@@ -1,0 +1,6 @@
+[workspace]
+members = [
+	"iso-10303-logical",
+	"exp2rs",
+	"ruststep",
+]
