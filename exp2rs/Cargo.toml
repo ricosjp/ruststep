@@ -15,4 +15,7 @@ path = "src/main.rs"
 doc = false
 
 [dependencies]
-iso-10303-logical = {path = "../iso-10303-logical"}
+iso-10303-simple-types = {path = "../iso-10303-simple-types"}
+Inflector = "*"
+regex = "*"
+lazy_static = "*"

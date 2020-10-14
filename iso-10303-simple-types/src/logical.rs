@@ -1,4 +1,4 @@
-use std::ops::*;
+use super::*;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub enum Logical {
@@ -42,7 +42,7 @@ impl From<Option<bool>> for Logical {
 
 impl From<Logical> for Option<bool> {
     /// ```
-    /// use iso_10303_logical::Logical;
+    /// use iso_10303_simple_types::Logical;
     /// assert_eq!(Option::<bool>::from(Logical::False), Some(false));
     /// assert_eq!(Option::<bool>::from(Logical::Unknown), None);
     /// assert_eq!(Option::<bool>::from(Logical::True), Some(true));

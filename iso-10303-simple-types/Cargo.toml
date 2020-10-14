@@ -1,5 +1,5 @@
 [package]
-name = "iso-10303-logical"
+name = "iso-10303-simple-types"
 version = "0.1.0"
 authors = ["Yoshinori Tanimura <tanimura@ricos.co.jp>"]
 edition = "2018"

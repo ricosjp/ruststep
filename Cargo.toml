@@ -1,6 +1,6 @@
 [workspace]
 members = [
-	"iso-10303-logical",
+	"iso-10303-simple-types",
 	"exp2rs",
 	"ruststep",
 ]
