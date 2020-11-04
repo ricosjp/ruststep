@@ -8,7 +8,9 @@ lazy_static::lazy_static! {
     static ref COMMENT_REGEX: Regex = Regex::new(r"(--[^\n]*\n)|\(\*[\s\S]*?\*\)|\n").unwrap();
 }
 
-fn remove_comments_and_newline(code: &str) -> String { COMMENT_REGEX.replace_all(code, "").into() }
+fn remove_comments_and_newline(code: &str) -> String {
+    COMMENT_REGEX.replace_all(code, "").into()
+}
 
 pub fn decode(code: &str) -> Result<Vec<Schema>, &str> {
     let mut res = Vec::new();
