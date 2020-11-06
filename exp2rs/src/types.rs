@@ -64,7 +64,6 @@ pub struct MemberVariant {
 }
 
 impl Type {
-    #[inline(always)]
     pub fn is_simple(&self) -> bool {
         match self {
             Type::Number => true,
@@ -78,7 +77,6 @@ impl Type {
         }
     }
 
-    #[inline(always)]
     pub fn is_aggrigation(&self) -> bool {
         match self {
             Type::Array { .. } => true,
@@ -89,7 +87,6 @@ impl Type {
         }
     }
 
-    #[inline(always)]
     pub fn is_named(&self) -> bool {
         match self {
             Type::Entity { .. } => true,
@@ -98,7 +95,6 @@ impl Type {
         }
     }
 
-    #[inline(always)]
     pub fn is_constructed(&self) -> bool {
         match self {
             Type::Enumerate { .. } => true,
@@ -107,7 +103,6 @@ impl Type {
         }
     }
 
-    #[inline(always)]
     pub fn is_generalized(&self) -> bool {
         match self {
             Type::Generic => true,
@@ -116,17 +111,14 @@ impl Type {
         }
     }
 
-    #[inline(always)]
     pub fn is_base(&self) -> bool {
         self.is_aggrigation() | self.is_simple() | self.is_named()
     }
 
-    #[inline(always)]
     pub fn is_parameter(&self) -> bool {
         self.is_generalized() | self.is_named() | self.is_simple()
     }
 
-    #[inline(always)]
     pub fn is_underlying(&self) -> bool {
         match self {
             Type::Defined { .. } => true,
