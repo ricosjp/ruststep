@@ -2,9 +2,12 @@ use std::{env, fs, io::Write, path::*};
 
 #[test]
 fn decode() {
-    let code = include_str!("test.exp");
-    let schemas = exp2rs::decode(code).unwrap();
-    let out_dir = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("generated");
+    let root = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
+
+    let code = fs::read_to_string(root.join("express/test.exp")).unwrap();
+
+    let schemas = exp2rs::decode(&code).unwrap();
+    let out_dir = root.join("generated");
     if !out_dir.exists() {
         fs::create_dir_all(&out_dir).unwrap();
     }
