@@ -208,35 +208,6 @@ fn defined_type_struct(name: String, underlying: &String) -> String {
     res
 }
 
-#[test]
-fn print_entity_definition() {
-    let entity = Type::Entity {
-        name: "test_struct_type".into(),
-        members: vec![
-            MemberVariant {
-                name: "m_int".into(),
-                type_name: "usize".into(),
-                optional: true,
-            },
-            MemberVariant {
-                name: "m_float".into(),
-                type_name: "f64".into(),
-                optional: false,
-            },
-        ],
-    };
-    println!("{}", entity.struct_definition());
-}
-
-#[test]
-fn print_defined_definition() {
-    let defined = Type::Defined {
-        name: "test_defined_type".into(),
-        underlying: "FormerType".into(),
-    };
-    println!("{}", defined.struct_definition());
-}
-
 #[derive(Clone, Debug)]
 pub struct Schema {
     pub name: String,
@@ -252,5 +223,39 @@ impl Schema {
         }
         res += "}";
         res
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn print_entity_definition() {
+        let entity = Type::Entity {
+            name: "test_struct_type".into(),
+            members: vec![
+                MemberVariant {
+                    name: "m_int".into(),
+                    type_name: "usize".into(),
+                    optional: true,
+                },
+                MemberVariant {
+                    name: "m_float".into(),
+                    type_name: "f64".into(),
+                    optional: false,
+                },
+            ],
+        };
+        println!("{}", entity.struct_definition());
+    }
+
+    #[test]
+    fn print_defined_definition() {
+        let defined = Type::Defined {
+            name: "test_defined_type".into(),
+            underlying: "FormerType".into(),
+        };
+        println!("{}", defined.struct_definition());
     }
 }
