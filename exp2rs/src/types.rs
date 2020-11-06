@@ -1,4 +1,4 @@
-use super::*;
+use inflector::Inflector;
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub enum Type {
@@ -117,7 +117,9 @@ impl Type {
     }
 
     #[inline(always)]
-    pub fn is_base(&self) -> bool { self.is_aggrigation() | self.is_simple() | self.is_named() }
+    pub fn is_base(&self) -> bool {
+        self.is_aggrigation() | self.is_simple() | self.is_named()
+    }
 
     #[inline(always)]
     pub fn is_parameter(&self) -> bool {
@@ -174,7 +176,10 @@ impl Type {
 
 fn entity_struct_definition(name: String, members: &Vec<MemberVariant>) -> String {
     let mut res = String::new();
-    res += &format!("#[derive(Clone, Debug, PartialEq)]\npub struct {} {{ ", name);
+    res += &format!(
+        "#[derive(Clone, Debug, PartialEq)]\npub struct {} {{ ",
+        name
+    );
     for member in members {
         let type_name = if member.optional {
             format!("Option<{}>", member.type_name.to_pascal_case())
