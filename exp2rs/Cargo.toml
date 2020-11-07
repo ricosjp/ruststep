@@ -1,21 +1,12 @@
 [package]
 name = "exp2rs"
 version = "0.1.0"
-authors = ["Yoshinori Tanimura <tanimura@ricos.co.jp>"]
+authors = ["Yoshinori Tanimura <tanimura@ricos.co.jp>", "Toshiki Teramura <teramura@ricos.co.jp"]
 edition = "2018"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
-[lib]
-path = "src/lib.rs"
-
-[[bin]]
-name = "exp2rs"
-path = "src/main.rs"
-doc = false
 
 [dependencies]
 iso-10303-simple-types = {path = "../iso-10303-simple-types"}
-Inflector = "*"
-regex = "*"
-lazy_static = "*"
+Inflector = "0.11.4"
+regex = "1.4.2"
+lazy_static = "1.4.0"
+trybuild = "1.0.35"

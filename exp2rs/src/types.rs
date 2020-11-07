@@ -1,4 +1,4 @@
-use super::*;
+use inflector::Inflector;
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub enum Type {
@@ -64,7 +64,6 @@ pub struct MemberVariant {
 }
 
 impl Type {
-    #[inline(always)]
     pub fn is_simple(&self) -> bool {
         match self {
             Type::Number => true,
@@ -78,7 +77,6 @@ impl Type {
         }
     }
 
-    #[inline(always)]
     pub fn is_aggrigation(&self) -> bool {
         match self {
             Type::Array { .. } => true,
@@ -89,7 +87,6 @@ impl Type {
         }
     }
 
-    #[inline(always)]
     pub fn is_named(&self) -> bool {
         match self {
             Type::Entity { .. } => true,
@@ -98,7 +95,6 @@ impl Type {
         }
     }
 
-    #[inline(always)]
     pub fn is_constructed(&self) -> bool {
         match self {
             Type::Enumerate { .. } => true,
@@ -107,7 +103,6 @@ impl Type {
         }
     }
 
-    #[inline(always)]
     pub fn is_generalized(&self) -> bool {
         match self {
             Type::Generic => true,
@@ -116,15 +111,14 @@ impl Type {
         }
     }
 
-    #[inline(always)]
-    pub fn is_base(&self) -> bool { self.is_aggrigation() | self.is_simple() | self.is_named() }
+    pub fn is_base(&self) -> bool {
+        self.is_aggrigation() | self.is_simple() | self.is_named()
+    }
 
-    #[inline(always)]
     pub fn is_parameter(&self) -> bool {
         self.is_generalized() | self.is_named() | self.is_simple()
     }
 
-    #[inline(always)]
     pub fn is_underlying(&self) -> bool {
         match self {
             Type::Defined { .. } => true,
@@ -174,7 +168,10 @@ impl Type {
 
 fn entity_struct_definition(name: String, members: &Vec<MemberVariant>) -> String {
     let mut res = String::new();
-    res += &format!("#[derive(Clone, Debug, PartialEq)]\npub struct {} {{ ", name);
+    res += &format!(
+        "#[derive(Clone, Debug, PartialEq)]\npub struct {} {{ ",
+        name
+    );
     for member in members {
         let type_name = if member.optional {
             format!("Option<{}>", member.type_name.to_pascal_case())
@@ -211,35 +208,28 @@ fn defined_type_struct(name: String, underlying: &String) -> String {
     res
 }
 
-#[test]
-fn print_entity_definition() {
-    let entity = Type::Entity {
-        name: "test_struct_type".into(),
-        members: vec![
-            MemberVariant {
-                name: "m_int".into(),
-                type_name: "usize".into(),
-                optional: true,
-            },
-            MemberVariant {
-                name: "m_float".into(),
-                type_name: "f64".into(),
-                optional: false,
-            },
-        ],
-    };
-    println!("{}", entity.struct_definition());
-}
-
-#[test]
-fn print_defined_definition() {
-    let defined = Type::Defined {
-        name: "test_defined_type".into(),
-        underlying: "FormerType".into(),
-    };
-    println!("{}", defined.struct_definition());
-}
-
+/// Corresponding to `SCHEMA` in EXPRESS
+///
+/// Here, we consinder following simple schema definition in EXPRESS language
+///
+/// ```text
+/// SCHEMA ONE;
+///
+/// ENTITY first;
+/// m_ref : second;
+/// fattr : STRING;
+/// END_ENTITY;
+///
+/// ENTITY second;
+/// sattr : STRING;
+/// END_ENTITY;
+///
+/// END_SCHEMA;
+/// ```
+///
+/// EXPRESS's schema consists of `ENTITY`es,
+/// which will be translated into Rust struct definitions.
+///
 #[derive(Clone, Debug)]
 pub struct Schema {
     pub name: String,
@@ -255,5 +245,39 @@ impl Schema {
         }
         res += "}";
         res
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn print_entity_definition() {
+        let entity = Type::Entity {
+            name: "test_struct_type".into(),
+            members: vec![
+                MemberVariant {
+                    name: "m_int".into(),
+                    type_name: "usize".into(),
+                    optional: true,
+                },
+                MemberVariant {
+                    name: "m_float".into(),
+                    type_name: "f64".into(),
+                    optional: false,
+                },
+            ],
+        };
+        println!("{}", entity.struct_definition());
+    }
+
+    #[test]
+    fn print_defined_definition() {
+        let defined = Type::Defined {
+            name: "test_defined_type".into(),
+            underlying: "FormerType".into(),
+        };
+        println!("{}", defined.struct_definition());
     }
 }

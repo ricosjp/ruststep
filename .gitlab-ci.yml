@@ -1,25 +1,22 @@
 stages:
-    - test
-    - pages
+  - test
+  - pages
 
 test:
-    image: rust:latest
-    stage: test
-    script:
-        - cargo test
-    except:
-        - master
+  image: rust:latest
+  stage: test
+  script:
+    - cargo test
+  allow_failure: true
 
 pages:
-    image: rust:latest
-    stage: pages
-    script:
-        - cargo clean
-        - cargo test
-        - cargo doc --no-deps
-        - cp -r target/doc public
-    artifacts:
-        paths:
-            - public
-    only:
-        - master
+  image: rust:latest
+  stage: pages
+  script:
+    - cargo doc --no-deps
+    - cp -r target/doc public
+  artifacts:
+    paths:
+      - public
+  only:
+    - master
