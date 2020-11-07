@@ -208,6 +208,28 @@ fn defined_type_struct(name: String, underlying: &String) -> String {
     res
 }
 
+/// Corresponding to `SCHEMA` in EXPRESS
+///
+/// Here, we consinder following simple schema definition in EXPRESS language
+///
+/// ```text
+/// SCHEMA ONE;
+///
+/// ENTITY first;
+/// m_ref : second;
+/// fattr : STRING;
+/// END_ENTITY;
+///
+/// ENTITY second;
+/// sattr : STRING;
+/// END_ENTITY;
+///
+/// END_SCHEMA;
+/// ```
+///
+/// EXPRESS's schema consists of `ENTITY`es,
+/// which will be translated into Rust struct definitions.
+///
 #[derive(Clone, Debug)]
 pub struct Schema {
     pub name: String,
