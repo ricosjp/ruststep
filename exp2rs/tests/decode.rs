@@ -1,5 +1,6 @@
 use std::{env, fs, io::Write, path::*};
 
+#[ignore]
 #[test]
 fn decode() {
     let root = PathBuf::from(env!("CARGO_MANIFEST_DIR"));

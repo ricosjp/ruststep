@@ -1,16 +1,21 @@
+image: rust:latest
+
 stages:
   - test
   - pages
 
 test:
-  image: rust:latest
   stage: test
   script:
     - cargo test
+
+test-ignored:
+  stage: test
+  script:
+    - cargo test -- --ignored
   allow_failure: true
 
 pages:
-  image: rust:latest
   stage: pages
   script:
     - cargo doc --no-deps
