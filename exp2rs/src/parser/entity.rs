@@ -1,7 +1,5 @@
 use super::identifier;
-use nom::{
-    branch::*, bytes::complete::*, character::complete::*, multi::*, sequence::*, IResult, Parser,
-};
+use nom::{bytes::complete::*, character::complete::*, multi::*, sequence::*, IResult, Parser};
 
 /// ```text
 /// ENTITY first;
@@ -27,14 +25,14 @@ pub struct Entity {
 /// 177 attribute_decl = attribute_id | redeclared_attribute .
 /// 266 parameter_type = generalized_types | named_types | simple_types .
 /// ```
-fn explicit_attr(input: &str) -> IResult<&str, (Vec<String>, String)> {
+pub fn explicit_attr(input: &str) -> IResult<&str, (Vec<String>, String)> {
     tuple((
-        separated_list0(tuple((space0, tag(","), space0)), identifier),
-        space0,
+        separated_list1(tuple((multispace0, tag(","), multispace0)), identifier),
+        multispace0,
         tag(":"),
-        space0,
+        multispace0,
         identifier, // FIXME this must be type instead of identifier
-        space0,
+        multispace0,
         tag(";"),
     ))
     .map(|(attrs, _, _, _, ty, _, _)| (attrs, ty))
@@ -42,8 +40,20 @@ fn explicit_attr(input: &str) -> IResult<&str, (Vec<String>, String)> {
 }
 
 fn entity_head(input: &str) -> IResult<&str, String> {
-    tuple((tag("ENTITY"), space1, identifier, space0, tag(";")))
-        .map(|(_, _, id, _, _)| id)
+    tuple((
+        tag("ENTITY"),
+        multispace1,
+        identifier,
+        multispace0,
+        tag(";"),
+    ))
+    .map(|(_, _, id, _, _)| id)
+    .parse(input)
+}
+
+fn entity_end(input: &str) -> IResult<&str, ()> {
+    tuple((tag("END_ENTITY"), multispace0, tag(";")))
+        .map(|_| ())
         .parse(input)
 }
 
@@ -55,7 +65,22 @@ fn entity_head(input: &str) -> IResult<&str, String> {
 /// 204 entity_body = { explicit_attr } [ derive_clause ] [ inverse_clause ] [ unique_clause ] [ where_clause ] .
 /// ```
 pub fn entity(input: &str) -> IResult<&str, Entity> {
-    todo!()
+    tuple((
+        entity_head,
+        multispace0,
+        separated_list0(multispace0, explicit_attr),
+        multispace0,
+        entity_end,
+    ))
+    .map(|(name, _, attributes, _, _)| Entity {
+        name,
+        attributes: attributes
+            .into_iter()
+            .map(|(attrs, ty)| attrs.into_iter().map(move |attr| (attr, ty.clone())))
+            .flatten()
+            .collect(),
+    })
+    .parse(input)
 }
 
 #[cfg(test)]
@@ -79,6 +104,24 @@ mod tests {
         let (residual, (id, ty)) = super::explicit_attr("x, y : Real;").finish().unwrap();
         assert_eq!(id, &["x", "y"]);
         assert_eq!(ty, "Real");
+        assert_eq!(residual, "");
+    }
+
+    #[test]
+    fn entity() {
+        let exp = r#"ENTITY first;
+                       m_ref : second;
+                       fattr : STRING;
+                     END_ENTITY;"#;
+        let (residual, entity) = super::entity(exp).finish().unwrap();
+        assert_eq!(entity.name, "first");
+        assert_eq!(
+            entity.attributes,
+            &[
+                ("m_ref".to_string(), "second".to_string()),
+                ("fattr".to_string(), "STRING".to_string())
+            ]
+        );
         assert_eq!(residual, "");
     }
 }
