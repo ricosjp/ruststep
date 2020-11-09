@@ -1,11 +1,32 @@
 use super::identifier;
 use nom::{bytes::complete::*, character::complete::*, multi::*, sequence::*, IResult, Parser};
 
-/// ```text
+/// Parsed result of EXPRESS's ENTITY
+///
+/// Example
+/// --------
+///
+/// ```
+/// use exp2rs::parser;
+/// use nom::Finish;
+///
+/// let exp_str = r#"
 /// ENTITY first;
-/// m_ref : second;
-/// fattr : STRING;
+///   m_ref : second;
+///   fattr : STRING;
 /// END_ENTITY;
+/// "#.trim();
+///
+/// let (residual, entity) = parser::entity(exp_str).finish().unwrap();
+/// assert_eq!(entity.name, "first");
+/// assert_eq!(
+///     entity.attributes,
+///     &[
+///         ("m_ref".to_string(), "second".to_string()),
+///         ("fattr".to_string(), "STRING".to_string())
+///     ]
+/// );
+/// assert_eq!(residual, "");
 /// ```
 #[derive(Debug, Clone, PartialEq)]
 pub struct Entity {
@@ -104,24 +125,6 @@ mod tests {
         let (residual, (id, ty)) = super::explicit_attr("x, y : Real;").finish().unwrap();
         assert_eq!(id, &["x", "y"]);
         assert_eq!(ty, "Real");
-        assert_eq!(residual, "");
-    }
-
-    #[test]
-    fn entity() {
-        let exp = r#"ENTITY first;
-                       m_ref : second;
-                       fattr : STRING;
-                     END_ENTITY;"#;
-        let (residual, entity) = super::entity(exp).finish().unwrap();
-        assert_eq!(entity.name, "first");
-        assert_eq!(
-            entity.attributes,
-            &[
-                ("m_ref".to_string(), "second".to_string()),
-                ("fattr".to_string(), "STRING".to_string())
-            ]
-        );
         assert_eq!(residual, "");
     }
 }

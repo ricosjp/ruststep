@@ -1,18 +1,18 @@
-//! Syntatic analysis of EXPRESS language
+//! Syntatic analysis of EXPRESS language standardized as [ISO-10303-11](https://www.iso.org/standard/38047.html)
 //!
-//! EXPRESS language is standardized as [ISO-10303-11][ISO-10303-11].
-//!
-//! [ISO-10303-11]: https://www.iso.org/standard/38047.html
+//! This module is based on [nom](https://github.com/Geal/nom) parser combinater.
 
 mod entity;
+mod schema;
 
 pub use entity::*;
+pub use schema::*;
 
 use nom::{
     branch::*, bytes::complete::*, character::complete::*, multi::*, sequence::*, IResult, Parser,
 };
 
-/// Parse identifier
+/// 7.4 Identifier
 ///
 /// ```text
 /// 143 simple_id = letter { letter | digit | ’_’ } .
