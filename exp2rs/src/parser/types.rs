@@ -3,6 +3,7 @@ use nom::{
     Parser,
 };
 
+/// Parsed result of `width_spec`
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct WidthSpec {
     pub width: usize,
@@ -48,6 +49,12 @@ fn boolen(input: &str) -> IResult<&str, SimpleDataType> {
     value(SimpleDataType::Boolen, tag("BOOLEN")).parse(input)
 }
 
+/// `width_spec` in String data type (8.1.6) and Binary data type (8.1.7)
+///
+/// ```text
+/// 341 width_spec = ’(’ width ’)’ [ FIXED ] .
+/// 340 width = numeric_expression .
+/// ```
 pub fn width_spec(input: &str) -> IResult<&str, WidthSpec> {
     tuple((
         delimited(char('('), is_not(")"), char(')')),
@@ -68,8 +75,6 @@ pub fn width_spec(input: &str) -> IResult<&str, WidthSpec> {
 ///
 /// ```text
 /// 311 string_type = STRING [ width_spec ] .
-/// 341 width_spec = ’(’ width ’)’ [ FIXED ] .
-/// 340 width = numeric_expression .
 /// ```
 pub fn string(input: &str) -> IResult<&str, SimpleDataType> {
     tuple((tag("STRING"), multispace0, opt(width_spec)))
@@ -81,8 +86,6 @@ pub fn string(input: &str) -> IResult<&str, SimpleDataType> {
 ///
 /// ```text
 /// 181 binary_type = BINARY [ width_spec ] .
-/// 341 width_spec = ’(’ width ’)’ [ FIXED ] .
-/// 340 width = numeric_expression .
 /// ```
 pub fn binary(input: &str) -> IResult<&str, SimpleDataType> {
     tuple((tag("BINARY"), multispace0, opt(width_spec)))
