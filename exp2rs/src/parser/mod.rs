@@ -4,11 +4,11 @@
 
 mod entity;
 mod schema;
-mod types;
+mod simple_data_type;
 
 pub use entity::*;
 pub use schema::*;
-pub use types::*;
+pub use simple_data_type::*;
 
 use nom::{
     branch::*, bytes::complete::*, character::complete::*, multi::*, sequence::*, IResult, Parser,
