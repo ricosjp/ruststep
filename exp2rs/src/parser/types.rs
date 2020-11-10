@@ -83,6 +83,7 @@ pub fn boolen(input: &str) -> IResult<&str, SimpleDataType> {
 /// 340 width = numeric_expression .
 /// ```
 pub fn width_spec(input: &str) -> IResult<&str, WidthSpec> {
+    // FIXME Should use `numeric_expression` parser
     tuple((
         delimited(char('('), is_not(")"), char(')')),
         multispace0,
