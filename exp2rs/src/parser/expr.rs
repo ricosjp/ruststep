@@ -4,43 +4,74 @@ pub struct Expr {}
 
 /// ```text
 /// 216 expression = simple_expression [ rel_op_extended simple_expression ] .
-/// 283 rel_op_extended = rel_op | IN | LIKE .
-/// 282 rel_op = ’<’ | ’>’ | ’<=’ | ’>=’ | ’<>’ | ’=’ | ’:<>:’ | ’:=:’ .
 /// 305 simple_expression = term { add_like_op term } .
 /// 325 term = factor { multiplication_like_op factor } .
 /// 217 factor = simple_factor [ ’**’ simple_factor ] .
-/// 306 simple_factor = aggregate_initializer | entity_constructor |enumeration_reference | interval | query_expression |( [ unary_op ] ( ’(’ expression ’)’ | primary ) ) .
-/// 331 unary_op = ’+’ | ’-’ | NOT .
+/// 306 simple_factor = aggregate_initializer
+///                   | entity_constructor
+///                   | enumeration_reference
+///                   | interval
+///                   | query_expression
+///                   | ( [ unary_op ] ( ’(’ expression ’)’ | primary ) ) .
 /// 269 primary = literal | ( qualifiable_factor { qualifier } ) .
-/// 257 multiplication_like_op = ’*’ | ’/’ | DIV | MOD | AND | ’||’ .
-/// 168 add_like_op = ’+’ | ’-’ | OR | XOR .
 /// ```
 pub fn expr(_input: &str) -> IResult<&str, Expr> {
     todo!()
 }
 
 #[derive(Debug, Clone, PartialEq)]
+pub enum RelOpExtended {
+    RelOp(RelOp),
+    /// `IN`
+    In,
+    /// `LIKE`
+    Like,
+}
+
+impl From<RelOp> for RelOpExtended {
+    fn from(op: RelOp) -> Self {
+        RelOpExtended::RelOp(op)
+    }
+}
+
+/// Relation operator extened with `IN` and `LIKE`
+///
+/// ```text
+/// 283 rel_op_extended = rel_op | IN | LIKE .
+/// ```
+pub fn rel_op_extended(input: &str) -> IResult<&str, RelOpExtended> {
+    use RelOpExtended::*;
+    alt((
+        rel_op.map(|op| RelOp(op)),
+        alt((value(In, tag("IN")), value(Like, tag("LIKE")))),
+    ))
+    .parse(input)
+}
+
+#[derive(Debug, Clone, PartialEq)]
 pub enum RelOp {
-    /// "="
+    /// `=`
     Equal,
-    /// "<>"
+    /// `<>`
     NotEqual,
-    /// "<"
+    /// `<`
     LT,
-    /// ">"
+    /// `>`
     GT,
-    /// "<="
+    /// `<=`
     LEQ,
-    /// ">="
+    /// `>=`
     GEQ,
-    /// ":=:"
+    /// `:=:`
     InstanceEqual,
-    /// ":<>:"
+    /// `:<>:`
     InstanceNotEqual,
 }
 
+/// Relation operator
+///
 /// ```text
-/// 331 unary_op = ’+’ | ’-’ | NOT .
+/// 282 rel_op = ’<’ | ’>’ | ’<=’ | ’>=’ | ’<>’ | ’=’ | ’:<>:’ | ’:=:’ .
 /// ```
 pub fn rel_op(input: &str) -> IResult<&str, RelOp> {
     use RelOp::*;
@@ -59,14 +90,16 @@ pub fn rel_op(input: &str) -> IResult<&str, RelOp> {
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum UnaryOp {
-    /// "+"
+    /// `+`
     Plus,
-    /// "-"
+    /// `-`
     Minus,
-    /// "NOT"
+    /// `NOT`
     Not,
 }
 
+/// Unary operator
+///
 /// ```text
 /// 331 unary_op = ’+’ | ’-’ | NOT .
 /// ```
@@ -82,20 +115,22 @@ pub fn unary_op(input: &str) -> IResult<&str, UnaryOp> {
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum MultiplicationLikeOp {
-    /// "*"
+    /// `*`
     Mul,
-    /// "/"
+    /// `/`
     RealDiv,
-    /// "DIV"
+    /// `DIV`
     IntegerDiv,
-    /// "MOD"
+    /// `MOD`
     Mod,
-    /// "AND"
+    /// `AND`
     And,
-    /// "||", Complex entity instance construction operator (12.10)
+    /// `||`, Complex entity instance construction operator (12.10)
     ComplexEntityInstanceConstruction,
 }
 
+/// Operator which behaves like `*`, i.e. `*`, `/`, `DIV`, `MOD`, `AND`, and `||`
+///
 /// ```text
 /// 257 multiplication_like_op = ’*’ | ’/’ | DIV | MOD | AND | ’||’ .
 /// ```
@@ -114,16 +149,18 @@ pub fn multiplication_like_op(input: &str) -> IResult<&str, MultiplicationLikeOp
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum AddLikeOp {
-    /// "+"
+    /// `+`
     Add,
-    /// "-"
+    /// `-`
     Sub,
-    /// "OR"
+    /// `OR`
     Or,
-    /// "XOR"
+    /// `XOR`
     Xor,
 }
 
+/// Operator which behaves like `+`, i.e. `+`, `-`, `OR`, and `XOR`
+///
 /// ```text
 /// 168 add_like_op = ’+’ | ’-’ | OR | XOR .
 /// ```
