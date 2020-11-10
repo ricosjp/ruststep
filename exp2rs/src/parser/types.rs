@@ -29,23 +29,50 @@ pub enum SimpleDataType {
     Binary { width_spec: Option<WidthSpec> },
 }
 
-fn number(input: &str) -> IResult<&str, SimpleDataType> {
+/// 8.1.1 Number data type
+///
+/// ```text
+/// 261 number_type = NUMBER .
+/// ```
+pub fn number(input: &str) -> IResult<&str, SimpleDataType> {
     value(SimpleDataType::Number, tag("NUMBER")).parse(input)
 }
 
-fn real(input: &str) -> IResult<&str, SimpleDataType> {
+/// 8.1.2 Real data type
+///
+/// ```text
+/// 278 real_type = REAL [ ’(’ precision_spec ’)’ ] .
+/// 268 precision_spec = numeric_expression .
+/// ```
+pub fn real(input: &str) -> IResult<&str, SimpleDataType> {
+    // FIXME precision_spec is not supported
     value(SimpleDataType::Real, tag("REAL")).parse(input)
 }
 
-fn integer(input: &str) -> IResult<&str, SimpleDataType> {
+/// 8.1.3 Integer data type
+///
+/// ```text
+/// 241 integer_type = INTEGER .
+/// ```
+pub fn integer(input: &str) -> IResult<&str, SimpleDataType> {
     value(SimpleDataType::Integer, tag("INTEGER")).parse(input)
 }
 
-fn logical(input: &str) -> IResult<&str, SimpleDataType> {
+/// 8.1.4 Logical data type
+///
+/// ```text
+/// 256 logical_type = LOGICAL .
+/// ```
+pub fn logical(input: &str) -> IResult<&str, SimpleDataType> {
     value(SimpleDataType::Logical, tag("LOGICAL")).parse(input)
 }
 
-fn boolen(input: &str) -> IResult<&str, SimpleDataType> {
+/// 8.1.5 Boolen data type
+///
+/// ```text
+/// 182 boolean_type = BOOLEAN .
+/// ```
+pub fn boolen(input: &str) -> IResult<&str, SimpleDataType> {
     value(SimpleDataType::Boolen, tag("BOOLEN")).parse(input)
 }
 
