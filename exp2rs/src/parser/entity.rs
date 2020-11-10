@@ -1,4 +1,4 @@
-use super::identifier;
+use super::simple_id;
 use nom::{bytes::complete::*, character::complete::*, multi::*, sequence::*, IResult, Parser};
 
 /// Parsed result of EXPRESS's ENTITY
@@ -48,11 +48,11 @@ pub struct Entity {
 /// ```
 pub fn explicit_attr(input: &str) -> IResult<&str, (Vec<String>, String)> {
     tuple((
-        separated_list1(tuple((multispace0, tag(","), multispace0)), identifier),
+        separated_list1(tuple((multispace0, tag(","), multispace0)), simple_id),
         multispace0,
         tag(":"),
         multispace0,
-        identifier, // FIXME this must be type instead of identifier
+        simple_id, // FIXME this must be type instead of simple_id
         multispace0,
         tag(";"),
     ))
@@ -61,15 +61,9 @@ pub fn explicit_attr(input: &str) -> IResult<&str, (Vec<String>, String)> {
 }
 
 fn entity_head(input: &str) -> IResult<&str, String> {
-    tuple((
-        tag("ENTITY"),
-        multispace1,
-        identifier,
-        multispace0,
-        tag(";"),
-    ))
-    .map(|(_, _, id, _, _)| id)
-    .parse(input)
+    tuple((tag("ENTITY"), multispace1, simple_id, multispace0, tag(";")))
+        .map(|(_, _, id, _, _)| id)
+        .parse(input)
 }
 
 fn entity_end(input: &str) -> IResult<&str, ()> {
