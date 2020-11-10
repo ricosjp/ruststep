@@ -6,13 +6,13 @@ pub struct Expr {}
 /// 216 expression = simple_expression [ rel_op_extended simple_expression ] .
 /// 305 simple_expression = term { add_like_op term } .
 /// 325 term = factor { multiplication_like_op factor } .
-/// 217 factor = simple_factor [ ’**’ simple_factor ] .
+/// 217 factor = simple_factor [ `**` simple_factor ] .
 /// 306 simple_factor = aggregate_initializer
 ///                   | entity_constructor
 ///                   | enumeration_reference
 ///                   | interval
 ///                   | query_expression
-///                   | ( [ unary_op ] ( ’(’ expression ’)’ | primary ) ) .
+///                   | ( [ unary_op ] ( `(` expression `)` | primary ) ) .
 /// 269 primary = literal | ( qualifiable_factor { qualifier } ) .
 /// ```
 pub fn expr(_input: &str) -> IResult<&str, Expr> {
@@ -34,11 +34,7 @@ impl From<RelOp> for RelOpExtended {
     }
 }
 
-/// Relation operator extened with `IN` and `LIKE`
-///
-/// ```text
 /// 283 rel_op_extended = rel_op | IN | LIKE .
-/// ```
 pub fn rel_op_extended(input: &str) -> IResult<&str, RelOpExtended> {
     use RelOpExtended::*;
     alt((
@@ -68,11 +64,7 @@ pub enum RelOp {
     InstanceNotEqual,
 }
 
-/// Relation operator
-///
-/// ```text
-/// 282 rel_op = ’<’ | ’>’ | ’<=’ | ’>=’ | ’<>’ | ’=’ | ’:<>:’ | ’:=:’ .
-/// ```
+/// 282 rel_op = `<` | `>` | `<=` | `>=` | `<>` | `=` | `:<<>:` | `:=:` .
 pub fn rel_op(input: &str) -> IResult<&str, RelOp> {
     use RelOp::*;
     alt((
@@ -98,11 +90,7 @@ pub enum UnaryOp {
     Not,
 }
 
-/// Unary operator
-///
-/// ```text
-/// 331 unary_op = ’+’ | ’-’ | NOT .
-/// ```
+/// 331 unary_op = `+` | `-` | NOT .
 pub fn unary_op(input: &str) -> IResult<&str, UnaryOp> {
     use UnaryOp::*;
     alt((
@@ -129,11 +117,7 @@ pub enum MultiplicationLikeOp {
     ComplexEntityInstanceConstruction,
 }
 
-/// Operator which behaves like `*`, i.e. `*`, `/`, `DIV`, `MOD`, `AND`, and `||`
-///
-/// ```text
-/// 257 multiplication_like_op = ’*’ | ’/’ | DIV | MOD | AND | ’||’ .
-/// ```
+/// 257 multiplication_like_op = `*` | `/` | DIV | MOD | AND | `||` .
 pub fn multiplication_like_op(input: &str) -> IResult<&str, MultiplicationLikeOp> {
     use MultiplicationLikeOp::*;
     alt((
@@ -159,11 +143,7 @@ pub enum AddLikeOp {
     Xor,
 }
 
-/// Operator which behaves like `+`, i.e. `+`, `-`, `OR`, and `XOR`
-///
-/// ```text
-/// 168 add_like_op = ’+’ | ’-’ | OR | XOR .
-/// ```
+/// 168 add_like_op = `+` | `-` | OR | XOR .
 pub fn add_like_op(input: &str) -> IResult<&str, AddLikeOp> {
     use AddLikeOp::*;
     alt((
