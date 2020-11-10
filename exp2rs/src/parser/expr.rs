@@ -34,7 +34,7 @@ impl From<RelOp> for RelOpExtended {
     }
 }
 
-/// 283 rel_op_extended = rel_op | IN | LIKE .
+/// 283 rel_op_extended = rel_op | `IN` | `LIKE` .
 pub fn rel_op_extended(input: &str) -> IResult<&str, RelOpExtended> {
     use RelOpExtended::*;
     alt((
@@ -64,7 +64,7 @@ pub enum RelOp {
     InstanceNotEqual,
 }
 
-/// 282 rel_op = `<` | `>` | `<=` | `>=` | `<>` | `=` | `:<<>:` | `:=:` .
+/// 282 rel_op = `<` | `>` | `<=` | `>=` | `<>` | `=` | `:<>:` | `:=:` .
 pub fn rel_op(input: &str) -> IResult<&str, RelOp> {
     use RelOp::*;
     alt((
@@ -90,7 +90,7 @@ pub enum UnaryOp {
     Not,
 }
 
-/// 331 unary_op = `+` | `-` | NOT .
+/// 331 unary_op = `+` | `-` | `NOT` .
 pub fn unary_op(input: &str) -> IResult<&str, UnaryOp> {
     use UnaryOp::*;
     alt((
@@ -117,7 +117,7 @@ pub enum MultiplicationLikeOp {
     ComplexEntityInstanceConstruction,
 }
 
-/// 257 multiplication_like_op = `*` | `/` | DIV | MOD | AND | `||` .
+/// 257 multiplication_like_op = `*` | `/` | `DIV` | `MOD` | `AND` | `||` .
 pub fn multiplication_like_op(input: &str) -> IResult<&str, MultiplicationLikeOp> {
     use MultiplicationLikeOp::*;
     alt((
@@ -143,7 +143,7 @@ pub enum AddLikeOp {
     Xor,
 }
 
-/// 168 add_like_op = `+` | `-` | OR | XOR .
+/// 168 add_like_op = `+` | `-` | `OR` | `XOR` .
 pub fn add_like_op(input: &str) -> IResult<&str, AddLikeOp> {
     use AddLikeOp::*;
     alt((
