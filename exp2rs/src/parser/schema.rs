@@ -51,15 +51,9 @@ pub struct Schema {
 }
 
 fn schema_decl(input: &str) -> IResult<&str, String> {
-    tuple((
-        tag("SCHEMA"),
-        multispace1,
-        identifier,
-        multispace0,
-        tag(";"),
-    ))
-    .map(|(_, _, id, _, _)| id)
-    .parse(input)
+    tuple((tag("SCHEMA"), multispace1, simple_id, multispace0, tag(";")))
+        .map(|(_, _, id, _, _)| id)
+        .parse(input)
 }
 
 fn schema_end(input: &str) -> IResult<&str, ()> {
