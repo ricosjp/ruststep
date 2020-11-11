@@ -42,11 +42,43 @@ pub fn logical_literal(input: &str) -> IResult<&str, Logical> {
 ///
 /// Negative integer, e.g. `-23`,
 /// will be represented by the combination of `-` unary operator and integer literal `23`
+///
+/// Example
+/// --------
+///
+/// ```
+/// use exp2rs::parser;
+/// use nom::Finish;
+///
+/// let (residual, value) = super::integer_literal("123").finish().unwrap();
+/// assert_eq!(value, 123);
+/// assert_eq!(residual, "");
+/// ```
 pub fn integer_literal(input: &str) -> IResult<&str, u64> {
     digit1.map(|d: &str| d.parse().unwrap()).parse(input)
 }
 
 /// 142 real_literal = integer_literal | ( digits `.` [ digits ] [ `e` [ sign ] digits ] ) .
+///
+/// Example
+/// --------
+///
+/// ```
+/// use exp2rs::parser;
+/// use nom::Finish;
+///
+/// let (residual, value) = parser::real_literal("123").finish().unwrap();
+/// assert_eq!(value, 123.0);
+/// assert_eq!(residual, "");
+///
+/// let (residual, value) = parser::real_literal("123.456").finish().unwrap();
+/// assert_eq!(value, 123.456);
+/// assert_eq!(residual, "");
+///
+/// let (residual, value) = parser::real_literal("1.23e-5").finish().unwrap();
+/// assert_eq!(value, 1.23e-5);
+/// assert_eq!(residual, "");
+/// ```
 pub fn real_literal(input: &str) -> IResult<&str, f64> {
     double.parse(input)
 }
