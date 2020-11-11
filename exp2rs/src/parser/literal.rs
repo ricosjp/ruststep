@@ -50,7 +50,7 @@ pub fn logical_literal(input: &str) -> IResult<&str, Logical> {
 /// use exp2rs::parser;
 /// use nom::Finish;
 ///
-/// let (residual, value) = super::integer_literal("123").finish().unwrap();
+/// let (residual, value) = parser::integer_literal("123").finish().unwrap();
 /// assert_eq!(value, 123);
 /// assert_eq!(residual, "");
 /// ```
