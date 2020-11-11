@@ -20,17 +20,12 @@ pub enum Literal {
 /// 251 literal = binary_literal | logical_literal | real_literal | string_literal .
 pub fn literal(input: &str) -> IResult<&str, Literal> {
     alt((
-        binary_literal,
         logical_literal.map(|val| Literal::Logial(val)),
         real_literal.map(|val| Literal::Real(val)),
+        // FIXME binary_literal,
         // FIXME string_literal
     ))
     .parse(input)
-}
-
-/// 139 binary_literal = `%` bit { bit } .
-pub fn binary_literal(input: &str) -> IResult<&str, Literal> {
-    todo!()
 }
 
 /// 255 logical_literal = `FALSE` | `TRUE` | `UNKNOWN` .
