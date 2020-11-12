@@ -8,21 +8,58 @@ pub struct Expr {}
 /// 305 simple_expression = term { add_like_op term } .
 /// 325 term = factor { multiplication_like_op factor } .
 /// 217 factor = simple_factor [ `**` simple_factor ] .
+/// ```
+pub fn expr(_input: &str) -> IResult<&str, Expr> {
+    todo!()
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub enum SimpleFactor {
+    Primary {
+        unary_op: Option<UnaryOp>,
+        primary: Primary,
+    },
+}
+
 /// 306 simple_factor = aggregate_initializer
 ///                   | entity_constructor
 ///                   | enumeration_reference
 ///                   | interval
 ///                   | query_expression
 ///                   | ( [ unary_op ] ( `(` expression `)` | primary ) ) .
-/// ```
-pub fn expr(_input: &str) -> IResult<&str, Expr> {
-    todo!()
+pub fn simple_factor(input: &str) -> IResult<&str, SimpleFactor> {
+    // FIXME most branches are not supported
+    tuple((
+        opt(tuple((unary_op, multispace0)).map(|(op, _)| op)),
+        primary,
+    ))
+    .map(|(unary_op, primary)| SimpleFactor::Primary { unary_op, primary })
+    .parse(input)
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub enum Primary {
+    Literal(Literal),
 }
 
 /// 269 primary = literal | ( qualifiable_factor { qualifier } ) .
-pub fn primary(input: &str) -> IResult<&str, Literal> {
+///
+/// Example
+/// --------
+///
+/// ```
+/// use exp2rs::parser::*;
+/// use nom::Finish;
+///
+/// let (residual, p) = primary("123").finish().unwrap();
+/// assert_eq!(p, Primary::Literal(Literal::Real(123.0)));
+/// assert_eq!(residual, "");
+/// ```
+pub fn primary(input: &str) -> IResult<&str, Primary> {
     // FIXME add qualifiable_factor branch
-    literal(input)
+    literal
+        .map(|literal| Primary::Literal(literal))
+        .parse(input)
 }
 
 #[derive(Debug, Clone, PartialEq)]

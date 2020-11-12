@@ -12,12 +12,25 @@ pub enum Logical {
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum Literal {
-    Integer(u64),
     Real(f64),
     Logial(Logical),
 }
 
 /// 251 literal = binary_literal | logical_literal | real_literal | string_literal .
+///
+/// Integer value, e.g. `23` will be recognized as a real number `23.0`
+///
+/// Example
+/// --------
+///
+/// ```
+/// use exp2rs::parser::*;
+/// use nom::Finish;
+///
+/// let (residual, l) = literal("23").finish().unwrap();
+/// assert_eq!(l, Literal::Real(23.0));
+/// assert_eq!(residual, "");
+/// ```
 pub fn literal(input: &str) -> IResult<&str, Literal> {
     alt((
         logical_literal.map(|val| Literal::Logial(val)),
