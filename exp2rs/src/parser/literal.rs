@@ -1,3 +1,4 @@
+use derive_more::From;
 use nom::{
     branch::*, bytes::complete::*, character::complete::*, combinator::*, number::complete::double,
     IResult, Parser,
@@ -10,7 +11,7 @@ pub enum Logical {
     Unknown,
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, From)]
 pub enum Literal {
     Real(f64),
     Logial(Logical),

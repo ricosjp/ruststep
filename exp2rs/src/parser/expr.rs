@@ -1,4 +1,5 @@
 use super::*;
+use derive_more::From;
 use nom::{branch::*, bytes::complete::*, combinator::*, IResult, Parser};
 
 pub struct Expr {}
@@ -13,12 +14,31 @@ pub fn expr(_input: &str) -> IResult<&str, Expr> {
     todo!()
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, From)]
 pub enum SimpleFactor {
+    #[from(ignore)]
     Primary {
         unary_op: Option<UnaryOp>,
         primary: Primary,
     },
+}
+
+impl From<Primary> for SimpleFactor {
+    fn from(primary: Primary) -> Self {
+        SimpleFactor::Primary {
+            unary_op: None,
+            primary,
+        }
+    }
+}
+
+impl From<(UnaryOp, Primary)> for SimpleFactor {
+    fn from((unary_op, primary): (UnaryOp, Primary)) -> Self {
+        SimpleFactor::Primary {
+            unary_op: Some(unary_op),
+            primary,
+        }
+    }
 }
 
 /// 306 simple_factor = aggregate_initializer
@@ -37,7 +57,7 @@ pub fn simple_factor(input: &str) -> IResult<&str, SimpleFactor> {
     .parse(input)
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, From)]
 pub enum Primary {
     Literal(Literal),
 }
@@ -52,7 +72,7 @@ pub enum Primary {
 /// use nom::Finish;
 ///
 /// let (residual, p) = primary("123").finish().unwrap();
-/// assert_eq!(p, Primary::Literal(Literal::Real(123.0)));
+/// assert_eq!(p, Literal::Real(123.0).into());
 /// assert_eq!(residual, "");
 /// ```
 pub fn primary(input: &str) -> IResult<&str, Primary> {
@@ -62,19 +82,13 @@ pub fn primary(input: &str) -> IResult<&str, Primary> {
         .parse(input)
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, From)]
 pub enum RelOpExtended {
     RelOp(RelOp),
     /// `IN`
     In,
     /// `LIKE`
     Like,
-}
-
-impl From<RelOp> for RelOpExtended {
-    fn from(op: RelOp) -> Self {
-        RelOpExtended::RelOp(op)
-    }
 }
 
 /// 283 rel_op_extended = rel_op | `IN` | `LIKE` .
