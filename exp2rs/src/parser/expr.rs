@@ -1,3 +1,4 @@
+use super::*;
 use nom::{branch::*, bytes::complete::*, combinator::*, IResult, Parser};
 
 pub struct Expr {}
@@ -13,10 +14,15 @@ pub struct Expr {}
 ///                   | interval
 ///                   | query_expression
 ///                   | ( [ unary_op ] ( `(` expression `)` | primary ) ) .
-/// 269 primary = literal | ( qualifiable_factor { qualifier } ) .
 /// ```
 pub fn expr(_input: &str) -> IResult<&str, Expr> {
     todo!()
+}
+
+/// 269 primary = literal | ( qualifiable_factor { qualifier } ) .
+pub fn primary(input: &str) -> IResult<&str, Literal> {
+    // FIXME add qualifiable_factor branch
+    literal(input)
 }
 
 #[derive(Debug, Clone, PartialEq)]

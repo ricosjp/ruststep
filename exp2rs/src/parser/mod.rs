@@ -5,12 +5,14 @@
 mod entity;
 mod expr;
 mod literal;
+mod qualify;
 mod schema;
 mod simple_data_type;
 
 pub use entity::*;
 pub use expr::*;
 pub use literal::*;
+pub use qualify::*;
 pub use schema::*;
 pub use simple_data_type::*;
 
