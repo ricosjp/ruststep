@@ -47,6 +47,22 @@ impl From<(UnaryOp, Primary)> for SimpleFactor {
 ///                   | interval
 ///                   | query_expression
 ///                   | ( [ unary_op ] ( `(` expression `)` | primary ) ) .
+///
+/// Example
+/// --------
+///
+/// ```
+/// use exp2rs::parser::*;
+/// use nom::Finish;
+///
+/// let (residual, p) = simple_factor("123").finish().unwrap();
+/// assert_eq!(p, Primary::Literal(Literal::Real(123.0)).into());
+/// assert_eq!(residual, "");
+///
+/// let (residual, p) = simple_factor("-123").finish().unwrap();
+/// assert_eq!(p, (UnaryOp::Minus, Primary::Literal(Literal::Real(123.0))).into());
+/// assert_eq!(residual, "");
+/// ```
 pub fn simple_factor(input: &str) -> IResult<&str, SimpleFactor> {
     // FIXME most branches are not supported
     tuple((
