@@ -1,5 +1,13 @@
 image: rust:latest
 
+cache:
+  key: cargo
+  paths:
+    - target/
+    - cargo/
+variables:
+  CARGO_HOME: $CI_PROJECT_DIR/cargo
+
 stages:
   - test
   - pages
