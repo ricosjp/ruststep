@@ -75,27 +75,33 @@ pub fn factor(input: &str) -> IResult<&str, Factor> {
 }
 
 #[derive(Debug, Clone, PartialEq)]
+pub enum PrimaryOrExpression {
+    Primary(Primary),
+    Expression(Box<Expression>), // to avoid recusive definition
+}
+
+#[derive(Debug, Clone, PartialEq)]
 pub enum SimpleFactor {
-    Primary {
+    PrimaryOrExpression {
         unary_op: Option<UnaryOp>,
-        primary: Primary,
+        primary_or_expression: PrimaryOrExpression,
     },
 }
 
 impl From<Primary> for SimpleFactor {
     fn from(primary: Primary) -> Self {
-        SimpleFactor::Primary {
+        SimpleFactor::PrimaryOrExpression {
             unary_op: None,
-            primary,
+            primary_or_expression: PrimaryOrExpression::Primary(primary),
         }
     }
 }
 
-impl From<(UnaryOp, Primary)> for SimpleFactor {
-    fn from((unary_op, primary): (UnaryOp, Primary)) -> Self {
-        SimpleFactor::Primary {
-            unary_op: Some(unary_op),
-            primary,
+impl From<Expression> for SimpleFactor {
+    fn from(expression: Expression) -> Self {
+        SimpleFactor::PrimaryOrExpression {
+            unary_op: None,
+            primary_or_expression: PrimaryOrExpression::Expression(Box::new(expression)),
         }
     }
 }
@@ -119,16 +125,36 @@ impl From<(UnaryOp, Primary)> for SimpleFactor {
 /// assert_eq!(residual, "");
 ///
 /// let (residual, p) = simple_factor("-123").finish().unwrap();
-/// assert_eq!(p, (UnaryOp::Minus, Primary::Literal(Literal::Real(123.0))).into());
+/// assert_eq!(p, SimpleFactor::PrimaryOrExpression {
+///    unary_op: Some(UnaryOp::Minus),
+///    primary_or_expression: PrimaryOrExpression::Primary(Primary::Literal(Literal::Real(123.0))),
+/// });
+/// assert_eq!(residual, "");
+///
+/// let (residual, p) = simple_factor("(1 + 2)").finish().unwrap();
 /// assert_eq!(residual, "");
 /// ```
 pub fn simple_factor(input: &str) -> IResult<&str, SimpleFactor> {
-    // FIXME most branches are not supported
+    // FIXME Add aggregate_initializer
+    // FIXME Add entity_constructor
+    // FIXME Add enumeration_reference
+    // FIXME Add interval
+    // FIXME Add query_expression
     tuple((
         opt(tuple((unary_op, multispace0)).map(|(op, _)| op)),
-        primary,
+        alt((
+            primary.map(|primary| PrimaryOrExpression::Primary(primary)),
+            tuple((tag("("), multispace0, expression, multispace0, tag(")"))).map(
+                |(_, _, expression, _, _)| PrimaryOrExpression::Expression(Box::new(expression)),
+            ),
+        )),
     ))
-    .map(|(unary_op, primary)| SimpleFactor::Primary { unary_op, primary })
+    .map(
+        |(unary_op, primary_or_expression)| SimpleFactor::PrimaryOrExpression {
+            unary_op,
+            primary_or_expression,
+        },
+    )
     .parse(input)
 }
 
