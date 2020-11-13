@@ -3,17 +3,6 @@ use derive_more::From;
 use nom::{branch::*, bytes::complete::*, combinator::*, IResult, Parser};
 
 /// Unary expresion, e.g. `x` or binary expression `x + y`
-///
-/// Example
-/// --------
-///
-/// ```
-/// use exp2rs::parser::*;
-/// use nom::Finish;
-///
-/// let (residual, e) = expression("1 - 2").finish().unwrap();
-/// assert_eq!(residual, "");
-/// ```
 #[derive(Debug, Clone, PartialEq)]
 pub enum Expr<Base, Op> {
     Unary(Base),
@@ -112,28 +101,6 @@ impl From<Expression> for SimpleFactor {
 ///                   | interval
 ///                   | query_expression
 ///                   | ( [ unary_op ] ( `(` expression `)` | primary ) ) .
-///
-/// Example
-/// --------
-///
-/// ```
-/// use exp2rs::parser::*;
-/// use nom::Finish;
-///
-/// let (residual, p) = simple_factor("123").finish().unwrap();
-/// assert_eq!(p, Primary::Literal(Literal::Real(123.0)).into());
-/// assert_eq!(residual, "");
-///
-/// let (residual, p) = simple_factor("-123").finish().unwrap();
-/// assert_eq!(p, SimpleFactor::PrimaryOrExpression {
-///    unary_op: Some(UnaryOp::Minus),
-///    primary_or_expression: PrimaryOrExpression::Primary(Primary::Literal(Literal::Real(123.0))),
-/// });
-/// assert_eq!(residual, "");
-///
-/// let (residual, p) = simple_factor("(1 + 2)").finish().unwrap();
-/// assert_eq!(residual, "");
-/// ```
 pub fn simple_factor(input: &str) -> IResult<&str, SimpleFactor> {
     // FIXME Add aggregate_initializer
     // FIXME Add entity_constructor
@@ -164,18 +131,6 @@ pub enum Primary {
 }
 
 /// 269 primary = literal | ( qualifiable_factor { qualifier } ) .
-///
-/// Example
-/// --------
-///
-/// ```
-/// use exp2rs::parser::*;
-/// use nom::Finish;
-///
-/// let (residual, p) = primary("123").finish().unwrap();
-/// assert_eq!(p, Literal::Real(123.0).into());
-/// assert_eq!(residual, "");
-/// ```
 pub fn primary(input: &str) -> IResult<&str, Primary> {
     // FIXME add qualifiable_factor branch
     literal
@@ -324,4 +279,47 @@ pub enum PowerOp {
 /// Additional trivial rule for managing operators uniformly
 pub fn power_op(input: &str) -> IResult<&str, PowerOp> {
     value(PowerOp::Power, tag("**")).parse(input)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use nom::Finish;
+
+    #[test]
+    fn expr() {
+        let (residual, e) = super::expression("1 - 2").finish().unwrap();
+        dbg!(e);
+        assert_eq!(residual, "");
+    }
+
+    #[test]
+    fn simple_factor() {
+        let (residual, p) = super::simple_factor("123").finish().unwrap();
+        assert_eq!(p, Primary::Literal(Literal::Real(123.0)).into());
+        assert_eq!(residual, "");
+
+        let (residual, p) = super::simple_factor("-123").finish().unwrap();
+        assert_eq!(
+            p,
+            SimpleFactor::PrimaryOrExpression {
+                unary_op: Some(UnaryOp::Minus),
+                primary_or_expression: PrimaryOrExpression::Primary(Primary::Literal(
+                    Literal::Real(123.0)
+                )),
+            }
+        );
+        assert_eq!(residual, "");
+
+        let (residual, p) = super::simple_factor("(1 + 2)").finish().unwrap();
+        dbg!(p);
+        assert_eq!(residual, "");
+    }
+
+    #[test]
+    fn primary() {
+        let (residual, p) = super::primary("123").finish().unwrap();
+        assert_eq!(p, Literal::Real(123.0).into());
+        assert_eq!(residual, "");
+    }
 }
