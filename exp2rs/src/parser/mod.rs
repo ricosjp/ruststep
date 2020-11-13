@@ -3,14 +3,14 @@
 //! This module is based on [nom](https://github.com/Geal/nom) parser combinater.
 
 mod entity;
-mod expr;
+mod expression;
 mod literal;
 mod qualify;
 mod schema;
 mod simple_data_type;
 
 pub use entity::*;
-pub use expr::*;
+pub use expression::*;
 pub use literal::*;
 pub use qualify::*;
 pub use schema::*;
