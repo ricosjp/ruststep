@@ -310,10 +310,24 @@ mod tests {
             }
         );
         assert_eq!(residual, "");
+    }
 
-        let (residual, p) = super::simple_factor("(1 + 2)").finish().unwrap();
-        dbg!(p);
+    #[test]
+    fn simple_factor_expression() {
+        let (residual, expr) = super::expression("1 + 2").finish().unwrap();
         assert_eq!(residual, "");
+
+        let (residual, sf) = super::simple_factor("(1 + 2)").finish().unwrap();
+        assert_eq!(residual, "");
+        match sf {
+            SimpleFactor::PrimaryOrExpression {
+                unary_op: _,
+                primary_or_expression,
+            } => match primary_or_expression {
+                PrimaryOrExpression::Expression(e) => assert_eq!(*e, expr),
+                _ => panic!("Must be expression"),
+            },
+        }
     }
 
     #[test]
