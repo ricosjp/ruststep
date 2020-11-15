@@ -85,12 +85,7 @@ pub fn binary_type(input: &str) -> IResult<&str, SimpleType> {
         .parse(input)
 }
 
-/// `width_spec` in String data type (8.1.6) and Binary data type (8.1.7)
-///
-/// ```text
 /// 341 width_spec = `(` width `)` [ FIXED ] .
-/// 340 width = numeric_expression .
-/// ```
 pub fn width_spec(input: &str) -> IResult<&str, WidthSpec> {
     // FIXME Should use `numeric_expression` parser
     tuple((
