@@ -14,19 +14,21 @@ use nom::{bytes::complete::*, character::complete::*, multi::*, sequence::*, IRe
 /// let exp_str = r#"
 /// ENTITY first;
 ///   m_ref : second;
-///   fattr : STRING;
+///   fattr : REAL;
 /// END_ENTITY;
 /// "#.trim();
 ///
 /// let (residual, entity) = parser::entity(exp_str).finish().unwrap();
 /// assert_eq!(entity.name, "first");
-/// assert_eq!(
-///     entity.attributes,
-///     &[
-///         ("m_ref".to_string(), "second".to_string()),
-///         ("fattr".to_string(), "STRING".to_string())
-///     ]
-/// );
+///
+/// assert_eq!(entity.attributes.len(), 2);
+/// // check `m_ref`
+/// assert_eq!(entity.attributes[0].0, "m_ref");
+/// assert!(matches!(entity.attributes[0].1, parser::ParameterType::Named(_)));
+/// // check `fattr`
+/// assert_eq!(entity.attributes[1].0, "fattr");
+/// assert!(matches!(entity.attributes[1].1, parser::ParameterType::Simple(parser::SimpleType::Real)));
+///
 /// assert_eq!(residual, "");
 /// ```
 #[derive(Debug, Clone, PartialEq)]
@@ -42,24 +44,25 @@ pub struct Entity {
 
 #[derive(Debug, Clone, PartialEq, From)]
 pub enum ParameterType {
+    Named(String),
     Simple(SimpleType),
 }
 
 /// 266 parameter_type = generalized_types | named_types | simple_types .
 pub fn paramter_type(input: &str) -> IResult<&str, ParameterType> {
-    simple_types
-        .map(|ty| ParameterType::Simple(ty))
-        .parse(input)
+    // FIXME generalized_types
+    // FIXME named_types
+    alt((
+        simple_id.map(|ty| ParameterType::Named(ty)),
+        simple_types.map(|ty| ParameterType::Simple(ty)),
+    ))
+    .parse(input)
 }
 
-/// 9.2.1.1 Explicit attribute
-///
-/// ```text
 /// 215 explicit_attr = attribute_decl { ’,’ attribute_decl } ’:’ [ OPTIONAL ] parameter_type ’;’ .
-/// 177 attribute_decl = attribute_id | redeclared_attribute .
-/// 266 parameter_type = generalized_types | named_types | simple_types .
-/// ```
 pub fn explicit_attr(input: &str) -> IResult<&str, (Vec<String>, ParameterType)> {
+    // FIXME Support attribute_decl
+    // FIXME OPTIONAL
     tuple((
         separated_list1(tuple((multispace0, tag(","), multispace0)), simple_id),
         multispace0,

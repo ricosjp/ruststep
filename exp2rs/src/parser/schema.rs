@@ -10,7 +10,7 @@ use super::*;
 /// use nom::Finish;
 ///
 /// let exp_str = r#"
-/// SCHEMA ONE;
+/// SCHEMA my_first_schema;
 ///   ENTITY first;
 ///     m_ref : second;
 ///     fattr : STRING;
@@ -23,7 +23,7 @@ use super::*;
 /// "#.trim();
 ///
 /// let (residual, schema) = parser::schema(exp_str).finish().unwrap();
-/// assert_eq!(schema.name, "ONE");
+/// assert_eq!(schema.name, "my_first_schema");
 /// assert_eq!(schema.entities.len(), 2);
 /// assert_eq!(
 ///     schema.entities[0],
