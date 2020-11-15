@@ -18,17 +18,17 @@ use nom::{
     branch::*, bytes::complete::*, character::complete::*, multi::*, sequence::*, IResult, Parser,
 };
 
-/// 128 letter = ’a’ | ’b’ | ’c’ | ’d’ | ’e’ | ’f’ | ’g’ | ’h’ | ’i’ | ’j’ | ’k’ | ’l’ |’m’ | ’n’ | ’o’ | ’p’ | ’q’ | ’r’ | ’s’ | ’t’ | ’u’ | ’v’ | ’w’ | ’x’ |’y’ | ’z’ .
+/// 128 letter = `a` | `b` | `c` | `d` | `e` | `f` | `g` | `h` | `i` | `j` | `k` | `l` |`m` | `n` | `o` | `p` | `q` | `r` | `s` | `t` | `u` | `v` | `w` | `x` |`y` | `z` .
 pub fn letter(input: &str) -> IResult<&str, char> {
     satisfy(|c| matches!(c, 'a'..='z')).parse(input)
 }
 
-/// 124 digit = ’0’ | ’1’ | ’2’ | ’3’ | ’4’ | ’5’ | ’6’ | ’7’ | ’8’ | ’9’ .
+/// 124 digit = `0` | `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8` | `9` .
 pub fn digit(input: &str) -> IResult<&str, char> {
     satisfy(|c| matches!(c, '0'..='9')).parse(input)
 }
 
-/// 143 simple_id = letter { letter | digit | ’_’ } .
+/// 143 simple_id = letter { letter | digit | `_` } .
 pub fn simple_id(input: &str) -> IResult<&str, String> {
     tuple((letter, many0(alt((letter, digit, char('_'))))))
         .map(|(head, tail)| format!("{}{}", head, tail.into_iter().collect::<String>()))
