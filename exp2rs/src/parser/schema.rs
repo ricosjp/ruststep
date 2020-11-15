@@ -75,7 +75,7 @@ pub fn schema(input: &str) -> IResult<&str, Schema> {
     tuple((
         schema_decl,
         multispace0,
-        separated_list0(multispace0, entity),
+        separated_list0(multispace0, entity_decl),
         multispace0,
         schema_end,
     ))
