@@ -65,7 +65,7 @@ fn schema_end(input: &str) -> IResult<&str, ()> {
 /// 9.3 Schema
 ///
 /// ```text
-/// 296 schema_decl = SCHEMA schema_id [ schema_version_id ] ’;’ schema_body END_SCHEMA ’;’ .
+/// 296 schema_decl = SCHEMA schema_id [ schema_version_id ] `;` schema_body END_SCHEMA `;` .
 /// 298 schema_version_id = string_literal .
 /// 295 schema_body = { interface_specification } [ constant_decl ] { declaration | rule_decl } .
 /// 242 interface_specification = reference_clause | use_clause .

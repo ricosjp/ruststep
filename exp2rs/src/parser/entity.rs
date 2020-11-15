@@ -31,7 +31,7 @@ pub fn paramter_type(input: &str) -> IResult<&str, ParameterType> {
     .parse(input)
 }
 
-/// 215 explicit_attr = attribute_decl { ’,’ attribute_decl } ’:’ [ OPTIONAL ] parameter_type ’;’ .
+/// 215 explicit_attr = attribute_decl { `,` attribute_decl } `:` [ OPTIONAL ] parameter_type `;` .
 pub fn explicit_attr(input: &str) -> IResult<&str, (Vec<String>, ParameterType)> {
     // FIXME Support attribute_decl
     // FIXME OPTIONAL
@@ -48,14 +48,14 @@ pub fn explicit_attr(input: &str) -> IResult<&str, (Vec<String>, ParameterType)>
     .parse(input)
 }
 
-/// 207 entity_head = ENTITY entity_id subsuper ’;’ .
+/// 207 entity_head = ENTITY entity_id subsuper `;` .
 pub fn entity_head(input: &str) -> IResult<&str, String> {
     tuple((tag("ENTITY"), multispace1, simple_id, multispace0, tag(";")))
         .map(|(_, _, id, _, _)| id)
         .parse(input)
 }
 
-/// 206 entity_decl = entity_head entity_body END_ENTITY ’;’ .
+/// 206 entity_decl = entity_head entity_body END_ENTITY `;` .
 pub fn entity_decl(input: &str) -> IResult<&str, Entity> {
     tuple((
         entity_head,

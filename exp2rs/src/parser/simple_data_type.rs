@@ -48,7 +48,7 @@ pub fn number_type(input: &str) -> IResult<&str, SimpleType> {
     value(SimpleType::Number, tag("NUMBER")).parse(input)
 }
 
-/// 278 real_type = REAL [ ’(’ precision_spec ’)’ ] .
+/// 278 real_type = REAL [ `(` precision_spec `)` ] .
 ///
 /// 268 precision_spec = numeric_expression .
 pub fn real_type(input: &str) -> IResult<&str, SimpleType> {
@@ -88,7 +88,7 @@ pub fn binary_type(input: &str) -> IResult<&str, SimpleType> {
 /// `width_spec` in String data type (8.1.6) and Binary data type (8.1.7)
 ///
 /// ```text
-/// 341 width_spec = ’(’ width ’)’ [ FIXED ] .
+/// 341 width_spec = `(` width `)` [ FIXED ] .
 /// 340 width = numeric_expression .
 /// ```
 pub fn width_spec(input: &str) -> IResult<&str, WidthSpec> {
