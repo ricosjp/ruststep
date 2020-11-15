@@ -1,4 +1,5 @@
-use super::simple_id;
+use super::*;
+use derive_more::From;
 use nom::{bytes::complete::*, character::complete::*, multi::*, sequence::*, IResult, Parser};
 
 /// Parsed result of EXPRESS's ENTITY
@@ -36,7 +37,19 @@ pub struct Entity {
     /// attribute name and types
     ///
     /// Be sure that this "type" is a string, not validated type in this timing
-    pub attributes: Vec<(String, String)>,
+    pub attributes: Vec<(String, ParameterType)>,
+}
+
+#[derive(Debug, Clone, PartialEq, From)]
+pub enum ParameterType {
+    Simple(SimpleType),
+}
+
+/// 266 parameter_type = generalized_types | named_types | simple_types .
+pub fn paramter_type(input: &str) -> IResult<&str, ParameterType> {
+    simple_types
+        .map(|ty| ParameterType::Simple(ty))
+        .parse(input)
 }
 
 /// 9.2.1.1 Explicit attribute
@@ -46,13 +59,13 @@ pub struct Entity {
 /// 177 attribute_decl = attribute_id | redeclared_attribute .
 /// 266 parameter_type = generalized_types | named_types | simple_types .
 /// ```
-pub fn explicit_attr(input: &str) -> IResult<&str, (Vec<String>, String)> {
+pub fn explicit_attr(input: &str) -> IResult<&str, (Vec<String>, ParameterType)> {
     tuple((
         separated_list1(tuple((multispace0, tag(","), multispace0)), simple_id),
         multispace0,
         tag(":"),
         multispace0,
-        simple_id, // FIXME this must be type instead of simple_id
+        paramter_type,
         multispace0,
         tag(";"),
     ))
@@ -78,6 +91,7 @@ fn entity_end(input: &str) -> IResult<&str, ()> {
 /// 206 entity_decl = entity_head entity_body END_ENTITY ’;’ .
 /// 207 entity_head = ENTITY entity_id subsuper ’;’ .
 /// 204 entity_body = { explicit_attr } [ derive_clause ] [ inverse_clause ] [ unique_clause ] [ where_clause ] .
+/// 208 entity_id = simple_id .
 /// ```
 pub fn entity(input: &str) -> IResult<&str, Entity> {
     tuple((
@@ -100,6 +114,7 @@ pub fn entity(input: &str) -> IResult<&str, Entity> {
 
 #[cfg(test)]
 mod tests {
+    use super::*;
     use nom::Finish;
 
     #[test]
@@ -111,14 +126,14 @@ mod tests {
 
     #[test]
     fn explicit_attr() {
-        let (residual, (id, ty)) = super::explicit_attr("x : Real;").finish().unwrap();
+        let (residual, (id, ty)) = super::explicit_attr("x : REAL;").finish().unwrap();
         assert_eq!(id, &["x"]);
-        assert_eq!(ty, "Real");
+        assert!(matches!(ty, ParameterType::Simple(SimpleType::Real)));
         assert_eq!(residual, "");
 
-        let (residual, (id, ty)) = super::explicit_attr("x, y : Real;").finish().unwrap();
+        let (residual, (id, ty)) = super::explicit_attr("x, y : REAL;").finish().unwrap();
         assert_eq!(id, &["x", "y"]);
-        assert_eq!(ty, "Real");
+        assert!(matches!(ty, ParameterType::Simple(SimpleType::Real)));
         assert_eq!(residual, "");
     }
 }
