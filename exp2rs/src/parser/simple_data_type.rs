@@ -12,7 +12,7 @@ pub struct WidthSpec {
 
 /// 8.1 Simple data types
 #[derive(Debug, Clone, Copy, PartialEq)]
-pub enum SimpleDataType {
+pub enum SimpleType {
     /// 8.1.1 Number data type
     Number,
     /// 8.1.2 Real data type
@@ -29,59 +29,63 @@ pub enum SimpleDataType {
     Binary { width_spec: Option<WidthSpec> },
 }
 
-/// 8.1.1 Number data type
-///
-/// ```text
+/// 307 simple_types = binary_type | boolean_type | integer_type | logical_type | number_type | real_type | string_type .
+pub fn simple_types(input: &str) -> IResult<&str, SimpleType> {
+    alt((
+        number_type,
+        real_type,
+        integer_type,
+        logical_type,
+        boolen_type,
+        string_type,
+        binary_type,
+    ))
+    .parse(input)
+}
+
 /// 261 number_type = NUMBER .
-/// ```
-pub fn number(input: &str) -> IResult<&str, SimpleDataType> {
-    value(SimpleDataType::Number, tag("NUMBER")).parse(input)
+pub fn number_type(input: &str) -> IResult<&str, SimpleType> {
+    value(SimpleType::Number, tag("NUMBER")).parse(input)
 }
 
-/// 8.1.2 Real data type
+/// 278 real_type = REAL [ `(` precision_spec `)` ] .
 ///
-/// ```text
-/// 278 real_type = REAL [ ’(’ precision_spec ’)’ ] .
 /// 268 precision_spec = numeric_expression .
-/// ```
-pub fn real(input: &str) -> IResult<&str, SimpleDataType> {
+pub fn real_type(input: &str) -> IResult<&str, SimpleType> {
     // FIXME precision_spec is not supported
-    value(SimpleDataType::Real, tag("REAL")).parse(input)
+    value(SimpleType::Real, tag("REAL")).parse(input)
 }
 
-/// 8.1.3 Integer data type
-///
-/// ```text
 /// 241 integer_type = INTEGER .
-/// ```
-pub fn integer(input: &str) -> IResult<&str, SimpleDataType> {
-    value(SimpleDataType::Integer, tag("INTEGER")).parse(input)
+pub fn integer_type(input: &str) -> IResult<&str, SimpleType> {
+    value(SimpleType::Integer, tag("INTEGER")).parse(input)
 }
 
-/// 8.1.4 Logical data type
-///
-/// ```text
 /// 256 logical_type = LOGICAL .
-/// ```
-pub fn logical(input: &str) -> IResult<&str, SimpleDataType> {
-    value(SimpleDataType::Logical, tag("LOGICAL")).parse(input)
+pub fn logical_type(input: &str) -> IResult<&str, SimpleType> {
+    value(SimpleType::Logical, tag("LOGICAL")).parse(input)
 }
 
-/// 8.1.5 Boolen data type
-///
-/// ```text
 /// 182 boolean_type = BOOLEAN .
-/// ```
-pub fn boolen(input: &str) -> IResult<&str, SimpleDataType> {
-    value(SimpleDataType::Boolen, tag("BOOLEN")).parse(input)
+pub fn boolen_type(input: &str) -> IResult<&str, SimpleType> {
+    value(SimpleType::Boolen, tag("BOOLEN")).parse(input)
 }
 
-/// `width_spec` in String data type (8.1.6) and Binary data type (8.1.7)
-///
-/// ```text
-/// 341 width_spec = ’(’ width ’)’ [ FIXED ] .
-/// 340 width = numeric_expression .
-/// ```
+/// 311 string_type = STRING [ width_spec ] .
+pub fn string_type(input: &str) -> IResult<&str, SimpleType> {
+    tuple((tag("STRING"), multispace0, opt(width_spec)))
+        .map(|(_, _, width_spec)| SimpleType::String_ { width_spec })
+        .parse(input)
+}
+
+/// 181 binary_type = BINARY [ width_spec ] .
+pub fn binary_type(input: &str) -> IResult<&str, SimpleType> {
+    tuple((tag("BINARY"), multispace0, opt(width_spec)))
+        .map(|(_, _, width_spec)| SimpleType::Binary { width_spec })
+        .parse(input)
+}
+
+/// 341 width_spec = `(` width `)` [ FIXED ] .
 pub fn width_spec(input: &str) -> IResult<&str, WidthSpec> {
     // FIXME Should use `numeric_expression` parser
     tuple((
@@ -99,48 +103,21 @@ pub fn width_spec(input: &str) -> IResult<&str, WidthSpec> {
     .parse(input)
 }
 
-/// 8.1.6 String data type
-///
-/// ```text
-/// 311 string_type = STRING [ width_spec ] .
-/// ```
-pub fn string(input: &str) -> IResult<&str, SimpleDataType> {
-    tuple((tag("STRING"), multispace0, opt(width_spec)))
-        .map(|(_, _, width_spec)| SimpleDataType::String_ { width_spec })
-        .parse(input)
-}
-
-/// 8.1.7 Binary data type
-///
-/// ```text
-/// 181 binary_type = BINARY [ width_spec ] .
-/// ```
-pub fn binary(input: &str) -> IResult<&str, SimpleDataType> {
-    tuple((tag("BINARY"), multispace0, opt(width_spec)))
-        .map(|(_, _, width_spec)| SimpleDataType::Binary { width_spec })
-        .parse(input)
-}
-
-/// 8.1 Simple data type
-pub fn simple_data_type(input: &str) -> IResult<&str, SimpleDataType> {
-    alt((number, real, integer, logical, boolen, string, binary)).parse(input)
-}
-
 #[cfg(test)]
 mod tests {
-    use super::{SimpleDataType, WidthSpec};
+    use super::{SimpleType, WidthSpec};
     use nom::Finish;
 
     #[test]
     fn string() {
-        let (res, string) = super::string("STRING").finish().unwrap();
-        assert_eq!(string, SimpleDataType::String_ { width_spec: None });
+        let (res, string) = super::string_type("STRING").finish().unwrap();
+        assert_eq!(string, SimpleType::String_ { width_spec: None });
         assert_eq!(res, "");
 
-        let (res, string) = super::string("STRING (10)").finish().unwrap();
+        let (res, string) = super::string_type("STRING (10)").finish().unwrap();
         assert_eq!(
             string,
-            SimpleDataType::String_ {
+            SimpleType::String_ {
                 width_spec: Some(WidthSpec {
                     width: 10,
                     fixed: false,
@@ -149,10 +126,10 @@ mod tests {
         );
         assert_eq!(res, "");
 
-        let (res, string) = super::string("STRING (10) FIXED").finish().unwrap();
+        let (res, string) = super::string_type("STRING (10) FIXED").finish().unwrap();
         assert_eq!(
             string,
-            SimpleDataType::String_ {
+            SimpleType::String_ {
                 width_spec: Some(WidthSpec {
                     width: 10,
                     fixed: true,
@@ -164,14 +141,14 @@ mod tests {
 
     #[test]
     fn binary() {
-        let (res, binary) = super::binary("BINARY").finish().unwrap();
-        assert_eq!(binary, SimpleDataType::Binary { width_spec: None });
+        let (res, binary) = super::binary_type("BINARY").finish().unwrap();
+        assert_eq!(binary, SimpleType::Binary { width_spec: None });
         assert_eq!(res, "");
 
-        let (res, binary) = super::binary("BINARY (10)").finish().unwrap();
+        let (res, binary) = super::binary_type("BINARY (10)").finish().unwrap();
         assert_eq!(
             binary,
-            SimpleDataType::Binary {
+            SimpleType::Binary {
                 width_spec: Some(WidthSpec {
                     width: 10,
                     fixed: false
@@ -180,10 +157,10 @@ mod tests {
         );
         assert_eq!(res, "");
 
-        let (res, binary) = super::binary("BINARY (10) FIXED").finish().unwrap();
+        let (res, binary) = super::binary_type("BINARY (10) FIXED").finish().unwrap();
         assert_eq!(
             binary,
-            SimpleDataType::Binary {
+            SimpleType::Binary {
                 width_spec: Some(WidthSpec {
                     width: 10,
                     fixed: true
