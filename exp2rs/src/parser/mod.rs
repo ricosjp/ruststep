@@ -28,7 +28,79 @@ pub fn digit(input: &str) -> IResult<&str, char> {
     satisfy(|c| matches!(c, '0'..='9')).parse(input)
 }
 
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub enum IdKind {
+    Attribute,
+    Constant,
+    Entity,
+    Enumeration,
+    Function,
+    Parameter,
+    Procedure,
+    Rename,
+    Rule,
+    RuleLabel,
+    Schema,
+    SubtypeConstraint,
+    Type,
+    TypeLabel,
+    Variable,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub enum RefKind {
+    Attribute,
+    Constant,
+    Entity,
+    Enumeration,
+    Function,
+    Parameter,
+    Procedure,
+    Rule,
+    RuleLabel,
+    Schema,
+    SubtypeConstraint,
+    Type,
+    TypeLabel,
+    Variable,
+}
+
 /// 143 simple_id = letter { letter | digit | `_` } .
+///
+/// This parser identifies following **ALL** identifier types and references:
+///
+/// - Identifier types
+///   - 178 attribute_id = simple_id .
+///   - 197 constant_id = simple_id .
+///   - 208 entity_id = simple_id .
+///   - 210 enumeration_id = simple_id .
+///   - 222 function_id = simple_id .
+///   - 265 parameter_id = simple_id .
+///   - 273 procedure_id = simple_id .
+///   - 284 rename_id = constant_id | entity_id | function_id | procedure_id | type_id .
+///   - 293 rule_id = simple_id .
+///   - 294 rule_label_id = simple_id .
+///   - 297 schema_id = simple_id .
+///   - 298 schema_version_id = string_literal .
+///   - 317 subtype_constraint_id = simple_id .
+///   - 328 type_id = simple_id .
+///   - 330 type_label_id = simple_id .
+///   - 337 variable_id = simple_id .
+/// - Reference types
+///   - 150 attribute_ref = attribute_id .
+///   - 151 constant_ref = constant_id .
+///   - 152 entity_ref = entity_id .
+///   - 153 enumeration_ref = enumeration_id .
+///   - 154 function_ref = function_id .
+///   - 155 parameter_ref = parameter_id .
+///   - 156 procedure_ref = procedure_id .
+///   - 157 rule_label_ref = rule_label_id .
+///   - 158 rule_ref = rule_id .
+///   - 159 schema_ref = schema_id .
+///   - 160 subtype_constraint_ref = subtype_constraint_id .
+///   - 161 type_label_ref = type_label_id .
+///   - 162 type_ref = type_id .
+///   - 163 variable_ref = variable_id .
 pub fn simple_id(input: &str) -> IResult<&str, String> {
     tuple((letter, many0(alt((letter, digit, char('_'))))))
         .map(|(head, tail)| format!("{}{}", head, tail.into_iter().collect::<String>()))
