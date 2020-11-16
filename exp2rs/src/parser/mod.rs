@@ -14,6 +14,7 @@ pub use literal::*;
 pub use schema::*;
 pub use simple_data_type::*;
 
+use derive_more::{Display, Deref};
 use nom::{
     branch::*, bytes::complete::*, character::complete::*, multi::*, sequence::*, IResult, Parser,
 };
@@ -37,11 +38,11 @@ pub fn simple_id(input: &str) -> IResult<&str, String> {
 
 macro_rules! define_id_ref {
     ($ID:ident, $Ref:ident, $id_parse:ident, $ref_parse:ident) => {
-        #[derive(Debug, Clone, PartialEq)]
-        pub struct $ID(pub String);
+        #[derive(Debug, Clone, PartialEq, Display, Deref)]
+        pub struct $ID(String);
 
-        #[derive(Debug, Clone, PartialEq)]
-        pub struct $Ref(pub String);
+        #[derive(Debug, Clone, PartialEq, Display, Deref)]
+        pub struct $Ref(String);
 
         pub fn $id_parse(input: &str) -> IResult<&str, $ID> {
             simple_id.map(|id| $ID(id)).parse(input)
