@@ -1,3 +1,4 @@
+use quote::*;
 use std::{env, fs, io::Write, path::*};
 
 #[ignore]
@@ -18,7 +19,8 @@ fn decode() {
     let mut file = std::fs::File::create(&dest).unwrap();
     file.write(b"#![allow(dead_code)]\n").unwrap();
     for schema in schemas {
-        file.write(schema.rust_code().as_bytes()).unwrap();
+        file.write(schema.to_token_stream().to_string().as_bytes())
+            .unwrap();
     }
 
     // Test the generate Rust code is compile-able
