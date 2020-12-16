@@ -157,17 +157,17 @@ impl Type {
     pub fn struct_definition(&self) -> String {
         match self {
             Type::Entity { members, .. } => {
-                entity_struct_definition(self.rust_type_name(), members)
+                entity_struct_definition(&self.rust_type_name(), members)
             }
             Type::Defined { underlying, .. } => {
-                defined_type_struct(self.rust_type_name(), &underlying)
+                defined_type_struct(&self.rust_type_name(), &underlying)
             }
             _ => String::new(),
         }
     }
 }
 
-fn entity_struct_definition(name: String, members: &[MemberVariant]) -> String {
+fn entity_struct_definition(name: &str, members: &[MemberVariant]) -> String {
     let name = format_ident!("{}", name);
     let member_name: Vec<_> = members
         .iter()
@@ -202,15 +202,20 @@ fn entity_struct_definition(name: String, members: &[MemberVariant]) -> String {
     token_stream.to_string()
 }
 
-fn defined_type_struct(name: String, underlying: &String) -> String {
-    let mut res = String::new();
-    res += &format!("#[derive(Clone, Debug, PartialEq)]\n");
-    res += &format!("pub struct {}({});\n", name, underlying);
-    res += &format!(
-        "impl {} {{ fn new(entity: {}) -> {} {{ {}(entity) }} }}\n",
-        name, underlying, name, name
-    );
-    res
+fn defined_type_struct(name: &str, underlying: &str) -> String {
+    let name = format_ident!("{}", name);
+    let underlying = format_ident!("{}", underlying);
+    let token_stream = quote! {
+        #[derive(Clone, Debug, PartialEq)]
+        pub struct #name ( #underlying );
+
+        impl #name {
+            pub fn new(entity: #underlying) -> Self {
+                Self ( entity )
+            }
+        }
+    };
+    token_stream.to_string()
 }
 
 /// Corresponding to `SCHEMA` in EXPRESS
