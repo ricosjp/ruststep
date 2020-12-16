@@ -43,7 +43,7 @@ fn expr<Base, Op>(
     .parse(input)
 }
 
-/// 216 expression = simple_expression [ rel_op_extended simple_expression ] .
+/// 216 expression = simple_expression \[ rel_op_extended simple_expression \] .
 pub fn expression(input: &str) -> IResult<&str, Expression> {
     expr(input, simple_expression, rel_op_extended)
 }
@@ -58,7 +58,7 @@ pub fn term(input: &str) -> IResult<&str, Term> {
     expr(input, factor, multiplication_like_op)
 }
 
-/// 217 factor = simple_factor [ `**` simple_factor ] .
+/// 217 factor = simple_factor \[ `**` simple_factor \] .
 pub fn factor(input: &str) -> IResult<&str, Factor> {
     expr(input, simple_factor, power_op)
 }
@@ -100,7 +100,7 @@ impl From<Expression> for SimpleFactor {
 ///                   | enumeration_reference
 ///                   | interval
 ///                   | query_expression
-///                   | ( [ unary_op ] ( `(` expression `)` | primary ) ) .
+///                   | ( \[ unary_op \] ( `(` expression `)` | primary ) ) .
 pub fn simple_factor(input: &str) -> IResult<&str, SimpleFactor> {
     // FIXME Add aggregate_initializer
     // FIXME Add entity_constructor

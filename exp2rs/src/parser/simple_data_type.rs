@@ -48,7 +48,7 @@ pub fn number_type(input: &str) -> IResult<&str, SimpleType> {
     value(SimpleType::Number, tag("NUMBER")).parse(input)
 }
 
-/// 278 real_type = REAL [ `(` precision_spec `)` ] .
+/// 278 real_type = REAL \[ `(` precision_spec `)` \] .
 ///
 /// 268 precision_spec = numeric_expression .
 pub fn real_type(input: &str) -> IResult<&str, SimpleType> {
@@ -71,21 +71,21 @@ pub fn boolen_type(input: &str) -> IResult<&str, SimpleType> {
     value(SimpleType::Boolen, tag("BOOLEN")).parse(input)
 }
 
-/// 311 string_type = STRING [ width_spec ] .
+/// 311 string_type = STRING \[ width_spec \] .
 pub fn string_type(input: &str) -> IResult<&str, SimpleType> {
     tuple((tag("STRING"), multispace0, opt(width_spec)))
         .map(|(_, _, width_spec)| SimpleType::String_ { width_spec })
         .parse(input)
 }
 
-/// 181 binary_type = BINARY [ width_spec ] .
+/// 181 binary_type = BINARY \[ width_spec \] .
 pub fn binary_type(input: &str) -> IResult<&str, SimpleType> {
     tuple((tag("BINARY"), multispace0, opt(width_spec)))
         .map(|(_, _, width_spec)| SimpleType::Binary { width_spec })
         .parse(input)
 }
 
-/// 341 width_spec = `(` width `)` [ FIXED ] .
+/// 341 width_spec = `(` width `)` \[ FIXED \] .
 pub fn width_spec(input: &str) -> IResult<&str, WidthSpec> {
     // FIXME Should use `numeric_expression` parser
     tuple((

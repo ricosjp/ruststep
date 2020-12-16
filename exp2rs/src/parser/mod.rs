@@ -1,6 +1,6 @@
-//! Syntatic analysis of EXPRESS language standardized as [ISO-10303-11](https://www.iso.org/standard/38047.html)
+//! Syntatic analysis of EXPRESS language standardized as \[ISO-10303-11](https://www.iso.org/standard/38047.html)
 //!
-//! This module is based on [nom](https://github.com/Geal/nom) parser combinater.
+//! This module is based on \[nom](https://github.com/Geal/nom) parser combinater.
 
 mod entity;
 mod expression;
