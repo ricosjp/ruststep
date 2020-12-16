@@ -45,10 +45,14 @@ use nom::{
 /// "#.trim()).unwrap();
 /// ```
 pub fn parse(input: &str) -> Result<Vec<Schema>, nom::error::Error<&str>> {
-    let (_residual, schemas) = tuple((multispace0, many1(schema), multispace0))
-        .map(|(_, schemas, _)| schemas)
-        .parse(input)
-        .finish()?;
+    let (_residual, schemas) = tuple((
+        multispace0,
+        separated_list1(multispace1, schema),
+        multispace0,
+    ))
+    .map(|(_, schemas, _)| schemas)
+    .parse(input)
+    .finish()?;
     // should check residual here
     Ok(schemas)
 }
