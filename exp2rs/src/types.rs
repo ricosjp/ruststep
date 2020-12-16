@@ -1,4 +1,5 @@
 use inflector::Inflector;
+use quote::*;
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub enum Type {
@@ -166,35 +167,39 @@ impl Type {
     }
 }
 
-fn entity_struct_definition(name: String, members: &Vec<MemberVariant>) -> String {
-    let mut res = String::new();
-    res += &format!(
-        "#[derive(Clone, Debug, PartialEq)]\npub struct {} {{ ",
-        name
-    );
-    for member in members {
-        let type_name = if member.optional {
-            format!("Option<{}>", member.type_name.to_pascal_case())
-        } else {
-            member.type_name.to_pascal_case()
-        };
-        res += &format!("{}: {}, ", member.name, type_name)
-    }
-    res += &format!("}}\nimpl {} {{ pub fn new(", name);
-    for member in members {
-        let type_name = if member.optional {
-            format!("Option<{}>", member.type_name.to_pascal_case())
-        } else {
-            member.type_name.to_pascal_case()
-        };
-        res += &format!("{}: {}, ", member.name, type_name)
-    }
-    res += &format!(") -> {} {{ {} {{ ", name, name);
-    for member in members {
-        res += &format!("{}, ", member.name);
-    }
-    res += "} } }\n";
-    res
+fn entity_struct_definition(name: String, members: &[MemberVariant]) -> String {
+    let name = format_ident!("{}", name);
+    let member_name: Vec<_> = members
+        .iter()
+        .map(|member| format_ident!("{}", member.name))
+        .collect();
+    let member_type: Vec<_> = members
+        .iter()
+        .map(|member| {
+            let name = format_ident!("{}", member.type_name.to_pascal_case());
+            if member.optional {
+                quote! { Option<#name> }
+            } else {
+                quote! { #name }
+            }
+        })
+        .collect();
+
+    let token_stream = quote! {
+        #[derive(Clone, Debug, PartialEq)]
+        pub struct #name {
+            #(
+            #member_name : #member_type,
+            )*
+        }
+
+        impl #name {
+            pub fn new(#(#member_name : #member_type),*) -> Self {
+                Self { #(#member_name),* }
+            }
+        }
+    };
+    token_stream.to_string()
 }
 
 fn defined_type_struct(name: String, underlying: &String) -> String {
