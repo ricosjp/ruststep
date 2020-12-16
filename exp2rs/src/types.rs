@@ -1,4 +1,6 @@
 use inflector::Inflector;
+use proc_macro2::TokenStream;
+use quote::*;
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub enum Type {
@@ -152,60 +154,70 @@ impl Type {
             Type::Aggrigate => "dyn Any".into(),
         }
     }
+}
 
-    pub fn struct_definition(&self) -> String {
-        match self {
+impl ToTokens for Type {
+    fn to_tokens(&self, tokens: &mut TokenStream) {
+        tokens.append_all(match self {
             Type::Entity { members, .. } => {
-                entity_struct_definition(self.rust_type_name(), members)
+                entity_struct_definition(&self.rust_type_name(), members)
             }
             Type::Defined { underlying, .. } => {
-                defined_type_struct(self.rust_type_name(), &underlying)
+                defined_type_struct(&self.rust_type_name(), &underlying)
             }
-            _ => String::new(),
+            _ => unimplemented!(),
+        })
+    }
+}
+
+fn entity_struct_definition(name: &str, members: &[MemberVariant]) -> TokenStream {
+    let name = format_ident!("{}", name);
+    let member_name: Vec<_> = members
+        .iter()
+        .map(|member| format_ident!("{}", member.name))
+        .collect();
+    let member_type: Vec<_> = members
+        .iter()
+        .map(|member| {
+            let name = format_ident!("{}", member.type_name.to_pascal_case());
+            if member.optional {
+                quote! { Option<#name> }
+            } else {
+                quote! { #name }
+            }
+        })
+        .collect();
+
+    quote! {
+        #[derive(Clone, Debug, PartialEq)]
+        pub struct #name {
+            #(
+            #member_name : #member_type,
+            )*
+        }
+
+        impl #name {
+            pub fn new(#(#member_name : #member_type),*) -> Self {
+                Self { #(#member_name),* }
+            }
         }
     }
 }
 
-fn entity_struct_definition(name: String, members: &Vec<MemberVariant>) -> String {
-    let mut res = String::new();
-    res += &format!(
-        "#[derive(Clone, Debug, PartialEq)]\npub struct {} {{ ",
-        name
-    );
-    for member in members {
-        let type_name = if member.optional {
-            format!("Option<{}>", member.type_name.to_pascal_case())
-        } else {
-            member.type_name.to_pascal_case()
-        };
-        res += &format!("{}: {}, ", member.name, type_name)
-    }
-    res += &format!("}}\nimpl {} {{ pub fn new(", name);
-    for member in members {
-        let type_name = if member.optional {
-            format!("Option<{}>", member.type_name.to_pascal_case())
-        } else {
-            member.type_name.to_pascal_case()
-        };
-        res += &format!("{}: {}, ", member.name, type_name)
-    }
-    res += &format!(") -> {} {{ {} {{ ", name, name);
-    for member in members {
-        res += &format!("{}, ", member.name);
-    }
-    res += "} } }\n";
-    res
-}
+fn defined_type_struct(name: &str, underlying: &str) -> TokenStream {
+    let name = format_ident!("{}", name);
+    let underlying = format_ident!("{}", underlying);
 
-fn defined_type_struct(name: String, underlying: &String) -> String {
-    let mut res = String::new();
-    res += &format!("#[derive(Clone, Debug, PartialEq)]\n");
-    res += &format!("pub struct {}({});\n", name, underlying);
-    res += &format!(
-        "impl {} {{ fn new(entity: {}) -> {} {{ {}(entity) }} }}\n",
-        name, underlying, name, name
-    );
-    res
+    quote! {
+        #[derive(Clone, Debug, PartialEq)]
+        pub struct #name ( #underlying );
+
+        impl #name {
+            pub fn new(entity: #underlying) -> Self {
+                Self ( entity )
+            }
+        }
+    }
 }
 
 /// Corresponding to `SCHEMA` in EXPRESS
@@ -236,15 +248,15 @@ pub struct Schema {
     pub types: Vec<Type>,
 }
 
-impl Schema {
-    pub fn rust_code(&self) -> String {
-        let mut res = String::new();
-        res += &format!("mod {} {{\n", self.name.to_snake_case());
-        for current_type in &self.types {
-            res += &current_type.struct_definition();
-        }
-        res += "}";
-        res
+impl ToTokens for Schema {
+    fn to_tokens(&self, tokens: &mut TokenStream) {
+        let name = format_ident!("{}", self.name);
+        let types = &self.types;
+        tokens.append_all(quote! {
+            mod #name {
+                #(#types)*
+            }
+        });
     }
 }
 
@@ -269,7 +281,7 @@ mod tests {
                 },
             ],
         };
-        println!("{}", entity.struct_definition());
+        println!("{}", entity.to_token_stream());
     }
 
     #[test]
@@ -278,6 +290,6 @@ mod tests {
             name: "test_defined_type".into(),
             underlying: "FormerType".into(),
         };
-        println!("{}", defined.struct_definition());
+        println!("{}", defined.to_token_stream());
     }
 }
