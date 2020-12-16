@@ -16,8 +16,42 @@ pub use simple_data_type::*;
 
 use derive_more::{Deref, Display};
 use nom::{
-    branch::*, bytes::complete::*, character::complete::*, multi::*, sequence::*, IResult, Parser,
+    branch::*, bytes::complete::*, character::complete::*, multi::*, sequence::*, Finish, IResult,
+    Parser,
 };
+
+/// Entrypoint of entire EXPRESS language parser
+///
+/// Example
+/// --------
+///
+/// ```
+/// let schemas = exp2rs::parser::parse(r#"
+/// SCHEMA one;
+///   ENTITY first;
+///     m_ref : second;
+///     fattr : STRING;
+///   END_ENTITY;
+///   ENTITY second;
+///     sattr : STRING;
+///   END_ENTITY;
+/// END_SCHEMA;
+///
+/// SCHEMA geometry0;
+///   ENTITY point;
+///     x, y, z: REAL;
+///   END_ENTITY;
+/// END_SCHEMA;
+/// "#.trim()).unwrap();
+/// ```
+pub fn parse(input: &str) -> Result<Vec<Schema>, nom::error::Error<&str>> {
+    let (_residual, schemas) = tuple((multispace0, many1(schema), multispace0))
+        .map(|(_, schemas, _)| schemas)
+        .parse(input)
+        .finish()?;
+    // should check residual here
+    Ok(schemas)
+}
 
 /// 128 letter = `a` | `b` | `c` | `d` | `e` | `f` | `g` | `h` | `i` | `j` | `k` | `l` |`m` | `n` | `o` | `p` | `q` | `r` | `s` | `t` | `u` | `v` | `w` | `x` |`y` | `z` .
 pub fn letter(input: &str) -> IResult<&str, char> {
