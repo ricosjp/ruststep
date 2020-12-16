@@ -5,6 +5,7 @@
 //!
 
 pub mod decode;
+pub mod error;
 pub mod parser;
 pub mod semantics;
 pub mod types;

@@ -1,4 +1,4 @@
-use crate::parser::*;
+use crate::{error::*, parser::*};
 use std::collections::HashMap;
 
 /// Additional names
@@ -12,9 +12,10 @@ pub enum Type {
 pub struct Namespace(HashMap<String, HashMap<String, Type>>);
 
 impl Namespace {
-    pub fn new(schemas: &[Schema]) -> Self {
+    pub fn new(schemas: &[Schema]) -> Result<Self, crate::error::Error> {
         let mut names = HashMap::new();
         for schema in schemas {
+            let schema_name = schema.name.clone();
             let mut local_names = HashMap::new();
             for entity in &schema.entities {
                 let attribute_names = entity
@@ -22,15 +23,21 @@ impl Namespace {
                     .iter()
                     .map(|(name, _ty)| name.clone())
                     .collect();
-                local_names
+                if local_names
                     .insert(entity.name.clone(), Type::Entity { attribute_names })
-                    .expect("entity name is duplicated");
+                    .is_some()
+                {
+                    return Err(Error::DuplicatedEntity {
+                        schema: schema_name,
+                        name: entity.name.clone(),
+                    });
+                }
             }
-            names
-                .insert(schema.name.clone(), local_names)
-                .expect("Schema name is duplicated");
+            if names.insert(schema_name.clone(), local_names).is_some() {
+                return Err(Error::DuplicatedSchema { name: schema_name });
+            }
         }
-        Self(names)
+        Ok(Self(names))
     }
 }
 
