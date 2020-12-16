@@ -6,6 +6,7 @@
 
 pub mod decode;
 pub mod parser;
+pub mod semantics;
 pub mod types;
 
 pub use decode::decode;
