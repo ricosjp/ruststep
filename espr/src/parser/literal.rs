@@ -25,7 +25,7 @@ pub enum Literal {
 /// --------
 ///
 /// ```
-/// use exp2rs::parser::*;
+/// use espr::parser::*;
 /// use nom::Finish;
 ///
 /// let (residual, l) = literal("23").finish().unwrap();
@@ -61,7 +61,7 @@ pub fn logical_literal(input: &str) -> IResult<&str, Logical> {
 /// --------
 ///
 /// ```
-/// use exp2rs::parser;
+/// use espr::parser;
 /// use nom::Finish;
 ///
 /// let (residual, value) = parser::integer_literal("123").finish().unwrap();
@@ -78,7 +78,7 @@ pub fn integer_literal(input: &str) -> IResult<&str, u64> {
 /// --------
 ///
 /// ```
-/// use exp2rs::parser;
+/// use espr::parser;
 /// use nom::Finish;
 ///
 /// let (residual, value) = parser::real_literal("123").finish().unwrap();
