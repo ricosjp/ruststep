@@ -1,4 +1,5 @@
 use inflector::Inflector;
+use proc_macro2::TokenStream;
 use quote::*;
 
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -157,17 +158,17 @@ impl Type {
     pub fn struct_definition(&self) -> String {
         match self {
             Type::Entity { members, .. } => {
-                entity_struct_definition(&self.rust_type_name(), members)
+                entity_struct_definition(&self.rust_type_name(), members).to_string()
             }
             Type::Defined { underlying, .. } => {
-                defined_type_struct(&self.rust_type_name(), &underlying)
+                defined_type_struct(&self.rust_type_name(), &underlying).to_string()
             }
             _ => String::new(),
         }
     }
 }
 
-fn entity_struct_definition(name: &str, members: &[MemberVariant]) -> String {
+fn entity_struct_definition(name: &str, members: &[MemberVariant]) -> TokenStream {
     let name = format_ident!("{}", name);
     let member_name: Vec<_> = members
         .iter()
@@ -185,7 +186,7 @@ fn entity_struct_definition(name: &str, members: &[MemberVariant]) -> String {
         })
         .collect();
 
-    let token_stream = quote! {
+    quote! {
         #[derive(Clone, Debug, PartialEq)]
         pub struct #name {
             #(
@@ -198,14 +199,14 @@ fn entity_struct_definition(name: &str, members: &[MemberVariant]) -> String {
                 Self { #(#member_name),* }
             }
         }
-    };
-    token_stream.to_string()
+    }
 }
 
-fn defined_type_struct(name: &str, underlying: &str) -> String {
+fn defined_type_struct(name: &str, underlying: &str) -> TokenStream {
     let name = format_ident!("{}", name);
     let underlying = format_ident!("{}", underlying);
-    let token_stream = quote! {
+
+    quote! {
         #[derive(Clone, Debug, PartialEq)]
         pub struct #name ( #underlying );
 
@@ -214,8 +215,7 @@ fn defined_type_struct(name: &str, underlying: &str) -> String {
                 Self ( entity )
             }
         }
-    };
-    token_stream.to_string()
+    }
 }
 
 /// Corresponding to `SCHEMA` in EXPRESS
