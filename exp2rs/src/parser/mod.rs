@@ -14,7 +14,7 @@ pub use literal::*;
 pub use schema::*;
 pub use simple_data_type::*;
 
-use derive_more::{Display, Deref};
+use derive_more::{Deref, Display};
 use nom::{
     branch::*, bytes::complete::*, character::complete::*, multi::*, sequence::*, IResult, Parser,
 };

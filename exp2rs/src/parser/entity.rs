@@ -31,7 +31,7 @@ pub fn paramter_type(input: &str) -> IResult<&str, ParameterType> {
     .parse(input)
 }
 
-/// 215 explicit_attr = attribute_decl { `,` attribute_decl } `:` [ OPTIONAL ] parameter_type `;` .
+/// 215 explicit_attr = attribute_decl { `,` attribute_decl } `:` \[ OPTIONAL \] parameter_type `;` .
 pub fn explicit_attr(input: &str) -> IResult<&str, (Vec<String>, ParameterType)> {
     // FIXME Support attribute_decl
     // FIXME OPTIONAL

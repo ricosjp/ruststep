@@ -72,7 +72,7 @@ pub fn integer_literal(input: &str) -> IResult<&str, u64> {
     digit1.map(|d: &str| d.parse().unwrap()).parse(input)
 }
 
-/// 142 real_literal = integer_literal | ( digits `.` [ digits ] [ `e` [ sign ] digits ] ) .
+/// 142 real_literal = integer_literal | ( digits `.` \[ digits \] \[ `e` \[ sign \] digits \] ) .
 ///
 /// Example
 /// --------
