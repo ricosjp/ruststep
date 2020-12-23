@@ -8,7 +8,7 @@ fn decode() {
 
     // load EXPRESS
     let code = fs::read_to_string(root.join("express/test.exp")).unwrap();
-    let schemas = exp2rs::decode(&code).unwrap();
+    let schemas = espr::decode(&code).unwrap();
 
     // Generate Rust code
     let out_dir = root.join("generated");
