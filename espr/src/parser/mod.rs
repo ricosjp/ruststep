@@ -26,7 +26,7 @@ use nom::{
 /// --------
 ///
 /// ```
-/// let schemas = exp2rs::parser::parse(r#"
+/// let schemas = espr::parser::parse(r#"
 /// SCHEMA one;
 ///   ENTITY first;
 ///     m_ref : second;
