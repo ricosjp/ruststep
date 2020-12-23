@@ -1,9 +1,10 @@
 use crate::{error::*, parser::*};
+use maplit::hashmap;
 use std::{collections::HashMap, fmt};
 
 /// Identifier in EXPRESS language must be one of scopes described in
 /// "Table 9 – Scope and identifier defining items"
-#[derive(Debug, Clone, PartialEq, Hash)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub enum Scope {
     /// Root of all scopes
     Global,
@@ -117,41 +118,68 @@ impl fmt::Display for Scope {
     }
 }
 
-/// Additional names
-#[derive(Debug, Clone, PartialEq)]
-pub enum Type {
-    Entity { attribute_names: Vec<String> },
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum IdentifierType {
+    Entity,
+    Schema,
+    Attribute,
 }
 
-/// Identifiers in schemas
 #[derive(Debug, Clone, PartialEq)]
-pub struct Namespace(HashMap<String, HashMap<String, Type>>);
+pub struct Namespace(HashMap<Scope, HashMap<IdentifierType, Vec<String>>>);
 
 impl Namespace {
-    pub fn new(schemas: &[Schema]) -> Result<Self, crate::error::Error> {
+    pub fn new(schemas: &[Schema]) -> Result<Self, Error> {
         let mut names = HashMap::new();
+        let mut current_scope = Scope::Global;
+        names.insert(
+            current_scope.clone(),
+            hashmap! {
+                IdentifierType::Schema => schemas.iter().map(|schema| schema.name.clone()).collect()
+            },
+        ); // this must be None
+
         for schema in schemas {
-            let schema_name = schema.name.clone();
-            let mut local_names = HashMap::new();
+            // push scope
+            current_scope = Scope::Schema {
+                parent: Box::new(current_scope),
+                name: schema.name.clone(),
+            };
+            names.insert(
+                current_scope.clone(),
+                hashmap! {
+                    IdentifierType::Entity => schema.entities.iter().map(|e| e.name.clone()).collect()
+                },
+            );
+
             for entity in &schema.entities {
-                let attribute_names = entity
+                // push scope
+                current_scope = Scope::Entity {
+                    parent: Box::new(current_scope),
+                    name: entity.name.clone(),
+                };
+                let attrs = entity
                     .attributes
                     .iter()
                     .map(|(name, _ty)| name.clone())
                     .collect();
-                if local_names
-                    .insert(entity.name.clone(), Type::Entity { attribute_names })
-                    .is_some()
-                {
-                    return Err(Error::DuplicatedEntity {
-                        schema: schema_name,
-                        name: entity.name.clone(),
-                    });
-                }
+                names.insert(
+                    current_scope.clone(),
+                    hashmap! {
+                        IdentifierType::Attribute => attrs
+                    },
+                );
+
+                // pop scope
+                current_scope = current_scope
+                    .parent()
+                    .expect("Must be schema scope, not global");
             }
-            if names.insert(schema_name.clone(), local_names).is_some() {
-                return Err(Error::DuplicatedSchema { name: schema_name });
-            }
+
+            // pop scope
+            current_scope = current_scope
+                .parent()
+                .expect("Must be schema scope, not global");
         }
         Ok(Self(names))
     }
