@@ -1,5 +1,4 @@
 use crate::{error::*, parser::*};
-use derive_more::{Deref, DerefMut};
 use itertools::*;
 use maplit::hashmap;
 use std::{collections::HashMap, fmt};
@@ -20,13 +19,13 @@ pub enum ScopeType {
     Type,
 }
 
-#[derive(Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Deref, DerefMut)]
+#[derive(Clone, PartialEq, Eq, Hash)]
 pub struct Scope(Vec<(ScopeType, String)>);
 
 // Custom debug output like: `schema.entity`
 impl fmt::Display for Scope {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "{}", self.iter().map(|(_ty, name)| name).join("."))
+        write!(f, "{}", self.0.iter().map(|(_ty, name)| name).join("."))
     }
 }
 
@@ -34,7 +33,7 @@ impl fmt::Display for Scope {
 impl fmt::Debug for Scope {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "Scope(")?;
-        for (i, (ty, name)) in self.iter().enumerate() {
+        for (i, (ty, name)) in self.0.iter().enumerate() {
             if i != 0 {
                 write!(f, ".")?;
             }
@@ -42,6 +41,24 @@ impl fmt::Debug for Scope {
         }
         write!(f, ")")?;
         Ok(())
+    }
+}
+
+impl Scope {
+    fn root() -> Self {
+        Self(Vec::new())
+    }
+
+    fn pushed(&self, ty: ScopeType, name: &str) -> Self {
+        let mut new = self.clone();
+        new.0.push((ty, name.to_string()));
+        new
+    }
+
+    fn popd(&self) -> Self {
+        let mut new = self.clone();
+        new.0.pop().expect("Cannot get the parent of root scope");
+        new
     }
 }
 
@@ -58,7 +75,7 @@ pub struct Namespace(HashMap<Scope, HashMap<IdentifierType, Vec<String>>>);
 impl Namespace {
     pub fn new(schemas: &[Schema]) -> Result<Self, Error> {
         let mut names = HashMap::new();
-        let mut current_scope = Scope(Vec::new());
+        let mut current_scope = Scope::root();
         names.insert(
             current_scope.clone(),
             hashmap! {
@@ -68,7 +85,7 @@ impl Namespace {
 
         for schema in schemas {
             // push scope
-            current_scope.push((ScopeType::Schema, schema.name.clone()));
+            current_scope = current_scope.pushed(ScopeType::Schema, &schema.name);
             names.insert(
                 current_scope.clone(),
                 hashmap! {
@@ -78,7 +95,7 @@ impl Namespace {
 
             for entity in &schema.entities {
                 // push scope
-                current_scope.push((ScopeType::Entity, entity.name.clone()));
+                current_scope = current_scope.pushed(ScopeType::Entity, &entity.name);
                 let attrs = entity
                     .attributes
                     .iter()
@@ -91,10 +108,10 @@ impl Namespace {
                     },
                 );
 
-                current_scope.pop();
+                current_scope = current_scope.popd();
             }
 
-            current_scope.pop();
+            current_scope = current_scope.popd();
         }
         Ok(Self(names))
     }
@@ -106,7 +123,7 @@ mod tests {
 
     #[test]
     fn scope() {
-        let root = Scope(Vec::new());
+        let root = Scope::root();
         assert_eq!(format!("{}", root), "");
 
         let schema1 = Scope(vec![(ScopeType::Schema, "schema1".to_string())]);
