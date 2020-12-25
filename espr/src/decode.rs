@@ -1,6 +1,5 @@
-use super::*;
+use crate::semantics::*;
 use regex::Regex;
-use types::*;
 
 const SYNTAX_ERROR: &str = "Syntax Error";
 

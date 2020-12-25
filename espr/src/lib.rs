@@ -8,7 +8,6 @@ pub mod decode;
 pub mod error;
 pub mod parser;
 pub mod semantics;
-pub mod types;
 
 pub use decode::decode;
 pub use iso_10303_simple_types::*;
