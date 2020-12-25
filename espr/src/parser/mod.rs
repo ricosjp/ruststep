@@ -1,6 +1,35 @@
-//! Syntatic analysis of EXPRESS language standardized as [ISO-10303-11](https://www.iso.org/standard/38047.html)
+//! Tokenize EXPRESS language into [SyntaxTree]
 //!
-//! This module is based on [nom](https://github.com/Geal/nom) parser combinater.
+//! This submodule responsible for tokenize of EXPRESS language input into a [SyntaxTree] struct.
+//! Following steps of compile, i.e. semantics analysis and Rust code generation will be handled by
+//! other submodules.
+//!
+//! This submodule is based on [nom](https://github.com/Geal/nom) parser combinater.
+//!
+//! Example
+//! --------
+//!
+//! EXPRESS Language string is parsed into [SyntaxTree]:
+//!
+//! ```
+//! let schemas = espr::parser::SyntaxTree::parse(r#"
+//! SCHEMA one;
+//!   ENTITY first;
+//!     m_ref : second;
+//!     fattr : STRING;
+//!   END_ENTITY;
+//!   ENTITY second;
+//!     sattr : STRING;
+//!   END_ENTITY;
+//! END_SCHEMA;
+//!
+//! SCHEMA geometry0;
+//!   ENTITY point;
+//!     x, y, z: REAL;
+//!   END_ENTITY;
+//! END_SCHEMA;
+//! "#.trim()).unwrap();
+//! ```
 
 mod entity;
 mod expression;
@@ -21,29 +50,6 @@ use nom::{
 };
 
 /// Entire syntax tree parsed from EXPRESS Language string
-///
-/// Example
-/// --------
-///
-/// ```
-/// let schemas = espr::parser::SyntaxTree::parse(r#"
-/// SCHEMA one;
-///   ENTITY first;
-///     m_ref : second;
-///     fattr : STRING;
-///   END_ENTITY;
-///   ENTITY second;
-///     sattr : STRING;
-///   END_ENTITY;
-/// END_SCHEMA;
-///
-/// SCHEMA geometry0;
-///   ENTITY point;
-///     x, y, z: REAL;
-///   END_ENTITY;
-/// END_SCHEMA;
-/// "#.trim()).unwrap();
-/// ```
 #[derive(Debug, Clone, PartialEq)]
 pub struct SyntaxTree {
     pub schemas: Vec<Schema>,
