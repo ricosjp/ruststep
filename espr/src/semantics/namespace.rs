@@ -13,17 +13,17 @@ pub enum IdentifierType {
 pub struct Namespace(HashMap<Scope, HashMap<IdentifierType, Vec<String>>>);
 
 impl Namespace {
-    pub fn new(schemas: &[Schema]) -> Result<Self, Error> {
+    pub fn new(syn: &SyntaxTree) -> Result<Self, Error> {
         let mut names = HashMap::new();
         let mut current_scope = Scope::root();
         names.insert(
             current_scope.clone(),
             hashmap! {
-                IdentifierType::Schema => schemas.iter().map(|schema| schema.name.clone()).collect()
+                IdentifierType::Schema => syn.schemas.iter().map(|schema| schema.name.clone()).collect()
             },
         );
 
-        for schema in schemas {
+        for schema in &syn.schemas {
             // push scope
             current_scope = current_scope.pushed(ScopeType::Schema, &schema.name);
             names.insert(
@@ -63,31 +63,7 @@ mod tests {
 
     #[test]
     fn namespace() {
-        let ns = Namespace::new(&example());
+        let ns = Namespace::new(&SyntaxTree::example());
         dbg!(&ns);
-    }
-
-    fn example() -> Vec<Schema> {
-        crate::parser::parse(
-            r#"
-            SCHEMA one;
-              ENTITY first;
-                m_ref : second;
-                fattr : STRING;
-              END_ENTITY;
-              ENTITY second;
-                sattr : STRING;
-              END_ENTITY;
-            END_SCHEMA;
-
-            SCHEMA geometry0;
-              ENTITY point;
-                x, y, z: REAL;
-              END_ENTITY;
-            END_SCHEMA;
-            "#
-            .trim(),
-        )
-        .unwrap()
     }
 }
