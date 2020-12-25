@@ -1,7 +1,7 @@
 use crate::{error::*, parser::*};
 use itertools::*;
 use maplit::hashmap;
-use std::{collections::HashMap, fmt};
+use std::{cmp, collections::HashMap, fmt};
 
 /// Identifier in EXPRESS language must be one of scopes described in
 /// "Table 9 – Scope and identifier defining items"
@@ -19,6 +19,35 @@ pub enum ScopeType {
     Type,
 }
 
+/// Scope declaration
+///
+/// Partial Order
+/// --------------
+/// Scope is partially ordered in terms of the sub-scope relation:
+///
+/// ```
+/// # use espr::semantics::*;
+/// let root = Scope::root();
+/// let schema = root.pushed(ScopeType::Schema, "schema");
+/// assert!(root > schema); // schema scope is sub-scope of root scope
+/// ```
+///
+/// Be sure that this is not total order:
+///
+/// ```
+/// # use espr::semantics::*;
+/// let root = Scope::root();
+/// let schema1 = root.pushed(ScopeType::Schema, "schema1");
+/// let schema2 = root.pushed(ScopeType::Schema, "schema2");
+///
+/// // schema1 and schema2 are both sub-scope of root,
+/// assert!(root > schema1);
+/// assert!(root > schema2);
+///
+/// // but they are independent. Comparison always returns false:
+/// assert!(!(schema1 <= schema2));
+/// assert!(!(schema1 >= schema2));
+/// ```
 #[derive(Clone, PartialEq, Eq, Hash)]
 pub struct Scope(Vec<(ScopeType, String)>);
 
@@ -44,18 +73,46 @@ impl fmt::Debug for Scope {
     }
 }
 
+impl PartialOrd for Scope {
+    fn partial_cmp(&self, other: &Self) -> Option<cmp::Ordering> {
+        for (lhs, rhs) in self.0.iter().zip(other.0.iter()) {
+            if lhs != rhs {
+                return None;
+            }
+        }
+        if self.0.len() == other.0.len() {
+            Some(cmp::Ordering::Equal)
+        } else if self.0.len() > other.0.len() {
+            Some(cmp::Ordering::Less)
+        } else {
+            Some(cmp::Ordering::Greater)
+        }
+    }
+}
+
 impl Scope {
-    fn root() -> Self {
+    pub fn root() -> Self {
         Self(Vec::new())
     }
 
-    fn pushed(&self, ty: ScopeType, name: &str) -> Self {
+    pub fn pushed(&self, ty: ScopeType, name: &str) -> Self {
         let mut new = self.clone();
         new.0.push((ty, name.to_string()));
         new
     }
 
-    fn popd(&self) -> Self {
+    /// Pop the last scope
+    ///
+    /// Panics
+    /// ------
+    /// - when try to pop root scope
+    ///
+    ///   ```should_panic
+    ///   # use espr::semantics::*;
+    ///   let root = Scope::root();
+    ///   let _ = root.popd();
+    ///   ```
+    pub fn popd(&self) -> Self {
         let mut new = self.clone();
         new.0.pop().expect("Cannot get the parent of root scope");
         new
@@ -126,14 +183,11 @@ mod tests {
         let root = Scope::root();
         assert_eq!(format!("{}", root), "");
 
-        let schema1 = Scope(vec![(ScopeType::Schema, "schema1".to_string())]);
-        assert_eq!(format!("{}", schema1), "schema1");
-        assert_eq!(format!("{:?}", schema1), "Scope(schema1[Schema])");
+        let schema = root.pushed(ScopeType::Schema, "schema1");
+        assert_eq!(format!("{}", schema), "schema1");
+        assert_eq!(format!("{:?}", schema), "Scope(schema1[Schema])");
 
-        let entity = Scope(vec![
-            (ScopeType::Schema, "schema1".to_string()),
-            (ScopeType::Entity, "entity1".to_string()),
-        ]);
+        let entity = schema.pushed(ScopeType::Entity, "entity1");
         assert_eq!(format!("{}", entity), "schema1.entity1");
         assert_eq!(
             format!("{:?}", entity),
