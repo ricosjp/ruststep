@@ -50,29 +50,6 @@ use nom::{
 };
 
 /// Entire syntax tree parsed from EXPRESS Language string
-///
-/// Example
-/// --------
-///
-/// ```
-/// let schemas = espr::parser::SyntaxTree::parse(r#"
-/// SCHEMA one;
-///   ENTITY first;
-///     m_ref : second;
-///     fattr : STRING;
-///   END_ENTITY;
-///   ENTITY second;
-///     sattr : STRING;
-///   END_ENTITY;
-/// END_SCHEMA;
-///
-/// SCHEMA geometry0;
-///   ENTITY point;
-///     x, y, z: REAL;
-///   END_ENTITY;
-/// END_SCHEMA;
-/// "#.trim()).unwrap();
-/// ```
 #[derive(Debug, Clone, PartialEq)]
 pub struct SyntaxTree {
     pub schemas: Vec<Schema>,
