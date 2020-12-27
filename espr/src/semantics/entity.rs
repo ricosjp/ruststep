@@ -1,17 +1,12 @@
 use super::*;
+use inflector::Inflector;
 use proc_macro2::TokenStream;
 use quote::*;
 
-/// Parsed result of EXPRESS's ENTITY
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Entity {
-    /// Name of this entity type
-    pub name: String,
-
-    /// attribute name and types
-    ///
-    /// Be sure that this "type" is a string, not validated type in this timing
-    pub attributes: Vec<Attribute>,
+    name: String,
+    attributes: Vec<Attribute>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -23,13 +18,15 @@ pub struct Attribute {
 
 impl ToTokens for Entity {
     fn to_tokens(&self, tokens: &mut TokenStream) {
-        let name = format_ident!("{}", self.name);
-        let member_name: Vec<_> = self
+        // EXPRESS identifier should be snake_case, but Rust struct should be PascalCase.
+        let name = format_ident!("{}", self.name.to_pascal_case());
+
+        let attr_name: Vec<_> = self
             .attributes
             .iter()
             .map(|Attribute { name, .. }| format_ident!("{}", name))
             .collect();
-        let member_type: Vec<_> = self
+        let attr_type: Vec<_> = self
             .attributes
             .iter()
             .map(|Attribute { ty, optional, .. }| {
@@ -45,13 +42,13 @@ impl ToTokens for Entity {
             #[derive(Clone, Debug, PartialEq)]
             pub struct #name {
                 #(
-                #member_name : #member_type,
+                #attr_name : #attr_type,
                 )*
             }
 
             impl #name {
-                pub fn new(#(#member_name : #member_type),*) -> Self {
-                    Self { #(#member_name),* }
+                pub fn new(#(#attr_name : #attr_type),*) -> Self {
+                    Self { #(#attr_name),* }
                 }
             }
         })
