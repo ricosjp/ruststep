@@ -1,17 +1,12 @@
+use super::Entity;
+use crate::parser::SimpleType;
 use inflector::Inflector;
 use proc_macro2::TokenStream;
 use quote::*;
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub enum Type {
-    // simple types
-    Number,
-    Real,
-    Integer,
-    String,
-    Boolean,
-    Logical,
-    Binary(Option<usize>),
+    SimpleType(SimpleType),
 
     // aggregate types
     Array {
@@ -33,11 +28,9 @@ pub enum Type {
         length_range: (usize, Option<usize>),
         base_type: String,
     },
+
     // named types
-    Entity {
-        name: String,
-        members: Vec<MemberVariant>,
-    },
+    Entity(Entity),
     Defined {
         name: String,
         underlying: String,
@@ -68,13 +61,7 @@ pub struct MemberVariant {
 impl Type {
     pub fn is_simple(&self) -> bool {
         match self {
-            Type::Number => true,
-            Type::Real => true,
-            Type::Integer => true,
-            Type::String => true,
-            Type::Boolean => true,
-            Type::Logical => true,
-            Type::Binary(_) => true,
+            Type::SimpleType(_) => true,
             _ => false,
         }
     }
@@ -130,14 +117,7 @@ impl Type {
 
     pub fn rust_type_name(&self) -> String {
         match self {
-            Type::Number => "f64".into(),
-            Type::Real => "f64".into(),
-            Type::Integer => "isize".into(),
-            Type::String => "String".into(),
-            Type::Boolean => "bool".into(),
-            Type::Logical => "Logical".into(),
-            Type::Binary(None) => "Vec<bool>".into(),
-            Type::Binary(Some(len)) => format!("[bool; {}]", len),
+            Type::SimpleType(ty) => format!("{:?}", ty),
             Type::Array {
                 index_range,
                 base_type,
@@ -146,7 +126,7 @@ impl Type {
             Type::List { base_type, .. } => format!("Vec<{}>", base_type),
             Type::Bag { base_type, .. } => format!("Vec<{}>", base_type),
             Type::Set { base_type, .. } => format!("HashSet<{}>", base_type),
-            Type::Entity { name, .. } => name.to_pascal_case(),
+            Type::Entity(entity) => entity.name.to_pascal_case(),
             Type::Defined { name, .. } => name.to_pascal_case(),
             Type::Enumerate { name, .. } => name.to_pascal_case(),
             Type::Select { name, .. } => name.to_pascal_case(),
@@ -156,50 +136,33 @@ impl Type {
     }
 }
 
-impl ToTokens for Type {
+impl ToTokens for SimpleType {
     fn to_tokens(&self, tokens: &mut TokenStream) {
-        tokens.append_all(match self {
-            Type::Entity { members, .. } => {
-                entity_struct_definition(&self.rust_type_name(), members)
-            }
-            Type::Defined { underlying, .. } => {
-                defined_type_struct(&self.rust_type_name(), &underlying)
-            }
+        use SimpleType::*;
+        match self {
+            Number => tokens.append(format_ident!("f64")),
+            Real => tokens.append(format_ident!("f64")),
+            Integer => tokens.append(format_ident!("i64")),
+            Logical => tokens.append_all(quote! { ::espr_runtime::Logial }),
+            Boolen => tokens.append(format_ident!("bool")),
             _ => unimplemented!(),
-        })
+        }
     }
 }
 
-fn entity_struct_definition(name: &str, members: &[MemberVariant]) -> TokenStream {
-    let name = format_ident!("{}", name);
-    let member_name: Vec<_> = members
-        .iter()
-        .map(|member| format_ident!("{}", member.name))
-        .collect();
-    let member_type: Vec<_> = members
-        .iter()
-        .map(|member| {
-            let name = format_ident!("{}", member.type_name.to_pascal_case());
-            if member.optional {
-                quote! { Option<#name> }
-            } else {
-                quote! { #name }
+impl ToTokens for Type {
+    fn to_tokens(&self, tokens: &mut TokenStream) {
+        match self {
+            Type::SimpleType(ty) => {
+                ty.to_tokens(tokens);
             }
-        })
-        .collect();
-
-    quote! {
-        #[derive(Clone, Debug, PartialEq)]
-        pub struct #name {
-            #(
-            #member_name : #member_type,
-            )*
-        }
-
-        impl #name {
-            pub fn new(#(#member_name : #member_type),*) -> Self {
-                Self { #(#member_name),* }
+            Type::Entity(entity) => {
+                entity.to_tokens(tokens);
             }
+            Type::Defined { underlying, .. } => {
+                tokens.append_all(defined_type_struct(&self.rust_type_name(), &underlying))
+            }
+            _ => unimplemented!(),
         }
     }
 }

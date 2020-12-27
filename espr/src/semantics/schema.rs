@@ -47,26 +47,6 @@ mod tests {
     use super::*;
 
     #[test]
-    fn print_entity_definition() {
-        let entity = Type::Entity {
-            name: "test_struct_type".into(),
-            members: vec![
-                MemberVariant {
-                    name: "m_int".into(),
-                    type_name: "usize".into(),
-                    optional: true,
-                },
-                MemberVariant {
-                    name: "m_float".into(),
-                    type_name: "f64".into(),
-                    optional: false,
-                },
-            ],
-        };
-        println!("{}", entity.to_token_stream());
-    }
-
-    #[test]
     fn print_defined_definition() {
         let defined = Type::Defined {
             name: "test_defined_type".into(),
