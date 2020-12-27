@@ -8,7 +8,8 @@ fn decode() {
 
     // load EXPRESS
     let code = fs::read_to_string(root.join("express/test.exp")).unwrap();
-    let schemas = espr::decode(&code).unwrap();
+    let st = espr::parser::SyntaxTree::parse(&code).unwrap();
+    let ir = espr::semantics::IR::legalize(&st).unwrap();
 
     // Generate Rust code
     let out_dir = root.join("generated");
@@ -18,10 +19,8 @@ fn decode() {
     let dest = out_dir.join("decoded.rs");
     let mut file = std::fs::File::create(&dest).unwrap();
     file.write(b"#![allow(dead_code)]\n").unwrap();
-    for schema in schemas {
-        file.write(schema.to_token_stream().to_string().as_bytes())
-            .unwrap();
-    }
+    file.write(ir.to_token_stream().to_string().as_bytes())
+        .unwrap();
 
     // Test the generate Rust code is compile-able
     let t = trybuild::TestCases::new();
