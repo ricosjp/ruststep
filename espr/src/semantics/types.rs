@@ -1,6 +1,5 @@
 use super::Entity;
 use crate::parser::SimpleType;
-use inflector::Inflector;
 use proc_macro2::TokenStream;
 use quote::*;
 
@@ -49,13 +48,6 @@ pub enum Type {
     // generalized types
     Generic,
     Aggrigate,
-}
-
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub struct MemberVariant {
-    pub name: String,
-    pub type_name: String,
-    pub optional: bool,
 }
 
 impl Type {
@@ -114,26 +106,6 @@ impl Type {
             _ => self.is_constructed() | self.is_aggrigation() | self.is_simple(),
         }
     }
-
-    pub fn rust_type_name(&self) -> String {
-        match self {
-            Type::SimpleType(ty) => format!("{:?}", ty),
-            Type::Array {
-                index_range,
-                base_type,
-                ..
-            } => format!("[{}; {}]", base_type, index_range.1 - index_range.0),
-            Type::List { base_type, .. } => format!("Vec<{}>", base_type),
-            Type::Bag { base_type, .. } => format!("Vec<{}>", base_type),
-            Type::Set { base_type, .. } => format!("HashSet<{}>", base_type),
-            Type::Entity(entity) => entity.name.to_pascal_case(),
-            Type::Defined { name, .. } => name.to_pascal_case(),
-            Type::Enumerate { name, .. } => name.to_pascal_case(),
-            Type::Select { name, .. } => name.to_pascal_case(),
-            Type::Generic => "dyn Any".into(),
-            Type::Aggrigate => "dyn Any".into(),
-        }
-    }
 }
 
 impl ToTokens for SimpleType {
@@ -159,26 +131,7 @@ impl ToTokens for Type {
             Type::Entity(entity) => {
                 entity.to_tokens(tokens);
             }
-            Type::Defined { underlying, .. } => {
-                tokens.append_all(defined_type_struct(&self.rust_type_name(), &underlying))
-            }
             _ => unimplemented!(),
-        }
-    }
-}
-
-fn defined_type_struct(name: &str, underlying: &str) -> TokenStream {
-    let name = format_ident!("{}", name);
-    let underlying = format_ident!("{}", underlying);
-
-    quote! {
-        #[derive(Clone, Debug, PartialEq)]
-        pub struct #name ( #underlying );
-
-        impl #name {
-            pub fn new(entity: #underlying) -> Self {
-                Self ( entity )
-            }
         }
     }
 }

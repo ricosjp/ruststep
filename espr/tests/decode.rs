@@ -1,15 +1,19 @@
+use espr::{parser::*, semantics::*};
 use quote::*;
 use std::{env, fs, io::Write, path::*};
 
-#[ignore]
 #[test]
 fn decode() {
     let root = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
 
     // load EXPRESS
     let code = fs::read_to_string(root.join("express/test.exp")).unwrap();
-    let st = espr::parser::SyntaxTree::parse(&code).unwrap();
-    let ir = espr::semantics::IR::legalize(&st).unwrap();
+    let st = SyntaxTree::parse(&code).unwrap();
+    dbg!(&st);
+    let ns = Namespace::new(&st).unwrap();
+    dbg!(&ns);
+    let ir = IR::legalize(&ns, &st).unwrap();
+    dbg!(&ir);
 
     // Generate Rust code
     let out_dir = root.join("generated");

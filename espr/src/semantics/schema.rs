@@ -24,7 +24,7 @@ use quote::*;
 /// EXPRESS's schema consists of `ENTITY`es,
 /// which will be translated into Rust struct definitions.
 ///
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, PartialEq, Eq)]
 pub struct Schema {
     pub name: String,
     pub types: Vec<Type>,

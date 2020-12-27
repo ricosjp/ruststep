@@ -16,11 +16,25 @@ use crate::parser::SyntaxTree;
 use proc_macro2::TokenStream;
 use quote::*;
 
-/// Intermediate Representation
-pub struct IR {}
+/// Semantic errors
+#[derive(Debug)]
+pub enum SemanticError {}
 
-impl IR {
-    pub fn legalize(_syn: &SyntaxTree) -> Result<Self, ()> {
+/// Legalize partial parsed input into corresponding intermediate representation
+pub trait Legalize: Sized {
+    type Input;
+    fn legalize(namespace: &Namespace, syn: &Self::Input) -> Result<Self, SemanticError>;
+}
+
+/// Intermediate Representation
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct IR {
+    pub schemas: Vec<Schema>,
+}
+
+impl Legalize for IR {
+    type Input = SyntaxTree;
+    fn legalize(_ns: &Namespace, _syn: &SyntaxTree) -> Result<Self, SemanticError> {
         todo!()
     }
 }
