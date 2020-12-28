@@ -45,9 +45,9 @@ impl Namespace {
                         IdentifierType::Attribute => attrs
                     },
                 );
-                current_scope = current_scope.popd().expect("Never be root");
+                current_scope = current_scope.popped().expect("Never be root");
             }
-            current_scope = current_scope.popd().expect("Never be root");
+            current_scope = current_scope.popped().expect("Never be root");
         }
         Ok(Self(names))
     }

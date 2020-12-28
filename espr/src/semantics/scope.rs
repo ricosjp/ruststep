@@ -102,7 +102,7 @@ impl Scope {
     /// Pop the last scope
     ///
     /// Returns `None` when `self` is root.
-    pub fn popd(&self) -> Option<Self> {
+    pub fn popped(&self) -> Option<Self> {
         let mut new = self.clone();
         let _current = new.0.pop()?;
         Some(new)
