@@ -24,7 +24,6 @@ impl Namespace {
         );
 
         for schema in &syn.schemas {
-            // push scope
             current_scope = current_scope.pushed(ScopeType::Schema, &schema.name);
             names.insert(
                 current_scope.clone(),
@@ -34,7 +33,6 @@ impl Namespace {
             );
 
             for entity in &schema.entities {
-                // push scope
                 current_scope = current_scope.pushed(ScopeType::Entity, &entity.name);
                 let attrs = entity
                     .attributes
@@ -47,11 +45,9 @@ impl Namespace {
                         IdentifierType::Attribute => attrs
                     },
                 );
-
-                current_scope = current_scope.popd();
+                current_scope = current_scope.popd().expect("Never be root");
             }
-
-            current_scope = current_scope.popd();
+            current_scope = current_scope.popd().expect("Never be root");
         }
         Ok(Self(names))
     }

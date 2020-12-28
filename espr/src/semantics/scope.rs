@@ -101,19 +101,11 @@ impl Scope {
 
     /// Pop the last scope
     ///
-    /// Panics
-    /// ------
-    /// - when try to pop root scope
-    ///
-    ///   ```should_panic
-    ///   # use espr::semantics::*;
-    ///   let root = Scope::root();
-    ///   let _ = root.popd();
-    ///   ```
-    pub fn popd(&self) -> Self {
+    /// Returns `None` when `self` is root.
+    pub fn popd(&self) -> Option<Self> {
         let mut new = self.clone();
-        new.0.pop().expect("Cannot get the parent of root scope");
-        new
+        let _current = new.0.pop()?;
+        Some(new)
     }
 }
 
