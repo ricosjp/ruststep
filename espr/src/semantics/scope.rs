@@ -1,4 +1,6 @@
 use itertools::*;
+use proc_macro2::TokenStream;
+use quote::*;
 use std::{cmp, fmt};
 
 /// Identifier in EXPRESS language must be one of scopes described in
@@ -106,6 +108,16 @@ impl Scope {
         let mut new = self.clone();
         let _current = new.0.pop()?;
         Some(new)
+    }
+}
+
+impl ToTokens for Scope {
+    fn to_tokens(&self, tokens: &mut TokenStream) {
+        // FIXME needs case conversion
+        let names: Vec<_> = self.0.iter().map(|(_ty, name)| name).collect();
+        tokens.append_all(quote! {
+            #( :: #names )*
+        });
     }
 }
 

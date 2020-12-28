@@ -1,4 +1,4 @@
-use crate::{error::*, parser::*, semantics::*};
+use crate::{error::*, parser, semantics::*};
 use maplit::hashmap;
 use std::collections::HashMap;
 
@@ -7,6 +7,32 @@ pub enum IdentifierType {
     Entity,
     Schema,
     Attribute,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum TypeRef {
+    Named { name: String, scope: Scope },
+    SimpleType(parser::SimpleType),
+}
+
+impl ToTokens for TypeRef {
+    fn to_tokens(&self, tokens: &mut TokenStream) {
+        use TypeRef::*;
+        match self {
+            SimpleType(ty) => {
+                use parser::SimpleType::*;
+                match ty {
+                    Number => tokens.append(format_ident!("f64")),
+                    Real => tokens.append(format_ident!("f64")),
+                    Integer => tokens.append(format_ident!("i64")),
+                    Logical => tokens.append_all(quote! { ::espr_runtime::Logial }),
+                    Boolen => tokens.append(format_ident!("bool")),
+                    _ => unimplemented!(),
+                }
+            }
+            Named { name, scope } => tokens.append_all(quote! { #scope :: #name }),
+        }
+    }
 }
 
 #[derive(Debug, Clone, PartialEq)]
@@ -52,8 +78,22 @@ impl Namespace {
         Ok(Self(names))
     }
 
-    pub fn lookup_type(&self, _current_scope: &Scope, _name: &str) -> Result<Type, SemanticError> {
-        todo!()
+    pub fn lookup_type(&self, scope: &Scope, name: &str) -> Result<TypeRef, SemanticError> {
+        while let Some(scope) = scope.popped() {
+            let entities = &self.0[&scope][&IdentifierType::Entity];
+            for entity_name in entities {
+                if name == entity_name {
+                    return Ok(TypeRef::Named {
+                        name: name.to_string(),
+                        scope,
+                    });
+                }
+            }
+        }
+        Err(SemanticError::TypeNotFound {
+            name: name.to_string(),
+            scope: scope.clone(),
+        })
     }
 }
 

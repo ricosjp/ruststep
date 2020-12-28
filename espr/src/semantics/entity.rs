@@ -13,7 +13,7 @@ pub struct Entity {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Attribute {
     name: String,
-    ty: Type,
+    ty: namespace::TypeRef,
     optional: bool,
 }
 
@@ -32,7 +32,7 @@ impl Legalize for Entity {
                 use parser::ParameterType::*;
                 let ty = match ty {
                     Named(name) => ns.lookup_type(scope, name)?,
-                    Simple(ty) => Type::SimpleType(*ty),
+                    Simple(ty) => namespace::TypeRef::SimpleType(*ty),
                 };
                 Ok(Attribute {
                     name: name.clone(),

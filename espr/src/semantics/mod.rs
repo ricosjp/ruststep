@@ -18,7 +18,9 @@ use quote::*;
 
 /// Semantic errors
 #[derive(Debug)]
-pub enum SemanticError {}
+pub enum SemanticError {
+    TypeNotFound { name: String, scope: Scope },
+}
 
 /// Legalize partial parsed input into corresponding intermediate representation
 pub trait Legalize: Sized {
