@@ -31,23 +31,18 @@
 //! "#.trim()).unwrap();
 //! ```
 
-mod entity;
-mod expression;
-mod literal;
-mod schema;
-mod simple_data_type;
-
-pub use entity::*;
-pub use expression::*;
-pub use literal::*;
-pub use schema::*;
-pub use simple_data_type::*;
+pub mod entity;
+pub mod expression;
+pub mod literal;
+pub mod schema;
+pub mod simple_data_type;
 
 use derive_more::{Deref, Display};
 use nom::{
     branch::*, bytes::complete::*, character::complete::*, multi::*, sequence::*, Finish, IResult,
     Parser,
 };
+use schema::*;
 
 /// Entire syntax tree parsed from EXPRESS Language string
 #[derive(Debug, Clone, PartialEq)]
