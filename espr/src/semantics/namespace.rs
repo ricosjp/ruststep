@@ -55,6 +55,10 @@ impl Namespace {
         }
         Ok(Self(names))
     }
+
+    pub fn lookup_type(&self, _current_scope: &Scope, _name: &str) -> Result<Type, SemanticError> {
+        todo!()
+    }
 }
 
 #[cfg(test)]

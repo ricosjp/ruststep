@@ -23,7 +23,11 @@ pub enum SemanticError {}
 /// Legalize partial parsed input into corresponding intermediate representation
 pub trait Legalize: Sized {
     type Input;
-    fn legalize(namespace: &Namespace, syn: &Self::Input) -> Result<Self, SemanticError>;
+    fn legalize(
+        namespace: &Namespace,
+        scope: &Scope,
+        syn: &Self::Input,
+    ) -> Result<Self, SemanticError>;
 }
 
 /// Intermediate Representation
@@ -34,7 +38,7 @@ pub struct IR {
 
 impl Legalize for IR {
     type Input = SyntaxTree;
-    fn legalize(_ns: &Namespace, _syn: &SyntaxTree) -> Result<Self, SemanticError> {
+    fn legalize(_ns: &Namespace, _scope: &Scope, _syn: &SyntaxTree) -> Result<Self, SemanticError> {
         todo!()
     }
 }

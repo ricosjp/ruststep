@@ -1,4 +1,5 @@
 use super::*;
+use crate::parser;
 use inflector::Inflector;
 use proc_macro2::TokenStream;
 use quote::*;
@@ -14,6 +15,38 @@ pub struct Attribute {
     name: String,
     ty: Type,
     optional: bool,
+}
+
+impl Legalize for Entity {
+    type Input = parser::Entity;
+
+    fn legalize(
+        ns: &Namespace,
+        scope: &Scope,
+        entity: &parser::Entity,
+    ) -> Result<Self, SemanticError> {
+        let attributes = entity
+            .attributes
+            .iter()
+            .map(|(name, ty)| {
+                use parser::ParameterType::*;
+                let ty = match ty {
+                    Named(name) => ns.lookup_type(scope, name)?,
+                    Simple(ty) => Type::SimpleType(*ty),
+                };
+                Ok(Attribute {
+                    name: name.clone(),
+                    ty,
+                    optional: false,
+                })
+            })
+            .collect::<Result<Vec<_>, _>>()?;
+
+        Ok(Entity {
+            name: entity.name.clone(),
+            attributes,
+        })
+    }
 }
 
 impl ToTokens for Entity {
@@ -52,5 +85,19 @@ impl ToTokens for Entity {
                 }
             }
         })
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn legalize() {
+        let example = SyntaxTree::example();
+        let ns = Namespace::new(&example).unwrap();
+        let entity = &example.schemas[0].entities[1];
+        let entity = Entity::legalize(&ns, &Scope::root(), entity).unwrap();
+        dbg!(entity);
     }
 }

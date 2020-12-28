@@ -12,7 +12,7 @@ fn decode() {
     dbg!(&st);
     let ns = Namespace::new(&st).unwrap();
     dbg!(&ns);
-    let ir = IR::legalize(&ns, &st).unwrap();
+    let ir = IR::legalize(&ns, &Scope::root, &st).unwrap();
     dbg!(&ir);
 
     // Generate Rust code
