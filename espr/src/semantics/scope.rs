@@ -111,12 +111,13 @@ impl Scope {
     }
 }
 
+/// Scope will be tokenized like `scope_name::sub_scope_name::`.
 impl ToTokens for Scope {
     fn to_tokens(&self, tokens: &mut TokenStream) {
         // FIXME needs case conversion
         let names: Vec<_> = self.0.iter().map(|(_ty, name)| name).collect();
         tokens.append_all(quote! {
-            #( :: #names )*
+            #( #names :: )*
         });
     }
 }

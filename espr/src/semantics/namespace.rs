@@ -36,7 +36,7 @@ impl ToTokens for TypeRef {
                     _ => unimplemented!(),
                 }
             }
-            Named { name, scope } => tokens.append_all(quote! { #scope :: #name }),
+            Named { name, scope } => tokens.append_all(quote! { #scope #name }),
         }
     }
 }
@@ -84,16 +84,30 @@ impl Namespace {
         Ok(Self(names))
     }
 
+    /// Panics
+    /// -------
+    /// - when `scope` is not belongs to this Namespace
     pub fn lookup_type(&self, scope: &Scope, name: &str) -> Result<TypeRef, SemanticError> {
-        while let Some(scope) = scope.popped() {
-            let entities = &self.0[&scope][&IdentifierType::Entity];
-            for entity_name in entities {
-                if name == entity_name {
-                    return Ok(TypeRef::Named {
-                        name: name.to_string(),
-                        scope,
-                    });
+        let mut scope = scope.clone();
+        loop {
+            let ns = self
+                .0
+                .get(&scope)
+                .expect("Scope is not belong to the namespace");
+            if let Some(entities) = ns.get(&IdentifierType::Entity) {
+                for entity_name in entities {
+                    if name == entity_name {
+                        return Ok(TypeRef::Named {
+                            name: name.to_string(),
+                            scope: scope,
+                        });
+                    }
                 }
+            } // skip if entity does not exist
+            if let Some(popped) = scope.popped() {
+                scope = popped;
+            } else {
+                break;
             }
         }
         Err(SemanticError::TypeNotFound {

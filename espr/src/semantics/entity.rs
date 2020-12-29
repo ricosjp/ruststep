@@ -96,8 +96,10 @@ mod tests {
     fn legalize() {
         let example = SyntaxTree::example();
         let ns = Namespace::new(&example).unwrap();
-        let entity = &example.schemas[0].entities[1];
-        let entity = Entity::legalize(&ns, &Scope::root(), entity).unwrap();
-        dbg!(entity);
+        dbg!(&ns);
+        let entity = &example.schemas[0].entities[0];
+        let scope = Scope::root().pushed(ScopeType::Schema, &example.schemas[0].name);
+        let entity = Entity::legalize(&ns, &scope, entity).unwrap();
+        dbg!(&entity);
     }
 }
