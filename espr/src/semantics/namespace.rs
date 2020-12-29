@@ -1,5 +1,11 @@
-use crate::{error::*, parser, semantics::*};
+use super::{scope::*, SemanticError};
+use crate::{
+    error::*,
+    parser::{self, SyntaxTree},
+};
 use maplit::hashmap;
+use proc_macro2::TokenStream;
+use quote::*;
 use std::collections::HashMap;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -12,7 +18,7 @@ pub enum IdentifierType {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum TypeRef {
     Named { name: String, scope: Scope },
-    SimpleType(parser::SimpleType),
+    SimpleType(parser::simple_data_type::SimpleType),
 }
 
 impl ToTokens for TypeRef {
@@ -20,7 +26,7 @@ impl ToTokens for TypeRef {
         use TypeRef::*;
         match self {
             SimpleType(ty) => {
-                use parser::SimpleType::*;
+                use parser::simple_data_type::SimpleType::*;
                 match ty {
                     Number => tokens.append(format_ident!("f64")),
                     Real => tokens.append(format_ident!("f64")),

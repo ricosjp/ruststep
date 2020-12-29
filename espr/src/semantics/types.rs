@@ -1,5 +1,5 @@
-use super::Entity;
-use crate::parser::SimpleType;
+use super::entity::Entity;
+use crate::parser::simple_data_type::SimpleType;
 use proc_macro2::TokenStream;
 use quote::*;
 

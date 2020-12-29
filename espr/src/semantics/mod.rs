@@ -1,16 +1,14 @@
 //! Legalize [SyntaxTree] into [IR]
 
-mod entity;
-mod namespace;
-mod schema;
-mod scope;
-mod types;
+pub mod entity;
+pub mod namespace;
+pub mod schema;
+pub mod scope;
+pub mod types;
 
-pub use entity::*;
-pub use namespace::*;
-pub use schema::*;
-pub use scope::*;
-pub use types::*;
+pub use namespace::Namespace;
+pub use schema::Schema;
+pub use scope::Scope;
 
 use crate::parser::SyntaxTree;
 use proc_macro2::TokenStream;

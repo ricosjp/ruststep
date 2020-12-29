@@ -1,4 +1,4 @@
-use super::*;
+use super::{namespace::*, scope::*, *};
 use crate::parser;
 use inflector::Inflector;
 use proc_macro2::TokenStream;
@@ -13,23 +13,23 @@ pub struct Entity {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Attribute {
     name: String,
-    ty: namespace::TypeRef,
+    ty: TypeRef,
     optional: bool,
 }
 
 impl Legalize for Entity {
-    type Input = parser::Entity;
+    type Input = parser::entity::Entity;
 
     fn legalize(
         ns: &Namespace,
         scope: &Scope,
-        entity: &parser::Entity,
+        entity: &parser::entity::Entity,
     ) -> Result<Self, SemanticError> {
         let attributes = entity
             .attributes
             .iter()
             .map(|(name, ty)| {
-                use parser::ParameterType::*;
+                use parser::entity::ParameterType::*;
                 let ty = match ty {
                     Named(name) => ns.lookup_type(scope, name)?,
                     Simple(ty) => namespace::TypeRef::SimpleType(*ty),

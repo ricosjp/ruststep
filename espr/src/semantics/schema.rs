@@ -1,4 +1,4 @@
-use super::*;
+use super::types::Type;
 use proc_macro2::TokenStream;
 use quote::*;
 
