@@ -3,6 +3,7 @@ use crate::{
     error::*,
     parser::{self, SyntaxTree},
 };
+use inflector::Inflector;
 use maplit::hashmap;
 use proc_macro2::TokenStream;
 use quote::*;
@@ -33,10 +34,14 @@ impl ToTokens for TypeRef {
                     Integer => tokens.append(format_ident!("i64")),
                     Logical => tokens.append_all(quote! { ::espr_runtime::Logial }),
                     Boolen => tokens.append(format_ident!("bool")),
-                    _ => unimplemented!(),
+                    String_ { .. } => tokens.append(format_ident!("String")),
+                    Binary { .. } => unimplemented!("Binary type is not supported yet"),
                 }
             }
-            Named { name, scope } => tokens.append_all(quote! { #scope #name }),
+            Named { name, .. } => {
+                let name = format_ident!("{}", name.to_pascal_case());
+                tokens.append_all(quote! { #name })
+            }
         }
     }
 }

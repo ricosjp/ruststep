@@ -1,42 +1,38 @@
-use super::types::Type;
+use super::{entity::*, namespace::*, scope::*, *};
+use crate::parser;
 use proc_macro2::TokenStream;
 use quote::*;
 
-/// Corresponding to `SCHEMA` in EXPRESS
-///
-/// Here, we consinder following simple schema definition in EXPRESS language
-///
-/// ```text
-/// SCHEMA ONE;
-///
-/// ENTITY first;
-/// m_ref : second;
-/// fattr : STRING;
-/// END_ENTITY;
-///
-/// ENTITY second;
-/// sattr : STRING;
-/// END_ENTITY;
-///
-/// END_SCHEMA;
-/// ```
-///
-/// EXPRESS's schema consists of `ENTITY`es,
-/// which will be translated into Rust struct definitions.
-///
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct Schema {
     pub name: String,
-    pub types: Vec<Type>,
+    pub entities: Vec<Entity>,
+}
+
+impl Legalize for Schema {
+    type Input = parser::schema::Schema;
+    fn legalize(
+        ns: &Namespace,
+        scope: &Scope,
+        schema: &Self::Input,
+    ) -> Result<Self, SemanticError> {
+        let name = schema.name.clone();
+        let entities = schema
+            .entities
+            .iter()
+            .map(|entity| Entity::legalize(ns, &scope.pushed(ScopeType::Schema, &name), entity))
+            .collect::<Result<Vec<Entity>, SemanticError>>()?;
+        Ok(Schema { name, entities })
+    }
 }
 
 impl ToTokens for Schema {
     fn to_tokens(&self, tokens: &mut TokenStream) {
         let name = format_ident!("{}", self.name);
-        let types = &self.types;
+        let entities = &self.entities;
         tokens.append_all(quote! {
             mod #name {
-                #(#types)*
+                #(#entities)*
             }
         });
     }
@@ -47,11 +43,13 @@ mod tests {
     use super::*;
 
     #[test]
-    fn print_defined_definition() {
-        let defined = Type::Defined {
-            name: "test_defined_type".into(),
-            underlying: "FormerType".into(),
-        };
-        println!("{}", defined.to_token_stream());
+    fn legalize() {
+        let example = SyntaxTree::example();
+        let ns = Namespace::new(&example).unwrap();
+        dbg!(&ns);
+        let schema = &example.schemas[0];
+        let scope = Scope::root();
+        let schema = Schema::legalize(&ns, &scope, schema).unwrap();
+        dbg!(&schema);
     }
 }

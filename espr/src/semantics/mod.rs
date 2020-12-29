@@ -38,13 +38,21 @@ pub struct IR {
 
 impl Legalize for IR {
     type Input = SyntaxTree;
-    fn legalize(_ns: &Namespace, _scope: &Scope, _syn: &SyntaxTree) -> Result<Self, SemanticError> {
-        todo!()
+    fn legalize(ns: &Namespace, scope: &Scope, syn: &SyntaxTree) -> Result<Self, SemanticError> {
+        let schemas = syn
+            .schemas
+            .iter()
+            .map(|schema| Schema::legalize(ns, scope, schema))
+            .collect::<Result<Vec<Schema>, SemanticError>>()?;
+        Ok(IR { schemas })
     }
 }
 
 impl ToTokens for IR {
-    fn to_tokens(&self, _tokens: &mut TokenStream) {
-        todo!()
+    fn to_tokens(&self, tokens: &mut TokenStream) {
+        let schemas = &self.schemas;
+        tokens.append_all(quote! {
+            #(#schemas)*
+        })
     }
 }

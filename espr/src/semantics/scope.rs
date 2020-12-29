@@ -26,7 +26,7 @@ pub enum ScopeType {
 /// Scope is partially ordered in terms of the sub-scope relation:
 ///
 /// ```
-/// # use espr::semantics::*;
+/// # use espr::semantics::scope::*;
 /// let root = Scope::root();
 /// let schema = root.pushed(ScopeType::Schema, "schema");
 /// assert!(root > schema); // schema scope is sub-scope of root scope
@@ -35,7 +35,7 @@ pub enum ScopeType {
 /// Be sure that this is not total order:
 ///
 /// ```
-/// # use espr::semantics::*;
+/// # use espr::semantics::scope::*;
 /// let root = Scope::root();
 /// let schema1 = root.pushed(ScopeType::Schema, "schema1");
 /// let schema2 = root.pushed(ScopeType::Schema, "schema2");
@@ -115,9 +115,13 @@ impl Scope {
 impl ToTokens for Scope {
     fn to_tokens(&self, tokens: &mut TokenStream) {
         // FIXME needs case conversion
-        let names: Vec<_> = self.0.iter().map(|(_ty, name)| name).collect();
+        let names: Vec<_> = self
+            .0
+            .iter()
+            .map(|(_ty, name)| format_ident!("{}", name))
+            .collect();
         tokens.append_all(quote! {
-            #( #names :: )*
+            #( :: #names )*
         });
     }
 }

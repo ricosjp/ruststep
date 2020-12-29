@@ -25,6 +25,7 @@ fn decode() {
     file.write(b"#![allow(dead_code)]\n").unwrap();
     file.write(ir.to_token_stream().to_string().as_bytes())
         .unwrap();
+    file.write(b"fn main() {}\n").unwrap();
 
     // Test the generate Rust code is compile-able
     let t = trybuild::TestCases::new();
