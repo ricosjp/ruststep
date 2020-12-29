@@ -12,10 +12,12 @@ pub use scope::Scope;
 use crate::parser::SyntaxTree;
 use proc_macro2::TokenStream;
 use quote::*;
+use thiserror::Error;
 
 /// Semantic errors
-#[derive(Debug)]
+#[derive(Debug, Error)]
 pub enum SemanticError {
+    #[error("Type {name} not found in scope {scope}")]
     TypeNotFound { name: String, scope: Scope },
 }
 
