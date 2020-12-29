@@ -1,15 +1,16 @@
-SCHEMA ONE;
-ENTITY first;
-m_ref : second;
-fattr : STRING;
-END_ENTITY;
-ENTITY second;
-sattr : STRING;
-END_ENTITY;
+SCHEMA one;
+  ENTITY first;
+    m_ref : second;
+    fattr : STRING;
+  END_ENTITY;
+
+  ENTITY second;
+    sattr : STRING;
+  END_ENTITY;
 END_SCHEMA;
 
-SCHEMA GEOMETRY0;
-ENTITY point;
-x, y, z: Real;
-END_ENTITY;
+SCHEMA geometry;
+  ENTITY point;
+    x, y, z: REAL;
+  END_ENTITY;
 END_SCHEMA;

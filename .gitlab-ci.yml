@@ -17,12 +17,6 @@ test:
   script:
     - cargo test
 
-test-ignored:
-  stage: test
-  script:
-    - cargo test -- --ignored
-  allow_failure: true
-
 pages:
   stage: pages
   script:

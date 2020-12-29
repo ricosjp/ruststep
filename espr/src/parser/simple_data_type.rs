@@ -4,14 +4,14 @@ use nom::{
 };
 
 /// Parsed result of `width_spec`
-#[derive(Debug, Clone, Copy, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct WidthSpec {
     pub width: usize,
     pub fixed: bool,
 }
 
 /// 8.1 Simple data types
-#[derive(Debug, Clone, Copy, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum SimpleType {
     /// 8.1.1 Number data type
     Number,
