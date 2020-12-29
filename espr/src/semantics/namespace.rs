@@ -1,8 +1,5 @@
 use super::{scope::*, SemanticError};
-use crate::{
-    error::*,
-    parser::{self, SyntaxTree},
-};
+use crate::parser::{self, SyntaxTree};
 use inflector::Inflector;
 use maplit::hashmap;
 use proc_macro2::TokenStream;
@@ -58,7 +55,7 @@ impl ToTokens for TypeRef {
 pub struct Namespace(HashMap<Scope, HashMap<IdentifierType, Vec<String>>>);
 
 impl Namespace {
-    pub fn new(syn: &SyntaxTree) -> Result<Self, Error> {
+    pub fn new(syn: &SyntaxTree) -> Result<Self, SemanticError> {
         let mut names = HashMap::new();
         let mut current_scope = Scope::root();
         names.insert(
