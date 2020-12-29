@@ -40,6 +40,14 @@ impl ToTokens for TypeRef {
             }
             Named { name, .. } => {
                 let name = format_ident!("{}", name.to_pascal_case());
+                // FIXME This type name should be full path like
+                //
+                // ```
+                // tokens.append_all(quote! { #scope :: #name })
+                // ```
+                //
+                // But it does not work as desired.
+                // See https://gitlab.ritc.jp/ricos/truck/ruststep/-/merge_requests/12/diffs#note_14506
                 tokens.append_all(quote! { #name })
             }
         }
