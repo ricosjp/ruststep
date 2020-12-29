@@ -4,7 +4,6 @@ pub mod entity;
 pub mod namespace;
 pub mod schema;
 pub mod scope;
-pub mod types;
 
 pub use namespace::Namespace;
 pub use schema::Schema;
