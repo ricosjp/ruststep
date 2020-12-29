@@ -25,7 +25,7 @@ pub enum Literal {
 /// --------
 ///
 /// ```
-/// use espr::parser::*;
+/// use espr::parser::literal::*;
 /// use nom::Finish;
 ///
 /// let (residual, l) = literal("23").finish().unwrap();
@@ -61,10 +61,10 @@ pub fn logical_literal(input: &str) -> IResult<&str, Logical> {
 /// --------
 ///
 /// ```
-/// use espr::parser;
+/// use espr::parser::literal::*;
 /// use nom::Finish;
 ///
-/// let (residual, value) = parser::integer_literal("123").finish().unwrap();
+/// let (residual, value) = integer_literal("123").finish().unwrap();
 /// assert_eq!(value, 123);
 /// assert_eq!(residual, "");
 /// ```
@@ -78,18 +78,18 @@ pub fn integer_literal(input: &str) -> IResult<&str, u64> {
 /// --------
 ///
 /// ```
-/// use espr::parser;
+/// use espr::parser::literal::*;
 /// use nom::Finish;
 ///
-/// let (residual, value) = parser::real_literal("123").finish().unwrap();
+/// let (residual, value) = real_literal("123").finish().unwrap();
 /// assert_eq!(value, 123.0);
 /// assert_eq!(residual, "");
 ///
-/// let (residual, value) = parser::real_literal("123.456").finish().unwrap();
+/// let (residual, value) = real_literal("123.456").finish().unwrap();
 /// assert_eq!(value, 123.456);
 /// assert_eq!(residual, "");
 ///
-/// let (residual, value) = parser::real_literal("1.23e-5").finish().unwrap();
+/// let (residual, value) = real_literal("1.23e-5").finish().unwrap();
 /// assert_eq!(value, 1.23e-5);
 /// assert_eq!(residual, "");
 /// ```
