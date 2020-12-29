@@ -1,4 +1,4 @@
-use super::*;
+use super::{entity::*, *};
 
 /// Parsed result of EXPRESS's SCHEMA
 #[derive(Debug, Clone, PartialEq)]

@@ -31,23 +31,17 @@
 //! "#.trim()).unwrap();
 //! ```
 
-mod entity;
-mod expression;
-mod literal;
-mod schema;
-mod simple_data_type;
+pub mod entity;
+pub mod expression;
+pub mod literal;
+pub mod schema;
+pub mod simple_data_type;
 
-pub use entity::*;
-pub use expression::*;
-pub use literal::*;
-pub use schema::*;
-pub use simple_data_type::*;
-
-use derive_more::{Deref, Display};
 use nom::{
     branch::*, bytes::complete::*, character::complete::*, multi::*, sequence::*, Finish, IResult,
     Parser,
 };
+use schema::*;
 
 /// Entire syntax tree parsed from EXPRESS Language string
 #[derive(Debug, Clone, PartialEq)]
@@ -115,50 +109,6 @@ pub fn simple_id(input: &str) -> IResult<&str, String> {
         .map(|(head, tail)| format!("{}{}", head, tail.into_iter().collect::<String>()))
         .parse(input)
 }
-
-macro_rules! define_id_ref {
-    ($ID:ident, $Ref:ident, $id_parse:ident, $ref_parse:ident) => {
-        #[derive(Debug, Clone, PartialEq, Display, Deref)]
-        pub struct $ID(String);
-
-        #[derive(Debug, Clone, PartialEq, Display, Deref)]
-        pub struct $Ref(String);
-
-        pub fn $id_parse(input: &str) -> IResult<&str, $ID> {
-            simple_id.map(|id| $ID(id)).parse(input)
-        }
-
-        pub fn $ref_parse(input: &str) -> IResult<&str, $Ref> {
-            simple_id.map(|id| $Ref(id)).parse(input)
-        }
-    };
-}
-
-define_id_ref!(AttributeID, AttributeRef, attribute_id, attribute_ref);
-define_id_ref!(ConstantID, ConstantRef, constant_id, constant_ref);
-define_id_ref!(EntityID, EntityRef, entity_id, entity_ref);
-define_id_ref!(
-    EnumerationID,
-    EnumerationRef,
-    enumeration_id,
-    enumeration_ref
-);
-define_id_ref!(FunctionID, FunctionRef, function_id, function_ref);
-define_id_ref!(ParameterID, ParameterRef, parameter_id, parameter_ref);
-define_id_ref!(ProcedureID, ProcedureRef, procedure_id, procedure_ref);
-define_id_ref!(RenameID, RenameRef, rename_id, rename_ref);
-define_id_ref!(RuleID, RuleRef, rule_id, rule_ref);
-define_id_ref!(RuleLabelID, RuleLabelRef, rule_label_id, rule_label_ref);
-define_id_ref!(SchemaID, SchemaRef, schema_id, schema_ref);
-define_id_ref!(
-    SubtypeConstraintID,
-    SubtypeConstraintRef,
-    subtype_constraint_id,
-    subtype_constraint_ref
-);
-define_id_ref!(TypeID, TypeRef, type_id, type_ref);
-define_id_ref!(TypeLabelID, TypeLabelRef, type_label_id, type_label_ref);
-define_id_ref!(VariableID, VariableRef, variable_id, variable_ref);
 
 #[cfg(test)]
 mod tests {
