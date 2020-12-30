@@ -1,6 +1,4 @@
-pub mod sdai;
 pub mod registory;
+pub mod sdai;
 
-pub struct Registory {
-
-}
+pub struct Registory {}

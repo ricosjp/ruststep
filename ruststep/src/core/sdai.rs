@@ -46,7 +46,7 @@ pub enum ErrorKind {
     /// Session not available
     SessionNotAvailable = 20,
     /// Session is not open
-    SessionClosed = 30, 
+    SessionClosed = 30,
     /// Repository does not exist
     RepositoryNonExistent = 40,
     /// Repository not available
@@ -92,7 +92,7 @@ pub enum ErrorKind {
     /// Entity definition invalid
     EntityDefinitionInvalid = 250,
     // /// Entity definition not available
-    //  EntityDefinitionNonAvailable =  250, 
+    //  EntityDefinitionNonAvailable =  250,
     /// Rule not defined
     RuleNonDefined = 260,
     /// Expression evaluation not supported
@@ -116,7 +116,7 @@ pub enum ErrorKind {
     /// Scope does not exist
     ScopeNonExistent = 360,
     /// Scope exists
-    ScopeExists = 370, 
+    ScopeExists = 370,
     /// Aggregate instance does not exist
     AggregateInstanceNonExistent = 380,
     /// Aggregate instance invalid
