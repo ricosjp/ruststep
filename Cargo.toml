@@ -1,6 +1,6 @@
 [workspace]
 members = [
-	"iso-10303-simple-types",
-	"espr",
-	"ruststep",
+  "espr-runtime",
+  "espr",
+  "ruststep",
 ]

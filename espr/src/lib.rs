@@ -6,5 +6,3 @@
 
 pub mod parser;
 pub mod semantics;
-
-pub use iso_10303_simple_types::*;

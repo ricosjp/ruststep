@@ -5,7 +5,6 @@ authors = ["Yoshinori Tanimura <tanimura@ricos.co.jp>", "Toshiki Teramura <teram
 edition = "2018"
 
 [dependencies]
-iso-10303-simple-types = {path = "../iso-10303-simple-types"}
 Inflector = "0.11.4"
 regex = "1.4.2"
 lazy_static = "1.4.0"
