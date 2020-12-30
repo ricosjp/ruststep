@@ -9,7 +9,9 @@ pub enum Logical {
 
 impl Default for Logical {
     /// Returns `Logical::Unknown`.
-    fn default() -> Logical { Logical::Unknown }
+    fn default() -> Logical {
+        Logical::Unknown
+    }
 }
 
 impl std::fmt::Display for Logical {
@@ -72,19 +74,25 @@ impl BitAnd for Logical {
 impl BitAnd<&Logical> for Logical {
     type Output = Logical;
     #[inline(always)]
-    fn bitand(self, other: &Logical) -> Logical { &self & *other }
+    fn bitand(self, other: &Logical) -> Logical {
+        &self & *other
+    }
 }
 
 impl BitAnd<Logical> for &Logical {
     type Output = Logical;
     #[inline(always)]
-    fn bitand(self, other: Logical) -> Logical { *self & other }
+    fn bitand(self, other: Logical) -> Logical {
+        *self & other
+    }
 }
 
 impl BitAnd for &Logical {
     type Output = Logical;
     #[inline(always)]
-    fn bitand(self, other: &Logical) -> Logical { *self & *other }
+    fn bitand(self, other: &Logical) -> Logical {
+        *self & *other
+    }
 }
 
 impl BitOr for Logical {
@@ -104,19 +112,25 @@ impl BitOr for Logical {
 impl BitOr<&Logical> for Logical {
     type Output = Logical;
     #[inline(always)]
-    fn bitor(self, other: &Logical) -> Logical { self | *other }
+    fn bitor(self, other: &Logical) -> Logical {
+        self | *other
+    }
 }
 
 impl BitOr<Logical> for &Logical {
     type Output = Logical;
     #[inline(always)]
-    fn bitor(self, other: Logical) -> Logical { *self | other }
+    fn bitor(self, other: Logical) -> Logical {
+        *self | other
+    }
 }
 
 impl BitOr for &Logical {
     type Output = Logical;
     #[inline(always)]
-    fn bitor(self, other: &Logical) -> Logical { *self | *other }
+    fn bitor(self, other: &Logical) -> Logical {
+        *self | *other
+    }
 }
 
 impl BitXor for Logical {
@@ -134,19 +148,25 @@ impl BitXor for Logical {
 impl BitXor<&Logical> for Logical {
     type Output = Logical;
     #[inline(always)]
-    fn bitxor(self, other: &Logical) -> Logical { self ^ *other }
+    fn bitxor(self, other: &Logical) -> Logical {
+        self ^ *other
+    }
 }
 
 impl BitXor<Logical> for &Logical {
     type Output = Logical;
     #[inline(always)]
-    fn bitxor(self, other: Logical) -> Logical { *self ^ other }
+    fn bitxor(self, other: Logical) -> Logical {
+        *self ^ other
+    }
 }
 
 impl BitXor for &Logical {
     type Output = Logical;
     #[inline(always)]
-    fn bitxor(self, other: &Logical) -> Logical { *self ^ *other }
+    fn bitxor(self, other: &Logical) -> Logical {
+        *self ^ *other
+    }
 }
 
 impl Not for Logical {
@@ -164,7 +184,9 @@ impl Not for Logical {
 impl Not for &Logical {
     type Output = Logical;
     #[inline(always)]
-    fn not(self) -> Logical { !*self }
+    fn not(self) -> Logical {
+        !*self
+    }
 }
 
 #[test]
