@@ -5,7 +5,7 @@ SCHEMA one;
   END_ENTITY;
 
   ENTITY second;
-    sattr : STRING;
+    sattr : LOGICAL;
   END_ENTITY;
 END_SCHEMA;
 

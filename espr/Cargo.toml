@@ -5,7 +5,6 @@ authors = ["Yoshinori Tanimura <tanimura@ricos.co.jp>", "Toshiki Teramura <teram
 edition = "2018"
 
 [dependencies]
-iso-10303-simple-types = {path = "../iso-10303-simple-types"}
 Inflector = "0.11.4"
 regex = "1.4.2"
 lazy_static = "1.4.0"
@@ -18,3 +17,6 @@ proc-macro2 = "1.0.24"
 thiserror = "1.0.22"
 maplit = "1.0.2"
 itertools = "0.9.0"
+
+[dev-dependencies]
+espr-runtime = { version = "0.1.0", path = "../espr-runtime" }

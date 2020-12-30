@@ -44,7 +44,7 @@ impl From<Option<bool>> for Logical {
 
 impl From<Logical> for Option<bool> {
     /// ```
-    /// use iso_10303_simple_types::Logical;
+    /// use espr_runtime::Logical;
     /// assert_eq!(Option::<bool>::from(Logical::False), Some(false));
     /// assert_eq!(Option::<bool>::from(Logical::Unknown), None);
     /// assert_eq!(Option::<bool>::from(Logical::True), Some(true));

@@ -1,8 +1,5 @@
-//! Runtime for espr EXPRESS Language compiler
-
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum Logial {
-    True,
-    False,
-    Unknown,
-}
+use std::ops::*;
+pub mod logical;
+pub use logical::Logical;
+pub mod array;
+pub use array::Array;
