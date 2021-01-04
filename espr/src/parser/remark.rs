@@ -1,7 +1,4 @@
-use nom::{
-    branch::alt, bytes::complete::*, character::complete::*, combinator::*, multi::*, sequence::*,
-    IResult, Parser,
-};
+use nom::{bytes::complete::*, character::complete::*, multi::*, sequence::*, IResult, Parser};
 
 #[derive(Debug, Clone)]
 pub struct Reamrk {
@@ -24,9 +21,15 @@ pub fn embedded_remark_end(input: &str) -> IResult<&str, String> {
 }
 
 pub fn embedded_remark(input: &str) -> IResult<&str, String> {
-    tuple((embedded_remark_begin, embedded_remark_end))
-        .map(|(_begin, end)| end)
-        .parse(input)
+    tuple((
+        embedded_remark_begin,
+        multispace0,
+        many0(none_of("*")),
+        embedded_remark_end,
+    ))
+    .map(|(_begin, _sp1, chars, end)| format!("{}{}", chars.iter().collect::<String>(), end))
+    .map(|s| s.trim().to_string())
+    .parse(input)
 }
 
 #[cfg(test)]
@@ -50,7 +53,14 @@ mod tests {
     }
 
     #[test]
-    fn embedded_remark() {
+    fn embedded_remark_simple() {
+        let (res, stars) = super::embedded_remark("(* aaa *)").finish().unwrap();
+        assert_eq!(res, "");
+        assert_eq!(stars, "aaa");
+    }
+
+    #[test]
+    fn embedded_remark_stars() {
         let (res, stars) = super::embedded_remark("(*****)").finish().unwrap();
         assert_eq!(res, "");
         assert_eq!(stars, "***");
