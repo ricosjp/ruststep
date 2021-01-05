@@ -29,16 +29,25 @@ fn middle_star(input: &str) -> IResult<&str, String> {
         .parse(input)
 }
 
+/// Quoted string like `\`*)\``
+fn quoted(input: &str) -> IResult<&str, String> {
+    tuple((char('`'), many0(none_of("`")), char('`')))
+        .map(|(_quote_start, chars, _quote_end)| format!("`{}`", chars.iter().collect::<String>()))
+        .parse(input)
+}
+
+/// String which does not include `*` and \`
+fn non_quoted(input: &str) -> IResult<&str, String> {
+    many1(none_of("`*"))
+        .map(|chars| chars.iter().collect::<String>())
+        .parse(input)
+}
+
 pub fn embedded_remark(input: &str) -> IResult<&str, String> {
     tuple((
         begin,
         multispace0,
-        many0(alt((
-            // String which does not include *
-            many1(none_of("*")).map(|chars| chars.iter().collect::<String>()),
-            // String starts with * and not end by )
-            middle_star,
-        ))),
+        many0(alt((non_quoted, quoted, middle_star))),
         end,
     ))
     .map(|(_begin, _sp1, chars, end)| format!("{}{}", chars.iter().join(""), end))
@@ -49,6 +58,26 @@ pub fn embedded_remark(input: &str) -> IResult<&str, String> {
 #[cfg(test)]
 mod tests {
     use nom::Finish;
+
+    #[test]
+    fn quoted() {
+        let (res, quoted) = super::quoted("`*)`").finish().unwrap();
+        assert_eq!(res, "");
+        assert_eq!(quoted, "`*)`");
+
+        let (res, quoted) = super::quoted("` a `").finish().unwrap();
+        assert_eq!(res, "");
+        assert_eq!(quoted, "` a `");
+    }
+
+    #[test]
+    fn quoted_end() {
+        let (res, stars) = super::embedded_remark("(* `*)` should be ignored *)")
+            .finish()
+            .unwrap();
+        assert_eq!(res, "");
+        assert_eq!(stars, "`*)` should be ignored");
+    }
 
     #[test]
     fn embedded_remark_begin() {
