@@ -60,6 +60,36 @@ mod tests {
     use nom::Finish;
 
     #[test]
+    fn begin() {
+        let (res, _) = super::begin("(*").finish().unwrap();
+        assert_eq!(res, "");
+
+        let (res, _) = super::begin("(**").finish().unwrap();
+        assert_eq!(res, "*");
+    }
+
+    #[test]
+    fn end() {
+        let (res, stars) = super::end("***)").finish().unwrap();
+        assert_eq!(res, "");
+        assert_eq!(stars, "**");
+    }
+
+    #[test]
+    fn middle_star() {
+        let (res, stars) = super::middle_star("*b").finish().unwrap();
+        assert_eq!(res, "");
+        assert_eq!(stars, "*b");
+
+        let (res, stars) = super::middle_star("* ").finish().unwrap();
+        assert_eq!(res, "");
+        assert_eq!(stars, "* ");
+
+        assert!(super::middle_star("**").finish().is_err());
+        assert!(super::middle_star("*)").finish().is_err());
+    }
+
+    #[test]
     fn quoted() {
         let (res, quoted) = super::quoted("`*)`").finish().unwrap();
         assert_eq!(res, "");
@@ -80,44 +110,14 @@ mod tests {
     }
 
     #[test]
-    fn embedded_remark_begin() {
-        let (res, _) = super::begin("(*").finish().unwrap();
-        assert_eq!(res, "");
-
-        let (res, _) = super::begin("(**").finish().unwrap();
-        assert_eq!(res, "*");
-    }
-
-    #[test]
-    fn embedded_remark_end() {
-        let (res, stars) = super::end("***)").finish().unwrap();
-        assert_eq!(res, "");
-        assert_eq!(stars, "**");
-    }
-
-    #[test]
-    fn embedded_remark_middle_star() {
-        let (res, stars) = super::middle_star("*b").finish().unwrap();
-        assert_eq!(res, "");
-        assert_eq!(stars, "*b");
-
-        let (res, stars) = super::middle_star("* ").finish().unwrap();
-        assert_eq!(res, "");
-        assert_eq!(stars, "* ");
-
-        assert!(super::middle_star("**").finish().is_err());
-        assert!(super::middle_star("*)").finish().is_err());
-    }
-
-    #[test]
-    fn embedded_remark_simple() {
+    fn simple() {
         let (res, stars) = super::embedded_remark("(* aaa *)").finish().unwrap();
         assert_eq!(res, "");
         assert_eq!(stars, "aaa");
     }
 
     #[test]
-    fn embedded_remark_stars() {
+    fn stars() {
         let (res, stars) = super::embedded_remark("(*****)").finish().unwrap();
         assert_eq!(res, "");
         assert_eq!(stars, "***");
@@ -132,7 +132,7 @@ mod tests {
     }
 
     #[test]
-    fn embedded_remark_middle_stars() {
+    fn middle_stars() {
         let (res, stars) = super::embedded_remark("(* a * b *)").finish().unwrap();
         assert_eq!(res, "");
         assert_eq!(stars, "a * b");
