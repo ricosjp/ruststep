@@ -64,15 +64,21 @@ fn non_quoted(input: &str) -> IResult<&str, String> {
 /// (* The `(*` symbol starts a remark, and the `*)` symbol ends it *)
 /// ```
 ///
-pub fn embedded_remark(input: &str) -> IResult<&str, String> {
+pub fn embedded_remark(input: &str) -> IResult<&str, Remark> {
     tuple((
         begin,
+        multispace0,
+        opt(remark_tag),
         multispace0,
         many0(alt((non_quoted, quoted, middle_star))),
         end,
     ))
-    .map(|(_begin, _sp1, chars, end)| format!("{}{}", chars.iter().join(""), end))
-    .map(|s| s.trim().to_string())
+    .map(|(_begin, _sp1, tag, _sp2, chars, end)| Remark {
+        tag,
+        remark: format!("{}{}", chars.iter().join(""), end)
+            .trim()
+            .to_string(),
+    })
     .parse(input)
 }
 
@@ -161,36 +167,49 @@ mod tests {
             .finish()
             .unwrap();
         assert_eq!(res, "");
-        assert_eq!(stars, "`*)` should be ignored");
+        assert_eq!(stars.remark, "`*)` should be ignored");
     }
 
     #[test]
     fn simple() {
         let (res, stars) = super::embedded_remark("(* aaa *)").finish().unwrap();
         assert_eq!(res, "");
-        assert_eq!(stars, "aaa");
+        assert_eq!(stars.remark, "aaa");
     }
 
     #[test]
     fn stars() {
         let (res, stars) = super::embedded_remark("(*****)").finish().unwrap();
         assert_eq!(res, "");
-        assert_eq!(stars, "***");
+        assert_eq!(stars.remark, "***");
 
         let (res, stars) = super::embedded_remark("(* *** *)").finish().unwrap();
         assert_eq!(res, "");
-        assert_eq!(stars, "***");
+        assert_eq!(stars.remark, "***");
 
         let (res, stars) = super::embedded_remark("(* ****)").finish().unwrap();
         assert_eq!(res, "");
-        assert_eq!(stars, "***");
+        assert_eq!(stars.remark, "***");
     }
 
     #[test]
     fn middle_stars() {
         let (res, stars) = super::embedded_remark("(* a * b *)").finish().unwrap();
         assert_eq!(res, "");
-        assert_eq!(stars, "a * b");
+        assert_eq!(stars.remark, "a * b");
+    }
+
+    #[test]
+    fn tag() {
+        let (res, remark) = super::embedded_remark("(* \"some.tag\" a * b *)")
+            .finish()
+            .unwrap();
+        assert_eq!(res, "");
+        assert_eq!(
+            remark.tag,
+            Some(vec!["some".to_string(), "tag".to_string()])
+        );
+        assert_eq!(remark.remark, "a * b");
     }
 
     #[test]
