@@ -43,6 +43,25 @@ fn non_quoted(input: &str) -> IResult<&str, String> {
         .parse(input)
 }
 
+/// 999 embedded_remark
+///
+/// Extended the original definition
+///
+/// ```text
+/// 145 embedded_remark = `(*` [ remark_tag ] { ( not_paren_star { not_paren_star } )
+///                                           | lparen_then_not_lparen_star
+///                                           | ( `*` { `*` } )
+///                                           | not_rparen_star_then_rparen
+///                                           | embedded_remark
+///                                           } `*)` .
+/// ```
+///
+/// because it cannot parse the example in ISO 10303-11 correctly:
+///
+/// ```text
+/// (* The `(*` symbol starts a remark, and the `*)` symbol ends it *)
+/// ```
+///
 pub fn embedded_remark(input: &str) -> IResult<&str, String> {
     tuple((
         begin,
@@ -55,7 +74,15 @@ pub fn embedded_remark(input: &str) -> IResult<&str, String> {
     .parse(input)
 }
 
-/// 149 tail_remark = `--` \[ remark_tag \] { \a | \s | \x9 | \xA | \xD } \n .
+/// 999 tail_remark
+///
+/// Extended the original definition
+///
+/// ```text
+/// 149 tail_remark = `--` [ remark_tag ] { \a | \s | \x9 | \xA | \xD } \n .
+/// ```
+///
+/// to support `\r\n` case and unicode string
 pub fn tail_remark(input: &str) -> IResult<&str, String> {
     tuple((tag("--"), not_line_ending, line_ending))
         .map(|(_start, chars, _newline): (_, &str, _)| chars.trim().to_string())
