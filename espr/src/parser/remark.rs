@@ -1,10 +1,12 @@
+use super::simple_id;
 use itertools::Itertools;
 use nom::{
-    branch::alt, bytes::complete::*, character::complete::*, multi::*, sequence::*, IResult, Parser,
+    branch::alt, bytes::complete::*, character::complete::*, combinator::opt, multi::*,
+    sequence::*, IResult, Parser,
 };
 
 #[derive(Debug, Clone)]
-pub struct Reamrk {
+pub struct Remark {
     tag: Option<Vec<String>>,
     remark: String,
 }
@@ -43,16 +45,75 @@ fn non_quoted(input: &str) -> IResult<&str, String> {
         .parse(input)
 }
 
-pub fn embedded_remark(input: &str) -> IResult<&str, String> {
+/// 999 embedded_remark
+///
+/// Extended the original definition
+///
+/// ```text
+/// 145 embedded_remark = `(*` [ remark_tag ] { ( not_paren_star { not_paren_star } )
+///                                           | lparen_then_not_lparen_star
+///                                           | ( `*` { `*` } )
+///                                           | not_rparen_star_then_rparen
+///                                           | embedded_remark
+///                                           } `*)` .
+/// ```
+///
+/// because it cannot parse the example in ISO 10303-11 correctly:
+///
+/// ```text
+/// (* The `(*` symbol starts a remark, and the `*)` symbol ends it *)
+/// ```
+///
+pub fn embedded_remark(input: &str) -> IResult<&str, Remark> {
     tuple((
         begin,
+        multispace0,
+        opt(remark_tag),
         multispace0,
         many0(alt((non_quoted, quoted, middle_star))),
         end,
     ))
-    .map(|(_begin, _sp1, chars, end)| format!("{}{}", chars.iter().join(""), end))
-    .map(|s| s.trim().to_string())
+    .map(|(_begin, _sp1, tag, _sp2, chars, end)| Remark {
+        tag,
+        remark: format!("{}{}", chars.iter().join(""), end)
+            .trim()
+            .to_string(),
+    })
     .parse(input)
+}
+
+/// 999 tail_remark
+///
+/// Extended the original definition
+///
+/// ```text
+/// 149 tail_remark = `--` [ remark_tag ] { \a | \s | \x9 | \xA | \xD } \n .
+/// ```
+///
+/// to support `\r\n` case and unicode string
+pub fn tail_remark(input: &str) -> IResult<&str, Remark> {
+    tuple((
+        tag("--"),
+        multispace0,
+        opt(remark_tag),
+        not_line_ending,
+        line_ending,
+    ))
+    .map(
+        |(_start, _sp, tag, chars, _newline): (_, _, _, &str, _)| Remark {
+            tag,
+            remark: chars.trim().to_string(),
+        },
+    )
+    .parse(input)
+}
+
+/// 147 remark_tag = `"` remark_ref { `.` remark_ref } `"` .
+///
+/// `remark_ref` is replaced by `simple_id` because it should be handled by following semantics
+/// analysis phase.
+pub fn remark_tag(input: &str) -> IResult<&str, Vec<String>> {
+    delimited(char('"'), separated_list1(char('.'), simple_id), char('"')).parse(input)
 }
 
 #[cfg(test)]
@@ -106,35 +167,76 @@ mod tests {
             .finish()
             .unwrap();
         assert_eq!(res, "");
-        assert_eq!(stars, "`*)` should be ignored");
+        assert_eq!(stars.remark, "`*)` should be ignored");
     }
 
     #[test]
     fn simple() {
         let (res, stars) = super::embedded_remark("(* aaa *)").finish().unwrap();
         assert_eq!(res, "");
-        assert_eq!(stars, "aaa");
+        assert_eq!(stars.remark, "aaa");
     }
 
     #[test]
     fn stars() {
         let (res, stars) = super::embedded_remark("(*****)").finish().unwrap();
         assert_eq!(res, "");
-        assert_eq!(stars, "***");
+        assert_eq!(stars.remark, "***");
 
         let (res, stars) = super::embedded_remark("(* *** *)").finish().unwrap();
         assert_eq!(res, "");
-        assert_eq!(stars, "***");
+        assert_eq!(stars.remark, "***");
 
         let (res, stars) = super::embedded_remark("(* ****)").finish().unwrap();
         assert_eq!(res, "");
-        assert_eq!(stars, "***");
+        assert_eq!(stars.remark, "***");
     }
 
     #[test]
     fn middle_stars() {
         let (res, stars) = super::embedded_remark("(* a * b *)").finish().unwrap();
         assert_eq!(res, "");
-        assert_eq!(stars, "a * b");
+        assert_eq!(stars.remark, "a * b");
+    }
+
+    #[test]
+    fn tag() {
+        let (res, remark) = super::embedded_remark("(* \"some.tag\" a * b *)")
+            .finish()
+            .unwrap();
+        assert_eq!(res, "");
+        assert_eq!(
+            remark.tag,
+            Some(vec!["some".to_string(), "tag".to_string()])
+        );
+        assert_eq!(remark.remark, "a * b");
+    }
+
+    #[test]
+    fn tail_remark() {
+        let (res, remark) = super::tail_remark("-- aaa\nbbb").finish().unwrap();
+        assert_eq!(res, "bbb");
+        assert_eq!(remark.tag, None);
+        assert_eq!(remark.remark, "aaa");
+
+        let (res, remark) = super::tail_remark("-- \"some.tag\" aaa\nbbb")
+            .finish()
+            .unwrap();
+        assert_eq!(res, "bbb");
+        assert_eq!(
+            remark.tag,
+            Some(vec!["some".to_string(), "tag".to_string()])
+        );
+        assert_eq!(remark.remark, "aaa");
+    }
+
+    #[test]
+    fn remark_tag() {
+        let (res, tag) = super::remark_tag(r#""some.name.space""#).finish().unwrap();
+        assert_eq!(res, "");
+        assert_eq!(
+            tag,
+            vec!["some".to_string(), "name".to_string(), "space".to_string()]
+        );
     }
 }
