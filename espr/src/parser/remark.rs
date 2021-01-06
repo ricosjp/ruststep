@@ -1,3 +1,4 @@
+use super::simple_id;
 use itertools::Itertools;
 use nom::{
     branch::alt, bytes::complete::*, character::complete::*, multi::*, sequence::*, IResult, Parser,
@@ -89,6 +90,14 @@ pub fn tail_remark(input: &str) -> IResult<&str, String> {
         .parse(input)
 }
 
+/// 147 remark_tag = `"` remark_ref { `.` remark_ref } `"` .
+///
+/// `remark_ref` is replaced by `simple_id` because it should be handled by following semantics
+/// analysis phase.
+pub fn remark_tag(input: &str) -> IResult<&str, Vec<String>> {
+    delimited(char('"'), separated_list1(char('.'), simple_id), char('"')).parse(input)
+}
+
 #[cfg(test)]
 mod tests {
     use nom::Finish;
@@ -177,5 +186,15 @@ mod tests {
         let (res, remark) = super::tail_remark("-- aaa\nbbb").finish().unwrap();
         assert_eq!(res, "bbb");
         assert_eq!(remark, "aaa");
+    }
+
+    #[test]
+    fn remark_tag() {
+        let (res, tag) = super::remark_tag(r#""some.name.space""#).finish().unwrap();
+        assert_eq!(res, "");
+        assert_eq!(
+            tag,
+            vec!["some".to_string(), "name".to_string(), "space".to_string()]
+        );
     }
 }
