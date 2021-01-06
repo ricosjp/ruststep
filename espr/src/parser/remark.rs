@@ -55,6 +55,13 @@ pub fn embedded_remark(input: &str) -> IResult<&str, String> {
     .parse(input)
 }
 
+/// 149 tail_remark = `--` \[ remark_tag \] { \a | \s | \x9 | \xA | \xD } \n .
+pub fn tail_remark(input: &str) -> IResult<&str, String> {
+    tuple((tag("--"), not_line_ending, line_ending))
+        .map(|(_start, chars, _newline): (_, &str, _)| chars.trim().to_string())
+        .parse(input)
+}
+
 #[cfg(test)]
 mod tests {
     use nom::Finish;
@@ -136,5 +143,12 @@ mod tests {
         let (res, stars) = super::embedded_remark("(* a * b *)").finish().unwrap();
         assert_eq!(res, "");
         assert_eq!(stars, "a * b");
+    }
+
+    #[test]
+    fn tail_remark() {
+        let (res, remark) = super::tail_remark("-- aaa\nbbb").finish().unwrap();
+        assert_eq!(res, "bbb");
+        assert_eq!(remark, "aaa");
     }
 }
