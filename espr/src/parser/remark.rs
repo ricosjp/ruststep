@@ -1,11 +1,12 @@
 use super::simple_id;
 use itertools::Itertools;
 use nom::{
-    branch::alt, bytes::complete::*, character::complete::*, multi::*, sequence::*, IResult, Parser,
+    branch::alt, bytes::complete::*, character::complete::*, combinator::opt, multi::*,
+    sequence::*, IResult, Parser,
 };
 
 #[derive(Debug, Clone)]
-pub struct Reamrk {
+pub struct Remark {
     tag: Option<Vec<String>>,
     remark: String,
 }
@@ -84,10 +85,21 @@ pub fn embedded_remark(input: &str) -> IResult<&str, String> {
 /// ```
 ///
 /// to support `\r\n` case and unicode string
-pub fn tail_remark(input: &str) -> IResult<&str, String> {
-    tuple((tag("--"), not_line_ending, line_ending))
-        .map(|(_start, chars, _newline): (_, &str, _)| chars.trim().to_string())
-        .parse(input)
+pub fn tail_remark(input: &str) -> IResult<&str, Remark> {
+    tuple((
+        tag("--"),
+        multispace0,
+        opt(remark_tag),
+        not_line_ending,
+        line_ending,
+    ))
+    .map(
+        |(_start, _sp, tag, chars, _newline): (_, _, _, &str, _)| Remark {
+            tag,
+            remark: chars.trim().to_string(),
+        },
+    )
+    .parse(input)
 }
 
 /// 147 remark_tag = `"` remark_ref { `.` remark_ref } `"` .
@@ -185,7 +197,18 @@ mod tests {
     fn tail_remark() {
         let (res, remark) = super::tail_remark("-- aaa\nbbb").finish().unwrap();
         assert_eq!(res, "bbb");
-        assert_eq!(remark, "aaa");
+        assert_eq!(remark.tag, None);
+        assert_eq!(remark.remark, "aaa");
+
+        let (res, remark) = super::tail_remark("-- \"some.tag\" aaa\nbbb")
+            .finish()
+            .unwrap();
+        assert_eq!(res, "bbb");
+        assert_eq!(
+            remark.tag,
+            Some(vec!["some".to_string(), "tag".to_string()])
+        );
+        assert_eq!(remark.remark, "aaa");
     }
 
     #[test]
