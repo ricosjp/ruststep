@@ -9,13 +9,13 @@ where
     separated_list0(multispace0, f)
 }
 
-pub fn spaced_many1<'a, O, F>(
+pub fn space_separated<'a, O, F>(
     f: F,
 ) -> impl FnMut(&'a str) -> IResult<&'a str, Vec<O>, Error<&'a str>>
 where
     F: Parser<&'a str, O, Error<&'a str>>,
 {
-    separated_list1(multispace0, f)
+    separated_list1(multispace1, f)
 }
 
 pub fn comma_separated<'a, O, F>(

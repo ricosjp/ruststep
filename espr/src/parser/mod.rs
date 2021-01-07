@@ -12,7 +12,7 @@
 //! EXPRESS Language string is parsed into [SyntaxTree]:
 //!
 //! ```
-//! let schemas = espr::parser::SyntaxTree::parse(r#"
+//! let schemas = espr::parser::syntax_tree::SyntaxTree::parse(r#"
 //! SCHEMA one;
 //!   ENTITY first;
 //!     m_ref : second;

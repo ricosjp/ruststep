@@ -9,7 +9,7 @@ pub struct SyntaxTree {
 
 impl SyntaxTree {
     pub fn parse(input: &str) -> Result<Self, nom::error::Error<&str>> {
-        let (_residual, schemas) = tuple((multispace0, spaced_many1(schema), multispace0))
+        let (_residual, schemas) = tuple((multispace0, space_separated(schema), multispace0))
             .map(|(_, schemas, _)| schemas)
             .parse(input)
             .finish()?;
