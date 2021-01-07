@@ -1,6 +1,9 @@
-use super::{literal::*, *};
+use super::literal::*;
 use derive_more::From;
-use nom::{branch::*, bytes::complete::*, combinator::*, IResult, Parser};
+use nom::{
+    branch::*, bytes::complete::*, character::complete::*, combinator::*, sequence::*, IResult,
+    Parser,
+};
 
 /// Unary expresion, e.g. `x` or binary expression `x + y`
 #[derive(Debug, Clone, PartialEq)]

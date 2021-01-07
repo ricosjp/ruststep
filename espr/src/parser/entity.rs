@@ -1,6 +1,8 @@
-use super::{simple_data_type::*, *};
+use super::{basis::*, simple_data_type::*};
 use derive_more::From;
-use nom::{bytes::complete::*, character::complete::*, multi::*, sequence::*, IResult, Parser};
+use nom::{
+    branch::*, bytes::complete::*, character::complete::*, multi::*, sequence::*, IResult, Parser,
+};
 
 /// Parsed result of EXPRESS's ENTITY
 #[derive(Debug, Clone, PartialEq)]
