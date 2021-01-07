@@ -3,6 +3,7 @@ use nom::{character::complete::*, error::Error, multi::*, sequence::*, IResult, 
 
 pub type ParseResult<'a, Output> = IResult<&'a str, (Output, Vec<Remark>), Error<&'a str>>;
 
+/// Specialized trait of `nom::Parser` to capturing remarks
 pub trait EsprParser<'a, Output>: FnMut(&'a str) -> ParseResult<'a, Output> + Clone {}
 impl<'a, Output, T: FnMut(&'a str) -> ParseResult<'a, Output> + Clone> EsprParser<'a, Output>
     for T
