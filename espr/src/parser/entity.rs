@@ -1,6 +1,6 @@
-use super::{simple_data_type::*, *};
+use super::{basis::*, simple_data_type::*, util::*};
 use derive_more::From;
-use nom::{bytes::complete::*, character::complete::*, multi::*, sequence::*, IResult, Parser};
+use nom::{branch::*, bytes::complete::*, character::complete::*, sequence::*, IResult, Parser};
 
 /// Parsed result of EXPRESS's ENTITY
 #[derive(Debug, Clone, PartialEq)]
@@ -36,7 +36,7 @@ pub fn explicit_attr(input: &str) -> IResult<&str, (Vec<String>, ParameterType)>
     // FIXME Support attribute_decl
     // FIXME OPTIONAL
     tuple((
-        separated_list1(tuple((multispace0, tag(","), multispace0)), simple_id),
+        comma_separated(simple_id),
         multispace0,
         tag(":"),
         multispace0,
@@ -60,7 +60,7 @@ pub fn entity_decl(input: &str) -> IResult<&str, Entity> {
     tuple((
         entity_head,
         multispace0,
-        separated_list0(multispace0, explicit_attr),
+        spaced_many0(explicit_attr),
         multispace0,
         tag("END_ENTITY"),
         multispace0,

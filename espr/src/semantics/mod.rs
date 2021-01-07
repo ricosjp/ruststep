@@ -9,7 +9,7 @@ pub use namespace::Namespace;
 pub use schema::Schema;
 pub use scope::Scope;
 
-use crate::parser::SyntaxTree;
+use crate::parser::syntax_tree::SyntaxTree;
 use proc_macro2::TokenStream;
 use quote::*;
 use thiserror::Error;

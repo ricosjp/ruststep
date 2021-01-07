@@ -1,4 +1,5 @@
-use super::{entity::*, *};
+use super::{basis::*, entity::*, util::*};
+use nom::{bytes::complete::*, character::complete::*, sequence::*, IResult, Parser};
 
 /// Parsed result of EXPRESS's SCHEMA
 #[derive(Debug, Clone, PartialEq)]
@@ -16,7 +17,7 @@ pub fn schema_decl(input: &str) -> IResult<&str, String> {
 /// 295 schema_body = { interface_specification } \[ constant_decl \] { declaration | rule_decl } .
 pub fn schema_body(input: &str) -> IResult<&str, Vec<Entity>> {
     // FIXME constant_decl
-    separated_list0(multispace0, entity_decl).parse(input)
+    spaced_many0(entity_decl).parse(input)
 }
 
 /// 296 schema_decl = SCHEMA schema_id \[ schema_version_id \] `;` schema_body END_SCHEMA `;` .
