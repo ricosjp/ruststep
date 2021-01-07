@@ -1,5 +1,5 @@
-use super::schema::*;
-use nom::{character::complete::*, multi::*, sequence::*, Finish, Parser};
+use super::{schema::*, util::*};
+use nom::{character::complete::*, sequence::*, Finish, Parser};
 
 /// Entire syntax tree parsed from EXPRESS Language string
 #[derive(Debug, Clone, PartialEq)]
@@ -9,14 +9,10 @@ pub struct SyntaxTree {
 
 impl SyntaxTree {
     pub fn parse(input: &str) -> Result<Self, nom::error::Error<&str>> {
-        let (_residual, schemas) = tuple((
-            multispace0,
-            separated_list1(multispace1, schema),
-            multispace0,
-        ))
-        .map(|(_, schemas, _)| schemas)
-        .parse(input)
-        .finish()?;
+        let (_residual, schemas) = tuple((multispace0, spaced_many1(schema), multispace0))
+            .map(|(_, schemas, _)| schemas)
+            .parse(input)
+            .finish()?;
         // FIXME should check residual here
         Ok(Self { schemas })
     }
