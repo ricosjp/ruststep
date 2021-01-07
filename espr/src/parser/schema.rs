@@ -17,7 +17,7 @@ pub fn schema_decl(input: &str) -> IResult<&str, String> {
 /// 295 schema_body = { interface_specification } \[ constant_decl \] { declaration | rule_decl } .
 pub fn schema_body(input: &str) -> IResult<&str, Vec<Entity>> {
     // FIXME constant_decl
-    spaced_many0(remarked(entity_decl))
+    spaced_many0(entity_decl)
         .map(|(entity_decl, _remarks)| entity_decl)
         .parse(input)
 }
@@ -76,6 +76,7 @@ mod tests {
             .finish()
             .unwrap()
             .1
+             .0
         );
         assert_eq!(
             schema.entities[1],
@@ -90,6 +91,7 @@ mod tests {
             .finish()
             .unwrap()
             .1
+             .0
         );
         assert_eq!(residual, "");
     }
