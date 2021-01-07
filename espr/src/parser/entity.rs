@@ -37,7 +37,7 @@ pub fn explicit_attr(input: &str) -> IResult<&str, (Vec<String>, ParameterType)>
     // FIXME OPTIONAL
 
     tuple((
-        comma_separated(simple_id),
+        comma_separated(remarked(simple_id)),
         multispace0,
         tag(":"),
         multispace0,
@@ -61,7 +61,7 @@ pub fn entity_decl(input: &str) -> IResult<&str, Entity> {
     tuple((
         entity_head,
         multispace0,
-        spaced_many0(explicit_attr),
+        spaced_many0(remarked(explicit_attr)),
         multispace0,
         tag("END_ENTITY"),
         multispace0,

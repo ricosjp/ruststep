@@ -9,10 +9,11 @@ pub struct SyntaxTree {
 
 impl SyntaxTree {
     pub fn parse(input: &str) -> Result<Self, nom::error::Error<&str>> {
-        let (_residual, schemas) = tuple((multispace0, space_separated(schema), multispace0))
-            .map(|(_, (schemas, _remarks), _)| schemas)
-            .parse(input)
-            .finish()?;
+        let (_residual, schemas) =
+            tuple((multispace0, space_separated(remarked(schema)), multispace0))
+                .map(|(_, (schemas, _remarks), _)| schemas)
+                .parse(input)
+                .finish()?;
         // FIXME should check residual here
         Ok(Self { schemas })
     }
