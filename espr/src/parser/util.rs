@@ -1,7 +1,13 @@
 use super::remark::*;
 use nom::{character::complete::*, error::Error, multi::*, sequence::*, IResult, Parser};
 
-type ParseResult<'a, Output> = IResult<&'a str, (Output, Vec<Remark>), Error<&'a str>>;
+pub type ParseResult<'a, Output> = IResult<&'a str, (Output, Vec<Remark>), Error<&'a str>>;
+
+pub trait EsprParser<'a, Output>: FnMut(&'a str) -> ParseResult<'a, Output> + Clone {}
+impl<'a, Output, T: FnMut(&'a str) -> ParseResult<'a, Output> + Clone> EsprParser<'a, Output>
+    for T
+{
+}
 
 fn collect_pairs<O>(iter: impl IntoIterator<Item = (Vec<Remark>, O)>) -> (Vec<O>, Vec<Remark>) {
     let mut outputs = Vec::new();
@@ -11,6 +17,13 @@ fn collect_pairs<O>(iter: impl IntoIterator<Item = (Vec<Remark>, O)>) -> (Vec<O>
         remarks.append(&mut r);
     }
     (outputs, remarks)
+}
+
+pub fn remarked<'a, O, F>(f: F) -> impl EsprParser<'a, O>
+where
+    F: Parser<&'a str, O, Error<&'a str>> + Clone,
+{
+    move |input| f.clone().map(|out| (out, Vec::new())).parse(input)
 }
 
 pub fn spaced_many0<'a, O, F>(f: F) -> impl FnMut(&'a str) -> ParseResult<'a, Vec<O>>
