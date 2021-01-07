@@ -1,5 +1,5 @@
-use super::{basis::*, entity::*, util::*};
-use nom::{bytes::complete::*, character::complete::*, sequence::*, IResult, Parser};
+use super::{basis::*, entity::*, remark::*, util::*};
+use nom::{bytes::complete::*, character::complete::*, sequence::*, Parser};
 
 /// Parsed result of EXPRESS's SCHEMA
 #[derive(Debug, Clone, PartialEq)]
@@ -8,33 +8,49 @@ pub struct Schema {
     pub entities: Vec<Entity>,
 }
 
-pub fn schema_decl(input: &str) -> IResult<&str, String> {
-    tuple((tag("SCHEMA"), multispace1, simple_id, multispace0, tag(";")))
-        .map(|(_, _, id, _, _)| id)
-        .parse(input)
+pub fn schema_decl(input: &str) -> ParseResult<String> {
+    tuple((
+        tag("SCHEMA"),
+        multispace1,
+        spaces_or_remarks,
+        simple_id,
+        spaces_or_remarks,
+        tag(";"),
+    ))
+    .map(|(_start, _space, mut remarks, id, mut r1, _semicoron)| {
+        remarks.append(&mut r1);
+        (id, remarks)
+    })
+    .parse(input)
 }
 
 /// 295 schema_body = { interface_specification } \[ constant_decl \] { declaration | rule_decl } .
-pub fn schema_body(input: &str) -> IResult<&str, Vec<Entity>> {
+pub fn schema_body(input: &str) -> ParseResult<Vec<Entity>> {
     // FIXME constant_decl
-    spaced_many0(entity_decl)
-        .map(|(entity_decl, _remarks)| entity_decl)
-        .parse(input)
+    spaced_many0(entity_decl).parse(input)
 }
 
 /// 296 schema_decl = SCHEMA schema_id \[ schema_version_id \] `;` schema_body END_SCHEMA `;` .
-pub fn schema(input: &str) -> IResult<&str, Schema> {
+pub fn schema(input: &str) -> ParseResult<Schema> {
     // FIXME schema_version_id
     tuple((
         schema_decl,
-        multispace0,
+        spaces_or_remarks,
         schema_body,
-        multispace0,
+        spaces_or_remarks,
         tag("END_SCHEMA"),
-        multispace0,
+        spaces_or_remarks,
         tag(";"),
     ))
-    .map(|(name, _, entities, _, _, _, _)| Schema { name, entities })
+    .map(
+        |((name, mut remarks), mut r1, (entities, mut r2), mut r3, _end, mut r4, _semicoron)| {
+            remarks.append(&mut r1);
+            remarks.append(&mut r2);
+            remarks.append(&mut r3);
+            remarks.append(&mut r4);
+            (Schema { name, entities }, remarks)
+        },
+    )
     .parse(input)
 }
 
@@ -59,7 +75,7 @@ mod tests {
         "#
         .trim();
 
-        let (residual, schema) = super::schema(exp_str).finish().unwrap();
+        let (residual, (schema, _remark)) = super::schema(exp_str).finish().unwrap();
         assert_eq!(schema.name, "my_first_schema");
         assert_eq!(schema.entities.len(), 2);
         assert_eq!(

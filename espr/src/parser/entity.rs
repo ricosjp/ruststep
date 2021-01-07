@@ -57,7 +57,7 @@ pub fn explicit_attr(input: &str) -> ParseResult<(Vec<String>, ParameterType)> {
 }
 
 /// 207 entity_head = ENTITY entity_id subsuper `;` .
-pub fn entity_head(input: &str) -> IResult<&str, String> {
+pub fn entity_head(input: &str) -> ParseResult<String> {
     tuple((
         tag("ENTITY"),
         multispace1,
@@ -65,7 +65,7 @@ pub fn entity_head(input: &str) -> IResult<&str, String> {
         spaces_or_remarks,
         tag(";"),
     ))
-    .map(|(_, _, id, _, _)| id)
+    .map(|(_start, _space, id, remarks, _semicoron)| (id, remarks))
     .parse(input)
 }
 
@@ -81,10 +81,11 @@ pub fn entity_decl(input: &str) -> ParseResult<Entity> {
         tag(";"),
     ))
     .map(
-        |(name, mut remarks, (attributes, mut r1), mut r2, _end, mut r3, _semicoron)| {
+        |((name, mut remarks), mut r1, (attributes, mut r2), mut r3, _end, mut r4, _semicoron)| {
             remarks.append(&mut r1);
             remarks.append(&mut r2);
             remarks.append(&mut r3);
+            remarks.append(&mut r4);
             (
                 Entity {
                     name,
@@ -108,7 +109,7 @@ mod tests {
 
     #[test]
     fn entity_head() {
-        let (residual, name) = super::entity_head("ENTITY homhom;").finish().unwrap();
+        let (residual, (name, _remark)) = super::entity_head("ENTITY homhom;").finish().unwrap();
         assert_eq!(name, "homhom");
         assert_eq!(residual, "");
     }
