@@ -45,7 +45,7 @@ pub fn explicit_attr(input: &str) -> IResult<&str, (Vec<String>, ParameterType)>
         multispace0,
         tag(";"),
     ))
-    .map(|(attrs, _, _, _, ty, _, _)| (attrs, ty))
+    .map(|((attrs, _remarks), _, _, _, ty, _, _)| (attrs, ty))
     .parse(input)
 }
 

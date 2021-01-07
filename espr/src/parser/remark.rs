@@ -7,8 +7,8 @@ use nom::{
 
 #[derive(Debug, Clone)]
 pub struct Remark {
-    tag: Option<Vec<String>>,
-    remark: String,
+    pub tag: Option<Vec<String>>,
+    pub remark: String,
 }
 
 fn begin(input: &str) -> IResult<&str, ()> {
