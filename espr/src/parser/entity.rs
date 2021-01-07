@@ -35,6 +35,7 @@ pub fn paramter_type(input: &str) -> IResult<&str, ParameterType> {
 pub fn explicit_attr(input: &str) -> IResult<&str, (Vec<String>, ParameterType)> {
     // FIXME Support attribute_decl
     // FIXME OPTIONAL
+
     tuple((
         comma_separated(simple_id),
         multispace0,
@@ -66,7 +67,7 @@ pub fn entity_decl(input: &str) -> IResult<&str, Entity> {
         multispace0,
         tag(";"),
     ))
-    .map(|(name, _, attributes, _, _, _, _)| Entity {
+    .map(|(name, _, (attributes, _remarks), _, _, _, _)| Entity {
         name,
         attributes: attributes
             .into_iter()

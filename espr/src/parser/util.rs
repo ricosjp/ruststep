@@ -1,12 +1,25 @@
+use super::remark::*;
 use nom::{character::complete::*, error::Error, multi::*, sequence::*, IResult, Parser};
 
 pub fn spaced_many0<'a, O, F>(
     f: F,
-) -> impl FnMut(&'a str) -> IResult<&'a str, Vec<O>, Error<&'a str>>
+) -> impl FnMut(&'a str) -> IResult<&'a str, (Vec<O>, Vec<Remark>), Error<&'a str>>
 where
-    F: Parser<&'a str, O, Error<&'a str>>,
+    F: Parser<&'a str, O, Error<&'a str>> + Copy,
 {
-    separated_list0(multispace0, f)
+    move |input| {
+        many0(pair(spaces_or_remarks, f))
+            .map(|pairs| {
+                let mut outputs = Vec::new();
+                let mut remarks = Vec::new();
+                for (mut remark, out) in pairs {
+                    outputs.push(out);
+                    remarks.append(&mut remark);
+                }
+                (outputs, remarks)
+            })
+            .parse(input)
+    }
 }
 
 pub fn space_separated<'a, O, F>(
