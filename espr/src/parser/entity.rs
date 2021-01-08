@@ -1,4 +1,4 @@
-use super::{basis::*, simple_data_type::*, util::*};
+use super::{basis::*, remark::*, simple_data_type::*, util::*};
 use derive_more::From;
 use nom::{branch::*, bytes::complete::*, character::complete::*, sequence::*, IResult, Parser};
 
@@ -32,48 +32,73 @@ pub fn paramter_type(input: &str) -> IResult<&str, ParameterType> {
 }
 
 /// 215 explicit_attr = attribute_decl { `,` attribute_decl } `:` \[ OPTIONAL \] parameter_type `;` .
-pub fn explicit_attr(input: &str) -> IResult<&str, (Vec<String>, ParameterType)> {
+pub fn explicit_attr(input: &str) -> ParseResult<(Vec<String>, ParameterType)> {
     // FIXME Support attribute_decl
     // FIXME OPTIONAL
+
     tuple((
-        comma_separated(simple_id),
-        multispace0,
+        comma_separated(remarked(simple_id)),
+        spaces_or_remarks,
         tag(":"),
-        multispace0,
+        spaces_or_remarks,
         paramter_type,
-        multispace0,
+        spaces_or_remarks,
         tag(";"),
     ))
-    .map(|(attrs, _, _, _, ty, _, _)| (attrs, ty))
+    .map(
+        |((attrs, mut remarks), mut r1, _coron, mut r2, ty, mut r3, _semicoron)| {
+            remarks.append(&mut r1);
+            remarks.append(&mut r2);
+            remarks.append(&mut r3);
+            ((attrs, ty), remarks)
+        },
+    )
     .parse(input)
 }
 
 /// 207 entity_head = ENTITY entity_id subsuper `;` .
-pub fn entity_head(input: &str) -> IResult<&str, String> {
-    tuple((tag("ENTITY"), multispace1, simple_id, multispace0, tag(";")))
-        .map(|(_, _, id, _, _)| id)
-        .parse(input)
+pub fn entity_head(input: &str) -> ParseResult<String> {
+    tuple((
+        tag("ENTITY"),
+        multispace1,
+        simple_id,
+        spaces_or_remarks,
+        tag(";"),
+    ))
+    .map(|(_start, _space, id, remarks, _semicoron)| (id, remarks))
+    .parse(input)
 }
 
 /// 206 entity_decl = entity_head entity_body END_ENTITY `;` .
-pub fn entity_decl(input: &str) -> IResult<&str, Entity> {
+pub fn entity_decl(input: &str) -> ParseResult<Entity> {
     tuple((
         entity_head,
-        multispace0,
+        spaces_or_remarks,
         spaced_many0(explicit_attr),
-        multispace0,
+        spaces_or_remarks,
         tag("END_ENTITY"),
-        multispace0,
+        spaces_or_remarks,
         tag(";"),
     ))
-    .map(|(name, _, attributes, _, _, _, _)| Entity {
-        name,
-        attributes: attributes
-            .into_iter()
-            .map(|(attrs, ty)| attrs.into_iter().map(move |attr| (attr, ty.clone())))
-            .flatten()
-            .collect(),
-    })
+    .map(
+        |((name, mut remarks), mut r1, (attributes, mut r2), mut r3, _end, mut r4, _semicoron)| {
+            remarks.append(&mut r1);
+            remarks.append(&mut r2);
+            remarks.append(&mut r3);
+            remarks.append(&mut r4);
+            (
+                Entity {
+                    name,
+                    attributes: attributes
+                        .into_iter()
+                        .map(|(attrs, ty)| attrs.into_iter().map(move |attr| (attr, ty.clone())))
+                        .flatten()
+                        .collect(),
+                },
+                remarks,
+            )
+        },
+    )
     .parse(input)
 }
 
@@ -84,19 +109,20 @@ mod tests {
 
     #[test]
     fn entity_head() {
-        let (residual, name) = super::entity_head("ENTITY homhom;").finish().unwrap();
+        let (residual, (name, _remark)) = super::entity_head("ENTITY homhom;").finish().unwrap();
         assert_eq!(name, "homhom");
         assert_eq!(residual, "");
     }
 
     #[test]
     fn explicit_attr() {
-        let (residual, (id, ty)) = super::explicit_attr("x : REAL;").finish().unwrap();
+        let (residual, ((id, ty), _remark)) = super::explicit_attr("x : REAL;").finish().unwrap();
         assert_eq!(id, &["x"]);
         assert!(matches!(ty, ParameterType::Simple(SimpleType::Real)));
         assert_eq!(residual, "");
 
-        let (residual, (id, ty)) = super::explicit_attr("x, y : REAL;").finish().unwrap();
+        let (residual, ((id, ty), _remark)) =
+            super::explicit_attr("x, y : REAL;").finish().unwrap();
         assert_eq!(id, &["x", "y"]);
         assert!(matches!(ty, ParameterType::Simple(SimpleType::Real)));
         assert_eq!(residual, "");
@@ -112,7 +138,7 @@ mod tests {
         "#
         .trim();
 
-        let (residual, entity) = super::entity_decl(exp_str).finish().unwrap();
+        let (residual, (entity, _remark)) = super::entity_decl(exp_str).finish().unwrap();
         assert_eq!(entity.name, "first");
 
         assert_eq!(entity.attributes.len(), 2);

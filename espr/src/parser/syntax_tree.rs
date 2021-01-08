@@ -1,20 +1,29 @@
-use super::{schema::*, util::*};
-use nom::{character::complete::*, sequence::*, Finish, Parser};
+use super::{remark::*, schema::*, util::*};
+use nom::{sequence::*, Finish, Parser};
 
 /// Entire syntax tree parsed from EXPRESS Language string
 #[derive(Debug, Clone, PartialEq)]
 pub struct SyntaxTree {
     pub schemas: Vec<Schema>,
+    pub remarks: Vec<Remark>,
 }
 
 impl SyntaxTree {
     pub fn parse(input: &str) -> Result<Self, nom::error::Error<&str>> {
-        let (_residual, schemas) = tuple((multispace0, space_separated(schema), multispace0))
-            .map(|(_, schemas, _)| schemas)
-            .parse(input)
-            .finish()?;
-        // FIXME should check residual here
-        Ok(Self { schemas })
+        let (residual, st) = tuple((
+            spaces_or_remarks,
+            space_separated(schema),
+            spaces_or_remarks,
+        ))
+        .map(|(mut remarks, (schemas, mut r1), mut r2)| {
+            remarks.append(&mut r1);
+            remarks.append(&mut r2);
+            SyntaxTree { schemas, remarks }
+        })
+        .parse(input)
+        .finish()?;
+        assert!(residual.is_empty());
+        Ok(st)
     }
 
     // Example syntax tree for easy testing
@@ -44,5 +53,38 @@ impl SyntaxTree {
             .trim(),
         )
         .unwrap()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+
+    #[test]
+    fn parse_remarks() {
+        let st = super::SyntaxTree::parse(
+            r#"
+            SCHEMA one;
+              ENTITY first;
+                m_ref : second;
+                fattr : STRING;
+              END_ENTITY; -- first
+              ENTITY second;
+                sattr : STRING;
+              END_ENTITY; -- second
+              (* this is the example! *)
+            END_SCHEMA;
+
+            (* Hey! *)
+
+            SCHEMA geometry0;
+              ENTITY point;
+                x, (* y, *) z: REAL; -- skip y
+              END_ENTITY;
+            END_SCHEMA;
+            "#,
+        )
+        .unwrap();
+        dbg!(&st);
+        assert_eq!(st.remarks.len(), 6);
     }
 }

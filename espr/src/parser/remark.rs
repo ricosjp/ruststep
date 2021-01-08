@@ -5,10 +5,10 @@ use nom::{
     sequence::*, IResult, Parser,
 };
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Remark {
-    tag: Option<Vec<String>>,
-    remark: String,
+    pub tag: Option<Vec<String>>,
+    pub remark: String,
 }
 
 fn begin(input: &str) -> IResult<&str, ()> {
@@ -114,6 +114,16 @@ pub fn tail_remark(input: &str) -> IResult<&str, Remark> {
 /// analysis phase.
 pub fn remark_tag(input: &str) -> IResult<&str, Vec<String>> {
     delimited(char('"'), separated_list1(char('.'), simple_id), char('"')).parse(input)
+}
+
+/// Match to spaces or remarks
+pub fn spaces_or_remarks(input: &str) -> IResult<&str, Vec<Remark>> {
+    delimited(
+        multispace0,
+        separated_list0(multispace0, alt((embedded_remark, tail_remark))),
+        multispace0,
+    )
+    .parse(input)
 }
 
 #[cfg(test)]
@@ -238,5 +248,24 @@ mod tests {
             tag,
             vec!["some".to_string(), "name".to_string(), "space".to_string()]
         );
+    }
+
+    #[test]
+    fn spaces_or_remarks() {
+        let (res, remarks) = super::spaces_or_remarks("").finish().unwrap();
+        assert_eq!(res, "");
+        assert!(remarks.is_empty());
+
+        let (res, remarks) = super::spaces_or_remarks(
+            r#"
+            -- some comment
+            (* embedded comment *)
+            "#,
+        )
+        .finish()
+        .unwrap();
+        assert_eq!(res, "");
+        dbg!(&remarks);
+        assert_eq!(remarks.len(), 2);
     }
 }
