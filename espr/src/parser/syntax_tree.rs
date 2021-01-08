@@ -55,3 +55,36 @@ impl SyntaxTree {
         .unwrap()
     }
 }
+
+#[cfg(test)]
+mod tests {
+
+    #[test]
+    fn parse_remarks() {
+        let st = super::SyntaxTree::parse(
+            r#"
+            SCHEMA one;
+              ENTITY first;
+                m_ref : second;
+                fattr : STRING;
+              END_ENTITY; -- first
+              ENTITY second;
+                sattr : STRING;
+              END_ENTITY; -- second
+              (* this is the example! *)
+            END_SCHEMA;
+
+            (* Hey! *)
+
+            SCHEMA geometry0;
+              ENTITY point;
+                x, (* y, *) z: REAL; -- skip y
+              END_ENTITY;
+            END_SCHEMA;
+            "#,
+        )
+        .unwrap();
+        dbg!(&st);
+        assert_eq!(st.remarks.len(), 6);
+    }
+}
