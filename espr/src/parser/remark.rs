@@ -5,7 +5,7 @@ use nom::{
     sequence::*, IResult, Parser,
 };
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Remark {
     pub tag: Option<Vec<String>>,
     pub remark: String,
