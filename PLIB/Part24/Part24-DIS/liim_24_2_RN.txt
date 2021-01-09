@@ -1,0 +1,445 @@
+
+ALL THE CHANGES ARE IMPLEMENTED IN THE RELEASED SCHEMAS
+
+
+=====================================================================
+
+ISSUE NUMBER: 1
+AUTHOR: E. SARDET
+ENTITY or RESOURCE MODIFIED: ENTITY dictionary
+DESCRIPTION: The dictionary entity data type references an entity called semantic_relationship through its a_posteriori_semantic_relationships attribute. But the semantic_relationship entity data type name has been updated by a new one: a_posteriori_semantic_relationship.
+OLD CONTENT: 
+NEW CONTENT: 
+Wherever semantic_relationship appears, replace by a_posteriori_semantic_relationship.
+
+=====================================================================
+
+=====================================================================
+
+ISSUE NUMBER: 2
+AUTHOR: E. SARDET
+ENTITY or RESOURCE MODIFIED: imported_documents_are_visible_or_applicable_rule rule
+DESCRIPTION: The imported_documents_are_visible_or_applicable_rule does not appear in the long form, whereas it should have been implicitly imported through the a_priori_semantics_relationship and document_element entity data types.
+OLD CONTENT: 
+NEW CONTENT: 
+Add the following global rule in the long form:
+
+RULE imported_documents_are_visible_or_applicable_rule FOR (
+		a_priori_semantics_relationship, document_element);
+WHERE
+	WR1: QUERY (rel <* a_priori_semantics_relationship  
+		| QUERY ( doc <* rel.referenced_documents
+		| QUERY ( cl <* rel.referenced_classes
+		| NOT visible_documents (cl, [doc])
+		AND NOT applicable_documents (cl, [doc])) 
+		= rel.referenced_classes) <> [] ) 
+	 = [];
+END_RULE; -- imported_documents_are_visible_or_applicable_rule
+
+=====================================================================
+
+=====================================================================
+
+ISSUE NUMBER: 3
+AUTHOR: E. SARDET
+ENTITY or RESOURCE MODIFIED: 
+DESCRIPTION: Some group references were not correctly used in some entity 
+data types and functions. These have been updated.
+OLD CONTENT
+
+1 - ENTITY in_RDB_table_boolean_expression
+...
+WR1: ... is_sql_mappable_table_expression (from_table\table_expression);
+WR2: ... is_sql_mappable(simple_expr\expression)
+
+2 - ENTITY subclass_defined_domain
+...
+WR3: ...NOT is_subclass (SELF.from_class.definition[1]\class,  
+		va\class_instance_expression.expr_type.definition[1]\class)
+
+3 - ENTITY model_class_extension
+...
+WR16: ... (SELF.dictionary_definition\class_BSU)
+
+4 - FUNCTION variables_belong_to_assumes
+...
+RETURN(collects_var_sem(used_variables(gsd.guard\boolean_expression)) <= ...
+
+5 - FUNCTION is_SQL_mappable_table_expression
+...
+IF ('ISO13584_G_M_IIM_LIBRARY_IMPLICIT_SCHEMA.SELECT_EXPRESSION'  
+...
+	RETURN (is_SQL_mappable_table_expression( 
+			arg\select_expression.from_table\table_expression) 
+			AND is_SQL_mappable( 
+			arg\select_expression.condition\boolean_expression)); 
+
+6 - FUNCTION used_tables_in_domain
+...
+IF 'ISO13584_G_M_IIM_LIBRARY_IMPLICIT_SCHEMA.BOOLEAN_EXPRESSION' ...
+     result := result + used_table_literals(arg.domains[i].guard\boolean_expression);
+
+7 - FUNCTION collects_column
+...
+IF 'ISO13584_G_M_IIM_LIBRARY_IMPLICIT_SCHEMA.SELECT_EXPRESSION'...
+	RETURN(collects_columns(t\binary_generic_expression.operands[1]\table_expression)); 
+END_IF;
+
+8 - FUNCTION acyclic_superclass_relationship
+...
+   IF current.definition[1]\class IN visited
+...
+        RETURN (acyclic_superclass_relationship(current.definition[1]\class.
+         its_superclass,visited + current.definition[1]\class));
+
+9 - FUNCTION compliant_http_protocol_24_2
+...
+IF ef.designation.short_name\label  --some tools may require \label
+
+10 - FUNCTION return_key
+...
+IF 'ISO13584_G_M_IIM_LIBRARY_IMPLICIT_SCHEMA.TABLE_VARIABLE ...
+	RETURN(t\simple_table_expression\table_variable.its_key); 
+END_IF; 
+
+11 - FUNCTION compatible_content_and_specification
+...
+RETURN (
+		...
+		tab\content_item.dictionary_definition.definition[1]
+		\table_element\table_specification.column_meaning),
+		tab\table_extension.content));
+
+12 - FUNCTION used_variables_in_domain (2)
+...
+IF 'ISO13584_F_M_IIM_LIBRARY_IMPLICIT_SCHEMA.BOOLEAN_EXPRESSION' ...
+     result := result + used_variables(arg.domains[i].guard\boolean_expression);
+
+13 - ENTITY linked_interface_program_protocol (2)
+...
+wr1 : QUERY(pl <* SELF.link_libraries | (SIZEOF(pl\basic_semantic_unit.
+         referenced_by) > 0) AND (pl\basic_semantic_unit.referenced_by[1]\
+         dictionary_external_item\external_item.used_protocol <> SELF.
+         base_protocol)) = [];
+
+14 - ENTITY supplier_program_library_relationship (2)
+...
+SELF\supplier_bsu_relationship.related_tokens : SET[01:?] OF program_library_bsu;
+		
+15 - ENTITY odd_function (Implemented in P20)
+...
+WR: is_int_expr(SELF\numeric_expression)
+		
+NEW CONTENT: 
+
+1 - ENTITY in_RDB_table_boolean_expression
+...
+WR1: ... is_sql_mappable_table_expression (from_table);
+WR2: ... is_sql_mappable(simple_expr)
+
+2 - ENTITY subclass_defined_domain
+...
+WR3: ...NOT is_subclass (SELF.from_class.definition[1],  
+		va\class_instance_expression.expr_type.definition[1])
+
+3 - ENTITY model_class_extension
+...
+WR16: ... (SELF.dictionary_definition)
+
+4 - FUNCTION variables_belong_to_assumes
+...
+RETURN(collects_var_sem(used_variables(gsd.guard)) <= ...
+
+5 - FUNCTION is_SQL_mappable_table_expression
+...
+IF ('ISO13584_G_M_IIM_LIBRARY_IMPLICIT_SCHEMA.SELECT_EXPRESSION'  
+...
+	RETURN (is_SQL_mappable_table_expression( 
+			arg\select_expression.from_table) 
+			AND is_SQL_mappable( 
+			arg\select_expression.condition)); 
+
+6 - FUNCTION used_tables_in_domain
+...
+IF 'ISO13584_G_M_IIM_LIBRARY_IMPLICIT_SCHEMA.BOOLEAN_EXPRESSION' ...
+     result := result + used_table_literals(arg.domains[i].guard);
+
+7 - FUNCTION collects_column
+...
+IF 'ISO13584_G_M_IIM_LIBRARY_IMPLICIT_SCHEMA.SELECT_EXPRESSION'...
+	RETURN(collects_columns(t\binary_generic_expression.operands[1])); 
+END_IF;
+
+8 - FUNCTION acyclic_superclass_relationship
+...
+   IF current.definition[1]\class IN visited
+...
+        RETURN (acyclic_superclass_relationship(current.definition[1]\class.
+         its_superclass,visited + current.definition[1]));
+
+9 - FUNCTION compliant_http_protocol_24_2
+...
+IF ef.designation.short_name\label  --some tools may require \label
+
+10 - FUNCTION return_key
+...
+IF 'ISO13584_G_M_IIM_LIBRARY_IMPLICIT_SCHEMA.TABLE_VARIABLE ...
+	RETURN(t\table_variable.its_key); 
+END_IF; 
+
+11 - FUNCTION compatible_content_and_specification
+...
+RETURN (
+		...
+		tab\content_item.dictionary_definition.definition[1]
+		\table_specification.column_meaning),
+		tab\table_extension.content));
+
+12 - FUNCTION used_variables_in_domain (2)
+...
+IF 'ISO13584_F_M_IIM_LIBRARY_IMPLICIT_SCHEMA.BOOLEAN_EXPRESSION' ...
+     result := result + used_variables(arg.domains[i].guard\boolean_expression);
+
+13 - ENTITY linked_interface_program_protocol (2)
+...
+wr1 : QUERY(pl <* SELF.link_libraries | (SIZEOF(pl\basic_semantic_unit.
+         referenced_by) > 0) AND (pl\basic_semantic_unit.referenced_by[1]\
+         dictionary_external_item\external_item.used_protocol <> SELF.
+         base_protocol)) = [];
+
+14 - ENTITY supplier_program_library_relationship (2)
+...
+SELF\supplier_bsu_relationship.related_tokens : SET[01:?] OF program_library_bsu;
+		
+15 - ENTITY odd_function (Implemented in P20)
+...
+WR: is_int_expr(SELF\numeric_expression)
+
+=====================================================================
+
+=====================================================================
+
+ISSUE NUMBER: 4
+AUTHOR: E. SARDET
+ENTITY or RESOURCE MODIFIED: class_document_relationship
+DESCRIPTION: An attribute redefinition has been badly redefined.
+OLD CONTENT:
+ENTITY class_document_relationship
+SELF\class_bsu_relationship.related_tokens : SET[0:?] OF document_bsu;
+
+NEW CONTENT:
+ENTITY class_document_relationship
+SELF\class_bsu_relationship.related_tokens : SET[1:?] OF document_bsu;
+
+
+=====================================================================
+
+=====================================================================
+
+ISSUE NUMBER: 5
+AUTHOR: E. SARDET
+ENTITY or RESOURCE MODIFIED: Function makes_reference_outside 
+DESCRIPTION: The local attribute temp is never initialized
+OLD CONTENT:
+FUNCTION makes_reference_outside(...)
+...
+IF  NOT (temp[1] IN l) ...
+...
+END_FUNCTION;
+
+NEW CONTENT:
+
+FUNCTION makes_reference_outside(...)
+...
+temp := data_type_class_of(p[j]);
+IF  NOT (temp[1] IN l) ...
+...
+END_FUNCTION;		
+
+=====================================================================
+
+=====================================================================
+
+ISSUE NUMBER: 6
+AUTHOR: E. SARDET
+ENTITY or RESOURCE MODIFIED: table_code_type and document_code_type datatypes 
+DESCRIPTION: the underlying type of these two datatypes must be code_type 
+in place of identifier.
+OLD CONTENT:
+
+TYPE table_code_type = identifier;
+TYPE document_code_type = identifier;
+
+NEW CONTENT:
+
+TYPE table_code_type = code_type;
+TYPE document_code_type = code_type;
+
+=====================================================================
+
+=====================================================================
+
+ISSUE NUMBER: 6
+AUTHOR: E. SARDET
+ENTITY or RESOURCE MODIFIED:  
+DESCRIPTION: A lot of local variables have been declared in functions 
+whereas they are never used. They must be removed.
+
+OLD CONTENT:
+All the functions listed hereafter together with their local unused variable(s)
+have been updated.
+
+1 - FUNCTION derived_properties_list 
+LOCAL
+	i: INTEGER;
+
+2 - FUNCTION retrieve_required_properties 
+LOCAL
+	i: INTEGER;
+
+3 - FUNCTION acyclic_class_extension_definition 
+LOCAL
+	i : INTEGER;
+
+4 - FUNCTION optional_properties_list 
+LOCAL
+	i : INTEGER;
+
+5 - FUNCTION selectable_properties_list 
+LOCAL
+	i : INTEGER;
+
+6 - FUNCTION visible_types 
+LOCAL
+	i : INTEGER;
+
+7 - FUNCTION makes_reference_outside 
+LOCAL
+	j : INTEGER;
+
+8 - FUNCTION makes_sub_list 
+LOCAL
+	k : INTEGER;
+
+9 - FUNCTION diff_columns 
+LOCAL
+	i : INTEGER;
+END_LOCAL;
+
+10 - FUNCTION compatible_column_and_variable_semantics 
+LOCAL
+	i : INTEGER;
+
+11 - FUNCTION return_key 
+LOCAL
+	i : INTEGER;
+
+12 - FUNCTION collects_assigned_instance_properties 
+LOCAL
+	i : INTEGER;
+
+13 - FUNCTION retrieve_fm_free_model_properties (2)
+LOCAL
+	i : INTEGER;
+
+14 - FUNCTION visible_properties 
+LOCAL
+	i : INTEGER;
+
+15 - FUNCTION compatible_list_library_types_and_columns 
+LOCAL
+	i : INTEGER;
+
+16 - FUNCTION prefix_ordered_class_list 
+LOCAL
+	j, k, prev : INTEGER;
+
+17 - FUNCTION visible_tables 
+LOCAL 
+	i: INTEGER;
+END_LOCAL;
+
+18 - FUNCTION get_property_BSU_from_property_semantics 
+LOCAL
+	i : INTEGER;
+
+19 - FUNCTION visible_documents 
+LOCAL 
+	i: INTEGER;
+END_LOCAL;
+
+20 - FUNCTION collects_columns 
+LOCAL
+	i : INTEGER;
+
+21 - FUNCTION compatible_list_variable_semantics_and_columns 
+LOCAL
+	i : INTEGER;
+
+22 - FUNCTION syntax_of 
+LOCAL
+	i : INTEGER;
+
+23 - FUNCTION compatible_list_variable_semantics_and_expressions 
+LOCAL
+	i : INTEGER;
+
+24 - is_SQL_mappable_table_expression
+LOCAL
+	i : INTEGER;
+END_LOCAL;
+
+25 - FUNCTION compatible_variable_semantics_and_expression
+LOCAL
+	i : INTEGER;
+
+26 - FUNCTION collects_assigned_properties
+LOCAL
+	i : INTEGER;
+
+27 - FUNCTION collects_referenced_library_expressions
+LOCAL
+	i : INTEGER;
+
+28 - FUNCTION is_int_expr (Implemented in P20)
+LOCAL
+	i: INTEGER;
+END_LOCAL;
+
+29 - FUNCTION is_sql_mappable (Implemented in P20)
+LOCAL
+	i : INTEGER;
+
+30 - FUNCTION retrieve_method_variables
+LOCAL
+	i : INTEGER;
+
+31 - FUNCTION fm_free_model_properties_list
+LOCAL
+	i : INTEGER;
+
+=====================================================================
+
+=====================================================================
+
+ISSUE NUMBER: 7
+DATE: 2000-04-11
+AUTHOR: E.SARDET
+ENTITY or RESOURCE MODIFIED: odd_function
+DESCRIPTION: The parameter of the function called in the entity
+datatype where rule is not the good one.
+OLD CONTENT:
+
+ENTITY odd_function
+...
+WHERE
+	WR1: is_int_expr(SELF);
+END_ENTITY;
+
+NEW CONTENT:
+
+ENTITY odd_function
+...
+WHERE
+	WR1: is_int_expr(SELF.operand);
+END_ENTITY;

@@ -1,0 +1,1327 @@
+SCHEMA ISO13584_IEC61360_dictionary_schema;
+
+
+REFERENCE FROM support_resource_schema(identifier, label, text); 
+
+ 
+REFERENCE FROM person_organization_schema(organization, address); 
+
+ 
+REFERENCE FROM measure_schema;
+
+ 
+REFERENCE FROM ISO13584_IEC61360_language_resource_schema; 
+
+
+
+CONSTANT 
+    property_code_len: INTEGER := 14; 
+    class_code_len: INTEGER := 14;
+    data_type_code_len:INTEGER := 14;
+    supplier_code_len: INTEGER := 70;
+    version_len: INTEGER := 9; 
+    revision_len: INTEGER := 3; 
+    value_code_len: INTEGER :=18; 
+    pref_name_len: INTEGER := 70;
+    short_name_len: INTEGER := 15;
+    syn_name_len: INTEGER := pref_name_len;
+    DET_classification_len: INTEGER := 3;
+    source_doc_len: INTEGER := 80;
+    value_format_len: INTEGER := 80;
+    sep_cv: STRING := '-';
+    sep_id: STRING := '.'; 
+END_CONSTANT;
+
+
+ENTITY basic_semantic_unit
+ABSTRACT SUPERTYPE OF(ONEOF(
+    supplier_BSU,
+    class_BSU,
+    property_BSU,
+    data_type_BSU,
+    supplier_related_BSU,
+    class_related_BSU));
+    
+    code: code_type;
+    version: version_type;
+DERIVE
+    dic_identifier: identifier := code + sep_cv + version;
+INVERSE
+    definition: SET [0:1] OF dictionary_element FOR 
+    identified_by;
+    referenced_by: SET [0:1] OF content_item 
+        FOR dictionary_definition;
+END_ENTITY; -- basic_semantic_unit
+
+
+ENTITY dictionary_element
+ABSTRACT SUPERTYPE OF(ONEOF(
+    supplier_element,
+    class_and_property_elements,
+    data_type_element));
+
+    identified_by: basic_semantic_unit;
+    time_stamps: OPTIONAL dates;
+    revision: revision_type;
+END_ENTITY; -- dictionary_element
+
+
+ENTITY content_item
+ABSTRACT SUPERTYPE;
+    dictionary_definition: basic_semantic_unit;
+END_ENTITY; -- content_item
+
+
+ENTITY supplier_related_BSU
+ABSTRACT SUPERTYPE
+SUBTYPE OF(basic_semantic_unit);
+END_ENTITY; -- supplier_related_BSU
+
+
+ENTITY class_related_BSU
+ABSTRACT SUPERTYPE
+SUBTYPE OF(basic_semantic_unit);
+END_ENTITY; -- class_related_BSU
+
+
+ENTITY supplier_BSU_relationship
+ABSTRACT SUPERTYPE;
+    relating_supplier: supplier_element;
+    related_tokens: SET [1:?] OF supplier_related_BSU;
+END_ENTITY; -- supplier_BSU_relationship
+
+
+ENTITY class_BSU_relationship
+ABSTRACT SUPERTYPE;
+    relating_class: class;
+    related_tokens: SET [1:?] OF class_related_BSU;
+END_ENTITY; -- class_BSU_relationship
+
+
+ENTITY supplier_BSU 
+SUBTYPE OF(basic_semantic_unit); 
+    SELF\basic_semantic_unit.code: supplier_code_type; 
+DERIVE 
+    SELF\basic_semantic_unit.version: version_type := '1';
+    absolute_id: identifier := SELF\basic_semantic_unit.code; 
+UNIQUE 
+    UR1: absolute_id; 
+END_ENTITY; -- supplier_BSU
+
+
+ENTITY supplier_element
+SUBTYPE OF(dictionary_element);
+    SELF\dictionary_element.identified_by: supplier_BSU;
+    org: organization;
+    addr: address;
+INVERSE
+    associated_items: SET [0:?] OF supplier_BSU_relationship 
+        FOR relating_supplier;
+END_ENTITY; -- supplier_element
+
+
+ENTITY class_BSU
+SUBTYPE OF(basic_semantic_unit);
+    SELF\basic_semantic_unit.code: class_code_type;
+    defined_by: supplier_BSU;
+DERIVE
+    absolute_id: identifier 
+        := defined_by.absolute_id + sep_id + dic_identifier; 
+    known_visible_properties : SET [0:?]OF property_BSU
+        :=compute_known_visible_properties(SELF);
+    known_visible_data_types: SET [0:?]OF data_type_BSU
+        :=compute_known_visible_data_types(SELF);
+INVERSE
+    subclasses: SET [0:?] OF class FOR its_superclass;
+    added_visible_properties:SET [0:?] OF property_BSU 
+        FOR name_scope;
+    added_visible_data_types:SET [0:?] OF data_type_BSU 
+        FOR name_scope;
+UNIQUE
+    UR1: absolute_id; 
+END_ENTITY; -- class_BSU
+
+
+ENTITY class_and_property_elements
+ABSTRACT SUPERTYPE OF(ONEOF(
+    property_DET, 
+    class))
+SUBTYPE OF(dictionary_element);
+    names: item_names;
+    definition: definition_type;
+    source_doc_of_definition: OPTIONAL document;
+    note: OPTIONAL note_type;
+    remark: OPTIONAL remark_type;
+END_ENTITY; -- class_and_property_elements
+
+
+ENTITY class
+ABSTRACT SUPERTYPE OF(item_class)
+SUBTYPE OF(class_and_property_elements);
+    SELF\dictionary_element.identified_by: class_BSU;
+    its_superclass: OPTIONAL class_BSU;
+    described_by: LIST [0:?] OF UNIQUE property_BSU;
+    defined_types: SET [0:?] OF data_type_BSU;
+DERIVE
+    subclasses: SET [0:?] OF class := identified_by.subclasses;
+    known_applicable_properties: SET [0:?] OF property_BSU
+        := compute_known_applicable_properties(
+            SELF\dictionary_element.identified_by);
+    known_applicable_data_types: SET [0:?] OF data_type_BSU
+        := compute_known_applicable_data_types(
+            SELF\dictionary_element.identified_by);
+INVERSE
+    associated_items: SET [0:?] OF class_BSU_relationship 
+        FOR relating_class;
+WHERE
+    WR1: acyclic_superclass_relationship(SELF.identified_by, []);
+    WR2: NOT all_class_descriptions_reachable(
+        SELF\dictionary_element.identified_by)
+        OR (list_to_set(SELF.described_by) <= 
+        SELF\dictionary_element.identified_by
+        \class_BSU.known_visible_properties);
+    WR3: NOT all_class_descriptions_reachable(
+        SELF\dictionary_element.identified_by)
+        OR (SELF.defined_types <= 
+        SELF\dictionary_element.identified_by
+        \class_BSU.known_visible_data_types); 
+    WR4: check_properties_applicability(SELF);
+    WR5: check_datatypes_applicability(SELF);
+END_ENTITY; -- class
+
+
+ENTITY item_class 
+SUPERTYPE OF(ONEOF(component_class, material_class))
+SUBTYPE OF(class);
+    simplified_drawing: OPTIONAL graphics;
+    sub_class_properties: SET [0:?] OF property_BSU;
+    class_constant_values: SET [0:?] 
+        OF class_value_assignment;
+    coded_name: OPTIONAL value_code_type;
+WHERE
+    WR1: QUERY(p <* sub_class_properties
+        | NOT(p IN SELF.described_by)) = [];
+    WR2: NOT all_class_descriptions_reachable(SELF.identified_by) OR
+        (QUERY(va <* class_constant_values | SIZEOF(QUERY(c <*
+        va.super_class_defined_property.describes_classes |
+        is_subclass(SELF, c) 
+        AND (va.super_class_defined_property 
+        IN c\item_class.sub_class_properties))) <> 1) = []);
+END_ENTITY; -- item_class
+
+
+ENTITY component_class 
+SUBTYPE OF(item_class);
+END_ENTITY; -- component_class
+
+
+ENTITY material_class 
+SUBTYPE OF(item_class);
+END_ENTITY; -- material_class
+
+
+ENTITY property_BSU
+SUBTYPE OF(basic_semantic_unit);
+    SELF\basic_semantic_unit.code: property_code_type;
+    name_scope: class_BSU;
+DERIVE
+    absolute_id: identifier :=
+        name_scope.defined_by.absolute_id
+        + sep_id + name_scope.dic_identifier
+        + sep_id + dic_identifier;
+INVERSE
+    describes_classes: SET OF class FOR described_by;
+UNIQUE
+    UR1: absolute_id;
+WHERE
+    WR1: QUERY(c <* describes_classes |
+        NOT(is_subclass(c, name_scope.definition[1])))= [];
+END_ENTITY; -- property_BSU
+
+
+ENTITY property_DET
+ABSTRACT SUPERTYPE OF(ONEOF(
+    condition_DET, dependent_P_DET, non_dependent_P_DET))
+SUBTYPE OF(class_and_property_elements);
+    SELF\dictionary_element.identified_by: property_BSU;
+    preferred_symbol: OPTIONAL mathematical_string;
+    synonymous_symbols: SET [0:2] OF mathematical_string;
+    figure: OPTIONAL graphics;
+    det_classification: OPTIONAL DET_classification_type;
+    domain: data_type;
+    formula: OPTIONAL mathematical_string;
+DERIVE
+    describes_classes: SET [0:?] OF class
+        := identified_by.describes_classes;
+END_ENTITY; -- property_DET
+
+
+ENTITY condition_DET
+SUBTYPE OF(property_DET);
+END_ENTITY; -- condition_DET
+
+
+ENTITY dependent_P_DET
+SUBTYPE OF(property_DET);
+    depends_on: SET [1:?] OF property_BSU;
+WHERE
+    WR1: QUERY(p <* depends_on | NOT(definition_available_implies(
+        p, ('ISO13584_IEC61360_DICTIONARY_SCHEMA.CONDITION_DET'
+        IN TYPEOF(p.definition[1]))))) = [];
+END_ENTITY; -- dependent_P_DET
+
+
+ENTITY non_dependent_P_DET
+SUBTYPE OF(property_DET);
+END_ENTITY; -- non_dependent_P_DET
+
+
+ENTITY class_value_assignment;
+    super_class_defined_property: property_BSU;
+    assigned_value: value_code_type;
+WHERE
+    WR1: definition_available_implies(super_class_defined_property, 
+        ('ISO13584_IEC61360_DICTIONARY_SCHEMA'
+        +'.NON_QUANTITATIVE_CODE_TYPE' IN TYPEOF(
+        super_class_defined_property.
+        definition[1]\property_DET.domain)));
+    WR2: definition_available_implies(super_class_defined_property, 
+        (SIZEOF(QUERY(v <* 
+        super_class_defined_property.
+        definition[1]\property_DET.domain
+        \non_quantitative_code_type.domain.its_values |
+        assigned_value = v.value_code)) = 1));
+END_ENTITY; -- class_value_assignment
+
+
+ENTITY data_type_BSU
+SUBTYPE OF(basic_semantic_unit);
+    SELF\basic_semantic_unit.code: data_type_code_type;
+    name_scope: class_BSU;
+DERIVE
+    absolute_id: identifier := 
+        name_scope.defined_by.absolute_id   
+        + sep_id + name_scope.dic_identifier    
+        + sep_id + dic_identifier;          
+INVERSE
+    defining_class: SET [0:1] OF class FOR defined_types;
+UNIQUE
+    absolute_id;
+WHERE
+    WR1: is_subclass(defining_class[1], name_scope.definition[1]); 
+END_ENTITY; -- data_type_BSU
+
+
+ENTITY data_type_element
+SUBTYPE OF(dictionary_element);
+    SELF\dictionary_element.identified_by: data_type_BSU;
+    names: item_names;
+    type_definition: data_type;
+END_ENTITY; -- data_type_element
+
+
+ENTITY data_type
+ABSTRACT SUPERTYPE OF(ONEOF(
+    simple_type,
+    complex_type,
+    named_type));
+END_ENTITY; -- data_type
+
+
+ENTITY simple_type
+ABSTRACT SUPERTYPE OF(ONEOF(
+    number_type,
+    boolean_type,
+    string_type))
+SUBTYPE OF(data_type);
+    value_format: value_format_type;
+END_ENTITY; -- simple_type
+
+
+ENTITY number_type
+SUPERTYPE OF(ONEOF(
+    int_type,
+    real_type))
+SUBTYPE OF(simple_type); 
+END_ENTITY; -- number_type
+
+
+ENTITY int_type
+SUPERTYPE OF(ONEOF(
+    int_measure_type,
+    int_currency_type,
+    non_quantitative_int_type))
+SUBTYPE OF(number_type);
+END_ENTITY; -- int_type
+
+
+ENTITY int_measure_type
+SUBTYPE OF(int_type);
+    unit: dic_unit;
+END_ENTITY; -- int_measure_type
+
+
+ENTITY int_currency_type
+SUBTYPE OF(int_type);
+    currency: OPTIONAL currency_code; 
+END_ENTITY; -- int_currency_type
+
+
+ENTITY non_quantitative_int_type
+SUBTYPE OF(int_type);
+    domain: value_domain;
+WHERE
+    WR1: QUERY(v <* domain.its_values | 
+        'ISO13584_IEC61360_DICTIONARY_SCHEMA.VALUE_CODE_TYPE' IN
+        TYPEOF(v.value_code)) = [];
+END_ENTITY; -- non_quantitative_int_type
+
+
+ENTITY real_type
+SUPERTYPE OF(ONEOF(
+    real_measure_type,
+    real_currency_type))
+SUBTYPE OF(number_type);
+END_ENTITY; -- real_type
+
+
+ENTITY real_measure_type
+SUBTYPE OF(real_type);
+    unit: dic_unit;
+END_ENTITY; -- real_measure_type
+
+
+ENTITY real_currency_type
+SUBTYPE OF(real_type);
+    currency: OPTIONAL currency_code; 
+END_ENTITY; -- real_currency_type
+
+
+ENTITY boolean_type
+SUBTYPE OF(simple_type);
+END_ENTITY; -- boolean_type
+
+
+ENTITY string_type
+SUBTYPE OF(simple_type);
+END_ENTITY; -- string_type
+
+
+ENTITY non_quantitative_code_type
+SUBTYPE OF(string_type);
+    domain: value_domain;
+WHERE
+    WR1: QUERY(v <* domain.its_values | 
+        NOT('ISO13584_IEC61360_DICTIONARY_SCHEMA.VALUE_CODE_TYPE' IN
+        TYPEOF(v.value_code))) = [];
+END_ENTITY; -- non_quantitative_code_type
+
+
+ENTITY complex_type
+ABSTRACT SUPERTYPE OF(ONEOF(
+    level_type,
+    class_instance_type,
+    entity_instance_type))
+SUBTYPE OF(data_type);
+END_ENTITY; -- complex_type
+
+
+ENTITY level_type
+SUBTYPE OF(complex_type);
+    levels: LIST [1:4] OF UNIQUE level;
+    value_type: simple_type;
+WHERE
+    WR1: 'ISO13584_IEC61360_DICTIONARY_SCHEMA.NUMBER_TYPE'
+        IN TYPEOF(value_type);
+END_ENTITY; -- level_type
+
+
+TYPE level = ENUMERATION OF(
+    min,        
+    nom,        
+    typ,        
+    max);   
+END_TYPE; -- level 
+
+
+ENTITY class_instance_type
+SUBTYPE OF(complex_type);
+    domain: class_BSU;
+END_ENTITY; -- class_instance_type
+
+
+ENTITY entity_instance_type
+SUBTYPE OF(complex_type);
+    type_name: SET OF STRING;
+END_ENTITY; -- entity_instance_type
+
+
+ENTITY placement_type
+SUPERTYPE OF(ONEOF(
+    axis1_placement_type,
+    axis2_placement_2d_type,
+    axis2_placement_3d_type))
+SUBTYPE OF(entity_instance_type);
+WHERE
+    WR1: 'GEOMETRY_SCHEMA.PLACEMENT' 
+        IN SELF\entity_instance_type.type_name;
+END_ENTITY; -- placement_type
+
+
+ENTITY axis1_placement_type
+SUBTYPE OF(placement_type);
+WHERE
+    WR1: 'GEOMETRY_SCHEMA.AXIS1_PLACEMENT' IN
+        SELF\entity_instance_type.type_name;
+END_ENTITY; -- axis1_placement_type
+
+
+ENTITY axis2_placement_2d_type
+SUBTYPE OF(placement_type);
+WHERE
+    WR1: 'GEOMETRY_SCHEMA.AXIS2_PLACEMENT_2D'
+        IN SELF\entity_instance_type.type_name;
+END_ENTITY; -- axis2_placement_2d_type
+
+
+ENTITY axis2_placement_3d_type
+SUBTYPE OF(placement_type);
+WHERE
+    WR1: 'GEOMETRY_SCHEMA.AXIS2_PLACEMENT_3D' 
+        IN SELF\entity_instance_type.type_name;
+END_ENTITY; -- axis2_placement_3d_type
+
+
+ENTITY named_type
+SUBTYPE OF(data_type );
+    referred_type: data_type_BSU;
+END_ENTITY; -- named_type
+
+
+ENTITY value_domain;
+    its_values: LIST [2:?] OF dic_value;
+    source_doc_of_value_domain: OPTIONAL document;
+    languages: OPTIONAL present_translations;
+    terms: LIST [0:?] OF item_names;
+WHERE
+    WR1: NOT EXISTS(languages) OR (QUERY(v <* its_values |
+        languages :<>: v.meaning.languages) = []);
+    WR2: codes_are_unique(its_values);
+END_ENTITY; -- value_domain
+
+
+TYPE integer_type = INTEGER; 
+END_TYPE; -- integer_type
+
+TYPE value_type = SELECT(value_code_type, integer_type); 
+END_TYPE; -- value_type
+
+
+ENTITY dic_value;
+    value_code: value_type;
+    meaning: item_names;
+    source_doc_of_value: OPTIONAL document;
+END_ENTITY; -- dic_value
+
+
+ENTITY non_si_unit
+SUBTYPE OF(named_unit);
+    name: label;
+END_ENTITY; -- non_si_unit
+
+
+RULE assert_ONEOF FOR(named_unit);
+WHERE
+    QUERY(u <* named_unit | 
+        ('ISO13584_IEC61360_DICTIONARY_SCHEMA.NON_SI_UNIT' 
+        IN TYPEOF(u)) AND
+        ('MEASURE_SCHEMA.SI_UNIT' IN TYPEOF(u))
+        OR ('ISO13584_IEC61360_DICTIONARY_SCHEMA.NON_SI_UNIT' 
+        IN TYPEOF(u)) AND
+        ('MEASURE_SCHEMA.CONTEXT_DEPENDENT_UNIT' IN TYPEOF(u))
+        OR ('ISO13584_IEC61360_DICTIONARY_SCHEMA.NON_SI_UNIT'
+        IN TYPEOF(u)) AND
+        ('MEASURE_SCHEMA.CONVERSION_BASED_UNIT' IN TYPEOF(u))
+        ) = []; 
+END_RULE; -- assert_ONEOF
+
+
+ENTITY dic_unit;
+    structured_representation: unit; 
+    string_representation: OPTIONAL mathematical_string;
+END_ENTITY; -- dic_unit
+
+
+TYPE class_code_type = code_type; 
+WHERE 
+    WR1: LENGTH(SELF) <= class_code_len;
+END_TYPE; -- class_code_type
+
+
+TYPE code_type = identifier; 
+WHERE 
+    WR1: NOT(SELF LIKE '*.*');
+    WR2: NOT(SELF LIKE '*-*');
+    WR3: NOT(SELF LIKE '* *');
+    WR4: NOT(SELF = '');
+END_TYPE; -- code_type
+
+
+TYPE currency_code = identifier;
+WHERE
+    WR1: LENGTH(SELF) = 3;
+END_TYPE; -- currency_code
+
+
+TYPE data_type_code_type = code_type; 
+WHERE 
+    WR1: LENGTH(SELF) = data_type_code_len;
+END_TYPE; -- data_type_code_type
+
+
+TYPE date_type = STRING(10) FIXED;
+END_TYPE; -- date_type
+
+
+TYPE definition_type = translatable_text;
+END_TYPE; -- definition_type
+
+
+TYPE DET_classification_type = identifier;
+WHERE
+    WR1: LENGTH(SELF) = DET_classification_len; 
+END_TYPE; -- DET_classification_type
+
+
+TYPE note_type = translatable_text;
+END_TYPE; -- note_type
+
+
+TYPE pref_name_type = translatable_label;
+WHERE
+    WR1: check_label_length(SELF, pref_name_len);
+END_TYPE; -- pref_name_type
+
+
+TYPE property_code_type = code_type; 
+WHERE 
+    WR1: LENGTH(SELF) <= property_code_len;
+END_TYPE; -- property_code_type
+
+
+TYPE remark_type = translatable_text; 
+END_TYPE; -- remark_type
+
+
+TYPE revision_type = code_type; 
+WHERE 
+    WR1: LENGTH(SELF) <= revision_len; 
+END_TYPE; -- revision_type
+
+
+TYPE short_name_type = translatable_label;
+WHERE
+    WR1: check_label_length(SELF, short_name_len); 
+END_TYPE; -- short_name_type
+
+
+TYPE supplier_code_type = code_type;
+WHERE
+    WR1: LENGTH(SELF) <= supplier_code_len; 
+END_TYPE; -- supplier_code_type
+
+
+TYPE syn_name_type = SELECT(label_with_language, label);
+WHERE
+    WR1: check_syn_length(SELF, syn_name_len); 
+END_TYPE; -- syn_name_type
+
+
+TYPE value_code_type = identifier;
+WHERE
+    WR1: LENGTH(SELF) <= value_code_len; 
+END_TYPE; -- value_code_type
+
+
+TYPE value_format_type = identifier;
+WHERE
+    WR1: LENGTH(SELF) <= value_format_len; 
+END_TYPE; -- value_format_type
+
+
+TYPE version_type = code_type; 
+WHERE 
+    WR1: LENGTH(SELF) <= version_len; 
+    WR2: EXISTS(VALUE(SELF)) AND ('INTEGER' IN TYPEOF(VALUE(SELF)))
+        AND (VALUE(SELF) >= 0);
+END_TYPE; -- version_type
+
+
+TYPE source_doc_type = identifier; 
+WHERE
+    WR1: LENGTH(SELF) <= source_doc_len; 
+END_TYPE; -- source_doc_type
+
+
+ENTITY dates;
+    date_of_original_definition: date_type;
+    date_of_current_version: date_type;
+    date_of_current_revision: OPTIONAL date_type;
+END_ENTITY; -- dates
+
+
+ENTITY document
+ABSTRACT SUPERTYPE;
+END_ENTITY; -- document
+
+
+ENTITY graphics
+ABSTRACT SUPERTYPE;
+END_ENTITY; -- graphics
+
+
+ENTITY identified_document
+SUBTYPE OF(document);
+    document_identifier: source_doc_type;
+END_ENTITY; -- identified_document
+
+
+ENTITY item_names;
+    preferred_name: pref_name_type;
+    synonymous_names: SET OF syn_name_type;
+    short_name: short_name_type;
+    languages: OPTIONAL present_translations;
+    icon : OPTIONAL graphics;
+WHERE
+    WR1: NOT(EXISTS(languages )) OR (
+        ('ISO13584_IEC61360_LANGUAGE_RESOURCE_SCHEMA'
+        + '.TRANSLATED_LABEL' IN TYPEOF(preferred_name))
+        AND (languages :=: preferred_name\translated_label.languages)
+        AND ('ISO13584_IEC61360_LANGUAGE_RESOURCE_SCHEMA'
+        + '.TRANSLATED_LABEL' IN TYPEOF(short_name))
+        AND (languages :=: short_name\translated_label.languages)
+        AND (QUERY(s <* synonymous_names |
+        NOT('ISO13584_IEC61360_DICTIONARY_SCHEMA' + 
+        '.LABEL_WITH_LANGUAGE' IN TYPEOF(s))) = []));
+    WR2: NOT EXISTS(languages) OR (QUERY(s <* synonymous_names |
+        EXISTS(s.language) AND NOT(s.language IN
+        QUERY(l <* languages.language_codes | TRUE
+        ))) = []);
+    WR3: at_most_two_synonyms_per_language(languages, 
+        synonymous_names);
+END_ENTITY; -- item_names
+
+
+ENTITY label_with_language;
+    l: label;
+    language: language_code;
+END_ENTITY; -- label_with_language
+
+
+ENTITY mathematical_string;
+    text_representation: text; 
+    SGML_representation: OPTIONAL text;
+END_ENTITY; -- mathematical_string
+
+
+FUNCTION acyclic_superclass_relationship(
+    current: class_BSU; visited: SET OF class): LOGICAL;
+
+IF SIZEOF(current.definition) = 1 THEN 
+    IF current.definition[1] IN visited THEN
+        RETURN(FALSE);
+    
+    ELSE
+        IF EXISTS(current.definition[1]\class.its_superclass)
+        THEN 
+            RETURN(acyclic_superclass_relationship(
+                current.definition[1]\class.its_superclass,
+                visited + current.definition[1])); 
+        ELSE
+            RETURN(TRUE);
+        END_IF;
+    END_IF;
+ELSE
+    RETURN(UNKNOWN);
+END_IF;
+END_FUNCTION; -- acyclic_superclass_relationship
+
+
+FUNCTION at_most_two_synonyms_per_language(
+    languages: present_translations;
+    synonymous_names: SET OF syn_name_type): BOOLEAN;
+
+IF EXISTS(languages) THEN
+    REPEAT i := 1 TO SIZEOF(languages.language_codes);
+        IF SIZEOF(QUERY(s <* synonymous_names |
+            s.language = languages.language_codes[i])) > 2
+        THEN
+            RETURN(FALSE);
+        END_IF;
+    END_REPEAT;
+    RETURN(TRUE);
+ELSE
+    RETURN(SIZEOF(synonymous_names) <= 2);
+END_IF;
+END_FUNCTION; -- at_most_two_synonyms_per_language
+
+
+FUNCTION check_syn_length(s: syn_name_type; s_length: INTEGER):BOOLEAN;
+
+IF 'ISO13584_IEC61360_DICTIONARY_SCHEMA.LABEL_WITH_LANGUAGE' 
+    IN TYPEOF(s)
+THEN 
+    RETURN(LENGTH(s.l) <= s_length); 
+ELSE
+    RETURN(LENGTH(s) <= s_length); 
+END_IF;
+END_FUNCTION; -- check_syn_length 
+
+
+FUNCTION codes_are_unique(values: LIST OF dic_value): BOOLEAN;
+LOCAL
+    ls: SET OF STRING := [];
+    li: SET OF INTEGER := [];
+END_LOCAL;
+
+IF('ISO13584_IEC61360_DICTIONARY_SCHEMA.VALUE_CODE_TYPE' IN 
+    TYPEOF(values[1].value_code))
+THEN
+    REPEAT i := 1 TO SIZEOF(values);
+        ls := ls + values[i].value_code;
+    END_REPEAT;
+
+    RETURN(SIZEOF(values) = SIZEOF(ls));
+ELSE
+    IF('ISO13584_IEC61360_DICTIONARY_SCHEMA.INTEGER_TYPE' IN 
+        TYPEOF(values[1].value_code))
+    THEN
+        REPEAT i := 1 TO SIZEOF(values);
+            li := li + values[i].value_code;
+        END_REPEAT;
+
+        RETURN(SIZEOF(values) = SIZEOF(li));
+    ELSE
+        RETURN(UNKNOWN);
+    END_IF;
+END_IF;
+
+END_FUNCTION; -- codes_are_unique
+
+
+FUNCTION definition_available_implies(
+    BSU: basic_semantic_unit;
+    expression: LOGICAL): LOGICAL;
+
+RETURN(NOT(SIZEOF(BSU.definition) = 1) OR expression);
+
+END_FUNCTION; -- definition_available_implies
+
+
+FUNCTION is_subclass(sub, super: class): LOGICAL;
+    IF (NOT EXISTS(sub)) OR (NOT EXISTS(super)) THEN
+        RETURN(UNKNOWN);
+    END_IF;
+    
+    IF sub = super
+    THEN
+        RETURN(TRUE);
+    END_IF;
+    
+    IF NOT EXISTS(sub.its_superclass) 
+    THEN
+        
+        RETURN(FALSE); 
+    END_IF;
+    
+    IF SIZEOF(sub.its_superclass.definition) = 1 
+    THEN
+
+
+        IF (sub.its_superclass.definition[1] = super) 
+        THEN
+            RETURN(TRUE);
+        ELSE
+            RETURN(is_subclass(sub.its_superclass.definition[1],
+                super));
+        END_IF;
+    ELSE
+        RETURN(UNKNOWN);
+    END_IF;
+
+END_FUNCTION; -- is_subclass
+
+
+FUNCTION string_for_derived_unit(u: derived_unit): STRING;
+
+    FUNCTION string_for_derived_unit_element(
+        u: derived_unit_element; neg_exp: BOOLEAN
+        ): STRING;
+        
+
+    
+    LOCAL
+        result: STRING;
+    END_LOCAL;
+        
+    result := string_for_named_unit(u.unit);
+    IF (u.exponent <> 0) 
+    THEN 
+        IF (u.exponent > 0) OR NOT neg_exp 
+        THEN
+            result := result + '**' + FORMAT(
+                ABS(u.exponent), '2I')[2];
+        ELSE
+            result := result + '**' + FORMAT(u.exponent, '2I')[2];
+        END_IF;
+    END_IF;
+        RETURN(result); 
+    END_FUNCTION; -- string_for_derived_unit_element
+
+LOCAL
+    pos, neg: SET OF derived_unit_element;
+    us: STRING;
+END_LOCAL;
+    
+
+pos := QUERY(ue <* u.elements | ue.exponent > 0); 
+neg := QUERY(ue <* u.elements | ue.exponent < 0); 
+us := '';
+IF SIZEOF(pos) > 0 THEN
+    
+    REPEAT i := LOINDEX(pos) TO HIINDEX(pos);
+        us := us + string_for_derived_unit_element(pos[i], FALSE);
+        IF i <> HIINDEX(pos) 
+        THEN
+            us := us + '.'; 
+        END_IF;
+    END_REPEAT;
+
+    IF SIZEOF(neg) > 0 
+    THEN 
+        
+
+        us := us + '/';
+
+        IF SIZEOF(neg) > 1 
+        THEN
+            us := us + '('; 
+        END_IF;
+
+        REPEAT i := LOINDEX(neg) TO HIINDEX(neg);
+            us := us + string_for_derived_unit_element(
+                neg[i], FALSE);
+            IF i <> HIINDEX(neg) 
+            THEN 
+                us := us + '.'; 
+            END_IF;
+        END_REPEAT;
+
+        IF SIZEOF(neg) > 1 
+        THEN 
+            us := us + ')'; 
+        END_IF;
+    END_IF;
+ELSE 
+    
+    IF SIZEOF(neg) > 0 THEN
+        REPEAT i := LOINDEX(neg) TO HIINDEX(neg);
+            us := us + string_for_derived_unit_element(
+                neg[i], TRUE);
+            IF i <> HIINDEX(neg) 
+            THEN 
+                us := us + '.'; 
+            END_IF;
+        END_REPEAT;
+    END_IF;
+END_IF;
+
+RETURN(us);
+
+END_FUNCTION; -- string_for_derived_unit
+
+
+FUNCTION string_for_named_unit(u: named_unit): STRING;
+
+IF 'MEASURE_SCHEMA.SI_UNIT' IN TYPEOF(u) THEN
+    RETURN(string_for_SI_unit(u));
+ELSE
+    IF 'MEASURE_SCHEMA.CONTEXT_DEPENDENT_UNIT' IN TYPEOF(u)
+    THEN
+        RETURN(u\context_dependent_unit.name);
+    ELSE
+        IF 'MEASURE_SCHEMA.CONVERSION_BASED_UNIT' IN TYPEOF(u)
+        THEN
+            RETURN(u\conversion_based_unit.name);
+        ELSE
+            IF 'ISO13584_IEC61360_DICTIONARY_SCHEMA'
+                +'.NON_SI_UNIT' IN TYPEOF(u)
+            THEN
+                RETURN(u\non_si_unit.name);
+            ELSE
+                RETURN('name_unknown');
+            END_IF;
+        END_IF;
+    END_IF;
+END_IF;
+
+END_FUNCTION; -- string_for_named_unit
+
+
+FUNCTION string_for_SI_unit(unit: si_unit): STRING;
+
+LOCAL
+    prefix_string, unit_string: STRING;
+END_LOCAL;
+
+IF EXISTS(unit.prefix) THEN
+    CASE unit.prefix OF
+        exa     : prefix_string := 'E';
+        peta        : prefix_string := 'P';
+        tera        : prefix_string := 'T';
+        giga        : prefix_string := 'G';
+        mega        : prefix_string := 'M';
+        kilo        : prefix_string := 'k';
+        hecto   : prefix_string := 'h';
+        deca        : prefix_string := 'da';
+        deci        : prefix_string := 'd';
+        centi   : prefix_string := 'c';
+        milli   : prefix_string := 'm';
+        micro   : prefix_string := 'u';
+        nano        : prefix_string := 'n';
+        pico        : prefix_string := 'p';
+        femto   : prefix_string := 'f';
+        atto        : prefix_string := 'a';
+    END_CASE;
+ELSE
+    prefix_string := '';
+END_IF;
+
+CASE unit.name OF
+    metre           : unit_string:= 'm'; 
+    gram                : unit_string := 'g'; 
+    second          : unit_string := 's'; 
+    ampere          : unit_string := 'A'; 
+    kelvin          : unit_string := 'K'; 
+    mole                : unit_string := 'mol'; 
+    candela         : unit_string := 'cd'; 
+    radian          : unit_string := 'rad'; 
+    steradian           : unit_string := 'sr'; 
+    hertz           : unit_string := 'Hz'; 
+    newton          : unit_string := 'N'; 
+    pascal          : unit_string := 'Pa'; 
+    joule           : unit_string := 'J'; 
+    watt                : unit_string := 'W'; 
+    coulomb         : unit_string := 'C'; 
+    volt                : unit_string := 'V'; 
+    farad           : unit_string := 'F'; 
+    ohm             : unit_string := 'Ohm';
+    siemens         : unit_string := 'S'; 
+    weber           : unit_string := 'Wb'; 
+    tesla           : unit_string := 'T'; 
+    henry           : unit_string := 'H'; 
+    degree_Celsius      : unit_string := 'Cel';
+    lumen           : unit_string := 'lm'; 
+    lux             : unit_string := 'lx'; 
+    becquerel           : unit_string := 'Bq'; 
+    gray                : unit_string := 'Gy';
+    sievert         : unit_string := 'Sv';
+END_CASE;
+
+RETURN(prefix_string + unit_string); 
+
+END_FUNCTION; -- string_for_SI_unit
+
+
+FUNCTION string_for_unit(u: unit): STRING;
+    IF 'MEASURE_SCHEMA.DERIVED_UNIT' IN TYPEOF(u) 
+    THEN
+        RETURN(string_for_derived_unit(u));
+    ELSE 
+        RETURN(string_for_named_unit(u));
+    END_IF;
+END_FUNCTION; -- string_for_unit
+
+
+FUNCTION all_class_descriptions_reachable(cl: class_BSU): BOOLEAN;
+
+IF NOT EXISTS(cl)
+THEN
+    RETURN(UNKNOWN);
+END_IF;
+
+IF SIZEOF(cl.definition) = 0
+THEN
+    RETURN(FALSE);
+END_IF;
+
+IF NOT(EXISTS(cl.definition[1]\class.its_superclass))
+THEN
+    RETURN(TRUE);
+ELSE
+    RETURN(all_class_descriptions_reachable(
+        cl.definition[1]\class.its_superclass));
+END_IF;
+
+END_FUNCTION; -- all_class_descriptions_reachable
+
+
+FUNCTION compute_known_visible_properties(cl: class_BSU):
+    SET OF property_BSU;
+LOCAL
+    s: SET OF property_BSU := [];
+END_LOCAL;
+
+s := s + USEDIN(cl, 'ISO13584_IEC61360_DICTIONARY_SCHEMA' + 
+    '.PROPERTY_BSU.NAME_SCOPE');
+IF SIZEOF(cl.definition) = 0
+THEN
+    RETURN(s);
+ELSE
+    IF EXISTS(cl.definition[1]\class.its_superclass) THEN
+        s := s + compute_known_visible_properties(
+            cl.definition[1]\class.its_superclass);
+    END_IF;
+    
+    RETURN(s);
+END_IF;
+
+END_FUNCTION; -- compute_known_visible_properties
+
+
+FUNCTION compute_known_visible_data_types(cl: class_BSU):
+    SET OF data_type_BSU;
+LOCAL
+    s: SET OF data_type_BSU :=[ ];
+END_LOCAL;
+
+s := s + USEDIN(cl, 'ISO13584_IEC61360_DICTIONARY_SCHEMA' + 
+    '.DATA_TYPE_BSU.NAME_SCOPE');
+
+IF SIZEOF(cl.definition) = 0
+THEN
+    RETURN(s);
+ELSE
+    IF EXISTS(cl.definition[1]\class.its_superclass) 
+    THEN
+        s := s + compute_known_visible_data_types(
+            cl.definition[1]\class.its_superclass);
+    END_IF;
+
+    RETURN(s);
+END_IF;
+
+END_FUNCTION; -- compute_known_visible_data_types
+
+
+FUNCTION compute_known_applicable_properties(cl: class_BSU): 
+    SET OF property_BSU;
+
+LOCAL 
+    s: SET OF property_BSU := [];
+END_LOCAL;
+
+IF SIZEOF(cl.definition)=0
+THEN 
+    RETURN(s);
+ELSE
+    REPEAT i := 1 TO SIZEOF(cl.definition[1]\class.described_by);
+        s := s + cl.definition[1]\class.described_by[i];
+    END_REPEAT;
+
+    IF EXISTS(cl.definition[1]\class.its_superclass) 
+    THEN 
+        s := s + compute_known_applicable_properties(
+            cl.definition[1]\class.its_superclass);
+    END_IF;
+
+    RETURN(s); 
+END_IF;
+END_FUNCTION; -- compute_known_applicable_properties
+
+
+FUNCTION compute_known_applicable_data_types(cl: class_BSU):
+    SET OF data_type_BSU;
+LOCAL
+    s: SET OF data_type_BSU := [];
+END_LOCAL;
+
+IF SIZEOF(cl.definition) = 0
+THEN
+    RETURN(s);
+ELSE
+    REPEAT i := 1 TO SIZEOF(cl.definition[1]\class.defined_types);
+        s := s + cl.definition[1]\class.defined_types[i];
+    END_REPEAT;
+    
+    IF EXISTS(cl.definition[1]\class.its_superclass) 
+    THEN
+        s := s + compute_known_applicable_data_types(
+            cl.definition[1]\class.its_superclass);
+    END_IF;
+    
+    RETURN(s);
+END_IF;
+
+END_FUNCTION; -- compute_known_applicable_data_types
+
+
+FUNCTION list_to_set(l: LIST [0:?] OF GENERIC:type_elem):
+    SET OF GENERIC: type_elem;
+
+LOCAL
+    s: SET OF GENERIC: type_elem := [];
+END_LOCAL;
+
+REPEAT i := 1 TO SIZEOF(l);
+    s := s + l[i];
+END_REPEAT;
+
+RETURN(s);
+END_FUNCTION; -- list_to_set
+
+
+FUNCTION check_properties_applicability(cl: class): LOGICAL;
+LOCAL
+    inter: SET OF property_bsu := [];
+END_LOCAL;
+
+IF EXISTS(cl.its_superclass)
+THEN
+    IF (SIZEOF(cl.its_superclass.definition)=1)
+    THEN
+        inter := (list_to_set(cl.described_by) * 
+            cl.its_superclass.definition[1]\class.
+            known_applicable_properties);
+        RETURN(inter = []);
+    ELSE
+        RETURN(UNKNOWN);
+    END_IF;
+ELSE
+    RETURN(TRUE);
+END_IF;
+
+END_FUNCTION; -- check_properties_applicability
+
+
+FUNCTION check_datatypes_applicability(cl: class): LOGICAL;
+LOCAL
+    inter: SET OF data_type_bsu := [];
+END_LOCAL;
+
+IF EXISTS(cl.its_superclass)
+THEN
+    IF (SIZEOF(cl.its_superclass.definition) = 1)
+    THEN
+        inter := cl.defined_types * 
+            cl.its_superclass.definition[1]\class.
+            known_applicable_data_types;
+        RETURN(inter = []);
+    ELSE
+        RETURN(UNKNOWN);
+    END_IF;
+ELSE
+    RETURN(TRUE);
+END_IF;
+
+END_FUNCTION; -- check_datatypes_applicability
+
+END_SCHEMA; -- ISO13584_IEC61360_dictionary_schema
+
+
+SCHEMA ISO13584_IEC61360_language_resource_schema;
+
+REFERENCE FROM support_resource_schema(identifier, label, text); 
+    
+ 
+
+
+TYPE language_code = identifier; 
+END_TYPE; -- language_code
+
+
+ENTITY global_language_assignment;
+    language: language_code;
+END_ENTITY; -- global_language_assignment
+
+
+ENTITY present_translations; 
+    language_codes: LIST [1:?] OF UNIQUE language_code;
+UNIQUE
+    UR1: language_codes;
+END_ENTITY; -- present_translations
+
+
+TYPE translatable_label = SELECT(label, translated_label);
+END_TYPE; -- translatable_label
+
+
+ENTITY translated_label; 
+    labels: LIST [1:?] OF label;
+    languages: present_translations; 
+WHERE
+    WR1: SIZEOF(labels) = SIZEOF(languages.language_codes);
+END_ENTITY; -- translated_label
+
+
+TYPE translatable_text = SELECT(text, translated_text);
+END_TYPE; -- translatable_text
+
+
+ENTITY translated_text; 
+    texts: LIST [1:?] OF text;
+    languages: present_translations; 
+WHERE
+    WR1: SIZEOF(texts) = SIZEOF(languages.language_codes);
+END_ENTITY; -- translated_text
+
+
+FUNCTION check_label_length(l: translatable_label;
+    l_length: INTEGER): BOOLEAN;
+
+IF 'ISO13584_IEC61360_LANGUAGE_RESOURCE_SCHEMA.TRANSLATED_LABEL' 
+    IN TYPEOF(l) 
+THEN 
+    REPEAT i :=1 TO SIZEOF(l.labels);
+        IF LENGTH(l.labels[i]) > l_length 
+        THEN
+            RETURN(FALSE);
+        END_IF;
+    END_REPEAT;
+
+    RETURN(TRUE);
+
+ELSE 
+    RETURN(LENGTH(l) <= l_length); 
+END_IF;
+END_FUNCTION; -- check_label_length 
+
+
+FUNCTION check_text_length(t: translatable_text;
+    t_length: INTEGER): BOOLEAN;
+
+IF 'ISO13584_IEC61360_LANGUAGE_RESOURCE_SCHEMA.TRANSLATED_TEXT' 
+    IN TYPEOF(t) 
+THEN 
+    REPEAT i :=1 TO SIZEOF(t.texts);
+        IF LENGTH(t.texts[i]) > t_length 
+        THEN
+            RETURN(FALSE);
+        END_IF;
+    END_REPEAT;
+
+    RETURN(TRUE);
+
+ELSE 
+    RETURN(LENGTH(t) <= t_length); 
+END_IF;
+END_FUNCTION; -- check_text_length 
+
+
+RULE single_language_assignment FOR(global_language_assignment);
+WHERE
+    SIZEOF(global_language_assignment) <= 1;
+END_RULE; -- single_language_assignment
+
+
+END_SCHEMA; -- ISO13584_IEC61360_language_resource_schema

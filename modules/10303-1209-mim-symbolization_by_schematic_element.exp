@@ -1,0 +1,43 @@
+(*
+ $Id: 10303-1209-mim-symbolization_by_schematic_element.exp,v 1.1 2006/08/04 12:11:55 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2835 - ISO/TS 10303-1209 Symbolization by schematic element - EXPRESS MIM
+ Supersedes ISO TC184/SC4/WG12 N2208
+*)
+
+SCHEMA Symbolization_by_schematic_element_mim;
+
+USE FROM Class_mim;    --  ISO/TS 10303-1070
+USE FROM Schematic_element_mim;    --  ISO/TS 10303-1205
+USE FROM presentation_organization_schema    --  ISO 10303-46
+  (presented_item,
+   presented_item_representation); 
+
+TYPE symbolized_class_select = EXTENSIBLE SELECT;
+END_TYPE; 
+
+TYPE symbolized_item_select = EXTENSIBLE SELECT;
+END_TYPE; 
+
+ENTITY symbolization_by_schematic_element
+  SUBTYPE OF (class, presented_item_representation);
+  SELF\presented_item_representation.presentation : schematic_element;
+  SELF\presented_item_representation.item : symbolized_item;
+END_ENTITY;
+
+ENTITY symbolization_of_member_or_subclass_by_schematic_element
+  SUBTYPE OF (class, presented_item_representation);
+  SELF\presented_item_representation.presentation : schematic_element_definition;
+  SELF\presented_item_representation.item : symbolized_class;
+END_ENTITY;
+
+ENTITY symbolized_class
+  SUBTYPE OF (presented_item);
+  item : symbolized_class_select;
+END_ENTITY;
+
+ENTITY symbolized_item
+  SUBTYPE OF (presented_item);
+  item : symbolized_item_select;
+END_ENTITY;
+
+END_SCHEMA;

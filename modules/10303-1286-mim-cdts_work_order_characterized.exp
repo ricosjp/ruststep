@@ -1,0 +1,66 @@
+(*
+ISO TC184/SC4/WG12 N1620 - ISO/CD-TS 10303-1286 Work order characterized - EXPRESS MIM
+*) 
+
+
+SCHEMA Work_order_characterized_mim; 
+
+USE FROM action_schema   -- ISO 10303-41
+  (action_directive,
+   directed_action); 
+
+USE FROM Ap239_management_resource_information_mim;    -- ISO/CD-TS 10303-1289
+
+USE FROM Management_resource_information_mim;    -- ISO/CD-TS 10303-1288
+
+USE FROM Work_order_mim;    -- ISO/TS 10303-1043
+
+
+TYPE wordchar_ap239_mri_attribute_classification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON ap239_mri_attribute_classification_item WITH 
+   (action_directive);
+END_TYPE; 
+
+TYPE wordchar_ap239_mri_classification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON ap239_mri_classification_item WITH 
+   (action_directive, 
+    directed_action);
+END_TYPE; 
+
+TYPE wordchar_mri_approval_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON mri_approval_item WITH 
+   (action_directive, 
+    directed_action);
+END_TYPE; 
+
+TYPE wordchar_mri_attribute_language_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON mri_attribute_language_item WITH 
+   (action_directive);
+END_TYPE; 
+
+TYPE wordchar_mri_date_and_time_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON mri_date_and_time_item WITH 
+   (action_directive, 
+    directed_action);
+END_TYPE; 
+
+TYPE wordchar_mri_date_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON mri_date_item WITH 
+   (action_directive, 
+    directed_action);
+END_TYPE; 
+
+TYPE wordchar_mri_identification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON mri_identification_item WITH 
+   (action_directive, 
+    directed_action);
+END_TYPE; 
+
+TYPE wordchar_mri_multi_language_attribute_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON mri_multi_language_attribute_item WITH 
+   (action_directive);
+END_TYPE; 
+
+TYPE wordchar_mri_organization_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON mri_organization_item WITH 
+   (action_directive, 
+    directed_action);
+END_TYPE; 
+
+TYPE wordchar_mri_person_and_organization_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON mri_person_and_organization_item WITH 
+   (action_directive, 
+    directed_action);
+END_TYPE; 
+
+END_SCHEMA;  -- Work_order_characterized_mim

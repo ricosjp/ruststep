@@ -1,0 +1,65 @@
+(*
+ $Id: 10303-1080-mim-Property_space.exp,v 1.4 2006/08/04 12:11:54 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2820 - ISO/TS 10303-1080 Property space - EXPRESS MIM
+ Supersedes ISO TC184/SC4/WG12 N2052
+*)
+
+SCHEMA Property_space_mim;
+
+USE FROM Class_mim;    --  ISO/TS 10303-1070
+USE FROM Class_of_activity_mim;    --  ISO/TS 10303-1071
+USE FROM Class_of_product_mim;    --  ISO/TS 10303-1077
+USE FROM Independent_property_mim;    --  ISO/TS 10303-1036
+USE FROM Process_property_assignment_mim;    --  ISO/TS 10303-1040
+USE FROM Property_assignment_mim;    --  ISO/TS 10303-1030
+USE FROM external_reference_schema    --  ISO 10303-41
+  (externally_defined_item,
+   external_source); 
+
+ENTITY class_of_possession_of_property_by_activity
+  SUBTYPE OF (action_property);
+  SELF\action_property.definition : class_of_activity;
+END_ENTITY;
+
+ENTITY class_of_possession_of_property_by_product
+  SUBTYPE OF (property_definition);
+WHERE
+  link_to_class: 'CLASS_OF_PRODUCT_MIM.CLASS_OF_PRODUCT' IN TYPEOF(SELF\property_definition.definition.formation);
+END_ENTITY;
+
+ENTITY possessed_physical_quantity_space
+  SUBTYPE OF (general_property_association);
+  SELF\general_property_association.base_definition : physical_quantity_space;
+WHERE
+  link_to_possession: ('PROPERTY_SPACE_MIM.CLASS_OF_POSSESSION_OF_PROPERTY_BY_ACTIVITY' IN TYPEOF(SELF\general_property_association.derived_definition)) OR ('PROPERTY_SPACE_MIM.CLASS_OF_POSSESSION_OF_PROPERTY_BY_PRODUCT' IN TYPEOF(SELF\general_property_association.derived_definition));
+END_ENTITY;
+
+ENTITY physical_quantity_range
+  SUBTYPE OF (physical_quantity_space);
+END_ENTITY;
+
+ENTITY physical_quantity_space
+  SUBTYPE OF (general_property, class);
+END_ENTITY;
+
+ENTITY standard_tensor_order_and_symmetry
+  SUBTYPE OF (tensor_order_and_symmetry_by_library_reference);
+WHERE
+  valid_standard_class: (SELF\tensor_order_and_symmetry_by_library_reference\externally_defined_item.source.source_id = 'ISO-TS-10303-1080') AND (SELF\tensor_order_and_symmetry_by_library_reference\externally_defined_item.item_id IN ['TO001', 'TO002', 'TO003', 'TO004', 'TO005', 'TO006', 'TO007', 'TO008', 'TO009']);
+END_ENTITY;
+
+ENTITY tensor_order_and_symmetry
+  SUBTYPE OF (general_property, class);
+END_ENTITY;
+
+ENTITY tensor_order_and_symmetry_by_library_reference
+  SUBTYPE OF (tensor_order_and_symmetry, externally_defined_item);
+END_ENTITY;
+
+ENTITY tensor_order_and_symmetry_for_physical_quantity_space
+  SUBTYPE OF (general_property_relationship);
+  SELF\general_property_relationship.relating_property : tensor_order_and_symmetry;
+  SELF\general_property_relationship.related_property : physical_quantity_space;
+END_ENTITY;
+
+END_SCHEMA;

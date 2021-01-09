@@ -1,0 +1,87 @@
+(*
+$Id: 10303-1131-arm-construction_geometry.exp,v 1.2 2005/02/22 16:53:55 wg12deputy Exp $
+ISO TC184/SC4/WG12 N2867 - ISO/TS 10303-1131 Construction geometry - EXPRESS ARM
+Supersedes ISO TC184/SC4/WG12 N1541
+*) 
+
+
+SCHEMA Construction_geometry_arm;
+
+USE FROM Elemental_geometric_shape_arm;    -- ISO/TS 10303-1004
+
+USE FROM Foundation_representation_arm;    -- ISO/TS 10303-1006
+
+
+TYPE constructive_element_select = EXTENSIBLE GENERIC_ENTITY SELECT
+   (Axis_placement, 
+    Curve, 
+    point_select, 
+    Surface);
+END_TYPE; 
+
+TYPE constructive_geometry_select = SELECT
+   (Constructive_geometry, 
+    Geometric_model);
+END_TYPE; 
+
+TYPE point_select = EXTENSIBLE GENERIC_ENTITY SELECT
+   (Cartesian_point, 
+    Point_on_curve, 
+    Point_on_surface);
+END_TYPE; 
+
+ENTITY Constructive_geometry
+  SUBTYPE OF (Representation);
+  SELF\Representation.context_of_items : Geometric_coordinate_space;
+WHERE
+  WR1: SIZEOF(SELF\Representation.items) = SIZEOF(QUERY (it <* SELF\Representation.items | 'CONSTRUCTION_GEOMETRY_ARM.CONSTRUCTIVE_ELEMENT_SELECT' IN TYPEOF(it)));
+END_ENTITY;
+
+ENTITY Constructive_geometry_association;
+  auxiliary_geometry : Constructive_geometry;
+  base_geometry : constructive_geometry_select;
+  description : STRING;
+WHERE
+  WR1: auxiliary_geometry\Representation.context_of_items :=: base_geometry\Representation.context_of_items;
+END_ENTITY;
+
+ENTITY Curve
+  SUBTYPE OF (Detailed_geometric_model_element);
+END_ENTITY;
+
+ENTITY Line
+  SUBTYPE OF (Curve);
+END_ENTITY;
+
+ENTITY Measurement_path;
+  defined_by : Curve;
+  defined_in : Geometric_coordinate_space;
+END_ENTITY;
+
+ENTITY Plane
+  SUBTYPE OF (Surface);
+END_ENTITY;
+
+ENTITY Point_on_curve
+  SUBTYPE OF (Detailed_geometric_model_element);
+  supporting_curve : Curve;
+END_ENTITY;
+
+ENTITY Point_on_surface
+  SUBTYPE OF (Detailed_geometric_model_element);
+  supporting_surface : Surface;
+END_ENTITY;
+
+ENTITY Surface
+  SUBTYPE OF (Detailed_geometric_model_element);
+END_ENTITY;
+
+SUBTYPE_CONSTRAINT alternate_geometry_items FOR Detailed_geometric_model_element;
+  ONEOF (Cartesian_point,
+         Curve,
+         Point_on_curve,
+         Point_on_surface,
+         Surface);
+END_SUBTYPE_CONSTRAINT;
+
+END_SCHEMA;  -- Construction_geometry_arm

@@ -1,0 +1,67 @@
+(*
+ $Id: 10303-1011-arm-person_organization.exp,v 1.5 2006/08/07 07:44:41 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2921 - ISO/TS 10303-1011 Person organization - EXPRESS ARM
+*)
+ 
+
+
+SCHEMA Person_organization_arm;
+
+
+TYPE organization_or_person_in_organization_select = SELECT
+   (Organization, 
+    Person_in_organization);
+END_TYPE; 
+
+ENTITY Address;
+  name : OPTIONAL STRING;
+  street_number : OPTIONAL STRING;
+  street : OPTIONAL STRING;
+  postal_box : OPTIONAL STRING;
+  town : OPTIONAL STRING;
+  region : OPTIONAL STRING;
+  postal_code : OPTIONAL STRING;
+  country : OPTIONAL STRING;
+  internal_location : OPTIONAL STRING;
+  facsimile_number : OPTIONAL STRING;
+  telephone_number : OPTIONAL STRING;
+  electronic_mail_address : OPTIONAL STRING;
+  telex_number : OPTIONAL STRING;
+  url : OPTIONAL STRING;
+WHERE
+  WR1: (EXISTS (street_number) OR EXISTS (street) OR EXISTS (postal_box) OR EXISTS (town) OR EXISTS (region) OR EXISTS (postal_code) OR EXISTS (country) OR EXISTS (internal_location) OR EXISTS (facsimile_number) OR EXISTS (telephone_number) OR EXISTS (electronic_mail_address) OR EXISTS (telex_number));
+END_ENTITY;
+
+ENTITY Address_assignment;
+  address_type : OPTIONAL STRING;
+  assigned_address : Address;
+  located_person_organizations : SET[1:?] OF organization_or_person_in_organization_select;
+END_ENTITY;
+
+ENTITY Organization;
+  id : OPTIONAL STRING;
+  name : STRING;
+END_ENTITY;
+
+ENTITY Organization_relationship;
+  relation_type : STRING;
+  description : OPTIONAL STRING;
+  relating_organization : Organization;
+  related_organization : Organization;
+END_ENTITY;
+
+ENTITY Person;
+  last_name : STRING;
+  first_name : OPTIONAL STRING;
+  middle_names : OPTIONAL LIST[1:?] OF STRING;
+  prefix_titles : OPTIONAL LIST[1:?] OF STRING;
+  suffix_titles : OPTIONAL LIST[1:?] OF STRING;
+END_ENTITY;
+
+ENTITY Person_in_organization;
+  concerned_person : Person;
+  containing_organization : Organization;
+  role : STRING;
+END_ENTITY;
+
+END_SCHEMA;  -- Person_organization_arm

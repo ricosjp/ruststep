@@ -1,0 +1,85 @@
+(* 
+   $Id: 10303-1109-mim-alternative_solution.exp,v 1.1 2006/08/03 15:03:34 wg12deputy Exp $
+   ISO/TC184/SC4 WG12N2593 - ISO/TS 10303-1109 Alternative solution - Express MIM 
+   Supersedes ISO TC184/SC4/WG12N1727
+*)
+
+SCHEMA Alternative_solution_mim;
+
+USE FROM Functional_breakdown_mim;
+
+USE FROM Product_occurrence_mim;
+
+USE FROM Person_organization_mim;
+
+USE FROM Person_organization_assignment_mim;
+
+USE FROM Physical_breakdown_mim;
+
+USE FROM qualified_measure_schema(
+	measure_representation_item);
+
+USE FROM measure_schema(
+	ratio_measure_with_unit);
+
+TYPE organization_item_solution = SELECT BASED_ON organization_item WITH (product_definition);
+END_TYPE;
+
+RULE alternative_solution_requires_solution_definition FOR (product_definition_formation);
+LOCAL
+  solution_versions: SET OF product_definition_formation := [];
+END_LOCAL;
+  solution_versions :=  QUERY( pdf <* product_definition_formation |
+	SIZEOF( QUERY( prpc <* USEDIN(pdf.of_product, 'ALTERNATIVE_SOLUTION_MIM' + '.PRODUCT_RELATED_PRODUCT_CATEGORY.PRODUCTS') | 
+	prpc.name = 'alternative solution')) = 1);
+WHERE 
+WR1: SIZEOF( QUERY( pdf <* solution_versions |
+SIZEOF( QUERY( pd <* USEDIN(pdf, 'ALTERNATIVE_SOLUTION_MIM' + '.PRODUCT_DEFINITION.FORMATION') | 
+ pd.frame_of_reference.name = 'alternative definition')) <> 1))= 0; 
+END_RULE;
+
+RULE restrict_alternative_definition FOR (product_definition);
+LOCAL
+  solution_definitions: SET OF product_definition := [];
+END_LOCAL;
+  solution_definitions :=  QUERY( pd <* product_definition |
+	(pd.frame_of_reference.name = 'alternative definition'));
+WHERE
+WR1: SIZEOF ( QUERY ( pd <* solution_definitions | 
+	( SIZEOF ( QUERY ( pdr <* USEDIN ( pd ,
+	'ALTERNATIVE_SOLUTION_MIM' + '.PRODUCT_DEFINITION_RELATIONSHIP.RELATED_PRODUCT_DEFINITION' ) | 
+	pdr.name = 'solution alternative definition' ) ) <>1 ) ) ) = 0;
+WR2: SIZEOF ( QUERY ( pd <* solution_definitions | 
+	NOT ( pd.name IN ['technical' , 'supplier' , 'technical supplier' , ''] ) ) ) = 0;
+WR3: SIZEOF ( QUERY ( pd <* solution_definitions | 
+	( pd.name IN ['supplier' , 'technical supplier'] ) AND (
+	SIZEOF ( QUERY ( aoa <* USEDIN ( pd.formation ,
+	'ALTERNATIVE_SOLUTION_MIM' + '.APPLIED_ORGANIZATION_ASSIGNMENT.ITEMS' ) | 
+	aoa.role.name = 'supplier' )) <>1 ) )) = 0;
+END_RULE; 
+
+RULE solution_definition_requires_solution_category FOR (product_definition);
+LOCAL
+  solution_definitions: SET OF product_definition := [];
+END_LOCAL;
+  solution_definitions :=  QUERY( pd <* product_definition |
+	(pd.frame_of_reference.name = 'alternative definition'));
+WHERE
+WR1: SIZEOF( QUERY( pd <* solution_definitions | 
+(SIZEOF( QUERY( prpc <* USEDIN(pd.formation.of_product, 'ALTERNATIVE_SOLUTION_MIM' + '.PRODUCT_RELATED_PRODUCT_CATEGORY.PRODUCTS') | 
+	prpc.name = 'alternative solution')) = 0 ) )) = 0;
+END_RULE;
+
+RULE restrict_product_definitions_for_base_element FOR
+    (product_definition_relationship);
+WHERE
+WR1: SIZEOF ( QUERY ( pdr <* product_definition_relationship |
+     ( pdr. name = 'solution alternative definition' ) AND 
+	( NOT( pdr. relating_product_definition.frame_of_reference.name
+     IN [ 'alternative definition' , 'functional definition' , 'conceptual definition' ] ) OR 
+	( pdr.related_product_definition.frame_of_reference.name<>'alternative definition' ) ) ) ) =0;
+END_RULE;
+
+
+END_SCHEMA;
+

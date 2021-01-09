@@ -1,0 +1,23 @@
+(*
+ $Id: 10303-1210-mim-Set_theory.exp,v 1.2 2006/08/07 09:42:04 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N3167 - ISO/TS 10303-1210 Set theory - EXPRESS MIM
+ Supersedes ISO TC184/SC4/WG12 N2298
+*) 
+
+
+SCHEMA Set_theory_mim;
+
+USE FROM Class_mim;    -- ISO/TS 10303-1070
+
+USE FROM set_theory_schema   -- ISO 10303-54
+  (complement,
+   intersection,
+   power_set,
+   proper_subset,
+   same_membership,
+   subset,
+   union); 
+
+
+END_SCHEMA;  -- Set_theory_mim
+

@@ -1,0 +1,30 @@
+(*
+ $Id: 10303-1124-arm-document_structure.exp,v 1.5 2006/08/07 07:44:43 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N1195 - ISO/TS 10303-1124 Document structure - EXPRESS ARM
+*)
+
+
+SCHEMA Document_structure_arm;
+
+USE FROM Document_definition_arm;  
+USE FROM File_identification_arm; 
+  
+ENTITY Document_definition_relationship;
+  relation_type : STRING;
+  description : OPTIONAL STRING;
+  relating_document_definition : Document_definition;
+  related_document_definition : Document_definition;
+WHERE
+  WR1: relating_document_definition :<>: related_document_definition;
+END_ENTITY;
+
+ENTITY File_relationship;
+  relation_type : STRING;
+  description : OPTIONAL STRING;
+  relating_document_file : File;
+  related_document_file : File;
+WHERE
+  WR1: relating_document_file:<>: related_document_file;
+END_ENTITY;
+
+END_SCHEMA;

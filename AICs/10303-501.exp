@@ -1,0 +1,145 @@
+SCHEMA aic_edge_based_wireframe;
+USE FROM geometric_model_schema                   -- ISO 10303-42
+  (edge_based_wireframe_model);
+USE FROM geometry_schema                          -- ISO 10303-42
+  (axis2_placement_3d,
+   b_spline_curve_with_knots,
+   bezier_curve,
+   cartesian_transformation_operator_3d,
+   circle,
+   conic,
+   curve,
+   curve_replica,
+   ellipse,
+   geometric_representation_context,
+   hyperbola,
+   line,
+   offset_curve_3d,
+   parabola,
+   point,
+   point_replica,
+   polyline,
+   quasi_uniform_curve,
+   rational_b_spline_curve,
+   uniform_curve);
+USE FROM product_property_representation_schema   -- ISO 10303-41
+  (shape_representation);
+USE FROM representation_schema                    -- ISO 10303-43
+  (mapped_item);
+USE FROM topology_schema                          -- ISO 10303-42
+  (edge_curve,
+   vertex_point);
+ENTITY edge_based_wireframe_shape_representation
+    SUBTYPE OF (shape_representation);
+  WHERE
+    WR1: SIZEOF (QUERY (it <* SELF.items |
+           NOT
+           (SIZEOF(['AIC_EDGE_BASED_WIREFRAME.EDGE_BASED_WIREFRAME_MODEL',
+                        'AIC_EDGE_BASED_WIREFRAME.MAPPED_ITEM',
+                        'AIC_EDGE_BASED_WIREFRAME.AXIS2_PLACEMENT_3D'] *
+               TYPEOF (it)) = 1
+         ))) = 0;
+    WR2: SIZEOF (QUERY (it <* SELF.items |
+            SIZEOF(['AIC_EDGE_BASED_WIREFRAME.EDGE_BASED_WIREFRAME_MODEL',
+            'AIC_EDGE_BASED_WIREFRAME.MAPPED_ITEM'] * TYPEOF (it)) = 1
+         )) >= 1;
+    WR3: SIZEOF (QUERY (ebwm <* QUERY (it <* SELF.items |
+           ('AIC_EDGE_BASED_WIREFRAME.EDGE_BASED_WIREFRAME_MODEL'
+               IN TYPEOF (it))) |
+           NOT (SIZEOF (QUERY (eb <* ebwm\edge_based_wireframe_model.
+                                     ebwm_boundary |
+             NOT (SIZEOF (QUERY (edges <* eb.ces_edges |
+                NOT ('AIC_EDGE_BASED_WIREFRAME.EDGE_CURVE'
+                        IN TYPEOF (edges)))) = 0
+         ))) = 0))) = 0;
+    WR4: SIZEOF (QUERY (ebwm <* QUERY (it <* SELF.items |
+            ('AIC_EDGE_BASED_WIREFRAME.EDGE_BASED_WIREFRAME_MODEL'
+                IN TYPEOF (it))) |
+           NOT (SIZEOF (QUERY (eb <* ebwm\edge_based_wireframe_model.
+                                     ebwm_boundary |
+             NOT (SIZEOF (QUERY (pline_edges <* QUERY (edges <* eb.ces_edges |
+                ('AIC_EDGE_BASED_WIREFRAME.POLYLINE' IN
+                    TYPEOF (edges\edge_curve.edge_geometry))) |
+                NOT (SIZEOF (pline_edges\edge_curve.
+                             edge_geometry\polyline.points) > 2))) = 0
+         ))) = 0))) = 0;
+    WR5: SIZEOF (QUERY (ebwm <* QUERY (it <* SELF.items |
+            ('AIC_EDGE_BASED_WIREFRAME.EDGE_BASED_WIREFRAME_MODEL'
+                IN TYPEOF (it))) |
+           NOT (SIZEOF (QUERY (eb <* ebwm\edge_based_wireframe_model.
+                                     ebwm_boundary |
+             NOT (SIZEOF (QUERY (edges <* eb.ces_edges |
+                NOT (('AIC_EDGE_BASED_WIREFRAME.VERTEX_POINT'
+                         IN TYPEOF (edges.edge_start)) AND
+                     ('AIC_EDGE_BASED_WIREFRAME.VERTEX_POINT'
+                         IN TYPEOF (edges.edge_end))))) = 0
+         ))) = 0))) = 0;
+    WR6: SIZEOF (QUERY (ebwm <* QUERY (it <* SELF.items |
+            ('AIC_EDGE_BASED_WIREFRAME.EDGE_BASED_WIREFRAME_MODEL'
+                 IN TYPEOF (it))) |
+           NOT (SIZEOF (QUERY (eb <* ebwm\edge_based_wireframe_model.
+                                     ebwm_boundary |
+             NOT (SIZEOF (QUERY (edges <* eb.ces_edges |
+               NOT (valid_wireframe_edge_curve
+                   (edges\edge_curve.edge_geometry))
+          )) = 0))) = 0))) = 0;
+    WR7: SIZEOF (QUERY (ebwm <* QUERY (it <* SELF.items|
+            ('AIC_EDGE_BASED_WIREFRAME.EDGE_BASED_WIREFRAME_MODEL'
+                 IN TYPEOF (it))) |
+           NOT (SIZEOF (QUERY (eb <* ebwm\edge_based_wireframe_model.
+                                     ebwm_boundary |
+             NOT (SIZEOF (QUERY (edges <* eb.ces_edges |
+               NOT ((valid_wireframe_vertex_point
+                     (edges.edge_start\vertex_point.vertex_geometry)) AND
+                    (valid_wireframe_vertex_point
+                     (edges.edge_end\vertex_point.vertex_geometry))) )) = 0
+             ))) = 0))) = 0;
+   
+    WR8: SIZEOF (QUERY (mi <* QUERY (it <* SELF.items |
+             ('AIC_EDGE_BASED_WIREFRAME.MAPPED_ITEM' IN TYPEOF (it))) |
+            NOT ('AIC_EDGE_BASED_WIREFRAME.' +
+                 'EDGE_BASED_WIREFRAME_SHAPE_REPRESENTATION'
+              IN TYPEOF (mi\mapped_item.mapping_source.mapped_representation)
+          ))) = 0;
+    WR9: SELF.context_of_items\geometric_representation_context.
+               coordinate_space_dimension = 3;
+  END_ENTITY;
+FUNCTION valid_wireframe_edge_curve (crv   : curve ) : BOOLEAN;
+    -- check for valid basic curve types
+  
+    IF SIZEOF (['AIC_EDGE_BASED_WIREFRAME.LINE',
+                'AIC_EDGE_BASED_WIREFRAME.CONIC',
+                'AIC_EDGE_BASED_WIREFRAME.B_SPLINE_CURVE',
+                'AIC_EDGE_BASED_WIREFRAME.POLYLINE'] * TYPEOF (crv)) = 1
+      THEN RETURN (TRUE);
+    ELSE
+    -- recursively check for valid basic curves for curve_replica
+      IF ('AIC_EDGE_BASED_WIREFRAME.CURVE_REPLICA') IN TYPEOF (crv)
+        THEN RETURN (valid_wireframe_edge_curve
+                           (crv\curve_replica.parent_curve));
+      ELSE
+        -- recursively check for valid basis curves for offset_curve
+        IF( 'AIC_EDGE_BASED_WIREFRAME.OFFSET_CURVE_3D') IN TYPEOF (crv)
+          THEN RETURN (valid_wireframe_edge_curve
+                             (crv\offset_curve_3d.basis_curve));
+        END_IF;
+      END_IF;
+    END_IF;
+    RETURN (FALSE);
+  END_FUNCTION;
+FUNCTION valid_wireframe_vertex_point (pnt   : point) : BOOLEAN;
+    -- check for valid basic point types
+    IF ('AIC_EDGE_BASED_WIREFRAME.CARTESIAN_POINT') IN TYPEOF (pnt)
+      THEN RETURN (TRUE);
+    ELSE
+      -- recursively check for valid basic point types as parents for a
+      -- point_replica
+  
+      IF( 'AIC_EDGE_BASED_WIREFRAME.POINT_REPLICA') IN TYPEOF (pnt)
+        THEN RETURN (valid_wireframe_vertex_point
+                           (pnt\point_replica.parent_pt));
+      END_IF;
+    END_IF;
+    RETURN (FALSE);
+  END_FUNCTION;
+  END_SCHEMA;  -- aic_edge_based_wireframe

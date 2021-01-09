@@ -1,0 +1,57 @@
+(*
+   $Id: 10303-1116-arm-pdm_material_aspects.exp,v 1.1 2006/08/03 14:41:10 wg12deputy Exp $
+   ISO/TC184/SC4 WG12N2613 - ISO/TS 10303-1116 pdm_material_aspects - EXPRESS ARM
+   Supersedes ISO TC184/SC4/WG12N1747
+*)
+
+SCHEMA Pdm_material_aspects_arm;
+
+USE FROM File_identification_arm;
+USE FROM Independent_property_arm;
+USE FROM Independent_property_representation_arm;
+USE FROM Part_view_definition_arm;
+USE FROM Product_as_individual_arm;
+USE FROM Property_assignment_arm;
+
+TYPE material_item_select = SELECT (
+  Hardcopy,
+  Part_view_definition,
+  Product_as_individual_version);
+END_TYPE;
+
+TYPE dependent_or_independent_property_representation = SELECT(
+  Independent_property_representation,
+  Property_representation);
+END_TYPE;
+
+ ENTITY Data_environment;
+  environment_name : STRING;
+  description : OPTIONAL STRING;
+  environment_characterization: SET[1:?] OF dependent_or_independent_property_representation;
+ END_ENTITY;
+
+ ENTITY Material_identification;
+  material_name : STRING;
+  items : SET[1:?] OF material_item_select;
+ END_ENTITY;
+
+ ENTITY Material_property_association;
+  described_material : Material_identification;
+  associated_property_value : Material_property_value_representation;
+  definitional : OPTIONAL BOOLEAN;
+ END_ENTITY;
+
+ ENTITY Material_property_value_representation
+  SUBTYPE OF (Property_representation);
+  environment_condition : Data_environment;
+  SELF\Property_representation.property : Applied_independent_property;
+WHERE
+WR1: 'MATERIAL_ASPECTS_ARM.PDM_MATERIAL_PROPERTY' IN TYPEOF(SELF\Property_representation.property.base_independent_property); 
+END_ENTITY;
+
+ ENTITY Pdm_material_property
+  SUBTYPE OF (Independent_property);
+ END_ENTITY;
+
+
+END_SCHEMA;

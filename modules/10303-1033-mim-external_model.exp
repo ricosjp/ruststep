@@ -1,0 +1,19 @@
+(*
+ $Id: 10303-1033-mim-external_model.exp,v 1.5 2006/08/07 09:42:03 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N1229 - ISO/TS 10303-1033 External model - EXPRESS MIM
+*)
+
+SCHEMA External_model_mim;
+  
+USE FROM Elemental_geometric_shape_mim; -- ISO 10303-1004
+  
+USE FROM File_identification_mim;
+
+USE FROM product_property_definition_schema
+  (property_definition);
+
+USE FROM product_property_representation_schema
+  (property_definition_representation);
+
+END_SCHEMA;
+

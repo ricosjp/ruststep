@@ -1,0 +1,110 @@
+(*
+ $Id: 10303-1271-arm-state_characterized.exp,v 1.1 2006/08/07 07:44:46 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N3169 - ISO/TS 10303-1271 State characterized - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG12 N2360
+*) 
+
+
+SCHEMA State_characterized_arm;
+
+USE FROM Attribute_classification_arm;    -- ISO/TS 10303-1246
+
+USE FROM Classification_assignment_arm;    -- ISO/TS 10303-1114
+
+USE FROM Condition_arm;    -- ISO/TS 10303-1253
+
+USE FROM Condition_characterized_arm;    -- ISO/TS 10303-1257
+
+USE FROM Condition_evaluation_arm;    -- ISO/TS 10303-1254
+
+USE FROM Condition_evaluation_characterized_arm;    -- ISO/TS 10303-1296
+
+USE FROM Date_time_assignment_arm;    -- ISO/TS 10303-1014
+
+USE FROM Identification_assignment_arm;    -- ISO/TS 10303-1021
+
+USE FROM Multi_linguism_arm;    -- ISO/TS 10303-1105
+
+USE FROM Person_organization_assignment_arm;    -- ISO/TS 10303-1013
+
+USE FROM Property_assignment_arm;    -- ISO/TS 10303-1030
+
+USE FROM State_definition_arm;    -- ISO/TS 10303-1255
+
+USE FROM State_observed_arm;    -- ISO/TS 10303-1256
+
+
+TYPE state_definition_condition_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON condition_item WITH 
+   (State_definition, 
+    State_definition_relationship);
+END_TYPE; 
+
+TYPE state_observed_condition_evaluation_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON condition_evaluation_item WITH 
+   (State_assertion, 
+    State_assessment);
+END_TYPE; 
+
+TYPE state_role_classification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON classification_item WITH 
+   (State_role);
+END_TYPE; 
+
+TYPE statechar_classified_attribute_select = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON classified_attribute_select WITH 
+   (Applied_state_assignment, 
+    Applied_state_definition_assignment, 
+    State, 
+    State_definition, 
+    State_definition_relationship, 
+    State_relationship);
+END_TYPE; 
+
+TYPE statechar_date_or_date_time_item = EXTENSIBLE SELECT BASED_ON date_or_date_time_item WITH 
+   (Applied_state_assignment, 
+    Applied_state_definition_assignment, 
+    State, 
+    State_assertion, 
+    State_assessment, 
+    State_definition, 
+    State_definition_relationship, 
+    State_relationship);
+END_TYPE; 
+
+TYPE statechar_identification_item = EXTENSIBLE SELECT BASED_ON identification_item WITH 
+   (Applied_state_assignment, 
+    Applied_state_definition_assignment, 
+    Defined_state_relationship, 
+    State, 
+    State_assertion, 
+    State_assessment, 
+    State_definition, 
+    State_definition_relationship, 
+    State_relationship);
+END_TYPE; 
+
+TYPE statechar_organization_or_person_in_organization_item = EXTENSIBLE SELECT BASED_ON organization_or_person_in_organization_item WITH 
+   (Applied_state_assignment, 
+    Applied_state_definition_assignment, 
+    State, 
+    State_assertion, 
+    State_assessment, 
+    State_definition, 
+    State_definition_relationship, 
+    State_relationship);
+END_TYPE; 
+
+TYPE statechar_property_assignment_select = EXTENSIBLE SELECT BASED_ON property_assignment_select WITH 
+   (Applied_state_assignment, 
+    Applied_state_definition_assignment, 
+    State, 
+    State_definition, 
+    State_definition_relationship, 
+    State_relationship);
+END_TYPE; 
+
+TYPE statechar_string_select = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON string_select WITH 
+   (State, 
+    State_definition, 
+    State_definition_relationship, 
+    State_relationship);
+END_TYPE; 
+
+END_SCHEMA;  -- State_characterized_arm

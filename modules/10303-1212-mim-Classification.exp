@@ -1,0 +1,17 @@
+(*
+ $Id: 10303-1212-mim-Classification.exp,v 1.4 2006/08/04 12:11:55 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2757 - ISO/TS 10303-1212 Classification - EXPRESS MIM
+ Supersedes ISO TC184/SC4/WG12 N1871
+*)
+
+SCHEMA Classification_mim; 
+
+USE FROM Class_mim;   -- ISO/TS 10303-1070
+
+USE FROM classification_schema   -- ISO/DIS 10303-54
+  (classification_select,
+  complete_membership_select,
+  classification,
+  complete_membership); 
+
+END_SCHEMA;  -- Classification_mim

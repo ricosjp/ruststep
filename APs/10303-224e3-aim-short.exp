@@ -1,0 +1,1334 @@
+(*
+AIM EXPRESS short form for ISO/IS 10303-224 ed 3
+Len Slovensky
+2006-01-04
+ISO TC184/SC4/WG3 N1942
+*)
+
+SCHEMA feature_based_process_planning;
+
+  USE FROM action_schema                                   -- ISO 10303-41
+      (action_directive,
+       action_method,
+       action_relationship,
+       action_request_solution, 
+       action_request_status,
+       action_status,
+       directed_action,
+       versioned_action_request);
+  USE FROM aic_machining_feature;                          -- ISO 10303-522
+  USE FROM aic_advanced_brep                               -- ISO 10303-514
+       (advanced_brep_shape_representation);
+
+  USE FROM aic_topologically_bounded_surface               -- ISO 10303-511
+       (advanced_face);
+
+  USE FROM aic_geometric_tolerances                        -- ISO 10303-519
+      (angularity_tolerance,
+       concentricity_tolerance,
+       circular_runout_tolerance,
+       cylindricity_tolerance,
+       flatness_tolerance,
+       line_profile_tolerance,
+       parallelism_tolerance,
+       perpendicularity_tolerance,
+       position_tolerance,
+       roundness_tolerance,
+       straightness_tolerance,
+       surface_profile_tolerance,
+       symmetry_tolerance,
+       total_runout_tolerance);
+
+  USE FROM application_context_schema	                    -- ISO 10303-41
+      (application_context,
+       application_protocol_definition); 
+
+  USE FROM approval_schema	                          	-- ISO 10303-41
+      (approval,
+       approval_date_time,
+       approval_person_organization,
+       approval_status);
+        
+  REFERENCE FROM basic_attribute_schema              	     -- ISO 10303-41
+     (description_attribute,
+     object_role,
+     role_association);
+  
+  USE FROM date_time_schema	                  	          -- ISO 10303-41
+      (date,
+       calendar_date,
+       ordinal_date,
+       week_of_year_and_day_date);
+
+  USE FROM document_schema	             	               -- ISO 10303-41
+      (document,
+       document_representation_type,
+       document_with_class,
+       document_usage_constraint,
+       document_relationship);
+
+  USE FROM external_reference_schema           		     -- ISO 10303-41
+      (externally_defined_item,
+       external_source,
+       externally_defined_item_relationship,
+       pre_defined_item);   
+  USE FROM geometric_model_schema		                    -- ISO 10303-42
+      (brep_with_voids,
+       manifold_solid_brep);
+
+  REFERENCE FROM geometry_schema     	                    -- ISO 10303-42
+      (dummy_gri);
+
+  USE FROM geometry_schema		                         -- ISO 10303-42
+      (axis2_placement_2d,
+       axis2_placement_3d,
+       bezier_curve,
+       bezier_surface,
+       b_spline_curve_with_knots,
+       b_spline_surface_with_knots,
+       cartesian_point,
+       cartesian_transformation_operator_3d,
+       circle,
+       conical_surface,
+       cylindrical_surface,
+       degenerate_toroidal_surface,
+       direction,
+       ellipse,
+       geometric_representation_context,
+       hyperbola,
+       line,
+       parabola,
+       pcurve,
+       plane,
+       point,
+       polyline,
+       quasi_uniform_curve,
+       quasi_uniform_surface,
+       rational_b_spline_curve,
+       rational_b_spline_surface,
+       spherical_surface,
+       surface_curve,
+       surface_of_linear_extrusion,
+       surface_of_revolution,
+       swept_surface,
+       toroidal_surface,
+       uniform_curve,
+       uniform_surface,
+       vector);
+
+  USE FROM group_schema		                              -- ISO 10303-41
+      (group,
+       group_relationship);
+
+  USE FROM management_resources_schema		               -- ISO 10303-41
+      (action_assignment,
+       action_request_assignment,
+       approval_assignment,
+       classification_assignment,
+       date_assignment,
+       document_reference,
+       document_usage_constraint_assignment,
+       external_identification_assignment, 
+       identification_assignment,
+       group_assignment,
+       organization_assignment,
+       person_and_organization_assignment,
+       security_classification_assignment);
+
+  USE FROM material_property_representation_schema		-- ISO 10303-45
+      (material_property_representation);
+
+  USE FROM material_property_definition_schema		     -- ISO 10303-45
+      (material_designation,
+       material_property,
+       property_definition_relationship);
+        
+  USE FROM measure_schema		                         -- ISO 10303-41
+      (context_dependent_measure,
+       context_dependent_unit,
+       conversion_based_unit,
+       count_measure, 
+       derived_unit,
+       descriptive_measure,
+       global_unit_assigned_context,
+       length_measure_with_unit,
+       length_unit, 
+       measure_with_unit,
+       named_unit, 
+       parameter_value,
+       plane_angle_measure_with_unit,
+       plane_angle_unit, 
+       positive_plane_angle_measure, 
+       ratio_measure,
+       ratio_measure_with_unit,
+       ratio_unit,
+       si_unit,
+       solid_angle_measure_with_unit,
+       solid_angle_unit);  
+
+  USE FROM person_organization_schema		               -- ISO 10303-41
+      (organizational_address,
+       person_and_organization,
+       personal_address);
+
+  USE FROM product_definition_schema		               -- ISO 10303-41
+      (product,
+       product_definition,
+       product_definition_formation,
+       product_definition_with_associated_documents);
+
+  USE FROM product_property_definition_schema		     -- ISO 10303-41
+      (characterized_object,
+       general_property,
+       general_property_association,
+       product_definition_shape, 
+       property_definition,   
+       shape_aspect,
+       shape_aspect_relationship);
+
+  USE FROM product_property_representation_schema		     -- ISO 10303-41
+      (property_definition_representation,
+       shape_definition_representation,
+       shape_representation);
+
+  USE FROM product_structure_schema		               -- ISO 10303-44
+      (assembly_component_usage,
+       next_assembly_usage_occurrence,
+       make_from_usage_option);
+
+  USE FROM qualified_measure_schema		               -- ISO 10303-45
+      (descriptive_representation_item,
+       expanded_uncertainty,
+       measure_representation_item,
+       measure_qualification,
+       precision_qualifier,
+       qualified_representation_item,
+       qualitative_uncertainty,
+       standard_uncertainty,
+       type_qualifier,
+       uncertainty_qualifier);
+
+  USE FROM representation_schema		                    -- ISO 10303-43
+      (definitional_representation,
+       global_uncertainty_assigned_context,
+       mapped_item,
+       parametric_representation_context,
+       compound_representation_item,
+       compound_item_definition,
+       list_representation_item,
+       set_representation_item,
+       representation,
+       representation_item,
+       representation_relationship,
+       value_representation_item);
+
+  USE FROM security_classification_schema		          -- ISO 10303-41
+      (security_classification,
+       security_classification_level);
+
+  USE FROM shape_aspect_definition_schema		          -- ISO 10303-47
+      (composite_shape_aspect,
+       datum_feature,
+       datum_reference,
+       datum_target,
+       referenced_modified_datum,
+       datum);
+
+  USE FROM shape_dimension_schema		                    -- ISO 10303-47
+      (angular_location,
+       angular_size,
+       dimensional_characteristic_representation,
+       dimensional_location,
+       dimensional_location_with_path,
+       dimensional_size,
+       dimensional_size_with_path,
+       shape_dimension_representation);
+
+  USE FROM shape_tolerance_schema		                    -- ISO 10303-47
+      (geometric_tolerance,
+       geometric_tolerance_relationship,
+       geometric_tolerance_with_datum_reference,
+       geometric_tolerance_with_defined_unit,
+       limits_and_fits,
+       modified_geometric_tolerance,
+       plus_minus_tolerance,
+       projected_zone_definition,
+       runout_zone_definition,
+       runout_zone_orientation,
+       tolerance_value,
+       tolerance_zone,
+       tolerance_zone_definition);  
+
+  USE FROM support_resource_schema		                    -- ISO 10303-41
+      (identifier,
+       label,
+       text);
+  REFERENCE FROM topology_schema     	                    -- ISO 10303-42
+      (dummy_tri);
+
+  USE FROM topology_schema 		                         -- ISO 10303-42
+      (closed_shell,
+       connected_face_set,
+       oriented_closed_shell,
+       edge_curve,
+       edge_loop,
+       face_bound,
+       face_outer_bound,
+       face_surface,
+       path,
+       vertex_loop,
+       vertex_point);
+
+
+
+TYPE classification_item = SELECT (
+     externally_defined_representation_with_parameters);
+END_TYPE;
+
+
+TYPE document_reference_item = SELECT
+  (action_method,
+   externally_defined_feature_definition,
+   directed_action,
+   dimensional_characteristic_representation,
+   product_definition_formation,
+   externally_defined_dimension_definition,
+   property_definition);
+END_TYPE;
+
+TYPE external_identification_item = SELECT (
+     externally_defined_item,
+     externally_defined_general_property);                         
+END_TYPE;
+
+TYPE feature_based_pp_action_item = SELECT
+  (product_definition_formation);
+END_TYPE;
+
+TYPE feature_based_pp_action_request_item = SELECT
+  (product_definition_formation);
+END_TYPE;
+
+TYPE feature_based_pp_approved_item = SELECT
+  (directed_action,
+   product_definition_formation);
+END_TYPE;
+
+TYPE feature_based_pp_classified_item = SELECT
+  (product_definition_formation);
+END_TYPE;
+
+TYPE feature_based_pp_dated_item = SELECT
+  (directed_action,
+   document,
+   versioned_action_request);
+END_TYPE;
+
+TYPE feature_based_pp_ordered_item = SELECT
+  (product_definition_formation);
+END_TYPE;
+
+TYPE feature_based_pp_organization_item = SELECT
+  (action_directive,
+   product_definition_formation,
+   externally_defined_item,
+     known_source);
+END_TYPE;
+
+TYPE feature_based_pp_person_and_organization_item = SELECT
+  (action_directive, product_definition_formation);
+END_TYPE;
+
+  TYPE group_item = SELECT
+    (instanced_feature, replicate_feature, transition_feature);
+  END_TYPE;
+
+TYPE identification_item = SELECT (
+     document);                         
+END_TYPE;
+
+
+ENTITY applied_identification_assignment
+     SUBTYPE OF (identification_assignment);
+     items: SET[1:?] OF identification_item;
+END_ENTITY;
+
+ENTITY applied_classification_assignment
+     SUBTYPE OF (classification_assignment);
+     items: SET[1:?] OF classification_item;
+WHERE 
+      
+   wr1: (NOT ( ('FEATURE_BASED_PROCESS_PLANNING.EXTERNALLY_DEFINED_CLASS' 
+        IN TYPEOF(SELF.assigned_class)) AND 
+        ((SELF.role.name = 'definitional class membership'))AND 
+        ( (SELF.assigned_class.name= 'library identifier'))));
+        
+ wr2: (SIZEOF(QUERY ( edir <* USEDIN(SELF.assigned_class,
+    'FEATURE_BASED_PROCESS_PLANNING.EXTERNALLY_DEFINED_ITEM_RELATIONSHIP.'+
+      'RELATED_ITEM') |
+      ((edir.name='name scope')  AND 
+      ('FEATURE_BASED_PROCESS_PLANNING.'+
+      'EXTERNALLY_DEFINED_GENERAL_PROPERTY' 
+      IN TYPEOF (edir.relating_item))AND 
+      (NOT (SIZEOF(QUERY ( gpa <* USEDIN(edir.relating_item,
+      'FEATURE_BASED_PROCESS_PLANNING.'+
+      'GENERAL_PROPERTY_ASSOCIATION.BASE_DEFINITION')  |
+      ((gpa.name='definitional') AND 
+      (NOT (SIZEOF (QUERY (pdr <* USEDIN(gpa.derived_definition,
+      'FEATURE_BASED_PROCESS_PLANNING.'+
+      'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |
+      ((pdr.used_representation.name='property value') AND 
+      ('FEATURE_BASED_PROCESS_PLANNING.VALUE_REPRESENTATION_ITEM' 
+      IN TYPEOF (pdr.used_representation.items))
+      ))) >= 1 )) )
+      )) =0))
+      ))) =0);
+
+END_ENTITY;
+
+ENTITY applied_document_reference
+  SUBTYPE OF (document_reference);
+  items : SET [1:?] OF document_reference_item;
+END_ENTITY;
+
+ENTITY applied_document_usage_constraint_assignment
+  SUBTYPE OF (document_usage_constraint_assignment);
+  items : SET [1:?] OF document_reference_item;
+END_ENTITY;
+
+ENTITY applied_external_identification_assignment
+     SUPERTYPE OF (ONEOF (library_property_version_assignment,
+                           library_class_version_assignment))
+     SUBTYPE OF (external_identification_assignment);
+     items: SET[1:?] OF external_identification_item;
+
+END_ENTITY;
+
+ENTITY applied_group_assignment
+  SUBTYPE OF (group_assignment);
+  items : SET [1:?] OF group_item;
+END_ENTITY;
+
+
+
+  ENTITY block_shape_representation
+    SUBTYPE OF (shape_representation_with_parameters);
+    WHERE
+      wr1: (SIZEOF(SELF.items) = 4);
+
+      wr2: (SIZEOF(QUERY ( it <* SELF.items | 
+           (('FEATURE_BASED_PROCESS_PLANNING.PLACEMENT' 
+           IN TYPEOF(it)) AND (it.name = 'orientation')) )) = 1);
+
+      wr3: (SIZEOF(QUERY ( it <* SELF.items | 
+           ((SIZEOF(
+           ['FEATURE_BASED_PROCESS_PLANNING.MEASURE_REPRESENTATION_ITEM',
+           'FEATURE_BASED_PROCESS_PLANNING.LENGTH_MEASURE_WITH_UNIT'] *
+            TYPEOF(it)) = 2) AND (it.name = 'length')) )) = 1);
+
+      wr4: (SIZEOF(QUERY ( it <* SELF.items | 
+           ((SIZEOF([
+           'FEATURE_BASED_PROCESS_PLANNING.MEASURE_REPRESENTATION_ITEM',
+           'FEATURE_BASED_PROCESS_PLANNING.LENGTH_MEASURE_WITH_UNIT'] *
+           TYPEOF(it)) = 2) AND (it.name = 'width')) )) = 1);
+
+      wr5: (SIZEOF(QUERY ( it <* SELF.items | 
+           ((SIZEOF([
+           'FEATURE_BASED_PROCESS_PLANNING.MEASURE_REPRESENTATION_ITEM',
+           'FEATURE_BASED_PROCESS_PLANNING.LENGTH_MEASURE_WITH_UNIT'] *
+           TYPEOF(it)) = 2) AND (it.name = 'height')) )) = 1);
+  END_ENTITY; -- block_shape_representation
+
+ENTITY class
+     SUBTYPE OF (group);
+END_ENTITY;
+
+  ENTITY cylindrical_shape_representation
+    SUBTYPE OF (shape_representation_with_parameters);
+    WHERE
+      wr1: (SIZEOF(SELF.items) = 3);
+
+      wr2: (SIZEOF(QUERY ( it <* SELF.items | ((
+           'FEATURE_BASED_PROCESS_PLANNING.PLACEMENT' 
+           IN TYPEOF(it)) AND (it.name = 'orientation')) )) = 1);
+
+      wr3: (SIZEOF(QUERY ( it <* SELF.items | ((SIZEOF([
+           'FEATURE_BASED_PROCESS_PLANNING.MEASURE_REPRESENTATION_ITEM',
+           'FEATURE_BASED_PROCESS_PLANNING.LENGTH_MEASURE_WITH_UNIT'] *
+            TYPEOF(it)) = 2) AND (it.name = 'length')) )) = 1);
+
+      wr4: (SIZEOF(QUERY ( it <* SELF.items | ((SIZEOF([
+           'FEATURE_BASED_PROCESS_PLANNING.MEASURE_REPRESENTATION_ITEM',
+           'FEATURE_BASED_PROCESS_PLANNING.LENGTH_MEASURE_WITH_UNIT'] *
+            TYPEOF(it)) = 2) AND (it.name = 'diameter')) )) = 1);
+  END_ENTITY; -- cylindrical_shape_representation
+
+  ENTITY directed_dimensional_location
+    SUBTYPE OF (dimensional_location);
+  END_ENTITY; -- directed_dimensional_location
+
+ENTITY document_file
+   SUBTYPE OF (characterized_object, document);
+   WHERE
+ wr1: (SIZEOF(QUERY(adr<* QUERY(dr <* USEDIN(SELF,
+   'FEATURE_BASED_PROCESS_PLANNING.DOCUMENT_REFERENCE.ASSIGNED_DOCUMENT') |
+      'FEATURE_BASED_PROCESS_PLANNING.APPLIED_DOCUMENT_REFERENCE'
+      IN TYPEOF(dr))|
+     'FEATURE_BASED_PROCESS_PLANNING.EXTERNALLY_DEFINED_FEATURE_DEFINITION'
+      IN TYPEOF(adr.items)
+      ))=1) OR 
+      (SIZEOF(QUERY (duc <* USEDIN(SELF,
+      'FEATURE_BASED_PROCESS_PLANNING.DOCUMENT_USAGE_CONSTRAINT.SOURCE') |
+      NOT 
+      (SIZEOF(QUERY(aduc<* QUERY(duca <* USEDIN(duc,
+    'FEATURE_BASED_PROCESS_PLANNING.DOCUMENT_USAGE_CONSTRAINT_ASSIGNMENT.'+
+      'ASSIGNED_DOCUMENT_USAGE') |
+      'FEATURE_BASED_PROCESS_PLANNING.'+
+      'APPLIED_DOCUMENT_USAGE_CONSTRAINT_ASSIGNMENT'
+      IN TYPEOF(duca))|
+     'FEATURE_BASED_PROCESS_PLANNING.EXTERNALLY_DEFINED_FEATURE_DEFINITION'
+      IN TYPEOF(aduc.items)
+      ))=1))) = 0);
+            
+ wr2: (SIZEOF(QUERY(drt <* USEDIN(SELF,
+      'FEATURE_BASED_PROCESS_PLANNING.'+
+      'DOCUMENT_REPRESENTATION_TYPE.REPRESENTED_DOCUMENT') |
+      (drt.name='physical')))=1);
+  END_ENTITY; -- document_file
+
+ENTITY externally_defined_dimension_definition
+     SUBTYPE OF (externally_defined_item, dimensional_size);
+WHERE 
+  
+ wr1: SELF.source.description = 'externally defined dimension specification';  
+     
+  wr2: SIZEOF(QUERY ( adr <* USEDIN(SELF,
+      'FEATURE_BASED_PROCESS_PLANNING.APPLIED_DOCUMENT_REFERENCE.ITEMS')| 
+      (adr.assigned_document.description =
+      'externally defined size dimension specification')
+      ) ) <= 1; 
+         
+END_ENTITY;
+
+ENTITY externally_defined_class
+     SUBTYPE OF (externally_defined_item,class);
+WHERE
+  wr1:  'FEATURE_BASED_PROCESS_PLANNING.KNOWN_SOURCE' 
+  IN TYPEOF(SELF.source);
+  wr2:  SELF.source.name='ISO 13584 library';
+   
+  WR3: ( SIZEOF ( QUERY ( aoa <* 
+       USEDIN ( SELF.source, 
+       'FEATURE_BASED_PROCESS_PLANNING.'+
+       'FEATURE_BASED_PP_ORGANIZATION_ASSIGNMENT.ITEMS' )| 
+       aoa. role.name = 'library supplier' ))=1);
+
+  WR4: ( SIZEOF ( QUERY ( aoa <* 
+       USEDIN ( SELF, 
+       'FEATURE_BASED_PROCESS_PLANNING.'+
+       'APPLIED_EXTERNAL_IDENTIFICATION_ASSIGNMENT.ITEMS' )|
+       ('FEATURE_BASED_PROCESS_PLANNING.LIBRARY_CLASS_VERSION_ASSIGNMENT' 
+       IN TYPEOF(aoa)) AND 
+       ( aoa. role.name = 'class version' )))=1);
+     
+END_ENTITY;
+
+ENTITY externally_defined_general_property
+     SUBTYPE OF (general_property, externally_defined_item);
+WHERE 
+  wr1:  'FEATURE_BASED_PROCESS_PLANNING.KNOWN_SOURCE' 
+  IN TYPEOF(SELF.source);
+  wr2:  SELF.source.name='ISO 13584 library';
+
+  WR3: ( SIZEOF ( QUERY ( aoa <* 
+       USEDIN ( SELF, 
+       'FEATURE_BASED_PROCESS_PLANNING.'+
+       'APPLIED_EXTERNAL_IDENTIFICATION_ASSIGNMENT.ITEMS' )|
+       ('FEATURE_BASED_PROCESS_PLANNING.'+
+       'LIBRARY_CLASS_VERSION_ASSIGNMENT' 
+       IN TYPEOF(aoa)) AND 
+       ( aoa. role.name = 'property version' )))=1); 
+       
+  wr4: (SIZEOF(QUERY ( ap <* USEDIN(SELF,
+       'FEATURE_BASED_PROCESS_PLANNING.'+
+       'EXTERNALLY_DEFINED_ITEM_RELATIONSHIP.RELATING_ITEM') | 
+       ((ap.name='name scope') AND 
+       ('FEATURE_BASED_PROCESS_PLANNING.EXTERNALLY_DEFINED_CLASS' 
+       IN TYPEOF(ap.related_item))
+       )))>=1); 
+ 
+END_ENTITY;
+
+ENTITY externally_defined_representation_with_parameters
+     SUBTYPE OF (representation);
+WHERE 
+
+  wr1: (SIZEOF(QUERY( adr <*USEDIN(SELF,
+       'FEATURE_BASED_PROCESS_PLANNING.'+
+       'APPLIED_CLASSIFICATION_ASSIGNMENT.ITEMS') |
+       'FEATURE_BASED_PROCESS_PLANNING.CLASSIFICATION_ASSIGNMENT' 
+       IN TYPEOF(adr))) = 1);
+ 
+  wr2: (SIZEOF (QUERY(adr <* SELF.items|
+        'FEATURE_BASED_PROCESS_PLANNING.PLACEMENT' IN TYPEOF(adr)))=1);
+
+  wr3: (SIZEOF (QUERY(adr <* SELF.items|
+        ('FEATURE_BASED_PROCESS_PLANNING.PLACEMENT' IN TYPEOF(adr)) AND 
+        ('FEATURE_BASED_PROCESS_PLANNING.CARTESIAN_POINT' 
+        IN TYPEOF(adr.location))))
+        =1);        
+END_ENTITY;
+
+ENTITY face_shape_representation_relationship
+  SUBTYPE OF (representation_relationship);
+      WHERE
+      wr1: ('FEATURE_BASED_PROCESS_PLANNING.FACE_SHAPE_REPRESENTATION' 
+            IN TYPEOF(SELF.rep_1));
+      wr2: ('FEATURE_BASED_PROCESS_PLANNING.FACE_SHAPE_REPRESENTATION' 
+            IN TYPEOF(SELF.rep_2));
+END_ENTITY; -- face_shape_representation_relationship
+
+ENTITY feature_based_pp_action_assignment
+  SUBTYPE OF (action_assignment);
+  items : SET [1:?] OF feature_based_pp_action_item;
+END_ENTITY;
+
+ENTITY feature_based_pp_action_request_assignment
+  SUBTYPE OF (action_request_assignment);
+  items : SET [1:?] OF feature_based_pp_action_request_item;
+END_ENTITY;
+
+ENTITY feature_based_pp_approval_assignment
+  SUBTYPE OF (approval_assignment);
+  items : SET [1:?] OF feature_based_pp_approved_item;
+END_ENTITY;
+
+ENTITY feature_based_pp_date_assignment
+  SUBTYPE OF (date_assignment);
+  items : SET [1:?] OF feature_based_pp_dated_item;
+END_ENTITY;
+
+ENTITY feature_based_pp_organization_assignment
+  SUBTYPE OF (organization_assignment);
+  items : SET [1:?] OF feature_based_pp_organization_item;
+END_ENTITY;
+
+ENTITY feature_based_pp_person_and_organization_assignment
+  SUBTYPE OF (person_and_organization_assignment);
+  items : SET [1:?] OF feature_based_pp_person_and_organization_item;
+END_ENTITY;
+
+ENTITY feature_based_pp_security_classification_assignment
+  SUBTYPE OF (security_classification_assignment);
+  items : SET [1:?] OF feature_based_pp_classified_item;
+END_ENTITY;
+
+ENTITY known_source
+     SUBTYPE OF (external_source,pre_defined_item);
+  WHERE 
+      wr1: SELF\pre_defined_item.name = 'ISO 13584 library';
+      wr2: SIZEOF(QUERY ( oa <* USEDIN(SELF,
+      'FEATURE_BASED_PROCESS_PLANNING.'+
+      'FEATURE_BASED_PP_ORGANIZATION_ASSIGNMENT.ITEMS')|
+      ((NOT ('FEATURE_BASED_PROCESS_PLANNING.'+
+      'ORGANIZATION_ASSIGNMENT' 
+      IN TYPEOF(oa))) AND (oa.role.name = 'library supplier')) )) 
+      = 0;          
+END_ENTITY;
+
+ENTITY library_class_version_assignment
+     SUBTYPE OF (applied_external_identification_assignment);
+END_ENTITY;
+
+ENTITY library_property_version_assignment
+     SUBTYPE OF (applied_external_identification_assignment);
+END_ENTITY;
+
+  ENTITY ngon_shape_representation
+    SUBTYPE OF (shape_representation_with_parameters);
+    WHERE
+  wr1: (SIZEOF(SELF.items) = 5);
+
+  wr2: (SIZEOF(QUERY ( it <* SELF.items | 
+       (('FEATURE_BASED_PROCESS_PLANNING.PLACEMENT' 
+       IN TYPEOF(it)) AND (it.name = 'orientation')) )) = 1);
+
+  wr3: (SIZEOF(QUERY ( it <* SELF.items | 
+       ((SIZEOF([
+       'FEATURE_BASED_PROCESS_PLANNING.MEASURE_REPRESENTATION_ITEM',
+       'FEATURE_BASED_PROCESS_PLANNING.LENGTH_MEASURE_WITH_UNIT'] *
+       TYPEOF(it)) = 2) AND (it.name = 'length')) )) = 1);
+
+  wr4: (SIZEOF(QUERY ( it <* SELF.items | 
+       ((SIZEOF([
+       'FEATURE_BASED_PROCESS_PLANNING.MEASURE_REPRESENTATION_ITEM',
+       'FEATURE_BASED_PROCESS_PLANNING.LENGTH_MEASURE_WITH_UNIT'] *
+       TYPEOF(it)) = 2) AND (it.name = 'corner radius')) )) = 1);
+
+  wr5: SIZEOF (QUERY (it <* SELF.items |
+       (SIZEOF 
+       (['FEATURE_BASED_PROCESS_PLANNING.MEASURE_REPRESENTATION_ITEM',
+       'FEATURE_BASED_PROCESS_PLANNING.LENGTH_MEASURE_WITH_UNIT'] *    
+       TYPEOF (it)) = 2) AND
+     (it.name IN ['circumscribed diameter','diameter across flats']) ))= 1;
+ 
+  wr6: (SIZEOF(QUERY ( it <* SELF.items |
+       (('FEATURE_BASED_PROCESS_PLANNING.MEASURE_REPRESENTATION_ITEM' 
+       IN TYPEOF(it)) AND 
+       ('FEATURE_BASED_PROCESS_PLANNING.COUNT_MEASURE' 
+       IN TYPEOF(it\measure_with_unit.value_component)) AND 
+       (it.name = 'number of sides')) )) = 1);
+  END_ENTITY; -- ngon_shape_representation
+
+  ENTITY ordered_part
+    SUBTYPE OF (action_assignment, characterized_object);
+      items : SET [1:?] OF feature_based_pp_ordered_item;
+    WHERE
+  wr1: (SIZEOF(USEDIN(SELF,
+     'FEATURE_BASED_PROCESS_PLANNING.PROPERTY_DEFINITION.DEFINITION'))= 1);
+
+  wr2: (SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'FEATURE_BASED_PROCESS_PLANNING.PROPERTY_DEFINITION.DEFINITION') | 
+       (NOT (SIZEOF(USEDIN(pd,
+       'FEATURE_BASED_PROCESS_PLANNING.' + 
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION')) = 1)) )) 
+       = 0);
+
+  wr3: (SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'FEATURE_BASED_PROCESS_PLANNING.PROPERTY_DEFINITION.DEFINITION') | 
+       (NOT (SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'FEATURE_BASED_PROCESS_PLANNING.' + 
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') | 
+       (NOT (SIZEOF(items) = 1)) )) = 0)) )) = 0);
+
+  wr4: (SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'FEATURE_BASED_PROCESS_PLANNING.PROPERTY_DEFINITION.DEFINITION') | 
+       (NOT (SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'FEATURE_BASED_PROCESS_PLANNING.' + 
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') | 
+       (NOT (SIZEOF(QUERY ( it <* pdr.used_representation.items |
+       (('FEATURE_BASED_PROCESS_PLANNING.MEASURE_REPRESENTATION_ITEM' 
+       IN TYPEOF(it)) AND (it.name = 'quantity')) )) = 1)) )) 
+       = 0)) )) = 0);
+  END_ENTITY; -- ordered_part
+
+  ENTITY placed_datum_target_feature
+    SUBTYPE OF (datum_target);
+    WHERE
+  wr1 : (SELF.description IN ['point','line','rectangle','circle']);
+  wr2 : (SIZEOF(QUERY ( pd <* USEDIN(SELF,
+        'FEATURE_BASED_PROCESS_PLANNING.PROPERTY_DEFINITION.DEFINITION') | 
+        (NOT (SIZEOF(QUERY ( pdr <* USEDIN(pd,
+        'FEATURE_BASED_PROCESS_PLANNING.' + 
+        'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') | 
+        (('FEATURE_BASED_PROCESS_PLANNING.' + 
+        'SHAPE_REPRESENTATION_WITH_PARAMETERS') 
+        IN TYPEOF(pdr.used_representation)) )) = 1)) )) = 0);
+
+  wr3 : (SIZEOF(QUERY ( pd <* USEDIN(SELF,
+        'FEATURE_BASED_PROCESS_PLANNING.PROPERTY_DEFINITION.DEFINITION') | 
+        (NOT (SIZEOF(QUERY ( dtm_rep <* QUERY ( pdr <* USEDIN(pd,
+        'FEATURE_BASED_PROCESS_PLANNING.' +
+        'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') | 
+        (('FEATURE_BASED_PROCESS_PLANNING.' + 
+        'SHAPE_REPRESENTATION_WITH_PARAMETERS') 
+        IN TYPEOF(pdr.used_representation)) ) | 
+        (NOT (SIZEOF(QUERY ( it <* dtm_rep.used_representation.items | 
+        (('FEATURE_BASED_PROCESS_PLANNING.PLACEMENT' 
+        IN TYPEOF(it)) AND (it.name = 'orientation')) )) = 1)) )) 
+        = 0)) )) = 0);
+
+  wr4 : ((NOT (SELF.description = 'point')) OR 
+        (SIZEOF(QUERY ( pd <*  USEDIN(SELF,
+        'FEATURE_BASED_PROCESS_PLANNING.PROPERTY_DEFINITION.DEFINITION') | 
+        (NOT (SIZEOF(QUERY ( dtm_rep <* 
+        QUERY ( pdr <* USEDIN(pd,'FEATURE_BASED_PROCESS_PLANNING.' +
+        'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') | 
+        (('FEATURE_BASED_PROCESS_PLANNING.' + 
+        'SHAPE_REPRESENTATION_WITH_PARAMETERS') 
+        IN TYPEOF(pdr.used_representation)) ) | 
+        (NOT (SIZEOF(dtm_rep.used_representation.items) = 1)) )) 
+        = 0)) )) = 0));
+
+  wr5 : ((NOT (SELF.description IN ['line','circle'])) OR 
+        (SIZEOF(QUERY ( pd <* USEDIN(SELF,
+        'FEATURE_BASED_PROCESS_PLANNING.PROPERTY_DEFINITION.DEFINITION') | 
+        (NOT (SIZEOF(QUERY ( dtm_rep <* QUERY ( pdr <* USEDIN(pd,
+        'FEATURE_BASED_PROCESS_PLANNING.' +
+        'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') | 
+        (('FEATURE_BASED_PROCESS_PLANNING.' + 
+        'SHAPE_REPRESENTATION_WITH_PARAMETERS') 
+        IN TYPEOF(pdr.used_representation)) ) | 
+        (NOT (SIZEOF(dtm_rep.used_representation.items) = 2)) )) 
+         = 0)) )) = 0));
+
+  wr6 : ((NOT (SELF.description = 'rectangle')) OR 
+        (SIZEOF(QUERY ( pd <* USEDIN(SELF,
+        'FEATURE_BASED_PROCESS_PLANNING.PROPERTY_DEFINITION.DEFINITION') | 
+        (NOT (SIZEOF(QUERY ( dtm_rep <* QUERY ( pdr <* USEDIN(pd,
+        'FEATURE_BASED_PROCESS_PLANNING.' +
+        'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') | 
+        (('FEATURE_BASED_PROCESS_PLANNING.' + 
+        'SHAPE_REPRESENTATION_WITH_PARAMETERS') 
+        IN TYPEOF(pdr.used_representation)) ) | 
+        (NOT (SIZEOF(dtm_rep.used_representation.items) = 3)) )) 
+        = 0)) )) = 0));
+
+  wr7 : ((NOT (SELF.description = 'circle')) OR 
+        (SIZEOF(QUERY ( pd <* USEDIN(SELF,
+        'FEATURE_BASED_PROCESS_PLANNING.PROPERTY_DEFINITION.DEFINITION') | 
+        (NOT (SIZEOF(QUERY ( dtm_rep <* QUERY ( pdr <* USEDIN(pd,
+        'FEATURE_BASED_PROCESS_PLANNING.' + 
+        'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') | 
+        (('FEATURE_BASED_PROCESS_PLANNING.' + 
+        'SHAPE_REPRESENTATION_WITH_PARAMETERS') 
+        IN TYPEOF(pdr.used_representation)) ) | 
+        (NOT (SIZEOF(QUERY ( it <* dtm_rep.used_representation.items | 
+        ((SIZEOF([
+        'FEATURE_BASED_PROCESS_PLANNING.MEASURE_REPRESENTATION_ITEM',
+        'FEATURE_BASED_PROCESS_PLANNING.LENGTH_MEASURE_WITH_UNIT'] *
+        TYPEOF(it)) = 2) AND (it.name = 'target diameter')) )) 
+        = 1)) )) = 0)) )) = 0));
+
+  wr8 : ((NOT (SELF.description = 'line')) OR 
+        (SIZEOF(QUERY ( pd <* USEDIN(SELF,
+        'FEATURE_BASED_PROCESS_PLANNING.PROPERTY_DEFINITION.DEFINITION') | 
+        (NOT (SIZEOF(QUERY ( dtm_rep <* QUERY ( pdr <* USEDIN(pd,
+        'FEATURE_BASED_PROCESS_PLANNING.' + 
+        'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') | 
+        (('FEATURE_BASED_PROCESS_PLANNING.' + 
+        'SHAPE_REPRESENTATION_WITH_PARAMETERS') 
+        IN TYPEOF(pdr.used_representation)) ) | 
+        (NOT (SIZEOF(QUERY ( it <* dtm_rep.used_representation.items | 
+        ((SIZEOF([
+        'FEATURE_BASED_PROCESS_PLANNING.MEASURE_REPRESENTATION_ITEM',
+        'FEATURE_BASED_PROCESS_PLANNING.LENGTH_MEASURE_WITH_UNIT'] *
+        TYPEOF(it)) = 2) AND (it.name = 'target length')))) = 1)) )) 
+        = 0)) )) = 0));
+
+  wr9 : ((NOT (SELF.description = 'rectangle')) OR 
+        (SIZEOF(QUERY ( pd <* USEDIN(SELF,
+        'FEATURE_BASED_PROCESS_PLANNING.PROPERTY_DEFINITION.DEFINITION') | 
+        (NOT (SIZEOF(QUERY ( dtm_rep <* QUERY ( pdr <* USEDIN(pd,
+        'FEATURE_BASED_PROCESS_PLANNING.' + 
+        'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') | 
+        (('FEATURE_BASED_PROCESS_PLANNING.' + 
+        'SHAPE_REPRESENTATION_WITH_PARAMETERS') 
+        IN TYPEOF(pdr.used_representation)) ) | 
+        (NOT (SIZEOF(QUERY ( it <* dtm_rep.used_representation.items | 
+        ((SIZEOF([
+        'FEATURE_BASED_PROCESS_PLANNING.MEASURE_REPRESENTATION_ITEM',
+        'FEATURE_BASED_PROCESS_PLANNING.LENGTH_MEASURE_WITH_UNIT'] *
+        TYPEOF(it)) = 2) AND (it.name = 'target length')))) = 1)) )) 
+        = 0)) )) = 0));
+
+  wr10: ((NOT (SELF.description = 'rectangle')) OR 
+        (SIZEOF(QUERY ( pd <* USEDIN(SELF,
+        'FEATURE_BASED_PROCESS_PLANNING.PROPERTY_DEFINITION.DEFINITION') | 
+        (NOT (SIZEOF(QUERY ( dtm_rep <* QUERY ( pdr <* USEDIN(pd,
+        'FEATURE_BASED_PROCESS_PLANNING.' + 
+        'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') | 
+        (('FEATURE_BASED_PROCESS_PLANNING.' + 
+        'SHAPE_REPRESENTATION_WITH_PARAMETERS') 
+        IN TYPEOF(pdr.used_representation)) ) | 
+        (NOT (SIZEOF(QUERY ( it <* dtm_rep.used_representation.items | 
+        ((SIZEOF([
+        'FEATURE_BASED_PROCESS_PLANNING.MEASURE_REPRESENTATION_ITEM',
+        'FEATURE_BASED_PROCESS_PLANNING.LENGTH_MEASURE_WITH_UNIT'] *
+        TYPEOF(it)) = 2) AND (it.name = 'target width'))))= 1))))
+        = 0)) ))=0));
+  END_ENTITY; -- placed_datum_target_feature
+
+
+ENTITY value_range
+   SUBTYPE OF (compound_representation_item);
+ 
+WHERE
+
+wr1:  SIZEOF(QUERY ( mri <* QUERY( sri <* SELF.item_element |
+     ('FEATURE_BASED_PROCESS_PLANNING.SET_REPRESENTATION_ITEM' IN TYPEOF (sri))) | 
+    ('FEATURE_BASED_PROCESS_PLANNING.MEASURE_REPRESENTATION_ITEM' IN TYPEOF (mri))
+       ))=2;
+
+wr2:  SIZEOF(QUERY ( mri <* QUERY( sri <* SELF.item_element |
+     ('FEATURE_BASED_PROCESS_PLANNING.SET_REPRESENTATION_ITEM' IN TYPEOF (sri))) | 
+   (('FEATURE_BASED_PROCESS_PLANNING.MEASURE_REPRESENTATION_ITEM' IN TYPEOF (mri))
+    AND  (mri.name='lower limit'))    ))=1;
+
+wr3:  SIZEOF(QUERY ( mri <* QUERY( sri <* SELF.item_element |
+     ('FEATURE_BASED_PROCESS_PLANNING.SET_REPRESENTATION_ITEM' IN TYPEOF (sri))) | 
+  (('FEATURE_BASED_PROCESS_PLANNING.MEASURE_REPRESENTATION_ITEM' IN TYPEOF (mri))
+   AND    (mri.name='upper limit'))       ))=1;
+      
+wr4: SIZEOF(QUERY( i1 <* SELF.item_element |
+ ('FEATURE_BASED_PROCESS_PLANNING.MEASURE_REPRESENTATION_ITEM' IN TYPEOF (i1)) AND 
+     (SIZEOF ( QUERY (i2 <* SELF.item_element |
+ ('FEATURE_BASED_PROCESS_PLANNING.MEASURE_REPRESENTATION_ITEM' IN TYPEOF (i2)) AND 
+     (i1 :<>: i2) AND 
+     (i1\measure_with_unit.unit_component :=:
+      i2\measure_with_unit.unit_component) 
+     ) ) = 1 ))) = 2 ;
+          
+END_ENTITY;
+
+
+RULE application_context_requires_ap_definition FOR 
+  (application_context, application_protocol_definition);
+WHERE
+  WR1: SIZEOF (QUERY (ac <* application_context | 
+       NOT (SIZEOF (QUERY (apd <* application_protocol_definition | 
+       (ac :=: apd.application) 
+       AND
+       (apd.application_interpreted_model_schema_name =   
+       'feature_based_process_planning'))) = 1 ))) = 0;
+END_RULE;
+
+RULE approval_requires_approval_date_time FOR (approval,
+  approval_date_time);
+WHERE
+  WR1: SIZEOF (QUERY (app <* approval |
+       NOT (SIZEOF (QUERY (adt <* approval_date_time |
+       app :=: adt.dated_approval )) = 1 ))) = 0;
+END_RULE;
+
+RULE approval_requires_approval_person_organization FOR 
+  (approval, approval_person_organization);
+WHERE
+  WR1: SIZEOF (QUERY (app <* approval |
+       NOT (SIZEOF (QUERY (apo <* approval_person_organization | 
+       app :=: apo.authorized_approval )) >= 1 ))) = 0;
+END_RULE;
+
+RULE chamfer_requires_faces FOR (chamfer, property_definition_representation);
+WHERE
+ WR1:  (SIZEOF (QUERY (cf <* chamfer |
+        NOT (1 = SIZEOF (QUERY (pdr <* property_definition_representation |
+       ((pdr.definition.definition = cf) AND
+       ('FEATURE_BASED_PROCESS_PLANNING.FACE_SHAPE_REPRESENTATION' 
+       IN TYPEOF (pdr.used_representation)) AND 
+       (pdr.used_representation.name = 'chamfer face'))
+            )))
+        ))=0);
+END_RULE;
+
+RULE chamfer_offset_requires_faces FOR (chamfer_offset, property_definition_representation);
+WHERE
+ WR1:  (SIZEOF (QUERY (co <* chamfer_offset |
+        NOT (1 = SIZEOF (QUERY (pdr <* property_definition_representation |
+       ((pdr.definition.definition = co) AND
+       ('FEATURE_BASED_PROCESS_PLANNING.FACE_SHAPE_REPRESENTATION' 
+       IN TYPEOF (pdr.used_representation)) AND 
+       ( ((pdr.definition.definition.description = 'first offset') AND
+       (pdr.used_representation.name = 'first face shape')) 
+       OR
+        ((pdr.definition.definition.description = 'second offset') AND
+        (pdr.used_representation.name = 'second face shape'))
+             ))
+          )))
+       ))=0);
+END_RULE;
+
+RULE dependent_instantiable_action_request_status FOR (action_request_status);
+WHERE
+  WR1: SIZEOF (QUERY (arst <* action_request_status |
+       NOT (SIZEOF (USEDIN (arst, '')) >= 1))) = 0;
+END_RULE;
+
+RULE dependent_instantiable_approval_status FOR (approval_status);
+WHERE
+  WR1: SIZEOF (QUERY (ast <* approval_status |
+       NOT (SIZEOF (USEDIN (ast, '')) >= 1))) = 0;
+END_RULE;
+
+RULE dependent_instantiable_date FOR (date);
+WHERE
+  WR1: SIZEOF (QUERY (dt <* date |NOT(SIZEOF (USEDIN (dt,'')) >= 1))) = 0;
+END_RULE;
+
+RULE dependent_instantiable_named_unit FOR (named_unit);
+WHERE
+  WR1: SIZEOF (QUERY (nu <* named_unit |
+       NOT (SIZEOF (USEDIN (nu, '')) >= 1))) = 0;
+END_RULE;
+
+RULE dependent_instantiable_precision_qualifier FOR (precision_qualifier);
+WHERE
+  WR1: SIZEOF (QUERY (pq <* precision_qualifier |
+       NOT (SIZEOF (USEDIN (pq, '')) >= 1))) = 0;
+END_RULE;
+
+RULE dependent_instantiable_type_qualifier FOR (type_qualifier);
+WHERE
+  WR1: SIZEOF (QUERY (tq <* type_qualifier |
+       NOT (SIZEOF (USEDIN (tq, '')) >= 1))) = 0;
+END_RULE;
+
+RULE dependent_instantiable_uncertainty_qualifier FOR (uncertainty_qualifier);
+WHERE
+  WR1: SIZEOF (QUERY (uq <* uncertainty_qualifier |
+       NOT (SIZEOF (USEDIN (uq, '')) >= 1))) = 0;
+END_RULE;
+
+RULE dependent_instantiable_security_classification_level FOR 
+  (security_classification_level);
+WHERE
+  WR1: SIZEOF (QUERY (scl <* security_classification_level |
+       NOT (SIZEOF (USEDIN (scl, '')) >= 1))) = 0;
+END_RULE;
+
+RULE dependent_instantiable_shape_representation FOR (shape_representation);
+WHERE
+  WR1: SIZEOF (QUERY (sr <* shape_representation |
+       NOT (SIZEOF (USEDIN (sr, '')) >= 1))) = 0;
+END_RULE;
+
+RULE edge_round_requires_faces FOR (edge_round, property_definition_representation);
+WHERE
+ WR1:  (0 = SIZEOF (QUERY (er <* edge_round |
+        NOT (1 = SIZEOF (QUERY (pdr <* property_definition_representation |
+               ((pdr.definition.definition = er) AND
+                ('FEATURE_BASED_PROCESS_PLANNING.FACE_SHAPE_REPRESENTATION' 
+                  IN TYPEOF (pdr.used_representation)) AND 
+                (pdr.used_representation.name = 'edge round face'))
+            )))
+        )));
+
+ WR2:  (SIZEOF (QUERY (er <* edge_round |
+        NOT (1 = SIZEOF (QUERY (pdr <* property_definition_representation |
+               ((pdr.definition.definition = er) AND
+                ('FEATURE_BASED_PROCESS_PLANNING.FACE_SHAPE_REPRESENTATION' 
+                  IN TYPEOF (pdr.used_representation)) AND 
+                (pdr.used_representation.name = 'first face shape'))
+            )))
+        ))=0);
+
+ WR3:  (SIZEOF (QUERY (er <* edge_round |
+        NOT (1 = SIZEOF (QUERY (pdr <* property_definition_representation |
+               ((pdr.definition.definition = er) AND
+                ('FEATURE_BASED_PROCESS_PLANNING.FACE_SHAPE_REPRESENTATION' 
+                  IN TYPEOF (pdr.used_representation)) AND 
+                (pdr.used_representation.name = 'second face shape'))
+            )))
+        ))=0);
+END_RULE;
+
+RULE geometric_tolerance_subtype_exclusiveness FOR (geometric_tolerance);
+WHERE
+  WR1: SIZEOF (QUERY (gt <* geometric_tolerance |
+       NOT (SIZEOF (TYPEOF (gt) *
+       ['FEATURE_BASED_PROCESS_PLANNING.ANGULARITY_TOLERANCE',
+       'FEATURE_BASED_PROCESS_PLANNING.CIRCULAR_RUNOUT_TOLERANCE',
+       'FEATURE_BASED_PROCESS_PLANNING.CONCENTRICITY_TOLERANCE',
+       'FEATURE_BASED_PROCESS_PLANNING.CYLINDRICITY_TOLERANCE',
+       'FEATURE_BASED_PROCESS_PLANNING.FLATNESS_TOLERANCE',
+       'FEATURE_BASED_PROCESS_PLANNING.LINE_PROFILE_TOLERANCE',
+       'FEATURE_BASED_PROCESS_PLANNING.PARALLELISM_TOLERANCE', 
+       'FEATURE_BASED_PROCESS_PLANNING.PERPENDICULARITY_TOLERANCE',
+       'FEATURE_BASED_PROCESS_PLANNING.POSITION_TOLERANCE',
+       'FEATURE_BASED_PROCESS_PLANNING.ROUNDNESS_TOLERANCE',
+       'FEATURE_BASED_PROCESS_PLANNING.STRAIGHTNESS_TOLERANCE',
+       'FEATURE_BASED_PROCESS_PLANNING.SURFACE_PROFILE_TOLERANCE', 
+       'FEATURE_BASED_PROCESS_PLANNING.SYMMETRY_TOLERANCE',
+       'FEATURE_BASED_PROCESS_PLANNING.TOTAL_RUNOUT_TOLERANCE'])
+       <= 2))) = 0;
+END_RULE;
+
+ RULE machining_feature_life_cycle FOR    
+ (instanced_feature);
+WHERE
+  WR1: SIZEOF (QUERY (mf <* instanced_feature |
+       NOT (mf.of_shape.definition.frame_of_reference.life_cycle_stage =
+       'manufacturing planning'))) = 0;
+END_RULE;
+
+RULE material_is_specified_for_part FOR (product_definition, 
+  make_from_usage_option);
+WHERE
+  WR1: SIZEOF (QUERY (nmpd <* QUERY (pd <* product_definition |
+       SIZEOF (USEDIN (pd, 'FEATURE_BASED_PROCESS_PLANNING.' + 
+       'MATERIAL_DESIGNATION.DEFINITIONS')) = 0) |
+       NOT (SIZEOF (QUERY (mfuo <* make_from_usage_option |
+       NOT (nmpd :=: mfuo.relating_product_definition))) >= 1))) = 0;
+END_RULE;
+
+RULE mating_definition_requires_externally_defined_representation FOR
+  (product_definition,
+   externally_defined_representation_with_parameters);
+WHERE
+  WR1: SIZEOF (QUERY (pdf <* product_definition |
+       ((pdf.frame_of_reference.name='mating definition') AND 
+       (SIZEOF(QUERY ( pd <* USEDIN(pdf,
+        'FEATURE_BASED_PROCESS_PLANNING.'+
+        'PROPERTY_DEFINITION.DEFINITION') | 
+        (NOT (SIZEOF(QUERY ( dtm_rep <* QUERY ( pdr <* USEDIN(pd,
+        'FEATURE_BASED_PROCESS_PLANNING.'+
+        'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') | 
+        (('FEATURE_BASED_PROCESS_PLANNING.'+
+        'EXTERNALLY_DEFINED_REPRESENTATION_WITH_PARAMETERS') 
+        IN TYPEOF(pdr.used_representation)) ) | 
+        (NOT (SIZEOF(dtm_rep.used_representation.items) >= 0)) )) 
+        = 0)) )) = 0) )))=0; 
+       
+END_RULE;
+
+  RULE non_instantiable_description_attribute FOR (
+             description_attribute);
+  WHERE
+    wr1: (SIZEOF(QUERY ( da <* description_attribute | (NOT (SIZEOF(
+             USEDIN(da,'')) = 1)) )) = 0);
+  END_RULE; -- non_description_attribute
+
+  RULE non_instantiable_object_role FOR (
+             object_role);
+
+  WHERE
+    wr1: (SIZEOF(QUERY ( da <* object_role | (NOT (SIZEOF(
+             USEDIN(da,'')) = 1)) )) = 0);
+  END_RULE; --  non_object_role
+
+  RULE non_instantiable_role_association FOR (
+             role_association);
+  WHERE
+    wr1: (SIZEOF(QUERY ( da <* role_association | (NOT (SIZEOF(
+             USEDIN(da,'')) = 1)) )) = 0);
+  END_RULE; --   non_role_association
+
+RULE part_requires_project_order FOR (product_definition_formation, 
+  feature_based_pp_action_assignment);
+WHERE
+  WR1: SIZEOF (QUERY (pdf <* product_definition_formation |
+       NOT (SIZEOF (QUERY (fbppaa <* feature_based_pp_action_assignment | 
+       (pdf IN fbppaa.items) AND 
+       (fbppaa.assigned_action.name = 'project order'))) = 1 ))) = 0;
+END_RULE;
+
+RULE part_to_approval FOR (product_definition_formation, 
+  feature_based_pp_approval_assignment);
+WHERE
+  WR1: SIZEOF (QUERY (pdf <* product_definition_formation |
+       NOT (SIZEOF (QUERY (fbppa <* feature_based_pp_approval_assignment | 
+       pdf IN fbppa.items )) <= 1 ))) = 0;
+END_RULE;
+
+RULE product_requires_version FOR (product, product_definition_formation);
+WHERE
+  WR1: SIZEOF (QUERY (prod <* product |
+       NOT (SIZEOF (QUERY (pdf <* product_definition_formation | 
+       prod :=: pdf.of_product )) >= 1 ))) = 0;
+END_RULE;
+
+RULE product_definition_formation_requires_security_classification FOR
+  (product_definition_formation,
+  feature_based_pp_security_classification_assignment);
+WHERE
+  WR1: SIZEOF (QUERY (pdf <* product_definition_formation |
+       NOT (SIZEOF (QUERY (fbppsca <* 
+       feature_based_pp_security_classification_assignment | 
+       pdf IN fbppsca.items )) = 1 ))) = 0;
+END_RULE;
+
+RULE project_order_requires_approval FOR 
+  (directed_action, feature_based_pp_approval_assignment);
+WHERE
+  WR1: SIZEOF (QUERY (po <* QUERY (da <* directed_action | 
+       da.name = 'project order') |
+      NOT (SIZEOF (QUERY (fbppapp <* feature_based_pp_approval_assignment | 
+       po IN fbppapp.items )) = 1 ))) = 0;
+END_RULE;
+
+RULE project_order_tracking_relationships FOR (directed_action,
+  action_relationship);
+WHERE
+  WR1: SIZEOF (QUERY (da <* directed_action |
+       (da.name IN ['shop work order', 'resource acquisition order',
+       'digital technical data package work order',
+       'pedigree creation order']) AND
+       NOT (SIZEOF (QUERY (ar <* action_relationship |
+       (da :=: ar.related_action) AND
+       (('FEATURE_BASED_PROCESS_PLANNING.DIRECTED_ACTION' IN 
+       TYPEOF (ar.relating_action)) AND
+       (ar.relating_action.name = 'project order')))) = 1))) = 0;
+  WR2: SIZEOF (QUERY (da <* directed_action |
+       (da.name = 'project order') AND 
+       NOT (SIZEOF (QUERY (ar <* action_relationship |
+       (da :=: ar.relating_action) AND
+       (('FEATURE_BASED_PROCESS_PLANNING.DIRECTED_ACTION' IN 
+       TYPEOF (ar.related_action)) AND
+       (ar.related_action.name  = 'shop work order')))) <= 1))) = 0; 
+  WR3: SIZEOF (QUERY (da <* directed_action |
+       (da.name = 'project order') AND 
+       NOT (SIZEOF (QUERY (ar <* action_relationship |
+       (da :=: ar.relating_action) AND
+       (('FEATURE_BASED_PROCESS_PLANNING.DIRECTED_ACTION' IN 
+       TYPEOF (ar.related_action)) AND
+       (ar.related_action.name  = 'resource acquisition order')))) 
+       <= 1))) = 0; 
+  WR4: SIZEOF (QUERY (da <* directed_action |
+       (da.name = 'project order') AND
+       NOT (SIZEOF (QUERY (ar <* action_relationship |
+       (da :=: ar.relating_action) AND
+       (('FEATURE_BASED_PROCESS_PLANNING.DIRECTED_ACTION' IN 
+       TYPEOF (ar.related_action)) AND
+       (ar.related_action.name  = 
+       'digital technical data package work order')))) <= 1))) = 0; 
+  WR5: SIZEOF (QUERY (da <* directed_action |
+       (da.name = 'project order') AND 
+       NOT (SIZEOF (QUERY (ar <* action_relationship |
+       (da :=: ar.relating_action) AND
+       (('FEATURE_BASED_PROCESS_PLANNING.DIRECTED_ACTION' IN 
+       TYPEOF (ar.related_action)) AND
+       (ar.related_action.name  = 'pedigree creation order')))) 
+       <= 1))) = 0; 
+  WR6: SIZEOF (QUERY (da <* directed_action |
+       (da.name = 'customer order') AND
+       NOT (SIZEOF (QUERY (ar <* action_relationship |
+       (da :=: ar.related_action) AND
+       (('FEATURE_BASED_PROCESS_PLANNING.DIRECTED_ACTION' IN 
+       TYPEOF (ar.relating_action)) AND
+       (ar.relating_action.name = 'project order')))) >= 1))) = 0;
+  WR7: SIZEOF (QUERY (da <* directed_action |
+       (da.name = 'project order' ) AND 
+       NOT (SIZEOF (QUERY (ar <* action_relationship |
+       (da :=: ar.relating_action) AND
+       (('FEATURE_BASED_PROCESS_PLANNING.DIRECTED_ACTION' IN 
+       TYPEOF (ar.related_action)) AND
+       (ar.related_action.name  = 'customer order')))) 
+       <= 1))) = 0; 
+END_RULE;
+
+RULE representation_subtype_exclusiveness FOR (representation);
+WHERE
+  WR1: SIZEOF (QUERY (rep <* representation |
+       NOT (SIZEOF (TYPEOF (rep) *
+       ['FEATURE_BASED_PROCESS_PLANNING.SHAPE_REPRESENTATION',
+       'FEATURE_BASED_PROCESS_PLANNING.DEFINITIONAL_REPRESENTATION', 
+       'FEATURE_BASED_PROCESS_PLANNING.DIRECTION_SHAPE_REPRESENTATION',
+       'FEATURE_BASED_PROCESS_PLANNING.FACE_SHAPE_REPRESENTATION',
+       'FEATURE_BASED_PROCESS_PLANNING.PLANAR_SHAPE_REPRESENTATION',
+       'FEATURE_BASED_PROCESS_PLANNING.LOCATION_SHAPE_REPRESENTATION',
+       'FEATURE_BASED_PROCESS_PLANNING.PATH_SHAPE_REPRESENTATION']) 
+       <= 2))) = 0;
+END_RULE;
+
+RULE restrict_approval_status FOR (approval_status);
+WHERE
+  WR1: SIZEOF (QUERY (ast <* approval_status | 
+       NOT (ast.name IN 
+       ['approved', 'not yet approved', 'disapproved', 'withdrawn']))) = 0;
+END_RULE;
+
+RULE restrict_externally_defined_feature_definition 
+  FOR(EXTERNALLY_DEFINED_FEATURE_DEFINITION);
+WHERE 
+      wr1:((SIZEOF(QUERY ( ex <* externally_defined_feature_definition | 
+         (NOT (SIZEOF(QUERY ( adr <* USEDIN(ex,
+         'FEATURE_BASED_PROCESS_PLANNING.APPLIED_DOCUMENT_REFERENCE.ITEMS')| 
+         ('FEATURE_BASED_PROCESS_PLANNING.DOCUMENT_FILE' 
+         IN TYPEOF(adr.assigned_document)))) >=1)))) =0) OR 
+         (SIZEOF(QUERY ( ex <* externally_defined_feature_definition | 
+         (NOT (SIZEOF(QUERY ( adr <* USEDIN(ex,
+         'FEATURE_BASED_PROCESS_PLANNING'+
+         '.APPLIED_DOCUMENT_USAGE_CONSTRAINT_ASSIGNMENT.ITEMS')| 
+         ('FEATURE_BASED_PROCESS_PLANNING.DOCUMENT_FILE' 
+         IN TYPEOF(adr\document_usage_constraint_assignment.assigned_document_usage.source)))) 
+         >=1)))) =0));
+END_RULE;
+
+RULE restrict_security_classification_level FOR
+  (security_classification_level);
+WHERE
+  WR1: SIZEOF (QUERY (scl <* security_classification_level |
+       NOT (scl.name IN 
+       ['unclassified', 'classified', 'proprietary','confidential', 'secret',
+       'top_secret']))) = 0;
+END_RULE;
+
+RULE shape_aspect_relationship_subtype_exclusiveness FOR 
+  (shape_aspect_relationship);
+WHERE
+  WR1: SIZEOF (QUERY (sr <* shape_aspect_relationship |
+       NOT (SIZEOF (TYPEOF (sr) *
+       ['FEATURE_BASED_PROCESS_PLANNING.DIMENSIONAL_LOCATION',
+       'FEATURE_BASED_PROCESS_PLANNING.GEOMETRIC_TOLERANCE_RELATIONSHIP',
+       'FEATURE_BASED_PROCESS_PLANNING.FEATURE_COMPONENT_RELATIONSHIP',
+       'FEATURE_BASED_PROCESS_PLANNING.SHAPE_DEFINING_RELATIONSHIP'])
+       <= 2))) = 0;
+END_RULE;
+
+RULE shape_aspect_subtype_exclusiveness FOR (shape_aspect);
+  WHERE
+    wr1: (SIZEOF(QUERY ( sr <* shape_aspect | (NOT (SIZEOF(TYPEOF(sr) * [
+             'FEATURE_BASED_PROCESS_PLANNING.PATH_FEATURE_COMPONENT',
+             'FEATURE_BASED_PROCESS_PLANNING.SLOT_END',
+             'FEATURE_BASED_PROCESS_PLANNING.POCKET_BOTTOM',
+             'FEATURE_BASED_PROCESS_PLANNING.PROFILE_FLOOR',
+             'FEATURE_BASED_PROCESS_PLANNING.RIB_TOP_FLOOR',
+             'FEATURE_BASED_PROCESS_PLANNING.BOSS_TOP',
+             'FEATURE_BASED_PROCESS_PLANNING.HOLE_BOTTOM',
+             'FEATURE_BASED_PROCESS_PLANNING.APPLIED_AREA',
+             'FEATURE_BASED_PROCESS_PLANNING.TAPER',
+             'FEATURE_BASED_PROCESS_PLANNING.CHAMFER_OFFSET',
+             'FEATURE_BASED_PROCESS_PLANNING.CIRCULAR_CLOSED_PROFILE',
+             'FEATURE_BASED_PROCESS_PLANNING.NGON_CLOSED_PROFILE',
+             'FEATURE_BASED_PROCESS_PLANNING.CLOSED_PATH_PROFILE',
+             'FEATURE_BASED_PROCESS_PLANNING.SQUARE_U_PROFILE',
+             'FEATURE_BASED_PROCESS_PLANNING.LINEAR_PROFILE',
+             'FEATURE_BASED_PROCESS_PLANNING.TEE_PROFILE',
+             'FEATURE_BASED_PROCESS_PLANNING.VEE_PROFILE',
+             'FEATURE_BASED_PROCESS_PLANNING.RECTANGULAR_CLOSED_PROFILE',
+             'FEATURE_BASED_PROCESS_PLANNING.PARTIAL_CIRCULAR_PROFILE',
+             'FEATURE_BASED_PROCESS_PLANNING.ROUNDED_U_PROFILE',
+             'FEATURE_BASED_PROCESS_PLANNING.OPEN_PATH_PROFILE',
+             'FEATURE_BASED_PROCESS_PLANNING.INSTANCED_FEATURE',
+             'FEATURE_BASED_PROCESS_PLANNING.REPLICATE_FEATURE',
+             'FEATURE_BASED_PROCESS_PLANNING.TRANSITION_FEATURE',
+             'FEATURE_BASED_PROCESS_PLANNING.DATUM',
+             'FEATURE_BASED_PROCESS_PLANNING.DATUM_FEATURE',
+             'FEATURE_BASED_PROCESS_PLANNING.DATUM_TARGET']) <= 2)) )) 
+             = 0);
+  END_RULE; -- shape_aspect_subtype_exclusiveness
+
+RULE shape_representation_subtype_exclusiveness FOR (shape_representation);
+WHERE
+  WR1: SIZEOF (QUERY (sr <* shape_representation |
+       NOT (SIZEOF (TYPEOF (sr) *
+      ['FEATURE_BASED_PROCESS_PLANNING.ADVANCED_BREP_SHAPE_REPRESENTATION', 
+     'FEATURE_BASED_PROCESS_PLANNING.SHAPE_REPRESENTATION_WITH_PARAMETERS',
+     'FEATURE_BASED_PROCESS_PLANNING.SHAPE_DIMENSION_REPRESENTATION']) 
+       <= 2))) = 0;
+END_RULE;
+
+
+  RULE subtype_mandatory_characterized_object FOR (characterized_object);
+  WHERE
+    wr1: ((SIZEOF(QUERY ( csa <* characterized_object | 
+         (NOT (SIZEOF([
+         'FEATURE_BASED_PROCESS_PLANNING.DOCUMENT_FILE',
+         'FEATURE_BASED_PROCESS_PLANNING.FEATURE_DEFINITION',
+         'FEATURE_BASED_PROCESS_PLANNING.FEATURE_COMPONENT_DEFINITION',
+         'FEATURE_BASED_PROCESS_PLANNING.ORDERED_PART'] * 
+         TYPEOF(csa)) = 1))  
+         AND
+         (NOT(SIZEOF(QUERY ( pd <* USEDIN(csa,
+         'FEATURE_BASED_PROCESS_PLANNING.PROPERTY_DEFINITION.DEFINITION') | 
+         ('FEATURE_BASED_PROCESS_PLANNING.MATERIAL_PROPERTY' 
+         IN TYPEOF(pd)) )) = 1))
+         )) = 0) );
+  END_RULE; -- subtype_mandatory_characterized_object
+
+RULE transition_feature_life_cycle FOR    
+ (transition_feature);
+WHERE
+  WR1: SIZEOF (QUERY (tf <* transition_feature |
+       NOT (tf.of_shape.definition.frame_of_reference.life_cycle_stage =
+       'manufacturing planning'))) = 0;
+END_RULE;
+
+RULE transition_feature_on_part_boundary FOR    
+ (transition_feature);
+WHERE
+  WR1: SIZEOF (QUERY (tf <* transition_feature |
+       NOT (tf.product_definitional))) = 0;
+END_RULE;
+
+END_SCHEMA;	-- feature_based_process_planning

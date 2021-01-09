@@ -1,0 +1,13 @@
+(*
+ $Id: 10303-1208-arm-schematic_element_library.exp,v 1.1 2006/08/04 12:01:51 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2831 - ISO/TS 10303-1208 Schematic element library - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG12 N2204
+*)
+
+SCHEMA Schematic_element_library_arm;
+
+USE FROM Schematic_element_arm;    --  ISO/TS 10303-1205
+USE FROM Symbolization_by_schematic_element_arm;    --  ISO/TS 10303-1209
+USE FROM Set_theory_arm;    --  ISO/TS 10303-1210
+
+END_SCHEMA;

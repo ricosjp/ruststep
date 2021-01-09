@@ -1,0 +1,24 @@
+(*
+WG12 N655
+ISO/TS 10303-1002
+Product data representation and exchange: Application module: Colour
+*)
+
+SCHEMA Colour_mim;
+  USE FROM external_reference_schema -- ISO 10303-41
+      (externally_defined_item);
+  USE FROM presentation_resource_schema -- ISO 10303-46
+      (colour,
+       colour_rgb,
+       colour_specification,
+       draughting_pre_defined_colour,
+       pre_defined_colour);
+  USE FROM support_resource_schema -- ISO 10303-41
+      (identifier);
+
+ ENTITY externally_defined_colour
+  SUBTYPE OF (colour_specification,externally_defined_item);
+END_ENTITY; -- externally_defined_colour
+
+END_SCHEMA;
+

@@ -1,0 +1,23 @@
+(*
+ $Id: 10303-1240-arm-organization_type.exp,v 1.2 2006/08/07 07:44:44 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N3091 - ISO/TS 10303-1240 Organization type - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG12 N2399
+*) 
+
+
+SCHEMA Organization_type_arm;
+
+USE FROM Person_organization_arm;    -- ISO/TS 10303-1011
+
+
+ENTITY Organization_organization_type_relationship;
+  organization : Organization;
+  organization_type : Organization_type;
+END_ENTITY;
+
+ENTITY Organization_type;
+  name : STRING;
+  description : OPTIONAL STRING;
+END_ENTITY;
+
+END_SCHEMA;  -- Organization_type_arm

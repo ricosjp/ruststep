@@ -1,0 +1,29 @@
+(*
+   $Id: 10303-1115-arm-part_collection.exp,v 1.1 2006/08/03 14:41:10 wg12deputy Exp $
+   ISO/TC184/SC4 WG12N2601 - ISO/TS 10303-1115 part_collection - EXPRESS ARM
+   Supersedes ISO TC184/SC4/WG12N1735
+*)
+
+SCHEMA Part_collection_arm;
+
+USE FROM Product_occurrence_arm;
+
+USE FROM Part_view_definition_arm;
+
+REFERENCE FROM Product_identification_arm(
+	types_of_product);
+
+ENTITY Collected_item_association
+SUBTYPE OF (Part_occurrence_definition_relationship);
+  SELF\View_definition_relationship.relating_view : Collection_definition;
+WHERE
+WR1: NOT ('PART_COLLECTION_ARM.ASSEMBLY_COMPONENT_RELATIONSHIP' IN TYPEOF(SELF));
+END_ENTITY;
+
+ENTITY Collection_definition
+SUBTYPE OF (Part_view_definition);
+WHERE
+WR1: 'collection' IN types_of_product(SELF\Product_view_definition.defined_version.of_product);
+END_ENTITY;
+
+END_SCHEMA;

@@ -1,0 +1,21 @@
+(*
+ $Id: 10303-1038-arm-independent_property_representation.exp,v 1.5 2006/08/07 07:44:42 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2966 - ISO/TS 10303-1038 Independent property representation - EXPRESS ARM
+*) 
+
+
+SCHEMA Independent_property_representation_arm; 
+
+USE FROM Foundation_representation_arm;    -- ISO/TS 10303-1006
+
+USE FROM Independent_property_arm;    -- ISO/TS 10303-1036
+
+
+ENTITY Independent_property_representation;
+  description : OPTIONAL STRING;
+  property : Independent_property;
+  rep : Representation;
+  role : OPTIONAL STRING;
+END_ENTITY;
+
+END_SCHEMA;  -- Independent_property_representation_arm

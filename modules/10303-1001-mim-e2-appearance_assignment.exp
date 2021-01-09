@@ -1,0 +1,45 @@
+(*
+ISO TC184/SC4/WG12 N2691 - ISO/TS 10303-1001 Appearance assignment - EXPRESS MIM
+*) 
+
+
+SCHEMA Appearance_assignment_mim;
+
+USE FROM aic_associative_draughting_elements;    -- 10303-520
+
+USE FROM aic_mechanical_design_geometric_presentation;    -- 10303-517
+
+USE FROM Elemental_geometric_shape_mim;    -- ISO/TS 10303-1004
+
+USE FROM Foundation_representation_mim;    -- ISO/TS 10303-1006
+
+USE FROM Identification_assignment_mim;    -- ISO/TS 10303-1021
+
+USE FROM presentation_appearance_schema   -- 10303-46
+  (invisibility,
+   over_riding_styled_item,
+   presentation_style_assignment,
+   presentation_style_by_context,
+   styled_item); 
+
+USE FROM representation_schema   -- ISO 10303-43
+  (mapped_item); 
+
+
+TYPE appearance_representation_identification_item = SELECT BASED_ON identification_item WITH 
+   (draughting_model, 
+    mechanical_design_geometric_presentation_representation);
+END_TYPE; 
+
+TYPE appearance_representation_version_item = SELECT BASED_ON versionable_item WITH 
+   (draughting_model, 
+    mechanical_design_geometric_presentation_representation);
+END_TYPE; 
+
+RULE styled_curve FOR 
+(styled_item);
+WHERE
+  WR1: SIZEOF( QUERY( si <* styled_item | ('APPEARANCE_ASSIGNMENT_MIM.CURVE' IN TYPEOF (si.item)) AND (SIZEOF (QUERY (psa <* si.styles | (SIZEOF (QUERY (cs <* psa.styles | ('APPEARANCE_ASSIGNMENT_MIM.CURVE_STYLE' IN TYPEOF (cs)) )) > 0) )) <> 1) )) = 0;
+END_RULE; 
+
+END_SCHEMA;  -- Appearance_assignment_mim

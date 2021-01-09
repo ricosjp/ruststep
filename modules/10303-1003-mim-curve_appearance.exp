@@ -1,0 +1,67 @@
+(*
+WG12 N657
+ISO/TS 10303-1003
+Product data representation and exchange: Application module: Curve appearance
+*)
+
+SCHEMA Curve_appearance_mim;
+  USE FROM representation_schema -- ISO 10303-43
+      (mapped_item);
+  USE FROM presentation_appearance_schema -- ISO 10303-46
+      (curve_style,
+       curve_style_font,
+       curve_style_font_pattern,
+       draughting_pre_defined_curve_font,
+       externally_defined_curve_font,
+       marker_select,
+       marker_type,
+       pre_defined_curve_font,
+       pre_defined_marker,
+       point_style);
+  USE FROM presentation_definition_schema -- ISO 10303-46
+      (pre_defined_symbol,
+       externally_defined_symbol);
+  USE FROM Colour_mim; -- ISO/TS 10303-1002
+  USE FROM Elemental_geometric_shape_mim; -- ISOTS 10303-1004
+
+TYPE terminator = SELECT
+  (externally_defined_terminator_symbol,
+   pre_defined_terminator_symbol,
+   user_defined_terminator_symbol);
+END_TYPE;
+
+ ENTITY externally_defined_marker
+  SUBTYPE OF (externally_defined_symbol, pre_defined_marker);
+END_ENTITY;
+
+ENTITY externally_defined_terminator_symbol
+  SUBTYPE OF (externally_defined_symbol);
+END_ENTITY;
+
+ENTITY pre_defined_terminator_symbol
+  SUBTYPE OF (pre_defined_symbol);
+WHERE
+  WR1: SELF.name IN ['blanked arrow', 'blanked box',
+       'blanked dot', 'dimension origin', 'filled arrow',
+       'filled box', 'filled dot', 'integral symbol',
+       'open arrow', 'slash', 'unfilled arrow'];
+END_ENTITY;
+
+ENTITY user_defined_curve_font
+  SUBTYPE OF (curve_style_font, mapped_item);
+END_ENTITY;
+
+ENTITY user_defined_marker
+  SUBTYPE OF (pre_defined_marker, mapped_item);
+END_ENTITY;
+
+ENTITY user_defined_terminator_symbol
+  SUBTYPE OF (pre_defined_symbol, mapped_item);
+END_ENTITY;
+
+ENTITY vector_style
+  SUBTYPE OF (curve_style, pre_defined_terminator_symbol);
+END_ENTITY;
+
+END_SCHEMA; -- Curve_appearance_mim
+

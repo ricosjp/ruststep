@@ -1,0 +1,32 @@
+(*
+ISO TC184/SC4/WG12 N2694 - ISO/TS 10303-1132 Associative text - EXPRESS MIM
+*) 
+
+
+SCHEMA Associative_text_mim;
+
+USE FROM Appearance_assignment_mim;    -- ISO/TS 10303-1001
+
+USE FROM Curve_appearance_mim;    -- ISO/TS 10303-1003
+
+USE FROM Text_appearance_mim;    -- ISO/TS 10303-1136
+
+USE FROM Construction_geometry_mim;    -- ISO/CD-TS 10303-1131
+
+USE FROM Elemental_geometric_shape_mim;    -- ISO/TS 10303-1004
+
+USE FROM Shape_property_assignment_mim;    -- ISO/TS 10303-1032
+
+USE FROM draughting_element_schema   -- ISO 10303-101
+  (leader_curve); 
+
+USE FROM aic_associative_draughting_elements;    -- 10303-520
+
+USE FROM aic_draughting_annotation;    -- 10303-504
+
+USE FROM aic_draughting_elements;    -- 10303-506
+
+USE FROM presentation_definition_schema;    -- ISO 10303-46
+
+
+END_SCHEMA;  -- Associative_text_mim

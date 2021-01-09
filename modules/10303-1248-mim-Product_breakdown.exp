@@ -1,0 +1,81 @@
+(*
+ $Id: 10303-1248-mim-Product_breakdown.exp,v 1.2 2006/08/07 09:42:05 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N3110 - ISO/TS 10303-1248 Product breakdown - EXPRESS MIM
+ Supersedes ISO TC184/SC4/WG12 N2295
+*) 
+
+
+SCHEMA Product_breakdown_mim;
+
+USE FROM group_schema;    -- ISO 10303-41
+
+USE FROM management_resources_schema   -- ISO 10303-41
+  (group_assignment); 
+
+USE FROM product_definition_schema   -- ISO 10303-41
+  (product_definition,
+   product_definition_relationship); 
+
+USE FROM Product_identification_mim;    -- ISO/TS 10303-1017
+
+USE FROM product_property_definition_schema;    -- ISO 10303-41
+
+USE FROM product_structure_schema   -- ISO 10303-44
+  (product_definition_usage); 
+
+USE FROM Product_version_mim;    -- ISO/TS 10303-1018
+
+USE FROM Product_view_definition_mim;    -- ISO/TS 10303-1019
+
+USE FROM Product_view_definition_relationship_mim;    -- ISO/TS 10303-1041
+
+USE FROM Property_assignment_mim;    -- ISO/TS 10303-1030
+
+
+TYPE product_definition_or_breakdown_element_usage = EXTENSIBLE GENERIC_ENTITY SELECT
+   (breakdown_element_usage, 
+    product_definition);
+END_TYPE; 
+
+TYPE product_definition_or_product_definition_relationship = EXTENSIBLE GENERIC_ENTITY SELECT
+   (product_definition, 
+    product_definition_usage);
+END_TYPE; 
+
+ENTITY breakdown_context
+  SUBTYPE OF (product_definition_relationship);
+END_ENTITY;
+
+ENTITY breakdown_element_group_assignment
+  SUBTYPE OF (group_assignment);
+  SELF\group_assignment.assigned_group : product_definition_element_relationship;
+  items : SET[1:1] OF product_definition_or_breakdown_element_usage;
+END_ENTITY;
+
+ENTITY breakdown_element_realization
+  SUBTYPE OF (characterized_object, product_definition_element_relationship);
+END_ENTITY;
+
+ENTITY breakdown_element_usage
+  SUBTYPE OF (product_definition_relationship);
+END_ENTITY;
+
+ENTITY breakdown_of
+  SUBTYPE OF (product_definition_relationship);
+END_ENTITY;
+
+ENTITY product_definition_element_relationship
+  SUBTYPE OF (group);
+END_ENTITY;
+
+ENTITY product_definition_group_assignment
+  SUBTYPE OF (group_assignment);
+  SELF\group_assignment.assigned_group : product_definition_element_relationship;
+  items : SET[1:1] OF product_definition_or_product_definition_relationship;
+END_ENTITY;
+
+END_SCHEMA;  -- Product_breakdown_mim
+
+
+
+

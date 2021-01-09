@@ -1,0 +1,14 @@
+(*
+ $Id: 10303-1170-arm-Class_of_activity_structure.exp,v 1.4 2006/08/04 12:01:50 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2720 - ISO/TS 10303-1170 Class of activity structure - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG12 N1837
+*)
+
+SCHEMA Class_of_activity_structure_arm;
+
+USE FROM Class_of_activity_arm;    -- ISO/TS 10303-1071
+USE FROM Class_of_composition_of_activity_arm;    -- ISO/TS 10303-1171
+USE FROM Class_of_connection_of_activity_arm;    -- ISO/TS 10303-1172
+USE FROM Class_of_involvement_in_activity_arm;    -- ISO/TS 10303-1173
+
+END_SCHEMA;

@@ -1,0 +1,41 @@
+(*
+ $Id: 10303-1217-mim-Zonal_breakdown.exp,v 1.2 2006/08/07 09:42:04 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N3200 - ISO/TS 10303-1217 Zonal breakdown - EXPRESS MIM
+ Supersedes ISO TC184/SC4/WG12 N2304
+*) 
+
+
+SCHEMA Zonal_breakdown_mim;
+
+USE FROM Group_mim;    -- ISO/TS 10303-1113
+
+USE FROM group_schema   -- ISO 10303-41
+  (group); 
+
+USE FROM Product_breakdown_mim;    -- ISO/TS 10303-1248
+
+USE FROM product_definition_schema   -- ISO 10303-41
+  (product_definition); 
+
+USE FROM Product_view_definition_mim;    -- ISO/TS 10303-1019
+
+
+TYPE in_zone_groupable_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON groupable_item WITH 
+   (product_definition);
+END_TYPE; 
+
+ENTITY in_zone
+  SUBTYPE OF (group);
+END_ENTITY;
+
+ENTITY zone_breakdown_context
+  SUBTYPE OF (breakdown_context);
+END_ENTITY;
+
+ENTITY zone_element_usage
+  SUBTYPE OF (breakdown_element_usage);
+END_ENTITY;
+
+END_SCHEMA;  -- Zonal_breakdown_mim
+
+

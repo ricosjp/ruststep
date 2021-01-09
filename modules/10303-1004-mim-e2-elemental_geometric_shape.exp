@@ -1,0 +1,40 @@
+(* 
+$Id: 10303-1004-mim-e2-elemental_geometric_shape.exp,v 1.3 2003/10/21 12:49:17 wg12deputy Exp $
+ISO/TC184/SC4 WG12N2103 - ISO/TS 10303-1004 Elemental geometric shape - EXPRESS MIM *)
+   
+SCHEMA Elemental_geometric_shape_mim;
+  
+USE FROM Foundation_representation_mim;
+
+USE FROM Identification_assignment_mim; -- ISO 10303-1021
+
+USE FROM Value_with_unit_mim; -- ISO 10303-1054
+
+USE FROM geometry_schema -- ISO 10303-42
+      (cartesian_point,
+       direction,
+       axis2_placement_2d,
+       axis2_placement_3d,
+       geometric_representation_context,
+       geometric_representation_item,
+       cartesian_transformation_operator_2d,
+       cartesian_transformation_operator_3d);
+
+USE FROM product_property_representation_schema -- ISO 10303-41
+      (shape_representation,
+  	 shape_representation_relationship);
+
+USE FROM representation_schema -- ISO 10303-43
+      (item_defined_transformation,
+	value_representation_item);
+
+TYPE representation_identification_item = SELECT BASED_ON identification_item WITH 
+  (shape_representation);
+END_TYPE; 
+ 
+TYPE representation_version_item = SELECT BASED_ON versionable_item WITH 
+  (shape_representation);
+END_TYPE;
+
+END_SCHEMA;
+

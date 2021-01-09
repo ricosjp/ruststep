@@ -1,0 +1,50 @@
+(*
+ $Id: 10303-1294-arm-Interface_lifecycle.exp,v 1.2 2006/08/07 07:44:46 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N3064 - ISO/TS 10303-1294 Interface lifecycle - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG12 N2276
+*) 
+
+
+SCHEMA Interface_lifecycle_arm;
+
+USE FROM Interface_arm;    -- ISO/TS 10303-1251
+
+
+ENTITY Interface_connector_as_planned
+  SUBTYPE OF (Interface_connector_version);
+END_ENTITY;
+
+ENTITY Interface_connector_as_realized
+  SUBTYPE OF (Interface_connector_version);
+END_ENTITY;
+
+ENTITY Interface_connector_design
+  SUBTYPE OF (Interface_connector_version);
+END_ENTITY;
+
+ENTITY Interface_connector_design_to_planned;
+  id : STRING;
+  name : STRING;
+  description : OPTIONAL STRING;
+  design : Interface_connector_design;
+  planned : Interface_connector_as_planned;
+END_ENTITY;
+
+ENTITY Interface_connector_design_to_realized;
+  id : STRING;
+  name : STRING;
+  description : OPTIONAL STRING;
+  design : Interface_connector_design;
+  realized : Interface_connector_as_realized;
+END_ENTITY;
+
+ENTITY Interface_connector_planned_to_realized;
+  id : STRING;
+  name : STRING;
+  description : OPTIONAL STRING;
+  planned : Interface_connector_as_planned;
+  realized : Interface_connector_as_realized;
+END_ENTITY;
+
+END_SCHEMA;  -- Interface_lifecycle_arm
+

@@ -1,0 +1,25 @@
+(*
+ $Id: 10303-1199-arm-Possession_of_property.exp,v 1.4 2006/08/04 12:01:51 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2804 - ISO/TS 10303-1199 Possession of property - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG12 N2057
+*)
+
+SCHEMA Possession_of_property_arm;
+
+USE FROM Individual_activity_arm;    --  ISO/TS 10303-1176
+USE FROM Independent_property_definition_arm;    --  ISO/TS 10303-1099
+USE FROM Process_property_assignment_arm;    --  ISO/TS 10303-1040
+USE FROM Product_as_individual_arm;    --  ISO/TS 10303-1164
+USE FROM Property_assignment_arm;    --  ISO/TS 10303-1030
+
+TYPE characterized_individual_physical_object = SELECT BASED_ON property_assignment_select WITH 
+   (Individual_activity, 
+    Product_as_individual_version);
+END_TYPE; 
+
+ENTITY Possession_of_property
+  SUBTYPE OF (Applied_independent_property);
+  SELF\Applied_independent_property.base_independent_property : Physical_quantity_instance;
+END_ENTITY;
+
+END_SCHEMA;

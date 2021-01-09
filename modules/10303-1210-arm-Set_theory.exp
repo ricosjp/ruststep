@@ -1,0 +1,71 @@
+(*
+ $Id: 10303-1210-arm-Set_theory.exp,v 1.2 2006/08/07 07:44:44 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N3166 - ISO/TS 10303-1210 Set theory - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG12 N2297
+*) 
+
+
+SCHEMA Set_theory_arm;
+
+USE FROM Class_arm;    -- ISO/TS 10303-1070
+
+
+ENTITY Complement;
+  id : STRING;
+  name : STRING;
+  description : STRING;
+  set_1 : Class;
+  set_2 : Class;
+  universe : Class;
+END_ENTITY;
+
+ENTITY Intersection;
+  id : STRING;
+  name : STRING;
+  description : OPTIONAL STRING;
+  operand : SET[2:?] OF Class;
+  resultant : Class;
+END_ENTITY;
+
+ENTITY Power_set;
+  id : STRING;
+  name : STRING;
+  description : OPTIONAL STRING;
+  base : Class;
+  derived : Class;
+END_ENTITY;
+
+ENTITY Proper_subset;
+  id : STRING;
+  name : STRING;
+  description : OPTIONAL STRING;
+  subset : Class;
+  superset : Class;
+END_ENTITY;
+
+ENTITY Same_membership;
+  id : STRING;
+  name : STRING;
+  description : OPTIONAL STRING;
+  set_1 : Class;
+  set_2 : Class;
+END_ENTITY;
+
+ENTITY Subset;
+  id : STRING;
+  name : STRING;
+  description : OPTIONAL STRING;
+  subset : Class;
+  superset : Class;
+END_ENTITY;
+
+ENTITY Union;
+  id : STRING;
+  name : STRING;
+  description : OPTIONAL STRING;
+  operand : SET[2:?] OF Class;
+  resultant : Class;
+END_ENTITY;
+
+END_SCHEMA;  -- Set_theory_arm
+

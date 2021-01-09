@@ -1,0 +1,198 @@
+ISO-10303-21;
+HEADER;
+FILE_DESCRIPTION(('PLIB FUNCTIONAL MODEL EXAMPLE 1'), '1');
+FILE_NAME('P24_fm_implicit_p101.spf',
+          '2000-06-05T02:38:14',
+          (''),
+          ('LISI/ENSMA'),
+          'ECCO RUNTIME SYSTEM BUILT-IN PREPROCESSOR V2.3.3',
+          'ECCO RUNTIME SYSTEM V2.3.3',
+          '');
+FILE_SCHEMA(('ISO13584_F_M_IIM_LIBRARY_IMPLICIT_SCHEMA'));
+ENDSEC;
+
+DATA;
+
+/* Global library description */
+#2=LIBRARY_IN_STANDARD_FORMAT($, $, $, $, (), #30, #11, (#7), (#12), (#20, #30, #40), (#50, #60, #140, #130), (), #3, $, $, ());
+#3=ITEM_NAMES(LABEL('Functional geometry model'), (), LABEL(''), $,
+$);
+#6=ORGANIZATION('ISO', 'International Organization for Standardization', '');
+#7=STANDARD_SIMPLE_PROGRAM_PROTOCOL(#6, $, 'ISO_13584_31', '001', '1', #8, $, 'FORTRAN', .SOURCE., $, $, $);
+#8=ITEM_NAMES(LABEL('ISO_13584_31'), (), LABEL('ISO_13584_31'), $, $);
+#11=LIBRARY_IIM_IDENTIFICATION($, 'IS', 'ISO_13584_24_2', 2001, '3', $, ());
+#12=VIEW_EXCHANGE_PROTOCOL_IDENTIFICATION($, 'IS', 'ISO_13584_101', 2001, '1', '1', (#7), $);
+#10=GLOBAL_LANGUAGE_ASSIGNMENT('en');
+
+/* DICTIONARY DESCRIPTION */
+/* BSU for supplier */
+#20=SUPPLIER_BSU('INA', *);	/* INA code unknown */
+#30=SUPPLIER_BSU('9/19860073600021', *);
+   /* LISI/ENSMA code in the coding scheme ICD=0009: SIRET number */
+#40=SUPPLIER_BSU('0112/1///13584_101_1', *);
+   /* Identification of ISO 13584-101 according to ISO 13584-26 */
+
+/* BSU for component_class */
+#50=CLASS_BSU('Bearing', '001', #20);
+#60=CLASS_BSU('PAW', '001', #20);
+#130=CLASS_BSU('PAW_Geometry', '001', #30);
+#140=CLASS_BSU('basic_geometry', '001', #40);
+
+/* BSU for properties */
+#90=PROPERTY_BSU('d_in', '001', #50);
+#100=PROPERTY_BSU('d_out', '001', #50);
+#110=PROPERTY_BSU('e', '001', #50);
+#150=PROPERTY_BSU('geometry_level', '001', #140);
+#160=PROPERTY_BSU('detail_level', '001', #140);
+#170=PROPERTY_BSU('side', '001', #140);
+#180=PROPERTY_BSU('prg', '001', #130);
+#190=PROPERTY_BSU('required_side', '001', #130);
+#200=PROPERTY_BSU('variant', '001', #140);
+#210=PROPERTY_BSU('unreg_variant', '001', #140);
+
+/* BSU for table */
+#230=TABLE_BSU('T2', '001', #130);
+
+/* v_c_v range */
+#155=VIEW_CONTROL_VARIABLE_RANGE(#150, 1, 1);
+#165=VIEW_CONTROL_VARIABLE_RANGE(#160, 2, 2);
+#175=VIEW_CONTROL_VARIABLE_RANGE(#170, 1, 6);
+#205=VIEW_CONTROL_VARIABLE_RANGE(#200, 1, 1);
+#215=VIEW_CONTROL_VARIABLE_RANGE(#210, 0, 0);
+
+/* supplier description */
+#31=SUPPLIER_ELEMENT(#30, $, '001', #32, #33);
+#32=ORGANIZATION('LISI/ENSMA', 'LISI/ENSMA', '');
+#33=ADDRESS($, $, $, $, $, $, $, 'FRANCE', $, $, $, $);
+
+/* Dictionary table description */
+#231=TABLE_ELEMENT(#230, $, '001', #232, TEXT('Definition of the
+geometry programs according to the side of the part'), $, $, *, (#196,
+#186), (#196));
+#232=ITEM_NAMES(LABEL('side / prg table'), (), LABEL(''), $, $);
+
+/* Dictionary properties description */
+/* prg */
+#91=REPRESENTATION_P_DET (#180, $, '001', #92, TEXT('variable used to
+reference geometry programs'), $, $, $, $, (), $, 'A58', #93, $);
+#92=ITEM_NAMES (LABEL('related program'), (), LABEL(''), $, $);
+#93=PROGRAM_REFERENCE_TYPE ((
+'ISO13584_F_M_IIM_LIBRARY_IMPLICIT_SCHEMA.PROGRAM_REFERENCE'));
+
+/* required side */
+#101=REPRESENTATION_P_DET(#190, $, '001', #102, TEXT('property used
+to store the required side'), $, $, $, $, (), $, 'A58', #103, $);
+#102=ITEM_NAMES(LABEL('side to be represented'), (), LABEL(''), $,
+$);
+#103=INT_TYPE('N 1');
+
+/* class - table relationship */
+#1424=CLASS_TABLE_RELATIONSHIP(#71, (#230));
+
+/* Dictionary class description */
+/* Functional model class view_of definition*/
+#71=FM_CLASS_VIEW_OF(#130, $, '001', #72, TEXT('Functional model
+class describing the 2d standard geometry of PAW'), $, $, $, $, (#180,
+#190), (), *, *, *, *, *, #140, (#155, #165, #175, #205, #215), (#150,
+#160, #170, #200, #210), (), (), (), (), (), (), (), (), #60, (#90, #100, #110), (),(),());
+#72=ITEM_NAMES(LABEL('Functional model class of PAW'), (), LABEL('fm class of PAW'), $, $);
+
+/* Definition of the properties semantics */
+#176=OPEN_VIEW_PROPERTY_VALUE_SEMANTICS(#170, $);
+#186=SELF_PROPERTY_VALUE_SEMANTICS(#180, $);
+#196=SELF_PROPERTY_VALUE_SEMANTICS(#190, $);
+#206=COLUMN_TRAVERSAL_VARIABLE_SEMANTICS(#2407, #196);
+
+#96 =SELF_PROPERTY_VALUE_SEMANTICS(#90, $);
+#106=SELF_PROPERTY_VALUE_SEMANTICS(#100, $);
+#116=SELF_PROPERTY_VALUE_SEMANTICS(#110, $);
+
+/* Properties syntax definition */
+#177=INT_NUMERIC_VARIABLE();
+#187=ENTITY_INSTANCE_VARIABLE((
+'ISO13584_F_M_IIM_LIBRARY_IMPLICIT_SCHEMA.PROGRAM_REFERENCE'));
+#197=INT_NUMERIC_VARIABLE();
+#207=INT_NUMERIC_VARIABLE();
+#97 =REAL_NUMERIC_VARIABLE();
+#107=REAL_NUMERIC_VARIABLE();
+#117=REAL_NUMERIC_VARIABLE();
+
+/* Syntax / semantics association */
+#178=ENVIRONMENT(#177, #176);
+#188=ENVIRONMENT(#187, #186);
+#198=ENVIRONMENT(#197, #196);
+#208=ENVIRONMENT(#207, #206);
+#98 =ENVIRONMENT(#97, #96);
+#108=ENVIRONMENT(#107, #106);
+#118=ENVIRONMENT(#117, #116);
+
+/* LIBRARY DESCRIPTION */
+
+/* Extension of the table */
+#2300=TABLE_CONTENT(#230, *, (#2301, #2302), '001', '1997-12-19');
+#2301=INTEGER_COLUMN((1, 2, 3, 4, 5, 6), 'NR1..1');
+#2302=ENTITY_INSTANCE_COLUMN((#2303, #2304, #2305, #2306, #2307,
+#2308), ('ISO13584_F_M_IIM_LIBRARY_IMPLICIT_SCHEMA.PROGRAM_REFERENCE'));
+#2303=PROGRAM_REFERENCE(#7, #2313, 'Add1_PAW', 'PAW_p1', (), (), ());
+#2304=PROGRAM_REFERENCE(#7, #2314, 'Add2_PAW', 'PAW_p2', (), (), ());
+#2305=PROGRAM_REFERENCE(#7, #2315, 'Add3_PAW', 'PAW_p3', (), (), ());
+#2306=PROGRAM_REFERENCE(#7, #2316, 'Add4_PAW', 'PAW_p4', (), (), ());
+#2307=PROGRAM_REFERENCE(#7, #2317, 'Add5_PAW', 'PAW_p5', (), (), ());
+#2308=PROGRAM_REFERENCE(#7, #2318, 'Add6_PAW', 'PAW_p6', (), (), ());
+#2313=NOT_TRANSLATABLE_EXTERNAL_CONTENT((#2323));
+#2314=NOT_TRANSLATABLE_EXTERNAL_CONTENT((#2324));
+#2315=NOT_TRANSLATABLE_EXTERNAL_CONTENT((#2325));
+#2316=NOT_TRANSLATABLE_EXTERNAL_CONTENT((#2326));
+#2317=NOT_TRANSLATABLE_EXTERNAL_CONTENT((#2327));
+#2318=NOT_TRANSLATABLE_EXTERNAL_CONTENT((#2328));
+#2323=LANGUAGE_SPECIFIC_CONTENT((#2333), #2333, $);
+#2324=LANGUAGE_SPECIFIC_CONTENT((#2334), #2334, $);
+#2325=LANGUAGE_SPECIFIC_CONTENT((#2335), #2335, $);
+#2326=LANGUAGE_SPECIFIC_CONTENT((#2336), #2336, $);
+#2327=LANGUAGE_SPECIFIC_CONTENT((#2337), #2337, $);
+#2328=LANGUAGE_SPECIFIC_CONTENT((#2338), #2338, $);
+#2333=EXTERNAL_FILE_UNIT('PAW_p1.for', '7bit');
+#2334=EXTERNAL_FILE_UNIT('PAW_p1.for', '7bit');
+#2335=EXTERNAL_FILE_UNIT('PAW_p1.for', '7bit');
+#2336=EXTERNAL_FILE_UNIT('PAW_p1.for', '7bit');
+#2337=EXTERNAL_FILE_UNIT('PAW_p1.for', '7bit');
+#2338=EXTERNAL_FILE_UNIT('PAW_p1.for', '7bit');
+
+/* Library definition of the properties */
+#900 =OPT_OR_MAND_PROPERTY_BSU(#90, .F., .T.);
+#1000=OPT_OR_MAND_PROPERTY_BSU(#100, .F., .T.);
+#1100=OPT_OR_MAND_PROPERTY_BSU(#110, .F., .T.);
+#1700=OPT_OR_MAND_PROPERTY_BSU(#170, .F., .T.);
+#1800=OPT_OR_MAND_PROPERTY_BSU(#180, .F., .F.);
+#1900=OPT_OR_MAND_PROPERTY_BSU(#190, .F., .F.);
+
+/* Functional model class extension */
+#1300=FUNCTIONAL_MODEL_CLASS_EXTENSION(#130, (#2303, #2304, #2305,
+#2306, #2307, #2308), (#7), (#12),'001', '001', (), (), *, *, *, (), (), (), $, (#900, #1000, #1100), (), (), (#1700, #1800, #1900), (),
+(#3000), $, $, (), $);
+
+/* Definition of the derivation table that computes 'prg' from 'side' */
+#2401=FUNCTIONAL_DOMAIN_RESTRICTION((#186), (#176, #196, #206),
+(#2402), $);
+#2402=GUARDED_FUNCTIONAL_DOMAIN(#2403, #2405);
+#2403=OTHERS();
+#2405=TABLE_DEFINED_VALUE(#2406);
+#2406=SELECT_EXPRESSION((#2407, #2408));
+#2407=TABLE_LITERAL(#230);
+#2408=EQUALS_EXPRESSION((#207, #177));
+
+/* Definition of the methods */
+#3000=METHOD(#3001, #3002, #7);
+#3001=METHOD_SPECIF(#140, (#155, #165, #175, #205, #215), (#90, #100, #110),
+());
+#3002=METHOD_BODY((#97, #107, #117, #177, #187, #197, #207),
+(#3019));
+
+#3019=METHOD_STATEMENT((#3020));
+#3020=GUARDED_STATEMENT(#3021, #3023);
+#3021=BOOLEAN_LITERAL(.T.);
+#3023=CALL_PROGRAM_STATEMENT(#187, #2401, (#97, #107, #117), (),
+());
+
+ENDSEC;
+END-ISO-10303-21;

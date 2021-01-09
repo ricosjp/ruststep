@@ -1,0 +1,49 @@
+(*
+ $Id: 10303-1012-arm-approval.exp,v 1.5 2006/08/07 07:44:41 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2909 - ISO/TS 10303-1012 Approval - EXPRESS ARM
+*)
+
+
+
+SCHEMA Approval_arm; 
+
+USE FROM Date_time_arm;    -- ISO/TS 10303-1010
+
+USE FROM Person_organization_arm;    -- ISO/TS 10303-1011
+
+
+TYPE approval_item = EXTENSIBLE GENERIC_ENTITY SELECT;
+END_TYPE; 
+
+ENTITY Approval;
+  status : Approval_status;
+  purpose : STRING;
+  planned_date : OPTIONAL date_or_date_time_select;
+  actual_date : OPTIONAL date_or_date_time_select;
+END_ENTITY;
+
+ENTITY Approval_assignment;
+  assigned_approval : Approval;
+  items : SET[1:?] OF approval_item;
+  role : OPTIONAL STRING;
+END_ENTITY;
+
+ENTITY Approval_relationship;
+  relation_type : STRING;
+  description : OPTIONAL STRING;
+  relating_approval : Approval;
+  related_approval : Approval;
+END_ENTITY;
+
+ENTITY Approval_status;
+  status_name : STRING;
+END_ENTITY;
+
+ENTITY Approving_person_organization;
+  person_organization : organization_or_person_in_organization_select;
+  approval_date : OPTIONAL date_or_date_time_select;
+  authorized_approval : Approval;
+  role : OPTIONAL STRING;
+END_ENTITY;
+
+END_SCHEMA;  -- Approval_arm

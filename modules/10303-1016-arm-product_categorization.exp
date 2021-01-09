@@ -1,0 +1,19 @@
+(*
+ $Id: 10303-1016-arm-product_categorization.exp,v 1.5 2006/08/07 07:44:41 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N1099 - ISO/TS 10303-1016 Product categorization - EXPRESS ARM
+*)
+
+SCHEMA Product_categorization_arm;   
+
+ENTITY Product_category;  
+  id		: OPTIONAL STRING;
+  name	: STRING;
+  description : OPTIONAL STRING;  
+END_ENTITY;   
+
+ENTITY Product_category_hierarchy;  
+  super_category : Product_category;  
+  sub_category   : Product_category;
+END_ENTITY;   
+
+END_SCHEMA;

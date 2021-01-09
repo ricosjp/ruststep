@@ -1,0 +1,24 @@
+(*
+ $Id: 10303-1062-arm-contract.exp,v 1.5 2006/08/07 07:44:43 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N1126 - ISO/TS 10303-1062 Contract - EXPRESS ARM
+*)   
+SCHEMA Contract_arm;
+
+   
+TYPE contract_item = EXTENSIBLE SELECT;
+END_TYPE;
+
+ENTITY Contract;
+  id             : STRING;
+  purpose        : STRING;
+  kind	     : STRING;
+END_ENTITY;
+   
+ENTITY Contract_assignment;
+  assigned_contract  : Contract;
+  items              : SET [1:?] OF contract_item;
+END_ENTITY;
+
+   
+END_SCHEMA;
+

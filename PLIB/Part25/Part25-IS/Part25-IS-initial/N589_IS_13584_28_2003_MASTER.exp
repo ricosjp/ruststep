@@ -1,0 +1,1177 @@
+
+SCHEMA ISO13584_IEC61360_dictionary_aggregate_extension_schema;
+
+REFERENCE FROM ISO13584_IEC61360_dictionary_schema(
+	data_type,
+	entity_instance_type);
+
+
+ENTITY entity_instance_type_for_aggregate
+SUBTYPE OF(entity_instance_type);
+	type_structure: aggregate_type;
+WHERE
+	WR1: SELF\entity_instance_type.type_name =
+		['ISO13584_IEC61360_DICTIONARY_AGGREGATE_EXTENSION_SCHEMA' 
+		+ '.AGGREGATE_TYPE'];
+END_ENTITY;
+
+ENTITY aggregate_type 
+ABSTRACT SUPERTYPE OF(ONEOF(
+		list_type,
+		set_type,
+		bag_type,
+		array_type,	set_with_subset_constraint_type ));
+	bound_1: OPTIONAL INTEGER;
+	bound_2: OPTIONAL INTEGER;
+	value_type: data_type;
+WHERE
+	WR1: bound_1 <= bound_2;
+END_ENTITY;
+
+ENTITY list_type 
+SUBTYPE OF(aggregate_type);
+	uniqueness: BOOLEAN;
+WHERE
+	WR1: EXISTS(bound_1) OR NOT(EXISTS(bound_2));
+	WR2: NOT(EXISTS(bound_1)) OR (bound_1 >= 0);
+END_ENTITY;
+
+ENTITY set_type 
+SUBTYPE OF(aggregate_type);
+WHERE
+	WR1: EXISTS(bound_1) OR NOT(EXISTS(bound_2));
+	WR2: NOT(EXISTS(bound_1)) OR (bound_1 >= 0);
+END_ENTITY;
+
+ENTITY bag_type 
+SUBTYPE OF(aggregate_type);
+WHERE
+	WR1: EXISTS(bound_1) OR NOT(EXISTS(bound_2));
+	WR2: NOT(EXISTS(bound_1)) OR (bound_1 >= 0);
+END_ENTITY;
+
+ENTITY array_type
+SUBTYPE OF (aggregate_type);
+	SELF\aggregate_type.bound_1: INTEGER;
+	SELF\aggregate_type.bound_2: INTEGER;
+	uniqueness: BOOLEAN;
+	are_optional: BOOLEAN;
+END_ENTITY;
+
+ENTITY set_with_subset_constraint_type 
+SUBTYPE OF (aggregate_type);
+	cardinal_min: OPTIONAL INTEGER;
+	cardinal_max: OPTIONAL INTEGER;
+WHERE
+	WR1: cardinal_min <= cardinal_max ;
+	WR2: NOT EXISTS (bound_2) OR NOT EXISTS (cardinal_max) 	
+		OR (cardinal_max <= bound_2);
+	WR3: NOT EXISTS (bound_1) OR NOT EXISTS (cardinal_min) 
+		OR (cardinal_min <= bound_1);
+END_ENTITY;
+
+END_SCHEMA; 
+-- ISO13584_IEC61360_dictionary_aggregate_extension_schema
+
+
+SCHEMA ISO13584_aggregate_value_schema;
+
+REFERENCE FROM ISO13584_IEC61360_dictionary_schema(
+	class_instance_type,
+	data_type,
+	data_type_element,
+	level_type,
+	named_type,
+	property_BSU,
+	property_DET
+	);
+
+REFERENCE FROM ISO13584_IEC61360_dictionary_aggregate_extension_schema(
+	entity_instance_type_for_aggregate,
+	list_type,
+	set_type,
+	bag_type,
+	array_type,
+	set_with_subset_constraint_type);
+
+REFERENCE FROM ISO13584_extended_dictionary_schema(
+	data_type_type_name,
+	data_type_typeof
+	);
+
+REFERENCE FROM ISO13584_instance_resource_schema(
+	compatible_class_and_class,
+	compatible_level_type_and_instance,
+	compatible_type_and_value,
+	dic_class_instance,
+	null_or_primitive_value,
+	primitive_value,
+	property_or_data_type_BSU,
+	property_value,
+	uncontrolled_entity_instance_value
+	);
+
+
+ENTITY aggregate_entity_instance_value 
+SUBTYPE OF (uncontrolled_entity_instance_value);
+	the_value: aggregate_value;
+END_ENTITY;
+
+ENTITY aggregate_value 
+ABSTRACT SUPERTYPE OF(ONEOF(
+		list_value,
+		set_value,
+		bag_value,
+		array_value,
+		set_with_subset_constraint_value ));
+		values: LIST OF null_or_primitive_value;
+END_ENTITY;
+
+ENTITY list_value 
+SUBTYPE OF (aggregate_value);
+	SELF\aggregate_value.values: LIST OF primitive_value;
+END_ENTITY;
+
+ENTITY set_value 
+SUBTYPE OF (aggregate_value);
+	SELF\aggregate_value.values: LIST OF primitive_value;
+WHERE
+	WR1: VALUE_UNIQUE(values);
+END_ENTITY;
+
+ENTITY bag_value 
+SUBTYPE OF (aggregate_value);
+	SELF\aggregate_value.values: LIST OF primitive_value;
+END_ENTITY;
+
+ENTITY array_value 
+SUBTYPE OF (aggregate_value);
+	bound_1: INTEGER;
+	bound_2: INTEGER;
+WHERE
+	WR1: SIZEOF(SELF\aggregate_value.values) = 
+		SELF.bound_2 - SELF.bound_1 + 1;
+END_ENTITY;
+
+ENTITY set_with_subset_constraint_value  
+SUBTYPE OF (aggregate_value);
+	SELF\aggregate_value.values: LIST OF primitive_value;
+	min: OPTIONAL INTEGER;
+	max: OPTIONAL INTEGER;
+WHERE
+	WR1: NOT EXISTS (min) OR NOT EXISTS (max) OR (min <= max) ;
+	WR2: VALUE_UNIQUE(values);
+END_ENTITY;
+
+RULE allowed_aggregate_values FOR (
+	property_value,
+	entity_instance_type_for_aggregate);
+
+WHERE
+	WR1: QUERY (prop <* property_value |
+		NOT(compatible_complete_types_and_value(
+		prop.prop_def, prop.its_value))) = [];
+END_RULE; -- allowed_aggregate_values
+
+FUNCTION compatible_complete_types_and_value(
+	dom: property_or_data_type_BSU; 
+	val: primitive_value): LOGICAL;
+
+IF (data_type_typeof(dom) = [])
+THEN
+	RETURN(UNKNOWN);
+END_IF;
+
+-- checking that values are primitive values but are not aggregate
+-- values.
+IF ('ISO13584_INSTANCE_RESOURCE_SCHEMA.PRIMITIVE_VALUE' IN TYPEOF(val))
+	AND (NOT('ISO13584_AGGREGATE_VALUE_SCHEMA.' +
+	'AGGREGATE_ENTITY_INSTANCE_VALUE' IN TYPEOF(val)))
+THEN
+	RETURN(compatible_type_and_value(dom, val));
+END_IF;
+
+IF 'ISO13584_AGGREGATE_VALUE_SCHEMA.' +
+	'AGGREGATE_ENTITY_INSTANCE_VALUE' IN TYPEOF(val)
+THEN
+	RETURN(compatible_aggregate_domain_and_aggregate_value(
+		dom, val));
+END_IF;
+
+-- neither primitive value nor aggregate value
+RETURN(UNKNOWN);
+
+END_FUNCTION; -- compatible_complete_types_and_value
+
+FUNCTION compatible_aggregate_domain_and_aggregate_value(
+	dom: property_or_data_type_BSU; 
+	val: aggregate_entity_instance_value) : LOGICAL;
+
+LOCAL
+	the_data_type: data_type;
+END_LOCAL;
+
+-- Check the avalability of the final type of a property or a
+-- data type BSU.
+IF data_type_typeof(dom) = []
+THEN 
+	RETURN(UNKNOWN);
+END_IF;
+
+-- Check that the final type of the property or data type BSU
+-- is an entity_instance_type whose type_name_attribute
+-- references the aggregate_type entity
+
+IF (NOT('ISO13584_IEC61360_DICTIONARY_SCHEMA.ENTITY_INSTANCE_TYPE' IN data_type_typeof(dom)))
+THEN
+	RETURN(FALSE);
+END_IF;
+
+IF (NOT('ISO13584_IEC61360_DICTIONARY_AGGREGATE_EXTENSION_SCHEMA' + 
+	'.AGGREGATE_TYPE' IN data_type_type_name(dom)))
+THEN
+	RETURN(FALSE);
+END_IF;
+
+-- Compute the final type of the dom property or data_type_BSU
+
+the_data_type := data_type_final_type(dom)[1];
+
+RETURN(compatible_aggregate_type_and_value(the_data_type, val));
+
+END_FUNCTION; -- compatible_aggregate_domain_and_value
+
+FUNCTION data_type_final_type(
+	type_spec: property_or_data_type_BSU): SET [0:1] OF data_type;
+
+LOCAL
+	res: BOOLEAN := FALSE;
+	x: data_type;
+END_LOCAL;
+
+IF NOT EXISTS(type_spec)
+THEN
+	RETURN([]); -- type_spec is indeterminate
+END_IF;
+
+IF ('ISO13584_IEC61360_DICTIONARY_SCHEMA.PROPERTY_BSU' IN 
+	TYPEOF(type_spec))
+THEN
+	IF NOT(SIZEOF(type_spec.definition) = 0)
+	THEN
+		x := type_spec.definition[1]\property_DET.domain;
+		res := TRUE;
+	END_IF;
+ELSE
+	IF NOT(SIZEOF(type_spec.definition) = 0)
+	THEN
+		x := type_spec.definition[1]\data_type_element.
+			type_definition;
+		res := TRUE;
+	END_IF;
+END_IF;
+
+IF NOT(res)
+THEN
+	RETURN([]);
+END_IF;
+
+IF ('ISO13584_IEC61360_DICTIONARY_SCHEMA.NAMED_TYPE' IN TYPEOF(x))
+THEN
+	IF NOT(SIZEOF(x\named_type.referred_type.definition) = 0)
+	THEN
+		RETURN(data_type_final_type(x\named_type.referred_type));
+	ELSE
+		RETURN([]);
+	END_IF;
+ELSE
+	RETURN([x]);
+END_IF;
+
+END_FUNCTION; -- data_type_final_type
+
+FUNCTION compatible_aggregate_type_and_value(
+	the_data_type: entity_instance_type_for_aggregate;
+	val: aggregate_entity_instance_value): LOGICAL;
+
+LOCAL
+	elements: LIST OF null_or_primitive_value;
+	type_of_elements: data_type;
+	result: LOGICAL;
+	tmp: LIST OF primitive_value := [];
+END_LOCAL;
+
+elements := val.the_value.values;
+
+-- Compute type of elements contained in the aggregate
+IF ('ISO13584_IEC61630_DICTIONARY_SCHEMA.NAMED_TYPE' IN
+	TYPEOF(the_data_type.type_structure.value_type))
+THEN
+	IF (data_type_typeof(the_data_type.type_structure.
+		value_type\named_type.referred_type) = [])
+	THEN 
+	
+		RETURN(UNKNOWN);
+	END_IF;
+	type_of_elements := data_type_final_type(the_data_type.
+		type_structure.value_type\named_type.referred_type)[1];
+ELSE
+	type_of_elements := the_data_type.type_structure.value_type;
+END_IF;
+
+-- check that a value aggregate is compatible with its type 
+-- aggregate declaration
+IF ('ISO13584_AGGREGATE_VALUE_SCHEMA.LIST_VALUE' 
+	IN TYPEOF (val.the_value))
+	AND NOT
+	('ISO13584_IEC61360_DICTIONARY_AGGREGATE_EXTENSION_SCHEMA'+ 
+	'.LIST_TYPE' IN TYPEOF(the_data_type.type_structure))
+THEN
+	RETURN(FALSE);
+END_IF;
+
+IF ('ISO13584_AGGREGATE_VALUE_SCHEMA.BAG_VALUE' IN TYPEOF(
+	val.the_value)) AND NOT
+	('ISO13584_IEC61360_DICTIONARY_AGGREGATE_EXTENSION_SCHEMA.'+ 
+	'BAG_TYPE' IN TYPEOF(the_data_type.type_structure))
+THEN
+	RETURN(FALSE);
+END_IF;
+
+IF ('ISO13584_AGGREGATE_VALUE_SCHEMA.SET_VALUE' IN TYPEOF(
+	val.the_value)) AND NOT
+	('ISO13584_IEC61360_DICTIONARY_AGGREGATE_EXTENSION_SCHEMA.'+ 
+	'SET_TYPE' IN TYPEOF(the_data_type.type_structure))
+THEN
+	RETURN(FALSE);
+END_IF;
+
+IF ('ISO13584_AGGREGATE_VALUE_SCHEMA.ARRAY_VALUE' IN TYPEOF(
+	val.the_value)) AND NOT
+	('ISO13584_IEC61360_DICTIONARY_AGGREGATE_EXTENSION_SCHEMA.'+
+	'ARRAY_TYPE' IN TYPEOF(the_data_type.type_structure))
+THEN
+	RETURN(FALSE);
+END_IF;
+
+IF ('ISO13584_AGGREGATE_VALUE_SCHEMA.SET_WITH_SUBSET_CONSTRAINT_VALUE' 
+		IN TYPEOF(val.the_value)) AND NOT
+	('ISO13584_IEC61360_DICTIONARY_AGGREGATE_EXTENSION_SCHEMA.'+
+			'SET_WITH_SUBSET_CONSTRAINT_TYPE' 
+		IN TYPEOF(the_data_type.type_structure))
+THEN
+	RETURN(FALSE);
+END_IF;
+
+-- check that that low and high bounds of the values are compatible
+-- with the type declaration.
+IF 	(('ISO13584_AGGREGATE_VALUE_SCHEMA.LIST_VALUE' 
+		IN TYPEOF (val.the_value))
+	OR ('ISO13584_AGGREGATE_VALUE_SCHEMA.BAG_VALUE'
+		IN TYPEOF (val.the_value))
+	OR ('ISO13584_AGGREGATE_VALUE_SCHEMA.SET_VALUE'
+		IN TYPEOF (val.the_value))
+	OR ('ISO13584_AGGREGATE_VALUE_SCHEMA.SET_WITH_SUBSET_CONSTRAINT_VALUE'
+		IN TYPEOF (val.the_value)))
+	AND (
+	(EXISTS(the_data_type.type_structure.bound_1))
+	AND NOT
+	(SIZEOF(elements) >= the_data_type.type_structure.bound_1)
+	)
+THEN
+	RETURN(FALSE);
+END_IF;
+
+IF (('ISO13584_AGGREGATE_VALUE_SCHEMA.LIST_VALUE' IN TYPEOF(
+		val.the_value))
+	OR ('ISO13584_AGGREGATE_VALUE_SCHEMA.BAG_VALUE' IN TYPEOF(
+		val.the_value))
+	OR ('ISO13584_AGGREGATE_VALUE_SCHEMA.SET_VALUE' IN TYPEOF(
+		val.the_value))
+	OR ('ISO13584_AGGREGATE_VALUE_SCHEMA.SET_WITH_SUBSET_CONSTRAINT_VALUE'
+		IN TYPEOF (val.the_value)))
+	AND (
+	(EXISTS(the_data_type.type_structure.bound_2))
+	AND NOT
+	(SIZEOF(elements) <= the_data_type.type_structure.bound_2))
+THEN
+	RETURN(FALSE);
+END_IF;
+
+
+-- For array data type and values, check that size of the storage 
+-- list of values is size compatible with the type declaration.
+IF ('ISO13584_AGGREGATE_VALUE_SCHEMA.ARRAY_VALUE' IN TYPEOF(
+	val.the_value))
+THEN
+	IF (NOT(val.the_value\array_value.bound_1 = 
+		the_data_type.type_structure.bound_1) OR
+		NOT(val.the_value\array_value.bound_2 = 
+		the_data_type.type_structure.bound_2))
+	THEN
+		RETURN(FALSE);
+	END_IF;
+END_IF;
+
+-- For set_with_subset_constraint_type, check that the possible 
+-- constraints on subset size defined at the value level are consistent 
+-- with those defined at the type level.
+IF
+('ISO13584_AGGREGATE_VALUE_SCHEMA.SET_WITH_SUBSET_CONSTRAINT_VALUE'
+		IN TYPEOF (val.the_value))
+	AND NOT
+	((the_data_type.type_structure.cardinal_min
+	<= val.the_value\set_with_subset_constraint_value.min)
+	AND
+	(val.the_value\set_with_subset_constraint_value.min 
+	<= val.the_value\set_with_subset_constraint_value.max)
+	AND
+	(val.the_value\set_with_subset_constraint_value.max 
+	<= the_data_type.type_structure.cardinal_max))
+THEN
+	RETURN(FALSE);
+END_IF;
+
+-- In case of a list or array of unique values, check that no 
+-- value is duplicated
+IF ('ISO13584_AGGREGATE_VALUE_SCHEMA.LIST_VALUE' IN TYPEOF(
+	val.the_value)) OR 
+	('ISO13584_AGGREGATE_VALUE_SCHEMA.ARRAY_VALUE'
+	IN TYPEOF (val.the_value))
+THEN
+	IF (the_data_type.type_structure.uniqueness)
+	THEN
+		REPEAT i := 1 TO SIZEOF(val.the_value.values);
+			IF NOT('ISO13584_INSTANCE_RESOURCE_SCHEMA.NULL_VALUE' 
+				IN TYPEOF(val.the_value.values[i]))
+			THEN
+				tmp := tmp + val.the_value.values[i];
+			END_IF;
+		END_REPEAT;
+
+		IF NOT(VALUE_UNIQUE(tmp))
+		THEN
+			RETURN(FALSE);
+		END_IF;
+	END_IF;
+END_IF;
+
+-- For an array where optional values are not allowed, check that 
+-- no null_value is provided
+IF ('ISO13584_AGGREGATE_VALUE_SCHEMA.ARRAY_VALUE' 
+	IN TYPEOF(val.the_value))
+THEN
+	IF NOT(the_data_type.type_structure.are_optional)
+	THEN
+		REPEAT i := 1 TO SIZEOF(val.the_value.values);
+			IF ('ISO13584_INSTANCE_RESOURCE_SCHEMA.NULL_VALUE' 
+				IN TYPEOF(val.the_value.values[i]))
+			THEN
+				RETURN(FALSE);
+			END_IF;
+		END_REPEAT;
+	END_IF;
+END_IF;
+
+-- Check for value/type compatibility for all the elements contained 
+-- in the aggregate 
+
+result := TRUE;
+
+REPEAT i := 1 TO SIZEOF(elements);
+	IF NOT('ISO13584_AGGREGATE_VALUE_SCHEMA.NULL_VALUE'
+		 IN TYPEOF(elements[i]))
+	THEN
+		IF('ISO13584_IEC61360_DICTIONARY_AGGREGATE_EXTENSION_SCHEMA.'
+			+ 'ENTITY_INSTANCE_TYPE_FOR_AGGREGATE' 
+			IN TYPEOF(type_of_elements))
+		THEN
+			IF ('ISO13584_AGGREGATE_VALUE_SCHEMA.'+
+				'AGGREGATE_ENTITY_INSTANCE_VALUE' IN 
+				TYPEOF(elements[i]))
+			THEN
+				result := result AND
+					compatible_aggregate_type_and_value(
+					type_of_elements, elements[i]);
+			ELSE
+				RETURN(FALSE);
+			END_IF;
+		ELSE
+			result := result AND compatible_final_type_and_value(
+				type_of_elements, elements[i]);
+		END_IF;
+
+		IF NOT(result)
+		THEN
+			RETURN(FALSE);
+		END_IF;
+	END_IF;
+END_REPEAT;
+
+RETURN(result);
+
+END_FUNCTION; -- compatible_aggregate_type_and_value
+
+FUNCTION compatible_final_type_and_value(
+	typ: data_type; val: primitive_value): LOGICAL;
+
+LOCAL
+	set_string: SET OF STRING := [];
+	set_integer: SET OF INTEGER := [];
+	code_type: non_quantitative_code_type;
+	int_type: non_quantitative_int_type;
+END_LOCAL;
+
+IF ('ISO13584_INSTANCE_RESOURCE_SCHEMA.INTEGER_VALUE' IN TYPEOF(val))
+THEN
+	IF (('ISO13584_IEC61360_DICTIONARY_SCHEMA.' + 
+		'NON_QUANTITATIVE_INT_TYPE' IN TYPEOF(typ)))
+	THEN
+		set_integer := [];
+		code_type := typ;
+
+		REPEAT j := 1 TO SIZEOF(code_type.domain.its_values);
+			set_integer := set_integer + 
+				code_type.domain.its_values[j].value_code;
+		END_REPEAT;
+		
+		RETURN(val IN set_integer);
+	ELSE
+		RETURN(('ISO13584_IEC61360_DICTIONARY_SCHEMA.INT_TYPE'
+			IN TYPEOF(typ)) OR
+			(('ISO13584_IEC61360_DICTIONARY_SCHEMA.NUMBER_TYPE'
+			IN TYPEOF(typ))
+			AND NOT('ISO13584_IEC61360_DICTIONARY_SCHEMA.REAL_TYPE'
+			IN TYPEOF(typ))));
+	END_IF;
+END_IF;
+
+IF ('ISO13584_INSTANCE_RESOURCE_SCHEMA.REAL_VALUE' IN TYPEOF(val))
+THEN
+	RETURN(('ISO13584_IEC61360_DICTIONARY_SCHEMA.REAL_TYPE'
+		IN TYPEOF(typ)) OR
+		(('ISO13584_IEC61360_DICTIONARY_SCHEMA.NUMBER_TYPE'
+		IN TYPEOF(typ))
+		AND NOT('ISO13584_IEC61360_DICTIONARY_SCHEMA.INT_TYPE'
+		IN TYPEOF(typ))));
+END_IF;
+
+IF ('ISO13584_INSTANCE_RESOURCE_SCHEMA.NUMBER_VALUE' IN TYPEOF(val))
+THEN
+	RETURN('ISO13584_IEC61360_DICTIONARY_SCHEMA.NUMBER_TYPE'
+		IN TYPEOF(typ));
+END_IF;
+
+IF ('ISO13584_INSTANCE_RESOURCE_SCHEMA.BOOLEAN_VALUE' IN TYPEOF(val))
+THEN
+	RETURN('ISO13584_IEC61360_DICTIONARY_SCHEMA.BOOLEAN_TYPE'
+		IN TYPEOF(typ));
+END_IF;
+
+IF ('ISO13584_INSTANCE_RESOURCE_SCHEMA.TRANSLATABLE_STRING_VALUE' IN
+TYPEOF(val))
+THEN
+	IF (('ISO13584_IEC61360_DICTIONARY_SCHEMA' +
+		'.NON_QUANTITATIVE_CODE_TYPE') IN TYPEOF(typ))
+	THEN
+			set_string := [];
+			code_type := typ;
+			REPEAT j := 1 TO SIZEOF(code_type.domain.its_values);
+				set_string := set_string + 
+					code_type.domain.its_values[j].value_code;
+			END_REPEAT;
+
+			RETURN(('ISO13584_INSTANCE_RESOURCE_SCHEMA.STRING_VALUE' 
+				IN TYPEOF(val)) AND (val IN set_string));
+
+	ELSE
+		RETURN('ISO13584_IEC61360_DICTIONARY_SCHEMA.STRING_TYPE'
+			IN TYPEOF(typ));
+	END_IF;
+END_IF;
+
+IF 'ISO13584_INSTANCE_RESOURCE_SCHEMA.ENTITY_INSTANCE_VALUE'
+	IN TYPEOF(val)
+THEN
+	IF 'ISO13584_INSTANCE_RESOURCE_SCHEMA' +
+		'.UNCONTROLLED_ENTITY_INSTANCE_VALUE' IN TYPEOF(val)
+	THEN
+		RETURN(UNKNOWN);
+	END_IF;
+	IF ('ISO13584_IEC61360_DICTIONARY_SCHEMA.ENTITY_INSTANCE_TYPE'
+		IN TYPEOF(typ)) AND 
+		(typ\entity_instance_type.type_name <= TYPEOF(val))
+	THEN
+		RETURN(TRUE);
+	ELSE
+		RETURN(FALSE);
+	END_IF;
+END_IF;
+
+IF 'ISO13584_INSTANCE_RESOURCE_SCHEMA.DIC_CLASS_INSTANCE'
+	IN TYPEOF(val)
+THEN
+	IF ('ISO13584_IEC61360_DICTIONARY_SCHEMA.CLASS_INSTANCE_TYPE'
+		IN TYPEOF(typ))
+	THEN
+		RETURN(compatible_class_and_class(typ\class_instance_type.
+			domain,val\dic_class_instance.class_def));
+	ELSE
+		RETURN(FALSE);
+	END_IF;
+END_IF;
+
+IF 'ISO13584_INSTANCE_RESOURCE_SCHEMA.LEVEL_SPEC_VALUE' IN TYPEOF(val)
+THEN
+	IF ('ISO13584_IEC61360_DICTIONARY_SCHEMA.LEVEL_TYPE'
+		IN TYPEOF(typ))
+	THEN
+		RETURN(compatible_level_type_and_instance(
+			typ\level_type.levels,
+			TYPEOF(typ\level_type.value_type), val));
+	ELSE
+		RETURN(FALSE);
+	END_IF;
+END_IF;
+
+RETURN(FALSE);
+
+END_FUNCTION; -- compatible_final_type_and_value
+
+END_SCHEMA; -- ISO13584_aggregate_value_schema;
+
+SCHEMA ISO13584_25_IEC61360_5_liim_schema;
+
+USE FROM ISO13584_IEC61360_dictionary_schema
+	(axis1_placement_type,
+	axis2_placement_2d_type,
+	axis2_placement_3d_type,
+	boolean_type,
+	class_BSU,
+	class_instance_type,
+	class_value_assignment,
+	complex_type,
+	component_class,
+	condition_DET,
+	data_type_BSU,
+	data_type_element,
+	dates,	
+	dependent_P_DET,
+	dic_unit,
+	dic_value,
+	entity_instance_type,
+	identified_document,
+	int_currency_type,
+	int_measure_type,
+	int_type,
+	integer_type,
+	item_class,
+	item_names,
+	label_with_language,
+	level_type,
+	material_class,
+	mathematical_string,
+	named_type,
+	non_dependent_P_DET,
+	non_quantitative_code_type,
+	non_quantitative_int_type,
+	non_si_unit,
+	number_type,
+	placement_type,
+	property_BSU,
+	property_DET,
+	real_currency_type,
+	real_measure_type,
+	real_type,
+	string_type,
+	supplier_BSU,
+	supplier_element,
+	value_domain);
+
+USE FROM ISO13584_IEC61360_language_resource_schema
+	(global_language_assignment,
+	present_translations,
+	translated_label,
+	translated_text);
+
+USE FROM ISO13584_instance_resource_schema
+	(null_value,
+	primitive_value,
+	null_or_primitive_value,
+	simple_value,
+	null_or_simple_value,
+	number_value,
+	null_or_number_value,
+	integer_value,
+	null_or_integer_value,
+	real_value,
+	null_or_real_value,
+	boolean_value,
+	null_or_boolean_value,
+	translatable_string_value,
+	translated_string_value,
+	string_value,
+	null_or_translatable_string_value,
+	complex_value,
+	null_or_complex_value,
+	entity_instance_value,
+	null_or_entity_instance_value,
+	defined_entity_instance_value,
+	controlled_entity_instance_value,
+	STEP_entity_instance_value,
+	PLIB_entity_instance_value,
+	property_or_data_type_BSU,
+	level_spec_value,
+	null_or_level_spec_value,
+	int_level_spec_value,
+	null_or_int_level_spec_value,
+	real_level_spec_value,
+	null_or_real_level_spec_value,
+	property_value,
+	context_dependent_property_value,
+	dic_class_instance,
+	null_or_dic_class_instance,
+	dic_component_instance,
+	dic_feature_instance,
+	dic_material_instance,
+	lib_component_instance,
+	lib_feature_instance,
+	lib_material_instance,
+	dic_f_model_instance,
+	lib_f_model_instance);
+
+USE FROM ISO13584_IEC61360_dictionary_aggregate_extension_schema
+	(entity_instance_type_for_aggregate,
+	list_type,
+	set_type,
+	bag_type,
+	array_type,
+	set_with_subset_constraint_type);
+
+USE FROM ISO13584_extended_dictionary_schema
+	(dictionary,
+	dictionary_in_standard_format,
+	library_iim_identification,
+	view_exchange_protocol_identification,
+	representation_type,
+	geometric_representation_context_type,
+	representation_reference_type,
+	program_reference_type,
+	program_library_BSU,
+	document_BSU,
+	supplier_program_library_relationship,
+	class_document_relationship,
+	representation_P_DET,
+	class_related_dictionary_element,
+	program_library_element,
+	document_element,
+	document_element_with_http_access,
+	document_element_with_translated_http_access,
+	referenced_document,
+	referenced_graphics,
+	feature_class,
+	functional_model_class,
+	fm_class_view_of,
+	functional_view_class,
+	non_instantiable_functional_view_class,
+	view_control_variable_range,
+	item_class_case_of,
+	component_class_case_of,
+	material_class_case_of,
+	feature_class_case_of,
+	a_posteriori_case_of,
+	a_posteriori_view_of);
+
+USE FROM ISO13584_external_file_schema
+	(standard_simple_program_protocol,
+	non_standard_simple_program_protocol,
+	linked_interface_program_protocol,
+	standard_data_protocol,
+	non_standard_data_protocol,
+	http_protocol,
+	program_library_content,
+	document_content,
+	representation_reference,
+	program_reference,
+	property_value_external_item,
+	message,
+	illustration,
+	A6_illustration,
+	A9_illustration,
+	translated_external_content,
+	not_translated_external_content,
+	not_translatable_external_content,
+	language_specific_content,
+	external_file_unit,
+	http_file,
+	http_class_directory,
+	simple_program_protocol);
+
+
+USE FROM ISO13584_aggregate_value_schema
+	(aggregate_entity_instance_value,
+	list_value,
+	set_value,
+	bag_value,
+	array_value,
+	set_with_subset_constraint_value);
+
+USE FROM ISO13584_library_content_schema
+	(library,
+	library_in_standard_format,
+	explicit_item_class_extension,
+	explicit_functional_model_class_extension,
+	property_classification,
+	property_value_recommended_presentation);
+
+USE FROM measure_schema
+	(amount_of_substance_measure,
+	area_measure,
+	context_dependent_measure,
+	context_dependent_unit,
+	conversion_based_unit,
+	count_measure,
+	derived_unit,
+	derived_unit_element,
+	dimensional_exponents,
+	electric_current_measure,
+	global_unit_assigned_context,
+	length_measure,
+	length_measure_with_unit,
+	length_unit,
+	luminous_intensity_measure,
+	mass_measure,
+	measure_value,
+	measure_with_unit,
+	named_unit,
+	numeric_measure,
+	parameter_value,
+	plane_angle_measure,
+	positive_length_measure,
+	positive_plane_angle_measure,
+	ratio_measure,
+	si_unit,
+	solid_angle_measure,
+	thermodynamic_temperature_measure,
+	time_measure,
+	volume_measure);
+
+USE FROM person_organization_schema
+	(address,
+	organization,
+	person);
+
+USE FROM date_time_schema
+	(date,
+	date_and_time,
+	local_time,
+	calendar_date,
+	ordinal_date,
+	week_of_year_and_day_date);
+
+USE FROM geometry_schema
+	(axis1_placement,
+	axis2_placement_2D,
+	axis2_placement_3D,
+	geometric_representation_context,
+	placement);
+
+USE FROM representation_schema
+	(representation,
+	representation_context,
+	representation_item);
+
+USE FROM application_context_schema
+	(application_context,
+	application_context_element,
+	application_protocol_definition);
+
+END_SCHEMA; -- ISO13584_25_IEC61360_5_liim_schema
+
+SCHEMA ISO13584_25_IEC61360_5_conformance_schema;
+
+USE FROM ISO13584_IEC61360_language_resource_schema(
+	translated_label,
+	present_translations,
+	global_language_assignment);
+
+USE FROM ISO13584_IEC61360_dictionary_aggregate_extension_schema(
+	aggregate_type,
+	entity_instance_type);
+
+USE FROM ISO13584_extended_dictionary_schema(
+	data_exchange_specification_identification,
+	library_iim_identification);
+
+USE FROM ISO13584_external_file_schema(
+	external_file_protocol);
+
+RULE allowed_reference_to_LIIM_25_rule FOR (
+	library_iim_identification);
+WHERE
+	WR1: QUERY( liim_id <* library_iim_identification |
+		((liim_id\data_exchange_specification_identification.status 
+			= 'WD') OR
+		(liim_id\data_exchange_specification_identification.status 
+			= 'CD') OR
+		(liim_id\data_exchange_specification_identification.status 
+			= 'DIS') OR
+		(liim_id\data_exchange_specification_identification.status 
+			= 'FDIS') OR
+		(liim_id\data_exchange_specification_identification.status 
+			= 'IS') OR
+		(liim_id\data_exchange_specification_identification.status 
+			= 'TS') OR
+		(liim_id\data_exchange_specification_identification.status 
+			= 'PAS') OR
+		(liim_id\data_exchange_specification_identification.status 
+			= 'ITA'))
+		AND
+		(liim_id\data_exchange_specification_identification.name 
+			= 'ISO13584_25_IEC61360_5')
+		AND
+		is_correct_liim_25_application_value(liim_id)
+		AND
+		(QUERY( efp <* 
+			liim_id\data_exchange_specification_identification
+			.external_file_protocols 
+			| NOT(compliant_external_file_protocol_25([efp]))
+			) = []))
+		= QUERY( liim_id <* library_iim_identification | 
+			(liim_id\data_exchange_specification_identification.name 
+			= 'ISO13584_25_IEC61360_5'));
+END_RULE; -- allowed_reference_to_LIIM_25_rule
+
+RULE allowed_entity_instance_type_in_LIIM_25_rule FOR (
+	entity_instance_type);
+WHERE
+	WR1: QUERY( x<*entity_instance_type |
+		NOT(
+		('REPRESENTATION_SCHEMA.REPRESENTATION' 
+			IN X.type_name)
+			OR
+		('REPRESENTATION_SCHEMA.REPRESENTATION_CONTEXT' 
+			IN X.type_name)
+			OR
+		('GEOMETRY_SCHEMA.GEOMETRIC_REPRESENTATION_CONTEXT' 
+			IN X.type_name)
+			OR
+		('REPRESENTATION_SCHEMA.REPRESENTATION_ITEM' 
+			IN X.type_name)
+			OR
+		('DATE_TIME_SCHEMA.DATE' IN X.type_name)
+			OR
+		('DATE_TIME_SCHEMA.DATE_AND_TIME' IN X.type_name)
+			OR
+		('DATE_TIME_SCHEMA.LOCAL_TIME' IN X.type_name)
+			OR
+		('DATE_TIME_SCHEMA.CALENDAR_TIME' IN X.type_name)
+			OR
+		('DATE_TIME_SCHEMA.ORDINAL_TIME' IN X.type_name)
+			OR
+		('DATE_TIME_SCHEMA.WEEK_OF_YEAR_AND_DAY_TIME' 
+			IN X.type_name)
+			OR
+		(' PERSON_ORGANIZATION_SCHEMA.PERSON' 
+			IN X.type_name)
+			OR
+		(' PERSON_ORGANIZATION _SCHEMA.ORGANIZATION' 
+			IN X.type_name)
+			OR
+		(' PERSON_ORGANIZATION_SCHEMA.ADDRESS' 
+			IN X.type_name)
+			OR
+		('ISO13584_EXTERNAL_FILE_SCHEMA.PROGRAM_REFERENCE' 
+			IN X.type_name)
+			OR
+		('ISO13584_EXTERNAL_FILE_SCHEMA.REPRESENTATION_REFERENCE'			IN X.type_name)
+			OR
+		('ISO13584_EXTERNAL_FILE_SCHEMA.PROPERTY_VALUE_EXTERNAL_ITEM'
+			 IN X.type_name)
+		)) = [];
+END_RULE; -- allowed_entity_instance_type_in_LIIM_25_rule
+
+RULE allowed_language_assignment_rule FOR (present_translations,
+								global_language_assignment);
+	WHERE
+	WR1:	(QUERY (x <*  global_language_assignment | TRUE)= []) 
+	XOR
+		(QUERY(x<* present_translations | TRUE)=[]
+		) ;
+
+END_RULE; -- Allowed_language_assignment 
+
+FUNCTION compliant_http_protocol_25(ef : external_file_protocol): BOOLEAN;
+
+LOCAL 
+	ok: BOOLEAN := TRUE;
+END_LOCAL;
+
+IF (('ISO13584_EXTERNAL_FILE_SCHEMA'
+	+ '.HTTP_PROTOCOL' IN TYPEOF(ef)) AND
+	(ef.organisation.id = 'IAB') AND
+	(ef.organisation.name = 'Internet Architecture Board') AND
+	((ef.protocol_name = 'HTTP') 
+		OR (ef.protocol_name = 'HTTPS'))AND
+	(ef.designation.preferred_name 
+	= 'Hypertext Transfer Protocol'))
+THEN 
+	IF 'ISO13584_IEC61360_LANGUAGE_RESOURCE_SCHEMA.TRANSLATED_LABEL'
+		IN TYPEOF(ef.designation.short_name) 
+	THEN
+		REPEAT i:= 1 TO SIZEOF(ef.designation.short_name
+				\translated_label.labels);
+			IF (ef.designation.short_name\translated_label.
+				labels[i] LIKE 'RFC####&') 
+			THEN 
+				ok := ok AND TRUE;
+			ELSE 
+				ok := OK AND FALSE;
+			END_IF;
+		END_REPEAT;
+		RETURN(OK);
+	ELSE
+		IF (ef.designation.short_name LIKE 'RFC####&')
+		THEN 
+			RETURN(TRUE);
+		ELSE
+			RETURN(FALSE);
+		END_IF;
+	END_IF;
+ELSE
+	RETURN(FALSE);
+END_IF;
+
+END_FUNCTION; -- compliant_http_protocol_25
+
+FUNCTION compliant_8859_1_protocol_25(ef: external_file_protocol)
+	: BOOLEAN;
+
+IF (('ISO13584_EXTERNAL_FILE_SCHEMA'
+	+ '.STANDARD_DATA_PROTOCOL' IN TYPEOF(ef)) AND
+	(ef.organisation.id = 'ISO') AND
+	(ef.organisation.name 
+	= 'International Organisation for Standardization') AND
+	(ef.protocol_name = 'ISO_8859_1') AND
+	(ef.designation.preferred_name 
+	= 'Latin alphabet No 1') AND
+	(ef.designation.short_name = 'ISO 8859-1'))
+THEN 
+	RETURN(TRUE);
+ELSE
+	RETURN(FALSE);
+END_IF;
+END_FUNCTION; -- compliant_8859_1_protocol_25
+
+FUNCTION compliant_external_file_protocol_25(
+	s: SET [0:?] OF external_file_protocol): BOOLEAN;
+
+REPEAT i := 1 TO SIZEOF(s);
+	IF NOT (compliant_8859_1_protocol_25(s[i]) 
+			OR compliant_http_protocol_25(s[i]))
+	THEN
+		RETURN(FALSE);
+	END_IF;
+END_REPEAT;
+
+RETURN(TRUE);
+
+END_FUNCTION; -- compliant_external_file_protocol_25
+
+FUNCTION is_correct_liim_25_application_value(
+	liim_id: library_iim_identification): BOOLEAN;
+
+IF EXISTS(liim_id\data_exchange_specification_identification.
+	application) 
+	AND
+	(((liim_id\data_exchange_specification_identification.
+		application[1]='2')
+		OR
+	(liim_id\data_exchange_specification_identification.
+		application[1]='3')
+		OR
+	(liim_id\data_exchange_specification_identification.
+		application[1]='4')
+		OR
+	(liim_id\data_exchange_specification_identification.
+		application[1]='5')
+		OR
+	(liim_id\data_exchange_specification_identification.
+		application[1]='6')
+		OR
+	(liim_id\data_exchange_specification_identification.
+		application[1]='7'))
+	AND
+	(liim_id\data_exchange_specification_identification.
+		Application LIKE '#'))
+	OR 
+	((liim_id\data_exchange_specification_identification.
+		application[1]='1')
+		AND
+	((liim_id\data_exchange_specification_identification.
+		application[2]='0')
+	OR
+	(liim_id\data_exchange_specification_identification.
+		application[2]='1')))
+
+THEN 
+	RETURN(TRUE);
+ELSE 
+	RETURN(FALSE);
+END_IF;
+END_FUNCTION; -- is_correct_liim_25_application_value
+
+RULE nesting_level_aggregate_limit_rule FOR
+			 (library_iim_identification,
+				aggregate_type);
+	WHERE
+	WR1:	NOT (QUERY( liim_id <* library_iim_identification |
+			(liim_id\data_exchange_specification_identification.name 
+			= 'ISO13584_25_IEC61360_5')
+			AND
+			((liim_id\data_exchange_specification_identification.
+			application[1]='4')
+			OR
+			(liim_id\data_exchange_specification_identification.
+			application[1]='7'))) <> [])
+		OR
+			(QUERY (x <*  aggregate_type | NOT
+			no_more_than_two_nested_levels(x))= []); 
+END_RULE; -- nesting_level_aggregate_limit_rule
+ 
+FUNCTION no_more_than_two_nested_levels(typ : aggregate_type):BOOLEAN;
+
+
+IF NOT ('ISO13584_IEC61360_DICTIONARY_AGGREGATE_EXTENSION_SCHEMA.'+
+	'ENTITY_INSTANCE_TYPE_FOR_AGGREGATE' IN 
+	TYPEOF(typ.value_type))
+THEN -- level 1 is not an aggregate
+	RETURN (TRUE);
+END_IF;
+
+-- level 1 is an aggregate
+
+IF NOT ('ISO13584_IEC61360_DICTIONARY_AGGREGATE_EXTENSION_SCHEMA.'+
+		'ENTITY_INSTANCE_TYPE_FOR_AGGREGATE' IN 
+		TYPEOF(typ.value_type.type_structure.value_type))
+THEN -- level 2 is not an aggregate
+	RETURN (TRUE);
+END_IF;
+
+-- Level 2 is an aggregate
+RETURN(FALSE);
+
+END_FUNCTION; -- more_than_two_nested_levels
+
+END_SCHEMA; --ISO13584_25_IEC61360_5_conformance_schema
+
+??
+
+??
+
+
+
+
+
+1
+

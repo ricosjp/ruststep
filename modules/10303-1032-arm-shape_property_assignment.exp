@@ -1,0 +1,88 @@
+(*
+ $Id: 10303-1032-arm-shape_property_assignment.exp,v 1.5 2006/08/07 07:44:42 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2974 - ISO/TS 10303-1032 Shape property assignment - EXPRESS ARM
+*)
+
+
+SCHEMA Shape_property_assignment_arm; 
+
+USE FROM Elemental_geometric_shape_arm;    -- ISO/TS 10303-1004
+
+USE FROM External_model_arm;    -- ISO/TS 10303-1033
+
+USE FROM Foundation_representation_arm;    -- ISO/TS 10303-1006
+
+USE FROM Product_view_definition_arm;    -- ISO/TS 10303-1019
+
+USE FROM Product_view_definition_relationship_arm;    -- ISO/TS 10303-1041
+
+
+TYPE shape_dependent_select = SELECT
+   (Item_shape, 
+    Shape_element);
+END_TYPE; 
+
+TYPE shape_model = SELECT
+   (External_geometric_model, 
+    Geometric_model);
+END_TYPE; 
+
+TYPE shape_select = SELECT
+   (Item_shape, 
+    Shape_element, 
+    Shape_element_relationship);
+END_TYPE; 
+
+TYPE shapeable_item = SELECT
+   (Characterizable_object, 
+    Product_view_definition, 
+    View_definition_usage);
+END_TYPE; 
+
+ENTITY Characterizable_object;
+  name : STRING;
+  description : OPTIONAL STRING;
+END_ENTITY;
+
+ENTITY Contextual_item_shape
+  SUBTYPE OF (Item_shape);
+  SELF\Item_shape.described_element : View_definition_usage;
+DERIVE
+  shaped_product : Product_view_definition := described_element\View_definition_relationship.related_view;
+END_ENTITY;
+
+ENTITY Item_shape;
+  id : OPTIONAL STRING;
+  description : OPTIONAL STRING;
+  described_element : shapeable_item;
+END_ENTITY;
+
+ENTITY Shape_dependent_property_representation;
+  characteristic_type : STRING;
+  description : OPTIONAL STRING;
+  described_element : shape_dependent_select;
+  property_representation : Representation;
+END_ENTITY;
+
+ENTITY Shape_description_association;
+  represented_characteristic : shape_select;
+  representation : shape_model;
+  role : OPTIONAL STRING;
+  description : OPTIONAL STRING;
+END_ENTITY;
+
+ENTITY Shape_element;
+  id : OPTIONAL STRING;
+  element_name : STRING;
+  description : OPTIONAL STRING;
+  containing_shape : Item_shape;
+END_ENTITY;
+
+ENTITY Shape_element_relationship;
+  relation_type : STRING;
+  description : OPTIONAL STRING;
+  relating : Shape_element;
+  related : Shape_element;
+END_ENTITY;
+
+END_SCHEMA;  -- Shape_property_assignment_arm

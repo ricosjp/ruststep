@@ -1,0 +1,11 @@
+(*  ISO/TC184/SC4 WG12N1277 ISO/TS 10303-1509 Manifold surface  *)
+
+SCHEMA Manifold_surface_mim;
+
+USE FROM Elemental_geometric_shape_mim;
+
+USE FROM aic_manifold_surface;              -- ISO 10303-511 
+
+
+END_SCHEMA;
+

@@ -1,0 +1,82 @@
+(*
+ $Id: 10303-1288-arm-Management_resource_information.exp,v 1.2 2006/08/07 07:44:46 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N3079 - ISO/TS 10303-1288 Management resource information - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG12 N2279
+*) 
+
+
+SCHEMA Management_resource_information_arm;
+
+USE FROM Alias_identification_arm;    -- ISO/TS 10303-1025
+
+USE FROM Approval_arm;    -- ISO/TS 10303-1012
+
+USE FROM Certification_arm;    -- ISO/TS 10303-1044
+
+USE FROM Contract_arm;    -- ISO/TS 10303-1062
+
+USE FROM Date_time_assignment_arm;    -- ISO/TS 10303-1014
+
+USE FROM Identification_assignment_arm;    -- ISO/TS 10303-1021
+
+USE FROM Multi_linguism_arm;    -- ISO/TS 10303-1105
+
+USE FROM Person_organization_arm;    -- ISO/TS 10303-1011
+
+USE FROM Person_organization_assignment_arm;    -- ISO/TS 10303-1013
+
+USE FROM Project_arm;    -- ISO/TS 10303-1061
+
+USE FROM Security_classification_arm;    -- ISO/TS 10303-1015
+
+
+TYPE mri_alias_identification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON alias_identification_item WITH 
+   (Approval_status, 
+    Contract, 
+    Organization, 
+    Security_classification);
+END_TYPE; 
+
+TYPE mri_approval_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON approval_item WITH 
+   (Certification, 
+    Contract);
+END_TYPE; 
+
+TYPE mri_date_or_date_time_item = EXTENSIBLE SELECT BASED_ON date_or_date_time_item WITH 
+   (Certification, 
+    Contract, 
+    Organization_or_person_in_organization_assignment, 
+    Security_classification_assignment);
+END_TYPE; 
+
+TYPE mri_identification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON identification_item WITH 
+   (Approval_status, 
+    Contract, 
+    Organization, 
+    Security_classification);
+END_TYPE; 
+
+TYPE mri_organization_or_person_in_organization_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON organization_or_person_in_organization_item WITH 
+   (Contract, 
+    Identification_assignment, 
+    Security_classification_assignment);
+END_TYPE; 
+
+TYPE mri_string_select = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON string_select WITH 
+   (Approval, 
+    Approval_relationship, 
+    Approval_status, 
+    Certification, 
+    Contract, 
+    Date_or_date_time_assignment, 
+    Identification_assignment, 
+    Organization_relationship, 
+    Person_in_organization, 
+    Project, 
+    Project_assignment, 
+    Project_relationship);
+END_TYPE; 
+
+END_SCHEMA;  -- Management_resource_information_arm
+
+

@@ -1,0 +1,60 @@
+(*
+ $Id: 10303-1265-mim-envelope.exp,v 1.1 2006/08/07 09:42:05 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N3041 - ISO/TS 10303-1265 Envelope - EXPRESS MIM
+ Supersedes ISO TC184/SC4/WG12 N2334
+*) 
+
+
+SCHEMA Envelope_mim;
+
+USE FROM Approval_mim;    -- ISO/TS 10303-1012
+
+USE FROM Date_time_assignment_mim;    -- ISO/TS 10303-1014
+
+USE FROM Message_mim;    -- ISO/TS 10303-1270
+
+USE FROM Person_organization_assignment_mim;    -- ISO/TS 10303-1013
+
+USE FROM product_definition_schema   -- ISO 10303-41
+  (product,
+   product_relationship); 
+
+USE FROM product_property_definition_schema   -- ISO 10303-41
+  (characterized_object,
+   characterized_product_definition); 
+
+USE FROM Product_view_definition_properties_mim;    -- ISO/TS 10303-1034
+
+USE FROM Property_assignment_mim;    -- ISO/TS 10303-1030
+
+
+TYPE envelope_approval = SELECT BASED_ON approval_item WITH 
+   (envelope);
+END_TYPE; 
+
+TYPE envelope_date = SELECT BASED_ON date_item WITH 
+   (envelope);
+END_TYPE; 
+
+TYPE envelope_date_and_time = SELECT BASED_ON date_and_time_item WITH 
+   (envelope);
+END_TYPE; 
+
+TYPE envelope_organization_item = SELECT BASED_ON organization_item WITH 
+   (envelope);
+END_TYPE; 
+
+TYPE envelope_person_organization_item = SELECT BASED_ON person_and_organization_item WITH 
+   (envelope);
+END_TYPE; 
+
+ENTITY envelope
+  SUBTYPE OF (characterized_object, product);
+END_ENTITY;
+
+ENTITY envelope_relationship
+  SUBTYPE OF (product_relationship);
+END_ENTITY;
+
+END_SCHEMA;  -- Envelope_mim
+

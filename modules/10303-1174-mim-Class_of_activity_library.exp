@@ -1,0 +1,20 @@
+(*
+ $Id: 10303-1174-mim-Class_of_activity_library.exp,v 1.4 2006/08/04 12:11:55 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2718 - ISO/TS 10303-1174 Class of activity library - EXPRESS MIM
+ Supersedes ISO TC184/SC4/WG12 N1853
+*)
+
+SCHEMA Class_of_activity_library_mim;
+
+USE FROM Cardinality_of_relationship_mim;    -- ISO/TS 10303-1211
+USE FROM Class_of_activity_structure_mim;    -- ISO/TS 10303-1170
+USE FROM Set_theory_mim;    -- ISO/TS 10303-1210
+
+TYPE class_of_activity_relationship = SELECT BASED_ON relationship_select WITH 
+   (class_of_connection_of_activity, 
+    class_of_composition_of_activity, 
+    class_of_involvement_in_activity);
+END_TYPE; 
+
+END_SCHEMA;
+

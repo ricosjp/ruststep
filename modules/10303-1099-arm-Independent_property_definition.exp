@@ -1,0 +1,45 @@
+(*
+ $Id: 10303-1099-arm-Independent_property_definition.exp,v 1.4 2006/08/04 12:01:50 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2780 - ISO/TS 10303-1099 Independent property definition - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG12 N2048
+*)
+
+SCHEMA Independent_property_definition_arm;
+
+USE FROM Class_arm;    --  ISO/TS 10303-1070
+USE FROM Independent_property_arm;    --  ISO/TS 10303-1036
+USE FROM Property_space_arm;    --  ISO/TS 10303-1080
+
+ENTITY Physical_quantity_instance
+  SUBTYPE OF (Independent_property, Class);
+END_ENTITY;
+
+ENTITY Physical_quantity_symmetry
+  SUBTYPE OF (Independent_property, Class);
+END_ENTITY;
+
+ENTITY Physical_quantity_symmetry_by_library_reference
+  SUBTYPE OF (Physical_quantity_symmetry);
+  item_id : STRING;
+  source_id : STRING;
+END_ENTITY;
+
+ENTITY Space_for_physical_quantity
+  SUBTYPE OF (Independent_property_relationship);
+  SELF\Independent_property_relationship.relating : Physical_quantity_space;
+  SELF\Independent_property_relationship.related : Physical_quantity_instance;
+END_ENTITY;
+
+ENTITY Standard_physical_quantity_symmetry
+  SUBTYPE OF (Physical_quantity_symmetry_by_library_reference);
+WHERE
+  valid_standard_class: (SELF\Physical_quantity_symmetry_by_library_reference.source_id = 'ISO-TS-10303-1099') AND (SELF\Physical_quantity_symmetry_by_library_reference.item_id IN ['PS001', 'PS002', 'PS003', 'PS004', 'PS005', 'PS006', 'PS007', 'PS008', 'PS009', 'PS010', 'PS011', 'PS012', 'PS013']);
+END_ENTITY;
+
+ENTITY Symmetry_for_physical_quantity
+  SUBTYPE OF (Independent_property_relationship);
+  SELF\Independent_property_relationship.relating : Physical_quantity_symmetry;
+  SELF\Independent_property_relationship.related : Physical_quantity_instance;
+END_ENTITY;
+
+END_SCHEMA;

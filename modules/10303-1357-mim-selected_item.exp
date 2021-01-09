@@ -1,0 +1,53 @@
+(*
+ $Id: 10303-1357-mim-selected_item.exp,v 1.1 2006/08/07 09:42:07 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N3164 - ISO/TS 10303-1357 Selected item - EXPRESS MIM
+ Supersedes ISO TC184/SC4/WG12 N2445
+*) 
+
+
+SCHEMA Selected_item_mim;
+
+USE FROM Class_mim;    -- ISO/TS 10303-1070
+
+USE FROM classification_schema   -- ISO 10303-54
+  (class); 
+
+USE FROM group_schema   -- ISO 10303-41
+  (group); 
+
+USE FROM management_resources_schema   -- ISO 10303-41
+  (group_assignment); 
+
+
+TYPE selected_item_context_items = EXTENSIBLE GENERIC_ENTITY SELECT;
+END_TYPE; 
+
+TYPE selected_item_select = EXTENSIBLE GENERIC_ENTITY SELECT;
+END_TYPE; 
+
+ENTITY selected_item
+  SUBTYPE OF (class);
+END_ENTITY;
+
+ENTITY selected_item_assignment;
+  assigned_class : selected_item;
+  item : selected_item_select;
+END_ENTITY;
+
+ENTITY selected_items_assignment_in_context_group
+  SUBTYPE OF (group_assignment);
+  SELF\group_assignment.assigned_group : selected_items_context_group;
+  selected_item_assignment : SET[1:1] OF selected_item_assignment;
+END_ENTITY;
+
+ENTITY selected_items_context_group
+  SUBTYPE OF (group);
+END_ENTITY;
+
+ENTITY selected_items_context_group_to_context
+  SUBTYPE OF (group_assignment);
+  SELF\group_assignment.assigned_group : selected_items_context_group;
+  item_context : SET[1:?] OF selected_item_context_items;
+END_ENTITY;
+
+END_SCHEMA;  -- Selected_item_mim

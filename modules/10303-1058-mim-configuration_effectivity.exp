@@ -1,0 +1,24 @@
+(*
+ $Id: 10303-1058-mim-configuration_effectivity.exp,v 1.5 2006/08/07 09:42:03 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2950 - ISO/TS 10303-1058 Configuration effectivity - EXPRESS MIM
+ Supersedes ISO TC184/SC4/WG12 N2519
+*) 
+
+
+SCHEMA Configuration_effectivity_mim; 
+
+USE FROM Effectivity_mim;    -- ISO/TS 10303-1057
+
+USE FROM Configuration_item_mim;    -- ISO/CD-TS 10303-1056
+
+USE FROM Product_view_definition_relationship_mim;    -- ISO/TS 10303-1041
+
+USE FROM configuration_management_schema   -- ISO 10303-44
+  (configuration_effectivity); 
+
+
+END_SCHEMA;  -- Configuration_effectivity_mim
+
+
+
+

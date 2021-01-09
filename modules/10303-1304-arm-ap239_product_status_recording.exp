@@ -1,0 +1,93 @@
+(*
+ $Id: 10303-1304-arm-ap239_product_status_recording.exp,v 1.1 2006/08/07 07:44:47 wg12deputy Exp $
+ ISO TC184/SC4/WG3 N1557 - ISO/TS 10303-1304 AP239 product status recording - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG3 N1396
+*) 
+
+SCHEMA Ap239_product_status_recording_arm;
+
+USE FROM Activity_arm;    -- ISO/TS 10303-1047
+
+USE FROM Ap239_product_definition_information_arm;    -- ISO/TS 10303-1292
+
+USE FROM Attachment_slot_arm;    -- ISO/TS 10303-1250
+
+USE FROM Justification_arm;    -- ISO/TS 10303-1263
+
+USE FROM Location_assignment_arm;    -- ISO/TS 10303-1277
+
+USE FROM Multi_linguism_arm;    -- ISO/TS 10303-1105
+
+USE FROM Observation_arm;    -- ISO/TS 10303-1258
+
+USE FROM Product_breakdown_arm;    -- ISO/TS 10303-1248
+
+USE FROM Product_group_arm;    -- ISO/TS 10303-1278
+
+USE FROM Product_identification_arm;    -- ISO/TS 10303-1017
+
+USE FROM Product_version_arm;    -- ISO/TS 10303-1018
+
+USE FROM Product_view_definition_relationship_arm;    -- ISO/TS 10303-1041
+
+USE FROM State_observed_arm;    -- ISO/TS 10303-1256
+
+
+TYPE ap239_psr_activity_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON activity_item WITH 
+   (Applied_state_assignment, 
+    State_assertion, 
+    State_assessment);
+END_TYPE; 
+
+TYPE ap239_psr_justification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON justification_item WITH 
+   (Applied_state_assignment);
+END_TYPE; 
+
+TYPE ap239_psr_location_assignment_select = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON location_assignment_select WITH 
+   (Attachment_slot, 
+    Attachment_slot_definition, 
+    Attachment_slot_version, 
+    Breakdown, 
+    Breakdown_element, 
+    Breakdown_element_definition, 
+    Breakdown_version, 
+    Product, 
+    Product_group, 
+    Product_version, 
+    View_definition_relationship);
+END_TYPE; 
+
+TYPE ap239_psr_observed_context = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON observed_context WITH 
+   (Attachment_slot, 
+    Attachment_slot_definition, 
+    Attachment_slot_version, 
+    Breakdown, 
+    Breakdown_element, 
+    Breakdown_element_definition, 
+    Breakdown_version, 
+    Product, 
+    Product_group, 
+    Product_version, 
+    View_definition_relationship);
+END_TYPE; 
+
+TYPE ap239_psr_state_of_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON state_of_item WITH 
+   (Attachment_slot, 
+    Attachment_slot_version, 
+    Breakdown, 
+    Breakdown_element, 
+    Breakdown_element_definition, 
+    Breakdown_version, 
+    Product, 
+    Product_group, 
+    Product_version, 
+    View_definition_relationship);
+END_TYPE; 
+
+TYPE ap239_psr_string_select = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON string_select WITH 
+   (Observation, 
+    Observation_consequence);
+END_TYPE; 
+
+END_SCHEMA;  -- Ap239_product_status_recording_arm
+

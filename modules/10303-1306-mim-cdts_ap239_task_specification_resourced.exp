@@ -1,0 +1,366 @@
+(*
+ISO TC184/SC4/WG3 N1273 - ISO/CD-TS 10303-1306 Ap239 task specification resourced - EXPRESS MIM
+*) 
+
+
+SCHEMA Ap239_task_specification_resourced_mim; 
+
+USE FROM action_schema   -- ISO 10303-41
+  (action_method,
+   action_method_relationship,
+   action_resource,
+   action_resource_relationship); 
+
+USE FROM Activity_method_assignment_mim;    -- ISO/CD-TS 10303-1249
+
+USE FROM Activity_method_mim;    -- ISO/TS 10303-1049
+
+USE FROM Ap239_product_definition_information_mim;    -- ISO/CD-TS 10303-1292
+
+USE FROM Approval_mim;    -- ISO/TS 10303-1012
+
+USE FROM Attachment_slot_mim;    -- ISO/CD-TS 10303-1250
+
+USE FROM Certification_mim;    -- ISO/TS 10303-1044
+
+USE FROM Condition_mim;    -- ISO/CD-TS 10303-1253
+
+USE FROM Contract_mim;    -- ISO/TS 10303-1062
+
+USE FROM contract_schema   -- ISO 10303-41
+  (contract); 
+
+USE FROM Date_time_assignment_mim;    -- ISO/TS 10303-1014
+
+USE FROM Document_and_version_identification_mim;    -- ISO/TS 10303-1121
+
+USE FROM Document_assignment_mim;    -- ISO/TS 10303-1122
+
+USE FROM Document_definition_mim;    -- ISO/TS 10303-1123
+
+USE FROM File_identification_mim;    -- ISO/TS 10303-1127
+
+USE FROM Functional_breakdown_mim;    -- ISO/CD-TS 10303-1216
+
+USE FROM Identification_assignment_mim;    -- ISO/TS 10303-1021
+
+USE FROM Interface_lifecycle_mim;    -- ISO/CD-TS 10303-1294
+
+USE FROM Interface_mim;    -- ISO/CD-TS 10303-1251
+
+USE FROM Justification_mim;    -- ISO/CD-TS 10303-1263
+
+USE FROM Location_assignment_mim;    -- ISO/CD-TS 10303-1277
+
+USE FROM Location_mim;    -- ISO/CD-TS 10303-1276
+
+USE FROM location_schema;    -- ISO 10303-41
+
+USE FROM Management_resource_information_mim;    -- ISO/CD-TS 10303-1288
+
+USE FROM Multi_linguism_mim;    -- ISO/CD-TS 10303-1105
+
+USE FROM Organization_type_mim;    -- ISO/CD-TS 10303-1240
+
+USE FROM Part_and_version_identification_mim;    -- ISO/TS 10303-1022
+
+USE FROM Part_view_definition_mim;    -- ISO/TS 10303-1023
+
+USE FROM Person_organization_assignment_mim;    -- ISO/TS 10303-1013
+
+USE FROM Person_organization_mim;    -- ISO/TS 10303-1011
+
+USE FROM person_organization_schema;    -- ISO 10303-41
+
+USE FROM Physical_breakdown_mim;    -- ISO/CD-TS 10303-1215
+
+USE FROM Position_in_organization_mim;    -- ISO/CD-TS 10303-1242
+
+USE FROM Probability_distribution_mim;    -- ISO/CD-TS 10303-1274
+
+USE FROM Probability_mim;    -- ISO/CD-TS 10303-1252
+
+USE FROM Process_property_assignment_mim;    -- ISO/TS 10303-1040
+
+USE FROM process_property_schema   -- ISO 10303-49
+  (action_resource_requirement,
+   action_resource_requirement_relationship); 
+
+USE FROM Product_as_individual_mim;    -- ISO/CD-TS 10303-1164
+
+USE FROM Product_breakdown_mim;    -- ISO/CD-TS 10303-1248
+
+USE FROM product_definition_schema;    -- ISO 10303-41
+
+USE FROM Product_group_mim;    -- ISO/CD-TS 10303-1278
+
+USE FROM Product_identification_mim;    -- ISO/TS 10303-1017
+
+USE FROM product_property_definition_schema   -- ISO 10303-41
+  (characterized_object); 
+
+USE FROM Product_version_mim;    -- ISO/TS 10303-1018
+
+USE FROM Product_view_definition_mim;    -- ISO/TS 10303-1019
+
+USE FROM Product_view_definition_relationship_mim;    -- ISO/TS 10303-1041
+
+USE FROM Project_mim;    -- ISO/TS 10303-1061
+
+USE FROM Property_assignment_mim;    -- ISO/TS 10303-1030
+
+USE FROM Required_resource_characterized_mim;    -- ISO/CD-TS 10303-1280
+
+USE FROM Required_resource_mim;    -- ISO/CD-TS 10303-1267
+
+USE FROM Requirement_assignment_mim;    -- ISO/CD-TS 10303-1233
+
+USE FROM Resource_item_mim;    -- ISO/CD-TS 10303-1268
+
+USE FROM Security_classification_mim;    -- ISO/TS 10303-1015
+
+USE FROM State_definition_mim;    -- ISO/CD-TS 10303-1255
+
+USE FROM State_observed_mim;    -- ISO/CD-TS 10303-1256
+
+USE FROM state_observed_schema   -- ISO 10303-56
+  (applied_state_assignment,
+   state_observed,
+   state_observed_relationship); 
+
+USE FROM state_type_schema   -- ISO 10303-56
+  (applied_state_type_assignment,
+   state_type,
+   state_type_relationship); 
+
+USE FROM System_breakdown_mim;    -- ISO/CD-TS 10303-1214
+
+USE FROM Task_specification_mim;    -- ISO/CD-TS 10303-1262
+
+USE FROM Type_of_person_mim;    -- ISO/CD-TS 10303-1245
+
+USE FROM Work_output_characterized_mim;    -- ISO/CD-TS 10303-1301
+
+USE FROM Work_output_mim;    -- ISO/CD-TS 10303-1300
+
+USE FROM Zonal_breakdown_mim;    -- ISO/CD-TS 10303-1217
+
+
+TYPE tsr_action_method_items = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON action_method_items WITH 
+   (action_method, 
+    action_resource, 
+    action_resource_requirement, 
+    applied_action_method_assignment, 
+    breakdown_element_usage, 
+    document_file, 
+    location, 
+    organization, 
+    organization_role, 
+    person, 
+    person_and_organization, 
+    person_type, 
+    person_type_definition, 
+    position_in_organization, 
+    position_in_organization_type, 
+    product, 
+    product_as_individual, 
+    product_definition, 
+    product_definition_formation, 
+    product_definition_relationship, 
+    product_group);
+END_TYPE; 
+
+TYPE tsr_approval_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON approval_item WITH 
+   (action_method, 
+    action_method_relationship, 
+    applied_action_method_assignment, 
+    applied_state_assignment, 
+    applied_state_type_assignment);
+END_TYPE; 
+
+TYPE tsr_attribute_language_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON attribute_language_item WITH 
+   (action_method, 
+    action_method_relationship, 
+    applied_action_method_assignment);
+END_TYPE; 
+
+TYPE tsr_certification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON certification_item WITH 
+   (action_method);
+END_TYPE; 
+
+TYPE tsr_condition_action_method_items = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON condition_action_method_items WITH 
+   (action_method, 
+    action_method_relationship, 
+    action_resource_relationship, 
+    action_resource_requirement_relationship, 
+    applied_action_method_assignment);
+END_TYPE; 
+
+TYPE tsr_contract_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON contract_item WITH 
+   (action_method, 
+    action_method_relationship, 
+    applied_action_method_assignment);
+END_TYPE; 
+
+TYPE tsr_date_and_time_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON date_and_time_item WITH 
+   (action_method, 
+    action_method_relationship, 
+    applied_action_method_assignment, 
+    applied_state_assignment, 
+    applied_state_type_assignment);
+END_TYPE; 
+
+TYPE tsr_date_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON date_item WITH 
+   (action_method, 
+    action_method_relationship, 
+    applied_action_method_assignment, 
+    applied_state_assignment, 
+    applied_state_type_assignment);
+END_TYPE; 
+
+TYPE tsr_document_reference_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON document_reference_item WITH 
+   (action_method, 
+    action_method_relationship, 
+    action_resource_relationship, 
+    action_resource_requirement, 
+    action_resource_requirement_relationship, 
+    applied_action_method_assignment, 
+    applied_state_assignment, 
+    applied_state_type_assignment, 
+    location);
+END_TYPE; 
+
+TYPE tsr_identification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON identification_item WITH 
+   (action_method, 
+    action_method_relationship, 
+    applied_action_method_assignment, 
+    applied_state_assignment, 
+    applied_state_type_assignment);
+END_TYPE; 
+
+TYPE tsr_justification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON justification_item WITH 
+   (action_method, 
+    action_method_relationship, 
+    applied_action_method_assignment, 
+    applied_location_assignment, 
+    applied_state_assignment, 
+    applied_state_type_assignment);
+END_TYPE; 
+
+TYPE tsr_justification_support_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON justification_support_item WITH 
+   (action_method, 
+    action_method_relationship, 
+    applied_action_method_assignment, 
+    applied_location_assignment, 
+    applied_state_assignment, 
+    applied_state_type_assignment, 
+    contract, 
+    location, 
+    product, 
+    product_definition, 
+    product_definition_formation, 
+    state_observed, 
+    state_observed_relationship, 
+    state_type, 
+    state_type_relationship);
+END_TYPE; 
+
+TYPE tsr_location_item = SELECT BASED_ON location_item WITH 
+   (action_method, 
+    action_resource, 
+    action_resource_requirement, 
+    applied_action_method_assignment, 
+    document_file, 
+    organization, 
+    organization_type, 
+    organizational_project, 
+    person, 
+    person_and_organization, 
+    person_type, 
+    person_type_definition, 
+    position_in_organization, 
+    position_in_organization_type, 
+    product, 
+    product_definition, 
+    product_definition_formation, 
+    product_group);
+END_TYPE; 
+
+TYPE tsr_multi_language_attribute_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON multi_language_attribute_item WITH 
+   (action_method, 
+    action_method_relationship, 
+    applied_action_method_assignment);
+END_TYPE; 
+
+TYPE tsr_organization_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON organization_item WITH 
+   (action_method, 
+    action_method_relationship, 
+    applied_action_method_assignment, 
+    applied_state_assignment, 
+    applied_state_type_assignment);
+END_TYPE; 
+
+TYPE tsr_person_and_organization_item = SELECT BASED_ON person_and_organization_item WITH 
+   (action_method, 
+    action_method_relationship, 
+    applied_action_method_assignment, 
+    applied_state_assignment, 
+    applied_state_type_assignment);
+END_TYPE; 
+
+TYPE tsr_project_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON project_item WITH 
+   (action_method, 
+    applied_action_method_assignment);
+END_TYPE; 
+
+TYPE tsr_requirement_assigned_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON requirement_assigned_item WITH 
+   (action_method, 
+    applied_action_method_assignment, 
+    applied_state_assignment, 
+    applied_state_type_assignment, 
+    state_observed, 
+    state_type);
+END_TYPE; 
+
+TYPE tsr_requirement_source_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON requirement_source_item WITH 
+   (action_method, 
+    applied_action_method_assignment, 
+    applied_state_assignment, 
+    applied_state_type_assignment, 
+    state_observed, 
+    state_type);
+END_TYPE; 
+
+TYPE tsr_resource_assignment_items = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON action_method_items WITH 
+   (contract, 
+    location, 
+    organizational_project, 
+    product, 
+    product_definition, 
+    product_definition_formation, 
+    product_group);
+END_TYPE; 
+
+TYPE tsr_security_classification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON security_classification_item WITH 
+   (action_method, 
+    action_method_relationship, 
+    applied_action_method_assignment, 
+    applied_state_assignment, 
+    applied_state_type_assignment);
+END_TYPE; 
+
+ENTITY characterized_applied_action_method_assignment
+  SUBTYPE OF (applied_action_method_assignment, characterized_object);
+END_ENTITY;
+
+ENTITY characterized_applied_state_assignment
+  SUBTYPE OF (applied_state_assignment, characterized_object);
+END_ENTITY;
+
+ENTITY characterized_applied_state_type_assignment
+  SUBTYPE OF (applied_state_type_assignment, characterized_object);
+END_ENTITY;
+
+END_SCHEMA;  -- Ap239_task_specification_resourced_mim
+
+

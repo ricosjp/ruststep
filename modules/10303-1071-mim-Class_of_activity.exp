@@ -1,0 +1,16 @@
+(*
+ $Id: 10303-1071-mim-Class_of_activity.exp,v 1.4 2006/08/04 12:11:54 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2715 - ISO/TS 10303-1071 Class of activity - EXPRESS MIM
+ Supersedes ISO TC184/SC4/WG12 N1841
+*)
+
+SCHEMA Class_of_activity_mim;
+
+USE FROM Activity_mim;    -- ISO/TS 10303-1047
+USE FROM Class_mim;    -- ISO/TS 10303-1070
+
+ENTITY class_of_activity
+  SUBTYPE OF (executed_action, class);
+END_ENTITY;
+
+END_SCHEMA;

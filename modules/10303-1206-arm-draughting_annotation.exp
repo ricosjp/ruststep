@@ -1,0 +1,15 @@
+(*
+ $Id: 10303-1206-arm-draughting_annotation.exp,v 1.1 2006/08/04 12:01:51 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2774 - ISO/TS 10303-1206 Draughting annotation - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG12 N2198
+*)
+
+SCHEMA Draughting_annotation_arm;
+
+USE FROM Foundation_representation_arm;    --  ISO/TS 10303-1006
+
+ENTITY Draughting_annotation_occurrence
+  SUBTYPE OF (Representation);
+END_ENTITY;
+
+END_SCHEMA;

@@ -1,0 +1,40 @@
+(*
+ $Id: 10303-1261-arm-activity_method_implementation.exp,v 1.2 2006/08/07 07:44:45 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N3004 - ISO/TS 10303-1261 Activity method implementation - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG12 N2378
+*) 
+
+
+SCHEMA Activity_method_implementation_arm;
+
+USE FROM Activity_method_arm;    -- ISO/TS 10303-1049
+
+USE FROM Classification_assignment_arm;    -- ISO/TS 10303-1114
+
+
+TYPE activity_method_implementation_classified_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON classification_item WITH 
+   (Activity_method_realization, 
+    Activity_method_realization_relationship);
+END_TYPE; 
+
+TYPE activity_realization_select = EXTENSIBLE SELECT;
+END_TYPE; 
+
+ENTITY Activity_method_realization;
+  id : STRING;
+  name : STRING;
+  description : OPTIONAL STRING;
+  activity_method : Activity_method;
+  realized_by : activity_realization_select;
+END_ENTITY;
+
+ENTITY Activity_method_realization_relationship;
+  id : STRING;
+  name : STRING;
+  description : OPTIONAL STRING;
+  relating : Activity_method_realization;
+  related : Activity_method_realization;
+END_ENTITY;
+
+END_SCHEMA;  -- Activity_method_implementation_arm
+

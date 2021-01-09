@@ -1,0 +1,1406 @@
+(* 
+ARM long form for ISO/IS 10303-216
+Blair Downie
+2002-09-18
+ISO TC184/SC4/WG3 N1141
+*)
+
+SCHEMA SHIP_MOULDED_FORMS_ARM_SCHEMA;
+
+  TYPE ship_identifier = SELECT
+    (imo_number,
+     pennant_hull_number);
+  END_TYPE;
+
+  TYPE imo_number = text;
+  END_TYPE;
+
+  TYPE text = STRING;
+  END_TYPE;
+
+  TYPE pennant_hull_number = text;
+  END_TYPE;
+
+  TYPE shipyard_role = ENUMERATION OF
+    (PRIME,
+     PRIME_BUILD,
+     PRIME_DESIGN,
+     PRIME_REPAIR,
+     SUBCONTRACTOR);
+  END_TYPE;
+
+  TYPE heavy_cargo = ENUMERATION OF
+    (HC,
+     HC_E,
+     HC_EA);
+  END_TYPE;
+
+  TYPE global_co_ordinate_system_orientation = ENUMERATION OF
+    (AFT_POINTING,
+     FORWARD_POINTING);
+  END_TYPE;
+
+  TYPE hydrostatic_property_measure = SELECT
+    (area_measure,
+     centre_location,
+     inertia_moment_measure,
+     length_measure,
+     moment_measure);
+  END_TYPE;
+
+  TYPE area_measure = REAL;
+  END_TYPE;
+
+  TYPE length_measure = REAL;
+  END_TYPE;
+
+  TYPE inertia_moment_measure = REAL;
+  END_TYPE;
+
+  TYPE moment_measure = REAL;
+  END_TYPE;
+
+  TYPE hydrostatic_property_type = ENUMERATION OF
+    (CENTRE_OF_BUOYANCY,
+     CENTRE_OF_FLOTATION,
+     CENTRE_OF_LATERAL_RESISTANCE,
+     LONGITUDINAL_METACENTRIC_HEIGHT,
+     LONGITUDINAL_SECOND_MOMENT_OF_AREA_OF_WATERPLANE,
+     MID_SHIP_SECTION_AREA,
+     MOMENT_FOR_UNIT_CHANGE_OF_TRIM,
+     TRANSVERSE_METACENTRIC_HEIGHT,
+     TRANSVERSE_SECOND_MOMENT_OF_AREA_OF_WATERPLANE,
+     WATERPLANE_AREA,
+     WETTED_SURFACE_AREA);
+  END_TYPE;
+
+  TYPE sense_of_rotation = ENUMERATION OF
+    (RIGHT,
+     LEFT);
+  END_TYPE;
+
+  TYPE location = ENUMERATION OF
+    (BOW,
+     STERN);
+  END_TYPE;
+
+  TYPE rudder_type = ENUMERATION OF
+    (BALANCED,
+     UNBALANCED);
+  END_TYPE;
+
+  TYPE kind_of_propeller_blade = ENUMERATION OF
+    (FIXED_BLADE,
+     ADJUSTABLE_BLADE,
+     CONTROLLABLE_BLADE);
+  END_TYPE;
+
+  TYPE appendage_type = ENUMERATION OF
+    (ACTIVE_FIN,
+     AIR_EMITTER,
+     ARRAYS,
+     BILGE_KEEL,
+     BOW_THRUSTER,
+     CATHODIC_PROTECTION_ANODE,
+     DUCK_TAIL,
+     RUDDER,
+     SEA_CHEST,
+     STERN_FLAP,
+     STERN_THRUSTER,
+     SKEG,
+     SHAFT_STRUT,
+     SHAFT_BOSSINGS,
+     PASSIVE_FIN,
+     SPRAY_RAIL,
+     USER_DEFINED);
+  END_TYPE;
+
+  TYPE ship_curve_class_name = ENUMERATION OF
+    (BUTTOCK_LINE,
+     CENTRELINE,
+     CAMBER,
+     SHEER,
+     FLAT_OF_BOTTOM,
+     FLAT_OF_SIDE,
+     INTERSECTION_LINE,
+     STATION_LINE,
+     WATERLINE,
+     BOUNDING_LINE,
+     RISE_OF_FLOOR,
+     TRACE_LINE,
+     UNSPECIFIED);
+  END_TYPE;
+
+  TYPE side_condition_type = ENUMERATION OF
+    (KNUCKLE,
+     SMOOTH,
+     TANGENT,
+     UNSPECIFIED);
+  END_TYPE;
+
+  TYPE ship_point_class_name = ENUMERATION OF
+    (ORDINARY,
+     TANGENT,
+     KNUCKLE,
+     UNSPECIFIED);
+  END_TYPE;
+
+  TYPE moulded_form_functionality = ENUMERATION OF
+    (SHIP_HULL,
+     PROPELLER,
+     RUDDER,
+     BULBOUS_BOW,
+     BULBOUS_STERN,
+     APPENDAGE,
+     THRUSTER,
+     KEEL,
+     TRANSOM,
+     DOUBLE_BOTTOM,
+     DOUBLE_SHIP_HULL,
+     DECK,
+     SUPERSTRUCTURE,
+     HORIZONTAL_GIRDER,
+     LONGITUDINAL_GIRDER,
+     LONGITUDINAL_BULKHEAD,
+     TRANSVERSE_BULKHEAD,
+     FRAME,
+     PRESSURE_HULL,
+     NON_STRUCTURAL_BULKHEAD,
+     GRATING,
+     USER_DEFINED);
+  END_TYPE;
+
+  TYPE surface_representation = SELECT
+    (edge_based_wireframe_shape,
+     non_manifold_surface_shape);
+  END_TYPE;
+
+  TYPE surface_geometry = SELECT
+    (ship_surface,
+     moulded_form_shape_representation,
+     surface_representation);
+  END_TYPE;
+
+  TYPE point = STRING;
+  END_TYPE;
+
+  TYPE curve = STRING;
+  END_TYPE;
+
+  TYPE ship_surface_class_name = ENUMERATION OF
+    (EXTERNAL_SURFACE,
+     INTERNAL_SURFACE,
+     BLENDING_SURFACE,
+     DECK,
+     STRENGTH_DECK,
+     ACCOMODATION_DECK,
+     MAIN_DECK,
+     WEATHER_DECK,
+     NAVIGATION_DECK,
+     PLATFORM_DECK,
+     DECK_IN_SUPERSTRUCTURE,
+     BOTTOM,
+     INNER_BOTTOM,
+     DOUBLE_BOTTOM,
+     OUTER_SHELL,
+     INNER_SHELL,
+     DOUBLE_SHELL,
+     BULKHEAD,
+     LONGITUDINAL_BULKHEAD,
+     TRANSVERSAL_BULKHEAD,
+     STRENGTH_BULKHEAD,
+     WASH_BULKHEAD,
+     COLLISION_BULKHEAD,
+     HOLD_BULKHEAD,
+     TANK_BULKHEAD,
+     WING_BULKHEAD,
+     SUPERSTRUCTURE_FRONT_BULKHEAD,
+     SUPERSTRUCTURE_SIDE_BULKHEAD,
+     SUPERSTRUCTURE_AFT_BULKHEAD,
+     STOOL,
+     WALL,
+     PLATING,
+     TRANSOM,
+     DECK_HOUSE,
+     SUPERSTRUCTURE,
+     MID_SHIP,
+     FORE_SHIP,
+     AFT_SHIP,
+     ENGINE_AREA,
+     CARGO_AREA,
+     ACCOMODATION_AREA,
+     MACHINERY_CASING,
+     SHEER_STRAKE,
+     TANK_BOTTOM,
+     TANK_SIDE,
+     TANK_TOP,
+     HATCH_COVER,
+     KEEL,
+     DUCT_KEEL,
+     HATCHWAY_COAMING,
+     HATCHWAY_SIDECOAMING,
+     HATCHWAY_ENDCOAMING,
+     UPPER_BOOM,
+     LOWER_BOOM,
+     FRAME,
+     WEB_FRAME,
+     VERTICAL_WEB_FRAME,
+     TRANSVERSE_WEB_FRAME,
+     FLOOR,
+     TRANSVERSE_FLOOR,
+     CROSS_TIE,
+     STRINGER,
+     GIRDER,
+     LONGITUDINAL_GIRDER,
+     DECK_BEAM,
+     ENGINE_FOUNDATION,
+     BRACKET,
+     USER_DEFINED);
+  END_TYPE;
+
+  TYPE surface = STRING;
+  END_TYPE;
+
+  TYPE face_based_surface_model = STRING;
+  END_TYPE;
+
+  TYPE offset_table_type = ENUMERATION OF
+    (WATERLINE_TABLE_TYPE,
+     STATION_TABLE_TYPE,
+     BUTTOCK_TABLE_TYPE,
+     USER_DEFINED_TABLE_TYPE);
+  END_TYPE;
+
+  TYPE label = STRING;
+  END_TYPE;
+
+  TYPE plane = STRING;
+  END_TYPE;
+
+  TYPE axis1_placement = STRING;
+  END_TYPE;
+
+  TYPE moulded_form_border = SELECT
+    (moulded_form_boundary_relationship,
+     planar_boundary,
+     ship_curve);
+  END_TYPE;
+
+  TYPE positive_length_measure = length_measure;
+    WHERE
+      WR1 : SELF > 0;
+  END_TYPE;
+
+  TYPE ratio_measure = REAL;
+  END_TYPE;
+
+  TYPE propulsion_type = ENUMERATION OF
+    (WATER_JET,
+     PADDLE_WHEEL,
+     VERTICAL_AXIS_PROPELLER,
+     SCREW_PROPELLER,
+     DUCTED_PROPELLER,
+     THRUSTER,
+     USER_DEFINED);
+  END_TYPE;
+
+  TYPE plane_angle_measure = REAL;
+  END_TYPE;
+
+  TYPE volume_measure = REAL;
+  END_TYPE;
+
+  TYPE person_and_organization = STRING;
+  END_TYPE;
+
+  TYPE approval_status = ENUMERATION OF
+    (APPROVED,
+     REJECTED,
+     UNAPPROVED,
+     USER_DEFINED);
+  END_TYPE;
+
+  TYPE date_and_time = STRING;
+  END_TYPE;
+
+  TYPE unit = SELECT
+    (named_unit,
+     derived_unit);
+  END_TYPE;
+
+  TYPE single_or_multiple_hulls = ENUMERATION OF
+    (DESIGN_FOR_SINGLE_HULL,
+     DESIGN_FOR_MULTIPLE_HULLS);
+  END_TYPE;
+
+  TYPE representation = STRING;
+  END_TYPE;
+
+  TYPE shape_definition_status = ENUMERATION OF
+    (COMPLETE,
+     PARTIAL);
+  END_TYPE;
+
+  TYPE organization = STRING;
+  END_TYPE;
+
+  TYPE document_referent = SELECT
+    (document,
+     document_portion);
+  END_TYPE;
+
+  TYPE any_author = SELECT
+    (person,
+     organization,
+     person_and_organization);
+  END_TYPE;
+
+  TYPE any_address = SELECT
+    (external_storage,
+     universal_resource_locator);
+  END_TYPE;
+
+  TYPE speed_measure = REAL;
+  END_TYPE;
+
+  TYPE mass_measure = REAL;
+  END_TYPE;
+
+  TYPE carrier_ship_type = ENUMERATION OF
+    (BARGE,
+     BARGE_FOR_DECK_LOADING,
+     BARGE_FOR_LIQUEFIED_GAS,
+     BARGE_FOR_OIL,
+     BARGE_PONTOON,
+     BULK_CARRIER,
+     CAR_CARRIER,
+     CAR_FERRY,
+     CARGO_SHIP_CARRYING_PASSENGERS,
+     CHEMICAL_TANKER,
+     CHEMICAL_TANKER_TYPE_1,
+     CONTAINER_CARRIER,
+     CRUISE_LINER,
+     DRY_CARGO_VESSEL,
+     FERRY,
+     GAS_CARRIER,
+     GENERAL_CARGO_CARRIER,
+     HIGHSPEEDCRAFT_CARGO,
+     HIGHSPEEDCRAFT_PASSENGER,
+     HYDROFOIL,
+     LIQUEFIED_GAS_TANKER,
+     LNG_CARRIER,
+     LPG_CARRIER,
+     OIL_TANKER,
+     ORE_CARRIER,
+     PASSENGER_VESSEL,
+     PRODUCT_TANKER,
+     REFRIGERATED_CARGO_CARRYING_SHIP,
+     RORO_VESSEL,
+     TANKER_FOR_REFRIGERATED_FRUIT_JUICE,
+     USER_DEFINED);
+  END_TYPE;
+
+  TYPE working_ship_type = ENUMERATION OF
+    (CRANE_VESSEL,
+     DREDGER,
+     DRILLING_VESSEL,
+     FIRE_FIGHTER,
+     FISHING_VESSEL,
+     FLOATING_DOCK,
+     FLOATING_HOTEL,
+     FPGO,
+     FPSO,
+     ICE_BREAKER,
+     OFFSHORE_SUPPLY_VESSEL,
+     OIL_PRODUCTION_AND_STORAGE_VESSEL,
+     OIL_PRODUCTION_VESSEL,
+     OIL_STORAGE_VESSEL,
+     PILOT_BOAT,
+     PIPE_LAYING_VESSEL,
+     PUSHER,
+     REEFER,
+     SEALER,
+     SHUTTLE_TANKER,
+     STERN_TRAWLER,
+     SUPPLY_VESSEL,
+     TUG,
+     USER_DEFINED,
+     WELL_STIMULATION_VESSEL);
+  END_TYPE;
+
+  TYPE research_ship_type = ENUMERATION OF
+    (USER_DEFINED);
+  END_TYPE;
+
+  TYPE navy_ship_type = ENUMERATION OF
+    (AIRCRAFT_CARRIER,
+     AUXILIARY_OILER,
+     CORVETTE,
+     CRUISER,
+     DESTROYER,
+     FLEET_AUXILIARY_VESSEL,
+     FRIGATE,
+     LANDING_PLATFORM_DOCK,
+     LANDING_PLATFORM_HELICOPTER,
+     MINE_WARFARE_SHIP,
+     PATROL_FORCE_VESSEL,
+     SERVICE_CRAFT,
+     SUBMARINE,
+     USER_DEFINED);
+  END_TYPE;
+
+  TYPE location_reference = SELECT
+    (spacing_position,
+     length_measure);
+  END_TYPE;
+
+  TYPE co_ordinate_system = SELECT
+    (local_co_ordinate_system,
+     global_axis_placement);
+  END_TYPE;
+
+  TYPE identifier = STRING;
+  END_TYPE;
+
+  TYPE planar_boundary = SELECT
+    (plane,
+     spacing_position);
+  END_TYPE;
+
+  TYPE vector = STRING;
+  END_TYPE;
+
+  TYPE object_description = SELECT
+    (document_reference,
+     text);
+  END_TYPE;
+
+  TYPE person = STRING;
+  END_TYPE;
+
+  ENTITY centre_location;
+      longitudinal_location : length_measure;
+      transversal_location  : length_measure;
+      vertical_location     : length_measure;
+  END_ENTITY;
+
+  ENTITY edge_based_wireframe_shape;
+  END_ENTITY;
+
+  ENTITY non_manifold_surface_shape;
+  END_ENTITY;
+
+  ENTITY ship_surface
+    SUBTYPE OF(moulded_form_representation_item);
+      surface_class : ship_surface_class_name;
+      surface_shape : surface;
+  END_ENTITY;
+
+  ENTITY moulded_form_representation_item
+    ABSTRACT SUPERTYPE OF (ONEOF(ship_point, ship_curve, ship_surface));
+  END_ENTITY;
+
+  ENTITY ship_point
+    SUBTYPE OF(moulded_form_representation_item);
+      point_class : ship_point_class_name;
+      point_shape : point;
+  END_ENTITY;
+
+  ENTITY ship_curve
+    SUBTYPE OF(moulded_form_representation_item);
+      curve_class    : ship_curve_class_name;
+      side_condition : side_condition_type;
+      curve_shape    : curve;
+  END_ENTITY;
+
+  ENTITY ship_curve_with_spacing_position
+    SUBTYPE OF(ship_curve);
+      location : spacing_position;
+  END_ENTITY;
+
+  ENTITY spacing_position
+    ABSTRACT SUPERTYPE OF (ONEOF(longitudinal_position, transversal_position, vertical_position) ANDOR spacing_position_with_offset);
+      position_number : REAL;
+      name            : OPTIONAL text;
+      position        : length_measure;
+    WHERE
+      WR1 : ('AP216_DIS_V1.Longitudinal_position' IN TYPEOF(self)) OR
+            ('AP216_DIS_V1.Vertical_position' IN TYPEOF(self)) OR
+            ('AP216_DIS_V1.Transversal_position' IN TYPEOF(self));
+  END_ENTITY;
+
+  ENTITY longitudinal_position
+    SUBTYPE OF(spacing_position);
+  END_ENTITY;
+
+  ENTITY transversal_position
+    SUBTYPE OF(spacing_position);
+  END_ENTITY;
+
+  ENTITY vertical_position
+    SUBTYPE OF(spacing_position);
+  END_ENTITY;
+
+  ENTITY spacing_position_with_offset
+    SUBTYPE OF(spacing_position);
+      offset                    : length_measure;
+      relating_spacing_position : spacing_position;
+    DERIVE
+      SELF\spacing_position.position                  : length_measure := offset + 
+                                  relating_spacing_position.position;
+    WHERE
+      WR1 : NOT (TYPEOF (relating_spacing_position)=['SPACING_POSITION', 
+            'SPACING_POSITION_WITH_OFFSET']);
+  END_ENTITY;
+
+  ENTITY moulded_form_shape_representation
+    ABSTRACT SUPERTYPE OF (ONEOF(surface_shape_representation, wireframe_shape_representation, offset_table_shape_representation));
+      moulded_form_representation_id : OPTIONAL label;
+      moulded_form_symmetry          : OPTIONAL symmetry;
+  END_ENTITY;
+
+  ENTITY surface_shape_representation
+    SUBTYPE OF(moulded_form_shape_representation);
+      items : SET [1:?] OF face_based_surface_model;
+  END_ENTITY;
+
+  ENTITY wireframe_shape_representation
+    SUBTYPE OF(moulded_form_shape_representation);
+      items : SET [1:?] OF ship_curve;
+  END_ENTITY;
+
+  ENTITY offset_table_shape_representation
+    SUBTYPE OF(moulded_form_shape_representation);
+      items : SET [1:?] OF offset_point_table_model;
+  END_ENTITY;
+
+  ENTITY offset_point_table_model;
+      offset_point_table_type     : offset_table_type;
+      offset_point_table_sections : LIST [1:?] OF section_of_offset_point_table;
+  END_ENTITY;
+
+  ENTITY section_of_offset_point_table;
+      section_identifier : label;
+      section_points     : LIST [1:?] OF ship_point;
+    INVERSE
+      for_table          : SET [1:?] OF offset_point_table_model FOR offset_point_table_sections;
+    UNIQUE
+      UR1 : section_identifier;
+  END_ENTITY;
+
+  ENTITY symmetry
+    ABSTRACT SUPERTYPE OF (ONEOF(planar_symmetry, rotational_symmetry));
+  END_ENTITY;
+
+  ENTITY planar_symmetry
+    SUBTYPE OF(symmetry);
+      the_symmetry_plane : plane;
+  END_ENTITY;
+
+  ENTITY rotational_symmetry
+    SUBTYPE OF(symmetry);
+      the_rotational_axis : axis1_placement;
+  END_ENTITY;
+
+  ENTITY moulded_form_boundary_relationship
+    SUBTYPE OF(moulded_form_relationship);
+  END_ENTITY;
+
+  ENTITY moulded_form_relationship
+    SUBTYPE OF(item_relationship);
+      SELF\item_relationship.item_1 : OPTIONAL moulded_form;
+      SELF\item_relationship.item_2 : OPTIONAL moulded_form;
+  END_ENTITY;
+
+  ENTITY item_relationship
+    ABSTRACT SUPERTYPE
+    SUBTYPE OF(definable_object, versionable_object);
+      item_1          : OPTIONAL item;
+      external_item_1 : OPTIONAL external_instance_reference;
+      item_2          : OPTIONAL item;
+      external_item_2 : OPTIONAL external_instance_reference;
+    WHERE
+      WR1 : external_item_1.entity_type IN TYPEOF(item_1);
+      WR2 : external_item_2.entity_type IN TYPEOF(item_2);
+      WR3 : EXISTS(item_1) XOR EXISTS(external_item_1);
+      WR4 : EXISTS(item_2) XOR EXISTS(external_item_2);
+  END_ENTITY;
+
+  ENTITY definable_object
+    ABSTRACT SUPERTYPE OF (ONEOF(item, item_structure, item_relationship));
+      id : global_id;
+    UNIQUE
+      ID_IS_UNIQUE : id;
+  END_ENTITY;
+
+  ENTITY item
+    ABSTRACT SUPERTYPE OF (ONEOF(ship_moulded_form, moulded_form, change, ship))
+    SUBTYPE OF(definable_object);
+      name          : label;
+      documentation : SET OF external_reference;
+      description   : OPTIONAL text;
+      ship_context  : OPTIONAL ship;
+    WHERE
+      WR1 : ('SHIPS_EXPORT.SHIP' IN TYPEOF(SELF)) XOR
+            EXISTS(ship_context);
+  END_ENTITY;
+
+  ENTITY ship_moulded_form
+    SUBTYPE OF(item, item_structure);
+      SELF\item_structure.relationships : SET OF moulded_form_relationship;
+      SELF\item_structure.items         : SET [1:?] OF moulded_form;
+  END_ENTITY;
+
+  ENTITY item_structure
+    ABSTRACT SUPERTYPE
+    SUBTYPE OF(definable_object, versionable_object);
+      items                  : SET OF item;
+      external_items         : SET OF external_instance_reference;
+      relationships          : SET OF item_relationship;
+      external_relationships : SET OF external_instance_reference;
+    WHERE
+      WR1 : SIZEOF(QUERY(i <* external_items |
+            NOT(i.entity_type IN TYPEOF(items)))) = 0;
+      WR2 : SIZEOF(QUERY(i <* external_relationships |
+            NOT(i.entity_type IN TYPEOF(relationships))))
+            = 0;
+  END_ENTITY;
+
+  ENTITY versionable_object
+    ABSTRACT SUPERTYPE OF (ONEOF(definition, document, item_relationship, item_structure, revision));
+      description : OPTIONAL text;
+      version_id  : identifier;
+  END_ENTITY;
+
+  ENTITY definition
+    ABSTRACT SUPERTYPE OF (ONEOF(moulded_form_characteristics_definition, spacing_table, change_definition, design_definition, general_characteristics_definition, functional_definition, local_co_ordinate_system))
+    SUBTYPE OF(versionable_object);
+      id          : global_id;
+      defined_for : SET [1:?] OF definable_object;
+      local_units : SET OF unit;
+    UNIQUE
+      ID_IS_UNIQUE : id;
+  END_ENTITY;
+
+  ENTITY moulded_form_characteristics_definition
+    ABSTRACT SUPERTYPE OF (ONEOF(bulb_moulded_form_design_parameter, rudder_moulded_form_design_parameter, propeller_moulded_form_design_parameter, hull_moulded_form_design_parameter, deck_moulded_form_design_parameter, appendage_moulded_form_design_parameter, thruster_moulded_form_design_parameter, bottom_moulded_form_design_parameter))
+    SUBTYPE OF(definition);
+      SELF\definition.defined_for                : SET [1:?] OF moulded_form;
+      moulded_form_outer_surface : OPTIONAL area_measure;
+      moulded_form_displacement  : OPTIONAL volume_measure;
+  END_ENTITY;
+
+  ENTITY bulb_moulded_form_design_parameter
+    SUBTYPE OF(moulded_form_characteristics_definition);
+      bulb_length                   : positive_length_measure;
+      bulb_length_from_pp           : positive_length_measure;
+      bulb_breadth                  : positive_length_measure;
+      bulb_breadth_pp               : positive_length_measure;
+      bulb_depth                    : positive_length_measure;
+      bulb_depth_pp                 : positive_length_measure;
+      bulb_frame_section_area_at_pp : area_measure;
+      bulb_location                 : location;
+  END_ENTITY;
+
+  ENTITY rudder_moulded_form_design_parameter
+    SUBTYPE OF(moulded_form_characteristics_definition);
+      rudder_height         : positive_length_measure;
+      rudder_mean_height    : positive_length_measure;
+      rudder_length         : positive_length_measure;
+      rudder_mean_length    : positive_length_measure;
+      rudder_thickness      : positive_length_measure;
+      projected_rudder_area : area_measure;
+      type_of_the_rudder    : rudder_type;
+      rudder_location       : centre_location;
+    DERIVE
+      aspect_ratio          : ratio_measure := rudder_mean_height / 
+                              rudder_mean_length;
+  END_ENTITY;
+
+  ENTITY propeller_moulded_form_design_parameter
+    SUBTYPE OF(moulded_form_characteristics_definition);
+      type_of_propulsion                         : propulsion_type;
+      propeller_diameter                         : positive_length_measure;
+      chord_length_at_0_7_radius                 : positive_length_measure;
+      thickness_at_0_7_radius                    : positive_length_measure;
+      number_of_propeller_blades                 : INTEGER;
+      blade_mean_height                          : OPTIONAL positive_length_measure;
+      expanded_area_ratio                        : ratio_measure;
+      hub_diameter_ratio                         : ratio_measure;
+      nominal_design_pitch_ratio                 : ratio_measure;
+      type_of_propeller_blades                   : kind_of_propeller_blade;
+      rake                                       : plane_angle_measure;
+      skew                                       : plane_angle_measure;
+      design_sense_of_rotation                   : sense_of_rotation;
+      location_of_the_propeller_at_the_ship_hull : OPTIONAL propeller_location;
+  END_ENTITY;
+
+  ENTITY propeller_location;
+      shaft_line_location      : centre_location;
+      propeller_location       : centre_location;
+      shaft_line_inclination_x : plane_angle_measure;
+      shaft_line_inclination_y : plane_angle_measure;
+  END_ENTITY;
+
+  ENTITY hull_moulded_form_design_parameter
+    SUBTYPE OF(moulded_form_characteristics_definition);
+      aft_end_of_parallel_midbody_at_design_draught   : positive_length_measure;
+      front_end_of_parallel_midbody_at_design_draught : positive_length_measure;
+      aft_end_of_flat_of_side                         : positive_length_measure;
+      front_end_of_flat_of_side                       : positive_length_measure;
+      block_coefficient                               : ratio_measure;
+      prismatic_coefficient                           : ratio_measure;
+      waterline_angle_of_entrance_at_stern            : OPTIONAL plane_angle_measure;
+      waterline_angle_of_entrance_at_bow              : OPTIONAL plane_angle_measure;
+      max_frame_section_area_location                 : OPTIONAL positive_length_measure;
+      max_wetted_frame_section_area                   : area_measure;
+      gunwale_radius                                  : OPTIONAL positive_length_measure;
+      hull_length_pp                                  : OPTIONAL positive_length_measure;
+      hull_length_waterline                           : OPTIONAL positive_length_measure;
+      hull_breadth                                    : OPTIONAL positive_length_measure;
+      hull_depth                                      : OPTIONAL positive_length_measure;
+      hull_design_draught                             : OPTIONAL positive_length_measure;
+      midship_tumble_data                             : OPTIONAL midship_tumble;
+      waterplane_coefficient                          : ratio_measure;
+    DERIVE
+      length_of_parallel_midbody_at_design_draught    : positive_length_measure := 
+                                                        (front_end_of_parallel_midbody_at_design_draught - 
+                                                        aft_end_of_parallel_midbody_at_design_draught);
+      length_of_flat_of_side                          : positive_length_measure := 
+                                                        (front_end_of_flat_of_side - aft_end_of_flat_of_side);
+      length_to_beam_ratio                            : ratio_measure := 
+                                                        (hull_length_waterline / hull_breadth);
+  END_ENTITY;
+
+  ENTITY midship_tumble;
+      tumble_out_at_bottom : positive_length_measure;
+      tumble_in_at_top     : positive_length_measure;
+      tumble_out_at_side   : positive_length_measure;
+      tumble_in_at_side    : positive_length_measure;
+  END_ENTITY;
+
+  ENTITY deck_moulded_form_design_parameter
+    SUBTYPE OF(moulded_form_characteristics_definition);
+      SELF\moulded_form_characteristics_definition.defined_for : SET [1:?] OF moulded_form;
+      camber      : positive_length_measure;
+      sheer_at_ap : positive_length_measure;
+      sheer_at_fp : positive_length_measure;
+  END_ENTITY;
+
+  ENTITY moulded_form
+    SUBTYPE OF(item);
+  END_ENTITY;
+
+  ENTITY appendage_moulded_form_design_parameter
+    SUBTYPE OF(moulded_form_characteristics_definition);
+      appendage_length        : positive_length_measure;
+      appendage_breadth       : positive_length_measure;
+      appendage_depth         : positive_length_measure;
+      type_of_appendage       : appendage_type;
+      user_def_appendage_type : OPTIONAL label;
+    WHERE
+      WR1 : EXISTS(SELF.user_def_appendage_type) XOR 
+            (type_of_appendage <> Appendage_type.USER_DEFINED);
+  END_ENTITY;
+
+  ENTITY thruster_moulded_form_design_parameter
+    SUBTYPE OF(moulded_form_characteristics_definition);
+      thruster_tunnel_diameter     : positive_length_measure;
+      thruster_tunnel_min_length   : positive_length_measure;
+      thruster_tunnel_max_length   : positive_length_measure;
+      thruster_propeller_parameter : propeller_moulded_form_design_parameter;
+      geometric_thruster_location  : centre_location;
+      thruster_location            : location;
+  END_ENTITY;
+
+  ENTITY bottom_moulded_form_design_parameter
+    SUBTYPE OF(moulded_form_characteristics_definition);
+      bilge_radius                : positive_length_measure;
+      rise_of_floor               : positive_length_measure;
+      rake_of_keel                : plane_angle_measure;
+      aft_end_of_flat_of_bottom   : positive_length_measure;
+      front_end_of_flat_of_bottom : positive_length_measure;
+      flat_of_bottom_breadth      : positive_length_measure;
+    DERIVE
+      length_of_flat_of_bottom    : positive_length_measure := 
+                                    (front_end_of_flat_of_bottom - aft_end_of_flat_of_bottom);
+  END_ENTITY;
+
+  ENTITY spacing_table
+    SUPERTYPE OF (ONEOF(longitudinal_table, transversal_table, vertical_table))
+    SUBTYPE OF(definition);
+      spacing_table_representations : LIST OF spacing_position;
+      name                          : OPTIONAL text;
+  END_ENTITY;
+
+  ENTITY longitudinal_table
+    SUPERTYPE OF (ONEOF(frame_table, station_table))
+    SUBTYPE OF(spacing_table);
+      SELF\spacing_table.spacing_table_representations : LIST OF longitudinal_position;
+  END_ENTITY;
+
+  ENTITY frame_table
+    SUBTYPE OF(longitudinal_table);
+  END_ENTITY;
+
+  ENTITY station_table
+    SUBTYPE OF(longitudinal_table);
+  END_ENTITY;
+
+  ENTITY transversal_table
+    SUBTYPE OF(spacing_table);
+      SELF\spacing_table.spacing_table_representations : LIST OF transversal_position;
+  END_ENTITY;
+
+  ENTITY buttock_table
+    SUBTYPE OF(transversal_table);
+  END_ENTITY;
+
+  ENTITY vertical_table
+    SUBTYPE OF(spacing_table);
+      SELF\spacing_table.spacing_table_representations : LIST OF vertical_position;
+  END_ENTITY;
+
+  ENTITY waterline_table
+    SUBTYPE OF(vertical_table);
+  END_ENTITY;
+
+  ENTITY change_definition
+    ABSTRACT SUPERTYPE OF (ONEOF(change_request, change_plan, change_realization))
+    SUBTYPE OF(definition);
+      SELF\definition.defined_for : SET [1:?] OF change;
+      SELF\definition.local_units : SET OF unit;
+      author      : person_and_organization;
+      date_time   : date_and_time;
+  END_ENTITY;
+
+  ENTITY change_request
+    SUBTYPE OF(change_definition);
+      initiator             : person_and_organization;
+      addressee             : OPTIONAL person_and_organization;
+      problem               : text;
+      solution_description  : OPTIONAL text;
+      solution_alternatives : SET OF change_impact;
+  END_ENTITY;
+
+  ENTITY change_impact;
+      impact : SET [1:?] OF versionable_object_change_event;
+  END_ENTITY;
+
+  ENTITY versionable_object_change_event
+    ABSTRACT SUPERTYPE OF (ONEOF(envisaged_version_creation, version_creation, version_modification, version_deletion))
+    SUBTYPE OF(event);
+  END_ENTITY;
+
+  ENTITY event
+    ABSTRACT SUPERTYPE OF (ONEOF(approval_event, check, versionable_object_change_event));
+      caused_by   : person_and_organization;
+      caused_when : date_and_time;
+      description : text;
+  END_ENTITY;
+
+  ENTITY approval_event
+    SUBTYPE OF(event);
+      result              : approval_status;
+      user_defined_result : OPTIONAL label;
+    INVERSE
+      approval_reference  : approval_history FOR approvals;
+    UNIQUE
+       approval_reference, caused_when;
+    WHERE
+      WR1 : (result <> Approval_status.USER_DEFINED) XOR
+            (SELF.user_defined_result <> '');
+  END_ENTITY;
+
+  ENTITY approval_history;
+      approvals : LIST [1:?] OF approval_event;
+      subject   : definition;
+    DERIVE
+      status    : approval_status := 
+                  current_approval_status(approvals);
+  END_ENTITY;
+
+  ENTITY check
+    SUBTYPE OF(event);
+  END_ENTITY;
+
+  ENTITY envisaged_version_creation
+    SUBTYPE OF(versionable_object_change_event);
+      base     : SET OF versionable_object;
+      category : label;
+  END_ENTITY;
+
+  ENTITY version_creation
+    SUBTYPE OF(versionable_object_change_event);
+      base    : SET OF versionable_object;
+      subject : versionable_object;
+  END_ENTITY;
+
+  ENTITY version_modification
+    SUBTYPE OF(versionable_object_change_event);
+      base    : SET [1:?] OF versionable_object;
+      subject : versionable_object;
+  END_ENTITY;
+
+  ENTITY version_deletion
+    SUBTYPE OF(versionable_object_change_event);
+      subject : versionable_object;
+  END_ENTITY;
+
+  ENTITY change_plan
+    SUBTYPE OF(change_definition);
+      chosen_solution_for : change_request;
+      checks              : SET OF check;
+      planned_impact      : change_impact;
+  END_ENTITY;
+
+  ENTITY change_realization
+    SUBTYPE OF(change_definition);
+      realization_of : change_plan;
+      checks         : SET OF check;
+      impact         : change_impact;
+  END_ENTITY;
+
+  ENTITY change
+    SUBTYPE OF(item);
+      the_class : label;
+  END_ENTITY;
+
+  ENTITY named_unit;
+  END_ENTITY;
+
+  ENTITY derived_unit;
+  END_ENTITY;
+
+  ENTITY design_definition
+    ABSTRACT SUPERTYPE OF (ONEOF(hydrostatic_definition, stability_definition, moulded_form_design_definition))
+    SUBTYPE OF(definition);
+      representations : SET OF representation;
+  END_ENTITY;
+
+  ENTITY hydrostatic_definition
+    SUBTYPE OF(design_definition);
+      SELF\definition.defined_for          : SET [1:?] OF ship;
+      SELF\design_definition.representations      : SET [1:?] OF hydrostatic_table;
+      displacement_changes : LIST OF displacement_operation;
+      SELF\versionable_object.description          : OPTIONAL label;
+  END_ENTITY;
+
+  ENTITY ship
+    SUBTYPE OF(item);
+      units                : SET OF unit;
+      single_hull_or_class : single_or_multiple_hulls;
+    INVERSE
+      ship_items           : SET OF item FOR ship_context;
+  END_ENTITY;
+
+  ENTITY hydrostatic_table;
+      items                               : SET [1:?] OF hydrostatic_properties_for_constant_floating_position;
+      properties_in_the_hydrostatic_table : LIST [1:?] OF hydrostatic_property;
+      mean_shell_thickness                : positive_length_measure;
+      name                                : text;
+  END_ENTITY;
+
+  ENTITY hydrostatic_properties_for_constant_floating_position;
+      hydrostatic_property_values     : LIST [1:?] OF hydrostatic_property_value;
+      definition_of_floating_position : floating_position;
+    INVERSE
+      related_hydrostatic_table       : SET [1:?] OF hydrostatic_table FOR items;
+  END_ENTITY;
+
+  ENTITY hydrostatic_property_value
+    ABSTRACT SUPERTYPE OF (ONEOF(hydrostatic_position_value, hydrostatic_scalar_value));
+  END_ENTITY;
+
+  ENTITY hydrostatic_position_value
+    SUBTYPE OF(hydrostatic_property_value);
+      position : centre_location;
+  END_ENTITY;
+
+  ENTITY hydrostatic_scalar_value
+    SUBTYPE OF(hydrostatic_property_value);
+      scalar : REAL;
+  END_ENTITY;
+
+  ENTITY floating_position;
+      draught_at_amidships      : positive_length_measure;
+      angle_of_trim             : plane_angle_measure;
+      angle_of_heel             : plane_angle_measure;
+      length_of_waterline       : positive_length_measure;
+      breadth_of_waterline      : positive_length_measure;
+      moulded_form_displacement : volume_measure;
+  END_ENTITY;
+
+  ENTITY hydrostatic_property;
+      property_measure : hydrostatic_property_measure;
+      property_type    : hydrostatic_property_type;
+  END_ENTITY;
+
+  ENTITY displacement_operation
+    ABSTRACT SUPERTYPE OF (ONEOF(addition_of_moulded_form, subtraction_of_moulded_form));
+      displacement_of_moulded_form_to_add_or_subtract : moulded_form;
+  END_ENTITY;
+
+  ENTITY addition_of_moulded_form
+    SUBTYPE OF(displacement_operation);
+  END_ENTITY;
+
+  ENTITY subtraction_of_moulded_form
+    SUBTYPE OF(displacement_operation);
+  END_ENTITY;
+
+  ENTITY stability_definition
+    SUBTYPE OF(design_definition);
+      SELF\definition.defined_for     : SET [1:?] OF ship;
+      SELF\design_definition.representations : SET [1:?] OF stability_table;
+  END_ENTITY;
+
+  ENTITY stability_table;
+      items                : SET [1:?] OF stability_properties_for_one_floating_position;
+      mean_shell_thickness : positive_length_measure;
+      name                 : text;
+  END_ENTITY;
+
+  ENTITY stability_properties_for_one_floating_position;
+      centre_of_gravity_above_keel                      : centre_location;
+      definition_of_starting_floating_position          : floating_position;
+      stability_properties_for_different_angles_of_heel : LIST [1:?] OF stability_property;
+    INVERSE
+      related_stability_table                           : SET [1:?] OF stability_table FOR items;
+  END_ENTITY;
+
+  ENTITY stability_property;
+      centre_of_buoyancy : centre_location;
+      righting_arm       : length_measure;
+      angle_of_heel      : plane_angle_measure;
+  END_ENTITY;
+
+  ENTITY moulded_form_design_definition
+    SUBTYPE OF(design_definition);
+      SELF\definition.defined_for     : SET [1:?] OF moulded_form;
+      SELF\design_definition.representations : SET OF surface_representation;
+      moulded_surface : OPTIONAL surface_geometry;
+      borders         : OPTIONAL LIST [1:?] OF moulded_form_border;
+      status          : OPTIONAL shape_definition_status;
+  END_ENTITY;
+
+  ENTITY general_characteristics_definition
+    ABSTRACT SUPERTYPE OF (ONEOF(ship_designation, owner_designation, shipyard_designation, class_and_statutory_designation, class_parameters, principal_characteristics, ship_overall_dimensions, global_axis_placement))
+    SUBTYPE OF(definition);
+      SELF\definition.defined_for : SET [1:?] OF ship;
+  END_ENTITY;
+
+  ENTITY ship_designation
+    SUBTYPE OF(general_characteristics_definition);
+      flag_state           : text;
+      ship_name            : text;
+      port_of_registration : text;
+      call_sign            : text;
+      ship_identification  : ship_identifier;
+      SELF\versionable_object.description          : text;
+      SELF\definition.local_units          : SET OF unit;
+  END_ENTITY;
+
+  ENTITY owner_designation
+    SUBTYPE OF(general_characteristics_definition);
+      ordering_company : organization;
+      managing_company : organization;
+      owning_company   : organization;
+      SELF\definition.local_units      : SET OF unit;
+      owner_approval   : OPTIONAL STRING;
+  END_ENTITY;
+
+  ENTITY shipyard_designation
+    SUBTYPE OF(general_characteristics_definition);
+      shipyard_new_building_id : OPTIONAL label;
+      shipyard_project_name    : text;
+      role                     : shipyard_role;
+      shipyard                 : organization;
+      SELF\definition.local_units              : SET OF unit;
+  END_ENTITY;
+
+  ENTITY class_and_statutory_designation
+    SUBTYPE OF(general_characteristics_definition);
+      the_class     : class_notation;
+      the_statutory : regulation;
+      class_number  : label;
+      SELF\definition.local_units   : SET OF unit;
+  END_ENTITY;
+
+  ENTITY class_notation;
+      class_society                               : organization;
+      class_notations_hull                        : SET [1:?] OF text;
+      class_notations_machinery                   : SET [1:?] OF text;
+      ice_class_notation                          : OPTIONAL text;
+      service_area                                : text;
+      service_factor                              : OPTIONAL REAL;
+      approval_required_for_oil_cargo             : BOOLEAN;
+      approval_required_loading_unloading_aground : BOOLEAN;
+      approval_required_loading_unloading_grabs   : BOOLEAN;
+      approval_required_for_heavy_cargo           : OPTIONAL heavy_cargo;
+  END_ENTITY;
+
+  ENTITY regulation;
+      international_regulations : SET OF external_reference;
+      national_regulations      : SET OF external_reference;
+      standards                 : SET OF external_reference;
+  END_ENTITY;
+
+  ENTITY external_reference;
+      location    : any_address;
+      description : text;
+  END_ENTITY;
+
+  ENTITY document_reference_with_address
+    SUBTYPE OF(document_reference, external_reference);
+  END_ENTITY;
+
+  ENTITY document_reference;
+      assigned_document : document_referent;
+  END_ENTITY;
+
+  ENTITY document
+    SUBTYPE OF(versionable_object);
+      author      : any_author;
+      title       : label;
+      source_type : label;
+      SELF\versionable_object.description : OPTIONAL text;
+  END_ENTITY;
+
+  ENTITY document_portion;
+      source        : document;
+      element_type  : label;
+      element_value : text;
+  END_ENTITY;
+
+  ENTITY external_storage;
+      location : label;
+  END_ENTITY;
+
+  ENTITY universal_resource_locator;
+      location : label;
+  END_ENTITY;
+
+  ENTITY class_parameters
+    SUBTYPE OF(general_characteristics_definition);
+      length_class            : length_measure;
+      length_solas            : length_measure;
+      scantlings_draught      : length_measure;
+      block_coefficient_class : ratio_measure;
+      design_speed_ahead      : speed_measure;
+      design_speed_astern     : speed_measure;
+  END_ENTITY;
+
+  ENTITY principal_characteristics
+    SUBTYPE OF(general_characteristics_definition);
+      length_between_perpendiculars : length_measure;
+      moulded_breadth               : length_measure;
+      moulded_depth                 : length_measure;
+      design_draught                : OPTIONAL length_measure;
+      block_coefficient             : OPTIONAL ratio_measure;
+      design_deadweight             : OPTIONAL mass_measure;
+      min_draught_at_fp             : OPTIONAL length_measure;
+      max_draught_at_fp             : OPTIONAL length_measure;
+      min_draught_at_ap             : OPTIONAL length_measure;
+      max_draught_at_ap             : OPTIONAL length_measure;
+  END_ENTITY;
+
+  ENTITY ship_overall_dimensions
+    SUBTYPE OF(general_characteristics_definition);
+      SELF\general_characteristics_definition.defined_for     : SET [1:?] OF ship;
+      overall_breadth : positive_length_measure;
+      overall_depth   : positive_length_measure;
+      overall_length  : positive_length_measure;
+      stem_overhang   : positive_length_measure;
+      stern_overhang  : positive_length_measure;
+  END_ENTITY;
+
+  ENTITY global_axis_placement
+    SUBTYPE OF(general_characteristics_definition);
+      orientation                : global_co_ordinate_system_orientation;
+      after_perpendicular_offset : length_measure;
+  END_ENTITY;
+
+  ENTITY functional_definition
+    ABSTRACT SUPERTYPE OF (ONEOF(moulded_form_functional_definition, shiptype))
+    SUBTYPE OF(definition);
+      user_def_function : OPTIONAL label;
+      SELF\definition.local_units       : SET OF unit;
+  END_ENTITY;
+
+  ENTITY moulded_form_functional_definition
+    SUBTYPE OF(functional_definition);
+      SELF\definition.defined_for  : SET [1:?] OF moulded_form;
+      the_function : moulded_form_functionality;
+    WHERE
+      WR1 : EXISTS(SELF\Functional_definition.user_def_function) XOR 
+            (the_function <> Moulded_form_functionality.USER_DEFINED);
+  END_ENTITY;
+
+  ENTITY shiptype
+    ABSTRACT SUPERTYPE OF (ONEOF(carrier, working_ship, research_ship, navy_ship))
+    SUBTYPE OF(functional_definition);
+      SELF\versionable_object.description : OPTIONAL text;
+      SELF\definition.defined_for : SET [1:?] OF ship;
+  END_ENTITY;
+
+  ENTITY carrier
+    SUBTYPE OF(shiptype);
+      has_type : carrier_ship_type;
+    WHERE
+      WR1 : (NOT EXISTS(SELF.user_def_function)) OR
+            (has_type = Carrier_Ship_Type.user_defined);
+  END_ENTITY;
+
+  ENTITY working_ship
+    SUBTYPE OF(shiptype);
+      has_type : working_ship_type;
+    WHERE
+      WR1 : (NOT EXISTS(SELF.user_def_function)) OR
+            (has_type = Working_Ship_Type.user_defined);
+  END_ENTITY;
+
+  ENTITY research_ship
+    SUBTYPE OF(shiptype);
+      has_type : research_ship_type;
+    WHERE
+      WR1 : (NOT EXISTS(SELF.user_def_function)) OR
+            (has_type = Research_Ship_Type.user_defined);
+  END_ENTITY;
+
+  ENTITY navy_ship
+    SUBTYPE OF(shiptype);
+      has_type : navy_ship_type;
+    WHERE
+      WR1 : (NOT EXISTS(SELF.user_def_function)) OR
+            (has_type = Navy_Ship_Type.user_defined);
+  END_ENTITY;
+
+  ENTITY local_co_ordinate_system
+    SUBTYPE OF(definition);
+      parent : co_ordinate_system;
+  END_ENTITY;
+
+  ENTITY local_co_ordinate_system_with_position_reference
+    SUBTYPE OF(local_co_ordinate_system);
+      longitudinal_ref : OPTIONAL location_reference;
+      transversal_ref  : OPTIONAL location_reference;
+      vertical_ref     : OPTIONAL location_reference;
+    WHERE
+      AT_LEAST_ONE_REFERENCE: 
+             (EXISTS(longitudinal_ref) OR EXISTS(vertical_ref) OR EXISTS(transversal_ref));
+
+      RELATES_DIRECTLY_TO_GLOBAL_SYSTEM: 
+             ('AP216_DIS_V1.GLOBAL_AXIS_PLACEMENT' IN 
+             TYPEOF(SELF\Local_co_ordinate_system.parent));
+
+      CORRECT_LONGITUDINAL_REF: 
+             (NOT ('SPACING_GRIDS_EXPORT.SPACING_POSITION' IN TYPEOF (longitudinal_ref)) OR 
+             ('SPACING_GRIDS_EXPORT.LONGITUDINAL_POSITION' IN TYPEOF (longitudinal_ref)));
+
+      CORRECT_TRANSVERSAL_REF: 
+             (NOT ('SPACING_GRIDS_EXPORT.SPACING_POSITION' IN TYPEOF (transversal_ref)) OR 
+             ('SPACING_GRIDS_EXPORT.TRANSVERSAL_POSITION' IN TYPEOF (transversal_ref)));
+
+      CORRECT_VERTICAL_REF: 
+             (NOT ('SPACING_GRIDS_EXPORT.SPACING_POSITION' IN TYPEOF (vertical_ref)) OR 
+             ('SPACING_GRIDS_EXPORT.VERTICAL_POSITION' IN TYPEOF (vertical_ref)));
+  END_ENTITY;
+
+  ENTITY global_id;
+      id : STRING;
+  END_ENTITY;
+
+  ENTITY revision
+    SUBTYPE OF(versionable_object);
+      name        : label;
+      members     : SET [1:?] OF versionable_object;
+      SELF\versionable_object.description : text;
+  END_ENTITY;
+
+  ENTITY revision_with_context
+    SUBTYPE OF(revision);
+      context_of_revision : definable_object;
+  END_ENTITY;
+
+  ENTITY ship_moulded_form_revision
+    SUBTYPE OF(revision_with_context);
+      SELF\revision_with_context.context_of_revision : ship_moulded_form;
+      SELF\revision.members             : SET [1:?] OF moulded_form_design_definition;
+  END_ENTITY;
+
+  ENTITY external_instance_reference;
+      schema_name : label;
+      entity_type : label;
+      target_guid : global_id;
+  END_ENTITY;
+
+  ENTITY moulded_form_representation_relationship;
+      rep_1       : moulded_form_shape_representation;
+      rep_2       : moulded_form_shape_representation;
+      id          : label;
+      description : OPTIONAL text;
+  END_ENTITY;
+
+  ENTITY ship_curve_segment;
+      part_of_ship_curve : ship_curve;
+  END_ENTITY;
+
+  ENTITY knot;
+      intersecting_ship_curves : LIST [2:?] OF ship_curve;
+      tangent_information      : OPTIONAL vector;
+  END_ENTITY;
+
+  ENTITY hull_applicability;
+      start_hull            : label;
+      end_hull              : OPTIONAL label;
+      items_for_hulls       : SET OF item;
+      definitions_for_hulls : SET OF definition;
+  END_ENTITY;
+
+  ENTITY precision;
+      minimum_point_spacing : length_measure;
+  END_ENTITY;
+
+  ENTITY version_history;
+      versions        : SET [1:?] OF versionable_object;
+      relationships   : SET OF version_relationship;
+      current_version : versionable_object;
+  END_ENTITY;
+
+  ENTITY version_relationship;
+      predecessor : versionable_object;
+      successor   : versionable_object;
+      reason      : text;
+  END_ENTITY;
+
+  ENTITY alternative_version_relationship;
+      alternative_1 : versionable_object;
+      alternative_2 : versionable_object;
+      reason        : text;
+  END_ENTITY;
+
+  RULE unique_global_placement FOR (global_axis_placement);
+    WHERE
+      WR1 : SIZEOF(Global_axis_placement) = 1;
+  END_RULE;
+
+  FUNCTION current_approval_status
+  (  history: LIST[1:?] OF Approval_event
+              (*the approval history the current approval status is
+                 to be derived from. *)
+        ): Approval_status;
+           (*The <current_approval_status> function returns the
+              approval status being the <result> of the last
+              <Approval_event> in the approval history. *)
+  
+        LOCAL
+           a: Approval_event;
+        END_LOCAL;
+  
+        a := history[HIINDEX(history)];
+        RETURN (a.result);
+  END_FUNCTION;
+
+
+END_SCHEMA;

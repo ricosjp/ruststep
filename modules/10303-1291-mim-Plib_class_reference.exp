@@ -1,0 +1,32 @@
+(*
+  $Id: 10303-1291-mim-Plib_class_reference.exp,v 1.1 2003/01/27 20:34:50 wg12deputy Exp $
+  ISO/TC184/SC4 WG12N1355 - ISO/CD-TS - 10303-1291 Plib class reference - EXPRESS MIM
+*)
+
+
+SCHEMA Plib_class_reference_mim; 
+
+USE FROM External_class_mim;    -- ISO/CD-TS 10303-1275
+
+USE FROM External_item_identification_assignment_mim;    -- ISO/TS 10303-1128
+
+USE FROM external_reference_schema   -- ISO 10303-41
+  (external_source,
+   pre_defined_item); 
+
+USE FROM Person_organization_assignment_mim;    -- ISO/TS 10303-1013
+
+
+TYPE plib_class_identification_item = SELECT BASED_ON external_identification_item WITH 
+   (externally_defined_class);
+END_TYPE; 
+
+TYPE plib_class_organization_item = SELECT BASED_ON organization_item WITH 
+   (externally_defined_class);
+END_TYPE; 
+
+ENTITY known_source
+  SUBTYPE OF (external_source, pre_defined_item);
+END_ENTITY;
+
+END_SCHEMA;  -- Plib_class_reference_mim

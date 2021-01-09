@@ -1,0 +1,17 @@
+(*
+ $Id: 10303-1077-mim-Class_of_product.exp,v 1.4 2006/08/04 12:11:54 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2748 - ISO/TS 10303-1077 Class of product - EXPRESS MIM
+ Supersedes ISO TC184/SC4/WG12 N1960
+*)
+
+SCHEMA Class_of_product_mim;
+
+USE FROM Class_mim;    --  ISO/TS 10303-1070
+USE FROM Product_version_mim;    --  ISO/TS 10303-1018
+USE FROM Product_view_definition_mim;    --  ISO/TS 10303-1019
+
+ENTITY class_of_product
+  SUBTYPE OF (product_definition_formation, class);
+END_ENTITY;
+
+END_SCHEMA;

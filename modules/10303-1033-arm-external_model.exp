@@ -1,0 +1,22 @@
+(*
+ $Id: 10303-1033-arm-external_model.exp,v 1.5 2006/08/07 07:44:42 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N1228 - ISO/TS 10303-1033 External model - EXPRESS ARM
+*)
+
+SCHEMA External_model_arm;
+
+USE FROM Elemental_geometric_shape_arm;
+
+USE FROM File_identification_arm;
+
+ENTITY External_geometric_model
+SUBTYPE OF (Geometric_model);
+   SELF\Representation.items: SET[1:1] OF Axis_placement;
+   external_file: Digital_file;
+WHERE
+WR1: SELF\Representation.context_of_items.dimension_count = 3;
+WR2: SELF\Representation.context_of_items.kind = 'external';
+END_ENTITY;
+
+END_SCHEMA;
+

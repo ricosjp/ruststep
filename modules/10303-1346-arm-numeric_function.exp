@@ -1,0 +1,131 @@
+(* 
+   $Id: 10303-1346-arm-numeric_function.exp,v 1.2 2005/02/22 15:19:42 wg12deputy Exp $
+   ISO/TC184/SC4 WG12N2561 - ISO/TS 10303-1346 Numeric-function - Express ARM
+   Supersedes ISO TC184/SC4/WG12N1802
+*)
+
+SCHEMA Numeric_function_arm;
+
+USE FROM Expression_arm;
+
+REFERENCE FROM Expression_arm(is_int_expr);
+
+ENTITY Abs_function
+SUBTYPE OF (Unary_function_call);
+END_ENTITY;
+
+ENTITY Acos_function
+SUBTYPE OF (Unary_function_call);
+END_ENTITY;
+
+ENTITY Asin_function
+	SUBTYPE OF (Unary_function_call);
+END_ENTITY;
+
+ENTITY Atan_function
+	SUBTYPE OF (Binary_function_call);
+END_ENTITY;
+
+ENTITY Cos_function
+SUBTYPE OF (Unary_function_call);
+END_ENTITY;
+
+ENTITY Exp_function
+SUBTYPE OF (Unary_function_call);
+END_ENTITY;
+
+ENTITY Int_value_function
+	SUBTYPE OF (Value_function);
+END_ENTITY;
+
+ENTITY Integer_defined_function 
+	ABSTRACT SUPERTYPE
+	SUBTYPE OF (Numeric_defined_function);
+END_ENTITY ;
+
+ENTITY Length_function
+	SUBTYPE OF (Numeric_expression, Unary_generic_expression);
+	SELF\Unary_generic_expression.operand: String_expression;
+END_ENTITY;
+
+ENTITY Log10_function
+SUBTYPE OF (Unary_function_call);
+END_ENTITY;
+
+ENTITY Log2_function
+SUBTYPE OF (Unary_function_call);
+END_ENTITY;
+
+ENTITY Log_function
+SUBTYPE OF (Unary_function_call);
+END_ENTITY;
+
+ENTITY Maximum_function
+	SUBTYPE OF (Multiple_arity_function_call);
+END_ENTITY;
+
+ENTITY Minimum_function
+	SUBTYPE OF (Multiple_arity_function_call);
+END_ENTITY;
+
+ENTITY Minus_function
+SUBTYPE OF (Unary_function_call);
+END_ENTITY;
+
+ENTITY Numeric_defined_function
+	ABSTRACT SUPERTYPE OF (ONEOF (Integer_defined_function,
+				Real_defined_function))
+	SUBTYPE OF (Numeric_expression, Defined_function);
+END_ENTITY;
+
+ENTITY Odd_function
+SUBTYPE OF (Unary_boolean_expression);
+	SELF\Unary_generic_expression.operand: Numeric_expression;
+WHERE
+	WR1: Is_int_expr(SELF\Numeric_expression);
+END_ENTITY;
+
+ENTITY Real_defined_function 
+	ABSTRACT SUPERTYPE
+	SUBTYPE OF (Numeric_defined_function);
+END_ENTITY ;
+
+ENTITY Sin_function
+SUBTYPE OF (Unary_function_call);
+END_ENTITY;
+
+ENTITY Square_root_function
+SUBTYPE OF (Unary_function_call);
+END_ENTITY;
+
+ENTITY Tan_function
+SUBTYPE OF (Unary_function_call);
+END_ENTITY;
+
+ENTITY Unary_function_call
+ABSTRACT SUPERTYPE OF (ONEOF (Abs_function,
+				Minus_function,
+				Sin_function,
+				Cos_function,
+				Tan_function,
+				Asin_function,
+				Acos_function,
+				Exp_function,
+				Log_function,
+				Log2_function,
+				Log10_function,
+				Square_root_function))
+	SUBTYPE OF (Unary_numeric_expression);
+END_ENTITY;
+
+ENTITY Value_function
+	SUPERTYPE OF (Int_value_function)
+	SUBTYPE OF (Numeric_expression, Unary_generic_expression);
+	SELF\Unary_generic_expression.operand: String_expression;
+END_ENTITY;
+
+
+
+
+
+END_SCHEMA;

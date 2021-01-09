@@ -1,0 +1,2037 @@
+(***********************************************************************
+Title:  AIM short form for ISO/IS 10303-209
+Author: Keith Hunten and Adnan Yucel
+Date: 2001-06-01
+N-number: ISO TC184/SC4/WG3 N971
+***********************************************************************)
+
+SCHEMA structural_analysis_design;
+
+  USE FROM aic_advanced_brep;
+
+  USE FROM aic_edge_based_wireframe;
+
+  USE FROM aic_faceted_brep;
+
+  USE FROM aic_geometrically_bounded_surface;
+
+  USE FROM aic_geometrically_bounded_wireframe;
+
+  USE FROM aic_manifold_surface;
+
+  USE FROM aic_shell_based_wireframe;
+ 
+ USE FROM action_schema
+      (action,
+       action_directive,
+       action_method,
+       action_request_solution,
+       action_request_status,
+       action_status,
+       directed_action,
+       versioned_action_request);
+
+  USE FROM application_context_schema
+      (application_context_element,
+       application_protocol_definition,
+       product_context,
+       product_definition_context);
+
+  USE FROM approval_schema
+      (approval,
+       approval_date_time,
+       approval_person_organization,
+       approval_relationship,
+       approval_role,
+       approval_status);
+
+  USE FROM certification_schema
+      (certification,
+       certification_type);
+
+  USE FROM configuration_management_schema
+      (configuration_effectivity,
+       configuration_item);
+
+  USE FROM contract_schema
+      (contract,
+       contract_type);
+
+  USE FROM date_time_schema
+      (calendar_date,
+       date,
+       date_and_time,
+       date_role,
+       date_time_role,
+       ordinal_date,
+       week_of_year_and_day_date);
+
+  USE FROM document_schema
+      (document,
+       document_relationship,
+       document_type,
+       document_usage_constraint,
+       document_with_class);
+
+  USE FROM effectivity_schema
+      (dated_effectivity,
+       lot_effectivity,
+       serial_numbered_effectivity);
+
+  USE FROM ISO13584_expressions_schema
+      (comparison_equal,
+       div_expression,
+       minus_expression,
+       mult_expression,
+       plus_expression,
+       real_literal,
+       real_numeric_variable);
+
+  USE FROM ISO13584_generic_expressions_schema
+      (environment,
+       variable_semantics);
+
+  USE FROM fea_scalar_vector_tensor_schema;
+
+  USE FROM finite_element_analysis_control_and_result_schema;
+
+  USE FROM geometric_model_schema
+      (geometric_set);
+
+  USE FROM geometry_schema
+      (cartesian_transformation_operator_2d,
+       curve,
+       dummy_gri,
+       geometric_representation_context,
+       geometric_representation_item,
+       offset_curve_2d,
+       placement,
+       point);
+
+  USE FROM management_resources_schema
+      (action_assignment,
+       action_request_assignment,
+       approval_assignment,
+       certification_assignment,
+       contract_assignment,
+       date_assignment,
+       date_and_time_assignment,
+       document_reference,
+       organization_assignment,
+       person_and_organization_assignment,
+       security_classification_assignment);
+
+  USE FROM material_property_definition_schema
+      (material_designation,
+       material_designation_characterization,
+       material_property,
+       product_material_composition_relationship);
+
+  USE FROM material_property_representation_schema
+      (data_environment,
+       data_environment_relationship,
+       material_property_representation);
+
+  USE FROM measure_schema
+      (amount_of_substance_measure,
+       amount_of_substance_measure_with_unit,
+       amount_of_substance_unit,
+       area_measure,
+       area_measure_with_unit,
+       area_unit,
+       context_dependent_measure,
+       context_dependent_unit,
+       conversion_based_unit,
+       count_measure,
+       derived_unit,
+       derived_unit_element,
+       descriptive_measure,
+       dimensional_exponents,
+       electric_current_measure,
+       global_unit_assigned_context,
+       length_measure,
+       length_measure_with_unit,
+       length_unit,
+       luminous_intensity_measure,
+       mass_measure,
+       mass_measure_with_unit,
+       mass_unit,
+       measure_value,
+       measure_with_unit,
+       named_unit,
+       numeric_measure,
+       parameter_value,
+       plane_angle_measure,
+       plane_angle_measure_with_unit,
+       plane_angle_unit,
+       positive_length_measure,
+       positive_plane_angle_measure,
+       positive_ratio_measure,
+       ratio_measure,
+       ratio_unit,
+       si_prefix,
+       si_unit,
+       si_unit_name,
+       solid_angle_measure,
+       solid_angle_measure_with_unit,
+       solid_angle_unit,
+       thermodynamic_temperature_measure,
+       thermodynamic_temperature_measure_with_unit,
+       thermodynamic_temperature_unit,
+       time_measure,
+       time_measure_with_unit,
+       time_unit,
+       unit,
+       volume_measure,
+       volume_measure_with_unit,
+       volume_unit);
+
+  USE FROM person_organization_schema
+      (address,
+       organization,
+       organization_relationship,
+       organization_role,
+       organizational_address,
+       organizational_project,
+       person_and_organization,
+       person_and_organization_role,
+       personal_address);
+
+  USE FROM product_concept_schema
+      (product_concept);
+
+  USE FROM product_definition_schema
+      (product,
+       product_category_relationship,
+       product_definition,
+       product_definition_effectivity,
+       product_definition_formation,
+       product_definition_formation_relationship,
+       product_definition_formation_with_specified_source,
+       product_definition_relationship,
+       product_definition_with_associated_documents,
+       product_related_product_category);
+
+  USE FROM product_property_definition_schema
+      (characterized_definition,
+       characterized_object,
+       property_definition,
+       product_definition_shape,
+       shape_aspect,
+       shape_aspect_relationship);
+
+  USE FROM product_property_representation_schema
+      (context_dependent_shape_representation,
+       property_definition_representation,
+       shape_definition_representation,
+       shape_representation,
+       shape_representation_relationship);
+
+  USE FROM product_structure_schema
+      (alternate_product_relationship,
+       assembly_component_usage,
+       assembly_component_usage_substitute,
+       make_from_usage_option,
+       next_assembly_usage_occurrence,
+       product_definition_usage,
+       promissory_usage_occurrence,
+       quantified_assembly_component_usage,
+       specified_higher_usage_occurrence);
+
+  USE FROM qualified_measure_schema
+       (descriptive_representation_item,
+        expanded_uncertainty,
+        measure_qualification,
+        measure_representation_item,
+        precision_qualifier,
+        qualified_representation_item,
+        qualitative_uncertainty,
+        standard_uncertainty,
+        type_qualifier,
+        uncertainty_qualifier);
+
+  USE FROM representation_schema
+      (definitional_representation,
+       functionally_defined_transformation,
+       global_uncertainty_assigned_context,
+       item_defined_transformation,
+       mapped_item,
+       parametric_representation_context,
+       representation_context,
+       representation_item,
+       representation_map,
+       representation_relationship,
+       representation_relationship_with_transformation);
+
+  USE FROM security_classification_schema
+      (security_classification,
+       security_classification_level);
+
+  USE FROM shape_dimension_schema
+      (dimensional_size,
+       shape_dimension_representation);
+
+  USE FROM structural_response_definition_schema;
+
+  USE FROM structural_response_representation_schema;
+
+  USE FROM topology_schema
+      (dummy_tri);
+
+TYPE action_item = SELECT
+  (product_definition,
+   product_definition_formation,
+   product_definition_relationship);
+END_TYPE;
+
+TYPE action_request_item = SELECT
+  (product_definition,
+   product_definition_formation,
+   product_definition_relationship);
+END_TYPE;
+
+TYPE approval_item = SELECT
+  (action_directive,
+   certification,
+   configuration_item,
+   configuration_effectivity,
+   contract,
+   control,
+   fea_model,
+   product_definition,
+   product_definition_formation,
+   result,
+   retention,
+   security_classification,
+   versioned_action_request);
+END_TYPE;
+
+TYPE certification_item = SELECT
+  (product_definition_relationship);
+END_TYPE;
+
+TYPE contract_item = SELECT
+  (product_definition_formation);
+END_TYPE;
+
+TYPE date_item = SELECT
+  (action_directive,
+   approval_person_organization,
+   certification,
+   contract,
+   product_definition,
+   retention,
+   security_classification,
+   versioned_action_request);
+END_TYPE;
+
+TYPE date_time_item = SELECT
+  (action_directive,
+   approval_person_organization,
+   certification,
+   contract,
+   product_definition,
+   retention,
+   security_classification,
+   versioned_action_request);
+END_TYPE;
+
+TYPE document_reference_item = SELECT
+  (product_definition,
+   shape_aspect);
+END_TYPE;
+
+TYPE organization_item = SELECT
+  (action_directive,
+   configuration_item,
+   contract,
+   product,
+   product_definition,
+   product_definition_formation,
+   security_classification,
+   versioned_action_request);
+END_TYPE;
+
+TYPE person_organization_item = SELECT
+  (action_directive,
+   configuration_item,
+   contract,
+   product,
+   product_definition,
+   product_definition_formation,
+   security_classification,
+   versioned_action_request);
+END_TYPE;
+
+TYPE retention_item = SELECT
+  (control,
+   document,
+   material_property,
+   product,
+   product_definition,
+   product_definition_formation,
+   product_definition_relationship,
+   representation,
+   result);
+END_TYPE;
+
+TYPE security_classification_item = SELECT
+  (product_definition,
+   product_definition_formation,
+   product_definition_usage);
+END_TYPE;
+
+ENTITY applied_action_assignment
+  SUBTYPE OF (action_assignment);
+  items : SET [1:?] OF action_item;
+END_ENTITY;
+
+ENTITY applied_action_request_assignment
+  SUBTYPE OF (action_request_assignment);
+  items : SET [1:?] OF action_request_item;
+END_ENTITY;
+
+ENTITY applied_approval_assignment
+  SUBTYPE OF (approval_assignment);
+  items : SET [1:?] OF approval_item;
+END_ENTITY;
+
+ENTITY applied_certification_assignment
+  SUBTYPE OF (certification_assignment);
+  items : SET [1:?] OF certification_item;
+END_ENTITY;
+
+ENTITY applied_contract_assignment
+  SUBTYPE OF (contract_assignment);
+  items : SET [1:?] OF contract_item;
+END_ENTITY;
+
+ENTITY applied_date_and_time_assignment
+  SUBTYPE OF (date_and_time_assignment);
+  items : SET [1:?] OF date_time_item;
+WHERE
+  WR1: applied_date_time_correlation (SELF);
+END_ENTITY;
+
+ENTITY applied_date_assignment
+  SUBTYPE OF (date_assignment);
+  items : SET [1:?] OF date_item;
+WHERE
+  WR1: applied_date_correlation (SELF);
+END_ENTITY;
+
+ENTITY applied_document_reference
+  SUBTYPE OF (document_reference);
+  items : SET [1:?] OF document_reference_item;
+END_ENTITY;
+
+ENTITY applied_organization_assignment
+  SUBTYPE OF (organization_assignment);
+  items : SET [1:?] OF organization_item;
+WHERE
+  WR1: applied_organization_correlation (SELF);
+END_ENTITY;
+
+ENTITY applied_person_and_organization_assignment
+  SUBTYPE OF (person_and_organization_assignment);
+  items : SET [1:?] OF person_organization_item;
+WHERE
+  WR1: applied_person_and_organization_correlation (SELF);
+END_ENTITY;
+
+ENTITY applied_security_classification_assignment
+  SUBTYPE OF (security_classification_assignment);
+  items : SET [1:?] OF security_classification_item;
+END_ENTITY;
+
+ENTITY beveled_sheet_representation
+  SUBTYPE OF (shape_representation);
+END_ENTITY;
+
+ENTITY composite_assembly_definition
+  SUBTYPE OF (product_definition);
+WHERE
+  WR1: SIZEOF (QUERY (pdr <* USEDIN (SELF, 
+                             'PRODUCT_DEFINITION_SCHEMA.' +
+                             'PRODUCT_DEFINITION_RELATIONSHIP.' +
+                             'RELATING_PRODUCT_DEFINITION') |
+                             'PRODUCT_STRUCTURE_SCHEMA.' +
+                             'NEXT_ASSEMBLY_USAGE_OCCURRENCE' IN
+                             TYPEOF (pdr))) = 1;
+END_ENTITY;
+
+ENTITY composite_assembly_sequence_definition
+  SUBTYPE OF (product_definition);
+WHERE
+  WR1: SIZEOF (QUERY (pdr <* USEDIN (SELF, 
+                             'PRODUCT_DEFINITION_SCHEMA.' +
+                             'PRODUCT_DEFINITION_RELATIONSHIP.' +
+                             'RELATING_PRODUCT_DEFINITION') |
+                             'PRODUCT_STRUCTURE_SCHEMA.' +
+                             'NEXT_ASSEMBLY_USAGE_OCCURRENCE' IN
+                             TYPEOF (pdr))) > 0;
+END_ENTITY;
+
+ENTITY composite_sheet_representation
+  SUBTYPE OF (shape_representation);
+WHERE
+  WR1: SIZEOF (['AIC_GEOMETRICALLY_BOUNDED_SURFACE.' +
+       'GEOMETRICALLY_BOUNDED_SURFACE_SHAPE_REPRESENTATION',
+       'AIC_MANIFOLD_SURFACE.' +
+       'MANIFOLD_SURFACE_SHAPE_REPRESENTATION'] * TYPEOF (SELF)) = 1;
+END_ENTITY;
+
+ENTITY design_make_from_relationship
+  SUBTYPE OF (product_definition_relationship);
+END_ENTITY;
+
+ENTITY draped_defined_transformation
+  SUBTYPE OF (item_defined_transformation);
+END_ENTITY;
+
+ENTITY expression_conversion_based_unit
+  SUBTYPE OF (named_unit, variable_semantics);
+  INVERSE
+    associated_variable_environment: environment FOR semantics;
+END_ENTITY;
+
+ENTITY flat_pattern_ply_representation_relationship
+  SUBTYPE OF (shape_representation_relationship);
+WHERE
+  WR1: 'STRUCTURAL_ANALYSIS_DESIGN.SHAPE_REPRESENTATION' IN
+       (TYPEOF (SELF\representation_relationship.rep_1) *
+        TYPEOF (SELF\representation_relationship.rep_2));
+  WR2: SELF\representation_relationship.rep_1.
+       context_of_items\geometric_representation_context.
+       coordinate_space_dimension = 3;
+END_ENTITY;
+
+ENTITY laid_defined_transformation
+  SUBTYPE OF (item_defined_transformation);
+END_ENTITY;
+
+ENTITY named_unit_variable
+  SUBTYPE OF (named_unit, variable_semantics);
+  INVERSE
+   associated_variable_environment : environment FOR semantics;
+END_ENTITY;
+
+ENTITY percentage_laminate_definition
+  SUBTYPE OF (product_definition);
+WHERE
+  WR1: SIZEOF (QUERY (pdr <* USEDIN (SELF, 
+                             'PRODUCT_DEFINITION_SCHEMA.' +
+                             'PRODUCT_DEFINITION_RELATIONSHIP.' +
+                             'RELATING_PRODUCT_DEFINITION') |
+                             'PRODUCT_STRUCTURE_SCHEMA.' +
+                             'NEXT_ASSEMBLY_USAGE_OCCURRENCE' IN
+                             TYPEOF (pdr))) > 0;
+END_ENTITY;
+
+ENTITY percentage_ply_definition
+  SUBTYPE OF (product_definition);
+WHERE
+  WR1: SIZEOF (QUERY (pdr <* USEDIN (SELF, 'PRODUCT_DEFINITION_SCHEMA.' +
+       'PRODUCT_DEFINITION_RELATIONSHIP.RELATING_PRODUCT_DEFINITION') |
+       ('STRUCTURAL_ANALYSIS_DESIGN.PERCENTAGE_LAMINATE_DEFINITION' 
+       IN TYPEOF (pdr.related_product_definition)) AND
+       (pdr.name = 'makeup_and_properties'))) = 0;
+END_ENTITY;
+
+ENTITY ply_laminate_definition
+  SUBTYPE OF (product_definition);
+WHERE
+  WR1: SIZEOF (QUERY (pdr <* USEDIN (SELF, 
+                             'PRODUCT_DEFINITION_SCHEMA.' +
+                             'PRODUCT_DEFINITION_RELATIONSHIP.' +
+                             'RELATING_PRODUCT_DEFINITION') |
+                             'PRODUCT_STRUCTURE_SCHEMA.' +
+                             'NEXT_ASSEMBLY_USAGE_OCCURRENCE' IN
+                             TYPEOF (pdr))) = 1;
+END_ENTITY;
+
+ENTITY ply_laminate_sequence_definition
+  SUBTYPE OF (product_definition);
+WHERE
+  WR1: SIZEOF (QUERY (pdr <* USEDIN (SELF, 
+                             'PRODUCT_DEFINITION_SCHEMA.' +
+                             'PRODUCT_DEFINITION_RELATIONSHIP.' +
+                             'RELATING_PRODUCT_DEFINITION') |
+                             'PRODUCT_STRUCTURE_SCHEMA.' +
+                             'NEXT_ASSEMBLY_USAGE_OCCURRENCE' IN
+                             TYPEOF (pdr))) > 0;
+END_ENTITY;
+
+ENTITY point_and_vector
+  SUBTYPE OF (shape_representation);
+WHERE
+  WR1: SIZEOF (SELF\representation.items) = 3;
+  WR2: ('GEOMETRY_SCHEMA.POINT'
+        IN TYPEOF (SELF\representation.items[1])) AND
+       ('GEOMETRY_SCHEMA.DIRECTION'
+        IN TYPEOF (SELF\representation.items[2])) AND
+       ('GEOMETRY_SCHEMA.DIRECTION'
+        IN TYPEOF (SELF\representation.items[3]));
+END_ENTITY;
+
+ENTITY point_path
+  SUBTYPE OF (shape_representation);
+WHERE
+  WR1: SIZEOF (USEDIN (SELF, 'REPRESENTATION_SCHEMA.' +
+                             'REPRESENTATION_RELATIONSHIP.REP_1')) = 1;
+END_ENTITY;
+
+ENTITY point_representation
+  SUBTYPE OF (shape_representation);
+WHERE
+  WR1: SIZEOF (QUERY ( it <* SELF\representation.items |
+       (NOT (SIZEOF (
+       ['STRUCTURAL_RESPONSE_REPRESENTATION_SCHEMA.NODE_SET',
+        'REPRESENTATION_SCHEMA.MAPPED_ITEM',
+        'STRUCTURAL_RESPONSE_REPRESENTATION_SCHEMA.' +
+        'FEA_AXIS2_PLACEMENT_3D'] *
+        TYPEOF (it)) = 1 )))) = 0;
+  WR2: SIZEOF (QUERY ( it <* SELF\representation.items |
+       (SIZEOF (
+       ['STRUCTURAL_RESPONSE_REPRESENTATION_SCHEMA.NODE_SET',
+        'REPRESENTATION_SCHEMA.MAPPED_ITEM'] *
+        TYPEOF (it)) = 1 ))) >= 1;
+END_ENTITY;
+
+ENTITY retention
+  SUBTYPE OF (action);
+WHERE
+  WR1: SIZEOF (QUERY (aa <* USEDIN (SELF, 
+         'MANAGEMENT_RESOURCES_SCHEMA.' +
+         'ACTION_ASSIGNMENT.ASSIGNED_ACTION') |
+         'STRUCTURAL_ANALYSIS_DESIGN.RETENTION_ASSIGNMENT'
+         IN TYPEOF (aa) )) > 0;
+  WR2: SIZEOF (QUERY (ada <* USEDIN (SELF,
+         'STRUCTURAL_ANALYSIS_DESIGN.' +
+         'APPLIED_DATE_ASSIGNMENT.ITEMS') |
+         ada.role.name = 'start_date')) +
+       SIZEOF (QUERY (adata <* USEDIN (SELF,
+         'STRUCTURAL_ANALYSIS_DESIGN.' +
+         'APPLIED_DATE_AND_TIME_ASSIGNMENT.ITEMS') |
+         adata.role.name = 'start_date')) = 1;
+  WR3: SIZEOF (QUERY (ada <* USEDIN (SELF,
+         'STRUCTURAL_ANALYSIS_DESIGN.' +
+         'APPLIED_DATE_ASSIGNMENT.ITEMS') |
+         ada.role.name = 'earliest_end_date')) +
+       SIZEOF (QUERY (adata <* USEDIN (SELF,
+         'STRUCTURAL_ANALYSIS_DESIGN.' +
+         'APPLIED_DATE_AND_TIME_ASSIGNMENT.ITEMS') |
+         adata.role.name = 'earliest_end_date')) = 1;
+  WR4: SIZEOF (QUERY (ada <* USEDIN (SELF,
+         'STRUCTURAL_ANALYSIS_DESIGN.' +
+         'APPLIED_DATE_ASSIGNMENT.ITEMS') |
+         ada.role.name = 'latest_end_date')) +
+       SIZEOF (QUERY (adata <* USEDIN (SELF,
+         'STRUCTURAL_ANALYSIS_DESIGN.' +
+         'APPLIED_DATE_AND_TIME_ASSIGNMENT.ITEMS') |
+         adata.role.name = 'latest_end_date')) = 1;
+END_ENTITY;
+
+ENTITY retention_assignment
+  SUBTYPE OF (action_assignment);
+  items : SET [1:?] OF retention_item;
+WHERE
+  WR1: 'STRUCTURAL_ANALYSIS_DESIGN.RETENTION' IN 
+        TYPEOF (SELF.assigned_action);
+END_ENTITY;
+
+ENTITY smeared_material_definition
+  SUBTYPE OF (product_definition);
+END_ENTITY;
+
+ENTITY supplied_part_relationship
+  SUBTYPE OF (product_definition_relationship);
+END_ENTITY;
+
+ENTITY thickness_laminate_definition
+  SUBTYPE OF (product_definition);
+WHERE
+  WR1: SIZEOF (QUERY (pdr <* USEDIN (SELF, 
+                             'PRODUCT_DEFINITION_SCHEMA.' +
+                             'PRODUCT_DEFINITION_RELATIONSHIP.' +
+                             'RELATING_PRODUCT_DEFINITION') |
+                             'PRODUCT_STRUCTURE_SCHEMA.' +
+                             'NEXT_ASSEMBLY_USAGE_OCCURRENCE' IN
+                             TYPEOF (pdr))) = 1;
+END_ENTITY;
+
+ENTITY transformation_with_derived_angle
+  SUBTYPE OF (item_defined_transformation);
+DERIVE
+  orientation_angle : plane_angle_measure := derive_angle (
+                      SELF\item_defined_transformation.
+                           transform_item_1,
+                      SELF\item_defined_transformation.
+                           transform_item_2);
+WHERE
+  WR1: 'GEOMETRY_SCHEMA.AXIS2_PLACEMENT_3D' IN
+       TYPEOF(SELF\item_defined_transformation.transform_item_1);
+  WR2: 'GEOMETRY_SCHEMA.AXIS2_PLACEMENT_3D' IN
+       TYPEOF(SELF\item_defined_transformation.transform_item_2);
+  WR3: (SELF\item_defined_transformation.transform_item_1\
+             axis2_placement_3d.p[3].direction_ratios[1] =
+        SELF\item_defined_transformation.transform_item_2\
+             axis2_placement_3d.p[3].direction_ratios[1])
+       AND
+       (SELF\item_defined_transformation.transform_item_1\
+             axis2_placement_3d.p[3].direction_ratios[2] =
+        SELF\item_defined_transformation.transform_item_2\
+             axis2_placement_3d.p[3].direction_ratios[2])
+       AND
+       (SELF\item_defined_transformation.transform_item_1\
+             axis2_placement_3d.p[3].direction_ratios[3] =
+        SELF\item_defined_transformation.transform_item_2\
+             axis2_placement_3d.p[3].direction_ratios[3]);
+END_ENTITY;
+
+RULE action_directive_requires_date_time FOR
+ (action_directive, applied_date_and_time_assignment,
+  applied_date_assignment);
+WHERE
+  WR1: SIZEOF (QUERY (ad <* action_directive |
+       NOT ((SIZEOF (QUERY (adta <* applied_date_and_time_assignment |
+                    (ad IN adta.items) AND
+                    (adta.role.name IN ['change_date', 'start_date']))) +
+             SIZEOF (QUERY (ada <* applied_date_assignment |
+                    (ad IN ada.items) AND
+                    (ada.role.name IN ['change_date', 'start_date'])))
+             ) = 1 ))) = 0;
+END_RULE;
+
+RULE action_request_requires_date_time FOR
+ (versioned_action_request, applied_date_and_time_assignment,
+  applied_date_assignment);
+WHERE
+  WR1: SIZEOF (QUERY (ar <* versioned_action_request |
+       NOT ((SIZEOF (QUERY (adta <* applied_date_and_time_assignment |
+                     ar IN adta.items)) +
+             SIZEOF (QUERY (ada <* applied_date_assignment |
+                     ar IN ada.items))) = 1 ))) = 0;
+END_RULE;
+
+RULE action_request_requires_person_organization FOR
+ (versioned_action_request, applied_person_and_organization_assignment,
+  applied_organization_assignment);
+WHERE
+  WR1: SIZEOF (QUERY (ar <* versioned_action_request |
+       NOT ((SIZEOF (QUERY (apoa <* 
+                     applied_person_and_organization_assignment |
+                     (ar IN apoa.items) AND 
+                     (apoa.role.name = 'request_recipient'))) +
+             SIZEOF (QUERY (aoa <* applied_organization_assignment |
+                     (ar IN aoa.items) AND 
+                     (aoa.role.name = 'request_recipient')))) >= 1 ))) = 0;
+END_RULE;
+
+RULE approval_requires_approval_date_time FOR
+ (approval, approval_date_time);
+WHERE
+  WR1: SIZEOF (QUERY (e <* approval |
+       NOT (SIZEOF (QUERY (s <* approval_date_time |
+       e :=: s.dated_approval)) = 1 ))) = 0;
+END_RULE;
+
+RULE approval_requires_approval_person_organization FOR
+ (approval, approval_person_organization);
+WHERE
+  WR1: SIZEOF (QUERY (e <* approval |
+       NOT (SIZEOF (QUERY (s <* approval_person_organization |
+       e :=: s.authorized_approval)) >= 1 ))) = 0;
+END_RULE;
+
+RULE approvals_are_assigned FOR
+ (approval, approval_assignment);
+WHERE
+  WR1: SIZEOF (QUERY (app <* approval |
+       NOT (SIZEOF (QUERY (aa <* approval_assignment |
+       app :=: aa.assigned_approval)) >= 1 ))) = 0;
+END_RULE;
+
+RULE as_required_quantity FOR
+ (measure_with_unit);
+WHERE
+  WR1: SIZEOF (QUERY (m <* measure_with_unit |
+       ('MEASURE_SCHEMA.DESCRIPTIVE_MEASURE'
+        IN TYPEOF (m.value_component)) AND
+       (NOT (m.value_component = 'as_required')))) = 0;
+END_RULE;
+
+RULE component_class_for_assembly_select FOR
+ (composite_assembly_sequence_definition,
+  next_assembly_usage_occurrence,
+  product_related_product_category);
+LOCAL
+  i,j,k :  INTEGER;
+  dkuhr :  LOGICAL;
+  nnauo :  INTEGER;
+  nprpc :  INTEGER;
+  rp    :  product;
+END_LOCAL;
+
+  dkuhr := TRUE;
+  REPEAT i:= LOINDEX (composite_assembly_sequence_definition) TO
+             HIINDEX (composite_assembly_sequence_definition);
+
+    nnauo := 0;  
+    REPEAT j:= LOINDEX (next_assembly_usage_occurrence) TO
+               HIINDEX (next_assembly_usage_occurrence);
+
+      IF (composite_assembly_sequence_definition[i] = 
+        next_assembly_usage_occurrence[j].relating_product_definition) THEN
+
+        rp := next_assembly_usage_occurrence[j].related_product_definition.
+              formation.of_product;
+        nprpc := 0;
+        REPEAT k:= LOINDEX (product_related_product_category) TO
+                   HIINDEX (product_related_product_category);
+
+          IF ((rp IN product_related_product_category[k].products) AND
+              (product_related_product_category[k].name IN ['ply',
+               'ply_laminate', 'filament_laminate', 'processed_core',
+               'composite_assembly'])) THEN
+              nprpc := nprpc + 1;
+          END_IF;
+
+        END_REPEAT;
+
+        IF (nprpc = 1) THEN
+          nnauo := nnauo + 1;
+        ELSE
+          dkuhr := FALSE;
+          ESCAPE;
+        END_IF;
+
+      END_IF;
+
+    END_REPEAT;
+
+    IF (dkuhr = FALSE) THEN
+      ESCAPE; 
+    END_IF;
+    IF(nnauo = 0) THEN
+      dkuhr := FALSE;
+      ESCAPE;
+    END_IF;
+
+  END_REPEAT;
+
+WHERE
+  WR1:  dkuhr;
+END_RULE;
+
+RULE configuration_item_requires_person_organization FOR
+ (configuration_item, applied_person_and_organization_assignment,
+applied_organization_assignment);
+WHERE
+  WR1: SIZEOF (QUERY (ci <* configuration_item |
+       NOT ((SIZEOF (QUERY (apoa <* 
+                    applied_person_and_organization_assignment |
+                    ci IN apoa.items)) +
+             SIZEOF (QUERY (aoa <* applied_organization_assignment |
+                    ci IN aoa.items))) = 1 ))) = 0;
+END_RULE;
+
+RULE coordinated_assembly_and_shape FOR
+ (next_assembly_usage_occurrence);
+WHERE
+  WR1: SIZEOF (QUERY (nauo <* next_assembly_usage_occurrence |
+       NOT (assembly_shape_is_defined (nauo)))) = 0;
+END_RULE;
+
+RULE dependent_instantiable_approval_status FOR
+ (approval_status);
+WHERE
+  WR1: SIZEOF (QUERY (ast <* approval_status |
+       NOT (SIZEOF (USEDIN (ast, '')) >= 1 ))) = 0;
+END_RULE;
+
+RULE dependent_instantiable_certification_type FOR
+ (certification_type);
+WHERE
+  WR1: SIZEOF (QUERY (ct <* certification_type |
+       NOT (SIZEOF (USEDIN (ct, '')) >= 1 ))) = 0;
+END_RULE;
+
+RULE dependent_instantiable_contract_type FOR
+ (contract_type);
+WHERE
+  WR1: SIZEOF (QUERY (ct <* contract_type |
+       NOT (SIZEOF (USEDIN (ct, '')) >= 1 ))) = 0;
+END_RULE;
+
+RULE dependent_instantiable_date FOR
+ (date);
+WHERE
+  WR1: SIZEOF (QUERY (dt <* date |
+       NOT (SIZEOF (USEDIN (dt, '')) >= 1 ))) = 0;
+END_RULE;
+
+RULE dependent_instantiable_date_and_time FOR
+ (date_and_time);
+WHERE
+  WR1: SIZEOF (QUERY (dat <* date_and_time |
+       NOT (SIZEOF (USEDIN (dat, '')) >= 1 ))) = 0;
+END_RULE;
+
+RULE dependent_instantiable_date_role FOR
+ (date_role);
+WHERE
+  WR1: SIZEOF (QUERY (dr <* date_role |
+       NOT (SIZEOF (USEDIN (dr, '')) >= 1 ))) = 0;
+END_RULE;
+
+RULE dependent_instantiable_date_time_role FOR
+ (date_time_role);
+WHERE
+  WR1: SIZEOF (QUERY (dtr <* date_time_role |
+       NOT (SIZEOF (USEDIN (dtr, '')) >= 1 ))) = 0;
+END_RULE;
+
+RULE dependent_instantiable_document_type FOR
+ (document_type);
+WHERE
+  WR1: SIZEOF (QUERY (dt <* document_type |
+       NOT (SIZEOF (USEDIN (dt, '')) >= 1 ))) = 0;
+END_RULE;
+
+RULE dependent_instantiable_named_unit FOR
+ (named_unit);
+WHERE
+  WR1: SIZEOF (QUERY (nu <* named_unit |
+       NOT (SIZEOF (USEDIN (nu, '')) >= 1 ))) = 0;
+END_RULE;
+
+RULE dependent_instantiable_organization_role FOR
+ (organization_role);
+WHERE
+  WR1: SIZEOF (QUERY (orl <* organization_role |
+       NOT (SIZEOF (USEDIN (orl, '')) >= 1 ))) = 0;
+END_RULE;
+
+RULE dependent_instantiable_parametric_representation_context FOR
+ (parametric_representation_context);
+WHERE
+  WR1: SIZEOF (QUERY (prc <* parametric_representation_context |
+       NOT (SIZEOF (USEDIN (prc, '')) >= 1 ))) = 0;
+END_RULE;
+
+RULE dependent_instantiable_person_and_organization_role FOR
+ (person_and_organization_role);
+WHERE
+  WR1: SIZEOF (QUERY (paor <* person_and_organization_role |
+       NOT (SIZEOF (USEDIN (paor, '')) >= 1 ))) = 0;
+END_RULE;
+
+RULE dependent_instantiable_representation_item FOR
+ (representation_item);
+WHERE
+  WR1: SIZEOF (QUERY (ri <* representation_item |
+       NOT (SIZEOF (USEDIN (ri, '')) >= 1 ))) = 0;
+END_RULE;
+
+RULE dependent_instantiable_security_classification_level FOR
+ (security_classification_level);
+WHERE
+  WR1: SIZEOF (QUERY (scl <* security_classification_level |
+       NOT (SIZEOF (USEDIN (scl, '')) >= 1 ))) = 0;
+END_RULE;
+
+RULE dependent_instantiable_shape_representation FOR
+ (shape_representation);
+WHERE
+  WR1: SIZEOF (QUERY (sr <* shape_representation |
+       NOT (SIZEOF (USEDIN (sr, '')) >= 1 ))) = 0;
+END_RULE;
+
+RULE global_unit_assignment FOR
+ (global_unit_assigned_context);
+WHERE
+  WR1: SIZEOF (QUERY (guac <* global_unit_assigned_context |
+       NOT (SIZEOF (guac.units) >= 3))) = 0;
+  WR2: SIZEOF (QUERY (guac <* global_unit_assigned_context |
+        NOT ((SIZEOF (QUERY (u <* guac.units |
+              'MEASURE_SCHEMA.LENGTH_UNIT'
+               IN TYPEOF (u))) = 1)
+             AND
+             (SIZEOF (QUERY (u <* guac.units |
+              'MEASURE_SCHEMA.PLANE_ANGLE_UNIT'
+               IN TYPEOF (u))) = 1)
+             AND
+             (SIZEOF (QUERY (u <* guac.units |
+              'MEASURE_SCHEMA.SOLID_ANGLE_UNIT'
+               IN TYPEOF (u))) = 1 ))
+        )) = 0;
+END_RULE;
+
+RULE pdu_requires_security_classification FOR
+ (product_definition_usage,
+  applied_security_classification_assignment);
+WHERE
+  WR1: SIZEOF (QUERY (e <* product_definition_usage |
+     NOT (SIZEOF (QUERY (s <* applied_security_classification_assignment |
+     e IN s.items)) = 1 ))) = 0;
+END_RULE;
+
+RULE ply_reference FOR
+ (ply_laminate_sequence_definition,
+  next_assembly_usage_occurrence,
+  product_related_product_category);
+LOCAL
+  i,j,k :  INTEGER;
+  dkuhr :  LOGICAL;
+  nnauo :  INTEGER;
+  nprpc :  INTEGER;
+  rp    :  product;
+END_LOCAL;
+
+  dkuhr := TRUE;
+  REPEAT i:= LOINDEX (ply_laminate_sequence_definition) TO
+             HIINDEX (ply_laminate_sequence_definition);
+
+    nnauo := 0;  
+    REPEAT j:= LOINDEX (next_assembly_usage_occurrence) TO 
+               HIINDEX (next_assembly_usage_occurrence);
+
+      IF (ply_laminate_sequence_definition[i] = 
+        next_assembly_usage_occurrence[j].relating_product_definition) THEN
+
+        rp := next_assembly_usage_occurrence[j].related_product_definition.
+              formation.of_product;
+        nprpc := 0;
+        REPEAT k:= LOINDEX (product_related_product_category) TO
+                   HIINDEX (product_related_product_category);
+
+          IF ((product_related_product_category[k].name = 'ply') AND
+              (rp IN product_related_product_category[k].products)) THEN
+              nprpc := nprpc + 1;
+          END_IF;
+
+        END_REPEAT;
+
+        IF (nprpc = 1) THEN
+          nnauo := nnauo + 1;
+        ELSE
+          dkuhr := FALSE;
+          ESCAPE;
+        END_IF;
+
+      END_IF;
+
+    END_REPEAT;
+
+    IF (dkuhr = FALSE) THEN
+      ESCAPE; 
+    END_IF;
+    IF(nnauo = 0) THEN
+      dkuhr := FALSE;
+      ESCAPE;
+    END_IF;
+
+  END_REPEAT;
+
+WHERE
+  WR1:  dkuhr;
+END_RULE;
+
+RULE ply_stock_material_select FOR
+ (product_related_product_category,
+  make_from_usage_option);
+LOCAL
+  i,j,k,kp :  INTEGER;
+  dkuhr    :  LOGICAL;
+  nmfuo    :  INTEGER;
+  nprpc    :  INTEGER;
+  rp       :  product;
+END_LOCAL;
+
+dkuhr := TRUE;
+REPEAT kp:= LOINDEX (product_related_product_category) TO
+            HIINDEX (product_related_product_category);
+
+  IF (product_related_product_category[kp].name = 'ply') THEN
+  REPEAT i:= LOINDEX (product_related_product_category[kp].products) TO
+             HIINDEX (product_related_product_category[kp].products);
+
+    nmfuo := 0;  
+    REPEAT j:= LOINDEX (make_from_usage_option) TO 
+               HIINDEX (make_from_usage_option);
+
+      IF (product_related_product_category[kp].products[i] = 
+        make_from_usage_option[j].relating_product_definition.
+        formation.of_product) THEN
+
+        rp := make_from_usage_option[j].related_product_definition.
+              formation.of_product;
+        REPEAT k:= LOINDEX (product_related_product_category) TO
+                   HIINDEX (product_related_product_category);
+
+          IF ((rp IN product_related_product_category[k].products) AND
+              (product_related_product_category[k].name IN 
+               ['isotropic_material', 'filament_assembly', 
+                'discontinuous_fiber_assembly'])) THEN
+              nprpc := nprpc + 1;
+          END_IF;
+
+        END_REPEAT;
+
+        IF (nprpc = 1) THEN
+          nmfuo := nmfuo + 1;
+        ELSE
+          dkuhr := FALSE;
+          ESCAPE;
+        END_IF;
+
+      END_IF;
+
+    END_REPEAT;
+
+    IF (dkuhr = FALSE) THEN
+      ESCAPE; 
+    END_IF;
+    IF(nmfuo <> 1) THEN
+      dkuhr := FALSE;
+      ESCAPE;
+    END_IF;
+
+  END_REPEAT;
+  END_IF;
+
+END_REPEAT;
+
+WHERE
+  WR1: dkuhr;
+END_RULE;
+
+RULE product_concept_requires_configuration_item FOR
+ (product_concept, configuration_item);
+WHERE
+  WR1: SIZEOF (QUERY (pc <* product_concept |
+       NOT (SIZEOF (QUERY (ci <* configuration_item |
+       pc :=: ci.item_concept)) >=1 ))) = 0;
+END_RULE;
+
+RULE product_definition_requires_date_time FOR
+ (product_definition, applied_date_and_time_assignment,
+  applied_date_assignment);
+WHERE
+  WR1: SIZEOF (QUERY (pd <* product_definition |
+       NOT ((SIZEOF (QUERY (adta <* applied_date_and_time_assignment |
+                    pd IN adta.items)) +
+             SIZEOF (QUERY (ada <* applied_date_assignment |
+                    pd IN ada.items))) = 1 ))) = 0;
+END_RULE;
+
+RULE product_definition_requires_person_organization FOR
+ (product_definition, applied_person_and_organization_assignment,
+  applied_organization_assignment);
+WHERE
+  WR1: SIZEOF (QUERY (pd <* product_definition |
+       NOT ((SIZEOF (QUERY (apoa <* 
+                    applied_person_and_organization_assignment |
+                    pd IN apoa.items)) +
+             SIZEOF (QUERY (aoa <* applied_organization_assignment |
+                    pd IN aoa.items))) = 1 ))) = 0;
+END_RULE;
+
+RULE product_requires_person_organization FOR
+ (product, applied_person_and_organization_assignment,
+  applied_organization_assignment);
+WHERE
+  WR1: SIZEOF (QUERY (prod <* product |
+       NOT ((SIZEOF (QUERY (apoa <* 
+                    applied_person_and_organization_assignment |
+                    prod IN apoa.items)) +
+             SIZEOF (QUERY (aoa <* applied_organization_assignment |
+                    prod IN aoa.items))) = 1 ))) = 0;
+END_RULE;
+
+RULE product_requires_product_category FOR
+ (product, product_related_product_category);
+WHERE
+  WR1: SIZEOF (QUERY (prod <* product |
+       NOT (SIZEOF (QUERY (prpc <* product_related_product_category |
+       (prod IN prpc.products) AND
+       (prpc.name IN ['assembly', 'inseparable_assembly', 'detail',
+       'customer_furnished_equipment']))) = 1 ))) = 0;
+END_RULE;
+
+RULE product_requires_version FOR
+ (product, product_definition_formation);
+WHERE
+  WR1: SIZEOF (QUERY (prod <* product |
+       NOT (SIZEOF (QUERY (pdf <* product_definition_formation |
+       prod :=: pdf.of_product)) >= 1 ))) = 0;
+END_RULE;
+
+RULE product_version_requires_person_organization FOR
+ (product_definition_formation,
+  applied_person_and_organization_assignment,
+  applied_organization_assignment);
+WHERE
+  WR1: SIZEOF (QUERY (pdf <* product_definition_formation |
+       NOT ((SIZEOF (QUERY (apoa <*
+                     applied_person_and_organization_assignment |
+                     (pdf IN apoa.items) AND 
+                     (apoa.role.name = 'creator'))) +
+             SIZEOF (QUERY (aoa <*
+                     applied_organization_assignment |
+                     (pdf IN aoa.items) AND 
+                     (aoa.role.name = 'creator')))) = 1 ))) = 0;
+  WR2: SIZEOF (QUERY (pdf <* product_definition_formation |
+       NOT ((SIZEOF (QUERY (apoa <*
+                     applied_person_and_organization_assignment |
+                     (pdf IN apoa.items) AND (apoa.role.name IN
+                     ['analysis_supplier', 'design_supplier', 
+                      'part_supplier']))) +
+             SIZEOF (QUERY (aoa <*
+                     applied_organization_assignment |
+                     (pdf IN aoa.items) AND (aoa.role.name IN
+                     ['analysis_supplier', 'design_supplier', 
+                      'part_supplier']))))  >= 1 ))) = 0;
+END_RULE;
+
+RULE product_version_requires_security_classification FOR
+ (product_definition_formation,
+  applied_security_classification_assignment);
+WHERE
+  WR1: SIZEOF (QUERY (e <* product_definition_formation |
+       NOT (SIZEOF (QUERY (s <*
+            applied_security_classification_assignment |
+            e IN s.items)) = 1 ))) = 0;
+END_RULE;
+
+RULE restrict_action_request_status FOR
+ (action_request_status);
+WHERE
+  WR1: SIZEOF (QUERY (ars <* action_request_status |
+       NOT (ars.status IN ['proposed', 'in_work', 'issued', 'hold']))) = 0;
+END_RULE;
+
+RULE restrict_approval_status FOR
+ (approval_status);
+WHERE
+  WR1: SIZEOF (QUERY (ast <* approval_status |
+       NOT (ast.name IN
+       ['approved', 'not_yet_approved', 'disapproved', 'withdrawn']))) = 0;
+END_RULE;
+
+RULE restrict_date_time_role FOR
+ (date_time_role, date_role);
+WHERE
+  WR1: (SIZEOF (QUERY (dtr <* date_time_role |
+        NOT (dtr.name IN ['change_date', 'creation_date',
+       'request_date', 'release_date','start_date',
+       'earliest_end_date', 'latest_end_date', 'contract_date',
+       'sign_off_date', 'certification_date',
+       'classification_date', 'declassification_date']))) +
+        SIZEOF (QUERY (dr <* date_role |
+        NOT (dr.name IN ['change_date', 'creation_date',
+       'request_date', 'release_date','start_date',
+       'earliest_end_date', 'latest_end_date', 'contract_date',
+       'sign_off_date', 'certification_date',
+       'classification_date', 'declassification_date'])))) = 0;
+END_RULE;
+
+RULE restrict_person_organization_role FOR
+ (person_and_organization_role, organization_role);
+WHERE
+  WR1: (SIZEOF (QUERY (porl <* person_and_organization_role |
+        NOT (porl.name IN ['request_recipient', 'initiator',
+       'part_supplier','design_supplier', 'analysis_supplier',
+       'creator', 'design_owner', 'analysis_owner', 'contractor',
+       'configuration_manager', 'classification_officer']))) +
+        SIZEOF (QUERY (orl <* organization_role |
+        NOT (orl.name IN ['request_recipient', 'initiator',
+       'part_supplier','design_supplier', 'analysis_supplier',
+       'creator', 'design_owner', 'analysis_owner', 'contractor',
+       'configuration_manager', 'classification_officer'])))) = 0;
+END_RULE;
+
+RULE restrict_product_category_value FOR
+ (product_related_product_category);
+WHERE
+  WR1: SIZEOF (QUERY (prpc <*
+       product_related_product_category |
+       NOT (prpc.name IN ['assembly', 'detail',
+       'customer_furnished_equipment', 'inseparable_assembly',
+       'standard_part', 'linear_static_analysis',
+       'linear_modes_and_frequencies_analysis',
+       'cast', 'coined', 'drawn', 'extruded', 'forged',
+       'formed', 'machined', 'molded', 'rolled', 'sheared',
+       'anisotropic_material', 'composite_assembly',
+       'discontinuous_fiber_assembly', 'filament_assembly',
+       'filament_laminate', 'isotropic_material', 'ply',
+       'ply_laminate', 'ply_piece', 'processed_core',
+       'stock_core']))) = 0;
+END_RULE;
+
+RULE restrict_product_definition_context FOR
+ (product_definition_context);
+WHERE
+  WR1: SIZEOF (QUERY (pdc <* product_definition_context |
+       NOT (pdc.life_cycle_stage IN ['analysis', 'design']))) = 0;
+END_RULE;
+
+RULE restrict_security_classification_level FOR
+ (security_classification_level);
+WHERE
+  WR1: SIZEOF (QUERY (scl <* security_classification_level |
+       NOT (scl.name IN ['unclassified', 'classified', 'proprietary',
+       'confidential', 'secret', 'top_secret']))) = 0;
+END_RULE;
+
+RULE stock_material_reference FOR
+ (percentage_ply_definition,
+  make_from_usage_option,
+  product_related_product_category);
+LOCAL
+  i,j,k :  INTEGER;
+  dkuhr :  LOGICAL;
+  nmfuo :  INTEGER;
+  nprpc :  INTEGER;
+  rp     :  product;
+END_LOCAL;
+
+  dkuhr := TRUE;
+  REPEAT i:= LOINDEX (percentage_ply_definition) TO
+             HIINDEX (percentage_ply_definition);
+
+    nmfuo := 0;  
+    REPEAT j:= LOINDEX (make_from_usage_option) TO 
+               HIINDEX (make_from_usage_option);
+
+      IF (percentage_ply_definition[i] = 
+        make_from_usage_option[j].relating_product_definition) THEN
+
+        rp := make_from_usage_option[j].related_product_definition.
+              formation.of_product;
+        nprpc := 0;
+        REPEAT k:= LOINDEX (product_related_product_category) TO
+                   HIINDEX (product_related_product_category);
+
+          IF ((rp IN product_related_product_category[k].products) AND
+              (product_related_product_category[k].name IN 
+              ['anisotropic_material', 'isotropic_material', 'stock_core',
+               'filament_assembly', 'discontinuous_fiber_assembly'])) THEN
+              nprpc := nprpc + 1;
+          END_IF;
+
+        END_REPEAT;
+
+        IF (nprpc = 1) THEN
+          nmfuo := nmfuo + 1;
+        ELSE
+          dkuhr := FALSE;
+          ESCAPE;
+        END_IF;
+
+      END_IF;
+
+    END_REPEAT;
+
+    IF (dkuhr = FALSE) THEN
+      ESCAPE; 
+    END_IF;
+    IF(nmfuo = 0) THEN
+      dkuhr := FALSE;
+      ESCAPE;
+    END_IF;
+
+  END_REPEAT;
+
+WHERE
+  WR1:  dkuhr;
+END_RULE;
+
+RULE subtype_mandatory_action FOR
+ (action);
+WHERE
+  WR1: SIZEOF (QUERY (act <* action |
+       NOT ('ACTION_SCHEMA.DIRECTED_ACTION'
+            IN TYPEOF (act)))) = 0;
+END_RULE;
+
+RULE subtype_mandatory_shape_representation FOR
+ (shape_representation);
+WHERE
+  WR1: SIZEOF (QUERY (sr <* shape_representation |
+       NOT
+       ((SIZEOF (['AIC_GEOMETRICALLY_BOUNDED_SURFACE.' +
+        'GEOMETRICALLY_BOUNDED_SURFACE_SHAPE_REPRESENTATION', 
+        'AIC_GEOMETRICALLY_BOUNDED_WIREFRAME.' +
+        'GEOMETRICALLY_BOUNDED_WIREFRAME_SHAPE_REPRESENTATION', 
+        'AIC_EDGE_BASED_WIREFRAME.' +
+        'EDGE_BASED_WIREFRAME_SHAPE_REPRESENTATION', 
+        'AIC_SHELL_BASED_WIREFRAME.' +
+        'SHELL_BASED_WIREFRAME_SHAPE_REPRESENTATION', 
+        'AIC_MANIFOLD_SURFACE.' +
+        'MANIFOLD_SURFACE_SHAPE_REPRESENTATION', 
+        'STRUCTURAL_ANALYSIS_DESIGN.POINT_PATH', 
+        'STRUCTURAL_ANALYSIS_DESIGN.POINT_AND_VECTOR', 
+        'STRUCTURAL_ANALYSIS_DESIGN.POINT_REPRESENTATION', 
+        'AIC_FACETED_BREP.FACETED_BREP_SHAPE_REPRESENTATION', 
+        'AIC_ADVANCED_BREP.ADVANCED_BREP_SHAPE_REPRESENTATION', 
+        'SHAPE_DIMENSION_SCHEMA.SHAPE_DIMENSION_REPRESENTATION', 
+        'STRUCTURAL_ANALYSIS_DESIGN.BEVELED_SHEET_REPRESENTATION', 
+        'STRUCTURAL_ANALYSIS_DESIGN.COMPOSITE_SHEET_REPRESENTATION'] *
+         TYPEOF (sr)) > 0)
+        OR
+        (SIZEOF (QUERY (it <* sr\representation.items |
+         NOT (SIZEOF (['GEOMETRY_SCHEMA.PLACEMENT',
+                       'REPRESENTATION_SCHEMA.MAPPED_ITEM'] *
+                      TYPEOF (it)) = 1 ))) = 0)
+        OR
+        (SIZEOF (QUERY (sdr <* QUERY (pdr <* USEDIN (sr,
+        'PRODUCT_PROPERTY_REPRESENTATION_SCHEMA.' +
+        'PROPERTY_DEFINITION_REPRESENTATION.USED_REPRESENTATION') |
+        'PRODUCT_PROPERTY_REPRESENTATION_SCHEMA.' +
+        'SHAPE_DEFINITION_REPRESENTATION' IN TYPEOF (pdr)) |
+         NOT (SIZEOF (['PRODUCT_PROPERTY_DEFINITION_SCHEMA.SHAPE_ASPECT',
+        'PRODUCT_PROPERTY_DEFINITION_SCHEMA.SHAPE_ASPECT_RELATIONSHIP'] *
+         TYPEOF (sdr.definition.definition)) = 1 ))) = 0)
+        ))) = 0;
+END_RULE;
+
+RULE thickness_laminate_table_component_select FOR
+ (thickness_laminate_definition,
+  next_assembly_usage_occurrence,
+  product_related_product_category);
+LOCAL
+  i,j,k :  INTEGER;
+  dkuhr :  LOGICAL;
+  nnauo :  INTEGER;
+  nprpc :  INTEGER;
+  rp    :  product;
+END_LOCAL;
+
+  dkuhr := TRUE;
+  REPEAT i:= LOINDEX (thickness_laminate_definition) TO
+             HIINDEX (thickness_laminate_definition);
+
+    nnauo := 0;  
+    REPEAT j:= LOINDEX (next_assembly_usage_occurrence) TO 
+               HIINDEX (next_assembly_usage_occurrence);
+
+      IF (thickness_laminate_definition[i] = 
+        next_assembly_usage_occurrence[j].relating_product_definition) THEN
+
+        rp := next_assembly_usage_occurrence[j].related_product_definition.
+              formation.of_product;
+        nprpc := 0;
+        REPEAT k:= LOINDEX (product_related_product_category) TO
+                   HIINDEX (product_related_product_category);
+
+          IF ((rp IN product_related_product_category[k].products) AND
+              (product_related_product_category[k].name IN 
+               ['ply', 'filament_laminate', 'processed_core'])) THEN
+              nprpc := nprpc + 1;
+          END_IF;
+
+        END_REPEAT;
+
+        IF (nprpc = 1) THEN
+          nnauo := nnauo + 1;
+        ELSE
+          dkuhr := FALSE;
+          ESCAPE;
+        END_IF;
+
+      END_IF;
+
+    END_REPEAT;
+
+    IF (dkuhr = FALSE) THEN
+      ESCAPE;
+    END_IF;
+    IF (nnauo <> 1) THEN
+      dkuhr := FALSE;
+      ESCAPE;
+    END_IF;
+
+  END_REPEAT;
+
+WHERE
+  WR1:  dkuhr;
+END_RULE;
+
+RULE unique_version_change_order_rule FOR
+ (action_directive);
+WHERE
+  WR1: SIZEOF (QUERY (ad <* action_directive |
+       NOT (unique_version_change_order (ad)))) = 0;
+END_RULE;
+
+RULE versioned_action_request_requires_status FOR
+ (versioned_action_request, action_request_status);
+WHERE
+  WR1: SIZEOF (QUERY (ar <* versioned_action_request |
+       NOT (SIZEOF (QUERY (ars <* action_request_status |
+       ar :=: ars.assigned_request)) = 1 ))) = 0;
+END_RULE;
+
+FUNCTION applied_date_correlation
+  (e : applied_date_assignment) : BOOLEAN;
+
+  LOCAL
+    dt_role : STRING;
+  END_LOCAL;
+
+    dt_role := e\date_assignment.role.name;
+  CASE dt_role OF
+    'change_date'           : IF SIZEOF (e.items) <>
+                                 SIZEOF (QUERY (x <* e.items |
+                                 'ACTION_SCHEMA.ACTION_DIRECTIVE'
+                                 IN TYPEOF (x)))
+                                 THEN RETURN(FALSE);
+                              END_IF;
+    'creation_date'         : IF SIZEOF (e.items) <>
+                                 SIZEOF (QUERY (x <* e.items |
+                                 'PRODUCT_DEFINITION_SCHEMA.' +
+                                 'PRODUCT_DEFINITION'
+                                 IN TYPEOF (x)))
+                                 THEN RETURN(FALSE);
+                              END_IF;
+    'earliest_end_date'     : IF SIZEOF (e.items) <>
+                                 SIZEOF (QUERY (x <* e.items |
+                                 'STRUCTURAL_ANALYSIS_DESIGN.RETENTION'
+                                 IN TYPEOF (x)))
+                                 THEN RETURN(FALSE);
+                              END_IF;
+    'latest_end_date'       : IF SIZEOF (e.items) <>
+                                 SIZEOF (QUERY (x <* e.items |
+                                 'STRUCTURAL_ANALYSIS_DESIGN.RETENTION'
+                                 IN TYPEOF (x)))
+                                 THEN RETURN(FALSE);
+                              END_IF;
+    'request_date'          : IF SIZEOF (e.items) <>
+                                 SIZEOF (QUERY (x <* e.items |
+                                 'ACTION_SCHEMA.VERSIONED_ACTION_REQUEST'
+                                 IN TYPEOF (x)))
+                                 THEN RETURN(FALSE);
+                              END_IF;
+    'release_date'          : IF SIZEOF (e.items) <>
+                                 SIZEOF (QUERY (x <* e.items |
+                                 'ACTION_SCHEMA.ACTION_DIRECTIVE'
+                                 IN TYPEOF (x)))
+                                 THEN RETURN(FALSE);
+                              END_IF;
+    'start_date'            : IF SIZEOF (e.items) <>
+                                 SIZEOF (QUERY (x <* e.items |
+                                 SIZEOF (['ACTION_SCHEMA.ACTION_DIRECTIVE',
+                                 'STRUCTURAL_ANALYSIS_DESIGN.RETENTION'] *
+                                 TYPEOF (x)) = 1 ))
+                                 THEN RETURN(FALSE);
+                              END_IF;
+    'sign_off_date'         : IF SIZEOF (e.items) <>
+                                 SIZEOF (QUERY (x <* e.items |
+                                 'APPROVAL_SCHEMA.' +
+                                 'APPROVAL_PERSON_ORGANIZATION'
+                                 IN TYPEOF (x)))
+                                 THEN RETURN(FALSE);
+                              END_IF;
+    'contract_date'         : IF SIZEOF (e.items) <>
+                                 SIZEOF (QUERY (x <* e.items |
+                                 'CONTRACT_SCHEMA.CONTRACT'
+                                 IN TYPEOF (x)))
+                                 THEN RETURN(FALSE);
+                              END_IF;
+    'certification_date'    : IF SIZEOF (e.items) <>
+                                 SIZEOF (QUERY (x <* e.items |
+                                 'CERTIFICATION_SCHEMA.CERTIFICATION'
+                                 IN TYPEOF (x)))
+                                 THEN RETURN(FALSE);
+                              END_IF;
+    'classification_date'   : IF SIZEOF (e.items) <>
+                                 SIZEOF (QUERY (x <* e.items |
+                                 'SECURITY_CLASSIFICATION_SCHEMA.' +
+                                 'SECURITY_CLASSIFICATION'
+                                 IN TYPEOF (x)))
+                                 THEN RETURN(FALSE);
+                              END_IF;
+    'declassification_date' : IF SIZEOF (e.items) <>
+                                 SIZEOF (QUERY (x <* e.items |
+                                 'SECURITY_CLASSIFICATION_SCHEMA.' +
+                                 'SECURITY_CLASSIFICATION'
+                                 IN TYPEOF (x)))
+                                 THEN RETURN(FALSE);
+                              END_IF;
+    OTHERWISE : RETURN(TRUE);
+  END_CASE;
+  RETURN (TRUE);
+END_FUNCTION;
+
+FUNCTION applied_date_time_correlation
+  (e : applied_date_and_time_assignment) : BOOLEAN;
+
+  LOCAL
+    dt_role : STRING;
+  END_LOCAL;
+
+    dt_role := e\date_and_time_assignment.role.name;
+  CASE dt_role OF
+    'change_date'           : IF SIZEOF (e.items) <>
+                                 SIZEOF (QUERY (x <* e.items |
+                                 'ACTION_SCHEMA.ACTION_DIRECTIVE'
+                                 IN TYPEOF (x)))
+                                 THEN RETURN(FALSE);
+                              END_IF;
+    'creation_date'         : IF SIZEOF (e.items) <>
+                                 SIZEOF (QUERY (x <* e.items |
+                                 'PRODUCT_DEFINITION_SCHEMA.' +
+                                 'PRODUCT_DEFINITION'
+                                 IN TYPEOF (x)))
+                                 THEN RETURN(FALSE);
+                              END_IF;
+    'earliest_end_date'     : IF SIZEOF (e.items) <>
+                                 SIZEOF (QUERY (x <* e.items |
+                                 'STRUCTURAL_ANALYSIS_DESIGN.RETENTION'
+                                 IN TYPEOF (x)))
+                                 THEN RETURN(FALSE);
+                              END_IF;
+    'latest_end_date'       : IF SIZEOF (e.items) <>
+                                 SIZEOF (QUERY (x <* e.items |
+                                 'STRUCTURAL_ANALYSIS_DESIGN.RETENTION'
+                                 IN TYPEOF (x)))
+                                 THEN RETURN(FALSE);
+                              END_IF;
+    'request_date'          : IF SIZEOF (e.items) <>
+                                 SIZEOF (QUERY (x <* e.items |
+                                 'ACTION_SCHEMA.VERSIONED_ACTION_REQUEST'
+                                 IN TYPEOF (x)))
+                                 THEN RETURN(FALSE);
+                              END_IF;
+    'release_date'          : IF SIZEOF (e.items) <>
+                                 SIZEOF (QUERY (x <* e.items |
+                                 'ACTION_SCHEMA.ACTION_DIRECTIVE'
+                                 IN TYPEOF (x)))
+                                 THEN RETURN(FALSE);
+                              END_IF;
+    'start_date'            : IF SIZEOF (e.items) <>
+                                 SIZEOF (QUERY (x <* e.items |
+                                 SIZEOF (['ACTION_SCHEMA.ACTION_DIRECTIVE',
+                                 'STRUCTURAL_ANALYSIS_DESIGN.RETENTION'] *
+                                 TYPEOF (x)) = 1 ))
+                                 THEN RETURN(FALSE);
+                              END_IF;
+    'sign_off_date'         : IF SIZEOF (e.items) <>
+                                 SIZEOF (QUERY (x <* e.items |
+                                 'APPROVAL_SCHEMA.' +
+                                 'APPROVAL_PERSON_ORGANIZATION'
+                                 IN TYPEOF (x)))
+                                 THEN RETURN(FALSE);
+                              END_IF;
+    'contract_date'         : IF SIZEOF (e.items) <>
+                                 SIZEOF (QUERY (x <* e.items |
+                                 'CONTRACT_SCHEMA.CONTRACT'
+                                 IN TYPEOF (x)))
+                                 THEN RETURN(FALSE);
+                              END_IF;
+    'certification_date'    : IF SIZEOF (e.items) <>
+                                 SIZEOF (QUERY (x <* e.items |
+                                 'CERTIFICATION_SCHEMA.CERTIFICATION'
+                                 IN TYPEOF (x)))
+                                 THEN RETURN(FALSE);
+                              END_IF;
+    'classification_date'   : IF SIZEOF (e.items) <>
+                                 SIZEOF (QUERY (x <* e.items |
+                                 'SECURITY_CLASSIFICATION_SCHEMA.' +
+                                 'SECURITY_CLASSIFICATION'
+                                 IN TYPEOF (x)))
+                                 THEN RETURN(FALSE);
+                              END_IF;
+    'declassification_date' : IF SIZEOF (e.items) <>
+                                 SIZEOF (QUERY (x <* e.items |
+                                 'SECURITY_CLASSIFICATION_SCHEMA.' +
+                                 'SECURITY_CLASSIFICATION'
+                                 IN TYPEOF (x)))
+                                 THEN RETURN(FALSE);
+                              END_IF;
+    OTHERWISE : RETURN(TRUE);
+  END_CASE;
+  RETURN (TRUE);
+END_FUNCTION;
+
+FUNCTION applied_organization_correlation
+  (e : applied_organization_assignment) : BOOLEAN;
+
+  LOCAL
+    po_role : STRING;
+  END_LOCAL;
+
+    po_role := e\organization_assignment.role.name;
+  CASE po_role OF
+    'request_recipient'      : IF SIZEOF (e.items) <>
+                                  SIZEOF (QUERY (x <* e.items |
+                                  'ACTION_SCHEMA.' +
+                                  'VERSIONED_ACTION_REQUEST'
+                                  IN TYPEOF (x)))
+                                  THEN RETURN(FALSE);
+                               END_IF;
+    'initiator'              : IF SIZEOF (e.items) <>
+                                  SIZEOF (QUERY (x <* e.items |
+                                  SIZEOF (['ACTION_SCHEMA.' +
+                                  'VERSIONED_ACTION_REQUEST',
+                                  'ACTION_SCHEMA.ACTION_DIRECTIVE'] *
+                                  TYPEOF (x)) = 1 ))
+                                  THEN RETURN(FALSE);
+                               END_IF;
+    'creator'                : IF SIZEOF (e.items) <>
+                                  SIZEOF (QUERY (x <* e.items |
+                                  SIZEOF (['PRODUCT_DEFINITION_SCHEMA.' +
+                                  'PRODUCT_DEFINITION_FORMATION',
+                                  'PRODUCT_DEFINITION_SCHEMA.' +
+                                  'PRODUCT_DEFINITION'] *
+                                  TYPEOF (x)) = 1 ))
+                                  THEN RETURN (FALSE);
+                               END_IF;
+    'part_supplier'          : IF SIZEOF (e.items) <>
+                                  SIZEOF (QUERY (x <* e.items |
+                                  'PRODUCT_DEFINITION_SCHEMA.' +
+                                  'PRODUCT_DEFINITION_FORMATION'
+                                  IN TYPEOF (x)))
+                                  THEN RETURN(FALSE);
+                               END_IF;
+    'analysis_supplier'      : IF SIZEOF (e.items) <>
+                                  SIZEOF (QUERY (x <* e.items |
+                                  'PRODUCT_DEFINITION_SCHEMA.' +
+                                  'PRODUCT_DEFINITION_FORMATION'
+                                  IN TYPEOF (x)))
+                                  THEN RETURN(FALSE);
+                               END_IF;
+    'design_supplier'        : IF SIZEOF (e.items) <>
+                                  SIZEOF (QUERY (x <* e.items |
+                                  'PRODUCT_DEFINITION_SCHEMA.' +
+                                  'PRODUCT_DEFINITION_FORMATION'
+                                  IN TYPEOF (x)))
+                                  THEN RETURN(FALSE);
+                               END_IF;
+    'analysis_owner'         : IF SIZEOF (e.items) <>
+                                  SIZEOF (QUERY (x <* e.items |
+                                  'PRODUCT_DEFINITION_SCHEMA.PRODUCT'
+                                  IN TYPEOF (x)))
+                                  THEN RETURN(FALSE);
+                               END_IF;
+    'design_owner'           : IF SIZEOF (e.items) <>
+                                  SIZEOF (QUERY (x <* e.items |
+                                  'PRODUCT_DEFINITION_SCHEMA.PRODUCT'
+                                  IN TYPEOF (x)))
+                                  THEN RETURN(FALSE);
+                               END_IF;
+    'configuration_manager'  : IF SIZEOF (e.items) <>
+                                  SIZEOF (QUERY (x <* e.items |
+                                  'CONFIGURATION_MANAGEMENT_SCHEMA.' +
+                                  'CONFIGURATION_ITEM'
+                                  IN TYPEOF (x)))
+                                  THEN RETURN(FALSE);
+                               END_IF;
+    'contractor'             : IF SIZEOF (e.items) <>
+                                  SIZEOF (QUERY (x <* e.items |
+                                  'CONTRACT_SCHEMA.CONTRACT'
+                                  IN TYPEOF (x)))
+                                  THEN RETURN(FALSE);
+                               END_IF;
+    'classification_officer' : IF SIZEOF (e.items) <>
+                                  SIZEOF (QUERY (x <* e.items |
+                                  'SECURITY_CLASSIFICATION_SCHEMA.' +
+                                  'SECURITY_CLASSIFICATION'
+                                  IN TYPEOF (x))) THEN
+                                  RETURN(FALSE);
+                               END_IF;
+    OTHERWISE : RETURN(TRUE);
+  END_CASE;
+  RETURN (TRUE);
+END_FUNCTION;
+
+FUNCTION applied_person_and_organization_correlation
+  (e : applied_person_and_organization_assignment) : BOOLEAN;
+
+  LOCAL
+    po_role : STRING;
+  END_LOCAL;
+
+    po_role := e\person_and_organization_assignment.role.name;
+  CASE po_role OF
+    'request_recipient'      : IF SIZEOF (e.items) <>
+                                  SIZEOF (QUERY (x <* e.items |
+                                  'ACTION_SCHEMA.' +
+                                  'VERSIONED_ACTION_REQUEST'
+                                  IN TYPEOF (x)))
+                                  THEN RETURN(FALSE);
+                               END_IF;
+    'initiator'              : IF SIZEOF (e.items) <>
+                                  SIZEOF (QUERY (x <* e.items |
+                                  SIZEOF (['ACTION_SCHEMA.' +
+                                  'VERSIONED_ACTION_REQUEST',
+                                  'ACTION_SCHEMA.ACTION_DIRECTIVE'] *
+                                  TYPEOF (x)) = 1 ))
+                                  THEN RETURN(FALSE);
+                               END_IF;
+    'creator'                : IF SIZEOF (e.items) <>
+                                  SIZEOF (QUERY (x <* e.items |
+                                  SIZEOF (['PRODUCT_DEFINITION_SCHEMA.' +
+                                  'PRODUCT_DEFINITION_FORMATION',
+                                  'PRODUCT_DEFINITION_SCHEMA.' +
+                                  'PRODUCT_DEFINITION'] *
+                                  TYPEOF (x)) = 1 ))
+                                  THEN RETURN (FALSE);
+                               END_IF;
+    'part_supplier'          : IF SIZEOF (e.items) <>
+                                  SIZEOF (QUERY (x <* e.items |
+                                  'PRODUCT_DEFINITION_SCHEMA.' +
+                                  'PRODUCT_DEFINITION_FORMATION'
+                                  IN TYPEOF (x)))
+                                  THEN RETURN(FALSE);
+                               END_IF;
+    'analysis_supplier'      : IF SIZEOF (e.items) <>
+                                  SIZEOF (QUERY (x <* e.items |
+                                  'PRODUCT_DEFINITION_SCHEMA.' +
+                                  'PRODUCT_DEFINITION_FORMATION'
+                                  IN TYPEOF (x)))
+                                  THEN RETURN(FALSE);
+                               END_IF;
+    'design_supplier'        : IF SIZEOF (e.items) <>
+                                  SIZEOF (QUERY (x <* e.items |
+                                  'PRODUCT_DEFINITION_SCHEMA.' +
+                                  'PRODUCT_DEFINITION_FORMATION'
+                                  IN TYPEOF (x)))
+                                  THEN RETURN(FALSE);
+                               END_IF;
+    'analysis_owner'         : IF SIZEOF (e.items) <>
+                                  SIZEOF (QUERY (x <* e.items |
+                                  'PRODUCT_DEFINITION_SCHEMA.PRODUCT'
+                                  IN TYPEOF (x)))
+                                  THEN RETURN(FALSE);
+                               END_IF;
+    'design_owner'           : IF SIZEOF (e.items) <>
+                                  SIZEOF (QUERY (x <* e.items |
+                                  'PRODUCT_DEFINITION_SCHEMA.PRODUCT'
+                                  IN TYPEOF (x)))
+                                  THEN RETURN(FALSE);
+                               END_IF;
+    'configuration_manager'  : IF SIZEOF (e.items) <>
+                                  SIZEOF (QUERY (x <* e.items |
+                                  'CONFIGURATION_MANAGEMENT_SCHEMA.' +
+                                  'CONFIGURATION_ITEM'
+                                  IN TYPEOF (x)))
+                                  THEN RETURN(FALSE);
+                               END_IF;
+    'contractor'             : IF SIZEOF (e.items) <>
+                                  SIZEOF (QUERY (x <* e.items |
+                                  'CONTRACT_SCHEMA.CONTRACT'
+                                  IN TYPEOF (x)))
+                                  THEN RETURN(FALSE);
+                               END_IF;
+    'classification_officer' : IF SIZEOF (e.items) <>
+                                  SIZEOF (QUERY (x <* e.items |
+                                  'SECURITY_CLASSIFICATION_SCHEMA.' +
+                                  'SECURITY_CLASSIFICATION'
+                                  IN TYPEOF (x))) THEN
+                                  RETURN(FALSE);
+                               END_IF;
+    OTHERWISE : RETURN(TRUE);
+  END_CASE;
+  RETURN (TRUE);
+END_FUNCTION;
+
+FUNCTION assembly_shape_is_defined
+  (assy: next_assembly_usage_occurrence) : BOOLEAN;
+
+  LOCAL
+    sdr_set    : SET OF shape_definition_representation := [];
+    sdr_a_set  : SET OF shape_definition_representation := [];
+    srr_set    : SET OF shape_representation_relationship := [];
+    pr1_set    : SET OF property_definition := [];
+    pr2_set    : SET OF property_definition := [];
+    pdrel_set  : SET OF product_definition_relationship := [];
+    i,j        : INTEGER;
+  END_LOCAL;
+
+  -- Gather all instances of shape_definition_representation where
+  -- the component part has a representation defined for it.
+
+  pr1_set := bag_to_set (USEDIN (assy.related_product_definition,
+    'PRODUCT_PROPERTY_DEFINITION_SCHEMA.PROPERTY_DEFINITION.' +
+    'DEFINITION'));
+  REPEAT i := 1 TO HIINDEX(pr1_set) BY 1;
+    sdr_set := sdr_set + QUERY (pdr <* 
+     bag_to_set (USEDIN (pr1_set[i],
+    'PRODUCT_PROPERTY_REPRESENTATION_SCHEMA.' +
+    'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION')) |
+    'PRODUCT_PROPERTY_REPRESENTATION_SCHEMA.' +
+    'SHAPE_DEFINITION_REPRESENTATION' IN TYPEOF(pdr));
+  END_REPEAT;
+
+  pdrel_set := bag_to_set (USEDIN (assy.related_product_definition,
+    'PRODUCT_DEFINITION_SCHEMA.PRODUCT_DEFINITION_RELATIONSHIP.' +
+    'RELATED_PRODUCT_DEFINITION'));
+  REPEAT j := 1 TO HIINDEX(pdrel_set) BY 1;
+    pr2_set := pr2_set + bag_to_set (USEDIN (pdrel_set[j],
+    'PRODUCT_PROPERTY_DEFINITION_SCHEMA.PROPERTY_DEFINITION.' +
+    'DEFINITION'));
+  END_REPEAT;
+  REPEAT i := 1 TO HIINDEX(pr2_set) BY 1;
+    sdr_set := sdr_set + QUERY (pdr <* 
+     bag_to_set (USEDIN(pr2_set[i],
+    'PRODUCT_PROPERTY_REPRESENTATION_SCHEMA.' +
+    'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION')) |
+    'PRODUCT_PROPERTY_REPRESENTATION_SCHEMA.' +
+    'SHAPE_DEFINITION_REPRESENTATION' IN TYPEOF(pdr));
+  END_REPEAT;
+
+  -- Gather all instances of shape_definition_representation where
+  -- the assembly part has a representation defined for it.
+
+  pr1_set := bag_to_set (USEDIN (assy.relating_product_definition,
+    'PRODUCT_PROPERTY_DEFINITION_SCHEMA.PROPERTY_DEFINITION.' +
+    'DEFINITION'));
+  REPEAT i := 1 TO HIINDEX(pr1_set) BY 1;
+    sdr_a_set := sdr_a_set + QUERY (pdr <* 
+     bag_to_set (USEDIN (pr1_set[i],
+    'PRODUCT_PROPERTY_REPRESENTATION_SCHEMA.' +
+    'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION')) |
+    'PRODUCT_PROPERTY_REPRESENTATION_SCHEMA.' +
+    'SHAPE_DEFINITION_REPRESENTATION' IN TYPEOF(pdr));
+  END_REPEAT;
+
+  -- If there is a representation defined for the component part
+
+  IF SIZEOF (sdr_set) > 0 THEN
+
+    -- For each representation of the shape of the component part
+    -- gather all instances of shape_representation_relationship the
+    -- where representation of component part is related to
+    -- another representation.
+
+    REPEAT i := 1 TO HIINDEX (sdr_set);
+      srr_set := QUERY (rr <* bag_to_set (USEDIN (sdr_set[i]\
+       property_definition_representation.used_representation,
+      'REPRESENTATION_SCHEMA.REPRESENTATION_RELATIONSHIP.REP_2')) |
+      'PRODUCT_PROPERTY_REPRESENTATION_SCHEMA.' +
+      'SHAPE_REPRESENTATION_RELATIONSHIP' IN TYPEOF (rr));
+
+      -- If there is a shape_representation_relationship
+      -- where the component part's shape_representation
+      -- is related to another shape_representation.
+
+      IF SIZEOF (srr_set) > 0 THEN
+
+        -- For each shape_representation_relationship in that set
+
+        REPEAT j := 1 TO HIINDEX (srr_set);
+
+          -- If the other shape_representation in the
+          -- shape_representation_relationship is the
+          -- shape_representation of the assembly
+          -- product_definition in at least one instance.
+
+          IF SIZEOF (QUERY (pdr <* bag_to_set (
+            USEDIN (srr_set[j]\representation_relationship.rep_1,
+            'PRODUCT_PROPERTY_REPRESENTATION_SCHEMA.' +
+            'PROPERTY_DEFINITION_REPRESENTATION.USED_REPRESENTATION')) |
+            'PRODUCT_PROPERTY_REPRESENTATION_SCHEMA.' +
+            'SHAPE_DEFINITION_REPRESENTATION' IN TYPEOF (pdr)) *
+            sdr_a_set) >= 1 THEN
+
+            -- If the shape_representation_relationship and the
+            -- product_definition_relationship of each occurrence
+            -- of the component and assembly relationship is not given
+            -- via the context_dependent_shape_representation then
+            -- return FALSE
+
+            IF SIZEOF (QUERY (cdsr <* bag_to_set (USEDIN (srr_set[j],
+              'PRODUCT_PROPERTY_REPRESENTATION_SCHEMA.' +
+              'CONTEXT_DEPENDENT_SHAPE_REPRESENTATION.' +
+              'REPRESENTATION_RELATION')) | NOT (cdsr.
+               represented_product_relation.definition :=: assy) )) > 0
+              THEN RETURN (FALSE);
+            END_IF;
+          END_IF;
+        END_REPEAT;
+      END_IF;
+    END_REPEAT;
+  END_IF;
+
+  -- If the shape of the component is not specified
+  -- or there are no violations then return TRUE
+
+  RETURN (TRUE);
+END_FUNCTION;
+
+FUNCTION derive_angle (placement_1 : axis2_placement_3d;
+                       placement_2 : axis2_placement_3d) :
+                       plane_angle_measure;
+
+  LOCAL
+    v1     : direction;
+    v2     : direction;
+    mag_v1 : REAL;
+    mag_v2 : REAL;
+    theta  : plane_angle_measure;
+  END_LOCAL;
+
+  v1 := placement_1.p[1];
+  v2 := placement_2.p[1];
+
+  mag_v1 := SQRT (v1.direction_ratios[1]*v1.direction_ratios[1] +
+                  v1.direction_ratios[2]*v1.direction_ratios[2]);
+
+  mag_v2 := SQRT (v2.direction_ratios[1]*v2.direction_ratios[1] +
+                  v2.direction_ratios[2]*v2.direction_ratios[2]);
+
+  IF ((mag_v1 = 0.0) OR (mag_v2 = 0.0)) THEN
+    theta := 0.0;
+    RETURN (theta);
+  END_IF;
+
+  theta := ACOS ((v1.direction_ratios[1]*v2.direction_ratios[1] +
+                  v1.direction_ratios[2]*v2.direction_ratios[2]) /
+                 (mag_v1*mag_v2));
+
+  RETURN (theta);
+
+END_FUNCTION;
+
+FUNCTION unique_version_change_order 
+ (ad : action_directive) : BOOLEAN;
+
+  LOCAL
+    varset : SET OF versioned_action_request := ad.requests;
+    aara   : SET OF applied_action_request_assignment := [];
+    vers   : SET OF product_definition_formation := [];
+    i,k    : INTEGER;
+  END_LOCAL;
+
+  -- build the set of applied_action_request_assignments 
+  -- associated with the versioned_action_requests
+  -- that are incorporated by the action_directive
+
+  REPEAT i := 1 TO SIZEOF (varset);
+    aara := aara + QUERY (ara <* bag_to_set (USEDIN (varset[i],
+     'MANAGEMENT_RESOURCES_SCHEMA.' +
+     'ACTION_REQUEST_ASSIGNMENT.ASSIGNED_ACTION_REQUEST')) |
+     'STRUCTURAL_ANALYSIS_DESIGN.' +
+     'APPLIED_ACTION_REQUEST_ASSIGNMENT' IN TYPEOF (ara));
+  END_REPEAT;
+
+  -- gather the product_definition_formations that are
+  -- referenced by the applied_action_request_assignments
+  REPEAT k := 1 TO SIZEOF (aara);
+    vers := vers + bag_to_set (QUERY (aarai <* aara[k].items |
+     'PRODUCT_DEFINITION_SCHEMA.PRODUCT_DEFINITION_FORMATION'
+      IN TYPEOF (aarai)));
+  END_REPEAT;
+
+  -- check that no product_definition_formation
+  -- reference the same instance of product
+  RETURN (SIZEOF (QUERY (ver <* vers |
+          NOT (SIZEOF (QUERY (other_ver <* vers - ver |
+          ver.of_product :=: other_ver.of_product)) = 0 ))) = 0);
+END_FUNCTION;
+
+END_SCHEMA; --structural_analysis_design
+

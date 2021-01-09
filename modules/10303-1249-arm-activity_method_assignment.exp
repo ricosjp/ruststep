@@ -1,0 +1,29 @@
+(*
+ $Id: 10303-1249-arm-activity_method_assignment.exp,v 1.1 2006/08/07 07:44:45 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2998 - ISO/TS 10303-1249 Activity method assignment - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG12 N2306
+*) 
+
+
+SCHEMA Activity_method_assignment_arm;
+
+USE FROM Activity_method_arm;    -- ISO/TS 10303-1049
+
+
+TYPE activity_method_item = EXTENSIBLE GENERIC_ENTITY SELECT;
+END_TYPE; 
+
+ENTITY Activity_method_relationship;
+  name : STRING;
+  description : OPTIONAL STRING;
+  relating_method : Activity_method;
+  related_method : Activity_method;
+END_ENTITY;
+
+ENTITY Applied_activity_method_assignment;
+  assigned_activity_method : Activity_method;
+  items : SET[1:?] OF activity_method_item;
+  role : STRING;
+END_ENTITY;
+
+END_SCHEMA;  -- Activity_method_assignment_arm

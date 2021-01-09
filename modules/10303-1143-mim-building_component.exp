@@ -1,0 +1,56 @@
+(*
+   $Id: 10303-1143-mim-building_component.exp,v 1.2 2006/08/03 13:36:19 wg12deputy Exp $
+   ISO/TC184/SC4 WG12N2570 - ISO/TS - 10303-1143 Building_component - EXPRESS MIM
+   Supersedes ISO TC184/SC4/WG12N1779
+*)
+
+SCHEMA Building_component_mim;
+
+USE FROM Classification_assignment_mim;
+
+USE FROM Shape_property_assignment_mim;
+
+
+TYPE element_component_classification_item = SELECT BASED_ON classification_item WITH
+   (opening);
+END_TYPE;
+
+ENTITY element_component_classification_group
+SUBTYPE OF (group);
+WHERE
+WR1: SIZEOF (QUERY (ga <* USEDIN (SELF, 'BUILDING_COMPONENT_MIM.' +
+    'CLASSIFICATION_ASSIGNMENT.ASSIGNED_CLASS') |
+    'BUILDING_COMPONENT_MIM.' + 'APPLIED_CLASSIFICATION_ASSIGNMENT' IN TYPEOF (ga)))
+    >= 1;
+END_ENTITY;
+
+ENTITY negative_component
+SUBTYPE OF (shape_aspect);
+WHERE
+WR1: SIZEOF (TYPEOF (SELF.of_shape.definition) *
+    ['BUILDING_COMPONENT_MIM.BUILDING_ELEMENT' ]) = 1;
+END_ENTITY;
+
+ENTITY opening
+SUBTYPE OF (negative_component);
+WHERE
+WR1: SIZEOF (QUERY (aca <* USEDIN (SELF, 'BUILDING_COMPONENT_MIM.'+
+    'APPLIED_CLASSIFICATION_ASSIGNMENT.ITEMS') |
+    'BUILDING_COMPONENT_MIM.ELEMENT_COMPONENT_CLASSIFICATION_GROUP' IN 
+    TYPEOF(aca\classification_assignment.assigned_class)
+    )) = 1;
+END_ENTITY;
+
+ENTITY positive_component
+SUBTYPE OF (shape_aspect);
+WHERE
+WR1: SIZEOF (TYPEOF (SELF.of_shape.definition) *
+    ['BUILDING_COMPONENT_MIM.BUILDING_ELEMENT' ]) = 1;
+END_ENTITY;
+
+ENTITY recess
+SUBTYPE OF (negative_component);
+END_ENTITY;
+
+
+END_SCHEMA;

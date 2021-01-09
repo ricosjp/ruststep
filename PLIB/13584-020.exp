@@ -1,0 +1,1051 @@
+
+SCHEMA ISO13584_generic_expressions_schema;
+
+ENTITY generic_expression
+ABSTRACT SUPERTYPE OF(ONEOF(simple_generic_expression,
+								unary_generic_expression,
+								binary_generic_expression,
+								multiple_arity_generic_expression));
+WHERE 
+	WR1: is_acyclic(SELF);
+END_ENTITY;
+
+ENTITY simple_generic_expression
+ABSTRACT SUPERTYPE OF (ONEOF(generic_literal, generic_variable))
+SUBTYPE OF (generic_expression);
+END_ENTITY;
+
+ENTITY generic_literal
+ABSTRACT SUPERTYPE
+SUBTYPE OF (simple_generic_expression);
+END_ENTITY; 
+
+ENTITY generic_variable
+ABSTRACT SUPERTYPE
+SUBTYPE OF (simple_generic_expression);
+INVERSE
+	interpretation :
+			environment FOR syntactic_representation;
+END_ENTITY;
+
+ENTITY variable_semantics
+ABSTRACT SUPERTYPE;
+END_ENTITY;
+
+ENTITY environment;
+	syntactic_representation: generic_variable;
+	semantics: variable_semantics;
+END_ENTITY;
+
+ENTITY unary_generic_expression
+ABSTRACT SUPERTYPE
+SUBTYPE OF(generic_expression);
+	operand: generic_expression;
+END_ENTITY;
+
+ENTITY binary_generic_expression
+ABSTRACT SUPERTYPE
+SUBTYPE OF(generic_expression);
+	operands: LIST [2:2] OF generic_expression;
+END_ENTITY;
+
+ENTITY multiple_arity_generic_expression
+ABSTRACT SUPERTYPE
+SUBTYPE OF(generic_expression);
+	operands: LIST [2:?] OF generic_expression;
+END_ENTITY;
+
+FUNCTION is_acyclic (arg: generic_expression): BOOLEAN;
+RETURN (acyclic (arg, []));
+END_FUNCTION ; -- is_acyclic
+
+FUNCTION acyclic (arg1: generic_expression; 
+			arg2: SET OF generic_expression): BOOLEAN;
+
+LOCAL
+	result: BOOLEAN;
+END_LOCAL;
+
+IF ('ISO13584_GENERIC_EXPRESSIONS_SCHEMA.SIMPLE_GENERIC_EXPRESSION'
+	IN TYPEOF (arg1)) 
+THEN
+	RETURN (TRUE);
+END_IF;
+
+IF arg1 IN arg2 
+THEN 
+	RETURN (FALSE);
+END_IF;
+
+IF 'ISO13584_GENERIC_EXPRESSIONS_SCHEMA.UNARY_GENERIC_EXPRESSION' 
+	IN TYPEOF (arg1) 
+THEN 
+	RETURN 
+	(acyclic(arg1\unary_generic_expression.operand,arg2+[arg1]));
+END_IF;
+
+IF 'ISO13584_GENERIC_EXPRESSIONS_SCHEMA.BINARY_GENERIC_EXPRESSION' 
+	IN TYPEOF (arg1) 
+THEN 
+	RETURN 
+	(acyclic(arg1\binary_generic_expression.operands[1],arg2+[arg1])
+	AND
+	acyclic(arg1\binary_generic_expression.operands[2],arg2+[arg1]));
+END_IF;
+
+IF 
+'ISO13584_GENERIC_EXPRESSIONS_SCHEMA.MULTIPLE_ARITY_GENERIC_EXPRESSION' 
+	IN TYPEOF (arg1) 
+THEN 
+	result := TRUE;
+	REPEAT i := 1 TO 
+			SIZEOF (arg1\multiple_arity_generic_expression.operands);
+		result := result AND
+		acyclic(arg1\multiple_arity_generic_expression.operands[i], arg2+[arg1]);
+	END_REPEAT;
+
+	RETURN (result);
+END_IF;
+
+END_FUNCTION; -- acyclic
+
+FUNCTION used_variables (arg : generic_expression) : 
+			SET OF generic_variable;
+
+LOCAL
+	result : SET OF generic_variable := [];
+END_LOCAL;
+
+IF 'ISO13584_GENERIC_EXPRESSIONS_SCHEMA.GENERIC_VARIABLE' 
+	IN TYPEOF (arg) 
+THEN 
+	RETURN ([arg]);
+END_IF;
+
+IF 'ISO13584_GENERIC_EXPRESSIONS_SCHEMA.UNARY_GENERIC_EXPRESSION' 
+	IN TYPEOF (arg)
+THEN 
+	RETURN (used_variables (arg\unary_generic_expression.operand));
+END_IF;
+
+IF 'ISO13584_GENERIC_EXPRESSIONS_SCHEMA.BINARY_GENERIC_EXPRESSION'
+	IN TYPEOF (arg)
+THEN 
+	RETURN(used_variables(arg\binary_generic_expression.operands[1])
+		+ used_variables (arg\binary_generic_expression.operands[2]));
+END_IF;
+
+IF
+'ISO13584_GENERIC_EXPRESSIONS_SCHEMA.MULTIPLE_ARITY_GENERIC_EXPRESSION' 
+	IN TYPEOF (arg)
+THEN
+	REPEAT i := 1 TO 
+		SIZEOF(arg\multiple_arity_generic_expression.operands);
+		result := result + used_variables(
+			arg\multiple_arity_generic_expression.operands[i]);
+	END_REPEAT;
+	
+	RETURN (result);
+END_IF;
+RETURN ([ ]);      -- in this case the subtype shall not contain
+			            -- any variable (see IP1 in generic_expression)
+END_FUNCTION; -- used_variables
+
+END_SCHEMA;
+
+SCHEMA ISO13584_expressions_schema;
+
+REFERENCE FROM ISO13584_generic_expressions_schema(
+			generic_expression,
+			simple_generic_expression,
+			generic_variable,
+			generic_literal,
+			unary_generic_expression,
+			binary_generic_expression,
+			multiple_arity_generic_expression);
+
+ENTITY expression
+ABSTRACT SUPERTYPE OF (ONEOF (numeric_expression,
+				boolean_expression,
+				string_expression))
+SUBTYPE OF (generic_expression);
+END_ENTITY;
+
+ENTITY variable
+ABSTRACT SUPERTYPE OF (ONEOF (numeric_variable,
+				boolean_variable,
+					string_variable))
+SUBTYPE OF(generic_variable);
+END_ENTITY;
+
+ENTITY defined_function
+ABSTRACT SUPERTYPE OF ((ONEOF (numeric_defined_function,
+				string_defined_function,
+				boolean_defined_function)
+				)
+				ANDOR SQL_mappable_defined_function);
+END_ENTITY;
+
+ENTITY SQL_mappable_defined_function
+ABSTRACT SUPERTYPE
+SUBTYPE OF (defined_function);
+END_ENTITY;
+
+ENTITY numeric_expression
+ABSTRACT SUPERTYPE OF (ONEOF (simple_numeric_expression,
+								unary_numeric_expression,
+								binary_numeric_expression,
+								multiple_arity_numeric_expression,
+								length_function,
+								value_function,
+								numeric_defined_function))
+SUBTYPE OF (expression);
+DERIVE
+	is_int: BOOLEAN := is_int_expr (SELF);
+	sql_mappable: BOOLEAN := is_SQL_mappable (SELF);
+END_ENTITY;
+
+ENTITY simple_numeric_expression
+ABSTRACT SUPERTYPE OF (ONEOF (literal_number, numeric_variable))
+SUBTYPE OF (numeric_expression, simple_generic_expression);
+END_ENTITY;
+
+ENTITY literal_number 
+ABSTRACT SUPERTYPE OF (ONEOF (int_literal, real_literal))
+SUBTYPE OF (simple_numeric_expression, generic_literal);
+	the_value: NUMBER;
+END_ENTITY;
+
+ENTITY int_literal
+SUBTYPE OF (literal_number);
+	SELF\literal_number.the_value: INTEGER;
+END_ENTITY;
+
+ENTITY real_literal
+SUBTYPE OF (literal_number); 
+	SELF\literal_number.the_value: REAL;
+END_ENTITY;
+
+ENTITY numeric_variable
+SUPERTYPE OF (ONEOF (int_numeric_variable,
+			          real_numeric_variable))
+SUBTYPE OF (simple_numeric_expression, variable);
+WHERE 
+	WR1:	('ISO13584_EXPRESSIONS_SCHEMA.INT_NUMERIC_VARIABLE' 
+			IN TYPEOF(SELF) ) OR
+			('ISO13584_EXPRESSIONS_SCHEMA.REAL_NUMERIC_VARIABLE' 
+			IN TYPEOF(SELF) );
+END_ENTITY;
+
+ENTITY int_numeric_variable
+SUBTYPE OF (numeric_variable);
+END_ENTITY;
+
+ENTITY real_numeric_variable
+SUBTYPE OF (numeric_variable);
+END_ENTITY;
+
+ENTITY unary_numeric_expression
+ABSTRACT SUPERTYPE OF (ONEOF (unary_function_call))
+SUBTYPE OF (numeric_expression, unary_generic_expression);
+	SELF\unary_generic_expression.operand	: numeric_expression;
+END_ENTITY;
+
+ENTITY binary_numeric_expression
+ABSTRACT SUPERTYPE OF (ONEOF (minus_expression,
+				div_expression,
+				mod_expression,
+				slash_expression,
+				power_expression,
+				binary_function_call))
+SUBTYPE OF (numeric_expression, binary_generic_expression);
+	SELF\binary_generic_expression.operands : LIST [2:2] OF 
+						numeric_expression;
+END_ENTITY;
+
+ENTITY multiple_arity_numeric_expression
+ABSTRACT SUPERTYPE OF (ONEOF (plus_expression,
+				mult_expression,
+				multiple_arity_function_call))
+SUBTYPE OF (numeric_expression, multiple_arity_generic_expression);
+	SELF\multiple_arity_generic_expression.operands	: LIST [2:?] OF 						numeric_expression;
+END_ENTITY;
+
+ENTITY length_function
+SUBTYPE OF (numeric_expression, unary_generic_expression);
+	SELF\unary_generic_expression.operand: string_expression;
+END_ENTITY;
+
+ENTITY value_function
+SUPERTYPE OF (int_value_function)
+SUBTYPE OF (numeric_expression, unary_generic_expression);
+	SELF\unary_generic_expression.operand: string_expression;
+END_ENTITY;
+
+ENTITY int_value_function
+SUBTYPE OF (value_function);
+END_ENTITY;
+
+ENTITY numeric_defined_function
+ABSTRACT SUPERTYPE OF (ONEOF (integer_defined_function,
+				real_defined_function))
+SUBTYPE OF (numeric_expression, defined_function);
+END_ENTITY;
+
+ENTITY plus_expression
+SUBTYPE OF (multiple_arity_numeric_expression);
+END_ENTITY;
+
+ENTITY minus_expression
+SUBTYPE OF (binary_numeric_expression);
+END_ENTITY;
+
+ENTITY mult_expression
+SUBTYPE OF (multiple_arity_numeric_expression);
+END_ENTITY;
+
+ENTITY div_expression
+SUBTYPE OF (binary_numeric_expression);
+END_ENTITY;
+
+ENTITY mod_expression
+SUBTYPE OF (binary_numeric_expression);
+END_ENTITY;
+
+ENTITY slash_expression
+SUBTYPE OF (binary_numeric_expression);
+END_ENTITY;
+
+ENTITY power_expression
+SUBTYPE OF (binary_numeric_expression);
+END_ENTITY;
+
+ENTITY unary_function_call
+ABSTRACT SUPERTYPE OF (ONEOF (abs_function,
+				minus_function,
+				sin_function,
+				cos_function,
+				tan_function,
+				asin_function,
+				acos_function,
+				exp_function,
+				log_function,
+				log2_function,
+				log10_function,
+				square_root_function))
+SUBTYPE OF (unary_numeric_expression);
+END_ENTITY;
+
+ENTITY binary_function_call
+ABSTRACT SUPERTYPE OF (ONEOF (atan_function))
+SUBTYPE OF (binary_numeric_expression);
+END_ENTITY;
+
+ENTITY multiple_arity_function_call
+ABSTRACT SUPERTYPE OF (ONEOF (maximum_function, 
+				minimum_function))
+SUBTYPE OF (multiple_arity_numeric_expression);
+END_ENTITY;
+
+ENTITY abs_function
+SUBTYPE OF (unary_function_call);
+END_ENTITY;
+
+ENTITY minus_function
+SUBTYPE OF (unary_function_call);
+END_ENTITY;
+
+ENTITY sin_function
+SUBTYPE OF (unary_function_call);
+END_ENTITY;
+
+ENTITY cos_function
+SUBTYPE OF (unary_function_call);
+END_ENTITY;
+
+ENTITY tan_function
+SUBTYPE OF (unary_function_call);
+END_ENTITY;
+
+ENTITY asin_function
+	SUBTYPE OF (unary_function_call);
+END_ENTITY;
+
+ENTITY acos_function
+SUBTYPE OF (unary_function_call);
+END_ENTITY;
+
+ENTITY exp_function
+SUBTYPE OF (unary_function_call);
+END_ENTITY;
+
+ENTITY log_function
+SUBTYPE OF (unary_function_call);
+END_ENTITY;
+
+ENTITY log2_function
+SUBTYPE OF (unary_function_call);
+END_ENTITY;
+
+ENTITY log10_function
+SUBTYPE OF (unary_function_call);
+END_ENTITY;
+
+ENTITY square_root_function
+SUBTYPE OF (unary_function_call);
+END_ENTITY;
+
+ENTITY atan_function
+SUBTYPE OF (binary_function_call);
+END_ENTITY;
+
+ENTITY maximum_function
+SUBTYPE OF (multiple_arity_function_call);
+END_ENTITY;
+
+ENTITY minimum_function
+SUBTYPE OF (multiple_arity_function_call);
+END_ENTITY;
+
+ENTITY integer_defined_function 
+ABSTRACT SUPERTYPE
+SUBTYPE OF (numeric_defined_function);
+END_ENTITY ;
+
+ENTITY real_defined_function 
+ABSTRACT SUPERTYPE
+SUBTYPE OF (numeric_defined_function);
+END_ENTITY ;
+
+ENTITY boolean_expression
+ABSTRACT SUPERTYPE OF (ONEOF (simple_boolean_expression,
+				unary_boolean_expression,
+				binary_boolean_expression,
+				multiple_arity_Boolean_expression,
+				comparison_expression,
+				interval_expression,
+				boolean_defined_function))
+SUBTYPE OF (expression);
+END_ENTITY;
+
+ENTITY simple_boolean_expression
+ABSTRACT SUPERTYPE OF (ONEOF (boolean_literal,
+				boolean_variable))
+SUBTYPE OF (boolean_expression, simple_generic_expression);
+END_ENTITY;
+
+ENTITY boolean_literal
+SUBTYPE OF (simple_Boolean_expression, generic_literal);
+	the_value: BOOLEAN;
+END_ENTITY;
+
+ENTITY boolean_variable
+SUBTYPE OF (simple_Boolean_expression, variable);
+END_ENTITY;
+
+ENTITY unary_boolean_expression
+ABSTRACT SUPERTYPE OF (ONEOF (not_expression, odd_function))
+SUBTYPE OF (boolean_expression, unary_generic_expression);
+END_ENTITY;
+
+ENTITY not_expression
+SUBTYPE OF (unary_Boolean_expression);
+SELF\unary_generic_expression.operand: boolean_expression;
+END_ENTITY;
+
+ENTITY odd_function
+SUBTYPE OF (unary_Boolean_expression);
+	SELF\unary_generic_expression.operand: numeric_expression;
+WHERE
+	WR1: is_int_expr(SELF\numeric_expression);
+END_ENTITY;
+
+ENTITY binary_boolean_expression
+ABSTRACT SUPERTYPE OF (ONEOF (xor_expression, equals_expression))
+SUBTYPE OF (boolean_expression, binary_generic_expression);
+END_ENTITY;
+
+ENTITY multiple_arity_boolean_expression
+ABSTRACT SUPERTYPE OF (ONEOF (and_expression, or_expression))
+SUBTYPE OF (boolean_expression, multiple_arity_generic_expression);
+	SELF\multiple_arity_generic_expression.operands	: 
+LIST [2:?] OF boolean_expression;
+END_ENTITY;
+
+ENTITY xor_expression
+SUBTYPE OF (binary_boolean_expression);
+	SELF\binary_generic_expression.operands: 
+				LIST [2:2] OF boolean_expression;
+END_ENTITY;
+
+ENTITY equals_expression
+SUBTYPE OF (binary_boolean_expression);
+END_ENTITY;
+
+ENTITY and_expression
+SUBTYPE OF (multiple_arity_boolean_expression);
+END_ENTITY;
+
+ENTITY or_expression
+SUBTYPE OF (multiple_arity_boolean_expression);
+END_ENTITY;
+
+ENTITY comparison_expression
+ABSTRACT SUPERTYPE OF (ONEOF (comparison_equal,
+				comparison_greater,
+				comparison_greater_equal,
+				comparison_less,
+				comparison_less_equal,
+				comparison_not_equal,
+				like_expression))
+SUBTYPE OF (boolean_expression, binary_generic_expression);
+	SELF\binary_generic_expression.operands	: LIST [2:2] OF expression; 
+WHERE 
+	WR1: (('ISO13584_EXPRESSIONS_SCHEMA.NUMERIC_EXPRESSION' 
+IN TYPEOF(SELF\binary_generic_expression.operands[1]))
+		AND 
+		 	'ISO13584_EXPRESSIONS_SCHEMA.NUMERIC_EXPRESSION' 
+IN TYPEOF(SELF\binary_generic_expression.operands[2])) 
+OR
+ (('ISO13584_EXPRESSIONS_SCHEMA.BOOLEAN_EXPRESSION' 
+IN TYPEOF(SELF\binary_generic_expression.operands[1]))
+		AND 
+		 	('ISO13584_EXPRESSIONS_SCHEMA.BOOLEAN_EXPRESSION' 
+	IN TYPEOF(SELF\binary_generic_expression.operands[2])))
+OR
+(('ISO13584_EXPRESSIONS_SCHEMA.STRING_EXPRESSION' 
+IN TYPEOF(SELF\binary_generic_expression.operands[1]))
+		AND 
+		 	('ISO13584_EXPRESSIONS_SCHEMA.STRING_EXPRESSION' 
+IN TYPEOF(SELF\binary_generic_expression.operands[2]))) ;
+END_ENTITY;
+
+ENTITY comparison_equal
+SUBTYPE OF (comparison_expression);
+END_ENTITY;
+
+ENTITY comparison_greater
+SUBTYPE OF (comparison_expression);
+END_ENTITY;
+
+ENTITY comparison_greater_equal
+SUBTYPE OF (comparison_expression);
+END_ENTITY;
+
+ENTITY comparison_less
+SUBTYPE OF (comparison_expression);
+END_ENTITY;
+
+ENTITY comparison_less_equal
+SUBTYPE OF (comparison_expression);
+END_ENTITY;
+
+ENTITY comparison_not_equal
+	SUBTYPE OF (comparison_expression);
+END_ENTITY;
+
+ENTITY like_expression
+SUBTYPE OF (comparison_expression);
+WHERE
+	WR1: ('ISO13584_EXPRESSIONS_SCHEMA.STRING_EXPRESSION' 
+		IN TYPEOF(SELF\comparison_expression.operands[1])) AND 
+		('ISO13584_EXPRESSIONS_SCHEMA.STRING_EXPRESSION' 
+		IN TYPEOF(SELF\comparison_expression.operands[2]));
+END_ENTITY;
+
+ENTITY interval_expression
+SUBTYPE OF (boolean_expression, multiple_arity_generic_expression) ;
+DERIVE
+	interval_low: generic_expression
+			:= SELF\multiple_arity_generic_expression.operands[1];
+	interval_item:generic_expression
+			:= SELF\multiple_arity_generic_expression.operands[2];
+	interval_high:generic_expression
+			:= SELF\multiple_arity_generic_expression.operands[3];
+WHERE
+	WR1:('ISO13584_EXPRESSIONS_SCHEMA.EXPRESSION' 
+				IN TYPEOF(interval_low))
+		AND ('ISO13584_EXPRESSIONS_SCHEMA.EXPRESSION' 
+				IN TYPEOF(interval_item) )
+		AND ('ISO13584_EXPRESSIONS_SCHEMA.EXPRESSION' 
+				IN TYPEOF(interval_high));
+	WR2:(('ISO13584_EXPRESSIONS_SCHEMA.STRING_EXPRESSION' 
+				IN TYPEOF (SELF.interval_low)) 
+			AND ('ISO13584_EXPRESSIONS_SCHEMA.STRING_EXPRESSION'  
+				IN TYPEOF (SELF.interval_high)) 
+			AND ('ISO13584_EXPRESSIONS_SCHEMA.STRING_EXPRESSION' 
+				IN TYPEOF (SELF.interval_item))) 
+		OR
+		(('ISO13584_EXPRESSIONS_SCHEMA.STRING_EXPRESSION' 
+				IN TYPEOF(SELF.interval_low)) 
+			AND ('ISO13584_EXPRESSIONS_SCHEMA.NUMERIC_EXPRESSION' 
+				IN TYPEOF(SELF.interval_item)) 
+			AND ('ISO13584_EXPRESSIONS_SCHEMA.NUMERIC_EXPRESSION' 
+				IN TYPEOF(SELF.interval_high)));
+END_ENTITY; 
+
+ENTITY boolean_defined_function 
+ABSTRACT SUPERTYPE
+SUBTYPE OF (defined_function, boolean_expression);
+END_ENTITY ;
+
+ENTITY string_expression
+ABSTRACT SUPERTYPE OF (ONEOF (simple_string_expression,
+				index_expression,
+				substring_expression,
+				concat_expression,
+				format_function,
+				string_defined_function)) 
+SUBTYPE OF (expression);
+END_ENTITY;
+
+ENTITY simple_string_expression
+ABSTRACT SUPERTYPE OF (ONEOF (string_literal,
+				string_variable))
+SUBTYPE OF (string_expression, simple_generic_expression);
+END_ENTITY;
+
+ENTITY string_literal
+SUBTYPE OF (simple_string_expression, generic_literal);
+	the_value: STRING;
+END_ENTITY;
+
+ENTITY string_variable
+SUBTYPE OF (simple_string_expression, variable);
+END_ENTITY;
+
+ENTITY index_expression
+SUBTYPE OF (string_expression, binary_generic_expression);
+DERIVE
+	operand:generic_expression:=
+SELF\binary_generic_expression.operands[1];
+	index:generic_expression:= 
+SELF\binary_generic_expression.operands[2];
+WHERE
+	WR1: ('ISO13584_EXPRESSIONS_SCHEMA.STRING_EXPRESSION' 
+			IN TYPEOF(operand))
+		AND ('ISO13584_EXPRESSIONS_SCHEMA.NUMERIC_EXPRESSION' 
+			IN TYPEOF(index));
+	WR2: is_int_expr (index);
+END_ENTITY;
+
+ENTITY substring_expression
+SUBTYPE OF (string_expression, multiple_arity_generic_expression);
+DERIVE
+	operand:generic_expression:=
+			SELF\multiple_arity_generic_expression.operands[1];
+	index1:generic_expression:=
+			SELF\multiple_arity_generic_expression.operands[2];
+	index2:generic_expression:=
+			SELF\multiple_arity_generic_expression.operands[3]; 
+WHERE
+	WR1: ('ISO13584_EXPRESSIONS_SCHEMA.STRING_EXPRESSION' 
+					IN TYPEOF(operand))
+			AND ('ISO13584_EXPRESSIONS_SCHEMA.NUMERIC_EXPRESSION' 
+					IN TYPEOF(index1))
+			AND ('ISO13584_EXPRESSIONS_SCHEMA.NUMERIC_EXPRESSION' 
+					IN TYPEOF(index2));
+	WR2: SIZEOF(SELF\multiple_arity_generic_expression.operands)=3;
+	WR3: is_int_expr (index1);
+	WR4: is_int_expr (index2);
+END_ENTITY;
+
+ENTITY concat_expression
+SUBTYPE OF (string_expression, multiple_arity_generic_expression);
+	SELF\multiple_arity_generic_expression.operands: 
+				LIST [2 : ?] OF string_expression;
+END_ENTITY;
+
+ENTITY format_function
+SUBTYPE OF (string_expression, binary_generic_expression);
+DERIVE
+	value_to_format: generic_expression:=
+			SELF\binary_generic_expression.operands[1];
+	format_string:generic_expression:=
+			SELF\binary_generic_expression.operands[2];
+WHERE
+	WR1: (('ISO13584_EXPRESSIONS_SCHEMA.NUMERIC_EXPRESSION') 
+					IN TYPEOF(value_to_format)) 
+			AND (('ISO13584_EXPRESSIONS_SCHEMA.STRING_EXPRESSION') 
+					IN TYPEOF(format_string));
+END_ENTITY;
+
+ENTITY string_defined_function 
+ABSTRACT SUPERTYPE
+SUBTYPE OF (defined_function, string_expression);
+END_ENTITY ;
+
+FUNCTION is_int_expr (arg: numeric_expression) : BOOLEAN;
+
+LOCAL
+	i: INTEGER;
+END_LOCAL;
+
+IF 'ISO13584_EXPRESSIONS_SCHEMA.INT_LITERAL' IN TYPEOF(arg) 
+THEN 
+	RETURN (TRUE); 
+END_IF;
+IF 'ISO13584_EXPRESSIONS_SCHEMA.REAL_LITERAL' IN TYPEOF(arg) 
+THEN 
+	RETURN (FALSE); 
+END_IF;
+IF 'ISO13584_EXPRESSIONS_SCHEMA.INT_NUMERIC_VARIABLE' IN TYPEOF(arg) 
+THEN 
+	RETURN (TRUE); 
+END_IF;
+IF 'ISO13584_EXPRESSIONS_SCHEMA.REAL_NUMERIC_VARIABLE' IN TYPEOF(arg) 
+THEN 
+	RETURN (FALSE); 
+END_IF;
+IF 'ISO13584_EXPRESSIONS_SCHEMA.ABS_FUNCTION' IN TYPEOF(arg) 
+THEN 
+	RETURN (is_int_expr(arg\unary_numeric_expression.operand));
+END_IF;
+IF 'ISO13584_EXPRESSIONS_SCHEMA.MINUS_FUNCTION' IN TYPEOF(arg) 
+THEN 
+	RETURN (is_int_expr(arg\unary_numeric_expression.operand)); 
+END_IF;
+IF ('ISO13584_EXPRESSIONS_SCHEMA.SIN_FUNCTION' IN TYPEOF(arg)) 
+		OR ('ISO13584_EXPRESSIONS_SCHEMA.COS_FUNCTION' IN TYPEOF(arg))
+		OR ('ISO13584_EXPRESSIONS_SCHEMA.TAN_FUNCTION' IN TYPEOF(arg))
+		OR ('ISO13584_EXPRESSIONS_SCHEMA.ASIN_FUNCTION' IN TYPEOF(arg))
+		OR ('ISO13584_EXPRESSIONS_SCHEMA.ACOS_FUNCTION' IN TYPEOF(arg))
+		OR ('ISO13584_EXPRESSIONS_SCHEMA.ATAN_FUNCTION' IN TYPEOF(arg))
+		OR ('ISO13584_EXPRESSIONS_SCHEMA.EXP_FUNCTION' IN TYPEOF(arg))
+		OR ('ISO13584_EXPRESSIONS_SCHEMA.LOG_FUNCTION' IN TYPEOF(arg))
+		OR ('ISO13584_EXPRESSIONS_SCHEMA.LOG2_FUNCTION' IN TYPEOF(arg))
+		OR ('ISO13584_EXPRESSIONS_SCHEMA.LOG10_FUNCTION' IN TYPEOF(arg))
+		OR ('ISO13584_EXPRESSIONS_SCHEMA.SQUARE_ROOT_FUNCTION' 
+								IN TYPEOF(arg))
+THEN 
+	RETURN (FALSE);
+END_IF;
+IF 	('ISO13584_EXPRESSIONS_SCHEMA.PLUS_EXPRESSION' IN TYPEOF(arg))
+		OR ('ISO13584_EXPRESSIONS_SCHEMA.MULT_EXPRESSION' 
+								IN TYPEOF(arg))
+		OR ('ISO13584_EXPRESSIONS_SCHEMA.MAXIMUM_FUNCTION'
+								IN TYPEOF(arg))
+		OR ('ISO13584_EXPRESSIONS_SCHEMA.MINIMUM_FUNCTION'
+								IN TYPEOF(arg)) 
+THEN 
+	REPEAT i :=1 TO SIZEOF (
+			arg\multiple_arity_numeric_expression.operands);
+	IF NOT 
+		is_int_expr(arg\multiple_arity_numeric_expression.operands[i]) 
+	THEN 
+		RETURN (FALSE);
+	END_IF;
+	END_REPEAT;
+	RETURN (TRUE);
+END_IF;
+IF 	('ISO13584_EXPRESSIONS_SCHEMA.MINUS_EXPRESSION' IN TYPEOF(arg))
+		OR ('ISO13584_EXPRESSIONS_SCHEMA.POWER_EXPRESSION' 
+								IN TYPEOF(arg))
+THEN 
+	RETURN (is_int_expr(arg\binary_numeric_expression.operands[1])
+		AND is_int_expr(arg\binary_numeric_expression.operands[2]));
+END_IF;
+IF	('ISO13584_EXPRESSIONS_SCHEMA.DIV_EXPRESSION' IN TYPEOF(arg))
+		OR ('ISO13584_EXPRESSIONS_SCHEMA.MOD_EXPRESSION' IN TYPEOF(arg))
+THEN 
+	RETURN(TRUE);	
+END_IF;
+IF 'ISO13584_EXPRESSIONS_SCHEMA.SLASH_EXPRESSION' IN TYPEOF(arg) 
+THEN 
+	RETURN (FALSE); 	
+END_IF;
+IF 'ISO13584_EXPRESSIONS_SCHEMA.LENGTH_FUNCTION' IN TYPEOF(arg) 
+THEN 
+	RETURN (TRUE); 
+END_IF;
+IF 'ISO13584_EXPRESSIONS_SCHEMA.VALUE_FUNCTION' IN TYPEOF(arg) 
+THEN 
+	IF 'ISO13584_EXPRESSIONS_SCHEMA.INT_VALUE_FUNCTION' 
+								IN TYPEOF(arg) 
+	THEN 
+		RETURN (TRUE); 
+	ELSE 
+		RETURN (FALSE); 
+	END_IF;
+END_IF;
+IF 'ISO13584_EXPRESSIONS_SCHEMA.INTEGER_DEFINED_FUNCTION' 
+								IN TYPEOF(arg)
+THEN 
+	RETURN(TRUE) ;
+END_IF;
+IF'ISO13584_EXPRESSIONS_SCHEMA.REAL_DEFINED_FUNCTION' IN TYPEOF(arg) 
+THEN 
+	RETURN(FALSE) ;
+END_IF ;
+IF 'ISO13584_EXPRESSIONS_SCHEMA.BOOLEAN_DEFINED_FUNCTION' 
+								IN TYPEOF(arg)
+THEN 
+	RETURN(FALSE) ;
+END_IF ;
+IF 'ISO13584_EXPRESSIONS_SCHEMA.STRING_DEFINED_FUNCTION' 
+								IN TYPEOF(arg)
+THEN 
+	RETURN (FALSE) ;
+END_IF ;
+
+RETURN (FALSE);
+
+END_FUNCTION; -- is_int_expr
+
+FUNCTION is_SQL_mappable (arg: expression) : BOOLEAN;
+
+LOCAL
+	i: INTEGER;
+END_LOCAL;
+
+IF 'ISO13584_EXPRESSIONS_SCHEMA.SIMPLE_NUMERIC_EXPRESSION' 
+								IN TYPEOF (arg) 
+THEN 
+	RETURN (TRUE);
+END_IF;
+IF 'ISO13584_EXPRESSIONS_SCHEMA.SQL_MAPPABLE_DEFINED_FUNCTION' 
+								IN TYPEOF (arg) 
+THEN 
+	RETURN (TRUE);
+END_IF;
+IF 'ISO13584_EXPRESSIONS_SCHEMA.MINUS_FUNCTION' IN TYPEOF(arg) 
+THEN 
+	RETURN (is_SQL_mappable(arg\unary_numeric_expression.operand)); 
+END_IF;
+IF ('ISO13584_EXPRESSIONS_SCHEMA.ABS_FUNCTION' IN TYPEOF(arg)) 
+		OR ('ISO13584_EXPRESSIONS_SCHEMA.SIN_FUNCTION' IN TYPEOF(arg)) 
+		OR ('ISO13584_EXPRESSIONS_SCHEMA.COS_FUNCTION' IN TYPEOF(arg)) 
+		OR ('ISO13584_EXPRESSIONS_SCHEMA.TAN_FUNCTION' IN TYPEOF(arg)) 
+		OR ('ISO13584_EXPRESSIONS_SCHEMA.ASIN_FUNCTION' IN TYPEOF(arg)) 
+		OR ('ISO13584_EXPRESSIONS_SCHEMA.ACOS_FUNCTION' IN TYPEOF(arg)) 
+		OR ('ISO13584_EXPRESSIONS_SCHEMA.ATAN_FUNCTION' IN TYPEOF(arg)) 
+		OR ('ISO13584_EXPRESSIONS_SCHEMA.EXP_FUNCTION' IN TYPEOF(arg)) 
+		OR ('ISO13584_EXPRESSIONS_SCHEMA.LOG_FUNCTION' IN TYPEOF(arg)) 
+		OR ('ISO13584_EXPRESSIONS_SCHEMA.LOG2_FUNCTION' IN TYPEOF(arg)) 
+		OR ('ISO13584_EXPRESSIONS_SCHEMA.LOG10_FUNCTION' IN TYPEOF(arg)) 
+		OR ('ISO13584_EXPRESSIONS_SCHEMA.SQUARE_ROOT_FUNCTION' 
+								IN TYPEOF(arg)) 
+		OR ('ISO13584_EXPRESSIONS_SCHEMA.VALUE_FUNCTION' IN TYPEOF(arg)) 
+		OR ('ISO13584_EXPRESSIONS_SCHEMA.LENGTH_FUNCTION' 
+								IN TYPEOF(arg))
+THEN 
+	RETURN (FALSE);
+END_IF;
+IF ('ISO13584_EXPRESSIONS_SCHEMA.PLUS_EXPRESSION' IN TYPEOF(arg)) 
+		OR('ISO13584_EXPRESSIONS_SCHEMA.MULT_EXPRESSION' IN TYPEOF(arg)) 
+		OR('ISO13584_EXPRESSIONS_SCHEMA.MAXIMUM_FUNCTION' 
+								IN TYPEOF(arg)) 
+		OR('ISO13584_EXPRESSIONS_SCHEMA.MINIMUM_FUNCTION' 
+								IN TYPEOF(arg)) 
+THEN 
+	REPEAT i :=1 TO SIZEOF (
+			arg\multiple_arity_numeric_expression.operands);
+		IF NOT is_SQL_mappable(
+			arg\multiple_arity_numeric_expression.operands[i])
+		THEN 
+			RETURN (FALSE);
+		END_IF;
+	END_REPEAT;
+RETURN (TRUE);
+END_IF;
+IF ('ISO13584_EXPRESSIONS_SCHEMA.MINUS_EXPRESSION' IN TYPEOF(arg)) 
+		OR ('ISO13584_EXPRESSIONS_SCHEMA.SLASH_EXPRESSION' IN 
+								TYPEOF(arg))
+THEN
+		RETURN (is_SQL_mappable(
+			arg\binary_numeric_expression.operands[1])
+		AND is_SQL_mappable(arg\binary_numeric_expression.operands[2]));
+END_IF;
+IF ('ISO13584_EXPRESSIONS_SCHEMA.DIV_EXPRESSION' IN TYPEOF(arg)) 
+		OR ('ISO13584_EXPRESSIONS_SCHEMA.MOD_EXPRESSION' IN TYPEOF(arg)) 
+		OR('ISO13584_EXPRESSIONS_SCHEMA.POWER_EXPRESSION' 
+								IN TYPEOF(arg))
+THEN 
+	RETURN (FALSE); 	
+END_IF;
+IF 'ISO13584_EXPRESSIONS_SCHEMA.SIMPLE_BOOLEAN_EXPRESSION' 
+								IN TYPEOF (arg) 
+THEN 
+	RETURN (TRUE);
+END_IF;
+IF 'ISO13584_EXPRESSIONS_SCHEMA.NOT_EXPRESSION' IN TYPEOF (arg) 
+THEN 
+	RETURN (is_SQL_mappable (arg\UNARY_GENERIC_EXPRESSION.OPERAND));
+END_IF;
+IF ('ISO13584_EXPRESSIONS_SCHEMA.ODD_FUNCTION'IN TYPEOF (arg)) 
+		OR ('ISO13584_EXPRESSIONS_SCHEMA.XOR_EXPRESSION' 
+								IN TYPEOF (arg)) 
+THEN	
+	RETURN (FALSE);
+END_IF;
+IF ('ISO13584_EXPRESSIONS_SCHEMA.AND_EXPRESSION' IN TYPEOF (arg)) 
+		OR ('ISO13584_EXPRESSIONS_SCHEMA.OR_EXPRESSION' IN TYPEOF (arg)) 
+THEN
+	REPEAT i:=1 TO SIZEOF (
+			arg\MULTIPLE_ARITY_BOOLEAN_EXPRESSION.OPERANDS);
+		IF NOT is_SQL_mappable (
+			arg\MULTIPLE_ARITY_BOOLEAN_EXPRESSION.OPERANDS[i]) 
+		THEN 
+			RETURN (FALSE);
+		END_IF;
+	END_REPEAT;
+	RETURN (TRUE);
+END_IF;
+IF 'ISO13584_EXPRESSIONS_SCHEMA.EQUALS_EXPRESSION' IN TYPEOF (arg) 
+THEN
+	RETURN(is_SQL_mappable (
+			arg\BINARY_GENERIC_EXPRESSION.OPERANDS [1])
+		AND is_SQL_mappable(
+			arg\BINARY_GENERIC_EXPRESSION.OPERANDS [2]));
+END_IF;
+IF	('ISO13584_EXPRESSIONS_SCHEMA.COMPARISON_EQUAL' IN TYPEOF (arg)) 
+		OR ('ISO13584_EXPRESSIONS_SCHEMA.COMPARISON_GREATER' 
+								IN TYPEOF (arg)) 
+		OR ('ISO13584_EXPRESSIONS_SCHEMA.COMPARISON_GREATER_EQUAL'
+								IN TYPEOF (arg))
+		OR ('ISO13584_EXPRESSIONS_SCHEMA.COMPARISON_LESS' 
+								IN TYPEOF (arg)) 
+		OR ('ISO13584_EXPRESSIONS_SCHEMA.COMPARISON_LESS_EQUAL' 
+								IN TYPEOF (arg)) 
+		OR ('ISO13584_EXPRESSIONS_SCHEMA.COMPARISON_NOT_EQUAL' 
+								IN TYPEOF (arg)) 
+		OR ('ISO13584_EXPRESSIONS_SCHEMA.LIKE_EXPRESSION' 
+								IN TYPEOF (arg)) 
+THEN
+	RETURN (is_SQL_mappable (arg\COMPARISON_EXPRESSION.OPERANDS[1])
+		AND is_SQL_mappable (arg\COMPARISON_EXPRESSION.OPERANDS[2]));
+END_IF;
+IF 'ISO13584_EXPRESSIONS_SCHEMA.INTERVAL_EXPRESSION' IN TYPEOF(arg) 
+THEN 
+	RETURN (is_SQL_mappable(arg\interval_expression.interval_low) 
+		AND is_SQL_mappable(arg\interval_expression.interval_high)
+		AND is_SQL_mappable(arg\interval_expression.interval_item));
+END_IF;
+IF ('ISO13584_EXPRESSIONS_SCHEMA.NUMERIC_DEFINED_FUNCTION' 
+								IN TYPEOF(arg)) 
+		OR ('ISO13584_EXPRESSIONS_SCHEMA.BOOLEAN_DEFINED_FUNCTION' 
+								IN TYPEOF(arg))
+		OR ('ISO13584_EXPRESSIONS_SCHEMA.STRING_DEFINED_FUNCTION' 
+								IN TYPEOF(arg))  
+THEN 
+		RETURN (FALSE) ;
+END_IF;
+
+IF 'ISO13584_EXPRESSIONS_SCHEMA.SIMPLE_STRING_EXPRESSION' 
+								IN TYPEOF(ARG) 
+THEN 
+	RETURN (TRUE);
+END_IF;
+IF 	('ISO13584_EXPRESSIONS_SCHEMA.INDEX_EXPRESSION' IN TYPEOF(arg)) 
+		OR ('ISO13584_EXPRESSIONS_SCHEMA.SUBSTRING_EXPRESSION' 
+								IN TYPEOF(arg)) 
+		OR ('ISO13584_EXPRESSIONS_SCHEMA.CONCAT_EXPRESSION' 
+								IN TYPEOF(arg)) 
+		OR ('ISO13584_EXPRESSIONS_SCHEMA.FORMAT_FUNCTION' 
+								IN TYPEOF(arg)) 
+THEN 
+	RETURN (FALSE);
+END_IF;
+
+	RETURN (FALSE);
+END_FUNCTION; -- is_SQL_mappable
+
+FUNCTION used_functions (arg : expression) : SET OF defined_function;
+
+LOCAL
+	result : SET OF defined_function := [];
+END_LOCAL;
+
+IF ('ISO13584_EXPRESSIONS_SCHEMA.DEFINED_FUNCTION' IN TYPEOF(arg))  
+THEN 
+	RETURN ( [arg] ) ;
+END_IF;
+IF 'ISO13584_EXPRESSIONS_SCHEMA.UNARY_NUMERIC_EXPRESSION' IN 
+	TYPEOF (arg) 
+THEN
+	RETURN (used_functions (arg\unary_numeric_expression.operand));
+END_IF;
+IF 'ISO13584_EXPRESSIONS_SCHEMA.BINARY_NUMERIC_EXPRESSION' IN 
+		TYPEOF (arg) 
+THEN
+	RETURN (used_functions (arg\binary_numeric_expression.operands[1])
+		+ used_functions (arg\binary_numeric_expression.operands[2]));
+END_IF;
+IF 'ISO13584_EXPRESSIONS_SCHEMA.MULTIPLE_ARITY_NUMERIC_EXPRESSION' IN 		TYPEOF (arg) 
+THEN
+	REPEAT i := 1 TO SIZEOF (
+			arg\multiple_arity_numeric_expression.operands);
+		result := result + used_functions (
+			arg\multiple_arity_numeric_expression.operands[i]);
+	END_REPEAT;
+	RETURN (result);
+END_IF;
+IF 'ISO13584_EXPRESSIONS_SCHEMA.UNARY_GENERIC_EXPRESSION' 
+		IN TYPEOF (arg) 
+THEN
+	RETURN (used_functions (arg\unary_generic_expression.operand));
+END_IF;
+IF 'ISO13584_EXPRESSIONS_SCHEMA.BINARY_BOOLEAN_EXPRESSION' 
+								IN TYPEOF (arg) 
+THEN
+	RETURN (used_functions (arg\binary_generic_expression.operands[1])
+		+ used_functions (
+			arg\binary_generic_expression.operands[2]));
+END_IF;
+IF 'ISO13584_EXPRESSIONS_SCHEMA.MULTIPLE_ARITY_BOOLEAN_EXPRESSION' 
+								IN TYPEOF (arg) 
+THEN
+	REPEAT i := 1 TO 
+		SIZEOF (arg\multiple_arity_Boolean_expression.operands);
+		result := result + used_functions(
+			arg\multiple_arity_Boolean_expression.operands[i]);
+	END_REPEAT;
+	RETURN (result);
+END_IF;
+IF 'ISO13584_EXPRESSIONS_SCHEMA.COMPARISON_EXPRESSION' 
+								IN TYPEOF (arg) 
+THEN
+	RETURN (used_functions (arg\comparison_expression.operands[1])
+			+ used_functions (arg\comparison_expression.operands[2]));
+END_IF;
+IF 'ISO13584_EXPRESSIONS_SCHEMA.INTERVAL_EXPRESSION' IN TYPEOF(arg) 
+THEN 
+	RETURN (used_functions(arg\interval_expression.interval_low)
+		+ used_functions(arg\interval_expression.interval_high)
+		+ used_functions(arg\interval_expression.interval_item));
+END_IF;
+IF 'ISO13584_EXPRESSIONS_SCHEMA.INDEX_EXPRESSION' IN TYPEOF (arg) 
+THEN
+	RETURN (used_functions (arg\index_expression.operand)
+		+ used_functions (arg\index_expression.index));
+END_IF;
+IF 'ISO13584_EXPRESSIONS_SCHEMA.SUBSTRING_EXPRESSION' IN TYPEOF (arg) 
+THEN
+	RETURN (used_functions (arg\substring_expression.operand)
+		+ used_functions (arg\substring_expression.index1)
+		+ used_functions (arg\substring_expression.index2));
+END_IF;
+IF 'ISO13584_EXPRESSIONS_SCHEMA.CONCAT_EXPRESSION' IN TYPEOF (arg) 
+THEN
+	REPEAT i := 1 TO SIZEOF (arg\concat_expression.operands);
+		result := result + used_functions (
+			arg\concat_expression.operands[i]);
+	END_REPEAT;
+	RETURN (result);
+END_IF;
+IF 'ISO13584_EXPRESSIONS_SCHEMA.FORMAT_FUNCTION' IN TYPEOF (arg) 
+THEN
+	RETURN (used_functions (arg\format_function.value_to_format)
+		+ used_functions (arg\format_function.format_string));
+END_IF;
+IF 'ISO13584_EXPRESSIONS_SCHEMA.LIKE_EXPRESSION' IN TYPEOF (arg) 
+THEN
+	RETURN (used_functions (arg\like_expression.operands[1])
+		+ used_functions (arg\like_expression.operands[2]));
+END_IF;
+RETURN ([ ]);
+
+END_FUNCTION; -- used_functions
+
+END_SCHEMA;
+

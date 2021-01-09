@@ -1,0 +1,104 @@
+(*
+ $Id: 10303-1290-arm-document_management.exp,v 1.1 2006/08/07 07:44:46 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N3037 - ISO/TS 10303-1290 Document management - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG12 N2330
+*) 
+
+
+SCHEMA Document_management_arm;
+
+USE FROM Alias_identification_arm;    -- ISO/TS 10303-1025
+
+USE FROM Contract_arm;    -- ISO/TS 10303-1062
+
+USE FROM Document_and_version_identification_arm;    -- ISO/TS 10303-1121
+
+USE FROM Document_assignment_arm;    -- ISO/TS 10303-1122
+
+USE FROM Document_definition_arm;    -- ISO/TS 10303-1123
+
+USE FROM Document_properties_arm;    -- ISO/TS 10303-1126
+
+USE FROM Document_structure_arm;    -- ISO/TS 10303-1124
+
+USE FROM External_item_identification_assignment_arm;    -- ISO/TS 10303-1128
+
+USE FROM File_identification_arm;    -- ISO/TS 10303-1127
+
+USE FROM Management_resource_information_arm;    -- ISO/TS 10303-1288
+
+USE FROM Product_categorization_arm;    -- ISO/TS 10303-1016
+
+USE FROM Security_classification_arm;    -- ISO/TS 10303-1015
+
+
+TYPE document_management_alias_identification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON alias_identification_item WITH 
+   (Digital_document_definition, 
+    Digital_file, 
+    Document, 
+    Document_version, 
+    Hardcopy, 
+    Physical_document_definition);
+END_TYPE; 
+
+TYPE document_management_approval_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON mri_approval_item WITH 
+   (Digital_document_definition, 
+    Document_definition_relationship, 
+    Document_version, 
+    Physical_document_definition);
+END_TYPE; 
+
+TYPE document_management_contract_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON contract_item WITH 
+   (Document_version);
+END_TYPE; 
+
+TYPE document_management_date_or_date_time_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON mri_date_or_date_time_item WITH 
+   (Digital_document_definition, 
+    Digital_file, 
+    Document_definition_relationship, 
+    Document_version, 
+    Hardcopy, 
+    Physical_document_definition);
+END_TYPE; 
+
+TYPE document_management_identification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON mri_identification_item WITH 
+   (Digital_document_definition, 
+    Digital_file, 
+    Document, 
+    Document_version, 
+    Hardcopy, 
+    Physical_document_definition);
+END_TYPE; 
+
+TYPE document_management_person_and_organization_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON mri_organization_or_person_in_organization_item WITH 
+   (Digital_document_definition, 
+    Digital_file, 
+    Document, 
+    Document_version, 
+    Hardcopy, 
+    Physical_document_definition);
+END_TYPE; 
+
+TYPE document_management_security_classification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON security_classification_item WITH 
+   (Digital_document_definition, 
+    Digital_file, 
+    Document, 
+    Document_version, 
+    Hardcopy, 
+    Physical_document_definition);
+END_TYPE; 
+
+TYPE document_management_string_select = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON mri_string_select WITH 
+   (Digital_document_definition, 
+    Document, 
+    Document_assignment, 
+    Document_definition_relationship, 
+    Document_version, 
+    External_item_identification, 
+    External_source_identification, 
+    File_relationship, 
+    Physical_document_definition, 
+    Product_category);
+END_TYPE; 
+
+END_SCHEMA;  -- Document_management_arm

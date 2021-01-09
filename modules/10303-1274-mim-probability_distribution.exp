@@ -1,0 +1,33 @@
+(*
+ $Id: 10303-1274-mim-probability_distribution.exp,v 1.1 2006/08/07 09:42:06 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N3104 - ISO/TS 10303-1274 Probability distribution - EXPRESS MIM
+ Supersedes ISO TC184/SC4/WG12 N2409
+*) 
+
+
+SCHEMA Probability_distribution_mim;
+
+USE FROM Classification_assignment_mim;    -- ISO/TS 10303-1114
+
+USE FROM Measure_representation_mim;    -- ISO/TS 10303-1118
+
+USE FROM measure_schema   -- ISO 10303-41
+  (descriptive_measure,
+   measure_value,
+   numeric_measure); 
+
+USE FROM Probability_mim;    -- ISO/TS 10303-1252
+
+USE FROM representation_schema   -- ISO 10303-43
+  (compound_representation_item,
+   representation,
+   representation_context,
+   representation_item,
+   value_representation_item); 
+
+
+TYPE probability_distribution_item = SELECT BASED_ON classification_item WITH 
+   (representation);
+END_TYPE; 
+
+END_SCHEMA;  -- Probability_distribution_mim

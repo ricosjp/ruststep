@@ -1,0 +1,563 @@
+(* THIS DOCUMENT IS ISO TC184/SC4/WG12 N4486 *)
+
+SCHEMA procedural_sketch_schema;
+
+REFERENCE FROM measure_schema
+    (count_measure,
+    length_measure,
+    plane_angle_measure,
+    positive_length_measure,
+    positive_plane_angle_measure,
+    positive_ratio_measure);
+
+REFERENCE FROM geometry_schema
+    (cartesian_point,
+    circle,
+    conic,
+    cross_product,
+    curve,
+    direction,
+    geometric_representation_item,
+    line,
+    point_on_curve,
+    trimmed_curve);
+
+REFERENCE FROM geometric_model_schema
+    (geometric_curve_set,
+    geometric_set);
+
+REFERENCE FROM sketch_schema
+    (sketch_element_select);
+
+REFERENCE FROM explicit_geometric_constraint_schema
+    (near_point_relationship,
+    non_negative_length_measure);
+
+TYPE polygon_circle_type = ENUMERATION OF 
+    (inscribed, 
+    circumscribed);
+END_TYPE;
+
+TYPE circle_or_circular_arc = SELECT
+    (circle,
+    trimmed_curve);
+WHERE
+    WR1: circular_type(SELF);
+END_TYPE;
+
+TYPE line_or_trimmed_line = SELECT
+    (line,
+    trimmed_curve);
+WHERE
+    WR1: linear_type(SELF);
+END_TYPE;
+
+TYPE rotation_direction = ENUMERATION OF 
+    (cw,
+    ccw);
+END_TYPE;
+
+TYPE ps_sketch_element_select = SELECT BASED_ON sketch_element_select WITH 
+    (sketch_create_curve_element,
+    sketch_create_pattern_element,
+    sketch_operate_transform);
+END_TYPE;
+
+ENTITY sketch_command
+ABSTRACT SUPERTYPE OF (ONEOF (sketch_create_curve_element, sketch_create_pattern_element, sketch_operate_transform));
+END_ENTITY;
+
+ENTITY sketch_create_curve_element
+ABSTRACT SUPERTYPE OF (ONEOF (create_line_segment, create_centreline, create_polyline, create_rectangle, create_polygon, create_circular_arc, create_circle, create_ellipse, create_spline, create_parabolic_arc, create_fillet, create_chamfer, create_divided_curve))
+SUBTYPE OF (sketch_command, geometric_representation_item);
+WHERE
+    WR1: SELF\geometric_representation_item.dim = 2;
+END_ENTITY;
+
+ENTITY create_line_segment
+ABSTRACT SUPERTYPE OF (ONEOF (create_line_segment_2_points, create_line_segment_point_tangent, create_line_segment_2_tangents))
+SUBTYPE OF (sketch_create_curve_element);
+END_ENTITY;
+
+ENTITY create_line_segment_2_points
+SUBTYPE OF (create_line_segment);
+    start_point         : cartesian_point;
+    end_point       : cartesian_point;
+WHERE
+    WR1: distance_between_cartesian_points(start_point, end_point) <> 0.0;
+END_ENTITY;
+
+ENTITY create_line_segment_point_tangent 
+SUBTYPE OF (create_line_segment);
+    start_point             : cartesian_point;
+    tangent_curve           : curve; 
+    tangent_curve_near_point    : near_point_relationship;
+WHERE
+    WR1: tangent_curve_near_point\representation_item_relationship.relating_representation_item :=: tangent_curve;
+END_ENTITY;
+
+ENTITY create_line_segment_2_tangents 
+SUBTYPE OF (create_line_segment);
+    first_curve     : curve; 
+    first_near_point    : near_point_relationship;
+    second_curve        : curve; 
+    second_near_point   : near_point_relationship;
+WHERE
+    WR1: first_curve <> second_curve;
+    WR2: first_near_point\representation_item_relationship.relating_representation_item :=: first_curve;
+    WR3: second_near_point\representation_item_relationship.relating_representation_item :=: second_curve;
+END_ENTITY;
+
+ENTITY create_centreline
+SUBTYPE OF (sketch_create_curve_element);
+    first_ref_point         : cartesian_point;
+    second_ref_point        : cartesian_point;
+WHERE
+    WR1: distance_between_cartesian_points(first_ref_point, second_ref_point) <> 0.0;
+END_ENTITY;
+
+ENTITY create_polyline   
+SUBTYPE OF (sketch_create_curve_element);
+    points  : LIST [3:?] OF cartesian_point;
+WHERE
+    WR1: distinct_points(points);
+END_ENTITY;
+
+ENTITY create_rectangle
+SUBTYPE OF (sketch_create_curve_element);
+    first_point     : cartesian_point;
+    second_point        : cartesian_point;
+    third_point     : cartesian_point;
+WHERE
+    WR1: non_collinear_2d_points (first_point, second_point, third_point);
+END_ENTITY;
+
+ENTITY create_polygon
+SUBTYPE OF (sketch_create_curve_element);
+    polygon_sides       : count_measure;
+    centre_point        : cartesian_point;
+    start_point     : cartesian_point;
+    circle_type     : polygon_circle_type;
+    circle_radius       : positive_length_measure;
+WHERE
+    WR1: distance_between_cartesian_points(centre_point, start_point) <> 0.0;
+END_ENTITY;
+
+ENTITY create_circular_arc
+ABSTRACT SUPERTYPE OF (ONEOF (create_circular_arc_concentric, create_circular_arc_3_tangents, create_circular_arc_centre_ends, create_circular_arc_start_centre_angle, create_circular_arc_start_centre_length, create_circular_arc_start_end_angle, create_circular_arc_start_end_direction, create_circular_arc_start_end_radius, create_circular_arc_3_points, create_circular_arc_angles))
+SUBTYPE OF (sketch_create_curve_element);
+END_ENTITY;
+
+ENTITY create_circular_arc_concentric 
+SUBTYPE OF (create_circular_arc);
+    reference_curve         : circle_or_circular_arc;
+    start_point             : cartesian_point;
+    end_point           : cartesian_point;
+    arc_rotation_direction  : rotation_direction;
+WHERE
+    WR1: distance_between_cartesian_points(start_point, end_point) <> 0.0;
+    WR2: distance_between_cartesian_points(start_point, centre_of_circle_or_circular_arc(reference_curve)) = distance_between_cartesian_points (end_point, centre_of_circle_or_circular_arc(reference_curve));
+END_ENTITY;
+
+ENTITY create_circular_arc_3_tangents 
+SUBTYPE OF (create_circular_arc); 
+    first_curve     : curve; 
+    first_near_point    : near_point_relationship;
+    second_curve        : curve; 
+    second_near_point   : near_point_relationship;
+    third_curve     : curve; 
+    third_near_point    : near_point_relationship;
+WHERE
+    WR1: first_curve <> second_curve;
+    WR2: second_curve <> third_curve;
+    WR3: third_curve <> first_curve;
+    WR4: first_near_point\representation_item_relationship.relating_representation_item :=: first_curve;
+    WR5: second_near_point\representation_item_relationship.relating_representation_item :=: second_curve;
+    WR6: third_near_point\representation_item_relationship.relating_representation_item :=: third_curve;
+END_ENTITY;
+
+ENTITY create_circular_arc_centre_ends 
+SUBTYPE OF (create_circular_arc); 
+    centre_point            : cartesian_point;
+    start_point             : cartesian_point; 
+    end_point           : cartesian_point;    
+    arc_rotation_direction  : rotation_direction;
+WHERE
+    WR1: three_distinct_points(start_point, end_point, centre_point);
+    WR2: distance_between_cartesian_points (centre_point, start_point) = distance_between_cartesian_points (centre_point, end_point);
+END_ENTITY;
+
+ENTITY create_circular_arc_start_centre_angle
+SUBTYPE OF (create_circular_arc); 
+    centre_point            : cartesian_point;
+    start_point             : cartesian_point; 
+    end_angle           : positive_plane_angle_measure;
+    arc_rotation_direction      : rotation_direction;
+WHERE
+    WR1: distance_between_cartesian_points(centre_point, start_point) <> 0.0;
+END_ENTITY;
+
+ENTITY create_circular_arc_start_centre_length
+SUBTYPE OF (create_circular_arc); 
+    centre_point            : cartesian_point;
+    start_point             : cartesian_point; 
+    chord_length            : positive_length_measure;
+    arc_rotation_direction      : rotation_direction;
+WHERE
+    WR1: distance_between_cartesian_points(centre_point, start_point) <> 0.0;
+END_ENTITY;
+
+ENTITY create_circular_arc_start_end_angle
+SUBTYPE OF (create_circular_arc); 
+    start_point             : cartesian_point;
+    end_point           : cartesian_point; 
+    arc_angle           : positive_plane_angle_measure;
+    arc_rotation_direction      : rotation_direction;
+WHERE
+    WR1: distance_between_cartesian_points(start_point, end_point) <> 0.0;
+END_ENTITY;
+
+ENTITY create_circular_arc_start_end_direction
+SUBTYPE OF (create_circular_arc); 
+    start_point         : cartesian_point;
+    end_point       : cartesian_point; 
+    start_direction     : direction;
+WHERE
+    WR1: distance_between_cartesian_points(start_point, end_point) <> 0.0;
+END_ENTITY;
+
+ENTITY create_circular_arc_start_end_radius
+SUBTYPE OF (create_circular_arc); 
+    start_point             : cartesian_point;
+    end_point           : cartesian_point; 
+    radius              : positive_length_measure;
+    arc_rotation_direction      : rotation_direction;
+WHERE
+    WR1: distance_between_cartesian_points(start_point, end_point) <> 0.0;
+END_ENTITY;
+
+ENTITY create_circular_arc_3_points
+SUBTYPE OF (create_circular_arc); 
+    first_point     : cartesian_point; 
+    second_point        : cartesian_point;
+    third_point     : cartesian_point; 
+WHERE
+    WR1: non_collinear_2d_points (first_point, second_point, third_point);
+END_ENTITY;
+
+ENTITY create_circular_arc_angles
+SUBTYPE OF (create_circular_arc); 
+    centre_point        : cartesian_point;
+    radius          : positive_length_measure; 
+    start_angle         : plane_angle_measure;
+    end_angle           : plane_angle_measure;
+WHERE
+    WR1: start_angle <> end_angle;
+END_ENTITY;
+
+ENTITY create_circle
+ABSTRACT SUPERTYPE OF (ONEOF (create_circle_centre_point, create_circle_concentric, create_circle_3_tangents, create_circle_2_points, create_circle_3_points))
+SUBTYPE OF (sketch_create_curve_element);
+END_ENTITY;
+
+ENTITY create_circle_centre_point
+SUBTYPE OF (create_circle); 
+    centre_point        : cartesian_point; 
+    radius          : positive_length_measure; 
+END_ENTITY;
+
+ENTITY create_circle_concentric
+SUBTYPE OF (create_circle);  
+    reference_element   : circle_or_circular_arc;
+    radius          : positive_length_measure;
+END_ENTITY;
+
+ENTITY create_circle_3_tangents
+SUBTYPE OF (create_circle); 
+    first_curve     : curve; 
+    first_near_point    : near_point_relationship;
+    second_curve        : curve; 
+    second_near_point   : near_point_relationship;
+    third_curve     : curve; 
+    third_near_point    : near_point_relationship;
+WHERE
+    WR1: first_curve <> second_curve;
+    WR2: second_curve <> third_curve;
+    WR3: third_curve <> first_curve;
+    WR4: first_near_point\representation_item_relationship.relating_representation_item :=: first_curve;
+    WR5: second_near_point\representation_item_relationship.relating_representation_item :=: second_curve;
+    WR6: third_near_point\representation_item_relationship.relating_representation_item :=: third_curve;
+END_ENTITY;
+
+ENTITY create_circle_2_points
+SUBTYPE OF (create_circle);  
+    first_point     : cartesian_point; 
+    second_point        : cartesian_point; 
+DERIVE
+    diameter: length_measure := distance_between_cartesian_points (first_point, second_point);
+WHERE
+    WR1: distance_between_cartesian_points(first_point, second_point) <> 0.0;
+END_ENTITY;
+
+ENTITY create_circle_3_points
+SUBTYPE OF (create_circle);  
+    first_point     : cartesian_point; 
+    second_point        : cartesian_point; 
+    third_point     : cartesian_point; 
+WHERE
+    WR1: non_collinear_2d_points (first_point, second_point, third_point);
+END_ENTITY;
+
+ENTITY create_ellipse
+ABSTRACT SUPERTYPE OF (ONEOF (create_ellipse_3_points, create_ellipse_centre_point))
+SUBTYPE OF (sketch_create_curve_element);
+END_ENTITY;
+
+ENTITY create_ellipse_3_points
+SUBTYPE OF (create_ellipse);
+    first_point         : cartesian_point;
+    second_point        : cartesian_point;
+    third_point         : cartesian_point;  
+WHERE
+    WR1: non_collinear_2d_points(first_point, second_point, third_point);
+END_ENTITY;
+
+ENTITY create_ellipse_centre_point
+SUBTYPE OF (create_ellipse);
+    centre_point        : cartesian_point;
+    first_point     : cartesian_point;
+    second_point        : cartesian_point;
+WHERE
+    WR1: non_collinear_2d_points(centre_point, first_point, second_point);
+END_ENTITY;
+
+ENTITY create_spline
+SUBTYPE OF (sketch_create_curve_element);
+    points          : LIST[4:?] OF cartesian_point;
+    closed          : BOOLEAN;
+WHERE
+    WR1: distinct_points(points);
+END_ENTITY;
+
+ENTITY create_parabolic_arc
+SUBTYPE OF (sketch_create_curve_element); 
+    first_end_point     : cartesian_point;
+    intermediate_point  : cartesian_point; 
+    second_end_point    : cartesian_point;
+WHERE
+    WR1: three_distinct_points(first_end_point, intermediate_point, second_end_point);
+END_ENTITY;
+
+ENTITY create_fillet
+SUBTYPE OF (sketch_create_curve_element);
+    first_curve             : curve;
+    to_right_of_first_curve     : BOOLEAN;
+    second_curve            : curve; 
+    to_right_of_second_curve    : BOOLEAN;
+    radius              : positive_length_measure;
+    trim_option             : BOOLEAN;
+    near_point          : cartesian_point;
+WHERE
+    WR1: first_curve <> second_curve;
+END_ENTITY;
+
+ENTITY create_chamfer
+SUBTYPE OF (sketch_create_curve_element); 
+    first_line          : line; 
+    to_right_of_first_line      : BOOLEAN;
+    second_line             : line; 
+    to_right_of_second_line     : BOOLEAN;
+    first_chamfer_length        : positive_length_measure; 
+    second_chamfer_length       : OPTIONAL positive_length_measure; 
+    trim_option                 : BOOLEAN; 
+WHERE
+    WR1: first_line <> second_line;
+    WR2: cross_product(first_line.dir, second_line.dir).magnitude <> 0.0;
+END_ENTITY;
+
+ENTITY create_divided_curve
+SUBTYPE OF (sketch_create_curve_element); 
+    selected_curve      : curve;
+    division_point      : point_on_curve;
+WHERE
+    WR1: division_point.basis_curve :=: selected_curve;
+END_ENTITY;
+
+ENTITY sketch_operate_transform
+ABSTRACT SUPERTYPE OF (ONEOF (sketch_transform_translate, sketch_transform_rotate, sketch_transform_mirror, sketch_transform_scale))
+SUBTYPE OF (sketch_command, geometric_representation_item);
+    selected_objects        : geometric_curve_set;
+    preserve_selected_objects   : BOOLEAN;
+WHERE
+    WR1: SELF\geometric_representation_item.dim = 2;
+END_ENTITY;
+
+ENTITY sketch_transform_translate
+SUBTYPE OF (sketch_operate_transform); 
+    displacement_x      : length_measure; 
+    displacement_y      : length_measure; 
+END_ENTITY;
+
+ENTITY sketch_transform_rotate
+SUBTYPE OF (sketch_operate_transform); 
+    rotation_angle          : plane_angle_measure; 
+    rotation_centre         : cartesian_point;
+    objects_rotation_direction  : OPTIONAL rotation_direction;
+END_ENTITY;
+
+ENTITY sketch_transform_mirror
+SUBTYPE OF (sketch_operate_transform);
+    reference_axis      : line_or_trimmed_line; 
+END_ENTITY;
+
+ENTITY sketch_transform_scale
+SUBTYPE OF (sketch_operate_transform); 
+    scale_x         : positive_ratio_measure;
+    scale_y         : positive_ratio_measure;
+    fixed_point     : cartesian_point;
+END_ENTITY;
+
+ENTITY sketch_create_pattern_element 
+ABSTRACT SUPERTYPE OF (ONEOF (create_pattern_rectangular, create_pattern_circular))
+SUBTYPE OF (sketch_command, geometric_curve_set);
+    selected_objects        : geometric_curve_set;
+WHERE
+    WR1: NOT(have_pattern_element_in_geometric_curve_set(selected_objects));
+    WR2: SELF\geometric_representation_item.dim = 2;
+END_ENTITY;
+
+ENTITY create_pattern_rectangular
+SUBTYPE OF (sketch_create_pattern_element); 
+    row_direction           : direction; 
+    row_number          : INTEGER;
+    column_number           : INTEGER;
+    row_spacing             : positive_length_measure; 
+    column_spacing          : positive_length_measure; 
+    column_augmentation_direction   : OPTIONAL rotation_direction;
+WHERE
+    WR1: (row_number > 0) AND (column_number > 0);
+END_ENTITY;
+
+ENTITY create_pattern_circular
+SUBTYPE OF (sketch_create_pattern_element); 
+    number_of_replicates    : INTEGER;
+    angle_increment     : plane_angle_measure;
+    centre_point        : cartesian_point;
+    radial_alignment    : BOOLEAN;
+    reference_point     : cartesian_point;
+WHERE
+    WR1: number_of_replicates > 0;
+END_ENTITY;
+
+FUNCTION distance_between_cartesian_points (pt1, pt2 : cartesian_point) : length_measure;
+
+LOCAL
+    temp_dis : length_measure;
+END_LOCAL;
+
+    temp_dis := SQRT ( ((pt1.coordinates[1]-pt2.coordinates[1])**2)+((pt1.coordinates[2]-pt2.coordinates[2])**2) );
+
+    RETURN(temp_dis);
+
+END_FUNCTION;
+
+FUNCTION non_collinear_2d_points (pt1, pt2, pt3 : cartesian_point) : BOOLEAN;
+
+    IF ((pt1.dim =2) AND (pt2.dim =2) AND (pt3.dim =2)) THEN
+        IF (three_distinct_points(pt1, pt2, pt3)) THEN
+            IF ((pt2.coordinates[2]-pt1.coordinates[2])*(pt3.coordinates[1]-pt1.coordinates[1]) <> (pt3.coordinates[2]-pt1.coordinates[2])* (pt2.coordinates[1]-pt1.coordinates[1])) THEN
+                RETURN (TRUE);
+            END_IF;
+          END_IF;
+    END_IF;
+
+    RETURN (FALSE);
+
+END_FUNCTION;
+
+FUNCTION midpoint(pt1, pt2 : cartesian_point) : cartesian_point;
+
+LOCAL
+    temp_pt : cartesian_point;
+END_LOCAL;
+
+    temp_pt.coordinates[1] := (pt1.coordinates[1] + pt2.coordinates[1]) / 2;
+    temp_pt.coordinates[2] := (pt1.coordinates[2] + pt2.coordinates[2]) / 2;
+
+    RETURN (temp_pt);
+
+END_FUNCTION;
+
+FUNCTION distinct_points(pts : LIST[3:?] OF cartesian_point) : BOOLEAN;
+
+    REPEAT index := LOINDEX(pts) TO HIINDEX(pts) - 1;
+        IF (distance_between_cartesian_points(pts[index], pts[index + 1]) = 0.0) THEN
+            RETURN (FALSE);
+        END_IF;
+    END_REPEAT;
+
+    RETURN (TRUE);
+
+END_FUNCTION;
+
+FUNCTION circular_type(tr : circle_or_circular_arc) : BOOLEAN;
+
+    IF ('GEOMETRY_SCHEMA.TRIMMED_CURVE' IN TYPEOF(tr)) THEN
+        IF ('GEOMETRY_SCHEMA.CIRCLE' IN TYPEOF (tr\trimmed_curve.basis_curve)) THEN
+            RETURN (TRUE);
+        ELSE
+            RETURN (FALSE);
+        END_IF;
+    END_IF;
+
+    RETURN (TRUE);
+
+END_FUNCTION;
+
+FUNCTION linear_type(tr : line_or_trimmed_line) : BOOLEAN;
+
+    IF ('GEOMETRY_SCHEMA.TRIMMED_CURVE' IN TYPEOF(tr)) THEN
+        IF ('GEOMETRY_SCHEMA.LINE' IN TYPEOF (tr\trimmed_curve.basis_curve)) THEN
+            RETURN (TRUE);
+        ELSE
+            RETURN (FALSE);
+        END_IF;
+    END_IF;
+
+    RETURN (TRUE);
+
+END_FUNCTION;
+
+FUNCTION centre_of_circle_or_circular_arc(coca :  circle_or_circular_arc) : cartesian_point;
+
+    IF ('GEOMETRY_SCHEMA.TRIMMED_CURVE' IN TYPEOF(coca)) THEN
+        RETURN (coca\trimmed_curve.basis_curve\circle\conic.position.location);
+    ELSE
+        RETURN (coca\circle\conic.position.location);
+    END_IF;
+
+END_FUNCTION; 
+
+FUNCTION have_pattern_element_in_geometric_curve_set(cs : geometric_curve_set) : BOOLEAN;
+
+    REPEAT index := LOINDEX(cs\geometric_set.elements) TO HIINDEX(cs\geometric_set.elements);
+        IF ('PROCEDURAL_SKETCH_SCHEMA.SKETCH_CREATE_PATTERN_ELEMENT' IN TYPEOF(cs\geometric_set.elements[index])) THEN
+            RETURN (TRUE);
+        END_IF;
+    END_REPEAT;
+
+    RETURN (FALSE);
+
+END_FUNCTION;
+
+FUNCTION three_distinct_points(pt1, pt2, pt3 : cartesian_point) : BOOLEAN;
+
+    IF ((distance_between_cartesian_points(pt1, pt2) <> 0.0) AND (distance_between_cartesian_points(pt2, pt3) <> 0.0) AND (distance_between_cartesian_points(pt3, pt1) <> 0.0)) THEN
+        RETURN (TRUE);
+    END_IF;
+
+    RETURN (FALSE);
+
+END_FUNCTION;
+
+END_SCHEMA;

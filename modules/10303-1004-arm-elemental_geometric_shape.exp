@@ -1,0 +1,109 @@
+(* 
+$Id: 10303-1004-arm-elemental_geometric_shape.exp,v 1.2 2006/08/07 07:44:41 wg12deputy Exp $
+ISO/TC184/SC4 WG12N2102 - ISO/TS 10303-1004 Elemental geometric shape - EXPRESS ARM 
+*)
+   
+SCHEMA Elemental_geometric_shape_arm;
+ 
+USE FROM Foundation_representation_arm;
+
+USE FROM Value_with_unit_arm;	
+
+TYPE cartesian_transformation = SELECT (Cartesian_transformation_2d, Cartesian_transformation_3d);
+END_TYPE;
+
+TYPE geometric_mapping_target = SELECT (Axis_placement, cartesian_transformation);
+END_TYPE;
+
+ENTITY Geometric_coordinate_space
+SUBTYPE OF (Numerical_representation_context);
+  dimension_count: INTEGER;
+WHERE
+WR1: dimension_count >0;
+END_ENTITY;
+
+ENTITY Geometric_model
+SUBTYPE OF (Representation);
+  version_id    : OPTIONAL STRING;
+  model_extent  : OPTIONAL length_measure;
+  SELF\Representation.context_of_items : Geometric_coordinate_space;
+  SELF\Representation.items: SET[1:?] OF Detailed_geometric_model_element;
+END_ENTITY;
+   
+ENTITY Detailed_geometric_model_element
+ABSTRACT SUPERTYPE OF (ONEOF(Cartesian_point, Direction, Axis_placement, Cartesian_transformation_2d,
+	Cartesian_transformation_3d))
+SUBTYPE OF (Representation_item);
+END_ENTITY;
+
+ENTITY Cartesian_point
+SUBTYPE OF (Detailed_geometric_model_element);
+  coordinates: LIST[1:3] OF length_measure;
+END_ENTITY;
+
+ENTITY Direction
+SUBTYPE OF (Detailed_geometric_model_element);
+  coordinates: LIST[2:3] OF length_measure;  
+END_ENTITY;
+
+ENTITY Axis_placement
+SUBTYPE OF (Detailed_geometric_model_element);
+  origin: Cartesian_point;
+  x_axis: Direction;
+  y_axis: Direction;
+DERIVE
+  dim: INTEGER := SIZEOF(origin.coordinates);
+WHERE
+WR1: dim >1;
+WR2: dim = SIZEOF(x_axis.coordinates);
+WR3: dim = SIZEOF(y_axis.coordinates);
+END_ENTITY;
+   
+ENTITY Cartesian_transformation_2d
+SUBTYPE OF (Detailed_geometric_model_element);
+   multiplication_matrix: ARRAY[1:2] OF Direction;
+   translation: Cartesian_point;
+WHERE
+WR1: SIZEOF(multiplication_matrix[1]\Direction.coordinates)=2;
+WR2: SIZEOF(multiplication_matrix[2]\Direction.coordinates)=2;
+WR3: SIZEOF(translation.coordinates)=2;
+END_ENTITY;
+
+ENTITY Cartesian_transformation_3d
+SUBTYPE OF (Detailed_geometric_model_element);
+   multiplication_matrix: ARRAY[1:3] OF Direction;
+   translation: Cartesian_point;
+WHERE
+WR1: SIZEOF(multiplication_matrix[1]\Direction.coordinates)=3;
+WR2: SIZEOF(multiplication_matrix[2]\Direction.coordinates)=3;
+WR3: SIZEOF(multiplication_matrix[3]\Direction.coordinates)=3;
+WR4: SIZEOF(translation.coordinates)=3;
+END_ENTITY;
+
+ENTITY Axis_placement_mapping;
+  source: Axis_placement;
+  target: Axis_placement;
+WHERE
+WR1: source\Axis_placement.dim = target\Axis_placement.dim;
+END_ENTITY;
+
+ENTITY Axis_placement_transformation_mapping;
+  source: Axis_placement;
+  target: cartesian_transformation;
+WHERE
+WR1: source\Axis_placement.dim = SIZEOF(target.translation\Cartesian_point.coordinates);
+END_ENTITY;
+
+END_SCHEMA;
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,70 @@
+SCHEMA aic_faceted_brep;
+
+ USE FROM geometry_schema
+     (axis2_placement_3d,
+      cartesian_point,
+      cartesian_transformation_operator_3d,
+      elementary_surface,
+      plane);
+ USE FROM geometric_model_schema
+     (brep_with_voids,
+      faceted_brep,
+      manifold_solid_brep);
+ REFERENCE FROM geometric_model_schema(msb_shells);
+ USE FROM topology_schema
+     (closed_shell,
+      connected_face_set,
+      face_bound,
+      face_outer_bound,
+      face_surface,
+      oriented_closed_shell,
+      poly_loop);
+
+ USE FROM representation_schema(mapped_item);
+
+ USE FROM product_property_representation_schema(shape_representation);
+
+ ENTITY faceted_brep_shape_representation
+   SUBTYPE OF (shape_representation);
+ WHERE
+   WR1 : SIZEOF (QUERY (it <* items |
+          NOT (SIZEOF(['AIC_FACETED_BREP.FACETED_BREP',
+            'AIC_FACETED_BREP.MAPPED_ITEM',
+            'AIC_FACETED_BREP.AXIS2_PLACEMENT_3D'] *
+             TYPEOF(it)) = 1))) = 0;
+   WR2 : SIZEOF (QUERY (it <* items |
+          SIZEOF(['AIC_FACETED_BREP.FACETED_BREP',
+          'AIC_FACETED_BREP.MAPPED_ITEM'] * TYPEOF(it)) = 1)) > 0;
+   WR3 : SIZEOF (QUERY (fbrep <* QUERY ( it <* items |
+          'AIC_FACETED_BREP.FACETED_BREP' IN TYPEOF(it)) |
+          NOT (SIZEOF (QUERY (csh <* msb_shells(fbrep) |
+          NOT (SIZEOF (QUERY (fcs <* csh\connected_face_set.cfs_faces |
+          NOT (('AIC_FACETED_BREP.FACE_SURFACE' IN TYPEOF (fcs)) AND
+          (('AIC_FACETED_BREP.PLANE' IN TYPEOF
+               (fcs\face_surface.face_geometry)) AND
+          ('AIC_FACETED_BREP.CARTESIAN_POINT' IN TYPEOF (
+               fcs\face_surface.face_geometry\
+                    elementary_surface.position.location))))))
+                      = 0))) = 0))) = 0;
+   WR4 : SIZEOF (QUERY (fbrep <* QUERY ( it <* items |
+          'AIC_FACETED_BREP.FACETED_BREP' IN TYPEOF(it)) |
+          NOT (SIZEOF (QUERY (csh <* msb_shells(fbrep) |
+          NOT (SIZEOF (QUERY (fcs <* csh\connected_face_set.cfs_faces |
+          NOT (SIZEOF (QUERY (bnds <* fcs.bounds |
+           'AIC_FACETED_BREP.FACE_OUTER_BOUND' IN TYPEOF(bnds)))
+              = 1))) = 0))) = 0))) = 0;
+   WR5 : SIZEOF (QUERY (msb <* QUERY (it <* items |
+          'AIC_FACETED_BREP.MANIFOLD_SOLID_BREP' IN TYPEOF(it)) |
+          'AIC_FACETED_BREP.ORIENTED_CLOSED_SHELL' IN
+              TYPEOF (msb\manifold_solid_brep.outer))) = 0;
+   WR6 : SIZEOF (QUERY (brv <* QUERY (it <* items |
+          'AIC_FACETED_BREP.BREP_WITH_VOIDS' IN TYPEOF(it)) |
+          NOT (SIZEOF (QUERY (csh <* brv\brep_with_voids.voids |
+           csh\oriented_closed_shell.orientation)) = 0))) = 0;
+   WR7 : SIZEOF (QUERY (mi <*  QUERY (it <* items |
+                 'AIC_FACETED_BREP.MAPPED_ITEM' IN TYPEOF(it)) |
+          NOT ('AIC_FACETED_BREP.FACETED_BREP_SHAPE_REPRESENTATION' IN
+            TYPEOF(mi\mapped_item.mapping_source.mapped_representation))))
+                = 0;
+ END_ENTITY;
+ END_SCHEMA; -- end AIC FACETED BREP SCHEMA

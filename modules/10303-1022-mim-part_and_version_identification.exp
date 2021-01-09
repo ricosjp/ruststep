@@ -1,0 +1,16 @@
+(*
+ $Id: 10303-1022-mim-part_and_version_identification.exp,v 1.5 2006/08/07 09:42:02 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2522 - ISO/TS 10303-1022 Part and version identification - EXPRESS MIM
+ Supersedes ISO TC184/SC4/WG12 N1115
+*) 
+
+
+SCHEMA Part_and_version_identification_mim; 
+
+USE FROM Product_identification_mim;    -- ISO/TS 10303-1017
+
+USE FROM Product_version_mim;    -- ISO/TS 10303-1018
+
+
+END_SCHEMA;  -- Part_and_version_identification_mim
+

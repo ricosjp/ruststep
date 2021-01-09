@@ -1,0 +1,31 @@
+(*
+ISO TC184/SC4/WG12 N2547 - ISO/TS 10303-1134 Product structure - EXPRESS MIM
+Supersedes ISO TC184/SC4/WG12 N1671
+*) 
+
+
+SCHEMA Product_structure_mim;
+
+USE FROM Assembly_structure_mim;    -- ISO/TS 10303-1026
+
+USE FROM Contextual_shape_positioning_mim;    -- ISO/TS 10303-1027
+
+USE FROM Part_and_version_identification_mim;    -- ISO/TS 10303-1022
+
+USE FROM Part_definition_relationship_mim;    -- ISO/TS 10303-1055
+
+USE FROM Product_replacement_mim;    -- ISO/TS 10303-1046
+
+USE FROM Product_version_relationship_mim;    -- ISO/TS 10303-1020
+
+USE FROM Product_view_definition_relationship_mim;    -- ISO/TS 10303-1041
+
+USE FROM Property_assignment_mim;    -- ISO/TS 10303-1030
+
+USE FROM Single_part_representation_mim;    -- ISO/TS 10303-1133
+
+REFERENCE FROM support_resource_schema   -- ISO 10303-41
+  (bag_to_set); 
+
+
+END_SCHEMA;  -- Product_structure_mim

@@ -1,0 +1,33 @@
+(*
+   $Id: 10303-1349-arm-incomplete_data_reference_mechanism.exp,v 1.1 2006/08/03 14:41:11 wg12deputy Exp $
+   ISO/TC184/SC4 WG12N2634 - ISO/TS 10303- incomplete_data_reference_mechanism - EXPRESS ARM
+   Supersedes ISO TC184/SC4/WG12N2071
+*)
+
+SCHEMA Incomplete_data_reference_mechanism_arm;
+
+USE FROM Classification_assignment_arm;
+
+USE FROM Document_definition_arm;
+
+USE FROM File_identification_arm;
+
+USE FROM Part_view_definition_arm;
+
+
+TYPE idrm_marked_item  = EXTENSIBLE SELECT BASED_ON classification_item WITH
+      (Digital_document_definition, Digital_file,
+       Part_view_definition);
+END_TYPE;
+
+
+ENTITY Incomplete_reference_marking
+SUBTYPE OF (Classification_assignment);
+WHERE
+WR1: SIZEOF (QUERY( item <* SELF\Classification_assignment.items | 
+	NOT ('INCOMPLETE_DATA_REFERENCE_MECHANISM_ARM.IDRM_MARKED_ITEM' IN TYPEOF(item) ) )) = 0;
+
+WR2: SELF\Classification_assignment.assigned_class.id = 'reference';
+END_ENTITY;
+
+END_SCHEMA;

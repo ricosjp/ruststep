@@ -1,0 +1,59 @@
+(*
+WG12 N670
+ISO/TS 10303-1001
+Product data representation and exchange: Application module: Appearance assignment - EXPRESS ARM
+*)
+
+
+SCHEMA Appearance_assignment_arm;
+
+USE FROM Elemental_shape_arm; -- ISO/TS 10303-1004
+USE FROM Foundation_representation_arm; -- ISO/TS 10303-1006
+
+ENTITY Appearance
+     ABSTRACT SUPERTYPE;
+END_ENTITY;
+
+ENTITY Appearance_assignment;
+	component: SET [1:?] OF Appearance;
+END_ENTITY;
+
+ENTITY Appearance_context
+    ABSTRACT SUPERTYPE;
+END_ENTITY;
+
+ENTITY Context_dependent_appearance_assignment
+SUBTYPE OF (Appearance_assignment);
+	context_definition: Appearance_context;
+END_ENTITY;
+
+ENTITY Overriding_styled_element
+	SUBTYPE OF (Styled_element);
+	is_defined_for: SET [1:?] OF Appearance_context;
+END_ENTITY;
+
+ENTITY Styled_element
+    SUBTYPE OF (Representation_item);
+	appearance: Appearance_assignment;
+	invisible: BOOLEAN;
+END_ENTITY;
+
+ENTITY Styled_geometric_model
+  SUBTYPE OF (Styled_model);
+	styled_geometry: Geometric_model;
+END_ENTITY;
+
+ENTITY Styled_model;
+	additional_elements: SET [0:?] OF Template_instance;
+	description: OPTIONAL STRING;
+	element: SET [1:?] OF Styled_element;
+	id: STRING;
+END_ENTITY;
+
+ENTITY Styled_model_element
+  SUBTYPE OF (Styled_element);
+element: Representation_item;
+END_ENTITY;
+
+END_SCHEMA;
+

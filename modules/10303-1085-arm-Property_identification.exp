@@ -1,0 +1,29 @@
+(*
+ $Id: 10303-1085-arm-Property_identification.exp,v 1.4 2006/08/04 12:01:50 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2816 - ISO/TS 10303-1085 Property identification - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG12 N2054
+*)
+
+SCHEMA Property_identification_arm;
+
+USE FROM Independent_property_definition_arm;    --  ISO/TS 10303-1099
+USE FROM Maths_space_arm;    --  ISO/TS 10303-1091
+USE FROM Maths_value_arm;    --  ISO/TS 10303-1092
+USE FROM Property_space_arm;    --  ISO/TS 10303-1080
+
+ENTITY Identification_of_property;
+  identifier : maths_value;
+  property : Physical_quantity_instance;
+END_ENTITY;
+
+ENTITY Scale;
+  identifier : Maths_space;
+  property : Physical_quantity_space;
+END_ENTITY;
+
+ENTITY Scale_for_identification_of_property;
+  identification : Identification_of_property;
+  scale : Scale;
+END_ENTITY;
+
+END_SCHEMA;

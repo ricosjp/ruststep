@@ -1,0 +1,5349 @@
+(* ARM EXPRESS for ISO 10303-215
+   2003-12-14
+   Peter Lazo
+   ISO TC184/SC4 WG3 N1230
+*)
+
+SCHEMA AP215_ARM;
+
+
+CONSTANT
+      SEP: STRING := '.';
+
+END_CONSTANT;
+
+
+TYPE bounded_curve = STRING;
+END_TYPE;
+
+TYPE cartesian_point = STRING;
+END_TYPE;
+
+TYPE date_and_time = STRING;
+END_TYPE;
+
+TYPE person = STRING;
+END_TYPE;
+
+TYPE organization = STRING;
+END_TYPE;
+
+TYPE person_and_organization = STRING;
+END_TYPE;
+
+TYPE representation = STRING;
+END_TYPE;
+
+TYPE shape_representation = STRING;
+END_TYPE;
+
+TYPE Carrier_ship_type = ENUMERATION OF (
+barge,
+barge_for_deck_loading,
+barge_for_liquefied_gas,
+barge_for_oil,
+barge_pontoon,
+bulk_carrier,        
+car_carrier,
+car_ferry,        
+cargo_ship_carrying_passengers,        
+chemical_tanker,       
+chemical_tanker_type_1,        
+container_carrier,
+cruise_liner,        
+dry_cargo_vessel,        
+ferry,
+gas_carrier,        
+general_cargo_carrier,        
+highspeedcraft_cargo,        
+highspeedcraft_passenger,        
+hydrofoil,
+liquefied_gas_tanker,        
+LNG_carrier,
+LPG_carrier,
+oil_tanker,
+ore_carrier,
+passenger_vessel,        
+product_tanker,
+refrigerated_cargo_carrying_ship,        
+roro_vessel,        
+tanker_for_refrigerated_fruit_juice,        
+user_defined
+);
+END_TYPE;
+
+TYPE Working_ship_type = ENUMERATION OF (
+        crane_vessel,
+        dredger,
+        drilling_vessel,
+        fire_fighter,
+        fishing_vessel,
+        floating_dock,
+        floating_hotel,
+        FPGO,
+        FPSO,
+        ice_breaker,
+        offshore_supply_vessel,
+        oil_production_and_storage_vessel,  
+        oil_production_vessel,
+        oil_storage_vessel, 
+        pilot_boat,
+        pipe_laying_vessel,
+        pusher,
+        reefer,
+        sealer,
+        shuttle_tanker, 
+        stern_trawler,
+        supply_vessel,
+        tug,
+        user_defined,
+        well_stimulation_vessel
+);
+END_TYPE;
+
+TYPE Research_ship_type = ENUMERATION OF (
+      user_defined
+);
+END_TYPE;
+
+TYPE Navy_ship_type = ENUMERATION OF (
+aircraft_carrier,
+auxiliary_oiler,
+corvette,
+cruiser,
+destroyer,
+fleet_auxiliary_vessel,
+frigate,
+landing_platform_dock,
+landing_platform_helicopter,
+mine_warfare_ship,
+patrol_force_vessel,
+service_craft,
+submarine,
+user_defined
+);
+END_TYPE;
+
+TYPE Global_co_ordinate_system_orientation = ENUMERATION OF (
+ aft_pointing,
+ forward_pointing
+);
+END_TYPE;
+
+TYPE Location_reference =  SELECT (
+  Spacing_position, 
+  Length_measure
+);
+END_TYPE;
+
+TYPE Ship_identifier = SELECT (
+  IMO_number,
+  Pennant_hull_number
+);
+END_TYPE;
+
+TYPE IMO_number = Text;
+END_TYPE;
+
+TYPE Pennant_hull_number = Text;
+END_TYPE;
+
+TYPE Shipyard_role = ENUMERATION OF (
+ prime,
+ prime_build,
+ prime_design,
+ prime_repair,
+ subcontractor
+);
+END_TYPE;
+
+TYPE Heavy_cargo = ENUMERATION OF (
+ HC,
+ HC_E,
+ HC_EA
+);
+END_TYPE;
+
+TYPE Pre_defined_compartment_function = ENUMERATION OF (
+access_trunk,
+aft_peak_tank,
+auxiliary_engine_room,
+ballast_tank,
+battery_room,
+berthing_compartment,
+boiler_room,
+bottom_wing_tank,
+bow_thruster_room,
+cabin,
+cargo_compartment,
+centre_tank,
+chainlocker,
+cofferdam,
+compressor_room,
+control,
+crossover_tank,
+deck_tank,
+deep_tank,
+diving_well,
+double_bottom_and_side_tank,
+double_bottom_tank,
+double_side_tank,
+drill_well,
+duct_keel,
+electric_motor_room,
+emergency_fire_pump_room,
+equipment_room,
+escape_trunk,
+fore_peak_tank,
+forecastle,
+habitable_compartment,
+heeling_tank,
+hopper_tank,
+insulated_tank,
+lounge,
+machinery_compartment,
+main_engine_room,
+medical,
+passageway,
+poop,
+pump_room,
+rudder_trunk,
+separator_room,
+settling_tank,
+shaft_tunnel,
+side_tank,
+side_wing_tank,
+stabiliser_room,
+stability_tank,
+steering_gear_room,
+stern_tank,
+stool_tank,
+tank,
+thruster_room,
+top_wing_tank,
+trimming_tank,
+trunk,
+user_defined,
+void,
+waterjet_room,
+wheelhouse,
+wing_tank
+);
+END_TYPE;
+
+TYPE Pre_defined_zone_function = ENUMERATION OF (
+arrangement_zone,
+bottom_external_zone,
+bow_external_zone,
+bridging_structure_zone,
+damage_control_zone,
+deckhouse_zone,
+design_zone,
+double_bottom_zone,
+external_zone,
+fire_zone,
+hatch_zone,
+pressure_zone,
+ship_side_external_zone,
+stern_external_zone,
+subsafe_zone,
+tank_top_zone,
+tween_deck_zone,
+user_defined
+);
+END_TYPE;
+
+TYPE Pre_defined_deck_zone_function = ENUMERATION OF (
+boat_deck_zone,
+bridge_deck_zone,
+car_deck_zone,
+deck_compartment_arrangement,
+deck_loading_zone,
+main_deck_zone,
+sun_deck_zone,
+topside_zone,
+user_defined,
+weather_deck_zone
+);
+END_TYPE;
+
+TYPE Compartment_design_requirement_type = ENUMERATION OF (
+combat_system,
+electrical,
+electronic,
+hvac,
+naval_architecture,
+outfit_furnishing,
+painting_coating,
+piping,
+structural,
+user_defined
+);
+END_TYPE;
+
+TYPE Compartment_shape_representation = SELECT (
+Non_manifold_surface_shape);
+END_TYPE;
+
+TYPE Space_boundary = SELECT (
+External_instance_reference);
+END_TYPE;
+
+TYPE Deck_reference = SELECT (
+External_instance_reference);
+END_TYPE;
+
+TYPE Compartments_in_zone = SELECT (
+Compartment,
+External_instance_reference);
+END_TYPE;
+
+TYPE Compartment_property_context = ENUMERATION OF(
+	estimated,
+	calculated,
+	maximum,
+	measured,
+	minimum 
+);
+END_TYPE;
+
+TYPE Authorization_classification = ENUMERATION OF (
+     crew_only, 
+     officers_only,
+     restricted,
+     unrestricted,
+     user_defined
+);
+END_TYPE;
+
+TYPE Insulation_category = ENUMERATION OF (
+	A,
+	B,
+	C,
+	D,
+	E,
+	F,
+	G,
+	H,
+      I,
+	J,
+      K,
+      L,
+      M,
+      N,
+      O,
+      P,
+      Q,
+      R,
+	user_defined
+);
+END_TYPE;
+
+TYPE Noise_category = ENUMERATION OF (
+	A,
+	B,
+	C,
+	D,
+	E,
+	F,
+	user_defined
+);
+END_TYPE;
+
+TYPE Naval_nuclear_classification = ENUMERATION OF (
+	non_nuclear,
+	nuclear
+);
+END_TYPE;
+
+TYPE Naval_safety_category = ENUMERATION OF (
+	A,
+	B,
+	C,
+	user_defined
+);
+END_TYPE;
+
+TYPE Naval_security_classification = ENUMERATION OF (
+ 	classified,
+	secret,
+	unclassified,
+	user_defined
+);
+END_TYPE;
+
+TYPE Compartment_required_bulkhead_tightness = ENUMERATION OF (
+     air_tight,
+     non_tight, 
+     oil_tight,
+     user_defined,
+     water_tight,
+     weather_tight
+);
+END_TYPE;
+
+TYPE capacity_context = ENUMERATION OF (
+	full_95_percent,
+	full_98_percent,
+	pressed_full,
+	slack,
+	user_defined
+);
+END_TYPE;
+
+TYPE Space_product_structure_type = ENUMERATION OF (
+compartments_in_arrangement,
+items_in_compartment
+);   
+END_TYPE;
+
+TYPE Positional_relationship_type = ENUMERATION OF (
+  	above,
+	aft_longitudinal_extent,
+	below,
+	forward_longitudinal_extent,
+	matched_transverse,
+  	port_transverse_extent,
+	relative,
+	starboard_transverse_extent 
+	);
+END_TYPE;
+
+TYPE Space_adjacency_type = ENUMERATION OF (
+	complete,
+	partial
+);
+END_TYPE;
+
+TYPE System_reference = SELECT (
+External_instance_reference,
+Label
+);
+END_TYPE;
+
+TYPE Coating_type = ENUMERATION OF (
+     aluminium,
+     bituminous,
+     chlorinated_rubber,
+     coal_tar,
+     epoxy,
+     glassflake,
+     isocynate,
+     micaceous_iron_oxide,
+     non_oxidising,
+     phenolic,
+     pitch,
+     polyester,
+     polyurethane,
+     tar,
+     user_defined,
+     vinyl,
+     water_based,
+     zinc_rich,
+     zinc_silicate
+ );
+END_TYPE;
+
+TYPE Coating_applicability = ENUMERATION OF (
+     B,
+     C,
+     RS,
+     V
+);
+END_TYPE;
+
+TYPE Surface_preparation = ENUMERATION OF (
+     Fl,
+     Sa1,
+     Sa2,
+     Sa2_5,
+     Sa3,
+     St2,
+     St3 
+) ;
+END_TYPE;
+
+TYPE Bulk_cargo_type = ENUMERATION OF (
+     cement,
+     coal,
+     fish,
+     general,
+     grain,
+     mud,
+     ore,
+     sugar,
+     timber,
+     unspecified,
+     user_defined
+);
+END_TYPE;
+
+TYPE Gaseous_cargo_type = ENUMERATION OF (
+        acetaldehyde,
+ 	  anhydrous_ammonia, 
+        avcat, 
+        butane, 
+        butadiene, 
+        butylene,
+        chlorine,
+        diethyl_ether, 
+        dimethylamine, 
+        ethylene, 
+        ethyl_chlorine, 
+        ethylene_oxide, 
+        inert_gas,
+        isoprene, 
+        isopropylamine, 
+        liquified_natural_gas,
+        liquified_petroleum_gas,
+        methane, 
+        methyl_chloride, 
+        monoethylamine, 
+        naptha, 
+        propane, 
+        propane_butane_mix, 
+        propylene_oxide, 
+        propylene, 
+        user_defined,
+        vinyl_chloride_monomer,
+        vinyl_ethyl_ether
+); 
+END_TYPE;
+
+TYPE Contact_material_type = ENUMERATION OF (
+      metal,
+      other,
+      pneumatic,
+      rubber
+);
+END_TYPE;
+
+TYPE Dangerous_goods_class = ENUMERATION OF (
+     class_1,
+     class_21,
+     class_22,
+     class_23,
+     class_3,
+     class_41,
+     class_42,
+     class_43,
+     class_51,
+     class_52,
+     class_61,
+     class_62,
+     class_71,
+     class_72,
+     class_73,
+     class_8,
+     class_9
+     );
+END_TYPE;
+
+TYPE Liquid_cargo_type = ENUMERATION OF (
+     alcohol,
+     ammonia,
+     asphalt,
+     aviation_oil,
+     caustic_soda,
+     cement,
+     chemical,
+     crude_oil,
+     edible_oil,
+     fuel_oil,
+     fresh_water,
+     fruit_juice,
+     hydrocloric_acid,
+     lubricating_oil,
+     methanol,
+     molasses,
+     product_oil,
+     salt_water,
+     sullage,
+     sludge,
+     sulphur,
+     user_defined,
+     vegetable_oil,
+     water_ballast,
+     wine
+);
+END_TYPE;
+
+TYPE Passengers_or_crew=ENUMERATION OF (
+     crew,
+     enlisted,
+     officers,
+     passengers
+);
+END_TYPE;
+
+TYPE Pollution_codes = ENUMERATION OF (
+     code_A,
+     code_B,
+     code_C,
+     code_D
+);
+END_TYPE;
+
+TYPE Unit_cargo_type = ENUMERATION OF (
+     aircraft,
+     boat,
+     cable,
+     container,
+     drums,
+     livestock,
+     pallet,
+     trailer,
+     undefined,
+     user_defined,
+     vehicle
+);
+END_TYPE;
+
+TYPE Ship_cargo = SELECT (
+     Cargo,
+     Unit_cargo_group);
+  END_TYPE;
+
+TYPE Bounding_box_representation = SELECT
+     (Unit_cargo_bounding_box, 
+     Shape_representation);
+END_TYPE;
+
+TYPE assignment_type = ENUMERATION OF (
+    accomodation,
+    cargo_load,
+    consumables,
+     stores,
+     unspecified
+);
+END_TYPE;
+
+TYPE Compartment_or_deck = SELECT (
+Deck_zone,
+Compartment);
+END_TYPE;
+
+TYPE Design_loading_type = ENUMERATION OF (
+     actual,
+     expected,
+     maximum,
+     minimum,
+     other
+);
+END_TYPE;
+
+TYPE Operating_loading_type = ENUMERATION OF (
+     actual,
+     arrival,
+     departure,
+     other
+);
+END_TYPE;
+
+TYPE Port_code = STRING;
+END_TYPE;
+
+TYPE Tonnage_regulation_types = ENUMERATION OF(
+      convention1969,
+      panama,
+      suez 
+);
+END_TYPE;
+
+TYPE Damage_type = ENUMERATION OF (
+collision,
+explosion,
+grounding,
+user_defined
+);
+END_TYPE;
+
+TYPE Damage_location = ENUMERATION OF (
+above_waterline,
+below_waterline,
+on_waterline
+);
+END_TYPE;
+
+TYPE Accuracy_of_position = ENUMERATION OF (
+actual,
+estimate 
+);
+END_TYPE;
+
+TYPE Approval_status = ENUMERATION OF (
+approved,
+rejected,
+unapproved,
+user_defined
+);
+END_TYPE;
+
+TYPE Unit = SELECT (
+  Named_unit,
+  Derived_unit);
+END_TYPE;
+
+TYPE label = STRING;
+END_TYPE;
+
+TYPE Density_measure = REAL;
+END_TYPE;
+
+TYPE Pressure_measure = REAL;
+END_TYPE;
+
+TYPE Inertia_moment_measure = REAL;
+END_TYPE;
+
+TYPE Percentage = REAL;
+WHERE
+  WR1: (0.0 <= SELF) AND (SELF <= 100.0);
+END_TYPE;
+
+TYPE Force_measure = REAL;
+END_TYPE;
+
+TYPE length_measure = REAL;
+END_TYPE;
+
+TYPE text = STRING;
+END_TYPE;
+
+TYPE volume_measure = REAL;
+END_TYPE;
+
+TYPE plane_angle_measure = REAL;
+END_TYPE;
+
+TYPE area_measure = REAL;
+END_TYPE;
+
+TYPE positive_length_measure = length_measure;
+WHERE
+  WR1: SELF > 0;
+END_TYPE;
+
+TYPE luminous_intensity_measure = REAL;
+END_TYPE;
+
+TYPE mass_measure = REAL;
+END_TYPE;
+
+TYPE thermodynamic_temperature_measure = REAL;
+END_TYPE;
+
+TYPE ratio_measure = REAL;
+END_TYPE;
+
+TYPE count_measure = NUMBER;
+END_TYPE;
+
+TYPE Speed_measure = REAL;
+END_TYPE;
+
+TYPE Airflow_volume_measure = REAL;
+END_TYPE;
+
+TYPE Thermal_conductivity_measure = REAL;
+END_TYPE;
+
+TYPE Specific_heat_capacity = REAL;
+END_TYPE;
+
+TYPE Coefficient_of_viscosity = REAL;
+END_TYPE;
+
+TYPE Coefficient_of_thermal_expansion = REAL;
+END_TYPE;
+
+TYPE Freeboard_type = ENUMERATION OF (
+  A,
+  A_PLUS,
+  B,
+  B_PLUS,
+  B_60,
+  B_100,
+  other
+);
+END_TYPE;
+
+TYPE Load_line_convention_type = ENUMERATION OF (
+   ILLC_1930,
+   ILLC_1966,
+   other
+);
+END_TYPE;
+
+TYPE Moment_measure = REAL;
+END_TYPE;
+
+TYPE identifier = STRING;
+END_TYPE;
+
+TYPE  Co_ordinate_system = SELECT (
+  Local_co_ordinate_system,
+  Global_axis_placement);
+END_TYPE;
+
+TYPE Any_author = SELECT (
+  Person,
+  Organization,
+  Person_and_organization);
+END_TYPE;
+
+TYPE DOCUMENT_REFERENT = SELECT (
+  Document,
+  Document_portion);
+END_TYPE;
+
+TYPE ANY_ADDRESS = SELECT (
+  External_storage,
+  Universal_resource_locator);
+END_TYPE;
+
+TYPE Single_or_multiple_hulls = ENUMERATION OF (
+  design_for_single_hull,
+  design_for_multiple_hulls
+);
+END_TYPE;
+
+ENTITY Ship
+      SUBTYPE OF (Item);
+(* A <Ship> is the primary Product supported by the suite of ISO 10303
+   Shipbuilding Application Protocols. All data defining the product
+shall be related to a Ship. Product model definition data related to the
+<Ship> object is supported for many stages of the life cycle of a ship, 
+including new project, early and detailed design, production
+engineering, manufacturing, operations, and scrapping.  The Ship may represent a single hull, or it may represent a range of hulls within a class of sister ships that share identical product data.
+*)
+         units               : SET OF Unit;
+(*  a reference to a set of pre-defined units for all types of
+    measures that may appear in the ship model. 
+    NOTE: The name of the ship is specified as a <Definition>
+   in <Ship_designation>, where it may be versioned.
+   END_NOTE
+ *)
+
+   single_hull_or_class	:  single_or_multiple_hulls;
+ (* specifies whether the exchange of data is applicable to a single hull or
+  to multiple hulls in a class of Ships.  If the the value of single_hull_or_class
+  is "design_for_multiple_hulls", the range of hulls for which particular <Item>s
+  or <Definition>s are applicable shall be specified using the <Hull_applicability>.
+ *)
+
+      INVERSE
+         ship_items: SET OF Item FOR ship_context;
+(* the constituent objects that are applicable to a particular <Ship>.
+ *)
+END_ENTITY;
+
+ENTITY Hull_applicability;
+ (* identification of a hull, or a range of hulls within a class of ships, for which particular product data is applicable.*)
+ start_hull		:		Label;
+ (* specifies the first hull in a range of hulls for which the product data is applicable. *)
+ end_hull		:		OPTIONAL Label;	
+ (* specifies the final hull in a range of hulls for which the product data is applicable.  The end_hull need not be specified for a particular Hull_applicability.  If the end_hull is not specified, the product data is applicable to only the start_hull.*)
+ items_for_hulls	:		SET OF Item;
+ (* <Item>s that are applicable for the range of hulls specified in <start_hull> and <end_hull>.*)
+ definitions_for_hulls	:	SET OF Definition;
+ (* <Definition>s that are applicable for the range of hulls specified in <start_hull> and <end_hull>.*)
+END_ENTITY;
+
+ENTITY Precision;
+  (* the geometric precision of the CAD system from which the product data originated. *)
+ minimum_point_spacing	:  Length_measure;
+ (* the minimum distance between two points that are considered to be coincident in the originating CAD system. *)
+END_ENTITY;
+
+
+ENTITY Shiptype
+   ABSTRACT SUPERTYPE OF (ONEOF (
+                       Carrier,
+                       Working_ship,
+                       Research_ship,
+                       Navy_ship))
+  SUBTYPE OF (Functional_Definition);
+       (* 
+          is a description of the function, purpose, or mission that
+          a <Ship> is designed for. A <Ship> may have multiple functions. In this
+          case several Entities of this type shall be defined and assigned to an 
+          instance of Ship. It is almost impossible to provide a complete 
+          list of ship types. Therefore, only the major types are named explicitly,
+          other <Shiptype>s may be assigned via the user_defined type with clarification
+          of the function specified in the description attribute. 
+        *)
+     SELF\Versionable_object.description: OPTIONAL Text;
+     (* a function, purpose, or mission that a <Ship> is designed for. *)
+     SELF\Definition.defined_for: SET [1:?] OF Ship;
+     (* the <Ship> for which the <Shiptype> is defined. *)
+   END_ENTITY;
+
+
+
+   ENTITY Carrier
+   SUBTYPE OF (Shiptype);
+       (* 
+        represents a <Ship> that transports goods or passengers.
+        *)
+   has_type: Carrier_ship_type;
+       (* the type of the <Carrier_ship>. *)
+   WHERE
+    WR1 : (NOT EXISTS(SELF.user_def_function)) OR
+                        (has_type = Carrier_Ship_Type.user_defined);
+   END_ENTITY;
+
+
+
+   ENTITY Working_ship
+   SUBTYPE OF (Shiptype);
+       (* represents a <Ship> that is constructed to perform specific tasks.
+        *)
+   has_type: Working_ship_type;
+       (* the type of the <Working_ship>. *)
+   WHERE
+    WR1 : (NOT EXISTS(SELF.user_def_function)) OR
+                        (has_type = Working_Ship_Type.user_defined);
+   END_ENTITY;
+
+
+
+   ENTITY Research_ship
+   SUBTYPE OF (Shiptype);
+       (* represents a <Ship> that is specially designed for research.
+        *)
+   has_type: Research_ship_type;
+       (* the type of the <Research_ship>. *)
+   WHERE
+    WR1 : (NOT EXISTS(SELF.user_def_function)) OR
+                        (has_type = Research_Ship_Type.user_defined);
+   END_ENTITY;
+
+
+
+   ENTITY Navy_ship
+   SUBTYPE OF (Shiptype);
+       (* represents a <Ship> operating under military command.
+        *)
+   has_type: Navy_ship_type;
+       (* the type of the <Navy_ship>. *)
+   
+   WHERE
+    WR1 : (NOT EXISTS(SELF.user_def_function)) OR
+                        (has_type = Navy_Ship_Type.user_defined);
+   END_ENTITY;   
+
+
+
+ ENTITY Global_axis_placement
+  SUBTYPE OF (General_characteristics_definition);
+(*
+defines a fixed system of right handed orthogonal axes to which 
+geometric 
+data are referred. A <Global_axis_placement> shall have a
+ positive Z-axis in an upward direction starting from the base
+ of the <Ship> and a positive X-axis running along the <Ship> on the 
+intersection of
+ the centreline with the base. In one case it is directed from the 
+ after part of the <Ship> to the forward part of the <Ship>, in the 
+other, it 
+ is directed from the forward part of the <Ship> to the aft part of the 
+<Ship>. 
+ The origin of the <Global_axis_placement> can be any point on the 
+X-axis.
+
+The distance of the after perpendicular from the origin and the 
+orientation of the X-axis shall be specified.
+
+If any other system of axes is used, local or global, then the 
+transformation relations between it and the <Global_axis_placement> 
+shall be specified.
+*)
+  orientation : Global_co_ordinate_system_orientation;
+(*
+the direction of the X-axis.
+*)
+  after_perpendicular_offset : Length_measure;
+(*
+the distance from the origin of the <Global_axis_placement> to the 
+after perpendicular.
+*)
+ END_ENTITY;
+
+   
+
+   ENTITY Local_co_ordinate_system_with_position_reference
+      SUBTYPE OF (Local_co_ordinate_system);
+	(* directly refers to the unique <Global_axis_placement> as its parent. 
+	   Its location is defined by references to longitudinal, vertical, 
+	   or transversal frames, possibly using an additional offset value
+	   (a distance). Alternatively absolute coordinates may be specified.
+	   Also, combinations of coordinates and references are valid.
+	   A <Local_co_ordinate_system_with_position_reference> shall not 
+	   specify rotations as transformation to the global system, i.e., its
+	   axes are required to be parallel to the axes of the
+	   <Global_axis_placement>.
+	*)
+	longitudinal_ref: OPTIONAL Location_reference;
+	(* a <Longitudinal_position>, possibly with an
+	   offset value, or an absolute coordinate value, along the 
+	   longitudinal axis of the global coordinate system.
+	*)
+	transversal_ref: OPTIONAL Location_reference;
+	(* a <Transversal_position>, possibly with an
+	   offset value, or an absolute coordinate value, along the 
+	   transversal axis of the global coordinate system. 
+	*)
+	vertical_ref: OPTIONAL Location_reference;
+	(* a <Vertical_position>, possibly with an
+	   offset value, or an absolute coordinate value, along the 
+	   vertical axis of the global coordinate system.
+	*)
+
+     WHERE
+	(* At least one reference has to be defined *)
+	At_least_one_reference:
+		(EXISTS(longitudinal_ref) OR EXISTS(vertical_ref) OR EXISTS(transversal_ref));
+	(* All axes shall be parallel to the axis of the global system, therefore inherited 
+	   <axis> attribute shall not be instanciated *)
+
+
+	Relates_directly_to_global_system:
+		('AP215.GLOBAL_AXIS_PLACEMENT' IN 
+
+		  TYPEOF(SELF\Local_co_ordinate_system.parent));
+	(* Check, that reference are correct, i.e. <longitudinal_ref> shall only be related to 
+	   <Longitudinal_position>. *)
+	Correct_Longitudinal_Ref:
+       		(NOT ('SPACING_GRIDS_EXPORT.SPACING_POSITION' IN TYPEOF (longitudinal_ref)) OR 
+       		    ('SPACING_GRIDS_EXPORT.LONGITUDINAL_POSITION' IN TYPEOF (longitudinal_ref)));
+	(* Check, that reference are correct, i.e. <transversal_ref> shall only be related to 
+	   <Transversal_position>. *)
+	Correct_Transversal_Ref : 
+       		(NOT ('SPACING_GRIDS_EXPORT.SPACING_POSITION' IN TYPEOF (transversal_ref)) OR 
+       		    ('SPACING_GRIDS_EXPORT.TRANSVERSAL_POSITION' IN TYPEOF (transversal_ref)));
+	(* Check, that reference are correct, i.e. <vertical_ref> shall only be related to 
+	   <Vertical_position>. *)
+	Correct_Vertical_Ref    : 
+       		(NOT ('SPACING_GRIDS_EXPORT.SPACING_POSITION' IN TYPEOF (vertical_ref)) OR 
+       		    ('SPACING_GRIDS_EXPORT.VERTICAL_POSITION' IN TYPEOF (vertical_ref)));
+   END_ENTITY;
+
+
+
+ ENTITY Ship_designation
+  SUBTYPE OF (General_characteristics_definition);
+(*
+specifies the identification given to the <Ship> in 
+order that it can be categorised by any shipping related <organization>.
+*)
+  flag_state : Text;
+(*
+the national authority with which the <Ship> is registered.
+*)
+  ship_name : Text;
+(*
+the name of the <Ship> assigned by the owner.
+*)
+  port_of_registration : Text;
+(*
+the national homeport of the <Ship>. The <port_of_registration> lies 
+within the jurisdiction of the flag_state.
+*)
+  call_sign : Text;
+(*
+a unique, lifecycle identifier assigned to the <Ship> by the 
+<flag_state> 
+for radio communication.
+*)
+  ship_identification : Ship_identifier;
+(*
+a general identifier unique to the <Ship> assigned during the 
+classification process.
+*)
+   SELF\Versionable_object.description: OPTIONAL Text;
+(*
+details about the function of the <Ship> and additional 
+information about the <Cargo> carried. If the <ship_type> is 
+user_defined, then the <description> delivers the information 
+for the type of the <Ship>.
+*)
+ SELF\Definition.local_units: SET[0:0] OF Unit;
+(*
+that a Ship_designation shall not define local units.
+*)
+
+ END_ENTITY;
+
+
+
+ ENTITY Owner_designation
+  SUBTYPE OF (General_characteristics_definition);
+(*
+specifies the <organization>s that order, own, and manage the <Ship>.
+*)
+  ordering_company : Organization;
+(*
+the <organization> that ordered the <Ship> at a shipyard.
+*)
+  managing_company : Organization;
+(*
+the <organization> that is responsible for managing and operating the 
+<Ship>.
+*)
+  owning_company : Organization;
+(*
+the <organization> that legally owns the <Ship>.
+*)
+  owner_approval   : OPTIONAL STRING;
+(*
+an indication that the ship owner has approved the design of the ship.
+*)
+ SELF\Definition.local_units: SET[0:0] OF Unit;
+(*
+that an Owner_designation shall not define local units.
+*)
+END_ENTITY;
+
+
+
+ ENTITY Shipyard_designation
+  SUBTYPE OF (General_characteristics_definition);
+(*
+specifies the identification given to the <Ship> by the shipbuilder.
+*)
+  shipyard_new_building_id : OPTIONAL Label;
+(*
+an identifier for the <Ship> that is assigned by the shipyard after an 
+order has been confirmed.
+*)
+  shipyard_project_name : Text;
+(*
+an identifier for the <Ship> that is assigned by the shipyard on 
+receipt 
+of an order, or tender, for a new <Ship>.
+*)
+  role : Shipyard_role;
+(*
+the contractual obligation the shipyard has in relation to the <Ship>.
+*)
+  shipyard: Organization;
+(*
+the name and organizational details of the shipyard.
+*)
+ SELF\Definition.local_units: SET[0:0] OF Unit;
+(*
+that a Shipyard_designation shall not define local units.
+*)
+END_ENTITY;
+
+
+
+
+ ENTITY Class_and_statutory_designation
+  SUBTYPE OF (General_characteristics_definition);
+(*
+specifies the identification given to the <Ship> by the classification 
+society for the purpose of design, manufacture, and in-service approval.
+*)
+  the_class : Class_notation;
+(*
+the applicable <Class_notation> with information about the <Ship> type 
+and the <Cargo>.
+*)
+  the_statutory : Regulation;
+(*
+the set of national and international regulations and standards with 
+which the <Ship> is intended to comply.
+*)
+  class_number : Label;
+(*
+a classification society specific identifier to a <Ship>.
+*)
+  SELF\Definition.local_units: SET[0:0] OF Unit;
+(*
+that a Class_and_statutory_designation shall not define local units.
+*)
+END_ENTITY;
+
+
+
+ ENTITY Class_notation;
+(*
+specifies the notations given to the hull and machinery of the <Ship> 
+by the classification society as a result of its approval 
+activities during the design, manufacture, and in-service maintenance 
+of 
+the <Ship>.
+*)
+  class_society : Organization;
+(*
+the name and organizational details of the classification society whose 
+rules and regulations are being used to assess the <Ship>.
+*)
+  class_notations_hull : SET [1:?] OF Text;
+(*
+the notation given to the hull of the <Ship> by the classification 
+society as a 
+result of its approval activities done on the hull.
+*)
+  class_notations_machinery : SET [1:?] OF Text;
+(*
+the notation given to the machinery on the <Ship> by the classification 
+society as a result of its approval activities done on the machinery.
+*)
+  ice_class_notation : OPTIONAL Text;
+(*
+the type of class notation given to the <Ship> indicating the ice 
+conditions in which the <Ship> has been approved to operate.
+*)
+  service_area : Text;
+(*
+the area or route in which the <Ship> operates. This may 
+include information about waterway, wave, weather, and wind conditions.
+*)
+  service_factor : OPTIONAL REAL;
+(*
+the service area of the <Ship> and the waves that occur in 
+that area. The <service_factor> should be in the range of 0.5 to 1.0.
+*)
+  approval_required_for_oil_cargo : BOOLEAN;
+ (*
+a flag indicating whether or not approval is required for the carriage 
+of oil <Cargo>s.
+*)
+  approval_required_loading_unloading_aground : BOOLEAN;
+(*
+a flag indicating whether or not approval for loading and unloading 
+aground is necessary.
+*)
+  approval_required_loading_unloading_grabs : BOOLEAN;
+(*
+a flag indicating whether or not approval for loading and unloading 
+using grabs is necessary.
+*)
+  approval_required_for_heavy_cargo : OPTIONAL Heavy_cargo;
+(*
+a flag indicating whether or not approval for special strengthening for 
+heavy <Cargo>s is necessary. These notations are valid for bulk 
+carriers to indicate the 
+distribution of loads across the cargo holds.
+*)
+ END_ENTITY;
+
+
+
+ ENTITY Regulation;
+(*
+specifies the set of all international and national 
+regulations as well as standards which apply to the <Ship>.
+*)
+  international_regulations : SET [0:?] OF External_reference;
+(*
+all relevant international regulations that apply to the <Ship>.
+*)
+  national_regulations : SET [0:?] OF External_reference;
+(*
+all relevant national regulations that apply to the <Ship>.
+*)
+  standards : SET [0:?] OF External_reference;
+(*
+all relevant standards that apply to the <Ship>.
+*)
+ END_ENTITY;
+
+
+
+ ENTITY Class_parameters
+  SUBTYPE OF (
+   General_characteristics_definition
+  );
+(*
+<Class_parameters> specify the length and speed of the ship in 
+accordance with Classification Society rules and statutory regulations.
+*)
+  length_class : Length_measure;
+(*
+a length measurement for the ship that is defined in Classification 
+Society Rules.
+*)
+  length_solas : Length_measure;
+(*
+a length measurement for the ship measured in accordance with the 
+International Convention on the Safety of Life at Sea.
+*)
+  scantlings_draught : Length_measure;
+(*
+the summer load draught used by the Classification Society in its 
+calculations for structural integrity and strength.
+*)
+  block_coefficient_class : Ratio_measure;
+(*
+the ratio of the moulded displacement volume to the volume of a block 
+that has its length equal to the <length_class>, its breadth equal to 
+the <moulded_breadth> and its depth equal to the <scantlings_draught>.
+*)
+  design_speed_ahead : Speed_measure;
+(*
+the forward speed at which the ship is designed to operate.
+*)
+  design_speed_astern : Speed_measure;
+(*
+the reverse speed at which the ship is designed to operate.
+
+ NOTE:
+froude_number : Ratio_measure := design_speed_ahead / (SQRT(9.81 * 
+length_class));
+
+a parameter of significance to the resistance and propulsion 
+calculations of a ship. The Froude number is a nondimensional parameter 
+which is defined by dividing the ship speed in meter per second by the 
+square root of the product of the length of the ship in meter and the 
+gravitational acceleration in meter per square second. In the DERIVE 
+clause the <design_speed_ahead> for the ship speed and the 
+<length_class> for the length of the ship are used.
+END_NOTE
+*)
+ END_ENTITY;
+
+ ENTITY Principal_characteristics
+  SUBTYPE OF (
+   General_characteristics_definition
+  );
+(*
+<Principal_characteristics> specify the main shape parameters of the 
+hull moulded form. <Principal_characteristics> also include data that 
+is required in subsequent iterations of the hull development process 
+when one is considering hydrostatics.
+*)
+  length_between_perpendiculars : Length_measure;
+(*
+the length measured from the after perpendicular to the forward 
+perpendicular of the ship.
+*)
+  moulded_breadth : Length_measure;
+(*
+the maximum breath of the ship amidships and at the <design_draught>.
+*)
+  moulded_depth : Length_measure;
+(*
+the vertical distance above the baseline to the uppermost deck where 
+the deck joins the side of the ship measured amidships.
+*)
+  design_draught : OPTIONAL Length_measure;
+(*
+the draught to which the ship has been designed to operate.
+*)
+  block_coefficient : OPTIONAL Ratio_measure;
+(*
+the ratio of the moulded displacement volume to the volume of a block 
+that has its length equal to the <length_between_perpendiculars>, its 
+breadth equal to the maximum immersed <moulded_breadth> and its depth 
+equal to the <design_draught>. The <block_coefficient> should be 
+defined only for mono hull ships.
+*)
+  design_deadweight : OPTIONAL Mass_measure;
+(*
+the weight of the ship representing the weight of cargo, bunker fuel, 
+water, passengers, crew and consumables which a ship can carry when 
+loaded to the summer load line.
+*)
+  min_draught_at_FP : OPTIONAL Length_measure;
+(*
+the minimum possible draught at the Forward Perpendicular during the 
+operation of the ship. The <min_draught_at_FP> is used for hull cross 
+section approval for ice class notation.
+*)
+  max_draught_at_FP : OPTIONAL Length_measure;
+(*
+the maximum possible draught at the Forward Perpendicular during the 
+operation of the ship. The <max_draught_at_FP> is used for hull cross 
+section approval for ice class notation.
+*)
+  min_draught_at_AP : OPTIONAL Length_measure;
+(*
+the minimum possible draught at the Aft Perpendicular during the 
+operation of the ship. The <min_draught_at_AP> is used for hull cross 
+section approval for ice class notation.
+*)
+  max_draught_at_AP : OPTIONAL Length_measure;
+(*
+the maximum possible draught at the Aft Perpendicular during the 
+operation of the ship. The <max_draught_at_AP> is used for hull cross 
+section approval for ice class notation.
+*)
+END_ENTITY;
+
+
+
+ENTITY Freeboard_characteristics
+  SUBTYPE of (General_characteristics_definition);
+(* gives details of the assignment of freeboard for a ship.
+ *)
+        date_freeboard_assigned  : Date_and_time;
+(* the date and time the freeboard is assigned.
+ *)
+        freeboard_assigned_by : Organization;
+(* the organization which made the freeboard assignment.
+ *)
+        assigned_code         : Freeboard_type;
+(* the type of loadline according to ship type.  These are defined fully in the
+   International Convention on Load Lines, 1966:  Regulation 27.
+ *)
+        freeboard             : Length_measure;
+(* the assigned freeboard, which is the difference 
+   between the actual depth at side including the thickness of the
+   stringer plate and wooden deck sheathing, if fitted, and the
+   summer load draught.
+ *)
+        applicable_loadline   : Loadline ;
+ (* the resulting <loadline> for the assigned freeboard. *)
+END_ENTITY;
+
+
+
+ENTITY Space
+  ABSTRACT SUPERTYPE OF (ONEOF (
+                       Compartment, Deck_zone,
+                       Zone))
+  SUBTYPE OF (Item);
+(* is a defined volume or area on board a <Ship>. A <Space> may have a functional
+   definitions, design definitions, manufacturing definitions, and 
+   product structure definitions relating applicable properties to the
+<Space>.
+*)
+END_ENTITY;
+
+
+
+ENTITY Zone
+  SUBTYPE OF (Space);
+     (* represents an abstract bounded volume identifying a region of a
+        <Ship> with unique requirements or characteristics that must be
+        specially treated in the design	and manufacturing processes.
+     *)
+END_ENTITY;
+
+
+
+ENTITY Deck_zone
+  SUBTYPE OF (Space);
+     (* identifies a bounded region of a deck with design requirements or
+characteristics
+     that must be managed in the design process.  
+     *)
+END_ENTITY;
+
+
+
+ENTITY Zone_functional_definition
+  SUBTYPE OF (Functional_definition);
+      (* defines the functional role of a <Zone>;  the role may be a
+	 pre-defined one or may be user-defined.
+      *)
+SELF\Definition.defined_for: SET [1:?] OF Zone;
+      (* redefinition of the defined_for attribute; a
+      <Zone_functional_definition> is only valid for a <Zone>.
+      *)
+     
+ used_for: Pre_defined_zone_function;
+      (* the name of a function that a specific <Zone> may have in a
+	<Ship>.
+      *)
+  WHERE
+    W1 : (NOT EXISTS(SELF.user_def_function)) OR
+         (used_for = Pre_defined_zone_function.user_defined);
+(* attribute <user_def_function> shall only be set if the
+<Pre_defined_zone_function> has a value of <user_defined>.
+*)
+END_ENTITY;
+
+
+
+ENTITY Deck_zone_functional_definition
+  SUBTYPE OF (Functional_definition);
+      (* defines the functional role of a <Deck_zone>;  the role may be a
+	 pre-defined one or may be user-defined.
+      *)
+SELF\Definition.defined_for: SET [1:?] OF Deck_zone;
+      (* redefinition of the defined_for attribute; a
+      <Deck_zone_functional_definition> is only valid for a <Deck_zone>.
+      *)
+     
+ used_for: Pre_defined_deck_zone_function;
+      (* the name of a function that a specific <Deck_zone> may have in a
+	<Ship>.
+      *)
+  WHERE
+    W1 : (NOT EXISTS(SELF.user_def_function)) OR
+         (used_for = Pre_defined_deck_zone_function.user_defined);
+(* attribute <user_def_function> shall only be set if the
+<Pre_defined_deck_zone_function> has a value of <user_defined>.
+*)
+END_ENTITY;
+
+
+
+ENTITY Compartment
+      SUBTYPE OF (Space);
+      (* is a physical subdivision of space on a <Ship>,
+         designed to hold dry or  liquid cargo, fuel, water, passengers,
+	 crew, machinery, equipment, etc.  Each <Compartment>  may have
+	 one or more functional definitions to specify the intended
+	 function(s) of the <Compartment>, as well as one or more design
+	 definitions, which specify the boundaries of the <Compartment>
+	 as well as its physical and geometric properties.
+      *)
+END_ENTITY;
+
+
+
+ENTITY Compartment_functional_definition
+  SUBTYPE OF (Functional_definition);
+      (*
+      defines the functional role of a <Compartment>;
+      the role may be a pre-defined one that corresponds to 
+      the intended use of the <Compartment> or may be a user-defined one.
+      *)
+SELF\Definition.defined_for: SET [1:?] OF Compartment;
+      (*
+      redefinition of the defined_for attribute; a
+      <Compartment_functional_definition> is only valid for a
+	<Compartment>.
+      *)
+      used_for: Pre_defined_compartment_function;
+       (*
+        the intended use of a <Compartment>.
+	The pre-defined functions correspond to either a general compartment
+	use, such as a cargo_compartment, or a specialized function such as
+	dry <Unit_cargo>.  The user_defined value allows identification of a
+	type not specified by one of the pre-defined values.
+  *)
+
+WHERE
+    WR1 : (NOT EXISTS(SELF.user_def_function)) OR
+         (used_for = Pre_defined_compartment_function.user_defined);
+        (* attribute <usr_def_function> shall only be set if the
+           <Pre_defined_compartment_function>
+           is <user_defined>.
+        *)
+END_ENTITY;
+
+
+ENTITY Non_manifold_surface_shape;
+(*a shape representation which conforms to 10303-508.*)
+END_ENTITY;
+
+
+
+ENTITY Compartment_design_requirement
+  SUBTYPE OF(Design_requirement);
+        (*defines a type of specification that represents a constraint
+        placed on a design.
+
+	NOTE: These requirements could be in the form of a reference
+	to a set of rules or formula, such as Design Specifications,
+  	Classification Society Rules, Welding Society Rules, etc. or it
+	may be an explicit requirement, such as an electrical requirement
+	for 110 volt power, an HVAC requirement for operating tempuratures
+	in the range of 50 degrees to 90 degrees Farenheit, etc.
+	END_NOTE
+  	*)
+  requirement_type   : Compartment_design_requirement_type;
+        (*an indicator used to denote the source placing the design
+	requirement on the <Space>. The source identifies the discipline or
+	design function that governs some aspect of the design or
+	operation of the <Space>.
+   	*)
+
+   SELF\Versionable_object.description: Text;
+
+  	(*a textual description of the requirement that is to be met.
+  	*)
+
+      SELF\Definition.defined_for: SET [1:?] OF Space;
+
+      (* redefinition of the defined_for attribute: a
+      <Compartment_design_requirement> is only valid for a
+	<Space> or one of its subtypes, i.e., a <Compartment>
+	or <Zone>.
+      *)
+END_ENTITY;
+
+
+
+ENTITY Compartment_design_definition
+      SUBTYPE OF (Design_definition);
+      (*
+      defines a version of a <Compartment> from a design
+      perspective. 
+      *)
+
+      boundaries : SET OF Space_boundary;
+      (* <External_instance_reference>s to the ISO 10303-216 <Moulded_form>s
+	or ISO 10303-218 <Structural_system>s that bound the <Compartment>.
+      *)
+
+	properties : SET OF Compartment_property;
+	(* a collection of properties applicable to or derived from
+      the design of a <Compartment>.
+	*)
+
+      SELF\Design_definition.representations: SET OF
+		Compartment_shape_representation;
+      (* redefinition of the representation attribute;
+      a <Compartment_design_definition> shall only have
+	<Compartment_shape_representation>s.
+       *)
+
+      SELF\Definition.defined_for: SET [1:?] OF Compartment;
+
+      (* redefinition of the defined_for attribute; a
+      <Compartment_design_definition> is only valid for a
+	<Compartment>.
+      *)
+END_ENTITY;
+
+
+
+
+ENTITY Zone_design_definition
+      SUBTYPE OF (Design_definition);
+      (*
+      is the abstract definition of a version of a <Zone> from a design
+      perspective. 
+      *)
+
+      boundaries : SET OF Space_boundary;
+      (* <External_instance_reference>s to the ISO 10303-216 <Moulded_form>s
+	or ISO 10303-218 <Structural_system>s that bound the <Zone>.
+      *)
+
+	properties : SET OF Compartment_property;
+	(* a collection of properties applicable to or derived from
+      the design of a <Zone>.
+	*)
+
+      constituent_compartments: SET OF Compartments_in_zone;
+      (* the <Compartment>s, or portions of <Compartment>s, which consitute
+the <Zone>.  
+      *)
+
+      SELF\Design_definition.representations: SET OF
+	Compartment_shape_representation;
+      (*
+      redefinition of the representation attribute;
+      a <Zone_design_definition> shall only have <Compartment_shape_
+      representation>s.
+      *)
+
+    SELF\Definition.defined_for: SET [1:?] OF Zone;
+      (*
+         redefinition of the defined_for attribute: a
+         <Zone_design_definition> is only valid for a <Zone>.
+      *)
+END_ENTITY;
+
+
+
+ENTITY Deck_zone_design_definition
+      SUBTYPE OF (Design_definition);
+      (*
+      is the abstract definition of a version of a <Deck_zone> from a design
+      perspective. 
+      *)
+
+      outer_boundary : OPTIONAL Bounded_curve;
+      (* Closed curve which specifies the outer boundary the <Deck_zone>.
+      *)
+ 	
+      inner_boundaries : SET OF Bounded_curve;
+      (* Closed curves which specify any internal voids in the <Deck_zone>.
+      *)
+
+      deck_for_zone:  Deck_reference;
+	
+	(* <External_instance_reference> to the ISO 10303-216 <Moulded_form>
+
+	or ISO 10303-218 <Structural_system> that is the deck on which the 
+      <Deck_zone> is defined.*)
+
+	properties : SET OF Compartment_property;
+	(* a collection of properties applicable to or derived from
+      the design of a <Zone>.
+	*)
+
+      constituent_compartments: SET OF Compartments_in_zone;
+      (* the <Compartment>s, or portions of <Compartment>s, which consitute
+the <Zone>.  
+      *)
+
+      SELF\Design_definition.representations: SET OF
+	Compartment_shape_representation;
+      (*
+      redefinition of the representation attribute;
+      a <Deck_zone_design_definition> shall only have <Compartment_shape_
+      representation>s.
+      *)
+
+    SELF\Definition.defined_for: SET [1:?] OF Deck_zone;
+      (*
+         redefinition of the defined_for attribute: a
+         <Deck_zone_design_definition> is only valid for a <Deck_zone>.
+      *)
+END_ENTITY;
+
+
+
+
+ENTITY Cargo_bay_definition
+      SUBTYPE OF (Definition);
+        (* represents a grid of positions within a <Compartment> that are
+used
+        to specify the location of placement of <Cargo> within that
+	<Compartment>.
+        *)
+     	cargo_positions : SET [1:?] OF Spacing_table;
+        (* a set of <Spacing_table>s, which may be either
+<Longitudinal_table>, 
+           <Transversal_table>, or a <Vertical_table>. These tables each
+provide a 
+           set of <Spacing_position>s, (constrained in orientation) to
+locate 
+           <Cargo> within <Space>s.
+        *)
+     	SELF\Definition.defined_for: SET [1:?] OF Compartment;
+        (* redefinition of the defined_for attribute; a
+           <Cargo_bay_definition> is only valid for a <Compartment>.
+	*)
+END_ENTITY;
+
+
+
+ENTITY Compartment_property
+  ABSTRACT SUPERTYPE OF (ONEOF (
+                       General_compartment_property,
+                       Compartment_naval_administrative_property,
+                       Cargo_compartment_property,
+                       Tank_compartment_property));
+  (*
+    is a collection of properties for a <Compartment>. A property is a
+measure 
+    of some significant characteristic of a <Compartment> associated with a 
+    specific context. The contexts may be either maximum, minimum,
+estimated,
+    calculated, or measured.
+   *)
+     context : Compartment_property_context;
+        (* an indicator used to associate a design meaning with a
+<Compartment> property.
+           The maximum and minimum contexts serve to define the design
+limits for 
+           the property, while the estimated, calculated, and measured
+contexts 
+           associate a degree of accuracy for the property value.
+        *)
+END_ENTITY;
+
+
+
+ENTITY General_compartment_property
+  ABSTRACT SUPERTYPE OF (ONEOF(Compartment_volume_property,
+     Compartment_area_property, Compartment_volume_permeability_property,
+     Compartment_coating, Compartment_tightness, Compartment_occupancy,
+     Compartment_air_circulation_rate, Compartment_illumination, Compartment_abbreviated_name, Compartment_acceleration, Compartment_noise_category,  Compartment_insulation, Compartment_access_authorization))
+  SUBTYPE OF (Compartment_property);
+        (*
+	defines generic properties that are applicable to all types of
+<Compartment>s.
+        The types of properties that may be specified include information
+regarding
+        the area, volume, volume permeability, coating, tightness,
+occupancy, air 
+        circulation rate, and illumination data for a <Compartment>.
+        *)
+END_ENTITY;
+
+
+
+ENTITY Compartment_volume_property
+  SUBTYPE OF (General_compartment_property);
+   	(* describes the volumetric properties of a <Compartment>.
+   	*)
+      volume : Volume_measure;
+      	(*  the <volume> of a <Compartment>.
+	*)
+      centre_of_volume : Centre_location;
+      	(*  the <centre of volume> of a <Compartment> in relation to the
+          global coordinate system of the <Ship>.
+	*)
+END_ENTITY;
+
+
+
+ENTITY Compartment_area_property
+ABSTRACT SUPERTYPE OF (ONEOF (
+                       Compartment_vertical_longitudinal_cross_sectional_area_property,
+                       Compartment_vertical_transverse_cross_sectional_area_property,
+                       Compartment_horizontal_cross_sectional_area_property,
+                       Compartment_stiffened_surface_area_property,
+                       Compartment_unstiffened_surface_area_property))
+  SUBTYPE OF (General_compartment_property);
+             (* defines different types of area properties for a
+<Compartment>.*)
+END_ENTITY;
+
+
+
+ENTITY Compartment_vertical_longitudinal_cross_sectional_area_property
+  SUBTYPE OF (Compartment_area_property);
+        (*specifies a two dimensional cross-sectional area for a
+<Compartment>,
+	  required to accomodate design requirements on the <Compartment>,
+	  such as placement of equipment. 
+        *)
+       vertical_longitudinal_cross_sectional_area       : Area_measure;
+        (* an area measurement corresponding to a plane defined by the
+	   vertical and longitudinal axes.
+
+        NOTE:  Typically, this area is used to reserve space early in
+		the design process, such as the area needed
+        	for placement of a large piece of equipment.
+        END_NOTE
+        *)
+END_ENTITY;
+
+
+
+ENTITY Compartment_vertical_transverse_cross_sectional_area_property
+  SUBTYPE OF (Compartment_area_property);
+        (*specifies a two dimensional cross-sectional area for a
+<Compartment>,
+	  required to accomodate design requirements on the <Compartment>,
+	  such as placement of equipment. 
+        *)
+
+       vertical_transverse_cross_sectional_area         : Area_measure;
+        (* an area measurement corresponding to a plane defined by the
+	vertical and transverse axes.
+
+        NOTE:  Typically, this area is used to reserve space early in
+	the design process, such as the area needed for placement of a
+	large piece of equipment.
+        END_NOTE
+        *)
+END_ENTITY;
+
+
+
+ENTITY Compartment_horizontal_cross_sectional_area_property
+  SUBTYPE OF (Compartment_area_property);
+        (*represents a two dimensional cross-sectional area for a
+<Compartment>,
+	  required to accomodate design requirements on the <Compartment>,
+	  such as placement of equipment. 
+        *)
+       horizontal_cross_sectional_area                  : Area_measure;
+        (* an area measurement on a plane parallel to the baseline plane.
+
+        NOTE: Typically, the area is used to reserve space early in the
+	design process, such as the area needed for placement of a
+	propulsion system footprint (i.e., main engine, reduction gear,
+etc.).
+        END_NOTE
+        *)
+END_ENTITY;
+
+
+
+
+ENTITY Compartment_unstiffened_surface_area_property
+  SUBTYPE OF (Compartment_area_property);
+      (*is a measure of the amount of surface area for the <Compartment>
+excluding the
+	surface area of any interior stiffeners on the bulkheads, decks,
+	hull shell, etc.
+        
+	NOTE: the unstiffened_surface_area is used to estimate amount of
+	<Coating> materials to be applied to <Compartment> surfaces but not
+the
+	attached stiffeners, such as insulation.
+        END_NOTE
+	*)
+       unstiffened_surface_area                         : Area_measure;
+        (*the value of the unstiffened surface area. *)
+END_ENTITY;
+
+
+
+ENTITY Compartment_stiffened_surface_area_property
+  SUBTYPE OF (Compartment_area_property);
+      (*is a measure of the amount of surface area for the <Compartment>
+including the
+	surface area of any interior stiffeners on the bulkheads, decks,
+	hull shell, etc.
+        
+	NOTE: the stiffened_surface_area is used to estimate amount of
+	coating materials	to be applied to the <Compartment> surfaces
+and
+	the attached stiffeners, such as primer or paint.
+        END_NOTE
+	*)
+       stiffened_surface_area                           : Area_measure;
+        (*the value of the stiffened surface area. *)
+END_ENTITY;
+
+
+
+
+ENTITY Compartment_volume_permeability_property
+  SUBTYPE OF (General_compartment_property);
+        (* is a measure, expressed as a percentage of the volume of the
+<Compartment>
+           representing open space (i.e. not occupied by equipment,
+           structure, machinery, etc.) that would flood in the event the
+watertight
+           integrity of the <Space> was damaged.  This is a key parameter
+for the
+           damage stability calculations for a <Ship>.
+        *)
+      permeability : Percentage;
+      (* the percentage of the total volume of a <Compartment> that is not
+occupied
+	 by the <Ship> structure, systems, or permanently attached
+outfitting
+	 and furnishing objects.
+	*)
+END_ENTITY;
+
+
+
+
+ENTITY Compartment_coating
+  SUBTYPE OF (General_compartment_property);
+   (* specifies the type of painting or Coating required for a
+<Compartment>. *)
+      corrosion_protection              : Corrosion_protection;
+        (* a reference to the collection of properties for protecting
+	   <Compartment> internals and boundaries from corrosion.
+        *)
+END_ENTITY;
+
+
+
+
+ENTITY Corrosion_protection;
+        (*
+        describes properties for protecting
+        <Compartment> internals and boundaries from corrosion.
+        *)
+  coating_height        : Coating_level;
+        (*
+        the vertical range of the Coating of the <Compartment>.
+
+        EXAMPLE: A tank would be coated from 80 percent to 90 percent.
+        END_EXAMPLE
+        *)
+  coating_material      : Coating;
+        (* the material that is to be used to coat the metal making up
+        the <Compartment> boundaries.
+        *)
+  cathodic_protection : BOOLEAN;
+        (* flags whether cathodic corrosion protection is applicable or
+	not. *)
+END_ENTITY;
+
+
+
+ENTITY Coating_level;
+        (*
+        are used for expressing the extent of <Coating> in a <Compartment>.
+        *)
+  lower_extent : Percentage;
+        (*
+        the percentage of the height from the base of the <Compartment> to
+  	the lowest level of the <Coating>.
+        *)
+   upper_extent : Percentage;
+        (*
+        the percentage of the height from the base of the <Compartment> to
+	the highest level of the <Coating>.
+        *)
+END_ENTITY;
+
+
+
+
+ENTITY Compartment_tightness
+  SUBTYPE OF (General_compartment_property);
+ (* is an indicator as to the degree of tightness (i.e., the ability to
+prevent
+    the passage of air and liquid) required of all bulkheads forming the 
+    boundary of the <Compartment>.*)
+      required_bulkhead_tightness : Compartment_required_bulkhead_tightness;
+        (* an indicator of the ability to prevent the passage of air and
+	 liquid for all bulkheads forming the boundary of the <Compartment>.
+        *)
+     user_defined_value: OPTIONAL Label;
+      (* the description for the USER_DEFINED required_bulkhead_tightness.
+       *)
+END_ENTITY;
+
+
+
+ENTITY Compartment_occupancy
+  SUBTYPE OF (General_compartment_property);
+ (* specifies the design requirements for the number of people that are
+permitted to 
+    occupy a <Compartment>.*)
+     occupancy  : INTEGER;
+      (* the number of humans which are permitted to
+         occupy a <Compartment> simultaneously.
+	*)
+END_ENTITY;
+
+
+
+ENTITY Compartment_air_circulation_rate               
+  SUBTYPE OF (General_compartment_property);
+ (* defines the volume of air changes for the <Compartment> per unit of
+time.*)
+     air_circulation_rate          : airflow_volume_measure;
+     (* measure of the volume of air changes for the <Compartment> per unit
+of time.
+
+	NOTE: this value is used by applications performing HVAC load
+analyses.
+	END_NOTE
+     *)
+END_ENTITY;
+
+ 
+
+ENTITY Compartment_illumination           
+  SUBTYPE OF (General_compartment_property);
+ (* defines the lighting requirements for a <Compartment>. *)
+     illumination_value              : Luminous_intensity_measure;
+     (* amount of lighting required for a <Compartment>.
+
+	NOTE: this value is used by applications in performing lighting
+analysis.
+	END_NOTE
+
+     *)
+END_ENTITY;
+
+
+
+ENTITY Compartment_naval_administrative_property
+     ABSTRACT SUPERTYPE OF (ONEOF(Compartment_ziplist_number, 
+  Compartment_nuclear_classification, Compartment_safety_class,
+  Compartment_security_classification))
+  SUBTYPE OF (Compartment_property);
+        (* represents a collection of identification and <Compartment>
+design parameters that are applicable only to the design of naval
+vessels.*)
+END_ENTITY;
+
+
+
+ENTITY Compartment_abbreviated_name 
+  SUBTYPE OF (General_compartment_property);  
+ (* specifies a short, compact, efficient reference to a particular 
+    <Compartment> on a <Ship>. *)          
+     name               : Label;
+        (* a short, compact, efficient means of referring to a
+           particular <Compartment> on a <Ship>.  The abbreviated 
+           name may or may not have an embedded meaning.
+
+        NOTE: In Naval vessels, abbreviated names are commonly used and
+        are encoded such that they indicate the type of cargo, and the
+vertical,
+        transverse, and longitudinal position.
+        END_NOTE
+
+        EXAMPLE: The abbreviation of 6-55-1-F for the freshwater tank above
+the
+        6th deck, beginning at frame 55, and located on the starboard side.
+        END_EXAMPLE
+        *)
+END_ENTITY;
+
+  
+
+ENTITY Compartment_ziplist_number           
+  SUBTYPE OF (Compartment_naval_administrative_property);  
+   (* specifies an organization-specific identifier used for departmental or
+divisional
+      control over a <Compartment> during an overhaul or repair
+availability.*)          
+     department_ziplist_number          : Text;
+        (* an organization-specific identifier used for departmental
+           control over the <Compartment> during an overhaul or repair
+availability.
+        *)
+     division_ziplist_number            : Text;
+        (* an organization-specific identifier used for departmental or
+division 
+	   control over the <Compartment> during an overhaul or repair
+availability.
+        *)
+END_ENTITY;
+
+
+
+ENTITY Compartment_acceleration
+  SUBTYPE OF (General_compartment_property);     
+ (* is the acceleration of gravity of the <Compartment> while the <Ship> is
+underway. *)       
+     acceleration_g_force        : REAL;
+        (* a measure of the allowable acceleration force,
+           expressed as a ratio compared to the acceleration of gravity,
+allowed for a
+           <Compartment>. This force is represented as a single value and
+governs the
+           accelerations in all three principal directions (e.g. vertical,
+longitudinal,
+           and transverse).
+
+        EXAMPLE:  A value of 1.5 would represent 1.5 times the acceleration
+	 of gravity (9.81 metres per second per second), or 14.72 metres
+	 per second per second.
+        END_EXAMPLE
+        *)
+END_ENTITY;
+
+
+
+ENTITY Compartment_nuclear_classification  
+  SUBTYPE OF (Compartment_naval_administrative_property);  
+ (* specifies whether a Compartment is designated as containing
+    nuclear reactors or is used for storage or repair of nuclear weapons; 
+    otherwise the Compartment is classified as non-nuclear.*)          
+     nuclear_classification             : Naval_nuclear_classification;
+        (* an indicator used to denote whether the <Compartment> is
+	   designated a nuclear or non-nuclear <Space>. This designation
+applies to <Space>s
+	   specifically designed to contain such things as nuclear reactors
+as well as <Space>s
+	   used for the storage or repair of nuclear weapons.
+	*)
+END_ENTITY;
+
+
+
+ENTITY Compartment_noise_category                     
+  SUBTYPE OF (General_compartment_property);  
+  (* defines the design requirements for the internal level of sound of a
+<Compartment>.*)          
+     noise_category                     : Noise_category;
+        (* a single alphabetical character key used to denote whether
+	special consideration is to be given to the <Compartment> with
+respect
+	to the internal level of sound.
+	*)
+     user_defined_value: OPTIONAL Label;
+      (* the description for the USER_DEFINED noise_category.
+       *)
+END_ENTITY;
+
+
+
+ENTITY Compartment_insulation
+  SUBTYPE OF (General_compartment_property);
+  (* identifies the type of thermal insulation required for a
+<Compartment>.*)            
+     insulation_category                : Insulation_category;
+      (* an indicator used to denote what type of thermal insulation is
+         to be applied to compartment boundaries to reduce the rate of heat 
+         transfer to or from heated, ventilated, and air-conditioned spaces;
+
+         to reduce condensation; and to retard excessive temperature rise in
+
+         the event of fire in adjacent spaces. Thermal insulation may be
+installed
+         in conjunction with antisweat treatments to reduce condensation, 
+         and to serve as a vapor barrier to prevent the insulation from 
+         absorbing condensation.*)
+     user_defined_value: OPTIONAL Label;
+      (* the description for the USER_DEFINED insulation_category.
+       *)
+END_ENTITY;
+
+
+
+ENTITY Compartment_access_authorization
+  SUBTYPE OF (General_compartment_property);      
+ (* is an indication of a limit on allowed accessibility to a <Compartment>
+     based on naval rank.*)      
+     authorization_classification : Authorization_classification;
+      (* a type of crew restriction placed on the use of the
+	<Compartment>.
+	*)
+     user_defined_value: OPTIONAL Label;
+      (* classification for the case of authorization_classification
+         specified as USER_DEFINED.
+       *)
+END_ENTITY;
+
+
+
+ENTITY Compartment_safety_class
+  SUBTYPE OF (Compartment_naval_administrative_property);      
+ (* specifies the safety classification of a <Compartment> with regards to a
+    hazardous working environment for humans.*)      
+     safety_category                    : Naval_safety_category;
+      (* an indicator used to denote special consideration for the
+	<Compartment> with regard to a hazardous working environment for
+humans.
+*)
+     user_defined_value: OPTIONAL Label;
+      (* the description for the USER_DEFINED safety_category.
+       *)
+END_ENTITY;
+
+
+
+ENTITY Compartment_security_classification
+  SUBTYPE OF (Compartment_naval_administrative_property);   
+(* specifies the security requirements of a <Compartment> with regards
+   to personnel accessibility and security clearances.*)         
+     security_classification            : Naval_security_classification;
+      (* an indicator used to denote special considerations for the
+	<Compartment> with respect to accessibility and security clearances.
+*)
+     user_defined_value: OPTIONAL Label;
+      (* the description for the USER_DEFINED security_classification.
+       *)
+END_ENTITY;
+
+
+
+ENTITY Cargo_compartment_property
+      SUBTYPE OF (Compartment_property);
+      (* describes properties for <Cargo> capacities and <Cargo> 
+         densities for which the cargo <Compartment> is designed.
+      *)
+      bulk_cargo_capacity               : OPTIONAL Capacity_properties;
+        (* volumetric characteristic of a cargo <Compartment>.
+        *)
+      design_stowage_density            : Density_measure;
+      (* the measure of the quantity per unit volume of the <Bulk_cargo>
+         for which the cargo <Compartment> is designed.
+      *)
+END_ENTITY;
+
+
+
+ENTITY Tank_compartment_property
+      SUBTYPE OF (Compartment_property);
+      (* specifies properties for <Compartment>s designated for carrying
+fluid <Cargo>
+	 such as oil or fuel.
+      *)
+
+     moments_of_inertia                 : Moments_of_inertia;
+        (* the inertial resistance to motion of a fluid <Cargo> in the tank.
+        *)
+     liquid_capacity                    : SET OF Capacity_properties;
+        (* volumetric characteristics of a tank <Compartment>.
+        *)
+     design_stowage_density             : Density_measure;
+     (* the measure of the quantity per unit volume of the <Liquid_cargo>
+	for which the tank <Compartment> is designed.
+     *)
+     geometric_parameters               : OPTIONAL
+Tank_geometric_parameters;
+        (* geometric properties of the tank <Compartment> used for
+	analysis of fluid <Cargo> sloshing.
+        *)
+     design_properties                  : OPTIONAL
+			Tank_piping_design_properties;
+        (* properties of the tank required for the design of piping
+	systems supplying the tank.
+        *)
+END_ENTITY;
+
+
+
+
+ENTITY Tank_piping_design_properties;
+        (* is a collection of piping properties applicable to a Tank
+compartment
+ that provide requirements for the design of the applicable piping system.
+        *)
+      sounding_pipe_height      : OPTIONAL Length_measure;
+      (*  the height of a sounding pipe.
+      *)
+      airpipe_height            :  OPTIONAL Length_measure;
+      (*  height from the base line to the top of the air pipe, if any.
+      *)
+      relief_valve_pressure_setting     : OPTIONAL Pressure_measure;
+      (* the opening pressure of the relief valve.
+      *)
+      filling_height            : OPTIONAL Length_measure;
+      (* the maximum height for filling of the tank <Compartment>.
+      *)
+END_ENTITY;
+
+
+
+ENTITY Tank_geometric_parameters;
+      (* is the geometric properties of the tank <Compartment> used for
+analysis
+	of fluid <Cargo> sloshing.
+        *)
+  length_wash : OPTIONAL Length_measure;
+      (* length between effective wash bulkheads at the height of the
+	load point.
+	*)
+  breadth_wash: OPTIONAL Length_measure;
+      (* breadth between effective wash bulkheads at the height of the
+	load point.
+	*)
+END_ENTITY;
+
+
+
+ENTITY Capacity_properties;
+	(* is a measure of volumetric characteristics of a tank or cargo
+	type of <Compartment> computed at some specific combination of
+level,
+	trim, and heel angle. The level represents the imaginary planar
+	surface at the <Cargo> to non-<Cargo> interface and is relative to a
+	capacity level origin established for the <Compartment>.  The
+attitude
+	of the plane is adjusted to coincide with a vector having a
+	magnitude equal to the level and a direction reflecting the vessel's
+	heel and trim.  A <Compartment> may have any number of combinations
+	of capacity values, each having a different value for
+capacity_context.
+	*)
+     capacity_level_origin                      : Centre_location;
+     (* the point associated with a tank or cargo_type of <Comparment>
+	that represents the vertical reference for measuring the capacity
+	depth levels corresponding to a set of <Compartment> capacities.
+     	It may be chosen to represent the bottom of the <Compartment>, the
+	bottom of the sounding tube, or any other convenient location.
+     *)
+     capacity_centre                            : Centre_location;
+     (* the position of the volumetric centre of the interior region of
+	space formed by the <Compartment> boundaries and the imaginary
+	plane representing the <Cargo> to non-<Cargo> interface.
+     *)
+     capacity_level                             : Length_measure;
+     (* the distance between the bottom of the <Compartment> expressed as
+the
+     	capacity_level_origin and the top of an imaginary plane
+	representing the <Cargo> to non-<Cargo> interface.  It is measured
+along
+	a vector offset from the vertical to reflect the capacity heel
+	angle and the capacity trim angle.
+     *)
+     capacity_trim_angle                        : Plane_angle_measure;
+     (* the amount of rotation about the transverse axis of the <Ship>
+	that has been factored into the capacity calculation for the plane
+	representing the interface between the <Cargo> and non-<Cargo>
+regions
+	of the <Compartment>.
+     *)
+     capacity_heel_angle                        : Plane_angle_measure;
+     (* the amount of rotation about the longitudinal axis of the <Ship>
+that has
+	been factored into the capacity calculation for the plane
+	representing the interface between the <Cargo> and non-<Cargo>
+	regions of the <Compartment>.
+     *)
+     capacity_volume                            : Volume_measure;
+     (*  the enclosed volumetric measurement of the interior region of
+	space formed by the <Compartment> and the imaginary plane
+representing
+	the <Cargo> to non-<Cargo> interface.
+     *)
+     capacity_context                           : Capacity_context;
+     (*  the values representing the significant capacity states.
+     *)
+     user_defined_capacity_context: OPTIONAL Label;
+      (* capacity context of the user_defined_value.
+       *)
+END_ENTITY;
+
+
+
+ENTITY Moments_of_inertia;
+        (* is the values of the area moments of the boundary formed by the
+	 intersection of the <Compartment> and a plane representing the
+	 <Cargo> to non-<Cargo> interface.
+        *)
+      long_moment_of_inertia : Inertia_moment_measure;
+      (*   represents the value of the
+          second moment of the boundary formed by the intersection of the
+          <Compartment> and a plane representing the <Cargo> interface
+(i.e.,
+          <Liquid_cargo> static waterline). The lever of the moment is
+          parallel to the longitudinal axis of the <Ship>.
+	*)
+      trans_moment_of_inertia : Inertia_moment_measure;
+      (*   represents the value of the
+          second moment of the boundary formed by the intersection of the
+          <Compartment> and a plane representing the <Cargo> interface
+(i.e.,
+          <Liquid_cargo> static waterline). The lever of the moment is
+          parallel to the transverse axis of the <Ship>.
+	*)
+END_ENTITY;
+
+
+
+   ENTITY Space_product_structure
+      SUBTYPE OF (Item, Item_structure);
+    (*
+	serves as a collection of External_instance_references to <Item>s
+	that are contained within a <Compartment> or <Zone>.  
+	It may be defined to consist of references to <Item>s from any one or more
+        disciplines. Alternatively, the Space_product_structure may contain
+	Compartment Items to define a graph of Spaces.
+     *)
+
+	contained_in: Space;
+    (* the <Space> that all <Items> are contained within.
+
+	EXAMPLE: In the case of a Space_Product_structure used to reference all of the 
+        part Items contained in a Space, the contained_in would be the appropriate Compartment Item.
+	In the case of a Space_product_structure used to define a structure of Compartments,
+        the contained_in would be a Zone Item, such as a design zone or arrangement zone representing
+        the compartment and access drawing for a deck of the Ship.
+	END_EXAMPLE
+     *)
+	product_structure_type:	Space_product_structure_type;
+     (* whether the Product Structure identifies the items in a single compartment,
+	or the compartments in a compartment arrangement.
+     *)
+   WHERE
+      WR1: SIZEOF (SELF.relationships) = 0;
+     (* This subtype of <Item_structure> shall not reference any
+        <Item_relationship>s. *)
+      WR2: SIZEOF (SELF.external_relationships) = 0;
+     (* This subtype of <Item_structure> shall not have any
+        <external_relationships>. *)
+
+   END_ENTITY;
+
+
+
+ENTITY Space_product_structure_revision
+       SUBTYPE OF (Revision_with_context);
+	(* relates the versions of <Item>s in a <Space_product_structure>
+	 to a particular version of the <Space_product_structure>.
+         NOTE: the versions of Items are related through a particular 
+         <Design_definition> for each Item in the Item_structure.external_items
+	 or .items attributes.
+         END_NOTE
+	*)
+	SELF\Revision.members : SET [1:?] OF Design_definition;
+        (* the <Design_definition>s that are related to the
+           Space_product_structure_revision.
+        *)
+	SELF\Revision_with_context.context_of_revision :
+Space_product_structure;
+        (* the <Space_product_structure> for which the <Revision>
+          is defined. 
+        *)
+
+END_ENTITY;
+
+ 
+
+
+ENTITY Adjacent_space_surface_area;
+  (*is the area of that portion of the boundary between adjacent <Space>s
+  that is common to both <Space>s.
+
+  EXAMPLE:  two compartments are divided by a longitudinal bulkhead 8 ft
+  high. One compartment is 10 ft wide and the other is 6 ft wide. The
+  adjacent_space_surface_area would be 48 square feet (8 ft x 6 ft).
+  END_EXAMPLE
+  *)
+      surface_area      : Area_measure;
+  (* the area measure of shared boundary between the adjacent <Space>s.
+  *)
+END_ENTITY;
+
+
+
+ENTITY Space_adjacency_relationship
+  SUBTYPE OF (Space_arrangement_relationship);
+  (*identifies <Space>s that share a common boundary.  These <Space>s 
+    may or may not be accessible from one another and may share all or a
+portion
+    of a boundary.
+  *)
+
+  adjacency_type                : Space_adjacency_type;
+  (*whether the two adjacent <Space>s are completely or partially adjacent.
+*)
+
+
+  adjacency_access              : Boolean;
+  (*that it is or is not intended to provide a means to allow passage of
+    a person between the two adjacent <Space>s.  A value of YES specifies
+the
+    design intent of accessibility.
+  *)
+  adjacent_space_surface_area   : Adjacent_space_surface_area;
+  (* the area of that portion of the boundary between adjacent <Space>s
+  that is common to both <Space>s.
+  *)
+END_ENTITY;
+
+
+
+ENTITY Space_enclosing_relationship
+  SUBTYPE OF (Space_arrangement_relationship);
+  (*identifies a <Space> that is contained within another <Space>.
+
+    The two spaces may share one or more boundaries, or a portion of a
+boundary.
+
+ EXAMPLE: a lube oil storage tank mounted on a foundation within the main
+engine room.
+ END_EXAMPLE
+  *)
+  SELF\Item_relationship.item_1         : Space;
+         (* The Space that is enclosed within the item_2 Space
+         *)
+
+  SELF\Item_relationship.item_2         : Space;
+         (* The Space that contains the item_1 Space.
+         *)
+
+END_ENTITY;
+
+
+
+
+ENTITY Space_positional_relationship
+  SUBTYPE OF (Space_arrangement_relationship);
+  (*identifies <Space>s whose position is dependent upon another <Space>.  A
+variety of
+    positional relationship types are supported that serve to define the
+significant
+    aspects of the relationship.
+  *)
+
+  relationship_type     : Positional_relationship_type;
+  (*an indicator as to the kind of <Space> positional relationship
+expressed.
+  The relationship is defined in terms of topological aspects of the two
+related
+  <Space>s. *)
+
+END_ENTITY;
+
+
+
+ENTITY Space_connection_relationship
+  SUBTYPE OF (Space_arrangement_relationship);
+  (*identifies <Space>s that are intended to be interconnected in some way.
+
+  EXAMPLE:  two tanks may be interconnected by a piping system to allow the
+  transfer of ballast water between the tanks.
+  END_EXAMPLE
+  *)
+
+  connecting_system     : System_reference;
+  (*the identification of the system that connects the two <Spaces> through
+the 
+   use of an External_instance_reference to a System in another AP, or a
+Label.
+  *)
+END_ENTITY;
+
+
+
+
+ENTITY Space_arrangement_relationship
+  ABSTRACT SUPERTYPE OF (ONEOF (
+                       Space_enclosing_relationship,
+                       Space_adjacency_relationship,
+                       Space_connection_relationship,
+                       Space_positional_relationship))
+  SUBTYPE OF (Item_relationship);
+  (*represents an association between two <Space>s. The collection of the
+set
+    of any particular category of relationships defines a network of 
+    inter-related <Space>s.
+*)
+  SELF\Item_relationship.item_1         : Space;
+         (* redeclaration of the first items attribute inherited from
+            <Item_relationship> in order to constrain it to be a
+            type of <Space>.
+         *)
+
+  SELF\Item_relationship.item_2         : Space;
+         (* redeclaration of the second item attribute inherited from
+            <Item_relationship> in order to constrain it to be a type of
+            <Space>.
+         *)
+
+END_ENTITY;
+
+     
+
+
+ENTITY Coating
+   ABSTRACT SUPERTYPE OF (ONEOF (	Corrosion_control_coating,
+						Primer_coating,
+						Fire_safe_coating));
+(* is the definition of the protective coating applied to the <Ship> 
+structure to
+   protect it from corrosion from water or liquid <Cargo>s. *)
+     name : Label;
+     (*the trade name of the <Coating>. *)
+     manufacturer : Organization;
+     (*the company that makes the <Coating>. *)
+     description: Text;
+     (*a brief description of the <Coating>. *)
+     certification : SET [0:?] OF Coating_certification ;
+     (*whether the <Coating>, and all the
+         given attributes, has been certified for the specified use
+         by an <organization>.
+         EXAMPLE: An Organization such as a Classification Society can 
+issue a <Coating_certification>.
+         END_EXAMPLE *)
+     surface_preparation : Surface_preparation ;
+     (* the codes used for the grade of preparation required for steel 
+surfaces
+         prior to application of <Coating>.  These are defined in ISO 
+8501-1.
+ *)
+     dry_film_thickness : Length_measure;
+     (*the thickness of the <Coating> film. *)
+     number_of_coats : INTEGER;
+     (*the number of coats which must be applied to the surface.  *) 
+END_ENTITY;
+
+
+
+ENTITY Coating_certification;
+     (* identifies the <organization> and time limit on
+ the certification of a <Coating> for usage. *)
+     certifying_organization : Organization;
+     (*the <Organsation> that certified the <Coating> for use. *)
+     expiry_date : Date_and_time;
+     (*the time limit on the approval. *)
+END_ENTITY;
+
+
+
+ENTITY Corrosion_control_coating
+SUBTYPE OF (Coating);
+ (* is to be applied to a <Compartment> 
+     to prevent corrosion of the steel due to contact with the 
+enironmental 
+     elements or with a <Cargo>. *)
+     type_of : Coating_type;
+     (*the chemical compound used to coat the hull structure. *)
+     applicability : Coating_applicability;
+     (*the circumstances where the coating can be used. *)
+     primer : Primer_coating;
+     (*the <Primer_coating> that is required by the 
+<Corrosion_control_coating>. *)
+     user_defined_type : OPTIONAL Label;
+     (*a text description of the type of <Corrosion_control_coating>
+     if it is not one of the pre-defined types.
+     *) 
+  WHERE
+    WR1 : (NOT EXISTS(user_defined_type)) OR
+         (type_of = Coating_type.user_defined);
+	(* attribute <user_defined_type> shall only be set if the
+	<Coating_type> has a value of <user_defined>.
+      *)
+END_ENTITY;
+
+
+
+ENTITY Primer_coating
+SUBTYPE OF (Coating);
+ (* is used to coat steel after surface 
+      preparation and prior to fabrication, such that it has no 
+significant
+ deleterious effect on subsequent welding work. *)
+END_ENTITY;
+
+
+
+
+ENTITY Fire_safe_coating
+SUBTYPE OF (Coating);
+ (* is used on the structure to retard the spread of fire.*)
+     nitro_cellulose_based : BOOLEAN;
+     (*whether the <Coating> has a nitro-cellulose or other highly 
+inflammable base. *)
+     low_flame_spread : BOOLEAN;
+     (*whether the <Coating> has low flame spread characteristics, as 
+specified by BS476:Part7
+     or other equivalent standards. *)
+     primer : Primer_coating;
+     (*the <Primer_coating> that is required by the Fire_safe_coating. 
+*)
+END_ENTITY;
+
+
+
+ENTITY Bulk_cargo
+   SUBTYPE OF (Dry_cargo);
+     (*is solid <Cargo> that is not packed, but is carried loose.
+       EXAMPLE: grain or coal are bulk cargo.
+       END_EXAMPLE *)
+     natural_angle_of_repose : Plane_angle_measure;
+     (* the angle naturally subtended with the horizontal by the 
+        upper surface of the conic pile, made by the <Bulk_cargo> when 
+        loaded into a hold by a chute using gravity alone.*)
+     type_of : Bulk_cargo_type;
+     (* the type of <Bulk_cargo> that can be loaded into the <Ship>. 
+The standard Oxford English Dictionary definitions for the <Cargo> 
+types apply.*)
+  WHERE
+    WR1 : (NOT EXISTS(SELF.user_def_cargo)) OR
+         (type_of = Bulk_cargo_type.user_defined);
+(* attribute <user_def_cargo> shall only be set if the
+<Bulk_cargo_type> has a value of <user_defined>.
+*)
+END_ENTITY;
+
+
+
+ENTITY Cargo
+    ABSTRACT SUPERTYPE OF (ONEOF (
+                       Dry_cargo,
+                       Gaseous_cargo,
+                       Liquid_cargo));
+(*is any item of temporary nature loaded onboard a <Ship>
+for the purpose of being consumed during the voyage, used by the
+crew or passengers, transferred to another <Ship> while underway, or
+offloaded at one of the destination ports.  Cargo may be secured
+from shifting during the voyage, but is not permanently afixed to the
+<Ship>.
+*)
+     description : Label;
+     (* a free text description of the <Cargo>.*)
+     un_type_code : INTEGER;
+     (* the type of the <Cargo>.  This is the number relating to each
+        product as shown in the recommendations proposed by the United 
+Nations Committee of Experts on the Transport of Dangerous Goods, New 
+York, 1977, ST/SG/AC.10/1/Rev. 1. and used by the MARPOL and BCH 
+codes.*)
+     cargo_hazard : OPTIONAL Dangerous_goods_code ;
+     (*  the classification of the hazards associated with the 
+<Cargo>.*)
+         pollution_code : Pollution_codes ;
+     (*  the degree to which the <Cargo> will cause pollution of the 
+sea if released.  These are according to MARPOL 73-78, Annex II.*)
+     flash_point : OPTIONAL Thermodynamic_temperature_measure;
+     (*  the temperature at which the <Cargo> will spontaneously 
+combust.*)
+     required_carriage_temperature : OPTIONAL 
+Thermodynamic_temperature_measure;
+     (* the required temperature of the <Cargo> while it is stowed.*)
+     references : SET [0:?] OF Document_reference_with_address;
+     (* the <Document_reference>s that may be of relevance to the 
+carriage of the <Cargo>.
+        These may be material data sheets, technical specifications, or 
+additional
+        safety information.*)
+     material_properties : OPTIONAL General_cargo_material_properties;
+     (*  the physical properties of the material which makes up the 
+<Cargo> on the <Ship>.*)
+        user_def_cargo: OPTIONAL LABEL;
+ (* the type of cargo is not available in the pre-defined cargo lists at
+  the subtype level and is defined by the user using this attribute. *)
+END_ENTITY;
+
+
+
+ENTITY Cargo_footprint;
+(*      is the size and position of the area of contact of a <Cargo> 
+with the structure of the <Ship>.  *)
+     shape : Bounded_curve;
+     (*  the definition of the shape of the footprint. The footprint 
+bounding 
+         curve is relative to the local coordinate system.*)
+     transferred_mass : Mass_measure;
+ (* the mass of the <Cargo> that is transferred to the structure of the 
+<Ship> via the footprint.  *)
+     contact_material  : Contact_material_type;
+     (*  the type of material that is in contact with the structure of 
+the <Ship>.*)
+END_ENTITY;
+
+
+
+ENTITY General_cargo_material_properties
+   SUPERTYPE OF (
+              Detailed_cargo_material_properties);
+     (*  specifies the general physical properties associated with the 
+<Cargo>.*)
+     material_reference: OPTIONAL Document_reference_with_address;
+     (* any reference to a source where more specific information 
+        about a material is available. *)
+     description: OPTIONAL LABEL;
+      (* the name used for that material*)
+     density : OPTIONAL Density_measure;
+     (* the density of the <Cargo>.*)
+END_ENTITY;
+
+
+
+ENTITY Detailed_cargo_material_properties
+ SUBTYPE OF (General_cargo_material_properties);
+(*  specifies the detailed physical properties associated with the 
+<Cargo>.*)
+     viscosity : OPTIONAL Coefficient_of_viscosity;
+     (*  the kinematic viscosity of the <Liquid_cargo>.  When 
+multiplied by the Reynolds number, gives the fluid velocity over a 
+linear 
+dimension.*)
+     thermal_conductivity : OPTIONAL Thermal_conductivity_measure;
+     (*  the rate at which the <Cargo> will conduct heat.*)
+     specific_heat_capacity : OPTIONAL Specific_heat_capacity;
+     (*  the amount of energy required to raise the temperature of a 
+kilogram 
+         of <Cargo> material by 1 degree Centigrade.*)
+     expansion_coefficient : OPTIONAL Coefficient_of_thermal_expansion;
+     (*  the coefficient of volumetric thermal expansion. It is used to 
+define the relationship between expansion and temperature change of 
+the  <Cargo> material.*)
+END_ENTITY;
+
+
+
+ENTITY Dangerous_goods_code;
+(*  identifies the nature of the danger associated with the specific 
+<Cargo> as specified by the International Maritime Dangerous Goods code 
+and 
+the International Convention for the Safety of Life at Sea, 1974 
+Chapter VII, Part A.*)
+     class : Dangerous_goods_class ;
+     (*   the primary hazard class of the <Cargo>.*)
+     subsidiary_risks : SET [0:?] OF Dangerous_goods_class ;
+     (*  additional risks associated with the <Cargo>.*)
+END_ENTITY;
+
+
+
+ENTITY Dry_cargo
+  SUPERTYPE OF (ONEOF (
+              Bulk_cargo,
+              Unit_cargo))
+  SUBTYPE OF (Cargo);
+ (* is not in liquid or gaseous form. *)
+     permeability : OPTIONAL Ratio_measure;
+     (* the amount by which the <Cargo> takes up water.*)
+     stowage_factor : OPTIONAL Volume_measure;
+     (* The stowage_factor specifies the average specific volume for a dry cargo.  The stowage_factor need not be specified for a particular Dry_cargo.
+NOTE  The stowage_factor is usually expressed as the volume in cubic meters that is occupied by one metric ton of the cargo.
+*)
+END_ENTITY;
+
+
+
+ENTITY Gaseous_cargo
+   SUBTYPE OF (Cargo);
+     (*has a natural condition of a non-solid, non-liquid gaseous 
+state. *)
+     required_carriage_pressure : OPTIONAL Pressure_measure;
+     (* the required pressure of the <Compartment> in which the <Cargo> 
+is to be carried. The pressure is normally used to keep the gas in a 
+liquid state.
+However, it may also be used in association with an inerting gas. *)
+     cargo_type : OPTIONAL Gaseous_cargo_type ;
+     (* the type of <Gaseous_cargo> that can be loaded into the 
+<Ship>.*)
+     carried_in_liquid_state: BOOLEAN;
+     (* indicates whether the gas is transported as a liquid 
+(frequently the case) or not.*)
+  WHERE
+    W1 : (NOT EXISTS(SELF.user_def_cargo)) OR
+         (cargo_type = Gaseous_cargo_type.user_defined);
+(* attribute <user_def_cargo> shall only be set if the 
+<Gaseous_cargo_type> has a value of <user_defined>. *)
+
+END_ENTITY;
+
+
+
+ENTITY Liquid_cargo
+   SUBTYPE OF (Cargo);
+     (*whose natural condition is a non-solid, non-gaseous liquid 
+state. *)
+     required_carriage_pressure : OPTIONAL Pressure_measure;
+     (* the required pressure of the <Compartment> in which the <Cargo> 
+is to be carried. The pressure is used to prevent vapourisation of the 
+liquid.  
+*)
+     cargo_type : OPTIONAL Liquid_cargo_type ;
+     (* the type of <Liquid_cargo> that can be loaded into the <Ship>.*)
+  WHERE
+    W1 : (NOT EXISTS(SELF.user_def_cargo)) OR
+         (cargo_type = Liquid_cargo_type.user_defined);
+(* attribute <user_def_cargo> shall only be set if the 
+<Liquid_cargo_type> has a value of <user_defined>. *)
+END_ENTITY;
+
+
+
+ENTITY Unit_cargo_group;
+(* is a collector of <Unit_cargo>s that may be aggregated for use in 
+analysis. *)
+      cargo                       : OPTIONAL SET[1:?] OF unit_cargo;
+(* the set of <Cargo>s being grouped. This is restricted to the types 
+of <Unit_cargo>. *)
+      footprint                   : cargo_footprint;
+(* the combined area of space taken up by the group. *)
+      weight_and_centre_of_gravity : weight_and_centre_of_gravity;
+(* the combined weight of all the <Unit_cargo>s in the group. *)
+      volume                       : volume_measure;
+(* the combined volume of space taken up by the <Unit_cargo>s in the 
+group. *)
+END_ENTITY;
+
+
+
+
+ENTITY Person_group
+     SUBTYPE OF (Unit_cargo_group);
+(* is either of type passenger or a member of the crew.*)
+      person_type                  : passengers_or_crew;
+(* the role of the people in the group. *)
+      number_of_people             : INTEGER;
+(* the number of people in the group. *)
+  END_ENTITY;
+
+
+
+
+ENTITY Unit_cargo
+   SUBTYPE OF (Dry_cargo);
+     (* is <Cargo> that is packed or comprises discrete units that
+        can be loaded and stored individually on the <Ship>.*)
+     cargo_type           : OPTIONAL Unit_cargo_type;
+     (* the type of <Unit_cargo> that can be loaded into the <Ship>.*)
+     shape_description : OPTIONAL Shape_representation;
+     (*  the definition of the true shape of the <Unit_cargo>.*)
+     bounding_space    : OPTIONAL Bounding_box_representation;
+     (*  the description of the total space needed
+         for stowage of the <Unit_cargo>.  This may be the same as the
+         <shape_description> but may also include the surrounding space
+         required for inspection and maintenance.*)
+     footprints        : OPTIONAL SET [1:?] OF Cargo_footprint;
+     (*  the description of the areas of the <Unit_cargo>
+         that are in contact with the <Ship> deck or hanging point.
+         NOTE: there may be several footprints - e.g., a car has a 
+footprint for each wheel. 
+         END_NOTE *)
+     stack_limit       : OPTIONAL INTEGER;
+     (*  the maximum number of this type of
+         <Unit_cargo> that can be stacked on top of each other.*)
+     lashing_points    : SET [0:?] OF Cartesian_point;
+     (*  the points at which lashings are secured to the <Unit_cargo>.  
+These points are
+         specified in the local coordinate system of the <Unit_cargo>.*)
+     weight_and_centre_of_gravity : OPTIONAL 
+Weight_and_centre_of_gravity;
+     (*  the definition of the <Unit_cargo>s,
+         weight and centre of gravity with respect to that local
+         coordinate system, whose origin is at the base of the centre 
+of plane area of the <Cargo>.*)
+     volume            : OPTIONAL Volume_measure;
+     (*  the volume of the <Unit_cargo>.*)
+  WHERE
+    W1 : (NOT EXISTS(SELF.user_def_cargo)) OR
+         (cargo_type = Unit_cargo_type.user_defined);
+(* attribute <user_def_cargo> shall only be set if the 
+<Unit_cargo_type> has a value of <user_defined>.
+*)
+END_ENTITY;
+
+
+
+ENTITY Unit_cargo_bounding_box;
+(*
+is the cube circumscribing a <Unit_cargo>.
+It is defined by two cartesian points for opposite corners of the 
+bounding box. The edges of the cube are parallel to the coordinate axes.
+*)
+       point_min: Cartesian_point;
+(*
+the corner of the bounding box that has minimum coordinate values.
+*)
+       point_max: Cartesian_point;
+(*
+the opposite corner from the point_min that has maximum coordinate 
+values.
+*)
+
+END_ENTITY;
+
+
+	 
+ENTITY Absolute_cargo_position
+     SUBTYPE OF (Cargo_position);
+     (* is the position of a <Unit_cargo> in terms of a position 
+        in the global coordinate system of the <Ship>. *)
+        parent_coordinate_system: Global_axis_placement;
+        (* the parent co_ordinate system to which the unit cargo is 
+	placed (relatively). *)
+        position : Cartesian_point;
+        (* the location of the origin of the local coordinate system
+        of the <Unit_cargo> within the global coordinate system of
+        the <Ship>. *)
+        orientation : Plane_angle_measure;
+        (* the orientation of the <Unit_cargo>.  It specifies the angle 
+           between the X-axis of the local coordinate system of the
+           <Unit_cargo> and the X-axis of the global coordinate system
+           of the <Ship>, given that the Z-axes of the two coordinate
+           systems are parallel. The angle is positive if the rotation
+           of the <Unit_cargo> X-axis is in a counter-clockwise
+           direction with respect to the global X-axis of the <Ship>. *)
+END_ENTITY;
+
+
+
+ENTITY Bay_cell_position
+     SUBTYPE OF (Bay_position);
+     (* is the position of a <Unit_cargo> in terms of cargo bays in a 
+        <Ship>, <Compartment>, or on a deck. *)
+        row         : Longitudinal_position;
+        (* the longitudinal position of the bay within the bay 
+           definition. *)
+        bay_number  : Transversal_position;
+        (* the transverse position of the bay within the bay 
+           definition. *)
+        tier        : Vertical_position;
+        (* the vertical position of the bay within the bay definition. 
+         *)
+END_ENTITY;
+
+
+
+ENTITY Bulk_cargo_assignment
+     SUBTYPE OF (Compartment_cargo_assignment);
+     (* is a weight of <Bulk_cargo> that has been allocated and loaded 
+        into a <Compartment>. *)
+        actual_angle_of_repose : Plane_angle_measure;
+        (* the actual angle subtended with the horizontal by the upper 
+           surface of the conic pile, made by the <Bulk_cargo> when
+           loaded into a hold. *)
+        trimmed : BOOLEAN;
+        (* the natural pile of <Bulk_cargo> has been flattened and 
+           spread out to fill the <Compartment>. *)
+ cargo_height: Length_measure;
+        (* the actual height of the <Bulk_cargo> loaded. This should be 
+           taken as the highest point of the <Cargo> (top of the cone).
+         *)
+END_ENTITY;
+
+
+
+ENTITY Cargo_assignment
+     ABSTRACT SUPERTYPE OF (ONEOF (
+                       Compartment_cargo_assignment,
+                       Deck_cargo_assignment,
+                       Unit_cargo_assignment));
+     (* is the allocation  of a <Cargo> to a <Space> within a <Ship>. 
+      *) 
+        assignment_context : assignment_type;
+        (* the context for the loading of <Cargo> on the <Ship>. *)
+        allocated_weight : OPTIONAL Weight_and_centre_of_gravity;
+        (* the definition of the weight and centre of gravity of a 
+           <Compartment> or deck with respect to that local coordinate
+           system, whose origin is at the base of the centre plane
+           area of the <Cargo>.*)
+        cargo_identifier : Label;
+     (*  the label used to identify each <Cargo> instance. *)
+END_ENTITY;
+
+
+
+ENTITY Cargo_position
+     SUPERTYPE OF (ONEOF (
+              Absolute_cargo_position,
+              Bay_position,
+              Relative_cargo_position));
+     (* is the position of a <Unit_cargo> in terms of either the bays 
+        in a <Compartment> or on the deck of a <Ship> or by a <Ship> 
+        coordinate. *)
+END_ENTITY;
+
+
+
+ENTITY Relative_cargo_position
+     SUBTYPE OF (Cargo_position);
+     (* defines a relative position for the cargo in terms of the 
+longitudinal, transverse
+       and vertical axis in the global axis of the ship. *)
+      Longitudinal_location:   Longitudinal_position;
+     (* the longitudinal location of the unit_cargo. *)
+      Transverse_location:     Transversal_position;
+     (* the Transversal location of the unit_cargo. *)
+      Vertical_location:       Vertical_position;
+     (* the Transversal location of the unit_cargo. *)
+END_ENTITY;
+
+
+
+
+ENTITY Bay_position
+     SUPERTYPE OF (ONEOF (
+              Bay_cell_position,
+              Lane_position))
+  SUBTYPE OF (Cargo_position);
+     (* defines a bay as a vertical section of the <Ship>, in a 
+        transverse orientation, (from stem to stern),  that is one 
+        container-length wide but encompasses all those tiers and
+        rows in that section. *)
+        relating_to  : Cargo_bay_definition;
+        (*  the definition of the bay structure of the <Ship>. *)
+END_ENTITY;
+
+
+
+
+ENTITY Compartment_cargo_assignment
+        SUPERTYPE OF (ONEOF (
+              Bulk_cargo_assignment,
+              Liquid_cargo_assignment,
+		  Gaseous_cargo_assignment))
+  SUBTYPE OF (Cargo_assignment);
+        (* is the allocation of a <Cargo> to a <Compartment> or <Space> 
+           within a <Ship>. *)
+        cargo       : Ship_cargo;
+        (* the type of <Cargo> that has been loaded. *)
+        compartment : Compartment;
+        (* the <Compartment> into which the <Cargo> has been loaded. *)
+END_ENTITY;
+
+
+
+ENTITY Deck_cargo_assignment
+      SUBTYPE OF (Cargo_assignment);
+      (* is the allocation of <Unit_cargo> to <Space>s on the deck of a 
+         <Ship>. *)
+        position : Cargo_position;
+        (* the position on the deck where the <Cargo> has been loaded. 
+         *)
+        cargo    : Unit_cargo_group;
+        (* the <Unit_cargo_group> that has been loaded onto the 
+           deck. *)
+        deck_zone: Deck_zone;
+        (* the area of deck to which the cargo is assigned. *)
+END_ENTITY;
+
+
+
+ENTITY Lane_position
+      SUBTYPE OF (Bay_position);
+      (* is the positon of a <Unit_cargo> using a definition of the 
+         lanes on a deck.  
+         This will usually apply to <Ship>s used for vehicle stowage.
+         EXAMPLE: a ro-ro ferry would use lane_positions to locate 
+                  vehicles.
+         END_EXAMPLE *)
+        deck_number  : Vertical_position;
+        (* the vertical position of the deck onto which the <Cargo> has 
+           been loaded. *)
+        lane_number  : Transversal_position;
+        (* the transverse position of the <Unit_cargo> on the deck. *)
+        frame_number : Longitudinal_position;
+        (* the longitudinal position of the <Cargo> on the deck. *)
+END_ENTITY;
+
+
+
+ENTITY Liquid_cargo_assignment
+     SUBTYPE OF (Compartment_cargo_assignment);
+     (* is a consignment of <Liquid_cargo> or <Gaseous_cargo>s that has 
+been allocated and 
+        loaded into a tank on the <Ship>. Note that <Gaseous_cargo>s 
+can be added
+        as these are carried in liquid form. *)
+        cargo_height: Length_measure;
+        (* the actual height of the cargo loaded. This should be taken 
+           as the highest point of the cargo. *)
+      WHERE
+         WR1:('CARGO.LIQUID_CARGO' IN TYPEOF(SELF))
+             XOR ('CARGO.GASEOUS_CARGO' IN TYPEOF(SELF));
+        (* rule to state that either <liquid_cargo> or <Gaseous_cargo>s 
+           should be in this type of cargo_assignment. *)
+END_ENTITY;
+
+
+
+ENTITY Gaseous_cargo_assignment
+     SUBTYPE OF (Compartment_cargo_assignment);
+     (* is a consignment of <Gaseous_cargo> that has been allocated 
+        and loaded into a tank on the <Ship>. Note that this assignment
+        is used for the use of inert gases. Normally most gaseous_cargo 
+is
+        transported in liquid form. *)
+      WHERE
+         WR1:('CARGO.GASEOUS_CARGO' IN TYPEOF(SELF));
+        (* rule to state that only <Gaseous_cargo>s should be in this 
+           type of cargo_assignment. *)
+END_ENTITY;
+
+
+
+ENTITY Unit_cargo_assignment
+     SUBTYPE OF (Cargo_assignment);
+     (* is a consignment of <Unit_cargo> that has been allocated and 
+        loaded into a <Compartment>. *)
+	  cargo       : Ship_cargo;
+        (* the type of <Cargo> that has been loaded. *)
+        position   : Cargo_position;
+        (* the position of the <Unit_cargo> within the <Compartment>
+           where it has been loaded. *)
+        assigned_to: Compartment_or_deck;
+        (* the type of location that the cargo is assigned to. *)
+      WHERE
+         WR1: ('CARGO.UNIT_CARGO' IN TYPEOF(SELF)) 
+              XOR ('CARGO.UNIT_CARGO_GROUP' IN TYPEOF(SELF))
+              XOR ('CARGO.PERSON_GROUP' IN TYPEOF(SELF));
+        (* either SELF is of type <UNIT_CARGO> or a <UNIT_CARGO_GROUP> 
+           or a PERSON_GROUP>. *)
+END_ENTITY; 
+
+
+
+ENTITY Deadweight;
+(* specifies the weight of the passengers, crew, cargo, stores,
+   ballast, fresh water, fuel oil, and other comsumables being carried 
+by
+   a <Ship>. 
+*)
+     deadweight_value : Mass_measure;
+     (*  the value of the deadweight. *)
+     deadweight_items : SET [1:?] OF Cargo_assignment;
+     (*  the <Items> on the <Ship> that constitute the <Deadweight> 
+measurement. *)
+END_ENTITY;
+
+
+
+ENTITY Loading_condition_definition
+	SUPERTYPE OF (ONEOF (	Loading_condition_design_definition,
+					Loading_condition_operating_definition))
+  SUBTYPE OF (Definition);
+(* defines a loading of the <Ship>.  The loading 
+includes <Cargo> 
+   loads that have been allocated and loaded into <Compartment>s or on 
+decks, the
+   associated <Deadweight>, and <Floating_position>.
+*)
+     SELF\Definition.defined_for : SET [1:?] OF Ship;
+     (* the loading conditions are defined for the <Ship> as a whole. *)
+     cargo_loads : SET [1:?] OF Cargo_assignment;
+     (*  the assignment of cargo that has been loaded onto the 
+        <Ship> for a particular Loading_condition.*)
+     deadweight : OPTIONAL Deadweight;
+     (*  a measure of the mass for use during design and operation. For 
+design, 
+         the value is usually fixed, but may vary during operation 
+depending upon 
+         the loading condition. *)
+     SELF\Versionable_object.description: OPTIONAL Text;
+     (* a free text description of the loading condition. *)
+     floating_position : Floating_position;
+     (*  the attitude of the <Ship> in the water in its present loading 
+        condition. *)
+END_ENTITY;
+
+
+
+ENTITY Loading_condition_design_definition
+   SUBTYPE OF (Loading_condition_definition);
+ (* defines a hypothetical loading of the <Ship> during design
+  development for analysis of the expected behavior of the <Ship>.
+  The loading includes <Cargo> loads that have been allocated
+  and loaded onto a <Ship>, the associated <Deadweight>,
+  and <Floating_position> necessary for analysis.
+ *)
+    type_of : Design_loading_type;
+     (* the qualification on the loading conditions used during design.
+*)
+END_ENTITY;
+
+
+
+ENTITY Loading_condition_operating_definition
+   SUBTYPE OF (Loading_condition_definition);
+     (* defines an actual loading of the <Ship> while in service.  The 
+loading includes <Cargo> loads that have been allocated and
+ loaded onto a <Ship>, the associated <Deadweight>,
+ and the place and date of loading. *)
+     type_of : Operating_loading_type;
+     (* the qualification on the loading conditions used during 
+operation of the
+        <Ship>. *)
+     date_of_loading : OPTIONAL Date_and_time;
+     (*  the <Date_and_time> when the <Ship> was loaded to its present 
+         condition. *)
+     place_of_loading : OPTIONAL Port_code;
+     (*  the port at which the <Ship> was last loaded *)
+END_ENTITY;
+
+
+
+ENTITY Compartment_group;
+(* 
+defines the <Compartment> and its associated volume that has been used 
+in <Tonnage_measurement> calculations. 
+*)
+     compartment    : SET [0:?] OF Compartment;
+     (*  the <Compartment> or group of <Compartment>s that are used in 
+the <Tonnage_measurement> calculation.
+     *)
+     tonnage_volume : Volume_measure;
+     (*  the volume of the <Compartment_group> that iss used for 
+         the <Tonnage_measurement> calculation.
+     *)
+END_ENTITY;
+
+
+
+ENTITY Compensated_gross_tonnage;
+(* 
+represents a value for <Gross_tonnage> that reflects the complexity of 
+the work involved in the construction of the <Ship>.  
+*)
+     tonnage_value : Force_measure;
+     (* the value of the <Compensated_gross_tonnage> resulting from the 
+multiplication of the <Gross_tonnage> measurement by the compensation 
+factor.  *)
+     gross_tonnage_measurement  : Gross_tonnage;
+     (*  
+     the <Gross_tonnage> measurement that is the basis for the 
+compensation_factor.
+     *)
+     compensation_factor : REAL ;
+     (*  
+       the multiplication factor applied to the <Gross_tonnage> value 
+in order to obtain the <Compensated_gross_tonnage>.  The compensation 
+factor is derived by the Association of West European Shipyards and the 
+Shipbuilding Association of Japan, and varies according to the type of 
+<Ship>, <Deadweight>(for cargo <Ship>s), and <Gross_tonnage> (for 
+passenger <Ship>s).  
+       NOTE: for any particular <Shiptype>, the compensation
+       factor decreases with increasing <Ship> size - the larger the
+       <Ship>, the smaller the man-hour-requirement per <Gross_tonnage>.
+       END_NOTE
+     *)
+END_ENTITY;
+
+
+
+ENTITY Gross_tonnage
+
+     SUBTYPE OF (Tonnage_measurement);
+     (* 
+ is the result of a calculation representing the total volume of a 
+<Ship>. It is the sum of the overdeck and underdeck tonnages.  
+*)
+     underdeck_tonnage : Force_measure;
+     (*  
+       the total volume of the <Ship> below the tonnage deck to the 
+inside of the frames, underside of the deck plating, and above the 
+inner bottom.
+     *)
+     overdeck_tonnage : Force_measure;
+     (*
+       the volume to the inside of the frames and deck plating of the 
+tween decks, poop, bridge, forecastle, deckhouses, and erections above 
+the tonnage deck less the exempted <Space>s. Spaces exempted include 
+dry <Cargo> space (unless in a break in the deck) and certain closed-in 
+<Space>s associated with machinery, safety equipment, navigation, 
+galleys, washrooms, water ballast, and workshops.
+     *)
+END_ENTITY;
+
+
+
+ENTITY Net_tonnage
+
+     SUBTYPE OF (Tonnage_measurement);
+(* 
+ is a calculation of the <Cargo> carrying space within the <Ship>.  It 
+is the Gross_tonnage with deductions for crew spaces, engine room, 
+water ballast, and any space not used for passengers or <Cargo>. 
+*)
+END_ENTITY;
+
+
+
+ENTITY Tonnage_measurement
+     SUPERTYPE OF (ONEOF (
+              Net_tonnage,
+              Gross_tonnage));
+ (*
+ is the calculation of tonnage and the <Space>s that are included to 
+obtain that measurement. 
+*)
+     tonnage_value : Force_measure;
+     (*  the numerical value resulting from the tonnage calculation. *)
+     spaces_included : SET [0:?] OF Compartment_group;
+     (*  the <Compartment_group> included in the tonnage calculation. *)
+     date_of_measurement : Date_and_time;
+     (* the <Date_and_time> that the measurement was acquired. *)
+END_ENTITY;
+
+
+
+ENTITY Tonnage_definition
+     SUBTYPE OF (Definition);
+(* 
+ defines a method of volume calculation applied to <Ship>s. It is used 
+for determining charges for facilities such as berthing, docking, and 
+passage through canals and locks.
+*)
+     net_tonnage   : Net_tonnage;
+     (*  the value and deriviation of the <Net_tonnage> calculation. *)
+     gross_tonnage : Gross_tonnage;
+     (*  the value and derivation of the <Gross_tonnage> calculation. *)
+     compensated_gross_tonnage : Compensated_gross_tonnage;
+     (*  
+       the <Gross_tonnage> value compensated for the type and 
+complexity of the vessel.
+     *)
+     spaces_excluded : SET [0:?] OF Compartment;
+     (* the set of <Compartment>s that are excluded from the tonnage 
+calculations. *)
+     tonnage_regulation : Tonnage_regulation_types;
+     (* the regulations that are used to produce the tonnage 
+calculations. *)
+     certificate   : Document_reference_with_address;
+     (* 
+       the <Document> that is issued to the <Ship> owner by the 
+authority that carried out the tonnage calculations.
+      *)
+           SELF\Definition.defined_for: SET [1:?] OF Ship;
+
+      (* redefinition of the defined_for attribute: a
+      <Tonnage_definition> is only valid for a
+	<Ship>.
+      *)
+END_ENTITY;
+
+
+
+
+ ENTITY Damage_stability_definition
+  SUBTYPE OF (Stability_definition);
+(* defines the stability properties for a given <Ship> having
+been damaged. The results are defined in a tabular form for a given set 
+of
+loading and damaged conditions, the associated <Floating_position>s and
+represents the righting arms and the centre of buoyancy for the heel 
+angles
+attained through the damage inflicted on the <Ship>.
+*)
+extent_of_damage: SET [1:?] OF Damage_case;
+(* a representation of the <Ship> in a damaged state. This information 
+includes
+the <Loading_condition_definition>s of the <Ship>
+before damage occurred, those <Compartment>s that have been damaged, 
+and the
+associated <Stability_property>s.
+*)
+ SELF\Definition.defined_for : SET [1:1] OF Ship;
+(* the <Ship> for which the <Damage_stability_definition> is defined. *)
+ SELF\Design_definition.representations : SET [1:?] OF Stability_table;
+(* the <Stability_table> that represents the <Ship> in the damaged 
+state.
+*)
+
+ END_ENTITY;
+
+
+
+
+ ENTITY Damage_case;
+(* is a representation of the state of the <Ship> when it has sustained 
+damage.
+The state is defined by the <Loading_condition_definition>s of the 
+<Ship>
+before damage occurred, those <Compartment>s that have been damaged and 
+the
+associated <Stability_property>s.
+*)
+
+  original_loads: Loading_condition_definition;
+(* a definition describing the relationship between the <Compartment>s, 
+the
+<Cargo> and the original <Floating_position> of the <Ship> for a given
+<Deadweight>. The condition can be either for the design or the 
+operation of
+the <Ship>.
+*)
+
+  damaged_compartments: SET [1:?] OF Compartment_design_definition;
+(* the set of Compartment_design_definitions which are damaged.
+Each Compartment_design_definition provides the properties and
+related specification data for permeability, volume, capacity, etc.
+for the <Compartment>.
+*)
+
+  relative_damage_position: Damage_location;
+(*a simple indication of whether the damage sustained is above the
+waterline, below the waterline, or on the waterline. This provides an 
+early
+indication of whether the <Compartment>s affected are likely to become 
+filled
+with water or not. If the damage is below the waterline, then it can be
+assumed that the <Compartment> will become flooded to the maximum extent
+possible.
+*)
+
+  position_of_damage: Damage_position;
+(*a reference point within the <Ship> of where the centre of the damage 
+is
+believed to be. The data associated with this information is a 
+qualifier to
+state whether this is an estimate or known fact.*)
+
+  damage_cause: Damage_type;
+(*the type of incident that has caused the damage to the associated
+<Compartment>s.
+*)
+
+  user_defined: OPTIONAL STRING;
+(* a text string to identify causes of damage not enumerated by the
+<Damage_type> *)
+
+ END_ENTITY;
+
+
+
+
+ ENTITY Damage_position;
+(*is a reference point within the <Ship> of where the centre of the 
+damage is
+believed to be. The data associated with this information is a 
+qualifier to
+state whether this is an estimate or known fact.*)
+
+centre_of_damage:  Centre_location;
+(*a reference for the centre of the damage.
+*)
+
+position_accuracy: Accuracy_of_position;
+(* a qualifier to state whether this is an estimate or an actual known 
+fact.*)
+ END_ENTITY;
+
+
+
+ENTITY Class_compartment_requirement_definition
+ ABSTRACT SUPERTYPE OF (ONEOF (
+                       Class_bulk_load_requirement_definition,
+                       Class_tank_requirement_definition))
+
+ SUBTYPE OF (Design_requirement);
+(* describes properties of a <Compartment> in general that 
+   are specifically required for performing a hull design 
+   approval by rules.
+ *) 
+   SELF\Definition.defined_for: SET [1:?] OF 
+                                     Compartment;
+  (* the <Compartment> that this 
+     <Class_compartment_requirement_definition> shall be 
+     a definition for.
+   *)
+   cargo_density       : Density_measure;
+  (* the highest <Cargo> density for <Ship>s with tanks for 
+     liquid; otherwise, it is the stowage rate of bulk load, i.e. the
+total 
+     <Cargo> capacity of the <Ship> divided by the total hold volume.
+   *)
+   cargo_height      : Positive_length_measure;
+  (* the filling height in the case of liquid load; otherwise, it is the 
+     height from the baseline to the top of the hatch in the case of bulk
+load.
+   *)
+   ambient_temperature : BOOLEAN;
+  (* the indication whether the <Cargo> shall be 
+     transported without air conditioning.
+   *)
+   min_temperature : Thermodynamic_temperature_measure;
+  (* the minimum temperature inside the <Compartment>.
+   *)
+   max_temperature : Thermodynamic_temperature_measure;
+  (* the maximum temperature inside the <Compartment>.
+   *)
+   min_pressure    : Pressure_measure;
+  (* the minimum pressure inside the <Compartment>.
+   *)
+   max_pressure    : Pressure_measure;
+  (* the maximum pressure inside the <Compartment>.
+   *)
+   coating         : BOOLEAN;
+  (* the indication whether the <Compartment> is fully 
+     coated or not.
+   *)
+   damage_waterline: Positive_length_measure;
+  (* the height from the baseline to the waterline in a 
+     damaged condition of the <Compartment>.
+   *)
+END_ENTITY;
+
+
+
+
+ENTITY Class_bulk_load_requirement_definition
+  SUBTYPE OF (Class_compartment_requirement_definition);
+(* describes properties for bulk load <Compartment>s that 
+   are specifically required for performing a hull design 
+   approval by rules.
+ *) 
+   angle_of_repose : Plane_angle_measure;
+  (* the angle of repose for <Bulk_cargo>.
+   *)
+   top_of_hatch	   : Positive_length_measure;
+  (* the height from baseline to the highest point of the 
+     hold including hatchway.
+   *)
+   bulk_cargo_mass : Mass_measure;
+  (* the mass of the <Bulk_cargo> that is supposed to be 
+     carried in the <Compartment>.
+   *)
+   permeability : Ratio_measure;
+  (* the permeability of the <Bulk_cargo>.
+   *)
+END_ENTITY;
+
+
+
+
+ENTITY Class_tank_requirement_definition
+  SUBTYPE OF (Class_compartment_requirement_definition);
+(* describes properties for tanks that are specifically 
+   required for performing a hull design approval by 
+   rules.
+ *) 
+   pressure_relief_setting : Pressure_measure;
+  (* the pressure under which the inert gas relief valve
+     will open.
+   *)
+   overflow_height         : Positive_length_measure;
+  (* the maximum filling height in a tank just before
+     overflow; this is also referred to as the top of the air 
+     pipe.
+   *)
+   partial_filling         : BOOLEAN;
+  (* the indication whether the <Compartment> may be 
+     partially filled or not.
+   *)
+   free_surface_parameters : OPTIONAL LIST [2:2] OF 
+                          Positive_length_measure;
+  (* the length and breadth of the free surface in the 
+     tank in this mentioned sequence, if there is any 
+     free surface.
+   *)
+END_ENTITY;
+
+
+
+
+ENTITY Class_deck_load_requirement_definition
+  SUBTYPE OF (Design_requirement);
+(* describes properties for deck loads that are 
+   specifically required for performing a hull design 
+   approval by rules.
+ *)
+ 
+ 
+   stowage_rate     : OPTIONAL Density_measure;
+  (* the maximum density with which <Cargo> may be stowed 
+     on the deck. 
+   *)
+   stowage_height   : OPTIONAL Positive_length_measure;
+  (* the maximum height of <Cargo> that may be stowed 
+     on the deck. 
+   *)
+   vehicle_load     : OPTIONAL Vehicle_load_description;
+  (* the maximum load that may be imposed by a vehicle.
+   *)
+   grab_weight      : OPTIONAL Force_measure;
+  (* the maximum weight of grabs that shall be used for 
+     unloading of <Cargo>.
+   *)
+
+  SELF\Definition.defined_for: SET [1:?] OF Deck_zone;
+  (*the <Deck_zone> that this 
+     <Class_deck_load_requirement_definition> shall be a 
+     definition for.
+   *)
+END_ENTITY;
+
+
+
+
+ENTITY Vehicle_load_description;
+(* defines all the properties that are required to estimate the impact 
+   of a vehicle on a structural system.
+*)
+   type_of_vehicle    : Label;
+  (* the name of the type of vehicle. 
+   *)
+   load_per_wheel     : Force_measure;
+  (* the maximum permitted load per wheel. 
+   *)
+   number_of_wheels   : Count_measure;
+  (* minimum number of wheels per vehicle.
+   *)
+   print_area         : OPTIONAL Area_measure;
+  (* the minimum area of a wheel that touches the deck.
+   *)
+   max_tyre_pressure  : OPTIONAL Pressure_measure;
+  (* the maximum tyre pressure; only required if 
+     print_area is not known.
+   *)
+   load_handling      : BOOLEAN;
+  (* an indication whether the vehicle is for load    
+     handling only or will stay onboard when at sea. 
+   *)
+END_ENTITY;
+
+
+
+ENTITY Lightship_definition
+SUBTYPE OF (Definition) ;
+(* specifies the weight of the hull structure of the <Ship>, 
+including the weight of any installed machinery and outfitting, 
+but excluding the weight of the crew, any passengers and cargoes.*)
+        lightship_weight            : Mass_measure;
+(* the lightweight of the <Ship> expressed in units of mass. *)
+        lightship_centre_of_gravity : Centre_location;
+(* the centre of gravity of the
+lightweight in the global coordinate system of the <Ship>.*)
+        lightship_items             : SET [0:?] OF 
+Lightship_weight_item;
+(* the components that make up the lightweight definition.  *)
+
+ SELF\Definition.defined_for: SET [1:1] OF Ship;
+      (* redefinition of the defined_for attribute; a 
+      <Lightship_definition> is only valid for types of <Ship>s.
+       *)
+
+END_ENTITY;
+
+
+
+ENTITY Lightship_weight_item
+SUBTYPE OF (Weight_and_centre_of_gravity);
+(* identifies the component that is a part of the total lightship 
+weight. 
+It may include the hull structure of the <Ship>,
+machinery or outfitting, but does not include cargo, crew or passengers 
+.*)
+        lightship_item_description : Text;
+(* a descriptive label of the <Lightship_weight_item>. *)
+        aft_weight_extent          : Length_measure;
+(* the length ordinate in the local coordinate system of the 
+<Lightship_weight_item>
+   identifying the aft extent. *)
+        fwd_weight_extent          : Length_measure;
+(* the length ordinate in the local coordinate system of the 
+<Lightship_weight_item>
+ identifying the forward  extent. *)
+END_ENTITY;
+
+
+
+ENTITY Weight_and_centre_of_gravity;
+   (*
+      specifies the weight and the centre of gravity of a <Ship> <Part>. 
+      The moment components will be derived if the moment origin exists.
+    *)
+   mass: Mass_measure;
+      (* the weight of a <Ship> <Part>. *)
+   centre_of_gravity: Centre_location;
+      (* the centre of gravity of a <Ship> <Part>. *)
+   moment: OPTIONAL Moment_3d;
+      (* the <Moment_3d> based on the <centre_of_gravity> and 
+         <weight> of a <Ship> <Part>. *)
+
+END_ENTITY;
+
+
+
+
+   ENTITY Approval_history;
+        (*is a collection of all <Approval_event>s of a specific 
+          type defined for a portion of product data.
+        *)
+
+       approvals: LIST [1:?] OF UNIQUE Approval_event;
+         (*the sequence of <Approval_event>s having occurred up to
+            this point in time. The history must consist of at least
+            one Approval_event. The sequence of Approval_events is 
+            assumed to be in chronological order.
+         *)
+
+       subject: Definition;
+         (*the product data this approval is related to.
+           NOTE: A <Definition> may have zero, one, or many 
+           associated approvals. In case it has more than one associated
+approval, 
+           all of them shall be different.
+           END_NOTE
+          *)
+   DERIVE
+      status: Approval_status :=
+         current_approval_status(approvals);
+         (*the current approval status.
+         *)
+   END_ENTITY;
+
+
+
+   ENTITY Approval_event
+     SUBTYPE OF (Event);
+         (*records a change in the status of the organizational review 	and approval of some product data. *)
+
+       result: Approval_status;
+       (*product data for a version of the design is to be reviewed, or has
+         been reviewed by an authorized member of the organization and has 
+         been approved, rejected, or has some other project-specific
+status.*)
+
+       user_defined_result: OPTIONAL Label;
+      (*a user-defined approval status.
+       *)
+
+     INVERSE
+       approval_reference: Approval_history FOR approvals;
+         (*the <Approval_history> effected by the event.
+            Every <Approval_event> must refer to exactly one
+            <Approval_history>.
+         *)
+     UNIQUE
+         approval_reference, SELF\Event.caused_when;
+         (*the event shall be unique with respect to its associated
+            <Approval> together with the date and time the
+            event occurred.
+         *)
+      WHERE
+         WR1: (result <> Approval_status.USER_DEFINED) XOR
+              (SELF.user_defined_result <> '');
+         (* If <Approval_event.result> is not user_defined, 
+		<Approval_event.user_defined_result> shall be empty.
+		The approval status shall either be one of the
+		pre-defined values, except <user_defined>,
+		or it shall be a user-defined string.
+          *)
+   END_ENTITY;
+
+
+
+   ENTITY Change
+	SUBTYPE OF (Item);
+         (* represents the focus of all stages associated with a potential
+            or actual change to the product model resulting from a customer
+            or design organization change order.  The change may or may
+  	    not result in modifications to the product model data.  Any
+            planned or actual changes to the product model are documented
+            in the associated <Change_definition>s.
+	    *)
+
+      the_class: Label;
+         (* the qualification of the organizational role of the change.
+            EXAMPLE: Headquater Modification Request or Engineering
+            Change Proposal.
+            END_EXAMPLE
+	 *)
+
+   END_ENTITY;
+
+
+
+
+   ENTITY Change_definition
+      ABSTRACT SUPERTYPE OF (ONEOF (
+                       Change_request,
+                       Change_plan,
+                       Change_realization))
+  SUBTYPE OF (Definition);
+         (* is the generalization of the major discrete stages of a
+<Change>.
+	 *)
+     
+	 SELF\Definition.defined_for: SET [1:?] OF Change;
+      (* the <Change> to which the <Change_definition> is applicable.
+       *)
+
+      SELF\Definition.local_units: SET[0:0] OF Unit;
+      (*a <Change_definition> shall not define local units.
+       *)
+
+      author: Person_and_organization;
+         (* the person or organization responsible for the <Change>
+            activities during the period lasting from the end of the
+            previous, if it exists, up to the end of this
+            <Change_definition>.
+	 *)
+      date_time: Date_and_time;
+         (* the date and time when the state of the <Change_definition> was
+reached.
+	 *)
+   END_ENTITY;
+
+
+
+
+   ENTITY Change_request
+      SUBTYPE OF (Change_definition);
+         (* is the first phase of a <Change>, where the need for a 
+            <Change> and possible solution alternatives are established.
+	 *)
+      initiator: Person_and_organization;
+         (* the person or organization the request is coming from.
+	 *)
+      addressee: OPTIONAL Person_and_organization;
+         (* the person or organization the request is addressed to.
+ 	 *)
+      problem: Text;
+         (* a description of the problem having induced the
+            request.
+	 *)
+      solution_description: OPTIONAL Text;
+         (* a description of one or more possible solutions for
+            the <problem>. This textual description should be present,
+            if the <solution_alternatives> are not yet established, or
+            may enhance the information provided by the
+            <solution_alternatives>.
+	 *)
+      solution_alternatives: SET OF Change_impact;
+         (* alternative solutions proposed to solve the
+            <problem>.  A solution is described in terms of the effect
+            on <Versionable_object>s.
+	 *)
+   END_ENTITY;
+
+
+
+
+   ENTITY Check
+     SUBTYPE OF (Event);
+         (* defines the details of a planned or fulfilled approval within
+            an organization for a <Change_plan> or a <Change_realization>.
+	 *)
+   END_ENTITY;
+
+
+
+
+   ENTITY Change_impact;
+         (* defines the effect a <Change> will cause or has caused.
+	 *)
+      impact: SET [1:?] OF Versionable_object_change_event;
+         (* the effect of a <Change> in terms of the creation,
+            modification or deletion of some <Definition>s,
+		<Item_structure>s, or <Item_relationship>s.
+	 *)
+   END_ENTITY;
+
+
+
+
+   ENTITY Change_plan
+      SUBTYPE OF (Change_definition);
+         (* defines the proposed solution for a <Change>. It is the basis 
+            for the activities, i.e., the <Versionable_object_change_event>s
+
+            necessary to implement the <Change> in the product model.
+	 *)
+      chosen_solution_for: Change_request;
+   	(* identification of the <Change_request> for which a <Change_plan>
+is
+	applicable.
+	*)
+	checks: SET OF Check;
+         (* the verifications planned for the <Change>.
+	 *)
+      planned_impact: Change_impact;
+         (* the estimated or calculated effects of the <Change>. This
+            impact is usually chosen from the set
+            of solution alternatives of a <Change_request>.
+	 *)
+   END_ENTITY;
+
+
+
+
+   ENTITY Change_realization
+      SUBTYPE OF (Change_definition);
+         (* defines the actual, observed effects of a <Change>.
+	 *)
+      realization_of:	Change_plan;
+	(* the <Change_plan> for which a product model <Change> is being
+implemented.
+	   *)
+	checks: SET OF Check;
+         (* organizational approval of the product model revisions made to
+            implement the <Change>.
+	 *)
+      impact: Change_impact;
+         (* identification of the revisions made to the product model. 
+	 *)
+   END_ENTITY;
+
+
+
+
+   ENTITY Versionable_object_change_event
+      ABSTRACT SUPERTYPE OF (ONEOF (Envisaged_version_creation,
+						Version_creation,
+						Version_modification,
+						Version_deletion))
+  SUBTYPE OF (Event);
+         (* is the generalization of the <Event>s effectively changing a 
+            <Definition>, <Item_structure>, or <Item_relationship>.
+	 *)
+   END_ENTITY;
+
+
+
+
+   ENTITY Envisaged_version_creation
+      SUBTYPE OF (Versionable_object_change_event);
+         (* is the event leading to a new <Versionable_object>. The event is
+an 
+            envisaged event and has not yet happened. The <Definition>,
+<Item_structure>
+	    or <Item_relationship> as the subject of the <Event> does not
+yet exist and
+            is described in terms of descriptive, non-formal properties.
+	 *)
+      base: SET OF Versionable_object;
+         (* the <Versionable_object>s the envisaged new version is derived
+	from.
+	 *)
+      category: Label;
+         (* the category the envisaged <Versionable_object> belongs to.
+	 *)
+
+   END_ENTITY;
+
+
+
+
+   ENTITY Version_creation
+      SUBTYPE OF (Versionable_object_change_event);
+         (* identifies the <Event> leading to a new <Definition>,
+<Item_structure>, or
+            <Item_relationship>.  The base attribute shall be populated if
+the
+            subject <Versionable_object> is based upon an existing
+	    <Versionable_object>. The base <Versionable_object> need not be 
+            the immediately preceding version of the subject
+<Versionable_object>,
+            but may refer to any previous version in the version
+	    history of the same Item, or to any <Versionable_object> of
+another
+            <Item> which contributes to the creation of the subject
+<Versionable_object>.
+	 *) 
+      base: SET [0:?] OF Versionable_object;
+         (* the <Versionable_object>s the <subject> is derived from.
+	 *)
+      subject: Versionable_object;
+         (* the <Versionable_object> created by the <Change> <Event>.
+	 *)
+   END_ENTITY;
+
+
+
+
+   ENTITY Version_modification
+      SUBTYPE OF (Versionable_object_change_event);
+         (* identifies the <Event> leading to a <Change> of a
+<Versionable_object>, 
+            i.e., the creation of a new version	for an existing thing. The
+base
+            <Versionable_object> need not be the immediately preceding
+            version of the subject <Versionable_object>, but may refer to
+any
+            previous version in the <Version_history> of the same <Item>.
+	 *) 
+      base: SET [1:?]OF Versionable_object;
+         (* the <Versionable_object>s the <subject> is derived from.
+	 *)
+      subject: Versionable_object;
+         (* the <Versionable_object> modified or to be modified by the
+            <Change> <Event>.
+	 *)
+   END_ENTITY;
+
+
+
+
+   ENTITY Version_deletion
+      SUBTYPE OF (Versionable_object_change_event);
+         (* identifies the <Event> leading to the deletion of a
+<Definition>, an <Item_structure>,
+	    or an <Item_relationship>.
+	 *)
+      subject: Versionable_object;
+         (* the <Versionable_object> deleted or to be deleted by the
+<Change> <Event>.
+	 *)
+   END_ENTITY;
+
+
+
+  ENTITY Event
+    ABSTRACT SUPERTYPE OF (ONEOF (	Approval_event,
+						Check,
+						Versionable_object_change_event));
+(*
+	is identification that something has happened at a certain time, activated
+        by a certain <Person_and_organization> for a certain reason.
+*)
+    caused_by: 		Person_and_organization;
+	(* the <Person_and_organization> creating the <Event>  
+	*)
+    caused_when:	Date_and_time;
+	(* the <Date_and_time> that the <Event> occured .
+	*)
+    description:	Text;
+	(* a description for the reason of the <Event>. 
+	*)
+  END_ENTITY;
+
+
+
+  ENTITY Revision
+        SUBTYPE OF ( Versionable_object );
+        (* serves as the link between the object of interest and 
+           the <Definition>s of its constituents and associated members.
+           A revision is not created automatically, but has to be created
+           explicitly each time it is needed.
+           EXAMPLE: the object of interest can be a hull cross section 
+           whose members are plate definitions, but only those plate
+           definitions that belong to the same version.
+           END_EXAMPLE
+        *)
+    name    : Label;
+        (* a <Label> that identifies a particular <Revision>.
+        *)
+    members : SET [1:?] OF Versionable_object;
+         (* the <Versionable_object>s within the <Revision>.
+         *)
+     SELF\Versionable_object.description: OPTIONAL Text;
+         (* a description of the cause for the creation of a new <Revision>. *)
+  END_ENTITY;
+
+
+
+  ENTITY Revision_with_context
+        SUBTYPE OF ( Revision );
+        (* serves as the link between the object of interest, the context, and
+           the <Definition>s of its constituents and associated members.
+        *)
+    context_of_revision : Definable_object;
+        (* the link to a higher level object of interest. This may not be 
+           known explicitly.
+        *)
+   END_ENTITY;
+
+
+
+   ENTITY Version_history;
+         (* is an identification of <Versionable_object>s and their
+            <Version_relationship>s in terms of their role as predecessors
+            and successors with respect to each other.
+            NOTE: the <Version_history> shall be a directed acyclic graph.
+            Consequently the <Version_history> may contain <Versionable_object>s
+            considered alternatives with respect to each other (i.e., a
+            <Versionable_object> having more than one successor), and merged
+            <Versionable_object>s (i.e., a <Versionable_object> having more than
+            one predecessor).
+            END_NOTE
+         *)
+      versions: SET [1:?] OF Versionable_object;
+         (* the <Versionable_object>s within the <Version_history>.
+         *)
+
+      relationships: SET OF Version_relationship;
+         (* the <Version_relationship>s within the <Version_history>.
+         *)
+
+      current_version: Versionable_object;
+         (* the <Versionable_object> that plays the role of the 
+            current version in this <Version_history>.
+         *)
+   END_ENTITY;
+
+
+
+   ENTITY Version_relationship;
+         (* defines the relationship of two
+            <Versionable_object>s of the same type in terms of a
+<Version_history>.
+         *)
+      predecessor: Versionable_object;
+         (* the <Versionable_object> from which the <successor> is derived.
+         *)
+      successor: Versionable_object;
+         (* the <Versionable_object> that the predecessor is the preceding
+            version of.
+         *)
+      reason: Text;
+         (* the purpose for a new version, created by a certain person
+            at a certain time.
+         *)
+   WHERE
+        TRUE;
+         (* Both attributes have to be of same type.
+         *)
+   END_ENTITY;
+
+
+  ENTITY Alternative_version_relationship;
+         (*An Alternative_version_relationship is a relationship between two
+Versionable_object objects of the same type. Each Versionable_object is an alternative to another Versionable_object.
+
+         *)
+      alternative_1: Versionable_object;
+         (*The alternative_1 specifies an alternative design for the
+Versionable_object defined by alternative_2. *)
+
+      alternative_2: Versionable_object;
+         (*The alternative_1 specifies an alternative design for the
+Versionable_object defined by alternative_1. *)
+
+reason: Text;
+         (*The reason specifies the description of the relationship between
+the two alternative designs.
+     *)
+
+END_ENTITY;
+
+   ENTITY Definition
+      ABSTRACT SUPERTYPE OF (ONEOF (Cargo_bay_definition,
+						Loading_condition_definition,
+						Tonnage_definition,
+						Lightship_definition,
+						Change_definition,
+						Functional_definition,
+						General_characteristics_definition,
+						Local_co_ordinate_system,
+						Spacing_table,
+						Design_definition,
+						Design_requirement))
+  SUBTYPE OF (Versionable_object);
+   (* is the basis for all types of <Definable_object> definitions.
+Definitions
+      support the following concepts in shipbuilding: design, function, 
+      manufacturing, general ship characteristics, design requirements, 
+      and parametric and library descriptions of objects.
+    *)
+
+      id: Global_ID;
+      (* the global unique identifier for the Definition.
+       *)
+
+      defined_for: SET [1:?] OF Definable_object;
+      (* the <Definable_object>s that are defined by the Definition.
+       *)
+
+      local_units: SET OF Unit;
+      (* the <Unit>s that the <Definition> makes use of if they differ
+from the <Unit>s
+         globally defined for the <Ship>.
+       *)
+
+      UNIQUE
+         id_is_unique: id;
+         (* ensures that id is unique on schema level
+            this is just the necessary condition, it does not
+            ensure the global uniqueness!
+          *)
+   END_ENTITY;
+
+
+
+
+
+
+   ENTITY Functional_definition
+      ABSTRACT SUPERTYPE OF (ONEOF (Shiptype,
+						Zone_functional_definition,
+						Deck_zone_functional_definition,
+						Compartment_functional_definition))
+  SUBTYPE OF (Definition);
+   (* is the basis for all types of functional definitions. It provides
+the capability 
+      to specify a role or purpose for a Definition.
+    *)
+
+      user_def_function: OPTIONAL Label;
+      (* a user-defined role or purpose of the <Functional_definition>.
+       *)
+
+      SELF\Definition.local_units: SET[0:0] OF Unit;
+      (* that a Functional_definition shall not define local units.
+       *)
+   END_ENTITY;
+
+
+
+ENTITY Named_unit;
+(* is a pre-defined Unit specified in ISO 10303-41.  *)
+END_ENTITY;
+
+
+
+ENTITY Derived_unit;
+  (* is a unit of measure that is composed of elements that are pre-defined Named_units with exponents.*)
+END_ENTITY;
+
+
+
+
+
+
+
+
+
+
+   ENTITY Universal_resource_locator;
+   (* the address of an electronic data source (i.e., an Internet address).
+      This is an alternative to the common mail address as provided by
+      ISO 10303-41.
+ 
+      Because there is a permanent development on this field it is impossible 
+      to cover describe all details, e.g. available protocol types here. Instead
+      The structure of an <universal_resource_locator> shall exactly follow the 
+      specification of the Uniform Resource Locator as described in RFC 1738 of
+      the W3C Network Working Group (http://www.w3.org).
+    *)
+
+      location: Label;
+      (* the storage place where a document or other information is located in
+         the web. Such a location is typically composed of several components, 
+         like protocol type (i.e., ftp, http), machine address (name or IP number), 
+         an optional port number and a local path. Further components are possible.
+         EXAMPLE:
+             http://www.w3.org/Addressing/rfc1738.txt
+
+             ftp://ftp.atlantec-es.com/pub/out/AP218/post-ws/mapping status.xls
+         END_EXAMPLE
+       *)
+
+   END_ENTITY;
+
+
+
+  
+
+   ENTITY General_characteristics_definition
+      ABSTRACT SUPERTYPE OF (ONEOF (Global_axis_placement,
+						Ship_designation,
+						Owner_designation,
+						Shipyard_designation,
+						Class_and_statutory_designation,
+						Class_parameters,
+						Principal_characteristics,
+						Freeboard_characteristics))
+  SUBTYPE OF (Definition);
+   (* provides a major part of the documentation of a <Ship>. It
+includes primary 
+      dimensions and  capacities due to the contract of the product
+(Ship).
+    *)
+      SELF\Definition.defined_for: SET [1:?] OF Ship;
+      (* a <Ship> or set of <Ship>s for which
+         the <General_characteristics_definition> applies.
+       *)
+   END_ENTITY;
+
+ 
+
+   ENTITY Local_co_ordinate_system
+     SUBTYPE OF (Definition);
+         (* is used to locate an object in space. A <Local_co_ordinate_system>
+            is always defined with respect to another coordinate system,
+            this might be the <Global_axis_placement> or another 
+            <Local_co_ordinate_system> that has to member in the same
+            hierarchy.
+            NOTE:
+               Local axes and origin are handled in the same way as for
+               <Axis2_placement_3d>. A <local_co_ordinate system> shall form always a
+               right handed system.
+            END_NOTE
+         *)
+	parent : Co_ordinate_system;
+         (* the underlying coordinate system that serves as definition space
+	    for the current coordinate system.
+         *)
+   END_ENTITY;
+
+
+
+ENTITY Spacing_position
+ABSTRACT SUPERTYPE OF (ONEOF (
+                       Longitudinal_position,
+                       Transversal_position,
+                       Vertical_position)
+			     ANDOR (Spacing_position_with_offset));
+(*
+ is a location on one of the global coordinate axes of the <Ship> 
+ that is used as a reference point for any geometrical 
+ or structural item during the design and manufacture of the <Ship>.
+EXAMPLE:
+typically spacing positions are specified by LFR 123, TFR 10, 100, 
+100.1, A. In addition the distance to the global origin is defined, for 
+instance, by 154.5 metres.
+END_EXAMPLE
+*)
+  position_number : REAL;
+(*
+ the numerical identification that is given to the <Spacing_position>.
+*)
+  name : OPTIONAL Text;
+(*
+ a label that is used to name the reference point. 
+*)
+  position : Length_measure;
+(*
+ the distance to the origin of the global coordinate system of the 
+<Ship>. The 
+ axis on which the distance is measured depends on the type of 
+<Spacing_position>.
+*)
+
+UNIQUE
+UR1 : position_number, name;
+(*
+ the <position_number> and the <name> should uniquely identify 
+ <Spacing_position>s within the <Spacing_table>.
+*)
+
+WHERE
+   WR1: ('AP215.Longitudinal_position' IN TYPEOF(self)) OR
+        ('AP215.Vertical_position' IN TYPEOF(self)) OR
+        ('AP215.Transversal_position' IN TYPEOF(self));
+
+(*
+Any instantiation of this entity should include one of the subtypes 
+Longitudinal_position, Vertical_position, Transversal_position.
+*)
+ END_ENTITY;
+
+ENTITY Spacing_position_with_offset
+SUBTYPE OF (Spacing_position);
+(*
+ is a position defined by an offset to 
+ an existing <Spacing_position> on one of the global coordinate axes of 
+ the <Ship>. It is used as a reference point for any geometrical or 
+ structural item during the design and manufacture of the <Ship>.
+*)
+  offset: Length_measure;
+(*
+ the distance to the relating <Spacing_position>. The axis on which the 
+ distance is measured depends on the type of the relating 
+ <Spacing_position>.
+*)
+  relating_spacing_position: Spacing_position;
+(*
+ the <Spacing_position> from where the offset is taken to identify the 
+ <Spacing_position_with_offset>.
+*)
+DERIVE
+  SELF\Spacing_position.position: Length_measure := offset + 
+  relating_spacing_position.position;
+(*
+ the distance to the origin of the global coordinate system of the 
+<Ship>.
+ The axis on which the distance is measured depends on the type of the 
+ relating <Spacing_position>.
+*)
+
+WHERE
+   WR1:  NOT (TYPEOF (relating_spacing_position)=['SPACING_POSITION', 
+'SPACING_POSITION_WITH_OFFSET']);
+(*
+The attribute <relating_spacing_position> cannot inherit a recursive 
+reference to another <Spacing_position_with_offset>.
+*)
+
+ END_ENTITY;
+
+
+
+   ENTITY Item
+      ABSTRACT SUPERTYPE OF (ONEOF (Ship,
+						Space,
+						Space_product_structure,
+						Change))
+  SUBTYPE OF (Definable_object);
+   (* is a discrete, identifiable object used in one or more design,
+      production, or operational activities. 
+      An <Item> is something (to be) created  by a physical or mental
+      activity or (automatically) derived from one or more other
+      <Item>s. An <Item> need not represent a physically realizable
+      object; it may also represent an abstract concept. like
+      "activity", "task" etc.
+      <Item> provides the functionality to have relationships to other
+      <Item>s and to be a member in an <Item_structure>.
+      NOTE: an <Item> may represent some abstract concept such as an
+      activity or task.
+      END_NOTE
+    *)
+
+      name: Label;
+      (* the human readable name of the concept that is represented
+         by an <Item>.
+       *)
+
+      documentation: SET OF External_reference;
+      (* documentation available for an <Item>.
+       *)
+
+      description: OPTIONAL Text;
+      (* the description for an <Item>.
+       *)
+
+      ship_context: OPTIONAL Ship;
+      (* the context of an <Item> in terms of its applicability to a
+         <Ship>.
+       *)
+
+      WHERE
+         WR1: ('SHIPS_EXPORT.SHIP' IN TYPEOF(SELF)) XOR
+              EXISTS(ship_context);
+         (* either SELF is of type <Ship> xor attribute ship_context
+            exists
+          *)
+   END_ENTITY;
+
+
+
+
+
+
+   ENTITY External_instance_reference;
+   (* represents an instance of an entity that does not exist in the
+      same scope.
+      NOTE: the entity that is referenced must be a type of either
+            <Definable_object> or <Definition> in order to be
+            referable via a global unique identifier.
+      END_NOTE
+    *)   
+
+      schema_name: Label;
+      (* the schema in which the externally referenced instance is
+         defined.
+       *)
+
+      entity_type: Label;
+      (* the name of the type of the externally referenced instance.
+       *)
+
+      target_GUID: Global_Id;
+      (* the global unique identifier of the externally referenced
+         instance.
+       *)
+
+   END_ENTITY;
+
+
+
+ENTITY Spacing_table
+	SUPERTYPE OF (ONEOF (	Longitudinal_table,
+					Transversal_table,
+					Vertical_table))
+ SUBTYPE OF (Definition);
+(*
+ is a collection of <Spacing_position>s that defines a 
+ list of reference points along one of the coordinate axes of the 
+ <Ship>. There are several specific types of <Spacing_table> that 
+ can be chosen.
+ EXAMPLE
+ a frame table is a type of <Spacing_table> where the frame positions 
+ would be longitudinal positions.
+ END_EXAMPLE
+*)
+
+  SELF\Versionable_object.description: OPTIONAL Text;
+ (* The description specifies the textual account of the reason for creation of the Spacing_table and any additional text that is required to describe the purpose of the Spacing_table.*)
+
+  spacing_table_representations : LIST[0:?] OF Spacing_position;
+ (*
+ the positions that make up the table on the coordinate axis that are 
+ of interest.
+*)
+
+  name : OPTIONAL Text;
+(*
+ the context specific identification for the <Spacing_table>.
+*)
+
+ END_ENTITY;
+
+   
+ENTITY Longitudinal_table
+ SUPERTYPE OF (ONEOF (	Frame_table,
+				Station_table))
+ SUBTYPE OF (Spacing_table);
+(*
+ has positions that are along the longitudinal axis of
+ the global coordinate system that is the global X-axis.
+*)
+SELF\Spacing_table.spacing_table_representations : LIST[0:?] OF 
+Longitudinal_position;
+ (*
+ the longitudinal positions that make up the longitudinal table.
+*)
+
+END_ENTITY;
+
+ENTITY Transversal_table
+SUBTYPE OF (Spacing_table);
+(*
+ has positions that are along the transverse axis of the global 
+coordinate
+ system that is the global Y-axis. 
+*)
+SELF\Spacing_table.spacing_table_representations : LIST[0:?] OF 
+Transversal_position;
+ (*
+ the transversal positions that make up the transversal table.
+*)
+END_ENTITY;
+
+ENTITY Vertical_table
+SUBTYPE OF (Spacing_table);
+(*
+ has positions that are along the vertical axis of the global coordinate
+ system that is the global Z-axis.
+*)
+SELF\Spacing_table.spacing_table_representations : LIST[0:?] OF 
+Vertical_position;
+ (*
+ the vertical positions that make up the vertical table.
+*)
+END_ENTITY;
+
+ENTITY Buttock_table
+SUBTYPE OF (Transversal_table);
+(*
+ has positions that reference the location of buttocks that are located 
+on the
+ global Y-axis.
+*)
+END_ENTITY;
+
+ENTITY Frame_table
+SUBTYPE OF (Longitudinal_table);
+(*
+ has positions that reference the location of frames that are located 
+along the
+ global X-axis.
+NOTE:
+frames are used for the internal structure of the <Ship> and they are 
+structural elements. A <Ship> can have more than 100 frames. The 
+intersection curve between a frame and the hull moulded form is a curve 
+of transversal section through the hull of the <Ship>.
+END_NOTE
+*)
+END_ENTITY;
+
+ENTITY Station_table
+SUBTYPE OF (Longitudinal_table);
+(*
+ has positions that reference the location of stations that are located 
+along the 
+ global X-axis.
+NOTE:
+stations are used in the design process of a <Ship> and the station 
+curves are curves of transversal sections through the hull of the 
+<Ship>. There 
+are usually 20 stations, but the number can differ from shipyard to 
+shipyard.
+END_NOTE
+*)
+END_ENTITY;
+
+ENTITY Waterline_table
+SUBTYPE OF (Vertical_table);
+(*
+ has positions that reference the location of waterlines that are 
+located along the
+ global Z-axis.
+*)
+END_ENTITY;
+
+
+
+   ENTITY Design_definition
+      ABSTRACT SUPERTYPE OF (ONEOF (Compartment_design_definition,
+						Zone_design_definition,
+						Deck_zone_design_definition,
+						Stability_definition))
+  SUBTYPE OF (Definition);
+   (* is the basis for all types of design definitions. The ability to 
+      reference representations differentiates a <Design_definition>
+from a <Definition>.
+    *)
+
+      representations: SET OF Representation;
+      (* the <Representation>s of the design definition. It is possible
+for a
+         <Design_definition> to have multiple <Representation>s.
+         
+         EXAMPLE: a Design_definition may have multiple shape
+representations defined: 
+         wireframe, surface, and solid.
+         END_EXAMPLE
+       *)
+   END_ENTITY;
+
+
+
+
+
+
+   ENTITY Design_requirement
+      ABSTRACT SUPERTYPE OF (ONEOF (Compartment_design_requirement,
+						Class_compartment_requirement_definition,
+						Class_deck_load_requirement_definition))
+  SUBTYPE OF (Definition);
+   (* represents a constraint placed on a design. These constraints
+identify
+      the set of rules to which the design must adhere.
+    *)
+
+      specification: SET OF Document_reference_with_address;
+      (* a set of <Document_reference>s that define a design requirement
+or rule.
+       *)
+   END_ENTITY;   
+
+
+
+ENTITY Document
+        SUBTYPE OF (Versionable_object);
+       (* references an unambiguous identification of some human
+          readable data item defined outside ISO 10303.
+          A document has an author and may be versioned.
+        *)
+
+        author : any_author;
+        (* the <Person> and/or <organization> that authored the <Document>.
+        *)
+
+        title: Label;
+        (* a description of the subject matter within the <Document>.
+        *)
+
+        source_type: Label;
+        (* the format of the document.
+           EXAMPLE - the <Document> may be in a printed copy of a book or in a file format.
+           END_EXAMPLE
+         *)
+
+     SELF\Versionable_object.description: OPTIONAL Text;
+        (* a summary or abstract that describes the content of the <Document>.
+        *)
+END_ENTITY;
+
+
+
+
+   ENTITY Versionable_object
+        ABSTRACT SUPERTYPE OF (ONEOF (Revision,
+                       			Definition,
+						Document,
+						Item_structure,
+                       			Item_relationship));
+         (* is any object that may be versioned.
+         *)
+
+      description: OPTIONAL Text;
+      (* additional information that identifies or describes the object. *)
+
+      version_id: Identifier;
+      (* specifies the identification of the version.
+       *)
+
+   END_ENTITY;
+
+
+
+
+
+
+   ENTITY Item_structure
+      ABSTRACT SUPERTYPE
+  SUBTYPE OF (Definable_object, Versionable_object);
+   (* is a collection of <Item>s possibly related by
+      <Item_relationship>s. An <Item_structure> forms a graph without
+      any restriction regarding the number of entries, the
+      connectivity, nor the cyclicity.
+    *)
+
+      items: SET OF Item;
+      (* the <Item>s belonging locally to an <Item_structure>.
+       *) 
+
+      external_items: SET OF External_instance_reference;
+      (* the <Item>s belonging externally to an <Item_structure>.
+       *) 
+
+      relationships: SET OF Item_relationship;
+      (* the relationships (local) between the <Item>s belonging to an
+         <Item_structure>.
+       *)
+
+      external_relationships: SET OF External_instance_reference;
+      (* the relationships (external) between the <Item>s belonging to
+         an <Item_structure>.
+       *)
+
+      WHERE
+         WR1: SIZEOF(QUERY(i <* external_items |
+                           NOT(i.entity_type IN TYPEOF(items)))) = 0;
+         (* there must bo no external item that is of a type
+            other than the one the elements of items are declared.
+          *)
+
+         WR2: SIZEOF(QUERY(i <* external_relationships |
+                           NOT(i.entity_type IN TYPEOF(relationships))))
+              = 0;
+         (* there must bo no external relationships that is of a type
+            other than the one the elements of relationships are
+            declared.
+          *)
+   END_ENTITY;
+
+
+
+
+
+
+   ENTITY Item_relationship
+      ABSTRACT SUPERTYPE
+  SUBTYPE OF (Definable_object, Versionable_object);
+   (* defines the association of two <Item>s. The related <Item>s
+      may share a common function or activity, or are dependent on
+      each other.
+    *)
+
+     item_1: OPTIONAL Item;
+     (* the relating <Item> of the relationship in the case where it is
+        in the same instance model as the <Item>.
+        NOTE: the items related by <Item> may be either local instances
+        or external instances; constraints ensure that either the local
+        or the external instances exist.
+        END_NOTE
+      *)
+
+     external_item_1: OPTIONAL External_instance_reference;
+     (* the relating <Item> of the relationship in the case where it
+        is an externally referenced instance of an <Item>.
+      *)
+      
+     item_2: OPTIONAL Item;
+     (* the related <Item> of the relationship in the case where it is
+        in the same instance model as the <Item>.
+      *)
+
+     external_item_2: OPTIONAL External_instance_reference;
+     (* the related <Item> of the relationship in the case where it is
+        an externally referenced instance of an <Item>.
+      *)
+
+
+      WHERE
+         WR1: external_item_1.entity_type IN TYPEOF(item_1);
+         (* the type of external_item_1 must be the one specified
+            for item_1.
+          *)
+
+         WR2: external_item_2.entity_type IN TYPEOF(item_2);
+         (* the type of external_item_2 must be the one specified
+            for item_2.
+          *)
+
+         WR3: EXISTS(item_1) XOR EXISTS(external_item_1);
+         (* ensure that exactly one of item_1 or external_item_1 exists.
+          *)
+
+         WR4: EXISTS(item_2) XOR EXISTS(external_item_2);
+         (* ensure that exactly one of item_2 or external_item_2 exists.
+          *)
+   END_ENTITY;
+
+
+
+ENTITY Document_reference;
+        (* is the qualification of a <Document> or sections of a <Document>
+           in terms of its source or location.
+         EXAMPLE: if the Document_reference source is a book, the pointer could be a
+         section label or a page number.
+         END_EXAMPLE
+        *)
+
+      assigned_document : Document_referent;
+        (* specifies the <Document> (or portion of a <Document>) that is to be
+           associated with the product data.
+        *)
+END_ENTITY;
+
+
+
+ENTITY Document_reference_with_address
+        SUBTYPE OF (Document_reference, External_reference);
+(*
+         specifies a pointer to a location inside the source.
+*)
+END_ENTITY;
+
+ENTITY Document_portion;
+        (* is the qualification of a specific subset or portion of a <Document> in
+           generic terms.
+
+         EXAMPLE: A subsection of a book could be a subsection identified by its section
+                  number.
+             Document_portion.element_type = 'subsection' and
+             Document_portion.element_value = '3.3.2'.
+         END_EXAMPLE
+
+         EXAMPLE: A subsection of a book could be a subsection identified by its section
+                  title.
+             Document_portion.element_type = 'subsection' and
+             Document_portion.element_value = 'Introduction'.
+         END_EXAMPLE
+
+         EXAMPLE: A subsection of a report could be a range of pages identified by their
+                  numbers.
+             Document_portion.element_type = 'page' and
+             Document_portion.element_value = '1-10, 15'.
+         END_EXAMPLE
+        *)
+      source : Document;
+        (* the <Document> to which the specified subset is related.
+        *)
+
+      element_type: Label;
+        (* the name for this subset of the <Document>: page, section,
+           paragraph, etc.
+        *)
+      element_value: Text;
+        (* the value for this subset of the <Document>: page numbers,
+           section numbers, section title, etc.
+        *)
+END_ENTITY;
+
+ENTITY Longitudinal_position
+SUBTYPE OF (Spacing_position);
+(*
+
+ is located on the global X-axis.
+*)
+
+END_ENTITY;
+
+
+
+ENTITY Transversal_position
+SUBTYPE OF (Spacing_position);
+(*
+ is located on the global Y-axis.
+*)
+
+END_ENTITY;
+
+
+
+ENTITY Vertical_position
+SUBTYPE OF (Spacing_position);
+(*
+ is located on the global Z-axis.
+*)
+
+END_ENTITY;
+
+
+
+ ENTITY Floating_position;
+(*
+is the draught and attitude of the <Ship> when immersed and the 
+resulting 
+displacement volume.
+*)
+  draught_at_amidships : Positive_length_measure;
+(*
+the distance from the operating waterplane to the moulded bottom of the 
+ship measured perpendicular at the centreline on the transverse 
+cross-section amidships.
+*)
+  angle_of_trim : Plane_angle_measure;
+(*
+the angle of rotation around the Y-axis of the <Ship> measured in 
+radians 
+and measured on a line parallel to the global X-axis and the 
+waterplane. The <angle_of_trim> is equal to zero when the transverse 
+cross-section is perpendicular to the waterplane. The <angle_of_trim> 
+has positive values if the bow of the <Ship> moves up.
+*)
+  angle_of_heel : Plane_angle_measure;
+(*
+the angle of rotation around the X-axis of the <Ship> measured in 
+radians 
+and measured on a line parallel to the global Y-axis and the 
+waterplane. The <angle_of_heel> is equal to zero when the centreplane 
+is perpendicular to the waterplane. The <angle_of_heel> has positive 
+values if the starboard side of the <Ship> moves down.
+*)
+  length_of_waterline: Positive_length_measure;
+(*
+the length of the current waterline.
+*)
+  breadth_of_waterline: Positive_length_measure;
+(*
+the breadth of the current waterline.
+*)
+  moulded_form_displacement : Volume_measure;
+(*
+the wetted displacement of the <Ship>.
+*)
+ END_ENTITY;
+
+
+
+ ENTITY Stability_definition
+  SUBTYPE OF (Design_definition);
+(*
+defines the stability properties for a given 
+intact <Ship>. The results are defined in a tabular form for different 
+loading conditions and represent the righting arms and the centre of 
+buoyancy for different heel angles.
+NOTE:
+damage stability will be defined in a special type of 
+<Stability_definition>.
+END_NOTE
+*)
+ SELF\Definition.defined_for : SET [1:?] OF Ship;
+(*
+the <Ship> for which the <Stability_definition> is defined.
+*)
+ SELF\Design_Definition.representations : SET [1:?] OF Stability_table;
+(*
+the <Stability_table> that the <Stability_definition> represents. 
+*)
+END_ENTITY;
+
+
+
+ ENTITY Stability_table;
+(*
+defines the stability properties for a given intact 
+or damaged <Ship>, depending on the stability definition. The results 
+are defined in a tabular form and represent the righting arms and the 
+centre of buoyancy for different heel angles for one starting 
+<Floating_position>. 
+*)
+
+items : SET [1:?] OF 
+Stability_properties_for_one_floating_position;
+
+(*
+the stability properties, which are the the righting arms and the 
+centre of buoyancy for different heel angles for one starting 
+<Floating_position>. 
+*)
+mean_shell_thickness : Positive_length_measure;
+(*
+the real value for the average thickness of the shell plating, that  
+may be used to define the related extreme form for the stability 
+properties for the <Ship> including the thickness.
+*)
+
+  name: text;
+(*  a user or system defined name for the table. *)
+
+
+
+ END_ENTITY;
+
+
+
+ENTITY Loadline;
+ (* is a mark placed on the side of the ship in the form of a ring of 
+300mm outside diameter and 25mm wide, intersected by a horizontal line 
+450mm long and 25mm wide. The upper edge of this line passes through the centre of 
+the ring.  The ring is positioned at midships and at a distance below the 
+upper edge of the deck line which corresponds to the assigned minumum freeboard. 
+This value may not be less than 50mm. A series of load line marks are situated 
+forward of this mark and these denote the minimum freeboards within certain 
+geographical zones or in fresh water. The summer load line is level with the 
+centre of the ring and marked "S". *)
+
+        load_line_length            : Length_measure;
+(* the length of the ship measured in accordance
+   with the applicable IMO Load Line Convention.
+ *)
+        load_line_depth             : Length_measure;
+(* the least moulded depth of the ship.
+ *)
+        load_line_displacement      : Volume_measure;
+(* the moulded displacement of the ship
+   measured at the <load_line_draught>.
+ *)
+        load_line_block_coefficient : Ratio_measure;
+(* the ratio measure obtained
+   when the <load_line_displacement> is divided by the product of
+   <load_line_length>, <load_line_depth> and the moulded breadth of the 
+   ship. 
+ *)
+        load_line_regulation        : Load_line_convention_type;
+(* the relevant IMO Load Line Convention containing the rules to which the
+   load line has been calculated.
+ *)
+
+DERIVE
+        load_line_draught:  Length_measure := load_line_depth * 0.85 ;
+(* the draught corresponding to 0.85 times 
+   the <load_line_depth> of the ship.
+ *)
+END_ENTITY;
+
+
+
+ENTITY Moment_3d;
+   (*is a collection of moment components at three major coordinate
+system axes, vertical, transveral, and longitudinal.
+    *)
+    longitudinal_moment: Moment_measure;
+      (* the moment component along the longitudinal axis. *)
+    transverse_moment: Moment_measure;
+      (* the moment component along the transverse axis. *)
+    vertical_moment: Moment_measure;
+      (* the moment component along the vertical axis. *)
+    origin:  Centre_location;
+      (* the point in the local coordinate system about which the
+         moment component is defined.
+      *)
+END_ENTITY;
+
+
+
+   ENTITY Definable_object
+      ABSTRACT SUPERTYPE OF (ONEOF (Item,
+						Item_structure,
+						Item_relationship));
+   (* is any type of product that can be defined, i.e., that can be 
+      pointed to by a <Definition>.
+    *)
+
+      id: Global_id;
+      (* the global unique identifier for the <Definable_object>.
+       *)
+
+      UNIQUE
+         id_is_unique: id;
+         (* ensures that id is unique on schema level
+            this is just the necessary condition, it does not
+            ensure the global uniqueness!
+          *)
+   END_ENTITY;
+
+
+
+   ENTITY Global_id;
+   (*
+    is a persistent, global identifier that uniquely identifies the definition.
+   *)
+
+      id: STRING;
+      (* a unique, persistent identifier generated by the company that creates the product data.
+       *)
+
+END_ENTITY;
+
+   ENTITY External_storage;
+   (* the location of physical documents or items external to the current 
+      exchange. This entity may be relevant when identifying the location of items such as CD-ROMs, floppy disks, video tapes, and books.
+
+      EXAMPLE: A public libary or a company archive may serve as <External_storage>.
+      END_EXAMPLE
+    *)
+
+      location: Label;
+      (* describes the identification of an external storage place, typically without possibility for direct computer network access. 
+       *)
+
+   END_ENTITY;
+
+
+   ENTITY External_reference;
+   (* is the abstract denotion of a data source external to the data set 
+      where an instance of this entity exists.
+      EXAMPLE: a <Universal_resource_locator> denotes such a data
+               source.
+      END_EXAMPLE
+    *)
+
+      location: Any_address;
+      (* the location of an external reference. In the case of a
+         Universal_resource_locator, the location is computer accessible
+         by a specified transmission protocol.
+       *)
+
+      description: Text;
+      (* some additional information regarding the External_reference.
+       *)
+   END_ENTITY;
+
+ENTITY Centre_location;
+(* a location in terms of the three principal axis directions of the
+Ship global coordinate system.*)
+  longitudinal_location:  Length_measure;
+(* the distance along the X axis from the origin of the global coordinate system of the 
+Ship. *) 
+  transversal_location:  Length_measure;
+(* the distance along the Y axis from the origin of the global coordinate system of the 
+Ship. *)
+  vertical_location:  Length_measure;
+(* the distance along the Z axis from the origin of the global coordinate system of the 
+Ship. *) 
+
+END_ENTITY;
+
+ ENTITY Stability_properties_for_one_floating_position;
+(*
+specifies the collection of values that represent the data specific to 
+stability 
+calculations for a particular <Floating_position> for a 
+<Ship_moulded_form>.
+*)
+  centre_of_gravity_above_keel : Centre_location;
+(*
+the location for the centre of gravity of a <Ship>. It will be 
+presumed, that 
+the location for the centre of gravity of the <Ship> will not change 
+for 
+different heel angles. The X-coordinate is measured from the aft 
+perpendicular, the Y-coordinate is measured from the centreline and 
+the Z-coordinate is measured from the baseline.
+*)
+  definition_of_starting_floating_position : Floating_position;
+(*
+the <Floating_position> of the <Ship> for specific loading conditions, 
+which is used as the starting point for the calculations of the 
+stability properties. The <Floating_position> covers the draught, trim, 
+heel, and corresponding volume of displacement for the <Ship>.
+*)
+  stability_properties_for_different_angles_of_heel : LIST [1:?] OF 
+Stability_property;
+(*
+all the stability properties that are valid for the particular 
+<Definition_of_starting_floating_position>.
+*)
+ INVERSE
+  related_stability_table : SET [1:?] OF Stability_table FOR items;
+(*
+the <Stability_table>s with which the 
+<Stability_properties_for_one_floating_position> is associated.
+*)
+ END_ENTITY;
+
+
+
+ ENTITY Stability_property;
+(*
+defines all the necessary properties for the stability caculations for
+a <Ship_moulded_form> with specific loading conditions.
+*)
+  centre_of_buoyancy : Centre_location;
+(*
+the location of the volumetric centre of the submerged 
+<Ship_moulded_form> volume. The X-coordinate is measured from the aft 
+perpendicular, the Y-coordinate is measured from the centreline, and 
+the Z-coordinate is measured from the baseline.
+*)
+  righting_arm : Length_measure;
+(*
+the distance between a perpendicular line through the 
+<centre_of_gravity_above_keel> and a perpendicular line through the 
+<centre_of_buoyancy>. Both lines are taken orthogonal to the heeled 
+waterline.
+*)
+  angle_of_heel : Plane_angle_measure;
+(*
+the angle of rotation of the <Ship> around the X-axis. The 
+<angle_of_heel> has positive values if the starboard side of the <Ship> 
+moves down.
+*)
+ END_ENTITY;
+
+
+
+   FUNCTION current_approval_status
+      (  history: LIST[1:?] OF Approval_event
+            (*the approval history the current approval status is
+               to be derived from. *)
+      ): Approval_status;
+         (*The <current_approval_status> function returns the
+            approval status being the <result> of the last
+            <Approval_event> in the approval history. *)
+
+      LOCAL
+         a: Approval_event;
+      END_LOCAL;
+
+      a := history[HIINDEX(history)];
+      RETURN (a.result);
+   END_FUNCTION;
+
+
+
+   FUNCTION get_company_id(id: STRING): STRING;
+      LOCAL
+         company_id: STRING;
+      END_LOCAL;
+
+      (* extract the company id *)
+
+      RETURN (company_id);
+   END_FUNCTION;
+
+
+
+   FUNCTION get_local_id(id: STRING): STRING;
+      LOCAL
+         local_id: STRING;
+      END_LOCAL;
+
+      (* extract the local id *)
+
+      RETURN (local_id);
+   END_FUNCTION;
+
+
+
+
+ RULE  unique_global_placement FOR (Global_axis_placement);
+   WHERE  
+         (* there is exactly one global axis placement for a ship 
+            to which all local co-ordinate systems may refer.
+         *)
+      wr1: SIZEOF(Global_axis_placement) = 1;
+   END_RULE;
+
+
+END_SCHEMA;

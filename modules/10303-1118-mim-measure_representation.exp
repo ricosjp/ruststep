@@ -1,0 +1,19 @@
+(*
+ $Id: 10303-1118-mim-measure_representation.exp,v 1.4 2006/08/07 09:42:04 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N1217 - ISO/TS 10303-1118 Measure representation - EXPRESS MIM
+*)
+
+SCHEMA Measure_representation_mim;
+
+USE FROM Foundation_representation_mim;
+
+USE FROM qualified_measure_schema
+(measure_representation_item);
+
+USE FROM representation_schema
+(value_representation_item);
+
+USE FROM Value_with_unit_mim;
+
+END_SCHEMA;
+

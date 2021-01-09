@@ -1,0 +1,27 @@
+(*
+ $Id: 10303-1212-arm-Classification.exp,v 1.4 2006/08/04 12:01:51 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2756 - ISO/TS 10303-1212 Classification - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG12 N1870
+*)
+
+SCHEMA Classification_arm; 
+
+USE FROM Class_arm;    -- ISO/TS 10303-1070
+
+TYPE classification_select = EXTENSIBLE SELECT;
+END_TYPE; 
+
+TYPE complete_membership_select = EXTENSIBLE SELECT;
+END_TYPE; 
+
+ENTITY Classification;
+  classified : classification_select;
+  classifier : Class;
+END_ENTITY;
+
+ENTITY Complete_membership;
+  containing_set : Class;
+  members : SET[0:?] OF complete_membership_select;
+END_ENTITY;
+
+END_SCHEMA;  -- Classification_arm

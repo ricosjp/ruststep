@@ -1,0 +1,32 @@
+(*
+ISO TC184/SC4/WG12 N2696 - ISO/TS 10303-1136 Text appearance - EXPRESS ARM
+*) 
+
+
+SCHEMA Text_appearance_arm;
+
+USE FROM Elemental_geometric_shape_arm;    -- ISO/TS 10303-1004
+
+
+TYPE composite_text_element_select = SELECT
+   (Composite_presentable_text, 
+    Presentable_text_item);
+END_TYPE; 
+
+ENTITY Composite_presentable_text
+  SUBTYPE OF (Detailed_geometric_model_element);
+  collected_text : LIST[2:?] OF composite_text_element_select;
+END_ENTITY;
+
+ENTITY Presentable_text_item
+  SUBTYPE OF (Detailed_geometric_model_element);
+  literal : STRING;
+  placement : Axis_placement;
+  style : Text_style;
+END_ENTITY;
+
+ENTITY Text_style;
+  name : STRING;
+END_ENTITY;
+
+END_SCHEMA;  -- Text_appearance_arm

@@ -1,0 +1,58 @@
+(*
+ISO TC184/SC4/WG12 N1422 - ISO/CD-TS 10303-1244 Qualifications - EXPRESS MIM
+*) 
+
+
+SCHEMA Qualifications_mim; 
+
+USE FROM Certification_mim;    -- ISO/TS 10303-1044
+
+USE FROM Classification_assignment_mim;    -- ISO/CD-TS 10303-1114
+
+USE FROM Date_time_assignment_mim;    -- ISO/TS 10303-1014
+
+USE FROM management_resources_schema   -- ISO 10303-41
+  (qualification_type_assignment); 
+
+USE FROM Person_organization_assignment_mim;    -- ISO/TS 10303-1013
+
+USE FROM Person_organization_mim;    -- ISO/TS 10303-1011
+
+USE FROM person_organization_schema   -- ISO 10303-41
+  (person); 
+
+USE FROM qualifications_schema   -- ISO 10303-41
+  (qualification_type,
+   qualification_type_relationship); 
+
+
+TYPE person_organization_item = EXTENSIBLE GENERIC_ENTITY SELECT
+   (person);
+END_TYPE; 
+
+TYPE qualification_type_certification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON certification_item WITH 
+   (applied_qualification_type_assignment);
+END_TYPE; 
+
+TYPE qualification_type_classification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON classification_item WITH 
+   (qualification_type);
+END_TYPE; 
+
+TYPE qualification_type_date_and_time_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON date_and_time_item WITH 
+   (applied_qualification_type_assignment);
+END_TYPE; 
+
+TYPE qualification_type_date_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON date_item WITH 
+   (applied_qualification_type_assignment);
+END_TYPE; 
+
+TYPE qualification_type_person_and_organization_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON person_and_organization_item WITH 
+   (applied_qualification_type_assignment);
+END_TYPE; 
+
+ENTITY applied_qualification_type_assignment
+  SUBTYPE OF (qualification_type_assignment);
+  items : SET[1:?] OF person_organization_item;
+END_ENTITY;
+
+END_SCHEMA;  -- Qualifications_mim

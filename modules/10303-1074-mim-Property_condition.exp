@@ -1,0 +1,30 @@
+(*
+ $Id: 10303-1074-mim-Property_condition.exp,v 1.4 2006/08/04 12:11:54 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2814 - ISO/TS 10303-1074 Property condition - EXPRESS MIM
+ Supersedes ISO TC184/SC4/WG12 N2061
+*)
+
+SCHEMA Property_condition_mim;
+
+USE FROM Class_of_activity_mim;    --  ISO/TS 10303-1071
+USE FROM Class_of_product_mim;    --  ISO/TS 10303-1077
+USE FROM Property_space_mim;    --  ISO/TS 10303-1080
+USE FROM Process_property_assignment_mim;    --  ISO/TS 10303-1040
+USE FROM Property_assignment_mim;    --  ISO/TS 10303-1030
+
+ENTITY condition_property
+  SUBTYPE OF (general_property_association);
+  SELF\general_property_association.base_definition : physical_quantity_range;
+WHERE
+  link_to_condition: ('PROPERTY_CONDITION_MIM.PROPERTY_CONDITION_FOR_ACTIVITY' IN TYPEOF(SELF\general_property_association.derived_definition)) OR ('PROPERTY_CONDITION_MIM.PROPERTY_CONDITION_FOR_PRODUCT' IN TYPEOF(SELF\general_property_association.derived_definition));
+END_ENTITY;
+
+ENTITY property_condition_for_activity
+  SUBTYPE OF (class_of_possession_of_property_by_activity);
+END_ENTITY;
+
+ENTITY property_condition_for_product
+  SUBTYPE OF (class_of_possession_of_property_by_product);
+END_ENTITY;
+
+END_SCHEMA;

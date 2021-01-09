@@ -1,0 +1,26 @@
+(*
+ISO TC184/SC4/WG12 N1410 - ISO/CD-TS 10303-1240 Organization type - EXPRESS MIM
+*) 
+
+
+SCHEMA Organization_type_mim; 
+
+USE FROM management_resources_schema   -- ISO 10303-41
+  (organization_type_assignment); 
+
+USE FROM Person_organization_mim;    -- ISO/TS 10303-1011
+
+USE FROM person_organization_schema   -- ISO 10303-41
+  (organization); 
+
+
+TYPE organization_type_item = EXTENSIBLE GENERIC_ENTITY SELECT
+   (organization);
+END_TYPE; 
+
+ENTITY applied_organization_type_assignment
+  SUBTYPE OF (organization_type_assignment);
+  items : SET[1:?] OF organization_type_item;
+END_ENTITY;
+
+END_SCHEMA;  -- Organization_type_mim

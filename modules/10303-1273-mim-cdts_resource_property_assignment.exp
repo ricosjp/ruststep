@@ -1,0 +1,24 @@
+(*
+ISO TC184/SC4/WG12 N - ISO/CD-TS 10303-xxxx Resource property assignment - EXPRESS MIM
+*) 
+
+
+SCHEMA Resource_property_assignment_mim; 
+
+USE FROM Foundation_representation_mim;    -- ISO/TS 10303-1006
+
+USE FROM Independent_property_mim;    -- ISO/TS 10303-1036
+
+USE FROM process_property_representation_schema   -- ISO 10303-49
+  (resource_property_representation); 
+
+USE FROM process_property_schema   -- ISO 10303-49
+  (characterized_resource_definition,
+   resource_property); 
+
+USE FROM product_property_definition_schema   -- ISO 10303-41
+  (derived_property_select,
+   general_property_association); 
+
+
+END_SCHEMA;  -- Resource_property_assignment_mim

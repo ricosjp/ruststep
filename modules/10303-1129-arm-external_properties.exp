@@ -1,0 +1,34 @@
+(*
+   $Id: 10303-1129-arm-external_properties.exp,v 1.1 2006/08/03 14:41:10 wg12deputy Exp $
+   ISO/TC184/SC4 WG12N2610 - ISO/TS 10303-1129 external_properties - EXPRESS ARM
+   Supersedes ISO TC184/SC4/WG12N1744
+*)
+
+SCHEMA External_properties_arm;
+
+USE FROM Independent_property_arm;
+
+USE FROM Plib_class_reference_arm;
+
+
+TYPE external_property_select = SELECT (Plib_property_reference, External_library_property);
+END_TYPE;
+
+ENTITY External_library_property
+SUBTYPE OF (Independent_property);
+  external_id: STRING;
+  library_type: STRING;
+END_ENTITY;
+
+ENTITY Plib_property_reference
+SUBTYPE OF (Independent_property);
+  code: STRING;
+  version: STRING;
+  name_scope: Plib_class_reference;
+END_ENTITY;
+
+SUBTYPE_CONSTRAINT plib_or_external FOR Independent_property;
+ONEOF(Plib_property_reference, External_library_property);
+END_SUBTYPE_CONSTRAINT;
+
+END_SCHEMA;

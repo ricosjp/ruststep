@@ -1,0 +1,71 @@
+(*
+ $Id: 10303-1301-arm-work_output_characterized.exp,v 1.2 2006/08/07 07:44:47 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N3193 - ISO/TS 10303-1301 Work output characterized - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG12 N2459
+*) 
+
+
+SCHEMA Work_output_characterized_arm;
+
+USE FROM Ap239_properties_arm;    -- ISO/TS 10303-1295
+
+USE FROM Approval_arm;    -- ISO/TS 10303-1012
+
+USE FROM Attribute_classification_arm;    -- ISO/TS 10303-1246
+
+USE FROM Certification_arm;    -- ISO/TS 10303-1044
+
+USE FROM Date_time_assignment_arm;    -- ISO/TS 10303-1014
+
+USE FROM Identification_assignment_arm;    -- ISO/TS 10303-1021
+
+USE FROM Multi_linguism_arm;    -- ISO/TS 10303-1105
+
+USE FROM Person_organization_assignment_arm;    -- ISO/TS 10303-1013
+
+USE FROM Process_property_assignment_arm;    -- ISO/TS 10303-1040
+
+USE FROM Security_classification_arm;    -- ISO/TS 10303-1015
+
+USE FROM Work_output_arm;    -- ISO/TS 10303-1300
+
+
+TYPE work_output_approval_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON approval_item WITH 
+   (Work_output);
+END_TYPE; 
+
+TYPE work_output_certification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON certification_item WITH 
+   (Work_output);
+END_TYPE; 
+
+TYPE work_output_characterized_activity_definition = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON characterized_activity_definition WITH 
+   (Work_output);
+END_TYPE; 
+
+TYPE work_output_classified_attribute_select = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON classified_attribute_select WITH 
+   (Work_output, 
+    Work_output_relationship);
+END_TYPE; 
+
+TYPE work_output_date_or_date_time_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON date_or_date_time_item WITH 
+   (Work_output);
+END_TYPE; 
+
+TYPE work_output_identification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON identification_item WITH 
+   (Work_output);
+END_TYPE; 
+
+TYPE work_output_organization_or_person_in_organization_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON organization_or_person_in_organization_item WITH 
+   (Work_output);
+END_TYPE; 
+
+TYPE work_output_security_classification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON security_classification_item WITH 
+   (Work_output);
+END_TYPE; 
+
+TYPE work_output_string_select = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON string_select WITH 
+   (Work_output, 
+    Work_output_relationship);
+END_TYPE; 
+
+END_SCHEMA;  -- Work_output_characterized_arm

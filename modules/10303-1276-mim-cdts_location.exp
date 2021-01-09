@@ -1,0 +1,69 @@
+(*
+ISO TC184/SC4/WG12 N1590 - ISO/CD-TS 10303-1276 Location - EXPRESS MIM
+*) 
+
+
+SCHEMA Location_mim; 
+
+USE FROM Classification_assignment_mim;    -- ISO/CD-TS 10303-1114
+
+USE FROM location_schema   -- ISO 10303-41
+  (location,
+   location_relationship); 
+
+USE FROM management_resources_schema   -- ISO 10303-41
+  (location_representation_assignment); 
+
+USE FROM Person_organization_mim;    -- ISO/TS 10303-1011
+
+USE FROM person_organization_schema   -- ISO 10303-41
+  (organizational_address); 
+
+USE FROM product_definition_schema   -- ISO 10303-41
+  (product); 
+
+USE FROM Product_identification_mim;    -- ISO/TS 10303-1017
+
+USE FROM product_property_definition_schema   -- ISO 10303-41
+  (characterized_definition,
+   characterized_object,
+   property_definition); 
+
+USE FROM product_property_representation_schema   -- ISO 10303-41
+  (property_definition_representation,
+   represented_definition); 
+
+USE FROM qualified_measure_schema   -- ISO 10303-45
+  (measure_representation_item); 
+
+USE FROM representation_schema   -- ISO 10303-43
+  (representation,
+   representation_item); 
+
+USE FROM Value_with_unit_mim;    -- ISO/TS 10303-1054
+
+USE FROM Zonal_breakdown_mim;    -- ISO/CD-TS 10303-1217
+
+
+TYPE location_classification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON classification_item WITH 
+   (location_relationship);
+END_TYPE; 
+
+TYPE location_representation_item = EXTENSIBLE GENERIC_ENTITY SELECT
+   (organizational_address, 
+    person_and_organization_address, 
+    product);
+END_TYPE; 
+
+ENTITY applied_location_representation_assignment
+  SUBTYPE OF (location_representation_assignment);
+  items : SET[1:?] OF location_representation_item;
+END_ENTITY;
+
+ENTITY characterized_location_object
+  SUBTYPE OF (characterized_object, location);
+END_ENTITY;
+
+END_SCHEMA;  -- Location_mim
+
+

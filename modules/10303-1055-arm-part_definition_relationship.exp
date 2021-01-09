@@ -1,0 +1,25 @@
+(*
+ $Id: 10303-1055-arm-part_definition_relationship.exp,v 1.4 2006/08/07 07:44:43 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N1326 - ISO/TS 10303-1055 Part definition relationship - EXPRESS ARM
+*)
+  
+SCHEMA Part_definition_relationship_arm;
+ 
+USE FROM Product_view_definition_relationship_arm;
+USE FROM Part_view_definition_arm;
+USE FROM Value_with_unit_arm;
+      
+ENTITY Make_from_relationship
+  SUBTYPE OF (View_definition_usage);
+  SELF\View_definition_relationship.relating_view: Part_view_definition;
+  SELF\View_definition_relationship.related_view: Part_view_definition;
+  quantity  : OPTIONAL Value_with_unit;
+  priority  : OPTIONAL INTEGER;
+WHERE
+WR1: SELF\View_definition_relationship.relating_view :<>: 
+  SELF\View_definition_relationship.related_view ;
+WR2: NOT(EXISTS(quantity)) XOR 
+	((NOT ('NUMBER' IN TYPEOF(quantity.value_component))) XOR (quantity.value_component > 0));
+END_ENTITY;
+
+END_SCHEMA;

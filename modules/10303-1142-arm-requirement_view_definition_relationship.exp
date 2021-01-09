@@ -1,0 +1,27 @@
+(*
+ $Id: 10303-1142-arm-requirement_view_definition_relationship.exp,v 1.1 2006/08/07 07:44:44 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N3136 - ISO/TS 10303-1142 Requirement view definition relationship - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG12 N2357
+*) 
+
+
+SCHEMA Requirement_view_definition_relationship_arm;
+
+USE FROM Product_view_definition_relationship_arm;    -- ISO/TS 10303-1041
+
+USE FROM Requirement_view_definition_arm;    -- ISO/TS 10303-1141
+
+
+ENTITY Requirement_collection_relationship
+  SUBTYPE OF (View_definition_relationship);
+  SELF\View_definition_relationship.relating_view RENAMED collection : Requirement_view_definition;
+  SELF\View_definition_relationship.related_view RENAMED member : Requirement_view_definition;
+END_ENTITY;
+
+ENTITY Tracing_relationship
+  SUBTYPE OF (View_definition_relationship);
+  SELF\View_definition_relationship.relating_view RENAMED traces_from : Requirement_view_definition;
+  SELF\View_definition_relationship.related_view RENAMED traces_to : Requirement_view_definition;
+END_ENTITY;
+
+END_SCHEMA;  -- Requirement_view_definition_relationship_arm

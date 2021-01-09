@@ -1,0 +1,68 @@
+(*
+ $Id: 10303-1278-arm-product_group.exp,v 1.1 2006/08/07 07:44:46 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N3112 - ISO/TS 10303-1278 Product group - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG12 N2342
+*) 
+
+
+SCHEMA Product_group_arm;
+
+USE FROM Classification_assignment_arm;    -- ISO/TS 10303-1114
+
+USE FROM Effectivity_application_arm;    -- ISO/TS 10303-1059
+
+USE FROM Product_as_individual_arm;    -- ISO/TS 10303-1164
+
+USE FROM Product_concept_identification_arm;    -- ISO/TS 10303-1060
+
+USE FROM Product_identification_arm;    -- ISO/TS 10303-1017
+
+USE FROM Product_version_arm;    -- ISO/TS 10303-1018
+
+USE FROM Property_assignment_arm;    -- ISO/TS 10303-1030
+
+
+TYPE product_group_classification_item = SELECT BASED_ON classification_item WITH 
+   (Product_group, 
+    Product_group_relationship);
+END_TYPE; 
+
+TYPE product_group_effectivity_item = SELECT BASED_ON effectivity_item WITH 
+   (Product_group, 
+    Product_group_membership, 
+    Product_group_relationship);
+END_TYPE; 
+
+TYPE product_group_property_assignment_select = EXTENSIBLE SELECT BASED_ON property_assignment_select WITH 
+   (Product_group_membership);
+END_TYPE; 
+
+TYPE product_select = EXTENSIBLE SELECT
+   (Product, 
+    Product_as_individual, 
+    Product_concept, 
+    Product_group, 
+    Product_version);
+END_TYPE; 
+
+ENTITY Product_group;
+  id : STRING;
+  description : OPTIONAL STRING;
+  purpose : STRING;
+  membership_rule : OPTIONAL STRING;
+  product_group_context : OPTIONAL STRING;
+END_ENTITY;
+
+ENTITY Product_group_membership;
+  member : product_select;
+  of_group : Product_group;
+END_ENTITY;
+
+ENTITY Product_group_relationship;
+  description : OPTIONAL STRING;
+  relating : Product_group;
+  related : Product_group;
+  role : OPTIONAL STRING;
+END_ENTITY;
+
+END_SCHEMA;  -- Product_group_arm

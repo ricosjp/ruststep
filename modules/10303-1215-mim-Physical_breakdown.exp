@@ -1,0 +1,22 @@
+(*
+ $Id: 10303-1215-mim-Physical_breakdown.exp,v 1.2 2006/08/07 09:42:04 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N3095 - ISO/TS 10303-1215 Physical breakdown - EXPRESS MIM
+ Supersedes ISO TC184/SC4/WG12 N2286
+*) 
+
+
+SCHEMA Physical_breakdown_mim;
+
+USE FROM Product_breakdown_mim;    -- ISO/TS 10303-1248
+
+
+ENTITY physical_breakdown_context
+  SUBTYPE OF (breakdown_context);
+END_ENTITY;
+
+ENTITY physical_element_usage
+  SUBTYPE OF (breakdown_element_usage);
+END_ENTITY;
+
+END_SCHEMA;  -- Physical_breakdown_mim
+

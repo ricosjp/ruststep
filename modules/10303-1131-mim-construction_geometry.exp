@@ -1,0 +1,83 @@
+(*
+$Id: 10303-1131-mim-construction_geometry.exp,v 1.2 2005/02/22 17:09:07 wg12deputy Exp $
+ISO TC184/SC4/WG12 N2868 - ISO/TS 10303-1131 Construction geometry - EXPRESS MIM
+Supersedes ISO TC184/SC4/WG12 N1542
+*) 
+
+
+SCHEMA Construction_geometry_mim;
+
+USE FROM aic_topologically_bounded_surface;    -- ISO 10303-511
+
+USE FROM Elemental_geometric_shape_mim;    -- ISO/TS 10303-1004
+
+USE FROM Foundation_representation_mim;    -- ISO/TS 10303-1006
+
+USE FROM geometry_schema   -- ISO 10303-42
+  (b_spline_curve,
+   b_spline_surface,
+   circle,
+   composite_curve,
+   conical_surface,
+   curve,
+   curve_bounded_surface,
+   curve_replica,
+   cylindrical_surface,
+   degenerate_pcurve,
+   ellipse,
+   hyperbola,
+   line,
+   offset_curve_2d,
+   offset_curve_3d,
+   offset_surface,
+   oriented_surface,
+   parabola,
+   pcurve,
+   placement,
+   plane,
+   point_on_curve,
+   point_on_surface,
+   point_replica,
+   polyline,
+   rectangular_composite_surface,
+   rectangular_trimmed_surface,
+   spherical_surface,
+   surface,
+   surface_curve,
+   surface_of_linear_extrusion,
+   surface_of_revolution,
+   surface_replica,
+   toroidal_surface,
+   trimmed_curve); 
+
+USE FROM representation_schema   -- ISO 10303-43
+  (mapped_item,
+   representation,
+   representation_map,
+   representation_relationship); 
+
+USE FROM topology_schema   -- ISO 10303-42
+  (edge_curve,
+   face_surface,
+   vertex_point); 
+
+
+ENTITY constructive_geometry_representation
+  SUBTYPE OF (representation);
+WHERE
+  WR1: ('CONSTRUCTION_GEOMETRY_MIM.GEOMETRIC_REPRESENTATION_CONTEXT' IN TYPEOF(SELF.context_of_items)) AND ({2 <= SELF.context_of_items\geometric_representation_context. coordinate_space_dimension <= 3});
+  WR2: SIZEOF( QUERY( cgr_i <* SELF.items | SIZEOF(['CONSTRUCTION_GEOMETRY_MIM.PLACEMENT', 'CONSTRUCTION_GEOMETRY_MIM.CURVE', 'CONSTRUCTION_GEOMETRY_MIM.EDGE', 'CONSTRUCTION_GEOMETRY_MIM.FACE', 'CONSTRUCTION_GEOMETRY_MIM.POINT', 'CONSTRUCTION_GEOMETRY_MIM.SURFACE', 'CONSTRUCTION_GEOMETRY_MIM.FACE_SURFACE', 'CONSTRUCTION_GEOMETRY_MIM.VERTEX_POINT'] * TYPEOF(cgr_i)) <> 1 )) = 0;
+  WR3: SIZEOF( USEDIN( SELF, 'REPRESENTATION_SCHEMA.' + 'REPRESENTATION_RELATIONSHIP.REP_2') ) > 0;
+  WR4: SIZEOF( USEDIN( SELF, 'REPRESENTATION_SCHEMA.' + 'REPRESENTATION_MAP.MAPPED_REPRESENTATION') ) = 0;
+END_ENTITY;
+
+ENTITY constructive_geometry_representation_relationship
+  SUBTYPE OF (representation_relationship);
+WHERE
+  WR1: (SELF.rep_1.context_of_items :=: SELF.rep_2.context_of_items) AND ('CONSTRUCTION_GEOMETRY_MIM.GEOMETRIC_REPRESENTATION_CONTEXT' IN TYPEOF(SELF.rep_1.context_of_items));
+  WR2: 'CONSTRUCTION_GEOMETRY_MIM.CONSTRUCTIVE_GEOMETRY_REPRESENTATION' IN TYPEOF(SELF.rep_2);
+  WR3: SIZEOF(['CONSTRUCTION_GEOMETRY_MIM.SHAPE_REPRESENTATION', 'CONSTRUCTION_GEOMETRY_MIM.CONSTRUCTIVE_GEOMETRY_REPRESENTATION'] * TYPEOF(SELF.rep_1)) = 1;
+  WR4: NOT('CONSTRUCTION_GEOMETRY_MIM.' + 'REPRESENTATION_RELATIONSHIP_WITH_TRANSFORMATION' IN TYPEOF(SELF));
+END_ENTITY;
+
+END_SCHEMA;  -- Construction_geometry_mim

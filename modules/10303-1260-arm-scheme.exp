@@ -1,0 +1,97 @@
+(*
+ $Id: 10303-1260-arm-scheme.exp,v 1.2 2006/08/07 07:44:45 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N3160 - ISO/TS 10303-1260 Scheme - EXPRESS ARM
+Supersedes ISO TC184/SC4/WG12 N2441
+*) 
+
+
+SCHEMA Scheme_arm;
+
+USE FROM Activity_method_arm;    -- ISO/TS 10303-1049
+
+USE FROM Activity_method_assignment_arm;    -- ISO/TS 10303-1249
+
+USE FROM Date_time_assignment_arm;    -- ISO/TS 10303-1014
+
+USE FROM Person_organization_assignment_arm;    -- ISO/TS 10303-1013
+
+USE FROM Time_interval_arm;    -- ISO/TS 10303-1065
+
+
+TYPE scheme_date_or_date_time_item = SELECT BASED_ON date_or_date_time_item WITH 
+   (Scheme_entry);
+END_TYPE; 
+
+TYPE scheme_entry_item_select = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON activity_method_item;
+END_TYPE; 
+
+TYPE scheme_person_organization_select = SELECT BASED_ON organization_or_person_in_organization_item WITH 
+   (Scheme, 
+    Scheme_entry);
+END_TYPE; 
+
+TYPE scheme_subject_select = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON activity_method_item;
+END_TYPE; 
+
+TYPE scheme_version_select = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON activity_method_item;
+END_TYPE; 
+
+ENTITY Scheme
+  SUBTYPE OF (Activity_method);
+END_ENTITY;
+
+ENTITY Scheme_entry
+  SUBTYPE OF (Activity_method);
+  scheme : Scheme_version;
+END_ENTITY;
+
+ENTITY Scheme_entry_assignment
+  SUBTYPE OF (Applied_activity_method_assignment);
+  SELF\Applied_activity_method_assignment.assigned_activity_method RENAMED assigned_entry : Scheme_entry;
+  SELF\Applied_activity_method_assignment.items : SET[1:?] OF scheme_entry_item_select;
+END_ENTITY;
+
+ENTITY Scheme_entry_relationship
+  SUBTYPE OF (Activity_method_relationship);
+  SELF\Activity_method_relationship.relating_method RENAMED relating_entry : Scheme_entry;
+  SELF\Activity_method_relationship.related_method RENAMED related_entry : Scheme_entry;
+END_ENTITY;
+
+ENTITY Scheme_relationship
+  SUBTYPE OF (Activity_method_relationship);
+  SELF\Activity_method_relationship.relating_method RENAMED relating_scheme : Scheme;
+  SELF\Activity_method_relationship.related_method RENAMED related_scheme : Scheme;
+END_ENTITY;
+
+ENTITY Scheme_subject_assignment
+  SUBTYPE OF (Applied_activity_method_assignment);
+  SELF\Applied_activity_method_assignment.assigned_activity_method RENAMED assigned_scheme : Scheme;
+  SELF\Applied_activity_method_assignment.items : SET[1:?] OF scheme_subject_select;
+END_ENTITY;
+
+ENTITY Scheme_version
+  SUBTYPE OF (Activity_method);
+  of_scheme : Scheme;
+END_ENTITY;
+
+ENTITY Scheme_version_assignment
+  SUBTYPE OF (Applied_activity_method_assignment);
+  SELF\Applied_activity_method_assignment.assigned_activity_method RENAMED assigned_scheme_version : Scheme_version;
+  SELF\Applied_activity_method_assignment.items : SET[1:?] OF scheme_version_select;
+END_ENTITY;
+
+ENTITY Scheme_version_relationship
+  SUBTYPE OF (Activity_method_relationship);
+  SELF\Activity_method_relationship.relating_method RENAMED relating_scheme_version : Scheme_version;
+  SELF\Activity_method_relationship.related_method RENAMED related_scheme_version : Scheme_version;
+END_ENTITY;
+
+ENTITY Sequencing_relationship
+  SUBTYPE OF (Scheme_entry_relationship);
+  sequencing_type : STRING;
+  time_lag : OPTIONAL Time_interval;
+END_ENTITY;
+
+END_SCHEMA;  -- Scheme_arm
+
+

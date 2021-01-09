@@ -1,0 +1,23 @@
+(*
+ $Id: 10303-1128-mim-external_item_identification_assignment.exp,v 1.5 2006/08/07 09:42:04 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N1208 - ISO/TS 10303-1128 External item identification assignment - EXPRESS MIM
+*)
+
+
+SCHEMA External_item_identification_assignment_mim;
+
+USE FROM management_resources_schema   	-- ISO 10303-41
+  (external_identification_assignment); 
+
+USE FROM support_resource_schema		-- ISO 10303-41
+  (identifier);
+
+TYPE external_identification_item = EXTENSIBLE GENERIC_ENTITY SELECT;
+END_TYPE;
+
+ENTITY applied_external_identification_assignment
+SUBTYPE OF (external_identification_assignment);
+  items : SET [1 : ?] OF external_identification_item;
+END_ENTITY;
+
+END_SCHEMA;

@@ -1,0 +1,1076 @@
+(*
+  AIM EXPRESS long form for ISO/FDIS 10303-207
+*)
+SCHEMA sheet_metal;
+
+USE FROM aic_advanced_brep;
+
+USE FROM aic_csg;
+
+USE FROM aic_edge_based_wireframe;
+
+USE FROM aic_faceted_brep;
+
+USE FROM aic_geometrically_bounded_surface;
+
+USE FROM aic_geometrically_bounded_wireframe;
+
+USE FROM aic_manifold_surface;
+
+USE FROM aic_shell_based_wireframe;
+
+USE FROM application_context_schema
+  (application_context,
+  application_protocol_definition,
+  product_concept_context,
+  product_context,
+  product_definition_context);
+
+USE FROM product_definition_schema
+  (product,
+  product_related_product_category,
+  product_category_relationship,
+  product_definition,
+  product_definition_effectivity,
+  product_definition_formation,
+  product_definition_formation_with_specified_source,
+  product_definition_relationship,
+  product_definition_substitute,
+  product_definition_with_associated_documents);
+
+USE FROM product_property_definition_schema
+  (shape_aspect);
+
+USE FROM product_property_representation_schema
+  (shape_definition_representation,
+  shape_representation,
+  shape_representation_relationship);
+
+USE FROM management_resources_schema
+  (action_assignment,
+  approval_assignment,
+  contract_assignment,
+  date_assignment,
+  date_and_time_assignment,
+  document_reference,
+  organization_assignment,
+  person_and_organization_assignment,
+  person_assignment,
+  security_classification_assignment);
+
+USE FROM action_schema
+  (action,
+  action_method,
+  action_relationship,
+  action_request_solution,
+  action_resource_relationship,
+  directed_action,
+  executed_action,
+  versioned_action_request);
+
+USE FROM approval_schema
+  (approval,
+  approval_date_time,
+  approval_person_organization);
+
+USE FROM contract_schema
+  (contract);
+
+USE FROM person_organization_schema
+  (organization_role,
+  person_and_organization_role,
+  person_role);
+
+USE FROM date_time_schema
+  (calendar_date,
+  date_role,
+  date_time_role,
+  ordinal_date,
+  week_of_year_and_day_date);
+
+USE FROM effectivity_schema
+  (dated_effectivity,
+  serial_numbered_effectivity);
+
+USE FROM support_resource_schema;
+
+USE FROM measure_schema
+  (context_dependent_unit,
+  conversion_based_unit,
+  derived_unit,
+  length_measure_with_unit,
+  length_unit,
+  plane_angle_measure_with_unit,
+  plane_angle_unit,
+  si_unit);
+
+USE FROM geometry_schema
+  (direction,
+  surface);
+  
+USE FROM topology_schema
+  (face_surface);
+
+USE FROM geometric_model_schema
+  (geometric_set);
+
+USE FROM representation_schema
+  (functionally_defined_transformation,
+  global_uncertainty_assigned_context,
+  item_defined_transformation,
+  representation_relationship_with_transformation);
+
+USE FROM product_structure_schema
+  (assembly_component_usage_substitute,
+  make_from_usage_option_group,
+  promissory_usage_occurrence,
+  quantified_assembly_component_usage);
+
+USE FROM product_concept_schema;
+
+USE FROM configuration_management_schema
+  (configuration_design);
+
+USE FROM material_property_definition_schema
+  (material_property);
+
+USE FROM qualified_measure_schema
+  (descriptive_representation_item,
+  measure_representation_item);
+
+USE FROM shape_dimension_schema
+  (angular_location,
+  dimensional_characteristic_representation,
+  dimensional_location_with_path,
+  dimensional_size,
+  shape_dimension_representation);
+
+USE FROM shape_tolerance_schema
+  (geometric_tolerance_with_datum_reference,
+  limits_and_fits,
+  modified_geometric_tolerance,
+  plus_minus_tolerance,
+  tolerance_value,
+  tolerance_zone_definition);
+
+USE FROM method_definition_schema
+  (action_method_with_associated_documents,
+  sequential_method);
+
+USE FROM process_property_representation_schema
+  (action_property_representation,
+  resource_property_representation);
+
+USE FROM process_property_schema
+  (action_resource_requirement,
+  action_resource_requirement_relationship,
+  process_product_association,
+  product_definition_process,
+  replacement_relationship,
+  requirement_for_action_resource);
+
+TYPE action_assigned_item = SELECT
+  (executed_action,
+   process_plan,
+   product_definition,
+   product_definition_formation);
+END_TYPE;
+
+TYPE approval_assigned_item = SELECT
+  (executed_action,
+   process_plan,
+   product_definition,
+   product_definition_formation,
+   sheet_metal_action_assignment);
+END_TYPE;
+
+TYPE contract_assigned_item = SELECT
+  (change_order,
+   executed_action,
+   product_definition_formation_with_specified_source,
+   start_order);
+END_TYPE;
+
+TYPE date_assigned_item = SELECT 
+  (executed_action,
+   process_plan,
+   product_concept,
+   product_definition,
+   product_definition_formation,
+   sheet_metal_action_assignment,
+   versioned_action_request);
+END_TYPE;
+
+TYPE date_and_time_assigned_item = SELECT 
+  (executed_action,
+   process_plan,
+   product_concept,
+   product_definition,
+   product_definition_formation,
+   sheet_metal_action_assignment,
+   versioned_action_request);
+END_TYPE;
+
+TYPE document_referenced_item = SELECT
+  (action_resource_requirement,
+   executed_action,
+   process_plan,
+   product_definition,
+   sheet_metal_action_assignment);
+END_TYPE;
+
+TYPE organization_assigned_item = SELECT
+  (change_order,
+   contract,
+   executed_action,
+   product_definition,
+   start_order);
+END_TYPE;
+
+TYPE person_and_organization_assigned_item = SELECT
+  (change_order,
+   process_plan,
+   product_definition);
+END_TYPE;
+
+TYPE person_assigned_item = SELECT
+  (change_order,
+   contract,
+   product_definition,
+   shape_aspect,
+   versioned_action_request);
+END_TYPE;
+
+TYPE security_classification_assigned_item = SELECT
+  (process_plan,
+     product_definition);
+END_TYPE;
+
+ENTITY change_order
+  SUBTYPE OF (work_order);
+END_ENTITY;
+
+ENTITY die_definition_constraint_relationship
+  SUBTYPE OF (product_definition_relationship);
+WHERE
+  WR1: SELF\product_definition_relationship.
+     related_product_definition.frame_of_reference.
+     life_cycle_stage = 'as design constrained';
+  WR2: product_type_of_product
+      ( SELF.relating_product_definition.formation.of_product, product_type)
+      .name IN ['die'];
+  WR3: product_type_of_product 
+      ( SELF.related_product_definition.formation.of_product, product_type)
+      .name IN ['die'];
+END_ENTITY;
+
+ENTITY input_item_die_relationship
+  SUBTYPE OF (product_definition_relationship);
+WHERE
+  WR1: product_type_of_product 
+     ( SELF.relating_product_definition.formation.of_product, product_type)
+     .name = 'die';
+  WR2: product_type_of_product 
+     ( SELF.related_product_definition.formation.of_product, product_type)
+          .name IN ['material', 'part'];
+END_ENTITY;
+
+ENTITY physically_modelled_product_definition
+  SUBTYPE OF (product_definition);
+WHERE
+  WR1: SELF\product_definition.frame_of_reference.
+        life_cycle_stage = 'as physically modelled';
+  WR2: SIZEOF( USEDIN (SELF, 'SHEET_METAL.' +
+                'PRODUCT_DEFINITION_RELATIONSHIP.' +
+                'RELATED_PRODUCT_DEFINITION')) > 0;
+END_ENTITY;
+
+ENTITY process_plan
+  SUBTYPE OF (action);
+END_ENTITY;
+
+ENTITY product_type
+  SUBTYPE OF (product_related_product_category);
+WHERE
+  WR1: SIZEOF (USEDIN (SELF,'SHEET_METAL.PRODUCT_CATEGORY_RELATIONSHIP.'
+         + 'RELATING_PRODUCT_CATEGORY ') + USEDIN (SELF,
+         'SHEET_METAL.PRODUCT_CATEGORY_RELATIONSHIP.' +
+         'RELATED_PRODUCT_CATEGORY ')) = 0;      
+  WR2: SELF.name IN [ 'die', 'part', 'material', 'unspecified'];
+END_ENTITY;
+
+ENTITY sequenced_product_definition_relationship
+  SUBTYPE OF (product_definition_relationship);
+WHERE
+  WR1: (('SHEET_METAL.' +
+        'PRODUCT_DEFINITION_WITH_ASSOCIATED_DOCUMENTS') IN (TYPEOF (
+        SELF\product_definition_relationship.
+        relating_product_definition) AND ('SHEET_METAL.' +
+        'PRODUCT_DEFINITION_WITH_ASSOCIATED_DOCUMENTS'))) IN TYPEOF (
+        SELF\product_definition_relationship.related_product_definition);
+END_ENTITY;
+
+ENTITY sheet_metal_action_assignment
+  SUBTYPE OF (action_assignment);
+  items  : SET [1:?] OF action_assigned_item;
+WHERE
+  WR1: 'SHEET_METAL.EXECUTED_ACTION' IN
+        TYPEOF (SELF\action_assignment.assigned_action);
+END_ENTITY;
+
+ENTITY sheet_metal_approval_assignment
+  SUBTYPE OF (approval_assignment);
+  items  : SET [1:?] OF approval_assigned_item;
+END_ENTITY;
+
+ENTITY sheet_metal_contract_assignment
+  SUBTYPE OF (contract_assignment);
+  items  : SET [1:?] OF contract_assigned_item;
+END_ENTITY;
+
+ENTITY sheet_metal_date_and_time_assignment
+  SUBTYPE OF (date_and_time_assignment);
+  items  : SET [1:?] OF date_and_time_assigned_item;
+WHERE
+  WR1: sheet_metal_date_correlation (SELF);
+END_ENTITY;
+
+ENTITY sheet_metal_date_assignment
+  SUBTYPE OF (date_assignment);
+  items  : SET [1:?] OF date_assigned_item;
+WHERE
+  WR1: sheet_metal_date_correlation (SELF);
+END_ENTITY;
+
+ENTITY sheet_metal_document_reference
+  SUBTYPE OF (document_reference);
+  items  : SET [1:?] OF document_referenced_item;
+WHERE
+  WR1: sheet_metal_document_correlation (SELF);
+END_ENTITY;
+
+ENTITY sheet_metal_organization_assignment
+  SUBTYPE OF (organization_assignment);
+  items  : SET [1:?] OF organization_assigned_item;
+WHERE
+  WR1: sheet_metal_organization_correlation (SELF);
+END_ENTITY;
+
+ENTITY sheet_metal_person_and_organization_assignment
+  SUBTYPE OF (person_and_organization_assignment);
+  items  : SET [1:?] OF person_and_organization_assigned_item;
+WHERE
+  WR1: sheet_metal_person_and_organization_correlation (SELF);
+END_ENTITY;
+
+ENTITY sheet_metal_person_assignment
+  SUBTYPE OF (person_assignment);
+  items  : SET [1:?] OF person_assigned_item;
+WHERE
+  WR1: sheet_metal_person_correlation (SELF);
+END_ENTITY;
+
+ENTITY sheet_metal_security_classification_assignment
+  SUBTYPE OF (security_classification_assignment);
+  items  : SET [1:?] OF security_classification_assigned_item;
+END_ENTITY;
+
+ENTITY start_order
+  SUBTYPE OF (work_order);
+END_ENTITY;
+
+ENTITY work_order
+  SUPERTYPE OF (ONEOF (change_order, start_order))
+  SUBTYPE OF (executed_action);
+UNIQUE 
+  UR1:name;
+END_ENTITY;
+
+ENTITY work_order_relationship
+  SUBTYPE OF (action_relationship);
+WHERE
+  WR1:(('CHANGE_ORDER' IN (TYPEOF(SELF\action_relationship.
+   relating_action)  OR 'START_ORDER')) IN TYPEOF(SELF\
+   action_relationship.relating_action)) AND (('CHANGE_ORDER' 
+   IN (TYPEOF(SELF\action_relationship.related_action )  OR
+   'START_ORDER')) IN TYPEOF (SELF\action_relationship.
+   related_action ));
+END_ENTITY;
+
+RULE application_context_requires_ap_definition FOR
+     (application_context, application_protocol_definition);
+WHERE
+     WR1:  SIZEOF (QUERY (ac <* application_context |
+     NOT (SIZEOF (QUERY (apd <* application_protocol_definition |
+     (ac :=: apd.application)
+     AND
+     (apd.application_interpreted_model_schema_name =
+      'sheet_metal'))) = 1 ))) = 0;
+END_RULE;
+
+RULE approval_requires_approval_date_time FOR
+  (approval, approval_date_time);
+WHERE
+  WR1: SIZEOF (QUERY (a <* approval |
+       NOT (SIZEOF (QUERY (adt <* approval_date_time |
+       a :=: adt.dated_approval )) = 1 ))) = 0;
+END_RULE;
+
+RULE approval_requires_approval_person_organization FOR
+  (approval, approval_person_organization);
+WHERE
+  WR1: SIZEOF (QUERY (a <* approval |
+       NOT (SIZEOF (QUERY (apo <* approval_person_organization |
+       a :=: apo.authorized_approval )) >= 1 ))) = 0;
+END_RULE;
+
+RULE cardinality_action_method_to_process_plan FOR
+  (action_method, process_plan);
+WHERE
+  WR1: SIZEOF (QUERY (am <* action_method |
+     (am.name = 'part process plan template') AND
+     (NOT (SIZEOF (QUERY (pp <* process_plan |
+      am :=: pp.chosen_method )) = 1 )))) = 0;
+END_RULE;
+
+RULE cardinality_product_definition_process_to_action_resource_requirement
+    FOR (product_definition_process, action_resource_requirement);
+WHERE 
+    WR1: SIZEOF (QUERY (pdp <* product_definition_process |
+         NOT (SIZEOF (QUERY (arr <* action_resource_requirement |
+         pdp :=: arr.operations)) <= 1))) = 0;
+END_RULE;
+
+RULE cardinality_sm_action_assignment_to_process_plan 
+    FOR (sheet_metal_action_assignment, process_plan);
+WHERE
+    WR1: SIZEOF (QUERY (pp <* process_plan |
+         NOT (SIZEOF (QUERY (smaa <* sheet_metal_action_assignment |
+         pp IN smaa.items)) <=1))) = 0;
+END_RULE; 
+
+RULE cardinality_sm_action_assignment_to_product_definition 
+    FOR (sheet_metal_action_assignment, product_definition);
+WHERE
+    WR1: SIZEOF (QUERY (pd <* product_definition |
+         NOT (SIZEOF (QUERY (smaa <* sheet_metal_action_assignment |
+         pd IN smaa.items)) <=1))) = 0;
+END_RULE; 
+
+RULE cardinality_sm_action_assignment_to_product_definition_formation 
+    FOR (sheet_metal_action_assignment, product_definition_formation);
+WHERE
+    WR1: SIZEOF (QUERY (pdf <* product_definition_formation |
+         NOT (SIZEOF (QUERY (smaa <* sheet_metal_action_assignment |
+         pdf IN smaa.items)) <=1))) = 0;
+END_RULE; 
+
+RULE cardinality_sm_organization_assignment_to_work_order 
+    FOR (sheet_metal_organization_assignment, work_order);
+WHERE
+    WR1: SIZEOF (QUERY (wo <* work_order |
+    NOT (SIZEOF (QUERY (smoa <* sheet_metal_organization_assignment |
+    ('effector' = smoa.role) AND (wo IN smoa.items))) >=1))) = 0;
+END_RULE;
+
+RULE cardinality_start_order_to_sm_action_assignment 
+    FOR (sheet_metal_action_assignment, start_order);
+WHERE
+    WR1: SIZEOF (QUERY (so <* start_order | 
+         NOT (SIZEOF (QUERY (smaa <* sheet_metal_action_assignment |
+         so :=:smaa.assigned_action)) >= 1))) = 0;
+END_RULE;
+
+RULE cardinality_work_order_to_sm_contract_assig_or_sm_org_assig FOR
+  (work_order, sheet_metal_contract_assignment,
+   sheet_metal_organization_assignment);
+WHERE
+  WR1: SIZEOF (QUERY (wo <* work_order |
+       NOT (SIZEOF (QUERY (smca <* sheet_metal_contract_assignment |
+       wo IN smca.items)) = 1)
+     XOR
+     (SIZEOF (QUERY (smoa <* sheet_metal_organization_assignment |
+     wo IN smoa.items)) = 1) )) = 0;
+END_RULE;
+
+RULE dependent_instantiation_for_action FOR (action);
+WHERE
+  WR1: SIZEOF (QUERY (a <* action |
+       NOT (SIZEOF (USEDIN (a, '')) >= 1 ))) = 0;
+END_RULE;
+
+RULE dependent_instantiation_for_action_request_solution
+     FOR (action_request_solution);
+WHERE
+  WR1: SIZEOF (QUERY (ars <* action_request_solution |
+       NOT (SIZEOF (USEDIN (ars, '')) >= 1 ))) = 0;
+END_RULE;
+
+RULE dependent_instantiation_for_application_context
+     FOR (application_context);
+WHERE
+  WR1: SIZEOF (QUERY (ac <* application_context |
+       NOT (SIZEOF (USEDIN (ac, '')) >= 1 ))) = 0;
+END_RULE;
+
+RULE dependent_instantiation_for_contract 
+     FOR (contract);
+WHERE
+  WR1: SIZEOF (QUERY (c <* contract |
+       NOT (SIZEOF (USEDIN (c, '')) >= 1 ))) = 0;
+END_RULE;
+
+RULE dependent_instantiation_for_date_role 
+     FOR (date_role);
+WHERE
+  WR1: SIZEOF (QUERY (dr <* date_role |
+       NOT (SIZEOF (USEDIN (dr, '')) >= 1 ))) = 0;
+END_RULE;
+
+RULE dependent_instantiation_for_date_time_role 
+     FOR (date_time_role);
+WHERE
+  WR1: SIZEOF (QUERY (dtr <* date_time_role |
+       NOT (SIZEOF (USEDIN (dtr, '')) >= 1 ))) = 0;
+END_RULE;
+
+RULE dependent_instantiation_for_derived_unit 
+     FOR (derived_unit);
+WHERE
+  WR1: SIZEOF (QUERY (du <* derived_unit |
+       NOT (SIZEOF (USEDIN (du, '')) >= 1 ))) = 0;
+END_RULE;
+
+RULE dependent_instantiation_for_document_reference 
+     FOR (document_reference);
+WHERE
+  WR1: SIZEOF (QUERY (dr <* document_reference |
+       NOT (SIZEOF (USEDIN (dr, '')) >= 1 ))) = 0;
+END_RULE;
+
+RULE dependent_instantiation_for_functionally_defined_transformation 
+     FOR (functionally_defined_transformation);
+WHERE
+  WR1: SIZEOF (QUERY (fdt <* functionally_defined_transformation |
+       NOT (SIZEOF (USEDIN (fdt, '')) >= 1 ))) = 0;
+END_RULE;
+
+RULE dependent_instantiation_for_item_defined_transformation 
+     FOR (item_defined_transformation);
+WHERE
+  WR1: SIZEOF (QUERY (idt <* item_defined_transformation |
+       NOT (SIZEOF (USEDIN (idt, '')) >= 1 ))) = 0;
+END_RULE;
+
+RULE dependent_instantiation_for_organization_role 
+     FOR (organization_role);
+WHERE
+  WR1: SIZEOF (QUERY (o_r <* organization_role |
+       NOT (SIZEOF (USEDIN (o_r, '')) >= 1 ))) = 0;
+END_RULE;
+
+RULE dependent_instantiation_for_person_and_organization_role 
+     FOR (person_and_organization_role);
+WHERE
+  WR1: SIZEOF (QUERY (paor <* person_and_organization_role |
+       NOT (SIZEOF (USEDIN (paor, '')) >= 1 ))) = 0;
+END_RULE;
+
+RULE dependent_instantiation_for_person_role 
+     FOR (person_role);
+WHERE
+  WR1: SIZEOF (QUERY (pr <* person_role |
+       NOT (SIZEOF (USEDIN (pr, '')) >= 1 ))) = 0;
+END_RULE;
+
+RULE dependent_instantiation_for_tolerance_value 
+     FOR (tolerance_value);
+WHERE
+  WR1: SIZEOF (QUERY (tr <* tolerance_value |
+       NOT (SIZEOF (USEDIN (tr, '')) >= 1 ))) = 0;
+END_RULE;
+
+RULE executed_action_requires_approval FOR
+  (executed_action, sheet_metal_approval_assignment);
+WHERE
+  WR1: SIZEOF (QUERY (ea <* executed_action |
+       NOT (SIZEOF (QUERY (smaa <* 
+       sheet_metal_approval_assignment | 
+       ea IN smaa.items)) >=1 ))) = 0;
+END_RULE;
+
+RULE executed_action_requires_date_or_date_and_time FOR
+  (executed_action, sheet_metal_date_assignment,
+   sheet_metal_date_and_time_assignment);
+WHERE
+  WR1: SIZEOF (QUERY (ea <* executed_action |
+       NOT (SIZEOF (QUERY (smda <* sheet_metal_date_assignment | 
+      ea IN smda.items)) +
+          (SIZEOF (QUERY (smdata <* sheet_metal_date_and_time_assignment | 
+      ea IN smdata.items))) =1 ) )) = 0;
+END_RULE;
+
+RULE executed_action_requires_organization FOR
+  (executed_action, sheet_metal_organization_assignment);
+WHERE
+  WR1: SIZEOF (QUERY (ea <* executed_action |
+       NOT (SIZEOF (QUERY (smoa <* 
+       sheet_metal_organization_assignment | 
+       ea IN smoa.items)) >=1 ))) = 0;
+END_RULE;
+
+RULE global_uncertainty_assigned_context_constraint
+ FOR (global_uncertainty_assigned_context);
+WHERE
+  WR1: SIZEOF (QUERY (guac <* global_uncertainty_assigned_context |
+       NOT (SIZEOF (guac.uncertainty)=2)))=0;
+  WR2: SIZEOF (QUERY (guac <* global_uncertainty_assigned_context |
+       NOT ((SIZEOF (QUERY (x <* guac.uncertainty |
+             'SHEET_METAL.LENGTH_UNIT' IN TYPEOF (x.unit_component)))=1) AND
+            (SIZEOF (QUERY (x <* guac.uncertainty |
+             'SHEET_METAL.PLANE_ANGLE_UNIT' IN TYPEOF (x.unit_component)))=1)
+       )))=0;
+END_RULE;
+
+RULE process_plan_requires_product_definition FOR
+  (process_plan, sheet_metal_action_assignment);
+WHERE
+  WR1: SIZEOF (QUERY (pp <* process_plan |
+       NOT (SIZEOF (QUERY ( smaa <* sheet_metal_action_assignment |
+       (smaa\action_assignment.assigned_action :=: pp\action) AND
+       (SIZEOF (QUERY (i <* smaa.items | 'SHEET_METAL.' +
+       'PRODUCT_DEFINITION' IN TYPEOF(i))) >= 1))) = 1))) = 0;
+END_RULE;
+
+RULE product_definition_formation_requires_date_or_date_and_time FOR
+  (product_definition_formation, sheet_metal_date_assignment,
+      sheet_metal_date_and_time_assignment);
+WHERE
+  WR1: SIZEOF (QUERY (pdf <* product_definition_formation |
+       NOT (SIZEOF (QUERY (smda <* sheet_metal_date_assignment | 
+      pdf IN smda.items)) +
+          (SIZEOF (QUERY (smdata <* sheet_metal_date_and_time_assignment | 
+      pdf IN smdata.items))) =1 ) )) = 0;
+END_RULE;
+
+RULE product_definition_formation_requires_product_definition FOR
+  (product_definition_formation, product_definition);
+WHERE
+  WR1: SIZEOF (QUERY (pdf <* product_definition_formation |
+       NOT (SIZEOF (QUERY (pd <* product_definition |
+       pdf :=: pd.formation )) >= 1 ))) = 0;
+END_RULE;
+
+RULE product_requires_product_definition_formation FOR
+  (product, product_definition_formation);
+WHERE
+  WR1: SIZEOF (QUERY (p <* product |
+       NOT (SIZEOF (QUERY (pdf <* product_definition_formation |
+       p :=: pdf.of_product )) >= 1 ))) = 0;
+END_RULE;
+
+RULE product_requires_product_type FOR (product, product_type);
+WHERE
+  WR1: SIZEOF (QUERY (p <* product |
+       NOT (SIZEOF (QUERY (pt <* product_type |
+       SIZEOF (p IN
+       pt\product_related_product_category.products) = 1 ))
+       = 1 ))) = 0;
+END_RULE;
+
+RULE restrict_assembly_component_usage_substitute FOR
+  (assembly_component_usage_substitute, product_type);
+WHERE
+  WR1: SIZEOF (QUERY (acus <* assembly_component_usage_substitute |
+     NOT (('SHEET_METAL.QUANTIFIED_ASSEMBLY_COMPONENT_USAGE'
+     IN TYPEOF (acus.base)) AND
+     ('SHEET_METAL.QUANTIFIED_ASSEMBLY_COMPONENT_USAGE'
+     IN TYPEOF (acus.substitute))))) = 0;
+  WR2: SIZEOF (QUERY (acus <* assembly_component_usage_substitute | 
+     product_type_of_product 
+     (acus.base.relating_product_definition.formation.of_product,
+      product_type)
+     .name = product_type_of_product 
+     (acus.substitute.relating_product_definition.formation.of_product,
+     product_type)
+     .name ));
+END_RULE;
+
+RULE restrict_date_role FOR
+  (date_role);
+WHERE
+  WR1: SIZEOF (QUERY (dr <* date_role |
+       NOT (dr.name IN ['creation date', 'revision date', 'review date', 
+       'production year date', 'completion date', 'order date', 
+       'preliminary review date', 'start date', 'request date']))) = 0;
+END_RULE;
+
+RULE restrict_date_time_role FOR
+  (date_time_role);
+WHERE
+  WR1: SIZEOF (QUERY (dtr <* date_time_role |
+       NOT (dtr.name IN ['creation date', 'revision date', 
+      'review date', 'completion date', 'order date', 
+      'preliminary review date', 'start date', 'request date']))) = 0;
+END_RULE;
+
+RULE restrict_organization_role FOR
+  (organization_role);
+WHERE
+  WR1: SIZEOF (QUERY (o_r <* organization_role |
+       NOT (o_r.name IN ['design supplier', 'effector', 'implementor',
+      'order source', 'plant', 'supplier']))) = 0;
+END_RULE;
+
+RULE restrict_person_role FOR
+  (person_role);
+WHERE
+  WR1: SIZEOF (QUERY (pr <* person_role |
+       NOT (pr.name IN ['designer', 'implementor', 'purchaser',                
+  'work requestor']))) = 0;
+END_RULE;
+
+RULE restrict_person_and_organization_role FOR
+  (person_and_organization_role);
+WHERE
+  WR1: SIZEOF (QUERY (paor <* person_and_organization_role |
+       NOT (paor.name IN ['data owner', 'planner',
+       'implementor']))) = 0;
+END_RULE;
+
+RULE restrict_product_definition_context FOR
+  (product_definition_context);
+WHERE
+  WR1: SIZEOF (QUERY (pdc <* product_definition_context |
+       NOT ((pdc.life_cycle_stage = 'design') OR
+       (pdc.life_cycle_stage = 'in process') OR
+       (pdc.life_cycle_stage = 'as physically modelled') OR
+       (pdc.life_cycle_stage = 'as design constrained')))) = 0;
+END_RULE;
+
+RULE restrict_quantified_assembly_component_usage FOR
+  (quantified_assembly_component_usage, product_type);
+WHERE
+  WR1: SIZEOF (QUERY (qacu <* quantified_assembly_component_usage |
+       product_type_of_product
+ (qacu.relating_product_definition.formation.of_product, product_type).name =
+       product_type_of_product 
+ (qacu.related_product_definition.formation.of_product, product_type).name )); 
+END_RULE;
+
+RULE same_type_for_relationships FOR
+  (product_definition_relationship, product_type);
+WHERE
+  WR1: SIZEOF (QUERY (pdr <* product_definition_relationship |
+       NOT ((pdr.name <> 'assembly component' 
+       AND pdr.name <> 'mating' AND pdr.name <> 'symmetrical')
+       OR (pdr.name IN ['assembly component', 'mating', 'symmetrical']
+       AND (product_type_of_product
+       (pdr.relating_product_definition.formation.of_product,
+       product_type).name =
+      product_type_of_product
+       (pdr.related_product_definition.formation.of_product,
+       product_type).name ))))) = 0;
+END_RULE;
+
+RULE subtype_mandatory_for_shape_representation FOR (shape_representation);
+WHERE
+  WR1: SIZEOF ( QUERY (sr <* shape_representation |
+      NOT ( SIZEOF ( ['SHEET_METAL.ADVANCED_BREP_SHAPE_REPRESENTATION',
+      'SHEET_METAL.FACETED_BREP_SHAPE_REPRESENTATION',
+      'SHEET_METAL.CSG_SHAPE_REPRESENTATION', 
+      'SHEET_METAL.GEOMETRICALLY_BOUNDED_SURFACE_SHAPE_REPRESENTATION',
+      'SHEET_METAL.EDGE_BASED_WIREFRAME_SHAPE_REPRESENTATION',
+      'SHEET_METAL.SHELL_BASED_WIREFRAME_SHAPE_REPRESENTATION',
+      'SHEET_METAL.GEOMETRICALLY_BOUNDED_WIREFRAME_SHAPE_REPRESENTATION',
+      'SHEET_METAL.MANIFOLD_SURFACE_SHAPE_REPRESENTATION'] )
+      * ( TYPEOF ('sr') ) = 1 ))) = 0;
+END_RULE;
+
+RULE subtype_mandatory_work_order FOR (work_order);
+WHERE
+  WR1: SIZEOF ( QUERY (wo <* work_order |
+      (NOT ('SHEET_METAL.CHANGE_ORDER' IN TYPEOF (wo)) AND
+       NOT ('SHEET_METAL.START_ORDER' IN TYPEOF (wo))) )) = 0;
+END_RULE;
+
+RULE work_request_requires_date_or_date_and_time FOR
+  (versioned_action_request, sheet_metal_date_assignment,
+   sheet_metal_date_and_time_assignment);
+WHERE
+  WR1: SIZEOF (QUERY (varq <* versioned_action_request |
+      NOT (SIZEOF (QUERY (smda <* sheet_metal_date_assignment | 
+      varq IN smda.items)) +
+      SIZEOF (QUERY (smdata <* sheet_metal_date_and_time_assignment | 
+      varq IN smdata.items)) =1 ) )) = 0;
+END_RULE;
+
+RULE work_request_requires_person FOR
+  (versioned_action_request, sheet_metal_person_assignment);
+WHERE
+  WR1: SIZEOF (QUERY (varq <* versioned_action_request |
+       NOT (SIZEOF (QUERY (smpa <* sheet_metal_person_assignment |
+       varq IN smpa.items)) >=1 ))) = 0;
+END_RULE;
+
+FUNCTION product_type_of_product
+         (prod : product ; types : SET [1:?] OF product_type )
+         : product_type;
+ 
+  REPEAT i := 1 TO HIINDEX (types);
+    IF prod IN types[i]\product_related_product_category.products
+      THEN RETURN (types[i]);
+    END_IF;
+  END_REPEAT;
+  
+END_FUNCTION;
+
+FUNCTION sheet_metal_date_correlation
+  (e : sheet_metal_date_assignment ) : BOOLEAN;
+  LOCAL
+    dt_role : label;
+  END_LOCAL;
+  dt_role := e\date_assignment.role.name;
+  CASE dt_role OF
+    'creation'               : IF SIZEOF (e.items) <>
+                                 SIZEOF (QUERY (x <* e.items |
+                                 SIZEOF(['SHEET_METAL.' +
+                                 'PRODUCT_DEFINITION',
+                                 'SHEET_METAL.PROCESS_PLAN'] *
+                                 TYPEOF (x)) = 1))
+                                 THEN RETURN (FALSE);
+                               END_IF;
+    'revision'               : IF SIZEOF (e.items) <>
+                                 SIZEOF (QUERY (x <* e.items |
+                                 'SHEET_METAL.' +
+                                 'PRODUCT_DEFINITION'
+                                 IN TYPEOF (x)))
+                                 THEN RETURN (FALSE);
+                               END_IF;
+    'review'                 : IF SIZEOF (e.items) <>
+                                 SIZEOF (QUERY (x <* e.items |
+                                 'SHEET_METAL.' +
+                                 'PROCESS_PLAN'
+                                 IN TYPEOF (x)))
+                                 THEN RETURN (FALSE);
+                               END_IF;
+    'production year'        : IF SIZEOF (e.items) <>
+                                 SIZEOF (QUERY (x <* e.items |
+                                 'SHEET_METAL.' +
+                                 'PRODUCT_CONCEPT'
+                                 IN TYPEOF (x)))
+                                 THEN RETURN (FALSE);
+                               END_IF;
+    'completion'             : IF SIZEOF (e.items) <>
+                                 SIZEOF (QUERY (x <* e.items |
+                                 'SHEET_METAL.' +
+                                 'EXECUTED_ACTION'
+                                 IN TYPEOF (x)))
+                                 THEN RETURN (FALSE);
+                               END_IF;
+    'order'                  : IF SIZEOF (e.items) <>
+                                 SIZEOF (QUERY (x <* e.items |
+                                 'SHEET_METAL.' +
+                                 'EXECUTED_ACTION'
+                                 IN TYPEOF (x)))
+                                 THEN RETURN (FALSE);
+                               END_IF;
+    'preliminary review'     : IF SIZEOF (e.items) <>
+                                 SIZEOF (QUERY (x <* e.items |
+                                 'SHEET_METAL.' +
+                                 'EXECUTED_ACTION'
+                                 IN TYPEOF (x)))
+                                 THEN RETURN (FALSE);
+                               END_IF;
+    'start'                  : IF SIZEOF (e.items) <>
+                                 SIZEOF (QUERY (x <* e.items |
+                                 'SHEET_METAL.' +
+                                 'EXECUTED_ACTION'
+                                 IN TYPEOF (x)))
+                                 THEN RETURN (FALSE);
+                               END_IF;
+    'request'                : IF SIZEOF (e.items) <>
+                                 SIZEOF (QUERY (x <* e.items |
+                                 'SHEET_METAL.' +
+                                 'VERSIONED_ACTION_REQUEST'
+                                 IN TYPEOF (x)))
+                                 THEN RETURN (FALSE);
+                               END_IF;
+    OTHERWISE  : RETURN (TRUE);
+  END_CASE;
+END_FUNCTION;
+
+FUNCTION sheet_metal_document_correlation
+  (e : sheet_metal_document_reference ) : BOOLEAN;
+  LOCAL
+    doc_type : label;
+  END_LOCAL;
+  doc_type := e\document_reference.assigned_document.kind.product_data_type;
+  CASE doc_type OF
+    'die layout'             : IF SIZEOF (e.items) <>
+                                 SIZEOF (QUERY (x <* e.items |
+                                 'SHEET_METAL.' +
+                                 'PRODUCT_DEFINITION'
+                                 IN TYPEOF (x)))
+                                 THEN RETURN (FALSE);
+                               END_IF;
+    'die structure'          : IF SIZEOF (e.items) <>
+                                 SIZEOF (QUERY (x <* e.items |
+                                 'SHEET_METAL.' +
+                                 'PRODUCT_DEFINITION'
+                                 IN TYPEOF (x)))
+                                 THEN RETURN (FALSE);
+                               END_IF;
+    'pattern casting'        : IF SIZEOF (e.items) <>
+                                 SIZEOF (QUERY (x <* e.items |
+                                 'SHEET_METAL.' +
+                                 'PRODUCT_DEFINITION'
+                                 IN TYPEOF (x)))
+                                 THEN RETURN (FALSE);
+                               END_IF;
+    'press'                  : IF SIZEOF (e.items) <>
+                                 SIZEOF (QUERY (x <* e.items |
+                                 'SHEET_METAL.' +
+                                 'PRODUCT_DEFINITION'
+                                 IN TYPEOF (x)))
+                                 THEN RETURN (FALSE);
+                               END_IF;
+    'generating system information' : IF SIZEOF (e.items) <>
+                                 SIZEOF (QUERY (x <* e.items |
+                                 'SHEET_METAL.' +
+                                 'PROCESS_PLAN'
+                                 IN TYPEOF (x)))
+                                 THEN RETURN (FALSE);
+                               END_IF;
+    'applicable standards'  : IF SIZEOF (e.items) <>
+                                 SIZEOF (QUERY (x <* e.items |
+                                 'SHEET_METAL.' +
+                                 'EXECUTED_ACTION'
+                                 IN TYPEOF (x)))
+                                 THEN RETURN (FALSE);
+                               END_IF;
+    OTHERWISE  : RETURN (TRUE);
+  END_CASE;
+END_FUNCTION;
+
+FUNCTION sheet_metal_organization_correlation
+  (e : sheet_metal_organization_assignment ) : BOOLEAN;
+  LOCAL
+    o_role : label;
+  END_LOCAL;
+  o_role := e\organization_assignment.role.name;
+  CASE o_role OF
+    'design supplier'        : IF SIZEOF (e.items) <>
+                                 SIZEOF (QUERY (x <* e.items |
+                                 'SHEET_METAL.' +
+                                 'PRODUCT_DEFINITION'
+                                 IN TYPEOF (x)))
+                                 THEN RETURN (FALSE);
+                               END_IF;
+    'implementor'            : IF SIZEOF (e.items) <>
+                                 SIZEOF (QUERY (x <* e.items |
+                                 'SHEET_METAL.' +
+                                 'EXECUTED_ACTION'
+                                 IN TYPEOF (x)))
+                                 THEN RETURN (FALSE);
+                               END_IF;
+    'supplier'               : IF SIZEOF (e.items) <>
+                                 SIZEOF (QUERY (x <* e.items |
+                                 SIZEOF (['SHEET_METAL.' +
+                                 'CONTRACT', 'SHEET_METAL.' +
+                                 'EXECUTED_ACTION'] *
+                                 TYPEOF (x)) = 1 ))
+                                 THEN RETURN (FALSE);
+                               END_IF;
+    'order source'           : IF SIZEOF (e.items) <>
+                                 SIZEOF (QUERY (x <* e.items |
+                                 'SHEET_METAL.' +
+                                 'EXECUTED_ACTION'
+                                 IN TYPEOF (x)))
+                                 THEN RETURN (FALSE);
+                               END_IF;
+    'effector'               : IF SIZEOF (e.items) <>
+                                 SIZEOF (QUERY (x <* e.items |
+                                 'SHEET_METAL.' +
+                                 'EXECUTED_ACTION'
+                                 IN TYPEOF (x)))
+                                 THEN RETURN (FALSE);
+                               END_IF;
+    OTHERWISE  : RETURN (TRUE);
+  END_CASE;
+END_FUNCTION;
+
+FUNCTION sheet_metal_person_correlation
+  (e : sheet_metal_person_assignment ) : BOOLEAN;
+  LOCAL
+    p_role : label;
+  END_LOCAL;
+  p_role := e\person_assignment.role.name;
+  CASE p_role OF
+    'designer'               : IF SIZEOF (e.items) <>
+                                 SIZEOF (QUERY (x <* e.items |
+                                 'SHEET_METAL.' +
+                                 'PRODUCT_DEFINITION'
+                                 IN TYPEOF (x)))
+                                 THEN RETURN (FALSE);
+                               END_IF;
+    'implementor'            : IF SIZEOF (e.items) <>
+                                 SIZEOF (QUERY (x <* e.items |
+                                 'SHEET_METAL.' +
+                                 'EXECUTED_ACTION'
+                                 IN TYPEOF (x)))
+                                 THEN RETURN (FALSE);
+                               END_IF;
+    'purchaser'              : IF SIZEOF (e.items) <>
+                                 SIZEOF (QUERY (x <* e.items |
+                                 'SHEET_METAL.' +
+                                 'CONTRACT'
+                                 IN TYPEOF (x)))
+                                 THEN RETURN (FALSE);
+                               END_IF;
+    'work requestor'         : IF SIZEOF (e.items) <>
+                                 SIZEOF (QUERY (x <* e.items |
+                                 'SHEET_METAL.' +
+                                 'VERSIONED_ACTION_REQUEST'
+                                 IN TYPEOF (x)))
+                                 THEN RETURN (FALSE);
+                               END_IF;
+    OTHERWISE  : RETURN (TRUE);
+  END_CASE;
+END_FUNCTION;
+
+FUNCTION sheet_metal_person_and_organization_correlation
+  (e : sheet_metal_person_and_organization_assignment ) : BOOLEAN;
+  LOCAL
+    p_org_role : label;
+  END_LOCAL;
+  p_org_role := e\person_and_organization_assignment.role.name;
+  CASE p_org_role OF
+    'data owner'             : IF SIZEOF (e.items) <>
+                                 SIZEOF (QUERY (x <* e.items |
+                                 SIZEOF (['SHEET_METAL.' +
+                                 'PRODUCT_DEFINITION',
+                                 'SHEET_METAL.PROCESS_PLAN'] *
+                                 TYPEOF (x)) = 1))
+                                 THEN RETURN (FALSE);
+                               END_IF;
+    'planner'                : IF SIZEOF (e.items) <>
+                                 SIZEOF (QUERY (x <* e.items |
+                                 'SHEET_METAL.' +
+                                 'PROCESS_PLAN'
+                                 IN TYPEOF (x)))
+                                 THEN RETURN (FALSE);
+                               END_IF;
+    'implementor'            : IF SIZEOF (e.items) <>
+                                 SIZEOF (QUERY (x <* e.items |
+                                 'SHEET_METAL.' +
+                                 'EXECUTED_ACTION'
+                                 IN TYPEOF (x)))
+                                 THEN RETURN (FALSE);
+                               END_IF;
+    OTHERWISE  : RETURN (TRUE);
+  END_CASE;
+END_FUNCTION;
+
+END_SCHEMA;
+

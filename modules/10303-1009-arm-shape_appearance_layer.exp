@@ -1,0 +1,35 @@
+(*
+WG12 N678
+ISO/TS 10303-1009
+Product data representation and exchange: Application module: Shape appearance and layers - EXPRESS ARM
+*)
+
+SCHEMA Shape_appearance_layer_arm;
+
+USE FROM Appearance_assignment_arm; --ISO/TS 10303-1001
+USE FROM Elemental_topology_arm; -- ISO/TS 10303-1005
+USE FROM Foundation_representation_arm; -- ISO/TS 10303-1006
+USE FROM General_surface_appearance_arm; -- ISO/TS 10303-1007
+USE FROM Layer_assignment_arm; -- ISO/TS 10303-1008
+
+TYPE shape_appearance_context_select = SELECT
+     (Representation);
+END_TYPE;
+
+TYPE shape_appearance_select = SELECT
+     (Surface_appearance_wireframe,
+Surface_colour);
+END_TYPE;
+
+ENTITY Shape_appearance
+	SUBTYPE OF (Appearance);
+	appearance_style:shape_appearance_select;
+END_ENTITY;
+
+ENTITY Shape_appearance_context
+SUBTYPE OF (Appearance_context);
+context_for_appearance: shape_appearance_context_select;
+END_ENTITY;
+
+END_SCHEMA;
+

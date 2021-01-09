@@ -1,0 +1,50 @@
+(*
+ $Id: 10303-1268-arm-resource_item.exp,v 1.2 2006/08/07 07:44:46 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N3145 - ISO/TS 10303-1268 Resource item - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG12 N2426
+*) 
+
+
+SCHEMA Resource_item_arm;
+
+USE FROM Classification_assignment_arm;    -- ISO/TS 10303-1114
+
+USE FROM Value_with_unit_arm;    -- ISO/TS 10303-1054
+
+
+TYPE resource_assignment_item = EXTENSIBLE GENERIC_ENTITY SELECT;
+END_TYPE; 
+
+TYPE resource_item_classification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON classification_item WITH 
+   (Resource_item, 
+    Resource_item_assignment, 
+    Resource_item_relationship);
+END_TYPE; 
+
+TYPE resource_item_select = EXTENSIBLE GENERIC_ENTITY SELECT;
+END_TYPE; 
+
+ENTITY Resource_group_relationship
+  SUBTYPE OF (Resource_item_relationship);
+  quantity : OPTIONAL Value_with_unit;
+END_ENTITY;
+
+ENTITY Resource_item;
+  name : STRING;
+  description : OPTIONAL STRING;
+  resource_items : OPTIONAL SET[0:?] OF resource_item_select;
+END_ENTITY;
+
+ENTITY Resource_item_assignment;
+  assigned_resource : Resource_item;
+  item : resource_assignment_item;
+END_ENTITY;
+
+ENTITY Resource_item_relationship;
+  name : STRING;
+  description : OPTIONAL STRING;
+  relating : Resource_item;
+  related : Resource_item;
+END_ENTITY;
+
+END_SCHEMA;  -- Resource_item_arm

@@ -1,0 +1,18 @@
+(*
+ $Id: 10303-1049-arm-activity_method.exp,v 1.4 2006/08/07 07:44:42 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2943 - ISO/TS 10303-1049 Activity method - EXPRESS ARM
+*)
+
+
+SCHEMA Activity_method_arm; 
+
+
+ENTITY Activity_method;
+  name : STRING;
+  description : OPTIONAL STRING;
+  consequence : OPTIONAL STRING;
+  purpose : STRING;
+END_ENTITY;
+
+END_SCHEMA;  -- Activity_method_arm
+

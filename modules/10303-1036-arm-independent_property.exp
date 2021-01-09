@@ -1,0 +1,23 @@
+(*
+ $Id: 10303-1036-arm-independent_property.exp,v 1.5 2006/08/07 07:44:42 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2964 - ISO/TS 10303-1036 Independent property - EXPRESS ARM
+*) 
+
+
+SCHEMA Independent_property_arm; 
+
+
+ENTITY Independent_property;
+  id : STRING;
+  property_type : STRING;
+  description : OPTIONAL STRING;
+END_ENTITY;
+
+ENTITY Independent_property_relationship;
+  relation_type : STRING;
+  description : OPTIONAL STRING;
+  relating : Independent_property;
+  related : Independent_property;
+END_ENTITY;
+
+END_SCHEMA;  -- Independent_property_arm

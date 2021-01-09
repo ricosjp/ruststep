@@ -1,0 +1,29 @@
+(*
+ $Id: 10303-1064-mim-event.exp,v 1.5 2006/08/07 09:42:04 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2115 - ISO/TS 10303-1064 Event - EXPRESS MIM
+*)
+
+SCHEMA Event_mim; 
+
+USE FROM Date_time_assignment_mim;    -- ISO/TS 10303-1014
+
+USE FROM Date_time_mim;    -- ISO/TS 10303-1010
+
+USE FROM date_time_schema   -- ISO 10303-41
+  (event_occurrence,
+   event_occurrence_relationship,
+   relative_event_occurrence); 
+
+USE FROM Value_with_unit_mim;    -- ISO/TS 10303-1054
+
+
+TYPE event_occurrence_date_and_time_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON date_and_time_item WITH 
+   (event_occurrence);
+END_TYPE; 
+
+TYPE event_occurrence_date_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON date_item WITH 
+   (event_occurrence);
+END_TYPE; 
+
+END_SCHEMA;  -- Event_mim
+

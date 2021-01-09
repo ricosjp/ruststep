@@ -1,0 +1,29 @@
+(*
+ $Id: 10303-1059-mim-effectivity_application.exp,v 1.5 2006/08/07 09:42:04 wg12deputy Exp $
+ISO TC184/SC4/WG12 N3224 - ISO/TS 10303-1059 Effectivity application - EXPRESS MIM
+Supersedes ISO TC184/SC4/WG12 N1175
+*) 
+
+
+SCHEMA Effectivity_application_mim;
+
+USE FROM basic_attribute_schema   -- ISO 10303-41
+  (object_role,
+   role_association,
+   role_select); 
+
+USE FROM Effectivity_mim;    -- ISO/TS 10303-1057
+
+USE FROM management_resources_schema   -- ISO 10303-41
+  (effectivity_assignment); 
+
+
+TYPE effectivity_item = EXTENSIBLE SELECT;
+END_TYPE; 
+
+ENTITY applied_effectivity_assignment
+  SUBTYPE OF (effectivity_assignment);
+  items : SET[1:?] OF effectivity_item;
+END_ENTITY;
+
+END_SCHEMA;  -- Effectivity_application_mim

@@ -1,0 +1,176 @@
+(*
+ $Id: 10303-1205-mim-schematic_element.exp,v 1.1 2006/08/04 12:11:55 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2829 - ISO/TS 10303-1205 Schematic element - EXPRESS MIM
+ Supersedes ISO TC184/SC4/WG12 N2196
+*)
+
+SCHEMA Schematic_element_mim;
+
+USE FROM Class_mim;    --  ISO/TS 10303-1070
+USE FROM Set_theory_mim;    --  ISO/TS 10303-1210
+USE FROM Draughting_annotation_mim;    --  ISO/TS 10303-1206
+USE FROM Foundation_representation_mim;    --  ISO/TS 10303-1006
+USE FROM aic_geometrically_bounded_2d_wireframe;    --  ISO 10303-503
+USE FROM representation_schema    --  ISO 10303-43
+  (mapped_item,
+   representation_map); 
+USE FROM presentation_appearance_schema    --  ISO 10303-46
+  (styled_item); 
+USE FROM presentation_organization_schema    --  ISO 10303-46
+  (presentation_representation); 
+
+ENTITY composition_of_schematic_element_occurrence
+  SUBTYPE OF (mapped_item);
+WHERE
+  schematic_element_occurrence_as_part:
+    'SCHEMATIC_ELEMENT_MIM.' + 'SCHEMATIC_ELEMENT_OCCURRENCE' 
+       IN TYPEOF (SELF\mapped_item.mapping_source.mapped_representation);
+  schematic_element_occurrence_as_whole:
+    'SCHEMATIC_ELEMENT_MIM.' + 'SCHEMATIC_ELEMENT_OCCURRENCE' 
+       IN TYPEOF (using_representations(SELF));
+END_ENTITY;
+
+ENTITY connection_of_schematic_element_occurrence
+  SUBTYPE OF (mapped_item);
+WHERE
+  schematic_element_occurrence_as_side_1:
+    'SCHEMATIC_ELEMENT_MIM.' + 'SCHEMATIC_ELEMENT_OCCURRENCE'
+       IN TYPEOF (SELF\mapped_item.mapping_source.mapped_representation);
+  schematic_element_occurrence_as_side_2:
+    'SCHEMATIC_ELEMENT_MIM.' + 'SCHEMATIC_ELEMENT_OCCURRENCE'
+       IN TYPEOF (using_representations(SELF));
+END_ENTITY;
+
+ENTITY definition_of_schematic_element_occurrence
+  SUBTYPE OF (mapped_item);
+WHERE
+  schematic_element_as_superset: 
+    'SCHEMATIC_ELEMENT_MIM.' + 'SCHEMATIC_ELEMENT' 
+       IN TYPEOF (SELF\mapped_item.mapping_source.mapped_representation);
+  schematic_element_occurrence_as_subset:
+    'SCHEMATIC_ELEMENT_MIM.' + 'SCHEMATIC_ELEMENT_OCCURRENCE' 
+       IN TYPEOF (using_representations(SELF));
+END_ENTITY;
+
+ENTITY derivation_of_schematic_element_definition
+  SUBTYPE OF (mapped_item);
+WHERE
+  schematic_element_definition_as_base:
+    'SCHEMATIC_ELEMENT_MIM.' + 'SCHEMATIC_ELEMENT_DEFINITION'
+       IN TYPEOF (SELF\mapped_item.mapping_source.mapped_representation);
+  implicit_schematic_element_definition_as_derived:
+    'SCHEMATIC_ELEMENT_MIM.' + 'IMPLICIT_SCHEMATIC_ELEMENT_DEFINITION'
+       IN TYPEOF (using_representations(SELF));
+END_ENTITY;
+
+ENTITY draughting_model
+  SUBTYPE OF (representation);
+UNIQUE
+  unique_id: SELF\representation.name;
+WHERE
+  valid_draughting_model_items:
+     SIZEOF(QUERY ( it <* SELF.items |
+         (NOT (SIZEOF([ 'REPRESENTATION_SCHEMA.MAPPED_ITEM',
+                        'DRAUGHTING_ANNOTATION_MIM.STYLED_ITEM',
+                        'DRAUGHTING_ANNOTATION_MIM.AXIS2_PLACEMENT'] * TYPEOF(it)) = 1)) )) = 0;
+  valid_mapped_items:
+     SIZEOF(QUERY ( mi <* QUERY ( it <* SELF.items |
+         ('REPRESENTATION_SCHEMA.MAPPED_ITEM' IN TYPEOF(it)) ) |
+         (NOT (SIZEOF(['DRAUGHTING_ANNOTATION_MIM.SHAPE_REPRESENTATION',
+                       'SCHEMATIC_ELEMENT_MIM.DRAUGHTING_MODEL'] * TYPEOF(mi\mapped_item.mapping_source.mapped_representation)) = 1 )) )) = 0;
+  valid_use_of_style:
+     SIZEOF(QUERY ( smi <* QUERY ( si <* QUERY ( it <* SELF.items |
+         ('DRAUGHTING_ANNOTATION_MIM.STYLED_ITEM' IN TYPEOF(it)) ) |
+         ('REPRESENTATION_SCHEMA.MAPPED_ITEM' IN TYPEOF(si\styled_item.item)) ) |
+         (NOT (('DRAUGHTING_ANNOTATION_MIM.SHAPE_REPRESENTATION' 
+         IN TYPEOF(smi\styled_item.item\mapped_item.mapping_source.mapped_representation)) AND
+         (SIZEOF(QUERY ( sty <* smi\styled_item.styles |
+         (NOT (SIZEOF(QUERY ( psa <* sty.styles |
+         (NOT ('DRAUGHTING_ANNOTATION_MIM.CURVE_STYLE' IN TYPEOF(psa))) )) = 1 )) )) = 1))) )) = 0;
+END_ENTITY;
+
+ENTITY explicit_schematic_element_definition
+  SUBTYPE OF (schematic_element_definition);
+WHERE
+  not_derived_or_defined_by_assembly:
+      (SIZEOF( QUERY(it <* SELF.items |
+         'SCHEMATIC_ELEMENT_MIM.' + 'DERIVATION_OF_SCHEMATIC_ELEMENT_DEFINITION'
+         IN TYPEOF(it) ) ) = 0) AND
+      (SIZEOF( QUERY(it <* SELF.items |
+         'SCHEMATIC_ELEMENT_MIM.' + 'USAGE_OF_SCHEMATIC_ELEMENT_OCCURRENCE'
+         IN TYPEOF(it) ) ) >= 0);
+END_ENTITY;
+
+ENTITY implicit_schematic_element_definition
+  SUBTYPE OF (schematic_element_definition);
+WHERE
+  no_styled_item: 
+      SIZEOF( QUERY(it <* SELF.items |
+         'DRAUGHTING_ANNOTATION_MIM.STYLED_ITEM' IN TYPEOF(it) ) ) = 0;
+  either_derived_once_or_defined_by_assembly:
+      (SIZEOF( QUERY(it <* SELF.items |
+         'SCHEMATIC_ELEMENT_MIM.' + 'DERIVATION_OF_SCHEMATIC_ELEMENT_DEFINITION' IN TYPEOF(it) ) ) = 1) 
+         OR (SIZEOF( QUERY(it <* SELF.items |
+         'SCHEMATIC_ELEMENT_MIM.' + 'USAGE_OF_SCHEMATIC_ELEMENT_OCCURRENCE' IN TYPEOF(it) ) ) >= 1);
+END_ENTITY;
+
+ENTITY schematic_element
+  ABSTRACT SUPERTYPE OF (ONEOF (schematic_element_definition,
+                                schematic_element_occurrence))
+  SUBTYPE OF (class, draughting_model, presentation_representation);
+WHERE
+  valid_mapping:
+      SIZEOF( QUERY(it <* SELF.items |
+         ('REPRESENTATION_SCHEMA.MAPPED_ITEM' IN TYPEOF(it)) AND
+         ('SCHEMATIC_ELEMENT_MIM.DRAUGHTING_MODEL' 
+             IN TYPEOF (it\mapped_item.mapping_source.mapped_representation)) AND
+         (NOT( SIZEOF( ['SCHEMATIC_ELEMENT_MIM.' + 'DERIVATION_OF_SCHEMATIC_ELEMENT_DEFINITION',
+                        'SCHEMATIC_ELEMENT_MIM.' + 'USAGE_OF_SCHEMATIC_ELEMENT_OCCURRENCE',
+                        'SCHEMATIC_ELEMENT_MIM.' + 'DEFINITION_OF_SCHEMATIC_ELEMENT_OCCURRENCE' ] * TYPEOF(it) ) = 1 ))
+            ) ) = 0;
+END_ENTITY;
+
+ENTITY schematic_element_definition
+  SUPERTYPE OF (ONEOF (explicit_schematic_element_definition,
+                       implicit_schematic_element_definition))
+  SUBTYPE OF (schematic_element);
+END_ENTITY;
+
+ENTITY schematic_element_occurrence
+  SUBTYPE OF (schematic_element);
+INVERSE
+  usage_in_map : SET[1:?] OF representation_map FOR mapped_representation;
+WHERE
+  no_styled_item:
+      SIZEOF( QUERY(it <* SELF.items |
+         'DRAUGHTING_ANNOTATION_MIM.STYLED_ITEM' IN TYPEOF(it) ) ) = 0;
+ 
+  (* defined_with_respect_to_definition_no_more_than_once:
+      SIZEOF( QUERY(it <* SELF.usage_in_map.map_usage |
+         ('SCHEMATIC_ELEMENT_MIM.' + 'DEFINITION_OF_SCHEMATIC_ELEMENT_OCCURRENCE' IN TYPEOF(it)) AND
+         ('SCHEMATIC_ELEMENT_MIM.' + 'SCHEMATIC_ELEMENT_DEFINITION'
+              IN TYPEOF (it\mapped_item.mapping_source.mapped_representation) ) 
+            ) ) <= 1;
+  referenced_as_usage_or_defined_with_respect_to_occurrence:
+       SIZEOF( QUERY(it <* SELF.usage_in_map.map_usage |
+         'SCHEMATIC_ELEMENT_MIM.' + 'USAGE_OF_SCHEMATIC_ELEMENT_OCCURRENCE' IN TYPEOF(it) ) ) +
+       SIZEOF( QUERY(it <* SELF.usage_in_map.map_usage |
+         ('SCHEMATIC_ELEMENT_MIM.' + 'DEFINITION_OF_SCHEMATIC_ELEMENT_OCCURRENCE' IN TYPEOF(it)) AND
+         ('SCHEMATIC_ELEMENT_MIM.' + 'SCHEMATIC_ELEMENT_OCCURRENCE'
+             IN TYPEOF (it\mapped_item.mapping_source.mapped_representation) ) ) ) 
+        = 1;
+  *)      
+END_ENTITY;
+
+ENTITY usage_of_schematic_element_occurrence
+  SUBTYPE OF (mapped_item);
+WHERE
+  schematic_element_occurrence_as_part:
+     'SCHEMATIC_ELEMENT_MIM.' + 'SCHEMATIC_ELEMENT_OCCURRENCE'
+        IN TYPEOF (SELF\mapped_item.mapping_source.mapped_representation);
+  implicit_schematic_element_definition_as_whole:
+     'SCHEMATIC_ELEMENT_MIM.' + 'IMPLICIT_SCHEMATIC_ELEMENT_DEFINITION'
+        IN TYPEOF (using_representations(SELF));
+END_ENTITY;
+
+END_SCHEMA;

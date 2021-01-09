@@ -1,0 +1,12 @@
+(* ISO/TC184/SC4 WG12N1282  $Id: 10303-1511-arm-topologically_bounded_surface.exp,v 1.4 2003/10/21 12:20:22 wg12deputy Exp $ *) 
+
+SCHEMA Topologically_bounded_surface_arm;
+
+USE FROM Elemental_geometric_shape_arm;
+
+ENTITY Advanced_face
+SUBTYPE OF (Detailed_geometric_model_element);
+END_ENTITY;
+
+END_SCHEMA;
+

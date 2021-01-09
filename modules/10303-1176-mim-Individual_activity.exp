@@ -1,0 +1,15 @@
+(*
+ $Id: 10303-1176-mim-Individual_activity.exp,v 1.4 2006/08/04 12:11:55 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2784 - ISO/TS 10303-1176 Individual activity - EXPRESS MIM
+ Supersedes ISO TC184/SC4/WG12 N1859
+*)
+
+SCHEMA Individual_activity_mim;
+
+USE FROM Activity_mim;    -- ISO/TS 10303-1047
+
+ENTITY individual_activity
+  SUBTYPE OF (executed_action);
+END_ENTITY;
+
+END_SCHEMA;

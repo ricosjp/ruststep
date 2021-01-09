@@ -1,0 +1,52 @@
+(*
+   $Id: 10303-1344-mim-numerical_interface.exp,v 1.1 2006/08/03 15:03:35 wg12deputy Exp $
+   ISO/TC184/SC4 WG12N2559 - ISO/TS 10303-1344 Numerical_interface - Express MIM
+   Supersedes ISO TC184/SC4/WG12N1800
+*)
+
+SCHEMA Numerical_interface_mim;
+
+USE FROM Generic_expression_mim;
+USE FROM Expression_mim;
+
+USE FROM Value_with_unit_mim;
+USE FROM Dimension_tolerance_mim;
+USE FROM Measure_representation_mim;
+
+USE FROM ISO13584_expressions_schema(
+    numeric_expression,
+    string_expression
+);
+
+TYPE property_variable_rep_select = SELECT
+    (
+      dimensional_size,     --ISO 10303-47
+      representation        --ISO 10303-43
+    );
+END_TYPE;
+
+TYPE expression_extension_select = SELECT
+    (
+    expression_extension_string,
+    expression_extension_numeric
+    );
+END_TYPE;
+
+ENTITY expression_extension_numeric
+    SUBTYPE OF (measure_with_unit, numeric_expression);    
+END_ENTITY;
+
+ENTITY expression_extension_string
+    SUBTYPE OF (measure_with_unit, string_expression);    
+END_ENTITY;
+
+ENTITY expression_extension_to_select;
+    type_expression_associated: expression_extension_select;
+END_ENTITY;
+ 
+ENTITY variable_expression
+    SUBTYPE OF (variable_semantics);
+    property_associated: property_variable_rep_select;
+END_ENTITY;
+
+END_SCHEMA;

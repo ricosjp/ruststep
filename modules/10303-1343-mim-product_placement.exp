@@ -1,0 +1,14 @@
+(*
+   $Id: 10303-1343-mim-product_placement.exp,v 1.1 2006/08/03 15:03:35 wg12deputy Exp $
+   ISO/TC184/SC4 WG12N2608 - ISO/CD-TS 10303-1343 product_placement - EXPRESS MIM
+   Supersedes ISO TC184/SC4/WG12N1742
+*)
+
+SCHEMA Product_placement_mim;
+
+USE FROM Contextual_shape_positioning_mim;
+USE FROM Physical_breakdown_mim;
+USE FROM Product_occurrence_mim;
+
+
+END_SCHEMA;

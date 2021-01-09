@@ -1,0 +1,18 @@
+(*
+ $Id: 10303-1065-mim-time_interval.exp,v 1.5 2006/08/07 09:42:04 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2119 - ISO/TS 10303-1065 Time interval - EXPRESS MIM
+*)
+
+SCHEMA Time_interval_mim; 
+
+USE FROM date_time_schema   -- ISO 10303-41
+  (time_interval,
+   time_interval_relationship,
+   time_interval_with_bounds); 
+
+USE FROM Event_mim;    -- ISO/TS 10303-1064
+
+USE FROM Value_with_unit_mim;    -- ISO/TS 10303-1054
+
+
+END_SCHEMA;  -- Time_interval_mim

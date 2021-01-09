@@ -1,0 +1,22 @@
+(*
+ $Id: 10303-1364-arm-Event_assignment.exp,v 1.2 2006/08/07 07:44:47 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2116 - ISO/TS 10303-1364 Event assignment - EXPRESS ARM
+*) 
+
+
+SCHEMA Event_assignment_arm; 
+
+USE FROM Event_arm;    -- ISO/TS 10303-1064
+
+
+TYPE event_item = EXTENSIBLE GENERIC_ENTITY SELECT;
+END_TYPE; 
+
+ENTITY Event_assignment;
+  assigned_event : Event;
+  items : SET[1:?] OF event_item;
+  role : STRING;
+END_ENTITY;
+
+END_SCHEMA;  -- Event_assignment_arm
+

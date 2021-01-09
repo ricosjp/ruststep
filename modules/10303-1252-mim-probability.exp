@@ -1,0 +1,37 @@
+(*
+ $Id: 10303-1252-mim-probability.exp,v 1.1 2006/08/07 09:42:05 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N3101 - ISO/TS 10303-1252 Probability - EXPRESS MIM
+ Supersedes ISO TC184/SC4/WG12 N2406
+*) 
+
+
+SCHEMA Probability_mim;
+
+USE FROM Foundation_representation_mim;    -- ISO/TS 10303-1006
+
+USE FROM Measure_representation_mim;    -- ISO/TS 10303-1118
+
+USE FROM measure_schema   -- ISO 10303-41
+  (descriptive_measure,
+   measure_value,
+   numeric_measure); 
+
+USE FROM qualified_measure_schema   -- ISO 10303-45
+  (descriptive_representation_item); 
+
+USE FROM representation_schema   -- ISO 10303-43
+  (compound_representation_item,
+   representation,
+   representation_context,
+   representation_item,
+   representation_relationship,
+   value_representation_item); 
+
+
+ENTITY probability_generator
+  SUBTYPE OF (representation);
+END_ENTITY;
+
+END_SCHEMA;  -- Probability_mim
+
+

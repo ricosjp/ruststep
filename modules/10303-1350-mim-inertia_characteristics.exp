@@ -1,0 +1,52 @@
+(*
+   $Id: 10303-1350-mim-inertia_characteristics.exp,v 1.1 2006/08/03 15:03:35 wg12deputy Exp $
+   ISO/TC184/SC4 WG12N2638 - ISO/TS - 10303- inertia_characteristics - EXPRESS MIM
+   Supersedes ISO TC184/SC4/WG12N2072
+*)
+
+SCHEMA Inertia_characteristics_mim;
+
+USE FROM Elemental_geometric_shape_mim;
+
+USE FROM Shape_property_assignment_mim;
+
+USE FROM Value_with_unit_mim;
+
+USE FROM representation_schema
+	(compound_representation_item,
+	list_representation_item); 
+
+ENTITY moments_of_inertia_representation 
+SUBTYPE OF (representation); 
+WHERE 
+WR1: (SIZEOF(SELF.items) = 1) AND 
+ (SIZEOF( QUERY( i <* SELF.items | ('INERTIA_CHARACTERISTICS_MIM' + '.COMPOUND_REPRESENTATION_ITEM' IN TYPEOF(i)) AND 
+  (i.name = 'moments of inertia matrix') )) = 1); 
+WR2: SIZEOF( QUERY( i <* SELF.items | ('INERTIA_CHARACTERISTICS_MIM' + '.COMPOUND_REPRESENTATION_ITEM' IN TYPEOF(i)) AND 
+  ('INERTIA_CHARACTERISTICS_MIM' + '.LIST_REPRESENTATION_ITEM' IN TYPEOF(i\compound_representation_item.item_element)) AND 
+  value_range_aggregate_rep_item (i\compound_representation_item.item_element) )) = 1; 
+END_ENTITY; 
+
+RULE restrict_centre_of_mass_representation FOR
+    (representation);
+WHERE
+ WR1: SIZEOF ( QUERY ( r <* representation | 
+	( r.name ='centre of mass' ) AND 
+	( ( SIZEOF ( r.items ) <>1 ) OR 
+	(SIZEOF ( QUERY ( i <* r.items | 
+	( 'INERTIA_CHARACTERISTICS_MIM' + '.POINT' IN TYPEOF ( i ) ) AND 
+	( i.name = 'centre point' ) )) <>1 ) ) ) ) 
+	=0;
+END_RULE;
+
+FUNCTION value_range_aggregate_rep_item (agg : AGGREGATE OF representation_item) : BOOLEAN; 
+  BEGIN 
+  IF (SIZEOF(QUERY(i1 <* agg | ('INERTIA_CHARACTERISTICS_MIM' + '.MEASURE_REPRESENTATION_ITEM' IN TYPEOF(i1)) )) = 6) THEN 
+	  RETURN (TRUE); 
+   ELSE 
+	RETURN (FALSE); 
+   END_IF; 
+   END; 
+END_FUNCTION; 
+
+END_SCHEMA;

@@ -1,0 +1,59 @@
+(*
+ $Id: 10303-1269-arm-resource_as_realized.exp,v 1.2 2006/08/07 07:44:46 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N3139 - ISO/TS 10303-1269 Resource as realized - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG12 N2420
+*) 
+
+
+SCHEMA Resource_as_realized_arm;
+
+USE FROM Classification_assignment_arm;    -- ISO/TS 10303-1114
+
+USE FROM Required_resource_arm;    -- ISO/TS 10303-1267
+
+USE FROM Resource_item_arm;    -- ISO/TS 10303-1268
+
+USE FROM Resource_management_arm;    -- ISO/TS 10303-1266
+
+USE FROM Value_with_unit_arm;    -- ISO/TS 10303-1054
+
+
+TYPE resource_as_realized_classification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON classification_item WITH 
+   (Resource_as_realized, 
+    Resource_as_realized_assignment, 
+    Resource_as_realized_relationship);
+END_TYPE; 
+
+TYPE resource_as_realized_item = EXTENSIBLE GENERIC_ENTITY SELECT;
+END_TYPE; 
+
+TYPE resource_as_realized_relationship_select = SELECT
+   (Required_resource, 
+    Resource_event);
+END_TYPE; 
+
+ENTITY Resource_as_realized;
+  name : STRING;
+  description : OPTIONAL STRING;
+  quantity : OPTIONAL Value_with_unit;
+END_ENTITY;
+
+ENTITY Resource_as_realized_assignment;
+  assigned_resource : Resource_as_realized;
+  item : resource_as_realized_item;
+END_ENTITY;
+
+ENTITY Resource_as_realized_relationship;
+  name : STRING;
+  description : OPTIONAL STRING;
+  relating : Resource_as_realized;
+  related : resource_as_realized_relationship_select;
+END_ENTITY;
+
+ENTITY Resource_as_realized_resource_item
+  SUBTYPE OF (Resource_as_realized);
+  resource_item : Resource_item;
+END_ENTITY;
+
+END_SCHEMA;  -- Resource_as_realized_arm
+

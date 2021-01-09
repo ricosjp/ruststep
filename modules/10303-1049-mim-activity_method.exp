@@ -1,0 +1,11 @@
+(*
+ $Id: 10303-1049-mim-activity_method.exp,v 1.4 2006/08/07 09:42:03 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N1163 - ISO/TS 10303-1049 Activity method - EXPRESS MIM
+*)
+
+SCHEMA Activity_method_mim;
+
+USE FROM action_schema    -- ISO 10303-41
+(action_method );
+
+END_SCHEMA;

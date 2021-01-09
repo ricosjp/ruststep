@@ -1,0 +1,61 @@
+(*
+ $Id: 10303-1241-arm-information_rights.exp,v 1.1 2006/08/07 07:44:44 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N3058 - ISO/TS 10303-1241 Information rights - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG12 N2336
+*) 
+
+
+SCHEMA Information_rights_arm;
+
+USE FROM Contract_arm;    -- ISO/TS 10303-1062
+
+USE FROM Management_resource_information_arm;    -- ISO/TS 10303-1288
+
+
+TYPE information_usage_right_item = EXTENSIBLE SELECT;
+END_TYPE; 
+
+TYPE right_approval_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON mri_approval_item WITH 
+   (Applied_information_usage_right, 
+    Information_usage_right);
+END_TYPE; 
+
+TYPE right_contract_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON contract_item WITH 
+   (Information_usage_right);
+END_TYPE; 
+
+TYPE right_date_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON mri_date_or_date_time_item WITH 
+   (Information_usage_right);
+END_TYPE; 
+
+TYPE right_person_organization_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON mri_organization_or_person_in_organization_item WITH 
+   (Information_usage_right);
+END_TYPE; 
+
+ENTITY Applied_information_usage_right;
+  item : SET[1:?] OF information_usage_right_item;
+  right_applied : Information_usage_right;
+END_ENTITY;
+
+ENTITY Information_right;
+  id : STRING;
+  name : STRING;
+  description : OPTIONAL STRING;
+  restriction : OPTIONAL STRING;
+END_ENTITY;
+
+ENTITY Information_usage_right;
+  id : STRING;
+  name : STRING;
+  comment : OPTIONAL STRING;
+  grants_right : SET[1:?] OF Information_right;
+END_ENTITY;
+
+ENTITY Information_usage_right_relationship;
+  relating : Information_usage_right;
+  related : Information_usage_right;
+  relation_type : STRING;
+END_ENTITY;
+
+END_SCHEMA;  -- Information_rights_arm
+

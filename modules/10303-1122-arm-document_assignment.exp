@@ -1,0 +1,36 @@
+(*
+ $Id: 10303-1122-arm-document_assignment.exp,v 1.5 2006/08/07 07:44:43 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N1189 - ISO/TS 10303-1122 Document assignment - EXPRESS ARM
+*)
+
+
+SCHEMA Document_assignment_arm;
+
+USE FROM Document_and_version_identification_arm;    -- ISO/TS 10303-1121
+
+USE FROM Document_definition_arm;    -- ISO/TS 10303-1123
+
+USE FROM File_identification_arm;    -- ISO/TS 10303-1127
+
+TYPE assigned_document_select = SELECT 
+  (Document,
+   Document_definition,
+   Document_version,
+   File);
+END_TYPE;
+
+TYPE documented_element_select = EXTENSIBLE SELECT ;
+END_TYPE;
+
+ENTITY Document_assignment;
+  assigned_document : assigned_document_select;
+  is_assigned_to : documented_element_select;
+  role : STRING;
+END_ENTITY;
+
+ENTITY Partial_document_assignment
+SUBTYPE OF (Document_assignment);
+  document_portion : STRING;
+END_ENTITY;
+
+END_SCHEMA;

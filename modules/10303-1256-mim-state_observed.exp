@@ -1,0 +1,45 @@
+(*
+ $Id: 10303-1256-mim-state_observed.exp,v 1.1 2006/08/07 09:42:05 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N3176 - ISO/TS 10303-1256 State observed - EXPRESS MIM
+ Supersedes ISO TC184/SC4/WG12 N2367
+*) 
+
+
+SCHEMA State_observed_mim;
+
+USE FROM Classification_assignment_mim;    -- ISO/TS 10303-1114
+
+USE FROM management_resources_schema   -- ISO 10303-41
+  (identification_role); 
+
+USE FROM State_definition_mim;    -- ISO/TS 10303-1255
+
+USE FROM state_observed_schema   -- ISO 10303-56
+  (ascribable_state,
+   ascribable_state_relationship,
+   state_observed,
+   state_observed_assignment,
+   state_observed_relationship,
+   state_observed_role); 
+
+
+TYPE state_observed_classification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON classification_item WITH 
+   (state_observed, 
+    state_observed_assignment, 
+    state_observed_relationship);
+END_TYPE; 
+
+TYPE state_observed_of_item = EXTENSIBLE GENERIC_ENTITY SELECT;
+END_TYPE; 
+
+ENTITY applied_state_observed_assignment
+  SUBTYPE OF (state_observed_assignment);
+  items : SET[1:?] OF state_observed_of_item;
+END_ENTITY;
+
+ENTITY state_predicted
+  SUBTYPE OF (state_observed);
+END_ENTITY;
+
+END_SCHEMA;  -- State_observed_mim
+

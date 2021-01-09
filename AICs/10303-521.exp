@@ -1,0 +1,158 @@
+ (* part 521 Manifold subsurface AIC EXPRESS listing WG12 N1308
+ 2002-07-23 *)
+ SCHEMA aic_manifold_subsurface;  --- extracted from part 521 IS WG12 N1307
+  USE FROM aic_topologically_bounded_surface; -- ISO 10303-511
+
+  USE FROM geometry_schema    -- ISO  10303-42
+      (cartesian_transformation_operator_3d);
+  USE FROM topology_schema  -- ISO  10303-42
+      (closed_shell,
+       connected_face_set,
+       connected_face_sub_set,
+       face,
+       open_shell,
+       subedge,
+       subface);
+
+  USE FROM representation_schema(mapped_item);   -- ISO  10303-43
+
+  USE FROM product_property_representation_schema   -- ISO  10303-41
+      (shape_representation);
+
+ ENTITY manifold_subsurface_shape_representation
+ SUBTYPE OF (shape_representation);
+ WHERE
+   WR1: SIZEOF (QUERY (it <* SELF.items |
+          NOT (SIZEOF (['AIC_MANIFOLD_SUBSURFACE.CONNECTED_FACE_SUB_SET',
+                'AIC_MANIFOLD_SUBSURFACE.MAPPED_ITEM',
+                'AIC_MANIFOLD_SUBSURFACE.AXIS2_PLACEMENT_3D'] *
+                   TYPEOF(it)) = 1))) = 0;
+   WR2: SIZEOF (QUERY (it <* SELF.items |
+         SIZEOF(['AIC_MANIFOLD_SUBSURFACE.CONNECTED_FACE_SUB_SET',
+         'AIC_MANIFOLD_SUBSURFACE.MAPPED_ITEM'] * TYPEOF(it)) =1 )) > 0;
+   WR3: SIZEOF (QUERY (mi <*  QUERY (it <* items |
+                 'AIC_MANIFOLD_SUBSURFACE.MAPPED_ITEM' IN TYPEOF(it)) |
+   NOT ('AIC_MANIFOLD_SUBSURFACE.MANIFOLD_SUBSURFACE_SHAPE_REPRESENTATION' IN
+             TYPEOF(mi\mapped_item.mapping_source.
+                           mapped_representation)))) = 0;
+   WR4: SIZEOF (QUERY (cfss <* QUERY (it <* SELF.items |
+           'AIC_MANIFOLD_SUBSURFACE.CONNECTED_FACE_SUB_SET' IN TYPEOF(it)) |
+          NOT('AIC_MANIFOLD_SUBSURFACE.OPEN_SHELL' IN TYPEOF(cfss)))) = 0;
+   WR5: SIZEOF (QUERY (cfss <* QUERY (it <* SELF.items |
+           'AIC_MANIFOLD_SUBSURFACE.CONNECTED_FACE_SUB_SET' IN TYPEOF(it)) |
+          NOT( (('AIC_MANIFOLD_SUBSURFACE.CONNECTED_FACE_SUB_SET' IN
+                   TYPEOF(cfss.parent_face_set)) AND
+            (SIZEOF (QUERY (fac <* cfss.parent_face_set.cfs_faces | NOT
+                 advanced_face_properties(fac))) = 0)) OR
+             (SIZEOF (QUERY (fac <* cfss.parent_face_set.cfs_faces | NOT
+              ('AIC_MANIFOLD_SUBSURFACE.ADVANCED_FACE' IN TYPEOF(fac)))) = 0)
+                    ))) = 0;
+   WR6: SIZEOF (QUERY (cfss <* QUERY (it <* SELF.items |
+           'AIC_MANIFOLD_SUBSURFACE.CONNECTED_FACE_SUB_SET' IN TYPEOF(it)) |
+          ( SIZEOF (QUERY (fac <* cfss\connected_face_set.cfs_faces  | NOT
+              advanced_face_properties(fac))) = 0))) = 0;
+   WR7: SIZEOF (QUERY (cfss <* QUERY (it <* SELF.items |
+          'AIC_MANIFOLD_SUBSURFACE.CONNECTED_FACE_SUB_SET' IN TYPEOF(it)) |
+             NOT (SIZEOF (QUERY(fcs <* cfss\connected_face_set.cfs_faces |
+               ('AIC_MANIFOLD_SUBSURFACE.SUBFACE' IN TYPEOF(fcs)) AND
+            NOT (SIZEOF(QUERY (elp_fbnds <* QUERY (bnds <* fcs.bounds |
+         'AIC_MANIFOLD_SUBSURFACE.EDGE_LOOP' IN TYPEOF(bnds.bound)) |
+                NOT (SIZEOF (QUERY (oe <* elp_fbnds.bound\path.edge_list |
+                  NOT(('AIC_MANIFOLD_SUBSURFACE.EDGE_CURVE' IN
+            TYPEOF(oe.edge_element)) OR
+           ('AIC_MANIFOLD_SUBSURFACE.SUBEDGE' IN
+            TYPEOF(oe.edge_element)) ))) = 0
+                   ))) = 0
+                 ))) = 0
+             ))) = 0;
+   WR8: SIZEOF (QUERY (cfss <* QUERY (it <* SELF.items |
+           'AIC_MANIFOLD_SUBSURFACE.CONNECTED_FACE_SUBSET' IN TYPEOF(it)) |
+             NOT (SIZEOF (QUERY(fcs <* cfss\connected_face_set.cfs_faces |
+           ('AIC_MANIFOLD_SUBSURFACE.SUBFACE' IN TYPEOF(fcs)) AND
+               NOT (SIZEOF(QUERY (elp_fbnds <* QUERY (bnds <* fcs.bounds |
+         'AIC_MANIFOLD_SUBSURFACE.EDGE_LOOP' IN TYPEOF(bnds.bound)) |
+                 NOT (SIZEOF (QUERY (oe <* elp_fbnds.bound\path.edge_list |
+          NOT(('AIC_MANIFOLD_SUBSURFACE.VERTEX_POINT' IN TYPEOF(oe.edge_start))
+                AND ('AIC_MANIFOLD_SUBSURFACE.VERTEX_POINT' IN
+                 TYPEOF(oe.edge_end))
+            ))) = 0
+              ))) = 0
+               ))) = 0
+                   ))) = 0;
+   WR9: SIZEOF (QUERY (cfss <* QUERY (it <* SELF.items |
+           'AIC_MANIFOLD_SUBSURFACE.CONNECTED_FACE_SUB_SET' IN TYPEOF(it)) |
+             NOT (SIZEOF (QUERY(fcs <* cfss\connected_face_set.cfs_faces |
+              ( 'AIC_MANIFOLD_SUBSURFACE.SUBFACE' IN TYPEOF(fcs)) AND
+              ( NOT (SIZEOF(QUERY  (bnds <* fcs.bounds |
+         NOT (SIZEOF (['AIC_MANIFOLD_SUBSURFACE.EDGE_LOOP',
+                'AIC_MANIFOLD_SUBSURFACE.VERTEX_LOOP'] *
+                   TYPEOF(bnds.bound)) = 1 )
+                   )) = 0)
+                 ))) = 0
+             ))) = 0;
+   WR10: SIZEOF (QUERY (cfss <* QUERY (it <* SELF.items |
+           'AIC_MANIFOLD_SUBSURFACE.CONNECTED_FACE_SUB_SET' IN TYPEOF(it)) |
+             NOT (SIZEOF (QUERY(fcs <* cfss\connected_face_set.cfs_faces |
+              ( 'AIC_MANIFOLD_SUBSURFACE.SUBFACE' IN TYPEOF(fcs)) AND
+              ( NOT (SIZEOF(QUERY (elp_fbnds <* QUERY (bnds <* fcs.bounds |
+         'AIC_MANIFOLD_SUBSURFACE.EDGE_LOOP' IN TYPEOF(bnds.bound)) |
+                 NOT (SIZEOF (QUERY (oe <* elp_fbnds.bound\path.edge_list |
+                   NOT (SIZEOF (['AIC_MANIFOLD_SUBSURFACE.LINE',
+                         'AIC_MANIFOLD_SUBSURFACE.CONIC',
+                         'AIC_MANIFOLD_SUBSURFACE.POLYLINE',
+                         'AIC_MANIFOLD_SUBSURFACE.SURFACE_CURVE',
+                         'AIC_MANIFOLD_SUBSURFACE.B_SPLINE_CURVE' ] *
+            TYPEOF(oe.edge_element\edge_curve.edge_geometry)) = 1 )
+               )) = 0
+               ))) = 0
+                 )))) = 0
+                    ))) = 0;
+   WR11: SIZEOF (QUERY (cfss <* QUERY (it <* SELF.items |
+           'AIC_MANIFOLD_SUBSURFACE.CONNECTED_FACE_SUBSET' IN TYPEOF(it)) |
+             NOT (SIZEOF (QUERY(fcs <* cfss\connected_face_set.cfs_faces |
+              ( 'AIC_MANIFOLD_SUBSURFACE.SUBFACE' IN TYPEOF(fcs)) AND
+               (NOT (SIZEOF(QUERY (elp_fbnds <* QUERY (bnds <* fcs.bounds |
+         'AIC_MANIFOLD_SUBSURFACE.EDGE_LOOP' IN TYPEOF(bnds.bound)) |
+                NOT (SIZEOF (QUERY (oe <* elp_fbnds.bound\path.edge_list |
+                   ('AIC_MANIFOLD_SUBSURFACE.SURFACE_CURVE' IN
+            TYPEOF(oe.edge_element\edge_curve.edge_geometry)) AND
+            (NOT ((SIZEOF (QUERY (sc_ag <*
+            oe.edge_element\edge_curve.edge_geometry\
+            surface_curve.associated_geometry |
+            NOT ('AIC_TOPOLOGICALLY_BOUNDED_SURFACE.PCURVE' IN
+            TYPEOF(sc_ag)))) = 0)))
+               )) = 0
+               ))) = 0
+                   )))) = 0
+                    ))) = 0;
+   WR12: SIZEOF (QUERY (cfss <* QUERY (it <* SELF.items |
+           'AIC_MANIFOLD_SUBSURFACE.CONNECTED_FACE_SUBSET' IN TYPEOF(it)) |
+             NOT (SIZEOF (QUERY(fcs <* cfss\connected_face_set.cfs_faces |
+              ( 'AIC_MANIFOLD_SUBSURFACE.SUBFACE' IN TYPEOF(fcs)) AND
+               (NOT (SIZEOF(QUERY (elp_fbnds <* QUERY (bnds <* fcs.bounds |
+         'AIC_MANIFOLD_SUBSURFACE.EDGE_LOOP' IN TYPEOF(bnds.bound)) |
+                NOT (SIZEOF (QUERY (oe <* elp_fbnds.bound\path.edge_list |
+                   ('AIC_MANIFOLD_SUBSURFACE.POLYLINE' IN
+            TYPEOF(oe.edge_element\edge_curve.edge_geometry)) AND
+            (NOT (SIZEOF (oe\oriented_edge.edge_element\
+                  edge_curve.edge_geometry\polyline.points) >= 3))
+               )) = 0
+               ))) = 0
+                   )))) = 0
+                    ))) = 0;
+ END_ENTITY;
+
+FUNCTION advanced_face_properties (testface : face) : BOOLEAN;
+(* return TRUE if testface is of type advanced_face *)
+IF 'AIC_MANIFOLD_SUBSURFACE.ADVANCED_FACE' IN TYPEOF(testface) THEN
+    RETURN (TRUE);
+END_IF;
+(* if testface is a subface recursively test the parent_face,
+return FALSE for all other types of face *)
+IF  ('AIC_MANIFOLD_SUBSURFACE.SUBFACE' IN TYPEOF(testface)) THEN
+   RETURN(advanced_face_properties(testface.parent_face));
+   ELSE  RETURN (FALSE);
+END_IF;
+END_FUNCTION;
+
+END_SCHEMA; -- end AIC_MANIFOLD_SUBSURFACE SCHEMA

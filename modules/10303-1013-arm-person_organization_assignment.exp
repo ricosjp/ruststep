@@ -1,0 +1,21 @@
+(*
+ $Id: 10303-1013-arm-person_organization_assignment.exp,v 1.5 2006/08/07 07:44:41 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N1090 - ISO/TS 10303-1013 Person organization assignment - EXPRESS ARM
+*)
+  
+SCHEMA Person_organization_assignment_arm;
+
+USE FROM Person_organization_arm; -- Person organization
+
+TYPE organization_or_person_in_organization_item = EXTENSIBLE SELECT ;
+END_TYPE;
+
+ENTITY Organization_or_person_in_organization_assignment;
+  assigned_entity : organization_or_person_in_organization_select;
+  role            : STRING;
+  items           : SET [1:?] OF organization_or_person_in_organization_item;
+END_ENTITY;
+
+   
+END_SCHEMA;
+

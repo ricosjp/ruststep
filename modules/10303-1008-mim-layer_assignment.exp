@@ -1,0 +1,15 @@
+(*
+WG12 N667
+ISO/TS 10303-1008
+Product data representation and exchange: Application module: Layer assignment
+*)
+
+SCHEMA Layer_assignment_mim;
+
+USE FROM Foundation_representation_mim; 	-- ISO/TS 10303-1006
+
+USE FROM presentation_organization_schema -- ISO 10303-46
+(presentation_layer_assignment);
+
+END_SCHEMA;
+

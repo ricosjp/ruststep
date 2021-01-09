@@ -1,0 +1,35 @@
+(*
+ $Id: 10303-1127-arm-file_identification.exp,v 1.5 2006/08/07 07:44:44 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2123 - ISO/TS 10303-1127 File identification - EXPRESS ARM
+*)
+
+SCHEMA File_identification_arm;
+
+USE FROM External_item_identification_assignment_arm;
+
+TYPE located_select = SELECT BASED_ON external_identification_item WITH (File);
+END_TYPE;
+
+ENTITY Digital_file
+SUBTYPE OF (File);
+END_ENTITY;
+
+ENTITY File
+ABSTRACT SUPERTYPE OF (ONEOF(Digital_file, Hardcopy));
+  id : STRING;
+  version : OPTIONAL STRING;
+  contained_data_type : OPTIONAL STRING;
+END_ENTITY;
+
+ENTITY Hardcopy
+SUBTYPE OF (File);
+END_ENTITY;
+
+ENTITY File_location_identification
+SUBTYPE OF (External_item_identification);
+WHERE
+WR1: 'FILE_IDENTIFICATION_ARM.FILE' IN TYPEOF(SELF\External_source_identification.item);
+END_ENTITY;
+
+END_SCHEMA;
+

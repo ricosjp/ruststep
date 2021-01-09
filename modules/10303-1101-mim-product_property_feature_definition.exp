@@ -1,0 +1,18 @@
+(* THIS DOCUMENT IS ISO TC184/SC4/WG12 N2655 *)
+
+(* JH fixed below SCHEMA Product_propety_feature_definition_mim;  *)
+SCHEMA Product_property_feature_definition_mim; 
+
+USE FROM product_property_definition_schema
+  (characterized_object,
+   shape_aspect);
+
+ENTITY product_property_feature_definition
+  SUBTYPE OF (characterized_object);
+END_ENTITY; --product_property_feature_definition
+
+ENTITY product_property_instanced_feature
+  SUBTYPE OF (product_property_feature_definition, shape_aspect);
+END_ENTITY; --product_property_instanced_feature
+
+END_SCHEMA;

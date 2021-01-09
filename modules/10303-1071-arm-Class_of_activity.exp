@@ -1,0 +1,16 @@
+(*
+ $Id: 10303-1071-arm-Class_of_activity.exp,v 1.4 2006/08/04 12:01:50 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2714 - ISO/TS 10303-1071 Class of activity - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG12 N1840
+*)
+
+SCHEMA Class_of_activity_arm;
+
+USE FROM Activity_arm;    -- ISO/TS 10303-1047
+USE FROM Class_arm;    -- ISO/TS 10303-1070
+
+ENTITY Class_of_activity
+  SUBTYPE OF (Activity, Class);
+END_ENTITY;
+
+END_SCHEMA;

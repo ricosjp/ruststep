@@ -1,0 +1,28 @@
+(*
+ $Id: 10303-1211-mim-Cardinality_of_relationship.exp,v 1.4 2006/08/04 12:11:55 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2712 - ISO/TS 10303-1211 Cardinality of relationship - EXPRESS MIM
+ Supersedes ISO TC184/SC4/WG12 N1874
+*)
+
+SCHEMA Cardinality_of_relationship_mim;
+
+USE FROM Maths_space_mim;    -- ISO/TS 10303-1091
+
+USE FROM mathematical_context_schema    -- ISO 10303-51
+  (space_context_select,
+   maths_space_context);
+
+TYPE relationship_select = EXTENSIBLE SELECT BASED_ON space_context_select;
+END_TYPE; 
+
+ENTITY cardinality_of_related_class
+  SUBTYPE OF (maths_space_context);
+  SELF\maths_space_context.physical_space : relationship_select;
+END_ENTITY;
+
+ENTITY cardinality_of_relating_class
+  SUBTYPE OF (maths_space_context);
+  SELF\maths_space_context.physical_space : relationship_select;
+END_ENTITY;
+
+END_SCHEMA;

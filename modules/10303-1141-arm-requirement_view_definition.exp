@@ -1,0 +1,27 @@
+(*
+ $Id: 10303-1141-arm-requirement_view_definition.exp,v 1.1 2006/08/07 07:44:44 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N3133 - ISO/TS 10303-1141 Requirement view definition - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG12 N2354
+*) 
+
+
+SCHEMA Requirement_view_definition_arm;
+
+USE FROM Identification_assignment_arm;    -- ISO/TS 10303-1021
+
+USE FROM Product_view_definition_arm;    -- ISO/TS 10303-1019
+
+USE FROM Requirement_identification_and_version_arm;    -- ISO/TS 10303-1140
+
+
+TYPE requirement_view_definition_identification_item = SELECT BASED_ON identification_item WITH 
+   (Requirement_view_definition);
+END_TYPE; 
+
+ENTITY Requirement_view_definition
+  SUBTYPE OF (Product_view_definition);
+  SELF\Product_view_definition.defined_version : Requirement_version;
+END_ENTITY;
+
+END_SCHEMA;  -- Requirement_view_definition_arm
+

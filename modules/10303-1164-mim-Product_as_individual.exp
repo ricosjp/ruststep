@@ -1,0 +1,75 @@
+(*
+ $Id: 10303-1164-mim-Product_as_individual.exp,v 1.2 2006/08/07 09:42:04 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N3107 - ISO/TS 10303-1164 Product as individual - EXPRESS MIM
+ Supersedes ISO TC184/SC4/WG12 N2292
+*) 
+
+
+SCHEMA Product_as_individual_mim;
+
+USE FROM Identification_assignment_mim;    -- ISO/TS 10303-1021
+
+USE FROM product_definition_schema   -- ISO 10303-41
+  (product,
+   product_definition,
+   product_definition_formation,
+   product_definition_formation_relationship,
+   product_relationship); 
+
+USE FROM Product_identification_mim;    -- ISO/TS 10303-1017
+
+USE FROM Product_version_mim;    -- ISO/TS 10303-1018
+
+USE FROM Product_view_definition_mim;    -- ISO/TS 10303-1019
+
+
+TYPE product_as_individual_identification_item = SELECT BASED_ON identification_item WITH 
+   (product_as_individual, 
+    product_as_individual_version, 
+    product_as_individual_view);
+END_TYPE; 
+
+ENTITY product_as_individual
+  SUBTYPE OF (product);
+END_ENTITY;
+
+ENTITY product_as_individual_version
+  ABSTRACT SUPERTYPE OF (ONEOF (product_as_planned,
+                                product_as_realized))
+  SUBTYPE OF (product_definition_formation);
+  SELF\product_definition_formation.of_product : product_as_individual;
+END_ENTITY;
+
+ENTITY product_as_individual_view
+  SUBTYPE OF (product_definition);
+  SELF\product_definition.formation RENAMED defined_version : product_as_individual_version;
+END_ENTITY;
+
+ENTITY product_as_planned
+  SUBTYPE OF (product_as_individual_version);
+END_ENTITY;
+
+ENTITY product_as_realized
+  SUBTYPE OF (product_as_individual_version);
+END_ENTITY;
+
+ENTITY product_design_to_individual
+  SUBTYPE OF (product_relationship);
+  SELF\product_relationship.related_product RENAMED individual_product : product_as_individual;
+  SELF\product_relationship.relating_product RENAMED product_design : product;
+END_ENTITY;
+
+ENTITY product_design_version_to_individual
+  SUBTYPE OF (product_definition_formation_relationship);
+  SELF\product_definition_formation_relationship.related_product_definition_formation RENAMED individual_product : product_as_individual_version;
+  SELF\product_definition_formation_relationship.relating_product_definition_formation RENAMED product_design_version : product_definition_formation;
+END_ENTITY;
+
+ENTITY product_planned_to_realized
+  SUBTYPE OF (product_definition_formation_relationship);
+  SELF\product_definition_formation_relationship.relating_product_definition_formation RENAMED planned_product : product_as_planned;
+  SELF\product_definition_formation_relationship.related_product_definition_formation RENAMED realized_product : product_as_realized;
+END_ENTITY;
+
+END_SCHEMA;  -- Product_as_individual_mim
+

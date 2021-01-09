@@ -1,0 +1,19 @@
+(*
+ $Id: 10303-1163-mim-Individual_product_structure.exp,v 1.4 2006/08/04 12:11:54 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2793 - ISO/TS 10303-1163 Individual product structure - EXPRESS MIM
+ Supersedes ISO TC184/SC4/WG12 N1978
+*)
+
+SCHEMA Individual_product_structure_mim;
+
+USE FROM Composition_of_individual_product_mim;    --  ISO/TS 10303-1166
+USE FROM Connection_of_individual_product_mim;    --  ISO/TS 10303-1167
+USE FROM Containment_of_individual_product_mim;    --  ISO/TS 10303-1168
+USE FROM Involvement_of_individual_product_in_connection_mim;    --  ISO/TS 10303-1165
+USE FROM Product_as_individual_mim;    --  ISO/TS 10303-1164
+
+TYPE product_as_individual_versionable_item = SELECT BASED_ON versionable_item WITH 
+   (product_as_individual_version);
+END_TYPE; 
+
+END_SCHEMA;

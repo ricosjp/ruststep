@@ -1,0 +1,15 @@
+(*
+  $Id: 10303-1291-arm-Plib_class_reference.exp,v 1.1 2003/01/27 20:34:32 wg12deputy Exp $
+  ISO/TC184/SC4 WG12N1354 - ISO/CD-TS - 10303-1291 Plib class reference - EXPRESS ARM
+*)
+
+SCHEMA Plib_class_reference_arm; 
+
+
+ENTITY Plib_class_reference;
+  code : STRING;
+  supplier_bsu : STRING;
+  version : STRING;
+END_ENTITY;
+
+END_SCHEMA;  -- Plib_class_reference_arm

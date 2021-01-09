@@ -1,0 +1,57 @@
+(*
+ $Id: 10303-1286-arm-work_order_characterized.exp,v 1.2 2006/08/07 07:44:46 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N3187 - ISO/TS 10303-1286 Work order characterized - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG12 N2453
+*) 
+
+
+SCHEMA Work_order_characterized_arm;
+
+USE FROM Ap239_management_resource_information_arm;    -- ISO/TS 10303-1289
+
+USE FROM Document_assignment_arm;    -- ISO/TS 10303-1122
+
+USE FROM Management_resource_information_arm;    -- ISO/TS 10303-1288
+
+USE FROM Work_order_arm;    -- ISO/TS 10303-1043
+
+
+TYPE wordchar_ap239_mri_classification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON ap239_mri_classification_item WITH 
+   (Directed_activity, 
+    Work_order);
+END_TYPE; 
+
+TYPE wordchar_ap239_mri_classified_attribute_select = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON ap239_mri_classified_attribute_select WITH 
+   (Work_order);
+END_TYPE; 
+
+TYPE wordchar_documented_element_select = SELECT BASED_ON documented_element_select WITH 
+   (Work_order);
+END_TYPE; 
+
+TYPE wordchar_mri_approval_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON mri_approval_item WITH 
+   (Directed_activity, 
+    Work_order);
+END_TYPE; 
+
+TYPE wordchar_mri_date_or_date_time_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON mri_date_or_date_time_item WITH 
+   (Directed_activity, 
+    Work_order);
+END_TYPE; 
+
+TYPE wordchar_mri_identification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON mri_identification_item WITH 
+   (Directed_activity, 
+    Work_order);
+END_TYPE; 
+
+TYPE wordchar_mri_organization_or_person_in_organization_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON mri_organization_or_person_in_organization_item WITH 
+   (Directed_activity, 
+    Work_order);
+END_TYPE; 
+
+TYPE wordchar_mri_string_select = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON mri_string_select WITH 
+   (Work_order);
+END_TYPE; 
+
+END_SCHEMA;  -- Work_order_characterized_arm
+

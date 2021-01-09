@@ -1,0 +1,33 @@
+(*
+ $Id: 10303-1011-mim-person_organization.exp,v 1.5 2006/08/07 09:42:02 wg12deputy Exp $
+ISO TC184/SC4/WG12 N2922 - ISO/TS 10303-1011 Person organization - EXPRESS MIM
+*) 
+
+
+SCHEMA Person_organization_mim;
+
+USE FROM basic_attribute_schema   -- ISO 10303-41
+  (id_attribute,
+   id_attribute_select,
+   name_attribute,
+   name_attribute_select); 
+
+USE FROM person_organization_schema   -- ISO 10303-41
+  (address,
+   organization,
+   organization_relationship,
+   organizational_address,
+   person,
+   person_and_organization,
+   personal_address); 
+
+
+ENTITY person_and_organization_address
+  SUBTYPE OF (organizational_address, personal_address);
+  SELF\organizational_address.organizations : SET[1:1] OF organization;
+  SELF\personal_address.people : SET[1:1] OF person;
+WHERE
+  WR1: SIZEOF(QUERY(pao <* USEDIN (SELF\personal_address.people[1], 'PERSON_ORGANIZATION_SCHEMA.PERSON_AND_ORGANIZATION.THE_PERSON') | pao.the_organization :=: SELF\organizational_address.organizations[1])) = 1;
+END_ENTITY;
+
+END_SCHEMA;  -- Person_organization_mim

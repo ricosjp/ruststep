@@ -1,0 +1,53 @@
+(*
+ $Id: 10303-1253-arm-condition.exp,v 1.1 2006/08/07 07:44:45 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N3025 - ISO/TS 10303-1253 Condition - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG12 N2318
+*) 
+
+
+SCHEMA Condition_arm;
+
+USE FROM Classification_assignment_arm;    -- ISO/TS 10303-1114
+
+
+TYPE condition_classification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON classification_item WITH 
+   (Condition, 
+    Condition_assignment, 
+    Condition_parameter, 
+    Condition_relationship);
+END_TYPE; 
+
+TYPE condition_item = EXTENSIBLE GENERIC_ENTITY SELECT;
+END_TYPE; 
+
+TYPE condition_parameter_item = EXTENSIBLE GENERIC_ENTITY SELECT
+   (Condition_relationship);
+END_TYPE; 
+
+ENTITY Condition;
+  name : STRING;
+  description : OPTIONAL STRING;
+END_ENTITY;
+
+ENTITY Condition_assignment;
+  assigned_condition : Condition;
+  item : condition_item;
+END_ENTITY;
+
+ENTITY Condition_parameter;
+  name : STRING;
+  description : OPTIONAL STRING;
+  condition : Condition;
+  parameter : OPTIONAL condition_parameter_item;
+END_ENTITY;
+
+ENTITY Condition_relationship;
+  name : STRING;
+  description : OPTIONAL STRING;
+  relating_condition : Condition;
+  related_condition : Condition;
+END_ENTITY;
+
+END_SCHEMA;  -- Condition_arm
+
+

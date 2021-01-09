@@ -1,0 +1,40 @@
+(*
+ $Id: 10303-1140-arm-requirement_identification_and_version.exp,v 1.1 2006/08/07 07:44:44 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N3127 - ISO/TS 10303-1140 Requirement identification and version - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG12 N2348
+*) 
+
+
+SCHEMA Requirement_identification_and_version_arm;
+
+USE FROM Identification_assignment_arm;    -- ISO/TS 10303-1021
+
+USE FROM Product_identification_arm;    -- ISO/TS 10303-1017
+
+USE FROM Product_version_arm;    -- ISO/TS 10303-1018
+
+USE FROM Product_version_relationship_arm;    -- ISO/TS 10303-1020
+
+
+TYPE requirement_identification_and_version_identification_item = SELECT BASED_ON identification_item WITH 
+   (Requirement, 
+    Requirement_version);
+END_TYPE; 
+
+ENTITY Requirement
+  SUBTYPE OF (Product);
+END_ENTITY;
+
+ENTITY Requirement_version
+  SUBTYPE OF (Product_version);
+  SELF\Product_version.of_product : Requirement;
+END_ENTITY;
+
+ENTITY Requirement_version_relationship
+  SUBTYPE OF (Product_version_relationship);
+  SELF\Product_version_relationship.relating_version RENAMED predecessor : Requirement_version;
+  SELF\Product_version_relationship.related_version RENAMED successor : Requirement_version;
+END_ENTITY;
+
+END_SCHEMA;  -- Requirement_identification_and_version_arm
+

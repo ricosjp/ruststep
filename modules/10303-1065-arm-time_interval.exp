@@ -1,0 +1,37 @@
+(*
+ $Id: 10303-1065-arm-time_interval.exp,v 1.5 2006/08/07 07:44:43 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2955 - ISO/TS 10303-1065 Time interval - EXPRESS ARM
+*)
+
+
+SCHEMA Time_interval_arm; 
+
+USE FROM Event_arm;    -- ISO/TS 10303-1064
+
+USE FROM Value_with_unit_arm;    -- ISO/TS 10303-1054
+
+
+ENTITY Time_interval;
+  id : STRING;
+  name : STRING;
+  description : OPTIONAL STRING;
+END_ENTITY;
+
+ENTITY Time_interval_relationship;
+  relation_type : STRING;
+  description : STRING;
+  relating_time_interval : Time_interval;
+  related_time_interval : Time_interval;
+END_ENTITY;
+
+ENTITY Time_interval_with_bounds
+  SUBTYPE OF (Time_interval);
+  primary_bound : OPTIONAL date_or_event;
+  secondary_bound : OPTIONAL date_or_event;
+  duration_from_primary_bound : OPTIONAL Duration;
+WHERE
+  WR1: NOT (EXISTS (secondary_bound) AND EXISTS (duration_from_primary_bound));
+  WR2: EXISTS (primary_bound) OR EXISTS (secondary_bound);
+END_ENTITY;
+
+END_SCHEMA;  -- Time_interval_arm

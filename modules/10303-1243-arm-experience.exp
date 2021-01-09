@@ -1,0 +1,81 @@
+(*
+ $Id: 10303-1243-arm-experience.exp,v 1.2 2006/08/07 07:44:44 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N3043 - ISO/TS 10303-1243 Experience - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG12 N2381
+*) 
+
+
+SCHEMA Experience_arm;
+
+USE FROM Activity_arm;    -- ISO/TS 10303-1047
+
+USE FROM Activity_as_realized_arm;    -- ISO/TS 10303-1259
+
+USE FROM Activity_method_arm;    -- ISO/TS 10303-1049
+
+USE FROM Classification_assignment_arm;    -- ISO/TS 10303-1114
+
+USE FROM Date_time_assignment_arm;    -- ISO/TS 10303-1014
+
+USE FROM Person_organization_arm;    -- ISO/TS 10303-1011
+
+USE FROM Property_assignment_arm;    -- ISO/TS 10303-1030
+
+USE FROM Required_resource_arm;    -- ISO/TS 10303-1267
+
+USE FROM Resource_as_realized_arm;    -- ISO/TS 10303-1269
+
+
+TYPE defined_activities = EXTENSIBLE GENERIC_ENTITY SELECT
+   (Activity_actual, 
+    Resource_as_realized);
+END_TYPE; 
+
+TYPE defined_methods = EXTENSIBLE GENERIC_ENTITY SELECT
+   (Activity, 
+    Activity_method, 
+    Required_resource);
+END_TYPE; 
+
+TYPE experience_classified_select = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON classification_item WITH 
+   (Experience_type);
+END_TYPE; 
+
+TYPE experience_date_or_date_time_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON date_or_date_time_item WITH 
+   (Experience_instance);
+END_TYPE; 
+
+TYPE experience_instance_property_assignment_select = SELECT BASED_ON property_assignment_select WITH 
+   (Experience_instance);
+END_TYPE; 
+
+TYPE person_or_organization_or_person_in_organization_select = EXTENSIBLE GENERIC_ENTITY SELECT
+   (Organization, 
+    Person, 
+    Person_in_organization);
+END_TYPE; 
+
+ENTITY Experience_gained;
+  experience_of : Experience_instance;
+  gained_by : person_or_organization_or_person_in_organization_select;
+  role : OPTIONAL STRING;
+END_ENTITY;
+
+ENTITY Experience_instance;
+  description : OPTIONAL STRING;
+  is_defined_by : Experience_type;
+  consists_of : OPTIONAL defined_activities;
+END_ENTITY;
+
+ENTITY Experience_type;
+  name : STRING;
+  description : OPTIONAL STRING;
+  consists_of : OPTIONAL defined_methods;
+END_ENTITY;
+
+ENTITY Experience_type_relationship;
+  compound_experience : Experience_type;
+  component_experience : Experience_type;
+END_ENTITY;
+
+END_SCHEMA;  -- Experience_arm

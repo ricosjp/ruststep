@@ -1,0 +1,29 @@
+(*
+ $Id: 10303-1113-mim-group.exp,v 1.3 2006/08/07 09:42:04 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N3246 - ISO/TS 10303-1113 Group - EXPRESS MIM
+ Supersedes ISO TC184/SC4/WG12 N2227
+*) 
+
+
+SCHEMA Group_mim;
+
+USE FROM group_schema   -- ISO 10303-41
+  (group,
+   group_relationship); 
+
+USE FROM management_resources_schema   -- ISO 10303-41
+  (group_assignment); 
+
+
+TYPE groupable_item = EXTENSIBLE GENERIC_ENTITY SELECT;
+WHERE
+  WR1: NOT ('GROUP_MIM.GROUP' IN TYPEOF(SELF));
+END_TYPE; 
+
+ENTITY applied_group_assignment
+  SUBTYPE OF (group_assignment);
+  items : SET[1:?] OF groupable_item;
+END_ENTITY;
+
+END_SCHEMA;  -- Group_mim
+

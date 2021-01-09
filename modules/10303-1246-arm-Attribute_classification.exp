@@ -1,0 +1,24 @@
+(*
+ $Id: 10303-1246-arm-Attribute_classification.exp,v 1.2 2006/08/07 07:44:44 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N3019 - ISO/TS 10303-1246 Attribute classification - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG12 N2255
+*) 
+
+
+SCHEMA Attribute_classification_arm;
+
+USE FROM Class_arm;    -- ISO/TS 10303-1070
+
+
+TYPE classified_attribute_select = EXTENSIBLE GENERIC_ENTITY SELECT;
+END_TYPE; 
+
+ENTITY Attribute_classification;
+  allowed_value : Class;
+  attribute_name : STRING;
+  classified_entity : SET[1:?] OF classified_attribute_select;
+END_ENTITY;
+
+END_SCHEMA;  -- Attribute_classification_arm
+
+

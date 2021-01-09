@@ -1,0 +1,40 @@
+(*
+ $Id: 10303-1275-mim-External_class.exp,v 1.2 2006/08/07 09:42:06 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N3050 - ISO/TS 10303-1275 External class - EXPRESS MIM
+ Supersedes ISO TC184/SC4/WG12 N2265
+*) 
+
+
+SCHEMA External_class_mim;
+
+USE FROM basic_attribute_schema   -- ISO 10303-41
+  (description_attribute,
+   description_attribute_select); 
+
+USE FROM Class_mim;    -- ISO/TS 10303-1070
+
+USE FROM classification_schema   -- ISO 10303-54
+  (class); 
+
+USE FROM external_reference_schema   -- ISO 10303-41
+  (external_source,
+   externally_defined_item); 
+
+USE FROM Name_assignment_mim;    -- ISO/TS 10303-1340
+
+
+TYPE external_class_name_item = SELECT BASED_ON name_item WITH 
+   (external_class_library);
+END_TYPE; 
+
+ENTITY external_class_library
+  SUBTYPE OF (external_source);
+END_ENTITY;
+
+ENTITY externally_defined_class
+  SUBTYPE OF (class, externally_defined_item);
+END_ENTITY;
+
+END_SCHEMA;  -- External_class_mim
+
+

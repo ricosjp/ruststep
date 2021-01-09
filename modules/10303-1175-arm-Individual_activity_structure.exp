@@ -1,0 +1,14 @@
+(*
+ $Id: 10303-1175-arm-Individual_activity_structure.exp,v 1.4 2006/08/04 12:01:50 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2786 - ISO/TS 10303-1175 Individual activity structure - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG12 N1855
+*)
+
+SCHEMA Individual_activity_structure_arm;
+
+USE FROM Composition_of_individual_activity_arm;    -- ISO/TS 10303-1177
+USE FROM Connection_of_individual_activity_arm;    -- ISO/TS 10303-1178
+USE FROM Individual_activity_arm;    -- ISO/TS 10303-1176
+USE FROM Individual_involvement_in_activity_arm;    -- ISO/TS 10303-1179
+
+END_SCHEMA;

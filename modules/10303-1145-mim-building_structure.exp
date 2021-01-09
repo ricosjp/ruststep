@@ -1,0 +1,87 @@
+(*
+   $Id: 10303-1145-mim-building_structure.exp,v 1.2 2006/08/03 13:36:19 wg12deputy Exp $
+   ISO/TC184/SC4 WG12N2576 - ISO/TS 10303-1145 Building_structure - EXPRESS MIM
+   Supersedes ISO TC184/SC4/WG12N1785
+*)
+
+SCHEMA Building_structure_mim;
+
+USE FROM Assembly_structure_mim;
+
+USE FROM Building_item_mim;
+
+USE FROM Person_organization_assignment_mim;
+
+USE FROM Product_view_definition_mim;
+
+USE FROM Product_view_definition_relationship_mim;
+
+
+TYPE building_design_organization_item = SELECT BASED_ON organization_item WITH 
+  (building);
+END_TYPE;
+
+TYPE building_design_person_item = SELECT BASED_ON person_and_organization_item WITH 
+  (building);
+END_TYPE;
+
+ENTITY building
+  SUBTYPE OF (product_definition);
+WHERE
+  WR1: SIZEOF (QUERY (bdpa <* USEDIN (SELF, 'BUILDING_STRUCTURE_MIM.' +
+       'APPLIED_PERSON_AND_ORGANIZATION_ASSIGNMENT.ITEMS') |
+       bdpa.role.name = 'owner')) +
+       SIZEOF (QUERY (bdoa <* USEDIN (SELF, 'BUILDING_STRUCTURE_MIM.' +
+       'APPLIED_ORGANIZATION_ASSIGNMENT.ITEMS') |
+       bdoa.role.name = 'owner')) = 1;
+  WR2: SIZEOF (QUERY (pdr <* USEDIN (SELF, 'BUILDING_STRUCTURE_MIM.'+
+       'PRODUCT_DEFINITION_RELATIONSHIP.RELATING_PRODUCT_DEFINITION') |
+       'BUILDING_STRUCTURE_MIM.BUILDING_SECTION'
+       IN TYPEOF (pdr.related_product_definition))) >= 1;
+END_ENTITY;
+
+ENTITY building_element_assembly
+  SUBTYPE OF (product_definition);
+WHERE
+   WR1: SIZEOF (QUERY (acu <* QUERY (pdr <* USEDIN (SELF,
+       'BUILDING_STRUCTURE_MIM.PRODUCT_DEFINITION_RELATIONSHIP.' +
+       'RELATING_PRODUCT_DEFINITION') |
+       'BUILDING_STRUCTURE_MIM.ASSEMBLY_COMPONENT_USAGE' IN
+       TYPEOF (pdr)) |
+       SIZEOF (TYPEOF (acu.related_product_definition) *
+       ['BUILDING_ITEM_MIM.BUILDING_ELEMENT',
+       'BUILDING_ITEM_MIM.FIXTURE_EQUIPMENT_ELEMENT',
+       'BUILDING_ITEM_MIM.SERVICE_ELEMENT',
+       'BUILDING_ITEM_MIM.SPACE_ELEMENT',
+       'BUILDING_ITEM_MIM.STRUCTURE_ENCLOSURE_ELEMENT',
+       'BUILDING_STRUCTURE_MIM.BUILDING_ELEMENT_ASSEMBLY']) = 1)) >= 1;
+END_ENTITY;
+
+ENTITY building_level
+  SUBTYPE OF (product_definition);
+WHERE
+WR1: SIZEOF (QUERY (pdr <* USEDIN (SELF, 'BUILDING_STRUCTURE_MIM.' +
+       'PRODUCT_DEFINITION_RELATIONSHIP.RELATED_PRODUCT_DEFINITION') |
+       'BUILDING_STRUCTURE_MIM.BUILDING_SECTION' IN
+       TYPEOF (pdr.relating_product_definition))) = 1;
+END_ENTITY;
+
+ENTITY building_section
+  SUBTYPE OF (product_definition);
+WHERE
+WR1: SIZEOF (QUERY (pdr <* USEDIN(SELF,'BUILDING_STRUCTURE_MIM.'+
+       'PRODUCT_DEFINITION_RELATIONSHIP.RELATED_PRODUCT_DEFINITION') |
+       'BUILDING_STRUCTURE_MIM.BUILDING' IN
+       TYPEOF (pdr.relating_product_definition))) = 1;
+WR2: SIZEOF (QUERY (pdr <* USEDIN (SELF,'BUILDING_ITEM_MIM.' +
+       'PRODUCT_DEFINITION_RELATIONSHIP.RELATING_PRODUCT_DEFINITION') |
+       SIZEOF (TYPEOF (pdr.related_product_definition) *
+       ['BUILDING_STRUCTURE_MIM.BUILDING_LEVEL',
+       'BUILDING_ITEM_MIM.BUILDING_ELEMENT',
+       'BUILDING_ITEM_MIM.FIXTURE_EQUIPMENT_ELEMENT',
+       'BUILDING_ITEM_MIM.SERVICE_ELEMENT',
+       'BUILDING_ITEM_MIM.SPACE_ELEMENT',
+       'BUILDING_ITEM_MIM.STRUCTURE_ENCLOSURE_ELEMENT']) = 1)) >= 1;
+END_ENTITY;
+
+END_SCHEMA;

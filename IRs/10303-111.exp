@@ -1,0 +1,758 @@
+(* THIS IS DOCUMENT ISO TC184/SC4/WG12 N5267, CONTAINING EXPRESS CODE FOR *)
+(* ISO 10303-111, 'ELEMENTS FOR THE PROCEDURAL MODELLING OF SOLID SHAPES' *)
+(* UPDATED ACCORDING TO TC1                              -- 2008-07-31 -- *)                          
+
+SCHEMA solid_shape_element_schema;
+
+REFERENCE FROM support_resource_schema                 -- ISO 10303-41
+  (text);
+
+REFERENCE FROM measure_schema                          -- ISO 10303-41
+  (length_measure,
+   non_negative_length_measure,
+   plane_angle_measure, 
+   positive_length_measure,
+   positive_plane_angle_measure);
+
+REFERENCE FROM geometry_schema                         -- ISO 10303-42
+  (axis2_placement_3d,
+   bounded_curve,   
+   bounded_surface,
+   curve_bounded_surface,
+   geometric_representation_item,
+   point,
+   point_on_curve,
+   surface);
+
+REFERENCE FROM topology_schema                          --ISO 10303-42
+  (connected_face_set,
+   edge_curve,
+   face_surface,
+   open_shell,
+   topological_representation_item,
+   vertex); 
+
+REFERENCE FROM geometric_model_schema                   --ISO 10303-42
+  (boolean_result,
+   csg_primitive,
+   extruded_face_solid,
+   primitive_2d,
+   revolved_face_solid,
+   solid_model,
+   swept_face_solid);
+
+REFERENCE FROM representation_schema                    --ISO 10303-43
+  (representation_item,
+   using_items);
+
+REFERENCE FROM mathematical_functions_schema            --ISO 10303-50
+  (positive_integer);
+ 
+REFERENCE FROM sketch_schema                            --ISO 10303-108
+  (positioned_sketch); 
+ 
+TYPE base_solid_select = SELECT
+  (solid_model,
+   csg_primitive,
+   boolean_result);
+WHERE
+   WR1: NOT('GEOMETRIC_MODEL_SCHEMA.PRIMITIVE_2D' IN TYPEOF(SELF));
+END_TYPE;
+
+TYPE blend_end_condition_select = SELECT 
+  (point_on_curve,  
+   edge_curve, 
+   vertex);
+END_TYPE;
+
+TYPE generalized_surface_select = SELECT 
+  (surface, 
+   face_surface, 
+   surfaced_open_shell);
+END_TYPE;
+
+TYPE trim_condition_select = SELECT 
+  (length_measure,
+   plane_angle_measure,   
+   generalized_surface_select,
+   solid_model);
+END_TYPE;
+
+TYPE blend_radius_variation_type = ENUMERATION OF 
+  (linear_blend,  
+   cubic_blend, 
+   unspecified_blend);
+END_TYPE;
+ 
+TYPE trim_intent = ENUMERATION OF
+  (blind,
+   offset,
+   through_all,
+   unspecified,
+   up_to_next);
+END_TYPE;
+
+ENTITY modified_solid
+  ABSTRACT SUPERTYPE OF (ONEOF
+                        (edge_blended_solid,
+                         sculptured_solid,
+                         shelled_solid,
+                         offset_face_solid,
+                         modified_solid_with_placed_configuration))
+  SUBTYPE OF (solid_model);
+  rationale  : text;
+  base_solid : base_solid_select;
+END_ENTITY;
+
+ENTITY edge_blended_solid
+  ABSTRACT SUPERTYPE OF (track_blended_solid ANDOR (ONEOF
+                         (solid_with_constant_radius_edge_blend,
+                          solid_with_variable_radius_edge_blend,
+                          solid_with_chamfered_edges)))
+  SUBTYPE OF (modified_solid);
+  blended_edges : LIST [1:?] OF UNIQUE edge_curve;
+END_ENTITY; 
+
+ENTITY track_blended_solid
+  ABSTRACT SUPERTYPE OF (track_blended_solid_with_end_conditions)
+  SUBTYPE OF (edge_blended_solid);
+WHERE
+  WR1: check_continuous_edges(SELF\edge_blended_solid.blended_edges);
+END_ENTITY; 
+
+ENTITY track_blended_solid_with_end_conditions
+  SUBTYPE OF (track_blended_solid);
+  end_conditions : LIST [2:2] OF blend_end_condition_select;
+WHERE
+  WR1: SIZEOF(TYPEOF(SELF) *
+    ['SOLID_SHAPE_ELEMENT_SCHEMA.SOLID_WITH_CONSTANT_RADIUS_EDGE_BLEND',
+     'SOLID_SHAPE_ELEMENT_SCHEMA.SOLID_WITH_VARIABLE_RADIUS_EDGE_BLEND',
+     'SOLID_SHAPE_ELEMENT_SCHEMA.SOLID_WITH_CHAMFERED_EDGES']) = 1;
+  WR2: NOT (('GEOMETRY_SCHEMA.VERTEX' IN TYPEOF(end_conditions[1]))
+       AND ('GEOMETRY_SCHEMA.VERTEX' IN TYPEOF(end_conditions[2])));
+  WR3: NOT (('GEOMETRY_SCHEMA.VERTEX' IN TYPEOF(end_conditions[1]))
+       AND (NOT ((end_conditions[1] 
+            :=: SELF\edge_blended_solid.blended_edges[1].edge_start)
+            XOR (end_conditions[1] 
+            :=: SELF\edge_blended_solid.blended_edges[1].edge_end))));
+  WR4: NOT (('GEOMETRY_SCHEMA.VERTEX' IN TYPEOF(end_conditions[2]))
+       AND (NOT ((end_conditions[2] 
+            :=: SELF\edge_blended_solid.blended_edges[HIINDEX(
+                SELF\edge_blended_solid.blended_edges)].edge_start)
+            XOR (end_conditions[2] 
+            :=: SELF\edge_blended_solid.blended_edges[HIINDEX(
+                SELF\edge_blended_solid.blended_edges)].edge_end))));
+END_ENTITY; 
+
+ENTITY solid_with_constant_radius_edge_blend
+  SUBTYPE OF (edge_blended_solid);
+  radius : positive_length_measure;
+END_ENTITY;
+
+ENTITY solid_with_variable_radius_edge_blend
+  SUBTYPE OF (edge_blended_solid, track_blended_solid);
+  point_list         : LIST[2:?] OF point;
+  radius_list        : LIST[2:?] OF positive_length_measure;
+  edge_function_list : LIST[1:?] OF blend_radius_variation_type;
+WHERE
+  WR1: SIZEOF(point_list) = SIZEOF(radius_list); 
+  WR2: SIZEOF(edge_function_list) = SIZEOF(radius_list) - 1;
+  WR3: NOT((point_list[1] = point_list[HIINDEX(point_list)]) AND NOT 
+         (radius_list[1] = radius_list[HIINDEX(radius_list)]));
+END_ENTITY;
+
+ENTITY solid_with_chamfered_edges
+  ABSTRACT SUPERTYPE OF (ONEOF
+                        (solid_with_single_offset_chamfer,
+                         solid_with_double_offset_chamfer,
+                         solid_with_angle_based_chamfer))
+  SUBTYPE OF (edge_blended_solid);
+END_ENTITY;
+
+ENTITY solid_with_single_offset_chamfer
+  SUBTYPE OF (solid_with_chamfered_edges);
+  offset_distance : positive_length_measure;
+END_ENTITY;
+
+ENTITY solid_with_double_offset_chamfer
+  SUBTYPE OF (solid_with_chamfered_edges);
+  left_offset_distance  : positive_length_measure;  
+  right_offset_distance : positive_length_measure;
+END_ENTITY;
+
+ENTITY solid_with_angle_based_chamfer
+  SUBTYPE OF (solid_with_chamfered_edges);
+  offset_distance             : positive_length_measure;
+  left_offset                 : BOOLEAN;
+  offset_angle                : positive_plane_angle_measure;
+END_ENTITY;
+
+ENTITY surfaced_open_shell
+  SUBTYPE OF (open_shell);
+WHERE 
+  WR1: SIZEOF(QUERY(q <* SELF\connected_face_set.cfs_faces |
+         NOT ('TOPOLOGY_SCHEMA.FACE_SURFACE' IN TYPEOF(q)))) = 0;
+END_ENTITY;
+
+ENTITY sculptured_solid
+  SUBTYPE OF (modified_solid);
+  sculpturing_element : generalized_surface_select;
+  positive_side       : BOOLEAN;
+END_ENTITY;
+
+ENTITY sculptured_solid_with_selection
+  SUBTYPE OF (sculptured_solid);
+  retained_solid : topological_representation_item;
+END_ENTITY;
+
+ENTITY offset_face_solid
+  SUBTYPE OF (modified_solid);
+  offset_faces     : LIST [1:?] OF SET[1:?] OF face_surface;
+  offset_distances : LIST [1:?] OF length_measure;
+WHERE
+  WR1: SIZEOF(offset_faces) = SIZEOF(offset_distances); 
+END_ENTITY;
+
+ENTITY shelled_solid
+  SUPERTYPE OF (ONEOF
+               (double_offset_shelled_solid, 
+                complex_shelled_solid))
+  SUBTYPE OF (modified_solid);
+  deleted_face_set : SET [1:?] OF face_surface;
+  thickness        : length_measure;
+WHERE
+  WR1: thickness <> 0;
+END_ENTITY; 
+
+ENTITY double_offset_shelled_solid
+  SUBTYPE OF (shelled_solid);
+  thickness2 : length_measure;
+WHERE
+  WR1: thickness2 <> 0;
+  WR2: SELF\shelled_solid.thickness <> thickness2;
+END_ENTITY; 
+
+ENTITY complex_shelled_solid
+  SUBTYPE OF (shelled_solid);
+  thickened_face_list :  LIST [1:?] OF SET[1:?] OF face_surface;
+  thickness_list      :  LIST [1:?] OF length_measure;
+WHERE
+  WR1: SIZEOF(thickened_face_list) = SIZEOF(thickness_list);
+  WR2: SIZEOF(QUERY(q <* thickness_list | (q = 0))) = 0;
+END_ENTITY; 
+
+ENTITY modified_solid_with_placed_configuration
+  ABSTRACT SUPERTYPE OF (ONEOF
+                        (solid_with_depression, 
+                         solid_with_protrusion,
+                         solid_with_shape_element_pattern))
+  SUBTYPE OF (modified_solid);
+  placing : axis2_placement_3d;
+END_ENTITY; 
+
+ENTITY solid_with_depression
+  ABSTRACT SUPERTYPE OF (solid_with_through_depression
+    ANDOR ONEOF (solid_with_hole,
+                 solid_with_pocket,
+                 solid_with_slot,
+                 solid_with_groove))
+  SUBTYPE OF (modified_solid_with_placed_configuration);
+  depth : positive_length_measure;
+END_ENTITY;
+
+ENTITY solid_with_through_depression
+  SUBTYPE OF (solid_with_depression);
+  exit_faces : SET[1:?] OF face_surface;
+WHERE
+  WR1: SIZEOF(TYPEOF(SELF) *
+         ['SOLID_SHAPE_ELEMENT_SCHEMA.SOLID_WITH_HOLE',
+          'SOLID_SHAPE_ELEMENT_SCHEMA.SOLID_WITH_POCKET',
+          'SOLID_SHAPE_ELEMENT_SCHEMA.SOLID_WITH_SLOT']) = 1;
+END_ENTITY;
+
+ENTITY solid_with_hole
+  ABSTRACT SUPERTYPE OF (solid_with_stepped_round_hole)
+  SUBTYPE OF (solid_with_depression);
+END_ENTITY;
+
+ENTITY solid_with_stepped_round_hole
+SUPERTYPE OF (solid_with_stepped_round_hole_and_conical_transitions
+  ANDOR ONEOF (solid_with_flat_bottom_round_hole,
+               solid_with_conical_bottom_round_hole,
+               solid_with_spherical_bottom_round_hole))
+SUBTYPE OF (solid_with_hole);
+  segments           : positive_integer;
+  segment_radii      : LIST[1:segments] OF positive_length_measure;
+  segment_depths     : LIST[1:segments] OF positive_length_measure;
+DERIVE
+  SELF\solid_with_depression.depth
+                     : positive_length_measure := compute_total_depth(SELF);
+WHERE
+  WR1: NOT (('SOLID_SHAPE_ELEMENT_SCHEMA.SOLID_WITH_THROUGH_DEPRESSION'
+       IN TYPEOF(SELF)) AND (SIZEOF(TYPEOF(SELF) *
+       ['SOLID_SHAPE_ELEMENT_SCHEMA.SOLID_WITH_FLAT_BOTTOM_ROUND_HOLE',
+       'SOLID_SHAPE_ELEMENT_SCHEMA.SOLID_WITH_SPHERICAL_BOTTOM_ROUND_HOLE',
+       'SOLID_SHAPE_ELEMENT_SCHEMA.SOLID_WITH_FLAT_BOTTOM_ROUND_HOLE']) 
+       <> 0)); 
+END_ENTITY;
+
+ENTITY conical_stepped_hole_transition
+  SUBTYPE OF (geometric_representation_item);
+  transition_number  : positive_integer;
+  cone_apex_angle    : plane_angle_measure;
+  cone_base_radius   : positive_length_measure;
+END_ENTITY;
+
+ENTITY solid_with_stepped_round_hole_and_conical_transitions
+  SUBTYPE OF (solid_with_stepped_round_hole);
+  conical_transitions : SET[1:?] OF conical_stepped_hole_transition; 
+WHERE
+  WR1: SIZEOF (conical_transitions) <= 
+         (SELF\solid_with_stepped_round_hole.segments + 1);
+  WR2: ('SOLID_SHAPE_ELEMENT_SCHEMA.SOLID_WITH_THROUGH_DEPRESSION'
+         IN TYPEOF(SELF)) XOR (SIZEOF(conical_transitions) <= 
+         SELF\solid_with_stepped_round_hole.segments);
+  WR3: validate_countersink_radii(SELF);
+END_ENTITY;
+
+ENTITY solid_with_flat_bottom_round_hole
+  SUBTYPE OF (solid_with_stepped_round_hole);
+  fillet_radius : non_negative_length_measure;
+WHERE
+  WR1 : fillet_radius < 
+          SELF\solid_with_stepped_round_hole.segment_radii[segments];
+END_ENTITY;
+
+ENTITY solid_with_spherical_bottom_round_hole
+  SUBTYPE OF (solid_with_stepped_round_hole);
+  sphere_radius : positive_length_measure;
+WHERE
+  WR1 : sphere_radius >= 
+          SELF\solid_with_stepped_round_hole.segment_radii[segments];
+END_ENTITY;
+
+ENTITY solid_with_conical_bottom_round_hole
+  SUBTYPE OF (solid_with_stepped_round_hole);
+  semi_apex_angle : positive_plane_angle_measure;
+  tip_radius      : non_negative_length_measure;
+WHERE
+  WR1 : tip_radius < 
+          SELF\solid_with_stepped_round_hole.segment_radii[segments];
+END_ENTITY;
+
+ENTITY solid_with_pocket
+ABSTRACT SUPERTYPE OF (ONEOF 
+                      (solid_with_rectangular_pocket,
+                       solid_with_circular_pocket,
+                       solid_with_general_pocket))
+SUBTYPE OF (solid_with_depression);
+  floor_blend_radius : non_negative_length_measure;
+  draft_angle        : plane_angle_measure;
+END_ENTITY;
+
+ENTITY solid_with_rectangular_pocket
+  SUBTYPE OF (solid_with_pocket);
+  pocket_length : positive_length_measure;
+  pocket_width  : positive_length_measure;
+  corner_radius : non_negative_length_measure;
+WHERE
+  WR1: (corner_radius < pocket_width/2) 
+         AND (corner_radius < pocket_length/2);
+END_ENTITY;
+
+ENTITY solid_with_circular_pocket
+  SUBTYPE OF (solid_with_pocket);
+  pocket_radius: positive_length_measure; 
+WHERE 
+  WR1: SELF\solid_with_pocket.floor_blend_radius <= pocket_radius;
+END_ENTITY;
+
+ENTITY solid_with_general_pocket  
+  SUBTYPE OF (solid_with_pocket);
+  profile         : positioned_sketch;
+  reference_point : point;
+WHERE
+  WR1: SIZEOF(['GEOMETRY_SCHEMA.CURVE_BOUNDED_SURFACE',
+    'TOPOLOGY_SCHEMA.FACE_SURFACE'] * TYPEOF(profile.sketch_basis)) = 1;
+  WR2: profile IN using_items(reference_point,[]); 
+END_ENTITY;
+
+ENTITY solid_with_slot
+  ABSTRACT SUPERTYPE OF ((ONEOF (solid_with_straight_slot,
+                                 solid_with_curved_slot))
+                     AND (ONEOF (solid_with_trapezoidal_section_slot,
+                                 solid_with_tee_section_slot)))
+  SUBTYPE OF (solid_with_depression);
+  slot_width     : positive_length_measure;
+  closed_ends    : LIST[2:2] OF LOGICAL;
+  end_exit_faces : LIST[2:2] OF SET[0:?] OF face_surface;
+WHERE
+  WR1: NOT(('SOLID_SHAPE_ELEMENT_SCHEMA.SOLID_WITH_THROUGH_DEPRESSION' IN
+         TYPEOF(SELF)) AND (closed_ends = [FALSE,FALSE]));
+  WR2: NOT(((closed_ends[1] = TRUE) AND (SIZEOF(end_exit_faces[1]) <> 0))
+         OR ((closed_ends[2] = TRUE) AND (SIZEOF(end_exit_faces[2]) <> 0)));
+END_ENTITY;
+
+ENTITY solid_with_straight_slot
+  SUBTYPE OF (solid_with_slot);
+  slot_length : positive_length_measure;
+END_ENTITY;
+
+ENTITY solid_with_curved_slot
+  SUBTYPE OF (solid_with_slot);
+  slot_centreline : bounded_curve;
+END_ENTITY;
+
+ENTITY solid_with_trapezoidal_section_slot
+SUBTYPE OF (solid_with_slot);
+  draft_angle         : plane_angle_measure;
+  floor_fillet_radius : non_negative_length_measure;
+END_ENTITY;
+
+ENTITY solid_with_tee_section_slot
+  SUBTYPE OF (solid_with_slot);
+  tee_section_width  : positive_length_measure;
+  collar_depth       : positive_length_measure;
+WHERE
+  WR1: collar_depth < SELF\solid_with_depression.depth;
+  WR2: tee_section_width > SELF\solid_with_slot.slot_width; 
+END_ENTITY;
+
+ENTITY solid_with_groove
+  SUBTYPE OF (solid_with_depression);
+  groove_radius       : positive_length_measure;
+  groove_width        : positive_length_measure;
+  draft_angle         : plane_angle_measure;
+  floor_fillet_radius : non_negative_length_measure;
+  external_groove     : BOOLEAN;
+WHERE
+  WR1: NOT ('SOLID_SHAPE_ELEMENT_SCHEMA.SOLID_WITH_THROUGH_DEPRESSION'
+         IN TYPEOF(SELF));
+END_ENTITY; 
+
+ENTITY solid_with_protrusion
+  ABSTRACT SUPERTYPE OF (ONEOF 
+                        (solid_with_circular_protrusion,
+                         solid_with_rectangular_protrusion,
+                         solid_with_general_protrusion))
+  SUBTYPE OF (modified_solid_with_placed_configuration);
+  protrusion_height      : positive_length_measure;
+  protrusion_draft_angle : plane_angle_measure;
+END_ENTITY;
+
+ENTITY solid_with_circular_protrusion
+  SUBTYPE OF (solid_with_protrusion);
+  protrusion_radius : positive_length_measure;
+END_ENTITY;
+
+ENTITY solid_with_rectangular_protrusion
+  SUBTYPE OF (solid_with_protrusion);
+  protrusion_length        : positive_length_measure;
+  protrusion_width         : positive_length_measure;
+  protrusion_corner_radius : non_negative_length_measure;
+WHERE
+  WR1: (protrusion_corner_radius <= protrusion_width/2) 
+         AND (protrusion_corner_radius <= protrusion_length/2);
+END_ENTITY;
+
+ENTITY solid_with_general_protrusion
+  SUBTYPE OF (solid_with_protrusion);
+  profile         : positioned_sketch;
+  reference_point : point;
+WHERE
+  WR1: SIZEOF(['GEOMETRY_SCHEMA.CURVE_BOUNDED_SURFACE',
+    'TOPOLOGY_SCHEMA.FACE_SURFACE'] * TYPEOF(profile.sketch_basis)) = 1;
+  WR2: profile IN using_items(reference_point,[]);
+END_ENTITY;
+
+ENTITY solid_with_shape_element_pattern
+  ABSTRACT SUPERTYPE OF (ONEOF
+                        (solid_with_circular_pattern,
+                         solid_with_rectangular_pattern))
+  SUBTYPE OF (modified_solid_with_placed_configuration);
+  replicated_element : modified_solid_with_placed_configuration;
+END_ENTITY;
+
+ENTITY solid_with_circular_pattern
+  SUPERTYPE OF (solid_with_incomplete_circular_pattern)
+  SUBTYPE OF (solid_with_shape_element_pattern);
+  replicate_count  : positive_integer;
+  angular_spacing  : plane_angle_measure;
+  radial_alignment : BOOLEAN;
+  reference_point  : point;
+END_ENTITY;
+
+ENTITY solid_with_rectangular_pattern
+  SUPERTYPE OF (solid_with_incomplete_rectangular_pattern)
+  SUBTYPE OF (solid_with_shape_element_pattern);
+  row_count      : positive_integer;
+  column_count   : positive_integer;
+  row_spacing    : length_measure;
+  column_spacing : length_measure; 
+WHERE
+   WR1: (row_count * column_count) > 1;
+END_ENTITY;
+
+ENTITY solid_with_incomplete_circular_pattern
+  SUBTYPE OF (solid_with_circular_pattern);
+  omitted_instances : SET[1:?] OF positive_integer;
+WHERE
+  WR1: SIZEOF(omitted_instances) <
+         SELF\solid_with_circular_pattern.replicate_count;
+  WR2: SIZEOF(QUERY(q <* omitted_instances | q > 
+         SELF\solid_with_circular_pattern.replicate_count)) = 0;
+END_ENTITY;
+
+ENTITY solid_with_incomplete_rectangular_pattern
+  SUBTYPE OF (solid_with_rectangular_pattern);
+  omitted_instances : SET[1:?] OF LIST [2:2] OF positive_integer;
+WHERE
+  WR1: NOT([1,1] IN omitted_instances);
+  WR2: SIZEOF(omitted_instances) <
+         ((SELF\solid_with_rectangular_pattern.row_count *
+           SELF\solid_with_rectangular_pattern.column_count) - 1);
+  WR3: SIZEOF(QUERY(q <* omitted_instances |
+         ((q[1] > SELF\solid_with_rectangular_pattern.row_count) OR
+          (q[2] > SELF\solid_with_rectangular_pattern.column_count)))) = 0;
+END_ENTITY;
+
+ENTITY thickened_face_solid
+  SUBTYPE OF (solid_model);
+  base_element : generalized_surface_select;
+  offset1      : length_measure;
+  offset2      : length_measure;
+WHERE
+  WR1: NOT (('GEOMETRY_SCHEMA.SURFACE' IN TYPEOF(base_element)) AND
+    (NOT ('GEOMETRY_SCHEMA.BOUNDED_SURFACE' IN TYPEOF(base_element))));
+  WR2: offset1 <> offset2;
+END_ENTITY;
+
+ENTITY extruded_face_solid_with_trim_conditions
+  SUPERTYPE OF (ONEOF
+                 (extruded_face_solid_with_draft_angle, 
+                  extruded_face_solid_with_multiple_draft_angles))
+  SUBTYPE OF (extruded_face_solid);
+  first_trim_condition  : trim_condition_select;
+  second_trim_condition : trim_condition_select;
+  first_trim_intent     : trim_intent;
+  second_trim_intent    : trim_intent;
+  first_offset          : non_negative_length_measure;
+  second_offset         : non_negative_length_measure;
+WHERE
+  WR1: NOT(('MEASURE_SCHEMA.PLANE_ANGLE_MEASURE' 
+         IN TYPEOF(first_trim_condition)) OR
+         ('MEASURE_SCHEMA.PLANE_ANGLE_MEASURE' 
+         IN TYPEOF(second_trim_condition)));
+  WR2: NOT ((('MEASURE_SCHEMA.LENGTH_MEASURE' 
+         IN TYPEOF(first_trim_condition)) AND 
+         ((first_trim_intent = trim_intent.offset) 
+         OR (first_trim_intent = trim_intent.up_to_next))) OR  
+         (('MEASURE_SCHEMA.LENGTH_MEASURE' 
+         IN TYPEOF(second_trim_condition)) AND 
+         ((second_trim_intent = trim_intent.offset) 
+         OR (second_trim_intent = trim_intent.up_to_next))));
+  WR3: NOT (((NOT ('MEASURE_SCHEMA.LENGTH_MEASURE' 
+         IN TYPEOF(first_trim_condition))) AND 
+         ((first_trim_intent = trim_intent.blind) 
+         OR (first_trim_intent = trim_intent.through_all))) OR  
+         ((NOT('MEASURE_SCHEMA.LENGTH_MEASURE' 
+         IN TYPEOF(second_trim_condition))) AND 
+         ((second_trim_intent = trim_intent.blind) 
+         OR (second_trim_intent = trim_intent.through_all))));
+  WR4: (((first_trim_intent = trim_intent.offset) 
+           AND (first_offset > 0)) XOR
+         ((first_trim_intent <> trim_intent.offset) 
+           AND (first_offset = 0))) AND 
+         (((second_trim_intent = trim_intent.offset) 
+           AND (second_offset > 0)) XOR
+         ((second_trim_intent <> trim_intent.offset) 
+            AND (second_offset = 0)));
+  WR5: NOT((('MEASURE_SCHEMA.LENGTH_MEASURE' 
+         IN TYPEOF(first_trim_condition)) AND
+            ('MEASURE_SCHEMA.LENGTH_MEASURE' 
+         IN TYPEOF(second_trim_condition))) AND
+         (first_trim_condition = second_trim_condition));
+END_ENTITY;
+
+ENTITY extruded_face_solid_with_draft_angle
+  SUBTYPE OF (extruded_face_solid_with_trim_conditions);
+  draft_angle : plane_angle_measure;
+WHERE
+  WR1: draft_angle <> 0;
+END_ENTITY;
+
+ENTITY extruded_face_solid_with_multiple_draft_angles
+  SUBTYPE OF (extruded_face_solid_with_trim_conditions);
+  drafted_edges : LIST[2:?] OF SET[1:?] OF edge_curve;
+  draft_angles  : LIST[2:?] OF plane_angle_measure;
+WHERE
+  WR1: SIZEOF(drafted_edges) = SIZEOF(draft_angles);
+  WR2: SIZEOF(QUERY(q <* draft_angles | q = 0)) = 0;
+  WR3: SIZEOF(QUERY(q <* drafted_edges | (SIZEOF(QUERY(r <* q | NOT 
+         (SELF\swept_face_solid.swept_face IN 
+          using_items(r,[])))) > 0))) = 0;
+END_ENTITY;
+
+ENTITY revolved_face_solid_with_trim_conditions
+  SUBTYPE OF(revolved_face_solid);
+  first_trim_condition  : trim_condition_select;
+  second_trim_condition : trim_condition_select;
+WHERE
+  WR1: NOT (('MEASURE_SCHEMA.LENGTH_MEASURE' 
+         IN TYPEOF(first_trim_condition)) 
+         OR ('MEASURE_SCHEMA.LENGTH_MEASURE' 
+         IN TYPEOF(second_trim_condition)));
+  WR2: NOT((('MEASURE_SCHEMA.PLANE_ANGLE_MEASURE' 
+         IN TYPEOF(first_trim_condition)) AND
+            ('MEASURE_SCHEMA.PLANE_ANGLE_MEASURE' 
+         IN TYPEOF(second_trim_condition))) AND
+         (first_trim_condition = second_trim_condition));
+END_ENTITY;
+
+ENTITY auxiliary_geometric_instance_aggregator
+  SUBTYPE OF (geometric_representation_item);
+  shape_element   : geometric_representation_item;
+  auxiliary_items : SET[1:?] OF geometric_representation_item;
+WHERE
+  WR1: SIZEOF(QUERY(q <* auxiliary_items | 
+                shape_element IN using_items(q,[]))) = 0;
+END_ENTITY;
+
+FUNCTION check_continuous_edges (edges : LIST OF UNIQUE edge_curve)
+                                       : BOOLEAN;
+
+  LOCAL
+    i           : INTEGER;
+    next_vertex : vertex;
+  END_LOCAL;
+
+  -- first check whether there is only one edge in the list: in this
+  -- case there is no connectivity to be checked.
+
+  IF (SIZEOF(edges) = 1)
+  THEN RETURN(TRUE);
+  END_IF;
+
+  -- otherwise, establish the matching vertices of edges 1 and 2 in 
+  -- the list, and determine the vertex of edge 2 to which edge 3, 
+  -- must be connected, if there are more than two edges in the list.
+
+  IF ((edges[2].edge_start :=: edges[1].edge_end)
+    XOR (edges[2].edge_start :=: edges[1].edge_start))
+  THEN next_vertex := edges[2].edge_end;
+  ELSE 
+    IF ((edges[2].edge_end :=: edges[1].edge_end)
+      XOR (edges[2].edge_end :=: edges[1].edge_start))
+    THEN next_vertex := edges[2].edge_start;
+    ELSE RETURN(FALSE); -- no match between any vertices of edges 1 and 2 
+    END_IF;
+  END_IF;
+
+  -- exit if there are only two edges and they are connected
+
+  IF (SIZEOF(edges) = 2)
+  THEN RETURN(TRUE);
+  END_IF;
+
+  -- otherwise, check that any remaining edges are connected in list order.
+
+  REPEAT i := 3 TO HIINDEX(edges);
+    IF (edges[i].edge_start :=: next_vertex)
+    THEN next_vertex := edges[i].edge_end;
+    ELSE
+      IF (edges[i].edge_end :=: next_vertex)
+      THEN next_vertex := edges[i].edge_start;
+      ELSE RETURN(FALSE); -- no match is found.
+      END_IF;
+    END_IF; 
+  END_REPEAT;
+  RETURN(TRUE); -- all edges have now been successfully checked.
+
+END_FUNCTION;
+
+FUNCTION compute_total_depth (swsrh : solid_with_stepped_round_hole) 
+                                    : positive_length_measure;
+
+  LOCAL
+    i  : INTEGER;
+    td : positive_length_measure := swsrh.segment_depths[1];
+  END_LOCAL;
+
+  REPEAT i := 2 TO swsrh.segments;
+    td := td + swsrh.segment_depths[i];
+  END_REPEAT;
+  RETURN(td); 
+
+END_FUNCTION;
+
+
+
+FUNCTION validate_countersink_radii 
+  (cskhole : solid_with_stepped_round_hole_and_conical_transitions) 
+           : BOOLEAN;
+
+  LOCAL
+    i,j             : INTEGER;
+    n               : INTEGER := 1 +
+                        cskhole\solid_with_stepped_round_hole.segments;
+    smaller, larger : positive_length_measure;
+  END_LOCAL;
+
+  REPEAT i := 1 TO SIZEOF(cskhole.conical_transitions);
+
+  -- First check whether transition i applies to the entry of the hole or 
+  -- the exit of a through hole - those cases only need to be checked for 
+  -- the sign of the cone apex angle.
+
+  IF (((cskhole.conical_transitions[i].transition_number = 1)
+       AND (cskhole.conical_transitions[i].cone_apex_angle < 0))
+    XOR ((cskhole.conical_transitions[i].transition_number = n)
+         AND (cskhole.conical_transitions[i].cone_apex_angle > 0))) 
+  THEN RETURN(FALSE); 
+  ELSE
+    IF ((cskhole.conical_transitions[i].transition_number <> 1)
+      AND (cskhole.conical_transitions[i].transition_number <> n))
+    THEN
+
+  -- For all remaining transitions, check that the cone base radius 
+  -- lies in the range of validity.
+
+
+      BEGIN
+        j := cskhole.conical_transitions[i].transition_number;
+        IF cskhole\solid_with_stepped_round_hole.segment_radii[j] 
+          > cskhole\solid_with_stepped_round_hole.segment_radii[j-1]
+        THEN 
+          BEGIN
+            IF (cskhole.conical_transitions[i].cone_apex_angle > 0)
+            THEN RETURN(FALSE);
+            END_IF;
+            larger 
+              := cskhole\solid_with_stepped_round_hole.segment_radii[j];
+            smaller 
+              := cskhole\solid_with_stepped_round_hole.segment_radii[j-1];
+          END;
+        ELSE
+          BEGIN
+            IF (cskhole.conical_transitions[i].cone_apex_angle < 0)
+            THEN RETURN(FALSE);
+            END_IF;
+            larger  
+              := cskhole\solid_with_stepped_round_hole.segment_radii[j-1];
+            smaller 
+              := cskhole\solid_with_stepped_round_hole.segment_radii[j];
+          END;
+        END_IF; 
+        IF ((cskhole.conical_transitions[i].cone_base_radius > larger)
+          OR (cskhole.conical_transitions[i].cone_base_radius < smaller))
+        THEN RETURN(FALSE);
+        END_IF;
+      END;
+    END_IF;
+  END_IF;
+  END_REPEAT;
+  RETURN(TRUE);
+
+END_FUNCTION;
+
+END_SCHEMA; -- solid_shape_element_schema

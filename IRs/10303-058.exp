@@ -1,0 +1,241 @@
+(*
+	$Id: 10303-058.exp,v 1.2 2009/11/07 22:59:00 wg12deputy Exp $
+	ISO TC184/SC4/WG12 N5997 - ISO/DIS 10303-58 Risk Schema -EXPRESS
+	Supersedes ISO TC184/SC4/WG12 N3267
+*)
+
+SCHEMA risk_schema;
+
+REFERENCE FROM action_schema
+  (action,
+   action_method,
+   action_relationship);
+
+REFERENCE FROM application_context_schema
+  (product_definition_context);
+
+REFERENCE FROM date_time_schema
+  (event_occurrence);
+
+REFERENCE FROM management_resources_schema
+  (event_occurrence_assignment);
+
+REFERENCE FROM product_definition_schema
+  (product,
+   product_definition,
+   product_definition_formation,
+   product_definition_relationship,
+   product_relationship);
+
+REFERENCE FROM product_property_definition_schema
+  (characterized_object,
+   property_definition);
+
+REFERENCE FROM product_property_representation_schema
+  (property_definition_representation);
+
+REFERENCE FROM representation_schema
+  (representation);
+
+TYPE risk_action = SELECT 
+  (risk_acceptance,
+   risk_analysis,
+   risk_assessment,
+   risk_communication,
+   risk_control,
+   risk_estimation,
+   risk_evaluation,
+   risk_identification,
+   risk_treatment);
+END_TYPE;
+
+TYPE risk_impact_item = EXTENSIBLE GENERIC_ENTITY SELECT ;
+END_TYPE;
+
+TYPE risk_perception_source_item = EXTENSIBLE GENERIC_ENTITY SELECT 
+  (action,
+   action_method,
+   product);
+END_TYPE;
+
+ENTITY contained_acceptance
+SUBTYPE OF (risk_activity_structure);
+  SELF\risk_activity_structure.parent : risk_control;
+  SELF\risk_activity_structure.child : risk_acceptance;
+END_ENTITY;
+
+ENTITY contained_analysis
+SUBTYPE OF (risk_activity_structure);
+  SELF\risk_activity_structure.parent : risk_assessment;
+  SELF\risk_activity_structure.child : risk_analysis;
+END_ENTITY;
+
+ENTITY contained_communication
+SUBTYPE OF (risk_activity_structure);
+  SELF\risk_activity_structure.parent : risk_control;
+  SELF\risk_activity_structure.child : risk_communication;
+END_ENTITY;
+
+ENTITY contained_estimation
+SUBTYPE OF (risk_activity_structure);
+  SELF\risk_activity_structure.parent : risk_analysis;
+  SELF\risk_activity_structure.child : risk_estimation;
+END_ENTITY;
+
+ENTITY contained_evaluation
+SUBTYPE OF (risk_activity_structure);
+  SELF\risk_activity_structure.parent : risk_assessment;
+  SELF\risk_activity_structure.child : risk_evaluation;
+END_ENTITY;
+
+ENTITY contained_identification
+SUBTYPE OF (risk_activity_structure);
+  SELF\risk_activity_structure.parent : risk_analysis;
+  SELF\risk_activity_structure.child : risk_identification;
+END_ENTITY;
+
+ENTITY contained_treatments
+SUBTYPE OF (risk_activity_structure);
+  SELF\risk_activity_structure.parent : risk_control;
+  SELF\risk_activity_structure.child : risk_treatment;
+END_ENTITY;
+
+ENTITY event_occurrence_characterized_object
+SUBTYPE OF (characterized_object, event_occurrence);
+END_ENTITY;
+
+ENTITY event_probability
+SUBTYPE OF (property_definition);
+  SELF\property_definition.definition : event_occurrence_characterized_object;
+END_ENTITY;
+
+ENTITY monitor
+SUBTYPE OF (risk_activity_structure);
+  SELF\risk_activity_structure.parent : risk_control;
+  SELF\risk_activity_structure.child : risk_assessment;
+END_ENTITY;
+
+ENTITY probability_representation
+SUBTYPE OF (property_definition_representation);
+  SELF\property_definition_representation.definition : event_probability;
+END_ENTITY;
+
+ENTITY related_consequence
+SUBTYPE OF (product_definition_relationship);
+  SELF\product_definition_relationship.relating_product_definition : risk_perception;
+  SELF\product_definition_relationship.related_product_definition : risk_consequence;
+END_ENTITY;
+
+ENTITY risk
+SUBTYPE OF (product);
+END_ENTITY;
+
+ENTITY risk_acceptance
+SUBTYPE OF (action);
+END_ENTITY;
+
+ENTITY risk_activity_structure
+SUBTYPE OF (action_relationship);
+  SELF\action_relationship.relating_action RENAMED parent : risk_action;
+  SELF\action_relationship.related_action RENAMED child : risk_action;
+END_ENTITY;
+
+ENTITY risk_analysis
+SUBTYPE OF (action);
+END_ENTITY;
+
+ENTITY risk_assessment
+SUBTYPE OF (action);
+END_ENTITY;
+
+ENTITY risk_attitude
+SUBTYPE OF (property_definition_representation);
+  SELF\property_definition_representation.definition : risk_level;
+  SELF\property_definition_representation.used_representation RENAMED criticality_factor : representation;
+END_ENTITY;
+
+ENTITY risk_communication
+SUBTYPE OF (action);
+END_ENTITY;
+
+ENTITY risk_consequence
+SUBTYPE OF (product_definition);
+END_ENTITY;
+
+ENTITY risk_control
+SUBTYPE OF (action);
+END_ENTITY;
+
+ENTITY risk_estimation
+SUBTYPE OF (action);
+END_ENTITY;
+
+ENTITY risk_evaluation
+SUBTYPE OF (action);
+END_ENTITY;
+
+ENTITY risk_identification
+SUBTYPE OF (action);
+END_ENTITY;
+
+ENTITY risk_impact
+SUBTYPE OF (risk_consequence);
+  causal_consequence : OPTIONAL risk_consequence;
+END_ENTITY;
+
+ENTITY risk_impact_assignment;
+  assigned_risk_impact : risk_impact;
+  items : SET [1 : ?] OF risk_impact_item;
+END_ENTITY;
+
+ENTITY risk_level
+SUBTYPE OF (property_definition);
+  SELF\property_definition.definition : risk_perception;
+END_ENTITY;
+
+ENTITY risk_measure
+SUBTYPE OF (action_method);
+END_ENTITY;
+
+ENTITY risk_perception
+SUBTYPE OF (product_definition);
+  SELF\product_definition.formation : risk_perception_formation;
+  SELF\product_definition.frame_of_reference RENAMED risk_perception_context : risk_perception_context;
+END_ENTITY;
+
+ENTITY risk_perception_characterized_object
+SUBTYPE OF (characterized_object, risk_perception);
+END_ENTITY;
+
+ENTITY risk_perception_context
+SUBTYPE OF (product_definition_context);
+END_ENTITY;
+
+ENTITY risk_perception_formation
+SUBTYPE OF (product_definition_formation);
+  SELF\product_definition_formation.of_product RENAMED of_risk : risk;
+END_ENTITY;
+
+ENTITY risk_perception_relationship
+SUBTYPE OF (product_definition_relationship);
+  SELF\product_definition_relationship.relating_product_definition RENAMED relating_risk_perception : risk_perception;
+  SELF\product_definition_relationship.related_product_definition RENAMED related_risk_perception : risk_perception;
+END_ENTITY;
+
+ENTITY risk_perception_source_assignment;
+  assigned_risk : risk_perception;
+  items : SET [1 : ?] OF risk_perception_source_item;
+END_ENTITY;
+
+ENTITY risk_relationship
+SUBTYPE OF (product_relationship);
+  SELF\product_relationship.relating_product RENAMED relating_risk : risk;
+  SELF\product_relationship.related_product RENAMED related_risk : risk;
+END_ENTITY;
+
+ENTITY risk_treatment
+SUBTYPE OF (action);
+  SELF\action.chosen_method : risk_measure;
+END_ENTITY;
+
+END_SCHEMA;

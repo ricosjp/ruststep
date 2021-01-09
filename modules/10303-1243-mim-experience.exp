@@ -1,0 +1,99 @@
+(*
+ $Id: 10303-1243-mim-experience.exp,v 1.1 2006/08/07 09:42:05 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N3044 - ISO/TS 10303-1243 Experience - EXPRESS MIM
+ Supersedes ISO TC184/SC4/WG12 N2382
+*) 
+
+
+SCHEMA Experience_mim;
+
+USE FROM action_schema   -- ISO 10303-41
+  (action_method,
+   action_resource,
+   executed_action); 
+
+USE FROM Activity_as_realized_mim;    -- ISO/TS 10303-1259
+
+USE FROM Activity_method_mim;    -- ISO/TS 10303-1049
+
+USE FROM Activity_mim;    -- ISO/TS 10303-1047
+
+USE FROM Classification_assignment_mim;    -- ISO/TS 10303-1114
+
+USE FROM Date_time_assignment_mim;    -- ISO/TS 10303-1014
+
+USE FROM experience_schema   -- ISO 10303-41
+  (experience,
+   experience_type,
+   experience_type_relationship); 
+
+USE FROM management_resources_schema   -- ISO 10303-41
+  (experience_assignment,
+   experience_type_assignment); 
+
+USE FROM Person_organization_mim;    -- ISO/TS 10303-1011
+
+USE FROM person_organization_schema   -- ISO 10303-41
+  (organization,
+   person,
+   person_and_organization); 
+
+USE FROM process_property_schema   -- ISO 10303-49
+  (action_resource_requirement); 
+
+USE FROM product_property_definition_schema   -- ISO 10303-41
+  (characterized_object); 
+
+USE FROM Property_assignment_mim;    -- ISO/TS 10303-1030
+
+USE FROM Required_resource_mim;    -- ISO/TS 10303-1267
+
+USE FROM Resource_as_realized_mim;    -- ISO/TS 10303-1269
+
+
+TYPE experience_date_and_time_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON date_and_time_item WITH 
+   (applied_experience_assignment, 
+    experience);
+END_TYPE; 
+
+TYPE experience_date_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON date_item WITH 
+   (applied_experience_assignment, 
+    experience);
+END_TYPE; 
+
+TYPE experience_item = EXTENSIBLE GENERIC_ENTITY SELECT
+   (action_actual, 
+    action_resource, 
+    experience_type, 
+    experience_type_classification_item);
+END_TYPE; 
+
+TYPE experience_type_classification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON classification_item WITH 
+   (experience_type);
+END_TYPE; 
+
+TYPE experience_type_item = EXTENSIBLE GENERIC_ENTITY SELECT
+   (action_method, 
+    action_resource_requirement, 
+    executed_action, 
+    organization, 
+    person, 
+    person_and_organization);
+END_TYPE; 
+
+ENTITY applied_experience_assignment
+  SUBTYPE OF (experience_assignment);
+  items : SET[1:?] OF experience_item;
+END_ENTITY;
+
+ENTITY applied_experience_type_assignment
+  SUBTYPE OF (experience_type_assignment);
+  items : SET[1:?] OF experience_type_item;
+END_ENTITY;
+
+ENTITY characterized_experience
+  SUBTYPE OF (characterized_object, experience);
+END_ENTITY;
+
+END_SCHEMA;  -- Experience_mim
+

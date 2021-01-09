@@ -1,0 +1,21 @@
+(*
+ $Id: 10303-1025-arm-alias_identification.exp,v 1.6 2007/10/28 17:18:38 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N4837 - ISO/CD-TS 10303-1025 Alias identification - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG12 N1120
+*)
+
+SCHEMA Alias_identification_arm;
+
+USE FROM Identification_assignment_arm;
+
+  TYPE alias_identification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON identification_item;
+  END_TYPE;
+
+  ENTITY Alias_identification
+    SUBTYPE OF (Identification_assignment);
+      SELF\Identification_assignment.items : SET [1:?] OF alias_identification_item;
+    DERIVE
+      SELF\Identification_assignment.role : STRING := 'alias';
+  END_ENTITY;
+
+END_SCHEMA;
