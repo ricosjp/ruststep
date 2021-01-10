@@ -75,22 +75,13 @@ pub fn comma_separated<'a, O>(f: impl EsprParser<'a, O>) -> impl EsprParser<'a, 
     }
 }
 
-pub trait Tuple<'a, O>: Clone {
-    fn parse(&mut self, input: &'a str) -> ParseResult<'a, O>;
+/// Merge tupled EsprParser into a single EsprParser
+pub fn remarked_tuple<'a, O, List: Tuple<'a, O>>(mut l: List) -> impl EsprParser<'a, O> {
+    move |input| l.parse(input)
 }
 
-impl<'a, F1, O1> Tuple<'a, (O1,)> for (F1,)
-where
-    F1: EsprParser<'a, O1>,
-{
-    fn parse(&mut self, input: &'a str) -> ParseResult<'a, (O1,)> {
-        let mut remarks = Vec::new();
-        let (input, (o1, mut r)) = self.0.parse(input)?;
-        remarks.append(&mut r);
-        let (input, mut r) = spaces_or_remarks(input)?;
-        remarks.append(&mut r);
-        Ok((input, ((o1,), remarks)))
-    }
+pub trait Tuple<'a, O>: Clone {
+    fn parse(&mut self, input: &'a str) -> ParseResult<'a, O>;
 }
 
 macro_rules! impl_tuple {
@@ -160,10 +151,6 @@ impl_tuple!(
     f1, f2, f3, f4, f5, f6, f7, f8;
     o1, o2, o3, o4, o5, o6, o7, o8
 );
-
-pub fn remarked_tuple<'a, O, List: Tuple<'a, O>>(mut l: List) -> impl EsprParser<'a, O> {
-    move |input| l.parse(input)
-}
 
 #[cfg(test)]
 mod tests {
