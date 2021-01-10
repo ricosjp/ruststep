@@ -37,7 +37,6 @@ pub mod expression;
 pub mod literal;
 pub mod remark;
 pub mod schema;
-pub mod simple_data_type;
 pub mod syntax_tree;
-pub mod type_;
+pub mod types;
 pub mod util;

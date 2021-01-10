@@ -1,4 +1,4 @@
-use super::{basis::*, remark::*, simple_data_type::*, util::*};
+use super::{basis::*, remark::*, types::*, util::*};
 use derive_more::From;
 use nom::{branch::*, bytes::complete::*, character::complete::*, sequence::*, IResult, Parser};
 
