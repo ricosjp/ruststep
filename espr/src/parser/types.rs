@@ -10,14 +10,99 @@ pub struct Type {
     underlying_type: String,
 }
 
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct SelectType {
+    extensiblity: Extensiblity,
+    types: Vec<String>,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum Extensiblity {
+    None,
+    Extensible,
+    GenericEntity,
+}
+
+/// 301 select_list = `(` named_types { `,` named_types } `)` .
+///
+/// `named_types` is replaced by `simple_id` because it will be handled in semantics analysis phase
+pub fn select_list(input: &str) -> ParseResult<Vec<String>> {
+    tuple((
+        char('('),
+        spaces_or_remarks,
+        comma_separated(remarked(simple_id)),
+        spaces_or_remarks,
+        char(')'),
+    ))
+    .map(|(_start, mut remarks, (ids, mut r1), mut r2, _end)| {
+        remarks.append(&mut r1);
+        remarks.append(&mut r2);
+        (ids, remarks)
+    })
+    .parse(input)
+}
+
+/// 300 select_extension = BASED_ON type_ref [ WITH select_list ] .
+pub fn select_extension(input: &str) -> ParseResult<(String, Vec<String>)> {
+    let with = tuple((tag("WITH"), spaces_or_remarks, select_list)).map(
+        |(_with, mut remarks, (list, mut r1))| {
+            remarks.append(&mut r1);
+            (list, remarks)
+        },
+    );
+    tuple((tag("BASED_ON"), spaces_or_remarks, simple_id, opt(with)))
+        .map(|(_based_on, mut remarks, id, opt)| {
+            if let Some((list, mut r1)) = opt {
+                remarks.append(&mut r1);
+                ((id, list), remarks)
+            } else {
+                ((id, Vec::new()), remarks)
+            }
+        })
+        .parse(input)
+}
+
+/// 302 select_type = [ EXTENSIBLE [ GENERIC_ENTITY ] ] SELECT [ select_list | select_extension ] .
+pub fn select_type(input: &str) -> ParseResult<SelectType> {
+    // FIXME support select_extension
+    let extensiblity = tuple((
+        tag("EXTENSIBLE"),
+        opt(tuple((spaces_or_remarks, tag("GENERIC_ENTITY")))),
+    ))
+    .map(|(_extensible, opt)| {
+        if let Some((remarks, _generic_entity)) = opt {
+            (Extensiblity::GenericEntity, remarks)
+        } else {
+            (Extensiblity::Extensible, Vec::new())
+        }
+    });
+    tuple((
+        opt(tuple((extensiblity, spaces_or_remarks))),
+        tag("SELECT"),
+        spaces_or_remarks,
+        select_list,
+    ))
+    .map(|(opt, _select, mut r2, (types, mut r3))| {
+        let ((extensiblity, mut remarks), mut r1) =
+            opt.unwrap_or(((Extensiblity::None, Vec::new()), Vec::new()));
+        remarks.append(&mut r1);
+        remarks.append(&mut r2);
+        remarks.append(&mut r3);
+        (
+            SelectType {
+                extensiblity,
+                types,
+            },
+            remarks,
+        )
+    })
+    .parse(input)
+}
+
 /// 332 underlying_type = concrete_types | constructed_types .
 /// 193 concrete_types = aggregation_types | simple_types | type_ref.
 /// 198 constructed_types = enumeration_type | select_type .
 /// 213 enumeration_type = [ EXTENSIBLE ] ENUMERATION [ ( OF enumeration_items ) | enumeration_extension ] .
-/// 302 select_type = [ EXTENSIBLE [ GENERIC_ENTITY ] ] SELECT [ select_list | select_extension ] .
-/// 301 select_list = `(` named_types { `,` named_types } `)` .
-/// 300 select_extension = BASED_ON type_ref [ WITH select_list ] .
-/// 258 named_types = entity_ref | type_ref .
 pub fn underlying_type(input: &str) -> ParseResult<String> {
     // FIXME
     remarked(simple_id)(input)
