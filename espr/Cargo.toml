@@ -19,6 +19,7 @@ derive_more = "0.99.11"
 itertools = "0.10.0"
 maplit = "1.0.2"
 thiserror = "1.0.23"
+structopt = "0.3.21"
 
 [dev-dependencies]
 espr-runtime = { version = "0.1.0", path = "../espr-runtime" }
