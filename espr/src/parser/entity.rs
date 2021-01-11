@@ -36,23 +36,13 @@ pub fn explicit_attr(input: &str) -> ParseResult<(Vec<String>, ParameterType)> {
     // FIXME Support attribute_decl
     // FIXME OPTIONAL
 
-    tuple((
+    remarked_tuple((
         comma_separated(remarked(simple_id)),
-        spaces_or_remarks,
-        tag(":"),
-        spaces_or_remarks,
-        paramter_type,
-        spaces_or_remarks,
-        tag(";"),
+        remarked_char(':'),
+        remarked(paramter_type),
+        remarked_char(';'),
     ))
-    .map(
-        |((attrs, mut remarks), mut r1, _coron, mut r2, ty, mut r3, _semicoron)| {
-            remarks.append(&mut r1);
-            remarks.append(&mut r2);
-            remarks.append(&mut r3);
-            ((attrs, ty), remarks)
-        },
-    )
+    .map(|((attrs, _coron, ty, _semicoron), remarks)| ((attrs, ty), remarks))
     .parse(input)
 }
 
