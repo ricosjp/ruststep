@@ -1,5 +1,8 @@
 use super::remark::*;
-use nom::{character::complete::*, error::Error, multi::*, sequence::*, IResult, Parser};
+use nom::{
+    bytes::complete::*, character::complete::*, error::Error, multi::*, sequence::*, IResult,
+    Parser,
+};
 
 pub type ParseResult<'a, Output> = IResult<&'a str, (Output, Vec<Remark>), Error<&'a str>>;
 
@@ -16,6 +19,20 @@ where
     F: Parser<&'a str, O, Error<&'a str>> + Clone,
 {
     move |input| f.clone().map(|out| (out, Vec::new())).parse(input)
+}
+
+pub fn remarked_tag<'a>(tag_str: &'static str) -> impl EsprParser<'a, &'a str> {
+    move |input: &'a str| {
+        let (input, tag) = tag(tag_str)(input)?;
+        Ok((input, (tag, Vec::new())))
+    }
+}
+
+pub fn remarked_char<'a>(c: char) -> impl EsprParser<'a, char> {
+    move |input| {
+        let (input, c) = char(c)(input)?;
+        Ok((input, (c, Vec::new())))
+    }
 }
 
 pub fn spaced_many0<'a, O>(f: impl EsprParser<'a, O>) -> impl EsprParser<'a, Vec<O>> {
