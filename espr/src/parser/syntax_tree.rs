@@ -10,11 +10,10 @@ pub struct SyntaxTree {
 
 impl SyntaxTree {
     pub fn parse(input: &str) -> Result<Self, nom::error::Error<&str>> {
-        let (residual, (schemas, remarks)) =
-            remarked_tuple((remarked_spaces, space_separated(schema), remarked_spaces))
-                .remarked_map(|(_start_space, schemas, _end_space)| schemas)
-                .remarked_parse(input)
-                .finish()?;
+        let (residual, (schemas, remarks)) = tuple((spaces, space_separated(schema), spaces))
+            .map(|(_start_space, schemas, _end_space)| schemas)
+            .remarked_parse(input)
+            .finish()?;
         assert!(residual.is_empty());
         Ok(SyntaxTree { schemas, remarks })
     }

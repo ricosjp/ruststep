@@ -8,13 +8,9 @@ pub struct Schema {
 }
 
 pub fn schema_decl(input: &str) -> ParseResult<String> {
-    remarked_tuple((
-        remarked_tag("SCHEMA "),
-        remarked(simple_id),
-        remarked_char(';'),
-    ))
-    .remarked_map(|(_start, id, _semicoron)| id)
-    .remarked_parse(input)
+    tuple((tag("SCHEMA "), remarked(simple_id), char(';')))
+        .map(|(_start, id, _semicoron)| id)
+        .remarked_parse(input)
 }
 
 /// 295 schema_body = { interface_specification } \[ constant_decl \] { declaration | rule_decl } .
@@ -26,14 +22,9 @@ pub fn schema_body(input: &str) -> ParseResult<Vec<Entity>> {
 /// 296 schema_decl = SCHEMA schema_id \[ schema_version_id \] `;` schema_body END_SCHEMA `;` .
 pub fn schema(input: &str) -> ParseResult<Schema> {
     // FIXME schema_version_id
-    remarked_tuple((
-        schema_decl,
-        schema_body,
-        remarked_tag("END_SCHEMA"),
-        remarked_char(';'),
-    ))
-    .remarked_map(|(name, entities, _end, _semicoron)| Schema { name, entities })
-    .remarked_parse(input)
+    tuple((schema_decl, schema_body, tag("END_SCHEMA"), char(';')))
+        .map(|(name, entities, _end, _semicoron)| Schema { name, entities })
+        .remarked_parse(input)
 }
 
 #[cfg(test)]

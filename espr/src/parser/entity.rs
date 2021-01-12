@@ -24,9 +24,9 @@ pub fn paramter_type(input: &str) -> ParseResult<ParameterType> {
     // FIXME generalized_types
     // FIXME named_types
 
-    remarked_alt((
-        remarked(simple_id).remarked_map(|ty| ParameterType::Named(ty)),
-        remarked(simple_types).remarked_map(|ty| ParameterType::Simple(ty)),
+    alt((
+        remarked(simple_id).map(|ty| ParameterType::Named(ty)),
+        remarked(simple_types).map(|ty| ParameterType::Simple(ty)),
     ))
     .remarked_parse(input)
 }
@@ -36,36 +36,36 @@ pub fn explicit_attr(input: &str) -> ParseResult<(Vec<String>, ParameterType)> {
     // FIXME Support attribute_decl
     // FIXME OPTIONAL
 
-    remarked_tuple((
+    tuple((
         comma_separated(remarked(simple_id)),
-        remarked_char(':'),
+        char(':'),
         paramter_type,
-        remarked_char(';'),
+        char(';'),
     ))
-    .remarked_map(|(attrs, _coron, ty, _semicoron)| (attrs, ty))
+    .map(|(attrs, _coron, ty, _semicoron)| (attrs, ty))
     .remarked_parse(input)
 }
 
 /// 207 entity_head = ENTITY entity_id subsuper `;` .
 pub fn entity_head(input: &str) -> ParseResult<String> {
-    remarked_tuple((
-        remarked_tag("ENTITY "), // parse with trailing space
+    tuple((
+        tag("ENTITY "), // parse with trailing space
         remarked(simple_id),
-        remarked_char(';'),
+        char(';'),
     ))
-    .remarked_map(|(_start, id, _semicoron)| id)
+    .map(|(_start, id, _semicoron)| id)
     .remarked_parse(input)
 }
 
 /// 206 entity_decl = entity_head entity_body END_ENTITY `;` .
 pub fn entity_decl(input: &str) -> ParseResult<Entity> {
-    remarked_tuple((
+    tuple((
         entity_head,
         spaced_many0(explicit_attr),
-        remarked_tag("END_ENTITY"),
-        remarked_char(';'),
+        tag("END_ENTITY"),
+        char(';'),
     ))
-    .remarked_map(|(name, attributes, _end, _semicoron)| {
+    .map(|(name, attributes, _end, _semicoron)| {
         let attributes = attributes
             .into_iter()
             .map(|(attrs, ty)| attrs.into_iter().map(move |attr| (attr, ty.clone())))

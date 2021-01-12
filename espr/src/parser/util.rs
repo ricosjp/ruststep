@@ -1,8 +1,5 @@
 use super::remark::*;
-use nom::{
-    bytes::complete::*, character::complete::*, error::Error, multi::*, sequence::*, IResult,
-    Parser,
-};
+use nom::{error::Error, multi::*, sequence::*, IResult, Parser};
 use std::marker::PhantomData;
 
 pub type ParseResult<'a, Output> = IResult<&'a str, (Output, Vec<Remark>), Error<&'a str>>;
@@ -45,7 +42,7 @@ pub trait EsprParser<'a, Output>:
     }
 
     /// Apply `f` to `Output`, not to remarks
-    fn remarked_map<F, O2>(self, f: F) -> Map<'a, Self, Output, O2, F>
+    fn map<F, O2>(self, f: F) -> Map<'a, Self, Output, O2, F>
     where
         F: Fn(Output) -> O2,
     {
@@ -73,21 +70,21 @@ where
     move |input| f.clone().map(|out| (out, Vec::new())).parse(input)
 }
 
-pub fn remarked_tag<'a>(tag_str: &'static str) -> impl EsprParser<'a, &'a str> {
+pub fn tag<'a>(tag_str: &'static str) -> impl EsprParser<'a, &'a str> {
     move |input: &'a str| {
-        let (input, tag) = tag(tag_str)(input)?;
+        let (input, tag) = nom::bytes::complete::tag(tag_str)(input)?;
         Ok((input, (tag, Vec::new())))
     }
 }
 
-pub fn remarked_char<'a>(c: char) -> impl EsprParser<'a, char> {
+pub fn char<'a>(c: char) -> impl EsprParser<'a, char> {
     move |input| {
-        let (input, c) = char(c)(input)?;
+        let (input, c) = nom::character::complete::char(c)(input)?;
         Ok((input, (c, Vec::new())))
     }
 }
 
-pub fn remarked_spaces(input: &str) -> ParseResult<()> {
+pub fn spaces(input: &str) -> ParseResult<()> {
     let (input, remarks) = spaces_or_remarks(input)?;
     Ok((input, ((), remarks)))
 }
@@ -129,11 +126,13 @@ pub fn space_separated<'a, O>(f: impl EsprParser<'a, O>) -> impl EsprParser<'a, 
 pub fn comma_separated<'a, O>(f: impl EsprParser<'a, O>) -> impl EsprParser<'a, Vec<O>> {
     move |input| {
         let comma_with_remark =
-            tuple((spaces_or_remarks, char(','), spaces_or_remarks)).map(|(mut l, _, mut r)| {
-                l.append(&mut r);
-                l
-            });
-        tuple((f.clone(), many0(pair(comma_with_remark, f.clone()))))
+            nom::sequence::tuple((spaces_or_remarks, char(','), spaces_or_remarks)).map(
+                |(mut l, _, mut r)| {
+                    l.append(&mut r);
+                    l
+                },
+            );
+        nom::sequence::tuple((f.clone(), many0(pair(comma_with_remark, f.clone()))))
             .map(|((first, mut r0), pairs)| {
                 let mut output = vec![first];
                 let mut remarks = Vec::new();
@@ -150,7 +149,7 @@ pub fn comma_separated<'a, O>(f: impl EsprParser<'a, O>) -> impl EsprParser<'a, 
 }
 
 /// Merge tupled EsprParser into a single EsprParser
-pub fn remarked_tuple<'a, O, List: Tuple<'a, O>>(mut l: List) -> impl EsprParser<'a, O> {
+pub fn tuple<'a, O, List: Tuple<'a, O>>(mut l: List) -> impl EsprParser<'a, O> {
     move |input| l.parse(input)
 }
 
@@ -226,7 +225,7 @@ impl_tuple!(
     o1, o2, o3, o4, o5, o6, o7, o8
 );
 
-pub fn remarked_alt<'a, O, List: Alt<'a, O>>(l: List) -> impl EsprParser<'a, O> {
+pub fn alt<'a, O, List: Alt<'a, O>>(l: List) -> impl EsprParser<'a, O> {
     move |input| Alt::choice(l.clone(), input)
 }
 
