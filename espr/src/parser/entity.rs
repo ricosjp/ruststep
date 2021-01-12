@@ -42,7 +42,7 @@ pub fn explicit_attr(input: &str) -> ParseResult<(Vec<String>, ParameterType)> {
         remarked(paramter_type),
         remarked_char(';'),
     ))
-    .map(|((attrs, _coron, ty, _semicoron), remarks)| ((attrs, ty), remarks))
+    .remarked_map(|(attrs, _coron, ty, _semicoron)| (attrs, ty))
     .parse(input)
 }
 

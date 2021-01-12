@@ -14,7 +14,24 @@ pub trait EsprParser<'a, Output>:
     + FnMut(&'a str) -> ParseResult<'a, Output>
     + Clone
 {
+    fn remarked_map<G, O2>(
+        self,
+        g: G,
+    ) -> nom::Map<
+        Self,
+        Box<dyn Fn((Output, Vec<Remark>)) -> (O2, Vec<Remark>)>,
+        (Output, Vec<Remark>),
+    >
+    where
+        G: Fn(Output) -> O2 + 'static,
+    {
+        nom::Parser::map(
+            self,
+            Box::new(move |(output, remarks)| (g(output), remarks)),
+        )
+    }
 }
+
 impl<'a, Output, T: FnMut(&'a str) -> ParseResult<'a, Output> + Clone> EsprParser<'a, Output>
     for T
 {
