@@ -1,5 +1,4 @@
-use super::{basis::*, entity::*, remark::*, util::*};
-use nom::{bytes::complete::*, character::complete::*, sequence::*, Parser};
+use super::{basis::*, entity::*, util::*};
 
 /// Parsed result of EXPRESS's SCHEMA
 #[derive(Debug, Clone, PartialEq)]
@@ -9,49 +8,32 @@ pub struct Schema {
 }
 
 pub fn schema_decl(input: &str) -> ParseResult<String> {
-    tuple((
-        tag("SCHEMA"),
-        multispace1,
-        spaces_or_remarks,
-        simple_id,
-        spaces_or_remarks,
-        tag(";"),
+    remarked_tuple((
+        remarked_tag("SCHEMA "),
+        remarked(simple_id),
+        remarked_char(';'),
     ))
-    .map(|(_start, _space, mut remarks, id, mut r1, _semicoron)| {
-        remarks.append(&mut r1);
-        (id, remarks)
-    })
-    .parse(input)
+    .remarked_map(|(_start, id, _semicoron)| id)
+    .remarked_parse(input)
 }
 
 /// 295 schema_body = { interface_specification } \[ constant_decl \] { declaration | rule_decl } .
 pub fn schema_body(input: &str) -> ParseResult<Vec<Entity>> {
     // FIXME constant_decl
-    spaced_many0(entity_decl).parse(input)
+    spaced_many0(entity_decl).remarked_parse(input)
 }
 
 /// 296 schema_decl = SCHEMA schema_id \[ schema_version_id \] `;` schema_body END_SCHEMA `;` .
 pub fn schema(input: &str) -> ParseResult<Schema> {
     // FIXME schema_version_id
-    tuple((
+    remarked_tuple((
         schema_decl,
-        spaces_or_remarks,
         schema_body,
-        spaces_or_remarks,
-        tag("END_SCHEMA"),
-        spaces_or_remarks,
-        tag(";"),
+        remarked_tag("END_SCHEMA"),
+        remarked_char(';'),
     ))
-    .map(
-        |((name, mut remarks), mut r1, (entities, mut r2), mut r3, _end, mut r4, _semicoron)| {
-            remarks.append(&mut r1);
-            remarks.append(&mut r2);
-            remarks.append(&mut r3);
-            remarks.append(&mut r4);
-            (Schema { name, entities }, remarks)
-        },
-    )
-    .parse(input)
+    .remarked_map(|(name, entities, _end, _semicoron)| Schema { name, entities })
+    .remarked_parse(input)
 }
 
 #[cfg(test)]

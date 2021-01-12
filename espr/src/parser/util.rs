@@ -87,6 +87,11 @@ pub fn remarked_char<'a>(c: char) -> impl EsprParser<'a, char> {
     }
 }
 
+pub fn remarked_spaces(input: &str) -> ParseResult<()> {
+    let (input, remarks) = spaces_or_remarks(input)?;
+    Ok((input, ((), remarks)))
+}
+
 pub fn spaced_many0<'a, O>(f: impl EsprParser<'a, O>) -> impl EsprParser<'a, Vec<O>> {
     move |input| {
         many0(pair(spaces_or_remarks, f.clone()))
