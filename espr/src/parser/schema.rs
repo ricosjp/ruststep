@@ -10,13 +10,13 @@ pub struct Schema {
 pub fn schema_decl(input: &str) -> ParseResult<String> {
     tuple((tag("SCHEMA "), remarked(simple_id), char(';')))
         .map(|(_start, id, _semicoron)| id)
-        .remarked_parse(input)
+        .parse(input)
 }
 
 /// 295 schema_body = { interface_specification } \[ constant_decl \] { declaration | rule_decl } .
 pub fn schema_body(input: &str) -> ParseResult<Vec<Entity>> {
     // FIXME constant_decl
-    spaced_many0(entity_decl).remarked_parse(input)
+    spaced_many0(entity_decl).parse(input)
 }
 
 /// 296 schema_decl = SCHEMA schema_id \[ schema_version_id \] `;` schema_body END_SCHEMA `;` .
@@ -24,7 +24,7 @@ pub fn schema(input: &str) -> ParseResult<Schema> {
     // FIXME schema_version_id
     tuple((schema_decl, schema_body, tag("END_SCHEMA"), char(';')))
         .map(|(name, entities, _end, _semicoron)| Schema { name, entities })
-        .remarked_parse(input)
+        .parse(input)
 }
 
 #[cfg(test)]

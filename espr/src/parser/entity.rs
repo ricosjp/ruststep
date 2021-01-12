@@ -28,7 +28,7 @@ pub fn paramter_type(input: &str) -> ParseResult<ParameterType> {
         remarked(simple_id).map(|ty| ParameterType::Named(ty)),
         remarked(simple_types).map(|ty| ParameterType::Simple(ty)),
     ))
-    .remarked_parse(input)
+    .parse(input)
 }
 
 /// 215 explicit_attr = attribute_decl { `,` attribute_decl } `:` \[ OPTIONAL \] parameter_type `;` .
@@ -43,7 +43,7 @@ pub fn explicit_attr(input: &str) -> ParseResult<(Vec<String>, ParameterType)> {
         char(';'),
     ))
     .map(|(attrs, _coron, ty, _semicoron)| (attrs, ty))
-    .remarked_parse(input)
+    .parse(input)
 }
 
 /// 207 entity_head = ENTITY entity_id subsuper `;` .
@@ -54,7 +54,7 @@ pub fn entity_head(input: &str) -> ParseResult<String> {
         char(';'),
     ))
     .map(|(_start, id, _semicoron)| id)
-    .remarked_parse(input)
+    .parse(input)
 }
 
 /// 206 entity_decl = entity_head entity_body END_ENTITY `;` .
@@ -73,7 +73,7 @@ pub fn entity_decl(input: &str) -> ParseResult<Entity> {
             .collect();
         Entity { name, attributes }
     })
-    .remarked_parse(input)
+    .parse(input)
 }
 
 #[cfg(test)]

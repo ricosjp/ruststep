@@ -28,7 +28,7 @@ where
     F: Fn(O1) -> O2,
 {
     fn parse(&mut self, input: &'a str) -> ParseResult<'a, O2> {
-        let (input, (out, remarks)) = self.parser.parse(input)?;
+        let (input, (out, remarks)) = nom::Parser::parse(&mut self.parser, input)?;
         let out = (self.f)(out);
         Ok((input, (out, remarks)))
     }
@@ -38,7 +38,7 @@ where
 pub trait EsprParser<'a, Output>:
     nom::Parser<&'a str, (Output, Vec<Remark>), Error<&'a str>> + Clone
 {
-    fn remarked_parse(&mut self, input: &'a str) -> ParseResult<'a, Output> {
+    fn parse(&mut self, input: &'a str) -> ParseResult<'a, Output> {
         nom::Parser::parse(self, input)
     }
 
@@ -175,7 +175,7 @@ macro_rules! impl_tuple {
                 let ($($f),*) = self;
 
                 $(
-                let (input, ($o, mut r)) = $f.parse(input)?;
+                let (input, ($o, mut r)) = nom::Parser::parse($f, input)?;
                 remarks.append(&mut r);
                 let (input, mut r) = spaces_or_remarks(input)?;
                 remarks.append(&mut r);
