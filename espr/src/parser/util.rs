@@ -72,6 +72,20 @@ where
     move |input| f.clone().map(|out| (out, Vec::new())).parse(input)
 }
 
+pub fn opt<'a, O, F>(f: F) -> impl EsprParser<'a, Option<O>>
+where
+    F: EsprParser<'a, O>,
+{
+    move |input| -> ParseResult<'a, Option<O>> {
+        let (input, value) = nom::Parser::parse(&mut nom::combinator::opt(f.clone()), input)?;
+        if let Some((value, remarks)) = value {
+            Ok((input, (Some(value), remarks)))
+        } else {
+            Ok((input, (None, Vec::new())))
+        }
+    }
+}
+
 pub fn tag<'a>(tag_str: &'static str) -> impl EsprParser<'a, &'a str> {
     move |input: &'a str| {
         let (input, tag) = nom::bytes::complete::tag(tag_str)(input)?;
