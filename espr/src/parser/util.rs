@@ -29,9 +29,7 @@ where
 
 /// Specialized trait of `nom::Parser` to capturing remarks
 pub trait EsprParser<'a, Output>:
-    Parser<&'a str, (Output, Vec<Remark>), Error<&'a str>>
-    + FnMut(&'a str) -> ParseResult<'a, Output>
-    + Clone
+    Parser<&'a str, (Output, Vec<Remark>), Error<&'a str>> + Clone
 {
     /// Apply `f` to `Output`, not to remarks
     fn remarked_map<F, O2>(self, f: F) -> Map<'a, Self, Output, O2, F>
@@ -213,14 +211,14 @@ impl_tuple!(
 #[cfg(test)]
 mod tests {
     use crate::parser::basis;
-    use nom::Finish;
+    use nom::{Finish, Parser};
 
     #[test]
     fn comma_separated() {
-        let (res, (values, remarks)) =
-            super::comma_separated(super::remarked(basis::digit))("1, (* 2, *) 3, 4")
-                .finish()
-                .unwrap();
+        let (res, (values, remarks)) = super::comma_separated(super::remarked(basis::digit))
+            .parse("1, (* 2, *) 3, 4")
+            .finish()
+            .unwrap();
         assert_eq!(res, "");
         assert_eq!(values, ['1', '3', '4']);
         assert_eq!(remarks.len(), 1);
