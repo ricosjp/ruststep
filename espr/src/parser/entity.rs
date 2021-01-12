@@ -24,6 +24,7 @@ pub enum ParameterType {
 pub fn paramter_type(input: &str) -> IResult<&str, ParameterType> {
     // FIXME generalized_types
     // FIXME named_types
+
     alt((
         simple_id.map(|ty| ParameterType::Named(ty)),
         simple_types.map(|ty| ParameterType::Simple(ty)),
@@ -43,7 +44,7 @@ pub fn explicit_attr(input: &str) -> ParseResult<(Vec<String>, ParameterType)> {
         remarked_char(';'),
     ))
     .remarked_map(|(attrs, _coron, ty, _semicoron)| (attrs, ty))
-    .parse(input)
+    .remarked_parse(input)
 }
 
 /// 207 entity_head = ENTITY entity_id subsuper `;` .
@@ -54,7 +55,7 @@ pub fn entity_head(input: &str) -> ParseResult<String> {
         remarked_char(';'),
     ))
     .remarked_map(|(_start, id, _semicoron)| id)
-    .parse(input)
+    .remarked_parse(input)
 }
 
 /// 206 entity_decl = entity_head entity_body END_ENTITY `;` .
@@ -73,7 +74,7 @@ pub fn entity_decl(input: &str) -> ParseResult<Entity> {
             .collect();
         Entity { name, attributes }
     })
-    .parse(input)
+    .remarked_parse(input)
 }
 
 #[cfg(test)]

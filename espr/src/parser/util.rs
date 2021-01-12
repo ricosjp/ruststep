@@ -42,6 +42,10 @@ where
 pub trait EsprParser<'a, Output>:
     Parser<&'a str, (Output, Vec<Remark>), Error<&'a str>> + Clone
 {
+    fn remarked_parse(&mut self, input: &'a str) -> ParseResult<'a, Output> {
+        nom::Parser::parse(self, input)
+    }
+
     /// Apply `f` to `Output`, not to remarks
     fn remarked_map<F, O2>(self, f: F) -> Map<'a, Self, Output, O2, F>
     where
@@ -55,9 +59,8 @@ pub trait EsprParser<'a, Output>:
     }
 }
 
-// impl for nom::* parsers
 impl<'a, Output, T> EsprParser<'a, Output> for T where
-    T: FnMut(&'a str) -> ParseResult<'a, Output> + Clone
+    T: Parser<&'a str, (Output, Vec<Remark>), Error<&'a str>> + Clone
 {
 }
 
