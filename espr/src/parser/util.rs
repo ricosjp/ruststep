@@ -15,6 +15,17 @@ pub struct Map<'a, P, O1, O2, F> {
     phantom: PhantomData<&'a dyn Fn(O1) -> O2>,
 }
 
+// not use `#[derive(Close)]` becuase it requires `O1, O2: Clone`
+impl<'a, P: Clone, O1, O2, F: Clone> Clone for Map<'a, P, O1, O2, F> {
+    fn clone(&self) -> Self {
+        Map {
+            parser: self.parser.clone(),
+            f: self.f.clone(),
+            phantom: PhantomData,
+        }
+    }
+}
+
 impl<'a, P, O1, O2, F> Parser<&'a str, (O2, Vec<Remark>), Error<&'a str>> for Map<'a, P, O1, O2, F>
 where
     P: EsprParser<'a, O1>,
@@ -44,8 +55,9 @@ pub trait EsprParser<'a, Output>:
     }
 }
 
-impl<'a, Output, T: FnMut(&'a str) -> ParseResult<'a, Output> + Clone> EsprParser<'a, Output>
-    for T
+// impl for nom::* parsers
+impl<'a, Output, T> EsprParser<'a, Output> for T where
+    T: FnMut(&'a str) -> ParseResult<'a, Output> + Clone
 {
 }
 
