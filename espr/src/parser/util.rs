@@ -3,10 +3,29 @@ use nom::{
     bytes::complete::*, character::complete::*, error::Error, multi::*, sequence::*, IResult,
     Parser,
 };
+use std::marker::PhantomData;
 
 pub use nom::branch::alt;
 
 pub type ParseResult<'a, Output> = IResult<&'a str, (Output, Vec<Remark>), Error<&'a str>>;
+
+pub struct Map<'a, P, O1, O2, F> {
+    parser: P,
+    f: F,
+    phantom: PhantomData<&'a dyn Fn(O1) -> O2>,
+}
+
+impl<'a, P, O1, O2, F> Parser<&'a str, (O2, Vec<Remark>), Error<&'a str>> for Map<'a, P, O1, O2, F>
+where
+    P: EsprParser<'a, O1>,
+    F: Fn(O1) -> O2,
+{
+    fn parse(&mut self, input: &'a str) -> ParseResult<'a, O2> {
+        let (input, (out, remarks)) = self.parser.parse(input)?;
+        let out = (self.f)(out);
+        Ok((input, (out, remarks)))
+    }
+}
 
 /// Specialized trait of `nom::Parser` to capturing remarks
 pub trait EsprParser<'a, Output>:
@@ -14,21 +33,16 @@ pub trait EsprParser<'a, Output>:
     + FnMut(&'a str) -> ParseResult<'a, Output>
     + Clone
 {
-    fn remarked_map<G, O2>(
-        self,
-        g: G,
-    ) -> nom::Map<
-        Self,
-        Box<dyn Fn((Output, Vec<Remark>)) -> (O2, Vec<Remark>)>,
-        (Output, Vec<Remark>),
-    >
+    /// Apply `f` to `Output`, not to remarks
+    fn remarked_map<F, O2>(self, f: F) -> Map<'a, Self, Output, O2, F>
     where
-        G: Fn(Output) -> O2 + 'static,
+        F: Fn(Output) -> O2,
     {
-        nom::Parser::map(
-            self,
-            Box::new(move |(output, remarks)| (g(output), remarks)),
-        )
+        Map {
+            parser: self,
+            f,
+            phantom: PhantomData,
+        }
     }
 }
 

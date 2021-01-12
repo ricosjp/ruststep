@@ -53,7 +53,7 @@ pub fn entity_head(input: &str) -> ParseResult<String> {
         remarked(simple_id),
         remarked_char(';'),
     ))
-    .map(|((_start, id, _semicoron), remarks)| (id, remarks))
+    .remarked_map(|(_start, id, _semicoron)| id)
     .parse(input)
 }
 
@@ -65,13 +65,13 @@ pub fn entity_decl(input: &str) -> ParseResult<Entity> {
         remarked_tag("END_ENTITY"),
         remarked_char(';'),
     ))
-    .map(|((name, attributes, _end, _semicoron), remarks)| {
+    .remarked_map(|(name, attributes, _end, _semicoron)| {
         let attributes = attributes
             .into_iter()
             .map(|(attrs, ty)| attrs.into_iter().map(move |attr| (attr, ty.clone())))
             .flatten()
             .collect();
-        (Entity { name, attributes }, remarks)
+        Entity { name, attributes }
     })
     .parse(input)
 }
