@@ -1,5 +1,5 @@
 use super::{remark::*, schema::*, util::*};
-use nom::{sequence::*, Finish, Parser};
+use nom::Finish;
 
 /// Entire syntax tree parsed from EXPRESS Language string
 #[derive(Debug, Clone, PartialEq)]
@@ -10,20 +10,12 @@ pub struct SyntaxTree {
 
 impl SyntaxTree {
     pub fn parse(input: &str) -> Result<Self, nom::error::Error<&str>> {
-        let (residual, st) = tuple((
-            spaces_or_remarks,
-            space_separated(schema),
-            spaces_or_remarks,
-        ))
-        .map(|(mut remarks, (schemas, mut r1), mut r2)| {
-            remarks.append(&mut r1);
-            remarks.append(&mut r2);
-            SyntaxTree { schemas, remarks }
-        })
-        .parse(input)
-        .finish()?;
+        let (residual, (schemas, remarks)) = tuple((spaces, space_separated(schema), spaces))
+            .map(|(_start_space, schemas, _end_space)| schemas)
+            .parse(input)
+            .finish()?;
         assert!(residual.is_empty());
-        Ok(st)
+        Ok(SyntaxTree { schemas, remarks })
     }
 
     // Example syntax tree for easy testing
