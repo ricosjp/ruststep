@@ -1,5 +1,5 @@
 use super::remark::*;
-use nom::{error::Error, multi::*, sequence::*, IResult, Parser};
+use nom::{error::Error, multi::*, sequence::*, IResult};
 use std::marker::PhantomData;
 
 pub type ParseResult<'a, Output> = IResult<&'a str, (Output, Vec<Remark>), Error<&'a str>>;
@@ -21,7 +21,8 @@ impl<'a, P: Clone, O1, O2, F: Clone> Clone for Map<'a, P, O1, O2, F> {
     }
 }
 
-impl<'a, P, O1, O2, F> Parser<&'a str, (O2, Vec<Remark>), Error<&'a str>> for Map<'a, P, O1, O2, F>
+impl<'a, P, O1, O2, F> nom::Parser<&'a str, (O2, Vec<Remark>), Error<&'a str>>
+    for Map<'a, P, O1, O2, F>
 where
     P: EsprParser<'a, O1>,
     F: Fn(O1) -> O2,
@@ -35,7 +36,7 @@ where
 
 /// Specialized trait of `nom::Parser` to capturing remarks
 pub trait EsprParser<'a, Output>:
-    Parser<&'a str, (Output, Vec<Remark>), Error<&'a str>> + Clone
+    nom::Parser<&'a str, (Output, Vec<Remark>), Error<&'a str>> + Clone
 {
     fn remarked_parse(&mut self, input: &'a str) -> ParseResult<'a, Output> {
         nom::Parser::parse(self, input)
@@ -55,7 +56,7 @@ pub trait EsprParser<'a, Output>:
 }
 
 impl<'a, Output, T> EsprParser<'a, Output> for T where
-    T: Parser<&'a str, (Output, Vec<Remark>), Error<&'a str>> + Clone
+    T: nom::Parser<&'a str, (Output, Vec<Remark>), Error<&'a str>> + Clone
 {
 }
 
@@ -65,8 +66,9 @@ impl<'a, Output, T> EsprParser<'a, Output> for T where
 /// https://doc.rust-lang.org/std/vec/struct.Vec.html#method.new
 pub fn remarked<'a, O, F>(f: F) -> impl EsprParser<'a, O>
 where
-    F: Parser<&'a str, O, Error<&'a str>> + Clone,
+    F: nom::Parser<&'a str, O, Error<&'a str>> + Clone,
 {
+    use nom::Parser;
     move |input| f.clone().map(|out| (out, Vec::new())).parse(input)
 }
 
@@ -90,6 +92,7 @@ pub fn spaces(input: &str) -> ParseResult<()> {
 }
 
 pub fn spaced_many0<'a, O>(f: impl EsprParser<'a, O>) -> impl EsprParser<'a, Vec<O>> {
+    use nom::Parser;
     move |input| {
         many0(pair(spaces_or_remarks, f.clone()))
             .map(|pairs| {
@@ -107,6 +110,7 @@ pub fn spaced_many0<'a, O>(f: impl EsprParser<'a, O>) -> impl EsprParser<'a, Vec
 }
 
 pub fn space_separated<'a, O>(f: impl EsprParser<'a, O>) -> impl EsprParser<'a, Vec<O>> {
+    use nom::Parser;
     move |input| {
         many1(pair(spaces_or_remarks, f.clone()))
             .map(|pairs| {
@@ -124,6 +128,7 @@ pub fn space_separated<'a, O>(f: impl EsprParser<'a, O>) -> impl EsprParser<'a, 
 }
 
 pub fn comma_separated<'a, O>(f: impl EsprParser<'a, O>) -> impl EsprParser<'a, Vec<O>> {
+    use nom::Parser;
     move |input| {
         let comma_with_remark =
             nom::sequence::tuple((spaces_or_remarks, char(','), spaces_or_remarks)).map(
@@ -240,6 +245,7 @@ macro_rules! impl_alg {
             $( $F: EsprParser<'a, O> ),*
         {
             fn choice(self, input: &'a str) -> ParseResult<'a, O> {
+                use nom::Parser;
                 nom::branch::alt(self).parse(input)
             }
         }
