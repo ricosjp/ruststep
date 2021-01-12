@@ -5,8 +5,6 @@ use nom::{
 };
 use std::marker::PhantomData;
 
-pub use nom::branch::alt;
-
 pub type ParseResult<'a, Output> = IResult<&'a str, (Output, Vec<Remark>), Error<&'a str>>;
 
 pub struct Map<'a, P, O1, O2, F> {
@@ -238,7 +236,7 @@ macro_rules! impl_alg {
             $( $F: EsprParser<'a, O> ),*
         {
             fn choice(self, input: &'a str) -> ParseResult<'a, O> {
-                alt(self).parse(input)
+                nom::branch::alt(self).parse(input)
             }
         }
     };
