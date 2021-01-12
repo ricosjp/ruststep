@@ -223,6 +223,36 @@ impl_tuple!(
     o1, o2, o3, o4, o5, o6, o7, o8
 );
 
+pub fn remarked_alt<'a, O, List: Alt<'a, O>>(l: List) -> impl EsprParser<'a, O> {
+    move |input| Alt::choice(l.clone(), input)
+}
+
+pub trait Alt<'a, O>: Clone {
+    fn choice(self, input: &'a str) -> ParseResult<'a, O>;
+}
+
+macro_rules! impl_alg {
+    ($($F:ident),*) => {
+        impl<'a, $($F),*, O> Alt<'a, O> for ($($F),*)
+        where
+            $( $F: EsprParser<'a, O> ),*
+        {
+            fn choice(self, input: &'a str) -> ParseResult<'a, O> {
+                alt(self).parse(input)
+            }
+        }
+    };
+}
+
+impl_alg!(F1, F2);
+impl_alg!(F1, F2, F3);
+impl_alg!(F1, F2, F3, F4);
+impl_alg!(F1, F2, F3, F4, F5);
+impl_alg!(F1, F2, F3, F4, F5, F6);
+impl_alg!(F1, F2, F3, F4, F5, F6, F7);
+impl_alg!(F1, F2, F3, F4, F5, F6, F7, F8);
+impl_alg!(F1, F2, F3, F4, F5, F6, F7, F8, F9);
+
 #[cfg(test)]
 mod tests {
     use crate::parser::basis;

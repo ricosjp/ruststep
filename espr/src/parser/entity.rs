@@ -1,6 +1,5 @@
 use super::{basis::*, simple_data_type::*, util::*};
 use derive_more::From;
-use nom::{IResult, Parser};
 
 /// Parsed result of EXPRESS's ENTITY
 #[derive(Debug, Clone, PartialEq)]
@@ -21,15 +20,15 @@ pub enum ParameterType {
 }
 
 /// 266 parameter_type = generalized_types | named_types | simple_types .
-pub fn paramter_type(input: &str) -> IResult<&str, ParameterType> {
+pub fn paramter_type(input: &str) -> ParseResult<ParameterType> {
     // FIXME generalized_types
     // FIXME named_types
 
-    alt((
-        simple_id.map(|ty| ParameterType::Named(ty)),
-        simple_types.map(|ty| ParameterType::Simple(ty)),
+    remarked_alt((
+        remarked(simple_id).remarked_map(|ty| ParameterType::Named(ty)),
+        remarked(simple_types).remarked_map(|ty| ParameterType::Simple(ty)),
     ))
-    .parse(input)
+    .remarked_parse(input)
 }
 
 /// 215 explicit_attr = attribute_decl { `,` attribute_decl } `:` \[ OPTIONAL \] parameter_type `;` .
@@ -40,7 +39,7 @@ pub fn explicit_attr(input: &str) -> ParseResult<(Vec<String>, ParameterType)> {
     remarked_tuple((
         comma_separated(remarked(simple_id)),
         remarked_char(':'),
-        remarked(paramter_type),
+        paramter_type,
         remarked_char(';'),
     ))
     .remarked_map(|(attrs, _coron, ty, _semicoron)| (attrs, ty))
