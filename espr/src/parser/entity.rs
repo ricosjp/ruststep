@@ -1,6 +1,6 @@
-use super::{basis::*, remark::*, simple_data_type::*, util::*};
+use super::{basis::*, simple_data_type::*, util::*};
 use derive_more::From;
-use nom::{branch::*, bytes::complete::*, character::complete::*, sequence::*, IResult, Parser};
+use nom::{IResult, Parser};
 
 /// Parsed result of EXPRESS's ENTITY
 #[derive(Debug, Clone, PartialEq)]
@@ -48,47 +48,31 @@ pub fn explicit_attr(input: &str) -> ParseResult<(Vec<String>, ParameterType)> {
 
 /// 207 entity_head = ENTITY entity_id subsuper `;` .
 pub fn entity_head(input: &str) -> ParseResult<String> {
-    tuple((
-        tag("ENTITY"),
-        multispace1,
-        simple_id,
-        spaces_or_remarks,
-        tag(";"),
+    remarked_tuple((
+        remarked_tag("ENTITY "), // parse with trailing space
+        remarked(simple_id),
+        remarked_char(';'),
     ))
-    .map(|(_start, _space, id, remarks, _semicoron)| (id, remarks))
+    .map(|((_start, id, _semicoron), remarks)| (id, remarks))
     .parse(input)
 }
 
 /// 206 entity_decl = entity_head entity_body END_ENTITY `;` .
 pub fn entity_decl(input: &str) -> ParseResult<Entity> {
-    tuple((
+    remarked_tuple((
         entity_head,
-        spaces_or_remarks,
         spaced_many0(explicit_attr),
-        spaces_or_remarks,
-        tag("END_ENTITY"),
-        spaces_or_remarks,
-        tag(";"),
+        remarked_tag("END_ENTITY"),
+        remarked_char(';'),
     ))
-    .map(
-        |((name, mut remarks), mut r1, (attributes, mut r2), mut r3, _end, mut r4, _semicoron)| {
-            remarks.append(&mut r1);
-            remarks.append(&mut r2);
-            remarks.append(&mut r3);
-            remarks.append(&mut r4);
-            (
-                Entity {
-                    name,
-                    attributes: attributes
-                        .into_iter()
-                        .map(|(attrs, ty)| attrs.into_iter().map(move |attr| (attr, ty.clone())))
-                        .flatten()
-                        .collect(),
-                },
-                remarks,
-            )
-        },
-    )
+    .map(|((name, attributes, _end, _semicoron), remarks)| {
+        let attributes = attributes
+            .into_iter()
+            .map(|(attrs, ty)| attrs.into_iter().map(move |attr| (attr, ty.clone())))
+            .flatten()
+            .collect();
+        (Entity { name, attributes }, remarks)
+    })
     .parse(input)
 }
 
