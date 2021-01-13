@@ -86,6 +86,17 @@ where
     }
 }
 
+pub fn value<'a, O, V, F>(value: V, mut f: F) -> impl EsprParser<'a, V>
+where
+    V: Clone,
+    F: EsprParser<'a, O>,
+{
+    move |input| {
+        let (input, (_matched, remarks)) = nom::Parser::parse(&mut f, input)?;
+        Ok((input, (value.clone(), remarks)))
+    }
+}
+
 pub fn tag<'a>(tag_str: &'static str) -> impl EsprParser<'a, &'a str> {
     move |input: &'a str| {
         let (input, tag) = nom::bytes::complete::tag(tag_str)(input)?;
