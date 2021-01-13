@@ -104,6 +104,13 @@ pub fn tag<'a>(tag_str: &'static str) -> impl EsprParser<'a, &'a str> {
     }
 }
 
+pub fn is_not<'a>(pattern: &'static str) -> impl EsprParser<'a, &'a str> {
+    move |input: &'a str| {
+        let (input, tag) = nom::bytes::complete::is_not(pattern)(input)?;
+        Ok((input, (tag, Vec::new())))
+    }
+}
+
 pub fn char<'a>(c: char) -> impl EsprParser<'a, char> {
     move |input| {
         let (input, c) = nom::character::complete::char(c)(input)?;
