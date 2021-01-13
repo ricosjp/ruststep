@@ -39,6 +39,8 @@ pub fn select_extension(input: &str) -> ParseResult<(String, Vec<String>)> {
 /// 302 select_type = [ EXTENSIBLE [ GENERIC_ENTITY ] ] SELECT [ select_list | select_extension ] .
 pub fn select_type(input: &str) -> ParseResult<SelectType> {
     // FIXME support select_extension
+
+    // `GENERIC_ENTITY` only appears in `select_type` declaration.
     let extensiblity = tuple((
         tag("EXTENSIBLE"),
         opt(tuple((spaces, tag("GENERIC_ENTITY")))),
@@ -50,6 +52,7 @@ pub fn select_type(input: &str) -> ParseResult<SelectType> {
             Extensiblity::Extensible
         }
     });
+
     tuple((
         opt(tuple((extensiblity, spaces))),
         tag("SELECT"),
@@ -71,10 +74,42 @@ pub fn select_type(input: &str) -> ParseResult<SelectType> {
     .parse(input)
 }
 
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct Enumeration {
+    extensiblity: Extensiblity,
+    items: Vec<String>,
+}
+
+/// 211 enumeration_items = `(` enumeration_id { `,` enumeration_id } `)` .
+pub fn enumeration_items(input: &str) -> ParseResult<Vec<String>> {
+    tuple((char('('), comma_separated(remarked(simple_id)), char(')')))
+        .map(|(_open, enums, _close)| enums)
+        .parse(input)
+}
+
+/// 213 enumeration_type = [ EXTENSIBLE ] ENUMERATION [ ( OF enumeration_items ) | enumeration_extension ] .
+pub fn enumeration_type(input: &str) -> ParseResult<Enumeration> {
+    // FIXME enumeration_extension
+    tuple((
+        opt(tag("EXTENSIBLE")),
+        tag("ENUMERATION"),
+        tag("OF"),
+        enumeration_items,
+    ))
+    .map(|(extensiblility, _start, _of, items)| Enumeration {
+        extensiblity: if extensiblility.is_some() {
+            Extensiblity::Extensible
+        } else {
+            Extensiblity::None
+        },
+        items,
+    })
+    .parse(input)
+}
+
 /// 332 underlying_type = concrete_types | constructed_types .
 /// 193 concrete_types = aggregation_types | simple_types | type_ref.
 /// 198 constructed_types = enumeration_type | select_type .
-/// 213 enumeration_type = [ EXTENSIBLE ] ENUMERATION [ ( OF enumeration_items ) | enumeration_extension ] .
 pub fn underlying_type(input: &str) -> ParseResult<String> {
     // FIXME
     remarked(simple_id).parse(input)
