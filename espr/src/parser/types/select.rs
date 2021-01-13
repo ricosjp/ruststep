@@ -18,7 +18,7 @@ pub fn select_list(input: &str) -> ParseResult<Vec<String>> {
         .parse(input)
 }
 
-/// 300 select_extension = BASED_ON type_ref [ WITH select_list ] .
+/// 300 select_extension = BASED_ON type_ref \[ WITH select_list \] .
 pub fn select_extension(input: &str) -> ParseResult<(String, Vec<String>)> {
     let with = tuple((tag("WITH"), select_list)).map(|(_with, list)| list);
     tuple((tag("BASED_ON"), remarked(simple_id), opt(with)))
@@ -26,7 +26,7 @@ pub fn select_extension(input: &str) -> ParseResult<(String, Vec<String>)> {
         .parse(input)
 }
 
-/// 302 select_type = [ EXTENSIBLE [ GENERIC_ENTITY ] ] SELECT [ select_list | select_extension ] .
+/// 302 select_type = \[ EXTENSIBLE \[ GENERIC_ENTITY \] \] SELECT \[ select_list | select_extension \] .
 pub fn select_type(input: &str) -> ParseResult<SelectType> {
     // FIXME support select_extension
 

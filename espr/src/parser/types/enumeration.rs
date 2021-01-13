@@ -16,7 +16,7 @@ pub fn enumeration_items(input: &str) -> ParseResult<Vec<String>> {
         .parse(input)
 }
 
-/// 213 enumeration_type = [ EXTENSIBLE ] ENUMERATION [ ( OF enumeration_items ) | enumeration_extension ] .
+/// 213 enumeration_type = \[ EXTENSIBLE \] ENUMERATION \[ ( OF enumeration_items ) | enumeration_extension \] .
 pub fn enumeration_type(input: &str) -> ParseResult<Enumeration> {
     // FIXME enumeration_extension
     tuple((

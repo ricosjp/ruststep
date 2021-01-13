@@ -33,7 +33,7 @@ pub fn underlying_type(input: &str) -> ParseResult<String> {
     remarked(simple_id).parse(input)
 }
 
-/// 327 type_decl = TYPE type_id `=` underlying_type `;` [ where_clause ] END_TYPE `;` .
+/// 327 type_decl = TYPE type_id `=` underlying_type `;` \[ where_clause \] END_TYPE `;` .
 pub fn type_decl(input: &str) -> ParseResult<Type> {
     tuple((
         tag("TYPE"),
