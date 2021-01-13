@@ -26,7 +26,7 @@ pub fn paramter_type(input: &str) -> ParseResult<ParameterType> {
 
     alt((
         remarked(simple_id).map(|ty| ParameterType::Named(ty)),
-        remarked(simple_types).map(|ty| ParameterType::Simple(ty)),
+        simple_types.map(|ty| ParameterType::Simple(ty)),
     ))
     .parse(input)
 }
