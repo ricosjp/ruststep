@@ -1,4 +1,4 @@
-use super::{basis::*, remark::*, util::*};
+use super::{basis::*, util::*};
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Type {
@@ -23,38 +23,16 @@ pub enum Extensiblity {
 ///
 /// `named_types` is replaced by `simple_id` because it will be handled in semantics analysis phase
 pub fn select_list(input: &str) -> ParseResult<Vec<String>> {
-    tuple((
-        char('('),
-        spaces_or_remarks,
-        comma_separated(remarked(simple_id)),
-        spaces_or_remarks,
-        char(')'),
-    ))
-    .map(|(_start, mut remarks, (ids, mut r1), mut r2, _end)| {
-        remarks.append(&mut r1);
-        remarks.append(&mut r2);
-        (ids, remarks)
-    })
-    .parse(input)
+    tuple((char('('), comma_separated(remarked(simple_id)), char(')')))
+        .map(|(_start, ids, _end)| ids)
+        .parse(input)
 }
 
 /// 300 select_extension = BASED_ON type_ref [ WITH select_list ] .
 pub fn select_extension(input: &str) -> ParseResult<(String, Vec<String>)> {
-    let with = tuple((tag("WITH"), spaces_or_remarks, select_list)).map(
-        |(_with, mut remarks, (list, mut r1))| {
-            remarks.append(&mut r1);
-            (list, remarks)
-        },
-    );
-    tuple((tag("BASED_ON"), spaces_or_remarks, simple_id, opt(with)))
-        .map(|(_based_on, mut remarks, id, opt)| {
-            if let Some((list, mut r1)) = opt {
-                remarks.append(&mut r1);
-                ((id, list), remarks)
-            } else {
-                ((id, Vec::new()), remarks)
-            }
-        })
+    let with = tuple((tag("WITH"), select_list)).map(|(_with, list)| list);
+    tuple((tag("BASED_ON"), remarked(simple_id), opt(with)))
+        .map(|(_based_on, id, opt)| (id, opt.unwrap_or(Vec::new())))
         .parse(input)
 }
 
@@ -63,34 +41,32 @@ pub fn select_type(input: &str) -> ParseResult<SelectType> {
     // FIXME support select_extension
     let extensiblity = tuple((
         tag("EXTENSIBLE"),
-        opt(tuple((spaces_or_remarks, tag("GENERIC_ENTITY")))),
+        opt(tuple((spaces, tag("GENERIC_ENTITY")))),
     ))
     .map(|(_extensible, opt)| {
-        if let Some((remarks, _generic_entity)) = opt {
-            (Extensiblity::GenericEntity, remarks)
+        if opt.is_some() {
+            Extensiblity::GenericEntity
         } else {
-            (Extensiblity::Extensible, Vec::new())
+            Extensiblity::Extensible
         }
     });
     tuple((
-        opt(tuple((extensiblity, spaces_or_remarks))),
+        opt(tuple((extensiblity, spaces))),
         tag("SELECT"),
-        spaces_or_remarks,
         select_list,
     ))
-    .map(|(opt, _select, mut r2, (types, mut r3))| {
-        let ((extensiblity, mut remarks), mut r1) =
-            opt.unwrap_or(((Extensiblity::None, Vec::new()), Vec::new()));
-        remarks.append(&mut r1);
-        remarks.append(&mut r2);
-        remarks.append(&mut r3);
-        (
+    .map(|(opt, _select, types)| {
+        if let Some((extensiblity, _spaces)) = opt {
             SelectType {
                 extensiblity,
                 types,
-            },
-            remarks,
-        )
+            }
+        } else {
+            SelectType {
+                extensiblity: Extensiblity::None,
+                types,
+            }
+        }
     })
     .parse(input)
 }
@@ -101,55 +77,24 @@ pub fn select_type(input: &str) -> ParseResult<SelectType> {
 /// 213 enumeration_type = [ EXTENSIBLE ] ENUMERATION [ ( OF enumeration_items ) | enumeration_extension ] .
 pub fn underlying_type(input: &str) -> ParseResult<String> {
     // FIXME
-    remarked(simple_id)(input)
+    remarked(simple_id).parse(input)
 }
 
 /// 327 type_decl = TYPE type_id `=` underlying_type `;` [ where_clause ] END_TYPE `;` .
 pub fn type_decl(input: &str) -> ParseResult<Type> {
     tuple((
         tag("TYPE"),
-        spaces_or_remarks,
-        simple_id, // type_id
-        spaces_or_remarks,
+        remarked(simple_id), // type_id
         char('='),
-        spaces_or_remarks,
         underlying_type,
-        spaces_or_remarks,
         char(';'),
-        spaces_or_remarks,
         tag("END_TYPE"),
-        spaces_or_remarks,
         char(';'),
     ))
     .map(
-        |(
-            _start,
-            mut remarks,
+        |(_start, type_id, _equal, underlying_type, _semicoron1, _end, _semicoron2)| Type {
             type_id,
-            mut r1,
-            _equal,
-            mut r2,
-            (underlying_type, mut r3),
-            mut r4,
-            _semicoron1,
-            mut r5,
-            _end,
-            mut r6,
-            _semicoron2,
-        )| {
-            remarks.append(&mut r1);
-            remarks.append(&mut r2);
-            remarks.append(&mut r3);
-            remarks.append(&mut r4);
-            remarks.append(&mut r5);
-            remarks.append(&mut r6);
-            (
-                Type {
-                    type_id,
-                    underlying_type,
-                },
-                remarks,
-            )
+            underlying_type,
         },
     )
     .parse(input)
