@@ -1,17 +1,21 @@
-mod enumerate;
+mod enumeration;
 mod select;
 mod simple;
 
-pub use enumerate::*;
+pub use enumeration::*;
 pub use select::*;
 pub use simple::*;
 
 use super::{basis::*, util::*};
 
+/// `EXTENSIBLE` keyword for `SELECT` and `ENUMERATION` declarations
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum Extensiblity {
+    /// No `EXTENSIBLE`
     None,
+    /// `EXTENSIBLE`
     Extensible,
+    /// `EXTENSIBLE GENERIC_ENTITY`, which is allowed only for `SELECT`
     GenericEntity,
 }
 

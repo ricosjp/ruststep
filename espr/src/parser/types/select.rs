@@ -5,8 +5,8 @@ use super::{
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct SelectType {
-    extensiblity: Extensiblity,
-    types: Vec<String>,
+    pub extensiblity: Extensiblity,
+    pub types: Vec<String>,
 }
 
 /// 301 select_list = `(` named_types { `,` named_types } `)` .
