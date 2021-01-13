@@ -35,3 +35,57 @@ pub fn enumeration_type(input: &str) -> ParseResult<Enumeration> {
     })
     .parse(input)
 }
+
+#[cfg(test)]
+mod tests {
+    use nom::Finish;
+
+    #[test]
+    fn enumeration_type() {
+        let (residual, (e, _remark)) =
+            super::enumeration_type("ENUMERATION OF (up, down, left, right)")
+                .finish()
+                .unwrap();
+        assert_eq!(residual, "");
+        assert_eq!(
+            e,
+            super::Enumeration {
+                extensiblity: super::Extensiblity::None,
+                items: vec![
+                    "up".to_string(),
+                    "down".to_string(),
+                    "left".to_string(),
+                    "right".to_string()
+                ]
+            }
+        );
+    }
+
+    #[test]
+    fn extensible() {
+        let (residual, (e, _remark)) =
+            super::enumeration_type("EXTENSIBLE ENUMERATION OF (up, down, left, right)")
+                .finish()
+                .unwrap();
+        assert_eq!(residual, "");
+        assert_eq!(
+            e,
+            super::Enumeration {
+                extensiblity: super::Extensiblity::Extensible,
+                items: vec![
+                    "up".to_string(),
+                    "down".to_string(),
+                    "left".to_string(),
+                    "right".to_string()
+                ]
+            }
+        );
+
+        // GENERIC_ENTITY is only supported for SELECT
+        assert!(super::enumeration_type(
+            "EXTENSIBLE GENERIC_ENTITY ENUMERATION OF (up, down, left, right)"
+        )
+        .finish()
+        .is_err());
+    }
+}
