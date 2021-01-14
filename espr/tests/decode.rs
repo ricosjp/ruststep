@@ -10,9 +10,7 @@ fn decode() {
     let code = fs::read_to_string(root.join("express/test.exp")).unwrap();
     let st = SyntaxTree::parse(&code).unwrap();
     dbg!(&st);
-    let ns = Namespace::new(&st).unwrap();
-    dbg!(&ns);
-    let ir = IR::legalize(&ns, &Scope::root(), &st).unwrap();
+    let ir = IR::from_syntax_tree(&st).unwrap();
     dbg!(&ir);
 
     // Generate Rust code
