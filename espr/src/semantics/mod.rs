@@ -5,9 +5,9 @@ pub mod namespace;
 pub mod schema;
 pub mod scope;
 
-pub use namespace::Namespace;
-pub use schema::Schema;
-pub use scope::Scope;
+use namespace::Namespace;
+use schema::Schema;
+use scope::Scope;
 
 use crate::parser::syntax_tree::SyntaxTree;
 use proc_macro2::TokenStream;
