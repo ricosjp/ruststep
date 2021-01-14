@@ -3,6 +3,7 @@ use super::{
     *,
 };
 
+/// Output of [select_type]
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct SelectType {
     pub extensiblity: Extensiblity,

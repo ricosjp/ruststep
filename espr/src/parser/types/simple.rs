@@ -1,13 +1,13 @@
 use super::super::util::*;
 
-/// Parsed result of `width_spec`
+/// Output of [width_spec]
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct WidthSpec {
     pub width: usize,
     pub fixed: bool,
 }
 
-/// 8.1 Simple data types
+/// Output of [simple_types]
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum SimpleType {
     /// 8.1.1 Number data type

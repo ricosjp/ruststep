@@ -3,6 +3,7 @@ use super::{
     *,
 };
 
+/// Output of [enumeration_type]
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct EnumerationType {
     pub extensiblity: Extensiblity,

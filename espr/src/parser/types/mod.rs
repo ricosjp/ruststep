@@ -9,7 +9,7 @@ pub use simple::*;
 use super::{basis::*, util::*};
 use derive_more::From;
 
-/// `EXTENSIBLE` keyword for `SELECT` and `ENUMERATION` declarations
+/// `EXTENSIBLE` and `GENERIC_ENTITY` keywords for [select_type] and [enumeration_type]
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum Extensiblity {
     /// No `EXTENSIBLE`
@@ -20,12 +20,14 @@ pub enum Extensiblity {
     GenericEntity,
 }
 
+/// Output of [type_decl]
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct Type {
+pub struct TypeDecl {
     type_id: String,
     underlying_type: UnderlyingType,
 }
 
+/// Output of [constructed_types]
 #[derive(Debug, Clone, PartialEq, Eq, From)]
 pub enum ConstructedType {
     Enumeration(EnumerationType),
@@ -41,6 +43,7 @@ pub fn constructed_types(input: &str) -> ParseResult<ConstructedType> {
     .parse(input)
 }
 
+/// Output of [concrete_types]
 #[derive(Debug, Clone, PartialEq, Eq, From)]
 pub enum ConcreteType {
     Simple(SimpleType),
@@ -58,6 +61,7 @@ pub fn concrete_types(input: &str) -> ParseResult<ConcreteType> {
     .parse(input)
 }
 
+/// Output of [underlying_type]
 #[derive(Debug, Clone, PartialEq, Eq, From)]
 pub enum UnderlyingType {
     Constructed(ConstructedType),
@@ -74,7 +78,7 @@ pub fn underlying_type(input: &str) -> ParseResult<UnderlyingType> {
 }
 
 /// 327 type_decl = TYPE type_id `=` underlying_type `;` \[ where_clause \] END_TYPE `;` .
-pub fn type_decl(input: &str) -> ParseResult<Type> {
+pub fn type_decl(input: &str) -> ParseResult<TypeDecl> {
     tuple((
         tag("TYPE"),
         remarked(simple_id), // type_id
@@ -85,7 +89,7 @@ pub fn type_decl(input: &str) -> ParseResult<Type> {
         char(';'),
     ))
     .map(
-        |(_start, type_id, _equal, underlying_type, _semicoron1, _end, _semicoron2)| Type {
+        |(_start, type_id, _equal, underlying_type, _semicoron1, _end, _semicoron2)| TypeDecl {
             type_id,
             underlying_type,
         },
@@ -105,7 +109,7 @@ mod tests {
         assert_eq!(residual, "");
         assert_eq!(
             ty,
-            super::Type {
+            super::TypeDecl {
                 type_id: "my_type".to_string(),
                 underlying_type: super::UnderlyingType::Concrete(super::ConcreteType::Simple(
                     super::SimpleType::String_ { width_spec: None }
