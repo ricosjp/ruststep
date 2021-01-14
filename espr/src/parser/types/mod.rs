@@ -25,9 +25,37 @@ pub struct Type {
     underlying_type: String,
 }
 
-/// 332 underlying_type = concrete_types | constructed_types .
-/// 193 concrete_types = aggregation_types | simple_types | type_ref.
+pub enum ConstructedType {
+    Enumeration(EnumerationType),
+    Select(SelectType),
+}
+
 /// 198 constructed_types = enumeration_type | select_type .
+pub fn constructed_types(input: &str) -> ParseResult<ConstructedType> {
+    alt((
+        enumeration_type.map(|e| ConstructedType::Enumeration(e)),
+        select_type.map(|s| ConstructedType::Select(s)),
+    ))
+    .parse(input)
+}
+
+pub enum ConcreteType {
+    Simple(SimpleType),
+    AggrecationType,
+    Ref(String),
+}
+
+/// 193 concrete_types = aggregation_types | simple_types | type_ref.
+pub fn concrete_types(input: &str) -> ParseResult<ConcreteType> {
+    // FIXME aggregation_types
+    alt((
+        remarked(simple_id).map(|s| ConcreteType::Ref(s)),
+        simple_types.map(|ty| ConcreteType::Simple(ty)),
+    ))
+    .parse(input)
+}
+
+/// 332 underlying_type = concrete_types | constructed_types .
 pub fn underlying_type(input: &str) -> ParseResult<String> {
     // FIXME
     remarked(simple_id).parse(input)
