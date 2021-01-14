@@ -16,7 +16,7 @@ pub enum IdentifierType {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum TypeRef {
     Named { name: String, scope: Scope },
-    SimpleType(parser::simple_data_type::SimpleType),
+    SimpleType(parser::types::SimpleType),
 }
 
 impl ToTokens for TypeRef {
@@ -24,7 +24,7 @@ impl ToTokens for TypeRef {
         use TypeRef::*;
         match self {
             SimpleType(ty) => {
-                use parser::simple_data_type::SimpleType::*;
+                use parser::types::SimpleType::*;
                 match ty {
                     Number => tokens.append(format_ident!("f64")),
                     Real => tokens.append(format_ident!("f64")),

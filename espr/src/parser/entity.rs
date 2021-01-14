@@ -1,4 +1,4 @@
-use super::{basis::*, simple_data_type::*, util::*};
+use super::{basis::*, types::*, util::*};
 use derive_more::From;
 
 /// Parsed result of EXPRESS's ENTITY

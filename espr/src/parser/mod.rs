@@ -1,6 +1,6 @@
-//! Tokenize EXPRESS language into [SyntaxTree]
+//! Tokenize EXPRESS language into [syntax_tree::SyntaxTree]
 //!
-//! This submodule responsible for tokenize of EXPRESS language input into a [SyntaxTree] struct.
+//! This submodule responsible for tokenize of EXPRESS language input into a [syntax_tree::SyntaxTree] struct.
 //! Following steps of compile, i.e. semantics analysis and Rust code generation will be handled by
 //! other submodules.
 //!
@@ -9,7 +9,7 @@
 //! Example
 //! --------
 //!
-//! EXPRESS Language string is parsed into [SyntaxTree]:
+//! EXPRESS Language string is parsed into [syntax_tree::SyntaxTree]:
 //!
 //! ```
 //! let schemas = espr::parser::syntax_tree::SyntaxTree::parse(r#"
@@ -37,6 +37,6 @@ pub mod expression;
 pub mod literal;
 pub mod remark;
 pub mod schema;
-pub mod simple_data_type;
 pub mod syntax_tree;
+pub mod types;
 pub mod util;
