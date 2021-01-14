@@ -7,6 +7,7 @@ pub use select::*;
 pub use simple::*;
 
 use super::{basis::*, util::*};
+use derive_more::From;
 
 /// `EXTENSIBLE` keyword for `SELECT` and `ENUMERATION` declarations
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -22,9 +23,10 @@ pub enum Extensiblity {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Type {
     type_id: String,
-    underlying_type: String,
+    underlying_type: UnderlyingType,
 }
 
+#[derive(Debug, Clone, PartialEq, Eq, From)]
 pub enum ConstructedType {
     Enumeration(EnumerationType),
     Select(SelectType),
@@ -39,6 +41,7 @@ pub fn constructed_types(input: &str) -> ParseResult<ConstructedType> {
     .parse(input)
 }
 
+#[derive(Debug, Clone, PartialEq, Eq, From)]
 pub enum ConcreteType {
     Simple(SimpleType),
     AggrecationType,
@@ -55,10 +58,19 @@ pub fn concrete_types(input: &str) -> ParseResult<ConcreteType> {
     .parse(input)
 }
 
+#[derive(Debug, Clone, PartialEq, Eq, From)]
+pub enum UnderlyingType {
+    Constructed(ConstructedType),
+    Concrete(ConcreteType),
+}
+
 /// 332 underlying_type = concrete_types | constructed_types .
-pub fn underlying_type(input: &str) -> ParseResult<String> {
-    // FIXME
-    remarked(simple_id).parse(input)
+pub fn underlying_type(input: &str) -> ParseResult<UnderlyingType> {
+    alt((
+        concrete_types.map(|ty| UnderlyingType::Concrete(ty)),
+        constructed_types.map(|ty| UnderlyingType::Constructed(ty)),
+    ))
+    .parse(input)
 }
 
 /// 327 type_decl = TYPE type_id `=` underlying_type `;` \[ where_clause \] END_TYPE `;` .
@@ -95,7 +107,9 @@ mod tests {
             ty,
             super::Type {
                 type_id: "my_type".to_string(),
-                underlying_type: "STRING".to_string()
+                underlying_type: super::UnderlyingType::Concrete(super::ConcreteType::Simple(
+                    super::SimpleType::String_ { width_spec: None }
+                ))
             }
         );
     }
