@@ -1,8 +1,5 @@
+use super::util::*;
 use derive_more::From;
-use nom::{
-    branch::*, bytes::complete::*, character::complete::*, combinator::*, number::complete::double,
-    IResult, Parser,
-};
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum Logical {
@@ -28,11 +25,11 @@ pub enum Literal {
 /// use espr::parser::literal::*;
 /// use nom::Finish;
 ///
-/// let (residual, l) = literal("23").finish().unwrap();
+/// let (residual, (l, _remarks)) = literal("23").finish().unwrap();
 /// assert_eq!(l, Literal::Real(23.0));
 /// assert_eq!(residual, "");
 /// ```
-pub fn literal(input: &str) -> IResult<&str, Literal> {
+pub fn literal(input: &str) -> ParseResult<Literal> {
     alt((
         logical_literal.map(|val| Literal::Logial(val)),
         real_literal.map(|val| Literal::Real(val)),
@@ -43,7 +40,7 @@ pub fn literal(input: &str) -> IResult<&str, Literal> {
 }
 
 /// 255 logical_literal = `FALSE` | `TRUE` | `UNKNOWN` .
-pub fn logical_literal(input: &str) -> IResult<&str, Logical> {
+pub fn logical_literal(input: &str) -> ParseResult<Logical> {
     alt((
         value(Logical::True, tag("TRUE")),
         value(Logical::False, tag("FALSE")),
@@ -64,12 +61,14 @@ pub fn logical_literal(input: &str) -> IResult<&str, Logical> {
 /// use espr::parser::literal::*;
 /// use nom::Finish;
 ///
-/// let (residual, value) = integer_literal("123").finish().unwrap();
+/// let (residual, (value, _remarks)) = integer_literal("123").finish().unwrap();
 /// assert_eq!(value, 123);
 /// assert_eq!(residual, "");
 /// ```
-pub fn integer_literal(input: &str) -> IResult<&str, u64> {
-    digit1.map(|d: &str| d.parse().unwrap()).parse(input)
+pub fn integer_literal(input: &str) -> ParseResult<u64> {
+    remarked(nom::character::complete::digit1)
+        .map(|d: &str| d.parse().unwrap())
+        .parse(input)
 }
 
 /// 142 real_literal = integer_literal | ( digits `.` \[ digits \] \[ `e` \[ sign \] digits \] ) .
@@ -81,18 +80,18 @@ pub fn integer_literal(input: &str) -> IResult<&str, u64> {
 /// use espr::parser::literal::*;
 /// use nom::Finish;
 ///
-/// let (residual, value) = real_literal("123").finish().unwrap();
+/// let (residual, (value, _remarks)) = real_literal("123").finish().unwrap();
 /// assert_eq!(value, 123.0);
 /// assert_eq!(residual, "");
 ///
-/// let (residual, value) = real_literal("123.456").finish().unwrap();
+/// let (residual, (value, _remarks)) = real_literal("123.456").finish().unwrap();
 /// assert_eq!(value, 123.456);
 /// assert_eq!(residual, "");
 ///
-/// let (residual, value) = real_literal("1.23e-5").finish().unwrap();
+/// let (residual, (value, _remarks)) = real_literal("1.23e-5").finish().unwrap();
 /// assert_eq!(value, 1.23e-5);
 /// assert_eq!(residual, "");
 /// ```
-pub fn real_literal(input: &str) -> IResult<&str, f64> {
-    double.parse(input)
+pub fn real_literal(input: &str) -> ParseResult<f64> {
+    remarked(nom::number::complete::double).parse(input)
 }

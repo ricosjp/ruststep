@@ -1,9 +1,5 @@
-use super::literal::*;
+use super::{literal::*, util::*};
 use derive_more::From;
-use nom::{
-    branch::*, bytes::complete::*, character::complete::*, combinator::*, sequence::*, IResult,
-    Parser,
-};
 
 /// Unary expresion, e.g. `x` or binary expression `x + y`
 #[derive(Debug, Clone, PartialEq)]
@@ -23,17 +19,21 @@ pub type SimpleExpression = Expr<Term, AddLikeOp>;
 pub type Term = Expr<Factor, MultiplicationLikeOp>;
 pub type Factor = Expr<SimpleFactor, PowerOp>;
 
-fn expr<Base, Op>(
-    input: &str,
-    base_parse: impl Fn(&str) -> IResult<&str, Base> + Copy,
-    op_parser: impl Fn(&str) -> IResult<&str, Op>,
-) -> IResult<&str, Expr<Base, Op>> {
+fn expr<'a, Base, Op>(
+    input: &'a str,
+    base_parse: impl EsprParser<'a, Base>,
+    op_parser: impl EsprParser<'a, Op>,
+) -> ParseResult<'a, Expr<Base, Op>>
+where
+    Base: 'a,
+    Op: 'a,
+{
     tuple((
-        base_parse,
-        opt(tuple((multispace0, op_parser, multispace0, base_parse))),
+        base_parse.clone(),
+        opt(tuple((spaces, op_parser, base_parse))),
     ))
     .map(|(base, opt)| {
-        if let Some((_, op, _, arg2)) = opt {
+        if let Some((_, op, arg2)) = opt {
             Expr::Binary {
                 op,
                 arg1: base,
@@ -47,22 +47,22 @@ fn expr<Base, Op>(
 }
 
 /// 216 expression = simple_expression \[ rel_op_extended simple_expression \] .
-pub fn expression(input: &str) -> IResult<&str, Expression> {
+pub fn expression(input: &str) -> ParseResult<Expression> {
     expr(input, simple_expression, rel_op_extended)
 }
 
 /// 305 simple_expression = term { add_like_op term } .
-pub fn simple_expression(input: &str) -> IResult<&str, SimpleExpression> {
+pub fn simple_expression(input: &str) -> ParseResult<SimpleExpression> {
     expr(input, term, add_like_op)
 }
 
 /// 325 term = factor { multiplication_like_op factor } .
-pub fn term(input: &str) -> IResult<&str, Term> {
+pub fn term(input: &str) -> ParseResult<Term> {
     expr(input, factor, multiplication_like_op)
 }
 
 /// 217 factor = simple_factor \[ `**` simple_factor \] .
-pub fn factor(input: &str) -> IResult<&str, Factor> {
+pub fn factor(input: &str) -> ParseResult<Factor> {
     expr(input, simple_factor, power_op)
 }
 
@@ -104,19 +104,19 @@ impl From<Expression> for SimpleFactor {
 ///                   | interval
 ///                   | query_expression
 ///                   | ( \[ unary_op \] ( `(` expression `)` | primary ) ) .
-pub fn simple_factor(input: &str) -> IResult<&str, SimpleFactor> {
+pub fn simple_factor(input: &str) -> ParseResult<SimpleFactor> {
     // FIXME Add aggregate_initializer
     // FIXME Add entity_constructor
     // FIXME Add enumeration_reference
     // FIXME Add interval
     // FIXME Add query_expression
     tuple((
-        opt(tuple((unary_op, multispace0)).map(|(op, _)| op)),
+        opt(tuple((unary_op, spaces)).map(|(op, _)| op)),
         alt((
             primary.map(|primary| PrimaryOrExpression::Primary(primary)),
-            tuple((tag("("), multispace0, expression, multispace0, tag(")"))).map(
-                |(_, _, expression, _, _)| PrimaryOrExpression::Expression(Box::new(expression)),
-            ),
+            tuple((char('('), expression, char(')'))).map(|(_open, expression, _close)| {
+                PrimaryOrExpression::Expression(Box::new(expression))
+            }),
         )),
     ))
     .map(
@@ -134,7 +134,7 @@ pub enum Primary {
 }
 
 /// 269 primary = literal | ( qualifiable_factor { qualifier } ) .
-pub fn primary(input: &str) -> IResult<&str, Primary> {
+pub fn primary(input: &str) -> ParseResult<Primary> {
     // FIXME add qualifiable_factor branch
     literal
         .map(|literal| Primary::Literal(literal))
@@ -151,7 +151,7 @@ pub enum RelOpExtended {
 }
 
 /// 283 rel_op_extended = rel_op | `IN` | `LIKE` .
-pub fn rel_op_extended(input: &str) -> IResult<&str, RelOpExtended> {
+pub fn rel_op_extended(input: &str) -> ParseResult<RelOpExtended> {
     use RelOpExtended::*;
     alt((
         rel_op.map(|op| RelOp(op)),
@@ -181,7 +181,7 @@ pub enum RelOp {
 }
 
 /// 282 rel_op = `<` | `>` | `<=` | `>=` | `<>` | `=` | `:<>:` | `:=:` .
-pub fn rel_op(input: &str) -> IResult<&str, RelOp> {
+pub fn rel_op(input: &str) -> ParseResult<RelOp> {
     use RelOp::*;
     alt((
         value(Equal, tag("=")),
@@ -207,7 +207,7 @@ pub enum UnaryOp {
 }
 
 /// 331 unary_op = `+` | `-` | `NOT` .
-pub fn unary_op(input: &str) -> IResult<&str, UnaryOp> {
+pub fn unary_op(input: &str) -> ParseResult<UnaryOp> {
     use UnaryOp::*;
     alt((
         value(Plus, tag("+")),
@@ -234,7 +234,7 @@ pub enum MultiplicationLikeOp {
 }
 
 /// 257 multiplication_like_op = `*` | `/` | `DIV` | `MOD` | `AND` | `||` .
-pub fn multiplication_like_op(input: &str) -> IResult<&str, MultiplicationLikeOp> {
+pub fn multiplication_like_op(input: &str) -> ParseResult<MultiplicationLikeOp> {
     use MultiplicationLikeOp::*;
     alt((
         value(Mul, tag("*")),
@@ -260,7 +260,7 @@ pub enum AddLikeOp {
 }
 
 /// 168 add_like_op = `+` | `-` | `OR` | `XOR` .
-pub fn add_like_op(input: &str) -> IResult<&str, AddLikeOp> {
+pub fn add_like_op(input: &str) -> ParseResult<AddLikeOp> {
     use AddLikeOp::*;
     alt((
         value(Add, tag("+")),
@@ -280,7 +280,7 @@ pub enum PowerOp {
 /// 999 power_op = `**`
 ///
 /// Additional trivial rule for managing operators uniformly
-pub fn power_op(input: &str) -> IResult<&str, PowerOp> {
+pub fn power_op(input: &str) -> ParseResult<PowerOp> {
     value(PowerOp::Power, tag("**")).parse(input)
 }
 
@@ -298,11 +298,11 @@ mod tests {
 
     #[test]
     fn simple_factor() {
-        let (residual, p) = super::simple_factor("123").finish().unwrap();
+        let (residual, (p, _remarks)) = super::simple_factor("123").finish().unwrap();
         assert_eq!(p, Primary::Literal(Literal::Real(123.0)).into());
         assert_eq!(residual, "");
 
-        let (residual, p) = super::simple_factor("-123").finish().unwrap();
+        let (residual, (p, _remarks)) = super::simple_factor("-123").finish().unwrap();
         assert_eq!(
             p,
             SimpleFactor::PrimaryOrExpression {
@@ -317,10 +317,10 @@ mod tests {
 
     #[test]
     fn simple_factor_expression() {
-        let (residual, expr) = super::expression("1 + 2").finish().unwrap();
+        let (residual, (expr, _remarks)) = super::expression("1 + 2").finish().unwrap();
         assert_eq!(residual, "");
 
-        let (residual, sf) = super::simple_factor("(1 + 2)").finish().unwrap();
+        let (residual, (sf, _remarks)) = super::simple_factor("(1 + 2)").finish().unwrap();
         assert_eq!(residual, "");
         match sf {
             SimpleFactor::PrimaryOrExpression {
@@ -335,7 +335,7 @@ mod tests {
 
     #[test]
     fn primary() {
-        let (residual, p) = super::primary("123").finish().unwrap();
+        let (residual, (p, _remarks)) = super::primary("123").finish().unwrap();
         assert_eq!(p, Literal::Real(123.0).into());
         assert_eq!(residual, "");
     }
