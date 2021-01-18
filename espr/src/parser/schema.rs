@@ -1,7 +1,7 @@
 use super::{basis::*, entity::*, util::*};
 
 /// Parsed result of EXPRESS's SCHEMA
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Schema {
     pub name: String,
     pub entities: Vec<Entity>,

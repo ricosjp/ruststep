@@ -1,14 +1,14 @@
 use super::util::*;
 use derive_more::From;
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum Logical {
     False,
     True,
     Unknown,
 }
 
-#[derive(Debug, Clone, PartialEq, From)]
+#[derive(Debug, Clone, PartialEq, From)] // this cannot be Eq since f64 is not Eq
 pub enum Literal {
     Real(f64),
     Logial(Logical),

@@ -2,7 +2,7 @@ use super::{literal::*, util::*};
 use derive_more::From;
 
 /// Unary expresion, e.g. `x` or binary expression `x + y`
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum Expr<Base, Op> {
     Unary(Base),
     Binary { op: Op, arg1: Base, arg2: Base },
@@ -141,7 +141,7 @@ pub fn primary(input: &str) -> ParseResult<Primary> {
         .parse(input)
 }
 
-#[derive(Debug, Clone, PartialEq, From)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, From)]
 pub enum RelOpExtended {
     RelOp(RelOp),
     /// `IN`
@@ -160,7 +160,7 @@ pub fn rel_op_extended(input: &str) -> ParseResult<RelOpExtended> {
     .parse(input)
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum RelOp {
     /// `=`
     Equal,
@@ -196,7 +196,7 @@ pub fn rel_op(input: &str) -> ParseResult<RelOp> {
     .parse(input)
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum UnaryOp {
     /// `+`
     Plus,
@@ -217,7 +217,7 @@ pub fn unary_op(input: &str) -> ParseResult<UnaryOp> {
     .parse(input)
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum MultiplicationLikeOp {
     /// `*`
     Mul,
@@ -247,7 +247,7 @@ pub fn multiplication_like_op(input: &str) -> ParseResult<MultiplicationLikeOp> 
     .parse(input)
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum AddLikeOp {
     /// `+`
     Add,
@@ -271,7 +271,7 @@ pub fn add_like_op(input: &str) -> ParseResult<AddLikeOp> {
     .parse(input)
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum PowerOp {
     /// `**`
     Power,

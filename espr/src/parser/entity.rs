@@ -2,7 +2,7 @@ use super::{basis::*, types::*, util::*};
 use derive_more::From;
 
 /// Parsed result of EXPRESS's ENTITY
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Entity {
     /// Name of this entity type
     pub name: String,
@@ -13,7 +13,7 @@ pub struct Entity {
     pub attributes: Vec<(String, ParameterType)>,
 }
 
-#[derive(Debug, Clone, PartialEq, From)]
+#[derive(Debug, Clone, PartialEq, Eq, From)]
 pub enum ParameterType {
     Named(String),
     Simple(SimpleType),
