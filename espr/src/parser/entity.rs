@@ -1,4 +1,4 @@
-use super::{basis::*, types::*, util::*};
+use super::{basis::*, expression::*, types::*, util::*};
 use derive_more::From;
 
 /// Parsed result of EXPRESS's ENTITY
@@ -76,6 +76,28 @@ pub fn entity_decl(input: &str) -> ParseResult<Entity> {
     .parse(input)
 }
 
+/// Constructor like `point(0.0, 0.0, 0.0)`
+#[derive(Debug, Clone, PartialEq)]
+pub struct EntityConstructor {
+    name: String,
+    values: Vec<Expression>,
+}
+
+/// 205 entity_constructor = entity_ref ’(’ [ expression { ’,’ expression } ] ’)’ .
+pub fn entity_constructor(input: &str) -> ParseResult<EntityConstructor> {
+    tuple((
+        remarked(simple_id),
+        char('('),
+        opt(comma_separated(expression)),
+        char(')'),
+    ))
+    .map(|(name, _open, values, _close)| EntityConstructor {
+        name,
+        values: values.unwrap_or(Vec::new()),
+    })
+    .parse(input)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -127,5 +149,15 @@ mod tests {
         ));
 
         assert_eq!(residual, "");
+    }
+
+    #[test]
+    fn entity_constructor() {
+        let (residual, (ctor, _remarks)) = super::entity_constructor("point(0.0, 0.0, 0.0)")
+            .finish()
+            .unwrap();
+        assert_eq!(residual, "");
+        assert_eq!(ctor.name, "point");
+        assert_eq!(ctor.values.len(), 3);
     }
 }
