@@ -36,3 +36,32 @@ pub fn domain_rule(input: &str) -> ParseResult<DomainRule> {
         })
         .parse(input)
 }
+
+#[cfg(test)]
+mod tests {
+    use nom::Finish;
+
+    #[test]
+    fn domain_rule() {
+        let (residual, (rule, _remarks)) =
+            super::domain_rule("notnegative : a > 0").finish().unwrap();
+        assert_eq!(residual, "");
+        assert_eq!(rule.label, Some("notnegative".to_string()));
+    }
+
+    #[test]
+    fn where_clause() {
+        let (residual, (w, _remarks)) = super::where_clause(
+            r#"
+            WHERE
+                notnegative : SELF > 0;
+            "#
+            .trim(),
+        )
+        .finish()
+        .unwrap();
+        assert_eq!(residual, "");
+        assert_eq!(w.rules.len(), 1);
+        assert_eq!(w.rules[0].label, Some("notnegative".to_string()));
+    }
+}
