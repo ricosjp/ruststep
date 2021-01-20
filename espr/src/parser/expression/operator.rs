@@ -2,7 +2,7 @@ use super::super::util::*;
 
 /// Relation operators parsed by [rel_op] and [rel_op_extended]
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum Relation {
+pub enum RelationOperator {
     /// `=`
     Equal,
     /// `<>`
@@ -28,27 +28,27 @@ pub enum Relation {
 }
 
 /// 282 rel_op = `<` | `>` | `<=` | `>=` | `<>` | `=` | `:<>:` | `:=:` .
-pub fn rel_op(input: &str) -> ParseResult<Relation> {
+pub fn rel_op(input: &str) -> ParseResult<RelationOperator> {
     alt((
-        value(Relation::Equal, tag("=")),
-        value(Relation::NotEqual, tag("<>")),
-        value(Relation::LT, tag("<")),
-        value(Relation::GT, tag(">")),
-        value(Relation::LEQ, tag("<=")),
-        value(Relation::GEQ, tag(">=")),
-        value(Relation::InstanceEqual, tag(":=:")),
-        value(Relation::InstanceNotEqual, tag(":<>:")),
+        value(RelationOperator::Equal, tag("=")),
+        value(RelationOperator::NotEqual, tag("<>")),
+        value(RelationOperator::LT, tag("<")),
+        value(RelationOperator::GT, tag(">")),
+        value(RelationOperator::LEQ, tag("<=")),
+        value(RelationOperator::GEQ, tag(">=")),
+        value(RelationOperator::InstanceEqual, tag(":=:")),
+        value(RelationOperator::InstanceNotEqual, tag(":<>:")),
     ))
     .parse(input)
 }
 
 /// 283 rel_op_extended = [rel_op] | `IN` | `LIKE` .
-pub fn rel_op_extended(input: &str) -> ParseResult<Relation> {
+pub fn rel_op_extended(input: &str) -> ParseResult<RelationOperator> {
     alt((
         rel_op,
         alt((
-            value(Relation::In, tag("IN")),
-            value(Relation::Like, tag("LIKE")),
+            value(RelationOperator::In, tag("IN")),
+            value(RelationOperator::Like, tag("LIKE")),
         )),
     ))
     .parse(input)
@@ -56,7 +56,7 @@ pub fn rel_op_extended(input: &str) -> ParseResult<Relation> {
 
 /// Unary operators parsed by [unary_op]
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum Unary {
+pub enum UnaryOperator {
     /// `+`
     Plus,
     /// `-`
@@ -66,18 +66,18 @@ pub enum Unary {
 }
 
 /// 331 unary_op = `+` | `-` | `NOT` .
-pub fn unary_op(input: &str) -> ParseResult<Unary> {
+pub fn unary_op(input: &str) -> ParseResult<UnaryOperator> {
     alt((
-        value(Unary::Plus, tag("+")),
-        value(Unary::Minus, tag("-")),
-        value(Unary::Not, tag("NOT")),
+        value(UnaryOperator::Plus, tag("+")),
+        value(UnaryOperator::Minus, tag("-")),
+        value(UnaryOperator::Not, tag("NOT")),
     ))
     .parse(input)
 }
 
 /// Binary operators parsed by [add_like_op], [multiplication_like_op], and [power_op]
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum Binary {
+pub enum BinaryOperator {
     /* Mul-like */
     /// `*`
     Mul,
@@ -108,8 +108,8 @@ pub enum Binary {
 }
 
 /// 168 add_like_op = `+` | `-` | `OR` | `XOR` .
-pub fn add_like_op(input: &str) -> ParseResult<Binary> {
-    use Binary::*;
+pub fn add_like_op(input: &str) -> ParseResult<BinaryOperator> {
+    use BinaryOperator::*;
     alt((
         value(Add, tag("+")),
         value(Sub, tag("-")),
@@ -120,14 +120,14 @@ pub fn add_like_op(input: &str) -> ParseResult<Binary> {
 }
 
 /// 257 multiplication_like_op = `*` | `/` | `DIV` | `MOD` | `AND` | `||` .
-pub fn multiplication_like_op(input: &str) -> ParseResult<Binary> {
+pub fn multiplication_like_op(input: &str) -> ParseResult<BinaryOperator> {
     alt((
-        value(Binary::Mul, tag("*")),
-        value(Binary::RealDiv, tag("/")),
-        value(Binary::IntegerDiv, tag("DIV")),
-        value(Binary::Mod, tag("MOD")),
-        value(Binary::And, tag("AND")),
-        value(Binary::ComplexEntityInstanceConstruction, tag("||")),
+        value(BinaryOperator::Mul, tag("*")),
+        value(BinaryOperator::RealDiv, tag("/")),
+        value(BinaryOperator::IntegerDiv, tag("DIV")),
+        value(BinaryOperator::Mod, tag("MOD")),
+        value(BinaryOperator::And, tag("AND")),
+        value(BinaryOperator::ComplexEntityInstanceConstruction, tag("||")),
     ))
     .parse(input)
 }
@@ -135,6 +135,6 @@ pub fn multiplication_like_op(input: &str) -> ParseResult<Binary> {
 /// 999 power_op = `**`
 ///
 /// Additional trivial rule for managing operators uniformly
-pub fn power_op(input: &str) -> ParseResult<Binary> {
-    value(Binary::Power, tag("**")).parse(input)
+pub fn power_op(input: &str) -> ParseResult<BinaryOperator> {
+    value(BinaryOperator::Power, tag("**")).parse(input)
 }
