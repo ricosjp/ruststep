@@ -134,25 +134,45 @@ pub fn simple_factor(input: &str) -> ParseResult<SimpleFactor> {
 #[derive(Debug, Clone, PartialEq, From)]
 pub enum Primary {
     Literal(Literal),
+    Factor {
+        factor: QualifiableFactor,
+        qualifiers: Vec<Qualifier>,
+    },
 }
 
 /// 269 primary = literal | ( qualifiable_factor { qualifier } ) .
 pub fn primary(input: &str) -> ParseResult<Primary> {
-    // FIXME add qualifiable_factor branch
-    literal
-        .map(|literal| Primary::Literal(literal))
-        .parse(input)
+    alt((
+        literal.map(|literal| Primary::Literal(literal)),
+        tuple((qualifiable_factor, spaced_many0(qualifier)))
+            .map(|(factor, qualifiers)| Primary::Factor { factor, qualifiers }),
+    ))
+    .parse(input)
 }
 
-pub enum QualifiableFactor {}
+#[derive(Debug, Clone, PartialEq)]
+pub enum QualifiableFactor {
+    /// `attribute_ref` or `general_ref` or `population`
+    Reference(String),
+}
 
 /// 274 qualifiable_factor = attribute_ref | constant_factor | function_call | general_ref | population .
 pub fn qualifiable_factor(input: &str) -> ParseResult<QualifiableFactor> {
-    todo!()
+    // FIXME support constant_factor
+    // FIXME support function_call
+    remarked(simple_id)
+        .map(|id| QualifiableFactor::Reference(id))
+        .parse(input)
 }
 
+/// Qualifier component.
+///
+/// `SELF\point.x`
+#[derive(Debug, Clone, PartialEq)]
 pub enum Qualifier {
+    /// Like `.x`
     Attribute(String),
+    /// Like `\point`
     Group(String),
     Index {
         index_1: SimpleExpression,
