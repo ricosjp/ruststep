@@ -225,7 +225,26 @@ mod tests {
             assert_eq!(qualifiers.len(), 1);
             match &qualifiers[0] {
                 Qualifier::Range { begin: _, end } => {
-                    todo!("Check end")
+                    use super::super::*;
+                    assert_eq!(
+                        end,
+                        // FIXME compare directly...
+                        &SimpleExpression::Unary(Term::Unary(Factor::Unary(
+                            SimpleFactor::PrimaryOrExpression {
+                                unary_op: None,
+                                primary_or_expression: PrimaryOrExpression::Primary(
+                                    Primary::Factor {
+                                        factor: QualifiableFactor::ConstantFactor(
+                                            ConstantFactor::BuiltInConstant(
+                                                BuiltInConstant::INDETERMINATE
+                                            )
+                                        ),
+                                        qualifiers: Vec::new()
+                                    }
+                                )
+                            }
+                        )))
+                    )
                 }
                 _ => panic!("Must be range"),
             }
