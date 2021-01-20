@@ -50,12 +50,9 @@ pub enum Qualifier {
     /// Like `\point`
     Group(String),
     /// Like `[1]`
-    Index(SimpleExpression),
+    Index(ExprTree),
     /// Like `[1:3]`
-    Range {
-        begin: SimpleExpression,
-        end: SimpleExpression,
-    },
+    Range { begin: ExprTree, end: ExprTree },
 }
 
 /// 276 qualifier = attribute_qualifier | group_qualifier | index_qualifier .
@@ -225,26 +222,7 @@ mod tests {
             assert_eq!(qualifiers.len(), 1);
             match &qualifiers[0] {
                 Qualifier::Range { begin: _, end } => {
-                    use super::super::*;
-                    assert_eq!(
-                        end,
-                        // FIXME compare directly...
-                        &SimpleExpression::Unary(Term::Unary(Factor::Unary(
-                            SimpleFactor::PrimaryOrExpression {
-                                unary_op: None,
-                                primary_or_expression: PrimaryOrExpression::Primary(
-                                    Primary::Factor {
-                                        factor: QualifiableFactor::ConstantFactor(
-                                            ConstantFactor::BuiltInConstant(
-                                                BuiltInConstant::INDETERMINATE
-                                            )
-                                        ),
-                                        qualifiers: Vec::new()
-                                    }
-                                )
-                            }
-                        )))
-                    )
+                    todo!()
                 }
                 _ => panic!("Must be range"),
             }
