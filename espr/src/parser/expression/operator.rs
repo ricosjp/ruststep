@@ -1,17 +1,19 @@
 use super::super::util::*;
 
 /// 283 rel_op_extended = rel_op | `IN` | `LIKE` .
-pub fn rel_op_extended(input: &str) -> ParseResult<RelOp> {
-    use RelOp::*;
+pub fn rel_op_extended(input: &str) -> ParseResult<Relation> {
     alt((
         rel_op,
-        alt((value(In, tag("IN")), value(Like, tag("LIKE")))),
+        alt((
+            value(Relation::In, tag("IN")),
+            value(Relation::Like, tag("LIKE")),
+        )),
     ))
     .parse(input)
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum RelOp {
+pub enum Relation {
     /// `=`
     Equal,
     /// `<>`
@@ -37,23 +39,22 @@ pub enum RelOp {
 }
 
 /// 282 rel_op = `<` | `>` | `<=` | `>=` | `<>` | `=` | `:<>:` | `:=:` .
-pub fn rel_op(input: &str) -> ParseResult<RelOp> {
-    use RelOp::*;
+pub fn rel_op(input: &str) -> ParseResult<Relation> {
     alt((
-        value(Equal, tag("=")),
-        value(NotEqual, tag("<>")),
-        value(LT, tag("<")),
-        value(GT, tag(">")),
-        value(LEQ, tag("<=")),
-        value(GEQ, tag(">=")),
-        value(InstanceEqual, tag(":=:")),
-        value(InstanceNotEqual, tag(":<>:")),
+        value(Relation::Equal, tag("=")),
+        value(Relation::NotEqual, tag("<>")),
+        value(Relation::LT, tag("<")),
+        value(Relation::GT, tag(">")),
+        value(Relation::LEQ, tag("<=")),
+        value(Relation::GEQ, tag(">=")),
+        value(Relation::InstanceEqual, tag(":=:")),
+        value(Relation::InstanceNotEqual, tag(":<>:")),
     ))
     .parse(input)
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum UnaryOp {
+pub enum Unary {
     /// `+`
     Plus,
     /// `-`
@@ -63,12 +64,11 @@ pub enum UnaryOp {
 }
 
 /// 331 unary_op = `+` | `-` | `NOT` .
-pub fn unary_op(input: &str) -> ParseResult<UnaryOp> {
-    use UnaryOp::*;
+pub fn unary_op(input: &str) -> ParseResult<Unary> {
     alt((
-        value(Plus, tag("+")),
-        value(Minus, tag("-")),
-        value(Not, tag("NOT")),
+        value(Unary::Plus, tag("+")),
+        value(Unary::Minus, tag("-")),
+        value(Unary::Not, tag("NOT")),
     ))
     .parse(input)
 }

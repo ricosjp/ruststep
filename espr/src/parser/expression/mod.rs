@@ -20,7 +20,7 @@ impl<Base, Op> From<Base> for Expr<Base, Op> {
     }
 }
 
-pub type Expression = Expr<SimpleExpression, RelOp>;
+pub type Expression = Expr<SimpleExpression, Relation>;
 pub type SimpleExpression = Expr<Term, Binary>;
 pub type Term = Expr<Factor, Binary>;
 pub type Factor = Expr<SimpleFactor, Binary>;
@@ -81,7 +81,7 @@ pub enum PrimaryOrExpression {
 #[derive(Debug, Clone, PartialEq)]
 pub enum SimpleFactor {
     PrimaryOrExpression {
-        unary_op: Option<UnaryOp>,
+        unary_op: Option<Unary>,
         primary_or_expression: PrimaryOrExpression,
     },
 }
@@ -156,7 +156,7 @@ mod tests {
         assert_eq!(
             p,
             SimpleFactor::PrimaryOrExpression {
-                unary_op: Some(UnaryOp::Minus),
+                unary_op: Some(Unary::Minus),
                 primary_or_expression: PrimaryOrExpression::Primary(Primary::Literal(
                     Literal::Real(123.0)
                 )),
