@@ -134,26 +134,6 @@ pub fn simple_factor(input: &str) -> ParseResult<SimpleFactor> {
     .parse(input)
 }
 
-/// Output of [primary]
-#[derive(Debug, Clone, PartialEq, From)]
-pub enum Primary {
-    Literal(Literal),
-    Factor {
-        factor: QualifiableFactor,
-        qualifiers: Vec<Qualifier>,
-    },
-}
-
-/// 269 primary = literal | ( qualifiable_factor { qualifier } ) .
-pub fn primary(input: &str) -> ParseResult<Primary> {
-    alt((
-        literal.map(|literal| Primary::Literal(literal)),
-        tuple((qualifiable_factor, spaced_many0(qualifier)))
-            .map(|(factor, qualifiers)| Primary::Factor { factor, qualifiers }),
-    ))
-    .parse(input)
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;

@@ -3,6 +3,26 @@ use super::{
     *,
 };
 
+/// Output of [primary]
+#[derive(Debug, Clone, PartialEq, From)]
+pub enum Primary {
+    Literal(Literal),
+    Factor {
+        factor: QualifiableFactor,
+        qualifiers: Vec<Qualifier>,
+    },
+}
+
+/// 269 primary = literal | ( qualifiable_factor { qualifier } ) .
+pub fn primary(input: &str) -> ParseResult<Primary> {
+    alt((
+        literal.map(|literal| Primary::Literal(literal)),
+        tuple((qualifiable_factor, spaced_many0(qualifier)))
+            .map(|(factor, qualifiers)| Primary::Factor { factor, qualifiers }),
+    ))
+    .parse(input)
+}
+
 #[derive(Debug, Clone, PartialEq)]
 pub enum QualifiableFactor {
     /// `attribute_ref` or `general_ref` or `population`
@@ -27,9 +47,12 @@ pub enum Qualifier {
     Attribute(String),
     /// Like `\point`
     Group(String),
-    Index {
-        index_1: SimpleExpression,
-        index_2: Option<SimpleExpression>,
+    /// Like `[1]`
+    Index(SimpleExpression),
+    /// Like `[1:3]`
+    Range {
+        begin: SimpleExpression,
+        end: SimpleExpression,
     },
 }
 
@@ -60,9 +83,86 @@ pub fn index_qualifier(input: &str) -> ParseResult<Qualifier> {
         opt(tuple((char(':'), simple_expression))),
         char(']'),
     ))
-    .map(|(_open, index_1, opt, _close)| Qualifier::Index {
-        index_1,
-        index_2: opt.map(|(_coron, expr)| expr),
+    .map(|(_open, index, opt, _close)| {
+        if let Some((_coron, end)) = opt {
+            Qualifier::Range { begin: index, end }
+        } else {
+            Qualifier::Index(index)
+        }
     })
     .parse(input)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::{Primary, QualifiableFactor, Qualifier};
+    use nom::Finish;
+
+    #[test]
+    fn no_qualifier() {
+        let (res, (q, _remarks)) = super::primary("x").finish().unwrap();
+        assert_eq!(res, "");
+        if let Primary::Factor { factor, qualifiers } = q {
+            match factor {
+                QualifiableFactor::Reference(name) => {
+                    assert_eq!(name, "x");
+                }
+            }
+            assert_eq!(qualifiers.len(), 0);
+        } else {
+            panic!("Must be factor")
+        }
+    }
+
+    #[test]
+    fn simple() {
+        let (res, (q, _remarks)) = super::primary(r"x\group.attr").finish().unwrap();
+        assert_eq!(res, "");
+        if let Primary::Factor { factor, qualifiers } = q {
+            match factor {
+                QualifiableFactor::Reference(name) => {
+                    assert_eq!(name, "x");
+                }
+            }
+            assert_eq!(qualifiers.len(), 2);
+            assert_eq!(qualifiers[0], Qualifier::Group("group".to_string()));
+            assert_eq!(qualifiers[1], Qualifier::Attribute("attr".to_string()));
+        } else {
+            panic!("Must be factor")
+        }
+    }
+
+    #[test]
+    fn index() {
+        let (res, (q, _remarks)) = super::primary("x[2 * 2]").finish().unwrap();
+        assert_eq!(res, "");
+        if let Primary::Factor { factor, qualifiers } = q {
+            match factor {
+                QualifiableFactor::Reference(name) => {
+                    assert_eq!(name, "x");
+                }
+            }
+            assert_eq!(qualifiers.len(), 1);
+            assert!(matches!(qualifiers[0], Qualifier::Index(_)));
+        } else {
+            panic!("Must be factor")
+        }
+    }
+
+    #[test]
+    fn range() {
+        let (res, (q, _remarks)) = super::primary("x[1:3]").finish().unwrap();
+        assert_eq!(res, "");
+        if let Primary::Factor { factor, qualifiers } = q {
+            match factor {
+                QualifiableFactor::Reference(name) => {
+                    assert_eq!(name, "x");
+                }
+            }
+            assert_eq!(qualifiers.len(), 1);
+            assert!(matches!(qualifiers[0], Qualifier::Range { .. }));
+        } else {
+            panic!("Must be factor")
+        }
+    }
 }
