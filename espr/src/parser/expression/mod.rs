@@ -20,7 +20,7 @@ impl<Base, Op> From<Base> for Expr<Base, Op> {
     }
 }
 
-pub type Expression = Expr<SimpleExpression, RelOpExtended>;
+pub type Expression = Expr<SimpleExpression, RelOp>;
 pub type SimpleExpression = Expr<Term, AddLikeOp>;
 pub type Term = Expr<Factor, MultiplicationLikeOp>;
 pub type Factor = Expr<SimpleFactor, PowerOp>;

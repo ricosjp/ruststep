@@ -1,20 +1,10 @@
 use super::super::util::*;
-use derive_more::From;
-
-#[derive(Debug, Clone, Copy, PartialEq, Eq, From)]
-pub enum RelOpExtended {
-    RelOp(RelOp),
-    /// `IN`
-    In,
-    /// `LIKE`
-    Like,
-}
 
 /// 283 rel_op_extended = rel_op | `IN` | `LIKE` .
-pub fn rel_op_extended(input: &str) -> ParseResult<RelOpExtended> {
-    use RelOpExtended::*;
+pub fn rel_op_extended(input: &str) -> ParseResult<RelOp> {
+    use RelOp::*;
     alt((
-        rel_op.map(|op| RelOp(op)),
+        rel_op,
         alt((value(In, tag("IN")), value(Like, tag("LIKE")))),
     ))
     .parse(input)
@@ -38,6 +28,12 @@ pub enum RelOp {
     InstanceEqual,
     /// `:<>:`
     InstanceNotEqual,
+
+    /* extended */
+    /// `IN`
+    In,
+    /// `LIKE`
+    Like,
 }
 
 /// 282 rel_op = `<` | `>` | `<=` | `>=` | `<>` | `=` | `:<>:` | `:=:` .
