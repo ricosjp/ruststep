@@ -21,9 +21,9 @@ impl<Base, Op> From<Base> for Expr<Base, Op> {
 }
 
 pub type Expression = Expr<SimpleExpression, RelOp>;
-pub type SimpleExpression = Expr<Term, AddLikeOp>;
-pub type Term = Expr<Factor, MultiplicationLikeOp>;
-pub type Factor = Expr<SimpleFactor, PowerOp>;
+pub type SimpleExpression = Expr<Term, Binary>;
+pub type Term = Expr<Factor, Binary>;
+pub type Factor = Expr<SimpleFactor, Binary>;
 
 fn expr<'a, Base, Op>(
     input: &'a str,

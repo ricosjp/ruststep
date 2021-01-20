@@ -73,8 +73,22 @@ pub fn unary_op(input: &str) -> ParseResult<UnaryOp> {
     .parse(input)
 }
 
+/// 257 multiplication_like_op = `*` | `/` | `DIV` | `MOD` | `AND` | `||` .
+pub fn multiplication_like_op(input: &str) -> ParseResult<Binary> {
+    alt((
+        value(Binary::Mul, tag("*")),
+        value(Binary::RealDiv, tag("/")),
+        value(Binary::IntegerDiv, tag("DIV")),
+        value(Binary::Mod, tag("MOD")),
+        value(Binary::And, tag("AND")),
+        value(Binary::ComplexEntityInstanceConstruction, tag("||")),
+    ))
+    .parse(input)
+}
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum MultiplicationLikeOp {
+pub enum Binary {
+    /* Mul-like */
     /// `*`
     Mul,
     /// `/`
@@ -87,24 +101,8 @@ pub enum MultiplicationLikeOp {
     And,
     /// `||`, Complex entity instance construction operator (12.10)
     ComplexEntityInstanceConstruction,
-}
 
-/// 257 multiplication_like_op = `*` | `/` | `DIV` | `MOD` | `AND` | `||` .
-pub fn multiplication_like_op(input: &str) -> ParseResult<MultiplicationLikeOp> {
-    use MultiplicationLikeOp::*;
-    alt((
-        value(Mul, tag("*")),
-        value(RealDiv, tag("/")),
-        value(IntegerDiv, tag("DIV")),
-        value(Mod, tag("MOD")),
-        value(And, tag("AND")),
-        value(ComplexEntityInstanceConstruction, tag("||")),
-    ))
-    .parse(input)
-}
-
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum AddLikeOp {
+    /* Add-like */
     /// `+`
     Add,
     /// `-`
@@ -113,11 +111,15 @@ pub enum AddLikeOp {
     Or,
     /// `XOR`
     Xor,
+
+    /* power */
+    /// `**`
+    Power,
 }
 
 /// 168 add_like_op = `+` | `-` | `OR` | `XOR` .
-pub fn add_like_op(input: &str) -> ParseResult<AddLikeOp> {
-    use AddLikeOp::*;
+pub fn add_like_op(input: &str) -> ParseResult<Binary> {
+    use Binary::*;
     alt((
         value(Add, tag("+")),
         value(Sub, tag("-")),
@@ -127,15 +129,9 @@ pub fn add_like_op(input: &str) -> ParseResult<AddLikeOp> {
     .parse(input)
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum PowerOp {
-    /// `**`
-    Power,
-}
-
 /// 999 power_op = `**`
 ///
 /// Additional trivial rule for managing operators uniformly
-pub fn power_op(input: &str) -> ParseResult<PowerOp> {
-    value(PowerOp::Power, tag("**")).parse(input)
+pub fn power_op(input: &str) -> ParseResult<Binary> {
+    value(Binary::Power, tag("**")).parse(input)
 }
