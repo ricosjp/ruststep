@@ -1,17 +1,6 @@
 use super::super::util::*;
 
-/// 283 rel_op_extended = rel_op | `IN` | `LIKE` .
-pub fn rel_op_extended(input: &str) -> ParseResult<Relation> {
-    alt((
-        rel_op,
-        alt((
-            value(Relation::In, tag("IN")),
-            value(Relation::Like, tag("LIKE")),
-        )),
-    ))
-    .parse(input)
-}
-
+/// Relation operators parsed by [rel_op] and [rel_op_extended]
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Relation {
     /// `=`
@@ -53,6 +42,19 @@ pub fn rel_op(input: &str) -> ParseResult<Relation> {
     .parse(input)
 }
 
+/// 283 rel_op_extended = [rel_op] | `IN` | `LIKE` .
+pub fn rel_op_extended(input: &str) -> ParseResult<Relation> {
+    alt((
+        rel_op,
+        alt((
+            value(Relation::In, tag("IN")),
+            value(Relation::Like, tag("LIKE")),
+        )),
+    ))
+    .parse(input)
+}
+
+/// Unary operators parsed by [unary_op]
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Unary {
     /// `+`
@@ -73,19 +75,7 @@ pub fn unary_op(input: &str) -> ParseResult<Unary> {
     .parse(input)
 }
 
-/// 257 multiplication_like_op = `*` | `/` | `DIV` | `MOD` | `AND` | `||` .
-pub fn multiplication_like_op(input: &str) -> ParseResult<Binary> {
-    alt((
-        value(Binary::Mul, tag("*")),
-        value(Binary::RealDiv, tag("/")),
-        value(Binary::IntegerDiv, tag("DIV")),
-        value(Binary::Mod, tag("MOD")),
-        value(Binary::And, tag("AND")),
-        value(Binary::ComplexEntityInstanceConstruction, tag("||")),
-    ))
-    .parse(input)
-}
-
+/// Binary operators parsed by [add_like_op], [multiplication_like_op], and [power_op]
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Binary {
     /* Mul-like */
@@ -125,6 +115,19 @@ pub fn add_like_op(input: &str) -> ParseResult<Binary> {
         value(Sub, tag("-")),
         value(Or, tag("OR")),
         value(Xor, tag("XOR")),
+    ))
+    .parse(input)
+}
+
+/// 257 multiplication_like_op = `*` | `/` | `DIV` | `MOD` | `AND` | `||` .
+pub fn multiplication_like_op(input: &str) -> ParseResult<Binary> {
+    alt((
+        value(Binary::Mul, tag("*")),
+        value(Binary::RealDiv, tag("/")),
+        value(Binary::IntegerDiv, tag("DIV")),
+        value(Binary::Mod, tag("MOD")),
+        value(Binary::And, tag("AND")),
+        value(Binary::ComplexEntityInstanceConstruction, tag("||")),
     ))
     .parse(input)
 }

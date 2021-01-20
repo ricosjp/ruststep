@@ -4,8 +4,8 @@ use derive_more::From;
 mod operator;
 mod qualifier;
 
-use operator::*;
-use qualifier::*;
+pub use operator::*;
+pub use qualifier::*;
 
 /// Unary expresion, e.g. `x` or binary expression `x + y`
 #[derive(Debug, Clone, PartialEq, Eq)]
