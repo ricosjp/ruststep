@@ -27,15 +27,17 @@ pub fn primary(input: &str) -> ParseResult<Primary> {
 pub enum QualifiableFactor {
     /// `attribute_ref` or `general_ref` or `population`
     Reference(String),
+    ConstantFactor(ConstantFactor),
 }
 
 /// 274 qualifiable_factor = attribute_ref | constant_factor | function_call | general_ref | population .
 pub fn qualifiable_factor(input: &str) -> ParseResult<QualifiableFactor> {
-    // FIXME support constant_factor
     // FIXME support function_call
-    remarked(simple_id)
-        .map(|id| QualifiableFactor::Reference(id))
-        .parse(input)
+    alt((
+        remarked(simple_id).map(|id| QualifiableFactor::Reference(id)),
+        constant_factor.map(|f| QualifiableFactor::ConstantFactor(f)),
+    ))
+    .parse(input)
 }
 
 /// Output of [qualifier]
@@ -93,6 +95,45 @@ pub fn index_qualifier(input: &str) -> ParseResult<Qualifier> {
     .parse(input)
 }
 
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
+pub enum ConstantFactor {
+    BuiltInConstant(BuiltInConstant),
+    Reference(String),
+}
+
+/// 196 constant_factor = built_in_constant | constant_ref .
+pub fn constant_factor(input: &str) -> ParseResult<ConstantFactor> {
+    alt((
+        built_in_constant.map(|c| ConstantFactor::BuiltInConstant(c)),
+        remarked(simple_id).map(|name| ConstantFactor::Reference(name)),
+    ))
+    .parse(input)
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum BuiltInConstant {
+    /// `CONST_E`, Napier's constant `e = 2.71828 …`
+    NAPIER,
+    /// The ratio of a circle's circumference to its diameter, `π = 3.14159 …`
+    PI,
+    /// `SELF` is not a constant, but behaves as one in every context in which it can appear.
+    SELF,
+    /// The indeterminate symbol `?` stands for an ambiguous value.
+    /// It is compatible with all data types.
+    INDETERMINATE,
+}
+
+/// 186 built_in_constant = CONST_E | PI | SELF | ’?’ .
+pub fn built_in_constant(input: &str) -> ParseResult<BuiltInConstant> {
+    alt((
+        value(BuiltInConstant::NAPIER, tag("CONST_E")),
+        value(BuiltInConstant::PI, tag("PI")),
+        value(BuiltInConstant::SELF, tag("SELF")),
+        value(BuiltInConstant::INDETERMINATE, char('?')),
+    ))
+    .parse(input)
+}
+
 #[cfg(test)]
 mod tests {
     use super::{Primary, QualifiableFactor, Qualifier};
@@ -107,6 +148,7 @@ mod tests {
                 QualifiableFactor::Reference(name) => {
                     assert_eq!(name, "x");
                 }
+                _ => panic!("Must be reference"),
             }
             assert_eq!(qualifiers.len(), 0);
         } else {
@@ -123,6 +165,7 @@ mod tests {
                 QualifiableFactor::Reference(name) => {
                     assert_eq!(name, "x");
                 }
+                _ => panic!("Must be reference"),
             }
             assert_eq!(qualifiers.len(), 2);
             assert_eq!(qualifiers[0], Qualifier::Group("group".to_string()));
@@ -141,6 +184,7 @@ mod tests {
                 QualifiableFactor::Reference(name) => {
                     assert_eq!(name, "x");
                 }
+                _ => panic!("Must be reference"),
             }
             assert_eq!(qualifiers.len(), 1);
             assert!(matches!(qualifiers[0], Qualifier::Index(_)));
@@ -158,9 +202,33 @@ mod tests {
                 QualifiableFactor::Reference(name) => {
                     assert_eq!(name, "x");
                 }
+                _ => panic!("Must be reference"),
             }
             assert_eq!(qualifiers.len(), 1);
             assert!(matches!(qualifiers[0], Qualifier::Range { .. }));
+        } else {
+            panic!("Must be factor")
+        }
+    }
+
+    #[test]
+    fn indeterminate() {
+        let (res, (q, _remarks)) = super::primary("x[1:?]").finish().unwrap();
+        assert_eq!(res, "");
+        if let Primary::Factor { factor, qualifiers } = q {
+            match factor {
+                QualifiableFactor::Reference(name) => {
+                    assert_eq!(name, "x");
+                }
+                _ => panic!("Must be reference"),
+            }
+            assert_eq!(qualifiers.len(), 1);
+            match &qualifiers[0] {
+                Qualifier::Range { begin: _, end } => {
+                    todo!("Check end")
+                }
+                _ => panic!("Must be range"),
+            }
         } else {
             panic!("Must be factor")
         }
