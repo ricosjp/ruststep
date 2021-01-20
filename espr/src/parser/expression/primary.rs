@@ -1,7 +1,8 @@
 use super::{
-    super::{basis::*, util::*},
-    *,
+    super::{basis::*, literal::*, util::*},
+    simple::*,
 };
+use derive_more::From;
 
 /// Output of [primary]
 #[derive(Debug, Clone, PartialEq, From)]
@@ -50,9 +51,12 @@ pub enum Qualifier {
     /// Like `\point`
     Group(String),
     /// Like `[1]`
-    Index(ExprTree),
+    Index(SimpleExpression),
     /// Like `[1:3]`
-    Range { begin: ExprTree, end: ExprTree },
+    Range {
+        begin: SimpleExpression,
+        end: SimpleExpression,
+    },
 }
 
 /// 276 qualifier = attribute_qualifier | group_qualifier | index_qualifier .
