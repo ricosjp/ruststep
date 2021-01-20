@@ -7,6 +7,27 @@ mod qualifier;
 pub use operator::*;
 pub use qualifier::*;
 
+/// Relationship between two expressions, parsed by [expression]
+pub struct Relation {
+    pub op: RelationOperator,
+    pub lhs: ExprTree,
+    pub rhs: ExprTree,
+}
+
+pub enum ExprTree {
+    /// End node of expression tree
+    Primary(Primary),
+    Unary {
+        op: UnaryOperator,
+        arg: Box<ExprTree>,
+    },
+    Binary {
+        op: BinaryOperator,
+        arg1: Box<ExprTree>,
+        arg2: Box<ExprTree>,
+    },
+}
+
 /// Unary expresion, e.g. `x` or binary expression `x + y`
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum Expr<Base, Op> {
