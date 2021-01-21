@@ -35,6 +35,7 @@ pub mod basis;
 pub mod domain;
 pub mod entity;
 pub mod expression;
+pub mod identifier;
 pub mod literal;
 pub mod remark;
 pub mod schema;

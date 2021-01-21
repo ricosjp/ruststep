@@ -10,7 +10,7 @@ pub fn digit(input: &str) -> IResult<&str, char> {
     satisfy(|c| matches!(c, '0'..='9')).parse(input)
 }
 
-/// 143 simple_id = letter { letter | digit | `_` } .
+/// 143 simple_id = [letter] { [letter] | [digit] | `_` } .
 pub fn simple_id(input: &str) -> IResult<&str, String> {
     tuple((letter, many0(alt((letter, digit, char('_'))))))
         .map(|(head, tail)| format!("{}{}", head, tail.into_iter().collect::<String>()))

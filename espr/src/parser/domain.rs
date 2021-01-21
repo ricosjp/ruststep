@@ -1,4 +1,4 @@
-use super::{basis::*, expression::*, util::*};
+use super::{expression::*, identifier::*, util::*};
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct WhereClause {
@@ -11,7 +11,7 @@ pub struct DomainRule {
     expr: Expression,
 }
 
-/// 338 where_clause = WHERE domain_rule `;` { domain_rule `;` } .
+/// 338 where_clause = WHERE [domain_rule] `;` { [domain_rule] `;` } .
 pub fn where_clause(input: &str) -> ParseResult<WhereClause> {
     tuple((tag("WHERE"), spaced_many0(tuple((domain_rule, char(';'))))))
         .map(|(_where, rules)| {
@@ -21,15 +21,9 @@ pub fn where_clause(input: &str) -> ParseResult<WhereClause> {
         .parse(input)
 }
 
-/// 202 domain_rule = \[ rule_label_id `:` \] expression .
-///
-/// `rule_label_id` is replaced by `simple_id` because
-///
-/// ```text
-/// 294 rule_label_id = simple_id .
-/// ```
+/// 202 domain_rule = \[ [rule_label_id] `:` \] [expression] .
 pub fn domain_rule(input: &str) -> ParseResult<DomainRule> {
-    tuple((opt(tuple((remarked(simple_id), char(':')))), expression))
+    tuple((opt(tuple((rule_label_id, char(':')))), expression))
         .map(|(opt, expr)| {
             let label = opt.map(|(label, _coron)| label);
             DomainRule { label, expr }
