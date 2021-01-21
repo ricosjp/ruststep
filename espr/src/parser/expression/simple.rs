@@ -41,6 +41,14 @@ pub enum Expression {
         expr: Box<Expression>,
         repetition: Option<Box<Expression>>,
     },
+    AggregateInitializer {
+        elements: Vec<Expression>,
+    },
+    Query {
+        variable: String,
+        source: Box<Expression>,
+        expr: Box<Expression>,
+    },
 }
 
 /// 305 simple_expression = [term] { [add_like_op] [term] } .
@@ -126,7 +134,9 @@ pub fn expression(input: &str) -> ParseResult<Expression> {
 
 /// 169 aggregate_initializer = `[` \[ [element] { `,` [element] } \] `]` .
 pub fn aggregate_initializer(input: &str) -> ParseResult<Expression> {
-    todo!()
+    tuple((char('['), comma_separated(element), char(']')))
+        .map(|(_open, elements, _close)| Expression::AggregateInitializer { elements })
+        .parse(input)
 }
 
 /// 203 element = [expression] \[ `:` [repetition] \] .
@@ -197,9 +207,36 @@ pub fn interval_low(input: &str) -> ParseResult<Expression> {
     simple_expression(input)
 }
 
+/// 170 aggregate_source = [simple_expression] .
+pub fn aggregate_source(input: &str) -> ParseResult<Expression> {
+    simple_expression(input)
+}
+
+/// 254 logical_expression = [expression] .
+pub fn logical_expression(input: &str) -> ParseResult<Expression> {
+    expression(input)
+}
+
 /// 277 query_expression = QUERY `(` variable_id `<*` aggregate_source `|` logical_expression `)` .
 pub fn query_expression(input: &str) -> ParseResult<Expression> {
-    todo!()
+    tuple((
+        tag("QUERY"),
+        char('('),
+        variable_id,
+        tag("<*"),
+        aggregate_source,
+        char('|'),
+        logical_expression,
+        char(')'),
+    ))
+    .map(
+        |(_start, _open, variable, _star, source, _bar, expr, _close)| Expression::Query {
+            variable,
+            source: Box::new(source),
+            expr: Box::new(expr),
+        },
+    )
+    .parse(input)
 }
 
 /// 205 entity_constructor = entity_ref ’(’ [ [expression] { ’,’ [expression] } ] ’)’ .
