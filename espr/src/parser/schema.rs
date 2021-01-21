@@ -1,4 +1,4 @@
-use super::{basis::*, entity::*, util::*};
+use super::{entity::*, identifier::*, util::*};
 
 /// Parsed result of EXPRESS's SCHEMA
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -7,9 +7,14 @@ pub struct Schema {
     pub entities: Vec<Entity>,
 }
 
-pub fn schema_decl(input: &str) -> ParseResult<String> {
-    tuple((tag("SCHEMA "), remarked(simple_id), char(';')))
-        .map(|(_start, id, _semicoron)| id)
+/// 296 schema_decl = SCHEMA [schema_id] \[ schema_version_id \] `;` [schema_body] END_SCHEMA `;` .
+pub fn schema_decl(input: &str) -> ParseResult<Schema> {
+    // FIXME schema_version_id
+    let schema_head =
+        tuple((tag("SCHEMA "), schema_id, char(';'))).map(|(_start, id, _semicoron)| id);
+
+    tuple((schema_head, schema_body, tag("END_SCHEMA"), char(';')))
+        .map(|(name, entities, _end, _semicoron)| Schema { name, entities })
         .parse(input)
 }
 
@@ -17,14 +22,6 @@ pub fn schema_decl(input: &str) -> ParseResult<String> {
 pub fn schema_body(input: &str) -> ParseResult<Vec<Entity>> {
     // FIXME constant_decl
     spaced_many0(entity_decl).parse(input)
-}
-
-/// 296 schema_decl = SCHEMA schema_id \[ schema_version_id \] `;` schema_body END_SCHEMA `;` .
-pub fn schema(input: &str) -> ParseResult<Schema> {
-    // FIXME schema_version_id
-    tuple((schema_decl, schema_body, tag("END_SCHEMA"), char(';')))
-        .map(|(name, entities, _end, _semicoron)| Schema { name, entities })
-        .parse(input)
 }
 
 #[cfg(test)]
@@ -48,7 +45,7 @@ mod tests {
         "#
         .trim();
 
-        let (residual, (schema, _remark)) = super::schema(exp_str).finish().unwrap();
+        let (residual, (schema, _remark)) = super::schema_decl(exp_str).finish().unwrap();
         assert_eq!(schema.name, "my_first_schema");
         assert_eq!(schema.entities.len(), 2);
         assert_eq!(

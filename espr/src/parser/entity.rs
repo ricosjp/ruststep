@@ -1,4 +1,4 @@
-use super::{basis::*, expression::*, types::*, util::*};
+use super::{basis::*, expression::*, identifier::*, types::*, util::*};
 use derive_more::From;
 
 /// Parsed result of EXPRESS's ENTITY
@@ -19,25 +19,32 @@ pub enum ParameterType {
     Simple(SimpleType),
 }
 
+/// 258 named_types = [entity_ref] | [type_ref] .
+pub fn named_types(input: &str) -> ParseResult<String> {
+    alt((entity_ref, type_ref)).parse(input)
+}
+
 /// 266 parameter_type = generalized_types | named_types | simple_types .
 pub fn paramter_type(input: &str) -> ParseResult<ParameterType> {
     // FIXME generalized_types
-    // FIXME named_types
-
     alt((
-        remarked(simple_id).map(|ty| ParameterType::Named(ty)),
+        named_types.map(|ty| ParameterType::Named(ty)),
         simple_types.map(|ty| ParameterType::Simple(ty)),
     ))
     .parse(input)
 }
 
+/// 177 attribute_decl = [attribute_id] | redeclared_attribute .
+pub fn attribute_decl(input: &str) -> ParseResult<String> {
+    // FIXME Support redeclared_attribute
+    attribute_id(input)
+}
+
 /// 215 explicit_attr = attribute_decl { `,` attribute_decl } `:` \[ OPTIONAL \] parameter_type `;` .
 pub fn explicit_attr(input: &str) -> ParseResult<(Vec<String>, ParameterType)> {
-    // FIXME Support attribute_decl
     // FIXME OPTIONAL
-
     tuple((
-        comma_separated(remarked(simple_id)),
+        comma_separated(attribute_decl),
         char(':'),
         paramter_type,
         char(';'),
@@ -50,7 +57,7 @@ pub fn explicit_attr(input: &str) -> ParseResult<(Vec<String>, ParameterType)> {
 pub fn entity_head(input: &str) -> ParseResult<String> {
     tuple((
         tag("ENTITY "), // parse with trailing space
-        remarked(simple_id),
+        entity_id,
         char(';'),
     ))
     .map(|(_start, id, _semicoron)| id)
