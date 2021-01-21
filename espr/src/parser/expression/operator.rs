@@ -138,3 +138,20 @@ pub fn multiplication_like_op(input: &str) -> ParseResult<BinaryOperator> {
 pub fn power_op(input: &str) -> ParseResult<BinaryOperator> {
     value(BinaryOperator::Power, tag("**")).parse(input)
 }
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum IntervalOperator {
+    /// `<`
+    LessThan,
+    /// `<=`
+    LessThanEqual,
+}
+
+/// 247 interval_op = `<` | `<=` .
+pub fn interval_op(input: &str) -> ParseResult<IntervalOperator> {
+    alt((
+        value(IntervalOperator::LessThan, tag("<")),
+        value(IntervalOperator::LessThanEqual, tag("<=")),
+    ))
+    .parse(input)
+}
