@@ -18,10 +18,21 @@ pub fn schema_decl(input: &str) -> ParseResult<Schema> {
         .parse(input)
 }
 
-/// 295 schema_body = { interface_specification } \[ constant_decl \] { declaration | rule_decl } .
+/// 199 declaration = [entity_decl] | function_decl | procedure_decl | subtype_constraint_decl | type_decl .
+pub fn declaration(input: &str) -> ParseResult<Entity> {
+    // FIXME function_decl
+    // FIXME procedure_decl
+    // FIXME subtype_constraint_decl
+    // FIXME type_decl
+    entity_decl(input)
+}
+
+/// 295 schema_body = { interface_specification } \[ constant_decl \] { [declaration] | rule_decl } .
 pub fn schema_body(input: &str) -> ParseResult<Vec<Entity>> {
+    // FIXME interface_specification
     // FIXME constant_decl
-    spaced_many0(entity_decl).parse(input)
+    // FIXME rule_decl
+    spaced_many0(declaration).parse(input)
 }
 
 #[cfg(test)]
