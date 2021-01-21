@@ -91,7 +91,22 @@ pub fn simple_factor(input: &str) -> ParseResult<Expression> {
 
 /// 216 expression = simple_expression \[ rel_op_extended simple_expression \] .
 pub fn expression(input: &str) -> ParseResult<Expression> {
-    todo!()
+    tuple((
+        simple_expression,
+        opt(tuple((rel_op_extended, simple_expression))),
+    ))
+    .map(|(lhs, opt)| {
+        if let Some((op, rhs)) = opt {
+            Expression::Relation {
+                op,
+                lhs: Box::new(lhs),
+                rhs: Box::new(rhs),
+            }
+        } else {
+            lhs
+        }
+    })
+    .parse(input)
 }
 
 /// 169 aggregate_initializer = ’[’ [ element { ’,’ element } ] ’]’ .
