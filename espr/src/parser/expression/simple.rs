@@ -1,5 +1,5 @@
 use super::{
-    super::{basis::*, util::*},
+    super::{identifier::*, util::*},
     operator::*,
     primary::*,
 };
@@ -32,6 +32,10 @@ pub enum Expression {
         high: Box<Expression>,
         low: Box<Expression>,
         item: Box<Expression>,
+    },
+    EnumerationReference {
+        ty: Option<String>,
+        enum_ref: String,
     },
 }
 
@@ -138,7 +142,12 @@ pub fn numeric_expression(input: &str) -> ParseResult<Expression> {
 
 /// 212 enumeration_reference = \[ [type_ref] ’.’ \] [enumeration_ref] .
 pub fn enumeration_reference(input: &str) -> ParseResult<Expression> {
-    todo!()
+    tuple((opt(tuple((type_ref, char('.')))), enumeration_ref))
+        .map(|(opt, enum_ref)| Expression::EnumerationReference {
+            ty: opt.map(|(ty, _comma)| ty),
+            enum_ref,
+        })
+        .parse(input)
 }
 
 /// 243 interval = `{` [interval_low] [interval_op] [interval_item] [interval_op] [interval_high] `}` .
@@ -187,7 +196,7 @@ pub fn query_expression(input: &str) -> ParseResult<Expression> {
 /// 205 entity_constructor = entity_ref ’(’ [ [expression] { ’,’ [expression] } ] ’)’ .
 pub fn entity_constructor(input: &str) -> ParseResult<Expression> {
     tuple((
-        remarked(simple_id),
+        entity_ref,
         char('('),
         opt(comma_separated(expression)),
         char(')'),
