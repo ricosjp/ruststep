@@ -1,5 +1,4 @@
 use super::{literal::*, util::*};
-use derive_more::From;
 
 mod operator;
 mod qualifier;

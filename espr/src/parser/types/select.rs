@@ -1,5 +1,5 @@
 use super::{
-    super::{basis::*, util::*},
+    super::{entity::named_types, util::*},
     *,
 };
 
@@ -14,7 +14,7 @@ pub struct SelectType {
 ///
 /// `named_types` is replaced by `simple_id` because it will be handled in semantics analysis phase
 pub fn select_list(input: &str) -> ParseResult<Vec<String>> {
-    tuple((char('('), comma_separated(remarked(simple_id)), char(')')))
+    tuple((char('('), comma_separated(named_types), char(')')))
         .map(|(_start, ids, _end)| ids)
         .parse(input)
 }
@@ -22,7 +22,7 @@ pub fn select_list(input: &str) -> ParseResult<Vec<String>> {
 /// 300 select_extension = BASED_ON type_ref \[ WITH select_list \] .
 pub fn select_extension(input: &str) -> ParseResult<(String, Vec<String>)> {
     let with = tuple((tag("WITH"), select_list)).map(|(_with, list)| list);
-    tuple((tag("BASED_ON"), remarked(simple_id), opt(with)))
+    tuple((tag("BASED_ON"), type_ref, opt(with)))
         .map(|(_based_on, id, opt)| (id, opt.unwrap_or(Vec::new())))
         .parse(input)
 }

@@ -1,7 +1,8 @@
 use super::{
-    super::{basis::*, util::*},
+    super::{identifier::*, literal::*, util::*},
     *,
 };
+use derive_more::From;
 
 /// Output of [primary]
 #[derive(Debug, Clone, PartialEq, From)]
@@ -34,15 +35,18 @@ pub enum QualifiableFactor {
 pub fn qualifiable_factor(input: &str) -> ParseResult<QualifiableFactor> {
     // FIXME support function_call
     alt((
-        remarked(simple_id).map(|id| QualifiableFactor::Reference(id)),
+        alt((attribute_ref, general_ref, population)).map(|id| QualifiableFactor::Reference(id)),
         constant_factor.map(|f| QualifiableFactor::ConstantFactor(f)),
     ))
     .parse(input)
 }
 
+/// 267 population = entity_ref .
+pub fn population(input: &str) -> ParseResult<String> {
+    entity_ref(input)
+}
+
 /// Output of [qualifier]
-///
-/// `SELF\point.x`
 #[derive(Debug, Clone, PartialEq)]
 pub enum Qualifier {
     /// Like `.x`
@@ -65,14 +69,14 @@ pub fn qualifier(input: &str) -> ParseResult<Qualifier> {
 
 /// 179 attribute_qualifier = `.` attribute_ref .
 pub fn attribute_qualifier(input: &str) -> ParseResult<Qualifier> {
-    tuple((char('.'), remarked(simple_id)))
+    tuple((char('.'), attribute_ref))
         .map(|(_dot, id)| Qualifier::Attribute(id))
         .parse(input)
 }
 
 /// 232 group_qualifier = `\` entity_ref .
 pub fn group_qualifier(input: &str) -> ParseResult<Qualifier> {
-    tuple((char('\\'), remarked(simple_id)))
+    tuple((char('\\'), entity_ref))
         .map(|(_dot, id)| Qualifier::Group(id))
         .parse(input)
 }
@@ -105,7 +109,7 @@ pub enum ConstantFactor {
 pub fn constant_factor(input: &str) -> ParseResult<ConstantFactor> {
     alt((
         built_in_constant.map(|c| ConstantFactor::BuiltInConstant(c)),
-        remarked(simple_id).map(|name| ConstantFactor::Reference(name)),
+        constant_ref.map(|name| ConstantFactor::Reference(name)),
     ))
     .parse(input)
 }
