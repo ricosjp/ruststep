@@ -14,7 +14,7 @@ pub enum Primary {
     },
 }
 
-/// 269 primary = literal | ( qualifiable_factor { qualifier } ) .
+/// 269 primary = [literal] | ( [qualifiable_factor] { [qualifier] } ) .
 pub fn primary(input: &str) -> ParseResult<Primary> {
     alt((
         literal.map(|literal| Primary::Literal(literal)),
@@ -31,7 +31,7 @@ pub enum QualifiableFactor {
     ConstantFactor(ConstantFactor),
 }
 
-/// 274 qualifiable_factor = attribute_ref | constant_factor | function_call | general_ref | population .
+/// 274 qualifiable_factor = [attribute_ref] | [constant_factor] | [function_call] | [general_ref] | [population] .
 pub fn qualifiable_factor(input: &str) -> ParseResult<QualifiableFactor> {
     // FIXME support function_call
     alt((
@@ -42,8 +42,6 @@ pub fn qualifiable_factor(input: &str) -> ParseResult<QualifiableFactor> {
 }
 
 /// Output of [qualifier]
-///
-/// `SELF\point.x`
 #[derive(Debug, Clone, PartialEq)]
 pub enum Qualifier {
     /// Like `.x`
@@ -56,31 +54,31 @@ pub enum Qualifier {
     Range { begin: Expression, end: Expression },
 }
 
-/// 276 qualifier = attribute_qualifier | group_qualifier | index_qualifier .
+/// 276 qualifier = [attribute_qualifier] | [group_qualifier] | [index_qualifier] .
 pub fn qualifier(input: &str) -> ParseResult<Qualifier> {
     alt((attribute_qualifier, group_qualifier, index_qualifier)).parse(input)
 }
 
-/// 179 attribute_qualifier = `.` attribute_ref .
+/// 179 attribute_qualifier = `.` [attribute_ref] .
 pub fn attribute_qualifier(input: &str) -> ParseResult<Qualifier> {
     tuple((char('.'), remarked(simple_id)))
         .map(|(_dot, id)| Qualifier::Attribute(id))
         .parse(input)
 }
 
-/// 232 group_qualifier = `\` entity_ref .
+/// 232 group_qualifier = `\` [entity_ref] .
 pub fn group_qualifier(input: &str) -> ParseResult<Qualifier> {
     tuple((char('\\'), remarked(simple_id)))
         .map(|(_dot, id)| Qualifier::Group(id))
         .parse(input)
 }
 
-/// 239 index_qualifier = `[` index_1 [ `:` index_2 ] `]` .
+/// 239 index_qualifier = `[` [index_1] [ `:` [index_2] ] `]` .
 pub fn index_qualifier(input: &str) -> ParseResult<Qualifier> {
     tuple((
         char('['),
-        simple_expression,
-        opt(tuple((char(':'), simple_expression))),
+        index_1,
+        opt(tuple((char(':'), index_2))),
         char(']'),
     ))
     .map(|(_open, index, opt, _close)| {
@@ -93,13 +91,28 @@ pub fn index_qualifier(input: &str) -> ParseResult<Qualifier> {
     .parse(input)
 }
 
+/// 236 index = [numeric_expression] .
+pub fn index(input: &str) -> ParseResult<Expression> {
+    numeric_expression(input)
+}
+
+/// 237 index_1 = [index] .
+pub fn index_1(input: &str) -> ParseResult<Expression> {
+    index(input)
+}
+
+/// 238 index_2 = [index] .
+pub fn index_2(input: &str) -> ParseResult<Expression> {
+    index(input)
+}
+
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub enum ConstantFactor {
     BuiltInConstant(BuiltInConstant),
     Reference(String),
 }
 
-/// 196 constant_factor = built_in_constant | constant_ref .
+/// 196 constant_factor = [built_in_constant] | [constant_ref] .
 pub fn constant_factor(input: &str) -> ParseResult<ConstantFactor> {
     alt((
         built_in_constant.map(|c| ConstantFactor::BuiltInConstant(c)),
@@ -121,7 +134,7 @@ pub enum BuiltInConstant {
     INDETERMINATE,
 }
 
-/// 186 built_in_constant = CONST_E | PI | SELF | ’?’ .
+/// 186 built_in_constant = `CONST_E` | `PI` | `SELF` | `?` .
 pub fn built_in_constant(input: &str) -> ParseResult<BuiltInConstant> {
     alt((
         value(BuiltInConstant::NAPIER, tag("CONST_E")),

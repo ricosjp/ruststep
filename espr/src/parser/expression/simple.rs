@@ -35,17 +35,17 @@ pub enum Expression {
     },
 }
 
-/// 305 simple_expression = term { add_like_op term } .
+/// 305 simple_expression = [term] { [add_like_op] [term] } .
 pub fn simple_expression(input: &str) -> ParseResult<Expression> {
     todo!()
 }
 
-/// 325 term = factor { multiplication_like_op factor } .
+/// 325 term = [factor] { [multiplication_like_op] [factor] } .
 pub fn term(input: &str) -> ParseResult<Expression> {
     todo!()
 }
 
-/// 217 factor = simple_factor \[ `**` simple_factor \] .
+/// 217 factor = [simple_factor] \[ `**` [simple_factor] \] .
 pub fn factor(input: &str) -> ParseResult<Expression> {
     tuple((simple_factor, opt(tuple((power_op, simple_factor)))))
         .map(|(arg1, opt)| {
@@ -184,7 +184,7 @@ pub fn query_expression(input: &str) -> ParseResult<Expression> {
     todo!()
 }
 
-/// 205 entity_constructor = entity_ref ’(’ [ expression { ’,’ expression } ] ’)’ .
+/// 205 entity_constructor = entity_ref ’(’ [ [expression] { ’,’ [expression] } ] ’)’ .
 pub fn entity_constructor(input: &str) -> ParseResult<Expression> {
     tuple((
         remarked(simple_id),
