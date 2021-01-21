@@ -24,8 +24,8 @@ pub fn named_types(input: &str) -> ParseResult<String> {
     alt((entity_ref, type_ref)).parse(input)
 }
 
-/// 266 parameter_type = generalized_types | named_types | simple_types .
-pub fn paramter_type(input: &str) -> ParseResult<ParameterType> {
+/// 266 parameter_type = generalized_types | [named_types] | [simple_types] .
+pub fn parameter_type(input: &str) -> ParseResult<ParameterType> {
     // FIXME generalized_types
     alt((
         named_types.map(|ty| ParameterType::Named(ty)),
@@ -40,21 +40,22 @@ pub fn attribute_decl(input: &str) -> ParseResult<String> {
     attribute_id(input)
 }
 
-/// 215 explicit_attr = attribute_decl { `,` attribute_decl } `:` \[ OPTIONAL \] parameter_type `;` .
+/// 215 explicit_attr = [attribute_decl] { `,` [attribute_decl] } `:` \[ OPTIONAL \] [parameter_type] `;` .
 pub fn explicit_attr(input: &str) -> ParseResult<(Vec<String>, ParameterType)> {
     // FIXME OPTIONAL
     tuple((
         comma_separated(attribute_decl),
         char(':'),
-        paramter_type,
+        parameter_type,
         char(';'),
     ))
     .map(|(attrs, _coron, ty, _semicoron)| (attrs, ty))
     .parse(input)
 }
 
-/// 207 entity_head = ENTITY entity_id subsuper `;` .
+/// 207 entity_head = ENTITY [entity_id] subsuper `;` .
 pub fn entity_head(input: &str) -> ParseResult<String> {
+    // FIXME subsuper
     tuple((
         tag("ENTITY "), // parse with trailing space
         entity_id,
@@ -64,23 +65,28 @@ pub fn entity_head(input: &str) -> ParseResult<String> {
     .parse(input)
 }
 
-/// 206 entity_decl = entity_head entity_body END_ENTITY `;` .
+/// 204 entity_body = { [explicit_attr] } \[ derive_clause \] \[ inverse_clause \] \[ unique_clause \] \[ where_clause \] .
+pub fn entity_body(input: &str) -> ParseResult<Vec<(String, ParameterType)>> {
+    // FIXME derive_clause
+    // FIXME inverse_clause
+    // FIXME unique_clause
+    // FIXME where_clause
+    spaced_many0(explicit_attr)
+        .map(|attributes| {
+            attributes
+                .into_iter()
+                .map(|(attrs, ty)| attrs.into_iter().map(move |attr| (attr, ty.clone())))
+                .flatten()
+                .collect()
+        })
+        .parse(input)
+}
+
+/// 206 entity_decl = [entity_head] [entity_body] END_ENTITY `;` .
 pub fn entity_decl(input: &str) -> ParseResult<Entity> {
-    tuple((
-        entity_head,
-        spaced_many0(explicit_attr),
-        tag("END_ENTITY"),
-        char(';'),
-    ))
-    .map(|(name, attributes, _end, _semicoron)| {
-        let attributes = attributes
-            .into_iter()
-            .map(|(attrs, ty)| attrs.into_iter().map(move |attr| (attr, ty.clone())))
-            .flatten()
-            .collect();
-        Entity { name, attributes }
-    })
-    .parse(input)
+    tuple((entity_head, entity_body, tag("END_ENTITY"), char(';')))
+        .map(|(name, attributes, _end, _semicoron)| Entity { name, attributes })
+        .parse(input)
 }
 
 /// Constructor like `point(0.0, 0.0, 0.0)`
@@ -90,7 +96,7 @@ pub struct EntityConstructor {
     values: Vec<Expression>,
 }
 
-/// 205 entity_constructor = entity_ref ’(’ [ expression { ’,’ expression } ] ’)’ .
+/// 205 entity_constructor = [entity_ref] ’(’ \[ [expression] { ’,’ [expression] } \] ’)’ .
 pub fn entity_constructor(input: &str) -> ParseResult<EntityConstructor> {
     tuple((
         entity_ref,
