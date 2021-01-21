@@ -26,6 +26,13 @@ pub enum Expression {
         name: String,
         values: Vec<Expression>,
     },
+    Interval {
+        op_low: IntervalOperator,
+        op_high: IntervalOperator,
+        high: Box<Expression>,
+        low: Box<Expression>,
+        item: Box<Expression>,
+    },
 }
 
 /// 305 simple_expression = term { add_like_op term } .
@@ -55,12 +62,12 @@ pub fn factor(input: &str) -> ParseResult<Expression> {
         .parse(input)
 }
 
-/// 306 simple_factor = aggregate_initializer
-///                   | entity_constructor
-///                   | enumeration_reference
-///                   | interval
-///                   | query_expression
-///                   | ( \[ unary_op \] ( `(` expression `)` | primary ) ) .
+/// 306 simple_factor = [aggregate_initializer]
+///                   | [entity_constructor]
+///                   | [enumeration_reference]
+///                   | [interval]
+///                   | [query_expression]
+///                   | ( \[ [unary_op] \] ( `(` [expression] `)` | [primary] ) ) .
 pub fn simple_factor(input: &str) -> ParseResult<Expression> {
     let paren_expr = tuple((char('('), expression, char(')'))).map(|(_open, e, _close)| e);
     // ( \[ unary_op \] ( `(` expression `)` | primary ) )
@@ -89,7 +96,7 @@ pub fn simple_factor(input: &str) -> ParseResult<Expression> {
     .parse(input)
 }
 
-/// 216 expression = simple_expression \[ rel_op_extended simple_expression \] .
+/// 216 expression = [simple_expression] \[ [rel_op_extended] [simple_expression] \] .
 pub fn expression(input: &str) -> ParseResult<Expression> {
     tuple((
         simple_expression,
@@ -109,32 +116,67 @@ pub fn expression(input: &str) -> ParseResult<Expression> {
     .parse(input)
 }
 
-/// 169 aggregate_initializer = ’[’ [ element { ’,’ element } ] ’]’ .
+/// 169 aggregate_initializer = `[` \[ [element] { `,` [element] } \] `]` .
 pub fn aggregate_initializer(input: &str) -> ParseResult<Expression> {
     todo!()
 }
 
-/// 203 element = expression [ ’:’ repetition ] .
+/// 203 element = [expression] \[ `:` [repetition] \] .
 pub fn element(input: &str) -> ParseResult<Expression> {
     todo!()
 }
 
-/// 287 repetition = numeric_expression .
+/// 287 repetition = [numeric_expression] .
 pub fn repetition(input: &str) -> ParseResult<Expression> {
-    todo!()
+    numeric_expression(input)
 }
 
-/// 212 enumeration_reference = [ type_ref ’.’ ] enumeration_ref .
+/// 262 numeric_expression = [simple_expression] .
+pub fn numeric_expression(input: &str) -> ParseResult<Expression> {
+    simple_expression(input)
+}
+
+/// 212 enumeration_reference = \[ [type_ref] ’.’ \] [enumeration_ref] .
 pub fn enumeration_reference(input: &str) -> ParseResult<Expression> {
     todo!()
 }
 
-/// 243 interval = `{` interval_low interval_op interval_item interval_op interval_high `}` .
-/// 244 interval_high = simple_expression .
-/// 245 interval_item = simple_expression .
-/// 246 interval_low = simple_expression .
+/// 243 interval = `{` [interval_low] [interval_op] [interval_item] [interval_op] [interval_high] `}` .
 pub fn interval(input: &str) -> ParseResult<Expression> {
-    todo!()
+    tuple((
+        char('{'),
+        interval_low,
+        interval_op,
+        interval_item,
+        interval_op,
+        interval_high,
+        char('}'),
+    ))
+    .map(
+        |(_open, low, op_low, item, op_high, high, _close)| Expression::Interval {
+            op_low,
+            op_high,
+            low: Box::new(low),
+            item: Box::new(item),
+            high: Box::new(high),
+        },
+    )
+    .parse(input)
+}
+
+/// 244 interval_high = [simple_expression] .
+pub fn interval_high(input: &str) -> ParseResult<Expression> {
+    simple_expression(input)
+}
+
+/// 245 interval_item = [simple_expression] .
+pub fn interval_item(input: &str) -> ParseResult<Expression> {
+    simple_expression(input)
+}
+
+/// 246 interval_low = [simple_expression] .
+pub fn interval_low(input: &str) -> ParseResult<Expression> {
+    simple_expression(input)
 }
 
 /// 277 query_expression = QUERY `(` variable_id `<*` aggregate_source `|` logical_expression `)` .
