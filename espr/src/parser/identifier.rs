@@ -37,3 +37,8 @@ impl_id!(subtype_constraint_ref);
 impl_id!(type_label_ref);
 impl_id!(type_ref);
 impl_id!(variable_ref);
+
+/// 228 general_ref = [parameter_ref] | [variable_ref] .
+pub fn general_ref(input: &str) -> ParseResult<String> {
+    alt((parameter_ref, variable_ref)).parse(input)
+}
