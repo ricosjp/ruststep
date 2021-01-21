@@ -37,6 +37,10 @@ pub enum Expression {
         ty: Option<String>,
         enum_ref: String,
     },
+    Element {
+        expr: Box<Expression>,
+        repetition: Option<Box<Expression>>,
+    },
 }
 
 /// 305 simple_expression = [term] { [add_like_op] [term] } .
@@ -127,7 +131,12 @@ pub fn aggregate_initializer(input: &str) -> ParseResult<Expression> {
 
 /// 203 element = [expression] \[ `:` [repetition] \] .
 pub fn element(input: &str) -> ParseResult<Expression> {
-    todo!()
+    tuple((expression, opt(tuple((char(':'), repetition)))))
+        .map(|(expr, opt)| Expression::Element {
+            expr: Box::new(expr),
+            repetition: opt.map(|(_comma, r)| Box::new(r)),
+        })
+        .parse(input)
 }
 
 /// 287 repetition = [numeric_expression] .
