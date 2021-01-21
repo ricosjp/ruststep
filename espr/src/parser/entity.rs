@@ -1,4 +1,4 @@
-use super::{basis::*, expression::*, identifier::*, types::*, util::*};
+use super::{expression::*, identifier::*, types::*, util::*};
 use derive_more::From;
 
 /// Parsed result of EXPRESS's ENTITY
@@ -93,7 +93,7 @@ pub struct EntityConstructor {
 /// 205 entity_constructor = entity_ref ’(’ [ expression { ’,’ expression } ] ’)’ .
 pub fn entity_constructor(input: &str) -> ParseResult<EntityConstructor> {
     tuple((
-        remarked(simple_id),
+        entity_ref,
         char('('),
         opt(comma_separated(expression)),
         char(')'),

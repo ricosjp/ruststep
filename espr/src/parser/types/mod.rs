@@ -6,7 +6,7 @@ pub use enumeration::*;
 pub use select::*;
 pub use simple::*;
 
-use super::{basis::*, util::*};
+use super::{identifier::*, util::*};
 use derive_more::From;
 
 /// `EXTENSIBLE` and `GENERIC_ENTITY` keywords for [select_type] and [enumeration_type]
@@ -55,8 +55,8 @@ pub enum ConcreteType {
 pub fn concrete_types(input: &str) -> ParseResult<ConcreteType> {
     // FIXME aggregation_types
     alt((
-        remarked(simple_id).map(|s| ConcreteType::Ref(s)),
         simple_types.map(|ty| ConcreteType::Simple(ty)),
+        type_ref.map(|s| ConcreteType::Ref(s)),
     ))
     .parse(input)
 }
@@ -81,7 +81,7 @@ pub fn underlying_type(input: &str) -> ParseResult<UnderlyingType> {
 pub fn type_decl(input: &str) -> ParseResult<TypeDecl> {
     tuple((
         tag("TYPE"),
-        remarked(simple_id), // type_id
+        type_id,
         char('='),
         underlying_type,
         char(';'),

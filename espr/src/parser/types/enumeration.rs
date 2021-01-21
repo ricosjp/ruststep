@@ -1,5 +1,5 @@
 use super::{
-    super::{basis::*, util::*},
+    super::{identifier::*, util::*},
     *,
 };
 
@@ -12,7 +12,7 @@ pub struct EnumerationType {
 
 /// 211 enumeration_items = `(` enumeration_id { `,` enumeration_id } `)` .
 pub fn enumeration_items(input: &str) -> ParseResult<Vec<String>> {
-    tuple((char('('), comma_separated(remarked(simple_id)), char(')')))
+    tuple((char('('), comma_separated(enumeration_id), char(')')))
         .map(|(_open, enums, _close)| enums)
         .parse(input)
 }
