@@ -51,12 +51,9 @@ pub enum Qualifier {
     /// Like `\point`
     Group(String),
     /// Like `[1]`
-    Index(SimpleExpression),
+    Index(Expression),
     /// Like `[1:3]`
-    Range {
-        begin: SimpleExpression,
-        end: SimpleExpression,
-    },
+    Range { begin: Expression, end: Expression },
 }
 
 /// 276 qualifier = attribute_qualifier | group_qualifier | index_qualifier .
