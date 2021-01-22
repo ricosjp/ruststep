@@ -275,7 +275,31 @@ pub fn entity_constructor(input: &str) -> ParseResult<Expression> {
 
 #[cfg(test)]
 mod tests {
+    use super::*;
     use nom::Finish;
+
+    #[test]
+    fn literal() {
+        let (res, (expr, _remarks)) = super::expression("1.0").finish().unwrap();
+        assert_eq!(res, "");
+        assert_eq!(expr, Expression::Literal(Literal::Real(1.0)));
+    }
+
+    #[test]
+    fn qualifiable_factor() {
+        let (res, (expr, _remarks)) = super::expression(r"x\group.attr").finish().unwrap();
+        assert_eq!(res, "");
+        assert_eq!(
+            expr,
+            Expression::QualifiableFactor {
+                factor: QualifiableFactor::Reference("x".to_string()),
+                qualifiers: vec![
+                    Qualifier::Group("group".to_string()),
+                    Qualifier::Attribute("attr".to_string())
+                ]
+            }
+        );
+    }
 
     #[test]
     fn entity_constructor() {
