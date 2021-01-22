@@ -163,14 +163,4 @@ mod tests {
 
         assert_eq!(residual, "");
     }
-
-    #[test]
-    fn entity_constructor() {
-        let (residual, (ctor, _remarks)) = super::entity_constructor("point(0.0, 0.0, 0.0)")
-            .finish()
-            .unwrap();
-        assert_eq!(residual, "");
-        assert_eq!(ctor.name, "point");
-        assert_eq!(ctor.values.len(), 3);
-    }
 }
