@@ -40,12 +40,8 @@ pub enum Expression {
         ty: Option<String>,
         enum_ref: String,
     },
-    Element {
-        expr: Box<Expression>,
-        repetition: Option<Box<Expression>>,
-    },
     AggregateInitializer {
-        elements: Vec<Expression>,
+        elements: Vec<Element>,
     },
     Query {
         variable: String,
@@ -157,12 +153,18 @@ pub fn aggregate_initializer(input: &str) -> ParseResult<Expression> {
         .parse(input)
 }
 
+#[derive(Debug, Clone, PartialEq)]
+pub struct Element {
+    expr: Expression,
+    repetition: Option<Expression>,
+}
+
 /// 203 element = [expression] \[ `:` [repetition] \] .
-pub fn element(input: &str) -> ParseResult<Expression> {
+pub fn element(input: &str) -> ParseResult<Element> {
     tuple((expression, opt(tuple((char(':'), repetition)))))
-        .map(|(expr, opt)| Expression::Element {
-            expr: Box::new(expr),
-            repetition: opt.map(|(_comma, r)| Box::new(r)),
+        .map(|(expr, opt)| Element {
+            expr,
+            repetition: opt.map(|(_comma, r)| r),
         })
         .parse(input)
 }
@@ -342,6 +344,46 @@ mod tests {
                 qualifiers: vec![
                     Qualifier::Group("group".to_string()),
                     Qualifier::Attribute("attr".to_string())
+                ]
+            }
+        );
+    }
+
+    #[test]
+    fn aggregate_initializer() {
+        let (res, (expr, _remarks)) = super::expression("[1, 3, 6, 9*8, -12]").finish().unwrap();
+        assert_eq!(res, "");
+        assert_eq!(
+            expr,
+            Expression::AggregateInitializer {
+                elements: vec![
+                    Element {
+                        expr: Expression::Literal(Literal::Real(1.0)),
+                        repetition: None,
+                    },
+                    Element {
+                        expr: Expression::Literal(Literal::Real(3.0)),
+                        repetition: None,
+                    },
+                    Element {
+                        expr: Expression::Literal(Literal::Real(6.0)),
+                        repetition: None,
+                    },
+                    Element {
+                        expr: Expression::Binary {
+                            op: BinaryOperator::Mul,
+                            arg1: Box::new(Expression::Literal(Literal::Real(9.0))),
+                            arg2: Box::new(Expression::Literal(Literal::Real(8.0)))
+                        },
+                        repetition: None,
+                    },
+                    Element {
+                        expr: Expression::Unary {
+                            op: UnaryOperator::Minus,
+                            arg: Box::new(Expression::Literal(Literal::Real(12.0))),
+                        },
+                        repetition: None,
+                    },
                 ]
             }
         );
