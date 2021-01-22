@@ -2,24 +2,13 @@ use super::{
     super::{identifier::*, literal::*, util::*},
     simple::*,
 };
-use derive_more::From;
-
-/// Output of [primary]
-#[derive(Debug, Clone, PartialEq, From)]
-pub enum Primary {
-    Literal(Literal),
-    Factor {
-        factor: QualifiableFactor,
-        qualifiers: Vec<Qualifier>,
-    },
-}
 
 /// 269 primary = [literal] | ( [qualifiable_factor] { [qualifier] } ) .
-pub fn primary(input: &str) -> ParseResult<Primary> {
+pub fn primary(input: &str) -> ParseResult<Expression> {
     alt((
-        literal.map(|literal| Primary::Literal(literal)),
+        literal.map(|literal| Expression::Literal(literal)),
         tuple((qualifiable_factor, spaced_many0(qualifier)))
-            .map(|(factor, qualifiers)| Primary::Factor { factor, qualifiers }),
+            .map(|(factor, qualifiers)| Expression::QualifiableFactor { factor, qualifiers }),
     ))
     .parse(input)
 }
@@ -147,14 +136,14 @@ pub fn built_in_constant(input: &str) -> ParseResult<BuiltInConstant> {
 
 #[cfg(test)]
 mod tests {
-    use super::{Primary, QualifiableFactor, Qualifier};
+    use super::{Expression, QualifiableFactor, Qualifier};
     use nom::Finish;
 
     #[test]
     fn no_qualifier() {
         let (res, (q, _remarks)) = super::primary("x").finish().unwrap();
         assert_eq!(res, "");
-        if let Primary::Factor { factor, qualifiers } = q {
+        if let Expression::QualifiableFactor { factor, qualifiers } = q {
             match factor {
                 QualifiableFactor::Reference(name) => {
                     assert_eq!(name, "x");
@@ -171,7 +160,7 @@ mod tests {
     fn simple() {
         let (res, (q, _remarks)) = super::primary(r"x\group.attr").finish().unwrap();
         assert_eq!(res, "");
-        if let Primary::Factor { factor, qualifiers } = q {
+        if let Expression::QualifiableFactor { factor, qualifiers } = q {
             match factor {
                 QualifiableFactor::Reference(name) => {
                     assert_eq!(name, "x");
@@ -190,7 +179,7 @@ mod tests {
     fn index() {
         let (res, (q, _remarks)) = super::primary("x[2 * 2]").finish().unwrap();
         assert_eq!(res, "");
-        if let Primary::Factor { factor, qualifiers } = q {
+        if let Expression::QualifiableFactor { factor, qualifiers } = q {
             match factor {
                 QualifiableFactor::Reference(name) => {
                     assert_eq!(name, "x");
@@ -208,7 +197,7 @@ mod tests {
     fn range() {
         let (res, (q, _remarks)) = super::primary("x[1:3]").finish().unwrap();
         assert_eq!(res, "");
-        if let Primary::Factor { factor, qualifiers } = q {
+        if let Expression::QualifiableFactor { factor, qualifiers } = q {
             match factor {
                 QualifiableFactor::Reference(name) => {
                     assert_eq!(name, "x");
@@ -226,7 +215,7 @@ mod tests {
     fn indeterminate() {
         let (res, (q, _remarks)) = super::primary("x[1:?]").finish().unwrap();
         assert_eq!(res, "");
-        if let Primary::Factor { factor, qualifiers } = q {
+        if let Expression::QualifiableFactor { factor, qualifiers } = q {
             match factor {
                 QualifiableFactor::Reference(name) => {
                     assert_eq!(name, "x");
@@ -239,12 +228,12 @@ mod tests {
                     use super::*;
                     assert_eq!(
                         end,
-                        &Expression::Primary(Primary::Factor {
+                        &Expression::QualifiableFactor {
                             factor: QualifiableFactor::BuiltInConstant(
                                 BuiltInConstant::INDETERMINATE
                             ),
                             qualifiers: Vec::new()
-                        })
+                        }
                     );
                 }
                 _ => panic!("Must be range"),

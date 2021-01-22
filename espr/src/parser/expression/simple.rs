@@ -1,13 +1,11 @@
 use super::{
-    super::{identifier::*, util::*},
+    super::{identifier::*, literal::*, util::*},
     operator::*,
     primary::*,
 };
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum Expression {
-    /// End node of expression tree
-    Primary(Primary),
     Unary {
         op: UnaryOperator,
         arg: Box<Expression>,
@@ -21,6 +19,11 @@ pub enum Expression {
         op: RelationOperator,
         lhs: Box<Expression>,
         rhs: Box<Expression>,
+    },
+    Literal(Literal),
+    QualifiableFactor {
+        factor: QualifiableFactor,
+        qualifiers: Vec<Qualifier>,
     },
     EntityConstructor {
         name: String,
@@ -105,11 +108,7 @@ pub fn factor(input: &str) -> ParseResult<Expression> {
 pub fn simple_factor(input: &str) -> ParseResult<Expression> {
     let paren_expr = tuple((char('('), expression, char(')'))).map(|(_open, e, _close)| e);
     // ( \[ unary_op \] ( `(` expression `)` | primary ) )
-    let unary = tuple((
-        opt(unary_op),
-        alt((paren_expr, primary.map(|p| Expression::Primary(p)))),
-    ))
-    .map(|(opt, expr)| {
+    let unary = tuple((opt(unary_op), alt((paren_expr, primary)))).map(|(opt, expr)| {
         if let Some(op) = opt {
             Expression::Unary {
                 op,
