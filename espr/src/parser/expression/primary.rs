@@ -26,9 +26,10 @@ pub fn primary(input: &str) -> ParseResult<Primary> {
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum QualifiableFactor {
-    /// `attribute_ref` or `general_ref` or `population`
+    /// [attribute_ref], [general_ref], [population], or [constant_ref]
     Reference(String),
-    ConstantFactor(ConstantFactor),
+    /// [built_in_constant]
+    BuiltInConstant(BuiltInConstant),
 }
 
 /// 274 qualifiable_factor = [attribute_ref] | [constant_factor] | [function_call] | [general_ref] | [population] .
@@ -36,7 +37,7 @@ pub fn qualifiable_factor(input: &str) -> ParseResult<QualifiableFactor> {
     // FIXME support function_call
     alt((
         alt((attribute_ref, general_ref, population)).map(|id| QualifiableFactor::Reference(id)),
-        constant_factor.map(|f| QualifiableFactor::ConstantFactor(f)),
+        constant_factor,
     ))
     .parse(input)
 }
@@ -44,6 +45,15 @@ pub fn qualifiable_factor(input: &str) -> ParseResult<QualifiableFactor> {
 /// 267 population = entity_ref .
 pub fn population(input: &str) -> ParseResult<String> {
     entity_ref(input)
+}
+
+/// 196 constant_factor = [built_in_constant] | [constant_ref] .
+pub fn constant_factor(input: &str) -> ParseResult<QualifiableFactor> {
+    alt((
+        built_in_constant.map(|c| QualifiableFactor::BuiltInConstant(c)),
+        constant_ref.map(|name| QualifiableFactor::Reference(name)),
+    ))
+    .parse(input)
 }
 
 /// Output of [qualifier]
@@ -109,21 +119,6 @@ pub fn index_1(input: &str) -> ParseResult<Expression> {
 /// 238 index_2 = [index] .
 pub fn index_2(input: &str) -> ParseResult<Expression> {
     index(input)
-}
-
-#[derive(Debug, Clone, PartialEq, Eq, Hash)]
-pub enum ConstantFactor {
-    BuiltInConstant(BuiltInConstant),
-    Reference(String),
-}
-
-/// 196 constant_factor = [built_in_constant] | [constant_ref] .
-pub fn constant_factor(input: &str) -> ParseResult<ConstantFactor> {
-    alt((
-        built_in_constant.map(|c| ConstantFactor::BuiltInConstant(c)),
-        constant_ref.map(|name| ConstantFactor::Reference(name)),
-    ))
-    .parse(input)
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -245,8 +240,8 @@ mod tests {
                     assert_eq!(
                         end,
                         &Expression::Primary(Primary::Factor {
-                            factor: QualifiableFactor::ConstantFactor(
-                                ConstantFactor::BuiltInConstant(BuiltInConstant::INDETERMINATE)
+                            factor: QualifiableFactor::BuiltInConstant(
+                                BuiltInConstant::INDETERMINATE
                             ),
                             qualifiers: Vec::new()
                         })
