@@ -54,6 +54,7 @@ pub enum Expression {
     },
 }
 
+/// Create left-joined tree `1.0 + 2.0 - 3.0` into `(- (+ 1.0 2.0) 3.0)`
 fn create_tree(mut head: Expression, tails: Vec<(BinaryOperator, Expression)>) -> Expression {
     for (op, expr) in tails {
         head = Expression::Binary {
@@ -277,6 +278,51 @@ pub fn entity_constructor(input: &str) -> ParseResult<Expression> {
 mod tests {
     use super::*;
     use nom::Finish;
+
+    #[test]
+    fn unary() {
+        let (res, (expr, _remarks)) = super::expression("-1.0").finish().unwrap();
+        assert_eq!(res, "");
+        assert_eq!(
+            expr,
+            Expression::Unary {
+                op: UnaryOperator::Minus,
+                arg: Box::new(Expression::Literal(Literal::Real(1.0))),
+            }
+        );
+    }
+
+    #[test]
+    fn binary() {
+        let (res, (expr, _remarks)) = super::expression("1.0 + 2.0").finish().unwrap();
+        assert_eq!(res, "");
+        assert_eq!(
+            expr,
+            Expression::Binary {
+                op: BinaryOperator::Add,
+                arg1: Box::new(Expression::Literal(Literal::Real(1.0))),
+                arg2: Box::new(Expression::Literal(Literal::Real(2.0))),
+            }
+        );
+    }
+
+    #[test]
+    fn binary3() {
+        let (res, (expr, _remarks)) = super::expression("1.0 + 2.0 - 3.0").finish().unwrap();
+        assert_eq!(res, "");
+        assert_eq!(
+            expr,
+            Expression::Binary {
+                op: BinaryOperator::Sub,
+                arg1: Box::new(Expression::Binary {
+                    op: BinaryOperator::Add,
+                    arg1: Box::new(Expression::Literal(Literal::Real(1.0))),
+                    arg2: Box::new(Expression::Literal(Literal::Real(2.0))),
+                }),
+                arg2: Box::new(Expression::Literal(Literal::Real(3.0)))
+            }
+        );
+    }
 
     #[test]
     fn literal() {
