@@ -124,7 +124,7 @@ pub fn simple_factor(input: &str) -> ParseResult<Expression> {
         interval,
         query_expression,
         unary,
-        enumeration_reference,
+        enumeration_reference, // must be after `unary` case
     ))
     .parse(input)
 }
