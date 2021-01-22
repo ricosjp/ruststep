@@ -121,10 +121,10 @@ pub fn simple_factor(input: &str) -> ParseResult<Expression> {
     alt((
         aggregate_initializer,
         entity_constructor,
-        enumeration_reference,
         interval,
         query_expression,
         unary,
+        enumeration_reference,
     ))
     .parse(input)
 }
