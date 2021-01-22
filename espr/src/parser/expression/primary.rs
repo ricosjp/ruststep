@@ -241,7 +241,16 @@ mod tests {
             assert_eq!(qualifiers.len(), 1);
             match &qualifiers[0] {
                 Qualifier::Range { begin: _, end } => {
-                    todo!()
+                    use super::*;
+                    assert_eq!(
+                        end,
+                        &Expression::Primary(Primary::Factor {
+                            factor: QualifiableFactor::ConstantFactor(
+                                ConstantFactor::BuiltInConstant(BuiltInConstant::INDETERMINATE)
+                            ),
+                            qualifiers: Vec::new()
+                        })
+                    );
                 }
                 _ => panic!("Must be range"),
             }
