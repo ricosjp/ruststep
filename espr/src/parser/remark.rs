@@ -1,8 +1,8 @@
-use super::basis::simple_id;
+use super::{basis::simple_id, util::RawParseResult};
 use itertools::Itertools;
 use nom::{
-    branch::alt, bytes::complete::*, character::complete::*, combinator::opt, error::VerboseError,
-    multi::*, sequence::*, IResult, Parser,
+    branch::alt, bytes::complete::*, character::complete::*, combinator::opt, multi::*,
+    sequence::*, Parser,
 };
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -11,11 +11,11 @@ pub struct Remark {
     pub remark: String,
 }
 
-fn begin(input: &str) -> IResult<&str, (), VerboseError<&str>> {
+fn begin(input: &str) -> RawParseResult<()> {
     tag("(*").map(|_| ()).parse(input)
 }
 
-fn end(input: &str) -> IResult<&str, String, VerboseError<&str>> {
+fn end(input: &str) -> RawParseResult<String> {
     tuple((many1(char('*')), char(')')))
         .map(|(stars, lparen)| {
             format!("{}{}", stars.iter().collect::<String>(), lparen)
@@ -25,21 +25,21 @@ fn end(input: &str) -> IResult<&str, String, VerboseError<&str>> {
         .parse(input)
 }
 
-fn middle_star(input: &str) -> IResult<&str, String, VerboseError<&str>> {
+fn middle_star(input: &str) -> RawParseResult<String> {
     tuple((many1(char('*')), none_of("*)")))
         .map(|(stars, c)| format!("{}{}", stars.iter().collect::<String>(), c))
         .parse(input)
 }
 
 /// Quoted string like `\`*)\``
-fn quoted(input: &str) -> IResult<&str, String, VerboseError<&str>> {
+fn quoted(input: &str) -> RawParseResult<String> {
     tuple((char('`'), many0(none_of("`")), char('`')))
         .map(|(_quote_start, chars, _quote_end)| format!("`{}`", chars.iter().collect::<String>()))
         .parse(input)
 }
 
 /// String which does not include `*` and \`
-fn non_quoted(input: &str) -> IResult<&str, String, VerboseError<&str>> {
+fn non_quoted(input: &str) -> RawParseResult<String> {
     many1(none_of("`*"))
         .map(|chars| chars.iter().collect::<String>())
         .parse(input)
@@ -64,7 +64,7 @@ fn non_quoted(input: &str) -> IResult<&str, String, VerboseError<&str>> {
 /// (* The `(*` symbol starts a remark, and the `*)` symbol ends it *)
 /// ```
 ///
-pub fn embedded_remark(input: &str) -> IResult<&str, Remark, VerboseError<&str>> {
+pub fn embedded_remark(input: &str) -> RawParseResult<Remark> {
     tuple((
         begin,
         multispace0,
@@ -91,7 +91,7 @@ pub fn embedded_remark(input: &str) -> IResult<&str, Remark, VerboseError<&str>>
 /// ```
 ///
 /// to support `\r\n` case and unicode string
-pub fn tail_remark(input: &str) -> IResult<&str, Remark, VerboseError<&str>> {
+pub fn tail_remark(input: &str) -> RawParseResult<Remark> {
     tuple((
         tag("--"),
         multispace0,
@@ -112,12 +112,12 @@ pub fn tail_remark(input: &str) -> IResult<&str, Remark, VerboseError<&str>> {
 ///
 /// `remark_ref` is replaced by `simple_id` because it should be handled by following semantics
 /// analysis phase.
-pub fn remark_tag(input: &str) -> IResult<&str, Vec<String>, VerboseError<&str>> {
+pub fn remark_tag(input: &str) -> RawParseResult<Vec<String>> {
     delimited(char('"'), separated_list1(char('.'), simple_id), char('"')).parse(input)
 }
 
 /// Match to spaces or remarks
-pub fn spaces_or_remarks(input: &str) -> IResult<&str, Vec<Remark>, VerboseError<&str>> {
+pub fn spaces_or_remarks(input: &str) -> RawParseResult<Vec<Remark>> {
     delimited(
         multispace0,
         separated_list0(multispace0, alt((embedded_remark, tail_remark))),

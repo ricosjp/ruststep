@@ -2,7 +2,10 @@ use super::remark::*;
 use nom::{error::VerboseError, multi::*, sequence::*, IResult};
 use std::marker::PhantomData;
 
-pub type ParseResult<'a, Output> = IResult<&'a str, (Output, Vec<Remark>), VerboseError<&'a str>>;
+/// Parse result without remarks
+pub type RawParseResult<'a, RawOutput> = IResult<&'a str, RawOutput, VerboseError<&'a str>>;
+/// Parse result with remarks
+pub type ParseResult<'a, Output> = RawParseResult<'a, (Output, Vec<Remark>)>;
 
 pub struct Map<'a, P, O1, O2, F> {
     parser: P,
