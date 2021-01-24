@@ -1,8 +1,11 @@
 use super::remark::*;
-use nom::{error::Error, multi::*, sequence::*, IResult};
+use nom::{error::VerboseError, multi::*, sequence::*, IResult};
 use std::marker::PhantomData;
 
-pub type ParseResult<'a, Output> = IResult<&'a str, (Output, Vec<Remark>), Error<&'a str>>;
+/// Parse result without remarks
+pub type RawParseResult<'a, RawOutput> = IResult<&'a str, RawOutput, VerboseError<&'a str>>;
+/// Parse result with remarks
+pub type ParseResult<'a, Output> = RawParseResult<'a, (Output, Vec<Remark>)>;
 
 pub struct Map<'a, P, O1, O2, F> {
     parser: P,
@@ -21,7 +24,7 @@ impl<'a, P: Clone, O1, O2, F: Clone> Clone for Map<'a, P, O1, O2, F> {
     }
 }
 
-impl<'a, P, O1, O2, F> nom::Parser<&'a str, (O2, Vec<Remark>), Error<&'a str>>
+impl<'a, P, O1, O2, F> nom::Parser<&'a str, (O2, Vec<Remark>), VerboseError<&'a str>>
     for Map<'a, P, O1, O2, F>
 where
     P: EsprParser<'a, O1>,
@@ -36,7 +39,7 @@ where
 
 /// Specialized trait of `nom::Parser` to capturing remarks
 pub trait EsprParser<'a, Output>:
-    nom::Parser<&'a str, (Output, Vec<Remark>), Error<&'a str>> + Clone
+    nom::Parser<&'a str, (Output, Vec<Remark>), VerboseError<&'a str>> + Clone
 {
     fn parse(&mut self, input: &'a str) -> ParseResult<'a, Output> {
         nom::Parser::parse(self, input)
@@ -56,7 +59,7 @@ pub trait EsprParser<'a, Output>:
 }
 
 impl<'a, Output, T> EsprParser<'a, Output> for T where
-    T: nom::Parser<&'a str, (Output, Vec<Remark>), Error<&'a str>> + Clone
+    T: nom::Parser<&'a str, (Output, Vec<Remark>), VerboseError<&'a str>> + Clone
 {
 }
 
@@ -66,7 +69,7 @@ impl<'a, Output, T> EsprParser<'a, Output> for T where
 /// https://doc.rust-lang.org/std/vec/struct.Vec.html#method.new
 pub fn remarked<'a, O, F>(f: F) -> impl EsprParser<'a, O>
 where
-    F: nom::Parser<&'a str, O, Error<&'a str>> + Clone,
+    F: nom::Parser<&'a str, O, VerboseError<&'a str>> + Clone,
 {
     use nom::Parser;
     move |input| f.clone().map(|out| (out, Vec::new())).parse(input)
