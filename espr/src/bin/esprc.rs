@@ -13,7 +13,22 @@ struct Arguments {
 fn main() {
     let args = Arguments::from_args();
     let src = fs::read_to_string(&args.source).expect("Failed to load EXPRESS source code");
-    let st = SyntaxTree::parse(&src).expect("Failed to parse input");
+    let st = match SyntaxTree::parse(&src) {
+        Ok(st) => st,
+        Err(e) => {
+            for (code, kind) in e.errors {
+                eprintln!(
+                    "Syntax Error occurred while parsing following line [{:?}]:",
+                    kind
+                );
+                for line in code.lines().take(3) {
+                    eprintln!("> {}", line);
+                }
+                eprintln!();
+            }
+            panic!("Syntax Error");
+        }
+    };
     let ir = IR::from_syntax_tree(&st).expect("Failed in semantic analysis phase");
     println!("{}", ir);
 }
