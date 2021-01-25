@@ -28,3 +28,8 @@ pages:
       - public
   only:
     - master
+
+ap201:
+  stage: test
+  script:
+    - cargo run --bin esprc -- ./schemas/APs/10303-201-aim-long.exp
