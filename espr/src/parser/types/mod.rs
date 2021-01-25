@@ -35,7 +35,7 @@ pub enum ConstructedType {
     Select(SelectType),
 }
 
-/// 198 constructed_types = enumeration_type | select_type .
+/// 198 constructed_types = [enumeration_type] | [select_type] .
 pub fn constructed_types(input: &str) -> ParseResult<ConstructedType> {
     alt((
         enumeration_type.map(|e| ConstructedType::Enumeration(e)),
@@ -52,7 +52,13 @@ pub enum ConcreteType {
     Ref(String),
 }
 
-/// 193 concrete_types = aggregation_types | simple_types | type_ref.
+/// 193 concrete_types = [aggregation_types] | [simple_types] | [type_ref].
+/// 172 aggregation_types = [array_type] | [bag_type] | [list_type] | [set_type] .
+/// 175 array_type = ARRAY [bound_spec] OF \[ OPTIONAL \] \[ UNIQUE \] [instantiable_type] .
+/// 180 bag_type = BAG \[ [bound_spec] \] OF [instantiable_type] .
+/// 250 list_type = LIST \[ [bound_spec] \] OF \[ UNIQUE \] [instantiable_type] .
+/// 303 set_type = SET \[ [bound_spec] \] OF [instantiable_type] .
+/// 240 instantiable_type = [concrete_types] | [entity_ref] .
 pub fn concrete_types(input: &str) -> ParseResult<ConcreteType> {
     // FIXME aggregation_types
     alt((
@@ -69,7 +75,7 @@ pub enum UnderlyingType {
     Concrete(ConcreteType),
 }
 
-/// 332 underlying_type = concrete_types | constructed_types .
+/// 332 underlying_type = [concrete_types] | [constructed_types] .
 pub fn underlying_type(input: &str) -> ParseResult<UnderlyingType> {
     alt((
         concrete_types.map(|ty| UnderlyingType::Concrete(ty)),
@@ -78,7 +84,7 @@ pub fn underlying_type(input: &str) -> ParseResult<UnderlyingType> {
     .parse(input)
 }
 
-/// 327 type_decl = TYPE type_id `=` underlying_type `;` \[ where_clause \] END_TYPE `;` .
+/// 327 type_decl = TYPE [type_id] `=` [underlying_type] `;` \[ [where_clause] \] END_TYPE `;` .
 pub fn type_decl(input: &str) -> ParseResult<TypeDecl> {
     tuple((
         tag("TYPE"),
