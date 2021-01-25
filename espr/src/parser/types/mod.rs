@@ -6,7 +6,7 @@ pub use enumeration::*;
 pub use select::*;
 pub use simple::*;
 
-use super::{identifier::*, util::*};
+use super::{domain::*, identifier::*, util::*};
 use derive_more::From;
 
 /// `EXTENSIBLE` and `GENERIC_ENTITY` keywords for [select_type] and [enumeration_type]
@@ -21,10 +21,11 @@ pub enum Extensiblity {
 }
 
 /// Output of [type_decl]
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct TypeDecl {
     type_id: String,
     underlying_type: UnderlyingType,
+    where_clause: Option<WhereClause>,
 }
 
 /// Output of [constructed_types]
@@ -85,13 +86,26 @@ pub fn type_decl(input: &str) -> ParseResult<TypeDecl> {
         char('='),
         underlying_type,
         char(';'),
+        opt(where_clause),
         tag("END_TYPE"),
         char(';'),
     ))
     .map(
-        |(_start, type_id, _equal, underlying_type, _semicoron1, _end, _semicoron2)| TypeDecl {
+        |(
+            _start,
             type_id,
+            _equal,
             underlying_type,
+            _semicoron1,
+            where_clause,
+            _end,
+            _semicoron2,
+        )| {
+            TypeDecl {
+                type_id,
+                underlying_type,
+                where_clause,
+            }
         },
     )
     .parse(input)
@@ -113,7 +127,8 @@ mod tests {
                 type_id: "my_type".to_string(),
                 underlying_type: super::UnderlyingType::Concrete(super::ConcreteType::Simple(
                     super::SimpleType::String_ { width_spec: None }
-                ))
+                )),
+                where_clause: None,
             }
         );
     }
