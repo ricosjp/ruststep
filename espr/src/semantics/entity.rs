@@ -7,14 +7,35 @@ use quote::*;
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Entity {
     name: String,
-    attributes: Vec<Attribute>,
+    attributes: Vec<EntityAttribute>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct Attribute {
+pub struct EntityAttribute {
     name: String,
     ty: TypeRef,
     optional: bool,
+}
+
+impl Legalize for EntityAttribute {
+    type Input = parser::entity::EntityAttribute;
+
+    fn legalize(
+        ns: &Namespace,
+        scope: &Scope,
+        attr: &parser::entity::EntityAttribute,
+    ) -> Result<Self, SemanticError> {
+        use parser::entity::ParameterType::*;
+        let ty = match &attr.ty {
+            Named(name) => ns.lookup_type(scope, name)?,
+            Simple(ty) => namespace::TypeRef::SimpleType(*ty),
+        };
+        Ok(EntityAttribute {
+            name: attr.name.clone(),
+            ty,
+            optional: attr.optional,
+        })
+    }
 }
 
 impl Legalize for Entity {
@@ -28,20 +49,8 @@ impl Legalize for Entity {
         let attributes = entity
             .attributes
             .iter()
-            .map(|attr| {
-                use parser::entity::ParameterType::*;
-                let ty = match &attr.ty {
-                    Named(name) => ns.lookup_type(scope, name)?,
-                    Simple(ty) => namespace::TypeRef::SimpleType(*ty),
-                };
-                Ok(Attribute {
-                    name: attr.name.clone(),
-                    ty,
-                    optional: false,
-                })
-            })
+            .map(|attr| EntityAttribute::legalize(ns, scope, attr))
             .collect::<Result<Vec<_>, _>>()?;
-
         Ok(Entity {
             name: entity.name.clone(),
             attributes,
@@ -57,12 +66,12 @@ impl ToTokens for Entity {
         let attr_name: Vec<_> = self
             .attributes
             .iter()
-            .map(|Attribute { name, .. }| format_ident!("{}", name))
+            .map(|EntityAttribute { name, .. }| format_ident!("{}", name))
             .collect();
         let attr_type: Vec<_> = self
             .attributes
             .iter()
-            .map(|Attribute { ty, optional, .. }| {
+            .map(|EntityAttribute { ty, optional, .. }| {
                 if *optional {
                     quote! { Option<#ty> }
                 } else {
