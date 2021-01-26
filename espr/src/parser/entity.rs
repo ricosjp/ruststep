@@ -10,7 +10,14 @@ pub struct Entity {
     /// attribute name and types
     ///
     /// Be sure that this "type" is a string, not validated type in this timing
-    pub attributes: Vec<(String, ParameterType)>,
+    pub attributes: Vec<EntityAttribute>,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct EntityAttribute {
+    pub name: String,
+    pub ty: ParameterType,
+    pub optional: bool,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, From)]
@@ -41,15 +48,24 @@ pub fn attribute_decl(input: &str) -> ParseResult<String> {
 }
 
 /// 215 explicit_attr = [attribute_decl] { `,` [attribute_decl] } `:` \[ OPTIONAL \] [parameter_type] `;` .
-pub fn explicit_attr(input: &str) -> ParseResult<(Vec<String>, ParameterType)> {
-    // FIXME OPTIONAL
+pub fn explicit_attr(input: &str) -> ParseResult<Vec<EntityAttribute>> {
     tuple((
         comma_separated(attribute_decl),
         char(':'),
+        opt(tag("OPTIONAL")),
         parameter_type,
         char(';'),
     ))
-    .map(|(attrs, _coron, ty, _semicoron)| (attrs, ty))
+    .map(|(attrs, _coron, optional, ty, _semicoron)| {
+        attrs
+            .into_iter()
+            .map(|name| EntityAttribute {
+                name,
+                ty: ty.clone(),
+                optional: optional.is_some(),
+            })
+            .collect()
+    })
     .parse(input)
 }
 
@@ -66,19 +82,13 @@ pub fn entity_head(input: &str) -> ParseResult<String> {
 }
 
 /// 204 entity_body = { [explicit_attr] } \[ derive_clause \] \[ inverse_clause \] \[ unique_clause \] \[ where_clause \] .
-pub fn entity_body(input: &str) -> ParseResult<Vec<(String, ParameterType)>> {
+pub fn entity_body(input: &str) -> ParseResult<Vec<EntityAttribute>> {
     // FIXME derive_clause
     // FIXME inverse_clause
     // FIXME unique_clause
     // FIXME where_clause
     spaced_many0(explicit_attr)
-        .map(|attributes| {
-            attributes
-                .into_iter()
-                .map(|(attrs, ty)| attrs.into_iter().map(move |attr| (attr, ty.clone())))
-                .flatten()
-                .collect()
-        })
+        .map(|attributes| attributes.into_iter().flatten().collect())
         .parse(input)
 }
 
@@ -125,16 +135,22 @@ mod tests {
 
     #[test]
     fn explicit_attr() {
-        let (residual, ((id, ty), _remark)) = super::explicit_attr("x : REAL;").finish().unwrap();
-        assert_eq!(id, &["x"]);
-        assert!(matches!(ty, ParameterType::Simple(SimpleType::Real)));
+        let (residual, (attrs, _remark)) = super::explicit_attr("x : REAL;").finish().unwrap();
         assert_eq!(residual, "");
+        assert_eq!(attrs.len(), 1);
+        let attr = &attrs[0];
+        assert_eq!(attr.name, "x");
+        assert!(matches!(attr.ty, ParameterType::Simple(SimpleType::Real)));
 
-        let (residual, ((id, ty), _remark)) =
-            super::explicit_attr("x, y : REAL;").finish().unwrap();
-        assert_eq!(id, &["x", "y"]);
-        assert!(matches!(ty, ParameterType::Simple(SimpleType::Real)));
+        let (residual, (attrs, _remark)) = super::explicit_attr("x, y : REAL;").finish().unwrap();
         assert_eq!(residual, "");
+        assert_eq!(attrs.len(), 2);
+        let attr = &attrs[0];
+        assert_eq!(attr.name, "x");
+        assert!(matches!(attr.ty, ParameterType::Simple(SimpleType::Real)));
+        let attr = &attrs[1];
+        assert_eq!(attr.name, "y");
+        assert!(matches!(attr.ty, ParameterType::Simple(SimpleType::Real)));
     }
 
     #[test]
@@ -152,12 +168,12 @@ mod tests {
 
         assert_eq!(entity.attributes.len(), 2);
         // check `m_ref`
-        assert_eq!(entity.attributes[0].0, "m_ref");
-        assert!(matches!(entity.attributes[0].1, ParameterType::Named(_)));
+        assert_eq!(entity.attributes[0].name, "m_ref");
+        assert!(matches!(entity.attributes[0].ty, ParameterType::Named(_)));
         // check `fattr`
-        assert_eq!(entity.attributes[1].0, "fattr");
+        assert_eq!(entity.attributes[1].name, "fattr");
         assert!(matches!(
-            entity.attributes[1].1,
+            entity.attributes[1].ty,
             ParameterType::Simple(SimpleType::Real)
         ));
 
