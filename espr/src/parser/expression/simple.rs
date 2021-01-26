@@ -51,6 +51,77 @@ pub enum Expression {
     },
 }
 
+macro_rules! impl_relation_op_expression {
+    ($f:ident, $op:path) => {
+        pub fn $f(self, other: Self) -> Self {
+            Expression::Relation {
+                op: $op,
+                lhs: Box::new(self),
+                rhs: Box::new(other),
+            }
+        }
+    };
+}
+
+macro_rules! impl_binary_op_expression {
+    ($f:ident, $op:path) => {
+        pub fn $f(self, other: Self) -> Self {
+            Expression::Binary {
+                op: $op,
+                arg1: Box::new(self),
+                arg2: Box::new(other),
+            }
+        }
+    };
+}
+
+impl Expression {
+    /// `SELF` constant
+    pub fn self_() -> Self {
+        Expression::QualifiableFactor {
+            factor: QualifiableFactor::BuiltInConstant(BuiltInConstant::SELF),
+            qualifiers: Vec::new(),
+        }
+    }
+
+    /// Real value literal
+    pub fn real(value: f64) -> Self {
+        Expression::Literal(Literal::Real(value))
+    }
+
+    impl_relation_op_expression!(leq, RelationOperator::LEQ);
+    impl_relation_op_expression!(geq, RelationOperator::GEQ);
+    impl_relation_op_expression!(lt, RelationOperator::LT);
+    impl_relation_op_expression!(gt, RelationOperator::GT);
+    impl_relation_op_expression!(eq, RelationOperator::Equal);
+    impl_relation_op_expression!(neq, RelationOperator::NotEqual);
+    impl_relation_op_expression!(in_, RelationOperator::In);
+    impl_relation_op_expression!(like, RelationOperator::Like);
+
+    impl_binary_op_expression!(and, BinaryOperator::And);
+    impl_binary_op_expression!(or, BinaryOperator::Or);
+    impl_binary_op_expression!(xor, BinaryOperator::Xor);
+}
+
+macro_rules! impl_binary_op_expression {
+    ($f:ident, $ops:path, $op:path) => {
+        impl $ops for Expression {
+            type Output = Self;
+            fn $f(self, other: Expression) -> Self {
+                Expression::Binary {
+                    op: $op,
+                    arg1: Box::new(self),
+                    arg2: Box::new(other),
+                }
+            }
+        }
+    };
+}
+
+impl_binary_op_expression!(add, std::ops::Add, BinaryOperator::Add);
+impl_binary_op_expression!(sub, std::ops::Sub, BinaryOperator::Sub);
+impl_binary_op_expression!(mul, std::ops::Mul, BinaryOperator::Mul);
+
 /// Create left-joined tree `1.0 + 2.0 - 3.0` into `(- (+ 1.0 2.0) 3.0)`
 fn create_tree(mut head: Expression, tails: Vec<(BinaryOperator, Expression)>) -> Expression {
     for (op, expr) in tails {
@@ -295,10 +366,38 @@ mod tests {
     }
 
     #[test]
+    fn relation() {
+        let (res, (expr, _remarks)) = super::expression("1 <= 2").finish().unwrap();
+        assert_eq!(res, "");
+        assert_eq!(expr, Expression::real(1.0).leq(Expression::real(2.0)));
+    }
+
+    #[test]
+    fn relation_self() {
+        let (res, (expr, _remarks)) = super::expression("1 <= SELF").finish().unwrap();
+        assert_eq!(res, "");
+        assert_eq!(expr, Expression::real(1.0).leq(Expression::self_()));
+    }
+
+    #[test]
+    fn binary_relation() {
+        let (res, (expr, _remarks)) = super::expression("(1 <= SELF) AND (SELF <= 12)")
+            .finish()
+            .unwrap();
+        assert_eq!(res, "");
+        assert_eq!(
+            expr,
+            Expression::real(1.0)
+                .leq(Expression::self_())
+                .and(Expression::self_().leq(Expression::real(12.0)))
+        );
+    }
+
+    #[test]
     fn literal() {
         let (res, (expr, _remarks)) = super::expression("1.0").finish().unwrap();
         assert_eq!(res, "");
-        assert_eq!(expr, Expression::Literal(Literal::Real(1.0)));
+        assert_eq!(expr, Expression::real(1.0));
     }
 
     #[test]

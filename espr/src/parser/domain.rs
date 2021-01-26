@@ -58,4 +58,20 @@ mod tests {
         assert_eq!(w.rules.len(), 1);
         assert_eq!(w.rules[0].label, Some("notnegative".to_string()));
     }
+
+    #[test]
+    fn where_clause_complex() {
+        let (residual, (w, _remarks)) = super::where_clause(
+            r#"
+            WHERE
+                wr1: (1 <= SELF) AND (SELF <= 12);
+            "#
+            .trim(),
+        )
+        .finish()
+        .unwrap();
+        assert_eq!(residual, "");
+        assert_eq!(w.rules.len(), 1);
+        assert_eq!(w.rules[0].label, Some("wr1".to_string()));
+    }
 }

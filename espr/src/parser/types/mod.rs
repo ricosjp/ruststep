@@ -116,4 +116,21 @@ mod tests {
             }
         );
     }
+
+    #[test]
+    fn type_decl_where() {
+        let (residual, (ty, _remark)) = super::type_decl(
+            r#"
+            TYPE dimension_count = INTEGER;
+            WHERE
+              wr1: SELF > 0;
+            END_TYPE;
+            "#
+            .trim(), // from AP201
+        )
+        .finish()
+        .unwrap();
+        assert_eq!(residual, "");
+        dbg!(ty);
+    }
 }
