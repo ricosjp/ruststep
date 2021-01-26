@@ -9,10 +9,19 @@ test:
   script:
     - cargo test
 
-pages:
-  stage: pages
+doc:
+  stage: test
   script:
     - cargo doc --no-deps
+  artifacts:
+    paths:
+      - target/doc
+
+pages:
+  stage: pages
+  needs:
+    - doc
+  script:
     - cp -r target/doc public
   artifacts:
     paths:
