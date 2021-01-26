@@ -6,6 +6,8 @@ use structopt::StructOpt;
 
 #[derive(Debug, StructOpt)]
 struct Arguments {
+    #[structopt(short = "l", long = "num_lines", default_value = "3")]
+    num_lines: usize,
     #[structopt(parse(from_os_str))]
     source: PathBuf,
 }
@@ -21,7 +23,7 @@ fn main() {
                     "Syntax Error occurred while parsing following line [{:?}]:",
                     kind
                 );
-                for line in code.lines().take(3) {
+                for line in code.lines().take(args.num_lines) {
                     eprintln!("> {}", line);
                 }
                 eprintln!();
