@@ -22,7 +22,7 @@ pub enum QualifiableFactor {
     BuiltInConstant(BuiltInConstant),
 }
 
-/// 274 qualifiable_factor = [attribute_ref] | [constant_factor] | [function_call] | [general_ref] | [population] .
+/// 274 qualifiable_factor = [attribute_ref] | [constant_factor] | function_call | [general_ref] | [population] .
 pub fn qualifiable_factor(input: &str) -> ParseResult<QualifiableFactor> {
     // FIXME support function_call
     alt((
