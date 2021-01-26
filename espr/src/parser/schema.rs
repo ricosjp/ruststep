@@ -1,10 +1,11 @@
-use super::{entity::*, identifier::*, util::*};
+use super::{entity::*, identifier::*, types::*, util::*};
 
 /// Parsed result of EXPRESS's SCHEMA
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct Schema {
     pub name: String,
     pub entities: Vec<Entity>,
+    pub types: Vec<TypeDecl>,
 }
 
 /// 296 schema_decl = SCHEMA [schema_id] \[ schema_version_id \] `;` [schema_body] END_SCHEMA `;` .
@@ -12,27 +13,51 @@ pub fn schema_decl(input: &str) -> ParseResult<Schema> {
     // FIXME schema_version_id
     let schema_head =
         tuple((tag("SCHEMA "), schema_id, char(';'))).map(|(_start, id, _semicoron)| id);
-
     tuple((schema_head, schema_body, tag("END_SCHEMA"), char(';')))
-        .map(|(name, entities, _end, _semicoron)| Schema { name, entities })
+        .map(|(name, (entities, types), _end, _semicoron)| Schema {
+            name,
+            entities,
+            types,
+        })
         .parse(input)
 }
 
-/// 199 declaration = [entity_decl] | function_decl | procedure_decl | subtype_constraint_decl | type_decl .
-pub fn declaration(input: &str) -> ParseResult<Entity> {
+#[derive(Debug, Clone, PartialEq)]
+pub enum Declaration {
+    Entity(Entity),
+    Type(TypeDecl),
+}
+
+/// 199 declaration = [entity_decl] | function_decl | procedure_decl | subtype_constraint_decl | [type_decl] .
+pub fn declaration(input: &str) -> ParseResult<Declaration> {
     // FIXME function_decl
     // FIXME procedure_decl
     // FIXME subtype_constraint_decl
-    // FIXME type_decl
-    entity_decl(input)
+    alt((
+        entity_decl.map(|e| Declaration::Entity(e)),
+        type_decl.map(|ty| Declaration::Type(ty)),
+    ))
+    .parse(input)
 }
 
 /// 295 schema_body = { interface_specification } \[ constant_decl \] { [declaration] | rule_decl } .
-pub fn schema_body(input: &str) -> ParseResult<Vec<Entity>> {
+pub fn schema_body(input: &str) -> ParseResult<(Vec<Entity>, Vec<TypeDecl>)> {
     // FIXME interface_specification
     // FIXME constant_decl
     // FIXME rule_decl
-    spaced_many0(declaration).parse(input)
+    spaced_many0(declaration)
+        .map(|decls| {
+            let mut entities = Vec::new();
+            let mut types = Vec::new();
+            for decl in decls {
+                match decl {
+                    Declaration::Entity(e) => entities.push(e),
+                    Declaration::Type(ty) => types.push(ty),
+                }
+            }
+            (entities, types)
+        })
+        .parse(input)
 }
 
 #[cfg(test)]
