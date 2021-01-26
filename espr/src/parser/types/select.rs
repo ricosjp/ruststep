@@ -62,3 +62,18 @@ pub fn select_type(input: &str) -> ParseResult<SelectType> {
     })
     .parse(input)
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use nom::Finish;
+
+    #[test]
+    fn select() {
+        let (res, (s, _remarks)) = super::select_type("SELECT (a, b)").finish().unwrap();
+        assert_eq!(res, "");
+        assert_eq!(s.extensiblity, Extensiblity::None);
+        assert_eq!(s.types[0], "a");
+        assert_eq!(s.types[1], "b");
+    }
+}
