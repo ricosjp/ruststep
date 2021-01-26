@@ -1,7 +1,9 @@
+mod concrete;
 mod enumeration;
 mod select;
 mod simple;
 
+pub use concrete::*;
 pub use enumeration::*;
 pub use select::*;
 pub use simple::*;
@@ -44,32 +46,8 @@ pub fn constructed_types(input: &str) -> ParseResult<ConstructedType> {
     .parse(input)
 }
 
-/// Output of [concrete_types]
-#[derive(Debug, Clone, PartialEq, Eq, From)]
-pub enum ConcreteType {
-    Simple(SimpleType),
-    AggrecationType,
-    Ref(String),
-}
-
-/// 193 concrete_types = [aggregation_types] | [simple_types] | [type_ref].
-/// 172 aggregation_types = [array_type] | [bag_type] | [list_type] | [set_type] .
-/// 175 array_type = ARRAY [bound_spec] OF \[ OPTIONAL \] \[ UNIQUE \] [instantiable_type] .
-/// 180 bag_type = BAG \[ [bound_spec] \] OF [instantiable_type] .
-/// 250 list_type = LIST \[ [bound_spec] \] OF \[ UNIQUE \] [instantiable_type] .
-/// 303 set_type = SET \[ [bound_spec] \] OF [instantiable_type] .
-/// 240 instantiable_type = [concrete_types] | [entity_ref] .
-pub fn concrete_types(input: &str) -> ParseResult<ConcreteType> {
-    // FIXME aggregation_types
-    alt((
-        simple_types.map(|ty| ConcreteType::Simple(ty)),
-        type_ref.map(|s| ConcreteType::Ref(s)),
-    ))
-    .parse(input)
-}
-
 /// Output of [underlying_type]
-#[derive(Debug, Clone, PartialEq, Eq, From)]
+#[derive(Debug, Clone, PartialEq, From)]
 pub enum UnderlyingType {
     Constructed(ConstructedType),
     Concrete(ConcreteType),
