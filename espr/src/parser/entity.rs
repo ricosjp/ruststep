@@ -227,7 +227,10 @@ mod tests {
         let attr = &attrs[0];
         assert_eq!(attr.name, "x");
         assert!(matches!(attr.ty, ParameterType::Simple(SimpleType::Real)));
+    }
 
+    #[test]
+    fn explicit_attr2() {
         let (residual, (attrs, _remark)) = super::explicit_attr("x, y : REAL;").finish().unwrap();
         assert_eq!(residual, "");
         assert_eq!(attrs.len(), 2);
@@ -237,6 +240,18 @@ mod tests {
         let attr = &attrs[1];
         assert_eq!(attr.name, "y");
         assert!(matches!(attr.ty, ParameterType::Simple(SimpleType::Real)));
+    }
+
+    #[test]
+    fn explicit_attr_optional() {
+        let (residual, (attrs, _remark)) =
+            super::explicit_attr("x: OPTIONAL REAL;").finish().unwrap();
+        assert_eq!(residual, "");
+        assert_eq!(attrs.len(), 1);
+        let attr = &attrs[0];
+        assert_eq!(attr.name, "x");
+        assert!(matches!(attr.ty, ParameterType::Simple(SimpleType::Real)));
+        assert!(attr.optional);
     }
 
     #[test]
