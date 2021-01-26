@@ -79,7 +79,7 @@ impl Namespace {
                 let attrs = entity
                     .attributes
                     .iter()
-                    .map(|(name, _ty)| name.clone())
+                    .map(|attr| attr.name.clone())
                     .collect();
                 names.insert(
                     current_scope.clone(),

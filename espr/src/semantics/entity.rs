@@ -28,14 +28,14 @@ impl Legalize for Entity {
         let attributes = entity
             .attributes
             .iter()
-            .map(|(name, ty)| {
+            .map(|attr| {
                 use parser::entity::ParameterType::*;
-                let ty = match ty {
+                let ty = match &attr.ty {
                     Named(name) => ns.lookup_type(scope, name)?,
                     Simple(ty) => namespace::TypeRef::SimpleType(*ty),
                 };
                 Ok(Attribute {
-                    name: name.clone(),
+                    name: attr.name.clone(),
                     ty,
                     optional: false,
                 })
