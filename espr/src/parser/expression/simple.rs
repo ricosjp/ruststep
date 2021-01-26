@@ -367,6 +367,13 @@ mod tests {
 
     #[test]
     fn relation() {
+        let (res, (expr, _remarks)) = super::expression("1 <= 2").finish().unwrap();
+        assert_eq!(res, "");
+        assert_eq!(expr, Expression::real(1.0).leq(Expression::real(2.0)));
+    }
+
+    #[test]
+    fn relation_self() {
         let (res, (expr, _remarks)) = super::expression("1 <= SELF").finish().unwrap();
         assert_eq!(res, "");
         assert_eq!(expr, Expression::real(1.0).leq(Expression::self_()));

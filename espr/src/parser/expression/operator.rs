@@ -30,14 +30,14 @@ pub enum RelationOperator {
 /// 282 rel_op = `<` | `>` | `<=` | `>=` | `<>` | `=` | `:<>:` | `:=:` .
 pub fn rel_op(input: &str) -> ParseResult<RelationOperator> {
     alt((
+        value(RelationOperator::InstanceEqual, tag(":=:")),
+        value(RelationOperator::InstanceNotEqual, tag(":<>:")),
+        value(RelationOperator::LEQ, tag("<=")),
+        value(RelationOperator::GEQ, tag(">=")),
         value(RelationOperator::Equal, tag("=")),
         value(RelationOperator::NotEqual, tag("<>")),
         value(RelationOperator::LT, tag("<")),
         value(RelationOperator::GT, tag(">")),
-        value(RelationOperator::LEQ, tag("<=")),
-        value(RelationOperator::GEQ, tag(">=")),
-        value(RelationOperator::InstanceEqual, tag(":=:")),
-        value(RelationOperator::InstanceNotEqual, tag(":<>:")),
     ))
     .parse(input)
 }
@@ -154,4 +154,16 @@ pub fn interval_op(input: &str) -> ParseResult<IntervalOperator> {
         value(IntervalOperator::LessThanEqual, tag("<=")),
     ))
     .parse(input)
+}
+
+#[cfg(test)]
+mod tests {
+    use nom::Finish;
+
+    #[test]
+    fn rel_op() {
+        let (res, (op, _remarks)) = super::rel_op("<=").finish().unwrap();
+        dbg!(op);
+        assert_eq!(res, "");
+    }
 }
