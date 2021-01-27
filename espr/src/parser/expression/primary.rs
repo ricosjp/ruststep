@@ -32,6 +32,42 @@ pub fn qualifiable_factor(input: &str) -> ParseResult<QualifiableFactor> {
     .parse(input)
 }
 
+/// 219 function_call = ( [built_in_function] | [function_ref] ) \[ [actual_parameter_list] \] .
+/// 167 actual_parameter_list = `(` [parameter] { `,` [parameter] } `)` .
+/// 264 parameter = [expression] .
+/// 187 built_in_function = ABS
+///                       | ACOS
+///                       | ASIN
+///                       | ATAN
+///                       | BLENGTH
+///                       | COS
+///                       | EXISTS
+///                       | EXP
+///                       | FORMAT
+///                       | HIBOUND
+///                       | HIINDEX
+///                       | LENGTH
+///                       | LOBOUND
+///                       | LOINDEX
+///                       | LOG
+///                       | LOG2
+///                       | LOG10
+///                       | NVL
+///                       | ODD
+///                       | ROLESOF
+///                       | SIN
+///                       | SIZEOF
+///                       | SQRT
+///                       | TAN
+///                       | TYPEOF
+///                       | USEDIN
+///                       | VALUE
+///                       | VALUE_IN
+///                       | VALUE_UNIQUE .
+pub fn function_call(input: &str) -> ParseResult<()> {
+    todo!()
+}
+
 /// 267 population = entity_ref .
 pub fn population(input: &str) -> ParseResult<String> {
     entity_ref(input)
