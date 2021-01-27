@@ -1,8 +1,8 @@
-use super::{expression::*, identifier::*, subsuper::*, types::*, util::*};
+use super::{domain::*, expression::*, identifier::*, subsuper::*, types::*, util::*};
 use derive_more::From;
 
 /// Parsed result of EXPRESS's ENTITY
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct Entity {
     /// Name of this entity type
     pub name: String,
@@ -14,6 +14,7 @@ pub struct Entity {
 
     pub constraint: Option<Constraint>,
     pub subtype: Option<SubTypeDecl>,
+    pub where_clause: Option<WhereClause>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -84,14 +85,15 @@ pub fn entity_head(input: &str) -> ParseResult<(String, Option<Constraint>, Opti
     .parse(input)
 }
 
-/// 204 entity_body = { [explicit_attr] } \[ derive_clause \] \[ inverse_clause \] \[ unique_clause \] \[ where_clause \] .
-pub fn entity_body(input: &str) -> ParseResult<Vec<EntityAttribute>> {
+/// 204 entity_body = { [explicit_attr] } \[ derive_clause \] \[ inverse_clause \] \[ unique_clause \] \[ [where_clause] \] .
+pub fn entity_body(input: &str) -> ParseResult<(Vec<EntityAttribute>, Option<WhereClause>)> {
     // FIXME derive_clause
     // FIXME inverse_clause
     // FIXME unique_clause
-    // FIXME where_clause
-    spaced_many0(explicit_attr)
-        .map(|attributes| attributes.into_iter().flatten().collect())
+    tuple((spaced_many0(explicit_attr), opt(where_clause)))
+        .map(|(attributes, where_clause)| {
+            (attributes.into_iter().flatten().collect(), where_clause)
+        })
         .parse(input)
 }
 
@@ -99,11 +101,12 @@ pub fn entity_body(input: &str) -> ParseResult<Vec<EntityAttribute>> {
 pub fn entity_decl(input: &str) -> ParseResult<Entity> {
     tuple((entity_head, entity_body, tag("END_ENTITY"), char(';')))
         .map(
-            |((name, constraint, subtype), attributes, _end, _semicoron)| Entity {
+            |((name, constraint, subtype), (attributes, where_clause), _end, _semicoron)| Entity {
                 name,
                 attributes,
                 constraint,
                 subtype,
+                where_clause,
             },
         )
         .parse(input)
