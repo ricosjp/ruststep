@@ -30,9 +30,9 @@ pub enum QualifiableFactor {
 /// 274 qualifiable_factor = [attribute_ref] | [constant_factor] | [function_call] | [general_ref] | [population] .
 pub fn qualifiable_factor(input: &str) -> ParseResult<QualifiableFactor> {
     alt((
+        function_call,
         alt((attribute_ref, general_ref, population)).map(|id| QualifiableFactor::Reference(id)),
         constant_factor,
-        function_call,
     ))
     .parse(input)
 }
@@ -43,17 +43,23 @@ pub enum Function {
     Reference(String),
 }
 
-/// 219 function_call = ( [built_in_function] | [function_ref] ) \[ [actual_parameter_list] \] .
+/// 999 function_call = ( [built_in_function] | [function_ref] ) [actual_parameter_list] .
+///
+/// Different from official definition
+///
+/// ```text
+/// 219 function_call = ( built_in_function | function_ref ) [ actual_parameter_list ] .
+/// ```
+///
+/// This function always requires `actual_parameter_list` in order to identify from
+/// other reference types.
 pub fn function_call(input: &str) -> ParseResult<QualifiableFactor> {
     let function_name = alt((
         built_in_function.map(|f| Function::BuiltInFunction(f)),
         function_ref.map(|f| Function::Reference(f)),
     ));
-    tuple((function_name, opt(actual_parameter_list)))
-        .map(|(name, args)| QualifiableFactor::FunctionCall {
-            name,
-            args: args.unwrap_or(Vec::new()),
-        })
+    tuple((function_name, actual_parameter_list))
+        .map(|(name, args)| QualifiableFactor::FunctionCall { name, args })
         .parse(input)
 }
 
@@ -279,7 +285,7 @@ pub fn built_in_constant(input: &str) -> ParseResult<BuiltInConstant> {
 
 #[cfg(test)]
 mod tests {
-    use super::{Expression, QualifiableFactor, Qualifier};
+    use super::{Expression, Function, QualifiableFactor, Qualifier};
     use nom::Finish;
 
     #[test]
@@ -313,6 +319,24 @@ mod tests {
             assert_eq!(qualifiers.len(), 2);
             assert_eq!(qualifiers[0], Qualifier::Group("group".to_string()));
             assert_eq!(qualifiers[1], Qualifier::Attribute("attr".to_string()));
+        } else {
+            panic!("Must be factor")
+        }
+    }
+
+    #[test]
+    fn function_call() {
+        let (res, (q, _remarks)) = super::primary("f(x)").finish().unwrap();
+        assert_eq!(res, "");
+        if let Expression::QualifiableFactor { factor, qualifiers } = q {
+            match factor {
+                QualifiableFactor::FunctionCall { name, args } => {
+                    assert_eq!(name, Function::Reference("f".to_string()));
+                    assert_eq!(args.len(), 1);
+                }
+                _ => panic!("Must be reference"),
+            }
+            assert_eq!(qualifiers.len(), 0);
         } else {
             panic!("Must be factor")
         }
