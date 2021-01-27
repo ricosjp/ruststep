@@ -20,21 +20,89 @@ pub enum QualifiableFactor {
     Reference(String),
     /// [built_in_constant]
     BuiltInConstant(BuiltInConstant),
+    /// [function_call]
+    FunctionCall {
+        name: Function,
+        args: Vec<Expression>,
+    },
 }
 
-/// 274 qualifiable_factor = [attribute_ref] | [constant_factor] | function_call | [general_ref] | [population] .
+/// 274 qualifiable_factor = [attribute_ref] | [constant_factor] | [function_call] | [general_ref] | [population] .
 pub fn qualifiable_factor(input: &str) -> ParseResult<QualifiableFactor> {
-    // FIXME support function_call
     alt((
         alt((attribute_ref, general_ref, population)).map(|id| QualifiableFactor::Reference(id)),
         constant_factor,
+        function_call,
     ))
     .parse(input)
 }
 
+#[derive(Debug, Clone, PartialEq)]
+pub enum Function {
+    BuiltInFunction(BuiltInFunction),
+    Reference(String),
+}
+
 /// 219 function_call = ( [built_in_function] | [function_ref] ) \[ [actual_parameter_list] \] .
+pub fn function_call(input: &str) -> ParseResult<QualifiableFactor> {
+    let function_name = alt((
+        built_in_function.map(|f| Function::BuiltInFunction(f)),
+        function_ref.map(|f| Function::Reference(f)),
+    ));
+    tuple((function_name, opt(actual_parameter_list)))
+        .map(|(name, args)| QualifiableFactor::FunctionCall {
+            name,
+            args: args.unwrap_or(Vec::new()),
+        })
+        .parse(input)
+}
+
 /// 167 actual_parameter_list = `(` [parameter] { `,` [parameter] } `)` .
+pub fn actual_parameter_list(input: &str) -> ParseResult<Vec<Expression>> {
+    tuple((char('('), comma_separated(parameter), char(')')))
+        .map(|(_open, parameters, _close)| parameters)
+        .parse(input)
+}
+
 /// 264 parameter = [expression] .
+pub fn parameter(input: &str) -> ParseResult<Expression> {
+    expression(input)
+}
+
+#[allow(non_camel_case_types)] // to use original identifiers
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
+pub enum BuiltInFunction {
+    ABS,
+    ACOS,
+    ASIN,
+    ATAN,
+    BLENGTH,
+    COS,
+    EXISTS,
+    EXP,
+    FORMAT,
+    HIBOUND,
+    HIINDEX,
+    LENGTH,
+    LOBOUND,
+    LOINDEX,
+    LOG,
+    LOG2,
+    LOG10,
+    NVL,
+    ODD,
+    ROLESOF,
+    SIN,
+    SIZEOF,
+    SQRT,
+    TAN,
+    TYPEOF,
+    USEDIN,
+    VALUE,
+    VALUE_IN,
+    VALUE_UNIQUE,
+}
+
 /// 187 built_in_function = ABS
 ///                       | ACOS
 ///                       | ASIN
@@ -64,8 +132,46 @@ pub fn qualifiable_factor(input: &str) -> ParseResult<QualifiableFactor> {
 ///                       | VALUE
 ///                       | VALUE_IN
 ///                       | VALUE_UNIQUE .
-pub fn function_call(input: &str) -> ParseResult<()> {
-    todo!()
+pub fn built_in_function(input: &str) -> ParseResult<BuiltInFunction> {
+    // alt impl is up to 9-element tuple
+    alt((
+        alt((
+            value(BuiltInFunction::ABS, tag("ABS")),
+            value(BuiltInFunction::ACOS, tag("ACOS")),
+            value(BuiltInFunction::ASIN, tag("ASIN")),
+            value(BuiltInFunction::ATAN, tag("ATAN")),
+            value(BuiltInFunction::BLENGTH, tag("BLENGTH")),
+            value(BuiltInFunction::COS, tag("COS")),
+            value(BuiltInFunction::EXISTS, tag("EXISTS")),
+            value(BuiltInFunction::EXP, tag("EXP")),
+            value(BuiltInFunction::FORMAT, tag("FORMAT")),
+        )),
+        alt((
+            value(BuiltInFunction::HIBOUND, tag("HIBOUND")),
+            value(BuiltInFunction::HIINDEX, tag("HIINDEX")),
+            value(BuiltInFunction::LENGTH, tag("LENGTH")),
+            value(BuiltInFunction::LOBOUND, tag("LOBOUND")),
+            value(BuiltInFunction::LOINDEX, tag("LOINDEX")),
+            value(BuiltInFunction::LOG, tag("LOG")),
+            value(BuiltInFunction::LOG2, tag("LOG2")),
+            value(BuiltInFunction::LOG10, tag("LOG10")),
+            value(BuiltInFunction::NVL, tag("NVL")),
+        )),
+        alt((
+            value(BuiltInFunction::ODD, tag("ODD")),
+            value(BuiltInFunction::ROLESOF, tag("ROLESOF")),
+            value(BuiltInFunction::SIN, tag("SIN")),
+            value(BuiltInFunction::SIZEOF, tag("SIZEOF")),
+            value(BuiltInFunction::SQRT, tag("SQRT")),
+            value(BuiltInFunction::TAN, tag("TAN")),
+            value(BuiltInFunction::TYPEOF, tag("TYPEOF")),
+            value(BuiltInFunction::USEDIN, tag("USEDIN")),
+            value(BuiltInFunction::VALUE, tag("VALUE")),
+        )),
+        value(BuiltInFunction::VALUE_IN, tag("VALUE_IN")),
+        value(BuiltInFunction::VALUE_UNIQUE, tag("VALUE_UNIQUE")),
+    ))
+    .parse(input)
 }
 
 /// 267 population = entity_ref .
