@@ -1,6 +1,6 @@
 use super::{identifier::*, util::*};
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum Constraint {
     AbstractEntity,
     AbstractSuperType(Option<SuperTypeExpression>),
@@ -33,7 +33,7 @@ pub fn subsuper(input: &str) -> ParseResult<(Option<Constraint>, Option<SubTypeD
     tuple((opt(supertype_constraint), opt(subtype_declaration))).parse(input)
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct SubTypeDecl {
     pub entity_references: Vec<String>,
 }
@@ -58,7 +58,7 @@ pub fn subtype_constraint(input: &str) -> ParseResult<SuperTypeExpression> {
         .parse(input)
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum SuperTypeExpression {
     Reference(String),
     AndOr { factors: Vec<SuperTypeExpression> },
