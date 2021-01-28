@@ -29,13 +29,26 @@ pub fn abstract_supertype_declaration(input: &str) -> ParseResult<Constraint> {
 }
 
 /// 312 subsuper = [ supertype_constraint ] [ subtype_declaration ] .
-pub fn subsuper(input: &str) -> ParseResult<()> {
-    todo!()
+pub fn subsuper(input: &str) -> ParseResult<(Option<Constraint>, Option<SubTypeDecl>)> {
+    tuple((opt(supertype_constraint), opt(subtype_declaration))).parse(input)
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct SubTypeDecl {
+    pub entity_references: Vec<String>,
 }
 
 /// 318 subtype_declaration = SUBTYPE OF ’(’ entity_ref { ’,’ entity_ref } ’)’ .
-pub fn subtype_declaration(input: &str) -> ParseResult<()> {
-    todo!()
+pub fn subtype_declaration(input: &str) -> ParseResult<SubTypeDecl> {
+    tuple((
+        tag("SUBTYPE"),
+        tag("OF"),
+        char('('),
+        comma_separated(entity_ref),
+        char(')'),
+    ))
+    .map(|(_subtype, _of, _open, entity_references, _close)| SubTypeDecl { entity_references })
+    .parse(input)
 }
 
 /// 313 subtype_constraint = OF ’(’ supertype_expression ’)’ .
@@ -101,11 +114,12 @@ pub fn supertype_factor(input: &str) -> ParseResult<SuperTypeExpression> {
 
 /// 323 supertype_term = entity_ref | one_of | `(` supertype_expression `)` .
 pub fn supertype_term(input: &str) -> ParseResult<SuperTypeExpression> {
-    // FIXME one_of
-    // FIXME supertype_expression
-    entity_ref
-        .map(|e| SuperTypeExpression::Reference(e))
-        .parse(input)
+    alt((
+        one_of,
+        supertype_expression,
+        entity_ref.map(|e| SuperTypeExpression::Reference(e)),
+    ))
+    .parse(input)
 }
 
 /// 322 supertype_rule = SUPERTYPE subtype_constraint .
@@ -116,6 +130,13 @@ pub fn supertype_rule(input: &str) -> ParseResult<Constraint> {
 }
 
 /// 263 one_of = ONEOF `(` supertype_expression { `,` supertype_expression } `)` .
-pub fn one_of(input: &str) -> ParseResult<()> {
-    todo!()
+pub fn one_of(input: &str) -> ParseResult<SuperTypeExpression> {
+    tuple((
+        tag("ONEOF"),
+        char('('),
+        comma_separated(supertype_expression),
+        char(')'),
+    ))
+    .map(|(_oneof, _open, exprs, _close)| SuperTypeExpression::OneOf { exprs })
+    .parse(input)
 }
