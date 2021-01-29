@@ -80,16 +80,18 @@ pub fn supertype_constraint(input: &str) -> ParseResult<Constraint> {
 pub fn supertype_expression(input: &str) -> ParseResult<SuperTypeExpression> {
     tuple((
         supertype_factor,
-        opt(spaced_many0(tuple((tag("ANDOR"), supertype_factor)))),
+        spaced_many0(tuple((tag("ANDOR"), supertype_factor))),
     ))
     .map(|(first, tails)| {
-        let mut factors = vec![first];
-        if let Some(tails) = tails {
+        if tails.len() > 0 {
+            let mut factors = vec![first];
             for (_andor, factor) in tails {
                 factors.push(factor)
             }
+            SuperTypeExpression::AndOr { factors }
+        } else {
+            first
         }
-        SuperTypeExpression::AndOr { factors }
     })
     .parse(input)
 }
@@ -98,16 +100,18 @@ pub fn supertype_expression(input: &str) -> ParseResult<SuperTypeExpression> {
 pub fn supertype_factor(input: &str) -> ParseResult<SuperTypeExpression> {
     tuple((
         supertype_term,
-        opt(spaced_many0(tuple((tag("AND"), supertype_term)))),
+        spaced_many0(tuple((tag("AND"), supertype_term))),
     ))
     .map(|(first, tails)| {
-        let mut terms = vec![first];
-        if let Some(tails) = tails {
+        if tails.len() > 0 {
+            let mut terms = vec![first];
             for (_and, term) in tails {
                 terms.push(term)
             }
+            SuperTypeExpression::And { terms }
+        } else {
+            first
         }
-        SuperTypeExpression::And { terms }
     })
     .parse(input)
 }
@@ -115,9 +119,9 @@ pub fn supertype_factor(input: &str) -> ParseResult<SuperTypeExpression> {
 /// 323 supertype_term = entity_ref | one_of | `(` supertype_expression `)` .
 pub fn supertype_term(input: &str) -> ParseResult<SuperTypeExpression> {
     alt((
+        entity_ref.map(|e| SuperTypeExpression::Reference(e)),
         one_of,
         supertype_expression,
-        entity_ref.map(|e| SuperTypeExpression::Reference(e)),
     ))
     .parse(input)
 }

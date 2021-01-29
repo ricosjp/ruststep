@@ -187,7 +187,7 @@ mod tests {
             super::entity_head("ENTITY pet ABSTRACT SUPERTYPE OF (ONEOF(cat, rabbit, dog));")
                 .finish()
                 .unwrap();
-        assert_eq!(name, "line");
+        assert_eq!(name, "pet");
         assert_eq!(
             constraint,
             Some(Constraint::AbstractSuperType(Some(
