@@ -1,8 +1,8 @@
-use super::{expression::*, identifier::*, types::*, util::*};
+use super::{domain::*, expression::*, identifier::*, subsuper::*, types::*, util::*};
 use derive_more::From;
 
 /// Parsed result of EXPRESS's ENTITY
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct Entity {
     /// Name of this entity type
     pub name: String,
@@ -11,6 +11,10 @@ pub struct Entity {
     ///
     /// Be sure that this "type" is a string, not validated type in this timing
     pub attributes: Vec<EntityAttribute>,
+
+    pub constraint: Option<Constraint>,
+    pub subtype: Option<SubTypeDecl>,
+    pub where_clause: Option<WhereClause>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -69,33 +73,42 @@ pub fn explicit_attr(input: &str) -> ParseResult<Vec<EntityAttribute>> {
     .parse(input)
 }
 
-/// 207 entity_head = ENTITY [entity_id] subsuper `;` .
-pub fn entity_head(input: &str) -> ParseResult<String> {
-    // FIXME subsuper
+/// 207 entity_head = ENTITY [entity_id] [subsuper] `;` .
+pub fn entity_head(input: &str) -> ParseResult<(String, Option<Constraint>, Option<SubTypeDecl>)> {
     tuple((
         tag("ENTITY "), // parse with trailing space
         entity_id,
+        subsuper,
         char(';'),
     ))
-    .map(|(_start, id, _semicoron)| id)
+    .map(|(_start, id, (constraint, subtype), _semicoron)| (id, constraint, subtype))
     .parse(input)
 }
 
-/// 204 entity_body = { [explicit_attr] } \[ derive_clause \] \[ inverse_clause \] \[ unique_clause \] \[ where_clause \] .
-pub fn entity_body(input: &str) -> ParseResult<Vec<EntityAttribute>> {
+/// 204 entity_body = { [explicit_attr] } \[ derive_clause \] \[ inverse_clause \] \[ unique_clause \] \[ [where_clause] \] .
+pub fn entity_body(input: &str) -> ParseResult<(Vec<EntityAttribute>, Option<WhereClause>)> {
     // FIXME derive_clause
     // FIXME inverse_clause
     // FIXME unique_clause
-    // FIXME where_clause
-    spaced_many0(explicit_attr)
-        .map(|attributes| attributes.into_iter().flatten().collect())
+    tuple((spaced_many0(explicit_attr), opt(where_clause)))
+        .map(|(attributes, where_clause)| {
+            (attributes.into_iter().flatten().collect(), where_clause)
+        })
         .parse(input)
 }
 
 /// 206 entity_decl = [entity_head] [entity_body] END_ENTITY `;` .
 pub fn entity_decl(input: &str) -> ParseResult<Entity> {
     tuple((entity_head, entity_body, tag("END_ENTITY"), char(';')))
-        .map(|(name, attributes, _end, _semicoron)| Entity { name, attributes })
+        .map(
+            |((name, constraint, subtype), (attributes, where_clause), _end, _semicoron)| Entity {
+                name,
+                attributes,
+                constraint,
+                subtype,
+                where_clause,
+            },
+        )
         .parse(input)
 }
 
@@ -128,8 +141,66 @@ mod tests {
 
     #[test]
     fn entity_head() {
-        let (residual, (name, _remark)) = super::entity_head("ENTITY homhom;").finish().unwrap();
+        let (residual, ((name, constraint, subtype), _remark)) =
+            super::entity_head("ENTITY homhom;").finish().unwrap();
         assert_eq!(name, "homhom");
+        assert_eq!(constraint, None);
+        assert_eq!(subtype, None);
+        assert_eq!(residual, "");
+    }
+
+    #[test]
+    fn subtype_of() {
+        // example from ISO 10303-11:2004(E) p.50
+        let (residual, ((name, constraint, subtype), _remark)) =
+            super::entity_head("ENTITY odd_number SUBTYPE OF (integer_number);")
+                .finish()
+                .unwrap();
+        assert_eq!(name, "odd_number");
+        assert_eq!(constraint, None);
+        assert_eq!(
+            subtype,
+            Some(SubTypeDecl {
+                entity_references: vec!["integer_number".to_string()]
+            })
+        );
+        assert_eq!(residual, "");
+    }
+
+    #[test]
+    fn abstract_entity() {
+        // example from ISO 10303-11:2004(E) p.52
+        let (residual, ((name, constraint, subtype), _remark)) =
+            super::entity_head("ENTITY line ABSTRACT;")
+                .finish()
+                .unwrap();
+        assert_eq!(name, "line");
+        assert_eq!(constraint, Some(Constraint::AbstractEntity));
+        assert_eq!(subtype, None);
+        assert_eq!(residual, "");
+    }
+
+    #[test]
+    fn one_of() {
+        // example from ISO 10303-11:2004(E) p.57 with some modification
+        let (residual, ((name, constraint, subtype), _remark)) =
+            super::entity_head("ENTITY pet ABSTRACT SUPERTYPE OF (ONEOF(cat, rabbit, dog));")
+                .finish()
+                .unwrap();
+        assert_eq!(name, "pet");
+        assert_eq!(
+            constraint,
+            Some(Constraint::AbstractSuperType(Some(
+                SuperTypeExpression::OneOf {
+                    exprs: vec![
+                        SuperTypeExpression::Reference("cat".to_string()),
+                        SuperTypeExpression::Reference("rabbit".to_string()),
+                        SuperTypeExpression::Reference("dog".to_string())
+                    ]
+                }
+            )))
+        );
+        assert_eq!(subtype, None);
         assert_eq!(residual, "");
     }
 

@@ -39,6 +39,7 @@ pub mod identifier;
 pub mod literal;
 pub mod remark;
 pub mod schema;
+pub mod subsuper;
 pub mod syntax_tree;
 pub mod types;
 pub mod util;
