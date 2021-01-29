@@ -141,9 +141,66 @@ mod tests {
 
     #[test]
     fn entity_head() {
-        let (residual, ((name, _constraint, _subtype), _remark)) =
+        let (residual, ((name, constraint, subtype), _remark)) =
             super::entity_head("ENTITY homhom;").finish().unwrap();
         assert_eq!(name, "homhom");
+        assert_eq!(constraint, None);
+        assert_eq!(subtype, None);
+        assert_eq!(residual, "");
+    }
+
+    #[test]
+    fn subtype_of() {
+        // example from ISO 10303-11:2004(E) p.50
+        let (residual, ((name, constraint, subtype), _remark)) =
+            super::entity_head("ENTITY odd_number SUBTYPE OF (integer_number);")
+                .finish()
+                .unwrap();
+        assert_eq!(name, "odd_number");
+        assert_eq!(constraint, None);
+        assert_eq!(
+            subtype,
+            Some(SubTypeDecl {
+                entity_references: vec!["integer_number".to_string()]
+            })
+        );
+        assert_eq!(residual, "");
+    }
+
+    #[test]
+    fn abstract_entity() {
+        // example from ISO 10303-11:2004(E) p.52
+        let (residual, ((name, constraint, subtype), _remark)) =
+            super::entity_head("ENTITY line ABSTRACT;")
+                .finish()
+                .unwrap();
+        assert_eq!(name, "line");
+        assert_eq!(constraint, Some(Constraint::AbstractEntity));
+        assert_eq!(subtype, None);
+        assert_eq!(residual, "");
+    }
+
+    #[test]
+    fn one_of() {
+        // example from ISO 10303-11:2004(E) p.57 with some modification
+        let (residual, ((name, constraint, subtype), _remark)) =
+            super::entity_head("ENTITY pet ABSTRACT SUPERTYPE OF (ONEOF(cat, rabbit, dog));")
+                .finish()
+                .unwrap();
+        assert_eq!(name, "line");
+        assert_eq!(
+            constraint,
+            Some(Constraint::AbstractSuperType(Some(
+                SuperTypeExpression::OneOf {
+                    exprs: vec![
+                        SuperTypeExpression::Reference("cat".to_string()),
+                        SuperTypeExpression::Reference("rabbit".to_string()),
+                        SuperTypeExpression::Reference("dog".to_string())
+                    ]
+                }
+            )))
+        );
+        assert_eq!(subtype, None);
         assert_eq!(residual, "");
     }
 

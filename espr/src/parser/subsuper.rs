@@ -69,8 +69,8 @@ pub enum SuperTypeExpression {
 /// 319 supertype_constraint = abstract_entity_declaration | abstract_supertype_declaration | supertype_rule .
 pub fn supertype_constraint(input: &str) -> ParseResult<Constraint> {
     alt((
-        abstract_entity_declaration,
         abstract_supertype_declaration,
+        abstract_entity_declaration,
         supertype_rule,
     ))
     .parse(input)
