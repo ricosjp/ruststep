@@ -11,19 +11,20 @@ pub enum Logical {
 #[derive(Debug, Clone, PartialEq, From)]
 pub enum Literal {
     Real(f64),
+    String(String),
     Logial(Logical),
 }
 
-/// 251 literal = binary_literal | [logical_literal] | [real_literal] | string_literal .
+/// 251 literal = binary_literal | [logical_literal] | [real_literal] | [string_literal] .
 ///
 /// Integer value, e.g. `23`, will be recognized as a real number `23.0`.
 /// Use [integer_literal] if you wish to parse it as an integer.
 pub fn literal(input: &str) -> ParseResult<Literal> {
+    // FIXME binary_literal,
     alt((
         logical_literal.map(|val| Literal::Logial(val)),
         real_literal.map(|val| Literal::Real(val)),
-        // FIXME binary_literal,
-        // FIXME string_literal
+        string_literal.map(|val| Literal::String(val)),
     ))
     .parse(input)
 }
