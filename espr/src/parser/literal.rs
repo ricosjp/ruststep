@@ -1,4 +1,4 @@
-use super::util::*;
+use super::{basis::*, util::*};
 use derive_more::From;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -51,6 +51,15 @@ pub fn integer_literal(input: &str) -> ParseResult<u64> {
 /// 142 real_literal = integer_literal | ( digits `.` \[ digits \] \[ `e` \[ sign \] digits \] ) .
 pub fn real_literal(input: &str) -> ParseResult<f64> {
     remarked(nom::number::complete::double).parse(input)
+}
+
+/// 310 string_literal = simple_string_literal | encoded_string_literal .
+pub fn string_literal(input: &str) -> ParseResult<String> {
+    alt((
+        remarked(simple_string_literal),
+        remarked(encoded_string_literal),
+    ))
+    .parse(input)
 }
 
 #[cfg(test)]

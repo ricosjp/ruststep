@@ -11,6 +11,49 @@ pub fn digit(input: &str) -> RawParseResult<char> {
     satisfy(|c| matches!(c, '0'..='9')).parse(input)
 }
 
+/// 127 hex_digit = [digit] | `a` | `b` | `c` | `d` | `e` | `f` .
+pub fn hex_digit(input: &str) -> RawParseResult<u8> {
+    let hex_letter = satisfy(|c| matches!(c, 'a'..='f'));
+    alt((digit, hex_letter))
+        .map(|c| c.to_digit(16).unwrap() as u8)
+        .parse(input)
+}
+
+/// 136 octet = [hex_digit] [hex_digit] .
+pub fn octet(input: &str) -> RawParseResult<u8> {
+    tuple((hex_digit, hex_digit))
+        .map(|(u, l)| {
+            assert!(u < 16);
+            assert!(l < 16);
+            u * 16 + l
+        })
+        .parse(input)
+}
+
+/// 126 encoded_character = [octet] [octet] [octet] [octet] .
+pub fn encoded_character(input: &str) -> RawParseResult<[u8; 4]> {
+    tuple((octet, octet, octet, octet))
+        .map(|(a, b, c, d)| [a, b, c, d])
+        .parse(input)
+}
+
+/// 140 encoded_string_literal = `"` encoded_character { encoded_character } `"` .
+pub fn encoded_string_literal(input: &str) -> RawParseResult<String> {
+    tuple((char('"'), many1(encoded_character), char('"')))
+        .map(|(_openq, chars, _closeq)| {
+            let raw_chars: Vec<u8> = chars.iter().map(|c| c.iter()).flatten().cloned().collect();
+            String::from_utf8(raw_chars).expect("non UTF8 input")
+        })
+        .parse(input)
+}
+
+/// 144 simple_string_literal = \q { ( \q \q ) | not_quote | \s | \x9 | \xA | \xD } \q .
+pub fn simple_string_literal(input: &str) -> RawParseResult<String> {
+    tuple((char('\''), many0(none_of("'")), char('\'')))
+        .map(|(_open, chars, _close)| chars.into_iter().collect())
+        .parse(input)
+}
+
 /// 143 simple_id = [letter] { [letter] | [digit] | `_` } .
 pub fn simple_id(input: &str) -> RawParseResult<String> {
     tuple((letter, many0(alt((letter, digit, char('_'))))))
@@ -46,6 +89,22 @@ mod tests {
 
         // Alphabets are not allowed
         assert!(super::digit("h").finish().is_err());
+    }
+
+    #[test]
+    fn hex_digit() {
+        let (residual, l) = super::hex_digit("a23").finish().unwrap();
+        assert_eq!(l, 10);
+        assert_eq!(residual, "23");
+
+        assert!(super::hex_digit("x").finish().is_err());
+    }
+
+    #[test]
+    fn encoded_character() {
+        let (residual, l) = super::encoded_character("a0b1c2d3").finish().unwrap();
+        assert_eq!(l, [0xa0, 0xb1, 0xc2, 0xd3]);
+        assert_eq!(residual, "");
     }
 
     #[test]
