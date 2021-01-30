@@ -25,7 +25,7 @@ impl Legalize for EntityAttribute {
         scope: &Scope,
         attr: &parser::entity::EntityAttribute,
     ) -> Result<Self, SemanticError> {
-        use parser::entity::ParameterType::*;
+        use parser::types::ParameterType::*;
         let ty = match &attr.ty {
             Named(name) => ns.lookup_type(scope, name)?,
             Simple(ty) => namespace::TypeRef::SimpleType(*ty),

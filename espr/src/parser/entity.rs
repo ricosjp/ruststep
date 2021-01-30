@@ -1,5 +1,4 @@
 use super::{domain::*, expression::*, identifier::*, subsuper::*, types::*, util::*};
-use derive_more::From;
 
 /// Parsed result of EXPRESS's ENTITY
 #[derive(Debug, Clone, PartialEq)]
@@ -22,27 +21,6 @@ pub struct EntityAttribute {
     pub name: String,
     pub ty: ParameterType,
     pub optional: bool,
-}
-
-#[derive(Debug, Clone, PartialEq, Eq, From)]
-pub enum ParameterType {
-    Named(String),
-    Simple(SimpleType),
-}
-
-/// 258 named_types = [entity_ref] | [type_ref] .
-pub fn named_types(input: &str) -> ParseResult<String> {
-    alt((entity_ref, type_ref)).parse(input)
-}
-
-/// 266 parameter_type = generalized_types | [named_types] | [simple_types] .
-pub fn parameter_type(input: &str) -> ParseResult<ParameterType> {
-    // FIXME generalized_types
-    alt((
-        named_types.map(|ty| ParameterType::Named(ty)),
-        simple_types.map(|ty| ParameterType::Simple(ty)),
-    ))
-    .parse(input)
 }
 
 /// 177 attribute_decl = [attribute_id] | redeclared_attribute .

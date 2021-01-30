@@ -1,10 +1,12 @@
 mod concrete;
 mod enumeration;
+mod generalized;
 mod select;
 mod simple;
 
 pub use concrete::*;
 pub use enumeration::*;
+pub use generalized::*;
 pub use select::*;
 pub use simple::*;
 
