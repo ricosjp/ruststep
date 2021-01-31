@@ -39,7 +39,7 @@ pub fn named_types(input: &str) -> ParseResult<String> {
     alt((entity_ref, type_ref)).parse(input)
 }
 
-/// 266 parameter_type = generalized_types | [named_types] | [simple_types] .
+/// 266 parameter_type = [generalized_types] | [named_types] | [simple_types] .
 pub fn parameter_type(input: &str) -> ParseResult<ParameterType> {
     alt((
         generalized_types,
@@ -163,4 +163,49 @@ pub fn general_set_type(input: &str) -> ParseResult<ParameterType> {
             bound_spec,
         })
         .parse(input)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::super::super::expression::Expression;
+    use super::*;
+    use nom::Finish;
+
+    #[test]
+    fn simple() {
+        let (res, (set, _remarks)) = super::parameter_type("STRING").finish().unwrap();
+        dbg!(&set);
+        assert_eq!(res, "");
+        assert_eq!(
+            set,
+            ParameterType::Simple(SimpleType::String_ { width_spec: None }),
+        )
+    }
+
+    #[test]
+    fn named() {
+        let (res, (set, _remarks)) = super::parameter_type("vim").finish().unwrap();
+        dbg!(&set);
+        assert_eq!(res, "");
+        assert_eq!(set, ParameterType::Named("vim".to_string()),)
+    }
+
+    #[test]
+    fn set() {
+        let (res, (set, _remarks)) = super::parameter_type("SET [1:?] OF curve")
+            .finish()
+            .unwrap();
+        dbg!(&set);
+        assert_eq!(res, "");
+        assert_eq!(
+            set,
+            ParameterType::Set {
+                ty: Box::new(ParameterType::Named("curve".to_string())),
+                bound_spec: Some(Bound {
+                    upper: Expression::indeterminate(),
+                    lower: Expression::real(1.0),
+                })
+            }
+        )
+    }
 }

@@ -104,8 +104,8 @@ pub fn set_type(input: &str) -> ParseResult<ConcreteType> {
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct Bound {
-    lower: Expression,
-    upper: Expression,
+    pub lower: Expression,
+    pub upper: Expression,
 }
 
 /// 183 bound_1 = [numeric_expression] .
