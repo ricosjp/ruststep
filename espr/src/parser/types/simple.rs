@@ -33,7 +33,7 @@ pub fn simple_types(input: &str) -> ParseResult<SimpleType> {
         real_type,
         integer_type,
         logical_type,
-        boolen_type,
+        boolean_type,
         string_type,
         binary_type,
     ))
@@ -64,7 +64,7 @@ pub fn logical_type(input: &str) -> ParseResult<SimpleType> {
 }
 
 /// 182 boolean_type = BOOLEAN .
-pub fn boolen_type(input: &str) -> ParseResult<SimpleType> {
+pub fn boolean_type(input: &str) -> ParseResult<SimpleType> {
     value(SimpleType::Boolen, tag("BOOLEN")).parse(input)
 }
 
