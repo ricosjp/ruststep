@@ -104,21 +104,21 @@ pub fn set_type(input: &str) -> ParseResult<ConcreteType> {
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct Bound {
-    lower: Expression,
-    upper: Expression,
+    pub lower: Expression,
+    pub upper: Expression,
 }
 
-/// 183 bound_1 = numeric_expression .
+/// 183 bound_1 = [numeric_expression] .
 pub fn bound_1(input: &str) -> ParseResult<Expression> {
     numeric_expression(input)
 }
 
-/// 184 bound_2 = numeric_expression .
+/// 184 bound_2 = [numeric_expression] .
 pub fn bound_2(input: &str) -> ParseResult<Expression> {
     numeric_expression(input)
 }
 
-/// 185 bound_spec = ’[’ bound_1 ’:’ bound_2 ’]’ .
+/// 185 bound_spec = `[` [bound_1] `:` [bound_2] `]` .
 pub fn bound_spec(input: &str) -> ParseResult<Bound> {
     tuple((char('['), bound_1, char(':'), bound_2, char(']')))
         .map(|(_open, lower, _comma, upper, _close)| Bound { lower, upper })

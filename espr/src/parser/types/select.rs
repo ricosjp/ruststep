@@ -1,5 +1,5 @@
 use super::{
-    super::{entity::named_types, util::*},
+    super::{types::named_types, util::*},
     *,
 };
 

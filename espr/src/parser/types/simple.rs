@@ -26,14 +26,14 @@ pub enum SimpleType {
     Binary { width_spec: Option<WidthSpec> },
 }
 
-/// 307 simple_types = binary_type | boolean_type | integer_type | logical_type | number_type | real_type | string_type .
+/// 307 simple_types = [binary_type] | [boolean_type] | [integer_type] | [logical_type] | [number_type] | [real_type] | [string_type] .
 pub fn simple_types(input: &str) -> ParseResult<SimpleType> {
     alt((
         number_type,
         real_type,
         integer_type,
         logical_type,
-        boolen_type,
+        boolean_type,
         string_type,
         binary_type,
     ))
@@ -64,18 +64,18 @@ pub fn logical_type(input: &str) -> ParseResult<SimpleType> {
 }
 
 /// 182 boolean_type = BOOLEAN .
-pub fn boolen_type(input: &str) -> ParseResult<SimpleType> {
+pub fn boolean_type(input: &str) -> ParseResult<SimpleType> {
     value(SimpleType::Boolen, tag("BOOLEN")).parse(input)
 }
 
-/// 311 string_type = STRING \[ width_spec \] .
+/// 311 string_type = STRING \[ [width_spec] \] .
 pub fn string_type(input: &str) -> ParseResult<SimpleType> {
     tuple((tag("STRING"), opt(width_spec)))
         .map(|(_, width_spec)| SimpleType::String_ { width_spec })
         .parse(input)
 }
 
-/// 181 binary_type = BINARY \[ width_spec \] .
+/// 181 binary_type = BINARY \[ [width_spec] \] .
 pub fn binary_type(input: &str) -> ParseResult<SimpleType> {
     tuple((tag("BINARY"), opt(width_spec)))
         .map(|(_, width_spec)| SimpleType::Binary { width_spec })

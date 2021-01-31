@@ -84,6 +84,14 @@ impl Expression {
         }
     }
 
+    /// `?` constant
+    pub fn indeterminate() -> Self {
+        Expression::QualifiableFactor {
+            factor: QualifiableFactor::BuiltInConstant(BuiltInConstant::INDETERMINATE),
+            qualifiers: Vec::new(),
+        }
+    }
+
     /// Real value literal
     pub fn real(value: f64) -> Self {
         Expression::Literal(Literal::Real(value))
