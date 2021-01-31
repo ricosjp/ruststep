@@ -75,6 +75,46 @@ pub fn entity_body(input: &str) -> ParseResult<(Vec<EntityAttribute>, Option<Whe
         .parse(input)
 }
 
+/// 201 derive_clause = DERIVE [derived_attr] { [derived_attr] } .
+pub fn derive_clause(input: &str) -> ParseResult<()> {
+    todo!()
+}
+
+/// 200 derived_attr = [attribute_decl] `:` [parameter_type] `:=` [expression] `;` .
+pub fn derived_attr(input: &str) -> ParseResult<()> {
+    todo!()
+}
+
+/// 249 inverse_clause = INVERSE [inverse_attr] { [inverse_attr] } .
+pub fn inverse_clause(input: &str) -> ParseResult<()> {
+    todo!()
+}
+
+/// 248 inverse_attr = [attribute_decl] `:` \[ ( SET | BAG ) \[ [bound_spec] \] OF \] [entity_ref] FOR \[ [entity_ref] `.` \] [attribute_ref] `;` .
+pub fn inverse_attr(input: &str) -> ParseResult<()> {
+    todo!()
+}
+
+/// 333 unique_clause = UNIQUE [unique_rule] `;` { [unique_rule] `;` } .
+pub fn unique_clause(input: &str) -> ParseResult<()> {
+    todo!()
+}
+
+/// 334 unique_rule = \[ [rule_label_id] `:` \] [referenced_attribute] { `,` [referenced_attribute] } .
+pub fn unique_rule(input: &str) -> ParseResult<()> {
+    todo!()
+}
+
+/// 280 referenced_attribute = [attribute_ref] | [qualified_attribute] .
+pub fn referenced_attribute(input: &str) -> ParseResult<()> {
+    todo!()
+}
+
+/// 275 qualified_attribute = SELF [group_qualifier] [attribute_qualifier] .
+pub fn qualified_attribute(input: &str) -> ParseResult<()> {
+    todo!()
+}
+
 /// 206 entity_decl = [entity_head] [entity_body] END_ENTITY `;` .
 pub fn entity_decl(input: &str) -> ParseResult<Entity> {
     tuple((entity_head, entity_body, tag("END_ENTITY"), char(';')))
