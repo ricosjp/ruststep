@@ -29,6 +29,7 @@ impl Legalize for EntityAttribute {
         let ty = match &attr.ty {
             Named(name) => ns.lookup_type(scope, name)?,
             Simple(ty) => namespace::TypeRef::SimpleType(*ty),
+            _ => unimplemented!(),
         };
         Ok(EntityAttribute {
             name: attr.name.clone(),

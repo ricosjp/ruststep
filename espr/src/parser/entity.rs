@@ -16,7 +16,7 @@ pub struct Entity {
     pub where_clause: Option<WhereClause>,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct EntityAttribute {
     pub name: String,
     pub ty: ParameterType,
