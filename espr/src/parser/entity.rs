@@ -1,4 +1,4 @@
-use super::{domain::*, expression::*, identifier::*, subsuper::*, types::*, util::*};
+use super::{clause::*, expression::*, identifier::*, subsuper::*, types::*, util::*};
 
 /// Parsed result of EXPRESS's ENTITY
 #[derive(Debug, Clone, PartialEq)]
