@@ -1,4 +1,4 @@
-use super::{domain::*, expression::*, identifier::*, subsuper::*, types::*, util::*};
+use super::{clause::*, expression::*, identifier::*, subsuper::*, types::*, util::*};
 
 /// Parsed result of EXPRESS's ENTITY
 #[derive(Debug, Clone, PartialEq)]
@@ -13,6 +13,10 @@ pub struct Entity {
 
     pub constraint: Option<Constraint>,
     pub subtype: Option<SubTypeDecl>,
+
+    pub derive_clause: Option<DeriveClause>,
+    pub inverse_clause: Option<InverseClause>,
+    pub unique_clause: Option<UniqueClause>,
     pub where_clause: Option<WhereClause>,
 }
 
@@ -63,27 +67,60 @@ pub fn entity_head(input: &str) -> ParseResult<(String, Option<Constraint>, Opti
     .parse(input)
 }
 
+/// Intermediate output of [entity_body]
+#[derive(Debug, Clone, PartialEq)]
+pub struct EntityBody {
+    pub attributes: Vec<EntityAttribute>,
+    pub derive_clause: Option<DeriveClause>,
+    pub inverse_clause: Option<InverseClause>,
+    pub unique_clause: Option<UniqueClause>,
+    pub where_clause: Option<WhereClause>,
+}
+
 /// 204 entity_body = { [explicit_attr] } \[ derive_clause \] \[ inverse_clause \] \[ unique_clause \] \[ [where_clause] \] .
-pub fn entity_body(input: &str) -> ParseResult<(Vec<EntityAttribute>, Option<WhereClause>)> {
-    // FIXME derive_clause
-    // FIXME inverse_clause
-    // FIXME unique_clause
-    tuple((spaced_many0(explicit_attr), opt(where_clause)))
-        .map(|(attributes, where_clause)| {
-            (attributes.into_iter().flatten().collect(), where_clause)
-        })
-        .parse(input)
+pub fn entity_body(input: &str) -> ParseResult<EntityBody> {
+    tuple((
+        spaced_many0(explicit_attr),
+        opt(derive_clause),
+        opt(inverse_clause),
+        opt(unique_clause),
+        opt(where_clause),
+    ))
+    .map(
+        |(attributes, derive_clause, inverse_clause, unique_clause, where_clause)| EntityBody {
+            attributes: attributes.into_iter().flatten().collect(),
+            derive_clause,
+            inverse_clause,
+            unique_clause,
+            where_clause,
+        },
+    )
+    .parse(input)
 }
 
 /// 206 entity_decl = [entity_head] [entity_body] END_ENTITY `;` .
 pub fn entity_decl(input: &str) -> ParseResult<Entity> {
     tuple((entity_head, entity_body, tag("END_ENTITY"), char(';')))
         .map(
-            |((name, constraint, subtype), (attributes, where_clause), _end, _semicoron)| Entity {
+            |(
+                (name, constraint, subtype),
+                EntityBody {
+                    attributes,
+                    derive_clause,
+                    inverse_clause,
+                    unique_clause,
+                    where_clause,
+                },
+                _end,
+                _semicoron,
+            )| Entity {
                 name,
                 attributes,
                 constraint,
                 subtype,
+                derive_clause,
+                inverse_clause,
+                unique_clause,
                 where_clause,
             },
         )

@@ -78,9 +78,14 @@ macro_rules! impl_binary_op_expression {
 impl Expression {
     /// `SELF` constant
     pub fn self_() -> Self {
+        Self::self_qualified(Vec::new())
+    }
+
+    /// `SELF` constant with qualifiers
+    pub fn self_qualified(qualifiers: Vec<Qualifier>) -> Self {
         Expression::QualifiableFactor {
             factor: QualifiableFactor::BuiltInConstant(BuiltInConstant::SELF),
-            qualifiers: Vec::new(),
+            qualifiers,
         }
     }
 

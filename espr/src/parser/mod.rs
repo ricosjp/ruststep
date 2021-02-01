@@ -32,7 +32,7 @@
 //! ```
 
 pub mod basis;
-pub mod domain;
+pub mod clause;
 pub mod entity;
 pub mod expression;
 pub mod identifier;
