@@ -117,3 +117,45 @@ pub fn inverse_attr(input: &str) -> ParseResult<InverseAttribute> {
     )
     .parse(input)
 }
+
+#[cfg(test)]
+mod tests {
+    use super::AggregationOption;
+    use crate::parser::{expression::*, types::*};
+    use nom::Finish;
+
+    #[test]
+    fn inverse() {
+        let (residual, (inv, _remarks)) = super::inverse_attr("opens : door FOR handle;")
+            .finish()
+            .unwrap();
+        assert_eq!(residual, "");
+        assert_eq!(inv.name, "opens");
+        assert_eq!(inv.dest, "door");
+        assert_eq!(inv.attribute, "handle");
+        assert_eq!(inv.dest_aggregation, AggregationOption::None);
+        assert_eq!(inv.attribute_prefix, None);
+    }
+
+    #[test]
+    fn inverse_agg() {
+        let (residual, (inv, _remarks)) =
+            super::inverse_attr("opens : SET [0:1] OF door FOR handle;")
+                .finish()
+                .unwrap();
+        assert_eq!(residual, "");
+        assert_eq!(inv.name, "opens");
+        assert_eq!(inv.dest, "door");
+        assert_eq!(inv.attribute, "handle");
+        assert_eq!(
+            inv.dest_aggregation,
+            AggregationOption::Set {
+                bound: Some(Bound {
+                    upper: Expression::real(1.0),
+                    lower: Expression::real(0.0)
+                })
+            }
+        );
+        assert_eq!(inv.attribute_prefix, None);
+    }
+}
