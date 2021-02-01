@@ -32,6 +32,11 @@ pub fn domain_rule(input: &str) -> ParseResult<DomainRule> {
 }
 
 #[derive(Debug, Clone, PartialEq)]
+pub struct DeriveClause {
+    pub attributes: Vec<DerivedAttribute>,
+}
+
+#[derive(Debug, Clone, PartialEq)]
 pub struct DerivedAttribute {
     pub attr: String,
     pub ty: ParameterType,
@@ -39,9 +44,9 @@ pub struct DerivedAttribute {
 }
 
 /// 201 derive_clause = DERIVE [derived_attr] { [derived_attr] } .
-pub fn derive_clause(input: &str) -> ParseResult<Vec<DerivedAttribute>> {
+pub fn derive_clause(input: &str) -> ParseResult<DeriveClause> {
     tuple((tag("DERIVE"), space_separated(derived_attr)))
-        .map(|(_derive, attrs)| attrs)
+        .map(|(_derive, attributes)| DeriveClause { attributes })
         .parse(input)
 }
 
@@ -59,13 +64,20 @@ pub fn derived_attr(input: &str) -> ParseResult<DerivedAttribute> {
     .parse(input)
 }
 
+#[derive(Debug, Clone, PartialEq)]
+pub struct InverseClause {
+    pub attributes: Vec<InverseAttribute>,
+}
+
 /// 249 inverse_clause = INVERSE [inverse_attr] { [inverse_attr] } .
-pub fn inverse_clause(input: &str) -> ParseResult<Vec<InverseAttribute>> {
+pub fn inverse_clause(input: &str) -> ParseResult<InverseClause> {
     tuple((tag("INVERSE"), space_separated(inverse_attr)))
-        .map(|(_inverse, attrs)| attrs)
+        .map(|(_inverse, attributes)| InverseClause { attributes })
         .parse(input)
 }
 
+/// Attribute of an inverse clause parsed by [inverse_attr]
+///
 /// From ISO 10303-11 document,
 ///
 /// ```text
@@ -170,13 +182,20 @@ pub fn inverse_attr(input: &str) -> ParseResult<InverseAttribute> {
     .parse(input)
 }
 
+#[derive(Debug, Clone, PartialEq)]
+pub struct UniqueClause {
+    rules: Vec<UniqueRule>,
+}
+
 /// 333 unique_clause = UNIQUE [unique_rule] `;` { [unique_rule] `;` } .
-pub fn unique_clause(input: &str) -> ParseResult<Vec<UniqueRule>> {
+pub fn unique_clause(input: &str) -> ParseResult<UniqueClause> {
     tuple((
         tag("UNIQUE"),
         space_separated(tuple((unique_rule, char(';')))),
     ))
-    .map(|(_unique, seq)| seq.into_iter().map(|(rule, _semicoron)| rule).collect())
+    .map(|(_unique, seq)| UniqueClause {
+        rules: seq.into_iter().map(|(rule, _semicoron)| rule).collect(),
+    })
     .parse(input)
 }
 
