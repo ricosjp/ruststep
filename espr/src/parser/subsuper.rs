@@ -118,10 +118,12 @@ pub fn supertype_factor(input: &str) -> ParseResult<SuperTypeExpression> {
 
 /// 323 supertype_term = entity_ref | one_of | `(` supertype_expression `)` .
 pub fn supertype_term(input: &str) -> ParseResult<SuperTypeExpression> {
+    let expr =
+        tuple((char('('), supertype_expression, char(')'))).map(|(_open, expr, _close)| expr);
     alt((
         entity_ref.map(|e| SuperTypeExpression::Reference(e)),
         one_of,
-        supertype_expression,
+        expr,
     ))
     .parse(input)
 }
