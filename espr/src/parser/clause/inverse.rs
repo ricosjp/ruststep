@@ -1,4 +1,4 @@
-use super::super::{entity::*, identifier::*, types::*, util::*};
+use super::super::{attribute::*, identifier::*, types::*, util::*};
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct InverseClause {

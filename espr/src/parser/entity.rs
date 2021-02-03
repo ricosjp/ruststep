@@ -1,4 +1,6 @@
-use super::{clause::*, expression::*, identifier::*, subsuper::*, types::*, util::*};
+use super::{
+    attribute::*, clause::*, expression::*, identifier::*, subsuper::*, types::*, util::*,
+};
 
 /// Parsed result of EXPRESS's ENTITY
 #[derive(Debug, Clone, PartialEq)]
@@ -18,19 +20,6 @@ pub struct Entity {
     pub inverse_clause: Option<InverseClause>,
     pub unique_clause: Option<UniqueClause>,
     pub where_clause: Option<WhereClause>,
-}
-
-#[derive(Debug, Clone, PartialEq)]
-pub struct EntityAttribute {
-    pub name: String,
-    pub ty: ParameterType,
-    pub optional: bool,
-}
-
-/// 177 attribute_decl = [attribute_id] | redeclared_attribute .
-pub fn attribute_decl(input: &str) -> ParseResult<String> {
-    // FIXME Support redeclared_attribute
-    attribute_id(input)
 }
 
 /// 215 explicit_attr = [attribute_decl] { `,` [attribute_decl] } `:` \[ OPTIONAL \] [parameter_type] `;` .

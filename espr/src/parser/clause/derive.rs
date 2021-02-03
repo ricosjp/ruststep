@@ -1,4 +1,4 @@
-use super::super::{entity::*, expression::*, types::*, util::*};
+use super::super::{attribute::*, expression::*, types::*, util::*};
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct DeriveClause {

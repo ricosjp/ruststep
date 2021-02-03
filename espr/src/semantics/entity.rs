@@ -18,13 +18,9 @@ pub struct EntityAttribute {
 }
 
 impl Legalize for EntityAttribute {
-    type Input = parser::entity::EntityAttribute;
+    type Input = parser::attribute::EntityAttribute;
 
-    fn legalize(
-        ns: &Namespace,
-        scope: &Scope,
-        attr: &parser::entity::EntityAttribute,
-    ) -> Result<Self, SemanticError> {
+    fn legalize(ns: &Namespace, scope: &Scope, attr: &Self::Input) -> Result<Self, SemanticError> {
         use parser::types::ParameterType::*;
         let ty = match &attr.ty {
             Named(name) => ns.lookup_type(scope, name)?,
