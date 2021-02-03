@@ -65,7 +65,7 @@ pub fn logical_type(input: &str) -> ParseResult<SimpleType> {
 
 /// 182 boolean_type = BOOLEAN .
 pub fn boolean_type(input: &str) -> ParseResult<SimpleType> {
-    value(SimpleType::Boolen, tag("BOOLEN")).parse(input)
+    value(SimpleType::Boolen, tag("BOOLEAN")).parse(input)
 }
 
 /// 311 string_type = STRING \[ [width_spec] \] .

@@ -227,7 +227,10 @@ mod tests {
         let attr = &attrs[0];
         assert_eq!(attr.name, "x");
         assert!(matches!(attr.ty, ParameterType::Simple(SimpleType::Real)));
+    }
 
+    #[test]
+    fn explicit_attr2() {
         let (residual, (attrs, _remark)) = super::explicit_attr("x, y : REAL;").finish().unwrap();
         assert_eq!(residual, "");
         assert_eq!(attrs.len(), 2);
@@ -237,6 +240,18 @@ mod tests {
         let attr = &attrs[1];
         assert_eq!(attr.name, "y");
         assert!(matches!(attr.ty, ParameterType::Simple(SimpleType::Real)));
+    }
+
+    #[test]
+    fn explicit_attr_optional() {
+        let (residual, (attrs, _remark)) =
+            super::explicit_attr("x: OPTIONAL REAL;").finish().unwrap();
+        assert_eq!(residual, "");
+        assert_eq!(attrs.len(), 1);
+        let attr = &attrs[0];
+        assert_eq!(attr.name, "x");
+        assert!(matches!(attr.ty, ParameterType::Simple(SimpleType::Real)));
+        assert!(attr.optional);
     }
 
     #[test]
@@ -264,5 +279,48 @@ mod tests {
         ));
 
         assert_eq!(residual, "");
+    }
+
+    #[test]
+    fn entity_subtype() {
+        let exp_str = r#"
+        ENTITY camera_model_d2 SUBTYPE OF (camera_model);
+            view_window          : planar_box;
+            view_window_clipping : BOOLEAN;
+          WHERE
+            wr1: SELF\geometric_representation_item.dim = 2;
+        END_ENTITY;
+        "#
+        .trim();
+
+        let (residual, (entity, _remark)) = super::entity_decl(exp_str).finish().unwrap();
+        dbg!(&entity);
+        assert_eq!(residual, "");
+
+        assert_eq!(entity.name, "camera_model_d2");
+        assert_eq!(entity.attributes.len(), 2);
+        assert!(entity.where_clause.is_some());
+    }
+
+    #[test]
+    fn entity_unique() {
+        let exp_str = r#"
+        ENTITY drawing_revision SUBTYPE OF (presentation_set);
+          revision_identifier : identifier;
+          drawing_identifier  : drawing_definition;
+          intended_scale      : OPTIONAL text;
+        UNIQUE
+          ur1 : revision_identifier, drawing_identifier;
+        END_ENTITY;
+        "#
+        .trim();
+
+        let (residual, (entity, _remark)) = super::entity_decl(exp_str).finish().unwrap();
+        dbg!(&entity);
+        assert_eq!(residual, "");
+
+        assert_eq!(entity.name, "drawing_revision");
+        assert_eq!(entity.attributes.len(), 3);
+        assert!(entity.unique_clause.is_some());
     }
 }

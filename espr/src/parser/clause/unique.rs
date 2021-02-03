@@ -27,7 +27,7 @@ pub struct UniqueRule {
 pub fn unique_rule(input: &str) -> ParseResult<UniqueRule> {
     tuple((
         opt(tuple((rule_label_id, char(':')))),
-        space_separated(referenced_attribute),
+        comma_separated(referenced_attribute),
     ))
     .map(|(opt_id, attributes)| UniqueRule {
         name: opt_id.map(|(name, _coron)| name),
@@ -65,4 +65,24 @@ pub fn qualified_attribute(input: &str) -> ParseResult<Expression> {
             Expression::self_qualified(qualifiers)
         })
         .parse(input)
+}
+
+#[cfg(test)]
+mod tests {
+    use nom::Finish;
+
+    #[test]
+    fn unique_clause() {
+        let (residual, (c, _remarks)) = super::unique_clause(
+            r#"
+            UNIQUE
+              ur1 : revision_identifier, drawing_identifier;
+            "#
+            .trim(),
+        )
+        .finish()
+        .unwrap();
+        assert_eq!(residual, "");
+        assert_eq!(c.rules.len(), 1);
+    }
 }
