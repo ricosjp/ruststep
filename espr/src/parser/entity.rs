@@ -331,6 +331,6 @@ mod tests {
 
         assert_eq!(entity.name, "si_unit");
         assert_eq!(entity.attributes.len(), 2);
-        assert!(entity.unique_clause.is_some());
+        assert!(entity.derive_clause.is_some());
     }
 }
