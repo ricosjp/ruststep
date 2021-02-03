@@ -323,4 +323,25 @@ mod tests {
         assert_eq!(entity.attributes.len(), 3);
         assert!(entity.unique_clause.is_some());
     }
+
+    #[test]
+    fn entity_derive() {
+        let exp_str = r#"
+        ENTITY si_unit SUBTYPE OF (named_unit);
+          prefix : OPTIONAL si_prefix;
+          name   : si_unit_name;
+        DERIVE
+          SELF\named_unit.dimensions : dimensional_exponents := dimensions_for_si_unit(SELF.name);
+        END_ENTITY;
+        "#
+        .trim();
+
+        let (residual, (entity, _remark)) = super::entity_decl(exp_str).finish().unwrap();
+        dbg!(&entity);
+        assert_eq!(residual, "");
+
+        assert_eq!(entity.name, "si_unit");
+        assert_eq!(entity.attributes.len(), 2);
+        assert!(entity.unique_clause.is_some());
+    }
 }
