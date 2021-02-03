@@ -280,4 +280,25 @@ mod tests {
 
         assert_eq!(residual, "");
     }
+
+    #[test]
+    fn entity_subtype() {
+        let exp_str = r#"
+        ENTITY camera_model_d2 SUBTYPE OF (camera_model);
+            view_window          : planar_box;
+            view_window_clipping : BOOLEAN;
+          WHERE
+            wr1: SELF\geometric_representation_item.dim = 2;
+        END_ENTITY;
+        "#
+        .trim();
+
+        let (residual, (entity, _remark)) = super::entity_decl(exp_str).finish().unwrap();
+        dbg!(&entity);
+        assert_eq!(residual, "");
+
+        assert_eq!(entity.name, "camera_model_d2");
+        assert_eq!(entity.attributes.len(), 2);
+        assert!(entity.where_clause.is_some());
+    }
 }
