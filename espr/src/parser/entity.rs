@@ -301,4 +301,26 @@ mod tests {
         assert_eq!(entity.attributes.len(), 2);
         assert!(entity.where_clause.is_some());
     }
+
+    #[test]
+    fn entity_unique() {
+        let exp_str = r#"
+        ENTITY drawing_revision SUBTYPE OF (presentation_set);
+          revision_identifier : identifier;
+          drawing_identifier  : drawing_definition;
+          intended_scale      : OPTIONAL text;
+        UNIQUE
+          ur1 : revision_identifier, drawing_identifier;
+        END_ENTITY;
+        "#
+        .trim();
+
+        let (residual, (entity, _remark)) = super::entity_decl(exp_str).finish().unwrap();
+        dbg!(&entity);
+        assert_eq!(residual, "");
+
+        assert_eq!(entity.name, "drawing_revision");
+        assert_eq!(entity.attributes.len(), 3);
+        assert!(entity.unique_clause.is_some());
+    }
 }
