@@ -18,7 +18,7 @@ pub struct EntityAttribute {
 }
 
 impl Legalize for EntityAttribute {
-    type Input = parser::attribute::EntityAttribute;
+    type Input = parser::entity::EntityAttribute;
 
     fn legalize(ns: &Namespace, scope: &Scope, attr: &Self::Input) -> Result<Self, SemanticError> {
         use parser::types::ParameterType::*;
@@ -28,7 +28,7 @@ impl Legalize for EntityAttribute {
             _ => unimplemented!(),
         };
         let name = match &attr.name {
-            parser::attribute::AttributeDecl::Reference(name) => name.clone(),
+            parser::entity::AttributeDecl::Reference(name) => name.clone(),
             _ => unimplemented!(),
         };
         Ok(EntityAttribute {

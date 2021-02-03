@@ -80,7 +80,7 @@ impl Namespace {
                     .attributes
                     .iter()
                     .map(|attr| match &attr.name {
-                        parser::attribute::AttributeDecl::Reference(name) => name.clone(),
+                        parser::entity::AttributeDecl::Reference(name) => name.clone(),
                         _ => unimplemented!(),
                     })
                     .collect();

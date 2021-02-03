@@ -1,4 +1,4 @@
-use super::{expression::*, identifier::*, types::*, util::*};
+use crate::parser::{expression::*, identifier::*, types::*, util::*};
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum AttributeDecl {

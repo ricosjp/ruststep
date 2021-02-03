@@ -1,4 +1,5 @@
-use super::super::{attribute::*, expression::*, types::*, util::*};
+use super::attribute::*;
+use crate::parser::{expression::*, types::*, util::*};
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct DeriveClause {
