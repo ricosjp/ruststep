@@ -27,8 +27,12 @@ impl Legalize for EntityAttribute {
             Simple(ty) => namespace::TypeRef::SimpleType(*ty),
             _ => unimplemented!(),
         };
+        let name = match &attr.name {
+            parser::attribute::AttributeDecl::Reference(name) => name.clone(),
+            _ => unimplemented!(),
+        };
         Ok(EntityAttribute {
-            name: attr.name.clone(),
+            name,
             ty,
             optional: attr.optional,
         })

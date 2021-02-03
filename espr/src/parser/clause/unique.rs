@@ -20,7 +20,7 @@ pub fn unique_clause(input: &str) -> ParseResult<UniqueClause> {
 #[derive(Debug, Clone, PartialEq)]
 pub struct UniqueRule {
     pub name: Option<String>,
-    pub attributes: Vec<ReferencedAttribute>,
+    pub attributes: Vec<AttributeDecl>,
 }
 
 /// 334 unique_rule = \[ [rule_label_id] `:` \] [referenced_attribute] { `,` [referenced_attribute] } .

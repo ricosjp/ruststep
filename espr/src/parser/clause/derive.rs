@@ -7,7 +7,7 @@ pub struct DeriveClause {
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct DerivedAttribute {
-    pub attr: String,
+    pub attr: AttributeDecl,
     pub ty: ParameterType,
     pub expr: Expression,
 }

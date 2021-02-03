@@ -209,20 +209,25 @@ pub enum Qualifier {
 
 /// 276 qualifier = [attribute_qualifier] | [group_qualifier] | [index_qualifier] .
 pub fn qualifier(input: &str) -> ParseResult<Qualifier> {
-    alt((attribute_qualifier, group_qualifier, index_qualifier)).parse(input)
+    alt((
+        attribute_qualifier.map(|s| Qualifier::Attribute(s)),
+        group_qualifier.map(|s| Qualifier::Group(s)),
+        index_qualifier,
+    ))
+    .parse(input)
 }
 
 /// 179 attribute_qualifier = `.` [attribute_ref] .
-pub fn attribute_qualifier(input: &str) -> ParseResult<Qualifier> {
+pub fn attribute_qualifier(input: &str) -> ParseResult<String> {
     tuple((char('.'), attribute_ref))
-        .map(|(_dot, id)| Qualifier::Attribute(id))
+        .map(|(_dot, id)| id)
         .parse(input)
 }
 
 /// 232 group_qualifier = `\` [entity_ref] .
-pub fn group_qualifier(input: &str) -> ParseResult<Qualifier> {
+pub fn group_qualifier(input: &str) -> ParseResult<String> {
     tuple((char('\\'), entity_ref))
-        .map(|(_dot, id)| Qualifier::Group(id))
+        .map(|(_dot, id)| id)
         .parse(input)
 }
 

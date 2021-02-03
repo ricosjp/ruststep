@@ -42,7 +42,7 @@ pub struct InverseAttribute {
     /// Name of this inverse relationship
     ///
     /// `opens` in above example
-    name: String,
+    name: AttributeDecl,
 
     /// The entity name which has `SELF` as an attribute
     ///
