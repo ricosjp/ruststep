@@ -20,6 +20,21 @@ pub fn case_stmt(input: &str) -> ParseResult<()> {
     todo!()
 }
 
+/// 299 selector = [expression] .
+pub fn selector(input: &str) -> ParseResult<()> {
+    todo!()
+}
+
+/// 189 case_action = [case_label] { `,` [case_label] } `:` [stmt] .
+pub fn case_action(input: &str) -> ParseResult<()> {
+    todo!()
+}
+
+/// 190 case_label = [expression] .
+pub fn case_label(input: &str) -> ParseResult<()> {
+    todo!()
+}
+
 /// 192 compound_stmt = BEGIN [stmt] { [stmt] } END `;` .
 pub fn compound_stmt(input: &str) -> ParseResult<()> {
     todo!()
@@ -45,8 +60,38 @@ pub fn procedure_call_stmt(input: &str) -> ParseResult<()> {
     todo!()
 }
 
+/// 188 built_in_procedure = INSERT | REMOVE .
+pub fn built_in_procedure(input: &str) -> ParseResult<()> {
+    todo!()
+}
+
 /// 286 repeat_stmt = REPEAT [repeat_control] `;` [stmt] { [stmt] } END_REPEAT `;` .
 pub fn repeat_stmt(input: &str) -> ParseResult<()> {
+    todo!()
+}
+
+/// 285 repeat_control = \[ [increment_control] \] \[ [while_control] \] \[ [until_control] \] .
+pub fn repeat_control(input: &str) -> ParseResult<()> {
+    todo!()
+}
+
+/// 235 increment_control = [variable_id] `:=` [bound_1] TO [bound_2] \[ BY [increment] \] .
+pub fn increment_control(input: &str) -> ParseResult<()> {
+    todo!()
+}
+
+/// 234 increment = [numeric_expression] .
+pub fn increment(input: &str) -> ParseResult<()> {
+    todo!()
+}
+
+/// 339 while_control = WHILE [logical_expression] .
+pub fn while_control(input: &str) -> ParseResult<()> {
+    todo!()
+}
+
+/// 335 until_control = UNTIL [logical_expression] .
+pub fn until_control(input: &str) -> ParseResult<()> {
     todo!()
 }
 
