@@ -1,22 +1,50 @@
 use super::{entity::*, expression::*, identifier::*, subsuper::*, types::*, util::*};
 
+#[derive(Debug, Clone, PartialEq)]
+pub enum Statement {
+    Assignment {
+        name: String,
+        qualifier: Option<Qualifier>,
+        expr: Expression,
+    },
+
+    Compound {
+        statements: Vec<Statement>,
+    },
+
+    If {
+        condition: Expression,
+        then_branch: Vec<Statement>,
+        else_branch: Option<Vec<Statement>>,
+    },
+
+    Repeat {
+        control: RepeatControl,
+        statements: Vec<Statement>,
+    },
+
+    Skip,
+    Escape,
+    Null,
+}
+
 /// 309 stmt = [alias_stmt] | [assignment_stmt] | [case_stmt] | [compound_stmt] | [escape_stmt] | [if_stmt] | [null_stmt] | [procedure_call_stmt] | [repeat_stmt] | [return_stmt] | [skip_stmt] .
-pub fn stmt(input: &str) -> ParseResult<()> {
+pub fn stmt(input: &str) -> ParseResult<Statement> {
     todo!()
 }
 
 /// 174 alias_stmt = ALIAS [variable_id] FOR [general_ref] { [qualifier] } `;` [stmt] { [stmt] } END_ALIAS `;` .
-pub fn alias_stmt(input: &str) -> ParseResult<()> {
+pub fn alias_stmt(input: &str) -> ParseResult<Statement> {
     todo!()
 }
 
 /// 176 assignment_stmt = [general_ref] { [qualifier] } `:=` [expression] `;` .
-pub fn assignment_stmt(input: &str) -> ParseResult<()> {
+pub fn assignment_stmt(input: &str) -> ParseResult<Statement> {
     todo!()
 }
 
 /// 191 case_stmt = CASE [selector] OF { [case_action] } \[ OTHERWISE `:` [stmt] \] END_CASE `;` .
-pub fn case_stmt(input: &str) -> ParseResult<()> {
+pub fn case_stmt(input: &str) -> ParseResult<Statement> {
     todo!()
 }
 
@@ -36,29 +64,47 @@ pub fn case_label(input: &str) -> ParseResult<Expression> {
 }
 
 /// 192 compound_stmt = BEGIN [stmt] { [stmt] } END `;` .
-pub fn compound_stmt(input: &str) -> ParseResult<()> {
-    todo!()
+pub fn compound_stmt(input: &str) -> ParseResult<Statement> {
+    tuple((tag("BEGIN"), space_separated(stmt), tag("END"), char(';')))
+        .map(|(_begin, statements, _end, _semicoron)| Statement::Compound { statements })
+        .parse(input)
 }
 
 /// 214 escape_stmt = ESCAPE `;` .
-pub fn escape_stmt(input: &str) -> ParseResult<()> {
+pub fn escape_stmt(input: &str) -> ParseResult<Statement> {
     tuple((tag("ESCAPE"), char(';')))
-        .map(|(_skip, _semicoron)| ())
+        .map(|(_skip, _semicoron)| Statement::Escape)
         .parse(input)
 }
 
 /// 233 if_stmt = IF [logical_expression] THEN [stmt] { [stmt] } \[ ELSE [stmt] { [stmt] } \] END_IF `;` .
-pub fn if_stmt(input: &str) -> ParseResult<()> {
-    todo!()
+pub fn if_stmt(input: &str) -> ParseResult<Statement> {
+    tuple((
+        tag("IF"),
+        logical_expression,
+        tag("THEN"),
+        space_separated(stmt),
+        opt(tuple((tag("ELSE"), space_separated(stmt))).map(|(_else, stmts)| stmts)),
+        tag("END_IF"),
+        char(';'),
+    ))
+    .map(
+        |(_if, condition, _then, then_branch, else_branch, _endif, _semicoron)| Statement::If {
+            condition,
+            then_branch,
+            else_branch,
+        },
+    )
+    .parse(input)
 }
 
 /// 260 null_stmt = `;` .
-pub fn null_stmt(input: &str) -> ParseResult<()> {
-    char(';').map(|_c| ()).parse(input)
+pub fn null_stmt(input: &str) -> ParseResult<Statement> {
+    char(';').map(|_c| Statement::Null).parse(input)
 }
 
 /// 270 procedure_call_stmt = ( [built_in_procedure] | [procedure_ref] ) \[ [actual_parameter_list] \] `;` .
-pub fn procedure_call_stmt(input: &str) -> ParseResult<()> {
+pub fn procedure_call_stmt(input: &str) -> ParseResult<Statement> {
     todo!()
 }
 
@@ -78,8 +124,22 @@ pub fn built_in_procedure(input: &str) -> ParseResult<BuiltInProcedure> {
 }
 
 /// 286 repeat_stmt = REPEAT [repeat_control] `;` [stmt] { [stmt] } END_REPEAT `;` .
-pub fn repeat_stmt(input: &str) -> ParseResult<()> {
-    todo!()
+pub fn repeat_stmt(input: &str) -> ParseResult<Statement> {
+    tuple((
+        tag("REPEAT"),
+        repeat_control,
+        char(';'),
+        space_separated(stmt),
+        tag("END_REPEAT"),
+        char(';'),
+    ))
+    .map(
+        |(_repeat, control, _semicoron1, statements, _end, _semicoron2)| Statement::Repeat {
+            control,
+            statements,
+        },
+    )
+    .parse(input)
 }
 
 #[derive(Debug, Clone, PartialEq)]
@@ -164,8 +224,8 @@ pub fn return_stmt(input: &str) -> ParseResult<Option<Expression>> {
 }
 
 /// 308 skip_stmt = SKIP `;` .
-pub fn skip_stmt(input: &str) -> ParseResult<()> {
+pub fn skip_stmt(input: &str) -> ParseResult<Statement> {
     tuple((tag("SKIP"), char(';')))
-        .map(|(_skip, _semicoron)| ())
+        .map(|(_skip, _semicoron)| Statement::Skip)
         .parse(input)
 }
