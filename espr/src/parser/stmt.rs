@@ -23,6 +23,10 @@ pub enum Statement {
         statements: Vec<Statement>,
     },
 
+    Return {
+        value: Option<Expression>,
+    },
+
     Skip,
     Escape,
     Null,
@@ -30,7 +34,20 @@ pub enum Statement {
 
 /// 309 stmt = [alias_stmt] | [assignment_stmt] | [case_stmt] | [compound_stmt] | [escape_stmt] | [if_stmt] | [null_stmt] | [procedure_call_stmt] | [repeat_stmt] | [return_stmt] | [skip_stmt] .
 pub fn stmt(input: &str) -> ParseResult<Statement> {
-    todo!()
+    alt((
+        alias_stmt,
+        assignment_stmt,
+        case_stmt,
+        compound_stmt,
+        escape_stmt,
+        if_stmt,
+        null_stmt,
+        procedure_call_stmt,
+        repeat_stmt,
+        return_stmt,
+        skip_stmt,
+    ))
+    .parse(input)
 }
 
 /// 174 alias_stmt = ALIAS [variable_id] FOR [general_ref] { [qualifier] } `;` [stmt] { [stmt] } END_ALIAS `;` .
@@ -213,13 +230,13 @@ pub fn until_control(input: &str) -> ParseResult<Expression> {
 }
 
 /// 290 return_stmt = RETURN \[ `(` [expression] `)` \] `;` .
-pub fn return_stmt(input: &str) -> ParseResult<Option<Expression>> {
+pub fn return_stmt(input: &str) -> ParseResult<Statement> {
     tuple((
         tag("RETURN"),
         opt(tuple((char('('), expression, char(')'))).map(|(_open, expr, _close)| expr)),
         char(';'),
     ))
-    .map(|(_return, expr, _semicoron)| expr)
+    .map(|(_return, value, _semicoron)| Statement::Return { value })
     .parse(input)
 }
 
