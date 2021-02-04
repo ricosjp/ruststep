@@ -284,7 +284,7 @@ pub trait Alt<'a, O>: Clone {
     fn choice(self, input: &'a str) -> ParseResult<'a, O>;
 }
 
-macro_rules! impl_alg {
+macro_rules! impl_alt {
     ($($F:ident),*) => {
         impl<'a, $($F),*, O> Alt<'a, O> for ($($F),*)
         where
@@ -298,14 +298,16 @@ macro_rules! impl_alg {
     };
 }
 
-impl_alg!(F1, F2);
-impl_alg!(F1, F2, F3);
-impl_alg!(F1, F2, F3, F4);
-impl_alg!(F1, F2, F3, F4, F5);
-impl_alg!(F1, F2, F3, F4, F5, F6);
-impl_alg!(F1, F2, F3, F4, F5, F6, F7);
-impl_alg!(F1, F2, F3, F4, F5, F6, F7, F8);
-impl_alg!(F1, F2, F3, F4, F5, F6, F7, F8, F9);
+impl_alt!(F1, F2);
+impl_alt!(F1, F2, F3);
+impl_alt!(F1, F2, F3, F4);
+impl_alt!(F1, F2, F3, F4, F5);
+impl_alt!(F1, F2, F3, F4, F5, F6);
+impl_alt!(F1, F2, F3, F4, F5, F6, F7);
+impl_alt!(F1, F2, F3, F4, F5, F6, F7, F8);
+impl_alt!(F1, F2, F3, F4, F5, F6, F7, F8, F9);
+impl_alt!(F1, F2, F3, F4, F5, F6, F7, F8, F9, F10);
+impl_alt!(F1, F2, F3, F4, F5, F6, F7, F8, F9, F10, F11);
 
 #[cfg(test)]
 mod tests {
