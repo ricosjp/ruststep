@@ -146,3 +146,23 @@ pub fn one_of(input: &str) -> ParseResult<SuperTypeExpression> {
     .map(|(_oneof, _open, exprs, _close)| SuperTypeExpression::OneOf { exprs })
     .parse(input)
 }
+
+/// 314 subtype_constraint_body = \[ [abstract_supertype] \] \[ [total_over] \] \[ [supertype_expression] `;` \] .
+pub fn subtype_constraint_decl(input: &str) -> ParseResult<()> {
+    todo!()
+}
+
+/// 315 subtype_constraint_decl = [subtype_constraint_head] [subtype_constraint_body] END_SUBTYPE_CONSTRAINT `;` .
+pub fn subtype_constraint_body(input: &str) -> ParseResult<()> {
+    todo!()
+}
+
+/// 316 subtype_constraint_head = SUBTYPE_CONSTRAINT [subtype_constraint_id] FOR [entity_ref] `;` .
+pub fn subtype_constraint_head(input: &str) -> ParseResult<()> {
+    todo!()
+}
+
+/// 326 total_over = TOTAL_OVER `(` [entity_ref] { `,` [entity_ref] } `)` `;` .
+pub fn total_over(input: &str) -> ParseResult<()> {
+    todo!()
+}
