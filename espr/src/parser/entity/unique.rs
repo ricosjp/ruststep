@@ -1,4 +1,5 @@
-use super::super::{expression::*, identifier::*, util::*};
+use super::attribute::*;
+use crate::parser::{identifier::*, util::*};
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct UniqueClause {
@@ -20,7 +21,7 @@ pub fn unique_clause(input: &str) -> ParseResult<UniqueClause> {
 #[derive(Debug, Clone, PartialEq)]
 pub struct UniqueRule {
     pub name: Option<String>,
-    pub attributes: Vec<ReferencedAttribute>,
+    pub attributes: Vec<AttributeDecl>,
 }
 
 /// 334 unique_rule = \[ [rule_label_id] `:` \] [referenced_attribute] { `,` [referenced_attribute] } .
@@ -34,37 +35,6 @@ pub fn unique_rule(input: &str) -> ParseResult<UniqueRule> {
         attributes,
     })
     .parse(input)
-}
-
-#[derive(Debug, Clone, PartialEq)]
-pub enum ReferencedAttribute {
-    Reference(String),
-    QualifiedAttribute(Expression),
-}
-
-/// 280 referenced_attribute = [attribute_ref] | [qualified_attribute] .
-pub fn referenced_attribute(input: &str) -> ParseResult<ReferencedAttribute> {
-    alt((
-        attribute_ref.map(|r| ReferencedAttribute::Reference(r)),
-        qualified_attribute.map(|a| ReferencedAttribute::QualifiedAttribute(a)),
-    ))
-    .parse(input)
-}
-
-/// 275 qualified_attribute = SELF [group_qualifier] [attribute_qualifier] .
-pub fn qualified_attribute(input: &str) -> ParseResult<Expression> {
-    tuple((tag("SELF"), opt(group_qualifier), opt(attribute_qualifier)))
-        .map(|(_self, group, attr)| {
-            let mut qualifiers = Vec::new();
-            if let Some(group) = group {
-                qualifiers.push(group)
-            }
-            if let Some(attr) = attr {
-                qualifiers.push(attr)
-            }
-            Expression::self_qualified(qualifiers)
-        })
-        .parse(input)
 }
 
 #[cfg(test)]

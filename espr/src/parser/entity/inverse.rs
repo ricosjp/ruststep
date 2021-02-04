@@ -1,4 +1,5 @@
-use super::super::{entity::*, identifier::*, types::*, util::*};
+use super::attribute::*;
+use crate::parser::{identifier::*, types::*, util::*};
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct InverseClause {
@@ -42,7 +43,7 @@ pub struct InverseAttribute {
     /// Name of this inverse relationship
     ///
     /// `opens` in above example
-    name: String,
+    name: AttributeDecl,
 
     /// The entity name which has `SELF` as an attribute
     ///

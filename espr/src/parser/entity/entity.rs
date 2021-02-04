@@ -1,4 +1,5 @@
-use super::{clause::*, expression::*, identifier::*, subsuper::*, types::*, util::*};
+use super::{attribute::*, derive::*, domain::*, inverse::*, unique::*};
+use crate::parser::{expression::*, identifier::*, subsuper::*, types::*, util::*};
 
 /// Parsed result of EXPRESS's ENTITY
 #[derive(Debug, Clone, PartialEq)]
@@ -18,19 +19,6 @@ pub struct Entity {
     pub inverse_clause: Option<InverseClause>,
     pub unique_clause: Option<UniqueClause>,
     pub where_clause: Option<WhereClause>,
-}
-
-#[derive(Debug, Clone, PartialEq)]
-pub struct EntityAttribute {
-    pub name: String,
-    pub ty: ParameterType,
-    pub optional: bool,
-}
-
-/// 177 attribute_decl = [attribute_id] | redeclared_attribute .
-pub fn attribute_decl(input: &str) -> ParseResult<String> {
-    // FIXME Support redeclared_attribute
-    attribute_id(input)
 }
 
 /// 215 explicit_attr = [attribute_decl] { `,` [attribute_decl] } `:` \[ OPTIONAL \] [parameter_type] `;` .
@@ -322,5 +310,26 @@ mod tests {
         assert_eq!(entity.name, "drawing_revision");
         assert_eq!(entity.attributes.len(), 3);
         assert!(entity.unique_clause.is_some());
+    }
+
+    #[test]
+    fn entity_derive() {
+        let exp_str = r#"
+        ENTITY si_unit SUBTYPE OF (named_unit);
+          prefix : OPTIONAL si_prefix;
+          name   : si_unit_name;
+        DERIVE
+          SELF\named_unit.dimensions : dimensional_exponents := dimensions_for_si_unit(SELF.name);
+        END_ENTITY;
+        "#
+        .trim();
+
+        let (residual, (entity, _remark)) = super::entity_decl(exp_str).finish().unwrap();
+        dbg!(&entity);
+        assert_eq!(residual, "");
+
+        assert_eq!(entity.name, "si_unit");
+        assert_eq!(entity.attributes.len(), 2);
+        assert!(entity.derive_clause.is_some());
     }
 }

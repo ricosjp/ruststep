@@ -79,7 +79,10 @@ impl Namespace {
                 let attrs = entity
                     .attributes
                     .iter()
-                    .map(|attr| attr.name.clone())
+                    .map(|attr| match &attr.name {
+                        parser::entity::AttributeDecl::Reference(name) => name.clone(),
+                        _ => unimplemented!(),
+                    })
                     .collect();
                 names.insert(
                     current_scope.clone(),

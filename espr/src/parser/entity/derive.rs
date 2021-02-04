@@ -1,4 +1,5 @@
-use super::super::{entity::*, expression::*, types::*, util::*};
+use super::attribute::*;
+use crate::parser::{expression::*, types::*, util::*};
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct DeriveClause {
@@ -7,7 +8,7 @@ pub struct DeriveClause {
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct DerivedAttribute {
-    pub attr: String,
+    pub attr: AttributeDecl,
     pub ty: ParameterType,
     pub expr: Expression,
 }
@@ -31,4 +32,24 @@ pub fn derived_attr(input: &str) -> ParseResult<DerivedAttribute> {
     ))
     .map(|(attr, _coron, ty, _equal, expr, _semicoron)| DerivedAttribute { attr, ty, expr })
     .parse(input)
+}
+
+#[cfg(test)]
+mod tests {
+    use nom::Finish;
+
+    #[test]
+    fn derive_clause() {
+        let (residual, (c, _remarks)) = super::derive_clause(
+            r#"
+            DERIVE
+              SELF\named_unit.dimensions : dimensional_exponents := dimensions_for_si_unit(SELF.name);
+            "#
+            .trim(),
+        )
+        .finish()
+        .unwrap();
+        assert_eq!(residual, "");
+        assert_eq!(c.attributes.len(), 1);
+    }
 }
