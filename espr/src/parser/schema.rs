@@ -1,4 +1,4 @@
-use super::{entity::*, identifier::*, types::*, util::*};
+use super::{entity::*, expression::*, identifier::*, subsuper::*, types::*, util::*};
 
 /// Parsed result of EXPRESS's SCHEMA
 #[derive(Debug, Clone, PartialEq)]
@@ -40,7 +40,53 @@ pub fn declaration(input: &str) -> ParseResult<Declaration> {
     .parse(input)
 }
 
+/// 314 subtype_constraint_body = \[ [abstract_supertype] \] \[ [total_over] \] \[ [supertype_expression] `;` \] .
+pub fn subtype_constraint_decl(input: &str) -> ParseResult<()> {
+    todo!()
+}
+
+/// 315 subtype_constraint_decl = [subtype_constraint_head] [subtype_constraint_body] END_SUBTYPE_CONSTRAINT `;` .
+pub fn subtype_constraint_body(input: &str) -> ParseResult<()> {
+    todo!()
+}
+
+/// 316 subtype_constraint_head = SUBTYPE_CONSTRAINT [subtype_constraint_id] FOR [entity_ref] `;` .
+pub fn subtype_constraint_head(input: &str) -> ParseResult<()> {
+    todo!()
+}
+
+/// 326 total_over = TOTAL_OVER `(` [entity_ref] { `,` [entity_ref] } `)` `;` .
+pub fn total_over(input: &str) -> ParseResult<()> {
+    todo!()
+}
+
+/// 309 stmt = alias_stmt | assignment_stmt | case_stmt | compound_stmt | escape_stmt | if_stmt | null_stmt | procedure_call_stmt | repeat_stmt | return_stmt | skip_stmt .
+pub fn stmt(input: &str) -> ParseResult<()> {
+    todo!()
+}
+
+/// 271 procedure_decl = procedure_head algorithm_head { stmt } END_PROCEDURE `;` .
+pub fn procedure_decl(input: &str) -> ParseResult<()> {
+    todo!()
+}
+
+/// 272 procedure_head = PROCEDURE procedure_id \[ `(` \[ VAR \] formal_parameter { `;` \[ VAR \] formal_parameter } `)` \] `;` .
+pub fn procedure_head(input: &str) -> ParseResult<()> {
+    todo!()
+}
+
+/// 220 function_decl = [function_head] [algorithm_head] [stmt] { [stmt] } END_FUNCTION `;` .
 pub fn function_decl(input: &str) -> ParseResult<()> {
+    todo!()
+}
+
+/// 221 function_head = FUNCTION [function_id] \[ `(` [formal_parameter] { `;` [formal_parameter] } `)` \] `:` [parameter_type] `;` .
+pub fn function_head(input: &str) -> ParseResult<()> {
+    todo!()
+}
+
+/// 218 formal_parameter = [parameter_id] { `,` [parameter_id] } `:` [parameter_type] .
+pub fn formal_parameter(input: &str) -> ParseResult<()> {
     todo!()
 }
 
@@ -99,6 +145,11 @@ pub fn resource_or_rename(input: &str) -> ParseResult<()> {
     todo!()
 }
 
+/// 284 rename_id = [constant_id] | [entity_id] | [function_id] | [procedure_id] | [type_id] .
+pub fn rename_id(input: &str) -> ParseResult<()> {
+    todo!()
+}
+
 /// 289 resource_ref = [constant_ref] | [entity_ref] | [function_ref] | [procedure_ref] | [type_ref] .
 pub fn resource_ref(input: &str) -> ParseResult<()> {
     todo!()
@@ -106,6 +157,11 @@ pub fn resource_ref(input: &str) -> ParseResult<()> {
 
 /// 336 use_clause = USE FROM [schema_ref] \[ `(` [named_type_or_rename] { `,` [named_type_or_rename] } `)` \] `;` .
 pub fn use_clause(input: &str) -> ParseResult<()> {
+    todo!()
+}
+
+/// 259 named_type_or_rename = [named_types] \[ AS ( [entity_id] | [type_id] ) \] .
+pub fn named_type_or_rename(input: &str) -> ParseResult<()> {
     todo!()
 }
 
