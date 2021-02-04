@@ -28,7 +28,7 @@ pub enum Declaration {
     Type(TypeDecl),
 }
 
-/// 199 declaration = [entity_decl] | function_decl | procedure_decl | subtype_constraint_decl | [type_decl] .
+/// 199 declaration = [entity_decl] | [function_decl] | [procedure_decl] | [subtype_constraint_decl] | [type_decl] .
 pub fn declaration(input: &str) -> ParseResult<Declaration> {
     // FIXME function_decl
     // FIXME procedure_decl
@@ -40,7 +40,76 @@ pub fn declaration(input: &str) -> ParseResult<Declaration> {
     .parse(input)
 }
 
-/// 295 schema_body = { interface_specification } \[ constant_decl \] { [declaration] | rule_decl } .
+pub fn function_decl(input: &str) -> ParseResult<()> {
+    todo!()
+}
+
+/// 195 constant_decl = CONSTANT [constant_body] { [constant_body] } END_CONSTANT `;` .
+pub fn constant_decl(input: &str) -> ParseResult<()> {
+    todo!()
+}
+
+/// 194 constant_body = [constant_id] `:` [instantiable_type] `:=` [expression] `;` .
+pub fn constant_body(input: &str) -> ParseResult<()> {
+    todo!()
+}
+
+/// 240 instantiable_type = [concrete_types] | [entity_ref] .
+pub fn instantiable_type(input: &str) -> ParseResult<()> {
+    todo!()
+}
+
+/// 291 rule_decl = [rule_head] [algorithm_head] { [stmt] } [where_clause] END_RULE `;` .
+pub fn rule_decl(input: &str) -> ParseResult<()> {
+    todo!()
+}
+
+/// 292 rule_head = RULE [rule_id] FOR `(` [entity_ref] { `,` [entity_ref] } `)` `;` .
+pub fn rule_head(input: &str) -> ParseResult<()> {
+    todo!()
+}
+
+/// 173 algorithm_head = { [declaration] } \[ [constant_decl] \] \[ [local_decl] \] .
+pub fn algorithm_head(input: &str) -> ParseResult<()> {
+    todo!()
+}
+
+/// 252 local_decl = LOCAL [local_variable] { [local_variable] } END_LOCAL `;` .
+pub fn local_decl(input: &str) -> ParseResult<()> {
+    todo!()
+}
+
+/// 253 local_variable = [variable_id] { `,` [variable_id] } `:` [parameter_type] \[ `:=` [expression] \] `;` .
+pub fn local_variable(input: &str) -> ParseResult<()> {
+    todo!()
+}
+
+/// 242 interface_specification = [reference_clause] | [use_clause] .
+pub fn interface_specification(input: &str) -> ParseResult<()> {
+    todo!()
+}
+
+/// 281 reference_clause = REFERENCE FROM [schema_ref] \[ `(` [resource_or_rename] { `,` [resource_or_rename] } `)` \] `;` .
+pub fn reference_clause(input: &str) -> ParseResult<()> {
+    todo!()
+}
+
+/// 288 resource_or_rename = [resource_ref] \[ AS [rename_id] \] .
+pub fn resource_or_rename(input: &str) -> ParseResult<()> {
+    todo!()
+}
+
+/// 289 resource_ref = [constant_ref] | [entity_ref] | [function_ref] | [procedure_ref] | [type_ref] .
+pub fn resource_ref(input: &str) -> ParseResult<()> {
+    todo!()
+}
+
+/// 336 use_clause = USE FROM [schema_ref] \[ `(` [named_type_or_rename] { `,` [named_type_or_rename] } `)` \] `;` .
+pub fn use_clause(input: &str) -> ParseResult<()> {
+    todo!()
+}
+
+/// 295 schema_body = { [interface_specification] } \[ [constant_decl] \] { [declaration] | [rule_decl] } .
 pub fn schema_body(input: &str) -> ParseResult<(Vec<Entity>, Vec<TypeDecl>)> {
     // FIXME interface_specification
     // FIXME constant_decl
