@@ -55,15 +55,51 @@ pub fn function_decl(input: &str) -> ParseResult<()> {
     todo!()
 }
 
-/// 221 function_head = FUNCTION [function_id] \[ `(` [formal_parameter] { `;` [formal_parameter] } `)` \] `:` [parameter_type] `;` .
-pub fn function_head(input: &str) -> ParseResult<()> {
-    todo!()
+/// 221 function_head = FUNCTION [function_id]
+///                   \[ `(` [formal_parameter] { `;` [formal_parameter] } `)` \]
+///                   `:` [parameter_type] `;` .
+pub fn function_head(input: &str) -> ParseResult<(String, Vec<FormalParameter>, ParameterType)> {
+    tuple((
+        tag("FUNCTION"),
+        function_id,
+        opt(
+            tuple((char('('), space_separated(formal_parameter), char(')'))).map(
+                |(_open, params, _close)| {
+                    params
+                        .into_iter()
+                        .map(|ps| ps.into_iter())
+                        .flatten()
+                        .collect()
+                },
+            ),
+        )
+        .map(|opt| opt.unwrap_or(Vec::new())),
+        char(':'),
+        parameter_type,
+        char(';'),
+    ))
+    .map(|(_function, name, parameters, _comma, ty, _semicoron)| (name, parameters, ty))
+    .parse(input)
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct FormalParameter {
+    pub name: String,
+    pub ty: ParameterType,
 }
 
 /// 218 formal_parameter = [parameter_id] { `,` [parameter_id] } `:` [parameter_type] .
-pub fn formal_parameter(input: &str) -> ParseResult<(Vec<String>, ParameterType)> {
+pub fn formal_parameter(input: &str) -> ParseResult<Vec<FormalParameter>> {
     tuple((comma_separated(parameter_id), char(':'), parameter_type))
-        .map(|(ids, _comma, ty)| (ids, ty))
+        .map(|(names, _comma, ty)| {
+            names
+                .into_iter()
+                .map(|name| FormalParameter {
+                    name,
+                    ty: ty.clone(),
+                })
+                .collect()
+        })
         .parse(input)
 }
 
