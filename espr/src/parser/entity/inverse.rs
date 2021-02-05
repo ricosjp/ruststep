@@ -106,7 +106,7 @@ pub fn inverse_attr(input: &str) -> ParseResult<InverseAttribute> {
         char(';'),
     ))
     .map(
-        |(name, _comma, dest_aggregation, dest, _for, attribute_prefix, attribute, _semicoron)| {
+        |(name, _comma, dest_aggregation, dest, _for, attribute_prefix, attribute, _semicolon)| {
             InverseAttribute {
                 name,
                 dest,
