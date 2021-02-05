@@ -275,6 +275,12 @@ impl_tuple!(
     f1, f2, f3, f4, f5, f6, f7, f8;
     o1, o2, o3, o4, o5, o6, o7, o8
 );
+impl_tuple!(
+    F1, F2, F3, F4, F5, F6, F7, F8, F9;
+    O1, O2, O3, O4, O5, O6, O7, O8, O9;
+    f1, f2, f3, f4, f5, f6, f7, f8, f9;
+    o1, o2, o3, o4, o5, o6, o7, o8, o9
+);
 
 pub fn alt<'a, O, List: Alt<'a, O>>(l: List) -> impl EsprParser<'a, O> {
     move |input| Alt::choice(l.clone(), input)
