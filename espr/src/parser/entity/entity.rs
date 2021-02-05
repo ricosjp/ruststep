@@ -30,7 +30,7 @@ pub fn explicit_attr(input: &str) -> ParseResult<Vec<EntityAttribute>> {
         parameter_type,
         char(';'),
     ))
-    .map(|(attrs, _coron, optional, ty, _semicoron)| {
+    .map(|(attrs, _colon, optional, ty, _semicolon)| {
         attrs
             .into_iter()
             .map(|name| EntityAttribute {
@@ -51,7 +51,7 @@ pub fn entity_head(input: &str) -> ParseResult<(String, Option<Constraint>, Opti
         subsuper,
         char(';'),
     ))
-    .map(|(_start, id, (constraint, subtype), _semicoron)| (id, constraint, subtype))
+    .map(|(_start, id, (constraint, subtype), _semicolon)| (id, constraint, subtype))
     .parse(input)
 }
 
@@ -100,7 +100,7 @@ pub fn entity_decl(input: &str) -> ParseResult<Entity> {
                     where_clause,
                 },
                 _end,
-                _semicoron,
+                _semicolon,
             )| Entity {
                 name,
                 attributes,

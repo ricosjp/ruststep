@@ -82,10 +82,10 @@ pub fn type_decl(input: &str) -> ParseResult<TypeDecl> {
             type_id,
             _equal,
             underlying_type,
-            _semicoron1,
+            _semicolon1,
             where_clause,
             _end,
-            _semicoron2,
+            _semicolon2,
         )| {
             TypeDecl {
                 type_id,

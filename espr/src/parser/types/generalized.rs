@@ -71,7 +71,7 @@ pub fn aggregate_type(input: &str) -> ParseResult<ParameterType> {
     .map(
         |(_aggregate, opt_type_label, _of, ty)| ParameterType::Aggregate {
             ty: Box::new(ty),
-            label: opt_type_label.map(|(_coron, label)| label),
+            label: opt_type_label.map(|(_colon, label)| label),
         },
     )
     .parse(input)
@@ -80,14 +80,14 @@ pub fn aggregate_type(input: &str) -> ParseResult<ParameterType> {
 /// 230 generic_entity_type = GENERIC_ENTITY \[ `:` [type_label] \] .
 pub fn generic_entity_type(input: &str) -> ParseResult<ParameterType> {
     tuple((tag("GENERIC_ENTITY"), opt(tuple((char(':'), type_label)))))
-        .map(|(_generic, opt)| ParameterType::GenericEntity(opt.map(|(_coron, label)| label)))
+        .map(|(_generic, opt)| ParameterType::GenericEntity(opt.map(|(_colon, label)| label)))
         .parse(input)
 }
 
 /// 231 generic_type = GENERIC \[ `:` [type_label] \] .
 pub fn generic_type(input: &str) -> ParseResult<ParameterType> {
     tuple((tag("GENERIC"), opt(tuple((char(':'), type_label)))))
-        .map(|(_generic, opt)| ParameterType::Generic(opt.map(|(_coron, label)| label)))
+        .map(|(_generic, opt)| ParameterType::Generic(opt.map(|(_colon, label)| label)))
         .parse(input)
 }
 
