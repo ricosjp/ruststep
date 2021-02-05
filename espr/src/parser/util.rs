@@ -173,11 +173,11 @@ pub fn space_separated<'a, O>(f: impl EsprParser<'a, O>) -> impl EsprParser<'a, 
     }
 }
 
-pub fn comma_separated<'a, O>(f: impl EsprParser<'a, O>) -> impl EsprParser<'a, Vec<O>> {
+pub fn separated<'a, O>(c: char, f: impl EsprParser<'a, O>) -> impl EsprParser<'a, Vec<O>> {
     use nom::Parser;
     move |input| {
         let comma_with_remark =
-            nom::sequence::tuple((spaces_or_remarks, char(','), spaces_or_remarks)).map(
+            nom::sequence::tuple((spaces_or_remarks, char(c), spaces_or_remarks)).map(
                 |(mut l, _, mut r)| {
                     l.append(&mut r);
                     l
@@ -197,6 +197,14 @@ pub fn comma_separated<'a, O>(f: impl EsprParser<'a, O>) -> impl EsprParser<'a, 
             })
             .parse(input)
     }
+}
+
+pub fn comma_separated<'a, O>(f: impl EsprParser<'a, O>) -> impl EsprParser<'a, Vec<O>> {
+    separated(',', f)
+}
+
+pub fn semicolon_separated<'a, O>(f: impl EsprParser<'a, O>) -> impl EsprParser<'a, Vec<O>> {
+    separated(';', f)
 }
 
 /// Merge tupled EsprParser into a single EsprParser
