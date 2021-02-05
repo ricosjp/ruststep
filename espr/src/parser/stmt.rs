@@ -1,10 +1,17 @@
-use super::{entity::*, expression::*, identifier::*, subsuper::*, types::*, util::*};
+use super::{expression::*, identifier::*, types::*, util::*};
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum Statement {
+    Alias {
+        name: String,
+        dest: String,
+        qualifiers: Vec<Qualifier>,
+        statements: Vec<Statement>,
+    },
+
     Assignment {
         name: String,
-        qualifier: Option<Qualifier>,
+        qualifiers: Vec<Qualifier>,
         expr: Expression,
     },
 
@@ -18,6 +25,12 @@ pub enum Statement {
         else_branch: Option<Vec<Statement>>,
     },
 
+    Case {
+        selector: Expression,
+        actions: Vec<(Vec<Expression>, Statement)>,
+        otherwise: Option<Box<Statement>>,
+    },
+
     Repeat {
         control: RepeatControl,
         statements: Vec<Statement>,
@@ -25,6 +38,11 @@ pub enum Statement {
 
     Return {
         value: Option<Expression>,
+    },
+
+    ProcedureCall {
+        procedure: Procedure,
+        parameters: Option<Vec<Expression>>,
     },
 
     Skip,
@@ -52,17 +70,69 @@ pub fn stmt(input: &str) -> ParseResult<Statement> {
 
 /// 174 alias_stmt = ALIAS [variable_id] FOR [general_ref] { [qualifier] } `;` [stmt] { [stmt] } END_ALIAS `;` .
 pub fn alias_stmt(input: &str) -> ParseResult<Statement> {
-    todo!()
+    tuple((
+        tag("ALIAS"),
+        variable_id,
+        tag("FOR"),
+        general_ref,
+        spaced_many0(qualifier),
+        char(';'),
+        space_separated(stmt),
+        tag("END_ASLIAS"),
+        char(';'),
+    ))
+    .map(
+        |(_alias, name, _for, dest, qualifiers, _semicoron1, statements, _end, _semicoron2)| {
+            Statement::Alias {
+                name,
+                dest,
+                qualifiers,
+                statements,
+            }
+        },
+    )
+    .parse(input)
 }
 
 /// 176 assignment_stmt = [general_ref] { [qualifier] } `:=` [expression] `;` .
 pub fn assignment_stmt(input: &str) -> ParseResult<Statement> {
-    todo!()
+    tuple((
+        general_ref,
+        spaced_many0(qualifier),
+        tag(":="),
+        expression,
+        char(';'),
+    ))
+    .map(
+        |(name, qualifiers, _def, expr, _semicoron)| Statement::Assignment {
+            name,
+            qualifiers,
+            expr,
+        },
+    )
+    .parse(input)
 }
 
 /// 191 case_stmt = CASE [selector] OF { [case_action] } \[ OTHERWISE `:` [stmt] \] END_CASE `;` .
 pub fn case_stmt(input: &str) -> ParseResult<Statement> {
-    todo!()
+    tuple((
+        tag("CASE"),
+        selector,
+        tag("OF"),
+        spaced_many0(case_action),
+        opt(tuple((tag("OTHERWISE"), char(':'), stmt))
+            .map(|(_otherwise, _coron, stmt)| Box::new(stmt))),
+        tag("END_CASE"),
+        char(';'),
+    ))
+    .map(
+        |(_case, selector, _of, actions, otherwise, _end, _semicoron)| Statement::Case {
+            selector,
+            actions,
+            otherwise,
+        },
+    )
+    .parse(input)
 }
 
 /// 299 selector = [expression] .
@@ -71,8 +141,10 @@ pub fn selector(input: &str) -> ParseResult<Expression> {
 }
 
 /// 189 case_action = [case_label] { `,` [case_label] } `:` [stmt] .
-pub fn case_action(input: &str) -> ParseResult<()> {
-    todo!()
+pub fn case_action(input: &str) -> ParseResult<(Vec<Expression>, Statement)> {
+    tuple((comma_separated(case_label), char(':'), stmt))
+        .map(|(labels, _coron, statement)| (labels, statement))
+        .parse(input)
 }
 
 /// 190 case_label = [expression] .
@@ -122,20 +194,37 @@ pub fn null_stmt(input: &str) -> ParseResult<Statement> {
 
 /// 270 procedure_call_stmt = ( [built_in_procedure] | [procedure_ref] ) \[ [actual_parameter_list] \] `;` .
 pub fn procedure_call_stmt(input: &str) -> ParseResult<Statement> {
-    todo!()
+    tuple((
+        alt((
+            built_in_procedure,
+            procedure_ref.map(|name| Procedure::Reference(name)),
+        )),
+        opt(actual_parameter_list),
+        char(';'),
+    ))
+    .map(
+        |(procedure, parameters, _semicoron)| Statement::ProcedureCall {
+            procedure,
+            parameters,
+        },
+    )
+    .parse(input)
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
-pub enum BuiltInProcedure {
+pub enum Procedure {
+    Reference(String),
+    /// Built-in procedure `INSERT`
     Insert,
+    /// Built-in procedure `REMOVE`
     Remove,
 }
 
 /// 188 built_in_procedure = INSERT | REMOVE .
-pub fn built_in_procedure(input: &str) -> ParseResult<BuiltInProcedure> {
+pub fn built_in_procedure(input: &str) -> ParseResult<Procedure> {
     alt((
-        tag("INSERT").map(|_| BuiltInProcedure::Insert),
-        tag("REMOVE").map(|_| BuiltInProcedure::Remove),
+        tag("INSERT").map(|_| Procedure::Insert),
+        tag("REMOVE").map(|_| Procedure::Remove),
     ))
     .parse(input)
 }
