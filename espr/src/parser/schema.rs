@@ -26,33 +26,132 @@ pub fn schema_decl(input: &str) -> ParseResult<Schema> {
 pub enum Declaration {
     Entity(Entity),
     Type(TypeDecl),
+    Function(Function),
+    Procedure(Procedure),
 }
 
 /// 199 declaration = [entity_decl] | [function_decl] | [procedure_decl] | [subtype_constraint_decl] | [type_decl] .
 pub fn declaration(input: &str) -> ParseResult<Declaration> {
-    // FIXME function_decl
-    // FIXME procedure_decl
     // FIXME subtype_constraint_decl
     alt((
         entity_decl.map(|e| Declaration::Entity(e)),
         type_decl.map(|ty| Declaration::Type(ty)),
+        function_decl.map(|f| Declaration::Function(f)),
+        procedure_decl.map(|p| Declaration::Procedure(p)),
     ))
     .parse(input)
 }
 
-/// 271 procedure_decl = [procedure_head] [algorithm_head] { [stmt] } END_PROCEDURE `;` .
-pub fn procedure_decl(input: &str) -> ParseResult<()> {
-    todo!()
+#[derive(Debug, Clone, PartialEq)]
+pub struct Procedure {
+    pub name: String,
+    pub parameters: Vec<FormalParameter>,
+    pub declarations: Vec<Declaration>,
+    pub constants: Vec<Constant>,
+    pub variables: Vec<LocalVariable>,
+    pub statements: Vec<Statement>,
 }
 
-/// 272 procedure_head = PROCEDURE [procedure_id] \[ `(` \[ VAR \] [formal_parameter] { `;` \[ VAR \] formal_parameter } `)` \] `;` .
-pub fn procedure_head(input: &str) -> ParseResult<()> {
-    todo!()
+/// 271 procedure_decl = [procedure_head] [algorithm_head] { [stmt] } END_PROCEDURE `;` .
+pub fn procedure_decl(input: &str) -> ParseResult<Procedure> {
+    tuple((
+        procedure_head,
+        algorithm_head,
+        spaced_many0(stmt),
+        tag("END_PROCEDURE"),
+        char(';'),
+    ))
+    .map(
+        |(
+            (name, parameters),
+            (declarations, constants, variables),
+            statements,
+            _end,
+            _semicolon,
+        )| Procedure {
+            name,
+            parameters,
+            declarations,
+            constants,
+            variables,
+            statements,
+        },
+    )
+    .parse(input)
+}
+
+/// 272 procedure_head = PROCEDURE [procedure_id]
+///                    \[ `(`
+///                      \[ VAR \] [formal_parameter] { `;`
+///                      \[ VAR \] [formal_parameter]
+///                    }
+///                    `)` \] `;` .
+pub fn procedure_head(input: &str) -> ParseResult<(String, Vec<FormalParameter>)> {
+    let param = tuple((opt(tag("VAR")), formal_parameter)).map(|(var, mut params)| {
+        for mut param in &mut params {
+            param.is_variable = var.is_some();
+        }
+        params
+    });
+    tuple((
+        tag("PROCEDURE"),
+        procedure_id,
+        opt(
+            tuple((char('('), semicolon_separated(param), char(')'))).map(
+                |(_open, params, _close)| {
+                    params
+                        .into_iter()
+                        .map(|ps| ps.into_iter())
+                        .flatten()
+                        .collect()
+                },
+            ),
+        )
+        .map(|opt| opt.unwrap_or(Vec::new())),
+        char(';'),
+    ))
+    .map(|(_procedure, name, parameters, _semicolon)| (name, parameters))
+    .parse(input)
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct Function {
+    pub name: String,
+    pub parameters: Vec<FormalParameter>,
+    pub declarations: Vec<Declaration>,
+    pub constants: Vec<Constant>,
+    pub variables: Vec<LocalVariable>,
+    pub statements: Vec<Statement>,
+    pub return_type: ParameterType,
 }
 
 /// 220 function_decl = [function_head] [algorithm_head] [stmt] { [stmt] } END_FUNCTION `;` .
-pub fn function_decl(input: &str) -> ParseResult<()> {
-    todo!()
+pub fn function_decl(input: &str) -> ParseResult<Function> {
+    tuple((
+        function_head,
+        algorithm_head,
+        space_separated(stmt),
+        tag("END_FUNCTION"),
+        char(';'),
+    ))
+    .map(
+        |(
+            (name, parameters, return_type),
+            (declarations, constants, variables),
+            statements,
+            _end,
+            _semicoron,
+        )| Function {
+            name,
+            parameters,
+            declarations,
+            constants,
+            variables,
+            statements,
+            return_type,
+        },
+    )
+    .parse(input)
 }
 
 /// 221 function_head = FUNCTION [function_id]
@@ -86,6 +185,8 @@ pub fn function_head(input: &str) -> ParseResult<(String, Vec<FormalParameter>, 
 pub struct FormalParameter {
     pub name: String,
     pub ty: ParameterType,
+    /// `true` if specified with `VAR` in `PROCEDURE`. Always `false` for `FUNCTION`
+    pub is_variable: bool,
 }
 
 /// 218 formal_parameter = [parameter_id] { `,` [parameter_id] } `:` [parameter_type] .
@@ -97,6 +198,7 @@ pub fn formal_parameter(input: &str) -> ParseResult<Vec<FormalParameter>> {
                 .map(|name| FormalParameter {
                     name,
                     ty: ty.clone(),
+                    is_variable: false,
                 })
                 .collect()
         })
@@ -156,8 +258,15 @@ pub fn rule_head(input: &str) -> ParseResult<()> {
 }
 
 /// 173 algorithm_head = { [declaration] } \[ [constant_decl] \] \[ [local_decl] \] .
-pub fn algorithm_head(input: &str) -> ParseResult<()> {
-    todo!()
+pub fn algorithm_head(
+    input: &str,
+) -> ParseResult<(Vec<Declaration>, Vec<Constant>, Vec<LocalVariable>)> {
+    tuple((
+        spaced_many0(declaration),
+        opt(constant_decl).map(|opt| opt.unwrap_or(Vec::new())),
+        opt(local_decl).map(|opt| opt.unwrap_or(Vec::new())),
+    ))
+    .parse(input)
 }
 
 /// 252 local_decl = LOCAL [local_variable] { [local_variable] } END_LOCAL `;` .
