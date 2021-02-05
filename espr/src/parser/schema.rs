@@ -6,6 +6,10 @@ pub struct Schema {
     pub name: String,
     pub entities: Vec<Entity>,
     pub types: Vec<TypeDecl>,
+    pub functions: Vec<Function>,
+    pub procedures: Vec<Procedure>,
+    pub rules: Vec<Rule>,
+    pub constants: Vec<Constant>,
 }
 
 /// 296 schema_decl = SCHEMA [schema_id] \[ schema_version_id \] `;` [schema_body] END_SCHEMA `;` .
@@ -14,12 +18,44 @@ pub fn schema_decl(input: &str) -> ParseResult<Schema> {
     let schema_head =
         tuple((tag("SCHEMA "), schema_id, char(';'))).map(|(_start, id, _semicolon)| id);
     tuple((schema_head, schema_body, tag("END_SCHEMA"), char(';')))
-        .map(|(name, (entities, types), _end, _semicolon)| Schema {
-            name,
-            entities,
-            types,
+        .map(|(name, (constants, decls), _end, _semicolon)| {
+            let mut entities = Vec::new();
+            let mut types = Vec::new();
+            let mut functions = Vec::new();
+            let mut procedures = Vec::new();
+            let mut rules = Vec::new();
+
+            for decl in decls {
+                match decl {
+                    Declaration::Entity(e) => entities.push(e),
+                    Declaration::Type(ty) => types.push(ty),
+                    Declaration::Function(f) => functions.push(f),
+                    Declaration::Procedure(p) => procedures.push(p),
+                    Declaration::Rule(r) => rules.push(r),
+                }
+            }
+
+            Schema {
+                name,
+                entities,
+                types,
+                functions,
+                procedures,
+                rules,
+                constants,
+            }
         })
         .parse(input)
+}
+
+/// 295 schema_body = { [interface_specification] } \[ [constant_decl] \] { [declaration] | [rule_decl] } .
+pub fn schema_body(input: &str) -> ParseResult<(Vec<Constant>, Vec<Declaration>)> {
+    // FIXME interface_specification
+    tuple((
+        constant_decl,
+        spaced_many0(alt((declaration, rule_decl.map(|r| Declaration::Rule(r))))),
+    ))
+    .parse(input)
 }
 
 #[derive(Debug, Clone, PartialEq)]
@@ -28,6 +64,7 @@ pub enum Declaration {
     Type(TypeDecl),
     Function(Function),
     Procedure(Procedure),
+    Rule(Rule),
 }
 
 /// 199 declaration = [entity_decl] | [function_decl] | [procedure_decl] | [subtype_constraint_decl] | [type_decl] .
@@ -247,14 +284,61 @@ pub fn instantiable_type(input: &str) -> ParseResult<ConcreteType> {
     .parse(input)
 }
 
+#[derive(Debug, Clone, PartialEq)]
+pub struct Rule {
+    pub name: String,
+    pub references: Vec<String>,
+    pub declarations: Vec<Declaration>,
+    pub constants: Vec<Constant>,
+    pub variables: Vec<LocalVariable>,
+    pub statements: Vec<Statement>,
+    pub where_clause: WhereClause,
+}
+
 /// 291 rule_decl = [rule_head] [algorithm_head] { [stmt] } [where_clause] END_RULE `;` .
-pub fn rule_decl(input: &str) -> ParseResult<()> {
-    todo!()
+pub fn rule_decl(input: &str) -> ParseResult<Rule> {
+    tuple((
+        rule_head,
+        algorithm_head,
+        spaced_many0(stmt),
+        where_clause,
+        tag("END_RULE"),
+        char(';'),
+    ))
+    .map(
+        |(
+            (name, references),
+            (declarations, constants, variables),
+            statements,
+            where_clause,
+            _end,
+            _semicolon,
+        )| Rule {
+            name,
+            references,
+            declarations,
+            constants,
+            variables,
+            statements,
+            where_clause,
+        },
+    )
+    .parse(input)
 }
 
 /// 292 rule_head = RULE [rule_id] FOR `(` [entity_ref] { `,` [entity_ref] } `)` `;` .
-pub fn rule_head(input: &str) -> ParseResult<()> {
-    todo!()
+pub fn rule_head(input: &str) -> ParseResult<(String, Vec<String>)> {
+    tuple((
+        tag("RULE"),
+        rule_id,
+        tag("FOR"),
+        char('('),
+        space_separated(entity_ref),
+        char(')'),
+        char(';'),
+    ))
+    .map(|(_rule, name, _for, _open, references, _close, _semicolon)| (name, references))
+    .parse(input)
 }
 
 /// 173 algorithm_head = { [declaration] } \[ [constant_decl] \] \[ [local_decl] \] .
@@ -338,26 +422,6 @@ pub fn use_clause(input: &str) -> ParseResult<()> {
 /// 259 named_type_or_rename = [named_types] \[ AS ( [entity_id] | [type_id] ) \] .
 pub fn named_type_or_rename(input: &str) -> ParseResult<()> {
     todo!()
-}
-
-/// 295 schema_body = { [interface_specification] } \[ [constant_decl] \] { [declaration] | [rule_decl] } .
-pub fn schema_body(input: &str) -> ParseResult<(Vec<Entity>, Vec<TypeDecl>)> {
-    // FIXME interface_specification
-    // FIXME constant_decl
-    // FIXME rule_decl
-    spaced_many0(declaration)
-        .map(|decls| {
-            let mut entities = Vec::new();
-            let mut types = Vec::new();
-            for decl in decls {
-                match decl {
-                    Declaration::Entity(e) => entities.push(e),
-                    Declaration::Type(ty) => types.push(ty),
-                }
-            }
-            (entities, types)
-        })
-        .parse(input)
 }
 
 #[cfg(test)]
