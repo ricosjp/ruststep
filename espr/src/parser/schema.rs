@@ -12,9 +12,9 @@ pub struct Schema {
 pub fn schema_decl(input: &str) -> ParseResult<Schema> {
     // FIXME schema_version_id
     let schema_head =
-        tuple((tag("SCHEMA "), schema_id, char(';'))).map(|(_start, id, _semicoron)| id);
+        tuple((tag("SCHEMA "), schema_id, char(';'))).map(|(_start, id, _semicolon)| id);
     tuple((schema_head, schema_body, tag("END_SCHEMA"), char(';')))
-        .map(|(name, (entities, types), _end, _semicoron)| Schema {
+        .map(|(name, (entities, types), _end, _semicolon)| Schema {
             name,
             entities,
             types,

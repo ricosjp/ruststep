@@ -17,7 +17,7 @@ pub fn abstract_entity_declaration(input: &str) -> ParseResult<Constraint> {
 /// 165 abstract_supertype = ABSTRACT SUPERTYPE ’;’ .
 pub fn abstract_supertype(input: &str) -> ParseResult<()> {
     tuple((tag("ABSTRACT"), tag("SUPERTYPE"), char(';')))
-        .map(|(_abstract, _supertype, _semicoron)| ())
+        .map(|(_abstract, _supertype, _semicolon)| ())
         .parse(input)
 }
 

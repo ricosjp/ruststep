@@ -15,7 +15,7 @@ pub struct DomainRule {
 pub fn where_clause(input: &str) -> ParseResult<WhereClause> {
     tuple((tag("WHERE"), spaced_many0(tuple((domain_rule, char(';'))))))
         .map(|(_where, rules)| {
-            let rules = rules.into_iter().map(|(rule, _semicoron)| rule).collect();
+            let rules = rules.into_iter().map(|(rule, _semicolon)| rule).collect();
             WhereClause { rules }
         })
         .parse(input)
@@ -25,7 +25,7 @@ pub fn where_clause(input: &str) -> ParseResult<WhereClause> {
 pub fn domain_rule(input: &str) -> ParseResult<DomainRule> {
     tuple((opt(tuple((rule_label_id, char(':')))), expression))
         .map(|(opt, expr)| {
-            let label = opt.map(|(label, _coron)| label);
+            let label = opt.map(|(label, _colon)| label);
             DomainRule { label, expr }
         })
         .parse(input)

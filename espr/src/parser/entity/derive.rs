@@ -30,7 +30,7 @@ pub fn derived_attr(input: &str) -> ParseResult<DerivedAttribute> {
         expression,
         char(';'),
     ))
-    .map(|(attr, _coron, ty, _equal, expr, _semicoron)| DerivedAttribute { attr, ty, expr })
+    .map(|(attr, _colon, ty, _equal, expr, _semicolon)| DerivedAttribute { attr, ty, expr })
     .parse(input)
 }
 

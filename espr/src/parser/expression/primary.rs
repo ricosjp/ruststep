@@ -240,7 +240,7 @@ pub fn index_qualifier(input: &str) -> ParseResult<Qualifier> {
         char(']'),
     ))
     .map(|(_open, index, opt, _close)| {
-        if let Some((_coron, end)) = opt {
+        if let Some((_colon, end)) = opt {
             Qualifier::Range { begin: index, end }
         } else {
             Qualifier::Index(index)

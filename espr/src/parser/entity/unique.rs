@@ -13,7 +13,7 @@ pub fn unique_clause(input: &str) -> ParseResult<UniqueClause> {
         space_separated(tuple((unique_rule, char(';')))),
     ))
     .map(|(_unique, seq)| UniqueClause {
-        rules: seq.into_iter().map(|(rule, _semicoron)| rule).collect(),
+        rules: seq.into_iter().map(|(rule, _semicolon)| rule).collect(),
     })
     .parse(input)
 }
@@ -31,7 +31,7 @@ pub fn unique_rule(input: &str) -> ParseResult<UniqueRule> {
         comma_separated(referenced_attribute),
     ))
     .map(|(opt_id, attributes)| UniqueRule {
-        name: opt_id.map(|(name, _coron)| name),
+        name: opt_id.map(|(name, _colon)| name),
         attributes,
     })
     .parse(input)
