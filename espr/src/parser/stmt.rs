@@ -82,7 +82,7 @@ pub fn alias_stmt(input: &str) -> ParseResult<Statement> {
         char(';'),
     ))
     .map(
-        |(_alias, name, _for, dest, qualifiers, _semicoron1, statements, _end, _semicoron2)| {
+        |(_alias, name, _for, dest, qualifiers, _semicolon1, statements, _end, _semicolon2)| {
             Statement::Alias {
                 name,
                 dest,
@@ -104,7 +104,7 @@ pub fn assignment_stmt(input: &str) -> ParseResult<Statement> {
         char(';'),
     ))
     .map(
-        |(name, qualifiers, _def, expr, _semicoron)| Statement::Assignment {
+        |(name, qualifiers, _def, expr, _semicolon)| Statement::Assignment {
             name,
             qualifiers,
             expr,
@@ -121,12 +121,12 @@ pub fn case_stmt(input: &str) -> ParseResult<Statement> {
         tag("OF"),
         spaced_many0(case_action),
         opt(tuple((tag("OTHERWISE"), char(':'), stmt))
-            .map(|(_otherwise, _coron, stmt)| Box::new(stmt))),
+            .map(|(_otherwise, _colon, stmt)| Box::new(stmt))),
         tag("END_CASE"),
         char(';'),
     ))
     .map(
-        |(_case, selector, _of, actions, otherwise, _end, _semicoron)| Statement::Case {
+        |(_case, selector, _of, actions, otherwise, _end, _semicolon)| Statement::Case {
             selector,
             actions,
             otherwise,
@@ -143,7 +143,7 @@ pub fn selector(input: &str) -> ParseResult<Expression> {
 /// 189 case_action = [case_label] { `,` [case_label] } `:` [stmt] .
 pub fn case_action(input: &str) -> ParseResult<(Vec<Expression>, Statement)> {
     tuple((comma_separated(case_label), char(':'), stmt))
-        .map(|(labels, _coron, statement)| (labels, statement))
+        .map(|(labels, _colon, statement)| (labels, statement))
         .parse(input)
 }
 
@@ -155,14 +155,14 @@ pub fn case_label(input: &str) -> ParseResult<Expression> {
 /// 192 compound_stmt = BEGIN [stmt] { [stmt] } END `;` .
 pub fn compound_stmt(input: &str) -> ParseResult<Statement> {
     tuple((tag("BEGIN"), space_separated(stmt), tag("END"), char(';')))
-        .map(|(_begin, statements, _end, _semicoron)| Statement::Compound { statements })
+        .map(|(_begin, statements, _end, _semicolon)| Statement::Compound { statements })
         .parse(input)
 }
 
 /// 214 escape_stmt = ESCAPE `;` .
 pub fn escape_stmt(input: &str) -> ParseResult<Statement> {
     tuple((tag("ESCAPE"), char(';')))
-        .map(|(_skip, _semicoron)| Statement::Escape)
+        .map(|(_skip, _semicolon)| Statement::Escape)
         .parse(input)
 }
 
@@ -178,7 +178,7 @@ pub fn if_stmt(input: &str) -> ParseResult<Statement> {
         char(';'),
     ))
     .map(
-        |(_if, condition, _then, then_branch, else_branch, _endif, _semicoron)| Statement::If {
+        |(_if, condition, _then, then_branch, else_branch, _endif, _semicolon)| Statement::If {
             condition,
             then_branch,
             else_branch,
@@ -203,7 +203,7 @@ pub fn procedure_call_stmt(input: &str) -> ParseResult<Statement> {
         char(';'),
     ))
     .map(
-        |(procedure, parameters, _semicoron)| Statement::ProcedureCall {
+        |(procedure, parameters, _semicolon)| Statement::ProcedureCall {
             procedure,
             parameters,
         },
@@ -240,7 +240,7 @@ pub fn repeat_stmt(input: &str) -> ParseResult<Statement> {
         char(';'),
     ))
     .map(
-        |(_repeat, control, _semicoron1, statements, _end, _semicoron2)| Statement::Repeat {
+        |(_repeat, control, _semicolon1, statements, _end, _semicolon2)| Statement::Repeat {
             control,
             statements,
         },
@@ -325,13 +325,13 @@ pub fn return_stmt(input: &str) -> ParseResult<Statement> {
         opt(tuple((char('('), expression, char(')'))).map(|(_open, expr, _close)| expr)),
         char(';'),
     ))
-    .map(|(_return, value, _semicoron)| Statement::Return { value })
+    .map(|(_return, value, _semicolon)| Statement::Return { value })
     .parse(input)
 }
 
 /// 308 skip_stmt = SKIP `;` .
 pub fn skip_stmt(input: &str) -> ParseResult<Statement> {
     tuple((tag("SKIP"), char(';')))
-        .map(|(_skip, _semicoron)| Statement::Skip)
+        .map(|(_skip, _semicolon)| Statement::Skip)
         .parse(input)
 }

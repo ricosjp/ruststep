@@ -140,7 +140,7 @@ pub fn function_decl(input: &str) -> ParseResult<Function> {
             (declarations, constants, variables),
             statements,
             _end,
-            _semicoron,
+            _semicolon,
         )| Function {
             name,
             parameters,
@@ -177,7 +177,7 @@ pub fn function_head(input: &str) -> ParseResult<(String, Vec<FormalParameter>, 
         parameter_type,
         char(';'),
     ))
-    .map(|(_function, name, parameters, _comma, ty, _semicoron)| (name, parameters, ty))
+    .map(|(_function, name, parameters, _comma, ty, _semicolon)| (name, parameters, ty))
     .parse(input)
 }
 
@@ -220,7 +220,7 @@ pub fn constant_decl(input: &str) -> ParseResult<Vec<Constant>> {
         tag("END_CONSTANT"),
         char(';'),
     ))
-    .map(|(_constant, consts, _end, _semicoron)| consts)
+    .map(|(_constant, consts, _end, _semicolon)| consts)
     .parse(input)
 }
 
@@ -234,7 +234,7 @@ pub fn constant_body(input: &str) -> ParseResult<Constant> {
         expression,
         char(';'),
     ))
-    .map(|(name, _coron, ty, _def, expr, _semicoron)| Constant { name, ty, expr })
+    .map(|(name, _colon, ty, _def, expr, _semicolon)| Constant { name, ty, expr })
     .parse(input)
 }
 
@@ -277,7 +277,7 @@ pub fn local_decl(input: &str) -> ParseResult<Vec<LocalVariable>> {
         tag("END_LOCAL"),
         char(';'),
     ))
-    .map(|(_local, vars, _end, _semicoron)| {
+    .map(|(_local, vars, _end, _semicolon)| {
         vars.into_iter()
             .map(|var| var.into_iter())
             .flatten()
@@ -302,7 +302,7 @@ pub fn local_variable(input: &str) -> ParseResult<Vec<LocalVariable>> {
         opt(tuple((tag(":="), expression)).map(|(_def, expr)| expr)),
         char(';'),
     ))
-    .map(|(names, _comma, ty, expr, _semicoron)| {
+    .map(|(names, _comma, ty, expr, _semicolon)| {
         names
             .into_iter()
             .map(|name| LocalVariable {

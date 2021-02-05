@@ -166,7 +166,7 @@ pub fn subtype_constraint_head(input: &str) -> ParseResult<(String, String)> {
         entity_ref,
         char(';'),
     ))
-    .map(|(_start, id, _for, entity, _semicoron)| (id, entity))
+    .map(|(_start, id, _for, entity, _semicolon)| (id, entity))
     .parse(input)
 }
 
@@ -179,6 +179,6 @@ pub fn total_over(input: &str) -> ParseResult<Vec<String>> {
         char(')'),
         char(';'),
     ))
-    .map(|(_start, _open, references, _close, _semicoron)| references)
+    .map(|(_start, _open, references, _close, _semicolon)| references)
     .parse(input)
 }
