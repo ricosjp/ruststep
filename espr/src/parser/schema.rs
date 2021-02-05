@@ -67,19 +67,46 @@ pub fn formal_parameter(input: &str) -> ParseResult<(Vec<String>, ParameterType)
         .parse(input)
 }
 
+#[derive(Debug, Clone, PartialEq)]
+pub struct Constant {
+    pub name: String,
+    pub ty: ConcreteType,
+    pub expr: Expression,
+}
+
 /// 195 constant_decl = CONSTANT [constant_body] { [constant_body] } END_CONSTANT `;` .
-pub fn constant_decl(input: &str) -> ParseResult<()> {
-    todo!()
+pub fn constant_decl(input: &str) -> ParseResult<Vec<Constant>> {
+    tuple((
+        tag("CONSTANT"),
+        space_separated(constant_body),
+        tag("END_CONSTANT"),
+        char(';'),
+    ))
+    .map(|(_constant, consts, _end, _semicoron)| consts)
+    .parse(input)
 }
 
 /// 194 constant_body = [constant_id] `:` [instantiable_type] `:=` [expression] `;` .
-pub fn constant_body(input: &str) -> ParseResult<()> {
-    todo!()
+pub fn constant_body(input: &str) -> ParseResult<Constant> {
+    tuple((
+        constant_id,
+        char(':'),
+        instantiable_type,
+        tag(":="),
+        expression,
+        char(';'),
+    ))
+    .map(|(name, _coron, ty, _def, expr, _semicoron)| Constant { name, ty, expr })
+    .parse(input)
 }
 
 /// 240 instantiable_type = [concrete_types] | [entity_ref] .
-pub fn instantiable_type(input: &str) -> ParseResult<()> {
-    todo!()
+pub fn instantiable_type(input: &str) -> ParseResult<ConcreteType> {
+    alt((
+        concrete_types,
+        entity_ref.map(|r| ConcreteType::Reference(r)),
+    ))
+    .parse(input)
 }
 
 /// 291 rule_decl = [rule_head] [algorithm_head] { [stmt] } [where_clause] END_RULE `;` .
