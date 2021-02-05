@@ -98,14 +98,31 @@ pub fn algorithm_head(input: &str) -> ParseResult<()> {
 }
 
 /// 252 local_decl = LOCAL [local_variable] { [local_variable] } END_LOCAL `;` .
-pub fn local_decl(input: &str) -> ParseResult<()> {
-    todo!()
+pub fn local_decl(input: &str) -> ParseResult<Vec<LocalVariable>> {
+    tuple((
+        tag("LOCAL"),
+        space_separated(local_variable),
+        tag("END_LOCAL"),
+        char(';'),
+    ))
+    .map(|(_local, vars, _end, _semicoron)| {
+        vars.into_iter()
+            .map(|var| var.into_iter())
+            .flatten()
+            .collect()
+    })
+    .parse(input)
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct LocalVariable {
+    pub name: String,
+    pub ty: ParameterType,
+    pub expr: Option<Expression>,
 }
 
 /// 253 local_variable = [variable_id] { `,` [variable_id] } `:` [parameter_type] \[ `:=` [expression] \] `;` .
-pub fn local_variable(
-    input: &str,
-) -> ParseResult<(Vec<String>, ParameterType, Option<Expression>)> {
+pub fn local_variable(input: &str) -> ParseResult<Vec<LocalVariable>> {
     tuple((
         comma_separated(variable_id),
         char(':'),
@@ -113,7 +130,16 @@ pub fn local_variable(
         opt(tuple((tag(":="), expression)).map(|(_def, expr)| expr)),
         char(';'),
     ))
-    .map(|(ids, _comma, ty, expr, _semicoron)| (ids, ty, expr))
+    .map(|(names, _comma, ty, expr, _semicoron)| {
+        names
+            .into_iter()
+            .map(|name| LocalVariable {
+                name,
+                ty: ty.clone(),
+                expr: expr.clone(),
+            })
+            .collect()
+    })
     .parse(input)
 }
 
