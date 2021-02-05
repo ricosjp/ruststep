@@ -147,22 +147,38 @@ pub fn one_of(input: &str) -> ParseResult<SuperTypeExpression> {
     .parse(input)
 }
 
-/// 314 subtype_constraint_body = \[ [abstract_supertype] \] \[ [total_over] \] \[ [supertype_expression] `;` \] .
+/// 315 subtype_constraint_decl = [subtype_constraint_head] [subtype_constraint_body] END_SUBTYPE_CONSTRAINT `;` .
 pub fn subtype_constraint_decl(input: &str) -> ParseResult<()> {
     todo!()
 }
 
-/// 315 subtype_constraint_decl = [subtype_constraint_head] [subtype_constraint_body] END_SUBTYPE_CONSTRAINT `;` .
+/// 314 subtype_constraint_body = \[ [abstract_supertype] \] \[ [total_over] \] \[ [supertype_expression] `;` \] .
 pub fn subtype_constraint_body(input: &str) -> ParseResult<()> {
     todo!()
 }
 
 /// 316 subtype_constraint_head = SUBTYPE_CONSTRAINT [subtype_constraint_id] FOR [entity_ref] `;` .
-pub fn subtype_constraint_head(input: &str) -> ParseResult<()> {
-    todo!()
+pub fn subtype_constraint_head(input: &str) -> ParseResult<(String, String)> {
+    tuple((
+        tag("SUBTYPE_CONSTRAINT"),
+        subtype_constraint_id,
+        tag("FOR"),
+        entity_ref,
+        char(';'),
+    ))
+    .map(|(_start, id, _for, entity, _semicoron)| (id, entity))
+    .parse(input)
 }
 
 /// 326 total_over = TOTAL_OVER `(` [entity_ref] { `,` [entity_ref] } `)` `;` .
-pub fn total_over(input: &str) -> ParseResult<()> {
-    todo!()
+pub fn total_over(input: &str) -> ParseResult<Vec<String>> {
+    tuple((
+        tag("TOTAL_OVER"),
+        char('('),
+        space_separated(entity_ref),
+        char(')'),
+        char(';'),
+    ))
+    .map(|(_start, _open, references, _close, _semicoron)| references)
+    .parse(input)
 }

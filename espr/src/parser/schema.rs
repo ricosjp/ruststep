@@ -61,8 +61,10 @@ pub fn function_head(input: &str) -> ParseResult<()> {
 }
 
 /// 218 formal_parameter = [parameter_id] { `,` [parameter_id] } `:` [parameter_type] .
-pub fn formal_parameter(input: &str) -> ParseResult<()> {
-    todo!()
+pub fn formal_parameter(input: &str) -> ParseResult<(Vec<String>, ParameterType)> {
+    tuple((comma_separated(parameter_id), char(':'), parameter_type))
+        .map(|(ids, _comma, ty)| (ids, ty))
+        .parse(input)
 }
 
 /// 195 constant_decl = CONSTANT [constant_body] { [constant_body] } END_CONSTANT `;` .
@@ -101,8 +103,18 @@ pub fn local_decl(input: &str) -> ParseResult<()> {
 }
 
 /// 253 local_variable = [variable_id] { `,` [variable_id] } `:` [parameter_type] \[ `:=` [expression] \] `;` .
-pub fn local_variable(input: &str) -> ParseResult<()> {
-    todo!()
+pub fn local_variable(
+    input: &str,
+) -> ParseResult<(Vec<String>, ParameterType, Option<Expression>)> {
+    tuple((
+        comma_separated(variable_id),
+        char(':'),
+        parameter_type,
+        opt(tuple((tag(":="), expression)).map(|(_def, expr)| expr)),
+        char(';'),
+    ))
+    .map(|(ids, _comma, ty, expr, _semicoron)| (ids, ty, expr))
+    .parse(input)
 }
 
 /// 242 interface_specification = [reference_clause] | [use_clause] .
@@ -117,16 +129,6 @@ pub fn reference_clause(input: &str) -> ParseResult<()> {
 
 /// 288 resource_or_rename = [resource_ref] \[ AS [rename_id] \] .
 pub fn resource_or_rename(input: &str) -> ParseResult<()> {
-    todo!()
-}
-
-/// 284 rename_id = [constant_id] | [entity_id] | [function_id] | [procedure_id] | [type_id] .
-pub fn rename_id(input: &str) -> ParseResult<()> {
-    todo!()
-}
-
-/// 289 resource_ref = [constant_ref] | [entity_ref] | [function_ref] | [procedure_ref] | [type_ref] .
-pub fn resource_ref(input: &str) -> ParseResult<()> {
     todo!()
 }
 
