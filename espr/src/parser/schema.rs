@@ -10,6 +10,7 @@ pub struct Schema {
     pub procedures: Vec<Procedure>,
     pub rules: Vec<Rule>,
     pub constants: Vec<Constant>,
+    pub interfaces: Vec<InterfaceSpec>,
 }
 
 /// 296 schema_decl = SCHEMA [schema_id] \[ schema_version_id \] `;` [schema_body] END_SCHEMA `;` .
@@ -18,7 +19,7 @@ pub fn schema_decl(input: &str) -> ParseResult<Schema> {
     let schema_head =
         tuple((tag("SCHEMA "), schema_id, char(';'))).map(|(_start, id, _semicolon)| id);
     tuple((schema_head, schema_body, tag("END_SCHEMA"), char(';')))
-        .map(|(name, (constants, decls), _end, _semicolon)| {
+        .map(|(name, (interfaces, constants, decls), _end, _semicolon)| {
             let mut entities = Vec::new();
             let mut types = Vec::new();
             let mut functions = Vec::new();
@@ -43,15 +44,18 @@ pub fn schema_decl(input: &str) -> ParseResult<Schema> {
                 procedures,
                 rules,
                 constants,
+                interfaces,
             }
         })
         .parse(input)
 }
 
 /// 295 schema_body = { [interface_specification] } \[ [constant_decl] \] { [declaration] | [rule_decl] } .
-pub fn schema_body(input: &str) -> ParseResult<(Vec<Constant>, Vec<Declaration>)> {
-    // FIXME interface_specification
+pub fn schema_body(
+    input: &str,
+) -> ParseResult<(Vec<InterfaceSpec>, Vec<Constant>, Vec<Declaration>)> {
     tuple((
+        spaced_many0(interface_specification),
         constant_decl,
         spaced_many0(alt((declaration, rule_decl.map(|r| Declaration::Rule(r))))),
     ))
@@ -399,29 +403,75 @@ pub fn local_variable(input: &str) -> ParseResult<Vec<LocalVariable>> {
     .parse(input)
 }
 
+#[derive(Debug, Clone, PartialEq)]
+pub enum InterfaceSpec {
+    Reference {
+        name: String,
+        resources: Vec<(String, Option<String>)>,
+    },
+    Use {
+        name: String,
+        types: Vec<(String, Option<String>)>,
+    },
+}
+
 /// 242 interface_specification = [reference_clause] | [use_clause] .
-pub fn interface_specification(input: &str) -> ParseResult<()> {
-    todo!()
+pub fn interface_specification(input: &str) -> ParseResult<InterfaceSpec> {
+    alt((reference_clause, use_clause)).parse(input)
 }
 
 /// 281 reference_clause = REFERENCE FROM [schema_ref] \[ `(` [resource_or_rename] { `,` [resource_or_rename] } `)` \] `;` .
-pub fn reference_clause(input: &str) -> ParseResult<()> {
-    todo!()
+pub fn reference_clause(input: &str) -> ParseResult<InterfaceSpec> {
+    tuple((
+        tag("REFERENCE"),
+        tag("FROM"),
+        schema_ref,
+        opt(
+            tuple((char('('), comma_separated(resource_or_rename), char(')')))
+                .map(|(_open, ty, _close)| ty),
+        )
+        .map(|opt| opt.unwrap_or(Vec::new())),
+        char(';'),
+    ))
+    .map(|(_use, _from, name, resources, _semicolon)| InterfaceSpec::Reference { name, resources })
+    .parse(input)
 }
 
 /// 288 resource_or_rename = [resource_ref] \[ AS [rename_id] \] .
-pub fn resource_or_rename(input: &str) -> ParseResult<()> {
-    todo!()
+pub fn resource_or_rename(input: &str) -> ParseResult<(String, Option<String>)> {
+    tuple((
+        resource_ref,
+        opt(tuple((tag("AS"), rename_id)).map(|(_as, rename)| rename)),
+    ))
+    .parse(input)
 }
 
-/// 336 use_clause = USE FROM [schema_ref] \[ `(` [named_type_or_rename] { `,` [named_type_or_rename] } `)` \] `;` .
-pub fn use_clause(input: &str) -> ParseResult<()> {
-    todo!()
+/// 336 use_clause = USE FROM [schema_ref]
+///                \[ `(` [named_type_or_rename] { `,` [named_type_or_rename] } `)`
+///                \] `;` .
+pub fn use_clause(input: &str) -> ParseResult<InterfaceSpec> {
+    tuple((
+        tag("USE"),
+        tag("FROM"),
+        schema_ref,
+        opt(
+            tuple((char('('), comma_separated(named_type_or_rename), char(')')))
+                .map(|(_open, ty, _close)| ty),
+        )
+        .map(|opt| opt.unwrap_or(Vec::new())),
+        char(';'),
+    ))
+    .map(|(_use, _from, name, types, _semicolon)| InterfaceSpec::Use { name, types })
+    .parse(input)
 }
 
 /// 259 named_type_or_rename = [named_types] \[ AS ( [entity_id] | [type_id] ) \] .
-pub fn named_type_or_rename(input: &str) -> ParseResult<()> {
-    todo!()
+pub fn named_type_or_rename(input: &str) -> ParseResult<(String, Option<String>)> {
+    tuple((
+        named_types,
+        opt(tuple((tag("AS"), alt((entity_id, type_id)))).map(|(_as, id)| id)),
+    ))
+    .parse(input)
 }
 
 #[cfg(test)]
