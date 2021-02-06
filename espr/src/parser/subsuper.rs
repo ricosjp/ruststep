@@ -14,7 +14,7 @@ pub fn abstract_entity_declaration(input: &str) -> ParseResult<Constraint> {
         .parse(input)
 }
 
-/// 165 abstract_supertype = ABSTRACT SUPERTYPE ’;’ .
+/// 165 abstract_supertype = ABSTRACT SUPERTYPE `;` .
 pub fn abstract_supertype(input: &str) -> ParseResult<()> {
     tuple((tag("ABSTRACT"), tag("SUPERTYPE"), char(';')))
         .map(|(_abstract, _supertype, _semicolon)| ())
@@ -38,7 +38,7 @@ pub struct SubTypeDecl {
     pub entity_references: Vec<String>,
 }
 
-/// 318 subtype_declaration = SUBTYPE OF ’(’ entity_ref { ’,’ entity_ref } ’)’ .
+/// 318 subtype_declaration = SUBTYPE OF `(` entity_ref { `,` entity_ref } `)` .
 pub fn subtype_declaration(input: &str) -> ParseResult<SubTypeDecl> {
     tuple((
         tag("SUBTYPE"),
@@ -51,7 +51,7 @@ pub fn subtype_declaration(input: &str) -> ParseResult<SubTypeDecl> {
     .parse(input)
 }
 
-/// 313 subtype_constraint = OF ’(’ supertype_expression ’)’ .
+/// 313 subtype_constraint = OF `(` supertype_expression `)` .
 pub fn subtype_constraint(input: &str) -> ParseResult<SuperTypeExpression> {
     tuple((tag("OF"), char('('), supertype_expression, char(')')))
         .map(|(_of, _open, expr, _close)| expr)
