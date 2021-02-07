@@ -11,6 +11,7 @@ pub struct Schema {
     pub rules: Vec<Rule>,
     pub constants: Vec<Constant>,
     pub interfaces: Vec<InterfaceSpec>,
+    pub subtype_constraints: Vec<SubTypeConstraint>,
 }
 
 /// 296 schema_decl = SCHEMA [schema_id] \[ schema_version_id \] `;` [schema_body] END_SCHEMA `;` .
@@ -47,6 +48,7 @@ pub fn schema_decl(input: &str) -> ParseResult<Schema> {
                 rules,
                 constants,
                 interfaces,
+                subtype_constraints,
             }
         })
         .parse(input)
