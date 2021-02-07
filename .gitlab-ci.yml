@@ -29,10 +29,19 @@ pages:
   only:
     - master
 
-ap201:
+.ap_test:
   stage: test
-  script:
-    - cargo run --bin esprc -- ./schemas/APs/10303-201-aim-long.exp
   variables:
     GIT_SUBMODULE_STRATEGY: recursive
+
+ap201:
+  extends: .ap_test
+  script:
+    - cargo run --bin esprc -- ./schemas/APs/10303-201-aim-long.exp
+  allow_failure: true
+
+ap203:
+  extends: .ap_test
+  script:
+    - cargo run --bin esprc -- ./schemas/APs/10303-203-aim-long.exp
   allow_failure: true
