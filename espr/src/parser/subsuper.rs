@@ -14,13 +14,6 @@ pub fn abstract_entity_declaration(input: &str) -> ParseResult<Constraint> {
         .parse(input)
 }
 
-/// 165 abstract_supertype = ABSTRACT SUPERTYPE `;` .
-pub fn abstract_supertype(input: &str) -> ParseResult<()> {
-    tuple((tag("ABSTRACT"), tag("SUPERTYPE"), char(';')))
-        .map(|(_abstract, _supertype, _semicolon)| ())
-        .parse(input)
-}
-
 /// 166 abstract_supertype_declaration = ABSTRACT SUPERTYPE [ subtype_constraint ] .
 pub fn abstract_supertype_declaration(input: &str) -> ParseResult<Constraint> {
     tuple((tag("ABSTRACT"), tag("SUPERTYPE"), opt(subtype_constraint)))
@@ -147,14 +140,33 @@ pub fn one_of(input: &str) -> ParseResult<SuperTypeExpression> {
     .parse(input)
 }
 
-/// 315 subtype_constraint_decl = [subtype_constraint_head] [subtype_constraint_body] END_SUBTYPE_CONSTRAINT `;` .
-pub fn subtype_constraint_decl(input: &str) -> ParseResult<()> {
-    todo!()
+#[derive(Debug, Clone, PartialEq)]
+pub struct SubTypeConstraint {
+    pub name: String,
+    pub entity: String,
+    pub is_abstract: bool,
+    pub total_over: Option<Vec<String>>,
+    pub expr: Option<SuperTypeExpression>,
 }
 
-/// 314 subtype_constraint_body = \[ [abstract_supertype] \] \[ [total_over] \] \[ [supertype_expression] `;` \] .
-pub fn subtype_constraint_body(input: &str) -> ParseResult<()> {
-    todo!()
+/// 315 subtype_constraint_decl = [subtype_constraint_head] [subtype_constraint_body] END_SUBTYPE_CONSTRAINT `;` .
+pub fn subtype_constraint_decl(input: &str) -> ParseResult<SubTypeConstraint> {
+    tuple((
+        subtype_constraint_head,
+        subtype_constraint_body,
+        tag("END_SUBTYPE_CONSTRAINT"),
+        char(';'),
+    ))
+    .map(
+        |((name, entity), (is_abstract, total_over, expr), _end, _semicolon)| SubTypeConstraint {
+            name,
+            entity,
+            is_abstract,
+            total_over,
+            expr,
+        },
+    )
+    .parse(input)
 }
 
 /// 316 subtype_constraint_head = SUBTYPE_CONSTRAINT [subtype_constraint_id] FOR [entity_ref] `;` .
@@ -170,6 +182,18 @@ pub fn subtype_constraint_head(input: &str) -> ParseResult<(String, String)> {
     .parse(input)
 }
 
+/// 314 subtype_constraint_body = \[ [abstract_supertype] \] \[ [total_over] \] \[ [supertype_expression] `;` \] .
+pub fn subtype_constraint_body(
+    input: &str,
+) -> ParseResult<(bool, Option<Vec<String>>, Option<SuperTypeExpression>)> {
+    tuple((
+        opt(abstract_supertype).map(|opt| opt.is_some()),
+        opt(total_over),
+        opt(supertype_expression),
+    ))
+    .parse(input)
+}
+
 /// 326 total_over = TOTAL_OVER `(` [entity_ref] { `,` [entity_ref] } `)` `;` .
 pub fn total_over(input: &str) -> ParseResult<Vec<String>> {
     tuple((
@@ -181,4 +205,11 @@ pub fn total_over(input: &str) -> ParseResult<Vec<String>> {
     ))
     .map(|(_start, _open, references, _close, _semicolon)| references)
     .parse(input)
+}
+
+/// 165 abstract_supertype = ABSTRACT SUPERTYPE `;` .
+pub fn abstract_supertype(input: &str) -> ParseResult<()> {
+    tuple((tag("ABSTRACT"), tag("SUPERTYPE"), char(';')))
+        .map(|(_abstract, _supertype, _semicolon)| ())
+        .parse(input)
 }

@@ -25,6 +25,7 @@ pub fn schema_decl(input: &str) -> ParseResult<Schema> {
             let mut functions = Vec::new();
             let mut procedures = Vec::new();
             let mut rules = Vec::new();
+            let mut subtype_constraints = Vec::new();
 
             for decl in decls {
                 match decl {
@@ -33,6 +34,7 @@ pub fn schema_decl(input: &str) -> ParseResult<Schema> {
                     Declaration::Function(f) => functions.push(f),
                     Declaration::Procedure(p) => procedures.push(p),
                     Declaration::Rule(r) => rules.push(r),
+                    Declaration::SubTypeConstraint(sub) => subtype_constraints.push(sub),
                 }
             }
 
@@ -69,16 +71,17 @@ pub enum Declaration {
     Function(Function),
     Procedure(Procedure),
     Rule(Rule),
+    SubTypeConstraint(SubTypeConstraint),
 }
 
 /// 199 declaration = [entity_decl] | [function_decl] | [procedure_decl] | [subtype_constraint_decl] | [type_decl] .
 pub fn declaration(input: &str) -> ParseResult<Declaration> {
-    // FIXME subtype_constraint_decl
     alt((
         entity_decl.map(|e| Declaration::Entity(e)),
         type_decl.map(|ty| Declaration::Type(ty)),
         function_decl.map(|f| Declaration::Function(f)),
         procedure_decl.map(|p| Declaration::Procedure(p)),
+        subtype_constraint_decl.map(|sub| Declaration::SubTypeConstraint(sub)),
     ))
     .parse(input)
 }
