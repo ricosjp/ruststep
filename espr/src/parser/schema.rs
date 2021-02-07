@@ -342,7 +342,7 @@ pub fn rule_head(input: &str) -> ParseResult<(String, Vec<String>)> {
         rule_id,
         tag("FOR"),
         char('('),
-        space_separated(entity_ref),
+        comma_separated(entity_ref),
         char(')'),
         char(';'),
     ))
@@ -534,6 +534,29 @@ mod tests {
             .1
              .0
         );
+        assert_eq!(residual, "");
+    }
+
+    #[test]
+    fn rule() {
+        // From AP201
+        let exp_str = r#"
+        RULE application_context_requires_ap_definition FOR
+          (application_context, application_protocol_definition);
+        WHERE
+          WR1: SIZEOF (QUERY (ac <* application_context |
+               NOT (SIZEOF (QUERY (apd <* application_protocol_definition |
+               (ac :=: apd.application)
+               AND
+               (apd.application_interpreted_model_schema_name =
+               'EXPLICIT_DRAUGHTING')
+               AND
+               (ac.application = 'draughting'))) = 1 ))) = 0;
+        END_RULE;
+        "#
+        .trim();
+        let (residual, (rule, _remark)) = super::rule_decl(exp_str).finish().unwrap();
+        dbg!(&rule);
         assert_eq!(residual, "");
     }
 }
