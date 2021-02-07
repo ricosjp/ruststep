@@ -6,7 +6,7 @@ use structopt::StructOpt;
 
 #[derive(Debug, StructOpt)]
 struct Arguments {
-    #[structopt(short = "l", long = "num_lines", default_value = "3")]
+    #[structopt(long = "num-error-lines", default_value = "10")]
     num_lines: usize,
     #[structopt(parse(from_os_str))]
     source: PathBuf,
