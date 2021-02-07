@@ -58,7 +58,7 @@ pub fn schema_body(
 ) -> ParseResult<(Vec<InterfaceSpec>, Vec<Constant>, Vec<Declaration>)> {
     tuple((
         spaced_many0(interface_specification),
-        constant_decl,
+        opt(constant_decl).map(|opt| opt.unwrap_or(Vec::new())),
         spaced_many0(alt((declaration, rule_decl.map(|r| Declaration::Rule(r))))),
     ))
     .parse(input)
