@@ -35,3 +35,4 @@ ap201:
     - cargo run --bin esprc -- ./schemas/APs/10303-201-aim-long.exp
   variables:
     GIT_SUBMODULE_STRATEGY: recursive
+  allow_failure: true
