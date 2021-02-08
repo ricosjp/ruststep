@@ -559,7 +559,7 @@ mod tests {
         LOCAL
             first_oct ,
             seventh_oct : SET OF point := []; -- empty set of point (see 12.9)
-        END_LOCAL
+        END_LOCAL;
         "#
         .trim();
         let (residual, (local, _remark)) = super::local_decl(exp_str).finish().unwrap();
@@ -575,7 +575,7 @@ mod tests {
         LOCAL
             first_oct ,
             seventh_oct : SET OF point := []; -- empty set of point (see 12.9), change `POINT` -> `point`
-        END_LOCAL
+        END_LOCAL;
             first_oct := QUERY(temp <* point | (temp.x > 0) AND
                 (temp.y > 0) AND
                 (temp.z > 0) );

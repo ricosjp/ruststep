@@ -2,9 +2,13 @@ use super::{super::util::*, *};
 
 /// 169 aggregate_initializer = `[` \[ [element] { `,` [element] } \] `]` .
 pub fn aggregate_initializer(input: &str) -> ParseResult<Expression> {
-    tuple((char('['), comma_separated(element), char(']')))
-        .map(|(_open, elements, _close)| Expression::AggregateInitializer { elements })
-        .parse(input)
+    tuple((
+        char('['),
+        opt(comma_separated(element)).map(|opt| opt.unwrap_or(Vec::new())),
+        char(']'),
+    ))
+    .map(|(_open, elements, _close)| Expression::AggregateInitializer { elements })
+    .parse(input)
 }
 
 #[derive(Debug, Clone, PartialEq)]
@@ -38,6 +42,13 @@ mod tests {
     use super::super::super::literal::*;
     use super::*;
     use nom::Finish;
+
+    #[test]
+    fn aggregate_initializer_empty() {
+        let (res, (expr, _remarks)) = super::expression("[]").finish().unwrap();
+        dbg!(expr);
+        assert_eq!(res, "");
+    }
 
     #[test]
     fn aggregate_initializer() {
