@@ -3411,7 +3411,7 @@ SCHEMA explicit_draughting;
                                (0.0, 1.0, -2.0, -1.0, 0.0, 0.0, 0.0));
       henry          : RETURN (dimensional_exponents
                                (2.0, 1.0, -2.0, -2.0, 0.0, 0.0, 0.0));
-      degree_Celsius : RETURN (dimensional_exponents
+      degree_celsius : RETURN (dimensional_exponents
                                (0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0));
       lumen          : RETURN (dimensional_exponents
                                (0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0));
