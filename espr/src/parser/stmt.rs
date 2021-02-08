@@ -78,7 +78,7 @@ pub fn alias_stmt(input: &str) -> ParseResult<Statement> {
         spaced_many0(qualifier),
         char(';'),
         space_separated(stmt),
-        tag("END_ASLIAS"),
+        tag("END_ALIAS"),
         char(';'),
     ))
     .map(
@@ -334,4 +334,117 @@ pub fn skip_stmt(input: &str) -> ParseResult<Statement> {
     tuple((tag("SKIP"), char(';')))
         .map(|(_skip, _semicolon)| Statement::Skip)
         .parse(input)
+}
+
+#[cfg(test)]
+mod tests {
+    use nom::Finish;
+
+    #[test]
+    fn alias() {
+        // From ISO-10303-11 p.112
+        let exp_str = r#"
+        ALIAS s FOR the_line.start_point;
+            ALIAS e FOR the_line.end_point;
+                RETURN (SQRT((s.x - e.x)**2 + (s.y - e.y)**2 + (s.z - e.z)**2));
+            END_ALIAS;
+        END_ALIAS;
+        "#
+        .trim();
+        let (residual, (result, _remark)) = super::alias_stmt(exp_str).finish().unwrap();
+        dbg!(&result);
+        assert_eq!(residual, "");
+    }
+
+    #[test]
+    fn if_then() {
+        // From ISO-10303-11 p.128
+        let exp_str = r#"
+        IF a < 10 THEN
+            c := c + 1;
+        ELSE
+            c := c - 1;
+        END_IF;
+        "#
+        .trim();
+        let (residual, (result, _remark)) = super::if_stmt(exp_str).finish().unwrap();
+        dbg!(&result);
+        assert_eq!(residual, "");
+    }
+
+    #[test]
+    fn procedure_call() {
+        // From ISO-10303-11 p.128
+        let exp_str = r#"
+        INSERT (point_list, this_point, here );
+        "#
+        .trim();
+        let (residual, (result, _remark)) = super::procedure_call_stmt(exp_str).finish().unwrap();
+        dbg!(&result);
+        assert_eq!(residual, "");
+    }
+
+    #[test]
+    fn return_expr1() {
+        // From ISO-10303-11 p.122, part of alias_stmt
+        let exp_str = r#"
+        RETURN (SQRT((s.x - e.x)**2 + (s.y - e.y)**2 + (s.z - e.z)**2));
+        "#
+        .trim();
+        let (residual, (result, _remark)) = super::return_stmt(exp_str).finish().unwrap();
+        dbg!(&result);
+        assert_eq!(residual, "");
+    }
+
+    #[test]
+    fn return_expr2() {
+        // From AP201
+        let exp_str = r#"
+        RETURN ((type1 IN USEDIN(sample, '')) AND (type2 IN USEDIN(sample, '')));
+        "#
+        .trim();
+        let (residual, (result, _remark)) = super::return_stmt(exp_str).finish().unwrap();
+        dbg!(&result);
+        assert_eq!(residual, "");
+    }
+
+    #[test]
+    fn return_none() {
+        // From ISO-10303-11 p.131
+        let exp_str = r#"
+        RETURN;
+        "#
+        .trim();
+        let (residual, (result, _remark)) = super::return_stmt(exp_str).finish().unwrap();
+        dbg!(&result);
+        assert_eq!(residual, "");
+    }
+
+    #[test]
+    fn skip() {
+        // From ISO-10303-11 p.131
+        let exp_str = r#"
+        SKIP;
+        "#
+        .trim();
+        let (residual, (result, _remark)) = super::skip_stmt(exp_str).finish().unwrap();
+        dbg!(&result);
+        assert_eq!(residual, "");
+    }
+
+    #[test]
+    fn repeat() {
+        // From ISO-10303-11 p.131
+        let exp_str = r#"
+        REPEAT UNTIL (a=1);
+            IF (a < 0) THEN
+                SKIP;
+            END_IF;
+        END_REPEAT;
+        "#
+        .trim();
+        let (residual, (result, _remark)) = super::repeat_stmt(exp_str).finish().unwrap();
+        dbg!(&result);
+        assert_eq!(residual, "");
+    }
 }
