@@ -208,7 +208,7 @@ pub fn function_head(input: &str) -> ParseResult<(String, Vec<FormalParameter>, 
         tag("FUNCTION"),
         function_id,
         opt(
-            tuple((char('('), space_separated(formal_parameter), char(')'))).map(
+            tuple((char('('), semicolon_separated(formal_parameter), char(')'))).map(
                 |(_open, params, _close)| {
                     params
                         .into_iter()
@@ -614,6 +614,24 @@ mod tests {
         .trim();
         let (residual, (rule, _remark)) = super::rule_decl(exp_str).finish().unwrap();
         dbg!(&rule);
+        assert_eq!(residual, "");
+    }
+
+    #[test]
+    fn formal_parameter1() {
+        let (residual, (p, _remark)) = super::formal_parameter("input : AGGREGATE:intype OF REAL")
+            .finish()
+            .unwrap();
+        dbg!(&p);
+        assert_eq!(residual, "");
+    }
+
+    #[test]
+    fn formal_parameter2() {
+        let (residual, (p, _remark)) = super::formal_parameter("a,b: GENERIC:intype")
+            .finish()
+            .unwrap();
+        dbg!(&p);
         assert_eq!(residual, "");
     }
 
