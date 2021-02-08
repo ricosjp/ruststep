@@ -538,6 +538,21 @@ mod tests {
     }
 
     #[test]
+    fn local() {
+        // From ISO-10303-11 p.72
+        let exp_str = r#"
+        LOCAL
+            r_result : REAL := 0.0;
+            i_result : INTEGER;
+        END_LOCAl;
+        "#
+        .trim();
+        let (residual, (local, _remark)) = super::local_decl(exp_str).finish().unwrap();
+        dbg!(&local);
+        assert_eq!(residual, "");
+    }
+
+    #[test]
     fn rule1() {
         // From ISO-10303-11 p.73
         let exp_str = r#"
