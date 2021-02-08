@@ -74,4 +74,19 @@ mod tests {
         assert_eq!(w.rules.len(), 1);
         assert_eq!(w.rules[0].label, Some("wr1".to_string()));
     }
+
+    #[test]
+    fn where_clause3() {
+        let (residual, (w, _remarks)) = super::where_clause(
+            r#"
+            WHERE
+                wr1 : VALUE_UNIQUE(s);
+            "#
+            .trim(),
+        )
+        .finish()
+        .unwrap();
+        assert_eq!(residual, "");
+        dbg!(w);
+    }
 }

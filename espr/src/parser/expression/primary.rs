@@ -348,6 +348,13 @@ mod tests {
     }
 
     #[test]
+    fn function_call_builtin() {
+        let (res, (q, _remarks)) = super::primary("VALUE_UNIQUE(x)").finish().unwrap();
+        assert_eq!(res, "");
+        dbg!(q);
+    }
+
+    #[test]
     fn index() {
         let (res, (q, _remarks)) = super::primary("x[2 * 2]").finish().unwrap();
         assert_eq!(res, "");
