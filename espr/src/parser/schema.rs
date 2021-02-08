@@ -538,20 +538,47 @@ mod tests {
     }
 
     #[test]
-    fn rule() {
-        // From AP201
+    fn rule1() {
+        // From ISO-10303-11 p.73
         let exp_str = r#"
-        RULE application_context_requires_ap_definition FOR
-          (application_context, application_protocol_definition);
+        RULE point_match FOR (point);
+        LOCAL
+            first_oct ,
+            seventh_oct : SET OF POINT := []; -- empty set of point (see 12.9)
+        END_LOCAL
+            first_oct := QUERY(temp <* point | (temp.x > 0) AND
+                (temp.y > 0) AND
+                (temp.z > 0) );
+            seventh_oct := QUERY(temp <* point | (temp.x < 0) AND
+                (temp.y < 0) AND
+                (temp.z < 0) );
         WHERE
-          WR1: SIZEOF (QUERY (ac <* application_context |
-               NOT (SIZEOF (QUERY (apd <* application_protocol_definition |
-               (ac :=: apd.application)
-               AND
-               (apd.application_interpreted_model_schema_name =
-               'EXPLICIT_DRAUGHTING')
-               AND
-               (ac.application = 'draughting'))) = 1 ))) = 0;
+            SIZEOF(first_oct) = SIZEOF(seventh_oct);
+        END_RULE;
+        "#
+        .trim();
+        let (residual, (rule, _remark)) = super::rule_decl(exp_str).finish().unwrap();
+        dbg!(&rule);
+        assert_eq!(residual, "");
+    }
+
+    #[test]
+    fn rule2() {
+        // From ISO-10303-11 p.73
+        let exp_str = r#"
+        RULE vu FOR (b);
+            ENTITY temp;
+                a1 : c;
+                a2 : d;
+            END_ENTITY;
+        LOCAL
+            s : SET OF temp := [];
+        END_LOCAL;
+        REPEAT i := 1 TO SIZEOF(b);
+            s := s + temp(b[i].a1, b[i].a2);
+        END_REPEAT;
+        WHERE
+            wr1 : VALUE_UNIQUE(s);
         END_RULE;
         "#
         .trim();
