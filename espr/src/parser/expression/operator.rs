@@ -150,8 +150,8 @@ pub enum IntervalOperator {
 /// 247 interval_op = `<` | `<=` .
 pub fn interval_op(input: &str) -> ParseResult<IntervalOperator> {
     alt((
-        value(IntervalOperator::LessThan, tag("<")),
         value(IntervalOperator::LessThanEqual, tag("<=")),
+        value(IntervalOperator::LessThan, tag("<")),
     ))
     .parse(input)
 }
