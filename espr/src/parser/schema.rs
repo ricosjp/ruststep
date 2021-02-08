@@ -706,4 +706,27 @@ mod tests {
         dbg!(&rule);
         assert_eq!(residual, "");
     }
+
+    #[test]
+    fn function_ap201_bag_to_set() {
+        // From AP201
+        let exp_str = r#"
+        FUNCTION bag_to_set (the_bag : BAG OF GENERIC : intype) : SET OF GENERIC : intype;
+            LOCAL
+                the_set: SET OF GENERIC : intype := [];
+                i      : INTEGER;
+            END_LOCAL;
+            IF SIZEOF (the_bag) > 0 THEN
+                REPEAT i := 1 TO HIINDEX (the_bag);
+                    the_set := the_set + the_bag [i];
+                END_REPEAT;
+            END_IF;
+            RETURN (the_set);
+        END_FUNCTION;
+        "#
+        .trim();
+        let (residual, (rule, _remark)) = super::function_decl(exp_str).finish().unwrap();
+        dbg!(&rule);
+        assert_eq!(residual, "");
+    }
 }

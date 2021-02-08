@@ -358,6 +358,21 @@ mod tests {
 
     #[test]
     fn if_then() {
+        let exp_str = r#"
+        IF SIZEOF (the_bag) > 0 THEN
+            REPEAT i := 1 TO HIINDEX (the_bag);
+                the_set := the_set + the_bag [i];
+            END_REPEAT;
+        END_IF;
+        "#
+        .trim();
+        let (residual, (result, _remark)) = super::if_stmt(exp_str).finish().unwrap();
+        dbg!(&result);
+        assert_eq!(residual, "");
+    }
+
+    #[test]
+    fn if_then_else() {
         // From ISO-10303-11 p.128
         let exp_str = r#"
         IF a < 10 THEN
@@ -433,13 +448,27 @@ mod tests {
     }
 
     #[test]
-    fn repeat() {
+    fn repeat_until() {
         // From ISO-10303-11 p.131
         let exp_str = r#"
         REPEAT UNTIL (a=1);
             IF (a < 0) THEN
                 SKIP;
             END_IF;
+        END_REPEAT;
+        "#
+        .trim();
+        let (residual, (result, _remark)) = super::repeat_stmt(exp_str).finish().unwrap();
+        dbg!(&result);
+        assert_eq!(residual, "");
+    }
+
+    #[test]
+    fn repeat_increment() {
+        // From AP201
+        let exp_str = r#"
+        REPEAT i := 1 TO HIINDEX (the_bag);
+            the_set := the_set + the_bag [i];
         END_REPEAT;
         "#
         .trim();
