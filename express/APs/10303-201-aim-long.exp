@@ -2470,7 +2470,7 @@ SCHEMA explicit_draughting;
   RULE application_context_requires_ap_definition FOR
     (application_context, application_protocol_definition);
   WHERE
-    WR1: SIZEOF (QUERY (ac <* application_context |
+    wr1: SIZEOF (QUERY (ac <* application_context |
          NOT (SIZEOF (QUERY (apd <* application_protocol_definition |
          (ac :=: apd.application)
          AND
@@ -2482,7 +2482,7 @@ SCHEMA explicit_draughting;
 
   RULE approvals_are_assigned FOR (approval);
   WHERE
-    WR1: SIZEOF (QUERY (a <* approval |
+    wr1: SIZEOF (QUERY (a <* approval |
          NOT (SIZEOF (USEDIN (a, 'EXPLICIT_DRAUGHTING.' +
                                  'APPROVAL_ASSIGNMENT.' +
                                  'ASSIGNED_APPROVAL')) >= 1
@@ -2491,21 +2491,21 @@ SCHEMA explicit_draughting;
 
   RULE calendar_date_instantiation FOR (calendar_date);
   WHERE
-    WR1: SIZEOF (QUERY (each <* calendar_date |
+    wr1: SIZEOF (QUERY (each <* calendar_date |
            NOT (SIZEOF (USEDIN (each, '')) >= 1
          ))) = 0;
   END_RULE; -- calendar_date_instantiation
 
   RULE camera_usage_mapped_representation FOR (camera_usage);
   WHERE
-    WR1: SIZEOF (QUERY (cu <* camera_usage |
+    wr1: SIZEOF (QUERY (cu <* camera_usage |
          NOT ('EXPLICIT_DRAUGHTING.DRAUGHTING_MODEL'
               IN TYPEOF (cu.mapped_representation))))=0;
   END_RULE; -- camera_usage_mapped_representation
 
   RULE colour_rgb_instantiation FOR (colour_rgb);
   WHERE
-    WR1: SIZEOF (QUERY (each <* colour_rgb |
+    wr1: SIZEOF (QUERY (each <* colour_rgb |
            NOT (SIZEOF (USEDIN (each, '')) >= 1
          ))) = 0;
   END_RULE; -- colour_rgb_instantiation
@@ -2516,10 +2516,10 @@ SCHEMA explicit_draughting;
     representation_context,
     geometric_representation_context);
   WHERE
-    WR1: SIZEOF(QUERY(x <* cartesian_point| SIZEOF(QUERY
+    wr1: SIZEOF(QUERY(x <* cartesian_point| SIZEOF(QUERY
          (y <* geometric_representation_context | item_in_context(x,y) AND
          (HIINDEX(x.coordinates) <> y.coordinate_space_dimension))) > 0 )) =0;
-    WR2: SIZEOF(QUERY(x <* direction | SIZEOF( QUERY
+    wr2: SIZEOF(QUERY(x <* direction | SIZEOF( QUERY
          (y <* geometric_representation_context | item_in_context(x,y) AND
          (HIINDEX(x.direction_ratios) <> y.coordinate_space_dimension)))
          > 0 )) = 0;
@@ -2530,34 +2530,34 @@ SCHEMA explicit_draughting;
      pre_defined_curve_font,
      externally_defined_curve_font);
   WHERE
-    WR1: SIZEOF (QUERY (csf <* curve_style_font |
+    wr1: SIZEOF (QUERY (csf <* curve_style_font |
          NOT (SIZEOF (USEDIN (csf, 'EXPLICIT_DRAUGHTING.' +
                                    'CURVE_STYLE.CURVE_FONT'))>=1)))=0;
-    WR2: SIZEOF (QUERY (pdcf <* pre_defined_curve_font |
+    wr2: SIZEOF (QUERY (pdcf <* pre_defined_curve_font |
          NOT (SIZEOF (USEDIN (pdcf, 'EXPLICIT_DRAUGHTING.' +
                                     'CURVE_STYLE.CURVE_FONT'))>=1)))=0;
-    WR3: SIZEOF (QUERY (edcf <* externally_defined_curve_font |
+    wr3: SIZEOF (QUERY (edcf <* externally_defined_curve_font |
          NOT (SIZEOF (USEDIN (edcf, 'EXPLICIT_DRAUGHTING.' +
                                     'CURVE_STYLE.CURVE_FONT'))>=1)))=0;
   END_RULE; -- curve_font_usage
 
   RULE curve_style_font_instantiation FOR (curve_style_font);
   WHERE
-    WR1: SIZEOF (QUERY (each <* curve_style_font |
+    wr1: SIZEOF (QUERY (each <* curve_style_font |
            NOT (SIZEOF (USEDIN (each, '')) >= 1
          ))) = 0;
   END_RULE;
 
   RULE curve_style_instantiation FOR (curve_style);
   WHERE
-    WR1: SIZEOF (QUERY (each <* curve_style |
+    wr1: SIZEOF (QUERY (each <* curve_style |
            NOT (SIZEOF (USEDIN (each, '')) >= 1
          ))) = 0;
   END_RULE;
 
   RULE dimensionality_is_two FOR (geometric_representation_context);
   WHERE
-    WR1: SIZEOF (QUERY (g <* geometric_representation_context |
+    wr1: SIZEOF (QUERY (g <* geometric_representation_context |
                  NOT ((g.coordinate_space_dimension = 2)
                 )))=0;
   END_RULE;
@@ -2565,7 +2565,7 @@ SCHEMA explicit_draughting;
   RULE draughting_model_annotation_layers FOR
     (draughting_model);
   WHERE
-    WR1: SIZEOF
+    wr1: SIZEOF
          (QUERY (dm <* draughting_model |
          NOT (SIZEOF (QUERY (ao <* QUERY (it <* dm\representation.items |
             ('EXPLICIT_DRAUGHTING.ANNOTATION_OCCURRENCE' IN TYPEOF (it))) |
@@ -2579,7 +2579,7 @@ SCHEMA explicit_draughting;
   RULE draughting_sub_model_mapped_item FOR
     (mapped_item);
   WHERE
-    WR1: SIZEOF (QUERY (sr <* QUERY (mi <* mapped_item |
+    wr1: SIZEOF (QUERY (sr <* QUERY (mi <* mapped_item |
            ('EXPLICIT_DRAUGHTING.SHAPE_REPRESENTATION'
                IN TYPEOF (mi.mapping_source.mapped_representation))) |
           NOT (SIZEOF (USEDIN (sr, ''))  =
@@ -2594,7 +2594,7 @@ SCHEMA explicit_draughting;
   RULE draughting_subfigure_representation_layers FOR
     (draughting_subfigure_representation);
   WHERE
-    WR1: SIZEOF (QUERY (dsr <* draughting_subfigure_representation |
+    wr1: SIZEOF (QUERY (dsr <* draughting_subfigure_representation |
          NOT (SIZEOF (QUERY (item <* dsr\representation.items |
              ('EXPLICIT_DRAUGHTING.ANNOTATION_OCCURRENCE'
               IN TYPEOF (item)) AND
@@ -2607,7 +2607,7 @@ SCHEMA explicit_draughting;
 
   RULE drawing_sheet_annotation_layers FOR (drawing_sheet_revision);
   WHERE
-    WR1: SIZEOF
+    wr1: SIZEOF
          (QUERY (dsr <* drawing_sheet_revision |
          NOT (SIZEOF (QUERY (ao <* QUERY (it <* dsr\representation.items |
             ('EXPLICIT_DRAUGHTING.ANNOTATION_OCCURRENCE' IN TYPEOF (it))) |
@@ -2620,7 +2620,7 @@ SCHEMA explicit_draughting;
 
   RULE drawing_sheet_layout_usage FOR (mapped_item);
   WHERE
-    WR1: SIZEOF (QUERY (dsl <* QUERY (mi <* mapped_item |
+    wr1: SIZEOF (QUERY (dsl <* QUERY (mi <* mapped_item |
            ('EXPLICIT_DRAUGHTING.DRAWING_SHEET_LAYOUT'
                IN TYPEOF (mi.mapping_source.mapped_representation))) |
            NOT (SIZEOF (USEDIN (dsl, '')) =
@@ -2633,7 +2633,7 @@ SCHEMA explicit_draughting;
 
   RULE drawing_view_annotation_layers FOR (presentation_view);
   WHERE
-    WR1: SIZEOF
+    wr1: SIZEOF
          (QUERY (pv <* presentation_view |
          NOT (SIZEOF (QUERY (ao <* QUERY (it <* pv\representation.items |
             ('EXPLICIT_DRAUGHTING.ANNOTATION_OCCURRENCE' IN TYPEOF (it))) |
@@ -2647,14 +2647,14 @@ SCHEMA explicit_draughting;
   RULE externally_defined_curve_font_instantiation FOR
     (externally_defined_curve_font);
   WHERE
-    WR1: SIZEOF (QUERY (each <* externally_defined_curve_font |
+    wr1: SIZEOF (QUERY (each <* externally_defined_curve_font |
            NOT (SIZEOF (USEDIN (each, '')) >= 1
          ))) = 0;
   END_RULE;
 
   RULE externally_defined_symbol_instantiation FOR (externally_defined_symbol);
   WHERE
-    WR1: SIZEOF (QUERY (each <* externally_defined_symbol |
+    wr1: SIZEOF (QUERY (each <* externally_defined_symbol |
            NOT (SIZEOF (USEDIN (each, '')) >= 1
          ))) = 0;
   END_RULE;
@@ -2662,21 +2662,21 @@ SCHEMA explicit_draughting;
   RULE externally_defined_text_font_instantiation FOR
     (externally_defined_text_font);
   WHERE
-    WR1: SIZEOF (QUERY (each <* externally_defined_text_font |
+    wr1: SIZEOF (QUERY (each <* externally_defined_text_font |
            NOT (SIZEOF (USEDIN (each, '')) >= 1
          ))) = 0;
   END_RULE;
 
   RULE fill_area_style_colour_instantiation FOR (fill_area_style_colour);
   WHERE
-    WR1: SIZEOF (QUERY (each <* fill_area_style_colour |
+    wr1: SIZEOF (QUERY (each <* fill_area_style_colour |
            NOT (SIZEOF (USEDIN (each, '')) >= 1
          ))) = 0;
   END_RULE;
 
   RULE fill_area_style_instantiation FOR (fill_area_style);
   WHERE
-    WR1: SIZEOF (QUERY (each <* fill_area_style |
+    wr1: SIZEOF (QUERY (each <* fill_area_style |
            NOT (SIZEOF (USEDIN (each, '')) >= 1
          ))) = 0;
   END_RULE;
@@ -2684,7 +2684,7 @@ SCHEMA explicit_draughting;
   RULE fill_area_style_tile_symbol_constraint FOR
     (fill_area_style_tile_symbol_with_style);
   WHERE
-    WR1: SIZEOF (QUERY (fast <* fill_area_style_tile_symbol_with_style |
+    wr1: SIZEOF (QUERY (fast <* fill_area_style_tile_symbol_with_style |
          (('EXPLICIT_DRAUGHTING.DEFINED_SYMBOL' IN
             TYPEOF(fast.symbol\styled_item.item))
           AND NOT
@@ -2696,7 +2696,7 @@ SCHEMA explicit_draughting;
 
   RULE geometric_set_layers FOR (geometric_set);
   WHERE
-    WR1: SIZEOF (QUERY (gs <* geometric_set |
+    wr1: SIZEOF (QUERY (gs <* geometric_set |
          NOT (SIZEOF (QUERY (element <* gs.elements |
               NOT (SIZEOF (USEDIN (element, 'EXPLICIT_DRAUGHTING.' +
                                             'PRESENTATION_LAYER_ASSIGNMENT.' +
@@ -2707,9 +2707,9 @@ SCHEMA explicit_draughting;
 
   RULE global_length_and_angle_units FOR (global_unit_assigned_context);
   WHERE
-    WR1: SIZEOF (QUERY (guac <* global_unit_assigned_context |
+    wr1: SIZEOF (QUERY (guac <* global_unit_assigned_context |
          NOT (SIZEOF (guac.units)=2)))=0;
-    WR2: SIZEOF (QUERY (guac <* global_unit_assigned_context |
+    wr2: SIZEOF (QUERY (guac <* global_unit_assigned_context |
          NOT ((SIZEOF (QUERY (x <* guac.units |
                'EXPLICIT_DRAUGHTING.LENGTH_UNIT' IN TYPEOF (x)))=1) AND
               (SIZEOF (QUERY (x <* guac.units |
@@ -2719,17 +2719,17 @@ SCHEMA explicit_draughting;
 
   RULE group_usage_constraint FOR (group, group_assignment);
   WHERE
-    WR1: SIZEOF (QUERY (g <* group |
+    wr1: SIZEOF (QUERY (g <* group |
          NOT (SIZEOF (QUERY (ga <* group_assignment |
          g :=: ga.assigned_group )) = 1 ))) = 0;
   END_RULE;
 
   RULE measure_with_unit_instantiation FOR (measure_with_unit);
   WHERE
-    WR1: SIZEOF (QUERY (m <* measure_with_unit |
+    wr1: SIZEOF (QUERY (m <* measure_with_unit |
            NOT (SIZEOF (USEDIN (m, '')) >= 1
          ))) = 0;
-    WR2: SIZEOF (QUERY (m <* measure_with_unit |
+    wr2: SIZEOF (QUERY (m <* measure_with_unit |
            NOT (SIZEOF (TYPEOF (m) *
                      ['EXPLICIT_DRAUGHTING.LENGTH_MEASURE_WITH_UNIT',
                      'EXPLICIT_DRAUGHTING.PLANE_ANGLE_MEASURE_WITH_UNIT']) = 1
@@ -2738,10 +2738,10 @@ SCHEMA explicit_draughting;
 
   RULE named_unit_instantiation FOR (named_unit);
   WHERE
-    WR1: SIZEOF (QUERY (n <* named_unit |
+    wr1: SIZEOF (QUERY (n <* named_unit |
            NOT (SIZEOF (USEDIN (n, '')) >= 1
          ))) = 0;
-    WR2: SIZEOF (QUERY (n <* named_unit |
+    wr2: SIZEOF (QUERY (n <* named_unit |
            NOT (SIZEOF (TYPEOF (n) *
                        ['EXPLICIT_DRAUGHTING.CONVERSION_BASED_UNIT',
                         'EXPLICIT_DRAUGHTING.LENGTH_UNIT',
@@ -2752,28 +2752,28 @@ SCHEMA explicit_draughting;
 
   RULE pre_defined_colour_instantiation FOR (pre_defined_colour);
   WHERE
-    WR1: SIZEOF (QUERY (each <* pre_defined_colour |
+    wr1: SIZEOF (QUERY (each <* pre_defined_colour |
            NOT (SIZEOF (USEDIN (each, '')) >= 1
          ))) = 0;
   END_RULE;
 
   RULE pre_defined_curve_font_instantiation FOR (pre_defined_curve_font);
   WHERE
-    WR1: SIZEOF (QUERY (each <* pre_defined_curve_font |
+    wr1: SIZEOF (QUERY (each <* pre_defined_curve_font |
            NOT (SIZEOF (USEDIN (each, '')) >= 1
          ))) = 0;
   END_RULE;
 
   RULE pre_defined_symbol_instantiation FOR (pre_defined_symbol);
   WHERE
-    WR1: SIZEOF (QUERY (each <* pre_defined_symbol |
+    wr1: SIZEOF (QUERY (each <* pre_defined_symbol |
            NOT (SIZEOF (USEDIN (each, '')) >= 1
          ))) = 0;
   END_RULE;
 
   RULE pre_defined_text_font_instantiation FOR (pre_defined_text_font);
   WHERE
-    WR1: SIZEOF (QUERY (each <* pre_defined_text_font |
+    wr1: SIZEOF (QUERY (each <* pre_defined_text_font |
            NOT (SIZEOF (USEDIN (each, '')) >= 1
          ))) = 0;
   END_RULE;
@@ -2781,28 +2781,28 @@ SCHEMA explicit_draughting;
   RULE presentation_layer_assignment_constraint FOR
     (presentation_layer_assignment);
   WHERE
-    WR1: SIZEOF (QUERY (pla <* presentation_layer_assignment |
+    wr1: SIZEOF (QUERY (pla <* presentation_layer_assignment |
          NOT (SIZEOF (QUERY (item <* pla.assigned_items |
          NOT (SIZEOF (TYPEOF (item) *
                       ['EXPLICIT_DRAUGHTING.POINT',
                        'EXPLICIT_DRAUGHTING.CURVE',
                        'EXPLICIT_DRAUGHTING.ANNOTATION_OCCURRENCE'])=1)))=0
          )))=0;
-    WR2: SIZEOF (QUERY (pla <* presentation_layer_assignment |
+    wr2: SIZEOF (QUERY (pla <* presentation_layer_assignment |
          NOT (SIZEOF (QUERY (pnt <* QUERY (item <* pla.assigned_items |
               ('EXPLICIT_DRAUGHTING.POINT' IN TYPEOF (item))) |
             NOT (SIZEOF (USEDIN (pnt, 'EXPLICIT_DRAUGHTING.' +
                                      'GEOMETRIC_SET.ELEMENTS')) = 0)
               ))=0
          )))=0;
-    WR3: SIZEOF (QUERY (pla <* presentation_layer_assignment |
+    wr3: SIZEOF (QUERY (pla <* presentation_layer_assignment |
          NOT (SIZEOF (QUERY (crv <* QUERY (item <* pla.assigned_items |
               ('EXPLICIT_DRAUGHTING.CURVE' IN TYPEOF (item))) |
             NOT (SIZEOF (USEDIN (crv, 'EXPLICIT_DRAUGHTING.' +
                                      'GEOMETRIC_SET.ELEMENTS')) = 0)
               ))=0
          )))=0;
-    WR4: SIZEOF (QUERY (pla <* presentation_layer_assignment |
+    wr4: SIZEOF (QUERY (pla <* presentation_layer_assignment |
          NOT (SIZEOF (QUERY (ao <* QUERY (item <* pla.assigned_items |
                 ('EXPLICIT_DRAUGHTING.ANNOTATION_OCCURRENCE'
                   IN TYPEOF (item))) |
@@ -2822,7 +2822,7 @@ SCHEMA explicit_draughting;
     (presentation_layer_assignment,
      presentation_layer_usage);
   WHERE
-    WR1: SIZEOF (QUERY (e <* presentation_layer_assignment |
+    wr1: SIZEOF (QUERY (e <* presentation_layer_assignment |
          NOT (SIZEOF (QUERY (s <* presentation_layer_usage |
          e :=: s.assignment )) = 1 ))) = 0;
   END_RULE;
@@ -2830,7 +2830,7 @@ SCHEMA explicit_draughting;
   RULE presentation_of_product_definition_formation FOR
     (product_definition_formation);
   WHERE
-    WR1: SIZEOF (QUERY (pdf <* product_definition_formation |
+    wr1: SIZEOF (QUERY (pdf <* product_definition_formation |
          NOT (
          (SIZEOF (USEDIN (pdf, 'EXPLICIT_DRAUGHTING.' +
                                'DRAUGHTING_PRESENTED_ITEM.ITEMS'))>=1) OR
@@ -2857,7 +2857,7 @@ SCHEMA explicit_draughting;
 
   RULE presentation_size_constraint FOR (presentation_size);
   WHERE
-    WR1: SIZEOF (QUERY ( ps <* presentation_size |
+    wr1: SIZEOF (QUERY ( ps <* presentation_size |
                  NOT ('EXPLICIT_DRAUGHTING.' +
                       'DRAWING_SHEET_REVISION' IN
                       TYPEOF (ps.unit))))=0;
@@ -2866,7 +2866,7 @@ SCHEMA explicit_draughting;
   RULE presentation_style_by_context_constraint FOR
     (presentation_style_by_context);
   WHERE
-    WR1: SIZEOF (QUERY (psbc <* presentation_style_by_context |
+    wr1: SIZEOF (QUERY (psbc <* presentation_style_by_context |
          NOT ('EXPLICIT_DRAUGHTING.PRESENTATION_VIEW'
               IN TYPEOF (psbc.style_context)
          )))=0;
@@ -2875,7 +2875,7 @@ SCHEMA explicit_draughting;
   RULE presentation_style_by_context_instantiation FOR
     (presentation_style_by_context);
   WHERE
-    WR1: SIZEOF (QUERY (each <* presentation_style_by_context |
+    wr1: SIZEOF (QUERY (each <* presentation_style_by_context |
            NOT (SIZEOF (USEDIN (each, '')) >= 1
          ))) = 0;
   END_RULE;
@@ -2884,7 +2884,7 @@ SCHEMA explicit_draughting;
     (presentation_view,
      drawing_sheet_revision);
   WHERE
-    WR1: SIZEOF (QUERY (pv <* presentation_view |
+    wr1: SIZEOF (QUERY (pv <* presentation_view |
          NOT (
          SIZEOF (QUERY (rm <* USEDIN (pv, 'EXPLICIT_DRAUGHTING.' +
                                           'REPRESENTATION_MAP.' +
@@ -2901,7 +2901,7 @@ SCHEMA explicit_draughting;
 
   RULE product_definition_instantiation FOR (product_definition);
   WHERE
-    WR1: SIZEOF (QUERY (each <* product_definition |
+    wr1: SIZEOF (QUERY (each <* product_definition |
            NOT (SIZEOF (USEDIN (each, '')) >= 1
          ))) = 0;
   END_RULE;
@@ -2910,7 +2910,7 @@ SCHEMA explicit_draughting;
     (product,
      product_definition_formation);
   WHERE
-    WR1: SIZEOF (QUERY (e <* product |
+    wr1: SIZEOF (QUERY (e <* product |
          NOT (SIZEOF (QUERY (s <* product_definition_formation |
          e :=: s.of_product )) >= 1 ))) = 0;
   END_RULE;
@@ -2918,7 +2918,7 @@ SCHEMA explicit_draughting;
   RULE product_shape_has_representations FOR
     (product_definition_shape);
   WHERE
-    WR1: SIZEOF (QUERY (pds <* product_definition_shape |
+    wr1: SIZEOF (QUERY (pds <* product_definition_shape |
          NOT (SIZEOF (USEDIN (pds, 'EXPLICIT_DRAUGHTING.' +
                                    'PROPERTY_DEFINITION_REPRESENTATION.' +
                                    'DEFINITION')) >= 1
@@ -2927,7 +2927,7 @@ SCHEMA explicit_draughting;
 
   RULE representation_context_global_units FOR (representation_context);
   WHERE
-    WR1: SIZEOF (QUERY (rc <* representation_context |
+    wr1: SIZEOF (QUERY (rc <* representation_context |
          NOT ('EXPLICIT_DRAUGHTING.' +
               'GLOBAL_UNIT_ASSIGNED_CONTEXT' IN TYPEOF (rc)
          )))=0;
@@ -2935,7 +2935,7 @@ SCHEMA explicit_draughting;
 
   RULE representation_instantiation FOR (representation);
   WHERE
-    WR1: SIZEOF (QUERY (each <* representation |
+    wr1: SIZEOF (QUERY (each <* representation |
            NOT (SIZEOF (USEDIN (each, '')) >= 1
          ))) = 0;
   END_RULE;
@@ -2944,14 +2944,14 @@ SCHEMA explicit_draughting;
     (drawing_sheet_revision,
      drawing_sheet_revision_usage);
   WHERE
-    WR1: SIZEOF (QUERY (dsr <* drawing_sheet_revision |
+    wr1: SIZEOF (QUERY (dsr <* drawing_sheet_revision |
          NOT (SIZEOF (QUERY (usage <* drawing_sheet_revision_usage | 
          dsr :=: usage.area )) = 1 ))) = 0;
   END_RULE;
 
   RULE styled_curve FOR (styled_item);
   WHERE
-    WR1: SIZEOF (QUERY (crv <* QUERY (si <* styled_item | 
+    wr1: SIZEOF (QUERY (crv <* QUERY (si <* styled_item | 
            ('EXPLICIT_DRAUGHTING.CURVE' IN TYPEOF (si.item))) |
            NOT (SIZEOF (QUERY (sty <* crv.styles |
              NOT ((SIZEOF (sty.styles)=1) AND
@@ -2962,7 +2962,7 @@ SCHEMA explicit_draughting;
 
   RULE subtype_mandatory_annotation_occurrence FOR (annotation_occurrence);
   WHERE
-    WR1: SIZEOF (QUERY (ao <* annotation_occurrence |
+    wr1: SIZEOF (QUERY (ao <* annotation_occurrence |
          NOT ('EXPLICIT_DRAUGHTING.DRAUGHTING_ANNOTATION_OCCURRENCE'
                  IN TYPEOF (ao))
          ))=0;
@@ -2970,7 +2970,7 @@ SCHEMA explicit_draughting;
 
   RULE subtype_mandatory_camera_image FOR (camera_image);
   WHERE
-    WR1: SIZEOF (QUERY (ci <* camera_image |
+    wr1: SIZEOF (QUERY (ci <* camera_image |
          NOT ('EXPLICIT_DRAUGHTING.CAMERA_IMAGE_2D_WITH_SCALE'
               IN TYPEOF (ci)
          )))=0;
@@ -2978,7 +2978,7 @@ SCHEMA explicit_draughting;
 
   RULE subtype_mandatory_draughting_callout FOR (draughting_callout);
   WHERE
-    WR1: SIZEOF (QUERY (dc <* draughting_callout |
+    wr1: SIZEOF (QUERY (dc <* draughting_callout |
          NOT ('EXPLICIT_DRAUGHTING.DRAUGHTING_ELEMENTS' IN
                  TYPEOF (dc))
          ))=0;
@@ -2986,7 +2986,7 @@ SCHEMA explicit_draughting;
 
   RULE subtype_mandatory_drawing_revision FOR (drawing_revision);
   WHERE
-    WR1: SIZEOF (QUERY (dr <* drawing_revision |
+    wr1: SIZEOF (QUERY (dr <* drawing_revision |
          NOT ('EXPLICIT_DRAUGHTING.DRAUGHTING_DRAWING_REVISION'
                  IN TYPEOF (dr))
          ))=0;
@@ -2994,21 +2994,21 @@ SCHEMA explicit_draughting;
 
   RULE subtype_mandatory_pre_defined_colour FOR (pre_defined_colour);
   WHERE
-    WR1: SIZEOF (QUERY (pdc <* pre_defined_colour |
+    wr1: SIZEOF (QUERY (pdc <* pre_defined_colour |
          NOT ('EXPLICIT_DRAUGHTING.DRAUGHTING_PRE_DEFINED_COLOUR'
                  IN TYPEOF (pdc))))=0;
   END_RULE;
 
   RULE subtype_mandatory_pre_defined_curve_font FOR (pre_defined_curve_font);
   WHERE
-    WR1: SIZEOF (QUERY (pdcf <* pre_defined_curve_font |
+    wr1: SIZEOF (QUERY (pdcf <* pre_defined_curve_font |
          NOT ('EXPLICIT_DRAUGHTING.DRAUGHTING_PRE_DEFINED_CURVE_FONT'
                  IN TYPEOF (pdcf))))=0;
   END_RULE;
 
   RULE subtype_mandatory_pre_defined_symbol FOR (pre_defined_symbol);
   WHERE
-    WR1: SIZEOF (QUERY (pds <* pre_defined_symbol |
+    wr1: SIZEOF (QUERY (pds <* pre_defined_symbol |
          NOT (SIZEOF (TYPEOF (pds) *
                      ['EXPLICIT_DRAUGHTING.' +
                       'PRE_DEFINED_GEOMETRICAL_TOLERANCE_SYMBOL',
@@ -3023,7 +3023,7 @@ SCHEMA explicit_draughting;
 
   RULE subtype_mandatory_pre_defined_text_font FOR (pre_defined_text_font);
   WHERE
-    WR1: SIZEOF (QUERY (pdtf <* pre_defined_text_font |
+    wr1: SIZEOF (QUERY (pdtf <* pre_defined_text_font |
          NOT ('EXPLICIT_DRAUGHTING.DRAUGHTING_PRE_DEFINED_TEXT_FONT'
                  IN TYPEOF (pdtf))))=0;
   END_RULE;
@@ -3031,7 +3031,7 @@ SCHEMA explicit_draughting;
   RULE subtype_mandatory_shape_representation FOR
          (shape_representation);
   WHERE
-    WR1: SIZEOF (QUERY (sr <* shape_representation |
+    wr1: SIZEOF (QUERY (sr <* shape_representation |
          NOT (('EXPLICIT_DRAUGHTING.' +
               'GEOMETRICALLY_BOUNDED_2D_WIREFRAME_REPRESENTATION')
               IN TYPEOF (sr)
@@ -3040,14 +3040,14 @@ SCHEMA explicit_draughting;
 
   RULE symbol_colour_instantiation FOR (symbol_colour);
   WHERE
-    WR1: SIZEOF (QUERY (each <* symbol_colour |
+    wr1: SIZEOF (QUERY (each <* symbol_colour |
            NOT (SIZEOF (USEDIN (each, '')) >= 1
          ))) = 0;
   END_RULE;
 
   RULE terminator_symbol_constraint FOR (terminator_symbol);
   WHERE
-    WR1: SIZEOF (QUERY (ts <* terminator_symbol |
+    wr1: SIZEOF (QUERY (ts <* terminator_symbol |
            (('EXPLICIT_DRAUGHTING.DEFINED_SYMBOL' IN TYPEOF(ts.item))
            AND
            NOT ('EXPLICIT_DRAUGHTING.PRE_DEFINED_TERMINATOR_SYMBOL' IN
@@ -3059,11 +3059,11 @@ SCHEMA explicit_draughting;
     (pre_defined_text_font,
      externally_defined_text_font);
   WHERE
-    WR1: SIZEOF (QUERY (pdtf <* pre_defined_text_font |
+    wr1: SIZEOF (QUERY (pdtf <* pre_defined_text_font |
          NOT (SIZEOF (USEDIN (pdtf, 'EXPLICIT_DRAUGHTING.' +
                                     'TEXT_LITERAL.FONT'))>=1
          )))=0;
-    WR2: SIZEOF (QUERY (edtf <* externally_defined_text_font |
+    wr2: SIZEOF (QUERY (edtf <* externally_defined_text_font |
          NOT (SIZEOF (USEDIN (edtf, 'EXPLICIT_DRAUGHTING.' +
                                     'TEXT_LITERAL.FONT'))>=1
          )))=0;
@@ -3072,14 +3072,14 @@ SCHEMA explicit_draughting;
   RULE text_style_for_defined_font_instantiation FOR
     (text_style_for_defined_font);
   WHERE
-    WR1: SIZEOF (QUERY (each <* text_style_for_defined_font |
+    wr1: SIZEOF (QUERY (each <* text_style_for_defined_font |
            NOT (SIZEOF (USEDIN (each, '')) >= 1
          ))) = 0;
   END_RULE;
 
   RULE text_style_instantiation FOR (text_style);
   WHERE
-    WR1: SIZEOF (QUERY (each <* text_style |
+    wr1: SIZEOF (QUERY (each <* text_style |
            NOT (SIZEOF (USEDIN (each, '')) >= 1
          ))) = 0;
   END_RULE;
@@ -3088,13 +3088,13 @@ SCHEMA explicit_draughting;
     (geometrically_bounded_2d_wireframe_representation,
      mapped_item);
   WHERE
-    WR1: SIZEOF (QUERY (gbwr <*
+    wr1: SIZEOF (QUERY (gbwr <*
                       geometrically_bounded_2d_wireframe_representation |
          NOT (
          SIZEOF (QUERY (mi <* mapped_item |
          mi.mapping_source.mapped_representation :=: gbwr)) >= 1
          ))) = 0;
-    WR2: SIZEOF (QUERY (gbwr_map <* QUERY (mi <* mapped_item |
+    wr2: SIZEOF (QUERY (gbwr_map <* QUERY (mi <* mapped_item |
                  ('EXPLICIT_DRAUGHTING.' +
                   'GEOMETRICALLY_BOUNDED_2D_WIREFRAME_REPRESENTATION') IN
                  TYPEOF (mi.mapping_source.mapped_representation)) |
