@@ -538,7 +538,7 @@ mod tests {
     }
 
     #[test]
-    fn local() {
+    fn local1() {
         // From ISO-10303-11 p.72
         let exp_str = r#"
         LOCAL
@@ -553,13 +553,28 @@ mod tests {
     }
 
     #[test]
+    fn local2() {
+        // Part of rule1
+        let exp_str = r#"
+        LOCAL
+            first_oct ,
+            seventh_oct : SET OF point := []; -- empty set of point (see 12.9)
+        END_LOCAL
+        "#
+        .trim();
+        let (residual, (local, _remark)) = super::local_decl(exp_str).finish().unwrap();
+        dbg!(&local);
+        assert_eq!(residual, "");
+    }
+
+    #[test]
     fn rule1() {
         // From ISO-10303-11 p.73
         let exp_str = r#"
         RULE point_match FOR (point);
         LOCAL
             first_oct ,
-            seventh_oct : SET OF POINT := []; -- empty set of point (see 12.9)
+            seventh_oct : SET OF point := []; -- empty set of point (see 12.9), change `POINT` -> `point`
         END_LOCAL
             first_oct := QUERY(temp <* point | (temp.x > 0) AND
                 (temp.y > 0) AND
