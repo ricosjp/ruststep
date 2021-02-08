@@ -544,7 +544,7 @@ mod tests {
         LOCAL
             r_result : REAL := 0.0;
             i_result : INTEGER;
-        END_LOCAl;
+        END_LOCAL;
         "#
         .trim();
         let (residual, (local, _remark)) = super::local_decl(exp_str).finish().unwrap();
