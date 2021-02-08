@@ -3459,11 +3459,11 @@ SCHEMA explicit_draughting;
     END_IF;
   END_FUNCTION;
 
-   FUNCTION list_to_array(lis : LIST [0:?] OF GENERIC : T; 
-                        low,u : INTEGER) : ARRAY[low:u] OF GENERIC : T;
+   FUNCTION list_to_array(lis : LIST [0:?] OF GENERIC : t; 
+                        low,u : INTEGER) : ARRAY[low:u] OF GENERIC : t;
      LOCAL
        n   : INTEGER;
-       res : ARRAY [low:u] OF GENERIC : T;
+       res : ARRAY [low:u] OF GENERIC : t;
      END_LOCAL;
      n := SIZEOF(lis);
      IF (n <> (u-low +1)) THEN
