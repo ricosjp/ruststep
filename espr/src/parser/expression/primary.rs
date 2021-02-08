@@ -139,43 +139,43 @@ pub enum BuiltInFunction {
 ///                       | VALUE_IN
 ///                       | VALUE_UNIQUE .
 pub fn built_in_function(input: &str) -> ParseResult<BuiltInFunction> {
-    // alt impl is up to 9-element tuple
+    // alt impl is up to 11-element tuple. In reverse order to match longer case first.
     alt((
         alt((
-            value(BuiltInFunction::ABS, tag("ABS")),
-            value(BuiltInFunction::ACOS, tag("ACOS")),
-            value(BuiltInFunction::ASIN, tag("ASIN")),
-            value(BuiltInFunction::ATAN, tag("ATAN")),
-            value(BuiltInFunction::BLENGTH, tag("BLENGTH")),
-            value(BuiltInFunction::COS, tag("COS")),
-            value(BuiltInFunction::EXISTS, tag("EXISTS")),
-            value(BuiltInFunction::EXP, tag("EXP")),
             value(BuiltInFunction::FORMAT, tag("FORMAT")),
+            value(BuiltInFunction::EXP, tag("EXP")),
+            value(BuiltInFunction::EXISTS, tag("EXISTS")),
+            value(BuiltInFunction::COS, tag("COS")),
+            value(BuiltInFunction::BLENGTH, tag("BLENGTH")),
+            value(BuiltInFunction::ATAN, tag("ATAN")),
+            value(BuiltInFunction::ASIN, tag("ASIN")),
+            value(BuiltInFunction::ACOS, tag("ACOS")),
+            value(BuiltInFunction::ABS, tag("ABS")),
         )),
         alt((
-            value(BuiltInFunction::HIBOUND, tag("HIBOUND")),
-            value(BuiltInFunction::HIINDEX, tag("HIINDEX")),
-            value(BuiltInFunction::LENGTH, tag("LENGTH")),
-            value(BuiltInFunction::LOBOUND, tag("LOBOUND")),
+            value(BuiltInFunction::NVL, tag("NVL")),
             value(BuiltInFunction::LOINDEX, tag("LOINDEX")),
-            value(BuiltInFunction::LOG, tag("LOG")),
             value(BuiltInFunction::LOG2, tag("LOG2")),
             value(BuiltInFunction::LOG10, tag("LOG10")),
-            value(BuiltInFunction::NVL, tag("NVL")),
+            value(BuiltInFunction::LOG, tag("LOG")), // must be after `LOG2` and `LOG10`
+            value(BuiltInFunction::LOBOUND, tag("LOBOUND")),
+            value(BuiltInFunction::LENGTH, tag("LENGTH")),
+            value(BuiltInFunction::HIINDEX, tag("HIINDEX")),
+            value(BuiltInFunction::HIBOUND, tag("HIBOUND")),
         )),
         alt((
-            value(BuiltInFunction::ODD, tag("ODD")),
-            value(BuiltInFunction::ROLESOF, tag("ROLESOF")),
-            value(BuiltInFunction::SIN, tag("SIN")),
-            value(BuiltInFunction::SIZEOF, tag("SIZEOF")),
-            value(BuiltInFunction::SQRT, tag("SQRT")),
-            value(BuiltInFunction::TAN, tag("TAN")),
-            value(BuiltInFunction::TYPEOF, tag("TYPEOF")),
+            value(BuiltInFunction::VALUE_UNIQUE, tag("VALUE_UNIQUE")),
+            value(BuiltInFunction::VALUE_IN, tag("VALUE_IN")),
+            value(BuiltInFunction::VALUE, tag("VALUE")), // must be after `VALUE_IN` and `VALUE_UNIQUE`
             value(BuiltInFunction::USEDIN, tag("USEDIN")),
-            value(BuiltInFunction::VALUE, tag("VALUE")),
+            value(BuiltInFunction::TYPEOF, tag("TYPEOF")),
+            value(BuiltInFunction::TAN, tag("TAN")),
+            value(BuiltInFunction::SQRT, tag("SQRT")),
+            value(BuiltInFunction::SIZEOF, tag("SIZEOF")),
+            value(BuiltInFunction::SIN, tag("SIN")),
+            value(BuiltInFunction::ROLESOF, tag("ROLESOF")),
+            value(BuiltInFunction::ODD, tag("ODD")),
         )),
-        value(BuiltInFunction::VALUE_IN, tag("VALUE_IN")),
-        value(BuiltInFunction::VALUE_UNIQUE, tag("VALUE_UNIQUE")),
     ))
     .parse(input)
 }
