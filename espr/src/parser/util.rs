@@ -173,11 +173,11 @@ pub fn space_separated<'a, O>(f: impl EsprParser<'a, O>) -> impl EsprParser<'a, 
     }
 }
 
-pub fn comma_separated<'a, O>(f: impl EsprParser<'a, O>) -> impl EsprParser<'a, Vec<O>> {
+pub fn separated<'a, O>(c: char, f: impl EsprParser<'a, O>) -> impl EsprParser<'a, Vec<O>> {
     use nom::Parser;
     move |input| {
         let comma_with_remark =
-            nom::sequence::tuple((spaces_or_remarks, char(','), spaces_or_remarks)).map(
+            nom::sequence::tuple((spaces_or_remarks, char(c), spaces_or_remarks)).map(
                 |(mut l, _, mut r)| {
                     l.append(&mut r);
                     l
@@ -197,6 +197,14 @@ pub fn comma_separated<'a, O>(f: impl EsprParser<'a, O>) -> impl EsprParser<'a, 
             })
             .parse(input)
     }
+}
+
+pub fn comma_separated<'a, O>(f: impl EsprParser<'a, O>) -> impl EsprParser<'a, Vec<O>> {
+    separated(',', f)
+}
+
+pub fn semicolon_separated<'a, O>(f: impl EsprParser<'a, O>) -> impl EsprParser<'a, Vec<O>> {
+    separated(';', f)
 }
 
 /// Merge tupled EsprParser into a single EsprParser
@@ -275,6 +283,12 @@ impl_tuple!(
     f1, f2, f3, f4, f5, f6, f7, f8;
     o1, o2, o3, o4, o5, o6, o7, o8
 );
+impl_tuple!(
+    F1, F2, F3, F4, F5, F6, F7, F8, F9;
+    O1, O2, O3, O4, O5, O6, O7, O8, O9;
+    f1, f2, f3, f4, f5, f6, f7, f8, f9;
+    o1, o2, o3, o4, o5, o6, o7, o8, o9
+);
 
 pub fn alt<'a, O, List: Alt<'a, O>>(l: List) -> impl EsprParser<'a, O> {
     move |input| Alt::choice(l.clone(), input)
@@ -284,7 +298,7 @@ pub trait Alt<'a, O>: Clone {
     fn choice(self, input: &'a str) -> ParseResult<'a, O>;
 }
 
-macro_rules! impl_alg {
+macro_rules! impl_alt {
     ($($F:ident),*) => {
         impl<'a, $($F),*, O> Alt<'a, O> for ($($F),*)
         where
@@ -298,14 +312,16 @@ macro_rules! impl_alg {
     };
 }
 
-impl_alg!(F1, F2);
-impl_alg!(F1, F2, F3);
-impl_alg!(F1, F2, F3, F4);
-impl_alg!(F1, F2, F3, F4, F5);
-impl_alg!(F1, F2, F3, F4, F5, F6);
-impl_alg!(F1, F2, F3, F4, F5, F6, F7);
-impl_alg!(F1, F2, F3, F4, F5, F6, F7, F8);
-impl_alg!(F1, F2, F3, F4, F5, F6, F7, F8, F9);
+impl_alt!(F1, F2);
+impl_alt!(F1, F2, F3);
+impl_alt!(F1, F2, F3, F4);
+impl_alt!(F1, F2, F3, F4, F5);
+impl_alt!(F1, F2, F3, F4, F5, F6);
+impl_alt!(F1, F2, F3, F4, F5, F6, F7);
+impl_alt!(F1, F2, F3, F4, F5, F6, F7, F8);
+impl_alt!(F1, F2, F3, F4, F5, F6, F7, F8, F9);
+impl_alt!(F1, F2, F3, F4, F5, F6, F7, F8, F9, F10);
+impl_alt!(F1, F2, F3, F4, F5, F6, F7, F8, F9, F10, F11);
 
 #[cfg(test)]
 mod tests {

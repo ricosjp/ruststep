@@ -42,3 +42,20 @@ impl_id!(variable_ref);
 pub fn general_ref(input: &str) -> ParseResult<String> {
     alt((parameter_ref, variable_ref)).parse(input)
 }
+
+/// 289 resource_ref = [constant_ref] | [entity_ref] | [function_ref] | [procedure_ref] | [type_ref] .
+pub fn resource_ref(input: &str) -> ParseResult<String> {
+    alt((
+        constant_ref,
+        entity_ref,
+        function_ref,
+        procedure_ref,
+        type_ref,
+    ))
+    .parse(input)
+}
+
+/// 284 rename_id = [constant_id] | [entity_id] | [function_id] | [procedure_id] | [type_id] .
+pub fn rename_id(input: &str) -> ParseResult<String> {
+    alt((constant_id, entity_id, function_id, procedure_id, type_id)).parse(input)
+}
