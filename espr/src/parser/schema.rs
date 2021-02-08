@@ -616,4 +616,76 @@ mod tests {
         dbg!(&rule);
         assert_eq!(residual, "");
     }
+
+    #[test]
+    fn function_aggregate() {
+        // From ISO-10303-11 p.66-67
+        let exp_str = r#"
+        FUNCTION scale(input : AGGREGATE:intype OF REAL; scalar: REAL): AGGREGATE:intype OF REAL;
+            LOCAL
+                result : AGGREGATE:intype OF REAL := input;
+            END_LOCAL;
+            IF SIZEOF([`BAG,`SET`] * TYPEOF(input)) > 0 THEN
+                REPEAT i := LOINDEX(input) TO HIINDEX(input);
+                    result := result - input[i];              -- remove the original
+                    result := result + scalar*input[i];       -- insert the scaled
+                END_REPEAT;
+            ELSE
+                REPEAT i := LOINDEX(input) TO HIINDEX(input);
+                    result[i] := scalar*input[i];
+                END_REPEAT;
+            END_IF;
+            RETURN(result);
+        END_FUNCTION;
+        "#
+        .trim();
+        let (residual, (rule, _remark)) = super::function_decl(exp_str).finish().unwrap();
+        dbg!(&rule);
+        assert_eq!(residual, "");
+    }
+
+    #[test]
+    fn function_generic() {
+        // From ISO-10303-11 p.67-68
+        let exp_str = r#"
+        FUNCTION add(a,b: GENERIC:intype): GENERIC:intype;
+            LOCAL
+                nr : NUMBER; -- integer or real
+                vr : vector;
+            END_LOCAL;
+            IF (`NUMBER` IN TYPEOF(a)) AND (`NUMBER` IN TYPEOF(b)) THEN
+                nr := a+b;
+                RETURN(nr);
+            ELSE
+                IF (`THIS_SCHEMA.VECTOR` IN TYPEOF(a)) AND (`THIS_SCHEMA.VECTOR` IN TYPEOF(b)) THEN
+                    vr := vector(a.i + b.i,
+                    a.j + b.j,
+                    a.k + b.k);
+                    RETURN(vr);
+                END_IF;
+            END_IF;
+            RETURN (?); --"add" if we receive input that is invalid, return a no-value
+        END_FUNCTION;
+        "#
+        .trim();
+        let (residual, (rule, _remark)) = super::function_decl(exp_str).finish().unwrap();
+        dbg!(&rule);
+        assert_eq!(residual, "");
+    }
+
+    #[test]
+    fn function_generic_entity() {
+        // From ISO-10303-11 p.68
+        let exp_str = r#"
+        FUNCTION check_relating (type1 : instance_of_type_1;
+                                 type2 : instance_of_type_2;
+                                 sample : GENERIC_ENTITY): BOOLEAN;
+            RETURN ((type1 IN USEDIN(sample, ``)) AND (type2 IN USEDIN(sample, ``)));
+        END_FUNCTION;
+        "#
+        .trim();
+        let (residual, (rule, _remark)) = super::function_decl(exp_str).finish().unwrap();
+        dbg!(&rule);
+        assert_eq!(residual, "");
+    }
 }
