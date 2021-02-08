@@ -643,7 +643,7 @@ mod tests {
             LOCAL
                 result : AGGREGATE:intype OF REAL := input;
             END_LOCAL;
-            IF SIZEOF([`BAG,`SET`] * TYPEOF(input)) > 0 THEN
+            IF SIZEOF(['BAG','SET'] * TYPEOF(input)) > 0 THEN
                 REPEAT i := LOINDEX(input) TO HIINDEX(input);
                     result := result - input[i];              -- remove the original
                     result := result + scalar*input[i];       -- insert the scaled
@@ -671,11 +671,11 @@ mod tests {
                 nr : NUMBER; -- integer or real
                 vr : vector;
             END_LOCAL;
-            IF (`NUMBER` IN TYPEOF(a)) AND (`NUMBER` IN TYPEOF(b)) THEN
+            IF ('NUMBER' IN TYPEOF(a)) AND ('NUMBER' IN TYPEOF(b)) THEN
                 nr := a+b;
                 RETURN(nr);
             ELSE
-                IF (`THIS_SCHEMA.VECTOR` IN TYPEOF(a)) AND (`THIS_SCHEMA.VECTOR` IN TYPEOF(b)) THEN
+                IF ('THIS_SCHEMA.VECTOR' IN TYPEOF(a)) AND ('THIS_SCHEMA.VECTOR' IN TYPEOF(b)) THEN
                     vr := vector(a.i + b.i,
                     a.j + b.j,
                     a.k + b.k);
@@ -698,7 +698,7 @@ mod tests {
         FUNCTION check_relating (type1 : instance_of_type_1;
                                  type2 : instance_of_type_2;
                                  sample : GENERIC_ENTITY): BOOLEAN;
-            RETURN ((type1 IN USEDIN(sample, ``)) AND (type2 IN USEDIN(sample, ``)));
+            RETURN ((type1 IN USEDIN(sample, '')) AND (type2 IN USEDIN(sample, '')));
         END_FUNCTION;
         "#
         .trim();
