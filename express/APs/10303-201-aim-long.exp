@@ -3221,7 +3221,7 @@ SCHEMA explicit_draughting;
       i      : INTEGER;
     END_LOCAL;
     IF SIZEOF (the_bag) > 0 THEN
-      REPEAT i := 1 to HIINDEX (the_bag);
+      REPEAT i := 1 TO HIINDEX (the_bag);
         the_set := the_set + the_bag [i];
       END_REPEAT;
     END_IF;
