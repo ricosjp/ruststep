@@ -421,4 +421,11 @@ mod tests {
             panic!("Must be factor")
         }
     }
+
+    #[test]
+    fn call_attr() {
+        let (residual, (expr, _remarks)) = super::primary("f(a, b).attr").finish().unwrap();
+        dbg!(expr);
+        assert_eq!(residual, "");
+    }
 }
