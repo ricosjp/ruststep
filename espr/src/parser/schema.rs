@@ -538,6 +538,20 @@ mod tests {
     }
 
     #[test]
+    fn constant() {
+        let exp_str = r#"
+        CONSTANT
+            dummy_gri : geometric_representation_item := representation_item('') || geometric_representation_item();
+            dummy_tri : topological_representation_item := representation_item('') || topological_representation_item();
+        END_CONSTANT;
+        "#
+        .trim();
+        let (residual, (local, _remark)) = super::constant_decl(exp_str).finish().unwrap();
+        dbg!(&local);
+        assert_eq!(residual, "");
+    }
+
+    #[test]
     fn local1() {
         // From ISO-10303-11 p.72
         let exp_str = r#"

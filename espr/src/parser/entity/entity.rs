@@ -332,4 +332,27 @@ mod tests {
         assert_eq!(entity.attributes.len(), 2);
         assert!(entity.derive_clause.is_some());
     }
+
+    #[test]
+    fn entity_ap203_axis2_placement_3d() {
+        // From AP203
+        let exp_str = r#"
+        ENTITY axis2_placement_3d SUBTYPE OF (placement);
+            axis          : OPTIONAL direction;
+            ref_direction : OPTIONAL direction;
+        DERIVE
+            p : LIST [3:3] OF direction := build_axes(axis,ref_direction);
+        WHERE
+            wr1: (SELF\placement.location.dim = 3);
+            wr2: ((NOT EXISTS(axis)) OR (axis.dim = 3));
+            wr3: ((NOT EXISTS(ref_direction)) OR (ref_direction.dim = 3));
+            wr4: ((NOT EXISTS(axis)) OR (NOT EXISTS(ref_direction)) OR (cross_product(axis,ref_direction).magnitude > 0));
+        END_ENTITY;
+        "#
+        .trim();
+
+        let (residual, (entity, _remark)) = super::entity_decl(exp_str).finish().unwrap();
+        dbg!(&entity);
+        assert_eq!(residual, "");
+    }
 }

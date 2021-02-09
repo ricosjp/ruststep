@@ -65,9 +65,13 @@ pub fn function_call(input: &str) -> ParseResult<QualifiableFactor> {
 
 /// 167 actual_parameter_list = `(` [parameter] { `,` [parameter] } `)` .
 pub fn actual_parameter_list(input: &str) -> ParseResult<Vec<Expression>> {
-    tuple((char('('), comma_separated(parameter), char(')')))
-        .map(|(_open, parameters, _close)| parameters)
-        .parse(input)
+    tuple((
+        char('('),
+        opt(comma_separated(parameter)).map(|opt| opt.unwrap_or(Vec::new())),
+        char(')'),
+    ))
+    .map(|(_open, parameters, _close)| parameters)
+    .parse(input)
 }
 
 /// 264 parameter = [expression] .
@@ -420,5 +424,12 @@ mod tests {
         } else {
             panic!("Must be factor")
         }
+    }
+
+    #[test]
+    fn call_attr() {
+        let (residual, (expr, _remarks)) = super::primary("f(a, b).attr").finish().unwrap();
+        dbg!(expr);
+        assert_eq!(residual, "");
     }
 }

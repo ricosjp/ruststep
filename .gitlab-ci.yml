@@ -43,4 +43,3 @@ parse-ap203:
   extends: .parse_test
   script:
     - cargo run --bin esprc -- ./schemas/APs/10303-203-aim-long.exp --check
-  allow_failure: true

@@ -201,11 +201,11 @@ pub fn simple_factor(input: &str) -> ParseResult<Expression> {
         }
     });
     alt((
+        unary,
         aggregate_initializer,
         entity_constructor,
         interval,
         query_expression,
-        unary,
         enumeration_reference, // must be after `unary` case
     ))
     .parse(input)
@@ -450,5 +450,12 @@ mod tests {
         } else {
             panic!("Must be entity constructor")
         }
+    }
+
+    #[test]
+    fn call_attr() {
+        let (residual, (expr, _remarks)) = super::expression("f(a, b).attr").finish().unwrap();
+        dbg!(expr);
+        assert_eq!(residual, "");
     }
 }
