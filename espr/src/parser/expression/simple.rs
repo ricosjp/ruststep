@@ -201,11 +201,11 @@ pub fn simple_factor(input: &str) -> ParseResult<Expression> {
         }
     });
     alt((
+        unary,
         aggregate_initializer,
         entity_constructor,
         interval,
         query_expression,
-        unary,
         enumeration_reference, // must be after `unary` case
     ))
     .parse(input)
