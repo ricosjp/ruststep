@@ -8,6 +8,8 @@ use structopt::StructOpt;
 struct Arguments {
     #[structopt(long = "num-error-lines", default_value = "10")]
     num_lines: usize,
+    #[structopt(long = "check", help = "Check input EXPRESS definitions can be parsed")]
+    check: bool,
     #[structopt(parse(from_os_str))]
     source: PathBuf,
 }
@@ -31,6 +33,11 @@ fn main() {
             panic!("Syntax Error");
         }
     };
+    if args.check {
+        eprintln!("Parse succeeded");
+        return;
+    }
+
     let ir = IR::from_syntax_tree(&st).expect("Failed in semantic analysis phase");
     println!("{}", ir);
 }
