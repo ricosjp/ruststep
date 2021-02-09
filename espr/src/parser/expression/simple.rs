@@ -451,4 +451,11 @@ mod tests {
             panic!("Must be entity constructor")
         }
     }
+
+    #[test]
+    fn call_attr() {
+        let (residual, (expr, _remarks)) = super::expression("f(a, b).attr").finish().unwrap();
+        dbg!(expr);
+        assert_eq!(residual, "");
+    }
 }
