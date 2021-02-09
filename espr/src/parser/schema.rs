@@ -729,4 +729,35 @@ mod tests {
         dbg!(&rule);
         assert_eq!(residual, "");
     }
+
+    #[test]
+    fn function_ap201_valid_calendar_date() {
+        // From AP201
+        let exp_str = r#"
+        FUNCTION valid_calendar_date (date : calendar_date) : LOGICAL;
+            IF NOT ({1 <= date.day_component <= 31}) THEN
+                RETURN(FALSE);
+            END_IF;
+            CASE date.month_component OF
+                4         : RETURN({ 1<= date.day_component <= 30});
+                6         : RETURN({ 1<= date.day_component <= 30});
+                9         : RETURN({ 1<= date.day_component <= 30});
+                11        : RETURN({ 1<= date.day_component <= 30});
+                2         : 
+                    BEGIN
+                        IF (leap_year(date.year_component)) THEN
+                            RETURN({ 1<= date.day_component <= 29});
+                        ELSE
+                            RETURN({ 1<= date.day_component <= 28});
+                        END_IF;
+                    END;
+                OTHERWISE : RETURN(TRUE);
+            END_CASE;
+        END_FUNCTION;
+        "#
+        .trim();
+        let (residual, (rule, _remark)) = super::function_decl(exp_str).finish().unwrap();
+        dbg!(&rule);
+        assert_eq!(residual, "");
+    }
 }

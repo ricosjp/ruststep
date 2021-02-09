@@ -347,6 +347,15 @@ mod tests {
     }
 
     #[test]
+    fn interval() {
+        let (res, (expr, _remarks)) = super::interval("{1 <= date.day_component <= 31}")
+            .finish()
+            .unwrap();
+        assert_eq!(res, "");
+        dbg!(expr);
+    }
+
+    #[test]
     fn binary() {
         let (res, (expr, _remarks)) = super::expression("1.0 + 2.0").finish().unwrap();
         assert_eq!(res, "");

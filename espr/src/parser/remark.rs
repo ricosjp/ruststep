@@ -118,11 +118,16 @@ pub fn remark_tag(input: &str) -> RawParseResult<Vec<String>> {
 
 /// Match to spaces or remarks
 pub fn spaces_or_remarks(input: &str) -> RawParseResult<Vec<Remark>> {
-    delimited(
+    tuple((
+        many0(tuple((multispace0, alt((embedded_remark, tail_remark))))),
         multispace0,
-        separated_list0(multispace0, alt((embedded_remark, tail_remark))),
-        multispace0,
-    )
+    ))
+    .map(|(contains, _endspace)| {
+        contains
+            .into_iter()
+            .map(|(_space, remark)| remark)
+            .collect()
+    })
     .parse(input)
 }
 
