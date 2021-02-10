@@ -149,19 +149,16 @@ fn create_tree(mut head: Expression, tails: Vec<(BinaryOperator, Expression)>) -
 
 /// 305 simple_expression = [term] { [add_like_op] [term] } .
 pub fn simple_expression(input: &str) -> ParseResult<Expression> {
-    tuple((term, spaced_many0(tuple((add_like_op, term)))))
+    tuple((term, many0(tuple((add_like_op, term)))))
         .map(|(head, tails)| create_tree(head, tails))
         .parse(input)
 }
 
 /// 325 term = [factor] { [multiplication_like_op] [factor] } .
 pub fn term(input: &str) -> ParseResult<Expression> {
-    tuple((
-        factor,
-        spaced_many0(tuple((multiplication_like_op, factor))),
-    ))
-    .map(|(head, tails)| create_tree(head, tails))
-    .parse(input)
+    tuple((factor, many0(tuple((multiplication_like_op, factor)))))
+        .map(|(head, tails)| create_tree(head, tails))
+        .parse(input)
 }
 
 /// 217 factor = [simple_factor] \[ `**` [simple_factor] \] .

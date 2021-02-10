@@ -75,7 +75,7 @@ pub fn alias_stmt(input: &str) -> ParseResult<Statement> {
         variable_id,
         tag("FOR"),
         general_ref,
-        spaced_many0(qualifier),
+        many0(qualifier),
         char(';'),
         space_separated(stmt),
         tag("END_ALIAS"),
@@ -98,7 +98,7 @@ pub fn alias_stmt(input: &str) -> ParseResult<Statement> {
 pub fn assignment_stmt(input: &str) -> ParseResult<Statement> {
     tuple((
         general_ref,
-        spaced_many0(qualifier),
+        many0(qualifier),
         tag(":="),
         expression,
         char(';'),
@@ -119,7 +119,7 @@ pub fn case_stmt(input: &str) -> ParseResult<Statement> {
         tag("CASE"),
         selector,
         tag("OF"),
-        spaced_many0(case_action),
+        many0(case_action),
         opt(tuple((tag("OTHERWISE"), char(':'), stmt))
             .map(|(_otherwise, _colon, stmt)| Box::new(stmt))),
         tag("END_CASE"),

@@ -68,7 +68,7 @@ pub struct EntityBody {
 /// 204 entity_body = { [explicit_attr] } \[ [derive_clause] \] \[ [inverse_clause] \] \[ [unique_clause] \] \[ [where_clause] \] .
 pub fn entity_body(input: &str) -> ParseResult<EntityBody> {
     tuple((
-        spaced_many0(explicit_attr),
+        many0(explicit_attr),
         opt(derive_clause),
         opt(inverse_clause),
         opt(unique_clause),

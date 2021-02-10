@@ -61,9 +61,9 @@ pub fn schema_body(
     input: &str,
 ) -> ParseResult<(Vec<InterfaceSpec>, Vec<Constant>, Vec<Declaration>)> {
     tuple((
-        spaced_many0(interface_specification),
+        many0(interface_specification),
         opt(constant_decl).map(|opt| opt.unwrap_or(Vec::new())),
-        spaced_many0(alt((declaration, rule_decl.map(|r| Declaration::Rule(r))))),
+        many0(alt((declaration, rule_decl.map(|r| Declaration::Rule(r))))),
     ))
     .parse(input)
 }
@@ -105,7 +105,7 @@ pub fn procedure_decl(input: &str) -> ParseResult<Procedure> {
     tuple((
         procedure_head,
         algorithm_head,
-        spaced_many0(stmt),
+        many0(stmt),
         tag("END_PROCEDURE"),
         char(';'),
     ))
@@ -302,7 +302,7 @@ pub fn rule_decl(input: &str) -> ParseResult<Rule> {
     tuple((
         rule_head,
         algorithm_head,
-        spaced_many0(stmt),
+        many0(stmt),
         where_clause,
         tag("END_RULE"),
         char(';'),
@@ -348,7 +348,7 @@ pub fn algorithm_head(
     input: &str,
 ) -> ParseResult<(Vec<Declaration>, Vec<Constant>, Vec<LocalVariable>)> {
     tuple((
-        spaced_many0(declaration),
+        many0(declaration),
         opt(constant_decl).map(|opt| opt.unwrap_or(Vec::new())),
         opt(local_decl).map(|opt| opt.unwrap_or(Vec::new())),
     ))

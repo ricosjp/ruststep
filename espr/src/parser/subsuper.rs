@@ -73,7 +73,7 @@ pub fn supertype_constraint(input: &str) -> ParseResult<Constraint> {
 pub fn supertype_expression(input: &str) -> ParseResult<SuperTypeExpression> {
     tuple((
         supertype_factor,
-        spaced_many0(tuple((tag("ANDOR"), supertype_factor))),
+        many0(tuple((tag("ANDOR"), supertype_factor))),
     ))
     .map(|(first, tails)| {
         if tails.len() > 0 {
@@ -91,22 +91,19 @@ pub fn supertype_expression(input: &str) -> ParseResult<SuperTypeExpression> {
 
 /// 321 supertype_factor = [supertype_term] { AND [supertype_term] } .
 pub fn supertype_factor(input: &str) -> ParseResult<SuperTypeExpression> {
-    tuple((
-        supertype_term,
-        spaced_many0(tuple((tag("AND"), supertype_term))),
-    ))
-    .map(|(first, tails)| {
-        if tails.len() > 0 {
-            let mut terms = vec![first];
-            for (_and, term) in tails {
-                terms.push(term)
+    tuple((supertype_term, many0(tuple((tag("AND"), supertype_term)))))
+        .map(|(first, tails)| {
+            if tails.len() > 0 {
+                let mut terms = vec![first];
+                for (_and, term) in tails {
+                    terms.push(term)
+                }
+                SuperTypeExpression::And { terms }
+            } else {
+                first
             }
-            SuperTypeExpression::And { terms }
-        } else {
-            first
-        }
-    })
-    .parse(input)
+        })
+        .parse(input)
 }
 
 /// 323 supertype_term = [entity_ref] | [one_of] | `(` [supertype_expression] `)` .

@@ -1,7 +1,7 @@
 //! Parser combinators for EXPRESS language with remarks
 
 use super::remark::*;
-use nom::{error::VerboseError, multi::*, sequence::*, IResult};
+use nom::{error::VerboseError, sequence::pair, IResult};
 use std::marker::PhantomData;
 
 /// Parse result without remarks
@@ -128,10 +128,10 @@ pub fn spaces(input: &str) -> ParseResult<()> {
     Ok((input, ((), remarks)))
 }
 
-pub fn spaced_many0<'a, O>(f: impl EsprParser<'a, O>) -> impl EsprParser<'a, Vec<O>> {
+pub fn many0<'a, O>(f: impl EsprParser<'a, O>) -> impl EsprParser<'a, Vec<O>> {
     use nom::Parser;
     move |input| {
-        many0(pair(spaces_or_remarks, f.clone()))
+        nom::multi::many0(pair(spaces_or_remarks, f.clone()))
             .map(|pairs| {
                 let mut outputs = Vec::new();
                 let mut remarks = Vec::new();
@@ -149,7 +149,7 @@ pub fn spaced_many0<'a, O>(f: impl EsprParser<'a, O>) -> impl EsprParser<'a, Vec
 pub fn space_separated<'a, O>(f: impl EsprParser<'a, O>) -> impl EsprParser<'a, Vec<O>> {
     use nom::Parser;
     move |input| {
-        many1(pair(spaces_or_remarks, f.clone()))
+        nom::multi::many1(pair(spaces_or_remarks, f.clone()))
             .map(|pairs| {
                 let mut outputs = Vec::new();
                 let mut remarks = Vec::new();
@@ -174,19 +174,22 @@ pub fn separated<'a, O>(c: char, f: impl EsprParser<'a, O>) -> impl EsprParser<'
                     l
                 },
             );
-        nom::sequence::tuple((f.clone(), many0(pair(comma_with_remark, f.clone()))))
-            .map(|((first, mut r0), pairs)| {
-                let mut output = vec![first];
-                let mut remarks = Vec::new();
-                remarks.append(&mut r0);
-                for (mut r1, (out, mut r2)) in pairs {
-                    remarks.append(&mut r1);
-                    remarks.append(&mut r2);
-                    output.push(out);
-                }
-                (output, remarks)
-            })
-            .parse(input)
+        nom::sequence::tuple((
+            f.clone(),
+            nom::multi::many0(pair(comma_with_remark, f.clone())),
+        ))
+        .map(|((first, mut r0), pairs)| {
+            let mut output = vec![first];
+            let mut remarks = Vec::new();
+            remarks.append(&mut r0);
+            for (mut r1, (out, mut r2)) in pairs {
+                remarks.append(&mut r1);
+                remarks.append(&mut r2);
+                output.push(out);
+            }
+            (output, remarks)
+        })
+        .parse(input)
     }
 }
 
