@@ -1,4 +1,4 @@
-use espr::{parser::syntax_tree::SyntaxTree, semantics::*};
+use espr::{parser::SyntaxTree, semantics::*};
 use quote::*;
 use std::{env, fs, io::Write, path::*};
 

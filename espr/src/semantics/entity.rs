@@ -18,17 +18,17 @@ pub struct EntityAttribute {
 }
 
 impl Legalize for EntityAttribute {
-    type Input = parser::entity::EntityAttribute;
+    type Input = parser::EntityAttribute;
 
     fn legalize(ns: &Namespace, scope: &Scope, attr: &Self::Input) -> Result<Self, SemanticError> {
-        use parser::types::ParameterType::*;
+        use parser::ParameterType::*;
         let ty = match &attr.ty {
             Named(name) => ns.lookup_type(scope, name)?,
             Simple(ty) => namespace::TypeRef::SimpleType(*ty),
             _ => unimplemented!(),
         };
         let name = match &attr.name {
-            parser::entity::AttributeDecl::Reference(name) => name.clone(),
+            parser::AttributeDecl::Reference(name) => name.clone(),
             _ => unimplemented!(),
         };
         Ok(EntityAttribute {
@@ -40,12 +40,12 @@ impl Legalize for EntityAttribute {
 }
 
 impl Legalize for Entity {
-    type Input = parser::entity::Entity;
+    type Input = parser::Entity;
 
     fn legalize(
         ns: &Namespace,
         scope: &Scope,
-        entity: &parser::entity::Entity,
+        entity: &parser::Entity,
     ) -> Result<Self, SemanticError> {
         let attributes = entity
             .attributes

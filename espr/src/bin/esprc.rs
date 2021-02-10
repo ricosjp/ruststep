@@ -1,6 +1,6 @@
 //! Executable for espr EXPRESS language compiler
 
-use espr::{parser::syntax_tree::SyntaxTree, semantics::IR};
+use espr::{parser::SyntaxTree, semantics::IR};
 use std::{fs, path::*};
 use structopt::StructOpt;
 

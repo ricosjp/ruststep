@@ -1,5 +1,5 @@
 use super::{scope::*, SemanticError};
-use crate::parser::{self, syntax_tree::SyntaxTree};
+use crate::parser::{self, SyntaxTree};
 use inflector::Inflector;
 use maplit::hashmap;
 use proc_macro2::TokenStream;
@@ -16,7 +16,7 @@ pub enum IdentifierType {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum TypeRef {
     Named { name: String, scope: Scope },
-    SimpleType(parser::types::SimpleType),
+    SimpleType(parser::SimpleType),
 }
 
 impl ToTokens for TypeRef {
@@ -24,7 +24,7 @@ impl ToTokens for TypeRef {
         use TypeRef::*;
         match self {
             SimpleType(ty) => {
-                use parser::types::SimpleType::*;
+                use parser::SimpleType::*;
                 match ty {
                     Number => tokens.append(format_ident!("f64")),
                     Real => tokens.append(format_ident!("f64")),
@@ -80,7 +80,7 @@ impl Namespace {
                     .attributes
                     .iter()
                     .map(|attr| match &attr.name {
-                        parser::entity::AttributeDecl::Reference(name) => name.clone(),
+                        parser::AttributeDecl::Reference(name) => name.clone(),
                         _ => unimplemented!(),
                     })
                     .collect();
