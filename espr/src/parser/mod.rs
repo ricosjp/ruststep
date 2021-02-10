@@ -42,4 +42,5 @@ pub mod stmt;
 pub mod subsuper;
 pub mod syntax_tree;
 pub mod types;
-pub mod util;
+
+mod combinator;

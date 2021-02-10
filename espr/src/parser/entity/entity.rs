@@ -1,5 +1,5 @@
 use super::{attribute::*, derive::*, domain::*, inverse::*, unique::*};
-use crate::parser::{expression::*, identifier::*, subsuper::*, types::*, util::*};
+use crate::parser::{expression::*, identifier::*, subsuper::*, types::*, combinator::*};
 
 /// Parsed result of EXPRESS's ENTITY
 #[derive(Debug, Clone, PartialEq)]

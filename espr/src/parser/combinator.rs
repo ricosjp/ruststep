@@ -126,17 +126,6 @@ pub fn spaces(input: &str) -> ParseResult<()> {
     Ok((input, ((), remarks)))
 }
 
-pub fn satisfy<'a, F>(f: F) -> impl EsprParser<'a, char>
-where
-    F: Fn(char) -> bool + Clone,
-{
-    use nom::Parser;
-    move |input: &'a str| {
-        let (input, c) = nom::character::complete::satisfy(f.clone()).parse(input)?;
-        Ok((input, (c, Vec::new())))
-    }
-}
-
 pub fn spaced_many0<'a, O>(f: impl EsprParser<'a, O>) -> impl EsprParser<'a, Vec<O>> {
     use nom::Parser;
     move |input| {

@@ -1,4 +1,4 @@
-use super::{entity::*, expression::*, identifier::*, stmt::*, subsuper::*, types::*, util::*};
+use super::{entity::*, expression::*, identifier::*, stmt::*, subsuper::*, types::*, combinator::*};
 
 /// Parsed result of EXPRESS's SCHEMA
 #[derive(Debug, Clone, PartialEq)]

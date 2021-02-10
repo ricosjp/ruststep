@@ -1,4 +1,4 @@
-use super::{basis::simple_id, util::RawParseResult};
+use super::{basis::simple_id, combinator::RawParseResult};
 use itertools::Itertools;
 use nom::{
     branch::alt, bytes::complete::*, character::complete::*, combinator::opt, multi::*,

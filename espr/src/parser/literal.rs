@@ -1,4 +1,4 @@
-use super::{basis::*, util::*};
+use super::{basis::*, combinator::*};
 use derive_more::From;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
