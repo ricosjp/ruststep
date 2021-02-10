@@ -1,4 +1,4 @@
-use super::super::{expression::*, identifier::*, combinator::*};
+use super::super::{combinator::*, expression::*, identifier::*};
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct WhereClause {

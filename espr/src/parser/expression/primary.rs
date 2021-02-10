@@ -1,5 +1,5 @@
 use super::{
-    super::{identifier::*, literal::*, combinator::*},
+    super::{combinator::*, identifier::*, literal::*},
     aggregate_initializer::*,
     simple::*,
 };

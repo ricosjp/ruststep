@@ -1,5 +1,5 @@
 use super::attribute::*;
-use crate::parser::{identifier::*, types::*, combinator::*};
+use crate::parser::{combinator::*, identifier::*, types::*};
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct InverseClause {

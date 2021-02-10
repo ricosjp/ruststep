@@ -1,5 +1,5 @@
 use super::attribute::*;
-use crate::parser::{identifier::*, combinator::*};
+use crate::parser::{combinator::*, identifier::*};
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct UniqueClause {

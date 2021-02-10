@@ -10,7 +10,7 @@ pub use generalized::*;
 pub use select::*;
 pub use simple::*;
 
-use super::{entity::*, identifier::*, combinator::*};
+use super::{combinator::*, entity::*, identifier::*};
 use derive_more::From;
 
 /// `EXTENSIBLE` and `GENERIC_ENTITY` keywords for [select_type] and [enumeration_type]

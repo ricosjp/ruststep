@@ -1,4 +1,4 @@
-use super::{remark::*, schema::*, combinator::*};
+use super::{combinator::*, remark::*, schema::*};
 use nom::Finish;
 
 /// Entire syntax tree parsed from EXPRESS Language string

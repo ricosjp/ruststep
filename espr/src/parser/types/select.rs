@@ -1,5 +1,5 @@
 use super::{
-    super::{types::named_types, combinator::*},
+    super::{combinator::*, types::named_types},
     *,
 };
 

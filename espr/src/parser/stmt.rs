@@ -1,4 +1,4 @@
-use super::{expression::*, identifier::*, types::*, combinator::*};
+use super::{combinator::*, expression::*, identifier::*, types::*};
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum Statement {
