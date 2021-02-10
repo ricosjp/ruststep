@@ -286,7 +286,7 @@ pub fn logical_expression(input: &str) -> ParseResult<Expression> {
     expression(input)
 }
 
-/// 277 query_expression = QUERY `(` variable_id `<*` aggregate_source `|` logical_expression `)` .
+/// 277 query_expression = QUERY `(` [variable_id] `<*` [aggregate_source] `|` [logical_expression] `)` .
 pub fn query_expression(input: &str) -> ParseResult<Expression> {
     tuple((
         tag("QUERY"),
