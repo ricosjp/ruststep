@@ -231,7 +231,7 @@ pub fn expression(input: &str) -> ParseResult<Expression> {
     .parse(input)
 }
 
-/// 212 enumeration_reference = \[ [type_ref] ’.’ \] [enumeration_ref] .
+/// 212 enumeration_reference = \[ [type_ref] `.` \] [enumeration_ref] .
 pub fn enumeration_reference(input: &str) -> ParseResult<Expression> {
     tuple((opt(tuple((type_ref, char('.')))), enumeration_ref))
         .map(|(opt, enum_ref)| Expression::EnumerationReference {
@@ -311,7 +311,7 @@ pub fn query_expression(input: &str) -> ParseResult<Expression> {
     .parse(input)
 }
 
-/// 205 entity_constructor = entity_ref ’(’ [ [expression] { ’,’ [expression] } ] ’)’ .
+/// 205 entity_constructor = entity_ref `(` [ [expression] { `,` [expression] } ] `)` .
 pub fn entity_constructor(input: &str) -> ParseResult<Expression> {
     tuple((
         entity_ref,

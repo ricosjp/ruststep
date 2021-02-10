@@ -37,7 +37,7 @@ pub fn encoded_character(input: &str) -> RawParseResult<[u8; 4]> {
         .parse(input)
 }
 
-/// 140 encoded_string_literal = `"` encoded_character { encoded_character } `"` .
+/// 140 encoded_string_literal = `"` [encoded_character] { [encoded_character] } `"` .
 pub fn encoded_string_literal(input: &str) -> RawParseResult<String> {
     tuple((char('"'), many1(encoded_character), char('"')))
         .map(|(_openq, chars, _closeq)| {
