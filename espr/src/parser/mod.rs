@@ -1,4 +1,4 @@
-//! Tokenize EXPRESS language into [syntax_tree::SyntaxTree]
+//! Tokenize EXPRESS language into [SyntaxTree]
 //!
 //! This submodule responsible for tokenize of EXPRESS language input into a [syntax_tree::SyntaxTree] struct.
 //! Following steps of compile, i.e. semantics analysis and Rust code generation will be handled by

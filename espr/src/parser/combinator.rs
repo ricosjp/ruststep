@@ -1,3 +1,5 @@
+//! Parser combinators for EXPRESS language with remarks
+
 use super::remark::*;
 use nom::{error::VerboseError, multi::*, sequence::*, IResult};
 use std::marker::PhantomData;
