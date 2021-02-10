@@ -5,31 +5,6 @@
 //! other submodules.
 //!
 //! This submodule is based on [nom](https://github.com/Geal/nom) parser combinater.
-//!
-//! Example
-//! --------
-//!
-//! EXPRESS Language string is parsed into [syntax_tree::SyntaxTree]:
-//!
-//! ```
-//! let schemas = espr::parser::syntax_tree::SyntaxTree::parse(r#"
-//! SCHEMA one;
-//!   ENTITY first;
-//!     m_ref : second;
-//!     fattr : STRING;
-//!   END_ENTITY;
-//!   ENTITY second;
-//!     sattr : STRING;
-//!   END_ENTITY;
-//! END_SCHEMA;
-//!
-//! SCHEMA geometry0;
-//!   ENTITY point;
-//!     x, y, z: REAL;
-//!   END_ENTITY;
-//! END_SCHEMA;
-//! "#.trim()).unwrap();
-//! ```
 
 pub mod combinator;
 
