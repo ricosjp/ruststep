@@ -1,4 +1,4 @@
-use super::super::{expression::*, identifier::*, util::*};
+use super::super::{combinator::*, expression::*, identifier::*};
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct WhereClause {
@@ -13,7 +13,7 @@ pub struct DomainRule {
 
 /// 338 where_clause = WHERE [domain_rule] `;` { [domain_rule] `;` } .
 pub fn where_clause(input: &str) -> ParseResult<WhereClause> {
-    tuple((tag("WHERE"), spaced_many0(tuple((domain_rule, char(';'))))))
+    tuple((tag("WHERE"), many0(tuple((domain_rule, char(';'))))))
         .map(|(_where, rules)| {
             let rules = rules.into_iter().map(|(rule, _semicolon)| rule).collect();
             WhereClause { rules }

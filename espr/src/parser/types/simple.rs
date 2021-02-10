@@ -1,4 +1,4 @@
-use super::super::util::*;
+use super::super::combinator::*;
 
 /// Output of [width_spec]
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]

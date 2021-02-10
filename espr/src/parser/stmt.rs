@@ -1,4 +1,4 @@
-use super::{expression::*, identifier::*, types::*, util::*};
+use super::{combinator::*, expression::*, identifier::*, types::*};
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum Statement {
@@ -75,9 +75,9 @@ pub fn alias_stmt(input: &str) -> ParseResult<Statement> {
         variable_id,
         tag("FOR"),
         general_ref,
-        spaced_many0(qualifier),
+        many0(qualifier),
         char(';'),
-        space_separated(stmt),
+        many1(stmt),
         tag("END_ALIAS"),
         char(';'),
     ))
@@ -98,7 +98,7 @@ pub fn alias_stmt(input: &str) -> ParseResult<Statement> {
 pub fn assignment_stmt(input: &str) -> ParseResult<Statement> {
     tuple((
         general_ref,
-        spaced_many0(qualifier),
+        many0(qualifier),
         tag(":="),
         expression,
         char(';'),
@@ -119,7 +119,7 @@ pub fn case_stmt(input: &str) -> ParseResult<Statement> {
         tag("CASE"),
         selector,
         tag("OF"),
-        spaced_many0(case_action),
+        many0(case_action),
         opt(tuple((tag("OTHERWISE"), char(':'), stmt))
             .map(|(_otherwise, _colon, stmt)| Box::new(stmt))),
         tag("END_CASE"),
@@ -154,7 +154,7 @@ pub fn case_label(input: &str) -> ParseResult<Expression> {
 
 /// 192 compound_stmt = BEGIN [stmt] { [stmt] } END `;` .
 pub fn compound_stmt(input: &str) -> ParseResult<Statement> {
-    tuple((tag("BEGIN"), space_separated(stmt), tag("END"), char(';')))
+    tuple((tag("BEGIN"), many1(stmt), tag("END"), char(';')))
         .map(|(_begin, statements, _end, _semicolon)| Statement::Compound { statements })
         .parse(input)
 }
@@ -172,8 +172,8 @@ pub fn if_stmt(input: &str) -> ParseResult<Statement> {
         tag("IF"),
         logical_expression,
         tag("THEN"),
-        space_separated(stmt),
-        opt(tuple((tag("ELSE"), space_separated(stmt))).map(|(_else, stmts)| stmts)),
+        many1(stmt),
+        opt(tuple((tag("ELSE"), many1(stmt))).map(|(_else, stmts)| stmts)),
         tag("END_IF"),
         char(';'),
     ))
@@ -235,7 +235,7 @@ pub fn repeat_stmt(input: &str) -> ParseResult<Statement> {
         tag("REPEAT"),
         repeat_control,
         char(';'),
-        space_separated(stmt),
+        many1(stmt),
         tag("END_REPEAT"),
         char(';'),
     ))

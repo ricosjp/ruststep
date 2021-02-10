@@ -1,4 +1,4 @@
-use super::super::util::*;
+use super::super::combinator::*;
 
 /// Relation operators parsed by [rel_op] and [rel_op_extended]
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]

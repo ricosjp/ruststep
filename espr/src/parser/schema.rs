@@ -1,4 +1,6 @@
-use super::{entity::*, expression::*, identifier::*, stmt::*, subsuper::*, types::*, util::*};
+use super::{
+    combinator::*, entity::*, expression::*, identifier::*, stmt::*, subsuper::*, types::*,
+};
 
 /// Parsed result of EXPRESS's SCHEMA
 #[derive(Debug, Clone, PartialEq)]
@@ -59,9 +61,9 @@ pub fn schema_body(
     input: &str,
 ) -> ParseResult<(Vec<InterfaceSpec>, Vec<Constant>, Vec<Declaration>)> {
     tuple((
-        spaced_many0(interface_specification),
+        many0(interface_specification),
         opt(constant_decl).map(|opt| opt.unwrap_or(Vec::new())),
-        spaced_many0(alt((declaration, rule_decl.map(|r| Declaration::Rule(r))))),
+        many0(alt((declaration, rule_decl.map(|r| Declaration::Rule(r))))),
     ))
     .parse(input)
 }
@@ -103,7 +105,7 @@ pub fn procedure_decl(input: &str) -> ParseResult<Procedure> {
     tuple((
         procedure_head,
         algorithm_head,
-        spaced_many0(stmt),
+        many0(stmt),
         tag("END_PROCEDURE"),
         char(';'),
     ))
@@ -176,7 +178,7 @@ pub fn function_decl(input: &str) -> ParseResult<Function> {
     tuple((
         function_head,
         algorithm_head,
-        space_separated(stmt),
+        many1(stmt),
         tag("END_FUNCTION"),
         char(';'),
     ))
@@ -262,7 +264,7 @@ pub struct Constant {
 pub fn constant_decl(input: &str) -> ParseResult<Vec<Constant>> {
     tuple((
         tag("CONSTANT"),
-        space_separated(constant_body),
+        many1(constant_body),
         tag("END_CONSTANT"),
         char(';'),
     ))
@@ -284,15 +286,6 @@ pub fn constant_body(input: &str) -> ParseResult<Constant> {
     .parse(input)
 }
 
-/// 240 instantiable_type = [concrete_types] | [entity_ref] .
-pub fn instantiable_type(input: &str) -> ParseResult<ConcreteType> {
-    alt((
-        concrete_types,
-        entity_ref.map(|r| ConcreteType::Reference(r)),
-    ))
-    .parse(input)
-}
-
 #[derive(Debug, Clone, PartialEq)]
 pub struct Rule {
     pub name: String,
@@ -309,7 +302,7 @@ pub fn rule_decl(input: &str) -> ParseResult<Rule> {
     tuple((
         rule_head,
         algorithm_head,
-        spaced_many0(stmt),
+        many0(stmt),
         where_clause,
         tag("END_RULE"),
         char(';'),
@@ -355,7 +348,7 @@ pub fn algorithm_head(
     input: &str,
 ) -> ParseResult<(Vec<Declaration>, Vec<Constant>, Vec<LocalVariable>)> {
     tuple((
-        spaced_many0(declaration),
+        many0(declaration),
         opt(constant_decl).map(|opt| opt.unwrap_or(Vec::new())),
         opt(local_decl).map(|opt| opt.unwrap_or(Vec::new())),
     ))
@@ -366,7 +359,7 @@ pub fn algorithm_head(
 pub fn local_decl(input: &str) -> ParseResult<Vec<LocalVariable>> {
     tuple((
         tag("LOCAL"),
-        space_separated(local_variable),
+        many1(local_variable),
         tag("END_LOCAL"),
         char(';'),
     ))

@@ -1,5 +1,5 @@
 use super::{
-    super::{identifier::*, literal::*, util::*},
+    super::{combinator::*, identifier::*, literal::*},
     aggregate_initializer::*,
     operator::*,
     primary::*,
@@ -149,19 +149,16 @@ fn create_tree(mut head: Expression, tails: Vec<(BinaryOperator, Expression)>) -
 
 /// 305 simple_expression = [term] { [add_like_op] [term] } .
 pub fn simple_expression(input: &str) -> ParseResult<Expression> {
-    tuple((term, spaced_many0(tuple((add_like_op, term)))))
+    tuple((term, many0(tuple((add_like_op, term)))))
         .map(|(head, tails)| create_tree(head, tails))
         .parse(input)
 }
 
 /// 325 term = [factor] { [multiplication_like_op] [factor] } .
 pub fn term(input: &str) -> ParseResult<Expression> {
-    tuple((
-        factor,
-        spaced_many0(tuple((multiplication_like_op, factor))),
-    ))
-    .map(|(head, tails)| create_tree(head, tails))
-    .parse(input)
+    tuple((factor, many0(tuple((multiplication_like_op, factor)))))
+        .map(|(head, tails)| create_tree(head, tails))
+        .parse(input)
 }
 
 /// 217 factor = [simple_factor] \[ `**` [simple_factor] \] .
@@ -231,7 +228,7 @@ pub fn expression(input: &str) -> ParseResult<Expression> {
     .parse(input)
 }
 
-/// 212 enumeration_reference = \[ [type_ref] ’.’ \] [enumeration_ref] .
+/// 212 enumeration_reference = \[ [type_ref] `.` \] [enumeration_ref] .
 pub fn enumeration_reference(input: &str) -> ParseResult<Expression> {
     tuple((opt(tuple((type_ref, char('.')))), enumeration_ref))
         .map(|(opt, enum_ref)| Expression::EnumerationReference {
@@ -289,7 +286,7 @@ pub fn logical_expression(input: &str) -> ParseResult<Expression> {
     expression(input)
 }
 
-/// 277 query_expression = QUERY `(` variable_id `<*` aggregate_source `|` logical_expression `)` .
+/// 277 query_expression = QUERY `(` [variable_id] `<*` [aggregate_source] `|` [logical_expression] `)` .
 pub fn query_expression(input: &str) -> ParseResult<Expression> {
     tuple((
         tag("QUERY"),
@@ -311,7 +308,7 @@ pub fn query_expression(input: &str) -> ParseResult<Expression> {
     .parse(input)
 }
 
-/// 205 entity_constructor = entity_ref ’(’ [ [expression] { ’,’ [expression] } ] ’)’ .
+/// 205 entity_constructor = entity_ref `(` [ [expression] { `,` [expression] } ] `)` .
 pub fn entity_constructor(input: &str) -> ParseResult<Expression> {
     tuple((
         entity_ref,

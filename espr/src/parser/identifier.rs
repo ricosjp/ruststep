@@ -1,4 +1,4 @@
-use super::{basis::*, util::*};
+use super::{basis::*, combinator::*};
 
 macro_rules! impl_id {
     ($name:ident) => {

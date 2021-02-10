@@ -10,7 +10,7 @@ pub struct Schema {
 }
 
 impl Legalize for Schema {
-    type Input = parser::schema::Schema;
+    type Input = parser::Schema;
     fn legalize(
         ns: &Namespace,
         scope: &Scope,

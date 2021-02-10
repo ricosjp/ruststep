@@ -1,5 +1,5 @@
 use super::{
-    super::{identifier::*, literal::*, util::*},
+    super::{combinator::*, identifier::*, literal::*},
     aggregate_initializer::*,
     simple::*,
 };
@@ -8,7 +8,7 @@ use super::{
 pub fn primary(input: &str) -> ParseResult<Expression> {
     alt((
         literal.map(|literal| Expression::Literal(literal)),
-        tuple((qualifiable_factor, spaced_many0(qualifier)))
+        tuple((qualifiable_factor, many0(qualifier)))
             .map(|(factor, qualifiers)| Expression::QualifiableFactor { factor, qualifiers }),
     ))
     .parse(input)

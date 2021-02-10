@@ -1,5 +1,5 @@
 use super::{attribute::*, derive::*, domain::*, inverse::*, unique::*};
-use crate::parser::{expression::*, identifier::*, subsuper::*, types::*, util::*};
+use crate::parser::{combinator::*, identifier::*, subsuper::*, types::*};
 
 /// Parsed result of EXPRESS's ENTITY
 #[derive(Debug, Clone, PartialEq)]
@@ -65,10 +65,10 @@ pub struct EntityBody {
     pub where_clause: Option<WhereClause>,
 }
 
-/// 204 entity_body = { [explicit_attr] } \[ derive_clause \] \[ inverse_clause \] \[ unique_clause \] \[ [where_clause] \] .
+/// 204 entity_body = { [explicit_attr] } \[ [derive_clause] \] \[ [inverse_clause] \] \[ [unique_clause] \] \[ [where_clause] \] .
 pub fn entity_body(input: &str) -> ParseResult<EntityBody> {
     tuple((
-        spaced_many0(explicit_attr),
+        many0(explicit_attr),
         opt(derive_clause),
         opt(inverse_clause),
         opt(unique_clause),
@@ -113,28 +113,6 @@ pub fn entity_decl(input: &str) -> ParseResult<Entity> {
             },
         )
         .parse(input)
-}
-
-/// Constructor like `point(0.0, 0.0, 0.0)`
-#[derive(Debug, Clone, PartialEq)]
-pub struct EntityConstructor {
-    name: String,
-    values: Vec<Expression>,
-}
-
-/// 205 entity_constructor = [entity_ref] ’(’ \[ [expression] { ’,’ [expression] } \] ’)’ .
-pub fn entity_constructor(input: &str) -> ParseResult<EntityConstructor> {
-    tuple((
-        entity_ref,
-        char('('),
-        opt(comma_separated(expression)),
-        char(')'),
-    ))
-    .map(|(name, _open, values, _close)| EntityConstructor {
-        name,
-        values: values.unwrap_or(Vec::new()),
-    })
-    .parse(input)
 }
 
 #[cfg(test)]
