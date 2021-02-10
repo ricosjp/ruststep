@@ -1,5 +1,5 @@
 use super::{
-    super::{expression::*, identifier::*, combinator::*},
+    super::{combinator::*, expression::*, identifier::*},
     *,
 };
 

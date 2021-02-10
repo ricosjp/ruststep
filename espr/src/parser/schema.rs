@@ -1,4 +1,6 @@
-use super::{entity::*, expression::*, identifier::*, stmt::*, subsuper::*, types::*, combinator::*};
+use super::{
+    combinator::*, entity::*, expression::*, identifier::*, stmt::*, subsuper::*, types::*,
+};
 
 /// Parsed result of EXPRESS's SCHEMA
 #[derive(Debug, Clone, PartialEq)]
@@ -281,15 +283,6 @@ pub fn constant_body(input: &str) -> ParseResult<Constant> {
         char(';'),
     ))
     .map(|(name, _colon, ty, _def, expr, _semicolon)| Constant { name, ty, expr })
-    .parse(input)
-}
-
-/// 240 instantiable_type = [concrete_types] | [entity_ref] .
-pub fn instantiable_type(input: &str) -> ParseResult<ConcreteType> {
-    alt((
-        concrete_types,
-        entity_ref.map(|r| ConcreteType::Reference(r)),
-    ))
     .parse(input)
 }
 
