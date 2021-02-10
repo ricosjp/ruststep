@@ -15,7 +15,7 @@ pub struct DerivedAttribute {
 
 /// 201 derive_clause = DERIVE [derived_attr] { [derived_attr] } .
 pub fn derive_clause(input: &str) -> ParseResult<DeriveClause> {
-    tuple((tag("DERIVE"), space_separated(derived_attr)))
+    tuple((tag("DERIVE"), many1(derived_attr)))
         .map(|(_derive, attributes)| DeriveClause { attributes })
         .parse(input)
 }

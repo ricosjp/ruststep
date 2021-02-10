@@ -10,7 +10,7 @@ pub struct SyntaxTree {
 
 impl SyntaxTree {
     pub fn parse(input: &str) -> Result<Self, nom::error::VerboseError<&str>> {
-        let (residual, (schemas, remarks)) = tuple((spaces, space_separated(schema_decl), spaces))
+        let (residual, (schemas, remarks)) = tuple((spaces, many1(schema_decl), spaces))
             .map(|(_start_space, schemas, _end_space)| schemas)
             .parse(input)
             .finish()?;

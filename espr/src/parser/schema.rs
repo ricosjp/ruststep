@@ -178,7 +178,7 @@ pub fn function_decl(input: &str) -> ParseResult<Function> {
     tuple((
         function_head,
         algorithm_head,
-        space_separated(stmt),
+        many1(stmt),
         tag("END_FUNCTION"),
         char(';'),
     ))
@@ -264,7 +264,7 @@ pub struct Constant {
 pub fn constant_decl(input: &str) -> ParseResult<Vec<Constant>> {
     tuple((
         tag("CONSTANT"),
-        space_separated(constant_body),
+        many1(constant_body),
         tag("END_CONSTANT"),
         char(';'),
     ))
@@ -359,7 +359,7 @@ pub fn algorithm_head(
 pub fn local_decl(input: &str) -> ParseResult<Vec<LocalVariable>> {
     tuple((
         tag("LOCAL"),
-        space_separated(local_variable),
+        many1(local_variable),
         tag("END_LOCAL"),
         char(';'),
     ))

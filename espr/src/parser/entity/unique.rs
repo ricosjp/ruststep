@@ -8,14 +8,11 @@ pub struct UniqueClause {
 
 /// 333 unique_clause = UNIQUE [unique_rule] `;` { [unique_rule] `;` } .
 pub fn unique_clause(input: &str) -> ParseResult<UniqueClause> {
-    tuple((
-        tag("UNIQUE"),
-        space_separated(tuple((unique_rule, char(';')))),
-    ))
-    .map(|(_unique, seq)| UniqueClause {
-        rules: seq.into_iter().map(|(rule, _semicolon)| rule).collect(),
-    })
-    .parse(input)
+    tuple((tag("UNIQUE"), many1(tuple((unique_rule, char(';'))))))
+        .map(|(_unique, seq)| UniqueClause {
+            rules: seq.into_iter().map(|(rule, _semicolon)| rule).collect(),
+        })
+        .parse(input)
 }
 
 #[derive(Debug, Clone, PartialEq)]

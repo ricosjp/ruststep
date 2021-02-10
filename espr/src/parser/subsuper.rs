@@ -196,7 +196,7 @@ pub fn total_over(input: &str) -> ParseResult<Vec<String>> {
     tuple((
         tag("TOTAL_OVER"),
         char('('),
-        space_separated(entity_ref),
+        many1(entity_ref),
         char(')'),
         char(';'),
     ))

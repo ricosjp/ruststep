@@ -77,7 +77,7 @@ pub fn alias_stmt(input: &str) -> ParseResult<Statement> {
         general_ref,
         many0(qualifier),
         char(';'),
-        space_separated(stmt),
+        many1(stmt),
         tag("END_ALIAS"),
         char(';'),
     ))
@@ -154,7 +154,7 @@ pub fn case_label(input: &str) -> ParseResult<Expression> {
 
 /// 192 compound_stmt = BEGIN [stmt] { [stmt] } END `;` .
 pub fn compound_stmt(input: &str) -> ParseResult<Statement> {
-    tuple((tag("BEGIN"), space_separated(stmt), tag("END"), char(';')))
+    tuple((tag("BEGIN"), many1(stmt), tag("END"), char(';')))
         .map(|(_begin, statements, _end, _semicolon)| Statement::Compound { statements })
         .parse(input)
 }
@@ -172,8 +172,8 @@ pub fn if_stmt(input: &str) -> ParseResult<Statement> {
         tag("IF"),
         logical_expression,
         tag("THEN"),
-        space_separated(stmt),
-        opt(tuple((tag("ELSE"), space_separated(stmt))).map(|(_else, stmts)| stmts)),
+        many1(stmt),
+        opt(tuple((tag("ELSE"), many1(stmt))).map(|(_else, stmts)| stmts)),
         tag("END_IF"),
         char(';'),
     ))
@@ -235,7 +235,7 @@ pub fn repeat_stmt(input: &str) -> ParseResult<Statement> {
         tag("REPEAT"),
         repeat_control,
         char(';'),
-        space_separated(stmt),
+        many1(stmt),
         tag("END_REPEAT"),
         char(';'),
     ))

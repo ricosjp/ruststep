@@ -146,7 +146,7 @@ pub fn many0<'a, O>(f: impl EsprParser<'a, O>) -> impl EsprParser<'a, Vec<O>> {
     }
 }
 
-pub fn space_separated<'a, O>(f: impl EsprParser<'a, O>) -> impl EsprParser<'a, Vec<O>> {
+pub fn many1<'a, O>(f: impl EsprParser<'a, O>) -> impl EsprParser<'a, Vec<O>> {
     use nom::Parser;
     move |input| {
         nom::multi::many1(pair(spaces_or_remarks, f.clone()))

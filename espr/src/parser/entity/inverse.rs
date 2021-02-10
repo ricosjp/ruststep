@@ -8,7 +8,7 @@ pub struct InverseClause {
 
 /// 249 inverse_clause = INVERSE [inverse_attr] { [inverse_attr] } .
 pub fn inverse_clause(input: &str) -> ParseResult<InverseClause> {
-    tuple((tag("INVERSE"), space_separated(inverse_attr)))
+    tuple((tag("INVERSE"), many1(inverse_attr)))
         .map(|(_inverse, attributes)| InverseClause { attributes })
         .parse(input)
 }
