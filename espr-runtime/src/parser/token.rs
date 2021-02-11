@@ -21,12 +21,12 @@ use nom::{
     Parser,
 };
 
-/// sign = `+` | `-` .
+/// SIGN = `+` | `-` .
 pub fn sign(input: &str) -> ParseResult<char> {
     alt((char('+'), char('-'))).parse(input)
 }
 
-/// integer = \[ [sign] \] [digit] { [digit] } .
+/// INTEGER = [ SIGN ] DIGIT { DIGIT } .
 pub fn integer(input: &str) -> ParseResult<i64> {
     tuple((opt(sign), multispace0, digit1))
         .map(|(sign, _space, numbers)| {
@@ -39,7 +39,7 @@ pub fn integer(input: &str) -> ParseResult<i64> {
         .parse(input)
 }
 
-/// real = \[ [sign] \] [digit] { [digit] } `.` { [digit] } \[ `e` \[ [sign] \] [digit] { [digit] } \] .
+/// REAL = [ SIGN ] DIGIT { DIGIT } `.` { DIGIT } [ `E` [ SIGN ] DIGIT { DIGIT } ] .
 pub fn real(input: &str) -> ParseResult<f64> {
     tuple((opt(sign), multispace0, double))
         .map(|(sign, _space, number)| match sign {
@@ -47,6 +47,57 @@ pub fn real(input: &str) -> ParseResult<f64> {
             _ => number,
         })
         .parse(input)
+}
+
+/// ENUMERATION = `.` UPPER { UPPER | DIGIT } `.` .
+pub fn enumeration(input: &str) -> ParseResult<String> {
+    tuple((char('.'), standard_keyword, char('.')))
+        .map(|(_head, name, _tail)| name)
+        .parse(input)
+}
+
+/// ENTITY_INSTANCE_NAME = `#` ( DIGIT ) { DIGIT } .
+pub fn entity_instance_name(input: &str) -> ParseResult<String> {
+    tuple((char('#'), digit1))
+        .map(|(_sharp, name): (_, &str)| name.to_string())
+        .parse(input)
+}
+
+/// VALUE_INSTANCE_NAME = `@` ( DIGIT ) { DIGIT } .
+pub fn value_instance_name(input: &str) -> ParseResult<String> {
+    tuple((char('@'), digit1))
+        .map(|(_sharp, name): (_, &str)| name.to_string())
+        .parse(input)
+}
+
+/// CONSTANT_ENTITY_NAME = `#` ( UPPER ) { UPPER | DIGIT } .
+pub fn constant_entity_name(input: &str) -> ParseResult<String> {
+    tuple((char('#'), standard_keyword))
+        .map(|(_sharp, name)| name)
+        .parse(input)
+}
+
+/// CONSTANT_VALUE_NAME = `@` ( UPPER ) { UPPER | DIGIT } .
+pub fn constant_value_name(input: &str) -> ParseResult<String> {
+    tuple((char('@'), standard_keyword))
+        .map(|(_sharp, name)| name)
+        .parse(input)
+}
+
+/// LHS_OCCURRENCE_NAME = ( ENTITY_INSTANCE_NAME | VALUE_INSTANCE_NAME ) .
+pub fn lhs_occurrence_name(input: &str) -> ParseResult<String> {
+    alt((entity_instance_name, value_instance_name)).parse(input)
+}
+
+/// RHS_OCCURRENCE_NAME = ( ENTITY_INSTANCE_NAME | VALUE_INSTANCE_NAME | CONSTANT_ENTITY_NAME | CONSTANT_VALUE_NAME) .
+pub fn rhs_occurrence_name(input: &str) -> ParseResult<String> {
+    alt((
+        entity_instance_name,
+        value_instance_name,
+        constant_entity_name,
+        constant_value_name,
+    ))
+    .parse(input)
 }
 
 /// string = `'` { [special] | [digit] | [space] | [lower] | [upper] | high_codepoint | [apostrophe] [apostrophe] | [reverse_solidus] [reverse_solidus] | control_directive } `'` .
@@ -63,57 +114,6 @@ pub fn anchor_name(input: &str) -> ParseResult<String> {
     tuple((char('<'), many0(none_of(">")), char('>')))
         .map(|(_start, s, _end)| s.iter().collect())
         .parse(input)
-}
-
-/// enumeration = `.` [upper] { [upper] | [digit] } `.` .
-pub fn enumeration(input: &str) -> ParseResult<String> {
-    tuple((char('.'), standard_keyword, char('.')))
-        .map(|(_head, name, _tail)| name)
-        .parse(input)
-}
-
-/// entity_instance_name = `#` ( [digit] ) { [digit] } .
-pub fn entity_instance_name(input: &str) -> ParseResult<String> {
-    tuple((char('#'), digit1))
-        .map(|(_sharp, name): (_, &str)| name.to_string())
-        .parse(input)
-}
-
-/// value_instance_name = `@` ( [digit] ) { [digit] } .
-pub fn value_instance_name(input: &str) -> ParseResult<String> {
-    tuple((char('@'), digit1))
-        .map(|(_sharp, name): (_, &str)| name.to_string())
-        .parse(input)
-}
-
-/// constant_entity_name = `#` ( [upper] ) { [upper] | [digit] } .
-pub fn constant_entity_name(input: &str) -> ParseResult<String> {
-    tuple((char('#'), standard_keyword))
-        .map(|(_sharp, name)| name)
-        .parse(input)
-}
-
-/// constant_value_name = `@` ( [upper] ) { [upper] | [digit] } .
-pub fn constant_value_name(input: &str) -> ParseResult<String> {
-    tuple((char('@'), standard_keyword))
-        .map(|(_sharp, name)| name)
-        .parse(input)
-}
-
-/// lhs_occurrence_name = ( [entity_instance_name] | [value_instance_name] ) .
-pub fn lhs_occurrence_name(input: &str) -> ParseResult<String> {
-    alt((entity_instance_name, value_instance_name)).parse(input)
-}
-
-/// rhs_occurrence_name = ( [entity_instance_name] | [value_instance_name] | [constant_entity_name] | [constant_value_name]) .
-pub fn rhs_occurrence_name(input: &str) -> ParseResult<String> {
-    alt((
-        entity_instance_name,
-        value_instance_name,
-        constant_entity_name,
-        constant_value_name,
-    ))
-    .parse(input)
 }
 
 /// keyword = [user_defined_keyword] | [standard_keyword] .

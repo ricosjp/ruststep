@@ -39,7 +39,7 @@ pub fn lower(input: &str) -> ParseResult<char> {
     satisfy(|c| matches!(c, 'a'..='z')).parse(input)
 }
 
-/// upper = `a` | `b` | `c` | `d` | `e` | `f` | `g` | `h`
+/// upper = `A` | `B` | `C` | `D` | `E` | `F` | `G` | `H`
 ///       | `I` | `J` | `K` | `L` | `M` | `N` | `O` | `P`
 ///       | `Q` | `R` | `S` | `T` | `U` | `V` | `W` | `X`
 ///       | `Y` | `Z` | `_` .
