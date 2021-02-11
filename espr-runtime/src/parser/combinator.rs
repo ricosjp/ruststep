@@ -13,10 +13,10 @@
 use nom::{
     branch::alt,
     bytes::complete::tag,
-    character::complete::{multispace1, none_of},
+    character::complete::{char, multispace1, none_of},
     combinator::value,
     error::VerboseError,
-    multi::many0,
+    multi::{many0, many1},
     sequence::tuple,
     IResult, Parser,
 };
@@ -78,4 +78,42 @@ pub fn separator(input: &str) -> ParseResult<()> {
     // FIXME support explicit print control directives
     let space = value((), multispace1);
     alt((space, comment)).parse(input)
+}
+
+pub fn many0_<'a, O>(f: impl ExchangeParser<'a, O>) -> impl ExchangeParser<'a, Vec<O>> {
+    move |input| {
+        many0(tuple((separator, f.clone())))
+            .map(|seq| seq.into_iter().map(|(_sep, val)| val).collect())
+            .parse(input)
+    }
+}
+
+pub fn many1_<'a, O>(f: impl ExchangeParser<'a, O>) -> impl ExchangeParser<'a, Vec<O>> {
+    move |input| {
+        many1(tuple((separator, f.clone())))
+            .map(|seq| seq.into_iter().map(|(_sep, val)| val).collect())
+            .parse(input)
+    }
+}
+
+pub fn separated<'a, O>(c: char, f: impl ExchangeParser<'a, O>) -> impl ExchangeParser<'a, Vec<O>> {
+    move |input| {
+        tuple((
+            f.clone(),
+            many0(
+                tuple((separator, char(c), separator, f.clone()))
+                    .map(|(_sep1, _char, _sep2, value)| value),
+            ),
+        ))
+        .map(|(first, mut tails)| {
+            let mut values = vec![first];
+            values.append(&mut tails);
+            values
+        })
+        .parse(input)
+    }
+}
+
+pub fn comma_separated<'a, O>(f: impl ExchangeParser<'a, O>) -> impl ExchangeParser<'a, Vec<O>> {
+    separated(',', f)
 }
