@@ -1,4 +1,4 @@
-use super::*;
+use std::ops::*;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub enum Logical {
