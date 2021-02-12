@@ -20,3 +20,84 @@
 //! LATIN_CODEPOINT = SPACE | DIGIT | LOWER | UPPER | SPECIAL | REVERSE_SOLIDUS | APOSTROPHE
 //! HIGH_CODEPOINT = (U+0080 to U+10FFFF, see 5.2)
 //! ```
+
+use super::combinator::*;
+use nom::{
+    branch::alt,
+    character::complete::{char, satisfy},
+    Parser,
+};
+
+pub fn latin_codepoint(input: &str) -> ParseResult<char> {
+    alt((
+        space,
+        digit,
+        lower,
+        upper,
+        special,
+        reverse_solidus,
+        apostrophe,
+    ))
+    .parse(input)
+}
+
+pub fn space(input: &str) -> ParseResult<char> {
+    char(' ')(input)
+}
+
+pub fn digit(input: &str) -> ParseResult<char> {
+    satisfy(|c| matches!(c, '0'..='9')).parse(input)
+}
+
+pub fn lower(input: &str) -> ParseResult<char> {
+    satisfy(|c| matches!(c, 'a'..='z')).parse(input)
+}
+
+pub fn upper(input: &str) -> ParseResult<char> {
+    satisfy(|c| matches!(c, 'A'..='Z' | '_')).parse(input)
+}
+
+pub fn special(input: &str) -> ParseResult<char> {
+    satisfy(|c| {
+        matches!(
+            c,
+            '!' | '"'
+                | '*'
+                | '$'
+                | '%'
+                | '&'
+                | '.'
+                | '#'
+                | '+'
+                | ','
+                | '-'
+                | '('
+                | ')'
+                | '?'
+                | '/'
+                | ':'
+                | ';'
+                | '<'
+                | '='
+                | '>'
+                | '@'
+                | '['
+                | ']'
+                | '{'
+                | '|'
+                | '}'
+                | '^'
+                | '`'
+                | '~'
+        )
+    })
+    .parse(input)
+}
+
+pub fn reverse_solidus(input: &str) -> ParseResult<char> {
+    char('\\')(input)
+}
+
+pub fn apostrophe(input: &str) -> ParseResult<char> {
+    char('\'')(input)
+}
