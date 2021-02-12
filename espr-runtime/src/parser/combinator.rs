@@ -71,6 +71,7 @@ impl<'a, P: Clone, X, Y, F: Clone> Clone for Map<'a, P, X, Y, F> {
 /// These comments are dropped while parsing. Do not passed to following convert step.
 ///
 pub fn comment(input: &str) -> ParseResult<()> {
+    // FIXME this cannot use `*` and `/` in comment
     value((), tuple((tag("/*"), many0(none_of("/*")), tag("*/")))).parse(input)
 }
 
