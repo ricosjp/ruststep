@@ -4,9 +4,6 @@
 //! ------------------------------------
 //!
 //! ```text
-//! SIGN              = `+` | `-` .
-//! INTEGER           = [ SIGN ] DIGIT { DIGIT } .
-//! REAL              = [ SIGN ] DIGIT { DIGIT } `.` { DIGIT } [ `E` [ SIGN ] DIGIT { DIGIT } ] .
 //! STRING            = `'` { SPECIAL | DIGIT | SPACE | LOWER | UPPER | HIGH_CODEPOINT | APOSTROPHE APOSTROPHE | REVERSE_SOLIDUS REVERSE_SOLIDUS | CONTROL_DIRECTIVE } `'` .
 //! ANCHOR_NAME       = `<` URI_FRAGMENT_IDENTIFIER `>` .
 //! RESOURCE          = `<` UNIVERSAL_RESOURCE_IDENTIFIER `>` .
@@ -19,11 +16,41 @@
 use super::{basic::*, combinator::*};
 use nom::{
     branch::alt,
-    character::complete::{char, digit1},
+    character::complete::{char, digit1, multispace0},
+    combinator::opt,
     multi::many0,
+    number::complete::double,
     sequence::tuple,
     Parser,
 };
+
+/// SIGN = `+` | `-` .
+pub fn sign(input: &str) -> ParseResult<char> {
+    alt((char('+'), char('-'))).parse(input)
+}
+
+/// INTEGER = [ SIGN ] DIGIT { DIGIT } .
+pub fn integer(input: &str) -> ParseResult<i64> {
+    tuple((opt(sign), multispace0, digit1))
+        .map(|(sign, _space, numbers)| {
+            let num: i64 = numbers.parse().expect("Failed to parse into integer");
+            match sign {
+                Some('-') => -num,
+                _ => num,
+            }
+        })
+        .parse(input)
+}
+
+/// REAL = [ SIGN ] DIGIT { DIGIT } `.` { DIGIT } [ `E` [ SIGN ] DIGIT { DIGIT } ] .
+pub fn real(input: &str) -> ParseResult<f64> {
+    tuple((opt(sign), multispace0, double))
+        .map(|(sign, _space, number)| match sign {
+            Some('-') => -number,
+            _ => number,
+        })
+        .parse(input)
+}
 
 /// ENUMERATION = `.` UPPER { UPPER | DIGIT } `.` .
 pub fn enumeration(input: &str) -> ParseResult<String> {
