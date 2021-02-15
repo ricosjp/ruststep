@@ -4,11 +4,9 @@
 //! ------------------------------------
 //!
 //! ```text
-//! STRING            = `'` { SPECIAL | DIGIT | SPACE | LOWER | UPPER | HIGH_CODEPOINT | APOSTROPHE APOSTROPHE | REVERSE_SOLIDUS REVERSE_SOLIDUS | CONTROL_DIRECTIVE } `'` .
 //! ANCHOR_NAME       = `<` URI_FRAGMENT_IDENTIFIER `>` .
 //! RESOURCE          = `<` UNIVERSAL_RESOURCE_IDENTIFIER `>` .
-//! HEX               = `0` | `1` | `2` | `3` | `4` | `5` | `6` | `7` |
-//!                     `8` | `9` | `A` | `B` | `C` | `D` | `E` | `F` .
+//! HEX               = `0` | `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8` | `9` | `A` | `B` | `C` | `D` | `E` | `F` .
 //! BINARY            = ```` ( `0` | `1` | `2` | `3` ) { HEX } ```` .
 //! SIGNATURE_CONTENT = BASE64 .
 //! ```
@@ -16,7 +14,7 @@
 use super::{basic::*, combinator::*};
 use nom::{
     branch::alt,
-    character::complete::{char, digit1, multispace0},
+    character::complete::{char, digit1, multispace0, none_of},
     combinator::opt,
     multi::many0,
     number::complete::double,
@@ -49,6 +47,13 @@ pub fn real(input: &str) -> ParseResult<f64> {
             Some('-') => -number,
             _ => number,
         })
+        .parse(input)
+}
+
+/// STRING = `'` { SPECIAL | DIGIT | SPACE | LOWER | UPPER | HIGH_CODEPOINT | APOSTROPHE APOSTROPHE | REVERSE_SOLIDUS REVERSE_SOLIDUS | CONTROL_DIRECTIVE } `'` .
+pub fn string(input: &str) -> ParseResult<String> {
+    tuple((char('\''), many0(none_of("'")), char('\'')))
+        .map(|(_start, s, _end)| s.iter().collect())
         .parse(input)
 }
 
@@ -133,4 +138,16 @@ pub fn tag_name(input: &str) -> ParseResult<String> {
             head.iter().chain(tail.iter()).collect()
         })
         .parse(input)
+}
+
+#[cfg(test)]
+mod tests {
+    use nom::Finish;
+
+    #[test]
+    fn string() {
+        let (res, s) = super::string("'vim'").finish().unwrap();
+        assert_eq!(res, "");
+        assert_eq!(s, "vim");
+    }
 }
