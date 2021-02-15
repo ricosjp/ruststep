@@ -56,6 +56,24 @@ pub fn string(input: &str) -> ParseResult<String> {
         .parse(input)
 }
 
+/// RESOURCE = `<` UNIVERSAL_RESOURCE_IDENTIFIER `>` .
+///
+/// Parse as string, without validating as URI
+pub fn resource(input: &str) -> ParseResult<String> {
+    tuple((char('<'), many0(none_of(">")), char('>')))
+        .map(|(_start, s, _end)| s.iter().collect())
+        .parse(input)
+}
+
+/// ANCHOR_NAME = `<` URI_FRAGMENT_IDENTIFIER `>` .
+///
+/// Parse as string, without validating as URI fragment identifier
+pub fn anchor_name(input: &str) -> ParseResult<String> {
+    tuple((char('<'), many0(none_of(">")), char('>')))
+        .map(|(_start, s, _end)| s.iter().collect())
+        .parse(input)
+}
+
 /// ENUMERATION = `.` UPPER { UPPER | DIGIT } `.` .
 pub fn enumeration(input: &str) -> ParseResult<String> {
     tuple((char('.'), standard_keyword, char('.')))
