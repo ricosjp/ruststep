@@ -14,7 +14,7 @@ use nom::{
     branch::alt,
     bytes::complete::tag,
     character::complete::{char, multispace1, none_of},
-    combinator::value,
+    combinator::{not, peek, value},
     error::VerboseError,
     multi::{many0, many1},
     sequence::tuple,
@@ -70,14 +70,20 @@ impl<'a, P: Clone, X, Y, F: Clone> Clone for Map<'a, P, X, Y, F> {
 ///
 /// These comments are dropped while parsing. Do not passed to following convert step.
 ///
-pub fn comment(input: &str) -> ParseResult<()> {
-    // FIXME this cannot use `*` and `/` in comment
-    value((), tuple((tag("/*"), many0(none_of("/*")), tag("*/")))).parse(input)
+pub fn comment(input: &str) -> ParseResult<String> {
+    let internal = alt((
+        none_of("*"),
+        tuple((char('*'), peek(not(char('/'))))).map(|(star, _not_slash)| star),
+    ));
+    tuple((tag("/*"), many0(internal), tag("*/")))
+        .map(|(_start, c, _end)| c.into_iter().collect())
+        .parse(input)
 }
 
 pub fn separator(input: &str) -> ParseResult<()> {
     // FIXME support explicit print control directives
     let space = value((), multispace1);
+    let comment = value((), comment);
     alt((space, comment)).parse(input)
 }
 
@@ -117,4 +123,23 @@ pub fn separated<'a, O>(c: char, f: impl ExchangeParser<'a, O>) -> impl Exchange
 
 pub fn comma_separated<'a, O>(f: impl ExchangeParser<'a, O>) -> impl ExchangeParser<'a, Vec<O>> {
     separated(',', f)
+}
+
+#[cfg(test)]
+mod tests {
+    use nom::Finish;
+
+    #[test]
+    fn comment_emoji() {
+        let (res, c) = super::comment("/*🦀*/").finish().unwrap();
+        assert_eq!(res, "");
+        assert_eq!(c, "🦀");
+    }
+
+    #[test]
+    fn comment_astr() {
+        let (res, c) = super::comment("/* vim * vim */").finish().unwrap();
+        assert_eq!(res, "");
+        assert_eq!(c, " vim * vim ");
+    }
 }
