@@ -26,7 +26,7 @@ pub fn sign(input: &str) -> ParseResult<char> {
     alt((char('+'), char('-'))).parse(input)
 }
 
-/// INTEGER = [ SIGN ] DIGIT { DIGIT } .
+/// INTEGER = \[ SIGN \] DIGIT { DIGIT } .
 pub fn integer(input: &str) -> ParseResult<i64> {
     tuple((opt(sign), multispace0, digit1))
         .map(|(sign, _space, numbers)| {
@@ -39,7 +39,7 @@ pub fn integer(input: &str) -> ParseResult<i64> {
         .parse(input)
 }
 
-/// REAL = [ SIGN ] DIGIT { DIGIT } `.` { DIGIT } [ `E` [ SIGN ] DIGIT { DIGIT } ] .
+/// REAL = \[ SIGN \] DIGIT { DIGIT } `.` { DIGIT } \[ `E` \[ SIGN \] DIGIT { DIGIT } \] .
 pub fn real(input: &str) -> ParseResult<f64> {
     tuple((opt(sign), multispace0, double))
         .map(|(sign, _space, number)| match sign {

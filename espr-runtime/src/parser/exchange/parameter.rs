@@ -10,7 +10,7 @@ pub enum UntypedParameter {
     // FIXME Add Binary, $
 }
 
-/// LIST = "(" [ PARAMETER { "," PARAMETER } ] ")" .
+/// LIST = `(` \[ PARAMETER { `,` PARAMETER } \] `)` .
 pub fn list(input: &str) -> ParseResult<UntypedParameter> {
     todo!()
 }
@@ -31,22 +31,22 @@ pub fn parameter(input: &str) -> ParseResult<Parameter> {
     todo!()
 }
 
-/// TYPED_PARAMETER = KEYWORD "(" PARAMETER ")" .
+/// TYPED_PARAMETER = KEYWORD `(` PARAMETER `)` .
 pub fn typed_parameter(input: &str) -> ParseResult<Parameter> {
     todo!()
 }
 
-/// UNTYPED_PARAMETER = "$" | INTEGER | REAL | STRING | RHS_OCCURENCE_NAME | ENUMERATION | BINARY | LIST .
+/// UNTYPED_PARAMETER = `$` | INTEGER | REAL | STRING | RHS_OCCURENCE_NAME | ENUMERATION | BINARY | LIST .
 pub fn untyped_parameter(input: &str) -> ParseResult<Parameter> {
     todo!()
 }
 
-/// OMITTED_PARAMETER = "*" .
+/// OMITTED_PARAMETER = `*` .
 pub fn omitted_parameter(input: &str) -> ParseResult<Parameter> {
     todo!()
 }
 
-/// PARAMETER_LIST = PARAMETER { "," PARAMETER } .
+/// PARAMETER_LIST = PARAMETER { `,` PARAMETER } .
 pub fn parameter_list(input: &str) -> ParseResult<Vec<Parameter>> {
     todo!()
 }

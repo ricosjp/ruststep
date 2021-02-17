@@ -4,14 +4,14 @@
 //! ----------------------------------------
 //!
 //! ```text
-//! EXCHANGE_FILE = "ISO-10303-21;" HEADER_SECTION
-//!               [ ANCHOR_SECTION ]
-//!               [ REFERENCE_SECTION ]
+//! EXCHANGE_FILE = `ISO-10303-21;` HEADER_SECTION
+//!               \[ ANCHOR_SECTION \]
+//!               \[ REFERENCE_SECTION \]
 //!               { DATA_SECTION }
-//!               "END-ISO-10303-21;"
+//!               `END-ISO-10303-21;`
 //!               { SIGNATURE_SECTION } .
 //!
-//! SIGNATURE_SECTION  = "SIGNATURE" SIGNATURE_CONTENT "ENDSEC;".
+//! SIGNATURE_SECTION  = `SIGNATURE` SIGNATURE_CONTENT `ENDSEC;`.
 //! ```
 //!
 
