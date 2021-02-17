@@ -1,6 +1,6 @@
-use super::*;
 use std::borrow::{Borrow, BorrowMut};
 use std::marker::PhantomData;
+use std::ops::*;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord, Default)]
 pub struct Array<T, E> {
