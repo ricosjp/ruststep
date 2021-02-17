@@ -95,6 +95,84 @@ pub fn comma_separated<'a, O>(f: impl ExchangeParser<'a, O>) -> impl ExchangePar
     separated(',', f)
 }
 
+pub fn tuple_<'a, O, List: Tuple<'a, O>>(mut l: List) -> impl ExchangeParser<'a, O> {
+    move |input| l.parse(input)
+}
+
+pub trait Tuple<'a, O>: Clone {
+    fn parse(&mut self, input: &'a str) -> ParseResult<'a, O>;
+}
+
+macro_rules! impl_tuple {
+    ($($F:ident),*; $($O:ident),*; $($f:ident),*; $($o:ident),*) => {
+
+        impl<'a, $($F),*, $($O),*> Tuple<'a, ($($O),*)> for ($($F),*)
+        where
+            $( $F: ExchangeParser<'a, $O> ),*
+        {
+            fn parse(&mut self, input: &'a str) -> ParseResult<'a, ($($O),*)> {
+                let ($($f),*) = self;
+
+                $(
+                let (input, _spacer) = separator(input)?;
+                let (input, $o) = nom::Parser::parse($f, input)?;
+                )*
+
+                Ok((input, ($($o),*,)))
+            }
+        }
+    };
+}
+
+impl_tuple!(
+    F1, F2;
+    O1, O2;
+    f1, f2;
+    o1, o2
+);
+impl_tuple!(
+    F1, F2, F3;
+    O1, O2, O3;
+    f1, f2, f3;
+    o1, o2, o3
+);
+impl_tuple!(
+    F1, F2, F3, F4;
+    O1, O2, O3, O4;
+    f1, f2, f3, f4;
+    o1, o2, o3, o4
+);
+impl_tuple!(
+    F1, F2, F3, F4, F5;
+    O1, O2, O3, O4, O5;
+    f1, f2, f3, f4, f5;
+    o1, o2, o3, o4, o5
+);
+impl_tuple!(
+    F1, F2, F3, F4, F5, F6;
+    O1, O2, O3, O4, O5, O6;
+    f1, f2, f3, f4, f5, f6;
+    o1, o2, o3, o4, o5, o6
+);
+impl_tuple!(
+    F1, F2, F3, F4, F5, F6, F7;
+    O1, O2, O3, O4, O5, O6, O7;
+    f1, f2, f3, f4, f5, f6, f7;
+    o1, o2, o3, o4, o5, o6, o7
+);
+impl_tuple!(
+    F1, F2, F3, F4, F5, F6, F7, F8;
+    O1, O2, O3, O4, O5, O6, O7, O8;
+    f1, f2, f3, f4, f5, f6, f7, f8;
+    o1, o2, o3, o4, o5, o6, o7, o8
+);
+impl_tuple!(
+    F1, F2, F3, F4, F5, F6, F7, F8, F9;
+    O1, O2, O3, O4, O5, O6, O7, O8, O9;
+    f1, f2, f3, f4, f5, f6, f7, f8, f9;
+    o1, o2, o3, o4, o5, o6, o7, o8, o9
+);
+
 #[cfg(test)]
 mod tests {
     use nom::Finish;
