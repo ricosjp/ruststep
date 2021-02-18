@@ -13,7 +13,7 @@
 use nom::{
     branch::alt,
     bytes::complete::tag,
-    character::complete::{char, multispace1, none_of},
+    character::complete::{char, multispace0, multispace1, none_of},
     combinator::{not, peek, value},
     error::VerboseError,
     multi::{many0, many1},
@@ -53,7 +53,7 @@ pub fn comment(input: &str) -> ParseResult<String> {
 pub fn separator(input: &str) -> ParseResult<()> {
     // FIXME support explicit print control directives
     let space = value((), multispace1);
-    let comment = value((), comment);
+    let comment = value((), tuple((multispace0, comment, multispace0)));
     alt((space, comment)).parse(input)
 }
 
@@ -175,6 +175,7 @@ impl_tuple!(
 
 #[cfg(test)]
 mod tests {
+    use super::*;
     use nom::Finish;
 
     #[test]
@@ -189,5 +190,18 @@ mod tests {
         let (res, c) = super::comment("/* vim * vim */").finish().unwrap();
         assert_eq!(res, "");
         assert_eq!(c, " vim * vim ");
+    }
+
+    fn tuple_digit(input: &str) -> ParseResult<(char, char)> {
+        use crate::parser::basic::digit;
+        tuple_((digit, digit)).parse(input)
+    }
+
+    #[test]
+    fn tuple() {
+        let (res, (a, b)) = tuple_digit("1 /* comment */ 2").finish().unwrap();
+        assert_eq!(res, "");
+        assert_eq!(a, '1');
+        assert_eq!(b, '2');
     }
 }
