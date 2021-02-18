@@ -49,6 +49,13 @@ pub fn real(input: &str) -> ParseResult<f64> {
         .parse(input)
 }
 
+/// STRING = `'` { SPECIAL | DIGIT | SPACE | LOWER | UPPER | HIGH_CODEPOINT | APOSTROPHE APOSTROPHE | REVERSE_SOLIDUS REVERSE_SOLIDUS | CONTROL_DIRECTIVE } `'` .
+pub fn string(input: &str) -> ParseResult<String> {
+    tuple((char('\''), many0(none_of("'")), char('\'')))
+        .map(|(_start, s, _end)| s.iter().collect())
+        .parse(input)
+}
+
 /// ENUMERATION = `.` UPPER { UPPER | DIGIT } `.` .
 pub fn enumeration(input: &str) -> ParseResult<String> {
     tuple((char('.'), standard_keyword, char('.')))
@@ -98,13 +105,6 @@ pub fn rhs_occurrence_name(input: &str) -> ParseResult<String> {
         constant_value_name,
     ))
     .parse(input)
-}
-
-/// string = `'` { [special] | [digit] | [space] | [lower] | [upper] | high_codepoint | [apostrophe] [apostrophe] | [reverse_solidus] [reverse_solidus] | control_directive } `'` .
-pub fn string(input: &str) -> ParseResult<String> {
-    tuple((char('\''), many0(none_of("'")), char('\'')))
-        .map(|(_start, s, _end)| s.iter().collect())
-        .parse(input)
 }
 
 /// anchor_name = `<` URI_FRAGMENT_IDENTIFIER `>` .
