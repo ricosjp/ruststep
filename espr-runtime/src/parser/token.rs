@@ -21,12 +21,12 @@ use nom::{
     Parser,
 };
 
-/// SIGN = `+` | `-` .
+/// sign = `+` | `-` .
 pub fn sign(input: &str) -> ParseResult<char> {
     alt((char('+'), char('-'))).parse(input)
 }
 
-/// INTEGER = \[ SIGN \] DIGIT { DIGIT } .
+/// integer = \[ [sign] \] [digit] { [digit] } .
 pub fn integer(input: &str) -> ParseResult<i64> {
     tuple((opt(sign), multispace0, digit1))
         .map(|(sign, _space, numbers)| {
@@ -39,7 +39,7 @@ pub fn integer(input: &str) -> ParseResult<i64> {
         .parse(input)
 }
 
-/// REAL = \[ SIGN \] DIGIT { DIGIT } `.` { DIGIT } \[ `E` \[ SIGN \] DIGIT { DIGIT } \] .
+/// real = \[ [sign] \] [digit] { [digit] } `.` { [digit] } \[ `E` \[ [sign] \] [digit] { [digit] } \] .
 pub fn real(input: &str) -> ParseResult<f64> {
     tuple((opt(sign), multispace0, double))
         .map(|(sign, _space, number)| match sign {
@@ -49,14 +49,14 @@ pub fn real(input: &str) -> ParseResult<f64> {
         .parse(input)
 }
 
-/// STRING = `'` { SPECIAL | DIGIT | SPACE | LOWER | UPPER | HIGH_CODEPOINT | APOSTROPHE APOSTROPHE | REVERSE_SOLIDUS REVERSE_SOLIDUS | CONTROL_DIRECTIVE } `'` .
+/// string = `'` { [special] | [digit] | [space] | [lower] | [upper] | high_codepoint | [apostrophe] [apostrophe] | [reverse_solidus] [reverse_solidus] | [control_directive] } `'` .
 pub fn string(input: &str) -> ParseResult<String> {
     tuple((char('\''), many0(none_of("'")), char('\'')))
         .map(|(_start, s, _end)| s.iter().collect())
         .parse(input)
 }
 
-/// RESOURCE = `<` UNIVERSAL_RESOURCE_IDENTIFIER `>` .
+/// resource = `<` UNIVERSAL_RESOURCE_IDENTIFIER `>` .
 ///
 /// Parse as string, without validating as URI
 pub fn resource(input: &str) -> ParseResult<String> {
@@ -65,56 +65,47 @@ pub fn resource(input: &str) -> ParseResult<String> {
         .parse(input)
 }
 
-/// ANCHOR_NAME = `<` URI_FRAGMENT_IDENTIFIER `>` .
-///
-/// Parse as string, without validating as URI fragment identifier
-pub fn anchor_name(input: &str) -> ParseResult<String> {
-    tuple((char('<'), many0(none_of(">")), char('>')))
-        .map(|(_start, s, _end)| s.iter().collect())
-        .parse(input)
-}
-
-/// ENUMERATION = `.` UPPER { UPPER | DIGIT } `.` .
+/// enumeration = `.` [upper] { [upper] | [digit] } `.` .
 pub fn enumeration(input: &str) -> ParseResult<String> {
     tuple((char('.'), standard_keyword, char('.')))
         .map(|(_head, name, _tail)| name)
         .parse(input)
 }
 
-/// ENTITY_INSTANCE_NAME = `#` ( DIGIT ) { DIGIT } .
+/// entity_instance_name = `#` ( [digit] ) { [digit] } .
 pub fn entity_instance_name(input: &str) -> ParseResult<String> {
     tuple((char('#'), digit1))
         .map(|(_sharp, name): (_, &str)| name.to_string())
         .parse(input)
 }
 
-/// VALUE_INSTANCE_NAME = `@` ( DIGIT ) { DIGIT } .
+/// value_instance_name = `@` ( [digit] ) { [digit] } .
 pub fn value_instance_name(input: &str) -> ParseResult<String> {
     tuple((char('@'), digit1))
         .map(|(_sharp, name): (_, &str)| name.to_string())
         .parse(input)
 }
 
-/// CONSTANT_ENTITY_NAME = `#` ( UPPER ) { UPPER | DIGIT } .
+/// constant_entity_name = `#` ( [upper] ) { [upper] | [digit] } .
 pub fn constant_entity_name(input: &str) -> ParseResult<String> {
     tuple((char('#'), standard_keyword))
         .map(|(_sharp, name)| name)
         .parse(input)
 }
 
-/// CONSTANT_VALUE_NAME = `@` ( UPPER ) { UPPER | DIGIT } .
+/// constant_value_name = `@` ( [upper] ) { [upper] | [digit] } .
 pub fn constant_value_name(input: &str) -> ParseResult<String> {
     tuple((char('@'), standard_keyword))
         .map(|(_sharp, name)| name)
         .parse(input)
 }
 
-/// LHS_OCCURRENCE_NAME = ( ENTITY_INSTANCE_NAME | VALUE_INSTANCE_NAME ) .
+/// lhs_occurrence_name = ( [entity_instance_name] | [value_instance_name] ) .
 pub fn lhs_occurrence_name(input: &str) -> ParseResult<String> {
     alt((entity_instance_name, value_instance_name)).parse(input)
 }
 
-/// RHS_OCCURRENCE_NAME = ( ENTITY_INSTANCE_NAME | VALUE_INSTANCE_NAME | CONSTANT_ENTITY_NAME | CONSTANT_VALUE_NAME) .
+/// rhs_occurrence_name = ( [entity_instance_name] | [value_instance_name] | [constant_entity_name] | [constant_value_name]) .
 pub fn rhs_occurrence_name(input: &str) -> ParseResult<String> {
     alt((
         entity_instance_name,

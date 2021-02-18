@@ -1,16 +1,16 @@
 use crate::parser::combinator::*;
 
-/// REFERENCE_SECTION = `REFERENCE;` REFERENCE_LIST `ENDSEC;` .
+/// reference_section = `REFERENCE;` [reference_list] `ENDSEC;` .
 pub fn reference_section(input: &str) -> ParseResult<()> {
     todo!()
 }
 
-/// REFERENCE_LIST = { REFERENCE } .
+/// reference_list = { [reference] } .
 pub fn reference_list(input: &str) -> ParseResult<()> {
     todo!()
 }
 
-/// REFERENCE = LHS_OCCURRENCE_NAME `=` RESOURCE `;` .
+/// reference = [lhs_occurrence_name] `=` [resource] `;` .
 pub fn reference(input: &str) -> ParseResult<()> {
     todo!()
 }

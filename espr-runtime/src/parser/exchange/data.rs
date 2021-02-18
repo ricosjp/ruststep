@@ -1,41 +1,41 @@
 use crate::parser::combinator::*;
 
-/// DATA_SECTION = `DATA` \[ `(` PARAMETER_LIST `)` \] `;` ENTITY_INSTANCE_LIST `ENDSEC;` .
+/// data_section = `DATA` \[ `(` [parameter_list] `)` \] `;` [entity_instance_list] `ENDSEC;` .
 pub fn data_section(input: &str) -> ParseResult<()> {
     todo!()
 }
 
-/// ENTITY_INSTANCE_LIST = { ENTITY_INSTANCE } .
+/// entity_instance_list = { [entity_instance] } .
 pub fn entity_instance_list(input: &str) -> ParseResult<()> {
     todo!()
 }
 
-/// ENTITY_INSTANCE = SIMPLE_ENTITY_INSTANCE | COMPLEX_ENTITY_INSTANCE .
+/// entity_instance = [simple_entity_instance] | [complex_entity_instance] .
 pub fn entity_instance(input: &str) -> ParseResult<()> {
     todo!()
 }
 
-/// SIMPLE_ENTITY_INSTANCE = ENTITY_INSTANCE_NAME `=` SIMPLE_RECORD `;` .
+/// simple_entity_instance = [entity_instance_name] `=` [simple_record] `;` .
 pub fn simple_entity_instance(input: &str) -> ParseResult<()> {
     todo!()
 }
 
-/// COMPLEX_ENTITY_INSTANCE = ENTITY_INSTANCE_NAME `=` SUBSUPER_RECORD `;` .
+/// complex_entity_instance = [entity_instance_name] `=` [subsuper_record] `;` .
 pub fn complex_entity_instance(input: &str) -> ParseResult<()> {
     todo!()
 }
 
-/// SIMPLE_RECORD = KEYWORD `(` \[ PARAMETER_LIST \] `)` .
+/// simple_record = [keyword] `(` \[ [parameter_list] \] `)` .
 pub fn simple_record(input: &str) -> ParseResult<()> {
     todo!()
 }
 
-/// SUBSUPER_RECORD = `(` SIMPLE_RECORD_LIST `)` .
+/// subsuper_record = `(` [simple_record_list] `)` .
 pub fn subsuper_record(input: &str) -> ParseResult<()> {
     todo!()
 }
 
-/// SIMPLE_RECORD_LIST = SIMPLE_RECORD { SIMPLE_RECORD } .
+/// simple_record_list = [simple_record] { [simple_record] } .
 pub fn simple_record_list(input: &str) -> ParseResult<()> {
     todo!()
 }

@@ -1,31 +1,31 @@
 use crate::parser::combinator::*;
 
-/// ANCHOR_SECTION = `ANCHOR;` ANCHOR_LIST `ENDSEC;` .
+/// anchor_section = `ANCHOR;` [anchor_list] `ENDSEC;` .
 pub fn anchor_section(input: &str) -> ParseResult<()> {
     todo!()
 }
 
-/// ANCHOR_LIST = { ANCHOR } .
+/// anchor_list = { [anchor] } .
 pub fn anchor_list(input: &str) -> ParseResult<()> {
     todo!()
 }
 
-/// ANCHOR = ANCHOR_NAME `=` ANCHOR_ITEM { ANCHOR_TAG } `;` .
+/// anchor = [anchor_name] `=` [anchor_item] { [anchor_tag] } `;` .
 pub fn anchor(input: &str) -> ParseResult<()> {
     todo!()
 }
 
-/// ANCHOR_ITEM = `$` | INTEGER | REAL | STRING | ENUMERATION | BINARY | RHS_OCCURRENCE_NAME | RESOURCE | ANCHOR_ITEM_LIST .
+/// anchor_item = `$` | [integer] | [real] | [string] | [enumeration] | [binary] | [rhs_occurrence_name] | [resource] | [anchor_item_list] .
 pub fn anchor_item(input: &str) -> ParseResult<()> {
     todo!()
 }
 
-/// ANCHOR_ITEM_LIST = `(` \[ ANCHOR_ITEM { `,` ANCHOR_ITEM } \] `)` .
+/// anchor_item_list = `(` \[ [anchor_item] { `,` [anchor_item] } \] `)` .
 pub fn anchor_item_list(input: &str) -> ParseResult<()> {
     todo!()
 }
 
-/// ANCHOR_TAG = `{` TAG_NAME `:` ANCHOR_ITEM `}` .
+/// anchor_tag = `{` [tag_name] `:` [anchor_item] `}` .
 pub fn anchor_tag(input: &str) -> ParseResult<()> {
     todo!()
 }
