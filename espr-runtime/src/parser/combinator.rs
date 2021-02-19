@@ -55,8 +55,16 @@ pub fn comment(input: &str) -> ParseResult<String> {
         .parse(input)
 }
 
+/// Comments with front/back spaces, or multi-space at least 1 char
+///
+/// - This never matches to empty string.
+/// - Drop matched comments and spaces
+///
+/// FIXME
+/// ------
+/// - support explicit print control directives
+///
 pub fn separator(input: &str) -> ParseResult<()> {
-    // FIXME support explicit print control directives
     let comment = many1(tuple((multispace0, comment, multispace0))).map(|_| ());
     alt((comment, value((), multispace1))).parse(input)
 }
@@ -99,10 +107,12 @@ pub fn comma_separated<'a, O>(f: impl ExchangeParser<'a, O>) -> impl ExchangePar
     separated(',', f)
 }
 
+/// Sequence of separated tokens
 pub fn tuple_<'a, O, List: Tuple<'a, O>>(mut l: List) -> impl ExchangeParser<'a, O> {
     move |input| l.parse(input)
 }
 
+/// helper for [tuple_]
 pub trait Tuple<'a, O>: Clone {
     fn parse(&mut self, input: &'a str) -> ParseResult<'a, O>;
 }
@@ -238,5 +248,14 @@ mod tests {
         assert_eq!(res, "");
         assert_eq!(a, '1');
         assert_eq!(b, '2');
+
+        // does not match to trailing space
+        let (res, (a, b)) = tuple_digit("1 /* comment */ 2 ").finish().unwrap();
+        assert_eq!(res, " ");
+        assert_eq!(a, '1');
+        assert_eq!(b, '2');
+
+        // does not match to head space
+        assert!(tuple_digit(" 1 /* comment */ 2").finish().is_err());
     }
 }
