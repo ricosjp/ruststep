@@ -14,7 +14,7 @@ use nom::{
     branch::alt,
     bytes::complete::tag,
     character::complete::{char, multispace0, multispace1, none_of},
-    combinator::{not, peek, value},
+    combinator::{not, opt, peek, value},
     error::VerboseError,
     multi::{many0, many1},
     sequence::tuple,
@@ -71,16 +71,25 @@ pub fn separator(input: &str) -> ParseResult<()> {
 
 pub fn many0_<'a, O>(f: impl ExchangeParser<'a, O>) -> impl ExchangeParser<'a, Vec<O>> {
     move |input| {
-        many0(tuple((separator, f.clone())))
-            .map(|seq| seq.into_iter().map(|(_sep, val)| val).collect())
-            .parse(input)
+        let (input, first) = opt(f.clone()).parse(input)?;
+        if first.is_none() {
+            return Ok((input, Vec::new()));
+        };
+        let (input, tail) = many0(tuple((separator, f.clone())).map(|(_sep, v)| v)).parse(input)?;
+        let first = vec![first.unwrap()];
+        let list = first.into_iter().chain(tail).collect();
+        Ok((input, list))
     }
 }
 
 pub fn many1_<'a, O>(f: impl ExchangeParser<'a, O>) -> impl ExchangeParser<'a, Vec<O>> {
     move |input| {
-        many1(tuple((separator, f.clone())))
-            .map(|seq| seq.into_iter().map(|(_sep, val)| val).collect())
+        tuple((f.clone(), many0(tuple((separator, f.clone())))))
+            .map(|(first, tail)| {
+                let first = vec![first];
+                let tail = tail.into_iter().map(|(_sep, val)| val);
+                first.into_iter().chain(tail).collect()
+            })
             .parse(input)
     }
 }
@@ -285,6 +294,13 @@ mod tests {
     }
 
     #[test]
+    fn many0_single() {
+        let (res, digits) = many1_digit("1").finish().unwrap();
+        assert_eq!(res, "");
+        assert_eq!(digits, &['1']);
+    }
+
+    #[test]
     fn many0_trailing_space() {
         // does not match to trailing space
         let (res, digits) = many0_digit("1 /* comment */ 2 ").finish().unwrap();
@@ -295,7 +311,9 @@ mod tests {
     #[test]
     fn many0_head_space() {
         // does not match to head space
-        assert!(many0_digit(" 1 /* comment */ 2").finish().is_err());
+        let (res, digits) = many0_digit(" 1 /* comment */ 2").finish().unwrap();
+        assert_eq!(res, " 1 /* comment */ 2"); // match to nothing
+        assert_eq!(digits, &[]);
     }
 
     fn many1_digit(input: &str) -> ParseResult<Vec<char>> {
@@ -313,6 +331,13 @@ mod tests {
     fn many1_empty() {
         // does not match to empty
         assert!(many1_digit("").finish().is_err());
+    }
+
+    #[test]
+    fn many1_single() {
+        let (res, digits) = many1_digit("1").finish().unwrap();
+        assert_eq!(res, "");
+        assert_eq!(digits, &['1']);
     }
 
     #[test]
