@@ -24,11 +24,16 @@ use nom::{
 /// Parse result
 pub type ParseResult<'a, X> = IResult<&'a str, X, VerboseError<&'a str>>;
 
-/// Specialized trait of `nom::Parser`
-pub trait ExchangeParser<'a, X>: nom::Parser<&'a str, X, VerboseError<&'a str>> + Clone {}
+/// Alias of `nom::Parser`
+pub trait ExchangeParser<'a, X>:
+    Clone + nom::Parser<&'a str, X, VerboseError<&'a str>> + FnMut(&'a str) -> ParseResult<'a, X>
+{
+}
 
 impl<'a, X, T> ExchangeParser<'a, X> for T where
-    T: nom::Parser<&'a str, X, VerboseError<&'a str>> + Clone
+    T: Clone
+        + nom::Parser<&'a str, X, VerboseError<&'a str>>
+        + FnMut(&'a str) -> ParseResult<'a, X>
 {
 }
 
@@ -52,9 +57,8 @@ pub fn comment(input: &str) -> ParseResult<String> {
 
 pub fn separator(input: &str) -> ParseResult<()> {
     // FIXME support explicit print control directives
-    let space = value((), multispace1);
-    let comment = value((), tuple((multispace0, comment, multispace0)));
-    alt((space, comment)).parse(input)
+    let comment = many1(tuple((multispace0, comment, multispace0))).map(|_| ());
+    alt((comment, value((), multispace1))).parse(input)
 }
 
 pub fn many0_<'a, O>(f: impl ExchangeParser<'a, O>) -> impl ExchangeParser<'a, Vec<O>> {
@@ -103,22 +107,37 @@ pub trait Tuple<'a, O>: Clone {
     fn parse(&mut self, input: &'a str) -> ParseResult<'a, O>;
 }
 
+/// Expand `tuple_gen!(f1, f2, f3)` to `tuple((f1, separator, tuple((f2, separator, f3))))`
+macro_rules! tuple_gen {
+    ($head:ident, $($tail:ident),*) => {
+        tuple(($head, separator, tuple_gen!($($tail),*)))
+    };
+    ($head:ident) => {
+        $head
+    };
+}
+
+/// Expand `match_gen!(o1, o2, o3)` to `(o1, _, (o2, _, o3))`
+macro_rules! match_gen {
+    ($head:ident, $($tail:ident),*) => {
+        ($head, _, match_gen!($($tail),*))
+    };
+    ($head:ident) => {
+        $head
+    };
+}
+
 macro_rules! impl_tuple {
     ($($F:ident),*; $($O:ident),*; $($f:ident),*; $($o:ident),*) => {
-
         impl<'a, $($F),*, $($O),*> Tuple<'a, ($($O),*)> for ($($F),*)
         where
             $( $F: ExchangeParser<'a, $O> ),*
         {
             fn parse(&mut self, input: &'a str) -> ParseResult<'a, ($($O),*)> {
                 let ($($f),*) = self;
-
-                $(
-                let (input, _spacer) = separator(input)?;
-                let (input, $o) = nom::Parser::parse($f, input)?;
-                )*
-
-                Ok((input, ($($o),*,)))
+                tuple_gen!($($f),*)
+                    .map(|match_gen!($($o),*)| ($($o),*))
+                    .parse(input)
             }
         }
     };
@@ -190,6 +209,22 @@ mod tests {
         let (res, c) = super::comment("/* vim * vim */").finish().unwrap();
         assert_eq!(res, "");
         assert_eq!(c, " vim * vim ");
+    }
+
+    #[test]
+    fn separator() {
+        let (res, _sep) = super::separator("/* comment */").finish().unwrap();
+        assert_eq!(res, "");
+
+        let (res, _sep) = super::separator("/* comment1 */ /* comment2 */")
+            .finish()
+            .unwrap();
+        assert_eq!(res, "");
+
+        let (res, _sep) = super::separator(" ").finish().unwrap();
+        assert_eq!(res, "");
+
+        assert!(super::separator("").finish().is_err());
     }
 
     fn tuple_digit(input: &str) -> ParseResult<(char, char)> {
