@@ -205,6 +205,7 @@ impl_tuple!(
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::parser::basic::digit;
     use nom::Finish;
 
     #[test]
@@ -238,7 +239,6 @@ mod tests {
     }
 
     fn tuple_digit(input: &str) -> ParseResult<(char, char)> {
-        use crate::parser::basic::digit;
         tuple_((digit, digit)).parse(input)
     }
 
@@ -248,14 +248,83 @@ mod tests {
         assert_eq!(res, "");
         assert_eq!(a, '1');
         assert_eq!(b, '2');
+    }
 
+    #[test]
+    fn tuple_trailing_space() {
         // does not match to trailing space
         let (res, (a, b)) = tuple_digit("1 /* comment */ 2 ").finish().unwrap();
         assert_eq!(res, " ");
         assert_eq!(a, '1');
         assert_eq!(b, '2');
+    }
 
+    #[test]
+    fn tuple_head_space() {
         // does not match to head space
         assert!(tuple_digit(" 1 /* comment */ 2").finish().is_err());
+    }
+
+    fn many0_digit(input: &str) -> ParseResult<Vec<char>> {
+        many0_(digit).parse(input)
+    }
+
+    #[test]
+    fn many0() {
+        let (res, digits) = many0_digit("1 /* comment */ 2 3").finish().unwrap();
+        assert_eq!(res, "");
+        assert_eq!(digits, &['1', '2', '3']);
+    }
+
+    #[test]
+    fn many0_empty() {
+        // match to empty
+        let (res, digits) = many0_digit("").finish().unwrap();
+        assert_eq!(res, "");
+        assert_eq!(digits, &[]);
+    }
+
+    #[test]
+    fn many0_trailing_space() {
+        // does not match to trailing space
+        let (res, digits) = many0_digit("1 /* comment */ 2 ").finish().unwrap();
+        assert_eq!(res, " ");
+        assert_eq!(digits, &['1', '2']);
+    }
+
+    #[test]
+    fn many0_head_space() {
+        // does not match to head space
+        assert!(many0_digit(" 1 /* comment */ 2").finish().is_err());
+    }
+
+    fn many1_digit(input: &str) -> ParseResult<Vec<char>> {
+        many1_(digit).parse(input)
+    }
+
+    #[test]
+    fn many1() {
+        let (res, digits) = many1_digit("1 /* comment */ 2 3").finish().unwrap();
+        assert_eq!(res, "");
+        assert_eq!(digits, &['1', '2', '3']);
+    }
+
+    #[test]
+    fn many1_empty() {
+        // does not match to empty
+        assert!(many1_digit("").finish().is_err());
+    }
+
+    #[test]
+    fn many1_trailing_space() {
+        // does not match to trailing space
+        let (res, digits) = many1_digit("1 /* comment */ 2 ").finish().unwrap();
+        assert_eq!(res, " ");
+        assert_eq!(digits, &['1', '2']);
+    }
+    #[test]
+    fn many1_head_space() {
+        // does not match to head space
+        assert!(many1_digit(" 1 /* comment */ 2").finish().is_err());
     }
 }
