@@ -94,12 +94,17 @@ pub fn many1_<'a, O>(f: impl ExchangeParser<'a, O>) -> impl ExchangeParser<'a, V
     }
 }
 
+pub fn ignorable(input: &str) -> ParseResult<()> {
+    let comment = many1(tuple((multispace0, comment, multispace0))).map(|_| ());
+    alt((comment, value((), multispace0))).parse(input)
+}
+
 pub fn separated<'a, O>(c: char, f: impl ExchangeParser<'a, O>) -> impl ExchangeParser<'a, Vec<O>> {
     move |input| {
         tuple((
             f.clone(),
             many0(
-                tuple((separator, char(c), separator, f.clone()))
+                tuple((ignorable, char(c), ignorable, f.clone()))
                     .map(|(_sep1, _char, _sep2, value)| value),
             ),
         ))
@@ -218,14 +223,11 @@ mod tests {
     use nom::Finish;
 
     #[test]
-    fn comment_emoji() {
+    fn comment() {
         let (res, c) = super::comment("/*🦀*/").finish().unwrap();
         assert_eq!(res, "");
         assert_eq!(c, "🦀");
-    }
 
-    #[test]
-    fn comment_astr() {
         let (res, c) = super::comment("/* vim * vim */").finish().unwrap();
         assert_eq!(res, "");
         assert_eq!(c, " vim * vim ");
@@ -283,33 +285,21 @@ mod tests {
         let (res, digits) = many0_digit("1 /* comment */ 2 3").finish().unwrap();
         assert_eq!(res, "");
         assert_eq!(digits, &['1', '2', '3']);
-    }
 
-    #[test]
-    fn many0_empty() {
         // match to empty
         let (res, digits) = many0_digit("").finish().unwrap();
         assert_eq!(res, "");
         assert_eq!(digits, &[]);
-    }
 
-    #[test]
-    fn many0_single() {
         let (res, digits) = many1_digit("1").finish().unwrap();
         assert_eq!(res, "");
         assert_eq!(digits, &['1']);
-    }
 
-    #[test]
-    fn many0_trailing_space() {
         // does not match to trailing space
         let (res, digits) = many0_digit("1 /* comment */ 2 ").finish().unwrap();
         assert_eq!(res, " ");
         assert_eq!(digits, &['1', '2']);
-    }
 
-    #[test]
-    fn many0_head_space() {
         // does not match to head space
         let (res, digits) = many0_digit(" 1 /* comment */ 2").finish().unwrap();
         assert_eq!(res, " 1 /* comment */ 2"); // match to nothing
@@ -325,31 +315,64 @@ mod tests {
         let (res, digits) = many1_digit("1 /* comment */ 2 3").finish().unwrap();
         assert_eq!(res, "");
         assert_eq!(digits, &['1', '2', '3']);
-    }
 
-    #[test]
-    fn many1_empty() {
         // does not match to empty
         assert!(many1_digit("").finish().is_err());
-    }
 
-    #[test]
-    fn many1_single() {
         let (res, digits) = many1_digit("1").finish().unwrap();
         assert_eq!(res, "");
         assert_eq!(digits, &['1']);
-    }
 
-    #[test]
-    fn many1_trailing_space() {
         // does not match to trailing space
         let (res, digits) = many1_digit("1 /* comment */ 2 ").finish().unwrap();
         assert_eq!(res, " ");
         assert_eq!(digits, &['1', '2']);
-    }
-    #[test]
-    fn many1_head_space() {
+
         // does not match to head space
         assert!(many1_digit(" 1 /* comment */ 2").finish().is_err());
+    }
+
+    #[test]
+    fn ignorable() {
+        let (res, _) = super::ignorable("").finish().unwrap();
+        assert_eq!(res, "");
+
+        let (res, _) = super::ignorable(" ").finish().unwrap();
+        assert_eq!(res, "");
+
+        let (res, _) = super::ignorable("  ").finish().unwrap();
+        assert_eq!(res, "");
+
+        let (res, _) = super::ignorable("/* comment */").finish().unwrap();
+        assert_eq!(res, "");
+
+        let (res, _) = super::ignorable("/* comment */ ").finish().unwrap();
+        assert_eq!(res, "");
+
+        let (res, _) = super::ignorable(" /* comment */ ").finish().unwrap();
+        assert_eq!(res, "");
+    }
+
+    fn comma_digit(input: &str) -> ParseResult<Vec<char>> {
+        comma_separated(digit).parse(input)
+    }
+
+    #[test]
+    fn comma() {
+        let (res, digits) = comma_digit("1,2").finish().unwrap();
+        assert_eq!(res, "");
+        assert_eq!(digits, &['1', '2']);
+
+        let (res, digits) = comma_digit("1 ,2").finish().unwrap();
+        assert_eq!(res, "");
+        assert_eq!(digits, &['1', '2']);
+
+        let (res, digits) = comma_digit("1, 2").finish().unwrap();
+        assert_eq!(res, "");
+        assert_eq!(digits, &['1', '2']);
+
+        let (res, digits) = comma_digit("1 , 2").finish().unwrap();
+        assert_eq!(res, "");
+        assert_eq!(digits, &['1', '2']);
     }
 }
