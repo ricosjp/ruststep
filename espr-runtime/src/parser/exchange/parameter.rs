@@ -1,4 +1,5 @@
 use crate::parser::combinator::*;
+use nom::Parser;
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum UntypedParameter {
@@ -12,7 +13,9 @@ pub enum UntypedParameter {
 
 /// list = `(` \[ [parameter] { `,` [parameter] } \] `)` .
 pub fn list(input: &str) -> ParseResult<UntypedParameter> {
-    todo!()
+    tuple_((char_('('), comma_separated(parameter), char_(')')))
+        .map(|(_open, params, _close)| UntypedParameter::List(params))
+        .parse(input)
 }
 
 #[derive(Debug, Clone, PartialEq)]

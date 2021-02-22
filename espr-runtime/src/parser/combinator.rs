@@ -32,6 +32,13 @@ impl<'a, X, T> ExchangeParser<'a, X> for T where
 {
 }
 
+pub fn char_<'a>(c: char) -> impl ExchangeParser<'a, char> {
+    move |input| {
+        let (input, c) = nom::character::complete::char(c)(input)?;
+        Ok((input, c))
+    }
+}
+
 /// Comment
 ///
 /// A comment shall be encoded as a solidus asterisk `/*`
