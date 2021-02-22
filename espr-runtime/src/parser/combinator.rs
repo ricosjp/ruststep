@@ -25,15 +25,10 @@ use nom::{
 pub type ParseResult<'a, X> = IResult<&'a str, X, VerboseError<&'a str>>;
 
 /// Alias of `nom::Parser`
-pub trait ExchangeParser<'a, X>:
-    Clone + nom::Parser<&'a str, X, VerboseError<&'a str>> + FnMut(&'a str) -> ParseResult<'a, X>
-{
-}
+pub trait ExchangeParser<'a, X>: Clone + nom::Parser<&'a str, X, VerboseError<&'a str>> {}
 
 impl<'a, X, T> ExchangeParser<'a, X> for T where
-    T: Clone
-        + nom::Parser<&'a str, X, VerboseError<&'a str>>
-        + FnMut(&'a str) -> ParseResult<'a, X>
+    T: Clone + nom::Parser<&'a str, X, VerboseError<&'a str>>
 {
 }
 
@@ -134,10 +129,10 @@ pub trait Tuple<'a, O>: Clone {
 /// Expand `tuple_gen!(f1, f2, f3)` to `tuple((f1, separator, tuple((f2, separator, f3))))`
 macro_rules! tuple_gen {
     ($head:ident, $($tail:ident),*) => {
-        tuple(($head, separator, tuple_gen!($($tail),*)))
+        tuple(($head.clone(), separator, tuple_gen!($($tail),*)))
     };
     ($head:ident) => {
-        $head
+        $head.clone()
     };
 }
 
