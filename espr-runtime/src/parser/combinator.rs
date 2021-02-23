@@ -39,6 +39,13 @@ pub fn char_<'a>(c: char) -> impl ExchangeParser<'a, char> {
     }
 }
 
+pub fn opt_<'a, O>(f: impl ExchangeParser<'a, O>) -> impl ExchangeParser<'a, Option<O>> {
+    move |input| {
+        let (input, c) = nom::combinator::opt(f.clone())(input)?;
+        Ok((input, c))
+    }
+}
+
 /// Comment
 ///
 /// A comment shall be encoded as a solidus asterisk `/*`
