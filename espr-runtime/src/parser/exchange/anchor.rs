@@ -1,11 +1,11 @@
-use crate::parser::combinator::*;
+use crate::parser::{combinator::*, exchange::*, token::*};
 
 /// anchor_section = `ANCHOR;` [anchor_list] `ENDSEC;` .
 pub fn anchor_section(input: &str) -> ParseResult<()> {
     todo!()
 }
 
-/// anchor_list = { [anchor] } .
+/// anchor_list = { [anchor()] } .
 pub fn anchor_list(input: &str) -> ParseResult<()> {
     todo!()
 }
@@ -15,7 +15,7 @@ pub fn anchor(input: &str) -> ParseResult<()> {
     todo!()
 }
 
-/// anchor_item = `$` | [integer] | [real] | [string] | [enumeration] | [binary] | [rhs_occurrence_name] | [resource] | [anchor_item_list] .
+/// anchor_item = `$` | [integer] | [real] | [string] | [enumeration] | binary | [rhs_occurrence_name] | [resource] | [anchor_item_list] .
 pub fn anchor_item(input: &str) -> ParseResult<()> {
     todo!()
 }

@@ -46,7 +46,7 @@ pub fn typed_parameter(input: &str) -> ParseResult<Parameter> {
         .parse(input)
 }
 
-/// untyped_parameter = `$` | [integer] | [real] | [string] | [rhs_occurrence_name] | [enumeration] | [binary] | [list] .
+/// untyped_parameter = `$` | [integer] | [real] | [string] | [rhs_occurrence_name] | [enumeration] | binary | [list] .
 pub fn untyped_parameter(input: &str) -> ParseResult<Parameter> {
     alt((
         char_('$').map(|_| UntypedParameter::NotProvided),
