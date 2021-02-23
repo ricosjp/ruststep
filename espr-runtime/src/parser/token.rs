@@ -105,8 +105,8 @@ pub fn lhs_occurrence_name(input: &str) -> ParseResult<String> {
     alt((entity_instance_name, value_instance_name)).parse(input)
 }
 
-/// rhs_occurence_name = ( [entity_instance_name] | [value_instance_name] | [constant_entity_name] | [constant_value_name]) .
-pub fn rhs_occurence_name(input: &str) -> ParseResult<String> {
+/// rhs_occurrence_name = ( [entity_instance_name] | [value_instance_name] | [constant_entity_name] | [constant_value_name]) .
+pub fn rhs_occurrence_name(input: &str) -> ParseResult<String> {
     alt((
         entity_instance_name,
         value_instance_name,

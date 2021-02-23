@@ -46,14 +46,14 @@ pub fn typed_parameter(input: &str) -> ParseResult<Parameter> {
         .parse(input)
 }
 
-/// untyped_parameter = `$` | [integer] | [real] | [string] | [rhs_occurence_name] | [enumeration] | [binary] | [list] .
+/// untyped_parameter = `$` | [integer] | [real] | [string] | [rhs_occurrence_name] | [enumeration] | [binary] | [list] .
 pub fn untyped_parameter(input: &str) -> ParseResult<Parameter> {
     alt((
         char_('$').map(|_| UntypedParameter::NotProvided),
         integer.map(|val| UntypedParameter::Integer(val)),
         real.map(|val| UntypedParameter::Real(val)),
         string.map(|val| UntypedParameter::String(val)),
-        // FIXME rhs_occurence_name
+        // FIXME rhs_occurrence_name
         enumeration.map(|val| UntypedParameter::Enumeration(val)),
         // FIXME binary
         list,
