@@ -39,6 +39,13 @@ pub fn char_<'a>(c: char) -> impl ExchangeParser<'a, char> {
     }
 }
 
+pub fn tag_<'a>(name: &'static str) -> impl ExchangeParser<'a, &'a str> {
+    move |input| {
+        let (input, c) = nom::bytes::complete::tag(name)(input)?;
+        Ok((input, c))
+    }
+}
+
 pub fn opt_<'a, O>(f: impl ExchangeParser<'a, O>) -> impl ExchangeParser<'a, Option<O>> {
     move |input| {
         let (input, c) = nom::combinator::opt(f.clone())(input)?;
