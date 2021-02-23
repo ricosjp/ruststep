@@ -7,10 +7,12 @@ pub enum UntypedParameter {
     Real(f64),
     String(String),
     Enumeration(String),
-    List(Vec<Parameter>),
     /// The special token dollar sign (`$`) is used to represent an object whose value is not provided in the exchange structure.
     NotProvided,
-    // FIXME Add Binary
+    /// A reference to entity or value, parsed by [rhs_occurrence_name]
+    RValue(RValue),
+    /// List of other parameters
+    List(Vec<Parameter>),
 }
 
 /// list = `(` \[ [parameter] { `,` [parameter] } \] `)` .
@@ -53,7 +55,7 @@ pub fn untyped_parameter(input: &str) -> ParseResult<Parameter> {
         integer.map(|val| UntypedParameter::Integer(val)),
         real.map(|val| UntypedParameter::Real(val)),
         string.map(|val| UntypedParameter::String(val)),
-        // FIXME rhs_occurrence_name
+        rhs_occurrence_name.map(|val| UntypedParameter::RValue(val)),
         enumeration.map(|val| UntypedParameter::Enumeration(val)),
         // FIXME binary
         list,
