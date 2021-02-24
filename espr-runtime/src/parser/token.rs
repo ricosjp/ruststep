@@ -7,15 +7,14 @@
 //! ```text
 //! HEX               = `0` | `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8` | `9` | `A` | `B` | `C` | `D` | `E` | `F` .
 //! BINARY            = ```` ( `0` | `1` | `2` | `3` ) { HEX } ```` .
-//! SIGNATURE_CONTENT = BASE64 .
 //! ```
 
 use super::{basic::*, combinator::*};
 use nom::{
     branch::alt,
-    character::complete::{char, digit1, multispace0, none_of},
+    character::complete::{char, digit1, multispace0, none_of, satisfy},
     combinator::opt,
-    multi::many0,
+    multi::{many0, many1},
     number::complete::double,
     sequence::tuple,
     Parser,
@@ -183,6 +182,14 @@ pub fn tag_name(input: &str) -> ParseResult<String> {
             let head = &[first];
             head.iter().chain(tail.iter()).collect()
         })
+        .parse(input)
+}
+
+/// signature_content = BASE64 .
+pub fn signature_content(input: &str) -> ParseResult<String> {
+    let base_char = satisfy(|c| matches!(c, '0'..='9' | 'a'..='z' | 'A'..='Z' | '+' | '/' | '='));
+    many1(base_char)
+        .map(|chars| chars.iter().collect())
         .parse(input)
 }
 
