@@ -1,9 +1,28 @@
 use crate::parser::{combinator::*, exchange::*, token::*};
 use nom::{branch::alt, Parser};
 
+#[derive(Debug, Clone, PartialEq)]
+pub struct DataSection {
+    pub meta: Vec<Parameter>,
+    pub entities: Vec<EntityInstance>,
+}
+
 /// data_section = `DATA` \[ `(` [parameter_list] `)` \] `;` [entity_instance_list] `ENDSEC;` .
-pub fn data_section(input: &str) -> ParseResult<()> {
-    todo!()
+pub fn data_section(input: &str) -> ParseResult<DataSection> {
+    tuple_((
+        tag_("DATA"),
+        opt_(tuple_((char_('('), parameter_list, char_(')')))),
+        char_(';'),
+        entity_instance_list,
+        tag_("ENDSEC;"),
+    ))
+    .map(|(_start, meta, _semicolon, entities, _end)| DataSection {
+        meta: meta
+            .map(|(_open, params, _close)| params)
+            .unwrap_or_default(),
+        entities,
+    })
+    .parse(input)
 }
 
 /// entity_instance_list = { [entity_instance] } .
