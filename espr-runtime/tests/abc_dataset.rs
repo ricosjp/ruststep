@@ -5,6 +5,20 @@ use nom::Finish;
 use std::{fs, path::*};
 
 #[test]
+fn abc_dataset_header() -> anyhow::Result<()> {
+    let header = r#"
+    HEADER;
+    FILE_DESCRIPTION( ( '' ), ' ' );
+    FILE_NAME( '/vol/tmp/translate-2747021839723325609/5ae2de121ced560fc658f4c5.step', '2018-04-27T08:23:47', ( '' ), ( '' ), ' ', ' ', ' ' );
+    FILE_SCHEMA( ( 'AUTOMOTIVE_DESIGN { 1 0 10303 214 1 1 1 1 }' ) );
+    ENDSEC;
+    "#.trim();
+    let exchange = parser::exchange::header_section(&header).finish().unwrap();
+    dbg!(exchange);
+    Ok(())
+}
+
+#[test]
 fn abc_dataset() -> anyhow::Result<()> {
     let step_file = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
         .join("tests/steps/00000050_80d90bfdd2e74e709956122a_step_000.step");
