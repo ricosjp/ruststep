@@ -91,7 +91,7 @@ pub fn many0_<'a, O>(f: impl ExchangeParser<'a, O>) -> impl ExchangeParser<'a, V
         if first.is_none() {
             return Ok((input, Vec::new()));
         };
-        let (input, tail) = many0(tuple((separator, f.clone())).map(|(_sep, v)| v)).parse(input)?;
+        let (input, tail) = many0(tuple((ignorable, f.clone())).map(|(_sep, v)| v)).parse(input)?;
         let first = vec![first.unwrap()];
         let list = first.into_iter().chain(tail).collect();
         Ok((input, list))
@@ -100,7 +100,7 @@ pub fn many0_<'a, O>(f: impl ExchangeParser<'a, O>) -> impl ExchangeParser<'a, V
 
 pub fn many1_<'a, O>(f: impl ExchangeParser<'a, O>) -> impl ExchangeParser<'a, Vec<O>> {
     move |input| {
-        tuple((f.clone(), many0(tuple((separator, f.clone())))))
+        tuple((f.clone(), many0(tuple((ignorable, f.clone())))))
             .map(|(first, tail)| {
                 let first = vec![first];
                 let tail = tail.into_iter().map(|(_sep, val)| val);
