@@ -5,5 +5,4 @@
 pub mod basic;
 pub mod combinator;
 pub mod exchange;
-pub mod string;
 pub mod token;
