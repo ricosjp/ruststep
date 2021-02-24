@@ -147,10 +147,10 @@ pub trait Tuple<'a, O>: Clone {
     fn parse(&mut self, input: &'a str) -> ParseResult<'a, O>;
 }
 
-/// Expand `tuple_gen!(f1, f2, f3)` to `tuple((f1, separator, tuple((f2, separator, f3))))`
+/// Expand `tuple_gen!(f1, f2, f3)` to `tuple((f1, ignorable, tuple((f2, ignorable, f3))))`
 macro_rules! tuple_gen {
     ($head:ident, $($tail:ident),*) => {
-        tuple(($head.clone(), separator, tuple_gen!($($tail),*)))
+        tuple(($head.clone(), ignorable, tuple_gen!($($tail),*)))
     };
     ($head:ident) => {
         $head.clone()
