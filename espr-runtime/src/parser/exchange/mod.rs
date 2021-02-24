@@ -4,7 +4,8 @@
 //! ----------------------------------------
 //!
 //! ```text
-//! EXCHANGE_FILE = `ISO-10303-21;` HEADER_SECTION
+//! EXCHANGE_FILE = `ISO-10303-21;`
+//!                 HEADER_SECTION
 //!               \[ ANCHOR_SECTION \]
 //!               \[ REFERENCE_SECTION \]
 //!               { DATA_SECTION }
@@ -26,3 +27,23 @@ pub use data::*;
 pub use header::*;
 pub use parameter::*;
 pub use reference::*;
+
+use crate::parser::combinator::*;
+
+pub struct Exchange {
+    pub header: Vec<Record>,
+    pub anchor: Vec<Anchor>,
+    pub reference: Vec<ReferenceEntry>,
+    pub data: Vec<DataSection>,
+}
+
+/// exchange_file = `ISO-10303-21;`
+///                 [header_section]
+///              \[ [anchor_section] \]
+///              \[ [reference_section] \]
+///               { [data_section] }
+///                 `END-ISO-10303-21;`
+///               { signature_section } .
+pub fn exchange_file(input: &str) -> ParseResult<Exchange> {
+    todo!()
+}
