@@ -13,6 +13,7 @@ pub fn reference_list(input: &str) -> ParseResult<Vec<ReferenceEntry>> {
     many0_(reference).parse(input)
 }
 
+#[derive(Debug, Clone, PartialEq)]
 pub struct ReferenceEntry {
     pub name: LValue,
     pub resource: URI,
