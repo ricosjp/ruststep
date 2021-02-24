@@ -13,7 +13,13 @@ pub fn header_entity_list(input: &str) -> ParseResult<Vec<Record>> {
     many1_(header_entity).parse(input)
 }
 
-/// header_entity = [keyword] `(` \[ [parameter_list] \] `)` `;` .
+/// header_entity = [simple_record] `;` .
+///
+/// Changed from the following original definition due to the duplication
+///
+/// ```text
+/// header_entity = keyword ( [ parameter_list ] ) ; .
+/// ```
 pub fn header_entity(input: &str) -> ParseResult<Record> {
     tuple_((simple_record, char_(';')))
         .map(|(record, _semicolon)| record)
