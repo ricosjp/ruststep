@@ -6,7 +6,7 @@ This document describes the high-level architecture of ruststep project.
 EXPRESS Language compiler (esprc)
 ----------------------------------
 
-![espr-overview](./espr-overview.svg "espr-overview.svg")
+<img src="./espr-overview.svg" width=500 />
 
 STEP file I/O
 --------------
