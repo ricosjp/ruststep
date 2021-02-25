@@ -8,12 +8,12 @@ What is STEP?
 
 ### Rosetta Stone
 
-|                 | Protocol Buffers                                           | STEP (ISO 10303)                        |
-|:----------------|:----------------------------------------------------------|:----------------------------------------|
-| Schema Language | [Protocol Buffers Version 3 Language Specification][pbspec] | EXPRESS Language (ISO 10303-11)         |
-| Schema file      | `*.proto` file                                             | `*.exp` file                             |
-| Data            | [Encoded Binary data][pbencoding]                         | `*.step` file (ASCII, ISO 10303-21)      |
-| Compiler        | protoc             | stepcode, esprc                         |
+|                 | Protocol Buffers                                           | STEP (ISO 10303)                                         |
+|:----------------|:-----------------------------------------------------------|:---------------------------------------------------------|
+| Schema Language | [Protocol Buffers Version 3 Language Specification][pbspec]| EXPRESS Language (ISO 10303-11)                          |
+| Schema file     | `*.proto` file                                             | `*.exp` file                                             |
+| Data            | [Encoded Binary data][pbencoding]                          | "Exchange structure", `*.step` file (ASCII, ISO 10303-21)|
+| Compiler        | protoc                                                     | esprc                                                    |
 
 [pbspec]: https://developers.google.com/protocol-buffers/docs/reference/proto3-spec
 [pbencoding]: https://developers.google.com/protocol-buffers/docs/encoding
