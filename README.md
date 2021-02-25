@@ -13,6 +13,21 @@ This project consists of following crates:
 
 [EXPRESS]: https://www.iso.org/standard/38047.html
 
+What is STEP?
+--------------
+
+### Rosetta Stone
+
+|                 | Protocol Buffers                                           | STEP (ISO 10303)                        |
+|:----------------|:----------------------------------------------------------|:----------------------------------------|
+| Schema Language | [Protocol Buffers Version 3 Language Specification][pbspec] | EXPRESS Language (ISO 10303-11)         |
+| Schema file      | `*.proto` file                                             | `*.exp` file                             |
+| Data            | [Encoded Binary data][pbencoding]                         | `*.step` file (ASCII, ISO 10303-21)      |
+| Compiler        | protoc             | stepcode, esprc                         |
+
+[pbspec]: https://developers.google.com/protocol-buffers/docs/reference/proto3-spec
+[pbencoding]: https://developers.google.com/protocol-buffers/docs/encoding
+
 License
 --------
 Copyright 2021 RICOS Co. Ltd.
