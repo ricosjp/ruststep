@@ -6,7 +6,7 @@ A crate for STEP (Standard for the Exchange of Product model data), standarized 
 What is STEP?
 --------------
 
-### Rosetta Stone
+### Rosetta Stone for web developers
 
 |                 | Protocol Buffers                                           | STEP (ISO 10303)                                         |
 |:----------------|:-----------------------------------------------------------|:---------------------------------------------------------|
@@ -17,6 +17,12 @@ What is STEP?
 
 [pbspec]: https://developers.google.com/protocol-buffers/docs/reference/proto3-spec
 [pbencoding]: https://developers.google.com/protocol-buffers/docs/encoding
+
+- STEP is a set of data serialize format, schema language, and common schemas.
+- Data serialize format is called *exchange structure* and serialized as ASCII text or XML.
+- Schema language is called *EXPRESS*.
+- Many common schemas are defined in ISO-10303. Application Protocol (AP) is a class of defined schemas,
+  and the main target of this project. AP203 is most famous one in CAD (computer-aided design) applications.
 
 Architecture
 -------------
