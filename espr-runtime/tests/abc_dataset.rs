@@ -5,7 +5,7 @@ use nom::Finish;
 use std::{fs, path::*};
 
 #[test]
-fn abc_dataset_header() -> anyhow::Result<()> {
+fn header() -> anyhow::Result<()> {
     let header = r#"
     HEADER;
     FILE_DESCRIPTION( ( '' ), ' ' );
@@ -18,25 +18,24 @@ fn abc_dataset_header() -> anyhow::Result<()> {
     Ok(())
 }
 
+fn format_example() -> anyhow::Result<String> {
+    let step_file = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+        .join("tests/steps/00000050_80d90bfdd2e74e709956122a_step_000.step");
+    let step_str = fs::read_to_string(step_file)?;
+    Ok(step_str)
+}
+
 #[test]
 fn abc_dataset_data() -> anyhow::Result<()> {
-    let data = r#"
-    DATA;
-    #2 = PRODUCT_DEFINITION_CONTEXT( '', #57, 'design' );
-    #73 =  ( NAMED_UNIT( #181 )PLANE_ANGLE_UNIT(  )SI_UNIT( $, .RADIAN. ) );
-    ENDSEC;
-    "#
-    .trim();
-    let exchange = parser::exchange::data_section(&data).finish().unwrap();
-    dbg!(exchange);
+    for line in format_example()?.lines() {
+        dbg!(line);
+    }
     Ok(())
 }
 
 #[test]
 fn abc_dataset() -> anyhow::Result<()> {
-    let step_file = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
-        .join("tests/steps/00000050_80d90bfdd2e74e709956122a_step_000.step");
-    let step_str = fs::read_to_string(step_file)?;
+    let step_str = format_example()?;
     let exchange = parser::exchange::exchange_file(&step_str).finish().unwrap();
     dbg!(exchange);
     Ok(())
