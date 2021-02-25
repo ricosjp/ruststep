@@ -3,6 +3,30 @@ ruststep
 
 A crate for STEP (Standard for the Exchange of Product model data), standarized as ISO 10303
 
+What is STEP?
+--------------
+
+### Rosetta Stone for web developers
+
+|                 | Protocol Buffers                                           | STEP (ISO 10303)                                         |
+|:----------------|:-----------------------------------------------------------|:---------------------------------------------------------|
+| Schema Language | [Protocol Buffers Version 3 Language Specification][pbspec]| EXPRESS Language (ISO 10303-11)                          |
+| Schema file     | `*.proto` file                                             | `*.exp` file                                             |
+| Data            | [Encoded Binary data][pbencoding]                          | "Exchange structure", `*.step` file (ASCII, ISO 10303-21)|
+| Compiler        | protoc                                                     | esprc                                                    |
+
+[pbspec]: https://developers.google.com/protocol-buffers/docs/reference/proto3-spec
+[pbencoding]: https://developers.google.com/protocol-buffers/docs/encoding
+
+- STEP is a set of data serialize format, schema language, and common schemas.
+- Data serialize format is called *exchange structure* and serialized as ASCII text or XML.
+- Schema language is called *EXPRESS*.
+- Many common schemas are defined in ISO-10303. Application Protocol (AP) is a class of defined schemas,
+  and the main target of this project. AP203 is most famous one in CAD (computer-aided design) applications.
+
+Architecture
+-------------
+
 This project consists of following crates:
 
 | name         | description                                                        |
@@ -13,6 +37,10 @@ This project consists of following crates:
 
 [EXPRESS]: https://www.iso.org/standard/38047.html
 
+See [ARCHITECTURE.md](./ARCHITECTURE.md) for detail.
+
 License
 --------
 Copyright 2021 RICOS Co. Ltd.
+
+Licensed under the Apache License, Version 2.0 http://www.apache.org/licenses/LICENSE-2.0
