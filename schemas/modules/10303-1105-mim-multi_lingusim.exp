@@ -1,0 +1,77 @@
+(* 
+   $ID: mim.exp,v 1.3 2003/01/08 08:54:20 rugarcia Exp $
+   ISO/TC184/SC4 WG12N2224 - ISO/CD-TS 10303-1105 Multi_linguism - Express MIM 
+*)
+
+
+SCHEMA Multi_linguism_mim;
+
+USE FROM management_resources_schema (
+	attribute_classification_assignment,
+	attribute_value_assignment);
+
+USE FROM group_schema (
+	group);
+
+TYPE attribute_language_item = EXTENSIBLE GENERIC_ENTITY SELECT (multi_language_attribute_assignment);
+END_TYPE;
+
+TYPE multi_language_attribute_item = EXTENSIBLE GENERIC_ENTITY SELECT;
+END_TYPE;
+
+ENTITY language 
+SUBTYPE OF (group); 
+WHERE
+WR1: SELF\group.name <> '';
+END_ENTITY; 
+
+ENTITY attribute_language_assignment 
+SUBTYPE OF (attribute_classification_assignment); 
+  SELF\attribute_classification_assignment.assigned_class: language;
+  items : SET [1:?] OF attribute_language_item; 
+WHERE 
+WR1: SELF\attribute_classification_assignment.role.name IN ['primary', 'translated']; 
+WR2: SELF\attribute_classification_assignment.attribute_name<> '';
+END_ENTITY; 
+
+ENTITY multi_language_attribute_assignment 
+SUBTYPE OF (attribute_value_assignment); 
+  items : SET [1:?] OF multi_language_attribute_item;
+
+DERIVE
+  translation_language : language := language_indication[1]\attribute_classification_assignment.assigned_class;
+
+INVERSE
+  language_indication: SET[1:1] OF attribute_language_assignment FOR items;
+
+WHERE 
+WR1: (SELF\attribute_value_assignment.role.name = 'alternate language');
+WR2: SIZEOF( QUERY( ala <* language_indication |  
+   (ala\attribute_classification_assignment.attribute_name = 'attribute_value') AND 
+   (ala\attribute_classification_assignment.role.name='translated') )) = 1 ; 
+WR3: SELF\attribute_value_assignment.attribute_name <> '' ;
+WR4: SIZEOF(QUERY(ci <* items |
+SIZEOF(QUERY(ata <* USEDIN(ci, 'MULTI_LINGUISM_MIM.MULTI_LANGUAGE_ATTRIBUTE_ASSIGNMENT.ITEMS') |
+(ata\attribute_value_assignment.attribute_name = SELF\attribute_value_assignment.attribute_name) AND 
+(ata.translation_language :=: translation_language) ))>1 )) =0;
+WR5: SIZEOF(QUERY(ci <* items |
+SIZEOF(QUERY(ata <* USEDIN(ci, 'MULTI_LINGUISM_MIM.ATTRIBUTE_LANGUAGE_ASSIGNMENT.ITEMS') |
+ (ata\attribute_classification_assignment.role.name='primary') AND
+ (ata\attribute_classification_assignment.attribute_name= SELF\attribute_value_assignment.attribute_name) AND 
+ (ata\attribute_classification_assignment.assigned_class :=: translation_language) ))>0 )) =0;
+END_ENTITY; 
+
+
+RULE restrict_language_assignment_per_attribute FOR (attribute_language_assignment);
+WHERE
+WR1: SIZEOF ( QUERY ( ala1 <* attribute_language_assignment |
+	SIZEOF(QUERY( it <* ala1.items |
+	   SIZEOF ( QUERY ( ala2 <* USEDIN ( it ,'MULTI_LINGUISM_MIM.ATTRIBUTE_LANGUAGE_ASSIGNMENT.ITEMS' ) | 
+		( ala1\attribute_classification_assignment.attribute_name = ala2\attribute_classification_assignment.attribute_name ) AND 
+		( ala1\attribute_classification_assignment.assigned_class :=: ala2\attribute_classification_assignment.assigned_class )
+		 )) >1 
+	   )) >0 
+	)) =0;
+END_RULE;
+
+END_SCHEMA;

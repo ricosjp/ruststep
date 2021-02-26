@@ -1,0 +1,98 @@
+(*
+$Id: 10303-1052-mim-default_tolerance.exp,v 1.2 2005/02/22 17:09:42 wg12deputy Exp $ 
+ISO TC184/SC4/WG12 N2871 - ISO/TS 10303-1052 Default tolerance - EXPRESS MIM
+Supersedes ISO TC184/SC4/WG12 N1545
+*) 
+
+
+SCHEMA Default_tolerance_mim;
+
+USE FROM Foundation_representation_mim;    -- ISO/TS 10303-1006
+
+USE FROM Measure_representation_mim;    -- ISO/TS 10303-1118
+
+USE FROM representation_schema   -- ISO 10303-43
+  (compound_item_definition,
+   compound_representation_item,
+   representation,
+   set_representation_item); 
+
+USE FROM Shape_property_assignment_mim;    -- ISO/TS 10303-1032
+
+
+ENTITY default_tolerance_table
+  SUBTYPE OF (representation);
+WHERE
+  WR1: SIZEOF( QUERY( i <* SELF.items | NOT('DEFAULT_TOLERANCE_MIM.DEFAULT_TOLERANCE_TABLE_CELL' IN TYPEOF(i)) )) = 0;
+  WR2: (SIZEOF( QUERY( rr <* USEDIN(SELF,'REPRESENTATION_SCHEMA.' + 'REPRESENTATION_RELATIONSHIP.REP_1') | rr.name < 'general tolerance definition' )) = 0) AND (SIZEOF( QUERY( rr <* USEDIN(SELF,'REPRESENTATION_SCHEMA.' + 'REPRESENTATION_RELATIONSHIP.REP_1') | (rr.name = 'general tolerance definition') AND (rr.rep_2.name < 'default tolerance') )) = 0) AND (SIZEOF( USEDIN(SELF,'REPRESENTATION_SCHEMA.' + 'REPRESENTATION_RELATIONSHIP.REP_2') ) = 0);
+END_ENTITY;
+
+ENTITY default_tolerance_table_cell
+  SUBTYPE OF (compound_representation_item);
+WHERE
+  WR1: SIZEOF(QUERY( x <* USEDIN(SELF,'REPRESENTATION_SCHEMA.' + 'REPRESENTATION.ITEMS') | 'DEFAULT_TOLERANCE_MIM.' + 'DEFAULT_TOLERANCE_TABLE' IN TYPEOF(x)))=1 ;
+  WR2: default_tolerance_table_cell_wr2(SELF\compound_representation_item.item_element);
+  WR3: default_tolerance_table_cell_wr3(SELF\compound_representation_item.item_element);
+  WR4: default_tolerance_table_cell_wr4(SELF\compound_representation_item.item_element);
+  WR5: default_tolerance_table_cell_wr5(SELF\compound_representation_item.item_element);
+END_ENTITY;
+
+FUNCTION default_tolerance_table_cell_wr2
+ (agg : compound_item_definition) : BOOLEAN; 
+BEGIN 
+IF SIZEOF(agg) <= 5 THEN 
+  RETURN(TRUE); 
+ELSE 
+  RETURN(FALSE); 
+END_IF; 
+END; 
+      END_FUNCTION; 
+
+FUNCTION default_tolerance_table_cell_wr3
+ (agg : compound_item_definition) : BOOLEAN; 
+BEGIN 
+IF (SIZEOF(QUERY ( i <* agg | (('DEFAULT_TOLERANCE_MIM.MEASURE_REPRESENTATION_ITEM' IN TYPEOF(i)) 
+  AND (i\representation_item.name = 'significant number of digits')) )) = 1) OR 
+((SIZEOF(QUERY ( i <* agg | (('DEFAULT_TOLERANCE_MIM.MEASURE_REPRESENTATION_ITEM' IN TYPEOF(i)) AND 
+  (i\representation_item.name = 'lower limit')) )) = 1) AND 
+(SIZEOF( QUERY ( i <* agg | (('DEFAULT_TOLERANCE_MIM.MEASURE_REPRESENTATION_ITEM' IN TYPEOF(i)) AND 
+  (i\representation_item.name = 'upper limit')) )) = 1)) THEN 
+  RETURN(TRUE); 
+ELSE 
+  RETURN(FALSE); 
+END_IF; 
+END; 
+      END_FUNCTION; 
+
+FUNCTION default_tolerance_table_cell_wr4
+ (agg : compound_item_definition) : BOOLEAN; 
+BEGIN 
+IF (SIZEOF(QUERY ( i <* agg | (('DEFAULT_TOLERANCE_MIM.MEASURE_REPRESENTATION_ITEM' IN TYPEOF(i)) AND 
+  (i\representation_item.name = 'plus minus tolerance value')) )) = 1) OR 
+((SIZEOF(QUERY ( i <* agg | (('DEFAULT_TOLERANCE_MIM.MEASURE_REPRESENTATION_ITEM' IN TYPEOF(i)) AND (
+  i\representation_item.name = 'lower tolerance value')) )) = 1) AND 
+(SIZEOF( QUERY ( i <* agg | (('DEFAULT_TOLERANCE_MIM.MEASURE_REPRESENTATION_ITEM' IN TYPEOF(i)) AND (
+  i\representation_item.name = 'upper tolerance value')) )) = 1)) THEN 
+  RETURN(TRUE); 
+ELSE 
+  RETURN(FALSE); 
+END_IF; 
+END; 
+      END_FUNCTION; 
+
+FUNCTION default_tolerance_table_cell_wr5
+ (agg : compound_item_definition) : BOOLEAN; 
+BEGIN 
+IF (SIZEOF(QUERY ( i <* agg | ('DEFAULT_TOLERANCE_MIM.DESCRIPTIVE_REPRESENTATION_ITEM' IN TYPEOF(i)) )) <= 1) AND 
+(SIZEOF(QUERY ( i <* agg | ('DEFAULT_TOLERANCE_MIM.DESCRIPTIVE_REPRESENTATION_ITEM' IN TYPEOF(i)) )) = 
+  SIZEOF(QUERY ( i <* agg | (('DEFAULT_TOLERANCE_MIM.DESCRIPTIVE_REPRESENTATION_ITEM' IN TYPEOF(i)) AND 
+  (i\representation_item.name = 'cell description'))) )) 
+THEN 
+  RETURN(TRUE); 
+ELSE 
+  RETURN(FALSE); 
+END_IF; 
+END; 
+      END_FUNCTION; 
+
+END_SCHEMA;  -- Default_tolerance_mim

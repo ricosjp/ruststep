@@ -1,0 +1,21 @@
+(*
+ $Id: 10303-1141-mim-requirement_view_definition.exp,v 1.1 2006/08/07 09:42:04 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N3134 - ISO/TS 10303-1141 Requirement view definition - EXPRESS MIM
+ Supersedes ISO TC184/SC4/WG12 N2355
+*) 
+
+
+SCHEMA Requirement_view_definition_mim;
+
+USE FROM Identification_assignment_mim;    -- ISO/TS 10303-1021
+
+USE FROM Product_version_mim;    -- ISO/TS 10303-1018
+
+USE FROM Product_view_definition_mim;    -- ISO/TS 10303-1019
+
+USE FROM Requirement_identification_and_version_mim;    -- ISO/TS 10303-1140
+
+
+END_SCHEMA;  -- Requirement_view_definition_mim
+
+

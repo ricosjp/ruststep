@@ -1,0 +1,62 @@
+(*
+ISO TC184/SC4/WG12 N1425 - ISO/CD-TS 10303-1245 Type of person - EXPRESS MIM
+*) 
+
+
+SCHEMA Type_of_person_mim; 
+
+USE FROM Classification_assignment_mim;    -- ISO/CD-TS 10303-1114
+
+USE FROM Experience_mim;    -- ISO/CD-TS 10303-1243
+
+USE FROM experience_schema   -- ISO 10303-41
+  (experience_type); 
+
+USE FROM management_resources_schema   -- ISO 10303-41
+  (person_type_assignment,
+   person_type_definition_assignment); 
+
+USE FROM person_organization_schema   -- ISO 10303-41
+  (person_type_definition,
+   person_type_definition_relationship); 
+
+USE FROM product_property_definition_schema   -- ISO 10303-41
+  (characterized_object); 
+
+USE FROM Property_assignment_mim;    -- ISO/TS 10303-1030
+
+USE FROM Qualifications_mim;    -- ISO/CD-TS 10303-1244
+
+USE FROM qualifications_schema   -- ISO 10303-41
+  (qualification_type); 
+
+
+TYPE person_definition_item = EXTENSIBLE GENERIC_ENTITY SELECT
+   (experience_type, 
+    qualification_type);
+END_TYPE; 
+
+TYPE person_type_definition_relationship_classification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON classification_item WITH 
+   (person_type_definition_relationship);
+END_TYPE; 
+
+TYPE person_type_item = EXTENSIBLE GENERIC_ENTITY SELECT;
+END_TYPE; 
+
+ENTITY applied_person_type_assignment
+  SUBTYPE OF (person_type_assignment);
+  items : SET[1:?] OF person_type_item;
+END_ENTITY;
+
+ENTITY applied_person_type_definition_assignment
+  SUBTYPE OF (person_type_definition_assignment);
+  items : SET[1:?] OF person_definition_item;
+END_ENTITY;
+
+ENTITY characterized_person_type_definition
+  SUBTYPE OF (characterized_object, person_type_definition);
+END_ENTITY;
+
+END_SCHEMA;  -- Type_of_person_mim
+
+

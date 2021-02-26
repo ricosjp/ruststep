@@ -1,0 +1,21 @@
+(*
+ $Id: 10303-1114-arm-classification_assignment.exp,v 1.3 2006/08/07 07:44:43 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N3248 - ISO/TS 10303-1114 Classification assignment - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG12 N2229
+*)
+
+SCHEMA Classification_assignment_arm;
+
+USE FROM Class_arm;    -- ISO/TS 10303-1070
+
+
+TYPE classification_item = EXTENSIBLE GENERIC_ENTITY SELECT;
+END_TYPE; 
+
+ENTITY Classification_assignment;
+  assigned_class : Class;
+  items : SET[1:?] OF classification_item;
+  role : OPTIONAL STRING;
+END_ENTITY;
+
+END_SCHEMA;  -- Classification_assignment_arm

@@ -1,0 +1,101 @@
+ALL THE CHANGES ARE IMPLEMENTED IN THE RELEASED SCHEMAS
+
+=====================================================================
+ISSUE NUMBER: 1
+DATE: 2003-10-18
+AUTHOR: R. SCHULER
+SOURCE DOCUMENT:ISO 13584-24:2003
+SCHEMA and CLAUSE: ISO13584_instance_resource_schema  6.6.12
+OTHER PARTS AFFECTED: ISO 13584-25 long form
+ENTITY or RESOURCE MODIFIED: FUNCTION check_class_type_for_dic_f_view_instance
+DESCRIPTION: error in formal parameter type
+
+
+OLD CONTENT:
+FUNCTION check_class_type_for_dic_f_view_instance(
+	dic_cl: dic_f_model_instance): LOGICAL;
+
+
+
+NEW CONTENT:
+FUNCTION check_class_type_for_dic_f_view_instance(
+	dic_cl: dic_f_view_instance): LOGICAL;
+
+
+SCHEMA NAME AND VERSION: ISO13584_instance_resource_schema 1.0
+NEW VERSION:1.1
+=====================================================================
+ISSUE NUMBER: 2
+DATE: 2003-10-18
+AUTHOR: R. SCHULER
+SOURCE DOCUMENT:ISO 13584-24:2003
+SCHEMA and CLAUSE:
+ISO13584_instance_resource_schema  6.6.4
+ISO13584_g_m_iim_library_implicit_schema
+ISO13584_f_m_iim_library_implicit_schema
+OTHER PARTS AFFECTED: ISO 13584-25 long form
+ENTITY or RESOURCE MODIFIED: FUNCTION compatible_type_and_value
+DESCRIPTION: One error in a variable name (last line below)
+
+OLD CONTENT:
+FUNCTION compatible_type_and_value
+. . .
+    'NON_QUANTITATIVE_INT_TYPE' IN data_type_typeof(dom)) AND (SIZEOF(
+    data_type_non_quantitative_int_type(dom)) = 1) THEN
+      set_integer := [];
+      code_type := data_type_non_quantitative_int_type(dom)[1];
+
+
+
+NEW CONTENT:
+FUNCTION compatible_type_and_value
+. . .
+    'NON_QUANTITATIVE_INT_TYPE' IN data_type_typeof(dom)) AND (SIZEOF(
+    data_type_non_quantitative_int_type(dom)) = 1) THEN
+      set_integer := [];
+      int_type := data_type_non_quantitative_int_type(dom)[1];
+
+
+SCHEMA NAME AND VERSION: ISO13584_instance_resource_schema 1.0
+NEW VERSION:1.1
+SCHEMA NAME AND VERSION: ISO13584_g_m_iim_library_implicit_schema 1.0
+NEW VERSION:1.1
+SCHEMA NAME AND VERSION: ISO13584_f_m_iim_library_implicit_schema 1.0
+NEW VERSION:1.1
+=====================================================================
+=====================================================================
+=====================================================================
+
+
+ISSUE NUMBER: 
+DATE: 
+AUTHOR: 
+SOURCE DOCUMENT:
+SCHEMA and CLAUSE:
+OTHER PARTS AFFECTED: 
+ENTITY or RESOURCE MODIFIED:
+DESCRIPTION: 
+
+
+OLD CONTENT:
+
+NEW CONTENT:
+SCHEMA NAME AND VERSION: 
+NEW VERSION:
+=====================================================================
+ISSUE NUMBER: 
+DATE: 
+AUTHOR: 
+SOURCE DOCUMENT:
+SCHEMA and CLAUSE:
+OTHER PARTS AFFECTED: 
+ENTITY or RESOURCE MODIFIED:
+DESCRIPTION: 
+
+
+OLD CONTENT:
+
+NEW CONTENT:
+SCHEMA NAME AND VERSION: 
+NEW VERSION:
+=====================================================================

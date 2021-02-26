@@ -1,0 +1,50 @@
+(*
+ISO TC184/SC4/WG12 N2090 - ISO/CD-TS 10303-1358 Location assignment characterized - EXPRESS MIM
+*) 
+
+
+SCHEMA Location_assignment_characterized_mim; 
+
+USE FROM Approval_mim;    -- ISO/TS 10303-1012
+
+USE FROM Classification_assignment_mim;    -- ISO/CD-TS 10303-1114
+
+USE FROM Date_time_assignment_mim;    -- ISO/TS 10303-1014
+
+USE FROM Effectivity_application_mim;    -- ISO/TS 10303-1059
+
+USE FROM Location_assignment_mim;    -- ISO/CD-TS 10303-1277
+
+USE FROM Person_organization_assignment_mim;    -- ISO/TS 10303-1013
+
+
+TYPE location_assignment_approval_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON approval_item WITH 
+   (applied_location_assignment);
+END_TYPE; 
+
+TYPE location_assignment_classification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON classification_item WITH 
+   (applied_location_assignment);
+END_TYPE; 
+
+TYPE location_assignment_date_and_time_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON date_and_time_item WITH 
+   (applied_location_assignment);
+END_TYPE; 
+
+TYPE location_assignment_date_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON date_item WITH 
+   (applied_location_assignment);
+END_TYPE; 
+
+TYPE location_assignment_effectivity_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON effectivity_item WITH 
+   (applied_location_assignment);
+END_TYPE; 
+
+TYPE location_assignment_organization_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON organization_item WITH 
+   (applied_location_assignment);
+END_TYPE; 
+
+TYPE location_assignment_person_and_organization_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON person_and_organization_item WITH 
+   (applied_location_assignment);
+END_TYPE; 
+
+END_SCHEMA;  -- Location_assignment_characterized_mim
+

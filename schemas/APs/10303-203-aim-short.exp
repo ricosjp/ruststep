@@ -1,0 +1,1372 @@
+(* AIM short form for ISO 10303-203 amendment 1
+   ISO TC184/SC4/WG3 N915
+   Larry McKee
+   2000-05-04
+ *)
+
+SCHEMA config_control_design;
+
+  USE FROM application_context_schema   -- ISO 10303-41
+      (application_context,
+       application_protocol_definition,
+       product_context,
+       product_definition_context,
+       product_concept_context);
+
+  USE FROM product_definition_schema   -- ISO 10303-41
+      (product,
+       product_definition,
+       product_definition_formation,
+       product_definition_formation_with_specified_source,
+       product_definition_relationship,
+       product_category,
+       product_category_relationship,
+       product_related_product_category,
+       product_definition_with_associated_documents);
+
+  USE FROM product_structure_schema  -- ISO 10303-44
+      (product_definition_usage,
+       assembly_component_usage,
+       next_assembly_usage_occurrence,
+       promissory_usage_occurrence,
+       quantified_assembly_component_usage,
+       specified_higher_usage_occurrence,
+       assembly_component_usage_substitute,
+       alternate_product_relationship);
+
+  USE FROM configuration_management_schema  -- ISO 10303-44
+      (configuration_item,
+       configuration_design,
+       configuration_effectivity);
+
+
+  USE FROM product_concept_schema  -- ISO 10303-44
+      (product_concept);
+
+  USE FROM product_property_definition_schema  -- ISO 10303-41
+      (product_definition_shape,
+       property_definition,
+       shape_aspect,
+       shape_aspect_relationship);
+
+  USE FROM product_property_representation_schema  -- ISO 10303-41
+      (context_dependent_shape_representation,
+       property_definition_representation,
+       shape_representation,
+       shape_representation_relationship,
+       shape_definition_representation);
+
+  USE FROM representation_schema  -- ISO 10303-43
+      (functionally_defined_transformation,
+       item_defined_transformation,
+       global_uncertainty_assigned_context,
+       mapped_item,
+       representation,
+       representation_context,
+       parametric_representation_context,
+       representation_item,
+       representation_map,
+       representation_relationship,
+       representation_relationship_with_transformation,
+       using_representations);
+
+  USE FROM geometry_schema  -- ISO 10303-42
+      (axis1_placement,
+       axis2_placement_2d,
+       axis2_placement_3d,
+       b_spline_curve,
+       b_spline_curve_with_knots,
+       b_spline_surface,
+       b_spline_surface_with_knots,
+       bezier_curve,
+       bezier_surface,
+       boundary_curve,
+       cartesian_point,
+       cartesian_transformation_operator_3d,
+       circle,
+       composite_curve,
+       composite_curve_on_surface,
+       composite_curve_segment,
+       conic,
+       conical_surface,
+       curve,
+       curve_bounded_surface,
+       curve_replica,
+       cylindrical_surface,
+       degenerate_pcurve,
+       degenerate_toroidal_surface,
+       dimension_count,
+       dimension_of,
+       direction,
+       ellipse,
+       evaluated_degenerate_pcurve,
+       geometric_representation_context,
+       geometric_representation_item,
+       hyperbola,
+       intersection_curve,
+       line,
+       offset_curve_3d,
+       offset_surface,
+       outer_boundary_curve,
+       parabola,
+       pcurve,
+       plane,
+       point,
+       point_on_curve,
+       point_on_surface,
+       point_replica,
+       polyline,
+       quasi_uniform_curve,
+       quasi_uniform_surface,
+       rational_b_spline_curve,
+       rational_b_spline_surface,
+       rectangular_composite_surface,
+       rectangular_trimmed_surface,
+       reparametrised_composite_curve_segment,
+       seam_curve,
+       spherical_surface,
+       surface,
+       surface_curve,
+       surface_of_linear_extrusion,
+       surface_of_revolution,
+       surface_replica,
+       swept_surface,
+       toroidal_surface,
+       trimmed_curve,
+       uniform_curve,
+       uniform_surface,
+       vector);
+
+  USE FROM topology_schema  -- ISO 10303-42
+      (closed_shell,
+       connected_edge_set,
+       connected_face_set,
+       edge_curve,
+       edge_loop,
+       face_bound,
+       face_outer_bound,
+       face_surface,
+       open_shell,
+       oriented_closed_shell,
+       oriented_face,
+       path,
+       poly_loop,
+       topological_representation_item,
+       vertex_loop,
+       vertex_point,
+       vertex_shell,
+       wire_shell);
+
+  USE FROM geometric_model_schema  -- ISO 10303-42
+      (brep_with_voids,
+       edge_based_wireframe_model,
+       faceted_brep,
+       geometric_curve_set,
+       geometric_set,
+       manifold_solid_brep,
+       shell_based_surface_model,
+       shell_based_wireframe_model);
+
+  USE FROM action_schema  -- ISO 10303-41
+      (action,
+       action_method,
+       action_request_solution,
+       action_request_status,
+       action_status,
+       action_directive,
+       directed_action,
+       versioned_action_request);
+
+  USE FROM certification_schema  -- ISO 10303-41
+      (certification,
+       certification_type);
+
+  USE FROM approval_schema  -- ISO 10303-41
+      (approval_date_time,
+       approval_person_organization,
+       approval,
+       approval_status,
+       approval_relationship);
+
+  USE FROM contract_schema  -- ISO 10303-41
+      (contract,
+       contract_type);
+
+  USE FROM security_classification_schema   -- ISO 10303-41
+      (security_classification,
+       security_classification_level);
+
+  USE FROM person_organization_schema  -- ISO 10303-41
+      (person_and_organization,
+       organization_relationship,
+       personal_address,
+       organizational_address,
+       organizational_project,
+       person_and_organization_role);
+
+  USE FROM date_time_schema  -- ISO 10303-41
+      (date_and_time,
+       date,
+       calendar_date,
+       ordinal_date,
+       week_of_year_and_day_date,
+       date_time_role);
+
+  USE FROM document_schema  -- ISO 10303-41
+      (document_with_class,
+       document_usage_constraint,
+       document_type,
+       document_relationship);
+
+  USE FROM effectivity_schema  -- ISO 10303-41
+      (effectivity,
+       serial_numbered_effectivity,
+       dated_effectivity,
+       lot_effectivity);
+
+  USE FROM management_resources_schema  -- ISO 10303-41
+      (approval_assignment,
+       certification_assignment,
+       contract_assignment,
+       date_and_time_assignment,
+       person_and_organization_assignment,
+       document_reference,
+       security_classification_assignment,
+       action_assignment,
+       action_request_assignment);
+
+  USE FROM measure_schema -- ISO 10303-41
+      (measure_value,
+       area_measure,
+       count_measure,
+       descriptive_measure,
+       context_dependent_measure,
+       parameter_value,
+       plane_angle_measure,
+       positive_length_measure,
+       positive_plane_angle_measure,
+       mass_measure,
+       solid_angle_measure,
+       volume_measure,
+       named_unit,
+       context_dependent_unit,
+       conversion_based_unit,
+       si_unit,
+       area_unit,
+       length_unit,
+       mass_unit,
+       plane_angle_unit,
+       solid_angle_unit,
+       volume_unit,
+       measure_with_unit,
+       area_measure_with_unit,
+       length_measure_with_unit,
+       mass_measure_with_unit,
+       plane_angle_measure_with_unit,
+       solid_angle_measure_with_unit,
+       volume_measure_with_unit,
+       global_unit_assigned_context);
+
+USE FROM aic_edge_based_wireframe;   -- ISO 10303-501
+
+USE FROM aic_shell_based_wireframe;   -- ISO 10303-502
+
+USE FROM aic_geometrically_bounded_surface;   -- ISO 10303-507
+
+USE FROM aic_manifold_surface;   -- ISO 10303-509
+
+USE FROM aic_geometrically_bounded_wireframe;   -- ISO 10303-510
+
+USE FROM aic_topologically_bounded_surface;   -- ISO 10303-511
+
+USE FROM aic_faceted_brep;   -- ISO 10303-512
+
+USE FROM aic_advanced_brep;   -- ISO 10303-514
+
+CONSTANT
+
+  dummy_gri : geometric_representation_item := representation_item('') ||
+              geometric_representation_item();
+
+  dummy_tri : topological_representation_item := representation_item('') ||
+              topological_representation_item();
+END_CONSTANT;
+
+TYPE work_item = SELECT (product_definition_formation);
+END_TYPE;
+
+TYPE change_request_item = SELECT (product_definition_formation);
+END_TYPE;
+
+TYPE start_request_item = SELECT (product_definition_formation);
+END_TYPE;
+
+TYPE certified_item = SELECT (supplied_part_relationship);
+END_TYPE;
+
+TYPE approved_item = SELECT
+  (product_definition_formation,
+   product_definition,
+   configuration_effectivity,
+   configuration_item,
+   security_classification,
+   change_request,
+   change,
+   start_request,
+   start_work,
+   certification,
+   contract);
+END_TYPE;
+
+TYPE contracted_item = SELECT (product_definition_formation);
+END_TYPE;
+
+TYPE classified_item = SELECT
+  (product_definition_formation,
+   assembly_component_usage);
+END_TYPE;
+
+TYPE person_organization_item = SELECT
+  (change,
+   start_work,
+   change_request,
+   start_request,
+   configuration_item,
+   product,
+   product_definition_formation,
+   product_definition,
+   contract,
+   security_classification);
+END_TYPE;
+
+TYPE date_time_item = SELECT
+  (product_definition,
+   change_request,
+   start_request,
+   change,
+   start_work,
+   approval_person_organization,
+   contract,
+   security_classification,
+   certification);
+END_TYPE;
+
+TYPE specified_item = SELECT
+  (product_definition,
+   shape_aspect);
+END_TYPE;
+
+ENTITY mechanical_context
+  SUBTYPE OF (product_context);
+WHERE
+  WR1: SELF.discipline_type = 'mechanical';
+END_ENTITY;
+
+ENTITY design_context
+  SUBTYPE OF (product_definition_context);
+WHERE
+  WR1: SELF.life_cycle_stage = 'design';
+END_ENTITY;
+
+ENTITY design_make_from_relationship
+  SUBTYPE OF (product_definition_relationship);
+END_ENTITY;
+
+ENTITY supplied_part_relationship
+  SUBTYPE OF (product_definition_relationship);
+END_ENTITY;
+
+ENTITY change_request
+  SUBTYPE OF (action_request_assignment);
+  items : SET [1:?] OF change_request_item;
+END_ENTITY;
+
+ENTITY start_request
+  SUBTYPE OF (action_request_assignment);
+  items : SET [1:?] OF start_request_item;
+END_ENTITY;
+
+ENTITY change
+  SUBTYPE OF (action_assignment);
+  items : SET [1:?] OF work_item;
+END_ENTITY;
+
+ENTITY start_work
+  SUBTYPE OF (action_assignment);
+  items : SET [1:?] OF work_item;
+END_ENTITY;
+
+ENTITY cc_design_certification
+  SUBTYPE OF (certification_assignment);
+  items : SET [1:?] OF certified_item;
+END_ENTITY;
+
+ENTITY cc_design_approval
+  SUBTYPE OF (approval_assignment);
+  items : SET [1:?] OF approved_item;
+END_ENTITY;
+
+ENTITY cc_design_contract
+  SUBTYPE OF (contract_assignment);
+  items : SET [1:?] OF contracted_item;
+END_ENTITY;
+
+ENTITY cc_design_security_classification
+  SUBTYPE OF (security_classification_assignment);
+  items : SET [1:?] OF classified_item;
+END_ENTITY;
+
+ENTITY cc_design_person_and_organization_assignment
+  SUBTYPE OF (person_and_organization_assignment);
+  items : SET [1:?] OF person_organization_item;
+WHERE
+  WR1: cc_design_person_and_organization_correlation (SELF);
+END_ENTITY;
+
+ENTITY cc_design_date_and_time_assignment
+  SUBTYPE OF (date_and_time_assignment);
+  items : SET [1:?] OF date_time_item;
+WHERE
+  WR1: cc_design_date_time_correlation (SELF);
+END_ENTITY;
+
+ENTITY cc_design_specification_reference
+  SUBTYPE OF (document_reference);
+  items : SET [1:?] OF specified_item;
+END_ENTITY;
+
+RULE application_context_requires_ap_definition FOR
+  (application_context, application_protocol_definition);
+WHERE
+  WR1: SIZEOF (QUERY (ac <* application_context |
+       NOT (SIZEOF (QUERY (apd <* application_protocol_definition |
+       (ac :=: apd.application)
+       AND
+       (apd.application_interpreted_model_schema_name =
+       'config_control_design'))) = 1 ))) = 0;
+END_RULE;
+
+RULE subtype_mandatory_product_context FOR (product_context);
+WHERE
+  WR1: SIZEOF ( QUERY (pc <* product_context |
+       NOT ('CONFIG_CONTROL_DESIGN.MECHANICAL_CONTEXT' IN TYPEOF(pc))))
+       = 0;
+END_RULE;
+
+RULE design_context_for_property FOR (product_definition);
+WHERE
+  WR1: SIZEOF (QUERY (pd <* product_definition |
+       (SIZEOF (USEDIN (pd, 'CONFIG_CONTROL_DESIGN.' +
+       'PROPERTY_DEFINITION.DEFINITION') +
+       QUERY (pdr <* USEDIN (pd, 'CONFIG_CONTROL_DESIGN.' +
+       'PRODUCT_DEFINITION_RELATIONSHIP.RELATED_PRODUCT_DEFINITION') |
+       SIZEOF (USEDIN (pdr, 'CONFIG_CONTROL_DESIGN.PROPERTY_DEFINITION.' +
+       'DEFINITION')) >= 1)) >= 1) AND
+       (NOT ('CONFIG_CONTROL_DESIGN.DESIGN_CONTEXT' IN
+       TYPEOF (pd.frame_of_reference))))) = 0;
+END_RULE;
+
+RULE restrict_product_category_value FOR
+  (product_related_product_category);
+WHERE
+   WR1: SIZEOF (QUERY (prpc <*
+       product_related_product_category |
+       NOT( prpc.name IN ['assembly', 'detail',
+       'customer_furnished_equipment', 'inseparable_assembly', 'cast',
+       'coined', 'drawn', 'extruded', 'forged', 'formed', 'machined',
+       'molded', 'rolled', 'sheared']))) = 0;
+END_RULE;
+
+RULE product_requires_product_category FOR
+  (product,product_related_product_category);
+WHERE
+  WR1: SIZEOF (QUERY (prod <* product |
+       NOT (SIZEOF (QUERY (prpc <* product_related_product_category |
+       (prod IN prpc.products) AND
+       (prpc.name IN ['assembly', 'inseparable_assembly', 'detail',
+       'customer_furnished_equipment']))) = 1))) = 0;
+END_RULE;
+
+RULE change_request_requires_approval FOR
+  (change_request, cc_design_approval);
+WHERE
+  WR1: SIZEOF (QUERY (cr <* change_request |
+       NOT (SIZEOF (QUERY (ccda <* cc_design_approval |
+       cr IN ccda.items )) = 1 ))) = 0;
+END_RULE;
+
+RULE change_request_requires_person_organization FOR
+  (change_request,
+  cc_design_person_and_organization_assignment);
+WHERE
+  WR1: SIZEOF (QUERY (cr <* change_request |
+       NOT (SIZEOF (QUERY (ccpoa <*
+       cc_design_person_and_organization_assignment |
+       cr IN ccpoa.items )) >= 1 ))) = 0;
+END_RULE;
+
+RULE change_request_requires_date_time FOR
+  (change_request, cc_design_date_and_time_assignment);
+WHERE
+  WR1: SIZEOF (QUERY (cr <* change_request |
+       NOT (SIZEOF (QUERY (ccdta <* cc_design_date_and_time_assignment |
+       cr IN ccdta.items )) = 1 ))) = 0;
+END_RULE;
+
+RULE change_requires_approval FOR
+  (change, cc_design_approval);
+WHERE
+  WR1: SIZEOF (QUERY (chg <* change |
+       NOT (SIZEOF (QUERY (ccda <* cc_design_approval |
+       chg IN ccda.items )) = 1 ))) = 0;
+END_RULE;
+
+RULE change_requires_date_time FOR
+  (change, cc_design_date_and_time_assignment);
+WHERE
+  WR1: SIZEOF (QUERY (chg <* change |
+       NOT (SIZEOF (QUERY (ccdta <* cc_design_date_and_time_assignment |
+       (chg IN ccdta.items)
+       AND (ccdta.role.name = 'start_date'))) = 1 ))) = 0;
+END_RULE;
+
+RULE start_request_requires_approval FOR
+  (start_request, cc_design_approval);
+WHERE
+  WR1: SIZEOF (QUERY (sr <* start_request |
+       NOT (SIZEOF (QUERY (ccda <* cc_design_approval |
+       sr IN ccda.items )) = 1 ))) = 0;
+END_RULE;
+
+RULE start_request_requires_person_organization FOR (start_request,
+  cc_design_person_and_organization_assignment);
+WHERE
+  WR1: SIZEOF (QUERY (sr <* start_request |
+       NOT (SIZEOF (QUERY (ccdpoa <*
+       cc_design_person_and_organization_assignment |
+       sr IN ccdpoa.items )) >= 1 ))) = 0;
+END_RULE;
+
+RULE start_request_requires_date_time FOR
+  (start_request, cc_design_date_and_time_assignment);
+WHERE
+  WR1: SIZEOF (QUERY (sr <* start_request |
+       NOT (SIZEOF (QUERY (ccdta <* cc_design_date_and_time_assignment |
+       sr IN ccdta.items )) = 1 ))) = 0;
+END_RULE;
+
+RULE start_work_requires_approval FOR
+  (start_work, cc_design_approval);
+WHERE
+  WR1: SIZEOF (QUERY (sw <* start_work |
+       NOT (SIZEOF (QUERY (ccda <* cc_design_approval |
+       sw IN ccda.items )) = 1 ))) = 0;
+END_RULE;
+
+RULE start_work_requires_date_time FOR
+  (start_work, cc_design_date_and_time_assignment);
+WHERE
+  WR1: SIZEOF (QUERY (sw <* start_work |
+       NOT (SIZEOF (QUERY (ccdta <* cc_design_date_and_time_assignment |
+       (sw IN ccdta.items)
+       AND (ccdta.role.name = 'start_date'))) = 1 ))) = 0;
+END_RULE;
+
+RULE restrict_action_request_status FOR (action_request_status);
+WHERE
+  WR1: SIZEOF (QUERY (ars <* action_request_status |
+       NOT (ars.status IN ['proposed', 'in_work', 'issued', 'hold']))) = 0;
+END_RULE;
+
+RULE versioned_action_request_requires_status FOR
+  (versioned_action_request, action_request_status);
+WHERE
+  WR1: SIZEOF (QUERY (ar <* versioned_action_request |
+       NOT (SIZEOF (QUERY (ars <* action_request_status |
+       ar :=: ars.assigned_request)) = 1))) = 0;
+END_RULE;
+
+RULE versioned_action_request_requires_solution FOR
+  (versioned_action_request, action_request_solution);
+WHERE
+  WR1: SIZEOF (QUERY (ar <* versioned_action_request |
+       NOT (SIZEOF (QUERY (ars <* action_request_solution |
+       ar :=: ars.request)) >= 1))) = 0;
+END_RULE;
+
+RULE unique_version_change_order_rule FOR (change);
+WHERE
+  WR1: SIZEOF (QUERY (c <* change |
+       NOT (unique_version_change_order (c.assigned_action)))) = 0;
+END_RULE;
+
+RULE product_requires_version FOR (product, product_definition_formation);
+WHERE
+  WR1: SIZEOF (QUERY (prod <* product |
+       NOT (SIZEOF (QUERY (pdf <* product_definition_formation |
+       prod :=: pdf.of_product )) >= 1 ))) = 0;
+END_RULE;
+
+RULE product_requires_person_organization FOR
+  (product, cc_design_person_and_organization_assignment);
+WHERE
+  WR1: SIZEOF (QUERY (prod <* product |
+       NOT (SIZEOF (QUERY (ccdpoa <*
+       cc_design_person_and_organization_assignment |
+       prod IN ccdpoa.items )) = 1 ))) = 0;
+END_RULE;
+
+RULE product_version_requires_approval FOR  (product_definition_formation,
+  cc_design_approval);
+WHERE
+  WR1: SIZEOF (QUERY (pdf <* product_definition_formation |
+       NOT (SIZEOF (QUERY (ccda <* cc_design_approval |
+       pdf IN ccda.items )) = 1 ))) = 0;
+END_RULE;
+
+RULE product_version_requires_person_organization FOR
+  (product_definition_formation,
+  cc_design_person_and_organization_assignment);
+WHERE
+  WR1: SIZEOF (QUERY (pdf <* product_definition_formation |
+       NOT (SIZEOF (QUERY (ccdpoa <*
+       cc_design_person_and_organization_assignment |
+       (pdf IN ccdpoa.items) AND (ccdpoa.role.name = 'creator'))) = 1 )))
+       = 0;
+  WR2: SIZEOF (QUERY (pdf <* product_definition_formation |
+       NOT (SIZEOF (QUERY (ccdpoa <*
+       cc_design_person_and_organization_assignment |
+       (pdf IN ccdpoa.items) AND
+       (ccdpoa.role.name IN ['design_supplier', 'part_supplier']))) >= 1)))
+       = 0;
+END_RULE;
+
+RULE product_version_requires_security_classification FOR
+  (product_definition_formation, cc_design_security_classification);
+WHERE
+  WR1: SIZEOF (QUERY (pdf <* product_definition_formation |
+       NOT (SIZEOF (QUERY (ccdsc <* cc_design_security_classification |
+       pdf IN ccdsc.items )) = 1 ))) = 0;
+END_RULE;
+
+RULE product_definition_requires_person_organization FOR
+  (product_definition,
+  cc_design_person_and_organization_assignment);
+WHERE
+  WR1: SIZEOF (QUERY (pd <* product_definition |
+       NOT (SIZEOF (QUERY (ccdpoa <*
+       cc_design_person_and_organization_assignment |
+       pd IN ccdpoa.items )) = 1 ))) = 0;
+END_RULE;
+
+RULE product_definition_requires_approval FOR
+  (product_definition, cc_design_approval);
+WHERE
+  WR1: SIZEOF (QUERY (pd <* product_definition |
+       NOT (SIZEOF (QUERY (ccda <* cc_design_approval |
+       pd IN ccda.items )) = 1 ))) = 0;
+END_RULE;
+
+RULE product_definition_requires_date_time FOR
+  (product_definition, cc_design_date_and_time_assignment);
+WHERE
+  WR1: SIZEOF (QUERY (pd <* product_definition |
+       NOT (SIZEOF (QUERY (ccdta <* cc_design_date_and_time_assignment |
+       pd IN ccdta.items )) = 1 ))) = 0;
+END_RULE;
+
+RULE certification_requires_approval FOR (certification,
+  cc_design_approval);
+WHERE
+  WR1: SIZEOF (QUERY (cert <* certification |
+       NOT (SIZEOF (QUERY (ccda <* cc_design_approval |
+       cert IN ccda.items )) = 1 ))) = 0;
+END_RULE;
+
+RULE restrict_certification_type FOR (certification_type);
+WHERE
+  WR1: SIZEOF (QUERY (ct <* certification_type |
+       NOT (ct.description IN ['design_supplier', 'part_supplier']))) = 0;
+END_RULE;
+
+RULE certification_requires_date_time FOR
+  (certification, cc_design_date_and_time_assignment);
+WHERE
+  WR1: SIZEOF (QUERY (cert <* certification |
+       NOT (SIZEOF (QUERY (ccdta <* cc_design_date_and_time_assignment |
+       cert IN ccdta.items )) = 1 ))) = 0;
+END_RULE;
+
+RULE approvals_are_assigned FOR
+  (approval, approval_assignment);
+WHERE
+  WR1: SIZEOF (QUERY (app <* approval |
+       NOT (SIZEOF (QUERY (aa <* approval_assignment |
+       app :=: aa.assigned_approval )) >= 1 ))) = 0;
+END_RULE;
+
+RULE approval_requires_approval_person_organization FOR
+  (approval, approval_person_organization);
+WHERE
+  WR1: SIZEOF (QUERY (app <* approval |
+       NOT (SIZEOF (QUERY (apo <* approval_person_organization |
+       app :=: apo.authorized_approval )) >= 1 ))) = 0;
+END_RULE;
+
+RULE approval_requires_approval_date_time FOR (approval,
+  approval_date_time);
+WHERE
+  WR1: SIZEOF (QUERY (app <* approval |
+       NOT (SIZEOF (QUERY (adt <* approval_date_time |
+       app :=: adt.dated_approval )) = 1 ))) = 0;
+END_RULE;
+
+RULE restrict_approval_status FOR (approval_status);
+WHERE
+  WR1: SIZEOF (QUERY (ast <* approval_status |
+       NOT (ast.name IN
+       ['approved', 'not_yet_approved', 'disapproved', 'withdrawn']))) = 0;
+END_RULE;
+
+RULE contract_requires_approval FOR (contract,
+  cc_design_approval);
+WHERE
+  WR1: SIZEOF (QUERY (c <* contract |
+       NOT (SIZEOF (QUERY (ccda <* cc_design_approval |
+       c IN ccda.items )) = 1 ))) = 0;
+END_RULE;
+
+RULE contract_requires_person_organization FOR
+  (contract, cc_design_person_and_organization_assignment);
+WHERE
+  WR1: SIZEOF (QUERY (c <* contract |
+       NOT (SIZEOF (QUERY (ccdpoa <*
+       cc_design_person_and_organization_assignment |
+       c IN ccdpoa.items )) = 1 ))) = 0;
+END_RULE;
+
+RULE restrict_contract_type FOR (contract_type);
+WHERE
+  WR1: SIZEOF (QUERY (ct <* contract_type |
+       NOT (ct.description IN ['fixed_price', 'cost_plus']))) = 0;
+END_RULE;
+
+RULE security_classification_requires_approval FOR
+  (security_classification, cc_design_approval);
+WHERE
+  WR1: SIZEOF (QUERY (sc <* security_classification |
+       NOT (SIZEOF (QUERY (ccda <* cc_design_approval |
+       sc IN ccda.items )) = 1 ))) = 0;
+END_RULE;
+
+RULE security_classification_requires_person_organization FOR
+  (security_classification,
+  cc_design_person_and_organization_assignment);
+WHERE
+  WR1: SIZEOF (QUERY (sc <* security_classification |
+       NOT (SIZEOF (QUERY (ccdpoa <*
+       cc_design_person_and_organization_assignment |
+       sc IN ccdpoa.items )) = 1 ))) = 0;
+END_RULE;
+
+RULE security_classification_requires_date_time FOR
+  (security_classification, cc_design_date_and_time_assignment);
+WHERE
+  WR1: SIZEOF (QUERY (sc <* security_classification |
+       NOT (SIZEOF (QUERY (ccdta <* cc_design_date_and_time_assignment |
+       (sc IN ccdta.items) AND
+       ('classification_date' = ccdta.role.name))) = 1 ))) = 0;
+END_RULE;
+
+RULE security_classification_optional_date_time FOR
+  (security_classification, cc_design_date_and_time_assignment);
+WHERE
+  WR1: SIZEOF (QUERY (sc <* security_classification |
+       NOT (SIZEOF (QUERY (ccdta <* cc_design_date_and_time_assignment |
+       (sc IN ccdta.items) AND
+       ('declassification_date' = ccdta.role.name))) <= 1 ))) = 0;
+END_RULE;
+
+RULE restrict_security_classification_level FOR
+  (security_classification_level);
+WHERE
+  WR1: SIZEOF (QUERY (scl <* security_classification_level |
+       NOT (scl.name IN ['unclassified', 'classified', 'proprietary',
+       'confidential',  'secret', 'top_secret']))) = 0;
+END_RULE;
+
+RULE restrict_person_organization_role FOR
+  (person_and_organization_role);
+WHERE
+  WR1: SIZEOF (QUERY (por <* person_and_organization_role |
+       NOT (por.name IN ['request_recipient', 'initiator', 'part_supplier',
+       'design_supplier', 'configuration_manager', 'contractor',
+       'classification_officer', 'creator', 'design_owner']))) = 0;
+END_RULE;
+
+RULE restrict_date_time_role FOR (date_time_role);
+WHERE
+  WR1: SIZEOF (QUERY (dtr <* date_time_role |
+       NOT (dtr.name IN ['creation_date', 'request_date', 'release_date',
+       'start_date', 'contract_date', 'certification_date',
+       'sign_off_date', 'classification_date',
+     'declassification_date']))) = 0;
+END_RULE;
+
+RULE restrict_document_type FOR (document_type);
+WHERE
+  WR1: SIZEOF (QUERY (dt <* document_type |
+       NOT (dt.product_data_type IN ['material_specification',
+       'process_specification', 'design_specification',
+       'surface_finish_specification', 'cad_filename', 'drawing']))) = 0;
+END_RULE;
+
+RULE document_to_product_definition FOR
+  (cc_design_specification_reference);
+WHERE
+  WR1: SIZEOF (QUERY (sp <* cc_design_specification_reference |
+       NOT (((('CONFIG_CONTROL_DESIGN.DOCUMENT_RELATIONSHIP.' +
+       'RELATING_DOCUMENT' IN
+       ROLESOF (sp\document_reference.assigned_document)) AND
+       (SIZEOF (QUERY (it <* sp.items |
+       NOT('CONFIG_CONTROL_DESIGN.PRODUCT_DEFINITION' IN
+       TYPEOF (it)))) = 0)))
+       OR
+       (NOT ('CONFIG_CONTROL_DESIGN.DOCUMENT_RELATIONSHIP.' +
+       'RELATING_DOCUMENT' IN
+       ROLESOF (sp\document_reference.assigned_document)))))) = 0;
+END_RULE;
+
+RULE as_required_quantity FOR (measure_with_unit);
+WHERE
+  WR1: SIZEOF (QUERY (m <* measure_with_unit |
+       ('CONFIG_CONTROL_DESIGN.DESCRIPTIVE_MEASURE' IN
+       TYPEOF (m.value_component)) AND
+       (NOT (m.value_component = 'as_required')))) = 0;
+END_RULE;
+
+RULE global_unit_assignment FOR (global_unit_assigned_context);
+WHERE
+  WR1: SIZEOF (QUERY (guac <* global_unit_assigned_context |
+       NOT (SIZEOF (guac.units) = 3))) = 0;
+  WR2: SIZEOF (QUERY (guac <* global_unit_assigned_context |
+       NOT ((SIZEOF (QUERY (u <* guac.units |
+       'CONFIG_CONTROL_DESIGN.LENGTH_UNIT' IN TYPEOF (u))) = 1) AND
+       (SIZEOF (QUERY (u <* guac.units |
+       'CONFIG_CONTROL_DESIGN.PLANE_ANGLE_UNIT' IN TYPEOF (u))) = 1) AND
+       (SIZEOF (QUERY (u <* guac.units |
+       'CONFIG_CONTROL_DESIGN.SOLID_ANGLE_UNIT' IN TYPEOF (u))) = 1
+       )))) = 0;
+END_RULE;
+
+RULE subtype_mandatory_action FOR
+  (action);
+WHERE
+  WR1: SIZEOF (QUERY (act <* action |
+       NOT ('CONFIG_CONTROL_DESIGN.DIRECTED_ACTION' IN
+       TYPEOF (act)))) = 0;
+END_RULE;
+
+RULE subtype_mandatory_product_definition_formation FOR
+  (product_definition_formation);
+WHERE
+  WR1: SIZEOF (QUERY (pdf <* product_definition_formation |
+       NOT ('CONFIG_CONTROL_DESIGN.' +
+       'PRODUCT_DEFINITION_FORMATION_WITH_SPECIFIED_SOURCE' IN
+       TYPEOF (pdf)))) = 0;
+END_RULE;
+
+RULE dependent_instantiable_date FOR (date);
+WHERE
+  WR1: SIZEOF (QUERY (dt <* date |
+       NOT (SIZEOF (USEDIN (dt, '')) >= 1))) = 0;
+END_RULE;
+
+RULE dependent_instantiable_shape_representation FOR
+  (shape_representation);
+WHERE
+  WR1: SIZEOF (QUERY (sr <* shape_representation |
+       NOT (SIZEOF (USEDIN (sr, '')) >= 1))) = 0;
+END_RULE;
+
+RULE dependent_instantiable_named_unit FOR (named_unit);
+WHERE
+  WR1: SIZEOF (QUERY (nu <* named_unit |
+       NOT (SIZEOF (USEDIN (nu, '')) >= 1))) = 0;
+END_RULE;
+
+RULE dependent_instantiable_representation_item FOR (representation_item);
+WHERE
+  WR1: SIZEOF (QUERY (ri <* representation_item |
+       NOT (SIZEOF (USEDIN (ri, '')) >= 1))) = 0;
+END_RULE;
+
+RULE dependent_instantiable_date_time_role FOR (date_time_role);
+WHERE
+  WR1: SIZEOF (QUERY (dtr <* date_time_role |
+       NOT (SIZEOF (USEDIN (dtr, '')) >= 1))) = 0;
+END_RULE;
+
+RULE dependent_instantiable_person_and_organization_role FOR
+  (person_and_organization_role);
+WHERE
+  WR1: SIZEOF (QUERY (poar <* person_and_organization_role |
+       NOT (SIZEOF (USEDIN (poar, '')) >= 1))) = 0;
+END_RULE;
+
+RULE dependent_instantiable_action_directive FOR (action_directive);
+WHERE
+  WR1: SIZEOF (QUERY (ad <* action_directive |
+       NOT (SIZEOF (USEDIN (ad, '')) >= 1))) = 0;
+END_RULE;
+
+RULE dependent_instantiable_security_classification_level FOR
+  (security_classification_level);
+WHERE
+  WR1: SIZEOF (QUERY (scl <* security_classification_level |
+       NOT (SIZEOF (USEDIN (scl, '')) >= 1))) = 0;
+END_RULE;
+
+RULE dependent_instantiable_approval_status FOR (approval_status);
+WHERE
+  WR1: SIZEOF (QUERY (ast <* approval_status |
+       NOT (SIZEOF (USEDIN (ast, '')) >= 1))) = 0;
+END_RULE;
+
+RULE dependent_instantiable_document_type FOR (document_type);
+WHERE
+  WR1: SIZEOF (QUERY (dt <* document_type |
+       NOT (SIZEOF (USEDIN (dt, '')) >= 1))) = 0;
+END_RULE;
+
+RULE dependent_instantiable_contract_type FOR (contract_type);
+WHERE
+  WR1: SIZEOF (QUERY (ct <* contract_type |
+       NOT (SIZEOF (USEDIN (ct, '')) >= 1))) = 0;
+END_RULE;
+
+RULE dependent_instantiable_certification_type FOR (certification_type);
+WHERE
+  WR1: SIZEOF (QUERY (ct <* certification_type |
+       NOT (SIZEOF (USEDIN (ct, '')) >= 1))) = 0;
+END_RULE;
+
+RULE product_concept_requires_configuration_item FOR
+  (product_concept, configuration_item);
+WHERE
+  WR1: SIZEOF (QUERY (pc <* product_concept |
+       NOT (SIZEOF (QUERY (ci <* configuration_item |
+       pc :=: ci.item_concept)) >=1 ))) = 0;
+END_RULE;
+
+RULE configuration_item_requires_person_organization FOR
+  (configuration_item,
+  cc_design_person_and_organization_assignment);
+WHERE
+  WR1: SIZEOF (QUERY (ci <* configuration_item |
+       NOT (SIZEOF (QUERY (ccdpoa <*
+       cc_design_person_and_organization_assignment |
+       ci IN ccdpoa.items )) = 1 ))) = 0;
+END_RULE;
+
+RULE subtype_mandatory_effectivity FOR (effectivity);
+WHERE
+  WR1: SIZEOF (QUERY (eff <* effectivity |
+       NOT ((SIZEOF (['CONFIG_CONTROL_DESIGN.SERIAL_NUMBERED_EFFECTIVITY',
+       'CONFIG_CONTROL_DESIGN.LOT_EFFECTIVITY',
+       'CONFIG_CONTROL_DESIGN.DATED_EFFECTIVITY'] *
+       TYPEOF (eff)) = 1) AND
+       ('CONFIG_CONTROL_DESIGN.CONFIGURATION_EFFECTIVITY' IN
+       TYPEOF(eff))))) = 0;
+END_RULE;
+
+RULE effectivity_requires_approval FOR
+  (effectivity, cc_design_approval);
+WHERE
+  WR1: SIZEOF (QUERY (eff <* effectivity |
+       NOT (SIZEOF (QUERY (ccda <* cc_design_approval |
+       eff IN ccda.items )) = 1 ))) = 0;
+END_RULE;
+
+RULE configuration_item_requires_approval FOR
+  (configuration_item, cc_design_approval);
+WHERE
+  WR1: SIZEOF (QUERY (ci <* configuration_item |
+       NOT (SIZEOF (QUERY (ccda <* cc_design_approval |
+       ci IN ccda.items )) = 1 ))) = 0;
+END_RULE;
+
+RULE coordinated_assembly_and_shape FOR
+  (next_assembly_usage_occurrence);
+WHERE
+  WR1: SIZEOF (QUERY (nauo <* next_assembly_usage_occurrence |
+       NOT (assembly_shape_is_defined (nauo, 'CONFIG_CONTROL_DESIGN'))))
+       = 0;
+END_RULE;
+
+RULE subtype_mandatory_product_definition_usage FOR
+  (product_definition_usage);
+WHERE
+  WR1: SIZEOF (QUERY (pdu <* product_definition_usage |
+       NOT ('CONFIG_CONTROL_DESIGN.' +
+       'ASSEMBLY_COMPONENT_USAGE' IN TYPEOF (pdu)))) = 0;
+END_RULE;
+
+RULE acu_requires_security_classification FOR
+  (assembly_component_usage,
+   cc_design_security_classification);
+WHERE
+  WR1: SIZEOF (QUERY (acu <* assembly_component_usage |
+       NOT (SIZEOF (QUERY (ccdsc <* cc_design_security_classification |
+       acu IN ccdsc.items )) = 1 ))) = 0;
+END_RULE;
+
+RULE geometric_representation_item_3d FOR
+  (geometric_representation_item);
+WHERE
+  WR1: SIZEOF (QUERY (gri <* geometric_representation_item |
+       NOT ((dimension_of (gri) = 3) OR
+       (SIZEOF (QUERY (ur <* using_representations(gri) |
+       'CONFIG_CONTROL_DESIGN.DEFINITIONAL_REPRESENTATION'
+       IN TYPEOF(ur))) > 0)))) = 0;
+END_RULE;
+
+RULE dependent_instantiable_parametric_representation_context FOR
+  (parametric_representation_context);
+WHERE
+  WR1: SIZEOF (QUERY (prc <* parametric_representation_context |
+       NOT (SIZEOF (USEDIN (prc, '')) >= 1))) = 0;
+END_RULE;
+
+RULE subtype_mandatory_shape_representation FOR
+  (shape_representation);
+WHERE
+  WR1: SIZEOF (QUERY (sr <* shape_representation |
+       NOT ((SIZEOF (['CONFIG_CONTROL_DESIGN.' +
+       'ADVANCED_BREP_SHAPE_REPRESENTATION',
+       'CONFIG_CONTROL_DESIGN.FACETED_BREP_SHAPE_REPRESENTATION',
+       'CONFIG_CONTROL_DESIGN.MANIFOLD_SURFACE_SHAPE_REPRESENTATION',
+       'CONFIG_CONTROL_DESIGN.EDGE_BASED_WIREFRAME_SHAPE_REPRESENTATION',
+       'CONFIG_CONTROL_DESIGN.SHELL_BASED_WIREFRAME_SHAPE_REPRESENTATION',
+       'CONFIG_CONTROL_DESIGN.' +
+       'GEOMETRICALLY_BOUNDED_SURFACE_SHAPE_REPRESENTATION',
+       'CONFIG_CONTROL_DESIGN.' +
+       'GEOMETRICALLY_BOUNDED_WIREFRAME_SHAPE_REPRESENTATION'] *
+       TYPEOF (sr)) = 1) OR
+       (SIZEOF (QUERY (it <* sr\representation.items |
+       NOT ('CONFIG_CONTROL_DESIGN.AXIS2_PLACEMENT_3D' IN TYPEOF (it))))
+       = 0) OR
+       (SIZEOF (QUERY (sdr <* QUERY (pdr <* USEDIN (sr,
+       'CONFIG_CONTROL_DESIGN.PROPERTY_DEFINITION_REPRESENTATION.' +
+       'USED_REPRESENTATION') |
+       'CONFIG_CONTROL_DESIGN.SHAPE_DEFINITION_REPRESENTATION' IN
+       TYPEOF (pdr)) |
+       NOT (SIZEOF (['CONFIG_CONTROL_DESIGN.SHAPE_ASPECT',
+       'CONFIG_CONTROL_DESIGN.SHAPE_ASPECT_RELATIONSHIP'] * TYPEOF
+       (sdr.definition.definition)) = 1))) = 0)))) = 0;
+END_RULE;
+
+RULE subtype_mandatory_representation FOR (representation);
+WHERE
+  WR1: SIZEOF (QUERY (rep <* representation |
+       NOT ('CONFIG_CONTROL_DESIGN.SHAPE_REPRESENTATION' IN
+       TYPEOF (rep)))) = 0;
+END_RULE;
+
+RULE subtype_mandatory_representation_context FOR (representation_context);
+WHERE
+  WR1: SIZEOF (QUERY (rep_cntxt <* representation_context |
+       NOT ('CONFIG_CONTROL_DESIGN.GEOMETRIC_REPRESENTATION_CONTEXT' IN
+       TYPEOF (rep_cntxt)))) = 0;
+END_RULE;
+
+RULE no_shape_for_make_from FOR
+  (design_make_from_relationship);
+WHERE
+  WR1: SIZEOF (QUERY (dmfr <* design_make_from_relationship |
+       NOT (SIZEOF (QUERY (pd <* USEDIN (dmfr, 'CONFIG_CONTROL_DESIGN.' +
+       'PROPERTY_DEFINITION.DEFINITION') |
+       'CONFIG_CONTROL_DESIGN.PRODUCT_DEFINITION_SHAPE' IN TYPEOF (pd))) =
+       0))) = 0;
+END_RULE;
+
+RULE no_shape_for_supplied_part FOR
+  (supplied_part_relationship);
+WHERE
+  WR1: SIZEOF (QUERY (spr <* supplied_part_relationship |
+       NOT (SIZEOF (QUERY (pd <* USEDIN (spr, 'CONFIG_CONTROL_DESIGN.' +
+       'PROPERTY_DEFINITION.DEFINITION') |
+       'CONFIG_CONTROL_DESIGN.PRODUCT_DEFINITION_SHAPE' IN TYPEOF (pd))) =
+       0))) = 0;
+END_RULE;
+
+RULE approval_date_time_constraints FOR (approval_date_time);
+WHERE
+  WR1: SIZEOF (QUERY (adt <* approval_date_time |
+       NOT (SIZEOF (TYPEOF(adt.date_time) *
+       ['CONFIG_CONTROL_DESIGN.DATE_AND_TIME']) = 1)))=0;
+END_RULE;
+
+RULE approval_person_organization_constraints FOR
+  (approval_person_organization);
+WHERE
+  WR1: SIZEOF (QUERY (apo <* approval_person_organization |
+       NOT (SIZEOF (TYPEOF(apo.person_organization) *
+       ['CONFIG_CONTROL_DESIGN.PERSON_AND_ORGANIZATION']) = 1)))=0;
+END_RULE;
+
+FUNCTION unique_version_change_order (c : action) : BOOLEAN;
+  LOCAL
+    ords       : action_directive := c\directed_action.directive;
+    assign     : SET OF change_request := [];
+    versions   : SET OF product_definition_formation := [];
+  END_LOCAL;
+
+  -- build the set of change_requests that are the assigned
+  -- versioned_action_requests incorporated by the action_directive
+
+  REPEAT i := 1 TO SIZEOF(ords.requests);
+  assign := assign + QUERY (ara <* bag_to_set (USEDIN (ords.requests[i],
+            'CONFIG_CONTROL_DESIGN.ACTION_REQUEST_ASSIGNMENT.' +
+            'ASSIGNED_ACTION_REQUEST')) |
+            'CONFIG_CONTROL_DESIGN.CHANGE_REQUEST' IN TYPEOF (ara));
+  END_REPEAT;
+
+  -- gather the product_definition_formations that are referenced by the
+  -- change_requests
+
+  REPEAT k := 1 TO SIZEOF(assign);
+    versions := versions + assign[k].items;
+  END_REPEAT;
+
+  -- check that no product_definition_formation reference the same
+  -- instance of product
+
+  RETURN (SIZEOF (QUERY (vers <* versions |
+          NOT (SIZEOF (QUERY (other_vers <* versions - vers |
+          vers.of_product :=: other_vers.of_product)) = 0))) = 0);
+END_FUNCTION;
+
+FUNCTION cc_design_person_and_organization_correlation
+  (e : cc_design_person_and_organization_assignment ) : BOOLEAN;
+  LOCAL
+    po_role : STRING;
+  END_LOCAL;
+    po_role := e\person_and_organization_assignment.role.name;
+  CASE po_role OF
+    'request_recipient'      : IF SIZEOF (e.items) <>
+                                 SIZEOF (QUERY (x <* e.items |
+                                 SIZEOF(['CONFIG_CONTROL_DESIGN.' +
+                                 'CHANGE_REQUEST',
+                                 'CONFIG_CONTROL_DESIGN.' +
+                                 'START_REQUEST'] *
+                                 TYPEOF (x)) = 1))
+                                 THEN RETURN(FALSE);
+                               END_IF;
+    'initiator'              : IF SIZEOF (e.items) <>
+                                 SIZEOF (QUERY (x <* e.items |
+                                 SIZEOF(['CONFIG_CONTROL_DESIGN.' +
+                                 'CHANGE_REQUEST',
+                                 'CONFIG_CONTROL_DESIGN.' +
+                                 'START_REQUEST',
+                                 'CONFIG_CONTROL_DESIGN.' +
+                                 'START_WORK',
+                                 'CONFIG_CONTROL_DESIGN.' +
+                                 'CHANGE'] *
+                                 TYPEOF (x)) = 1))
+                                 THEN RETURN(FALSE);
+                               END_IF;
+    'creator'                : IF SIZEOF (e.items) <>
+                                 SIZEOF (QUERY (x <* e.items |
+                                 SIZEOF (['CONFIG_CONTROL_DESIGN.' +
+                                 'PRODUCT_DEFINITION_FORMATION',
+                                 'CONFIG_CONTROL_DESIGN.' +
+                                 'PRODUCT_DEFINITION'] *
+                                 TYPEOF (x)) = 1))
+                                 THEN RETURN (FALSE);
+                               END_IF;
+    'part_supplier'          : IF SIZEOF (e.items) <>
+                                 SIZEOF (QUERY (x <* e.items |
+                                 'CONFIG_CONTROL_DESIGN.' +
+                                 'PRODUCT_DEFINITION_FORMATION'
+                                 IN TYPEOF (x)))
+                                 THEN RETURN(FALSE);
+                               END_IF;
+    'design_supplier'        : IF SIZEOF (e.items) <>
+                                 SIZEOF (QUERY (x <* e.items |
+                                 'CONFIG_CONTROL_DESIGN.' +
+                                 'PRODUCT_DEFINITION_FORMATION'
+                                 IN TYPEOF (x)))
+                                 THEN RETURN(FALSE);
+                               END_IF;
+    'design_owner'           : IF SIZEOF (e.items) <>
+                                 SIZEOF (QUERY (x <* e.items |
+                                 'CONFIG_CONTROL_DESIGN.PRODUCT'
+                                 IN TYPEOF (x)))
+                                 THEN RETURN(FALSE);
+                               END_IF;
+    'configuration_manager'  : IF SIZEOF (e.items) <>
+                                 SIZEOF (QUERY (x <* e.items |
+                                 'CONFIG_CONTROL_DESIGN.' +
+                                 'CONFIGURATION_ITEM'
+                                 IN TYPEOF (x)))
+                                 THEN RETURN(FALSE);
+                               END_IF;
+    'contractor'             : IF SIZEOF (e.items) <>
+                                 SIZEOF (QUERY (x <* e.items |
+                                 'CONFIG_CONTROL_DESIGN.CONTRACT'
+                                 IN TYPEOF (x))) THEN RETURN(FALSE);
+                               END_IF;
+    'classification_officer' : IF SIZEOF (e.items) <>
+                                 SIZEOF (QUERY (x <* e.items |
+                                 'CONFIG_CONTROL_DESIGN.' +
+                                 'SECURITY_CLASSIFICATION'
+                                 IN TYPEOF (x))) THEN RETURN(FALSE);
+                               END_IF;
+    OTHERWISE : RETURN(TRUE);
+  END_CASE;
+  RETURN (TRUE);
+END_FUNCTION;
+
+FUNCTION cc_design_date_time_correlation
+  (e : cc_design_date_and_time_assignment ) : BOOLEAN;
+  LOCAL
+    dt_role : STRING;
+  END_LOCAL;
+    dt_role := e\date_and_time_assignment.role.name;
+  CASE dt_role OF
+    'creation_date'         : IF SIZEOF (e.items) <>
+                                SIZEOF (QUERY (x <* e.items |
+                                'CONFIG_CONTROL_DESIGN.' +
+                                'PRODUCT_DEFINITION'
+                                IN TYPEOF (x)))
+                                THEN RETURN(FALSE);
+                              END_IF;
+    'request_date'         : IF SIZEOF (e.items) <>
+                                SIZEOF (QUERY (x <* e.items |
+                                SIZEOF (
+                                ['CONFIG_CONTROL_DESIGN.CHANGE_REQUEST',
+                                'CONFIG_CONTROL_DESIGN.START_REQUEST'] *
+                                TYPEOF (x)) = 1))
+                                THEN RETURN(FALSE);
+                              END_IF;
+    'release_date'         : IF SIZEOF (e.items) <>
+                                SIZEOF (QUERY (x <* e.items |
+                                SIZEOF (
+                                ['CONFIG_CONTROL_DESIGN.CHANGE',
+                                'CONFIG_CONTROL_DESIGN.START_WORK'] *
+                                TYPEOF (x)) = 1))
+                                THEN RETURN(FALSE);
+                              END_IF;
+    'start_date'          : IF SIZEOF (e.items) <>
+                                SIZEOF (QUERY (x <* e.items |
+                                SIZEOF (
+                                ['CONFIG_CONTROL_DESIGN.CHANGE',
+                                'CONFIG_CONTROL_DESIGN.START_WORK'] *
+                                TYPEOF (x)) = 1))
+                                THEN RETURN(FALSE);
+                              END_IF;
+    'sign_off_date'         : IF SIZEOF (e.items) <>
+                                SIZEOF (QUERY (x <* e.items |
+                                'CONFIG_CONTROL_DESIGN.' +
+                                'APPROVAL_PERSON_ORGANIZATION'
+                                IN TYPEOF (x)))
+                                THEN RETURN(FALSE);
+                              END_IF;
+    'contract_date'         : IF SIZEOF (e.items) <>
+                                SIZEOF (QUERY (x <* e.items |
+                                'CONFIG_CONTROL_DESIGN.CONTRACT'
+                                IN TYPEOF (x)))
+                                THEN RETURN(FALSE);
+                              END_IF;
+    'certification_date'    : IF SIZEOF (e.items) <>
+                                SIZEOF (QUERY (x <* e.items |
+                                'CONFIG_CONTROL_DESIGN.CERTIFICATION'
+                                IN TYPEOF (x)))
+                                THEN RETURN(FALSE);
+                              END_IF;
+    'classification_date'   : IF SIZEOF (e.items) <>
+                                SIZEOF (QUERY (x <* e.items |
+                                'CONFIG_CONTROL_DESIGN.' +
+                                'SECURITY_CLASSIFICATION'
+                                IN TYPEOF (x)))
+                                THEN RETURN(FALSE);
+                              END_IF;
+    'declassification_date' : IF SIZEOF (e.items) <>
+                                SIZEOF (QUERY (x <* e.items |
+                                'CONFIG_CONTROL_DESIGN.' +
+                                'SECURITY_CLASSIFICATION'
+                                IN TYPEOF (x)))
+                                THEN RETURN(FALSE);
+                              END_IF;
+    OTHERWISE : RETURN(TRUE);
+  END_CASE;
+  RETURN (TRUE);
+END_FUNCTION;
+
+FUNCTION assembly_shape_is_defined(
+             assy: next_assembly_usage_occurrence;
+             schma: STRING
+    ): BOOLEAN;
+
+  LOCAL
+    srr_set   : SET OF shape_representation_relationship := [];
+    i         : INTEGER;
+    j         : INTEGER;
+    sdr_set   : SET OF shape_definition_representation := [];
+    pr1_set   : SET OF property_definition := [];
+    pdrel_set : SET OF product_definition_relationship := [];
+    pr2_set   : SET OF property_definition := [];
+  END_LOCAL;
+  pr1_set := bag_to_set(USEDIN(assy.related_product_definition,schma +
+      '.PROPERTY_DEFINITION.DEFINITION'));
+  REPEAT i := 1 TO HIINDEX(pr1_set) BY 1;
+    sdr_set := sdr_set + QUERY ( pdr <* USEDIN(pr1_set[i],schma +
+        '.PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') | ((schma +
+        '.SHAPE_DEFINITION_REPRESENTATION') IN TYPEOF(pdr)) );
+  END_REPEAT;
+  pdrel_set := bag_to_set(USEDIN(assy.related_product_definition,schma +
+       '.PRODUCT_DEFINITION_RELATIONSHIP.' +
+       'RELATED_PRODUCT_DEFINITION'));
+  REPEAT j := 1 TO HIINDEX(pdrel_set) BY 1;
+    pr2_set := pr2_set + USEDIN(pdrel_set[j],schma +
+        '.PROPERTY_DEFINITION.DEFINITION');
+  END_REPEAT;
+  REPEAT i := 1 TO HIINDEX(pr2_set) BY 1;
+    sdr_set := sdr_set + QUERY ( pdr <* USEDIN(pr2_set[i],schma +
+        '.PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') | ((schma +
+        '.SHAPE_DEFINITION_REPRESENTATION') IN TYPEOF(pdr)) );
+  END_REPEAT;
+  IF SIZEOF(sdr_set) > 0 THEN
+    REPEAT i := 1 TO HIINDEX(sdr_set) BY 1;
+      srr_set := QUERY ( rr <* bag_to_set(USEDIN(sdr_set[i]\
+          property_definition_representation.used_representation,schma +
+          '.REPRESENTATION_RELATIONSHIP.REP_2')) | ((schma +
+          '.SHAPE_REPRESENTATION_RELATIONSHIP') IN TYPEOF(rr)) );
+      IF SIZEOF(srr_set) > 0 THEN
+        REPEAT j := 1 TO HIINDEX(srr_set) BY 1;
+          IF SIZEOF(QUERY ( pdr <* bag_to_set(USEDIN(srr_set[j]\
+              representation_relationship.rep_1,schma +
+              '.PROPERTY_DEFINITION_REPRESENTATION.USED_REPRESENTATION'))
+               | ((schma + '.SHAPE_DEFINITION_REPRESENTATION') IN TYPEOF(
+              pdr)) ) * QUERY ( pdr <* bag_to_set(USEDIN(assy.
+              relating_product_definition,schma +
+              '.PROPERTY_DEFINITION_REPRESENTATION.DEFINITION')) | ((
+              schma + '.SHAPE_DEFINITION_REPRESENTATION')
+              IN TYPEOF(pdr)) )) >= 1 THEN
+            IF SIZEOF(QUERY ( cdsr <* USEDIN(srr_set[j],schma +
+                '.CONTEXT_DEPENDENT_SHAPE_REPRESENTATION.' +
+                'REPRESENTATION_RELATION') | (NOT (cdsr\
+                context_dependent_shape_representation.
+                represented_product_relation\property_definition.
+                definition :=: assy)) )) > 0 THEN RETURN(FALSE);
+            END_IF;
+          END_IF;
+        END_REPEAT;
+      END_IF;
+    END_REPEAT;
+  END_IF;
+  RETURN(TRUE);
+END_FUNCTION; -- assembly_shape_is_defined
+
+END_SCHEMA; --config_control_design

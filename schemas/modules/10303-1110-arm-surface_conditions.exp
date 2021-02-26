@@ -1,0 +1,123 @@
+(* 
+   $Id: 10303-1110-arm-surface_conditions.exp,v 1.1 2006/08/03 14:41:10 wg12deputy Exp $
+   ISO/TC184/SC4 WG12N2604 - ISO/TS 10303-1110 Surface_conditions - Express ARM
+   Supersedes ISO TC184/SC4/WG12N1738
+*)
+
+SCHEMA Surface_conditions_arm;
+
+USE FROM Construction_geometry_arm;
+
+USE FROM Dimension_tolerance_arm;
+
+USE FROM Document_and_version_identification_arm;
+
+USE FROM Extended_measure_representation_arm;
+
+USE FROM Measure_representation_arm;
+
+USE FROM Pdm_material_aspects_arm;
+
+USE FROM Product_view_definition_arm;
+
+USE FROM Shape_property_assignment_arm;
+
+
+ TYPE shaped_element_select = SELECT
+      (Shape_element,Item_shape);
+ END_TYPE;
+
+ TYPE texture_select = SELECT
+      (Surface_texture);
+ END_TYPE;
+
+ ENTITY Coating_layer
+ SUBTYPE OF (Shape_element);
+ INVERSE
+   thickness : SET[0:1] OF Thickness_size_dimension FOR applied_to;
+ WHERE
+ WR1: SIZEOF(USEDIN(SELF, 'SURFACE_CONDITIONS_ARM.MATERIAL_IDENTIFICATION.ITEMS'))=1;
+ END_ENTITY;
+
+ ENTITY Contact_ratio
+  SUBTYPE OF (Surface_condition);
+  ratio_value : Measure_item;
+  measuring_gauge : Physical_model_representation;
+ END_ENTITY;
+
+ ENTITY Hardness
+  SUBTYPE OF (Surface_condition);
+  measuring_method : STRING;
+  environment_condition : SET[0:?] OF STRING;
+  description : OPTIONAL STRING;
+  measuring_position : OPTIONAL STRING;
+  hardness_value : Measure_item;
+  depth : OPTIONAL Measure_item;
+ END_ENTITY;
+
+ ENTITY Physical_model
+  SUBTYPE OF (Document);
+ END_ENTITY;
+
+ ENTITY Physical_model_version
+  SUBTYPE OF (Document_version);
+  SELF\Product_version.of_product: Physical_model;
+ END_ENTITY;
+
+ ENTITY Physical_model_representation
+  SUBTYPE OF (Product_view_definition);
+  SELF\Product_view_definition.defined_version : Physical_model_version;
+ END_ENTITY;
+
+ ENTITY Surface_condition
+  ABSTRACT SUPERTYPE OF (ONEOF(Contact_ratio,Hardness,Tactile_appearance,
+                         Treatment_result,Visual_appearance,Surface_texture));
+  value_determination : OPTIONAL STRING;
+ END_ENTITY;
+
+ ENTITY Surface_condition_association;
+  describing_surface_condition : Surface_condition;
+  described_element : shaped_element_select;
+ END_ENTITY;
+
+ ENTITY Surface_texture
+  SUBTYPE OF (Surface_condition);
+  measuring_method : STRING;
+  measuring_direction : OPTIONAL Measurement_path;
+ END_ENTITY;
+
+ ENTITY Surface_texture_parameter;
+  parameter_value : Measure_item;
+  parameter_name : STRING;
+  described_texture : texture_select;
+  parameter_index : OPTIONAL INTEGER;
+ END_ENTITY;
+
+ ENTITY Tactile_appearance
+  SUBTYPE OF (Surface_condition);
+  id : OPTIONAL STRING;
+  name : OPTIONAL STRING;
+  depth : OPTIONAL Measure_item;
+  description : OPTIONAL STRING;
+ END_ENTITY;
+
+ ENTITY Treatment_result
+  SUBTYPE OF (Surface_condition);
+  id : OPTIONAL STRING;
+  name : OPTIONAL STRING;
+  description : STRING;
+  purpose : OPTIONAL STRING;
+ END_ENTITY;
+
+ ENTITY Visual_appearance
+  SUBTYPE OF (Surface_condition);
+  id : OPTIONAL STRING;
+  colour_id : STRING;
+  name : OPTIONAL STRING;
+  colour_name : OPTIONAL STRING;
+  lustre : STRING;
+  transparency : OPTIONAL STRING;
+  pattern : OPTIONAL STRING;
+ END_ENTITY;
+
+END_SCHEMA;

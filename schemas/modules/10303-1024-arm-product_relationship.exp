@@ -1,0 +1,20 @@
+(*
+ $Id: 10303-1024-arm-product_relationship.exp,v 1.5 2006/08/07 07:44:41 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2935 - ISO/TS 10303-1024 Product relationship - EXPRESS ARM
+*)
+
+
+SCHEMA Product_relationship_arm; 
+
+USE FROM Product_identification_arm;    -- ISO/TS 10303-1017
+
+
+ENTITY Product_relationship;
+  relation_type : STRING;
+  description : OPTIONAL STRING;
+  relating_product : Product;
+  related_product : Product;
+END_ENTITY;
+
+END_SCHEMA;  -- Product_relationship_arm
+

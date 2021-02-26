@@ -1,0 +1,14 @@
+(*
+ $Id: 10303-1041-mim-product_view_definition_relationship.exp,v 1.5 2006/08/07 09:42:03 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N1142 - ISO/TS 10303-1041 Product view definition relationship - EXPRESS MIM
+*)
+
+SCHEMA Product_view_definition_relationship_mim;
+
+USE FROM Product_view_definition_mim; -- ISO 10303-1019
+USE FROM product_definition_schema -- ISO 10303-41
+  (product_definition_relationship);
+
+USE FROM product_structure_schema -- ISO 10303-44
+  (product_definition_usage);
+END_SCHEMA;

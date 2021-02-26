@@ -1,0 +1,26 @@
+(*
+ $Id: 10303-1123-mim-document_definition.exp,v 1.5 2006/08/07 09:42:04 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2961 - ISO/TS 10303-1123 Document definition - EXPRESS MIM
+*) 
+
+
+SCHEMA Document_definition_mim;
+
+USE FROM Document_and_version_identification_mim;    -- ISO/TS 10303-1121
+
+USE FROM External_item_identification_assignment_mim;    -- ISO/TS 10303-1128
+
+USE FROM File_identification_mim;    -- ISO/TS 10303-1127
+
+USE FROM product_definition_schema   -- ISO 10303-41
+  (product_definition,
+   product_definition_with_associated_documents); 
+
+USE FROM Product_view_definition_mim;    -- ISO/TS 10303-1019
+
+
+TYPE document_location_select = SELECT BASED_ON external_identification_item WITH 
+   (product_definition);
+END_TYPE; 
+
+END_SCHEMA;  -- Document_definition_mim

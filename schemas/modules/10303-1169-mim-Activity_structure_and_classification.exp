@@ -1,0 +1,35 @@
+(*
+ $Id: 10303-1169-mim-Activity_structure_and_classification.exp,v 1.4 2006/08/04 12:11:55 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2709 - ISO/TS 10303-1169 Activity structure and classification - EXPRESS MIM
+ Supersedes ISO TC184/SC4/WG12 N1835
+*)
+
+SCHEMA Activity_structure_and_classification_mim;
+
+USE FROM Class_of_activity_library_mim;    -- ISO/TS 10303-1174
+USE FROM Classification_mim;    -- ISO/TS 10303-1212
+USE FROM External_item_identification_assignment_mim;    -- ISO/TS 10303-1128
+USE FROM Individual_activity_structure_mim;    -- ISO/TS 10303-1175
+
+TYPE individual_activity_or_activity_relationship = SELECT BASED_ON classification_select WITH 
+  (individual_activity,
+  composition_of_individual_activity,
+  connection_of_individual_activity,
+  individual_involvement_in_activity);
+END_TYPE;
+
+TYPE complete_membership_individual_activity_or_activity_relationship = SELECT BASED_ON complete_membership_select WITH 
+  (individual_activity,
+  composition_of_individual_activity,
+  connection_of_individual_activity,
+  individual_involvement_in_activity);
+END_TYPE;
+
+TYPE externally_identified_class_of_activity_or_relationship = SELECT BASED_ON external_identification_item WITH 
+  (class_of_activity,
+  class_of_composition_of_activity,
+  class_of_connection_of_activity,
+  class_of_involvement_in_activity);
+END_TYPE;
+
+END_SCHEMA;

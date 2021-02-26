@@ -1,0 +1,25 @@
+(*
+WG12 N665
+ISO/TS 10303-1007
+Product data representation and exchange: Application module: General surface appearance
+*)
+
+SCHEMA General_surface_appearance_mim;
+USE FROM Colour_mim;				-- ISO/TS 10303-1002
+USE FROM Curve_appearance_mim; 		-- ISO/TS 10303-1003
+USE FROM presentation_appearance_schema	-- ISO 10303-46
+ ( fill_area_style_colour,
+   surface_side,
+   surface_side_style,
+   surface_style_boundary,
+   surface_style_control_grid,
+   surface_style_element_select,
+   surface_style_fill_area,
+   surface_style_parameter_line,
+   surface_style_segmentation_curve,
+   surface_style_silhouette,
+   surface_style_usage,
+   u_direction_count,
+   v_direction_count);
+
+END_SCHEMA;

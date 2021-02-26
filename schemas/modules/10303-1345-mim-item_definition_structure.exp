@@ -1,0 +1,54 @@
+(*
+   $Id: 10303-1345-mim-item_definition_structure.exp,v 1.1 2006/08/03 15:03:35 wg12deputy Exp $
+   ISO/TC184/SC4 WG12N2620 - ISO/TS 10303-1345 item_definition_structure - EXPRESS MIM
+   Supersedes ISO TC184/SC4/WG12N1767
+*)
+
+SCHEMA Item_definition_structure_mim;
+
+USE FROM Effectivity_application_mim;
+
+USE FROM Product_occurrence_mim;
+
+USE FROM Product_structure_mim;
+
+REFERENCE FROM Single_part_representation_mim
+	(categories_of_product);
+
+
+TYPE effectivity_item_for_replacement  = SELECT BASED_ON effectivity_item WITH
+  (product_definition_relationship);
+END_TYPE;
+
+
+RULE restrict_assembly_category FOR (product_definition);
+LOCAL
+  assembly_definitions: SET OF product_definition := [];
+END_LOCAL;
+  assembly_definitions :=  QUERY( pd <* product_definition | 
+    SIZEOF( QUERY( pdca <* USEDIN( pd, 'ITEM_DEFINITION_STRUCTURE_MIM.PRODUCT_DEFINITION_CONTEXT_ASSOCIATION.DEFINITION') |
+    pdca.frame_of_reference.name= 'assembly definition')) > 0 );
+WHERE
+WR1: SIZEOF( QUERY( pd <* assembly_definitions | 
+   NOT ('assembly' IN categories_of_product(pd.formation.of_product)) ))= 0;
+END_RULE;
+
+RULE restrict_product_definitions_for_part_definition_relationship FOR
+    (product_definition_relationship);
+WHERE
+WR1: SIZEOF ( QUERY ( pdr <* product_definition_relationship |
+     ( pdr.name IN [ 'geometrical relationship' , 'definition replacement' ] ) AND 
+	( ( pdr.relating_product_definition.frame_of_reference.name <>'part definition' ) OR 
+	( pdr.related_product_definition.frame_of_reference.name <>'part definition' ) ) ) ) =0;
+END_RULE;
+
+RULE product_definition_replacement_requires_effectivity_assignment FOR 
+	(product_definition_relationship);
+WHERE 
+WR1: SIZEOF( QUERY( pdr <* product_definition_relationship | 
+	(pdr.name = 'definition replacement') AND 
+	(SIZEOF( USEDIN(pdr,'ITEM_DEFINITION_STRUCTURE_MIM.APPLIED_EFFECTIVITY_ASSIGNMENT.ITEMS') ) = 0) ))
+	 = 0; 
+END_RULE; 
+
+END_SCHEMA;

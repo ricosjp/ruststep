@@ -1,0 +1,129 @@
+(*
+WG12 N672
+ISO/TS 10303-1003
+Product data representation and exchange: Application module: Curve appearance - EXPRESS ARM
+*)
+
+SCHEMA Curve_appearance_arm;
+
+USE FROM Colour_arm; -- ISO/TS 10303-1002
+USE FROM Elemental_shape_arm; --ISO/TS 10303-1004
+
+TYPE curve_appearance_select = SELECT
+      (Curve_appearance, Point_appearance, Vector_appearance);
+END_TYPE;
+
+ENTITY Curve_appearance;
+   width             : REAL;
+   font              : Curve_font;
+   colour            : Colour;
+END_ENTITY; -- Curve_appearance
+
+ENTITY Curve_font
+  SUPERTYPE OF (ONEOF (Externally_defined_curve_font,
+                       Predefined_curve_font,
+                       User_defined_curve_font));
+  curve_font_name : STRING;
+END_ENTITY; -- Curve_font
+
+ENTITY Curve_font_pattern;
+   on_segment  : REAL;
+   off_segment : REAL;
+END_ENTITY; -- Curve_font_pattern
+
+ENTITY Externally_defined_curve_font
+  SUBTYPE OF (curve_font);
+  curve_font_reference : STRING;
+END_ENTITY; -- Externally_defined_curve_font
+
+ENTITY Externally_defined_marker
+  SUBTYPE OF (Marker);
+  marker_reference : STRING;
+END_ENTITY; -- Externally_defined_marker
+
+ENTITY Externally_defined_terminator
+  SUBTYPE OF (Terminator);
+  terminator_reference : STRING;
+END_ENTITY; -- Externally_defined_terminator
+
+ENTITY Marker
+  SUPERTYPE OF (ONEOF (Externally_defined_marker,
+                       Predefined_marker,
+                       User_defined_marker));
+  marker_name : STRING;
+END_ENTITY; -- Marker
+
+ENTITY Point_appearance;
+  marker : Marker;
+  colour : Colour;
+  size   : REAL;
+ END_ENTITY;
+
+ENTITY Predefined_curve_font
+  SUBTYPE OF (Curve_font);
+WHERE
+  WR1: SELF.curve_font_name IN ['continuous',
+                               'chain',
+                               'chain double dash',
+                               'dashed',
+                               'dotted'];
+END_ENTITY; -- Predefined_curve_font
+
+ENTITY Predefined_marker
+  SUBTYPE OF (Marker);
+WHERE
+  WR1: SELF.marker_name IN ['asterisk',
+                            'circle',
+                            'dot',
+                            'plus',
+                            'square',
+                            'triangle',
+                            'x'];
+END_ENTITY; -- Predefined_marker
+
+ENTITY Predefined_terminator
+  SUBTYPE OF (Terminator);
+WHERE
+  WR1: SELF.terminator_name IN ['blanked arrow',
+                                'blanked box',
+                                'dimension origin',
+                                'filled arrow',
+                                'filled box',
+                                'filled dot',
+                                'integral symbol',
+                                'open arrow',
+                                'slash',
+                                'unfilled arrow'];
+END_ENTITY; -- Predefined_terminator
+
+ENTITY Terminator
+  SUPERTYPE OF (ONEOF (Externally_defined_terminator,
+                       Predefined_terminator,
+                       User_defined_terminator));
+  terminator_name : STRING;
+END_ENTITY; -- Terminator
+
+ENTITY User_defined_curve_font
+  SUBTYPE OF (Curve_font);
+  pattern         : SET [1:?] OF Curve_font_pattern;
+  segment_symbol  : Geometric_model;
+END_ENTITY; -- User_defined_curve_font
+
+ENTITY User_defined_marker
+  SUBTYPE OF (Marker);
+  symbol : Geometric_model;
+END_ENTITY; -- User_defined_marker
+
+ENTITY User_defined_terminator
+  SUBTYPE OF (Terminator);
+  symbol : Geometric_model;
+END_ENTITY; -- User_defined_terminator
+
+ENTITY Vector_appearance;
+ terminator_type   : Terminator;
+ vector_font       : Curve_font;
+ colour            : Colour;
+ width             : REAL;
+END_ENTITY; -- Vector_appearance
+
+END_SCHEMA;

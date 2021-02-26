@@ -1,0 +1,20 @@
+(*
+ $Id: 10303-1070-mim-Class.exp,v 1.2 2006/08/07 09:42:04 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N3023 - ISO/TS 10303-1070 Class - EXPRESS MIM
+ Supersedes ISO TC184/SC4/WG12 N2259
+*) 
+
+
+SCHEMA Class_mim;
+
+USE FROM classification_schema   -- ISO 10303-54
+  (class,
+   class_by_extension,
+   class_by_intension); 
+
+USE FROM group_schema   -- ISO 10303-41
+  (group); 
+
+
+END_SCHEMA;  -- Class_mim
+

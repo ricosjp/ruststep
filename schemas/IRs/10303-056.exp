@@ -1,0 +1,92 @@
+(* $Id: 10303-056.exp,v 1.5 2005/02/07 07:54:23 wg12deputy Exp $ 
+ISO TC184/SC4/WG12 N3207 - ISO/IS 10303-56 State - EXPRESS
+Supersedes ISO TC184/SC4/WG12 N2465
+*) 
+
+
+SCHEMA state_observed_schema;
+
+REFERENCE FROM state_type_schema   -- ISO 10303-56
+  (state_type); 
+
+REFERENCE FROM support_resource_schema   -- ISO 10303-41
+  (label,
+   text); 
+
+
+ENTITY ascribable_state;
+  name : label;
+  description : OPTIONAL text;
+  pertaining_state_type : state_type;
+  ascribed_state_observed : state_observed;
+END_ENTITY;
+
+ENTITY ascribable_state_relationship;
+  name : label;
+  description : OPTIONAL text;
+  relating_ascribable_state : ascribable_state;
+  related_ascribable_state : ascribable_state;
+END_ENTITY;
+
+ENTITY state_observed;
+  name : label;
+  description : OPTIONAL text;
+END_ENTITY;
+
+ENTITY state_observed_assignment
+  ABSTRACT SUPERTYPE ;
+  assigned_state_observed : state_observed;
+  role : state_observed_role;
+END_ENTITY;
+
+ENTITY state_observed_relationship;
+  name : label;
+  description : OPTIONAL text;
+  relating_state_observed : SET[1:?] OF state_observed;
+  related_state_observed : SET[1:?] OF state_observed;
+END_ENTITY;
+
+ENTITY state_observed_role;
+  name : label;
+  description : OPTIONAL text;
+END_ENTITY;
+
+END_SCHEMA;  -- state_observed_schema
+(*
+$Id: 10303-056.exp,v 1.5 2005/02/07 07:54:23 wg12deputy Exp $
+ISO TC184/SC4/WG12 N3207 - ISO/IS 10303-56 State - EXPRESS
+Supersedes ISO TC184/SC4/WG12 N2465
+*) 
+
+
+SCHEMA state_type_schema;
+
+REFERENCE FROM support_resource_schema   -- ISO 10303-41
+  (label,
+   text); 
+
+
+ENTITY state_type;
+  name : label;
+  description : OPTIONAL text;
+END_ENTITY;
+
+ENTITY state_type_assignment
+  ABSTRACT SUPERTYPE ;
+  assigned_state_type : state_type;
+  role : state_type_role;
+END_ENTITY;
+
+ENTITY state_type_relationship;
+  name : label;
+  description : OPTIONAL text;
+  relating_state_type : SET[1:?] OF state_type;
+  related_state_type : SET[1:?] OF state_type;
+END_ENTITY;
+
+ENTITY state_type_role;
+  name : label;
+  description : OPTIONAL text;
+END_ENTITY;
+
+END_SCHEMA;  -- state_type_schema

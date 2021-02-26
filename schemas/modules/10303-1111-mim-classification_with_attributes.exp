@@ -1,0 +1,123 @@
+(* 
+   $Id: 10303-1111-mim-classification_with_attributes.exp,v 1.1 2006/08/03 15:03:34 wg12deputy Exp $
+   ISO/TC184/SC4 WG12N2617 - ISO/TS 10303-1111 Classification_with_attributes - Express MIM 
+   Supersedes ISO TC184/SC4/WG12N1764
+*)
+
+SCHEMA Classification_with_attributes_mim;
+
+USE FROM Class_mim;
+
+USE FROM Classification_assignment_mim;
+
+USE FROM Extended_measure_representation_mim;
+
+USE FROM External_class_mim;
+
+USE FROM Identification_assignment_mim;
+
+USE FROM Plib_class_reference_mim;
+
+USE FROM Part_and_version_identification_mim;
+
+USE FROM Part_view_definition_mim;
+
+USE FROM group_schema(
+	group,
+      group_relationship);
+
+USE FROM product_property_definition_schema(
+      characterized_object,
+	general_property,
+	general_property_association,
+	property_definition);
+
+USE FROM product_property_representation_schema(
+	property_definition_representation);
+
+USE FROM representation_schema(
+	set_representation_item);
+
+
+TYPE classification_item_extended = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON classification_item WITH (
+	characterized_class,
+      product, 
+      product_definition_formation,
+      product_definition);
+END_TYPE;
+
+TYPE classified_item = EXTENSIBLE GENERIC_ENTITY SELECT (product, product_definition_formation, product_definition);
+END_TYPE;
+
+TYPE class_system_item = EXTENSIBLE GENERIC_ENTITY SELECT(characterized_class);
+END_TYPE;
+
+TYPE id_for_class = SELECT BASED_ON identification_item WITH (characterized_class);
+END_TYPE;
+
+TYPE version_for_class = SELECT BASED_ON versionable_item WITH (characterized_class);
+END_TYPE;
+
+
+ENTITY characterized_class
+SUBTYPE OF (characterized_object, class);
+END_ENTITY;
+
+ENTITY class_system 
+SUBTYPE OF (group); 
+END_ENTITY; 
+
+
+RULE restrict_classification_assignments FOR (applied_classification_assignment);
+WHERE
+WR1: SIZEOF(QUERY(aia <* applied_classification_assignment | 
+		NOT class_assignment_is_valid(aia)))=0;
+END_RULE;
+
+FUNCTION class_assignment_is_valid (aia: applied_classification_assignment): BOOLEAN;
+LOCAL
+  item: classification_item;
+  role: classification_role;
+END_LOCAL;
+
+role:= aia.role;
+IF ('CLASSIFICATION_WITH_ATTRIBUTES_MIM.' +'CLASS_SYSTEM' IN TYPEOF(aia.assigned_class)) THEN
+  IF(role.name <> 'class system membership') THEN
+    RETURN(FALSE);
+  END_IF;
+  REPEAT i:=LOINDEX(aia.items) TO HIINDEX(aia.items);
+    item:= aia.items[i];
+
+    IF (SIZEOF(['CLASSIFICATION_WITH_ATTRIBUTES_MIM.' + 'CLASS_SYSTEM_ITEM']*TYPEOF(item))=0) THEN
+-- item invalid if item does not belong to the types that may have a class_system
+	RETURN(FALSE);
+    END_IF;
+  END_REPEAT;
+END_IF;
+
+IF ('CLASSIFICATION_WITH_ATTRIBUTES_MIM.' +'CHARACTERIZED_CLASS' IN TYPEOF(aia.assigned_class)) THEN
+  IF	NOT(role.name IN ['definitional','non-definitional','']) THEN
+    RETURN(FALSE); 
+  END_IF;
+
+  REPEAT i:=LOINDEX(aia.items) TO HIINDEX(aia.items);
+    item:= aia.items[i];
+
+    IF (SIZEOF(['CLASSIFICATION_WITH_ATTRIBUTES_MIM.' + 'CLASSIFIED_ITEM']*TYPEOF(item))=0) THEN
+-- item invalid if item does not belong to the types that may have a characterized_class
+	RETURN(FALSE);
+    END_IF;
+  END_REPEAT;
+END_IF;
+RETURN(TRUE);
+END_FUNCTION;
+
+RULE restrict_group_relationship_for_classification_hierarchy FOR (group_relationship); 
+WHERE 
+WR1: SIZEOF( QUERY( gr <* group_relationship | 
+  (gr.name = 'class hierarchy') AND 
+  (NOT('CLASSIFICATION_WITH_ATTRIBUTES_MIM.CLASS' IN TYPEOF(gr.related_group)) OR 
+  NOT('CLASSIFICATION_WITH_ATTRIBUTES_MIM.CLASS' IN TYPEOF(gr.relating_group))) )) = 0; 
+END_RULE; 
+
+END_SCHEMA;

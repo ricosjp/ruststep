@@ -1,0 +1,1331 @@
+(* AIM EXPRESS short form schema for ISO/IS 10303-235
+   ISO TC 184/SC 4/WG 3 N2546
+   2009-01-02
+   Norman Swindells
+*)
+
+SCHEMA engineering_properties_schema;
+
+USE FROM aic_geometric_tolerances					-- ISO 10303-519
+		(angularity_tolerance,
+		coaxiality_tolerance,
+		concentricity_tolerance,
+		cylindricity_tolerance,
+		flatness_tolerance,
+		parallelism_tolerance,
+		perpendicularity_tolerance,
+		position_tolerance,
+		roundness_tolerance,
+		straightness_tolerance,
+		symmetry_tolerance,
+		total_runout_tolerance);		
+
+USE FROM action_schema									--ISO 10303-41
+		(action,
+		action_method,
+		action_method_relationship,
+		action_relationship,
+		action_resource,
+		action_resource_type,
+		action_status,
+		executed_action,
+		supported_item,
+		versioned_action_request,
+		action_resource_relationship);
+
+USE FROM application_context_schema					-- ISO 10303-41
+		(application_context,
+		application_context_element,
+		application_context_relationship,
+		product_concept_context,
+		product_context,
+		product_definition_context);
+
+USE FROM approval_schema								-- ISO 10303-41
+		(approval,
+		approval_date_time,
+		approval_person_organization,
+		approval_relationship,
+		approval_role,
+		approval_status);
+
+USE FROM basic_attribute_schema						-- ISO 10303-41
+		(description_attribute_select,
+		id_attribute_select,
+		name_attribute_select,
+		role_select,
+		description_attribute,
+		id_attribute,
+		name_attribute,
+		object_role,
+		role_association);
+
+USE FROM certification_schema							-- ISO 10303-41
+		(certification,
+		certification_type);
+
+USE FROM 	classification_schema						--ISO 10303-54
+		(class);
+
+USE FROM contract_schema								-- ISO 10303-41
+	(contract,
+	contract_relationship,
+	contract_type);
+
+USE FROM date_time_schema								-- ISO 10303-41
+	(ahead_or_behind,
+	calendar_date,
+	coordinated_universal_time_offset,
+	date,
+	date_time_select,
+	day_in_month_number,
+	day_in_year_number,
+	hour_in_day,
+	minute_in_hour,
+	month_in_year_number,
+	second_in_minute,
+	week_in_year_number,
+	week_of_year_and_day_date,
+	year_number,
+	year_month,
+	date_and_time,
+	date_role,
+	date_and_time_role,
+	date_time_or_event_occurrence,
+	event_occurrence,
+	event_occurrence_role,
+	event_occurence_relationship,
+	local_time,
+	ordinal_date,
+	time_interval,
+	time_interval_relationship,
+	time_interval_role,
+	time_interval_with_bounds);
+
+USE FROM document_schema								--ISO 10303-41
+	(document,
+	document_product_association,
+	document_relationship,
+	document_representation_type,
+	document_type,
+	document_usage_constraint);
+
+USE FROM ISO13584_generic_expressions_schema  -- ISO 13584-20
+		(generic_expression,
+		simple_generic_expression,
+		generic_literal,
+		generic_variable,
+		variable_semantics,
+		environment,
+		unary_generic_expression,
+		binary_generic_expression,
+		multiple_arity_generic_expression);
+
+USE FROM ISO13584_expressions_schema  --ISO 13584-20
+		(expression,
+		variable,
+		defined_function,
+		SQL_mappable_defined_function,
+		numeric_expression,
+		simple_numeric_expression,
+		literal_number,
+		int_literal,
+		real_literal,
+		numeric_variable,
+		int_numeric_variable,
+		real_numeric_variable,
+		unary_numeric_expression,
+		binary_numeric_expression,
+		multiple_arity_numeric_expression,
+		length_function,
+		value_function,
+		int_value_function,
+		numeric_defined_function,
+		plus_expression,
+		minus_expression,
+		mult_expression,
+		div_expression,
+		mod_expression,
+		power_expression,
+		unary_function_call,
+		binary_function_call,
+		multiple_arity_function_call,
+		abs_function,
+		minus_function,
+		sin_function,
+		cos_function,
+		tan_function,
+		asin_function,
+		acos_function,
+		exp_function,
+		log_function,
+		log2_function,
+		log10_function,
+		square_root_function,
+		atan_function,
+		maximum_function,
+		minimum_function,
+		integer_defined_function,
+		real_defined_function,
+		boolean_expression,
+		simple_boolean_expression,
+		boolean_literal,
+		boolean_variable,
+		unary_boolean_expression,
+		not_expression,
+		odd_function,
+		binary_boolean_expression,
+		multiple_arity_boolean_expression,
+		xor_expression,
+		equals_expression,
+		and_expression,
+		or_expression,
+		comparison_expression,
+		comparison_equal,
+		comparison_greater,
+		comparison_greater_equal,
+		comparison_less,
+		comparison_less_equal,
+		comparison_not_equal,
+		like_expression,
+		interval_expression,
+		boolean_defined_function,
+		string_expression,
+		simple_string_expression,
+		string_literal,
+		string_variable,
+		index_expression,
+		substring_expression,
+		concat_expression,
+		format_function,
+		string_defined_function);
+
+USE FROM external_reference_schema					-- ISO 10303-41
+		(message,
+		source_item,
+		external_source,
+		external_source_relationship,
+		externally_defined_item,
+		externally_defined_item_relationship,
+		pre_defined_item);
+
+USE FROM effectivity_schema							-- ISO 10303-41
+		(dated_effectivity,
+		effectivity,
+		effectivity_relationship,
+		lot_efectivity,
+		serial_numbered_effectivity,
+		time_interval_based_effectivity);
+
+USE FROM geometry_schema								-- ISO 10303-42
+		(dimension_count,
+		axis1_placement,
+		axis2_placement,
+		axis2_placement_2d,
+		axis2_placement_3d,
+		curve,
+		line,
+		conic,
+		circle,
+		ellipse,
+		parabola,
+		hyperbola,
+		vector_or_direction,
+		geometric_representation_context,
+		geometric_representation_item,
+		point,
+		cartesian_point,
+		point_on_curve,
+		point_on_surface,
+		point_in_volume,
+		cylindrical_point,
+		spherical_point,
+		polar_point,
+		direction,
+		vector,
+		placement,
+		cartesian_transformation_operator,
+		cartesian_transformation_operator_3d,
+		cartesian_tranformation_operator_2d,
+		surface,
+		oriented_surface,
+		elementary_surface,
+		plane,
+		conical_surface,
+		cylindrical_surface,
+		spherical_surface,
+		volume,
+		block_volume,
+		spherical_volume,
+		cylindrical_volume);
+
+USE FROM group_schema									-- ISO 10303-41
+		(group,
+		group_relationship);
+
+USE FROM location_schema						-- ISO 10303-41
+		(location,
+		location_relationship);
+
+USE FROM management_resources_schema				-- ISO 10303-41
+		(action_assignment,
+		action_method_assignment,
+		action_method_role,
+		action_request_assignment,
+		approval_assignment,
+		attribute_classification_assignment,
+		attribute_value_assignment,
+		attribute_value_role,
+		certification_assignment,
+		classification_assignment,
+		classification_role,
+		contract_assignment,
+		date_and_time_assignment,
+		date_assignment,
+		document_reference,
+		document_usage_constraint_assignment,
+		document_usage_role,
+		effectivity_assignment,
+		external_identification_assignment,
+		event_occurrence_assignment,
+		group_assignment,
+		identification_assignment,
+		identification_assignment_relationship,
+		identification_role,
+		location_assignment,
+		location_representation_assignment,
+		organization_assignment,
+		organizational_project_assignment,
+		organizational_project_role,
+		person_and_organization_assignment,
+		person_assignment,
+		qualification_type_assignment,
+		security_classification_assignment,
+		time_interval_assignment);
+
+USE FROM material_property_definition_schema		-- ISO 10303-45
+	(characterized_material_property,
+	material_property,
+	property_definition_relationship,
+	material_designation,
+	material_designation_characterization);
+
+USE FROM material_property_representation_schema
+	(material_property_representation,
+	data_environment,
+	data_environment_relationship);
+
+USE FROM mathematical_functions_schema				-- ISO 10303-50
+	(nonnegative_integer,
+	positive_integer,
+	zero_or_one,
+	one_or_two,
+	maths_number,
+	maths_real,
+	maths_integer,
+	maths_logical,
+	maths_boolean,
+	maths_string,
+	maths_binary,
+	maths_simple_atom,
+	maths_atom,
+	atom_based_tuple,
+	atom_based_value,
+	maths_tuple,
+	maths_value,
+	maths_expression,
+	maths_function_select,
+	input_selector,
+	elementary_space_enumerators,
+	ordering_type,
+	lower_upper,
+	symmetry_type,
+	elementary_function_enumerators,
+	open_closed,
+	space_constraint_type,
+	repackage_options,
+	extension_options,
+	maths_enum_atom,
+	dotted_express_identifier,
+	express_identifier,
+	product_space,
+	tuple_space,
+	maths_space_or_function,
+	real_interval,
+	quantifier_expression,
+	dependent_variable_definition,
+	bound_variable_semantics,
+	free_variable_semantics,
+	complex_number_literal,
+	logical_literal,
+	binary_literal,
+	maths_enum_literal,
+	real_tuple_literal,
+	integer_tuple_literal,
+	atom_based_literal,
+	maths_tupel_literal,
+	maths_variable,
+	maths_real_variable,
+	maths_integer_variable,
+	maths_boolean_variable,
+	maths_string_variable,
+	function_application,
+	maths_space,
+	elementary_space,
+	finite_integer_interval,
+	integer_interval_from_min,
+	integer_interval_to_max,
+	finite_real_interval,
+	real_interval_from_min,
+	real_interval_to_max,
+	cartesian_complex_number_region,
+	polar_complex_number_region,
+	finite_space,
+	uniform_product_space,
+	listed_product_space,
+	extended_tuple_space,
+	function_space,
+	maths_function,
+	finite_function,
+	constant_function,
+	selector_function,
+	elementary_function,
+	restriction_function,
+	repackaging_function,
+	reindexed_array_function,
+	series_composed_function,
+	parallel_composed_function,
+	explicit_table_function,
+	listed_real_data,
+	listed_integer_data,
+	listed_logical_data,
+	listed_string_data,
+	listed_complex_number_data,
+	listed_data,
+	externally_listed_data,
+	linearized_table_function,
+	standard_table_function,
+	regular_table_function,
+	triangular_matrix,
+	strict_triangular_matrix,
+	symmetric_matrix,
+	symmetric_banded_matrix,
+	banded_matrix,
+	basic_sparse_matrix,
+	homogeneous_linear_function,
+	general_linear_function,
+	b_spline_basis,
+	b_spline_function,
+	rationalize_function,
+	partial_derivative_function,
+	partial_derivative_expression,
+	definite_integral_function,
+	definite_integral_expression,
+	abstracted_expression_function,
+	expression_denoted_function,
+	imported_point_function,
+	imported_curve_function,
+	imported_surface_function,
+	imported_volume_function,
+	application_defined_function,
+	mathematical_description);
+
+USE FROM measure_schema									-- ISO 10303-41
+	(absorbed_dose_measure,
+	absorbed_dose_unit,
+	absorbed_dose_measure_with_unit,
+	acceleration_measure,
+	acceleration_unit,
+	acceleration_measure_with_unit,
+	amount_of_substance_measure,
+	amount_of_substance_unit,
+	amount_of_substance_measure_with_unit,
+	area_measure,
+	area_unit,
+	area_measure_with_unit,
+	capacitance_measure,
+	capacitance_unit,
+	capacitance_measure_with_unit,
+	celsius_temperature_measure,
+	celsius_temperature_measure_with_unit,
+	conductance_measure,
+	conductance_unit,
+	conductance_measure_with_unit,
+	context_dependent_measure,
+	context_dependent_unit,
+	conversion_based_unit,
+	count_measure,
+	derived_unit,
+	derived_unit_element,
+	descriptive_measure,
+	dimensional_exponents,
+	dose_equivalent_measure,
+	dose_equivalent_unit,
+	dose_equivalent_measure_with_unit,
+	electric_charge_measure,
+	electric_charge_unit,
+	electric_charge_measure_with_unit,
+	electric_current_measure,
+	electric_current_unit,
+	electric_current_measure_with_unit,
+	electric_potential_measure,
+	electric_potential_unit,
+	electric_potential_measure_with_unit,
+	energy_measure,
+	energy_unit,
+	energy_measure_with_unit,
+	force_measure,
+	force_unit,
+	force_measure_with_unit,
+	frequency_measure,
+	frequency_unit,
+	frequncy_measure_with_unit,
+	global_unit_assigned_context,
+	illuminance_measure,
+	illuminance_unit,
+	illuminance_measure_with_unit,
+	inductance_measure,
+	inductance_unit,
+	inductance_measure_with_unit,
+	length_measure,
+	length_unit,
+	length_measure_with_unit,
+	luminous_flux_measure,
+	luminous_flux_unit,
+	luminous_flux_measure_with_unit,
+	luminous_intensity_measure,
+	luminous_intensity_unit,
+	luminous_intensity_measure_with_unit,
+	magnetic_flux_density_measure,
+	magnetic_flux_density_unit,
+	magnetic_flux_density_measure_with_unit,
+	magnetic_flux_measure,
+	magnetic_flux_unit,
+	magnetic_flux_measure_with_unit,
+	mass_measure,
+	mass_unit,
+	mass_measure_with_unit,
+	measure_value,
+	measure_with_unit,
+	named_unit,
+	non_negative_length_measure,
+	numeric_measure,
+	parameter_value,
+	plane_angle_measure,
+	plane_angle_unit,
+	plane_angle_measure_with_unit,
+	positive_length_measure,
+	positive_plane_angle_measure,
+	positive_ratio_measure,
+	power_measure,
+	power_unit,
+	power_measure_with_unit,
+	pressure_measure,
+	pressure_unit,
+	pressure_measure_with_unit,
+	radioactivity_measure,
+	radioactivity_unit,
+	radioactivity_measure_with_unit,
+	ratio_measure,
+	ratio_unit,
+	ratio_measure_with_unit,
+	resistance_measure,
+	resistance_unit,
+	resistance_measure_with_unit,
+	si_prefix,
+	si_unit,
+	si_unit_name,
+	solid_angle_measure,
+	solid_angle_unit,
+	solid_angle_measure_with_unit,
+	thermodynamic_temperature_measure,
+	thermodynamic_temperature_unit,
+	thermodynamic_temperature_measure_with_unit,
+	time_measure,
+	time_unit,
+	time_measure_with_unit,
+	unit,
+	velocity_measure,
+	vleocity_measure,
+	velocity_measure_with_unit,
+	volume_measure,
+	volume_unit,
+	volume_measure_with_unit);
+
+USE FROM method_definition_schema					--ISO 10303-49
+	(relationship_with_condition,
+	process_or_process_relationship,
+	action_method_with_associated_documents,
+	action_method_with_associated_documents_constrained,
+	process_or_process_relationship_effectivity,
+	concurrent_action_method,
+	serial_action_method,
+	sequential_method);
+
+USE FROM person_organization_schema					--ISO 10303-41
+	(person_organization_select,
+	address,
+	organization,
+	organization_relationship,
+	organization_role,
+	organizational_address,
+	organizational_project,
+	organizational_project_relationship,
+	person,
+	person_and_organization,
+	person_and_organization_role,
+	person_role,
+	person_type,
+	person_type_definition,
+	person_type_definition_formation,
+	person_type_definition_relationship,
+	personal_address);
+
+USE FROM process_property_schema						--ISO 10303-49
+	(characterized_action_definition,
+	characterized_resource_definition,
+	property_or_shape_select,
+	action_property,
+	product_definition_process,
+	process_product_association,
+	property_process,
+	process_property_association,
+	resource_property,
+	action_resource_requirement,
+	action_property_relationship,
+	requirement_for_action_resource,
+	resource_property_relationship,
+	action_resource_requirement_relationship,
+	resource_requirement_type,
+	resource_requirement_type_relationship);
+
+USE FROM process_property_representation_schema			--ISO 10303-49
+	(action_property_representation,
+	resource_property_representation);	
+		
+USE FROM product_definition_schema					--ISO 10303-41
+	(product,
+	product_category,
+	product_category_relationship,
+	product_definition,
+	product_defintion_relationship,
+	product_definition_formation,
+	product_definition_formation_relationship,
+	product_definition_relationship,
+	product_definition_with_associated_documents,
+	product_relationship);
+
+USE FROM product_property_definition_schema		-- ISO 10303-41
+	(characterized_definition,
+	characterized_product_definition,
+	derived_property_select,
+	shape_definition,
+	characterized_object,
+	product_definition_shape,
+	property_definition,
+	shape_aspect,
+	shape_aspect_relationship);
+
+USE FROM product_property_representation_schema	-- ISO 10303-41
+	(represented_definition,
+	context_dependent_shape_representation,
+	item_identified_representation_usage,
+	property_definition_representation,
+	shape_definition_representation,
+	shape_representation,
+	shape_representation_relationship);
+
+USE FROM qualifications_schema					-- ISO 10303-41
+	(qualification_type,
+	qualification_relationship);
+
+USE FROM qualified_measure_schema					-- ISO 10303-45
+	(value_qualifier,
+	type_qualifier,
+	precision_qualifier,
+	uncertainty_qualifier,
+	qualitative_uncertainty,
+	standard_uncertainty,
+	expanded_uncertainty,
+	measure_representation_item,
+	descriptive_representation_item,
+	qualified_representation_item,
+	measure_qualification);
+
+USE FROM representation_schema					-- ISO 10303-43
+	(compound_item_definition,
+	founded_item_select,
+	list_representation_item,
+	set_representation_item,
+	value_representation_item,
+	transformation,
+	compound_representation_item,
+	functionally_defined_transformation,
+	global_uncertainty_assigned_context,
+	item_defined_transformation,
+	mapped_item,
+	parametric_representation_context,
+	representation,
+	representation_context,
+	representation_item,
+	representation_item_relationship,
+	representation_map,
+	representation_relationship,
+	representation_relationship_with_transformation,
+	uncertainty_measure_with_unit,
+	uncertainty_assigned_representation);
+
+USE FROM shape_aspect_definition_schema				-- ISO 10303-47
+	(datum, 
+	datum_feature,
+	datum_target,
+	datum_reference,
+	referenced_modified_datum);
+
+USE FROM shape_dimension_schema				-- ISO 10303-47
+	(angle_relator,
+	dimensional_characteristic,
+	angular_location,
+	angular_size,
+	dimensional_characteristic_representation,
+	dimensional_location,
+	dimensional_location_with_path,
+	dimensional_size,
+	dimensional_size_with_path,
+	shape_dimension_representation);
+
+USE FROM shape_tolerance_schema						--ISO 10303-47
+	(tolerance_method_definition,
+	shape_tolerance_select,
+	dimension_related_tolerance_zone_element,
+	geometric_tolerance,
+	geometric_tolerance_relationship,
+	geometric_tolerance_with_datum_reference,
+	geometric_tolerance_with_defined_unit,
+	modified_geometric_tolerance,
+	projected_zone_definition,
+	runout_zone_defintion,
+	runout_zone_orientation,
+	runout_zone_orientation_reference_direction,
+	statistical_distribution_for_tolerance,
+	tolerance_with_statistical_distribution,
+	tolerance_zone,
+	tolerance_zone_definition,
+	tolerance_zone_form,
+	limits_and_fits,
+	plus_minus_tolerance,
+	tolerance_value);
+	
+USE FROM state_type_schema								-- ISO 10303-56
+	(state_type,
+	state_type_assignment,
+	state_type_relationship,
+	state_type_role);
+
+USE FROM state_observed_schema						-- ISO 10303-56
+	(ascribable_state,
+	ascribable_state_relationship,
+	state_observed,
+	state_observed_assignment,
+	state_observed_relationship,
+	state_observed_role);
+
+USE FROM support_resource_schema						-- ISO 10303-41
+	(identifier,
+	label,
+	text);
+
+REFERENCE FROM cutting_tools_schema ( item_correlation);	-- ISO 13399-1
+
+REFERENCE FROM automotive_design_schema (get_multi_language);	-- ISO 10303-214
+
+TYPE action_item = SELECT
+	(approval,
+	certification,
+	document,
+	material_property,
+	material_property_representation, 
+	product_definition,
+	property_definition,
+	property_definition_representation);
+END_TYPE;
+
+TYPE action_request_item = SELECT
+	(action,
+	approval,
+	certification,
+	document,
+	executed_action,
+	material_property,
+	product,
+	product_definition,
+	product_definition_formation,
+	property_definition,
+	organizational_project,
+	security_classification,
+	security_classification_level);
+END_TYPE;
+
+TYPE approval_item = SELECT
+	(material_property,
+	product,
+	product_definition,
+	product_definition_formation,
+	property_definition,
+	representation,
+	versioned_action_request);
+END_TYPE;
+
+TYPE attribute_language_item = SELECT
+	(action,
+	action_method,
+	action_property,
+	application_context,
+	certification,
+	document,
+	descriptive_representation_item,
+	material_designation,
+	material_property,
+	material_property_representation,
+	product,
+	product_definition,
+	product_definition_formation,
+	property_definition,
+	qualification_type,
+	representation);
+END_TYPE;
+
+TYPE attribute_type = SELECT
+	(label,
+	text);
+END_TYPE;
+
+TYPE certification_item = SELECT
+	(action,
+	action_method,
+	material_property,
+	organization,
+	product,
+	product_definition,
+	product_definition_formation,
+	person_and_organization,
+	property_definition);
+END_TYPE;
+
+TYPE characterized_product_composition_value = SELECT
+  	(maths_value_with_unit,
+   	measure_with_unit);
+END_TYPE;
+
+TYPE contract_item = SELECT
+	(action,
+	material_property,
+	organizational_project,
+	person_organization_select,
+	product,
+	property_definition);
+END_TYPE;
+
+TYPE date_and_time_item = SELECT
+	(action,
+	event_occurrence,
+	representation,
+	versioned_action_request);
+END_TYPE;
+
+TYPE date_item = SELECT
+	(action,
+	approval,
+	certification,
+	contract,
+	event_occurrence,
+	product_definition_formation,
+	representation,
+	versioned_action_request);
+END_TYPE;
+
+TYPE document_item = SELECT
+	(action,
+	action_method,
+	action_resource,
+	action_resource_requirement,
+	contract,
+	geometric_tolerance,
+	material_designation,
+	material_property,
+	product_definition,
+	product_definition_formation,
+	product_definition_process,
+	property_definition,
+	representation);
+END_TYPE;
+
+TYPE effectivity_item = SELECT
+	(action,
+	document,
+	product_definition_formation);
+END_TYPE;
+
+
+TYPE event_occurred_item = SELECT
+	(action);
+END_TYPE;
+
+TYPE external_identification_item = SELECT
+	(document,
+	product,
+	product_definition,
+	externally_defined_class,
+	externally_defined_engineering_property);
+END_TYPE;
+
+TYPE groupable_item = SELECT
+	(action,
+	action_method,
+	material_property,
+	property_definition,
+	product,
+	product_definition);
+END_TYPE;
+
+TYPE identification_item = SELECT
+	(certification,
+	document,
+	product,
+	product_definition,
+	organization,
+	person_and_organization);
+END_TYPE;
+
+TYPE language_item = SELECT
+	(action,
+	action_method,
+	action_property,
+	application_context,
+	certification,
+	document,
+	descriptive_representation_item,
+	material_designation,
+	material_property,
+	material_property_representation,
+	product,
+	product_definition,
+	product_definition_formation,
+	property_definition,
+	qualification_type,
+	representation);
+END_TYPE;
+
+TYPE location_item = SELECT
+	(action,
+	event_occurrence,
+	product,
+	product_definition,
+	product_definition_formation);
+END_TYPE;
+
+TYPE location_representation_item = SELECT
+	(representation);
+END_TYPE;
+
+TYPE multi_language_attribute_item = SELECT
+	(action,
+   	action_method,
+  	action_property,
+   	application_context,
+	certification,
+  	document,
+   	descriptive_representation_item,
+   	material_designation,
+	material_property,
+	material_property_representation,
+   	product,
+   	product_definition,
+   	product_definition_formation,
+	property_definition,
+   	qualification_type,
+	representation);
+END_TYPE;
+
+TYPE organization_item = SELECT
+	(action,
+	approval,
+	certification,
+	document,
+	material_designation,
+	versioned_action_request);
+END_TYPE;
+
+TYPE organizational_project_item =  SELECT
+	(action,
+	action_method,
+	document,
+	product,
+	material_property);
+END_TYPE;
+
+TYPE person_item = SELECT
+	(action,
+	document,
+	versioned_action_request);
+END_TYPE;
+
+TYPE person_and_organization_item = SELECT
+	(action,
+	certification,
+	product_definition_formation,
+	versioned_action_request);
+END_TYPE;
+
+TYPE qualification_item = SELECT
+	(person,
+	person_and_organization,
+	organization);
+END_TYPE;
+
+TYPE security_classified_item = SELECT
+	(action,
+	action_method,
+	document,
+	material_property,
+	representation,
+	representation_item);
+END_TYPE;
+
+TYPE state_item = SELECT
+	(action,
+	action_method,
+	product,
+	product_definition,
+	product_definition_formation,
+	property_definition,
+	material_property,
+	material_property_representation);
+END_TYPE;
+
+TYPE state_observed_item = SELECT
+	(action,
+	action_method,
+	product,
+	product_definition,
+	product_definition_formation,
+	property_definition,
+	material_property,
+	material_property_representation);
+END_TYPE;
+
+
+TYPE time_interval_item = SELECT
+	(action,
+	approval,
+	effectivity,
+	document,
+	qualification);
+END_TYPE;
+
+ENTITY applied_action_assignment
+		SUBTYPE OF (action_assignment);
+		item : action_item;
+END_ENTITY;
+
+ENTITY applied_action_request_assignment
+		SUBTYPE OF (action_request_assignment);
+		item : action_request_item;
+END_ENTITY;
+
+ENTITY applied_approval_assignment
+		SUBTYPE OF (approval_assignment);
+		item : approval_item;
+END_ENTITY;
+
+ENTITY applied_certification_assignment
+		SUBTYPE OF (certification_assignment);
+		item : certification_item;
+END_ENTITY;
+
+ENTITY applied_contract_assignment
+		SUBTYPE OF (contract_assignment);
+		item : contract_item;
+END_ENTITY;
+
+ENTITY applied_date_assignment
+		SUBTYPE OF (date_assignment);
+		item : date_item;
+END_ENTITY;
+
+ENTITY applied_date_and_time_assignment
+		SUBTYPE OF (date_and_time_assignment);
+		item : date_and_time_item;
+END_ENTITY;
+
+ENTITY applied_document_reference
+		SUBTYPE OF (document_reference);
+		item : document_item;
+END_ENTITY;
+
+ENTITY applied_document_usage_contraint_assignment
+		SUBTYPE OF (document_usage_constraint_assignment);
+		item : document_item;
+END_ENTITY;
+
+ENTITY applied_effectivity_assignment
+		SUBTYPE OF (effectivity_assignment);
+		item : effectivity_item;
+END_ENTITY;
+
+ENTITY applied_event_occurrence_assignment
+		SUBTYPE OF (event_occurrence_assignment);
+		item : event_occurred_item;
+END_ENTITY;
+
+ENTITY applied_external_identification_assignment
+		SUBTYPE OF (external_identification_assignment);
+		items : SET[1:?] OF 	external_identification_item;
+WHERE
+	WR1:	NOT (SELF.role.name = 'version') OR
+		item_correlation(SELF.items,
+		['EXTERNALLY_DEFINED_CLASS',
+		'EXTERNALLY_DEFINED_ENGINEERING_PROPERTY' ]);
+END_ENTITY;
+
+ENTITY applied_group_assignment
+		SUBTYPE OF (group_assignment);
+		items : SET[1:?] OF	 groupable_item;
+END_ENTITY;
+
+ENTITY applied_identification_assignment
+		SUBTYPE OF (identification_assignment);
+		item : identification_item;
+END_ENTITY;
+
+ENTITY applied_location_assignment
+		SUBTYPE OF (location_assignment);
+		item : location_item;
+END_ENTITY;
+
+ENTITY applied_location_representation_assignment
+		SUBTYPE OF (location_representation_assignment);
+		item : location_representation_item;
+END_ENTITY;
+
+ENTITY applied_organization_assignment
+		SUBTYPE OF (organization_assignment);
+		item : organization_item;
+END_ENTITY;
+
+ENTITY applied_organizational_project_assignment
+		SUBTYPE OF (organizational_project_assignment);
+		item : SET [1:?] OF organizational_project_item;
+END_ENTITY;
+
+ENTITY applied_person_assignment
+		SUBTYPE OF (person_assignment);
+		item : person_item;
+END_ENTITY;
+
+ENTITY applied_person_and_organization_assignment
+		SUBTYPE OF (person_and_organization_assignment);
+		item : person_and_organization_item;
+END_ENTITY;
+
+ENTITY applied_qualification_assignment
+		SUBTYPE OF (qualification_type_assignment);
+		item : qualification_item;
+END_ENTITY;
+
+ENTITY applied_security_classification_assignment
+		SUBTYPE OF (security_classification_assignment);
+		item : SET [1:?] OF security_classified_item;
+END_ENTITY;
+
+ENTITY applied_state_type_assignment
+		SUBTYPE OF (state_type_assignment);
+		item : state_item;
+END_ENTITY;
+
+ENTITY applied_state_observed_assignment
+		SUBTYPE OF (state_observed_assignment);
+		item : state_observed_item;
+END_ENTITY;
+
+ENTITY applied_time_interval_assignment
+		SUBTYPE OF (time_interval_assignment);
+		item : time_interval_item;
+END_ENTITY;
+
+ENTITY attribute_language_assignment
+    SUBTYPE OF(attribute_classification_assignment);
+      items    : SET [1:?] OF attribute_language_item;
+    DERIVE
+      language : label := SELF\attribute_classification_assignment.assigned_class.name;
+    WHERE
+      WR1 : 
+            SELF\attribute_classification_assignment.role.name IN ['primary', 'translated' ];
+      WR2 : 
+            'ENGINEERING_PROPERTIES_SCHEMA.' + 'LANGUAGE' IN 
+			TYPEOF(SELF\attribute_classification_assignment.assigned_class);
+ END_ENTITY;
+
+ENTITY externally_defined_action_property
+		SUBTYPE OF (action_property, externally_defined_item);
+END_ENTITY;
+
+ENTITY externally_defined_class
+		SUBTYPE OF (class, externally_defined_item);
+END_ENTITY;
+
+ENTITY externally_defined_engineering_property
+		SUBTYPE OF (material_property, externally_defined_item);
+END_ENTITY;
+
+ENTITY language
+    SUBTYPE OF(group);
+    WHERE
+      WR1 : 
+            (SIZEOF(QUERY (ca <* USEDIN(SELF, 'ENGINEERING_PROPERTIES_SCHEMA.' + 
+			'CLASSIFICATION_ASSIGNMENT.' + 'ASSIGNED_CLASS')| 
+		('ENGINEERING_PROPERTIES_SCHEMA.' + 'LANGUAGE_ASSIGNMENT' IN TYPEOF(ca)))) > 0) OR 
+		(SIZEOF(QUERY (aca <* USEDIN(SELF, 'ENGINEERING_PROPERTIES_SCHEMA.' + 
+		'ATTRIBUTE_CLASSIFICATION_ASSIGNMENT.' + 'ASSIGNED_CLASS')| 
+		('ENGINEERING_PROPERTIES_SCHEMA.' + 'ATTRIBUTE_LANGUAGE_ASSIGNMENT' IN TYPEOF(aca)))) > 0);
+  END_ENTITY;
+
+ENTITY language_assignment
+    SUBTYPE OF(classification_assignment);
+      items : SET [1:?] OF language_item;
+    WHERE
+      WR1 : 
+            'ENGINEERING_PROPERTIES_SCHEMA.' + 'LANGUAGE' IN TYPEOF(SELF.assigned_class);
+      WR2 : 
+            SELF.role.name = 'language';
+      WR3 : 
+            SIZEOF(SELF.items) = SIZEOF(QUERY (i <* SELF.items| 
+			('ENGINEERING_PROPERTIES_SCHEMA.' + 'REPRESENTATION' IN TYPEOF(i)) AND 
+			(i\representation.name = 'document content')));
+  END_ENTITY;
+
+ENTITY multi_language_attribute_assignment
+    SUBTYPE OF(attribute_value_assignment);
+      items    : SET [1:?] OF multi_language_attribute_item;
+    DERIVE
+      language : label := get_multi_language(SELF);
+    WHERE
+      WR1 : 
+            SELF\attribute_value_assignment.role.name = 'alternate language';
+      WR2 : 
+            (SIZEOF(USEDIN(SELF, 'ENGINEERING_PROPERTIES_SCHEMA.ATTRIBUTE_LANGUAGE_ASSIGNMENT.ITEMS')) = 1)
+			 AND (SIZEOF(QUERY (ala <* USEDIN(SELF, 'ENGINEERING_PROPERTIES_SCHEMA.' + 
+			'ATTRIBUTE_LANGUAGE_ASSIGNMENT.' + 'ITEMS')| (ala.attribute_name = 'attribute_value'))) = 1);
+  END_ENTITY;
+
+ENTITY maths_value_qualification;
+  	name 					: label;
+  	description 			: text;
+  	qualified_maths_value 		: maths_value_with_unit;
+  	qualifiers 				: SET [1:?] OF value_qualifier;
+WHERE
+  	WR1: SIZEOF(QUERY(temp <* qualifiers |
+             'QUALIFIED_MEASURE_SCHEMA.PRECISION_QUALIFIER'
+             IN TYPEOF(temp))) < 2;
+END_ENTITY;
+
+ENTITY maths_value_representation_item
+  	SUBTYPE OF (representation_item, maths_value_with_unit);
+END_ENTITY;
+
+ENTITY maths_value_with_unit;
+  value_component 		: maths_value;
+  unit_component 			: unit;
+END_ENTITY;
+
+ENTITY product_as_individual
+		ABSTRACT SUPERTYPE OF (ONEOF (product_as_planned,
+		product_as_realised))
+		SUBTYPE OF (product_definition_formation);
+END_ENTITY;
+
+ENTITY product_as_planned
+		SUBTYPE OF (product_as_individual);
+END_ENTITY;
+
+ENTITY product_as_realised
+		SUBTYPE OF (product_as_individual);
+END_ENTITY;
+
+
+ENTITY product_material_composition_relationship
+SUBTYPE OF (product_definition_relationship);
+  class        	       	: label;
+  constituent_amount  		: SET [1:?] OF characterized_product_composition_value;
+  composition_basis    		: label;
+  determination_method 		: text;
+END_ENTITY;
+
+
+
+RULE dependent_instantiable_attribute_value_role FOR
+    (attribute_value_role);
+WHERE
+  WR1:  SIZEOF ( QUERY (a <* attribute_value_role |
+        NOT (SIZEOF (USEDIN (a,'')) > 0 ))) = 0;
+
+END_RULE;
+
+RULE dependent_instantiable_classification_role FOR
+    (classification_role);
+WHERE
+  WR1:  SIZEOF ( QUERY (c <* classification_role |
+        NOT (SIZEOF (USEDIN (c,'')) > 0 ))) = 0;
+
+END_RULE;
+
+RULE dependent_instantiable_identification_role FOR
+    (identification_role);
+WHERE
+  WR1:  SIZEOF ( QUERY (i <* identification_role |
+        NOT (SIZEOF (USEDIN (i,'')) > 0 ))) = 0;
+
+END_RULE;
+
+RULE plib_class_reference_requires_version FOR
+    (externally_defined_class);
+WHERE
+ WR1: SIZEOF ( QUERY ( edc <* externally_defined_class | (
+     'ENGINEERING_PROPERTIES_SCHEMA.'+ 'EXTERNAL_SOURCE' IN TYPEOF ( edc.
+     source ) ) AND ( SIZEOF ( QUERY ( aei <* USEDIN ( edc ,
+     'ENGINEERING_PROPERTIES_SCHEMA.APPLIED_EXTERNAL_IDENTIFICATION_ASSIGNMENT.ITEMS' ) | 
+	aei. role.name ='version' ) ) <>1 ) ) ) =0;
+ WR2: SIZEOF ( QUERY ( edc <* externally_defined_class | (
+     'ENGINEERING_PROPERTIES_SCHEMA.'+ 'EXTERNAL_SOURCE' IN TYPEOF ( edc.
+     source ) ) AND ( SIZEOF ( QUERY ( aei <* USEDIN ( edc ,
+     'ENGINEERING_PROPERTIES_SCHEMA.APPLIED_EXTERNAL_IDENTIFICATION_ASSIGNMENT.ITEMS'
+     ) | aei. role.name ='version' ) ) >0 ) ) ) =0;
+END_RULE;
+
+RULE plib_property_reference_requires_name_scope FOR
+    (externally_defined_engineering_property);
+WHERE
+ WR1: SIZEOF ( QUERY ( edep <*
+     externally_defined_engineering_property | (
+     'ENGINEERING_PROPERTIES_SCHEMA.'+ 'EXTERNAL_SOURCE' IN TYPEOF ( edep.
+     source ) ) AND ( SIZEOF ( QUERY ( edir <* USEDIN ( edep ,
+     'ENGINEERING_PROPERTIES_SCHEMA.'+'EXTERNALLY_DEFINED_ITEM_RELATIONSHIP.'+
+     'RELATING_ITEM' ) | ( edir. name = 'name scope' ) AND (
+     'ENGINEERING_PROPERTIES_SCHEMA.'+ 'EXTERNALLY_DEFINED_CLASS' IN TYPEOF
+     ( edir. related_item ) ) AND ( 'ENGINEERING_PROPERTIES_SCHEMA.'+
+     'EXTERNAL_SOURCE' IN TYPEOF ( edir. related_item.source ) ) )
+     ) <>1 ) ) ) =0;
+END_RULE;
+
+RULE plib_property_reference_requires_version FOR
+    (externally_defined_engineering_property);
+WHERE
+ WR1: SIZEOF ( QUERY ( edep <* externally_defined_engineering_property | (
+     'ENGINEERING_PROPERTIES_SCHEMA.'+ 'EXTERNAL_SOURCE' IN TYPEOF ( edep.
+     source ) ) AND ( SIZEOF ( QUERY ( edir <* USEDIN ( edep ,
+     'ENGINEERING_PROPERTIES_SCHEMA.APPLIED_EXTERNAL_IDENTIFICATION_ASSIGNMENT.ITEMS' ) | 
+	 (edir. role.name ='version' ) ) )<>1 ) ) ) =0;
+END_RULE;
+
+
+END_SCHEMA; --- engineering_properties_schema

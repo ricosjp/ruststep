@@ -1,0 +1,47 @@
+(*
+ $Id: 10303-1061-arm-project.exp,v 1.5 2006/08/07 07:44:43 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2930 - ISO/TS 10303-1061 Project - EXPRESS ARM
+*)
+
+
+SCHEMA Project_arm; 
+
+USE FROM Date_time_arm;    -- ISO/TS 10303-1010
+
+USE FROM Date_time_assignment_arm;    -- ISO/TS 10303-1014
+
+USE FROM Event_arm;    -- ISO/TS 10303-1064
+
+USE FROM Event_assignment_arm;    -- ISO/TS 10303-1364
+
+USE FROM Person_organization_arm;    -- ISO/TS 10303-1011
+
+
+TYPE project_item = EXTENSIBLE SELECT;
+END_TYPE; 
+
+ENTITY Project;
+  id : STRING;
+  name : STRING;
+  description : OPTIONAL STRING;
+  responsible_organizations : SET[0:?] OF Organization;
+  planned_start_date : OPTIONAL date_or_event;
+  planned_end_date : OPTIONAL date_or_event;
+  actual_start_date : OPTIONAL date_or_date_time_select;
+  actual_end_date : OPTIONAL date_or_date_time_select;
+END_ENTITY;
+
+ENTITY Project_assignment;
+  assigned_project : Project;
+  role : STRING;
+  items : SET[0:?] OF project_item;
+END_ENTITY;
+
+ENTITY Project_relationship;
+  relation_type : STRING;
+  description : OPTIONAL STRING;
+  relating_project : Project;
+  related_project : Project;
+END_ENTITY;
+
+END_SCHEMA;  -- Project_arm

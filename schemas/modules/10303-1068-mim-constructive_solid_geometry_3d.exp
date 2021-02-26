@@ -1,0 +1,40 @@
+(*   $Id: 10303-1068-mim-constructive_solid_geometry_3d.exp,v 1.4 2003/10/21 12:49:18 wg12deputy Exp $
+  ISO/TC184/SC4 WG12N1262 - ISO/TS 10303-1068 Constructive_solid_geometry  - EXPRESS MIM *)
+
+SCHEMA Constructive_solid_geometry_3d_mim;
+
+USE FROM Elemental_geometric_shape_mim;
+
+USE FROM geometric_model_schema         -- ISO 10303-42
+(block,
+ boolean_result,
+ boxed_half_space,
+ convex_hexahedron,
+ csg_solid,
+ cyclide_segment_solid,
+ eccentric_cone,
+ ellipsoid,
+ extruded_area_solid,
+ extruded_face_solid,
+ faceted_brep,
+ faceted_primitive,
+ half_space_solid,
+ manifold_solid_brep,
+ rectangular_pyramid,
+ revolved_area_solid,
+ revolved_face_solid,
+ right_angular_wedge,
+ right_circular_cone,
+ right_circular_cylinder,
+ sphere,
+ solid_model,
+ solid_replica,
+ surface_curve_swept_area_solid,
+ surface_curve_swept_face_solid,
+ swept_area_solid,
+ swept_face_solid,
+ tetrahedron,
+ torus
+ );
+
+END_SCHEMA;

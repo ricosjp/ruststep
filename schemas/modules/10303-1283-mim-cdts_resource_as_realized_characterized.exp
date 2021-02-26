@@ -1,0 +1,45 @@
+(*
+  $Id: 10303-1283-mim-cdts_resource_as_realized_characterized.exp,v 1.1 2003/07/15 09:43:14 wg12deputy Exp $
+  ISO/TC184/SC4 WG12N1611 - ISO/TS 10303-1283 Resource as realized characterized - EXPRESS MIM 
+*)
+
+SCHEMA Resource_as_realized_characterized_mim;
+
+USE FROM action_schema
+(action_resource);
+
+USE FROM Approval_mim;
+
+USE FROM Date_time_assignment_mim;
+
+USE FROM Identification_assignment_mim;
+
+USE FROM Justification_mim;
+
+USE FROM Resource_as_realized_mim;
+
+USE FROM Resource_management_characterized_mim;
+
+USE FROM Resource_property_assignment_mim;
+
+TYPE resource_as_realized_approval_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON approval_item WITH
+(action_resource);
+END_TYPE;
+
+TYPE resource_as_realized_date_and_time_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON date_and_time_item WITH
+(action_resource);
+END_TYPE;
+
+TYPE resource_as_realized_date_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON date_item WITH
+(action_resource);
+END_TYPE;
+
+TYPE resource_as_realized_identification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON identification_item WITH
+(action_resource);
+END_TYPE;
+
+TYPE resource_as_realized_justification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON justification_item WITH
+(action_resource);
+END_TYPE;
+
+END_SCHEMA;

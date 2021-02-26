@@ -1,0 +1,15 @@
+(*
+ $Id: 10303-1060-mim-product_concept_identification.exp,v 1.5 2006/08/07 09:42:04 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N1178 - ISO/TS 10303-1060 Product concept identification - EXPRESS MIM
+*)
+   
+SCHEMA Product_concept_identification_mim;
+
+USE FROM product_concept_schema -- ISO 10303-44
+  (product_concept);
+USE FROM application_context_schema -- ISO 10303-41
+  (product_concept_context);
+
+   
+END_SCHEMA;
+

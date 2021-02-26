@@ -1,0 +1,36 @@
+(*
+ $Id: 10303-1092-arm-Maths_value.exp,v 1.4 2006/08/04 12:01:50 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2801 - ISO/TS 10303-1092 Maths value - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG12 N1876
+*)
+
+SCHEMA Maths_value_arm;
+
+TYPE maths_atom = SELECT
+  (maths_boolean,
+  maths_complex,
+  maths_integer,
+  maths_real);
+END_TYPE;
+
+TYPE maths_boolean = BOOLEAN;
+END_TYPE;
+
+TYPE maths_integer = INTEGER;
+END_TYPE;
+
+TYPE maths_complex = LIST[2:2] OF REAL;
+END_TYPE;
+
+TYPE maths_real = REAL;
+END_TYPE;
+
+TYPE maths_tuple = LIST[0:?] OF maths_value;
+END_TYPE;
+
+TYPE maths_value = EXTENSIBLE SELECT
+  (maths_atom,
+  maths_tuple);
+END_TYPE;
+
+END_SCHEMA;

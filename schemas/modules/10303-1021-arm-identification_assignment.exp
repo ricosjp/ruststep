@@ -1,0 +1,20 @@
+(*
+ $Id: 10303-1021-arm-identification_assignment.exp,v 1.5 2006/08/07 07:44:41 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N1111 - ISO/TS 10303-1021 Identification assignment - EXPRESS ARM
+*)
+  
+SCHEMA Identification_assignment_arm;
+
+   
+TYPE identification_item = EXTENSIBLE SELECT;
+END_TYPE;
+
+   
+ENTITY Identification_assignment;
+  identifier  : STRING;
+  role        : STRING;
+  description : OPTIONAL STRING;
+  items       : SET [1:?] OF identification_item;
+END_ENTITY;
+
+END_SCHEMA;

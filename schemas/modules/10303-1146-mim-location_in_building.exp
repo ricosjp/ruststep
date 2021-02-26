@@ -1,0 +1,234 @@
+(*
+   $Id: 10303-1146-mim-location_in_building.exp,v 1.2 2006/08/03 13:36:19 wg12deputy Exp $
+   ISO/TC184/SC4 WG12N2579 - ISO/TS 10303-1146 location_in_building - EXPRESS MIM
+   Supersedes ISO TC184/SC4/WG12N1788
+*)
+
+SCHEMA Location_in_building_mim;
+
+USE FROM Building_component_mim;  
+USE FROM Building_item_mim;
+USE FROM Building_structure_mim;
+USE FROM Contextual_shape_positioning_mim;
+USE FROM Product_view_definition_mim;
+
+
+RULE building_element_maps_into_building_section_or_space FOR
+  (mapped_item, representation_relationship_with_transformation);
+WHERE
+WR1: SIZEOF (QUERY (mi <* mapped_item |
+        (SIZEOF (QUERY (pdr <* USEDIN(mi.mapping_source.mapped_representation,
+        'LOCATION_IN_BUILDING_MIM.'+
+        'PROPERTY_DEFINITION_REPRESENTATION.USED_REPRESENTATION') |
+	  SIZEOF (TYPEOF (pdr.definition.definition) *
+        ['LOCATION_IN_BUILDING_MIM.BUILDING_ELEMENT',
+        'LOCATION_IN_BUILDING_MIM.FIXTURE_EQUIPMENT_ELEMENT',
+        'LOCATION_IN_BUILDING_MIM.SERVICE_ELEMENT',
+        'LOCATION_IN_BUILDING_MIM.STRUCTURE_ENCLOSURE_ELEMENT']
+        ) = 1
+        )) >= 1)
+        AND
+        (SIZEOF (QUERY (r <* USEDIN (mi,'LOCATION_IN_BUILDING_MIM.REPRESENTATION.ITEMS') |
+        SIZEOF (QUERY (pdr <* USEDIN(r,'LOCATION_IN_BUILDING_MIM.'+
+        'PROPERTY_DEFINITION_REPRESENTATION.USED_REPRESENTATION') | 
+	  SIZEOF (TYPEOF (pdr.definition.definition) *
+        ['LOCATION_IN_BUILDING_MIM.BUILDING_SECTION',
+	    'LOCATION_IN_BUILDING_MIM.SPACE_ELEMENT'] ) >= 1 ))
+	=1 )) 
+	= 0)
+        )) = 0;
+WR2: SIZEOF (QUERY (rrwt <*
+       representation_relationship_with_transformation |
+       (SIZEOF (QUERY (pdr <* USEDIN(rrwt\representation_relationship.rep_2,
+       'LOCATION_IN_BUILDING_MIM.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.USED_REPRESENTATION') |
+       SIZEOF (TYPEOF (pdr.definition.definition) *
+       ['LOCATION_IN_BUILDING_MIM.BUILDING_ELEMENT',
+       'LOCATION_IN_BUILDING_MIM.FIXTURE_EQUIPMENT_ELEMENT',
+       'LOCATION_IN_BUILDING_MIM.SERVICE_ELEMENT',
+       'LOCATION_IN_BUILDING_MIM.STRUCTURE_ENCLOSURE_ELEMENT']) = 1
+       )) >= 1)
+       AND
+      (SIZEOF (QUERY (pdr <* USEDIN(rrwt\representation_relationship.rep_1,
+       'LOCATION_IN_BUILDING_MIM.PROPERTY_DEFINITION_REPRESENTATION.USED_REPRESENTATION') |
+	  SIZEOF (TYPEOF (pdr.definition.definition) *
+        ['LOCATION_IN_BUILDING_MIM.BUILDING_SECTION',
+	    'LOCATION_IN_BUILDING_MIM.SPACE_ELEMENT'] ) >= 1
+	  )) = 0)
+       )) = 0;
+WR3: SIZEOF (QUERY (rrwt_1 <* representation_relationship_with_transformation |
+       SIZEOF (QUERY (rrwt_2 <* representation_relationship_with_transformation |
+       (SIZEOF (QUERY (pdr <* USEDIN(rrwt_1\representation_relationship.rep_2,
+       'LOCATION_IN_BUILDING_MIM.PROPERTY_DEFINITION_REPRESENTATION.USED_REPRESENTATION') |
+       SIZEOF (TYPEOF (pdr.definition.definition) *
+       ['LOCATION_IN_BUILDING_MIM.BUILDING_ELEMENT',
+       'LOCATION_IN_BUILDING_MIM.FIXTURE_EQUIPMENT_ELEMENT',
+       'LOCATION_IN_BUILDING_MIM.SERVICE_ELEMENT',
+       'LOCATION_IN_BUILDING_MIM.STRUCTURE_ENCLOSURE_ELEMENT']) = 1
+       )) >= 1)
+       AND
+       (rrwt_1\representation_relationship.rep_2 :=: rrwt_2\representation_relationship.rep_2)
+       )) >= 1
+       )) = 0;
+END_RULE;
+
+RULE space_or_building_level_maps_into_building_section FOR
+  (mapped_item, representation_relationship_with_transformation);
+WHERE
+WR1: SIZEOF (QUERY (mi <* mapped_item |
+        (SIZEOF (QUERY (pdr <* USEDIN(mi.mapping_source.mapped_representation,
+        'LOCATION_IN_BUILDING_MIM.'+
+        'PROPERTY_DEFINITION_REPRESENTATION.USED_REPRESENTATION') |
+	  SIZEOF (TYPEOF (pdr.definition.definition) *
+        ['BUILDING_ITEM_MIM.SPACE_ELEMENT',
+        'LOCATION_IN_BUILDING_MIM.BUILDING_LEVEL']
+        ) = 1
+        )) >= 1)
+        AND
+        (NOT (SIZEOF (QUERY (r <* USEDIN (mi,'LOCATION_IN_BUILDING_MIM.REPRESENTATION.ITEMS') |
+        SIZEOF (QUERY (pdr <* USEDIN(r,'LOCATION_IN_BUILDING_MIM.'+
+        'PROPERTY_DEFINITION_REPRESENTATION.USED_REPRESENTATION') | 
+        ('LOCATION_IN_BUILDING_MIM.BUILDING_SECTION' IN TYPEOF(pdr.definition.definition))
+        )) >= 1
+        )) = 1))
+        )) = 0;
+WR2: SIZEOF (QUERY (rrwt <* representation_relationship_with_transformation |
+       (SIZEOF (QUERY (pdr <* USEDIN(rrwt\representation_relationship.rep_2,
+       'LOCATION_IN_BUILDING_MIM.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.USED_REPRESENTATION') |
+       SIZEOF (TYPEOF (pdr.definition.definition) *
+       ['LOCATION_IN_BUILDING_MIM.SPACE_ELEMENT',
+       'LOCATION_IN_BUILDING_MIM.BUILDING_LEVEL']) = 1
+       )) >= 1)
+       AND
+      (NOT (SIZEOF (QUERY (pdr <* USEDIN(rrwt\representation_relationship.rep_1,
+       'LOCATION_IN_BUILDING_MIM.PROPERTY_DEFINITION_REPRESENTATION.USED_REPRESENTATION') |
+       ('LOCATION_IN_BUILDING_MIM.BUILDING_SECTION' IN TYPEOF (pdr.definition.definition))
+       )) = 1))
+       )) = 0;
+WR3: SIZEOF (QUERY (rrwt_1 <* representation_relationship_with_transformation |
+       SIZEOF (QUERY (rrwt_2 <* representation_relationship_with_transformation |
+       (SIZEOF (QUERY (pdr <* USEDIN(rrwt_1\representation_relationship.rep_2,
+       'LOCATION_IN_BUILDING_MIM.PROPERTY_DEFINITION_REPRESENTATION.USED_REPRESENTATION') |
+       SIZEOF (TYPEOF (pdr.definition.definition) *
+       ['LOCATION_IN_BUILDING_MIM.SPACE_ELEMENT',
+       'LOCATION_IN_BUILDING_MIM.BUILDING_LEVEL']) = 1
+       )) >= 1)
+       AND
+       (rrwt_1\representation_relationship.rep_2 :=: rrwt_2\representation_relationship.rep_2)
+       )) >= 1
+       )) = 0;
+END_RULE;
+
+RULE building_element_component_maps_into_building_element FOR
+  (mapped_item, representation_relationship_with_transformation);
+WHERE
+WR1: SIZEOF (QUERY (mi <* mapped_item |
+        (SIZEOF (QUERY (pdr <* USEDIN(mi.mapping_source.mapped_representation,
+        'LOCATION_IN_BUILDING_MIM.'+
+        'PROPERTY_DEFINITION_REPRESENTATION.USED_REPRESENTATION') |
+	  SIZEOF (TYPEOF (pdr.definition.definition) *
+        ['LOCATION_IN_BUILDING_MIM.NEGATIVE_COMPOMENT',
+         'LOCATION_IN_BUILDING_MIM.POSITIVE_COMPOMENT']
+        ) = 1
+        )) >= 1)
+        AND
+        (SIZEOF (QUERY (r <* USEDIN (mi,'LOCATION_IN_BUILDING_MIM.'+
+        'REPRESENTATION.ITEMS') |
+        SIZEOF (QUERY (pdr <* USEDIN(r,'LOCATION_IN_BUILDING_MIM.'+
+        'PROPERTY_DEFINITION_REPRESENTATION.USED_REPRESENTATION') | 
+	  SIZEOF (TYPEOF (pdr.definition.definition) *
+         ['LOCATION_IN_BUILDING_MIM.BUILDING_ELEMENT',
+	  'LOCATION_IN_BUILDING_MIM.FIXTURE_EQUIPMENT_ELEMENT',
+          'LOCATION_IN_BUILDING_MIM.SERVICE_ELEMENT',
+          'LOCATION_IN_BUILDING_MIM.STRUCTURE_ENCLOSURE_ELEMENT'] ) >= 1)) 
+	 =1 ))
+	 = 0)
+        )) = 0;
+WR2: SIZEOF (QUERY (rrwt <* representation_relationship_with_transformation |
+       (SIZEOF (QUERY (pdr <* USEDIN(rrwt\representation_relationship.rep_2,
+       'LOCATION_IN_BUILDING_MIM.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.USED_REPRESENTATION') |
+       SIZEOF (TYPEOF (pdr.definition.definition) *
+       ['LOCATION_IN_BUILDING_MIM.NEGATIVE_COMPOMENT',
+        'LOCATION_IN_BUILDING_MIM.POSITIVE_COMPOMENT']
+       ) = 1
+       )) >= 1)
+       AND
+      (SIZEOF (QUERY (pdr <*
+       USEDIN(rrwt\representation_relationship.rep_1,
+       'LOCATION_IN_BUILDING_MIM.PROPERTY_DEFINITION_REPRESENTATION.USED_REPRESENTATION') |
+	  SIZEOF (TYPEOF (pdr.definition.definition) *
+         ['LOCATION_IN_BUILDING_MIM.BUILDING_ELEMENT',
+	    'LOCATION_IN_BUILDING_MIM.FIXTURE_EQUIPMENT_ELEMENT',
+          'LOCATION_IN_BUILDING_MIM.SERVICE_ELEMENT',
+          'LOCATION_IN_BUILDING_MIM.STRUCTURE_ENCLOSURE_ELEMENT'] ) >= 1
+	  )) = 0)
+       )) = 0;
+WR3: SIZEOF (QUERY (rrwt_1 <* representation_relationship_with_transformation |
+       SIZEOF (QUERY (rrwt_2 <* representation_relationship_with_transformation |
+       (SIZEOF (QUERY (pdr <* USEDIN(rrwt_1\representation_relationship.rep_2,
+       'LOCATION_IN_BUILDING_MIM.PROPERTY_DEFINITION_REPRESENTATION.USED_REPRESENTATION') |
+       SIZEOF (TYPEOF (pdr.definition.definition) *
+       ['LOCATION_IN_BUILDING_MIM.NEGATIVE_COMPONENT',
+        'LOCATION_IN_BUILDING_MIM.POSITIVE_COMPONENT']) = 1
+       )) >= 1)
+       AND
+       (rrwt_1\representation_relationship.rep_2 :=: rrwt_2\representation_relationship.rep_2)
+       )) >= 1
+       )) = 0;
+END_RULE;
+
+RULE building_section_maps_into_building FOR
+  (mapped_item, representation_relationship_with_transformation);
+WHERE
+WR1: SIZEOF (QUERY (mi <* mapped_item |
+        (SIZEOF (QUERY (pdr <* USEDIN(mi.mapping_source.mapped_representation,
+        'LOCATION_IN_BUILDING_MIM.'+
+        'PROPERTY_DEFINITION_REPRESENTATION.USED_REPRESENTATION') |
+	  SIZEOF (TYPEOF (pdr.definition.definition) *
+        ['LOCATION_IN_BUILDING_MIM.BUILDING_SECTION']
+        ) = 1
+        )) >= 1)
+        AND
+        (NOT (SIZEOF (QUERY (r <* USEDIN (mi,'LOCATION_IN_BUILDING_MIM.'+
+        'REPRESENTATION.ITEMS') |
+        SIZEOF (QUERY (pdr <* USEDIN(r,'LOCATION_IN_BUILDING_MIM.'+
+        'PROPERTY_DEFINITION_REPRESENTATION.USED_REPRESENTATION') | 
+        (['LOCATION_IN_BUILDING_MIM.BUILDING'] IN
+        TYPEOF (pdr.definition.definition))
+        )) >= 1
+        )) = 1))
+        )) = 0;
+WR2: SIZEOF (QUERY (rrwt <* representation_relationship_with_transformation |
+       (SIZEOF (QUERY (pdr <* USEDIN(rrwt\representation_relationship.rep_2,
+       'LOCATION_IN_BUILDING_MIM.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.USED_REPRESENTATION') |
+	SIZEOF (TYPEOF (pdr.definition.definition) *
+       ['LOCATION_IN_BUILDING_MIM.BUILDING_SECTION']) = 1
+       )) >= 1)
+       AND
+      (NOT (SIZEOF (QUERY (pdr <*
+       USEDIN(rrwt\representation_relationship.rep_1,
+       'LOCATION_IN_BUILDING_MIM.PROPERTY_DEFINITION_REPRESENTATION.USED_REPRESENTATION') |
+       (['LOCATION_IN_BUILDING_MIM.BUILDING'] IN TYPEOF (pdr.definition.definition))
+       )) = 1))
+       )) = 0;
+WR3: SIZEOF (QUERY (rrwt_1 <*
+       representation_relationship_with_transformation |
+       SIZEOF (QUERY (rrwt_2 <*
+       representation_relationship_with_transformation |
+       (SIZEOF (QUERY (pdr <* USEDIN(rrwt_1\representation_relationship.rep_2,
+       'LOCATION_IN_BUILDING_MIM.PROPERTY_DEFINITION_REPRESENTATION.USED_REPRESENTATION') |
+       SIZEOF (TYPEOF ('LOCATION_IN_BUILDING_MIM.BUILDING_SECTION') * pdr.definition.definition) = 1
+       )) >= 1)
+       AND
+       (rrwt_1\representation_relationship.rep_2 :=: rrwt_2\representation_relationship.rep_2)
+       )) >= 1
+       )) = 0;
+END_RULE;
+
+END_SCHEMA;
+
+
+

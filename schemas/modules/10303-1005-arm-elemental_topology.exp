@@ -1,0 +1,17 @@
+(*
+WG12 N674
+ISO/TS 10303-1005
+Product data representation and exchange: Application module: Elemental topology - EXPRESS ARM
+*)
+
+SCHEMA Elemental_topology_arm;
+
+USE FROM Foundation_representation_arm; -- ISO/TS 10303-1004
+
+ENTITY Detailed_topological_model_element
+  ABSTRACT SUPERTYPE
+  SUBTYPE OF (Representation_item);
+END_ENTITY;
+
+END_SCHEMA;
+

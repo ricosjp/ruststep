@@ -1,0 +1,37 @@
+(*
+ $Id: 10303-1046-arm-product_replacement.exp,v 1.4 2006/08/07 07:44:42 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N1144 - ISO/TS 10303-1046 Product replacement - EXPRESS ARM
+*)
+  
+SCHEMA Product_replacement_arm;
+
+USE FROM Assembly_structure_arm; -- ISO/TS 10303-1026
+USE FROM Product_identification_arm; -- ISO/TS 10303-1017
+   
+ENTITY Alternate_product_relationship;
+   name : OPTIONAL STRING;
+   description : OPTIONAL STRING;
+   alternate_product : Product;
+   base_product : Product;
+   criteria : STRING;
+UNIQUE
+   UR1: alternate_product , base_product ;
+WHERE
+   WR1: alternate_product  :<>: base_product ;
+END_ENTITY;
+
+   
+ENTITY Assembly_relationship_substitution;
+  name : OPTIONAL STRING;
+  description : OPTIONAL STRING;
+  base_relationship        : Assembly_component_relationship;
+  substitute_relationship  : Assembly_component_relationship;
+UNIQUE
+  UR1 : base_relationship, substitute_relationship;
+WHERE
+  WR1: base_relationship.relating_view :=: substitute_relationship.relating_view;
+  WR2: base_relationship :<>: substitute_relationship;
+END_ENTITY;
+
+   
+END_SCHEMA;

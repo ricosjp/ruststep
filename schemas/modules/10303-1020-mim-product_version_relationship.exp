@@ -1,0 +1,15 @@
+(*
+ $Id: 10303-1020-mim-product_version_relationship.exp,v 1.5 2006/08/07 09:42:02 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N1130 - ISO/TS 10303-1020 Product version relationship - EXPRESS MIM
+*)
+   
+SCHEMA Product_version_relationship_mim;
+
+USE FROM Product_version_mim; 	--ISO 10303-1018
+
+USE FROM product_definition_schema 	-- ISO 10303-41
+  (product_definition_formation_relationship);
+   
+END_SCHEMA;
+
+

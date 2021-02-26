@@ -1,0 +1,56 @@
+(*
+ $Id: 10303-1080-arm-Property_space.exp,v 1.4 2006/08/04 12:01:50 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2819 - ISO/TS 10303-1080 Property space - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG12 N2051
+*)
+
+SCHEMA Property_space_arm;
+
+USE FROM Class_arm;    --  ISO/TS 10303-1070
+USE FROM Class_of_activity_arm;    --  ISO/TS 10303-1071
+USE FROM Class_of_product_arm;    --  ISO/TS 10303-1077
+USE FROM Independent_property_arm;    --  ISO/TS 10303-1036
+USE FROM Process_property_assignment_arm;    --  ISO/TS 10303-1040
+USE FROM Property_assignment_arm;    --  ISO/TS 10303-1030
+
+TYPE characterized_class_of_physical_object = SELECT BASED_ON property_assignment_select WITH 
+   (Class_of_activity, 
+    Class_of_product);
+END_TYPE; 
+
+ENTITY Class_of_possession_of_property
+  SUBTYPE OF (Applied_independent_property);
+  SELF\Applied_independent_property.base_independent_property : Physical_quantity_space;
+END_ENTITY;
+
+ENTITY Physical_quantity_range
+  SUBTYPE OF (Physical_quantity_space);
+END_ENTITY;
+
+ENTITY Physical_quantity_space
+  SUBTYPE OF (Independent_property, Class);
+END_ENTITY;
+
+ENTITY Standard_tensor_order_and_symmetry
+  SUBTYPE OF (Tensor_order_and_symmetry_by_library_reference);
+WHERE
+  valid_standard_class: (SELF\Tensor_order_and_symmetry_by_library_reference.source_id = 'ISO-TS-10303-1099') AND (SELF\Tensor_order_and_symmetry_by_library_reference.item_id IN ['TO001', 'TO002', 'TO003', 'TO004', 'TO005', 'TO006', 'TO007', 'TO008', 'TO009']);
+END_ENTITY;
+
+ENTITY Tensor_order_and_symmetry
+  SUBTYPE OF (Independent_property, Class);
+END_ENTITY;
+
+ENTITY Tensor_order_and_symmetry_by_library_reference
+  SUBTYPE OF (Tensor_order_and_symmetry);
+  item_id : STRING;
+  source_id : STRING;
+END_ENTITY;
+
+ENTITY Tensor_order_and_symmetry_for_physical_quantity_space
+  SUBTYPE OF (Independent_property_relationship);
+  SELF\Independent_property_relationship.relating : Tensor_order_and_symmetry;
+  SELF\Independent_property_relationship.related : Physical_quantity_space;
+END_ENTITY;
+
+END_SCHEMA;

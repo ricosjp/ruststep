@@ -1,0 +1,3182 @@
+(*
+	AIM EXPRESS short form for ISO/DIS 10303-240
+        Len Slovensky
+	2003-09-23
+	ISO TC184/SC4/WG3 N1370
+	Supercedes ISO TC184/SC4/WG3 N1168
+	
+*)
+SCHEMA process_planning_schema;
+      
+USE FROM aic_machining_feature;     
+      
+USE FROM aic_advanced_brep;                            -- ISO 10303-514
+   
+USE FROM aic_faceted_brep;                             -- ISO 10303-512
+     
+USE FROM aic_manifold_surface;                         -- ISO 10303-509
+     
+USE FROM aic_edge_based_wireframe;                     -- ISO 10303-501
+     
+USE FROM aic_shell_based_wireframe;                    -- ISO 10303-502
+
+USE FROM aic_geometrically_bounded_surface;            -- ISO 10303-507
+     
+USE FROM aic_geometrically_bounded_wireframe;          -- ISO 10303-510
+
+USE FROM aic_geometric_tolerances;                     -- ISO 10303-519
+
+USE FROM action_schema                                 -- ISO 10303-41
+     (action,
+      action_directive,
+      action_method,
+      action_method_relationship,
+      action_relationship,
+      action_request_solution,
+      action_resource,
+      action_resource_relationship,
+      action_resource_type,
+      directed_action,
+      executed_action,
+      supported_item,
+      versioned_action_request);
+      
+USE FROM application_context_schema                   -- ISO 10303-41
+     (application_context,
+     application_context_element,
+     application_protocol_definition,
+      product_definition_context);
+
+USE FROM approval_schema                              -- ISO 10303-41
+     (approval,
+      approval_date_time,
+      approval_person_organization,
+      approval_role,
+      approval_status);
+
+USE FROM basic_attribute_schema                       -- ISO 10303-41
+     (id_attribute,
+      description_attribute,
+      description_attribute_select,
+      object_role);
+
+USE FROM contract_schema                              -- ISO 10303-41
+     (contract,
+     contract_type);
+     
+USE FROM date_time_schema                             -- ISO 10303-41
+     (calendar_date,
+      date,
+      date_and_time,
+      date_role,
+      date_time_select,
+      local_time);
+      
+USE FROM document_schema                              -- ISO 10303-41
+     (document,
+      document_product_association,
+      document_relationship,
+      document_representation_type,
+      document_type,
+      document_usage_constraint,
+      product_or_formation_or_definition);
+      
+USE FROM effectivity_schema                           -- ISO 10303-41
+     (effectivity);
+      
+USE FROM external_reference_schema                    -- ISO 10303-41
+     (external_source,
+      externally_defined_item,
+      externally_defined_item_relationship,
+      pre_defined_item,
+      source_item);
+
+  REFERENCE FROM geometry_schema     	-- ISO 10303-42
+      (dummy_gri);
+
+      
+USE FROM geometry_schema                              -- ISO 10303-42
+     (axis1_placement,
+     axis2_placement_3d,
+     b_spline_curve_with_knots,
+     bezier_curve,
+     bezier_surface,
+     cartesian_point, 
+     circle,
+     elementary_surface,
+     ellipse,
+     geometric_representation_item,
+     hyperbola,
+     line,
+     oriented_surface,
+     parabola,
+     placement,
+     plane,
+     point,
+     quasi_uniform_curve,
+     quasi_uniform_surface,
+     surface);
+     
+USE FROM geometric_model_schema                       -- ISO 10303-42
+     (edge_based_wireframe_model,
+      faceted_brep,
+      geometric_curve_set,
+      geometric_set,
+      manifold_solid_brep,
+      shell_based_surface_model, 
+      shell_based_wireframe_model,
+      solid_model);
+      
+USE FROM group_schema                                 -- ISO 10303-41
+     (group,
+     group_relationship);
+          
+USE FROM management_resources_schema                  -- ISO 10303-41
+     (action_assignment,
+      action_method_assignment,
+      action_method_role,
+      action_request_assignment,
+      approval_assignment,
+      attribute_classification_assignment,
+      classification_role,
+      classification_assignment,
+      contract_assignment,
+      date_assignment,
+      document_reference,
+      document_usage_role,
+      document_usage_constraint_assignment,
+      effectivity_assignment,
+      external_identification_assignment,
+      group_assignment,
+      identification_assignment,
+      identification_role,
+      organization_assignment,
+      security_classification_assignment);
+      
+USE FROM material_property_definition_schema          -- ISO 10303-45
+     (material_designation,
+      material_property,
+      property_definition_relationship);
+      
+USE FROM material_property_representation_schema      -- ISO 10303-45
+     (data_environment,
+      material_property_representation);
+      
+USE FROM measure_schema                               -- ISO 10303-41
+      (amount_of_substance_measure,
+      area_measure,
+      celsius_temperature_measure,
+      conversion_based_unit,
+      context_dependent_unit,
+      count_measure,
+      derived_unit,
+      electric_current_measure,
+      global_unit_assigned_context,
+      length_measure,
+      length_measure_with_unit,
+      length_unit,
+      luminous_intensity_measure,
+      mass_measure_with_unit,
+      mass_unit,
+      mass_measure,
+      measure_value,
+      measure_with_unit,
+      unit,
+      named_unit,
+      plane_angle_measure,
+      plane_angle_measure_with_unit,
+      plane_angle_unit,
+      positive_plane_angle_measure,
+      ratio_measure,
+      ratio_unit,
+      si_unit,
+      solid_angle_measure,
+      solid_angle_unit,
+      time_measure,
+      time_measure_with_unit,
+      time_unit,
+      thermodynamic_temperature_measure,
+      volume_measure);
+      
+USE FROM method_definition_schema                     -- ISO 10303-49
+     (action_method_with_associated_documents,
+     relationship_condition,
+     serial_action_method,
+     sequential_method);
+     
+USE FROM person_organization_schema                   -- ISO 10303-41
+     (address,
+      organization,
+      organization_role,
+      organizational_address,
+      organizational_project,
+      person,
+      person_and_organization,
+      person_organization_select,
+      personal_address);
+      
+USE FROM process_property_schema                      -- ISO 10303-49
+     (action_property,
+      characterized_action_definition,
+      characterized_resource_definition,
+      action_resource_requirement,
+      process_product_association,
+      process_property_association,
+      product_definition_process,
+      property_process,
+      requirement_for_action_resource,
+      resource_property);
+      
+USE FROM process_property_representation_schema       -- ISO 10303-49
+     (action_property_representation,
+      resource_property_representation);
+
+USE FROM product_definition_schema                    -- ISO 10303-41
+     (product,
+      product_category,
+      product_definition,
+      product_definition_effectivity,
+      product_definition_with_associated_documents,
+      product_definition_formation,
+      product_definition_relationship,
+      product_related_product_category);
+      
+USE FROM product_property_definition_schema           -- ISO 10303-41
+     (characterized_definition,
+      characterized_object,
+      characterized_product_definition,
+      general_property,
+      general_property_association,
+      product_definition_shape,
+      property_definition,
+      shape_definition,
+      shape_aspect,
+      shape_aspect_relationship);
+  
+USE FROM product_property_representation_schema       -- ISO 10303-41
+     (property_definition_representation,
+      represented_definition,
+      shape_definition_representation,
+      shape_representation);
+      
+USE FROM product_structure_schema                     -- ISO 10303-41
+     (assembly_component_usage,
+      make_from_usage_option,
+      next_assembly_usage_occurrence,
+      product_definition_usage);
+  
+USE FROM qualified_measure_schema                     -- ISO 10303-45
+     (descriptive_representation_item,
+      measure_qualification,
+      measure_representation_item,
+      precision_qualifier,
+     qualified_representation_item,
+     standard_uncertainty,
+     type_qualifier,
+     uncertainty_qualifier,
+     value_qualifier);
+     
+USE FROM representation_schema                        -- ISO 10303-43
+     (global_uncertainty_assigned_context,
+      mapped_item,
+      representation,
+      representation_item,
+      representation_map,
+      value_representation_item);
+      
+USE FROM security_classification_schema
+     (security_classification,
+      security_classification_level);
+
+USE FROM shape_dimension_schema
+     (angular_location,
+      angular_size,
+      dimensional_characteristic_representation,
+      dimensional_location,
+      dimensional_location_with_path,
+      dimensional_size,
+      shape_dimension_representation);
+      
+USE FROM shape_tolerance_schema
+     (geometric_tolerance,
+      limits_and_fits,
+      plus_minus_tolerance,
+      tolerance_value,
+      tolerance_zone);
+
+  REFERENCE FROM topology_schema     	-- ISO 10303-42
+      (dummy_tri);
+
+     
+USE FROM topology_schema
+     (closed_shell,
+      connected_face_set,
+      edge,
+      edge_loop,
+      face,
+      face_surface,
+      open_shell,
+      poly_loop,
+      shell,
+      topological_representation_item);
+     
+USE FROM support_resource_schema
+     (identifier);
+     
+REFERENCE FROM support_resource_schema
+      (type_check_function);
+
+
+TYPE action_item = SELECT (
+     feature_dependency ,
+     product_definition_formation);
+END_TYPE;
+
+TYPE action_method_item = SELECT (
+     externally_defined_schema);
+END_TYPE;
+
+TYPE action_request_item = SELECT (
+     product_definition_formation,
+     fixture_contract,
+     tool_contract);                  
+END_TYPE;
+
+TYPE approval_item = SELECT (
+     revision);
+END_TYPE;
+
+TYPE classification_item = SELECT (
+     externallY_defined_representation_with_parameters);
+END_TYPE;
+
+
+TYPE contract_item = SELECT (
+     process_plan_specification,
+     document_reference,
+     fixture_assembly,
+     organization,
+     product_definition_formation,
+     tool_assembly);                        
+END_TYPE;
+
+TYPE date_item = SELECT (
+     process_plan_security,
+     versioned_action_request);                       
+END_TYPE;
+
+TYPE document_reference_item = SELECT (
+      action_method, 
+      action_resource_requirement,
+      controller,
+      date_and_time,
+      drawing,
+      externally_defined_schema,
+      fixture_assembly,
+      fixture_assembly_element,
+      machine_usage,
+      process_activity,
+      process_plan_activity,
+      product_definition,
+      product_definition_formation,
+      property_definition,
+      single_setup_process,
+      tool_assembly,
+      tool_assembly_element,
+      tool_data);
+END_TYPE;
+
+
+TYPE document_usage_constraint_item = SELECT (
+     illustration);                             
+END_TYPE;
+
+TYPE effectivity_item = SELECT (
+     product_definition_formation);
+END_TYPE;
+
+TYPE external_identification_item = SELECT (
+     document,
+     externally_defined_class,
+     externally_defined_general_property);                         
+END_TYPE;
+
+TYPE group_item = SELECT (
+     workstation,
+     instanced_feature);                         
+END_TYPE;
+
+TYPE identification_assignment_item= SELECT (
+     document_file);                        
+END_TYPE;
+
+TYPE organization_item = SELECT (
+     action,
+     process_plan_activity,
+     fixture_assembly_element,
+     known_source,
+     machine,
+     part_contract,
+     product_definition,
+     tool_assembly_element);
+END_TYPE;
+
+TYPE security_classification_item = SELECT (
+     process_plan_activity,
+     process_plan_version );
+END_TYPE;
+
+ENTITY allowed_time
+     SUBTYPE OF (action_property);
+WHERE 
+
+        
+     
+    wr1: (NOT(SIZEOF(QUERY ( apr <* USEDIN(SELF,
+         'PROCESS_PLANNING_SCHEMA.ACTION_PROPERTY_REPRESENTATION.PROPERTY')| 
+         (SIZEOF(QUERY ( it <* apr.representation.items | 
+         ((SIZEOF([
+         'PROCESS_PLANNING_SCHEMA.MEASURE_REPRESENTATION_ITEM',
+         'PROCESS_PLANNING_SCHEMA.TIME_MEASURE_WITH_UNIT'] * TYPEOF
+         (it)) = 2) AND (it.name = 'allowance factor'))))=1)))=0));
+ 
+       
+    
+    wr2: (NOT(SIZEOF(QUERY ( apr <* USEDIN(SELF,
+         'PROCESS_PLANNING_SCHEMA.ACTION_PROPERTY_REPRESENTATION.PROPERTY')| 
+         (NOT (SIZEOF(QUERY ( it <* apr.representation.items | 
+         (( SIZEOF([
+         'PROCESS_PLANNING_SCHEMA.MEASURE_REPRESENTATION_ITEM',
+         'PROCESS_PLANNING_SCHEMA.TIME_MEASURE_WITH_UNIT'] * TYPEOF
+         (it)) = 2) AND (it.name = 'standard time'))))=1))))=0));
+       
+        
+    
+    wr3: (NOT(SIZEOF(QUERY ( apr <* USEDIN(SELF,
+         'PROCESS_PLANNING_SCHEMA.ACTION_PROPERTY_REPRESENTATION.PROPERTY')| 
+         (SIZEOF(QUERY ( it <* apr.representation.items | 
+         (('PROCESS_PLANNING_SCHEMA.DESCRIPTIVE_REPRESENTATION_ITEM' 
+         IN TYPEOF(it)) AND (it.name = 'allowed type'))))<=1)))=0));
+         
+        
+
+    wr4: SIZEOF(QUERY ( apr <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.ACTION_PROPERTY_REPRESENTATION.PROPERTY')| 
+      (SIZEOF(QUERY ( it <* apr.representation.items | 
+      (('PROCESS_PLANNING_SCHEMA.DESCRIPTIVE_REPRESENTATION_ITEM' 
+      IN TYPEOF(it)) AND (it.name = 'allowed time source'))))=1)))=1; 
+END_ENTITY;
+
+ENTITY alternate_action_method_relationship
+     SUBTYPE OF (action_method_relationship);
+WHERE 
+
+      wr1: ('PROCESS_PLANNING_SCHEMA.PROCESS_PLAN_ACTIVITY' 
+            IN TYPEOF(SELF.related_method));
+                  
+            
+      wr2: ('PROCESS_PLANNING_SCHEMA.PROCESS_PLAN_ACTIVITY' 
+            IN TYPEOF(SELF.relating_method));
+
+END_ENTITY;
+
+ENTITY alternate_plan_relationship
+     SUBTYPE OF (action_relationship);
+WHERE
+  wr1: ((('PROCESS_PLANNING_SCHEMA.PROCESS_PLAN_VERSION') 
+       IN TYPEOF (SELF.relating_action))AND
+       (('PROCESS_PLANNING_SCHEMA.PROCESS_PLAN_VERSION') 
+       IN TYPEOF (SELF.related_action)));
+       
+  wr2: (SIZEOF(QUERY ( edir <* USEDIN(SELF.related_action,
+       'PROCESS_PLANNING_SCHEMA.ID_ATTRIBUTE.IDENTIFIED_ITEM') |
+       ((edir.attribute_value='alternate process plan') )))=1);
+
+END_ENTITY;
+
+ENTITY ancillary_activity
+     SUBTYPE OF (manufacturing_activity);
+     
+END_ENTITY;
+
+ENTITY ancillary_setup
+     SUBTYPE OF (process_plan_activity);
+     
+END_ENTITY;
+
+ENTITY applied_action_request_assignment
+     SUBTYPE OF (action_request_assignment);
+     items: SET[1:?] OF action_request_item;
+END_ENTITY;
+
+ENTITY applied_action_assignment
+     SUBTYPE OF (action_assignment);
+     items: SET[1:?] OF action_item;
+END_ENTITY;
+
+ENTITY applied_action_method_assignment
+     SUBTYPE OF (action_method_assignment);
+     items: SET[1:?] OF action_method_item;
+END_ENTITY;
+
+ENTITY applied_approval_assignment
+     SUBTYPE OF (approval_assignment);
+     items: SET[1:?] OF approval_item;
+END_ENTITY;
+
+  ENTITY applied_classification_assignment
+    SUBTYPE OF (classification_assignment);
+      items : SET [1:?] OF classification_item;
+
+  END_ENTITY; -- applied_classification_assignment
+
+  ENTITY applied_library_assignment
+    SUBTYPE OF (applied_classification_assignment);
+    WHERE
+
+ 
+         
+      wr1: ((SELF\classification_assignment.role.name = 
+           'definitional class membership')) ;
+               
+      wr2:  (((SELF\classification_assignment.assigned_class.name= 
+            'library identifier') AND 
+            ('PROCESS_PLANNING_SCHEMA.EXTERNALLY_DEFINED_CLASS' 
+            IN TYPEOF (SELF\classification_assignment.assigned_class))));
+
+                  
+ 
+
+        
+      wr3: SIZEOF(QUERY ( edir <* USEDIN(SELF.assigned_class,
+ 'PROCESS_PLANNING_SCHEMA.EXTERNALLY_DEFINED_ITEM_RELATIONSHIP.RELATED_ITEM')| 
+          ((edir.name = 'name scope') AND 
+          ('PROCESS_PLANNING_SCHEMA.EXTERNALLY_DEFINED_GENERAL_PROPERTY' 
+           IN TYPEOF(edir.relating_item))AND 
+           (SIZEOF(QUERY ( gpa <* USEDIN(edir.relating_item,
+      'PROCESS_PLANNING_SCHEMA.GENERAL_PROPERTY_ASSOCIATION.BASE_DEFINITION')| 
+           ((gpa.name = 'definitional') AND 
+           (SIZEOF(QUERY ( pdr <* USEDIN(gpa.derived_definition,
+     'PROCESS_PLANNING_SCHEMA.PROPERTY_DEFINITION_REPRESENTATION.DEFINITION')| 
+           ((pdr.used_representation.name = 'property value')AND 
+           (SIZEOF(QUERY(ri <* pdr.used_representation.items|
+           'PROCESS_PLANNING_SCHEMA.VALUE_REPRESENTATION_ITEM' 
+           IN TYPEOF(ri))) >=1 )) )) =1 )) )) =1 )) )) =1;
+
+END_ENTITY;
+
+ENTITY applied_contract_assignment
+     SUBTYPE OF (contract_assignment);
+     items: SET[1:?] OF contract_item;
+END_ENTITY;
+
+ENTITY applied_date_assignment
+     SUBTYPE OF (date_assignment);
+     items: SET[1:?] OF date_item;
+END_ENTITY;
+
+ENTITY applied_document_reference
+     SUBTYPE OF (document_reference);
+     items: SET[1:?] OF document_reference_item;
+END_ENTITY;
+
+ENTITY applied_document_usage_constraint_assignment
+     SUBTYPE OF (document_usage_constraint_assignment);
+     items: SET[1:?] OF document_usage_constraint_item;
+END_ENTITY;
+
+ENTITY applied_effectivity_assignment
+     SUBTYPE OF (effectivity_assignment);
+     items: SET[1:?] OF effectivity_item;
+
+END_ENTITY;
+
+ENTITY applied_external_identification_assignment
+     SUPERTYPE OF (ONEOF (library_property_version_assignment,
+                           library_class_version_assignment))
+     SUBTYPE OF (external_identification_assignment);
+     items: SET[1:?] OF external_identification_item;
+
+END_ENTITY;
+
+ENTITY applied_group_assignment
+     SUBTYPE OF (group_assignment);
+     items: SET[1:?] OF group_item;
+END_ENTITY;
+
+ENTITY applied_identification_assignment
+     SUBTYPE OF (identification_assignment);
+     items: SET[1:?] OF identification_assignment_item;
+END_ENTITY;
+
+ENTITY applied_organization_assignment
+     SUBTYPE OF (organization_assignment);
+     items: SET[1:?] OF organization_item ;
+END_ENTITY;
+
+ENTITY applied_security_classification_assignment
+     SUBTYPE OF (security_classification_assignment);
+     items: SET[1:?] OF security_classification_item ;
+END_ENTITY;
+
+  ENTITY block_shape_representation
+    SUBTYPE OF (shape_representation_with_parameters);
+    WHERE
+      wr1: (SIZEOF(SELF.items) = 4);
+      wr2: (SIZEOF(QUERY ( it <* SELF.items | 
+           (('PROCESS_PLANNING_SCHEMA.PLACEMENT' 
+           IN TYPEOF(it)) AND (it.name = 'orientation')) )) = 1);
+      wr3: (SIZEOF(QUERY ( it <* SELF.items | 
+           ((SIZEOF(
+           ['PROCESS_PLANNING_SCHEMA.MEASURE_REPRESENTATION_ITEM',
+           'PROCESS_PLANNING_SCHEMA.LENGTH_MEASURE_WITH_UNIT'] *
+            TYPEOF(it)) = 2) AND (it.name = 'length')) )) = 1);
+      wr4: (SIZEOF(QUERY ( it <* SELF.items | 
+           ((SIZEOF([
+           'PROCESS_PLANNING_SCHEMA.MEASURE_REPRESENTATION_ITEM',
+           'PROCESS_PLANNING_SCHEMA.LENGTH_MEASURE_WITH_UNIT'] *
+           TYPEOF(it)) = 2) AND (it.name = 'width')) )) = 1);
+      wr5: (SIZEOF(QUERY ( it <* SELF.items | 
+           ((SIZEOF([
+           'PROCESS_PLANNING_SCHEMA.MEASURE_REPRESENTATION_ITEM',
+           'PROCESS_PLANNING_SCHEMA.LENGTH_MEASURE_WITH_UNIT'] *
+           TYPEOF(it)) = 2) AND (it.name = 'height')) )) = 1);
+  END_ENTITY; -- block_shape_representation
+
+ENTITY clamp_position
+     SUBTYPE OF (resource_property);
+WHERE      
+ wr1: SIZEOF(QUERY ( apr <* USEDIN(SELF ,
+      'PROCESS_PLANNING_SCHEMA.RESOURCE_PROPERTY_REPRESENTATION.PROPERTY')| 
+      ('PROCESS_PLANNING_SCHEMA.CLAMP_MATING_DEFINITION' IN TYPEOF(apr)) ))=1;
+
+ wr2: SIZEOF(QUERY ( apr <* USEDIN(SELF ,
+      'PROCESS_PLANNING_SCHEMA.RESOURCE_PROPERTY_REPRESENTATION.PROPERTY')| 
+      (SIZEOF(QUERY ( ap <* apr.representation.items| 
+      (('PROCESS_PLANNING_SCHEMA.DESCRIPTIVE_REPRESENTATION_ITEM' 
+      IN TYPEOF(ap)) AND (ap.name = 'position type') AND 
+       (ap.description IN ['jack','locator', 'clamp'])
+      )))=1)  ))=1;
+
+ wr3:  (('PROCESS_PLANNING_SCHEMA.REQUIREMENT_FOR_ACTION_RESOURCE' IN
+        TYPEOF(SELF.resource)) AND 
+       ('PROCESS_PLANNING_SCHEMA.FIXTURE_ASSEMBLY' IN
+        TYPEOF(SELF.resource.resources)));
+
+
+ wr4: SIZEOF(QUERY ( apr <* USEDIN(SELF ,
+      'PROCESS_PLANNING_SCHEMA.RESOURCE_PROPERTY_REPRESENTATION.PROPERTY')| 
+      (SIZEOF(QUERY ( ap <* apr.representation.items| 
+      (('PROCESS_PLANNING_SCHEMA.CARTESIAN_POINT' 
+      IN TYPEOF(ap)) AND (ap.name = 'clamp location'))))=1)
+      ))=1;
+
+     
+END_ENTITY;
+
+ENTITY clamp_mating_definition
+     SUBTYPE OF (resource_property_representation);
+   WHERE
+        
+ wr1:  SIZEOF(QUERY ( ap <* SELF.representation.items| 
+      (('PROCESS_PLANNING_SCHEMA.DESCRIPTIVE_REPRESENTATION_ITEM' 
+      IN TYPEOF(ap)) AND (ap.name = 'clamp mating type'))))=1;
+      
+     
+ wr2: SIZEOF(QUERY ( pdp_imp <* 
+      QUERY ( pdp <* SELF.property.resource.OPERATIONS | 
+   ('PROCESS_PLANNING_SCHEMA.PRODUCT_DEFINITION_PROCESS' IN TYPEOF(pdp)) ) | 
+      (SIZEOF(QUERY ( ppa <* USEDIN(pdp_imp,
+      'PROCESS_PLANNING_SCHEMA.PROCESS_PROPERTY_ASSOCIATION.PROCESS')| 
+      ((('PROCESS_PLANNING_SCHEMA.SHAPE_ASPECT' IN
+       TYPEOF(ppa.property_or_shape)) 
+      AND 
+      (ppa.description = 'clamp mating shape')))))=0)))>=1; 
+         
+END_ENTITY;
+
+ENTITY class
+     SUBTYPE OF (group);
+END_ENTITY;
+
+ENTITY controller
+     SUBTYPE OF (action_resource);
+
+WHERE     
+ 
+        
+
+      wr1: SIZEOF(QUERY (adr <* USEDIN(SELF,
+           'PROCESS_PLANNING_SCHEMA.APPLIED_DOCUMENT_REFERENCE.ITEMS')| 
+           ('PROCESS_PLANNING_SCHEMA.PROCESS_PLAN_SPECIFICATION' IN TYPEOF
+           (adr.assigned_document))))=1;
+               
+END_ENTITY;
+
+ENTITY controller_program
+     SUBTYPE OF (document);
+WHERE 
+
+  
+   
+      wr1: SIZEOF(QUERY ( duc <* USEDIN(SELF,
+          'PROCESS_PLANNING_SCHEMA.DOCUMENT_USAGE_CONSTRAINT.SOURCE')| 
+          (duc.subject_element = 'controller program revision level') )) = 1;
+                 
+  
+  
+      wr2: SIZEOF(QUERY ( adr <* QUERY ( dr <* USEDIN(SELF,
+           'PROCESS_PLANNING_SCHEMA.DOCUMENT_REFERENCE.ASSIGNED_DOCUMENT')| 
+           ('PROCESS_PLANNING_SCHEMA.APPLIED_DOCUMENT_REFERENCE' 
+           IN TYPEOF(dr)) ) | 
+           (SIZEOF(QUERY ( d <* adr.items | 
+           ((('PROCESS_PLANNING_SCHEMA.DATE_AND_TIME' IN TYPEOF(d)) AND 
+           ('PROCESS_PLANNING_SCHEMA.DATE' IN TYPEOF(d.date_component))) AND 
+           ('PROCESS_PLANNING_SCHEMA.LOCAL_TIME' IN TYPEOF(d.time_component)))
+           )) = 1) )) = 1;
+                  
+  
+  
+      wr3: SIZEOF(QUERY ( adr <* QUERY ( dr <* USEDIN(SELF,
+           'PROCESS_PLANNING_SCHEMA.DOCUMENT_REFERENCE.ASSIGNED_DOCUMENT')| 
+           ('PROCESS_PLANNING_SCHEMA.APPLIED_DOCUMENT_REFERENCE' 
+           IN TYPEOF(dr)) ) | (SIZEOF(QUERY ( d <* adr.items | 
+           ('PROCESS_PLANNING_SCHEMA.MANUFACTURING_ACTIVITY' IN TYPEOF(d)) )) 
+           >= 1) )) = 1;
+                   
+        
+           
+      wr4: SIZEOF(QUERY ( adr <* USEDIN(SELF,
+           'PROCESS_PLANNING_SCHEMA.DOCUMENT_REFERENCE.ASSIGNED_DOCUMENT')| 
+           (('PROCESS_PLANNING_SCHEMA.APPLIED_DOCUMENT_REFERENCE' 
+           IN TYPEOF(adr)) AND (NOT (SIZEOF(QUERY ( pdf <* adr.items | 
+           (('PROCESS_PLANNING_SCHEMA.PRODUCT_DEFINITION_FORMATION' 
+           IN TYPEOF(pdf)) AND (NOT (SIZEOF(QUERY ( pd <* USEDIN(pdf,
+           'PROCESS_PLANNING_SCHEMA.PRODUCT_DEFINITION.FORMATION') | 
+           (pd.frame_of_reference.name = 'part definition') )) = 1))) )) 
+           = 1))) )) = 0;          
+      
+  
+  
+      wr5: SIZEOF(QUERY ( adr <* QUERY ( dr <* USEDIN(SELF,
+           'PROCESS_PLANNING_SCHEMA.DOCUMENT_REFERENCE.ASSIGNED_DOCUMENT')| 
+           ('PROCESS_PLANNING_SCHEMA.APPLIED_DOCUMENT_REFERENCE' 
+           IN TYPEOF(dr)) ) | (SIZEOF(QUERY ( d <* adr.items | 
+           ('PROCESS_PLANNING_SCHEMA.TOOL_ASSEMBLY' IN TYPEOF(d)) 
+           )) >= 1) )) = 1;
+                 
+        
+     
+      wr6: (NOT(SIZEOF(QUERY ( ap <* USEDIN(SELF,
+           'PROCESS_PLANNING_SCHEMA.DOCUMENT_REFERENCE.ASSIGNED_DOCUMENT')| 
+           (('PROCESS_PLANNING_SCHEMA.APPLIED_DOCUMENT_REFERENCE' 
+           IN TYPEOF(ap)) AND (NOT (SIZEOF(QUERY ( it <* ap.items | 
+           (('PROCESS_PLANNING_SCHEMA.DOCUMENT' 
+          IN TYPEOF(it)) AND (it.description = 'controller program document')) 
+           )) >= 0))) )) = 1)) ;
+  
+  
+      wr7: SIZEOF(QUERY ( adr <* QUERY ( dr <* USEDIN(SELF,
+           'PROCESS_PLANNING_SCHEMA.DOCUMENT_REFERENCE.ASSIGNED_DOCUMENT')| 
+           ('PROCESS_PLANNING_SCHEMA.APPLIED_DOCUMENT_REFERENCE' 
+           IN TYPEOF(dr)) ) | (SIZEOF(QUERY ( d <* adr.items | 
+           ('PROCESS_PLANNING_SCHEMA.SINGLE_SETUP_PROCESS' IN TYPEOF(d)) )) 
+           >= 1) )) = 1;
+           
+END_ENTITY;
+
+  ENTITY cylindrical_shape_representation
+    SUBTYPE OF (shape_representation_with_parameters);
+    WHERE
+      wr1: (SIZEOF(SELF.items) = 3);
+      wr2: (SIZEOF(QUERY ( it <* SELF.items | ((
+           'PROCESS_PLANNING_SCHEMA.PLACEMENT' 
+           IN TYPEOF(it)) AND (it.name = 'orientation')) )) = 1);
+      wr3: (SIZEOF(QUERY ( it <* SELF.items | ((SIZEOF([
+           'PROCESS_PLANNING_SCHEMA.MEASURE_REPRESENTATION_ITEM',
+           'PROCESS_PLANNING_SCHEMA.LENGTH_MEASURE_WITH_UNIT'] *
+            TYPEOF(it)) = 2) AND (it.name = 'length')) )) = 1);
+      wr4: (SIZEOF(QUERY ( it <* SELF.items | ((SIZEOF([
+           'PROCESS_PLANNING_SCHEMA.MEASURE_REPRESENTATION_ITEM',
+           'PROCESS_PLANNING_SCHEMA.LENGTH_MEASURE_WITH_UNIT'] *
+            TYPEOF(it)) = 2) AND (it.name = 'diameter')) )) = 1);
+  END_ENTITY; -- cylindrical_shape_representation
+
+ENTITY defining_action_method_relationship
+     SUBTYPE OF (action_method_relationship);
+WHERE 
+      wr1: ('PROCESS_PLANNING_SCHEMA.PROCESS_PLAN_ACTIVITY' 
+            IN TYPEOF(SELF.related_method));
+END_ENTITY;
+
+  ENTITY directed_dimensional_location
+    SUBTYPE OF (dimensional_location);
+  END_ENTITY; -- directed_dimensional_location
+
+ENTITY document_file
+     SUBTYPE OF (document,characterized_object);
+WHERE
+      wr1 : SIZEOF(QUERY ( drt <* USEDIN(SELF,
+ 'PROCESS_PLANNING_SCHEMA.DOCUMENT_REPRESENTATION_TYPE.REPRESENTED_DOCUMENT')| 
+            (drt.name IN ['physical','digital']) )) = 1;
+            
+
+      
+      wr2 : SIZEOF(QUERY ( adr <* USEDIN(SELF,
+          'PROCESS_PLANNING_SCHEMA.APPLIED_IDENTIFICATION_ASSIGNMENT.ITEMS')| 
+            (('PROCESS_PLANNING_SCHEMA.IDENTIFICATION_ASSIGNMENT' 
+            IN TYPEOF(adr)) AND (adr.role.name = 'version')) )) <= 1;
+            
+
+      
+      wr3 : SIZEOF(QUERY ( aeia <* USEDIN(SELF,
+  'PROCESS_PLANNING_SCHEMA.APPLIED_EXTERNAL_IDENTIFICATION_ASSIGNMENT.ITEMS')| 
+            ('PROCESS_PLANNING_SCHEMA.EXTERNAL_IDENTIFICATION_ASSIGNMENT' 
+            IN TYPEOF(aeia)) )) >= 0;
+            
+
+      
+  wr4 : SIZEOF(QUERY ( pd <* USEDIN(SELF,
+        'PROCESS_PLANNING_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+        ((pd.name='document property') AND (SIZEOF(QUERY ( pdr <*
+        USEDIN(pd,
+  'PROCESS_PLANNING_SCHEMA.PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') | 
+        (('PROCESS_PLANNING_SCHEMA.DOCUMENT_FILE_PROPERTIES' 
+        IN TYPEOF(pdr.used_representation)) AND 
+        (pdr.used_representation.name = 'document format')))) <=1)))) <=1; 
+             
+END_ENTITY;
+
+  ENTITY  document_file_properties 
+     SUBTYPE OF (representation);
+  WHERE
+  
+   wr1: SIZEOF(QUERY(r <* SELF.items  |
+        ((r.name='country code') AND 
+       ( 'PROCESS_PLANNING_SCHEMA.DESCRIPTIVE_REPRESENTATION_ITEM' 
+       IN TYPEOF (r))) )) <=1;
+  
+   wr2: SIZEOF(QUERY(r <* SELF.items  |
+        ((r.name='detail level') AND 
+       ( 'PROCESS_PLANNING_SCHEMA.DESCRIPTIVE_REPRESENTATION_ITEM' 
+       IN TYPEOF (r))) )) <=1;
+  
+   wr3: SIZEOF(QUERY(r <* SELF.items  |
+        ((r.name='geometry type') AND 
+       ( 'PROCESS_PLANNING_SCHEMA.DESCRIPTIVE_REPRESENTATION_ITEM' 
+       IN TYPEOF (r))) )) <=1;
+  
+   wr4: SIZEOF(QUERY(r <* SELF.items  |
+        ((r.name='language code') AND 
+       ( 'PROCESS_PLANNING_SCHEMA.DESCRIPTIVE_REPRESENTATION_ITEM' 
+       IN TYPEOF (r))) )) <=1;
+  
+   wr5: SIZEOF(QUERY(r <* SELF.items  |
+        ((r.name='creating interface') AND 
+       ( 'PROCESS_PLANNING_SCHEMA.DESCRIPTIVE_REPRESENTATION_ITEM' 
+       IN TYPEOF (r))) )) <=1;
+  
+   wr6: SIZEOF(QUERY(r <* SELF.items  |
+        ((r.name='creating operating system') AND 
+       ( 'PROCESS_PLANNING_SCHEMA.DESCRIPTIVE_REPRESENTATION_ITEM' 
+       IN TYPEOF (r))) )) <=1;
+  
+   wr7: SIZEOF(QUERY(r <* SELF.items  |
+       ((r.name='creating system') AND 
+       ( 'PROCESS_PLANNING_SCHEMA.DESCRIPTIVE_REPRESENTATION_ITEM' 
+       IN TYPEOF (r))) )) <=1;
+  
+   wr8: SIZEOF(QUERY(r <* SELF.items  |
+        ((r.name='data format') AND 
+       ( 'PROCESS_PLANNING_SCHEMA.DESCRIPTIVE_REPRESENTATION_ITEM' 
+       IN TYPEOF (r))) )) <=1;
+  
+   wr9: SIZEOF(QUERY(r <* SELF.items  |
+        ((r.name='format character code') AND 
+       ( 'PROCESS_PLANNING_SCHEMA.DESCRIPTIVE_REPRESENTATION_ITEM' 
+       IN TYPEOF (r))) )) <=1;
+  
+   wr10: SIZEOF(QUERY(r <* SELF.items  |
+         ((r.name='file size') AND 
+          (SIZEOF(['PROCESS_PLANNING_SCHEMA.MEASURE_REPRESENTATION_ITEM',
+          'PROCESS_PLANNING_SCHEMA.LENGTH_MEASURE_WITH_UNIT'] * 
+          TYPEOF(r)) = 2)))) <=1;   
+  
+   wr11: SIZEOF(QUERY(r <* SELF.items  |
+         ((r.name='page count') AND 
+          (SIZEOF(['PROCESS_PLANNING_SCHEMA.MEASURE_REPRESENTATION_ITEM',
+          'PROCESS_PLANNING_SCHEMA.RATIO_MEASURE_WITH_UNIT'] * 
+          TYPEOF(r)) = 2)))) <=1;   
+
+  END_ENTITY;
+
+ENTITY drawing
+     SUBTYPE OF (document);
+WHERE 
+
+  
+   
+      wr1: SIZEOF(QUERY ( duc <* USEDIN(SELF,
+           'PROCESS_PLANNING_SCHEMA.DOCUMENT_USAGE_CONSTRAINT.SOURCE')| 
+           (duc.subject_element = 'drawing revision level') )) = 1;
+           
+         
+     
+
+ wr2: SIZEOF(QUERY ( adr <* QUERY ( dr <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.DOCUMENT_REFERENCE.ASSIGNED_DOCUMENT')| 
+      ('PROCESS_PLANNING_SCHEMA.APPLIED_DOCUMENT_REFERENCE' 
+      IN TYPEOF(dr)) ) | 
+      (NOT(SIZEOF(QUERY ( d <* adr.items | 
+      ('PROCESS_PLANNING_SCHEMA.PROCESS_PLAN_ACTIVITY' IN TYPEOF(d)) 
+      )) >= 1)) )) =0; 
+  
+
+END_ENTITY;
+
+ENTITY externally_defined_class
+     SUBTYPE OF (externally_defined_item,class);
+WHERE
+  wr1: 'PROCESS_PLANNING_SCHEMA.KNOWN_SOURCE' IN TYPEOF(SELF.source);
+  wr2: SELF.source.name = 'ISO 13584 library';
+       
+      
+         
+  wr3: SIZEOF(QUERY ( aoa <* USEDIN(SELF.source,
+       'PROCESS_PLANNING_SCHEMA.APPLIED_ORGANIZATION_ASSIGNMENT.ITEMS')| 
+       (aoa.role.name = 'library supplier') )) = 1;
+       
+      
+       
+  wr4: SIZEOF(QUERY ( aoa <* USEDIN(SELF,
+  'PROCESS_PLANNING_SCHEMA.APPLIED_EXTERNAL_IDENTIFICATION_ASSIGNMENT.ITEMS')| 
+       (('PROCESS_PLANNING_SCHEMA.LIBRARY_CLASS_VERSION_ASSIGNMENT' 
+       IN TYPEOF(aoa)) AND (aoa.role.name = 'class version')) )) = 1;
+     
+END_ENTITY;
+
+ENTITY externally_defined_general_property
+     SUBTYPE OF (general_property, externally_defined_item);
+WHERE 
+  wr1: 'PROCESS_PLANNING_SCHEMA.KNOWN_SOURCE' IN TYPEOF(SELF.source);
+  wr2: SELF.source.name = 'ISO 13584 library';
+  
+        
+       
+  wr3: SIZEOF(QUERY ( aoa <* USEDIN(SELF,
+  'PROCESS_PLANNING_SCHEMA.APPLIED_EXTERNAL_IDENTIFICATION_ASSIGNMENT.ITEMS')| 
+       (('PROCESS_PLANNING_SCHEMA.LIBRARY_CLASS_VERSION_ASSIGNMENT' 
+       IN TYPEOF(aoa)) AND 
+       (aoa.role.name = 'property version')) )) = 1;
+       
+  wr4: SIZEOF(QUERY ( ap <* USEDIN(SELF,
+'PROCESS_PLANNING_SCHEMA.EXTERNALLY_DEFINED_ITEM_RELATIONSHIP.RELATING_ITEM')|
+       ((ap.name = 'name scope') AND 
+       ('PROCESS_PLANNING_SCHEMA.EXTERNALLY_DEFINED_CLASS' IN 
+       TYPEOF(ap.related_item))) )) >= 1;
+ 
+END_ENTITY;
+
+ENTITY externally_defined_representation_with_parameters
+     SUBTYPE OF (representation);
+WHERE 
+
+          
+     
+  wr1: SIZEOF(QUERY ( adr <* USEDIN(SELF,
+       'PROCESS_PLANNING_SCHEMA.APPLIED_CLASSIFICATION_ASSIGNMENT.ITEMS')| 
+       (('PROCESS_PLANNING_SCHEMA.APPLIED_LIBRARY_ASSIGNMENT' 
+   IN TYPEOF(adr)) AND (adr.role.name='definitional class membership'))))= 1; 
+         
+ 
+         
+  wr2: SIZEOF(QUERY ( adr <* SELF.items | 
+       ('PROCESS_PLANNING_SCHEMA.PLACEMENT' IN TYPEOF(adr)) )) = 1;
+        
+ 
+         
+  wr3: SIZEOF(QUERY ( adr <* SELF.items | 
+       (('PROCESS_PLANNING_SCHEMA.PLACEMENT' IN TYPEOF(adr)) AND 
+       ('PROCESS_PLANNING_SCHEMA.CARTESIAN_POINT' 
+       IN TYPEOF(adr.location))) )) = 1;
+END_ENTITY;
+
+
+ENTITY externally_defined_schema
+       SUBTYPE OF (externally_defined_item);
+WHERE 
+
+  wr1: 'PROCESS_PLANNING_SCHEMA.KNOWN_SOURCE' IN TYPEOF(SELF.source);
+  wr2: SELF.source.name = 'ISO 10303 part';
+
+  wr3: SIZEOF(QUERY ( adr <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.APPLIED_DOCUMENT_REFERENCE.ITEMS')| 
+      (adr.assigned_document.description ='externally defined schema')
+      ) ) <= 1;
+      
+  wr4: (SELF.item_id IN ['externally defined schema','workingstep','nc function']);
+     
+END_ENTITY;
+
+ENTITY feature_identification_item
+    SUBTYPE OF (class);
+WHERE 
+   
+ 
+  
+ wr1:  (SIZEOF(QUERY(adr<* QUERY(ga <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.GROUP_ASSIGNMENT.ASSIGNED_GROUP') |
+      'PROCESS_PLANNING_SCHEMA.APPLIED_GROUP_ASSIGNMENT' 
+      IN TYPEOF(ga))|
+      NOT (SIZEOF(QUERY(ins <* adr.items |
+      ('PROCESS_PLANNING_SCHEMA.INSTANCED_FEATURE' 
+      IN TYPEOF(ins) ))) = 1)))=0);
+      
+  
+  
+  wr2: SIZEOF(QUERY ( adr <* USEDIN(SELF,
+       'PROCESS_PLANNING_SCHEMA.GROUP_RELATIONSHIP.RELATING_GROUP')
+       | ('PROCESS_PLANNING_SCHEMA.FEATURE_INTERACTION' IN TYPEOF(
+       adr)) )) >= 0;
+       
+END_ENTITY; 
+
+ENTITY feature_interaction
+     SUBTYPE OF (group_relationship);
+WHERE 
+      wr1: ('PROCESS_PLANNING_SCHEMA.FEATURE_IDENTIFICATION_ITEM' 
+            IN TYPEOF(SELF.related_group));
+      wr2: ('PROCESS_PLANNING_SCHEMA.FEATURE_IDENTIFICATION_ITEM' 
+            IN TYPEOF(SELF.relating_group));     
+END_ENTITY;
+
+ENTITY feature_dependency
+     SUBTYPE OF (group_relationship);
+WHERE
+
+        
+     
+      wr1: ('PROCESS_PLANNING_SCHEMA.FEATURE_IDENTIFICATION_ITEM' 
+            IN TYPEOF(SELF.related_group));
+      wr2: ('PROCESS_PLANNING_SCHEMA.FEATURE_IDENTIFICATION_ITEM' 
+            IN TYPEOF(SELF.relating_group)); 
+
+END_ENTITY;
+
+ENTITY fixture_assembly
+     SUBTYPE OF (action_resource);
+WHERE 
+
+ 
+  
+ wr1: SIZEOF(QUERY ( adr <* SELF.usage | ((
+      'PROCESS_PLANNING_SCHEMA.ACTION_METHOD' IN TYPEOF(adr)) AND 
+      (adr.name = 'assembly instruction')) )) = 1;
+         
+          
+     
+ wr2: SIZEOF(QUERY ( adr <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.RESOURCE_PROPERTY.RESOURCE') | 
+      (adr.description = 'configuration') )) = 1;
+          
+  
+ wr3: SIZEOF(QUERY ( ap <* USEDIN(SELF,
+    'PROCESS_PLANNING_SCHEMA.ACTION_RESOURCE_RELATIONSHIP.RELATING_RESOURCE')|
+      (('PROCESS_PLANNING_SCHEMA.FIXTURE_ASSEMBLY_RELATIONSHIP' 
+      IN TYPEOF(ap)) AND 
+      (SIZEOF([
+      'PROCESS_PLANNING_SCHEMA.FIXTURE_ASSEMBLY' ,
+      'PROCESS_PLANNING_SCHEMA.FIXTURE_ASSEMBLY_ELEMENT'] *
+       TYPEOF(ap.related_resource)) =1)    
+      ))) >= 1;
+     
+          
+     
+ wr4: SIZEOF(QUERY ( adr <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.APPLIED_CONTRACT_ASSIGNMENT.ITEMS')| 
+      ('PROCESS_PLANNING_SCHEMA.FIXTURE_CONTRACT' 
+      IN TYPEOF(adr.assigned_contract)) )) >= 1;
+ 
+  
+ 
+ wr5: SIZEOF(QUERY ( am <* QUERY ( arr <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.REQUIREMENT_FOR_ACTION_RESOURCE.RESOURCES')| 
+      ('PROCESS_PLANNING_SCHEMA.ACTION_RESOURCE_REQUIREMENT' 
+      IN TYPEOF(arr)) ) | (SIZEOF(QUERY ( it <* am.OPERATIONS| 
+      (SIZEOF(['PROCESS_PLANNING_SCHEMA.PART_FIXTURE_MOUNTING',
+          'PROCESS_PLANNING_SCHEMA.FIXTURE_PALLET_MOUNTING'] * 
+          TYPEOF(it)) = 1) )) >= 1))) = 0;   
+ 
+  
+ 
+ wr6: SIZEOF(QUERY ( adr <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.APPLIED_DOCUMENT_REFERENCE.ITEMS')| 
+      (('PROCESS_PLANNING_SCHEMA.DRAWING' 
+      IN TYPEOF(adr.assigned_document)) )))<=1;  
+ 
+  
+  
+  
+     
+ wr7: SIZEOF(QUERY ( arr <* QUERY ( ar <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.REQUIREMENT_FOR_ACTION_RESOURCE.RESOURCES')| 
+      ('PROCESS_PLANNING_SCHEMA.ACTION_RESOURCE_REQUIREMENT' 
+      IN TYPEOF(ar)) ) | (NOT (SIZEOF(QUERY ( pdp_imp <* 
+      QUERY ( pdp <* arr.OPERATIONS | 
+      ('PROCESS_PLANNING_SCHEMA.PRODUCT_DEFINITION_PROCESS' 
+      IN TYPEOF(pdp)) ) | (SIZEOF(QUERY ( ppa <* USEDIN(pdp_imp,
+      'PROCESS_PLANNING_SCHEMA.PROCESS_PROPERTY_ASSOCIATION.PROCESS')| 
+      ((('PROCESS_PLANNING_SCHEMA.SHAPE_ASPECT' 
+      IN TYPEOF(ppa.property_or_shape)) AND 
+      (ppa.description = 'fixture assembly shape')) ) )) =
+      0) )) = 0)) )) >= 0; 
+END_ENTITY;
+
+ENTITY fixture_assembly_element
+     SUBTYPE OF (action_resource);
+WHERE 
+
+          
+     
+ wr1: SIZEOF(QUERY ( adr <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.APPLIED_DOCUMENT_REFERENCE.ITEMS')| 
+      (('PROCESS_PLANNING_SCHEMA.DOCUMENT' 
+      IN TYPEOF(adr.assigned_document)) AND 
+      (adr.assigned_document.description ='fixture catalogue number')
+      ) )) <= 1;
+      
+          
+     
+ wr2: SIZEOF(QUERY ( adr <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.APPLIED_ORGANIZATION_ASSIGNMENT.ITEMS')| 
+      (adr.assigned_organization.description = 'fixture company name')
+      )) = 1;
+      
+          
+     
+ wr3: SIZEOF(QUERY ( adr <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.RESOURCE_PROPERTY.RESOURCE') | 
+      (adr.description = 'fixture element identification') )) = 1;
+
+        
+      
+ wr4: SIZEOF(QUERY ( ap <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.RESOURCE_PROPERTY.RESOURCE') | 
+      (NOT (SIZEOF(QUERY ( apr <* USEDIN(ap,
+      'PROCESS_PLANNING_SCHEMA.RESOURCE_PROPERTY_REPRESENTATION.PROPERTY')| 
+      (NOT (SIZEOF(QUERY ( rpr <* apr.representation.items | 
+      (('PROCESS_PLANNING_SCHEMA.MASS_MEASURE_WITH_UNIT' 
+      IN TYPEOF(rpr)) AND (rpr.name = 'fixture element weight')) 
+      )) <= 1)) )) = 0)) )) = 0;            
+
+        
+     
+ wr5: SIZEOF(QUERY ( arr <* QUERY ( ar <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.REQUIREMENT_FOR_ACTION_RESOURCE.RESOURCES')| 
+      ('PROCESS_PLANNING_SCHEMA.ACTION_RESOURCE_REQUIREMENT' 
+      IN TYPEOF(ar)) ) | (NOT (SIZEOF(QUERY ( pdp_imp <* 
+      QUERY ( pdp <* arr.OPERATIONS | 
+      ('PROCESS_PLANNING_SCHEMA.PRODUCT_DEFINITION_PROCESS' 
+      IN TYPEOF(pdp)) ) | (SIZEOF(QUERY ( ppa <* USEDIN(pdp_imp,
+      'PROCESS_PLANNING_SCHEMA.PROCESS_PROPERTY_ASSOCIATION.PROCESS')| 
+      ((('PROCESS_PLANNING_SCHEMA.SHAPE_ASPECT' 
+      IN TYPEOF(ppa.property_or_shape)) AND 
+      (ppa.description = 'fixture assembly element shape')) AND 
+      (SIZEOF(USEDIN(ppa.property_or_shape,
+      'PROCESS_PLANNING_SCHEMA.SHAPE_ASPECT.OF_SHAPE')) = 0)) )) =
+      0) )) = 0)) )) >= 0;
+END_ENTITY;
+
+ENTITY fixture_assembly_relationship
+     SUBTYPE OF (action_resource_relationship);
+WHERE
+  wr1: 'PROCESS_PLANNING_SCHEMA.FIXTURE_ASSEMBLY' 
+       IN TYPEOF(SELF.relating_resource);
+  wr2: 'PROCESS_PLANNING_SCHEMA.FIXTURE_ASSEMBLY_ELEMENT' 
+        IN TYPEOF(SELF.related_resource);
+                       
+END_ENTITY;
+
+ENTITY fixture_contract
+     SUBTYPE OF (contract);
+WHERE 
+
+    
+
+ wr1: SIZEOF(QUERY ( adr <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.APPLIED_ACTION_REQUEST_ASSIGNMENT.ITEMS')| 
+      (adr.assigned_action_request.description = 'design order'))) = 1;	
+
+    
+
+ wr2: SIZEOF(QUERY ( adr <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.APPLIED_ACTION_REQUEST_ASSIGNMENT.ITEMS') | 
+      (adr.assigned_action_request.description = 'fabrication order'))) = 1;
+               
+END_ENTITY;
+
+ENTITY fixture_setup
+     SUBTYPE OF (process_plan_activity);
+WHERE
+ 
+        
+     
+ wr1: (NOT(SIZEOF(QUERY ( ap <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.ACTION_PROPERTY.DEFINITION') | 
+      (NOT (SIZEOF(QUERY ( apr <* USEDIN(ap,
+      'PROCESS_PLANNING_SCHEMA.ACTION_PROPERTY_REPRESENTATION.PROPERTY')| 
+      (SIZEOF(QUERY ( rpr <* apr.representation.items | 
+      (('PROCESS_PLANNING_SCHEMA.CARTESIAN_POINT' IN TYPEOF(rpr)) 
+      AND (rpr.name = 'fixture to machine location'))))=1)))=0))))=0));
+       
+     
+      
+ wr2: SIZEOF(QUERY ( ap <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.ACTION_PROPERTY.DEFINITION') | 
+      (SIZEOF(QUERY ( apr <* USEDIN(ap,
+      'PROCESS_PLANNING_SCHEMA.ACTION_PROPERTY_REPRESENTATION.PROPERTY') | 
+      (SIZEOF(QUERY ( it <* apr.representation.items | 
+      (('PROCESS_PLANNING_SCHEMA.PLACEMENT' IN TYPEOF(it)) AND
+      (it.name = 'fixture to machine orientation')) )) = 1)))=1)))=1;    
+            
+        
+       
+  wr3: SIZEOF(QUERY ( ap <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.ACTION_PROPERTY.DEFINITION') | 
+      (NOT (SIZEOF(QUERY ( apr <* USEDIN(ap,
+      'PROCESS_PLANNING_SCHEMA.ACTION_PROPERTY_REPRESENTATION.PROPERTY') | 
+      (NOT (SIZEOF(QUERY ( rpr <* apr.representation.items | 
+      (('PROCESS_PLANNING_SCHEMA.PLANE' IN TYPEOF(rpr)) AND 
+      (rpr.name = 'fixture to machine reference plane')) )) = 1))))=1))))=1;
+                 
+   
+
+ wr4: SIZEOF(QUERY ( am <* QUERY ( arr <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.ACTION_RESOURCE_REQUIREMENT.OPERATIONS')| 
+      ('PROCESS_PLANNING_SCHEMA.REQUIREMENT_FOR_ACTION_RESOURCE' 
+      IN TYPEOF(arr)) ) | (NOT (SIZEOF(QUERY ( it <* am.resources | 
+      ('PROCESS_PLANNING_SCHEMA.MACHINE' IN TYPEOF(it)) )) = 1)) )) 
+      = 0;
+          
+   
+
+
+          
+   
+
+ wr6: SIZEOF(QUERY ( am <* QUERY ( arr <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.ACTION_RESOURCE_REQUIREMENT.OPERATIONS')| 
+      ('PROCESS_PLANNING_SCHEMA.REQUIREMENT_FOR_ACTION_RESOURCE' 
+      IN TYPEOF(arr)) ) | (NOT (SIZEOF(QUERY ( it <* am.resources | 
+      ('PROCESS_PLANNING_SCHEMA.PALLET' IN TYPEOF(it)) )) >= 0)) )) 
+      = 0;
+END_ENTITY;
+
+ENTITY machining_operation
+
+     SUBTYPE OF (sequential_method);
+WHERE 
+
+
+
+ wr1: (SIZEOF(QUERY ( cm <* USEDIN(SELF.relating_method,
+      'PROCESS_PLANNING_SCHEMA.ACTION.CHOSEN_METHOD') | 
+      (( 'PROCESS_PLANNING_SCHEMA.PROPERTY_PROCESS' IN TYPEOF(cm)) 
+      AND (SIZEOF(QUERY ( ppa <* USEDIN(cm,
+      'PROCESS_PLANNING_SCHEMA.PROCESS_PROPERTY_ASSOCIATION.PROCESS') | 
+      ((ppa.description = 'machining operation feature') AND
+      ('PROCESS_PLANNING_SCHEMA.SHAPE_ASPECT' 
+      IN TYPEOF(ppa.property_or_shape)) ))) =1))))<=0);
+
+
+
+ wr2: ('PROCESS_PLANNING_SCHEMA.SINGLE_SETUP_PROCESS' 
+      IN TYPEOF(SELF.relating_method));
+ 
+
+     
+  wr3:     ('PROCESS_PLANNING_SCHEMA.MANUFACTURING_ACTIVITY' 
+      IN TYPEOF(SELF.related_method));
+
+
+ 
+ wr4: (SELF.description IN['legacy nc','non nc','integrated nc']);  
+
+END_ENTITY;
+
+ENTITY manufacturing_process
+     SUBTYPE OF (action_method);
+WHERE 
+  wr1: SIZEOF(QUERY ( cm <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.ACTION.CHOSEN_METHOD') | (NOT (
+      SIZEOF(QUERY ( ppa <* USEDIN(cm,
+      'PROCESS_PLANNING_SCHEMA.PROCESS_PROPERTY_ASSOCIATION.PROCESS')
+      | ((('PROCESS_PLANNING_SCHEMA.SHAPE_ASPECT' IN 
+      TYPEOF(ppa.property_or_shape)) AND (ppa.description = 
+      'manufacturing process feature definition')) ))) 
+       >= 0)))) = 0; 
+       
+  wr2: SIZEOF(QUERY ( ap <* USEDIN(SELF,
+     'PROCESS_PLANNING_SCHEMA.ACTION_METHOD_RELATIONSHIP.RELATING_METHOD') | 
+ 'PROCESS_PLANNING_SCHEMA.MANUFACTURING_PROCESS_RELATIONSHIP' 
+       IN TYPEOF(ap))) >=  1;       
+       
+  wr3: SIZEOF(QUERY ( cm <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.ACTION.CHOSEN_METHOD') | (NOT (
+      SIZEOF(QUERY ( ppa <* USEDIN(cm,
+      'PROCESS_PLANNING_SCHEMA.PROCESS_PROPERTY_ASSOCIATION.PROCESS')
+      | ((('PROCESS_PLANNING_SCHEMA.SHAPE_ASPECT_RELATIONSHIP' IN 
+      TYPEOF(ppa.property_or_shape)) AND (ppa.description = 
+      'intermediate shape')) ))) 
+       >= 0)))) = 0;       
+END_ENTITY; 
+
+
+ENTITY manufacturing_process_relationship
+     SUBTYPE OF (sequential_method);
+WHERE 
+
+ wr1: (SIZEOF([
+           'PROCESS_PLANNING_SCHEMA.MACHINING_PROCESS',
+           'PROCESS_PLANNING_SCHEMA.NON_MACHINING_PROCESS'] *
+            TYPEOF(SELF.related_method))=1);
+         
+  wr2: ('PROCESS_PLANNING_SCHEMA.MANUFACTURING_PROCESS' 
+            IN TYPEOF(SELF.relating_method));
+              
+END_ENTITY;
+
+ENTITY generic_manufacturing_resource
+ SUPERTYPE OF (ONEOF (resource_with_representation, resource_with_material ))
+     SUBTYPE OF (action_resource);
+WHERE  
+
+        
+     
+ wr1: (NOT(SIZEOF(QUERY ( ap <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.RESOURCE_PROPERTY.RESOURCE') | 
+      (NOT (SIZEOF(QUERY ( apr <* USEDIN(ap,
+      'PROCESS_PLANNING_SCHEMA.RESOURCE_PROPERTY_REPRESENTATION.PROPERTY')| 
+      (SIZEOF(QUERY ( rpr <* apr.representation.items | 
+      ((SIZEOF(['PROCESS_PLANNING_SCHEMA.RATIO_MEASURE_WITH_UNIT',
+      'PROCESS_PLANNING_SCHEMA.MEASURE_REPRESENTATION_ITEM'] * TYPEOF(rpr))=2)
+       AND 
+      (rpr.name = 'resource quantity')) 
+       )) = 1))) = 0)) )) = 0)); 
+       
+        
+     
+ wr2: (NOT(SIZEOF(QUERY ( ap <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.RESOURCE_PROPERTY.RESOURCE') | 
+      (NOT (SIZEOF(QUERY ( apr <* USEDIN(ap,
+      'PROCESS_PLANNING_SCHEMA.RESOURCE_PROPERTY_REPRESENTATION.PROPERTY')| 
+      (SIZEOF(QUERY ( rpr <* apr.representation.items | 
+      ((SIZEOF(['PROCESS_PLANNING_SCHEMA.RATIO_MEASURE_WITH_UNIT',
+  'PROCESS_PLANNING_SCHEMA.MEASURE_REPRESENTATION_ITEM'] * TYPEOF(rpr))=2) AND 
+      (rpr.name = 'resource quantity') AND 
+       (rpr\measure_with_unit.unit_component.name = 'each'))
+       )) = 1))) = 0)) )) = 0));
+       
+END_ENTITY;
+
+ENTITY resource_with_material
+     SUBTYPE OF (generic_manufacturing_resource);
+WHERE      
+     
+ wr1:(NOT(SIZEOF(QUERY ( arr <* QUERY ( ar <* USEDIN(SELF,
+     'PROCESS_PLANNING_SCHEMA.REQUIREMENT_FOR_ACTION_RESOURCE.RESOURCES')| 
+     ('PROCESS_PLANNING_SCHEMA.ACTION_RESOURCE_REQUIREMENT' IN TYPEOF(ar)))| 
+     (NOT (SIZEOF(QUERY ( pdp_imp <* QUERY ( pdp <* arr.OPERATIONS| 
+     ('PROCESS_PLANNING_SCHEMA.PROPERTY_PROCESS' IN TYPEOF(pdp)) )| 
+     (SIZEOF(QUERY ( ppa <* USEDIN(pdp_imp,
+     'PROCESS_PLANNING_SCHEMA.PROCESS_PROPERTY_ASSOCIATION.PROCESS')| 
+     ((('PROCESS_PLANNING_SCHEMA.PROPERTY_DEFINITION' 
+     IN TYPEOF(ppa.property_or_shape)) AND 
+     (ppa.description = 'resource material')) AND 
+     ('PROCESS_PLANNING_SCHEMA.PRODUCT_DEFINITION' 
+     IN TYPEOF(ppa.property_or_shape.definition))) )) 
+     = 1)) ) = 0)) )) = 0));
+END_ENTITY;
+
+ENTITY resource_with_representation
+     SUBTYPE OF (generic_manufacturing_resource);
+WHERE 
+
+
+
+ wr1:(NOT(SIZEOF(QUERY ( ap <* USEDIN(SELF,
+     'PROCESS_PLANNING_SCHEMA.RESOURCE_PROPERTY.RESOURCE')| 
+     (SIZEOF(QUERY ( rpr <* USEDIN(ap,
+     'PROCESS_PLANNING_SCHEMA.RESOURCE_PROPERTY_REPRESENTATION.PROPERTY')| 
+  ('PROCESS_PLANNING_SCHEMA.EXTERNALLY_DEFINED_REPRESENTATION_WITH_PARAMETERS' 
+     IN TYPEOF(rpr.representation)))) = 1 )))=0));
+END_ENTITY;
+
+ENTITY illustration
+     SUBTYPE OF (document);
+WHERE 
+      
+  
+  
+ wr1: SIZEOF(QUERY ( adr <* QUERY ( dr <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.DOCUMENT_REFERENCE.ASSIGNED_DOCUMENT')| 
+      ('PROCESS_PLANNING_SCHEMA.APPLIED_DOCUMENT_REFERENCE' 
+      IN TYPEOF(dr)) ) | 
+      (NOT(SIZEOF(QUERY ( d <* adr.items | 
+      ('PROCESS_PLANNING_SCHEMA.PROCESS_PLAN_ACTIVITY' IN TYPEOF(d)) 
+      )) >= 1)) )) =0;
+              
+        
+     
+ wr2: SIZEOF(QUERY ( aduc <* USEDIN(SELF,
+'PROCESS_PLANNING_SCHEMA.APPLIED_DOCUMENT_USAGE_CONSTRAINT_ASSIGNMENT.ITEMS')| 
+       ('PROCESS_PLANNING_SCHEMA.VIEW_REFERENCE' 
+        IN TYPEOF
+       (aduc\document_usage_constraint_assignment.assigned_document_usage))
+        ))  >= 0;
+              
+END_ENTITY;
+
+ENTITY in_facility_location
+     SUBTYPE OF (resource_property);
+WHERE 
+ 
+ 
+     
+ wr1: (NOT(SIZEOF(QUERY ( ap <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.RESOURCE_PROPERTY_REPRESENTATION.PROPERTY')| 
+      (SIZEOF(QUERY ( it <* ap.representation.items | 
+      (('PROCESS_PLANNING_SCHEMA.DESCRIPTIVE_REPRESENTATION_ITEM' 
+      IN TYPEOF(it)) AND (it.name = 'building or area'))))=1)))=0));
+
+ 
+     
+ wr2: (NOT(SIZEOF(QUERY ( ap <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.RESOURCE_PROPERTY_REPRESENTATION.PROPERTY')| 
+      (SIZEOF(QUERY ( it <* ap.representation.items | 
+      (('PROCESS_PLANNING_SCHEMA.DESCRIPTIVE_REPRESENTATION_ITEM' IN
+      TYPEOF(it)) AND (it.name = 'location code')) ))=1 )))=0));
+
+ 
+     
+ wr3: (NOT(SIZEOF(QUERY ( ap <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.RESOURCE_PROPERTY_REPRESENTATION.PROPERTY')| 
+      (SIZEOF(QUERY ( it <* ap.representation.items | 
+      (('PROCESS_PLANNING_SCHEMA.DESCRIPTIVE_REPRESENTATION_ITEM' 
+      IN TYPEOF(it)) AND (it.name = 'sublocation')) )) = 1) ))=0));
+
+ 
+ 
+ wr4: 'PROCESS_PLANNING_SCHEMA.WORK_CELL' IN TYPEOF(SELF.resource);
+       
+END_ENTITY;
+
+ENTITY known_source
+     SUBTYPE OF (external_source,pre_defined_item);
+END_ENTITY;
+
+ENTITY library_class_version_assignment
+     SUBTYPE OF (applied_external_identification_assignment);
+END_ENTITY;
+
+ENTITY library_property_version_assignment
+     SUBTYPE OF (applied_external_identification_assignment);
+END_ENTITY;
+
+ENTITY machine
+     SUBTYPE OF (action_resource);
+WHERE 
+      
+          
+     
+ wr1: SIZEOF(QUERY ( adr <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.APPLIED_ORGANIZATION_ASSIGNMENT.ITEMS')| 
+      (('PROCESS_PLANNING_SCHEMA.ORGANIZATION' 
+      IN TYPEOF(adr.assigned_organization)) AND 
+      (adr.assigned_organization.description = 'machine company name')
+      ) )) = 1;
+
+ 
+  
+ wr2: SIZEOF(QUERY ( ar2 <* QUERY ( arr <* USEDIN(SELF,
+     'PROCESS_PLANNING_SCHEMA.ACTION_RESOURCE_RELATIONSHIP.RELATED_RESOURCE')| 
+     ('PROCESS_PLANNING_SCHEMA.MACHINE_ELEMENT_RELATIONSHIP'
+     IN TYPEOF(arr)) ) | 
+      ('PROCESS_PLANNING_SCHEMA.CONTROLLER' IN TYPEOF(ar2.relating_resource)
+      ) )) <= 1;
+
+ 
+ 
+  
+ wr3: SIZEOF(QUERY ( ar2 <* QUERY ( arr <* USEDIN(SELF,
+     'PROCESS_PLANNING_SCHEMA.ACTION_RESOURCE_RELATIONSHIP.RELATED_RESOURCE')| 
+     ('PROCESS_PLANNING_SCHEMA.MACHINE_ELEMENT_RELATIONSHIP' 
+     IN TYPEOF(arr)) ) | 
+      ('PROCESS_PLANNING_SCHEMA.WORKSTATION' IN TYPEOF(ar2.relating_resource)
+      ) )) = 1;
+ 
+ 
+       
+
+ wr4: SIZEOF(QUERY ( ar2 <* QUERY ( arr <* USEDIN(SELF,
+     'PROCESS_PLANNING_SCHEMA.ACTION_RESOURCE_RELATIONSHIP.RELATED_RESOURCE')| 
+     ('PROCESS_PLANNING_SCHEMA.MACHINE_ELEMENT_RELATIONSHIP' 
+     IN TYPEOF(arr)) ) | 
+     ((ar2.name = 'machine contains pallet') AND (
+      ('PROCESS_PLANNING_SCHEMA.PALLET' IN TYPEOF(ar2.relating_resource)
+      )) )) ) = 1;
+
+END_ENTITY;
+
+ENTITY machine_element_relationship
+     SUBTYPE OF (action_resource_relationship);
+END_ENTITY;
+
+ENTITY machine_setup
+     SUBTYPE OF (process_plan_activity);
+WHERE 
+   
+
+ wr1: SIZEOF(QUERY ( am <* QUERY ( arr <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.ACTION_RESOURCE_REQUIREMENT.OPERATIONS') | 
+      ('PROCESS_PLANNING_SCHEMA.REQUIREMENT_FOR_ACTION_RESOURCE' 
+      IN TYPEOF(arr)) ) | (NOT (SIZEOF(QUERY ( it <* am.resources | 
+      ('PROCESS_PLANNING_SCHEMA.MACHINE' IN TYPEOF(it)) 
+      )) >= 1)) )) = 0;
+END_ENTITY;
+
+ENTITY machine_usage
+     SUBTYPE OF (requirement_for_action_resource);
+WHERE 
+     
+      
+  wr1: SIZEOF(QUERY( w <* SELF.resources | 
+       ('PROCESS_PLANNING_SCHEMA.WORKSTATION' IN TYPEOF(W))))=1;
+  wr2: SIZEOF(QUERY( w <* SELF.resources | 
+       ('PROCESS_PLANNING_SCHEMA.MACHINE' IN TYPEOF(W))))=1;  
+
+        
+
+  wr3: SIZEOF(QUERY (adr <* USEDIN(SELF,
+       'PROCESS_PLANNING_SCHEMA.APPLIED_DOCUMENT_REFERENCE.ITEMS')| 
+       ('PROCESS_PLANNING_SCHEMA.PROCESS_PLAN_SPECIFICATION' IN TYPEOF
+       (adr.assigned_document))))=1;
+          
+  
+ 
+  wr4: (NOT(SIZEOF(QUERY ( rp <* USEDIN(SELF,
+       'PROCESS_PLANNING_SCHEMA.RESOURCE_PROPERTY.RESOURCE') | 
+       (NOT (SIZEOF(QUERY ( impl_rep <* QUERY ( pdr <* USEDIN(rp,
+       'PROCESS_PLANNING_SCHEMA.RESOURCE_PROPERTY_REPRESENTATION.PROPERTY')| 
+       ('PROCESS_PLANNING_SCHEMA.REPRESENTATION' 
+       IN TYPEOF(pdr.representation)) ) | 
+       ((impl_rep.representation.name = 'machine usage parameter')AND 
+       (SIZEOF(QUERY ( it <* impl_rep.representation.items | 
+      ((SIZEOF([
+      'PROCESS_PLANNING_SCHEMA.MEASURE_REPRESENTATION_ITEM',
+      'PROCESS_PLANNING_SCHEMA.RATIO_MEASURE_WITH_UNIT'] *
+      TYPEOF(it)) = 2) AND  (it.name='maximum spindle speed')
+       )  ))>=1))   ))=0))))=0));
+ 
+  wr5: (NOT(SIZEOF(QUERY ( rp <* USEDIN(SELF,
+       'PROCESS_PLANNING_SCHEMA.RESOURCE_PROPERTY.RESOURCE') | 
+       (NOT (SIZEOF(QUERY ( impl_rep <* QUERY ( pdr <* USEDIN(rp,
+       'PROCESS_PLANNING_SCHEMA.RESOURCE_PROPERTY_REPRESENTATION.PROPERTY')| 
+       ('PROCESS_PLANNING_SCHEMA.REPRESENTATION' 
+       IN TYPEOF(pdr.representation)) ) | 
+       ((impl_rep.representation.name = 'machine usage parameter')AND 
+       (SIZEOF(QUERY ( it <* impl_rep.representation.items | 
+      ((SIZEOF([
+      'PROCESS_PLANNING_SCHEMA.MEASURE_REPRESENTATION_ITEM',
+      'PROCESS_PLANNING_SCHEMA.LENGTH_MEASURE_WITH_UNIT'] *
+      TYPEOF(it)) = 2) AND  (it.name='maximum feedrate')
+       )  ))>=1))   ))=0))))=0));
+ 
+  wr6: (NOT(SIZEOF(QUERY ( rp <* USEDIN(SELF,
+       'PROCESS_PLANNING_SCHEMA.RESOURCE_PROPERTY.RESOURCE') | 
+       (NOT (SIZEOF(QUERY ( impl_rep <* QUERY ( pdr <* USEDIN(rp,
+       'PROCESS_PLANNING_SCHEMA.RESOURCE_PROPERTY_REPRESENTATION.PROPERTY')| 
+       ('PROCESS_PLANNING_SCHEMA.REPRESENTATION' 
+       IN TYPEOF(pdr.representation)) ) | 
+       ((impl_rep.representation.name = 'machine usage parameter')AND 
+       (SIZEOF(QUERY ( it <* impl_rep.representation.items | 
+      ('PROCESS_PLANNING_SCHEMA.MEASURE_REPRESENTATION_ITEM' IN 
+      TYPEOF(it)) AND ('PROCESS_PLANNING_SCHEMA.COUNT_MEASURE' IN 
+      TYPEOF(it\measure_with_unit.value_component)) AND (it.name 
+      = 'number of control axis')
+       ))>=1))   ))=0))))=0));
+ 
+  wr7: (NOT(SIZEOF(QUERY ( rp <* USEDIN(SELF,
+       'PROCESS_PLANNING_SCHEMA.RESOURCE_PROPERTY.RESOURCE') | 
+       (NOT (SIZEOF(QUERY ( impl_rep <* QUERY ( pdr <* USEDIN(rp,
+       'PROCESS_PLANNING_SCHEMA.RESOURCE_PROPERTY_REPRESENTATION.PROPERTY')| 
+       ('PROCESS_PLANNING_SCHEMA.REPRESENTATION' 
+       IN TYPEOF(pdr.representation)) ) | 
+       ((impl_rep.representation.name = 'machine usage parameter')AND 
+       (SIZEOF(QUERY ( it <* impl_rep.representation.items | 
+      ((SIZEOF([
+      'PROCESS_PLANNING_SCHEMA.MEASURE_REPRESENTATION_ITEM',
+      'PROCESS_PLANNING_SCHEMA.LENGTH_MEASURE_WITH_UNIT'] *
+      TYPEOF(it)) = 2) AND  (it.name='table size')
+       )  ))>=1))   ))=0))))=0));
+ 
+  wr8: (NOT(SIZEOF(QUERY ( rp <* USEDIN(SELF,
+       'PROCESS_PLANNING_SCHEMA.RESOURCE_PROPERTY.RESOURCE') | 
+       (NOT (SIZEOF(QUERY ( impl_rep <* QUERY ( pdr <* USEDIN(rp,
+       'PROCESS_PLANNING_SCHEMA.RESOURCE_PROPERTY_REPRESENTATION.PROPERTY')| 
+       ('PROCESS_PLANNING_SCHEMA.REPRESENTATION' 
+       IN TYPEOF(pdr.representation)) ) | 
+       ((impl_rep.representation.name = 'machine usage parameter')AND 
+       (SIZEOF(QUERY ( it <* impl_rep.representation.items | 
+       (('PROCESS_PLANNING_SCHEMA.DESCRIPTIVE_REPRESENTATION_ITEM' 
+       IN TYPEOF(it)) AND (it.description IN ['true','false','unknown']) 
+       AND  (it.name='table indexing function')
+       )))>=1))   ))=0))))=0));
+       
+       
+ 
+  wr9: (NOT(SIZEOF(QUERY ( rp <* USEDIN(SELF,
+       'PROCESS_PLANNING_SCHEMA.RESOURCE_PROPERTY.RESOURCE') | 
+       (NOT (SIZEOF(QUERY ( impl_rep <* QUERY ( pdr <* USEDIN(rp,
+       'PROCESS_PLANNING_SCHEMA.RESOURCE_PROPERTY_REPRESENTATION.PROPERTY')| 
+       ('PROCESS_PLANNING_SCHEMA.REPRESENTATION' 
+       IN TYPEOF(pdr.representation)) ) | 
+       ((impl_rep.representation.name = 'machine usage parameter')AND 
+       (SIZEOF(QUERY ( it <* impl_rep.representation.items | 
+      ((SIZEOF([
+      'PROCESS_PLANNING_SCHEMA.MEASURE_REPRESENTATION_ITEM',
+      'PROCESS_PLANNING_SCHEMA.LENGTH_MEASURE_WITH_UNIT'] *
+      TYPEOF(it)) = 2) AND  (it.name='positioning accuracy')
+       )  ))>=1))   ))=0))))=0));
+ 
+  wr10: (NOT(SIZEOF(QUERY ( rp <* USEDIN(SELF,
+       'PROCESS_PLANNING_SCHEMA.RESOURCE_PROPERTY.RESOURCE') | 
+       (NOT (SIZEOF(QUERY ( impl_rep <* QUERY ( pdr <* USEDIN(rp,
+       'PROCESS_PLANNING_SCHEMA.RESOURCE_PROPERTY_REPRESENTATION.PROPERTY')| 
+       ('PROCESS_PLANNING_SCHEMA.REPRESENTATION' 
+       IN TYPEOF(pdr.representation)) ) | 
+       ((impl_rep.representation.name = 'machine usage parameter')AND 
+       (SIZEOF(QUERY ( it <* impl_rep.representation.items | 
+      ((SIZEOF([
+      'PROCESS_PLANNING_SCHEMA.MEASURE_REPRESENTATION_ITEM',
+      'PROCESS_PLANNING_SCHEMA.LENGTH_MEASURE_WITH_UNIT'] *
+      TYPEOF(it)) = 2) AND  (it.name='axis range of motion ')
+       )  ))>=1))   ))=0))))=0));
+ 
+  wr11: (NOT(SIZEOF(QUERY ( rp <* USEDIN(SELF,
+       'PROCESS_PLANNING_SCHEMA.RESOURCE_PROPERTY.RESOURCE') | 
+       (NOT (SIZEOF(QUERY ( impl_rep <* QUERY ( pdr <* USEDIN(rp,
+       'PROCESS_PLANNING_SCHEMA.RESOURCE_PROPERTY_REPRESENTATION.PROPERTY')| 
+       ('PROCESS_PLANNING_SCHEMA.REPRESENTATION' 
+       IN TYPEOF(pdr.representation)) ) | 
+       ((impl_rep.representation.name = 'machine usage parameter')AND 
+       (SIZEOF(QUERY ( it <* impl_rep.representation.items | 
+      ('PROCESS_PLANNING_SCHEMA.MEASURE_REPRESENTATION_ITEM' IN 
+      TYPEOF(it)) AND ('PROCESS_PLANNING_SCHEMA.COUNT_MEASURE' IN 
+      TYPEOF(it\measure_with_unit.value_component)) AND (it.name 
+      = 'number of simultaneous axis')
+       ))>=1))   ))=0))))=0));
+ 
+  wr12: (NOT(SIZEOF(QUERY ( rp <* USEDIN(SELF,
+       'PROCESS_PLANNING_SCHEMA.RESOURCE_PROPERTY.RESOURCE') | 
+       (NOT (SIZEOF(QUERY ( impl_rep <* QUERY ( pdr <* USEDIN(rp,
+       'PROCESS_PLANNING_SCHEMA.RESOURCE_PROPERTY_REPRESENTATION.PROPERTY')| 
+       ('PROCESS_PLANNING_SCHEMA.REPRESENTATION' 
+       IN TYPEOF(pdr.representation)) ) | 
+       ((impl_rep.representation.name = 'machine usage parameter')AND 
+       (SIZEOF(QUERY ( it <* impl_rep.representation.items | 
+      ((SIZEOF([
+      'PROCESS_PLANNING_SCHEMA.MEASURE_REPRESENTATION_ITEM',
+      'PROCESS_PLANNING_SCHEMA.RATIO_MEASURE_WITH_UNIT'] *
+      TYPEOF(it)) = 2) AND  (it.name='spindle power')
+       )  ))>=1))   ))=0))))=0));
+ 
+
+END_ENTITY;
+
+ENTITY machining_tolerance
+  SUBTYPE OF (action_property);
+WHERE
+            
+ wr1: (NOT(SIZEOF(QUERY ( apr <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.ACTION_PROPERTY_REPRESENTATION.PROPERTY')| 
+      (SIZEOF(QUERY ( it <* apr.representation.items | 
+      ((SIZEOF([
+      'PROCESS_PLANNING_SCHEMA.MEASURE_REPRESENTATION_ITEM',
+      'PROCESS_PLANNING_SCHEMA.LENGTH_MEASURE_WITH_UNIT'] *
+      TYPEOF(it)) = 2) AND (it.name = 'inside tolerance'))))=1)))=0));
+            
+ wr2: (NOT(SIZEOF(QUERY ( apr <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.ACTION_PROPERTY_REPRESENTATION.PROPERTY')| 
+      (SIZEOF(QUERY ( it <* apr.representation.items | 
+      ((SIZEOF([
+      'PROCESS_PLANNING_SCHEMA.MEASURE_REPRESENTATION_ITEM',
+      'PROCESS_PLANNING_SCHEMA.LENGTH_MEASURE_WITH_UNIT'] *
+      TYPEOF(it)) = 2) AND (it.name = 'outside tolerance'))))=1)))=0));
+                         
+ wr3: (NOT(SIZEOF(QUERY ( apr <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.ACTION_PROPERTY_REPRESENTATION.PROPERTY')| 
+      (SIZEOF(QUERY ( it <* apr.representation.items | 
+      ((SIZEOF([
+      'PROCESS_PLANNING_SCHEMA.MEASURE_REPRESENTATION_ITEM',
+      'PROCESS_PLANNING_SCHEMA.LENGTH_MEASURE_WITH_UNIT'] *
+      TYPEOF(it)) = 2) AND (it.name = 'total tolerance'))))<=1)))=0));
+END_ENTITY;
+
+  ENTITY manufacturing_activity
+    SUPERTYPE OF (ONEOF (ancillary_activity, part_handling, 
+    part_fixture_unmounting, part_mounting, fixture_pallet_mounting, 
+    part_machine_unmounting, process_activity, validation,
+    fixture_pallet_unmounting ))
+    SUBTYPE OF (process_plan_activity);
+    WHERE
+  
+ 
+ wr1: (NOT ((
+      'PROCESS_PLANNING_SCHEMA.ACTION_METHOD_WITH_ASSOCIATED_DOCUMENTS') 
+      IN TYPEOF(SELF))) OR 
+      (SIZEOF(QUERY ( adr <* 
+      SELF\action_method_with_associated_documents.documents | 
+      ('PROCESS_PLANNING_SCHEMA.CONTROLLER_PROGRAM' IN TYPEOF(adr)) 
+      ))  <= 1);   
+ 
+
+      
+
+ wr2: SIZEOF(QUERY ( sar <* USEDIN(SELF,
+'PROCESS_PLANNING_SCHEMA.ACTION_METHOD_ASSIGNMENT.ASSIGNED_ACTION_METHOD') |
+      ('PROCESS_PLANNING_SCHEMA.APPLIED_ACTION_METHOD_ASSIGNMENT' 
+      IN TYPEOF(sar)) AND 
+      (SIZEOF(QUERY(edi <* sar.items |
+      ('PROCESS_PLANNING_SCHEMA.EXTERNALLY_DEFINED_SCHEMA' IN TYPEOF(edi)
+      )))=1)))>=1;
+
+END_ENTITY;
+
+ENTITY pallet
+   SUBTYPE OF (action_resource);
+
+END_ENTITY;
+
+  ENTITY ngon_shape_representation
+    SUBTYPE OF (shape_representation_with_parameters);
+    WHERE
+ wr1: SIZEOF(SELF.items) = 5;
+ wr2: SIZEOF(QUERY ( it <* SELF.items | ((
+      'PROCESS_PLANNING_SCHEMA.PLACEMENT' IN TYPEOF(it)) AND (it.
+      name = 'orientation')) )) = 1;
+ wr3: SIZEOF(QUERY ( it <* SELF.items | ((SIZEOF([
+      'PROCESS_PLANNING_SCHEMA.MEASURE_REPRESENTATION_ITEM',
+      'PROCESS_PLANNING_SCHEMA.LENGTH_MEASURE_WITH_UNIT'] * 
+      TYPEOF(it)) = 2) AND (it.name = 'length')) )) = 1;
+ wr4: SIZEOF(QUERY ( it <* SELF.items | ((SIZEOF([
+      'PROCESS_PLANNING_SCHEMA.MEASURE_REPRESENTATION_ITEM',
+      'PROCESS_PLANNING_SCHEMA.LENGTH_MEASURE_WITH_UNIT'] * 
+      TYPEOF(it)) = 2) AND (it.name = 'corner radius')) )) = 1;
+ wr5: SIZEOF(QUERY ( it <* SELF.items | ((SIZEOF([
+      'PROCESS_PLANNING_SCHEMA.MEASURE_REPRESENTATION_ITEM',
+      'PROCESS_PLANNING_SCHEMA.LENGTH_MEASURE_WITH_UNIT'] * 
+      TYPEOF(it)) = 2) AND (it.name IN ['circumscribed diameter',
+      'diameter across flats'])) )) = 1;
+ wr6: SIZEOF(QUERY ( it <* SELF.items | (((
+      'PROCESS_PLANNING_SCHEMA.MEASURE_REPRESENTATION_ITEM' IN 
+      TYPEOF(it)) AND ('PROCESS_PLANNING_SCHEMA.COUNT_MEASURE' IN 
+      TYPEOF(it\measure_with_unit.value_component))) AND (it.name 
+      = 'number of sides')) )) = 1;
+  END_ENTITY; -- ngon_shape_representation
+
+ENTITY non_machining_process
+
+     SUBTYPE OF (action_method);
+WHERE 
+ 
+
+        
+
+      
+ wr1: SIZEOF(QUERY ( sar <* USEDIN(SELF,
+     'PROCESS_PLANNING_SCHEMA.ACTION_METHOD_RELATIONSHIP.RELATING_METHOD') | 
+      ('PROCESS_PLANNING_SCHEMA.NON_MACHINING_PROCESS_RELATIONSHIP' 
+      IN TYPEOF(sar)) AND 
+      ('PROCESS_PLANNING_SCHEMA.ANCILLARY_SETUP' 
+      IN TYPEOF(sar.related_method))))>=1;
+
+
+        
+ wr2: SIZEOF(QUERY ( sar <* USEDIN(SELF,
+     'PROCESS_PLANNING_SCHEMA.ACTION_METHOD_RELATIONSHIP.RELATING_METHOD') | 
+      ('PROCESS_PLANNING_SCHEMA.NON_MACHINING_PROCESS_RELATIONSHIP' 
+      IN TYPEOF(sar)) AND 
+      ('PROCESS_PLANNING_SCHEMA.MANUFACTURING_ACTIVITY' 
+      IN TYPEOF(sar.related_method))))>=1; 
+        
+END_ENTITY;
+
+ENTITY non_machining_process_relationship
+  SUBTYPE OF(sequential_method);
+WHERE
+        
+ wr1: (SIZEOF([
+           'PROCESS_PLANNING_SCHEMA.MANUFACTURING_ACTIVITY',
+           'PROCESS_PLANNING_SCHEMA.ANCILLARY_SETUP'] *
+            TYPEOF(SELF.related_method))=1);
+         
+      wr2: ('PROCESS_PLANNING_SCHEMA.NON_MACHINING_PROCESS' 
+            IN TYPEOF(SELF.relating_method));  
+    
+    
+END_ENTITY;
+
+  ENTITY part_handling
+    SUBTYPE OF (manufacturing_activity);
+
+
+  END_ENTITY; -- part_handling
+
+ENTITY part_contract
+     SUBTYPE OF (contract);
+WHERE 
+
+        
+     
+ wr1: SIZEOF(QUERY ( adr <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.APPLIED_ORGANIZATION_ASSIGNMENT.ITEMS')| 
+      (('PROCESS_PLANNING_SCHEMA.ORGANIZATION' 
+      IN TYPEOF(adr.assigned_organization)) AND 
+      (adr.assigned_organization.description='binding aggrement'))))=1; 
+        
+        
+           
+ wr2: SIZEOF(QUERY ( ca <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.CONTRACT_ASSIGNMENT.ASSIGNED_CONTRACT')| 
+      (('PROCESS_PLANNING_SCHEMA.APPLIED_CONTRACT_ASSIGNMENT' 
+      IN TYPEOF(ca)) AND (NOT (SIZEOF(QUERY ( pdf <* ca.items | 
+      (('PROCESS_PLANNING_SCHEMA.PRODUCT_DEFINITION_FORMATION' 
+      IN TYPEOF(pdf)) AND (NOT (SIZEOF(QUERY ( pd <* USEDIN(pdf,
+      'PROCESS_PLANNING_SCHEMA.PRODUCT_DEFINITION.FORMATION') | 
+      (pd.frame_of_reference.name = 'part definition') )) = 1))) )) 
+      = 1))) )) = 0;
+
+        
+     
+ wr3: SIZEOF(QUERY ( ap <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.CONTRACT_ASSIGNMENT.ASSIGNED_CONTRACT')| 
+      (('PROCESS_PLANNING_SCHEMA.APPLIED_CONTRACT_ASSIGNMENT' 
+      IN TYPEOF(ap)) AND (NOT (SIZEOF(QUERY ( it <* ap.items | 
+      (('PROCESS_PLANNING_SCHEMA.DOCUMENT_FILE' IN TYPEOF(it)) 
+      AND (it.description = 'contract document')) )) <= 1
+      )) )) ) = 0;
+
+          
+     
+ wr4: SIZEOF(QUERY ( adr <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.APPLIED_ORGANIZATION_ASSIGNMENT.ITEMS')| 
+      (('PROCESS_PLANNING_SCHEMA.ORGANIZATION' 
+      IN TYPEOF(adr.assigned_organization)) AND 
+      (SIZEOF(QUERY ( op <* USEDIN(adr.assigned_organization,
+'PROCESS_PLANNING_SCHEMA.ORGANIZATIONAL_PROJECT.RESPONSIBLE_ORGANIZATIONS') |
+      (op.description = 'project number') )) = 1)) )) = 1;
+                   
+END_ENTITY;
+
+ENTITY part_fixture_mounting
+     SUBTYPE OF (part_mounting);
+WHERE 
+
+        
+     
+ wr1: (NOT(SIZEOF(QUERY ( ap <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.ACTION_PROPERTY.DEFINITION') | 
+      (NOT (SIZEOF(QUERY ( apr <* USEDIN(ap,
+      'PROCESS_PLANNING_SCHEMA.ACTION_PROPERTY_REPRESENTATION.PROPERTY') | 
+      (SIZEOF(QUERY ( it <* apr.representation.items | 
+      (('PROCESS_PLANNING_SCHEMA.CARTESIAN_POINT' IN TYPEOF(it)) AND
+      (it.name = 'fixture location origin'))))=1)))=0))))=0));
+
+        
+     
+ wr2: (NOT(SIZEOF(QUERY ( ap <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.ACTION_PROPERTY.DEFINITION') | 
+      (NOT (SIZEOF(QUERY ( apr <* USEDIN(ap,
+      'PROCESS_PLANNING_SCHEMA.ACTION_PROPERTY_REPRESENTATION.PROPERTY') | 
+      (SIZEOF(QUERY ( it <* apr.representation.items | 
+      (('PROCESS_PLANNING_SCHEMA.PLACEMENT' IN TYPEOF(it)) AND
+      (it.name = 'fixture orientation'))))=1)))=0))))=0));
+           
+        
+     
+ wr3: (NOT(SIZEOF(QUERY ( ap <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.ACTION_PROPERTY.DEFINITION') | 
+      (NOT (SIZEOF(QUERY ( apr <* USEDIN(ap,
+      'PROCESS_PLANNING_SCHEMA.ACTION_PROPERTY_REPRESENTATION.PROPERTY') | 
+      (SIZEOF(QUERY ( it <* apr.representation.items | 
+      (('PROCESS_PLANNING_SCHEMA.PLANE' IN TYPEOF(it)) AND 
+      (it.name = 'fixture reference plane'))))=1)))=0))))=0));
+       
+  
+ 
+ wr4: (NOT(SIZEOF(QUERY ( cm <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.ACTION.CHOSEN_METHOD') | 
+      (NOT (SIZEOF(QUERY ( ppa <* USEDIN(cm,
+      'PROCESS_PLANNING_SCHEMA.PROCESS_PROPERTY_ASSOCIATION.PROCESS') | 
+      (('PROCESS_PLANNING_SCHEMA.PRODUCT_DEFINITION_SHAPE' 
+      IN TYPEOF(ppa.property_or_shape)) AND 
+      (ppa.description = 'part fixture mounting part shape')) 
+      )) <=1 )) )) = 0));  
+             
+END_ENTITY;
+
+ENTITY part_fixture_unmounting
+     SUBTYPE OF (manufacturing_activity);
+END_ENTITY;
+
+ENTITY part_mounting
+     SUPERTYPE OF (ONEOF (part_fixture_mounting, part_machine_mounting ))
+     SUBTYPE OF (manufacturing_activity);
+WHERE 
+        
+     
+ wr1: SIZEOF(QUERY ( ap <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.ACTION_PROPERTY.DEFINITION') | 
+      (SIZEOF(QUERY ( apr <* USEDIN(ap,
+      'PROCESS_PLANNING_SCHEMA.ACTION_PROPERTY_REPRESENTATION.PROPERTY')| 
+      (SIZEOF(QUERY ( it <* apr.representation.items | 
+      (('PROCESS_PLANNING_SCHEMA.CARTESIAN_POINT' IN TYPEOF(it)) AND
+      (it.name = 'part location origin')) )) = 1)))=1)))=1;
+END_ENTITY;
+
+ENTITY part_machine_mounting
+     SUBTYPE OF (part_mounting);
+WHERE 
+
+        
+     
+ wr1: SIZEOF(QUERY ( ap <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.ACTION_PROPERTY.DEFINITION') | 
+      (SIZEOF(QUERY ( apr <* USEDIN(ap,
+      'PROCESS_PLANNING_SCHEMA.ACTION_PROPERTY_REPRESENTATION.PROPERTY')| 
+      (SIZEOF(QUERY ( it <* apr.representation.items | 
+      (('PROCESS_PLANNING_SCHEMA.CARTESIAN_POINT' IN TYPEOF(it)) AND
+      (it.name = 'machine location origin')) )) = 1)))=1)))=1; 
+
+        
+     
+ wr2: SIZEOF(QUERY ( ap <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.ACTION_PROPERTY.DEFINITION') | 
+      (SIZEOF(QUERY ( apr <* USEDIN(ap,
+      'PROCESS_PLANNING_SCHEMA.ACTION_PROPERTY_REPRESENTATION.PROPERTY') | 
+      (SIZEOF(QUERY ( it <* apr.representation.items | 
+      (('PROCESS_PLANNING_SCHEMA.PLACEMENT' IN TYPEOF(it)) AND
+      (it.name = 'machine orientation')) )) = 1)))=1)))=1;
+           
+        
+     
+ wr3: SIZEOF(QUERY ( ap <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.ACTION_PROPERTY.DEFINITION') | 
+      (SIZEOF(QUERY ( apr <* USEDIN(ap,
+      'PROCESS_PLANNING_SCHEMA.ACTION_PROPERTY_REPRESENTATION.PROPERTY') | 
+      (SIZEOF(QUERY ( it <* apr.representation.items | 
+      (('PROCESS_PLANNING_SCHEMA.PLANE' IN TYPEOF(it)) AND 
+      (it.name = 'machine reference plane')) )) = 1)))=1)))=1;
+       
+  
+ 
+ wr4: SIZEOF(QUERY ( cm <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.ACTION.CHOSEN_METHOD') | 
+      (NOT (SIZEOF(QUERY ( ppa <* USEDIN(cm,
+      'PROCESS_PLANNING_SCHEMA.PROCESS_PROPERTY_ASSOCIATION.PROCESS') | 
+      (('PROCESS_PLANNING_SCHEMA.PRODUCT_DEFINITION_SHAPE' 
+      IN TYPEOF(ppa.property_or_shape)) AND 
+     (ppa.description = 'part machine mounting part shape')) )) = 1)) )) = 1;
+
+ wr5: SIZEOF(QUERY ( am <* QUERY ( arr <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.ACTION_RESOURCE_REQUIREMENT.OPERATIONS')| 
+      ('PROCESS_PLANNING_SCHEMA.REQUIREMENT_FOR_ACTION_RESOURCE' 
+      IN TYPEOF(arr)) ) | 
+      (SIZEOF(QUERY ( it <* am.resources | 
+      ('PROCESS_PLANNING_SCHEMA.MACHINE' IN TYPEOF(it)) )) = 1)) ) = 1;
+ 
+END_ENTITY;
+
+ENTITY part_machine_unmounting
+     SUBTYPE OF (manufacturing_activity);
+END_ENTITY;
+
+ENTITY fixture_pallet_mounting
+     SUBTYPE OF (manufacturing_activity);
+WHERE 
+ wr1: (NOT(SIZEOF(QUERY ( ap <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.ACTION_PROPERTY.DEFINITION') | 
+      (NOT (SIZEOF(QUERY ( apr <* USEDIN(ap,
+      'PROCESS_PLANNING_SCHEMA.ACTION_PROPERTY_REPRESENTATION.PROPERTY') | 
+      (SIZEOF(QUERY ( it <* apr.representation.items | 
+      (('PROCESS_PLANNING_SCHEMA.CARTESIAN_POINT' IN TYPEOF(it)) AND
+      (it.name = 'pallet location origin'))))=1)))=0))))=0));
+
+        
+     
+ wr2: (NOT(SIZEOF(QUERY ( ap <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.ACTION_PROPERTY.DEFINITION') | 
+      (NOT (SIZEOF(QUERY ( apr <* USEDIN(ap,
+      'PROCESS_PLANNING_SCHEMA.ACTION_PROPERTY_REPRESENTATION.PROPERTY') | 
+      (SIZEOF(QUERY ( it <* apr.representation.items | 
+      (('PROCESS_PLANNING_SCHEMA.PLACEMENT' IN TYPEOF(it)) AND
+      (it.name = 'pallet orientation'))))=1)))=0))))=0));
+           
+        
+     
+ wr3: (NOT(SIZEOF(QUERY ( ap <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.ACTION_PROPERTY.DEFINITION') | 
+      (NOT (SIZEOF(QUERY ( apr <* USEDIN(ap,
+      'PROCESS_PLANNING_SCHEMA.ACTION_PROPERTY_REPRESENTATION.PROPERTY') | 
+      (SIZEOF(QUERY ( it <* apr.representation.items | 
+      (('PROCESS_PLANNING_SCHEMA.PLANE' IN TYPEOF(it)) AND 
+      (it.name = 'pallet reference plane'))))=1)))=0))))=0));
+        
+END_ENTITY;
+
+
+ENTITY Fixture_pallet_unmounting 
+     SUBTYPE OF (manufacturing_activity);
+END_ENTITY;
+
+ENTITY process_activity
+     SUBTYPE OF (manufacturing_activity);
+WHERE 
+        
+     
+ WR1: SIZEOF(QUERY ( ap <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.ACTION_PROPERTY.DEFINITION') | 
+      (NOT (SIZEOF(QUERY ( apr <* USEDIN(ap,
+      'PROCESS_PLANNING_SCHEMA.ACTION_PROPERTY_REPRESENTATION.PROPERTY') | 
+      NOT (SIZEOF(QUERY ( it <* apr.representation.items | 
+      (('PROCESS_PLANNING_SCHEMA.DESCRIPTIVE_REPRESENTATION_ITEM' 
+      IN TYPEOF(it)) AND (it.name = 'process parameter')) 
+      )) >= 0) ))  = 0)) )) = 0;
+  
+  
+ wr2: SIZEOF(QUERY ( cm <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.ACTION.CHOSEN_METHOD') | 
+      (('PROCESS_PLANNING_SCHEMA.PROPERTY_PROCESS' 
+      IN TYPEOF(cm)) AND (NOT (SIZEOF(QUERY ( ppa <* USEDIN(cm,
+      'PROCESS_PLANNING_SCHEMA.PROCESS_PROPERTY_ASSOCIATION.PROCESS')| 
+      ((ppa.description = 'process activity part shape') AND
+      ('PROCESS_PLANNING_SCHEMA.SHAPE_ASPECT' 
+      IN TYPEOF(ppa.property_or_shape)) )) ) <=1 )) )) )=0;
+           
+  
+ 
+ wr3: SIZEOF(QUERY ( sar <* USEDIN(SELF,
+     'PROCESS_PLANNING_SCHEMA.ACTION_METHOD_RELATIONSHIP.RELATING_METHOD') | 
+      ('PROCESS_PLANNING_SCHEMA.DEFINING_ACTION_METHOD_RELATIONSHIP' 
+      IN TYPEOF(sar)) AND 
+      ('PROCESS_PLANNING_SCHEMA.MACHINE_SETUP' 
+      IN TYPEOF(sar.related_method))))<=1;
+            
+  
+ 
+ wr4: SIZEOF(QUERY ( ap <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.ACTION_RESOURCE.USAGE') | (
+      'PROCESS_PLANNING_SCHEMA.FIXTURE_ASSEMBLY' IN TYPEOF(ap)) )) 
+      <= 1;           
+             
+  
+ 
+ wr5: SIZEOF(QUERY ( ap <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.ACTION_RESOURCE.USAGE') | (
+      'PROCESS_PLANNING_SCHEMA.TOOL_ASSEMBLY' IN TYPEOF(ap)) 
+      )) >=  1;  
+
+             
+  
+ 
+ wr6: SIZEOF(QUERY ( ap <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.ACTION_PROPERTY.DEFINITION') | (
+      'PROCESS_PLANNING_SCHEMA.MACHINING_TOLERANCE' IN TYPEOF(ap)) )) 
+      <= 1;   
+      
+END_ENTITY; 
+
+  ENTITY process_plan_activity
+    SUPERTYPE OF (ONEOF (ancillary_setup,fixture_setup,machine_setup,
+        manufacturing_activity,tool_setup))
+    SUBTYPE OF (action_method);
+    WHERE
+
+ 
+ 
+ wr1: SIZEOF(QUERY ( ap <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.ACTION_RESOURCE.USAGE') | 
+      (ap.name = 'frequency') )) <= 1;
+       
+          
+     
+ wr2: SIZEOF(QUERY ( adr <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.APPLIED_ORGANIZATION_ASSIGNMENT.ITEMS') | 
+      (('PROCESS_PLANNING_SCHEMA.ORGANIZATION' 
+      IN TYPEOF(adr.assigned_organization)) AND 
+      (adr.role.name = 'activity organization id')) 
+      )) = 1;
+
+        
+     
+ wr3: SIZEOF(QUERY ( ap <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.ACTION_PROPERTY.DEFINITION') | 
+      (NOT (SIZEOF(QUERY ( apr <* USEDIN(ap,
+      'PROCESS_PLANNING_SCHEMA.ACTION_PROPERTY_REPRESENTATION.PROPERTY') | 
+      NOT (SIZEOF(QUERY ( it <* apr.representation.items | 
+      (('PROCESS_PLANNING_SCHEMA.DESCRIPTIVE_REPRESENTATION_ITEM' 
+      IN TYPEOF(it)) AND (it.name = 'special instruction')) 
+      )) >= 0) ))  = 0)) )) = 0;
+       
+  
+       
+ wr4: (NOT ((
+      'PROCESS_PLANNING_SCHEMA.ACTION_METHOD_WITH_ASSOCIATED_DOCUMENTS') 
+      IN TYPEOF(SELF))) 
+      OR (SIZEOF(QUERY ( adr <* 
+      SELF\action_method_with_associated_documents.documents | 
+      (('PROCESS_PLANNING_SCHEMA.PROCESS_PLAN_SPECIFICATION' 
+      IN TYPEOF(adr)) AND 
+      (adr.kind.product_data_type = 'supplemental documents')) )) >= 0);
+      
+        
+         
+
+ wr5: (NOT ((
+      'PROCESS_PLANNING_SCHEMA.ACTION_METHOD_WITH_ASSOCIATED_DOCUMENTS') 
+      IN TYPEOF(SELF))) 
+      OR (SIZEOF(QUERY ( adr <* 
+      SELF\action_method_with_associated_documents.documents | 
+      ('PROCESS_PLANNING_SCHEMA.ILLUSTRATION' IN TYPEOF(adr)))) >=1);
+        
+         
+ wr6: (NOT ((
+      'PROCESS_PLANNING_SCHEMA.ACTION_METHOD_WITH_ASSOCIATED_DOCUMENTS') 
+      IN TYPEOF(SELF))) 
+      OR (SIZEOF(QUERY ( adr <* 
+      SELF\action_method_with_associated_documents.documents | 
+      ('PROCESS_PLANNING_SCHEMA.DRAWING' IN TYPEOF(adr)))) >=1);
+
+
+ wr7: (NOT ((
+      'PROCESS_PLANNING_SCHEMA.ACTION_METHOD_WITH_ASSOCIATED_DOCUMENTS') 
+      IN TYPEOF(SELF))) OR  
+      (SIZEOF(QUERY(edi <*
+      SELF\action_method_with_associated_documents.documents  |
+      ('PROCESS_PLANNING_SCHEMA.VIEW_REFERENCE' IN TYPEOF(edi)
+      )))>=1);
+    
+        
+ 
+ wr8: SIZEOF(QUERY ( ap <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.ACTION_PROPERTY.DEFINITION') | 
+      (SIZEOF(['PROCESS_PLANNING_SCHEMA.PRODUCTION_RATE',
+      'PROCESS_PLANNING_SCHEMA.ALLOWED_TIME'] * TYPEOF(ap))=1)
+      )) >=1;
+
+
+ 
+ 
+ wr9: SIZEOF(QUERY ( ap <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.ACTION_RESOURCE.USAGE') | 
+      ('PROCESS_PLANNING_SCHEMA.GENERIC_MANUFACTURING_RESOURCE' 
+      IN TYPEOF(ap)) )) >= 0;
+
+ 
+ 
+ wr10: SIZEOF(QUERY ( cm <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.ACTION.CHOSEN_METHOD') | 
+      (('PROCESS_PLANNING_SCHEMA.PROPERTY_PROCESS' 
+      IN TYPEOF(cm)) AND (NOT (SIZEOF(QUERY ( ppa <* USEDIN(cm,
+      'PROCESS_PLANNING_SCHEMA.PROCESS_PROPERTY_ASSOCIATION.PROCESS')| 
+      ((ppa.description = 'process plan activity material') AND
+      ('PROCESS_PLANNING_SCHEMA.PRODUCT_DEFINITION' 
+      IN TYPEOF(ppa.property_or_shape.definition)) )) ) <=1 )) )) )=0;
+     
+ wr11: (NOT (('PROCESS_PLANNING_SCHEMA.' + 
+       'ACTION_METHOD_WITH_ASSOCIATED_DOCUMENTS') IN TYPEOF(SELF))) 
+     OR (SIZEOF(SELF\action_method_with_associated_documents.documents) >= 0); 
+        
+     
+ wr12: SIZEOF(QUERY ( ap <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.ACTION_PROPERTY.DEFINITION') | 
+      (NOT (SIZEOF(QUERY ( apr <* USEDIN(ap,
+      'PROCESS_PLANNING_SCHEMA.ACTION_PROPERTY_REPRESENTATION.PROPERTY') | 
+      NOT (SIZEOF(QUERY ( it <* apr.representation.items |       
+      (('PROCESS_PLANNING_SCHEMA.MEASURE_REPRESENTATION_ITEM' 
+      IN TYPEOF(it)) AND ('PROCESS_PLANNING_SCHEMA.COUNT_MEASURE' IN 
+      TYPEOF(it\measure_with_unit.value_component))AND 
+      (it.name = 'activity number')) 
+      )) >= 0) ))  = 0)) )) = 0;                      
+END_ENTITY;
+
+ENTITY process_plan_security
+    SUBTYPE OF (security_classification);
+WHERE
+
+          
+     
+ wr1: SIZEOF(QUERY ( da <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.APPLIED_DATE_ASSIGNMENT.ITEMS') | 
+      ((('PROCESS_PLANNING_SCHEMA.DATE_ASSIGNMENT' 
+      IN TYPEOF(da)) AND 
+      ('PROCESS_PLANNING_SCHEMA.CALENDAR_DATE' 
+      IN TYPEOF(da.assigned_date))) AND 
+      (da.role.name = 'classification data')) )) 
+      = 1;
+          
+          
+     
+ wr2: SIZEOF(QUERY ( da <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.APPLIED_DATE_ASSIGNMENT.ITEMS') | 
+      ((('PROCESS_PLANNING_SCHEMA.DATE_ASSIGNMENT' IN TYPEOF(da)) 
+      AND ('PROCESS_PLANNING_SCHEMA.CALENDAR_DATE' 
+      IN TYPEOF(da.assigned_date))) AND 
+      (da.role.name = 'declassification data')) )) 
+      = 1;
+          
+          
+                
+ wr3: SIZEOF(QUERY ( ap <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.SECURITY_CLASSIFICATION_ASSIGNMENT.'+
+      'ASSIGNED_SECURITY_CLASSIFICATION') | 
+      (('PROCESS_PLANNING_SCHEMA.APPLIED_SECURITY_CLASSIFICATION_ASSIGNMENT' 
+      IN TYPEOF(ap)) AND 
+      (NOT (SIZEOF(QUERY ( it <* ap.items | 
+      ('PROCESS_PLANNING_SCHEMA.PROCESS_PLAN_ACTIVITY' IN TYPEOF(it)) )) 
+      = 1))) )) = 0;
+        
+          
+               
+ wr4: SIZEOF(QUERY ( ap <* USEDIN(SELF,'PROCESS_PLANNING_SCHEMA.' + 
+      'SECURITY_CLASSIFICATION_ASSIGNMENT.ASSIGNED_SECURITY_CLASSIFICATION')
+      | (('PROCESS_PLANNING_SCHEMA.APPLIED_SECURITY_CLASSIFICATION_ASSIGNMENT' 
+      IN TYPEOF(ap)) AND (NOT (SIZEOF(QUERY ( it <* ap.items | (
+      'PROCESS_PLANNING_SCHEMA.PROCESS_PLAN_VERSION' IN TYPEOF(it)) )) 
+      <= 1))) )) = 0;
+                            
+END_ENTITY;
+
+
+  ENTITY process_plan_specification
+     SUBTYPE OF (document);
+  WHERE
+ wr1: SIZEOF(QUERY ( duc <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.DOCUMENT_USAGE_CONSTRAINT.SOURCE')| 
+      (duc.subject_element = 'revision')))=1;
+ wr2: SIZEOF(QUERY ( duc <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.DOCUMENT_USAGE_CONSTRAINT.SOURCE')| 
+      (duc.subject_element = 'subclass')))=1;
+  END_ENTITY;
+
+ENTITY process_plan_version
+     SUBTYPE OF (product_definition_process);
+     
+WHERE
+        
+        
+     
+ wr1 : SIZEOF(QUERY ( ap <* USEDIN(SELF,
+       'PROCESS_PLANNING_SCHEMA.ACTION_PROPERTY.DEFINITION') | 
+       (ap.description = 'manufacturing gt code') )) <= 1;
+  
+ 
+     
+ wr2: SIZEOF(QUERY ( ap <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.ACTION_PROPERTY.DEFINITION') | 
+      (NOT (SIZEOF(QUERY ( apr <* USEDIN(ap,
+      'PROCESS_PLANNING_SCHEMA.ACTION_PROPERTY_REPRESENTATION.PROPERTY') | 
+      NOT (SIZEOF(QUERY ( it <* apr.representation.items |       
+      (('PROCESS_PLANNING_SCHEMA.MEASURE_REPRESENTATION_ITEM' 
+      IN TYPEOF(it)) AND ('PROCESS_PLANNING_SCHEMA.COUNT_MEASURE' IN 
+      TYPEOF(it\measure_with_unit.value_component))AND 
+      (it.name = 'quantity of parts')) 
+      )) >= 0) ))  = 0)) )) = 0; 
+       
+ 
+     
+ wr3: SIZEOF(QUERY ( ap <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.ACTION_PROPERTY.DEFINITION') | 
+      (NOT (SIZEOF(QUERY ( apr <* USEDIN(ap,
+      'PROCESS_PLANNING_SCHEMA.ACTION_PROPERTY_REPRESENTATION.PROPERTY') | 
+      NOT (SIZEOF(QUERY ( it <* apr.representation.items | 
+      (('PROCESS_PLANNING_SCHEMA.DESCRIPTIVE_REPRESENTATION_ITEM' 
+      IN TYPEOF(it)) AND (it.name = 'special instruction')) 
+      )) >= 0) ))  = 0)) )) = 0;
+       
+        
+     
+ wr4: SIZEOF(QUERY ( ap <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.ACTION_PROPERTY.DEFINITION') | 
+      (NOT (SIZEOF(QUERY ( apr <* USEDIN(ap,
+      'PROCESS_PLANNING_SCHEMA.ACTION_PROPERTY_REPRESENTATION.PROPERTY') | 
+      NOT (SIZEOF(QUERY ( it <* apr.representation.items | 
+      (it.name = 'auxilary header') 
+      )) >= 0) ))  = 0)) )) = 0;
+       
+        
+     
+ wr5 : SIZEOF(QUERY ( ap <* USEDIN(SELF,
+       'PROCESS_PLANNING_SCHEMA.ACTION_PROPERTY.DEFINITION') | (
+       'PROCESS_PLANNING_SCHEMA.RANGE_OF_PARTS' IN TYPEOF(ap)) )) 
+       <= 1;
+       
+        
+     
+ wr6 : SIZEOF(QUERY ( ppp <* USEDIN(SELF,
+       'PROCESS_PLANNING_SCHEMA.PROCESS_PRODUCT_ASSOCIATION.PROCESS') | 
+       (('PROCESS_PLANNING_SCHEMA.PRODUCT_DEFINITION' 
+       IN TYPEOF(ppp.defined_product)) AND 
+       (ppp.defined_product.name='material'))
+       )) <= 1;
+           
+        
+        
+ wr7:  ('PROCESS_PLANNING_SCHEMA.MANUFACTURING_PROCESS' IN
+        TYPEOF(SELF.chosen_method));      
+        
+ wr8 : SIZEOF(QUERY ( amr <* USEDIN(SELF.chosen_method ,
+     'PROCESS_PLANNING_SCHEMA.ACTION_METHOD_RELATIONSHIP.RELATING_METHOD') |
+       (('PROCESS_PLANNING_SCHEMA.MANUFACTURING_PROCESS_RELATIONSHIP' IN
+        TYPEOF(amr)) AND 
+       (SIZEOF(['PROCESS_PLANNING_SCHEMA.MACHINING_OPERATION',
+       'PROCESS_PLANNING_SCHEMA.NON_MACHINING_PROCESS'] 
+       * TYPEOF(amr.related_method))=1))))=1;
+        
+          
+                
+ wr9: SIZEOF(QUERY ( ap <* USEDIN(SELF,
+       'PROCESS_PLANNING_SCHEMA.ACTION_ASSIGNMENT.ASSIGNED_ACTION') | 
+       (('PROCESS_PLANNING_SCHEMA.APPLIED_ACTION_ASSIGNMENT' 
+       IN TYPEOF(ap)) AND (NOT (SIZEOF(QUERY ( it <* ap.items | 
+       ('PROCESS_PLANNING_SCHEMA.FEATURE_DEPENDENCY' IN TYPEOF(it)) )) 
+       <= 1))) )) = 0;
+END_ENTITY;
+
+ENTITY production_rate
+     SUBTYPE OF (action_property);
+WHERE 
+
+         
+     
+ wr1: SIZEOF(QUERY ( apr <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.ACTION_PROPERTY_REPRESENTATION.PROPERTY')| 
+      (SIZEOF(QUERY ( it <* apr.representation.items | 
+      ((SIZEOF([
+      'PROCESS_PLANNING_SCHEMA.MEASURE_REPRESENTATION_ITEM',
+      'PROCESS_PLANNING_SCHEMA.TIME_MEASURE_WITH_UNIT'] * TYPEOF
+      (it)) = 2) AND (it.name = 'time per unit')) )) = 1) )) = 1;
+ 
+        
+     
+ wr2: SIZEOF(QUERY ( apr <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.ACTION_PROPERTY_REPRESENTATION.PROPERTY')| 
+      (SIZEOF(QUERY ( it <* apr.representation.items | 
+      (('PROCESS_PLANNING_SCHEMA.MEASURE_REPRESENTATION_ITEM' 
+      IN TYPEOF(it)) AND (it.name = 'unit quantity'))))=1)))=1;
+           
+ wr3: SIZEOF(QUERY ( apr <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.ACTION_PROPERTY_REPRESENTATION.PROPERTY')| 
+      (SIZEOF(QUERY ( it <* apr.representation.items | 
+      (('PROCESS_PLANNING_SCHEMA.DESCRIPTIVE_REPRESENTATION_ITEM' 
+      IN TYPEOF(it)) AND (it.name = 'production rate source'))))=1)))=1;
+END_ENTITY;
+
+ENTITY range_of_parts
+     SUBTYPE OF (action_property);
+WHERE   
+ wr1: SIZEOF(QUERY ( apr <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.ACTION_PROPERTY_REPRESENTATION.PROPERTY') | 
+      (SIZEOF(QUERY ( rep <* apr.representation.items | 
+      (('PROCESS_PLANNING_SCHEMA.MEASURE_REPRESENTATION_ITEM' 
+      IN TYPEOF(rep)) AND (rep.name = 'low value')) )) = 1) )) = 1;
+       
+ wr2: SIZEOF(QUERY ( apr <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.ACTION_PROPERTY_REPRESENTATION.PROPERTY') | 
+      (SIZEOF(QUERY ( rep <* apr.representation.items | 
+      (('PROCESS_PLANNING_SCHEMA.MEASURE_REPRESENTATION_ITEM' 
+      IN TYPEOF(rep)) AND (rep.name = 'high value')) )) = 1) )) = 1;
+                  
+END_ENTITY;
+
+ENTITY revision
+     SUBTYPE OF (action_relationship);
+WHERE      
+  
+ 
+ wr1: SIZEOF(QUERY ( rc <* USEDIN(SELF,
+   'PROCESS_PLANNING_SCHEMA.RELATIONSHIP_CONDITION.APPLICABLE_RELATIONSHIPS')| 
+      (rc.name = 'reason for revision') )) = 1;
+
+  
+         
+ wr2: SIZEOF(QUERY ( ars <* USEDIN(SELF.related_action.chosen_method,
+      'PROCESS_PLANNING_SCHEMA.ACTION_REQUEST_SOLUTION.METHOD') | 
+      (('PROCESS_PLANNING_SCHEMA.VERSIONED_ACTION_REQUEST' 
+      IN TYPEOF(ars.request)) AND 
+      (ars.request.description = 'revision level')) )) = 1;
+
+          
+     
+ wr3: SIZEOF(QUERY ( adr <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.APPLIED_APPROVAL_ASSIGNMENT.ITEMS')| 
+      ('PROCESS_PLANNING_SCHEMA.APPROVAL' 
+      IN TYPEOF(adr.assigned_approval)) )) >= 1;
+ 
+         
+
+ wr4: ('PROCESS_PLANNING_SCHEMA.PROCESS_PLAN_VERSION' 
+      IN TYPEOF(SELF.related_action)) AND 
+      ('PROCESS_PLANNING_SCHEMA.PROCESS_PLAN_VERSION' 
+      IN TYPEOF(SELF.relating_action));
+END_ENTITY;
+
+ENTITY machining_process
+     SUBTYPE OF (action_method);
+WHERE      
+ wr1: SIZEOF(QUERY ( sar <* USEDIN(SELF,
+     'PROCESS_PLANNING_SCHEMA.ACTION_METHOD_RELATIONSHIP.RELATING_METHOD') | 
+      ('PROCESS_PLANNING_SCHEMA.SINGLE_SETUP_PROCESS_RELATIONSHIP' 
+      IN TYPEOF(sar)) AND 
+      ('PROCESS_PLANNING_SCHEMA.SINGLE_SETUP_PROCESS' 
+      IN TYPEOF(sar.related_method))))>=1;
+
+  wr2: SIZEOF(QUERY ( ap <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.ACTION_RESOURCE.USAGE') | (
+      'PROCESS_PLANNING_SCHEMA.MACHINE' IN TYPEOF(ap))  )) >=  0;
+        
+    
+END_ENTITY;
+
+ENTITY single_setup_process
+
+     SUBTYPE OF (action_method);
+WHERE      
+
+  wr1:SIZEOF(QUERY ( amr <* USEDIN(SELF,
+    'PROCESS_PLANNING_SCHEMA.ACTION_METHOD_RELATIONSHIP.RELATING_METHOD')|
+ (('PROCESS_PLANNING_SCHEMA.SINGLE_ACTIVITY_RELATIONSHIP' IN TYPEOF (amr)) AND 
+   (SIZEOF([
+           'PROCESS_PLANNING_SCHEMA.MACHINE_SETUP',
+           'PROCESS_PLANNING_SCHEMA.TOOL_SETUP',
+           'PROCESS_PLANNING_SCHEMA.FIXTURE_SETUP',
+           'PROCESS_PLANNING_SCHEMA.ANCILLARY_SETUP'] *
+            TYPEOF(amr.relating_method))=1))))>=1;
+
+  wr2:SIZEOF(QUERY ( amr <* USEDIN(SELF,
+    'PROCESS_PLANNING_SCHEMA.ACTION_METHOD_RELATIONSHIP.RELATING_METHOD')|
+        ('PROCESS_PLANNING_SCHEMA.MACHINING_OPERATION' IN TYPEOF (amr))))>=1;
+
+
+ 
+  wr3: SIZEOF(QUERY ( ap <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.ACTION_RESOURCE.USAGE') | (
+      'PROCESS_PLANNING_SCHEMA.CLAMP_POSITION' IN TYPEOF(ap))  )) >=  0;   
+                       
+END_ENTITY;
+
+
+ENTITY single_setup_process_relationship
+
+     SUBTYPE OF (sequential_method);
+     
+WHERE
+
+ wr1: ('PROCESS_PLANNING_SCHEMA.SINGLE_SETUP_PROCESS' 
+      IN TYPEOF(SELF.related_method));
+      
+  wr2:     ('PROCESS_PLANNING_SCHEMA.MACHINING_PROCESS' 
+      IN TYPEOF(SELF.relating_method));
+      
+END_ENTITY;
+
+ENTITY single_activity_relationship
+
+     SUBTYPE OF (sequential_method);
+     
+WHERE
+
+ wr2: ('PROCESS_PLANNING_SCHEMA.SINGLE_SETUP_PROCESS' 
+      IN TYPEOF(SELF.relating_method));
+      
+  wr3:   (SIZEOF([
+           'PROCESS_PLANNING_SCHEMA.MACHINE_SETUP',
+           'PROCESS_PLANNING_SCHEMA.TOOL_SETUP',
+           'PROCESS_PLANNING_SCHEMA.FIXTURE_SETUP',
+           'PROCESS_PLANNING_SCHEMA.ANCILLARY_SETUP'] *
+            TYPEOF(SELF.related_method))=1);      
+END_ENTITY;
+
+ENTITY tool_assembly
+     SUBTYPE OF (action_resource);
+WHERE 
+     
+          
+     
+ wr1: SIZEOF(QUERY ( adr <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.APPLIED_CONTRACT_ASSIGNMENT.ITEMS')| 
+      ('PROCESS_PLANNING_SCHEMA.TOOL_CONTRACT' 
+      IN TYPEOF(adr.assigned_contract)) )) <= 1;
+
+ 
+     
+ wr2: SIZEOF(QUERY ( adr <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.RESOURCE_PROPERTY.RESOURCE') | 
+      ('PROCESS_PLANNING_SCHEMA.TOOL_DATA' IN TYPEOF(adr)) )) <= 1;
+          
+ 
+ 
+ wr3: SIZEOF(QUERY ( rp <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.RESOURCE_PROPERTY.RESOURCE') | 
+      (SIZEOF(QUERY ( impl_rep <* QUERY ( pdr <* USEDIN(rp,
+      'PROCESS_PLANNING_SCHEMA.RESOURCE_PROPERTY_REPRESENTATION.PROPERTY')| 
+      ('PROCESS_PLANNING_SCHEMA.REPRESENTATION' 
+      IN TYPEOF(pdr.representation)) ) | 
+      (SIZEOF(QUERY ( it <* impl_rep.representation.items | 
+      ((SIZEOF([
+      'PROCESS_PLANNING_SCHEMA.MEASURE_REPRESENTATION_ITEM',
+      'PROCESS_PLANNING_SCHEMA.DESCRIPTIVE_REPRESENTATION_ITEM'] *
+      TYPEOF(it)) >= 0) AND 
+      (it.name = 'tool assembly tool parameters')) 
+      )) = 0) )) = 0) )) = 0;
+ wr4: SIZEOF(QUERY ( ar2 <* QUERY ( arr <* USEDIN(SELF,
+     'PROCESS_PLANNING_SCHEMA.ACTION_RESOURCE_RELATIONSHIP.RELATED_RESOURCE')| 
+      ('PROCESS_PLANNING_SCHEMA.TOOL_ASSEMBLY_RELATIONSHIP' 
+      IN TYPEOF(arr)) ) | 
+      ('PROCESS_PLANNING_SCHEMA.TOOL_ASSEMBLY_ELEMENT' 
+      IN TYPEOF(ar2.relating_resource)) )) >= 1;
+
+  
+
+ wr5: SIZEOF(QUERY ( adr <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.APPLIED_DOCUMENT_REFERENCE.ITEMS')| 
+      (('PROCESS_PLANNING_SCHEMA.DRAWING' 
+      IN TYPEOF(adr.assigned_document)) )))<=1; 
+     
+ wr6: SIZEOF(QUERY ( arr <* QUERY ( ar <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.REQUIREMENT_FOR_ACTION_RESOURCE.RESOURCES')| 
+      ('PROCESS_PLANNING_SCHEMA.ACTION_RESOURCE_REQUIREMENT' 
+      IN TYPEOF(ar)) ) | (NOT (SIZEOF(QUERY ( pdp_imp <* 
+      QUERY ( pdp <* arr.OPERATIONS | 
+      ('PROCESS_PLANNING_SCHEMA.PRODUCT_DEFINITION_PROCESS' 
+      IN TYPEOF(pdp)) ) | (SIZEOF(QUERY ( ppa <* USEDIN(pdp_imp,
+      'PROCESS_PLANNING_SCHEMA.PROCESS_PROPERTY_ASSOCIATION.PROCESS')| 
+      ((('PROCESS_PLANNING_SCHEMA.SHAPE_ASPECT' 
+      IN TYPEOF(ppa.property_or_shape)) AND 
+      (ppa.description = 'tool assembly shape')) ) )) =
+      0) )) = 0)) )) >= 0;   
+                     
+
+END_ENTITY;
+
+ENTITY tool_assembly_element
+     SUBTYPE OF (action_resource);
+WHERE 
+    
+          
+     
+ wr1: SIZEOF(QUERY ( adr <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.APPLIED_DOCUMENT_REFERENCE.ITEMS')| 
+      (adr.assigned_document.description ='tool catalogue number')
+      ) ) <= 1;
+      
+          
+     
+ wr2: SIZEOF(QUERY ( adr <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.APPLIED_ORGANIZATION_ASSIGNMENT.ITEMS')| 
+      (adr.assigned_organization.description = 'tool company name')
+      )) = 1;
+           
+          
+     
+ wr3: SIZEOF(QUERY ( adr <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.RESOURCE_PROPERTY.RESOURCE') | 
+      (adr.description = 'tool element identification') )) = 1;       
+ 
+
+        
+     
+
+ wr4: SIZEOF(QUERY (adr <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.APPLIED_DOCUMENT_REFERENCE.ITEMS')| 
+      ('PROCESS_PLANNING_SCHEMA.PROCESS_PLAN_SPECIFICATION' 
+      IN TYPEOF (adr.assigned_document))))=1;
+          
+ 
+        
+     
+ wr5: (NOT(SIZEOF(QUERY ( ap <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.RESOURCE_PROPERTY.RESOURCE') | 
+      (SIZEOF(QUERY ( apr <* USEDIN(ap,
+      'PROCESS_PLANNING_SCHEMA.RESOURCE_PROPERTY_REPRESENTATION.PROPERTY') | 
+      ('PROCESS_PLANNING_SCHEMA.'+
+      'EXTERNALLY_DEFINED_REPRESENTATION_WITH_PARAMETERS' 
+      IN TYPEOF(apr)) )) <= 1) )) = 0));
+      
+ wr6: SIZEOF(QUERY ( arr <* QUERY ( ar <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.REQUIREMENT_FOR_ACTION_RESOURCE.RESOURCES')| 
+      ('PROCESS_PLANNING_SCHEMA.ACTION_RESOURCE_REQUIREMENT' 
+      IN TYPEOF(ar)) ) | (NOT (SIZEOF(QUERY ( pdp_imp <* 
+      QUERY ( pdp <* arr.OPERATIONS | 
+      ('PROCESS_PLANNING_SCHEMA.PRODUCT_DEFINITION_PROCESS' 
+      IN TYPEOF(pdp)) ) | (SIZEOF(QUERY ( ppa <* USEDIN(pdp_imp,
+      'PROCESS_PLANNING_SCHEMA.PROCESS_PROPERTY_ASSOCIATION.PROCESS')| 
+      ((('PROCESS_PLANNING_SCHEMA.SHAPE_ASPECT' 
+      IN TYPEOF(ppa.property_or_shape)) AND 
+      (ppa.description = 'tool assembly element shape')) ) )) =
+      0) )) = 0)) )) >= 0; 
+
+END_ENTITY;
+
+ENTITY tool_body
+     SUBTYPE OF (tool_assembly);
+WHERE 
+ wr1: SIZEOF(QUERY ( rp <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.RESOURCE_PROPERTY.RESOURCE') | 
+      (SIZEOF(QUERY ( impl_rep <* QUERY ( pdr <* USEDIN(rp,
+      'PROCESS_PLANNING_SCHEMA.RESOURCE_PROPERTY_REPRESENTATION.PROPERTY')| 
+      ('PROCESS_PLANNING_SCHEMA.REPRESENTATION' 
+      IN TYPEOF(pdr.representation)) ) | 
+      (SIZEOF(QUERY ( it <* impl_rep.representation.items | 
+      ((SIZEOF([
+      'PROCESS_PLANNING_SCHEMA.MEASURE_REPRESENTATION_ITEM',
+      'PROCESS_PLANNING_SCHEMA.DESCRIPTIVE_REPRESENTATION_ITEM'] *
+      TYPEOF(it)) >= 0) AND 
+      (it.name = 'tool body parameters')) 
+      )) = 0) )) = 0) )) = 0;
+END_ENTITY; 
+
+ENTITY tool_contract
+     SUBTYPE OF (contract);
+WHERE 
+
+    
+
+ wr1: SIZEOF(QUERY ( adr <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.APPLIED_ACTION_REQUEST_ASSIGNMENT.ITEMS')| 
+      (('PROCESS_PLANNING_SCHEMA.VERSIONED_ACTION_REQUEST' 
+      IN TYPEOF(adr.assigned_action_request)) AND 
+      (adr.assigned_action_request.description = 'design order')
+      ) )) =   1;
+
+    
+
+ wr2: SIZEOF(QUERY ( adr <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.APPLIED_ACTION_REQUEST_ASSIGNMENT.ITEMS')| 
+      (('PROCESS_PLANNING_SCHEMA.VERSIONED_ACTION_REQUEST' 
+      IN TYPEOF(adr.assigned_action_request)) AND 
+      (adr.assigned_action_request.description = 'fabrication order')
+      ) ))  = 1;
+
+    
+
+ wr3: SIZEOF(QUERY ( ap <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.CONTRACT_ASSIGNMENT.ASSIGNED_CONTRACT')| 
+      (('PROCESS_PLANNING_SCHEMA.APPLIED_CONTRACT_ASSIGNMENT' 
+      IN TYPEOF(ap)) AND (NOT (SIZEOF(QUERY ( it <* ap.items | 
+      (('PROCESS_PLANNING_SCHEMA.PROCESS_PLAN_SPECIFICATION' IN TYPEOF(it)) 
+      AND (it\document.description = 'tool contract document')) )) <= 1
+      )) )) ) = 0;  
+END_ENTITY;
+
+ENTITY tool_data
+     SUBTYPE OF (resource_property);
+WHERE 
+ 
+ 
+     
+ wr1: SIZEOF(QUERY ( rpr <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.RESOURCE_PROPERTY_REPRESENTATION.PROPERTY')| 
+      ((rpr.name = 'tool position') AND 
+      (SIZEOF(QUERY ( it <*  rpr.representation.items | 
+      (('PROCESS_PLANNING_SCHEMA.DESCRIPTIVE_REPRESENTATION_ITEM' 
+      IN TYPEOF(it)) AND (it.name = 'tool position')
+      ) )) = 1)) )) =   0;
+       
+          
+     
+ wr2: SIZEOF(QUERY ( arr <* USEDIN(SELF.resource,
+      'PROCESS_PLANNING_SCHEMA.ACTION_RESOURCE_RELATIONSHIP.RELATED_RESOURCE')
+      | ('PROCESS_PLANNING_SCHEMA.TOOL_MAGAZINE_TURRET_CAROUSEL' 
+      IN TYPEOF(arr.relating_resource)) )) <= 1;
+
+        
+     
+
+ wr3: SIZEOF(QUERY (adr <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.APPLIED_DOCUMENT_REFERENCE.ITEMS')| 
+      ('PROCESS_PLANNING_SCHEMA.PROCESS_PLAN_SPECIFICATION' IN TYPEOF
+      (adr.assigned_document))))=1;
+END_ENTITY;
+
+ENTITY tool_setup
+     SUBTYPE OF (process_plan_activity);
+WHERE 
+                 
+   
+
+ wr1: SIZEOF(QUERY ( am <* QUERY ( arr <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.ACTION_RESOURCE_REQUIREMENT.OPERATIONS')| 
+      ('PROCESS_PLANNING_SCHEMA.REQUIREMENT_FOR_ACTION_RESOURCE' 
+      IN TYPEOF(arr)) ) | 
+      (SIZEOF(QUERY ( it <* am.resources | 
+      ('PROCESS_PLANNING_SCHEMA.MACHINE' IN TYPEOF(it)) )) = 1)) ) = 1;
+          
+   
+
+ wr2: SIZEOF(QUERY ( am <* QUERY ( arr <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.ACTION_RESOURCE_REQUIREMENT.OPERATIONS')| 
+      ('PROCESS_PLANNING_SCHEMA.REQUIREMENT_FOR_ACTION_RESOURCE' 
+      IN TYPEOF(arr)) ) | 
+      (NOT (SIZEOF(QUERY ( it <* am.resources | 
+      ('PROCESS_PLANNING_SCHEMA.TOOL_ASSEMBLY' IN TYPEOF(it)) 
+      )) =  1)) )) = 0;  
+          
+
+          
+    
+
+ wr3: SIZEOF(QUERY ( am <* QUERY ( arr <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.ACTION_RESOURCE_REQUIREMENT.OPERATIONS')| 
+      ('PROCESS_PLANNING_SCHEMA.REQUIREMENT_FOR_ACTION_RESOURCE' 
+      IN TYPEOF(arr)) ) | 
+      (NOT (SIZEOF(QUERY ( it <* am.resources | 
+      ('PROCESS_PLANNING_SCHEMA.TOOL_MAGAZINE_TURRET_CAROUSEL' 
+      IN  TYPEOF(it)) )) = 1)) )) = 0;
+  
+END_ENTITY;
+
+ENTITY tool_assembly_relationship
+     SUBTYPE OF (action_resource_relationship);
+END_ENTITY;
+
+ENTITY tool_data_representation
+     SUBTYPE OF (resource_property_representation);
+WHERE 
+wr1: SELF.name IN ['x_axis','y_axis','z_axis'];
+
+ 
+
+
+ wr2: SIZEOF(QUERY ( it <* SELF.representation.items | (SIZEOF([
+      'PROCESS_PLANNING_SCHEMA.LENGTH_MEASURE_WITH_UNIT',
+      'PROCESS_PLANNING_SCHEMA.MEASURE_REPRESENTATION_ITEM'] * 
+      TYPEOF(it)) = 2)) ) = 1;
+
+    WR3: 'PROCESS_PLANNING_SCHEMA.TOOL_DATA' IN TYPEOF(SELF.property);
+         
+END_ENTITY;
+
+ENTITY tool_magazine_turret_carousel
+     SUBTYPE OF (action_resource);
+WHERE
+     
+          
+     
+ wr1: SIZEOF(QUERY ( adr <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.RESOURCE_PROPERTY.RESOURCE') | (adr
+      .description = 'tool capacity') )) = 1;
+ 
+ 
+  
+ wr2: SIZEOF(QUERY ( ar2 <* QUERY ( arr <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.ACTION_RESOURCE_RELATIONSHIP.' + 
+      'RELATING_RESOURCE') | (
+      'PROCESS_PLANNING_SCHEMA.TOOL_ASSEMBLY_RELATIONSHIP' IN 
+      TYPEOF(arr)) ) | ('PROCESS_PLANNING_SCHEMA.WORKSTATION' IN 
+      TYPEOF(ar2.related_resource)) )) = 1;
+     
+END_ENTITY;
+
+ENTITY validation
+     SUBTYPE OF (manufacturing_activity);
+WHERE 
+
+
+
+ wr1: SIZEOF(QUERY ( am <* QUERY ( arr <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.ACTION_RESOURCE_REQUIREMENT.OPERATIONS')| 
+      ('PROCESS_PLANNING_SCHEMA.REQUIREMENT_FOR_ACTION_RESOURCE' 
+      IN TYPEOF(arr)) ) | 
+      (SIZEOF(QUERY ( it <* am.resources | 
+      ('PROCESS_PLANNING_SCHEMA.FIXTURE_ASSEMBLY' IN TYPEOF(it)) )) 
+      <= 1))) = 1;
+
+ 
+
+ wr2: SIZEOF(QUERY ( am <* QUERY ( arr <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.ACTION_RESOURCE_REQUIREMENT.OPERATIONS')| 
+      ('PROCESS_PLANNING_SCHEMA.REQUIREMENT_FOR_ACTION_RESOURCE' 
+      IN TYPEOF(arr)) ) | 
+      (SIZEOF(QUERY ( it <* am.resources | 
+      ('PROCESS_PLANNING_SCHEMA.TOOL_ASSEMBLY' IN TYPEOF(it)) )) =
+      1))) = 1;
+          
+  
+ 
+  wr3: SIZEOF(QUERY ( cm <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.ACTION.CHOSEN_METHOD') | 
+      (NOT (SIZEOF(QUERY ( ppa <* USEDIN(cm,
+      'PROCESS_PLANNING_SCHEMA.PROCESS_PROPERTY_ASSOCIATION.PROCESS') | 
+      (('PROCESS_PLANNING_SCHEMA.PRODUCT_DEFINITION_SHAPE' 
+      IN TYPEOF(ppa.property_or_shape)) AND 
+     (ppa.description = 'part fixture mounting part shape')) )) = 1)) )) = 1;
+          
+  
+
+ wr4: SIZEOF(QUERY ( adr <* 
+      SELF\action_method_with_associated_documents.documents | 
+      ('PROCESS_PLANNING_SCHEMA.CONTROLLER_PROGRAM' IN TYPEOF(adr)
+      ) )) <=1;
+                
+END_ENTITY;
+
+ENTITY view_reference
+     SUBTYPE OF (document_usage_constraint);
+WHERE 
+       
+  
+  
+ wr1: SIZEOF(QUERY ( adr <* QUERY ( dr <* USEDIN(SELF.source,
+      'PROCESS_PLANNING_SCHEMA.DOCUMENT_REFERENCE.ASSIGNED_DOCUMENT')| 
+      (('PROCESS_PLANNING_SCHEMA.APPLIED_DOCUMENT_REFERENCE' IN
+      TYPEOF(dr))    ) )    | (SIZEOF(QUERY ( d <* adr.items | (
+      'PROCESS_PLANNING_SCHEMA.PROCESS_PLAN_ACTIVITY' IN TYPEOF(d)) )) 
+      >= 0) )) = 0;
+      
+ wr2: 'PROCESS_PLANNING_SCHEMA.DRAWING' IN TYPEOF (SELF.source);
+           
+ wr3: SELF.subject_element IN ['sheet','view','zone'];
+  
+END_ENTITY;
+
+ENTITY work_cell
+     SUBTYPE OF (applied_group_assignment,action_resource);
+WHERE    
+
+ 
+ 
+ wr1: SIZEOF(QUERY ( adr <* SELF.items | 
+      ('PROCESS_PLANNING_SCHEMA.WORKSTATION' 
+      IN TYPEOF(adr)) )) >=  1; 
+        
+       
+ 
+ wr2: SIZEOF(QUERY ( adr <* SELF.usage | 
+      ('PROCESS_PLANNING_SCHEMA.PROCESS_PLAN_ACTIVITY' 
+      IN TYPEOF(adr)) )) >= 1;
+END_ENTITY;
+
+ENTITY workstation
+     SUBTYPE OF (action_resource);
+WHERE 
+
+       
+ 
+ wr1: SIZEOF(QUERY ( adr <* USEDIN(SELF ,
+      'PROCESS_PLANNING_SCHEMA.APPLIED_DOCUMENT_REFERENCE.ITEMS')| 
+     (adr.assigned_document.kind.product_data_type='special capability')))>=0;
+           
+ WR2: SIZEOF(QUERY(wc <* USEDIN(SELF,
+      'PROCESS_PLANNING_SCHEMA.APPLIED_GROUP_ASSIGNMENT.ITEMS') |
+      ('PROCESS_PLANNING_SCHEMA.WORK_CELL') IN TYPEOF (wc)))=1;
+       
+END_ENTITY;
+
+RULE application_context_requires_ap_definition FOR 
+  (application_context, application_protocol_definition);
+WHERE
+ wr1: SIZEOF(QUERY ( ac <* application_context | 
+      (NOT (SIZEOF( QUERY ( apd <* application_protocol_definition | 
+      ((ac :=: apd.application) AND 
+      (apd.application_interpreted_model_schema_name = 
+      'process_planning_schema')) )) = 1)) )) = 0;
+END_RULE;
+
+RULE approval_requires_approval_date_time FOR (approval,
+  approval_date_time);
+WHERE
+    wr1: SIZEOF(QUERY ( app <* approval | 
+         (NOT (SIZEOF(QUERY ( adt <* 
+         approval_date_time | (app :=: adt.dated_approval) )) = 1)) )) 
+         = 0;
+END_RULE;
+
+RULE approval_requires_approval_person_organization FOR 
+  (approval, approval_person_organization);
+WHERE
+    wr1: SIZEOF(QUERY ( app <* approval | 
+         (NOT (SIZEOF(QUERY ( apo <* 
+         approval_person_organization | 
+         (app :=: apo.authorized_approval) )) >= 1)) )) = 0;
+END_RULE;
+
+RULE dependent_instantiable_approval_status FOR (approval_status);
+WHERE
+  WR1: SIZEOF (QUERY (ast <* approval_status |
+       NOT (SIZEOF (USEDIN (ast, '')) >= 1))) = 0;
+END_RULE;
+
+RULE dependent_instantiable_date FOR (date);
+WHERE
+  WR1: SIZEOF (QUERY (dt <* date |NOT(SIZEOF (USEDIN (dt,'')) >= 1))) = 0;
+END_RULE;
+
+RULE dependent_instantiable_named_unit FOR (named_unit);
+WHERE
+  WR1: SIZEOF (QUERY (nu <* named_unit |
+       NOT (SIZEOF (USEDIN (nu, '')) >= 1))) = 0;
+END_RULE;
+
+RULE dependent_instantiable_precision_qualifier FOR (precision_qualifier);
+WHERE
+  WR1: SIZEOF (QUERY (pq <* precision_qualifier |
+       NOT (SIZEOF (USEDIN (pq, '')) >= 1))) = 0;
+END_RULE;
+
+RULE dependent_instantiable_type_qualifier FOR (type_qualifier);
+WHERE
+  WR1: SIZEOF (QUERY (tq <* type_qualifier |
+       NOT (SIZEOF (USEDIN (tq, '')) >= 1))) = 0;
+END_RULE;
+
+RULE dependent_instantiable_uncertainty_qualifier FOR (uncertainty_qualifier);
+WHERE
+  WR1: SIZEOF (QUERY (uq <* uncertainty_qualifier |
+       NOT (SIZEOF (USEDIN (uq, '')) >= 1))) = 0;
+END_RULE;
+
+RULE dependent_instantiable_security_classification_level FOR 
+  (security_classification_level);
+WHERE
+  WR1: SIZEOF (QUERY (scl <* security_classification_level |
+       NOT (SIZEOF (USEDIN (scl, '')) >= 1))) = 0;
+END_RULE;
+
+RULE dependent_instantiable_shape_representation FOR (shape_representation);
+WHERE
+  WR1: SIZEOF (QUERY (sr <* shape_representation |
+       NOT (SIZEOF (USEDIN (sr, '')) >= 1))) = 0;
+END_RULE;
+
+RULE externally_defined_class_with_known_source_requirement FOR
+(externally_defined_class);
+WHERE
+    wr1: SIZEOF(QUERY ( edc <* externally_defined_class | 
+         (('PROCESS_PLANNING_SCHEMA.KNOWN_SOURCE' 
+   IN TYPEOF(edc.source)) AND (NOT (SIZEOF(QUERY ( aoa <* USEDIN(edc.source,
+         'PROCESS_PLANNING_SCHEMA.APPLIED_ORGANIZATION_ASSIGNMENT.ITEMS')| 
+         (aoa.role.name = 'library supplier') )) = 1)) ))) <= 1;
+END_RULE;
+
+RULE geometric_tolerance_subtype_exclusiveness FOR (geometric_tolerance);
+WHERE
+  WR1: SIZEOF (QUERY (gt <* geometric_tolerance |
+       NOT (SIZEOF (TYPEOF (gt) *
+       ['PROCESS_PLANNING_SCHEMA.ANGULARITY_TOLERANCE',
+       'PROCESS_PLANNING_SCHEMA.CIRCULAR_RUNOUT_TOLERANCE',
+       'PROCESS_PLANNING_SCHEMA.CONCENTRICITY_TOLERANCE',
+       'PROCESS_PLANNING_SCHEMA.CYLINDRICITY_TOLERANCE',
+       'PROCESS_PLANNING_SCHEMA.FLATNESS_TOLERANCE',
+       'PROCESS_PLANNING_SCHEMA.LINE_PROFILE_TOLERANCE',
+       'PROCESS_PLANNING_SCHEMA.PARALLELISM_TOLERANCE', 
+       'PROCESS_PLANNING_SCHEMA.PERPENDICULARITY_TOLERANCE',
+       'PROCESS_PLANNING_SCHEMA.POSITION_TOLERANCE',
+       'PROCESS_PLANNING_SCHEMA.ROUNDNESS_TOLERANCE',
+       'PROCESS_PLANNING_SCHEMA.STRAIGHTNESS_TOLERANCE',
+       'PROCESS_PLANNING_SCHEMA.SURFACE_PROFILE_TOLERANCE', 
+       'PROCESS_PLANNING_SCHEMA.SYMMETRY_TOLERANCE',
+       'PROCESS_PLANNING_SCHEMA.TOTAL_RUNOUT_TOLERANCE'])
+       <= 2))) = 0;
+END_RULE;
+
+ RULE machining_feature_life_cycle FOR    
+ (instanced_feature);
+WHERE
+  WR1: SIZEOF (QUERY (mf <* instanced_feature |
+       NOT (mf.of_shape.definition.frame_of_reference.life_cycle_stage =
+       'manufacturing planning'))) = 0;
+END_RULE;
+
+RULE material_is_specified_for_part FOR (product_definition, 
+  make_from_usage_option);
+WHERE
+  WR1: SIZEOF (QUERY (nmpd <* QUERY (pd <* product_definition |
+       SIZEOF (USEDIN (pd, 'PROCESS_PLANNING_SCHEMA.' + 
+       'MATERIAL_DESIGNATION.DEFINITIONS')) = 0) |
+       NOT (SIZEOF (QUERY (mfuo <* make_from_usage_option |
+       NOT (nmpd :=: mfuo.relating_product_definition))) >= 1))) = 0;
+END_RULE;
+
+RULE mating_definition_relationship_orientation FOR 
+   (product_definition_relationship);
+
+WHERE 
+
+    wr1: SIZEOF(QUERY ( prd_def_rel <* product_definition_relationship | 
+             (NOT (SIZEOF(QUERY ( pd <* USEDIN(prd_def_rel,
+             'PROCESS_PLANNING_SCHEMA.PROPERTY_DEFINITION.DEFINITION') | 
+             (NOT (SIZEOF(QUERY ( pdr <* USEDIN(pd,
+     'PROCESS_PLANNING_SCHEMA.PROPERTY_DEFINITION_REPRESENTATION.DEFINITION')| 
+              ((('PROCESS_PLANNING_SCHEMA.SHAPE_DEFINITION_REPRESENTATION' 
+             IN TYPEOF(pdr)) AND 
+             ('PROCESS_PLANNING_SCHEMA.SHAPE_REPRESENTATION' 
+             IN TYPEOF(pdr.used_representation))) AND 
+             (NOT(SIZEOF(QUERY ( rm <* USEDIN(pdr.used_representation,
+         'PROCESS_PLANNING_SCHEMA.REPRESENTATION_MAP.MAPPED_REPRESENTATION')| 
+              (SIZEOF(QUERY ( mi <* USEDIN(rm,
+             'PROCESS_PLANNING_SCHEMA.MAPPED_ITEM.MAPPING_SOURCE') | 
+             ('PROCESS_PLANNING_SCHEMA.REPRESENTATION_ITEM' 
+             IN TYPEOF(mi.mapping_target)) )) 
+             <= 1) )) = 0 )))))=0))))=0))))=0;
+       
+END_RULE;
+
+RULE restrict_name_for_known_source FOR
+(known_source);
+WHERE
+WR1: SIZEOF ( QUERY ( ks <* known_source | ( ks. name<>
+'ISO 13584 library' ) ) ) =0;
+END_RULE;
+
+RULE shape_aspect_relationship_subtype_exclusiveness FOR 
+  (shape_aspect_relationship);
+WHERE
+  WR1: SIZEOF (QUERY (sr <* shape_aspect_relationship |
+       NOT (SIZEOF (TYPEOF (sr) *
+       ['PROCESS_PLANNING_SCHEMA.DIMENSIONAL_LOCATION',
+       'PROCESS_PLANNING_SCHEMA.GEOMETRIC_TOLERANCE_RELATIONSHIP',
+       'PROCESS_PLANNING_SCHEMA.FEATURE_COMPONENT_RELATIONSHIP',
+       'PROCESS_PLANNING_SCHEMA.SHAPE_DEFINING_RELATIONSHIP'])
+       <= 2))) = 0;
+END_RULE;
+
+ RULE subtype_exclusiveness_action_resource
+ FOR (action_resource);
+  WHERE
+   wr1 : SIZEOF(QUERY(a <* action_resource | 
+        NOT (type_check_function(a,[
+       'PROCESS_PLANNING_SCHEMA.CONTROLLER',
+       'PROCESS_PLANNING_SCHEMA.GENERIC_MANUFACTURING_RESOURCE',
+       'PROCESS_PLANNING_SCHEMA.FIXTURE_ASSEMBLY',
+       'PROCESS_PLANNING_SCHEMA.FIXTURE_ASSEMBLY_ELEMENT',
+       'PROCESS_PLANNING_SCHEMA.WORK_CELL',
+       'PROCESS_PLANNING_SCHEMA.MACHINE',
+       'PROCESS_PLANNING_SCHEMA.WORKSTATION',
+       'PROCESS_PLANNING_SCHEMA.TOOL_MAGAZINE_TURRET_CAROUSEL',
+       'PROCESS_PLANNING_SCHEMA.TOOL_ASSEMBLY',
+       'PROCESS_PLANNING_SCHEMA.TOOL_ASSEMBLY_ELEMENT'],3)))) = 0;
+ END_RULE;
+
+ RULE subtype_exclusiveness_action_resource_relationship 
+ FOR (action_resource_relationship);
+  WHERE
+   wr1 : SIZEOF(QUERY(a <* action_resource_relationship | 
+        NOT (type_check_function(a,[
+        'PROCESS_PLANNING_SCHEMA.MACHINE_ELEMENT_RELATIONSHIP',
+       'PROCESS_PLANNING_SCHEMA.FIXTURE_ASSEMBLY_RELATIONSHIP',
+       'PROCESS_PLANNING_SCHEMA.TOOL_ASSEMBLY_RELATIONSHIP'],3)))) = 0;
+ END_RULE;
+
+ RULE subtype_exclusiveness_characterized_object FOR (characterized_object);
+  WHERE
+   wr1 : SIZEOF(QUERY(a <* characterized_object | NOT (type_check_function(a,[
+       'PROCESS_PLANNING_SCHEMA.DOCUMENT_FILE',
+       'PROCESS_PLANNING_SCHEMA.FEATURE_DEFINITION',
+       'PROCESS_PLANNING_SCHEMA.FEATURE_COMPONENT_DEFINITION'],3)))) = 0;
+ END_RULE;
+
+ RULE subtype_exclusiveness_contract
+ FOR (contract);
+  WHERE
+   wr1 : SIZEOF(QUERY(a <* contract | 
+        NOT (type_check_function(a,[
+       'PROCESS_PLANNING_SCHEMA.FIXTURE_CONTRACT',
+       'PROCESS_PLANNING_SCHEMA.PART_CONTRACT',
+       'PROCESS_PLANNING_SCHEMA.TOOL_CONTRACT'],3)))) = 0;
+ END_RULE;
+
+ RULE subtype_exclusiveness_document FOR (document);
+  WHERE
+   wr1 : SIZEOF(QUERY(a <* document | NOT (type_check_function(a,[
+       'PROCESS_PLANNING_SCHEMA.PROCESS_PLAN_SPECIFICATION',
+       'PROCESS_PLANNING_SCHEMA.DOCUMENT_FILE',
+       'PROCESS_PLANNING_SCHEMA.DRAWING',
+       'PROCESS_PLANNING_SCHEMA.CONTROLLER_PROGRAM',
+       'PROCESS_PLANNING_SCHEMA.ILLUSTRATION'],4)))) = 0;
+ END_RULE;
+
+ RULE subtype_exclusiveness_group
+ FOR (group);
+  WHERE
+   wr1 : SIZEOF(QUERY(a <* group | 
+        NOT (type_check_function(a,[
+         'PROCESS_PLANNING_SCHEMA.FEATURE_TREE',
+       'PROCESS_PLANNING_SCHEMA.CLASS'],1)))) = 0;
+ END_RULE;
+
+ RULE subtype_exclusiveness_resource_property FOR (resource_property);
+  WHERE
+   wr1 : SIZEOF(QUERY(a <* resource_property | NOT (type_check_function(a,[
+       'PROCESS_PLANNING_SCHEMA.CLAMP_POSITION',
+       'PROCESS_PLANNING_SCHEMA.TOOL_DATA',
+       'PROCESS_PLANNING_SCHEMA.IN_FACILITY_LOCATION'],3)))) = 0;
+ END_RULE;
+
+ RULE subtype_exclusiveness_shape_aspect FOR (shape_aspect);
+  WHERE
+   wr1 : SIZEOF(QUERY(a <* shape_aspect | NOT (type_check_function(a,[
+       'PROCESS_PLANNING_SCHEMA.APPLIED_AREA',
+       'PROCESS_PLANNING_SCHEMA.BOSS_TOP',
+       'PROCESS_PLANNING_SCHEMA.CHAMFER_OFFSET',
+       'PROCESS_PLANNING_SCHEMA.CIRCULAR_CLOSED_PROFILE',
+       'PROCESS_PLANNING_SCHEMA.CLOSED_PATH_PROFILE',
+       'PROCESS_PLANNING_SCHEMA.COMPOSITE_SHAPE_ASPECT',
+       'PROCESS_PLANNING_SCHEMA.DATUM',
+       'PROCESS_PLANNING_SCHEMA.DATUM_FEATURE',
+       'PROCESS_PLANNING_SCHEMA.DATUM_TARGET',
+       'PROCESS_PLANNING_SCHEMA.DERIVED_SHAPE_ASPECT',
+       'PROCESS_PLANNING_SCHEMA.HOLE_BOTTOM',
+       'PROCESS_PLANNING_SCHEMA.LINEAR_PROFILE',
+       'PROCESS_PLANNING_SCHEMA.MODIFIED_PATTERN',
+       'PROCESS_PLANNING_SCHEMA.NGON_CLOSED_PROFILE',
+       'PROCESS_PLANNING_SCHEMA.OPEN_PATH_PROFILE',
+       'PROCESS_PLANNING_SCHEMA.PARTIAL_CIRCULAR_PROFILE',
+       'PROCESS_PLANNING_SCHEMA.PATH_FEATURE_COMPONENT',
+       'PROCESS_PLANNING_SCHEMA.POCKET_BOTTOM',
+       'PROCESS_PLANNING_SCHEMA.PROFILE_FLOOR',
+       'PROCESS_PLANNING_SCHEMA.RECTANGULAR_CLOSED_PROFILE',
+       'PROCESS_PLANNING_SCHEMA.RIB_TOP_FLOOR',
+       'PROCESS_PLANNING_SCHEMA.ROUNDED_U_PROFILE',
+       'PROCESS_PLANNING_SCHEMA.SLOT_END',
+       'PROCESS_PLANNING_SCHEMA.SQUARE_U_PROFILE',
+       'PROCESS_PLANNING_SCHEMA.SYMMETRIC_SHAPE_ASPECT',
+       'PROCESS_PLANNING_SCHEMA.TAPER',
+       'PROCESS_PLANNING_SCHEMA.TEE_PROFILE',
+       'PROCESS_PLANNING_SCHEMA.TOLERANCE_ZONE',
+       'PROCESS_PLANNING_SCHEMA.TRANSITION_FEATURE',
+       'PROCESS_PLANNING_SCHEMA.VEE_PROFILE'],3)))) = 0;
+END_RULE;
+
+ RULE subtype_exclusiveness_shape_representation FOR (shape_representation);
+  WHERE
+   wr1 : SIZEOF(QUERY(a <* shape_representation | NOT (type_check_function(a,[
+       'PROCESS_PLANNING_SCHEMA.ADVANCED_BREP_SHAPE_REPRESENTATION',
+       'PROCESS_PLANNING_SCHEMA.DIRECTION_SHAPE_REPRESENTATION',
+       'PROCESS_PLANNING_SCHEMA.EDGE_BASED_WIREFRAME_SHAPE_REPRESENTATION',
+       'PROCESS_PLANNING_SCHEMA.FACE_SHAPE_REPRESENTATION',
+       'PROCESS_PLANNING_SCHEMA.FACETED_BREP_SHAPE_REPRESENTATION',
+ 'PROCESS_PLANNING_SCHEMA.GEOMETRICALLY_BOUNDED_SURFACE_SHAPE_REPRESENTATION',
+ 'PROCESS_PLANNING_SCHEMA.GEOMETRICALLY_BOUNDED_WIREFRAME_SHAPE_REPRESENTATION',
+       'PROCESS_PLANNING_SCHEMA.LOCATION_SHAPE_REPRESENTATION',
+       'PROCESS_PLANNING_SCHEMA.MANIFOLD_SURFACE_SHAPE_REPRESENTATION',
+       'PROCESS_PLANNING_SCHEMA.PATH_SHAPE_REPRESENTATION',
+       'PROCESS_PLANNING_SCHEMA.PLANAR_SHAPE_REPRESENTATION',
+       'PROCESS_PLANNING_SCHEMA.SHAPE_DIMENSION_REPRESENTATION',
+       'PROCESS_PLANNING_SCHEMA.SHAPE_REPRESENTATION_WITH_PARAMETERS',
+       'PROCESS_PLANNING_SCHEMA.SHELL_BASED_WIREFRAME_SHAPE_REPRESENTATION'],3
+        )))) = 0;
+ END_RULE;
+
+END_SCHEMA;

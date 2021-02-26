@@ -1,0 +1,10 @@
+(*   $Id: 10303-1510-mim-geometrically_bounded_wireframe.exp,v 1.4 2003/10/21 12:49:19 wg12deputy Exp $
+  ISO/TC184/SC4 WG12N1280 -ISO/TS 10303-1510 Geometrically bounded wireframet - EXPRESS MIM *)
+
+SCHEMA Geometrically_bounded_wireframe_mim;
+
+USE FROM aic_geometrically_bounded_wireframe;		-- ISO 10303-510
+USE FROM Elemental_geometric_shape_mim;			
+
+END_SCHEMA;
+

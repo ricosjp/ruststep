@@ -1,0 +1,182 @@
+ALL THE CHANGES THAT AFFECT SCHEMAS ARE IMPLEMENTED IN THE RELEASED SCHEMAS
+
+
+=====================================================================
+
+ISSUE NUMBER: 1
+DATE: 2000-03-14
+AUTHOR: E.SARDET
+SOURCE DOCUMENT:ISO IS 13584-20:1998
+SCHEMA and CLAUSE:ISO13584_expressions_schema 7.4.6
+OTHER PARTS AFFECTED: Long forms 24-1 and 24-2 of ISO 13584-24
+ENTITY or RESOURCE MODIFIED: odd_function entity
+DESCRIPTION: The where rule uses a group reference that is not further 
+qualified by an attribute as a parameter of a function
+
+OLD CONTENT:
+ENTITY odd_function
+SUBTYPE OF (unary_Boolean_expression);
+	SELF\unary_generic_expression.operand: numeric_expression;
+WHERE
+	WR1: is_int_expr(SELF\numeric_expression);
+END_ENTITY;
+
+NEW CONTENT:
+
+ENTITY odd_function
+SUBTYPE OF (unary_Boolean_expression);
+	SELF\unary_generic_expression.operand: numeric_expression;
+WHERE
+	WR1: is_int_expr(SELF);
+END_ENTITY;
+
+SCHEMA NAME AND VERSION: ISO13584_expressions_schema 1.0
+NEW VERSION:1.1
+DONE in released schema, DONE in Part24 long form
+=====================================================================
+ISSUE NUMBER:2 
+DATE: 2003-
+AUTHOR: Martin Philipp, ap214@dik.tu-darmstadt.de
+SOURCE DOCUMENT:ISO IS 13584-20:1998
+SCHEMA and CLAUSE: ISO13584_expressions_schema
+OTHER PARTS AFFECTED: none in ISO 13584
+ENTITY or RESOURCE MODIFIED:FUNCTION used_functions
+DESCRIPTION:error in  partial instance reference
+
+OLD CONTENT:
+FUNCTION used_functions (arg : expression) : SET OF defined_function;
+...
+IF 'ISO13584_EXPRESSIONS_SCHEMA.LIKE_EXPRESSION' IN TYPEOF (arg)
+THEN
+	RETURN (used_functions (arg\like_expression.operands[1])
+		+ used_functions (arg\like_expression.operands[2]));
+END_IF;
+
+NEW CONTENT:
+FUNCTION used_functions (arg : expression) : SET OF defined_function;
+...
+IF 'ISO13584_EXPRESSIONS_SCHEMA.LIKE_EXPRESSION' IN TYPEOF (arg)
+THEN
+	RETURN (used_functions (arg\comparison_expression.operands[1])
+		+ used_functions (arg\comparison_expression.operands[2]));
+END_IF;
+
+SCHEMA NAME AND VERSION: ISO13584_expressions_schema 1.1
+NEW VERSION:1.2
+DONE in released schema
+=====================================================================
+ISSUE NUMBER:3 
+DATE: 
+AUTHOR: Martin Philipp, ap214@dik.tu-darmstadt.de
+SOURCE DOCUMENT:ISO IS 13584-20:1998
+SCHEMA and CLAUSE: No effect on schema: text only
+OTHER PARTS AFFECTED: none in ISO 13584
+ENTITY or RESOURCE MODIFIED:
+DESCRIPTION: Various portions of the EXPRESS G in annex C of the
+FDIS document do not correctly reflect the EXPRESS of the schema
+Examples are: 
+C7: interger_defined_function and
+real_defined_function are ABSTRACT according to EXPRESS. 
+C8: binary_function_call is ABSTRACT according to EXPRESS.
+C13: entity comparison_expression (this is the correct name) is misspelled.
+
+OLD CONTENT:
+
+NEW CONTENT:
+SCHEMA NAME AND VERSION: No effect on schema: text only
+NEW VERSION:
+TO BE DONE in a TC
+=====================================================================
+ISSUE NUMBER:4 
+DATE: 
+AUTHOR: Martin Philipp, ap214@dik.tu-darmstadt.de
+SOURCE DOCUMENT:ISO IS 13584-20:1998
+SCHEMA and CLAUSE: comparison_expression
+OTHER PARTS AFFECTED: none 
+ENTITY or RESOURCE MODIFIED:none
+DESCRIPTION: A error of parenthesis was described in a SEDS 
+against the FDIS.  In fact this problem was solved in the IS document.
+OLD CONTENT:
+
+NEW CONTENT:
+SCHEMA NAME AND VERSION: No action. Solved in IS.
+NEW VERSION:
+DONE
+=====================================================================
+ISSUE NUMBER:6 (SEDS 344)	idem as ISSUE 5
+DATE: 1998
+AUTHOR: Joshua Lubell, lubell@cme.nist.gov
+SOURCE DOCUMENT:ISO IS 13584-20:1998
+SCHEMA and CLAUSE: comparison_expression
+OTHER PARTS AFFECTED: none 
+ENTITY or RESOURCE MODIFIED:none
+DESCRIPTION: A error of parenthesis was described in a SEDS 
+against the FDIS.  In fact this problem was solved in the IS document.
+OLD CONTENT:
+
+NEW CONTENT:
+SCHEMA NAME AND VERSION: No action. Solved in IS.
+NEW VERSION:
+DONE
+=====================================================================
+ISSUE NUMBER:7 (SEDS 373)
+DATE: 1998-12-11
+AUTHOR: P. Huau
+SOURCE DOCUMENT:ISO IS 13584-20:1998
+SCHEMA and CLAUSE: none. Text only. Table A1
+OTHER PARTS AFFECTED: none 
+ENTITY or RESOURCE MODIFIED: none
+DESCRIPTION: In table 1, the short names are missing for the entities
+ whose first letter is between 'i' and 'r'
+OLD CONTENT:
+
+NEW CONTENT:
+SCHEMA NAME AND VERSION: No action. Solved in IS.
+NEW VERSION:
+TO BE DONE in a TC
+=====================================================================
+ISSUE NUMBER:8 (SEDS 846)	idem as ISSUE 5
+DATE: 1998
+AUTHOR: T. Hendrix (thomas.e.hendrix@boeing.com)
+SOURCE DOCUMENT:ISO IS 13584-20:1998
+SCHEMA and CLAUSE: comparison_expression
+OTHER PARTS AFFECTED: none 
+ENTITY or RESOURCE MODIFIED:none
+DESCRIPTION: A error of parenthesis was described in a SEDS 
+against the FDIS.  In fact this problem was solved in the IS document.
+OLD CONTENT:
+
+NEW CONTENT:
+SCHEMA NAME AND VERSION: No action. Solved in IS.
+NEW VERSION:
+DONE
+Note. It shall be investigated where Part20 users find the wrong schema
+=====================================================================
+ISSUE NUMBER:
+DATE: 
+AUTHOR:
+SOURCE DOCUMENT:
+SCHEMA and CLAUSE:
+OTHER PARTS AFFECTED: 
+ENTITY or RESOURCE MODIFIED: 
+DESCRIPTION: 
+OLD CONTENT:
+
+NEW CONTENT:
+SCHEMA NAME AND VERSION: 
+NEW VERSION:
+=====================================================================
+ISSUE NUMBER:
+DATE: 
+AUTHOR:
+SOURCE DOCUMENT:
+SCHEMA and CLAUSE:
+OTHER PARTS AFFECTED: 
+ENTITY or RESOURCE MODIFIED: 
+DESCRIPTION: 
+OLD CONTENT:
+
+NEW CONTENT:
+SCHEMA NAME AND VERSION: 
+NEW VERSION:
+=====================================================================

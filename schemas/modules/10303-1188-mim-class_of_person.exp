@@ -1,0 +1,18 @@
+(*
+ $Id: 10303-1188-mim-class_of_person.exp,v 1.1 2006/08/04 12:11:55 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2745 - ISO/TS 10303-1188 Class of person - EXPRESS MIM
+ Supersedes ISO TC184/SC4/WG12 N2489
+*)
+
+SCHEMA Class_of_person_mim;
+
+USE FROM Class_mim;    -- ISO/TS 10303-1070
+
+USE FROM person_organization_schema   -- ISO 10303-41
+  (person_type); 
+
+ENTITY class_of_person
+  SUBTYPE OF (person_type, class);
+END_ENTITY;
+
+END_SCHEMA;

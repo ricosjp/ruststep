@@ -1,0 +1,55 @@
+(*
+ $Id: 10303-1254-arm-condition_evaluation.exp,v 1.1 2006/08/07 07:44:45 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N3031 - ISO/TS 10303-1254 Condition evaluation - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG12 N2324
+*) 
+
+
+SCHEMA Condition_evaluation_arm;
+
+USE FROM Classification_assignment_arm;    -- ISO/TS 10303-1114
+
+USE FROM Condition_arm;    -- ISO/TS 10303-1253
+
+
+TYPE condition_assignment_classification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON classification_item WITH 
+   (Condition_evaluation, 
+    Condition_evaluation_assignment, 
+    Condition_evaluation_parameter, 
+    Related_condition_parameter);
+END_TYPE; 
+
+TYPE condition_evaluation_item = EXTENSIBLE GENERIC_ENTITY SELECT;
+END_TYPE; 
+
+TYPE condition_evaluation_parameter_item = EXTENSIBLE GENERIC_ENTITY SELECT;
+END_TYPE; 
+
+ENTITY Condition_evaluation;
+  name : STRING;
+  description : OPTIONAL STRING;
+  result : LOGICAL;
+  condition : Condition;
+END_ENTITY;
+
+ENTITY Condition_evaluation_assignment;
+  assigned_condition_evaluation : Condition_evaluation;
+  item : condition_evaluation_item;
+END_ENTITY;
+
+ENTITY Condition_evaluation_parameter;
+  name : STRING;
+  description : OPTIONAL STRING;
+  condition_evaluation : Condition_evaluation;
+  evaluation_parameter : condition_evaluation_parameter_item;
+END_ENTITY;
+
+ENTITY Related_condition_parameter;
+  name : STRING;
+  description : OPTIONAL STRING;
+  conditon_evaluation_parameter : Condition_evaluation_parameter;
+  condition_parameter : Condition_parameter;
+END_ENTITY;
+
+END_SCHEMA;  -- Condition_evaluation_arm
+

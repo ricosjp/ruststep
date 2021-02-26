@@ -1,0 +1,38 @@
+(*
+ $Id: 10303-1030-arm-property_assignment.exp,v 1.5 2006/08/07 07:44:42 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2972 - ISO/TS 10303-1030 Property assignment - EXPRESS ARM
+*)
+
+
+SCHEMA Property_assignment_arm; 
+
+USE FROM Foundation_representation_arm;    -- ISO/TS 10303-1006
+
+USE FROM Independent_property_arm;    -- ISO/TS 10303-1036
+
+
+TYPE property_assignment_select = EXTENSIBLE SELECT;
+END_TYPE; 
+
+ENTITY Applied_independent_property
+  SUBTYPE OF (Assigned_property);
+  base_independent_property : Independent_property;
+DERIVE
+  SELF\Assigned_property.name : STRING := base_independent_property.property_type;
+END_ENTITY;
+
+ENTITY Assigned_property;
+  id : OPTIONAL STRING;
+  name : STRING;
+  description : OPTIONAL STRING;
+  described_element : property_assignment_select;
+END_ENTITY;
+
+ENTITY Property_representation;
+  description : OPTIONAL STRING;
+  property : Assigned_property;
+  rep : Representation;
+  role : OPTIONAL STRING;
+END_ENTITY;
+
+END_SCHEMA;  -- Property_assignment_arm

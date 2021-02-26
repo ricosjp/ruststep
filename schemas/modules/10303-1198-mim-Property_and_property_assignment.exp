@@ -1,0 +1,15 @@
+(*
+ $Id: 10303-1198-mim-Property_and_property_assignment.exp,v 1.4 2006/08/04 12:11:55 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2811 - ISO/TS 10303-1198 Property and property assignment - EXPRESS MIM
+ Supersedes ISO TC184/SC4/WG12 N2046
+*)
+
+SCHEMA Property_and_property_assignment_mim;
+
+USE FROM Independent_property_definition_mim;    --  ISO/TS 10303-1099
+USE FROM Property_space_mim;    --  ISO/TS 10303-1080
+USE FROM Property_identification_mim;    --  ISO/TS 10303-1085
+USE FROM Possession_of_property_mim;    --  ISO/TS 10303-1199
+USE FROM Property_condition_mim;    --  ISO/TS 10303-1074
+
+END_SCHEMA;

@@ -1,0 +1,94 @@
+SCHEMA ISO13584_102_cc_schema;
+
+REFERENCE FROM ISO13584_IEC61360_dictionary_schema(
+	item_names);
+
+REFERENCE FROM ISO13584_extended_dictionary_schema(
+	data_exchange_specification_identification,
+	view_exchange_protocol_identification);
+
+REFERENCE FROM ISO13584_external_file_schema(
+	external_file_protocol,
+	standard_data_protocol);
+
+REFERENCE FROM person_organization_schema(
+	organization);
+
+FUNCTION ISO13584_102_protocol_compliant_to_cc(
+	p: external_file_protocol): BOOLEAN;
+
+	IF (('ISO13584_EXTENDED_DICTIONARY_SCHEMA.STANDARD_DATA_PROTOCOL'
+		IN TYPEOF(p))
+		AND (ISO13584_102_organization_compliant_to_cc(p.organisation))
+		AND (p.protocol_name LIKE 'ISO_10303_2##')
+		AND (p.level LIKE '##')
+		AND ((0 < VALUE(p.level)) AND (VALUE(p.level) <= 99)))
+	THEN
+		RETURN(TRUE);
+	ELSE
+		RETURN(FALSE);
+	END_IF;
+END_FUNCTION; -- ISO13584_102_protocol_compliant_to_cc
+
+FUNCTION ISO13584_102_organization_compliant_to_cc(org: organization): BOOLEAN;
+	IF ((org.id = 'ISO') AND
+		(org.name = 'International Organization for Standardization'))
+	THEN
+		RETURN(TRUE);
+	ELSE
+		RETURN(FALSE);
+	END_IF;
+END_FUNCTION; -- ISO13584_102_organization_compliant_to_cc
+
+FUNCTION ISO13584_102_vep_application_is_the_protocol_name(
+	vep_id: view_exchange_protocol_identification): BOOLEAN;
+	IF (vep_id\data_exchange_specification_identification.
+		external_file_protocols = [])
+	THEN
+		RETURN(TRUE);
+	ELSE
+		RETURN((vep_id\data_exchange_specification_identification.application
+			= vep_id\data_exchange_specification_identification
+			.external_file_protocols[1].protocol_name));
+	END_IF;
+END_FUNCTION; -- ISO13584_102_vep_application_is_the_protocol_name
+
+RULE ISO13584_102_allowed_reference_to_conformance_class_rule FOR (
+	view_exchange_protocol_identification);
+WHERE
+WR1: QUERY(vep_id <* view_exchange_protocol_identification |
+		(vep_id\data_exchange_specification_identification.name
+		= 'ISO_13584_102')
+		AND
+		(SIZEOF(vep_id\data_exchange_specification_identification
+		.external_file_protocols) <> 1)) = [];
+
+WR2: QUERY(vep_id <* view_exchange_protocol_identification |
+		(vep_id\data_exchange_specification_identification.name = 'ISO_13584_102')
+		AND ((vep_id\data_exchange_specification_identification.status = 'WD')
+			OR
+			(vep_id\data_exchange_specification_identification.status = 'CD')
+			OR
+			(vep_id\data_exchange_specification_identification.status = 'DIS')
+			OR
+			(vep_id\data_exchange_specification_identification.status = 'FDIS')
+			OR
+			(vep_id\data_exchange_specification_identification.status = 'IS'))
+		AND
+			ISO13584_102_vep_application_is_the_protocol_name(vep_id)
+		AND
+			((vep_id\data_exchange_specification_identification.level = '1')
+			OR
+			(vep_id\data_exchange_specification_identification.level = '2'))
+		AND
+			(QUERY( efp <* vep_id\data_exchange_specification_identification
+			.external_file_protocols | NOT(
+			ISO13584_102_protocol_compliant_to_cc(efp))) = []))
+	= QUERY(vep_id <* view_exchange_protocol_identification |
+		(vep_id\data_exchange_specification_identification.name =
+		'ISO_13584_102'));
+END_RULE; -- ISO13584_102_allowed_reference_to_conformance_class_rule
+
+END_SCHEMA; -- ISO13584_102_cc_schema
+
+

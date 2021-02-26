@@ -1,0 +1,24 @@
+(*
+ $Id: 10303-1341-mim-generic_expression.exp,v 1.2 2005/02/22 15:24:15 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2553 - ISO/TS 10303-1341 Generic expression - EXPRESS MIM
+ Supersedes ISO TC184/SC4/WG12 N1794
+*)
+
+SCHEMA Generic_expression_mim;
+
+USE FROM ISO13584_generic_expressions_schema(
+	binary_generic_expression,
+	environment,
+	generic_expression,
+	generic_literal,
+	generic_variable,
+	multiple_arity_generic_expression,
+	simple_generic_expression,
+	unary_generic_expression,
+	variable_semantics
+	);
+	
+USE FROM ISO13584_expressions_schema(
+	variable);
+
+END_SCHEMA;

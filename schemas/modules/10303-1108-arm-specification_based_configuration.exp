@@ -1,0 +1,82 @@
+(* 
+   $Id: 10303-1108-arm-specification_based_configuration.exp,v 1.1 2006/08/03 14:41:10 wg12deputy Exp $
+   ISO/TC184/SC4 WG12N2595 - ISO/TS 10303-1108 Specification_based_configuration - Express ARM
+   Supersedes ISO TC184/SC4/WG12N1729
+*)
+
+
+SCHEMA Specification_based_configuration_arm;
+
+USE FROM Effectivity_application_arm;
+
+USE FROM Product_class_arm;
+
+
+TYPE configured_item_select = EXTENSIBLE GENERIC_ENTITY SELECT ; 
+END_TYPE;
+
+TYPE configuration_kind = ENUMERATION OF (usage, design);
+END_TYPE;
+
+TYPE configuration_inheritance_types = ENUMERATION OF (exception_case, full_inheritance, no_inheritance);
+END_TYPE;
+
+TYPE configured_specification_select = SELECT(Class_condition_association, Class_specification_association);
+END_TYPE;
+
+TYPE effectivity_for_configuration = SELECT BASED_ON effectivity_item WITH (Configuration);
+END_TYPE;
+
+ENTITY Configuration;
+  configured_element : configured_item_select;
+  is_solution_for : configured_specification_select;
+  configuration_type : configuration_kind;
+  inheritance_type : configuration_inheritance_types;
+WHERE
+WR1: consistent_configuration_type(SELF);
+END_ENTITY;
+
+RULE restrict_to_dated_effectivity FOR (Effectivity_assignment);
+LOCAL
+  ndea_set : SET OF Effectivity_assignment := [];
+END_LOCAL;
+  ndea_set := QUERY(ea <* Effectivity_assignment | 
+	NOT ('SPECIFICATION_BASED_CONFIGURATION_ARM.DATED_EFFECTIVITY' IN TYPEOF(ea.assigned_effectivity)));
+WHERE
+  WR1: SIZEOF(QUERY(ea <* ndea_set | 
+		(SIZEOF(['SPECIFICATION_BASED_CONFIGURATION_ARM.CONFIGURATION']*type_of_set(ea.items))>0) )) =0;
+END_RULE;
+
+FUNCTION type_of_set(items: SET OF GENERIC_ENTITY): SET OF STRING;
+LOCAL
+  result: SET OF STRING:= [];
+END_LOCAL;
+
+REPEAT i:=1 TO HIINDEX(items);
+  result := result + TYPEOF(items[i]);
+END_REPEAT;
+RETURN(result);
+END_FUNCTION;
+
+FUNCTION consistent_configuration_type(config: Configuration): BOOLEAN;
+IF ('SPECIFICATION_BASED_CONFIGURATION_ARM.CLASS_CONDITION_ASSOCIATION' IN TYPEOF(config.is_solution_for)) THEN
+  IF config.configuration_type = configuration_kind.usage THEN
+    RETURN(config.is_solution_for\Class_condition_association.condition_type ='part usage');
+  ELSE
+    RETURN(config.is_solution_for\Class_condition_association.condition_type ='design case');
+  END_IF;
+END_IF;
+
+IF ('SPECIFICATION_BASED_CONFIGURATION_ARM.CLASS_SPECIFICATION_ASSOCIATION' IN TYPEOF(config.is_solution_for)) THEN
+  IF config.configuration_type = configuration_kind.usage THEN
+    RETURN(config.is_solution_for\Class_specification_association.association_type ='part usage');
+  ELSE 
+    RETURN(config.is_solution_for\Class_specification_association.association_type ='design case');
+  END_IF;
+END_IF;
+
+RETURN(FALSE);
+END_FUNCTION;
+
+
+END_SCHEMA;

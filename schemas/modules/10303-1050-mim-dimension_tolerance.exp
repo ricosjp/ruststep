@@ -1,0 +1,72 @@
+(*
+$Id: 10303-1050-mim-dimension_tolerance.exp,v 1.2 2005/02/22 17:10:11 wg12deputy Exp $
+ISO TC184/SC4/WG12 N2874 - ISO/TS 10303-1050 Dimension tolerance - EXPRESS MIM
+Supersedes ISO TC184/SC4/WG12 N1548
+*) 
+
+
+SCHEMA Dimension_tolerance_mim;
+
+USE FROM Construction_geometry_mim;    -- ISO/TS 10303-1131
+
+USE FROM Derived_shape_element_mim;    -- ISO/TS 10303-1130
+
+USE FROM Document_assignment_mim;    -- ISO/TS 10303-1122
+
+USE FROM Elemental_geometric_shape_mim;    -- ISO/TS 10303-1004
+
+USE FROM Extended_measure_representation_mim;    -- ISO/TS 10303-1106
+
+USE FROM external_reference_schema   -- ISO 10303-41
+  (external_source,
+   externally_defined_item); 
+
+USE FROM geometry_schema   -- ISO 10303-42
+  (placement); 
+
+USE FROM Identification_assignment_mim;    -- ISO/TS 10303-1021
+
+USE FROM Measure_representation_mim;    -- ISO/TS 10303-1118
+
+USE FROM qualified_measure_schema   -- ISO 10303-45
+  (descriptive_representation_item,
+   measure_qualification,
+   value_qualifier); 
+
+USE FROM shape_aspect_definition_schema   -- ISO 10303-47
+  (shape_aspect_deriving_relationship); 
+
+USE FROM shape_dimension_schema;    -- ISO 10303-47
+
+USE FROM Shape_property_assignment_mim;    -- ISO/TS 10303-1032
+
+USE FROM shape_tolerance_schema   -- ISO 10303-47
+  (limits_and_fits,
+   plus_minus_tolerance,
+   tolerance_method_definition,
+   tolerance_value); 
+
+USE FROM Value_with_unit_mim;    -- ISO/TS 10303-1054
+
+
+TYPE dimension_identification_item = SELECT BASED_ON identification_item WITH 
+   (dimensional_size);
+END_TYPE; 
+
+TYPE dimension_tolerance_document_reference_item = SELECT BASED_ON document_reference_item WITH 
+   (dimensional_size, 
+    externally_defined_dimension_definition);
+END_TYPE; 
+
+ENTITY directed_dimensional_location
+  SUBTYPE OF (dimensional_location);
+END_ENTITY;
+
+ENTITY externally_defined_dimension_definition
+  SUBTYPE OF (dimensional_size, externally_defined_item);
+WHERE
+  WR1: (SELF\externally_defined_item.item_id = 'external size dimension') AND (SELF\externally_defined_item.source.source_id = 'external size dimension specification');
+  WR2: 1 >= SIZEOF(QUERY ( adr <* USEDIN(SELF, 'DOCUMENT_ASSIGNMENT_MIM.APPLIED_DOCUMENT_REFERENCE.ITEMS')| (adr.assigned_document.description = 'external size dimension specification') ));
+END_ENTITY;
+
+END_SCHEMA;  -- Dimension_tolerance_mim

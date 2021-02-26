@@ -1,0 +1,27 @@
+(*
+   $Id: 10303-1228-arm-representation_with_uncertainty.exp,v 1.1 2003/10/24 20:31:46 wg12deputy Exp $
+   ISO TC184/SC4/WG12 N1941 - ISO/CD-TS 10303-1228 Representation_with_uncertainty - EXPRESS ARM
+*)
+
+SCHEMA Representation_with_uncertainty_arm;
+
+USE FROM Foundation_representation_arm;
+
+
+ENTITY Representation_with_uncertainty
+SUBTYPE OF (Representation);
+   uncertainty : SET[1:?] OF Uncertainty_with_unit; 
+END_ENTITY;
+
+ENTITY Representation_item_with_uncertainty
+SUBTYPE OF (Representation_item);
+   uncertainty : SET[1:?] OF Uncertainty_value; 
+END_ENTITY;
+
+ENTITY Uncertainty_value;
+  name: STRING;
+  uncertainty: REAL;
+  description: OPTIONAL STRING;
+END_ENTITY;
+
+END_SCHEMA;

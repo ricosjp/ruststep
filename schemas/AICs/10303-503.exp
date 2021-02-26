@@ -1,0 +1,148 @@
+(* Document WG12 N4505 EXPRESS listing for ISO 10303-503 as modified by TC1
+ July 2006 *)
+SCHEMA aic_geometrically_bounded_2d_wireframe; -- as modified by TC1 WG12 N4397
+USE FROM geometric_model_schema    -- ISO 10303-42
+    (geometric_curve_set,
+     geometric_set);
+USE FROM geometry_schema -- ISO 10303-42
+   (axis2_placement_2d,
+    b_spline_curve_with_knots,
+    bezier_curve,
+    circle,
+    composite_curve,
+    composite_curve_segment,
+    curve,
+    curve_replica,
+    ellipse,
+    geometric_representation_context,
+    hyperbola,
+    line,
+    offset_curve_2d,
+    parabola,
+    point_on_curve,
+    polyline,
+    quasi_uniform_curve,
+    rational_b_spline_curve,
+    trimmed_curve,
+    uniform_curve);
+USE FROM product_property_representation_schema -- ISO 10303-41
+   (shape_representation);
+USE FROM representation_schema -- ISO 10303-43
+   (mapped_item);
+ENTITY geometrically_bounded_2d_wireframe_representation
+  SUBTYPE OF (shape_representation);
+WHERE
+  WR1: SELF.context_of_items\geometric_representation_context.
+            coordinate_space_dimension = 2;
+  WR2: SIZEOF (QUERY (item <* SELF.items |
+         NOT (SIZEOF (TYPEOF (item) *
+['AIC_GEOMETRICALLY_BOUNDED_2D_WIREFRAME.GEOMETRIC_CURVE_SET',
+           
+'AIC_GEOMETRICALLY_BOUNDED_2D_WIREFRAME.AXIS2_PLACEMENT_2D',
+            'AIC_GEOMETRICALLY_BOUNDED_2D_WIREFRAME.MAPPED_ITEM']) = 1)
+       )) = 0;
+  WR3: SIZEOF (QUERY (item <* SELF.items |
+         SIZEOF (TYPEOF (item) *
+          
+['AIC_GEOMETRICALLY_BOUNDED_2D_WIREFRAME.GEOMETRIC_CURVE_SET',
+            'AIC_GEOMETRICALLY_BOUNDED_2D_WIREFRAME.MAPPED_ITEM']) = 1
+       )) >= 1;
+  WR4: SIZEOF (QUERY (mi <* QUERY (item <* SELF.items |
+     ('AIC_GEOMETRICALLY_BOUNDED_2D_WIREFRAME.MAPPED_ITEM'
+           IN TYPEOF (item))) |
+         NOT ('AIC_GEOMETRICALLY_BOUNDED_2D_WIREFRAME.' +
+              'GEOMETRICALLY_BOUNDED_2D_WIREFRAME_REPRESENTATION'
+           IN TYPEOF
+              (mi\mapped_item.mapping_source.mapped_representation))
+       )) = 0;
+  WR5: SIZEOF (QUERY (gcs <* QUERY (item <* SELF.items |
+     ('AIC_GEOMETRICALLY_BOUNDED_2D_WIREFRAME.GEOMETRIC_CURVE_SET'
+                IN TYPEOF (item))) |
+         NOT (SIZEOF (QUERY (elem <* gcs\geometric_set.elements |
+           NOT (SIZEOF (TYPEOF (elem) *
+             ['AIC_GEOMETRICALLY_BOUNDED_2D_WIREFRAME.B_SPLINE_CURVE',
+              'AIC_GEOMETRICALLY_BOUNDED_2D_WIREFRAME.CIRCLE',
+              'AIC_GEOMETRICALLY_BOUNDED_2D_WIREFRAME.COMPOSITE_CURVE',
+              'AIC_GEOMETRICALLY_BOUNDED_2D_WIREFRAME.ELLIPSE',
+              'AIC_GEOMETRICALLY_BOUNDED_2D_WIREFRAME.OFFSET_CURVE_2D',
+              'AIC_GEOMETRICALLY_BOUNDED_2D_WIREFRAME.POINT',
+              'AIC_GEOMETRICALLY_BOUNDED_2D_WIREFRAME.POLYLINE',
+              'AIC_GEOMETRICALLY_BOUNDED_2D_WIREFRAME.TRIMMED_CURVE']) =
+               1)
+         )) = 0)
+       )) = 0;
+  WR6: SIZEOF (QUERY (gcs <* QUERY (item <* SELF.items |
+     ('AIC_GEOMETRICALLY_BOUNDED_2D_WIREFRAME.GEOMETRIC_CURVE_SET'
+                IN TYPEOF (item))) |
+         NOT (SIZEOF (QUERY (crv <* 
+           QUERY (elem <* gcs\geometric_set.elements |
+              ('AIC_GEOMETRICALLY_BOUNDED_2D_WIREFRAME.CURVE'
+                   IN TYPEOF (elem))) |
+           NOT (valid_basis_curve_in_2d_wireframe
+              (crv))
+         )) = 0)
+       )) = 0;
+  WR7: SIZEOF (QUERY (gcs <* QUERY (item <* SELF.items |
+           ('AIC_GEOMETRICALLY_BOUNDED_2D_WIREFRAME.GEOMETRIC_CURVE_SET'
+                IN TYPEOF (item))) |
+         NOT (SIZEOF (QUERY (pnt <*
+           QUERY (elem <* gcs\geometric_set.elements |
+             ('AIC_GEOMETRICALLY_BOUNDED_2D_WIREFRAME.POINT'
+                  IN TYPEOF(elem))) |
+             NOT (SIZEOF (TYPEOF (pnt) *
+               ['AIC_GEOMETRICALLY_BOUNDED_2D_WIREFRAME.CARTESIAN_POINT',
+                'AIC_GEOMETRICALLY_BOUNDED_2D_WIREFRAME.POINT_ON_CURVE'])
+          = 1)
+         )) = 0)
+       )) = 0;
+END_ENTITY;
+FUNCTION valid_basis_curve_in_2d_wireframe
+   (crv: curve) : BOOLEAN;
+   -- check for valid basic curve types
+  IF SIZEOF (['AIC_GEOMETRICALLY_BOUNDED_2D_WIREFRAME.POLYLINE',
+               'AIC_GEOMETRICALLY_BOUNDED_2D_WIREFRAME.B_SPLINE_CURVE',
+               'AIC_GEOMETRICALLY_BOUNDED_2D_WIREFRAME.ELLIPSE',
+               'AIC_GEOMETRICALLY_BOUNDED_2D_WIREFRAME.CIRCLE'] * 
+               TYPEOF (crv)) = 1
+    THEN RETURN (TRUE);
+  ELSE
+    -- if the curve is a trimmed_curve
+    IF (('AIC_GEOMETRICALLY_BOUNDED_2D_WIREFRAME.TRIMMED_CURVE') 
+    IN TYPEOF (crv)) THEN
+      -- if a line, parabola, or hyperbola is being trimmed, then valid
+      IF SIZEOF (['AIC_GEOMETRICALLY_BOUNDED_2D_WIREFRAME.LINE',
+                   'AIC_GEOMETRICALLY_BOUNDED_2D_WIREFRAME.PARABOLA',
+                   'AIC_GEOMETRICALLY_BOUNDED_2D_WIREFRAME.HYPERBOLA'] *
+           TYPEOF(crv\trimmed_curve.basis_curve)) = 1
+        THEN RETURN (TRUE);
+      -- otherwise, recursively check basis_curve
+      ELSE RETURN (valid_basis_curve_in_2d_wireframe
+                         (crv\trimmed_curve.basis_curve));
+      END_IF;
+    ELSE
+      -- recursively check the offset_curve basis curve
+      IF (('AIC_GEOMETRICALLY_BOUNDED_2D_WIREFRAME.OFFSET_CURVE_2D') 
+      IN TYPEOF (crv))
+        THEN RETURN (valid_basis_curve_in_2d_wireframe
+                           (crv\offset_curve_2d.basis_curve));
+      ELSE
+        -- recursively check the curve_replica parent curve
+        IF (('AIC_GEOMETRICALLY_BOUNDED_2D_WIREFRAME.CURVE_REPLICA') 
+        IN TYPEOF (crv))
+          THEN RETURN (valid_basis_curve_in_2d_wireframe
+                         (crv\curve_replica.parent_curve));
+        ELSE
+          -- recursively check the composite_curve segments
+          IF (('AIC_GEOMETRICALLY_BOUNDED_2D_WIREFRAME.COMPOSITE_CURVE') 
+          IN TYPEOF (crv)) THEN
+            RETURN (SIZEOF (QUERY (ccs <* crv\composite_curve.segments |
+                      NOT (valid_basis_curve_in_2d_wireframe
+                             (ccs.parent_curve)))) = 0);
+          END_IF;
+        END_IF;
+      END_IF;
+    END_IF;
+  END_IF;
+  RETURN (FALSE);
+END_FUNCTION;
+END_SCHEMA;  --aic_geometrically_bounded_2d_wireframe

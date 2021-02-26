@@ -1,0 +1,86 @@
+(*
+$Id: 10303-1106-arm-Extended_measure_representation.exp,v 1.2 2006/08/07 07:44:43 wg12deputy Exp $
+ISO TC184/SC4/WG12 N3231 - ISO/TS 10303-1106 Extended measure representation - EXPRESS ARM
+Supersedes ISO TC184/SC4/WG12 N3046
+*) 
+
+
+SCHEMA Extended_measure_representation_arm;
+
+USE FROM Measure_representation_arm;    -- ISO/TS 10303-1118
+
+USE FROM Value_with_unit_arm;    -- ISO/TS 10303-1054
+
+
+TYPE limit_qualifier_list = ENUMERATION OF 
+   (minimum,
+    maximum);
+END_TYPE; 
+
+ENTITY Measure_item_with_precision
+  SUBTYPE OF (Measure_item);
+  significant_digits : INTEGER;
+END_ENTITY;
+
+ENTITY Qualified_property_value_representation
+  SUBTYPE OF (Property_value_representation);
+  value_determination : OPTIONAL STRING;
+  qualifier : OPTIONAL STRING;
+END_ENTITY;
+
+ENTITY Value_limit
+  SUBTYPE OF (Measure_item);
+  limit_qualifier : limit_qualifier_list;
+  limit : Value_with_unit;
+END_ENTITY;
+
+ENTITY Value_limit_with_global_unit
+  SUBTYPE OF (Measure_item);
+  limit : Numerical_item_with_global_unit;
+  limit_qualifier : limit_qualifier_list;
+END_ENTITY;
+
+ENTITY Value_list
+  SUBTYPE OF (Measure_item);
+  values : LIST[1:?] OF Measure_item;
+END_ENTITY;
+
+ENTITY Value_range
+  SUBTYPE OF (Measure_item);
+  lower_limit : Numerical_item_with_unit;
+  upper_limit : Numerical_item_with_unit;
+END_ENTITY;
+
+ENTITY Value_range_with_global_unit
+  SUBTYPE OF (Measure_item);
+  lower_limit : Numerical_item_with_global_unit;
+  upper_limit : Numerical_item_with_global_unit;
+END_ENTITY;
+
+ENTITY Value_set
+  SUBTYPE OF (Measure_item);
+  values : SET[1:?] OF Measure_item;
+END_ENTITY;
+
+ENTITY Value_with_tolerances
+  SUBTYPE OF (Measure_item);
+  item_value : Numerical_item_with_unit;
+  lower_limit : REAL;
+  upper_limit : REAL;
+END_ENTITY;
+
+SUBTYPE_CONSTRAINT alternate_measure_items FOR Measure_item;
+  ABSTRACT SUPERTYPE;
+  ONEOF (Measure_item_with_precision,
+         Numerical_item_with_global_unit,
+         Numerical_item_with_unit,
+         Value_limit,
+         Value_limit_with_global_unit,
+         Value_list,
+         Value_range,
+         Value_range_with_global_unit,
+         Value_set,
+         Value_with_tolerances);
+END_SUBTYPE_CONSTRAINT;
+
+END_SCHEMA;  -- Extended_measure_representation_arm

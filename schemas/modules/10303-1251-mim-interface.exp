@@ -1,0 +1,87 @@
+(*
+ $Id: 10303-1251-mim-interface.exp,v 1.1 2006/08/07 09:42:05 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N3062 - ISO/TS 10303-1251 Interface - EXPRESS MIM
+ Supersedes ISO TC184/SC4/WG12 N2274
+*) 
+
+
+SCHEMA Interface_mim;
+
+USE FROM Group_mim   -- ISO/TS 10303-1113
+  (groupable_item); 
+
+USE FROM group_schema   -- ISO 10303-41
+  (group); 
+
+USE FROM product_definition_schema   -- ISO 10303-41
+  (product_definition,
+   product_definition_formation,
+   product_definition_relationship); 
+
+USE FROM Product_identification_mim;    -- ISO/TS 10303-1017
+
+USE FROM Product_version_mim;    -- ISO/TS 10303-1018
+
+USE FROM Product_view_definition_mim;    -- ISO/TS 10303-1019
+
+USE FROM Product_view_definition_relationship_mim;    -- ISO/TS 10303-1041
+
+
+TYPE connection_items = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON groupable_item WITH 
+   (interface_connector_definition, 
+    product_definition, 
+    product_definition_relationship);
+END_TYPE; 
+
+TYPE interface_component_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON groupable_item WITH 
+   (interface_definition_for);
+END_TYPE; 
+
+TYPE interface_connector_occurrence_of_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON groupable_item WITH 
+   (product_definition);
+END_TYPE; 
+
+TYPE interface_connector_on_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON groupable_item WITH 
+   (product_definition, 
+    product_definition_relationship);
+END_TYPE; 
+
+ENTITY hierarchical_interface_connection
+  SUBTYPE OF (interface_connection);
+END_ENTITY;
+
+ENTITY interface_connection
+  SUBTYPE OF (group);
+END_ENTITY;
+
+ENTITY interface_connector_definition
+  SUBTYPE OF (product_definition);
+END_ENTITY;
+
+ENTITY interface_connector_occurrence
+  SUBTYPE OF (group);
+END_ENTITY;
+
+ENTITY interface_connector_version
+  SUBTYPE OF (product_definition_formation);
+END_ENTITY;
+
+ENTITY interface_definition_connection
+  SUBTYPE OF (product_definition_relationship);
+END_ENTITY;
+
+ENTITY interface_definition_for
+  SUBTYPE OF (product_definition_relationship);
+END_ENTITY;
+
+ENTITY interface_specification_definition
+  SUBTYPE OF (product_definition);
+END_ENTITY;
+
+ENTITY interface_specification_version
+  SUBTYPE OF (product_definition_formation);
+END_ENTITY;
+
+END_SCHEMA;  -- Interface_mim
+
+

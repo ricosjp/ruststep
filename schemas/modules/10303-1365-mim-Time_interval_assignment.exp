@@ -1,0 +1,27 @@
+(*
+ $Id: 10303-1365-mim-Time_interval_assignment.exp,v 1.2 2006/08/07 09:42:07 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2121 - ISO/TS 10303-1365 Time interval assignment - EXPRESS MIM
+*) 
+
+
+SCHEMA Time_interval_assignment_mim; 
+
+USE FROM date_time_schema   -- ISO 10303-41
+  (time_interval_role); 
+
+USE FROM management_resources_schema   -- ISO 10303-41
+  (time_interval_assignment); 
+
+USE FROM Time_interval_mim;    -- ISO/TS 10303-1065
+
+
+TYPE time_interval_item = EXTENSIBLE SELECT;
+END_TYPE; 
+
+ENTITY applied_time_interval_assignment
+  SUBTYPE OF (time_interval_assignment);
+  items : SET[0:?] OF time_interval_item;
+END_ENTITY;
+
+END_SCHEMA;  -- Time_interval_assignment_mim
+

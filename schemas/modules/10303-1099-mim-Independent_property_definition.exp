@@ -1,0 +1,46 @@
+(*
+ $Id: 10303-1099-mim-Independent_property_definition.exp,v 1.4 2006/08/04 12:11:54 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2781 - ISO/TS 10303-1099 Independent property definition - EXPRESS MIM
+ Supersedes ISO TC184/SC4/WG12 N2049
+*)
+
+SCHEMA Independent_property_definition_mim;
+
+USE FROM Class_mim;    --  ISO/TS 10303-1070
+USE FROM Independent_property_mim;    --  ISO/TS 10303-1036
+USE FROM Property_space_mim;    --  ISO/TS 10303-1080
+USE FROM external_reference_schema    --  ISO 10303-41
+  (externally_defined_item,
+   external_source); 
+
+ENTITY physical_quantity_instance
+  SUBTYPE OF (general_property, class);
+END_ENTITY;
+
+ENTITY physical_quantity_symmetry
+  SUBTYPE OF (general_property, class);
+END_ENTITY;
+
+ENTITY physical_quantity_symmetry_by_library_reference
+  SUBTYPE OF (physical_quantity_symmetry, externally_defined_item);
+END_ENTITY;
+
+ENTITY space_for_physical_quantity
+  SUBTYPE OF (general_property_relationship);
+  SELF\general_property_relationship.relating_property : physical_quantity_space;
+  SELF\general_property_relationship.related_property : physical_quantity_instance;
+END_ENTITY;
+
+ENTITY standard_physical_quantity_symmetry
+  SUBTYPE OF (physical_quantity_symmetry_by_library_reference);
+WHERE
+  valid_standard_class: (SELF\physical_quantity_symmetry_by_library_reference\externally_defined_item.source.source_id = 'ISO-TS-10303-1099') AND (SELF\physical_quantity_symmetry_by_library_reference\externally_defined_item.item_id IN ['PS001', 'PS002', 'PS003', 'PS004', 'PS005', 'PS006', 'PS007', 'PS008', 'PS009', 'PS010', 'PS011', 'PS012', 'PS013']);
+END_ENTITY;
+
+ENTITY symmetry_for_physical_quantity
+  SUBTYPE OF (general_property_relationship);
+  SELF\general_property_relationship.relating_property : physical_quantity_symmetry;
+  SELF\general_property_relationship.related_property : physical_quantity_instance;
+END_ENTITY;
+
+END_SCHEMA;

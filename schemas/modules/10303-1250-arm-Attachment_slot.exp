@@ -1,0 +1,95 @@
+(*
+ $Id: 10303-1250-arm-Attachment_slot.exp,v 1.2 2006/08/07 07:44:45 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N3016 - ISO/TS 10303-1250 Attachment slot - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG12 N2252
+*) 
+
+
+SCHEMA Attachment_slot_arm;
+
+USE FROM Product_identification_arm;    -- ISO/TS 10303-1017
+
+USE FROM Product_version_arm;    -- ISO/TS 10303-1018
+
+USE FROM Product_view_definition_arm;    -- ISO/TS 10303-1019
+
+USE FROM Product_view_definition_relationship_arm;    -- ISO/TS 10303-1041
+
+
+ENTITY Attachment_slot
+  SUBTYPE OF (Product);
+END_ENTITY;
+
+ENTITY Attachment_slot_as_planned
+  SUBTYPE OF (Attachment_slot_version);
+END_ENTITY;
+
+ENTITY Attachment_slot_as_realized
+  SUBTYPE OF (Attachment_slot_version);
+END_ENTITY;
+
+ENTITY Attachment_slot_definition
+  SUBTYPE OF (Product_view_definition);
+  SELF\Product_view_definition.defined_version : Attachment_slot_version;
+END_ENTITY;
+
+ENTITY Attachment_slot_design
+  SUBTYPE OF (Attachment_slot_version);
+END_ENTITY;
+
+ENTITY Attachment_slot_design_to_planned;
+  id : STRING;
+  name : STRING;
+  description : OPTIONAL STRING;
+  design : Attachment_slot_design;
+  planned : Attachment_slot_as_planned;
+WHERE
+  WR1: SELF.design.of_product :=: SELF.planned.of_product;
+END_ENTITY;
+
+ENTITY Attachment_slot_design_to_realized;
+  id : STRING;
+  name : STRING;
+  description : OPTIONAL STRING;
+  design : Attachment_slot_design;
+  realized : Attachment_slot_as_realized;
+WHERE
+  WR1: SELF.design.of_product :=: SELF.realized.of_product;
+END_ENTITY;
+
+ENTITY Attachment_slot_on_product;
+  id : STRING;
+  name : STRING;
+  description : OPTIONAL STRING;
+  product : Product_view_definition;
+  attachment_slot : Attachment_slot_definition;
+END_ENTITY;
+
+ENTITY Attachment_slot_planned_to_realized;
+  id : STRING;
+  name : STRING;
+  description : OPTIONAL STRING;
+  planned : Attachment_slot_as_planned;
+  realized : Attachment_slot_as_realized;
+WHERE
+  WR1: SELF.planned.of_product :=: SELF.realized.of_product;
+END_ENTITY;
+
+ENTITY Attachment_slot_version
+  SUPERTYPE OF (ONEOF (Attachment_slot_as_planned,
+                       Attachment_slot_as_realized,
+                       Attachment_slot_design))
+  SUBTYPE OF (Product_version);
+  SELF\Product_version.of_product : Attachment_slot;
+END_ENTITY;
+
+ENTITY Product_in_attachment_slot
+  SUBTYPE OF (View_definition_usage);
+  name : STRING;
+  SELF\View_definition_relationship.related_view RENAMED attachment_slot : Attachment_slot_definition;
+  SELF\View_definition_relationship.relating_view RENAMED product : Product_view_definition;
+END_ENTITY;
+
+END_SCHEMA;  -- Attachment_slot_arm
+
+

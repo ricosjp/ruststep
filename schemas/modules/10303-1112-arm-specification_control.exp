@@ -1,0 +1,131 @@
+(* 
+   $Id: 10303-1112-arm-specification_control.exp,v 1.1 2006/08/03 14:41:10 wg12deputy Exp $
+   ISO/TC184/SC4 WG12N2622 - ISO/TS 10303-1112 Specification control - Express ARM 
+   Supersedes ISO TC184/SC4/WG12N1769
+*)
+
+
+SCHEMA Specification_control_arm;
+
+USE FROM Alternative_solution_arm;
+
+USE FROM Effectivity_application_arm;
+
+USE FROM Functional_breakdown_arm;
+
+USE FROM Part_collection_arm;
+
+USE FROM Product_occurrence_arm;
+
+USE FROM Product_placement_arm;
+
+USE FROM Physical_breakdown_arm;
+
+USE FROM Requirement_identification_and_version_arm;
+
+USE FROM Specification_based_configuration_arm;
+
+USE FROM Specified_product_arm;
+
+TYPE breakdown_element_select = SELECT (
+	Functional_element_definition,
+	Physical_element_definition);
+END_TYPE;
+
+TYPE constraint_context_select = SELECT (Product_class);
+END_TYPE;
+
+TYPE effectivity_specification_for_replacement  = SELECT BASED_ON effectivity_item WITH
+      (Replaced_usage_relationship);
+END_TYPE;
+
+TYPE instance_usage_context_select = EXTENSIBLE GENERIC_ENTITY SELECT (
+	Collected_item_association, 
+	Solution_element);
+END_TYPE;
+
+TYPE sc_configured_element = EXTENSIBLE SELECT BASED_ON configured_item_select WITH (
+      Alternative_solution);
+END_TYPE;
+
+ENTITY Breakdown_node_relationship;
+  description: OPTIONAL STRING;
+  relating: complex_product_select;
+  related: breakdown_element_select;
+  relation_type: STRING;  
+WHERE
+WR1: (NOT (relation_type IN ['functionality', 'realization'])) OR
+	(TYPEOF(related) <> TYPEOF(relating));
+WR2: (NOT (relation_type IN ['decomposition', 'specialization', 'occurrence'])) OR
+	(aggregate1_in_aggregate2(TYPEOF(related),TYPEOF(relating)) OR aggregate1_in_aggregate2(TYPEOF(relating),TYPEOF(related)) ) ;
+WR3: (NOT (relation_type IN ['occurrence'])) OR 
+	('SPECIFICATION_CONTROL_ARM.PHYSICAL_ELEMENT_DEFINITION' IN TYPEOF(relating));
+END_ENTITY;
+
+ENTITY Class_breakdown_association;
+  description: OPTIONAL STRING;
+  considered_class: Product_class;
+  breakdown_element: breakdown_element_select;
+  relation_type: STRING;
+END_ENTITY;
+
+ENTITY Complex_node_relationship;
+  description: OPTIONAL STRING;
+  relating: complex_product_select;
+  related: complex_product_select;
+  relation_type: STRING;  
+WHERE
+WR1: (aggregate1_in_aggregate2(TYPEOF(related),TYPEOF(relating)) OR aggregate1_in_aggregate2(TYPEOF(relating),TYPEOF(related)) ) ;
+END_ENTITY;
+
+ENTITY Design_constraint_context_association;
+  constraint_definition: Design_constraint_definition;
+  constraint_context: constraint_context_select;
+END_ENTITY;
+
+ENTITY Design_constraint_association;
+  name: OPTIONAL STRING;	
+  constrained_object: complex_product_select;
+  constraint_definition: Design_constraint_definition;  
+END_ENTITY;
+
+ENTITY Design_constraint_definition
+SUBTYPE OF (Product_view_definition);
+  SELF\Product_view_definition.defined_version : Requirement_version;
+END_ENTITY;
+
+ENTITY Design_constraint_relationship
+SUBTYPE OF (View_definition_relationship);
+  SELF\View_definition_relationship.relating_view: Design_constraint_definition;
+  SELF\View_definition_relationship.related_view: Design_constraint_definition;
+END_ENTITY;
+
+ENTITY Part_function_association
+SUBTYPE OF (View_definition_relationship);
+  SELF\View_definition_relationship.relating_view: Functional_element_definition;
+  SELF\View_definition_relationship.related_view: Part_view_definition;
+END_ENTITY;
+
+ENTITY Part_occurrence_relationship
+SUBTYPE OF (View_definition_relationship);
+  SELF\View_definition_relationship.relating_view: part_occurrence_select;
+  SELF\View_definition_relationship.related_view: part_occurrence_select;
+END_ENTITY;
+
+ENTITY Replaced_usage_relationship
+SUBTYPE OF (Part_occurrence_relationship);
+  usage_context: instance_usage_context_select;
+DERIVE
+  SELF\View_definition_relationship.relation_type : STRING := 'usage replacement';
+END_ENTITY;
+
+ENTITY Specification_category_breakdown_influence;
+  influencing_category: Class_category_association;
+  influenced_breakdown_node: breakdown_element_select;
+END_ENTITY;
+
+FUNCTION aggregate1_in_aggregate2 (agg1, agg2: AGGREGATE OF GENERIC): LOGICAL;
+RETURN(SIZEOF(QUERY (ele <* agg1 | VALUE_IN(agg2, ele)))= SIZEOF(agg1));
+END_FUNCTION;
+
+END_SCHEMA;

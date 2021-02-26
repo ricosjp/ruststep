@@ -1,0 +1,72 @@
+(*
+ $Id: 10303-1272-arm-activity_characterized.exp,v 1.2 2006/08/07 07:44:46 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2995 - ISO/TS 10303-1272 Activity characterized - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG12 N2372
+*) 
+
+
+SCHEMA Activity_characterized_arm;
+
+USE FROM Activity_arm;    -- ISO/TS 10303-1047
+
+USE FROM Ap239_management_resource_information_arm;    -- ISO/TS 10303-1289
+
+USE FROM Management_resource_information_arm;    -- ISO/TS 10303-1288
+
+USE FROM Process_property_assignment_arm;    -- ISO/TS 10303-1040
+
+USE FROM Property_assignment_arm;    -- ISO/TS 10303-1030
+
+
+TYPE actchar_ap239_mri_classification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON ap239_mri_classification_item WITH 
+   (Activity, 
+    Activity_property, 
+    Activity_relationship, 
+    Applied_activity_assignment);
+END_TYPE; 
+
+TYPE actchar_ap239_mri_classified_attribute_select = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON ap239_mri_classified_attribute_select WITH 
+   (Activity, 
+    Activity_property, 
+    Activity_relationship, 
+    Applied_activity_assignment);
+END_TYPE; 
+
+TYPE actchar_mri_approval_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON mri_approval_item WITH 
+   (Activity, 
+    Activity_property, 
+    Applied_activity_assignment);
+END_TYPE; 
+
+TYPE actchar_mri_date_or_date_time_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON mri_date_or_date_time_item WITH 
+   (Activity, 
+    Activity_property, 
+    Activity_relationship, 
+    Applied_activity_assignment);
+END_TYPE; 
+
+TYPE actchar_mri_identification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON mri_identification_item WITH 
+   (Activity, 
+    Activity_property, 
+    Applied_activity_assignment);
+END_TYPE; 
+
+TYPE actchar_mri_organization_or_person_in_organization_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON mri_organization_or_person_in_organization_item WITH 
+   (Activity, 
+    Activity_property, 
+    Activity_relationship, 
+    Applied_activity_assignment);
+END_TYPE; 
+
+TYPE actchar_mri_string_select = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON mri_string_select WITH 
+   (Activity, 
+    Activity_property, 
+    Activity_relationship, 
+    Applied_activity_assignment);
+END_TYPE; 
+
+TYPE actchar_property_assignment_select = SELECT BASED_ON property_assignment_select WITH 
+   (Applied_activity_assignment);
+END_TYPE; 
+
+END_SCHEMA;  -- Activity_characterized_arm

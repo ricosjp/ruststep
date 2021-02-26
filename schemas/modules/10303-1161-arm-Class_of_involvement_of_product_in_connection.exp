@@ -1,0 +1,24 @@
+(*
+ $Id: 10303-1161-arm-Class_of_involvement_of_product_in_connection.exp,v 1.4 2006/08/04 12:01:50 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2741 - ISO/TS 10303-1161 Class of involvement of product in connection - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG12 N1971
+*)
+
+SCHEMA Class_of_involvement_of_product_in_connection_arm;
+
+USE FROM Class_arm;    --  ISO/TS 10303-1070
+USE FROM Class_of_connection_of_product_arm;    --  ISO/TS 10303-1159
+USE FROM Class_of_product_arm;    --  ISO/TS 10303-1077
+USE FROM Product_version_relationship_arm;    --  ISO/TS 10303-1020
+
+ENTITY Class_of_connection_of_product_with_involvements
+  SUBTYPE OF (Class_of_connection_of_product, Class_of_product);
+END_ENTITY;
+
+ENTITY Class_of_involvement_of_product_in_connection
+  SUBTYPE OF (Product_version_relationship, Class);
+  SELF\Product_version_relationship.relating_version : Class_of_connection_of_product_with_involvements;
+  SELF\Product_version_relationship.related_version : Class_of_product;
+END_ENTITY;
+
+END_SCHEMA;

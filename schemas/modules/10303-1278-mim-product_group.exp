@@ -1,0 +1,129 @@
+(*
+ $Id: 10303-1278-mim-product_group.exp,v 1.1 2006/08/07 09:42:06 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N3113 - ISO/TS 10303-1278 Product group - EXPRESS MIM
+ Supersedes ISO TC184/SC4/WG12 N2343
+*) 
+
+
+SCHEMA Product_group_mim;
+
+USE FROM basic_attribute_schema   -- ISO 10303-41
+  (id_attribute); 
+
+USE FROM Classification_assignment_mim;    -- ISO/TS 10303-1114
+
+USE FROM Effectivity_application_mim;    -- ISO/TS 10303-1059
+
+USE FROM group_schema   -- ISO 10303-41
+  (group,
+   group_relationship); 
+
+USE FROM management_resources_schema   -- ISO 10303-41
+  (group_assignment); 
+
+USE FROM Product_as_individual_mim;    -- ISO/TS 10303-1164
+
+USE FROM Product_concept_identification_mim;    -- ISO/TS 10303-1060
+
+USE FROM product_concept_schema   -- ISO 10303-44
+  (product_concept); 
+
+USE FROM product_definition_schema   -- ISO 10303-41
+  (product,
+   product_definition_formation); 
+
+USE FROM Product_identification_mim;    -- ISO/TS 10303-1017
+
+USE FROM product_property_definition_schema   -- ISO 10303-41
+  (characterized_object); 
+
+USE FROM Product_version_mim;    -- ISO/TS 10303-1018
+
+USE FROM Property_assignment_mim;    -- ISO/TS 10303-1030
+
+USE FROM qualified_measure_schema   -- ISO 10303-45
+  (descriptive_representation_item); 
+
+
+TYPE attribute_select = SELECT
+   (product_group_context, 
+    product_group_purpose);
+END_TYPE; 
+
+TYPE product_group_classification_item = SELECT BASED_ON classification_item WITH 
+   (product_group, 
+    product_group_relationship);
+END_TYPE; 
+
+TYPE product_group_effectivity_item = SELECT BASED_ON effectivity_item WITH 
+   (product_group, 
+    product_group_membership, 
+    product_group_relationship);
+END_TYPE; 
+
+TYPE product_select = EXTENSIBLE GENERIC_ENTITY SELECT
+   (product, 
+    product_as_individual, 
+    product_concept, 
+    product_definition_formation, 
+    product_group);
+END_TYPE; 
+
+ENTITY product_group
+  SUBTYPE OF (group);
+END_ENTITY;
+
+ENTITY product_group_attribute_assignment
+  SUBTYPE OF (group_assignment);
+  SELF\group_assignment.assigned_group : product_group_attributes;
+  attributes : SET[1:1] OF attribute_select;
+END_ENTITY;
+
+ENTITY product_group_attribute_set
+  SUBTYPE OF (group_assignment);
+  SELF\group_assignment.assigned_group : product_group;
+  product_group_attributes : SET[1:1] OF product_group_attributes;
+END_ENTITY;
+
+ENTITY product_group_attributes
+  SUBTYPE OF (group);
+END_ENTITY;
+
+ENTITY product_group_context
+  SUBTYPE OF (descriptive_representation_item);
+END_ENTITY;
+
+ENTITY product_group_membership
+  SUBTYPE OF (characterized_object, group_assignment);
+  member : product_select;
+END_ENTITY;
+
+ENTITY product_group_membership_rules
+  SUBTYPE OF (group_assignment);
+  SELF\group_assignment.assigned_group : product_group;
+  product_group_rules : SET[1:1] OF product_group_rules;
+END_ENTITY;
+
+ENTITY product_group_purpose
+  SUBTYPE OF (descriptive_representation_item);
+END_ENTITY;
+
+ENTITY product_group_relationship
+  SUBTYPE OF (group_relationship);
+END_ENTITY;
+
+ENTITY product_group_rule
+  SUBTYPE OF (descriptive_representation_item);
+END_ENTITY;
+
+ENTITY product_group_rule_assignment
+  SUBTYPE OF (group_assignment);
+  SELF\group_assignment.assigned_group : product_group_rules;
+  product_group_rules : SET[1:?] OF product_group_rule;
+END_ENTITY;
+
+ENTITY product_group_rules
+  SUBTYPE OF (group);
+END_ENTITY;
+
+END_SCHEMA;  -- Product_group_mim

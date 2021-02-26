@@ -1,0 +1,29 @@
+(*
+ $Id: 10303-1121-arm-document_and_version_identification.exp,v 1.5 2006/08/07 07:44:43 wg12deputy Exp $
+ISO TC184/SC4/WG12 N2957 - ISO/TS 10303-2956 Document and version identification - EXPRESS ARM
+*) 
+
+
+SCHEMA Document_and_version_identification_arm;
+
+USE FROM Product_identification_arm;    -- ISO/TS 10303-1017
+
+USE FROM Product_version_arm;    -- ISO/TS 10303-1018
+
+
+ENTITY Document
+  SUBTYPE OF (Product);
+END_ENTITY;
+
+ENTITY Document_version
+  SUBTYPE OF (Product_version);
+  SELF\Product_version.of_product : Document;
+END_ENTITY;
+
+RULE document_version_constraint FOR 
+(Product_version);
+WHERE
+  WR1: SIZEOF ( QUERY ( pv <* Product_version | ( NOT ( 'DOCUMENT_AND_VERSION_IDENTIFICATION_ARM.' + 'DOCUMENT_VERSION' IN TYPEOF ( pv) ) ) AND ( 'DOCUMENT_AND_VERSION_IDENTIFICATION_ARM.' + 'DOCUMENT' IN TYPEOF ( pv.of_product) ) ) ) = 0 ;
+END_RULE; 
+
+END_SCHEMA;  -- Document_and_version_identification_arm

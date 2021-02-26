@@ -1,0 +1,43 @@
+(*
+ $Id: 10303-1261-mim-activity_method_implementation.exp,v 1.1 2006/08/07 09:42:05 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N3005 - ISO/TS 10303-1261 Activity method implementation - EXPRESS MIM
+ Supersedes ISO TC184/SC4/WG12 N2379
+*) 
+
+
+SCHEMA Activity_method_implementation_mim;
+
+USE FROM action_schema   -- ISO 10303-41
+  (action_method_relationship); 
+
+USE FROM Activity_method_mim;    -- ISO/TS 10303-1049
+
+USE FROM basic_attribute_schema   -- ISO 10303-41
+  (id_attribute,
+   id_attribute_select,
+   object_role); 
+
+USE FROM Classification_assignment_mim;    -- ISO/TS 10303-1114
+
+USE FROM Group_mim;    -- ISO/TS 10303-1113
+
+USE FROM group_schema   -- ISO 10303-41
+  (group); 
+
+USE FROM Identification_assignment_mim;    -- ISO/TS 10303-1021
+
+
+TYPE action_method_implementation_groupable_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON groupable_item WITH 
+   (action_method_relationship);
+END_TYPE; 
+
+TYPE action_method_implementation_identification_item = EXTENSIBLE SELECT BASED_ON identification_item WITH 
+   (action_method_relationship);
+END_TYPE; 
+
+TYPE activity_method_implementation_classification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON classification_item WITH 
+   (action_method_relationship, 
+    group);
+END_TYPE; 
+
+END_SCHEMA;  -- Activity_method_implementation_mim

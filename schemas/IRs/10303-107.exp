@@ -1,0 +1,326 @@
+
+(*
+$Id: 10303-107.exp,v 1.3 2006/01/20 10:20:33 wg12deputy Exp $
+ISO TC184/SC4/WG12 N4312 - ISO/IS 10303-107 *) 
+
+SCHEMA action_and_model_relationships_schema;
+
+REFERENCE FROM action_schema
+  (action);
+
+REFERENCE FROM analysis_schema
+  (model_action_domain);
+
+REFERENCE FROM finite_element_analysis_control_and_result_schema
+  (analysis_step);
+
+REFERENCE FROM product_analysis_schema
+  (physical_action_domain);
+
+REFERENCE FROM support_resource_schema
+  (identifier,
+   label,
+   text);
+
+TYPE discretised_action_model_select = EXTENSIBLE SELECT 
+  (analysis_step,
+   model_action_domain);
+END_TYPE;
+
+TYPE idealised_action_select = EXTENSIBLE SELECT 
+  (action,
+   physical_action_domain);
+END_TYPE;
+
+ENTITY action_view_relationship;
+  id : identifier;
+  name : label;
+  description : OPTIONAL text;
+  discretised_model : discretised_action_model_select;
+  idealised_action : idealised_action_select;
+END_ENTITY;
+
+ENTITY same_discretised_action_model;
+  id : identifier;
+  name : label;
+  description : OPTIONAL text;
+  equivalent_records : SET [2 : ?] OF discretised_action_model_select;
+
+END_ENTITY;
+
+ENTITY same_idealised_action;
+  id : identifier;
+  name : label;
+  description : OPTIONAL text;
+  equivalent_records : SET [2 : ?] OF idealised_action_select;
+END_ENTITY;
+
+END_SCHEMA;
+
+
+(*
+$Id: 10303-107.exp,v 1.3 2006/01/20 10:20:33 wg12deputy Exp $
+ISO TC184/SC4/WG12 Nxxx - ISO/IS 10303-107 *) 
+
+SCHEMA fea_definition_relationships_schema;
+
+REFERENCE FROM product_property_definition_schema
+  (general_property,
+   property_definition);
+
+REFERENCE FROM structural_response_representation_schema
+  (analysis_item_within_representation,
+   consistent_element_reference,
+   curve_element_section_definition,
+   element_aspect,
+   element_representation,
+   fea_model,
+   node_representation,
+   surface_section,
+   surface_section_field);
+
+REFERENCE FROM support_resource_schema
+  (identifier,
+   label,
+   text);
+
+REFERENCE FROM topology_schema;
+
+ENTITY element_topological_relationship;
+  aspect : element_aspect;
+  element_ref : element_representation;
+  item : analysis_item_within_representation;
+WHERE
+    topology_referenced: 'TOPOLOGY_SCHEMA.TOPOLOGICAL_REPRESENTATION_ITEM' IN TYPEOF (item.item);
+    consistent_topology: consistent_topological_reference (aspect, item.item);
+    valid_aspect: consistent_element_reference (aspect, element_ref);
+END_ENTITY;
+
+ENTITY fea_beam_section_idealisation_relationship;
+  id : identifier;
+  name : label;
+  description : OPTIONAL text;
+  idealised : general_property;
+  idealising : curve_element_section_definition;
+END_ENTITY;
+
+ENTITY fea_model_topological_relationship;
+  item : analysis_item_within_representation;
+  model_ref : fea_model;
+WHERE
+    mesh_referenced: 'TOPOLOGICAL_DEFINITION_AND_MESH_SCHEMA.MESH' IN TYPEOF (item.item);
+END_ENTITY;
+
+ENTITY fea_shell_section_distribution_idealisation_relationship;
+  id : identifier;
+  name : label;
+  description : OPTIONAL text;
+  idealised : property_definition;
+  idealising : surface_section_field;
+END_ENTITY;
+
+ENTITY fea_shell_section_idealisation_relationship;
+  id : identifier;
+  name : label;
+  description : OPTIONAL text;
+  idealised : general_property;
+  idealising : surface_section;
+END_ENTITY;
+
+ENTITY node_topological_relationship;
+  item : analysis_item_within_representation;
+  node_ref : node_representation;
+WHERE
+    vertex_referenced: 'TOPOLOGY_SCHEMA.VERTEX' IN TYPEOF (item.item);
+END_ENTITY;
+
+FUNCTION consistent_topological_reference (
+  aspect    :  GENERIC;
+  item      :  topological_representation_item) : BOOLEAN;
+
+    LOCAL
+      status : BOOLEAN;
+      srrs   : STRING;
+    END_LOCAL;
+
+    status := FALSE;
+    srrs := 'STRUCTURAL_RESPONSE_REPRESENTATION_SCHEMA.';
+
+    IF (srrs + 'ELEMENT_VOLUME') IN TYPEOF(aspect) THEN
+      IF 'TOPOLOGY_SCHEMA.CLOSED_SHELL' IN TYPEOF(item) THEN
+        status := TRUE;
+      END_IF;
+    END_IF;
+
+    IF (srrs + 'VOLUME_3D_FACE') IN TYPEOF(aspect) THEN
+      IF 'TOPOLOGY_SCHEMA.FACE' IN TYPEOF(item) THEN
+        status := TRUE;
+      END_IF;
+    END_IF;
+
+    IF (srrs + 'VOLUME_2D_FACE') IN TYPEOF(aspect) THEN
+      IF 'TOPOLOGY_SCHEMA.EDGE' IN TYPEOF(item) THEN
+        status := TRUE;
+      END_IF;
+    END_IF;
+
+    IF (srrs + 'SURFACE_3D_FACE') IN TYPEOF(aspect) THEN
+      IF 'TOPOLOGY_SCHEMA.FACE' IN TYPEOF(item) THEN
+        status := TRUE;
+      END_IF;
+    END_IF;
+
+    IF (srrs + 'SURFACE_2D_FACE') IN TYPEOF(aspect) THEN
+      IF 'TOPOLOGY_SCHEMA.EDGE' IN TYPEOF(item) THEN
+        status := TRUE;
+      END_IF;
+    END_IF;
+
+    IF (srrs + 'VOLUME_3D_EDGE') IN TYPEOF(aspect) THEN
+      IF 'TOPOLOGY_SCHEMA.EDGE' IN TYPEOF(item) THEN
+        status := TRUE;
+      END_IF;
+    END_IF;
+
+    IF (srrs + 'VOLUME_2D_EDGE') IN TYPEOF(aspect) THEN
+      IF 'TOPOLOGY_SCHEMA.VERTEX' IN TYPEOF(item) THEN
+        status := TRUE;
+      END_IF;
+    END_IF;
+
+    IF (srrs + 'SURFACE_3D_EDGE') IN TYPEOF(aspect) THEN
+      IF 'TOPOLOGY_SCHEMA.EDGE' IN TYPEOF(item) THEN
+        status := TRUE;
+      END_IF;
+    END_IF;
+
+
+
+    IF (srrs + 'SURFACE_2D_EDGE') IN TYPEOF(aspect) THEN
+      IF 'TOPOLOGY_SCHEMA.VERTEX' IN TYPEOF(item) THEN
+        status := TRUE;
+      END_IF;
+    END_IF;
+
+    IF (srrs + 'CURVE_EDGE') IN TYPEOF(aspect) THEN
+      IF 'TOPOLOGY_SCHEMA.EDGE' IN TYPEOF(item) THEN
+        status := TRUE;
+
+      END_IF;
+    END_IF;
+
+    IF 'TOPOLOGICAL_DEFINITION_AND_MESH_SCHEMA.TOPOLOGICAL_REGION' IN TYPEOF(item) THEN
+      status := TRUE;
+    END_IF;
+
+  RETURN(status);
+
+  END_FUNCTION;
+
+
+
+END_SCHEMA;
+
+
+(*
+$Id: 10303-107.exp,v 1.3 2006/01/20 10:20:33 wg12deputy Exp $
+ISO TC184/SC4/WG12 Nxxx - ISO/IS 10303-107 *) 
+
+
+SCHEMA product_and_model_relationships_schema;
+
+REFERENCE FROM analysis_schema
+  (model_product_domain);
+
+REFERENCE FROM product_analysis_schema
+  (physical_product_domain);
+
+REFERENCE FROM product_definition_schema
+  (product_definition);
+
+REFERENCE FROM structural_response_representation_schema
+  (fea_model);
+
+REFERENCE FROM support_resource_schema
+  (identifier,
+   label,
+   text);
+
+TYPE discretised_product_model_select = EXTENSIBLE SELECT 
+  (fea_model,
+   model_product_domain);
+END_TYPE;
+
+TYPE idealised_product_select = EXTENSIBLE SELECT 
+  (physical_product_domain,
+   product_definition);
+END_TYPE;
+
+ENTITY product_view_relationship;
+  id : identifier;
+  name : label;
+  description : OPTIONAL text;
+  discretised_model : discretised_product_model_select;
+  idealised_product : idealised_product_select;
+
+END_ENTITY;
+
+END_SCHEMA;
+
+
+(*
+$Id: 10303-107.exp,v 1.3 2006/01/20 10:20:33 wg12deputy Exp $
+ISO TC184/SC4/WG12 Nxxx - ISO/IS 10303-107 *) 
+
+SCHEMA state_and_model_relationships_schema;
+
+REFERENCE FROM analysis_schema
+  (model_state_domain);
+
+REFERENCE FROM finite_element_analysis_control_and_result_schema
+  (state);
+
+REFERENCE FROM product_analysis_schema
+  (physical_state_domain);
+
+REFERENCE FROM state_type_schema
+  (state_type);
+
+REFERENCE FROM support_resource_schema
+  (identifier,
+   label,
+   text);
+
+TYPE discretised_state_model_select = EXTENSIBLE SELECT 
+  (model_state_domain,
+   state);
+END_TYPE;
+
+TYPE idealised_state_select = EXTENSIBLE SELECT 
+  (physical_state_domain,
+   state_type);
+END_TYPE;
+
+ENTITY same_discretised_state_model;
+  id : identifier;
+  name : label;
+  description : OPTIONAL text;
+  equivalent_records : SET [2 : ?] OF discretised_state_model_select;
+END_ENTITY;
+
+ENTITY same_idealised_state;
+  id : identifier;
+  name : label;
+  description : OPTIONAL text;
+  equivalent_records : SET [2 : ?] OF idealised_state_select;
+END_ENTITY;
+
+ENTITY state_view_relationship;
+  id : identifier;
+  name : label;  
+  description : OPTIONAL text;
+  discretised_model : discretised_state_model_select;
+  idealised_state : idealised_state_select;
+END_ENTITY;
+
+END_SCHEMA;

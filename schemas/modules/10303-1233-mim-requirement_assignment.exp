@@ -1,0 +1,65 @@
+(*
+ $Id: 10303-1233-mim-requirement_assignment.exp,v 1.1 2006/08/07 09:42:04 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N3125 - ISO/TS 10303-1233 Requirement assignment - EXPRESS MIM
+ Supersedes ISO TC184/SC4/WG12 N2346
+*) 
+
+
+SCHEMA Requirement_assignment_mim;
+
+USE FROM group_schema   -- ISO 10303-41
+  (group); 
+
+USE FROM management_resources_schema   -- ISO 10303-41
+  (group_assignment); 
+
+USE FROM product_definition_schema   -- ISO 10303-41
+  (product_definition); 
+
+USE FROM product_property_definition_schema   -- ISO 10303-41
+  (characterized_object); 
+
+USE FROM Property_assignment_mim;    -- ISO/TS 10303-1030
+
+USE FROM Requirement_view_definition_mim;    -- ISO/TS 10303-1141
+
+
+TYPE requirement_assigned_item = EXTENSIBLE GENERIC_ENTITY SELECT;
+END_TYPE; 
+
+TYPE requirement_source_item = EXTENSIBLE GENERIC_ENTITY SELECT;
+END_TYPE; 
+
+ENTITY assigned_requirement
+  SUBTYPE OF (group_assignment);
+  SELF\group_assignment.assigned_group : requirement_assignment;
+  items : SET[1:1] OF product_definition;
+END_ENTITY;
+
+ENTITY requirement_assigned_object
+  SUBTYPE OF (group_assignment);
+  SELF\group_assignment.assigned_group : requirement_assignment;
+  items : SET[1:1] OF requirement_assigned_item;
+END_ENTITY;
+
+ENTITY requirement_assignment
+  SUBTYPE OF (characterized_object, group);
+END_ENTITY;
+
+ENTITY requirement_source
+  SUBTYPE OF (group);
+END_ENTITY;
+
+ENTITY source_for_requirement
+  SUBTYPE OF (group_assignment);
+  SELF\group_assignment.assigned_group : requirement_source;
+  items : SET[1:1] OF requirement_source_item;
+END_ENTITY;
+
+ENTITY sourced_requirement
+  SUBTYPE OF (group_assignment);
+  SELF\group_assignment.assigned_group : requirement_source;
+  items : SET[1:1] OF product_definition;
+END_ENTITY;
+
+END_SCHEMA;  -- Requirement_assignment_mim

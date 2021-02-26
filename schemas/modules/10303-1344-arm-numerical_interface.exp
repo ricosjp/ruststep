@@ -1,0 +1,43 @@
+(*
+   $Id: 10303-1344-arm-numerical_interface.exp,v 1.1 2006/08/03 14:41:10 wg12deputy Exp $
+   ISO/TC184/SC4 WG12N2558 - ISO/TS 10303-1344 Numerical_interface - Express ARM
+   Supersedes ISO TC184/SC4/WG12N1799
+*)
+
+SCHEMA Numerical_interface_arm;
+
+USE FROM Generic_expression_arm;
+USE FROM Expression_arm;
+
+USE FROM Value_with_unit_arm;
+USE FROM Dimension_tolerance_arm;
+USE FROM Measure_representation_arm;
+
+
+TYPE property_variable_rep_select = SELECT
+    (
+      Size_dimension,
+      Property_value_representation
+    );
+END_TYPE; 
+
+TYPE expression_extension_select = SELECT
+    (
+      String_expression,
+      Numeric_expression
+    );
+END_TYPE; 
+
+ENTITY Expression_extension
+    SUBTYPE OF (Value_with_unit);
+    expression_associated: expression_extension_select;
+END_ENTITY; 
+ 
+ENTITY Variable_expression
+    SUBTYPE OF (Variable_semantics);
+    property_associated: property_variable_rep_select;
+END_ENTITY; 
+   
+
+END_SCHEMA;   
+

@@ -1,0 +1,33 @@
+(* 
+$Id: 10303-1006-mim-foundation_representation.exp,v 1.2 2006/08/07 09:42:02 wg12deputy Exp $ 
+ISO TC184/SC4/WG12 N3223 - ISO/TS 10303-1006 Foundation representation - EXPRESS MIM
+Supersedes ISO TC184/SC4/WG12 N2105
+*) 
+
+
+SCHEMA Foundation_representation_mim;
+
+USE FROM basic_attribute_schema   -- ISO 10303-41
+  (description_attribute,
+   description_attribute_select,
+   id_attribute,
+   id_attribute_select); 
+
+USE FROM measure_schema   -- ISO 10303-41
+  (global_unit_assigned_context); 
+
+USE FROM qualified_measure_schema   -- ISO 10303-45
+  (descriptive_representation_item); 
+
+USE FROM representation_schema   -- ISO 10303-43
+  (global_uncertainty_assigned_context,
+   representation,
+   representation_context,
+   representation_item,
+   representation_relationship,
+   uncertainty_measure_with_unit); 
+
+USE FROM Value_with_unit_mim;    -- ISO/TS 10303-1054
+
+
+END_SCHEMA;  -- Foundation_representation_mim

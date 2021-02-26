@@ -1,0 +1,393 @@
+(* ISO 10303-507, TC 184/SC4/WG12 N564 *)
+SCHEMA aic_geometrically_bounded_surface;  
+  
+  REFERENCE FROM support_resource_schema (   (* ISO 10303-41 *)
+      bag_to_set);  
+  
+  USE FROM geometric_model_schema (          (* ISO 10303-42 *)
+      geometric_set);  
+  
+  USE FROM geometry_schema (                 (* ISO 10303-42 *)
+      axis1_placement,  
+      axis2_placement_2d,  
+      axis2_placement_3d,  
+      b_spline_curve,  
+      b_spline_curve_with_knots,  
+      b_spline_surface,  
+      b_spline_surface_with_knots,  
+      bezier_curve,  
+      bezier_surface,  
+      boundary_curve,  
+      bounded_pcurve,  
+      bounded_surface_curve,  
+      cartesian_point,  
+      cartesian_transformation_operator_3d,  
+      circle,  
+      composite_curve,  
+      composite_curve_on_surface,  
+      composite_curve_segment,
+      conical_surface,  
+      curve,  
+      curve_bounded_surface,  
+      curve_replica,  
+      cylindrical_surface,  
+      degenerate_pcurve,  
+      degenerate_toroidal_surface,  
+      direction,  
+      ellipse,  
+      evaluated_degenerate_pcurve,  
+      geometric_representation_context,  
+      hyperbola,  
+      intersection_curve,  
+      line,  
+      offset_curve_3d,  
+      offset_surface,  
+      outer_boundary_curve,  
+      parabola,  
+      pcurve,  
+      plane,  
+      point,  
+      point_on_curve,  
+      point_on_surface,  
+      polyline,  
+      quasi_uniform_curve,  
+      quasi_uniform_surface,  
+      rational_b_spline_curve,  
+      rational_b_spline_surface,  
+      rectangular_composite_surface,  
+      rectangular_trimmed_surface,  
+      reparametrised_composite_curve_segment,  
+      seam_curve,  
+      spherical_surface,  
+      surface,  
+      surface_curve,  
+      surface_of_linear_extrusion,  
+      surface_of_revolution,  
+      surface_patch,  
+      surface_replica,  
+      swept_surface,  
+      toroidal_surface,  
+      trimmed_curve,  
+      uniform_curve,  
+      uniform_surface,  
+      vector); 
+
+  USE FROM product_property_representation_schema ( 
+      shape_representation);                 (* ISO 10303-41 *)
+  
+  USE FROM representation_schema (           (* ISO 10303-43 *)
+      definitional_representation,
+      mapped_item,
+      parametric_representation_context,
+      representation,
+      representation_item,
+      representation_map);
+
+ENTITY geometrically_bounded_surface_shape_representation 
+   SUBTYPE OF (shape_representation);  
+WHERE 
+  WR1 : SIZEOF (QUERY (it <* SELF.items |
+        NOT (SIZEOF (['AIC_GEOMETRICALLY_BOUNDED_SURFACE.GEOMETRIC_SET',
+        'AIC_GEOMETRICALLY_BOUNDED_SURFACE.MAPPED_ITEM',
+        'AIC_GEOMETRICALLY_BOUNDED_SURFACE.AXIS2_PLACEMENT_3D'] * TYPEOF
+        (it)) = 1))) = 0;
+  WR2 : SIZEOF (QUERY (it <* SELF.items |
+        SIZEOF (['AIC_GEOMETRICALLY_BOUNDED_SURFACE.GEOMETRIC_SET',
+        'AIC_GEOMETRICALLY_BOUNDED_SURFACE.MAPPED_ITEM'] * TYPEOF
+        (it)) = 1)) > 0;
+  WR3 : SIZEOF (QUERY (mi <* QUERY (it <* SELF.items |
+        'AIC_GEOMETRICALLY_BOUNDED_SURFACE.MAPPED_ITEM' IN TYPEOF (it)) |
+        NOT (('AIC_GEOMETRICALLY_BOUNDED_SURFACE.' +
+        'GEOMETRICALLY_BOUNDED_SURFACE_SHAPE_REPRESENTATION'
+        IN TYPEOF (mi\mapped_item.mapping_source.mapped_representation))
+        AND
+        (SIZEOF(QUERY (mr_it <*
+        mi\mapped_item.mapping_source.mapped_representation.items |
+        ('AIC_GEOMETRICALLY_BOUNDED_SURFACE.GEOMETRIC_SET'
+        IN TYPEOF (mr_it)))) > 0 )))) = 0;
+  WR4 : SIZEOF (QUERY (gs <* QUERY (it <* SELF.items |
+        'AIC_GEOMETRICALLY_BOUNDED_SURFACE.GEOMETRIC_SET' IN TYPEOF (it)) |
+        NOT (SIZEOF (QUERY (pnt <* QUERY (gsel <*
+        gs\geometric_set.elements |
+        'AIC_GEOMETRICALLY_BOUNDED_SURFACE.POINT' IN TYPEOF (gsel)) |
+        NOT (gbsf_check_point(pnt)))) = 0))) = 0;
+  WR5 : SIZEOF (QUERY (gs <* QUERY (it <* SELF.items |
+        'AIC_GEOMETRICALLY_BOUNDED_SURFACE.GEOMETRIC_SET' IN TYPEOF (it)) |
+        NOT (SIZEOF (QUERY (cv <* QUERY (gsel <*
+        gs\geometric_set.elements |
+        'AIC_GEOMETRICALLY_BOUNDED_SURFACE.CURVE' IN TYPEOF (gsel)) |
+        NOT (gbsf_check_curve(cv)))) = 0))) = 0;
+  WR6 : SIZEOF (QUERY (gs <* QUERY (it <* SELF.items |
+        'AIC_GEOMETRICALLY_BOUNDED_SURFACE.GEOMETRIC_SET' IN TYPEOF (it)) |
+        NOT (SIZEOF (QUERY (sf <* QUERY (gsel <*
+        gs\geometric_set.elements |
+        'AIC_GEOMETRICALLY_BOUNDED_SURFACE.SURFACE' IN TYPEOF (gsel)) |
+        NOT (gbsf_check_surface(sf)))) = 0))) = 0;
+  WR7 : SIZEOF (QUERY (gs <* QUERY (it <* SELF.items |
+        'AIC_GEOMETRICALLY_BOUNDED_SURFACE.GEOMETRIC_SET' IN TYPEOF (it)) |
+        SIZEOF (QUERY (gsel <* gs\geometric_set.elements |
+        'AIC_GEOMETRICALLY_BOUNDED_SURFACE.SURFACE' 
+        IN TYPEOF (gsel))) > 0)) > 0;
+
+END_ENTITY;
+
+FUNCTION gbsf_check_point (pnt : point) : BOOLEAN;  
+ 
+(* This function varifies the validity of a point in the context of a
+   geometrically bounded surface model.
+*)
+  (* a cartesian_point is valid
+  *)
+  IF 'AIC_GEOMETRICALLY_BOUNDED_SURFACE.CARTESIAN_POINT'
+    IN TYPEOF (pnt) THEN RETURN(TRUE);  
+  ELSE  
+ 
+  (* a point_on_curve shall reference a valid curve
+  *)
+    IF 'AIC_GEOMETRICALLY_BOUNDED_SURFACE.POINT_ON_CURVE'
+      IN TYPEOF (pnt) THEN RETURN
+      (gbsf_check_curve(pnt\point_on_curve.basis_curve));  
+    ELSE  
+ 
+    (* a point_on_surface shall reference a valid surface
+    *)
+      IF 'AIC_GEOMETRICALLY_BOUNDED_SURFACE.POINT_ON_SURFACE'
+        IN TYPEOF (pnt) THEN RETURN (gbsf_check_surface
+        (pnt\point_on_surface.basis_surface));  
+      ELSE  
+ 
+      (* a degenerate_pcurve shall reference a valid curve and
+         a valid surface
+      *)
+        IF 'AIC_GEOMETRICALLY_BOUNDED_SURFACE.DEGENERATE_PCURVE'
+          IN TYPEOF (pnt) THEN RETURN
+          ((gbsf_check_curve  
+          (pnt\degenerate_pcurve.reference_to_curve\
+                                              representation.items[1]))  
+          AND (gbsf_check_surface (pnt\degenerate_pcurve.basis_surface)));  
+        END_IF;  
+      END_IF;
+    END_IF;  
+  END_IF;  
+  RETURN(FALSE);  
+END_FUNCTION;
+
+FUNCTION gbsf_check_curve (cv : representation_item) : BOOLEAN;  
+ 
+(* This function varifies the validity of a curve in the context of a
+   geometrically bounded surface model. Representation_items are
+   valid input, however, they are supposed to be curves; otherwise
+   this function will return false.
+*)
+
+ (* complex subtypes of curve that are both bounded_curve and oneof
+    conic, curve_replica, line, or offset_curve_3d are not valid
+ *)
+ IF SIZEOF (['AIC_GEOMETRICALLY_BOUNDED_SURFACE.BOUNDED_CURVE',
+   'AIC_GEOMETRICALLY_BOUNDED_SURFACE.CONIC', 
+   'AIC_GEOMETRICALLY_BOUNDED_SURFACE.CURVE_REPLICA',
+   'AIC_GEOMETRICALLY_BOUNDED_SURFACE.LINE', 
+   'AIC_GEOMETRICALLY_BOUNDED_SURFACE.OFFSET_CURVE_3D']
+   * TYPEOF(cv)) > 1 THEN RETURN(FALSE);  
+ END_IF;
+ 
+ (* circle, ellipse, and trimmed_curve are valid curves; they
+    are bounded per definition
+ *)
+ IF SIZEOF (['AIC_GEOMETRICALLY_BOUNDED_SURFACE.CIRCLE',
+ 'AIC_GEOMETRICALLY_BOUNDED_SURFACE.ELLIPSE',
+ 'AIC_GEOMETRICALLY_BOUNDED_SURFACE.TRIMMED_CURVE']
+ * TYPEOF(cv)) = 1 
+ THEN RETURN(TRUE);  
+ ELSE  
+ 
+   (* b_spline_curves shall not self-intersect  
+   *)
+   IF (('AIC_GEOMETRICALLY_BOUNDED_SURFACE.B_SPLINE_CURVE'
+     IN TYPEOF(cv)) AND
+     (cv\b_spline_curve.self_intersect = FALSE) OR
+     (cv\b_spline_curve.self_intersect = UNKNOWN))
+   THEN RETURN(TRUE); 
+   ELSE  
+ 
+     (* a composite_curve shall not self-intersect and all of
+        its segments shall reference valid curves
+     *)
+     IF (('AIC_GEOMETRICALLY_BOUNDED_SURFACE.COMPOSITE_CURVE'
+     IN TYPEOF(cv)) AND
+       (cv\composite_curve.self_intersect = FALSE) OR
+       (cv\composite_curve.self_intersect = UNKNOWN))
+     THEN  
+       RETURN (SIZEOF (QUERY (seg <* cv\composite_curve.segments |
+       NOT (gbsf_check_curve(seg.parent_curve)))) = 0); 
+     ELSE  
+ 
+       (* a curve_replica shall reference a valid curve
+       *)
+       IF 'AIC_GEOMETRICALLY_BOUNDED_SURFACE.CURVE_REPLICA'
+         IN TYPEOF(cv) THEN 
+         RETURN (gbsf_check_curve (cv\curve_replica.parent_curve)); 
+       ELSE 
+ 
+         (* an offset_curve_3d shall not self-intersect and shall
+            reference a valid curve; a polyline is not a valid
+            basis_curve
+         *)
+         IF (('AIC_GEOMETRICALLY_BOUNDED_SURFACE.OFFSET_CURVE_3D'
+           IN TYPEOF(cv)) 
+           AND
+           ((cv\offset_curve_3d.self_intersect = FALSE) OR
+           (cv\offset_curve_3d.self_intersect = UNKNOWN))
+           AND
+           (NOT ('AIC_GEOMETRICALLY_BOUNDED_SURFACE.POLYLINE'
+           IN TYPEOF(cv\offset_curve_3d.basis_curve)))) THEN RETURN
+           (gbsf_check_curve (cv\offset_curve_3d.basis_curve));
+         ELSE  
+ 
+           (* a pcurve shall reference a valid curve and a valid
+              basis_surface 
+           *)
+           IF 'AIC_GEOMETRICALLY_BOUNDED_SURFACE.PCURVE'
+             IN TYPEOF(cv) THEN RETURN ((gbsf_check_curve 
+             (cv\pcurve.reference_to_curve\representation.items[1]))
+             AND  
+             (gbsf_check_surface (cv\pcurve.basis_surface)));  
+           ELSE  
+ 
+             (* a polyline shall have at least 3 points 
+             *)
+             IF 'AIC_GEOMETRICALLY_BOUNDED_SURFACE.POLYLINE'
+               IN TYPEOF(cv) THEN  
+               IF (SIZEOF (cv\polyline.points) >= 3)
+                 THEN RETURN (TRUE);  
+               END_IF;  
+             ELSE  
+ 
+               (* a surface_curve references a curve_3d and one or two  
+                  pcurves or one or two surfaces or one of each;
+                  all of these references shall be valid
+               *)
+               IF 'AIC_GEOMETRICALLY_BOUNDED_SURFACE.SURFACE_CURVE'
+                 IN TYPEOF(cv) THEN  
+ 
+                 (* if the curve reference is correct, check also the rest 
+                 *)
+                 IF gbsf_check_curve (cv\surface_curve.curve_3d) THEN  
+                   REPEAT i := 1 TO SIZEOF 
+                   (cv\surface_curve.associated_geometry);  
+ 
+                   (* do for one or two associated_geometrys:  
+                   *)
+                   IF 'AIC_GEOMETRICALLY_BOUNDED_SURFACE.SURFACE' IN TYPEOF
+                     (cv\surface_curve.associated_geometry[i]) THEN  
+                     IF NOT gbsf_check_surface
+                       (cv\surface_curve.associated_geometry[i]) THEN  
+                       RETURN(FALSE);  
+                     END_IF;  
+                   ELSE 
+                     IF 'AIC_GEOMETRICALLY_BOUNDED_SURFACE.PCURVE' IN TYPEOF  
+                       (cv\surface_curve.associated_geometry[i]) THEN  
+                       IF NOT gbsf_check_curve 
+                         (cv\surface_curve.associated_geometry[i]) THEN  
+                         RETURN(FALSE);  
+                       END_IF;  
+                     END_IF;  
+                   END_IF;  
+                   END_REPEAT;  
+                   RETURN(TRUE);  
+                 END_IF;  
+               END_IF;  
+             END_IF;  
+           END_IF;  
+         END_IF;   
+       END_IF;  
+     END_IF;  
+   END_IF;  
+ END_IF;  
+ (* FALSE is returned if the input parameter cv is not a valid curve.
+  *)
+ RETURN(FALSE);  
+END_FUNCTION;
+
+FUNCTION gbsf_check_surface (sf : surface) : BOOLEAN;  
+ 
+(* This function varifies the validity of a surface in the context of a
+   geometrically bounded surface model.
+*)
+  (* a b_spline_surface shall not self-intersect
+  *)
+  IF (('AIC_GEOMETRICALLY_BOUNDED_SURFACE.B_SPLINE_SURFACE'
+    IN TYPEOF(sf)) AND
+    (sf\b_spline_surface.self_intersect = FALSE) OR
+    (sf\b_spline_surface.self_intersect = UNKNOWN))
+  THEN
+    RETURN(TRUE);
+  ELSE  
+ 
+    (* spherical_surface and toroidal_surface are valid;
+       also curve_bounded_surface and rectangular_trimmed_surface
+       are per definition bounded and, thus, valid
+    *)
+    IF SIZEOF (['AIC_GEOMETRICALLY_BOUNDED_SURFACE.SPHERICAL_SURFACE',  
+      'AIC_GEOMETRICALLY_BOUNDED_SURFACE.TOROIDAL_SURFACE',
+      'AIC_GEOMETRICALLY_BOUNDED_SURFACE.CURVE_BOUNDED_SURFACE',
+      'AIC_GEOMETRICALLY_BOUNDED_SURFACE.RECTANGULAR_TRIMMED_SURFACE']
+      * TYPEOF(sf)) = 1 THEN RETURN(TRUE);  
+    ELSE  
+  
+      (* an offset_surface shall not self-intersect and shall
+         reference a valid surface
+      *)
+      IF (('AIC_GEOMETRICALLY_BOUNDED_SURFACE.OFFSET_SURFACE'
+        IN TYPEOF(sf)) AND
+        (sf\offset_surface.self_intersect = FALSE) OR
+        (sf\offset_surface.self_intersect = UNKNOWN))
+      THEN
+        RETURN (gbsf_check_surface (sf\offset_surface.basis_surface));
+      ELSE  
+ 
+        (* a rectangular_composite_surface shall reference a matrix of
+           valid surfaces  
+        *)
+        IF 'AIC_GEOMETRICALLY_BOUNDED_SURFACE.RECTANGULAR_COMPOSITE_SURFACE'
+          IN TYPEOF(sf) 
+        THEN
+          REPEAT i := 1 TO SIZEOF
+            (sf\rectangular_composite_surface.segments);  
+            REPEAT j := 1 TO SIZEOF
+              (sf\rectangular_composite_surface.segments[i]);  
+              IF NOT (gbsf_check_surface
+                (sf\rectangular_composite_surface.segments[i][j].
+                parent_surface))
+                THEN RETURN (FALSE);  
+              END_IF;  
+            END_REPEAT;  
+          END_REPEAT;  
+          RETURN(TRUE);  
+        ELSE  
+ 
+          (* a surface_replica shall have a valid parent surface
+          *)
+          IF 'AIC_GEOMETRICALLY_BOUNDED_SURFACE.SURFACE_REPLICA'
+            IN TYPEOF (sf) THEN RETURN (gbsf_check_surface 
+            (sf\surface_replica.parent_surface)); 
+          ELSE  
+ 
+            (* a surface_of_revolution shall have a valid sweeping
+               curve; surface_of_linear_extrusion is not valid, as
+               it is unbounded in the direction of the extrusion;
+               it may, however, be valid if trimmed
+            *)
+            IF 'AIC_GEOMETRICALLY_BOUNDED_SURFACE.SURFACE_OF_REVOLUTION'
+              IN TYPEOF(sf) THEN RETURN
+              (gbsf_check_curve (sf\swept_surface.swept_curve)); 
+            END_IF;    
+          END_IF;    
+        END_IF;     
+      END_IF;  
+    END_IF;  
+  END_IF;  
+  RETURN(FALSE);  
+END_FUNCTION;
+
+END_SCHEMA; (* aic_geometrically_bounded_surface *)

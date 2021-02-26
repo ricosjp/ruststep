@@ -1,0 +1,79 @@
+(*
+  $Id: 10303-1280-mim-cdts_required_resource_characterized.exp,v 1.1 2003/07/15 09:43:14 wg12deputy Exp $
+  ISO/TC184/SC4 WG12N1602 - ISO/TS - 10303-1280 Required resource characterized - EXPRESS MIM 
+*)
+
+SCHEMA Required_resource_characterized_mim;
+
+USE FROM Approval_mim;
+
+USE FROM Condition_mim;
+
+USE FROM Date_time_assignment_mim;
+
+USE FROM Effectivity_application_mim;
+
+USE FROM Identification_assignment_mim;
+
+USE FROM Justification_mim;
+
+USE FROM Person_organization_assignment_mim;
+
+USE FROM process_property_schema
+(action_resource_requirement,
+ action_resource_requirement_relationship);
+
+USE FROM Required_resource_mim;
+
+USE FROM Requirement_assignment_mim;
+
+USE FROM Resource_item_characterized_mim;
+
+USE FROM Resource_property_assignment_mim;
+
+TYPE required_resource_approval_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON approval_item WITH
+(action_resource_requirement,
+ action_resource_requirement_relationship);
+END_TYPE;
+
+TYPE required_resource_condition_action_method_items = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON condition_action_method_items WITH
+(action_resource_requirement,
+ action_resource_requirement_relationship);
+END_TYPE;
+
+TYPE required_resource_date_and_time_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON date_and_time_item WITH
+(action_resource_requirement);
+END_TYPE;
+
+TYPE required_resource_date_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON date_item WITH
+(action_resource_requirement);
+END_TYPE;
+
+TYPE required_resource_effectivity_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON effectivity_item WITH
+(action_resource_requirement,
+ action_resource_requirement_relationship);
+END_TYPE;
+
+TYPE required_resource_identification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON identification_item WITH
+(action_resource_requirement,
+ action_resource_requirement_relationship);
+END_TYPE;
+
+TYPE required_resource_justification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON justification_item WITH
+(action_resource_requirement,
+ action_resource_requirement_relationship);
+END_TYPE;
+
+TYPE required_resource_organization_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON organization_item WITH
+(action_resource_requirement);
+END_TYPE;
+
+TYPE required_resource_person_and_organization_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON person_and_organization_item WITH
+(action_resource_requirement);
+END_TYPE;
+
+TYPE required_resource_requirement_assigned_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON requirement_assigned_item WITH
+(action_resource_requirement);
+END_TYPE;
+
+END_SCHEMA;

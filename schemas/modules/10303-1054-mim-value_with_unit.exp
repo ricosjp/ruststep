@@ -1,0 +1,13 @@
+(*
+ $Id: 10303-1054-mim-value_with_unit.exp,v 1.4 2006/08/07 09:42:03 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N1302 - ISO/TS 10303-1054 Value with unit - EXPRESS MIM
+*)
+
+SCHEMA Value_with_unit_mim;
+
+USE FROM measure_schema;
+
+USE FROM representation_schema
+ (uncertainty_measure_with_unit);
+
+END_SCHEMA;

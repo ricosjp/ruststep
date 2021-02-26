@@ -1,0 +1,117 @@
+(*
+
+The following permission notice and disclaimer shall be included in all copies of these EXPRESS schemas 
+("the Schema"), and derivations of the Schema:
+
+© ISO 2010 — All rights reserved
+
+Permission is hereby granted, free of charge in perpetuity, to any person obtaining a copy of the Schema, 
+to use, copy, modify, merge and distribute free of charge, copies of the Schema for the purposes of 
+developing, implementing, installing and using software based on the Schema, and to permit persons to 
+whom the Schema is furnished to do so, subject to the following conditions:
+
+THE SCHEMA IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT 
+LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO 
+EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER 
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SCHEMA OR THE 
+USE OR OTHER DEALINGS IN THE SCHEMA.
+
+In addition, any modified copy of the Schema shall include the following notice:
+
+THIS SCHEMA HAS BEEN MODIFIED FROM THE SCHEMA DEFINED IN ISO 13584-42Ed2, AND SHOULD NOT BE INTERPRETED AS 
+COMPLYING WITH THAT STANDARD.
+
+*)
+
+SCHEMA ISO13584_IEC61360_language_resource_schema;
+
+REFERENCE FROM support_resource_schema(identifier, label, text); 
+
+ENTITY language_code;
+	language_id : identifier; 
+	country_id : OPTIONAL identifier;
+WHERE
+	WR1: (LENGTH (language_id)= 2) OR (LENGTH (language_id)= 3);
+	WR2: LENGTH (country_id)= 2;
+END_ENTITY; -- language_code
+(*
+
+
+*)
+ENTITY global_language_assignment;
+	language: language_code;
+END_ENTITY; -- global_language_assignment
+(*
+
+
+*)
+ENTITY present_translations; 
+	language_codes: LIST [1:?] OF UNIQUE language_code;
+UNIQUE
+	UR1: language_codes;
+END_ENTITY; -- present_translations
+(*
+
+
+*)
+TYPE translatable_label = SELECT(label, translated_label);
+END_TYPE; -- translatable_label
+(*
+
+
+*)
+ENTITY translated_label; 
+	labels: LIST [1:?] OF label;
+	languages: present_translations; 
+WHERE
+	WR1: SIZEOF(labels) = SIZEOF(languages.language_codes);
+END_ENTITY; -- translated_label
+(*
+
+
+*)
+TYPE translatable_text = SELECT(text, translated_text);
+END_TYPE; -- translatable_text
+(*
+
+
+*)
+ENTITY translated_text; 
+	texts: LIST [1:?] OF text;
+	languages: present_translations; 
+WHERE
+	WR1: SIZEOF(texts) = SIZEOF(languages.language_codes);
+END_ENTITY; -- translated_text
+(*
+
+
+*)
+FUNCTION check_label_length(l: translatable_label;
+	l_length: INTEGER): BOOLEAN;
+
+IF 'ISO13584_IEC61360_LANGUAGE_RESOURCE_SCHEMA.TRANSLATED_LABEL' 
+	IN TYPEOF(l) 
+THEN 
+	REPEAT i :=1 TO SIZEOF(l.labels);
+		IF LENGTH(l.labels[i]) > l_length 
+		THEN
+			RETURN(FALSE);
+		END_IF;
+	END_REPEAT;
+
+	RETURN(TRUE);
+
+ELSE (* the argument l is a single string *)
+	RETURN(LENGTH(l) <= l_length); 
+END_IF;
+END_FUNCTION; -- check_label_length 
+(*
+
+
+*)
+RULE single_language_assignment FOR(global_language_assignment);
+WHERE
+	SIZEOF(global_language_assignment) <= 1;
+END_RULE; -- single_language_assignment
+
+END_SCHEMA; -- ISO13584_IEC61360_language_resource_schema

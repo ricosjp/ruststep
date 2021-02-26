@@ -1,0 +1,65 @@
+(*
+ $Id: 10303-1285-arm-work_request_characterized.exp,v 1.2 2006/08/07 07:44:46 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N3196 - ISO/TS 10303-1285 Work request characterized - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG12 N2462
+*) 
+
+
+SCHEMA Work_request_characterized_arm;
+
+USE FROM Ap239_management_resource_information_arm;    -- ISO/TS 10303-1289
+
+USE FROM Document_assignment_arm;    -- ISO/TS 10303-1122
+
+USE FROM Management_resource_information_arm;    -- ISO/TS 10303-1288
+
+USE FROM Work_request_arm;    -- ISO/TS 10303-1042
+
+
+TYPE wreqchar_ap239_mri_classification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON ap239_mri_classification_item WITH 
+   (Activity_method_assignment, 
+    Affected_items_assignment, 
+    Work_request, 
+    Work_request_status);
+END_TYPE; 
+
+TYPE wreqchar_ap239_mri_classified_attribute_select = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON ap239_mri_classified_attribute_select WITH 
+   (Activity_method_assignment, 
+    Affected_items_assignment, 
+    Work_request, 
+    Work_request_status);
+END_TYPE; 
+
+TYPE wreqchar_documented_element_select = SELECT BASED_ON documented_element_select WITH 
+   (Work_request);
+END_TYPE; 
+
+TYPE wreqchar_mri_approval_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON mri_approval_item WITH 
+   (Activity_method_assignment, 
+    Affected_items_assignment, 
+    Work_request);
+END_TYPE; 
+
+TYPE wreqchar_mri_date_or_date_time_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON mri_date_or_date_time_item WITH 
+   (Activity_method_assignment, 
+    Affected_items_assignment, 
+    Work_request);
+END_TYPE; 
+
+TYPE wreqchar_mri_identification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON mri_identification_item WITH 
+   (Affected_items_assignment, 
+    Work_request);
+END_TYPE; 
+
+TYPE wreqchar_mri_organization_or_person_in_organization_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON mri_organization_or_person_in_organization_item WITH 
+   (Activity_method_assignment, 
+    Affected_items_assignment, 
+    Work_request);
+END_TYPE; 
+
+TYPE wreqchar_mri_string_select = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON mri_string_select WITH 
+   (Activity_method_assignment);
+END_TYPE; 
+
+END_SCHEMA;  -- Work_request_characterized_arm
+

@@ -1,0 +1,215 @@
+(*
+ $Id: 10303-1289-arm-ap239_management_resource_information.exp,v 1.1 2006/08/07 07:44:46 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N3010 - ISO/TS 10303-1289 AP239 management resource information - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG12 N2312
+*) 
+
+SCHEMA Ap239_management_resource_information_arm;
+
+USE FROM Alias_identification_arm;    -- ISO/TS 10303-1025
+
+USE FROM Approval_arm;    -- ISO/TS 10303-1012
+
+USE FROM Attribute_classification_arm;    -- ISO/TS 10303-1246
+
+USE FROM Certification_arm;    -- ISO/TS 10303-1044
+
+USE FROM Class_arm;    -- ISO/TS 10303-1070
+
+USE FROM Classification_assignment_arm;    -- ISO/TS 10303-1114
+
+USE FROM Contract_arm;    -- ISO/TS 10303-1062
+
+USE FROM Date_time_arm;    -- ISO/TS 10303-1010
+
+USE FROM Date_time_assignment_arm;    -- ISO/TS 10303-1014
+
+USE FROM Event_arm;    -- ISO/TS 10303-1064
+
+USE FROM Event_assignment_arm;    -- ISO/TS 10303-1364
+
+USE FROM External_class_arm;    -- ISO/TS 10303-1275
+
+USE FROM Identification_assignment_arm;    -- ISO/TS 10303-1021
+
+USE FROM Management_resource_information_arm;    -- ISO/TS 10303-1288
+
+USE FROM Multi_linguism_arm;    -- ISO/TS 10303-1105
+
+USE FROM Person_organization_arm;    -- ISO/TS 10303-1011
+
+USE FROM Person_organization_assignment_arm;    -- ISO/TS 10303-1013
+
+USE FROM Project_arm;    -- ISO/TS 10303-1061
+
+USE FROM Security_classification_arm;    -- ISO/TS 10303-1015
+
+USE FROM Set_theory_arm;    -- ISO/TS 10303-1210
+
+USE FROM Time_interval_arm;    -- ISO/TS 10303-1065
+
+
+TYPE ap239_mri_alias_identification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON alias_identification_item WITH 
+   (Address, 
+    Approval, 
+    Approval_status, 
+    Certification, 
+    Event, 
+    External_class_library, 
+    Organization, 
+    Organization_or_person_in_organization_assignment, 
+    Person, 
+    Person_in_organization, 
+    Project, 
+    Security_classification, 
+    Security_classification_assignment);
+END_TYPE; 
+
+TYPE ap239_mri_approval_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON approval_item WITH 
+   (Address_assignment, 
+    Certification_assignment, 
+    Classification_assignment, 
+    Contract_assignment, 
+    Date_or_date_time_assignment, 
+    Event, 
+    Event_assignment, 
+    Identification_assignment, 
+    Organization_or_person_in_organization_assignment, 
+    Organization_relationship, 
+    Person_in_organization, 
+    Project, 
+    Project_assignment, 
+    Security_classification, 
+    Security_classification_assignment);
+END_TYPE; 
+
+TYPE ap239_mri_certification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON certification_item WITH 
+   (Project);
+END_TYPE; 
+
+TYPE ap239_mri_classification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON classification_item WITH 
+   (Address, 
+    Address_assignment, 
+    Approval, 
+    Approval_assignment, 
+    Approval_relationship, 
+    Approval_status, 
+    Approving_person_organization, 
+    Attribute_translation_assignment, 
+    Calendar_date, 
+    Certification, 
+    Certification_assignment, 
+    Class, 
+    Contract, 
+    Contract_assignment, 
+    Date_or_date_time_assignment, 
+    Date_time, 
+    Event, 
+    Event_assignment, 
+    Event_relationship, 
+    External_class_library, 
+    Identification_assignment, 
+    Language, 
+    Language_indication, 
+    Local_time, 
+    Organization, 
+    Organization_or_person_in_organization_assignment, 
+    Organization_relationship, 
+    Person, 
+    Person_in_organization, 
+    Project, 
+    Project_assignment, 
+    Project_relationship, 
+    Security_classification, 
+    Security_classification_assignment, 
+    Time_interval_relationship);
+END_TYPE; 
+
+TYPE ap239_mri_classified_attribute_select = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON classified_attribute_select WITH 
+   (Address_assignment, 
+    Approval, 
+    Approval_assignment, 
+    Approval_relationship, 
+    Approval_status, 
+    Approving_person_organization, 
+    Certification, 
+    Certification_assignment, 
+    Contract, 
+    Date_or_date_time_assignment, 
+    Event_assignment, 
+    Event_relationship, 
+    Identification_assignment, 
+    Language, 
+    Organization_or_person_in_organization_assignment, 
+    Organization_relationship, 
+    Person_in_organization, 
+    Project_assignment, 
+    Project_relationship, 
+    Security_classification, 
+    Time_interval_relationship);
+END_TYPE; 
+
+TYPE ap239_mri_contract_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON contract_item WITH 
+   (External_class, 
+    External_class_library, 
+    Security_classification);
+END_TYPE; 
+
+TYPE ap239_mri_date_or_date_time_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON date_or_date_time_item WITH 
+   (Address_assignment, 
+    Alias_identification, 
+    Approval, 
+    Certification_assignment, 
+    Classification_assignment, 
+    Contract_assignment, 
+    Date_or_date_time_assignment, 
+    Event_assignment, 
+    Identification_assignment, 
+    Organization_relationship, 
+    Person, 
+    Person_in_organization, 
+    Security_classification);
+END_TYPE; 
+
+TYPE ap239_mri_event_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON event_item WITH 
+   (Certification, 
+    Project);
+END_TYPE; 
+
+TYPE ap239_mri_identification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON identification_item WITH 
+   (Address, 
+    Approval, 
+    Approval_status, 
+    Certification, 
+    Event, 
+    External_class_library, 
+    Organization, 
+    Organization_or_person_in_organization_assignment, 
+    Person, 
+    Person_in_organization, 
+    Project, 
+    Security_classification, 
+    Security_classification_assignment);
+END_TYPE; 
+
+TYPE ap239_mri_organization_or_person_in_organization_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON organization_or_person_in_organization_item WITH 
+   (Address_assignment, 
+    Certification, 
+    Certification_assignment, 
+    Classification_assignment, 
+    Contract_assignment, 
+    Date_or_date_time_assignment, 
+    Event, 
+    Event_assignment, 
+    Organization_or_person_in_organization_assignment, 
+    Person_in_organization, 
+    Project, 
+    Project_assignment, 
+    Security_classification);
+END_TYPE; 
+
+TYPE ap239_mri_string_select = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON string_select WITH 
+   (Event);
+END_TYPE; 
+
+END_SCHEMA;  -- Ap239_management_resource_information_arm

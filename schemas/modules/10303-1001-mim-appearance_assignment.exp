@@ -1,0 +1,28 @@
+(*
+WG12 N653
+ISO/TS 10303-1001
+Product data representation and exchange: Application module: Appearance assignment
+*)
+
+SCHEMA Appearance_assignment_mim;
+
+USE FROM Elemental_geometric_shape_mim; -- ISO/TS 10303-1004
+USE FROM Foundation_representation_mim; -- ISO/TS 10303-1006
+
+USE FROM presentation_appearance_schema
+( context_dependent_over_riding_styled_item,
+  invisibility,
+  presentation_style_assignment,
+  presentation_style_by_context,
+  styled_item); -- ISO 10303-46
+
+ENTITY draughting_model
+      SUBTYPE OF (representation);
+END_ENTITY;
+
+ENTITY mechanical_design_geometric_presentation_representation
+      SUBTYPE OF (representation);
+END_ENTITY;
+
+END_SCHEMA;
+

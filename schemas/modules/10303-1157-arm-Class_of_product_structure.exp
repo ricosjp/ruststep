@@ -1,0 +1,15 @@
+(*
+ $Id: 10303-1157-arm-Class_of_product_structure.exp,v 1.4 2006/08/04 12:01:50 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2753 - ISO/TS 10303-1157 Class of product structure - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG12 N1956
+*)
+
+SCHEMA Class_of_product_structure_arm;
+
+USE FROM Class_of_product_arm;    --  ISO/TS 10303-1077
+USE FROM Class_of_composition_of_product_arm;    --  ISO/CD 10303-1158
+USE FROM Class_of_connection_of_product_arm;    --  ISO/CD 10303-1159
+USE FROM Class_of_containment_of_product_arm;    --  ISO/CD 10303-1160
+USE FROM Class_of_involvement_of_product_in_connection_arm;    --  ISO/CD 10303-1161
+
+END_SCHEMA;

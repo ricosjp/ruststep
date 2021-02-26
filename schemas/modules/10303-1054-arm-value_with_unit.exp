@@ -1,0 +1,124 @@
+(*
+ $Id: 10303-1054-arm-value_with_unit.exp,v 1.4 2006/08/07 07:44:42 wg12deputy Exp $
+ISO TC184/SC4/WG12 N2976 - ISO/TS 10303-1054 Value with unit - EXPRESS ARM
+*) 
+
+
+SCHEMA Value_with_unit_arm;
+
+
+TYPE any_number_value = NUMBER;
+END_TYPE; 
+
+TYPE any_string_value = STRING;
+END_TYPE; 
+
+TYPE length_measure = REAL;
+END_TYPE; 
+
+TYPE measure_value = EXTENSIBLE SELECT
+   (any_number_value, 
+    any_string_value, 
+    length_measure, 
+    plane_angle_measure);
+END_TYPE; 
+
+TYPE plane_angle_measure = REAL;
+END_TYPE; 
+
+ENTITY Amount_of_substance_unit
+  SUBTYPE OF (Unit);
+END_ENTITY;
+
+ENTITY Context_dependent_unit
+  SUBTYPE OF (Unit);
+WHERE
+  WR1: EXISTS(SELF\Unit.name);
+END_ENTITY;
+
+ENTITY Conversion_based_unit
+  SUBTYPE OF (Unit);
+  conversion_factor : Value_with_unit;
+WHERE
+  WR1: EXISTS(SELF\Unit.name);
+END_ENTITY;
+
+ENTITY Derived_unit
+  SUBTYPE OF (Unit);
+  elements : SET[1:?] OF Derived_unit_element;
+END_ENTITY;
+
+ENTITY Derived_unit_element;
+  base_unit : Unit;
+  exponent : REAL;
+END_ENTITY;
+
+ENTITY Duration
+  SUBTYPE OF (Value_with_unit);
+WHERE
+  WR1: 'VALUE_WITH_UNIT_ARM.' + 'TIME_UNIT' IN TYPEOF(SELF\Value_with_unit.unit);
+END_ENTITY;
+
+ENTITY Electric_current_unit
+  SUBTYPE OF (Unit);
+END_ENTITY;
+
+ENTITY Length_unit
+  SUBTYPE OF (Unit);
+END_ENTITY;
+
+ENTITY Luminous_intensity_unit
+  SUBTYPE OF (Unit);
+END_ENTITY;
+
+ENTITY Mass_unit
+  SUBTYPE OF (Unit);
+END_ENTITY;
+
+ENTITY Plane_angle_unit
+  SUBTYPE OF (Unit);
+END_ENTITY;
+
+ENTITY Ratio_unit
+  SUBTYPE OF (Unit);
+END_ENTITY;
+
+ENTITY Solid_angle_unit
+  SUBTYPE OF (Unit);
+END_ENTITY;
+
+ENTITY Thermodynamic_temperature_unit
+  SUBTYPE OF (Unit);
+END_ENTITY;
+
+ENTITY Time_unit
+  SUBTYPE OF (Unit);
+END_ENTITY;
+
+ENTITY Uncertainty_with_unit
+  SUBTYPE OF (Value_with_unit);
+  name : STRING;
+  description : OPTIONAL STRING;
+END_ENTITY;
+
+ENTITY Unit
+  SUPERTYPE OF (ONEOF (Amount_of_substance_unit,
+                       Electric_current_unit,
+                       Length_unit,
+                       Luminous_intensity_unit,
+                       Mass_unit,
+                       Plane_angle_unit,
+                       Ratio_unit,
+                       Solid_angle_unit,
+                       Thermodynamic_temperature_unit,
+                       Time_unit));
+  name : STRING;
+  si_unit : BOOLEAN;
+END_ENTITY;
+
+ENTITY Value_with_unit;
+  unit : Unit;
+  value_component : measure_value;
+END_ENTITY;
+
+END_SCHEMA;  -- Value_with_unit_arm

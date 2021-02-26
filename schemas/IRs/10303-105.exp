@@ -1,0 +1,1850 @@
+(* 
+Part 105 express
+WG12 N587
+This corresponds to ISO 10303-105:1996/Cor.2:2000 contained in WG12 N586.
+
+*)
+
+SCHEMA kinematic_structure_schema;
+
+REFERENCE FROM geometry_schema
+    (axis2_placement_3d,
+     cartesian_transformation_operator_3d,
+     curve,
+     direction,
+     geometric_representation_context,
+     geometric_representation_item,
+     normalise,
+     point,
+     point_on_curve,
+     point_on_surface,
+     surface,
+     rectangular_trimmed_surface,
+     trimmed_curve);
+
+REFERENCE FROM measure_schema
+    (conversion_based_unit,
+     global_unit_assigned_context,
+     length_measure,
+     plane_angle_measure,
+     si_prefix,
+     si_unit,
+     si_unit_name,
+     unit);
+
+REFERENCE FROM product_property_definition_schema
+    (characterized_definition,
+     property_definition);
+
+REFERENCE FROM product_property_representation_schema
+    (property_definition_representation);
+
+REFERENCE FROM representation_schema
+    (functionally_defined_transformation,
+     item_defined_transformation,
+     representation,
+     representation_context,
+     representation_item,
+     representation_relationship,
+     representation_relationship_with_transformation);
+
+REFERENCE FROM support_resource_schema
+    (bag_to_set,
+     label);
+
+TYPE rigid_placement = SELECT
+  (axis2_placement_3d,
+   su_parameters);
+END_TYPE;
+
+TYPE rotational_range_measure = SELECT
+  (plane_angle_measure,
+   unlimited_range);
+END_TYPE;
+
+TYPE translational_range_measure = SELECT
+  (length_measure,
+   unlimited_range);
+END_TYPE;
+
+TYPE unlimited_range = ENUMERATION OF
+  (unlimited);
+END_TYPE;
+
+TYPE spatial_rotation = SELECT
+  (ypr_rotation,
+   rotation_about_direction);
+END_TYPE;
+
+TYPE ypr_enumeration = ENUMERATION OF
+  (yaw,
+   pitch,
+   roll);
+END_TYPE;
+
+TYPE ypr_rotation = ARRAY [ypr_index(yaw) : ypr_index(roll)]
+                    OF plane_angle_measure;
+END_TYPE;
+
+TYPE kinematic_frame_background = SELECT
+  (point,
+   curve,
+   surface);
+END_TYPE;
+
+ENTITY rotation_about_direction;
+  direction_of_axis : direction;
+  rotation_angle    : plane_angle_measure;
+WHERE
+  WR1: SIZEOF (direction_of_axis.direction_ratios) = 3;
+END_ENTITY;
+
+ENTITY kinematic_property_definition
+  SUBTYPE OF (property_definition);
+  ground_definition : characterized_definition;
+END_ENTITY;
+
+ENTITY kinematic_property_representation_relation
+  SUBTYPE OF (property_definition_representation);
+UNIQUE
+  UR1: SELF\property_definition_representation.definition;
+WHERE
+  WR1: 'KINEMATIC_STRUCTURE_SCHEMA.KINEMATIC_PROPERTY_DEFINITION'
+         IN TYPEOF (SELF\property_definition_representation.definition);
+  WR2: 'KINEMATIC_STRUCTURE_SCHEMA.KINEMATIC_GROUND_REPRESENTATION'
+         IN TYPEOF (SELF\property_definition_representation.used_representation);
+END_ENTITY;
+
+ENTITY kinematic_ground_representation
+  SUBTYPE OF (representation);
+INVERSE
+  property : kinematic_property_representation_relation FOR used_representation;
+WHERE
+  WR1: 'GEOMETRY_SCHEMA.GEOMETRIC_REPRESENTATION_CONTEXT' IN
+       TYPEOF (SELF\representation.context_of_items);
+END_ENTITY;
+
+ENTITY mechanism;
+  structure_definition : kinematic_structure;
+  base                 : kinematic_link;
+  containing_property  : kinematic_property_definition;
+WHERE
+  WR1: SIZEOF (QUERY (joint <* structure_definition.joints |
+               (base :=: joint.first_link) OR
+               (base :=: joint.second_link) )) > 0;
+END_ENTITY;
+
+ENTITY mechanism_base_placement
+  SUBTYPE OF (representation_relationship_with_transformation);
+  base_of_mechanism         : mechanism;
+  SELF\representation_relationship_with_transformation.
+    transformation_operator : cartesian_transformation_operator_3d;
+DERIVE
+  SELF\representation_relationship.rep_2
+                            : kinematic_link_representation
+                            := representation_of_link (base_of_mechanism.base);
+UNIQUE
+  UR1: base_of_mechanism;
+WHERE
+  WR1: ('KINEMATIC_STRUCTURE_SCHEMA.KINEMATIC_GROUND_REPRESENTATION' IN
+         TYPEOF (SELF\representation_relationship.rep_1))
+       OR
+       ('KINEMATIC_STRUCTURE_SCHEMA.KINEMATIC_LINK_REPRESENTATION' IN
+         TYPEOF (SELF\representation_relationship.rep_1));
+  WR2: suitably_based_mechanism (SELF, base_of_mechanism);
+  WR3: SELF\representation_relationship_with_transformation.
+         transformation_operator IN
+       SELF\representation_relationship.rep_1.items;
+END_ENTITY;
+
+ENTITY initial_state;
+  applies_to_mechanism : mechanism;
+  pair_values          : SET [1 : ?] OF pair_value;
+WHERE
+  WR1: SIZEOF (QUERY (joint <* applies_to_mechanism.structure_definition.joints |
+               SIZEOF (QUERY (init_val <* pair_values |
+                       init_val.applies_to_pair.joint :=: joint)) <> 1)) = 0;
+END_ENTITY;
+
+ENTITY kinematic_structure;
+  joints : SET [1 : ?] OF kinematic_joint;
+END_ENTITY;
+
+ENTITY kinematic_joint ;
+  first_link  : kinematic_link;
+  second_link : kinematic_link;
+INVERSE
+  structure   : kinematic_structure FOR joints;
+WHERE
+  WR1: first_link :<>: second_link;
+END_ENTITY;
+
+ENTITY kinematic_link;
+WHERE
+  WR1: SIZEOF (USEDIN (SELF,
+                 'KINEMATIC_STRUCTURE_SCHEMA.KINEMATIC_JOINT.FIRST_LINK') +
+               USEDIN (SELF,
+                 'KINEMATIC_STRUCTURE_SCHEMA.KINEMATIC_JOINT.SECOND_LINK')) > 0;
+  WR2: unique_link_usage (SELF);
+END_ENTITY;
+
+ENTITY kinematic_link_representation_relation;
+  topological_aspects : kinematic_link;
+  geometric_aspects   : kinematic_link_representation;
+UNIQUE
+  UR1: topological_aspects;
+END_ENTITY;
+
+ENTITY kinematic_link_representation
+  SUBTYPE OF (representation);
+  SELF\representation.context_of_items :  geometric_representation_context;
+DERIVE
+  link_frame                  :  geometric_representation_context
+                              := SELF\representation.context_of_items;
+INVERSE
+  link_representation_relation :
+        kinematic_link_representation_relation FOR geometric_aspects;
+WHERE
+  WR1: SIZEOF (QUERY (item <* SELF\representation.items |
+               NOT (('KINEMATIC_STRUCTURE_SCHEMA.RIGID_PLACEMENT' IN
+                      TYPEOF (item))
+                    OR
+ ('GEOMETRY_SCHEMA.CARTESIAN_TRANSFORMATION_OPERATOR_3D' IN
+                      TYPEOF (item))) )) = 0;
+END_ENTITY;
+
+ENTITY kinematic_link_representation_association
+  SUBTYPE OF (representation_relationship);
+  SELF\representation_relationship.rep_1 : kinematic_link_representation;
+WHERE
+  WR1: SELF\representation_relationship.rep_2.context_of_items :=:
+       SELF\representation_relationship.rep_1\representation.context_of_items;
+  WR2: SIZEOF (['KINEMATIC_STRUCTURE_SCHEMA.KINEMATIC_GROUND_REPRESENTATION',
+                'KINEMATIC_STRUCTURE_SCHEMA.KINEMATIC_LINK_REPRESENTATION'] *
+               TYPEOF (SELF\representation_relationship.rep_2)) = 0;
+END_ENTITY;
+
+ENTITY kinematic_frame_background_representation
+  SUBTYPE OF (representation);
+  SELF\representation.items            : SET [1 : ?] OF
+                                         kinematic_frame_background;
+  SELF\representation.context_of_items : geometric_representation_context;
+WHERE
+  WR1: SELF\representation.context_of_items\
+         geometric_representation_context.coordinate_space_dimension = 3;
+END_ENTITY;
+
+ENTITY kinematic_frame_based_transformation
+  SUBTYPE OF (geometric_representation_item,
+     functionally_defined_transformation);
+  transformator : rigid_placement;
+WHERE
+  WR1: SELF\geometric_representation_item.dim=3;
+END_ENTITY;
+
+ENTITY kinematic_frame_background_representation_association
+  SUBTYPE OF (representation_relationship_with_transformation);
+  SELF\representation_relationship_with_transformation.
+    transformation_operator : kinematic_frame_based_transformation;
+WHERE
+  WR1: 'KINEMATIC_STRUCTURE_SCHEMA.KINEMATIC_LINK_REPRESENTATION' IN
+         TYPEOF (SELF\representation_relationship.rep_1);
+  WR2: 'KINEMATIC_STRUCTURE_SCHEMA.KINEMATIC_FRAME_BACKGROUND_REPRESENTATION'
+         IN TYPEOF (SELF\representation_relationship.rep_2);
+  WR3: SELF\representation_relationship_with_transformation.
+           transformation_operator\kinematic_frame_based_transformation.
+           transformator IN
+         SELF\representation_relationship.rep_1.items;
+END_ENTITY;
+
+ENTITY su_parameters
+  SUBTYPE OF (geometric_representation_item);
+  a     : length_measure;
+  alpha : plane_angle_measure;
+  b     : length_measure;
+  beta  : plane_angle_measure;
+  c     : length_measure;
+  gamma : plane_angle_measure;
+WHERE
+  WR1: SELF\geometric_representation_item.dim=3;
+END_ENTITY;
+
+ENTITY kinematic_pair
+  SUBTYPE OF (item_defined_transformation);
+  joint : kinematic_joint;
+DERIVE
+  pair_placement_in_first_link_context
+        : rigid_placement
+        := SELF\item_defined_transformation.transform_item_1;
+  pair_placement_in_second_link_context
+        : rigid_placement
+        := SELF\item_defined_transformation.transform_item_2;
+UNIQUE
+  UR1: joint;
+WHERE
+  WR1: coordinated_pair_link_representation
+         (joint.first_link, pair_placement_in_first_link_context);
+  WR2: coordinated_pair_link_representation
+         (joint.second_link, pair_placement_in_second_link_context);
+END_ENTITY;
+
+ENTITY pair_actuator;
+  actuated_pair : kinematic_pair;
+  name          : label;
+UNIQUE
+  UR1: actuated_pair;
+END_ENTITY;
+
+ENTITY pair_value;
+  applies_to_pair : kinematic_pair;
+END_ENTITY;
+
+ENTITY simple_pair_range;
+  applies_to_pair : kinematic_pair;
+END_ENTITY;
+
+ENTITY revolute_pair
+  SUBTYPE OF (kinematic_pair);
+END_ENTITY;
+
+ENTITY revolute_pair_value
+  SUBTYPE OF (pair_value);
+  SELF\pair_value.applies_to_pair : revolute_pair;
+  actual_rotation                 : plane_angle_measure ;
+END_ENTITY;
+
+ENTITY revolute_pair_range
+  SUBTYPE OF (simple_pair_range);
+  SELF\simple_pair_range.applies_to_pair : revolute_pair;
+  lower_limit_actual_rotation            : rotational_range_measure;
+  upper_limit_actual_rotation            : rotational_range_measure;
+WHERE
+  WR1: (('KINEMATIC_STRUCTURE_SCHEMA.UNLIMITED_RANGE' IN
+         TYPEOF (lower_limit_actual_rotation))
+        OR
+        ('KINEMATIC_STRUCTURE_SCHEMA.UNLIMITED_RANGE' IN
+         TYPEOF (upper_limit_actual_rotation)))
+       XOR
+       (lower_limit_actual_rotation < upper_limit_actual_rotation);
+END_ENTITY;
+
+ENTITY prismatic_pair
+  SUBTYPE OF ( kinematic_pair);
+END_ENTITY;
+
+ENTITY prismatic_pair_value
+  SUBTYPE OF (pair_value);
+  SELF\pair_value.applies_to_pair : prismatic_pair;
+  actual_translation              : length_measure;
+END_ENTITY;
+
+ENTITY prismatic_pair_range
+  SUBTYPE OF (simple_pair_range);
+  SELF\simple_pair_range.applies_to_pair : prismatic_pair;
+  lower_limit_actual_translation         : translational_range_measure;
+  upper_limit_actual_translation         : translational_range_measure;
+WHERE
+  WR1: (('KINEMATIC_STRUCTURE_SCHEMA.UNLIMITED_RANGE' IN
+         TYPEOF (lower_limit_actual_translation))
+        OR
+        ('KINEMATIC_STRUCTURE_SCHEMA.UNLIMITED_RANGE' IN
+         TYPEOF (upper_limit_actual_translation)))
+       XOR
+       (lower_limit_actual_translation < upper_limit_actual_translation);
+END_ENTITY;
+
+ENTITY screw_pair
+  SUBTYPE OF (kinematic_pair);
+  pitch : length_measure;
+END_ENTITY;
+
+ENTITY screw_pair_value
+  SUBTYPE OF (pair_value);
+  SELF\pair_value.applies_to_pair : screw_pair;
+  actual_rotation                 : plane_angle_measure;
+DERIVE
+  actual_translation              : length_measure
+                                  := SELF\pair_value.applies_to_pair\
+                                     screw_pair.pitch *
+                                     plane_angle_for_pair_in_radian
+                                      (SELF\pair_value.applies_to_pair,
+                                       actual_rotation) / (2 * PI);
+END_ENTITY;
+
+ENTITY screw_pair_range
+  SUBTYPE OF (simple_pair_range);
+  SELF\simple_pair_range.applies_to_pair : screw_pair;
+  lower_limit_actual_rotation            : rotational_range_measure;
+  upper_limit_actual_rotation            : rotational_range_measure;
+WHERE
+  WR1: (('KINEMATIC_STRUCTURE_SCHEMA.UNLIMITED_RANGE' IN
+         TYPEOF (lower_limit_actual_rotation))
+        OR
+        ('KINEMATIC_STRUCTURE_SCHEMA.UNLIMITED_RANGE' IN
+         TYPEOF (upper_limit_actual_rotation)))
+       XOR
+       (lower_limit_actual_rotation < upper_limit_actual_rotation);
+END_ENTITY;
+
+ENTITY cylindrical_pair
+  SUBTYPE OF (kinematic_pair);
+END_ENTITY;
+
+ENTITY cylindrical_pair_value
+  SUBTYPE OF (pair_value);
+  SELF\pair_value.applies_to_pair : cylindrical_pair;
+  actual_translation              : length_measure;
+  actual_rotation                 : plane_angle_measure;
+END_ENTITY;
+
+ENTITY cylindrical_pair_range
+  SUBTYPE OF (simple_pair_range);
+  SELF\simple_pair_range.applies_to_pair : cylindrical_pair;
+  lower_limit_actual_translation         : translational_range_measure;
+  upper_limit_actual_translation         : translational_range_measure;
+  lower_limit_actual_rotation            : rotational_range_measure;
+  upper_limit_actual_rotation            : rotational_range_measure;
+WHERE
+  WR1: (('KINEMATIC_STRUCTURE_SCHEMA.UNLIMITED_RANGE' IN
+         TYPEOF (lower_limit_actual_translation))
+        OR
+        ('KINEMATIC_STRUCTURE_SCHEMA.UNLIMITED_RANGE' IN
+         TYPEOF (upper_limit_actual_translation)))
+       XOR
+       (lower_limit_actual_translation < upper_limit_actual_translation);
+  WR2: (('KINEMATIC_STRUCTURE_SCHEMA.UNLIMITED_RANGE' IN
+         TYPEOF (lower_limit_actual_rotation))
+        OR
+        ('KINEMATIC_STRUCTURE_SCHEMA.UNLIMITED_RANGE' IN
+         TYPEOF (upper_limit_actual_rotation)))
+       XOR
+       (lower_limit_actual_rotation < upper_limit_actual_rotation);
+END_ENTITY;
+
+ENTITY spherical_pair
+  SUBTYPE OF (kinematic_pair);
+END_ENTITY;
+
+ENTITY spherical_pair_value
+  SUBTYPE OF (pair_value);
+  SELF\pair_value.applies_to_pair : spherical_pair;
+  input_orientation               : spatial_rotation;
+DERIVE
+  actual_orientation              : ypr_rotation
+                                  := convert_spatial_to_ypr_rotation
+                                     (SELF\pair_value.applies_to_pair,
+                                      input_orientation);
+END_ENTITY;
+
+ENTITY spherical_pair_range
+  SUBTYPE OF (simple_pair_range);
+  SELF\simple_pair_range.applies_to_pair : spherical_pair;
+  lower_limit_yaw                        : rotational_range_measure;
+  upper_limit_yaw                        : rotational_range_measure;
+  lower_limit_pitch                      : rotational_range_measure;
+  upper_limit_pitch                      : rotational_range_measure;
+  lower_limit_roll                       : rotational_range_measure;
+  upper_limit_roll                       : rotational_range_measure;
+WHERE
+  WR1: (('KINEMATIC_STRUCTURE_SCHEMA.UNLIMITED_RANGE' IN
+         TYPEOF (lower_limit_yaw))
+        OR
+        ('KINEMATIC_STRUCTURE_SCHEMA.UNLIMITED_RANGE' IN
+         TYPEOF (upper_limit_yaw)))
+       XOR
+       (lower_limit_yaw < upper_limit_yaw);
+  WR2: (('KINEMATIC_STRUCTURE_SCHEMA.UNLIMITED_RANGE' IN
+         TYPEOF (lower_limit_pitch))
+        OR
+        ('KINEMATIC_STRUCTURE_SCHEMA.UNLIMITED_RANGE' IN
+         TYPEOF (upper_limit_pitch)))
+       XOR
+       (lower_limit_pitch < upper_limit_pitch);
+  WR3: (('KINEMATIC_STRUCTURE_SCHEMA.UNLIMITED_RANGE' IN
+         TYPEOF (lower_limit_roll))
+        OR
+        ('KINEMATIC_STRUCTURE_SCHEMA.UNLIMITED_RANGE' IN
+         TYPEOF (upper_limit_roll)))
+       XOR
+       (lower_limit_roll < upper_limit_roll);
+END_ENTITY;
+
+ENTITY universal_pair
+  SUBTYPE OF (kinematic_pair);
+  input_skew_angle : OPTIONAL plane_angle_measure;
+DERIVE
+  skew_angle       : plane_angle_measure := NVL (input_skew_angle, 0.0);
+WHERE
+  WR1: COS (plane_angle_for_pair_in_radian (SELF, skew_angle))
+       > 0.0;
+END_ENTITY;
+
+ENTITY universal_pair_value
+  SUBTYPE OF (pair_value);
+  SELF\pair_value.applies_to_pair : universal_pair;
+  first_rotation_angle            : plane_angle_measure;
+  second_rotation_angle           : plane_angle_measure;
+END_ENTITY;
+
+ENTITY universal_pair_range
+  SUBTYPE OF (simple_pair_range);
+  SELF\simple_pair_range.applies_to_pair : universal_pair;
+  lower_limit_first_rotation             : rotational_range_measure;
+  upper_limit_first_rotation             : rotational_range_measure;
+  lower_limit_second_rotation            : rotational_range_measure;
+  upper_limit_second_rotation            : rotational_range_measure;
+WHERE
+  WR1: (('KINEMATIC_STRUCTURE_SCHEMA.UNLIMITED_RANGE' IN
+         TYPEOF (lower_limit_first_rotation))
+        OR
+        ('KINEMATIC_STRUCTURE_SCHEMA.UNLIMITED_RANGE' IN
+         TYPEOF (upper_limit_first_rotation)))
+       XOR
+       (lower_limit_first_rotation < upper_limit_first_rotation);
+  WR2: (('KINEMATIC_STRUCTURE_SCHEMA.UNLIMITED_RANGE' IN
+         TYPEOF (lower_limit_second_rotation))
+        OR
+        ('KINEMATIC_STRUCTURE_SCHEMA.UNLIMITED_RANGE' IN
+         TYPEOF (upper_limit_second_rotation)))
+       XOR
+       (lower_limit_second_rotation < upper_limit_second_rotation);
+END_ENTITY;
+
+ENTITY planar_pair
+  SUBTYPE OF (kinematic_pair);
+END_ENTITY;
+
+ENTITY planar_pair_value
+  SUBTYPE OF (pair_value);
+  SELF\pair_value.applies_to_pair : planar_pair;
+  actual_rotation                 : plane_angle_measure;
+  actual_translation_x            : length_measure;
+  actual_translation_y            : length_measure;
+END_ENTITY;
+
+ENTITY planar_pair_range
+  SUBTYPE OF (simple_pair_range);
+  SELF\simple_pair_range.applies_to_pair : planar_pair;
+  lower_limit_actual_rotation            : rotational_range_measure;
+  upper_limit_actual_rotation            : rotational_range_measure;
+  lower_limit_actual_translation_x       : translational_range_measure;
+  upper_limit_actual_translation_x       : translational_range_measure;
+  lower_limit_actual_translation_y       : translational_range_measure;
+  upper_limit_actual_translation_y       : translational_range_measure;
+WHERE
+  WR1: (('KINEMATIC_STRUCTURE_SCHEMA.UNLIMITED_RANGE' IN
+         TYPEOF (lower_limit_actual_rotation))
+        OR
+        ('KINEMATIC_STRUCTURE_SCHEMA.UNLIMITED_RANGE' IN
+         TYPEOF (upper_limit_actual_rotation)))
+       XOR
+       (lower_limit_actual_rotation < upper_limit_actual_rotation);
+  WR2: (('KINEMATIC_STRUCTURE_SCHEMA.UNLIMITED_RANGE' IN
+         TYPEOF (lower_limit_actual_translation_x))
+        OR
+        ('KINEMATIC_STRUCTURE_SCHEMA.UNLIMITED_RANGE' IN
+         TYPEOF (upper_limit_actual_translation_x)))
+       XOR
+       (lower_limit_actual_translation_x < upper_limit_actual_translation_x);
+  WR3: (('KINEMATIC_STRUCTURE_SCHEMA.UNLIMITED_RANGE' IN
+         TYPEOF (lower_limit_actual_translation_y))
+        OR
+        ('KINEMATIC_STRUCTURE_SCHEMA.UNLIMITED_RANGE' IN
+         TYPEOF (upper_limit_actual_translation_y)))
+       XOR
+       (lower_limit_actual_translation_y < upper_limit_actual_translation_y);
+END_ENTITY;
+
+ENTITY unconstrained_pair
+  SUBTYPE OF (kinematic_pair);
+END_ENTITY;
+
+ENTITY unconstrained_pair_value
+  SUBTYPE OF (pair_value);
+  SELF\pair_value.applies_to_pair : unconstrained_pair;
+  actual_placement                : axis2_placement_3d;
+END_ENTITY;
+
+ENTITY fully_constrained_pair
+  SUBTYPE OF (kinematic_pair);
+END_ENTITY;
+
+ENTITY point_on_surface_pair
+  SUBTYPE OF (kinematic_pair);
+  pair_surface : surface;
+WHERE
+  WR1: frame_associated_to_background
+         (SELF\kinematic_pair.pair_placement_in_first_link_context,
+         pair_surface);
+END_ENTITY;
+
+ENTITY point_on_surface_pair_value
+  SUBTYPE OF (pair_value);
+  SELF\pair_value.applies_to_pair : point_on_surface_pair;
+  actual_point_on_surface         : point_on_surface;
+  input_orientation               : spatial_rotation;
+DERIVE
+  actual_orientation              : ypr_rotation
+                                  := convert_spatial_to_ypr_rotation
+                                     (SELF\pair_value.applies_to_pair,
+                                      input_orientation);
+WHERE
+  WR1: SELF\pair_value.applies_to_pair\point_on_surface_pair.pair_surface :=:
+       actual_point_on_surface.basis_surface;
+END_ENTITY;
+
+ENTITY point_on_surface_pair_range
+  SUBTYPE OF (simple_pair_range);
+  SELF\simple_pair_range.applies_to_pair : point_on_surface_pair;
+  range_on_pair_surface                  : rectangular_trimmed_surface;
+  lower_limit_yaw                        : rotational_range_measure;
+  upper_limit_yaw                        : rotational_range_measure;
+  lower_limit_pitch                      : rotational_range_measure;
+  upper_limit_pitch                      : rotational_range_measure;
+  lower_limit_roll                       : rotational_range_measure;
+  upper_limit_roll                       : rotational_range_measure;
+WHERE
+  WR1: SELF\simple_pair_range.applies_to_pair\point_on_surface_pair.pair_surface
+       :=: range_on_pair_surface.basis_surface;
+  WR2: (('KINEMATIC_STRUCTURE_SCHEMA.UNLIMITED_RANGE' IN
+         TYPEOF (lower_limit_yaw))
+        OR
+        ('KINEMATIC_STRUCTURE_SCHEMA.UNLIMITED_RANGE' IN
+         TYPEOF (upper_limit_yaw)))
+       XOR
+       (lower_limit_yaw < upper_limit_yaw);
+  WR3: (('KINEMATIC_STRUCTURE_SCHEMA.UNLIMITED_RANGE' IN
+         TYPEOF (lower_limit_pitch))
+        OR
+        ('KINEMATIC_STRUCTURE_SCHEMA.UNLIMITED_RANGE' IN
+         TYPEOF (upper_limit_pitch)))
+       XOR
+       (lower_limit_pitch < upper_limit_pitch);
+  WR4: (('KINEMATIC_STRUCTURE_SCHEMA.UNLIMITED_RANGE' IN
+         TYPEOF (lower_limit_roll))
+        OR
+        ('KINEMATIC_STRUCTURE_SCHEMA.UNLIMITED_RANGE' IN
+         TYPEOF (upper_limit_roll)))
+       XOR
+       (lower_limit_roll < upper_limit_roll);
+END_ENTITY;
+
+ENTITY surface_pair
+  SUBTYPE OF ( kinematic_pair);
+  surface_1   : surface;
+  surface_2   : surface;
+  orientation : BOOLEAN;
+WHERE
+  WR1: frame_associated_to_background
+         (SELF\kinematic_pair.pair_placement_in_first_link_context,
+          surface_1);
+  WR2: frame_associated_to_background
+         (SELF\kinematic_pair.pair_placement_in_second_link_context,
+          surface_2);
+END_ENTITY;
+
+ENTITY surface_pair_range
+  SUBTYPE OF (simple_pair_range);
+  SELF\simple_pair_range.applies_to_pair : surface_pair;
+  range_on_surface_1                     : rectangular_trimmed_surface;
+  range_on_surface_2                     : rectangular_trimmed_surface;
+  lower_limit_actual_rotation            : rotational_range_measure;
+  upper_limit_actual_rotation            : rotational_range_measure;
+WHERE
+  WR1: SELF\simple_pair_range.applies_to_pair\surface_pair.surface_1 :=:
+       range_on_surface_1.basis_surface;
+  WR2: SELF\simple_pair_range.applies_to_pair\surface_pair.surface_2 :=:
+       range_on_surface_2.basis_surface;
+  WR3: (('KINEMATIC_STRUCTURE_SCHEMA.UNLIMITED_RANGE' IN
+         TYPEOF (lower_limit_actual_rotation))
+        OR
+        ('KINEMATIC_STRUCTURE_SCHEMA.UNLIMITED_RANGE' IN
+         TYPEOF (upper_limit_actual_rotation)))
+       XOR
+       (lower_limit_actual_rotation < upper_limit_actual_rotation);
+END_ENTITY;
+
+ENTITY sliding_surface_pair
+  SUBTYPE OF (surface_pair);
+END_ENTITY;
+
+ENTITY sliding_surface_pair_value
+  SUBTYPE OF (pair_value);
+  SELF\pair_value.applies_to_pair : sliding_surface_pair;
+  actual_point_on_surface_1       : point_on_surface;
+  actual_point_on_surface_2       : point_on_surface;
+  actual_rotation                 : plane_angle_measure;
+WHERE
+  WR1: SELF\pair_value.applies_to_pair\surface_pair.surface_1 :=:
+       actual_point_on_surface_1.basis_surface;
+  WR2: SELF\pair_value.applies_to_pair\surface_pair.surface_2 :=:
+       actual_point_on_surface_2.basis_surface;
+END_ENTITY;
+
+ENTITY rolling_surface_pair
+  SUBTYPE OF (surface_pair);
+END_ENTITY;
+
+ENTITY rolling_surface_pair_value
+  SUBTYPE OF (pair_value);
+  SELF\pair_value.applies_to_pair : rolling_surface_pair;
+  actual_point_on_surface         : point_on_surface;
+  actual_rotation                 : plane_angle_measure;
+WHERE
+  WR1: SELF\pair_value.applies_to_pair\surface_pair.surface_1 :=:
+       actual_point_on_surface.basis_surface;
+END_ENTITY;
+
+ENTITY point_on_planar_curve_pair
+  SUBTYPE OF (kinematic_pair);
+  pair_curve  : curve;
+  orientation : BOOLEAN;
+WHERE
+  WR1: frame_associated_to_background
+         (SELF\kinematic_pair.pair_placement_in_first_link_context,
+         pair_curve);
+END_ENTITY;
+
+ENTITY point_on_planar_curve_pair_value
+  SUBTYPE OF (pair_value);
+  SELF\pair_value.applies_to_pair : point_on_planar_curve_pair;
+  actual_point_on_curve           : point_on_curve;
+  input_orientation               : spatial_rotation;
+DERIVE
+  actual_orientation              : ypr_rotation
+                                  := convert_spatial_to_ypr_rotation
+                                     (SELF\pair_value.applies_to_pair,
+                                      input_orientation);
+WHERE
+  WR1: SELF\pair_value.applies_to_pair\point_on_planar_curve_pair.pair_curve
+       :=: actual_point_on_curve.basis_curve;
+END_ENTITY;
+
+ENTITY point_on_planar_curve_pair_range
+  SUBTYPE OF (simple_pair_range);
+  SELF\simple_pair_range.applies_to_pair : point_on_planar_curve_pair;
+  range_on_pair_curve                    : trimmed_curve;
+  lower_limit_yaw                        : rotational_range_measure;
+  upper_limit_yaw                        : rotational_range_measure;
+  lower_limit_pitch                      : rotational_range_measure;
+  upper_limit_pitch                      : rotational_range_measure;
+  lower_limit_roll                       : rotational_range_measure;
+  upper_limit_roll                       : rotational_range_measure;
+WHERE
+  WR1: SELF\simple_pair_range.applies_to_pair\
+           point_on_planar_curve_pair.pair_curve
+       :=: range_on_pair_curve.basis_curve;
+  WR2: (('KINEMATIC_STRUCTURE_SCHEMA.UNLIMITED_RANGE' IN
+         TYPEOF (lower_limit_yaw))
+        OR
+        ('KINEMATIC_STRUCTURE_SCHEMA.UNLIMITED_RANGE' IN
+         TYPEOF (upper_limit_yaw)))
+       XOR
+       (lower_limit_yaw < upper_limit_yaw);
+  WR3: (('KINEMATIC_STRUCTURE_SCHEMA.UNLIMITED_RANGE' IN
+         TYPEOF (lower_limit_pitch))
+        OR
+        ('KINEMATIC_STRUCTURE_SCHEMA.UNLIMITED_RANGE' IN
+         TYPEOF (upper_limit_pitch)))
+       XOR
+       (lower_limit_pitch < upper_limit_pitch);
+  WR4: (('KINEMATIC_STRUCTURE_SCHEMA.UNLIMITED_RANGE' IN
+         TYPEOF (lower_limit_roll))
+        OR
+        ('KINEMATIC_STRUCTURE_SCHEMA.UNLIMITED_RANGE' IN
+         TYPEOF (upper_limit_roll)))
+       XOR
+       (lower_limit_roll < upper_limit_roll);
+END_ENTITY;
+
+ENTITY planar_curve_pair
+  SUBTYPE OF (kinematic_pair);
+  curve_1     : curve;
+  curve_2     : curve;
+  orientation : BOOLEAN;
+WHERE
+  WR1: frame_associated_to_background
+         (SELF\kinematic_pair.pair_placement_in_first_link_context,
+          curve_1);
+  WR2: frame_associated_to_background
+         (SELF\kinematic_pair.pair_placement_in_second_link_context,
+          curve_2);
+END_ENTITY;
+
+ENTITY planar_curve_pair_range
+  SUBTYPE OF (simple_pair_range);
+  SELF\simple_pair_range.applies_to_pair : planar_curve_pair;
+  range_on_curve_1                       : trimmed_curve;
+  range_on_curve_2                       : trimmed_curve;
+WHERE
+  WR1: SELF\simple_pair_range.applies_to_pair\planar_curve_pair.curve_1 :=:
+       range_on_curve_1.basis_curve;
+  WR2: SELF\simple_pair_range.applies_to_pair\planar_curve_pair.curve_2 :=:
+       range_on_curve_2.basis_curve;
+END_ENTITY;
+
+ENTITY sliding_curve_pair
+  SUBTYPE OF (planar_curve_pair);
+END_ENTITY;
+
+ENTITY sliding_curve_pair_value
+  SUBTYPE OF (pair_value);
+  SELF\pair_value.applies_to_pair : sliding_curve_pair;
+  actual_point_on_curve_1         : point_on_curve;
+  actual_point_on_curve_2         : point_on_curve;
+WHERE
+  WR1: SELF\pair_value.applies_to_pair\planar_curve_pair.curve_1 :=:
+       actual_point_on_curve_1.basis_curve;
+  WR2: SELF\pair_value.applies_to_pair\planar_curve_pair.curve_2 :=:
+       actual_point_on_curve_2.basis_curve;
+END_ENTITY;
+
+ENTITY rolling_curve_pair
+  SUBTYPE OF (planar_curve_pair);
+END_ENTITY;
+
+ENTITY rolling_curve_pair_value
+  SUBTYPE OF (pair_value);
+  SELF\pair_value.applies_to_pair : rolling_curve_pair;
+  actual_point_on_curve_1         : point_on_curve;
+WHERE
+  WR1: SELF\pair_value.applies_to_pair\planar_curve_pair.curve_1 :=:
+       actual_point_on_curve_1.basis_curve;
+END_ENTITY;
+
+ENTITY gear_pair
+  SUBTYPE OF (kinematic_pair);
+  radius_first_link  : length_measure;
+  radius_second_link : length_measure;
+  bevel              : plane_angle_measure;
+  helical_angle      : plane_angle_measure;
+  gear_ratio         : REAL;
+END_ENTITY;
+
+ENTITY gear_pair_value
+  SUBTYPE OF (pair_value);
+  SELF\pair_value.applies_to_pair : gear_pair;
+  actual_rotation_1               : plane_angle_measure;
+DERIVE
+  actual_rotation_2               : plane_angle_measure
+                                  := - actual_rotation_1 *
+                                     SELF\pair_value.applies_to_pair\
+                                     gear_pair.gear_ratio;
+END_ENTITY;
+
+ENTITY gear_pair_range
+  SUBTYPE OF (simple_pair_range);
+  SELF\simple_pair_range.applies_to_pair : gear_pair;
+  lower_limit_actual_rotation_1          : rotational_range_measure;
+  upper_limit_actual_rotation_1          : rotational_range_measure;
+WHERE
+  WR1: (('KINEMATIC_STRUCTURE_SCHEMA.UNLIMITED_RANGE' IN
+         TYPEOF (lower_limit_actual_rotation_1))
+        OR
+        ('KINEMATIC_STRUCTURE_SCHEMA.UNLIMITED_RANGE' IN
+         TYPEOF (upper_limit_actual_rotation_1)))
+       XOR
+       (lower_limit_actual_rotation_1 <
+        upper_limit_actual_rotation_1);
+END_ENTITY;
+
+ENTITY rack_and_pinion_pair
+  SUBTYPE OF (kinematic_pair);
+  pinion_radius : length_measure;
+END_ENTITY;
+
+ENTITY rack_and_pinion_pair_value
+  SUBTYPE OF (pair_value);
+  SELF\pair_value.applies_to_pair : rack_and_pinion_pair;
+  actual_displacement             : length_measure;
+DERIVE
+  actual_rotation : plane_angle_measure
+                  := convert_plane_angle_for_pair_from_radian
+                     (SELF\pair_value.applies_to_pair,
+                      (- actual_displacement /
+                       SELF\pair_value.applies_to_pair\
+                       rack_and_pinion_pair.pinion_radius));
+END_ENTITY;
+
+ENTITY rack_and_pinion_pair_range
+  SUBTYPE OF (simple_pair_range);
+  SELF\simple_pair_range.applies_to_pair : rack_and_pinion_pair;
+  lower_limit_rack_displacement          : translational_range_measure;
+  upper_limit_rack_displacement          : translational_range_measure;
+WHERE
+  WR1: (('KINEMATIC_STRUCTURE_SCHEMA.UNLIMITED_RANGE' IN
+         TYPEOF (lower_limit_rack_displacement))
+        OR
+        ('KINEMATIC_STRUCTURE_SCHEMA.UNLIMITED_RANGE' IN
+         TYPEOF (upper_limit_rack_displacement)))
+       XOR
+       (lower_limit_rack_displacement < upper_limit_rack_displacement);
+END_ENTITY;
+
+ENTITY kinematic_substructure
+  SUPERTYPE OF (ONEOF (kinematic_tree_structure,
+                       kinematic_network_structure));
+  parent_structure : kinematic_structure;
+END_ENTITY;
+
+ENTITY kinematic_network_structure
+  SUBTYPE OF (kinematic_substructure);
+END_ENTITY;
+
+ENTITY kinematic_tree_structure
+  SUBTYPE OF (kinematic_substructure);
+END_ENTITY;
+
+ENTITY kinematic_loop;
+  network : kinematic_network_structure;
+WHERE
+ WR1 : SIZEOF(USEDIN(SELF,
+   'KINEMATIC_STRUCTURE_SCHEMA.JOINT_LOGICAL_RELATIONSHIP.LOOP')) > 0;
+ WR2 : SIZEOF (QUERY( relation_1 <* USEDIN(SELF,
+    'KINEMATIC_STRUCTURE_SCHEMA.JOINT_LOGICAL_RELATIONSHIP.LOOP') |
+         SIZEOF (QUERY (relation_2 <*  (USEDIN(SELF, 
+         'KINEMATIC_STRUCTURE_SCHEMA.JOINT_LOGICAL_RELATIONSHIP.LOOP')
+              - relation_1) |
+              NOT(connected_in_simple_loop (relation_1, relation_2))
+         )) > 0 
+       )) = 0;
+END_ENTITY;
+
+ENTITY joint_logical_relationship;
+  loop                             : kinematic_loop;
+  previous_joint_logical_structure : oriented_joint;
+  next_joint_logical_structure     : oriented_joint;
+UNIQUE
+  UR1: loop, previous_joint_logical_structure;
+  UR2: loop, next_joint_logical_structure;
+WHERE
+  WR1: previous_joint_logical_structure.exit_link :=:
+       next_joint_logical_structure.advent_link;
+END_ENTITY;
+
+ENTITY oriented_joint;
+  joint       : kinematic_joint;
+  orientation : BOOLEAN;
+DERIVE
+  advent_link : kinematic_link
+              := assign_directed_link (joint, orientation);
+  exit_link   : kinematic_link
+              := assign_directed_link (joint, NOT (orientation));
+END_ENTITY;
+
+ENTITY oriented_joint_in_tree
+  SUBTYPE OF (oriented_joint);
+  parent_structure : kinematic_tree_structure;
+END_ENTITY;
+
+ENTITY advent_oriented_joint
+  SUBTYPE OF (oriented_joint);
+END_ENTITY;
+
+FUNCTION ypr_index (ypr : ypr_enumeration) : INTEGER;
+  CASE ypr OF
+    yaw    : RETURN (1);
+    pitch  : RETURN (2);
+    roll   : RETURN (3);
+  END_CASE;
+  RETURN (?);
+END_FUNCTION;
+
+FUNCTION representation_of_link (link : kinematic_link)
+    : kinematic_link_representation;
+  LOCAL
+    link_rep_rel : BAG OF kinematic_link_representation_relation;
+  END_LOCAL;
+
+  link_rep_rel := USEDIN (link, 'KINEMATIC_STRUCTURE_SCHEMA.'+
+                                'KINEMATIC_LINK_REPRESENTATION_RELATION.'+
+                                'TOPOLOGICAL_ASPECTS');
+  IF (SIZEOF (link_rep_rel) = 0) THEN
+    RETURN (?);
+  ELSE
+    RETURN (link_rep_rel[1].geometric_aspects);
+  END_IF;
+END_FUNCTION;
+
+FUNCTION suitably_based_mechanism (mbp  : mechanism_base_placement;
+                                   mech : mechanism) : BOOLEAN;
+  LOCAL
+    kprop  : kinematic_property_definition;
+    kgrep  : kinematic_ground_representation;
+    klrep  : kinematic_link_representation;
+    klnk   : kinematic_link;
+    kjnts  : BAG OF kinematic_joint;
+    nmechs : BAG OF mechanism;
+    nmbps  : BAG OF mechanism_base_placement;
+  END_LOCAL;
+
+  kprop := mech.containing_property;
+
+  IF ('KINEMATIC_STRUCTURE_SCHEMA.KINEMATIC_GROUND_REPRESENTATION' IN
+      TYPEOF (mbp\representation_relationship.rep_1)) THEN
+      kgrep := mbp\representation_relationship.rep_1;
+
+    IF (kgrep.property\property_definition_representation.definition
+        :=: kprop) THEN
+      RETURN (TRUE);
+    ELSE
+      RETURN (FALSE);
+    END_IF;
+  ELSE
+    klrep := mbp\representation_relationship.rep_1;
+    klnk   := klrep.link_representation_relation.topological_aspects;
+    kjnts  := USEDIN (klnk,
+            'KINEMATIC_STRUCTURE_SCHEMA.KINEMATIC_JOINT.FIRST_LINK') +
+              USEDIN (klnk,
+            'KINEMATIC_STRUCTURE_SCHEMA.KINEMATIC_JOINT.SECOND_LINK');
+    nmechs := USEDIN (kjnts[1].structure,
+         'KINEMATIC_STRUCTURE_SCHEMA.MECHANISM.STRUCTURE_DEFINITION');
+
+    IF (nmechs[1] :=: mech) THEN
+      RETURN (FALSE);
+    ELSE
+      IF (nmechs[1].containing_property :<>: kprop) THEN
+        RETURN (FALSE);
+      ELSE
+        nmbps := USEDIN (nmechs[1], 'KINEMATIC_STRUCTURE_SCHEMA.'+
+                        'MECHANISM_BASE_PLACEMENT.BASE_OF_MECHANISM');
+
+        IF (SIZEOF (nmbps) = 0) THEN
+          RETURN (FALSE);
+        ELSE
+          RETURN (suitably_based_mechanism (nmbps[1], mech));
+        END_IF;
+      END_IF;
+    END_IF;
+  END_IF;
+END_FUNCTION;
+
+FUNCTION unique_link_usage (link : kinematic_link) : BOOLEAN;
+  LOCAL
+    mechs  : SET OF mechanism;
+    joints : SET OF kinematic_joint;
+    struct : kinematic_structure;
+  END_LOCAL;
+  joints := bag_to_set
+              (USEDIN (link,
+                 'KINEMATIC_STRUCTURE_SCHEMA.KINEMATIC_JOINT.FIRST_LINK') +
+               USEDIN (link,
+                 'KINEMATIC_STRUCTURE_SCHEMA.KINEMATIC_JOINT.SECOND_LINK'));
+  struct := joints[1].structure;
+  REPEAT i := 2 TO SIZEOF (joints);
+    IF (joints[i].structure :<>: struct) THEN
+      RETURN (FALSE);
+    END_IF;
+  END_REPEAT;
+  mechs := bag_to_set
+             (USEDIN (struct,
+                'KINEMATIC_STRUCTURE_SCHEMA.MECHANISM.STRUCTURE_DEFINITION'));
+  IF (SIZEOF (mechs) <> 1) THEN
+    RETURN (FALSE);
+  END_IF;
+
+  RETURN (TRUE);
+
+END_FUNCTION;
+
+FUNCTION coordinated_pair_link_representation
+    (link           : kinematic_link;
+     pair_placement : rigid_placement) : BOOLEAN;
+  LOCAL
+    link_rep : kinematic_link_representation;
+  END_LOCAL;
+
+  link_rep := representation_of_link (link);
+
+  IF (link_rep = ?) THEN
+    RETURN (FALSE);
+  ELSE
+    IF NOT (pair_placement IN link_rep\representation.items) THEN
+      RETURN (FALSE);
+    ELSE
+      RETURN (TRUE);
+    END_IF;
+  END_IF;
+END_FUNCTION;
+
+FUNCTION frame_associated_to_background
+  (frame      : rigid_placement;
+   background : kinematic_frame_background) : BOOLEAN;
+  LOCAL
+    rep_bag : BAG OF kinematic_frame_background_representation;
+    trf_bag : BAG OF kinematic_frame_based_transformation;
+    trm_bag : BAG OF kinematic_frame_based_transformation;
+    ass_bag : BAG OF
+              kinematic_frame_background_representation_association;
+    rep     : kinematic_frame_background_representation;
+    ass     : kinematic_frame_background_representation_association;
+  END_LOCAL;
+
+  rep_bag := QUERY ( bg <* USEDIN (background,
+                     'KINEMATIC_STRUCTURE_SCHEMA.' +
+                     'REPRESENTATION.ITEMS')|
+                     'KINEMATIC_STRUCTURE_SCHEMA.'+
+                     'KINEMATIC_FRAME_BACKGROUND_REPRESENTATION' 
+                      IN TYPEOF (bg) );
+
+  IF SIZEOF (rep_bag) = 0 THEN
+    RETURN (FALSE);
+  END_IF;
+
+  trf_bag := USEDIN (frame,
+                     'KINEMATIC_STRUCTURE_SCHEMA.' +
+                     'KINEMATIC_FRAME_BASED_TRANSFORMATION.' +
+                     'TRANSFORMATOR');
+
+  IF SIZEOF (trf_bag) = 0 THEN
+    RETURN (FALSE);
+  END_IF;
+
+  REPEAT i := 1 TO HIINDEX (rep_bag);
+    rep := rep_bag[i];
+
+ass_bag := QUERY ( kfbra <* USEDIN ( rep,
+             'KINEMATIC_STRUCTURE_SCHEMA.' +
+             'REPRESENTATION_RELATIONSHIP.REP_2') |
+             'KINEMATIC_STRUCTURE_SCHEMA.'+
+             'KINEMATIC_FRAME_BACKGROUND_REPRESENTATION_ASSOCIATION'
+             IN TYPEOF ( kfbra ) );
+
+    IF SIZEOF (ass_bag) > 0 THEN
+      REPEAT j:= 1 TO HIINDEX (ass_bag);
+        ass := ass_bag[j];
+
+        trm_bag := QUERY (trm <* trf_bag |
+          (trm :=:
+           ass\representation_relationship_with_transformation.
+           transformation_operator));
+
+        IF SIZEOF (trm_bag) > 0 THEN
+          RETURN (TRUE);
+        END_IF;
+
+      END_REPEAT;
+    END_IF;
+  END_REPEAT;
+
+  RETURN (FALSE);
+
+END_FUNCTION;
+
+FUNCTION plane_angle_for_pair_in_radian
+         (pair  : kinematic_pair;
+          angle : plane_angle_measure) : plane_angle_measure;
+  LOCAL
+    converted_angle : plane_angle_measure := angle;
+    link_rep        : kinematic_link_representation
+                    := representation_of_link (pair.joint.first_link);
+    link_cntxt      : representation_context;
+    pa_units        : SET OF unit := [];
+    pau             : unit;
+  END_LOCAL;
+
+  link_cntxt := link_rep\representation.context_of_items;
+
+  IF NOT ('MEASURE_SCHEMA.GLOBAL_UNIT_ASSIGNED_CONTEXT'
+          IN TYPEOF (link_cntxt)) THEN
+    RETURN (?);
+  END_IF;
+
+  pa_units := QUERY (unit <* link_cntxt\global_unit_assigned_context.units |
+                     'MEASURE_SCHEMA.PLANE_ANGLE_UNIT' IN TYPEOF (unit));
+
+  IF SIZEOF (pa_units) <> 1 THEN
+    RETURN (?);
+  END_IF;
+
+  pau := pa_units[1];
+
+  IF (NOT ('MEASURE_SCHEMA.SI_UNIT' IN TYPEOF (pau)) AND
+      NOT ('MEASURE_SCHEMA.CONVERSION_BASED_UNIT' IN TYPEOF (pau))) THEN
+    RETURN (?);
+  END_IF;
+
+  REPEAT WHILE ('MEASURE_SCHEMA.CONVERSION_BASED_UNIT' IN TYPEOF (pau));
+    converted_angle := converted_angle *
+                       pau\conversion_based_unit.conversion_factor.
+                       value_component;
+    pau := pau\conversion_based_unit.conversion_factor.unit_component;
+
+    IF ((NOT ('MEASURE_SCHEMA.SI_UNIT' IN TYPEOF (pau)) AND
+         NOT ('MEASURE_SCHEMA.CONVERSION_BASED_UNIT' IN TYPEOF (pau))) OR
+        (NOT ('MEASURE_SCHEMA.PLANE_ANGLE_UNIT' IN TYPEOF (pau)))) THEN
+      RETURN (?);
+    END_IF;
+  END_REPEAT;
+
+  IF (pau\si_unit.name <> si_unit_name.radian) THEN
+    RETURN (?);
+  END_IF;
+
+  CASE pau\si_unit.prefix OF
+    si_prefix.exa     : RETURN (1.E18 * converted_angle);
+    si_prefix.peta    : RETURN (1.E15 * converted_angle);
+    si_prefix.tera    : RETURN (1.E12 * converted_angle);
+    si_prefix.giga    : RETURN (1.E9 * converted_angle);
+    si_prefix.mega    : RETURN (1.E6 * converted_angle);
+    si_prefix.kilo    : RETURN (1.E3 * converted_angle);
+    si_prefix.hecto   : RETURN (1.E2 * converted_angle);
+    si_prefix.deca    : RETURN (1.E1 * converted_angle);
+    si_prefix.deci    : RETURN (1.E-1 * converted_angle);
+    si_prefix.centi   : RETURN (1.E-2 * converted_angle);
+    si_prefix.milli   : RETURN (1.E-3 * converted_angle);
+    si_prefix.micro   : RETURN (1.E-6 * converted_angle);
+    si_prefix.nano    : RETURN (1.E-9 * converted_angle);
+    si_prefix.pico    : RETURN (1.E-12 * converted_angle);
+    si_prefix.femto   : RETURN (1.E-15 * converted_angle);
+    si_prefix.atto    : RETURN (1.E-18 * converted_angle);
+  OTHERWISE           : RETURN (converted_angle);
+  END_CASE;
+
+END_FUNCTION;
+
+FUNCTION convert_plane_angle_for_pair_from_radian
+         (pair       : kinematic_pair;
+          angle_expr : REAL) : plane_angle_measure;
+  LOCAL
+    link_rep    : kinematic_link_representation
+                := representation_of_link (pair.joint.first_link);
+    link_cntxt  : representation_context;
+    pa_units    : SET OF unit := [];
+    pau         : unit;
+    conv_factor : REAL := 1.0;
+    result      : plane_angle_measure;
+  END_LOCAL;
+
+  link_cntxt := link_rep\representation.context_of_items;
+
+  IF NOT ('MEASURE_SCHEMA.GLOBAL_UNIT_ASSIGNED_CONTEXT'
+          IN TYPEOF (link_cntxt)) THEN
+    RETURN (?);
+  END_IF;
+
+  pa_units := QUERY (unit <* link_cntxt\global_unit_assigned_context.units |
+                     'MEASURE_SCHEMA.PLANE_ANGLE_UNIT' IN TYPEOF (unit));
+
+  IF SIZEOF (pa_units) <> 1 THEN
+    RETURN (?);
+  END_IF;
+
+  pau := pa_units[1];
+
+  IF (NOT ('MEASURE_SCHEMA.SI_UNIT' IN TYPEOF (pau)) AND
+      NOT ('MEASURE_SCHEMA.CONVERSION_BASED_UNIT' IN TYPEOF (pau))) THEN
+    RETURN (?);
+  END_IF;
+
+  REPEAT WHILE ('MEASURE_SCHEMA.CONVERSION_BASED_UNIT' IN TYPEOF (pau));
+    conv_factor := conv_factor *
+                   pau\conversion_based_unit.conversion_factor.
+                   value_component;
+    pau := pau\conversion_based_unit.conversion_factor.unit_component;
+
+    IF ((NOT ('MEASURE_SCHEMA.SI_UNIT' IN TYPEOF (pau)) AND
+         NOT ('MEASURE_SCHEMA.CONVERSION_BASED_UNIT' IN TYPEOF (pau))) OR
+        (NOT ('MEASURE_SCHEMA.PLANE_ANGLE_UNIT' IN TYPEOF (pau)))) THEN
+      RETURN (?);
+    END_IF;
+  END_REPEAT;
+
+  IF (pau\si_unit.name <> si_unit_name.radian) THEN
+    RETURN (?);
+  END_IF;
+
+  CASE pau\si_unit.prefix OF
+    si_prefix.exa     : conv_factor := 1.E18 * conv_factor;
+    si_prefix.peta    : conv_factor := 1.E15 * conv_factor;
+    si_prefix.tera    : conv_factor := 1.E12 * conv_factor;
+    si_prefix.giga    : conv_factor := 1.E9 * conv_factor;
+    si_prefix.mega    : conv_factor := 1.E6 * conv_factor;
+    si_prefix.kilo    : conv_factor := 1.E3 * conv_factor;
+    si_prefix.hecto   : conv_factor := 1.E2 * conv_factor;
+    si_prefix.deca    : conv_factor := 1.E1 * conv_factor;
+    si_prefix.deci    : conv_factor := 1.E-1 * conv_factor;
+    si_prefix.centi   : conv_factor := 1.E-2 * conv_factor;
+    si_prefix.milli   : conv_factor := 1.E-3 * conv_factor;
+    si_prefix.micro   : conv_factor := 1.E-6 * conv_factor;
+    si_prefix.nano    : conv_factor := 1.E-9 * conv_factor;
+    si_prefix.pico    : conv_factor := 1.E-12 * conv_factor;
+    si_prefix.femto   : conv_factor := 1.E-15 * conv_factor;
+    si_prefix.atto    : conv_factor := 1.E-18 * conv_factor;
+  END_CASE;
+
+  result := angle_expr / conv_factor;
+  RETURN (result);
+END_FUNCTION;
+
+FUNCTION convert_spatial_to_ypr_rotation (pair     : kinematic_pair;
+                                          rotation : spatial_rotation)
+                                                   : ypr_rotation;
+  LOCAL
+    axis       : direction;
+    angle      : plane_angle_measure;   -- rotation angle in application
+                                        -- specific units
+    conv_angle : plane_angle_measure;   -- rotation angle in radians
+    ya, pa, ra : plane_angle_measure;   -- yaw, pitch, and roll angle
+    ucf        : REAL;                  -- unit conversion factor
+    dx, dy, dz : REAL;                  -- components of direction vector
+    s_a, c_a   : REAL;                  -- sine and cosine of rotation angle
+    rotmat     : ARRAY [1 : 3] OF
+                 ARRAY [1 : 3] OF REAL; -- rotation matrix
+    cm1        : REAL;
+    s_y, c_y   : REAL;
+    s_r, c_r   : REAL;
+  END_LOCAL;
+
+  -- If rotation is already a ypr_rotation, return it immediately
+  IF 'KINEMATIC_STRUCTURE_SCHEMA.YPR_ROTATION' IN TYPEOF (rotation) THEN
+    RETURN (rotation);
+  END_IF;
+
+  -- rotation is a rotation_about_direction
+
+  axis  := normalise (rotation\rotation_about_direction.direction_of_axis);
+  angle := rotation\rotation_about_direction.rotation_angle;
+
+  -- a zero rotation is converted trivially
+  IF (angle = 0.0) THEN
+    RETURN ([0.0, 0.0, 0.0]);
+  END_IF;
+
+  dx := axis.direction_ratios[1];
+  dy := axis.direction_ratios[2];
+  dz := axis.direction_ratios[3];
+
+  -- provide angle measured in radian
+
+  conv_angle := plane_angle_for_pair_in_radian (pair, angle);
+
+  IF (conv_angle = ?) THEN
+    RETURN (?);
+  END_IF;
+
+  ucf := angle / conv_angle;
+  s_a := SIN (conv_angle);
+  c_a := COS (conv_angle);
+
+  -- axis parallel either to x-axis or to z-axis?
+  IF (dy = 0.0) AND (dx * dz = 0.0) THEN
+    REPEAT WHILE (conv_angle <= - PI);
+      conv_angle := conv_angle + 2.0 * PI;
+    END_REPEAT;
+    REPEAT WHILE (conv_angle > PI);
+      conv_angle := conv_angle - 2.0 * PI;
+    END_REPEAT;
+
+    ya := ucf * conv_angle;
+    IF (conv_angle <> PI) THEN
+      ra := - ya;
+    ELSE
+      ra := ya;
+    END_IF;
+
+    IF (dx <> 0.0) THEN
+      -- axis parallel to x-axis - use x-axis as roll axis
+      IF (dx > 0.0) THEN
+        RETURN ([0.0, 0.0, ya]);
+      ELSE
+        RETURN ([0.0, 0.0, ra]);
+      END_IF;
+    ELSE
+      -- axis parallel to z-axis - use z-axis as yaw axis
+      IF (dz > 0.0) THEN
+        RETURN ([ya, 0.0, 0.0]);
+      ELSE
+        RETURN ([ra, 0.0, 0.0]);
+      END_IF;
+    END_IF;
+  END_IF;
+
+  -- axis parallel to y-axis - use y-axis as pitch axis
+  IF ((dy <> 0.0) AND (dx = 0.0) AND (dz = 0.0)) THEN
+    IF (c_a >= 0.0) THEN
+      ya := 0.0;
+      ra := 0.0;
+    ELSE
+      ya := ucf * PI;
+      ra := ya;
+    END_IF;
+
+    pa := ucf * ATAN (s_a, ABS (c_a));
+    IF (dy < 0.0) THEN
+      pa := - pa;
+    END_IF;
+
+    RETURN ([ya, pa, ra]);
+  END_IF;
+
+  -- axis not parallel to any axis of coordinate system
+  -- compute rotation matrix
+
+  cm1 := 1.0 - c_a;
+
+  rotmat := [ [ dx * dx * cm1 + c_a,
+                dx * dy * cm1 - dz * s_a,
+                dx * dz * cm1 + dy * s_a ],
+              [ dx * dy * cm1 + dz * s_a,
+                dy * dy * cm1 + c_a,
+                dy * dz * cm1 - dx * s_a ],
+              [ dx * dz * cm1 - dy * s_a,
+                dy * dz * cm1 + dx * s_a,
+                dz * dz * cm1 + c_a ] ];
+
+  -- rotmat[1][3] equals SIN (pitch_angle)
+  IF (ABS (rotmat[1][3]) = 1.0) THEN
+    -- |pa| = PI/2
+    BEGIN
+      IF (rotmat[1][3] = 1.0) THEN
+        pa := 0.5 * PI;
+      ELSE
+        pa := -0.5 * PI;
+      END_IF;
+
+      -- In this case, only the sum or difference of roll and yaw angles
+      -- is relevant and can be evaluated from the matrix.
+      -- According to IP `rectangular pitch angle' for ypr_rotation,
+      -- the roll angle is set to zero.
+
+      ra := 0.0;
+      ya := ATAN (rotmat[2][1], rotmat[2][2]);
+
+      -- result of ATAN is in the range [-PI/2, PI/2].
+      -- Here all four quadrants are needed.
+
+      IF (rotmat[2][2] < 0.0) THEN
+        IF ya <= 0.0 THEN
+          ya := ya + PI;
+        ELSE
+          ya := ya - PI;
+        END_IF;
+      END_IF;
+    END;
+  ELSE
+    -- COS (pitch_angle) not equal to zero
+    BEGIN
+      ya := ATAN (- rotmat[1][2], rotmat[1][1]);
+
+      IF (rotmat[1][1] < 0.0) THEN
+        IF (ya <= 0.0) THEN
+          ya := ya + PI;
+        ELSE
+          ya := ya - PI;
+        END_IF;
+      END_IF;
+
+      ra := ATAN (-rotmat[2][3], rotmat[3][3]);
+
+      IF (rotmat[3][3] < 0.0) THEN
+        IF (ra <= 0.0) THEN
+          ra := ra + PI;
+        ELSE
+          ra := ra - PI;
+        END_IF;
+      END_IF;
+
+      s_y := SIN (ya);
+      c_y := COS (ya);
+      s_r := SIN (ra);
+      c_r := COS (ra);
+
+      IF ((ABS (s_y) > ABS (c_y)) AND
+          (ABS (s_y) > ABS (s_r)) AND
+          (ABS (s_y) > ABS (c_r))) THEN
+        cm1 := - rotmat[1][2] / s_y;
+      ELSE
+        IF ((ABS (c_y) > ABS (s_r)) AND (ABS (c_y) > ABS (c_r))) THEN
+          cm1 := rotmat[1][1] / c_y;
+        ELSE
+          IF (ABS (s_r) > ABS (c_r)) THEN
+            cm1 := - rotmat[2][3] / s_r;
+          ELSE
+            cm1 := rotmat[3][3] / c_r;
+          END_IF;
+        END_IF;
+      END_IF;
+
+      pa := ATAN (rotmat[1][3], cm1);
+
+    END;
+  END_IF;
+
+  ya := ya * ucf;
+  pa := pa * ucf;
+  ra := ra * ucf;
+
+  RETURN ([ya, pa, ra]);
+
+END_FUNCTION;
+
+FUNCTION assign_directed_link
+   (joint : kinematic_joint; orientation : BOOLEAN ) : kinematic_link;
+   IF (orientation) THEN
+      RETURN (joint.first_link);
+   ELSE
+      RETURN (joint.second_link);
+   END_IF;
+END_FUNCTION;
+
+FUNCTION connected_in_simple_loop
+   (relation_1 : joint_logical_relationship;
+    relation_2 : joint_logical_relationship) : BOOLEAN;
+  LOCAL
+    next_jlr_in_loop_set : SET [1:?] OF joint_logical_relationship;
+  END_LOCAL;
+
+  IF ((relation_1.loop:<>: relation_2.loop) OR
+       (relation_1 :=: relation_2)) THEN
+         RETURN (FALSE);
+  ELSE
+    IF (relation_1.next_joint_logical_structure :=:
+        relation_2.previous_joint_logical_structure) THEN
+       RETURN (TRUE);
+    ELSE
+      next_jlr_in_loop_set :=
+          QUERY (relation <* 
+           bag_to_set (USEDIN (relation_1.next_joint_logical_structure,
+           'KINEMATIC_STRUCTURE_SCHEMA.JOINT_LOGICAL_RELATIONSHIP.' +
+           'PREVIOUS_JOINT_LOGICAL_STRUCTURE'))
+            | relation.loop :=: relation_1.loop);
+      IF (SIZEOF(next_jlr_in_loop_set) <> 1) THEN
+         RETURN (FALSE);
+      ELSE
+         RETURN (connected_in_simple_loop(next_jlr_in_loop_set [1],
+                 relation_2));
+      END_IF;
+    END_IF;
+  END_IF;
+END_FUNCTION;
+
+END_SCHEMA;         -- end kinematic_structure_schema
+
+
+SCHEMA kinematic_motion_representation_schema;
+
+REFERENCE FROM geometry_schema
+    (cartesian_point,
+     curve);
+
+REFERENCE FROM measure_schema
+    (length_measure,
+     measure_with_unit,
+     parameter_value,
+     plane_angle_measure);
+
+REFERENCE FROM representation_schema
+    (functionally_defined_transformation,
+     representation_item);
+
+REFERENCE FROM kinematic_structure_schema
+    (rotation_about_direction,
+     spatial_rotation,
+     ypr_rotation);
+
+TYPE motion_parameter_measure = SELECT
+  (parameter_value,
+   measure_with_unit);
+END_TYPE;
+
+ENTITY translation;
+  x : length_measure;
+  y : length_measure;
+  z : length_measure;
+END_ENTITY;
+
+ENTITY transform
+  SUBTYPE OF (functionally_defined_transformation);
+  rotation_component    : spatial_rotation;
+  translation_component : translation;
+END_ENTITY;
+
+ENTITY path_node;
+  control_transform : transform;
+  t_parameter       : motion_parameter_measure;
+END_ENTITY;
+
+ENTITY kinematic_path
+  SUPERTYPE OF (ONEOF (path_element, composite_path))
+  SUBTYPE OF (representation_item);
+END_ENTITY;
+
+ENTITY path_element_connection;
+  previous_element     : path_element;
+  next_element         : path_element;
+WHERE
+  WR1: previous_element.node_to = next_element.node_from;
+  WR2: compare_unit_components (previous_element.node_to.t_parameter,
+                                next_element.node_from.t_parameter);
+END_ENTITY;
+
+ENTITY composite_path
+  SUBTYPE OF (kinematic_path);
+  elements : SET [1 : ?] OF path_element_connection;
+  t_start  : motion_parameter_measure;
+  t_end    : motion_parameter_measure;
+WHERE
+  WR1: increasing_measure_value (t_start, t_end);
+  WR2: compare_unit_components (t_start, t_end);
+  WR3: connected_in_simple_path (elements);
+END_ENTITY;
+
+ENTITY path_element
+  SUPERTYPE OF (ONEOF (point_to_point_path,
+                       circular_path,
+                       linear_path,
+                       curve_based_path))
+  SUBTYPE OF (kinematic_path);
+  node_from : path_node;
+  node_to   : path_node;
+WHERE
+  WR1: compare_unit_components (node_from.t_parameter,
+                                node_to.t_parameter);
+  WR2: increasing_measure_value (node_from.t_parameter,
+                                 node_to.t_parameter);
+END_ENTITY;
+
+ENTITY point_to_point_path
+  SUBTYPE OF (path_element);
+END_ENTITY;
+
+ENTITY circular_path
+  SUBTYPE OF (path_element);
+  via_point : cartesian_point;
+WHERE
+  WR1: SELF\path_element.node_to.control_transform.translation_component <>
+       SELF\path_element.node_from.control_transform.translation_component;
+  WR2: non_coincident_coordinates (via_point,
+         SELF\path_element.node_from.control_transform.translation_component)
+       AND
+       non_coincident_coordinates (via_point,
+         SELF\path_element.node_to.control_transform.translation_component);
+END_ENTITY;
+
+ENTITY linear_path
+  SUBTYPE OF (path_element);
+END_ENTITY;
+
+ENTITY curve_based_path
+  SUBTYPE OF (path_element);
+  path_curve : curve;
+WHERE
+  WR1: SELF\path_element.node_to.control_transform.translation_component <>
+       SELF\path_element.node_from.control_transform.translation_component;
+END_ENTITY;
+
+FUNCTION connected_in_simple_path (connections : SET OF path_element_connection)
+                                               : BOOLEAN;
+  LOCAL
+     connection_set : SET [0 : ?] OF path_element_connection;
+     nec0           : INTEGER;
+     pec0           : INTEGER;
+     necbranch      : INTEGER;
+     pecbranch      : INTEGER;
+  END_LOCAL;
+
+  IF SIZEOF (connections) > 1 THEN
+    connection_set := QUERY (pec1 <* connections |
+                        SIZEOF (QUERY (pec2 <* connections - pec1 |
+                          pec1.next_element :=: pec2.previous_element)) = 0);
+    nec0 := SIZEOF (connection_set);
+
+    connection_set := QUERY (pec1 <* connections |
+                        SIZEOF (QUERY (pec2 <* connections - pec1 |
+                          pec2.next_element :=: pec1.previous_element)) = 0);
+    pec0 := SIZEOF (connection_set);
+
+    connection_set := QUERY (pec1 <* connections |
+                        SIZEOF (QUERY (pec2 <* connections - pec1 |
+                          pec1.next_element :=: pec2.previous_element)) > 1);
+    necbranch := SIZEOF (connection_set);
+
+    connection_set := QUERY (pec1 <* connections |
+                        SIZEOF (QUERY (pec2 <* connections - pec1 |
+                          pec2.next_element :=: pec1.previous_element)) > 1);
+    pecbranch := SIZEOF (connection_set);
+
+    IF ((nec0 <> 1) OR (pec0 <> 1) OR (necbranch > 0) OR (pecbranch > 0)) THEN
+      RETURN (FALSE);
+    ELSE
+      RETURN (TRUE);
+    END_IF;
+  ELSE
+    RETURN (TRUE);
+  END_IF;
+END_FUNCTION;
+
+FUNCTION compare_unit_components (parm1 : motion_parameter_measure;
+                                  parm2 : motion_parameter_measure) : BOOLEAN;
+   IF (('MEASURE_SCHEMA.PARAMETER_VALUE' IN TYPEOF (parm1)) AND
+       ('MEASURE_SCHEMA.PARAMETER_VALUE' IN TYPEOF (parm2))) THEN
+         RETURN (TRUE);
+   ELSE
+     IF (('MEASURE_SCHEMA.MEASURE_WITH_UNIT' IN TYPEOF (parm1)) AND
+         ('MEASURE_SCHEMA.MEASURE_WITH_UNIT' IN TYPEOF (parm2))) THEN
+        IF (parm1.unit_component :=: parm2.unit_component) THEN
+           RETURN (TRUE);
+        ELSE
+           RETURN (FALSE);
+        END_IF;
+     ELSE
+       RETURN (FALSE);
+     END_IF;
+  END_IF;
+END_FUNCTION;
+
+FUNCTION increasing_measure_value (parm1 : motion_parameter_measure;
+                                   parm2 : motion_parameter_measure) : BOOLEAN;
+  IF ('MEASURE_SCHEMA.PARAMETER_VALUE' IN TYPEOF (parm1)) THEN
+    IF (parm1 < parm2)  THEN
+      RETURN (TRUE);
+    ELSE
+      RETURN (FALSE);
+    END_IF;
+  ELSE
+    IF ('MEASURE_SCHEMA.MEASURE_WITH_UNIT' IN TYPEOF (parm1)) THEN
+      IF (parm1.value_component < parm2.value_component) THEN
+        RETURN (TRUE);
+      ELSE
+        RETURN (FALSE);
+      END_IF;
+    ELSE
+      RETURN (FALSE);
+    END_IF;
+  END_IF;
+END_FUNCTION;
+
+FUNCTION non_coincident_coordinates (crtpt : cartesian_point;
+                                     trltn : translation) : BOOLEAN;
+  IF ((crtpt.coordinates[1] = trltn.x) AND
+      (crtpt.coordinates[2] = trltn.y) AND
+      (crtpt.coordinates[3] = trltn.z)) THEN
+    RETURN (FALSE);
+  ELSE
+    RETURN (TRUE);
+  END_IF;
+END_FUNCTION;
+
+END_SCHEMA;   -- end kinematic_motion_representation_schema
+
+
+SCHEMA kinematic_analysis_control_and_result_schema;
+
+REFERENCE FROM kinematic_motion_representation_schema
+    (kinematic_path,
+     motion_parameter_measure);
+
+REFERENCE FROM kinematic_structure_schema
+    (kinematic_joint,
+     kinematic_link_representation,
+     mechanism,
+     pair_value,
+     rigid_placement);
+
+REFERENCE FROM geometry_schema
+    (geometric_representation_context);
+
+REFERENCE FROM representation_schema
+    (representation,
+     representation_relationship);
+
+TYPE interpolation_type = ENUMERATION OF
+  (undefined,
+   synchronous,
+   linear);
+END_TYPE;
+
+TYPE kinematic_analysis_definition = SELECT
+  (interpolated_configuration_sequence,
+   prescribed_path);
+END_TYPE;
+
+TYPE kinematic_result = SELECT
+  (interpolated_configuration_sequence,
+   resulting_path);
+END_TYPE;
+
+ENTITY configuration_interpolation;
+  previous_configuration_definition : configuration_definition;
+  next_configuration_definition     : configuration_definition;
+  interpolation                     : interpolation_type;
+END_ENTITY ;
+
+ENTITY kinematic_control;
+  controlled_mechanism         : mechanism;
+  contained_kinematic_programs : SET [1 : ?] OF kinematic_analysis_definition;
+END_ENTITY;
+
+ENTITY founded_kinematic_path
+  SUBTYPE OF (representation);
+  SELF\representation.items : SET [1 : ?] OF kinematic_path;
+  SELF\representation.context_of_items :
+       geometric_representation_context;
+DERIVE
+  paths : SET [1 : ?] OF kinematic_path := SELF\representation.items;
+  founding : geometric_representation_context
+           := SELF\representation.context_of_items;
+END_ENTITY;
+
+ENTITY motion_link_relationship
+  SUPERTYPE OF (ONEOF (prescribed_path, resulting_path))
+  SUBTYPE OF (representation_relationship);
+  SELF\representation_relationship.rep_1 : founded_kinematic_path;
+  SELF\representation_relationship.rep_2 :
+       kinematic_link_representation;
+  related_frame                          : rigid_placement;
+DERIVE
+  motion     : founded_kinematic_path
+             := SELF\representation_relationship.rep_1;
+  frame_link : kinematic_link_representation
+             := SELF\representation_relationship.rep_2;
+WHERE
+  WR1: related_frame IN frame_link\representation.items;
+END_ENTITY;
+
+ENTITY configuration_definition;
+  pair_values : SET [1 : ?] OF pair_value;
+  t_parameter : motion_parameter_measure;
+END_ENTITY;
+
+ENTITY interpolated_configuration_sequence;
+  interpolation : SET [1 : ?] OF configuration_interpolation;
+END_ENTITY;
+
+ENTITY prescribed_path
+  SUBTYPE OF (motion_link_relationship);
+  controlling_joints : OPTIONAL SET [1 : 6] OF kinematic_joint;
+END_ENTITY;
+
+ENTITY kinematic_analysis_result;
+  analysed_mechanism          : mechanism;
+  contained_kinematic_results : SET [1 : ?] OF kinematic_result;
+WHERE
+WR1: (SIZEOF (QUERY (result <* contained_kinematic_results |
+       'KINEMATIC_ANALYSIS_CONTROL_AND_RESULT_SCHEMA.RESULTING_PATH'
+       IN TYPEOF (result)))
+       > 0)
+     XOR
+     (SIZEOF (QUERY (result <* contained_kinematic_results |
+       (('KINEMATIC_ANALYSIS_CONTROL_AND_RESULT_SCHEMA.'+
+         'INTERPOLATED_CONFIGURATION_SEQUENCE' IN TYPEOF (result))
+              AND
+       (SIZEOF (QUERY (sequence <* result\
+                interpolated_configuration_sequence.interpolation |
+                (sequence.interpolation <> undefined ))) > 0)))) = 0);
+END_ENTITY;
+
+ENTITY kinematic_analysis_consistency;
+  control : kinematic_control;
+  result  : kinematic_analysis_result;
+WHERE
+  WR1: control.controlled_mechanism :=: result.analysed_mechanism;
+END_ENTITY;
+
+ENTITY resulting_path
+  SUBTYPE OF (motion_link_relationship);
+  controlling_joints : SET [1 : ?] OF kinematic_joint;
+END_ENTITY;
+
+END_SCHEMA;              -- end kinematic_analysis_control_and_result_schema

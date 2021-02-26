@@ -1,0 +1,28 @@
+(*
+ $Id: 10303-1070-arm-Class.exp,v 1.2 2006/08/07 07:44:43 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N3022 - ISO/TS 10303-1070 Class - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG12 N2258
+*) 
+
+
+SCHEMA Class_arm;
+
+
+ENTITY Class
+  SUPERTYPE OF (ONEOF (Class_by_extension,
+                       Class_by_intension));
+  id : STRING;
+  name : STRING;
+  description : OPTIONAL STRING;
+END_ENTITY;
+
+ENTITY Class_by_extension
+  SUBTYPE OF (Class);
+END_ENTITY;
+
+ENTITY Class_by_intension
+  SUBTYPE OF (Class);
+END_ENTITY;
+
+END_SCHEMA;  -- Class_arm
+

@@ -1,0 +1,26 @@
+(*
+ $Id: 10303-1058-arm-configuration_effectivity.exp,v 1.5 2006/08/07 07:44:43 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2949 - ISO/TS 10303-1058 Configuration effectivity - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG12 N2518
+*) 
+
+SCHEMA Configuration_effectivity_arm;
+
+USE FROM Configuration_item_arm;    -- ISO/CD-TS 10303-1056
+
+USE FROM Effectivity_arm;    -- ISO/TS 10303-1057
+
+USE FROM Product_view_definition_relationship_arm;    -- ISO/TS 10303-1041
+
+
+ENTITY Item_usage_effectivity;
+  effectivity_domain : Effectivity;
+  item_usage_relationship : View_definition_usage;
+  resolved_configuration : Item_design_association;
+END_ENTITY;
+
+END_SCHEMA;  -- Configuration_effectivity_arm
+
+
+
+

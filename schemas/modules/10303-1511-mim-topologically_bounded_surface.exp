@@ -1,0 +1,10 @@
+(* ISO/TC184/SC4 WG12N1283  $Id: 10303-1511-mim-topologically_bounded_surface.exp,v 1.4 2003/10/21 12:49:19 wg12deputy Exp $ *) 
+
+SCHEMA Topologically_bounded_surface_mim;
+
+USE FROM Elemental_geometric_shape_mim;
+
+USE FROM aic_topologically_bounded_surface;
+
+END_SCHEMA;
+

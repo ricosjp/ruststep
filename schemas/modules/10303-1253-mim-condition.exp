@@ -1,0 +1,46 @@
+(*
+ $Id: 10303-1253-mim-condition.exp,v 1.1 2006/08/07 09:42:05 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N3026 - ISO/TS 10303-1253 Condition - EXPRESS MIM
+ Supersedes ISO TC184/SC4/WG12 N2319
+*) 
+
+
+SCHEMA Condition_mim;
+
+USE FROM action_schema   -- ISO 10303-41
+  (action_method,
+   action_method_relationship); 
+
+USE FROM Activity_method_assignment_mim;    -- ISO/TS 10303-1249
+
+USE FROM Classification_assignment_mim;    -- ISO/TS 10303-1114
+
+USE FROM management_resources_schema   -- ISO 10303-41
+  (action_method_assignment,
+   action_method_role,
+   name_assignment); 
+
+USE FROM Name_assignment_mim;    -- ISO/TS 10303-1340
+
+
+TYPE condition_action_method_items = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON action_method_items WITH 
+   (action_method_relationship);
+END_TYPE; 
+
+TYPE condition_classification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON classification_item WITH 
+   (action_method, 
+    action_method_relationship, 
+    applied_action_method_assignment);
+END_TYPE; 
+
+TYPE condition_name_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON name_item WITH 
+   (applied_action_method_assignment);
+END_TYPE; 
+
+ENTITY condition
+  SUBTYPE OF (action_method);
+END_ENTITY;
+
+END_SCHEMA;  -- Condition_mim
+
+

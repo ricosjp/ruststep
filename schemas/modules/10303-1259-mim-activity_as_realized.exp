@@ -1,0 +1,25 @@
+(*
+ $Id: 10303-1259-mim-activity_as_realized.exp,v 1.1 2006/08/07 09:42:05 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2993 - ISO/TS 10303-1259 Activity as realized - EXPRESS MIM
+ Supersedes ISO TC184/SC4/WG12 N2370
+*) 
+
+
+SCHEMA Activity_as_realized_mim;
+
+USE FROM action_schema   -- ISO 10303-41
+  (action_relationship,
+   executed_action); 
+
+USE FROM Activity_mim;    -- ISO/TS 10303-1047
+
+
+ENTITY action_actual
+  SUBTYPE OF (executed_action);
+END_ENTITY;
+
+ENTITY action_happening
+  SUBTYPE OF (action_relationship);
+END_ENTITY;
+
+END_SCHEMA;  -- Activity_as_realized_mim

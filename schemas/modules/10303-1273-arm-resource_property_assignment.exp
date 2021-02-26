@@ -1,0 +1,38 @@
+(*
+ $Id: 10303-1273-arm-resource_property_assignment.exp,v 1.2 2006/08/07 07:44:46 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N3157 - ISO/TS 10303-1273 Resource property assignment - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG12 N2438
+*) 
+
+
+SCHEMA Resource_property_assignment_arm;
+
+USE FROM Foundation_representation_arm;    -- ISO/TS 10303-1006
+
+USE FROM Independent_property_arm;    -- ISO/TS 10303-1036
+
+
+TYPE characterized_resource_select = EXTENSIBLE GENERIC_ENTITY SELECT;
+END_TYPE; 
+
+ENTITY Applied_independent_resource_property
+  SUBTYPE OF (Resource_property);
+  base_element_property : Independent_property;
+DERIVE
+  SELF\Resource_property.name : STRING := base_element_property.property_type;
+END_ENTITY;
+
+ENTITY Resource_property;
+  name : STRING;
+  description : STRING;
+  described_element : characterized_resource_select;
+END_ENTITY;
+
+ENTITY Resource_property_representation;
+  description : OPTIONAL STRING;
+  property : Resource_property;
+  rep : Representation;
+  role : STRING;
+END_ENTITY;
+
+END_SCHEMA;  -- Resource_property_assignment_arm

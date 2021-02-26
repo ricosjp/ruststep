@@ -1,0 +1,46 @@
+(*
+ISO TC184/SC4/WG12 N1470 - ISO/CD-TS 10303-1268 Resource item - EXPRESS MIM
+*) 
+
+
+SCHEMA Resource_item_mim; 
+
+USE FROM action_schema   -- ISO 10303-41
+  (action_method,
+   action_resource,
+   action_resource_relationship,
+   action_resource_type,
+   supported_item); 
+
+USE FROM Activity_method_assignment_mim   -- ISO/CD-TS 10303-1249
+  (applied_action_method_assignment); 
+
+USE FROM Classification_assignment_mim;    -- ISO/CD-TS 10303-1114
+
+USE FROM management_resources_schema   -- ISO 10303-41
+  (action_method_assignment,
+   action_method_role); 
+
+USE FROM process_property_representation_schema   -- ISO 10303-49
+  (resource_property_representation); 
+
+USE FROM process_property_schema   -- ISO 10303-49
+  (characterized_resource_definition,
+   resource_property); 
+
+USE FROM representation_schema   -- ISO 10303-43
+  (representation,
+   representation_context,
+   representation_item,
+   value_representation_item); 
+
+USE FROM Value_with_unit_mim;    -- ISO/TS 10303-1054
+
+
+TYPE resource_item_classification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON classification_item WITH 
+   (action_method, 
+    action_resource, 
+    action_resource_relationship);
+END_TYPE; 
+
+END_SCHEMA;  -- Resource_item_mim

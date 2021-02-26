@@ -1,0 +1,19 @@
+(*
+ $Id: 10303-1057-mim-effectivity.exp,v 1.5 2006/08/07 09:42:03 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N1169 - ISO/TS 10303-1057 Effectivity - EXPRESS MIM
+*)
+  
+SCHEMA Effectivity_mim;
+
+USE FROM Time_interval_mim; -- ISO 10303-1065
+USE FROM Value_with_unit_mim ; -- ISO 10303-1054
+
+USE FROM effectivity_schema -- ISO 10303-41
+  (	dated_effectivity,
+	effectivity,
+   	effectivity_relationship,
+	lot_effectivity,
+   	serial_numbered_effectivity,
+      time_interval_based_effectivity);
+
+END_SCHEMA;

@@ -1,0 +1,49 @@
+(*
+ $Id: 10303-1133-arm-single_part_representation.exp,v 1.2 2006/08/07 07:44:44 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2543 - ISO/TS 10303-1133 Single part representation - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG12 N1667
+*) 
+
+
+SCHEMA Single_part_representation_arm;
+
+USE FROM Document_assignment_arm;    -- ISO/TS 10303-1122
+
+USE FROM Extended_measure_representation_arm;    -- ISO/TS 10303-1106
+
+USE FROM External_model_arm;    -- ISO/TS 10303-1033
+
+USE FROM Part_and_version_identification_arm;    -- ISO/TS 10303-1022
+
+USE FROM Part_view_definition_arm;    -- ISO/TS 10303-1023
+
+USE FROM Person_organization_assignment_arm;    -- ISO/TS 10303-1013
+
+USE FROM Product_categorization_arm;    -- ISO/TS 10303-1016
+
+USE FROM Property_assignment_arm;    -- ISO/TS 10303-1030
+
+USE FROM Shape_property_assignment_arm;    -- ISO/TS 10303-1032
+
+
+TYPE spr_documented_element_select = SELECT BASED_ON documented_element_select WITH 
+   (Part_view_definition, 
+    Part, 
+    Part_version);
+END_TYPE; 
+
+TYPE spr_product_property_assignment = SELECT BASED_ON property_assignment_select WITH 
+   (Part_view_definition);
+END_TYPE; 
+
+TYPE spr_organization_or_person_in_organization_item = EXTENSIBLE SELECT BASED_ON organization_or_person_in_organization_item WITH 
+   (Document, 
+    Document_version, 
+    Document_definition, 
+    Part, 
+    Part_view_definition, 
+    Part_version);
+END_TYPE; 
+
+END_SCHEMA;  -- Single_part_representation_arm
+

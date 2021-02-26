@@ -1,0 +1,76 @@
+(*
+  $Id: 10303-1251-arm-Interface_arm.exp,v 1.1 2003/01/27 20:32:06 wg12deputy Exp $
+  ISO TC184/SC4/WG12N1367 - ISO/CD-TS 10303-1251 Interface - EXPRESS ARM
+*) 
+
+SCHEMA Interface_arm; 
+
+USE FROM Product_identification_arm;    -- ISO/TS 10303-1017
+
+USE FROM Product_version_arm;    -- ISO/TS 10303-1018
+
+USE FROM Product_view_definition_arm;    -- ISO/TS 10303-1019
+
+USE FROM Product_view_definition_relationship_arm;    -- ISO/TS 10303-1041
+
+
+TYPE component_item = EXTENSIBLE SELECT
+   (Product_view_definition);
+END_TYPE; 
+
+TYPE connector_on_item = EXTENSIBLE SELECT
+   (Product_view_definition, 
+    View_definition_relationship);
+END_TYPE; 
+
+ENTITY Connector_on;
+  connector : Interface_connector_definition;
+  description : OPTIONAL STRING;
+  id : STRING;
+  item : connector_on_item;
+  name : STRING;
+END_ENTITY;
+
+ENTITY Interface_connection
+  SUBTYPE OF (View_definition_relationship);
+  SELF\View_definition_relationship.related_view RENAMED connected : Interface_connector_definition;
+  SELF\View_definition_relationship.relating_view RENAMED connecting : Interface_connector_definition;
+END_ENTITY;
+
+ENTITY Interface_connector
+  SUBTYPE OF (Product);
+END_ENTITY;
+
+ENTITY Interface_connector_definition
+  SUBTYPE OF (Product_view_definition);
+  SELF\Product_view_definition.defined_version : Interface_connector_version;
+END_ENTITY;
+
+ENTITY Interface_connector_version
+  SUBTYPE OF (Product_version);
+  SELF\Product_version.of_product : Interface_connector;
+END_ENTITY;
+
+ENTITY Interface_definition_for;
+  description : OPTIONAL STRING;
+  id : STRING;
+  interface : Interface_specification_definition;
+  interface_component : component_item;
+  name : STRING;
+END_ENTITY;
+
+ENTITY Interface_specification
+  SUBTYPE OF (Product);
+END_ENTITY;
+
+ENTITY Interface_specification_definition
+  SUBTYPE OF (Product_view_definition);
+  SELF\Product_view_definition.defined_version : Interface_specification_version;
+END_ENTITY;
+
+ENTITY Interface_specification_version
+  SUBTYPE OF (Product_version);
+  SELF\Product_version.of_product : Interface_specification;
+END_ENTITY;
+
+END_SCHEMA;  -- Interface_arm

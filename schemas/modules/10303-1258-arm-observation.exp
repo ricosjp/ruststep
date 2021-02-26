@@ -1,0 +1,77 @@
+(*
+ $Id: 10303-1258-arm-observation.exp,v 1.2 2006/08/07 07:44:45 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N3088 - ISO/TS 10303-1258 Observation - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG12 N2396
+*) 
+
+
+SCHEMA Observation_arm;
+
+USE FROM Activity_as_realized_arm;    -- ISO/TS 10303-1259
+
+USE FROM Classification_assignment_arm;    -- ISO/TS 10303-1114
+
+USE FROM Management_resource_information_arm;    -- ISO/TS 10303-1288
+
+USE FROM Product_as_individual_arm;    -- ISO/TS 10303-1164
+
+USE FROM Work_request_arm;    -- ISO/TS 10303-1042
+
+
+TYPE observation_approval = SELECT BASED_ON mri_approval_item WITH 
+   (Observation);
+END_TYPE; 
+
+TYPE observation_classification_item = SELECT BASED_ON classification_item WITH 
+   (Observation, 
+    Observation_relationship);
+END_TYPE; 
+
+TYPE observation_date_time = SELECT BASED_ON mri_date_or_date_time_item WITH 
+   (Observation);
+END_TYPE; 
+
+TYPE observation_recorder = EXTENSIBLE SELECT
+   (Product_as_realized);
+END_TYPE; 
+
+TYPE observed_context = EXTENSIBLE SELECT;
+END_TYPE; 
+
+TYPE observing_person = SELECT BASED_ON mri_organization_or_person_in_organization_item WITH 
+   (Observation);
+END_TYPE; 
+
+ENTITY Observation;
+  id : STRING;
+  name : STRING;
+  description : STRING;
+  applies_to : SET[0:?] OF Observation_item;
+  in_context : SET[0:?] OF observed_context;
+  observed_by : SET[0:?] OF observation_recorder;
+  observed_during : OPTIONAL Activity_actual;
+  related_records : SET[0:?] OF Observation_item;
+END_ENTITY;
+
+ENTITY Observation_consequence;
+  id : STRING;
+  name : STRING;
+  infered_from : Observation;
+  requests : Work_request;
+  role : STRING;
+END_ENTITY;
+
+ENTITY Observation_item;
+  access_comment : STRING;
+  item_identifier : STRING;
+  item_type : STRING;
+END_ENTITY;
+
+ENTITY Observation_relationship;
+  relating : Observation;
+  related : Observation;
+  role : STRING;
+END_ENTITY;
+
+END_SCHEMA;  -- Observation_arm
+

@@ -1,0 +1,45 @@
+(*
+ $Id: 10303-1260-mim-cdts_scheme.exp,v 1.1 2003/07/15 09:43:14 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N1446 - ISO/CD-TS 10303-1260 Scheme - EXPRESS MIM
+*) 
+
+SCHEMA Scheme_mim; 
+
+USE FROM action_schema   -- ISO 10303-41
+  (action_method,
+   action_method_relationship); 
+
+USE FROM Activity_method_assignment_mim;    -- ISO/CD-TS 10303-1249
+
+USE FROM Activity_method_mim;    -- ISO/TS 10303-1049
+
+USE FROM Date_time_assignment_mim;    -- ISO/TS 10303-1014
+
+USE FROM Identification_assignment_mim   -- ISO/TS 10303-1021
+  (applied_identification_assignment,
+   identification_item); 
+
+USE FROM Person_organization_assignment_mim;    -- ISO/TS 10303-1013
+
+USE FROM Time_interval_assignment_mim;    -- ISO/CD-TS 10303-1365
+
+USE FROM Time_interval_mim;    -- ISO/TS 10303-1065
+
+
+TYPE scheme_date_and_time_item = EXTENSIBLE SELECT BASED_ON date_and_time_item WITH 
+   (action_method);
+END_TYPE; 
+
+TYPE scheme_identification_item = EXTENSIBLE SELECT BASED_ON identification_item WITH 
+   (action_method);
+END_TYPE; 
+
+TYPE scheme_person_and_organization_item = EXTENSIBLE SELECT BASED_ON person_and_organization_item WITH 
+   (action_method);
+END_TYPE; 
+
+TYPE scheme_time_interval_item = EXTENSIBLE SELECT BASED_ON time_interval_item WITH 
+   (action_method_relationship);
+END_TYPE; 
+
+END_SCHEMA;  -- Scheme_mim

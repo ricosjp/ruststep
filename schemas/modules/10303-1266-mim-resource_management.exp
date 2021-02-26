@@ -1,0 +1,46 @@
+(*
+ $Id: 10303-1266-mim-resource_management.exp,v 1.1 2006/08/07 09:42:05 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N3152 - ISO/TS 10303-1266 Resource management - EXPRESS MIM
+ Supersedes ISO TC184/SC4/WG12 N2433
+*) 
+
+
+SCHEMA Resource_management_mim;
+
+USE FROM action_schema   -- ISO 10303-41
+  (action,
+   action_relationship,
+   action_resource,
+   action_resource_relationship); 
+
+USE FROM Classification_assignment_mim;    -- ISO/TS 10303-1114
+
+USE FROM Location_assignment_mim;    -- ISO/TS 10303-1277
+
+USE FROM process_property_representation_schema   -- ISO 10303-49
+  (action_property_representation); 
+
+USE FROM process_property_schema   -- ISO 10303-49
+  (action_property,
+   characterized_action_definition); 
+
+USE FROM Required_resource_mim;    -- ISO/TS 10303-1267
+
+USE FROM Resource_item_mim;    -- ISO/TS 10303-1268
+
+USE FROM Value_with_unit_mim;    -- ISO/TS 10303-1054
+
+
+TYPE resource_management_classification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON classification_item WITH 
+   (action, 
+    action_property, 
+    action_relationship, 
+    action_resource, 
+    action_resource_relationship);
+END_TYPE; 
+
+TYPE resource_management_location_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON location_item WITH 
+   (action_resource);
+END_TYPE; 
+
+END_SCHEMA;  -- Resource_management_mim

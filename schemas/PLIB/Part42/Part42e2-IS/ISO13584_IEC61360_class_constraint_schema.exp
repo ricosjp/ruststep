@@ -1,0 +1,642 @@
+(*
+
+The following permission notice and disclaimer shall be included in all copies of these EXPRESS schemas 
+("the Schema"), and derivations of the Schema:
+
+© ISO 2010 — All rights reserved
+
+Permission is hereby granted, free of charge in perpetuity, to any person obtaining a copy of the Schema, 
+to use, copy, modify, merge and distribute free of charge, copies of the Schema for the purposes of 
+developing, implementing, installing and using software based on the Schema, and to permit persons to 
+whom the Schema is furnished to do so, subject to the following conditions:
+
+THE SCHEMA IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT 
+LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO 
+EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER 
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SCHEMA OR THE 
+USE OR OTHER DEALINGS IN THE SCHEMA.
+
+In addition, any modified copy of the Schema shall include the following notice:
+
+THIS SCHEMA HAS BEEN MODIFIED FROM THE SCHEMA DEFINED IN ISO 13584-42Ed2, AND SHOULD NOT BE INTERPRETED AS 
+COMPLYING WITH THAT STANDARD.
+
+*)
+
+SCHEMA ISO13584_IEC61360_class_constraint_schema;
+
+REFERENCE FROM ISO13584_IEC61360_dictionary_schema (
+	class_BSU,
+	property_BSU,
+	definition_available_implies,
+	is_subclass,
+	data_type,
+	simple_type,
+	complex_type,
+	named_type,
+	allowed_values_integer_types);
+
+REFERENCE FROM ISO13584_extended_dictionary_schema
+	(data_type_typeof,
+	data_type_class_of,
+	data_type_type_name);
+
+REFERENCE FROM ISO13584_instance_resource_schema
+	(Boolean_value,
+	compatible_class_and_class,
+	complex_value,
+	dic_class_instance,
+	entity_instance_value,
+	int_level_spec_value,
+	integer_value,
+	level_spec_value,
+	number_value,
+	primitive_value,
+	rational_value,
+	real_level_spec_value,
+	real_value,
+	right_values_for_level_spec,
+	same_translations,
+	simple_value,
+	string_value,
+	translatable_string_value,
+	translated_string_value,
+	property_or_data_type_BSU);
+
+REFERENCE FROM ISO13584_aggregate_value_schema
+	(aggregate_entity_instance_value,
+	list_value,
+	set_value,
+	bag_value,
+	array_value,
+	set_with_subset_constraint_value,
+	compatible_complete_types_and_value);
+
+ENTITY constraint
+ABSTRACT SUPERTYPE OF ( ONEOF (
+				property_constraint,
+				class_constraint));
+	constraint_id: OPTIONAL constraint_identifier;
+END_ENTITY; -- constraint
+
+(*
+
+*)
+ENTITY property_constraint 
+ABSTRACT SUPERTYPE OF ( ONEOF (
+				integrity_constraint,
+				context_restriction_constraint))
+SUBTYPE OF (constraint);
+	constrained_property : property_BSU; 
+END_ENTITY; -- property_constraint
+(*
+
+
+*)
+ENTITY class_constraint 
+ABSTRACT SUPERTYPE OF (configuration_control_constraint)
+SUBTYPE OF (constraint);
+END_ENTITY; -- class_constraint
+(*
+
+
+*)
+ENTITY configuration_control_constraint 
+SUBTYPE OF (class_constraint);
+	PRECONDITION : SET [0:?] OF filter; 
+	POSTCONDITION : SET [1:?] OF filter; 
+END_ENTITY; -- configuration_control_constraint
+(*
+
+
+*)
+ENTITY filter; 
+	referenced_property : property_BSU ;
+	domain : enumeration_constraint ;
+WHERE
+	WR1: definition_available_implies (
+		referenced_property,
+		(('ISO13584_IEC61360_DICTIONARY_SCHEMA'
+		+'.NON_QUANTITATIVE_CODE_TYPE') IN TYPEOF(
+		referenced_property.
+		definition[1]\property_DET.domain))
+		OR 
+		(('ISO13584_IEC61360_DICTIONARY_SCHEMA'
+		+'.NON_QUANTITATIVE_INT_TYPE') IN TYPEOF(
+		referenced_property.
+		definition[1]\property_DET.domain)));
+	WR2: definition_available_implies (
+		referenced_property,
+		correct_constraint_type(domain,
+		referenced_property.definition[1].domain));
+END_ENTITY; -- filter
+(*
+
+
+*)
+ENTITY integrity_constraint 
+SUBTYPE OF (property_constraint);
+	redefined_domain : domain_constraint ;
+WHERE
+	WR1: definition_available_implies (constrained_property,
+		correct_constraint_type(redefined_domain,
+		constrained_property.definition[1].domain));
+END_ENTITY; -- integrity_constraint
+(*
+
+
+*)
+ENTITY context_restriction_constraint 
+SUBTYPE OF (property_constraint);
+	context_parameter_constraints : SET [1:?] OF property_constraint;
+WHERE
+	WR1 : definition_available_implies(constrained_property,
+		QUERY (cp <*SELF.context_parameter_constraints
+		| NOT (cp.constrained_property IN
+		constrained_property.definition[1].depends_on))=[]);
+	WR2 : QUERY (cp <*SELF.context_parameter_constraints
+		| NOT (('ISO13584_IEC61360_CLASS_CONSTRAINT_SCHEMA'
+		+'.INTEGRITY_CONSTRAINT') IN TYPEOF (cp))) =[]; 
+	WR3 :definition_available_implies(constrained_property,
+		'ISO13584_IEC61360_DICTIONARY_SCHEMA.DEPENDENT_P_DET'
+		IN TYPEOF(constrained_property.definition[1])); 
+END_ENTITY; -- context_restriction_constraint
+(*
+
+
+*)
+ENTITY domain_constraint
+ABSTRACT SUPERTYPE OF(ONEOF(
+	subclass_constraint,
+	entity_subtype_constraint,
+	enumeration_constraint,
+	range_constraint,
+	string_size_constraint,
+	string_pattern_constraint,
+	cardinality_constraint
+	));
+END_ENTITY; -- domain_constraint
+(*
+
+
+*)
+ENTITY subclass_constraint
+SUBTYPE OF(domain_constraint);
+	subclasses : SET [1:?] OF class_BSU ;
+END_ENTITY; -- subclass_constraint
+(*
+
+
+*)
+ENTITY entity_subtype_constraint
+SUBTYPE OF(domain_constraint);
+	subtype_names : SET[1 : ?] OF STRING ;
+END_ENTITY; -- entity_subtype_constraint
+ (*
+
+
+*)
+ENTITY enumeration_constraint
+SUBTYPE OF ( domain_constraint);
+	subset : LIST [1 : ?] OF UNIQUE primitive_value ;
+	value_meaning: OPTIONAL non_quantitative_int_type;
+WHERE
+	WR1: (NOT(EXISTS(SELF.value_meaning)))
+		OR
+		(integer_values_in_range(1, SIZEOF(SELF.subset)) 
+			= allowed_values_integer_types ( SELF.value_meaning));
+END_ENTITY; -- enumeration_constraint
+(*
+
+
+
+*)
+ENTITY range_constraint
+SUBTYPE OF (domain_constraint) ;
+	min_value, max_value : OPTIONAL NUMBER ;
+	min_inclusive, max_inclusive: OPTIONAL BOOLEAN ;
+WHERE
+	WR1 : min_value <= max_value ;
+	WR2 : TYPEOF(min_value) = TYPEOF(max_value) ;
+	WR3 : NOT EXISTS (min_value) OR EXISTS (min_inclusive) ;
+	WR4 : NOT EXISTS (max_value) OR EXISTS (max_inclusive) ;
+END_ENTITY; -- range_constraint
+(*
+
+
+*)
+ENTITY string_size_constraint
+SUBTYPE OF (domain_constraint) ;
+	min_length, max_length : OPTIONAL INTEGER ;
+WHERE 
+	WR1 : (min_length >= 0) AND (max_length >= min_length) ;
+END_ENTITY; -- string_size_constraint
+(*
+
+	
+
+*)
+ENTITY string_pattern_constraint
+SUBTYPE OF (domain_constraint) ;
+	pattern : STRING ;
+END_ENTITY; -- string_pattern_constraint
+(*
+
+
+*)
+ENTITY cardinality_constraint
+SUBTYPE OF (domain_constraint) ;
+	bound_1, bound_2 : OPTIONAL INTEGER ;
+WHERE 
+	WR1 : (bound_1 >= 0) AND (bound_2 >= bound_1) ;
+END_ENTITY; -- cardinality_constraint
+(*
+
+
+*)
+TYPE constraint_or_constraint_id = 
+			SELECT (constraint, constraint_identifier);
+END_TYPE; -- constraint_or_constraint_id
+(*
+
+
+*)
+FUNCTION integer_values_in_range(
+	low_bound, high_bound: INTEGER): SET OF INTEGER;
+LOCAL
+	result: SET OF INTEGER:= [];
+END_LOCAL;
+	IF EXISTS (low_bound) AND EXISTS (high_bound) 
+	THEN 
+		REPEAT i := low_bound TO high_bound;
+			result := result + [i];
+		END_REPEAT;
+		RETURN(result);
+	ELSE
+		RETURN(?);
+	END_IF;
+END_FUNCTION; -- integer_values_in_range
+(*
+
+
+*)
+FUNCTION correct_precondition(
+	cons: configuration_control_constraint ; cl:class): LOGICAL;
+
+LOCAL
+	prop: SET OF property_BSU:= [];
+END_LOCAL;
+	REPEAT i:=1 TO SIZEOF (cons.PRECONDITION);
+		prop := prop + cons.PRECONDITION[i].referenced_property ;
+	END_REPEAT;
+
+	IF prop <= cl.known_applicable_properties 
+	THEN RETURN (TRUE); 
+	ELSE 
+		IF all_class_descriptions_reachable(cl.identified_by)
+		THEN RETURN (FALSE);
+		ELSE RETURN (UNKNOWN);
+		END_IF;
+	END_IF;
+END_FUNCTION; -- correct_precondition
+(*
+
+
+*)
+FUNCTION correct_constraint_type(
+	cons: domain_constraint; typ:data_type): LOGICAL;
+
+(*case subclass constraint*)
+
+IF ('ISO13584_IEC61360_CLASS_CONSTRAINT_SCHEMA'
+	+'.SUBCLASS_CONSTRAINT') IN TYPEOF(cons)
+THEN
+	(*the data type shall be class_reference_type*)
+	IF NOT ('ISO13584_IEC61360_DICTIONARY_SCHEMA.CLASS_REFERENCE_TYPE'
+		IN TYPEOF (typ))
+	THEN RETURN(FALSE);
+	END_IF;
+
+	(*the cons.subclasses shall consist of subclasses for the class
+	that defined the initial domain of typ.*)
+IF NOT (QUERY (sc <* cons.subclasses |
+		definition_available_implies
+	(sc,definition_available_implies
+	(typ\class_reference_type.domain,is_subclass(sc.definition[1],
+	typ\class_reference_type.domain.definition[1])))= FALSE) 
+	= [])
+	THEN RETURN(FALSE);
+	END_IF;
+
+	RETURN (TRUE);
+END_IF;
+(*case entity subtype constraint*)
+
+IF (('ISO13584_IEC61360_CLASS_CONSTRAINT_SCHEMA'
+	+'.ENTITY_SUBTYPE_CONSTRAINT') IN TYPEOF (CONS))
+THEN
+
+(* the data type is a class_reference_type*)
+	IF NOT (('ISO13584_IEC61360_DICTIONARY_SCHEMA'
+	+'.ENTITY_INSTANCE_TYPE') IN TYPEOF (typ))
+	THEN RETURN(FALSE);
+ 	END_IF;
+(* the subtype_name shall define a subtype for the entity_instance_type of the constrained *)
+	IF NOT (cons\entity_subtype_constraint.subtype_names
+		>= typ\entity_instance_type.type_name)
+	THEN RETURN(FALSE);
+ 	END_IF; 
+
+RETURN (TRUE);
+END_IF;
+
+(*case enumeration_constraint *)
+
+IF ('ISO13584_IEC61360_CLASS_CONSTRAINT_SCHEMA'
+	+'.ENUMERATION_CONSTRAINT') IN TYPEOF (CONS)
+THEN
+
+(* all the values belonging to the subset of values shall be compatible with the typ data type *)
+	IF (QUERY (val<*cons.subset | 
+		NOT compatible_data_type_and_value ( typ, val))<> [])
+	THEN RETURN(FALSE);
+ 	END_IF; 
+
+RETURN (TRUE);
+END_IF;
+
+
+(*case range_constraint *)
+
+IF ('ISO13584_IEC61360_CLASS_CONSTRAINT_SCHEMA.RANGE_CONSTRAINT'
+	 IN TYPEOF (CONS))
+THEN
+
+(*if the data type is an integer_type then min_value and max_value shall be INTEGERs.*)
+	IF ('ISO13584_IEC61360_DICTIONARY_SCHEMA.INTEGER_TYPE'
+		IN TYPEOF (typ)) AND 
+		NOT ('INTEGER' IN TYPEOF (cons.min_value))
+	THEN RETURN(FALSE);
+ 	END_IF; 
+
+(*if the data type is a rational_type then min_value and max_value shall be rational.*)
+	IF ('ISO13584_IEC61360_DICTIONARY_SCHEMA.RATIONAL_TYPE'
+		IN TYPEOF (typ)) AND 
+		NOT ('ISO13584_IEC61360_DICTIONARY_SCHEMA.RATIONAL_VALUE' IN TYPEOF (cons.min_value))
+	THEN RETURN(FALSE);
+ 	END_IF; 
+
+(*if the data type is a real_type then min_value and max_value shall be REALs.*)
+	IF ('ISO13584_IEC61360_DICTIONARY_SCHEMA.REAL_TYPE'
+		IN TYPEOF (typ)) AND NOT ('REAL' IN TYPEOF (cons.min_value))
+	THEN RETURN(FALSE);
+ 	END_IF; 
+
+(*all values of the range shall belong to the allowed values defined by the type.*)
+	IF (('ISO13584_IEC61360_DICTIONARY_SCHEMA'
+		+ '.NON_QUANTITATIVE_INT_TYPE') IN TYPEOF (typ))
+	AND NOT
+		(integer_values_in_range(cons.min_value, cons.max_value)
+		<= allowed_values_integer_types (typ))
+	THEN RETURN(FALSE);
+ 	END_IF; 
+
+RETURN (TRUE);
+END_IF;
+
+(*case entity string_size_constraint*)
+
+IF ('ISO13584_IEC61360_CLASS_CONSTRAINT_SCHEMA'
+	+'.STRING_SIZE_CONSTRAINT') IN TYPEOF (CONS)
+THEN
+
+(* the data type shall be a string_type or any of its subtypes *)
+IF NOT	('ISO13584_IEC61360_DICTIONARY_SCHEMA.STRING_TYPE'
+		IN TYPEOF (typ))
+THEN RETURN(FALSE);
+END_IF; 
+
+RETURN (TRUE);
+END_IF;
+
+(*case entity string_pattern_constraint *)
+
+IF ('ISO13584_IEC61360_CLASS_CONSTRAINT_SCHEMA'
+	+'.STRING_PATTERN_CONSTRAINT') IN TYPEOF (CONS)
+THEN
+
+(* the data type shall be a string_type or any of its subtypes *)
+	IF NOT ('ISO13584_IEC61360_DICTIONARY_SCHEMA.STRING_TYPE'
+		IN TYPEOF (typ))
+	THEN RETURN(FALSE);
+ 	END_IF; 
+RETURN (TRUE);
+END_IF;
+
+(*case entity cardinality_constraint *)
+
+IF ('ISO13584_IEC61360_CLASS_CONSTRAINT_SCHEMA'
+	+'.CARDINALITY_CONSTRAINT') IN TYPEOF (CONS)
+THEN
+
+(* the data type shall be an aggregate type but not an array*)
+	IF (NOT(
+	('ISO13584_IEC61360_DICTIONARY_SCHEMA'
+	+ '.ENTITY_INSTANCE_TYPE_FOR_AGGREGATE')
+	 IN TYPEOF(typ)))
+	THEN
+		RETURN(FALSE);
+	END_IF;
+
+	IF (
+	'ISO13584_IEC61360_DICTIONARY_SCHEMA'
+ + '.ARRAY_TYPE' IN TYPEOF(typ.type_structure))
+	THEN
+		RETURN(FALSE);
+	END_IF;
+	RETURN (TRUE);
+END_IF;
+
+RETURN (UNKNOWN);
+
+END_FUNCTION; -- correct_constraint_type
+(*
+
+
+*)
+FUNCTION compatible_data_type_and_value(dom: data_type;
+	val: primitive_value): LOGICAL;
+
+LOCAL
+	temp: class_BSU;
+	set_string: SET OF STRING := [];
+	set_integer: SET OF INTEGER := [];
+	code_type: non_quantitative_code_type;
+	int_type: non_quantitative_int_type;
+END_LOCAL;
+
+(* The following express statements deal with simple types *)
+
+IF ('ISO13584_INSTANCE_RESOURCE_SCHEMA.INTEGER_VALUE' IN TYPEOF(val))
+THEN
+	IF ('ISO13584_IEC61360_DICTIONARY_SCHEMA.' + 
+		'NON_QUANTITATIVE_INT_TYPE' IN TYPEOF (dom))
+	THEN
+		set_integer := [];
+		int_type := dom;
+		REPEAT j := 1 TO SIZEOF(int_type.domain.its_values);
+			set_integer := set_integer + 
+				int_type.domain.its_values[j].value_code;
+		END_REPEAT;
+		
+		RETURN(val IN set_integer);
+
+	ELSE
+		RETURN(('ISO13584_IEC61360_DICTIONARY_SCHEMA.INT_TYPE'
+			IN TYPEOF (dom)) OR
+			(('ISO13584_IEC61360_DICTIONARY_SCHEMA.NUMBER_TYPE'
+			IN TYPEOF (dom))
+			AND NOT(('ISO13584_IEC61360_DICTIONARY_SCHEMA.REAL_TYPE'
+			IN TYPEOF (dom))
+			OR ('ISO13584_IEC61360_DICTIONARY_SCHEMA.RATIONAL_TYPE'
+			IN TYPEOF (dom)))));
+	END_IF;
+END_IF;
+
+IF ('ISO13584_INSTANCE_RESOURCE_SCHEMA.REAL_VALUE' IN TYPEOF(val))
+THEN
+	RETURN(('ISO13584_IEC61360_DICTIONARY_SCHEMA.REAL_TYPE'
+		IN TYPEOF (dom)) OR
+		(('ISO13584_IEC61360_DICTIONARY_SCHEMA.NUMBER_TYPE'
+		IN TYPEOF (dom))
+		AND NOT(('ISO13584_IEC61360_DICTIONARY_SCHEMA.INT_TYPE'
+		IN TYPEOF (dom))
+		OR ('ISO13584_IEC61360_DICTIONARY_SCHEMA.RATIONAL_TYPE'
+			IN TYPEOF (dom)))));
+END_IF;
+
+IF ('ISO13584_INSTANCE_RESOURCE_SCHEMA.RATIONAL_VALUE' IN TYPEOF(val))
+THEN
+	RETURN(('ISO13584_IEC61360_DICTIONARY_SCHEMA.RATIONAL_TYPE'
+		IN TYPEOF (dom)) OR
+		(('ISO13584_IEC61360_DICTIONARY_SCHEMA.NUMBER_TYPE'
+		IN TYPEOF (dom))
+		AND NOT(('ISO13584_IEC61360_DICTIONARY_SCHEMA.INT_TYPE'
+		IN TYPEOF (dom))
+		OR ('ISO13584_IEC61360_DICTIONARY_SCHEMA.REAL_TYPE'
+			IN TYPEOF (dom)))));
+END_IF;
+
+IF ('ISO13584_INSTANCE_RESOURCE_SCHEMA.STRING_VALUE' 
+	IN TYPEOF(val))
+THEN
+	IF (('ISO13584_IEC61360_DICTIONARY_SCHEMA' +
+		'.NON_QUANTITATIVE_CODE_TYPE') IN TYPEOF (dom))
+	THEN
+		set_string := [];
+		code_type := dom;
+		REPEAT j := 1 TO SIZEOF(code_type.domain.its_values);
+			set_string := set_string + 
+				code_type.domain.its_values[j].value_code;
+		END_REPEAT;
+
+			RETURN(val IN set_string);
+
+	ELSE
+		RETURN('ISO13584_IEC61360_DICTIONARY_SCHEMA' +
+			'.STRING_TYPE' IN TYPEOF (dom));
+	END_IF;
+END_IF;
+
+IF ('ISO13584_INSTANCE_RESOURCE_SCHEMA.TRANSLATED_STRING_VALUE' 
+	IN TYPEOF(val))
+THEN
+		RETURN('ISO13584_IEC61360_DICTIONARY_SCHEMA' +
+			'.TRANSLATABLE_STRING_TYPE' IN TYPEOF (dom));
+END_IF;
+
+(* The following express statements deal with complex types *)
+
+IF 'ISO13584_INSTANCE_RESOURCE_SCHEMA.DIC_CLASS_INSTANCE'
+	IN TYPEOF(val) 
+THEN
+	IF ('ISO13584_IEC61360_DICTIONARY_SCHEMA.CLASS_REFERENCE_TYPE'
+		IN TYPEOF (dom))
+	THEN
+		temp := dom.domain;
+		RETURN(compatible_class_and_class(temp,
+			val\dic_class_instance.class_def));
+	ELSE
+		RETURN(FALSE);
+	END_IF;
+END_IF;
+
+IF 'ISO13584_INSTANCE_RESOURCE_SCHEMA.LEVEL_SPEC_VALUE' IN TYPEOF(val) THEN	
+	IF ('ISO13584_IEC61360_DICTIONARY_SCHEMA.LEVEL_TYPE'
+		IN TYPEOF (dom))
+	THEN
+		RETURN(compatible_level_type_and_instance(
+			dom.levels,
+			TYPEOF(dom.value_type),
+			val));
+	ELSE
+		RETURN(FALSE);
+	END_IF;
+END_IF;
+
+
+(* The following express statements deal with aggregate types *)
+
+IF 'ISO13584_AGGREGATE_VALUE_SCHEMA.AGGREGATE_ENTITY_INSTANCE_VALUE' IN TYPEOF(val) THEN	
+
+	IF (NOT(
+	'ISO13584_IEC61360_DICTIONARY_SCHEMA.ENTITY_INSTANCE_TYPE'
+	 IN TYPEOF(dom)))
+	THEN
+		RETURN(FALSE);
+	END_IF;
+
+	IF (NOT(
+	'ISO13584_IEC61360_DICTIONARY_AGGREGATE_EXTENSION_SCHEMA'
+ + '.AGGREGATE_TYPE' IN dom.type_name))
+	THEN
+		RETURN(FALSE);
+	END_IF;
+	
+	RETURN(compatible_aggregate_type_and_value(dom, val));
+
+END_IF;
+
+IF 'ISO13584_INSTANCE_RESOURCE_SCHEMA.ENTITY_INSTANCE_VALUE'
+	IN TYPEOF(val)
+THEN
+	IF 'ISO13584_INSTANCE_RESOURCE_SCHEMA' +
+		'.UNCONTROLLED_ENTITY_INSTANCE_VALUE'
+		IN TYPEOF(val)
+	THEN
+		RETURN(UNKNOWN);
+	END_IF;
+	IF ('ISO13584_IEC61360_DICTIONARY_SCHEMA.ENTITY_INSTANCE_TYPE'
+		IN TYPEOF (dom))
+		AND (dom.type_name <= TYPEOF(val))
+	THEN 
+		RETURN(TRUE);
+	ELSE 
+		RETURN(FALSE);
+	END_IF;
+END_IF;
+
+RETURN(UNKNOWN);
+
+END_FUNCTION; -- compatible_data_type_and_value
+(*
+
+*)
+RULE unique_constraint_id FOR(constraint);
+WHERE
+	QUERY(c1 <* constraint | 
+		SIZEOF(QUERY(c2 <* constraint |
+		c1.constraint_id=c2.constraint_id))>1) =[];
+END_RULE; -- unique_constraint_id
+
+END_SCHEMA; -- ISO13584_IEC61360_class_constraint_schema

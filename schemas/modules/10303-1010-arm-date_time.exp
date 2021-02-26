@@ -1,0 +1,79 @@
+(*
+ $Id: 10303-1010-arm-date_time.exp,v 1.5 2006/08/07 07:44:41 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2913 - ISO/TS 10303-1010 Date time - EXPRESS ARM
+*) 
+
+
+SCHEMA Date_time_arm;
+
+
+TYPE date_or_date_time_select = SELECT
+   (Calendar_date, 
+    Date_time);
+END_TYPE; 
+
+TYPE day_in_month_number = INTEGER;
+WHERE
+  WR1: {1 <= SELF <= 31};
+END_TYPE; 
+
+TYPE hour_in_day = INTEGER;
+WHERE
+  WR1: { 0 <= SELF < 24 };
+END_TYPE; 
+
+TYPE minute_in_hour = INTEGER;
+WHERE
+  WR1: { 0 <= SELF <= 59 };
+END_TYPE; 
+
+TYPE month_in_year_number = INTEGER;
+WHERE
+  WR1: { 1 <= SELF <= 12 };
+END_TYPE; 
+
+TYPE offset_orientation = ENUMERATION OF 
+   (ahead,
+    exact,
+    behind);
+END_TYPE; 
+
+TYPE second_in_minute = REAL;
+WHERE
+  WR1: { 0 <= SELF <= 60.0 };
+END_TYPE; 
+
+TYPE year_number = INTEGER;
+END_TYPE; 
+
+ENTITY Calendar_date;
+  year_component : year_number;
+  month_component : month_in_year_number;
+  day_component : day_in_month_number;
+END_ENTITY;
+
+ENTITY Date_time;
+  date_component : Calendar_date;
+  time_component : Local_time;
+END_ENTITY;
+
+ENTITY Local_time;
+  hour_component : hour_in_day;
+  minute_component : OPTIONAL minute_in_hour;
+  second_component : OPTIONAL second_in_minute;
+  zone : Time_offset;
+END_ENTITY;
+
+ENTITY Time_offset;
+  hour_offset : INTEGER;
+  minute_offset : OPTIONAL INTEGER;
+  sense : offset_orientation;
+DERIVE
+  actual_minute_offset : INTEGER := NVL(minute_offset,0);
+WHERE
+  WR1: { 0 <= hour_offset < 24 };
+  WR2: { 0 <= actual_minute_offset <= 59 };
+  WR3: NOT (((hour_offset <> 0) OR (actual_minute_offset <>0)) AND (sense = exact));
+END_ENTITY;
+
+END_SCHEMA;  -- Date_time_arm

@@ -1,0 +1,15 @@
+(*
+   $Id: 10303-1347-arm-wireframe_2d.exp,v 1.1 2006/08/03 14:41:11 wg12deputy Exp $
+   ISO/TC184/SC4 WG12N2625 - ISO/TS 10303-1347 Wireframe_2d - EXPRESS ARM
+   Supersedes ISO TC184/SC4/WG12N1775
+*)
+
+SCHEMA Wireframe_2d_arm;
+
+USE FROM Elemental_geometric_shape_arm;
+
+ENTITY Geometrically_bounded_2d_wireframe_shape_representation
+  SUBTYPE OF (Geometric_model);
+END_ENTITY;
+
+END_SCHEMA;

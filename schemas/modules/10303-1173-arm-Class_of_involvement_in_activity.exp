@@ -1,0 +1,22 @@
+(*
+ $Id: 10303-1173-arm-Class_of_involvement_in_activity.exp,v 1.4 2006/08/04 12:01:50 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2738 - ISO/TS 10303-1173 Class of involvement in activity - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG12 N1849
+*)
+
+SCHEMA Class_of_involvement_in_activity_arm;
+
+USE FROM Activity_arm;    -- ISO/TS 10303-1047
+USE FROM Class_arm;    -- ISO/TS 10303-1070
+USE FROM Class_of_activity_arm;    -- ISO/TS 10303-1071
+
+TYPE involved_class_select = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON activity_item;
+END_TYPE;
+
+ENTITY Class_of_involvement_in_activity
+  SUBTYPE OF (Applied_activity_assignment, Class);
+  SELF\Applied_activity_assignment.assigned_activity : Class_of_activity;
+  SELF\Applied_activity_assignment.items : SET[1:1] OF involved_class_select;
+END_ENTITY;
+
+END_SCHEMA;

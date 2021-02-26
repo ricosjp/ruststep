@@ -1,0 +1,20 @@
+(*
+ $Id: 10303-1162-arm-Class_of_product_library.exp,v 1.4 2006/08/04 12:01:50 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2750 - ISO/TS 10303-1162 Class of product library - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG12 N1974
+*)
+
+SCHEMA Class_of_product_library_arm;
+
+USE FROM Cardinality_of_relationship_arm;    --  ISO/TS 10303-1211
+USE FROM Class_of_product_structure_arm;    --  ISO/TS 10303-1157
+USE FROM Set_theory_arm;    --  ISO/TS 10303-1210
+
+TYPE Class_of_product_relationship = SELECT BASED_ON relationship_select WITH 
+   (Class_of_composition_of_product, 
+    Class_of_connection_of_product, 
+    Class_of_containment_of_product, 
+    Class_of_involvement_of_product_in_connection);
+END_TYPE; 
+
+END_SCHEMA;

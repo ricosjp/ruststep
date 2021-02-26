@@ -1,0 +1,45 @@
+(*
+WG12 N671
+ISO/TS 10303-1002
+Product data representation and exchange: Application module: Colour - EXPRESS ARM
+*)
+
+SCHEMA Colour_arm;
+
+ENTITY Colour;
+  name : STRING;
+END_ENTITY;
+
+ENTITY Externally_defined_colour
+  SUBTYPE OF (Colour);
+  source : STRING;
+END_ENTITY;
+
+ENTITY Pre_defined_colour
+  SUBTYPE OF (Colour);
+WHERE
+  WR1: SELF.name IN
+       ['red',
+        'green',
+        'blue',
+        'yellow',
+        'magenta',
+        'cyan',
+        'black',
+        'white'];
+END_ENTITY;
+
+ENTITY User_defined_colour
+  SUBTYPE OF (Colour);
+  red   : REAL;
+  green : REAL;
+  blue  : REAL;
+WHERE
+  WR1: {0.0 <= red <= 1.0};
+  WR2: {0.0 <= green <= 1.0};
+  WR3: {0.0 <= blue <= 1.0};
+END_ENTITY;
+
+END_SCHEMA;
+
+

@@ -1,0 +1,38 @@
+(* 
+   $Id: 10303-1346-mim-numeric_function.exp,v 1.2 2005/02/22 15:24:44 wg12deputy Exp $
+   ISO/TC184/SC4 WG12N2562 - ISO/TS 10303-1346 Numeric-function - Express MIM
+   Supersedes ISO TC184/SC4/WG12N1803
+*)
+
+SCHEMA Numeric_function_mim;
+
+USE FROM Expression_mim;
+
+USE FROM ISO13584_expressions_schema(
+	abs_function,
+	acos_function,	
+	asin_function,
+	atan_function,	
+	cos_function,
+	exp_function,
+	int_value_function,
+	integer_defined_function,	
+	length_function,	
+	log_function,
+	log10_function,
+	log2_function,
+	maximum_function,
+	minimum_function,	
+	minus_function,		
+	numeric_defined_function,	
+	odd_function,	
+	real_defined_function,	
+	sin_function,	
+	square_root_function,	
+	tan_function,	
+	unary_function_call,	
+(* JH changed this one: 	value_function,	 *)
+	value_function	
+	);
+	
+END_SCHEMA;

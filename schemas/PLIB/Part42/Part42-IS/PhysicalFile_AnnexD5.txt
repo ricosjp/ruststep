@@ -1,0 +1,151 @@
+ISO-10303-21;
+HEADER;
+FILE_DESCRIPTION(('Example physical file'), '2;1');
+FILE_NAME('example.spf', '2001-01-29', ('IEC SC3D WG2'), (),
+'Version 1', '', '');
+FILE_SCHEMA(('example_schema'));
+ENDSEC;
+DATA;
+/*
+D.5.1.1  Supplier data
+*/
+#1=SUPPLIER_BSU('112/2///61360_4_1', *); /*according to ISO 13584-26*/
+#2=SUPPLIER_ELEMENT(#1, #3, '01', #4, #5);
+#3=DATES('1994-09-16', '1994-09-16', $);
+#4=ORGANIZATION('IEC', 'IEC Maintenance Agency', 'The IEC Maintenance Agency as described in IEC 61360-3: "Maintenance and Validation Procedures"');
+#5=ADDRESS('to be determined', $, $, $, $, $, $, $, $, $, $, $);
+#10=SUPPLIER_BSU('112/3///_00', *);	/* ISO/IEC ICS */
+/*
+
+D.5.1.2  Root class data
+The AAA000 IEC root class provides a name scope corresponding to the whole future IEC 61360-4 standard. It covers two trees, one for materials, one for components, therefore the class is defined as an item_class. It is a subtype of ICS root.
+*/
+#90=CLASS_BSU('OO', '001', #10);	/* ICS root */
+#100=CLASS_BSU('AAA000', '001', #1);
+#101=ITEM_CLASS(#100, #3, '01', #102, TEXT('IEC root class that provides a name scope corresponding to the whole IEC 61360-4 standard. It covers two trees, one for materials, one for components'), $, $, $, #90, (#110), (), $, (#110), (), $);
+#102=ITEM_NAMES(LABEL('IEC root class'), (), LABEL('IEC root'), $, $);
+#110=PROPERTY_BSU('AAE000', '001', #100);
+#111=NON_DEPENDENT_P_DET(#110, #3, '01', #112, TEXT('the type of tree: material or component'), $, $, $, $, (), $, $, #113, $);
+#112=ITEM_NAMES(LABEL('type of tree'), (), LABEL('tree type'), $, $);
+#113=NON_QUANTITATIVE_CODE_TYPE('A..8', #114);
+#114=VALUE_DOMAIN((#120, #122), $, $, ());
+#120=DIC_VALUE(VALUE_CODE_TYPE('MATERIAL'), #121, $);
+#121=ITEM_NAMES(LABEL('material tree'), (), LABEL('mat tree'), $, $);
+#122=DIC_VALUE(VALUE_CODE_TYPE('COMPONS'), #123, $);
+#123=ITEM_NAMES(LABEL('component tree'), (), LABEL('comp tree'), $, $);
+/*
+
+D.5.1.3  Material data
+*/
+#200=CLASS_BSU('AAA218', '001', #1);
+#201=MATERIAL_CLASS(#200, #3, '01', #202, TEXT('root class of the materials tree'), $, $, $, #100, (#210, #230), (), $, (#210), (#205), 'MATERIAL');
+#202=ITEM_NAMES(LABEL('materials root class'), (), LABEL('materials root'), $, $);
+#205=CLASS_VALUE_ASSIGNMENT(#110, 'MATERIAL');
+#210=PROPERTY_BSU('AAF311', '005', #100);
+#211=NON_DEPENDENT_P_DET(#210, #3, '01', #212, TEXT('code of the type of material'), $, $, $, $, (), $, 'A57', #213, $);
+#212=ITEM_NAMES(LABEL('material type'), (), LABEL('material type'), $, $);
+#213=NON_QUANTITATIVE_CODE_TYPE('M..3', #214);
+#214=VALUE_DOMAIN((#220, #222, #224, #226), $, $, ());
+#220=DIC_VALUE(VALUE_CODE_TYPE('ACO'), #221, $);
+#221=ITEM_NAMES(LABEL('acoustical'), (), LABEL('acoustical'), $, $);
+#222=DIC_VALUE(VALUE_CODE_TYPE('MG'), #223, $);
+#223=ITEM_NAMES(LABEL('magnetic'), (), LABEL('magnetical'), $, $);
+#224=DIC_VALUE(VALUE_CODE_TYPE('OP'), #225, $);
+#225=ITEM_NAMES(LABEL('optical'), (), LABEL('optical'), $, $);
+#226=DIC_VALUE(VALUE_CODE_TYPE('TH'), #227, $);
+#227=ITEM_NAMES(LABEL('thermal-electric'), (), LABEL('th-electric'), $, $);
+#230=PROPERTY_BSU('AAF286', '005', #100);
+#231=NON_DEPENDENT_P_DET(#230, #3, '01', #232, TEXT('The nominal density (in kg/m**3) of a material.'), $, $, $, #233, (), $, 'K02', #234, $);
+#232=ITEM_NAMES(LABEL('density'), (), LABEL('density'), $, $);
+#233=MATHEMATICAL_STRING('$r_d', '&rho;<sub>d</sub>');
+#234=REAL_MEASURE_TYPE('NR3..3.3ES2', #235);
+#235=DIC_UNIT(#236, $);
+#236=DERIVED_UNIT((#237, #239));
+#237=DERIVED_UNIT_ELEMENT(#238, 1.0);
+#238=SI_UNIT(*, .KILO., .GRAM.);
+#239=DERIVED_UNIT_ELEMENT(#240, -3.0);
+#240=SI_UNIT(*, $, .METRE.);
+/*
+
+D.5.1.4  Component data
+*/
+#300=CLASS_BSU('EEE000', '001', #1);
+#301=COMPONENT_CLASS(#300, #3, '01', #302, TEXT('root class of the components tree'), $, $, $, #100, (#310, #330, #350), (), $, (#310), (#305), 'COMPONS');
+#302=ITEM_NAMES(LABEL('components root class'), (), LABEL('components root'), $, $);
+#305=CLASS_VALUE_ASSIGNMENT(#110, 'COMPONS');
+#310=PROPERTY_BSU('AAE001', '005', #100);
+#311=NON_DEPENDENT_P_DET(#310, #3, '01', #312, TEXT('Code of the main functional class to which a component belongs'), $, $, $, $, (), $, 'A52', #313, $);
+#312=ITEM_NAMES(LABEL('main class of component'), (), LABEL('main class'), $, $);
+#313=NON_QUANTITATIVE_CODE_TYPE('M..3', #314);
+#314=VALUE_DOMAIN((#320, #322, #324, #326), $, $, ());
+#320=DIC_VALUE(VALUE_CODE_TYPE('EE'), #321, $);
+#321=ITEM_NAMES(LABEL('EE (electric / electronic)'), (), LABEL('EE'), $, $);
+#322=DIC_VALUE(VALUE_CODE_TYPE('EM'), #323, $);
+#323=ITEM_NAMES(LABEL('electromechanical'), (), LABEL('electromech'), $, $);
+#324=DIC_VALUE(VALUE_CODE_TYPE('ME'), #325, $);
+#325=ITEM_NAMES(LABEL('mechanical'), (), LABEL('mechanical'), $, $);
+#326=DIC_VALUE(VALUE_CODE_TYPE('MP'), #327, $);
+#327=ITEM_NAMES(LABEL('magnetic part'), (), LABEL('magnetic'), $, $);
+#330=PROPERTY_BSU('AAF267', '005', #100);
+#331=NON_DEPENDENT_P_DET(#330, #3, '01', #332, TEXT('The nominal distance (in m) between the inside of the two tapes used for taped products with axial leads'), $, $, $, #333, (), $, 'T03', #334, $);
+#332=ITEM_NAMES(LABEL('inner tape spacing'), (), LABEL('inner tape spac'), $, $);
+#333=MATHEMATICAL_STRING('b_tape', 'b<sub>tape</sub>');
+#334=LEVEL_TYPE((.NOM.), #335);
+#335=REAL_MEASURE_TYPE('NR3..3.3ES2', #336);
+#336=DIC_UNIT(#337, $);
+#337=SI_UNIT(*, $, .METRE.);
+#350=PROPERTY_BSU('AAE022', '005', #100);
+#351=NON_DEPENDENT_P_DET(#350, #3, '01', #352, TEXT('The value as specified by level (miNoMax) of the outside diameter (in m) of a component with a body of circular cross-section'), $, $, $, #353, (), $, 'T03', #354, $);
+#352=ITEM_NAMES(LABEL('outside diameter'), (), LABEL('outside diam'), $, $);
+#353=MATHEMATICAL_STRING('d_out', 'd<sub>out</sub>');
+#354=LEVEL_TYPE((.MIN.,.NOM.,.MAX.), #355);
+#355=REAL_MEASURE_TYPE('NR3..3.3ES2', #356);
+#356=DIC_UNIT(#357, #358);
+#357=SI_UNIT(*, $, .METRE.);
+#358=MATHEMATICAL_STRING('m','m');
+/*
+
+D.5.1.5  Electric / Electronic component data
+*/
+#400=CLASS_BSU('EEE001', '001', #1);
+#401=COMPONENT_CLASS(#400, #3, '01', #402, TEXT('electric / electronic components'), $, $, $, #300, (#410, #470), (), $, (#410), (#405), 'EE');
+#402=ITEM_NAMES(LABEL('EE components'), (), LABEL('EE components'), $, $);
+#405=CLASS_VALUE_ASSIGNMENT(#310, 'EE');
+#410=PROPERTY_BSU('AAE002', '005', #100);
+#411=NON_DEPENDENT_P_DET(#410, #3, '01', #412, TEXT('Code of the category to which an electric/electronic component belongs.'), $, $, $, $, (), $, 'A52', #413, $);
+#412=ITEM_NAMES(LABEL('category EE component'), (), LABEL('categ EE comp'), $, $);
+#413=NON_QUANTITATIVE_CODE_TYPE('M..3', #414);
+#414=VALUE_DOMAIN((#420, #422, #424, #426, #428, #430, #432, #434, #436, #438, #440), $, $, ());
+#420=DIC_VALUE(VALUE_CODE_TYPE('AMP'), #421, $);
+#421=ITEM_NAMES(LABEL('amplifier'), (), LABEL('amplifier'), $, $);
+#422=DIC_VALUE(VALUE_CODE_TYPE('ANT'), #423, $);
+#423=ITEM_NAMES(LABEL('antenna (aerial)'), (), LABEL('antenna (aer)'), $, $);
+#424=DIC_VALUE(VALUE_CODE_TYPE('BAT'), #425, $);
+#425=ITEM_NAMES(LABEL('battery'), (), LABEL('battery'), $, $);
+#426=DIC_VALUE(VALUE_CODE_TYPE('CAP'), #427, $);
+#427=ITEM_NAMES(LABEL('capacitor'), (), LABEL('capacitor'), $, $);
+#428=DIC_VALUE(VALUE_CODE_TYPE('CND'), #429, $);
+#429=ITEM_NAMES(LABEL('conductor'), (), LABEL('conductor'), $, $);
+#430=DIC_VALUE(VALUE_CODE_TYPE('DEL'), #431, $);
+#431=ITEM_NAMES(LABEL('delay line'), (), LABEL('delay line'), $, $);
+#432=DIC_VALUE(VALUE_CODE_TYPE('DID'), #433, $);
+#433=ITEM_NAMES(LABEL('diode device'), (), LABEL('diode device'), $, $);
+#434=DIC_VALUE(VALUE_CODE_TYPE('FIL'), #435, $);
+#435=ITEM_NAMES(LABEL('filter'), (), LABEL('filter'), $, $);
+#436=DIC_VALUE(VALUE_CODE_TYPE('IC'), #437, $);
+#437=ITEM_NAMES(LABEL('integrated circuit'), (), LABEL('IC'), $, $);
+#438=DIC_VALUE(VALUE_CODE_TYPE('IND'), #439, $);
+#439=ITEM_NAMES(LABEL('inductor'), (), LABEL('inductor'), $, $);
+#440=DIC_VALUE(VALUE_CODE_TYPE('LAM'), #441, $);
+#441=ITEM_NAMES(LABEL('lamp'), (), LABEL('lamp'), $, $);
+/* etc. */
+#470=PROPERTY_BSU('AAE754', '005', #100);
+#471=NON_DEPENDENT_P_DET(#470, #3, '01', #472, TEXT('The number of electrical terminals of an electric/electronic or electromechanical component'), $, $, $, #473, (), $, 'Q56', #474, $);
+#472=ITEM_NAMES(LABEL('number of terminals'), ('number of pins'), LABEL('nr of terminals'), $, $);
+#473=MATHEMATICAL_STRING('N_term', 'N<sub>term</sub>');
+#474=INT_TYPE('NR1..4');
+
+ENDSEC;
+END-ISO-10303-21;
+
+

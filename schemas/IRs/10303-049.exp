@@ -1,0 +1,283 @@
+
+SCHEMA method_definition_schema;
+
+REFERENCE FROM action_schema
+    (action_method, 
+     action_method_relationship, 
+     action_relationship);
+
+REFERENCE FROM document_schema
+    (document, 
+     document_usage_constraint);
+
+REFERENCE FROM effectivity_schema
+    (effectivity);
+
+REFERENCE FROM measure_schema
+    (count_measure);
+
+REFERENCE FROM support_resource_schema
+    (label, 
+     text);
+
+REFERENCE FROM process_property_schema
+    (product_definition_process,
+     property_process);
+
+TYPE relationship_with_condition = SELECT
+  (action_method_relationship,
+   action_relationship,
+   context_dependent_action_method_relationship,
+   context_dependent_action_relationship);
+END_TYPE;
+
+TYPE process_or_process_relationship = SELECT
+  (product_definition_process,
+   property_process,
+   relationship_with_condition);
+END_TYPE;
+
+ENTITY action_method_with_associated_documents
+  SUBTYPE OF (action_method);
+  documents : SET [1:?] of document;
+END_ENTITY;
+
+ENTITY action_method_with_associated_documents_constrained
+  SUBTYPE OF (action_method_with_associated_documents);
+  usage_constraints : SET [1:?] OF document_usage_constraint;
+WHERE
+  WR1: SIZEOF (QUERY (item <* usage_constraints | 
+       NOT (item.source 
+       IN SELF\action_method_with_associated_documents.documents))) = 0;
+END_ENTITY;
+
+ENTITY action_method_to_select_from
+  SUBTYPE OF (action_method);
+  number_of_elements : count_measure;
+WHERE
+  WR1: number_of_elements >=1;
+  WR2: SIZEOF (USEDIN (SELF, 
+       'ACTION_SCHEMA.ACTION_METHOD_RELATIONSHIP.RELATING_METHOD')) >= 
+       number_of_elements;
+END_ENTITY;
+
+ENTITY process_or_process_relationship_effectivity
+  SUBTYPE OF (effectivity);
+  effective_process_or_process_relationship : process_or_process_relationship;
+END_ENTITY;
+
+ENTITY serial_action_method
+  SUBTYPE OF (action_method_relationship);
+END_ENTITY;
+
+ENTITY sequential_method
+  SUBTYPE OF (serial_action_method);
+  sequence_position : count_measure;
+END_ENTITY;
+
+ENTITY concurrent_action_method
+  SUBTYPE OF (action_method_relationship);
+END_ENTITY;
+
+ENTITY context_dependent_action_method_relationship;
+  name                  : label;
+  relating_relationship : action_method_relationship;
+  related_relationship  : action_method_relationship;
+UNIQUE
+  UR1: relating_relationship, related_relationship;
+WHERE
+  WR1: relating_relationship.relating_method :=:
+       related_relationship.relating_method;
+END_ENTITY;
+
+ENTITY context_dependent_action_relationship;
+  name                  : label;
+  relating_relationship : action_relationship;
+  related_relationship  : action_relationship;
+UNIQUE
+  UR1: relating_relationship, related_relationship;
+WHERE
+  WR1: relating_relationship.relating_action :=:
+       related_relationship.relating_action;
+END_ENTITY;
+
+ENTITY relationship_condition;
+  name                     : label;
+  applicable_relationships : SET [1:?] OF relationship_with_condition;
+  condition_description    : text;
+END_ENTITY;
+
+END_SCHEMA;  -- method_definition_schema
+
+SCHEMA process_property_schema;
+
+REFERENCE FROM action_schema
+    (action, 
+     action_method,
+     action_method_relationship,
+     action_relationship,
+     action_resource,
+     action_resource_relationship,
+     acyclic_action_relationship);
+
+REFERENCE FROM product_property_definition_schema
+    (characterized_product_definition,
+     property_definition, 
+     shape_definition);
+
+REFERENCE FROM support_resource_schema
+    (identifier,
+     label,
+     text);
+
+TYPE characterized_action_definition = SELECT
+   (action,
+   action_method,
+   action_method_relationship,
+   action_relationship);
+END_TYPE;
+
+TYPE characterized_resource_definition = SELECT
+  (action_resource,
+   action_resource_relationship,
+   action_resource_requirement,
+   action_resource_requirement_relationship);
+END_TYPE;
+
+TYPE property_or_shape_select = SELECT
+     (property_definition,
+      shape_definition);
+END_TYPE;
+
+ENTITY action_property;
+  name        : label;
+  description : text;
+  definition  : characterized_action_definition;
+END_ENTITY;
+
+ENTITY product_definition_process
+  SUBTYPE OF (action);
+  identification : identifier;
+INVERSE 
+  product_definitions : SET [1:?] OF process_product_association FOR process;
+END_ENTITY;
+
+ENTITY process_product_association;
+  name            : label;
+  description     : text;
+  defined_product : characterized_product_definition;
+  process         : product_definition_process;
+END_ENTITY;
+
+ENTITY property_process
+  SUBTYPE OF (action);
+  identification : identifier;
+INVERSE
+  properties : SET [1:?] OF process_property_association FOR process;
+END_ENTITY;
+
+ENTITY process_property_association;
+  name              : label;
+  description       : text;
+  process           : property_process;
+  property_or_shape : property_or_shape_select;
+END_ENTITY;
+
+ENTITY replacement_relationship
+  SUBTYPE OF (action_relationship);
+WHERE
+  WR1: acyclic_action_relationship (SELF,
+       [SELF\action_relationship.related_action],
+       'PROCESS_PROPERTY_SCHEMA.REPLACEMENT_RELATIONSHIP');
+END_ENTITY;
+
+ENTITY resource_property;
+  name        : label;
+  description : text;
+  resource    : characterized_resource_definition;
+END_ENTITY;
+
+ENTITY action_resource_requirement;
+  name        : label;
+  description : text;
+  kind        : resource_requirement_type;
+  operations  : SET [1:?] OF characterized_action_definition;
+END_ENTITY;
+
+ENTITY action_property_relationship;
+  name                     : label;
+  description              : text;
+  relating_action_property : action_property;
+  related_action_property  : action_property;
+WHERE
+  WR1: relating_action_property :<>: related_action_property;
+END_ENTITY;
+
+ENTITY requirement_for_action_resource
+  SUBTYPE OF (action_resource_requirement);
+  resources : SET [1:?] OF action_resource;
+END_ENTITY;
+
+ENTITY resource_property_relationship;
+  name                       : label;
+  description                : text;
+  relating_resource_property : resource_property;
+  related_resource_property  : resource_property;
+WHERE
+  WR1: relating_resource_property :<>: related_resource_property;
+END_ENTITY;
+
+ENTITY action_resource_requirement_relationship;
+  name                                 : label;
+  description                          : text;
+  relating_action_resource_requirement : action_resource_requirement;
+  related_action_resource_requirement  : action_resource_requirement;
+WHERE
+  WR1: relating_action_resource_requirement :<>: 
+       related_action_resource_requirement;
+END_ENTITY;
+
+ENTITY resource_requirement_type;
+  name        : label;
+  description : text;
+END_ENTITY;
+
+ENTITY resource_requirement_type_relationship;
+  name                      : label;
+  description               : text;
+  relating_requirement_type : resource_requirement_type;
+  related_requirement_type  : resource_requirement_type;
+WHERE
+  WR1: relating_requirement_type :<>: related_requirement_type;
+END_ENTITY;
+
+END_SCHEMA; -- process_property_schema
+
+SCHEMA process_property_representation_schema;
+
+REFERENCE FROM support_resource_schema
+    (label, 
+     text);
+
+REFERENCE FROM representation_schema
+    (representation);
+
+REFERENCE FROM process_property_schema
+    (action_property, 
+     resource_property);
+
+ENTITY action_property_representation;
+  name           : label;
+  description    : text;
+  property       : action_property;
+  representation : representation;
+END_ENTITY;
+
+ENTITY resource_property_representation;
+  name           : label;
+  description    : text;
+  property       : resource_property;
+  representation : representation;
+END_ENTITY;
+
+END_SCHEMA; -- process_property_representation_schema

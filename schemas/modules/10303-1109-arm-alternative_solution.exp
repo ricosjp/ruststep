@@ -1,0 +1,51 @@
+(* 
+   $Id: 10303-1109-arm-alternative_solution.exp,v 1.1 2006/08/03 14:41:10 wg12deputy Exp $
+   ISO/TC184/SC4 WG12N2592 - ISO/TS 10303-1109 Alternative solution - Express ARM 
+   Supersedes ISO TC184/SC4/WG12N1726
+*)
+
+SCHEMA Alternative_solution_arm;
+
+USE FROM Functional_breakdown_arm;
+
+USE FROM Product_occurrence_arm;
+
+USE FROM Person_organization_arm;
+
+USE FROM Physical_breakdown_arm;
+
+
+TYPE complex_product_select = SELECT
+      (Alternative_solution, Functional_element_definition, Physical_element_definition);
+END_TYPE;
+
+
+ENTITY Alternative_solution;
+  id : STRING;
+  version_id : OPTIONAL STRING;
+  base_element : complex_product_select;
+END_ENTITY;
+
+ENTITY Solution_element;
+  resolved_requirement: complex_product_select;
+  element: part_occurrence_select;
+  description : OPTIONAL STRING;
+END_ENTITY;
+
+ENTITY Supplier_solution
+SUBTYPE OF (Alternative_solution);
+  supplier : Organization;
+  probability_rate : OPTIONAL REAL;
+DERIVE
+  actual_rate : REAL := NVL(probability_rate, 1.);
+WHERE
+WR1: { 0. <= actual_rate <= 1. };
+END_ENTITY;
+
+ENTITY Technical_solution
+SUBTYPE OF (Alternative_solution);
+  description : STRING;
+END_ENTITY;
+
+END_SCHEMA;
+

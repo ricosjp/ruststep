@@ -1,0 +1,87 @@
+(*
+   $Id: 10303-1258-mim-cdts_observation.exp,v 1.1 2003/07/15 09:43:14 wg12deputy Exp $
+ISO TC184/SC4/WG12 N1581 - ISO/CD-TS 10303-1258 Observation - EXPRESS MIM
+*) 
+
+
+SCHEMA Observation_mim; 
+
+USE FROM action_schema   -- ISO 10303-41
+  (action_relationship,
+   action_request_solution); 
+
+USE FROM Activity_as_realized_mim;    -- ISO/CD-TS 10303-1259
+
+USE FROM Activity_mim;    -- ISO/TS 10303-1047
+
+USE FROM Classification_assignment_mim;    -- ISO/CD-TS 10303-1114
+
+USE FROM Management_resource_information_mim;    -- ISO/CD-TS 10303-1288
+
+USE FROM Product_as_individual_mim;    -- ISO/CD-TS 10303-1164
+
+USE FROM qualified_measure_schema   -- ISO 10303-45
+  (descriptive_representation_item); 
+
+USE FROM representation_schema   -- ISO 10303-43
+  (representation,
+   representation_context,
+   representation_item); 
+
+USE FROM Work_request_mim;    -- ISO/TS 10303-1042
+
+
+TYPE observation_approval = SELECT BASED_ON mri_approval_item WITH 
+   (observation);
+END_TYPE; 
+
+TYPE observation_classification = SELECT BASED_ON classification_item WITH 
+   (observation, 
+    observation_relationship);
+END_TYPE; 
+
+TYPE observation_date = SELECT BASED_ON mri_date_item WITH 
+   (observation);
+END_TYPE; 
+
+TYPE observation_date_and_time = SELECT BASED_ON mri_date_and_time_item WITH 
+   (observation);
+END_TYPE; 
+
+TYPE observation_identification_item = SELECT BASED_ON mri_identification_item WITH 
+   (observation, 
+    observation_consequence);
+END_TYPE; 
+
+TYPE observation_item_representation = SELECT BASED_ON action_items WITH 
+   (representation);
+END_TYPE; 
+
+TYPE observation_organization = SELECT BASED_ON mri_organization_item WITH 
+   (observation);
+END_TYPE; 
+
+TYPE observation_person_and_organization = SELECT BASED_ON mri_person_and_organization_item WITH 
+   (observation);
+END_TYPE; 
+
+TYPE observation_recorder_item = EXTENSIBLE SELECT BASED_ON action_items WITH 
+   (product_as_realized);
+END_TYPE; 
+
+TYPE observed_context_item = EXTENSIBLE SELECT BASED_ON action_items;
+END_TYPE; 
+
+ENTITY observation
+  SUBTYPE OF (action_actual);
+END_ENTITY;
+
+ENTITY observation_consequence
+  SUBTYPE OF (action_request_solution);
+END_ENTITY;
+
+ENTITY observation_relationship
+  SUBTYPE OF (action_relationship);
+END_ENTITY;
+
+END_SCHEMA;  -- Observation_mim

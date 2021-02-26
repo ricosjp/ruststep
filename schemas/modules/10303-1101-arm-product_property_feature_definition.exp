@@ -1,0 +1,13 @@
+(* THIS DOCUMENT IS ISO TC184/SC4/WG12 N2654 *)
+
+SCHEMA Product_property_feature_definition_arm;
+
+ENTITY Product_property_feature_definition
+  ABSTRACT SUPERTYPE;
+END_ENTITY; --Product_property_feature_definition
+
+ENTITY Product_property_instanced_feature
+  SUBTYPE OF (Product_property_feature_definition);
+END_ENTITY; --Product_property_instanced_feature
+
+END_SCHEMA;

@@ -1,0 +1,121 @@
+(*
+ $Id: 10303-1255-arm-state_definition.exp,v 1.1 2006/08/07 07:44:45 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N3172 - ISO/TS 10303-1255 State definition - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG12 N2363
+*) 
+
+
+SCHEMA State_definition_arm;
+
+USE FROM Activity_arm;    -- ISO/TS 10303-1047
+
+USE FROM Classification_assignment_arm;    -- ISO/TS 10303-1114
+
+USE FROM Identification_assignment_arm;    -- ISO/TS 10303-1021
+
+
+TYPE state_definition_activity_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON activity_item WITH 
+   (Applied_state_definition_assignment);
+END_TYPE; 
+
+TYPE state_definition_classification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON classification_item WITH 
+   (Applied_state_definition_assignment, 
+    State_definition, 
+    State_definition_relationship);
+END_TYPE; 
+
+TYPE state_definition_identification_item = EXTENSIBLE SELECT BASED_ON identification_item WITH 
+   (State_definition, 
+    State_definition_relationship);
+END_TYPE; 
+
+TYPE state_definition_of_item = EXTENSIBLE GENERIC_ENTITY SELECT;
+END_TYPE; 
+
+ENTITY And_state_cause_effect_definition
+  SUBTYPE OF (State_cause_effect_definition);
+END_ENTITY;
+
+ENTITY Applied_state_definition_assignment;
+  described_state_definition : State_definition;
+  assigned_to : state_definition_of_item;
+  role : State_definition_role;
+END_ENTITY;
+
+ENTITY Composition_of_state_definition
+  SUBTYPE OF (State_definition_relationship);
+  SELF\State_definition_relationship.relating RENAMED whole : SET[1:?] OF State_definition;
+  SELF\State_definition_relationship.related RENAMED part : SET[1:?] OF State_definition;
+END_ENTITY;
+
+ENTITY Or_state_cause_effect_definition
+  SUBTYPE OF (State_cause_effect_definition);
+END_ENTITY;
+
+ENTITY Sequence_of_state_definition
+  SUBTYPE OF (State_definition_relationship);
+  SELF\State_definition_relationship.relating RENAMED successor : SET[1:?] OF State_definition;
+  SELF\State_definition_relationship.related RENAMED predecessor : SET[1:?] OF State_definition;
+END_ENTITY;
+
+ENTITY State_cause_effect_definition
+  SUBTYPE OF (State_definition_relationship);
+  SELF\State_definition_relationship.relating RENAMED effect : SET[1:?] OF State_definition;
+  SELF\State_definition_relationship.related RENAMED cause : SET[1:?] OF State_definition;
+END_ENTITY;
+
+ENTITY State_complement_definition
+  SUBTYPE OF (State_definition_relationship);
+  SELF\State_definition_relationship.relating RENAMED universe : SET[1:?] OF State_definition;
+  SELF\State_definition_relationship.related RENAMED set_1 : SET[1:?] OF State_definition;
+  set_2 : SET[1:?] OF State_definition;
+END_ENTITY;
+
+ENTITY State_definition;
+  name : STRING;
+  description : OPTIONAL STRING;
+END_ENTITY;
+
+ENTITY State_definition_relationship;
+  name : STRING;
+  description : OPTIONAL STRING;
+  relating : SET[1:?] OF State_definition;
+  related : SET[1:?] OF State_definition;
+END_ENTITY;
+
+ENTITY State_definition_role;
+  name : STRING;
+  description : OPTIONAL STRING;
+END_ENTITY;
+
+ENTITY State_proper_subset_definition
+  SUBTYPE OF (State_definition_relationship);
+  SELF\State_definition_relationship.related RENAMED proper_subset : SET[1:?] OF State_definition;
+  SELF\State_definition_relationship.relating RENAMED proper_superset : SET[1:?] OF State_definition;
+END_ENTITY;
+
+ENTITY State_subset_definition
+  SUBTYPE OF (State_definition_relationship);
+  SELF\State_definition_relationship.relating RENAMED superset : SET[1:?] OF State_definition;
+  SELF\State_definition_relationship.related RENAMED subset : SET[1:?] OF State_definition;
+END_ENTITY;
+
+ENTITY State_symptom_definition
+  SUBTYPE OF (State_definition_relationship);
+  SELF\State_definition_relationship.relating RENAMED symptom_effect : SET[1:?] OF State_definition;
+  SELF\State_definition_relationship.related RENAMED symptom_cause : SET[1:?] OF State_definition;
+END_ENTITY;
+
+ENTITY State_transition_definition
+  SUBTYPE OF (State_definition_relationship);
+  SELF\State_definition_relationship.relating RENAMED end_state : SET[1:?] OF State_definition;
+  SELF\State_definition_relationship.related RENAMED start_state : SET[1:?] OF State_definition;
+END_ENTITY;
+
+ENTITY Xor_state_cause_effect_definition
+  SUBTYPE OF (State_cause_effect_definition);
+END_ENTITY;
+
+END_SCHEMA;  -- State_definition_arm
+
+

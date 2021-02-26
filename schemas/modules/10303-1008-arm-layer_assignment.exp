@@ -1,0 +1,18 @@
+(*
+WG12 N677
+ISO/TS 10303-1008
+Product data representation and exchange: Application module: Layer assignment - EXPRESS ARM
+*)
+
+SCHEMA Layer_assignment_arm;
+
+USE FROM Foundation_representation_arm; -- ISO/TS 10303-1006
+
+ENTITY Layer;
+	description:STRING;
+	id:STRING;
+	layered_elements: SET [1:?] OF Representation_item;
+END_ENTITY;
+
+END_SCHEMA;
+

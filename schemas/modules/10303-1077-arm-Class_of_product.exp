@@ -1,0 +1,17 @@
+(*
+ $Id: 10303-1077-arm-Class_of_product.exp,v 1.4 2006/08/04 12:01:50 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2747 - ISO/TS 10303-1077 Class of product - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG12 N1959
+*)
+
+SCHEMA Class_of_product_arm;
+
+USE FROM Class_arm;    --  ISO/TS 10303-1070
+USE FROM Product_version_arm;    --  ISO/TS 10303-1018
+USE FROM Product_view_definition_arm;    --  ISO/TS 10303-1019
+
+ENTITY Class_of_product
+  SUBTYPE OF (Product_version, Class);
+END_ENTITY;
+
+END_SCHEMA;

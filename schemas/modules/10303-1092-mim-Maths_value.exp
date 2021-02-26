@@ -1,0 +1,20 @@
+(*
+ $Id: 10303-1092-mim-Maths_value.exp,v 1.4 2006/08/04 12:11:54 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2802 - ISO/TS 10303-1092 Maths value - EXPRESS MIM
+ Supersedes ISO TC184/SC4/WG12 N1877
+*)
+
+SCHEMA Maths_value_mim;
+
+USE FROM mathematical_functions_schema    -- ISO 10303-50
+  (maths_boolean,
+  maths_integer,
+  maths_real,
+  maths_simple_atom,
+  atom_based_tuple,
+  atom_based_value,
+  maths_tuple,
+  maths_value);
+
+END_SCHEMA;
+

@@ -1,0 +1,23 @@
+(*
+ $Id: 10303-1126-mim-document_properties.exp,v 1.5 2006/08/07 09:42:04 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N1202 - ISO/TS 10303-1126 Document properties - EXPRESS MIM
+*)
+
+
+
+SCHEMA Document_properties_mim;
+
+USE FROM Document_definition_mim;    -- ISO/TS 10303-1123
+
+USE FROM File_identification_mim;
+
+USE FROM Foundation_representation_mim;
+
+USE FROM Measure_representation_mim;    -- ISO/TS 10303-1118
+
+USE FROM Property_assignment_mim;
+
+USE FROM product_property_definition_schema   -- ISO 10303-41
+  (characterized_product_definition); 
+
+END_SCHEMA;

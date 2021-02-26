@@ -1,0 +1,28 @@
+(*
+ $Id: 10303-1249-mim-activity_method_assignment.exp,v 1.1 2006/08/07 09:42:05 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2999 - ISO/TS 10303-1249 Activity method assignment - EXPRESS MIM
+ Supersedes ISO TC184/SC4/WG12 N2307
+*) 
+
+
+SCHEMA Activity_method_assignment_mim;
+
+USE FROM action_schema   -- ISO 10303-41
+  (action_method_relationship); 
+
+USE FROM Activity_method_mim;    -- ISO/TS 10303-1049
+
+USE FROM management_resources_schema   -- ISO 10303-41
+  (action_method_assignment); 
+
+
+TYPE action_method_items = EXTENSIBLE SELECT;
+END_TYPE; 
+
+ENTITY applied_action_method_assignment
+  SUBTYPE OF (action_method_assignment);
+  items : SET[1:?] OF action_method_items;
+END_ENTITY;
+
+END_SCHEMA;  -- Activity_method_assignment_mim
+

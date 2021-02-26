@@ -1,0 +1,610 @@
+(* ISO 10303-518, TC 184/SC4/WG12 N627, short form; 2001-11-01 *)
+
+SCHEMA aic_mechanical_design_shaded_presentation;
+
+    USE FROM geometry_schema                          -- ISO 10303-42
+    (axis2_placement_2d);
+
+    USE FROM measure_schema                           -- ISO 10303-41
+    (positive_ratio_measure);
+
+    USE FROM presentation_appearance_schema           -- ISO 10303-46
+     (curve_style, 
+      curve_style_font, 
+      curve_style_font_pattern, 
+      curve_style_rendering,
+      draughting_pre_defined_curve_font,
+      fill_area_style_colour,
+      invisibility,
+      marker_type,
+      over_riding_styled_item,
+      point_style,
+      presentation_style_by_context,
+      styled_item,
+      surface_rendering_properties,
+      surface_side_style,
+      surface_style_boundary,
+      surface_style_control_grid,
+      surface_style_fill_area,
+      surface_style_parameter_line,
+      surface_style_reflectance_ambient,
+      surface_style_reflectance_ambient_diffuse,
+      surface_style_reflectance_ambient_diffuse_specular,
+      surface_style_rendering,
+      surface_style_rendering_with_properties,
+      surface_style_segmentation_curve,
+      surface_style_silhouette,
+      surface_style_transparent,
+      surface_style_usage,
+      u_direction_count,
+      v_direction_count);
+
+    REFERENCE FROM presentation_organization_schema   -- ISO 10303-46
+     (aspect_ratio);
+
+    USE FROM presentation_organization_schema         -- ISO 10303-46
+     (background_colour,
+      camera_image_3d_with_scale,
+      camera_model_d3,
+      camera_model_d3_with_hlhsr,
+      camera_model_with_light_sources,
+      camera_usage,
+      light_source_ambient,
+      light_source_directional,
+      light_source_positional,
+      light_source_spot,
+      presentation_area,        
+      presentation_representation,
+      presentation_size,
+      presentation_view);
+
+    USE FROM presentation_resource_schema             -- ISO 10303-46
+     (colour_rgb,
+      draughting_pre_defined_colour,
+      planar_box,   
+      planar_extent);
+
+    USE FROM representation_schema                    -- ISO 10303-43
+     (mapped_item,
+      representation); 
+
+
+
+  ENTITY mechanical_design_shaded_presentation_area
+    SUBTYPE OF (presentation_area);
+  WHERE
+  WR1 : (* only presentation_views or axis2_placements in
+           mechanical_design_shaded_presentation_area *)
+        SIZEOF (QUERY (it1 <* SELF.items |
+        NOT (('AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.AXIS2_PLACEMENT'
+        IN TYPEOF (it1))
+        OR
+        (('AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.MAPPED_ITEM'
+        IN TYPEOF (it1)) AND
+        ('AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.PRESENTATION_VIEW'
+        IN TYPEOF
+        (it1\mapped_item.mapping_source.mapped_representation)))))) = 0;
+  WR2 : (* only mechanical_design_shaded_presentation_representation
+           via camera_image_3d_with_scale or axis2_placements in 
+           presentation_views *)
+        SIZEOF (QUERY (pv <* QUERY (mi1 <* QUERY (it1 <* SELF.items |
+        'AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.MAPPED_ITEM'
+        IN TYPEOF (it1)) |
+        'AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.PRESENTATION_VIEW'
+        IN TYPEOF
+        (mi1\mapped_item.mapping_source.mapped_representation)) |
+        (* search in all presentation_views for axis2_placements and
+           mapped_items and for the subtype of mapped_item,
+           camera_image_3d_with_scale; the latter shall reference
+           a mechanical_design_geometric_presentation_representation;
+           the supertype mapped_item shall reference presentation_view. *)
+        NOT (SIZEOF(QUERY(it2 <* pv\mapped_item.mapping_source.
+        mapped_representation\presentation_view.items |
+        NOT (('AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.AXIS2_PLACEMENT'
+        IN TYPEOF(it2))
+        OR
+        (('AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.MAPPED_ITEM'
+        IN TYPEOF(it2)) AND NOT
+        ('AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.' +
+        'CAMERA_IMAGE_3D_WITH_SCALE' IN TYPEOF(it2))) AND NOT (
+        'AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.PRESENTATION_VIEW'
+        IN TYPEOF
+        (it2\mapped_item.mapping_source.mapped_representation)))
+        OR
+        (('AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.' +
+        'CAMERA_IMAGE_3D_WITH_SCALE' IN TYPEOF(it2))
+        AND NOT (
+        ('AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.' +
+        'MECHANICAL_DESIGN_SHADED_PRESENTATION_REPRESENTATION'
+        IN TYPEOF (it2\mapped_item.mapping_source.mapped_representation) ))
+        ))) = 0))) = 0;
+  WR3:  (* Presentation_size shall be a positive rectangle for area and set.
+           Check for this presentation_area subtype first. *)
+        (SIZEOF (QUERY(ps <* USEDIN (SELF, 
+        'AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.' + 
+        'PRESENTATION_SIZE.UNIT') |
+        NOT ((ps.size\planar_extent.size_in_x > 0) 
+        AND (ps.size\planar_extent.size_in_y > 0)) )) = 0)
+        AND
+        (* check secondly for presentation_set, via area_in_set *)
+        (SIZEOF (QUERY(pset <* QUERY(ais <* 
+        USEDIN (SELF, 'AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.' + 
+        'AREA_IN_SET.AREA') 
+        | 'AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.' +
+        'PRESENTATION_SET' IN TYPEOF (ais.in_set)) |
+        (* after having collected all presentation_set, check their sizes *)
+        SIZEOF (QUERY(psize <* USEDIN(pset, 
+        'AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.' + 
+        'PRESENTATION_SIZE.UNIT')
+        | NOT ((psize.size\planar_extent.size_in_x > 0) 
+        AND (psize.size\planar_extent.size_in_y > 0)) )) = 0)) = 0);
+  WR4:  (* Drawing space shall be defined in 2D.
+           Check for this presentation_area subtype first. *)
+        (SIZEOF(QUERY( psize <* USEDIN (SELF, 
+        'AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.' + 
+        'PRESENTATION_SIZE.UNIT') 
+        | 'AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.' +
+        'AXIS2_PLACEMENT_2D' 
+        IN TYPEOF (psize.size.placement))) = 1)
+        AND
+        (* check secondly for presentation_set, via area_in_set *)
+        (SIZEOF (QUERY(pset <* QUERY(ais <* 
+        USEDIN (SELF, 'AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.' +
+        'AREA_IN_SET.AREA')
+        | 'AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.' +
+        'PRESENTATION_SET' IN TYPEOF (ais.in_set)) |
+        (* after having collected all presentation_set, check their 
+           dimension *)
+        SIZEOF (QUERY(psize <* USEDIN(pset, 
+        'AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.' + 
+        'PRESENTATION_SIZE.UNIT')
+        | NOT ('AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.' + 
+        'AXIS2_PLACEMENT_2D' 
+        IN TYPEOF (psize.size.placement)) )) = 0)) = 0);
+  WR5 : (* valid types of camera_models
+           get for all presentation_areas their presentation_views *)
+        SIZEOF (QUERY (pv <* QUERY (mi1 <* QUERY (it1 <* SELF.items |
+        'AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.MAPPED_ITEM' 
+        IN TYPEOF (it1)) |
+        'AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.PRESENTATION_VIEW' 
+        IN TYPEOF 
+        (mi1\mapped_item.mapping_source.mapped_representation)) |
+        (* search in all presentation_views for 
+           mapped_items and for the subtype of mapped_item,
+           camera_image_3d_with_scale; the latter shall reference
+           a camera_usage that shall have as its mapping_origin either
+           camera_model_d3, camera_model_d3_with_hlhsr, or
+           camera_model_with_light_sources. *)
+        NOT (SIZEOF(QUERY(ci <* pv\mapped_item.mapping_source.
+        mapped_representation\presentation_view.items |
+        ('AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.'+
+         'CAMERA_IMAGE_3D_WITH_SCALE' IN TYPEOF(ci))
+        AND
+        (SIZEOF(['AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.'+
+        'CAMERA_MODEL_D3',
+        'AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.'+
+        'CAMERA_MODEL_D3_WITH_HLHSR',
+        'AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.'+
+        'CAMERA_MODEL_WITH_LIGHT_SOURCES'] * TYPEOF
+        (ci\camera_image_3d_with_scale.mapping_source.mapping_origin))
+        = 1))) = 0))) = 0;
+  END_ENTITY; (* mechanical_design_shaded_presentation_area *)
+
+
+ENTITY mechanical_design_shaded_presentation_representation
+   SUBTYPE OF (representation);
+WHERE
+  WR1:  SIZEOF(QUERY(it <* SELF.items |
+        NOT (SIZEOF(
+        ['AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.MAPPED_ITEM',
+        'AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.STYLED_ITEM',
+        'AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.AXIS2_PLACEMENT',
+        'AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.CAMERA_MODEL_D3']
+        * TYPEOF(it)) = 1))) = 0;
+  WR2:  (* for all mapped_items check that only
+           shape_representations and
+           mechanical_design_shaded_presentation_representations
+           are referenced *)
+        SIZEOF(QUERY(mi <* QUERY(it <* SELF.items |
+        ('AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.MAPPED_ITEM'
+        IN TYPEOF(it))) | NOT (SIZEOF(
+        ['AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.' +
+        'SHAPE_REPRESENTATION',
+        'AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.' +
+        'MECHANICAL_DESIGN_SHADED_PRESENTATION_REPRESENTATION']
+        * TYPEOF(mi\mapped_item.mapping_source.mapped_representation))
+        = 1))) = 0;
+  WR3:  (* for all styled_item.item check that in case they are
+           mapped_items that they are shape_representations *)
+        SIZEOF(QUERY(smi <* QUERY(si <* QUERY(it <* SELF.items |
+        ('AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.STYLED_ITEM'
+        IN TYPEOF(it))) |
+        ('AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.MAPPED_ITEM'
+        IN TYPEOF(si\styled_item.item))) | NOT (
+        ('AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.' +
+        'SHAPE_REPRESENTATION' IN TYPEOF (smi\styled_item.
+        item\mapped_item.mapping_source.mapped_representation))) )) = 0;
+  WR4 : (* for all styled_items get their styles via
+           presentation_style_assignment.styles and check for valid
+           style types *)
+        SIZEOF (QUERY (si <* QUERY (it <* SELF.items |
+        'AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.STYLED_ITEM'
+        IN TYPEOF (it)) |
+        NOT (SIZEOF (QUERY (psa <* si\styled_item.styles |
+        NOT (SIZEOF (QUERY (pss <* psa.styles |
+        NOT (SIZEOF (
+        ['AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.POINT_STYLE',
+        'AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.CURVE_STYLE',
+        'AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.SURFACE_STYLE_USAGE']
+        *  TYPEOF (pss)) = 1))) = 0))) = 0))) = 0;
+  WR5 : (* for all styled_items get those assigned styles that 
+           are presentation_style_by_contexts and ensure that
+           these reference only representation_items and 
+           representations as valid contexts *)
+        SIZEOF (QUERY (si <* QUERY (it <* SELF.items |
+        'AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.STYLED_ITEM'
+        IN TYPEOF (it)) |
+        NOT (SIZEOF (QUERY (psbc <* QUERY (psa <* si\styled_item.styles |
+        'AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.'+
+        'PRESENTATION_STYLE_BY_CONTEXT' IN TYPEOF (psa))  |
+        NOT (SIZEOF (
+        ['AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.REPRESENTATION_ITEM',
+        'AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.REPRESENTATION']
+        * TYPEOF (psbc\presentation_style_by_context.style_context)) = 1)))
+        = 0))) = 0;
+  WR6 : (* for all styled_items get all assigned point_styles  
+           and ensure that marker_select, marker_size and
+           marker_colour are valid *)
+        SIZEOF (QUERY (si <* QUERY (it <* SELF.items |
+        'AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.STYLED_ITEM'
+        IN TYPEOF (it)) |
+        NOT (SIZEOF (QUERY (psa <* si\styled_item.styles |
+        NOT (SIZEOF (QUERY (ps <* QUERY (pss <* psa.styles |
+        'AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.POINT_STYLE'
+        IN TYPEOF (pss)) |
+        NOT (
+        ('AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.MARKER_TYPE'
+        IN TYPEOF (ps\point_style.marker))
+        AND
+        ('MEASURE_SCHEMA.POSITIVE_LENGTH_MEASURE' IN TYPEOF
+        (ps\point_style.marker_size))
+        AND
+        (SIZEOF (['AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.COLOUR_RGB',
+        'AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.'+
+        'DRAUGHTING_PRE_DEFINED_COLOUR'] * TYPEOF
+        (ps\point_style.marker_colour)) = 1)))) = 0))) = 0))) = 0;
+  WR7 : (* for all styled_items get all assigned curve_styles  
+           and ensure that curve_width, curve_font and
+           curve_colour are valid *)
+        SIZEOF (QUERY (si <* QUERY (it <* SELF.items |
+        'AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.STYLED_ITEM'
+        IN TYPEOF (it)) |
+        NOT (SIZEOF (QUERY (psa <* si\styled_item.styles |
+        NOT (SIZEOF (QUERY (cs <* QUERY (pss <* psa.styles |
+        'AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.CURVE_STYLE'
+        IN TYPEOF (pss)) |
+        NOT (
+        (SIZEOF (['AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.COLOUR_RGB',
+        'AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.'+
+        'DRAUGHTING_PRE_DEFINED_COLOUR'] * TYPEOF
+        (cs\curve_style.curve_colour)) = 1)
+        AND
+        ('MEASURE_SCHEMA.POSITIVE_LENGTH_MEASURE' IN TYPEOF
+        (cs\curve_style.curve_width))
+        AND
+        (SIZEOF (['AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.'+
+        'CURVE_STYLE_FONT', 'AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.'+
+        'DRAUGHTING_PRE_DEFINED_CURVE_FONT'] * TYPEOF
+        (cs\curve_style.curve_font)) = 1)))) = 0))) = 0))) = 0;
+  WR8 : (* for all styled_items get all assigned surface_style_usages
+           and ensure that its style is a surface_side_style *)
+        SIZEOF (QUERY (si <* QUERY (it <* SELF.items |
+        'AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.STYLED_ITEM'
+        IN TYPEOF (it)) |
+        NOT (SIZEOF (QUERY (psa <* si\styled_item.styles |
+        NOT (SIZEOF (QUERY (ssu <* QUERY (pss <* psa.styles |
+        'AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.SURFACE_STYLE_USAGE'
+        IN TYPEOF (pss)) |
+        NOT ('AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.SURFACE_SIDE_STYLE'
+        IN TYPEOF (ssu\surface_style_usage.style)) )) = 0))) = 0 ))) = 0;
+  WR9 : (* for all styled_items get all assigned surface_style_usages
+           and the surface_side_styles that they reference, and ensure
+           that the styles referenced by those surface_side_styles
+           are among the valid subset *)
+        SIZEOF (QUERY (si <* QUERY (it <* SELF.items |
+        'AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.STYLED_ITEM'
+        IN TYPEOF (it)) |
+        NOT (SIZEOF (QUERY (psa <* si\styled_item.styles |
+        NOT (SIZEOF (QUERY (ssu <* QUERY (pss <* psa.styles |
+        'AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.SURFACE_STYLE_USAGE'
+        IN TYPEOF (pss)) |
+        NOT (SIZEOF (QUERY (sses <*
+        ssu\surface_style_usage.style\surface_side_style.styles |
+        NOT (SIZEOF (
+        ['AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.'+
+        'SURFACE_STYLE_PARAMETER_LINE',
+        'AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.'+
+        'SURFACE_STYLE_CONTROL_GRID',
+        'AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.'+
+        'SURFACE_STYLE_SILHOUETTE',
+        'AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.'+
+        'SURFACE_STYLE_SEGMENTATION_CURVE',
+        'AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.'+
+        'SURFACE_STYLE_BOUNDARY',
+        'AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.'+
+        'SURFACE_STYLE_FILL_AREA',
+        'AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.'+
+        'SURFACE_STYLE_RENDERING'] * TYPEOF (sses)) = 1))) = 0))) = 0)))
+        = 0))) = 0;
+  WR10: (* for all surface_style_fill_areas that are referenced by
+           any surface_side_styles ensure that they are valid 
+           with respect to their colour representation *)
+        SIZEOF (QUERY (si <* QUERY (it <* SELF.items |
+        'AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.STYLED_ITEM'
+        IN TYPEOF (it)) |
+        NOT (SIZEOF (QUERY (psa <* si\styled_item.styles |
+        NOT (SIZEOF (QUERY (ssu <* QUERY (pss <* psa.styles |
+        'AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.SURFACE_STYLE_USAGE'
+        IN TYPEOF (pss)) |
+        NOT (SIZEOF (QUERY (ssfa <* QUERY (sses <*
+        ssu\surface_style_usage.style\surface_side_style.styles |
+        'AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.SURFACE_STYLE_FILL_AREA'
+        IN TYPEOF (sses)) |
+        NOT (SIZEOF (QUERY (fss <*
+        ssfa\surface_style_fill_area.fill_area.fill_styles |
+        NOT (('AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.'+
+        'FILL_AREA_STYLE_COLOUR' IN TYPEOF (fss))
+        AND
+        (SIZEOF (['AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.COLOUR_RGB',
+        'AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.'+
+        'DRAUGHTING_PRE_DEFINED_COLOUR'] * TYPEOF
+        (fss\fill_area_style_colour.fill_colour)) = 1)))) = 0))) = 0)))
+        = 0))) = 0))) = 0;
+  WR11: (* for all surface_style_parameter_lines that are referenced by
+           any surface_side_styles ensure that they are valid 
+           with respect to the applied curve_style, which may include
+           rendering *)
+        SIZEOF (QUERY (si <* QUERY (it <* SELF.items |
+        'AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.STYLED_ITEM'
+        IN TYPEOF (it)) |
+        NOT (SIZEOF (QUERY (psa <* si\styled_item.styles |
+        NOT (SIZEOF (QUERY (ssu <* QUERY (pss <* psa.styles |
+        'AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.SURFACE_STYLE_USAGE'
+        IN TYPEOF (pss)) |
+        NOT (SIZEOF (QUERY (sspl <* QUERY (sses <*
+        ssu\surface_style_usage.style\surface_side_style.styles |
+        'AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.'+
+        'SURFACE_STYLE_PARAMETER_LINE' IN TYPEOF (sses)) |
+        NOT ((
+        ('AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.CURVE_STYLE' IN TYPEOF
+        (sspl\surface_style_parameter_line.style_of_parameter_lines))
+        AND
+        (SIZEOF (['AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.COLOUR_RGB',
+        'AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.'+
+        'DRAUGHTING_PRE_DEFINED_COLOUR'] * TYPEOF
+        (sspl\surface_style_parameter_line.
+        style_of_parameter_lines\curve_style.curve_colour)) = 1)
+        AND
+        ('MEASURE_SCHEMA.POSITIVE_LENGTH_MEASURE' IN TYPEOF
+        (sspl\surface_style_parameter_line.
+        style_of_parameter_lines\curve_style.curve_width))
+        AND
+        (SIZEOF (['AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.'+
+        'CURVE_STYLE_FONT', 'AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.'+
+        'DRAUGHTING_PRE_DEFINED_CURVE_FONT'] * TYPEOF
+        (sspl\surface_style_parameter_line.
+        style_of_parameter_lines\curve_style.curve_font)) = 1))
+        OR
+        (('AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.CURVE_STYLE_RENDERING'
+        IN TYPEOF
+        (sspl\surface_style_parameter_line.style_of_parameter_lines))
+        AND
+        (SIZEOF (['AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.COLOUR_RGB',
+        'AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.'+
+        'DRAUGHTING_PRE_DEFINED_COLOUR'] * TYPEOF
+        (sspl\surface_style_parameter_line.style_of_parameter_lines\
+        curve_style_rendering.rendering_properties.rendered_colour))
+        = 1))) )) = 0))) = 0))) = 0))) = 0;
+  WR12: (* for all surface_style_control_grids that are referenced by
+           any surface_side_styles ensure that they are valid 
+           with respect to the applied curve_style, which may include
+           rendering *)
+        SIZEOF (QUERY (si <* QUERY (it <* SELF.items |
+        'AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.STYLED_ITEM'
+        IN TYPEOF (it)) |
+        NOT (SIZEOF (QUERY (psa <* si\styled_item.styles |
+        NOT (SIZEOF (QUERY (ssu <* QUERY (pss <* psa.styles |
+        'AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.SURFACE_STYLE_USAGE'
+        IN TYPEOF (pss)) |
+        NOT (SIZEOF (QUERY (sscg <* QUERY (sses <*
+        ssu\surface_style_usage.style\surface_side_style.styles |
+        'AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.'+
+        'SURFACE_STYLE_CONTROL_GRID' IN TYPEOF (sses)) |
+        NOT ((
+        ('AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.CURVE_STYLE'
+        IN TYPEOF (sscg\surface_style_control_grid.style_of_control_grid))
+        AND
+        (SIZEOF (['AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.COLOUR_RGB',
+        'AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.'+
+        'DRAUGHTING_PRE_DEFINED_COLOUR'] * TYPEOF
+        (sscg\surface_style_control_grid.
+        style_of_control_grid\curve_style.curve_colour)) = 1)
+        AND
+        ('MEASURE_SCHEMA.POSITIVE_LENGTH_MEASURE' IN TYPEOF
+        (sscg\surface_style_control_grid.
+        style_of_control_grid\curve_style.curve_width))
+        AND
+        (SIZEOF (['AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.'+
+        'CURVE_STYLE_FONT', 'AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.'+
+        'DRAUGHTING_PRE_DEFINED_CURVE_FONT'] * TYPEOF
+        (sscg\surface_style_control_grid.
+        style_of_control_grid\curve_style.curve_font)) = 1))
+        OR
+        (('AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.CURVE_STYLE_RENDERING'
+        IN TYPEOF (sscg\surface_style_control_grid.style_of_control_grid))
+        AND
+        (SIZEOF (['AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.COLOUR_RGB',
+        'AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.'+
+        'DRAUGHTING_PRE_DEFINED_COLOUR'] * TYPEOF
+        (sscg\surface_style_control_grid.style_of_control_grid\
+        curve_style_rendering.rendering_properties.rendered_colour))
+        = 1))) )) = 0))) = 0))) = 0))) = 0;
+  WR13: (* for all surface_style_silhouettes that are referenced by
+           any surface_side_styles ensure that they are valid 
+           with respect to the applied curve_style, which may include
+           rendering *)
+        SIZEOF (QUERY (si <* QUERY (it <* SELF.items |
+        'AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.STYLED_ITEM'
+        IN TYPEOF (it)) |
+        NOT (SIZEOF (QUERY (psa <* si\styled_item.styles |
+        NOT (SIZEOF (QUERY (ssu <* QUERY (pss <* psa.styles |
+        'AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.SURFACE_STYLE_USAGE'
+        IN TYPEOF (pss)) |
+        NOT (SIZEOF (QUERY (sssh <* QUERY (sses <*
+        ssu\surface_style_usage.style\surface_side_style.styles |
+        'AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.'+
+        'SURFACE_STYLE_SILHOUETTE' IN TYPEOF (sses)) |
+        NOT ((
+        ('AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.CURVE_STYLE'
+        IN TYPEOF (sssh\surface_style_silhouette.style_of_silhouette))
+        AND
+        (SIZEOF (['AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.COLOUR_RGB',
+        'AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.'+
+        'DRAUGHTING_PRE_DEFINED_COLOUR'] * TYPEOF
+        (sssh\surface_style_silhouette.
+        style_of_silhouette\curve_style.curve_colour)) = 1)
+        AND
+        ('MEASURE_SCHEMA.POSITIVE_LENGTH_MEASURE' IN TYPEOF
+        (sssh\surface_style_silhouette.
+        style_of_silhouette\curve_style.curve_width))
+        AND
+        (SIZEOF (['AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.'+
+        'CURVE_STYLE_FONT', 'AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.'+
+        'DRAUGHTING_PRE_DEFINED_CURVE_FONT'] * TYPEOF
+        (sssh\surface_style_silhouette.
+        style_of_silhouette\curve_style.curve_font)) = 1)) 
+        OR
+        (('AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.CURVE_STYLE_RENDERING'
+        IN TYPEOF (sssh\surface_style_silhouette.style_of_silhouette))
+        AND
+        (SIZEOF (['AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.COLOUR_RGB',
+        'AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.'+
+        'DRAUGHTING_PRE_DEFINED_COLOUR'] * TYPEOF
+        (sssh\surface_style_silhouette.style_of_silhouette\
+        curve_style_rendering.rendering_properties.rendered_colour))
+        = 1))) )) = 0))) = 0))) = 0))) = 0;
+  WR14: (* for all surface_style_segmentation_curves that are referenced by
+           any surface_side_styles ensure that they are valid 
+           with respect to the applied curve_style, which may include
+           rendering *)
+        SIZEOF (QUERY (si <* QUERY (it <* SELF.items |
+        'AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.STYLED_ITEM'
+        IN TYPEOF (it)) |
+        NOT (SIZEOF (QUERY (psa <* si\styled_item.styles |
+        NOT (SIZEOF (QUERY (ssu <* QUERY (pss <* psa.styles |
+        'AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.SURFACE_STYLE_USAGE'
+        IN TYPEOF (pss)) |
+        NOT (SIZEOF (QUERY (sssc <* QUERY (sses <*
+        ssu\surface_style_usage.style\surface_side_style.styles |
+        'AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.'+
+        'SURFACE_STYLE_SEGMENTATION_CURVE' IN TYPEOF (sses)) |
+        NOT ((
+        ('AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.CURVE_STYLE'
+        IN TYPEOF
+        (sssc\surface_style_segmentation_curve.style_of_segmentation_curve))
+        AND
+        (SIZEOF (['AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.COLOUR_RGB',
+        'AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.'+
+        'DRAUGHTING_PRE_DEFINED_COLOUR'] * TYPEOF
+        (sssc\surface_style_segmentation_curve.
+        style_of_segmentation_curve\curve_style.curve_colour)) = 1)
+        AND
+        ('MEASURE_SCHEMA.POSITIVE_LENGTH_MEASURE' IN TYPEOF
+        (sssc\surface_style_segmentation_curve.
+        style_of_segmentation_curve\curve_style.curve_width))
+        AND
+        (SIZEOF (['AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.'+
+        'CURVE_STYLE_FONT', 'AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.'+
+        'DRAUGHTING_PRE_DEFINED_CURVE_FONT'] * TYPEOF
+        (sssc\surface_style_segmentation_curve.
+        style_of_segmentation_curve\curve_style.curve_font)) = 1)) 
+        OR
+        (('AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.CURVE_STYLE_RENDERING'
+        IN TYPEOF (sssc\surface_style_segmentation_curve.
+        style_of_segmentation_curve))
+        AND
+        (SIZEOF (['AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.COLOUR_RGB',
+        'AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.'+
+        'DRAUGHTING_PRE_DEFINED_COLOUR'] * TYPEOF
+        (sssc\surface_style_segmentation_curve.style_of_segmentation_curve\
+        curve_style_rendering.rendering_properties.rendered_colour))
+        = 1))) )) = 0))) = 0))) = 0))) = 0;
+  WR15: (* for all surface_style_boundaries that are referenced by
+           any surface_side_styles ensure that they are valid 
+           with respect to the applied curve_style, which may include
+           rendering *)
+        SIZEOF (QUERY (si <* QUERY (it <* SELF.items |
+        'AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.STYLED_ITEM'
+        IN TYPEOF (it)) |
+        NOT (SIZEOF (QUERY (psa <* si\styled_item.styles |
+        NOT (SIZEOF (QUERY (ssu <* QUERY (pss <* psa.styles |
+        'AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.SURFACE_STYLE_USAGE'
+        IN TYPEOF (pss)) |
+        NOT (SIZEOF (QUERY (ssbd <* QUERY (sses <*
+        ssu\surface_style_usage.style\surface_side_style.styles |
+        'AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.'+
+        'SURFACE_STYLE_BOUNDARY' IN TYPEOF (sses)) |
+        NOT ((
+        ('AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.CURVE_STYLE'
+        IN TYPEOF (ssbd\surface_style_boundary.style_of_boundary))
+        AND
+        (SIZEOF (['AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.COLOUR_RGB',
+        'AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.'+
+        'DRAUGHTING_PRE_DEFINED_COLOUR'] * TYPEOF
+        (ssbd\surface_style_boundary.
+        style_of_boundary\curve_style.curve_colour)) = 1)
+        AND
+        ('MEASURE_SCHEMA.POSITIVE_LENGTH_MEASURE' IN TYPEOF
+        (ssbd\surface_style_boundary.
+        style_of_boundary\curve_style.curve_width))
+        AND
+        (SIZEOF (['AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.'+
+        'CURVE_STYLE_FONT', 'AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.'+
+        'DRAUGHTING_PRE_DEFINED_CURVE_FONT'] * TYPEOF
+        (ssbd\surface_style_boundary.
+        style_of_boundary\curve_style.curve_font)) = 1)) 
+        OR
+        (('AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.CURVE_STYLE_RENDERING'
+        IN TYPEOF (ssbd\surface_style_boundary.style_of_boundary))
+        AND
+        (SIZEOF (['AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.COLOUR_RGB',
+        'AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.'+
+        'DRAUGHTING_PRE_DEFINED_COLOUR'] * TYPEOF
+        (ssbd\surface_style_boundary.style_of_boundary\
+        curve_style_rendering.rendering_properties.rendered_colour))
+        = 1))) )) = 0))) = 0))) = 0))) = 0;
+  WR16: (* for all surface_style_renderings that are referenced by
+           any surface_side_styles ensure that the colour
+           representation is valid *)
+        SIZEOF (QUERY (si <* QUERY (it <* SELF.items |
+        'AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.STYLED_ITEM'
+        IN TYPEOF (it)) |
+        NOT (SIZEOF (QUERY (psa <* si\styled_item.styles |
+        NOT (SIZEOF (QUERY (ssu <* QUERY (pss <* psa.styles |
+        'AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.SURFACE_STYLE_USAGE'
+        IN TYPEOF (pss)) |
+        NOT (SIZEOF (QUERY (ssre <* QUERY (sses <*
+        ssu\surface_style_usage.style\surface_side_style.styles |
+        'AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.'+
+        'SURFACE_STYLE_RENDERING' IN TYPEOF (sses)) |
+        NOT
+        (SIZEOF (['AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.COLOUR_RGB',
+        'AIC_MECHANICAL_DESIGN_SHADED_PRESENTATION.'+
+        'DRAUGHTING_PRE_DEFINED_COLOUR'] * TYPEOF
+        (ssre\surface_style_rendering.surface_colour)) = 1)))
+        = 0))) = 0))) = 0))) = 0;
+
+END_ENTITY;
+
+
+END_SCHEMA; -- aic_mechanical_design_shaded_presentation

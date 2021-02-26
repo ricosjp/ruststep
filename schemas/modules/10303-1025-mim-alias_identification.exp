@@ -1,0 +1,16 @@
+(*
+ $Id: 10303-1025-mim-alias_identification.exp,v 1.5 2006/08/07 09:42:02 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2907 - ISO/TS 10303-1025 Alias identification - EXPRESS MIM
+*)
+ 
+
+
+SCHEMA Alias_identification_mim;
+
+USE FROM Identification_assignment_mim;    -- ISO/TS 10303-1021
+
+
+TYPE aliasable_item = EXTENSIBLE SELECT;
+END_TYPE; 
+
+END_SCHEMA;  -- Alias_identification_mim

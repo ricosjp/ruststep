@@ -1,0 +1,48 @@
+(*
+ $Id: 10303-1026-arm-assembly_structure.exp,v 1.5 2006/08/07 07:44:41 wg12deputy Exp $
+ISO TC184/SC4/WG12 N3222 - ISO/TS 10303-1026 Assembly structure - EXPRESS ARM
+Supersedes ISO TC184/SC4/WG12 N2515
+*) 
+
+
+SCHEMA Assembly_structure_arm;
+
+USE FROM Product_view_definition_relationship_arm;    -- ISO/TS 10303-1041
+
+USE FROM Value_with_unit_arm;    -- ISO/TS 10303-1054
+
+
+ENTITY Assembly_component_relationship
+  ABSTRACT SUPERTYPE OF (ONEOF (Next_assembly_usage,
+                                Promissory_usage,
+                                Component_upper_level_identification))
+  SUBTYPE OF (View_definition_usage);
+  quantity : OPTIONAL Value_with_unit;
+  location_indicator : OPTIONAL STRING;
+WHERE
+  WR1: NOT(EXISTS(quantity)) OR ((NOT ('NUMBER' IN TYPEOF(quantity.value_component))) XOR (quantity.value_component > 0));
+END_ENTITY;
+
+ENTITY Next_assembly_usage
+  SUBTYPE OF (Assembly_component_relationship);
+END_ENTITY;
+
+ENTITY Promissory_usage
+  SUBTYPE OF (Assembly_component_relationship);
+END_ENTITY;
+
+ENTITY Component_upper_level_identification
+  SUBTYPE OF (Assembly_component_relationship);
+  upper_assembly_relationship : Assembly_component_relationship;
+  sub_assembly_relationship : Next_assembly_usage;
+UNIQUE
+  UR1: upper_assembly_relationship, sub_assembly_relationship;
+WHERE
+  WR1: SELF :<>: upper_assembly_relationship ;
+  WR2: SELF\View_definition_relationship.relating_view :=: upper_assembly_relationship\View_definition_relationship.relating_view;
+  WR3: SELF\View_definition_relationship.related_view :=: sub_assembly_relationship\View_definition_relationship.related_view;
+  WR4: (upper_assembly_relationship\View_definition_relationship.related_view :=: sub_assembly_relationship\View_definition_relationship.relating_view) OR (SIZEOF (QUERY (pdr <* USEDIN (upper_assembly_relationship\View_definition_relationship.related_view , 'PRODUCT_VIEW_DEFINITION_RELATIONSHIP_ARM.VIEW_DEFINITION_RELATIONSHIP.RELATED_VIEW') | pdr.relating_view :=: sub_assembly_relationship\View_definition_relationship.relating_view)) = 1);
+  WR5: SIZEOF (['ASSEMBLY_STRUCTURE_ARM.NEXT_ASSEMBLY_USAGE', 'ASSEMBLY_STRUCTURE_ARM.COMPONENT_UPPER_LEVEL_IDENTIFICATION'] * TYPEOF(upper_assembly_relationship)) = 1;
+END_ENTITY;
+
+END_SCHEMA;  -- Assembly_structure_arm

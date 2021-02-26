@@ -1,0 +1,68 @@
+(*
+   $Id: 10303-1345-arm-item_definition_structure.exp,v 1.1 2006/08/03 14:41:10 wg12deputy Exp $
+   ISO/TC184/SC4 WG12N2619 - ISO/TS 10303-1345  - item_definition_structure - EXPRESS ARM
+   Supersedes ISO TC184/SC4/WG12N1766
+*)
+
+SCHEMA Item_definition_structure_arm;
+
+USE FROM Effectivity_application_arm;
+
+USE FROM Product_occurrence_arm;
+
+USE FROM Product_structure_arm;
+
+REFERENCE FROM Product_identification_arm(
+	types_of_product);
+
+
+TYPE effectivity_item_for_replacement  = SELECT BASED_ON effectivity_item WITH
+      (Part_definition_relationship);
+END_TYPE;
+
+
+ENTITY Assembled_part_association
+SUBTYPE OF (Part_occurrence_definition_relationship, Assembly_component_relationship);
+  SELF\View_definition_relationship.relating_view : Assembly_definition;
+END_ENTITY;
+
+ENTITY Assembly_definition
+SUBTYPE OF (Part_view_definition);
+WHERE
+WR1: 'assembly' IN types_of_product(SELF\Product_view_definition.defined_version.of_product);
+END_ENTITY;
+
+ENTITY Geometrical_relationship
+  SUBTYPE OF (Part_definition_relationship);
+  definition_placement: template_instance;
+DERIVE
+  SELF\View_definition_relationship.relation_type : STRING := 'geometrical relationship';
+END_ENTITY;
+
+ENTITY Part_definition_relationship
+  SUBTYPE OF (View_definition_relationship);
+  SELF\View_definition_relationship.relating_view: Part_view_definition;
+  SELF\View_definition_relationship.related_view: Part_view_definition;
+END_ENTITY;
+
+RULE Definition_replacement_requires_effectivity_assignment FOR 
+	(Part_definition_relationship);
+WHERE 
+WR1: SIZEOF( QUERY( pdr <* Part_definition_relationship | 
+	(pdr\View_definition_relationship.relation_type = 'definition replacement') AND 
+	(SIZEOF( USEDIN(pdr,'ITEM_DEFINITION_STRUCTURE_ARM.EFFECTIVITY_ASSIGNMENT.ITEMS') ) = 0) ))
+	 = 0; 
+END_RULE; 
+
+RULE Mandatory_part_occurrence_definition_relationship FOR (Assembly_component_relationship);
+LOCAL
+  assemblies_of_parts: SET OF Assembly_component_relationship := [];
+END_LOCAL;
+  assemblies_of_parts := QUERY(acr <* Assembly_component_relationship |
+	'ITEM_DEFINITION_STRUCTURE_MIM.PART_VIEW_DEFINITION' IN TYPEOF(SELF\View_definition_relationship.relating_view));
+WHERE
+WR1: SIZEOF(QUERY(ar <* assemblies_of_parts | 
+	NOT ('ITEM_DEFINITION_STRUCTURE_ARM.ASSEMBLED_PART_ASSOCIATION' IN TYPEOF(ar)) ))= 0;
+END_RULE;
+
+END_SCHEMA;

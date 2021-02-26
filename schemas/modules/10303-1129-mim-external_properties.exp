@@ -1,0 +1,97 @@
+(*
+   $Id: 10303-1129-mim-external_properties.exp,v 1.1 2006/08/03 15:03:35 wg12deputy Exp $
+   ISO/TC184/SC4 WG12N2611 - ISO/TS 10303-1129 external_properties - EXPRESS MIM
+   Supersedes ISO TC184/SC4/WG12N1745
+*)
+
+SCHEMA External_properties_mim;
+
+USE FROM External_item_identification_assignment_mim;
+
+USE FROM Independent_property_mim;
+
+USE FROM Plib_class_reference_mim;
+
+USE FROM external_reference_schema(
+	externally_defined_item,
+	externally_defined_item_relationship);
+
+USE FROM support_resource_schema(
+	identifier);
+
+
+TYPE external_identification_for_plib_property = SELECT BASED_ON external_identification_item WITH (externally_defined_general_property);
+END_TYPE;
+
+TYPE externally_versioned_item = EXTENSIBLE GENERIC_ENTITY SELECT;
+END_TYPE;
+
+TYPE version_for_plib_property = SELECT BASED_ON externally_versioned_item WITH (externally_defined_general_property);
+END_TYPE;
+
+ENTITY externally_defined_general_property 
+SUBTYPE OF (general_property, externally_defined_item); 
+END_ENTITY; 
+
+
+RULE external_version_assignments_are_valid FOR (applied_external_identification_assignment);
+WHERE
+  WR1: SIZEOF(QUERY(aia <* applied_external_identification_assignment | 
+		NOT external_version_assignment_is_valid(aia)))=0;
+END_RULE;
+
+
+RULE plib_property_reference_requires_version FOR (externally_defined_general_property); 
+LOCAL
+  plib_properties : SET OF externally_defined_general_property := [];
+END_LOCAL;
+plib_properties := QUERY ( edgp <* externally_defined_general_property | 
+	( 'EXTERNAL_PROPERTIES_MIM' + '.KNOWN_SOURCE' IN TYPEOF ( edgp.source ) ) AND
+	( known_source\pre_defined_item.name = 'ISO 13584 library' ) ); 
+WHERE 
+WR1: SIZEOF( QUERY( edgp <* plib_properties | 
+	(SIZEOF( QUERY( edir <* USEDIN(edgp, 'EXTERNAL_PROPERTIES_MIM' + '.APPLIED_EXTERNAL_IDENTIFICATION_ASSIGNMENT.ITEMS') | 
+	(edir.role.name = 'version') )) <> 1) )) = 0; 
+END_RULE; 
+
+RULE plib_property_reference_requires_name_scope FOR (
+      externally_defined_general_property);
+LOCAL
+   known_sourced_properties : SET OF externally_defined_general_property;
+END_LOCAL;
+  known_sourced_properties := QUERY( edc <* externally_defined_general_property | 
+	'EXTERNAL_PROPERTIES_MIM' + '.KNOWN_SOURCE' IN TYPEOF(edc.source) );
+WHERE
+WR1: SIZEOF ( QUERY ( edgp <* known_sourced_properties | 
+   ( SIZEOF ( QUERY ( edir <* USEDIN ( edgp, 'EXTERNAL_PROPERTIES_MIM' + '.EXTERNALLY_DEFINED_ITEM_RELATIONSHIP.RELATING_ITEM' )| 
+	( edir.name =  'name scope' ) AND 
+      ('EXTERNAL_PROPERTIES_MIM' + '.EXTERNALLY_DEFINED_CLASS' IN  TYPEOF ( edir.related_item ) ) AND 
+      ( 'EXTERNAL_PROPERTIES_MIM' + '.KNOWN_SOURCE' IN TYPEOF ( edir.related_item.source ) ) ) ) <>1 ) ) ) =  0;
+END_RULE;
+
+
+FUNCTION external_version_assignment_is_valid (aia: applied_external_identification_assignment): BOOLEAN;
+LOCAL
+  item: identification_item;
+  role: identification_role;
+END_LOCAL;
+
+role:= aia.role;
+IF role.name='version' THEN
+  REPEAT i:=LOINDEX(aia.items) TO HIINDEX(aia.items);
+    item:= aia.items[i];
+
+    IF (SIZEOF(['EXTERNAL_PROPERTIES_MIM.' + 'EXTERNALLY_VERSIONED_ITEM']*TYPEOF(item))=0) THEN
+-- item invalid if item does not belong to versionable types
+	RETURN(FALSE);
+    END_IF;
+  END_REPEAT;
+  RETURN(TRUE);
+
+ELSE		-- case where aia does not convey a version id
+  RETURN(TRUE);
+END_IF;
+END_FUNCTION;
+
+
+END_SCHEMA;

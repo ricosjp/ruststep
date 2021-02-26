@@ -1,0 +1,53 @@
+(*
+ $Id: 10303-1123-arm-document_definition.exp,v 1.5 2006/08/07 07:44:43 wg12deputy Exp $
+ISO TC184/SC4/WG12 N3225 - ISO/TS 10303-1123 Document definition - EXPRESS ARM
+Supersedes ISO TC184/SC4/WG12 N1192
+*) 
+
+
+SCHEMA Document_definition_arm;
+
+USE FROM Document_and_version_identification_arm;    -- ISO/TS 10303-1121
+
+USE FROM External_item_identification_assignment_arm;    -- ISO/TS 10303-1128
+
+USE FROM File_identification_arm;    -- ISO/TS 10303-1127
+
+USE FROM Product_view_definition_arm;    -- ISO/TS 10303-1019
+
+
+TYPE document_location_select = SELECT BASED_ON external_identification_item WITH 
+   (Document_definition);
+END_TYPE; 
+
+ENTITY Digital_document_definition
+  SUBTYPE OF (Document_definition);
+  files : SET[0:?] OF Digital_file;
+END_ENTITY;
+
+ENTITY Document_definition
+  SUPERTYPE OF (ONEOF (Digital_document_definition,
+                       Physical_document_definition))
+  SUBTYPE OF (Product_view_definition);
+  SELF\Product_view_definition.name RENAMED description : OPTIONAL STRING;
+  SELF\Product_view_definition.defined_version RENAMED associated_document_version : Document_version;
+END_ENTITY;
+
+ENTITY Document_location_identification
+  SUBTYPE OF (External_source_identification);
+WHERE
+  WR1: 'DOCUMENT_DEFINITION_ARM.DOCUMENT_DEFINITION' IN TYPEOF(SELF\External_source_identification.item);
+END_ENTITY;
+
+ENTITY Physical_document_definition
+  SUBTYPE OF (Document_definition);
+  components : SET[0:?] OF Hardcopy;
+END_ENTITY;
+
+RULE document_definition_constraint FOR 
+(Product_view_definition);
+WHERE
+  WR1: SIZEOF ( QUERY ( dd <* Product_view_definition | ( NOT ( 'DOCUMENT_DEFINITION_ARM.' + 'DOCUMENT_DEFINITION' IN TYPEOF (dd) ) ) AND ( 'DOCUMENT_DEFINITION_ARM.' + 'DOCUMENT_VERSION' IN TYPEOF ( dd.defined_version) ) ) ) =0;
+END_RULE; 
+
+END_SCHEMA;  -- Document_definition_arm

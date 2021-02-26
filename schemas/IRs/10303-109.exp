@@ -1,0 +1,600 @@
+(* THIS DOCUMENT IS ISO TC184/SC4/WG12 N2649 *)
+
+SCHEMA assembly_feature_relationship_schema;
+
+REFERENCE FROM assembly_constraint_schema; -- 10303-109
+REFERENCE FROM geometry_schema; -- 10303-41
+REFERENCE FROM kinematic_motion_representation_schema; -- 10303-105
+REFERENCE FROM kinematic_structure_schema; -- 10303-105
+REFERENCE FROM product_definition_schema; -- 10303-41
+REFERENCE FROM product_property_definition_schema; -- 10303-41
+REFERENCE FROM product_property_representation_schema; -- 10303-41
+REFERENCE FROM product_structure_schema; -- 10303-44
+REFERENCE FROM representation_schema; -- 10303-43
+REFERENCE FROM support_resource_schema; -- 10303-41
+
+TYPE representing_relationship = SELECT
+(binary_assembly_constraint,
+constrained_kinematic_motion_representation,
+free_kinematic_motion_representation);
+END_TYPE;-- representing_relationship
+
+ENTITY shape_aspect_relationship_representation_association;
+  represented_shape_aspect_relationship: shape_aspect_relationship;
+  representing_representation_relationship : representation_relationship;
+WHERE
+WR1: ('REPRESENTATIVE_SHAPE_REPRESENTATION' IN 
+      TYPEOF(representing_representation_relationship\
+      representation_relationship.rep_1)) AND
+     ('REPRESENTATIVE_SHAPE_REPRESENTATION' IN 
+      TYPEOF(representing_representation_relationship\
+      representation_relationship.rep_2));
+WR2: (represented_shape_aspect_relationship.relating_shape_aspect IN 
+      using_shape_aspect_of_shape_representation 
+      (representing_representation_relationship.rep_1)) AND
+     (represented_shape_aspect_relationship.related_shape_aspect IN 
+      using_shape_aspect_of_shape_representation 
+      (representing_representation_relationship.rep_2));
+WR3: ((find_representative_shape_representation_of_product_definition 
+     (using_product_definition_of_shape_aspect
+     (represented_shape_aspect_relationship.relating_shape_aspect)).
+      context_of_items) :=:
+     (find_representative_shape_representation_of_shape_aspect 
+     (represented_shape_aspect_relationship.relating_shape_aspect).
+      context_of_items)) AND
+     ((find_representative_shape_representation_of_product_definition 
+     (using_product_definition_of_shape_aspect 
+     (represented_shape_aspect_relationship.related_shape_aspect)).
+      context_of_items) :=:
+     (find_representative_shape_representation_of_shape_aspect 
+     (represented_shape_aspect_relationship.related_shape_aspect).
+      context_of_items));
+WR4: using_product_definition_of_shape_aspect
+     (represented_shape_aspect_relationship.relating_shape_aspect) :<>: 
+     using_product_definition_of_shape_aspect 
+     (represented_shape_aspect_relationship.related_shape_aspect);
+WR5: find_assembly_root ([using_product_definition_of_shape_aspect 
+     (represented_shape_aspect_relationship.relating_shape_aspect)]) :=: 
+     find_assembly_root ([using_product_definition_of_shape_aspect 
+     (represented_shape_aspect_relationship.related_shape_aspect)]);
+END_ENTITY; -- shape_aspect_relationship_representation_association
+
+ENTITY representative_shape_representation
+  SUBTYPE OF (shape_representation);
+WHERE 
+WR1: unique_in_product_definition (SELF) OR unique_in_shape_aspect (SELF);
+END_ENTITY; -- representative_shape_representation
+
+ENTITY free_kinematic_motion_representation
+  SUBTYPE OF (representation_relationship_with_transformation);
+SELF\representation_relationship.rep_1: 
+   representative_shape_representation;
+SELF\representation_relationship.rep_2: 
+   representative_shape_representation;
+  motion : kinematic_path;
+WHERE
+WR1: 'ITEM_DEFINED_TRANSFORMATION' IN TYPEOF
+     (SELF\representation_relationship_with_transformation.
+      transformation_operator);
+WR2: ('GEOMETRY_SCHEMA.GEOMETRIC_REPRESENTATION_ITEM' IN TYPEOF
+     (SELF\representation_relationship_with_transformation.
+      transformation_operator\item_defined_transformation.transform_item_1)) AND
+     ('GEOMETRY_SCHEMA.GEOMETRIC_REPRESENTATION_ITEM' IN TYPEOF
+     (SELF\representation_relationship_with_transformation.
+      transformation_operator\item_defined_transformation.transform_item_2));
+WR3: ((dimension_of
+     (SELF\representation_relationship_with_transformation.
+      transformation_operator\item_defined_transformation.
+      transform_item_1\geometric_representation_item) = 3 ) AND
+     (dimension_of 
+     (SELF\representation_relationship_with_transformation.
+      transformation_operator\item_defined_transformation.
+      transform_item_2\geometric_representation_item) = 3 ));
+WR4:(SELF\representation_relationship.rep_1 IN 
+     (using_representations 
+     (SELF\representation_relationship_with_transformation.
+      transformation_operator\item_defined_transformation.transform_item_1) +
+      using_representation_with_mapping 
+     (SELF\representation_relationship_with_transformation.
+      transformation_operator\item_defined_transformation.transform_item_1))) AND
+     (SELF\representation_relationship.rep_2 IN 
+     (using_representations 
+     (SELF\representation_relationship_with_transformation.
+      transformation_operator\item_defined_transformation.transform_item_2) +
+      using_representation_with_mapping 
+     (SELF\representation_relationship_with_transformation.
+      transformation_operator\item_defined_transformation.transform_item_2)));
+END_ENTITY; -- free_kinematic_motion_representation
+
+ENTITY constrained_kinematic_motion_representation
+  SUBTYPE OF (representation_relationship_with_transformation);
+SELF\representation_relationship.rep_1: 
+    representative_shape_representation;
+SELF\representation_relationship.rep_2: 
+    representative_shape_representation;
+WHERE
+WR1: ('GEOMETRY_SCHEMA.AXIS2_PLACEMENT_3D' IN TYPEOF
+     (SELF\representation_relationship_with_transformation.
+     transformation_operator\item_defined_transformation.transform_item_1)) AND
+     ('GEOMETRY_SCHEMA.AXIS2_PLACEMENT_3D' IN TYPEOF
+     (SELF\representation_relationship_with_transformation.
+     transformation_operator\item_defined_transformation.transform_item_2));
+WR2: ((dimension_of
+     (SELF\representation_relationship_with_transformation.
+     transformation_operator\item_defined_transformation.
+     transform_item_1\geometric_representation_item) = 3 ) AND
+     (dimension_of 
+     (SELF\representation_relationship_with_transformation.
+     transformation_operator\item_defined_transformation.
+     transform_item_2\geometric_representation_item) = 3 ));
+WR3:(SELF\representation_relationship.rep_1 IN 
+     (using_representations 
+     (SELF\representation_relationship_with_transformation.
+     transformation_operator\item_defined_transformation.transform_item_1) +
+     using_representation_with_mapping 
+     (SELF\representation_relationship_with_transformation.
+     transformation_operator\item_defined_transformation.transform_item_1))) AND
+     (SELF\representation_relationship.rep_2 IN 
+     (using_representations 
+     (SELF\representation_relationship_with_transformation.
+     transformation_operator\item_defined_transformation.transform_item_2) +
+     using_representation_with_mapping 
+     (SELF\representation_relationship_with_transformation.
+     transformation_operator\item_defined_transformation.transform_item_2)));
+WR4: 'KINEMATIC_PAIR' IN TYPEOF
+     (SELF\representation_relationship_with_transformation.
+      transformation_operator);
+END_ENTITY; -- constrained_kinematic_motion_representation
+
+FUNCTION assembly_root
+  (item: product_definition) : BOOLEAN;
+-- extraction of related assembly_component_relationships --
+IF (SIZEOF(USEDIN (item, 
+   'PRODUCT_STRUCTURE_SCHEMA.ASSEMBLY_COMPONENT_USAGE.' + 
+   'RELATED_PRODUCT_DEFINITION')) = 0) THEN RETURN(TRUE);
+ELSE RETURN (FALSE);
+END_IF;
+END_FUNCTION;
+
+FUNCTION find_assembly_root
+  (constituent: SET OF product_definition) : SET OF product_definition;
+LOCAL
+  local_relation: SET OF assembly_component_usage := [];
+  local_relation2: BAG OF assembly_component_usage := [];
+  local_parent: SET OF product_definition := [];
+  root : SET OF product_definition;
+  i : INTEGER := 0;
+  j : INTEGER := 0;
+END_LOCAL;
+
+-- Is constituent root ? --
+IF ((SIZEOF (constituent) = 1) AND assembly_root (constituent[1]))
+  THEN RETURN ([constituent [1]]);
+-- ERROR constituent is vacant --
+  ELSE IF (SIZEOF (constituent) = 0 ) THEN RETURN ([]);
+
+-- extraction of related assembly_component_relationships --
+    ELSE
+      REPEAT j:= 1 TO HIINDEX(constituent);
+        local_relation2 := local_relation2 + (USEDIN (constituent[j], 
+                    'PRODUCT_STRUCTURE_SCHEMA.ASSEMBLY_COMPONENT_USAGE.' 
+                    +'RELATED_PRODUCT_DEFINITION'));
+      END_REPEAT;
+      local_relation := bag_to_set (local_relation2);
+      IF (SIZEOF(local_relation) = 0) THEN
+        IF (SIZEOF(constituent) = 1) THEN RETURN ([constituent[1]]);
+          ELSE RETURN ([]);
+        END_IF;
+      ELSE
+-- extraction of a set of parents --
+        REPEAT i :=1 TO HIINDEX(local_relation);
+          REPEAT j := 1 TO HIINDEX(constituent);
+          IF (local_relation[i].relating_product_definition <> 
+              constituent[j]) THEN
+            local_parent := local_parent + 
+                            local_relation[i].relating_product_definition;
+          END_IF;
+          END_REPEAT;
+        END_REPEAT;
+        IF ((SIZEOF (local_parent) = 1 ) AND 
+             assembly_root (local_parent[1])) 
+          THEN RETURN ([local_parent[1]]); 
+          ELSE IF (SIZEOF (local_parent) = 0) THEN RETURN ([]);
+-- try again --
+            ELSE 
+              root := find_assembly_root(local_parent);
+              IF (SIZEOF (root) =1) THEN RETURN (root);
+                ELSE IF (SIZEOF (root) = 0) THEN RETURN ([]);
+                END_IF;
+              END_IF;
+          END_IF;
+        END_IF;
+      END_IF;
+  END_IF;
+END_IF;
+END_FUNCTION;
+ 
+FUNCTION find_shape_representation_of_product_definition
+    (item:product_definition) : SET OF shape_representation;
+LOCAL
+  local_p_d_s: SET OF product_definition_shape := [];
+  local_p_d_s2: BAG OF product_definition_shape := [];
+  local_s_d_r: SET OF shape_definition_representation := [];
+  local_s_d_r2: BAG OF shape_definition_representation := [];
+  local_s_r: SET OF shape_representation := [];
+  i : INTEGER;
+END_LOCAL;
+-- find product_definition_shape representing the product_definiton
+  local_p_d_s2 := local_p_d_s2 + (USEDIN (item, 
+  'PRODUCT_PROPERTY_DEFINITION_SCHEMA.PRODUCT_DEFINITION_SHAPE.DEFINITION'));
+  local_p_d_s := bag_to_set(local_p_d_s2);
+-- find shape_definition_representations refereing to the local_p_d_s
+  REPEAT i := 1 to HIINDEX (local_p_d_s);
+    local_s_d_r2 := local_s_d_r2 + (USEDIN (local_p_d_s[i], 
+                   'PRODUCT_PROPERTY_REPRESENTATION_SCHEMA.' +
+                   'SHAPE_DEFINITION_REPRESENTATION.DEFINITION')); 
+  END_REPEAT;
+  local_s_d_r := bag_to_set (local_s_d_r2);
+  REPEAT i := 1 to HIINDEX (local_s_d_r);
+    IF('PRODUCT_PROPERTY_REPRESENTATION_SCHEMA.SHAPE_REPRESENTATION' 
+        IN TYPEOF (local_s_d_r[i].used_representation)) THEN
+        local_s_r := local_s_r + local_s_d_r[i].used_representation;
+    END_IF;
+  END_REPEAT;
+  RETURN (local_s_r);
+END_FUNCTION;
+
+FUNCTION find_shape_representation_of_shape_aspect
+    (item:shape_aspect) : SET OF shape_representation;
+LOCAL
+  local_p_d: SET OF property_definition:= [];
+  local_s_d_r: SET OF shape_definition_representation := [];
+  local_s_d_r2: BAG OF shape_definition_representation := [];
+  local_s_r: SET OF shape_representation := [];
+  i : INTEGER;
+END_LOCAL;
+-- find property_definition representing the shape_aspect
+  local_p_d := bag_to_set (USEDIN (item, 
+   'PRODUCT_PROPERTY_DEFINITION_SCHEMA.PROPERTY_DEFINITION.DEFINITION'));
+-- find shape_definition_representations refereing to the local_p_d
+  REPEAT i := 1 to HIINDEX (local_p_d);
+    local_s_d_r2 := local_s_d_r2 + (USEDIN (local_p_d[i], 
+                   'PRODUCT_PROPERTY_REPRESENTATION_SCHEMA.' +
+                   'SHAPE_DEFINITION_REPRESENTATION.DEFINITION')); 
+  END_REPEAT;
+    local_s_d_r := bag_to_set (local_s_d_r2);
+  REPEAT i := 1 to HIINDEX (local_s_d_r);
+    IF('PRODUCT_PROPERTY_REPRESENTATION_SCHEMA.SHAPE_REPRESENTATION'
+        IN TYPEOF (local_s_d_r[i].used_representation)) THEN
+        local_s_r := local_s_r + local_s_d_r[i].used_representation;
+    END_IF;
+  END_REPEAT;
+  RETURN (local_s_r);
+END_FUNCTION;
+ 
+FUNCTION find_representative_shape_representation_of_product_definition
+    (item:product_definition) : shape_representation;
+LOCAL
+  local_s_r: SET OF shape_representation := [];
+END_LOCAL;
+-- find representative_shape_representation of the product_definition
+  local_s_r := QUERY 
+    ( z <* find_shape_representation_of_product_definition (item)|
+      'REPRESENTATIVE_SHAPE_REPRESENTATION' IN TYPEOF(z));
+IF (SIZEOF (local_s_r) = 1) THEN RETURN (local_s_r[1]); 
+   ELSE local_s_r := []; RETURN(local_s_r[1]);
+END_IF;
+END_FUNCTION;
+
+FUNCTION find_representative_shape_representation_of_shape_aspect
+    (item:shape_aspect) : shape_representation;
+LOCAL
+  local_s_r: SET OF shape_representation := [];
+END_LOCAL;
+-- find representative_shape_representation of the shape_aspect
+  local_s_r := QUERY ( z <* find_shape_representation_of_shape_aspect (item)|
+               'REPRESENTATIVE_SHAPE_REPRESENTATION' IN TYPEOF(z));
+IF (SIZEOF (local_s_r) = 1) THEN RETURN (local_s_r[1]); 
+   ELSE local_s_r := []; RETURN(local_s_r[1]);
+END_IF;
+END_FUNCTION;
+
+FUNCTION unique_in_product_definition
+    (item:representative_shape_representation) : BOOLEAN;
+LOCAL
+  local_p_d: SET OF product_definition := [];
+  local_s_r: SET OF shape_representation := [];
+  i : INTEGER;
+  j : INTEGER;
+END_LOCAL;
+-- find product_definitions represented by the input 
+-- representative_shape_representation
+  local_p_d := using_product_definition_of_shape_representation (item);
+-- ERROR
+  IF (SIZEOF (local_p_d) <> 1) THEN RETURN (FALSE);
+    ELSE
+-- find shape_representation representing the product_definitions
+    REPEAT i := 1 to HIINDEX (local_p_d);
+      local_s_r := find_shape_representation_of_product_definition 
+                   (local_p_d[i]);
+      REPEAT j := 1 to HIINDEX (local_s_r);
+        IF (('REPRESENTATIVE_SHAPE_REPRESENTATION' IN TYPEOF (local_s_r[j])) 
+             AND (local_s_r[j] :<>: item)) THEN RETURN (FALSE);
+        END_IF;
+      END_REPEAT;
+    END_REPEAT;
+  END_IF;
+  RETURN (TRUE);
+END_FUNCTION;
+
+FUNCTION unique_in_shape_aspect
+    (item:representative_shape_representation) : BOOLEAN;
+LOCAL
+  local_s_a: SET OF shape_aspect := [];
+  local_s_r: SET OF shape_representation := [];
+  i : INTEGER;
+  j : INTEGER;
+END_LOCAL;
+-- find shape_aspects represented by the input 
+-- representative_shape_representation
+  local_s_a := using_shape_aspect_of_shape_representation (item);
+-- ERROR
+  IF (SIZEOF (local_s_a) <> 1) THEN RETURN (FALSE);
+    ELSE
+-- find shape_representation representing the shape_aspect
+    REPEAT i := 1 to HIINDEX (local_s_a);
+      local_s_r := find_shape_representation_of_shape_aspect 
+                   (local_s_a[i]);
+      REPEAT j := 1 to HIINDEX (local_s_r);
+        IF ((' REPRESENTATIVE_SHAPE_REPRESENTATION ' IN TYPEOF (local_s_r[j])) 
+           AND (local_s_r[j] :<>: item)) THEN RETURN (FALSE);
+        END_IF;
+      END_REPEAT;
+    END_REPEAT;
+  END_IF;
+  RETURN (TRUE);
+END_FUNCTION;
+
+FUNCTION using_product_definition_of_shape_aspect
+    (item:shape_aspect) : product_definition ;
+IF ('PRODUCT_DEFINITION_SCHEMA.PRODUCT_DEFINITION' IN TYPEOF 
+    (item.of_shape.definition)) THEN
+    RETURN (item.of_shape.definition);
+END_IF;
+END_FUNCTION;
+
+FUNCTION using_product_definition_of_shape_representation
+    (item: shape_representation) : SET OF product_definition;
+LOCAL
+  local_s_d_r: SET OF shape_definition_representation := [];
+  local_p_d_s: SET OF product_definition_shape := [];
+  local_p_d: SET OF product_definition := [];
+  i : INTEGER;
+END_LOCAL;
+
+-- find shape_definition_representations 
+  local_s_d_r  := local_s_d_r + bag_to_set (USEDIN (item, 
+ 'PRODUCT_PROPERTY_REPRESENTATION_SCHEMA.' +
+ 'SHAPE_DEFINITION_REPRESENTATION.USED_REPRESENTATION')); 
+
+-- find product_definition_shape & product_definitions
+REPEAT i := 1 TO HIINDEX (local_s_d_r);
+   IF (('PRODUCT_PROPERTY_DEFINITION_SCHEMA.PRODUCT_DEFINITION_SHAPE' IN 
+     TYPEOF (local_s_d_r[i].definition))
+     AND
+     ('PRODUCT_DEFINITION_SCHEMA.PRODUCT_DEFINITION' IN TYPEOF
+       (local_s_d_r[i].definition.definition))) 
+   THEN local_p_d := local_p_d + local_s_d_r[i].definition.definition;
+   ELSE IF (('PRODUCT_PROPERTY_DEFINITION_SCHEMA.PROPERTY_DEFINITION' IN 
+     TYPEOF (local_s_d_r[i].definition))
+     AND
+     ('PRODUCT_DEFINITION_SCHEMA.PRODUCT_DEFINITION' IN TYPEOF
+       (local_s_d_r[i].definition.definition)))
+   THEN local_p_d := local_p_d + local_s_d_r[i].definition.definition;
+   END_IF;
+   END_IF;
+END_REPEAT;
+RETURN (local_p_d);
+END_FUNCTION;
+
+FUNCTION using_shape_aspect_of_shape_representation
+    (item: shape_representation) : SET OF shape_aspect;
+LOCAL
+  local_s_d_r: SET OF shape_definition_representation := [];
+  local_s_d_r2: BAG OF shape_definition_representation := [];
+  local_s_a: SET OF shape_aspect := [];
+  i : INTEGER;
+END_LOCAL;
+-- find shape_definition_representations 
+  local_s_d_r2  := local_s_d_r2 + (USEDIN (item, 
+  'PRODUCT_PROPERTY_REPRESENTATION_SCHEMA.' +
+  'SHAPE_DEFINITION_REPRESENTATION.USED_REPRESENTATION')); 
+  local_s_d_r := bag_to_set (local_s_d_r2);
+-- find shape_aspects
+REPEAT i := 1 TO HIINDEX (local_s_d_r);
+   IF ('PRODUCT_PROPERTY_DEFINITION_SCHEMA.SHAPE_ASPECT' IN TYPEOF 
+      (local_s_d_r[i].definition))
+   THEN local_s_a := local_s_a + local_s_d_r[i].definition;
+   END_IF;
+END_REPEAT;
+RETURN (local_s_a);
+END_FUNCTION;
+
+FUNCTION using_representation_with_mapping (item : representation_item)
+         : SET OF representation;
+LOCAL 
+  results: SET OF representation := [];
+  local_results : SET OF representation := [];
+  local_representation_map : SET OF representation_map := [];
+  intermediate_items : SET OF representation_item := [];
+  i : INTEGER;
+  j : INTEGER;
+END_LOCAL;
+-- find the representations in which the item is used
+-- and which is referenced from the representation_map
+   local_results := QUERY (z <* using_representations (item)|
+           SIZEOF (USEDIN (z, 'REPRESENTATION_SCHEMA.REPRESENTATION_MAP.' +
+                              'MAPPED_REPRESENTATION')) > 0 );
+  IF (SIZEOF (local_results) = 0) THEN RETURN ([]);
+  ELSE 
+-- find the set of representation_map in which the local_results are used
+  REPEAT i := 1 TO HIINDEX(local_results);
+  local_representation_map := local_representation_map +
+      bag_to_set (USEDIN (local_results[i], 
+                 'REPRESENTATION_SCHEMA.REPRESENTATION_MAP.MAPPED_REPRESENTATION'));
+  END_REPEAT;
+-- find the set of mapped_item
+  REPEAT i := 1 TO HIINDEX(local_representation_map);
+  intermediate_items := intermediate_items + 
+          bag_to_set (USEDIN (local_representation_map[i], 
+                 'REPRESENTATION_SCHEMA.MAPPED_ITEM.MAPPING_SOURCE'));
+  END_REPEAT;
+-- repeat same manner
+  REPEAT j := 1 to HIINDEX(intermediate_items);
+        results := results + bag_to_set (using_representation_with_mapping 
+                             (intermediate_items[j]));
+    END_REPEAT;
+  END_IF;
+  RETURN (results);
+END_FUNCTION; 
+
+END_SCHEMA;  -- assembly_feature_relationship_schema 
+
+
+SCHEMA assembly_constraint_schema;
+
+REFERENCE FROM assembly_feature_relationship_schema; -- ISO 10303-109
+REFERENCE FROM explicit_constraint_schema; -- ISO 10303-108
+REFERENCE FROM explicit_geometric_constraint_schema; -- ISO 10303-108
+REFERENCE FROM geometry_schema; -- ISO 10303-42
+REFERENCE FROM geometric_model_schema; -- ISO 10303-42
+REFERENCE FROM parameterization_schema; -- ISO 10303-108
+REFERENCE FROM product_definition_schema; -- 10303-41
+REFERENCE FROM product_structure_schema; -- ISO 10303-44
+REFERENCE FROM representation_schema; -- ISO 10303-43
+REFERENCE FROM support_resource_schema; -- 10303-41
+
+ENTITY assembly_geometric_constraint
+  ABSTRACT SUPERTYPE OF (ONEOF
+           (binary_assembly_constraint,
+           fixed_constituent_assembly_constraint))
+  SUBTYPE OF (explicit_constraint);
+
+END_ENTITY;-- assembly_geometric_constraint
+
+ENTITY binary_assembly_constraint
+  ABSTRACT SUPERTYPE OF (ONEOF
+           (parallel_assembly_constraint,
+            surface_distance_assembly_constraint_with_dimension,
+             angle_assembly_constraint_with_dimension,
+            perpendicular_assembly_constraint,
+            incidence_assembly_constraint,
+            coaxial_assembly_constraint,
+            tangent_assembly_constraint))
+  SUBTYPE OF (assembly_geometric_constraint,
+            representation_relationship_with_transformation);
+SELF\representation_relationship.rep_1: representative_shape_representation;
+SELF\representation_relationship.rep_2: representative_shape_representation;
+WHERE
+WR1: (SELF\explicit_constraint.constrained_elements[1]
+      \geometric_representation_item.dim = 3) AND
+     (SELF\explicit_constraint.reference_elements[1]
+      \geometric_representation_item.dim = 3);
+WR2: (SELF\representation_relationship.rep_1 IN (using_representations 
+     (SELF\representation_relationship_with_transformation.
+      transformation_operator\item_defined_transformation.transform_item_1) +
+      using_representation_with_mapping 
+     (SELF\representation_relationship_with_transformation.
+      transformation_operator\item_defined_transformation.transform_item_1))) AND
+     (SELF\representation_relationship.rep_2 IN (using_representations 
+     (SELF\representation_relationship_with_transformation.
+       transformation_operator\item_defined_transformation.transform_item_2) +
+      using_representation_with_mapping 
+     (SELF\representation_relationship_with_transformation.
+      transformation_operator\item_defined_transformation.transform_item_2)));
+WR3: (SIZEOF(SELF\explicit_constraint.constrained_elements)=1) AND
+     (SIZEOF(SELF\explicit_constraint.reference_elements)=1);
+WR4: (SELF\representation_relationship_with_transformation.
+      transformation_operator\item_defined_transformation.transform_item_1 =  
+      SELF\explicit_constraint.reference_elements[1]) AND
+     (SELF\representation_relationship_with_transformation.
+      transformation_operator\item_defined_transformation.transform_item_2 =  
+      SELF\explicit_constraint.constrained_elements[1]);
+
+END_ENTITY;-- binary_assembly_constraint
+
+ENTITY fixed_constituent_assembly_constraint
+SUBTYPE OF (assembly_geometric_constraint,
+            fixed_element_geometric_constraint);
+    fixed_constituent: representative_shape_representation;
+WHERE
+WR1: SELF\explicit_constraint.constrained_elements[1]
+     \geometric_representation_item.dim = 3;
+WR2: (assembly_leaf (using_product_definition_of_shape_representation
+     (fixed_constituent)[1]));
+WR3: (SIZEOF(SELF\explicit_constraint.constrained_elements) = 1) AND
+     (SIZEOF(SELF\explicit_constraint.reference_elements) = 0);
+WR4: fixed_constituent IN (using_representations(SELF\explicit_constraint.constrained_elements[1]
+\representation_item) + using_representation_with_mapping
+(SELF\explicit_constraint.constrained_elements[1]\representation_item));
+END_ENTITY;-- fixed_constituent_assembly_constraint
+
+
+ENTITY parallel_assembly_constraint
+  SUBTYPE OF (binary_assembly_constraint,
+              parallel_geometric_constraint);
+END_ENTITY;-- parallel_assembly_constraint
+
+ENTITY  parallel_assembly_constraint_with_dimension
+  SUBTYPE OF (parallel_assembly_constraint,
+              pgc_with_dimension);
+END_ENTITY;-- parallel_assembly_constraint_with_dimension
+
+ENTITY surface_distance_assembly_constraint_with_dimension
+  SUBTYPE OF (binary_assembly_constraint,
+              sdgc_with_dimension);
+END_ENTITY;-- surface_distance_assembly_constraint_with_dimension
+
+ENTITY angle_assembly_constraint_with_dimension
+  SUBTYPE OF (binary_assembly_constraint,
+              agc_with_dimension);
+END_ENTITY;-- angle_assembly_constraint_with_dimension
+
+ENTITY perpendicular_assembly_constraint
+  SUBTYPE OF (binary_assembly_constraint,
+              perpendicular_geometric_constraint);
+END_ENTITY;-- perpendicular_assembly_constraint
+
+ENTITY incidence_assembly_constraint
+  SUBTYPE OF (binary_assembly_constraint,
+              incidence_geometric_constraint);
+END_ENTITY;-- incidence_assembly_constraint
+
+ENTITY coaxial_assembly_constraint
+  SUBTYPE OF (binary_assembly_constraint,
+              coaxial_geometric_constraint);
+END_ENTITY;-- coaxial_assembly_constraint
+
+ENTITY tangent_assembly_constraint
+  SUBTYPE OF (binary_assembly_constraint,
+              tangent_geometric_constraint);
+END_ENTITY;-- tangent_assembly_constraint
+
+FUNCTION assembly_leaf
+  (item: product_definition) : BOOLEAN;
+LOCAL
+  local_relation: SET OF assembly_component_usage := [];
+  local_relation2: BAG OF assembly_component_usage := [];
+END_LOCAL;
+-- extraction of related assembly_component_relationships --
+local_relation2 := local_relation2 + (USEDIN (item, 
+    'PRODUCT_STRUCTURE_SCHEMA.ASSEMBLY_COMPONENT_USAGE.'+ 
+    'RELATING_PRODUCT_DEFINITION'));
+local_relation := bag_to_set (local_relation2);
+IF (SIZEOF (local_relation) = 0) THEN RETURN (TRUE);
+  ELSE RETURN (FALSE);
+END_IF;
+END_FUNCTION;
+
+
+END_SCHEMA; -- assembly_constraint

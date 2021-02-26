@@ -1,0 +1,33 @@
+(*
+   $Id: 10303-1343-arm-product_placement.exp,v 1.1 2006/08/03 14:41:10 wg12deputy Exp $
+   ISO/TC184/SC4 WG12N2607 - ISO/TS 10303-1343 Product_placement - EXPRESS ARM
+   Supersedes ISO TC184/SC4/WG12N1741
+*)
+
+SCHEMA Product_placement_arm;
+
+USE FROM Contextual_shape_positioning_arm;
+USE FROM Physical_breakdown_arm;
+USE FROM Product_occurrence_arm;
+
+ENTITY Occurrence_placement
+ABSTRACT SUPERTYPE OF (ONEOF(Part_occurrence_placement,Physical_element_placement));
+  reference_physical_element: Physical_element_definition;
+  reference_geometric_space : Geometric_model;
+  positioned_representation : template_instance;
+END_ENTITY;
+
+ENTITY Part_occurrence_placement
+SUBTYPE OF(Occurrence_placement);
+  placed_part_occurrence: Single_instance;
+END_ENTITY;
+
+ENTITY Physical_element_placement
+SUBTYPE OF(Occurrence_placement);
+  placed_physical_element: Physical_element_definition;
+WHERE
+WR1: placed_physical_element\Product_view_definition.defined_version :<>: 
+	SELF\Occurrence_placement.reference_physical_element\Product_view_definition.defined_version;
+END_ENTITY;
+
+END_SCHEMA;

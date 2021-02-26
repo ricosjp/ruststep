@@ -1,0 +1,24 @@
+(*
+ $Id: 10303-1277-arm-location_assignment.exp,v 1.2 2006/08/07 07:44:46 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N3073 - ISO/TS 10303-1277 Location assignment - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG12 N2390
+*) 
+
+
+SCHEMA Location_assignment_arm;
+
+USE FROM Location_arm;    -- ISO/TS 10303-1276
+
+
+TYPE location_assignment_select = EXTENSIBLE GENERIC_ENTITY SELECT;
+END_TYPE; 
+
+ENTITY Location_assignment;
+  description : OPTIONAL STRING;
+  role : OPTIONAL STRING;
+  entity_for_location : location_assignment_select;
+  location_for_assignment : Location;
+END_ENTITY;
+
+END_SCHEMA;  -- Location_assignment_arm
+

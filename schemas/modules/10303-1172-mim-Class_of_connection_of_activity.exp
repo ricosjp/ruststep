@@ -1,0 +1,19 @@
+(*
+ $Id: 10303-1172-mim-Class_of_connection_of_activity.exp,v 1.4 2006/08/04 12:11:55 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2730 - ISO/TS 10303-1172 Class of connection of activity - EXPRESS MIM
+ Supersedes ISO TC184/SC4/WG12 N1847
+*)
+
+SCHEMA Class_of_connection_of_activity_mim;
+
+USE FROM Activity_mim;    -- ISO/TS 10303-1047
+USE FROM Class_mim;    -- ISO/TS 10303-1070
+USE FROM Class_of_activity_mim;    -- ISO/TS 10303-1071
+
+ENTITY class_of_connection_of_activity
+  SUBTYPE OF (action_relationship, class);
+  SELF\action_relationship.relating_action : class_of_activity;
+  SELF\action_relationship.related_action : class_of_activity;
+END_ENTITY;
+
+END_SCHEMA;

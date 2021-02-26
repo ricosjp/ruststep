@@ -1,0 +1,13 @@
+(*
+WG12 N661
+ISO/TS 10303-1005
+Product data representation and exchange: Application module: Elemental topology
+*)
+
+SCHEMA Elemental_topology_mim;
+  USE FROM Foundation_representation_mim; --ISO/TS 10303-1006
+  USE FROM topology_schema -- ISO 10303-42
+      (topological_representation_item);
+
+END_SCHEMA;
+

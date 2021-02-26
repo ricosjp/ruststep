@@ -1,0 +1,41 @@
+(*
+ $Id: 10303-1017-arm-product_identification.exp,v 1.5 2006/08/07 07:44:41 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2925 - ISO/TS 10303-1017 Product identification - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG12 N2524
+*)
+
+
+SCHEMA Product_identification_arm;
+
+USE FROM Product_categorization_arm;    -- ISO/TS 10303-1016
+
+
+ENTITY Product;
+  id : STRING;
+  name : OPTIONAL STRING;
+  description : OPTIONAL STRING;
+END_ENTITY;
+
+ENTITY Product_category_assignment;
+  category : Product_category;
+  products : SET[1:?] OF Product;
+END_ENTITY;
+
+FUNCTION types_of_product
+ (obj : Product) : SET OF STRING; 
+ LOCAL
+ 	category_assignments: BAG OF Product_category_assignment;
+ 	categories: SET OF STRING:=[];
+ 	i: INTEGER;
+ END_LOCAL;
+ 
+ category_assignments := USEDIN(obj,'PRODUCT_IDENTIFICATION_ARM.' + 'PRODUCT_CATEGORY_ASSIGNMENT.PRODUCTS');
+    
+ REPEAT i := LOINDEX(category_assignments) TO HIINDEX(category_assignments) BY 1;
+       categories := categories + category_assignments[i].category.name;
+ END_REPEAT;
+ 
+ RETURN(categories);
+       END_FUNCTION; 
+
+END_SCHEMA;  -- Product_identification_arm

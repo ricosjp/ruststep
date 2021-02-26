@@ -1,0 +1,61 @@
+(*
+$Id: 10303-1133-mim-single_part_representation.exp,v 1.2 2006/08/07 09:42:04 wg12deputy Exp $
+ISO TC184/SC4/WG12 N2544 - ISO/TS 10303-1133 Single part representation - EXPRESS MIM
+Supersedes ISO TC184/SC4/WG12 N1668
+*) 
+
+
+SCHEMA Single_part_representation_mim;
+
+USE FROM Document_assignment_mim;    -- ISO/TS 10303-1122
+
+USE FROM Extended_measure_representation_mim;    -- ISO/TS 10303-1106
+
+USE FROM External_model_mim;    -- ISO/TS 10303-1033
+
+USE FROM Part_and_version_identification_mim;    -- ISO/TS 10303-1022
+
+USE FROM Part_view_definition_mim;    -- ISO/TS 10303-1023
+
+USE FROM Person_organization_assignment_mim;    -- ISO/TS 10303-1013
+
+USE FROM Product_categorization_mim;    -- ISO/TS 10303-1016
+
+USE FROM Property_assignment_mim;    -- ISO/TS 10303-1030
+
+USE FROM Shape_property_assignment_mim;    -- ISO/TS 10303-1032
+
+
+TYPE spr_document_reference_item = SELECT BASED_ON document_reference_item WITH 
+   (product, 
+    product_definition, 
+    product_definition_formation);
+END_TYPE; 
+
+TYPE spr_organization_item = EXTENSIBLE SELECT BASED_ON organization_item WITH 
+   (product, 
+    product_definition, 
+    product_definition_formation);
+END_TYPE; 
+
+TYPE spr_person_and_organization_item = EXTENSIBLE SELECT BASED_ON person_and_organization_item WITH 
+   (product, 
+    product_definition, 
+    product_definition_formation);
+END_TYPE; 
+
+FUNCTION categories_of_product
+ (obj : product) : SET OF STRING; 
+LOCAL
+category_assignments: BAG OF product_category;
+categories: SET OF STRING:=[];
+i: INTEGER;
+END_LOCAL;
+category_assignments := USEDIN(obj, 'PRODUCT_DEFINITION_SCHEMA' + '.PRODUCT_RELATED_PRODUCT_CATEGORY.PRODUCTS');
+REPEAT i := LOINDEX(category_assignments) TO HIINDEX(category_assignments) BY 1;
+categories := categories + category_assignments[i].name;
+END_REPEAT;
+RETURN(categories);
+      END_FUNCTION; 
+
+END_SCHEMA;  -- Single_part_representation_mim

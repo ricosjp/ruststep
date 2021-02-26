@@ -1,0 +1,102 @@
+(* $Id: 10303-1068-arm-constructive_solid_geometry_3d.exp,v 1.4 2003/10/21 12:20:21 wg12deputy Exp $
+ ISO/TC184/SC4 WG12N1261  ISO/TS 10303-1068 Constructive_solid_geometry_3d  - EXPRESS ARM *)
+
+SCHEMA Constructive_solid_geometry_3d_arm;
+
+USE FROM Elemental_geometric_shape_arm;
+
+TYPE boolean_operand_3d = SELECT 
+  (Boolean_result_3d,
+   Csg_item_3d,
+   Half_space_3d,
+   Solid_model);
+END_TYPE;
+
+TYPE boolean_operator_3d = ENUMERATION OF 
+  (union,
+   difference,
+   intersection);
+END_TYPE;
+
+TYPE csg_primitive_3d = EXTENSIBLE ENUMERATION OF 
+  (block,
+   convex_hexahedron,
+   cyclide_segment_solid,
+   eccentric_cone,
+   ellipsoid,
+   faceted_primitive,
+   rectangular_pyramid,
+   right_angular_wedge,
+   right_circular_cone,
+   right_circular_cylinder,
+   sphere,
+   tetrahedron,
+   torus);
+END_TYPE;
+
+TYPE csg_select_3d = SELECT 
+  (Boolean_result_3d,
+   Csg_item_3d);
+END_TYPE;
+
+TYPE swept_area_solid_type = EXTENSIBLE ENUMERATION OF 
+  (revolved_area_solid,
+   surface_curve_swept_area_solid,
+   extruded_area_solid);
+END_TYPE;
+
+TYPE swept_face_solid_type = EXTENSIBLE ENUMERATION OF 
+  (revolved_face_solid,
+   surface_curve_swept_face_solid,
+   extruded_face_solid);
+END_TYPE;
+
+ENTITY Boolean_result_3d
+SUBTYPE OF (Detailed_geometric_model_element);
+  operator : boolean_operator_3d;
+  first_operand : boolean_operand_3d;
+  second_operand : boolean_operand_3d;
+END_ENTITY;
+
+ENTITY Csg_item_3d
+SUBTYPE OF (Detailed_geometric_model_element);
+  kind : csg_primitive_3d;
+END_ENTITY;
+
+ENTITY Csg_model
+SUBTYPE OF (Solid_model);
+  tree_root_expression : csg_select_3d;
+END_ENTITY;
+
+ENTITY Half_space_3d
+SUBTYPE OF (Detailed_geometric_model_element);
+END_ENTITY;
+
+ENTITY Manifold_solid_brep
+SUBTYPE OF (Solid_model);
+  faceted : BOOLEAN;
+END_ENTITY;
+
+ENTITY Solid_model
+ABSTRACT SUPERTYPE OF (ONEOF(Csg_model, Manifold_solid_brep, Solid_replica, Swept_area_solid, Swept_face_solid))
+SUBTYPE OF (Detailed_geometric_model_element);
+END_ENTITY;
+
+ENTITY Solid_replica
+SUBTYPE OF (Solid_model);
+  parent_solid : Solid_model;
+  transformation : Cartesian_transformation_3d;
+END_ENTITY;
+
+ENTITY Swept_area_solid
+SUBTYPE OF (Solid_model);
+  kind : swept_area_solid_type;
+END_ENTITY;
+
+ENTITY Swept_face_solid
+SUBTYPE OF (Solid_model);
+  kind : swept_face_solid_type;
+END_ENTITY;
+
+END_SCHEMA;
+

@@ -1,0 +1,73 @@
+(*
+   $Id: 10303-1145-arm-building_structure.exp,v 1.2 2006/08/03 13:23:53 wg12deputy Exp $
+   ISO/TC184/SC4 WG12N2575 - ISO/TS 10303-1145 Building_structure - EXPRESS ARM
+   Supersedes ISO TC184/SC4/WG12N1784
+*)
+
+SCHEMA Building_structure_arm;
+
+USE FROM Assembly_structure_arm;
+
+USE FROM Building_item_arm;
+
+USE FROM Person_organization_assignment_arm;
+
+USE FROM Product_view_definition_arm;
+
+USE FROM Product_view_definition_relationship_arm;
+
+
+TYPE building_organization_or_person_in_organization_item = SELECT BASED_ON organization_or_person_in_organization_item WITH
+   (Building);
+END_TYPE;
+
+ENTITY Building
+SUBTYPE OF (Product_view_definition);
+WHERE
+WR1: SIZEOF (QUERY (bdpa <* USEDIN (SELF, 'BUILDING_STRUCTURE_ARM.' +
+       'ORGANIZATION_OR_PERSON_IN_ORGANIZATION_ASSIGNMENT.ITEMS') |
+       bdpa.role = 'owner'))= 1;
+WR2: SIZEOF (QUERY (pdr <* USEDIN (SELF, 'BUILDING_STRUCTURE_ARM.'+
+       'VIEW_DEFINITION_RELATIONSHIP.RELATING_VIEW') |
+       'BUILDING_STRUCTURE_ARM.BUILDING_SECTION'
+       IN TYPEOF (pdr.related_view))) >= 1;
+END_ENTITY;
+
+ENTITY Building_level
+SUPERTYPE OF (Sublevel)
+SUBTYPE OF (Product_view_definition);
+END_ENTITY;
+
+ENTITY Building_level_assignment
+SUBTYPE OF (View_definition_relationship);
+	SELF\View_definition_relationship.relating_view RENAMED assigned_level : Building_level;
+	SELF\View_definition_relationship.related_view RENAMED assigned_item : Building_item;
+END_ENTITY;
+
+ENTITY Building_section
+SUBTYPE OF (Product_view_definition);
+WHERE
+WR1: SIZEOF (QUERY (pdr <* USEDIN(SELF,'BUILDING_STRUCTURE_ARM.'+
+       'VIEW_DEFINITION_RELATIONSHIP.RELATED_VIEW') |
+       'BUILDING_STRUCTURE_ARM.BUILDING' IN
+       TYPEOF (pdr.relating_view))) = 1;
+END_ENTITY;
+
+ENTITY Item_assembly
+SUBTYPE OF (Product_view_definition);
+INVERSE
+  component_relationships : SET[1:?] OF Assembly_component_relationship FOR relating_view;
+END_ENTITY;
+
+ENTITY Item_proximity_relationship
+SUBTYPE OF (View_definition_relationship);
+	SELF\View_definition_relationship.relating_view RENAMED item_in_proximity : Building_item;
+	SELF\View_definition_relationship.related_view RENAMED item : Building_item;
+END_ENTITY;
+
+ENTITY Sublevel
+SUBTYPE OF (Building_level);
+	belongs_to : Building_level;
+END_ENTITY;
+
+END_SCHEMA;

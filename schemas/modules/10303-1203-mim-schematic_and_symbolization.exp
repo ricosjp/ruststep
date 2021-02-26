@@ -1,0 +1,32 @@
+(*
+ $Id: 10303-1203-mim-schematic_and_symbolization.exp,v 1.1 2006/08/04 12:11:55 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2823 - ISO/TS 10303-1203 Schematic and symbolization - EXPRESS MIM
+ Supersedes ISO TC184/SC4/WG12 N2190
+*)
+
+SCHEMA Schematic_and_symbolization_mim;
+
+USE FROM Schematic_element_library_mim;    --  ISO/TS 10303-1208
+USE FROM Schematic_drawing_mim;    --  ISO/TS 10303-1204
+USE FROM Document_and_version_identification_mim;    --  ISO/TS 10303-1121
+USE FROM Class_mim;    --  ISO/TS 10303-1070
+USE FROM Symbolization_by_schematic_element_mim;    --  ISO/TS 10303-1209
+USE FROM External_item_identification_assignment_mim;    --  ISO/TS 10303-1128
+
+TYPE externally_identified_schematic_element_definition = SELECT BASED_ON external_identification_item WITH 
+   (implicit_schematic_element_definition);
+END_TYPE; 
+
+ENTITY drawing_revision_class_of_document
+  SUBTYPE OF (class, product_definition_formation, drawing_revision);
+WHERE
+  appropriate_category: SELF.of_product.name = 'document';
+END_ENTITY;
+
+ENTITY drawing_sheet_revision_class_of_document
+  SUBTYPE OF (class, product_definition_formation, drawing_sheet_revision);
+WHERE
+  appropriate_category: SELF.of_product.name = 'document';
+END_ENTITY;
+
+END_SCHEMA;

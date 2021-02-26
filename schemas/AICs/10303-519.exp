@@ -1,0 +1,176 @@
+(*
+    The following EXPRESS is for ISO 10303-519:2000 Technical Corrigendum 1
+
+    This is document ISO TC184/SC4/WG12 N532
+*)
+
+SCHEMA aic_geometric_tolerances;
+
+ USE FROM measure_schema                             --ISO 10303-41
+  (derived_unit,
+  named_unit);
+
+ USE FROM product_property_definition_schema         --ISO 10303-41
+   (shape_aspect_relationship);
+
+ USE FROM shape_aspect_definition_schema             --ISO 10303-47
+  (apex,
+  centre_of_symmetry,
+  composite_shape_aspect,
+  datum,
+  datum_feature,
+  datum_reference,
+  datum_target,
+  derived_shape_aspect,
+  extension,
+  geometric_alignment,
+  geometric_intersection,
+  parallel_offset,
+  perpendicular_to,
+  referenced_modified_datum,
+  shape_aspect_deriving_relationship,
+  symmetric_shape_aspect,
+  tangent);
+
+
+ USE FROM shape_tolerance_schema                    -- ISO 10303-47 
+  (dimension_related_tolerance_zone_element,
+  geometric_tolerance,
+  geometric_tolerance_relationship,
+  geometric_tolerance_with_datum_reference,
+  geometric_tolerance_with_defined_unit,
+  modified_geometric_tolerance,
+  projected_zone_definition,
+  runout_zone_definition,
+  runout_zone_orientation_reference_direction,
+  tolerance_zone,
+  tolerance_zone_definition);
+
+
+
+ENTITY angularity_tolerance
+  SUBTYPE OF (geometric_tolerance_with_datum_reference);
+WHERE
+  WR1:  SIZEOF(SELF\geometric_tolerance_with_datum_reference.datum_system) < 3;
+END_ENTITY;
+
+ENTITY circular_runout_tolerance
+  SUBTYPE OF (geometric_tolerance_with_datum_reference);
+WHERE
+  WR1:  SIZEOF(SELF\geometric_tolerance_with_datum_reference.datum_system) <= 2;
+END_ENTITY;
+
+ENTITY coaxiality_tolerance
+  SUBTYPE OF (geometric_tolerance_with_datum_reference);
+WHERE
+  WR1:  SIZEOF(SELF\geometric_tolerance_with_datum_reference.datum_system) <= 2;
+END_ENTITY;
+
+ENTITY common_datum
+  SUBTYPE OF (composite_shape_aspect, datum);
+WHERE
+  WR1:  SIZEOF ( SELF.component_relationships ) = 2;
+  WR2:  SIZEOF ( QUERY ( sar <*
+         SELF.component_relationships | NOT (
+         ('AIC_GEOMETRIC_TOLERANCES.DATUM' IN
+         TYPEOF (sar.related_shape_aspect)) AND NOT (
+         'AIC_GEOMETRIC_TOLERANCES.COMMON_DATUM'
+         IN TYPEOF (sar.related_shape_aspect)))))=0;
+END_ENTITY;
+
+ENTITY concentricity_tolerance
+  SUBTYPE OF (geometric_tolerance_with_datum_reference);
+WHERE
+  WR1:  SIZEOF(SELF\geometric_tolerance_with_datum_reference.datum_system)=1;
+END_ENTITY;
+
+ENTITY cylindricity_tolerance
+  SUBTYPE OF (geometric_tolerance);
+WHERE
+  WR1:  NOT ('AIC_GEOMETRIC_TOLERANCES.' + 
+             'GEOMETRIC_TOLERANCE_WITH_DATUM_REFERENCE' IN TYPEOF (SELF));
+END_ENTITY;
+
+ENTITY flatness_tolerance
+  SUBTYPE OF (geometric_tolerance);
+WHERE
+  WR1:  NOT ('AIC_GEOMETRIC_TOLERANCES.' + 
+             'GEOMETRIC_TOLERANCE_WITH_DATUM_REFERENCE' IN TYPEOF (SELF));
+END_ENTITY;
+
+ENTITY line_profile_tolerance
+  SUBTYPE OF (geometric_tolerance);
+WHERE
+  WR1:  (NOT (('AIC_GEOMETRIC_TOLERANCES.' + 
+               'GEOMETRIC_TOLERANCE_WITH_DATUM_REFERENCE') IN TYPEOF(SELF))) 
+        OR 
+        (SIZEOF(SELF\geometric_tolerance_with_datum_reference.
+                     datum_system) <= 3);
+  WR2:  SIZEOF ( QUERY (
+        sar <* USEDIN ( SELF\geometric_tolerance.toleranced_shape_aspect,
+                      'AIC_GEOMETRIC_TOLERANCES.' + 
+                      'SHAPE_ASPECT_RELATIONSHIP.RELATING_SHAPE_ASPECT' ) | 
+             (sar.name IN ['affected plane association',
+                           'resulting intersection curve association'])
+               ) ) = 1;
+END_ENTITY;
+
+ENTITY parallelism_tolerance
+  SUBTYPE OF (geometric_tolerance_with_datum_reference);
+WHERE
+  WR1:  SIZEOF(SELF\geometric_tolerance_with_datum_reference.datum_system) < 3;
+END_ENTITY;
+
+ENTITY perpendicularity_tolerance
+  SUBTYPE OF (geometric_tolerance_with_datum_reference);
+WHERE
+  WR1:  SIZEOF(SELF\geometric_tolerance_with_datum_reference.datum_system) <= 3;
+END_ENTITY;
+
+ENTITY position_tolerance
+  SUBTYPE OF (geometric_tolerance);
+WHERE
+  WR1:  ( NOT ('AIC_GEOMETRIC_TOLERANCES.' +
+        'GEOMETRIC_TOLERANCE_WITH_DATUM_REFERENCE' IN TYPEOF (SELF)))
+        OR
+        (SIZEOF(SELF\geometric_tolerance_with_datum_reference.
+        datum_system) <= 3);
+END_ENTITY;
+
+ENTITY roundness_tolerance
+  SUBTYPE OF (geometric_tolerance);
+WHERE
+  WR1:  NOT ('AIC_GEOMETRIC_TOLERANCES.' + 
+             'GEOMETRIC_TOLERANCE_WITH_DATUM_REFERENCE' IN TYPEOF (SELF));
+END_ENTITY;
+
+ENTITY straightness_tolerance
+  SUBTYPE OF (geometric_tolerance);
+WHERE
+  WR1:  NOT ('AIC_GEOMETRIC_TOLERANCES.' + 
+             'GEOMETRIC_TOLERANCE_WITH_DATUM_REFERENCE' IN TYPEOF (SELF));
+END_ENTITY;
+
+ENTITY surface_profile_tolerance
+  SUBTYPE OF (geometric_tolerance);
+WHERE
+  WR1:  (NOT (('AIC_GEOMETRIC_TOLERANCES.' + 
+               'GEOMETRIC_TOLERANCE_WITH_DATUM_REFERENCE') IN TYPEOF(SELF))) 
+        OR 
+        (SIZEOF(SELF\geometric_tolerance_with_datum_reference.
+                     datum_system) <= 3);
+END_ENTITY;
+
+ENTITY symmetry_tolerance
+  SUBTYPE OF (geometric_tolerance_with_datum_reference);
+WHERE
+  WR1:  SIZEOF(SELF\geometric_tolerance_with_datum_reference.datum_system) <= 3;
+END_ENTITY;
+
+ENTITY total_runout_tolerance
+  SUBTYPE OF (geometric_tolerance_with_datum_reference);
+WHERE
+  WR1:  SIZEOF(SELF\geometric_tolerance_with_datum_reference.datum_system) <= 2;
+END_ENTITY;
+
+END_SCHEMA;  

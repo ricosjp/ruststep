@@ -1,0 +1,15 @@
+(*
+ $Id: 10303-1188-arm-class_of_person.exp,v 1.1 2006/08/04 12:01:50 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2744 - ISO/TS 10303-1188 Class of person - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG12 N2488
+*)
+
+SCHEMA Class_of_person_arm;
+
+USE FROM Class_arm;    -- ISO/TS 10303-1070
+
+ENTITY Class_of_person
+  SUBTYPE OF (Class);
+END_ENTITY;
+
+END_SCHEMA;

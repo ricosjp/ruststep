@@ -1,0 +1,32 @@
+(*
+ $Id: 10303-1218-arm-Hybrid_breakdown.exp,v 1.2 2006/08/07 07:44:44 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N3055 - ISO/TS 10303-1218 Hybrid breakdown - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG12 N2270
+*) 
+
+
+SCHEMA Hybrid_breakdown_arm;
+
+USE FROM Product_breakdown_arm;    -- ISO/TS 10303-1248
+
+
+ENTITY Hybrid_breakdown
+  SUBTYPE OF (Breakdown);
+END_ENTITY;
+
+ENTITY Hybrid_breakdown_context
+  SUBTYPE OF (Breakdown_context);
+  SELF\Breakdown_context.breakdown : Hybrid_breakdown_version;
+END_ENTITY;
+
+ENTITY Hybrid_breakdown_version
+  SUBTYPE OF (Breakdown_version);
+  SELF\Breakdown_version.of_product : Hybrid_breakdown;
+END_ENTITY;
+
+ENTITY Hybrid_element_usage
+  SUBTYPE OF (Breakdown_element_usage);
+END_ENTITY;
+
+END_SCHEMA;  -- Hybrid_breakdown_arm
+

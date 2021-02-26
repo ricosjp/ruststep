@@ -1,0 +1,48 @@
+(*
+ $Id: 10303-1012-mim-approval.exp,v 1.5 2006/08/07 09:42:02 wg12deputy Exp $
+ISO TC184/SC4/WG12 N2910 - ISO/TS 10303-1012 Approval - EXPRESS MIM
+*) 
+
+
+SCHEMA Approval_mim;
+
+USE FROM approval_schema   -- ISO 10303-41
+  (approval,
+   approval_date_time,
+   approval_person_organization,
+   approval_relationship,
+   approval_role,
+   approval_status); 
+
+USE FROM basic_attribute_schema   -- ISO 10303-41
+  (object_role,
+   role_association,
+   role_select); 
+
+USE FROM Date_time_assignment_mim;    -- ISO/TS 10303-1014
+
+USE FROM Date_time_mim;    -- ISO/TS 10303-1010
+
+USE FROM management_resources_schema   -- ISO 10303-41
+  (approval_assignment); 
+
+USE FROM Person_organization_mim;    -- ISO/TS 10303-1011
+
+
+TYPE approval_item = EXTENSIBLE GENERIC_ENTITY SELECT;
+END_TYPE; 
+
+TYPE date_and_time_item_approval = SELECT BASED_ON date_and_time_item WITH 
+   (approval_person_organization);
+END_TYPE; 
+
+TYPE date_item_approval = SELECT BASED_ON date_item WITH 
+   (approval_person_organization);
+END_TYPE; 
+
+ENTITY applied_approval_assignment
+  SUBTYPE OF (approval_assignment);
+  items : SET[1:?] OF approval_item;
+END_ENTITY;
+
+END_SCHEMA;  -- Approval_mim

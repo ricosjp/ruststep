@@ -1,0 +1,87 @@
+(* 
+   $Id: 10303-1111-arm-classification_with_attributes.exp,v 1.1 2006/08/03 14:41:10 wg12deputy Exp $
+   ISO/TC184/SC4 WG12N2616 - ISO/TS 10303-1111 Classification_with_attributes - Express ARM 
+   Supersedes ISO TC184/SC4/WG12N1763
+*)
+
+
+SCHEMA Classification_with_attributes_arm;
+
+USE FROM Class_arm;
+
+USE FROM Classification_assignment_arm;
+
+USE FROM External_class_arm;
+
+USE FROM Extended_measure_representation_arm;
+
+USE FROM Plib_class_reference_arm;
+
+USE FROM Part_and_version_identification_arm;
+
+USE FROM Part_view_definition_arm;
+
+TYPE classification_item_extended = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON classification_item WITH (
+	Part, 
+	Part_version,
+	Part_view_definition) ;
+END_TYPE;
+
+TYPE classified_element_select = EXTENSIBLE GENERIC_ENTITY SELECT (
+	Part, 
+	Part_version,
+	Part_view_definition) ;
+END_TYPE;
+
+TYPE external_class_select = SELECT(Plib_class_reference, External_class);
+END_TYPE;
+
+TYPE definable_objects = SELECT (
+	Part, 
+	Part_version, 
+	Part_view_definition);
+END_TYPE;
+
+ENTITY Class_with_attributes
+SUBTYPE OF (Class);
+  version_id: OPTIONAL STRING;
+  used_classification_system: OPTIONAL Classification_system;
+INVERSE
+  characterization_attributes: SET[0:?] OF Classification_attribute FOR characterized_class;
+END_ENTITY;
+
+ENTITY Class_hierarchy;
+  super_class: Class_with_attributes;
+  sub_class: Class_with_attributes;
+END_ENTITY;
+
+ENTITY Classification_association
+SUBTYPE OF (Classification_assignment);
+   SELF\Classification_assignment.assigned_class: Class_with_attributes;
+   definitional: LOGICAL;
+WHERE
+WR1: SIZEOF(QUERY(it<* SELF\Classification_assignment.items |
+     NOT('CLASSIFICATION_WITH_ATTRIBUTES_ARM.DEFINABLE_OBJECTS' IN TYPEOF(it)) AND definitional ))=0;
+WR2: SIZEOF(QUERY(it<* SELF\Classification_assignment.items |
+     NOT('CLASSIFICATION_WITH_ATTRIBUTES_ARM.CLASSIFIED_ELEMENT_SELECT' IN TYPEOF(it)) )) =0;
+END_ENTITY;
+
+ENTITY Classification_attribute;
+   id: STRING;
+   name: OPTIONAL STRING;
+   description: OPTIONAL STRING;
+   allowed_values: OPTIONAL SET[1:?] OF Measure_item;
+   characterized_class: Class_with_attributes;
+END_ENTITY;
+
+ENTITY Classification_system;
+  id: STRING;
+  description: OPTIONAL STRING;
+END_ENTITY;
+
+ENTITY External_class_with_attributes
+SUBTYPE OF (Class_with_attributes);
+  source: external_class_select;
+END_ENTITY;
+
+END_SCHEMA;

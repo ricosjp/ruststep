@@ -1,0 +1,271 @@
+(*
+  $Id: 10303-053.exp,v 1.2 2009/03/16 02:53:37 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N6003 - ISO/TS 10303-53 EXPRESS
+*)
+
+SCHEMA analysis_product_relationships_schema;
+
+  REFERENCE FROM analysis_schema -- ISO 10303-53
+    (numerical_model);
+
+  REFERENCE FROM product_analysis_schema -- ISO 10303-53
+    (temporal_spatial_domain);
+
+  REFERENCE FROM product_definition_schema -- ISO 10303-41
+    (product_definition);
+
+  REFERENCE FROM support_resource_schema -- ISO 10303-41
+    (identifier,
+     label,
+     text);
+ 
+ENTITY idealisation_relationship;
+  id  : identifier;
+  name : label;
+  description : text;
+  idealised : product_definition;
+  idealisation : temporal_spatial_domain;
+END_ENTITY;
+ 
+ENTITY view_relationship;
+  id : identifier;
+  name :label;
+  description : text;
+  viewed : temporal_spatial_domain;
+  view : numerical_model;
+END_ENTITY;
+ 
+END_SCHEMA; -- analysis_product_relationships_schema
+
+(*
+  $Id: 10303-053.exp,v 1.2 2009/03/16 02:53:37 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N6003 - ISO/TS 10303-53 EXPRESS
+*)
+
+SCHEMA analysis_schema;
+
+REFERENCE FROM analysis_product_relationships_schema -- ISO 10303-53
+  (view_relationship);
+
+REFERENCE FROM mesh_topology_schema  -- ISO 10303-52
+  (mesh);
+
+REFERENCE FROM product_property_definition_schema -- ISO 10303-41
+  (general_property);
+
+REFERENCE FROM support_resource_schema  --ISO 10303-41
+  (bag_to_set,
+   identifier,
+   label,
+   text);
+
+ENTITY behavioural_decomposition_of_numerical_model;
+  parts : SET [2 : ?] OF numerical_model;
+  whole : numerical_model;
+END_ENTITY;
+
+ENTITY model_action_domain
+SUBTYPE OF (numerical_model);
+  initial : model_state_domain;
+  final : model_state_domain;
+END_ENTITY;
+
+ENTITY model_product_domain
+SUBTYPE OF (numerical_model);
+  temporal_parts : LIST [0 : ?] OF model_action_domain;
+END_ENTITY;
+
+ENTITY model_product_domain_with_mesh
+SUBTYPE OF (model_product_domain);
+  model_mesh : mesh;
+END_ENTITY;
+
+ENTITY model_property_distribution;
+  creating_software : text;
+  domain : numerical_model;
+  range : general_property;
+END_ENTITY;
+
+ENTITY model_state_domain
+SUBTYPE OF (numerical_model);
+END_ENTITY;
+
+ENTITY numerical_model;
+  id : identifier;
+  name : label;
+  description : text;
+  creating_software : text;
+  intended_analysis_code : SET [1 : ?] OF text;
+  analysis_type : text;
+WHERE
+    wr1: temporal_spatial_domain_for_model(SELF);
+END_ENTITY;
+
+ENTITY simulation_run;
+  id : identifier;
+  name : label;
+  description : text;
+  simulated : numerical_model;
+  results : SET [0 : ?] OF model_property_distribution;
+END_ENTITY;
+
+ENTITY spatial_decomposition_of_numerical_model;
+  parts : SET [2 : ?] OF numerical_model;
+  whole : numerical_model;
+END_ENTITY;
+
+ENTITY temporal_decomposition_of_model_action;
+  parts : LIST [2 : ?] OF model_action_domain;
+  whole : model_action_domain;
+END_ENTITY;
+
+SUBTYPE_CONSTRAINT sc1_numerical_model FOR numerical_model;
+  ABSTRACT SUPERTYPE;
+END_SUBTYPE_CONSTRAINT;
+
+  FUNCTION temporal_spatial_domain_for_model (domain : numerical_model): BOOLEAN;
+    LOCAL
+      spatial_set : SET OF spatial_decomposition_of_numerical_model;
+      behavioural_set : SET OF behavioural_decomposition_of_numerical_model;
+      domains : SET OF numerical_model := [];
+      viewing : BAG OF view_relationship;
+      spatial_bag : BAG OF spatial_decomposition_of_numerical_model;
+      behavioural_bag : BAG OF behavioural_decomposition_of_numerical_model;
+    END_LOCAL;
+
+    viewing := USEDIN(domain, 'ANALYSIS_PRODUCT_RELATIONSHIPS_SCHEMA.VIEW_RELATIONSHIP.VIEW');
+    IF SIZEOF(viewing) > 0 THEN
+      RETURN (TRUE);
+    END_IF;
+    spatial_bag := USEDIN(domain, 'ANALYSIS_SCHEMA.SPATIAL_DECOMPOSITION_OF_NUMERICAL_MODEL.PARTS');
+    IF SIZEOF(spatial_bag) > 0 THEN
+      spatial_set := bag_to_set(spatial_bag);
+      REPEAT i := 1 TO HIINDEX(spatial_set);
+        domains := domains + spatial_set[i].whole;
+      END_REPEAT;
+    END_IF;
+    behavioural_bag := USEDIN(domain, 'ANALYSIS_SCHEMA.BEHAVIOURAL_DECOMPOSITION_OF_NUMERICAL_MODEL.PARTS');
+    IF SIZEOF(behavioural_bag) > 0 THEN
+      behavioural_set := bag_to_set(behavioural_bag);
+      REPEAT i := 1 TO HIINDEX(behavioural_set);
+        domains := domains + behavioural_set[i].whole;
+      END_REPEAT;
+    END_IF;
+    IF SIZEOF(domains) > 0 THEN
+      REPEAT i := 1 TO HIINDEX(domains);
+        IF temporal_spatial_domain_for_model(domains[i]) THEN
+          RETURN (TRUE);
+        END_IF;
+      END_REPEAT;
+    END_IF;
+    RETURN (FALSE);
+  END_FUNCTION;
+
+
+
+END_SCHEMA;
+
+(*
+  $Id: 10303-053.exp,v 1.2 2009/03/16 02:53:37 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N6003 - ISO 10303-53 - EXPRESS ARM
+*)
+
+SCHEMA product_analysis_schema;
+  REFERENCE FROM analysis_product_relationships_schema  -- ISO 10303-53
+    (idealisation_relationship);
+  REFERENCE FROM product_property_definition_schema     -- ISO 10303-41
+    (general_property);
+  REFERENCE FROM support_resource_schema                -- ISO 10303-41
+    (bag_to_set,
+     identifier,
+     label,
+     text);
+
+ENTITY behavioural_decomposition_of_temporal_spatial_domain;
+  parts : SET [2 : ?] OF temporal_spatial_domain;
+  whole : temporal_spatial_domain;
+END_ENTITY;
+
+ENTITY domain_property;
+  domain : temporal_spatial_domain;
+  property_type : general_property;
+END_ENTITY;
+
+ENTITY physical_action_domain
+SUBTYPE OF (temporal_spatial_domain);
+  initial : physical_state_domain;
+  final : physical_state_domain;
+END_ENTITY;
+
+ENTITY physical_product_domain
+SUBTYPE OF (temporal_spatial_domain);
+  temporal_parts : SET [0.0000 : ?] OF physical_action_domain;
+END_ENTITY;
+
+ENTITY physical_state_domain
+SUBTYPE OF (temporal_spatial_domain);
+END_ENTITY;
+
+ENTITY spatial_decomposition_of_temporal_spatial_domain;
+  parts : SET [2 : ?] OF temporal_spatial_domain;
+  whole : temporal_spatial_domain;
+END_ENTITY;
+
+ENTITY temporal_decomposition_of_action_domain;
+  whole : physical_action_domain;
+  parts : LIST [2 : ?] OF physical_action_domain;
+END_ENTITY;
+
+ENTITY temporal_spatial_domain;
+  id : identifier;
+  name : label;
+  description : text;
+WHERE
+    wr1: definition_for_temporal_spatial_domain(SELF);
+END_ENTITY;
+
+SUBTYPE_CONSTRAINT sc1_temporal_spatial_domain FOR temporal_spatial_domain;
+  ABSTRACT SUPERTYPE;
+END_SUBTYPE_CONSTRAINT;
+
+  FUNCTION definition_for_temporal_spatial_domain (domain : temporal_spatial_domain): BOOLEAN;
+    LOCAL
+      spatial_set : SET OF spatial_decomposition_of_temporal_spatial_domain;
+      behavioural_set : SET OF behavioural_decomposition_of_temporal_spatial_domain;
+      domains : SET OF temporal_spatial_domain := [];
+      idealising : BAG OF idealisation_relationship;
+      spatial_bag : BAG OF spatial_decomposition_of_temporal_spatial_domain;
+      behavioural_bag : BAG OF behavioural_decomposition_of_temporal_spatial_domain;
+    END_LOCAL;
+
+    idealising := USEDIN(domain, 'ANALYSIS_PRODUCT_RELATIONSHIPS_SCHEMA.IDEALISATION_RELATIONSHIP.IDEALISATION');
+    IF SIZEOF(idealising) > 0 THEN
+      RETURN (TRUE);
+    END_IF;
+    spatial_bag := USEDIN(domain, 'PRODUCT_ANALYSIS_SCHEMA.SPATIAL_DECOMPOSITION_OF_TEMPORAL_SPATIAL_DOMAIN.PARTS');
+    IF SIZEOF(spatial_bag) > 0 THEN
+      spatial_set := bag_to_set(spatial_bag);
+      REPEAT i := 1 TO HIINDEX(spatial_set);
+        domains := domains + spatial_set[i].whole;
+      END_REPEAT;
+    END_IF;
+    behavioural_bag := USEDIN(domain, 'PRODUCT_ANALYSIS_SCHEMA.BEHAVIOURAL_DECOMPOSITION_OF_TEMPORAL_SPATIAL_DOMAIN.PARTS');
+    IF SIZEOF(behavioural_bag) > 0 THEN
+      behavioural_set := bag_to_set(behavioural_bag);
+      REPEAT i := 1 TO HIINDEX(behavioural_set);
+        domains := domains + behavioural_set[i].whole;
+      END_REPEAT;
+    END_IF;
+    IF SIZEOF(domains) > 0 THEN
+      REPEAT i := 1 TO HIINDEX(domains);
+        IF definition_for_temporal_spatial_domain(domains[i]) THEN
+          RETURN (TRUE);
+        END_IF;
+      END_REPEAT;
+    END_IF;
+    RETURN (FALSE);
+  END_FUNCTION;
+
+
+
+END_SCHEMA;

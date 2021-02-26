@@ -1,0 +1,102 @@
+(*
+ $Id: 10303-1280-mim-required_resource_characterized.exp,v 1.1 2006/08/07 09:42:06 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N3122 - ISO/TS 10303-1280 Required resource characterized - EXPRESS MIM
+ Supersedes ISO TC184/SC4/WG12 N2418
+*) 
+
+
+SCHEMA Required_resource_characterized_mim;
+
+USE FROM action_schema   -- ISO 10303-41
+  (action_method); 
+
+USE FROM Approval_mim;    -- ISO/TS 10303-1012
+
+USE FROM Attribute_classification_mim;    -- ISO/TS 10303-1246
+
+USE FROM Condition_mim;    -- ISO/TS 10303-1253
+
+USE FROM Date_time_assignment_mim;    -- ISO/TS 10303-1014
+
+USE FROM Identification_assignment_mim;    -- ISO/TS 10303-1021
+
+USE FROM Justification_mim;    -- ISO/TS 10303-1263
+
+USE FROM Multi_linguism_mim;    -- ISO/TS 10303-1105
+
+USE FROM Person_organization_assignment_mim;    -- ISO/TS 10303-1013
+
+USE FROM Process_property_assignment_mim;    -- ISO/TS 10303-1040
+
+USE FROM process_property_schema   -- ISO 10303-49
+  (action_resource_requirement,
+   action_resource_requirement_relationship); 
+
+USE FROM Required_resource_mim;    -- ISO/TS 10303-1267
+
+USE FROM Requirement_assignment_mim;    -- ISO/TS 10303-1233
+
+USE FROM Resource_item_characterized_mim;    -- ISO/TS 10303-1281
+
+USE FROM Resource_property_assignment_mim;    -- ISO/TS 10303-1273
+
+
+TYPE required_resource_approval_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON approval_item WITH 
+   (action_resource_requirement, 
+    action_resource_requirement_relationship);
+END_TYPE; 
+
+TYPE required_resource_attribute_classification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON attribute_classification_item WITH 
+   (action_resource_requirement, 
+    action_resource_requirement_relationship);
+END_TYPE; 
+
+TYPE required_resource_attribute_language_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON attribute_language_item WITH 
+   (action_resource_requirement, 
+    action_resource_requirement_relationship);
+END_TYPE; 
+
+TYPE required_resource_condition_action_method_items = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON condition_action_method_items WITH 
+   (action_method, 
+    action_resource_requirement, 
+    action_resource_requirement_relationship);
+END_TYPE; 
+
+TYPE required_resource_date_and_time_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON date_and_time_item WITH 
+   (action_resource_requirement);
+END_TYPE; 
+
+TYPE required_resource_date_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON date_item WITH 
+   (action_resource_requirement);
+END_TYPE; 
+
+TYPE required_resource_identification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON identification_item WITH 
+   (action_resource_requirement, 
+    action_resource_requirement_relationship);
+END_TYPE; 
+
+TYPE required_resource_justification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON justification_item WITH 
+   (action_method, 
+    action_resource_requirement, 
+    action_resource_requirement_relationship);
+END_TYPE; 
+
+TYPE required_resource_multi_language_attribute_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON multi_language_attribute_item WITH 
+   (action_resource_requirement, 
+    action_resource_requirement_relationship);
+END_TYPE; 
+
+TYPE required_resource_organization_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON organization_item WITH 
+   (action_resource_requirement);
+END_TYPE; 
+
+TYPE required_resource_person_and_organization_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON person_and_organization_item WITH 
+   (action_resource_requirement);
+END_TYPE; 
+
+TYPE required_resource_requirement_assigned_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON requirement_assigned_item WITH 
+   (action_resource_requirement);
+END_TYPE; 
+
+END_SCHEMA;  -- Required_resource_characterized_mim
+

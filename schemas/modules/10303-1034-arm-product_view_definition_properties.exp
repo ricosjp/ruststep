@@ -1,0 +1,22 @@
+(*
+ $Id: 10303-1034-arm-product_view_definition_properties.exp,v 1.5 2006/08/07 07:44:42 wg12deputy Exp $
+ISO TC184/SC4/WG12 N3227 - ISO/TS 10303-1034 Product view definition properties - EXPRESS ARM
+Supersedes ISO TC184/SC4/WG12 N1231
+*) 
+
+
+SCHEMA Product_view_definition_properties_arm;
+
+USE FROM Product_view_definition_arm;    -- ISO/TS 10303-1019
+
+USE FROM Product_view_definition_relationship_arm;    -- ISO/TS 10303-1041
+
+USE FROM Property_assignment_arm;    -- ISO/TS 10303-1030
+
+
+TYPE product_property_assignment = EXTENSIBLE SELECT BASED_ON property_assignment_select WITH 
+   (Product_view_definition, 
+    View_definition_relationship);
+END_TYPE; 
+
+END_SCHEMA;  -- Product_view_definition_properties_arm

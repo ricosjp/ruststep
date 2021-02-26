@@ -1,0 +1,16 @@
+(*
+ $Id: 10303-1043-mim-work_order.exp,v 1.5 2006/08/07 09:42:03 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N1154 - ISO/TS 10303-1043 Work order - EXPRESS MIM
+*)
+
+SCHEMA Work_order_mim; 
+
+USE FROM Activity_mim;    -- ISO/TS 10303-1047
+
+USE FROM Work_request_mim;    -- ISO/TS 10303-1042
+
+USE FROM action_schema   -- ISO 10303-41
+  (action_directive,
+   directed_action); 
+
+END_SCHEMA; 

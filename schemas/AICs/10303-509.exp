@@ -1,0 +1,372 @@
+(* ISO 10303-509, TC 184/SC4/WG12 N578 *)
+SCHEMA aic_manifold_surface; 
+ 
+  USE FROM aic_topologically_bounded_surface;       -- ISO 10303-511
+ 
+  USE FROM geometric_model_schema (                 -- ISO 10303-42
+      shell_based_surface_model); 
+ 
+  USE FROM geometry_schema (                        -- ISO 10303-42
+      b_spline_curve,
+      b_spline_surface,
+      bounded_pcurve,
+      bounded_surface_curve,
+      cartesian_transformation_operator_3d,
+      curve, 
+      curve_replica, 
+      degenerate_pcurve, 
+      evaluated_degenerate_pcurve, 
+      intersection_curve, 
+      offset_curve_3d, 
+      offset_surface, 
+      point_on_curve, 
+      point_on_surface, 
+      seam_curve, 
+      surface, 
+      surface_replica); 
+
+  USE FROM product_property_representation_schema ( -- ISO 10303-41 
+      shape_representation); 
+ 
+  USE FROM representation_schema (                  -- ISO 10303-43
+      mapped_item,
+      representation,
+      representation_item,
+      representation_map);
+ 
+  USE FROM topology_schema (                        -- ISO 10303-42
+      closed_shell,
+      connected_face_set, 
+      face,
+      open_shell, 
+      oriented_closed_shell);
+
+ENTITY manifold_surface_shape_representation 
+   SUBTYPE OF (shape_representation); 
+WHERE 
+  WR1: SIZEOF (QUERY (it <* SELF.items |
+       NOT (SIZEOF (['AIC_MANIFOLD_SURFACE.SHELL_BASED_SURFACE_MODEL',
+       'AIC_MANIFOLD_SURFACE.MAPPED_ITEM',
+       'AIC_MANIFOLD_SURFACE.AXIS2_PLACEMENT_3D'] * TYPEOF (it)) = 1))) = 0;
+  WR2: SIZEOF (QUERY (it <* SELF.items |
+       SIZEOF (['AIC_MANIFOLD_SURFACE.SHELL_BASED_SURFACE_MODEL',
+       'AIC_MANIFOLD_SURFACE.MAPPED_ITEM'] * TYPEOF (it)) = 1)) > 0;
+  WR3: SIZEOF (QUERY (mi <* QUERY (it <* SELF.items |
+       'AIC_MANIFOLD_SURFACE.MAPPED_ITEM' IN TYPEOF (it)) |
+       NOT (('AIC_MANIFOLD_SURFACE.MANIFOLD_SURFACE_SHAPE_REPRESENTATION'
+       IN TYPEOF (mi\mapped_item.mapping_source.mapped_representation))
+       AND
+       (SIZEOF(QUERY (mr_it <*
+       mi\mapped_item.mapping_source.mapped_representation.items |
+       ('AIC_MANIFOLD_SURFACE.SHELL_BASED_SURFACE_MODEL'
+       IN TYPEOF (mr_it)))) > 0 )))) = 0;
+  WR4: SIZEOF (QUERY (sbsm <* QUERY (it <* SELF.items |
+       'AIC_MANIFOLD_SURFACE.SHELL_BASED_SURFACE_MODEL' IN TYPEOF (it)) |
+       NOT (SIZEOF (QUERY (sh <*
+       sbsm\shell_based_surface_model.sbsm_boundary |
+       NOT (SIZEOF (['AIC_MANIFOLD_SURFACE.OPEN_SHELL',
+       'AIC_MANIFOLD_SURFACE.ORIENTED_CLOSED_SHELL',
+       'AIC_MANIFOLD_SURFACE.CLOSED_SHELL']
+       * TYPEOF (sh)) = 1))) = 0))) = 0;
+  WR5: SIZEOF (QUERY (sbsm <* QUERY (it <* SELF.items |
+       'AIC_MANIFOLD_SURFACE.SHELL_BASED_SURFACE_MODEL' IN TYPEOF (it)) |
+       NOT (SIZEOF (QUERY (cfs <*
+       sbsm\shell_based_surface_model.sbsm_boundary |
+       NOT (SIZEOF (QUERY (fa <* cfs\connected_face_set.cfs_faces |
+       NOT ('AIC_MANIFOLD_SURFACE.FACE_SURFACE' IN TYPEOF (fa)) )) = 0)))
+       = 0))) = 0;
+  WR6: SIZEOF (QUERY (sbsm <* QUERY (it <* SELF.items |
+       'AIC_MANIFOLD_SURFACE.SHELL_BASED_SURFACE_MODEL' IN TYPEOF (it)) |
+       NOT (SIZEOF (QUERY (cfs <*
+       sbsm\shell_based_surface_model.sbsm_boundary |
+       NOT (SIZEOF (QUERY (fa <* cfs\connected_face_set.cfs_faces |
+       NOT (('AIC_MANIFOLD_SURFACE.ADVANCED_FACE' IN TYPEOF (fa))
+       OR
+       (msf_surface_check(fa\face_surface.face_geometry))))) = 0))) 
+       = 0))) = 0;
+  WR7: SIZEOF (QUERY (sbsm <* QUERY (it <* SELF.items |
+       'AIC_MANIFOLD_SURFACE.SHELL_BASED_SURFACE_MODEL' IN TYPEOF (it)) |
+       NOT (SIZEOF (QUERY (cfs <*
+       sbsm\shell_based_surface_model.sbsm_boundary |
+       NOT (SIZEOF (QUERY (fa <* cfs\connected_face_set.cfs_faces |
+       NOT (('AIC_MANIFOLD_SURFACE.ADVANCED_FACE' IN TYPEOF (fa))
+       OR
+       (SIZEOF (QUERY (bnds <* fa.bounds |
+       NOT (SIZEOF (['AIC_MANIFOLD_SURFACE.EDGE_LOOP',
+       'AIC_MANIFOLD_SURFACE.VERTEX_LOOP']
+       * TYPEOF (bnds.bound)) = 1))) = 0)))) = 0))) = 0))) = 0;
+  WR8: SIZEOF (QUERY (sbsm <* QUERY (it <* SELF.items|
+       'AIC_MANIFOLD_SURFACE.SHELL_BASED_SURFACE_MODEL' IN TYPEOF (it)) |
+       NOT (SIZEOF (QUERY (cfs <*
+       sbsm\shell_based_surface_model.sbsm_boundary |
+       NOT (SIZEOF (QUERY (fa <* cfs\connected_face_set.cfs_faces |
+       NOT (('AIC_MANIFOLD_SURFACE.ADVANCED_FACE' IN TYPEOF (fa))
+       OR
+       (SIZEOF (QUERY (elp_fbnds <* QUERY (bnds <* fa.bounds |
+       'AIC_MANIFOLD_SURFACE.EDGE_LOOP' IN TYPEOF (bnds.bound)) |
+       NOT (SIZEOF (QUERY (oe <* elp_fbnds\path.edge_list |
+       NOT ('AIC_MANIFOLD_SURFACE.EDGE_CURVE' IN TYPEOF 
+       (oe.edge_element)))) = 0))) = 0)))) = 0))) = 0))) = 0;
+  WR9: SIZEOF (QUERY (sbsm <* QUERY (it <* SELF.items |
+       'AIC_MANIFOLD_SURFACE.SHELL_BASED_SURFACE_MODEL' IN TYPEOF (it)) |
+       NOT (SIZEOF (QUERY (cfs <*
+       sbsm\shell_based_surface_model.sbsm_boundary |
+       NOT (SIZEOF (QUERY (fa <* cfs\connected_face_set.cfs_faces |
+       NOT (('AIC_MANIFOLD_SURFACE.ADVANCED_FACE' IN TYPEOF (fa))
+       OR
+       (SIZEOF (QUERY (elp_fbnds <* QUERY (bnds <* fa.bounds |
+       'AIC_MANIFOLD_SURFACE.EDGE_LOOP' IN TYPEOF (bnds.bound)) |
+       NOT (SIZEOF (QUERY (oe_cv <* QUERY (oe <* 
+       elp_fbnds\path.edge_list |
+       'AIC_MANIFOLD_SURFACE.EDGE_CURVE' IN TYPEOF (oe.edge_element)) |
+       NOT (SIZEOF (['AIC_MANIFOLD_SURFACE.B_SPLINE_CURVE',
+       'AIC_MANIFOLD_SURFACE.CONIC',
+       'AIC_MANIFOLD_SURFACE.CURVE_REPLICA',
+       'AIC_MANIFOLD_SURFACE.LINE',
+       'AIC_MANIFOLD_SURFACE.OFFSET_CURVE_3D',
+       'AIC_MANIFOLD_SURFACE.PCURVE',
+       'AIC_MANIFOLD_SURFACE.POLYLINE',
+       'AIC_MANIFOLD_SURFACE.SURFACE_CURVE'] * 
+       TYPEOF (oe_cv.edge_element\edge_curve.edge_geometry)) 
+       = 1))) = 0))) = 0)))) = 0))) = 0))) = 0;
+ WR10: SIZEOF (QUERY (sbsm <* QUERY (it <* SELF.items |
+       'AIC_MANIFOLD_SURFACE.SHELL_BASED_SURFACE_MODEL' IN TYPEOF (it)) |
+       NOT (SIZEOF (QUERY (cfs <*
+       sbsm\shell_based_surface_model.sbsm_boundary |
+       NOT (SIZEOF (QUERY (fa <* cfs\connected_face_set.cfs_faces |
+       NOT (('AIC_MANIFOLD_SURFACE.ADVANCED_FACE' IN TYPEOF (fa))
+       OR
+       (SIZEOF (QUERY (elp_fbnds <* QUERY (bnds <* fa.bounds |
+       'AIC_MANIFOLD_SURFACE.EDGE_LOOP' IN TYPEOF (bnds.bound)) |
+       NOT (SIZEOF (QUERY (oe <* elp_fbnds\path.edge_list |
+       NOT (msf_curve_check (oe.edge_element\edge_curve.edge_geometry)))) 
+       = 0))) = 0)))) = 0))) = 0))) = 0;
+ WR11: SIZEOF (QUERY(sbsm <* QUERY (it <* SELF.items |
+       'AIC_MANIFOLD_SURFACE.SHELL_BASED_SURFACE_MODEL' IN TYPEOF (it)) |
+       NOT (SIZEOF (QUERY (cfs <*
+       sbsm\shell_based_surface_model.sbsm_boundary |
+       NOT (SIZEOF (QUERY (fa <* cfs\connected_face_set.cfs_faces |
+       NOT (('AIC_MANIFOLD_SURFACE.ADVANCED_FACE' IN TYPEOF (fa))
+       OR
+       (SIZEOF (QUERY (elp_fbnds <* QUERY (bnds <* fa.bounds |
+       'AIC_MANIFOLD_SURFACE.EDGE_LOOP' IN TYPEOF (bnds.bound)) |
+       NOT (SIZEOF (QUERY (oe <* elp_fbnds\path.edge_list|
+       NOT (('AIC_MANIFOLD_SURFACE.VERTEX_POINT' IN TYPEOF
+       (oe.edge_element.edge_start))
+       AND
+       ('AIC_MANIFOLD_SURFACE.VERTEX_POINT' IN
+       TYPEOF (oe.edge_element.edge_end))))) 
+       = 0))) = 0)))) = 0))) = 0))) = 0;
+ WR12: SIZEOF (QUERY (sbsm <* QUERY (it <* SELF.items |
+       'AIC_MANIFOLD_SURFACE.SHELL_BASED_SURFACE_MODEL' IN TYPEOF (it)) |
+       NOT (SIZEOF (QUERY (cfs <*
+       sbsm\shell_based_surface_model.sbsm_boundary |
+       NOT (SIZEOF (QUERY (fa <* cfs\connected_face_set.cfs_faces |
+       NOT (('AIC_MANIFOLD_SURFACE.ADVANCED_FACE' IN TYPEOF (fa))
+       OR
+       (SIZEOF (QUERY (elp_fbnds <* QUERY (bnds <* fa.bounds |
+       'AIC_MANIFOLD_SURFACE.EDGE_LOOP' IN TYPEOF (bnds.bound)) |
+       NOT (SIZEOF (QUERY (oe <* elp_fbnds\path.edge_list |
+       NOT ((SIZEOF (['AIC_MANIFOLD_SURFACE.CARTESIAN_POINT',
+       'AIC_MANIFOLD_SURFACE.DEGENERATE_PCURVE',
+       'AIC_MANIFOLD_SURFACE.POINT_ON_CURVE',
+       'AIC_MANIFOLD_SURFACE.POINT_ON_SURFACE'] * TYPEOF
+       (oe.edge_element.edge_start\vertex_point.vertex_geometry)) = 1)
+       AND
+       (SIZEOF (['AIC_MANIFOLD_SURFACE.CARTESIAN_POINT',
+       'AIC_MANIFOLD_SURFACE.DEGENERATE_PCURVE',
+       'AIC_MANIFOLD_SURFACE.POINT_ON_CURVE',
+       'AIC_MANIFOLD_SURFACE.POINT_ON_SURFACE'] * TYPEOF
+       (oe.edge_element.edge_end\vertex_point.vertex_geometry)) = 1
+       )))) = 0))) = 0)))) = 0))) = 0))) = 0;
+ WR13: SIZEOF (QUERY (sbsm <* QUERY (it <* SELF.items |
+       'AIC_MANIFOLD_SURFACE.SHELL_BASED_SURFACE_MODEL' IN TYPEOF (it)) |
+       NOT (SIZEOF (QUERY (cfs <* 
+       sbsm\shell_based_surface_model.sbsm_boundary |
+       NOT (SIZEOF (QUERY (fa <* cfs\connected_face_set.cfs_faces |
+       NOT (('AIC_MANIFOLD_SURFACE.ADVANCED_FACE' IN TYPEOF (fa))
+       OR
+       (SIZEOF (QUERY (vlp_fbnds <* QUERY (bnds <* fa.bounds |
+       'AIC_MANIFOLD_SURFACE.VERTEX_LOOP' IN TYPEOF (bnds.bound)) |
+       NOT ('AIC_MANIFOLD_SURFACE.VERTEX_POINT' IN TYPEOF
+       (vlp_fbnds\vertex_loop.loop_vertex)))) = 0)))) = 0))) 
+       = 0))) = 0;
+ WR14: SIZEOF (QUERY (sbsm <* QUERY (it <* SELF.items |
+       'AIC_MANIFOLD_SURFACE.SHELL_BASED_SURFACE_MODEL' IN TYPEOF (it)) |
+       NOT (SIZEOF (QUERY (cfs <* 
+       sbsm\shell_based_surface_model.sbsm_boundary |
+       NOT (SIZEOF (QUERY (fa <* cfs\connected_face_set.cfs_faces |
+       NOT (('AIC_MANIFOLD_SURFACE.ADVANCED_FACE' IN TYPEOF (fa))
+       OR
+       (SIZEOF (QUERY (vlp_fbnds <* QUERY (bnds <* fa.bounds |
+       'AIC_MANIFOLD_SURFACE.VERTEX_LOOP' IN TYPEOF (bnds.bound)) |
+       NOT (SIZEOF (['AIC_MANIFOLD_SURFACE.CARTESIAN_POINT',
+       'AIC_MANIFOLD_SURFACE.DEGENERATE_PCURVE',
+       'AIC_MANIFOLD_SURFACE.POINT_ON_CURVE',
+       'AIC_MANIFOLD_SURFACE.POINT_ON_SURFACE'] * TYPEOF
+       (vlp_fbnds\vertex_loop.loop_vertex\vertex_point.vertex_geometry)) 
+       = 1))) = 0)))) = 0))) = 0))) = 0;
+END_ENTITY;
+
+FUNCTION msf_curve_check (cv : representation_item) : BOOLEAN;  
+ 
+(* This function varifies the validity of a curve in the context of a
+   manifold surface model. Representation_items are
+   valid input, however, they are supposed to be curves; otherwise
+   this function will return false.
+*)
+
+(* complex subtypes of curve that are both bounded_curve and
+   oneof conic, curve_replica, line, or offset_curve_3d are not
+   valid
+*)
+IF SIZEOF (['AIC_MANIFOLD_SURFACE.BOUNDED_CURVE',
+  'AIC_MANIFOLD_SURFACE.CONIC',
+  'AIC_MANIFOLD_SURFACE.CURVE_REPLICA', 'AIC_MANIFOLD_SURFACE.LINE',
+  'AIC_MANIFOLD_SURFACE.OFFSET_CURVE_3D'] * TYPEOF(cv)) > 1 THEN
+  RETURN(FALSE);
+END_IF;
+
+(* b_spline_curves shall not self-intersect
+ *)
+IF (('AIC_MANIFOLD_SURFACE.B_SPLINE_CURVE' IN TYPEOF (cv)) AND
+  (cv\b_spline_curve.self_intersect = FALSE)OR
+  (cv\b_spline_curve.self_intersect = UNKNOWN)) THEN
+  RETURN(TRUE);
+ELSE
+
+  (* conics and lines are valid curve types
+   *)
+  IF SIZEOF (['AIC_MANIFOLD_SURFACE.CONIC', 'AIC_MANIFOLD_SURFACE.LINE'] 
+    * TYPEOF (cv)) = 1 THEN
+    RETURN(TRUE);
+  ELSE
+
+    (* a curve_replica shall reference a valid curve
+     *)
+    IF 'AIC_MANIFOLD_SURFACE.CURVE_REPLICA' IN TYPEOF(cv) THEN
+      RETURN (msf_curve_check(cv\curve_replica.parent_curve)); 
+    ELSE 
+ 
+      (* an offset_curve_3d shall not self-intersect and
+         shall reference a valid curve; a polyline is not a
+         valid basis_curve
+       *)
+      IF (('AIC_MANIFOLD_SURFACE.OFFSET_CURVE_3D' IN TYPEOF (cv))
+        AND
+        ((cv\offset_curve_3d.self_intersect = FALSE) OR
+        (cv\offset_curve_3d.self_intersect = UNKNOWN))
+        AND
+        (NOT ('AIC_MANIFOLD_SURFACE.POLYLINE' IN TYPEOF
+        (cv\offset_curve_3d.basis_curve)))) THEN
+        RETURN (msf_curve_check(cv\offset_curve_3d.basis_curve)); 
+      ELSE 
+ 
+        (* a pcurve shall reference a valid curve and a valid
+           basis_surface
+         *)
+        IF 'AIC_MANIFOLD_SURFACE.PCURVE' IN TYPEOF(cv) THEN 
+          RETURN ((msf_curve_check
+          (cv\pcurve.reference_to_curve\representation.items[1])) AND
+          (msf_surface_check(cv\pcurve.basis_surface)));
+        ELSE 
+ 
+          (* a surface_curve references a curve_3d and one or
+             two pcurves or one or two surfaces or one of
+             each; all of these references shall be valid
+           *)
+          IF 'AIC_MANIFOLD_SURFACE.SURFACE_CURVE' IN TYPEOF(cv) THEN 
+
+            (* if the curve reference is correct, check also the rest
+             *)
+            IF msf_curve_check(cv\surface_curve.curve_3d) THEN
+              REPEAT i := 1 TO SIZEOF
+              (cv\surface_curve.associated_geometry);
+
+                (* do for one or two associated_geometrys:
+                 *)
+                IF 'AIC_MANIFOLD_SURFACE.SURFACE' IN 
+                  TYPEOF (cv\surface_curve.associated_geometry[i]) THEN  
+                  IF NOT msf_surface_check
+                    (cv\surface_curve.associated_geometry[i]) THEN  
+                    RETURN(FALSE);  
+                  END_IF;  
+                ELSE  
+                  IF 'AIC_MANIFOLD_SURFACE.PCURVE' IN TYPEOF 
+                    (cv\surface_curve.associated_geometry[i]) THEN  
+                    IF NOT msf_curve_check
+                      (cv\surface_curve.associated_geometry[i]) THEN 
+                      RETURN(FALSE);  
+                    END_IF;  
+                  END_IF;  
+                END_IF; 
+              END_REPEAT;  
+              RETURN(TRUE);
+            END_IF; 
+          ELSE
+
+            (* a polyline shall have at least 3 points
+             *)
+            IF 'AIC_MANIFOLD_SURFACE.POLYLINE' IN TYPEOF(cv) THEN
+              IF (SIZEOF (cv\polyline.points) >= 3) THEN RETURN (TRUE);
+              END_IF;
+            END_IF;
+          END_IF; 
+        END_IF; 
+      END_IF; 
+    END_IF; 
+  END_IF; 
+END_IF; 
+(* FALSE is returned if the input parameter cv is not a valid curve.
+ *)
+RETURN (FALSE); 
+END_FUNCTION;
+
+FUNCTION msf_surface_check (surf : surface) : BOOLEAN;
+
+(* This function varifies the validity of a surface in the
+   context of a manifold surface model.
+*)
+
+  (* elementary_surfaces are valid surface types
+   *)
+  IF 'AIC_MANIFOLD_SURFACE.ELEMENTARY_SURFACE' IN TYPEOF(surf) THEN
+    RETURN(TRUE);
+  ELSE 
+
+    (* a swept_surface shall have a valid sweeping curve
+     *)
+    IF 'AIC_MANIFOLD_SURFACE.SWEPT_SURFACE' IN TYPEOF (surf) THEN 
+      RETURN (msf_curve_check(surf\swept_surface.swept_curve));  
+    ELSE 
+ 
+      (* an offset_surface shall not self-intersect and shall
+         reference a valid surface
+       *)
+      IF (('AIC_MANIFOLD_SURFACE.OFFSET_SURFACE' IN TYPEOF (surf)) AND
+        (surf\offset_surface.self_intersect = FALSE) OR 
+        (surf\offset_surface.self_intersect = UNKNOWN)) THEN
+        RETURN (msf_surface_check(surf\offset_surface.basis_surface));
+      ELSE 
+ 
+        (* a surface_replica shall have a valid parent surface
+         *)
+        IF 'AIC_MANIFOLD_SURFACE.SURFACE_REPLICA' IN TYPEOF(surf) THEN 
+          RETURN(msf_surface_check(surf\surface_replica.parent_surface)); 
+        ELSE
+
+          (* a b_spline_surface shall not self-intersect
+           *)
+          IF (('AIC_MANIFOLD_SURFACE.B_SPLINE_SURFACE' IN TYPEOF(surf)) AND
+            (surf\b_spline_surface.self_intersect = FALSE) OR
+            (surf\b_spline_surface.self_intersect = UNKNOWN)) THEN
+            RETURN(TRUE);
+          END_IF;
+        END_IF; 
+      END_IF; 
+    END_IF; 
+  END_IF; 
+  RETURN(FALSE); 
+END_FUNCTION;
+
+END_SCHEMA; (* aic_manifold_surface *)

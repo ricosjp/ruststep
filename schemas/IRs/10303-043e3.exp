@@ -1,0 +1,391 @@
+(*
+ISO TC184/SC4/WG12 N4828 - ISO/CD 10303-43 Representation structures - EXPRESS
+*) 
+
+SCHEMA representation_schema;
+
+REFERENCE FROM basic_attribute_schema
+  (get_description_value,
+   get_id_value);
+
+REFERENCE FROM measure_schema
+  (measure_value,
+   measure_with_unit);
+
+REFERENCE FROM support_resource_schema
+  (bag_to_set,
+   identifier,
+   label,
+   text);
+
+  TYPE compound_item_definition = SELECT
+    (list_representation_item,
+     set_representation_item);
+  END_TYPE;
+
+  TYPE founded_item_select = SELECT
+    (founded_item,
+     representation_item);
+  END_TYPE;
+
+  TYPE list_representation_item = LIST [1:?] OF representation_item;
+  END_TYPE;
+
+  TYPE set_representation_item = SET [1:?] OF representation_item;
+  END_TYPE;
+
+  TYPE transformation = SELECT
+    (item_defined_transformation,
+     functionally_defined_transformation);
+  END_TYPE;
+
+  ENTITY binary_representation_item 
+    SUBTYPE OF (representation_item); 
+      binary_value : BINARY; 
+  END_ENTITY; 
+
+  ENTITY bytes_representation_item 
+    SUBTYPE OF (binary_representation_item); 
+    DERIVE 
+      no_of_bytes : INTEGER := BLENGTH(SELF\binary_representation_item.binary_value) DIV 8; 
+    WHERE 
+      WR1: BLENGTH(SELF\binary_representation_item.binary_value) MOD 8 = 0; 
+  END_ENTITY; 
+
+  ENTITY compound_representation_item
+    SUBTYPE OF (representation_item);
+      item_element : compound_item_definition;
+  END_ENTITY;
+
+  ENTITY definitional_representation
+    SUBTYPE OF (representation);
+    WHERE
+      WR1: 'REPRESENTATION_SCHEMA.PARAMETRIC_REPRESENTATION_CONTEXT' IN
+          TYPEOF (SELF\representation.context_of_items );
+  END_ENTITY;
+
+  ENTITY definitional_representation_relationship
+    SUBTYPE OF (representation_relationship);
+     WHERE
+       WR1: acyclic_representation_relationship(SELF,
+         [SELF\representation_relationship.rep_2],
+         'REPRESENTATION_SCHEMA.'+'REPRESENTATION');
+       WR2: NOT('REPRESENTATION_SCHEMA.'+'DEFINITIONAL_REPRESENTATION_RELATIONSHIP_WITH_SAME_CONTEXT' 
+         IN TYPEOF(SELF)) XOR
+         (SELF\representation_relationship.rep_1.context_of_items = 
+          SELF\representation_relationship.rep_2.context_of_items);
+  END_ENTITY;  
+
+  ENTITY definitional_representation_relationship_with_same_context
+    SUBTYPE OF (definitional_representation_relationship);
+  END_ENTITY;  
+
+  ENTITY founded_item;
+    DERIVE
+      users : SET[0:?] OF founded_item_select := using_items(SELF,[]);
+    WHERE
+      WR1: SIZEOF(users) > 0;
+      WR2: NOT(SELF IN users);  
+  END_ENTITY;
+
+  ENTITY functionally_defined_transformation;
+    name        : label;
+    description : OPTIONAL text;
+  END_ENTITY;
+
+  ENTITY global_uncertainty_assigned_context
+    SUBTYPE OF (representation_context);
+      uncertainty : SET [1:?] OF uncertainty_measure_with_unit;
+  END_ENTITY;
+
+  ENTITY item_defined_transformation;
+    name             : label;
+    description      : OPTIONAL text;
+    transform_item_1 : representation_item;
+    transform_item_2 : representation_item;
+  END_ENTITY;
+
+  ENTITY mapped_item
+    SUBTYPE OF (representation_item);
+      mapping_source : representation_map;
+      mapping_target : representation_item;
+    WHERE
+      WR1: acyclic_mapped_representation(using_representations(SELF), [SELF]);
+  END_ENTITY;
+
+  ENTITY parametric_representation_context
+    SUBTYPE OF (representation_context);
+  END_ENTITY;
+
+  ENTITY representation;
+      name             : label;
+      items            : SET[1:?] OF representation_item;
+      context_of_items : representation_context;
+    DERIVE
+      id               : identifier := get_id_value (SELF);
+      description      : text := get_description_value (SELF);
+    WHERE
+      WR1: SIZEOF (USEDIN (SELF, 'BASIC_ATTRIBUTE_SCHEMA.' +
+                                 'ID_ATTRIBUTE.IDENTIFIED_ITEM'))
+         <= 1;
+      WR2: SIZEOF (USEDIN (SELF, 'BASIC_ATTRIBUTE_SCHEMA.' +
+                                 'DESCRIPTION_ATTRIBUTE.DESCRIBED_ITEM'))
+         <= 1;
+  END_ENTITY;
+
+  ENTITY representation_context;
+      context_identifier : identifier;
+      context_type       : text;
+    INVERSE
+      representations_in_context : SET [1:?] OF representation FOR context_of_items;
+  END_ENTITY;
+
+  ENTITY representation_item
+    SUPERTYPE OF(ONEOF(binary_representation_item,
+      compound_representation_item, 
+      mapped_item, 
+      value_representation_item));
+      name : label;
+    WHERE
+      WR1: SIZEOF(using_representations(SELF)) > 0;
+  END_ENTITY;
+
+  ENTITY representation_item_relationship;
+    name : label;
+    description : OPTIONAL text;
+    relating_representation_item : representation_item;
+    related_representation_item : representation_item;
+  END_ENTITY;
+
+  ENTITY representation_map;
+      mapping_origin        : representation_item;
+      mapped_representation : representation;
+    INVERSE
+      map_usage : SET[1:?] OF mapped_item FOR mapping_source;
+    WHERE
+      WR1: item_in_context(SELF.mapping_origin,
+        SELF.mapped_representation.context_of_items);
+  END_ENTITY;
+
+  ENTITY representation_relationship;
+      name        : label;
+      description : OPTIONAL text;
+      rep_1       : representation;
+      rep_2       : representation;
+  END_ENTITY;
+
+  ENTITY representation_relationship_with_transformation
+    SUBTYPE OF (representation_relationship);
+      transformation_operator : transformation;
+    WHERE
+      WR1: SELF\representation_relationship.rep_1.context_of_items
+           :<>: SELF\representation_relationship.rep_2.context_of_items;
+  END_ENTITY;
+
+  ENTITY uncertainty_assigned_representation
+    SUBTYPE OF (representation);
+      uncertainty : SET [1:?] OF uncertainty_measure_with_unit;
+  END_ENTITY;
+
+  ENTITY uncertainty_measure_with_unit
+    SUBTYPE OF (measure_with_unit);
+      name        : label;
+      description : OPTIONAL text;
+    WHERE
+      WR1: valid_measure_value (SELF\measure_with_unit.value_component);
+  END_ENTITY;
+
+  ENTITY value_representation_item
+    SUBTYPE OF (representation_item);
+      value_component : measure_value;
+    WHERE
+      WR1: SIZEOF (QUERY (rep <* using_representations (SELF) |
+        NOT ('MEASURE_SCHEMA.GLOBAL_UNIT_ASSIGNED_CONTEXT'
+        IN TYPEOF (rep.context_of_items)
+        ))) = 0;
+  END_ENTITY;
+
+  FUNCTION acyclic_mapped_representation
+    (parent_set   : SET OF representation;
+     children_set : SET OF representation_item) : BOOLEAN;
+    LOCAL
+      x,y : SET OF representation_item;
+    END_LOCAL;
+    -- Determine the subset of children_set that are mapped_items
+    x := QUERY(z <* children_set | 'REPRESENTATION_SCHEMA.MAPPED_ITEM'
+      IN TYPEOF(z));
+    -- Determine that the subset has elements
+    IF SIZEOF(x) > 0 THEN
+      -- Check each element of the set
+      REPEAT i := 1 TO HIINDEX(x);
+        -- If the selected element maps a representation in the
+        -- parent_set, then return false
+        IF x[i]\mapped_item.mapping_source.mapped_representation
+          IN parent_set THEN
+          RETURN (FALSE);
+        END_IF;
+        -- Recursive check of the items of mapped_representation
+        IF NOT acyclic_mapped_representation
+          (parent_set +
+          x[i]\mapped_item.mapping_source.mapped_representation,
+          x[i]\mapped_item.mapping_source.mapped_representation.items) THEN
+          RETURN (FALSE);
+        END_IF;
+      END_REPEAT;
+    END_IF;
+    -- Determine the subset of children_set that are not
+    -- mapped_items
+    x := children_set - x;
+    -- Determine that the subset has elements
+    IF SIZEOF(x) > 0 THEN
+      -- For each element of the set:
+      REPEAT i := 1 TO HIINDEX(x);
+        -- Determine the set of representation_items referenced
+        y := QUERY(z <* bag_to_set( USEDIN(x[i], '')) |
+             'REPRESENTATION_SCHEMA.REPRESENTATION_ITEM' IN TYPEOF(z));
+        -- Recursively check for an offending mapped_item
+        -- Return false for any errors encountered
+        IF NOT acyclic_mapped_representation(parent_set, y) THEN
+          RETURN (FALSE);
+        END_IF;
+      END_REPEAT;
+    END_IF;
+    -- Return true when all elements are checked and
+    -- no error conditions found
+    RETURN (TRUE);
+  END_FUNCTION;
+
+  FUNCTION acyclic_representation_relationship
+    (relation : representation_relationship; relatives : SET[1:?] OF representation; specific_relation : STRING) : BOOLEAN; 
+    LOCAL
+      x : SET OF representation_relationship;
+    END_LOCAL;
+
+    IF relation.rep_1 IN relatives THEN
+      RETURN (FALSE);
+    END_IF;
+    x := QUERY(r <* bag_to_set(USEDIN(relation.rep_1, 'REPRESENTATION_SCHEMA.' + 'REPRESENTATION_RELATIONSHIP.' + 'REP_2')) | specific_relation IN TYPEOF(r));
+    REPEAT i := 1 TO HIINDEX(x);
+      IF NOT acyclic_representation_relationship(x[i], relatives + relation.rep_1, specific_relation) THEN
+        RETURN (FALSE);
+      END_IF;
+    END_REPEAT;
+    RETURN (TRUE);
+  END_FUNCTION; 
+
+  FUNCTION item_in_context
+    (item  : representation_item;
+     cntxt : representation_context) : BOOLEAN;
+    LOCAL
+      y : BAG OF representation_item;
+    END_LOCAL;
+    -- If there is one or more representation using both the item
+    -- and cntxt return true.
+    IF SIZEOF(USEDIN(item,'REPRESENTATION_SCHEMA.REPRESENTATION.ITEMS')
+      * cntxt.representations_in_context) > 0 THEN
+      RETURN (TRUE);
+      -- Determine the bag of representation_items that reference
+      -- item
+      ELSE y := QUERY(z <* USEDIN (item , '') |
+             'REPRESENTATION_SCHEMA.REPRESENTATION_ITEM' IN TYPEOF(z));
+        -- Ensure that the bag is not empty
+        IF SIZEOF(y) > 0 THEN
+        -- For each element in the bag
+        REPEAT i := 1 TO HIINDEX(y);
+          -- Check to see it is an item in the input cntxt.
+          IF item_in_context(y[i], cntxt) THEN
+            RETURN (TRUE);
+          END_IF;
+        END_REPEAT;
+      END_IF;
+    END_IF;
+    -- Return false when all possible branches have been checked
+    -- with no success.
+    RETURN (FALSE);
+  END_FUNCTION;
+
+  FUNCTION using_items (item : founded_item_select;
+                        checked_items: SET OF founded_item_select)
+                      : SET OF founded_item_select;
+    LOCAL
+      new_check_items    : SET OF founded_item_select;
+      result_items       : SET OF founded_item_select;
+      next_items         : SET OF founded_item_select;
+    END_LOCAL;
+    result_items := [];
+    new_check_items := checked_items + item;
+    -- Find the set of representation_items or founded_items
+    -- in which item is used directly.
+    next_items := QUERY(z <* bag_to_set( USEDIN(item , '')) |
+      ('REPRESENTATION_SCHEMA.REPRESENTATION_ITEM' IN TYPEOF(z)) OR
+      ('REPRESENTATION_SCHEMA.FOUNDED_ITEM'        IN TYPEOF(z)));
+    -- If the set of next_items is not empty;
+    IF SIZEOF(next_items) > 0 THEN
+      -- For each element in the set, find the using_items recursively
+      REPEAT i := 1 TO HIINDEX(next_items);
+        -- Check for loop in data model, i.e. one of the next_items
+        -- occurred earlier in the set of check_items;
+        IF NOT(next_items[i] IN new_check_items) THEN
+          result_items := result_items + next_items[i] +
+                          using_items(next_items[i],new_check_items);
+        END_IF;
+      END_REPEAT;
+    END_IF;
+    -- return the set of representation_items or founded_items
+    -- in which the input item is used directly and indirectly.
+    RETURN (result_items);
+  END_FUNCTION;
+
+  FUNCTION using_representations (item : founded_item_select)
+    : SET OF representation;
+    LOCAL
+      results            : SET OF representation;
+      result_bag         : BAG OF representation;
+      intermediate_items : SET OF founded_item_select;
+    END_LOCAL;
+    -- Find the representations in which the item is used and add to the
+    -- results set.
+    results := [];
+    result_bag := USEDIN(item,'REPRESENTATION_SCHEMA.REPRESENTATION.ITEMS');
+    IF SIZEOF(result_bag) > 0 THEN
+      REPEAT i := 1 TO HIINDEX(result_bag);
+        results := results + result_bag[i];
+      END_REPEAT;
+    END_IF;
+    -- Find all representation_items or founded_items
+    -- by which item is referenced directly or indirectly.
+    intermediate_items := using_items(item,[]);
+    -- If the set of intermediate items is not empty;
+    IF SIZEOF(intermediate_items) > 0 THEN
+      -- For each element in the set, add the
+      -- representations of that element.
+      REPEAT i := 1 TO HIINDEX(intermediate_items);
+        result_bag := USEDIN(intermediate_items[i],
+                      'REPRESENTATION_SCHEMA.REPRESENTATION.ITEMS');
+        IF SIZEOF(result_bag) > 0 THEN
+          REPEAT j := 1 TO HIINDEX(result_bag);
+            results := results + result_bag[j];
+          END_REPEAT;
+        END_IF;
+      END_REPEAT;
+    END_IF;
+    -- Return the set of representation in which the input item is
+    -- used directly and indirectly (through intervening
+    -- representation_items or founded items).
+    RETURN (results);
+  END_FUNCTION;
+
+  FUNCTION valid_measure_value
+    (m : measure_value) : BOOLEAN;
+    IF ('REAL' IN TYPEOF (m)) THEN
+    RETURN (m > 0.0);
+    ELSE
+     IF ('INTEGER' IN TYPEOF (m)) THEN
+      RETURN (m > 0);
+      ELSE
+        RETURN (TRUE);
+      END_IF;
+    END_IF;
+  END_FUNCTION;
+
+END_SCHEMA;

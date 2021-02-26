@@ -1,0 +1,23 @@
+(*
+ $Id: 10303-1062-mim-contract.exp,v 1.5 2006/08/07 09:42:04 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N1127 - ISO/TS 10303-1062 Contract - EXPRESS MIM
+*)    
+SCHEMA Contract_mim;
+USE FROM contract_schema -- ISO 10303-41
+  (contract);
+USE FROM management_resources_schema -- ISO 10303-41
+  (contract_assignment);
+
+   
+TYPE contract_item = EXTENSIBLE SELECT; 
+END_TYPE;
+   
+   
+ENTITY applied_contract_assignment
+  SUBTYPE OF (contract_assignment);
+  items : SET [1:?] OF contract_item;
+END_ENTITY;
+
+END_SCHEMA;
+
+ 

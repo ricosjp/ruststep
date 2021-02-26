@@ -1,0 +1,21 @@
+(*
+ $Id: 10303-1179-mim-Individual_involvement_in_activity.exp,v 1.4 2006/08/04 12:11:55 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2790 - ISO/TS 10303-1179 Individual involvement in activity - EXPRESS MIM
+ Supersedes ISO TC184/SC4/WG12 N1868
+*)
+
+SCHEMA Individual_involvement_in_activity_mim;
+
+USE FROM Activity_mim;    -- ISO/TS 10303-1047
+USE FROM Individual_activity_mim;    -- ISO/TS 10303-1176
+
+TYPE involved_select = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON action_items;
+END_TYPE; 
+
+ENTITY individual_involvement_in_activity
+  SUBTYPE OF (applied_action_assignment);
+  SELF\action_assignment.assigned_action : individual_activity;
+  SELF\applied_action_assignment.items : SET[1:1] OF involved_select;
+END_ENTITY;
+
+END_SCHEMA;

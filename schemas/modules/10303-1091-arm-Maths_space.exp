@@ -1,0 +1,17 @@
+(*
+ $Id: 10303-1091-arm-Maths_space.exp,v 1.4 2006/08/04 12:01:50 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2798 - ISO/TS 10303-1091 Maths space - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG12 N1879
+*)
+
+SCHEMA Maths_space_arm;
+
+USE FROM Maths_value_arm;    -- ISO/TS 10303-1092
+
+TYPE maths_value_including_maths_space = EXTENSIBLE SELECT BASED_ON maths_value WITH (Maths_space);
+END_TYPE; 
+
+ENTITY Maths_space;
+END_ENTITY;
+
+END_SCHEMA;

@@ -1,0 +1,33 @@
+(*
+   $Id: 10303-1116-mim-pdm_material_aspects.exp,v 1.1 2006/08/03 15:03:35 wg12deputy Exp $
+   ISO/TC184/SC4 WG12N2614 - ISO/TS 10303-1116 pdm_material_aspects - EXPRESS MIM
+   Supersedes ISO TC184/SC4/WG12N1748
+*)
+
+SCHEMA Pdm_material_aspects_mim;
+
+USE FROM File_identification_mim;
+USE FROM Independent_property_mim;
+USE FROM Independent_property_representation_mim;
+USE FROM Part_view_definition_mim;
+USE FROM Product_as_individual_mim;
+USE FROM Property_assignment_mim;
+
+USE FROM material_property_definition_schema(
+  material_designation,
+  material_designation_characterization,
+  material_property);
+
+USE FROM material_property_representation_schema (
+  data_environment,  
+  material_property_representation);
+
+ENTITY general_material_property 
+SUBTYPE OF (general_property); 
+WHERE 
+WR1: SIZEOF( QUERY( gpa <* USEDIN(SELF,'MATERIAL_ASPECTS_MIM.GENERAL_PROPERTY_ASSOCIATION.BASE_DEFINITION') | 
+  NOT ('MATERIAL_ASPECTS_MIM.MATERIAL_PROPERTY' IN TYPEOF(gpa.derived_definition)) )) = 0; 
+END_ENTITY; 
+
+END_SCHEMA;
+

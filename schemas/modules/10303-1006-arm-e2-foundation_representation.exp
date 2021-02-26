@@ -1,0 +1,49 @@
+(*
+ISO TC184/SC4/WG12 N2104 - ISO/TS 10303-1006 Foundation representation - EXPRESS ARM
+*) 
+
+
+SCHEMA Foundation_representation_arm; 
+
+USE FROM Value_with_unit_arm;    -- ISO/TS 10303-1054
+
+
+ENTITY Numerical_representation_context
+  SUBTYPE OF (Representation_context);
+  units : OPTIONAL SET[1:?] OF Unit;
+  accuracies : OPTIONAL SET[1:?] OF Uncertainty_with_unit;
+END_ENTITY;
+
+ENTITY Representation;
+  id : OPTIONAL STRING;
+  name : STRING;
+  description : OPTIONAL STRING;
+  context_of_items : Representation_context;
+  items : SET[1:?] OF Representation_item;
+END_ENTITY;
+
+ENTITY Representation_context;
+  id : STRING;
+  kind : STRING;
+INVERSE
+  representations_in_context : SET[1:?] OF Representation FOR context_of_items;
+END_ENTITY;
+
+ENTITY Representation_item
+  ABSTRACT SUPERTYPE ;
+  name : STRING;
+END_ENTITY;
+
+ENTITY Representation_relationship;
+  relation_type : STRING;
+  description : STRING;
+  rep_1 : Representation;
+  rep_2 : Representation;
+END_ENTITY;
+
+ENTITY String_representation_item
+  SUBTYPE OF (Representation_item);
+  string_value : STRING;
+END_ENTITY;
+
+END_SCHEMA;  -- Foundation_representation_arm

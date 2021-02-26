@@ -1,0 +1,24 @@
+(*
+ $Id: 10303-1015-arm-security_classification.exp,v 1.5 2006/08/07 07:44:41 wg12deputy Exp $
+ISO TC184/SC4/WG12 N3221 - ISO/TS 10303-1015 Security classification - EXPRESS ARM
+Supersedes ISO TC184/SC4/WG12 N1096
+*) 
+
+
+SCHEMA Security_classification_arm;
+
+
+TYPE security_classification_item = EXTENSIBLE SELECT;
+END_TYPE; 
+
+ENTITY Security_classification;
+  classification_level : STRING;
+  description : OPTIONAL STRING;
+END_ENTITY;
+
+ENTITY Security_classification_assignment;
+  classification : Security_classification;
+  items : SET[1:?] OF security_classification_item;
+END_ENTITY;
+
+END_SCHEMA;  -- Security_classification_arm

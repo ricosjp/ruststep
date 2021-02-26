@@ -1,0 +1,56 @@
+(*
+ $Id: 10303-1254-mim-condition_evaluation.exp,v 1.1 2006/08/07 09:42:05 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N3032 - ISO/TS 10303-1254 Condition evaluation - EXPRESS MIM
+ Supersedes ISO TC184/SC4/WG12 N2325
+*) 
+
+
+SCHEMA Condition_evaluation_mim;
+
+USE FROM action_schema   -- ISO 10303-41
+  (action); 
+
+USE FROM Activity_method_assignment_mim;    -- ISO/TS 10303-1249
+
+USE FROM Activity_mim;    -- ISO/TS 10303-1047
+
+USE FROM basic_attribute_schema   -- ISO 10303-41
+  (object_role,
+   role_association,
+   role_select); 
+
+USE FROM Classification_assignment_mim;    -- ISO/TS 10303-1114
+
+USE FROM Condition_mim;    -- ISO/TS 10303-1253
+
+USE FROM Group_mim;    -- ISO/TS 10303-1113
+
+USE FROM group_schema   -- ISO 10303-41
+  (group); 
+
+USE FROM management_resources_schema   -- ISO 10303-41
+  (name_assignment); 
+
+USE FROM Name_assignment_mim;    -- ISO/TS 10303-1340
+
+
+TYPE condition_evaluation_action_items = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON action_items;
+END_TYPE; 
+
+TYPE condition_evaluation_classification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON classification_item WITH 
+   (action, 
+    applied_action_assignment, 
+    group);
+END_TYPE; 
+
+TYPE condition_evaluation_groupable_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON groupable_item WITH 
+   (applied_action_assignment, 
+    applied_action_method_assignment);
+END_TYPE; 
+
+TYPE condition_evaluation_name_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON name_item WITH 
+   (applied_action_assignment);
+END_TYPE; 
+
+END_SCHEMA;  -- Condition_evaluation_mim
+

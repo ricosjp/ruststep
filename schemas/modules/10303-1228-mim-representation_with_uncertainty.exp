@@ -1,0 +1,39 @@
+(*
+   $Id: 10303-1228-mim-representation_with_uncertainty.exp,v 1.1 2003/10/24 20:30:34 wg12deputy Exp $
+   ISO TC184/SC4/WG12 N1942 - ISO/CD-TS 10303-1228 Representation_with_uncertainty - EXPRESS MIM
+*)
+
+SCHEMA Representation_with_uncertainty_mim;
+
+USE FROM Foundation_representation_mim;
+
+USE FROM qualified_measure_schema 
+  (qualified_representation_item,
+   standard_uncertainty,
+   uncertainty_qualifier);
+ 
+USE FROM representation_schema
+  (uncertainty_assigned_representation);
+
+
+RULE consistent_uncertainty 
+      FOR (global_uncertainty_assigned_context,
+           qualified_representation_item,
+           uncertainty_assigned_representation);
+WHERE
+WR1: SIZEOF ( QUERY ( guac <* global_uncertainty_assigned_context | 
+    SIZEOF ( QUERY ( u1 <* guac.uncertainty | 
+	SIZEOF ( QUERY ( u2 <* guac.uncertainty | u2.name =  u1.name ) ) >1 ) ) >0 ) ) =  0 ;
+WR2: SIZEOF ( QUERY ( uar <* uncertainty_assigned_representation | 
+	SIZEOF ( QUERY ( u1<* uar.uncertainty | 
+	SIZEOF ( QUERY ( u2 <* uar.uncertainty | u2.name =  u1.name ) ) >1 ) ) >0 ) ) =  0;
+WR3: SIZEOF ( QUERY ( qri <* qualified_representation_item |
+     SIZEOF ( QUERY ( u1 <* qri.qualifiers |
+     (schema_name + '.UNCERTAINTY_QUALIFIER' IN TYPEOF ( u1 ) ) AND 
+	( SIZEOF ( QUERY ( u2 <* qri.qualifiers |
+     ( schema_name + '.UNCERTAINTY_QUALIFIER' IN TYPEOF ( u2 ) ) AND 
+	( u2\uncertainty_qualifier.measure_name =  u1\uncertainty_qualifier.measure_name ) )
+     ) >1 ) ) ) >0 ) ) =  0;
+END_RULE; 
+
+END_SCHEMA;
