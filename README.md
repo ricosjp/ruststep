@@ -47,4 +47,9 @@ License
 --------
 Copyright 2021 RICOS Co. Ltd.
 
-Licensed under the Apache License, Version 2.0 http://www.apache.org/licenses/LICENSE-2.0
+Licensed under [the Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0)
+
+The following directories are included for development purpose.
+**They are not parts of this project**.
+
+- [schemas](./schemas)
