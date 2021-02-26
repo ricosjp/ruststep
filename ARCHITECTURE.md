@@ -65,11 +65,37 @@ will be parsed into two tables:
 
 | Table A | value1 | value2 |
 |:--------|:-------|:-------|
-| #1      | 1      | 2      |
-| #2      | 3      | 4      |
+| `#1`    | 1      | 2      |
+| `#2`    | 3      | 4      |
 
 | Table B | value3 | @A     |
 |:--------|:-------|:-------|
-| #3      | 5      | 1      |
-| #4      | 6      | 1      |
-| #5      | 5      | 2      |
+| `#3`    | 5      | 1      |
+| `#4`    | 6      | 1      |
+| `#5`    | 5      | 2      |
+
+We may be able to built dynamically these tables only from a STEP file,
+however, we create these tables statically from EXPRESS schema.
+
+```
+ENTITY a;
+  x: INTEGER;
+  y: INTEGER;
+END_ENTITY;
+
+ENTITY b;
+  z: INTEGER;
+  w: a;
+END_ENTITY;
+```
+
+| Table (a) | x (int) | y (int) |
+|:----------|:--------|:--------|
+| `#1`      | 1       | 2       |
+| `#2`      | 3       | 4       |
+
+| Table (b) | z (int) | w (a) |
+|:----------|:--------|:------|
+| `#3`      | 5       | 1     |
+| `#4`      | 6       | 1     |
+| `#5`      | 5       | 2     |
