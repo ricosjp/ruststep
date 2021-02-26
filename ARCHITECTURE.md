@@ -89,6 +89,8 @@ ENTITY b;
 END_ENTITY;
 ```
 
+Then the each columns of the tables become statically typed:
+
 | Table (a) | x (int) | y (int) |
 |:----------|:--------|:--------|
 | `#1`      | 1       | 2       |
