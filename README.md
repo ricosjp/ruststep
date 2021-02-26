@@ -2,7 +2,7 @@ ruststep
 =========
 
 Crates for STEP (Standard for the Exchange of Product model data) written in pure Rust
-aimed at replacing [OCCT](https://www.opencascade.com/).
+aimed at replacing [stepcode](https://github.com/stepcode/stepcode).
 
 What is STEP?
 --------------
