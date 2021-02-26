@@ -10,8 +10,9 @@ What is STEP?
 - Data serialize format is called **exchange structure**,
   and serialized as ASCII text (ISO-10303-21, usually with extension `*.step`, `*.stp` or `*.p21`)
   or XML (ISO-10303-22).
-- Schema language is called **EXPRESS**.
-- Many common schemas are defined in ISO-10303.
+- Schema language is called **EXPRESS**. EXPRESS file is usually named with extension `*.exp`.
+- Many common schemas are defined in ISO-10303 by EXPRESS language.
+  - [schemas](./schemas) contains copies
   - Application Protocol (AP) is a class of defined schemas, and the main target of this project.
   - AP203 is most famous one in CAD (computer-aided design) applications.
 
