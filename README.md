@@ -1,15 +1,15 @@
 ruststep
 =========
 
-A crate for STEP (Standard for the Exchange of Product model data), standardized as ISO 10303
+Crates for STEP (Standard for the Exchange of Product model data) written in pure Rust
+aimed at replacing [OCCT](https://www.opencascade.com/).
 
 What is STEP?
 --------------
 
 - STEP is a set of data serialize formats, schema language, and common schemas.
-- Data serialize format is called **exchange structure**,
-  and serialized as ASCII text (ISO-10303-21, usually with extension `*.step`, `*.stp` or `*.p21`)
-  or XML (ISO-10303-22).
+- Data serialize format is called **exchange structure** in ISO document, but usually called **STEP file**,
+  They are serialized as ASCII text (ISO-10303-21, usually with extension `*.step`, `*.stp` or `*.p21`) or XML (ISO-10303-22).
 - Schema language is called **EXPRESS**. EXPRESS file is usually named with extension `*.exp`.
 - Many common schemas are defined in ISO-10303 by EXPRESS language.
   - [schemas](./schemas) contains copies
