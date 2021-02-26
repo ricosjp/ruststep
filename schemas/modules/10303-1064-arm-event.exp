@@ -1,0 +1,42 @@
+(*
+ $Id: 10303-1064-arm-event.exp,v 1.5 2006/08/07 07:44:43 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2114 - ISO/TS 10303-1064 Event - EXPRESS ARM
+*)
+
+SCHEMA Event_arm; 
+
+USE FROM Date_time_arm;    -- ISO/TS 10303-1010
+
+USE FROM Date_time_assignment_arm;    -- ISO/TS 10303-1014
+
+USE FROM Value_with_unit_arm;    -- ISO/TS 10303-1054
+
+
+TYPE date_or_event = SELECT
+   (Calendar_date, 
+    Date_time, 
+    Event);
+END_TYPE; 
+
+ENTITY Event;
+  id : STRING;
+  name : STRING;
+  description : OPTIONAL STRING;
+  actual_start_date : OPTIONAL date_or_date_time_select;
+  planned_start_date : OPTIONAL date_or_date_time_select;
+END_ENTITY;
+
+ENTITY Event_relationship;
+  relation_type : STRING;
+  description : OPTIONAL STRING;
+  relating_event : Event;
+  related_event : Event;
+END_ENTITY;
+
+ENTITY Relative_event
+  SUBTYPE OF (Event);
+  base_event : Event;
+  offset : Duration;
+END_ENTITY;
+
+END_SCHEMA;  -- Event_arm

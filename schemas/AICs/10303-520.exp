@@ -1,0 +1,241 @@
+
+SCHEMA aic_associative_draughting_elements;
+
+ USE FROM measure_schema                            -- ISO 10303-41
+  (derived_unit,
+  named_unit);
+
+ USE FROM product_property_definition_schema        -- ISO 10303-41
+  (shape_aspect_relationship);
+
+ USE FROM product_property_representation_schema    -- ISO 10303-41
+   (shape_definition_representation);
+
+ REFERENCE FROM support_resource_schema             -- ISO 10303-41
+  (bag_to_set);
+
+ USE FROM representation_schema                     -- ISO 10303-43
+  (mapped_item,
+  representation,
+  representation_item,
+  representation_map);
+
+ REFERENCE FROM representation_schema               -- ISO 10303-43
+  (using_representations);
+
+ USE FROM qualified_measure_schema                  -- ISO 10303-45
+  (measure_representation_item);
+
+ USE FROM presentation_appearance_schema            -- ISO 10303-46
+  (curve_style,
+  styled_item);
+ 
+ USE FROM presentation_definition_schema            -- ISO 10303-46
+  (annotation_curve_occurrence,
+  annotation_fill_area_occurrence,
+  annotation_occurrence,
+  annotation_occurrence_relationship,
+  annotation_symbol_occurrence,
+  annotation_text_occurrence,
+  text_literal);
+
+ USE FROM presentation_organization_schema            -- ISO 10303-46
+  (camera_model);
+
+ USE FROM shape_dimension_schema                    -- ISO 10303-47
+  (dimensional_characteristic_representation,
+  shape_dimension_representation);
+
+ USE FROM draughting_element_schema                 -- ISO 10303-101
+  (draughting_callout,
+  leader_curve,
+  projection_curve);
+
+
+ENTITY annotation_occurrence_associativity
+  SUBTYPE OF (annotation_occurrence_relationship);
+WHERE
+  WR1:  SIZEOF (TYPEOF (SELF.related_annotation_occurrence) *
+                ['AIC_ASSOCIATIVE_DRAUGHTING_ELEMENTS.ANNOTATION_FILL_AREA_OCCURRENCE',
+                'AIC_ASSOCIATIVE_DRAUGHTING_ELEMENTS.PROJECTION_CURVE',
+                'AIC_ASSOCIATIVE_DRAUGHTING_ELEMENTS.LEADER_CURVE']) = 1;
+END_ENTITY;
+
+ENTITY dimension_text_associativity
+  SUBTYPE OF (text_literal, mapped_item);
+WHERE
+  WR1:  ('AIC_ASSOCIATIVE_DRAUGHTING_ELEMENTS.SHAPE_DIMENSION_REPRESENTATION'
+          IN TYPEOF (SELF\mapped_item.
+                          mapping_source.mapped_representation));
+  WR2:  ('AIC_ASSOCIATIVE_DRAUGHTING_ELEMENTS.DRAUGHTING_CALLOUT'
+          IN TYPEOF (SELF\mapped_item.mapping_target));
+  WR3:  SIZEOF (QUERY (ato <* QUERY (si <* 
+                USEDIN (SELF, 'AIC_ASSOCIATIVE_DRAUGHTING_ELEMENTS.STYLED_ITEM.ITEM') |
+                  ('AIC_ASSOCIATIVE_DRAUGHTING_ELEMENTS.ANNOTATION_TEXT_OCCURRENCE'
+                    IN TYPEOF(si))) |
+                NOT (SIZEOF( QUERY (dc <*
+                   USEDIN (ato, 'AIC_ASSOCIATIVE_DRAUGHTING_ELEMENTS.' +
+                                 'DRAUGHTING_CALLOUT.CONTENTS') |
+                     ('AIC_ASSOCIATIVE_DRAUGHTING_ELEMENTS.DRAUGHTING_CALLOUT'
+                   IN TYPEOF (dc)))
+                  * [SELF\mapped_item.mapping_target]) = 1)
+                )) = 0;
+END_ENTITY;
+
+ENTITY draughting_model
+  SUBTYPE OF (representation);
+UNIQUE
+  UR1:  SELF\representation.name;
+WHERE
+  WR1:  SIZEOF (QUERY (it <* SELF.items |
+                 NOT (SIZEOF (['AIC_ASSOCIATIVE_DRAUGHTING_ELEMENTS.MAPPED_ITEM',
+                               'AIC_ASSOCIATIVE_DRAUGHTING_ELEMENTS.STYLED_ITEM',
+                               'AIC_ASSOCIATIVE_DRAUGHTING_ELEMENTS.AXIS2_PLACEMENT',
+                               'AIC_ASSOCIATIVE_DRAUGHTING_ELEMENTS.CAMERA_MODEL'] *
+                      TYPEOF (it)) = 1
+               ))) = 0;
+  WR2:  SIZEOF (QUERY (mi <* QUERY (it <* SELF.items |
+                 ('AIC_ASSOCIATIVE_DRAUGHTING_ELEMENTS.MAPPED_ITEM' IN TYPEOF(it))) |
+                 NOT (
+                   SIZEOF (['AIC_ASSOCIATIVE_DRAUGHTING_ELEMENTS.SHAPE_REPRESENTATION',
+                            'AIC_ASSOCIATIVE_DRAUGHTING_ELEMENTS.DRAUGHTING_MODEL'] *
+                      TYPEOF (mi\mapped_item.mapping_source.
+                              mapped_representation)) = 1
+               ))) = 0;
+  WR3:  SIZEOF (QUERY (smi <* QUERY (si <* QUERY (it <* SELF.items |
+                 ('AIC_ASSOCIATIVE_DRAUGHTING_ELEMENTS.STYLED_ITEM' IN TYPEOF(it))) |
+                 ('AIC_ASSOCIATIVE_DRAUGHTING_ELEMENTS.MAPPED_ITEM' IN
+                     TYPEOF(si\styled_item.item))) |
+                 (NOT (('AIC_ASSOCIATIVE_DRAUGHTING_ELEMENTS.SHAPE_REPRESENTATION' IN
+                          TYPEOF(smi\styled_item.item\mapped_item.
+                                 mapping_source.mapped_representation))
+                     AND
+                      (SIZEOF (QUERY (sty <* smi\styled_item.styles |
+                        (NOT (SIZEOF (QUERY (psa <* sty.styles |
+                               (NOT ('AIC_ASSOCIATIVE_DRAUGHTING_ELEMENTS.CURVE_STYLE'
+                                       IN TYPEOF(psa))))) = 1
+                     )))) = 1)))
+               )) = 0;
+END_ENTITY;
+
+ENTITY shape_aspect_associativity
+  SUBTYPE OF (shape_aspect_relationship);
+WHERE
+  WR1:  SELF.relating_shape_aspect.product_definitional;
+  WR2:  NOT (SELF.related_shape_aspect.product_definitional);
+  WR3:  SIZEOF (QUERY (pd <* USEDIN (SELF, 'AIC_ASSOCIATIVE_DRAUGHTING_ELEMENTS.' +
+                 'PROPERTY_DEFINITION.DEFINITION') |
+          NOT (SIZEOF (QUERY (sdr <* QUERY (pdr <* USEDIN (pd,
+                          'AIC_ASSOCIATIVE_DRAUGHTING_ELEMENTS.' +
+                          'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |
+               ('AIC_ASSOCIATIVE_DRAUGHTING_ELEMENTS.SHAPE_DEFINITION_REPRESENTATION'
+                   IN TYPEOF (pdr))) |
+            NOT (SIZEOF (QUERY (it <* sdr.used_representation.items |
+              NOT ('AIC_ASSOCIATIVE_DRAUGHTING_ELEMENTS.CURVE' IN TYPEOF(it))
+              AND
+              (SIZEOF (QUERY (aco <* USEDIN (it,
+                          'AIC_ASSOCIATIVE_DRAUGHTING_ELEMENTS.STYLED_ITEM.ITEM') |
+               SIZEOF (TYPEOF (aco) * 
+                     ['AIC_ASSOCIATIVE_DRAUGHTING_ELEMENTS.LEADER_CURVE',
+                      'AIC_ASSOCIATIVE_DRAUGHTING_ELEMENTS.PROJECTION_CURVE']) = 1)) +
+               SIZEOF (USEDIN (it, 'AIC_ASSOCIATIVE_DRAUGHTING_ELEMENTS.' +
+                      'ANNOTATION_FILL_AREA.BOUNDARIES')) >= 1)
+            )) = 1) 
+          )) = 0)
+        )) = 0;
+  WR4:  SIZEOF (QUERY (pd <* USEDIN (SELF, 'AIC_ASSOCIATIVE_DRAUGHTING_ELEMENTS.' +
+                 'PROPERTY_DEFINITION.DEFINITION') |
+          NOT (SIZEOF (QUERY (sdr <* QUERY (pdr <* USEDIN (pd,
+                          'AIC_ASSOCIATIVE_DRAUGHTING_ELEMENTS.' +
+                          'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |
+               ('AIC_ASSOCIATIVE_DRAUGHTING_ELEMENTS.SHAPE_DEFINITION_REPRESENTATION'
+                   IN TYPEOF (pdr))) |
+            NOT (check_associative_shape_aspects(sdr))
+          )) = 0)
+        )) = 0;
+END_ENTITY;
+
+FUNCTION check_associative_shape_aspects
+  (sdr : shape_definition_representation) : BOOLEAN;
+  LOCAL
+    sr1, sr2 : SET OF representation;
+    dm, pv   : SET OF representation;
+  END_LOCAL;
+
+  -- Check if the representation contains only two items
+  IF (SIZEOF (sdr.used_representation.items) <> 2) THEN
+     RETURN (FALSE);
+  END_IF;
+
+  -- Find the representations that use each item
+  sr1 := using_representations(sdr.used_representation.items[1]);
+  sr2 := using_representations(sdr.used_representation.items[2]);
+
+  -- Find the representations in which item 1 representations are mapped
+  REPEAT i := 1 TO HIINDEX(sr1);
+    dm := representations_mapped_into(sr1[i]);
+    REPEAT j := 1 TO HIINDEX(dm);
+      IF ('AIC_ASSOCIATIVE_DRAUGHTING_ELEMENTS.DRAUGHTING_MODEL' IN TYPEOF(dm[j]))
+      THEN
+        IF (dm[j] IN sr2) THEN RETURN (TRUE);
+        END_IF;
+        -- Find the views that the draughting model is mapped into
+        pv := representations_mapped_into(dm[j]);
+        REPEAT k := 1 TO HIINDEX(pv);
+          IF ('AIC_ASSOCIATIVE_DRAUGHTING_ELEMENTS.PRESENTATION_VIEW' IN TYPEOF(pv[k]))
+          THEN
+            IF (pv[k] IN sr2) THEN RETURN (TRUE);
+            END_IF;
+          END_IF;
+        END_REPEAT;
+      END_IF;
+    END_REPEAT;
+  END_REPEAT;
+
+  -- Find the representations in which item 2 representations are mapped
+  REPEAT i := 1 TO HIINDEX(sr2);
+    dm := representations_mapped_into(sr2[i]);
+    REPEAT j := 1 TO HIINDEX(dm);
+      IF ('AIC_ASSOCIATIVE_DRAUGHTING_ELEMENTS.DRAUGHTING_MODEL' IN TYPEOF(dm[j]))
+      THEN
+        IF (dm[j] IN sr1) THEN RETURN (TRUE);
+        END_IF;
+        -- Find the views that the draughting model is mapped into
+        pv := representations_mapped_into(dm[j]);
+        REPEAT k := 1 TO HIINDEX(pv);
+          IF ('AIC_ASSOCIATIVE_DRAUGHTING_ELEMENTS.PRESENTATION_VIEW' IN TYPEOF(pv[k]))
+          THEN
+            IF (pv[k] IN sr1) THEN RETURN (TRUE);
+            END_IF;
+          END_IF;
+        END_REPEAT;
+      END_IF;
+    END_REPEAT;
+  END_REPEAT;
+  RETURN(FALSE);
+END_FUNCTION;
+
+FUNCTION representations_mapped_into 
+  (rep : representation) : SET of representation;
+  LOCAL
+    results : SET OF representation := [];
+    rm      : SET OF representation_map;
+    mi      : SET OF mapped_item := [];
+  END_LOCAL;
+
+  -- Find set of representation_maps which specify the representation
+  rm := bag_to_set(USEDIN(rep, 'AIC_ASSOCIATIVE_DRAUGHTING_ELEMENTS.' +
+                    'REPRESENTATION_MAP.MAPPED_REPRESENTATION'));
+  -- Find the set of mapped_items that use each representation_map
+  REPEAT i := 1 TO HIINDEX(rm);
+    mi := mi + rm[i].map_usage;
+  END_REPEAT;
+  -- Find the set of representations that use each mapped_item
+  REPEAT j := 1 TO HIINDEX(mi);
+    results := results + USEDIN(mi[j],'AIC_ASSOCIATIVE_DRAUGHTING_ELEMENTS.' +
+                                      'REPRESENTATION.ITEMS');
+  END_REPEAT;
+  RETURN(results);
+END_FUNCTION;
+
+END_SCHEMA;  

@@ -1,0 +1,24 @@
+(*
+ISO TC184/SC4/WG12 N1593 - ISO/CD-TS 10303-1277 Location assignment - EXPRESS MIM
+*) 
+
+
+SCHEMA Location_assignment_mim; 
+
+USE FROM Location_mim;    -- ISO/CD-TS 10303-1278
+
+USE FROM management_resources_schema   -- ISO 10303-41
+  (location_assignment); 
+
+
+TYPE location_item = EXTENSIBLE GENERIC_ENTITY SELECT;
+END_TYPE; 
+
+ENTITY applied_location_assignment
+  SUBTYPE OF (location_assignment);
+  items : SET[1:?] OF location_item;
+END_ENTITY;
+
+END_SCHEMA;  -- Location_assignment_mim
+
+

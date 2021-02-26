@@ -1,0 +1,61 @@
+(*
+ $Id: 10303-1244-arm-qualifications.exp,v 1.2 2006/08/07 07:44:44 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N3115 - ISO/TS 10303-1244 Qualifications - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG12 N2411
+*) 
+
+
+SCHEMA Qualifications_arm;
+
+USE FROM Certification_arm;    -- ISO/TS 10303-1044
+
+USE FROM Classification_assignment_arm;    -- ISO/TS 10303-1114
+
+USE FROM Date_time_assignment_arm;    -- ISO/TS 10303-1014
+
+USE FROM Person_organization_arm;    -- ISO/TS 10303-1011
+
+USE FROM Person_organization_assignment_arm;    -- ISO/TS 10303-1013
+
+
+TYPE qualification_organization_or_person_in_organization_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON organization_or_person_in_organization_item WITH 
+   (Qualification_assignment, 
+    Qualification_type);
+END_TYPE; 
+
+TYPE qualifications_certification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON certification_item WITH 
+   (Qualification_assignment);
+END_TYPE; 
+
+TYPE qualifications_classified_select = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON classification_item WITH 
+   (Qualification_type);
+END_TYPE; 
+
+TYPE qualifications_date_or_date_time_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON date_or_date_time_item WITH 
+   (Qualification_assignment);
+END_TYPE; 
+
+TYPE qualifications_select = EXTENSIBLE GENERIC_ENTITY SELECT
+   (Organization, 
+    Person, 
+    Person_in_organization);
+END_TYPE; 
+
+ENTITY Qualification_assignment;
+  assigned_qualification_type : Qualification_type;
+  received_by : qualifications_select;
+END_ENTITY;
+
+ENTITY Qualification_type;
+  name : STRING;
+  description : OPTIONAL STRING;
+END_ENTITY;
+
+ENTITY Qualification_type_relationship;
+  name : STRING;
+  description : OPTIONAL STRING;
+  relating : Qualification_type;
+  related : Qualification_type;
+END_ENTITY;
+
+END_SCHEMA;  -- Qualifications_arm

@@ -1,0 +1,93 @@
+(*
+ $Id: 10303-1106-mim-Extended_measure_representation.exp,v 1.2 2006/08/07 09:42:04 wg12deputy Exp $
+ISO TC184/SC4/WG12 N3232 - ISO/TS 10303-1106 Extended measure representation - EXPRESS MIM
+Supersedes ISO TC184/SC4/WG12 N3047
+*) 
+
+
+SCHEMA Extended_measure_representation_mim;
+
+USE FROM Measure_representation_mim;    -- ISO/TS 10303-1118
+
+USE FROM qualified_measure_schema   -- ISO 10303-45
+  (measure_representation_item,
+   precision_qualifier,
+   qualified_representation_item,
+   standard_uncertainty,
+   type_qualifier,
+   uncertainty_qualifier); 
+
+USE FROM representation_schema   -- ISO 10303-43
+  (compound_item_definition,
+   compound_representation_item,
+   list_representation_item,
+   set_representation_item); 
+
+USE FROM support_resource_schema;    -- ISO 10303-41
+
+USE FROM Value_with_unit_mim;    -- ISO/TS 10303-1054
+
+REFERENCE FROM support_resource_schema   -- ISO 10303-41
+  (type_check_function); 
+
+
+ENTITY value_range
+  SUBTYPE OF (compound_representation_item);
+WHERE
+  WR1: ( 'value_with_unit_mim.'+ 'SET_REPRESENTATION_ITEM' IN TYPEOF ( item_element ) ) AND value_range_wr1 ( item_element );
+  WR2: value_range_wr2 ( item_element );
+  WR3: value_range_wr3 ( item_element );
+END_ENTITY;
+
+RULE subtype_exclusiveness_representation_item FOR 
+(representation_item);
+WHERE
+  WR1: SIZEOF(QUERY (cri <* representation_item | NOT (type_check_function(cri,['QUALIFIED_MEASURE_SCHEMA.MEASURE_REPRESENTATION_ITEM','REPRESENTATION_SCHEMA.VALUE_REPRESENTATION_ITEM','REPRESENTATION_SCHEMA.COMPOUND_REPRESENTATION_ITEM'] , 3)))) = 0;
+END_RULE; 
+
+FUNCTION value_range_wr1
+ (agg : compound_item_definition) : BOOLEAN; 
+BEGIN
+IF (SIZEOF(agg) = 2) AND ((SIZEOF(QUERY (i1 <* agg | (
+'QUALIFIED_MEASURE_SCHEMA.MEASURE_REPRESENTATION_ITEM' IN TYPEOF
+(i1)))) = 2) OR
+(SIZEOF(QUERY (i2 <* agg | (
+'REPRESENTATION_SCHEMA.VALUE_REPRESENTATION_ITEM' IN TYPEOF
+(i2)))) = 2)) THEN
+RETURN(TRUE);
+ELSE
+RETURN(FALSE);
+END_IF;
+END;
+      END_FUNCTION; 
+
+FUNCTION value_range_wr2
+ (agg : compound_item_definition) : BOOLEAN; 
+BEGIN
+IF (SIZEOF(QUERY (i <* agg | (i.name = 'upper limit'))) = 1)
+AND (SIZEOF(QUERY (i <* agg | (i.name = 'lower limit'))) = 1)
+THEN
+RETURN(TRUE);
+ELSE
+RETURN(FALSE);
+END_IF;
+END;
+      END_FUNCTION; 
+
+FUNCTION value_range_wr3
+ (agg : compound_item_definition) : BOOLEAN; 
+BEGIN
+IF (SIZEOF(QUERY(i1 <* agg |
+('QUALIFIED_MEASURE_SCHEMA.MEASURE_REPRESENTATION_ITEM' IN TYPEOF (i1)) AND
+(SIZEOF (QUERY (i2 <* agg |
+('QUALIFIED_MEASURE_SCHEMA.MEASURE_REPRESENTATION_ITEM' IN TYPEOF (i2)) AND
+(i1 :<>: i2) AND (i1\measure_with_unit.unit_component :=: i2\measure_with_unit.unit_component))) = 1))) = 2)
+THEN
+RETURN (TRUE);
+ELSE
+RETURN (FALSE);
+END_IF;
+END;
+      END_FUNCTION; 
+
+END_SCHEMA;  -- Extended_measure_representation_mim

@@ -1,0 +1,82 @@
+(*
+ $Id: 10303-1296-mim-condition_evaluation_characterized.exp,v 1.1 2006/08/07 09:42:06 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N3035 - ISO/TS 10303-1296 Condition evaluation characterized - EXPRESS MIM
+ Supersedes ISO TC184/SC4/WG12 N2328
+*) 
+
+
+SCHEMA Condition_evaluation_characterized_mim;
+
+USE FROM action_schema   -- ISO 10303-41
+  (action); 
+
+USE FROM Activity_mim;    -- ISO/TS 10303-1047
+
+USE FROM Approval_mim;    -- ISO/TS 10303-1012
+
+USE FROM Attribute_classification_mim;    -- ISO/TS 10303-1246
+
+USE FROM Condition_evaluation_mim;    -- ISO/TS 10303-1254
+
+USE FROM Date_time_assignment_mim;    -- ISO/TS 10303-1014
+
+USE FROM group_schema;    -- ISO 10303-41
+
+USE FROM Identification_assignment_mim;    -- ISO/TS 10303-1021
+
+USE FROM Multi_linguism_mim;    -- ISO/TS 10303-1105
+
+USE FROM Person_organization_assignment_mim;    -- ISO/TS 10303-1013
+
+USE FROM Process_property_assignment_mim;    -- ISO/TS 10303-1040
+
+
+TYPE condition_evaluation_approval_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON approval_item WITH 
+   (action, 
+    applied_action_assignment);
+END_TYPE; 
+
+TYPE condition_evaluation_attribute_classification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON attribute_classification_item WITH 
+   (action, 
+    applied_action_assignment, 
+    group);
+END_TYPE; 
+
+TYPE condition_evaluation_attribute_language_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON attribute_language_item WITH 
+   (action, 
+    applied_action_assignment, 
+    group);
+END_TYPE; 
+
+TYPE condition_evaluation_date_and_time_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON date_and_time_item WITH 
+   (action, 
+    applied_action_assignment);
+END_TYPE; 
+
+TYPE condition_evaluation_date_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON date_item WITH 
+   (action, 
+    applied_action_assignment);
+END_TYPE; 
+
+TYPE condition_evaluation_identification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON identification_item WITH 
+   (action);
+END_TYPE; 
+
+TYPE condition_evaluation_multi_language_attribute_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON multi_language_attribute_item WITH 
+   (action, 
+    applied_action_assignment, 
+    group);
+END_TYPE; 
+
+TYPE condition_evaluation_organization_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON organization_item WITH 
+   (action, 
+    applied_action_assignment);
+END_TYPE; 
+
+TYPE condition_evaluation_person_and_organization_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON person_and_organization_item WITH 
+   (action, 
+    applied_action_assignment);
+END_TYPE; 
+
+END_SCHEMA;  -- Condition_evaluation_characterized_mim
+

@@ -1,0 +1,50 @@
+(*
+WG12 N676
+ISO/TS 10303-1007
+Product data representation and exchange: Application module: General surface appearance - EXPRESS ARM
+*)
+
+SCHEMA General_surface_appearance_arm;
+
+USE FROM Colour_arm; -- ISO/TS 10303-1002
+USE FROM curve_appearance_arm; -- ISO/TS 10303-1003
+
+ENTITY Boundary_curve_appearance
+SUBTYPE OF (Surface_related_curve_appearance);
+END_ENTITY;
+
+ENTITY Control_grid_appearance
+	SUBTYPE OF (Surface_related_curve_appearance);
+END_ENTITY;
+
+ENTITY Parameter_line_appearance
+	SUBTYPE OF (Surface_related_curve_appearance);
+	number_of_u_curves:INTEGER;
+	number_of_v_curves:INTEGER;
+END_ENTITY;
+
+ENTITY Segmentation_curve_appearance
+	SUBTYPE OF (Surface_related_curve_appearance);
+END_ENTITY;
+
+ENTITY Silhouette_curve_appearance
+	SUBTYPE OF (Surface_related_curve_appearance);
+END_ENTITY;
+
+ENTITY Surface_appearance_wireframe;
+  side   		 : STRING;
+  styles       	 : SET [1:5] OF surface_related_curve_appearance;
+END_ENTITY;
+
+ENTITY Surface_colour;
+  side   		 : STRING;
+  assigned_colour  : colour;
+END_ENTITY;
+
+ENTITY Surface_related_curve_appearance
+ABSTRACT SUPERTYPE OF (ONEOF(Boundary_curve_appearance, Silhouette_curve_appearance, Segmentation_curve_appearance, Control_grid_appearance, Parameter_line_appearance));
+  		style : Curve_appearance;
+END_ENTITY;
+
+END_SCHEMA; -- general_surface_appearance_arm
+

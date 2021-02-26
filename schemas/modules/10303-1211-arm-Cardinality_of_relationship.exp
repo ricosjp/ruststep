@@ -1,0 +1,25 @@
+(*
+ $Id: 10303-1211-arm-Cardinality_of_relationship.exp,v 1.4 2006/08/04 12:01:51 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2711 - ISO/TS 10303-1211 Cardinality of relationship - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG12 N1873
+*)
+
+SCHEMA Cardinality_of_relationship_arm;
+
+USE FROM Maths_space_arm;    -- ISO/TS 10303-1091
+
+TYPE relationship_select = EXTENSIBLE SELECT;
+END_TYPE; 
+
+
+ENTITY Cardinality_of_related_class;
+  cardinality : Maths_space;
+  relationship : relationship_select;
+END_ENTITY;
+
+ENTITY Cardinality_of_relating_class;
+  cardinality : Maths_space;
+  relationship : relationship_select;
+END_ENTITY;
+
+END_SCHEMA;

@@ -1,0 +1,40 @@
+(*
+ $Id: 10303-1042-arm-work_request.exp,v 1.5 2006/08/07 07:44:42 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2947 - ISO/TS 10303-1042 Work request - EXPRESS ARM
+*)
+
+
+
+SCHEMA Work_request_arm; 
+
+USE FROM Activity_method_arm;    -- ISO/TS 10303-1049
+
+
+TYPE affected_item_select = EXTENSIBLE SELECT;
+END_TYPE; 
+
+ENTITY Activity_method_assignment;
+  relation_type : STRING;
+  assigned_method : Activity_method;
+  associated_request : Work_request;
+END_ENTITY;
+
+ENTITY Affected_items_assignment;
+  assigned_work_request : Work_request;
+  items : SET[1:?] OF affected_item_select;
+END_ENTITY;
+
+ENTITY Work_request;
+  request_id : STRING;
+  version_id : STRING;
+  description : OPTIONAL STRING;
+  purpose : STRING;
+END_ENTITY;
+
+ENTITY Work_request_status;
+  status : STRING;
+  work_request : Work_request;
+END_ENTITY;
+
+END_SCHEMA;  -- Work_request_arm
+

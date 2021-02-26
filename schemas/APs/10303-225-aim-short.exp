@@ -1,0 +1,1872 @@
+(* 
+   AIM EXPRESS short form for ISO/DIS 10303-225:1996
+   Wolfgang Haas
+*)
+
+SCHEMA building_design_schema;
+
+   USE FROM action_schema                                  -- ISO 10303-41
+   (action_request_solution,
+    action_request_status,
+    versioned_action_request);
+
+   USE FROM application_context_schema                     -- ISO 10303-41
+   (application_context,
+    application_protocol_definition);
+
+   USE FROM approval_schema                                -- ISO 10303-41
+   (approval_date_time,
+    approval_person_organization);
+
+   USE FROM date_time_schema                               -- ISO 10303-41
+   (calendar_date,
+    ordinal_date,
+    week_of_year_and_day_date);
+
+   USE FROM document_schema                                -- ISO 10303-41
+   (document_usage_constraint);
+
+   USE FROM geometric_model_schema                         -- ISO 10303-42
+   (block,
+    boolean_operand,
+    boolean_result,
+    brep_with_voids,
+    csg_solid,
+    extruded_area_solid,
+    faceted_brep,
+    geometric_curve_set,
+    geometric_set,
+    manifold_solid_brep,
+    revolved_area_solid,
+    right_circular_cone,
+    right_circular_cylinder,
+    solid_model,
+    sphere,
+    torus);
+
+   USE FROM geometry_schema                                -- ISO 10303-42
+   (axis2_placement_2d,
+    axis2_placement_3d,
+    bezier_curve,
+    bezier_surface,
+    b_spline_curve_with_knots,
+    b_spline_surface_with_knots,
+    cartesian_point,
+    cartesian_transformation_operator_3d,
+    circle,
+    conical_surface,
+    curve,
+    curve_bounded_surface,
+    cylindrical_surface,
+    degenerate_toroidal_surface,
+    direction,
+    ellipse,
+    geometric_representation_context,
+    hyperbola,
+    intersection_curve,
+    line,
+    outer_boundary_curve,
+    parabola,
+    pcurve,
+    placement,
+    plane,
+    polyline,
+    quasi_uniform_curve,
+    quasi_uniform_surface,
+    rational_b_spline_curve,
+    rational_b_spline_surface,
+    rectangular_composite_surface,
+    rectangular_trimmed_surface,
+    spherical_surface,
+    surface,
+    surface_curve,
+    surface_of_linear_extrusion,
+    surface_of_revolution,
+    surface_patch,
+    swept_surface,
+    toroidal_surface,
+    trimmed_curve,
+    uniform_curve,
+    uniform_surface,
+    vector);
+
+   USE FROM group_schema                                   -- ISO 10303-41
+   (group);
+
+   USE FROM management_resources_schema                    -- ISO 10303-41
+   (action_assignment,
+    approval_assignment,
+    date_assignment,
+    document_reference,
+    group_assignment,
+    name_assignment,
+    organization_assignment,
+    person_and_organization_assignment,
+    person_assignment);
+
+   USE FROM measure_schema                                 -- ISO 10303-41
+   (conversion_based_unit,
+    derived_unit,
+    global_unit_assigned_context,
+    length_measure,
+    length_measure_with_unit,
+    length_unit,
+    parameter_value,
+    plane_angle_measure_with_unit,
+    plane_angle_measure,
+    plane_angle_unit,
+    positive_length_measure,
+    si_unit);
+
+   USE FROM person_organization_schema                     -- ISO 10303-41
+   (organizational_project);
+
+   USE FROM product_definition_schema                      -- ISO 10303-41
+   (product_category,
+    product_category_relationship,
+    product_definition,
+    product_definition_relationship,
+    product_related_product_category);
+
+   USE FROM product_property_definition_schema             -- ISO 10303-41
+   (characterized_object,
+    property_definition,
+    shape_aspect,
+    shape_aspect_relationship);
+
+   USE FROM product_property_representation_schema         -- ISO 10303-41
+   (shape_definition_representation,
+    shape_representation);
+
+   USE FROM product_structure_schema                       -- ISO 10303-44
+   (assembly_component_usage);
+
+   USE FROM qualified_measure_schema                       -- ISO 10303-45
+   (descriptive_representation_item,
+    measure_representation_item);
+
+   USE FROM representation_schema                          -- ISO 10303-43
+   (definitional_representation,
+    mapped_item,
+    parametric_representation_context,
+    representation_item,
+    representation_relationship_with_transformation);
+
+   USE FROM topology_schema                                -- ISO 10303-42
+   (closed_shell,
+    connected_face_set,
+    edge,
+    edge_curve,
+    edge_loop,
+    face,
+    face_bound,
+    face_outer_bound,
+    face_surface,
+    loop,
+    oriented_closed_shell,
+    oriented_edge,
+    path,
+    poly_loop,
+    vertex,
+    vertex_loop,
+    vertex_point);
+
+TYPE building_component_classification_item = SELECT
+   (negative_component,
+    positive_component,
+    opening,
+    recess);
+END_TYPE;
+
+TYPE building_design_approval_item = SELECT
+   (building_element_assembly,
+    building_element,
+    fixture_equipment_element,
+    service_element,
+    space_element,
+    structure_enclosure_element,
+    change,
+    positive_component,
+    negative_component);
+END_TYPE;
+
+TYPE building_design_change_item = SELECT
+   (identified_item,
+    resulting_item);
+END_TYPE;
+
+TYPE building_design_date_item = SELECT
+   (versioned_action_request);
+END_TYPE;
+
+TYPE building_design_organization_item = SELECT
+   (building,
+    building_item_identification_assignment,
+    versioned_action_request);
+END_TYPE;
+
+TYPE building_design_person_and_organization_item = SELECT
+   (versioned_action_request);
+END_TYPE;
+
+TYPE building_design_person_item = SELECT
+   (building,
+    building_item_identification_assignment,
+    versioned_action_request);
+END_TYPE;
+
+TYPE building_document_item = SELECT
+   (negative_component,
+    positive_component,
+    building_element,
+    fixture_equipment_element,
+    service_element,
+    space_element,
+    structure_enclosure_element,
+    building_component_classification_group,
+    product_category);
+END_TYPE;
+
+TYPE identified_item = SELECT
+   (building_element,
+    fixture_equipment_element,
+    service_element,
+    space_element,
+    structure_enclosure_element,
+    building_level,
+    building_section,
+    positive_component,
+    negative_component);
+END_TYPE;
+
+TYPE resulting_item = SELECT
+   (building_element,
+    fixture_equipment_element,
+    service_element,
+    space_element,
+    structure_enclosure_element,
+    positive_component,
+    negative_component);
+END_TYPE; 
+
+ENTITY advanced_brep_shape_representation
+  SUBTYPE OF (shape_representation);
+WHERE
+  WR1: SIZEOF (QUERY (it <* SELF.items |
+       NOT (SIZEOF (['FEATURE_BASED_PROCESS_PLANNING.MANIFOLD_SOLID_BREP',
+       'FEATURE_BASED_PROCESS_PLANNING.FACETED_BREP',
+       'FEATURE_BASED_PROCESS_PLANNING.MAPPED_ITEM',
+       'FEATURE_BASED_PROCESS_PLANNING.AXIS2_PLACEMENT_3D'] * 
+       TYPEOF(it)) = 1))) = 0;
+  WR2: SIZEOF (QUERY (it <* SELF.items | 
+       SIZEOF (['FEATURE_BASED_PROCESS_PLANNING.MANIFOLD_SOLID_BREP',
+       'FEATURE_BASED_PROCESS_PLANNING.MAPPED_ITEM'] * TYPEOF(it)) = 1)) 
+       >= 1;
+  WR3: SIZEOF (QUERY (msb <* QUERY (it <* SELF.items |
+       'FEATURE_BASED_PROCESS_PLANNING.MANIFOLD_SOLID_BREP' IN TYPEOF(it))
+       | NOT (SIZEOF (QUERY (csh <* msb_shells(msb) |
+       NOT (SIZEOF (QUERY (fcs <* csh.cfs_faces | 
+       NOT ('FEATURE_BASED_PROCESS_PLANNING.ADVANCED_FACE' IN 
+       TYPEOF(fcs)))) = 0))) = 0))) = 0;
+  WR4: SIZEOF (QUERY (msb <* QUERY (it <* items |
+       'FEATURE_BASED_PROCESS_PLANNING.MANIFOLD_SOLID_BREP' IN TYPEOF(it))
+       | 'FEATURE_BASED_PROCESS_PLANNING.ORIENTED_CLOSED_SHELL' IN 
+       TYPEOF (msb.outer))) = 0;
+  WR5: SIZEOF (QUERY (brv <* QUERY (it <* items |
+       'FEATURE_BASED_PROCESS_PLANNING.BREP_WITH_VOIDS' IN TYPEOF(it)) | 
+       NOT (SIZEOF (QUERY ( csh <* brv.voids |
+       csh.orientation))  = 0))) = 0;
+  WR6: SIZEOF (QUERY (mi <* QUERY (it <* items |
+       'FEATURE_BASED_PROCESS_PLANNING.MAPPED_ITEM' IN TYPEOF(it)) | 
+       NOT ('FEATURE_BASED_PROCESS_PLANNING.' + 
+       'ADVANCED_BREP_SHAPE_REPRESENTATION' IN
+       TYPEOF (mi.mapping_source.mapped_representation)))) = 0;
+END_ENTITY;
+
+ENTITY advanced_csg_shape_representation
+  SUBTYPE OF (shape_representation);
+WHERE
+  WR1: SIZEOF (QUERY (item <* SELF.items |
+       NOT (SIZEOF (['BUILDING_DESIGN_SCHEMA.CSG_SOLID',
+       'BUILDING_DESIGN_SCHEMA.EXTRUDED_AREA_SOLID',
+       'BUILDING_DESIGN_SCHEMA.REVOLVED_AREA_SOLID',
+       'BUILDING_DESIGN_SCHEMA.AXIS2_PLACEMENT_3D',
+       'BUILDING_DESIGN_SCHEMA.MAPPED_ITEM'] * TYPEOF (item)) = 1))) = 0;
+  WR2: SIZEOF (QUERY (item <* SELF.items |
+       SIZEOF (['BUILDING_DESIGN_SCHEMA.CSG_SOLID',
+       'BUILDING_DESIGN_SCHEMA.EXTRUDED_AREA_SOLID',
+       'BUILDING_DESIGN_SCHEMA.REVOLVED_AREA_SOLID',
+       'BUILDING_DESIGN_SCHEMA.MAPPED_ITEM'] * TYPEOF (item)) = 1)) >= 1; 
+  WR3: SIZEOF (QUERY (item <* SELF.items |
+       ('BUILDING_DESIGN_SCHEMA.CSG_SOLID' IN TYPEOF (item)) AND
+       (NOT (valid_advanced_csg_tree
+               (item\csg_solid.tree_root_expression))))) = 0;
+  WR4: SIZEOF (QUERY (mi <* QUERY (item <* SELF.items |
+       'BUILDING_DESIGN_SCHEMA.MAPPED_ITEM' IN TYPEOF (item)) |
+       NOT ('BUILDING_DESIGN_SCHEMA.ADVANCED_CSG_SHAPE_REPRESENTATION' IN
+       TYPEOF (mi\mapped_item.mapping_source.mapped_representation)))) = 0;
+END_ENTITY;
+
+ENTITY advanced_face
+  SUBTYPE OF (face_surface);
+WHERE
+  WR1 : SIZEOF (['FEATURE_BASED_PROCESS_PLANNING.ELEMENTARY_SURFACE',
+        'FEATURE_BASED_PROCESS_PLANNING.B_SPLINE_SURFACE',
+        'FEATURE_BASED_PROCESS_PLANNING.SWEPT_SURFACE'] *
+        TYPEOF (face_geometry)) = 1;
+  WR2 : SIZEOF (QUERY (elp_fbnds <* QUERY (bnds <* SELF.bounds |
+        'FEATURE_BASED_PROCESS_PLANNING.EDGE_LOOP' IN
+        TYPEOF (bnds.bound)) |
+        NOT (SIZEOF (QUERY (oe <* elp_fbnds.bound\path.edge_list |
+        NOT('FEATURE_BASED_PROCESS_PLANNING.EDGE_CURVE' IN
+        TYPEOF(oe.edge_element)))) = 0))) = 0;
+  WR3 : SIZEOF (QUERY (elp_fbnds <* QUERY (bnds <* SELF.bounds |
+        'FEATURE_BASED_PROCESS_PLANNING.EDGE_LOOP' IN
+        TYPEOF (bnds.bound)) |
+        NOT (SIZEOF (QUERY (oe <* elp_fbnds.bound\path.edge_list |
+        NOT (SIZEOF (['FEATURE_BASED_PROCESS_PLANNING.LINE',
+        'FEATURE_BASED_PROCESS_PLANNING.CONIC',
+        'FEATURE_BASED_PROCESS_PLANNING.POLYLINE',
+        'FEATURE_BASED_PROCESS_PLANNING.SURFACE_CURVE',
+        'FEATURE_BASED_PROCESS_PLANNING.B_SPLINE_CURVE'] *
+        TYPEOF (oe.edge_element\edge_curve.edge_geometry)) = 1))) = 0))) 
+        = 0;
+  WR4 : SIZEOF (QUERY (elp_fbnds <* QUERY (bnds <* SELF.bounds |
+        'FEATURE_BASED_PROCESS_PLANNING.EDGE_LOOP' IN
+        TYPEOF (bnds.bound)) |
+        NOT (SIZEOF (QUERY (oe <* elp_fbnds.bound\path.edge_list |
+        NOT (((('FEATURE_BASED_PROCESS_PLANNING.VERTEX_POINT' IN
+        TYPEOF (oe.edge_start)) AND
+        ('FEATURE_BASED_PROCESS_PLANNING.CARTESIAN_POINT' IN
+        TYPEOF (oe.edge_start\vertex_point.vertex_geometry)))) AND
+        (('FEATURE_BASED_PROCESS_PLANNING.VERTEX_POINT' IN
+        TYPEOF (oe.edge_end)) AND
+        ('FEATURE_BASED_PROCESS_PLANNING.CARTESIAN_POINT' IN
+        TYPEOF (oe.edge_end\vertex_point.vertex_geometry)))))) = 0))) = 0;
+  WR5 : SIZEOF(QUERY (elp_fbnds <* QUERY (bnds <* SELF.bounds |
+        'FEATURE_BASED_PROCESS_PLANNING.EDGE_LOOP' IN
+         TYPEOF (bnds.bound)) |
+         'FEATURE_BASED_PROCESS_PLANNING.ORIENTED_PATH' IN
+         TYPEOF (elp_fbnds.bound))) = 0;
+  WR6 : (NOT ('FEATURE_BASED_PROCESS_PLANNING.SWEPT_SURFACE' IN
+        TYPEOF (face_geometry))) OR
+        (SIZEOF (['FEATURE_BASED_PROCESS_PLANNING.LINE',
+        'FEATURE_BASED_PROCESS_PLANNING.CONIC',
+        'FEATURE_BASED_PROCESS_PLANNING.POLYLINE',
+        'FEATURE_BASED_PROCESS_PLANNING.B_SPLINE_CURVE'] *
+        TYPEOF (face_geometry\swept_surface.swept_curve)) = 1);
+  WR7 : SIZEOF (QUERY (vlp_fbnds <* QUERY (bnds <* SELF.bounds |
+        'FEATURE_BASED_PROCESS_PLANNING.VERTEX_LOOP' IN
+        TYPEOF(bnds.bound)) |
+        NOT (('FEATURE_BASED_PROCESS_PLANNING.VERTEX_POINT' IN
+        TYPEOF (vlp_fbnds\face_bound.bound\vertex_loop.loop_vertex)) AND
+        ('FEATURE_BASED_PROCESS_PLANNING.CARTESIAN_POINT' IN
+        TYPEOF (vlp_fbnds\face_bound.bound\vertex_loop.
+        loop_vertex\vertex_point.vertex_geometry))))) = 0;
+  WR8 : SIZEOF (QUERY (bnd <* SELF.bounds |
+        NOT (SIZEOF (['FEATURE_BASED_PROCESS_PLANNING.EDGE_LOOP',
+        'FEATURE_BASED_PROCESS_PLANNING.VERTEX_LOOP'] *
+        TYPEOF(bnd.bound)) = 1))) = 0;
+  WR9 : SIZEOF (QUERY (elp_fbnds <* QUERY (bnds <* SELF.bounds |
+        'FEATURE_BASED_PROCESS_PLANNING.EDGE_LOOP' IN
+        TYPEOF (bnds.bound)) |
+        NOT (SIZEOF (QUERY (oe <* elp_fbnds.bound\path.edge_list |
+        ('FEATURE_BASED_PROCESS_PLANNING.SURFACE_CURVE' IN
+        TYPEOF (oe.edge_element\edge_curve.edge_geometry)) AND 
+        (NOT (SIZEOF (QUERY (sc_ag <* 
+        oe.edge_element\edge_curve.edge_geometry\
+        surface_curve.associated_geometry |
+        NOT ('FEATURE_BASED_PROCESS_PLANNING.PCURVE' IN
+        TYPEOF (sc_ag)))) = 0)))) = 0))) = 0;
+  WR10 : ((NOT ('FEATURE_BASED_PROCESS_PLANNING.SWEPT_SURFACE' IN
+         TYPEOF(face_geometry))) OR
+         ((NOT ('FEATURE_BASED_PROCESS_PLANNING.POLYLINE' IN
+         TYPEOF(face_geometry\swept_surface.swept_curve))) OR
+         (SIZEOF(face_geometry\swept_surface.swept_curve\polyline.points)
+         < 3))) AND
+         (SIZEOF (QUERY (elp_fbnds <* QUERY (bnds <* SELF.bounds |
+         'FEATURE_BASED_PROCESS_PLANNING.EDGE_LOOP' IN 
+         TYPEOF (bnds.bound)) |
+         NOT (SIZEOF (QUERY (oe <* elp_fbnds.bound\path.edge_list |
+         ('FEATURE_BASED_PROCESS_PLANNING.POLYLINE' IN
+         TYPEOF(oe.edge_element\edge_curve.edge_geometry)) AND 
+         (NOT (SIZEOF (oe.edge_element\edge_curve.edge_geometry\
+         polyline.points) < 3)))) = 0))) = 0);
+ END_ENTITY;
+
+ENTITY advanced_face_with_thickness_shape_representation
+  SUBTYPE OF (shape_representation, solid_model);
+WHERE
+  WR1: SIZEOF (SELF.items) = 2;
+  WR2: SIZEOF (QUERY (item <* SELF.items |
+       (SIZEOF (['BUILDING_DESIGN_SCHEMA.MEASURE_REPRESENTATION_ITEM',
+       'BUILDING_DESIGN_SCHEMA.LENGTH_MEASURE_WITH_UNIT'] * 
+       TYPEOF (item)) = 2) AND (item.name = 'thickness'))) = 1;
+  WR3: SIZEOF (QUERY (item <* SELF.items |
+       'BUILDING_DESIGN_SCHEMA.ADVANCED_FACE' IN TYPEOF (item))) = 1;
+END_ENTITY;
+
+ENTITY advanced_space_boundary_shape_representation
+  SUBTYPE OF (shape_representation);
+WHERE
+  WR1: SIZEOF (QUERY (item <* SELF.items | 
+       NOT (SIZEOF (['BUILDING_DESIGN_SCHEMA.CLOSED_SHELL',
+       'BUILDING_DESIGN_SCHEMA.MAPPED_ITEM',
+       'BUILDING_DESIGN_SCHEMA.AXIS2_PLACEMENT_3D'] * 
+       TYPEOF (item)) = 1))) = 0;
+  WR2: SIZEOF (QUERY (item <* SELF.items | 
+       SIZEOF (['BUILDING_DESIGN_SCHEMA.CLOSED_SHELL',
+       'BUILDING_DESIGN_SCHEMA.MAPPED_ITEM'] * TYPEOF (item)) = 1)) = 1;
+  WR3: SIZEOF (QUERY (csh <* QUERY (item <* SELF.items |
+       'BUILDING_DESIGN_SCHEMA.CLOSED_SHELL' IN TYPEOF (item)) |
+       NOT (SIZEOF (QUERY (fcs <* csh\connected_face_set.cfs_faces | 
+       NOT ('BUILDING_DESIGN_SCHEMA.ADVANCED_FACE' IN TYPEOF (fcs)))) 
+       = 0)))
+       = 0;
+  WR4: SIZEOF (QUERY (mi <* QUERY (item <* SELF.items |
+       'BUILDING_DESIGN_SCHEMA.MAPPED_ITEM' IN TYPEOF (item)) | 
+       NOT ('BUILDING_DESIGN_SCHEMA.' + 
+       'ADVANCED_SPACE_BOUNDARY_SHAPE_REPRESENTATION' IN
+       TYPEOF (mi\mapped_item.mapping_source.mapped_representation)))) = 0;
+END_ENTITY;
+
+ENTITY advanced_structural_wire_shape_representation
+  SUBTYPE OF (shape_representation);
+WHERE
+  WR1: SIZEOF (QUERY (item <* SELF.items |
+       NOT (SIZEOF (['BUILDING_DESIGN_SCHEMA.COMPOSITE_CURVE',
+       'BUILDING_DESIGN_SCHEMA.CIRCLE',
+       'BUILDING_DESIGN_SCHEMA.ELLIPSE',
+       'BUILDING_DESIGN_SCHEMA.B_SPLINE_CURVE',
+       'BUILDING_DESIGN_SCHEMA.OFFSET_CURVE_3D',
+       'BUILDING_DESIGN_SCHEMA.CURVE_REPLICA',
+       'BUILDING_DESIGN_SCHEMA.TRIMMED_CURVE', 
+       'BUILDING_DESIGN_SCHEMA.MAPPED_ITEM',
+       'BUILDING_DESIGN_SCHEMA.AXIS2_PLACEMENT_3D']
+       * TYPEOF (item) ) = 1))) = 0;
+  WR2: SIZEOF (QUERY (item <* SELF.items |
+       SIZEOF (['BUILDING_DESIGN_SCHEMA.COMPOSITE_CURVE',
+       'BUILDING_DESIGN_SCHEMA.CIRCLE',
+       'BUILDING_DESIGN_SCHEMA.ELLIPSE',
+       'BUILDING_DESIGN_SCHEMA.OFFSET_CURVE_3D',
+       'BUILDING_DESIGN_SCHEMA.CURVE_REPLICA',
+       'BUILDING_DESIGN_SCHEMA.TRIMMED_CURVE', 
+       'BUILDING_DESIGN_SCHEMA.MAPPED_ITEM'] * TYPEOF (item)) = 1)) = 1;
+  WR3: SIZEOF (QUERY (item <* SELF.items |
+       (SIZEOF (['BUILDING_DESIGN_SCHEMA.COMPOSITE_CURVE',
+       'BUILDING_DESIGN_SCHEMA.OFFSET_CURVE_3D',
+       'BUILDING_DESIGN_SCHEMA.CURVE_REPLICA',
+       'BUILDING_DESIGN_SCHEMA.TRIMMED_CURVE'] * TYPEOF (item)) = 1) AND
+       (NOT (valid_advanced_structural_wire_composition (item))))) = 0;
+  WR4: SIZEOF (QUERY (mi <* QUERY (item <* SELF.items |
+       'BUILDING_DESIGN_SCHEMA.MAPPED_ITEM' IN TYPEOF (item)) |
+       NOT ('BUILDING_DESIGN_SCHEMA.' + 
+       'ADVANCED_STRUCTURAL_WIRE_SHAPE_REPRESENTATION' IN
+       TYPEOF (mi\mapped_item.mapping_source.mapped_representation)))) = 0;
+END_ENTITY;
+
+ENTITY building
+  SUBTYPE OF (product_definition);
+WHERE
+  WR1: SIZEOF (QUERY (pdr <* USEDIN (SELF, 'BUILDING_DESIGN_SCHEMA.'+
+       'PRODUCT_DEFINITION_RELATIONSHIP.RELATING_PRODUCT_DEFINITION') |
+       'BUILDING_DESIGN_SCHEMA.BUILDING_SECTION'
+       IN TYPEOF (pdr.related_product_definition))) >= 1;
+  WR2: SIZEOF (QUERY (pdr <* USEDIN(SELF, 'BUILDING_DESIGN_SCHEMA.' +
+       'PRODUCT_DEFINITION_RELATIONSHIP.RELATED_PRODUCT_DEFINITION') |
+       'BUILDING_DESIGN_SCHEMA.BUILDING_COMPLEX'
+       IN TYPEOF (pdr.relating_product_definition))) = 1;
+END_ENTITY;
+
+ENTITY building_complex
+  SUBTYPE OF (product_definition);
+WHERE
+  WR1: SIZEOF (QUERY (pdr <* USEDIN (SELF, 'BUILDING_DESIGN_SCHEMA.' +
+       'PRODUCT_DEFINITION_RELATIONSHIP.RELATING_PRODUCT_DEFINITION') |
+       (pdr.name = 'in building complex')
+               AND
+               ('BUILDING_DESIGN_SCHEMA.BUILDING'
+       IN TYPEOF (pdr.related_product_definition)))) >= 1;
+  WR2: SIZEOF (QUERY (pa <* USEDIN (SELF, 'BUILDING_DESIGN_SCHEMA.' +
+       'BUILDING_DESIGN_PERSON_ASSIGNMENT.ITEMS') |
+       pa.role.name = 'owner'))+
+       SIZEOF (QUERY (oa <* USEDIN (SELF, 'BUILDING_DESIGN_SCHEMA.' +
+       'BUILDING_DESIGN_ORGANIZATION_ASSIGNMENT.ITEMS') |
+       oa.role.name = 'owner')) = 1;
+END_ENTITY;
+
+ENTITY building_component_classification_assignment
+  SUBTYPE OF (group_assignment);
+  items : SET[1:?] OF building_component_classification_item;
+END_ENTITY;
+
+ENTITY building_component_classification_group
+  SUBTYPE OF (group);
+WHERE
+  WR1: SIZEOF (QUERY (ga <* USEDIN (SELF, 'BUILDING_DESIGN_SCHEMA.' + 
+       'GROUP_ASSIGNMENT.ASSIGNED_GROUP') |
+       'BUILDING_DESIGN_SCHEMA.' + 
+         'BUILDING_COMPONENT_CLASSIFICATION_ASSIGNMENT' IN TYPEOF (ga))) 
+         >= 1;
+END_ENTITY;
+
+ENTITY building_design_approval
+  SUBTYPE OF (approval_assignment);
+  items : SET[1:?] OF building_design_approval_item;
+WHERE 
+  WR1: SIZEOF( QUERY( i <* SELF.items | 
+       SIZEOF (['BUILDING_DESIGN_SCHEMA.BUILDING', 
+       'BUILDING_DESIGN_SCHEMA.BUILDING_LEVEL', 
+       'BUILDING_DESIGN_SCHEMA.BUILDING_SECTION', 
+       'BUILDING_DESIGN_SCHEMA.ELEMENT_ASSEMBLY'] * 
+       TYPEOF(i)) = 1)) = 0; 
+END_ENTITY;
+
+ENTITY building_design_date_assignment
+  SUBTYPE OF (date_assignment);
+  items : SET[1:?] OF building_design_date_item;
+END_ENTITY;
+
+ENTITY building_design_organization_assignment
+  SUBTYPE OF (organization_assignment);
+  items : SET[1:?] OF building_design_organization_item;
+END_ENTITY;
+
+ENTITY building_design_person_and_organization_assignment
+  SUBTYPE OF (person_and_organization_assignment);
+  items : SET[1:?] OF building_design_person_and_organization_item;
+END_ENTITY;
+
+ENTITY building_design_person_assignment
+  SUBTYPE OF (person_assignment);
+  items : SET[1:?] OF building_design_person_item;
+END_ENTITY;
+
+ENTITY building_document_reference
+  SUBTYPE OF (document_reference);
+  items : SET[1:?] OF building_document_item;
+END_ENTITY;
+
+ENTITY building_element
+  SUBTYPE OF (product_definition);
+WHERE
+  WR1: SIZEOF (QUERY (pdr <* USEDIN(SELF, 'BUILDING_DESIGN_SCHEMA.' +
+          'PRODUCT_DEFINITION_RELATIONSHIP.RELATED_PRODUCT_DEFINITION') |
+         ('BUILDING_DESIGN_SCHEMA.BUILDING_SECTION'
+              IN TYPEOF (pdr.relating_product_definition))
+       )) = 1;
+  WR2: SIZEOF (USEDIN (SELF, 'BUILDING_DESIGN_SCHEMA.' +
+               'BUILDING_ITEM_IDENTIFICATION_ASSIGNMENT.ITEM')) = 1;
+  WR3: SIZEOF (QUERY (pd <* USEDIN (SELF, 'BUILDING_DESIGN_SCHEMA.'+
+                                'PROPERTY_DEFINITION.DEFINITION') |
+         SIZEOF (QUERY (sa <* USEDIN(pd, 'BUILDING_DESIGN_SCHEMA.'+
+                                  'SHAPE_ASPECT.OF_SHAPE') |
+           (('BUILDING_DESIGN_SCHEMA.POSITIVE_COMPONENT' IN TYPEOF (sa))
+           AND
+            (sa.description = 'main component'))
+         )) = 1
+       )) = 1;
+END_ENTITY;
+
+ENTITY building_element_assembly
+  SUBTYPE OF (product_definition);
+WHERE
+  WR1: SIZEOF (QUERY (pd <* USEDIN (SELF, 'BUILDING_DESIGN_SCHEMA.'+
+       'PROPERTY_DEFINITION.DEFINITION') |
+       'BUILDING_DESIGN_SCHEMA.PRODUCT_DEFINITION_SHAPE' 
+       IN TYPEOF (pd))) = 0;
+  WR2: SIZEOF (QUERY (acu <* QUERY (pdr <* USEDIN (SELF,
+       'BUILDING_DESIGN_SCHEMA.PRODUCT_DEFINITION_RELATIONSHIP.' + 
+       'RELATING_PRODUCT_DEFINITION') |
+       'BUILDING_DESIGN_SCHEMA.ASSEMBLY_COMPONENT_USAGE' IN 
+       TYPEOF (pdr)) |
+       SIZEOF (TYPEOF (acu.related_product_definition) *
+       ['BUILDING_DESIGN_SCHEMA.BUILDING_ELEMENT',
+       'BUILDING_DESIGN_SCHEMA.FIXTURE_EQUIPMENT_ELEMENT',
+       'BUILDING_DESIGN_SCHEMA.SERVICE_ELEMENT',
+       'BUILDING_DESIGN_SCHEMA.SPACE_ELEMENT',
+       'BUILDING_DESIGN_SCHEMA.STRUCTURE_ENCLOSURE_ELEMENT',
+       'BUILDING_DESIGN_SCHEMA.BUILDING_ELEMENT_ASSEMBLY']) = 1)) >= 1;
+END_ENTITY;
+
+ENTITY building_element_group
+  SUBTYPE OF (product_definition);
+WHERE
+  WR1: SIZEOF (QUERY (pd <* USEDIN (SELF, 'BUILDING_DESIGN_SCHEMA.'+
+       'PROPERTY_DEFINITION.DEFINITION') |
+       'BUILDING_DESIGN_SCHEMA.PRODUCT_DEFINITION_SHAPE'
+       IN TYPEOF (pd)) ) = 0;
+  WR2: SIZEOF (QUERY (pdr <* USEDIN (SELF, 'BUILDING_DESIGN_SCHEMA.'+
+       'PRODUCT_DEFINITION_RELATIONSHIP.RELATING_PRODUCT_DEFINITION') |
+       SIZEOF (TYPEOF (pdr.related_product_definition) *
+       ['BUILDING_DESIGN_SCHEMA.BUILDING_ELEMENT',
+       'BUILDING_DESIGN_SCHEMA.FIXTURE_EQUIPMENT_ELEMENT',
+       'BUILDING_DESIGN_SCHEMA.SERVICE_ELEMENT',
+       'BUILDING_DESIGN_SCHEMA.SPACE_ELEMENT',
+       'BUILDING_DESIGN_SCHEMA.STRUCTURE_ENCLOSURE_ELEMENT',
+       'BUILDING_DESIGN_SCHEMA.BUILDING_ELEMENT_GROUP']) = 1)) >= 1;
+END_ENTITY;
+
+ENTITY building_item_identification_assignment
+  SUBTYPE OF (name_assignment);
+  item : identified_item;
+END_ENTITY;
+
+ENTITY building_level
+  SUBTYPE OF (product_definition);
+WHERE
+  WR1: SIZEOF (QUERY (pdr <* USEDIN (SELF, 'BUILDING_DESIGN_SCHEMA.' +
+       'PRODUCT_DEFINITION_RELATIONSHIP.RELATED_PRODUCT_DEFINITION') |
+       'BUILDING_DESIGN_SCHEMA.BUILDING_SECTION' IN
+              TYPEOF (pdr.relating_product_definition))) = 1;
+  WR2: SIZEOF (USEDIN (SELF, 'BUILDING_DESIGN_SCHEMA.' +
+       'BUILDING_ITEM_IDENTIFICATION_ASSIGNMENT.ITEM')) <= 1;
+  WR3: SIZEOF (QUERY (pd <* USEDIN (SELF, 'BUILDING_DESIGN_SCHEMA.'+
+       'PROPERTY_DEFINITION.DEFINITION') |
+       NOT (SIZEOF (QUERY (pdr <* USEDIN (pd, 'BUILDING_DESIGN_SCHEMA.' +
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |
+       NOT (SIZEOF (TYPEOF (pdr.used_representation) *
+       ['BUILDING_DESIGN_SCHEMA.' +
+       'ADVANCED_SPACE_BOUNDARY_SHAPE_REPRESENTATION',
+       'BUILDING_DESIGN_SCHEMA.' +
+       'ELEMENTARY_SPACE_BOUNDARY_SHAPE_REPRESENTATION',
+       'BUILDING_DESIGN_SCHEMA.FACETED_SPACE_BOUNDARY_SHAPE_REPRESENTATION',
+       'BUILDING_DESIGN_SCHEMA.' +
+       'GROUND_FACE_SPACE_BOUNDARY_SHAPE_REPRESENTATION']) = 1))) = 0))) 
+       = 0;
+END_ENTITY;
+
+ENTITY building_section
+  SUBTYPE OF (product_definition);
+WHERE
+  WR1: SIZEOF (QUERY (pdr <* USEDIN(SELF,'BUILDING_DESIGN_SCHEMA.'+
+       'PRODUCT_DEFINITION_RELATIONSHIP.RELATED_PRODUCT_DEFINITION') |
+       'BUILDING_DESIGN_SCHEMA.BUILDING' IN 
+       TYPEOF (pdr.relating_product_definition))) = 1;
+  WR2: SIZEOF (USEDIN (SELF, 'BUILDING_DESIGN_SCHEMA.' +
+       'BUILDING_ITEM_IDENTIFICATION_ASSIGNMENT.ITEM')) = 1;
+  WR3: SIZEOF (QUERY (pdr <* USEDIN (SELF,'BUILDING_DESIGN_SCHEMA.' +
+       'PRODUCT_DEFINITION_RELATIONSHIP.RELATING_PRODUCT_DEFINITION') |
+       SIZEOF (TYPEOF (pdr.related_product_definition) *
+       ['BUILDING_DESIGN_SCHEMA.BUILDING_LEVEL',
+       'BUILDING_DESIGN_SCHEMA.BUILDING_ELEMENT',
+       'BUILDING_DESIGN_SCHEMA.FIXTURE_EQUIPMENT_ELEMENT',
+       'BUILDING_DESIGN_SCHEMA.SERVICE_ELEMENT',
+       'BUILDING_DESIGN_SCHEMA.SPACE_ELEMENT',
+       'BUILDING_DESIGN_SCHEMA.STRUCTURE_ENCLOSURE_ELEMENT']) = 1)) >= 1;
+END_ENTITY;
+
+ENTITY change
+  SUBTYPE OF (action_assignment);
+  items : SET[1:?] OF building_design_change_item;
+END_ENTITY;
+
+ENTITY classification_table
+  SUBTYPE OF (document_usage_constraint);
+WHERE
+  WR1: SIZEOF (QUERY (bddr <* QUERY (dr <* USEDIN (SELF.source,
+       'BUILDING_DESIGN_SCHEMA.DOCUMENT_REFERENCE.ASSIGNED_DOCUMENT') |
+       'BUILDING_DESIGN_SCHEMA.BUILDING_DOCUMENT_REFERENCE'
+       IN TYPEOF(dr)) |
+       NOT (SIZEOF (QUERY (item <* bddr.items |
+       NOT (SIZEOF (TYPEOF (item) * 
+       ['BUILDING_DESIGN_SCHEMA.PRODUCT_CATEGORY',
+       'BUILDING_DESIGN_SCHEMA.BUILDING_CLASSIFICATION_GROUP']) = 1)
+       )) = 0))) = 0;
+END_ENTITY;
+
+ENTITY elementary_csg_shape_representation
+  SUBTYPE OF (shape_representation);
+WHERE
+  WR1: SIZEOF (QUERY (item <* SELF.items |
+       NOT (SIZEOF (['BUILDING_DESIGN_SCHEMA.CSG_SOLID',
+       'BUILDING_DESIGN_SCHEMA.EXTRUDED_AREA_SOLID',
+       'BUILDING_DESIGN_SCHEMA.REVOLVED_AREA_SOLID',
+       'BUILDING_DESIGN_SCHEMA.AXIS2_PLACEMENT_3D',
+       'BUILDING_DESIGN_SCHEMA.MAPPED_ITEM'] * TYPEOF (item)) = 1))) = 0;
+  WR2: SIZEOF (QUERY (item <* SELF.items |
+       SIZEOF (['BUILDING_DESIGN_SCHEMA.CSG_SOLID',
+       'BUILDING_DESIGN_SCHEMA.EXTRUDED_AREA_SOLID',
+       'BUILDING_DESIGN_SCHEMA.REVOLVED_AREA_SOLID',
+       'BUILDING_DESIGN_SCHEMA.MAPPED_ITEM'] * TYPEOF (item)) = 1)) >= 1; 
+  WR3: SIZEOF (QUERY (item <* SELF.items |
+       ('BUILDING_DESIGN_SCHEMA.CSG_SOLID' IN TYPEOF (item)) AND
+       (NOT (valid_elementary_csg_tree
+              (item\csg_solid.tree_root_expression))))) = 0;
+  WR4: SIZEOF (QUERY (mi <* QUERY (item <* SELF.items |
+       'BUILDING_DESIGN_SCHEMA.MAPPED_ITEM' IN TYPEOF (item)) |
+       NOT ('BUILDING_DESIGN_SCHEMA.ELEMENTARY_CSG_SHAPE_REPRESENTATION' IN
+       TYPEOF(mi\mapped_item.mapping_source.mapped_representation)))) = 0;
+END_ENTITY;
+
+ENTITY elementary_face_with_thickness_shape_representation
+  SUBTYPE OF (shape_representation, solid_model);
+WHERE
+  WR1: SIZEOF (SELF.items) = 2;
+  WR2: SIZEOF (QUERY (item <* SELF.items |
+       (SIZEOF (['BUILDING_DESIGN_SCHEMA.MEASURE_REPRESENTATION_ITEM',
+       'BUILDING_DESIGN_SCHEMA.LENGTH_MEASURE_WITH_UNIT'] * 
+       TYPEOF (item)) = 2) AND (item.name = 'thickness'))) = 1;
+  WR3: SIZEOF (QUERY (item <* SELF.items |
+       'BUILDING_DESIGN_SCHEMA.FACE_SURFACE' IN TYPEOF (item))) = 1;
+  WR4: SIZEOF (QUERY (item <* SELF.items |
+       (NOT ('BUILDING_DESIGN_SCHEMA.FACE_SURFACE' IN TYPEOF (item))) OR
+       ('BUILDING_DESIGN_SCHEMA.ELEMENTARY_SURFACE' IN 
+       TYPEOF (item\face_surface.face_geometry)))) = 0;
+  WR5: SIZEOF (QUERY (item <* SELF.items |
+       ('BUILDING_DESIGN_SCHEMA.FACE_SURFACE' IN TYPEOF (item)) AND
+       (NOT (SIZEOF (QUERY (elp_fbnds <* QUERY (bnds <* item\face.bounds |
+       'BUILDING_DESIGN_SCHEMA.EDGE_LOOP' IN TYPEOF (bnds.bound)) |
+       NOT (SIZEOF (QUERY (oe <* elp_fbnds.bound\path.edge_list |
+       NOT ('BUILDING_DESIGN_SCHEMA.EDGE_CURVE' IN
+       TYPEOF(oe.edge_element)))) = 0))) = 0)))) = 0;
+  WR6: SIZEOF (QUERY (item <* SELF.items |
+       ('BUILDING_DESIGN_SCHEMA.FACE_SURFACE' IN TYPEOF (item)) AND
+       (NOT (SIZEOF (QUERY (elp_fbnds <* QUERY (bnds <* item\face.bounds |
+       'BUILDING_DESIGN_SCHEMA.EDGE_LOOP' IN TYPEOF (bnds.bound)) |
+       NOT (SIZEOF (QUERY (oe <* elp_fbnds.bound\path.edge_list |
+       NOT (SIZEOF (['BUILDING_DESIGN_SCHEMA.LINE',
+       'BUILDING_DESIGN_SCHEMA.CONIC',
+       'BUILDING_DESIGN_SCHEMA.POLYLINE',
+       'BUILDING_DESIGN_SCHEMA.B_SPLINE_CURVE'] *
+       TYPEOF (oe.edge_element\edge_curve.edge_geometry)) = 1)))
+       = 0))) = 0)))) = 0; 
+  WR7: SIZEOF (QUERY (item <* SELF.items |
+       ('BUILDING_DESIGN_SCHEMA.FACE_SURFACE' IN TYPEOF (item)) AND
+       (NOT (SIZEOF (QUERY (vlp_fbnds <* QUERY (bnds <* item\face.bounds |
+       'BUILDING_DESIGN_SCHEMA.VERTEX_LOOP' IN TYPEOF (bnds.bound)) |
+       NOT (('BUILDING_DESIGN_SCHEMA.VERTEX_POINT' IN
+       TYPEOF(vlp_fbnds\face_bound.bound\vertex_loop.loop_vertex)) AND
+       ('BUILDING_DESIGN_SCHEMA.CARTESIAN_POINT' IN
+       TYPEOF(vlp_fbnds\face_bound.bound\vertex_loop.
+       loop_vertex\vertex_point.vertex_geometry))))) =  0)))) = 0;
+END_ENTITY;
+
+ENTITY elementary_geometric_shape_representation
+  SUBTYPE OF (shape_representation);
+WHERE
+  WR1: SIZEOF (QUERY (item <* SELF.items |
+       NOT (SIZEOF (['BUILDING_DESIGN_SCHEMA.MANIFOLD_SOLID_BREP',
+       'BUILDING_DESIGN_SCHEMA.FACETED_BREP',
+       'BUILDING_DESIGN_SCHEMA.MAPPED_ITEM',
+       'BUILDING_DESIGN_SCHEMA.AXIS2_PLACEMENT_3D'] *
+       TYPEOF (item)) = 1))) = 0;
+   WR2: SIZEOF (QUERY (item <* SELF.items |
+        SIZEOF (['BUILDING_DESIGN_SCHEMA.MANIFOLD_SOLID_BREP',
+        'BUILDING_DESIGN_SCHEMA.MAPPED_ITEM'] * TYPEOF (item)) =1 )) > 0;
+   WR3: SIZEOF (QUERY (msb <* QUERY (item <* SELF.items |
+        'BUILDING_DESIGN_SCHEMA.MANIFOLD_SOLID_BREP' IN TYPEOF (item)) |
+        NOT (SIZEOF (QUERY (csh <* 
+        msb_shells (msb) |
+        NOT (SIZEOF (QUERY (fcs <* csh.cfs_faces |
+        NOT ('BUILDING_DESIGN_SCHEMA.FACE_SURFACE' IN TYPEOF (fcs)))) = 0
+        ))) = 0))) = 0;
+   WR4: SIZEOF (QUERY (msb <* QUERY (item <* SELF.items |
+        'BUILDING_DESIGN_SCHEMA.MANIFOLD_SOLID_BREP' IN TYPEOF (item)) |
+        NOT (SIZEOF (QUERY (csh <* 
+        msb_shells (msb) |
+        NOT (SIZEOF (QUERY (fcs <* csh\connected_face_set.cfs_faces |
+        NOT(('BUILDING_DESIGN_SCHEMA.ELEMENTARY_SURFACE' IN
+        TYPEOF (fcs\face_surface.face_geometry))))) = 0))) = 0))) = 0;
+   WR5: SIZEOF (QUERY (msb <* QUERY (item <* SELF.items |
+        'BUILDING_DESIGN_SCHEMA.MANIFOLD_SOLID_BREP' IN TYPEOF (item)) |
+        NOT (SIZEOF (QUERY (csh <* 
+        msb_shells (msb) |
+        NOT (SIZEOF (QUERY (fcs <* csh\connected_face_set.cfs_faces |
+        NOT (SIZEOF (QUERY (elp_fbnds <* QUERY (bnds <* fcs.bounds |
+        'BUILDING_DESIGN_SCHEMA.EDGE_LOOP' IN TYPEOF (bnds.bound)) |
+        NOT (SIZEOF (QUERY (oe <* elp_fbnds.bound\path.edge_list |
+        NOT('BUILDING_DESIGN_SCHEMA.EDGE_CURVE' IN
+        TYPEOF (oe.edge_element)))) = 0))) = 0))) = 0))) = 0))) = 0;
+   WR6: SIZEOF (QUERY (msb <* QUERY (item <* SELF.items |
+        'BUILDING_DESIGN_SCHEMA.MANIFOLD_SOLID_BREP' IN TYPEOF (item)) |
+        NOT (SIZEOF (QUERY (csh <* 
+        msb_shells (msb) |
+        NOT (SIZEOF (QUERY (fcs <* csh\connected_face_set.cfs_faces |
+        NOT (SIZEOF (QUERY (elp_fbnds <* QUERY (bnds <* fcs.bounds |
+        'BUILDING_DESIGN_SCHEMA.EDGE_LOOP' IN TYPEOF (bnds.bound)) |
+        NOT (SIZEOF (QUERY (oe <* elp_fbnds.bound\path.edge_list |
+        NOT (SIZEOF (['BUILDING_DESIGN_SCHEMA.LINE',
+        'BUILDING_DESIGN_SCHEMA.CONIC',
+        'BUILDING_DESIGN_SCHEMA.POLYLINE',
+        'BUILDING_DESIGN_SCHEMA.B_SPLINE_CURVE'] *
+        TYPEOF (oe.edge_element\edge_curve.edge_geometry)) = 1)))
+        = 0))) = 0))) = 0))) = 0))) = 0;
+   WR7: SIZEOF (QUERY (msb <* QUERY (item <* SELF.items |
+        'BUILDING_DESIGN_SCHEMA.MANIFOLD_SOLID_BREP' IN TYPEOF (item)) |
+        NOT (SIZEOF (QUERY (csh <* 
+        msb_shells (msb) |
+        NOT (SIZEOF (QUERY (fcs <* csh\connected_face_set.cfs_faces |
+        NOT (SIZEOF (QUERY (elp_fbnds <* QUERY (bnds <* fcs.bounds |
+        'BUILDING_DESIGN_SCHEMA.EDGE_LOOP' IN TYPEOF (bnds.bound)) |
+        NOT (SIZEOF (QUERY (oe <* elp_fbnds.bound\path.edge_list |
+        NOT(('BUILDING_DESIGN_SCHEMA.VERTEX_POINT' 
+          IN TYPEOF (oe.edge_start))
+        AND ('BUILDING_DESIGN_SCHEMA.VERTEX_POINT' 
+          IN TYPEOF (oe.edge_end)))))
+        = 0))) = 0))) = 0))) = 0))) = 0;
+   WR8: SIZEOF (QUERY (msb <* QUERY (item <* SELF.items |
+        'BUILDING_DESIGN_SCHEMA.MANIFOLD_SOLID_BREP' IN TYPEOF (item)) |
+        NOT (SIZEOF (QUERY (csh <* 
+        msb_shells (msb) |
+        NOT (SIZEOF (QUERY (fcs <* csh\connected_face_set.cfs_faces |
+        NOT (SIZEOF (QUERY (elp_fbnds <* QUERY (bnds <* fcs.bounds |
+        'BUILDING_DESIGN_SCHEMA.EDGE_LOOP' IN TYPEOF (bnds.bound)) |
+        'BUILDING_DESIGN_SCHEMA.ORIENTED_PATH' 
+          IN TYPEOF (elp_fbnds.bound)))
+        = 0))) = 0))) = 0))) = 0;
+   WR9: SIZEOF (QUERY (msb <* QUERY (item <* SELF.items |
+        'BUILDING_DESIGN_SCHEMA.MANIFOLD_SOLID_BREP' IN TYPEOF(item)) |
+        'BUILDING_DESIGN_SCHEMA.ORIENTED_CLOSED_SHELL' IN TYPEOF
+        (msb\manifold_solid_brep.outer))) = 0;
+  WR10: SIZEOF (QUERY (brv <* QUERY (item <* SELF.items |
+        'BUILDING_DESIGN_SCHEMA.BREP_WITH_VOIDS' IN TYPEOF (item)) |
+        NOT (SIZEOF (QUERY (csh <* brv\brep_with_voids.voids |
+        csh\oriented_closed_shell.orientation)) = 0))) = 0;
+  WR11: SIZEOF (QUERY (mi <*  QUERY (item <* SELF.items |
+        'BUILDING_DESIGN_SCHEMA.MAPPED_ITEM' IN TYPEOF (item)) |
+        NOT ('BUILDING_DESIGN_SCHEMA.' +
+        'ELEMENTARY_GEOMETRIC_SHAPE_REPRESENTATION'
+        IN TYPEOF (mi\mapped_item.mapping_source.
+        mapped_representation)))) = 0;
+  WR12: SIZEOF (QUERY (msb <* QUERY (item <* SELF.items |
+        'BUILDING_DESIGN_SCHEMA.MANIFOLD_SOLID_BREP' IN TYPEOF (item)) |
+        NOT (SIZEOF (QUERY (csh <* 
+        msb_shells (msb) |
+        NOT (SIZEOF (QUERY (fcs <* csh\connected_face_set.cfs_faces |
+        NOT (SIZEOF (QUERY (vlp_fbnds <* QUERY (bnds <* fcs.bounds |
+        'BUILDING_DESIGN_SCHEMA.VERTEX_LOOP' IN TYPEOF (bnds.bound)) |
+        NOT(('BUILDING_DESIGN_SCHEMA.VERTEX_POINT' IN
+        TYPEOF (vlp_fbnds\face_bound.bound\vertex_loop.loop_vertex)) AND
+        ('BUILDING_DESIGN_SCHEMA.CARTESIAN_POINT' IN
+        TYPEOF (vlp_fbnds\face_bound.bound\vertex_loop.
+        loop_vertex\vertex_point.vertex_geometry))
+        ))) = 0))) = 0))) = 0))) = 0;
+END_ENTITY;
+
+ENTITY elementary_space_boundary_shape_representation
+  SUBTYPE OF(shape_representation);
+WHERE
+  WR1: SIZEOF (QUERY (item <* SELF.items |
+       NOT (SIZEOF (['BUILDING_DESIGN_SCHEMA.CLOSED_SHELL',
+       'BUILDING_DESIGN_SCHEMA.MAPPED_ITEM',
+       'BUILDING_DESIGN_SCHEMA.AXIS2_PLACEMENT_3D']
+       * TYPEOF (item) ) = 1))) = 0;
+  WR2: SIZEOF (QUERY (item <* SELF.items |
+       SIZEOF (['BUILDING_DESIGN_SCHEMA.CLOSED_SHELL',
+       'BUILDING_DESIGN_SCHEMA.MAPPED_ITEM'] * TYPEOF (item)) = 1)) = 1;
+  WR3: SIZEOF (QUERY (mi <* QUERY (item <* SELF.items |
+       'BUILDING_DESIGN_SCHEMA.MAPPED_ITEM' IN TYPEOF (item)) |
+       NOT ('BUILDING_DESIGN_SCHEMA.' + 
+       'ELEMENTARY_SPACE_BOUNDARY_SHAPE_REPRESENTATION' IN
+       TYPEOF (mi\mapped_item.mapping_source.mapped_representation)))) = 0;
+  WR4: SIZEOF (QUERY (csh <* QUERY (item <* SELF.items |
+       'BUILDING_DESIGN_SCHEMA.CLOSED_SHELL' IN TYPEOF (item)) |
+       NOT (SIZEOF (QUERY (fcs <* csh\closed_shell.cfs_faces |
+       NOT ('BUILDING_DESIGN_SCHEMA.FACE_SURFACE' IN TYPEOF (fcs)))) = 0)))
+       = 0;
+  WR5: SIZEOF (QUERY (csh <* QUERY (item <* SELF.items |
+       'BUILDING_DESIGN_SCHEMA.CLOSED_SHELL' IN TYPEOF (item)) |
+       NOT (SIZEOF (QUERY (fcs <* csh\closed_shell.cfs_faces |
+       NOT ('BUILDING_DESIGN_SCHEMA.ELEMENTARY_SURFACE' IN
+       TYPEOF (fcs\face_surface.face_geometry)))) = 0))) = 0;
+  WR6: SIZEOF (QUERY (csh <* QUERY (item <* SELF.items |
+       'BUILDING_DESIGN_SCHEMA.CLOSED_SHELL' IN TYPEOF (item)) |
+       NOT (SIZEOF (QUERY (fcs <* csh\closed_shell.cfs_faces |
+       NOT (SIZEOF (QUERY (elp_fbnds <* QUERY (bnds <* fcs.bounds |
+       'BUILDING_DESIGN_SCHEMA.EDGE_LOOP' IN TYPEOF (bnds.bound)) |
+       NOT (SIZEOF (QUERY (oe <* elp_fbnds.bound\path.edge_list |
+       NOT ('BUILDING_DESIGN_SCHEMA.EDGE_CURVE' IN
+       TYPEOF (oe.edge_element)))) = 0))) = 0))) = 0))) = 0;
+  WR7: SIZEOF (QUERY (csh <* QUERY (item <* SELF.items |
+       'BUILDING_DESIGN_SCHEMA.CLOSED_SHELL' IN TYPEOF (item)) |
+       NOT (SIZEOF (QUERY (fcs <* csh\closed_shell.cfs_faces |
+       NOT (SIZEOF (QUERY (elp_fbnds <* QUERY (bnds <* fcs.bounds |
+       'BUILDING_DESIGN_SCHEMA.EDGE_LOOP' IN TYPEOF (bnds.bound)) |
+       NOT (SIZEOF (QUERY (oe <* elp_fbnds.bound\path.edge_list |
+       NOT (SIZEOF (['BUILDING_DESIGN_SCHEMA.LINE',
+       'BUILDING_DESIGN_SCHEMA.CONIC',
+       'BUILDING_DESIGN_SCHEMA.POLYLINE',
+       'BUILDING_DESIGN_SCHEMA.B_SPLINE_CURVE'] *
+       TYPEOF (oe.edge_element\edge_curve.edge_geometry)) = 1)))
+       = 0))) = 0))) = 0))) = 0;
+  WR8: SIZEOF (QUERY (csh <* QUERY (item <* SELF.items |
+       'BUILDING_DESIGN_SCHEMA.CLOSED_SHELL' IN TYPEOF (item)) |
+       NOT (SIZEOF (QUERY (fcs <* csh\closed_shell.cfs_faces |
+       NOT (SIZEOF (QUERY (elp_fbnds <* QUERY (bnds <* fcs.bounds |
+       'BUILDING_DESIGN_SCHEMA.EDGE_LOOP' IN TYPEOF (bnds.bound)) |
+       NOT (SIZEOF (QUERY (oe <* elp_fbnds.bound\path.edge_list |
+       NOT(('BUILDING_DESIGN_SCHEMA.VERTEX_POINT' 
+         IN TYPEOF (oe.edge_start))
+       AND ('BUILDING_DESIGN_SCHEMA.VERTEX_POINT' 
+         IN TYPEOF (oe.edge_end)))))
+       = 0))) = 0))) = 0))) = 0;
+  WR9: SIZEOF (QUERY (csh <* QUERY (item <* SELF.items |
+       'BUILDING_DESIGN_SCHEMA.CLOSED_SHELL' IN TYPEOF (item)) |
+       NOT (SIZEOF (QUERY (fcs <* csh\connected_face_set.cfs_faces |
+       NOT (SIZEOF (QUERY (elp_fbnds <* QUERY (bnds <* fcs.bounds |
+       'BUILDING_DESIGN_SCHEMA.EDGE_LOOP' IN TYPEOF (bnds.bound)) |
+       'BUILDING_DESIGN_SCHEMA.ORIENTED_PATH' IN TYPEOF (elp_fbnds.bound)))
+       = 0))) = 0))) = 0;
+ WR10: SIZEOF (QUERY (csh <* QUERY (item <* SELF.items |
+       'BUILDING_DESIGN_SCHEMA.CLOSED_SHELL' IN TYPEOF (item)) |
+       NOT (SIZEOF (QUERY (fcs <* csh\closed_shell.cfs_faces |
+       NOT (SIZEOF (QUERY (vlp_fbnds <* QUERY (bnds <* fcs.bounds |
+       'BUILDING_DESIGN_SCHEMA.VERTEX_LOOP' IN TYPEOF (bnds.bound)) |
+       NOT (('BUILDING_DESIGN_SCHEMA.VERTEX_POINT' IN
+       TYPEOF (vlp_fbnds\face_bound.bound\vertex_loop.loop_vertex)) AND
+       ('BUILDING_DESIGN_SCHEMA.CARTESIAN_POINT' IN
+       TYPEOF (vlp_fbnds\face_bound.bound\vertex_loop.
+       loop_vertex\vertex_point.vertex_geometry))
+       ))) = 0))) = 0))) = 0;
+END_ENTITY;
+
+ENTITY elementary_structural_wire_shape_representation
+  SUBTYPE OF (shape_representation);
+WHERE
+  WR1: SIZEOF (QUERY (item <* SELF.items |
+       NOT (SIZEOF (['BUILDING_DESIGN_SCHEMA.COMPOSITE_CURVE',
+       'BUILDING_DESIGN_SCHEMA.CIRCLE',
+       'BUILDING_DESIGN_SCHEMA.ELLIPSE',
+       'BUILDING_DESIGN_SCHEMA.TRIMMED_CURVE', 
+       'BUILDING_DESIGN_SCHEMA.MAPPED_ITEM',
+       'BUILDING_DESIGN_SCHEMA.AXIS2_PLACEMENT_3D']
+       * TYPEOF (item) ) = 1))) = 0;
+  WR2: SIZEOF (QUERY (item <* SELF.items |
+       SIZEOF (['BUILDING_DESIGN_SCHEMA.COMPOSITE_CURVE',
+       'BUILDING_DESIGN_SCHEMA.CIRCLE',
+       'BUILDING_DESIGN_SCHEMA.ELLIPSE',
+       'BUILDING_DESIGN_SCHEMA.TRIMMED_CURVE', 
+       'BUILDING_DESIGN_SCHEMA.MAPPED_ITEM'] * TYPEOF (item)) = 1)) = 1;
+  WR3: SIZEOF (QUERY (item <* SELF.items |
+       (SIZEOF (['BUILDING_DESIGN_SCHEMA.COMPOSITE_CURVE',
+       'BUILDING_DESIGN_SCHEMA.TRIMMED_CURVE'] * TYPEOF (item)) = 1) AND
+       (NOT (valid_elementary_structural_wire_composition (item))))) = 0;
+  WR4: SIZEOF (QUERY (mi <* QUERY (item <* SELF.items |
+       'BUILDING_DESIGN_SCHEMA.MAPPED_ITEM' IN TYPEOF (item)) |
+       NOT ('BUILDING_DESIGN_SCHEMA.' + 
+       'ELEMENTARY_STRUCTURAL_WIRE_SHAPE_REPRESENTATION' IN
+       TYPEOF (mi\mapped_item.mapping_source.mapped_representation)))) = 0;
+END_ENTITY;
+
+ENTITY faceted_csg_shape_representation
+  SUBTYPE OF(shape_representation);
+WHERE
+  WR1: SIZEOF (QUERY (item <* SELF.items |
+       NOT (SIZEOF (['BUILDING_DESIGN_SCHEMA.CSG_SOLID',
+       'BUILDING_DESIGN_SCHEMA.AXIS2_PLACEMENT_3D',
+       'BUILDING_DESIGN_SCHEMA.MAPPED_ITEM'] *
+       TYPEOF (item)) = 1))) = 0;
+  WR2: SIZEOF (QUERY (item <* SELF.items |
+       NOT (SIZEOF (['BUILDING_DESIGN_SCHEMA.CSG_SOLID',
+       'BUILDING_DESIGN_SCHEMA.MAPPED_ITEM'] *
+       TYPEOF (item)) = 1))) >= 1;
+  WR3: SIZEOF (QUERY (item <* SELF.items |
+       ('BUILDING_DESIGN_SCHEMA.CSG_SOLID' IN TYPEOF (item)) AND
+       (NOT (valid_faceted_csg_tree
+       (item\csg_solid.tree_root_expression))))) = 0;
+  WR4: SIZEOF (QUERY (mi <* QUERY (item <* SELF.items |
+       'BUILDING_DESIGN_SCHEMA.MAPPED_ITEM' IN TYPEOF (item)) |
+       NOT ('BUILDING_DESIGN_SCHEMA.FACETED_CSG_SHAPE_REPRESENTATION' IN
+       TYPEOF (mi\mapped_item.mapping_source.mapped_representation)))) = 0;
+END_ENTITY;
+
+ENTITY faceted_face_with_thickness_shape_representation
+  SUBTYPE OF (shape_representation, solid_model);
+WHERE
+  WR1: SIZEOF (SELF.items) = 2;
+  WR2: SIZEOF (QUERY (item <* SELF.items |
+       (SIZEOF (['BUILDING_DESIGN_SCHEMA.MEASURE_REPRESENTATION_ITEM',
+       'BUILDING_DESIGN_SCHEMA.LENGTH_MEASURE_WITH_UNIT'] * 
+       TYPEOF (item)) = 2) AND (item.name = 'thickness'))) = 1;
+  WR3: SIZEOF (QUERY (item <* SELF.items |
+       'BUILDING_DESIGN_SCHEMA.FACE' IN TYPEOF (item))) = 1;
+  WR4: SIZEOF (QUERY (item <* SELF.items |
+       ('BUILDING_DESIGN_SCHEMA.FACE' IN TYPEOF (item)) AND
+       (NOT (SIZEOF (QUERY (bnds <* item\face.bounds |
+       NOT ('BUILDING_DESIGN_SCHEMA.POLY_LOOP' IN TYPEOF (bnds.bound)))) 
+       = 0)))) = 0;
+  WR5: SIZEOF (QUERY (item <* SELF.items |
+       (NOT ('BUILDING_DESIGN_SCHEMA.FACE_SURFACE' IN TYPEOF (item))) OR
+       ('BUILDING_DESIGN_SCHEMA.PLANE' IN 
+       TYPEOF (item\face_surface.face_geometry)))) = 0;
+END_ENTITY;
+
+ENTITY faceted_geometric_shape_representation
+  SUBTYPE OF(shape_representation);
+WHERE
+  WR1: SIZEOF (QUERY (item <* SELF.items |
+       NOT (SIZEOF (['BUILDING_DESIGN_SCHEMA.FACETED_BREP',
+       'BUILDING_DESIGN_SCHEMA.AXIS2_PLACEMENT_3D',
+       'BUILDING_DESIGN_SCHEMA.MAPPED_ITEM'] *
+       TYPEOF (item)) = 1))) = 0;
+  WR2: SIZEOF (QUERY (item <* SELF.items |
+       SIZEOF (['BUILDING_DESIGN_SCHEMA.FACETED_BREP',
+       'BUILDING_DESIGN_SCHEMA.MAPPED_ITEM'] *
+       TYPEOF (item)) = 1)) >= 1;
+  WR3: SIZEOF (QUERY (msb <* QUERY (item <* SELF.items |
+       'BUILDING_DESIGN_SCHEMA.FACETED_BREP' IN TYPEOF (item)) |
+       NOT (SIZEOF (QUERY (csh <* 
+       msb_shells (msb) |
+       NOT (SIZEOF (QUERY (fcs <* csh\connected_face_set.cfs_faces |
+       NOT (SIZEOF (QUERY (bnds <* fcs.bounds |
+       NOT ('BUILDING_DESIGN_SCHEMA.POLY_LOOP' IN TYPEOF (bnds.bound)))) 
+       = 0))) = 0))) = 0))) = 0;
+  WR4: SIZEOF (QUERY (msb <* QUERY (item <* SELF.items |
+       'BUILDING_DESIGN_SCHEMA.FACETED_BREP' IN TYPEOF (item)) |
+       NOT (SIZEOF (QUERY (csh <* 
+       msb_shells (msb) |
+       NOT (SIZEOF (QUERY (fcs <* csh.cfs_faces |
+       ('BUILDING_DESIGN_SCHEMA.FACE_SURFACE' IN TYPEOF (fcs)) AND
+       (NOT ('BUILDING_DESIGN_SCHEMA.PLANE' IN 
+       TYPEOF (fcs\face_surface.face_geometry))))) = 0))) = 0))) = 0;
+  WR5: SIZEOF (QUERY (mi <* QUERY (item <* SELF.items |
+       'BUILDING_DESIGN_SCHEMA.MAPPED_ITEM' IN TYPEOF (item)) |
+       NOT ('BUILDING_DESIGN_SCHEMA.FACETED_GEOMETRIC_SHAPE_REPRESENTATION'
+       IN TYPEOF (mi\mapped_item.mapping_source.mapped_representation)))) 
+       = 0; 
+END_ENTITY;
+
+ENTITY faceted_space_boundary_shape_representation
+  SUBTYPE OF (shape_representation);
+WHERE
+  WR1: SIZEOF (QUERY (item <* SELF.items |
+       NOT (SIZEOF (['BUILDING_DESIGN_SCHEMA.CLOSED_SHELL',
+       'BUILDING_DESIGN_SCHEMA.MAPPED_ITEM',
+       'BUILDING_DESIGN_SCHEMA.AXIS2_PLACEMENT_3D']
+       * TYPEOF (item)) = 1))) = 0;
+  WR2: SIZEOF (QUERY (item <* SELF.items |
+       SIZEOF (['BUILDING_DESIGN_SCHEMA.CLOSED_SHELL',
+       'BUILDING_DESIGN_SCHEMA.MAPPED_ITEM'] * TYPEOF (item)) = 1)) = 1;
+  WR3: SIZEOF (QUERY (csh <* QUERY (item <* SELF.items |
+       'BUILDING_DESIGN_SCHEMA.CLOSED_SHELL' IN TYPEOF (item)) |
+       NOT (SIZEOF (QUERY (fcs <* csh\connected_face_set.cfs_faces |
+       NOT (SIZEOF (QUERY (bnds <* fcs.bounds |
+       NOT ('BUILDING_DESIGN_SCHEMA.POLY_LOOP' IN TYPEOF (bnds.bound)))) 
+       = 0))) = 0))) = 0;
+  WR4: SIZEOF (QUERY (mi <* QUERY (item <* SELF.items |
+       'BUILDING_DESIGN_SCHEMA.MAPPED_ITEM' IN TYPEOF (item)) |
+       NOT ('BUILDING_DESIGN_SCHEMA.' + 
+       'FACETED_SPACE_BOUNDARY_SHAPE_REPRESENTATION' IN
+       TYPEOF (mi\mapped_item.mapping_source.mapped_representation)))) = 0;
+END_ENTITY;
+
+ENTITY faceted_structural_wire_shape_representation
+  SUBTYPE OF (shape_representation);
+WHERE
+  WR1: SIZEOF (QUERY (item <* SELF.items |
+       NOT (SIZEOF (['BUILDING_DESIGN_SCHEMA.COMPOSITE_CURVE',
+       'BUILDING_DESIGN_SCHEMA.POLYLINE',
+       'BUILDING_DESIGN_SCHEMA.TRIMMED_CURVE', 
+       'BUILDING_DESIGN_SCHEMA.MAPPED_ITEM',
+       'BUILDING_DESIGN_SCHEMA.AXIS2_PLACEMENT_3D']
+       * TYPEOF (item) ) = 1))) = 0;
+  WR2: SIZEOF (QUERY (item <* SELF.items |
+       SIZEOF (['BUILDING_DESIGN_SCHEMA.COMPOSITE_CURVE',
+       'BUILDING_DESIGN_SCHEMA.POLYLINE',
+       'BUILDING_DESIGN_SCHEMA.TRIMMED_CURVE', 
+       'BUILDING_DESIGN_SCHEMA.MAPPED_ITEM'] * TYPEOF (item)) = 1)) = 1;
+  WR3: SIZEOF (QUERY (item <* SELF.items |
+       (SIZEOF (['BUILDING_DESIGN_SCHEMA.COMPOSITE_CURVE',
+       'BUILDING_DESIGN_SCHEMA.TRIMMED_CURVE'] * TYPEOF (item)) = 1) AND
+       (NOT (valid_faceted_structural_wire_composition (item))))) = 0;
+  WR4: SIZEOF (QUERY (mi <* QUERY (item <* SELF.items |
+       'BUILDING_DESIGN_SCHEMA.MAPPED_ITEM' IN TYPEOF (item)) |
+       NOT ('BUILDING_DESIGN_SCHEMA.' + 
+       'FACETED_STRUCTURAL_WIRE_SHAPE_REPRESENTATION' IN
+       TYPEOF (mi\mapped_item.mapping_source.mapped_representation)))) = 0;
+END_ENTITY;
+
+ENTITY fixture_equipment_element
+  SUBTYPE OF (product_definition);
+WHERE
+  WR1: SIZEOF (QUERY (pdr <* USEDIN(SELF, 'BUILDING_DESIGN_SCHEMA.' +
+       'PRODUCT_DEFINITION_RELATIONSHIP.RELATED_PRODUCT_DEFINITION') |
+       'BUILDING_DESIGN_SCHEMA.BUILDING_SECTION' IN
+       TYPEOF (pdr.relating_product_definition))) = 1;
+  WR2: SIZEOF (USEDIN (SELF, 'BUILDING_DESIGN_SCHEMA.' +
+       'BUILDING_ITEM_IDENTIFICATION_ASSIGNMENT.ITEM')) = 1;
+  WR3: SIZEOF (QUERY (pds <* QUERY (pd <* USEDIN (SELF,
+       'BUILDING_DESIGN_SCHEMA.PROPERTY_DEFINITION.DEFINITION') |
+       'BUILDING_DESIGN_SCHEMA.PRODUCT_DEFINITION_SHAPE' IN TYPEOF (pd)) |
+       SIZEOF (QUERY (sa <* USEDIN (pds, 'BUILDING_DESIGN_SCHEMA.' +
+       'SHAPE_ASPECT.OF_SHAPE') |
+       ('BUILDING_DESIGN_SCHEMA.POSITIVE_COMPONENT' IN TYPEOF (sa))
+       AND
+       (sa.description = 'main component'))) = 1)) = 1;
+END_ENTITY;
+
+ENTITY ground_face_space_boundary_shape_representation
+  SUBTYPE OF (shape_representation, solid_model);
+WHERE
+  WR1: SIZEOF (SELF.items) = 1;
+  WR2: SIZEOF (QUERY (item <* SELF.items |
+       'BUILDING_DESIGN_SCHEMA.FACE' IN TYPEOF (item))) = 1;
+  WR3: SIZEOF (QUERY (item <* SELF.items |
+       NOT (SIZEOF (QUERY (bnds <* item\face.bounds |
+       NOT ('BUILDING_DESIGN_SCHEMA.POLY_LOOP' IN TYPEOF (bnds.bound))))
+       = 0))) = 0;
+  WR4: SIZEOF (QUERY (item <* SELF.items |
+       (NOT ('BUILDING_DESIGN_SCHEMA.FACE_SURFACE' IN TYPEOF (item))) OR
+       ('BUILDING_DESIGN_SCHEMA.PLANE' IN 
+       TYPEOF (item\face_surface.face_geometry)))) = 0;
+END_ENTITY;
+
+ENTITY negative_component
+  SUBTYPE OF (shape_aspect);
+WHERE
+  WR1: (SIZEOF (USEDIN (SELF, 'BUILDING_DESIGN_SCHEMA.' +
+       'PROPERTY_DEFINITION.DEFINITION')) >= 1)
+       AND
+       (SIZEOF (QUERY (pd <* USEDIN (SELF, 'BUILDING_DESIGN_SCHEMA.' +
+       'PROPERTY_DEFINITION.DEFINITION') |
+       NOT (SIZEOF (USEDIN (pd, 'BUILDING_DESIGN_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION')) >= 1))) = 0);
+  WR2: SIZEOF (TYPEOF (SELF.of_shape.definition) *
+       ['BUILDING_DESIGN_SCHEMA.BUILDING_ELEMENT',
+       'BUILDING_DESIGN_SCHEMA.FIXTURE_EQUIPMENT_ELEMENT',
+       'BUILDING_DESIGN_SCHEMA.SERVICE_ELEMENT',
+       'BUILDING_DESIGN_SCHEMA.STRUCTURE_ENCLOSURE_ELEMENT']) = 1;
+  WR3: SIZEOF (USEDIN (SELF, 'BUILDING_DESIGN_SCHEMA.' +
+       'BUILDING_ITEM_IDENTIFICATION_ASSIGNMENT.ITEM')) = 1;
+  WR4: SIZEOF (QUERY (pd <* USEDIN (SELF, 'BUILDING_DESIGN_SCHEMA.'+
+       'PROPERTY_DEFINITION.DEFINITION') |
+       NOT (SIZEOF (QUERY (pdr <* USEDIN(pd, 'BUILDING_DESIGN_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |
+       NOT (SIZEOF (TYPEOF (pdr.used_representation) *
+       ['BUILDING_DESIGN_SCHEMA.ADVANCED_BREP_SHAPE_REPRESENTATION',
+       'BUILDING_DESIGN_SCHEMA.ADVANCED_CSG_SHAPE_REPRESENTATION',
+       'BUILDING_DESIGN_SCHEMA.' +
+       'ADVANCED_FACE_WITH_THICKNESS_SHAPE_REPRESENTATION',
+       'BUILDING_DESIGN_SCHEMA.' +
+       'ADVANCED_STRUCTURAL_WIRE_SHAPE_REPRESENTATION',
+       'BUILDING_DESIGN_SCHEMA.ELEMENTARY_CSG_SHAPE_REPRESENTATION',
+       'BUILDING_DESIGN_SCHEMA.' +
+       'ELEMENTARY_FACE_WITH_THICKNESS_SHAPE_REPRESENTATION',
+       'BUILDING_DESIGN_SCHEMA.' +
+       'ELEMENTARY_GEOMETRIC_SHAPE_REPRESENTATION',
+       'BUILDING_DESIGN_SCHEMA.' +
+       'ELEMENTARY_STRUCTURAL_WIRE_SHAPE_REPRESENTATION',
+       'BUILDING_DESIGN_SCHEMA.FACETED_CSG_SHAPE_REPRESENTATION',
+       'BUILDING_DESIGN_SCHEMA.' +
+       'FACETED_FACE_WITH_THICKNESS_SHAPE_REPRESENTATION',
+       'BUILDING_DESIGN_SCHEMA.FACETED_GEOMETRIC_SHAPE_REPRESENTATION',
+       'BUILDING_DESIGN_SCHEMA.' +
+       'FACETED_STRUCTURAL_WIRE_SHAPE_REPRESENTATION']) = 1))) = 0))) = 0;
+END_ENTITY;
+
+ENTITY opening
+  SUBTYPE OF (negative_component);
+WHERE
+  WR1: SIZEOF (USEDIN (SELF, 'BUILDING_DESIGN_SCHEMA.'+
+       'BUILDING_COMPONENT_CLASSIFICATION_ASSIGNMENT.ITEMS')) = 1;
+  WR2: SIZEOF (QUERY (bcca <* USEDIN (SELF, 'BUILDING_DESIGN_SCHEMA.'+
+       'BUILDING_COMPONENT_CLASSIFICATION_ASSIGNMENT.ITEMS') |
+       NOT (bcca\group_assignment.assigned_group.description = 'opening')
+       )) = 0;
+END_ENTITY;
+
+ENTITY positive_component
+  SUBTYPE OF (shape_aspect);
+WHERE
+  WR1: (SIZEOF (USEDIN (SELF, 'BUILDING_DESIGN_SCHEMA.' +
+       'PROPERTY_DEFINITION.DEFINITION')) >= 1)
+       AND
+       (SIZEOF (QUERY (pd <* USEDIN (SELF, 'BUILDING_DESIGN_SCHEMA.' +
+       'PROPERTY_DEFINITION.DEFINITION') |
+       NOT (SIZEOF (USEDIN (pd, 'BUILDING_DESIGN_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION')) >= 1))) = 0);
+  WR2: SIZEOF (TYPEOF (SELF.of_shape.definition) *
+       ['BUILDING_DESIGN_SCHEMA.BUILDING_ELEMENT',
+       'BUILDING_DESIGN_SCHEMA.FIXTURE_EQUIPMENT_ELEMENT',
+       'BUILDING_DESIGN_SCHEMA.SERVICE_ELEMENT',
+       'BUILDING_DESIGN_SCHEMA.STRUCTURE_ENCLOSURE_ELEMENT']) = 1;
+  WR3: SIZEOF (USEDIN (SELF, 'BUILDING_DESIGN_SCHEMA.' +
+       'BUILDING_ITEM_IDENTIFICATION_ASSIGNMENT.ITEM')) = 1;
+  WR4: SIZEOF (QUERY (pd <* USEDIN(SELF, 'BUILDING_DESIGN_SCHEMA.'+
+       'PROPERTY_DEFINITION.DEFINITION') |
+       NOT (SIZEOF (QUERY (pdr <* USEDIN(pd, 'BUILDING_DESIGN_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |
+       NOT (SIZEOF (TYPEOF (pdr.used_representation) *
+       ['BUILDING_DESIGN_SCHEMA.ADVANCED_BREP_SHAPE_REPRESENTATION',
+       'BUILDING_DESIGN_SCHEMA.ADVANCED_CSG_SHAPE_REPRESENTATION',
+       'BUILDING_DESIGN_SCHEMA.' +
+       'ADVANCED_FACE_WITH_THICKNESS_SHAPE_REPRESENTATION',
+       'BUILDING_DESIGN_SCHEMA.' +
+       'ADVANCED_STRUCTURAL_WIRE_SHAPE_REPRESENTATION',
+       'BUILDING_DESIGN_SCHEMA.ELEMENTARY_CSG_SHAPE_REPRESENTATION',
+       'BUILDING_DESIGN_SCHEMA.' +
+       'ELEMENTARY_FACE_WITH_THICKNESS_SHAPE_REPRESENTATION',
+       'BUILDING_DESIGN_SCHEMA.ELEMENTARY_GEOMETRIC_SHAPE_REPRESENTATION',
+       'BUILDING_DESIGN_SCHEMA.' +
+       'ELEMENTARY_STRUCTURAL_WIRE_SHAPE_REPRESENTATION',
+       'BUILDING_DESIGN_SCHEMA.FACETED_CSG_SHAPE_REPRESENTATION',
+       'BUILDING_DESIGN_SCHEMA.' +
+       'FACETED_FACE_WITH_THICKNESS_SHAPE_REPRESENTATION',
+       'BUILDING_DESIGN_SCHEMA.FACETED_GEOMETRIC_SHAPE_REPRESENTATION',
+       'BUILDING_DESIGN_SCHEMA.' +
+       'FACETED_STRUCTURAL_WIRE_SHAPE_REPRESENTATION']) = 1))) = 0))) = 0;
+END_ENTITY;
+
+ENTITY recess
+  SUBTYPE OF (negative_component);
+WHERE
+  WR1: SIZEOF (USEDIN (SELF, 'BUILDING_DESIGN_SCHEMA.' +
+       'BUILDING_COMPONENT_CLASSIFICATION_ASSIGNMENT.ITEMS')) = 1;
+  WR2: SIZEOF (QUERY (bcca <* USEDIN (SELF, 'BUILDING_DESIGN_SCHEMA.'+
+       'BUILDING_COMPONENT_CLASSIFICATION_ASSIGNMENT.ITEMS') |
+       NOT (bcca\group_assignment.assigned_group.description = 'recess')
+       )) = 0;
+END_ENTITY;
+
+ENTITY service_element
+  SUBTYPE OF (product_definition);
+WHERE
+  WR1: SIZEOF (QUERY (pdr <* USEDIN(SELF, 'BUILDING_DESIGN_SCHEMA.' +
+       'PRODUCT_DEFINITION_RELATIONSHIP.RELATED_PRODUCT_DEFINITION') |
+       'BUILDING_DESIGN_SCHEMA.BUILDING_SECTION'
+       IN TYPEOF (pdr.relating_product_definition))) = 1;
+  WR2: SIZEOF (USEDIN (SELF, 'BUILDING_DESIGN_SCHEMA.' +
+       'BUILDING_ITEM_IDENTIFICATION_ASSIGNMENT.ITEM')) = 1;
+  WR3: SIZEOF (QUERY (pds <* QUERY (pd <* USEDIN (SELF,
+       'BUILDING_DESIGN_SCHEMA.PROPERTY_DEFINITION.DEFINITION') |
+       'BUILDING_DESIGN_SCHEMA.PRODUCT_DEFINITION_SHAPE' IN 
+       TYPEOF (pd)) |
+       SIZEOF (QUERY (sa <* USEDIN(pds, 'BUILDING_DESIGN_SCHEMA.'+
+       'SHAPE_ASPECT.OF_SHAPE') |
+       ('BUILDING_DESIGN_SCHEMA.POSITIVE_COMPONENT' IN TYPEOF (sa))
+       AND
+       (sa.description = 'main component'))) = 1)) = 1;
+END_ENTITY;
+
+ENTITY site
+  SUBTYPE OF (characterized_object, product_definition);
+WHERE
+  WR1: (SIZEOF (USEDIN (SELF, 'BUILDING_DESIGN_SCHEMA.' +
+       'PROPERTY_DEFINITION.DEFINITION')) >= 1)
+       AND
+       (SIZEOF (QUERY (pd <* USEDIN (SELF, 'BUILDING_DESIGN_SCHEMA.'+
+       'PROPERTY_DEFINITION.DEFINITION') |
+       SIZEOF (USEDIN (pd, 'BUILDING_DESIGN_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION')) = 0)) = 0);
+  WR2: SIZEOF (QUERY (pd <* USEDIN (SELF, 'BUILDING_DESIGN_SCHEMA.' +
+       'PROPERTY_DEFINITION.DEFINITION') |
+       NOT (SIZEOF (QUERY (pdr <* USEDIN (pd, 'BUILDING_DESIGN_SCHEMA.'+
+       'PRODUCT_DEFINITION_REPRESENTATION.DEFINITION') |
+       NOT ('BUILDING_DESIGN_SCHEMA.SITE_REPRESENTATION' IN              
+       TYPEOF (pdr.used_representation)))) = 0))) = 0;
+END_ENTITY;
+
+ENTITY site_representation
+  SUBTYPE OF(shape_representation);
+WHERE
+  WR1: SIZEOF (QUERY (pdr <* USEDIN (SELF,'BUILDING_DESIGN_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.USED_REPRESENTATION') |
+       NOT('BUILDING_DESIGN_SCHEMA.SITE' IN 
+       TYPEOF (pdr.definition.definition)))) = 0;
+  WR2: SIZEOF (QUERY (item <* SELF.items |
+       NOT (SIZEOF (['BUILDING_DESIGN_SCHEMA.CONNECTED_FACE_SET',
+       'BUILDING_DESIGN_SCHEMA.GEOMETRIC_CURVE_SET'] *
+       TYPEOF (item)) = 1))) = 1;
+  WR3: SIZEOF (QUERY (cfs <* QUERY (item <* SELF.items |
+       'BUILDING_DESIGN_SCHEMA.CONNECTED_FACE_SET' IN TYPEOF (item)) |
+       NOT (SIZEOF (QUERY (fcs <* cfs\connected_face_set.cfs_faces |
+       NOT (SIZEOF (QUERY (bnds <* fcs.bounds |
+       NOT ('BUILDING_DESIGN_SCHEMA.POLY_LOOP' IN TYPEOF (bnds.bound)))) 
+       = 0))) = 0))) = 0;
+  WR4: SIZEOF (QUERY (cfs <* QUERY (item <* SELF.items |
+       'BUILDING_DESIGN_SCHEMA.CONNECTED_FACE_SET' IN TYPEOF (item)) |
+       NOT (SIZEOF (QUERY (fcs <* cfs\connected_face_set.cfs_faces |
+       NOT (SIZEOF (QUERY (bnds <* fcs.bounds |
+       NOT (SIZEOF (bnds.bound\poly_loop.polygon) = 3))) 
+       = 0))) = 0))) = 0;
+  WR5: SIZEOF (QUERY (gcs <* QUERY (item <* SELF.items |
+       'BUILDING_DESIGN_SCHEMA.GEOMETRIC_CURVE_SET' IN TYPEOF (item)) |
+       NOT (SIZEOF (QUERY (el <* gcs\geometric_set.elements |
+       NOT (SIZEOF (['BUILDING_DESIGN_SCHEMA.CARTESIAN_POINT',
+       'BUILDING_DESIGN_SCHEMA.POLYLINE'] * TYPEOF (el)) = 1))) = 0))) = 0;
+  WR6: SIZEOF (QUERY (gcs <* QUERY (item <* SELF.items |
+       'BUILDING_DESIGN_SCHEMA.GEOMETRIC_CURVE_SET' IN TYPEOF (item)) |
+       NOT (SIZEOF (QUERY (el <* gcs\geometric_set.elements |
+       'BUILDING_DESIGN_SCHEMA.CARTESIAN_POINT' IN TYPEOF (el))) >= 1))) 
+       = 0;
+  WR7: SIZEOF (QUERY (gcs <* QUERY (item <* SELF.items |
+       'BUILDING_DESIGN_SCHEMA.GEOMETRIC_CURVE_SET' IN TYPEOF (item)) |
+       NOT (SIZEOF (QUERY (pline <* QUERY (el <* gcs\geometric_set.elements 
+       | 'BUILDING_DESIGN_SCHEMA.POLYLINE' IN TYPEOF (el)) |
+       NOT (SIZEOF (QUERY (pline_pt <* pline\polyline.points |
+       NOT (pline_pt IN gcs\geometric_set.elements))) = 0))) = 0))) = 0;
+END_ENTITY;
+
+ENTITY space_element
+  SUBTYPE OF (product_definition);
+WHERE
+  WR1: SIZEOF (QUERY (pdr <* USEDIN (SELF, 'BUILDING_DESIGN_SCHEMA.' +
+       'PRODUCT_DEFINITION_RELATIONSHIP.RELATED_PRODUCT_DEFINITION') |
+       'BUILDING_DESIGN_SCHEMA.BUILDING_SECTION' IN
+       TYPEOF (pdr.relating_product_definition))) = 1;
+  WR2: SIZEOF (USEDIN (SELF, 'BUILDING_DESIGN_SCHEMA.' +
+       'BUILDING_ITEM_IDENTIFICATION_ASSIGNMENT.ITEM')) = 1;
+  WR3: (SIZEOF (QUERY (pd <* USEDIN (SELF, 'BUILDING_DESIGN_SCHEMA.' +
+       'PROPERTY_DEFINITION.DEFINITION') |
+       'BUILDING_DESIGN_SCHEMA.PRODUCT_DEFINITION_SHAPE' IN 
+       TYPEOF (pd))) >= 1)
+       AND
+       (SIZEOF (QUERY (pds <* QUERY (pd <* USEDIN (SELF,
+       'BUILDING_DESIGN_SCHEMA.PROPERTY_DEFINITION.DEFINITION') |
+       'BUILDING_DESIGN_SCHEMA.PRODUCT_DEFINITION_SHAPE' IN TYPEOF (pd)) |
+       NOT (SIZEOF (USEDIN (pds, 'BUILDING_DESIGN_SCHEMA.' +
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION')) >= 1))) = 0);
+  WR4: SIZEOF (QUERY (pd <* USEDIN (SELF, 'BUILDING_DESIGN_SCHEMA.' +
+       'PROPERTY_DEFINITION.DEFINITION') |
+       NOT (SIZEOF (QUERY (pdr <* USEDIN (pd, 'BUILDING_DESIGN_SCHEMA.'+
+       'PRODUCT_DEFINITION_REPRESENTATION.DEFINITION') |
+       NOT ( SIZEOF (TYPEOF (pdr.used_representation) *
+       ['BUILDING_DESIGN_SCHEMA.' +
+       'ADVANCED_SPACE_BOUNDARY_SHAPE_REPRESENTATION',
+       'BUILDING_DESIGN_SCHEMA.' +
+       'ELEMENTARY_SPACE_BOUNDARY_SHAPE_REPRESENTATION',
+       'BUILDING_DESIGN_SCHEMA.' +
+       'FACETED_SPACE_BOUNDARY_SHAPE_REPRESENTATION',
+       'BUILDING_DESIGN_SCHEMA.' +
+       'GROUND_FACE_SPACE_BOUNDARY_SHAPE_REPRESENTATION']) = 1))) = 0))) 
+       = 0;
+END_ENTITY;
+
+ENTITY structure_enclosure_element
+  SUBTYPE OF (product_definition);
+WHERE
+  WR1: SIZEOF (QUERY (pdr <* USEDIN (SELF, 'BUILDING_DESIGN_SCHEMA.' +
+       'PRODUCT_DEFINITION_RELATIONSHIP.RELATED_PRODUCT_DEFINITION') |
+       'BUILDING_DESIGN_SCHEMA.BUILDING_SECTION'
+       IN TYPEOF (pdr.relating_product_definition))) = 1;
+  WR2: SIZEOF (USEDIN (SELF, 'BUILDING_DESIGN_SCHEMA.' +
+       'BUILDING_ITEM_IDENTIFICATION_ASSIGNMENT.ITEM')) = 1;
+  WR3: SIZEOF (QUERY (pds <* QUERY (pd <* USEDIN (SELF,
+       'BUILDING_DESIGN_SCHEMA.PROPERTY_DEFINITION.DEFINITION') |
+       'BUILDING_DESIGN_SCHEMA.PRODUCT_DEFINITION_SHAPE' IN TYPEOF (pd)) |
+       SIZEOF (QUERY (sa <* USEDIN (pds, 'BUILDING_DESIGN_SCHEMA.'+
+       'SHAPE_ASPECT.OF_SHAPE') |
+       ('BUILDING_DESIGN_SCHEMA.POSITIVE_COMPONENT' IN TYPEOF (sa))
+           AND
+       (sa.description = 'main component'))) = 1)) = 1;
+END_ENTITY;
+
+ENTITY truncated_pyramid
+  SUBTYPE OF (boolean_result);
+END_ENTITY;
+
+RULE application_context_requires_ap_definition FOR 
+  (application_context, application_protocol_definition);
+WHERE
+  WR1: SIZEOF (QUERY (ac <* application_context | 
+       NOT (SIZEOF (QUERY (apd <* application_protocol_definition | 
+       (ac :=: apd.application) 
+       AND
+       (apd.application_interpreted_model_schema_name =   
+       'building_design_schema'))) = 1 ))) = 0;
+END_RULE;
+
+RULE building_element_maps_into_building_section FOR
+  (mapped_item, representation_relationship_with_transformation);
+WHERE
+  WR1: SIZEOF (QUERY (mi <* mapped_item |
+         (SIZEOF (QUERY (pdr <*  
+                         USEDIN(mi.mapping_source.mapped_representation,
+                                'BUILDING_DESIGN_SCHEMA.'+
+                                'PROPERTY_DEFINITION_REPRESENTATION.'+
+                                'USED_REPRESENTATION') |
+           SIZEOF (TYPEOF (pdr.definition.definition) *
+                     ['BUILDING_DESIGN_SCHEMA.BUILDING_ELEMENT',
+                      'BUILDING_DESIGN_SCHEMA.FIXTURE_EQUIPMENT_ELEMENT',
+                      'BUILDING_DESIGN_SCHEMA.SERVICE_ELEMENT',
+                      'BUILDING_DESIGN_SCHEMA.SPACE_ELEMENT',
+                      'BUILDING_DESIGN_SCHEMA.STRUCTURE_ENCLOSURE_ELEMENT']
+           ) = 1
+         )) >= 1)
+         AND
+         (NOT (SIZEOF (QUERY (r <* USEDIN (mi,'BUILDING_DESIGN_SCHEMA.'+
+                                              'REPRESENTATION.ITEMS') |
+            SIZEOF (QUERY (pdr <* USEDIN(r,'BUILDING_DESIGN_SCHEMA.'+
+                  'PROPERTY_DEFINITION_REPRESENTATION.USED_REPRESENTATION') 
+               | ('BUILDING_DESIGN_SCHEMA.BUILDING_SECTION' IN
+                    TYPEOF (pdr.definition.definition))
+            )) >= 1
+         )) = 1))
+       )) = 0;
+  WR2: (SIZEOF (QUERY (rrwt <* 
+                         representation_relationship_with_transformation |
+          (SIZEOF (QUERY (pdr <*
+                         USEDIN(rrwt\representation_relationship.rep_2,
+                                'BUILDING_DESIGN_SCHEMA.'+
+                                'PROPERTY_DEFINITION_REPRESENTATION.'+
+                                'USED_REPRESENTATION') |
+             SIZEOF (TYPEOF (pdr.definition.definition) *
+                     ['BUILDING_DESIGN_SCHEMA.BUILDING_ELEMENT',
+                      'BUILDING_DESIGN_SCHEMA.FIXTURE_EQUIPMENT_ELEMENT',
+                      'BUILDING_DESIGN_SCHEMA.SERVICE_ELEMENT',
+                      'BUILDING_DESIGN_SCHEMA.SPACE_ELEMENT',
+                      'BUILDING_DESIGN_SCHEMA.STRUCTURE_ENCLOSURE_ELEMENT']
+             ) = 1
+          )) >= 1)
+          AND
+          (NOT (SIZEOF (QUERY (pdr <*
+                        USEDIN(rrwt\representation_relationship.rep_1,
+                          'BUILDING_DESIGN_SCHEMA.PROPERTY_DEFINITION_'+
+                          'REPRESENTATION.USED_REPRESENTATION') |
+             ('BUILDING_DESIGN_SCHEMA.BUILDING_SECTION' IN
+                  TYPEOF (pdr.definition.definition))
+          )) = 1))
+
+       )) = 0);
+  WR3: SIZEOF (QUERY (rrwt_1 <*
+                      representation_relationship_with_transformation |
+          SIZEOF (QUERY (rrwt_2 <*
+                         representation_relationship_with_transformation |
+             (SIZEOF (QUERY (pdr <*
+                      USEDIN(rrwt_1\representation_relationship.rep_2,
+                        'BUILDING_DESIGN_SCHEMA.PROPERTY_DEFINITION_' +
+                        'REPRESENTATION.USED_REPRESENTATION') |
+                SIZEOF (TYPEOF (pdr.definition.definition) *
+                        ['BUILDING_DESIGN_SCHEMA.BUILDING_ELEMENT',
+                        'BUILDING_DESIGN_SCHEMA.FIXTURE_EQUIPMENT_ELEMENT',
+                         'BUILDING_DESIGN_SCHEMA.SERVICE_ELEMENT',
+                         'BUILDING_DESIGN_SCHEMA.SPACE_ELEMENT',
+                         'BUILDING_DESIGN_SCHEMA.' +
+                         'STRUCTURE_ENCLOSURE_ELEMENT']) = 1
+             )) >= 1)
+             AND
+             (rrwt_1\representation_relationship.rep_2 =
+              rrwt_2\representation_relationship.rep_2)
+          )) >= 1
+       )) = 0;
+END_RULE;
+
+RULE geometric_representation_context_3d FOR 
+  (geometric_representation_context);
+WHERE
+  WR1: SIZEOF (QUERY (grc <* geometric_representation_context |
+       NOT (grc.coordinate_space_dimension = 3)
+       )) = 0;
+END_RULE;
+
+RULE restrict_application_context FOR 
+  (application_context);
+WHERE
+  WR1: SIZEOF (QUERY (ac <* application_context |
+               NOT (ac.application = 'building shape composition'))) = 0;
+END_RULE;
+
+RULE restrict_origin_and_target FOR
+  (mapped_item);
+WHERE
+  WR1: SIZEOF (QUERY (mi <* mapped_item |
+       NOT (('BUILDING_DESIGN_SCHEMA.AXIS2_PLACEMENT_3D' 
+       IN TYPEOF (mi.mapping_target))
+           AND
+       ('BUILDING_DESIGN_SCHEMA.AXIS2_PLACEMENT_3D'
+       IN TYPEOF (mi.mapping_source.mapping_origin))))) = 0;
+END_RULE;
+
+RULE shape_representation_subtype_exclusiveness FOR 
+  (shape_representation);
+WHERE
+  WR1: SIZEOF (QUERY (sr <* shape_representation |
+       NOT (SIZEOF (TYPEOF (sr) *
+       ['BUILDING_DESIGN_SCHEMA.ADVANCED_BREP_SHAPE_REPRESENTATION',
+       'BUILDING_DESIGN_SCHEMA.ADVANCED_CSG_SHAPE_REPRESENTATION',
+       'BUILDING_DESIGN_SCHEMA.' +
+       'ADVANCED_FACE_WITH_THICKNESS_SHAPE_REPRESENTATION',
+    'BUILDING_DESIGN_SCHEMA.ADVANCED_SPACE_BOUNDARY_SHAPE_REPRESENTATION',
+    'BUILDING_DESIGN_SCHEMA.ADVANCED_STRUCTURAL_WIRE_SHAPE_REPRESENTATION',
+       'BUILDING_DESIGN_SCHEMA.ELEMENTARY_CSG_SHAPE_REPRESENTATION',
+       'BUILDING_DESIGN_SCHEMA.' +
+       'ELEMENTARY_FACE_WITH_THICKNESS_SHAPE_REPRESENTATION',
+       'BUILDING_DESIGN_SCHEMA.ELEMENTARY_GEOMETRIC_SHAPE_REPRESENTATION',
+       'BUILDING_DESIGN_SCHEMA.' +
+       'ELEMENTARY_SPACE_BOUNDARY_SHAPE_REPRESENTATION',
+       'BUILDING_DESIGN_SCHEMA.' +
+       'ELEMENTARY_STRUCTURAL_WIRE_SHAPE_REPRESENTATION',
+       'BUILDING_DESIGN_SCHEMA.FACETED_CSG_SHAPE_REPRESENTATION',
+       'BUILDING_DESIGN_SCHEMA.' +
+       'FACETED_FACE_WITH_THICKNESS_SHAPE_REPRESENTATION',
+       'BUILDING_DESIGN_SCHEMA.FACETED_GEOMETRIC_SHAPE_REPRESENTATION',
+     'BUILDING_DESIGN_SCHEMA.FACETED_SPACE_BOUNDARY_SHAPE_REPRESENTATION',
+     'BUILDING_DESIGN_SCHEMA.FACETED_STRUCTURAL_WIRE_SHAPE_REPRESENTATION',
+       'BUILDING_DESIGN_SCHEMA.' +
+       'GROUND_FACE_SPACE_BOUNDARY_SHAPE_REPRESENTATION',
+       'BUILDING_DESIGN_SCHEMA.SITE_REPRESENTATION']) <= 1))) = 0;
+END_RULE;
+
+RULE subtype_mandatory_geometric_set FOR 
+  (geometric_set);
+WHERE
+  WR1: SIZEOF (QUERY (gs <* geometric_set |
+       NOT ('BUILDING_DESIGN_SCHEMA.GEOMETRIC_CURVE_SET'
+       IN TYPEOF (gs)))) = 0;
+END_RULE;
+
+RULE subtype_mandatory_group FOR 
+  (group);
+WHERE
+  WR1: SIZEOF (QUERY (g <* group |
+       NOT ('BUILDING_DESIGN_SCHEMA.BUILDING_COMPONENT_CLASSIFICATION_GROUP'
+       IN TYPEOF (g)))) = 0;
+END_RULE;
+
+RULE subtype_mandatory_solid_model FOR 
+  (solid_model);
+WHERE
+  WR1: SIZEOF (QUERY (sm <* solid_model |
+       NOT (SIZEOF (TYPEOF (sm) *
+       ['BUILDING_DESIGN_SCHEMA.CSG_SOLID',
+       'BUILDING_DESIGN_SCHEMA.MANIFOLD_SOLID_BREP',
+       'BUILDING_DESIGN_SCHEMA.EXTRUDED_AREA_SOLID',
+       'BUILDING_DESIGN_SCHEMA.REVOLVED_AREA_SOLID',
+       'BUILDING_DESIGN_SCHEMA.' +
+       'ADVANCED_FACE_WITH_THICKNESS_SHAPE_REPRESENTATION',
+       'BUILDING_DESIGN_SCHEMA.' +
+       'ELEMENTARY_FACE_WITH_THICKNESS_SHAPE_REPRESENTATION',
+       'BUILDING_DESIGN_SCHEMA.' +
+       'FACETED_FACE_WITH_THICKNESS_SHAPE_REPRESENTATION']) = 1))) = 0;
+END_RULE;
+
+FUNCTION msb_shells (brep: manifold_solid_brep) :
+                      SET [1:?] OF  closed_shell;
+   IF SIZEOF (QUERY (brtyp <* TYPEOF (brep) |
+     brtyp LIKE '*.BREP_WITH_VOIDS')) >= 1 THEN
+     RETURN (brep\brep_with_voids.voids + brep.outer);
+   ELSE
+     RETURN ([brep.outer]);
+   END_IF;
+END_FUNCTION;
+
+FUNCTION valid_advanced_csg_tree (tree_element : boolean_operand) :
+BOOLEAN;
+
+  -- return true if the tree_element is a valid primitive
+
+  IF SIZEOF (TYPEOF (tree_element) *
+    ['BUILDING_DESIGN_SCHEMA.BLOCK', 'BUILDING_DESIGN_SCHEMA.TORUS',
+    'BUILDING_DESIGN_SCHEMA.RIGHT_CIRCULAR_CYLINDER', 
+    'BUILDING_DESIGN_SCHEMA.SPHERE',
+    'BUILDING_DESIGN_SCHEMA.RIGHT_CIRCULAR_CONE',
+    'BUILDING_DESIGN_SCHEMA.' + 
+    'ADVANCED_FACE_WITH_THICKNESS_SHAPE_REPRESENTATION',
+    'BUILDING_DESIGN_SCHEMA.EXTRUDED_AREA_SOLID',
+    'BUILDING_DESIGN_SCHEMA.REVOLVED_AREA_SOLID',
+    'BUILDING_DESIGN_SCHEMA.HALF_SPACED_SOLID']) = 1 THEN RETURN (TRUE); 
+    ELSE 
+
+    -- if the tree_element is a boolean_result check its operations and
+    -- operands
+
+    IF 'BUILDING_DESIGN_SCHEMA.BOOLEAN_RESULT' IN TYPEOF (tree_element)
+     THEN
+
+      -- addition and subtraction are the only valid operations
+
+      IF NOT (tree_element\boolean_result.operator
+                   IN ['union', 'difference'])
+        THEN RETURN (FALSE);
+      END_IF;
+
+      -- if the operand is a half_space_solid, check for advanced surface
+      -- otherwise return false and recursively check second operand
+
+      IF 'BUILDING_DESIGN_SCHEMA.HALF_SPACE_SOLID' IN 
+        TYPEOF (tree_element\boolean_result.first_operand) THEN
+        IF 'BUILDING_DESIGN_SCHEMA.ELEMENTARY_SURFACE' IN
+          TYPEOF (tree_element\boolean_result.
+                  first_operand\half_space_solid.base_surface) THEN
+          IF 'BUILDING_DESIGN_SCHEMA.HALF_SPACE_SOLID' IN 
+            TYPEOF (tree_element\boolean_result.second_operand) THEN
+            IF 'BUILDING_DESIGN_SCHEMA.ELEMENTARY_SURFACE' IN
+              TYPEOF (tree_element\boolean_result.
+                      second_operand\half_space_solid.base_surface) THEN
+              RETURN (TRUE);
+              ELSE RETURN (FALSE);
+            END_IF;
+            ELSE RETURN (valid_advanced_csg_tree
+            (tree_element\boolean_result.second_operand));
+          END_IF;
+          ELSE RETURN (FALSE);
+        END_IF;
+        ELSE
+          IF 'BUILDING_DESIGN_SCHEMA.HALF_SPACE_SOLID' IN 
+            TYPEOF (tree_element\boolean_result.second_operand) THEN
+            IF 'BUILDING_DESIGN_SCHEMA.ELEMENTARY_SURFACE' IN TYPEOF
+              (tree_element\boolean_result.second_operand\half_space_solid.
+               base_surface) THEN
+              RETURN (valid_advanced_csg_tree
+                        (tree_element\boolean_result.first_operand));
+              ELSE
+              RETURN (FALSE);
+            END_IF;
+            ELSE
+            RETURN (valid_advanced_csg_tree
+                      (tree_element\boolean_result.first_operand) AND
+                    valid_advanced_csg_tree
+                      (tree_element\boolean_result.second_operand));
+          END_IF;
+      END_IF;
+    END_IF;
+  END_IF;
+  RETURN (FALSE);
+END_FUNCTION;
+
+FUNCTION valid_advanced_structural_wire_composition (sw_element: curve) :
+BOOLEAN; 
+ 
+  -- let those types pass that have valid references to basis curves 
+ 
+  IF SIZEOF (['BUILDING_DESIGN_SCHEMA.B_SPLINE_CURVE',  
+    'BUILDING_DESIGN_SCHEMA.CONIC', 
+    'BUILDING_DESIGN_SCHEMA.LINE',  
+    'BUILDING_DESIGN_SCHEMA.POLYLINE'] * TYPEOF (sw_element)) = 1 THEN 
+    RETURN(TRUE); 
+    ELSE 
+ 
+    -- check in case curve_replica is the type of the input curve 
+ 
+    IF 'BUILDING_DESIGN_SCHEMA.CURVE_REPLICA' IN TYPEOF (sw_element) THEN
+      RETURN (valid_advanced_structural_wire_composition 
+      (sw_element\curve_replica.parent_curve)); 
+      ELSE 
+ 
+      --check in case offset_curve_3d is the type of the input curve 
+ 
+      IF 'BUILDING_DESIGN_SCHEMA.OFFSET_CURVE_3D' IN TYPEOF (sw_element) 
+        THEN 
+        RETURN(valid_advanced_structural_wire_composition  
+        (sw_element\offset_curve_3d.basis_curve)); 
+        ELSE 
+        IF ('BUILDING_DESIGN_SCHEMA.TRIMMED_CURVE') IN TYPEOF (sw_element) 
+          THEN  RETURN (valid_faceted_structural_wire_composition  
+          (sw_element\trimmed_curve.basis_curve));
+        END_IF;  
+      END_IF; 
+    END_IF; 
+  END_IF; 
+  RETURN (FALSE); 
+END_FUNCTION;
+
+FUNCTION valid_elementary_csg_tree (tree_element : boolean_operand) :
+BOOLEAN;
+
+  -- return true if the tree_element is a valid primitive
+
+  IF SIZEOF (TYPEOF (tree_element) *
+    ['BUILDING_DESIGN_SCHEMA.BLOCK', 'BUILDING_DESIGN_SCHEMA.TORUS',
+    'BUILDING_DESIGN_SCHEMA.RIGHT_CIRCULAR_CYLINDER', 
+    'BUILDING_DESIGN_SCHEMA.SPHERE',
+    'BUILDING_DESIGN_SCHEMA.RIGHT_CIRCULAR_CONE',
+    'BUILDING_DESIGN_SCHEMA.' + 
+    'ELEMENTARY_FACE_WITH_THICKNESS_SHAPE_REPRESENTATION',
+    'BUILDING_DESIGN_SCHEMA.EXTRUDED_AREA_SOLID',
+    'BUILDING_DESIGN_SCHEMA.REVOLVED_AREA_SOLID',
+    'BUILDING_DESIGN_SCHEMA.HALF_SPACED_SOLID']) = 1 THEN RETURN (TRUE); 
+    ELSE 
+
+    -- if the tree_element is a boolean_result check its operations and
+    -- operands
+
+    IF 'BUILDING_DESIGN_SCHEMA.BOOLEAN_RESULT' IN TYPEOF (tree_element)
+      THEN
+
+      -- addition and subtraction are the only valid operations
+
+      IF NOT (tree_element\boolean_result.operator
+               IN ['union', 'difference'])
+        THEN RETURN (FALSE);
+      END_IF;
+
+      -- if the operand is a half_space_solid, check for elementary surface
+      -- otherwise return false and recursively check second operand
+
+      IF 'BUILDING_DESIGN_SCHEMA.HALF_SPACE_SOLID' IN 
+        TYPEOF (tree_element\boolean_result.first_operand) THEN
+        IF 'BUILDING_DESIGN_SCHEMA.ELEMENTARY_SURFACE' IN
+          TYPEOF (tree_element\boolean_result.
+                  first_operand\half_space_solid.base_surface) THEN
+          IF 'BUILDING_DESIGN_SCHEMA.HALF_SPACE_SOLID' IN 
+            TYPEOF (tree_element\boolean_result.second_operand) THEN
+            IF 'BUILDING_DESIGN_SCHEMA.ELEMENTARY_SURFACE' IN
+              TYPEOF (tree_element\boolean_result.
+                      second_operand\half_space_solid.base_surface) THEN
+              RETURN (TRUE);
+              ELSE RETURN (FALSE);
+            END_IF;
+            ELSE RETURN (valid_elementary_csg_tree
+            (tree_element\boolean_result.second_operand));
+          END_IF;
+          ELSE RETURN (FALSE);
+        END_IF;
+        ELSE
+          IF 'BUILDING_DESIGN_SCHEMA.HALF_SPACE_SOLID' IN 
+            TYPEOF (tree_element\boolean_result.second_operand) THEN
+            IF 'BUILDING_DESIGN_SCHEMA.ELEMENTARY_SURFACE' IN
+              TYPEOF (tree_element\boolean_result.
+                      second_operand\half_space_solid.base_surface) THEN
+              RETURN (valid_elementary_csg_tree
+                        (tree_element\boolean_result.first_operand));
+              ELSE
+              RETURN (FALSE);
+            END_IF;
+            ELSE
+            RETURN (valid_elementary_csg_tree
+                      (tree_element\boolean_result.first_operand) AND
+                    valid_elementary_csg_tree
+                      (tree_element\boolean_result.second_operand));
+          END_IF;
+      END_IF;
+    END_IF;
+  END_IF;
+  RETURN (FALSE);
+END_FUNCTION;
+
+FUNCTION valid_elementary_structural_wire_composition 
+  (sw_element : curve) : BOOLEAN;
+ 
+  -- check for valid basic curves  
+ 
+  IF SIZEOF (['BUILDING_DESIGN_SCHEMA.LINE',
+    'BUILDING_DESIGN_SCHEMA.PARABOLA',
+    'BUILDING_DESIGN_SCHEMA.ELLIPSE', 
+    'BUILDING_DESIGN_SCHEMA.CIRCLE'] * TYPEOF (sw_element)) = 1 
+    THEN RETURN (TRUE); 
+    ELSE  
+ 
+    -- if the curve is a trimmed_curve  
+ 
+    IF ('BUILDING_DESIGN_SCHEMA.TRIMMED_CURVE') IN TYPEOF (sw_element) THEN 
+
+   
+        -- recursively check the basis_curve  
+ 
+        RETURN (valid_elementary_structural_wire_composition  
+        (sw_element\trimmed_curve.basis_curve));
+    ELSE 
+ 
+      -- recursively check the composite_curve segments  
+ 
+      IF ('BUILDING_DESIGN_SCHEMA.COMPOSITE_CURVE') IN 
+        TYPEOF (sw_element) THEN  
+        RETURN (SIZEOF (QUERY (ccs <* sw_element\composite_curve.segments |
+
+        NOT (valid_elementary_structural_wire_composition
+        (ccs.parent_curve)))) = 0); 
+      END_IF; 
+    END_IF; 
+  END_IF; 
+  RETURN (FALSE); 
+END_FUNCTION;
+
+FUNCTION valid_faceted_csg_tree (tree_element : boolean_operand) : BOOLEAN;
+
+  -- return true if the tree_element is a valid primitive
+
+  IF SIZEOF (['BUILDING_DESIGN_SCHEMA.BLOCK',
+    'BUILDING_DESIGN_SCHEMA.' + 
+    'FACETED_FACE_WITH_THICKNESS_SHAPE_REPRESENTATION'] *
+    TYPEOF (tree_element)) = 1 THEN RETURN (TRUE);
+    ELSE 
+
+    -- if the tree_element is a boolean_result check its operations and
+    -- operands
+
+    IF 'BUILDING_DESIGN_SCHEMA.BOOLEAN_RESULT' IN TYPEOF (tree_element) 
+      THEN
+
+      -- addition and subtraction are the only valid operations
+
+      IF NOT (tree_element\boolean_result.operator
+            IN ['union', 'difference'])
+        THEN RETURN (FALSE);
+      END_IF;
+
+      -- if the operand is a half_space_solid, check for elementary surface
+      -- otherwise return false and recursively check second operand
+
+      IF 'BUILDING_DESIGN_SCHEMA.HALF_SPACE_SOLID' IN
+        TYPEOF (tree_element\boolean_result.first_operand) THEN
+        IF 'BUILDING_DESIGN_SCHEMA.PLANE' IN TYPEOF
+          (tree_element\boolean_result.first_operand\half_space_solid.
+           base_surface) THEN
+          IF 'BUILDING_DESIGN_SCHEMA.HALF_SPACE_SOLID' IN 
+            TYPEOF (tree_element\boolean_result.second_operand) THEN
+            IF 'BUILDING_DESIGN_SCHEMA.PLANE' IN TYPEOF
+              (tree_element\boolean_result.second_operand\half_space_solid.
+               base_surface) THEN
+              RETURN (TRUE);
+              ELSE RETURN (FALSE);
+            END_IF;
+            ELSE RETURN (valid_faceted_csg_tree
+            (tree_element\boolean_result.second_operand));
+          END_IF;
+          ELSE RETURN (FALSE);
+        END_IF;
+        ELSE
+          IF 'BUILDING_DESIGN_SCHEMA.HALF_SPACE_SOLID' IN 
+            TYPEOF (tree_element\boolean_result.second_operand) THEN
+            IF 'BUILDING_DESIGN_SCHEMA.PLANE' IN
+              TYPEOF (tree_element\boolean_result.
+                      second_operand\half_space_solid.base_surface) THEN
+              RETURN (valid_faceted_csg_tree
+                        (tree_element\boolean_result.first_operand));
+              ELSE
+              RETURN (FALSE);
+            END_IF;
+            ELSE
+            RETURN (valid_faceted_csg_tree
+                      (tree_element\boolean_result.first_operand) AND
+                    valid_faceted_csg_tree
+                      (tree_element\boolean_result.second_operand));
+          END_IF;
+      END_IF;
+    END_IF;
+  END_IF;
+  RETURN (FALSE);
+END_FUNCTION;
+
+FUNCTION valid_faceted_structural_wire_composition
+  (sw_element : curve) : BOOLEAN;
+
+  -- check for valid basic curves 
+
+  IF 'BUILDING_DESIGN_SCHEMA.POLYLINE' IN TYPEOF (sw_element)
+    THEN RETURN (TRUE);
+    ELSE 
+
+    -- if the curve is a trimmed_curve 
+
+    IF ('BUILDING_DESIGN_SCHEMA.TRIMMED_CURVE') IN TYPEOF (sw_element) THEN
+
+  
+      -- if a line is being trimmed, then valid 
+
+      IF 'BUILDING_DESIGN_SCHEMA.LINE' IN TYPEOF
+            (sw_element\trimmed_curve.basis_curve)
+        THEN RETURN (TRUE);
+
+        -- otherwise, recursively check the basis_curve 
+
+        ELSE RETURN (valid_faceted_structural_wire_composition 
+        (sw_element\trimmed_curve.basis_curve));
+      END_IF; 
+      ELSE
+
+          -- recursively check the composite_curve segments 
+
+        IF ('BUILDING_DESIGN_SCHEMA.COMPOSITE_CURVE') IN
+          TYPEOF (sw_element) THEN 
+          RETURN (SIZEOF (QUERY (ccs <* sw_element\composite_curve.segments 
+         | NOT (valid_faceted_structural_wire_composition
+          (ccs.parent_curve)))) = 0);
+        END_IF;
+    END_IF;
+  END_IF;
+  RETURN (FALSE);
+END_FUNCTION;
+
+END_SCHEMA;  -- building_design_schema

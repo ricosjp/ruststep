@@ -1,0 +1,97 @@
+(*
+ $Id: 10303-1270-mim-message.exp,v 1.1 2006/08/07 09:42:05 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N3083 - ISO/TS 10303-1270 Message - EXPRESS MIM
+ Supersedes ISO TC184/SC4/WG12 N2340
+*) 
+
+
+SCHEMA Message_mim;
+
+USE FROM Approval_mim;    -- ISO/TS 10303-1012
+
+USE FROM Date_time_assignment_mim;    -- ISO/TS 10303-1014
+
+USE FROM group_schema   -- ISO 10303-41
+  (group); 
+
+USE FROM management_resources_schema   -- ISO 10303-41
+  (group_assignment); 
+
+USE FROM Person_organization_assignment_mim;    -- ISO/TS 10303-1013
+
+USE FROM Person_organization_mim;    -- ISO/TS 10303-1011
+
+USE FROM product_definition_schema   -- ISO 10303-41
+  (product,
+   product_category,
+   product_related_product_category,
+   product_relationship); 
+
+USE FROM qualified_measure_schema   -- ISO 10303-45
+  (descriptive_representation_item); 
+
+USE FROM representation_schema   -- ISO 10303-43
+  (representation,
+   representation_context,
+   representation_item); 
+
+USE FROM Security_classification_mim;    -- ISO/TS 10303-1015
+
+USE FROM State_observed_mim;    -- ISO/TS 10303-1256
+
+
+TYPE message_approval = SELECT BASED_ON approval_item WITH 
+   (structured_message);
+END_TYPE; 
+
+TYPE message_date = SELECT BASED_ON date_item WITH 
+   (structured_message);
+END_TYPE; 
+
+TYPE message_date_time = SELECT BASED_ON date_and_time_item WITH 
+   (structured_message);
+END_TYPE; 
+
+TYPE message_organization = SELECT BASED_ON organization_item WITH 
+   (structured_message);
+END_TYPE; 
+
+TYPE message_person_and_organization = SELECT BASED_ON person_and_organization_item WITH 
+   (structured_message);
+END_TYPE; 
+
+TYPE message_security_classification = SELECT BASED_ON security_classification_item WITH 
+   (structured_message);
+END_TYPE; 
+
+TYPE message_state = SELECT BASED_ON state_observed_of_item WITH 
+   (structured_message);
+END_TYPE; 
+
+ENTITY containing_message
+  SUBTYPE OF (group_assignment);
+  items : SET[1:1] OF structured_message;
+  SELF\group_assignment.assigned_group RENAMED message_contents_group : message_contents_group;
+END_ENTITY;
+
+ENTITY message_contents_assignment
+  SUBTYPE OF (group_assignment);
+  items : SET[1:?] OF representation;
+  SELF\group_assignment.assigned_group RENAMED message_contents_group : message_contents_group;
+END_ENTITY;
+
+ENTITY message_contents_group
+  SUBTYPE OF (group);
+END_ENTITY;
+
+ENTITY message_relationship
+  SUBTYPE OF (product_relationship);
+  SELF\product_relationship.relating_product RENAMED relating_message : structured_message;
+  SELF\product_relationship.related_product RENAMED related_message : structured_message;
+END_ENTITY;
+
+ENTITY structured_message
+  SUBTYPE OF (product);
+END_ENTITY;
+
+END_SCHEMA;  -- Message_mim

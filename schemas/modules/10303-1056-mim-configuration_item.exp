@@ -1,0 +1,21 @@
+(*
+ $Id: 10303-1056-mim-configuration_item.exp,v 1.5 2006/08/07 09:42:03 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2533 - ISO/TS 10303-1056 Configuration item - EXPRESS MIM
+ Supersedes ISO TC184/SC4/WG12 N2483
+*) 
+
+
+SCHEMA Configuration_item_mim;
+
+USE FROM Product_version_mim;    -- ISO/TS 10303-1018
+
+USE FROM Product_view_definition_mim;    -- ISO/TS 10303-1019
+
+USE FROM Product_concept_identification_mim;    -- ISO/TS 10303-1060
+
+USE FROM configuration_management_schema   -- ISO 10303-44
+  (configuration_design,
+   configuration_item); 
+
+
+END_SCHEMA;  -- Configuration_item_mim

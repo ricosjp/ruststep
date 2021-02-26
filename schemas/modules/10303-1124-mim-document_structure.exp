@@ -1,0 +1,16 @@
+(*
+ $Id: 10303-1124-mim-document_structure.exp,v 1.5 2006/08/07 09:42:04 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N1196 - ISO/TS 10303-1124 Document structure - EXPRESS MIM
+*)
+
+
+
+SCHEMA Document_structure_mim;
+USE FROM Document_definition_mim; -- ISO/CD TS 10303-1123
+USE FROM File_identification_mim; -- ISO/CD TS 10303-1127
+USE FROM document_schema (document_relationship); -- ISO 10303-41
+USE FROM product_definition_schema -- ISO 10303-41
+	(product_definition_formation_relationship,
+         product_definition_relationship);
+END_SCHEMA;
+

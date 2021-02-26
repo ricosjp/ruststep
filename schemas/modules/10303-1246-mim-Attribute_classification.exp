@@ -1,0 +1,29 @@
+(*
+ $Id: 10303-1246-mim-Attribute_classification.exp,v 1.2 2006/08/07 09:42:05 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N3020 - ISO/TS 10303-1246 Attribute classification - EXPRESS MIM
+ Supersedes ISO TC184/SC4/WG12 N2256
+*) 
+
+
+SCHEMA Attribute_classification_mim;
+
+USE FROM Class_mim;    -- ISO/TS 10303-1070
+
+USE FROM classification_schema   -- ISO 10303-54
+  (class); 
+
+USE FROM management_resources_schema   -- ISO 10303-41
+  (attribute_classification_assignment); 
+
+
+TYPE attribute_classification_item = EXTENSIBLE GENERIC_ENTITY SELECT;
+END_TYPE; 
+
+ENTITY applied_attribute_classification_assignment
+  SUBTYPE OF (attribute_classification_assignment);
+  SELF\attribute_classification_assignment.assigned_class : class;
+  items : SET[1:?] OF attribute_classification_item;
+END_ENTITY;
+
+END_SCHEMA;  -- Attribute_classification_mim
+

@@ -1,0 +1,6862 @@
+(*
+  ARM EXPRESS for ISO 10303-214 ed 3
+  2008-10-14
+*)
+SCHEMA ARM_schema_214;
+
+ TYPE general_organizational_data_select = SELECT (
+   activity,
+   design_constraint,
+   activity_element,
+   design_discipline_item_definition,
+   activity_method_assignment,
+   document,
+   alternate_item_relationship,
+   document_file,
+   approval_status,
+   document_representation,
+   assembly_substitute_relationship,
+   document_version,
+   certification,
+   drawing,
+   class_category_association,
+   drawing_sheet,
+   class_condition_association,
+   general_classification,
+   class_inclusion_association,
+   geometric_model,
+   class_specification_association,
+   item,
+   class_structure_relationship,
+   item_definition_instance_relationship,
+   classification_association,
+   item_definition_relationship,
+   classification_system,
+   item_instance,
+   complex_product,
+   item_instance_relationship,
+   complex_product_relationship,
+   item_version,
+   configuration,
+   item_version_relationship,
+   contract,
+   manufacturing_configuration,
+   property_value_association,
+   material,
+   security_classification,
+   organization_relationship,
+   security_level,
+   person_in_organization,
+   simple_property_association,
+   person_in_organization_relationship,
+   specification,
+   physical_assembly_relationship,
+   specification_category,
+   physical_instance,
+   specification_expression,
+   physical_instance_test_result,
+   specification_inclusion,
+   process_operation_definition,
+   styled_model,
+   view_area,
+   process_operation_occurrence,
+   work_order,
+   process_operation_resource_assignment,
+   work_request,
+   process_plan,
+   product_class,
+   product_identification,
+   product_structure_relationship,
+   project,
+   property,
+   kinematic_simulation_information,
+   organization,
+   document_type_property
+  );
+ END_TYPE;
+
+ TYPE boolean_operand_select = SELECT (
+   csg_select,
+   half_space_solid
+  );
+ END_TYPE;
+
+ TYPE csg_select = SELECT (
+   boolean_result,
+   non_primitive_solid_select,
+   csg_primitive
+  );
+ END_TYPE;
+
+ TYPE limitation_definition_select = SELECT (
+   limits_and_fits,
+   plus_minus_bounds
+  );
+ END_TYPE;
+
+ TYPE fill_area_associated_element_select = SELECT (
+   annotation_curve,
+   detailed_geometric_model_element
+  );
+ END_TYPE;
+
+ TYPE general_tolerance_table_select = SELECT (
+   document_file,
+   general_tolerance_table
+  );
+ END_TYPE;
+
+ TYPE area_select = SELECT (
+   view_area,
+   drawing_sheet
+  );
+ END_TYPE;
+
+ TYPE appearance_context_select = SELECT (
+   view,
+   structuring_method_select,
+   area_select,
+   model_image
+  );
+ END_TYPE;
+
+ TYPE structuring_method_select = SELECT (
+   group,
+   layer
+  );
+ END_TYPE;
+
+ TYPE default_setting_select = SELECT (
+   default_surface_texture,
+   default_chamfer,
+   default_draft_angle,
+   default_fillet,
+   default_edge_round,
+   general_tolerances,
+   default_thickness
+  );
+ END_TYPE;
+
+ TYPE model_change_select = SELECT (
+   styled_model_relationship,
+   geometric_model_relationship,
+   view_area_relationship,
+   view_relationship
+  );
+ END_TYPE;
+
+ TYPE cell_entry_select = SELECT (
+   plus_minus_toleranced_datum,
+   upper_lower_toleranced_datum
+  );
+ END_TYPE;
+
+ TYPE documented_element_select = SELECT (
+   contract,
+   material,
+   activity,
+   approval,
+   drawing_sheet,
+   change,
+   item_instance,
+   design_constraint,
+   descriptive_specification,
+   general_classification,
+   classification_attribute,
+   classification_system,
+   certification,
+   activity_method,
+   item_shape,
+   item_definition_instance_relationship,
+   item_instance_relationship,
+   item_definition_relationship,
+   complex_product,
+   feature_definition,
+   general_feature,
+   catalogue_thread,
+   specification_category,
+   thread_feature,
+   surface_condition,
+   work_request,
+   work_order,
+   transition_feature,
+   security_classification,
+   view_area,
+   physical_assembly_relationship,
+   physical_instance,
+   physical_instance_test_result,
+   process_plan,
+   process_operation_occurrence,
+   product_identification,
+   product_class,
+   product_structure_relationship,
+   profile,
+   project,
+   property,
+   retention_period,
+   shape_element,
+   shape_element_relationship,
+   specific_item_classification,
+   specification,
+   class_structure_relationship,
+   item,
+   activity_element,
+   item_version,
+   person,
+   path,
+   organization,
+   design_discipline_item_definition
+  );
+ END_TYPE;
+
+ TYPE connected_element_select = SELECT (
+   oriented_edge_curve,
+   face
+  );
+ END_TYPE;
+
+ TYPE loop_select = SELECT (
+   vertex_loop,
+   edge_loop
+  );
+ END_TYPE;
+
+ TYPE appearance_select = SELECT (
+   solid_fill_area,
+   tiling,
+   text_appearance,
+   surface_appearance,
+   curve_appearance,
+   point_appearance,
+   hatching
+  );
+ END_TYPE;
+
+ TYPE taper_select = SELECT (
+   diameter_taper,
+   angle_taper,
+   directed_taper
+  );
+ END_TYPE;
+
+ TYPE non_primitive_solid_select = SELECT (
+   swept_face_solid,
+   faceted_b_rep_model,
+   b_rep_model,
+   solid_replica
+  );
+ END_TYPE;
+
+ TYPE resource_definition_select = SELECT (
+   descriptive_specification,
+   design_discipline_item_definition,
+   item_instance,
+   physical_instance,
+   product_component
+  );
+ END_TYPE;
+
+ TYPE point_direction_element_select = SELECT (
+   point_on_surface,
+   point_direction
+  );
+ END_TYPE;
+
+ TYPE specification_operand_select = SELECT (
+   specification_expression,
+   specification
+  );
+ END_TYPE;
+
+ TYPE configured_specification_select = SELECT (
+   class_specification_association,
+   class_condition_association
+  );
+ END_TYPE;
+
+ TYPE configured_item_select = SELECT (
+   process_operation_occurrence,
+   item_instance,
+   complex_product_select,
+   process_plan
+  );
+ END_TYPE;
+
+ TYPE limit_select = SELECT (
+   significant_number_of_digits,
+   upper_lower_limit
+  );
+ END_TYPE;
+
+ TYPE template_definition_select = SELECT (
+   geometric_model,
+   styled_model,
+   external_model
+  );
+ END_TYPE;
+
+ TYPE associated_element_select = SELECT (
+   annotation_element,
+   detailed_geometric_model_element
+  );
+ END_TYPE;
+
+ TYPE placed_element_select = SELECT (
+   derived_geometry,
+   constructive_geometric_element,
+   element_with_dimension_select
+  );
+ END_TYPE;
+
+ TYPE complex_product_select = SELECT (
+   alternative_solution,
+   product_component,
+   product_function
+  );
+ END_TYPE;
+
+ TYPE element_with_dimension_select = SELECT (
+   shape_element,
+   annotation_curve
+  );
+ END_TYPE;
+
+ TYPE constructive_element_select = SELECT (
+   face,
+   point,
+   curve,
+   surface,
+   oriented_edge_curve,
+   vertex_point,
+   axis_placement
+  );
+ END_TYPE;
+
+ TYPE compound_in_solid_select = SELECT (
+   process_feature_in_solid,
+   transition_feature,
+   thread_feature
+  );
+ END_TYPE;
+
+ TYPE person_organization_select = SELECT (
+   person_in_organization,
+   organization
+  );
+ END_TYPE;
+
+ TYPE contracted_element_select = SELECT (
+   drawing,
+   item_version,
+   activity
+  );
+ END_TYPE;
+
+ TYPE shape_information_select = SELECT (
+   shape_element_relationship,
+   feature_definition_select,
+   shaped_element_select
+  );
+ END_TYPE;
+
+ TYPE process_operation_input_or_output_select = SELECT (
+   design_discipline_item_definition,
+   mated_item_association,
+   assembly_component_relationship,
+   item_instance
+  );
+ END_TYPE;
+
+ TYPE item_information_select = SELECT (
+   design_discipline_item_definition,
+   item_instance,
+   physical_instance,
+   product_component
+  );
+ END_TYPE;
+
+ TYPE presentation_association_select = SELECT (
+   process_plan,
+   process_operation_occurrence,
+   product_class,
+   specification,
+   specification_category,
+   design_constraint,
+   design_discipline_item_definition,
+   item_instance,
+   item_definition_instance_relationship,
+   item_definition_relationship,
+   item_instance_relationship,
+   complex_product,
+   item_version,
+   process_operation_definition
+  );
+ END_TYPE;
+
+ TYPE string_select = SELECT (
+   multi_language_string,
+   default_language_string
+  );
+ END_TYPE;
+
+ TYPE point_or_curve_select = SELECT (
+   curve,
+   point
+  );
+ END_TYPE;
+
+ TYPE model_property_representation_select = SELECT (
+   geometric_model,
+   styled_model,
+   external_model
+  );
+ END_TYPE;
+
+ TYPE default_context_select = SELECT (
+   area_select,
+   digital_document,
+   item_shape,
+   digital_file
+  );
+ END_TYPE;
+
+ TYPE activity_element_select = SELECT (
+   property,
+   view_area,
+   specification,
+   specification_category,
+   specification_expression,
+   specification_inclusion,
+   class_category_association,
+   class_inclusion_association,
+   class_specification_association,
+   product_class,
+   design_constraint,
+   activity_method,
+   configuration,
+   item_instance,
+   product_identification,
+   document_representation,
+   geometric_model,
+   document_file,
+   styled_model,
+   assembly_substitute_relationship,
+   document,
+   document_version,
+   feature_occurrence,
+   product_structure_relationship,
+   item_definition_instance_relationship,
+   item_definition_relationship,
+   item_instance_relationship,
+   complex_product,
+   process_plan,
+   property_value_association,
+   process_operation_definition,
+   design_discipline_item_definition,
+   alternate_item_relationship,
+   class_condition_association,
+   class_structure_relationship,
+   item,
+   item_version,
+   kinematic_simulation_information,
+   manufacturing_configuration,
+   material,
+   process_operation_occurrence,
+   physical_instance,
+   physical_assembly_relationship,
+   drawing,
+   simple_property_association,
+   project,
+   general_classification,
+   activity
+  );
+ END_TYPE;
+
+ TYPE security_element_select = SELECT (
+   work_request,
+   physical_instance,
+   drawing,
+   configuration,
+   material,
+   activity,
+   activity_element,
+   work_order,
+   project,
+   view_area,
+   drawing_sheet,
+   item_version,
+   specification,
+   specification_category,
+   design_constraint,
+   item,
+   document,
+   document_version,
+   document_file,
+   classification_system,
+   styled_model,
+   physical_instance_test_result,
+   assembly_substitute_relationship,
+   physical_assembly_relationship,
+   geometric_model,
+   kinematic_simulation_information,
+   document_representation,
+   manufacturing_configuration,
+   complex_product,
+   property_value_association,
+   property,
+   class_structure_relationship,
+   product_structure_relationship,
+   product_class,
+   process_plan,
+   simple_property_association
+  );
+ END_TYPE;
+
+ TYPE approval_element_select = SELECT (
+   document,
+   document_version,
+   document_representation,
+   geometric_model,
+   kinematic_simulation_information,
+   activity_method_assignment,
+   styled_model,
+   design_constraint,
+   specification_category,
+   class_category_association,
+   class_specification_association,
+   class_condition_association,
+   specification_expression,
+   specification_inclusion,
+   certification,
+   contract,
+   product_class,
+   physical_instance_test_result,
+   document_file,
+   class_inclusion_association,
+   drawing,
+   specification,
+   configuration,
+   material,
+   activity,
+   activity_element,
+   process_plan,
+   work_order,
+   project,
+   work_request,
+   physical_assembly_relationship,
+   design_discipline_item_definition,
+   physical_instance,
+   assembly_substitute_relationship,
+   alternate_item_relationship,
+   drawing_sheet,
+   view_area,
+   product_structure_relationship,
+   manufacturing_configuration,
+   complex_product,
+   property_value_association,
+   item_version,
+   property,
+   class_structure_relationship,
+   item_definition_instance_relationship,
+   item_definition_relationship,
+   item_instance,
+   item_instance_relationship,
+   general_classification,
+   classification_association,
+   classification_system,
+   simple_property_association
+  );
+ END_TYPE;
+
+ TYPE change_relationship_select = SELECT (
+   item_version_relationship,
+   process_plan_relationship,
+   design_constraint_relationship,
+   shape_element_relationship,
+   replaced_definition_relationship,
+   replaced_usage_relationship,
+   complex_product_relationship,
+   process_operation_occurrence_relationship,
+   activity_relationship
+  );
+ END_TYPE;
+
+ TYPE topologically_bounded_curve_select = SELECT (
+   line,
+   curve_on_surface,
+   b_spline_curve,
+   parabola,
+   hyperbola,
+   ellipse,
+   circle,
+   polyline
+  );
+ END_TYPE;
+
+ TYPE starting_or_ending = ENUMERATION OF ( starting, ending  );
+ END_TYPE;
+
+ TYPE constructive_geometry_select = SELECT (
+   geometric_model,
+   constructive_geometry
+  );
+ END_TYPE;
+
+ TYPE geometric_or_external_model_select = SELECT (
+   external_model,
+   geometric_model
+  );
+ END_TYPE;
+
+ TYPE feature_definition_select = SELECT (
+   transition_feature,
+   feature_definition,
+   general_feature,
+   thread_feature
+  );
+ END_TYPE;
+
+ TYPE straight_or_tapered = ENUMERATION OF ( straight, tapered  );
+ END_TYPE;
+
+ TYPE transformation_select = SELECT (
+   template_instance,
+   geometric_model_relationship_with_transformation
+  );
+ END_TYPE;
+
+ TYPE presented_model_select = SELECT (
+   styled_model,
+   external_model
+  );
+ END_TYPE;
+
+ TYPE profile_or_angle_select = SELECT (
+   closed_profile_usage,
+   angle_specification
+  );
+ END_TYPE;
+
+ TYPE boss_pocket_stairstep_enumeration = ENUMERATION OF ( boss, pocket, stairstep  );
+ END_TYPE;
+
+ TYPE event_or_date_select = SELECT (
+   event_reference,
+   date_time
+  );
+ END_TYPE;
+
+ TYPE period_or_date_select = SELECT (
+   duration,
+   event_reference,
+   date_time
+  );
+ END_TYPE;
+
+ TYPE alias_select = SELECT (
+   organization,
+   product_class,
+   approval_status,
+   security_level,
+   item,
+   document,
+   document_version,
+   specification,
+   item_version,
+   item_instance,
+   styled_model,
+   specification_category,
+   document_representation,
+   document_type_property,
+   physical_instance,
+   geometric_model,
+   general_classification,
+   complex_product,
+   classification_system,
+   property,
+   classification_attribute,
+   design_discipline_item_definition,
+   activity,
+   work_order,
+   work_request,
+   project
+  );
+ END_TYPE;
+
+ TYPE accuracy_select = SELECT (
+   vertex_point,
+   geometric_model,
+   face,
+   oriented_edge_curve,
+   external_geometric_model
+  );
+ END_TYPE;
+
+ TYPE instance_definition_select = SELECT (
+   design_discipline_item_definition,
+   product_identification
+  );
+ END_TYPE;
+
+ TYPE physical_instance_definition_select = SELECT (
+   product_identification,
+   design_discipline_item_definition
+  );
+ END_TYPE;
+
+ TYPE chamfer_value_select = SELECT (
+   chamfer_angle,
+   chamfer_offset
+  );
+ END_TYPE;
+
+ TYPE compound_in_panel_select = SELECT (
+   transition_feature,
+   process_feature_in_panel
+  );
+ END_TYPE;
+
+ TYPE angle_reference_enumeration = ENUMERATION OF ( punch_direction, profile_normal, surface_normal  );
+ END_TYPE;
+
+ TYPE general_end_select = SELECT (
+   surface,
+   shell
+  );
+ END_TYPE;
+
+ TYPE active_or_inactive = ENUMERATION OF ( active,inactive  );
+ END_TYPE;
+
+ TYPE default_language_string = STRING;
+ END_TYPE;
+
+ TYPE point_or_curve_or_surface_select = SELECT (
+   surface,
+   point_or_curve_select
+  );
+ END_TYPE;
+
+ TYPE simulation_context_select = SELECT (
+   design_discipline_item_definition,
+   item_instance,
+   product_specification,
+   product_class,
+   item_definition_instance_relationship,
+   item_instance_relationship,
+   item_definition_relationship,
+   complex_product
+  );
+ END_TYPE;
+
+ TYPE assigned_document_select = SELECT (
+   document,
+   document_version,
+   document_file,
+   document_representation,
+   externally_defined_size_dimension
+  );
+ END_TYPE;
+
+ TYPE annotation_select = SELECT (
+   annotation_element,
+   draughting_callout
+  );
+ END_TYPE;
+
+ TYPE class_source_select = SELECT (
+   external_library_reference,
+   plib_class_reference
+  );
+ END_TYPE;
+
+ TYPE classified_element_select = SELECT (
+   design_constraint,
+   item,
+   approval_status,
+   security_level,
+   product_class,
+   document,
+   document_representation,
+   project,
+   contract,
+   activity_method,
+   property,
+   catalogue_thread,
+   material,
+   product_identification,
+   complex_product,
+   feature_definition,
+   general_feature,
+   activity,
+   item_version,
+   property_value_association,
+   item_instance,
+   design_discipline_item_definition,
+   document_version,
+   shape_element,
+   specification_category,
+   thread_feature,
+   transition_feature,
+   work_order,
+   work_request,
+   process_plan,
+   process_operation_definition,
+   process_operation_occurrence,
+   document_file,
+   simple_property_association,
+   specification,
+   effectivity
+  );
+ END_TYPE;
+
+ TYPE property_source_select = SELECT (
+   external_library_reference,
+   plib_property_reference
+  );
+ END_TYPE;
+
+ TYPE item_property_select = SELECT (
+   product_class,
+   design_constraint,
+   catalogue_thread,
+   item_instance,
+   design_discipline_item_definition,
+   product_structure_relationship,
+   item_definition_relationship,
+   item_definition_instance_relationship,
+   item_instance_relationship,
+   item_shape,
+   shape_element,
+   shape_element_relationship,
+   complex_product,
+   document_file,
+   document_representation,
+   feature_definition,
+   general_feature,
+   thread_feature,
+   transition_feature,
+   product_identification,
+   physical_instance
+  );
+ END_TYPE;
+
+ TYPE model_property_select = SELECT (
+   process_property_select,
+   item_property_select
+  );
+ END_TYPE;
+
+ TYPE effective_element_select = SELECT (
+   item,
+   item_version,
+   product_identification,
+   item_instance,
+   material,
+   drawing,
+   view_area,
+   specification,
+   specification_category,
+   specification_inclusion,
+   specification_expression,
+   product_class,
+   design_constraint,
+   security_classification,
+   class_inclusion_association,
+   class_category_association,
+   kinematic_simulation_information,
+   class_specification_association,
+   assembly_substitute_relationship,
+   class_condition_association,
+   geometric_model,
+   styled_model,
+   document_file,
+   document,
+   feature_occurrence,
+   classification_system,
+   product_structure_relationship,
+   document_version,
+   configuration,
+   item_definition_instance_relationship,
+   item_definition_relationship,
+   item_instance_relationship,
+   complex_product,
+   property_value_association,
+   property,
+   class_structure_relationship,
+   complex_product_relationship,
+   document_representation,
+   process_operation_definition,
+   process_operation_definition_relationship,
+   process_plan,
+   process_operation_occurrence,
+   process_operation_resource_assignment,
+   process_operation_occurrence_relationship,
+   simple_property_association,
+   general_classification
+  );
+ END_TYPE;
+
+ TYPE certified_element_select = SELECT (
+   item_version_relationship,
+   item_version,
+   item_instance,
+   supplier_solution
+  );
+ END_TYPE;
+
+ TYPE test_activity_select = SELECT (
+   activity,
+   process_operation_occurrence
+  );
+ END_TYPE;
+
+ TYPE process_property_select = SELECT (
+   process_plan,
+   process_operation_occurrence,
+   process_operation_resource_assignment,
+   activity,
+   activity_method_assignment,
+   process_operation_definition
+  );
+ END_TYPE;
+
+ TYPE model_change_element_select = SELECT (
+   geometric_model,
+   styled_model
+  );
+ END_TYPE;
+
+ TYPE incremental_change_select = SELECT (
+   incremental_model_change,
+   model_change_element_select
+  );
+ END_TYPE;
+
+ TYPE instance_usage_context_select = SELECT (
+   product_structure_relationship,
+   item_definition_instance_relationship,
+   process_operation_input_or_output
+  );
+ END_TYPE;
+
+ TYPE texture_select = SELECT (
+   surface_texture,
+   default_surface_texture
+  );
+ END_TYPE;
+
+ TYPE dimension_callout_select = SELECT (
+   text,
+   dimension_symbol
+  );
+ END_TYPE;
+
+ TYPE shaped_element_select = SELECT (
+   shape_element,
+   item_shape
+  );
+ END_TYPE;
+
+ TYPE final_definition_select = SELECT (
+   physical_instance,
+   design_discipline_item_definition,
+   descriptive_specification
+  );
+ END_TYPE;
+
+ TYPE product_function_component_select = SELECT (
+   product_component,
+   product_function
+  );
+ END_TYPE;
+
+ TYPE date_time_person_organization_element_select = SELECT (
+   event_reference,
+   general_organizational_data_select
+  );
+ END_TYPE;
+
+ TYPE symbol_definition_select = SELECT (
+   dimension_symbol,
+   geometric_tolerance_symbol,
+   general_symbol,
+   surface_condition_symbol,
+   terminator_symbol,
+   point_marker_symbol
+  );
+ END_TYPE;
+
+ TYPE pocket_bottom_condition_select = SELECT (
+   pocket_bottom_condition,
+   through_pocket_bottom_condition
+  );
+ END_TYPE;
+
+ TYPE group_element_select = SELECT (
+   detailed_element,
+   shape_element
+  );
+ END_TYPE;
+
+ TYPE hole_bottom_condition_select = SELECT (
+   hole_bottom_condition,
+   through_hole_bottom_condition
+  );
+ END_TYPE;
+
+ TYPE validity_context_select = SELECT (
+   organization,
+   product_identification,
+   product_class
+  );
+ END_TYPE;
+
+ TYPE shape_definition_select = SELECT (
+   external_geometric_model,
+   geometric_model
+  );
+ END_TYPE;
+
+ TYPE draughting_callout_content_select = SELECT (
+   text,
+   annotation_curve,
+   annotation_subfigure,
+   annotation_symbol
+  );
+ END_TYPE;
+
+ TYPE project_information_select = SELECT (
+   item,
+   product_identification,
+   document_version,
+   product_class,
+   document,
+   physical_instance,
+   complex_product,
+   item_version,
+   item_instance,
+   activity
+  );
+ END_TYPE;
+
+ TYPE simple_property_select = SELECT (
+   item_property_select,
+   process_property_select
+  );
+ END_TYPE;
+
+ TYPE product_constituent_select = SELECT (
+   product_function,
+   product_component,
+   item_instance
+  );
+ END_TYPE;
+
+ TYPE shape_element_or_relationship_select = SELECT (
+   shape_element,
+   shape_element_relationship
+  );
+ END_TYPE;
+
+ TYPE property_value_select = SELECT (
+   numerical_value,
+   cartesian_point
+  );
+ END_TYPE;
+
+ TYPE explicit_transformation = SELECT (
+   explicit_transformation_2d,
+   explicit_transformation_3d
+  );
+ END_TYPE;
+
+ TYPE styled_model_element_select = SELECT (
+   styled_element
+  );
+ END_TYPE;
+
+ ENTITY product_class;
+(*
+UOF:S4,S7
+*)
+  name : OPTIONAL string_select;
+  id : STRING;
+  description : OPTIONAL string_select;
+  level_type : OPTIONAL STRING;
+  version_id : OPTIONAL STRING;
+ END_ENTITY;
+
+ ENTITY group;
+(*
+UOF:S2
+*)
+  purpose : OPTIONAL string_select;
+  element : SET [0:?] OF group_element_select;
+  name : string_select;
+ END_ENTITY;
+
+ ENTITY template_instance
+  SUBTYPE OF (
+   detailed_model_element
+  );
+(*
+UOF:E1,S2
+*)
+  template_definition : template_definition_select;
+  id : STRING;
+  scale : OPTIONAL REAL;
+  origin : axis_placement;
+  target : explicit_transformation;
+ END_ENTITY;
+
+ ENTITY layer;
+(*
+UOF:S2
+*)
+  id : STRING;
+  description : OPTIONAL string_select;
+  element : SET [1:?] OF detailed_element;
+ END_ENTITY;
+
+ ENTITY drawing;
+(*
+UOF:D1
+*)
+  drawing_id : STRING;
+  language : SET [0:?] OF STRING;
+  title : OPTIONAL string_select;
+  drawing_revision_id : STRING;
+  drawing_specification : SET [0:?] OF STRING;
+  drawing_type : STRING;
+ INVERSE
+  sheet : SET [1:?] OF drawing_sheet FOR associated_drawing;
+ END_ENTITY;
+
+ ENTITY drawing_sheet;
+(*
+UOF:D1
+*)
+  associated_drawing : drawing;
+  title : OPTIONAL string_select;
+  sheet_id : STRING;
+  sheet_revision_id : STRING;
+  sheet_space : cartesian_coordinate_space_2d;
+  size : STRING;
+ END_ENTITY;
+
+ ENTITY cartesian_coordinate_space_2d
+  SUBTYPE OF (
+   cartesian_coordinate_space
+  );
+(*
+UOF:E1,S2
+*)
+ END_ENTITY;
+
+ ENTITY cartesian_coordinate_space_3d
+  SUBTYPE OF (
+   cartesian_coordinate_space
+  );
+(*
+UOF:E1,S2
+*)
+ END_ENTITY;
+
+ ENTITY area_placed_annotation;
+(*
+UOF:P2
+*)
+  element : annotation_select;
+  reference_area : area_select;
+ END_ENTITY;
+
+ ENTITY view_area;
+(*
+UOF:P1
+*)
+  name : OPTIONAL string_select;
+  description : OPTIONAL string_select;
+  revision_id : OPTIONAL STRING;
+  area_space : cartesian_coordinate_space_2d;
+  size : STRING;
+  id : OPTIONAL STRING;
+ END_ENTITY;
+
+ ENTITY view_placed_annotation;
+(*
+UOF:P2
+*)
+  reference_view : view;
+  element : annotation_select;
+ END_ENTITY;
+
+ ENTITY model_image;
+(*
+UOF:P1
+*)
+  clipping : OPTIONAL view_boundary;
+  name : OPTIONAL string_select;
+  view_projection : STRING;
+  is_presented_in : view;
+  view_volume_placement : axis_placement;
+  is_displaying : presented_model_select;
+  scale : STRING;
+ INVERSE
+  has : SET [0:1] OF hidden_element_handling FOR is_defined_for;
+ END_ENTITY;
+
+ ENTITY general_item_definition_relationship
+  SUBTYPE OF (
+   item_definition_relationship
+  );
+(*
+UOF:S3
+*)
+  relation_type : STRING;
+  description : OPTIONAL string_select;
+ END_ENTITY;
+
+ ENTITY tool_part_relationship
+  SUBTYPE OF (
+   item_definition_relationship
+  );
+(*
+UOF:S8
+*)
+  placement : OPTIONAL transformation_select;
+  used_technology_description : OPTIONAL string_select;
+ END_ENTITY;
+
+ ENTITY geometrical_relationship
+  SUBTYPE OF (
+   item_definition_relationship
+  );
+(*
+UOF:S3
+*)
+  description : OPTIONAL string_select;
+  definition_placement : transformation_select;
+ END_ENTITY;
+
+ ENTITY mating_definition
+  SUBTYPE OF (
+   design_discipline_item_definition
+  );
+(*
+UOF:S8
+*)
+  mating_type : STRING;
+ INVERSE
+  mated_items : SET [2:?] OF mated_item_association FOR relating;
+ END_ENTITY;
+
+ ENTITY replaced_definition_relationship
+  SUBTYPE OF (
+   item_definition_relationship
+  );
+(*
+UOF:S3
+*)
+  description : OPTIONAL string_select;
+ END_ENTITY;
+
+ ENTITY assembly_component_relationship
+  SUPERTYPE OF ( ONEOF(promissory_usage,next_higher_assembly) )
+  SUBTYPE OF (
+   item_definition_instance_relationship
+  );
+(*
+UOF:S3
+*)
+  SELF\item_definition_instance_relationship.relating : assembly_definition;
+  placement : OPTIONAL transformation_select;
+ END_ENTITY;
+
+ ENTITY promissory_usage
+  SUBTYPE OF (
+   assembly_component_relationship
+  );
+(*
+UOF:S3
+*)
+ END_ENTITY;
+
+ ENTITY next_higher_assembly
+  SUBTYPE OF (
+   assembly_component_relationship
+  );
+(*
+UOF:S3
+*)
+ END_ENTITY;
+
+ ENTITY item;
+(*
+UOF:S1
+*)
+  id : STRING;
+  name : string_select;
+  description : OPTIONAL string_select;
+ INVERSE
+  item_classification : SET [1:?] OF specific_item_classification FOR associated_item;
+  associated_version : SET [1:?] OF item_version FOR associated_item;
+ END_ENTITY;
+
+ ENTITY item_version;
+(*
+UOF:S1
+*)
+  id : STRING;
+  description : OPTIONAL string_select;
+  associated_item : item;
+ INVERSE
+  associated_product : SET [0:1] OF product_design FOR design;
+ END_ENTITY;
+
+ ENTITY design_discipline_item_definition
+  SUPERTYPE OF ( ONEOF(mating_definition,assembly_definition,collection_definition) );
+(*
+UOF:S1
+*)
+  name : OPTIONAL string_select;
+  id : STRING;
+  associated_item_version : item_version;
+  additional_context : SET [0:?] OF application_context;
+  initial_context : application_context;
+ END_ENTITY;
+
+ ENTITY cartesian_coordinate_space
+  ABSTRACT SUPERTYPE OF ( ONEOF(cartesian_coordinate_space_2d,cartesian_coordinate_space_3d) );
+(*
+UOF:E1,S2
+*)
+  unit_of_values : OPTIONAL SET [2:?] OF unit;
+ END_ENTITY;
+
+ ENTITY general_classification;
+(*
+UOF:S6
+*)
+  classification_source : OPTIONAL class_source_select;
+  used_classification_system : OPTIONAL classification_system;
+  description : OPTIONAL string_select;
+  id : STRING;
+  version_id : OPTIONAL STRING;
+ END_ENTITY;
+
+ ENTITY general_classification_hierarchy;
+(*
+UOF:S6
+*)
+  super_classification : general_classification;
+  sub_classification : general_classification;
+ END_ENTITY;
+
+ ENTITY specific_item_classification;
+(*
+UOF:S1,S6
+*)
+  associated_item : SET [1:?] OF item;
+  description : OPTIONAL string_select;
+  classification_name : STRING;
+ END_ENTITY;
+
+ ENTITY accuracy;
+(*
+UOF:S2,E1
+*)
+  accuracy_value : REAL;
+  accuracy_type : STRING;
+  is_defined_for : SET [1:?] OF accuracy_select;
+  description : OPTIONAL string_select;
+ END_ENTITY;
+
+ ENTITY activity;
+(*
+UOF:S5
+*)
+  activity_type : STRING;
+  id : STRING;
+  status : OPTIONAL STRING;
+  description : OPTIONAL string_select;
+  resolved_request : SET [0:?] OF work_request;
+  concerned_organization : SET [0:?] OF organization;
+  supplying_organization : SET [0:?] OF organization;
+  requestor : OPTIONAL date_and_person_organization;
+  actual_end_date : OPTIONAL date_time;
+  planned_end_date : OPTIONAL period_or_date_select;
+  planned_start_date : OPTIONAL event_or_date_select;
+  actual_start_date : OPTIONAL date_time;
+  internal : OPTIONAL BOOLEAN;
+  chosen_method : OPTIONAL activity_method;
+ INVERSE
+  authorization : SET [0:1] OF work_order FOR is_controlling;
+ END_ENTITY;
+
+ ENTITY activity_relationship;
+(*
+UOF:S5
+*)
+  related : activity;
+  relating : activity;
+  description : OPTIONAL string_select;
+  relation_type : STRING;
+ END_ENTITY;
+
+ ENTITY approval;
+(*
+UOF:S1
+*)
+  status : approval_status;
+  is_applied_to : SET [1:?] OF approval_element_select;
+  is_approved_by : SET [0:?] OF date_and_person_organization;
+  planned_date : OPTIONAL date_time;
+  actual_date : OPTIONAL date_time;
+  scope : SET [0:?] OF organization;
+  level : OPTIONAL STRING;
+ END_ENTITY;
+
+ ENTITY organization;
+(*
+UOF:S1
+*)
+  organization_name : STRING;
+  visitor_address : OPTIONAL address;
+  organization_type : OPTIONAL STRING;
+  id : STRING;
+  delivery_address : OPTIONAL address;
+  postal_address : OPTIONAL address;
+ END_ENTITY;
+
+ ENTITY date_and_person_organization;
+(*
+UOF:S1
+*)
+  person_or_organization : person_organization_select;
+  actual_date : date_time;
+ END_ENTITY;
+
+ ENTITY contract;
+(*
+UOF:S1
+*)
+  id : STRING;
+  description : OPTIONAL string_select;
+  contracted_element : SET [0:?] OF contracted_element_select;
+ INVERSE
+  release : SET [0:?] OF organization_in_contract FOR signed_contract;
+ END_ENTITY;
+
+ ENTITY wireframe_model_3d
+  SUBTYPE OF (
+   geometric_model
+  );
+(*
+UOF:G2
+*)
+  element : SET [0:?] OF curve_set_3d;
+ END_ENTITY;
+
+ ENTITY surface_model
+  SUBTYPE OF (
+   geometric_model
+  );
+(*
+UOF:G3
+*)
+  element : SET [0:?] OF shell;
+ END_ENTITY;
+
+ ENTITY faceted_b_rep_model
+  SUBTYPE OF (
+   geometric_model
+  );
+(*
+UOF:G4,G7
+*)
+  element : SET [0:?] OF faceted_b_rep;
+ END_ENTITY;
+
+ ENTITY b_rep_model
+  SUBTYPE OF (
+   geometric_model
+  );
+(*
+UOF:G5,G7
+*)
+  element : SET [0:?] OF b_rep;
+ END_ENTITY;
+
+ ENTITY csg_model
+  SUBTYPE OF (
+   geometric_model
+  );
+(*
+UOF:G7
+*)
+  tree_root_expression : SET [0:?] OF csg_select;
+ END_ENTITY;
+
+ ENTITY compound_model
+  SUBTYPE OF (
+   geometric_model
+  );
+(*
+UOF:G6
+*)
+  element : SET [0:?] OF topologically_connected_set;
+ END_ENTITY;
+
+ ENTITY wireframe_model_2d
+  SUBTYPE OF (
+   geometric_model
+  );
+(*
+UOF:G1
+*)
+  element : SET [0:?] OF curve_set_2d;
+ END_ENTITY;
+
+ ENTITY cartesian_point
+  SUBTYPE OF (
+   point
+  );
+(*
+UOF:G1,G2,G3,G4,G5,G6,G7,G8
+*)
+  coordinates : LIST [2:3] OF REAL;
+ END_ENTITY;
+
+ ENTITY point_on_curve
+  SUBTYPE OF (
+   point
+  );
+(*
+UOF:G1,G2,G3,G6,G8
+*)
+ END_ENTITY;
+
+ ENTITY point_on_surface
+  SUBTYPE OF (
+   point
+  );
+(*
+UOF:G3,G6,G8
+*)
+ END_ENTITY;
+
+ ENTITY point_direction_sequence
+  SUBTYPE OF (
+   detailed_geometric_model_element
+  );
+(*
+UOF:MD1
+*)
+  element : LIST [1:?] OF point_direction_element_select;
+ END_ENTITY;
+
+ ENTITY point_direction
+  SUBTYPE OF (
+   detailed_geometric_model_element
+  );
+(*
+UOF:MD1
+*)
+  location : cartesian_point;
+  vector : direction;
+ END_ENTITY;
+
+ ENTITY offset_curve
+  SUBTYPE OF (
+   curve
+  );
+(*
+UOF:G1,G2,G3,G8
+*)
+ END_ENTITY;
+
+ ENTITY curve_on_surface
+  SUBTYPE OF (
+   curve
+  );
+(*
+UOF:G3,G5,G6,G7,G8
+*)
+ END_ENTITY;
+
+ ENTITY composite_curve
+  SUBTYPE OF (
+   curve
+  );
+(*
+UOF:G1,G2,G8
+*)
+ END_ENTITY;
+
+ ENTITY trimmed_curve
+  SUBTYPE OF (
+   curve
+  );
+(*
+UOF:G1,G2,G8
+*)
+ END_ENTITY;
+
+ ENTITY polyline
+  SUBTYPE OF (
+   curve
+  );
+(*
+UOF:G1,G2,G3,G5,G6,G7,G8
+*)
+ END_ENTITY;
+
+ ENTITY b_spline_curve
+  SUBTYPE OF (
+   curve
+  );
+(*
+UOF:G1,G2,G3,G5,G6,G7,G8
+*)
+ END_ENTITY;
+
+ ENTITY line
+  SUBTYPE OF (
+   curve
+  );
+(*
+UOF:G1,G2,G3,G5,G6,G7,G8
+*)
+ END_ENTITY;
+
+ ENTITY face
+  SUBTYPE OF (
+   detailed_geometric_model_element
+  );
+(*
+UOF:G3,G5,G6,G7
+*)
+  bound : SET [1:?] OF face_bound;
+  face_geometry : surface;
+ END_ENTITY;
+
+ ENTITY vertex_loop;
+(*
+UOF:G3,G5,G6,G7
+*)
+  loop_vertex : vertex_point;
+ END_ENTITY;
+
+ ENTITY edge_loop;
+(*
+UOF:G3,G5,G6,G7
+*)
+  edge : LIST [1:?] OF oriented_edge_curve;
+ END_ENTITY;
+
+ ENTITY oriented_edge_curve;
+(*
+UOF:G3,G5,G6,G7
+*)
+  edge_start : vertex_point;
+  edge_end : vertex_point;
+  edge_geometry : topologically_bounded_curve_select;
+ END_ENTITY;
+
+ ENTITY vertex_point;
+(*
+UOF:G3,G5,G6,G7
+*)
+  vertex_geometry : point;
+ END_ENTITY;
+
+ ENTITY face_transition;
+(*
+UOF:G3,G5,G6,G7
+*)
+  edge_joint : oriented_edge_curve;
+  face_2 : face;
+  face_1 : face;
+  transition : STRING;
+ END_ENTITY;
+
+ ENTITY offset_surface
+  SUBTYPE OF (
+   surface
+  );
+(*
+UOF:G3,G6,G8
+*)
+ END_ENTITY;
+
+ ENTITY b_spline_surface
+  SUBTYPE OF (
+   surface
+  );
+(*
+UOF:G3,G5,G6,G7,G8
+*)
+ END_ENTITY;
+
+ ENTITY plane
+  SUBTYPE OF (
+   surface
+  );
+(*
+UOF:G3,G4,G5,G6,G7,G8
+*)
+ END_ENTITY;
+
+ ENTITY conical_surface
+  SUBTYPE OF (
+   surface
+  );
+(*
+UOF:G3,G5,G6,G7,G8
+*)
+ END_ENTITY;
+
+ ENTITY cylindrical_surface
+  SUBTYPE OF (
+   surface
+  );
+(*
+UOF:G3,G5,G6,G7,G8
+*)
+ END_ENTITY;
+
+ ENTITY toroidal_surface
+  SUBTYPE OF (
+   surface
+  );
+(*
+UOF:G3,G5,G6,G7,G8
+*)
+ END_ENTITY;
+
+ ENTITY spherical_surface
+  SUBTYPE OF (
+   surface
+  );
+(*
+UOF:G3,G5,G6,G7,G8
+*)
+ END_ENTITY;
+
+ ENTITY surface_of_linear_extrusion
+  SUBTYPE OF (
+   surface
+  );
+(*
+UOF:G3,G5,G6,G7,G8
+*)
+ END_ENTITY;
+
+ ENTITY surface_of_revolution
+  SUBTYPE OF (
+   surface
+  );
+(*
+UOF:G3,G5,G6,G7,G8
+*)
+ END_ENTITY;
+
+ ENTITY edge_transition;
+(*
+UOF:G3,G5,G6,G7
+*)
+  edge_1 : oriented_edge_curve;
+  edge_2 : oriented_edge_curve;
+  transition : STRING;
+  vertex_joint : vertex_point;
+ END_ENTITY;
+
+ ENTITY faceted_closed_shell;
+(*
+UOF:G4,G7
+*)
+  shell_boundary : SET [4:?] OF faceted_face;
+ END_ENTITY;
+
+ ENTITY faceted_face;
+(*
+UOF:G4,G7
+*)
+  face_geometry : plane;
+  bound : SET [1:?] OF poly_loop;
+ END_ENTITY;
+
+ ENTITY poly_loop;
+(*
+UOF:G4,G7
+*)
+  polygon : LIST [3:?] OF cartesian_point;
+  outer : BOOLEAN;
+ INVERSE
+  is_bound_for : SET [1:1] OF faceted_face FOR bound;
+ END_ENTITY;
+
+ ENTITY closed_shell;
+(*
+UOF:G5,G7
+*)
+  shell_boundary : SET [1:?] OF face;
+ END_ENTITY;
+
+ ENTITY sphere
+  SUBTYPE OF (
+   csg_primitive
+  );
+(*
+UOF:G7
+*)
+ END_ENTITY;
+
+ ENTITY block
+  SUBTYPE OF (
+   csg_primitive
+  );
+(*
+UOF:G7
+*)
+ END_ENTITY;
+
+ ENTITY right_angular_wedge
+  SUBTYPE OF (
+   csg_primitive
+  );
+(*
+UOF:G7
+*)
+ END_ENTITY;
+
+ ENTITY torus
+  SUBTYPE OF (
+   csg_primitive
+  );
+(*
+UOF:G7
+*)
+ END_ENTITY;
+
+ ENTITY right_circular_cone
+  SUBTYPE OF (
+   csg_primitive
+  );
+(*
+UOF:G7
+*)
+ END_ENTITY;
+
+ ENTITY right_circular_cylinder
+  SUBTYPE OF (
+   csg_primitive
+  );
+(*
+UOF:G7
+*)
+ END_ENTITY;
+
+ ENTITY solid_replica
+  SUBTYPE OF (
+   detailed_geometric_model_element
+  );
+(*
+UOF:G7
+*)
+  replicated_solid : csg_select;
+ END_ENTITY;
+
+ ENTITY swept_face_solid
+  ABSTRACT SUPERTYPE OF ( ONEOF(solid_of_linear_extrusion,solid_of_revolution,solid_of_curved_extrusion) )
+  SUBTYPE OF (
+   detailed_geometric_model_element
+  );
+(*
+UOF:G7
+*)
+  swept_face : face;
+ END_ENTITY;
+
+ ENTITY solid_of_revolution
+  SUBTYPE OF (
+   swept_face_solid
+  );
+(*
+UOF:G7
+*)
+ END_ENTITY;
+
+ ENTITY solid_of_linear_extrusion
+  SUBTYPE OF (
+   swept_face_solid
+  );
+(*
+UOF:G7
+*)
+ END_ENTITY;
+
+ ENTITY boolean_result
+  SUBTYPE OF (
+   detailed_geometric_model_element
+  );
+(*
+UOF:G7
+*)
+  first_operand : boolean_operand_select;
+  second_operand : boolean_operand_select;
+  boolean_operation : STRING;
+ END_ENTITY;
+
+ ENTITY half_space_solid
+  SUBTYPE OF (
+   detailed_geometric_model_element
+  );
+(*
+UOF:G7
+*)
+ END_ENTITY;
+
+ ENTITY circle
+  SUBTYPE OF (
+   curve
+  );
+(*
+UOF:G1,G2,G3,G5,G6,G7,G8
+*)
+ END_ENTITY;
+
+ ENTITY ellipse
+  SUBTYPE OF (
+   curve
+  );
+(*
+UOF:G1,G2,G3,G5,G6,G7,G8
+*)
+ END_ENTITY;
+
+ ENTITY hyperbola
+  SUBTYPE OF (
+   curve
+  );
+(*
+UOF:G1,G2,G3,G5,G6,G7,G8
+*)
+ END_ENTITY;
+
+ ENTITY parabola
+  SUBTYPE OF (
+   curve
+  );
+(*
+UOF:G1,G2,G3,G5,G6,G7,G8
+*)
+ END_ENTITY;
+
+ ENTITY kinematic_mechanism;
+(*
+UOF:K1
+*)
+  structure_definition : kinematic_structure;
+  base_link : kinematic_link;
+  base_placement : transformation_to_reference_frame;
+ INVERSE
+  is_referenced_by : SET [1:?] OF kinematic_simulation_information FOR mechanism;
+ END_ENTITY;
+
+ ENTITY kinematic_structure
+  SUBTYPE OF (
+   kinematic_element
+  );
+(*
+UOF:K1
+*)
+  joint : SET [1:?] OF kinematic_joint;
+ INVERSE
+  is_referenced_by : SET [1:1] OF kinematic_mechanism FOR structure_definition;
+ END_ENTITY;
+
+ ENTITY kinematic_joint
+  SUBTYPE OF (
+   kinematic_element
+  );
+(*
+UOF:K1
+*)
+  first_link : kinematic_link;
+  second_link : kinematic_link;
+  pair : kinematic_pair;
+ INVERSE
+  is_referenced_by : SET [1:?] OF kinematic_structure FOR joint;
+ END_ENTITY;
+
+ ENTITY kinematic_link
+  SUBTYPE OF (
+   kinematic_element
+  );
+(*
+UOF:K1
+*)
+  representation : kinematic_link_representation;
+ END_ENTITY;
+
+ ENTITY ground_representation;
+(*
+UOF:K1
+*)
+  shape_description : geometric_model;
+ INVERSE
+  is_referenced_by : SET [1:?] OF kinematic_simulation_information FOR ground;
+ END_ENTITY;
+
+ ENTITY kinematic_pair
+  SUBTYPE OF (
+   kinematic_element
+  );
+(*
+UOF:K1
+*)
+  transformation_item_1 : transformation_to_reference_frame;
+  transformation_item_2 : transformation_to_reference_frame;
+  pair_type : STRING;
+ INVERSE
+  joint : SET [1:1] OF kinematic_joint FOR pair;
+  is_referenced_by : SET [0:1] OF actuator FOR is_applied_to;
+ END_ENTITY;
+
+ ENTITY simple_pair_range;
+(*
+UOF:K1
+*)
+  is_applied_to : kinematic_pair;
+ END_ENTITY;
+
+ ENTITY kinematic_link_representation;
+(*
+UOF:K1
+*)
+  additional_reference_frame : SET [0:?] OF transformation_to_reference_frame;
+  physical_description : geometric_model;
+ END_ENTITY;
+
+ ENTITY pair_value;
+(*
+UOF:K1
+*)
+  is_applied_to : kinematic_pair;
+ END_ENTITY;
+
+ ENTITY initial_configuration;
+(*
+UOF:K1
+*)
+  initial_pair_values : SET [1:?] OF pair_value;
+  is_applied_to : kinematic_mechanism;
+ END_ENTITY;
+
+ ENTITY transformation_to_reference_frame
+  SUPERTYPE OF ( ONEOF(tool_attachment_point_frame,tool_centre_point_frame) );
+(*
+UOF:K1
+*)
+ END_ENTITY;
+
+ ENTITY tool_attachment_point_frame
+  SUBTYPE OF (
+   transformation_to_reference_frame
+  );
+(*
+UOF:K1
+*)
+ END_ENTITY;
+
+ ENTITY tool_centre_point_frame
+  SUBTYPE OF (
+   transformation_to_reference_frame
+  );
+(*
+UOF:K1
+*)
+ END_ENTITY;
+
+ ENTITY digital_document
+  SUBTYPE OF (
+   document_representation
+  );
+(*
+UOF:E1
+*)
+  file : SET [0:?] OF digital_file;
+ END_ENTITY;
+
+ ENTITY physical_model
+  SUBTYPE OF (
+   physical_representation
+  );
+(*
+UOF:E1
+*)
+ END_ENTITY;
+
+ ENTITY physical_document
+  SUBTYPE OF (
+   physical_representation
+  );
+(*
+UOF:E1
+*)
+  component : SET [0:?] OF hardcopy;
+ END_ENTITY;
+
+ ENTITY recyclability_property
+  SUBTYPE OF (
+   property
+  );
+(*
+UOF:PR1
+*)
+ END_ENTITY;
+
+ ENTITY material_property
+  SUBTYPE OF (
+   property
+  );
+(*
+UOF:PR1
+*)
+  property_name : STRING;
+ END_ENTITY;
+
+ ENTITY mass_property
+  SUBTYPE OF (
+   property
+  );
+(*
+UOF:PR1
+*)
+ END_ENTITY;
+
+ ENTITY centre_of_mass
+  SUBTYPE OF (
+   shape_dependent_property
+  );
+(*
+UOF:PR1
+*)
+  centre_point : cartesian_point;
+  SELF\shape_dependent_property.is_defined_in : cartesian_coordinate_space;
+ END_ENTITY;
+
+ ENTITY moments_of_inertia
+  SUBTYPE OF (
+   shape_dependent_property
+  );
+(*
+UOF:PR1
+*)
+  inertia_value : ARRAY [1:3] OF ARRAY [1:3] OF numerical_value;
+  SELF\shape_dependent_property.is_defined_in : cartesian_coordinate_space;
+  reference_axis_placement : axis_placement;
+ END_ENTITY;
+
+ ENTITY surface_condition
+  ABSTRACT SUPERTYPE OF ( ONEOF(contact_ratio,hardness,tactile_appearance,treatment_result,visual_appearance,surface_texture) );
+(*
+UOF:C1
+*)
+  value_determination : OPTIONAL STRING;
+  is_caused_by : OPTIONAL process_operation_occurrence;
+ END_ENTITY;
+
+ ENTITY coating_layer
+  SUBTYPE OF (
+   shape_element
+  );
+(*
+UOF:C1
+*)
+  thickness : OPTIONAL thickness_dimension;
+  used_material : material;
+ END_ENTITY;
+
+ ENTITY surface_texture
+  SUBTYPE OF (
+   surface_condition
+  );
+(*
+UOF:C1
+*)
+  measuring_method : STRING;
+  measuring_direction : OPTIONAL measurement_path;
+ END_ENTITY;
+
+ ENTITY visual_appearance
+  SUBTYPE OF (
+   surface_condition
+  );
+(*
+UOF:C1
+*)
+  colour_id : STRING;
+  lustre : STRING;
+  transparency : OPTIONAL STRING;
+  name : OPTIONAL string_select;
+  pattern : OPTIONAL STRING;
+  colour_name : OPTIONAL string_select;
+  id : OPTIONAL STRING;
+ END_ENTITY;
+
+ ENTITY hardness
+  SUBTYPE OF (
+   surface_condition
+  );
+(*
+UOF:C1
+*)
+  measuring_method : STRING;
+  environment_condition : SET [0:?] OF data_environment;
+  description : OPTIONAL string_select;
+  measuring_position : OPTIONAL STRING;
+  hardness_value : value_with_unit;
+  depth : OPTIONAL value_with_unit;
+ END_ENTITY;
+
+ ENTITY project;
+(*
+UOF:S5
+*)
+  id : STRING;
+  name : string_select;
+  description : OPTIONAL string_select;
+  actual_start_date : OPTIONAL date_time;
+  actual_end_date : OPTIONAL date_time;
+  planned_start_date : OPTIONAL event_or_date_select;
+  planned_end_date : OPTIONAL period_or_date_select;
+ END_ENTITY;
+
+ ENTITY appearance_assignment;
+(*
+UOF:P1
+*)
+  component : SET [1:?] OF appearance_select;
+ END_ENTITY;
+
+ ENTITY light_source;
+(*
+UOF:P3
+*)
+  colour : OPTIONAL STRING;
+  light_type : STRING;
+  is_defined_for : SET [1:?] OF model_image;
+ END_ENTITY;
+
+ ENTITY hidden_element_handling;
+(*
+UOF:P3,P1
+*)
+  is_defined_for : SET [1:?] OF model_image;
+  switch : active_or_inactive;
+  hidden_element_appearance : OPTIONAL appearance_assignment;
+ END_ENTITY;
+
+ ENTITY vector_appearance
+  SUBTYPE OF (
+   curve_appearance
+  );
+(*
+UOF:P1
+*)
+  arrow_head_type : terminator_symbol;
+ END_ENTITY;
+
+ ENTITY point_appearance;
+(*
+UOF:P1
+*)
+  marker : point_marker_symbol;
+  colour : STRING;
+ END_ENTITY;
+
+ ENTITY curve_appearance;
+(*
+UOF:P1
+*)
+  width : value_with_unit;
+  colour : STRING;
+  font : STRING;
+ END_ENTITY;
+
+ ENTITY surface_appearance;
+(*
+UOF:P1
+*)
+  side : STRING;
+  element : SET [1:?] OF surface_appearance_element;
+ END_ENTITY;
+
+ ENTITY text_appearance;
+(*
+UOF:P2
+*)
+ END_ENTITY;
+
+ ENTITY surface_appearance_element;
+(*
+UOF:P1
+*)
+  presented_surface_condition : OPTIONAL visual_appearance;
+ END_ENTITY;
+
+ ENTITY hatching;
+(*
+UOF:P2
+*)
+ END_ENTITY;
+
+ ENTITY tiling;
+(*
+UOF:P2
+*)
+ END_ENTITY;
+
+ ENTITY solid_fill_area;
+(*
+UOF:P2
+*)
+ END_ENTITY;
+
+ ENTITY geometric_dimension
+  ABSTRACT SUPERTYPE OF ( ONEOF(size_dimension,location_dimension) );
+(*
+UOF:T1
+*)
+  dimension_value : value_with_unit;
+  id : REAL;
+  notes : SET [0:?] OF STRING;
+ END_ENTITY;
+
+ ENTITY geometric_tolerance
+  ABSTRACT SUPERTYPE OF ( ONEOF(line_profile_tolerance,flatness_tolerance,surface_profile_tolerance,total_runout_tolerance,straightness_tolerance,circular_runout_tolerance,symmetry_tolerance,position_tolerance,perpendicularity_tolerance,parallelism_tolerance,concentricity_tolerance,angularity_tolerance,cylindricity_tolerance,coaxiality_tolerance,roundness_tolerance) );
+(*
+UOF:T2
+*)
+  tolerance_value : value_with_unit;
+  is_applied_to : placed_element_select;
+  modification : OPTIONAL tolerance_condition;
+  qualifying_note : OPTIONAL string_select;
+  name : OPTIONAL string_select;
+  segment_size : OPTIONAL value_with_unit;
+  value_determination : OPTIONAL STRING;
+  significant_digits : OPTIONAL INTEGER;
+ END_ENTITY;
+
+ ENTITY limits_and_fits;
+(*
+UOF:T1
+*)
+  deviation : STRING;
+  grade : STRING;
+  fitting_type : OPTIONAL STRING;
+ END_ENTITY;
+
+ ENTITY process_plan;
+(*
+UOF:S8
+*)
+  plan_id : STRING;
+  name : OPTIONAL string_select;
+  description : OPTIONAL string_select;
+  produced_output : OPTIONAL SET [1:?] OF item_version;
+ END_ENTITY;
+
+ ENTITY process_operation_occurrence;
+(*
+UOF:S8
+*)
+  plan : process_plan;
+  is_defined_in : OPTIONAL cartesian_coordinate_space;
+  operation_definition : process_operation_definition;
+  id : STRING;
+ END_ENTITY;
+
+ ENTITY annotation_subfigure
+  SUBTYPE OF (
+   annotation_element
+  );
+(*
+UOF:P2
+*)
+ END_ENTITY;
+
+ ENTITY annotation_symbol
+  SUBTYPE OF (
+   annotation_element
+  );
+(*
+UOF:P2
+*)
+  symbol_definition : symbol_definition_select;
+ END_ENTITY;
+
+ ENTITY text
+  SUBTYPE OF (
+   annotation_element
+  );
+(*
+UOF:P2
+*)
+ END_ENTITY;
+
+ ENTITY fill_area
+  SUBTYPE OF (
+   annotation_element
+  );
+(*
+UOF:P2
+*)
+  reference_point : OPTIONAL point;
+  boundary : SET [1:?] OF annotation_curve;
+ END_ENTITY;
+
+ ENTITY leader
+  SUBTYPE OF (
+   annotation_curve
+  );
+(*
+UOF:P2
+*)
+  terminator : OPTIONAL terminator_symbol;
+ END_ENTITY;
+
+ ENTITY associated_leader
+  SUBTYPE OF (
+   leader
+  );
+(*
+UOF:D2
+*)
+  target : associated_element_select;
+ END_ENTITY;
+
+ ENTITY associated_projection_curve
+  SUBTYPE OF (
+   projection_curve
+  );
+(*
+UOF:D2
+*)
+  is_projected_to : associated_element_select;
+ END_ENTITY;
+
+ ENTITY projection_curve
+  SUBTYPE OF (
+   annotation_curve
+  );
+(*
+UOF:D1
+*)
+ END_ENTITY;
+
+ ENTITY dimension_curve
+  SUBTYPE OF (
+   annotation_curve
+  );
+(*
+UOF:D1
+*)
+  terminator : LIST [0:2] OF terminator_symbol;
+ END_ENTITY;
+
+ ENTITY dimension
+  SUBTYPE OF (
+   draughting_callout
+  );
+(*
+UOF:D1
+*)
+  primary_callout : dimension_callout;
+  secondary_callout : OPTIONAL dimension_callout;
+  id : STRING;
+ END_ENTITY;
+
+ ENTITY dimension_sequence_pair;
+(*
+UOF:D1
+*)
+  predecessor : dimension;
+  successor : dimension;
+ END_ENTITY;
+
+ ENTITY same_time_machining_relationship
+  SUBTYPE OF (
+   item_instance_relationship
+  );
+(*
+UOF:S8
+*)
+  description : OPTIONAL string_select;
+  placement : OPTIONAL transformation_select;
+ END_ENTITY;
+
+ ENTITY general_tolerances;
+(*
+UOF:T1
+*)
+  table_definition : general_tolerance_table_select;
+  tolerance_class : STRING;
+ END_ENTITY;
+
+ ENTITY alternate_item_relationship;
+(*
+UOF:S3
+*)
+  fulfilled_requirements : string_select;
+  base : item;
+  alternate : item;
+ END_ENTITY;
+
+ ENTITY shape_element
+  SUPERTYPE OF ( ONEOF(feature_occurrence,coating_layer) );
+(*
+UOF:S2,E1
+*)
+  description : OPTIONAL string_select;
+  composition : item_shape;
+  element_name : OPTIONAL STRING;
+ END_ENTITY;
+
+ ENTITY item_version_relationship;
+(*
+UOF:S1
+*)
+  relating : item_version;
+  related : item_version;
+  description : OPTIONAL string_select;
+  relation_type : STRING;
+ END_ENTITY;
+
+ ENTITY structuring_method_hierarchy;
+(*
+UOF:S2
+*)
+  relating : structuring_method_select;
+  related : group;
+ END_ENTITY;
+
+ ENTITY general_feature;
+(*
+UOF:FF1
+*)
+  additional_parameter : SET [0:?] OF general_parameter;
+  feature_type : STRING;
+  feature_category : STRING;
+ END_ENTITY;
+
+ ENTITY date_time;
+(*
+UOF:S1
+*)
+  time : OPTIONAL STRING;
+  date : STRING;
+ END_ENTITY;
+
+ ENTITY draughting_callout
+  SUPERTYPE OF ( associated_draughting_callout ANDOR ONEOF(surface_condition_callout,geometric_tolerance_callout,dimension,datum_target_callout,datum_feature_callout) )
+  SUBTYPE OF (
+   detailed_element
+  );
+(*
+UOF:P2
+*)
+  contents : SET [1:?] OF draughting_callout_content_select;
+ END_ENTITY;
+
+ ENTITY process_plan_relationship;
+(*
+UOF:S8
+*)
+  relating : process_plan;
+  related : process_plan;
+  description : OPTIONAL string_select;
+  relation_type : STRING;
+ END_ENTITY;
+
+ ENTITY process_operation_input_or_output;
+(*
+UOF:S8
+*)
+  role : STRING;
+  description : OPTIONAL string_select;
+  operation : process_operation_occurrence;
+  element : process_operation_input_or_output_select;
+  placement : OPTIONAL transformation;
+  concerned_shape : SET [0:?] OF shape_element;
+ END_ENTITY;
+
+ ENTITY process_operation_resource_assignment;
+(*
+UOF:S8
+*)
+  reference_tool : BOOLEAN;
+  operation : process_operation_occurrence;
+  reason : OPTIONAL string_select;
+  resource_definition : resource_definition_select;
+  placement : OPTIONAL transformation;
+ END_ENTITY;
+
+ ENTITY mated_item_association
+  SUBTYPE OF (
+   item_definition_instance_relationship
+  );
+(*
+UOF:S8
+*)
+  SELF\item_definition_instance_relationship.relating : mating_definition;
+  placement : OPTIONAL transformation_select;
+ END_ENTITY;
+
+ ENTITY tolerance_table_cell;
+(*
+UOF:T1
+*)
+  cell_value : cell_entry_select;
+  tolerance_class : STRING;
+  description : OPTIONAL string_select;
+  limit : limit_select;
+  table : general_tolerance_table;
+ END_ENTITY;
+
+ ENTITY plus_minus_toleranced_datum;
+(*
+UOF:T1
+*)
+  tolerance_value : value_with_unit;
+ END_ENTITY;
+
+ ENTITY upper_lower_toleranced_datum;
+(*
+UOF:T1
+*)
+  lower_tolerance_value : value_with_unit;
+  upper_tolerance_value : value_with_unit;
+ END_ENTITY;
+
+ ENTITY default_surface_texture;
+(*
+UOF:C1
+*)
+  measuring_method : STRING;
+ END_ENTITY;
+
+ ENTITY context_dependent_appearance_assignment
+  SUBTYPE OF (
+   appearance_assignment
+  );
+(*
+UOF:P1
+*)
+  appearance_context : appearance_context_select;
+ END_ENTITY;
+
+ ENTITY view_relationship;
+(*
+UOF:P2
+*)
+  related : view;
+  relating : view;
+  description : OPTIONAL string_select;
+  relation_type : STRING;
+ END_ENTITY;
+
+ ENTITY view;
+(*
+UOF:P1
+*)
+  id : OPTIONAL STRING;
+  description : OPTIONAL string_select;
+  view_space : cartesian_coordinate_space_2d;
+  view_placement : transformation_2d;
+  name : string_select;
+  layout : area_select;
+ INVERSE
+  image : SET [0:1] OF model_image FOR is_presented_in;
+ END_ENTITY;
+
+ ENTITY view_area_relationship;
+(*
+UOF:P2
+*)
+  related : view_area;
+  relating : view_area;
+  relation_type : STRING;
+  description : OPTIONAL string_select;
+ END_ENTITY;
+
+ ENTITY geometrically_bounded_surface_model
+  SUBTYPE OF (
+   geometric_model
+  );
+(*
+UOF:G8
+*)
+  element : SET [0:?] OF geometric_set_3d;
+ END_ENTITY;
+
+ ENTITY tactile_appearance
+  SUBTYPE OF (
+   surface_condition
+  );
+(*
+UOF:C1
+*)
+  id : OPTIONAL STRING;
+  name : OPTIONAL string_select;
+  depth : OPTIONAL value_with_unit;
+  description : OPTIONAL string_select;
+ END_ENTITY;
+
+ ENTITY treatment_result
+  SUBTYPE OF (
+   surface_condition
+  );
+(*
+UOF:C1
+*)
+  id : OPTIONAL STRING;
+  name : OPTIONAL string_select;
+  description : string_select;
+  purpose : OPTIONAL string_select;
+ END_ENTITY;
+
+ ENTITY actuator;
+(*
+UOF:K1
+*)
+  name : string_select;
+  is_applied_to : kinematic_pair;
+ END_ENTITY;
+
+ ENTITY person;
+(*
+UOF:S1
+*)
+  person_name : STRING;
+  preferred_business_address : OPTIONAL address;
+ INVERSE
+  associated_organization : SET [1:?] OF person_in_organization FOR associated_person;
+ END_ENTITY;
+
+ ENTITY default_setting_association;
+(*
+UOF:C1,FF2,T1
+*)
+  default_value : SET [1:?] OF default_setting_select;
+  default_context : default_context_select;
+ END_ENTITY;
+
+ ENTITY model_change
+  ABSTRACT SUPERTYPE OF ( ONEOF(full_model_change,incremental_model_change) );
+(*
+UOF:S2
+*)
+  id : OPTIONAL STRING;
+  description : string_select;
+  is_describing : change;
+  deleted_element : SET [0:?] OF detailed_element;
+ END_ENTITY;
+
+ ENTITY property
+  ABSTRACT SUPERTYPE OF ( ONEOF(cost_property,quality_property,duration_property,material_property,general_property,recyclability_property,mass_property) );
+(*
+UOF:PR1
+*)
+  allowed_unit : SET [0:?] OF unit;
+  description : OPTIONAL string_select;
+  property_source : OPTIONAL property_source_select;
+  id : STRING;
+  version_id : OPTIONAL STRING;
+ END_ENTITY;
+
+ ENTITY document;
+(*
+UOF:E1
+*)
+  description : OPTIONAL string_select;
+  name : string_select;
+  document_id : STRING;
+ INVERSE
+  associated_version : SET [1:?] OF document_version FOR associated_document;
+ END_ENTITY;
+
+ ENTITY material;
+(*
+UOF:PR1
+*)
+  material_name : STRING;
+  described_element : SET [1:?] OF item_property_select;
+ END_ENTITY;
+
+ ENTITY project_relationship;
+(*
+UOF:S5
+*)
+  related : project;
+  relating : project;
+  relation_type : STRING;
+  description : OPTIONAL string_select;
+ END_ENTITY;
+
+ ENTITY compound_feature_in_solid
+  ABSTRACT SUPERTYPE OF ( ONEOF(compound_hole,general_compound_feature_in_solid) )
+  SUBTYPE OF (
+   process_feature_in_solid
+  );
+(*
+UOF:FF2
+*)
+  feature_type : OPTIONAL STRING;
+ INVERSE
+  element : SET [2:?] OF compound_feature_in_solid_element FOR is_element_for;
+ END_ENTITY;
+
+ ENTITY round_hole
+  SUBTYPE OF (
+   process_feature_in_solid
+  );
+(*
+UOF:FF2
+*)
+  taper : OPTIONAL taper_select;
+  hole_depth : linear_path;
+  diameter : closed_profile_usage;
+  bottom_condition : hole_bottom_condition_select;
+ END_ENTITY;
+
+ ENTITY angle_taper;
+(*
+UOF:FF2
+*)
+  angle : feature_parameter;
+ END_ENTITY;
+
+ ENTITY diameter_taper;
+(*
+UOF:FF2
+*)
+  final_diameter : feature_parameter;
+ END_ENTITY;
+
+ ENTITY boss_feature
+  ABSTRACT SUPERTYPE OF ( ONEOF(general_boss,circular_boss,rectangular_boss) )
+  SUBTYPE OF (
+   process_feature_in_solid
+  );
+(*
+UOF:FF2
+*)
+  base_radius : OPTIONAL feature_parameter;
+  boss_height : linear_path;
+  top_condition : boss_top_condition;
+  taper : OPTIONAL taper_select;
+  boundary : closed_profile_usage;
+ END_ENTITY;
+
+ ENTITY circular_boss
+  SUBTYPE OF (
+   boss_feature
+  );
+(*
+UOF:FF2
+*)
+ END_ENTITY;
+
+ ENTITY general_boss
+  SUBTYPE OF (
+   boss_feature
+  );
+(*
+UOF:FF2
+*)
+ END_ENTITY;
+
+ ENTITY pocket_feature
+  ABSTRACT SUPERTYPE OF ( ONEOF(general_pocket,rectangular_closed_pocket,rectangular_open_pocket) )
+  SUBTYPE OF (
+   process_feature_in_solid
+  );
+(*
+UOF:FF2
+*)
+  boundary : profile_usage;
+  pocket_depth : linear_path;
+  bottom_condition : pocket_bottom_condition_select;
+  base_radius : OPTIONAL feature_parameter;
+  taper : OPTIONAL taper_select;
+ END_ENTITY;
+
+ ENTITY rectangular_closed_pocket
+  SUBTYPE OF (
+   pocket_feature
+  );
+(*
+UOF:FF2
+*)
+  SELF\pocket_feature.boundary : closed_profile_usage;
+ END_ENTITY;
+
+ ENTITY general_pocket
+  SUBTYPE OF (
+   pocket_feature
+  );
+(*
+UOF:FF2
+*)
+ END_ENTITY;
+
+ ENTITY planar_bottom_condition
+  SUBTYPE OF (
+   pocket_bottom_condition
+  );
+(*
+UOF:FF2
+*)
+  floor_normal : direction;
+  floor_radius : OPTIONAL feature_parameter;
+  floor_location : point;
+ END_ENTITY;
+
+ ENTITY general_bottom_condition
+  SUBTYPE OF (
+   pocket_bottom_condition
+  );
+(*
+UOF:FF2
+*)
+  floor_face : general_end_select;
+  floor_radius : OPTIONAL feature_parameter;
+ END_ENTITY;
+
+ ENTITY transition_feature
+  ABSTRACT SUPERTYPE OF ( ONEOF(fillet,chamfer,edge_round) );
+(*
+UOF:FF2
+*)
+  face_1 : face;
+  face_2 : face;
+ END_ENTITY;
+
+ ENTITY fillet
+  SUBTYPE OF (
+   transition_feature
+  );
+(*
+UOF:FF2
+*)
+  fillet_face : face;
+ END_ENTITY;
+
+ ENTITY chamfer
+  SUBTYPE OF (
+   transition_feature
+  );
+(*
+UOF:FF2
+*)
+  is_defined_by : chamfer_definition;
+  chamfer_face : face;
+ END_ENTITY;
+
+ ENTITY slot_feature
+  SUBTYPE OF (
+   process_feature_in_solid
+  );
+(*
+UOF:FF2
+*)
+  slot_profile : open_profile_usage;
+  sweep_path : path;
+  end_condition : SET [2:2] OF slot_end_type;
+ END_ENTITY;
+
+ ENTITY woodruff_slot_end_type
+  SUBTYPE OF (
+   slot_end_type
+  );
+(*
+UOF:FF2
+*)
+  radius : feature_parameter;
+ END_ENTITY;
+
+ ENTITY flat_slot_end_type
+  SUBTYPE OF (
+   slot_end_type
+  );
+(*
+UOF:FF2
+*)
+  first_radius : feature_parameter;
+  second_radius : feature_parameter;
+ END_ENTITY;
+
+ ENTITY radiused_slot_end_type
+  SUBTYPE OF (
+   slot_end_type
+  );
+(*
+UOF:FF2
+*)
+ END_ENTITY;
+
+ ENTITY open_slot_end_type
+  SUBTYPE OF (
+   slot_end_type
+  );
+(*
+UOF:FF2
+*)
+ END_ENTITY;
+
+ ENTITY circular_pattern
+  SUBTYPE OF (
+   replicate_feature
+  );
+(*
+UOF:FF2
+*)
+  number_of_features : INTEGER;
+  relocated_feature : SET [0:?] OF circular_offset_pattern;
+  missing_feature : SET [0:?] OF circular_omit_pattern;
+  diameter : OPTIONAL feature_parameter;
+  angular_spacing : feature_parameter;
+  rotation : OPTIONAL feature_parameter;
+ END_ENTITY;
+
+ ENTITY circular_offset_pattern;
+(*
+UOF:FF2
+*)
+  index : INTEGER;
+  angular_offset : value_with_unit;
+ INVERSE
+  base_feature : SET [1:?] OF circular_pattern FOR relocated_feature;
+ END_ENTITY;
+
+ ENTITY circular_omit_pattern;
+(*
+UOF:FF2
+*)
+  index : INTEGER;
+ INVERSE
+  base_feature : SET [1:?] OF circular_pattern FOR missing_feature;
+ END_ENTITY;
+
+ ENTITY rectangular_pattern
+  SUBTYPE OF (
+   replicate_feature
+  );
+(*
+UOF:FF2
+*)
+  rows : INTEGER;
+  columns : INTEGER;
+  row_layout_direction : direction;
+  column_layout_direction : direction;
+  relocated_feature : SET [0:?] OF rectangular_offset_pattern;
+  missing_feature : SET [0:?] OF rectangular_omit_pattern;
+  row_spacing : feature_parameter;
+  column_spacing : feature_parameter;
+ END_ENTITY;
+
+ ENTITY rectangular_offset_pattern;
+(*
+UOF:FF2
+*)
+  offset_direction : direction;
+  column_index : INTEGER;
+  row_index : INTEGER;
+  offset_distance : feature_parameter;
+ INVERSE
+  base_feature : SET [1:?] OF rectangular_pattern FOR relocated_feature;
+ END_ENTITY;
+
+ ENTITY rectangular_omit_pattern;
+(*
+UOF:FF2
+*)
+  row_index : INTEGER;
+  column_index : INTEGER;
+ INVERSE
+  base_feature : SET [1:?] OF rectangular_pattern FOR missing_feature;
+ END_ENTITY;
+
+ ENTITY dimension_callout;
+(*
+UOF:D1
+*)
+  callout_element : SET [1:?] OF dimension_callout_select;
+  is_displaying : OPTIONAL geometric_dimension;
+ END_ENTITY;
+
+ ENTITY activity_method;
+(*
+UOF:S5
+*)
+  description : string_select;
+  consequence : OPTIONAL STRING;
+  name : string_select;
+ END_ENTITY;
+
+ ENTITY work_request;
+(*
+UOF:S5
+*)
+  id : STRING;
+  request_type : STRING;
+  status : STRING;
+  notified_person : SET [0:?] OF date_and_person_organization;
+  version_id : OPTIONAL STRING;
+  requestor : date_and_person_organization;
+  scope : SET [0:?] OF activity_element_select;
+  description : OPTIONAL string_select;
+ END_ENTITY;
+
+ ENTITY included_feature
+  SUBTYPE OF (
+   feature_occurrence
+  );
+(*
+UOF:FF1
+*)
+  definition : feature_definition_select;
+ END_ENTITY;
+
+ ENTITY classification_attribute;
+(*
+UOF:S6
+*)
+  id : STRING;
+  name : OPTIONAL string_select;
+  description : OPTIONAL string_select;
+  allowed_value : SET [0:?] OF property_value_representation;
+  attribute_definition : property;
+  associated_classification : general_classification;
+ END_ENTITY;
+
+ ENTITY kinematic_configuration_definition;
+(*
+UOF:K1
+*)
+  t_parameter : path_approximation;
+  pair_values : SET [1:?] OF pair_value;
+ END_ENTITY;
+
+ ENTITY kinematic_configuration_interpolation;
+(*
+UOF:K1
+*)
+  next_definition : kinematic_configuration_definition;
+  previous_definition : kinematic_configuration_definition;
+  interpolation_type : STRING;
+ END_ENTITY;
+
+ ENTITY interpolated_configuration_sequence;
+(*
+UOF:K1
+*)
+  interpolation : SET [1:?] OF kinematic_configuration_interpolation;
+ END_ENTITY;
+
+ ENTITY kinematic_transformation_result;
+(*
+UOF:K1
+*)
+  result : SET [1:?] OF interpolated_configuration_sequence;
+  is_applied_to : kinematic_mechanism;
+ END_ENTITY;
+
+ ENTITY path_approximation;
+(*
+UOF:K1
+*)
+ END_ENTITY;
+
+ ENTITY organization_relationship;
+(*
+UOF:S5
+*)
+  related : organization;
+  relating : organization;
+  relation_type : STRING;
+  description : OPTIONAL string_select;
+ END_ENTITY;
+
+ ENTITY make_from_relationship
+  SUBTYPE OF (
+   item_definition_relationship
+  );
+(*
+UOF:S3,S8
+*)
+  description : OPTIONAL string_select;
+ END_ENTITY;
+
+ ENTITY point_direction_model
+  SUBTYPE OF (
+   geometric_model
+  );
+(*
+UOF:MD1
+*)
+  point_direction_elements : SET [0:?] OF point_direction_sequence;
+  point_elements : SET [0:?] OF point_sequence;
+ END_ENTITY;
+
+ ENTITY general_parameter;
+(*
+UOF:S1
+*)
+  parameter_role : STRING;
+  parameter_value : feature_parameter;
+ END_ENTITY;
+
+ ENTITY feature_parameter;
+(*
+UOF:S1
+*)
+  parameter_name : OPTIONAL STRING;
+  parameter_value : value_with_unit;
+ END_ENTITY;
+
+ ENTITY thread_specification
+  ABSTRACT SUPERTYPE OF ( ONEOF(defined_thread,catalogue_thread) );
+(*
+UOF:FF2
+*)
+  form_type : STRING;
+  hand : STRING;
+  fit_class : STRING;
+  major_diameter : feature_parameter;
+  density : feature_parameter;
+  inner : BOOLEAN;
+  qualifier : OPTIONAL STRING;
+ END_ENTITY;
+
+ ENTITY rib_feature
+  SUBTYPE OF (
+   process_feature_in_solid
+  );
+(*
+UOF:FF2
+*)
+  fillet_radius : OPTIONAL feature_parameter;
+  shoulder_radius : OPTIONAL feature_parameter;
+  rib_profile : open_profile_usage;
+  sweep_path : path;
+  draft_taper : OPTIONAL directed_taper;
+ END_ENTITY;
+
+ ENTITY bead_feature
+  SUBTYPE OF (
+   process_feature_in_panel
+  );
+(*
+UOF:FF2
+*)
+  bead_profile : open_profile_usage;
+  sweep_path : path;
+  base_radius : OPTIONAL feature_parameter;
+  end_condition : SET [2:2] OF bead_end_type;
+ END_ENTITY;
+
+ ENTITY descriptive_specification;
+(*
+UOF:S7,S8
+*)
+  description : string_select;
+  id : OPTIONAL STRING;
+ END_ENTITY;
+
+ ENTITY organization_in_contract;
+(*
+UOF:S1
+*)
+  role_of_organization : STRING;
+  contracted_organization : organization;
+  signature : SET [0:?] OF date_and_person_organization;
+  signed_contract : SET [1:?] OF contract;
+ END_ENTITY;
+
+ ENTITY general_compound_feature
+  SUBTYPE OF (
+   general_feature
+  );
+(*
+UOF:FF1
+*)
+  elements : SET [2:?] OF feature_definition_select;
+ END_ENTITY;
+
+ ENTITY group_relationship;
+(*
+UOF:S2
+*)
+  related : group;
+  relating : group;
+  relation_type : STRING;
+  description : OPTIONAL string_select;
+ END_ENTITY;
+
+ ENTITY process_feature_in_solid
+  ABSTRACT SUPERTYPE OF ( ONEOF(pocket_feature,rib_feature,round_hole,compound_feature_in_solid,boss_feature,slot_feature) )
+  SUBTYPE OF (
+   feature_definition
+  );
+(*
+UOF:FF2
+*)
+  SELF\feature_definition.location_and_orientation : axis_placement;
+ END_ENTITY;
+
+ ENTITY compound_feature_in_solid_element;
+(*
+UOF:FF2
+*)
+  is_element_for : compound_feature_in_solid;
+  feature : compound_in_solid_select;
+  element_placement : OPTIONAL transformation;
+ END_ENTITY;
+
+ ENTITY edge_round
+  SUBTYPE OF (
+   transition_feature
+  );
+(*
+UOF:FF2
+*)
+  edge_round_face : face;
+ END_ENTITY;
+
+ ENTITY through_pocket_bottom_condition;
+(*
+UOF:FF2
+*)
+ END_ENTITY;
+
+ ENTITY profile
+  ABSTRACT SUPERTYPE OF ( ONEOF(closed_profile,open_profile) );
+(*
+UOF:FF2
+*)
+  is_defined_in : cartesian_coordinate_space;
+  location_and : axis_placement;
+ END_ENTITY;
+
+ ENTITY closed_profile
+  ABSTRACT SUPERTYPE OF ( ONEOF(circular_closed_profile,ngon_profile,rectangular_closed_profile,general_closed_profile) )
+  SUBTYPE OF (
+   profile
+  );
+(*
+UOF:FF2
+*)
+ END_ENTITY;
+
+ ENTITY open_profile
+  ABSTRACT SUPERTYPE OF ( ONEOF(tee_profile,partial_circular_profile,general_open_profile,vee_profile,rounded_u_profile,square_u_profile) )
+  SUBTYPE OF (
+   profile
+  );
+(*
+UOF:FF2
+*)
+ END_ENTITY;
+
+ ENTITY circular_closed_profile
+  SUBTYPE OF (
+   closed_profile
+  );
+(*
+UOF:FF2
+*)
+  diameter : feature_parameter;
+ END_ENTITY;
+
+ ENTITY ngon_profile
+  SUBTYPE OF (
+   closed_profile
+  );
+(*
+UOF:FF2
+*)
+  diameter : feature_parameter;
+  corner_radius : OPTIONAL feature_parameter;
+  number_of_sides : INTEGER;
+  circumscribed_or_across_flats : STRING;
+ END_ENTITY;
+
+ ENTITY rectangular_closed_profile
+  SUBTYPE OF (
+   closed_profile
+  );
+(*
+UOF:FF2
+*)
+  profile_width : feature_parameter;
+  profile_length : feature_parameter;
+  corner_radius : OPTIONAL feature_parameter;
+ END_ENTITY;
+
+ ENTITY general_closed_profile
+  SUBTYPE OF (
+   closed_profile
+  );
+(*
+UOF:FF2
+*)
+  profile_shape : curve;
+ END_ENTITY;
+
+ ENTITY square_u_profile
+  SUBTYPE OF (
+   open_profile
+  );
+(*
+UOF:FF2
+*)
+  width : feature_parameter;
+  first_angle : feature_parameter;
+  second_angle : feature_parameter;
+  first_radius : OPTIONAL feature_parameter;
+  second_radius : OPTIONAL feature_parameter;
+ END_ENTITY;
+
+ ENTITY partial_circular_profile
+  SUBTYPE OF (
+   open_profile
+  );
+(*
+UOF:FF2
+*)
+  sweep_angle : feature_parameter;
+  radius : feature_parameter;
+ END_ENTITY;
+
+ ENTITY rounded_u_profile
+  SUBTYPE OF (
+   open_profile
+  );
+(*
+UOF:FF2
+*)
+  width : feature_parameter;
+ END_ENTITY;
+
+ ENTITY vee_profile
+  SUBTYPE OF (
+   open_profile
+  );
+(*
+UOF:FF2
+*)
+  tilt_angle : feature_parameter;
+  profile_angle : feature_parameter;
+  radius : OPTIONAL feature_parameter;
+ END_ENTITY;
+
+ ENTITY tee_profile
+  SUBTYPE OF (
+   open_profile
+  );
+(*
+UOF:FF2
+*)
+  first_offset : feature_parameter;
+  second_offset : feature_parameter;
+  first_angle : feature_parameter;
+  second_angle : feature_parameter;
+  depth : feature_parameter;
+  width : feature_parameter;
+  cross_bar_depth : feature_parameter;
+  cross_bar_width : feature_parameter;
+  radius : OPTIONAL feature_parameter;
+ END_ENTITY;
+
+ ENTITY general_open_profile
+  SUBTYPE OF (
+   open_profile
+  );
+(*
+UOF:FF2
+*)
+  profile_shape : curve;
+ END_ENTITY;
+
+ ENTITY general_pattern
+  SUBTYPE OF (
+   replicate_feature
+  );
+(*
+UOF:FF2
+*)
+  added_instance : SET [1:?] OF axis_placement;
+ END_ENTITY;
+
+ ENTITY catalogue_thread
+  SUBTYPE OF (
+   thread_specification
+  );
+(*
+UOF:FF2
+*)
+ END_ENTITY;
+
+ ENTITY defined_thread
+  SUBTYPE OF (
+   thread_specification
+  );
+(*
+UOF:FF2
+*)
+  crest : OPTIONAL feature_parameter;
+  minor_diameter : OPTIONAL feature_parameter;
+  pitch_diameter : feature_parameter;
+ END_ENTITY;
+
+ ENTITY product_class_relationship;
+(*
+UOF:S7
+*)
+  relating : product_class;
+  related : product_class;
+  description : OPTIONAL string_select;
+  relation_type : STRING;
+ END_ENTITY;
+
+ ENTITY class_specification_association;
+(*
+UOF:S7
+*)
+  associated_product_class : product_class;
+  association_type : STRING;
+  associated_specification : specification;
+ END_ENTITY;
+
+ ENTITY class_condition_association;
+(*
+UOF:S7
+*)
+  condition_type : STRING;
+  associated_product_class : product_class;
+  description : OPTIONAL string_select;
+  associated_condition : specification_expression;
+ END_ENTITY;
+
+ ENTITY specification;
+(*
+UOF:S7
+*)
+  id : STRING;
+  name : OPTIONAL string_select;
+  description : OPTIONAL string_select;
+  category : specification_category;
+  version_id : OPTIONAL STRING;
+  package : BOOLEAN;
+ END_ENTITY;
+
+ ENTITY configuration;
+(*
+UOF:S7
+*)
+  configured_element : configured_item_select;
+  is_solution_for : configured_specification_select;
+  configuration_type : STRING;
+  inheritance_type : STRING;
+ END_ENTITY;
+
+ ENTITY associated_fill_area
+  SUBTYPE OF (
+   fill_area
+  );
+(*
+UOF:D2
+*)
+  is_derived_from : SET [1:?] OF fill_area_associated_element_select;
+ END_ENTITY;
+
+ ENTITY effectivity;
+(*
+UOF:S4
+*)
+  concerned_organization : SET [0:?] OF organization;
+  description : OPTIONAL string_select;
+  id : OPTIONAL STRING;
+  version_id : OPTIONAL STRING;
+  effectivity_context : OPTIONAL STRING;
+  period : OPTIONAL duration;
+  start_definition : OPTIONAL event_or_date_select;
+  end_definition : OPTIONAL event_or_date_select;
+ END_ENTITY;
+
+ ENTITY significant_number_of_digits;
+(*
+UOF:T1
+*)
+  number_of_digits : INTEGER;
+ END_ENTITY;
+
+ ENTITY upper_lower_limit;
+(*
+UOF:T1
+*)
+  upper_limit : STRING;
+  lower_limit : STRING;
+ END_ENTITY;
+
+ ENTITY general_tolerance_table;
+(*
+UOF:T1
+*)
+  tolerance_type : STRING;
+ INVERSE
+  cell : SET [1:?] OF tolerance_table_cell FOR table;
+ END_ENTITY;
+
+ ENTITY point_sequence
+  SUBTYPE OF (
+   detailed_geometric_model_element
+  );
+(*
+UOF:MD1
+*)
+  element : LIST [1:?] OF cartesian_point;
+ END_ENTITY;
+
+ ENTITY compound_feature_in_solid_element_relationship;
+(*
+UOF:FF2
+*)
+  predecessor : compound_feature_in_solid_element;
+  successor : compound_feature_in_solid_element;
+ END_ENTITY;
+
+ ENTITY process_feature_in_panel
+  ABSTRACT SUPERTYPE OF ( ONEOF(form_feature_in_panel,bead_feature,hole_feature_in_panel,compound_feature_in_panel,joggle_feature,locator_feature) )
+  SUBTYPE OF (
+   feature_definition
+  );
+(*
+UOF:FF2
+*)
+  punch_direction : OPTIONAL direction;
+ END_ENTITY;
+
+ ENTITY circular_path
+  ABSTRACT SUPERTYPE OF ( ONEOF(partial_circular_path,complete_circular_path) )
+  SUBTYPE OF (
+   path
+  );
+(*
+UOF:FF2
+*)
+  radius : feature_parameter;
+ END_ENTITY;
+
+ ENTITY linear_path
+  SUBTYPE OF (
+   path
+  );
+(*
+UOF:FF2
+*)
+  distance : feature_parameter;
+ END_ENTITY;
+
+ ENTITY general_path
+  SUBTYPE OF (
+   path
+  );
+(*
+UOF:FF2
+*)
+  path_geometry : curve;
+ END_ENTITY;
+
+ ENTITY complete_circular_path
+  SUBTYPE OF (
+   circular_path
+  );
+(*
+UOF:FF2
+*)
+ END_ENTITY;
+
+ ENTITY partial_circular_path
+  SUBTYPE OF (
+   circular_path
+  );
+(*
+UOF:FF2
+*)
+  sweep_angle : feature_parameter;
+ END_ENTITY;
+
+ ENTITY compound_feature_in_panel
+  SUBTYPE OF (
+   process_feature_in_panel
+  );
+(*
+UOF:FF2
+*)
+  feature_type : STRING;
+ INVERSE
+  element : SET [2:?] OF compound_feature_in_panel_element FOR is_element_for;
+ END_ENTITY;
+
+ ENTITY compound_feature_in_panel_element;
+(*
+UOF:FF2
+*)
+  feature : compound_in_panel_select;
+  is_element_for : compound_feature_in_panel;
+  element_placement : OPTIONAL transformation;
+ END_ENTITY;
+
+ ENTITY compound_feature_in_panel_element_relationship;
+(*
+UOF:FF2
+*)
+  predecessor : compound_feature_in_panel_element;
+  successor : compound_feature_in_panel_element;
+ END_ENTITY;
+
+ ENTITY hole_feature_in_panel
+  SUBTYPE OF (
+   process_feature_in_panel
+  );
+(*
+UOF:FF2
+*)
+  hole_type : OPTIONAL STRING;
+  hole_profile : closed_profile_usage;
+ END_ENTITY;
+
+ ENTITY form_feature_in_panel
+  SUBTYPE OF (
+   process_feature_in_panel
+  );
+(*
+UOF:FF2
+*)
+  target_boundary_defined_by : profile_or_angle_select;
+  base_radius : feature_parameter;
+  target_radius : feature_parameter;
+  feature_type : boss_pocket_stairstep_enumeration;
+  base_boundary_defined_by : profile_or_angle_select;
+  target_face : OPTIONAL general_end_select;
+ END_ENTITY;
+
+ ENTITY radiused_bead_end_type
+  SUBTYPE OF (
+   bead_end_type
+  );
+(*
+UOF:FF2
+*)
+ END_ENTITY;
+
+ ENTITY linear_bead_end_type
+  SUBTYPE OF (
+   bead_end_type
+  );
+(*
+UOF:FF2
+*)
+  end_length : value_with_unit;
+  end_shape : straight_or_tapered;
+ END_ENTITY;
+
+ ENTITY replicate_feature
+  ABSTRACT SUPERTYPE OF ( ONEOF(general_pattern,rectangular_pattern,circular_pattern) )
+  SUBTYPE OF (
+   feature_definition
+  );
+(*
+UOF:FF2
+*)
+  replicate_base : replicate_base_assignment;
+  SELF\feature_definition.location_and_orientation : axis_placement;
+ END_ENTITY;
+
+ ENTITY annotation_curve
+  SUPERTYPE OF ( ONEOF(leader,projection_curve,dimension_curve) )
+  SUBTYPE OF (
+   annotation_element
+  );
+(*
+UOF:P2,D1
+*)
+  annotation_curve_type : OPTIONAL STRING;
+ END_ENTITY;
+
+ ENTITY specification_expression;
+(*
+UOF:S7
+*)
+  description : OPTIONAL string_select;
+  operation : STRING;
+  operand : SET [1:?] OF specification_operand_select;
+  id : OPTIONAL STRING;
+ END_ENTITY;
+
+ ENTITY default_chamfer;
+(*
+UOF:FF2
+*)
+  description : OPTIONAL string_select;
+  offset_value : feature_parameter;
+ END_ENTITY;
+
+ ENTITY default_draft_angle;
+(*
+UOF:FF2
+*)
+  description : OPTIONAL string_select;
+  draft_angle_value : feature_parameter;
+ END_ENTITY;
+
+ ENTITY default_fillet;
+(*
+UOF:FF2
+*)
+  description : OPTIONAL string_select;
+  radius_value : feature_parameter;
+ END_ENTITY;
+
+ ENTITY default_edge_round;
+(*
+UOF:FF2
+*)
+  description : OPTIONAL string_select;
+  radius_value : feature_parameter;
+ END_ENTITY;
+
+ ENTITY featured_shape
+  SUBTYPE OF (
+   item_shape
+  );
+(*
+UOF:FF3
+*)
+  base_shape : item_shape;
+ END_ENTITY;
+
+ ENTITY geometric_tolerance_symbol;
+(*
+UOF:P2
+*)
+ END_ENTITY;
+
+ ENTITY surface_condition_symbol;
+(*
+UOF:P2
+*)
+ END_ENTITY;
+
+ ENTITY specification_category;
+(*
+UOF:S7
+*)
+  implicit_exclusive_condition : BOOLEAN;
+  id : STRING;
+  description : string_select;
+ END_ENTITY;
+
+ ENTITY associated_draughting_callout
+  SUBTYPE OF (
+   draughting_callout
+  );
+(*
+UOF:D2
+*)
+  is_associated_to : SET [1:?] OF associated_element_select;
+ END_ENTITY;
+
+ ENTITY property_value_representation;
+(*
+UOF:PR1
+*)
+  value_determination : OPTIONAL STRING;
+  global_unit : OPTIONAL unit;
+  qualifier : OPTIONAL STRING;
+  definition : property;
+  specified_value : property_value;
+ END_ENTITY;
+
+ ENTITY lot_configuration
+  SUBTYPE OF (
+   manufacturing_configuration
+  );
+(*
+UOF:S4
+*)
+  lot_id : STRING;
+  lot_size : value_with_unit;
+ END_ENTITY;
+
+ ENTITY serial_configuration
+  SUBTYPE OF (
+   manufacturing_configuration
+  );
+(*
+UOF:S4
+*)
+  serial_start_number : STRING;
+  serial_end_number : OPTIONAL STRING;
+ END_ENTITY;
+
+ ENTITY dated_configuration
+  SUBTYPE OF (
+   manufacturing_configuration
+  );
+(*
+UOF:S4
+*)
+  start_date : event_or_date_select;
+  end_date : OPTIONAL event_or_date_select;
+ END_ENTITY;
+
+ ENTITY class_category_association;
+(*
+UOF:S7
+*)
+  associated_product_class : product_class;
+  mandatory : BOOLEAN;
+  associated_category : specification_category;
+ END_ENTITY;
+
+ ENTITY alternative_solution
+  SUBTYPE OF (
+   complex_product
+  );
+(*
+UOF:S7
+*)
+
+  base_element : complex_product_select;
+ END_ENTITY;
+
+ ENTITY contact_ratio
+  SUBTYPE OF (
+   surface_condition
+  );
+(*
+UOF:C1
+*)
+
+  ratio_value : value_with_unit;
+  measuring_gauge : physical_model;
+ END_ENTITY;
+
+ ENTITY product_function
+  SUBTYPE OF (
+   complex_product
+  );
+(*
+UOF:S7
+*)
+  name : OPTIONAL string_select;
+  description : OPTIONAL string_select;
+  is_relevant_for : SET [0:?] OF application_context;
+ END_ENTITY;
+
+ ENTITY application_context;
+(*
+UOF:S1
+*)
+  description : OPTIONAL string_select;
+  application_domain : STRING;
+  life_cycle_stage : STRING;
+ END_ENTITY;
+
+ ENTITY technical_solution
+  SUBTYPE OF (
+   alternative_solution
+  );
+(*
+UOF:S7
+*)
+
+  description : string_select;
+ END_ENTITY;
+
+ ENTITY supplier_solution
+  SUBTYPE OF (
+   alternative_solution
+  );
+(*
+UOF:S7
+*)
+
+  supplier : organization;
+  probability_rate : OPTIONAL REAL;
+ END_ENTITY;
+
+ ENTITY final_solution
+  SUBTYPE OF (
+   alternative_solution
+  );
+(*
+UOF:S7
+*)
+
+  final_specification : SET [1:?] OF final_definition_select;
+  final_status : STRING;
+ END_ENTITY;
+
+ ENTITY collected_item_association
+  SUBTYPE OF (
+   item_definition_instance_relationship
+  );
+(*
+UOF:S7
+*)
+
+  SELF\item_definition_instance_relationship.relating : collection_definition;
+ END_ENTITY;
+
+ ENTITY plus_minus_bounds;
+(*
+UOF:T1
+*)
+
+  upper_bound : value_with_unit;
+  lower_bound : value_with_unit;
+  value_determination : OPTIONAL STRING;
+  significant_digits : OPTIONAL INTEGER;
+ END_ENTITY;
+
+ ENTITY angular_size_dimension
+  SUBTYPE OF (
+   size_dimension
+  );
+(*
+UOF:T1
+*)
+
+  major_angle : BOOLEAN;
+  full : BOOLEAN;
+ END_ENTITY;
+
+ ENTITY curved_distance_dimension
+  SUBTYPE OF (
+   location_dimension
+  );
+(*
+UOF:T1
+*)
+
+  with_curve_direction : BOOLEAN;
+  used_path : measurement_path;
+ END_ENTITY;
+
+ ENTITY angular_location_dimension
+  SUBTYPE OF (
+   location_dimension
+  );
+(*
+UOF:T1
+*)
+
+  orientation : OPTIONAL axis_placement;
+ END_ENTITY;
+
+ ENTITY linear_distance_dimension
+  SUBTYPE OF (
+   location_dimension
+  );
+(*
+UOF:T1
+*)
+
+  orientation : OPTIONAL axis_placement;
+ END_ENTITY;
+
+ ENTITY concentricity_tolerance
+  SUBTYPE OF (
+   geometric_tolerance
+  );
+(*
+UOF:T2
+*)
+
+  reference_datum : datum_reference;
+ END_ENTITY;
+
+ ENTITY position_tolerance
+  SUBTYPE OF (
+   geometric_tolerance
+  );
+(*
+UOF:T2
+*)
+
+  reference_datum : SET [0:3] OF datum_reference;
+  affected_plane : OPTIONAL reference_plane;
+ END_ENTITY;
+
+ ENTITY symmetry_tolerance
+  SUBTYPE OF (
+   geometric_tolerance
+  );
+(*
+UOF:T2
+*)
+
+  reference_datum : SET [1:3] OF datum_reference;
+  affected_plane : OPTIONAL reference_plane;
+ END_ENTITY;
+
+ ENTITY circular_runout_tolerance
+  SUBTYPE OF (
+   geometric_tolerance
+  );
+(*
+UOF:T2
+*)
+
+  reference_datum : SET [1:2] OF datum_reference;
+  angle : OPTIONAL REAL;
+ END_ENTITY;
+
+ ENTITY total_runout_tolerance
+  SUBTYPE OF (
+   geometric_tolerance
+  );
+(*
+UOF:T2
+*)
+
+  angle : OPTIONAL REAL;
+  reference_datum : SET [1:2] OF datum_reference;
+ END_ENTITY;
+
+ ENTITY surface_profile_tolerance
+  SUBTYPE OF (
+   geometric_tolerance
+  );
+(*
+UOF:T2
+*)
+
+  reference_datum : SET [0:3] OF datum_reference;
+ END_ENTITY;
+
+ ENTITY line_profile_tolerance
+  SUBTYPE OF (
+   geometric_tolerance
+  );
+(*
+UOF:T2
+*)
+
+  reference_datum : SET [0:3] OF datum_reference;
+  affected_plane : OPTIONAL reference_plane;
+ END_ENTITY;
+
+ ENTITY perpendicularity_tolerance
+  SUBTYPE OF (
+   geometric_tolerance
+  );
+(*
+UOF:T2
+*)
+
+  reference_datum : SET [1:3] OF datum_reference;
+  affected_plane : OPTIONAL reference_plane;
+ END_ENTITY;
+
+ ENTITY parallelism_tolerance
+  SUBTYPE OF (
+   geometric_tolerance
+  );
+(*
+UOF:T2
+*)
+
+  reference_datum : SET [1:2] OF datum_reference;
+  affected_plane : OPTIONAL reference_plane;
+ END_ENTITY;
+
+ ENTITY straightness_tolerance
+  SUBTYPE OF (
+   geometric_tolerance
+  );
+(*
+UOF:T2
+*)
+
+  affected_plane : OPTIONAL reference_plane;
+ END_ENTITY;
+
+ ENTITY flatness_tolerance
+  SUBTYPE OF (
+   geometric_tolerance
+  );
+(*
+UOF:T2
+*)
+
+ END_ENTITY;
+
+ ENTITY tolerance_condition;
+(*
+UOF:T2
+*)
+
+  condition : STRING;
+ END_ENTITY;
+
+ ENTITY single_datum
+  SUPERTYPE OF ( ONEOF(datum_defined_by_derived_shape,datum_defined_by_feature,datum_defined_by_targets) )
+  SUBTYPE OF (
+   datum
+  );
+(*
+UOF:T2
+*)
+
+  datum_name : STRING;
+  modification : OPTIONAL tolerance_condition;
+ END_ENTITY;
+
+ ENTITY datum_target
+  ABSTRACT SUPERTYPE OF ( ONEOF(target_area,placed_target) );
+(*
+UOF:T2
+*)
+
+  id : STRING;
+ END_ENTITY;
+
+ ENTITY target_point
+  SUBTYPE OF (
+   placed_target
+  );
+(*
+UOF:T2
+*)
+
+ END_ENTITY;
+
+ ENTITY target_circle
+  SUBTYPE OF (
+   placed_target
+  );
+(*
+UOF:T2
+*)
+
+  diameter : value_with_unit;
+ END_ENTITY;
+
+ ENTITY angularity_tolerance
+  SUBTYPE OF (
+   geometric_tolerance
+  );
+(*
+UOF:T2
+*)
+
+  reference_datum : SET [1:2] OF datum_reference;
+ END_ENTITY;
+
+ ENTITY cylindricity_tolerance
+  SUBTYPE OF (
+   geometric_tolerance
+  );
+(*
+UOF:T2
+*)
+
+ END_ENTITY;
+
+ ENTITY datum
+  ABSTRACT SUPERTYPE OF ( ONEOF(single_datum,common_datum) );
+(*
+UOF:T2
+*)
+
+ END_ENTITY;
+
+ ENTITY target_rectangle
+  SUBTYPE OF (
+   placed_target
+  );
+(*
+UOF:T2
+*)
+
+  target_length : value_with_unit;
+  target_width : value_with_unit;
+ END_ENTITY;
+
+ ENTITY target_line
+  SUBTYPE OF (
+   placed_target
+  );
+(*
+UOF:T2
+*)
+
+  target_length : value_with_unit;
+ END_ENTITY;
+
+ ENTITY tolerance_zone;
+(*
+UOF:T2
+*)
+
+  form_type : STRING;
+  is_zone_for : SET [1:?] OF geometric_tolerance;
+ END_ENTITY;
+
+ ENTITY projection
+  SUBTYPE OF (
+   tolerance_zone_definition
+  );
+(*
+UOF:T2
+*)
+
+  projection_end : shape_element;
+  projection_length : value_with_unit;
+ END_ENTITY;
+
+ ENTITY size_dimension
+  ABSTRACT SUPERTYPE OF ( ONEOF(angular_size_dimension,thickness_dimension,externally_defined_size_dimension,width_size_dimension,radial_size_dimension,length_size_dimension,height_size_dimension,diameter_size_dimension,curved_size_dimension) )
+  SUBTYPE OF (
+   geometric_dimension
+  );
+(*
+UOF:T1
+*)
+
+  is_applied_to : element_with_dimension_select;
+  envelope : OPTIONAL BOOLEAN;
+ END_ENTITY;
+
+ ENTITY location_dimension
+  ABSTRACT SUPERTYPE OF ( ONEOF(curved_distance_dimension,linear_distance_dimension,angular_location_dimension) )
+  SUBTYPE OF (
+   geometric_dimension
+  );
+(*
+UOF:T1
+*)
+
+  description : OPTIONAL string_select;
+  origin : placed_element_select;
+  target : placed_element_select;
+  directed : BOOLEAN;
+ END_ENTITY;
+
+ ENTITY target_area
+  SUBTYPE OF (
+   datum_target
+  );
+(*
+UOF:T2
+*)
+
+  is_defined_by : shape_element;
+ END_ENTITY;
+
+ ENTITY quantified_instance
+  SUBTYPE OF (
+   item_instance
+  );
+(*
+UOF:S3
+*)
+
+  quantity : numerical_value;
+ END_ENTITY;
+
+ ENTITY open_bead_end_type
+  SUBTYPE OF (
+   bead_end_type
+  );
+(*
+UOF:FF2
+*)
+ END_ENTITY;
+
+ ENTITY planar_top_condition
+  SUBTYPE OF (
+   boss_top_condition
+  );
+(*
+UOF:FF2
+*)
+
+  top_location : point;
+  top_normal : direction;
+ END_ENTITY;
+
+ ENTITY general_top_condition
+  SUBTYPE OF (
+   boss_top_condition
+  );
+(*
+UOF:FF2
+*)
+
+  top_face : general_end_select;
+ END_ENTITY;
+
+ ENTITY value_limitation;
+(*
+UOF:T1
+*)
+
+  is_defined_by : limitation_definition_select;
+  limited_value : numerical_value;
+ END_ENTITY;
+
+ ENTITY constructive_geometry;
+(*
+UOF:S2
+*)
+
+  element : SET [1:?] OF constructive_geometric_element;
+  name : OPTIONAL string_select;
+ INVERSE
+  associated_model : SET [1:?] OF constructive_geometry_association FOR auxiliary_geometry;
+ END_ENTITY;
+
+ ENTITY constructive_geometry_association;
+(*
+UOF:S2
+*)
+
+  auxiliary_geometry : constructive_geometry;
+  description : OPTIONAL string_select;
+  base_geometry : constructive_geometry_select;
+ END_ENTITY;
+
+ ENTITY common_datum
+  SUBTYPE OF (
+   datum
+  );
+(*
+UOF:T2
+*)
+
+  is_made_up_by : SET [2:2] OF single_datum;
+ END_ENTITY;
+
+ ENTITY placed_target
+  ABSTRACT SUPERTYPE OF ( ONEOF(target_line,target_circle,target_rectangle,target_point) )
+  SUBTYPE OF (
+   datum_target
+  );
+(*
+UOF:T2
+*)
+
+  is_defined_in : cartesian_coordinate_space;
+  parameter_reference : axis_placement;
+ END_ENTITY;
+
+ ENTITY tolerance_zone_definition;
+(*
+UOF:T2
+*)
+
+  is_defining : tolerance_zone;
+  first_element : shape_element;
+  second_element : OPTIONAL shape_element;
+ END_ENTITY;
+
+ ENTITY design_constraint;
+(*
+UOF:S7
+*)
+
+  constraint_id : STRING;
+  name : OPTIONAL string_select;
+  description : OPTIONAL string_select;
+  is_valid_for : SET [0:?] OF product_class;
+ END_ENTITY;
+
+ ENTITY design_constraint_version
+  SUBTYPE OF (
+   design_constraint
+  );
+(*
+UOF:S7
+*)
+
+  version_id : STRING;
+ END_ENTITY;
+
+ ENTITY design_constraint_association;
+(*
+UOF:S7
+*)
+
+  is_based_on : design_constraint;
+  name : OPTIONAL string_select;
+  is_constraining : complex_product;
+ END_ENTITY;
+
+ ENTITY constant_radius_fillet
+  SUBTYPE OF (
+   fillet
+  );
+(*
+UOF:FF2
+*)
+  radius : feature_parameter;
+  first_offset : OPTIONAL feature_parameter;
+  second_offset : OPTIONAL feature_parameter;
+ END_ENTITY;
+
+ ENTITY constant_radius_edge_round
+  SUBTYPE OF (
+   edge_round
+  );
+(*
+UOF:FF2
+*)
+  radius : feature_parameter;
+  first_offset : OPTIONAL feature_parameter;
+  second_offset : OPTIONAL feature_parameter;
+ END_ENTITY;
+
+ ENTITY path
+  ABSTRACT SUPERTYPE OF ( ONEOF(general_path,linear_path,circular_path) );
+(*
+UOF:FF2
+*)
+  is_defined_in : OPTIONAL cartesian_coordinate_space;
+  is_defined_by : axis_placement;
+ END_ENTITY;
+
+ ENTITY directed_taper;
+(*
+UOF:FF2
+*)
+  angle : feature_parameter;
+  direction : direction;
+ END_ENTITY;
+
+ ENTITY through_hole_bottom_condition;
+(*
+UOF:FF2
+*)
+ END_ENTITY;
+
+ ENTITY flat_bottom
+  SUBTYPE OF (
+   hole_bottom_condition
+  );
+(*
+UOF:FF2
+*)
+ END_ENTITY;
+
+ ENTITY flat_with_radius_bottom
+  SUBTYPE OF (
+   hole_bottom_condition
+  );
+(*
+UOF:FF2
+*)
+  radius : feature_parameter;
+ END_ENTITY;
+
+ ENTITY conical_bottom
+  SUBTYPE OF (
+   hole_bottom_condition
+  );
+(*
+UOF:FF2
+*)
+  tip_angle : feature_parameter;
+  tip_radius : OPTIONAL feature_parameter;
+ END_ENTITY;
+
+ ENTITY spherical_bottom
+  SUBTYPE OF (
+   hole_bottom_condition
+  );
+(*
+UOF:FF2
+*)
+  radius : feature_parameter;
+ END_ENTITY;
+
+ ENTITY reference_plane;
+(*
+UOF:T2
+*)
+  plane_location : point;
+  plane_normal : direction;
+ END_ENTITY;
+
+ ENTITY derived_geometry;
+(*
+UOF:T1,T2
+*)
+  geometry : constructive_geometric_element;
+  is_derived_from : SET [1:?] OF shape_element;
+  role : STRING;
+ END_ENTITY;
+
+ ENTITY value_range
+  SUBTYPE OF (
+   value_with_unit
+  );
+(*
+UOF:S1
+*)
+  upper_limit : NUMBER;
+  lower_limit : NUMBER;
+ END_ENTITY;
+
+ ENTITY value_limit
+  SUBTYPE OF (
+   value_with_unit
+  );
+(*
+UOF:S1
+*)
+  limit_qualifier : STRING;
+  limit : NUMBER;
+ END_ENTITY;
+
+ ENTITY thickness_dimension
+  SUBTYPE OF (
+   size_dimension
+  );
+(*
+UOF:T1
+*)
+  used_path : OPTIONAL measurement_path;
+ END_ENTITY;
+
+ ENTITY material_property_value_representation
+  SUBTYPE OF (
+   property_value_representation
+  );
+(*
+UOF:PR1
+*)
+  environment_condition : data_environment;
+  SELF\property_value_representation.definition : material_property;
+ END_ENTITY;
+
+ ENTITY data_environment;
+(*
+UOF:PR1
+*)
+  environment_name : STRING;
+  description : OPTIONAL string_select;
+ END_ENTITY;
+
+ ENTITY certification;
+(*
+UOF:S1
+*)
+  name : string_select;
+  certification_type : STRING;
+  is_applied_to : SET [1:?] OF certified_element_select;
+  purpose : OPTIONAL string_select;
+ END_ENTITY;
+
+ ENTITY design_constraint_relationship;
+(*
+UOF:S7
+*)
+  related : design_constraint;
+  relating : design_constraint;
+  relation_type : STRING;
+  description : OPTIONAL string_select;
+ END_ENTITY;
+
+ ENTITY date_and_person_assignment;
+(*
+UOF:S1
+*)
+  is_applied_to : SET [1:?] OF date_time_person_organization_element_select;
+  assigned_date_and_person : date_and_person_organization;
+  role : STRING;
+  description : OPTIONAL string_select;
+ END_ENTITY;
+
+ ENTITY date_time_assignment;
+(*
+UOF:S1
+*)
+  assigned_date_time : date_time;
+  role : STRING;
+  is_applied_to : SET [1:?] OF date_time_person_organization_element_select;
+  description : OPTIONAL string_select;
+ END_ENTITY;
+
+ ENTITY person_organization_assignment;
+(*
+UOF:S1
+*)
+  is_applied_to : SET [1:?] OF date_time_person_organization_element_select;
+  assigned_person_organization : person_organization_select;
+  role : STRING;
+  description : OPTIONAL string_select;
+ END_ENTITY;
+
+ ENTITY security_classification;
+(*
+UOF:S1
+*)
+  is_applied_to : SET [1:?] OF security_element_select;
+  level : security_level;
+  name : string_select;
+  purpose : OPTIONAL string_select;
+ END_ENTITY;
+
+ ENTITY activity_element;
+(*
+UOF:S5
+*)
+  element : SET [1:?] OF activity_element_select;
+  associated_activity : activity;
+  role : STRING;
+ END_ENTITY;
+
+ ENTITY geometric_model
+  SUPERTYPE OF ( geometric_model_version ANDOR ONEOF(wireframe_model_3d,point_direction_model,wireframe_model_2d,hybrid_geometric_model_3d,geometrically_bounded_surface_model,surface_model,compound_model,csg_model,b_rep_model,faceted_b_rep_model) );
+(*
+UOF:E1,S2
+*)
+  is_defined_in : cartesian_coordinate_space;
+  model_id : STRING;
+  description : OPTIONAL string_select;
+  model_extent : OPTIONAL numerical_value;
+  additional_element : SET [0:?] OF template_instance;
+ END_ENTITY;
+
+ ENTITY hybrid_geometric_model_3d
+  SUBTYPE OF (
+   geometric_model
+  );
+(*
+UOF:S2
+*)
+  element : SET [0:?] OF detailed_geometric_model_element;
+ END_ENTITY;
+
+ ENTITY external_model
+  ABSTRACT SUPERTYPE OF ( ONEOF(external_picture,external_geometric_model) );
+(*
+UOF:E1
+*)
+  is_defined_as : digital_file;
+  is_defined_in : cartesian_coordinate_space;
+  description : OPTIONAL string_select;
+  model_id : STRING;
+ END_ENTITY;
+
+ ENTITY shape_description_association;
+(*
+UOF:E1,S2
+*)
+  is_defining_shape_for : shape_information_select;
+  role : STRING;
+  defining_geometry : shape_definition_select;
+ END_ENTITY;
+
+ ENTITY item_shape;
+(*
+UOF:S2,E1
+*)
+  described_object : item_information_select;
+  description : OPTIONAL string_select;
+ END_ENTITY;
+
+ ENTITY shape_element_relationship;
+(*
+UOF:S2,E1
+*)
+  relating : shape_element;
+  related : shape_element;
+  description : OPTIONAL string_select;
+  relation_type : STRING;
+ END_ENTITY;
+
+ ENTITY geometric_model_relationship;
+(*
+UOF:E1,S2
+*)
+  relating : geometric_or_external_model_select;
+  related : geometric_or_external_model_select;
+  description : OPTIONAL string_select;
+  relation_type : STRING;
+ END_ENTITY;
+
+ ENTITY detailed_geometric_model_element
+  ABSTRACT SUPERTYPE OF ( ONEOF(curve_set_2d,point_direction_sequence,point_direction,point_sequence,curve_set_3d,topologically_connected_set,faceted_b_rep,shell,b_rep,face,geometric_set_3d,csg_primitive,boolean_result,half_space_solid,point,curve,surface,swept_face_solid,solid_replica) )
+  SUBTYPE OF (
+   detailed_model_element
+  );
+(*
+UOF:G1,G2,G3,G4,G5,G6,G7
+*)
+ END_ENTITY;
+
+ ENTITY styled_model
+  ABSTRACT SUPERTYPE OF ( styled_model_version ANDOR ONEOF(styled_geometric_model,styled_annotation_model) );
+(*
+UOF:P1
+*)
+  element : SET [1:?] OF styled_element;
+  model_id : STRING;
+  description : OPTIONAL string_select;
+  additional_elements : SET [0:?] OF template_instance;
+ END_ENTITY;
+
+ ENTITY styled_element
+  ABSTRACT SUPERTYPE OF ( ONEOF(annotation_element,styled_model_element) )
+  SUBTYPE OF (
+   detailed_element
+  );
+(*
+UOF:P1
+*)
+  appearance : appearance_assignment;
+  invisible : BOOLEAN;
+ END_ENTITY;
+
+ ENTITY annotation_element
+  ABSTRACT SUPERTYPE OF ( ONEOF(annotation_curve,fill_area,text,annotation_symbol,annotation_subfigure) )
+  SUBTYPE OF (
+   styled_element
+  );
+(*
+UOF:P2
+*)
+ END_ENTITY;
+
+ ENTITY kinematic_simulation_information;
+(*
+UOF:K1
+*)
+  mechanism : SET [1:?] OF kinematic_mechanism;
+  ground : ground_representation;
+  described_element : SET [1:?] OF simulation_context_select;
+  description : OPTIONAL string_select;
+ END_ENTITY;
+
+ ENTITY transformation
+  ABSTRACT SUPERTYPE OF ( ONEOF(transformation_2d,transformation_3d) );
+(*
+UOF:E1,S2
+*)
+ END_ENTITY;
+
+ ENTITY document_assignment;
+(*
+UOF:E1
+*)
+  assigned_document : assigned_document_select;
+  is_assigned_to : SET [1:?] OF documented_element_select;
+  role : STRING;
+ END_ENTITY;
+
+ ENTITY document_version;
+(*
+UOF:E1
+*)
+  description : OPTIONAL string_select;
+  id : STRING;
+  associated_document : document;
+ END_ENTITY;
+
+ ENTITY detailed_element
+  ABSTRACT SUPERTYPE OF ( ONEOF(styled_element,detailed_model_element,draughting_callout) );
+(*
+UOF:G1,G2,G3,G4,G5,G6,G7,P2
+*)
+  name : OPTIONAL string_select;
+ END_ENTITY;
+
+ ENTITY point
+  ABSTRACT SUPERTYPE OF ( ONEOF(cartesian_point,point_on_surface,point_on_curve) )
+  SUBTYPE OF (
+   detailed_geometric_model_element
+  );
+(*
+UOF:G1,G2,G3,G4,G5,G6,G7,G8
+*)
+ END_ENTITY;
+
+ ENTITY curve
+  ABSTRACT SUPERTYPE OF ( ONEOF(composite_curve,trimmed_curve,offset_curve,line,parabola,b_spline_curve,hyperbola,curve_on_surface,ellipse,circle,polyline) )
+  SUBTYPE OF (
+   detailed_geometric_model_element
+  );
+(*
+UOF:G1,G2,G3,G5,G6,G7,G8
+*)
+ END_ENTITY;
+
+ ENTITY surface
+  ABSTRACT SUPERTYPE OF ( ONEOF(cylindrical_surface,offset_surface,surface_of_linear_extrusion,surface_of_revolution,conical_surface,plane,b_spline_surface,toroidal_surface,spherical_surface,trimmed_surface) )
+  SUBTYPE OF (
+   detailed_geometric_model_element
+  );
+(*
+UOF:G3,G5,G6,G7,G8
+*)
+ END_ENTITY;
+
+ ENTITY csg_primitive
+  ABSTRACT SUPERTYPE OF ( ONEOF(right_circular_cylinder,right_circular_cone,torus,right_angular_wedge,block,sphere) )
+  SUBTYPE OF (
+   detailed_geometric_model_element
+  );
+(*
+UOF:G7
+*)
+ END_ENTITY;
+
+ ENTITY rectangular_open_pocket
+  SUBTYPE OF (
+   pocket_feature
+  );
+(*
+UOF:FF2
+*)
+  SELF\pocket_feature.boundary : open_profile_usage;
+ END_ENTITY;
+
+ ENTITY boss_top_condition
+  ABSTRACT SUPERTYPE OF ( ONEOF(planar_top_condition,general_top_condition) );
+(*
+UOF:FF2
+*)
+  is_applied_to : starting_or_ending;
+  top_radius : OPTIONAL feature_parameter;
+ END_ENTITY;
+
+ ENTITY hole_bottom_condition
+  ABSTRACT SUPERTYPE OF ( ONEOF(flat_with_radius_bottom,flat_bottom,spherical_bottom,flat_with_taper_bottom,conical_bottom) );
+(*
+UOF:FF2
+*)
+  is_applied_to : starting_or_ending;
+ END_ENTITY;
+
+ ENTITY slot_end_type
+  ABSTRACT SUPERTYPE OF ( ONEOF(flat_slot_end_type,radiused_slot_end_type,open_slot_end_type,woodruff_slot_end_type) );
+(*
+UOF:FF2
+*)
+  is_applied_to : starting_or_ending;
+ END_ENTITY;
+
+ ENTITY pocket_bottom_condition
+  ABSTRACT SUPERTYPE OF ( ONEOF(general_bottom_condition,planar_bottom_condition) );
+(*
+UOF:FF2
+*)
+  is_applied_to : starting_or_ending;
+ END_ENTITY;
+
+ ENTITY joggle_feature
+  SUBTYPE OF (
+   process_feature_in_panel
+  );
+(*
+UOF:FF2
+*)
+  defining_path : linear_path;
+  slope_angle_1 : feature_parameter;
+  slope_angle_2 : feature_parameter;
+  height : feature_parameter;
+  termination : joggle_termination;
+  direction_angle_2 : feature_parameter;
+  direction_angle_1 : feature_parameter;
+  top_radius_1 : OPTIONAL feature_parameter;
+  top_radius_2 : OPTIONAL feature_parameter;
+  base_radius_2 : OPTIONAL feature_parameter;
+  base_radius_1 : OPTIONAL feature_parameter;
+ END_ENTITY;
+
+ ENTITY bead_end_type
+  ABSTRACT SUPERTYPE OF ( ONEOF(linear_bead_end_type,open_bead_end_type,radiused_bead_end_type) );
+(*
+UOF:FF2
+*)
+  is_applied_to : starting_or_ending;
+ END_ENTITY;
+
+ ENTITY geometric_model_relationship_with_transformation
+  SUBTYPE OF (
+   geometric_model_relationship
+  );
+(*
+UOF:E1,S2
+*)
+  model_placement : transformation;
+ END_ENTITY;
+
+ ENTITY multi_language_string;
+(*
+UOF:S1
+*)
+  additional_language_dependent_string : SET [0:?] OF string_with_language;
+  primary_language_dependent_string : string_with_language;
+ END_ENTITY;
+
+ ENTITY string_with_language;
+(*
+UOF:S1
+*)
+  contents : STRING;
+  language_specification : language;
+ END_ENTITY;
+
+ ENTITY face_bound;
+(*
+UOF:G3,G5,G6,G7
+*)
+  outer : BOOLEAN;
+  loop : loop_select;
+ END_ENTITY;
+
+ ENTITY shape_dependent_property
+  ABSTRACT SUPERTYPE OF ( ONEOF(centre_of_mass,moments_of_inertia,general_shape_dependent_property) );
+(*
+UOF:PR1,S2
+*)
+  description : OPTIONAL string_select;
+  value_determination : OPTIONAL STRING;
+  described_element : shaped_element_select;
+  is_defined_in : OPTIONAL cartesian_coordinate_space;
+ END_ENTITY;
+
+ ENTITY styled_model_relationship;
+(*
+UOF:P1
+*)
+  related : styled_model;
+  relating : styled_model;
+  description : OPTIONAL string_select;
+  relation_type : STRING;
+ END_ENTITY;
+
+ ENTITY transformation_2d
+  SUPERTYPE OF ( ONEOF(implicit_transformation_2d,explicit_transformation_2d) )
+  SUBTYPE OF (
+   transformation
+  );
+(*
+UOF:E1,S2
+*)
+ END_ENTITY;
+
+ ENTITY transformation_3d
+  SUPERTYPE OF ( ONEOF(implicit_transformation_3d,explicit_transformation_3d) )
+  SUBTYPE OF (
+   transformation
+  );
+(*
+UOF:E1,S2
+*)
+ END_ENTITY;
+
+ ENTITY curve_set_2d
+  SUBTYPE OF (
+   detailed_geometric_model_element
+  );
+(*
+UOF:G1
+*)
+  element : SET [1:?] OF point_or_curve_select;
+ END_ENTITY;
+
+ ENTITY curve_set_3d
+  SUBTYPE OF (
+   detailed_geometric_model_element
+  );
+(*
+UOF:G2
+*)
+  element : SET [1:?] OF point_or_curve_select;
+ END_ENTITY;
+
+ ENTITY geometric_set_3d
+  SUBTYPE OF (
+   detailed_geometric_model_element
+  );
+(*
+UOF:G8
+*)
+  element : SET [1:?] OF point_or_curve_or_surface_select;
+ END_ENTITY;
+
+ ENTITY b_rep
+  SUBTYPE OF (
+   detailed_geometric_model_element
+  );
+(*
+UOF:G5,G7
+*)
+  void : SET [0:?] OF closed_shell;
+  outer : closed_shell;
+ END_ENTITY;
+
+ ENTITY faceted_b_rep
+  SUBTYPE OF (
+   detailed_geometric_model_element
+  );
+(*
+UOF:G4,G7
+*)
+  outer : faceted_closed_shell;
+  void : SET [0:?] OF faceted_closed_shell;
+ END_ENTITY;
+
+ ENTITY shell
+  SUBTYPE OF (
+   detailed_geometric_model_element
+  );
+(*
+UOF:G3
+*)
+  included_face : SET [1:?] OF face;
+ END_ENTITY;
+
+ ENTITY styled_model_version
+  SUBTYPE OF (
+   styled_model
+  );
+(*
+UOF:P1
+*)
+  version_id : STRING;
+ END_ENTITY;
+
+ ENTITY geometric_model_version
+  SUBTYPE OF (
+   geometric_model
+  );
+(*
+UOF:E1,S2
+*)
+  version_id : STRING;
+ END_ENTITY;
+
+ ENTITY process_plan_version
+  SUBTYPE OF (
+   process_plan
+  );
+(*
+UOF:S8
+*)
+  version_id : STRING;
+ END_ENTITY;
+
+ ENTITY effectivity_relationship;
+(*
+UOF:S4
+*)
+  relating : effectivity;
+  related : effectivity;
+  relation_type : STRING;
+  description : OPTIONAL string_select;
+ END_ENTITY;
+
+ ENTITY work_order;
+(*
+UOF:S5
+*)
+  is_controlling : SET [1:?] OF activity;
+  id : STRING;
+  version_id : OPTIONAL STRING;
+  description : OPTIONAL string_select;
+  work_order_type : STRING;
+ END_ENTITY;
+
+ ENTITY element_delivery;
+(*
+UOF:S5
+*)
+  quantity : value_with_unit;
+  destination : organization;
+  deliverable_element : activity_element;
+ END_ENTITY;
+
+ ENTITY approval_status;
+(*
+UOF:S1
+*)
+  status_name : STRING;
+  used_classification_system : OPTIONAL classification_system;
+ END_ENTITY;
+
+ ENTITY approval_relationship;
+(*
+UOF:S1
+*)
+  relating : approval;
+  related : approval;
+  relation_type : STRING;
+  description : OPTIONAL string_select;
+ END_ENTITY;
+
+ ENTITY security_level;
+(*
+UOF:S1
+*)
+  level_name : STRING;
+  used_classification_system : OPTIONAL classification_system;
+ END_ENTITY;
+
+ ENTITY assembly_substitute_relationship;
+(*
+UOF:S3
+*)
+  base : assembly_component_relationship;
+  substitute : assembly_component_relationship;
+  description : OPTIONAL string_select;
+ END_ENTITY;
+
+ ENTITY mated_item_relationship;
+(*
+UOF:S8
+*)
+  mated_shape : OPTIONAL shape_element_or_relationship_select;
+  relating : mated_item_association;
+  related : mated_item_association;
+  mating_material : SET [0:?] OF quantified_instance;
+ END_ENTITY;
+
+ ENTITY drawing_sequence;
+(*
+UOF:D1
+*)
+  preceding_drawing : drawing;
+  succeeding_drawing : drawing;
+ END_ENTITY;
+
+ ENTITY property_change;
+(*
+UOF:PR1
+*)
+  is_describing : change;
+  added_property : SET [0:?] OF property_value_representation;
+  deleted_property : SET [0:?] OF property_value_representation;
+  description : string_select;
+  id : OPTIONAL STRING;
+ END_ENTITY;
+
+ ENTITY change;
+(*
+UOF:S5,S2,PR1
+*)
+  description : OPTIONAL string_select;
+  described_change : change_relationship_select;
+ END_ENTITY;
+
+ ENTITY joggle_termination
+  ABSTRACT SUPERTYPE OF ( ONEOF(value_termination,face_termination) );
+(*
+UOF:FF2
+*)
+ END_ENTITY;
+
+ ENTITY value_termination
+  SUBTYPE OF (
+   joggle_termination
+  );
+(*
+UOF:FF2
+*)
+  depth : feature_parameter;
+  angle : feature_parameter;
+ END_ENTITY;
+
+ ENTITY face_termination
+  SUBTYPE OF (
+   joggle_termination
+  );
+(*
+UOF:FF2
+*)
+ END_ENTITY;
+
+ ENTITY constructive_geometric_element;
+(*
+UOF:S2
+*)
+  element : constructive_element_select;
+  description : OPTIONAL string_select;
+ INVERSE
+  geometry : SET [1:?] OF constructive_geometry FOR element;
+ END_ENTITY;
+
+ ENTITY feature_placement;
+(*
+UOF:FF3
+*)
+
+  placement : transformation;
+  placed_definition : feature_definition;
+  placement_reference : geometric_model;
+ END_ENTITY;
+
+ ENTITY feature_definition
+  ABSTRACT SUPERTYPE OF ( ONEOF(replicate_feature,process_feature_in_solid,process_feature_in_panel) );
+(*
+UOF:FF2
+*)
+  is_defined_in : cartesian_coordinate_space_3d;
+  location_and_orientation : OPTIONAL axis_placement;
+ END_ENTITY;
+
+ ENTITY replicate_base_assignment;
+(*
+UOF:FF2
+*)
+  base_feature : feature_definition;
+  replicate_placement : OPTIONAL transformation;
+ END_ENTITY;
+
+ ENTITY single_instance
+  SUBTYPE OF (
+   item_instance
+  );
+(*
+UOF:S3
+*)
+ END_ENTITY;
+
+ ENTITY physical_instance;
+(*
+UOF:S7
+*)
+
+  is_realization_of : OPTIONAL physical_instance_definition_select;
+  serial_number : OPTIONAL STRING;
+  lot_id : OPTIONAL STRING;
+  description : OPTIONAL string_select;
+  inventory_number : OPTIONAL STRING;
+ END_ENTITY;
+
+ ENTITY physical_assembly_relationship;
+(*
+UOF:S7
+*)
+
+  physical_component : physical_instance;
+  physical_assembly : physical_instance;
+  is_realization_of : item_instance;
+ END_ENTITY;
+
+ ENTITY styled_annotation_model
+  SUBTYPE OF (
+   styled_model
+  );
+(*
+UOF:P2
+*)
+  is_defined_in : cartesian_coordinate_space;
+ END_ENTITY;
+
+ ENTITY styled_geometric_model
+  SUBTYPE OF (
+   styled_model
+  );
+(*
+UOF:P1
+*)
+  styled_geometry_context : geometric_model;
+ END_ENTITY;
+
+ ENTITY placed_feature
+  SUBTYPE OF (
+   feature_occurrence
+  );
+(*
+UOF:FF3
+*)
+  is_placed_by : feature_placement;
+ END_ENTITY;
+
+ ENTITY feature_occurrence
+  ABSTRACT SUPERTYPE OF ( ONEOF(placed_feature,included_feature) )
+  SUBTYPE OF (
+   shape_element
+  );
+(*
+UOF:FF1
+*)
+  maximum_feature_limit : OPTIONAL plane;
+ END_ENTITY;
+
+ ENTITY collection_definition
+  SUBTYPE OF (
+   design_discipline_item_definition
+  );
+(*
+UOF:S7
+*)
+  purpose : OPTIONAL string_select;
+ INVERSE
+  collected_items : SET [2:?] OF collected_item_association FOR relating;
+ END_ENTITY;
+
+ ENTITY assembly_definition
+  SUBTYPE OF (
+   design_discipline_item_definition
+  );
+(*
+UOF:S3
+*)
+  assembly_type : OPTIONAL STRING;
+ END_ENTITY;
+
+ ENTITY item_instance
+  ABSTRACT SUPERTYPE OF ( ONEOF(single_instance,quantified_instance,selected_instance,specified_instance) );
+(*
+UOF:S3
+*)
+  description : OPTIONAL string_select;
+  definition : instance_definition_select;
+  id : STRING;
+ END_ENTITY;
+
+ ENTITY selected_instance
+  SUBTYPE OF (
+   item_instance
+  );
+(*
+UOF:S3
+*)
+  selection_control : STRING;
+  selected_quantity : value_with_unit;
+ END_ENTITY;
+
+ ENTITY external_library_reference;
+(*
+UOF:S6
+*)
+  external_id : STRING;
+  library_type : STRING;
+  description : OPTIONAL string_select;
+ END_ENTITY;
+
+ ENTITY specification_inclusion;
+(*
+UOF:S7
+*)
+  if_condition : specification_operand_select;
+  included_specification : specification_operand_select;
+  description : OPTIONAL string_select;
+  id : OPTIONAL STRING;
+ END_ENTITY;
+
+ ENTITY person_in_organization;
+(*
+UOF:S1
+*)
+  associated_organization : organization;
+  role : STRING;
+  location : OPTIONAL address;
+  id : OPTIONAL STRING;
+  associated_person : person;
+ END_ENTITY;
+
+ ENTITY default_thickness;
+(*
+UOF:T1
+*)
+  thickness_value : value_with_unit;
+  description : OPTIONAL string_select;
+  parameter_name : OPTIONAL STRING;
+ END_ENTITY;
+
+ ENTITY model_property_association;
+(*
+UOF:PR1
+*)
+  described_element : model_property_select;
+  associated_property_value : model_property_value;
+  validity_context : OPTIONAL validity_context_select;
+ END_ENTITY;
+
+ ENTITY quality_property
+  SUBTYPE OF (
+   property
+  );
+(*
+UOF:PR1
+*)
+ END_ENTITY;
+
+ ENTITY cost_property
+  SUBTYPE OF (
+   property
+  );
+(*
+UOF:PR1
+*)
+ END_ENTITY;
+
+ ENTITY property_relationship;
+(*
+UOF:PR1
+*)
+  relating : property;
+  related : property;
+  description : OPTIONAL string_select;
+  relation_type : STRING;
+ END_ENTITY;
+
+ ENTITY detailed_model_element
+  ABSTRACT SUPERTYPE OF ( ONEOF(detailed_geometric_model_element,template_instance) )
+  SUBTYPE OF (
+   detailed_element
+  );
+(*
+UOF:G1,G2,G3,G4,G5,G6,G7,E1
+*)
+ END_ENTITY;
+
+ ENTITY closed_profile_usage
+  SUBTYPE OF (
+   profile_usage
+  );
+(*
+UOF:FF2
+*)
+  SELF\profile_usage.used_profile : closed_profile;
+ END_ENTITY;
+
+ ENTITY panel_hole_with_barring
+  SUBTYPE OF (
+   hole_feature_in_panel
+  );
+(*
+UOF:FF2
+*)
+  barring_profile : closed_profile_usage;
+  angle_defined_by : OPTIONAL angle_specification;
+  base_radius : OPTIONAL feature_parameter;
+ END_ENTITY;
+
+ ENTITY rectangular_boss
+  SUBTYPE OF (
+   boss_feature
+  );
+(*
+UOF:FF2
+*)
+ END_ENTITY;
+
+ ENTITY flat_with_taper_bottom
+  SUBTYPE OF (
+   hole_bottom_condition
+  );
+(*
+UOF:FF2
+*)
+  final_diameter : feature_parameter;
+  taper_angle : feature_parameter;
+ END_ENTITY;
+
+ ENTITY chamfer_definition;
+(*
+UOF:FF2
+*)
+  value_2 : chamfer_value_select;
+  offset_1 : chamfer_offset;
+ END_ENTITY;
+
+ ENTITY retention_period;
+(*
+UOF:S4
+*)
+  start_definition : event_or_date_select;
+  earliest_end_definition : period_or_date_select;
+  latest_end_definition : period_or_date_select;
+  is_applied_to : SET [1:?] OF general_organizational_data_select;
+  retention_purpose : OPTIONAL string_select;
+ END_ENTITY;
+
+ ENTITY styled_model_element
+  SUBTYPE OF (
+   styled_element
+  );
+(*
+UOF:P1
+*)
+  element : detailed_model_element;
+ END_ENTITY;
+
+ ENTITY classification_system;
+(*
+UOF:S6
+*)
+  description : OPTIONAL string_select;
+  id : STRING;
+ INVERSE
+  allowed_classification : SET [0:?] OF general_classification FOR used_classification_system;
+ END_ENTITY;
+
+ ENTITY class_inclusion_association;
+(*
+UOF:S7
+*)
+  associated_product_class : product_class;
+  description : OPTIONAL string_select;
+  associated_inclusion : specification_inclusion;
+ END_ENTITY;
+
+ ENTITY product_component
+  SUBTYPE OF (
+   complex_product
+  );
+(*
+UOF:S7
+*)
+  is_influenced_by : SET [0:?] OF class_category_association;
+  name : OPTIONAL string_select;
+  description : OPTIONAL string_select;
+  is_relevant_for : SET [0:?] OF application_context;
+  instance_required : BOOLEAN;
+ END_ENTITY;
+
+ ENTITY alias_identification;
+(*
+UOF:S1
+*)
+  alias_id : STRING;
+  alias_version_id : OPTIONAL STRING;
+  is_applied_to : alias_select;
+  alias_scope : OPTIONAL organization;
+  description : OPTIONAL string_select;
+ END_ENTITY;
+
+ ENTITY document_type_property;
+(*
+UOF:E1
+*)
+  document_type_name : STRING;
+  used_classification_system : OPTIONAL classification_system;
+ END_ENTITY;
+
+ ENTITY drawing_assignment;
+(*
+UOF:D1
+*)
+  associated_drawing : drawing;
+  is_describing : presentation_association_select;
+ END_ENTITY;
+
+ ENTITY view_area_assignment;
+(*
+UOF:P1
+*)
+  associated_view_area : view_area;
+  is_describing : presentation_association_select;
+ END_ENTITY;
+
+ ENTITY item_definition_relationship
+  ABSTRACT SUPERTYPE OF ( ONEOF(replaced_definition_relationship,geometrical_relationship,tool_part_relationship,make_from_relationship,general_item_definition_relationship,process_state_relationship) );
+(*
+UOF:S3
+*)
+  relating : design_discipline_item_definition;
+  related : design_discipline_item_definition;
+ END_ENTITY;
+
+ ENTITY item_definition_instance_relationship
+  ABSTRACT SUPERTYPE OF ( ONEOF(collected_item_association,mated_item_association,assembly_component_relationship,general_item_definition_instance_relationship) );
+(*
+UOF:S3
+*)
+  related : item_instance;
+  relating : design_discipline_item_definition;
+ END_ENTITY;
+
+ ENTITY replaced_usage_relationship
+  SUBTYPE OF (
+   item_instance_relationship
+  );
+(*
+UOF:S7
+*)
+  usage_context : instance_usage_context_select;
+  description : OPTIONAL string_select;
+ END_ENTITY;
+
+ ENTITY item_instance_relationship
+  ABSTRACT SUPERTYPE OF ( ONEOF(replaced_usage_relationship,same_time_machining_relationship,general_item_instance_relationship) );
+(*
+UOF:S7
+*)
+  relating : item_instance;
+  related : item_instance;
+ END_ENTITY;
+
+ ENTITY instance_placement;
+(*
+UOF:S7
+*)
+  reference_product_component : product_component;
+  placed_instance : single_instance;
+  placement : transformation_select;
+ END_ENTITY;
+
+ ENTITY event_reference;
+(*
+UOF:S4
+*)
+  offset : OPTIONAL duration;
+  event_context : OPTIONAL general_organizational_data_select;
+  event_type : STRING;
+  description : OPTIONAL string_select;
+ END_ENTITY;
+
+ ENTITY product_identification;
+(*
+UOF:S4,S7
+*)
+
+  associated_product_class : product_class;
+  name : OPTIONAL string_select;
+  version_id : OPTIONAL STRING;
+  id : STRING;
+  description : OPTIONAL string_select;
+ INVERSE
+  associated_design : SET [0:1] OF product_design FOR product;
+ END_ENTITY;
+
+ ENTITY chamfer_offset;
+(*
+UOF:FF2
+*)
+  offset : feature_parameter;
+ END_ENTITY;
+
+ ENTITY chamfer_angle;
+(*
+UOF:FF2
+*)
+  angle : feature_parameter;
+ END_ENTITY;
+
+ ENTITY angle_specification;
+(*
+UOF:FF2
+*)
+  angle : feature_parameter;
+  angle_reference : angle_reference_enumeration;
+ END_ENTITY;
+
+ ENTITY measurement_path;
+(*
+UOF:C1,T1
+*)
+  is_defined_in : cartesian_coordinate_space;
+  is_defined_as : curve;
+ END_ENTITY;
+
+ ENTITY locator_feature
+  SUBTYPE OF (
+   process_feature_in_panel
+  );
+(*
+UOF:FF2
+*)
+  diameter : feature_parameter;
+  tip_angle : feature_parameter;
+  base_radius : OPTIONAL feature_parameter;
+  tip_radius : OPTIONAL feature_parameter;
+ END_ENTITY;
+
+ ENTITY general_item_definition_instance_relationship
+  SUBTYPE OF (
+   item_definition_instance_relationship
+  );
+(*
+UOF:S7
+*)
+  description : OPTIONAL string_select;
+  relation_type : STRING;
+ END_ENTITY;
+
+ ENTITY general_item_instance_relationship
+  SUBTYPE OF (
+   item_instance_relationship
+  );
+(*
+UOF:S7
+*)
+  relation_type : STRING;
+  description : OPTIONAL string_select;
+ END_ENTITY;
+
+ ENTITY thread_feature;
+(*
+UOF:FF2
+*)
+  effective_thread_length : value_with_unit;
+  maximum_thread_length : OPTIONAL value_with_unit;
+  thread_definition : thread_specification;
+  location_and : axis_placement;
+ END_ENTITY;
+
+ ENTITY geometric_tolerance_relationship;
+(*
+UOF:T2
+*)
+  relating : geometric_tolerance;
+  related : geometric_tolerance;
+  relation_type : STRING;
+ END_ENTITY;
+
+ ENTITY trimmed_surface
+  SUBTYPE OF (
+   surface
+  );
+(*
+UOF:G8
+*)
+ END_ENTITY;
+
+ ENTITY topologically_connected_set
+  SUBTYPE OF (
+   detailed_geometric_model_element
+  );
+(*
+UOF:G6
+*)
+  element : SET [1:?] OF connected_element_select;
+ END_ENTITY;
+
+ ENTITY digital_file
+  SUBTYPE OF (
+   document_file
+  );
+(*
+UOF:E1
+*)
+ INVERSE
+  associated_model_space : SET [0:1] OF external_model FOR is_defined_as;
+ END_ENTITY;
+
+ ENTITY hardcopy
+  SUBTYPE OF (
+   document_file
+  );
+(*
+UOF:E1
+*)
+ END_ENTITY;
+
+ ENTITY document_representation
+  ABSTRACT SUPERTYPE OF ( ONEOF(physical_representation,digital_document) );
+(*
+UOF:E1
+*)
+  description : OPTIONAL string_select;
+  id : STRING;
+  associated_document_version : document_version;
+  creation : OPTIONAL document_creation_property;
+  common_location : SET [0:?] OF document_location_property;
+  representation_format : OPTIONAL document_format_property;
+  size : OPTIONAL document_size_property;
+  content : OPTIONAL document_content_property;
+ END_ENTITY;
+
+ ENTITY document_file
+  ABSTRACT SUPERTYPE OF ( ONEOF(digital_file,hardcopy) );
+(*
+UOF:E1
+*)
+  file_id : STRING;
+  version_id : OPTIONAL STRING;
+  document_file_type : OPTIONAL document_type_property;
+  external_id_and_location : SET [0:?] OF external_file_id_and_location;
+  size : OPTIONAL document_size_property;
+  file_format : OPTIONAL document_format_property;
+  content : OPTIONAL document_content_property;
+  creation : OPTIONAL document_creation_property;
+  description : OPTIONAL string_select;
+ END_ENTITY;
+
+ ENTITY document_structure;
+(*
+UOF:E1
+*)
+  relating : document_representation;
+  related : document_representation;
+  description : OPTIONAL string_select;
+  relation_type : STRING;
+ END_ENTITY;
+
+ ENTITY document_file_relationship;
+(*
+UOF:E1
+*)
+  relating : document_file;
+  related : document_file;
+  description : OPTIONAL string_select;
+  relation_type : STRING;
+ END_ENTITY;
+
+ ENTITY document_size_property;
+(*
+UOF:E1
+*)
+  file_size : OPTIONAL value_with_unit;
+  page_count : OPTIONAL value_with_unit;
+ END_ENTITY;
+
+ ENTITY document_version_relationship;
+(*
+UOF:E1
+*)
+  description : OPTIONAL string_select;
+  relating : document_version;
+  related : document_version;
+  relation_type : STRING;
+ END_ENTITY;
+
+ ENTITY document_content_property;
+(*
+UOF:E1
+*)
+  detail_level : OPTIONAL STRING;
+  geometry_type : OPTIONAL STRING;
+  real_world_scale : OPTIONAL numerical_value;
+  languages : SET [0:?] OF language;
+ END_ENTITY;
+
+ ENTITY document_creation_property;
+(*
+UOF:E1
+*)
+  creating_system : STRING;
+  operating_system : OPTIONAL STRING;
+  creating_interface : OPTIONAL STRING;
+ END_ENTITY;
+
+ ENTITY document_format_property;
+(*
+UOF:E1
+*)
+  data_format : OPTIONAL STRING;
+  character_code : OPTIONAL STRING;
+  size_format : OPTIONAL rectangular_size;
+ END_ENTITY;
+
+ ENTITY surface_texture_parameter;
+(*
+UOF:C1
+*)
+  parameter_value : value_with_unit;
+  parameter_name : STRING;
+  described_texture : texture_select;
+  parameter_index : OPTIONAL STRING;
+ END_ENTITY;
+
+ ENTITY kinematic_element
+  ABSTRACT SUPERTYPE OF ( ONEOF(kinematic_link,kinematic_structure,kinematic_joint,kinematic_pair) );
+(*
+UOF:K1
+*)
+  name : OPTIONAL string_select;
+ END_ENTITY;
+
+ ENTITY classification_association;
+(*
+UOF:S6
+*)
+  role : OPTIONAL STRING;
+  definitional : OPTIONAL BOOLEAN;
+  classified_element : SET [1:?] OF classified_element_select;
+  associated_classification : general_classification;
+ END_ENTITY;
+
+ ENTITY unit;
+(*
+UOF:S1
+*)
+  unit_name : STRING;
+ END_ENTITY;
+
+ ENTITY duration_property
+  SUBTYPE OF (
+   property
+  );
+(*
+UOF:PR1
+*)
+ END_ENTITY;
+
+ ENTITY general_property
+  SUBTYPE OF (
+   property
+  );
+(*
+UOF:PR1
+*)
+  property_type : STRING;
+ END_ENTITY;
+
+ ENTITY property_value_representation_relationship;
+(*
+UOF:PR1
+*)
+  relation_type : STRING;
+  description : OPTIONAL string_select;
+  relating : property_value_representation;
+  related : property_value_representation;
+ END_ENTITY;
+
+ ENTITY property_value_association
+  ABSTRACT SUPERTYPE OF ( ONEOF(item_property_association,process_property_association) );
+(*
+UOF:PR1
+*)
+  validity_context : OPTIONAL validity_context_select;
+  description : OPTIONAL string_select;
+  describing_property_value : property_value_representation;
+ END_ENTITY;
+
+ ENTITY plib_class_reference;
+(*
+UOF:S6
+*)
+  version : STRING;
+  supplier_bsu : STRING;
+  code : STRING;
+ END_ENTITY;
+
+ ENTITY plib_property_reference;
+(*
+UOF:S6
+*)
+  name_scope : plib_class_reference;
+  version : STRING;
+  code : STRING;
+ END_ENTITY;
+
+ ENTITY activity_method_assignment;
+(*
+UOF:S5
+*)
+  assigned_method : activity_method;
+  associated_request : work_request;
+  relation_type : STRING;
+ END_ENTITY;
+
+ ENTITY physical_instance_test_result;
+(*
+UOF:S7
+*)
+  test_activity : OPTIONAL test_activity_select;
+  test_result : SET [0:?] OF property_value_representation;
+  tested_instance : physical_instance;
+  description : OPTIONAL string_select;
+  id : STRING;
+ END_ENTITY;
+
+ ENTITY process_property_association
+  SUBTYPE OF (
+   property_value_association
+  );
+(*
+UOF:PR1
+*)
+  described_element : process_property_select;
+ END_ENTITY;
+
+ ENTITY item_property_association
+  SUBTYPE OF (
+   property_value_association
+  );
+(*
+UOF:PR1
+*)
+  definitional : OPTIONAL BOOLEAN;
+  described_element : item_property_select;
+ END_ENTITY;
+
+ ENTITY physical_representation
+  ABSTRACT SUPERTYPE OF ( ONEOF(physical_model,physical_document) )
+  SUBTYPE OF (
+   document_representation
+  );
+(*
+UOF:E1
+*)
+ END_ENTITY;
+
+ ENTITY terminator_symbol;
+(*
+UOF:P2,P1
+*)
+ END_ENTITY;
+
+ ENTITY dimension_symbol;
+(*
+UOF:P2
+*)
+ END_ENTITY;
+
+ ENTITY point_marker_symbol;
+(*
+UOF:P2,P1
+*)
+ END_ENTITY;
+
+ ENTITY full_model_change
+  SUBTYPE OF (
+   model_change
+  );
+(*
+UOF:S2
+*)
+  related_description : model_change_select;
+  added_element : SET [0:?] OF detailed_element;
+ END_ENTITY;
+
+ ENTITY incremental_model_change
+  SUBTYPE OF (
+   model_change
+  );
+(*
+UOF:S2
+*)
+  basis_model : incremental_change_select;
+  added_element : SET [0:?] OF model_change_element_select;
+ END_ENTITY;
+
+ ENTITY effectivity_assignment;
+(*
+UOF:S4
+*)
+  assigned_effectivity : effectivity;
+  effective_element : SET [1:?] OF effective_element_select;
+  role : STRING;
+  effectivity_indication : BOOLEAN;
+ END_ENTITY;
+
+ ENTITY product_structure_relationship;
+(*
+UOF:S7
+*)
+  relating : complex_product;
+  related : product_constituent_select;
+  relation_type : STRING;
+  description : OPTIONAL string_select;
+ END_ENTITY;
+
+ ENTITY complex_product
+  ABSTRACT SUPERTYPE OF ( ONEOF(product_component,product_function,alternative_solution) );
+(*
+UOF:S7
+*)
+  id : STRING;
+  version_id : OPTIONAL STRING;
+ END_ENTITY;
+
+ ENTITY partial_document_assignment
+  SUBTYPE OF (
+   document_assignment
+  );
+(*
+UOF:E1
+*)
+  document_portion : STRING;
+ END_ENTITY;
+
+ ENTITY external_geometric_model_with_parameters
+  SUBTYPE OF (
+   external_geometric_model
+  );
+(*
+UOF:E1
+*)
+  parameter_value : SET [1:?] OF general_parameter;
+ END_ENTITY;
+
+ ENTITY external_geometric_model
+  SUBTYPE OF (
+   external_model
+  );
+(*
+UOF:E1
+*)
+  model_extent : OPTIONAL numerical_value;
+ END_ENTITY;
+
+ ENTITY external_picture
+  SUBTYPE OF (
+   external_model
+  );
+(*
+UOF:E1
+*)
+  SELF\external_model.is_defined_in : cartesian_coordinate_space_2d;
+ END_ENTITY;
+
+ ENTITY product_design;
+(*
+UOF:S4
+*)
+  design : item_version;
+  product : product_identification;
+ END_ENTITY;
+
+ ENTITY manufacturing_configuration
+  ABSTRACT SUPERTYPE OF ( ONEOF(serial_configuration,dated_configuration,lot_configuration) );
+(*
+UOF:S4
+*)
+  is_solution_for : product_design;
+  configured_element : item_instance;
+  concerned_organization : SET [0:?] OF organization;
+ END_ENTITY;
+
+ ENTITY material_property_association;
+(*
+UOF:PR1
+*)
+  described_material : material;
+  associated_property_value : material_property_value_representation;
+  definitional : OPTIONAL BOOLEAN;
+ END_ENTITY;
+
+ ENTITY externally_defined_size_dimension
+  SUBTYPE OF (
+   size_dimension
+  );
+(*
+UOF:T1
+*)
+  name : string_select;
+  used_path : OPTIONAL measurement_path;
+ END_ENTITY;
+
+ ENTITY specified_instance
+  SUBTYPE OF (
+   item_instance
+  );
+(*
+UOF:S3
+*)
+  upper_usage : item_instance;
+  related_instance : item_instance;
+  assembly_context : assembly_definition;
+ END_ENTITY;
+
+ ENTITY value_with_unit
+  ABSTRACT SUPERTYPE OF ( ONEOF(numerical_value,value_range,value_limit) )
+  SUBTYPE OF (
+   property_value
+  );
+(*
+UOF:S1
+*)
+  unit_component : OPTIONAL unit;
+  significant_digits : OPTIONAL INTEGER;
+ END_ENTITY;
+
+ ENTITY complex_product_relationship;
+  relating : complex_product;
+  related : complex_product;
+(*
+UOF:S7
+*)
+  description : OPTIONAL string_select;
+  relation_type : STRING;
+ END_ENTITY;
+
+ ENTITY product_specification
+  SUBTYPE OF (
+   product_identification
+  );
+(*
+UOF:S7
+*)
+  defining_specification : SET [1:?] OF specification;
+ END_ENTITY;
+
+ ENTITY class_structure_relationship;
+(*
+UOF:S7
+*)
+  related : product_function_component_select;
+  relating : product_class;
+  description : OPTIONAL string_select;
+  relation_type : STRING;
+ END_ENTITY;
+
+ ENTITY item_function_association;
+(*
+UOF:S7
+*)
+  associated_function : product_function;
+  associated_item : design_discipline_item_definition;
+  description : OPTIONAL string_select;
+  association_type : STRING;
+ END_ENTITY;
+
+ ENTITY model_property_value;
+(*
+UOF:PR1
+*)
+  describing_model : model_property_representation_select;
+  definition : general_property;
+ END_ENTITY;
+
+ ENTITY geometric_tolerance_callout
+  SUBTYPE OF (
+   draughting_callout
+  );
+(*
+UOF:D1
+*)
+ END_ENTITY;
+
+ ENTITY surface_condition_callout
+  SUBTYPE OF (
+   draughting_callout
+  );
+(*
+UOF:D1
+*)
+ END_ENTITY;
+
+ ENTITY kinematic_control;
+(*
+UOF:K1
+*)
+
+  is_controlling : kinematic_mechanism;
+  program : SET [1:?] OF interpolated_configuration_sequence;
+  related_result : SET [0:?] OF kinematic_transformation_result;
+ END_ENTITY;
+
+ ENTITY named_size
+  SUBTYPE OF (
+   rectangular_size
+  );
+(*
+UOF:E1
+*)
+
+  referenced_standard : OPTIONAL classification_system;
+  size : STRING;
+ END_ENTITY;
+
+ ENTITY rectangular_size;
+(*
+UOF:E1
+*)
+
+  density : OPTIONAL value_with_unit;
+  width : OPTIONAL value_with_unit;
+  height : OPTIONAL value_with_unit;
+ END_ENTITY;
+
+ ENTITY duration;
+(*
+UOF:S4
+*)
+  time : STRING;
+  time_unit : STRING;
+ END_ENTITY;
+
+ ENTITY general_symbol;
+(*
+UOF:P2
+*)
+ END_ENTITY;
+
+ ENTITY datum_feature_callout
+  SUBTYPE OF (
+   draughting_callout
+  );
+(*
+UOF:D1
+*)
+ END_ENTITY;
+
+ ENTITY datum_target_callout
+  SUBTYPE OF (
+   draughting_callout
+  );
+(*
+UOF:D1
+*)
+ END_ENTITY;
+
+ ENTITY compound_hole
+  SUBTYPE OF (
+   compound_feature_in_solid
+  );
+(*
+UOF:FF2
+*)
+  compound_hole_type : STRING;
+ END_ENTITY;
+
+ ENTITY specific_item_classification_hierarchy;
+(*
+UOF:S1,S6
+*)
+  super_classification : specific_item_classification;
+  sub_classification : specific_item_classification;
+ END_ENTITY;
+
+ ENTITY language;
+(*
+UOF:S1
+*)
+  language_code : STRING;
+  country_code : OPTIONAL STRING;
+ END_ENTITY;
+
+ ENTITY general_shape_dependent_property
+  SUBTYPE OF (
+   shape_dependent_property
+  );
+(*
+UOF:PR1,S2
+*)
+  property_type : STRING;
+  unit_component : OPTIONAL unit;
+  property_value : property_value_select;
+ END_ENTITY;
+
+ ENTITY general_compound_feature_in_solid
+  SUBTYPE OF (
+   compound_feature_in_solid
+  );
+(*
+UOF:FF2
+*)
+  SELF\compound_feature_in_solid.feature_type : STRING;
+ END_ENTITY;
+
+ ENTITY profile_usage
+  ABSTRACT SUPERTYPE OF ( ONEOF(open_profile_usage,closed_profile_usage) );
+(*
+UOF:FF2
+*)
+  used_profile : profile;
+  profile_placement : OPTIONAL transformation;
+ END_ENTITY;
+
+ ENTITY open_profile_usage
+  SUBTYPE OF (
+   profile_usage
+  );
+(*
+UOF:FF2
+*)
+  profile_limit : OPTIONAL plane;
+  SELF\profile_usage.used_profile : open_profile;
+ END_ENTITY;
+
+ ENTITY coaxiality_tolerance
+  SUBTYPE OF (
+   geometric_tolerance
+  );
+(*
+UOF:T2
+*)
+  reference_datum : SET [1:2] OF datum_reference;
+ END_ENTITY;
+
+ ENTITY roundness_tolerance
+  SUBTYPE OF (
+   geometric_tolerance
+  );
+(*
+UOF:T2
+*)
+ END_ENTITY;
+
+ ENTITY surface_condition_association;
+(*
+UOF:C1
+*)
+  describing_surface_condition : surface_condition;
+  described_element : shaped_element_select;
+ END_ENTITY;
+
+ ENTITY person_in_organization_relationship;
+(*
+UOF:S1
+*)
+  relating : person_in_organization;
+  related : person_in_organization;
+  relation_type : STRING;
+  description : OPTIONAL string_select;
+ END_ENTITY;
+
+ ENTITY interval_of_time;
+(*
+UOF:S1
+*)
+  start_definition : event_or_date_select;
+  end_definition : period_or_date_select;
+ END_ENTITY;
+
+ ENTITY date_time_interval_assignment;
+(*
+UOF:S1
+*)
+  assigned_time_interval : interval_of_time;
+  role : STRING;
+  description : OPTIONAL string_select;
+  is_applied_to : SET [1:?] OF general_organizational_data_select;
+ END_ENTITY;
+
+ ENTITY specification_category_hierarchy;
+(*
+UOF:S7
+*)
+  sub_category : specification_category;
+  super_category : specification_category;
+ END_ENTITY;
+
+ ENTITY specific_document_classification_hierarchy;
+(*
+UOF:E1
+*)
+  super_classification : specific_document_classification;
+  sub_classification : specific_document_classification;
+ END_ENTITY;
+
+ ENTITY specific_document_classification;
+(*
+UOF:E1
+*)
+  associated_document : SET [1:?] OF document;
+  description : OPTIONAL string_select;
+  classification_name : STRING;
+ END_ENTITY;
+
+ ENTITY document_location_property;
+(*
+UOF:E1
+*)
+  location_name : STRING;
+ END_ENTITY;
+
+ ENTITY external_file_id_and_location;
+(*
+UOF:E1
+*)
+  location : document_location_property;
+  external_id : OPTIONAL STRING;
+ END_ENTITY;
+
+ ENTITY component_placement;
+(*
+UOF:S7
+*)
+  placed_component : product_component;
+  placement : transformation_select;
+  reference_product_component : product_component;
+ END_ENTITY;
+
+ ENTITY process_operation_definition;
+(*
+UOF:S8
+*)
+  id : STRING;
+  name : OPTIONAL string_select;
+  process_type : STRING;
+  description : OPTIONAL string_select;
+  version_id : OPTIONAL STRING;
+ END_ENTITY;
+
+ ENTITY process_operation_definition_relationship;
+(*
+UOF:S8
+*)
+  related : process_operation_definition;
+  relation_type : STRING;
+  relating : process_operation_definition;
+ END_ENTITY;
+
+ ENTITY process_operation_occurrence_relationship;
+(*
+UOF:S8
+*)
+  related : process_operation_occurrence;
+  relation_type : STRING;
+  relating : process_operation_occurrence;
+  waiting_time : OPTIONAL property_value;
+  description : OPTIONAL string_select;
+  cycle_time : OPTIONAL duration;
+ END_ENTITY;
+
+ ENTITY value_list
+  SUBTYPE OF (
+   property_value
+  );
+(*
+UOF:S1
+*)
+  values : LIST [1:?] OF property_value;
+ END_ENTITY;
+
+ ENTITY numerical_value
+  SUBTYPE OF (
+   value_with_unit
+  );
+(*
+UOF:S1
+*)
+  value_component : NUMBER;
+ INVERSE
+  limitation : SET [0:1] OF value_limitation FOR limited_value;
+ END_ENTITY;
+
+ ENTITY property_value
+  ABSTRACT SUPERTYPE OF ( ONEOF(value_list,value_with_unit,string_value) );
+(*
+UOF:S1
+*)
+  value_name : STRING;
+ END_ENTITY;
+
+ ENTITY string_value
+  SUBTYPE OF (
+   property_value
+  );
+(*
+UOF:S1
+*)
+  value_specification : string_select;
+ END_ENTITY;
+
+ ENTITY path_parameter;
+(*
+UOF:FF1
+*)
+  associated_path : path;
+  parameter_role : STRING;
+  parameter_context : general_feature;
+ END_ENTITY;
+
+ ENTITY profile_parameter;
+(*
+UOF:FF1
+*)
+  associated_profile : profile;
+  parameter_role : STRING;
+  parameter_context : general_feature;
+ END_ENTITY;
+
+ ENTITY work_request_relationship;
+  related : work_request;
+  description : OPTIONAL string_select;
+  relation_type : STRING;
+  relating : work_request;
+ END_ENTITY;
+
+ ENTITY address;
+  internal_location : OPTIONAL STRING;
+  street_number : OPTIONAL STRING;
+  street : OPTIONAL STRING;
+  postal_box : OPTIONAL STRING;
+  town : OPTIONAL STRING;
+  region : OPTIONAL STRING;
+  postal_code : OPTIONAL STRING;
+  country : OPTIONAL STRING;
+  facsimile_number : OPTIONAL STRING;
+  telephone_number : OPTIONAL STRING;
+  electronic_mail_address : OPTIONAL STRING;
+  telex_number : OPTIONAL STRING;
+  name : OPTIONAL STRING;
+  url : OPTIONAL STRING;
+ END_ENTITY;
+
+ ENTITY explicit_transformation_3d
+  SUBTYPE OF (
+   transformation_3d
+  );
+  local_origin : cartesian_point;
+  axis1 : OPTIONAL direction;
+  axis2 : OPTIONAL direction;
+  axis3 : OPTIONAL direction;
+ END_ENTITY;
+
+ ENTITY direction;
+  direction_ratios : LIST [2:3] OF REAL;
+ END_ENTITY;
+
+ ENTITY axis2_placement_3d
+  SUBTYPE OF (
+   axis_placement
+  );
+  axis : OPTIONAL direction;
+  ref_direction : OPTIONAL direction;
+ END_ENTITY;
+
+ ENTITY implicit_transformation_3d
+  SUBTYPE OF (
+   transformation_3d
+  );
+  transformation_origin : axis2_placement_3d;
+  transformation_target : axis2_placement_3d;
+ END_ENTITY;
+
+ ENTITY simple_property_association;
+  specified_value : property_value;
+  value_type : STRING;
+  described_element : simple_property_select;
+ END_ENTITY;
+
+ ENTITY axis2_placement_2d
+  SUBTYPE OF (
+   axis_placement
+  );
+  ref_direction : OPTIONAL direction;
+ END_ENTITY;
+
+ ENTITY axis1_placement
+  SUBTYPE OF (
+   axis_placement
+  );
+  axis : OPTIONAL direction;
+ END_ENTITY;
+
+ ENTITY axis_placement
+  ABSTRACT SUPERTYPE;
+  location : cartesian_point;
+ END_ENTITY;
+
+ ENTITY implicit_transformation_2d
+  SUBTYPE OF (
+   transformation_2d
+  );
+  transformation_target : axis2_placement_2d;
+  transformation_origin : axis2_placement_2d;
+ END_ENTITY;
+
+ ENTITY explicit_transformation_2d
+  SUBTYPE OF (
+   transformation_2d
+  );
+  axis1 : OPTIONAL direction;
+  axis2 : OPTIONAL direction;
+  local_origin : cartesian_point;
+ END_ENTITY;
+
+ ENTITY project_assignment;
+  is_applied_to : SET [1:?] OF project_information_select;
+  assigned_project : project;
+  role : STRING;
+  description : OPTIONAL string_select;
+ END_ENTITY;
+
+ ENTITY curved_size_dimension
+  SUBTYPE OF (
+   size_dimension
+  );
+ END_ENTITY;
+
+ ENTITY diameter_size_dimension
+  SUBTYPE OF (
+   size_dimension
+  );
+ END_ENTITY;
+
+ ENTITY height_size_dimension
+  SUBTYPE OF (
+   size_dimension
+  );
+  used_path : OPTIONAL measurement_path;
+ END_ENTITY;
+
+ ENTITY length_size_dimension
+  SUBTYPE OF (
+   size_dimension
+  );
+  used_path : OPTIONAL measurement_path;
+ END_ENTITY;
+
+ ENTITY radial_size_dimension
+  SUBTYPE OF (
+   size_dimension
+  );
+  radius_type : OPTIONAL STRING;
+ END_ENTITY;
+
+ ENTITY width_size_dimension
+  SUBTYPE OF (
+   size_dimension
+  );
+  used_path : OPTIONAL measurement_path;
+ END_ENTITY;
+
+ ENTITY datum_reference;
+  precedence : INTEGER;
+  referenced_datum : datum;
+ END_ENTITY;
+
+ ENTITY datum_defined_by_derived_shape
+  SUBTYPE OF (
+   single_datum,
+   derived_geometry
+  );
+ END_ENTITY;
+
+ ENTITY datum_defined_by_feature
+  SUBTYPE OF (
+   single_datum
+  );
+  defined_by : shape_element;
+ END_ENTITY;
+
+ ENTITY datum_defined_by_targets
+  SUBTYPE OF (
+   single_datum
+  );
+  rule_description : OPTIONAL string_select;
+  defined_by : SET [1:?] OF datum_target;
+ END_ENTITY;
+
+ ENTITY view_boundary;
+ END_ENTITY;
+
+ ENTITY process_state_relationship
+  SUBTYPE OF (
+   item_definition_relationship
+  );
+  description : OPTIONAL string_select;
+ END_ENTITY;
+
+ ENTITY solid_of_curved_extrusion
+  SUBTYPE OF (
+   swept_face_solid
+  );
+ END_ENTITY;
+
+END_SCHEMA;

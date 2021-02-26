@@ -1,0 +1,20 @@
+(*
+ $Id: 10303-1174-arm-Class_of_activity_library.exp,v 1.4 2006/08/04 12:01:50 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2717 - ISO/TS 10303-1174 Class of activity library - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG12 N1852
+*)
+
+SCHEMA Class_of_activity_library_arm;
+
+USE FROM Cardinality_of_relationship_arm;    -- ISO/TS 10303-1211
+USE FROM Class_of_activity_structure_arm;    -- ISO/TS 10303-1170
+USE FROM Set_theory_arm;    -- ISO/TS 10303-1210
+
+
+TYPE class_of_activity_relationship = SELECT BASED_ON relationship_select WITH 
+   (Class_of_connection_of_activity, 
+    Class_of_composition_of_activity, 
+    Class_of_involvement_in_activity);
+END_TYPE; 
+
+END_SCHEMA;

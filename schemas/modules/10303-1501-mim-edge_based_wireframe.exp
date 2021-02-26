@@ -1,0 +1,9 @@
+(*  ISO/TC184/SC4 WG12N1268 - ISO/TS 10303-1501 Edge based wireframe - EXPRESS MIM *)
+
+
+SCHEMA Edge_based_wireframe_mim;
+
+USE FROM Elemental_geometric_shape_mim; 
+USE FROM aic_edge_based_wireframe;      -- ISO 10303-501
+
+END_SCHEMA;

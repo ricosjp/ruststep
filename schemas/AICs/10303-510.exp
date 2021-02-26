@@ -1,0 +1,169 @@
+SCHEMA aic_geometrically_bounded_wireframe;
+
+  USE FROM geometric_model_schema	-- ISO 10303-42
+    (geometric_curve_set,
+     geometric_set);
+
+  USE FROM geometry_schema	-- ISO 10303-42
+    (axis1_placement,
+     axis2_placement_3d,
+     b_spline_curve_with_knots,
+     bezier_curve,
+     cartesian_transformation_operator_3d,
+     circle,
+     composite_curve,
+     conic,
+     curve,
+     curve_replica,
+     ellipse,
+     geometric_representation_context,
+     hyperbola,
+     line,
+     offset_curve_3d,
+     parabola,
+     point,
+     point_on_curve,
+     point_replica,
+     polyline,
+     quasi_uniform_curve,
+     rational_b_spline_curve,
+     reparametrised_composite_curve_segment,
+     trimmed_curve,
+     uniform_curve);
+
+  USE FROM product_property_representation_schema	-- ISO 10303-41
+    (shape_representation);
+
+  USE FROM representation_schema	-- ISO 10303-43
+    (mapped_item);
+
+ENTITY geometrically_bounded_wireframe_shape_representation
+  SUBTYPE OF (shape_representation);
+WHERE
+  WR1: SIZEOF (QUERY (it <* SELF.items |
+         NOT (SIZEOF (TYPEOF(it) *
+           ['AIC_GEOMETRICALLY_BOUNDED_WIREFRAME.GEOMETRIC_CURVE_SET',
+            'AIC_GEOMETRICALLY_BOUNDED_WIREFRAME.AXIS2_PLACEMENT_3D',
+            'AIC_GEOMETRICALLY_BOUNDED_WIREFRAME.MAPPED_ITEM']) = 1)
+       	)) = 0;
+  WR2: SIZEOF (QUERY (it <* SELF.items |
+         SIZEOF (TYPEOF (it) *
+           ['AIC_GEOMETRICALLY_BOUNDED_WIREFRAME.GEOMETRIC_CURVE_SET',
+            'AIC_GEOMETRICALLY_BOUNDED_WIREFRAME.MAPPED_ITEM']) = 1
+       	)) >= 1;
+  WR3: SIZEOF (QUERY (gcs <* QUERY (it <* SELF.items |
+         ('AIC_GEOMETRICALLY_BOUNDED_WIREFRAME.GEOMETRIC_CURVE_SET'
+         IN TYPEOF (it))) | NOT (SIZEOF (QUERY (crv <*
+         QUERY (elem <* gcs\geometric_set.elements |
+         ('AIC_GEOMETRICALLY_BOUNDED_WIREFRAME.CURVE' IN TYPEOF
+		   (elem))) |
+         NOT (valid_geometrically_bounded_wf_curve(crv))
+         )) = 0)
+         )) = 0;
+  WR4: SIZEOF (QUERY (gcs <* QUERY (it <* SELF.items |
+         ('AIC_GEOMETRICALLY_BOUNDED_WIREFRAME.GEOMETRIC_CURVE_SET'
+         IN TYPEOF (it))) |NOT (SIZEOF (QUERY (pnts <*
+         QUERY (elem <* gcs\geometric_set.elements |
+           ('AIC_GEOMETRICALLY_BOUNDED_WIREFRAME.POINT' IN TYPEOF (elem)))|
+           NOT (valid_geometrically_bounded_wf_point(pnts))
+           )) = 0)
+           )) = 0;
+  WR5: SIZEOF (QUERY (gcs <* QUERY (it <* SELF.items |
+         ('AIC_GEOMETRICALLY_BOUNDED_WIREFRAME.GEOMETRIC_CURVE_SET'
+         IN TYPEOF (it))) |NOT (SIZEOF (QUERY (cnc <*
+         QUERY (elem <* gcs\geometric_set.elements |
+         ('AIC_GEOMETRICALLY_BOUNDED_WIREFRAME.CONIC' IN TYPEOF (elem)))
+         | NOT('AIC_GEOMETRICALLY_BOUNDED_WIREFRAME.AXIS2_PLACEMENT_3D'
+         IN TYPEOF (cnc\conic.position))
+         )) = 0)
+         )) = 0;
+  WR6: SIZEOF (QUERY (gcs <* QUERY (it <* SELF.items |
+         ('AIC_GEOMETRICALLY_BOUNDED_WIREFRAME.GEOMETRIC_CURVE_SET'
+         IN TYPEOF (it))) | NOT (SIZEOF (QUERY (pline <*
+         QUERY (elem <* gcs\geometric_set.elements |
+         ('AIC_GEOMETRICALLY_BOUNDED_WIREFRAME.POLYLINE' IN TYPEOF (elem))) |
+         NOT (SIZEOF (pline\polyline.points) > 2)
+         )) = 0)
+         )) = 0;
+  WR7: SIZEOF (QUERY (mi <* QUERY (it <* SELF.items |
+        ('AIC_GEOMETRICALLY_BOUNDED_WIREFRAME.MAPPED_ITEM'
+        IN TYPEOF (it))) |NOT ('AIC_GEOMETRICALLY_BOUNDED_WIREFRAME.' +
+        'GEOMETRICALLY_BOUNDED_WIREFRAME_SHAPE_REPRESENTATION'
+        IN TYPEOF (mi\mapped_item.mapping_source.mapped_representation)))
+        )= 0;
+END_ENTITY;
+
+FUNCTION valid_geometrically_bounded_wf_curve
+   (crv: curve) : BOOLEAN;
+
+  -- check for valid basic curve types
+  IF SIZEOF (['AIC_GEOMETRICALLY_BOUNDED_WIREFRAME.POLYLINE',
+             'AIC_GEOMETRICALLY_BOUNDED_WIREFRAME.B_SPLINE_CURVE',
+             'AIC_GEOMETRICALLY_BOUNDED_WIREFRAME.ELLIPSE',
+             'AIC_GEOMETRICALLY_BOUNDED_WIREFRAME.CIRCLE'] * TYPEOF (crv)) =    1
+    THEN RETURN (TRUE);
+  ELSE
+    -- if the curve is a trimmed_curve
+    IF (('AIC_GEOMETRICALLY_BOUNDED_WIREFRAME.TRIMMED_CURVE') IN TYPEOF (crv)) THEN
+      -- if a line, parabola, or hyperbola is being trimmed, then valid
+      IF SIZEOF (['AIC_GEOMETRICALLY_BOUNDED_WIREFRAME.LINE',
+                   'AIC_GEOMETRICALLY_BOUNDED_WIREFRAME.PARABOLA',
+                   'AIC_GEOMETRICALLY_BOUNDED_WIREFRAME.HYPERBOLA'] *
+           TYPEOF(crv\trimmed_curve.basis_curve)) = 1
+        THEN RETURN (TRUE);
+
+      -- otherwise, recursively check basis_curve
+      ELSE RETURN (valid_geometrically_bounded_wf_curve
+                         (crv\trimmed_curve.basis_curve));
+      END_IF;
+    ELSE
+      -- recursively check the offset_curve basis curve
+      IF (('AIC_GEOMETRICALLY_BOUNDED_WIREFRAME.OFFSET_CURVE_3D') 
+           IN TYPEOF (crv))
+        THEN RETURN (valid_geometrically_bounded_wf_curve
+                           (crv\offset_curve_3d.basis_curve));
+      ELSE
+        -- recursively check the curve_replica parent curve
+        IF (('AIC_GEOMETRICALLY_BOUNDED_WIREFRAME.CURVE_REPLICA') 
+              IN TYPEOF (crv))
+          THEN RETURN (valid_geometrically_bounded_wf_curve
+                         (crv\curve_replica.parent_curve));
+        ELSE
+          -- recursively check the composite_curve segments
+          IF (('AIC_GEOMETRICALLY_BOUNDED_WIREFRAME.COMPOSITE_CURVE') 
+               IN  TYPEOF (crv)) THEN
+            RETURN (SIZEOF (QUERY (ccs <* crv\composite_curve.segments |
+                      NOT (valid_geometrically_bounded_wf_curve
+                             (ccs.parent_curve)))) = 0);
+          END_IF;
+        END_IF;
+      END_IF;
+    END_IF;
+  END_IF;
+  RETURN (FALSE);
+END_FUNCTION;
+
+FUNCTION valid_geometrically_bounded_wf_point
+   (pnt : point) : BOOLEAN;
+  -- check for valid basis types
+  IF (( 'AIC_GEOMETRICALLY_BOUNDED_WIREFRAME.CARTESIAN_POINT') IN TYPEOF (pnt))
+    THEN RETURN (TRUE);
+  ELSE
+    -- if the input type is a point_on_curve then check for a valid
+    -- geometrically bounded curve type as the basis
+    IF (('AIC_GEOMETRICALLY_BOUNDED_WIREFRAME.POINT_ON_CURVE') IN TYPEOF (pnt))
+      THEN RETURN (valid_geometrically_bounded_wf_curve
+                     (pnt\point_on_curve.basis_curve));
+
+    ELSE
+      -- if the input type is a point_replica check for a valid parent point
+      IF (('AIC_GEOMETRICALLY_BOUNDED_WIREFRAME.POINT_REPLICA') IN TYPEOF (pnt))
+        THEN RETURN (valid_geometrically_bounded_wf_point
+                         (pnt\point_replica.parent_pt));
+      END_IF;
+    END_IF;
+  END_IF;
+  RETURN (FALSE);
+END_FUNCTION;
+
+END_SCHEMA; -- aic_geometrically_bounded_wireframe

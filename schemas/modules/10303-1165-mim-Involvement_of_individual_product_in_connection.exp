@@ -1,0 +1,23 @@
+(*
+ $Id: 10303-1165-mim-Involvement_of_individual_product_in_connection.exp,v 1.4 2006/08/04 12:11:55 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2796 - ISO/TS 10303-1165 Involvement of individual product in connection - EXPRESS MIM
+ Supersedes ISO TC184/SC4/WG12 N1981
+*)
+
+SCHEMA Involvement_of_individual_product_in_connection_mim;
+
+USE FROM Connection_of_individual_product_mim;    --  ISO/TS 10303-1167
+USE FROM Product_as_individual_mim;    --  ISO/TS 10303-1164
+USE FROM Product_version_relationship_mim;    --  ISO/TS 10303-1020
+
+ENTITY connection_of_individual_product_with_involvements
+  SUBTYPE OF (connection_of_individual_product, product_as_individual_version);
+END_ENTITY;
+
+ENTITY involvement_of_individual_product_in_connection
+  SUBTYPE OF (product_definition_formation_relationship);
+  SELF\product_definition_formation_relationship.relating_product_definition_formation : connection_of_individual_product_with_involvements;
+  SELF\product_definition_formation_relationship.related_product_definition_formation : product_as_individual_version;
+END_ENTITY;
+
+END_SCHEMA;

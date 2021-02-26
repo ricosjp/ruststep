@@ -1,0 +1,77 @@
+(*
+ISO TC184/SC4/WG12 N2690 - ISO/TS 10303-1001 Appearance assignment - EXPRESS ARM
+*) 
+
+
+SCHEMA Appearance_assignment_arm;
+
+USE FROM Elemental_geometric_shape_arm;    -- ISO/TS 10303-1004
+
+USE FROM Foundation_representation_arm;    -- ISO/TS 10303-1006
+
+
+TYPE appearance_context = EXTENSIBLE GENERIC_ENTITY SELECT;
+END_TYPE; 
+
+TYPE appearance_select = EXTENSIBLE GENERIC_ENTITY SELECT;
+END_TYPE; 
+
+TYPE styled_model_element_select = SELECT
+   (Mapping_based_styled_model, 
+    Styled_element, 
+    Transformation_based_styled_model);
+END_TYPE; 
+
+ENTITY Appearance_assignment;
+  appearance_components : SET[1:?] OF appearance_select;
+END_ENTITY;
+
+ENTITY Context_dependent_appearance_assignment
+  SUBTYPE OF (Appearance_assignment);
+  context_definition : appearance_context;
+END_ENTITY;
+
+ENTITY Mapping_based_styled_model
+  SUBTYPE OF (Representation_item);
+  replicated_model : Styled_model;
+  source : Axis_placement;
+  target : geometric_mapping_target;
+END_ENTITY;
+
+ENTITY Over_riding_styled_element
+  SUBTYPE OF (Styled_element);
+  over_ridden_element : Styled_element;
+END_ENTITY;
+
+ENTITY Styled_element
+  ABSTRACT SUPERTYPE 
+  SUBTYPE OF (Representation_item);
+  appearance : Appearance_assignment;
+  invisible : BOOLEAN;
+END_ENTITY;
+
+ENTITY Styled_geometric_model
+  SUBTYPE OF (Styled_model);
+  styled_geometry : Geometric_model;
+DERIVE
+  SELF\Representation.context_of_items : Numerical_representation_context := styled_geometry\Representation.context_of_items;
+END_ENTITY;
+
+ENTITY Styled_model
+  SUBTYPE OF (Representation);
+  version_id : OPTIONAL STRING;
+  SELF\Representation.items : SET[1:?] OF styled_model_element_select;
+END_ENTITY;
+
+ENTITY Styled_model_element
+  SUBTYPE OF (Styled_element);
+  element : Detailed_geometric_model_element;
+END_ENTITY;
+
+ENTITY Transformation_based_styled_model
+  SUBTYPE OF (Representation_item);
+  replicated_model : Styled_model;
+  replication_transformation : cartesian_transformation;
+END_ENTITY;
+
+END_SCHEMA;  -- Appearance_assignment_arm

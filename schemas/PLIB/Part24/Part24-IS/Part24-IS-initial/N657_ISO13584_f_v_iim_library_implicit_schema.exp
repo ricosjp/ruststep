@@ -1,0 +1,4118 @@
+SCHEMA ISO13584_f_v_iim_library_implicit_schema;
+
+CONSTANT
+
+	value_format_len: INTEGER := 80;
+
+	version_len: INTEGER := 9;
+
+	sep_cv: STRING := '-';
+
+	revision_len: INTEGER := 3;
+
+	class_code_len: INTEGER := 14;
+
+	sep_id: STRING := '.';
+
+	data_type_code_len:INTEGER := 14;
+
+	source_doc_len: INTEGER := 80;
+
+	pref_name_len: INTEGER := 70;
+
+	syn_name_len: INTEGER := pref_name_len;
+
+	short_name_len: INTEGER := 30;
+
+	property_code_len: INTEGER := 14;
+
+	supplier_code_len: INTEGER := 70;
+
+	value_code_len: INTEGER :=18;
+
+	element_code_len: INTEGER := 14;
+
+	dictionary_code_len: INTEGER := 80;
+
+	DET_classification_len: INTEGER := 3;
+
+	external_file_address_length: INTEGER := 18;
+
+	http_directory_name_length: INTEGER := 128;
+
+	http_file_name_length: INTEGER := 128;
+
+END_CONSTANT;
+
+
+
+
+TYPE integer_type = INTEGER;
+END_TYPE; -- integer_type
+
+
+
+
+TYPE value_code_type = identifier;
+WHERE
+	WR1: LENGTH(SELF) <= value_code_len;
+END_TYPE; -- value_code_type
+
+
+
+TYPE amount_of_substance_measure = REAL;
+END_TYPE;
+
+
+
+TYPE area_measure = REAL;
+END_TYPE;
+
+
+
+TYPE context_dependent_measure = REAL;
+END_TYPE;
+
+
+
+TYPE count_measure = NUMBER;
+END_TYPE;
+
+
+
+TYPE descriptive_measure = STRING;
+END_TYPE;
+
+
+
+TYPE electric_current_measure = REAL;
+END_TYPE;
+
+
+
+TYPE length_measure = REAL;
+END_TYPE;
+
+
+
+TYPE luminous_intensity_measure = REAL;
+END_TYPE;
+
+
+
+TYPE mass_measure = REAL;
+END_TYPE;
+
+
+
+TYPE measure_value = SELECT
+  (length_measure,
+   mass_measure,
+   time_measure,
+   electric_current_measure,
+   thermodynamic_temperature_measure,
+   amount_of_substance_measure,
+   luminous_intensity_measure,
+   plane_angle_measure,
+   solid_angle_measure,
+   area_measure,
+   volume_measure,
+   ratio_measure,
+   parameter_value,
+   numeric_measure,
+   context_dependent_measure,
+   descriptive_measure,
+   positive_length_measure,
+   positive_plane_angle_measure,
+   positive_ratio_measure,
+   count_measure);
+END_TYPE;
+
+
+
+TYPE numeric_measure = NUMBER;
+END_TYPE;
+
+
+
+TYPE parameter_value = REAL;
+END_TYPE;
+
+
+
+TYPE plane_angle_measure = REAL;
+END_TYPE;
+
+
+
+TYPE positive_length_measure = length_measure;
+WHERE
+  WR1: SELF > 0;
+END_TYPE;
+
+
+
+TYPE positive_plane_angle_measure = plane_angle_measure;
+WHERE
+  WR1: SELF > 0;
+END_TYPE;
+
+
+
+TYPE positive_ratio_measure = ratio_measure;
+WHERE
+  WR1: SELF > 0;
+END_TYPE;
+
+
+
+TYPE ratio_measure = REAL;
+END_TYPE;
+
+
+
+TYPE solid_angle_measure = REAL;
+END_TYPE;
+
+
+
+TYPE thermodynamic_temperature_measure = REAL;
+END_TYPE;
+
+
+
+TYPE time_measure = REAL;
+END_TYPE;
+
+
+
+TYPE volume_measure = REAL;
+END_TYPE;
+
+
+
+
+TYPE value_format_type = identifier;
+WHERE
+	WR1: LENGTH(SELF) <= value_format_len;
+END_TYPE; -- value_format_type
+
+
+
+TYPE identifier = STRING;
+END_TYPE;
+
+
+
+
+TYPE code_type = identifier;
+WHERE
+	WR1: NOT(SELF LIKE '*.*');
+	WR2: NOT(SELF LIKE '*-*');
+	WR3: NOT(SELF LIKE '* *');
+	WR4: NOT(SELF = '');
+END_TYPE; -- code_type
+
+
+
+
+TYPE version_type = code_type;
+WHERE
+	WR1: LENGTH(SELF) <= version_len;
+	WR2: EXISTS(VALUE(SELF)) AND ('INTEGER' IN TYPEOF(VALUE(SELF)))
+		AND (VALUE(SELF) >= 0);
+END_TYPE; -- version_type
+
+
+
+
+TYPE revision_type = code_type;
+WHERE
+	WR1: LENGTH(SELF) <= revision_len;
+END_TYPE; -- revision_type
+
+
+
+
+TYPE class_code_type = code_type;
+WHERE
+	WR1: LENGTH(SELF) <= class_code_len;
+END_TYPE; -- class_code_type
+
+
+
+
+TYPE definition_type = translatable_text;
+END_TYPE; -- definition_type
+
+
+
+
+TYPE translatable_text = SELECT(text, translated_text);
+END_TYPE; -- translatable_text
+
+
+
+
+TYPE note_type = translatable_text;
+END_TYPE; -- note_type
+
+
+
+
+TYPE remark_type = translatable_text;
+END_TYPE; -- remark_type
+
+
+
+
+TYPE data_type_code_type = code_type;
+WHERE
+	WR1: LENGTH(SELF) = data_type_code_len;
+END_TYPE; -- data_type_code_type
+
+
+
+
+TYPE date_type = STRING(10) FIXED;
+END_TYPE; -- date_type
+
+
+
+TYPE unit = SELECT
+  (named_unit,
+   derived_unit);
+END_TYPE;
+
+
+
+TYPE value_type = SELECT(value_code_type, integer_type);
+END_TYPE; -- value_type
+
+
+
+
+TYPE source_doc_type = identifier;
+WHERE
+	WR1: LENGTH(SELF) <= source_doc_len;
+END_TYPE; -- source_doc_type
+
+
+
+
+TYPE currency_code = identifier;
+WHERE
+	WR1: LENGTH(SELF) = 3;
+END_TYPE; -- currency_code
+
+
+
+
+TYPE pref_name_type = translatable_label;
+WHERE
+	WR1: check_label_length(SELF, pref_name_len);
+END_TYPE; -- pref_name_type
+
+
+
+
+TYPE translatable_label = SELECT(label, translated_label);
+END_TYPE; -- translatable_label
+
+
+
+
+TYPE syn_name_type = SELECT(label_with_language, label);
+WHERE
+	WR1: check_syn_length(SELF, syn_name_len);
+END_TYPE; -- syn_name_type
+
+
+
+
+TYPE short_name_type = translatable_label;
+WHERE
+	WR1: check_label_length(SELF, short_name_len);
+END_TYPE; -- short_name_type
+
+
+
+
+TYPE level = ENUMERATION OF(
+	min,
+	nom,
+	typ,
+	max);
+END_TYPE; -- level
+
+
+
+TYPE label = STRING;
+END_TYPE;
+
+
+
+
+
+
+TYPE language_code = identifier;
+END_TYPE; -- language_code
+
+
+
+TYPE text = STRING;
+END_TYPE;
+
+
+
+
+TYPE property_code_type = code_type;
+WHERE
+	WR1: LENGTH(SELF) <= property_code_len;
+END_TYPE; -- property_code_type
+
+
+
+
+TYPE supplier_code_type = code_type;
+WHERE
+	WR1: LENGTH(SELF) <= supplier_code_len;
+END_TYPE; -- supplier_code_type
+
+
+
+
+TYPE table_code_type = code_type;
+WHERE
+	WR1: LENGTH(SELF) <= element_code_len;
+END_TYPE; -- table_code_type
+
+
+
+
+TYPE dictionary_code_type = code_type;
+WHERE
+	WR1: LENGTH(SELF) <= dictionary_code_len;
+END_TYPE; -- dictionary_code_type
+
+
+
+
+TYPE property_or_data_type_BSU = SELECT(
+	property_BSU,
+	data_type_BSU);
+END_TYPE; -- property_or_data_type_BSU
+
+
+
+
+TYPE DET_classification_type = identifier;
+WHERE
+	WR1: LENGTH(SELF) = DET_classification_len;
+END_TYPE; -- DET_classification_type
+
+
+
+TYPE year_number = INTEGER;
+END_TYPE;
+
+
+
+
+TYPE document_code_type = code_type;
+WHERE
+	WR1: LENGTH(SELF) <= element_code_len;
+END_TYPE; -- document_code_type
+
+
+
+
+TYPE absolute_URL_type = identifier;
+WHERE
+	WR1: SELF LIKE '*://*';
+END_TYPE; -- absolute_URL_type
+
+
+
+
+TYPE external_file_address = identifier;
+WHERE
+	WR1: LENGTH(SELF) <= external_file_address_length;
+	WR2: NOT(SELF LIKE '* *');
+END_TYPE; -- external_file_address
+
+
+
+
+TYPE content_encoding_type = identifier;
+WHERE
+	WR1: (SELF = '7bit' ) OR (SELF = '8bit' ) OR (SELF = 'binary' )
+		OR (SELF = 'quoted-printable' ) OR (SELF = 'base64' );
+END_TYPE; -- content_encoding_type
+
+
+
+
+TYPE IAB_RFC = INTEGER;
+WHERE
+	WR1: SELF > 0;
+END_TYPE; -- IAB_RFC
+
+
+
+
+TYPE http_directory_name_type = identifier;
+WHERE
+	WR1: LENGTH(SELF) <= http_directory_name_length;
+	WR2: NOT(SELF LIKE '* *');
+END_TYPE; -- http_directory_name_type
+
+
+
+
+TYPE MIME_type = identifier;
+WHERE
+	WR1: NOT(SELF LIKE '* *');
+END_TYPE; -- MIME_type
+
+
+
+
+TYPE MIME_subtype = identifier;
+WHERE
+	WR1: NOT(SELF LIKE '* *');
+END_TYPE; -- MIME_subtype
+
+
+
+
+TYPE http_file_name_type = identifier;
+WHERE
+	WR1: LENGTH(SELF) <= http_file_name_length;
+	WR2: NOT(SELF LIKE '* *');
+	WR3: NOT(SELF LIKE '*.*.*');
+	WR4: ((NOT(SELF LIKE '*.*'))
+		AND (LENGTH(SELF) <= http_file_name_length - 4))
+		OR ((SELF LIKE '*.?')
+		AND (LENGTH(SELF) <= http_file_name_length - 2))
+		OR ((SELF LIKE '*.??')
+		AND (LENGTH(SELF) <= http_file_name_length - 1))
+		OR (SELF LIKE '*.???');
+END_TYPE; -- http_file_name_type
+
+
+
+
+TYPE character_set_type = identifier;
+END_TYPE; -- character_set_type
+
+
+
+TYPE si_prefix = ENUMERATION OF
+  (exa,
+   peta,
+   tera,
+   giga,
+   mega,
+   kilo,
+   hecto,
+   deca,
+   deci,
+   centi,
+   milli,
+   micro,
+   nano,
+   pico,
+   femto,
+   atto);
+END_TYPE;
+
+
+
+TYPE si_unit_name = ENUMERATION OF
+  (metre,
+   gram,
+   second,
+   ampere,
+   kelvin,
+   mole,
+   candela,
+   radian,
+   steradian,
+   hertz,
+   newton,
+   pascal,
+   joule,
+   watt,
+   coulomb,
+   volt,
+   farad,
+   ohm,
+   siemens,
+   weber,
+   tesla,
+   henry,
+   degree_Celsius,
+   lumen,
+   lux,
+   becquerel,
+   gray,
+   sievert);
+END_TYPE;
+
+
+
+TYPE FOUNDED_ITEM_SELECT = SELECT (
+   REPRESENTATION_ITEM);
+END_TYPE;
+
+
+
+
+TYPE PERSON_ORGANIZATION_SELECT = SELECT (
+   PERSON,
+   ORGANIZATION);
+END_TYPE;
+
+
+
+ENTITY axis1_placement_type
+SUBTYPE OF(placement_type);
+WHERE
+	WR1: 'ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA.AXIS1_PLACEMENT' IN
+		SELF\entity_instance_type.type_name;
+END_ENTITY; -- axis1_placement_type
+
+
+
+
+ENTITY axis2_placement_2d_type
+SUBTYPE OF(placement_type);
+WHERE
+	WR1: 'ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA.AXIS2_PLACEMENT_2D'
+		IN SELF\entity_instance_type.type_name;
+END_ENTITY; -- axis2_placement_2d_type
+
+
+
+
+ENTITY axis2_placement_3d_type
+SUBTYPE OF(placement_type);
+WHERE
+	WR1: 'ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA.AXIS2_PLACEMENT_3D'
+		IN SELF\entity_instance_type.type_name;
+END_ENTITY; -- axis2_placement_3d_type
+
+
+
+
+ENTITY boolean_type
+SUBTYPE OF(simple_type);
+END_ENTITY; -- boolean_type
+
+
+
+
+ENTITY class_BSU
+SUBTYPE OF(basic_semantic_unit);
+	SELF\basic_semantic_unit.code: class_code_type;
+	defined_by: supplier_BSU;
+DERIVE
+	absolute_id: identifier
+		:= defined_by.absolute_id + sep_id + dic_identifier;
+	known_visible_properties : SET [0:?]OF property_BSU
+		:=compute_known_visible_properties(SELF);
+	known_visible_data_types: SET [0:?]OF data_type_BSU
+		:=compute_known_visible_data_types(SELF);
+INVERSE
+	subclasses: SET [0:?] OF class FOR its_superclass;
+	added_visible_properties:SET [0:?] OF property_BSU
+		FOR name_scope;
+	added_visible_data_types:SET [0:?] OF data_type_BSU
+		FOR name_scope;
+UNIQUE
+	UR1: absolute_id;
+END_ENTITY; -- class_BSU
+
+
+
+
+ENTITY class_instance_type
+SUBTYPE OF(complex_type);
+	domain: class_BSU;
+END_ENTITY; -- class_instance_type
+
+
+
+
+ENTITY data_type_BSU
+SUBTYPE OF(basic_semantic_unit);
+	SELF\basic_semantic_unit.code: data_type_code_type;
+	name_scope: class_BSU;
+DERIVE
+	absolute_id: identifier :=
+		name_scope.defined_by.absolute_id
+		+ sep_id + name_scope.dic_identifier
+		+ sep_id + dic_identifier;
+INVERSE
+	defining_class: SET OF class FOR defined_types;
+UNIQUE
+	absolute_id;
+WHERE
+	WR1: is_subclass(defining_class[1], name_scope.definition[1]);
+END_ENTITY; -- data_type_BSU
+
+
+
+
+ENTITY data_type_element
+SUBTYPE OF(dictionary_element);
+	SELF\dictionary_element.identified_by: data_type_BSU;
+	names: item_names;
+	type_definition: data_type;
+END_ENTITY; -- data_type_element
+
+
+
+
+ENTITY dates;
+	date_of_original_definition: date_type;
+	date_of_current_version: date_type;
+	date_of_current_revision: OPTIONAL date_type;
+END_ENTITY; -- dates
+
+
+
+
+ENTITY dic_unit;
+	structured_representation: unit;
+	string_representation: OPTIONAL mathematical_string;
+END_ENTITY; -- dic_unit
+
+
+
+
+ENTITY dic_value;
+	value_code: value_type;
+	meaning: item_names;
+	source_doc_of_value: OPTIONAL document;
+END_ENTITY; -- dic_value
+
+
+
+
+ENTITY entity_instance_type
+SUBTYPE OF(complex_type);
+	type_name: SET OF STRING;
+END_ENTITY; -- entity_instance_type
+
+
+
+
+ENTITY identified_document
+SUBTYPE OF(document);
+	document_identifier: source_doc_type;
+END_ENTITY; -- identified_document
+
+
+
+
+ENTITY int_currency_type
+SUBTYPE OF(int_type);
+	currency: OPTIONAL currency_code;
+END_ENTITY; -- int_currency_type
+
+
+
+
+ENTITY int_measure_type
+SUBTYPE OF(int_type);
+	unit: dic_unit;
+END_ENTITY; -- int_measure_type
+
+
+
+
+ENTITY int_type
+SUPERTYPE OF (ONEOF (
+              INT_MEASURE_TYPE,
+              INT_CURRENCY_TYPE,
+              NON_QUANTITATIVE_INT_TYPE))
+
+SUBTYPE OF(number_type);
+END_ENTITY; -- int_type
+
+
+
+
+ENTITY item_names;
+	preferred_name: pref_name_type;
+	synonymous_names: SET OF syn_name_type;
+	short_name: OPTIONAL short_name_type;
+	languages: OPTIONAL present_translations;
+	icon : OPTIONAL graphics;
+WHERE
+	WR1: NOT(EXISTS(languages )) OR (
+		('ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA'
+		+ '.TRANSLATED_LABEL' IN TYPEOF(preferred_name))
+		AND (languages :=: preferred_name\translated_label.languages)
+		AND (NOT(EXISTS(short_name)) OR ('ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA'
+		+ '.TRANSLATED_LABEL' IN TYPEOF(short_name))
+		AND (languages :=: short_name\translated_label.languages))
+		AND (QUERY(s <* synonymous_names |
+		NOT('ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA' +
+		'.LABEL_WITH_LANGUAGE' IN TYPEOF(s))) = []));
+	WR2: NOT EXISTS(languages) OR (QUERY(s <* synonymous_names |
+		EXISTS(s.language) AND NOT(s.language IN
+		QUERY(l <* languages.language_codes | TRUE
+		))) = []);
+	WR3: EXISTS(languages) OR
+		(('ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA.LABEL' IN
+		TYPEOF(preferred_name))
+		AND (NOT(EXISTS(short_name)) OR
+		('ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA.LABEL' IN
+		TYPEOF(short_name)))
+		AND (QUERY(s <* synonymous_names |
+		'ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA.LABEL_WITH_LANGUAGE' IN
+		TYPEOF(s)) = []));
+END_ENTITY; -- item_names
+
+
+
+
+ENTITY level_type
+SUBTYPE OF(complex_type);
+	levels: LIST [1:4] OF UNIQUE level;
+	value_type: simple_type;
+WHERE
+	WR1: 'ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA.NUMBER_TYPE'
+
+		IN TYPEOF(value_type);
+END_ENTITY; -- level_type
+
+
+
+
+ENTITY label_with_language;
+	l: label;
+	language: language_code;
+END_ENTITY; -- label_with_language
+
+
+
+
+ENTITY mathematical_string;
+	text_representation: text;
+	SGML_representation: OPTIONAL text;
+END_ENTITY; -- mathematical_string
+
+
+
+
+ENTITY named_type
+SUBTYPE OF(data_type );
+	referred_type: data_type_BSU;
+END_ENTITY; -- named_type
+
+
+
+
+ENTITY non_quantitative_code_type
+SUBTYPE OF(string_type);
+	domain: value_domain;
+WHERE
+	WR1: QUERY(v <* domain.its_values |
+		NOT('ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA.VALUE_CODE_TYPE' IN
+
+		TYPEOF(v.value_code))) = [];
+END_ENTITY; -- non_quantitative_code_type
+
+
+
+
+ENTITY non_quantitative_int_type
+SUBTYPE OF(int_type);
+	domain: value_domain;
+WHERE
+	WR1: QUERY(v <* domain.its_values |
+		'ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA.VALUE_CODE_TYPE' IN
+
+		TYPEOF(v.value_code)) = [];
+END_ENTITY; -- non_quantitative_int_type
+
+
+
+
+ENTITY non_si_unit
+SUBTYPE OF(named_unit);
+	name: label;
+END_ENTITY; -- non_si_unit
+
+
+
+
+ENTITY number_type
+SUPERTYPE OF (ONEOF (
+              INT_TYPE,
+              REAL_TYPE))
+
+SUBTYPE OF(simple_type);
+END_ENTITY; -- number_type
+
+
+
+
+ENTITY placement_type
+SUPERTYPE OF (ONEOF (
+              AXIS1_PLACEMENT_TYPE,
+              AXIS2_PLACEMENT_2D_TYPE,
+              AXIS2_PLACEMENT_3D_TYPE))
+
+SUBTYPE OF(entity_instance_type);
+WHERE
+	WR1: 'ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA.PLACEMENT'
+		IN SELF\entity_instance_type.type_name;
+END_ENTITY; -- placement_type
+
+
+
+
+ENTITY property_BSU
+SUBTYPE OF(basic_semantic_unit);
+	SELF\basic_semantic_unit.code: property_code_type;
+	name_scope: class_BSU;
+DERIVE
+	absolute_id: identifier :=
+		name_scope.defined_by.absolute_id
+		+ sep_id + name_scope.dic_identifier
+		+ sep_id + dic_identifier;
+INVERSE
+	describes_classes: SET OF class FOR described_by;
+UNIQUE
+	UR1: absolute_id;
+WHERE
+	WR1: QUERY(c <* describes_classes |
+		NOT(is_subclass(c, name_scope.definition[1])))= [];
+END_ENTITY; -- property_BSU
+
+
+
+
+ENTITY real_currency_type
+SUBTYPE OF(real_type);
+	currency: OPTIONAL currency_code;
+END_ENTITY; -- real_currency_type
+
+
+
+
+ENTITY real_measure_type
+SUBTYPE OF(real_type);
+	unit: dic_unit;
+END_ENTITY; -- real_measure_type
+
+
+
+
+ENTITY real_type
+SUPERTYPE OF (ONEOF (
+              REAL_MEASURE_TYPE,
+              REAL_CURRENCY_TYPE))
+
+SUBTYPE OF(number_type);
+END_ENTITY; -- real_type
+
+
+
+
+ENTITY string_type
+SUBTYPE OF(simple_type);
+END_ENTITY; -- string_type
+
+
+
+
+ENTITY supplier_BSU
+SUBTYPE OF(basic_semantic_unit);
+	SELF\basic_semantic_unit.code: supplier_code_type;
+DERIVE
+	SELF\basic_semantic_unit.version: version_type := '1';
+	absolute_id: identifier := SELF\basic_semantic_unit.code;
+UNIQUE
+	UR1: absolute_id;
+END_ENTITY; -- supplier_BSU
+
+
+
+
+ENTITY supplier_element
+SUBTYPE OF(dictionary_element);
+	SELF\dictionary_element.identified_by: supplier_BSU;
+	org: organization;
+	addr: address;
+INVERSE
+	associated_items: SET [0:?] OF supplier_BSU_relationship
+		FOR relating_supplier;
+END_ENTITY; -- supplier_element
+
+
+
+
+ENTITY value_domain;
+	its_values: LIST [1:?] OF dic_value;
+	source_doc_of_value_domain: OPTIONAL document;
+	languages: OPTIONAL present_translations;
+	terms: LIST [0:?] OF item_names;
+WHERE
+	WR1: NOT EXISTS(languages) OR (QUERY(v <* its_values |
+		languages :<>: v.meaning.languages) = []);
+	WR2: codes_are_unique(its_values);
+    WR3: EXISTS(languages) OR (QUERY(v <* its_values |
+		EXISTS(v.meaning.languages)) = []);
+END_ENTITY; -- value_domain
+
+
+
+
+ENTITY global_language_assignment;
+	language: language_code;
+END_ENTITY; -- global_language_assignment
+
+
+
+
+ENTITY present_translations;
+	language_codes: LIST [1:?] OF UNIQUE language_code;
+UNIQUE
+	UR1: language_codes;
+END_ENTITY; -- present_translations
+
+
+
+
+ENTITY translated_label;
+	labels: LIST [1:?] OF label;
+	languages: present_translations;
+WHERE
+	WR1: SIZEOF(labels) = SIZEOF(languages.language_codes);
+END_ENTITY; -- translated_label
+
+
+
+
+ENTITY translated_text;
+	texts: LIST [1:?] OF text;
+	languages: present_translations;
+WHERE
+	WR1: SIZEOF(texts) = SIZEOF(languages.language_codes);
+END_ENTITY; -- translated_text
+
+
+
+
+ENTITY table_BSU
+SUBTYPE OF(class_related_BSU, table_identification);
+	name_scope: class_BSU;
+	SELF\basic_semantic_unit.code: table_code_type;
+DERIVE
+	absolute_id: identifier:= name_scope.
+		defined_by.dic_identifier + sep_id
+		+ name_scope.dic_identifier + sep_id
+		+ dic_identifier;
+UNIQUE
+	UR1: absolute_id;
+END_ENTITY; -- table_BSU
+
+
+
+
+ENTITY class_document_relationship
+SUBTYPE OF(class_BSU_relationship);
+	SELF\class_BSU_relationship.related_tokens:
+		SET [1:?] OF document_BSU;
+WHERE
+	WR1: visible_documents(
+		SELF\class_BSU_relationship.relating_class.identified_by,
+		SELF.related_tokens);
+END_ENTITY; -- class_document_relationship
+
+
+
+
+ENTITY dictionary_identification;
+	code: dictionary_code_type;
+	version: version_type;
+	revision: revision_type;
+	defined_by: supplier_bsu;
+DERIVE
+	absolute_id: identifier :=
+		defined_by.absolute_id + sep_id + code + sep_cv + version;
+INVERSE
+	definition: SET [0:1] OF dictionary FOR identified_by;
+UNIQUE
+	UR1: absolute_id;
+END_ENTITY;
+
+
+
+
+ENTITY dictionary
+SUPERTYPE OF (
+              DICTIONARY_IN_STANDARD_FORMAT);
+	identified_by: OPTIONAL dictionary_identification;
+	is_complete: OPTIONAL BOOLEAN;
+	updates: OPTIONAL dictionary_identification;
+	update_agreement: OPTIONAL identifier;
+	referenced_dictionaries: SET [0:?] OF dictionary_identification;
+	responsible_supplier: supplier_BSU;
+	library_structure: library_iim_identification;
+	base_protocols: SET [0:?] OF external_file_protocol;
+	supported_vep: SET [0:?] OF
+		view_exchange_protocol_identification;
+	referred_suppliers: SET [1:?] OF supplier_BSU;
+	contained_classes: LIST [0:?] OF UNIQUE class_BSU;
+	a_posteriori_semantic_relationships: SET [0:?] OF
+		a_posteriori_semantic_relationship;
+	names: item_names;
+	note: OPTIONAL note_type;
+	remark: OPTIONAL remark_type;
+WHERE
+	WR1: prefix_ordered_class_list(SELF.contained_classes);
+	WR2: (EXISTS(identified_by) AND EXISTS(is_complete))
+		OR (NOT(EXISTS(identified_by)) AND NOT(EXISTS(is_complete)));
+	WR3: NOT(EXISTS(identified_by)) OR
+		(SELF.identified_by.defined_by = SELF.responsible_supplier);
+	WR4: NOT(EXISTS(updates)) OR
+		(EXISTS(identified_by) AND (is_complete = FALSE));
+	WR5: NOT(EXISTS(update_agreement)) OR EXISTS(updates);
+	WR6: NOT(EXISTS(updates)) OR
+		((updates.code = identified_by.code)
+		AND (updates.defined_by = identified_by.defined_by)
+		AND (updates.version <= identified_by.version)
+		AND (NOT(updates.version = identified_by.version) OR
+		(updates.revision < identified_by.revision)));
+END_ENTITY; -- dictionary
+
+
+
+
+ENTITY dictionary_in_standard_format
+SUBTYPE OF(dictionary);
+WHERE
+	WR1: QUERY(int <* SELF\dictionary.base_protocols
+		| ((SIZEOF(QUERY(vep <* SELF\dictionary.supported_vep
+		| int IN vep\data_exchange_specification_identification
+		.external_file_protocols )) = 0) AND NOT(int IN
+		SELF\dictionary.library_structure
+		.external_file_protocols))) = [];
+END_ENTITY; -- dictionary_in_standard_format
+
+
+
+
+ENTITY document_BSU
+SUBTYPE OF(class_related_BSU);
+	name_scope: class_BSU;
+	SELF\basic_semantic_unit.code: document_code_type;
+DERIVE
+	absolute_id: identifier :=
+		name_scope.defined_by.dic_identifier + sep_id
+		+ name_scope.dic_identifier + sep_id
+		+ dic_identifier;
+INVERSE
+	associate_to_class: class_BSU_relationship FOR related_tokens;
+UNIQUE
+	UR1: absolute_id;
+END_ENTITY; -- document_BSU
+
+
+
+
+ENTITY document_element
+SUPERTYPE OF (ONEOF (
+              DOCUMENT_ELEMENT_WITH_HTTP_ACCESS,
+              DOCUMENT_ELEMENT_WITH_TRANSLATED_HTTP_ACCESS))
+
+SUBTYPE OF(class_related_dictionary_element);
+	SELF\dictionary_element.identified_by: document_BSU;
+	authors: OPTIONAL LIST [1:?] OF person;
+	publishing_organisation: organization;
+END_ENTITY; -- document_element
+
+
+
+
+ENTITY document_element_with_http_access
+SUBTYPE OF(document_element);
+	remote_location: absolute_URL_type;
+END_ENTITY; -- document_element_with_http_access
+
+
+
+
+ENTITY document_element_with_translated_http_access
+SUBTYPE OF(document_element);
+	remote_locations: LIST [1:?] OF absolute_URL_type;
+	languages: present_translations;
+WHERE
+	WR1: SIZEOF(remote_locations) = SIZEOF(languages.language_codes);
+END_ENTITY; -- document_element_with_translated_http_access
+
+
+
+
+ENTITY functional_view_class
+SUPERTYPE OF (
+              NON_INSTANTIABLE_FUNCTIONAL_VIEW_CLASS)
+
+SUBTYPE OF(class);
+	representation_type: OPTIONAL STRING;
+	view_control_variables: LIST [0:?] OF UNIQUE property_BSU;
+	view_properties: LIST [0:?] OF UNIQUE property_BSU;
+DERIVE
+	SELF\class.described_by: LIST [0:?] OF UNIQUE property_BSU
+		:= SELF.view_control_variables + SELF.view_properties;
+WHERE
+	WR1: QUERY(v_c_v <* SELF.view_control_variables
+		| NOT((data_type_typeof(v_c_v) = [])
+		OR (('ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA'
+		+ '.NON_QUANTITATIVE_INT_TYPE' IN data_type_typeof(v_c_v))
+		AND ordered_index_value(
+		data_type_non_quantitative_int_type(v_c_v)[1].domain))))
+		= [];
+	WR2: NOT EXISTS(SELF.representation_type)
+		OR ('_SCHEMA.' LIKE SELF.representation_type);
+	WR3: NOT EXISTS(SELF\class.its_superclass)
+		OR (('ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA.'
+		+ 'FUNCTIONAL_VIEW_CLASS')
+		IN TYPEOF(SELF\class.its_superclass));
+	WR4: QUERY(prop <* SELF\class.described_by
+		| definition_available_implies(prop,
+		('ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA'
+		+'.REPRESENTATION_P_DET') IN TYPEOF(prop.definition[1])))
+		= SELF\class.described_by;
+END_ENTITY; -- functional_view_class
+
+
+
+
+ENTITY geometric_representation_context_type
+	SUBTYPE OF(entity_instance_type);
+WHERE
+	WR1:'ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA.GEOMETRIC_REPRESENTATION_CONTEXT'
+		IN SELF\entity_instance_type.type_name;
+END_ENTITY; -- geometric_representation_context_type
+
+
+
+
+ENTITY library_iim_identification
+SUBTYPE OF(data_exchange_specification_identification);
+END_ENTITY; -- library_iim_identification
+
+
+
+
+ENTITY non_instantiable_functional_view_class
+SUBTYPE OF(functional_view_class);
+DERIVE
+	SELF\functional_view_class.view_properties
+		: LIST [0:?] OF UNIQUE property_BSU := [];
+WHERE
+	WR1: NOT EXISTS(SELF\functional_view_class.representation_type);
+END_ENTITY; -- non_instantiable_functional_view_class
+
+
+
+
+ENTITY referenced_document
+SUBTYPE OF(document);
+	document_reference: document_BSU;
+WHERE
+	WR1: NOT('ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA' +
+		'.IDENTIFIED_DOCUMENT' IN TYPEOF(SELF));
+END_ENTITY; -- referenced_document
+
+
+
+
+ENTITY referenced_graphics
+SUBTYPE OF(graphics);
+	graphics_reference: document_BSU;
+END_ENTITY; -- referenced_graphics
+
+
+
+
+ENTITY representation_P_DET
+SUBTYPE OF(property_DET);
+WHERE
+	WR1: NOT('ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA.CONDITION_DET'
+		IN TYPEOF(SELF)) AND
+		NOT('ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA.DEPENDENT_P_DET'
+
+		IN TYPEOF(SELF)) AND
+		NOT('ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA' +
+		'.NON_DEPENDENT_P_DET' IN TYPEOF(SELF));
+END_ENTITY; -- representation_P_DET
+
+
+
+
+ENTITY representation_type
+	SUBTYPE OF(entity_instance_type);
+WHERE
+	WR1:'ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA.REPRESENTATION'
+
+		IN SELF\entity_instance_type.type_name;
+END_ENTITY; -- representation_type
+
+
+
+
+ENTITY view_control_variable_range;
+	parameter_type: property_BSU;
+	range_lobound: INTEGER;
+	range_hibound: INTEGER;
+WHERE
+	WR1: (data_type_typeof(SELF.parameter_type) = [])
+		OR ('ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA'
+		+ '.NON_QUANTITATIVE_INT_TYPE'
+		IN data_type_typeof(SELF.parameter_type));
+	WR2: SELF.range_lobound <= SELF.range_hibound;
+	WR3: view_control_variables_attributes_belong_to_domain(SELF);
+END_ENTITY; -- view_control_variable_range
+
+
+
+
+ENTITY view_exchange_protocol_identification
+SUBTYPE OF(data_exchange_specification_identification);
+	referenced_ISO10303_AP: OPTIONAL application_protocol_definition;
+END_ENTITY; -- view_exchange_protocol_identification
+
+
+
+
+ENTITY document_content
+SUBTYPE OF(class_BSU_related_content);
+	SELF\content_item.dictionary_definition: document_BSU;
+	SELF\external_item.used_protocol: data_protocol;
+END_ENTITY; -- document_content
+
+
+
+
+ENTITY external_file_unit
+SUPERTYPE OF (
+              HTTP_FILE);
+	file: external_file_address;
+	content_encoding: OPTIONAL content_encoding_type;
+INVERSE
+	unit_of: language_specific_content FOR content_files;
+WHERE
+	WR1: (('ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA.HTTP_PROTOCOL'
+		IN TYPEOF(SELF.unit_of.content_of.content_of.used_protocol))
+		AND ('ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA.HTTP_FILE'
+		IN TYPEOF(SELF)))
+		XOR NOT
+		(('ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA.HTTP_PROTOCOL'
+		IN TYPEOF(SELF.unit_of.content_of.content_of.used_protocol))
+		OR ('ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA.HTTP_FILE'
+
+		IN TYPEOF(SELF)));
+END_ENTITY; -- external_file_unit
+
+
+
+
+ENTITY http_protocol
+SUBTYPE OF(standard_data_protocol);
+	http_RFC: IAB_RFC;
+END_ENTITY; -- http_protocol
+
+
+
+
+ENTITY http_class_directory;
+	name: http_directory_name_type;
+	class: class_BSU;
+UNIQUE
+	UR1: class;
+END_ENTITY; -- http_class_directory
+
+
+
+
+ENTITY http_file
+SUBTYPE OF(external_file_unit);
+	mime: MIME_type;
+	exchange_format: MIME_subtype;
+	format_RFC: OPTIONAL IAB_RFC;
+	http_file_name: http_file_name_type;
+	http_directory: OPTIONAL http_class_directory;
+	remote_access: OPTIONAL absolute_URL_type;
+UNIQUE
+	UR1: http_file_name, http_directory;
+WHERE
+	WR1: EXISTS(http_directory) XOR
+		('ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA.SUPPLIER_BSU_RELATED_CONTENT'
+
+		IN TYPEOF(SELF.unit_of.content_of.content_of));
+END_ENTITY; -- http_file
+
+
+
+
+ENTITY language_specific_content;
+	content_files: SET [1:?] OF external_file_unit;
+	main_file: OPTIONAL external_file_unit;
+	character_encoding: OPTIONAL character_set_type;
+INVERSE
+	content_of: external_content FOR consists_of;
+WHERE
+	WR1: NOT EXISTS(main_file) OR (main_file IN content_files);
+	WR2: EXISTS(main_file) XOR
+		('ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA.PROGRAM_LIBRARY_CONTENT'
+		IN TYPEOF(SELF.content_of.content_of));
+	WR3: EXISTS(character_encoding) OR NOT
+		('ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA.HTTP_PROTOCOL'
+
+		IN TYPEOF(SELF.content_of.content_of.used_protocol));
+END_ENTITY; -- language_specific_content
+
+
+
+
+ENTITY non_standard_data_protocol
+SUBTYPE OF(data_protocol, non_standard_protocol);
+WHERE
+	WR1: NOT EXISTS(SELF\external_file_protocol.base_protocol);
+END_ENTITY; -- non_standard_data_protocol
+
+
+
+
+ENTITY not_translatable_external_content
+SUBTYPE OF(external_content);
+WHERE
+	WR1: SIZEOF(SELF\external_content.consists_of) = 1;
+END_ENTITY; -- not_translatable_external_content
+
+
+
+
+ENTITY not_translated_external_content
+SUBTYPE OF(external_content);
+WHERE
+	WR1: SIZEOF(SELF\external_content.consists_of) = 1;
+END_ENTITY; -- not_translated_external_content
+
+
+
+
+ENTITY standard_data_protocol
+SUBTYPE OF(data_protocol, standard_protocol);
+WHERE
+	WR1: NOT EXISTS(SELF\external_file_protocol.base_protocol);
+END_ENTITY; -- standard_data_protocol
+
+
+
+
+ENTITY translated_external_content
+SUBTYPE OF(external_content);
+	languages: present_translations;
+WHERE
+	WR1: SIZEOF(SELF\external_content.consists_of)
+		= SIZEOF(SELF.languages.language_codes);
+END_ENTITY; -- translated_external_content
+
+
+
+
+ENTITY amount_of_substance_unit
+  SUBTYPE OF (named_unit);
+WHERE
+  WR1: (SELF\named_unit.dimensions.length_exponent                    = 0.0) AND
+          (SELF\named_unit.dimensions.mass_exponent                      = 0.0) AND
+          (SELF\named_unit.dimensions.time_exponent                      = 0.0) AND
+          (SELF\named_unit.dimensions.electric_current_exponent          = 0.0) AND
+          (SELF\named_unit.dimensions.thermodynamic_temperature_exponent = 0.0) AND
+          (SELF\named_unit.dimensions.amount_of_substance_exponent       = 1.0) AND
+          (SELF\named_unit.dimensions.luminous_intensity_exponent        = 0.0);
+END_ENTITY;
+
+
+
+
+ENTITY area_unit
+  SUBTYPE OF (named_unit);
+WHERE
+  WR1: (SELF\named_unit.dimensions.length_exponent = 2.0)                    AND
+       (SELF\named_unit.dimensions.mass_exponent = 0.0)                      AND
+       (SELF\named_unit.dimensions.time_exponent = 0.0)                      AND
+       (SELF\named_unit.dimensions.electric_current_exponent = 0.0)          AND
+       (SELF\named_unit.dimensions.thermodynamic_temperature_exponent = 0.0) AND
+       (SELF\named_unit.dimensions.amount_of_substance_exponent = 0.0)       AND
+       (SELF\named_unit.dimensions.luminous_intensity_exponent = 0.0);
+END_ENTITY;
+
+
+
+ENTITY context_dependent_unit
+  SUBTYPE OF (named_unit);
+  name : label;
+END_ENTITY;
+
+
+
+ENTITY conversion_based_unit
+  SUBTYPE OF (named_unit);
+  name              : label;
+  conversion_factor : measure_with_unit;
+END_ENTITY;
+
+
+
+ENTITY derived_unit;
+  elements : SET [1:?] OF derived_unit_element;
+WHERE
+  WR1 : ( SIZEOF ( elements ) > 1 ) OR
+          (( SIZEOF ( elements ) = 1 ) AND ( elements[1].exponent <> 1.0 ));
+END_ENTITY;
+
+
+
+ENTITY derived_unit_element;
+  unit     : named_unit;
+  exponent : REAL;
+END_ENTITY;
+
+
+
+ENTITY dimensional_exponents;
+  length_exponent                    : REAL;
+  mass_exponent                      : REAL;
+  time_exponent                      : REAL;
+  electric_current_exponent          : REAL;
+  thermodynamic_temperature_exponent : REAL;
+  amount_of_substance_exponent       : REAL;
+  luminous_intensity_exponent        : REAL;
+END_ENTITY;
+
+
+
+ENTITY electric_current_unit
+  SUBTYPE OF (named_unit);
+WHERE
+  WR1: (SELF\named_unit.dimensions.length_exponent                    = 0.0) AND
+       (SELF\named_unit.dimensions.mass_exponent                      = 0.0) AND
+       (SELF\named_unit.dimensions.time_exponent                      = 0.0) AND
+       (SELF\named_unit.dimensions.electric_current_exponent          = 1.0) AND
+       (SELF\named_unit.dimensions.thermodynamic_temperature_exponent = 0.0) AND
+       (SELF\named_unit.dimensions.amount_of_substance_exponent       = 0.0) AND
+       (SELF\named_unit.dimensions.luminous_intensity_exponent        = 0.0);
+END_ENTITY;
+
+ENTITY length_unit
+  SUBTYPE OF (named_unit);
+WHERE
+  WR1: (SELF\named_unit.dimensions.length_exponent = 1.0)                    AND
+       (SELF\named_unit.dimensions.mass_exponent = 0.0)                      AND
+       (SELF\named_unit.dimensions.time_exponent = 0.0)                      AND
+       (SELF\named_unit.dimensions.electric_current_exponent = 0.0)          AND
+       (SELF\named_unit.dimensions.thermodynamic_temperature_exponent = 0.0) AND
+       (SELF\named_unit.dimensions.amount_of_substance_exponent = 0.0)       AND
+       (SELF\named_unit.dimensions.luminous_intensity_exponent = 0.0);
+END_ENTITY;
+
+
+
+ENTITY luminous_intensity_unit
+  SUBTYPE OF (named_unit);
+WHERE
+  WR1: (SELF\named_unit.dimensions.length_exponent                    = 0.0) AND
+       (SELF\named_unit.dimensions.mass_exponent                      = 0.0) AND
+       (SELF\named_unit.dimensions.time_exponent                      = 0.0) AND
+       (SELF\named_unit.dimensions.electric_current_exponent          = 0.0) AND
+       (SELF\named_unit.dimensions.thermodynamic_temperature_exponent = 0.0) AND
+       (SELF\named_unit.dimensions.amount_of_substance_exponent       = 0.0) AND
+       (SELF\named_unit.dimensions.luminous_intensity_exponent        = 1.0);
+END_ENTITY;
+
+
+
+ENTITY mass_unit
+  SUBTYPE OF (named_unit);
+WHERE
+  WR1: (SELF\named_unit.dimensions.length_exponent                    = 0.0) AND
+       (SELF\named_unit.dimensions.mass_exponent                      = 1.0) AND
+       (SELF\named_unit.dimensions.time_exponent                      = 0.0) AND
+       (SELF\named_unit.dimensions.electric_current_exponent          = 0.0) AND
+       (SELF\named_unit.dimensions.thermodynamic_temperature_exponent = 0.0) AND
+       (SELF\named_unit.dimensions.amount_of_substance_exponent       = 0.0) AND
+       (SELF\named_unit.dimensions.luminous_intensity_exponent        = 0.0);
+END_ENTITY ;
+
+
+
+ENTITY measure_with_unit
+  SUPERTYPE OF (ONEOF (
+              LENGTH_MEASURE_WITH_UNIT));
+  value_component : measure_value;
+  unit_component  : unit;
+WHERE
+  WR1: valid_units (SELF);
+END_ENTITY;
+
+
+
+ENTITY named_unit
+  SUPERTYPE OF (ONEOF (
+              SI_UNIT,
+              CONVERSION_BASED_UNIT,
+              CONTEXT_DEPENDENT_UNIT)
+              ANDOR ONEOF (
+              LENGTH_UNIT,
+              MASS_UNIT,
+              TIME_UNIT,
+              ELECTRIC_CURRENT_UNIT,
+              THERMODYNAMIC_TEMPERATURE_UNIT,
+              AMOUNT_OF_SUBSTANCE_UNIT,
+              LUMINOUS_INTENSITY_UNIT,
+              PLANE_ANGLE_UNIT,
+              SOLID_ANGLE_UNIT,
+              AREA_UNIT,
+              VOLUME_UNIT,
+              RATIO_UNIT));
+  dimensions : dimensional_exponents;
+END_ENTITY;
+
+
+
+ENTITY plane_angle_unit
+  SUBTYPE OF (named_unit);
+WHERE
+  WR1: (SELF\named_unit.dimensions.length_exponent                    = 0.0) AND
+       (SELF\named_unit.dimensions.mass_exponent                      = 0.0) AND
+       (SELF\named_unit.dimensions.time_exponent                      = 0.0) AND
+       (SELF\named_unit.dimensions.electric_current_exponent          = 0.0) AND
+       (SELF\named_unit.dimensions.thermodynamic_temperature_exponent = 0.0) AND
+       (SELF\named_unit.dimensions.amount_of_substance_exponent       = 0.0) AND
+       (SELF\named_unit.dimensions.luminous_intensity_exponent        = 0.0);
+END_ENTITY;
+
+
+
+
+ENTITY ratio_unit
+  SUBTYPE OF (named_unit);
+WHERE
+  WR1: (SELF\named_unit.dimensions.length_exponent = 0.0)                    AND
+       (SELF\named_unit.dimensions.mass_exponent = 0.0)                      AND
+       (SELF\named_unit.dimensions.time_exponent = 0.0)                      AND
+       (SELF\named_unit.dimensions.electric_current_exponent = 0.0)          AND
+       (SELF\named_unit.dimensions.thermodynamic_temperature_exponent = 0.0) AND
+       (SELF\named_unit.dimensions.amount_of_substance_exponent = 0.0)       AND
+       (SELF\named_unit.dimensions.luminous_intensity_exponent = 0.0);
+END_ENTITY;
+
+
+
+ENTITY si_unit
+  SUBTYPE OF (named_unit);
+  prefix     : OPTIONAL si_prefix;
+  name       : si_unit_name;
+DERIVE
+  SELF\named_unit.dimensions : dimensional_exponents
+                             := dimensions_for_si_unit (SELF.name);
+END_ENTITY;
+
+
+
+ENTITY solid_angle_measure_with_unit
+  SUBTYPE OF (measure_with_unit);
+WHERE
+  WR1: 'ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA.SOLID_ANGLE_UNIT' IN TYPEOF (SELF\measure_with_unit.unit_component);
+
+END_ENTITY;
+
+
+
+ENTITY solid_angle_unit
+  SUBTYPE OF (named_unit);
+WHERE
+  WR1: (SELF\named_unit.dimensions.length_exponent                    = 0.0) AND
+       (SELF\named_unit.dimensions.mass_exponent                      = 0.0) AND
+       (SELF\named_unit.dimensions.time_exponent                      = 0.0) AND
+       (SELF\named_unit.dimensions.electric_current_exponent          = 0.0) AND
+       (SELF\named_unit.dimensions.thermodynamic_temperature_exponent = 0.0) AND
+       (SELF\named_unit.dimensions.amount_of_substance_exponent       = 0.0) AND
+       (SELF\named_unit.dimensions.luminous_intensity_exponent        = 0.0);
+END_ENTITY;
+
+
+ENTITY thermodynamic_temperature_unit
+  SUBTYPE OF (named_unit);
+WHERE
+  WR1: (SELF\named_unit.dimensions.length_exponent                    = 0.0) AND
+       (SELF\named_unit.dimensions.mass_exponent                      = 0.0) AND
+       (SELF\named_unit.dimensions.time_exponent                      = 0.0) AND
+       (SELF\named_unit.dimensions.electric_current_exponent          = 0.0) AND
+       (SELF\named_unit.dimensions.thermodynamic_temperature_exponent = 1.0) AND
+       (SELF\named_unit.dimensions.amount_of_substance_exponent       = 0.0) AND
+       (SELF\named_unit.dimensions.luminous_intensity_exponent        = 0.0);
+END_ENTITY;
+
+
+ENTITY time_unit
+  SUBTYPE OF (named_unit);
+WHERE
+  WR1: (SELF\named_unit.dimensions.length_exponent                    = 0.0) AND
+       (SELF\named_unit.dimensions.mass_exponent                      = 0.0) AND
+       (SELF\named_unit.dimensions.time_exponent                      = 1.0) AND
+       (SELF\named_unit.dimensions.electric_current_exponent          = 0.0) AND
+       (SELF\named_unit.dimensions.thermodynamic_temperature_exponent = 0.0) AND
+       (SELF\named_unit.dimensions.amount_of_substance_exponent       = 0.0) AND
+       (SELF\named_unit.dimensions.luminous_intensity_exponent        = 0.0);
+END_ENTITY;
+
+
+
+
+ENTITY volume_unit
+  SUBTYPE OF (named_unit);
+WHERE
+  WR1: (SELF\named_unit.dimensions.length_exponent = 3.0)                    AND
+       (SELF\named_unit.dimensions.mass_exponent = 0.0)                      AND
+       (SELF\named_unit.dimensions.time_exponent = 0.0)                      AND
+       (SELF\named_unit.dimensions.electric_current_exponent = 0.0)          AND
+       (SELF\named_unit.dimensions.thermodynamic_temperature_exponent = 0.0) AND
+       (SELF\named_unit.dimensions.amount_of_substance_exponent = 0.0)       AND
+       (SELF\named_unit.dimensions.luminous_intensity_exponent = 0.0);
+END_ENTITY;
+
+
+
+ENTITY person;
+  id            : identifier;
+  last_name     : OPTIONAL label;
+  first_name    : OPTIONAL label;
+  middle_names  : OPTIONAL LIST [1:?] OF label;
+  prefix_titles : OPTIONAL LIST [1:?] OF label;
+  suffix_titles : OPTIONAL LIST [1:?] OF label;
+UNIQUE
+  UR1: id;
+WHERE
+  WR1: EXISTS(last_name) OR EXISTS(first_name);
+END_ENTITY;
+
+
+
+ENTITY organization;
+  id          : OPTIONAL identifier;
+  name        : label;
+  description : text;
+END_ENTITY;
+
+
+
+ENTITY address;
+  internal_location       : OPTIONAL label;
+  street_number           : OPTIONAL label;
+  street                  : OPTIONAL label;
+  postal_box              : OPTIONAL label;
+  town                    : OPTIONAL label;
+  region                  : OPTIONAL label;
+  postal_code             : OPTIONAL label;
+  country                 : OPTIONAL label;
+  facsimile_number        : OPTIONAL label;
+  telephone_number        : OPTIONAL label;
+  electronic_mail_address : OPTIONAL label;
+  telex_number            : OPTIONAL label;
+WHERE
+  WR1: EXISTS(internal_location)       OR
+       EXISTS(street_number)           OR
+       EXISTS(street)                  OR
+       EXISTS(postal_box)              OR
+       EXISTS(town)                    OR
+       EXISTS(region)                  OR
+       EXISTS(postal_code)             OR
+       EXISTS(country)                 OR
+       EXISTS(facsimile_number)        OR
+       EXISTS(telephone_number)        OR
+       EXISTS(electronic_mail_address) OR
+       EXISTS(telex_number);
+END_ENTITY;
+
+
+
+ENTITY application_context;
+  application          : text;
+INVERSE
+  context_elements : SET [1:?] OF  application_context_element
+                                FOR frame_of_reference;
+END_ENTITY;
+
+
+
+ENTITY application_context_element
+  ;
+  name                 : label;
+  frame_of_reference   : application_context;
+END_ENTITY;
+
+
+
+ENTITY application_protocol_definition;
+  status                                    : label;
+  application_interpreted_model_schema_name : label;
+  application_protocol_year                 : year_number;
+  application                               : application_context;
+END_ENTITY;
+
+
+
+ENTITY representation;
+  name             : label;
+  items            : SET[1:?] OF representation_item;
+  context_of_items : representation_context;
+END_ENTITY;
+
+
+
+ENTITY representation_context;
+  context_identifier : identifier;
+  context_type       : text;
+INVERSE
+  representations_in_context : SET [1:?] OF representation
+    FOR context_of_items;
+END_ENTITY;
+
+
+
+ENTITY representation_item;
+  name : label;
+WHERE
+  WR1: SIZEOF(using_representations(SELF)) > 0;
+END_ENTITY;
+
+
+
+
+ENTITY simple_type
+ABSTRACT SUPERTYPE OF (ONEOF (
+                       NUMBER_TYPE,
+                       BOOLEAN_TYPE,
+                       STRING_TYPE))
+
+SUBTYPE OF(data_type);
+	value_format: value_format_type;
+END_ENTITY; -- simple_type
+
+
+
+
+ENTITY data_type
+ABSTRACT SUPERTYPE OF (ONEOF (
+                       SIMPLE_TYPE,
+                       COMPLEX_TYPE,
+                       NAMED_TYPE));
+END_ENTITY; -- data_type
+
+
+
+
+ENTITY basic_semantic_unit
+ABSTRACT SUPERTYPE OF (ONEOF (
+                       SUPPLIER_BSU,
+                       CLASS_BSU,
+                       PROPERTY_BSU,
+                       DATA_TYPE_BSU,
+                       SUPPLIER_RELATED_BSU,
+                       CLASS_RELATED_BSU));
+
+	code: code_type;
+	version: version_type;
+DERIVE
+	dic_identifier: identifier := code + sep_cv + version;
+INVERSE
+	definition: SET [0:1] OF dictionary_element FOR
+	identified_by;
+	referenced_by: SET [0:1] OF content_item
+		FOR dictionary_definition;
+END_ENTITY; -- basic_semantic_unit
+
+
+
+
+ENTITY dictionary_element
+ABSTRACT SUPERTYPE OF (ONEOF (
+                       SUPPLIER_ELEMENT,
+                       CLASS_AND_PROPERTY_ELEMENTS,
+                       DATA_TYPE_ELEMENT));
+
+	identified_by: basic_semantic_unit;
+	time_stamps: OPTIONAL dates;
+	revision: revision_type;
+END_ENTITY; -- dictionary_element
+
+
+
+
+ENTITY content_item
+ABSTRACT SUPERTYPE;
+	dictionary_definition: basic_semantic_unit;
+END_ENTITY; -- content_item
+
+
+
+
+ENTITY class
+ABSTRACT SUPERTYPE
+
+SUBTYPE OF(class_and_property_elements);
+	SELF\dictionary_element.identified_by: class_BSU;
+	its_superclass: OPTIONAL class_BSU;
+	described_by: LIST [0:?] OF UNIQUE property_BSU;
+	defined_types: SET [0:?] OF data_type_BSU;
+DERIVE
+	subclasses: SET [0:?] OF class := identified_by.subclasses;
+	known_applicable_properties: SET [0:?] OF property_BSU
+		:= compute_known_applicable_properties(
+			SELF\dictionary_element.identified_by);
+	known_applicable_data_types: SET [0:?] OF data_type_BSU
+		:= compute_known_applicable_data_types(
+			SELF\dictionary_element.identified_by);
+INVERSE
+	associated_items: SET [0:?] OF class_BSU_relationship
+		FOR relating_class;
+WHERE
+	WR1: acyclic_superclass_relationship(SELF.identified_by, []);
+	WR2: NOT all_class_descriptions_reachable(
+		SELF\dictionary_element.identified_by)
+		OR (list_to_set(SELF.described_by) <=
+		SELF\dictionary_element.identified_by
+		\class_BSU.known_visible_properties);
+	WR3: NOT all_class_descriptions_reachable(
+		SELF\dictionary_element.identified_by)
+		OR (SELF.defined_types <=
+		SELF\dictionary_element.identified_by
+		\class_BSU.known_visible_data_types);
+	WR4: check_properties_applicability(SELF);
+	WR5: check_datatypes_applicability(SELF);
+END_ENTITY; -- class
+
+
+
+
+ENTITY class_and_property_elements
+ABSTRACT SUPERTYPE OF (ONEOF (
+                       PROPERTY_DET,
+                       CLASS))
+
+SUBTYPE OF(dictionary_element);
+	names: item_names;
+	definition: definition_type;
+	source_doc_of_definition: OPTIONAL document;
+	note: OPTIONAL note_type;
+	remark: OPTIONAL remark_type;
+END_ENTITY; -- class_and_property_elements
+
+
+
+
+ENTITY document
+ABSTRACT SUPERTYPE;
+END_ENTITY; -- document
+
+
+
+
+ENTITY class_BSU_relationship
+ABSTRACT SUPERTYPE;
+	relating_class: class;
+	related_tokens: SET [1:?] OF class_related_BSU;
+END_ENTITY; -- class_BSU_relationship
+
+
+
+
+ENTITY class_related_BSU
+ABSTRACT SUPERTYPE
+
+SUBTYPE OF(basic_semantic_unit);
+END_ENTITY; -- class_related_BSU
+
+
+
+
+ENTITY complex_type
+ABSTRACT SUPERTYPE OF (ONEOF (
+                       LEVEL_TYPE,
+                       CLASS_INSTANCE_TYPE,
+                       ENTITY_INSTANCE_TYPE))
+
+SUBTYPE OF(data_type);
+END_ENTITY; -- complex_type
+
+
+
+
+ENTITY graphics
+ABSTRACT SUPERTYPE;
+END_ENTITY; -- graphics
+
+
+
+
+ENTITY supplier_BSU_relationship
+ABSTRACT SUPERTYPE;
+	relating_supplier: supplier_element;
+	related_tokens: SET [1:?] OF supplier_related_BSU;
+END_ENTITY; -- supplier_BSU_relationship
+
+
+
+
+ENTITY supplier_related_BSU
+ABSTRACT SUPERTYPE
+
+SUBTYPE OF(basic_semantic_unit);
+END_ENTITY; -- supplier_related_BSU
+
+
+
+
+ENTITY table_identification
+ABSTRACT SUPERTYPE;
+WHERE
+	WR1: SIZEOF(USEDIN(SELF,
+		'ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA.TABLE_SPECIFICATION'
+		+ '.TABLE_IDENTIFIER'))
+		<= 1;
+	WR2: SIZEOF(USEDIN(SELF,
+		'ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA.TABLE_EXTENSION'
+
+		+ '.TABLE_IDENTIFIER')) <= 1;
+END_ENTITY; -- table_identification
+
+
+
+
+ENTITY external_file_protocol
+ABSTRACT SUPERTYPE OF ((ONEOF (
+                       STANDARD_PROTOCOL,
+                       NON_STANDARD_PROTOCOL))
+                       ANDOR (ONEOF (
+                       PROGRAM_PROTOCOL,
+                       DATA_PROTOCOL)));
+	organisation: organization;
+	country: OPTIONAL identifier;
+	protocol_name: identifier;
+	protocol_version: identifier;
+	level: OPTIONAL identifier;
+	designation: item_names;
+	base_protocol: OPTIONAL program_protocol;
+WHERE
+	WR1: (NOT(SELF.protocol_name LIKE '* *'))
+		AND (NOT(SELF.protocol_name LIKE '*.*'))
+		AND (NOT(SELF.protocol_name LIKE '*-*'));
+	WR2: NOT(SELF.protocol_version LIKE '* *');
+END_ENTITY; -- external_file_protocol
+
+
+
+
+ENTITY program_protocol
+ABSTRACT SUPERTYPE
+
+SUBTYPE OF(external_file_protocol);
+END_ENTITY; -- program_protocol
+
+
+
+
+ENTITY a_posteriori_semantic_relationship
+ABSTRACT SUPERTYPE;
+END_ENTITY; -- a_posteriori_semantic_relationship
+
+
+
+
+ENTITY a_priori_semantic_relationship
+ABSTRACT SUPERTYPE
+
+SUBTYPE OF(class);
+	referenced_classes: SET [1:?] OF class_BSU;
+	referenced_properties: LIST [0:?] OF property_BSU;
+	referenced_data_types: SET [0:?] OF data_type_BSU;
+	referenced_tables: SET[0:?] OF table_BSU;
+	referenced_documents: SET[0:?] OF document_BSU;
+END_ENTITY; -- a_priori_semantic_relationship
+
+
+
+
+ENTITY property_DET
+ABSTRACT SUPERTYPE
+
+SUBTYPE OF(class_and_property_elements);
+	SELF\dictionary_element.identified_by: property_BSU;
+	preferred_symbol: OPTIONAL mathematical_string;
+	synonymous_symbols: SET [0:?] OF mathematical_string;
+	figure: OPTIONAL graphics;
+	det_classification: OPTIONAL DET_classification_type;
+	domain: data_type;
+	formula: OPTIONAL mathematical_string;
+DERIVE
+	describes_classes: SET [0:?] OF class
+		:= identified_by.describes_classes;
+END_ENTITY; -- property_DET
+
+
+
+
+ENTITY data_exchange_specification_identification
+ABSTRACT SUPERTYPE OF (ONEOF (
+                       LIBRARY_IIM_IDENTIFICATION,
+                       VIEW_EXCHANGE_PROTOCOL_IDENTIFICATION));
+	source_document_identifier: OPTIONAL identifier;
+	status: label;
+	name: identifier;
+	date: year_number;
+	application: OPTIONAL identifier;
+	level: OPTIONAL identifier;
+	external_file_protocols: SET [0:?] OF external_file_protocol;
+END_ENTITY; -- data_exchange_specification_identification
+
+
+
+
+ENTITY class_related_dictionary_element
+ABSTRACT SUPERTYPE OF (ONEOF (
+                       DOCUMENT_ELEMENT))
+
+SUBTYPE OF(dictionary_element);
+	SELF\dictionary_element.identified_by: class_related_BSU;
+	names: item_names;
+	definition: definition_type;
+	note: OPTIONAL note_type;
+	remark: OPTIONAL remark_type;
+END_ENTITY; -- class_related_dictionary_element
+
+
+
+
+ENTITY class_BSU_related_content
+ABSTRACT SUPERTYPE OF (
+                       DOCUMENT_CONTENT)
+
+SUBTYPE OF(dictionary_external_item);
+	SELF\content_item.dictionary_definition: class_related_BSU;
+END_ENTITY; -- class_BSU_related_content
+
+
+
+
+ENTITY dictionary_external_item
+ABSTRACT SUPERTYPE OF (ONEOF (
+                       CLASS_BSU_RELATED_CONTENT))
+
+SUBTYPE OF(content_item, external_item);
+	revision: revision_type;
+END_ENTITY; -- dictionary_external_item
+
+
+
+
+ENTITY external_item
+ABSTRACT SUPERTYPE OF (ONEOF (
+                       DICTIONARY_EXTERNAL_ITEM));
+	used_protocol: external_file_protocol;
+	content: external_content;
+END_ENTITY; -- external_item
+
+
+
+
+ENTITY external_content
+ABSTRACT SUPERTYPE OF (ONEOF (
+                       TRANSLATED_EXTERNAL_CONTENT,
+                       NOT_TRANSLATED_EXTERNAL_CONTENT,
+                       NOT_TRANSLATABLE_EXTERNAL_CONTENT));
+	consists_of: LIST[1:?] OF language_specific_content;
+INVERSE
+	content_of: external_item FOR content;
+END_ENTITY; -- external_content
+
+
+
+
+ENTITY data_protocol
+ABSTRACT SUPERTYPE OF (ONEOF (
+                       STANDARD_DATA_PROTOCOL,
+                       NON_STANDARD_DATA_PROTOCOL))
+
+SUBTYPE OF(external_file_protocol);
+END_ENTITY; -- data_protocol
+
+
+
+
+ENTITY non_standard_protocol
+ABSTRACT SUPERTYPE OF (ONEOF (
+                       NON_STANDARD_DATA_PROTOCOL))
+
+SUBTYPE OF(external_file_protocol);
+END_ENTITY; -- non_standard_protocol
+
+
+
+
+ENTITY standard_protocol
+ABSTRACT SUPERTYPE OF (ONEOF (
+                       STANDARD_DATA_PROTOCOL))
+
+SUBTYPE OF(external_file_protocol);
+END_ENTITY; -- standard_protocol
+
+
+
+ENTITY length_measure_with_unit
+  SUBTYPE OF (measure_with_unit);
+WHERE
+  WR1: 'ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA.LENGTH_UNIT' IN TYPEOF (SELF\measure_with_unit.unit_component);
+
+END_ENTITY;
+
+
+FUNCTION string_for_derived_unit(u: derived_unit): STRING;
+
+	FUNCTION string_for_derived_unit_element(
+		u: derived_unit_element; neg_exp: BOOLEAN
+		): STRING;
+
+
+
+	LOCAL
+		result: STRING;
+	END_LOCAL;
+
+	result := string_for_named_unit(u.unit);
+	IF (u.exponent <> 0)
+	THEN
+		IF (u.exponent > 0) OR NOT neg_exp
+		THEN
+			result := result + '**' + FORMAT(
+				ABS(u.exponent), '2I')[2];
+		ELSE
+			result := result + '**' + FORMAT(u.exponent, '2I')[2];
+		END_IF;
+	END_IF;
+		RETURN(result);
+	END_FUNCTION; -- string_for_derived_unit_element
+
+LOCAL
+	pos, neg: SET OF derived_unit_element;
+	us: STRING;
+END_LOCAL;
+
+
+pos := QUERY(ue <* u.elements | ue.exponent > 0);
+neg := QUERY(ue <* u.elements | ue.exponent < 0);
+us := '';
+IF SIZEOF(pos) > 0 THEN
+
+	REPEAT i := LOINDEX(pos) TO HIINDEX(pos);
+		us := us + string_for_derived_unit_element(pos[i], FALSE);
+		IF i <> HIINDEX(pos)
+		THEN
+			us := us + '.';
+		END_IF;
+	END_REPEAT;
+
+	IF SIZEOF(neg) > 0
+	THEN
+
+
+		us := us + '/';
+
+		IF SIZEOF(neg) > 1
+		THEN
+			us := us + '(';
+		END_IF;
+
+		REPEAT i := LOINDEX(neg) TO HIINDEX(neg);
+			us := us + string_for_derived_unit_element(
+				neg[i], FALSE);
+			IF i <> HIINDEX(neg)
+			THEN
+				us := us + '.';
+			END_IF;
+		END_REPEAT;
+
+		IF SIZEOF(neg) > 1
+		THEN
+			us := us + ')';
+		END_IF;
+	END_IF;
+ELSE
+
+	IF SIZEOF(neg) > 0 THEN
+		REPEAT i := LOINDEX(neg) TO HIINDEX(neg);
+			us := us + string_for_derived_unit_element(
+				neg[i], TRUE);
+			IF i <> HIINDEX(neg)
+			THEN
+				us := us + '.';
+			END_IF;
+		END_REPEAT;
+	END_IF;
+END_IF;
+
+RETURN(us);
+
+END_FUNCTION; -- string_for_derived_unit
+
+
+FUNCTION string_for_named_unit(u: named_unit): STRING;
+
+IF 'ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA.SI_UNIT' IN TYPEOF(u) THEN
+	RETURN(string_for_SI_unit(u));
+ELSE
+	IF 'ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA.CONTEXT_DEPENDENT_UNIT' IN TYPEOF(u)
+	THEN
+		RETURN(u\context_dependent_unit.name);
+	ELSE
+		IF 'ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA.CONVERSION_BASED_UNIT' IN TYPEOF(u)
+		THEN
+			RETURN(u\conversion_based_unit.name);
+		ELSE
+			IF 'ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA'
+				+'.NON_SI_UNIT' IN TYPEOF(u)
+			THEN
+				RETURN(u\non_si_unit.name);
+			ELSE
+				RETURN('name_unknown');
+			END_IF;
+		END_IF;
+	END_IF;
+END_IF;
+
+END_FUNCTION; -- string_for_named_unit
+
+
+FUNCTION string_for_SI_unit(unit: si_unit): STRING;
+
+LOCAL
+	prefix_string, unit_string: STRING;
+END_LOCAL;
+
+IF EXISTS(unit.prefix) THEN
+	CASE unit.prefix OF
+		exa		: prefix_string := 'E';
+		peta		: prefix_string := 'P';
+		tera		: prefix_string := 'T';
+		giga		: prefix_string := 'G';
+		mega		: prefix_string := 'M';
+		kilo		: prefix_string := 'k';
+		hecto	: prefix_string := 'h';
+		deca		: prefix_string := 'da';
+		deci		: prefix_string := 'd';
+		centi	: prefix_string := 'c';
+		milli	: prefix_string := 'm';
+		micro	: prefix_string := 'u';
+		nano		: prefix_string := 'n';
+		pico		: prefix_string := 'p';
+		femto	: prefix_string := 'f';
+		atto		: prefix_string := 'a';
+	END_CASE;
+ELSE
+	prefix_string := '';
+END_IF;
+
+CASE unit.name OF
+	metre			: unit_string:= 'm';
+	gram				: unit_string := 'g';
+	second			: unit_string := 's';
+	ampere			: unit_string := 'A';
+	kelvin			: unit_string := 'K';
+	mole				: unit_string := 'mol';
+	candela			: unit_string := 'cd';
+	radian			: unit_string := 'rad';
+	steradian			: unit_string := 'sr';
+	hertz			: unit_string := 'Hz';
+	newton			: unit_string := 'N';
+	pascal			: unit_string := 'Pa';
+	joule			: unit_string := 'J';
+	watt				: unit_string := 'W';
+	coulomb			: unit_string := 'C';
+	volt				: unit_string := 'V';
+	farad			: unit_string := 'F';
+	ohm				: unit_string := 'Ohm';
+	siemens			: unit_string := 'S';
+	weber			: unit_string := 'Wb';
+	tesla			: unit_string := 'T';
+	henry			: unit_string := 'H';
+	degree_Celsius		: unit_string := 'Cel';
+	lumen			: unit_string := 'lm';
+	lux				: unit_string := 'lx';
+	becquerel			: unit_string := 'Bq';
+	gray				: unit_string := 'Gy';
+	sievert			: unit_string := 'Sv';
+END_CASE;
+
+RETURN(prefix_string + unit_string);
+
+END_FUNCTION; -- string_for_SI_unit
+
+
+FUNCTION string_for_unit(u: unit): STRING;
+	IF 'ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA.DERIVED_UNIT' IN TYPEOF(u)
+	THEN
+		RETURN(string_for_derived_unit(u));
+	ELSE
+		RETURN(string_for_named_unit(u));
+	END_IF;
+END_FUNCTION; -- string_for_unit
+
+
+FUNCTION compute_known_visible_properties(cl: class_BSU):
+	SET OF property_BSU;
+LOCAL
+	s: SET OF property_BSU := [];
+END_LOCAL;
+
+s := s + USEDIN(cl, 'ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA' +
+	'.PROPERTY_BSU.NAME_SCOPE');
+IF SIZEOF(cl.definition) = 0
+THEN
+	RETURN(s);
+ELSE
+	IF EXISTS(cl.definition[1]\class.its_superclass) THEN
+		s := s + compute_known_visible_properties(
+			cl.definition[1]\class.its_superclass);
+	END_IF;
+
+	RETURN(s);
+END_IF;
+
+END_FUNCTION; -- compute_known_visible_properties
+
+
+
+
+FUNCTION compute_known_applicable_properties(cl: class_BSU):
+	SET OF property_BSU;
+
+LOCAL
+	s: SET OF property_BSU := [];
+END_LOCAL;
+
+IF SIZEOF(cl.definition)=0
+THEN
+	RETURN(s);
+ELSE
+	REPEAT i := 1 TO SIZEOF(cl.definition[1]\class.described_by);
+		s := s + cl.definition[1]\class.described_by[i];
+	END_REPEAT;
+
+	IF EXISTS(cl.definition[1]\class.its_superclass)
+	THEN
+		s := s + compute_known_applicable_properties(
+			cl.definition[1]\class.its_superclass);
+	END_IF;
+
+	RETURN(s);
+END_IF;
+END_FUNCTION; -- compute_known_applicable_properties
+
+
+
+
+FUNCTION compute_known_applicable_data_types(cl: class_BSU):
+	SET OF data_type_BSU;
+LOCAL
+	s: SET OF data_type_BSU := [];
+END_LOCAL;
+
+IF SIZEOF(cl.definition) = 0
+THEN
+	RETURN(s);
+ELSE
+	REPEAT i := 1 TO SIZEOF(cl.definition[1]\class.defined_types);
+		s := s + cl.definition[1]\class.defined_types[i];
+	END_REPEAT;
+
+	IF EXISTS(cl.definition[1]\class.its_superclass)
+	THEN
+		s := s + compute_known_applicable_data_types(
+			cl.definition[1]\class.its_superclass);
+	END_IF;
+
+	RETURN(s);
+END_IF;
+
+END_FUNCTION; -- compute_known_applicable_data_types
+
+
+
+
+FUNCTION acyclic_superclass_relationship(
+	current: class_BSU; visited: SET OF class): LOGICAL;
+
+IF SIZEOF(current.definition) = 1 THEN
+	IF current.definition[1] IN visited THEN
+		RETURN(FALSE);
+
+	ELSE
+		IF EXISTS(current.definition[1]\class.its_superclass)
+		THEN
+			RETURN(acyclic_superclass_relationship(
+				current.definition[1]\class.its_superclass,
+				visited + current.definition[1]));
+		ELSE
+			RETURN(TRUE);
+		END_IF;
+	END_IF;
+ELSE
+	RETURN(UNKNOWN);
+END_IF;
+END_FUNCTION; -- acyclic_superclass_relationship
+
+
+
+
+FUNCTION all_class_descriptions_reachable(cl: class_BSU): BOOLEAN;
+
+IF NOT EXISTS(cl)
+THEN
+	RETURN(?);
+END_IF;
+
+IF SIZEOF(cl.definition) = 0
+THEN
+	RETURN(FALSE);
+END_IF;
+
+IF NOT(EXISTS(cl.definition[1]\class.its_superclass))
+THEN
+	RETURN(TRUE);
+ELSE
+	RETURN(all_class_descriptions_reachable(
+		cl.definition[1]\class.its_superclass));
+END_IF;
+
+END_FUNCTION; -- all_class_descriptions_reachable
+
+
+
+
+FUNCTION list_to_set(l: LIST [0:?] OF GENERIC:type_elem):
+	SET OF GENERIC: type_elem;
+
+LOCAL
+	s: SET OF GENERIC: type_elem := [];
+END_LOCAL;
+
+REPEAT i := 1 TO SIZEOF(l);
+	s := s + l[i];
+END_REPEAT;
+
+RETURN(s);
+END_FUNCTION; -- list_to_set
+
+
+
+
+FUNCTION check_properties_applicability(cl: class): LOGICAL;
+LOCAL
+	inter: SET OF property_bsu := [];
+END_LOCAL;
+
+IF EXISTS(cl.its_superclass)
+THEN
+	IF (SIZEOF(cl.its_superclass.definition)=1)
+	THEN
+		inter := (list_to_set(cl.described_by) *
+			cl.its_superclass.definition[1]\class.
+			known_applicable_properties);
+		RETURN(inter = []);
+	ELSE
+		RETURN(UNKNOWN);
+	END_IF;
+ELSE
+	RETURN(TRUE);
+END_IF;
+
+END_FUNCTION; -- check_properties_applicability
+
+
+
+
+FUNCTION check_datatypes_applicability(cl: class): LOGICAL;
+LOCAL
+	inter: SET OF data_type_bsu := [];
+END_LOCAL;
+
+IF EXISTS(cl.its_superclass)
+THEN
+	IF (SIZEOF(cl.its_superclass.definition) = 1)
+	THEN
+		inter := cl.defined_types *
+			cl.its_superclass.definition[1]\class.
+			known_applicable_data_types;
+		RETURN(inter = []);
+	ELSE
+		RETURN(UNKNOWN);
+	END_IF;
+ELSE
+	RETURN(TRUE);
+END_IF;
+
+END_FUNCTION; -- check_datatypes_applicability
+
+
+
+
+FUNCTION compute_known_visible_data_types(cl: class_BSU):
+	SET OF data_type_BSU;
+LOCAL
+	s: SET OF data_type_BSU :=[ ];
+END_LOCAL;
+
+s := s + USEDIN(cl, 'ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA' +
+	'.DATA_TYPE_BSU.NAME_SCOPE');
+
+IF SIZEOF(cl.definition) = 0
+THEN
+	RETURN(s);
+ELSE
+	IF EXISTS(cl.definition[1]\class.its_superclass)
+	THEN
+		s := s + compute_known_visible_data_types(
+			cl.definition[1]\class.its_superclass);
+	END_IF;
+
+	RETURN(s);
+END_IF;
+
+END_FUNCTION; -- compute_known_visible_data_types
+
+
+
+
+FUNCTION is_subclass(sub, super: class): LOGICAL;
+	IF (NOT EXISTS(sub)) OR (NOT EXISTS(super)) THEN
+		RETURN(UNKNOWN);
+	END_IF;
+
+	IF sub = super
+	THEN
+		RETURN(TRUE);
+	END_IF;
+
+	IF NOT EXISTS(sub.its_superclass)
+	THEN
+
+		RETURN(FALSE);
+	END_IF;
+
+	IF SIZEOF(sub.its_superclass.definition) = 1
+	THEN
+
+
+		IF (sub.its_superclass.definition[1] = super)
+		THEN
+			RETURN(TRUE);
+		ELSE
+			RETURN(is_subclass(sub.its_superclass.definition[1],
+				super));
+		END_IF;
+	ELSE
+		RETURN(UNKNOWN);
+	END_IF;
+
+END_FUNCTION; -- is_subclass
+
+
+
+
+FUNCTION check_label_length(l: translatable_label;
+	l_length: INTEGER): BOOLEAN;
+
+IF 'ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA.TRANSLATED_LABEL'
+
+	IN TYPEOF(l)
+THEN
+	REPEAT i :=1 TO SIZEOF(l.labels);
+		IF LENGTH(l.labels[i]) > l_length
+		THEN
+			RETURN(FALSE);
+		END_IF;
+	END_REPEAT;
+
+	RETURN(TRUE);
+
+ELSE
+	RETURN(LENGTH(l) <= l_length);
+END_IF;
+END_FUNCTION; -- check_label_length
+
+
+
+
+FUNCTION check_syn_length(s: syn_name_type; s_length: INTEGER):BOOLEAN;
+
+IF 'ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA.LABEL_WITH_LANGUAGE'
+
+	IN TYPEOF(s)
+THEN
+	RETURN(LENGTH(s.l) <= s_length);
+ELSE
+	RETURN(LENGTH(s) <= s_length);
+END_IF;
+END_FUNCTION; -- check_syn_length
+
+
+
+
+FUNCTION codes_are_unique(values: LIST OF dic_value): BOOLEAN;
+LOCAL
+	ls: SET OF STRING := [];
+	li: SET OF INTEGER := [];
+END_LOCAL;
+
+IF('ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA.VALUE_CODE_TYPE' IN
+	TYPEOF(values[1].value_code))
+THEN
+	REPEAT i := 1 TO SIZEOF(values);
+		ls := ls + values[i].value_code;
+	END_REPEAT;
+
+	RETURN(SIZEOF(values) = SIZEOF(ls));
+ELSE
+	IF('ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA.INTEGER_TYPE' IN
+
+		TYPEOF(values[1].value_code))
+	THEN
+		REPEAT i := 1 TO SIZEOF(values);
+			li := li + values[i].value_code;
+		END_REPEAT;
+
+		RETURN(SIZEOF(values) = SIZEOF(li));
+	ELSE
+		RETURN(?);
+	END_IF;
+END_IF;
+
+END_FUNCTION; -- codes_are_unique
+
+
+
+
+FUNCTION visible_documents(cl: class_BSU;
+	doc: AGGREGATE OF document_BSU): LOGICAL;
+
+IF NOT EXISTS(cl)
+THEN
+	RETURN(UNKNOWN);
+END_IF;
+
+REPEAT i := SIZEOF(doc) TO 1 BY -1;
+	IF doc[i].name_scope = cl
+	THEN
+		doc := doc - doc[i];
+	END_IF;
+END_REPEAT;
+
+IF SIZEOF(doc) = 0
+THEN
+	RETURN(TRUE);
+END_IF;
+
+IF SIZEOF(cl.definition) = 0
+THEN
+	RETURN(UNKNOWN);
+END_IF;
+
+IF EXISTS(cl.definition[1]\class.its_superclass)
+THEN
+	RETURN(visible_documents(cl.definition[1]
+		\class.its_superclass, doc));
+ELSE
+	RETURN(FALSE);
+END_IF;
+
+END_FUNCTION; -- visible_documents
+
+
+
+
+FUNCTION prefix_ordered_class_list(classes: LIST[2:?] OF class_BSU):
+	BOOLEAN;
+
+LOCAL
+	related_token: class_related_BSU;	-- items associated with
+		-- a class through a class_BSU_relationship
+END_LOCAL;
+
+REPEAT i := 1 TO SIZEOF(classes);
+
+	IF SIZEOF(classes[i].definition) = 1
+	THEN
+
+		IF (EXISTS(classes[i].definition[1]\class.its_superclass))
+			AND (NOT((classes[i].definition[1]\class.its_superclass)
+			IN (makes_sub_list(classes, 1, i - 1))))
+		THEN
+			RETURN(FALSE);
+		END_IF;
+
+		IF ('ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA'+
+			'.A_PRIORI_SEMANTIC_RELATIONSHIP'
+			IN TYPEOF(classes[i].definition[1]))
+		THEN
+			IF (QUERY(x <* classes[i].definition[1]
+			\a_priori_semantic_relationship.
+			referenced_classes | NOT(x IN makes_sub_list(
+			classes, 1, i - 1))) <> [])
+			THEN
+				RETURN(FALSE);
+			END_IF;
+		END_IF;
+
+		IF NOT(SIZEOF(classes[i].definition[1]\class.described_by)
+			= 0)
+		THEN
+			IF (makes_reference_outside(classes[i].definition[1]
+				\class.described_by, makes_sub_list(
+				classes, 1, i)))
+			THEN
+				RETURN(FALSE);
+			END_IF;
+		END_IF;
+
+		IF ('ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA'+
+			'.A_PRIORI_SEMANTIC_RELATIONSHIP'
+			IN TYPEOF(classes[i].definition[1]))
+		THEN
+			IF makes_reference_outside(classes[i].definition[1]\
+			a_priori_semantic_relationship.referenced_properties,
+			makes_sub_list(classes, 1, i - 1))
+			THEN
+				RETURN(FALSE);
+			END_IF;
+		END_IF;
+
+		IF NOT(SIZEOF(classes[i].definition[1]\class.defined_types)
+			= 0)
+		THEN
+			IF makes_reference_outside(classes[i].definition[1]\
+				class.defined_types, makes_sub_list
+				(classes, 1, i))
+			THEN
+				RETURN(FALSE);
+			END_IF;
+		END_IF;
+
+		IF ('ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA'+
+			'.A_PRIORI_SEMANTIC_RELATIONSHIP'
+			IN TYPEOF(classes[i].definition[1]))
+		THEN
+			IF makes_reference_outside(classes[i].definition[1]\
+			a_priori_semantic_relationship.referenced_data_types,
+			makes_sub_list(classes, 1, i - 1))
+			THEN
+				RETURN(FALSE);
+			END_IF;
+		END_IF;
+
+		IF NOT(SIZEOF(classes[i].definition[1]\
+			class.associated_items) = 0)
+		THEN
+			REPEAT j := 1 TO SIZEOF(classes[i].definition[1]
+			\class.associated_items);
+				REPEAT k := 1 TO SIZEOF(classes[i].definition[1]
+				\class.associated_items[j]
+				\class_BSU_relationship.related_tokens);
+
+					related_token := classes[i].definition[1]
+						\class.associated_items[j]
+						\class_BSU_relationship.related_tokens[k];
+
+					IF (('ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA'+
+						'.TABLE_BSU') IN (TYPEOF(related_token)))
+						AND NOT(related_token\table_BSU.name_scope
+						IN makes_sub_list(classes, 1, i))
+					THEN
+						RETURN(FALSE);
+					END_IF;
+
+					IF (('ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA'+
+						'.DOCUMENT_BSU')
+						IN (TYPEOF(related_token)))
+						AND NOT(related_token\document_BSU
+						.name_scope IN makes_sub_list
+						(classes, 1, i))
+					THEN
+						RETURN(FALSE);
+					END_IF;
+				END_REPEAT;
+			END_REPEAT;
+		END_IF;
+	END_IF;
+END_REPEAT;
+
+RETURN(TRUE);
+END_FUNCTION; -- prefix_ordered_class_list
+
+
+
+
+FUNCTION makes_sub_list(cla: LIST [1:?] OF class_BSU;
+	i, j: INTEGER): LIST [1:?] OF class_BSU;
+
+LOCAL
+	c: LIST [0:?] OF class_BSU := [];
+END_LOCAL;
+
+REPEAT k := i TO j;
+	c := c + cla[k];
+END_REPEAT;
+
+RETURN(c);
+
+END_FUNCTION; -- makes_sub_list
+
+
+
+
+FUNCTION makes_reference_outside (
+	p: AGGREGATE OF property_or_data_type_BSU;
+	l: LIST[1:?] OF class_BSU): BOOLEAN;
+
+LOCAL
+	bool: BOOLEAN := FALSE;
+	temp: SET[0:1] OF class_BSU := [];
+END_LOCAL;
+
+REPEAT j := 1 TO SIZEOF(p);
+	IF ((('ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA.PROPERTY_BSU'
+		IN TYPEOF(p[j]))
+		AND (NOT(p[j]\property_bsu.name_scope IN l)))
+		OR
+		(('ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA.DATA_TYPE_BSU'
+		IN TYPEOF(p[j]))
+		AND (NOT(p[j]\data_type_bsu.name_scope IN l))))
+	THEN
+		bool := TRUE;
+		RETURN(bool);
+	END_IF;
+
+	IF ((('ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA.PROPERTY_BSU'
+		IN TYPEOF(p[j]))
+		AND (NOT(SIZEOF(p[j]\basic_semantic_unit.definition) = 0)))
+		OR
+		(('ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA.DATA_TYPE_BSU'
+		IN TYPEOF(p[j]))
+		AND (NOT(SIZEOF(p[j]\basic_semantic_unit.definition) = 0))))
+	THEN
+		IF ('ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA.CLASS_INSTANCE_TYPE'
+
+			IN data_type_typeof(p[j]))
+		THEN
+			temp := data_type_class_of(p[j]);
+			IF NOT(temp[1] IN l)
+			THEN
+				bool := bool OR TRUE ;
+			ELSE
+				bool := bool OR FALSE;
+			END_IF;
+		END_IF;
+
+		IF SIZEOF(data_type_named_type(p[j])) = 1
+		THEN
+			bool := bool OR makes_reference_outside
+				(data_type_named_type(p[j]), l);
+		END_IF;
+	END_IF;
+END_REPEAT;
+
+RETURN(bool);
+
+END_FUNCTION; -- makes_reference_outside
+
+
+
+
+FUNCTION data_type_typeof(type_spec: property_or_data_type_BSU):
+	SET OF STRING;
+
+LOCAL
+	res: BOOLEAN := FALSE;
+	x: data_type;
+END_LOCAL;
+
+IF NOT EXISTS(type_spec)
+THEN
+	RETURN([]); -- type_spec is indeterminate
+END_IF;
+
+IF ('ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA.PROPERTY_BSU' IN
+	TYPEOF(type_spec))
+THEN
+	IF NOT(SIZEOF(type_spec.definition) = 0)
+	THEN
+		x := type_spec.definition[1]\property_DET.domain;
+		res := TRUE;
+	END_IF;
+ELSE
+	IF NOT(SIZEOF(type_spec.definition) = 0)
+	THEN
+		x := type_spec.definition[1]
+			\data_type_element.type_definition;
+		res := TRUE;
+	END_IF;
+END_IF;
+
+IF NOT(res)
+THEN
+	RETURN([]);
+END_IF;
+
+IF ('ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA.NAMED_TYPE' IN TYPEOF(x))
+
+THEN
+	IF NOT(SIZEOF(x\named_type.referred_type.definition) = 0)
+	THEN
+		RETURN(data_type_typeof(x\named_type.referred_type));
+	ELSE
+		RETURN([]);
+	END_IF;
+ELSE
+	RETURN(TYPEOF(x));
+END_IF;
+
+END_FUNCTION; -- data_type_typeof
+
+
+
+
+FUNCTION data_type_class_of(type_spec: property_or_data_type_BSU):
+	SET[0:1] OF class_BSU;
+
+LOCAL
+	res: BOOLEAN := FALSE;
+	s: SET[0:1] OF class_BSU := [];
+	x: data_type;
+END_LOCAL;
+
+IF NOT EXISTS(type_spec)
+THEN
+	RETURN([]); -- type_spec is indeterminate
+END_IF;
+
+IF ('ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA.PROPERTY_BSU' IN
+	TYPEOF(type_spec))
+THEN
+	IF NOT(SIZEOF(type_spec.definition) = 0)
+	THEN
+		x := type_spec.definition[1]\property_DET.domain;
+		res := TRUE;
+	END_IF;
+ELSE
+	IF NOT(SIZEOF(type_spec.definition) = 0)
+	THEN
+		x := type_spec.definition[1]\data_type_element
+			.type_definition;
+		res := TRUE;
+	END_IF;
+END_IF;
+
+IF res
+THEN
+	IF ('ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA.CLASS_INSTANCE_TYPE' IN
+		TYPEOF(x))
+	THEN
+		s := s + x\class_instance_type.domain;
+		RETURN(s);
+	END_IF;
+
+	IF ('ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA.NAMED_TYPE'
+
+		IN TYPEOF(x))
+	THEN
+		s := data_type_class_of(x\named_type.referred_type);
+		RETURN(s);
+	END_IF;
+END_IF;
+
+RETURN(s);
+
+END_FUNCTION; -- data_type_class_of
+
+
+
+
+FUNCTION data_type_named_type(type_spec: property_or_data_type_BSU):
+	SET[0:1] OF data_type_BSU;
+
+LOCAL
+	res: BOOLEAN := FALSE;
+	s: SET[0:1] OF data_type_BSU := [];
+	x: data_type;
+END_LOCAL;
+
+IF NOT EXISTS(type_spec)
+THEN
+	RETURN([]); -- type_spec is indeterminate
+END_IF;
+
+IF ('ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA.PROPERTY_BSU' IN
+	TYPEOF(type_spec))
+THEN
+	IF NOT(SIZEOF(type_spec.definition) = 0)
+	THEN
+		x := type_spec.definition[1]\property_DET.domain;
+		res := TRUE;
+	END_IF;
+ELSE
+	IF NOT(SIZEOF(type_spec.definition) = 0)
+	THEN
+		x := type_spec.definition[1]\data_type_element
+			.type_definition;
+		res := TRUE;
+	END_IF;
+END_IF;
+
+IF res
+THEN
+	IF ('ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA.NAMED_TYPE'
+
+		IN TYPEOF(x))
+	THEN
+		s := s + x\named_type.referred_type;
+	END_IF;
+END_IF;
+
+RETURN(s);
+
+END_FUNCTION; -- data_type_named_type
+
+
+
+
+FUNCTION ordered_index_value(x: value_domain): BOOLEAN;
+
+REPEAT i := LOBOUND(x.its_values) TO SIZEOF(x.its_values);
+	IF x.its_values[i].value_code <> x.its_values[i-1].value_code + 1
+	THEN
+		RETURN(FALSE);
+	END_IF;
+END_REPEAT;
+
+RETURN(TRUE);
+
+END_FUNCTION; -- ordered_index_value
+
+
+
+
+FUNCTION data_type_non_quantitative_int_type(
+	type_spec: property_or_data_type_BSU):
+	SET [0:1] OF non_quantitative_int_type;
+LOCAL
+	res: BOOLEAN := FALSE;
+	s: SET [0:1] OF non_quantitative_int_type := [];
+	x: data_type;
+END_LOCAL;
+
+IF NOT EXISTS(type_spec)
+THEN
+	RETURN([]); -- type_spec is indeterminate
+END_IF;
+
+IF ('ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA.PROPERTY_BSU' IN
+	TYPEOF(type_spec))
+THEN
+	IF NOT(SIZEOF(type_spec.definition) = 0)
+	THEN
+		x := type_spec.definition[1]\property_DET.domain;
+		res := TRUE;
+	END_IF;
+ELSE
+	IF NOT(SIZEOF(type_spec.definition) = 0)
+	THEN
+		x := type_spec.definition[1]\
+		data_type_element.type_definition;
+		res := TRUE;
+	END_IF;
+END_IF;
+
+IF res
+THEN
+	IF ('ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA'+
+		'.NON_QUANTITATIVE_INT_TYPE') IN TYPEOF(x)
+	THEN
+		s := s + x;
+		RETURN(s);
+	END_IF;
+
+	IF ('ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA.NAMED_TYPE')
+
+		IN TYPEOF(x)
+	THEN
+		s := data_type_non_quantitative_int_type(
+			x\named_type.referred_type);
+		RETURN(s);
+	END_IF;
+END_IF;
+
+RETURN([]);
+
+END_FUNCTION; -- data_type_non_quantitative_int_type
+
+
+
+
+FUNCTION view_control_variables_attributes_belong_to_domain(
+	vcv_range: view_control_variable_range): LOGICAL;
+
+IF (data_type_typeof(vcv_range.parameter_type) <> [])
+THEN
+	RETURN((data_type_non_quantitative_int_type(
+		vcv_range.parameter_type)[1].domain
+		.its_values[1].value_code <= vcv_range.range_lobound)
+		AND (vcv_range.range_hibound <=
+		data_type_non_quantitative_int_type(
+		vcv_range.parameter_type)[1].domain
+		.its_values[HIINDEX(data_type_non_quantitative_int_type(
+		vcv_range.parameter_type)[1].domain.its_values)].value_code)
+	);
+ELSE
+	RETURN(UNKNOWN);
+END_IF;
+
+END_FUNCTION; -- view_control_variables_attributes_belong_to_domain
+
+
+
+FUNCTION valid_units ( m : measure_with_unit ) : BOOLEAN ;
+
+  IF 'ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA.LENGTH_MEASURE' IN TYPEOF ( m.value_component ) THEN
+    IF derive_dimensional_exponents ( m.unit_component ) <>
+       dimensional_exponents ( 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ) THEN
+      RETURN (FALSE);
+    END_IF;
+  END_IF;
+
+  IF 'ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA.MASS_MEASURE' IN TYPEOF ( m.value_component ) THEN
+    IF derive_dimensional_exponents ( m.unit_component ) <>
+       dimensional_exponents ( 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0 ) THEN
+      RETURN (FALSE);
+    END_IF;
+  END_IF;
+
+  IF 'ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA.TIME_MEASURE' IN TYPEOF ( m.value_component ) THEN
+    IF derive_dimensional_exponents ( m.unit_component ) <>
+       dimensional_exponents ( 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0 ) THEN
+      RETURN (FALSE);
+    END_IF;
+  END_IF;
+
+ IF 'ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA.ELECTRIC_CURRENT_MEASURE' IN TYPEOF ( m.value_component ) THEN
+    IF derive_dimensional_exponents ( m.unit_component ) <>
+       dimensional_exponents ( 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0 ) THEN
+      RETURN (FALSE);
+    END_IF;
+  END_IF;
+
+  IF 'ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA.THERMODYNAMIC_TEMPERATURE_MEASURE'
+  IN TYPEOF ( m.value_component ) THEN
+    IF derive_dimensional_exponents ( m.unit_component ) <>
+       dimensional_exponents ( 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0 ) THEN
+      RETURN (FALSE);
+    END_IF;
+  END_IF;
+
+  IF 'ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA.AMOUNT_OF_SUBSTANCE_MEASURE' IN TYPEOF ( m.value_component ) THEN
+    IF derive_dimensional_exponents ( m.unit_component ) <>
+       dimensional_exponents ( 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0 ) THEN
+      RETURN (FALSE);
+    END_IF;
+  END_IF;
+
+  IF 'ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA.LUMINOUS_INTENSITY_MEASURE' IN TYPEOF ( m.value_component ) THEN
+    IF derive_dimensional_exponents ( m.unit_component ) <>
+       dimensional_exponents ( 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0 ) THEN
+      RETURN (FALSE);
+    END_IF;
+  END_IF;
+
+  IF 'ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA.PLANE_ANGLE_MEASURE' IN TYPEOF ( m.value_component ) THEN
+    IF derive_dimensional_exponents ( m.unit_component ) <>
+       dimensional_exponents ( 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ) THEN
+      RETURN (FALSE);
+    END_IF;
+  END_IF;
+
+  IF 'ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA.SOLID_ANGLE_MEASURE' IN TYPEOF ( m.value_component ) THEN
+    IF derive_dimensional_exponents ( m.unit_component ) <>
+       dimensional_exponents ( 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ) THEN
+      RETURN (FALSE);
+    END_IF;
+  END_IF;
+
+  IF 'ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA.AREA_MEASURE' IN TYPEOF ( m.value_component ) THEN
+    IF derive_dimensional_exponents ( m.unit_component ) <>
+       dimensional_exponents ( 2.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ) THEN
+      RETURN (FALSE);
+    END_IF;
+  END_IF;
+
+  IF 'ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA.VOLUME_MEASURE' IN TYPEOF ( m.value_component ) THEN
+    IF derive_dimensional_exponents ( m.unit_component ) <>
+       dimensional_exponents ( 3.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ) THEN
+      RETURN (FALSE);
+    END_IF;
+  END_IF;
+
+  IF 'ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA.RATIO_MEASURE' IN TYPEOF ( m.value_component ) THEN
+    IF derive_dimensional_exponents ( m.unit_component ) <>
+       dimensional_exponents ( 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ) THEN
+      RETURN (FALSE);
+    END_IF;
+  END_IF;
+
+  IF 'ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA.POSITIVE_LENGTH_MEASURE' IN TYPEOF ( m.value_component ) THEN
+    IF derive_dimensional_exponents ( m.unit_component ) <>
+       dimensional_exponents ( 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ) THEN
+      RETURN (FALSE);
+    END_IF;
+  END_IF;
+
+  IF 'ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA.POSITIVE_PLANE_ANGLE_MEASURE' IN TYPEOF ( m.value_component ) THEN
+
+    IF derive_dimensional_exponents ( m.unit_component ) <>
+       dimensional_exponents ( 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ) THEN
+      RETURN (FALSE);
+    END_IF;
+  END_IF;
+
+  RETURN (TRUE);
+
+END_FUNCTION;
+
+
+
+FUNCTION derive_dimensional_exponents (x : unit) : dimensional_exponents;
+
+  LOCAL
+    i      : INTEGER;
+    result : dimensional_exponents :=
+             dimensional_exponents(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+  END_LOCAL;
+
+  IF 'ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA.DERIVED_UNIT' IN TYPEOF(x) THEN -- x is a derived unit
+
+    REPEAT i := LOINDEX(x.elements) TO HIINDEX(x.elements);
+
+      result.length_exponent                    :=
+        result.length_exponent +
+        (x.elements[i].exponent *
+         x.elements[i].unit.dimensions.length_exponent);
+
+      result.mass_exponent                      :=
+        result.mass_exponent +
+        (x.elements[i].exponent *
+         x.elements[i].unit.dimensions.mass_exponent);
+
+     result.time_exponent :=
+        result.time_exponent +
+        (x.elements[i].exponent *
+         x.elements[i].unit.dimensions.time_exponent);
+
+      result.electric_current_exponent          :=
+        result.electric_current_exponent +
+        (x.elements[i].exponent *
+         x.elements[i].unit.dimensions.electric_current_exponent);
+
+      result.thermodynamic_temperature_exponent :=
+        result.thermodynamic_temperature_exponent +
+        (x.elements[i].exponent *
+         x.elements[i].unit.dimensions.thermodynamic_temperature_exponent);
+
+      result.amount_of_substance_exponent       :=
+        result.amount_of_substance_exponent +
+        (x.elements[i].exponent *
+         x.elements[i].unit.dimensions.amount_of_substance_exponent);
+
+      result.luminous_intensity_exponent        :=
+        result.luminous_intensity_exponent +
+        (x.elements[i].exponent *
+         x.elements[i].unit.dimensions.luminous_intensity_exponent);
+
+    END_REPEAT;
+  ELSE -- x is a unitless or a named unit
+    result := x.dimensions;
+  END_IF;
+  RETURN (result);
+END_FUNCTION;
+
+FUNCTION dimensions_for_si_unit (n : si_unit_name) : dimensional_exponents;
+
+  CASE n  OF
+    metre          : RETURN (dimensional_exponents
+                             (1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
+    gram           : RETURN (dimensional_exponents
+                             (0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0));
+    second         : RETURN (dimensional_exponents
+                             (0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0));
+    ampere         : RETURN (dimensional_exponents
+                             (0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0));
+    kelvin         : RETURN (dimensional_exponents
+                             (0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0));
+    mole           : RETURN (dimensional_exponents
+                             (0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0));
+    candela        : RETURN (dimensional_exponents
+                             (0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0));
+    radian         : RETURN (dimensional_exponents
+                             (0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
+    steradian      : RETURN (dimensional_exponents
+                             (0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
+    hertz          : RETURN (dimensional_exponents
+                             (0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0));
+    newton         : RETURN (dimensional_exponents
+                             (1.0, 1.0, -2.0, 0.0, 0.0, 0.0, 0.0));
+    pascal         : RETURN (dimensional_exponents
+                             (-1.0, 1.0, -2.0, 0.0, 0.0, 0.0, 0.0));
+    joule          : RETURN (dimensional_exponents
+                             (2.0, 1.0, -2.0, 0.0, 0.0, 0.0, 0.0));
+    watt           : RETURN (dimensional_exponents
+                             (2.0, 1.0, -3.0, 0.0, 0.0, 0.0, 0.0));
+    coulomb        : RETURN (dimensional_exponents
+                             (0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0));
+    volt           : RETURN (dimensional_exponents
+                             (2.0, 1.0, -3.0, -1.0, 0.0, 0.0, 0.0));
+    farad          : RETURN (dimensional_exponents
+                             (-2.0, -1.0, 4.0, 1.0, 0.0, 0.0, 0.0));
+    ohm            : RETURN (dimensional_exponents
+                             (2.0, 1.0, -3.0, -2.0, 0.0, 0.0, 0.0));
+    siemens        : RETURN (dimensional_exponents
+                             (-2.0, -1.0, 3.0, 2.0, 0.0, 0.0, 0.0));
+    weber          : RETURN (dimensional_exponents
+                             (2.0, 1.0, -2.0, -1.0, 0.0, 0.0, 0.0));
+    tesla          : RETURN (dimensional_exponents
+                             (0.0, 1.0, -2.0, -1.0, 0.0, 0.0, 0.0));
+    henry          : RETURN (dimensional_exponents
+                             (2.0, 1.0, -2.0, -2.0, 0.0, 0.0, 0.0));
+    degree_Celsius : RETURN (dimensional_exponents
+                             (0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0));
+    lumen          : RETURN (dimensional_exponents
+                             (0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0));
+    lux            : RETURN (dimensional_exponents
+                             (-2.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0));
+    becquerel      : RETURN (dimensional_exponents
+                             (0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0));
+    gray           : RETURN (dimensional_exponents
+                             (2.0, 0.0, -2.0, 0.0, 0.0, 0.0, 0.0));
+    sievert        : RETURN (dimensional_exponents
+                             (2.0, 0.0, -2.0, 0.0, 0.0, 0.0, 0.0));
+  END_CASE;
+END_FUNCTION;
+
+
+
+FUNCTION using_representations (item : founded_item_select)
+  : SET OF representation;
+  LOCAL
+    results            : SET OF representation;
+    result_bag         : BAG OF representation;
+    intermediate_items : SET OF founded_item_select;
+  END_LOCAL;
+  -- Find the representations in which the item is used and add to the
+  -- results set.
+  results := [];
+  result_bag :=
+USEDIN(item,'ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA.REPRESENTATION.ITEMS');
+  IF SIZEOF(result_bag) > 0 THEN
+    REPEAT i := 1 TO HIINDEX(result_bag);
+      results := results + result_bag[i];
+    END_REPEAT;
+  END_IF;
+  -- Find all representation_items or founded_items
+  -- by which item is referenced directly or indirectly.
+  intermediate_items := using_items(item,[]);
+  -- If the set of intermediate items is not empty;
+  IF SIZEOF(intermediate_items) > 0 THEN
+    -- For each element in the set, add the
+    -- representations of that element.
+    REPEAT i := 1 TO HIINDEX(intermediate_items);
+      result_bag := USEDIN(intermediate_items[i],
+                    'ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA.REPRESENTATION.ITEMS');
+
+      IF SIZEOF(result_bag) > 0 THEN
+        REPEAT j := 1 TO HIINDEX(result_bag);
+          results := results + result_bag[j];
+        END_REPEAT;
+      END_IF;
+    END_REPEAT;
+  END_IF;
+  -- Return the set of representation in which the input item is
+  -- used directly and indirectly (through intervening
+  -- representation_items or founded items).
+  RETURN (results);
+END_FUNCTION;
+
+
+
+FUNCTION using_items (item : founded_item_select;
+                      checked_items: SET OF founded_item_select)
+                    : SET OF founded_item_select;
+  LOCAL
+    new_check_items    : SET OF founded_item_select;
+    result_items       : SET OF founded_item_select;
+    next_items         : SET OF founded_item_select;
+  END_LOCAL;
+  result_items := [];
+  new_check_items := checked_items + item;
+  -- Find the set of representation_items or founded_items
+  -- in which item is used directly.
+  next_items := QUERY(z <* bag_to_set( USEDIN(item , '')) |
+    ('ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA.REPRESENTATION_ITEM' IN TYPEOF(z)) OR
+    ('ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA.FOUNDED_ITEM'        IN TYPEOF(z)));
+
+  -- If the set of next_items is not empty;
+  IF SIZEOF(next_items) > 0 THEN
+    -- For each element in the set, find the using_items recursively
+    REPEAT i := 1 TO HIINDEX(next_items);
+      -- Check for loop in data model, i.e. one of the next_items
+      -- occurred earlier in the set of check_items;
+      IF NOT(next_items[i] IN new_check_items) THEN
+        result_items := result_items + next_items[i] +
+                        using_items(next_items[i],new_check_items);
+      END_IF;
+    END_REPEAT;
+  END_IF;
+  -- return the set of representation_items or founded_items
+  -- in which the input item is used directly and indirectly.
+  RETURN (result_items);
+END_FUNCTION;
+
+FUNCTION definition_available_implies(
+	BSU: basic_semantic_unit;
+	expression: LOGICAL): LOGICAL;
+
+RETURN(NOT(SIZEOF(BSU.definition) = 1) OR expression);
+
+END_FUNCTION; -- definition_available_implies
+
+
+FUNCTION bag_to_set (the_bag : BAG OF GENERIC : intype) : SET OF GENERIC : intype;
+
+  LOCAL
+    the_set: SET OF GENERIC : intype := [];
+    i      : INTEGER;
+  END_LOCAL;
+
+  IF SIZEOF (the_bag) > 0 THEN
+    REPEAT i := 1 TO HIINDEX (the_bag);
+      the_set := the_set + the_bag [i];
+    END_REPEAT;
+  END_IF;
+
+  RETURN (the_set);
+
+END_FUNCTION;
+
+
+
+
+FUNCTION applicable_documents(cl: class_BSU;
+	doc: AGGREGATE OF document_BSU): LOGICAL;
+
+IF SIZEOF(doc) = 0
+THEN
+	RETURN(TRUE);
+END_IF;
+
+IF NOT EXISTS(cl)
+THEN
+	RETURN(UNKNOWN);
+END_IF;
+
+IF SIZEOF(cl.definition) = 0
+THEN
+	RETURN(UNKNOWN);
+END_IF;
+
+doc := doc - retrieve_documents(cl);
+
+IF 'ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA' +
+	'.A_PRIORI_SEMANTIC_RELATIONSHIP' IN TYPEOF(cl.definition[1])
+THEN
+	Doc := doc - cl.definition[1]\a_priori_semantic_relationship.
+		referenced_documents;
+END_IF;
+
+IF SIZEOF(doc) = 0
+THEN
+	RETURN(TRUE);
+ELSE
+	IF EXISTS(cl.definition[1]\class.its_superclass)
+	THEN
+		RETURN(applicable_documents(cl.definition[1]
+			\class.its_superclass, doc));
+	ELSE
+		RETURN(FALSE);
+	END_IF;
+END_IF;
+
+END_FUNCTION; -- applicable_documents
+
+
+
+
+FUNCTION retrieve_documents(cl: class_BSU): SET[0:?] OF document_BSU;
+-- requires: { SIZEOF(cl.definition) <> O }
+
+LOCAL
+	s: SET[0:?] OF document_BSU := [];
+END_LOCAL;
+
+REPEAT i := 1 TO SIZEOF(cl.definition[1]\class.associated_items);
+	IF 'ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA' +
+		'.CLASS_DOCUMENT_RELATIONSHIP'
+		IN TYPEOF(cl.definition[1]\class.associated_items[i])
+	THEN
+		s := s+ cl.definition[1]\class.associated_items[i]
+			\class_document_relationship.related_tokens;
+	END_IF;
+END_REPEAT;
+
+RETURN(s);
+
+END_FUNCTION; -- retrieve_documents
+
+
+
+FUNCTION visible_properties(cl: class_BSU;
+	prop: AGGREGATE OF property_BSU): LOGICAL;
+
+LOCAL
+	ok: BOOLEAN := TRUE;
+END_LOCAL;
+
+IF NOT EXISTS(cl)
+THEN
+	RETURN(UNKNOWN);
+END_IF;
+
+REPEAT i := 1 TO SIZEOF(prop);
+	IF NOT(prop[i] IN compute_known_visible_properties(cl))
+		THEN ok := FALSE;
+	END_IF;
+END_REPEAT;
+
+IF NOT(ok) AND NOT(all_class_descriptions_reachable(cl))
+	THEN RETURN(UNKNOWN);
+END_IF;
+
+IF NOT(ok) AND all_class_descriptions_reachable(cl)
+	THEN RETURN(FALSE);
+END_IF;
+
+RETURN(TRUE);
+
+END_FUNCTION; -- visible_properties
+
+
+
+FUNCTION visible_types(cl: class_BSU;
+	typ: AGGREGATE OF data_type_BSU): LOGICAL;
+
+LOCAL
+	ok: BOOLEAN := TRUE;
+END_LOCAL;
+
+IF NOT EXISTS(cl)
+THEN
+	RETURN(UNKNOWN);
+END_IF;
+
+REPEAT i := 1 TO SIZEOF(typ);
+IF NOT(typ[i] IN compute_known_visible_data_types(cl))
+	THEN ok := FALSE;
+END_IF;
+END_REPEAT;
+
+IF NOT(ok) AND NOT(all_class_descriptions_reachable(cl))
+	THEN RETURN(UNKNOWN);
+END_IF;
+
+IF NOT(ok) AND all_class_descriptions_reachable(cl)
+	THEN RETURN(FALSE);
+END_IF;
+
+RETURN(TRUE);
+
+END_FUNCTION; -- visible_types
+
+
+
+FUNCTION applicable_types(cl: class_BSU;
+	typ: AGGREGATE OF data_type_BSU): LOGICAL;
+
+IF SIZEOF(typ) = 0
+THEN
+	RETURN(TRUE);
+END_IF;
+
+IF NOT EXISTS(cl)
+THEN
+	RETURN(UNKNOWN);
+END_IF;
+
+IF SIZEOF(cl.definition) = 0
+THEN
+	RETURN(UNKNOWN);
+END_IF;
+
+typ := typ - cl.definition[1]\class.defined_types;
+
+IF ('ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA' +
+	'.A_PRIORI_SEMANTIC_RELATIONSHIP' IN TYPEOF(cl.definition[1]))
+THEN
+	typ := typ -
+		cl.definition[1]\a_priori_semantic_relationship
+		.referenced_data_types;
+END_IF;
+
+IF SIZEOF(typ) = 0
+THEN
+	RETURN(TRUE);
+ELSE
+	IF EXISTS(cl.definition[1]\class.its_superclass)
+	THEN
+		RETURN(applicable_types(cl.definition[1]
+			\class.its_superclass, typ));
+	ELSE
+		RETURN(FALSE);
+	END_IF;
+END_IF;
+
+END_FUNCTION; -- applicable_types
+
+
+
+FUNCTION supplier_associated_http_files(sup_BSU: supplier_BSU):
+	SET OF http_file;
+
+LOCAL
+	sup: supplier_element;
+	files: SET OF http_file := [];
+END_LOCAL;
+
+IF SIZEOF(sup_BSU.definition) > 0
+	THEN sup := sup_BSU.definition[1];
+ELSE
+	RETURN(files);
+END_IF;
+
+REPEAT i := 1 TO SIZEOF(sup.associated_items);
+-- supplier_BSU_relationship
+	REPEAT j := 1 TO SIZEOF(sup.associated_items[i].related_tokens);
+	--supplier_related_BSU
+		REPEAT k := 1 TO SIZEOF(sup.associated_items[i]
+				.related_tokens[j].referenced_by); --content_item
+
+			IF ('ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA.EXTERNAL_ITEM'IN
+				TYPEOF(sup.associated_items[i]
+				.related_tokens[j].referenced_by[k]))
+			THEN
+				REPEAT l := 1 TO SIZEOF(sup.associated_items[i]
+					.related_tokens[j].referenced_by[k]
+					\external_item.content.consists_of);
+					--language_specific_content
+
+					REPEAT m := 1 TO SIZEOF(
+						sup.associated_items[i]
+						.related_tokens[j].referenced_by[k]
+						\external_item.content
+						.consists_of[l].content_files);
+						-- external_file_unit
+						IF
+						('ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA.HTTP_FILE'
+							IN TYPEOF(sup.associated_items[i]
+							.related_tokens[j].referenced_by[k]
+							\external_item.content
+							.consists_of[l].content_files[m]))
+						THEN
+							files := files +
+							sup.associated_items[i]
+							.related_tokens[j].referenced_by[k]
+							\external_item.content
+							.consists_of[l].content_files[m];
+						END_IF; -- http_file
+					END_REPEAT; -- m
+				END_REPEAT; -- l
+			END_IF; -- external_item
+		END_REPEAT; -- k
+	END_REPEAT; -- j
+END_REPEAT; -- i
+
+RETURN(files);
+
+END_FUNCTION; -- supplier_associated_http_files
+
+
+
+RULE single_language_assignment FOR(global_language_assignment);
+WHERE
+	SIZEOF(global_language_assignment) <= 1;
+END_RULE; -- single_language_assignment
+
+
+RULE no_global_language_with_present_translations FOR(
+global_language_assignment, present_translations);
+WHERE
+	WR1: (SIZEOF(global_language_assignment) = 1)
+	XOR (SIZEOF(present_translations) = 1);
+END_RULE;
+
+
+RULE imported_documents_are_visible_or_applicable_rule FOR(
+	a_priori_semantic_relationship, document_element);
+WHERE
+	WR1: QUERY(rel <* a_priori_semantic_relationship
+		| QUERY(doc <* rel.referenced_documents
+		| QUERY(cl <* rel.referenced_classes
+		| NOT visible_documents(cl, [doc])
+		AND NOT applicable_documents(cl, [doc]))
+		= rel.referenced_classes) = [])
+		= a_priori_semantic_relationship;
+END_RULE; -- imported_documents_are_visible_or_applicable_rule
+
+
+
+
+RULE unique_http_directory_name_per_supplier_rule FOR(
+	http_class_directory);
+WHERE
+	WR1: QUERY(dir_1 <* http_class_directory
+		| QUERY(dir_2 <* http_class_directory
+		| (dir_1.name = dir_2.name) AND
+		(dir_1.class.defined_by = dir_2.class.defined_by))
+		<> [dir_1] )
+		= [];
+END_RULE; -- unique_http_directory_name_per_supplier_rule
+
+
+
+RULE http_directory_refers_to_bsu_related_class_rule FOR(
+	http_file, class_bsu_related_content);
+WHERE
+	WR1: QUERY(http_f <* http_file |
+		(('ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA' +
+		'.CLASS_BSU_RELATED_CONTENT'
+		IN TYPEOF(http_f\external_file_unit.unit_of
+		.content_of.content_of))
+		AND (http_f.http_directory.class <> http_f\
+		external_file_unit.unit_of.content_of.content_of
+		\content_item.dictionary_definition.name_scope))) = [];
+END_RULE; -- http_directory_refers_to_bsu_related_class_rule
+
+
+
+RULE assert_ONEOF FOR(named_unit);
+WHERE
+	QUERY(u <* named_unit |
+		('ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA.NON_SI_UNIT'
+		IN TYPEOF(u)) AND
+		('ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA.SI_UNIT' IN TYPEOF(u))
+		OR ('ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA.NON_SI_UNIT'
+		IN TYPEOF(u)) AND
+		('ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA.CONTEXT_DEPENDENT_UNIT' IN TYPEOF(u))
+		OR ('ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA.NON_SI_UNIT'
+		IN TYPEOF(u)) AND
+		('ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA.CONVERSION_BASED_UNIT' IN TYPEOF(u))
+		) = [];
+END_RULE; -- assert_ONEOF
+
+
+
+RULE allowed_named_type_usage_rule FOR(class);
+LOCAL
+	named_type_usage_allowed: LOGICAL := TRUE;
+	is_app: LOGICAL;
+	prop: property_bsu;
+	cl: class;
+	dtnt: SET[0:1] OF data_type_bsu := [];
+END_LOCAL;
+
+REPEAT i := 1 TO SIZEOF(class);
+	cl := class[i];
+	REPEAT j := 1 TO SIZEOF(class[i].described_by);
+		prop := cl.described_by[j];
+		dtnt := data_type_named_type(prop);
+
+		IF (SIZEOF(dtnt) = 1) THEN
+			is_app := applicable_types(cl.identified_by, dtnt);
+			IF (NOT is_app) THEN
+				named_type_usage_allowed := FALSE;
+			END_IF;
+		END_IF;
+	END_REPEAT;
+END_REPEAT;
+
+WHERE
+	WR1: named_type_usage_allowed;
+END_RULE; -- allowed_named_type_usage_rule
+
+
+
+RULE assert_oneof_for_class_rule FOR(class);
+WHERE
+	WR1: QUERY(cl <* class |
+		('ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA.ITEM_CLASS'
+		IN TYPEOF(cl))
+		AND (('ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA'
+		+'.ABSTRACT_FUNCTIONAL_MODEL_CLASS') IN TYPEOF(cl))) = [];
+	WR2: QUERY(cl <* class |
+		('ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA.ITEM_CLASS'
+		IN TYPEOF(cl))
+		AND (('ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA'
+		+ '.FUNCTIONAL_VIEW_CLASS') IN TYPEOF(cl))) = [];
+	WR3: QUERY(cl <* class |
+		(('ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA'
+		+ '.ABSTRACT_FUNCTIONAL_MODEL_CLASS')
+		IN TYPEOF(cl))
+		AND (('ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA'
+		+'.FUNCTIONAL_VIEW_CLASS') IN TYPEOF(cl))) = [];
+END_RULE; -- assert_oneof_for_class_rule
+
+
+
+RULE unique_http_file_name_per_supplier_element_rule FOR(
+	supplier_BSU);
+WHERE
+	WR1: QUERY(sup_BSU <* supplier_BSU | (SIZEOF
+		(sup_BSU.definition) = 1) AND
+		(QUERY(fil_1 <* supplier_associated_http_files(sup_BSU)
+		| QUERY(fil_2 <* supplier_associated_http_files(sup_BSU)
+		| fil_1.http_file_name = fil_2.http_file_name)
+		<> [fil_1] ) <> [] ) )
+		= [];
+END_RULE; -- unique_http_file_name_per_supplier_element_rule
+
+
+
+RULE allowed_reference_to_LIIM_24_3_rule FOR(
+	library_iim_identification);
+WHERE
+	WR1: QUERY(liim_id <* library_iim_identification |
+		((liim_id\data_exchange_specification_identification
+			.status = 'WD')
+			OR
+		(liim_id\data_exchange_specification_identification
+			.status = 'CD')
+			OR
+		(liim_id\data_exchange_specification_identification
+			.status = 'DIS')
+			OR
+		(liim_id\data_exchange_specification_identification
+			.status = 'FDIS')
+			OR
+		(liim_id\data_exchange_specification_identification
+			.status = 'IS')
+			OR
+		(liim_id\data_exchange_specification_identification
+			.status = 'TS')
+			OR
+		(liim_id\data_exchange_specification_identification
+			.status = 'PAS')
+			OR
+		(liim_id\data_exchange_specification_identification
+			.status = 'ITA'))
+		AND
+		(liim_id\data_exchange_specification_identification.name
+		= 'ISO_13584_24_3')
+		AND
+		is_correct_liim_24_3_application_value(liim_id)
+		AND
+		(QUERY(efp <*
+		liim_id\data_exchange_specification_identification
+		.external_file_protocols
+		| NOT(is_extended_liim_24_3_application_value(liim_id))
+		AND
+		NOT(conformant_external_file_protocol_24_3([efp]))
+		) = []))
+	= QUERY(liim_id <* library_iim_identification |
+		(liim_id\data_exchange_specification_identification
+		.name = 'ISO_13584_24_3'));
+END_RULE; -- allowed_reference_to_LIIM_24_3_rule
+
+
+FUNCTION conformant_http_protocol_24_3(
+	ef: external_file_protocol): BOOLEAN;
+
+LOCAL
+	OK: BOOLEAN := TRUE;
+END_LOCAL;
+
+IF (('ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA'
+	+ '.HTTP_PROTOCOL' IN TYPEOF(ef)) AND
+	(ef.organisation.id = 'IAB') AND
+	(ef.organisation.name = 'Internet Architecture Board') AND
+	((ef.protocol_name = 'HTTP')
+		OR (ef.protocol_name = 'HTTPS')) AND
+	(ef.designation.preferred_name = 'Hypertext Transfer Protocol'))
+THEN
+	IF 'ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA.TRANSLATED_LABEL'
+		IN TYPEOF(ef.designation.short_name)
+	THEN
+		REPEAT i:= 1 TO SIZEOF(ef.designation.short_name.labels);
+
+			IF ef.designation.short_name.labels[i]
+				LIKE 'RFC####&'
+			THEN
+				ok := ok AND TRUE;
+			ELSE
+				ok := ok AND FALSE;
+			END_IF;
+		END_REPEAT;
+		RETURN(OK);
+	ELSE
+		IF ef.designation.short_name
+			LIKE 'RFC####&'
+		THEN
+			RETURN(TRUE);
+		ELSE
+			RETURN(FALSE);
+		END_IF;
+	END_IF;
+ELSE
+	RETURN(FALSE);
+END_IF;
+
+END_FUNCTION; -- conformant_http_protocol_24_3
+
+
+FUNCTION conformant_8859_1_protocol_24_3(ef: external_file_protocol)
+						: BOOLEAN;
+
+IF (('ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA'
+	+ '.STANDARD_DATA_PROTOCOL' IN TYPEOF(ef)) AND
+	(ef.organisation.id = 'ISO') AND
+	(ef.organisation.name
+	= 'International Organisation for Standardisation') AND
+	(ef.protocol_name = 'ISO_8859_1') AND
+	(ef.designation.preferred_name
+	= 'Latin alphabet No 1') AND
+	(ef.designation.short_name = 'ISO 8859-1'))
+THEN
+	RETURN(TRUE);
+ELSE
+	RETURN(FALSE);
+END_IF;
+END_FUNCTION; -- conformant_8859_1_protocol_24_3
+
+
+FUNCTION conformant_external_file_protocol_24_3(
+				S: SET [0:?] OF external_file_protocol)
+				: BOOLEAN;
+
+REPEAT i := 1 TO SIZEOF(S);
+	IF NOT(conformant_8859_1_protocol_24_3(S[i])
+			OR conformant_http_protocol_24_3(S[i]))
+	THEN
+		RETURN(FALSE);
+	END_IF;
+END_REPEAT;
+
+RETURN(TRUE);
+
+END_FUNCTION; -- conformant_external_file_protocol_24_3
+
+
+FUNCTION is_correct_liim_24_3_application_value
+			(liim_id: library_iim_identification): BOOLEAN;
+
+IF
+EXISTS(liim_id\data_exchange_specification_identification.application)
+	AND
+	((liim_id\data_exchange_specification_identification
+		.application[1]='1')
+			OR
+	(liim_id\data_exchange_specification_identification
+		.application[1]='2'))
+	AND
+	((liim_id\data_exchange_specification_identification.application
+		LIKE '#')
+			OR
+	(liim_id\data_exchange_specification_identification.application
+		LIKE '#E'))
+THEN
+	RETURN(TRUE);
+ELSE
+	RETURN(FALSE);
+END_IF;
+
+END_FUNCTION; -- is_correct_liim_24_3_application_value
+
+
+FUNCTION is_extended_liim_24_3_application_value
+			(liim_id: library_iim_identification): BOOLEAN;
+
+IF EXISTS(liim_id\data_exchange_specification_identification
+	.application)
+	AND
+	(liim_id\data_exchange_specification_identification
+		.application LIKE '#E')
+THEN
+	RETURN(TRUE);
+ELSE
+	RETURN(FALSE);
+END_IF;
+END_FUNCTION; -- is_extended_liim_24_3_application_value
+
+RULE class_associated_items_rule FOR(class);
+WHERE
+	WR1: QUERY(temp <* class | (SIZEOF(temp.associated_items) > 2)
+		OR ((SIZEOF(temp.associated_items) = 1)
+		AND NOT(('ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA'
+		+'.CLASS_TABLE_RELATIONSHIP' IN
+		TYPEOF(temp.associated_items[1]))
+		OR ('ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA'
+		+'.CLASS_DOCUMENT_RELATIONSHIP'
+		IN TYPEOF(temp.associated_items[1]))))
+		OR ((SIZEOF(temp.associated_items) = 2)
+		AND NOT((('ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA'
+		+ '.CLASS_TABLE_RELATIONSHIP'
+		IN TYPEOF(temp.associated_items[1]))
+		AND ('ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA'
+		+'.CLASS_DOCUMENT_RELATIONSHIP'
+		IN TYPEOF(temp.associated_items[2])))
+		OR (('ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA'
+		+'.CLASS_TABLE_RELATIONSHIP'
+		IN TYPEOF(temp.associated_items[2]))
+		AND ('ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA'
+		+ '.CLASS_DOCUMENT_RELATIONSHIP'
+		IN TYPEOF(temp.associated_items[1]))))))
+		= [];
+END_RULE; -- class_associated_items_rule
+
+
+RULE exactly_one_dictionary_rule FOR(dictionary);
+WHERE
+	WR1: SIZEOF(dictionary) = 1;
+END_RULE; -- exactly_one_library_rule
+
+END_SCHEMA; -- ISO13584_f_v_iim_library_implicit_schema
+
+
+
+

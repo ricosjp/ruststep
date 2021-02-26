@@ -1,0 +1,40 @@
+(*
+  $Id: 10303-1047-arm-activity.exp,v 1.4 2006/08/07 07:44:42 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2941 - ISO/TS 10303-1047 Activity - EXPRESS ARM
+*)
+
+SCHEMA Activity_arm; 
+
+USE FROM Activity_method_arm;    -- ISO/TS 10303-1049
+
+
+TYPE activity_item = EXTENSIBLE GENERIC_ENTITY SELECT;
+END_TYPE; 
+
+ENTITY Activity;
+  id : STRING;
+  name : STRING;
+  description : OPTIONAL STRING;
+  chosen_method : Activity_method;
+END_ENTITY;
+
+ENTITY Activity_relationship;
+  name : STRING;
+  description : OPTIONAL STRING;
+  relating_activity : Activity;
+  related_activity : Activity;
+END_ENTITY;
+
+ENTITY Activity_status;
+  assigned_activity : Activity;
+  status : STRING;
+END_ENTITY;
+
+ENTITY Applied_activity_assignment;
+  assigned_activity : Activity;
+  items : SET[1:?] OF activity_item;
+  role : STRING;
+END_ENTITY;
+
+END_SCHEMA;  -- Activity_arm
+

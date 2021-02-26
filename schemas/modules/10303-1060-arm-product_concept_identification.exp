@@ -1,0 +1,25 @@
+(*
+ $Id: 10303-1060-arm-product_concept_identification.exp,v 1.5 2006/08/07 07:44:43 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N1177 - ISO/TS 10303-1060 Product concept identification - EXPRESS ARM
+*)
+   
+SCHEMA Product_concept_identification_arm;
+   
+ENTITY Market;
+  name                      : STRING;
+  market_segment_type       : OPTIONAL STRING;
+END_ENTITY;
+
+   
+ENTITY Product_concept;
+  id                        : STRING;
+  name                      : STRING;
+  description               : OPTIONAL STRING;
+  target_market             : OPTIONAL Market;
+UNIQUE
+  UR1: id;
+END_ENTITY;
+
+   
+END_SCHEMA;
+

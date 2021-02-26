@@ -1,0 +1,12 @@
+(*
+ $Id: 10303-1206-mim-draughting_annotation.exp,v 1.1 2006/08/04 12:11:55 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2775 - ISO/TS 10303-1206 Draughting annotation - EXPRESS MIM
+ Supersedes ISO TC184/SC4/WG12 N2199
+*)
+
+SCHEMA Draughting_annotation_mim;
+
+USE FROM Foundation_representation_mim;    --  ISO/TS 10303-1006
+USE FROM aic_draughting_annotation;    --  ISO 10303-504
+
+END_SCHEMA;

@@ -1,0 +1,625 @@
+(*
+ $Id: 10303-1292-arm-ap239_product_definition_information.exp,v 1.2 2006/08/07 07:44:46 wg12deputy Exp $
+ ISO TC184/SC4/WG3 N1555 - ISO/TS 10303-1292 AP239 product definition information - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG3 N1390
+*) 
+
+SCHEMA Ap239_product_definition_information_arm;
+
+USE FROM Alias_identification_arm;    -- ISO/TS 10303-1025
+
+USE FROM Ap239_part_definition_information_arm;    -- ISO/TS 10303-1293
+
+USE FROM Approval_arm;    -- ISO/TS 10303-1012
+
+USE FROM Assembly_structure_arm;    -- ISO/TS 10303-1026
+
+USE FROM Attachment_slot_arm;    -- ISO/TS 10303-1250
+
+USE FROM Attribute_classification_arm;    -- ISO/TS 10303-1246
+
+USE FROM Certification_arm;    -- ISO/TS 10303-1044
+
+USE FROM Classification_assignment_arm;    -- ISO/TS 10303-1114
+
+USE FROM Condition_arm;    -- ISO/TS 10303-1253
+
+USE FROM Condition_evaluation_arm;    -- ISO/TS 10303-1254
+
+USE FROM Configuration_effectivity_arm;    -- ISO/TS 10303-1058
+
+USE FROM Configuration_item_arm;    -- ISO/TS 10303-1056
+
+USE FROM Contract_arm;    -- ISO/TS 10303-1062
+
+USE FROM Date_time_assignment_arm;    -- ISO/TS 10303-1014
+
+USE FROM Document_and_version_identification_arm;    -- ISO/TS 10303-1121
+
+USE FROM Document_assignment_arm;    -- ISO/TS 10303-1122
+
+USE FROM Document_definition_arm;    -- ISO/TS 10303-1123
+
+USE FROM Document_structure_arm;    -- ISO/TS 10303-1124
+
+USE FROM Effectivity_application_arm;    -- ISO/TS 10303-1059
+
+USE FROM Effectivity_arm;    -- ISO/TS 10303-1057
+
+USE FROM File_identification_arm;    -- ISO/TS 10303-1127
+
+USE FROM Functional_breakdown_arm;    -- ISO/TS 10303-1216
+
+USE FROM Hybrid_breakdown_arm;    -- ISO/TS 10303-1218
+
+USE FROM Identification_assignment_arm;    -- ISO/TS 10303-1021
+
+USE FROM Information_rights_arm;    -- ISO/TS 10303-1241
+
+USE FROM Interface_arm;    -- ISO/TS 10303-1251
+
+USE FROM Interface_lifecycle_arm;    -- ISO/TS 10303-1294
+
+USE FROM Multi_linguism_arm;    -- ISO/TS 10303-1105
+
+USE FROM Part_and_version_identification_arm;    -- ISO/TS 10303-1022
+
+USE FROM Part_definition_relationship_arm;    -- ISO/TS 10303-1055
+
+USE FROM Part_view_definition_arm;    -- ISO/TS 10303-1023
+
+USE FROM Person_organization_arm;    -- ISO/TS 10303-1011
+
+USE FROM Person_organization_assignment_arm;    -- ISO/TS 10303-1013
+
+USE FROM Physical_breakdown_arm;    -- ISO/TS 10303-1215
+
+USE FROM Product_as_individual_arm;    -- ISO/TS 10303-1164
+
+USE FROM Product_breakdown_arm;    -- ISO/TS 10303-1248
+
+USE FROM Product_concept_identification_arm;    -- ISO/TS 10303-1060
+
+USE FROM Product_identification_arm;    -- ISO/TS 10303-1017
+
+USE FROM Product_relationship_arm;    -- ISO/TS 10303-1024
+
+USE FROM Product_replacement_arm;    -- ISO/TS 10303-1046
+
+USE FROM Product_structure_arm;    -- ISO/TS 10303-1134
+
+USE FROM Product_version_arm;    -- ISO/TS 10303-1018
+
+USE FROM Product_version_relationship_arm;    -- ISO/TS 10303-1020
+
+USE FROM Product_view_definition_arm;    -- ISO/TS 10303-1019
+
+USE FROM Product_view_definition_relationship_arm;    -- ISO/TS 10303-1041
+
+USE FROM Project_arm;    -- ISO/TS 10303-1061
+
+USE FROM Property_assignment_arm;    -- ISO/TS 10303-1030
+
+USE FROM Requirement_assignment_arm;    -- ISO/TS 10303-1233
+
+USE FROM Requirement_identification_and_version_arm;    -- ISO/TS 10303-1140
+
+USE FROM Requirement_view_definition_arm;    -- ISO/TS 10303-1141
+
+USE FROM Requirement_view_definition_relationship_arm;    -- ISO/TS 10303-1142
+
+USE FROM Security_classification_arm;    -- ISO/TS 10303-1015
+
+USE FROM Selected_item_arm;    -- ISO/TS 10303-1357
+
+USE FROM Shape_property_assignment_arm;    -- ISO/TS 10303-1032
+
+USE FROM State_definition_arm;    -- ISO/TS 10303-1255
+
+USE FROM State_observed_arm;    -- ISO/TS 10303-1256
+
+USE FROM System_breakdown_arm;    -- ISO/TS 10303-1214
+
+USE FROM Zonal_breakdown_arm;    -- ISO/TS 10303-1217
+
+
+TYPE ap239_prdi_alias_identification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON alias_identification_item WITH 
+   (Attachment_slot, 
+    Attachment_slot_definition, 
+    Attachment_slot_version, 
+    Breakdown, 
+    Breakdown_element, 
+    Breakdown_element_definition, 
+    Breakdown_element_version, 
+    Breakdown_version, 
+    Item_shape, 
+    Product_configuration, 
+    Product_relationship, 
+    Shape_element_relationship, 
+    View_definition_relationship);
+END_TYPE; 
+
+TYPE ap239_prdi_approval_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON approval_item WITH 
+   (Alternate_part_relationship, 
+    Assembly_component_relationship, 
+    Assembly_relationship_substitution, 
+    Attachment_slot_as_planned, 
+    Attachment_slot_as_realized, 
+    Attachment_slot_design, 
+    Attachment_slot_design_to_planned, 
+    Attachment_slot_design_to_realized, 
+    Attachment_slot_on_product, 
+    Attachment_slot_planned_to_realized, 
+    Breakdown, 
+    Breakdown_element, 
+    Breakdown_element_definition, 
+    Breakdown_element_realization, 
+    Breakdown_element_usage, 
+    Breakdown_element_version, 
+    Breakdown_version, 
+    Effectivity, 
+    In_zone, 
+    Product_configuration, 
+    Product_definition_element_relationship, 
+    Product_in_attachment_slot, 
+    Product_relationship, 
+    Selected_item_assignment);
+END_TYPE; 
+
+TYPE ap239_prdi_certification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON certification_item WITH 
+   (Breakdown, 
+    Product_configuration, 
+    View_definition_relationship);
+END_TYPE; 
+
+TYPE ap239_prdi_classification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON classification_item WITH 
+   (Alternate_part_relationship, 
+    Assembly_relationship_substitution, 
+    Attachment_slot_design_to_planned, 
+    Attachment_slot_design_to_realized, 
+    Attachment_slot_on_product, 
+    Attachment_slot_planned_to_realized, 
+    Breakdown, 
+    Breakdown_context, 
+    Breakdown_element, 
+    Breakdown_element_realization, 
+    Breakdown_element_usage, 
+    Breakdown_element_version, 
+    Breakdown_of, 
+    Characterizable_object, 
+    In_zone, 
+    Item_design_association, 
+    Item_shape, 
+    Item_usage_effectivity, 
+    Product_configuration, 
+    Product_relationship, 
+    Selected_item, 
+    Selected_item_assignment, 
+    View_definition_relationship);
+END_TYPE; 
+
+TYPE ap239_prdi_classified_attribute_select = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON classified_attribute_select WITH 
+   (Alternate_part_relationship, 
+    Breakdown_context, 
+    Breakdown_element_realization, 
+    Breakdown_element_usage, 
+    Product_relationship);
+END_TYPE; 
+
+TYPE ap239_prdi_condition_evaluation_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON condition_evaluation_item WITH 
+   (Product_definition_element_relationship, 
+    View_definition_relationship);
+END_TYPE; 
+
+TYPE ap239_prdi_condition_evaluation_parameter_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON condition_evaluation_parameter_item WITH 
+   (Product_definition_element_relationship, 
+    View_definition_relationship);
+END_TYPE; 
+
+TYPE ap239_prdi_condition_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON condition_item WITH 
+   (Product_definition_element_relationship, 
+    View_definition_relationship);
+END_TYPE; 
+
+TYPE ap239_prdi_condition_parameter_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON condition_parameter_item WITH 
+   (Product_definition_element_relationship, 
+    View_definition_relationship);
+END_TYPE; 
+
+TYPE ap239_prdi_contract_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON contract_item WITH 
+   (Breakdown, 
+    Breakdown_element, 
+    Breakdown_version, 
+    Product_configuration);
+END_TYPE; 
+
+TYPE ap239_prdi_date_or_date_time_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON date_or_date_time_item WITH 
+   (Alternate_part_relationship, 
+    Assembly_component_relationship, 
+    Assembly_relationship_substitution, 
+    Attachment_slot, 
+    Attachment_slot_definition, 
+    Attachment_slot_design_to_planned, 
+    Attachment_slot_design_to_realized, 
+    Attachment_slot_planned_to_realized, 
+    Attachment_slot_version, 
+    Breakdown, 
+    Breakdown_element, 
+    Breakdown_element_realization, 
+    Breakdown_element_usage, 
+    Breakdown_version, 
+    Product_configuration, 
+    Product_in_attachment_slot, 
+    Product_relationship, 
+    Selected_item, 
+    Selected_item_assignment);
+END_TYPE; 
+
+TYPE ap239_prdi_documented_element_select = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON documented_element_select WITH 
+   (Alternate_part_relationship, 
+    Assembly_component_relationship, 
+    Assembly_relationship_substitution, 
+    Attachment_slot, 
+    Attachment_slot_design_to_planned, 
+    Attachment_slot_design_to_realized, 
+    Attachment_slot_planned_to_realized, 
+    Attachment_slot_version, 
+    Breakdown, 
+    Breakdown_context, 
+    Breakdown_element, 
+    Breakdown_element_realization, 
+    Breakdown_element_usage, 
+    Breakdown_version, 
+    Product_configuration, 
+    Product_relationship, 
+    Selected_item, 
+    Shape_element, 
+    Shape_element_relationship, 
+    View_definition_relationship);
+END_TYPE; 
+
+TYPE ap239_prdi_effectivity_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON effectivity_item WITH 
+   (Address_assignment, 
+    Alternate_part_relationship, 
+    Applied_information_usage_right, 
+    Assembly_component_relationship, 
+    Assembly_relationship_substitution, 
+    Assigned_property, 
+    Attachment_slot, 
+    Attachment_slot_as_planned, 
+    Attachment_slot_as_realized, 
+    Attachment_slot_definition, 
+    Attachment_slot_design, 
+    Attachment_slot_design_to_planned, 
+    Attachment_slot_design_to_realized, 
+    Attachment_slot_on_product, 
+    Attachment_slot_planned_to_realized, 
+    Attachment_slot_version, 
+    Breakdown, 
+    Breakdown_element, 
+    Breakdown_element_definition, 
+    Breakdown_element_realization, 
+    Breakdown_element_usage, 
+    Breakdown_element_version, 
+    Breakdown_of, 
+    Breakdown_version, 
+    Certification_assignment, 
+    Contract_assignment, 
+    Document, 
+    Document_assignment, 
+    Document_definition, 
+    Document_definition_relationship, 
+    Document_location_identification, 
+    Document_version, 
+    File, 
+    File_relationship, 
+    Identification_assignment, 
+    Interface_connection, 
+    Interface_connector_design_to_planned, 
+    Interface_connector_design_to_realized, 
+    Interface_connector_planned_to_realized, 
+    Make_from_relationship, 
+    Part, 
+    Part_version, 
+    Part_view_definition, 
+    Product_as_individual, 
+    Product_as_individual_version, 
+    Product_as_individual_view, 
+    Product_configuration, 
+    Product_design_to_individual, 
+    Product_in_attachment_slot, 
+    Product_planned_to_realized, 
+    Product_relationship, 
+    Product_version_relationship, 
+    Project_assignment, 
+    Requirement, 
+    Requirement_assignment, 
+    Requirement_collection_relationship, 
+    Requirement_source, 
+    Requirement_version, 
+    Requirement_version_relationship, 
+    Requirement_view_definition, 
+    Security_classification_assignment, 
+    Selected_item_assignment);
+END_TYPE; 
+
+TYPE ap239_prdi_identification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON identification_item WITH 
+   (Attachment_slot, 
+    Attachment_slot_definition, 
+    Attachment_slot_version, 
+    Breakdown, 
+    Breakdown_element, 
+    Breakdown_element_definition, 
+    Breakdown_element_version, 
+    Breakdown_version, 
+    Item_shape, 
+    Product_configuration, 
+    Product_relationship, 
+    Shape_element_relationship, 
+    View_definition_relationship);
+END_TYPE; 
+
+TYPE ap239_prdi_in_zone_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON in_zone_item WITH 
+   (Hierarchical_interface_connection, 
+    Interface_connection, 
+    Interface_connector_occurrence, 
+    Interface_definition_connection);
+END_TYPE; 
+
+TYPE ap239_prdi_information_usage_right_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON information_usage_right_item WITH 
+   (Alternate_part_relationship, 
+    Applied_information_usage_right, 
+    Assembly_component_relationship, 
+    Assembly_relationship_substitution, 
+    Attachment_slot_definition, 
+    Attachment_slot_design_to_planned, 
+    Attachment_slot_design_to_realized, 
+    Attachment_slot_on_product, 
+    Attachment_slot_version, 
+    Breakdown, 
+    Breakdown_element, 
+    Breakdown_element_realization, 
+    Breakdown_element_usage, 
+    Breakdown_version, 
+    Product_configuration);
+END_TYPE; 
+
+TYPE ap239_prdi_organization_or_person_in_organization_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON organization_or_person_in_organization_item WITH 
+   (Alternate_part_relationship, 
+    Approval, 
+    Assembly_component_relationship, 
+    Assembly_relationship_substitution, 
+    Breakdown, 
+    Breakdown_element, 
+    Breakdown_element_realization, 
+    Breakdown_element_usage, 
+    Breakdown_version, 
+    Product_configuration, 
+    Product_relationship, 
+    Selected_item, 
+    Selected_item_assignment);
+END_TYPE; 
+
+TYPE ap239_prdi_product_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON product_item WITH 
+   (Interface_connector_occurrence);
+END_TYPE; 
+
+TYPE ap239_prdi_project_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON project_item WITH 
+   (Breakdown, 
+    Product_configuration);
+END_TYPE; 
+
+TYPE ap239_prdi_requirement_assignment_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON requirement_assignment_item WITH 
+   (Alternate_part_relationship, 
+    Assembly_component_relationship, 
+    Assembly_relationship_substitution, 
+    Attachment_slot, 
+    Attachment_slot_version, 
+    Breakdown, 
+    Breakdown_element, 
+    Breakdown_element_realization, 
+    Breakdown_element_usage, 
+    Breakdown_element_version, 
+    Breakdown_version, 
+    Product_configuration, 
+    Product_in_attachment_slot);
+END_TYPE; 
+
+TYPE ap239_prdi_security_classification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON security_classification_item WITH 
+   (Alternate_part_relationship, 
+    Assembly_component_relationship, 
+    Assembly_relationship_substitution, 
+    Attachment_slot_design_to_planned, 
+    Attachment_slot_design_to_realized, 
+    Attachment_slot_on_product, 
+    Attachment_slot_planned_to_realized, 
+    Attachment_slot_version, 
+    Breakdown, 
+    Breakdown_element_definition, 
+    Breakdown_element_realization, 
+    Breakdown_element_usage, 
+    Breakdown_element_version, 
+    Product_configuration, 
+    Product_relationship);
+END_TYPE; 
+
+TYPE ap239_prdi_selected_item_context_items = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON selected_item_context_items WITH 
+   (Breakdown, 
+    Contract, 
+    Part, 
+    Part_version, 
+    Product_as_individual, 
+    Product_as_individual_version, 
+    Product_concept, 
+    Product_configuration, 
+    Project);
+END_TYPE; 
+
+TYPE ap239_prdi_selected_item_select = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON selected_item_select WITH 
+   (Interface_connection, 
+    Interface_connector_definition, 
+    Interface_connector_occurrence, 
+    Interface_definition_connection, 
+    Product, 
+    Product_version);
+END_TYPE; 
+
+TYPE ap239_prdi_state_definition_of_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON state_definition_of_item WITH 
+   (Alternate_part_relationship, 
+    Assembly_component_relationship, 
+    Assembly_relationship_substitution, 
+    Attachment_slot, 
+    Attachment_slot_definition, 
+    Attachment_slot_design_to_planned, 
+    Attachment_slot_design_to_realized, 
+    Attachment_slot_on_product, 
+    Attachment_slot_planned_to_realized, 
+    Attachment_slot_version, 
+    Breakdown, 
+    Breakdown_element, 
+    Breakdown_element_definition, 
+    Breakdown_element_realization, 
+    Breakdown_element_usage, 
+    Breakdown_element_version, 
+    Product_configuration, 
+    Product_in_attachment_slot);
+END_TYPE; 
+
+TYPE ap239_prdi_state_of_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON state_of_item WITH 
+   (Alternate_part_relationship, 
+    Assembly_component_relationship, 
+    Assembly_relationship_substitution, 
+    Attachment_slot, 
+    Attachment_slot_definition, 
+    Attachment_slot_design_to_planned, 
+    Attachment_slot_design_to_realized, 
+    Attachment_slot_on_product, 
+    Attachment_slot_planned_to_realized, 
+    Attachment_slot_version, 
+    Breakdown, 
+    Breakdown_element, 
+    Breakdown_element_definition, 
+    Breakdown_element_realization, 
+    Breakdown_element_usage, 
+    Breakdown_element_version, 
+    Product_configuration, 
+    Product_in_attachment_slot);
+END_TYPE; 
+
+TYPE ap239_prdi_string_select = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON string_select WITH 
+   (Alternate_part_relationship, 
+    Assembly_component_relationship, 
+    Assembly_relationship_substitution, 
+    Attachment_slot, 
+    Attachment_slot_definition, 
+    Attachment_slot_design_to_planned, 
+    Attachment_slot_design_to_realized, 
+    Attachment_slot_on_product, 
+    Attachment_slot_planned_to_realized, 
+    Attachment_slot_version, 
+    Breakdown, 
+    Breakdown_element, 
+    Breakdown_element_realization, 
+    Breakdown_element_usage, 
+    Breakdown_element_version, 
+    Product_configuration, 
+    Product_relationship);
+END_TYPE; 
+
+SUBTYPE_CONSTRAINT ap239_prdi_restrict_breakdown_context_subtypes FOR Breakdown_context;
+  ONEOF (Functional_breakdown_context,
+         Hybrid_breakdown_context,
+         Physical_breakdown_context,
+         System_breakdown_context,
+         Zone_breakdown_context);
+END_SUBTYPE_CONSTRAINT;
+
+SUBTYPE_CONSTRAINT ap239_prdi_restrict_breakdown_element_definition_subtypes FOR Breakdown_element_definition;
+  ONEOF (Functional_element_definition,
+         Physical_element_definition,
+         System_element_definition,
+         Zone_element_definition);
+END_SUBTYPE_CONSTRAINT;
+
+SUBTYPE_CONSTRAINT ap239_prdi_restrict_breakdown_element_subtypes FOR Breakdown_element;
+  ONEOF (Functional_element,
+         Physical_element,
+         System_element,
+         Zone_element);
+END_SUBTYPE_CONSTRAINT;
+
+SUBTYPE_CONSTRAINT ap239_prdi_restrict_breakdown_element_usage_subtypes FOR Breakdown_element_usage;
+  ONEOF (Functional_element_usage,
+         Hybrid_element_usage,
+         Physical_element_usage,
+         System_element_usage,
+         Zone_element_usage);
+END_SUBTYPE_CONSTRAINT;
+
+SUBTYPE_CONSTRAINT ap239_prdi_restrict_breakdown_element_version_subtypes FOR Breakdown_element_version;
+  ONEOF (Functional_element_version,
+         Physical_element_version,
+         System_element_version,
+         Zone_element_version);
+END_SUBTYPE_CONSTRAINT;
+
+SUBTYPE_CONSTRAINT ap239_prdi_restrict_breakdown_subtypes FOR Breakdown;
+  ONEOF (Functional_breakdown,
+         Hybrid_breakdown,
+         Physical_breakdown,
+         System_breakdown,
+         Zone_breakdown);
+END_SUBTYPE_CONSTRAINT;
+
+SUBTYPE_CONSTRAINT ap239_prdi_restrict_breakdown_version_subtypes FOR Breakdown_version;
+  ONEOF (Functional_breakdown_version,
+         Hybrid_breakdown_version,
+         Physical_breakdown_version,
+         System_breakdown_version,
+         Zone_breakdown_version);
+END_SUBTYPE_CONSTRAINT;
+
+SUBTYPE_CONSTRAINT ap239_prdi_restrict_product_subtypes FOR Product;
+  ABSTRACT SUPERTYPE;
+  ONEOF (Attachment_slot,
+         Breakdown,
+         Breakdown_element,
+         Document,
+         Interface_connector,
+         Interface_specification,
+         Part,
+         Product_as_individual,
+         Requirement);
+END_SUBTYPE_CONSTRAINT;
+
+SUBTYPE_CONSTRAINT ap239_prdi_restrict_product_version_subtype FOR Product_version;
+  ABSTRACT SUPERTYPE;
+  ONEOF (Attachment_slot_version,
+         Breakdown_element_version,
+         Breakdown_version,
+         Document_version,
+         Interface_connector_version,
+         Interface_specification_version,
+         Part_version,
+         Product_as_individual_version,
+         Requirement_version);
+END_SUBTYPE_CONSTRAINT;
+
+SUBTYPE_CONSTRAINT ap239_prdi_restrict_product_view_definition_subtypes FOR Product_view_definition;
+  ONEOF (Attachment_slot_definition,
+         Breakdown_element_definition,
+         Interface_connector_definition,
+         Interface_specification_definition,
+         Part_view_definition,
+         Product_as_individual_view,
+         Requirement_view_definition);
+END_SUBTYPE_CONSTRAINT;
+
+SUBTYPE_CONSTRAINT ap239_prdi_restrict_view_definition_relationship_subtypes FOR View_definition_relationship;
+  ABSTRACT SUPERTYPE;
+  ONEOF (Requirement_collection_relationship,
+         Tracing_relationship,
+         View_definition_usage);
+END_SUBTYPE_CONSTRAINT;
+
+END_SCHEMA;  -- Ap239_product_definition_information_arm

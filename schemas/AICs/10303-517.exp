@@ -1,0 +1,411 @@
+--this is wg12n968
+SCHEMA aic_mechanical_design_geometric_presentation;
+
+    USE FROM geometry_schema                          -- ISO 10303-42
+     (axis2_placement_2d,
+      axis2_placement_3d); 
+
+    USE FROM presentation_appearance_schema           -- ISO 10303-46
+       (curve_style,
+        curve_style_font, 
+        curve_style_font_pattern,
+        draughting_pre_defined_curve_font,
+        fill_area_style_colour,
+        invisibility,
+        marker_type,
+        over_riding_styled_item,
+        point_style,
+        presentation_style_by_context,
+        styled_item,
+        surface_side_style,
+        surface_style_boundary,
+        surface_style_control_grid, 
+        surface_style_fill_area,
+        surface_style_parameter_line,
+        surface_style_segmentation_curve, 
+        surface_style_silhouette, 
+        surface_style_usage,
+        u_direction_count,        
+        v_direction_count);
+
+    REFERENCE FROM presentation_organization_schema    -- ISO 10303-46
+       (aspect_ratio);
+
+    USE FROM presentation_organization_schema          -- ISO 10303-46
+       (background_colour,
+        camera_image_3d_with_scale,
+        camera_usage,
+        presentation_area,        
+        presentation_representation,
+        presentation_size,
+        presentation_view);
+
+    USE FROM presentation_resource_schema              -- ISO 10303-46
+       (colour_rgb,
+        draughting_pre_defined_colour,
+        planar_extent);
+
+    USE FROM product_property_representation_schema    -- ISO 10303-41
+     (shape_representation);
+
+    USE FROM representation_schema                     -- ISO 10303-43
+       (mapped_item,
+        representation); 
+
+ENTITY mechanical_design_geometric_presentation_area
+  SUBTYPE OF (presentation_area);
+WHERE
+  WR1:  -- only presentation_views or axis2_placements in
+        -- mechanical_design_geometric_presentation_area
+        SIZEOF(QUERY(it1 <* SELF.items |
+        NOT (('AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.AXIS2_PLACEMENT'
+        IN TYPEOF(it1))
+        OR
+        (('AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.MAPPED_ITEM'
+        IN TYPEOF(it1)) AND
+        ('AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.PRESENTATION_VIEW'
+        IN TYPEOF
+        (it1\mapped_item.mapping_source.mapped_representation)))))) = 0;
+  WR2:  -- only mechanical_design_geometric_presentation_representation
+        -- via camera_image_3d_with_scale or axis2_placements in
+        -- presentation_views
+        SIZEOF(QUERY(pv <* QUERY(mi1 <* QUERY(it1 <* SELF.items |
+        'AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.MAPPED_ITEM'
+        IN TYPEOF(it1)) |
+        'AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.PRESENTATION_VIEW'
+        IN TYPEOF
+        (mi1\mapped_item.mapping_source.mapped_representation)) |
+        -- search in all presentation_views for axis2_placements and
+        -- mapped_items and for the subtype of mapped_item
+        -- camera_image_3d_with_scale; the latter shall reference
+        -- a mechanical_design_geometric_presentation_representation;
+        -- the supertype mapped_item shall reference presentation_view.
+        NOT (SIZEOF(QUERY(it2 <* pv\mapped_item.mapping_source.
+        mapped_representation\representation.items |
+        NOT (('AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.AXIS2_PLACEMENT'
+        IN TYPEOF(it2))
+        OR
+        (('AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.MAPPED_ITEM'
+        IN TYPEOF(it2)) AND NOT
+        ('AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.' +
+        'CAMERA_IMAGE_3D_WITH_SCALE' IN TYPEOF(it2))) AND NOT (
+        'AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.PRESENTATION_VIEW'
+        IN TYPEOF
+        (it2\mapped_item.mapping_source.mapped_representation)))
+        OR
+        (('AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.' +
+        'CAMERA_IMAGE_3D_WITH_SCALE' IN TYPEOF(it2))
+        AND NOT (
+        ('AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.' +
+        'MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION_REPRESENTATION'
+        IN TYPEOF (it2\mapped_item.mapping_source.mapped_representation) ))
+        ))) = 0))) = 0;
+  WR3:  (SIZEOF(QUERY(ps <* USEDIN (SELF\presentation_area,
+        'AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.' +
+        'PRESENTATION_SIZE.UNIT') | ((ps.size\planar_extent.size_in_x <= 0)
+        OR
+        (ps.size\planar_extent.size_in_y <= 0)))) = 0)
+        AND
+        (SIZEOF(QUERY(ais <* USEDIN (SELF\presentation_area,
+        'AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.' +
+        'AREA_IN_SET.AREA') |
+        (SIZEOF(QUERY(ps <* USEDIN (ais, 
+        'AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.' +
+        'PRESENTATION_SIZE.UNIT') |
+        ((ps.size\planar_extent.size_in_x <= 0)
+        OR
+        (ps.size\planar_extent.size_in_y <= 0)))) > 0))) = 0);
+  WR4:  (SIZEOF(QUERY(ps <* USEDIN (SELF\presentation_area,
+        'AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.' +
+        'PRESENTATION_SIZE.UNIT') | 
+        ('AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.' +
+        'AXIS2_PLACEMENT_2D' IN TYPEOF (ps.size.placement)))) = 1)
+        AND
+        (SIZEOF(QUERY(ps <* USEDIN (SELF\presentation_area,
+        'AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.' +
+        'PRESENTATION_SIZE.UNIT') | 
+        ('AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.' +
+        'AXIS2_PLACEMENT_3D' IN TYPEOF (ps.size.placement)))) = 0)
+        OR
+        ((SIZEOF(QUERY(ais <* USEDIN (SELF\presentation_area,
+        'AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.' +
+        'AREA_IN_SET.AREA') |
+        (SIZEOF(QUERY(ps <* USEDIN (ais, 
+        'AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.' +
+        'PRESENTATION_SIZE.UNIT') |
+        ('AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.' +
+        'AXIS2_PLACEMENT_2D' IN TYPEOF (ps.size.placement)))) = 1))) = 1)
+        AND
+        (SIZEOF(QUERY(ais <* USEDIN (SELF\presentation_area,
+        'AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.' +
+        'AREA_IN_SET.AREA') |
+        (SIZEOF(QUERY(ps <* USEDIN (ais, 
+        'AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.' +
+        'PRESENTATION_SIZE.UNIT') |
+        ('AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.' +
+        'AXIS2_PLACEMENT_3D' IN TYPEOF (ps.size.placement)))) = 0))) = 1));
+END_ENTITY;
+
+ENTITY mechanical_design_geometric_presentation_representation
+  SUBTYPE OF (representation);
+WHERE
+  WR1:  SIZEOF(QUERY(it <* SELF.items |
+        NOT (SIZEOF(
+        ['AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.MAPPED_ITEM',
+        'AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.STYLED_ITEM',
+        'AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.AXIS2_PLACEMENT',
+        'AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.CAMERA_MODEL_D3']
+        * TYPEOF(it)) = 1))) = 0;
+  WR2:  -- only shape_representations and
+        -- mechanical_design_geometric_presentation_representations
+        -- shall be referenced from mapped_items
+        SIZEOF(QUERY(mi <* QUERY(it <* SELF.items |
+        ('AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.MAPPED_ITEM'
+        IN TYPEOF(it))) | NOT (SIZEOF(
+        ['AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.' +
+        'SHAPE_REPRESENTATION',
+        'AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.' +
+        'MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION_REPRESENTATION']
+        * TYPEOF(mi\mapped_item.mapping_source.mapped_representation))
+        = 1))) = 0;
+  WR3:  -- a mapped_item that is styled shall reference a
+        -- shape_representation
+        SIZEOF(QUERY(smi <* QUERY(si <* QUERY(it <* SELF.items |
+        ('AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.STYLED_ITEM'
+        IN TYPEOF(it))) |
+        ('AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.MAPPED_ITEM'
+        IN TYPEOF(si\styled_item.item))) | NOT (
+        ('AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.' +
+        'SHAPE_REPRESENTATION' IN TYPEOF (smi\styled_item.
+        item\mapped_item.mapping_source.mapped_representation))) )) = 0;
+  WR4:  SIZEOF(QUERY(si <* QUERY(it <* SELF.items |
+        'AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.STYLED_ITEM'
+        IN TYPEOF(it)) | NOT (SIZEOF(QUERY(psa <* si\styled_item.styles |
+        NOT (SIZEOF(QUERY(pss <* psa.styles | NOT (SIZEOF(
+        ['AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.POINT_STYLE',
+        'AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.CURVE_STYLE',
+        'AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.SURFACE_STYLE_USAGE']
+        * TYPEOF(pss)) = 1))) = 0))) = 0))) = 0;
+  WR5:  SIZEOF(QUERY(si <* QUERY(it <* SELF.items |
+        'AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.STYLED_ITEM'
+        IN TYPEOF(it)) |
+        NOT (SIZEOF(QUERY(psbc <* QUERY(psa <* si\styled_item.styles |
+        'AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.' +
+        'PRESENTATION_STYLE_BY_CONTEXT' IN TYPEOF(psa)) | NOT (SIZEOF(
+        ['AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.' +
+        'REPRESENTATION_ITEM',
+        'AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.REPRESENTATION']
+        * TYPEOF(psbc\presentation_style_by_context.style_context))
+        = 1))) = 0))) = 0;
+  WR6:  SIZEOF(QUERY(si <* QUERY(it <* SELF.items |
+        'AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.STYLED_ITEM'
+        IN TYPEOF(it)) | NOT (SIZEOF(QUERY(psa <* si\styled_item.styles |
+        NOT (SIZEOF(QUERY(ps <* QUERY(pss <* psa.styles |
+        'AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.POINT_STYLE'
+        IN TYPEOF(pss)) | NOT
+        (('AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.' +
+        'POSITIVE_LENGTH_MEASURE' IN TYPEOF (ps\point_style.marker_size))
+        AND (SIZEOF(
+        ['AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.COLOUR_RGB',
+        'AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.' +
+        'DRAUGHTING_PRE_DEFINED_COLOUR']
+        * TYPEOF(ps\point_style.marker_colour))
+        = 1)))) = 0))) = 0))) = 0;
+  WR7:  SIZEOF(QUERY(si <* QUERY(it <* SELF.items |
+        'AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.STYLED_ITEM'
+        IN TYPEOF(it)) | NOT (SIZEOF(QUERY(psa <* si\styled_item.styles |
+        NOT (SIZEOF(QUERY(cs <* QUERY(pss <* psa.styles |
+        'AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.CURVE_STYLE'
+        IN TYPEOF(pss)) | NOT((SIZEOF(
+        ['AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.COLOUR_RGB',
+        'AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.' +
+        'DRAUGHTING_PRE_DEFINED_COLOUR']
+        * TYPEOF(cs\curve_style.curve_colour)) = 1)
+        AND
+        ('AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.' +
+        'POSITIVE_LENGTH_MEASURE' IN TYPEOF (cs\curve_style.curve_width))
+        AND (SIZEOF(
+        ['AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.CURVE_STYLE_FONT',
+        'AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.' +
+        'DRAUGHTING_PRE_DEFINED_CURVE_FONT']
+        * TYPEOF(cs\curve_style.curve_font)) = 1)))) = 0))) = 0))) = 0;
+  WR8:  SIZEOF(QUERY(si <* QUERY(it <* SELF.items |
+        'AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.STYLED_ITEM'
+        IN TYPEOF(it)) | NOT (SIZEOF(QUERY(psa <* si\styled_item.styles |
+        NOT (SIZEOF(QUERY(ssu <* QUERY(pss <* psa.styles |
+        'AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.SURFACE_STYLE_USAGE'
+        IN TYPEOF(pss)) |
+        NOT ('AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.' +
+        'SURFACE_SIDE_STYLE' IN TYPEOF
+        (ssu\surface_style_usage.style)))) = 0))) = 0))) = 0;
+  WR9:  SIZEOF(QUERY(si <* QUERY(it <* SELF.items |
+        'AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.STYLED_ITEM'
+        IN TYPEOF(it)) | NOT (SIZEOF(QUERY(psa <* si\styled_item.styles |
+        NOT (SIZEOF(QUERY(ssu <* QUERY(pss <* psa.styles |
+        'AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.SURFACE_STYLE_USAGE'
+        IN TYPEOF(pss)) | NOT (SIZEOF(QUERY(sses <*
+        ssu\surface_style_usage.style\surface_side_style.styles |
+        NOT (SIZEOF(
+        ['AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.' +
+        'SURFACE_STYLE_PARAMETER_LINE',
+        'AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.' +
+        'SURFACE_STYLE_CONTROL_GRID',
+        'AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.' +
+        'SURFACE_STYLE_SILHOUETTE',
+        'AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.' +
+        'SURFACE_STYLE_SEGMENTATION_CURVE',
+        'AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.' +
+        'SURFACE_STYLE_FILL_AREA',
+        'AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.' +
+        'SURFACE_STYLE_BOUNDARY']
+        * TYPEOF(sses)) = 1))) = 0))) = 0))) = 0))) = 0;
+  WR10: SIZEOF(QUERY(si <* QUERY(it <* SELF.items |
+        'AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.STYLED_ITEM'
+        IN TYPEOF(it)) | NOT (SIZEOF(QUERY(psa <* si\styled_item.styles |
+        NOT (SIZEOF(QUERY(ssu <* QUERY(pss <* psa.styles |
+        'AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.SURFACE_STYLE_USAGE'
+        IN TYPEOF(pss)) | NOT (SIZEOF(QUERY(sspl <* QUERY(sses <*
+        ssu\surface_style_usage.style\surface_side_style.styles |
+        'AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.' +
+        'SURFACE_STYLE_PARAMETER_LINE' IN TYPEOF(sses)) |
+        NOT (('AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.CURVE_STYLE'
+        IN TYPEOF
+        (sspl\surface_style_parameter_line.style_of_parameter_lines))
+        AND (SIZEOF(
+        ['AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.COLOUR_RGB',
+        'AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.' +
+        'DRAUGHTING_PRE_DEFINED_COLOUR']
+        * TYPEOF(sspl\surface_style_parameter_line.
+        style_of_parameter_lines\curve_style.curve_colour)) = 1)
+        AND (
+        'AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.' +
+        'POSITIVE_LENGTH_MEASURE' IN TYPEOF
+        (sspl\surface_style_parameter_line.
+        style_of_parameter_lines\curve_style.curve_width))
+        AND (SIZEOF(
+        ['AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.CURVE_STYLE_FONT',
+        'AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.'+
+        'DRAUGHTING_PRE_DEFINED_CURVE_FONT']
+        * TYPEOF(sspl\surface_style_parameter_line.
+        style_of_parameter_lines\curve_style.curve_font)) = 1))))
+        = 0))) = 0))) = 0))) = 0;
+  WR11: SIZEOF(QUERY(si <* QUERY(it <* SELF.items |
+        'AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.STYLED_ITEM'
+        IN TYPEOF(it)) | NOT (SIZEOF(QUERY(psa <* si\styled_item.styles |
+        NOT (SIZEOF(QUERY(ssu <* QUERY(pss <* psa.styles |
+        'AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.SURFACE_STYLE_USAGE'
+        IN TYPEOF(pss)) | NOT (SIZEOF(QUERY(sscg <* QUERY(sses <*
+        ssu\surface_style_usage.style\surface_side_style.styles |
+        'AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.' +
+        'SURFACE_STYLE_CONTROL_GRID' IN TYPEOF(sses)) |
+        NOT (('AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.CURVE_STYLE'
+        IN TYPEOF (sscg\surface_style_control_grid.style_of_control_grid))
+        AND (SIZEOF(
+        ['AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.COLOUR_RGB',
+        'AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.' +
+        'DRAUGHTING_PRE_DEFINED_COLOUR']
+        * TYPEOF(sscg\surface_style_control_grid.
+        style_of_control_grid\curve_style.curve_colour)) = 1)
+        AND
+        ('AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.' +
+        'POSITIVE_LENGTH_MEASURE' IN TYPEOF 
+        (sscg\surface_style_control_grid.
+        style_of_control_grid\curve_style.curve_width))
+        AND (SIZEOF(
+        ['AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.CURVE_STYLE_FONT',
+        'AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.' +
+        'DRAUGHTING_PRE_DEFINED_CURVE_FONT']
+        * TYPEOF(sscg\surface_style_control_grid.
+        style_of_control_grid\curve_style.curve_font)) = 1))))
+        = 0))) = 0))) = 0))) = 0;
+  WR12: SIZEOF(QUERY(si <* QUERY(it <* SELF.items |
+        'AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.STYLED_ITEM'
+        IN TYPEOF(it)) |
+        NOT (SIZEOF(QUERY(psa <* si\styled_item.styles |
+        NOT (SIZEOF(QUERY(ssu <* QUERY(pss <* psa.styles |
+        'AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.SURFACE_STYLE_USAGE'
+        IN TYPEOF(pss)) | NOT (SIZEOF(QUERY(sssh <* QUERY(sses <*
+        ssu\surface_style_usage.style\surface_side_style.styles |
+        'AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.' +
+        'SURFACE_STYLE_SILHOUETTE' IN TYPEOF(sses)) |
+        NOT (('AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.CURVE_STYLE'
+        IN TYPEOF (sssh\surface_style_silhouette.style_of_silhouette))
+        AND (SIZEOF(
+        ['AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.COLOUR_RGB',
+        'AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.' +
+        'DRAUGHTING_PRE_DEFINED_COLOUR']
+        * TYPEOF(sssh\surface_style_silhouette.
+        style_of_silhouette\curve_style.curve_colour)) = 1)
+        AND
+        ('AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.' +
+        'POSITIVE_LENGTH_MEASURE' IN TYPEOF
+        (sssh\surface_style_silhouette.style_of_silhouette\curve_style.
+        curve_width))
+        AND (SIZEOF(
+        ['AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.CURVE_STYLE_FONT',
+        'AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.' +
+        'DRAUGHTING_PRE_DEFINED_CURVE_FONT']
+        * TYPEOF(sssh\surface_style_silhouette.
+        style_of_silhouette\curve_style.curve_font)) = 1))))
+        = 0))) = 0))) = 0))) = 0;
+  WR13: SIZEOF(QUERY(si <* QUERY(it <* SELF.items |
+        'AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.STYLED_ITEM'
+        IN TYPEOF(it)) | NOT (SIZEOF(QUERY(psa <* si\styled_item.styles |
+        NOT (SIZEOF(QUERY(ssu <* QUERY(pss <* psa.styles |
+        'AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.SURFACE_STYLE_USAGE'
+        IN TYPEOF(pss)) | NOT (SIZEOF(QUERY(sssc <* QUERY(sses <*
+        ssu\surface_style_usage.style\surface_side_style.styles |
+        'AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.' +
+        'SURFACE_STYLE_SEGMENTATION_CURVE' IN TYPEOF(sses)) |
+        NOT (('AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.CURVE_STYLE'
+        IN TYPEOF
+        (sssc\surface_style_segmentation_curve.style_of_segmentation_curve))
+        AND (SIZEOF(
+        ['AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.COLOUR_RGB',
+        'AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.' +
+        'DRAUGHTING_PRE_DEFINED_COLOUR']
+        * TYPEOF(sssc\surface_style_segmentation_curve.
+        style_of_segmentation_curve\curve_style.curve_colour)) = 1)
+        AND
+        ('AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.' +
+        'POSITIVE_LENGTH_MEASURE' IN TYPEOF
+        (sssc\surface_style_segmentation_curve.
+        style_of_segmentation_curve\curve_style.curve_width))
+        AND (SIZEOF(
+        ['AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.CURVE_STYLE_FONT',
+        'AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.' +
+        'DRAUGHTING_PRE_DEFINED_CURVE_FONT']
+        * TYPEOF(sssc\surface_style_segmentation_curve.
+        style_of_segmentation_curve\curve_style.curve_font)) = 1))))
+        = 0))) = 0))) = 0))) = 0;
+  WR14: SIZEOF(QUERY(si <* QUERY(it <* SELF.items |
+        'AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.STYLED_ITEM'
+        IN TYPEOF(it)) | NOT (SIZEOF(QUERY(psa <* si\styled_item.styles |
+        NOT (SIZEOF(QUERY(ssu <* QUERY(pss <* psa.styles |
+        'AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.SURFACE_STYLE_USAGE'
+        IN TYPEOF(pss)) | NOT (SIZEOF(QUERY(ssbd <* QUERY(sses <*
+        ssu\surface_style_usage.style\surface_side_style.styles |
+        'AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.' +
+        'SURFACE_STYLE_BOUNDARY' IN TYPEOF(sses)) |
+        NOT (('AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.CURVE_STYLE'
+        IN TYPEOF (ssbd\surface_style_boundary.style_of_boundary))
+        AND (SIZEOF(
+        ['AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.COLOUR_RGB',
+        'AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.' +
+        'DRAUGHTING_PRE_DEFINED_COLOUR']
+        * TYPEOF(ssbd\surface_style_boundary.
+        style_of_boundary\curve_style.curve_colour)) = 1)
+        AND
+        ('AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.' +
+        'POSITIVE_LENGTH_MEASURE' IN TYPEOF (ssbd\surface_style_boundary.
+        style_of_boundary\curve_style.curve_width))
+        AND (SIZEOF(
+        ['AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.CURVE_STYLE_FONT',
+        'AIC_MECHANICAL_DESIGN_GEOMETRIC_PRESENTATION.' +
+        'DRAUGHTING_PRE_DEFINED_CURVE_FONT']
+        * TYPEOF(ssbd\surface_style_boundary.
+        style_of_boundary\curve_style.curve_font)) = 1)))) = 0)))
+        = 0))) = 0))) = 0;
+END_ENTITY;
+
+END_SCHEMA;  

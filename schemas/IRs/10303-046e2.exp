@@ -1,0 +1,2412 @@
+(*
+ISO TC184/SC4/WG12 N4830 - ISO/CD 10303-46 Visual presentation - EXPRESS
+*) 
+
+
+SCHEMA presentation_appearance_schema;
+ 
+REFERENCE FROM external_reference_schema
+    (externally_defined_item,
+     pre_defined_item);
+
+REFERENCE FROM geometry_schema
+    (axis2_placement,
+     b_spline_curve, 
+     cartesian_point,
+     composite_curve,
+     curve,
+     geometric_representation_item,
+     point,
+     polyline, 
+     vector);
+
+REFERENCE FROM group_schema
+  (group);
+
+REFERENCE FROM measure_schema
+    (descriptive_measure,
+     length_measure,
+     measure_with_unit,
+     plane_angle_measure,
+     positive_length_measure,
+     ratio_measure,
+     positive_ratio_measure);
+
+REFERENCE FROM presentation_organization_schema
+     (area_dependent_annotation_representation,
+      presentation_area,
+      presentation_layer_assignment,
+      presentation_layer_usage,
+      presentation_representation,
+      presentation_set,
+      presentation_view,
+      product_data_representation_view,
+      view_dependent_annotation_representation);
+
+REFERENCE FROM presentation_definition_schema
+    (annotation_curve_occurrence,
+     annotation_fill_area,
+     annotation_symbol_occurrence,
+     annotation_text_with_delineation,
+     symbol_representation_with_blanking_box);
+
+REFERENCE FROM presentation_resource_schema
+    (character_glyph_symbol_outline,
+     character_glyph_symbol_stroke,
+     colour);
+
+REFERENCE FROM product_property_representation_schema
+    (shape_representation_relationship);
+
+REFERENCE FROM representation_schema
+    (founded_item,
+     mapped_item,
+     representation,
+     representation_item,
+     representation_map,
+     using_representations);
+
+REFERENCE FROM support_resource_schema
+    (label,
+     bag_to_set);
+ 
+
+  TYPE approximation_method = ENUMERATION OF
+    (chordal_deviation,
+     chordal_length);
+  END_TYPE;
+
+  TYPE box_characteristic_select = SELECT
+    (box_height,
+     box_width,
+     box_slant_angle,
+     box_rotate_angle);
+  END_TYPE;
+
+  TYPE box_height = positive_ratio_measure;
+  END_TYPE;
+
+  TYPE box_rotate_angle = plane_angle_measure;
+  END_TYPE;
+
+  TYPE  box_slant_angle = plane_angle_measure;
+  END_TYPE;
+
+  TYPE box_width = positive_ratio_measure;
+  END_TYPE;
+
+  TYPE character_spacing_select = SELECT
+    (length_measure,
+     ratio_measure,
+     measure_with_unit,
+     descriptive_measure,
+     pre_defined_character_spacing);
+  END_TYPE;
+
+  TYPE character_style_select = SELECT
+    (character_glyph_style_stroke,
+     character_glyph_style_outline,
+     text_style_for_defined_font);
+  END_TYPE;
+
+  TYPE curve_font_or_scaled_curve_font_select = SELECT
+    (curve_style_font_select,
+     curve_style_font_and_scaling);
+  END_TYPE;
+
+  TYPE curve_or_annotation_curve_occurrence = SELECT
+    (curve,
+     annotation_curve_occurrence);
+  END_TYPE;
+
+  TYPE curve_or_render = SELECT
+    (curve_style,
+     curve_style_rendering);
+  END_TYPE;
+
+  TYPE curve_style_font_select = SELECT
+    (curve_style_font,
+     pre_defined_curve_font,
+     externally_defined_curve_font);
+  END_TYPE;
+
+  TYPE curve_tolerance_deviation = positive_length_measure;
+  END_TYPE;
+
+  TYPE curve_tolerance_parameter = REAL;
+  END_TYPE;
+
+  TYPE direction_count_select = SELECT
+    (u_direction_count,
+     v_direction_count);
+  END_TYPE;
+
+  TYPE fill_style_select = SELECT
+    (fill_area_style_colour,
+     pre_defined_tile_style,
+     externally_defined_tile_style,
+     fill_area_style_tiles,
+     pre_defined_hatch_style,
+     externally_defined_hatch_style,
+     fill_area_style_hatching);
+  END_TYPE;
+
+  TYPE fill_area_style_tile_shape_select = SELECT
+    (fill_area_style_tile_curve_with_style,
+     fill_area_style_tile_coloured_region,
+     fill_area_style_tile_symbol_with_style,
+     pre_defined_tile,
+     externally_defined_tile);
+  END_TYPE;
+
+  TYPE hiding_or_blanking_select = SELECT
+    (presentation_area,
+     presentation_view,
+     product_data_representation_view,
+     annotation_fill_area,
+     area_dependent_annotation_representation,
+     view_dependent_annotation_representation,
+     annotation_text_with_delineation,
+     character_glyph_symbol_stroke,
+     character_glyph_symbol_outline,
+     symbol_representation_with_blanking_box);
+  END_TYPE;
+
+  TYPE invisibility_context = SELECT 
+    (presentation_layer_usage,
+     presentation_representation,
+     presentation_set);
+  END_TYPE;
+
+  TYPE invisible_item = EXTENSIBLE GENERIC_ENTITY SELECT 
+    (styled_item,
+     presentation_layer_assignment,
+     representation);
+  END_TYPE;
+
+  TYPE marker_select = SELECT
+    (marker_type,
+     pre_defined_marker);
+  END_TYPE;
+
+  TYPE marker_type = ENUMERATION OF
+    (dot,
+     x,
+     plus,
+     asterisk,
+     ring,
+     square,
+     triangle);
+  END_TYPE;
+
+  TYPE null_style = ENUMERATION OF
+    (null);
+  END_TYPE;
+
+  TYPE presentation_style_select = SELECT
+    (pre_defined_presentation_style,
+     point_style,
+     curve_style,
+     surface_style_usage,
+     symbol_style,
+     fill_area_style,
+     text_style,
+     approximation_tolerance,
+     externally_defined_style,
+     null_style);
+  END_TYPE;
+
+  TYPE product_or_presentation_space = ENUMERATION OF
+    (product_shape_space,
+     presentation_area_space);
+  END_TYPE;
+
+  TYPE rendering_properties_select = SELECT
+    (surface_style_reflectance_ambient,
+     surface_style_transparent);
+  END_TYPE;
+
+  TYPE shading_curve_method = ENUMERATION OF
+    (constant_colour,
+     linear_colour);
+  END_TYPE;
+
+  TYPE shading_surface_method = ENUMERATION OF
+    (constant_shading,
+     colour_shading,
+     dot_shading,
+     normal_shading);
+  END_TYPE;
+
+  TYPE size_select  = SELECT
+    (positive_length_measure,
+     measure_with_unit,
+     descriptive_measure,
+     pre_defined_size);
+  END_TYPE;
+
+  TYPE squared_or_rounded = ENUMERATION OF
+    (squared,
+     rounded);
+  END_TYPE;
+
+  TYPE style_context_select = SELECT
+    (group,
+     presentation_layer_assignment,
+     presentation_set,
+     representation,
+     representation_item,
+     shape_representation_relationship);
+  END_TYPE;
+
+  TYPE surface_side = ENUMERATION OF
+    (positive,
+     negative,
+     both);
+  END_TYPE;
+
+  TYPE surface_side_style_select = SELECT
+    (surface_side_style,
+     pre_defined_surface_side_style);
+  END_TYPE;
+
+  TYPE surface_style_element_select = SELECT
+    (surface_style_fill_area,
+     surface_style_boundary,
+     surface_style_silhouette,
+     surface_style_segmentation_curve,
+     surface_style_control_grid,
+     surface_style_parameter_line,
+     surface_style_rendering);
+  END_TYPE;
+
+  TYPE surface_tolerance_deviation = positive_length_measure;
+  END_TYPE;
+
+  TYPE surface_tolerance_parameter = REAL;
+  END_TYPE;
+
+  TYPE symbol_style_select= SELECT
+    (symbol_element_style,
+     symbol_colour);
+  END_TYPE;
+
+
+  TYPE text_justification = label;
+  END_TYPE;
+
+  TYPE tolerance_deviation_select = SELECT
+    (curve_tolerance_deviation,
+     surface_tolerance_deviation);
+  END_TYPE;
+
+  TYPE tolerance_parameter_select = SELECT
+    (curve_tolerance_parameter,
+     surface_tolerance_parameter);
+  END_TYPE;
+
+  TYPE tolerance_select = SELECT
+    (approximation_tolerance_deviation,
+     approximation_tolerance_parameter);
+  END_TYPE;
+
+  TYPE u_direction_count = INTEGER;
+    WHERE
+      WR1: SELF > 1;
+  END_TYPE;
+
+  TYPE v_direction_count = INTEGER;
+    WHERE
+      WR1: SELF > 1;
+  END_TYPE;
+
+  ENTITY approximation_tolerance
+    SUBTYPE OF (founded_item);
+      tolerance : tolerance_select;
+  END_ENTITY;
+
+  ENTITY approximation_tolerance_deviation
+    SUBTYPE OF (founded_item);
+      tessellation_type : approximation_method;
+      tolerances        : SET [1:2] OF tolerance_deviation_select;
+      definition_space  : product_or_presentation_space;
+    WHERE
+      WR1: (HIINDEX(SELF.tolerances) = 1)
+            XOR
+        (TYPEOF(SELF.tolerances[1]) <> TYPEOF(SELF.tolerances[2]));
+  END_ENTITY;
+
+  ENTITY approximation_tolerance_parameter
+    SUBTYPE OF (founded_item);
+      tolerances : SET [1:2] OF tolerance_parameter_select;
+    WHERE
+      WR1: (HIINDEX (SELF.tolerances) = 1 )
+             XOR
+        (TYPEOF (SELF.tolerances[1]) <> TYPEOF (SELF.tolerances[2]));
+  END_ENTITY;
+
+  ENTITY character_glyph_style_outline
+    SUBTYPE OF (founded_item);
+      outline_style : curve_style;
+  END_ENTITY;
+
+  ENTITY character_glyph_style_outline_with_characteristics
+    SUBTYPE OF (character_glyph_style_outline);
+      characteristics : fill_area_style;
+  END_ENTITY;
+
+  ENTITY character_glyph_style_stroke
+    SUBTYPE OF (founded_item);
+      stroke_style : curve_style;
+  END_ENTITY;
+
+  ENTITY context_dependent_invisibility
+    SUBTYPE OF (invisibility);
+      presentation_context : invisibility_context;
+  END_ENTITY;
+
+  ENTITY context_dependent_over_riding_styled_item
+    SUBTYPE OF(over_riding_styled_item);
+      style_context : LIST[1:?] OF style_context_select;
+    WHERE
+      WR1: (SIZEOF(QUERY( sc <* SELF.style_context |
+       'REPRESENTATION_SCHEMA.REPRESENTATION_ITEM' IN
+         TYPEOF(sc))) = 1) OR
+        (SIZEOF(QUERY( sc <* SELF.style_context |
+       'REPRESENTATION_SCHEMA.MAPPED_ITEM' IN
+         TYPEOF(sc))) = SIZEOF(style_context)) OR
+         (SIZEOF(QUERY( sc <* SELF.style_context |
+       'PRODUCT_PROPERTY_REPRESENTATION_SCHEMA.SHAPE_REPRESENTATION_RELATIONSHIP' IN
+         TYPEOF(sc))) = SIZEOF(style_context));
+  END_ENTITY;
+
+  ENTITY curve_style
+    SUBTYPE OF (founded_item);
+      name         : label;
+      curve_font   : curve_font_or_scaled_curve_font_select;
+      curve_width  : size_select;
+      curve_colour : colour;
+  END_ENTITY;
+
+  ENTITY curve_style_curve_pattern
+    SUBTYPE OF (geometric_representation_item);
+      pattern        : annotation_curve_occurrence;
+      pattern_length : positive_length_measure;
+  END_ENTITY;
+
+  ENTITY curve_style_curve_pattern_set
+    SUBTYPE OF (curve_style_font, 
+                geometric_representation_item);
+      pattern_set : SET [1:?] OF curve_style_curve_pattern;
+  END_ENTITY;
+
+  ENTITY curve_style_font
+    SUBTYPE OF (founded_item);
+      name         : label;
+      pattern_list : LIST [1:?] OF curve_style_font_pattern;
+  END_ENTITY;
+
+  ENTITY curve_style_font_and_scaling
+    SUBTYPE OF (founded_item);
+      name               : label;
+      curve_font         : curve_style_font_select;
+      curve_font_scaling : REAL;
+  END_ENTITY;
+
+  ENTITY curve_style_font_pattern
+    SUBTYPE OF (founded_item);
+      visible_segment_length   : positive_length_measure;
+      invisible_segment_length : positive_length_measure;
+  END_ENTITY;
+
+  ENTITY curve_style_rendering;
+    rendering_method     : shading_curve_method;
+    rendering_properties : surface_rendering_properties;
+  END_ENTITY;
+
+  ENTITY curve_style_wide
+    SUBTYPE OF (curve_style_font);
+      interior_style : fill_area_style;
+  END_ENTITY;
+
+  ENTITY curve_style_with_ends_and_corners
+    SUBTYPE OF (curve_style);
+      curve_ends    : squared_or_rounded;
+      curve_corners : squared_or_rounded;
+  END_ENTITY;
+
+  ENTITY curve_style_with_extension
+    SUBTYPE OF (curve_style);
+      curve_extensions   : length_measure;
+  END_ENTITY;
+
+  ENTITY draughting_pre_defined_curve_font
+    SUBTYPE OF (pre_defined_curve_font);
+    WHERE
+      WR1: SELF.name IN
+        ['continuous',
+         'chain',
+         'chain double dash',
+         'dashed',
+         'dotted'];
+  END_ENTITY;
+
+  ENTITY externally_defined_curve_font
+    SUBTYPE OF (externally_defined_item);
+  END_ENTITY;
+
+  ENTITY externally_defined_hatch_style
+    SUBTYPE OF (externally_defined_item, geometric_representation_item);
+  END_ENTITY;
+
+  ENTITY externally_defined_style
+    SUBTYPE OF (externally_defined_item, founded_item);
+  END_ENTITY;
+
+  ENTITY externally_defined_tile
+    SUBTYPE OF (externally_defined_item);
+  END_ENTITY;
+
+  ENTITY externally_defined_tile_style
+    SUBTYPE OF (externally_defined_item, geometric_representation_item);
+  END_ENTITY;
+
+  ENTITY fill_area_style
+    SUBTYPE OF (founded_item);
+      name        : label;
+      fill_styles : SET [1:?] OF fill_style_select;
+    WHERE
+      WR1: SIZEOF(QUERY(fill_style <* SELF.fill_styles |
+         'PRESENTATION_APPEARANCE_SCHEMA.'+
+         'FILL_AREA_STYLE_COLOUR' IN
+         TYPEOF(fill_style)
+         )) <= 1;
+  END_ENTITY;
+
+  ENTITY fill_area_style_colour;
+    name        : label;
+    fill_colour : colour;
+  END_ENTITY;
+
+  ENTITY fill_area_style_hatching
+    SUBTYPE OF (geometric_representation_item);
+      hatch_line_appearance         : curve_style;
+      start_of_next_hatch_line      : one_direction_repeat_factor;
+      point_of_reference_hatch_line : cartesian_point;
+      pattern_start                 : cartesian_point;
+      hatch_line_angle              : plane_angle_measure;
+  END_ENTITY;
+
+  ENTITY fill_area_style_tile_coloured_region
+    SUBTYPE OF (geometric_representation_item);
+      closed_curve  : curve_or_annotation_curve_occurrence;
+      region_colour : colour;
+    WHERE
+      WR1: (NOT('GEOMETRY_SCHEMA.CURVE' IN TYPEOF (closed_curve))) OR 
+        ('GEOMETRY_SCHEMA.CIRCLE' IN TYPEOF (closed_curve)) OR 
+        ('GEOMETRY_SCHEMA.ELLIPSE' IN TYPEOF (closed_curve)) OR 
+        ( ('GEOMETRY_SCHEMA.B_SPLINE_CURVE' IN TYPEOF (closed_curve)) 
+             AND (closed_curve\b_spline_curve.closed_curve = TRUE) ) OR 
+        ( ('GEOMETRY_SCHEMA.COMPOSITE_CURVE' IN TYPEOF (closed_curve)) 
+             AND (closed_curve\composite_curve.closed_curve = TRUE) ) OR 
+        ( ('GEOMETRY_SCHEMA.POLYLINE' IN TYPEOF (closed_curve)) 
+             AND (closed_curve\polyline.points[LOINDEX(closed_curve\polyline.points)] = 
+                  closed_curve\polyline.points[HIINDEX(closed_curve\polyline.points)]) );
+  END_ENTITY;
+
+  ENTITY fill_area_style_tile_curve_with_style
+    SUBTYPE OF (geometric_representation_item);
+      styled_curve : annotation_curve_occurrence;
+  END_ENTITY;
+
+  ENTITY fill_area_style_tile_symbol_with_style
+    SUBTYPE OF (geometric_representation_item);
+      symbol : annotation_symbol_occurrence;
+  END_ENTITY;
+
+  ENTITY fill_area_style_tiles
+    SUBTYPE OF (geometric_representation_item);
+      tiling_pattern : two_direction_repeat_factor;
+      tiles          : SET [1:?] OF fill_area_style_tile_shape_select;
+      tiling_scale   : positive_ratio_measure;
+  END_ENTITY;
+
+  ENTITY invisibility;
+    invisible_items : SET [1:?] OF invisible_item;
+  END_ENTITY;
+
+  ENTITY occlusion_precedence;
+      higher_precedence : hiding_or_blanking_select;
+      lower_precedence  : hiding_or_blanking_select;
+      occlusion_context : representation;
+    WHERE
+      WR1: acyclic_occlusion_precedence (SELF, [SELF.lower_precedence]);
+  END_ENTITY;
+
+  ENTITY one_direction_repeat_factor
+    SUBTYPE OF (geometric_representation_item);
+      repeat_factor : vector;
+  END_ENTITY;
+
+  ENTITY over_riding_styled_item
+    SUBTYPE OF (styled_item);
+      over_ridden_style : styled_item;
+  END_ENTITY;
+
+  ENTITY point_style
+    SUBTYPE OF (founded_item);
+      name          : label;
+      marker        : marker_select;
+      marker_size   : size_select;
+      marker_colour : colour;
+  END_ENTITY;
+
+  ENTITY pre_defined_character_spacing
+    SUBTYPE OF (pre_defined_item);
+  END_ENTITY;
+
+  ENTITY pre_defined_curve_font
+    SUBTYPE OF (pre_defined_item);
+  END_ENTITY;
+
+  ENTITY pre_defined_hatch_style
+    SUBTYPE OF (pre_defined_item, geometric_representation_item);
+  END_ENTITY;
+
+  ENTITY pre_defined_marker
+    SUBTYPE OF (pre_defined_item);
+  END_ENTITY;
+
+  ENTITY pre_defined_presentation_style
+    SUBTYPE OF (founded_item, pre_defined_item);
+  END_ENTITY;
+
+  ENTITY pre_defined_size
+    SUBTYPE OF (pre_defined_item);
+  END_ENTITY;
+
+  ENTITY pre_defined_surface_side_style
+    SUBTYPE OF (pre_defined_item);
+  END_ENTITY;
+
+  ENTITY pre_defined_tile
+    SUBTYPE OF (pre_defined_item);
+  END_ENTITY;
+
+  ENTITY pre_defined_tile_style
+    SUBTYPE OF (pre_defined_item, geometric_representation_item);
+  END_ENTITY;
+
+  ENTITY presentation_style_assignment
+    SUBTYPE OF (founded_item);
+      styles : SET [1:?] OF presentation_style_select;
+    WHERE
+      WR1: SIZEOF (QUERY (style1 <* SELF.styles |
+           NOT (SIZEOF (QUERY (style2 <* (SELF.styles - style1) |
+           NOT ((TYPEOF (style1) <> TYPEOF (style2)) OR
+             (SIZEOF (['PRESENTATION_APPEARANCE_SCHEMA.' + 
+                       'SURFACE_STYLE_USAGE',
+                       'PRESENTATION_APPEARANCE_SCHEMA.'+
+                       'EXTERNALLY_DEFINED_STYLE'] *
+                     TYPEOF (style1)) = 1)
+           ))) = 0
+         ))) = 0;
+      WR2: SIZEOF (QUERY (style1 <* SELF.styles |
+         'PRESENTATION_APPEARANCE_SCHEMA.SURFACE_STYLE_USAGE' IN
+         TYPEOF(style1)
+         )) <= 2;
+      WR3: SIZEOF (QUERY (style1 <* SELF.styles |
+         ('PRESENTATION_APPEARANCE_SCHEMA.SURFACE_STYLE_USAGE' IN TYPEOF (style1)) AND 
+         (SIZEOF (QUERY (style2 <* (SELF.styles - style1) |
+           ('PRESENTATION_APPEARANCE_SCHEMA.SURFACE_STYLE_USAGE' IN TYPEOF (style2)) AND 
+           ((style1\surface_style_usage.side = both) OR 
+           (style2\surface_style_usage.side = both) OR 
+           (style1\surface_style_usage.side = style2\surface_style_usage.side)) )) > 0))) = 0;
+  END_ENTITY;
+
+  ENTITY presentation_style_by_context
+    SUBTYPE OF (presentation_style_assignment);
+      style_context : style_context_select;
+  END_ENTITY;
+
+  ENTITY symbol_colour;
+    colour_of_symbol : colour;
+  END_ENTITY;
+
+  ENTITY symbol_element_style
+    SUBTYPE OF (founded_item);
+      style_of_symbol : presentation_style_assignment;
+    WHERE
+      WR1: SIZEOF (QUERY ( style <* SELF.style_of_symbol.styles |
+           'PRESENTATION_APPEARANCE_SCHEMA.SYMBOL_STYLE' IN
+           TYPEOF (style))) = 0;
+      WR2: NOT ('PRESENTATION_APPEARANCE_SCHEMA.' +
+                'PRESENTATION_STYLE_BY_CONTEXT' IN
+              TYPEOF (SELF.style_of_symbol)
+           );
+  END_ENTITY;
+
+  ENTITY symbol_style
+    SUBTYPE OF (founded_item);
+      name            : label; 
+      style_of_symbol : symbol_style_select;
+  END_ENTITY;
+
+  ENTITY styled_item
+    SUBTYPE OF (representation_item);
+      styles :  SET [1:?] OF presentation_style_assignment;
+      item   :  representation_item;
+    WHERE
+      WR1: (SIZEOF(SELF.styles) = 1)
+               XOR
+         (SIZEOF(QUERY(pres_style <* SELF.styles |
+         NOT ('PRESENTATION_APPEARANCE_SCHEMA.' +
+              'PRESENTATION_STYLE_BY_CONTEXT' IN
+         TYPEOF(pres_style))
+         )) = 0);
+  END_ENTITY;
+
+  ENTITY surface_rendering_properties;
+    rendered_colour : colour;
+  END_ENTITY;
+
+  ENTITY surface_side_style
+    SUBTYPE OF (founded_item);
+      name   : label;
+      styles : SET [1:7] OF surface_style_element_select;
+    WHERE
+      WR1: SIZEOF(QUERY( style1 <* SELF.styles |
+           SIZEOF(QUERY( style2 <* SELF.styles - style1 |
+           TYPEOF(style1) = TYPEOF(style2)
+           )) > 0
+           )) = 0;
+  END_ENTITY;
+
+  ENTITY surface_style_boundary
+    SUBTYPE OF (founded_item);
+      style_of_boundary : curve_or_render;
+  END_ENTITY;
+
+  ENTITY surface_style_control_grid
+    SUBTYPE OF (founded_item);
+      style_of_control_grid : curve_or_render;
+  END_ENTITY;
+
+  ENTITY surface_style_fill_area
+    SUBTYPE OF (founded_item);
+      fill_area : fill_area_style;
+  END_ENTITY;
+
+  ENTITY surface_style_parameter_line
+    SUBTYPE OF (founded_item);
+      style_of_parameter_lines : curve_or_render;
+      direction_counts         : SET [1:2] OF direction_count_select;
+    WHERE
+      WR1: (HIINDEX(SELF.direction_counts) = 1)
+                        XOR
+         (TYPEOF(SELF.direction_counts[1]) <>
+          TYPEOF(SELF.direction_counts[2]));
+  END_ENTITY;
+
+  ENTITY surface_style_reflectance_ambient;
+    ambient_reflectance : REAL;
+  END_ENTITY;
+
+  ENTITY surface_style_reflectance_ambient_diffuse
+    SUBTYPE OF (surface_style_reflectance_ambient);
+      diffuse_reflectance : REAL;
+  END_ENTITY;
+
+  ENTITY surface_style_reflectance_ambient_diffuse_specular
+    SUBTYPE OF (surface_style_reflectance_ambient_diffuse);
+      specular_reflectance : REAL;
+      specular_exponent    : REAL;
+      specular_colour      : colour;
+  END_ENTITY;
+
+  ENTITY surface_style_rendering;
+    rendering_method : shading_surface_method;
+    surface_colour   : colour;
+  END_ENTITY;
+
+  ENTITY surface_style_rendering_with_properties
+    SUBTYPE OF (surface_style_rendering);
+      properties : SET [1:2] OF rendering_properties_select;
+    WHERE
+      WR1: (HIINDEX(SELF.properties) = 1)
+                   XOR
+         (TYPEOF(SELF.properties[1]) <> TYPEOF(SELF.properties[2]));
+  END_ENTITY;
+
+  ENTITY surface_style_segmentation_curve
+    SUBTYPE OF (founded_item);
+      style_of_segmentation_curve : curve_or_render;
+  END_ENTITY;
+
+  ENTITY surface_style_silhouette
+    SUBTYPE OF (founded_item);
+      style_of_silhouette : curve_or_render;
+  END_ENTITY;
+
+  ENTITY surface_style_transparent;
+      transparency : REAL;
+    WHERE
+      WR1: {0.0 <= transparency <= 1.0};
+  END_ENTITY;
+
+  ENTITY surface_style_usage
+    SUBTYPE OF (founded_item);
+      side  : surface_side;
+      style : surface_side_style_select;
+  END_ENTITY;
+
+  ENTITY text_style
+    SUBTYPE OF (founded_item);
+      name                 : label;
+      character_appearance : character_style_select;
+  END_ENTITY;
+
+  ENTITY text_style_for_defined_font;
+    text_colour : colour;
+  END_ENTITY;
+
+  ENTITY text_style_with_box_characteristics
+    SUBTYPE OF (text_style);
+      characteristics : SET [1:4] OF box_characteristic_select;
+    WHERE
+      WR1: SIZEOF( QUERY( c1 <* SELF.characteristics |
+           SIZEOF( QUERY( c2 <* SELF.characteristics - c1 |
+           TYPEOF (c1) = TYPEOF (c2)
+           )) > 0
+           )) = 0;
+  END_ENTITY;
+
+  ENTITY text_style_with_justification
+    SUBTYPE OF (text_style);
+      justification : text_justification;
+  END_ENTITY;
+
+  ENTITY text_style_with_mirror
+    SUBTYPE OF (text_style);
+      mirror_placement : axis2_placement;
+  END_ENTITY;
+
+  ENTITY text_style_with_spacing
+    SUBTYPE OF (text_style);
+      character_spacing : character_spacing_select;
+  END_ENTITY;
+
+  ENTITY two_direction_repeat_factor
+    SUBTYPE OF (one_direction_repeat_factor);
+      second_repeat_factor : vector;
+  END_ENTITY;
+
+  SUBTYPE_CONSTRAINT founded_item_subtypes FOR founded_item;
+    ONEOF (approximation_tolerance,
+      approximation_tolerance_deviation,
+      approximation_tolerance_parameter,
+      character_glyph_style_outline,
+      character_glyph_style_stroke,
+      curve_style,
+      curve_style_font,
+      curve_style_font_and_scaling,
+      curve_style_font_pattern,
+      externally_defined_style,
+      fill_area_style,
+      point_style,
+      pre_defined_presentation_style,
+      presentation_style_assignment,
+      surface_side_style,
+      surface_style_boundary,
+      surface_style_control_grid,
+      surface_style_fill_area,
+      surface_style_parameter_line,
+      surface_style_segmentation_curve,
+      surface_style_silhouette,
+      surface_style_usage,
+      symbol_element_style,
+      symbol_style,
+      text_style);
+  END_SUBTYPE_CONSTRAINT;
+
+  SUBTYPE_CONSTRAINT pas_geometric_representation_item_subtypes FOR geometric_representation_item;  
+    (ONEOF ( 
+     curve, 
+     curve_style_curve_pattern, 
+     curve_style_curve_pattern_set ,
+     externally_defined_hatch_style,
+     externally_defined_tile_style,  
+     fill_area_style_hatching,
+     fill_area_style_tile_coloured_region,
+     fill_area_style_tile_curve_with_style, 
+     fill_area_style_tile_symbol_with_style, 
+     fill_area_style_tiles, 
+     one_direction_repeat_factor,
+     point, 
+     pre_defined_hatch_style,  
+     pre_defined_tile_style, 
+     vector)); 
+  END_SUBTYPE_CONSTRAINT; 
+
+  FUNCTION acyclic_occlusion_precedence
+       ( relation : occlusion_precedence;
+     set_of_lower : SET OF hiding_or_blanking_select ) : BOOLEAN;
+    LOCAL
+      x : SET OF occlusion_precedence;
+      local_set_of_lower : SET OF hiding_or_blanking_select;
+    END_LOCAL;
+    REPEAT i:=1 TO HIINDEX(set_of_lower);
+      IF relation.higher_precedence :=: set_of_lower[i] THEN
+        RETURN(FALSE);
+      END_IF;
+    END_REPEAT;
+    x := bag_to_set (USEDIN ( relation.higher_precedence,
+                   'PRESENTATION_APPEARANCE_SCHEMA.'+
+           'OCCLUSION_PRECEDENCE.LOWER_PRECEDENCE'));
+    local_set_of_lower := set_of_lower + relation.higher_precedence;
+    IF SIZEOF (x) > 0 THEN
+      REPEAT i:=1 TO HIINDEX (x);
+        IF NOT acyclic_occlusion_precedence(x[i] ,
+                                     local_set_of_lower) THEN
+            RETURN (FALSE);
+        END_IF;
+      END_REPEAT;
+    END_IF;
+    RETURN (TRUE);
+  END_FUNCTION;
+
+END_SCHEMA; 
+(*
+ISO TC184/SC4/WG12 N4830 - ISO/CD 10303-46 Visual presentation - EXPRESS
+*)
+
+SCHEMA presentation_definition_schema;
+ 
+REFERENCE FROM external_reference_schema
+    (externally_defined_item,
+     pre_defined_item);
+ 
+REFERENCE FROM geometry_schema
+    (axis2_placement,
+     b_spline_curve,
+     composite_curve,
+     curve,
+     geometric_representation_item,
+     point,
+     polyline 
+     );
+ 
+REFERENCE FROM measure_schema
+    (positive_ratio_measure);
+ 
+REFERENCE FROM presentation_appearance_schema
+    (styled_item);
+
+REFERENCE FROM presentation_organization_schema
+    (annotation_representation_select);
+ 
+REFERENCE FROM presentation_resource_schema
+    (character_glyph_symbol,
+     planar_box,
+     planar_extent,
+     font_select,
+     text_font);
+ 
+REFERENCE FROM representation_schema
+    (item_in_context,
+     mapped_item,
+     representation,
+     representation_item,
+     representation_map,
+     representation_relationship,
+     representation_relationship_with_transformation,
+     using_representations);
+
+REFERENCE FROM support_resource_schema
+    (label,
+     text,
+     bag_to_set);
+
+  TYPE annotation_symbol_occurrence_item = SELECT (
+    annotation_symbol,
+    defined_symbol); 
+  END_TYPE;
+
+  TYPE defined_glyph_select = SELECT
+    (pre_defined_character_glyph,
+     externally_defined_character_glyph);
+  END_TYPE;
+
+  TYPE defined_symbol_select = SELECT
+    (pre_defined_symbol,
+     externally_defined_symbol);
+  END_TYPE;
+
+  TYPE text_alignment = label;
+  END_TYPE;
+
+  TYPE text_delineation = label;
+  END_TYPE;
+
+  TYPE text_or_character = SELECT
+    (annotation_text,
+     annotation_text_character,
+     defined_character_glyph,
+     composite_text,
+     text_literal);
+  END_TYPE;
+
+  TYPE text_path = ENUMERATION OF
+    (left,
+     right,
+     up,
+     down);
+  END_TYPE;
+
+  TYPE annotation_table_occurrence_item = SELECT(
+    annotation_table, 
+    defined_table); 
+  END_TYPE; 
+
+  TYPE annotation_text_occurrence_item = SELECT(
+    text_literal, 
+    annotation_text, 
+    annotation_text_character, 
+    defined_character_glyph, 
+    composite_text); 
+  END_TYPE; 
+
+  TYPE presentable_text = STRING;
+    WHERE
+      WR1: control_characters_free(SELF);
+  END_TYPE;
+
+  TYPE text_string_representation_item = SELECT(
+    text_literal, 
+    annotation_text, 
+    annotation_text_character, 
+    defined_character_glyph, 
+    composite_text, 
+    axis2_placement); 
+  END_TYPE; 
+
+  ENTITY annotation_curve_occurrence
+    SUBTYPE OF (annotation_occurrence);
+      SELF\styled_item.item : curve;
+  END_ENTITY;
+
+  ENTITY annotation_fill_area
+    SUBTYPE OF (geometric_representation_item);
+      boundaries : SET [1:?] OF curve;
+    WHERE
+      WR1: (SELF\geometric_representation_item.dim = 3) OR (SIZEOF (QUERY (curve <* SELF.boundaries |
+          NOT (
+              ('GEOMETRY_SCHEMA.CIRCLE' IN TYPEOF (curve)) OR 
+              ('GEOMETRY_SCHEMA.ELLIPSE' IN TYPEOF (curve)) OR 
+              ( ('GEOMETRY_SCHEMA.B_SPLINE_CURVE' IN TYPEOF (curve)) 
+                   AND (curve\b_spline_curve.closed_curve = TRUE) ) OR 
+              ( ('GEOMETRY_SCHEMA.COMPOSITE_CURVE' IN TYPEOF (curve)) 
+                   AND (curve\composite_curve.closed_curve = TRUE) ) OR 
+              ( ('GEOMETRY_SCHEMA.POLYLINE' IN TYPEOF (curve)) 
+                   AND (curve\polyline.points[LOINDEX(curve\polyline.points)] = 
+                        curve\polyline.points[HIINDEX(curve\polyline.points)]) )
+              ) )) = 0);
+  END_ENTITY;
+
+  ENTITY annotation_fill_area_occurrence
+    SUBTYPE OF (annotation_occurrence);
+      fill_style_target     : point;
+      SELF\styled_item.item : annotation_fill_area;
+  END_ENTITY;
+
+  ENTITY annotation_occurrence
+    SUPERTYPE OF (ONEOF(annotation_point_occurrence,
+                        annotation_curve_occurrence,
+                        annotation_fill_area_occurrence,
+                        annotation_text_occurrence,
+                        annotation_symbol_occurrence))
+    SUBTYPE OF (styled_item);
+    WHERE
+      WR1: 'GEOMETRY_SCHEMA.GEOMETRIC_REPRESENTATION_ITEM' IN
+             TYPEOF (SELF);
+      WR2: SIZEOF (QUERY (reps <* using_representations(SELF) | 
+        NOT('PRESENTATION_ORGANIZATION_SCHEMA.ANNOTATION_REPRESENTATION_SELECT' IN TYPEOF(reps)))) = 0;
+  END_ENTITY;
+
+  ENTITY annotation_occurrence_relationship;
+    name                           : label;
+    description                    : text;
+    relating_annotation_occurrence : annotation_occurrence;
+    related_annotation_occurrence  : annotation_occurrence;
+  END_ENTITY;
+
+  ENTITY annotation_point_occurrence
+    SUBTYPE OF (annotation_occurrence);
+    SELF\styled_item.item : point;
+  END_ENTITY;
+
+  ENTITY annotation_symbol
+    SUBTYPE OF(mapped_item);
+      SELF\mapped_item.mapping_source : symbol_representation_map;
+      SELF\mapped_item.mapping_target : symbol_target;
+    WHERE
+      WR1: 'GEOMETRY_SCHEMA.GEOMETRIC_REPRESENTATION_ITEM' IN
+          TYPEOF (SELF);
+  END_ENTITY;
+
+  ENTITY annotation_symbol_occurrence
+    SUBTYPE OF (annotation_occurrence);
+      SELF\styled_item.item : annotation_symbol_occurrence_item;
+  END_ENTITY;
+
+  ENTITY annotation_table
+    SUBTYPE OF(annotation_symbol);
+    WHERE
+      WR1: 'PRESENTATION_DEFINITION_SCHEMA.TABLE_REPRESENTATION' IN
+          TYPEOF (SELF\mapped_item.mapping_source.mapped_representation);
+  END_ENTITY;
+
+  ENTITY annotation_table_occurrence
+    SUBTYPE OF (annotation_symbol_occurrence);
+      SELF\styled_item.item : annotation_table_occurrence_item;
+  END_ENTITY;
+
+  ENTITY annotation_text
+    SUBTYPE OF (mapped_item); 
+      SELF\mapped_item.mapping_target : axis2_placement;
+    WHERE
+      WR1: 'PRESENTATION_DEFINITION_SCHEMA.TEXT_STRING_REPRESENTATION' IN
+        TYPEOF( SELF\mapped_item.mapping_source.mapped_representation);
+      WR2: 'GEOMETRY_SCHEMA.GEOMETRIC_REPRESENTATION_ITEM' IN
+        TYPEOF( SELF);
+  END_ENTITY;
+
+  ENTITY annotation_text_character
+    SUBTYPE OF (mapped_item); 
+      alignment                       : text_alignment;
+      SELF\mapped_item.mapping_target : axis2_placement;
+    WHERE
+      WR1: 'PRESENTATION_RESOURCE_SCHEMA.CHARACTER_GLYPH_SYMBOL' IN
+         TYPEOF (SELF\mapped_item.mapping_source.mapped_representation);
+      WR2: 'GEOMETRY_SCHEMA.GEOMETRIC_REPRESENTATION_ITEM' IN
+         TYPEOF (SELF);
+  END_ENTITY;
+
+  ENTITY annotation_text_occurrence
+    SUBTYPE OF (annotation_occurrence);
+      SELF\styled_item.item : annotation_text_occurrence_item;
+  END_ENTITY;
+
+  ENTITY annotation_text_with_associated_curves
+    SUBTYPE OF (annotation_text);
+      associated_curves : SET[1:?] of curve;
+  END_ENTITY;
+
+  ENTITY annotation_text_with_blanking_box
+    SUBTYPE OF (annotation_text);
+      blanking : planar_box;
+  END_ENTITY;
+
+  ENTITY annotation_text_with_delineation
+    SUBTYPE OF (annotation_text);
+      delineation : text_delineation;
+  END_ENTITY;
+
+  ENTITY annotation_text_with_extent
+    SUBTYPE OF (annotation_text);
+      extent : planar_extent;
+  END_ENTITY;
+
+  ENTITY composite_text
+    SUBTYPE OF (geometric_representation_item);
+      collected_text : SET[2:?] of text_or_character;
+    WHERE
+      WR1: acyclic_composite_text( SELF, SELF.collected_text);
+  END_ENTITY;
+
+  ENTITY composite_text_with_associated_curves
+    SUBTYPE OF (composite_text);
+      associated_curves : SET[1:?] of curve;
+  END_ENTITY;
+
+  ENTITY composite_text_with_blanking_box
+    SUBTYPE OF (composite_text);
+      blanking : planar_box;
+  END_ENTITY;
+
+  ENTITY composite_text_with_delineation
+    SUBTYPE OF (composite_text);
+      delineation : text_delineation;
+  END_ENTITY;
+
+  ENTITY composite_text_with_extent
+    SUBTYPE OF (composite_text);
+      extent : planar_extent;
+  END_ENTITY;
+
+  ENTITY defined_character_glyph
+    SUBTYPE OF(geometric_representation_item);
+      definition : defined_glyph_select;
+      placement  : axis2_placement;
+  END_ENTITY;
+
+  ENTITY defined_symbol
+    SUBTYPE OF(geometric_representation_item);
+      definition : defined_symbol_select;
+      target     : symbol_target;
+  END_ENTITY;
+
+  ENTITY defined_table
+    SUBTYPE OF(defined_symbol);
+  END_ENTITY;
+
+  ENTITY externally_defined_character_glyph
+    SUBTYPE OF (externally_defined_item);
+  END_ENTITY;
+
+  ENTITY externally_defined_symbol
+    SUBTYPE OF (externally_defined_item);
+  END_ENTITY;
+
+  ENTITY pre_defined_character_glyph
+    SUBTYPE OF (pre_defined_item);
+  END_ENTITY;
+
+  ENTITY pre_defined_symbol
+    SUBTYPE OF (pre_defined_item);
+  END_ENTITY;
+
+  ENTITY symbol_representation
+    SUBTYPE OF (representation);
+  END_ENTITY;
+
+  ENTITY symbol_representation_map
+    SUBTYPE OF (representation_map);
+      SELF\representation_map.mapped_representation : symbol_representation;
+      SELF\representation_map.mapping_origin        : axis2_placement;
+  END_ENTITY;
+
+  ENTITY symbol_representation_relationship
+    SUBTYPE OF (representation_relationship_with_transformation);
+      SELF\representation_relationship.rep_1 : symbol_representation;
+      SELF\representation_relationship.rep_2 : symbol_representation;
+    WHERE
+      WR1: acyclic_symbol_representation_relationship (SELF,
+                                                     [SELF\representation_relationship.
+                                                           rep_2]);
+  END_ENTITY;
+
+  ENTITY symbol_representation_with_blanking_box
+    SUBTYPE OF (symbol_representation);
+      blanking : planar_box;
+    WHERE
+      WR1: item_in_context (SELF.blanking, SELF\representation.context_of_items);
+  END_ENTITY;
+
+  ENTITY symbol_target
+    SUBTYPE OF (geometric_representation_item);
+      placement         : axis2_placement;
+      x_scale           : positive_ratio_measure;
+      y_scale           : positive_ratio_measure;
+  END_ENTITY;
+
+  ENTITY table_representation
+    SUBTYPE OF (symbol_representation);
+    WHERE
+      WR1: (SIZEOF (QUERY (trr <* USEDIN (SELF, 'REPRESENTATION_SCHEMA.' +
+                                                'REPRESENTATION_RELATIONSHIP.REP_1') | 
+            NOT ('PRESENTATION_DEFINITION_SCHEMA.TABLE_REPRESENTATION_RELATIONSHIP' IN TYPEOF (trr)) 
+            )) = 0) AND 
+            (SIZEOF (QUERY (trr <* USEDIN (SELF, 'REPRESENTATION_SCHEMA.' +
+                                      'REPRESENTATION_RELATIONSHIP.REP_2') | 
+            NOT ('PRESENTATION_DEFINITION_SCHEMA.TABLE_REPRESENTATION_RELATIONSHIP' IN TYPEOF (trr)) 
+            )) = 0);
+  END_ENTITY;
+
+  ENTITY table_record_field_representation
+    SUBTYPE OF (symbol_representation);
+    WHERE
+      WR1: (SIZEOF(USEDIN(SELF, 'REPRESENTATION_SCHEMA.'+ 
+                     'REPRESENTATION_RELATIONSHIP.REP_2')) > 0) 
+                        OR 
+           (SIZEOF(QUERY( map_item <* USEDIN(SELF, 'REPRESENTATION_SCHEMA.'+ 
+                                                   'REPRESENTATION_MAP.'+ 
+                                                   'MAPPED_REPRESENTATION') | 
+            SIZEOF(QUERY( mi <* USEDIN(map_item, 'REPRESENTATION_SCHEMA.'+
+                                                 'MAPPED_ITEM.'+
+                                                 'MAPPING_SOURCE') |   
+            SIZEOF(QUERY( rep <* using_representations (mi) |                              
+                                          'PRESENTATION_DEFINITION_SCHEMA.'+
+                                          'TABLE_RECORD_REPRESENTATION' IN 
+                                          TYPEOF (rep))) > 0
+            )) > 0))  
+               > 0);
+  END_ENTITY;
+
+  ENTITY table_record_field_representation_with_clipping_box
+    SUBTYPE OF (table_record_field_representation);
+      clipping_box : planar_box;
+    WHERE
+      WR1: item_in_context (SELF.clipping_box, 
+                            SELF\representation.context_of_items);
+  END_ENTITY;
+
+  ENTITY table_record_representation
+    SUBTYPE OF (symbol_representation);
+    WHERE
+      WR1: (SIZEOF(USEDIN(SELF, 'REPRESENTATION_SCHEMA.'+ 
+                                'REPRESENTATION_RELATIONSHIP.REP_2')) > 0) 
+                        OR 
+           (SIZEOF(QUERY( map_item <* USEDIN(SELF, 'REPRESENTATION_SCHEMA.'+ 
+                                                   'REPRESENTATION_MAP.'+ 
+                                                   'MAPPED_REPRESENTATION') | 
+            SIZEOF(QUERY( mi <* USEDIN(map_item, 'REPRESENTATION_SCHEMA.'+
+                                                 'MAPPED_ITEM.'+
+                                                 'MAPPING_SOURCE') |   
+	        SIZEOF(QUERY( rep <* using_representations (mi) |                              
+	                             'PRESENTATION_DEFINITION_SCHEMA.'+
+	                              'TABLE_REPRESENTATION' IN 
+	                              TYPEOF (rep))) > 0
+
+            )) > 0))  
+               > 0);
+      WR2: (SIZEOF (QUERY (trr <* USEDIN (SELF, 'REPRESENTATION_SCHEMA.' +
+                                                'REPRESENTATION_RELATIONSHIP.REP_1') | 
+            NOT ('PRESENTATION_DEFINITION_SCHEMA.TABLE_REPRESENTATION_RELATIONSHIP' IN TYPEOF (trr)) 
+            )) = 0) AND 
+            (SIZEOF (QUERY (trr <* USEDIN (SELF, 'REPRESENTATION_SCHEMA.' +
+                                                 'REPRESENTATION_RELATIONSHIP.REP_2') | 
+            NOT ('PRESENTATION_DEFINITION_SCHEMA.TABLE_REPRESENTATION_RELATIONSHIP' IN TYPEOF (trr)) 
+            )) = 0);
+  END_ENTITY;
+
+  ENTITY table_representation_relationship
+    SUBTYPE OF (symbol_representation_relationship);
+    WHERE
+      WR1: NOT ('PRESENTATION_DEFINITION_SCHEMA.TABLE_RECORD_REPRESENTATION' IN
+            TYPEOF (SELF\representation_relationship.rep_1))   
+           OR
+           ('PRESENTATION_DEFINITION_SCHEMA.TABLE_RECORD_FIELD_REPRESENTATION' IN
+           TYPEOF (SELF\representation_relationship.rep_2));
+      WR2: NOT ('PRESENTATION_DEFINITION_SCHEMA.TABLE_REPRESENTATION' IN
+           TYPEOF (SELF\representation_relationship.rep_1))   
+           OR
+           ('PRESENTATION_DEFINITION_SCHEMA.TABLE_RECORD_REPRESENTATION' IN
+           TYPEOF (SELF\representation_relationship.rep_2));
+      WR3: NOT ('PRESENTATION_DEFINITION_SCHEMA.TABLE_RECORD_FIELD_REPRESENTATION' IN
+           TYPEOF (SELF\representation_relationship.rep_1)) 
+           OR
+           ('PRESENTATION_DEFINITION_SCHEMA.TABLE_RECORD_FIELD_REPRESENTATION' IN
+           TYPEOF (SELF\representation_relationship.rep_2));
+  END_ENTITY;
+
+  ENTITY table_text_relationship
+    SUBTYPE OF (annotation_occurrence_relationship);
+      field : table_record_field_representation;
+      SELF\annotation_occurrence_relationship.relating_annotation_occurrence : annotation_table_occurrence; 
+      SELF\annotation_occurrence_relationship.related_annotation_occurrence : annotation_text_occurrence; 
+    WHERE
+      WR1: 'PRESENTATION_DEFINITION_SCHEMA.ANNOTATION_TABLE'
+         IN TYPEOF (SELF\annotation_occurrence_relationship.
+                  relating_annotation_occurrence\styled_item.item);
+      WR2: field_in_table (SELF.field,
+                           SELF\annotation_occurrence_relationship.
+                                relating_annotation_occurrence);
+  END_ENTITY;
+
+  ENTITY text_literal
+    SUBTYPE OF (geometric_representation_item);
+      literal   : presentable_text;
+      placement : axis2_placement;
+      alignment : text_alignment;
+      path      : text_path;
+      font      : font_select;
+  END_ENTITY;
+
+  ENTITY text_literal_with_associated_curves
+    SUBTYPE OF (text_literal);
+      associated_curves : SET[1:?] of curve;
+  END_ENTITY;
+
+  ENTITY text_literal_with_blanking_box
+    SUBTYPE OF (text_literal);
+      blanking : planar_box;
+  END_ENTITY;
+
+  ENTITY text_literal_with_delineation
+    SUBTYPE OF (text_literal);
+      delineation : text_delineation;
+  END_ENTITY;
+
+  ENTITY text_literal_with_extent
+    SUBTYPE OF (text_literal);
+      extent : planar_extent;
+  END_ENTITY;
+
+  ENTITY text_string_representation
+    SUBTYPE OF (representation);
+      SELF\representation.items : SET[1:?] OF text_string_representation_item; 
+    WHERE
+      WR1: SIZEOF (
+         QUERY (item <* SELF\representation.items |
+           NOT (SIZEOF (['PRESENTATION_DEFINITION_SCHEMA.TEXT_LITERAL',
+                         'PRESENTATION_DEFINITION_SCHEMA.ANNOTATION_TEXT',
+                         'PRESENTATION_DEFINITION_SCHEMA.ANNOTATION_TEXT_CHARACTER',
+                         'PRESENTATION_DEFINITION_SCHEMA.DEFINED_CHARACTER_GLYPH',
+                         'PRESENTATION_DEFINITION_SCHEMA.COMPOSITE_TEXT'] *
+                 TYPEOF (item)) = 0)
+         )) >= 1;
+     WR2: SIZEOF (
+         QUERY (a2p <* 
+           QUERY (item <* SELF\representation.items | 
+             'GEOMETRY_SCHEMA.AXIS2_PLACEMENT' IN TYPEOF (item)) |
+           NOT ((SIZEOF (
+             QUERY (at <* 
+               QUERY (item <* SELF\representation.items | 
+                  'PRESENTATION_DEFINITION_SCHEMA.' + 
+                  'ANNOTATION_TEXT' IN TYPEOF (item)) | 
+               (at\mapped_item.mapping_target :=: a2p))) >= 1) OR
+           (SIZEOF (
+             QUERY (atc <* 
+               QUERY (item <* SELF\representation.items |
+                 'PRESENTATION_DEFINITION_SCHEMA.' + 
+                 'ANNOTATION_TEXT_CHARACTER' IN TYPEOF (item)) | 
+               (atc\mapped_item.mapping_target :=: a2p))) >= 1)
+          ))) = 0;
+  END_ENTITY;
+
+  SUBTYPE_CONSTRAINT pds_geometric_representation_item_subtypes FOR geometric_representation_item;  
+    (ONEOF ( 
+      annotation_fill_area,
+      composite_text,
+      curve,
+      defined_character_glyph,
+      defined_symbol,
+      point,
+      symbol_target,
+      text_literal)); 
+  END_SUBTYPE_CONSTRAINT; 
+
+  FUNCTION acyclic_composite_text(start_composite : composite_text;
+                                child_text : SET [1:?] OF
+                                text_or_character) : LOGICAL;
+    LOCAL
+      i : INTEGER;
+      local_composite_text : SET [0:?] OF composite_text;
+      local_annotation_text : SET [0:?] OF annotation_text;
+      local_children : SET [0:?] OF text_or_character;
+    END_LOCAL;
+
+    local_composite_text := QUERY (child <* child_text |
+                          ('PRESENTATION_DEFINITION_SCHEMA.COMPOSITE_TEXT'
+                           IN TYPEOF (child)));
+
+    IF (SIZEOF (local_composite_text) > 0) 
+      THEN
+        REPEAT i := 1 TO HIINDEX (local_composite_text);
+          IF (start_composite :=: local_composite_text[i]) 
+            THEN
+              RETURN (FALSE);
+          END_IF;
+        END_REPEAT;
+    END_IF;
+
+    local_children := child_text;
+
+    IF (SIZEOF (local_composite_text)) > 0 THEN
+      REPEAT i := 1 TO HIINDEX (local_composite_text);
+        local_children := local_children +
+                          local_composite_text[i].collected_text;
+      END_REPEAT;
+    END_IF;
+
+    local_annotation_text := QUERY (child <* child_text |
+                            ('PRESENTATION_DEFINITION_SCHEMA.ANNOTATION_TEXT'
+                             IN TYPEOF (child)));
+
+    IF (SIZEOF (local_annotation_text) > 0) THEN
+      REPEAT i := 1 TO HIINDEX (local_annotation_text);
+        local_children := local_children +
+        QUERY (item <* local_annotation_text[i]\mapped_item.
+                       mapping_source.mapped_representation.items |
+          SIZEOF(['PRESENTATION_DEFINITION_SCHEMA.ANNOTATION_TEXT',
+                  'PRESENTATION_DEFINITION_SCHEMA.COMPOSITE_TEXT'] *
+                  TYPEOF(item)) > 0);
+      END_REPEAT;
+    END_IF;
+
+    IF (local_children :<>: child_text) THEN
+      RETURN (acyclic_composite_text (start_composite, local_children));
+    ELSE
+      RETURN (TRUE);
+    END_IF;
+
+  END_FUNCTION;
+
+  FUNCTION acyclic_symbol_representation_relationship
+    (relation : symbol_representation_relationship;
+     children : SET OF symbol_representation ) : BOOLEAN;
+    LOCAL
+      x : SET OF symbol_representation_relationship;
+      local_children : SET OF symbol_representation;
+    END_LOCAL;
+ 
+    REPEAT i:=1 TO HIINDEX(children);
+      IF relation\representation_relationship.rep_1 :=: children[i] THEN
+        RETURN(FALSE);
+      END_IF;
+    END_REPEAT;
+ 
+    x := bag_to_set (USEDIN ( relation\representation_relationship.rep_1,
+                  'REPRESENTATION_SCHEMA.'+
+                  'REPRESENTATION_RELATIONSHIP.'+ 'REP_2'));
+    local_children := children + relation\representation_relationship.rep_1;
+ 
+    IF SIZEOF (x) > 0 THEN
+      REPEAT i:=1 TO HIINDEX (x);
+        IF NOT acyclic_symbol_representation_relationship(x[i] , 
+                                                  local_children) THEN
+          RETURN (FALSE);
+        END_IF;
+      END_REPEAT;
+    END_IF;
+ 
+    RETURN (TRUE);
+ 
+  END_FUNCTION;
+
+  FUNCTION control_characters_free 
+    (s : STRING) : BOOLEAN;
+
+    LOCAL
+      ch : STRING;
+    END_LOCAL;
+
+    REPEAT i:=1 TO LENGTH(s);
+      ch := s[i];
+      IF (ch = '\x9') OR (ch = '\xA') OR (ch = '\xD') THEN
+        RETURN(FALSE);
+      END_IF;
+    END_REPEAT;
+    RETURN (TRUE);
+
+  END_FUNCTION;
+
+  FUNCTION field_in_table (field : table_record_field_representation;
+                           table : annotation_table_occurrence): BOOLEAN;
+    LOCAL
+      table_rep : table_representation;
+      symbol_rep_rel_set : SET OF symbol_representation_relationship;
+      mapped_item_set : SET OF mapped_item;
+      table_record_rep_set : SET OF table_record_representation := [];
+    END_LOCAL;
+ 
+    table_rep := table\styled_item.item\mapped_item.mapping_source.
+      mapped_representation;
+    mapped_item_set := QUERY(item <* table_rep.items |
+                         ('REPRESENTATION_SCHEMA.MAPPED_ITEM' IN
+                          TYPEOF(item))
+                                   AND
+                         ('PRESENTATION_DEFINITION_SCHEMA.'+
+                          'TABLE_RECORD_REPRESENTATION' IN
+                           TYPEOF(item\mapped_item.mapping_source.
+                                      mapped_representation ))
+                       );
+ 
+    REPEAT i := 1 TO HIINDEX(mapped_item_set);
+      table_record_rep_set := table_record_rep_set +
+             mapped_item_set[i].mapping_source.mapped_representation;
+    END_REPEAT;
+ 
+    symbol_rep_rel_set := bag_to_set (USEDIN(table_rep, 
+                                 'REPRESENTATION_SCHEMA.'+
+                                 'REPRESENTATION_RELATIONSHIP.REP_1'));
+ 
+    REPEAT i := 1 TO HIINDEX(symbol_rep_rel_set);
+       table_record_rep_set := table_record_rep_set +
+                symbol_rep_rel_set[i]\representation_relationship.rep_2;
+    END_REPEAT;
+ 
+    IF SIZEOF(QUERY( table_record_rep <* table_record_rep_set |
+                (SIZEOF(QUERY( rep_rel <* USEDIN(table_record_rep,
+                              'REPRESENTATION_SCHEMA.'+
+                              'REPRESENTATION_RELATIONSHIP.REP_1') |
+                         ('PRESENTATION_DEFINITION_SCHEMA.' +
+                         'SYMBOL_REPRESENTATION_RELATIONSHIP' IN TYPEOF(rep_rel)) AND  
+                         (rep_rel.rep_2 :=: field)
+                         )) > 0)
+                         OR
+                (SIZEOF(QUERY(item <* table_record_rep.items |
+                          ('REPRESENTATION_SCHEMA.MAPPED_ITEM' IN
+                           TYPEOF(item))
+                                   AND
+                          (field :=: item\mapped_item.mapping_source.
+                                      mapped_representation )
+                           )) > 0)
+               )) = 0 THEN
+      RETURN(FALSE);
+    END_IF;
+ 
+    RETURN(TRUE);
+ 
+  END_FUNCTION;
+
+END_SCHEMA; 
+(*
+ISO TC184/SC4/WG12 N4830 - ISO/CD 10303-46 Visual presentation - EXPRESS
+*) 
+
+
+SCHEMA presentation_organization_schema;
+
+REFERENCE FROM presentation_resource_schema
+   (colour,
+    planar_box,
+    planar_extent,
+    presentation_scaled_placement);
+
+REFERENCE FROM presentation_definition_schema
+    (annotation_occurrence,
+     symbol_representation,
+     symbol_representation_relationship);
+
+REFERENCE FROM presentation_appearance_schema
+    (styled_item);
+
+REFERENCE FROM geometry_schema
+    (axis2_placement,    
+     axis2_placement_2d,
+     axis2_placement_3d,
+     cartesian_point,
+     curve,
+     direction,
+     dot_product,
+     geometric_representation_context,
+     geometric_representation_item,
+     plane
+     );
+ 
+REFERENCE FROM representation_schema
+    (founded_item,
+     item_defined_transformation,
+     item_in_context,
+     mapped_item,
+     representation,
+     representation_item,
+     representation_map,
+     representation_relationship,
+     representation_relationship_with_transformation,
+     using_representations);
+ 
+REFERENCE FROM measure_schema
+   (length_measure,
+    positive_ratio_measure,
+    positive_plane_angle_measure);
+ 
+REFERENCE FROM support_resource_schema
+    (identifier,
+     label,
+     text,
+     bag_to_set);
+
+  TYPE area_or_view = SELECT 
+    (presentation_area,
+     presentation_view);
+  END_TYPE;
+
+  TYPE camera_model_d3_multi_clipping_interection_select = SELECT ( 
+    camera_model_d3_multi_clipping_union, 
+    plane); 
+  END_TYPE; 
+ 
+  TYPE camera_model_d3_multi_clipping_union_select = SELECT ( 
+    camera_model_d3_multi_clipping_intersection, 
+    plane); 
+  END_TYPE; 
+
+  TYPE central_or_parallel = ENUMERATION OF 
+    (central, 
+     parallel);
+  END_TYPE;
+
+  TYPE layered_item = SELECT 
+    (presentation_representation,
+     representation_item);
+  END_TYPE;
+
+  SUBTYPE_CONSTRAINT pos_geometric_representation_item_subtypes FOR geometric_representation_item;  
+      (ONEOF ( 
+    camera_model, 
+    camera_model_d3_multi_clipping_intersection,
+    camera_model_d3_multi_clipping_union, 
+    curve,
+    direction,
+    light_source)); 
+  END_SUBTYPE_CONSTRAINT; 
+
+  TYPE presentation_representation_select = SELECT 
+    (presentation_representation,
+     presentation_set);
+  END_TYPE;
+
+  TYPE presentation_size_assignment_select = SELECT 
+    (presentation_view,
+     presentation_area,
+     area_in_set);
+  END_TYPE;
+
+  TYPE annotation_representation_select = EXTENSIBLE SELECT (
+    area_dependent_annotation_representation, 
+    presentation_area,
+    presentation_view,
+    symbol_representation,
+    view_dependent_annotation_representation);
+  END_TYPE;
+
+  TYPE area_dependent_annotation_representation_item = SELECT (
+    annotation_occurrence, 
+    axis2_placement); 
+  END_TYPE;
+
+  TYPE product_data_representation_view_item = SELECT (
+    camera_image, 
+    axis2_placement); 
+  END_TYPE; 
+
+  TYPE view_dependent_annotation_representation_item = SELECT (
+    annotation_occurrence, 
+    axis2_placement); 
+  END_TYPE;
+
+  ENTITY area_dependent_annotation_representation
+    SUBTYPE OF (presentation_representation);
+      SELF\representation.items : SET[1:?] OF area_dependent_annotation_representation_item; 
+    WHERE
+      WR1: SIZEOF (QUERY (item <* SELF\representation.items | 
+        ('PRESENTATION_DEFINITION_SCHEMA.ANNOTATION_OCCURRENCE' IN
+        TYPEOF (item))
+        )) >= 1;
+      WR2: (SIZEOF (QUERY (prr <* USEDIN (SELF, 'REPRESENTATION_SCHEMA.' +
+                                                'REPRESENTATION_RELATIONSHIP.REP_2') | 
+           'PRESENTATION_ORGANIZATION_SCHEMA.PRESENTATION_AREA' IN
+           TYPEOF (prr\representation_relationship.rep_1))) > 0)
+                                  OR 
+           (SIZEOF(QUERY( rm <* USEDIN(SELF, 'REPRESENTATION_SCHEMA.'+ 
+                                             'REPRESENTATION_MAP.'+ 
+                                             'MAPPED_REPRESENTATION') | 
+            SIZEOF(QUERY( mi <* USEDIN(rm, 'REPRESENTATION_SCHEMA.'+
+                                           'MAPPED_ITEM.'+
+                                           'MAPPING_SOURCE') |   
+            SIZEOF(QUERY( rep <* using_representations (mi) |                              
+                                           'PRESENTATION_ORGANIZATION_SCHEMA.'+
+                                           'PRESENTATION_AREA' IN 
+                                           TYPEOF (rep))) > 0
+            )) > 0))  
+            > 0);
+      WR3: (SIZEOF (QUERY (prr <* USEDIN (SELF, 'REPRESENTATION_SCHEMA.' +
+                                                'REPRESENTATION_RELATIONSHIP.REP_2') | 
+           NOT('PRESENTATION_ORGANIZATION_SCHEMA.PRESENTATION_AREA' IN
+           TYPEOF (prr\representation_relationship.rep_1)))) = 0)
+                                  AND 
+           (SIZEOF(QUERY( rm <* USEDIN(SELF, 'REPRESENTATION_SCHEMA.'+ 
+                                             'REPRESENTATION_MAP.'+ 
+                                             'MAPPED_REPRESENTATION') | 
+            SIZEOF(QUERY( mi <* USEDIN(rm, 'REPRESENTATION_SCHEMA.'+
+                                           'MAPPED_ITEM.'+
+                                           'MAPPING_SOURCE') |   
+            SIZEOF(QUERY( rep <* using_representations (mi) |                              
+                                      NOT('PRESENTATION_ORGANIZATION_SCHEMA.'+
+                                          'PRESENTATION_AREA' IN 
+                                          TYPEOF (rep)))) > 0
+            )) > 0))  
+            = 0);
+  END_ENTITY;
+
+  ENTITY area_in_set;
+    area   : presentation_area;
+    in_set : presentation_set;
+  END_ENTITY;
+
+  ENTITY background_colour
+    SUBTYPE OF (colour);
+      presentation : area_or_view;
+    UNIQUE
+      UR1:  presentation;
+  END_ENTITY;
+
+  ENTITY camera_image
+    SUPERTYPE OF(ONEOF(camera_image_2d_with_scale,
+  	  camera_image_3d_with_scale))
+    SUBTYPE OF (mapped_item); 
+      SELF\mapped_item.mapping_source : camera_usage;
+      SELF\mapped_item.mapping_target : planar_box;
+    WHERE
+      WR1: 'GEOMETRY_SCHEMA.GEOMETRIC_REPRESENTATION_ITEM'
+        IN TYPEOF (SELF);
+  END_ENTITY;
+
+  ENTITY camera_image_2d_with_scale
+    SUBTYPE OF (camera_image);
+    DERIVE
+      scale : positive_ratio_measure := (SELF\mapped_item.mapping_target\planar_extent.size_in_x)/
+      (SELF\mapped_item.mapping_source.mapping_origin\camera_model_d2.view_window\planar_extent.size_in_x);
+    WHERE
+      WR1: ('PRESENTATION_ORGANIZATION_SCHEMA.CAMERA_MODEL_D2' IN TYPEOF(SELF\mapped_item.mapping_source.mapping_origin));
+      WR2: aspect_ratio (SELF\mapped_item.mapping_target) = aspect_ratio (SELF\mapped_item.mapping_source.mapping_origin\camera_model_d2.view_window);
+      WR3: SELF\mapped_item.mapping_source.mapping_origin\camera_model_d2.view_window_clipping;
+      WR4: NOT('PRESENTATION_ORGANIZATION_SCHEMA.CAMERA_MODEL_D2' IN TYPEOF(SELF));
+  END_ENTITY;
+ 
+  ENTITY camera_image_3d_with_scale
+    SUBTYPE OF (camera_image);
+    DERIVE
+      scale: positive_ratio_measure := ((SELF\mapped_item.mapping_target\
+           planar_extent.size_in_x) / (SELF\mapped_item.mapping_source.
+           mapping_origin\camera_model_d3.perspective_of_volume.view_window.
+           size_in_x));
+    WHERE
+      WR1: ('PRESENTATION_ORGANIZATION_SCHEMA.CAMERA_MODEL_D3'
+         IN TYPEOF (SELF\mapped_item.mapping_source.mapping_origin));
+      WR2: aspect_ratio(SELF\mapped_item.mapping_target) =
+           aspect_ratio(SELF\mapped_item.mapping_source.mapping_origin\
+           camera_model_d3.perspective_of_volume.view_window);
+      WR3: SELF\mapped_item.mapping_source.mapping_origin\camera_model_d3.
+           perspective_of_volume.front_plane_clipping
+           AND
+           SELF\mapped_item.mapping_source.mapping_origin\camera_model_d3.
+           perspective_of_volume.view_volume_sides_clipping;
+      WR4: (SELF\mapped_item.mapping_target\planar_extent.size_in_x > 0)
+           AND
+           (SELF\mapped_item.mapping_target\planar_extent.size_in_y > 0);
+      WR5: (SELF\mapped_item.mapping_source.mapping_origin\camera_model_d3.
+           perspective_of_volume.view_window.size_in_x > 0)
+           AND
+           (SELF\mapped_item.mapping_source.mapping_origin\camera_model_d3.
+           perspective_of_volume.view_window.size_in_y > 0);
+      WR6: ('GEOMETRY_SCHEMA.' +
+            'AXIS2_PLACEMENT_2D' IN TYPEOF (SELF\mapped_item.
+           mapping_target\planar_box.placement))
+           AND NOT ('GEOMETRY_SCHEMA.' +
+           'AXIS2_PLACEMENT_3D' IN TYPEOF (SELF\mapped_item.
+           mapping_target\planar_box.placement));
+  END_ENTITY;
+
+  ENTITY camera_model
+    ABSTRACT
+    SUPERTYPE OF (ONEOF(camera_model_d2, camera_model_d3))
+    SUBTYPE OF (geometric_representation_item);
+    WHERE
+      WR1: (SIZEOF (USEDIN (SELF, 'REPRESENTATION_SCHEMA.' +
+                                  'ITEM_DEFINED_TRANSFORMATION.' +
+                                  'TRANSFORM_ITEM_1')) +
+            SIZEOF (USEDIN (SELF, 'REPRESENTATION_SCHEMA.' +
+                                  'REPRESENTATION_MAP.MAPPING_ORIGIN'))
+            ) > 0;
+      WR2: SIZEOF(USEDIN(SELF,'PRESENTATION_APPEARANCE_SCHEMA.'+
+                              'STYLED_ITEM.ITEM')) = 0;
+  END_ENTITY;
+
+  ENTITY camera_model_d2
+    SUBTYPE OF (camera_model);
+      view_window          : planar_box;
+      view_window_clipping : BOOLEAN;
+    WHERE
+      WR1: SELF\geometric_representation_item.dim = 2;
+      WR2: NOT('PRESENTATION_ORGANIZATION_SCHEMA.CAMERA_IMAGE_2D_WITH_SCALE' IN TYPEOF(SELF));      
+  END_ENTITY;
+
+  ENTITY camera_model_d2_shape_clipping
+    SUBTYPE OF (camera_model_d2);
+      shape_clipping : curve;
+  END_ENTITY;
+
+  ENTITY camera_model_d3
+    SUBTYPE OF (camera_model);
+      view_reference_system : axis2_placement_3d;
+      perspective_of_volume : view_volume;
+    WHERE
+      WR1: (dot_product (SELF.view_reference_system.p[3],
+           SELF.perspective_of_volume.view_window.placement.p[3]) = 1.0)
+           AND
+           (SELF.view_reference_system.location.coordinates[3] =
+           SELF.perspective_of_volume.view_window.
+             placement.location.coordinates[3]);
+      WR2: SELF\geometric_representation_item.dim = 3;
+  END_ENTITY;
+
+  ENTITY camera_model_d3_multi_clipping 
+    SUBTYPE OF (camera_model_d3); 
+      shape_clipping : SET [1:?] OF camera_model_d3_multi_clipping_interection_select; 
+  END_ENTITY; 
+ 
+  ENTITY camera_model_d3_multi_clipping_union 
+    SUBTYPE OF (geometric_representation_item); 
+      shape_clipping : SET [2:?] OF camera_model_d3_multi_clipping_union_select; 
+  END_ENTITY;   
+ 
+  ENTITY camera_model_d3_multi_clipping_intersection 
+    SUBTYPE OF (geometric_representation_item); 
+      shape_clipping : SET [2:?] OF camera_model_d3_multi_clipping_interection_select; 
+  END_ENTITY;
+
+  ENTITY camera_model_d3_with_hlhsr
+    SUBTYPE OF (camera_model_d3);
+      hidden_line_surface_removal : BOOLEAN;
+  END_ENTITY;
+
+  ENTITY camera_model_with_light_sources
+    SUBTYPE OF (camera_model_d3);
+      sources : SET [1:?] OF light_source;
+  END_ENTITY;
+
+  ENTITY camera_usage
+    SUBTYPE OF (representation_map);
+      SELF\representation_map.mapping_origin : camera_model;
+    WHERE
+      WR1: NOT ('PRESENTATION_ORGANIZATION_SCHEMA.PRESENTATION_REPRESENTATION'
+          IN TYPEOF(SELF\representation_map.mapped_representation));
+  END_ENTITY;
+
+  ENTITY graphical_transformation
+    SUBTYPE OF (item_defined_transformation);
+      SELF\item_defined_transformation.transform_item_1 : axis2_placement_2d;
+      SELF\item_defined_transformation.transform_item_2 : presentation_scaled_placement;
+  END_ENTITY;
+
+  ENTITY light_source
+    SUPERTYPE OF (ONEOF(light_source_ambient,
+                        light_source_directional,
+                        light_source_positional,
+                        light_source_spot))
+    SUBTYPE OF (geometric_representation_item);
+      light_colour : colour;
+    WHERE
+      WR1: SIZEOF(USEDIN(SELF,'PRESENTATION_APPEARANCE_SCHEMA.'+
+                              'STYLED_ITEM.ITEM')) = 0;
+  END_ENTITY;
+
+  ENTITY light_source_ambient
+    SUBTYPE OF (light_source);
+  END_ENTITY;
+
+  ENTITY light_source_directional
+    SUBTYPE OF (light_source);
+      orientation : direction;
+  END_ENTITY;
+
+  ENTITY light_source_positional
+    SUBTYPE OF (light_source);
+      position             : cartesian_point;
+      constant_attenuation : REAL;
+      distance_attenuation : REAL;
+  END_ENTITY;
+
+  ENTITY light_source_spot
+    SUBTYPE OF (light_source);
+      position               : cartesian_point;
+      orientation            : direction;
+      concentration_exponent : REAL;
+      constant_attenuation   : REAL;
+      distance_attenuation   : REAL;
+      spread_angle           : positive_plane_angle_measure;
+  END_ENTITY;
+
+  ENTITY presentation_area
+    SUBTYPE OF (presentation_representation);
+    WHERE
+      WR1: ((SIZEOF (QUERY (ais <* USEDIN (SELF, 'PRESENTATION_ORGANIZATION_SCHEMA.' +
+                                                 'AREA_IN_SET.AREA') | 
+             SIZEOF (USEDIN (ais, 'PRESENTATION_ORGANIZATION_SCHEMA.' +
+                                  'PRESENTATION_SIZE.UNIT')) =1)) > 0) OR
+            (SIZEOF (USEDIN (SELF, 'PRESENTATION_ORGANIZATION_SCHEMA.' +
+                                   'PRESENTATION_SIZE.UNIT')) =1));
+  END_ENTITY;
+
+  ENTITY presentation_layer_assignment;
+    name           : label;
+    description    : text;
+    assigned_items : SET [1:?] OF layered_item;
+  END_ENTITY;
+
+  ENTITY presentation_layer_usage;
+      assignment   : presentation_layer_assignment;
+      presentation : presentation_representation;
+    UNIQUE
+      UR1: assignment, presentation;
+  END_ENTITY;
+
+  ENTITY presentation_representation
+    SUPERTYPE OF (ONEOF(area_dependent_annotation_representation,
+      presentation_area,
+      presentation_view,
+      product_data_representation_view,
+      view_dependent_annotation_representation))
+    SUBTYPE OF (representation);
+      SELF\representation.context_of_items : geometric_representation_context;
+    WHERE
+      WR1: SELF\representation.
+           context_of_items\geometric_representation_context.
+           coordinate_space_dimension = 2;
+      WR2: ('PRESENTATION_ORGANIZATION_SCHEMA.PRESENTATION_AREA' IN TYPEOF (SELF))
+           OR
+           (SIZEOF (QUERY (prr <* USEDIN (SELF, 'REPRESENTATION_SCHEMA.' +
+                                                'REPRESENTATION_RELATIONSHIP.REP_2') | 
+           'PRESENTATION_ORGANIZATION_SCHEMA.PRESENTATION_REPRESENTATION' IN
+           TYPEOF (prr\representation_relationship.rep_1))) > 0)
+           OR 
+           (SIZEOF(QUERY( rm <* USEDIN(SELF, 'REPRESENTATION_SCHEMA.'+ 
+                                             'REPRESENTATION_MAP.'+ 
+                                             'MAPPED_REPRESENTATION') | 
+           SIZEOF(QUERY( mi <* USEDIN(rm, 'REPRESENTATION_SCHEMA.'+
+                                          'MAPPED_ITEM.'+
+                                          'MAPPING_SOURCE') |   
+           SIZEOF(QUERY( rep <* using_representations (mi) |                              
+                                        'PRESENTATION_ORGANIZATION_SCHEMA.'+
+                                        'PRESENTATION_REPRESENTATION' IN 
+                                        TYPEOF (rep))) > 0
+           )) > 0))  
+           > 0);
+  END_ENTITY;
+
+  ENTITY presentation_representation_relationship
+    SUBTYPE OF (representation_relationship_with_transformation);
+      SELF\representation_relationship.rep_1                                       : presentation_representation; 
+      SELF\representation_relationship.rep_2                                       : presentation_representation; 
+      SELF\representation_relationship_with_transformation.transformation_operator : graphical_transformation;
+    WHERE
+      WR1: acyclic_presentation_representation_relationship (SELF,
+           [SELF\representation_relationship.rep_2]);
+      WR2: NOT (('PRESENTATION_ORGANIZATION_SCHEMA.PRESENTATION_AREA' IN
+           TYPEOF (SELF\representation_relationship.rep_1)) 
+           AND
+           NOT (SIZEOF (['PRESENTATION_ORGANIZATION_SCHEMA.' +
+                         'PRODUCT_DATA_REPRESENTATION_VIEW',
+                         'PRESENTATION_ORGANIZATION_SCHEMA.' +
+                         'VIEW_DEPENDENT_ANNOTATION_REPRESENTATION'] *
+           TYPEOF (SELF\representation_relationship.rep_2)) = 0));
+      WR3: NOT (('PRESENTATION_ORGANIZATION_SCHEMA.PRESENTATION_VIEW'
+           IN TYPEOF (SELF\representation_relationship.rep_1))
+           AND
+           NOT (SIZEOF (['PRESENTATION_ORGANIZATION_SCHEMA.' +
+                         'PRESENTATION_AREA',
+                         'PRESENTATION_ORGANIZATION_SCHEMA.' +
+                         'PRESENTATION_VIEW',
+                         'PRESENTATION_ORGANIZATION_SCHEMA.' +
+                         'AREA_DEPENDENT_ANNOTATION_REPRESENTATION'] *
+                TYPEOF (SELF\representation_relationship.rep_2))=0));
+      WR4: (NOT ('PRESENTATION_ORGANIZATION_SCHEMA.PRESENTATION_VIEW' IN
+           TYPEOF(SELF\representation_relationship.rep_2)))
+              XOR
+           ('PRESENTATION_ORGANIZATION_SCHEMA.PRESENTATION_AREA'IN
+           TYPEOF(SELF\representation_relationship.rep_1));
+      WR5: (NOT ('PRESENTATION_ORGANIZATION_SCHEMA.' +
+                 'PRODUCT_DATA_REPRESENTATION_VIEW' IN
+           (TYPEOF(SELF\representation_relationship.rep_1) +
+            TYPEOF(SELF\representation_relationship.rep_2))))
+              XOR
+           ('PRESENTATION_ORGANIZATION_SCHEMA.PRESENTATION_VIEW' IN
+            TYPEOF(SELF\representation_relationship.rep_1))
+              AND
+           ('PRESENTATION_ORGANIZATION_SCHEMA.PRODUCT_DATA_REPRESENTATION_VIEW' IN
+            TYPEOF(SELF\representation_relationship.rep_2));
+  END_ENTITY;
+
+  ENTITY presentation_set;
+   INVERSE
+     areas : SET [1:?] OF area_in_set FOR in_set;
+  END_ENTITY;
+
+  ENTITY presentation_size;
+      unit : presentation_size_assignment_select;
+      size : planar_box;
+    UNIQUE
+      UR1: unit;
+    WHERE
+      WR1: (('PRESENTATION_ORGANIZATION_SCHEMA.PRESENTATION_REPRESENTATION'
+           IN TYPEOF (SELF.unit)) AND
+           item_in_context (SELF.size, 
+                            SELF.unit\representation.context_of_items)
+           )
+           OR
+           (('PRESENTATION_ORGANIZATION_SCHEMA.AREA_IN_SET'
+           IN TYPEOF (SELF.unit)) AND
+           (SIZEOF (QUERY ( ais <* SELF.unit\area_in_set.in_set.areas |
+                NOT item_in_context (SELF.size, ais.area\representation.
+                                                context_of_items) )) = 0)); 
+  END_ENTITY;
+
+  ENTITY presentation_view
+    SUBTYPE OF (presentation_representation);
+  END_ENTITY;
+
+  ENTITY presented_item
+    ABSTRACT SUPERTYPE;
+  END_ENTITY;
+
+  ENTITY presented_item_representation;
+    presentation : presentation_representation_select;
+    item         : presented_item;
+  END_ENTITY;
+
+  ENTITY product_data_representation_view
+    SUBTYPE OF (presentation_representation);
+      SELF\representation.items : SET[1:?] OF product_data_representation_view_item;
+    WHERE
+      WR1: SIZEOF (QUERY (item <* SELF\representation.items | 
+        ('PRESENTATION_ORGANIZATION_SCHEMA.CAMERA_IMAGE' IN
+         TYPEOF (item))
+        )) >= 1;
+      WR2: (SIZEOF (QUERY (prr <* USEDIN (SELF, 'REPRESENTATION_SCHEMA.' +
+                                                'REPRESENTATION_RELATIONSHIP.REP_2') | 
+           'PRESENTATION_ORGANIZATION_SCHEMA.PRESENTATION_VIEW' IN
+           TYPEOF (prr\representation_relationship.rep_1))) > 0)
+                                  OR 
+           (SIZEOF(QUERY( rm <* USEDIN(SELF, 'REPRESENTATION_SCHEMA.'+ 
+                                             'REPRESENTATION_MAP.'+ 
+                                             'MAPPED_REPRESENTATION') | 
+           SIZEOF(QUERY( mi <* USEDIN(rm, 'REPRESENTATION_SCHEMA.'+
+                                          'MAPPED_ITEM.'+
+                                          'MAPPING_SOURCE') |   
+           SIZEOF(QUERY( rep <* using_representations (mi) |                              
+                                       'PRESENTATION_ORGANIZATION_SCHEMA.'+
+                                       'PRESENTATION_VIEW' IN 
+                                        TYPEOF (rep))) > 0
+           )) > 0))  
+               > 0);
+      WR3: (SIZEOF (QUERY (prr <* USEDIN (SELF, 'REPRESENTATION_SCHEMA.' +
+                                                'REPRESENTATION_RELATIONSHIP.REP_2') | 
+            NOT('PRESENTATION_ORGANIZATION_SCHEMA.PRESENTATION_VIEW' IN
+            TYPEOF (prr\representation_relationship.rep_1)))) = 0)
+                                  AND 
+           (SIZEOF(QUERY( rm <* USEDIN(SELF, 'REPRESENTATION_SCHEMA.'+ 
+                                             'REPRESENTATION_MAP.'+ 
+                                             'MAPPED_REPRESENTATION') | 
+            SIZEOF(QUERY( mi <* USEDIN(rm, 'REPRESENTATION_SCHEMA.'+
+                                           'MAPPED_ITEM.'+
+                                           'MAPPING_SOURCE') |   
+            SIZEOF(QUERY( rep <* using_representations (mi) |                              
+                                       NOT('PRESENTATION_ORGANIZATION_SCHEMA.'+
+                                           'PRESENTATION_VIEW' IN 
+                                       TYPEOF (rep)))) > 0
+            )) > 0))  
+            = 0);
+  END_ENTITY;
+
+  ENTITY representation_item_dependent_layer_assignment
+    SUBTYPE OF (presentation_layer_assignment);
+      item_context : representation_item;
+  END_ENTITY;
+
+  ENTITY view_dependent_annotation_representation
+    SUBTYPE OF (presentation_representation);
+      SELF\representation.items : SET [1:?] OF view_dependent_annotation_representation_item;
+    WHERE
+      WR1: SIZEOF (QUERY (item <* SELF\representation.items |
+        ('PRESENTATION_DEFINITION_SCHEMA.ANNOTATION_OCCURRENCE' IN
+        TYPEOF (item))
+        )) >= 1;
+      WR2: (SIZEOF (QUERY (prr <* USEDIN (SELF, 'REPRESENTATION_SCHEMA.' +
+                                                'REPRESENTATION_RELATIONSHIP.REP_2') | 
+           'PRESENTATION_ORGANIZATION_SCHEMA.PRESENTATION_VIEW' IN
+           TYPEOF (prr\representation_relationship.rep_1))) > 0)
+                                  OR 
+          (SIZEOF(QUERY( rm <* USEDIN(SELF, 'REPRESENTATION_SCHEMA.'+ 
+                                            'REPRESENTATION_MAP.'+ 
+                                            'MAPPED_REPRESENTATION') | 
+           SIZEOF(QUERY( mi <* USEDIN(rm, 'REPRESENTATION_SCHEMA.'+
+                                          'MAPPED_ITEM.'+
+                                          'MAPPING_SOURCE') |   
+           SIZEOF(QUERY( rep <* using_representations (mi) |                              
+                                       'PRESENTATION_ORGANIZATION_SCHEMA.'+
+                                       'PRESENTATION_VIEW' IN 
+                                        TYPEOF (rep))) > 0
+           )) > 0))  
+           > 0);
+      WR3: (SIZEOF (QUERY (prr <* USEDIN (SELF, 'REPRESENTATION_SCHEMA.' +
+                                                'REPRESENTATION_RELATIONSHIP.REP_2') | 
+           NOT('PRESENTATION_ORGANIZATION_SCHEMA.PRESENTATION_VIEW' IN
+           TYPEOF (prr\representation_relationship.rep_1)))) = 0)
+                                  AND 
+           (SIZEOF(QUERY( rm <* USEDIN(SELF, 'REPRESENTATION_SCHEMA.'+ 
+                                             'REPRESENTATION_MAP.'+ 
+                                             'MAPPED_REPRESENTATION') | 
+            SIZEOF(QUERY( mi <* USEDIN(rm, 'REPRESENTATION_SCHEMA.'+
+                                           'MAPPED_ITEM.'+
+                                           'MAPPING_SOURCE') |   
+            SIZEOF(QUERY( rep <* using_representations (mi) |                              
+                                      NOT('PRESENTATION_ORGANIZATION_SCHEMA.'+
+                                          'PRESENTATION_VIEW' IN 
+                                      TYPEOF (rep)))) > 0
+           )) > 0))  
+           = 0);
+  END_ENTITY;
+
+  ENTITY view_volume
+    SUBTYPE OF (founded_item);
+      projection_type            : central_or_parallel;
+      projection_point           : cartesian_point;
+      view_plane_distance        : length_measure;
+      front_plane_distance       : length_measure;
+      front_plane_clipping       : BOOLEAN;
+      back_plane_distance        : length_measure;
+      back_plane_clipping        : BOOLEAN;
+      view_volume_sides_clipping : BOOLEAN;
+      view_window                : planar_box;
+  END_ENTITY;
+
+  RULE symbol_representation_rule
+    FOR (presentation_representation_relationship);
+    WHERE
+      WR1: SIZEOF(QUERY(each_1 <* presentation_representation_relationship  |
+                NOT ('PRESENTATION_DEFINITION_SCHEMA.'+
+                'SYMBOL_REPRESENTATION_RELATIONSHIP' IN TYPEOF(each_1)) AND
+          (SIZEOF(QUERY(each_2 <* [each_1\representation_relationship.rep_1,
+                                   each_1\representation_relationship.rep_2] |
+          'PRESENTATION_DEFINITION_SCHEMA.SYMBOL_REPRESENTATION' IN TYPEOF(each_2)
+          )) > 0)
+          )) = 0;
+  END_RULE;
+
+  FUNCTION acyclic_presentation_representation_relationship
+    ( relation : presentation_representation_relationship;
+      children : SET OF presentation_representation ) : BOOLEAN;
+
+    LOCAL
+      x : SET OF presentation_representation_relationship;
+      local_children : SET OF presentation_representation;
+    END_LOCAL;
+
+    REPEAT i:=1 TO HIINDEX(children);
+      IF relation\representation_relationship.rep_1 :=: children[i] THEN
+        RETURN(FALSE);
+      END_IF;
+    END_REPEAT;
+
+    x := bag_to_set (USEDIN ( relation\representation_relationship.rep_1,
+                  'REPRESENTATION_SCHEMA.'+
+                  'REPRESENTATION_RELATIONSHIP.REP_2'));
+    local_children := children + relation\representation_relationship.rep_1;
+
+    IF SIZEOF (x) > 0 THEN
+      REPEAT i:=1 TO HIINDEX (x);
+        IF NOT acyclic_presentation_representation_relationship
+          (x[i] , local_children) THEN
+          RETURN (FALSE);
+        END_IF;
+      END_REPEAT;
+    END_IF;
+
+    RETURN (TRUE);
+
+  END_FUNCTION;
+
+  FUNCTION aspect_ratio (p : planar_box) : positive_ratio_measure;
+    IF (p.size_in_x > 0.) AND (p.size_in_y > 0.) THEN
+      RETURN (p.size_in_x / p.size_in_y);
+    ELSE
+      RETURN (?);
+    END_IF;
+  END_FUNCTION; 
+
+END_SCHEMA; 
+(*
+ISO TC184/SC4/WG12 N4830 - ISO/CD 10303-46 Visual presentation - EXPRESS
+*) 
+
+
+SCHEMA presentation_resource_schema;
+
+REFERENCE FROM external_reference_schema
+    (externally_defined_item,
+     pre_defined_item);
+
+REFERENCE FROM geometry_schema
+    (axis2_placement,
+     curve,
+     geometric_representation_item
+     );
+
+REFERENCE FROM measure_schema
+    (length_measure,
+     positive_length_measure,
+     positive_ratio_measure,
+     ratio_measure);
+
+REFERENCE FROM presentation_definition_schema
+    (annotation_fill_area,
+     symbol_representation);
+
+REFERENCE FROM representation_schema
+    (item_in_context,
+     representation);
+
+REFERENCE FROM support_resource_schema
+    (identifier,
+     label,
+     text);
+ 
+
+TYPE font_select = SELECT
+  (pre_defined_text_font,
+   externally_defined_text_font,
+   text_font);
+END_TYPE;
+
+TYPE staircase_or_linear = ENUMERATION OF 
+  (staircase, 
+   linear);
+END_TYPE;
+
+
+ENTITY character_glyph_font_usage;
+  character : generic_character_glyph_symbol;
+  font      : text_font;
+END_ENTITY;
+
+ENTITY character_glyph_symbol
+  SUBTYPE OF (generic_character_glyph_symbol);
+  character_box  : planar_extent;
+  baseline_ratio : ratio_measure;
+DERIVE
+  box_height : length_measure := character_box.size_in_y;
+WHERE
+  WR1: {0.0 <= baseline_ratio <= 1.0};
+  WR2: item_in_context(SELF.character_box, 
+                       SELF\representation.context_of_items);
+  WR3: 'MEASURE_SCHEMA.POSITIVE_LENGTH_MEASURE'
+        IN TYPEOF (SELF.box_height);
+END_ENTITY;
+
+ENTITY character_glyph_symbol_outline
+  SUBTYPE OF (character_glyph_symbol);
+  outlines : SET [1:?] OF annotation_fill_area;
+WHERE
+  WR1: SELF.outlines <= SELF\representation.items;
+END_ENTITY;
+
+ENTITY character_glyph_symbol_stroke
+  SUBTYPE OF (character_glyph_symbol);
+  strokes : SET [1:?] OF curve;
+WHERE
+  WR1: SELF.strokes <= SELF\representation.items;
+END_ENTITY;
+
+ENTITY colour;
+END_ENTITY;
+
+ENTITY colour_associated
+  SUBTYPE OF (colour);
+  name : label;
+  variable_to_be_shown : SET [1:?] OF REAL;
+  mapping              : colour_association_table;
+END_ENTITY;
+
+ENTITY colour_association_table;
+  discrete_states_with_colours : LIST [1:?] OF state_variable_with_colour;
+  interpolation_type           : staircase_or_linear;
+END_ENTITY;
+
+ENTITY colour_rgb
+  SUBTYPE OF (colour_specification);
+  red   : REAL;
+  green : REAL;
+  blue  : REAL;
+WHERE
+  WR1: {0.0 <= red <= 1.0};
+  WR2: {0.0 <= green <= 1.0};
+  WR3: {0.0 <= blue <= 1.0};
+END_ENTITY;
+
+ENTITY colour_specification
+  SUBTYPE OF (colour);
+  name : label;
+END_ENTITY;
+
+ENTITY draughting_pre_defined_colour
+  SUBTYPE OF (pre_defined_colour);
+WHERE
+  WR1: SELF.name IN
+      ['red',
+       'green',
+       'blue',
+       'yellow',
+       'magenta',
+       'cyan',
+       'black',
+       'white'];
+END_ENTITY;
+
+ENTITY draughting_pre_defined_text_font
+   SUBTYPE of (pre_defined_text_font);
+WHERE
+   WR1: SELF.name IN ['ISO 3098'];
+END_ENTITY;
+
+ENTITY externally_defined_text_font
+  SUBTYPE OF (externally_defined_item);
+END_ENTITY;
+
+ENTITY generic_character_glyph_symbol
+  ABSTRACT SUPERTYPE
+  SUBTYPE OF (symbol_representation);
+END_ENTITY; 
+
+ENTITY planar_box
+  SUBTYPE OF (planar_extent);
+  placement:  axis2_placement;
+END_ENTITY;
+
+ENTITY planar_extent
+  SUBTYPE OF (geometric_representation_item);
+   size_in_x : length_measure;
+   size_in_y : length_measure;
+END_ENTITY;
+
+ENTITY pre_defined_colour
+  SUBTYPE OF (pre_defined_item, colour);
+END_ENTITY;
+
+ENTITY pre_defined_text_font
+  SUBTYPE OF (pre_defined_item);
+END_ENTITY;
+
+ENTITY presentation_scaled_placement 
+  SUBTYPE OF (geometric_representation_item);
+  placement : axis2_placement;
+  scaling   : positive_ratio_measure;
+END_ENTITY;
+
+ENTITY state_variable_with_colour;
+  state_variable    : REAL;
+  associated_colour : colour_specification;
+END_ENTITY;
+
+ENTITY text_font;
+  id          : identifier;
+  name        : label;
+  description : text;
+INVERSE
+  glyphs : SET [1:?] OF character_glyph_font_usage FOR font;
+END_ENTITY;
+
+ENTITY text_font_family;
+  id          : identifier;
+  name        : label;
+  description : text;
+INVERSE
+  fonts       : SET [1:?] OF text_font_in_family FOR family;
+END_ENTITY;
+
+ENTITY text_font_in_family;
+  font   : text_font;
+  family : text_font_family;
+END_ENTITY;
+
+SUBTYPE_CONSTRAINT prs_geometric_representation_item_subtypes FOR geometric_representation_item;  
+    (ONEOF ( 
+    curve,
+	planar_extent,
+	presentation_scaled_placement)); 
+END_SUBTYPE_CONSTRAINT; 
+
+END_SCHEMA; -- presentation_resource_schema

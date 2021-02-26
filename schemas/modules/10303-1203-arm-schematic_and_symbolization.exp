@@ -1,0 +1,28 @@
+(*
+ $Id: 10303-1203-arm-schematic_and_symbolization.exp,v 1.1 2006/08/04 12:01:51 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2822 - ISO/TS 10303-1203 Schematic and symbolization - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG12 N2189
+*)
+
+SCHEMA Schematic_and_symbolization_arm;
+
+USE FROM Schematic_element_library_arm;    --  ISO/TS 10303-1208
+USE FROM Schematic_drawing_arm;    --  ISO/TS 10303-1204
+USE FROM Class_arm;    --  ISO/TS 10303-1070
+USE FROM Document_and_version_identification_arm;    --  ISO/TS 10303-1121
+USE FROM Symbolization_by_schematic_element_arm;    --  ISO/TS 10303-1209
+USE FROM External_item_identification_assignment_arm;    --  ISO/TS 10303-1128
+
+TYPE externally_identified_schematic_element_definition = SELECT BASED_ON external_identification_item WITH 
+   (Implicit_schematic_element_definition);
+END_TYPE; 
+
+ENTITY Drawing_revision_class_of_document
+  SUBTYPE OF (Document_version, Class, Drawing_revision);
+END_ENTITY;
+
+ENTITY Drawing_sheet_revision_class_of_document
+  SUBTYPE OF (Document_version, Class, Drawing_sheet_revision);
+END_ENTITY;
+
+END_SCHEMA;

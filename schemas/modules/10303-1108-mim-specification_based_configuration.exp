@@ -1,0 +1,50 @@
+(* 
+   $Id: 10303-1108-mim-specification_based_configuration.exp,v 1.1 2006/08/03 15:03:34 wg12deputy Exp $
+   ISO/TC184/SC4 WG12N2596 - ISO/TS 10303-1108 Specification_based_configuration - Express MIM
+   Supersedes ISO TC184/SC4/WG12N1730
+*)
+
+
+SCHEMA Specification_based_configuration_mim;
+
+USE FROM Effectivity_application_mim;
+
+USE FROM Product_class_mim;
+
+USE FROM management_resources_schema(
+  effectivity_context_assignment);
+
+TYPE configured_effectivity_context_item = SELECT (product_concept_feature_association);
+END_TYPE;
+
+TYPE configured_effectivity_item = EXTENSIBLE GENERIC_ENTITY SELECT (
+  product_definition); 
+END_TYPE; 
+
+ENTITY configured_effectivity_context_assignment 
+SUBTYPE OF (effectivity_context_assignment);
+  SELF\effectivity_context_assignment.assigned_effectivity_assignment: configured_effectivity_assignment;
+  items : SET [1:?] OF configured_effectivity_context_item; 
+WHERE 
+WR1: SIZEOF(SELF.items) = 1; 
+END_ENTITY;
+ 
+ENTITY configured_effectivity_assignment 
+SUBTYPE OF (effectivity_assignment);
+  items : SET [1:?] OF configured_effectivity_item; 
+WHERE 
+WR1: (SIZEOF(['SPECIFICATION_BASED_CONFIGURATION_MIM.EFFECTIVITY'] * TYPEOF(SELF.assigned_effectivity) ) = 1) 
+AND (SELF.assigned_effectivity.id = 'configuration validity'); 
+WR2: SIZEOF(SELF.items) = 1; 
+WR3: SIZEOF( QUERY( i <* SELF.items | NOT ('SPECIFICATION_BASED_CONFIGURATION_MIM.PRODUCT_DEFINITION' IN TYPEOF(i)) 
+OR NOT (i\product_definition.frame_of_reference.name IN ['conceptual definition','part occurrence', 'functional definition','alternative definition']) )) = 0; 
+WR4: SELF.role.name IN ['design', 'usage']; 
+WR5: (SELF.role.name <> 'design') 
+OR (SIZEOF( QUERY( i <* SELF.items | ('SPECIFICATION_BASED_CONFIGURATION_MIM.PRODUCT_DEFINITION' IN TYPEOF(i)) AND (i\product_definition.frame_of_reference.name = 'part occurrence') )) = 0); 
+WR6: (SELF.role.name <> 'usage') OR (SIZEOF( QUERY( i <* SELF.items | ('SPECIFICATION_BASED_CONFIGURATION_MIM.PRODUCT_DEFINITION' IN TYPEOF(i)) AND (i\product_definition.frame_of_reference.name = 'conceptual definition') )) = 0); 
+WR7: SELF.role.description IN ['exception', 'inherited', 'local']; 
+WR8: SIZEOF( QUERY( x <* USEDIN(SELF,'SPECIFICATION_BASED_CONFIGURATION_MIM.' + 'EFFECTIVITY_CONTEXT_ASSIGNMENT.ASSIGNED_EFFECTIVITY_ASSIGNMENT') | 'SPECIFICATION_BASED_CONFIGURATION_MIM.CONFIGURED_EFFECTIVITY_CONTEXT_ASSIGNMENT' IN TYPEOF(x) )) = 1; 
+END_ENTITY; 
+
+
+END_SCHEMA;

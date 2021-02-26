@@ -1,0 +1,90 @@
+(*
+ $Id: 10303-1280-arm-required_resource_characterized.exp,v 1.2 2006/08/07 07:44:46 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N3121 - ISO/TS 10303-1280 Required resource characterized - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG12 N2417
+*) 
+
+
+SCHEMA Required_resource_characterized_arm;
+
+USE FROM Approval_arm;    -- ISO/TS 10303-1012
+
+USE FROM Attribute_classification_arm;    -- ISO/TS 10303-1246
+
+USE FROM Condition_arm;    -- ISO/TS 10303-1253
+
+USE FROM Date_time_assignment_arm;    -- ISO/TS 10303-1014
+
+USE FROM Identification_assignment_arm;    -- ISO/TS 10303-1021
+
+USE FROM Justification_arm;    -- ISO/TS 10303-1263
+
+USE FROM Multi_linguism_arm;    -- ISO/TS 10303-1105
+
+USE FROM Person_organization_assignment_arm;    -- ISO/TS 10303-1013
+
+USE FROM Process_property_assignment_arm;    -- ISO/TS 10303-1040
+
+USE FROM Required_resource_arm;    -- ISO/TS 10303-1267
+
+USE FROM Requirement_assignment_arm;    -- ISO/TS 10303-1233
+
+USE FROM Resource_item_characterized_arm;    -- ISO/TS 10303-1281
+
+USE FROM Resource_property_assignment_arm;    -- ISO/TS 10303-1273
+
+
+TYPE required_resource_approval_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON approval_item WITH 
+   (Required_resource, 
+    Required_resource_relationship);
+END_TYPE; 
+
+TYPE required_resource_characterized_activity_definition = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON characterized_activity_definition WITH 
+   (Required_resource_assignment);
+END_TYPE; 
+
+TYPE required_resource_characterized_resource_select = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON characterized_resource_select WITH 
+   (Required_resource);
+END_TYPE; 
+
+TYPE required_resource_classified_attribute_select = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON classified_attribute_select WITH 
+   (Required_resource, 
+    Required_resource_relationship);
+END_TYPE; 
+
+TYPE required_resource_condition_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON condition_item WITH 
+   (Required_resource, 
+    Required_resource_assignment, 
+    Required_resource_relationship);
+END_TYPE; 
+
+TYPE required_resource_date_or_date_time_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON date_or_date_time_item WITH 
+   (Required_resource);
+END_TYPE; 
+
+TYPE required_resource_identification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON identification_item WITH 
+   (Required_resource, 
+    Required_resource_relationship);
+END_TYPE; 
+
+TYPE required_resource_justification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON justification_item WITH 
+   (Required_resource, 
+    Required_resource_assignment, 
+    Required_resource_relationship);
+END_TYPE; 
+
+TYPE required_resource_organization_or_person_in_organization_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON organization_or_person_in_organization_item WITH 
+   (Required_resource);
+END_TYPE; 
+
+TYPE required_resource_requirement_assignment_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON requirement_assignment_item WITH 
+   (Required_resource_by_specification);
+END_TYPE; 
+
+TYPE required_resource_string_select = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON string_select WITH 
+   (Required_resource, 
+    Required_resource_relationship);
+END_TYPE; 
+
+END_SCHEMA;  -- Required_resource_characterized_arm
+

@@ -1,0 +1,115 @@
+(*
+ $Id: 10303-1348-arm-requirement_management.exp,v 1.1 2006/08/07 07:44:47 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N3130 - ISO/TS 10303-1348 Requirement management - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG12 N2351
+*) 
+
+
+SCHEMA Requirement_management_arm;
+
+USE FROM Alias_identification_arm;    -- ISO/TS 10303-1025
+
+USE FROM Contract_arm;    -- ISO/TS 10303-1062
+
+USE FROM Management_resource_information_arm;    -- ISO/TS 10303-1288
+
+USE FROM Product_view_definition_properties_arm;    -- ISO/TS 10303-1034
+
+USE FROM Requirement_assignment_arm;    -- ISO/TS 10303-1233
+
+USE FROM Requirement_identification_and_version_arm;    -- ISO/TS 10303-1140
+
+USE FROM Requirement_view_definition_arm;    -- ISO/TS 10303-1141
+
+USE FROM Requirement_view_definition_relationship_arm;    -- ISO/TS 10303-1142
+
+USE FROM Security_classification_arm;    -- ISO/TS 10303-1015
+
+
+TYPE requirement_alias_idenfication_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON alias_identification_item WITH 
+   (Requirement_assignment, 
+    Requirement_collection_relationship, 
+    Requirement_source, 
+    Requirement_version_relationship, 
+    Tracing_relationship);
+END_TYPE; 
+
+TYPE requirement_contract_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON contract_item WITH 
+   (Requirement, 
+    Requirement_assignment, 
+    Requirement_collection_relationship, 
+    Requirement_source, 
+    Requirement_version, 
+    Requirement_version_relationship, 
+    Requirement_view_definition, 
+    Tracing_relationship);
+END_TYPE; 
+
+TYPE requirement_mri_approval_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON mri_approval_item WITH 
+   (Requirement, 
+    Requirement_assignment, 
+    Requirement_collection_relationship, 
+    Requirement_source, 
+    Requirement_version, 
+    Requirement_version_relationship, 
+    Requirement_view_definition, 
+    Tracing_relationship);
+END_TYPE; 
+
+TYPE requirement_mri_date_or_date_time_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON mri_date_or_date_time_item WITH 
+   (Requirement, 
+    Requirement_assignment, 
+    Requirement_collection_relationship, 
+    Requirement_source, 
+    Requirement_version, 
+    Requirement_version_relationship, 
+    Requirement_view_definition, 
+    Tracing_relationship);
+END_TYPE; 
+
+TYPE requirement_mri_identification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON mri_identification_item WITH 
+   (Requirement, 
+    Requirement_assignment, 
+    Requirement_collection_relationship, 
+    Requirement_source, 
+    Requirement_version, 
+    Requirement_version_relationship, 
+    Requirement_view_definition, 
+    Tracing_relationship);
+END_TYPE; 
+
+TYPE requirement_mri_organization_or_person_in_organization_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON mri_organization_or_person_in_organization_item WITH 
+   (Requirement, 
+    Requirement_assignment, 
+    Requirement_collection_relationship, 
+    Requirement_source, 
+    Requirement_version, 
+    Requirement_version_relationship, 
+    Requirement_view_definition, 
+    Tracing_relationship);
+END_TYPE; 
+
+TYPE requirement_mri_string_select = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON mri_string_select WITH 
+   (Requirement, 
+    Requirement_assignment, 
+    Requirement_collection_relationship, 
+    Requirement_source, 
+    Requirement_version, 
+    Requirement_version_relationship, 
+    Requirement_view_definition, 
+    Tracing_relationship);
+END_TYPE; 
+
+TYPE requirement_security_classification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON security_classification_item WITH 
+   (Requirement, 
+    Requirement_assignment, 
+    Requirement_collection_relationship, 
+    Requirement_source, 
+    Requirement_version, 
+    Requirement_version_relationship, 
+    Requirement_view_definition, 
+    Tracing_relationship);
+END_TYPE; 
+
+END_SCHEMA;  -- Requirement_management_arm
+

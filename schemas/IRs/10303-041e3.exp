@@ -1,0 +1,3606 @@
+(*
+2008-02-07
+ISO TC184/SC4/WG12 N4883 - ISO/IS 10303-41 Fundamentals of product description and support - EXPRESS
+*)
+(*
+Supersedes ISO TC184/SC4/WG12 N2887 - ISO/IS 10303-41 Fundamentals of product description and support - EXPRESS
+changes to date_time schema and to measure_schema as per TC1 - WG12 N4834.
+*)
+
+SCHEMA application_context_schema;
+  REFERENCE FROM basic_attribute_schema (description_attribute, get_description_value, get_id_value, id_attribute);
+  REFERENCE FROM date_time_schema (year_number);
+  REFERENCE FROM support_resource_schema (identifier, label, text);
+  ENTITY application_context;
+    application : label;
+  DERIVE
+    description : text := get_description_value(SELF);
+    id : identifier := get_id_value(SELF);
+  INVERSE
+    context_elements : SET [1:?] OF application_context_element FOR frame_of_reference;
+  WHERE
+    WR1: SIZEOF(USEDIN(SELF, 'BASIC_ATTRIBUTE_SCHEMA.' + 'DESCRIPTION_ATTRIBUTE.DESCRIBED_ITEM')) <= 1;
+    WR2: SIZEOF(USEDIN(SELF, 'BASIC_ATTRIBUTE_SCHEMA.' + 'ID_ATTRIBUTE.IDENTIFIED_ITEM')) <= 1;
+  END_ENTITY;
+
+  ENTITY application_context_element
+    SUPERTYPE OF (ONEOF(library_context, product_concept_context, product_context, product_definition_context));
+    name : label;
+    frame_of_reference : application_context;
+  END_ENTITY;
+
+  ENTITY application_context_relationship;
+    name : label;
+    description : OPTIONAL text;
+    relating_context : application_context;
+    related_context : application_context;
+  END_ENTITY;
+
+  ENTITY application_protocol_definition;
+    status : label;
+    application_interpreted_model_schema_name : label;
+    application_protocol_year : year_number;
+    application : application_context;
+  END_ENTITY;
+
+  ENTITY library_context
+    SUBTYPE OF (application_context_element);
+    library_reference : label;
+  END_ENTITY;
+
+  ENTITY product_concept_context
+    SUBTYPE OF (application_context_element);
+    market_segment_type : label;
+  END_ENTITY;
+
+  ENTITY product_context
+    SUBTYPE OF (application_context_element);
+    discipline_type : label;
+  END_ENTITY;
+
+  ENTITY product_definition_context
+    SUBTYPE OF (application_context_element);
+    life_cycle_stage : label;
+  END_ENTITY;
+
+END_SCHEMA;
+SCHEMA product_definition_schema;
+  REFERENCE FROM application_context_schema (product_context, product_definition_context);
+  REFERENCE FROM basic_attribute_schema (get_id_value, get_name_value, name_attribute);
+  REFERENCE FROM document_schema (document);
+  REFERENCE FROM effectivity_schema (effectivity);
+  REFERENCE FROM support_resource_schema (bag_to_set, identifier, label, text);
+  TYPE source = ENUMERATION OF (made, bought, not_known);
+  END_TYPE;
+
+  ENTITY product;
+    id : identifier;
+    name : label;
+    description : OPTIONAL text;
+    frame_of_reference : SET [1:?] OF product_context;
+  END_ENTITY;
+
+  ENTITY product_category;
+    name : label;
+    description : OPTIONAL text;
+  DERIVE
+    id : identifier := get_id_value(SELF);
+  WHERE
+    WR1: SIZEOF(USEDIN(SELF, 'BASIC_ATTRIBUTE_SCHEMA.' + 'ID_ATTRIBUTE.IDENTIFIED_ITEM')) <= 1;
+  END_ENTITY;
+
+  ENTITY product_category_relationship;
+    name : label;
+    description : OPTIONAL text;
+    category : product_category;
+    sub_category : product_category;
+  WHERE
+    WR1: acyclic_product_category_relationship(SELF, [SELF.sub_category]);
+  END_ENTITY;
+
+  ENTITY product_definition;
+    id : identifier;
+    description : OPTIONAL text;
+    formation : product_definition_formation;
+    frame_of_reference : product_definition_context;
+  DERIVE
+    name : label := get_name_value(SELF);
+  WHERE
+    WR1: SIZEOF(USEDIN(SELF, 'BASIC_ATTRIBUTE_SCHEMA.' + 'NAME_ATTRIBUTE.NAMED_ITEM')) <= 1;
+  END_ENTITY;
+
+  ENTITY product_definition_context_association;
+    definition : product_definition;
+    frame_of_reference : product_definition_context;
+    role : product_definition_context_role;
+  END_ENTITY;
+
+  ENTITY product_definition_context_role;
+    name : label;
+    description : OPTIONAL text;
+  END_ENTITY;
+
+  ENTITY product_definition_effectivity
+    SUBTYPE OF (effectivity);
+    usage : product_definition_relationship;
+  WHERE
+    WR1: SIZEOF(USEDIN(SELF, 'MANAGEMENT_RESOURCES_SCHEMA.' + 'EFFECTIVITY_ASSIGNMENT.ASSIGNED_EFFECTIVITY')) = 0;
+  END_ENTITY;
+
+  ENTITY product_definition_formation;
+    id : identifier;
+    description : OPTIONAL text;
+    of_product : product;
+  UNIQUE
+    UR1: id, of_product;
+  END_ENTITY;
+
+  ENTITY product_definition_formation_relationship;
+    id : identifier;
+    name : label;
+    description : OPTIONAL text;
+    relating_product_definition_formation : product_definition_formation;
+    related_product_definition_formation : product_definition_formation;
+  END_ENTITY;
+
+  ENTITY product_definition_formation_with_specified_source
+    SUBTYPE OF (product_definition_formation);
+    make_or_buy : source;
+  END_ENTITY;
+
+  ENTITY product_definition_relationship;
+    id : identifier;
+    name : label;
+    description : OPTIONAL text;
+    relating_product_definition : product_definition;
+    related_product_definition : product_definition;
+  END_ENTITY;
+
+  ENTITY product_definition_substitute;
+    description : OPTIONAL text;
+    context_relationship : product_definition_relationship;
+    substitute_definition : product_definition;
+  DERIVE
+    name : label := get_name_value(SELF);
+  WHERE
+    WR1: context_relationship.related_product_definition :<>: substitute_definition;
+    WR2: SIZEOF(USEDIN(SELF, 'BASIC_ATTRIBUTE_SCHEMA.' + 'NAME_ATTRIBUTE.NAMED_ITEM')) <= 1;
+  END_ENTITY;
+
+  ENTITY product_definition_with_associated_documents
+    SUBTYPE OF (product_definition);
+    documentation_ids : SET [1:?] OF document;
+  END_ENTITY;
+
+  ENTITY product_related_product_category
+    SUBTYPE OF (product_category);
+    products : SET [1:?] OF product;
+  END_ENTITY;
+
+  ENTITY product_relationship;
+    id : identifier;
+    name : label;
+    description : OPTIONAL text;
+    relating_product : product;
+    related_product : product;
+  END_ENTITY;
+
+  FUNCTION acyclic_product_category_relationship (relation : product_category_relationship; children : SET OF product_category):BOOLEAN;
+    LOCAL
+      x : SET OF product_category_relationship;
+      local_children : SET OF product_category;
+    END_LOCAL;
+
+    REPEAT i := 1 TO HIINDEX(children);
+      IF relation.category :=: children[i] THEN
+        RETURN (FALSE);
+      END_IF;
+    END_REPEAT;
+    x := bag_to_set(USEDIN(relation.category, 'PRODUCT_DEFINITION_SCHEMA.' + 'PRODUCT_CATEGORY_RELATIONSHIP.SUB_CATEGORY'));
+    local_children := children + relation.category;
+    IF SIZEOF(x) > 0 THEN
+      REPEAT i := 1 TO HIINDEX(x);
+        IF NOT acyclic_product_category_relationship(x[i], local_children) THEN
+          RETURN (FALSE);
+        END_IF;
+      END_REPEAT;
+    END_IF;
+    RETURN (TRUE);
+  END_FUNCTION;
+
+  FUNCTION acyclic_product_definition_formation_relationship (relation : product_definition_formation_relationship; relatives : SET [1:?] OF product_definition_formation; specific_relation : STRING):BOOLEAN;
+    LOCAL
+      x : SET OF product_definition_formation_relationship;
+    END_LOCAL;
+
+    IF relation.relating_product_definition_formation IN relatives THEN
+      RETURN (FALSE);
+    END_IF;
+    x := QUERY(pdf <* bag_to_set(USEDIN(relation.relating_product_definition_formation, 'PRODUCT_DEFINITION_SCHEMA.' + 'PRODUCT_DEFINITION_FORMATION_RELATIONSHIP.' + 'RELATED_PRODUCT_DEFINITION_FORMATION')) | specific_relation IN TYPEOF(pdf));
+    REPEAT i := 1 TO HIINDEX(x);
+      IF NOT acyclic_product_definition_formation_relationship(x[i], relatives + relation.relating_product_definition_formation, specific_relation) THEN
+        RETURN (FALSE);
+      END_IF;
+    END_REPEAT;
+    RETURN (TRUE);
+  END_FUNCTION;
+
+  FUNCTION acyclic_product_definition_relationship (relation : product_definition_relationship; relatives : SET [1:?] OF product_definition; specific_relation : STRING):BOOLEAN;
+    LOCAL
+      x : SET OF product_definition_relationship;
+    END_LOCAL;
+
+    IF relation.relating_product_definition IN relatives THEN
+      RETURN (FALSE);
+    END_IF;
+    x := QUERY(pd <* bag_to_set(USEDIN(relation.relating_product_definition, 'PRODUCT_DEFINITION_SCHEMA.' + 'PRODUCT_DEFINITION_RELATIONSHIP.' + 'RELATED_PRODUCT_DEFINITION')) | specific_relation IN TYPEOF(pd));
+    REPEAT i := 1 TO HIINDEX(x);
+      IF NOT acyclic_product_definition_relationship(x[i], relatives + relation.relating_product_definition, specific_relation) THEN
+        RETURN (FALSE);
+      END_IF;
+    END_REPEAT;
+    RETURN (TRUE);
+  END_FUNCTION;
+
+  FUNCTION acyclic_product_relationship (relation : product_relationship; relatives : SET [1:?] OF product; specific_relation : STRING):BOOLEAN;
+    LOCAL
+      x : SET OF product_relationship;
+    END_LOCAL;
+
+    IF relation.relating_product IN relatives THEN
+      RETURN (FALSE);
+    END_IF;
+    x := QUERY(prod <* bag_to_set(USEDIN(relation.relating_product, 'PRODUCT_DEFINITION_SCHEMA.' + 'PRODUCT_RELATIONSHIP.' + 'RELATED_PRODUCT')) | specific_relation IN TYPEOF(prod));
+    REPEAT i := 1 TO HIINDEX(x);
+      IF NOT acyclic_product_relationship(x[i], relatives + relation.relating_product, specific_relation) THEN
+        RETURN (FALSE);
+      END_IF;
+    END_REPEAT;
+    RETURN (TRUE);
+  END_FUNCTION;
+
+  FUNCTION get_product_definitions (c_def_instance : product):SET OF product_definition;
+    LOCAL
+      pd_set : SET OF product_definition_formation := [];
+      pdr_set : SET OF product_definition := [];
+    END_LOCAL;
+
+    pd_set := bag_to_set(USEDIN(c_def_instance, 'PRODUCT_DEFINITION_SCHEMA.PRODUCT_DEFINITION_FORMATION.OF_PRODUCT'));
+    IF (SIZEOF(pd_set) < 1) THEN
+      RETURN (pdr_set);
+    END_IF;
+    REPEAT i := 1 TO HIINDEX(pd_set);
+      pdr_set := pdr_set + bag_to_set(USEDIN(pd_set[i], 'PRODUCT_DEFINITION_SCHEMA.PRODUCT_DEFINITION.FORMATION'));
+    END_REPEAT;
+    RETURN (pdr_set);
+  END_FUNCTION;
+
+END_SCHEMA;
+SCHEMA product_property_definition_schema;
+  REFERENCE FROM process_property_schema (action_property, resource_property);
+  REFERENCE FROM product_definition_schema (product_definition, product_definition_relationship);
+  REFERENCE FROM support_resource_schema (bag_to_set, identifier, label, text);
+  REFERENCE FROM basic_attribute_schema (get_id_value, id_attribute);
+  TYPE characterized_definition = SELECT (characterized_object, characterized_product_definition, shape_definition);
+  END_TYPE;
+
+  TYPE characterized_product_definition = SELECT (product_definition, product_definition_relationship);
+  END_TYPE;
+
+  TYPE derived_property_select = SELECT (property_definition, action_property, resource_property);
+  END_TYPE;
+
+  TYPE shape_definition = SELECT (product_definition_shape, shape_aspect, shape_aspect_relationship);
+  END_TYPE;
+
+  ENTITY characterized_object;
+    name : label;
+    description : OPTIONAL text;
+  END_ENTITY;
+
+  ENTITY characterized_object_relationship;
+    name : label;
+    description : OPTIONAL text;
+    relating_object : characterized_object;
+    related_object : characterized_object;
+  END_ENTITY;
+
+  ENTITY general_property;
+    id : identifier;
+    name : label;
+    description : OPTIONAL text;
+  END_ENTITY;
+
+  ENTITY general_property_association;
+    name : label;
+    description : OPTIONAL text;
+    base_definition : general_property;
+    derived_definition : derived_property_select;
+  WHERE
+    WR1: SIZEOF(USEDIN(derived_definition, 'PRODUCT_PROPERTY_DEFINITION_SCHEMA.' + 'GENERAL_PROPERTY_ASSOCIATION.' + 'DERIVED_DEFINITION')) = 1;
+    WR2: derived_definition.name = base_definition.name;
+  END_ENTITY;
+
+  ENTITY general_property_relationship;
+    name : label;
+    description : OPTIONAL text;
+    relating_property : general_property;
+    related_property : general_property;
+  END_ENTITY;
+
+  ENTITY product_definition_shape
+    SUBTYPE OF (property_definition);
+  UNIQUE
+    UR1: SELF\property_definition.definition;
+  WHERE
+    WR1: SIZEOF(['PRODUCT_PROPERTY_DEFINITION_SCHEMA.CHARACTERIZED_PRODUCT_DEFINITION', 'PRODUCT_PROPERTY_DEFINITION_SCHEMA.CHARACTERIZED_OBJECT'] * TYPEOF(SELF\property_definition.definition)) > 0;
+  END_ENTITY;
+
+  ENTITY property_definition;
+    name : label;
+    description : OPTIONAL text;
+    definition : characterized_definition;
+  DERIVE
+    id : identifier := get_id_value(SELF);
+  WHERE
+    WR1: SIZEOF(USEDIN(SELF, 'BASIC_ATTRIBUTE_SCHEMA.' + 'ID_ATTRIBUTE.IDENTIFIED_ITEM')) <= 1;
+  END_ENTITY;
+
+  ENTITY shape_aspect;
+    name : label;
+    description : OPTIONAL text;
+    of_shape : product_definition_shape;
+    product_definitional : LOGICAL;
+  DERIVE
+    id : identifier := get_id_value(SELF);
+  WHERE
+    WR1: SIZEOF(USEDIN(SELF, 'BASIC_ATTRIBUTE_SCHEMA.' + 'ID_ATTRIBUTE.IDENTIFIED_ITEM')) <= 1;
+  END_ENTITY;
+
+  ENTITY shape_aspect_relationship;
+    name : label;
+    description : OPTIONAL text;
+    relating_shape_aspect : shape_aspect;
+    related_shape_aspect : shape_aspect;
+  DERIVE
+    id : identifier := get_id_value(SELF);
+  WHERE
+    WR1: SIZEOF(USEDIN(SELF, 'BASIC_ATTRIBUTE_SCHEMA.' + 'ID_ATTRIBUTE.IDENTIFIED_ITEM')) <= 1;
+  END_ENTITY;
+
+  FUNCTION acyclic_characterized_object_relationship (relation : characterized_object_relationship; relatives : SET [1:?] OF characterized_object; specific_relation : STRING):BOOLEAN;
+    LOCAL
+      x : SET OF characterized_object_relationship;
+    END_LOCAL;
+
+    IF relation.relating_object IN relatives THEN
+      RETURN (FALSE);
+    END_IF;
+    x := QUERY(ca <* bag_to_set(USEDIN(relation.relating_object, 'PRODUCT_PROPERTY_DEFINITION_SCHEMA.' + 'CHARACTERIZED_OBJECT_RELATIONSHIP.' + 'RELATED_OBJECT')) | specific_relation IN TYPEOF(ca));
+    REPEAT i := 1 TO HIINDEX(x);
+      IF NOT acyclic_characterized_object_relationship(x[i], relatives + relation.relating_object, specific_relation) THEN
+        RETURN (FALSE);
+      END_IF;
+    END_REPEAT;
+    RETURN (TRUE);
+  END_FUNCTION;
+
+  FUNCTION acyclic_general_property_relationship (relation : general_property_relationship; relatives : SET [1:?] OF general_property; specific_relation : STRING):BOOLEAN;
+    LOCAL
+      x : SET OF general_property_relationship;
+    END_LOCAL;
+
+    IF relation.relating_property IN relatives THEN
+      RETURN (FALSE);
+    END_IF;
+    x := QUERY(genp <* bag_to_set(USEDIN(relation.relating_property, 'PRODUCT_PROPERTY_DEFINITION_SCHEMA.' + 'GENERAL_PROPERTY_RELATIONSHIP.' + 'RELATED_PROPERTY')) | specific_relation IN TYPEOF(genp));
+    REPEAT i := 1 TO HIINDEX(x);
+      IF NOT acyclic_general_property_relationship(x[i], relatives + relation.relating_property, specific_relation) THEN
+        RETURN (FALSE);
+      END_IF;
+    END_REPEAT;
+    RETURN (TRUE);
+  END_FUNCTION;
+
+  FUNCTION acyclic_shape_aspect_relationship (relation : shape_aspect_relationship; relatives : SET [1:?] OF shape_aspect; specific_relation : STRING):BOOLEAN;
+    LOCAL
+      x : SET OF shape_aspect_relationship;
+    END_LOCAL;
+
+    IF relation.relating_shape_aspect IN relatives THEN
+      RETURN (FALSE);
+    END_IF;
+    x := QUERY(sa <* bag_to_set(USEDIN(relation.relating_shape_aspect, 'PRODUCT_PROPERTY_DEFINITION_SCHEMA.' + 'SHAPE_ASPECT_RELATIONSHIP.' + 'RELATED_SHAPE_ASPECT')) | specific_relation IN TYPEOF(sa));
+    REPEAT i := 1 TO HIINDEX(x);
+      IF NOT acyclic_shape_aspect_relationship(x[i], relatives + relation.relating_shape_aspect, specific_relation) THEN
+        RETURN (FALSE);
+      END_IF;
+    END_REPEAT;
+    RETURN (TRUE);
+  END_FUNCTION;
+
+  FUNCTION get_shape_aspects (c_def_instance : characterized_definition):SET OF shape_aspect;
+    LOCAL
+      pd_set : SET OF product_definition_shape := [];
+      pdr_set : SET OF shape_aspect := [];
+    END_LOCAL;
+
+    pd_set := bag_to_set(QUERY(pd <* USEDIN(c_def_instance, 'PRODUCT_PROPERTY_DEFINITION_SCHEMA.PROPERTY_DEFINITION.DEFINITION') | 'PRODUCT_PROPERTY_DEFINITION_SCHEMA.PRODUCT_DEFINITION_SHAPE' IN TYPEOF(pd)));
+    IF (SIZEOF(pd_set) < 1) THEN
+      RETURN (pdr_set);
+    END_IF;
+    REPEAT i := 1 TO HIINDEX(pd_set);
+      pdr_set := pdr_set + bag_to_set(USEDIN(pd_set[i], 'PRODUCT_PROPERTY_DEFINITION_SCHEMA.SHAPE_ASPECT.OF_SHAPE'));
+    END_REPEAT;
+    RETURN (pdr_set);
+  END_FUNCTION;
+
+END_SCHEMA;
+SCHEMA product_property_representation_schema;
+  REFERENCE FROM basic_attribute_schema (description_attribute, get_description_value, get_name_value, name_attribute);
+  REFERENCE FROM material_property_definition_schema (property_definition_relationship);
+  REFERENCE FROM product_definition_schema (product_definition, product_definition_relationship);
+  REFERENCE FROM product_property_definition_schema (characterized_definition, general_property, product_definition_shape, property_definition, shape_aspect, shape_aspect_relationship);
+  REFERENCE FROM representation_schema (representation, representation_item, representation_relationship, using_representations);
+  REFERENCE FROM support_resource_schema (bag_to_set, label, text);
+  TYPE represented_definition = SELECT (general_property, property_definition, property_definition_relationship, shape_aspect, shape_aspect_relationship);
+  END_TYPE;
+
+  ENTITY context_dependent_shape_representation;
+    representation_relation : shape_representation_relationship;
+    represented_product_relation : product_definition_shape;
+  DERIVE
+    description : text := get_description_value(SELF);
+    name : label := get_name_value(SELF);
+  WHERE
+    WR1: 'PRODUCT_DEFINITION_SCHEMA.PRODUCT_DEFINITION_RELATIONSHIP' IN TYPEOF(SELF.represented_product_relation.definition);
+    WR2: SIZEOF(USEDIN(SELF, 'BASIC_ATTRIBUTE_SCHEMA.' + 'DESCRIPTION_ATTRIBUTE.DESCRIBED_ITEM')) <= 1;
+    WR3: SIZEOF(USEDIN(SELF, 'BASIC_ATTRIBUTE_SCHEMA.' + 'NAME_ATTRIBUTE.NAMED_ITEM')) <= 1;
+  END_ENTITY;
+
+  ENTITY item_identified_representation_usage;
+    name : label;
+    description : OPTIONAL text;
+    definition : represented_definition;
+    used_representation : representation;
+    identified_item : representation_item;
+  WHERE
+    WR1: SELF.used_representation IN using_representations(SELF.identified_item);
+  END_ENTITY;
+
+  ENTITY property_definition_representation;
+    definition : represented_definition;
+    used_representation : representation;
+  DERIVE
+    description : text := get_description_value(SELF);
+    name : label := get_name_value(SELF);
+  WHERE
+    WR1: SIZEOF(USEDIN(SELF, 'BASIC_ATTRIBUTE_SCHEMA.' + 'DESCRIPTION_ATTRIBUTE.DESCRIBED_ITEM')) <= 1;
+    WR2: SIZEOF(USEDIN(SELF, 'BASIC_ATTRIBUTE_SCHEMA.' + 'NAME_ATTRIBUTE.NAMED_ITEM')) <= 1;
+  END_ENTITY;
+
+  ENTITY shape_definition_representation
+    SUBTYPE OF (property_definition_representation);
+  WHERE
+    WR1: ('PRODUCT_PROPERTY_DEFINITION_SCHEMA.PRODUCT_DEFINITION_SHAPE' IN TYPEOF(SELF.definition)) OR ('PRODUCT_PROPERTY_DEFINITION_SCHEMA.SHAPE_DEFINITION' IN TYPEOF(SELF.definition.definition));
+    WR2: 'PRODUCT_PROPERTY_REPRESENTATION_SCHEMA.SHAPE_REPRESENTATION' IN TYPEOF(SELF.used_representation);
+  END_ENTITY;
+
+  ENTITY shape_representation
+    SUBTYPE OF (representation);
+  END_ENTITY;
+
+  ENTITY shape_representation_relationship
+    SUBTYPE OF (representation_relationship);
+  WHERE
+    WR1: 'PRODUCT_PROPERTY_REPRESENTATION_SCHEMA.SHAPE_REPRESENTATION' IN (TYPEOF(SELF\representation_relationship.rep_1) + TYPEOF(SELF\representation_relationship.rep_2));
+  END_ENTITY;
+
+  FUNCTION relatives_of_product_definitions (definition_set : SET OF product_definition; relation_subtype : STRING):SET OF product_definition;
+    FUNCTION local_relatives_of_product_definitions (definition_set : SET OF product_definition; total_definitions : SET OF product_definition; relation_subtype : STRING):SET OF product_definition;
+      LOCAL
+        local_def : SET OF product_definition := [];
+        local_pdr : SET OF product_definition_relationship := [];
+        local_total : SET OF product_definition := [];
+      END_LOCAL;
+
+      REPEAT i := 1 TO HIINDEX(definition_set);
+        local_pdr := local_pdr + bag_to_set(USEDIN(definition_set[i], relation_subtype + '.RELATING_PRODUCT_DEFINITION'));
+      END_REPEAT;
+      REPEAT i := 1 TO HIINDEX(local_pdr);
+        local_def := local_def + local_pdr[i].related_product_definition;
+      END_REPEAT;
+      IF (SIZEOF(local_def) - SIZEOF(total_definitions)) = 0 THEN
+        RETURN (local_def);
+      ELSE
+        local_total := total_definitions + local_def;
+        RETURN (local_def + (local_relatives_of_product_definitions(local_def - total_definitions, local_total, relation_subtype)));
+      END_IF;
+    END_FUNCTION;
+
+    RETURN (local_relatives_of_product_definitions(definition_set, definition_set, relation_subtype));
+  END_FUNCTION;
+
+  FUNCTION relatives_of_shape_representations (shape_representation_set : SET OF shape_representation):SET OF shape_representation;
+    FUNCTION local_relatives_of_shape_representations (shape_representation_set : SET OF shape_representation; total_reps : SET OF shape_representation):SET OF shape_representation;
+      LOCAL
+        local_shape_rep : SET OF shape_representation := [];
+        local_srr : SET OF shape_representation_relationship := [];
+        local_total : SET OF shape_representation := [];
+      END_LOCAL;
+
+      REPEAT i := 1 TO HIINDEX(shape_representation_set);
+        local_srr := local_srr + QUERY(rr <* bag_to_set(USEDIN(shape_representation_set[i], 'REPRESENTATION_SCHEMA.REPRESENTATION_RELATIONSHIP.REP_1')) | 'PRODUCT_PROPERTY_REPRESENTATION_SCHEMA.SHAPE_REPRESENTATION_RELATIONSHIP' IN TYPEOF(rr));
+      END_REPEAT;
+      REPEAT i := 1 TO HIINDEX(local_srr);
+        IF 'PRODUCT_PROPERTY_REPRESENTATION_SCHEMA.' + 'SHAPE_REPRESENTATION_RELATIONSHIP' IN TYPEOF(local_srr[i]) THEN
+          local_shape_rep := local_shape_rep + local_srr[i].rep_2;
+        END_IF;
+      END_REPEAT;
+      IF SIZEOF(local_shape_rep - total_reps) = 0 THEN
+        RETURN (shape_representation_set);
+      ELSE
+        local_total := total_reps + local_shape_rep;
+        RETURN (local_shape_rep + (local_relatives_of_shape_representations(local_shape_rep - total_reps, local_total)));
+      END_IF;
+    END_FUNCTION;
+
+    RETURN (local_relatives_of_shape_representations(shape_representation_set, shape_representation_set));
+  END_FUNCTION;
+
+  FUNCTION get_property_definition_representations (c_def_instance : characterized_definition):SET OF property_definition_representation;
+    LOCAL
+      pd_set : SET OF property_definition := [];
+      pdr_set : SET OF property_definition_representation := [];
+    END_LOCAL;
+
+    pd_set := bag_to_set(USEDIN(c_def_instance, 'PRODUCT_PROPERTY_DEFINITION_SCHEMA.PROPERTY_DEFINITION.DEFINITION'));
+    IF (SIZEOF(pd_set) < 1) THEN
+      RETURN (pdr_set);
+    END_IF;
+    REPEAT i := 1 TO HIINDEX(pd_set);
+      pdr_set := pdr_set + bag_to_set(USEDIN(pd_set[i], 'PRODUCT_PROPERTY_REPRESENTATION_SCHEMA.PROPERTY_DEFINITION_REPRESENTATION.DEFINITION'));
+    END_REPEAT;
+    RETURN (pdr_set);
+  END_FUNCTION;
+
+END_SCHEMA;
+SCHEMA management_resources_schema;
+  REFERENCE FROM action_schema;
+  REFERENCE FROM application_context_schema (library_context);
+  REFERENCE FROM approval_schema;
+  REFERENCE FROM basic_attribute_schema (get_role, object_role, role_association);
+  REFERENCE FROM certification_schema;
+  REFERENCE FROM contract_schema;
+  REFERENCE FROM date_time_schema;
+  REFERENCE FROM document_schema;
+  REFERENCE FROM effectivity_schema;
+  REFERENCE FROM experience_schema;
+  REFERENCE FROM external_reference_schema (external_source);
+  REFERENCE FROM group_schema;
+  REFERENCE FROM location_schema;
+  REFERENCE FROM person_organization_schema;
+  REFERENCE FROM qualifications_schema;
+  REFERENCE FROM security_classification_schema;
+  REFERENCE FROM support_resource_schema;
+  TYPE attribute_type = SELECT (label, text);
+  END_TYPE;
+
+  ENTITY action_assignment
+    ABSTRACT SUPERTYPE;
+    assigned_action : action;
+  DERIVE
+    role : object_role := get_role(SELF);
+  WHERE
+    WR1: SIZEOF(USEDIN(SELF, 'BASIC_ATTRIBUTE_SCHEMA.' + 'ROLE_ASSOCIATION.ITEM_WITH_ROLE')) <= 1;
+  END_ENTITY;
+
+  ENTITY action_method_assignment
+    ABSTRACT SUPERTYPE;
+    assigned_action_method : action_method;
+    role : action_method_role;
+  END_ENTITY;
+
+  ENTITY action_method_role;
+    name : label;
+    description : OPTIONAL text;
+  END_ENTITY;
+
+  ENTITY action_request_assignment
+    ABSTRACT SUPERTYPE;
+    assigned_action_request : versioned_action_request;
+  DERIVE
+    role : object_role := get_role(SELF);
+  WHERE
+    WR1: SIZEOF(USEDIN(SELF, 'BASIC_ATTRIBUTE_SCHEMA.' + 'ROLE_ASSOCIATION.ITEM_WITH_ROLE')) <= 1;
+  END_ENTITY;
+
+  ENTITY approval_assignment
+    ABSTRACT SUPERTYPE;
+    assigned_approval : approval;
+  DERIVE
+    role : object_role := get_role(SELF);
+  WHERE
+    WR1: SIZEOF(USEDIN(SELF, 'BASIC_ATTRIBUTE_SCHEMA.' + 'ROLE_ASSOCIATION.ITEM_WITH_ROLE')) <= 1;
+  END_ENTITY;
+
+  ENTITY attribute_classification_assignment
+    ABSTRACT SUPERTYPE;
+    assigned_class : group;
+    attribute_name : label;
+    role : classification_role;
+  END_ENTITY;
+
+  ENTITY attribute_value_assignment
+    ABSTRACT SUPERTYPE;
+    attribute_name : label;
+    attribute_value : attribute_type;
+    role : attribute_value_role;
+  END_ENTITY;
+
+  ENTITY attribute_value_role;
+    name : label;
+    description : OPTIONAL text;
+  END_ENTITY;
+
+  ENTITY certification_assignment
+    ABSTRACT SUPERTYPE;
+    assigned_certification : certification;
+  DERIVE
+    role : object_role := get_role(SELF);
+  WHERE
+    WR1: SIZEOF(USEDIN(SELF, 'BASIC_ATTRIBUTE_SCHEMA.' + 'ROLE_ASSOCIATION.ITEM_WITH_ROLE')) <= 1;
+  END_ENTITY;
+
+  ENTITY classification_assignment
+    ABSTRACT SUPERTYPE;
+    assigned_class : group;
+    role : classification_role;
+  END_ENTITY;
+
+  ENTITY classification_role;
+    name : label;
+    description : OPTIONAL text;
+  END_ENTITY;
+
+  ENTITY contract_assignment
+    ABSTRACT SUPERTYPE;
+    assigned_contract : contract;
+  DERIVE
+    role : object_role := get_role(SELF);
+  WHERE
+    WR1: SIZEOF(USEDIN(SELF, 'BASIC_ATTRIBUTE_SCHEMA.' + 'ROLE_ASSOCIATION.ITEM_WITH_ROLE')) <= 1;
+  END_ENTITY;
+
+  ENTITY date_and_time_assignment
+    ABSTRACT SUPERTYPE;
+    assigned_date_and_time : date_and_time;
+    role : date_time_role;
+  END_ENTITY;
+
+  ENTITY date_assignment
+    ABSTRACT SUPERTYPE;
+    assigned_date : date;
+    role : date_role;
+  END_ENTITY;
+
+  ENTITY document_reference
+    ABSTRACT SUPERTYPE;
+    assigned_document : document;
+    source : label;
+  DERIVE
+    role : object_role := get_role(SELF);
+  WHERE
+    WR1: SIZEOF(USEDIN(SELF, 'BASIC_ATTRIBUTE_SCHEMA.' + 'ROLE_ASSOCIATION.ITEM_WITH_ROLE')) <= 1;
+  END_ENTITY;
+
+  ENTITY document_usage_constraint_assignment
+    ABSTRACT SUPERTYPE;
+    assigned_document_usage : document_usage_constraint;
+    role : document_usage_role;
+  END_ENTITY;
+
+  ENTITY document_usage_role;
+    name : label;
+    description : OPTIONAL text;
+  END_ENTITY;
+
+  ENTITY effectivity_assignment
+    ABSTRACT SUPERTYPE;
+    assigned_effectivity : effectivity;
+  DERIVE
+    role : object_role := get_role(SELF);
+  WHERE
+    WR1: SIZEOF(USEDIN(SELF, 'BASIC_ATTRIBUTE_SCHEMA.' + 'ROLE_ASSOCIATION.ITEM_WITH_ROLE')) <= 1;
+  END_ENTITY;
+
+  ENTITY effectivity_context_assignment
+    ABSTRACT SUPERTYPE;
+    assigned_effectivity_assignment : effectivity_assignment;
+    role : effectivity_context_role;
+  END_ENTITY;
+
+  ENTITY effectivity_context_role;
+    name : label;
+    description : OPTIONAL text;
+  END_ENTITY;
+
+  ENTITY event_occurrence_assignment
+    ABSTRACT SUPERTYPE;
+    assigned_event_occurrence : event_occurrence;
+    role : event_occurrence_role;
+  END_ENTITY;
+
+  ENTITY event_occurrence_context_assignment
+    ABSTRACT SUPERTYPE;
+    assigned_event_occurrence_assignment : event_occurrence_assignment;
+    role : event_occurrence_context_role;
+  END_ENTITY;
+
+  ENTITY experience_assignment
+    ABSTRACT SUPERTYPE;
+    id : identifier;
+    name : label;
+    description : OPTIONAL text;
+    assigned_experience : experience;
+    role : experience_role;
+  END_ENTITY;
+
+  ENTITY experience_role;
+    id : identifier;
+    name : label;
+    description : OPTIONAL text;
+  END_ENTITY;
+
+  ENTITY experience_type_assignment
+    ABSTRACT SUPERTYPE;
+    id : identifier;
+    name : label;
+    description : OPTIONAL text;
+    assigned_experience_type : experience_type;
+    role : experience_type_role;
+  END_ENTITY;
+
+  ENTITY experience_type_role;
+    id : identifier;
+    name : label;
+    description : OPTIONAL text;
+  END_ENTITY;
+
+  ENTITY external_identification_assignment
+    ABSTRACT SUPERTYPE
+    SUBTYPE OF (identification_assignment);
+    source : external_source;
+  END_ENTITY;
+
+  ENTITY external_referent_assignment
+    ABSTRACT SUPERTYPE;
+    assigned_name : label;
+  DERIVE
+    role : object_role := get_role(SELF);
+  UNIQUE
+    UR1: assigned_name;
+  WHERE
+    WR1: SIZEOF(USEDIN(SELF, 'BASIC_ATTRIBUTE_SCHEMA.' + 'ROLE_ASSOCIATION.ITEM_WITH_ROLE')) <= 1;
+  END_ENTITY;
+
+  ENTITY group_assignment
+    ABSTRACT SUPERTYPE;
+    assigned_group : group;
+  DERIVE
+    role : object_role := get_role(SELF);
+  WHERE
+    WR1: SIZEOF(USEDIN(SELF, 'BASIC_ATTRIBUTE_SCHEMA.' + 'ROLE_ASSOCIATION.ITEM_WITH_ROLE')) <= 1;
+  END_ENTITY;
+
+  ENTITY identification_assignment
+    ABSTRACT SUPERTYPE;
+    assigned_id : identifier;
+    role : identification_role;
+  END_ENTITY;
+
+  ENTITY identification_assignment_relationship;
+    name : label;
+    description : OPTIONAL text;
+    relating_identification_assignment : identification_assignment;
+    related_identification_assignment : identification_assignment;
+  END_ENTITY;
+
+  ENTITY identification_role;
+    name : label;
+    description : OPTIONAL text;
+  END_ENTITY;
+
+  ENTITY library_assignment
+    ABSTRACT SUPERTYPE
+    SUBTYPE OF (external_referent_assignment);
+    frame_of_reference : library_context;
+  UNIQUE
+    UR1: frame_of_reference;
+  END_ENTITY;
+
+  ENTITY location_assignment
+    ABSTRACT SUPERTYPE;
+    id : identifier;
+    name : label;
+    description : OPTIONAL text;
+    assigned_location : location;
+    role : location_role;
+  END_ENTITY;
+
+  ENTITY location_representation_assignment
+    ABSTRACT SUPERTYPE;
+    id : identifier;
+    name : label;
+    description : OPTIONAL text;
+    represented_location : location;
+    role : location_representation_role;
+  END_ENTITY;
+
+  ENTITY location_representation_role;
+    id : identifier;
+    name : label;
+    description : OPTIONAL text;
+  END_ENTITY;
+
+  ENTITY location_role;
+    id : identifier;
+    name : label;
+    description : OPTIONAL text;
+  END_ENTITY;
+
+  ENTITY name_assignment
+    ABSTRACT SUPERTYPE;
+    assigned_name : label;
+  DERIVE
+    role : object_role := get_role(SELF);
+  WHERE
+    WR1: SIZEOF(USEDIN(SELF, 'BASIC_ATTRIBUTE_SCHEMA.' + 'ROLE_ASSOCIATION.ITEM_WITH_ROLE')) <= 1;
+  END_ENTITY;
+
+  ENTITY organization_assignment
+    ABSTRACT SUPERTYPE;
+    assigned_organization : organization;
+    role : organization_role;
+  END_ENTITY;
+
+  ENTITY organization_type_assignment
+    ABSTRACT SUPERTYPE;
+    id : identifier;
+    name : label;
+    description : OPTIONAL text;
+    assigned_organization_type : organization_type;
+    role : organization_type_role;
+  END_ENTITY;
+
+  ENTITY organization_type_role;
+    id : identifier;
+    name : label;
+    description : OPTIONAL text;
+  END_ENTITY;
+
+  ENTITY organizational_project_assignment
+    ABSTRACT SUPERTYPE;
+    assigned_organizational_project : organizational_project;
+    role : organizational_project_role;
+  END_ENTITY;
+
+  ENTITY organizational_project_role;
+    name : label;
+    description : OPTIONAL text;
+  END_ENTITY;
+
+  ENTITY person_and_organization_assignment
+    ABSTRACT SUPERTYPE;
+    assigned_person_and_organization : person_and_organization;
+    role : person_and_organization_role;
+  END_ENTITY;
+
+  ENTITY person_assignment
+    ABSTRACT SUPERTYPE;
+    assigned_person : person;
+    role : person_role;
+  END_ENTITY;
+
+  ENTITY person_type_assignment
+    ABSTRACT SUPERTYPE;
+    id : identifier;
+    name : label;
+    description : OPTIONAL text;
+    assigned_person_type : person_type;
+    role : person_type_role;
+  END_ENTITY;
+
+  ENTITY person_type_definition_assignment
+    ABSTRACT SUPERTYPE;
+    id : identifier;
+    name : label;
+    description : OPTIONAL text;
+    assigned_person_type_definition : person_type_definition;
+    role : person_type_definition_role;
+  END_ENTITY;
+
+  ENTITY person_type_definition_role;
+    id : identifier;
+    name : label;
+    description : OPTIONAL text;
+  END_ENTITY;
+
+  ENTITY person_type_role;
+    id : identifier;
+    name : label;
+    description : OPTIONAL text;
+  END_ENTITY;
+
+  ENTITY position_in_organization_assignment
+    ABSTRACT SUPERTYPE;
+    id : identifier;
+    name : label;
+    description : OPTIONAL text;
+    assigned_position_in_organization : position_in_organization;
+    role : position_in_organization_role;
+  END_ENTITY;
+
+  ENTITY position_in_organization_role;
+    id : identifier;
+    name : label;
+    description : OPTIONAL text;
+  END_ENTITY;
+
+  ENTITY position_in_organization_type_assignment
+    ABSTRACT SUPERTYPE;
+    id : identifier;
+    name : label;
+    description : OPTIONAL text;
+    assigned_position_in_organization_type : position_in_organization_type;
+    role : position_in_organization_type_role;
+  END_ENTITY;
+
+  ENTITY position_in_organization_type_role;
+    id : identifier;
+    name : label;
+    description : OPTIONAL text;
+  END_ENTITY;
+
+  ENTITY qualification_assignment
+    ABSTRACT SUPERTYPE;
+    id : identifier;
+    name : label;
+    description : OPTIONAL text;
+    assigned_qualification : qualification;
+    role : qualification_role;
+  END_ENTITY;
+
+  ENTITY qualification_role;
+    id : identifier;
+    name : label;
+    description : OPTIONAL text;
+  END_ENTITY;
+
+  ENTITY qualification_type_assignment
+    ABSTRACT SUPERTYPE;
+    id : identifier;
+    name : label;
+    description : OPTIONAL text;
+    assigned_qualification_type : qualification_type;
+    role : qualification_type_role;
+  END_ENTITY;
+
+  ENTITY qualification_type_role;
+    id : identifier;
+    name : label;
+    description : OPTIONAL text;
+  END_ENTITY;
+
+  ENTITY security_classification_assignment
+    ABSTRACT SUPERTYPE;
+    assigned_security_classification : security_classification;
+  DERIVE
+    role : object_role := get_role(SELF);
+  WHERE
+    WR1: SIZEOF(USEDIN(SELF, 'BASIC_ATTRIBUTE_SCHEMA.' + 'ROLE_ASSOCIATION.ITEM_WITH_ROLE')) <= 1;
+  END_ENTITY;
+
+  ENTITY time_assignment
+    ABSTRACT SUPERTYPE;
+    assigned_time : local_time;
+    role : time_role;
+  END_ENTITY;
+
+  ENTITY time_interval_assignment
+    ABSTRACT SUPERTYPE;
+    assigned_time_interval : time_interval;
+    role : time_interval_role;
+  END_ENTITY;
+
+  FUNCTION acyclic_identification_assignment_relationship (relation : identification_assignment_relationship; relatives : SET [1:?] OF identification_assignment; specific_relation : STRING):BOOLEAN;
+    LOCAL
+      x : SET OF identification_assignment_relationship;
+    END_LOCAL;
+
+    IF relation.relating_identification_assignment IN relatives THEN
+      RETURN (FALSE);
+    END_IF;
+    x := QUERY(ia <* bag_to_set(USEDIN(relation.relating_identification_assignment, 'MANAGEMENT_RESOURCES_SCHEMA.' + 'IDENTIFICATION_ASSIGNMENT_RELATIONSHIP.' + 'RELATED_IDENTIFICATION_ASSIGNMENT')) | specific_relation IN TYPEOF(ia));
+    REPEAT i := 1 TO HIINDEX(x);
+      IF NOT acyclic_identification_assignment_relationship(x[i], relatives + relation.relating_identification_assignment, specific_relation) THEN
+        RETURN (FALSE);
+      END_IF;
+    END_REPEAT;
+    RETURN (TRUE);
+  END_FUNCTION;
+
+END_SCHEMA;
+SCHEMA document_schema;
+  REFERENCE FROM product_definition_schema (product, product_definition, product_definition_formation);
+  REFERENCE FROM support_resource_schema (bag_to_set, identifier, label, text);
+  TYPE product_or_formation_or_definition = SELECT (product, product_definition_formation, product_definition);
+  END_TYPE;
+
+  ENTITY document;
+    id : identifier;
+    name : label;
+    description : OPTIONAL text;
+    kind : document_type;
+  INVERSE
+    representation_types : SET [0:?] OF document_representation_type FOR represented_document;
+  END_ENTITY;
+
+  ENTITY document_product_association;
+    name : label;
+    description : OPTIONAL text;
+    relating_document : document;
+    related_product : product_or_formation_or_definition;
+  END_ENTITY;
+
+  ENTITY document_relationship;
+    name : label;
+    description : OPTIONAL text;
+    relating_document : document;
+    related_document : document;
+  END_ENTITY;
+
+  ENTITY document_representation_type;
+    name : label;
+    represented_document : document;
+  END_ENTITY;
+
+  ENTITY document_type;
+    product_data_type : label;
+  END_ENTITY;
+
+  ENTITY document_usage_constraint;
+    source : document;
+    subject_element : label;
+    subject_element_value : text;
+  END_ENTITY;
+
+  ENTITY document_with_class
+    SUBTYPE OF (document);
+    class : identifier;
+  END_ENTITY;
+
+  FUNCTION acyclic_document_relationship (relation : document_relationship; relatives : SET [1:?] OF document; specific_relation : STRING):BOOLEAN;
+    LOCAL
+      x : SET OF document_relationship;
+    END_LOCAL;
+
+    IF relation.relating_document IN relatives THEN
+      RETURN (FALSE);
+    END_IF;
+    x := QUERY(doc <* bag_to_set(USEDIN(relation.relating_document, 'DOCUMENT_SCHEMA.' + 'DOCUMENT_RELATIONSHIP.' + 'RELATED_DOCUMENT')) | specific_relation IN TYPEOF(doc));
+    REPEAT i := 1 TO HIINDEX(x);
+      IF NOT acyclic_document_relationship(x[i], relatives + relation.relating_document, specific_relation) THEN
+        RETURN (FALSE);
+      END_IF;
+    END_REPEAT;
+    RETURN (TRUE);
+  END_FUNCTION;
+
+END_SCHEMA;
+SCHEMA action_schema;
+  REFERENCE FROM basic_attribute_schema (description_attribute, get_description_value, get_id_value, get_name_value, id_attribute, name_attribute);
+  REFERENCE FROM support_resource_schema (bag_to_set, identifier, label, text);
+  TYPE supported_item = SELECT (action_directive, action, action_method);
+  END_TYPE;
+
+  ENTITY action;
+    name : label;
+    description : OPTIONAL text;
+    chosen_method : action_method;
+  DERIVE
+    id : identifier := get_id_value(SELF);
+  WHERE
+    WR1: SIZEOF(USEDIN(SELF, 'BASIC_ATTRIBUTE_SCHEMA.' + 'ID_ATTRIBUTE.IDENTIFIED_ITEM')) <= 1;
+  END_ENTITY;
+
+  ENTITY action_directive;
+    name : label;
+    description : OPTIONAL text;
+    analysis : text;
+    comment : text;
+    requests : SET [1:?] OF versioned_action_request;
+  END_ENTITY;
+
+  ENTITY action_method;
+    name : label;
+    description : OPTIONAL text;
+    consequence : text;
+    purpose : text;
+  END_ENTITY;
+
+  ENTITY action_method_relationship;
+    name : label;
+    description : OPTIONAL text;
+    relating_method : action_method;
+    related_method : action_method;
+  END_ENTITY;
+
+  ENTITY action_relationship;
+    name : label;
+    description : OPTIONAL text;
+    relating_action : action;
+    related_action : action;
+  END_ENTITY;
+
+  ENTITY action_request_solution;
+    method : action_method;
+    request : versioned_action_request;
+  DERIVE
+    description : text := get_description_value(SELF);
+    name : label := get_name_value(SELF);
+  WHERE
+    WR1: SIZEOF(USEDIN(SELF, 'BASIC_ATTRIBUTE_SCHEMA.' + 'DESCRIPTION_ATTRIBUTE.DESCRIBED_ITEM')) <= 1;
+    WR2: SIZEOF(USEDIN(SELF, 'BASIC_ATTRIBUTE_SCHEMA.' + 'NAME_ATTRIBUTE.NAMED_ITEM')) <= 1;
+  END_ENTITY;
+
+  ENTITY action_request_status;
+    status : label;
+    assigned_request : versioned_action_request;
+  END_ENTITY;
+
+  ENTITY action_resource;
+    name : label;
+    description : OPTIONAL text;
+    usage : SET [1:?] OF supported_item;
+    kind : action_resource_type;
+  END_ENTITY;
+
+  ENTITY action_resource_relationship;
+    name : label;
+    description : OPTIONAL text;
+    relating_resource : action_resource;
+    related_resource : action_resource;
+  END_ENTITY;
+
+  ENTITY action_resource_type;
+    name : label;
+  END_ENTITY;
+
+  ENTITY action_status;
+    status : label;
+    assigned_action : executed_action;
+  END_ENTITY;
+
+  ENTITY directed_action
+    SUBTYPE OF (executed_action);
+    directive : action_directive;
+  END_ENTITY;
+
+  ENTITY executed_action
+    SUBTYPE OF (action);
+  END_ENTITY;
+
+  ENTITY versioned_action_request;
+    id : identifier;
+    version : label;
+    purpose : text;
+    description : OPTIONAL text;
+  END_ENTITY;
+
+  ENTITY versioned_action_request_relationship;
+    id : identifier;
+    name : label;
+    description : OPTIONAL text;
+    relating_versioned_action_request : versioned_action_request;
+    related_versioned_action_request : versioned_action_request;
+  END_ENTITY;
+
+  FUNCTION acyclic_action_method_relationship (relation : action_method_relationship; relatives : SET [1:?] OF action_method; specific_relation : STRING):BOOLEAN;
+    LOCAL
+      x : SET OF action_method_relationship;
+    END_LOCAL;
+
+    IF relation.relating_method IN relatives THEN
+      RETURN (FALSE);
+    END_IF;
+    x := QUERY(am <* bag_to_set(USEDIN(relation.relating_method, 'ACTION_SCHEMA.' + 'ACTION_METHOD_RELATIONSHIP.' + 'RELATED_METHOD')) | specific_relation IN TYPEOF(am));
+    REPEAT i := 1 TO HIINDEX(x);
+      IF NOT acyclic_action_method_relationship(x[i], relatives + relation.relating_method, specific_relation) THEN
+        RETURN (FALSE);
+      END_IF;
+    END_REPEAT;
+    RETURN (TRUE);
+  END_FUNCTION;
+
+  FUNCTION acyclic_action_relationship (relation : action_relationship; relatives : SET [1:?] OF action; specific_relation : STRING):BOOLEAN;
+    LOCAL
+      x : SET OF action_relationship;
+    END_LOCAL;
+
+    IF relation.relating_action IN relatives THEN
+      RETURN (FALSE);
+    END_IF;
+    x := QUERY(actn <* bag_to_set(USEDIN(relation.relating_action, 'ACTION_SCHEMA.' + 'ACTION_RELATIONSHIP.' + 'RELATED_ACTION')) | specific_relation IN TYPEOF(actn));
+    REPEAT i := 1 TO HIINDEX(x);
+      IF NOT acyclic_action_relationship(x[i], relatives + relation.relating_action, specific_relation) THEN
+        RETURN (FALSE);
+      END_IF;
+    END_REPEAT;
+    RETURN (TRUE);
+  END_FUNCTION;
+
+  FUNCTION acyclic_action_resource_relationship (relation : action_resource_relationship; relatives : SET [1:?] OF action_resource; specific_relation : STRING):BOOLEAN;
+    LOCAL
+      x : SET OF action_resource_relationship;
+    END_LOCAL;
+
+    IF relation.relating_resource IN relatives THEN
+      RETURN (FALSE);
+    END_IF;
+    x := QUERY(ar <* bag_to_set(USEDIN(relation.relating_resource, 'ACTION_SCHEMA.' + 'ACTION_RESOURCE_RELATIONSHIP.' + 'RELATED_RESOURCE')) | specific_relation IN TYPEOF(ar));
+    REPEAT i := 1 TO HIINDEX(x);
+      IF NOT acyclic_action_resource_relationship(x[i], relatives + relation.relating_resource, specific_relation) THEN
+        RETURN (FALSE);
+      END_IF;
+    END_REPEAT;
+    RETURN (TRUE);
+  END_FUNCTION;
+
+  FUNCTION acyclic_versioned_action_request_relationship (relation : versioned_action_request_relationship; relatives : SET OF versioned_action_request; specific_relation : STRING):BOOLEAN;
+    LOCAL
+      x : SET OF versioned_action_request_relationship;
+    END_LOCAL;
+
+    IF relation.relating_versioned_action_request IN relatives THEN
+      RETURN (FALSE);
+    END_IF;
+    x := QUERY(varr <* bag_to_set(USEDIN(relation.relating_versioned_action_request, 'ACTION_SCHEMA.' + 'VERSIONED_ACTION_REQUEST_RELATIONSHIP.' + 'RELATED_VERSIONED_ACTION_REQUEST')) | specific_relation IN TYPEOF(varr));
+    REPEAT i := 1 TO HIINDEX(x);
+      IF NOT acyclic_versioned_action_request_relationship(x[i], relatives + relation.relating_versioned_action_request, specific_relation) THEN
+        RETURN (FALSE);
+      END_IF;
+    END_REPEAT;
+    RETURN (TRUE);
+  END_FUNCTION;
+
+END_SCHEMA;
+SCHEMA certification_schema;
+  REFERENCE FROM support_resource_schema (label, text);
+  ENTITY certification;
+    name : label;
+    purpose : text;
+    kind : certification_type;
+  END_ENTITY;
+
+  ENTITY certification_type;
+    description : label;
+  END_ENTITY;
+
+END_SCHEMA;
+SCHEMA approval_schema;
+  REFERENCE FROM basic_attribute_schema (description_attribute, get_description_value, get_role, object_role, role_association);
+  REFERENCE FROM date_time_schema (date_time_select);
+  REFERENCE FROM person_organization_schema (person_organization_select);
+  REFERENCE FROM support_resource_schema (bag_to_set, label, text);
+  ENTITY approval;
+    status : approval_status;
+    level : label;
+  END_ENTITY;
+
+  ENTITY approval_date_time;
+    date_time : date_time_select;
+    dated_approval : approval;
+  DERIVE
+    role : object_role := get_role(SELF);
+  WHERE
+    WR1: SIZEOF(USEDIN(SELF, 'BASIC_ATTRIBUTE_SCHEMA.' + 'ROLE_ASSOCIATION.ITEM_WITH_ROLE')) <= 1;
+  END_ENTITY;
+
+  ENTITY approval_person_organization;
+    person_organization : person_organization_select;
+    authorized_approval : approval;
+    role : approval_role;
+  END_ENTITY;
+
+  ENTITY approval_relationship;
+    name : label;
+    description : OPTIONAL text;
+    relating_approval : approval;
+    related_approval : approval;
+  END_ENTITY;
+
+  ENTITY approval_role;
+    role : label;
+  DERIVE
+    description : text := get_description_value(SELF);
+  WHERE
+    WR1: SIZEOF(USEDIN(SELF, 'BASIC_ATTRIBUTE_SCHEMA.' + 'DESCRIPTION_ATTRIBUTE.DESCRIBED_ITEM')) <= 1;
+  END_ENTITY;
+
+  ENTITY approval_status;
+    name : label;
+  END_ENTITY;
+
+  FUNCTION acyclic_approval_relationship (relation : approval_relationship; relatives : SET [1:?] OF approval; specific_relation : STRING):BOOLEAN;
+    LOCAL
+      x : SET OF approval_relationship;
+    END_LOCAL;
+
+    IF relation.relating_approval IN relatives THEN
+      RETURN (FALSE);
+    END_IF;
+    x := QUERY(app <* bag_to_set(USEDIN(relation.relating_approval, 'APPROVAL_SCHEMA.' + 'APPROVAL_RELATIONSHIP.' + 'RELATED_APPROVAL')) | specific_relation IN TYPEOF(app));
+    REPEAT i := 1 TO HIINDEX(x);
+      IF NOT acyclic_approval_relationship(x[i], relatives + relation.relating_approval, specific_relation) THEN
+        RETURN (FALSE);
+      END_IF;
+    END_REPEAT;
+    RETURN (TRUE);
+  END_FUNCTION;
+
+END_SCHEMA;
+SCHEMA contract_schema;
+  REFERENCE FROM support_resource_schema (bag_to_set, identifier, label, text);
+  ENTITY contract;
+    name : label;
+    purpose : text;
+    kind : contract_type;
+  END_ENTITY;
+
+  ENTITY contract_relationship;
+    id : identifier;
+    name : label;
+    description : OPTIONAL text;
+    relating_contract : contract;
+    related_contract : contract;
+  END_ENTITY;
+
+  ENTITY contract_type;
+    description : label;
+  END_ENTITY;
+
+  FUNCTION acyclic_contract_relationship (relation : contract_relationship; relatives : SET [1:?] OF contract; specific_relation : STRING):BOOLEAN;
+    LOCAL
+      x : SET OF contract_relationship;
+    END_LOCAL;
+
+    IF relation.relating_contract IN relatives THEN
+      RETURN (FALSE);
+    END_IF;
+    x := QUERY(cont <* bag_to_set(USEDIN(relation.relating_contract, 'CONTRACT_SCHEMA.' + 'CONTRACT_RELATIONSHIP.' + 'RELATED_CONTRACT')) | specific_relation IN TYPEOF(cont));
+    REPEAT i := 1 TO HIINDEX(x);
+      IF NOT acyclic_contract_relationship(x[i], relatives + relation.relating_contract, specific_relation) THEN
+        RETURN (FALSE);
+      END_IF;
+    END_REPEAT;
+    RETURN (TRUE);
+  END_FUNCTION;
+
+END_SCHEMA;
+SCHEMA security_classification_schema;
+  REFERENCE FROM support_resource_schema (label, text);
+  ENTITY security_classification;
+    name : label;
+    purpose : text;
+    security_level : security_classification_level;
+  END_ENTITY;
+
+  ENTITY security_classification_level;
+    name : label;
+  END_ENTITY;
+
+END_SCHEMA;
+SCHEMA person_organization_schema;
+  REFERENCE FROM basic_attribute_schema (description_attribute, get_description_value, get_id_value, get_name_value, get_role, id_attribute, name_attribute, object_role, role_association);
+  REFERENCE FROM support_resource_schema (bag_to_set, identifier, label, text);
+  TYPE person_organization_select = SELECT (person, organization, person_and_organization);
+  END_TYPE;
+
+  ENTITY address;
+    internal_location : OPTIONAL label;
+    street_number : OPTIONAL label;
+    street : OPTIONAL label;
+    postal_box : OPTIONAL label;
+    town : OPTIONAL label;
+    region : OPTIONAL label;
+    postal_code : OPTIONAL label;
+    country : OPTIONAL label;
+    facsimile_number : OPTIONAL label;
+    telephone_number : OPTIONAL label;
+    electronic_mail_address : OPTIONAL label;
+    telex_number : OPTIONAL label;
+  DERIVE
+    name : label := get_name_value(SELF);
+    url : identifier := get_id_value(SELF);
+  WHERE
+    WR1: EXISTS(internal_location) OR EXISTS(street_number) OR EXISTS(street) OR EXISTS(postal_box) OR EXISTS(town) OR EXISTS(region) OR EXISTS(postal_code) OR EXISTS(country) OR EXISTS(facsimile_number) OR EXISTS(telephone_number) OR EXISTS(electronic_mail_address) OR EXISTS(telex_number);
+  END_ENTITY;
+
+  ENTITY organization;
+    id : OPTIONAL identifier;
+    name : label;
+    description : OPTIONAL text;
+  END_ENTITY;
+
+  ENTITY organization_relationship;
+    name : label;
+    description : OPTIONAL text;
+    relating_organization : organization;
+    related_organization : organization;
+  END_ENTITY;
+
+  ENTITY organization_role;
+    name : label;
+  DERIVE
+    description : text := get_description_value(SELF);
+  WHERE
+    WR1: SIZEOF(USEDIN(SELF, 'BASIC_ATTRIBUTE_SCHEMA.' + 'DESCRIPTION_ATTRIBUTE.DESCRIBED_ITEM')) <= 1;
+  END_ENTITY;
+
+  ENTITY organization_type;
+    id : identifier;
+    name : label;
+    description : OPTIONAL text;
+  END_ENTITY;
+
+  ENTITY organization_type_relationship;
+    id : identifier;
+    name : label;
+    description : OPTIONAL text;
+    relating_organization_type : organization_type;
+    related_organization_type : organization_type;
+  END_ENTITY;
+
+  ENTITY organizational_address
+    SUBTYPE OF (address);
+    organizations : SET [1:?] OF organization;
+    description : OPTIONAL text;
+  END_ENTITY;
+
+  ENTITY organizational_project;
+    name : label;
+    description : OPTIONAL text;
+    responsible_organizations : SET [1:?] OF organization;
+  DERIVE
+    id : identifier := get_id_value(SELF);
+  WHERE
+    WR1: SIZEOF(USEDIN(SELF, 'BASIC_ATTRIBUTE_SCHEMA.' + 'ID_ATTRIBUTE.IDENTIFIED_ITEM')) <= 1;
+  END_ENTITY;
+
+  ENTITY organizational_project_relationship;
+    name : label;
+    description : OPTIONAL text;
+    relating_organizational_project : organizational_project;
+    related_organizational_project : organizational_project;
+  END_ENTITY;
+
+  ENTITY person;
+    id : identifier;
+    last_name : OPTIONAL label;
+    first_name : OPTIONAL label;
+    middle_names : OPTIONAL LIST [1:?] OF label;
+    prefix_titles : OPTIONAL LIST [1:?] OF label;
+    suffix_titles : OPTIONAL LIST [1:?] OF label;
+  WHERE
+    WR1: EXISTS(last_name) OR EXISTS(first_name);
+  END_ENTITY;
+
+  ENTITY person_and_organization;
+    the_person : person;
+    the_organization : organization;
+  DERIVE
+    name : label := get_name_value(SELF);
+    description : text := get_description_value(SELF);
+  WHERE
+    WR1: SIZEOF(USEDIN(SELF, 'BASIC_ATTRIBUTE_SCHEMA.' + 'NAME_ATTRIBUTE.NAMED_ITEM')) <= 1;
+    WR2: SIZEOF(USEDIN(SELF, 'BASIC_ATTRIBUTE_SCHEMA.' + 'DESCRIPTION_ATTRIBUTE.DESCRIBED_ITEM')) <= 1;
+  END_ENTITY;
+
+  ENTITY person_and_organization_role;
+    name : label;
+  DERIVE
+    description : text := get_description_value(SELF);
+  WHERE
+    WR1: SIZEOF(USEDIN(SELF, 'BASIC_ATTRIBUTE_SCHEMA.' + 'DESCRIPTION_ATTRIBUTE.DESCRIBED_ITEM')) <= 1;
+  END_ENTITY;
+
+  ENTITY person_role;
+    name : label;
+  DERIVE
+    description : text := get_description_value(SELF);
+  WHERE
+    WR1: SIZEOF(USEDIN(SELF, 'BASIC_ATTRIBUTE_SCHEMA.' + 'DESCRIPTION_ATTRIBUTE.DESCRIBED_ITEM')) <= 1;
+  END_ENTITY;
+
+  ENTITY person_type;
+    id : identifier;
+    name : label;
+    description : OPTIONAL text;
+  END_ENTITY;
+
+  ENTITY person_type_definition;
+    id : identifier;
+    name : label;
+    description : OPTIONAL text;
+    formation : person_type_definition_formation;
+  END_ENTITY;
+
+  ENTITY person_type_definition_formation;
+    id : identifier;
+    name : label;
+    description : OPTIONAL text;
+    of_person_type : person_type;
+  END_ENTITY;
+
+  ENTITY person_type_definition_relationship;
+    id : identifier;
+    name : label;
+    description : OPTIONAL text;
+    relating_person_type_definition : person_type_definition;
+    related_person_type_definition : person_type_definition;
+  END_ENTITY;
+
+  ENTITY personal_address
+    SUBTYPE OF (address);
+    people : SET [1:?] OF person;
+    description : OPTIONAL text;
+  END_ENTITY;
+
+  ENTITY position_in_organization;
+    id : identifier;
+    name : label;
+    description : OPTIONAL text;
+  END_ENTITY;
+
+  ENTITY position_in_organization_relationship;
+    id : identifier;
+    name : label;
+    description : OPTIONAL text;
+    relating_position_in_organization : position_in_organization;
+    related_position_in_organization : position_in_organization;
+  END_ENTITY;
+
+  ENTITY position_in_organization_type;
+    id : identifier;
+    name : label;
+    description : OPTIONAL text;
+  END_ENTITY;
+
+  FUNCTION acyclic_organization_relationship (relation : organization_relationship; relatives : SET [1:?] OF organization; specific_relation : STRING):BOOLEAN;
+    LOCAL
+      x : SET OF organization_relationship;
+    END_LOCAL;
+
+    IF relation.relating_organization IN relatives THEN
+      RETURN (FALSE);
+    END_IF;
+    x := QUERY(org <* bag_to_set(USEDIN(relation.relating_organization, 'PERSON_ORGANIZATION_SCHEMA.' + 'ORGANIZATION_RELATIONSHIP.' + 'RELATED_ORGANIZATION')) | specific_relation IN TYPEOF(org));
+    REPEAT i := 1 TO HIINDEX(x);
+      IF NOT acyclic_organization_relationship(x[i], relatives + relation.relating_organization, specific_relation) THEN
+        RETURN (FALSE);
+      END_IF;
+    END_REPEAT;
+    RETURN (TRUE);
+  END_FUNCTION;
+
+  FUNCTION acyclic_organization_type_relationship (relation : organization_type_relationship; relatives : SET OF organization_type; specific_relation : STRING):BOOLEAN;
+    LOCAL
+      x : SET OF organization_type_relationship;
+    END_LOCAL;
+
+    IF relation.relating_organization_type IN relatives THEN
+      RETURN (FALSE);
+    END_IF;
+    x := QUERY(orgtyp <* bag_to_set(USEDIN(relation.relating_organization_type, 'PERSON_ORGANIZATION_SCHEMA.' + 'ORGANIZATION_TYPE_RELATIONSHIP.' + 'RELATED_ORGANIZATION_TYPE')) | specific_relation IN TYPEOF(orgtyp));
+    REPEAT i := 1 TO HIINDEX(x);
+      IF NOT acyclic_organization_type_relationship(x[i], relatives + relation.relating_organization_type, specific_relation) THEN
+        RETURN (FALSE);
+      END_IF;
+    END_REPEAT;
+    RETURN (TRUE);
+  END_FUNCTION;
+
+  FUNCTION acyclic_organizational_project_relationship (relation : organizational_project_relationship; relatives : SET [1:?] OF organizational_project; specific_relation : STRING):BOOLEAN;
+    LOCAL
+      x : SET OF organizational_project_relationship;
+    END_LOCAL;
+
+    IF relation.relating_organizational_project IN relatives THEN
+      RETURN (FALSE);
+    END_IF;
+    x := QUERY(op <* bag_to_set(USEDIN(relation.relating_organizational_project, 'PERSON_ORGANIZATION_SCHEMA.' + 'ORGANIZATIONAL_PROJECT_RELATIONSHIP.' + 'RELATED_ORGANIZATIONAL_PROJECT')) | specific_relation IN TYPEOF(op));
+    REPEAT i := 1 TO HIINDEX(x);
+      IF NOT acyclic_organizational_project_relationship(x[i], relatives + relation.relating_organizational_project, specific_relation) THEN
+        RETURN (FALSE);
+      END_IF;
+    END_REPEAT;
+    RETURN (TRUE);
+  END_FUNCTION;
+
+  FUNCTION acyclic_person_type_definition_relationship (relation : person_type_definition_relationship; relatives : SET OF person_type_definition; specific_relation : STRING):BOOLEAN;
+    LOCAL
+      x : SET OF person_type_definition_relationship;
+    END_LOCAL;
+
+    IF relation.relating_person_type_definition IN relatives THEN
+      RETURN (FALSE);
+    END_IF;
+    x := QUERY(ptdef <* bag_to_set(USEDIN(relation.relating_person_type_definition, 'PERSON_ORGANIZATION_SCHEMA.' + 'PERSON_TYPE_DEFINITION_RELATIONSHIP.' + 'RELATED_PERSON_TYPE_DEFINITION')) | specific_relation IN TYPEOF(ptdef));
+    REPEAT i := 1 TO HIINDEX(x);
+      IF NOT acyclic_person_type_definition_relationship(x[i], relatives + relation.relating_person_type_definition, specific_relation) THEN
+        RETURN (FALSE);
+      END_IF;
+    END_REPEAT;
+    RETURN (TRUE);
+  END_FUNCTION;
+
+  FUNCTION acyclic_position_in_organization_relationship (relation : position_in_organization_relationship; relatives : SET OF position_in_organization; specific_relation : STRING):BOOLEAN;
+    LOCAL
+      x : SET OF position_in_organization_relationship;
+    END_LOCAL;
+
+    IF relation.relating_position_in_organization IN relatives THEN
+      RETURN (FALSE);
+    END_IF;
+    x := QUERY(piorg <* bag_to_set(USEDIN(relation.relating_position_in_organization, 'PERSON_ORGANIZATION_SCHEMA.' + 'POSITION_IN_ORGANIZATION_RELATIONSHIP.' + 'RELATED_POSITION_IN_ORGANIZATION')) | specific_relation IN TYPEOF(piorg));
+    REPEAT i := 1 TO HIINDEX(x);
+      IF NOT acyclic_position_in_organization_relationship(x[i], relatives + relation.relating_position_in_organization, specific_relation) THEN
+        RETURN (FALSE);
+      END_IF;
+    END_REPEAT;
+    RETURN (TRUE);
+  END_FUNCTION;
+
+END_SCHEMA;
+SCHEMA date_time_schema;
+
+REFERENCE FROM basic_attribute_schema   -- ISO 10303-41
+  (description_attribute,
+   get_description_value); 
+
+REFERENCE FROM measure_schema   -- ISO 10303-41
+  (time_measure_with_unit); 
+
+REFERENCE FROM support_resource_schema   -- ISO 10303-41
+  (bag_to_set,
+   identifier,
+   label,
+   text); 
+
+
+TYPE ahead_or_behind = ENUMERATION OF 
+   (ahead,
+    exact,
+    behind);
+END_TYPE; 
+
+TYPE date_time_or_event_occurrence = SELECT
+   (date_time_select, 
+    event_occurrence);
+END_TYPE; 
+
+TYPE date_time_select = SELECT
+   (date, 
+    date_and_time, 
+    local_time);
+END_TYPE; 
+
+TYPE day_in_month_number = INTEGER;
+WHERE
+  WR1: {1 <= SELF <= 31};
+END_TYPE; 
+
+TYPE day_in_week_number = INTEGER;
+WHERE
+  WR1: { 1 <= SELF <= 7 };
+END_TYPE; 
+
+TYPE day_in_year_number = INTEGER;
+WHERE
+  WR1: {1 <= SELF <= 366};
+END_TYPE; 
+
+TYPE hour_in_day = INTEGER;
+WHERE
+  WR1: { 0 <= SELF < 24 };
+END_TYPE; 
+
+TYPE minute_in_hour = INTEGER;
+WHERE
+  WR1: { 0 <= SELF <= 59 };
+END_TYPE; 
+
+TYPE month_in_year_number = INTEGER;
+WHERE
+  WR1: { 1 <= SELF <= 12 };
+END_TYPE; 
+
+TYPE second_in_minute = REAL;
+WHERE
+  WR1: { 0 <= SELF <= 60.0 };
+END_TYPE; 
+
+TYPE week_in_year_number = INTEGER;
+WHERE
+  WR1: { 1 <= SELF <= 53 };
+END_TYPE; 
+
+TYPE year_number = INTEGER;
+END_TYPE; 
+
+ENTITY calendar_date
+  SUBTYPE OF (date);
+  day_component : day_in_month_number;
+  month_component : month_in_year_number;
+WHERE
+  WR1: valid_calendar_date (SELF);
+END_ENTITY;
+
+ENTITY coordinated_universal_time_offset;
+  hour_offset : INTEGER;
+  minute_offset : OPTIONAL INTEGER;
+  sense : ahead_or_behind;
+DERIVE
+  actual_minute_offset : INTEGER := NVL(minute_offset,0);
+WHERE
+  WR1: { 0 <= hour_offset < 24 };
+  WR2: { 0 <= actual_minute_offset <= 59 };
+  WR3: NOT (((hour_offset <> 0) OR (actual_minute_offset <>0)) AND (sense = exact));
+END_ENTITY;
+
+ENTITY date
+  SUPERTYPE OF (ONEOF (calendar_date,
+                       ordinal_date,
+                       week_of_year_and_day_date,
+                       year_month));
+  year_component : year_number;
+END_ENTITY;
+
+ENTITY date_and_time;
+  date_component : date;
+  time_component : local_time;
+END_ENTITY;
+
+ENTITY date_role;
+  name : label;
+DERIVE
+  description : text := get_description_value (SELF);
+WHERE
+  WR1: SIZEOF (USEDIN (SELF, 'BASIC_ATTRIBUTE_SCHEMA.' + 'DESCRIPTION_ATTRIBUTE.DESCRIBED_ITEM')) <= 1;
+END_ENTITY;
+
+ENTITY date_time_role;
+  name : label;
+DERIVE
+  description : text := get_description_value (SELF);
+WHERE
+  WR1: SIZEOF (USEDIN (SELF, 'BASIC_ATTRIBUTE_SCHEMA.' + 'DESCRIPTION_ATTRIBUTE.DESCRIBED_ITEM')) <= 1;
+END_ENTITY;
+
+ENTITY event_occurrence;
+  id : identifier;
+  name : label;
+  description : OPTIONAL text;
+END_ENTITY;
+
+ENTITY event_occurrence_context_role;
+  name : label;
+  description : OPTIONAL text;
+END_ENTITY;
+
+ENTITY event_occurrence_relationship;
+  name : label;
+  description : OPTIONAL text;
+  relating_event : event_occurrence;
+  related_event : event_occurrence;
+END_ENTITY;
+
+ENTITY event_occurrence_role;
+  name : label;
+  description : OPTIONAL text;
+END_ENTITY;
+
+ENTITY local_time;
+  hour_component : hour_in_day;
+  minute_component : OPTIONAL minute_in_hour;
+  second_component : OPTIONAL second_in_minute;
+  zone : coordinated_universal_time_offset;
+WHERE
+  WR1: valid_time (SELF);
+END_ENTITY;
+
+ENTITY ordinal_date
+  SUBTYPE OF (date);
+  day_component : day_in_year_number;
+WHERE
+  WR1: (NOT leap_year(SELF.year_component) AND { 1 <= day_component <= 365 }) OR (leap_year(SELF.year_component) AND { 1 <= day_component <= 366 });
+END_ENTITY;
+
+ENTITY relative_event_occurrence
+  SUBTYPE OF (event_occurrence);
+  base_event : event_occurrence;
+  offset : time_measure_with_unit;
+END_ENTITY;
+
+ENTITY time_interval;
+  id : identifier;
+  name : label;
+  description : OPTIONAL text;
+END_ENTITY;
+
+ENTITY time_interval_relationship;
+  name : label;
+  description : OPTIONAL text;
+  relating_time_interval : time_interval;
+  related_time_interval : time_interval;
+END_ENTITY;
+
+ENTITY time_interval_role;
+  name : label;
+  description : OPTIONAL text;
+END_ENTITY;
+
+ENTITY time_interval_with_bounds
+  SUBTYPE OF (time_interval);
+  primary_bound : OPTIONAL date_time_or_event_occurrence;
+  secondary_bound : OPTIONAL date_time_or_event_occurrence;
+  duration : OPTIONAL time_measure_with_unit;
+WHERE
+  WR1: NOT (EXISTS(secondary_bound) AND EXISTS(duration));
+  WR2: EXISTS(primary_bound) OR EXISTS(secondary_bound);
+END_ENTITY;
+
+ENTITY time_role;
+  name : label;
+DERIVE
+  description : text := get_description_value (SELF);
+WHERE
+  WR1: SIZEOF (USEDIN (SELF, 'BASIC_ATTRIBUTE_SCHEMA.' + 'DESCRIPTION_ATTRIBUTE.DESCRIBED_ITEM')) <= 1;
+END_ENTITY;
+
+ENTITY week_of_year_and_day_date
+  SUBTYPE OF (date);
+  week_component : week_in_year_number;
+  day_component : OPTIONAL day_in_week_number;
+END_ENTITY;
+
+ENTITY year_month 
+  SUBTYPE OF (date);
+  month_component : month_in_year_number;
+END_ENTITY;
+
+FUNCTION acyclic_event_occurrence_relationship
+ (relation : event_occurrence_relationship; relatives : SET[1:?] OF event_occurrence; specific_relation : STRING) : BOOLEAN; 
+ LOCAL
+      x : SET OF event_occurrence_relationship;
+    END_LOCAL;
+
+    IF relation.relating_event IN relatives THEN
+      RETURN (FALSE);
+    END_IF;
+    x := QUERY(evnt <* bag_to_set(USEDIN(relation.relating_event, 'DATE_TIME_SCHEMA.' + 'EVENT_OCCURRENCE_RELATIONSHIP.' + 'RELATED_EVENT')) | specific_relation IN TYPEOF(evnt));
+    REPEAT i := 1 TO HIINDEX(x);
+      IF NOT acyclic_event_occurrence_relationship(x[i], relatives + relation.relating_event, specific_relation) THEN
+        RETURN (FALSE);
+      END_IF;
+    END_REPEAT;
+    RETURN (TRUE);
+END_FUNCTION; 
+
+FUNCTION acyclic_time_interval_relationship
+ (relation : time_interval_relationship; relatives : SET[1:?] OF time_interval; specific_relation : STRING) : BOOLEAN; 
+  LOCAL
+      x : SET OF time_interval_relationship;
+    END_LOCAL;
+
+    IF relation.relating_time_interval IN relatives THEN
+      RETURN (FALSE);
+    END_IF;
+    x := QUERY(ti <* bag_to_set(USEDIN(relation.relating_time_interval, 'DATE_TIME_SCHEMA.' + 'TIME_INTERVAL_RELATIONSHIP.' + 'RELATED_TIME_INTERVAL')) | specific_relation IN TYPEOF(ti));
+    REPEAT i := 1 TO HIINDEX(x);
+      IF NOT acyclic_time_interval_relationship(x[i], relatives + relation.relating_time_interval, specific_relation) THEN
+        RETURN (FALSE);
+      END_IF;
+    END_REPEAT;
+    RETURN (TRUE);
+END_FUNCTION; 
+
+FUNCTION leap_year
+ (year : year_number) : BOOLEAN; 
+  IF ((((year MOD 4) = 0) AND ((year MOD 100) <> 0)) OR ((year MOD 400) = 0)) THEN
+    RETURN (TRUE);
+  ELSE
+    RETURN (FALSE);
+  END_IF;
+END_FUNCTION; 
+
+FUNCTION valid_calendar_date
+ (date : calendar_date) : LOGICAL; 
+  CASE date.month_component OF
+    1  : RETURN({ 1 <= date.day_component <= 31 });
+    2  : BEGIN
+           IF (leap_year(date.year_component)) THEN
+             RETURN({ 1 <= date.day_component <= 29 });
+           ELSE
+             RETURN({ 1 <= date.day_component <= 28 });
+           END_IF;
+         END;
+    3  : RETURN({ 1 <= date.day_component <= 31 });
+    4  : RETURN({ 1 <= date.day_component <= 30 });
+    5  : RETURN({ 1 <= date.day_component <= 31 });
+    6  : RETURN({ 1 <= date.day_component <= 30 });
+    7  : RETURN({ 1 <= date.day_component <= 31 });
+    8  : RETURN({ 1 <= date.day_component <= 31 });
+    9  : RETURN({ 1 <= date.day_component <= 30 });
+    10 : RETURN({ 1 <= date.day_component <= 31 });
+    11 : RETURN({ 1 <= date.day_component <= 30 });
+    12 : RETURN({ 1 <= date.day_component <= 31 });
+  END_CASE;
+  RETURN (FALSE);
+END_FUNCTION; 
+
+FUNCTION valid_time
+ (time : local_time) : BOOLEAN; 
+  IF EXISTS(time.second_component) THEN
+    RETURN (EXISTS(time.minute_component));
+  ELSE
+    RETURN (TRUE);
+  END_IF;
+END_FUNCTION; 
+
+END_SCHEMA;
+SCHEMA group_schema;
+  REFERENCE FROM support_resource_schema (label, bag_to_set, identifier, text);
+  REFERENCE FROM basic_attribute_schema (get_id_value, id_attribute);
+  ENTITY group;
+    name : label;
+    description : OPTIONAL text;
+  DERIVE
+    id : identifier := get_id_value(SELF);
+  WHERE
+    WR1: SIZEOF(USEDIN(SELF, 'BASIC_ATTRIBUTE_SCHEMA.' + 'ID_ATTRIBUTE.IDENTIFIED_ITEM')) <= 1;
+  END_ENTITY;
+
+  ENTITY group_relationship;
+    name : label;
+    description : OPTIONAL text;
+    relating_group : group;
+    related_group : group;
+  END_ENTITY;
+
+  FUNCTION acyclic_group_relationship (relation : group_relationship; relatives : SET [1:?] OF group; specific_relation : STRING):BOOLEAN;
+    LOCAL
+      x : SET OF group_relationship;
+    END_LOCAL;
+
+    IF relation.relating_group IN relatives THEN
+      RETURN (FALSE);
+    END_IF;
+    x := QUERY(grp <* bag_to_set(USEDIN(relation.relating_group, 'GROUP_SCHEMA.' + 'GROUP_RELATIONSHIP.' + 'RELATED_GROUP')) | specific_relation IN TYPEOF(grp));
+    REPEAT i := 1 TO HIINDEX(x);
+      IF NOT acyclic_group_relationship(x[i], relatives + relation.relating_group, specific_relation) THEN
+        RETURN (FALSE);
+      END_IF;
+    END_REPEAT;
+    RETURN (TRUE);
+  END_FUNCTION;
+
+END_SCHEMA;
+SCHEMA effectivity_schema;
+  REFERENCE FROM basic_attribute_schema (description_attribute, get_description_value, get_name_value, name_attribute);
+  REFERENCE FROM date_time_schema (date_time_or_event_occurrence, time_interval);
+  REFERENCE FROM measure_schema (measure_with_unit);
+  REFERENCE FROM support_resource_schema (bag_to_set, identifier, label, text);
+  ENTITY dated_effectivity
+    SUBTYPE OF (effectivity);
+    effectivity_end_date : OPTIONAL date_time_or_event_occurrence;
+    effectivity_start_date : date_time_or_event_occurrence;
+  END_ENTITY;
+
+  ENTITY effectivity
+    SUPERTYPE OF (ONEOF(serial_numbered_effectivity, dated_effectivity, lot_effectivity, time_interval_based_effectivity));
+    id : identifier;
+  DERIVE
+    name : label := get_name_value(SELF);
+    description : text := get_description_value(SELF);
+  WHERE
+    WR1: SIZEOF(USEDIN(SELF, 'BASIC_ATTRIBUTE_SCHEMA.' + 'NAME_ATTRIBUTE.NAMED_ITEM')) <= 1;
+    WR2: SIZEOF(USEDIN(SELF, 'BASIC_ATTRIBUTE_SCHEMA.' + 'DESCRIPTION_ATTRIBUTE.DESCRIBED_ITEM')) <= 1;
+  END_ENTITY;
+
+  ENTITY effectivity_relationship;
+    name : label;
+    description : OPTIONAL text;
+    related_effectivity : effectivity;
+    relating_effectivity : effectivity;
+  END_ENTITY;
+
+  ENTITY lot_effectivity
+    SUBTYPE OF (effectivity);
+    effectivity_lot_id : identifier;
+    effectivity_lot_size : measure_with_unit;
+  END_ENTITY;
+
+  ENTITY serial_numbered_effectivity
+    SUBTYPE OF (effectivity);
+    effectivity_start_id : identifier;
+    effectivity_end_id : OPTIONAL identifier;
+  END_ENTITY;
+
+  ENTITY time_interval_based_effectivity
+    SUBTYPE OF (effectivity);
+    effectivity_period : time_interval;
+  END_ENTITY;
+
+  FUNCTION acyclic_effectivity_relationship (relation : effectivity_relationship; relatives : SET [1:?] OF effectivity; specific_relation : STRING):BOOLEAN;
+    LOCAL
+      x : SET OF effectivity_relationship;
+    END_LOCAL;
+
+    IF relation.relating_effectivity IN relatives THEN
+      RETURN (FALSE);
+    END_IF;
+    x := QUERY(eff <* bag_to_set(USEDIN(relation.relating_effectivity, 'EFFECTIVITY_SCHEMA.' + 'EFFECTIVITY_RELATIONSHIP.' + 'RELATED_EFFECTIVITY')) | specific_relation IN TYPEOF(eff));
+    REPEAT i := 1 TO HIINDEX(x);
+      IF NOT acyclic_effectivity_relationship(x[i], relatives + relation.relating_effectivity, specific_relation) THEN
+        RETURN (FALSE);
+      END_IF;
+    END_REPEAT;
+    RETURN (TRUE);
+  END_FUNCTION;
+
+END_SCHEMA;
+SCHEMA external_reference_schema;
+  REFERENCE FROM basic_attribute_schema (description_attribute, get_description_value);
+  REFERENCE FROM support_resource_schema (label, text, identifier, bag_to_set);
+  TYPE message = STRING;
+  END_TYPE;
+
+  TYPE source_item = SELECT (identifier, message);
+  END_TYPE;
+
+  ENTITY external_source;
+    source_id : source_item;
+  DERIVE
+    description : text := get_description_value(SELF);
+  WHERE
+    WR1: SIZEOF(USEDIN(SELF, 'BASIC_ATTRIBUTE_SCHEMA.' + 'DESCRIPTION_ATTRIBUTE.DESCRIBED_ITEM')) <= 1;
+  END_ENTITY;
+
+  ENTITY external_source_relationship;
+    name : label;
+    description : OPTIONAL text;
+    relating_source : external_source;
+    related_source : external_source;
+  END_ENTITY;
+
+  ENTITY externally_defined_item;
+    item_id : source_item;
+    source : external_source;
+  END_ENTITY;
+
+  ENTITY externally_defined_item_relationship;
+    name : label;
+    description : OPTIONAL text;
+    relating_item : externally_defined_item;
+    related_item : externally_defined_item;
+  END_ENTITY;
+
+  ENTITY pre_defined_item;
+    name : label;
+  END_ENTITY;
+
+  FUNCTION acyclic_external_source_relationship (relation : external_source_relationship; relatives : SET [1:?] OF external_source; specific_relation : STRING):BOOLEAN;
+    LOCAL
+      x : SET OF external_source_relationship;
+    END_LOCAL;
+
+    IF relation.relating_source IN relatives THEN
+      RETURN (FALSE);
+    END_IF;
+    x := QUERY(es <* bag_to_set(USEDIN(relation.relating_source, 'EXTERNAL_REFERENCE_SCHEMA.' + 'EXTERNAL_SOURCE_RELATIONSHIP.' + 'RELATED_SOURCE')) | specific_relation IN TYPEOF(es));
+    REPEAT i := 1 TO HIINDEX(x);
+      IF NOT acyclic_external_source_relationship(x[i], relatives + relation.relating_source, specific_relation) THEN
+        RETURN (FALSE);
+      END_IF;
+    END_REPEAT;
+    RETURN (TRUE);
+  END_FUNCTION;
+
+  FUNCTION acyclic_externally_defined_item_relationship (relation : externally_defined_item_relationship; relatives : SET [1:?] OF externally_defined_item; specific_relation : STRING):BOOLEAN;
+    LOCAL
+      x : SET OF externally_defined_item_relationship;
+    END_LOCAL;
+
+    IF relation.relating_item IN relatives THEN
+      RETURN (FALSE);
+    END_IF;
+    x := QUERY(edi <* bag_to_set(USEDIN(relation.relating_item, 'EXTERNAL_REFERENCE_SCHEMA.' + 'EXTERNALLY_DEFINED_ITEM_RELATIONSHIP.' + 'RELATED_ITEM')) | specific_relation IN TYPEOF(edi));
+    REPEAT i := 1 TO HIINDEX(x);
+      IF NOT acyclic_externally_defined_item_relationship(x[i], relatives + relation.relating_item, specific_relation) THEN
+        RETURN (FALSE);
+      END_IF;
+    END_REPEAT;
+    RETURN (TRUE);
+  END_FUNCTION;
+
+END_SCHEMA;
+SCHEMA support_resource_schema;
+  TYPE identifier = STRING;
+  END_TYPE;
+
+  TYPE label = STRING;
+  END_TYPE;
+
+  TYPE text = STRING;
+  END_TYPE;
+
+  FUNCTION bag_to_set (the_bag : BAG OF GENERIC:intype):SET OF GENERIC:intype;
+    LOCAL
+      the_set : SET OF GENERIC:intype := [];
+    END_LOCAL;
+
+    IF SIZEOF(the_bag) > 0 THEN
+      REPEAT i := 1 TO HIINDEX(the_bag);
+        the_set := the_set + the_bag[i];
+      END_REPEAT;
+    END_IF;
+    RETURN (the_set);
+  END_FUNCTION;
+
+  FUNCTION type_check_function (the_type : GENERIC; sub_names : SET OF STRING; criterion : INTEGER):LOGICAL;
+    IF ((NOT EXISTS(the_type)) OR (NOT ({0 <= criterion <= 3})) OR (SIZEOF(sub_names) = 0)) THEN
+      RETURN (UNKNOWN);
+    ELSE
+      CASE criterion OF 
+        0:
+          RETURN (SIZEOF(sub_names * TYPEOF(the_type)) > 0);
+        1:
+          RETURN (SIZEOF(sub_names * TYPEOF(the_type)) = 0);
+        2:
+          RETURN (SIZEOF(sub_names * TYPEOF(the_type)) = 1);
+        3:
+          RETURN (SIZEOF(sub_names * TYPEOF(the_type)) <= 1);
+      END_CASE;
+    END_IF;
+  END_FUNCTION;
+
+END_SCHEMA;
+
+SCHEMA measure_schema;
+
+REFERENCE FROM basic_attribute_schema   -- ISO 10303-41
+  (get_name_value,
+   name_attribute); 
+
+REFERENCE FROM representation_schema   -- ISO 10303-43
+  (representation_context); 
+
+REFERENCE FROM support_resource_schema;    -- ISO 10303-41
+
+
+  TYPE absorbed_dose_measure = REAL;
+  END_TYPE;
+
+TYPE acceleration_measure = REAL;
+  END_TYPE;
+
+  TYPE radioactivity_measure = REAL;
+  END_TYPE;
+
+TYPE amount_of_substance_measure = REAL;
+  END_TYPE;
+
+  TYPE area_measure = REAL;
+  END_TYPE;
+
+  TYPE celsius_temperature_measure = REAL;
+  END_TYPE;
+
+  TYPE context_dependent_measure = REAL;
+  END_TYPE;
+
+  TYPE count_measure = NUMBER;
+  END_TYPE;
+
+  TYPE descriptive_measure = STRING;
+  END_TYPE;
+  
+  TYPE capacitance_measure = REAL;
+  END_TYPE;
+  
+  TYPE dose_equivalent_measure = REAL;
+  END_TYPE;
+
+  TYPE electric_charge_measure = REAL;
+  END_TYPE;
+  
+  TYPE electric_current_measure = REAL;
+  END_TYPE;
+
+  TYPE conductance_measure = REAL;
+  END_TYPE;
+
+  TYPE electric_potential_measure = REAL;
+  END_TYPE;
+  
+  TYPE energy_measure = REAL;
+  END_TYPE;  
+  
+  TYPE force_measure = REAL;
+  END_TYPE;  
+  
+  TYPE frequency_measure = REAL;
+  END_TYPE; 
+  
+  TYPE magnetic_flux_density_measure = REAL;
+  END_TYPE;
+
+  TYPE illuminance_measure = REAL;
+  END_TYPE;  
+
+  TYPE inductance_measure = REAL;
+  END_TYPE;
+  
+  TYPE length_measure = REAL;
+  END_TYPE;
+
+  TYPE luminous_intensity_measure = REAL;
+  END_TYPE;
+
+  TYPE luminous_flux_measure = REAL;
+  END_TYPE;
+
+  TYPE mass_measure = REAL;
+  END_TYPE;
+
+  TYPE measure_value = SELECT 
+    (absorbed_dose_measure,
+     dose_equivalent_measure,
+     radioactivity_measure,
+     acceleration_measure,
+     amount_of_substance_measure, 
+     area_measure, 
+     celsius_temperature_measure, 
+     context_dependent_measure, 
+     count_measure, 
+     descriptive_measure, 
+     capacitance_measure,
+     electric_charge_measure,
+     conductance_measure,
+     electric_current_measure, 
+     electric_potential_measure,
+     energy_measure,
+     magnetic_flux_density_measure,
+     force_measure,
+     frequency_measure,
+     illuminance_measure,
+     inductance_measure,
+     length_measure, 
+     luminous_flux_measure,
+     luminous_intensity_measure, 
+     magnetic_flux_measure,
+     mass_measure, 
+     numeric_measure, 
+     non_negative_length_measure,
+     parameter_value, 
+     plane_angle_measure, 
+     positive_length_measure, 
+     positive_plane_angle_measure, 
+     positive_ratio_measure, 
+     power_measure,
+     pressure_measure,
+     ratio_measure, 
+     resistance_measure,
+     solid_angle_measure, 
+     thermodynamic_temperature_measure, 
+     time_measure, 
+     velocity_measure,
+     volume_measure);
+  END_TYPE;
+
+  TYPE magnetic_flux_measure = REAL;
+  END_TYPE;
+
+  TYPE non_negative_length_measure = length_measure;
+   WHERE
+    WR1: SELF >= 0.0;
+  END_TYPE;
+
+  TYPE numeric_measure = NUMBER;
+  END_TYPE;
+
+  TYPE parameter_value = REAL;
+  END_TYPE;
+
+  TYPE plane_angle_measure = REAL;
+  END_TYPE;
+
+  TYPE positive_length_measure = non_negative_length_measure;
+    WHERE
+      WR1: SELF > 0.0;
+  END_TYPE;
+
+  TYPE positive_plane_angle_measure = plane_angle_measure;
+    WHERE
+      WR1: SELF > 0.0;
+  END_TYPE;
+
+  TYPE positive_ratio_measure = ratio_measure;
+    WHERE
+      WR1: SELF > 0.0;
+  END_TYPE;
+
+  TYPE power_measure = REAL;
+  END_TYPE;
+
+  TYPE pressure_measure = REAL;
+  END_TYPE;
+
+  TYPE ratio_measure = REAL;
+  END_TYPE;
+
+  TYPE resistance_measure = REAL;
+  END_TYPE;
+
+  TYPE si_prefix = ENUMERATION OF (exa, peta, tera, giga, mega, kilo, hecto, deca, deci, centi, milli, micro, nano, pico, femto, atto);
+  END_TYPE;
+
+  TYPE si_unit_name = ENUMERATION OF (metre, gram, second, ampere, kelvin, mole, candela, radian, steradian, hertz, newton, pascal, joule, watt, coulomb, volt, farad, ohm, siemens, weber, tesla, henry, degree_Celsius, lumen, lux, becquerel, gray, sievert);
+  END_TYPE;
+
+  TYPE solid_angle_measure = REAL;
+  END_TYPE;
+
+  TYPE thermodynamic_temperature_measure = REAL;
+  END_TYPE;
+
+  TYPE time_measure = REAL;
+  END_TYPE;
+
+  TYPE unit = SELECT (derived_unit, named_unit);
+  END_TYPE;
+
+  TYPE velocity_measure = REAL;
+  END_TYPE;
+  
+  TYPE volume_measure = REAL;
+  END_TYPE;
+
+ENTITY absorbed_dose_measure_with_unit
+ SUBTYPE OF (measure_with_unit);
+WHERE
+    WR1: 'MEASURE_SCHEMA.ABSORBED_DOSE_UNIT' IN TYPEOF(SELF\measure_with_unit.unit_component);
+END_ENTITY;
+
+ENTITY absorbed_dose_unit
+ SUBTYPE OF (derived_unit);
+WHERE
+    WR1: derive_dimensional_exponents(SELF) = dimensions_for_si_unit (si_unit_name.gray);  
+END_ENTITY;
+
+  ENTITY si_absorbed_dose_unit
+     SUBTYPE OF (absorbed_dose_unit,si_unit);
+  WHERE
+    WR1: SELF\si_unit.name = si_unit_name.gray;
+    WR2: NOT EXISTS(SELF\derived_unit.name);
+  END_ENTITY;
+
+  ENTITY acceleration_measure_with_unit
+    SUBTYPE OF (measure_with_unit);
+  WHERE
+    WR1: 'MEASURE_SCHEMA.ACCELERATION_UNIT' IN TYPEOF (SELF\measure_with_unit.unit_component);
+  END_ENTITY;
+  
+  ENTITY acceleration_unit
+    SUBTYPE OF (derived_unit);
+  WHERE
+    WR1: derive_dimensional_exponents(SELF) = 
+       dimensional_exponents ( 1.0, 0.0, -2.0, 0.0, 0.0, 0.0, 0.0 );
+  END_ENTITY;
+
+ENTITY radioactivity_measure_with_unit
+ SUBTYPE OF (measure_with_unit);
+WHERE
+    WR1: 'MEASURE_SCHEMA.RADIOACTIVITY_UNIT' IN TYPEOF(SELF\measure_with_unit.unit_component);
+END_ENTITY;
+
+ENTITY radioactivity_unit
+ SUBTYPE OF (derived_unit);
+WHERE
+    WR1: derive_dimensional_exponents(SELF) = dimensions_for_si_unit (si_unit_name.becquerel);  
+END_ENTITY;
+
+  ENTITY si_radioactivity_unit
+     SUBTYPE OF (radioactivity_unit,si_unit);
+  WHERE
+    WR1: SELF\si_unit.name = si_unit_name.becquerel;
+    WR2: NOT EXISTS(SELF\derived_unit.name);
+  END_ENTITY;
+
+  ENTITY amount_of_substance_measure_with_unit
+    SUBTYPE OF (measure_with_unit);
+  WHERE
+    WR1: 'MEASURE_SCHEMA.AMOUNT_OF_SUBSTANCE_UNIT' IN TYPEOF(SELF\measure_with_unit.unit_component);
+  END_ENTITY;
+
+  ENTITY amount_of_substance_unit
+    SUBTYPE OF (named_unit);
+  WHERE
+    WR1: (SELF\named_unit.dimensions.length_exponent = 0.0) AND (SELF\named_unit.dimensions.mass_exponent = 0.0) AND (SELF\named_unit.dimensions.time_exponent = 0.0) AND (SELF\named_unit.dimensions.electric_current_exponent = 0.0) AND (SELF\named_unit.dimensions.thermodynamic_temperature_exponent = 0.0) AND (SELF\named_unit.dimensions.amount_of_substance_exponent = 1.0) AND (SELF\named_unit.dimensions.luminous_intensity_exponent = 0.0);
+  END_ENTITY;
+
+  ENTITY area_measure_with_unit
+    SUBTYPE OF (measure_with_unit);
+  WHERE
+    WR1: 'MEASURE_SCHEMA.AREA_UNIT' IN TYPEOF(SELF\measure_with_unit.unit_component);
+  END_ENTITY;
+
+  ENTITY area_unit
+   SUBTYPE OF (derived_unit);
+  WHERE
+  WR1: derive_dimensional_exponents(SELF) = 
+      dimensional_exponents ( 2.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 );
+  END_ENTITY;
+
+  ENTITY celsius_temperature_measure_with_unit
+    SUBTYPE OF (measure_with_unit);
+  WHERE
+    WR1: 'MEASURE_SCHEMA.THERMODYNAMIC_TEMPERATURE_UNIT' IN TYPEOF(SELF\measure_with_unit.unit_component);
+  END_ENTITY;
+
+  ENTITY context_dependent_unit
+    SUBTYPE OF (named_unit);
+    name : label;
+  END_ENTITY;
+
+  ENTITY conversion_based_unit
+    SUBTYPE OF (named_unit);
+     name : label;
+     conversion_factor : measure_with_unit;
+   DERIVE
+     SELF\named_unit.dimensions : dimensional_exponents := 
+    derive_dimensional_exponents(conversion_factor\measure_with_unit.unit_component);
+  END_ENTITY;
+
+  ENTITY derived_unit
+    SUPERTYPE OF (ONEOF(absorbed_dose_unit,
+	acceleration_unit,
+    radioactivity_unit,
+	area_unit,
+    capacitance_unit,
+	dose_equivalent_unit,
+    electric_charge_unit,
+    conductance_unit,
+    electric_potential_unit,
+    energy_unit,
+    magnetic_flux_density_unit,
+    force_unit,
+    frequency_unit,
+    illuminance_unit,
+    inductance_unit,
+    magnetic_flux_unit,
+    power_unit,
+    pressure_unit,
+    resistance_unit,
+    velocity_unit,
+    volume_unit));
+    elements : SET [1:?] OF derived_unit_element;
+  DERIVE
+    name : label := get_name_value(SELF);
+  WHERE
+    WR1: (SIZEOF(elements) > 1) OR ((SIZEOF(elements) = 1) AND (elements[1].exponent <> 1.0));
+    WR2: SIZEOF(USEDIN(SELF, 'BASIC_ATTRIBUTE_SCHEMA.' + 'NAME_ATTRIBUTE.NAMED_ITEM')) <= 1;
+  END_ENTITY;
+
+  ENTITY derived_unit_element;
+    unit : named_unit;
+    exponent : REAL;
+  END_ENTITY;
+
+  ENTITY dimensional_exponents;
+    length_exponent : REAL;
+    mass_exponent : REAL;
+    time_exponent : REAL;
+    electric_current_exponent : REAL;
+    thermodynamic_temperature_exponent : REAL;
+    amount_of_substance_exponent : REAL;
+    luminous_intensity_exponent : REAL;
+  END_ENTITY;
+
+  ENTITY capacitance_unit
+    SUBTYPE OF(derived_unit);
+  WHERE
+    WR1: derive_dimensional_exponents(SELF) = dimensions_for_si_unit (si_unit_name.farad);  
+  END_ENTITY;
+
+  ENTITY capacitance_measure_with_unit
+    SUBTYPE OF (measure_with_unit);
+  WHERE
+    WR1: 'MEASURE_SCHEMA.CAPACITANCE_UNIT' IN TYPEOF(SELF\measure_with_unit.unit_component);
+  END_ENTITY;
+
+  ENTITY si_capacitance_unit
+     SUBTYPE OF (capacitance_unit,si_unit);
+  WHERE
+    WR1: SELF\si_unit.name = si_unit_name.farad;
+    WR2: NOT EXISTS(SELF\derived_unit.name);
+  END_ENTITY;
+
+ENTITY dose_equivalent_measure_with_unit
+ SUBTYPE OF (measure_with_unit);
+WHERE
+    WR1: 'MEASURE_SCHEMA.DOSE_EQUIVALENT_UNIT' IN TYPEOF(SELF\measure_with_unit.unit_component);
+END_ENTITY;
+
+ENTITY dose_equivalent_unit
+ SUBTYPE OF (derived_unit);
+WHERE
+    WR1: derive_dimensional_exponents(SELF) = dimensions_for_si_unit (si_unit_name.sievert);  
+END_ENTITY;
+
+  ENTITY si_dose_equivalent_unit
+     SUBTYPE OF (dose_equivalent_unit,si_unit);
+  WHERE
+    WR1: SELF\si_unit.name = si_unit_name.sievert;
+    WR2: NOT EXISTS(SELF\derived_unit.name);
+  END_ENTITY;
+
+  ENTITY electric_charge_unit
+    SUBTYPE OF(derived_unit);
+  WHERE
+    WR1: derive_dimensional_exponents(SELF) = dimensions_for_si_unit (si_unit_name.coulomb);  
+  END_ENTITY;
+
+  ENTITY electric_charge_measure_with_unit
+    SUBTYPE OF (measure_with_unit);
+  WHERE
+    WR1: 'MEASURE_SCHEMA.ELECTRIC_CHARGE_UNIT' IN TYPEOF(SELF\measure_with_unit.unit_component);
+  END_ENTITY;
+
+  ENTITY si_electric_charge_unit
+     SUBTYPE OF (electric_charge_unit,si_unit);
+  WHERE
+    WR1: SELF\si_unit.name = si_unit_name.coulomb;
+    WR2: NOT EXISTS(SELF\derived_unit.name);
+  END_ENTITY;
+  
+  ENTITY electric_current_measure_with_unit
+    SUBTYPE OF (measure_with_unit);
+  WHERE
+    WR1: 'MEASURE_SCHEMA.ELECTRIC_CURRENT_UNIT' IN TYPEOF(SELF\measure_with_unit.unit_component);
+  END_ENTITY;
+
+  ENTITY electric_current_unit
+    SUBTYPE OF (named_unit);
+  WHERE
+    WR1: (SELF\named_unit.dimensions.length_exponent = 0.0) AND (SELF\named_unit.dimensions.mass_exponent = 0.0) AND (SELF\named_unit.dimensions.time_exponent = 0.0) AND (SELF\named_unit.dimensions.electric_current_exponent = 1.0) AND (SELF\named_unit.dimensions.thermodynamic_temperature_exponent = 0.0) AND (SELF\named_unit.dimensions.amount_of_substance_exponent = 0.0) AND (SELF\named_unit.dimensions.luminous_intensity_exponent = 0.0);
+  END_ENTITY;
+  
+   ENTITY conductance_unit
+    SUBTYPE OF(derived_unit);
+  WHERE
+    WR1: derive_dimensional_exponents(SELF) = dimensions_for_si_unit (si_unit_name.siemens);  
+  END_ENTITY;
+
+  ENTITY conductance_measure_with_unit
+    SUBTYPE OF (measure_with_unit);
+  WHERE
+    WR1: 'MEASURE_SCHEMA.CONDUCTANCE_UNIT' IN TYPEOF(SELF\measure_with_unit.unit_component);
+  END_ENTITY;
+
+  ENTITY si_conductance_unit
+     SUBTYPE OF (conductance_unit,si_unit);
+  WHERE
+    WR1: SELF\si_unit.name = si_unit_name.siemens;
+    WR2: NOT EXISTS(SELF\derived_unit.name);
+  END_ENTITY;
+
+  ENTITY electric_potential_unit
+    SUBTYPE OF(derived_unit);
+  WHERE
+    WR1: derive_dimensional_exponents(SELF) = dimensions_for_si_unit (si_unit_name.volt);  
+  END_ENTITY;
+
+  ENTITY electric_potential_measure_with_unit
+    SUBTYPE OF (measure_with_unit);
+  WHERE
+    WR1: 'MEASURE_SCHEMA.ELECTRIC_POTENTIAL_UNIT' IN TYPEOF(SELF\measure_with_unit.unit_component);
+  END_ENTITY;
+
+  ENTITY si_electric_potential_unit
+     SUBTYPE OF (electric_potential_unit,si_unit);
+  WHERE
+    WR1: SELF\si_unit.name = si_unit_name.volt;
+    WR2: NOT EXISTS(SELF\derived_unit.name);
+  END_ENTITY;
+
+  ENTITY energy_unit
+    SUBTYPE OF(derived_unit);
+  WHERE
+    WR1: derive_dimensional_exponents(SELF) = dimensions_for_si_unit (si_unit_name.joule);  
+  END_ENTITY;
+
+  ENTITY energy_measure_with_unit
+    SUBTYPE OF (measure_with_unit);
+  WHERE
+    WR1: 'MEASURE_SCHEMA.ENERGY_UNIT' IN TYPEOF(SELF\measure_with_unit.unit_component);
+  END_ENTITY;
+
+  ENTITY si_energy_unit
+     SUBTYPE OF (energy_unit,si_unit);
+  WHERE
+    WR1: SELF\si_unit.name = si_unit_name.joule;
+    WR2: NOT EXISTS(SELF\derived_unit.name);
+  END_ENTITY;
+
+  ENTITY magnetic_flux_density_unit
+    SUBTYPE OF(derived_unit);
+  WHERE
+    WR1: derive_dimensional_exponents(SELF) = dimensions_for_si_unit (si_unit_name.tesla);  
+  END_ENTITY;
+
+  ENTITY magnetic_flux_density_measure_with_unit
+    SUBTYPE OF (measure_with_unit);
+  WHERE
+    WR1: 'MEASURE_SCHEMA.MAGNETIC_FLUX_DENSITY_UNIT' IN TYPEOF(SELF\measure_with_unit.unit_component);
+  END_ENTITY;
+
+  ENTITY si_magnetic_flux_density_unit
+     SUBTYPE OF (magnetic_flux_density_unit,si_unit);
+  WHERE
+    WR1: SELF\si_unit.name = si_unit_name.tesla;
+    WR2: NOT EXISTS(SELF\derived_unit.name);
+  END_ENTITY;
+
+  ENTITY force_unit
+    SUBTYPE OF(derived_unit);
+  WHERE
+    WR1: derive_dimensional_exponents(SELF) = dimensions_for_si_unit (si_unit_name.newton);  
+  END_ENTITY;
+
+  ENTITY force_measure_with_unit
+    SUBTYPE OF (measure_with_unit);
+  WHERE
+    WR1: 'MEASURE_SCHEMA.FORCE_UNIT' IN TYPEOF(SELF\measure_with_unit.unit_component);
+  END_ENTITY;
+
+  ENTITY si_force_unit
+     SUBTYPE OF (force_unit,si_unit);
+  WHERE
+    WR1: SELF\si_unit.name = si_unit_name.newton;
+    WR2: NOT EXISTS(SELF\derived_unit.name);
+  END_ENTITY;
+
+  ENTITY frequency_unit
+    SUBTYPE OF(derived_unit);
+  WHERE
+    WR1: derive_dimensional_exponents(SELF) = dimensions_for_si_unit (si_unit_name.hertz);  
+  END_ENTITY;
+
+  ENTITY frequency_measure_with_unit
+    SUBTYPE OF (measure_with_unit);
+  WHERE
+    WR1: 'MEASURE_SCHEMA.FREQUENCY_UNIT' IN TYPEOF(SELF\measure_with_unit.unit_component);
+  END_ENTITY;
+
+  ENTITY si_frequency_unit
+     SUBTYPE OF (frequency_unit,si_unit);
+  WHERE
+    WR1: SELF\si_unit.name = si_unit_name.hertz;
+    WR2: NOT EXISTS(SELF\derived_unit.name);
+  END_ENTITY;
+ 
+  ENTITY global_unit_assigned_context
+    SUBTYPE OF (representation_context);
+    units : SET [1:?] OF unit;
+  END_ENTITY;
+
+  ENTITY illuminance_unit
+    SUBTYPE OF(derived_unit);
+  WHERE
+    WR1: derive_dimensional_exponents(SELF) = dimensions_for_si_unit (si_unit_name.lux);  
+  END_ENTITY;
+
+  ENTITY illuminance_measure_with_unit
+    SUBTYPE OF (measure_with_unit);
+  WHERE
+    WR1: 'MEASURE_SCHEMA.ILLUMINANCE_UNIT' IN TYPEOF(SELF\measure_with_unit.unit_component);
+  END_ENTITY;
+
+  ENTITY si_illuminance_unit
+     SUBTYPE OF (illuminance_unit,si_unit);
+  WHERE
+    WR1: SELF\si_unit.name = si_unit_name.lux;
+    WR2: NOT EXISTS(SELF\derived_unit.name);
+  END_ENTITY;
+
+  ENTITY inductance_unit
+    SUBTYPE OF(derived_unit);
+  WHERE
+    WR1: derive_dimensional_exponents(SELF) = dimensions_for_si_unit (si_unit_name.henry);  
+  END_ENTITY;
+
+  ENTITY inductance_measure_with_unit
+    SUBTYPE OF (measure_with_unit);
+  WHERE
+    WR1: 'MEASURE_SCHEMA.INDUCTANCE_UNIT' IN TYPEOF(SELF\measure_with_unit.unit_component);
+  END_ENTITY;
+
+  ENTITY si_inductance_unit
+     SUBTYPE OF (inductance_unit,si_unit);
+  WHERE
+    WR1: SELF\si_unit.name = si_unit_name.henry;
+    WR2: NOT EXISTS(SELF\derived_unit.name);
+  END_ENTITY;
+ 
+  ENTITY length_measure_with_unit
+    SUBTYPE OF (measure_with_unit);
+  WHERE
+    WR1: 'MEASURE_SCHEMA.LENGTH_UNIT' IN TYPEOF(SELF\measure_with_unit.unit_component);
+  END_ENTITY;
+
+  ENTITY length_unit
+    SUBTYPE OF (named_unit);
+  WHERE
+    WR1: (SELF\named_unit.dimensions.length_exponent = 1.0) AND 
+    (SELF\named_unit.dimensions.mass_exponent = 0.0) AND 
+    (SELF\named_unit.dimensions.time_exponent = 0.0) AND 
+    (SELF\named_unit.dimensions.electric_current_exponent = 0.0) AND 
+    (SELF\named_unit.dimensions.thermodynamic_temperature_exponent = 0.0) AND 
+    (SELF\named_unit.dimensions.amount_of_substance_exponent = 0.0) AND 
+    (SELF\named_unit.dimensions.luminous_intensity_exponent = 0.0);
+  END_ENTITY;
+
+  ENTITY luminous_flux_unit
+    SUBTYPE OF(named_unit);
+  WHERE
+    WR1: derive_dimensional_exponents(SELF) = dimensions_for_si_unit (si_unit_name.lumen);  
+  END_ENTITY;
+
+  ENTITY luminous_flux_measure_with_unit
+    SUBTYPE OF (measure_with_unit);
+  WHERE
+    WR1: 'MEASURE_SCHEMA.LUMINOUS_FLUX_UNIT' IN TYPEOF(SELF\measure_with_unit.unit_component);
+  END_ENTITY;
+
+  ENTITY luminous_intensity_measure_with_unit
+    SUBTYPE OF (measure_with_unit);
+  WHERE
+    WR1: 'MEASURE_SCHEMA.LUMINOUS_INTENSITY_UNIT' IN TYPEOF(SELF\measure_with_unit.unit_component);
+  END_ENTITY;
+
+  ENTITY luminous_intensity_unit
+    SUBTYPE OF (named_unit);
+  WHERE
+    WR1: (SELF\named_unit.dimensions.length_exponent = 0.0) AND (SELF\named_unit.dimensions.mass_exponent = 0.0) AND (SELF\named_unit.dimensions.time_exponent = 0.0) AND (SELF\named_unit.dimensions.electric_current_exponent = 0.0) AND (SELF\named_unit.dimensions.thermodynamic_temperature_exponent = 0.0) AND (SELF\named_unit.dimensions.amount_of_substance_exponent = 0.0) AND (SELF\named_unit.dimensions.luminous_intensity_exponent = 1.0);
+  END_ENTITY;
+
+  ENTITY magnetic_flux_unit
+    SUBTYPE OF(derived_unit);
+  WHERE
+    WR1: derive_dimensional_exponents(SELF) = dimensions_for_si_unit (si_unit_name.weber);  
+  END_ENTITY;
+
+  ENTITY magnetic_flux_measure_with_unit
+    SUBTYPE OF (measure_with_unit);
+  WHERE
+    WR1: 'MEASURE_SCHEMA.MAGNETIC_FLUX_UNIT' IN TYPEOF(SELF\measure_with_unit.unit_component);
+  END_ENTITY;
+
+  ENTITY si_magnetic_flux_unit
+     SUBTYPE OF (magnetic_flux_unit,si_unit);
+  WHERE
+    WR1: SELF\si_unit.name = si_unit_name.weber;
+    WR2: NOT EXISTS(SELF\derived_unit.name);
+  END_ENTITY;
+
+  ENTITY mass_measure_with_unit
+    SUBTYPE OF (measure_with_unit);
+  WHERE
+    WR1: 'MEASURE_SCHEMA.MASS_UNIT' IN TYPEOF(SELF\measure_with_unit.unit_component);
+  END_ENTITY;
+
+  ENTITY mass_unit
+    SUBTYPE OF (named_unit);
+  WHERE
+    WR1: (SELF\named_unit.dimensions.length_exponent = 0.0) AND (SELF\named_unit.dimensions.mass_exponent = 1.0) AND (SELF\named_unit.dimensions.time_exponent = 0.0) AND (SELF\named_unit.dimensions.electric_current_exponent = 0.0) AND (SELF\named_unit.dimensions.thermodynamic_temperature_exponent = 0.0) AND (SELF\named_unit.dimensions.amount_of_substance_exponent = 0.0) AND (SELF\named_unit.dimensions.luminous_intensity_exponent = 0.0);
+  END_ENTITY;
+
+  ENTITY measure_with_unit
+    SUPERTYPE OF (ONEOF(length_measure_with_unit, 
+    mass_measure_with_unit, 
+	time_measure_with_unit, 
+    electric_current_measure_with_unit, 
+	thermodynamic_temperature_measure_with_unit, 
+    celsius_temperature_measure_with_unit, 
+	amount_of_substance_measure_with_unit, 
+    luminous_intensity_measure_with_unit, 
+	plane_angle_measure_with_unit, 
+    solid_angle_measure_with_unit, 
+	area_measure_with_unit, 
+	volume_measure_with_unit, 
+    ratio_measure_with_unit, 
+    acceleration_measure_with_unit,
+    capacitance_measure_with_unit,
+    electric_charge_measure_with_unit,
+    conductance_measure_with_unit,
+    electric_potential_measure_with_unit,
+    energy_measure_with_unit,
+    magnetic_flux_density_measure_with_unit,
+    force_measure_with_unit,
+    frequency_measure_with_unit,
+    illuminance_measure_with_unit,
+    inductance_measure_with_unit,
+    luminous_flux_measure_with_unit,
+    magnetic_flux_measure_with_unit,
+    power_measure_with_unit,
+    pressure_measure_with_unit,
+    resistance_measure_with_unit,
+    velocity_measure_with_unit,
+	absorbed_dose_measure_with_unit,
+    radioactivity_measure_with_unit,
+    dose_equivalent_measure_with_unit));
+    value_component : measure_value;
+    unit_component : unit;
+  WHERE
+    WR1: valid_units(SELF);
+  END_ENTITY;
+
+  ENTITY named_unit
+    SUPERTYPE OF (ONEOF(si_unit, conversion_based_unit, context_dependent_unit) ANDOR 
+    ONEOF(length_unit, mass_unit, time_unit, electric_current_unit, thermodynamic_temperature_unit, 
+    amount_of_substance_unit, luminous_flux_unit, luminous_intensity_unit, plane_angle_unit, 
+    solid_angle_unit, ratio_unit));
+    dimensions : dimensional_exponents;
+  END_ENTITY;
+
+  ENTITY plane_angle_measure_with_unit
+    SUBTYPE OF (measure_with_unit);
+  WHERE
+    WR1: 'MEASURE_SCHEMA.PLANE_ANGLE_UNIT' IN TYPEOF(SELF\measure_with_unit.unit_component);
+  END_ENTITY;
+
+  ENTITY plane_angle_unit
+    SUBTYPE OF (named_unit);
+  WHERE
+    WR1: (SELF\named_unit.dimensions.length_exponent = 0.0) AND (SELF\named_unit.dimensions.mass_exponent = 0.0) AND (SELF\named_unit.dimensions.time_exponent = 0.0) AND (SELF\named_unit.dimensions.electric_current_exponent = 0.0) AND (SELF\named_unit.dimensions.thermodynamic_temperature_exponent = 0.0) AND (SELF\named_unit.dimensions.amount_of_substance_exponent = 0.0) AND (SELF\named_unit.dimensions.luminous_intensity_exponent = 0.0);
+  END_ENTITY;
+
+  ENTITY power_unit
+    SUBTYPE OF(derived_unit);
+  WHERE
+    WR1: derive_dimensional_exponents(SELF) = dimensions_for_si_unit (si_unit_name.watt);  
+  END_ENTITY;
+
+  ENTITY power_measure_with_unit
+    SUBTYPE OF (measure_with_unit);
+  WHERE
+    WR1: 'MEASURE_SCHEMA.POWER_UNIT' IN TYPEOF(SELF\measure_with_unit.unit_component);
+  END_ENTITY;
+
+  ENTITY si_power_unit
+     SUBTYPE OF (power_unit,si_unit);
+  WHERE
+    WR1: SELF\si_unit.name = si_unit_name.watt;
+    WR2: NOT EXISTS(SELF\derived_unit.name);
+  END_ENTITY;
+ 
+  ENTITY pressure_unit
+    SUBTYPE OF(derived_unit);
+  WHERE
+    WR1: derive_dimensional_exponents(SELF) = dimensions_for_si_unit (si_unit_name.pascal);  
+  END_ENTITY;
+
+  ENTITY pressure_measure_with_unit
+    SUBTYPE OF (measure_with_unit);
+  WHERE
+    WR1: 'MEASURE_SCHEMA.PRESSURE_UNIT' IN TYPEOF(SELF\measure_with_unit.unit_component);
+  END_ENTITY;
+
+  ENTITY si_pressure_unit
+     SUBTYPE OF (pressure_unit,si_unit);
+  WHERE
+    WR1: SELF\si_unit.name = si_unit_name.pascal;
+    WR2: NOT EXISTS(SELF\derived_unit.name);
+  END_ENTITY;
+
+  ENTITY ratio_measure_with_unit
+    SUBTYPE OF (measure_with_unit);
+  WHERE
+    WR1: 'MEASURE_SCHEMA.RATIO_UNIT' IN TYPEOF(SELF\measure_with_unit.unit_component);
+  END_ENTITY;
+
+  ENTITY ratio_unit
+    SUBTYPE OF (named_unit);
+  WHERE
+    WR1: (SELF\named_unit.dimensions.length_exponent = 0.0) AND (SELF\named_unit.dimensions.mass_exponent = 0.0) AND (SELF\named_unit.dimensions.time_exponent = 0.0) AND (SELF\named_unit.dimensions.electric_current_exponent = 0.0) AND (SELF\named_unit.dimensions.thermodynamic_temperature_exponent = 0.0) AND (SELF\named_unit.dimensions.amount_of_substance_exponent = 0.0) AND (SELF\named_unit.dimensions.luminous_intensity_exponent = 0.0);
+  END_ENTITY;
+
+  ENTITY resistance_unit
+    SUBTYPE OF(derived_unit);
+  WHERE
+    WR1: derive_dimensional_exponents(SELF) = dimensions_for_si_unit (si_unit_name.ohm);  
+  END_ENTITY;
+
+  ENTITY resistance_measure_with_unit
+    SUBTYPE OF (measure_with_unit);
+  WHERE
+    WR1: 'MEASURE_SCHEMA.RESISTANCE_UNIT' IN TYPEOF(SELF\measure_with_unit.unit_component);
+  END_ENTITY;
+
+  ENTITY si_resistance_unit
+     SUBTYPE OF (resistance_unit,si_unit);
+  WHERE
+    WR1: SELF\si_unit.name = si_unit_name.ohm;
+    WR2: NOT EXISTS(SELF\derived_unit.name);
+  END_ENTITY;
+
+  
+  ENTITY si_unit
+    SUBTYPE OF (named_unit);
+    prefix : OPTIONAL si_prefix;
+    name : si_unit_name;
+  DERIVE
+    SELF\named_unit.dimensions : dimensional_exponents := dimensions_for_si_unit(name);
+  WHERE
+    WR1: NOT(('MEASURE_SCHEMA.MASS_UNIT' IN TYPEOF(SELF)) AND
+             (SIZEOF(USEDIN(SELF,'MEASURE_SCHEMA.DERIVED_UNIT_ELEMENT.UNIT')) > 0)) OR
+            (prefix = si_prefix.kilo); 
+  END_ENTITY;
+
+  ENTITY solid_angle_measure_with_unit
+    SUBTYPE OF (measure_with_unit);
+  WHERE
+    WR1: 'MEASURE_SCHEMA.SOLID_ANGLE_UNIT' IN TYPEOF(SELF\measure_with_unit.unit_component);
+  END_ENTITY;
+
+  ENTITY solid_angle_unit
+    SUBTYPE OF (named_unit);
+  WHERE
+    WR1: (SELF\named_unit.dimensions.length_exponent = 0.0) AND (SELF\named_unit.dimensions.mass_exponent = 0.0) AND (SELF\named_unit.dimensions.time_exponent = 0.0) AND (SELF\named_unit.dimensions.electric_current_exponent = 0.0) AND (SELF\named_unit.dimensions.thermodynamic_temperature_exponent = 0.0) AND (SELF\named_unit.dimensions.amount_of_substance_exponent = 0.0) AND (SELF\named_unit.dimensions.luminous_intensity_exponent = 0.0);
+  END_ENTITY;
+
+  ENTITY thermodynamic_temperature_measure_with_unit
+    SUBTYPE OF (measure_with_unit);
+  WHERE
+    WR1: 'MEASURE_SCHEMA.THERMODYNAMIC_TEMPERATURE_UNIT' IN TYPEOF(SELF\measure_with_unit.unit_component);
+  END_ENTITY;
+
+  ENTITY thermodynamic_temperature_unit
+    SUBTYPE OF (named_unit);
+  WHERE
+    WR1: (SELF\named_unit.dimensions.length_exponent = 0.0) AND (SELF\named_unit.dimensions.mass_exponent = 0.0) AND (SELF\named_unit.dimensions.time_exponent = 0.0) AND (SELF\named_unit.dimensions.electric_current_exponent = 0.0) AND (SELF\named_unit.dimensions.thermodynamic_temperature_exponent = 1.0) AND (SELF\named_unit.dimensions.amount_of_substance_exponent = 0.0) AND (SELF\named_unit.dimensions.luminous_intensity_exponent = 0.0);
+  END_ENTITY;
+
+  ENTITY time_measure_with_unit
+    SUBTYPE OF (measure_with_unit);
+  WHERE
+    WR1: 'MEASURE_SCHEMA.TIME_UNIT' IN TYPEOF(SELF\measure_with_unit.unit_component);
+  END_ENTITY;
+
+  ENTITY time_unit
+    SUBTYPE OF (named_unit);
+  WHERE
+    WR1: (SELF\named_unit.dimensions.length_exponent = 0.0) AND (SELF\named_unit.dimensions.mass_exponent = 0.0) AND (SELF\named_unit.dimensions.time_exponent = 1.0) AND (SELF\named_unit.dimensions.electric_current_exponent = 0.0) AND (SELF\named_unit.dimensions.thermodynamic_temperature_exponent = 0.0) AND (SELF\named_unit.dimensions.amount_of_substance_exponent = 0.0) AND (SELF\named_unit.dimensions.luminous_intensity_exponent = 0.0);
+  END_ENTITY;
+
+  ENTITY velocity_measure_with_unit
+   SUBTYPE OF (measure_with_unit);
+  WHERE
+   WR1: 'MEASURE_SCHEMA.VELOCITY_UNIT' IN TYPEOF (SELF\measure_with_unit.unit_component);
+  END_ENTITY;
+  
+  ENTITY velocity_unit
+  SUBTYPE OF (derived_unit);
+  WHERE
+  WR1: derive_dimensional_exponents(SELF) = 
+       dimensional_exponents ( 1.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0 );
+  END_ENTITY;
+
+  ENTITY volume_measure_with_unit
+    SUBTYPE OF (measure_with_unit);
+  WHERE
+    WR1: 'MEASURE_SCHEMA.VOLUME_UNIT' IN TYPEOF(SELF\measure_with_unit.unit_component);
+  END_ENTITY;
+
+  ENTITY volume_unit
+    SUBTYPE OF (derived_unit);
+   WHERE
+     WR1: derive_dimensional_exponents(SELF) = 
+          dimensional_exponents ( 3.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 );
+  END_ENTITY;
+
+  FUNCTION derive_dimensional_exponents (x : unit):dimensional_exponents;
+    LOCAL
+      result : dimensional_exponents := dimensional_exponents(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+    END_LOCAL;
+
+    IF 'MEASURE_SCHEMA.DERIVED_UNIT' IN TYPEOF(x) THEN
+      REPEAT i := LOINDEX(x\derived_unit.elements) TO HIINDEX(x\derived_unit.elements);
+        result.length_exponent := result.length_exponent + 
+        (x\derived_unit.elements[i]\derived_unit_element.exponent * 
+         x\derived_unit.elements[i]\derived_unit_element.unit\named_unit.dimensions.length_exponent);
+        result.mass_exponent := result.mass_exponent + 
+        (x\derived_unit.elements[i]\derived_unit_element.exponent * 
+         x\derived_unit.elements[i]\derived_unit_element.unit\named_unit.dimensions.mass_exponent);
+        result.time_exponent := result.time_exponent + 
+        (x\derived_unit.elements[i]\derived_unit_element.exponent * 
+         x\derived_unit.elements[i]\derived_unit_element.unit\named_unit.dimensions.time_exponent);
+        result.electric_current_exponent := result.electric_current_exponent + 
+        (x\derived_unit.elements[i]\derived_unit_element.exponent * 
+         x\derived_unit.elements[i]\derived_unit_element.unit\named_unit.dimensions.electric_current_exponent);
+        result.thermodynamic_temperature_exponent := result.thermodynamic_temperature_exponent + 
+        (x\derived_unit.elements[i]\derived_unit_element.exponent * 
+         x\derived_unit.elements[i]\derived_unit_element.unit\named_unit.dimensions.thermodynamic_temperature_exponent);
+        result.amount_of_substance_exponent := result.amount_of_substance_exponent + 
+        (x\derived_unit.elements[i]\derived_unit_element.exponent * 
+         x\derived_unit.elements[i]\derived_unit_element.unit\named_unit.dimensions.amount_of_substance_exponent);
+        result.luminous_intensity_exponent := result.luminous_intensity_exponent + 
+        (x\derived_unit.elements[i]\derived_unit_element.exponent * 
+         x\derived_unit.elements[i]\derived_unit_element.unit\named_unit.dimensions.luminous_intensity_exponent);
+      END_REPEAT;
+    ELSE
+      result := x\named_unit.dimensions;
+    END_IF;
+    RETURN (result);
+  END_FUNCTION;
+
+  FUNCTION dimensions_for_si_unit (n : si_unit_name):dimensional_exponents;
+    CASE n OF 
+      metre:
+        RETURN (dimensional_exponents(1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
+      gram:
+        RETURN (dimensional_exponents(0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0));
+      second:
+        RETURN (dimensional_exponents(0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0));
+      ampere:
+        RETURN (dimensional_exponents(0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0));
+      kelvin:
+        RETURN (dimensional_exponents(0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0));
+      mole:
+        RETURN (dimensional_exponents(0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0));
+      candela:
+        RETURN (dimensional_exponents(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0));
+      radian:
+        RETURN (dimensional_exponents(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
+      steradian:
+        RETURN (dimensional_exponents(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
+      hertz:
+        RETURN (dimensional_exponents(0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0));
+      newton:
+        RETURN (dimensional_exponents(1.0, 1.0, -2.0, 0.0, 0.0, 0.0, 0.0));
+      pascal:
+        RETURN (dimensional_exponents(-1.0, 1.0, -2.0, 0.0, 0.0, 0.0, 0.0));
+      joule:
+        RETURN (dimensional_exponents(2.0, 1.0, -2.0, 0.0, 0.0, 0.0, 0.0));
+      watt:
+        RETURN (dimensional_exponents(2.0, 1.0, -3.0, 0.0, 0.0, 0.0, 0.0));
+      coulomb:
+        RETURN (dimensional_exponents(0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0));
+      volt:
+        RETURN (dimensional_exponents(2.0, 1.0, -3.0, -1.0, 0.0, 0.0, 0.0));
+      farad:
+        RETURN (dimensional_exponents(-2.0, -1.0, 4.0, 1.0, 0.0, 0.0, 0.0));
+      ohm:
+        RETURN (dimensional_exponents(2.0, 1.0, -3.0, -2.0, 0.0, 0.0, 0.0));
+      siemens:
+        RETURN (dimensional_exponents(-2.0, -1.0, 3.0, 2.0, 0.0, 0.0, 0.0));
+      weber:
+        RETURN (dimensional_exponents(2.0, 1.0, -2.0, -1.0, 0.0, 0.0, 0.0));
+      tesla:
+        RETURN (dimensional_exponents(0.0, 1.0, -2.0, -1.0, 0.0, 0.0, 0.0));
+      henry:
+        RETURN (dimensional_exponents(2.0, 1.0, -2.0, -2.0, 0.0, 0.0, 0.0));
+      degree_Celsius:
+        RETURN (dimensional_exponents(0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0));
+      lumen:
+        RETURN (dimensional_exponents(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0));
+      lux:
+        RETURN (dimensional_exponents(-2.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0));
+      becquerel:
+        RETURN (dimensional_exponents(0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0));
+      gray:
+        RETURN (dimensional_exponents(2.0, 0.0, -2.0, 0.0, 0.0, 0.0, 0.0));
+      sievert:
+        RETURN (dimensional_exponents(2.0, 0.0, -2.0, 0.0, 0.0, 0.0, 0.0));
+      OTHERWISE:
+        RETURN (?);
+    END_CASE;
+  END_FUNCTION;
+
+  FUNCTION valid_units (m : measure_with_unit):BOOLEAN;
+    IF 'MEASURE_SCHEMA.LENGTH_MEASURE' IN TYPEOF(m.value_component) THEN
+      IF derive_dimensional_exponents(m.unit_component) <> 
+      dimensional_exponents(1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0) THEN
+        RETURN (FALSE);
+      END_IF;
+    END_IF;
+    IF 'MEASURE_SCHEMA.MASS_MEASURE' IN TYPEOF(m.value_component) THEN
+      IF derive_dimensional_exponents(m.unit_component) <> 
+      dimensional_exponents(0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0) THEN
+        RETURN (FALSE);
+      END_IF;
+    END_IF;
+    IF 'MEASURE_SCHEMA.TIME_MEASURE' IN TYPEOF(m.value_component) THEN
+      IF derive_dimensional_exponents(m.unit_component) <> 
+      dimensional_exponents(0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0) THEN
+        RETURN (FALSE);
+      END_IF;
+    END_IF;
+    IF 'MEASURE_SCHEMA.ELECTRIC_CURRENT_MEASURE' IN TYPEOF(m.value_component) THEN
+      IF derive_dimensional_exponents(m.unit_component) <> 
+      dimensional_exponents(0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0) THEN
+        RETURN (FALSE);
+      END_IF;
+    END_IF;
+    IF 'MEASURE_SCHEMA.THERMODYNAMIC_TEMPERATURE_MEASURE' IN TYPEOF(m.value_component) THEN
+      IF derive_dimensional_exponents(m.unit_component) <> 
+      dimensional_exponents(0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0) THEN
+        RETURN (FALSE);
+      END_IF;
+    END_IF;
+    IF 'MEASURE_SCHEMA.CELSIUS_TEMPERATURE_MEASURE' IN TYPEOF(m.value_component) THEN
+      IF derive_dimensional_exponents(m.unit_component) <> 
+      dimensional_exponents(0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0) THEN
+        RETURN (FALSE);
+      END_IF;
+    END_IF;
+    IF 'MEASURE_SCHEMA.AMOUNT_OF_SUBSTANCE_MEASURE' IN TYPEOF(m.value_component) THEN
+      IF derive_dimensional_exponents(m.unit_component) <> 
+      dimensional_exponents(0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0) THEN
+        RETURN (FALSE);
+      END_IF;
+    END_IF;
+    IF 'MEASURE_SCHEMA.LUMINOUS_INTENSITY_MEASURE' IN TYPEOF(m.value_component) THEN
+      IF derive_dimensional_exponents(m.unit_component) <> 
+      dimensional_exponents(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0) THEN
+        RETURN (FALSE);
+      END_IF;
+    END_IF;
+    IF 'MEASURE_SCHEMA.PLANE_ANGLE_MEASURE' IN TYPEOF(m.value_component) THEN
+      IF derive_dimensional_exponents(m.unit_component) <> 
+      dimensional_exponents(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0) THEN
+        RETURN (FALSE);
+      END_IF;
+    END_IF;
+    IF 'MEASURE_SCHEMA.SOLID_ANGLE_MEASURE' IN TYPEOF(m.value_component) THEN
+      IF derive_dimensional_exponents(m.unit_component) <> 
+      dimensional_exponents(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0) THEN
+        RETURN (FALSE);
+      END_IF;
+    END_IF;
+    IF 'MEASURE_SCHEMA.AREA_MEASURE' IN TYPEOF(m.value_component) THEN
+      IF derive_dimensional_exponents(m.unit_component) <> 
+      dimensional_exponents(2.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0) THEN
+        RETURN (FALSE);
+      END_IF;
+    END_IF;
+    IF 'MEASURE_SCHEMA.VOLUME_MEASURE' IN TYPEOF(m.value_component) THEN
+      IF derive_dimensional_exponents(m.unit_component) <> 
+      dimensional_exponents(3.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0) THEN
+        RETURN (FALSE);
+      END_IF;
+    END_IF;
+    IF 'MEASURE_SCHEMA.RATIO_MEASURE' IN TYPEOF(m.value_component) THEN
+      IF derive_dimensional_exponents(m.unit_component) <> 
+      dimensional_exponents(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0) THEN
+        RETURN (FALSE);
+      END_IF;
+    END_IF;
+    IF 'MEASURE_SCHEMA.POSITIVE_LENGTH_MEASURE' IN TYPEOF(m.value_component) THEN
+      IF derive_dimensional_exponents(m.unit_component) <> 
+      dimensional_exponents(1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0) THEN
+        RETURN (FALSE);
+      END_IF;
+    END_IF;
+    IF 'MEASURE_SCHEMA.POSITIVE_PLANE_ANGLE_MEASURE' IN TYPEOF(m.value_component) THEN
+      IF derive_dimensional_exponents(m.unit_component) <> 
+      dimensional_exponents(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0) THEN
+        RETURN (FALSE);
+      END_IF;
+    END_IF;
+    IF 'MEASURE_SCHEMA.ACCELERATION_MEASURE' IN TYPEOF(m.value_component) THEN
+      IF derive_dimensional_exponents(m.unit_component) <> 
+        dimensional_exponents( 1.0, 0.0, -2.0, 0.0, 0.0, 0.0, 0.0 ) THEN
+        RETURN (FALSE);
+      END_IF;
+    END_IF;
+     IF 'MEASURE_SCHEMA.CAPACITANCE_MEASURE' IN TYPEOF(m.value_component) THEN
+      IF derive_dimensional_exponents(m.unit_component) <> 
+        dimensional_exponents( -2.0, -1.0, 4.0, 1.0, 0.0, 0.0, 0.0 ) THEN
+        RETURN (FALSE);
+      END_IF;
+    END_IF;
+    IF 'MEASURE_SCHEMA.ELECTRIC_CHARGE_MEASURE' IN TYPEOF(m.value_component) THEN
+      IF derive_dimensional_exponents(m.unit_component) <> 
+        dimensional_exponents( 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0 ) THEN
+        RETURN (FALSE);
+      END_IF;
+    END_IF;
+        IF 'MEASURE_SCHEMA.CONDUCTANCE_MEASURE' IN TYPEOF(m.value_component) THEN
+          IF derive_dimensional_exponents(m.unit_component) <> 
+            dimensional_exponents( -2.0, -1.0, 3.0, 2.0, 0.0, 0.0, 0.0 ) THEN
+            RETURN (FALSE);
+          END_IF;
+    END_IF;
+        IF 'MEASURE_SCHEMA.ELECTRIC_POTENTIAL_MEASURE' IN TYPEOF(m.value_component) THEN
+          IF derive_dimensional_exponents(m.unit_component) <> 
+            dimensional_exponents( 2.0, 1.0, -3.0, -1.0, 0.0, 0.0, 0.0 ) THEN
+            RETURN (FALSE);
+          END_IF;
+    END_IF;    
+    IF 'MEASURE_SCHEMA.ENERGY_MEASURE' IN TYPEOF(m.value_component) THEN
+      IF derive_dimensional_exponents(m.unit_component) <> 
+        dimensional_exponents( 2.0, 1.0, -2.0, 0.0, 0.0, 0.0, 0.0 ) THEN
+        RETURN (FALSE);
+      END_IF;
+    END_IF;
+    IF 'MEASURE_SCHEMA.FORCE_MEASURE' IN TYPEOF(m.value_component) THEN
+      IF derive_dimensional_exponents(m.unit_component) <> 
+        dimensional_exponents( 1.0, 1.0, -2.0, 0.0, 0.0, 0.0, 0.0 ) THEN
+        RETURN (FALSE);
+      END_IF;
+    END_IF;
+    IF 'MEASURE_SCHEMA.FREQUENCY_MEASURE' IN TYPEOF(m.value_component) THEN
+      IF derive_dimensional_exponents(m.unit_component) <> 
+        dimensional_exponents( 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0 ) THEN
+        RETURN (FALSE);
+      END_IF;
+    END_IF;
+    IF 'MEASURE_SCHEMA.ILLUMINANCE_MEASURE' IN TYPEOF(m.value_component) THEN
+      IF derive_dimensional_exponents(m.unit_component) <> 
+        dimensional_exponents( -2.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0 ) THEN
+        RETURN (FALSE);
+      END_IF;
+    END_IF;
+     IF 'MEASURE_SCHEMA.INDUCTANCE_MEASURE' IN TYPEOF(m.value_component) THEN
+      IF derive_dimensional_exponents(m.unit_component) <> 
+        dimensional_exponents( 2.0, 1.0, -2.0, -2.0, 0.0, 0.0, 0.0 ) THEN
+        RETURN (FALSE);
+      END_IF;
+    END_IF;
+    IF 'MEASURE_SCHEMA.LUMINOUS_FLUX_MEASURE' IN TYPEOF(m.value_component) THEN
+      IF derive_dimensional_exponents(m.unit_component) <> 
+        dimensional_exponents( 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0 ) THEN
+        RETURN (FALSE);
+      END_IF;
+    END_IF;
+    IF 'MEASURE_SCHEMA.MAGNETIC_FLUX_MEASURE' IN TYPEOF(m.value_component) THEN
+      IF derive_dimensional_exponents(m.unit_component) <> 
+        dimensional_exponents( 2.0, 1.0, -2.0, -1.0, 0.0, 0.0, 0.0 ) THEN
+        RETURN (FALSE);
+      END_IF;
+    END_IF;
+     IF 'MEASURE_SCHEMA.MAGNETIC_FLUX_DENSITY_MEASURE' IN TYPEOF(m.value_component) THEN
+      IF derive_dimensional_exponents(m.unit_component) <> 
+        dimensional_exponents( 0.0, 1.0, -2.0, -1.0, 0.0, 0.0, 0.0 ) THEN
+        RETURN (FALSE);
+      END_IF;
+    END_IF;
+    IF 'MEASURE_SCHEMA.POWER_MEASURE' IN TYPEOF(m.value_component) THEN
+      IF derive_dimensional_exponents(m.unit_component) <> 
+        dimensional_exponents( 2.0, 1.0, -3.0, 0.0, 0.0, 0.0, 0.0 ) THEN
+        RETURN (FALSE);
+      END_IF;
+    END_IF;
+    IF 'MEASURE_SCHEMA.PRESSURE_MEASURE' IN TYPEOF(m.value_component) THEN
+      IF derive_dimensional_exponents(m.unit_component) <> 
+        dimensional_exponents( -1.0, 1.0, -2.0, 0.0, 0.0, 0.0, 0.0 ) THEN
+        RETURN (FALSE);
+      END_IF;
+    END_IF;
+    IF 'MEASURE_SCHEMA.RESISTANCE_MEASURE' IN TYPEOF(m.value_component) THEN
+      IF derive_dimensional_exponents(m.unit_component) <> 
+        dimensional_exponents( 2.0, 1.0, -3.0, -2.0, 0.0, 0.0, 0.0 ) THEN
+        RETURN (FALSE);
+      END_IF;
+    END_IF;
+    IF 'MEASURE_SCHEMA.VELOCITY_MEASURE' IN TYPEOF(m.value_component) THEN
+      IF derive_dimensional_exponents(m.unit_component) <> 
+        dimensional_exponents( 1.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0 ) THEN
+        RETURN (FALSE);
+      END_IF;
+    END_IF;
+    IF 'MEASURE_SCHEMA.RADIOACTIVITY_MEASURE' IN TYPEOF(m.value_component) THEN
+      IF derive_dimensional_exponents(m.unit_component) <> 
+        dimensional_exponents(0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0) THEN
+        RETURN (FALSE);
+      END_IF;
+    END_IF;
+    IF 'MEASURE_SCHEMA.ABSORBED_DOSE_MEASURE' IN TYPEOF(m.value_component) THEN
+      IF derive_dimensional_exponents(m.unit_component) <> 
+        dimensional_exponents(2.0, 0.0, -2.0, 0.0, 0.0, 0.0, 0.0) THEN
+        RETURN (FALSE);
+      END_IF;
+    END_IF;
+    IF 'MEASURE_SCHEMA.DOSE_EQUIVALENT_MEASURE' IN TYPEOF(m.value_component) THEN
+      IF derive_dimensional_exponents(m.unit_component) <> 
+        dimensional_exponents(2.0, 0.0, -2.0, 0.0, 0.0, 0.0, 0.0) THEN
+        RETURN (FALSE);
+      END_IF;
+    END_IF;
+    RETURN (TRUE);
+  END_FUNCTION;
+END_SCHEMA;
+
+
+
+SCHEMA basic_attribute_schema;
+  REFERENCE FROM action_schema (action, action_request_solution);
+  REFERENCE FROM application_context_schema (application_context);
+  REFERENCE FROM approval_schema (approval_date_time, approval_role);
+  REFERENCE FROM configuration_management_schema (configuration_design);
+  REFERENCE FROM date_time_schema (date_role, date_time_role, time_role);
+  REFERENCE FROM effectivity_schema (effectivity);
+  REFERENCE FROM external_reference_schema (external_source);
+  REFERENCE FROM management_resources_schema (action_assignment, action_request_assignment, approval_assignment, certification_assignment, contract_assignment, document_reference, effectivity_assignment, external_referent_assignment, group_assignment, name_assignment, security_classification_assignment);
+  REFERENCE FROM measure_schema (derived_unit);
+  REFERENCE FROM person_organization_schema (address, person_and_organization_role, person_and_organization, person_role, organization_role, organizational_project);
+  REFERENCE FROM product_definition_schema (product_category, product_definition, product_definition_substitute);
+  REFERENCE FROM product_property_definition_schema (property_definition, shape_aspect, shape_aspect_relationship);
+  REFERENCE FROM product_property_representation_schema (context_dependent_shape_representation, property_definition_representation);
+  REFERENCE FROM group_schema (group);
+  REFERENCE FROM representation_schema (representation);
+  REFERENCE FROM support_resource_schema (identifier, label, text);
+  TYPE description_attribute_select = SELECT (action_request_solution, application_context, approval_role, configuration_design, date_role, date_time_role, context_dependent_shape_representation, effectivity, external_source, organization_role, person_and_organization_role, person_and_organization, person_role, property_definition_representation, representation, time_role);
+  END_TYPE;
+
+  TYPE id_attribute_select = SELECT (action, address, product_category, property_definition, shape_aspect, shape_aspect_relationship, application_context, group, organizational_project, representation);
+  END_TYPE;
+
+  TYPE name_attribute_select = SELECT (action_request_solution, address, configuration_design, context_dependent_shape_representation, derived_unit, effectivity, person_and_organization, product_definition, product_definition_substitute, property_definition_representation);
+  END_TYPE;
+
+  TYPE role_select = SELECT (action_assignment, action_request_assignment, approval_assignment, approval_date_time, certification_assignment, contract_assignment, document_reference, effectivity_assignment, external_referent_assignment, group_assignment, name_assignment, security_classification_assignment);
+  END_TYPE;
+
+  ENTITY description_attribute;
+    attribute_value : text;
+    described_item : description_attribute_select;
+  END_ENTITY;
+
+  ENTITY id_attribute;
+    attribute_value : identifier;
+    identified_item : id_attribute_select;
+  END_ENTITY;
+
+  ENTITY name_attribute;
+    attribute_value : label;
+    named_item : name_attribute_select;
+  END_ENTITY;
+
+  ENTITY object_role;
+    name : label;
+    description : OPTIONAL text;
+  END_ENTITY;
+
+  ENTITY role_association;
+    role : object_role;
+    item_with_role : role_select;
+  END_ENTITY;
+
+  FUNCTION get_description_value (obj : description_attribute_select):text;
+    LOCAL
+      description_bag : BAG OF description_attribute := (USEDIN(obj, 'BASIC_ATTRIBUTE_SCHEMA.' + 'DESCRIPTION_ATTRIBUTE.' + 'DESCRIBED_ITEM'));
+    END_LOCAL;
+
+    IF SIZEOF(description_bag) = 1 THEN
+      RETURN (description_bag[1].attribute_value);
+    ELSE
+      RETURN (?);
+    END_IF;
+  END_FUNCTION;
+
+  FUNCTION get_id_value (obj : id_attribute_select):identifier;
+    LOCAL
+      id_bag : BAG OF id_attribute := (USEDIN(obj, 'BASIC_ATTRIBUTE_SCHEMA.' + 'ID_ATTRIBUTE.' + 'IDENTIFIED_ITEM'));
+    END_LOCAL;
+
+    IF SIZEOF(id_bag) = 1 THEN
+      RETURN (id_bag[1].attribute_value);
+    ELSE
+      RETURN (?);
+    END_IF;
+  END_FUNCTION;
+
+  FUNCTION get_name_value (obj : name_attribute_select):label;
+    LOCAL
+      name_bag : BAG OF name_attribute := (USEDIN(obj, 'BASIC_ATTRIBUTE_SCHEMA.' + 'NAME_ATTRIBUTE.' + 'NAMED_ITEM'));
+    END_LOCAL;
+
+    IF SIZEOF(name_bag) = 1 THEN
+      RETURN (name_bag[1].attribute_value);
+    ELSE
+      RETURN (?);
+    END_IF;
+  END_FUNCTION;
+
+  FUNCTION get_role (obj : role_select):object_role;
+    LOCAL
+      role_bag : BAG OF role_association := (USEDIN(obj, 'BASIC_ATTRIBUTE_SCHEMA.' + 'ROLE_ASSOCIATION.' + 'ITEM_WITH_ROLE'));
+    END_LOCAL;
+
+    IF SIZEOF(role_bag) = 1 THEN
+      RETURN (role_bag[1].role);
+    ELSE
+      RETURN (?);
+    END_IF;
+  END_FUNCTION;
+
+END_SCHEMA;
+SCHEMA experience_schema;
+  REFERENCE FROM support_resource_schema (identifier, label, text, bag_to_set);
+  ENTITY experience;
+    id : identifier;
+    name : label;
+    description : OPTIONAL text;
+  END_ENTITY;
+
+  ENTITY experience_relationship;
+    id : identifier;
+    name : label;
+    description : OPTIONAL text;
+    relating_experience : experience;
+    related_experience : experience;
+  END_ENTITY;
+
+  ENTITY experience_type;
+    id : identifier;
+    name : label;
+    description : OPTIONAL text;
+  END_ENTITY;
+
+  ENTITY experience_type_relationship;
+    id : identifier;
+    name : label;
+    description : OPTIONAL text;
+    relating_experience_type : experience_type;
+    related_experience_type : experience_type;
+  END_ENTITY;
+
+  FUNCTION acyclic_experience_relationship (relation : experience_relationship; relatives : SET OF experience; specific_relation : STRING):BOOLEAN;
+    LOCAL
+      x : SET OF experience_relationship;
+    END_LOCAL;
+
+    IF relation.relating_experience IN relatives THEN
+      RETURN (FALSE);
+    END_IF;
+    x := QUERY(expr <* bag_to_set(USEDIN(relation.relating_experience, 'EXPERIENCE_SCHEMA.' + 'EXPERIENCE_RELATIONSHIP.' + 'RELATED_EXPERIENCE')) | specific_relation IN TYPEOF(expr));
+    REPEAT i := 1 TO HIINDEX(x);
+      IF NOT acyclic_experience_relationship(x[i], relatives + relation.relating_experience, specific_relation) THEN
+        RETURN (FALSE);
+      END_IF;
+    END_REPEAT;
+    RETURN (TRUE);
+  END_FUNCTION;
+
+  FUNCTION acyclic_experience_type_relationship (relation : experience_type_relationship; relatives : SET OF experience_type; specific_relation : STRING):BOOLEAN;
+    LOCAL
+      x : SET OF experience_type_relationship;
+    END_LOCAL;
+
+    IF relation.relating_experience_type IN relatives THEN
+      RETURN (FALSE);
+    END_IF;
+    x := QUERY(exptyp <* bag_to_set(USEDIN(relation.relating_experience_type, 'EXPERIENCE_SCHEMA.' + 'EXPERIENCE_TYPE_RELATIONSHIP.' + 'RELATED_EXPERIENCE_TYPE')) | specific_relation IN TYPEOF(exptyp));
+    REPEAT i := 1 TO HIINDEX(x);
+      IF NOT acyclic_experience_type_relationship(x[i], relatives + relation.relating_experience_type, specific_relation) THEN
+        RETURN (FALSE);
+      END_IF;
+    END_REPEAT;
+    RETURN (TRUE);
+  END_FUNCTION;
+
+END_SCHEMA;
+SCHEMA qualifications_schema;
+  REFERENCE FROM support_resource_schema (identifier, label, text, bag_to_set);
+  ENTITY qualification;
+    id : identifier;
+    name : label;
+    description : OPTIONAL text;
+  END_ENTITY;
+
+  ENTITY qualification_relationship;
+    id : identifier;
+    name : label;
+    description : OPTIONAL text;
+    relating_qualification : qualification;
+    related_qualification : qualification;
+  END_ENTITY;
+
+  ENTITY qualification_type;
+    id : identifier;
+    name : label;
+    description : OPTIONAL text;
+  END_ENTITY;
+
+  ENTITY qualification_type_relationship;
+    id : identifier;
+    name : label;
+    description : OPTIONAL text;
+    relating_qualification_type : qualification_type;
+    related_qualification_type : qualification_type;
+  END_ENTITY;
+
+  FUNCTION acyclic_qualification_relationship (relation : qualification_relationship; relatives : SET OF qualification; specific_relation : STRING):BOOLEAN;
+    LOCAL
+      x : SET OF qualification_relationship;
+    END_LOCAL;
+
+    IF relation.relating_qualification IN relatives THEN
+      RETURN (FALSE);
+    END_IF;
+    x := QUERY(qual <* bag_to_set(USEDIN(relation.relating_qualification, 'QUALIFICATIONS_SCHEMA.' + 'QUALIFICATION_RELATIONSHIP.' + 'RELATED_QUALIFICATION')) | specific_relation IN TYPEOF(qual));
+    REPEAT i := 1 TO HIINDEX(x);
+      IF NOT acyclic_qualification_relationship(x[i], relatives + relation.relating_qualification, specific_relation) THEN
+        RETURN (FALSE);
+      END_IF;
+    END_REPEAT;
+    RETURN (TRUE);
+  END_FUNCTION;
+
+  FUNCTION acyclic_qualification_type_relationship (relation : qualification_type_relationship; relatives : SET OF qualification_type; specific_relation : STRING):BOOLEAN;
+    LOCAL
+      x : SET OF qualification_type_relationship;
+    END_LOCAL;
+
+    IF relation.relating_qualification_type IN relatives THEN
+      RETURN (FALSE);
+    END_IF;
+    x := QUERY(qultyp <* bag_to_set(USEDIN(relation.relating_qualification_type, 'QUALIFICATIONS_SCHEMA.' + 'QUALIFICATION_TYPE_RELATIONSHIP.' + 'RELATED_QUALIFICATION_TYPE')) | specific_relation IN TYPEOF(qultyp));
+    REPEAT i := 1 TO HIINDEX(x);
+      IF NOT acyclic_qualification_type_relationship(x[i], relatives + relation.relating_qualification_type, specific_relation) THEN
+        RETURN (FALSE);
+      END_IF;
+    END_REPEAT;
+    RETURN (TRUE);
+  END_FUNCTION;
+
+END_SCHEMA;
+SCHEMA location_schema;
+  REFERENCE FROM support_resource_schema (identifier, label, text, bag_to_set);
+  ENTITY location;
+    id : identifier;
+    name : label;
+    description : OPTIONAL text;
+  END_ENTITY;
+
+  ENTITY location_relationship;
+    id : identifier;
+    name : label;
+    description : OPTIONAL text;
+    relating_location : location;
+    related_location : location;
+  END_ENTITY;
+
+  FUNCTION acyclic_location_relationship (relation : location_relationship; relatives : SET OF location; specific_relation : STRING):BOOLEAN;
+    LOCAL
+      x : SET OF location_relationship;
+    END_LOCAL;
+
+    IF relation.relating_location IN relatives THEN
+      RETURN (FALSE);
+    END_IF;
+    x := QUERY(lctn <* bag_to_set(USEDIN(relation.relating_location, 'LOCATION_SCHEMA.' + 'LOCATION_RELATIONSHIP.' + 'RELATED_LOCATION')) | specific_relation IN TYPEOF(lctn));
+    REPEAT i := 1 TO HIINDEX(x);
+      IF NOT acyclic_location_relationship(x[i], relatives + relation.relating_location, specific_relation) THEN
+        RETURN (FALSE);
+      END_IF;
+    END_REPEAT;
+    RETURN (TRUE);
+  END_FUNCTION;
+
+END_SCHEMA;

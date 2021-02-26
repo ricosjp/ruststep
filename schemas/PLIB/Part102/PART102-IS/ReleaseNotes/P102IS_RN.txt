@@ -1,0 +1,35 @@
+ALL THE CHANGES WILL BE IMPLEMENTED IN THE RELEASED SCHEMAS
+
+=====================================================================
+ISSUE NUMBER: 
+DATE: 
+AUTHOR: 
+SOURCE DOCUMENT:
+SCHEMA and CLAUSE:
+OTHER PARTS AFFECTED: 
+ENTITY or RESOURCE MODIFIED:
+DESCRIPTION: 
+
+
+OLD CONTENT:
+
+NEW CONTENT:
+SCHEMA NAME AND VERSION: 
+NEW VERSION:
+=====================================================================
+ISSUE NUMBER: 
+DATE: 
+AUTHOR: 
+SOURCE DOCUMENT:
+SCHEMA and CLAUSE:
+OTHER PARTS AFFECTED: 
+ENTITY or RESOURCE MODIFIED:
+DESCRIPTION: 
+
+
+OLD CONTENT:
+
+NEW CONTENT:
+SCHEMA NAME AND VERSION: 
+NEW VERSION:
+=====================================================================

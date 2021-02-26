@@ -1,0 +1,26 @@
+(*
+ $Id: 10303-1044-arm-certification.exp,v 1.5 2006/08/07 07:44:42 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2932 - ISO/TS 10303-1044 Certification - EXPRESS ARM
+*)
+
+
+
+SCHEMA Certification_arm; 
+
+
+TYPE certification_item = EXTENSIBLE GENERIC_ENTITY SELECT;
+END_TYPE; 
+
+ENTITY Certification;
+  name : STRING;
+  description : OPTIONAL STRING;
+  kind : STRING;
+END_ENTITY;
+
+ENTITY Certification_assignment;
+  assigned_certification : Certification;
+  items : SET[1:?] OF certification_item;
+  role : STRING;
+END_ENTITY;
+
+END_SCHEMA;  -- Certification_arm

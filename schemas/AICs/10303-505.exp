@@ -1,0 +1,556 @@
+(*
+
+This EXPRESS file is WG12 N997
+*)
+
+
+
+SCHEMA aic_drawing_structure_and_administration;
+
+
+
+USE FROM approval_schema    -- ISO 10303-41
+
+  (approval,
+
+   approval_date_time,
+
+   approval_person_organization);
+
+
+
+USE FROM date_time_schema   -- ISO 10303-41
+
+  (calendar_date);
+
+
+
+USE FROM drawing_definition_schema  -- ISO 10303-101
+
+  (draughting_title,
+
+   drawing_revision,
+
+   drawing_sheet_revision,
+
+   drawing_sheet_revision_usage);
+
+
+
+USE FROM geometry_schema    -- ISO 10303-42
+
+  (axis2_placement_2d);
+
+
+
+USE FROM management_resources_schema    -- ISO 10303-41
+
+  (approval_assignment,
+
+   contract_assignment,
+
+   document_reference,
+
+   organization_assignment,
+
+   person_and_organization_assignment,
+
+   person_assignment,
+
+   security_classification_assignment);
+
+
+
+USE FROM person_organization_schema -- ISO 10303-41
+
+  (organizational_address,
+
+   personal_address);
+
+
+
+USE FROM presentation_definition_schema -- ISO 10303-46
+
+  (annotation_occurrence);
+
+
+
+USE FROM presentation_organization_schema   -- ISO 10303-46
+
+  (camera_image,
+
+   presentation_size,
+
+   presentation_view,
+
+   presented_item,
+
+   presented_item_representation);
+
+
+
+USE FROM product_definition_schema  -- ISO 10303-41
+
+  (product,
+
+   product_definition,
+
+   product_definition_formation);
+
+
+TYPE approved_item = SELECT
+  (drawing_revision,
+   drawing_sheet_revision);
+END_TYPE;
+
+TYPE classified_item = SELECT
+  (drawing_revision,
+   drawing_sheet_revision);
+END_TYPE;
+
+TYPE contracted_item = SELECT
+  (drawing_revision);
+END_TYPE;
+
+TYPE draughting_organization_item = SELECT
+  (product_definition_formation,
+   drawing_revision,
+   drawing_sheet_revision);
+END_TYPE;
+
+TYPE draughting_presented_item_select = SELECT
+  (product_definition_formation);
+END_TYPE;
+
+TYPE specified_item = SELECT
+  (drawing_revision);
+END_TYPE;
+
+ENTITY draughting_approval_assignment
+  SUBTYPE OF (approval_assignment);
+  approved_items : SET [1:?] OF approved_item;
+WHERE
+  WR1: SIZEOF (QUERY (item <* approved_items |
+       'AIC_DRAWING_STRUCTURE_AND_ADMINISTRATION.DRAWING_REVISION'
+       IN TYPEOF (item)))<=1;
+END_ENTITY;
+
+ENTITY draughting_contract_assignment
+  SUBTYPE OF (contract_assignment);
+  items : SET [1:?] OF contracted_item;
+END_ENTITY;
+
+
+ENTITY draughting_drawing_revision
+
+  SUBTYPE OF (drawing_revision);
+
+WHERE
+
+  WR1:  -- drawing_requires_sheets:
+
+    (SIZEOF (USEDIN (SELF,
+
+      'AIC_DRAWING_STRUCTURE_AND_ADMINISTRATION.AREA_IN_SET.IN_SET')) >= 1)
+
+       AND 
+
+    (SIZEOF (QUERY (ais <* USEDIN (SELF,
+
+       'AIC_DRAWING_STRUCTURE_AND_ADMINISTRATION.AREA_IN_SET.IN_SET') | 
+
+        NOT ('AIC_DRAWING_STRUCTURE_AND_ADMINISTRATION.DRAWING_SHEET_REVISION'
+
+        IN TYPEOF (ais.area))
+
+    )) = 0);
+
+  WR2:   -- drawing_approval_has_date:
+
+    SIZEOF (QUERY (app_ass <* USEDIN (SELF,
+
+                         'AIC_DRAWING_STRUCTURE_AND_ADMINISTRATION.' +
+
+                         'DRAUGHTING_APPROVAL_ASSIGNMENT.APPROVED_ITEMS') |
+
+       NOT (SIZEOF (USEDIN (app_ass.assigned_approval,
+
+          'AIC_DRAWING_STRUCTURE_AND_ADMINISTRATION.' +
+
+          'APPROVAL_DATE_TIME.DATED_APPROVAL')) = 1)
+
+    )) = 0;
+
+  WR3:  -- sheet_approval_has_date:
+
+    SIZEOF (QUERY (ais <* USEDIN (SELF,
+
+           'AIC_DRAWING_STRUCTURE_AND_ADMINISTRATION.AREA_IN_SET.IN_SET') |
+
+           NOT (SIZEOF (QUERY (app_ass <* USEDIN (ais.area,
+
+             'AIC_DRAWING_STRUCTURE_AND_ADMINISTRATION.' +
+
+             'DRAUGHTING_APPROVAL_ASSIGNMENT.APPROVED_ITEMS') |
+
+        NOT (SIZEOF (USEDIN (app_ass.assigned_approval,
+
+            'AIC_DRAWING_STRUCTURE_AND_ADMINISTRATION.' +
+
+            'APPROVAL_DATE_TIME.DATED_APPROVAL')) = 1)
+
+      )) = 0)
+
+    )) = 0;
+
+  WR4:  -- drawing_approval_has_authorization:
+
+    SIZEOF (QUERY (app_ass <* USEDIN (SELF,
+
+                         'AIC_DRAWING_STRUCTURE_AND_ADMINISTRATION.' +
+
+                         'DRAUGHTING_APPROVAL_ASSIGNMENT.APPROVED_ITEMS') |
+
+       NOT (SIZEOF (USEDIN (app_ass.assigned_approval,
+
+           'AIC_DRAWING_STRUCTURE_AND_ADMINISTRATION.' +
+
+           'APPROVAL_PERSON_ORGANIZATION.AUTHORIZED_APPROVAL')) >= 1)
+
+    )) = 0;
+
+  WR5:  -- sheet_approval_has_authorization:
+
+    SIZEOF (QUERY (ais <* USEDIN (SELF,
+
+            'AIC_DRAWING_STRUCTURE_AND_ADMINISTRATION.AREA_IN_SET.IN_SET') |
+
+              NOT (SIZEOF (QUERY (app_ass <* USEDIN (ais.area,
+
+                'AIC_DRAWING_STRUCTURE_AND_ADMINISTRATION.' +
+
+                'DRAUGHTING_APPROVAL_ASSIGNMENT.APPROVED_ITEMS') |
+
+                NOT (SIZEOF (USEDIN (app_ass.assigned_approval,
+
+                     'AIC_DRAWING_STRUCTURE_AND_ADMINISTRATION.' +
+
+                     'APPROVAL_PERSON_ORGANIZATION.AUTHORIZED_APPROVAL')) >= 1)
+
+              )) = 0)
+
+    )) = 0;
+
+  WR6:  -- drawing_title:
+
+    SIZEOF (USEDIN (SELF, 'AIC_DRAWING_STRUCTURE_AND_ADMINISTRATION.' +
+
+                          'DRAUGHTING_TITLE.ITEMS')) <= 1;
+
+  WR7:  -- sheet_title:
+
+    SIZEOF (QUERY (ais <* USEDIN (SELF,
+
+            'AIC_DRAWING_STRUCTURE_AND_ADMINISTRATION.AREA_IN_SET.IN_SET') |   
+
+             NOT (SIZEOF (USEDIN (ais.area,
+
+                          'AIC_DRAWING_STRUCTURE_AND_ADMINISTRATION.' +
+
+                          'DRAUGHTING_TITLE.ITEMS')) <= 1)
+
+    )) = 0;
+
+  WR8:  -- allowable_items_of_sheet:
+
+    SIZEOF (QUERY (ais <* USEDIN (SELF,
+
+            'AIC_DRAWING_STRUCTURE_AND_ADMINISTRATION.AREA_IN_SET.IN_SET') |   
+
+            NOT (SIZEOF (QUERY (item <* ais.area.items |
+
+            NOT (SIZEOF (TYPEOF(item) *
+
+              ['AIC_DRAWING_STRUCTURE_AND_ADMINISTRATION.STYLED_ITEM',
+
+              'AIC_DRAWING_STRUCTURE_AND_ADMINISTRATION.MAPPED_ITEM',
+
+              'AIC_DRAWING_STRUCTURE_AND_ADMINISTRATION.AXIS2_PLACEMENT',
+
+              'AIC_DRAWING_STRUCTURE_AND_ADMINISTRATION.PLANAR_BOX']) = 1)
+
+      )) = 0)
+
+    )) = 0;
+
+  WR9:  -- sheet_contains_view_or_annotation:
+
+    SIZEOF (QUERY (ais <* USEDIN (SELF,
+
+           'AIC_DRAWING_STRUCTURE_AND_ADMINISTRATION.AREA_IN_SET.IN_SET') |
+
+            NOT (SIZEOF (QUERY (item <* ais.area.items |
+
+             (SIZEOF (TYPEOF(item) *
+
+               ['AIC_DRAWING_STRUCTURE_AND_ADMINISTRATION.STYLED_ITEM',
+
+                'AIC_DRAWING_STRUCTURE_AND_ADMINISTRATION.MAPPED_ITEM']) = 1)
+
+      )) > 0)
+
+    )) = 0;
+
+  WR10: -- planar_box_in_sheet:
+
+    SIZEOF (QUERY (ais <* USEDIN (SELF,
+
+            'AIC_DRAWING_STRUCTURE_AND_ADMINISTRATION.AREA_IN_SET.IN_SET') |
+
+              NOT (SIZEOF (QUERY (p_b <* 
+
+                QUERY (item <* ais.area.items |
+
+                  ('AIC_DRAWING_STRUCTURE_AND_ADMINISTRATION.PLANAR_BOX' 
+
+                   IN TYPEOF(item))) |
+
+                   NOT (SIZEOF (USEDIN (p_b, 'AIC_DRAWING_STRUCTURE_AND_' +
+
+                        'ADMINISTRATION.PRESENTATION_SIZE.SIZE')  ) = 1)
+
+      )) = 0)
+
+    )) = 0;
+
+  WR11:  -- sheets_contain_views:
+
+    SIZEOF (QUERY (ais <* USEDIN (SELF,
+
+           'AIC_DRAWING_STRUCTURE_AND_ADMINISTRATION.AREA_IN_SET.IN_SET') |
+
+            NOT (SIZEOF (QUERY (mi <* QUERY (item <* ais.area.items |
+
+           ('AIC_DRAWING_STRUCTURE_AND_ADMINISTRATION.MAPPED_ITEM'
+
+           IN TYPEOF(item))) |
+
+             NOT ('AIC_DRAWING_STRUCTURE_AND_ADMINISTRATION.PRESENTATION_VIEW'
+
+               IN TYPEOF(mi.mapping_source.mapped_representation))
+
+      )) = 0)
+
+    )) = 0;
+
+  WR12:  -- sheets_contain_placements:
+
+    SIZEOF (QUERY (ais <* USEDIN (SELF,
+
+            'AIC_DRAWING_STRUCTURE_AND_ADMINISTRATION.AREA_IN_SET.IN_SET') |
+
+              NOT (SIZEOF (QUERY (a2p <* QUERY (item <* ais.area.items |
+
+               ('AIC_DRAWING_STRUCTURE_AND_ADMINISTRATION.AXIS2_PLACEMENT'
+
+              IN TYPEOF(item))) |
+
+                NOT (SIZEOF (USEDIN (a2p,
+
+                             'AIC_DRAWING_STRUCTURE_AND_ADMINISTRATION.' +
+
+                             'MAPPED_ITEM.MAPPING_TARGET')) > 0)
+
+      )) = 0)
+
+    )) = 0;
+
+  WR13: -- sheets_have_unique_context:
+
+    SIZEOF (QUERY (ais <* USEDIN (SELF,
+
+            'AIC_DRAWING_STRUCTURE_AND_ADMINISTRATION.AREA_IN_SET.IN_SET') |
+
+              NOT (SIZEOF (ais.area.context_of_items.
+
+                   representations_in_context) = 1)   )) = 0;
+
+  WR14: -- views_presented_once:
+
+    SIZEOF (QUERY (ais <* USEDIN (SELF,
+
+           'AIC_DRAWING_STRUCTURE_AND_ADMINISTRATION.AREA_IN_SET.IN_SET') |
+
+      NOT (SIZEOF (QUERY (mi <* QUERY (item <* ais.area.items |
+
+             ('AIC_DRAWING_STRUCTURE_AND_ADMINISTRATION.MAPPED_ITEM'
+
+                 IN TYPEOF(item))) |
+
+        NOT (SIZEOF (USEDIN (mi.mapping_source.mapped_representation,
+
+                        'AIC_DRAWING_STRUCTURE_AND_ADMINISTRATION.' +
+
+                        'REPRESENTATION_MAP.MAPPED_REPRESENTATION')) = 1)
+
+      )) = 0)
+
+    )) = 0;
+
+  WR15: -- allowable_items_of_view:
+
+    SIZEOF (QUERY (ais <* USEDIN (SELF,
+
+            'AIC_DRAWING_STRUCTURE_AND_ADMINISTRATION.AREA_IN_SET.IN_SET') |
+
+             NOT (SIZEOF (QUERY (mi <* QUERY (item <* ais.area.items |
+
+               ('AIC_DRAWING_STRUCTURE_AND_ADMINISTRATION.MAPPED_ITEM'
+
+               IN TYPEOF(item))) |
+
+                 NOT (SIZEOF (QUERY (pv_item <* mi.mapping_source.
+
+                              mapped_representation.items |
+
+                   NOT (SIZEOF (TYPEOF(pv_item) *
+
+                     ['AIC_DRAWING_STRUCTURE_AND_ADMINISTRATION.' +
+
+                      'STYLED_ITEM',
+
+                      'AIC_DRAWING_STRUCTURE_AND_ADMINISTRATION.CAMERA_IMAGE',
+
+                      'AIC_DRAWING_STRUCTURE_AND_ADMINISTRATION.' +
+
+                      'AXIS2_PLACEMENT']) = 1)
+
+        )) = 0)
+
+      )) = 0)
+
+    )) = 0;
+
+  WR16: -- views_contain_one_projection:
+
+    SIZEOF (QUERY (ais <* USEDIN (SELF,
+
+            'AIC_DRAWING_STRUCTURE_AND_ADMINISTRATION.AREA_IN_SET.IN_SET') |
+
+            NOT (SIZEOF (QUERY (mi <* QUERY (item <* ais.area.items |
+
+                ('AIC_DRAWING_STRUCTURE_AND_ADMINISTRATION.MAPPED_ITEM'
+
+                IN TYPEOF(item))) |
+
+                NOT (SIZEOF (QUERY (pv_item <* mi.mapping_source.
+
+                             mapped_representation.items |
+
+                    ('AIC_DRAWING_STRUCTURE_AND_ADMINISTRATION.CAMERA_IMAGE'
+
+                    IN TYPEOF(pv_item))
+
+                )) = 1)
+
+            )) = 0)
+
+    )) = 0;
+
+  WR17: -- views_contain_one_placement:
+
+    SIZEOF (QUERY (ais <* USEDIN (SELF,
+
+            'AIC_DRAWING_STRUCTURE_AND_ADMINISTRATION.AREA_IN_SET.IN_SET') |
+
+              NOT (SIZEOF (QUERY (mi <* QUERY (item <* ais.area.items |
+
+                ('AIC_DRAWING_STRUCTURE_AND_ADMINISTRATION.MAPPED_ITEM'
+
+                IN TYPEOF(item))) |
+
+                NOT (SIZEOF (QUERY (a2p <* QUERY (pv_item <* mi.mapping_source.
+
+                       mapped_representation.items |
+
+                    ('AIC_DRAWING_STRUCTURE_AND_ADMINISTRATION.AXIS2_PLACEMENT'
+
+                      IN TYPEOF(pv_item))) |
+
+                     ('AIC_DRAWING_STRUCTURE_AND_ADMINISTRATION.' +
+
+                      'REPRESENTATION_MAP.MAPPING_SOURCE' IN ROLESOF (a2p))
+
+                  )) = 1)
+
+              )) = 0)
+
+    )) = 0;
+
+  WR18: -- views_have_unique_context:
+
+    SIZEOF (QUERY (ais <* USEDIN (SELF,
+
+            'AIC_DRAWING_STRUCTURE_AND_ADMINISTRATION.AREA_IN_SET.IN_SET') |
+
+             NOT (SIZEOF (QUERY (mi <* QUERY (item <* ais.area.items |
+
+                 ('AIC_DRAWING_STRUCTURE_AND_ADMINISTRATION.MAPPED_ITEM'
+
+                 IN TYPEOF(item))) |
+
+        NOT (SIZEOF (mi.mapping_source.
+
+                     mapped_representation.context_of_items.
+
+                     representations_in_context) = 1)
+
+      )) = 0)
+
+    )) = 0;
+
+END_ENTITY;
+
+
+ENTITY draughting_organization_assignment
+  SUBTYPE OF (organization_assignment);
+  assigned_items : SET [1:?] OF draughting_organization_item;
+END_ENTITY;
+
+ENTITY draughting_person_and_organization_assignment
+  SUBTYPE OF (person_and_organization_assignment);
+  assigned_items : SET [1:?] OF draughting_organization_item;
+END_ENTITY;
+
+ENTITY draughting_person_assignment
+  SUBTYPE OF (person_assignment);
+  assigned_items : SET [1:?] OF draughting_organization_item;
+END_ENTITY;
+
+ENTITY draughting_presented_item
+  SUBTYPE OF (presented_item);
+  items : SET [1:?] OF draughting_presented_item_select;
+WHERE
+  WR1:                                        -- presented_item_presentation:
+       SIZEOF (QUERY (pir <* USEDIN (SELF,
+                'AIC_DRAWING_STRUCTURE_AND_ADMINISTRATION.' +
+                'PRESENTED_ITEM_REPRESENTATION.ITEM') |
+          NOT ('AIC_DRAWING_STRUCTURE_AND_ADMINISTRATION.DRAWING_REVISION'
+                IN TYPEOF (pir.presentation)) )) = 0;
+END_ENTITY;
+
+ENTITY draughting_security_classification_assignment
+  SUBTYPE OF (security_classification_assignment);
+  assigned_items : SET [1:?] OF classified_item;
+END_ENTITY;
+
+ENTITY draughting_specification_reference
+  SUBTYPE OF (document_reference);
+  specified_items : SET [1:?] OF specified_item;
+WHERE
+  WR1: (SELF.assigned_document.kind.product_data_type =
+        'draughting specification');
+END_ENTITY;
+
+
+END_SCHEMA;

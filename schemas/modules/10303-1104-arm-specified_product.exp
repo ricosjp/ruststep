@@ -1,0 +1,29 @@
+(* 
+   $Id: 10303-1104-arm-specified_product.exp,v 1.1 2006/08/03 14:41:10 wg12deputy Exp $
+   ISO/TC184/SC4 WG12N2589 - ISO/TS 10303-1104 Specified product - Express ARM 
+   Supersedes ISO TC184/SC4/WG12N1723
+*)
+
+SCHEMA Specified_product_arm;
+
+USE FROM Configuration_item_arm;
+
+USE FROM Product_class_arm;
+
+USE FROM Product_version_arm;
+
+ENTITY Product_specification
+SUBTYPE OF (Product_configuration);
+  version_id: OPTIONAL STRING;
+  SELF\Product_configuration.item_context: Product_class;
+  defining_specifications: SET [0:?] OF Specification;
+END_ENTITY;
+
+ENTITY Specification_based_product_version
+SUBTYPE OF (Product_version);
+INVERSE
+  specification_source: Item_design_association FOR design;
+WHERE
+WR1 : 'SPECIFIED_PRODUCT_ARM.PRODUCT_SPECIFICATION' IN TYPEOF(specification_source.configuration);
+END_ENTITY;
+END_SCHEMA;

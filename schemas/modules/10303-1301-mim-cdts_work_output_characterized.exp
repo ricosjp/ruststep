@@ -1,0 +1,61 @@
+(*
+  $Id: 10303-1301-mim-cdts_work_output_characterized.exp,v 1.1 2003/07/15 09:43:14 wg12deputy Exp $
+  ISO/TC184/SC4 WG12N1921 - ISO/TS - 10303-1301 Work output characterized- EXPRESS MIM 
+*)
+
+SCHEMA Work_output_characterized_mim;
+
+USE FROM action_schema
+(action_method);
+
+USE FROM Ap239_properties_mim;
+
+USE FROM Approval_mim;
+
+USE FROM Certification_mim;
+
+USE FROM Date_time_assignment_mim;
+
+USE FROM Identification_assignment_mim;
+
+USE FROM Person_organization_assignment_mim;
+
+USE FROM Process_property_assignment_mim;
+
+USE FROM Security_classification_mim;
+
+USE FROM Work_output_mim;
+
+TYPE work_output_approval_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON approval_item WITH
+(action_method);
+END_TYPE;
+
+TYPE work_output_certification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON certification_item WITH
+(action_method);
+END_TYPE;
+
+TYPE work_output_date_and_time_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON date_and_time_item WITH
+(action_method);
+END_TYPE;
+
+TYPE work_output_date_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON date_item WITH
+(action_method);
+END_TYPE;
+
+TYPE work_output_identification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON identification_item WITH
+(action_method);
+END_TYPE;
+
+TYPE work_output_organization_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON organization_item WITH
+(action_method);
+END_TYPE;
+
+TYPE work_output_person_and_organization_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON person_and_organization_item WITH
+(action_method);
+END_TYPE;
+
+TYPE work_output_security_classification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON security_classification_item WITH
+(action_method);
+END_TYPE;
+
+END_SCHEMA;

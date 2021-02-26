@@ -1,0 +1,33 @@
+(*
+ $Id: 10303-1199-mim-Possession_of_property.exp,v 1.4 2006/08/04 12:11:55 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2805 - ISO/TS 10303-1199 Possession of property - EXPRESS MIM
+ Supersedes ISO TC184/SC4/WG12 N2058
+*)
+
+SCHEMA Possession_of_property_mim;
+
+USE FROM Individual_activity_mim;    --  ISO/TS 10303-1176
+USE FROM Independent_property_definition_mim;    --  ISO/TS 10303-1099
+USE FROM Process_property_assignment_mim;    --  ISO/TS 10303-1040
+USE FROM Product_as_individual_mim;    --  ISO/TS 10303-1164
+USE FROM Property_assignment_mim;    --  ISO/TS 10303-1030
+
+ENTITY possession_of_property_by_activity
+  SUBTYPE OF (action_property);
+  SELF\action_property.definition : individual_activity;
+END_ENTITY;
+
+ENTITY possession_of_property_by_product
+  SUBTYPE OF (property_definition);
+WHERE
+  link_to_individual: 'PRODUCT_AS_INDIVIDUAL_MIM.PRODUCT_AS_INDIVIDUAL_VERSION' IN TYPEOF(SELF\property_definition.definition.formation);
+END_ENTITY;
+
+ENTITY possessed_property
+  SUBTYPE OF (general_property_association);
+  SELF\general_property_association.base_definition : physical_quantity_instance;
+WHERE
+  link_to_possession: ('POSSESSION_OF_PROPERTY_MIM.POSSESSION_OF_PROPERTY_BY_ACTIVITY' IN TYPEOF(SELF\general_property_association.derived_definition)) OR ('POSSESSION_OF_PROPERTY_MIM.POSSESSION_OF_PROPERTY_BY_PRODUCT' IN TYPEOF(SELF\general_property_association.derived_definition));
+END_ENTITY;
+
+END_SCHEMA;

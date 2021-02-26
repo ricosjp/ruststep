@@ -1,0 +1,24 @@
+(*
+ $Id: 10303-1021-mim-identification_assignment.exp,v 1.5 2006/08/07 09:42:02 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2915 - ISO/TS 10303-1021 Identification assignment - EXPRESS MIM
+*)
+
+SCHEMA Identification_assignment_mim;
+
+USE FROM management_resources_schema   -- ISO 10303-41
+  (identification_assignment,
+   identification_role); 
+
+
+TYPE identification_item = EXTENSIBLE SELECT;
+END_TYPE; 
+
+TYPE versionable_item = EXTENSIBLE SELECT;
+END_TYPE; 
+
+ENTITY applied_identification_assignment
+  SUBTYPE OF (identification_assignment);
+  items : SET[1:?] OF identification_item;
+END_ENTITY;
+
+END_SCHEMA;  -- Identification_assignment_mim

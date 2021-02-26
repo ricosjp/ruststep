@@ -1,0 +1,26 @@
+(*
+ $Id: 10303-1023-arm-part_view_definition.exp,v 1.5 2006/08/07 07:44:41 wg12deputy Exp $
+ISO TC184/SC4/WG12 N3220 - ISO/TS 10303-1023 Part view definition - EXPRESS ARM
+Supersedes ISO TC184/SC4/WG12 N2109
+*) 
+
+
+SCHEMA Part_view_definition_arm;
+
+USE FROM Part_and_version_identification_arm;    -- ISO/TS 10303-1022
+
+USE FROM Product_view_definition_arm;    -- ISO/TS 10303-1019
+
+
+ENTITY Part_view_definition
+  SUBTYPE OF (Product_view_definition);
+  SELF\Product_view_definition.defined_version : Part_version;
+END_ENTITY;
+
+RULE part_view_definition_constraint FOR 
+(Product_view_definition);
+WHERE
+  WR1: SIZEOF ( QUERY ( pvd <* Product_view_definition | ( NOT ( 'PART_VIEW_DEFINITION_ARM.' + 'PART_VIEW_DEFINITION' IN TYPEOF (pvd) ) ) AND ( 'PART_VIEW_DEFINITION_ARM.' + 'PART_VERSION' IN TYPEOF ( pvd.defined_version) ) ) ) =0 ;
+END_RULE; 
+
+END_SCHEMA;  -- Part_view_definition_arm

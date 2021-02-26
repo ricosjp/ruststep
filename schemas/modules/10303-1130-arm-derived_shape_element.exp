@@ -1,0 +1,34 @@
+(* 
+$Id: 10303-1130-arm-derived_shape_element.exp,v 1.2 2005/02/22 16:53:44 wg12deputy Exp $  
+ISO TC184/SC4/WG12 N2864 - ISO/TS 10303-1130 Derived shape element - EXPRESS ARM
+Supersedes ISO TC184/SC4/WG12 N1538
+*) 
+
+
+SCHEMA Derived_shape_element_arm;
+
+USE FROM Construction_geometry_arm;    -- ISO/TS 10303-1131
+
+USE FROM Shape_property_assignment_arm;    -- ISO/TS 10303-1032
+
+USE FROM Value_with_unit_arm;    -- ISO/TS 10303-1054
+
+
+ENTITY Derived_geometry;
+  derived_from : SET[1:?] OF Shape_element;
+  geometry : constructive_element_select;
+  role : STRING;
+END_ENTITY;
+
+ENTITY Derived_shape_element
+  SUBTYPE OF (Shape_element);
+  derived_from : SET[1:?] OF Shape_element;
+  role : STRING;
+END_ENTITY;
+
+ENTITY Offset_shape_element
+  SUBTYPE OF (Derived_shape_element);
+  offset : Value_with_unit;
+END_ENTITY;
+
+END_SCHEMA;  -- Derived_shape_element_arm

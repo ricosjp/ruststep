@@ -1,0 +1,20 @@
+(*
+ $Id: 10303-1018-arm-product_version.exp,v 1.5 2006/08/07 07:44:41 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2527 - ISO/TS 10303-1018 Product version - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG12 N1105
+*) 
+
+
+SCHEMA Product_version_arm; 
+
+USE FROM Product_identification_arm;    -- ISO/TS 10303-1017
+
+
+ENTITY Product_version;
+  id : STRING;
+  description : OPTIONAL STRING;
+  of_product : Product;
+END_ENTITY;
+
+END_SCHEMA;  -- Product_version_arm
+

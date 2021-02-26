@@ -1,0 +1,89 @@
+(*
+ $Id: 10303-1304-mim-ap239_product_status_recording.exp,v 1.1 2006/08/07 09:42:07 wg12deputy Exp $
+ ISO TC184/SC4/WG3 N1565 - ISO/TS 10303-1304 AP239 product status recording - EXPRESS MIM
+ Supersedes ISO TC184/SC4/WG3 N1397
+*) 
+
+SCHEMA Ap239_product_status_recording_mim;
+
+USE FROM Activity_mim;    -- ISO/TS 10303-1047
+
+USE FROM Ap239_product_definition_information_mim;    -- ISO/TS 10303-1292
+
+USE FROM Attachment_slot_mim;    -- ISO/TS 10303-1250
+
+USE FROM Justification_mim;    -- ISO/TS 10303-1263
+
+USE FROM Location_assignment_mim;    -- ISO/TS 10303-1277
+
+USE FROM Multi_linguism_mim;    -- ISO/TS 10303-1105
+
+USE FROM Observation_mim;    -- ISO/TS 10303-1258
+
+USE FROM Product_breakdown_mim;    -- ISO/TS 10303-1248
+
+USE FROM product_definition_schema   -- ISO 10303-41
+  (product,
+   product_definition,
+   product_definition_formation,
+   product_definition_relationship); 
+
+USE FROM Product_group_mim;    -- ISO/TS 10303-1278
+
+USE FROM Product_identification_mim;    -- ISO/TS 10303-1017
+
+USE FROM Product_version_mim;    -- ISO/TS 10303-1018
+
+USE FROM Product_view_definition_relationship_mim;    -- ISO/TS 10303-1041
+
+USE FROM State_characterized_mim;    -- ISO/TS 10303-1271
+
+USE FROM State_observed_mim;    -- ISO/TS 10303-1256
+
+USE FROM state_observed_schema;    -- ISO 10303-56
+
+
+TYPE ap239_psr_action_items = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON action_items WITH 
+   (applied_state_observed_assignment, 
+    statechar_action_items);
+END_TYPE; 
+
+TYPE ap239_psr_attribute_language_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON attribute_language_item WITH 
+   (observation, 
+    observation_consequence);
+END_TYPE; 
+
+TYPE ap239_psr_justification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON justification_item WITH 
+   (applied_state_observed_assignment);
+END_TYPE; 
+
+TYPE ap239_psr_location_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON location_item WITH 
+   (product, 
+    product_definition, 
+    product_definition_formation, 
+    product_definition_relationship, 
+    product_group);
+END_TYPE; 
+
+TYPE ap239_psr_multi_language_attribute_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON multi_language_attribute_item WITH 
+   (observation, 
+    observation_consequence);
+END_TYPE; 
+
+TYPE ap239_psr_observed_context_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON observed_context_item WITH 
+   (product, 
+    product_definition, 
+    product_definition_formation, 
+    product_definition_relationship, 
+    product_group);
+END_TYPE; 
+
+TYPE ap239_psr_state_of_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON state_observed_of_item WITH 
+   (product, 
+    product_definition, 
+    product_definition_formation, 
+    product_definition_relationship, 
+    product_group);
+END_TYPE; 
+
+END_SCHEMA;  -- Ap239_product_status_recording_mim

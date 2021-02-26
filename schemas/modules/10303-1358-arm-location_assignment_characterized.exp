@@ -1,0 +1,55 @@
+(*
+ $Id: 10303-1358-arm-location_assignment_characterized.exp,v 1.2 2006/08/07 07:44:47 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N3076 - ISO/TS 10303-1358 Location assignment characterized - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG12 N2393
+*) 
+
+
+SCHEMA Location_assignment_characterized_arm;
+
+USE FROM Approval_arm;    -- ISO/TS 10303-1012
+
+USE FROM Classification_assignment_arm;    -- ISO/TS 10303-1114
+
+USE FROM Date_time_assignment_arm;    -- ISO/TS 10303-1014
+
+USE FROM Effectivity_application_arm;    -- ISO/TS 10303-1059
+
+USE FROM Location_assignment_arm;    -- ISO/TS 10303-1277
+
+USE FROM Multi_linguism_arm;    -- ISO/TS 10303-1105
+
+USE FROM Person_organization_assignment_arm;    -- ISO/TS 10303-1013
+
+USE FROM Property_assignment_arm;    -- ISO/TS 10303-1030
+
+
+TYPE location_assignment_approval_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON approval_item WITH 
+   (Location_assignment);
+END_TYPE; 
+
+TYPE location_assignment_classification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON classification_item WITH 
+   (Location_assignment);
+END_TYPE; 
+
+TYPE location_assignment_date_or_date_time_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON date_or_date_time_item WITH 
+   (Location_assignment);
+END_TYPE; 
+
+TYPE location_assignment_effectivity_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON effectivity_item WITH 
+   (Location_assignment);
+END_TYPE; 
+
+TYPE location_assignment_organization_or_person_in_organization_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON organization_or_person_in_organization_item WITH 
+   (Location_assignment);
+END_TYPE; 
+
+TYPE location_assignment_property_assignment_select = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON property_assignment_select WITH 
+   (Location_assignment);
+END_TYPE; 
+
+TYPE location_assignment_string_select = SELECT BASED_ON string_select WITH 
+   (Location_assignment);
+END_TYPE; 
+
+END_SCHEMA;  -- Location_assignment_characterized_arm

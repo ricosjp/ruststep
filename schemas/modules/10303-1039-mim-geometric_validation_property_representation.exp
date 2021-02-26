@@ -1,0 +1,23 @@
+(*
+ISO TC184/SC4/WG12 N2131 - ISO/TS 10303-1039 Geometric validation property representation - EXPRESS MIM
+*) 
+
+
+SCHEMA Geometric_validation_property_representation_mim; 
+
+USE FROM Elemental_geometric_shape_mim;    -- ISO/TS 10303-1004
+
+USE FROM Foundation_representation_mim;    -- ISO/TS 10303-1006
+
+USE FROM Measure_representation_mim;    -- ISO/TS 10303-1118
+
+USE FROM product_property_definition_schema   -- ISO 10303-41
+  (property_definition,
+   shape_aspect); 
+
+USE FROM product_property_representation_schema   -- ISO 10303-41
+  (property_definition_representation,
+   shape_definition_representation); 
+
+
+END_SCHEMA;  -- Geometric_validation_property_representation_mim

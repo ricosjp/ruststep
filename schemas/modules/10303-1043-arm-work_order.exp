@@ -1,0 +1,25 @@
+(*
+ $Id: 10303-1043-arm-work_order.exp,v 1.5 2006/08/07 07:44:42 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2945 - ISO/TS 10303-1043 Work order - EXPRESS ARM
+*)
+
+
+SCHEMA Work_order_arm; 
+
+USE FROM Activity_arm;    -- ISO/TS 10303-1047
+
+USE FROM Work_request_arm;    -- ISO/TS 10303-1042
+
+
+ENTITY Directed_activity
+  SUBTYPE OF (Activity);
+  directive : Work_order;
+END_ENTITY;
+
+ENTITY Work_order;
+  name : STRING;
+  description : OPTIONAL STRING;
+  in_response_to : SET[0:?] OF Work_request;
+END_ENTITY;
+
+END_SCHEMA;  -- Work_order_arm

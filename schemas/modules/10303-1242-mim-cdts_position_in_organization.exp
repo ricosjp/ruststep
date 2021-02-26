@@ -1,0 +1,86 @@
+(*
+ISO TC184/SC4/WG12 N1416 - ISO/CD-TS 10303-1242 Position in organization - EXPRESS MIM
+*) 
+
+
+SCHEMA Position_in_organization_mim; 
+
+USE FROM Classification_assignment_mim;    -- ISO/CD-TS 10303-1114
+
+USE FROM group_schema   -- ISO 10303-41
+  (group); 
+
+USE FROM management_resources_schema   -- ISO 10303-41
+  (group_assignment,
+   name_assignment,
+   position_in_organization_assignment,
+   position_in_organization_type_assignment); 
+
+USE FROM Person_organization_mim;    -- ISO/TS 10303-1011
+
+USE FROM person_organization_schema   -- ISO 10303-41
+  (address,
+   organization,
+   organizational_project,
+   person,
+   position_in_organization,
+   position_in_organization_relationship,
+   position_in_organization_type); 
+
+USE FROM Project_mim;    -- ISO/TS 10303-1061
+
+
+TYPE position_in_organization_classification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON classification_item WITH 
+   (group, 
+    position_in_organization_relationship);
+END_TYPE; 
+
+TYPE position_in_organization_group_assignment_item = EXTENSIBLE GENERIC_ENTITY SELECT
+   (position_in_organization_assignment);
+END_TYPE; 
+
+TYPE position_in_organization_group_item = EXTENSIBLE GENERIC_ENTITY SELECT;
+END_TYPE; 
+
+TYPE position_in_organization_item = EXTENSIBLE GENERIC_ENTITY SELECT
+   (address, 
+    organization, 
+    organizational_project, 
+    person);
+END_TYPE; 
+
+TYPE position_in_organization_type_item = EXTENSIBLE GENERIC_ENTITY SELECT
+   (position_in_organization);
+END_TYPE; 
+
+TYPE project_group_name_item = EXTENSIBLE GENERIC_ENTITY SELECT
+   (applied_position_in_organization_group_assignment);
+END_TYPE; 
+
+ENTITY applied_position_in_organization_assignment
+  SUBTYPE OF (position_in_organization_assignment);
+  items : SET[1:?] OF position_in_organization_item;
+END_ENTITY;
+
+ENTITY applied_position_in_organization_assignment_group_assignment
+  SUBTYPE OF (group_assignment);
+  items : SET[1:?] OF position_in_organization_group_assignment_item;
+END_ENTITY;
+
+ENTITY applied_position_in_organization_group_assignment
+  SUBTYPE OF (group_assignment);
+  items : SET[1:?] OF position_in_organization_group_item;
+END_ENTITY;
+
+ENTITY applied_position_in_organization_type_assignment
+  SUBTYPE OF (position_in_organization_type_assignment);
+  items : SET[1:?] OF position_in_organization_type_item;
+END_ENTITY;
+
+ENTITY applied_project_group_name_assignment
+  SUBTYPE OF (name_assignment);
+  items : SET[1:?] OF project_group_name_item;
+END_ENTITY;
+
+END_SCHEMA;  -- Position_in_organization_mim
+

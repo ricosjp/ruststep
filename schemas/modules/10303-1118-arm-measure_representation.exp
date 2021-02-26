@@ -1,0 +1,37 @@
+(*
+ $Id: 10303-1118-arm-measure_representation.exp,v 1.4 2006/08/07 07:44:43 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2968 - ISO/TS 10303-1118 Measure representation - EXPRESS ARM
+*) 
+
+
+SCHEMA Measure_representation_arm;
+
+USE FROM Foundation_representation_arm;    -- ISO/TS 10303-1006
+
+USE FROM Value_with_unit_arm;    -- ISO/TS 10303-1054
+
+
+ENTITY Measure_item
+  ABSTRACT SUPERTYPE 
+  SUBTYPE OF (Representation_item);
+WHERE
+  WR1: SIZEOF(USEDIN(SELF, 'FOUNDATION_REPRESENTATION_ARM.REPRESENTATION.ITEMS'))>0;
+END_ENTITY;
+
+ENTITY Numerical_item_with_global_unit
+  SUBTYPE OF (Measure_item);
+  value_component : measure_value;
+WHERE
+  WR1: SIZEOF(QUERY(pvr <* QUERY ( r <* USEDIN(SELF, 'FOUNDATION_REPRESENTATION_ARM.REPRESENTATION.ITEMS')| 'MEASURE_REPRESENTATION_ARM.PROPERTY_VALUE_REPRESENTATION' IN TYPEOF(r)) | EXISTS(pvr.context_of_items.units) )) > 0;
+END_ENTITY;
+
+ENTITY Numerical_item_with_unit
+  SUBTYPE OF (Measure_item, Value_with_unit);
+END_ENTITY;
+
+ENTITY Property_value_representation
+  SUBTYPE OF (Representation);
+  SELF\Representation.context_of_items : Numerical_representation_context;
+END_ENTITY;
+
+END_SCHEMA;  -- Measure_representation_arm

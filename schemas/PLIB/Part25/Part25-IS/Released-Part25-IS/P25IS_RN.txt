@@ -1,0 +1,197 @@
+ALL THE CHANGES ARE IMPLEMENTED IN THE RELEASED SCHEMAS
+
+
+=====================================================================
+ISSUE NUMBER: 0		Correction integrated in the final published version
+DATE: 2003-10-18
+AUTHOR:G. Pierra 
+SOURCE DOCUMENT:none (long form)
+SCHEMA and CLAUSE:ISO13584_25_IEC61360_5_LIBRARY_IMPLICIT_SCHEMA
+OTHER PARTS AFFECTED: none
+ENTITY or RESOURCE MODIFIED:
+RULE imported_documents_are_visible_or_applicable_rule
+FUNCTION applicable_documents
+FUNCTION retrieve_documents
+DESCRIPTION: The imported_documents_are_visible_or_applicable_rule does not appear in the long form, whereas it should have been implicitly imported through the a_priori_semantics_relationship and document_element entity data types.It should be added together with the function retrieve_documents and applicable_documents 
+
+
+OLD CONTENT:
+
+NEW CONTENT:
+RULE imported_documents_are_visible_or_applicable_rule FOR(
+	a_priori_semantic_relationship, document_element);
+WHERE
+	WR1: QUERY(rel <* a_priori_semantic_relationship
+		| QUERY(doc <* rel.referenced_documents
+		| QUERY(cl <* rel.referenced_classes
+		| NOT visible_documents(cl, [doc])
+		AND NOT applicable_documents(cl, [doc]))
+		= rel.referenced_classes) = [])
+		= a_priori_semantic_relationship;
+END_RULE; -- imported_documents_are_visible_or_applicable_rule
+
+FUNCTION applicable_documents(cl: class_BSU;
+	doc: AGGREGATE OF document_BSU): LOGICAL;
+
+IF SIZEOF(doc) = 0
+THEN
+	RETURN(TRUE);
+END_IF;
+
+IF NOT EXISTS(cl)
+THEN
+	RETURN(UNKNOWN);
+END_IF;
+
+IF SIZEOF(cl.definition) = 0
+THEN
+	RETURN(UNKNOWN);
+END_IF;
+
+doc := doc - retrieve_documents(cl);
+
+IF 'ISO13584_25_IEC61360_5_LIBRARY_IMPLICIT_SCHEMA' +
+	'.A_PRIORI_SEMANTIC_RELATIONSHIP' IN TYPEOF(cl.definition[1])
+THEN
+	Doc := doc - cl.definition[1]\a_priori_semantic_relationship.
+		referenced_documents;
+END_IF;
+
+IF SIZEOF(doc) = 0
+THEN
+	RETURN(TRUE);
+ELSE
+	IF EXISTS(cl.definition[1]\class.its_superclass)
+	THEN
+		RETURN(applicable_documents(cl.definition[1]
+			\class.its_superclass, doc));
+	ELSE
+		RETURN(FALSE);
+	END_IF;
+END_IF;
+
+END_FUNCTION; -- applicable_documents
+
+FUNCTION retrieve_documents(cl: class_BSU): SET[0:?] OF document_BSU;
+-- requires: { SIZEOF(cl.definition) <> O }
+
+LOCAL
+	s: SET[0:?] OF document_BSU := [];
+END_LOCAL;
+
+REPEAT i := 1 TO SIZEOF(cl.definition[1]\class.associated_items);
+	IF 'ISO13584_25_IEC61360_5_LIBRARY_IMPLICIT_SCHEMA' +
+		'.CLASS_DOCUMENT_RELATIONSHIP'
+		IN TYPEOF(cl.definition[1]\class.associated_items[i])
+	THEN
+		s := s+ cl.definition[1]\class.associated_items[i]
+			\class_document_relationship.related_tokens;
+	END_IF;
+END_REPEAT;
+
+RETURN(s);
+
+END_FUNCTION; -- retrieve_documents
+
+SCHEMA NAME AND VERSION: 
+ISO13584_25_IEC61360_5_LIBRARY_IMPLICIT_SCHEMA 1.0 before publication
+NEW VERSION:1.0 After publication (dated 2003-10-17)
+
+=====================================================================
+ISSUE NUMBER: 1
+DATE: 2003-10-18
+AUTHOR: R. SCHULER
+SOURCE DOCUMENT:ISO 13584-24:2003
+SCHEMA and CLAUSE: ISO13584_instance_resource_schema  6.6.12
+OTHER PARTS AFFECTED: ISO 13584-24 and its long form
+ENTITY or RESOURCE MODIFIED: FUNCTION check_class_type_for_dic_f_view_instance
+DESCRIPTION: error in formal parameter type
+
+
+OLD CONTENT:
+FUNCTION check_class_type_for_dic_f_view_instance(
+	dic_cl: dic_f_model_instance): LOGICAL;
+
+
+
+NEW CONTENT:
+FUNCTION check_class_type_for_dic_f_view_instance(
+	dic_cl: dic_f_view_instance): LOGICAL;
+
+
+SCHEMA NAME AND VERSION: ISO13584_25_IEC61360_5_LIBRARY_IMPLICIT_SCHEMA 1.0
+NEW VERSION:1.1
+=====================================================================
+ISSUE NUMBER: 2
+DATE: 2003-10-18
+AUTHOR: R. SCHULER
+SOURCE DOCUMENT:ISO 13584-24:2003
+SCHEMA and CLAUSE:ISO13584_instance_resource_schema  6.6.4
+OTHER PARTS AFFECTED: ISO 13584-24 and its long form
+ENTITY or RESOURCE MODIFIED: FUNCTION compatible_type_and_value
+DESCRIPTION: One error in a variable name (last line below)
+
+OLD CONTENT:
+FUNCTION compatible_type_and_value
+. . .
+  IF 'ISO13584_25_IEC61360_5_LIBRARY_IMPLICIT_SCHEMA.INTEGER_VALUE' IN TYPEOF(val)
+   THEN
+    IF ('ISO13584_25_IEC61360_5_LIBRARY_IMPLICIT_SCHEMA.' +
+    'NON_QUANTITATIVE_INT_TYPE' IN data_type_typeof(dom)) AND (SIZEOF(
+    data_type_non_quantitative_int_type(dom)) = 1) THEN
+      set_integer := [];
+      code_type := data_type_non_quantitative_int_type(dom)[1];
+
+
+
+NEW CONTENT:
+FUNCTION compatible_type_and_value
+. . .
+  IF 'ISO13584_25_IEC61360_5_LIBRARY_IMPLICIT_SCHEMA.INTEGER_VALUE' IN TYPEOF(val)
+   THEN
+    IF ('ISO13584_25_IEC61360_5_LIBRARY_IMPLICIT_SCHEMA.' +
+    'NON_QUANTITATIVE_INT_TYPE' IN data_type_typeof(dom)) AND (SIZEOF(
+    data_type_non_quantitative_int_type(dom)) = 1) THEN
+      set_integer := [];
+      int_type := data_type_non_quantitative_int_type(dom)[1];
+
+
+SCHEMA NAME AND VERSION: ISO13584_25_IEC61360_5_LIBRARY_IMPLICIT_SCHEMA 1.0
+NEW VERSION:1.1
+=====================================================================
+=====================================================================
+=====================================================================
+
+
+ISSUE NUMBER: 
+DATE: 
+AUTHOR: 
+SOURCE DOCUMENT:
+SCHEMA and CLAUSE:
+OTHER PARTS AFFECTED: 
+ENTITY or RESOURCE MODIFIED:
+DESCRIPTION: 
+
+
+OLD CONTENT:
+
+NEW CONTENT:
+SCHEMA NAME AND VERSION: 
+NEW VERSION:
+=====================================================================
+ISSUE NUMBER: 
+DATE: 
+AUTHOR: 
+SOURCE DOCUMENT:
+SCHEMA and CLAUSE:
+OTHER PARTS AFFECTED: 
+ENTITY or RESOURCE MODIFIED:
+DESCRIPTION: 
+
+
+OLD CONTENT:
+
+NEW CONTENT:
+SCHEMA NAME AND VERSION: 
+NEW VERSION:
+=====================================================================

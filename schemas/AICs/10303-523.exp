@@ -1,0 +1,95 @@
+ (* Curve Swept Solid AIC EXPRESS definitions - 
+   document WG12 N2506 dated  2003-12-19 *)
+ SCHEMA aic_curve_swept_solid; -- WG12 N2506 As in WG12 N2505 part 523 IS
+
+  USE FROM geometry_schema  -- ISO 10303-42
+                          (axis2_placement_2d,
+                           axis2_placement_3d,
+                           bezier_curve,
+                           bezier_surface,
+                           b_spline_curve,
+                           b_spline_curve_with_knots,
+                           b_spline_surface,
+                           b_spline_surface_with_knots,
+                           cartesian_point,
+                           circle,
+                           composite_curve_on_surface,
+                           conical_surface,
+                           cylindrical_surface,
+                           degenerate_toroidal_surface,
+                           direction,
+                           ellipse,
+                           geometric_representation_context,
+                           hyperbola,
+                           line,
+                           parabola,
+                           pcurve,
+                           plane,
+                           polyline,
+                           quasi_uniform_curve,
+                           quasi_uniform_surface,
+                           rational_b_spline_curve,
+                           rational_b_spline_surface,
+                           spherical_surface,
+                           surface_curve,
+                           surface_of_linear_extrusion,
+                           surface_of_revolution,
+                           swept_surface,
+                           toroidal_surface,
+                           trimmed_curve,
+                           uniform_curve,
+                           uniform_surface,
+                           vector);
+
+  USE FROM geometric_model_schema  -- ISO  10303-42
+      (extruded_area_solid,
+       revolved_area_solid,
+       surface_curve_swept_area_solid,
+       swept_disk_solid);
+
+  USE FROM representation_schema(mapped_item);   -- ISO  10303-43
+
+  USE FROM product_property_representation_schema   -- ISO  10303-41
+      (shape_representation);
+
+ ENTITY curve_swept_solid_shape_representation
+ SUBTYPE OF (shape_representation);
+ WHERE
+  WR1: SIZEOF (QUERY (it <* SELF.items |
+          NOT (SIZEOF (['AIC_CURVE_SWEPT_SOLID.SWEPT_AREA_SOLID',
+                'AIC_CURVE_SWEPT_SOLID.SWEPT_DISK_SOLID',
+                'AIC_CURVE_SWEPT_SOLID.MAPPED_ITEM',
+                'AIC_CURVE_SWEPT_SOLID.AXIS2_PLACEMENT_3D'] *
+                   TYPEOF(it)) = 1))) = 0;
+   WR2: SIZEOF (QUERY (it <* SELF.items |
+         SIZEOF(['AIC_CURVE_SWEPT_SOLID.SWEPT_AREA_SOLID',
+                'AIC_CURVE_SWEPT_SOLID.SWEPT_DISK_SOLID',
+          'AIC_CURVE_SWEPT_SOLID.MAPPED_ITEM'] * TYPEOF(it)) =1 )) > 0;
+   WR3: SIZEOF (QUERY (mi <*  QUERY (it <* items |
+                 'AIC_CURVE_SWEPT_SOLID.MAPPED_ITEM' IN TYPEOF(it)) |
+   NOT ('AIC_CURVE_SWEPT_SOLID.CURVE_SWEPT_SOLID_SHAPE_REPRESENTATION' IN
+             TYPEOF(mi\mapped_item.mapping_source.
+                           mapped_representation)))) = 0;
+   WR4: SIZEOF (QUERY (scsas <* QUERY (it <* SELF.items |
+        'AIC_CURVE_SWEPT_SOLID.SURFACE_CURVE_SWEPT_AREA_SOLID' IN
+              TYPEOF(it)) |
+          NOT(('AIC_CURVE_SWEPT_SOLID.SURFACE_CURVE' IN
+                   TYPEOF(scsas.directrix)) OR
+                   ('AIC_CURVE_SWEPT_SOLID.PCURVE' IN
+                   TYPEOF(scsas.directrix))))) = 0;
+ END_ENTITY;
+
+ENTITY ruled_surface_swept_area_solid
+  SUBTYPE OF(surface_curve_swept_area_solid);
+  WHERE
+  WR1: ('GEOMETRY_SCHEMA.B_SPLINE_SURFACE' IN TYPEOF(SELF.reference_surface))
+            AND (SELF.reference_surface\b_spline_surface.u_degree = 1);
+  WR2: ('GEOMETRY_SCHEMA.PCURVE' IN TYPEOF(SELF.directrix)) OR
+        (('GEOMETRY_SCHEMA.B_SPLINE_CURVE' IN
+             TYPEOF(SELF.directrix\surface_curve.curve_3d))
+         AND
+         (SELF.directrix\surface_curve.curve_3d\b_spline_curve.degree =
+         SELF.reference_surface\b_spline_surface.v_degree));
+END_ENTITY;
+
+END_SCHEMA; -- end AIC_CURVE_SWEPT_SOLID SCHEMA

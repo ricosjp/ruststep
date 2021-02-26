@@ -1,0 +1,16 @@
+(* 
+ $Id: 10303-1142-mim-requirement_view_definition_relationship.exp,v 1.1 2006/08/07 09:42:04 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N3137 - ISO/TS 10303-1142 Requirement view definition relationship - EXPRESS MIM
+ Supersedes ISO TC184/SC4/WG12 N2358
+*) 
+
+
+SCHEMA Requirement_view_definition_relationship_mim;
+
+USE FROM Product_view_definition_relationship_mim;    -- ISO/TS 10303-1041
+
+USE FROM Requirement_view_definition_mim;    -- ISO/TS 10303-1141
+
+
+END_SCHEMA;  -- Requirement_view_definition_relationship_mim
+

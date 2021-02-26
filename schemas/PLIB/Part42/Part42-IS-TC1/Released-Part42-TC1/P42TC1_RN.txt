@@ -1,0 +1,56 @@
+ALL THE CHANGES ARE IMPLEMENTED IN THE RELEASED SCHEMAS
+
+=====================================================================
+ISSUE NUMBER: 1
+DATE: 2003-09-09
+AUTHOR: Hiroshi MURAYAMA
+SOURCE DOCUMENT:ISO/IS 13584-42:1998(E)TC1:2003
+SCHEMA and CLAUSE: Clause 7 and after. No error in Annex D (EXPRESS schema)
+OTHER PARTS AFFECTED: none
+ENTITY or RESOURCE MODIFIED: none, text only
+DESCRIPTION: In the body of the text of Part42TC1 ( not in Annex), clause 7 and after, all the changes WG2 members have made in the EXPRESS schema were not reflected. And in TC itself, in fact TC1 didn't change anything(One must have forgotten to rewrite it). Thus, the preferred_name(7.2.4) of class has still 30 characters long, (where it should be 70 characters), and short name(7.2.5) is still mandatory, (It should be optional and it is so in the EXPRESS already), and versions and revisions are still 3 digits( where they should be 9 digits), and so and so on.In brief, WG2 forgot to change the text of the body of the standard of Part42, when it prepared and okeyed 42TC1. WG2 just altered EXPRESS schema definitions. So there's a serious discrepancy between the Part42 schema and its textual explanation in the body of the standard.
+
+OLD CONTENT:
+
+NEW CONTENT:
+To be defined. Express schema ans its documentation is correct.
+
+SCHEMA NAME AND VERSION: none
+NEW VERSION:
+=====================================================================
+=====================================================================
+=====================================================================
+
+
+ISSUE NUMBER: 
+DATE: 
+AUTHOR: 
+SOURCE DOCUMENT:
+SCHEMA and CLAUSE:
+OTHER PARTS AFFECTED: 
+ENTITY or RESOURCE MODIFIED:
+DESCRIPTION: 
+
+
+OLD CONTENT:
+
+NEW CONTENT:
+SCHEMA NAME AND VERSION: 
+NEW VERSION:
+=====================================================================
+ISSUE NUMBER: 
+DATE: 
+AUTHOR: 
+SOURCE DOCUMENT:
+SCHEMA and CLAUSE:
+OTHER PARTS AFFECTED: 
+ENTITY or RESOURCE MODIFIED:
+DESCRIPTION: 
+
+
+OLD CONTENT:
+
+NEW CONTENT:
+SCHEMA NAME AND VERSION: 
+NEW VERSION:
+=====================================================================

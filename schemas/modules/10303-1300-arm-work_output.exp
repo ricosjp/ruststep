@@ -1,0 +1,48 @@
+(*
+ $Id: 10303-1300-arm-work_output.exp,v 1.2 2006/08/07 07:44:47 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N3190 - ISO/TS 10303-1300 Work output - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG12 N2456
+*) 
+
+
+SCHEMA Work_output_arm;
+
+USE FROM Activity_method_assignment_arm;    -- ISO/TS 10303-1249
+
+USE FROM Classification_assignment_arm;    -- ISO/TS 10303-1114
+
+USE FROM Value_with_unit_arm;    -- ISO/TS 10303-1054
+
+
+TYPE work_item = EXTENSIBLE GENERIC_ENTITY SELECT;
+END_TYPE; 
+
+TYPE work_output_classification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON classification_item WITH 
+   (Work_output, 
+    Work_output_assignment, 
+    Work_output_relationship);
+END_TYPE; 
+
+TYPE work_output_item = EXTENSIBLE GENERIC_ENTITY SELECT;
+END_TYPE; 
+
+ENTITY Work_output;
+  name : STRING;
+  description : OPTIONAL STRING;
+  quantity : OPTIONAL Value_with_unit;
+  output_item : OPTIONAL work_output_item;
+END_ENTITY;
+
+ENTITY Work_output_assignment;
+  assigned_output : Work_output;
+  item : work_item;
+END_ENTITY;
+
+ENTITY Work_output_relationship;
+  name : STRING;
+  description : OPTIONAL STRING;
+  relating : Work_output;
+  related : Work_output;
+END_ENTITY;
+
+END_SCHEMA;  -- Work_output_arm

@@ -1,0 +1,82 @@
+(*
+ $Id: 10303-1241-mim-information_rights.exp,v 1.1 2006/08/07 09:42:05 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N3059 - ISO/TS 10303-1241 Information rights - EXPRESS MIM
+ Supersedes ISO TC184/SC4/WG12 N2337
+*) 
+
+
+SCHEMA Information_rights_mim;
+
+USE FROM action_schema   -- ISO 10303-41
+  (action_method,
+   action_method_relationship); 
+
+USE FROM Activity_mim;    -- ISO/TS 10303-1047
+
+USE FROM Contract_mim;    -- ISO/TS 10303-1062
+
+USE FROM Management_resource_information_mim;    -- ISO/TS 10303-1288
+
+
+TYPE ir_approval_item = SELECT BASED_ON mri_approval_item WITH 
+   (applied_usage_right, 
+    information_usage_right);
+END_TYPE; 
+
+TYPE ir_contract_item = SELECT BASED_ON contract_item WITH 
+   (information_usage_right);
+END_TYPE; 
+
+TYPE ir_date_and_time_item = SELECT BASED_ON mri_date_and_time_item WITH 
+   (information_usage_right);
+END_TYPE; 
+
+TYPE ir_date_item = SELECT BASED_ON mri_date_item WITH 
+   (information_usage_right);
+END_TYPE; 
+
+TYPE ir_identification_item = SELECT BASED_ON mri_identification_item WITH 
+   (information_right, 
+    information_usage_right);
+END_TYPE; 
+
+TYPE ir_organization_item = SELECT BASED_ON mri_organization_item WITH 
+   (information_usage_right);
+END_TYPE; 
+
+TYPE ir_person_and_organization_item = SELECT BASED_ON mri_person_and_organization_item WITH 
+   (information_usage_right);
+END_TYPE; 
+
+TYPE ir_usage_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON action_items;
+END_TYPE; 
+
+ENTITY applied_usage_right
+  SUBTYPE OF (applied_action_assignment);
+  SELF\applied_action_assignment.items : SET[1:?] OF ir_usage_item;
+END_ENTITY;
+
+ENTITY information_right
+  SUBTYPE OF (action_method);
+END_ENTITY;
+
+ENTITY information_usage_right
+  SUBTYPE OF (action_method);
+END_ENTITY;
+
+ENTITY right_to_usage_association
+  SUBTYPE OF (action_method_relationship);
+  SELF\action_method_relationship.relating_method RENAMED right_usage : information_usage_right;
+  SELF\action_method_relationship.related_method RENAMED right_applied : information_right;
+END_ENTITY;
+
+ENTITY usage_association
+  SUBTYPE OF (action_method_relationship);
+  SELF\action_method_relationship.relating_method RENAMED relating : information_usage_right;
+  SELF\action_method_relationship.related_method RENAMED related : information_usage_right;
+END_ENTITY;
+
+END_SCHEMA;  -- Information_rights_mim
+
+
+

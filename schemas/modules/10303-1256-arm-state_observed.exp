@@ -1,0 +1,109 @@
+(*
+ $Id: 10303-1256-arm-state_observed.exp,v 1.1 2006/08/07 07:44:45 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N3175 - ISO/TS 10303-1256 State observed - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG12 N2366
+*) 
+
+
+SCHEMA State_observed_arm;
+
+USE FROM Classification_assignment_arm;    -- ISO/TS 10303-1114
+
+USE FROM State_definition_arm;    -- ISO/TS 10303-1255
+
+
+TYPE state_classification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON classification_item WITH 
+   (Applied_state_assignment, 
+    State, 
+    State_relationship);
+END_TYPE; 
+
+TYPE state_of_item = EXTENSIBLE GENERIC_ENTITY SELECT;
+END_TYPE; 
+
+ENTITY Applied_state_assignment;
+  described_state : State;
+  assigned_to : state_of_item;
+  role : State_role;
+END_ENTITY;
+
+ENTITY Composition_of_state
+  SUBTYPE OF (State_relationship);
+  SELF\State_relationship.relating RENAMED whole : SET[1:?] OF State;
+  SELF\State_relationship.related RENAMED part : SET[1:?] OF State;
+END_ENTITY;
+
+ENTITY Defined_state_relationship;
+  name : STRING;
+  description : OPTIONAL STRING;
+  definitive_state : State_assertion;
+  defined_state : State_assessment;
+END_ENTITY;
+
+ENTITY Sequence_of_state
+  SUBTYPE OF (State_relationship);
+  SELF\State_relationship.relating RENAMED successor : SET[1:?] OF State;
+  SELF\State_relationship.related RENAMED predecessor : SET[1:?] OF State;
+END_ENTITY;
+
+ENTITY State
+  SUPERTYPE OF (ONEOF (State_observed,
+                       State_predicted));
+  name : STRING;
+  description : OPTIONAL STRING;
+END_ENTITY;
+
+ENTITY State_assertion;
+  name : STRING;
+  description : OPTIONAL STRING;
+  asserted_state : State;
+  conformance_state : State_definition;
+END_ENTITY;
+
+ENTITY State_assessment;
+  name : STRING;
+  description : OPTIONAL STRING;
+  assessed_state : State;
+  comparable_state : State_definition;
+END_ENTITY;
+
+ENTITY State_cause_effect
+  SUBTYPE OF (State_relationship);
+  SELF\State_relationship.relating RENAMED effect : SET[1:?] OF State;
+  SELF\State_relationship.related RENAMED cause : SET[1:?] OF State;
+END_ENTITY;
+
+ENTITY State_observed
+  SUBTYPE OF (State);
+END_ENTITY;
+
+ENTITY State_predicted
+  SUBTYPE OF (State);
+END_ENTITY;
+
+ENTITY State_predicted_to_observed
+  SUBTYPE OF (State_relationship);
+  SELF\State_relationship.relating RENAMED observed_state : SET[1:?] OF State_observed;
+  SELF\State_relationship.related RENAMED predicted_state : SET[1:?] OF State_predicted;
+END_ENTITY;
+
+ENTITY State_relationship;
+  name : STRING;
+  description : OPTIONAL STRING;
+  relating : SET[1:?] OF State;
+  related : SET[1:?] OF State;
+END_ENTITY;
+
+ENTITY State_role;
+  name : STRING;
+  description : OPTIONAL STRING;
+END_ENTITY;
+
+ENTITY State_transition
+  SUBTYPE OF (State_relationship);
+  SELF\State_relationship.relating RENAMED end_state : SET[1:?] OF State;
+  SELF\State_relationship.related RENAMED start_state : SET[1:?] OF State;
+END_ENTITY;
+
+END_SCHEMA;  -- State_observed_arm
+

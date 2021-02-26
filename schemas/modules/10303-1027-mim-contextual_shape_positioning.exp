@@ -1,0 +1,23 @@
+(*
+ $Id: 10303-1027-mim-contextual_shape_positioning.exp,v 1.5 2006/08/07 09:42:03 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N1139 - ISO/TS 10303-1027 Contextual shape positioning - EXPRESS MIM
+*)
+SCHEMA Contextual_shape_positioning_mim;
+
+USE FROM Elemental_geometric_shape_mim;
+USE FROM Foundation_representation_mim;
+USE FROM Shape_property_assignment_mim; 
+
+USE FROM product_property_representation_schema -- ISO 10303-41
+  (context_dependent_shape_representation);
+
+USE FROM representation_schema 	-- ISO 10303-43
+      (functionally_defined_transformation,
+      representation_relationship_with_transformation,
+      mapped_item);
+
+END_SCHEMA;
+
+
+
+

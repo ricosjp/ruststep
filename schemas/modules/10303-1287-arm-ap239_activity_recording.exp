@@ -1,0 +1,164 @@
+(*
+ $Id: 10303-1287-arm-ap239_activity_recording.exp,v 1.1 2006/08/07 07:44:46 wg12deputy Exp $
+ ISO TC184/SC4/WG3 N1554 - ISO/TS 10303-1287 AP239 activity recording - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG3 N1393
+*) 
+
+SCHEMA Ap239_activity_recording_arm;
+
+USE FROM Activity_arm;    -- ISO/TS 10303-1047
+
+USE FROM Activity_as_realized_arm;    -- ISO/TS 10303-1259
+
+USE FROM Activity_method_arm;    -- ISO/TS 10303-1049
+
+USE FROM Activity_method_assignment_arm;    -- ISO/TS 10303-1249
+
+USE FROM Activity_method_implementation_arm;    -- ISO/TS 10303-1261
+
+USE FROM Ap239_work_definition_arm;    -- ISO/TS 10303-1307
+
+USE FROM Classification_assignment_arm;    -- ISO/TS 10303-1114
+
+USE FROM Condition_evaluation_arm;    -- ISO/TS 10303-1254
+
+USE FROM Document_assignment_arm;    -- ISO/TS 10303-1122
+
+USE FROM Event_arm;    -- ISO/TS 10303-1064
+
+USE FROM Identification_assignment_arm;    -- ISO/TS 10303-1021
+
+USE FROM Independent_property_representation_arm;    -- ISO/TS 10303-1038
+
+USE FROM Interface_arm;    -- ISO/TS 10303-1251
+
+USE FROM Justification_arm;    -- ISO/TS 10303-1263
+
+USE FROM Multi_linguism_arm;    -- ISO/TS 10303-1105
+
+USE FROM Observation_arm;    -- ISO/TS 10303-1258
+
+USE FROM Process_property_assignment_arm;    -- ISO/TS 10303-1040
+
+USE FROM Product_group_arm;    -- ISO/TS 10303-1278
+
+USE FROM Product_identification_arm;    -- ISO/TS 10303-1017
+
+USE FROM Product_version_arm;    -- ISO/TS 10303-1018
+
+USE FROM Product_view_definition_arm;    -- ISO/TS 10303-1019
+
+USE FROM Required_resource_arm;    -- ISO/TS 10303-1267
+
+USE FROM Resource_as_realized_arm;    -- ISO/TS 10303-1269
+
+USE FROM Resource_as_realized_characterized_arm;    -- ISO/TS 10303-1283
+
+USE FROM Resource_item_arm;    -- ISO/TS 10303-1268
+
+USE FROM Resource_management_arm;    -- ISO/TS 10303-1266
+
+USE FROM Resource_property_assignment_arm;    -- ISO/TS 10303-1273
+
+USE FROM Scheme_arm;    -- ISO/TS 10303-1260
+
+USE FROM Task_specification_arm;    -- ISO/TS 10303-1262
+
+USE FROM Work_order_arm;    -- ISO/TS 10303-1043
+
+USE FROM Work_output_arm;    -- ISO/TS 10303-1300
+
+USE FROM Work_request_arm;    -- ISO/TS 10303-1042
+
+
+TYPE ar_classification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON classification_item WITH 
+   (Observation_consequence, 
+    Observation_item);
+END_TYPE; 
+
+TYPE ar_condition_evaluation_item = SELECT BASED_ON condition_evaluation_item WITH 
+   (Activity, 
+    Activity_method, 
+    Activity_method_realization, 
+    Activity_method_realization_relationship, 
+    Activity_method_relationship, 
+    Applied_activity_assignment, 
+    Applied_activity_method_assignment, 
+    Managed_resource, 
+    Product_group, 
+    Product_group_membership, 
+    Product_group_relationship, 
+    Resource_as_realized, 
+    Resource_as_realized_assignment, 
+    Resource_as_realized_relationship, 
+    Resource_event, 
+    Resource_event_relationship, 
+    Resource_item, 
+    Resource_item_assignment, 
+    Resource_item_relationship);
+END_TYPE; 
+
+TYPE ar_condition_evaluation_parameter_item = SELECT BASED_ON condition_evaluation_parameter_item WITH 
+   (Activity, 
+    Activity_method, 
+    Activity_property, 
+    Activity_property_representation, 
+    Independent_property_representation, 
+    Managed_resource, 
+    Required_resource, 
+    Resource_as_realized, 
+    Resource_as_realized_relationship, 
+    Resource_event, 
+    Resource_property, 
+    Resource_property_representation);
+END_TYPE; 
+
+TYPE ar_documented_element_select = SELECT BASED_ON documented_element_select WITH 
+   (Observation, 
+    Observation_consequence);
+END_TYPE; 
+
+TYPE ar_identification_item = EXTENSIBLE SELECT BASED_ON identification_item WITH 
+   (Observation, 
+    Observation_consequence);
+END_TYPE; 
+
+TYPE ar_justification_support_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON justification_support_item WITH 
+   (Observation);
+END_TYPE; 
+
+TYPE ar_observed_context = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON observed_context WITH 
+   (Activity, 
+    Activity_method, 
+    Applied_activity_assignment, 
+    Interface_connector_occurrence, 
+    Product, 
+    Product_group, 
+    Product_version, 
+    Product_view_definition, 
+    Required_resource, 
+    Resource_as_realized, 
+    Resource_item, 
+    Scheme, 
+    Scheme_entry, 
+    Scheme_version, 
+    Task_element, 
+    Task_method, 
+    Task_method_version, 
+    Work_order, 
+    Work_output, 
+    Work_request);
+END_TYPE; 
+
+TYPE ar_resource_as_realized_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON resource_as_realized_item WITH 
+   (Activity_actual, 
+    Applied_activity_assignment, 
+    Event);
+END_TYPE; 
+
+TYPE ar_string_select = SELECT BASED_ON string_select WITH 
+   (Observation, 
+    Observation_consequence);
+END_TYPE; 
+
+END_SCHEMA;  -- Ap239_activity_recording_arm

@@ -1,0 +1,46 @@
+(*
+ $Id: 10303-1122-mim-document_assignment.exp,v 1.5 2006/08/07 09:42:04 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2959 - ISO/TS 10303-1122 Document assignment - EXPRESS MIM
+*)
+
+
+
+SCHEMA Document_assignment_mim;
+
+USE FROM Document_and_version_identification_mim;    -- ISO/TS 10303-1121
+
+USE FROM Document_definition_mim;    -- ISO/TS 10303-1123
+
+USE FROM document_schema   -- ISO 10303-41
+  (document_product_association); 
+
+USE FROM File_identification_mim;    -- ISO/TS 10303-1127
+
+USE FROM management_resources_schema   -- ISO 10303-41
+  (document_reference,
+   document_usage_constraint_assignment); 
+
+
+TYPE document_reference_item = EXTENSIBLE SELECT;
+END_TYPE; 
+
+ENTITY applied_document_reference
+  SUBTYPE OF (document_reference);
+  items : SET[1:?] OF document_reference_item;
+END_ENTITY;
+
+ENTITY applied_document_usage_constraint_assignment
+  SUBTYPE OF (document_usage_constraint_assignment);
+  items : SET[1:?] OF document_reference_item;
+END_ENTITY;
+
+ENTITY document_product_equivalence
+  SUBTYPE OF (document_product_association);
+WHERE
+  WR1: SELF\document_product_association.name = 'equivalence';
+  WR2: NOT('DOCUMENT_ASSIGNMENT_MIM.PRODUCT' IN TYPEOF(SELF\document_product_association.related_product)) OR ((SELF\document_product_association.relating_document.kind. product_data_type = 'configuration controlled document') AND (SIZEOF( QUERY( prpc <* USEDIN(SELF\document_product_association.related_product,'PRODUCT_DEFINITION_SCHEMA.' + 'PRODUCT_RELATED_PRODUCT_CATEGORY.PRODUCTS') | prpc.name = 'document' )) = 1));
+  WR3: NOT('DOCUMENT_ASSIGNMENT_MIM.PRODUCT_DEFINITION_FORMATION' IN TYPEOF(SELF.related_product)) OR ((SELF\document_product_association.relating_document.kind.product_data_type = 'configuration controlled document version') AND (SIZEOF( QUERY( prpc <* USEDIN(SELF.related_product\product_definition_formation.of_product, 'PRODUCT_DEFINITION_SCHEMA.PRODUCT_RELATED_PRODUCT_CATEGORY.PRODUCTS') | prpc.name = 'document')) = 1));
+  WR4: NOT('DOCUMENT_ASSIGNMENT_MIM.PRODUCT_DEFINITION' IN TYPEOF(SELF.related_product)) OR ((SELF\document_product_association.relating_document.kind.product_data_type = 'configuration controlled document definition') AND (SIZEOF( QUERY( prpc <* USEDIN(SELF\document_product_association.related_product\product_definition.formation.of_product, 'PRODUCT_DEFINITION_SCHEMA.PRODUCT_RELATED_PRODUCT_CATEGORY.PRODUCTS') | prpc.name = 'document' )) = 1));
+END_ENTITY;
+
+END_SCHEMA;  -- Document_assignment_mim

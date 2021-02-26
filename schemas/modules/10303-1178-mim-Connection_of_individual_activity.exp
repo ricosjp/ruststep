@@ -1,0 +1,18 @@
+(*
+ $Id: 10303-1178-mim-Connection_of_individual_activity.exp,v 1.4 2006/08/04 12:11:55 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2766 - ISO/TS 10303-1178 Connection of individual activity - EXPRESS MIM
+ Supersedes ISO TC184/SC4/WG12 N1865
+*)
+
+SCHEMA Connection_of_individual_activity_mim;
+
+USE FROM Activity_mim;    -- ISO/TS 10303-1047
+USE FROM Individual_activity_mim;    -- ISO/TS 10303-1176
+
+ENTITY connection_of_individual_activity
+  SUBTYPE OF (action_relationship);
+  SELF\action_relationship.relating_action : individual_activity;
+  SELF\action_relationship.related_action : individual_activity;
+END_ENTITY;
+
+END_SCHEMA;

@@ -1,0 +1,31 @@
+(*
+ $Id: 10303-1240-mim-organization_type.exp,v 1.1 2006/08/07 09:42:05 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N3092 - ISO/TS 10303-1240 Organization type - EXPRESS MIM
+ Supersedes ISO TC184/SC4/WG12 N2400
+*) 
+
+
+SCHEMA Organization_type_mim;
+
+USE FROM management_resources_schema   -- ISO 10303-41
+  (organization_type_assignment); 
+
+USE FROM Person_organization_mim;    -- ISO/TS 10303-1011
+
+USE FROM person_organization_schema   -- ISO 10303-41
+  (organization,
+   organization_type); 
+
+
+TYPE organization_type_item = EXTENSIBLE GENERIC_ENTITY SELECT
+   (organization);
+END_TYPE; 
+
+ENTITY applied_organization_type_assignment
+  SUBTYPE OF (organization_type_assignment);
+  items : SET[1:?] OF organization_type_item;
+END_ENTITY;
+
+END_SCHEMA;  -- Organization_type_mim
+
+

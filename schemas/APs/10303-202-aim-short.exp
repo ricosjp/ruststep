@@ -1,0 +1,1678 @@
+(*
+  AIM EXPRESS short form for ISO/IS 10303-202
+*)
+
+SCHEMA associative_draughting;
+
+USE FROM aic_advanced_brep;                            -- Annex F
+
+USE FROM aic_draughting_annotation;                    -- Annex F
+
+USE FROM aic_draughting_elements;                      -- Annex F
+
+USE FROM aic_drawing_structure_and_administration;     -- Annex F
+
+USE FROM aic_edge_based_wireframe;                     -- Annex F
+
+USE FROM aic_elementary_brep;                          -- Annex F
+
+USE FROM aic_faceted_brep;                             -- Annex F
+
+USE FROM aic_geometrically_bounded_2d_wireframe;       -- Annex F
+
+USE FROM aic_geometrically_bounded_surface;            -- Annex F
+
+USE FROM aic_geometrically_bounded_wireframe;          -- Annex F
+
+USE FROM aic_manifold_surface;                         -- Annex F
+
+USE FROM aic_shell_based_wireframe;                    -- Annex F
+
+USE FROM application_context_schema               -- ISO 10303-41
+  (application_context,
+   application_protocol_definition);
+
+USE FROM date_time_schema                         -- ISO 10303-41
+  (date_and_time);
+
+USE FROM geometric_model_schema                   -- ISO 10303-42
+  (edge_based_wireframe_model,
+   geometric_curve_set,
+   shell_based_wireframe_model);
+
+USE FROM geometry_schema                          -- ISO 10303-42
+  (axis2_placement_2d,
+   b_spline_curve_with_knots,
+   bezier_curve,
+   cartesian_transformation_operator_2d,
+   circle,
+   curve_replica,
+   ellipse,
+   hyperbola,
+   line,
+   offset_curve_2d,
+   parabola,
+   point,
+   point_on_curve,
+   point_replica,
+   polyline,
+   quasi_uniform_curve,
+   rational_b_spline_curve,
+   trimmed_curve,
+   uniform_curve);
+
+USE FROM group_schema                             -- ISO 10303-41
+  (group,
+   group_relationship);
+
+USE FROM management_resources_schema              -- ISO 10303-41
+  (group_assignment);
+
+USE FROM measure_schema                           -- ISO 10303-41
+  (derived_unit,
+   plane_angle_measure_with_unit,
+   positive_ratio_measure,
+   si_unit,
+   solid_angle_measure,
+   solid_angle_measure_with_unit,
+   solid_angle_unit);
+
+USE FROM presentation_appearance_schema           -- ISO 10303-46
+  (context_dependent_over_riding_styled_item,
+   curve_style,
+   pre_defined_marker,
+   styled_item);
+
+USE FROM presentation_definition_schema           -- ISO 10303-46
+  (annotation_occurrence_relationship,
+   pre_defined_symbol,
+   text_literal);
+
+USE FROM presentation_organization_schema         -- ISO 10303-46
+  (camera_image,
+   camera_model,
+   camera_model_d2,
+   camera_model_d3,
+   camera_model_d3_with_hlhsr,
+   camera_usage,
+   presentation_layer_assignment,
+   presentation_layer_usage);
+
+USE FROM presentation_resource_schema             -- ISO 10303-46
+  (planar_box);
+
+USE FROM product_definition_schema                -- ISO 10303-41
+  (product_definition_with_associated_documents);
+
+USE FROM product_property_definition_schema       -- ISO 10303-41
+  (product_definition_shape,
+   shape_aspect,
+   shape_aspect_relationship);
+
+USE FROM product_property_representation_schema   -- ISO 10303-41
+  (shape_definition_representation,
+   shape_representation);
+
+USE FROM qualified_measure_schema                 -- ISO 10303-45
+  (measure_representation_item);
+
+USE FROM representation_schema                    -- ISO 10303-43
+  (global_uncertainty_assigned_context,
+   mapped_item,
+   representation_context,
+   representation_map);
+
+USE FROM shape_aspect_definition_schema           -- ISO 10303-47
+  (centre_of_symmetry,
+   tangent);
+
+USE FROM shape_dimension_schema                   -- ISO 10303-47
+  (angular_location,
+   dimensional_characteristic_representation,
+   dimensional_location,
+   dimensional_location_with_path,
+   dimensional_size);
+
+USE FROM shape_tolerance_schema                   -- ISO 10303-47
+  (plus_minus_tolerance,
+   tolerance_value);
+
+USE FROM topology_schema                          -- ISO 10303-42
+  (edge_curve,
+   edge_loop,
+   vertex_loop,
+   vertex_point,
+   vertex_shell,
+   wire_shell);
+
+TYPE draughting_group_element = SELECT
+  (annotation_occurrence,
+   point,
+   curve,
+   surface);
+END_TYPE;
+
+ENTITY annotation_occurrence_associativity
+  SUBTYPE OF (annotation_occurrence_relationship);
+WHERE
+  WR1: SIZEOF (TYPEOF (SELF.related_annotation_occurrence) *
+                 ['ASSOCIATIVE_DRAUGHTING.ANNOTATION_FILL_AREA_OCCURRENCE',
+                  'ASSOCIATIVE_DRAUGHTING.PROJECTION_CURVE',
+                  'ASSOCIATIVE_DRAUGHTING.LEADER_CURVE']) = 1;
+END_ENTITY;
+
+ENTITY camera_image_2d_with_scale
+  SUBTYPE of (camera_image);
+DERIVE
+  scale : positive_ratio_measure :=
+         ((SELF\mapped_item.mapping_target\planar_extent.size_in_x) /
+          (SELF\mapped_item.mapping_source.
+                mapping_origin\camera_model_d2.view_window.size_in_x));
+WHERE
+  WR1: ('ASSOCIATIVE_DRAUGHTING.CAMERA_MODEL_D2' IN
+           TYPEOF(SELF\mapped_item.mapping_source.mapping_origin));
+  WR2: aspect_ratio (SELF\mapped_item.mapping_target) =
+       aspect_ratio (SELF\mapped_item.mapping_source.
+                          mapping_origin\camera_model_d2.view_window);
+  WR3: SELF\mapped_item.mapping_source.
+            mapping_origin\camera_model_d2.view_window_clipping;
+END_ENTITY;
+
+ENTITY camera_image_3d_with_scale
+  SUBTYPE OF (camera_image);
+DERIVE
+  scale: positive_ratio_measure :=
+         ((SELF\mapped_item.mapping_target\planar_extent.size_in_x) /
+          (SELF\mapped_item.mapping_source.
+                mapping_origin\camera_model_d3.
+                perspective_of_volume.view_window.size_in_x));
+WHERE
+  WR1: ('ASSOCIATIVE_DRAUGHTING.CAMERA_MODEL_D3' IN
+           TYPEOF(SELF\mapped_item.mapping_source.mapping_origin));
+  WR2: (aspect_ratio (SELF\mapped_item.mapping_target) =
+        aspect_ratio (SELF\mapped_item.mapping_source.
+                           mapping_origin\camera_model_d3.
+                           perspective_of_volume.view_window));
+  WR3: SELF\mapped_item.mapping_source.
+            mapping_origin\camera_model_d3.
+            perspective_of_volume.front_plane_clipping
+       AND
+       SELF\mapped_item.mapping_source.
+            mapping_origin\camera_model_d3.
+            perspective_of_volume.view_volume_sides_clipping;
+END_ENTITY;
+
+ENTITY dimension_text_associativity
+  SUBTYPE OF (text_literal, mapped_item);
+WHERE
+  WR1: ('ASSOCIATIVE_DRAUGHTING.SHAPE_DIMENSION_REPRESENTATION'
+            IN TYPEOF (SELF\mapped_item.
+                       mapping_source.mapped_representation));
+  WR2: ('ASSOCIATIVE_DRAUGHTING.DRAUGHTING_CALLOUT'
+            IN TYPEOF (SELF\mapped_item.mapping_target));
+  WR3: SIZEOF (QUERY (ato <* QUERY (si <* 
+         USEDIN (SELF, 'ASSOCIATIVE_DRAUGHTING.STYLED_ITEM.ITEM') |
+             ('ASSOCIATIVE_DRAUGHTING.ANNOTATION_TEXT_OCCURRENCE'
+                 IN TYPEOF(si))) |
+         NOT (SIZEOF( QUERY (dc <*
+           USEDIN (ato, 'ASSOCIATIVE_DRAUGHTING.DRAUGHTING_CALLOUT.' +
+                        'CONTENTS') |
+             ('ASSOCIATIVE_DRAUGHTING.DRAUGHTING_CALLOUT' IN TYPEOF (dc)))
+          * [SELF\mapped_item.mapping_target]) = 1)
+        )) = 0;
+END_ENTITY;
+
+ENTITY draughting_group_elements_assignment
+  SUBTYPE OF (group_assignment);
+  items : SET [1:?] OF draughting_group_element;
+END_ENTITY;
+
+ENTITY draughting_model
+  SUBTYPE OF (representation);
+UNIQUE
+  UR1: SELF\representation.name;
+WHERE
+  WR1: SIZEOF (QUERY (it <* SELF.items |
+         NOT (SIZEOF (['ASSOCIATIVE_DRAUGHTING.MAPPED_ITEM',
+                       'ASSOCIATIVE_DRAUGHTING.STYLED_ITEM',
+                       'ASSOCIATIVE_DRAUGHTING.AXIS2_PLACEMENT'] *
+              TYPEOF (it)) = 1
+       ))) = 0;
+  WR2: SIZEOF (QUERY (mi <* QUERY (it <* SELF.items |
+         ('ASSOCIATIVE_DRAUGHTING.MAPPED_ITEM' IN TYPEOF(it))) |
+         NOT (SIZEOF (['ASSOCIATIVE_DRAUGHTING.SHAPE_REPRESENTATION',
+                       'ASSOCIATIVE_DRAUGHTING.DRAUGHTING_MODEL'] *
+              TYPEOF (mi\mapped_item.mapping_source.
+                      mapped_representation)) = 1
+       ))) = 0;
+  WR3: SIZEOF (QUERY (smi <* QUERY (si <* QUERY (it <* SELF.items |
+         ('ASSOCIATIVE_DRAUGHTING.STYLED_ITEM' IN TYPEOF(it))) |
+         ('ASSOCIATIVE_DRAUGHTING.MAPPED_ITEM' IN
+             TYPEOF(si\styled_item.item))) |
+         (NOT (('ASSOCIATIVE_DRAUGHTING.SHAPE_REPRESENTATION' IN
+                  TYPEOF(smi\styled_item.item\mapped_item.
+                         mapping_source.mapped_representation))
+             AND
+              (SIZEOF (QUERY (sty <* smi\styled_item.styles |
+                (NOT (SIZEOF (QUERY (psa <* sty.styles |
+                       (NOT ('ASSOCIATIVE_DRAUGHTING.CURVE_STYLE' IN
+                               TYPEOF(psa))))) = 1
+             )))) = 1)))
+       )) = 0;
+END_ENTITY;
+
+ENTITY draughting_pre_defined_colour
+  SUBTYPE OF (pre_defined_colour);
+WHERE
+  WR1: SELF.name IN ['black', 'red', 'green', 'blue',
+                     'yellow', 'magenta', 'cyan', 'white'];
+END_ENTITY;
+
+ENTITY draughting_pre_defined_curve_font
+  SUBTYPE OF (pre_defined_curve_font);
+WHERE
+  WR1: SELF.name IN ['continuous', 'chain',
+                     'chain double dash', 'dashed', 'dotted'];
+END_ENTITY;
+
+ENTITY draughting_pre_defined_text_font
+  SUBTYPE of (pre_defined_text_font);
+WHERE
+  WR1: SELF.name IN
+       ['ISO 3098-1 font A', 'ISO 3098-1 font B'];
+END_ENTITY;
+
+ENTITY drawing_sheet_layout
+  SUBTYPE OF (draughting_symbol_representation);
+END_ENTITY;
+
+ENTITY edge_based_2d_wireframe_shape_representation
+  SUBTYPE OF (shape_representation);
+WHERE
+  WR1: SIZEOF (QUERY (it <* SELF\representation.items |
+       NOT (SIZEOF(['ASSOCIATIVE_DRAUGHTING.EDGE_BASED_WIREFRAME_MODEL',
+                    'ASSOCIATIVE_DRAUGHTING.MAPPED_ITEM',
+                    'ASSOCIATIVE_DRAUGHTING.AXIS2_PLACEMENT_2D'] *
+            TYPEOF (it)) = 1
+       ))) = 0;
+  WR2: SIZEOF (QUERY (it <* SELF\representation.items |
+       SIZEOF(['ASSOCIATIVE_DRAUGHTING.EDGE_BASED_WIREFRAME_MODEL',
+               'ASSOCIATIVE_DRAUGHTING.MAPPED_ITEM'] * TYPEOF (it)) = 1
+       )) >= 1;
+  WR3: SIZEOF (QUERY (ebwm <* QUERY (it <* SELF\representation.items |
+         ('ASSOCIATIVE_DRAUGHTING.EDGE_BASED_WIREFRAME_MODEL'
+               IN TYPEOF (it))) |
+         NOT (SIZEOF (QUERY (eb <* ebwm\edge_based_wireframe_model.
+                                   ebwm_boundary |
+           NOT (SIZEOF (QUERY (edges <* eb.ces_edges |
+             NOT ('ASSOCIATIVE_DRAUGHTING.EDGE_CURVE'
+                       IN TYPEOF (edges)))) = 0
+       ))) = 0))) = 0;
+  WR4: SIZEOF (QUERY (ebwm <* QUERY (it <* SELF\representation.items |
+         ('ASSOCIATIVE_DRAUGHTING.EDGE_BASED_WIREFRAME_MODEL'
+               IN TYPEOF (it))) |
+         NOT (SIZEOF (QUERY (eb <* ebwm\edge_based_wireframe_model.
+                                   ebwm_boundary |
+           NOT (SIZEOF (QUERY (pline_edges <* QUERY (edges <* eb.ces_edges |
+             ('ASSOCIATIVE_DRAUGHTING.POLYLINE' IN
+                    TYPEOF (edges\edge_curve.edge_geometry))) |
+             NOT (SIZEOF(pline_edges\edge_curve.
+                         edge_geometry\polyline.points) > 2))) = 0
+       ))) = 0))) = 0;
+  WR5: SIZEOF (QUERY (ebwm <* QUERY (it <* SELF\representation.items |
+          ('ASSOCIATIVE_DRAUGHTING.EDGE_BASED_WIREFRAME_MODEL'
+                IN TYPEOF (it))) |
+         NOT (SIZEOF (QUERY (eb <* ebwm\edge_based_wireframe_model.
+                                   ebwm_boundary |
+           NOT (SIZEOF (QUERY (edges <* eb.ces_edges |
+             NOT (('ASSOCIATIVE_DRAUGHTING.VERTEX_POINT'
+                        IN TYPEOF (edges.edge_start)) AND
+                  ('ASSOCIATIVE_DRAUGHTING.VERTEX_POINT'
+                        IN TYPEOF (edges.edge_end))))) = 0
+       ))) = 0))) = 0;
+  WR6: SIZEOF (QUERY (ebwm <* QUERY (it <* SELF\representation.items |
+          ('ASSOCIATIVE_DRAUGHTING.EDGE_BASED_WIREFRAME_MODEL'
+                IN TYPEOF (it))) |
+         NOT (SIZEOF (QUERY (eb <*ebwm\edge_based_wireframe_model.
+                                   ebwm_boundary |
+           NOT (SIZEOF (QUERY (edges <* eb.ces_edges |
+             NOT (valid_2d_wireframe_edge_curve
+                 (edges\edge_curve.edge_geometry, 'ASSOCIATIVE_DRAUGHTING'))
+          )) = 0)
+       )) = 0))) = 0;
+  WR7: SIZEOF (QUERY (ebwm <* QUERY (it <* SELF\representation.items|
+          ('ASSOCIATIVE_DRAUGHTING.EDGE_BASED_WIREFRAME_MODEL'
+                IN TYPEOF (it))) |
+         NOT (SIZEOF (QUERY (eb <* ebwm\edge_based_wireframe_model.
+                                   ebwm_boundary |
+           NOT (SIZEOF (QUERY (edges <* eb.ces_edges |
+             NOT ((valid_wireframe_vertex_point
+                   (edges.edge_start\vertex_point.vertex_geometry,
+                    'ASSOCIATIVE_DRAUGHTING')) AND
+                  (valid_wireframe_vertex_point
+                   (edges.edge_end\vertex_point.vertex_geometry,
+                    'ASSOCIATIVE_DRAUGHTING'))) )) = 0
+       ))) = 0))) = 0;
+  WR8: SIZEOF (QUERY (ebwm <* QUERY (it <* SELF\representation.items |
+          ('ASSOCIATIVE_DRAUGHTING.EDGE_BASED_WIREFRAME_MODEL'
+                IN TYPEOF (it))) |
+         NOT (SIZEOF (QUERY (eb <* ebwm\edge_based_wireframe_model.
+                                   ebwm_boundary |
+           NOT (SIZEOF (QUERY (con_edges <* QUERY (edges <* eb.ces_edges |
+              ('ASSOCIATIVE_DRAUGHTING.CONIC'
+                    IN TYPEOF (edges\edge_curve.edge_geometry))) |
+             NOT ('ASSOCIATIVE_DRAUGHTING.AXIS2_PLACEMENT_2D'
+                       IN TYPEOF (con_edges\edge_curve.
+                                edge_geometry\conic.position)))) = 0
+       ))) = 0))) = 0;
+  WR9: SIZEOF (QUERY (mi <* QUERY (it <* SELF\representation.items |
+           ('ASSOCIATIVE_DRAUGHTING.MAPPED_ITEM' IN TYPEOF (it))) |
+          NOT ('ASSOCIATIVE_DRAUGHTING.' +
+                'EDGE_BASED_2D_WIREFRAME_SHAPE_REPRESENTATION'
+             IN TYPEOF (mi\mapped_item.mapping_source.mapped_representation)
+        ))) = 0;
+  WR10: SELF\representation.context_of_items\geometric_representation_context.
+            coordinate_space_dimension = 2;
+END_ENTITY;
+
+ENTITY elementary_2d_geometric_curve_set_shape_representation
+  SUBTYPE OF (shape_representation);
+WHERE
+  WR1: SELF\representation.context_of_items\geometric_representation_context.
+            coordinate_space_dimension = 2;
+  WR2: SIZEOF (QUERY (item <* SELF\representation.items |
+       NOT (SIZEOF(['ASSOCIATIVE_DRAUGHTING.GEOMETRIC_CURVE_SET',
+                    'ASSOCIATIVE_DRAUGHTING.MAPPED_ITEM',
+                    'ASSOCIATIVE_DRAUGHTING.AXIS2_PLACEMENT_2D'] *
+            TYPEOF (item)) = 1
+       ))) = 0;
+  WR3: SIZEOF (QUERY (item <* SELF\representation.items |
+       SIZEOF(['ASSOCIATIVE_DRAUGHTING.GEOMETRIC_CURVE_SET',
+               'ASSOCIATIVE_DRAUGHTING.MAPPED_ITEM'] * TYPEOF (item)) = 1
+       )) >= 1;
+  WR4: SIZEOF (QUERY (mi <* QUERY (item <* SELF\representation.items |
+         ('ASSOCIATIVE_DRAUGHTING.MAPPED_ITEM' IN TYPEOF (item))) |
+         NOT ('ASSOCIATIVE_DRAUGHTING.' +
+              'ELEMENTARY_2D_GEOMETRIC_CURVE_SET_SHAPE_REPRESENTATION'
+            IN TYPEOF (mi\mapped_item.mapping_source.mapped_representation))
+       )) = 0;
+  WR5: SIZEOF (QUERY (gcs <* QUERY (item <* SELF\representation.items |
+       ('ASSOCIATIVE_DRAUGHTING.GEOMETRIC_CURVE_SET' IN TYPEOF (item))) |
+         NOT (SIZEOF (QUERY (elem <* gcs\geometric_set.elements |
+           NOT (SIZEOF (TYPEOF (elem) *
+             ['ASSOCIATIVE_DRAUGHTING.CIRCLE',
+              'ASSOCIATIVE_DRAUGHTING.COMPOSITE_CURVE',
+              'ASSOCIATIVE_DRAUGHTING.ELLIPSE',
+              'ASSOCIATIVE_DRAUGHTING.POINT',
+              'ASSOCIATIVE_DRAUGHTING.POLYLINE',
+              'ASSOCIATIVE_DRAUGHTING.TRIMMED_CURVE']) = 1)
+         )) = 0)
+       )) = 0;
+  WR6: SIZEOF (QUERY (gcs <* QUERY (item <* SELF\representation.items |
+       ('ASSOCIATIVE_DRAUGHTING.GEOMETRIC_CURVE_SET' IN TYPEOF (item))) |
+         NOT (SIZEOF (QUERY (tc <* QUERY (elem <* gcs\geometric_set.elements |
+             ('ASSOCIATIVE_DRAUGHTING.TRIMMED_CURVE' IN TYPEOF (elem))) |
+           NOT (valid_elementary_trimmed_curves_in_set
+              (tc\trimmed_curve.basis_curve,'ASSOCIATIVE_DRAUGHTING'))
+         )) = 0)
+       )) = 0;
+  WR7: SIZEOF (QUERY (gcs <* QUERY (item <* SELF\representation.items |
+         ('ASSOCIATIVE_DRAUGHTING.GEOMETRIC_CURVE_SET' IN TYPEOF (item))) |
+         NOT (SIZEOF (QUERY (pnt <*
+           QUERY (elem <* gcs\geometric_set.elements |
+             ('ASSOCIATIVE_DRAUGHTING.POINT' IN TYPEOF(elem))) |
+             NOT (SIZEOF (TYPEOF (pnt) *
+               ['ASSOCIATIVE_DRAUGHTING.CARTESIAN_POINT',
+                'ASSOCIATIVE_DRAUGHTING.POINT_ON_CURVE']) = 1)
+         )) = 0)
+       )) = 0;
+  WR8: SIZEOF (QUERY (gcs <* QUERY (item <* SELF\representation.items |
+         ('ASSOCIATIVE_DRAUGHTING.GEOMETRIC_CURVE_SET' IN TYPEOF (item))) |
+         NOT (SIZEOF (QUERY (pl <* 
+                      QUERY (elem <* gcs\geometric_set.elements |
+             ('ASSOCIATIVE_DRAUGHTING.POLYLINE' IN TYPEOF (elem))) |
+           NOT (SIZEOF(pl\polyline.points) > 2)
+         )) = 0)
+       )) = 0;
+END_ENTITY;
+
+ENTITY pre_defined_dimension_symbol
+  SUBTYPE OF (pre_defined_symbol);
+WHERE
+  WR1: SELF.name IN ['arc length', 'conical taper',
+           'counterbore', 'countersink', 'depth', 'diameter',
+           'plus minus', 'radius', 'slope', 'spherical diameter',
+           'spherical radius', 'square'];
+END_ENTITY;
+
+ENTITY pre_defined_geometrical_tolerance_symbol
+  SUBTYPE OF (pre_defined_symbol);
+WHERE
+  WR1: SELF.name IN
+       ['angularity',
+        'circular runout',
+        'circularity',
+        'concentricity',
+        'cylindricity',
+        'diameter',
+        'flatness',
+        'least material condition',
+        'maximum material condition',
+        'parallelism',
+        'perpendicularity',
+        'position',
+        'profile of a line',
+        'profile of a surface',
+        'projected tolerance zone',
+        'regardless of feature size',
+        'straightness',
+        'symmetry',
+        'target point',
+        'total runout'];
+END_ENTITY;
+
+ENTITY pre_defined_point_marker_symbol
+  SUBTYPE OF (pre_defined_symbol, pre_defined_marker);
+WHERE
+  WR1: SELF.name IN
+       ['asterisk',
+        'circle',
+        'dot',
+        'plus',
+        'square',
+        'triangle',
+        'x'];
+END_ENTITY;
+
+ENTITY pre_defined_terminator_symbol
+  SUBTYPE OF (pre_defined_symbol);
+WHERE
+  WR1: SELF.name IN ['blanked arrow', 'blanked box',
+           'blanked dot', 'dimension origin', 'filled arrow',
+           'filled box', 'filled dot', 'integral symbol',
+           'open arrow', 'slash', 'unfilled arrow'];
+END_ENTITY;
+
+ENTITY shape_aspect_associativity
+  SUBTYPE OF (shape_aspect_relationship);
+WHERE
+  WR1: SELF.relating_shape_aspect.product_definitional;
+  WR2: NOT (SELF.related_shape_aspect.product_definitional);
+  WR3: SIZEOF (QUERY (pd <* USEDIN (SELF, 'ASSOCIATIVE_DRAUGHTING.' +
+                'PROPERTY_DEFINITION.DEFINITION') |
+         NOT (SIZEOF (QUERY (sdr <* QUERY (pdr <* USEDIN (pd,
+                         'ASSOCIATIVE_DRAUGHTING.' +
+                         'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |
+              ('ASSOCIATIVE_DRAUGHTING.SHAPE_DEFINITION_REPRESENTATION'
+                  IN TYPEOF (pdr))) |
+           NOT (SIZEOF (QUERY (it <* sdr.used_representation.items |
+             NOT ('ASSOCIATIVE_DRAUGHTING.CURVE' IN TYPEOF(it))
+             AND
+             (SIZEOF (QUERY (aco <* USEDIN (it,
+                         'ASSOCIATIVE_DRAUGHTING.STYLED_ITEM.ITEM') |
+           SIZEOF (TYPEOF (aco) * 
+                    ['ASSOCIATIVE_DRAUGHTING.LEADER_CURVE',
+                     'ASSOCIATIVE_DRAUGHTING.PROJECTION_CURVE']) = 1)) +
+              SIZEOF (USEDIN (it, 'ASSOCIATIVE_DRAUGHTING.' +
+                     'ANNOTATION_FILL_AREA.BOUNDARIES')) >= 1)
+           )) = 1) 
+         )) = 0)
+       )) = 0;
+  WR4: SIZEOF (QUERY (pd <* USEDIN (SELF, 'ASSOCIATIVE_DRAUGHTING.' +
+                'PROPERTY_DEFINITION.DEFINITION') |
+         NOT (SIZEOF (QUERY (sdr <* QUERY (pdr <* USEDIN (pd,
+                         'ASSOCIATIVE_DRAUGHTING.' +
+                         'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |
+              ('ASSOCIATIVE_DRAUGHTING.SHAPE_DEFINITION_REPRESENTATION'
+                  IN TYPEOF (pdr))) |
+           NOT (check_associative_shape_aspects(sdr))
+         )) = 0)
+       )) = 0;
+END_ENTITY;
+
+ENTITY shell_based_2d_wireframe_shape_representation
+  SUBTYPE OF (shape_representation);
+WHERE
+  WR1: SIZEOF (QUERY (it <* SELF\representation.items |
+       NOT (SIZEOF(['ASSOCIATIVE_DRAUGHTING.SHELL_BASED_WIREFRAME_MODEL',
+                    'ASSOCIATIVE_DRAUGHTING.MAPPED_ITEM',
+                    'ASSOCIATIVE_DRAUGHTING.AXIS2_PLACEMENT_2D'] *
+            TYPEOF (it)) = 1
+       ))) = 0;
+  WR2: SIZEOF (QUERY (it <* SELF\representation.items |
+       SIZEOF(['ASSOCIATIVE_DRAUGHTING.SHELL_BASED_WIREFRAME_MODEL',
+               'ASSOCIATIVE_DRAUGHTING.MAPPED_ITEM'] * TYPEOF (it)) = 1
+       )) >= 1;
+  WR3: SIZEOF (QUERY (sbwm <* QUERY (it <* SELF\representation.items |
+         ('ASSOCIATIVE_DRAUGHTING.SHELL_BASED_WIREFRAME_MODEL'
+             IN TYPEOF (it))) |
+         NOT (SIZEOF (QUERY (ws <* QUERY (sb <* 
+                             sbwm\shell_based_wireframe_model.sbwm_boundary |
+                   ('ASSOCIATIVE_DRAUGHTING.WIRE_SHELL' IN TYPEOF (sb))) |
+           NOT (SIZEOF (QUERY (eloop <* QUERY (wsb <*
+                               ws\wire_shell.wire_shell_extent |
+                ('ASSOCIATIVE_DRAUGHTING.EDGE_LOOP' IN TYPEOF (wsb))) | 
+             NOT (SIZEOF (QUERY (el <* eloop\path.edge_list |
+               NOT ('ASSOCIATIVE_DRAUGHTING.EDGE_CURVE'
+                          IN TYPEOF (el.edge_element)))) = 0)
+           )) = 0)
+         )) = 0)
+       )) = 0;
+  WR4: SIZEOF (QUERY (sbwm <* QUERY (it <* SELF\representation.items |
+         ('ASSOCIATIVE_DRAUGHTING.SHELL_BASED_WIREFRAME_MODEL'
+             IN TYPEOF (it))) |
+         NOT (SIZEOF (QUERY (ws <* QUERY (sb <*
+                              sbwm\shell_based_wireframe_model.sbwm_boundary |
+                   ('ASSOCIATIVE_DRAUGHTING.WIRE_SHELL' IN TYPEOF (sb))) |
+           NOT (SIZEOF (QUERY (eloop <* QUERY (wsb <*
+                               ws\wire_shell.wire_shell_extent |
+                  ('ASSOCIATIVE_DRAUGHTING.EDGE_LOOP' IN TYPEOF (wsb))) |
+             NOT (SIZEOF (QUERY (pline_el <*
+                           QUERY (el <* eloop\path.edge_list |
+                      ('ASSOCIATIVE_DRAUGHTING.POLYLINE' IN
+                        TYPEOF (el.edge_element\edge_curve.edge_geometry))) |
+                 NOT (SIZEOF (pline_el.edge_element\edge_curve.
+                            edge_geometry\polyline.points) > 2)
+             )) = 0)
+           )) = 0)
+         )) = 0)
+       )) = 0;
+  WR5: SIZEOF (QUERY (sbwm <* QUERY (it <* SELF\representation.items |
+         ('ASSOCIATIVE_DRAUGHTING.SHELL_BASED_WIREFRAME_MODEL'
+             IN TYPEOF (it))) |
+         NOT (SIZEOF (QUERY (ws <* QUERY (sb <*
+                            sbwm\shell_based_wireframe_model.sbwm_boundary |
+                   ('ASSOCIATIVE_DRAUGHTING.WIRE_SHELL' IN TYPEOF (sb))) |
+           NOT (SIZEOF (QUERY (eloop <* QUERY (wsb <*
+                               ws\wire_shell.wire_shell_extent |
+                 ('ASSOCIATIVE_DRAUGHTING.EDGE_LOOP' IN TYPEOF (wsb))) |
+             NOT (SIZEOF (QUERY (el <* eloop\path.edge_list |
+               NOT (valid_2d_wireframe_edge_curve
+                         (el.edge_element\edge_curve.edge_geometry,
+                         'ASSOCIATIVE_DRAUGHTING')))) = 0)
+           )) = 0)
+         )) = 0)
+       )) = 0;
+  WR6: SIZEOF (QUERY (sbwm <* QUERY (it <* SELF\representation.items |
+         ('ASSOCIATIVE_DRAUGHTING.SHELL_BASED_WIREFRAME_MODEL'
+             IN TYPEOF (it))) |
+         NOT (SIZEOF (QUERY (ws <* QUERY (sb <*
+                            sbwm\shell_based_wireframe_model.sbwm_boundary |
+                   ('ASSOCIATIVE_DRAUGHTING.WIRE_SHELL' IN TYPEOF (sb))) |
+           NOT (SIZEOF (QUERY (eloop <* QUERY (wsb <*
+                               ws\wire_shell.wire_shell_extent |
+                 ('ASSOCIATIVE_DRAUGHTING.EDGE_LOOP' IN TYPEOF (wsb))) |
+             NOT (SIZEOF (QUERY (el <* eloop\path.edge_list |
+               NOT (('ASSOCIATIVE_DRAUGHTING.VERTEX_POINT' IN
+                        TYPEOF (el.edge_element.edge_start))
+                AND
+                    ('ASSOCIATIVE_DRAUGHTING.VERTEX_POINT' IN
+                        TYPEOF (el.edge_element.edge_end))) )) = 0)
+           )) = 0)
+         )) = 0)
+       )) = 0;
+  WR7: SIZEOF (QUERY (sbwm <* QUERY (it <* SELF\representation.items |
+         ('ASSOCIATIVE_DRAUGHTING.SHELL_BASED_WIREFRAME_MODEL'
+             IN TYPEOF (it))) |
+         NOT (SIZEOF (QUERY (ws <* QUERY (sb <*
+                            sbwm\shell_based_wireframe_model.sbwm_boundary |
+                   ('ASSOCIATIVE_DRAUGHTING.WIRE_SHELL' IN TYPEOF (sb))) |
+           NOT (SIZEOF (QUERY (eloop <* QUERY (wsb <*
+                               ws\wire_shell.wire_shell_extent |
+                 ('ASSOCIATIVE_DRAUGHTING.EDGE_LOOP' IN TYPEOF (wsb))) |
+             NOT (SIZEOF (QUERY (el <* eloop\path.edge_list |
+               NOT ((valid_wireframe_vertex_point
+                     (el.edge_element.edge_start\vertex_point.
+                      vertex_geometry, 'ASSOCIATIVE_DRAUGHTING'))
+                 AND
+                    (valid_wireframe_vertex_point
+                     (el.edge_element.edge_end\vertex_point.
+                      vertex_geometry, 'ASSOCIATIVE_DRAUGHTING')))
+             )) = 0)
+           )) = 0)
+         )) = 0)
+       )) = 0;
+  WR8: SIZEOF (QUERY (sbwm <* QUERY (it <* SELF\representation.items |
+         ('ASSOCIATIVE_DRAUGHTING.SHELL_BASED_WIREFRAME_MODEL'
+             IN TYPEOF (it))) |
+         NOT (SIZEOF (QUERY (ws <* QUERY (sb <*
+                            sbwm\shell_based_wireframe_model.sbwm_boundary |
+                   ('ASSOCIATIVE_DRAUGHTING.WIRE_SHELL' IN TYPEOF (sb))) |
+           NOT (SIZEOF (QUERY (eloop <* QUERY (wsb <*
+                               ws\wire_shell.wire_shell_extent |
+                 ('ASSOCIATIVE_DRAUGHTING.EDGE_LOOP' IN TYPEOF (wsb))) |
+             NOT (SIZEOF (QUERY (con_edges <* 
+                           QUERY (el <* eloop\path.edge_list |
+               ('ASSOCIATIVE_DRAUGHTING.CONIC' IN
+                     TYPEOF (el.edge_element\edge_curve.edge_geometry))) | 
+               NOT ('ASSOCIATIVE_DRAUGHTING.AXIS2_PLACEMENT_2D'
+                         IN TYPEOF (con_edges.edge_element\edge_curve.
+                                    edge_geometry\conic.position))
+              )) = 0)
+           )) = 0)
+         )) = 0)
+       )) = 0;
+  WR9: SIZEOF (QUERY (sbwm <* QUERY (it <* SELF\representation.items |
+          ('ASSOCIATIVE_DRAUGHTING.SHELL_BASED_WIREFRAME_MODEL'
+              IN TYPEOF(it))) |
+          NOT (SIZEOF (QUERY (ws <* QUERY (sb <*
+                              sbwm\shell_based_wireframe_model.sbwm_boundary |
+                    ('ASSOCIATIVE_DRAUGHTING.WIRE_SHELL' IN TYPEOF (sb))) |
+            NOT (SIZEOF (QUERY (vloop <* QUERY (wsb <*
+                                ws\wire_shell.wire_shell_extent |
+                  ('ASSOCIATIVE_DRAUGHTING.VERTEX_LOOP' IN TYPEOF (wsb))) |
+              NOT ('ASSOCIATIVE_DRAUGHTING.VERTEX_POINT' IN
+                      TYPEOF (vloop\vertex_loop.loop_vertex))
+            )) = 0)
+          )) = 0)
+        )) = 0;
+  WR10: SIZEOF (QUERY (sbwm <* QUERY (it <* SELF\representation.items |
+          ('ASSOCIATIVE_DRAUGHTING.SHELL_BASED_WIREFRAME_MODEL'
+              IN TYPEOF(it))) |
+          NOT (SIZEOF (QUERY (ws <* QUERY (sb <*
+                              sbwm\shell_based_wireframe_model.sbwm_boundary |
+                    ('ASSOCIATIVE_DRAUGHTING.WIRE_SHELL' IN TYPEOF (sb))) |
+            NOT (SIZEOF (QUERY (vloop <* QUERY (wsb <*
+                                ws\wire_shell.wire_shell_extent |
+                  ('ASSOCIATIVE_DRAUGHTING.VERTEX_LOOP' IN TYPEOF (wsb))) |
+              NOT (valid_wireframe_vertex_point (vloop\vertex_loop.
+                    loop_vertex\vertex_point.vertex_geometry,
+                    'ASSOCIATIVE_DRAUGHTING'))
+            )) = 0)
+          )) = 0)
+        )) = 0;
+  WR11: SIZEOF (QUERY (sbwm <* QUERY (it <* SELF\representation.items |
+          ('ASSOCIATIVE_DRAUGHTING.SHELL_BASED_WIREFRAME_MODEL'
+              IN TYPEOF(it))) |
+          NOT (SIZEOF (QUERY (vs <* QUERY (sb <*
+                              sbwm\shell_based_wireframe_model.sbwm_boundary |
+                  ('ASSOCIATIVE_DRAUGHTING.VERTEX_SHELL' IN TYPEOF (sb))) |
+            NOT ('ASSOCIATIVE_DRAUGHTING.VERTEX_POINT' IN
+                    TYPEOF (vs\vertex_shell.vertex_shell_extent.loop_vertex))
+          )) = 0)
+        )) = 0;
+  WR12: SIZEOF (QUERY (sbwm <* QUERY (it <* SELF\representation.items |
+          ('ASSOCIATIVE_DRAUGHTING.SHELL_BASED_WIREFRAME_MODEL'
+              IN TYPEOF(it))) |
+          NOT (SIZEOF (QUERY (vs <* QUERY (sb <*
+                              sbwm\shell_based_wireframe_model.sbwm_boundary |
+                  ('ASSOCIATIVE_DRAUGHTING.VERTEX_SHELL' IN TYPEOF (sb))) |
+            NOT (valid_wireframe_vertex_point (vs\vertex_shell.
+                   vertex_shell_extent.loop_vertex\vertex_point.
+                   vertex_geometry,'ASSOCIATIVE_DRAUGHTING'))
+          )) = 0)
+        )) = 0;
+  WR13: SIZEOF (QUERY (mi <* QUERY (it <* SELF\representation.items |
+           ('ASSOCIATIVE_DRAUGHTING.MAPPED_ITEM' IN TYPEOF (it))) |
+          NOT ('ASSOCIATIVE_DRAUGHTING.' +
+                'SHELL_BASED_2D_WIREFRAME_SHAPE_REPRESENTATION'
+           IN TYPEOF (mi\mapped_item.mapping_source.mapped_representation))
+        )) = 0;
+  WR14: SELF.context_of_items\geometric_representation_context.
+             coordinate_space_dimension = 2;
+END_ENTITY;
+
+RULE application_context_requires_ap_definition FOR
+  (application_context,
+   application_protocol_definition);
+WHERE
+  WR1: SIZEOF (QUERY (ac <* application_context |
+         NOT (SIZEOF (QUERY (apd <* application_protocol_definition |
+           (ac :=: apd.application)
+           AND (apd.application_interpreted_model_schema_name =
+              'ASSOCIATIVE_DRAUGHTING')
+           AND (ac.application = 'draughting')
+         )) = 1)
+       )) = 0;
+END_RULE;
+
+RULE approval_date_time_constraints FOR (approval_date_time);
+WHERE
+  WR1: SIZEOF (QUERY (adt <* approval_date_time |
+          NOT (SIZEOF (TYPEOF(adt.date_time) *
+                 ['ASSOCIATIVE_DRAUGHTING.DATE_AND_TIME',
+                  'ASSOCIATIVE_DRAUGHTING.DATE']) = 1)
+       ))=0;
+END_RULE;
+
+RULE approvals_are_assigned FOR (approval);
+WHERE
+  WR1: SIZEOF (QUERY (a <* approval |
+       NOT (SIZEOF (USEDIN (a, 'ASSOCIATIVE_DRAUGHTING.' +
+                               'APPROVAL_ASSIGNMENT.' +
+                               'ASSIGNED_APPROVAL')) >= 1
+       )))=0;
+END_RULE;
+
+RULE calendar_date_instantiation FOR (calendar_date);
+WHERE
+  WR1: SIZEOF (QUERY (each <* calendar_date |
+         NOT (SIZEOF (USEDIN (each, '')) >= 1
+       ))) = 0;
+END_RULE;
+
+RULE camera_usage_mapped_representation FOR (camera_usage);
+WHERE
+  WR1: SIZEOF (QUERY (cu <* camera_usage |
+       NOT ('ASSOCIATIVE_DRAUGHTING.DRAUGHTING_MODEL'
+            IN TYPEOF (cu.mapped_representation))))=0;
+END_RULE;
+
+RULE colour_rgb_instantiation FOR (colour_rgb);
+WHERE
+  WR1: SIZEOF (QUERY (each <* colour_rgb |
+         NOT (SIZEOF (USEDIN (each, '')) >= 1
+       ))) = 0;
+END_RULE;
+
+RULE curve_font_usage FOR (curve_style_font,
+                           pre_defined_curve_font,
+                           externally_defined_curve_font);
+WHERE
+  WR1: SIZEOF (QUERY (csf <* curve_style_font |
+       NOT (SIZEOF (USEDIN (csf, 'ASSOCIATIVE_DRAUGHTING.' +
+                                 'CURVE_STYLE.CURVE_FONT'))>=1)))=0;
+  WR2: SIZEOF (QUERY (pdcf <* pre_defined_curve_font |
+       NOT (SIZEOF (USEDIN (pdcf, 'ASSOCIATIVE_DRAUGHTING.' +
+                                  'CURVE_STYLE.CURVE_FONT'))>=1)))=0;
+  WR3: SIZEOF (QUERY (edcf <* externally_defined_curve_font |
+       NOT (SIZEOF (USEDIN (edcf, 'ASSOCIATIVE_DRAUGHTING.' +
+                                  'CURVE_STYLE.CURVE_FONT'))>=1)))=0;
+END_RULE;
+
+RULE curve_style_instantiation FOR (curve_style);
+WHERE
+  WR1: SIZEOF (QUERY (each <* curve_style |
+         NOT (SIZEOF (USEDIN (each, '')) >= 1
+       ))) = 0;
+END_RULE;
+
+RULE derived_unit_instantiation FOR (derived_unit);
+WHERE
+  WR1: SIZEOF (QUERY (du <* derived_unit |
+         NOT (SIZEOF (USEDIN (du, '')) >= 1)
+       )) = 0;
+END_RULE;
+
+RULE dimensional_size_instantiation FOR (dimensional_size);
+WHERE
+  WR1: SIZEOF (QUERY (each <* dimensional_size |
+         NOT (SIZEOF (USEDIN (each, '')) >= 1
+       ))) = 0;
+END_RULE;
+
+RULE dimensionality_is_two_or_three FOR (geometric_representation_context);
+WHERE
+  WR1: SIZEOF (QUERY (g <* geometric_representation_context |
+         NOT ((g.coordinate_space_dimension = 2) OR
+              (g.coordinate_space_dimension = 3))
+       )) = 0;
+END_RULE;
+
+RULE dimensions_are_represented FOR (dimensional_location,
+                                     dimensional_size);
+WHERE
+  WR1: SIZEOF (QUERY (dl <* dimensional_location |
+         NOT ((SIZEOF (USEDIN (dl, 'ASSOCIATIVE_DRAUGHTING.' +
+               'DIMENSIONAL_CHARACTERISTIC_REPRESENTATION.DIMENSION')) >= 1)
+          AND (SIZEOF (QUERY (pd <* USEDIN (dl, 'ASSOCIATIVE_DRAUGHTING.' +
+                                         'PROPERTY_DEFINITION.DEFINITION') |
+                 NOT (SIZEOF (QUERY (sdr <* USEDIN (pd,
+                            'ASSOCIATIVE_DRAUGHTING.' +
+                            'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |
+                 ('SHAPE_DEFINITION_REPRESENTATION' IN TYPEOF(sdr)))) = 1)
+               )) = 0))
+       )) = 0;
+  WR2: SIZEOF (QUERY (ds <* dimensional_size |
+         NOT ((SIZEOF (USEDIN (ds, 'ASSOCIATIVE_DRAUGHTING.' +
+               'DIMENSIONAL_CHARACTERISTIC_REPRESENTATION.DIMENSION')) >= 1)
+          AND (SIZEOF (QUERY (pd <* USEDIN (ds.applies_to,
+                    'ASSOCIATIVE_DRAUGHTING.PROPERTY_DEFINITION.DEFINITION') |
+                 NOT (SIZEOF (QUERY (sdr <* USEDIN (pd,
+                            'ASSOCIATIVE_DRAUGHTING.' +
+                            'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |
+                 ('SHAPE_DEFINITION_REPRESENTATION' IN TYPEOF(sdr)))) = 1)
+               )) = 0))
+       )) = 0;
+END_RULE;
+
+RULE draughting_model_annotation_layers FOR (draughting_model);
+WHERE
+  WR1: SIZEOF
+       (QUERY (dm <* draughting_model |
+       NOT (SIZEOF (QUERY (ao <* QUERY (it <* dm\representation.items |
+          ('ASSOCIATIVE_DRAUGHTING.ANNOTATION_OCCURRENCE' IN TYPEOF (it))) |
+          NOT (SIZEOF (USEDIN (ao, 'ASSOCIATIVE_DRAUGHTING.' +
+                                      'PRESENTATION_LAYER_ASSIGNMENT.' +
+                                      'ASSIGNED_ITEMS')) >= 1)
+           ))=0)
+       ))=0;
+END_RULE;
+
+RULE draughting_sub_model_mapped_item FOR (mapped_item);
+WHERE
+  WR1: SIZEOF (QUERY (sr <* QUERY (mi <* mapped_item |
+         (('ASSOCIATIVE_DRAUGHTING.SHAPE_REPRESENTATION'
+             IN TYPEOF (mi.mapping_source.mapped_representation))
+         AND NOT ('ASSOCIATIVE_DRAUGHTING.SHAPE_DIMENSION_REPRESENTATION'
+             IN TYPEOF (mi.mapping_source.mapped_representation)))) |
+        NOT (SIZEOF (USEDIN (sr, ''))  =
+             SIZEOF (QUERY (mr <* USEDIN (sr, 'ASSOCIATIVE_DRAUGHTING.' +
+                                              'REPRESENTATION.ITEMS') |
+                SIZEOF (['ASSOCIATIVE_DRAUGHTING.DRAUGHTING_MODEL',
+                         'ASSOCIATIVE_DRAUGHTING.SHAPE_REPRESENTATION'] *
+                   TYPEOF (mr)) = 1)))
+       ))=0;
+END_RULE;
+
+RULE draughting_subfigure_representation_layers FOR
+  (draughting_subfigure_representation);
+WHERE
+  WR1: SIZEOF (QUERY (dsr <* draughting_subfigure_representation |
+       NOT (SIZEOF (QUERY (item <* dsr\representation.items |
+           ('ASSOCIATIVE_DRAUGHTING.ANNOTATION_OCCURRENCE'
+            IN TYPEOF (item)) AND
+           (SIZEOF (USEDIN (item, 'ASSOCIATIVE_DRAUGHTING.' +
+                                  'PRESENTATION_LAYER_ASSIGNMENT.' +
+                                  'ASSIGNED_ITEMS'))=0)
+           ))=0)
+       ))=0;
+END_RULE;
+
+RULE drawing_sheet_annotation_layers FOR (drawing_sheet_revision);
+WHERE
+  WR1: SIZEOF
+       (QUERY (dsr <* drawing_sheet_revision |
+       NOT (SIZEOF (QUERY (ao <* QUERY (it <* dsr\representation.items |
+          ('ASSOCIATIVE_DRAUGHTING.ANNOTATION_OCCURRENCE' IN TYPEOF (it))) |
+          NOT (SIZEOF (USEDIN (ao, 'ASSOCIATIVE_DRAUGHTING.' +
+                                   'PRESENTATION_LAYER_ASSIGNMENT.' +
+                                   'ASSIGNED_ITEMS')) >= 1)
+           ))=0)
+       ))=0;
+END_RULE;
+
+RULE drawing_sheet_layout_usage FOR (mapped_item);
+WHERE
+  WR1: SIZEOF (QUERY (dsl <* QUERY (mi <* mapped_item |
+         ('ASSOCIATIVE_DRAUGHTING.DRAWING_SHEET_LAYOUT'
+             IN TYPEOF (mi.mapping_source.mapped_representation))) |
+         NOT (SIZEOF (USEDIN (dsl, '')) =
+             SIZEOF (QUERY (dsr <* USEDIN (dsl, 'ASSOCIATIVE_DRAUGHTING.' +
+                                 'REPRESENTATION.ITEMS') |
+             ('ASSOCIATIVE_DRAUGHTING.DRAWING_SHEET_REVISION'
+                IN TYPEOF(dsr)))))
+       )) = 0;
+END_RULE;
+
+RULE drawing_view_annotation_layers FOR (presentation_view);
+WHERE
+  WR1: SIZEOF
+       (QUERY (pv <* presentation_view |
+       NOT (SIZEOF (QUERY (ao <* QUERY (it <* pv\representation.items |
+          ('ASSOCIATIVE_DRAUGHTING.ANNOTATION_OCCURRENCE' IN TYPEOF (it))) |
+          NOT (SIZEOF (USEDIN (ao, 'ASSOCIATIVE_DRAUGHTING.' +
+                                   'PRESENTATION_LAYER_ASSIGNMENT.' +
+                                   'ASSIGNED_ITEMS')) >= 1)
+           ))=0)
+       ))=0;
+END_RULE;
+
+RULE externally_defined_symbol_instantiation FOR (externally_defined_symbol);
+WHERE
+  WR1: SIZEOF (QUERY (each <* externally_defined_symbol |
+         NOT (SIZEOF (USEDIN (each, '')) >= 1
+       ))) = 0;
+END_RULE;
+
+RULE fill_area_style_colour_instantiation FOR (fill_area_style_colour); WHERE
+  WR1: SIZEOF (QUERY (each <* fill_area_style_colour |
+         NOT (SIZEOF (USEDIN (each, '')) >= 1
+       ))) = 0;
+END_RULE;
+
+RULE fill_area_style_instantiation FOR (fill_area_style);
+WHERE
+  WR1: SIZEOF (QUERY (each <* fill_area_style |
+         NOT (SIZEOF (USEDIN (each, '')) >= 1
+       ))) = 0;
+END_RULE;
+
+RULE fill_area_style_tile_symbol_constraint FOR
+  (fill_area_style_tile_symbol_with_style);
+WHERE
+  WR1: SIZEOF (QUERY (fast <* fill_area_style_tile_symbol_with_style |
+         (('ASSOCIATIVE_DRAUGHTING.DEFINED_SYMBOL' IN
+             TYPEOF(fast.symbol\styled_item.item)) AND
+         NOT ('ASSOCIATIVE_DRAUGHTING.EXTERNALLY_DEFINED_SYMBOL' IN
+                 TYPEOF(fast.symbol\styled_item.
+                        item\defined_symbol.definition)))
+       )) = 0;
+END_RULE;
+
+RULE geometric_elements_belong_to_layers FOR
+  (point, curve, surface);
+WHERE
+  WR1: SIZEOF (QUERY (geo_pt <* QUERY (pt <* point |
+            SIZEOF (QUERY (rep <* 
+                USEDIN (pt, 'ASSOCIATIVE_DRAUGHTING.' +
+                            'REPRESENTATION.ITEMS') |
+                ('ASSOCIATIVE_DRAUGHTING.SHAPE_REPRESENTATION'
+                     IN TYPEOF(rep))
+            )) > 0) |
+         NOT (SIZEOF (USEDIN (geo_pt, 'ASSOCIATIVE_DRAUGHTING.' +
+                        'PRESENTATION_LAYER_ASSIGNMENT.ASSIGNED_ITEMS')
+             ) >= 1)
+       )) = 0;
+  WR2: SIZEOF (QUERY (geo_cv <* QUERY (cv <* curve |
+            SIZEOF (QUERY (rep <* 
+                USEDIN (cv, 'ASSOCIATIVE_DRAUGHTING.' +
+                            'REPRESENTATION.ITEMS') |
+                ('ASSOCIATIVE_DRAUGHTING.SHAPE_REPRESENTATION'
+                     IN TYPEOF(rep))
+            )) > 0) |
+         NOT (SIZEOF (USEDIN (geo_cv, 'ASSOCIATIVE_DRAUGHTING.' +
+                        'PRESENTATION_LAYER_ASSIGNMENT.ASSIGNED_ITEMS')
+             ) >= 1)
+       )) = 0;
+  WR3: SIZEOF (QUERY (geo_sf <* QUERY (sf <* surface |
+            SIZEOF (QUERY (rep <* 
+                USEDIN (sf, 'ASSOCIATIVE_DRAUGHTING.' +
+                            'REPRESENTATION.ITEMS') |
+                ('ASSOCIATIVE_DRAUGHTING.SHAPE_REPRESENTATION'
+                     IN TYPEOF(rep))
+            )) > 0) |
+         NOT (SIZEOF (USEDIN (geo_sf, 'ASSOCIATIVE_DRAUGHTING.' +
+                        'PRESENTATION_LAYER_ASSIGNMENT.ASSIGNED_ITEMS')
+             ) >= 1)
+       )) = 0;
+END_RULE;
+
+RULE global_length_and_angle_units_2d_or_3d FOR
+  (global_unit_assigned_context);
+WHERE
+  WR1: SIZEOF (QUERY (guac <* global_unit_assigned_context |
+          NOT (SIZEOF (guac.units) <= 3)
+       ))=0;
+  WR2: SIZEOF (QUERY (guac <* global_unit_assigned_context |
+       NOT ((SIZEOF (QUERY (x <* guac.units |
+             'ASSOCIATIVE_DRAUGHTING.LENGTH_UNIT' IN TYPEOF (x)))=1) AND
+            (SIZEOF (QUERY (x <* guac.units |
+             'ASSOCIATIVE_DRAUGHTING.PLANE_ANGLE_UNIT' IN TYPEOF (x)))=1) AND
+            (SIZEOF (QUERY (x <* guac.units |
+             'ASSOCIATIVE_DRAUGHTING.SOLID_ANGLE_UNIT' IN TYPEOF (x)))<=1)
+       )))=0;
+END_RULE;
+
+RULE groups_contain_elements FOR
+  (group, group_assignment, group_relationship);
+WHERE
+  WR1: SIZEOF (QUERY (g <* group |
+        NOT (((SIZEOF (QUERY (ga <* group_assignment |
+               (g :=: ga.assigned_group))) = 1)
+          OR
+             ((SIZEOF (QUERY (ga <* group_assignment |
+               (g :=: ga.assigned_group))) = 0)
+         AND (SIZEOF (QUERY (gr <* group_relationship |
+               (g :=: gr.relating_group))) >= 1))))
+        ))=0;
+END_RULE;
+
+RULE measure_with_unit_instantiation FOR (measure_with_unit);
+WHERE
+  WR1: SIZEOF (QUERY (m <* measure_with_unit|
+         NOT (SIZEOF (USEDIN (m, '')) >= 1
+       ))) = 0;
+  WR2: SIZEOF (QUERY (m <* measure_with_unit |
+         NOT (SIZEOF (TYPEOF (m) *
+                ['ASSOCIATIVE_DRAUGHTING.LENGTH_MEASURE_WITH_UNIT',
+                 'ASSOCIATIVE_DRAUGHTING.PLANE_ANGLE_MEASURE_WITH_UNIT',
+                 'ASSOCIATIVE_DRAUGHTING.SOLID_ANGLE_MEASURE_WITH_UNIT']) = 1
+       ))) = 0;
+END_RULE;
+
+RULE named_unit_instantiation FOR (named_unit);
+WHERE
+  WR1: SIZEOF (QUERY (n <* named_unit|
+         NOT (SIZEOF (USEDIN (n, '')) >= 1
+       ))) = 0;
+  WR2: SIZEOF (QUERY (n <* named_unit|
+         NOT (SIZEOF (TYPEOF (n) *
+                     ['ASSOCIATIVE_DRAUGHTING.CONVERSION_BASED_UNIT',
+                      'ASSOCIATIVE_DRAUGHTING.LENGTH_UNIT',
+                      'ASSOCIATIVE_DRAUGHTING.PLANE_ANGLE_UNIT',
+                      'ASSOCIATIVE_DRAUGHTING.SOLID_ANGLE_UNIT',
+                      'ASSOCIATIVE_DRAUGHTING.SI_UNIT']) = 2
+       ))) = 0;
+END_RULE;
+
+RULE pre_defined_colour_instantiation FOR (pre_defined_colour);
+WHERE
+  WR1: SIZEOF (QUERY (each <* pre_defined_colour |
+         NOT (SIZEOF (USEDIN (each, '')) >= 1
+       ))) = 0;
+END_RULE;
+
+RULE pre_defined_symbol_instantiation FOR (pre_defined_symbol);
+WHERE
+  WR1: SIZEOF (QUERY (each <* pre_defined_symbol |
+         NOT (SIZEOF (USEDIN (each, '')) >= 1
+       ))) = 0;
+END_RULE;
+
+RULE presentation_layer_assignment_constraint_2d_or_3d FOR
+  (presentation_layer_assignment);
+WHERE
+  WR1: SIZEOF (QUERY (pla <* presentation_layer_assignment |
+       NOT (SIZEOF (QUERY (item <* pla.assigned_items |
+       NOT (SIZEOF (TYPEOF (item) *
+                    ['ASSOCIATIVE_DRAUGHTING.POINT',
+                     'ASSOCIATIVE_DRAUGHTING.CURVE',
+                     'ASSOCIATIVE_DRAUGHTING.SURFACE',
+                     'ASSOCIATIVE_DRAUGHTING.ANNOTATION_OCCURRENCE'])=1)))=0
+       )))=0;
+  WR2: SIZEOF (QUERY (pla <* presentation_layer_assignment |
+       NOT (SIZEOF (QUERY (pnt <* QUERY (item <* pla.assigned_items |
+            ('ASSOCIATIVE_DRAUGHTING.POINT' IN TYPEOF (item))) |
+          NOT (SIZEOF (QUERY (rep <* USEDIN (pnt,
+                     'ASSOCIATIVE_DRAUGHTING.REPRESENTATION.ITEMS') |
+                 ('ASSOCIATIVE_DRAUGHTING.SHAPE_REPRESENTATION'
+                       IN TYPEOF (rep)))) = 0)
+            ))=0
+       )))=0;
+  WR3: SIZEOF (QUERY (pla <* presentation_layer_assignment |
+       NOT (SIZEOF (QUERY (crv <* QUERY (item <* pla.assigned_items |
+            ('ASSOCIATIVE_DRAUGHTING.CURVE' IN TYPEOF (item))) |
+          NOT (SIZEOF (QUERY (rep <* USEDIN (crv,
+                     'ASSOCIATIVE_DRAUGHTING.REPRESENTATION.ITEMS') |
+                 ('ASSOCIATIVE_DRAUGHTING.SHAPE_REPRESENTATION'
+                       IN TYPEOF (rep)))) = 0)
+            ))=0
+       )))=0;
+  WR4: SIZEOF (QUERY (pla <* presentation_layer_assignment |
+       NOT (SIZEOF (QUERY (srf <* QUERY (item <* pla.assigned_items|
+            ('ASSOCIATIVE_DRAUGHTING.SURFACE' IN TYPEOF (item))) |
+           NOT  (SIZEOF (QUERY (rep <* USEDIN (srf,
+                       'ASSOCIATIVE_DRAUGHTING.REPRESENTATION.ITEMS') |
+                   ('ASSOCIATIVE_DRAUGHTING.SHAPE_REPRESENTATION'
+                         IN TYPEOF (rep)))) = 0)
+            ))=0
+       )))=0;
+  WR5: SIZEOF (QUERY (pla <* presentation_layer_assignment |
+       NOT (SIZEOF (QUERY (ao <* QUERY (item <* pla.assigned_items|
+              ('ASSOCIATIVE_DRAUGHTING.ANNOTATION_OCCURRENCE'
+                IN TYPEOF (item))) |
+         NOT (SIZEOF (QUERY (ur <* using_representations(ao) |
+           NOT (SIZEOF (TYPEOF(ur) *
+              ['ASSOCIATIVE_DRAUGHTING.' +
+               'DRAUGHTING_SUBFIGURE_REPRESENTATION',
+               'ASSOCIATIVE_DRAUGHTING.DRAUGHTING_MODEL',
+               'ASSOCIATIVE_DRAUGHTING.DRAWING_SHEET_REVISION',
+               'ASSOCIATIVE_DRAUGHTING.PRESENTATION_VIEW']) = 1)
+         )) = 0)
+         ))=0
+       )))=0;
+END_RULE;
+
+RULE presentation_layer_assignment_requires_usage FOR
+  (presentation_layer_assignment,
+   presentation_layer_usage);
+WHERE
+  WR1: SIZEOF (QUERY (e <* presentation_layer_assignment |
+       NOT (SIZEOF (QUERY (s <* presentation_layer_usage |
+       e :=: s.assignment )) = 1 ))) = 0;
+END_RULE;
+
+RULE presentation_of_product_definition_formation FOR
+(product_definition_formation);
+WHERE
+  WR1: SIZEOF (QUERY (pdf <* product_definition_formation |
+         NOT ((SIZEOF (USEDIN (pdf, 'ASSOCIATIVE_DRAUGHTING.' +
+                              'DRAUGHTING_PRESENTED_ITEM.ITEMS'))>= 1)
+           OR (SIZEOF (QUERY (pd <* USEDIN (pdf, 'ASSOCIATIVE_DRAUGHTING.' +
+                                           'PRODUCT_DEFINITION.FORMATION') |
+                 NOT (SIZEOF (QUERY (pds <* QUERY (prop_def <*
+                              USEDIN (pd, 'ASSOCIATIVE_DRAUGHTING.' +
+                                          'PROPERTY_DEFINITION.DEFINITION') |
+                           ('ASSOCIATIVE_DRAUGHTING.PRODUCT_DEFINITION_SHAPE'
+                               IN TYPEOF (prop_def))) |
+                   NOT (SIZEOF (QUERY (pdr <* USEDIN (pds,
+                                  'ASSOCIATIVE_DRAUGHTING.PROPERTY_' +
+                                  'DEFINITION_REPRESENTATION.DEFINITION') |
+                     
+('ASSOCIATIVE_DRAUGHTING.SHAPE_DEFINITION_REPRESENTATION'
+                          IN TYPEOF (pdr)))) >= 1)
+               )) = 0)
+           )) = 0)
+       )))=0;
+END_RULE;
+
+RULE presentation_size_constraint FOR (presentation_size);
+WHERE
+  WR1: SIZEOF (QUERY ( ps <* presentation_size |
+               NOT ('ASSOCIATIVE_DRAUGHTING.' +
+                    'DRAWING_SHEET_REVISION' IN
+                    TYPEOF (ps.unit))))=0;
+END_RULE;
+
+RULE presentation_style_by_context_constraint FOR
+  (presentation_style_by_context);
+WHERE
+  WR1: SIZEOF (QUERY (psbc <* presentation_style_by_context |
+          NOT ('ASSOCIATIVE_DRAUGHTING.PRESENTATION_VIEW'
+                  IN TYPEOF (psbc.style_context))
+       )) = 0;
+  WR2: SIZEOF (QUERY (psbc <* presentation_style_by_context |
+         NOT (SIZEOF (psbc\presentation_style_assignment.styles) = 1)
+       )) = 0;
+END_RULE;
+
+RULE presentation_style_by_context_instantiation FOR 
+(presentation_style_by_context);
+WHERE
+  WR1: SIZEOF (QUERY (each <* presentation_style_by_context |
+         NOT (SIZEOF (USEDIN (each, '')) >= 1
+       ))) = 0;
+END_RULE;
+
+RULE presentation_view_presented_once FOR
+  (presentation_view,
+   drawing_sheet_revision);
+WHERE
+  WR1: SIZEOF (QUERY (pv <* presentation_view |
+         NOT (SIZEOF (QUERY (rm <* USEDIN (pv, 'ASSOCIATIVE_DRAUGHTING.' +
+                               'REPRESENTATION_MAP.MAPPED_REPRESENTATION') |
+           NOT (SIZEOF (QUERY (mi <* rm.map_usage |
+             NOT (SIZEOF (QUERY (dsr <* drawing_sheet_revision |
+                (mi IN dsr\representation.items))) = 1)
+           )) = 0)
+         )) = 0)
+       ))=0;
+END_RULE;
+
+RULE product_definition_has_one_shape FOR (product_definition);
+WHERE
+  WR1: SIZEOF (QUERY (pd <* product_definition |
+         NOT (SIZEOF (QUERY (prop_def <* USEDIN (pd,
+                        'ASSOCIATIVE_DRAUGHTING.' +
+                        'PROPERTY_DEFINITION.DEFINITION') |
+            NOT (SIZEOF (QUERY (pdr <* USEDIN (prop_def,
+                        'ASSOCIATIVE_DRAUGHTING.' +
+                        'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |
+                 ('ASSOCIATIVE_DRAUGHTING.DRAUGHTING_MODEL'
+                     IN TYPEOF (pdr.used_representation))
+           )) <= 1) 
+         )) = 0)
+       )) = 0;
+END_RULE;
+
+RULE product_definition_instantiation FOR (product_definition);
+WHERE
+  WR1: SIZEOF (QUERY (each <* product_definition |
+         NOT (SIZEOF (USEDIN (each, '')) >= 1
+       ))) = 0;
+END_RULE;
+
+RULE product_requires_version FOR
+  (product,
+   product_definition_formation);
+WHERE
+  WR1: SIZEOF (QUERY (e <* product |
+       NOT (SIZEOF (QUERY (s <* product_definition_formation |
+       e :=: s.of_product )) >= 1 ))) = 0;
+END_RULE;
+
+RULE product_shape_has_representations FOR
+  (product_definition_shape);
+WHERE
+  WR1: SIZEOF (QUERY (pds <* product_definition_shape |
+       NOT (SIZEOF (USEDIN (pds, 'ASSOCIATIVE_DRAUGHTING.' +
+                                 'PROPERTY_DEFINITION_REPRESENTATION.' +
+                                 'DEFINITION')) >= 1
+       ))) = 0;
+END_RULE;
+
+RULE product_version_requires_definition FOR
+  (product_definition_formation,
+   product_definition);
+WHERE
+  WR1: SIZEOF (QUERY (pdf <* product_definition_formation |
+       NOT (SIZEOF (QUERY (pd <* product_definition |
+       pdf :=: pd.formation )) >= 1 ))) = 0;
+END_RULE;
+
+RULE representation_context_global_units FOR (representation_context);
+WHERE
+  WR1: SIZEOF (QUERY (rc <* representation_context |
+       NOT ('ASSOCIATIVE_DRAUGHTING.' +
+            'GLOBAL_UNIT_ASSIGNED_CONTEXT' IN TYPEOF (rc)
+       )))=0;
+END_RULE;
+
+RULE representation_instantiation FOR (representation);
+WHERE
+  WR1: SIZEOF (QUERY (each <* representation |
+         NOT (SIZEOF (USEDIN (each, '')) >= 1
+       ))) = 0;
+END_RULE;
+
+RULE restrict_product_definition_document_type FOR
+ (product_definition_with_associated_documents);
+WHERE
+  WR1: SIZEOF (QUERY (pd <* product_definition_with_associated_documents |
+         NOT (SIZEOF (QUERY (doc <* pd.documentation_ids |
+           NOT ((doc.kind.product_data_type = 'CAD filename')
+             OR (doc.kind.product_data_type = 'drawing'))
+         )) = 0)
+       ))=0;
+END_RULE;
+
+RULE shape_aspect_instantiation FOR (shape_aspect);
+WHERE
+  WR1: SIZEOF (QUERY (each <* shape_aspect |
+         NOT (SIZEOF (USEDIN (each, '')) >= 1
+       ))) = 0;
+END_RULE;
+
+RULE sheets_belong_to_one_drawing FOR
+  (drawing_sheet_revision,
+   drawing_sheet_revision_usage);
+WHERE
+  WR1: SIZEOF (QUERY (dsr <* drawing_sheet_revision |
+         NOT (SIZEOF (QUERY (usage <* drawing_sheet_revision_usage |
+           (dsr :=: usage.area))) = 1)
+       ))=0;
+END_RULE;
+
+RULE styled_curve FOR (styled_item);
+WHERE
+  WR1: SIZEOF (QUERY (crv <* QUERY (si <* styled_item | 
+         ('ASSOCIATIVE_DRAUGHTING.CURVE' IN TYPEOF (si.item))) |
+         NOT (SIZEOF (QUERY (sty <* crv.styles |
+           NOT ((SIZEOF (sty.styles)=1) AND
+           ('ASSOCIATIVE_DRAUGHTING.CURVE_STYLE' IN TYPEOF (sty.styles[1]))
+         )))=0
+       )))=0;
+END_RULE;
+
+RULE subtype_mandatory_annotation_occurrence FOR (annotation_occurrence);
+WHERE
+  WR1: SIZEOF (QUERY (ao <* annotation_occurrence |
+       NOT ('ASSOCIATIVE_DRAUGHTING.DRAUGHTING_ANNOTATION_OCCURRENCE'
+               IN TYPEOF (ao))
+       ))=0;
+END_RULE;
+
+RULE subtype_mandatory_camera_image_2d_or_3d FOR (camera_image);
+WHERE
+  WR1: SIZEOF (QUERY (ci <* camera_image |
+       NOT (SIZEOF (TYPEOF (ci) *
+                   ['ASSOCIATIVE_DRAUGHTING.CAMERA_IMAGE_2D_WITH_SCALE',
+                    'ASSOCIATIVE_DRAUGHTING.CAMERA_IMAGE_3D_WITH_SCALE']) = 1
+       )))=0;
+END_RULE;
+
+RULE subtype_mandatory_camera_model_2d_or_3d FOR (camera_model);
+WHERE
+  WR1: SIZEOF(QUERY ( cm <* camera_model | 
+          NOT (SIZEOF (TYPEOF(cm) *
+            ['ASSOCIATIVE_DRAUGHTING.CAMERA_MODEL_D2',
+             'ASSOCIATIVE_DRAUGHTING.CAMERA_MODEL_D3']) = 1
+         ))) = 0;
+END_RULE;
+
+RULE subtype_mandatory_draughting_callout FOR (draughting_callout);
+WHERE
+  WR1: SIZEOF (QUERY (dc <* draughting_callout |
+       NOT ('ASSOCIATIVE_DRAUGHTING.DRAUGHTING_ELEMENTS' IN
+               TYPEOF (dc))
+       ))=0;
+END_RULE;
+
+RULE subtype_mandatory_drawing_revision FOR (drawing_revision);
+WHERE
+  WR1: SIZEOF (QUERY (dr <* drawing_revision |
+       NOT ('ASSOCIATIVE_DRAUGHTING.DRAUGHTING_DRAWING_REVISION'
+               IN TYPEOF (dr))
+       ))=0;
+END_RULE;
+
+RULE subtype_mandatory_pre_defined_colour FOR (pre_defined_colour);
+WHERE
+  WR1: SIZEOF (QUERY (pdc <* pre_defined_colour |
+       NOT ('ASSOCIATIVE_DRAUGHTING.DRAUGHTING_PRE_DEFINED_COLOUR'
+               IN TYPEOF (pdc))))=0;
+END_RULE;
+
+RULE subtype_mandatory_pre_defined_curve_font FOR (pre_defined_curve_font);
+WHERE
+  WR1: SIZEOF (QUERY (pdcf <* pre_defined_curve_font |
+       NOT ('ASSOCIATIVE_DRAUGHTING.DRAUGHTING_PRE_DEFINED_CURVE_FONT'
+               IN TYPEOF (pdcf))))=0;
+END_RULE;
+
+RULE subtype_mandatory_pre_defined_symbol FOR (pre_defined_symbol);
+WHERE
+  WR1: SIZEOF (QUERY (pds <* pre_defined_symbol |
+       NOT (SIZEOF (TYPEOF (pds) *
+                   ['ASSOCIATIVE_DRAUGHTING.' +
+                    'PRE_DEFINED_GEOMETRICAL_TOLERANCE_SYMBOL',
+                    'ASSOCIATIVE_DRAUGHTING.' +
+                    'PRE_DEFINED_DIMENSION_SYMBOL',
+                    'ASSOCIATIVE_DRAUGHTING.' +
+                    'PRE_DEFINED_POINT_MARKER_SYMBOL',
+                    'ASSOCIATIVE_DRAUGHTING.' +
+                    'PRE_DEFINED_TERMINATOR_SYMBOL']) =1
+        ))) = 0;
+END_RULE;
+
+RULE subtype_mandatory_pre_defined_text_font FOR (pre_defined_text_font);
+WHERE
+  WR1: SIZEOF (QUERY (pdtf <* pre_defined_text_font |
+       NOT ('ASSOCIATIVE_DRAUGHTING.DRAUGHTING_PRE_DEFINED_TEXT_FONT'
+               IN TYPEOF (pdtf))))=0;
+END_RULE;
+
+RULE subtype_mandatory_shape_representation_2d_or_3d FOR
+       (shape_representation);
+WHERE
+  WR1: SIZEOF (QUERY (sr <* shape_representation |
+       NOT ((SIZEOF (TYPEOF (sr) *
+           ['ASSOCIATIVE_DRAUGHTING.' +
+                 'GEOMETRICALLY_BOUNDED_2D_WIREFRAME_REPRESENTATION',
+            'ASSOCIATIVE_DRAUGHTING.' +
+                 'ELEMENTARY_2D_GEOMETRIC_CURVE_SET_SHAPE_REPRESENTATION',
+            'ASSOCIATIVE_DRAUGHTING.' +
+                 'EDGE_BASED_2D_WIREFRAME_SHAPE_REPRESENTATION',
+            'ASSOCIATIVE_DRAUGHTING.' +
+                 'SHELL_BASED_2D_WIREFRAME_SHAPE_REPRESENTATION',
+            'ASSOCIATIVE_DRAUGHTING.' +
+                 'GEOMETRICALLY_BOUNDED_WIREFRAME_SHAPE_REPRESENTATION',
+            'ASSOCIATIVE_DRAUGHTING.' +
+                 'EDGE_BASED_WIREFRAME_SHAPE_REPRESENTATION',
+            'ASSOCIATIVE_DRAUGHTING.' +
+                 'SHELL_BASED_WIREFRAME_SHAPE_REPRESENTATION',
+            'ASSOCIATIVE_DRAUGHTING.' +
+                 'GEOMETRICALLY_BOUNDED_SURFACE_SHAPE_REPRESENTATION',
+            'ASSOCIATIVE_DRAUGHTING.' +
+                 'MANIFOLD_SURFACE_SHAPE_REPRESENTATION',
+            'ASSOCIATIVE_DRAUGHTING.ADVANCED_BREP_SHAPE_REPRESENTATION',
+            'ASSOCIATIVE_DRAUGHTING.ELEMENTARY_BREP_SHAPE_REPRESENTATION',
+            'ASSOCIATIVE_DRAUGHTING.FACETED_BREP_SHAPE_REPRESENTATION',
+            'ASSOCIATIVE_DRAUGHTING.SHAPE_DIMENSION_REPRESENTATION']) = 1)
+          OR (SIZEOF (QUERY (it <* sr\representation.items |
+                NOT (SIZEOF (TYPEOF (it) * 
+                      ['ASSOCIATIVE_DRAUGHTING.AXIS2_PLACEMENT_2D',
+                       'ASSOCIATIVE_DRAUGHTING.AXIS2_PLACEMENT_3D']) = 1)
+             )) = 0)
+          OR (SIZEOF (QUERY (pdr <* USEDIN (sr, 'ASSOCIATIVE_DRAUGHTING.' +
+                'PROPERTY_DEFINITION_REPRESENTATION.USED_REPRESENTATION') |
+                NOT (SIZEOF (TYPEOF(pdr\property_definition_representation.
+                                    definition.definition) *
+                      ['ASSOCIATIVE_DRAUGHTING.SHAPE_ASPECT_RELATIONSHIP',
+                       'ASSOCIATIVE_DRAUGHTING.SHAPE_ASPECT']) = 1)
+             )) = 0)
+       )))=0;
+END_RULE;
+
+RULE symbol_colour_instantiation FOR (symbol_colour);
+WHERE
+  WR1: SIZEOF (QUERY (each <* symbol_colour |
+         NOT (SIZEOF (USEDIN (each, '')) >= 1
+       ))) = 0;
+END_RULE;
+
+RULE terminator_symbol_constraint FOR (terminator_symbol);
+WHERE
+  WR1: SIZEOF (QUERY (ts <* terminator_symbol |
+         (('ASSOCIATIVE_DRAUGHTING.DEFINED_SYMBOL' IN TYPEOF(ts.item))
+         AND
+         NOT ('ASSOCIATIVE_DRAUGHTING.PRE_DEFINED_TERMINATOR_SYMBOL' IN
+                 TYPEOF (ts.item\defined_symbol.definition)))
+       )) = 0;
+END_RULE;
+
+RULE text_font_usage FOR
+  (pre_defined_text_font,
+   externally_defined_text_font);
+WHERE
+  WR1: SIZEOF (QUERY (pdtf <* pre_defined_text_font |
+       NOT (SIZEOF (USEDIN (pdtf, 'ASSOCIATIVE_DRAUGHTING.' +
+                                  'TEXT_LITERAL.FONT'))>=1
+       )))=0;
+  WR2: SIZEOF (QUERY (edtf <* externally_defined_text_font |
+       NOT (SIZEOF (USEDIN (edtf, 'ASSOCIATIVE_DRAUGHTING.' +
+                                  'TEXT_LITERAL.FONT'))>=1
+       )))=0;
+END_RULE;
+
+RULE text_style_for_defined_font_instantiation FOR
+(text_style_for_defined_font); WHERE
+  WR1: SIZEOF (QUERY (each <* text_style_for_defined_font |
+         NOT (SIZEOF (USEDIN (each, '')) >= 1
+       ))) = 0;
+END_RULE;
+
+RULE text_style_instantiation FOR (text_style);
+WHERE
+  WR1: SIZEOF (QUERY (each <* text_style |
+         NOT (SIZEOF (USEDIN (each, '')) >= 1
+       ))) = 0;
+END_RULE;
+
+RULE tolerance_value_instantiation FOR (tolerance_value);
+WHERE
+  WR1: SIZEOF (QUERY (each <* tolerance_value |
+         NOT (SIZEOF (USEDIN (each, '')) >= 1
+       ))) = 0;
+END_RULE;
+
+RULE units_name_and_prefix_constraint FOR (si_unit);
+WHERE
+  WR1: SIZEOF (QUERY (su <* si_unit |
+         NOT ((su.name = 'metre') XOR
+              (su.name = 'radian') XOR
+              (su.name = 'steradian'))
+       )) = 0;
+  WR2: SIZEOF (QUERY (lu <* QUERY (su <* si_unit |
+                                  (su.name = 'metre')) |
+         NOT ((NOT EXISTS (lu.prefix)) XOR
+              (lu.prefix = 'micro') XOR
+              (lu.prefix = 'milli') XOR
+              (lu.prefix = 'centi') XOR
+              (lu.prefix = 'kilo'))
+       )) = 0;
+  WR3: SIZEOF (QUERY (pau <* QUERY (su <* si_unit |
+                                   (su.name = 'radian')) |
+               EXISTS (pau.prefix)
+       )) = 0;
+  WR4: SIZEOF (QUERY (sau <* QUERY (su <* si_unit |
+                                   (su.name = 'steradian')) |
+               EXISTS (sau.prefix)
+       )) = 0;
+END_RULE;
+
+FUNCTION aspect_ratio (p : planar_box) : positive_ratio_measure;
+  RETURN (p.size_in_x / p.size_in_y);
+END_FUNCTION;
+
+FUNCTION check_associative_shape_aspects
+  (sdr : shape_definition_representation) : BOOLEAN;
+  LOCAL
+    sr1, sr2 : SET OF representation;
+    dm, pv   : SET OF representation;
+    i, j, k  : INTEGER;
+  END_LOCAL;
+
+  -- Check if the representation contains only two items
+  IF (SIZEOF (sdr.used_representation.items) <> 2) THEN
+     RETURN (FALSE);
+  END_IF;
+
+  -- Find the representations that use each item
+  sr1 := using_representations(sdr.used_representation.items[1]);
+  sr2 := using_representations(sdr.used_representation.items[2]);
+
+  -- Find the representations in which item 1 representations are mapped
+  REPEAT i := 1 TO HIINDEX(sr1);
+    dm := representations_mapped_into(sr1[i]);
+    REPEAT j := 1 TO HIINDEX(dm);
+      IF ('ASSOCIATIVE_DRAUGHTING.DRAUGHTING_MODEL' IN TYPEOF(dm[j]))
+      THEN
+        IF (dm[j] IN sr2) THEN RETURN (TRUE);
+        END_IF;
+        -- Find the views that the draughting model is mapped into
+        pv := representations_mapped_into(dm[j]);
+        REPEAT k := 1 TO HIINDEX(pv);
+          IF ('ASSOCIATIVE_DRAUGHTING.PRESENTATION_VIEW' IN TYPEOF(pv[k]))
+          THEN
+            IF (pv[k] IN sr2) THEN RETURN (TRUE);
+            END_IF;
+          END_IF;
+        END_REPEAT;
+      END_IF;
+    END_REPEAT;
+  END_REPEAT;
+
+  -- Find the representations in which item 2 representations are mapped
+  REPEAT i := 1 TO HIINDEX(sr2);
+    dm := representations_mapped_into(sr2[i]);
+    REPEAT j := 1 TO HIINDEX(dm);
+      IF ('ASSOCIATIVE_DRAUGHTING.DRAUGHTING_MODEL' IN TYPEOF(dm[j]))
+      THEN
+        IF (dm[j] IN sr1) THEN RETURN (TRUE);
+        END_IF;
+        -- Find the views that the draughting model is mapped into
+        pv := representations_mapped_into(dm[j]);
+        REPEAT k := 1 TO HIINDEX(pv);
+          IF ('ASSOCIATIVE_DRAUGHTING.PRESENTATION_VIEW' IN TYPEOF(pv[k]))
+          THEN
+            IF (pv[k] IN sr1) THEN RETURN (TRUE);
+            END_IF;
+          END_IF;
+        END_REPEAT;
+      END_IF;
+    END_REPEAT;
+  END_REPEAT;
+  RETURN(FALSE);
+END_FUNCTION;
+
+FUNCTION representations_mapped_into 
+  (rep : representation) : SET of representation;
+  LOCAL
+    results : SET OF representation := [];
+    rm      : SET OF representation_map;
+    mi      : SET OF mapped_item;
+    i,j     : INTEGER;
+  END_LOCAL;
+
+  -- Find set of representation_maps which specify the representation
+  rm := USEDIN(rep, 'ASSOCIATIVE_DRAUGHTING.' +
+                    'REPRESENTATION_MAP.MAPPED_REPRESENTATION');
+  -- Find the set of mapped_items that use each representation_map
+  REPEAT i := 1 TO HIINDEX(rm);
+    mi := mi + rm[i].map_usage;
+  END_REPEAT;
+  -- Find the set of representations that use each mapped_item
+  REPEAT j := 1 TO HIINDEX(mi);
+    results := results + USEDIN(mi[j],'ASSOCIATIVE_DRAUGHTING.' +
+                                      'REPRESENTATION.ITEMS');
+  END_REPEAT;
+  RETURN(results);
+END_FUNCTION;
+
+FUNCTION using_representations(item: representation_item) :
+                 SET OF representation;
+
+  LOCAL
+    results            : SET OF representation;
+    result_bag         : BAG OF representation;
+    intermediate_items : SET OF representation_item;
+    i                  : INTEGER;
+  END_LOCAL;
+
+  -- Find the representations in which the item is used and
+  -- add to the results set.
+  result_bag := USEDIN(item,'ASSOCIATIVE_DRAUGHTING.REPRESENTATION.ITEMS');
+
+  IF SIZEOF (result_bag) > 0 THEN
+    REPEAT i := 1 TO HIINDEX(result_bag);
+      results := results + result_bag[i];
+    END_REPEAT;
+  END_IF;
+
+  -- Find the set of representation_items in which item is used.
+  intermediate_items := QUERY (z <* bag_to_set (USEDIN(item,'')) |
+      'ASSOCIATIVE_DRAUGHTING.REPRESENTATION_ITEM' IN TYPEOF(z));
+
+  -- If the set of intermediate items is not empty;
+  IF SIZEOF(intermediate_items) > 0 THEN
+    -- For each element in the set, recursively add the
+    -- using_representations of that element.
+    REPEAT i := 1 TO HIINDEX(intermediate_items);
+      results := results +
+                 using_representations(intermediate_items[i]);
+    END_REPEAT;
+  END_IF;
+
+  -- Return the set of representations in which the input item is used
+  -- directly and indirectly (through intervening representation_items).
+  RETURN(results);
+END_FUNCTION;
+
+FUNCTION valid_2d_wireframe_edge_curve
+  (crv   : curve; schma : STRING) : BOOLEAN;
+
+  -- recursively check for valid basic curve types
+  IF SIZEOF ([schma + '.LINE',
+              schma + '.B_SPLINE_CURVE',
+              schma + '.CIRCLE',
+              schma + '.HYPERBOLA',
+              schma + '.ELLIPSE',
+              schma + '.PARABOLA',
+              schma + '.POLYLINE'] * TYPEOF (crv)) = 1
+      THEN RETURN (TRUE);
+  ELSE
+    -- recursively check for valid basic curves for curve_replicas
+    IF (schma + '.CURVE_REPLICA') IN TYPEOF (crv)
+      THEN RETURN (valid_2d_wireframe_edge_curve
+                         (crv\curve_replica.parent_curve, schma));
+    -- recursively check for valid basis curves for offset_curves
+    ELSE
+      IF (schma + '.OFFSET_CURVE_2D') IN TYPEOF (crv)
+        THEN RETURN (valid_2d_wireframe_edge_curve
+                         (crv\offset_curve_2d.basis_curve, schma));
+      END_IF;
+    END_IF;
+  END_IF;
+  RETURN (FALSE);
+END_FUNCTION;
+
+FUNCTION valid_elementary_trimmed_curves_in_set
+  (crv   : curve; schma : STRING) : BOOLEAN;
+
+  -- recursively check for valid basis curves for trimmed_curves
+  IF (schma + '.TRIMMED_CURVE') IN TYPEOF (crv)
+    THEN RETURN (valid_elementary_trimmed_curves_in_set
+                         (crv\trimmed_curve.basis_curve, schma));
+  ELSE
+    -- recursively check for valid basis curves for composite_curves
+    IF (schma + '.COMPOSITE_CURVE') IN TYPEOF (crv) THEN
+      RETURN (SIZEOF (QUERY (ccs <* crv\composite_curve.segments |
+                NOT (valid_elementary_trimmed_curves_in_set
+                       (ccs.parent_curve, schma)))) = 0);
+    ELSE
+      IF SIZEOF ([schma + '.LINE',
+                  schma + '.CIRCLE',
+                  schma + '.ELLIPSE',
+                  schma + '.PARABOLA',
+                  schma + '.HYPERBOLA',
+                  schma + '.POLYLINE'] * TYPEOF (crv)) = 1
+      THEN RETURN (TRUE);
+      END_IF;
+    END_IF;
+  END_IF;
+  RETURN (FALSE);
+END_FUNCTION;
+
+END_SCHEMA;

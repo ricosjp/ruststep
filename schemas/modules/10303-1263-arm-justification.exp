@@ -1,0 +1,46 @@
+(*
+ $Id: 10303-1263-arm-justification.exp,v 1.2 2006/08/07 07:44:45 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N3067 - ISO/TS 10303-1263 Justification - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG12 N2384
+*) 
+
+
+SCHEMA Justification_arm;
+
+
+TYPE justification_item = EXTENSIBLE GENERIC_ENTITY SELECT;
+END_TYPE; 
+
+TYPE justification_support_item = EXTENSIBLE GENERIC_ENTITY SELECT;
+END_TYPE; 
+
+ENTITY Justification;
+  id : STRING;
+  name : OPTIONAL STRING;
+  description : STRING;
+  context_description : OPTIONAL STRING;
+END_ENTITY;
+
+ENTITY Justification_assignment;
+  justification : Justification;
+  description : OPTIONAL STRING;
+  item : justification_item;
+  role : STRING;
+END_ENTITY;
+
+ENTITY Justification_relationship;
+  name : STRING;
+  description : OPTIONAL STRING;
+  relating_justification : Justification;
+  related_justification : Justification;
+END_ENTITY;
+
+ENTITY Justification_support_assignment;
+  justification : Justification;
+  description : OPTIONAL STRING;
+  support_item : justification_support_item;
+  role : STRING;
+END_ENTITY;
+
+END_SCHEMA;  -- Justification_arm
+

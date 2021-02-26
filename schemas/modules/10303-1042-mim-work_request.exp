@@ -1,0 +1,27 @@
+(*
+ $Id: 10303-1042-mim-work_request.exp,v 1.5 2006/08/07 09:42:03 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N1151 - ISO/TS 10303-1042 Work request - EXPRESS MIM
+*)
+
+SCHEMA Work_request_mim;
+
+USE FROM Activity_method_mim;    -- ISO/TS 10303-1049
+
+USE FROM action_schema   -- ISO 10303-41
+  (action_request_solution,
+   action_request_status,
+   versioned_action_request); 
+
+USE FROM management_resources_schema   -- ISO 10303-41
+   (action_request_assignment);
+
+
+TYPE action_request_item = EXTENSIBLE GENERIC_ENTITY SELECT ;
+END_TYPE;
+
+ENTITY applied_action_request_assignment
+SUBTYPE OF (action_request_assignment);
+  items : SET [1 : ?] OF action_request_item;
+END_ENTITY;
+
+END_SCHEMA;

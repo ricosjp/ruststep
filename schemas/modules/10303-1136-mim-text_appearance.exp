@@ -1,0 +1,50 @@
+(*
+ISO TC184/SC4/WG12 N2697 - ISO/TS 10303-1136 Text appearance - EXPRESS MIM
+*) 
+
+
+SCHEMA Text_appearance_mim;
+
+USE FROM Elemental_geometric_shape_mim;    -- ISO/TS 10303-1004
+
+USE FROM presentation_appearance_schema   -- 10303-46
+  (box_height,
+   box_width,
+   box_slant_angle,
+   box_rotate_angle,
+   character_glyph_style_stroke,
+   character_glyph_style_outline,
+   text_style,
+   text_style_for_defined_font,
+   text_style_with_box_characteristics,
+   text_style_with_mirror,
+   text_style_with_spacing); 
+
+USE FROM presentation_definition_schema   -- ISO 10303-46
+  (composite_text,
+   composite_text_with_extent,
+   composite_text_with_delineation,
+   composite_text_with_blanking_box,
+   text_literal,
+   text_literal_with_extent,
+   text_literal_with_delineation,
+   text_literal_with_blanking_box); 
+
+USE FROM presentation_resource_schema   -- ISO 10303-46
+  (colour_rgb,
+   externally_defined_text_font,
+   font_select,
+   pre_defined_colour,
+   pre_defined_text_font); 
+
+USE FROM aic_draughting_annotation;    -- ISO 10303-504
+
+
+RULE text_font_usage FOR 
+(externally_defined_text_font,pre_defined_text_font);
+WHERE
+  WR1: SIZEOF (QUERY (pdtf <* pre_defined_text_font | SIZEOF (USEDIN (pdtf, 'PRESENTATION_DEFINITION_SCHEMA.TEXT_LITERAL.FONT')) = 0 )) = 0;
+  WR2: SIZEOF (QUERY (edtf <* externally_defined_text_font | SIZEOF (USEDIN (edtf, 'PRESENTATION_DEFINITION_SCHEMA.TEXT_LITERAL.FONT')) = 0 )) = 0;
+END_RULE; 
+
+END_SCHEMA;  -- Text_appearance_mim

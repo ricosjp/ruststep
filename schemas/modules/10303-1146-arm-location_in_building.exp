@@ -1,0 +1,58 @@
+(*
+   $Id: 10303-1146-arm-location_in_building.exp,v 1.2 2006/08/03 13:23:54 wg12deputy Exp $
+   ISO/TC184/SC4 WG12N2578 - ISO/TS - 10303-1146 location_in_building - EXPRESS ARM
+   Supersedes ISO TC184/SC4/WG12N1787
+*)
+
+SCHEMA Location_in_building_arm;
+
+USE FROM Building_component_arm;
+USE FROM Building_item_arm;
+USE FROM Building_structure_arm;
+USE FROM Contextual_shape_positioning_arm;
+USE FROM Product_view_definition_arm;
+
+TYPE reference_item_select = SELECT (
+	Building,
+	Building_section,
+	Space
+	);
+END_TYPE;
+
+TYPE placed_item_select = SELECT (
+	Building_item,
+	Building_section,
+	Building_level
+	);
+END_TYPE;
+
+ENTITY Contextual_position_in_building;
+	reference_context : reference_item_select;
+  	reference_geometric_space : Geometric_model ;
+	positioned_item: placed_item_select;
+  	positioned_representation : template_instance;
+WHERE
+WR1: reference_context\Product_view_definition.defined_version :<>: 
+	positioned_item\Product_view_definition.defined_version;
+WR2: (('LOCATION_IN_BUILDING_ARM.'+ 'BUILDING' IN TYPEOF(reference_context)) AND
+	('LOCATION_IN_BUILDING_ARM.'+ 'BUILDING_SECTION' IN TYPEOF(positioned_item)) ) 
+	OR
+     (('LOCATION_IN_BUILDING_ARM.'+ 'SPACE' IN TYPEOF(reference_context)) AND
+	('LOCATION_IN_BUILDING_ARM.'+ 'BUILDING_ELEMENT' IN TYPEOF(positioned_item)) ) 
+	OR
+     (('LOCATION_IN_BUILDING_ARM.'+ 'BUILDING_SECTION' IN TYPEOF(reference_context)) AND
+	('LOCATION_IN_BUILDING_ARM.'+ 'BUILDING_ITEM' IN TYPEOF(positioned_item)) ) 
+	OR
+     (('LOCATION_IN_BUILDING_ARM.'+ 'BUILDING_SECTION' IN TYPEOF(reference_context)) AND
+	('LOCATION_IN_BUILDING_ARM.'+ 'BUILDING_LEVEL' IN TYPEOF(positioned_item)) ) 
+	;
+END_ENTITY;
+
+ENTITY Component_position_in_element;
+	reference_context : Building_element;
+  	reference_geometric_space : Geometric_model ;
+	positioned_shape_element : Building_element_component;
+  	positioned_representation : template_instance;
+END_ENTITY;
+
+END_SCHEMA;

@@ -1,0 +1,34 @@
+(*
+ $Id: 10303-1269-mim-resource_as_realized.exp,v 1.1 2006/08/07 09:42:05 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N3140 - ISO/TS 10303-1269 Resource as realized - EXPRESS MIM
+ Supersedes ISO TC184/SC4/WG12 N2421
+*) 
+
+
+SCHEMA Resource_as_realized_mim;
+
+USE FROM action_schema   -- ISO 10303-41
+  (action_method,
+   action_resource,
+   action_resource_relationship); 
+
+USE FROM Activity_method_assignment_mim;    -- ISO/TS 10303-1249
+
+USE FROM Classification_assignment_mim;    -- ISO/TS 10303-1114
+
+USE FROM Required_resource_mim;    -- ISO/TS 10303-1267
+
+USE FROM Resource_item_mim;    -- ISO/TS 10303-1268
+
+USE FROM Resource_management_mim;    -- ISO/TS 10303-1266
+
+USE FROM Value_with_unit_mim;    -- ISO/TS 10303-1054
+
+
+TYPE resource_as_realized_classification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON classification_item WITH 
+   (action_method, 
+    action_resource, 
+    action_resource_relationship);
+END_TYPE; 
+
+END_SCHEMA;  -- Resource_as_realized_mim

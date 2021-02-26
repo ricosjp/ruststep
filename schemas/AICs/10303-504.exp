@@ -1,0 +1,417 @@
+(*
+  This is the EXPRESS of the IS version of ISO 10303-504.
+  This document is ISO TC 184/SC4/WG12 N503.
+*)
+SCHEMA aic_draughting_annotation;
+
+USE FROM draughting_element_schema	-- ISO 10303-101
+  (draughting_callout,
+   terminator_symbol);
+
+USE FROM geometry_schema	-- ISO 10303-42
+  (axis2_placement_2d,
+   geometric_representation_context);
+
+USE FROM measure_schema	-- ISO 10303-41
+  (conversion_based_unit,
+   derived_unit,
+   global_unit_assigned_context,
+   length_measure_with_unit,
+   length_unit,
+   measure_with_unit,
+   named_unit,
+   plane_angle_unit,
+   plane_angle_measure_with_unit,
+   si_unit);
+USE FROM presentation_appearance_schema	-- ISO 10303-46
+  (box_height,
+   box_rotate_angle,
+   box_slant_angle,
+   box_width,
+   context_dependent_invisibility,
+   curve_style,
+   curve_style_font,
+   externally_defined_curve_font,
+   externally_defined_hatch_style,
+   externally_defined_tile_style,
+   fill_area_style,
+   fill_area_style_colour,
+   fill_area_style_hatching,
+   fill_area_style_tile_symbol_with_style,
+   fill_area_style_tiles,
+   null_style,
+   pre_defined_curve_font,
+   presentation_style_by_context,
+   symbol_colour,
+   symbol_style,
+   text_style,
+   text_style_for_defined_font,
+   text_style_with_box_characteristics,
+   text_style_with_mirror,
+   text_style_with_spacing);
+
+USE FROM presentation_definition_schema	-- ISO 10303-46
+  (annotation_curve_occurrence,
+   annotation_fill_area,
+   annotation_fill_area_occurrence,
+   annotation_occurrence,
+   annotation_symbol,
+   annotation_symbol_occurrence,
+   annotation_text_occurrence,
+   composite_text,
+   composite_text_with_associated_curves,
+   composite_text_with_blanking_box,
+   composite_text_with_extent,
+   defined_symbol,
+   externally_defined_symbol,
+   pre_defined_symbol,
+   symbol_representation,
+   symbol_representation_map,
+   text_alignment,
+   text_literal,
+   text_literal_with_associated_curves,
+   text_literal_with_blanking_box,
+   text_literal_with_delineation,
+   text_literal_with_extent);
+
+USE FROM presentation_resource_schema	-- ISO 10303-46
+  (colour_rgb,
+   externally_defined_text_font,
+   font_select,
+   pre_defined_colour,
+   pre_defined_text_font);
+
+USE FROM representation_schema	-- ISO 10303-43
+  (mapped_item,
+   representation,
+   representation_item);
+
+ENTITY annotation_subfigure_occurrence
+  SUBTYPE OF (annotation_symbol_occurrence);
+WHERE
+  WR1: SIZEOF (QUERY (sty <* SELF.styles |
+         NOT (SIZEOF (sty.styles) = 1)
+       )) = 0;
+  WR2: SIZEOF (QUERY (sty <* SELF.styles |
+         NOT ('AIC_DRAUGHTING_ANNOTATION.NULL_STYLE'
+               IN TYPEOF (sty.styles[1]))       ))=0;
+  WR3: ('AIC_DRAUGHTING_ANNOTATION.ANNOTATION_SYMBOL'
+           IN TYPEOF (SELF.item));
+  WR4: ('AIC_DRAUGHTING_ANNOTATION.DRAUGHTING_SUBFIGURE_REPRESENTATION'
+           IN TYPEOF
+           (SELF.item\mapped_item.mapping_source.mapped_representation));
+END_ENTITY;
+
+ENTITY draughting_annotation_occurrence
+  SUBTYPE OF (annotation_occurrence);
+WHERE
+  WR1:	-- curve_has_curve_style:
+    (NOT ('AIC_DRAUGHTING_ANNOTATION.ANNOTATION_CURVE_OCCURRENCE'
+            IN TYPEOF (SELF))) OR
+    (SIZEOF (QUERY (sty <* SELF.styles |
+       NOT ((SIZEOF (sty.styles) = 1)
+         AND ('AIC_DRAUGHTING_ANNOTATION.CURVE_STYLE'
+                 IN TYPEOF (sty.styles[1]))) )) = 0);
+  WR2:	-- fill_area_has_fill_style:
+    (NOT ('AIC_DRAUGHTING_ANNOTATION.ANNOTATION_FILL_AREA_OCCURRENCE'
+            IN TYPEOF (SELF))) OR    (SIZEOF (QUERY (sty <* SELF.styles |
+      NOT ((SIZEOF (sty.styles) = 1)
+        AND ('AIC_DRAUGHTING_ANNOTATION.FILL_AREA_STYLE'
+                IN TYPEOF (sty.styles[1]))) )) = 0);
+  WR3:	-- styled_fill_boundaries:
+    (NOT ('AIC_DRAUGHTING_ANNOTATION.ANNOTATION_FILL_AREA_OCCURRENCE'
+            IN TYPEOF (SELF))) OR    (SIZEOF (QUERY (bound <*
+                     SELF.item\annotation_fill_area.boundaries |
+       NOT (SIZEOF (QUERY (si <*
+                   USEDIN (bound, 'PRESENTATION_APPEARANCE_SCHEMA.' +
+                                  'STYLED_ITEM.ITEM') |
+         ('AIC_DRAUGHTING_ANNOTATION.' +
+             'ANNOTATION_CURVE_OCCURRENCE' IN TYPEOF (si)))) > 0))) = 0);
+  WR4:	-- symbol_has_symbol_style:
+    (NOT ('AIC_DRAUGHTING_ANNOTATION.ANNOTATION_SYMBOL_OCCURRENCE'
+            IN TYPEOF (SELF))) OR    (SIZEOF (QUERY (sty <* SELF.styles |
+       NOT ((SIZEOF (sty.styles) = 1)           AND
+            (SIZEOF (TYPEOF (sty.styles[1]) *
+                ['AIC_DRAUGHTING_ANNOTATION.SYMBOL_STYLE',
+                 'AIC_DRAUGHTING_ANNOTATION.NULL_STYLE']) = 1)) )) = 0);
+  WR5:	-- allowable_symbol_representations:
+    (NOT (('AIC_DRAUGHTING_ANNOTATION.ANNOTATION_SYMBOL_OCCURRENCE'
+             IN TYPEOF (SELF)) AND
+         ('AIC_DRAUGHTING_ANNOTATION.ANNOTATION_SYMBOL'
+             IN TYPEOF(SELF.item)))) OR
+         (SIZEOF (['AIC_DRAUGHTING_ANNOTATION.' +
+                   'DRAUGHTING_SYMBOL_REPRESENTATION',
+                  'AIC_DRAUGHTING_ANNOTATION.' +
+                  'DRAUGHTING_SUBFIGURE_REPRESENTATION'] *
+          TYPEOF (SELF.item\mapped_item.mapping_source.
+                  mapped_representation)) = 1);
+  WR6:	-- text_has_text_style:
+    (NOT ('AIC_DRAUGHTING_ANNOTATION.ANNOTATION_TEXT_OCCURRENCE'
+            IN TYPEOF (SELF))) OR
+    (SIZEOF (QUERY (sty <* SELF.styles |
+       NOT ((SIZEOF (sty.styles) = 1)
+        AND ('AIC_DRAUGHTING_ANNOTATION.TEXT_STYLE'
+                IN TYPEOF (sty.styles[1]))) )) = 0);
+  WR7:	-- allowable_text:
+     (('AIC_DRAUGHTING_ANNOTATION.ANNOTATION_TEXT_OCCURRENCE'
+             IN TYPEOF (SELF))) OR
+         (SIZEOF (TYPEOF(SELF.item) *
+             ['AIC_DRAUGHTING_ANNOTATION.COMPOSITE_TEXT',
+              'AIC_DRAUGHTING_ANNOTATION.TEXT_LITERAL']) = 1);
+  WR8:	-- text_not_nested:
+    (NOT (('AIC_DRAUGHTING_ANNOTATION.ANNOTATION_TEXT_OCCURRENCE'
+             IN TYPEOF (SELF)) AND
+         ('AIC_DRAUGHTING_ANNOTATION.COMPOSITE_TEXT'
+             IN TYPEOF (SELF.item)))) OR    (SIZEOF (QUERY (tl <*
+                   SELF.item\composite_text.collected_text |
+             NOT ('AIC_DRAUGHTING_ANNOTATION.TEXT_LITERAL' 
+             IN TYPEOF (tl)) )) = 0);
+  WR9:	-- text_alignment_literals:
+    (NOT (('AIC_DRAUGHTING_ANNOTATION.ANNOTATION_TEXT_OCCURRENCE'
+             IN TYPEOF (SELF)) AND
+         ('AIC_DRAUGHTING_ANNOTATION.TEXT_LITERAL'
+             IN TYPEOF (SELF.item)))) OR (SELF.item\text_literal.alignment 
+             IN ['baseline left', 'baseline centre', 'baseline right']);
+  WR10:	-- text_alignment_composites:
+    (NOT (('AIC_DRAUGHTING_ANNOTATION.ANNOTATION_TEXT_OCCURRENCE'
+             IN TYPEOF (SELF)) AND
+         ('AIC_DRAUGHTING_ANNOTATION.COMPOSITE_TEXT'
+             IN TYPEOF (SELF.item)))) OR
+         (SIZEOF (QUERY (tl <* QUERY (text <* SELF.
+                  item\composite_text.collected_text
+             |('AIC_DRAUGHTING_ANNOTATION.TEXT_LITERAL' IN TYPEOF(text))) |
+          NOT (tl\text_literal.alignment IN
+         ['baseline left', 'baseline centre', 'baseline right']) )) = 0);
+  WR11:	-- single_text_alignment:
+    NOT (('AIC_DRAUGHTING_ANNOTATION.ANNOTATION_TEXT_OCCURRENCE'
+             IN TYPEOF(SELF)) AND
+         ('AIC_DRAUGHTING_ANNOTATION.COMPOSITE_TEXT'
+             IN TYPEOF (SELF.item))) OR check_text_alignment(SELF.item);
+  WR12:	-- single_text_font:
+    NOT (('AIC_DRAUGHTING_ANNOTATION.ANNOTATION_TEXT_OCCURRENCE'
+             IN TYPEOF(SELF)) AND
+         ('AIC_DRAUGHTING_ANNOTATION.COMPOSITE_TEXT'
+             IN TYPEOF (SELF.item))) OR check_text_font(SELF.item);
+  WR13:	-- allowable_text_literals:
+    (NOT (('AIC_DRAUGHTING_ANNOTATION.ANNOTATION_TEXT_OCCURRENCE'
+             IN TYPEOF(SELF)) AND
+         ('AIC_DRAUGHTING_ANNOTATION.COMPOSITE_TEXT'
+               IN TYPEOF (SELF.item)))) OR
+         (SIZEOF (QUERY (tl <* QUERY (text <*
+            SELF.item\composite_text.collected_text |
+            ('AIC_DRAUGHTING_ANNOTATION.TEXT_LITERAL' IN TYPEOF (text))) |
+             NOT (SIZEOF (TYPEOF(tl) *
+                  ['AIC_DRAUGHTING_ANNOTATION.' +
+                   'TEXT_LITERAL_WITH_BLANKING_BOX',
+                   'AIC_DRAUGHTING_ANNOTATION.' +
+                   'TEXT_LITERAL_WITH_ASSOCIATED_CURVES']) = 0) )) = 0);
+  WR14:	-- styled_text_literal_curves:
+    (NOT (('AIC_DRAUGHTING_ANNOTATION.ANNOTATION_TEXT_OCCURRENCE'
+             IN TYPEOF (SELF)) AND
+         ('AIC_DRAUGHTING_ANNOTATION.TEXT_LITERAL_WITH_ASSOCIATED_CURVES'
+             IN TYPEOF (SELF.item)))) OR
+    (SIZEOF (QUERY (crv <*
+                   SELF.item\text_literal_with_associated_curves.
+                   associated_curves |
+      NOT (SIZEOF (QUERY (si <*  USEDIN (crv, 
+             'PRESENTATION_APPEARANCE_SCHEMA.STYLED_ITEM.ITEM') |
+        ('AIC_DRAUGHTING_ANNOTATION.ANNOTATION_CURVE_OCCURRENCE'
+            IN TYPEOF (si)) )) > 0) )) = 0);
+  WR15:	-- styled_composite_text_curves:
+    (NOT (('AIC_DRAUGHTING_ANNOTATION.ANNOTATION_TEXT_OCCURRENCE'
+             IN TYPEOF (SELF)) AND
+         ('AIC_DRAUGHTING_ANNOTATION.COMPOSITE_TEXT_WITH_ASSOCIATED_CURVES'
+             IN TYPEOF (SELF.item)))) OR
+          (SIZEOF (QUERY (crv <*
+                SELF.item\composite_text_with_associated_curves.
+                associated_curves |
+           NOT (SIZEOF (QUERY (si <*  USEDIN (crv,
+                'PRESENTATION_APPEARANCE_SCHEMA.STYLED_ITEM.ITEM') |
+               ('AIC_DRAUGHTING_ANNOTATION.ANNOTATION_CURVE_OCCURRENCE'
+           IN TYPEOF (si)) )) > 0) )) = 0);
+WR16:	-- curve_style_has_width:
+    SIZEOF (QUERY (cs <* QUERY (sty <* SELF.styles |
+      ('AIC_DRAUGHTING_ANNOTATION.CURVE_STYLE' IN TYPEOF (sty.styles[1])))
+      | NOT (('AIC_DRAUGHTING_ANNOTATION.LENGTH_MEASURE_WITH_UNIT'
+        IN TYPEOF (cs.styles[1]\curve_style.curve_width)) AND
+       ('MEASURE_SCHEMA.POSITIVE_LENGTH_MEASURE'
+        IN TYPEOF (cs.styles[1]\curve_style.
+        curve_width\measure_with_unit.value_component))))) = 0;
+WR17:	-- tiling_constraints:
+    SIZEOF (QUERY (fas <* QUERY (sty <* SELF.styles |
+      ('AIC_DRAUGHTING_ANNOTATION.FILL_AREA_STYLE'
+          IN TYPEOF (sty.styles[1]))) |
+      NOT ((SIZEOF (QUERY (fs <* fas.styles[1]\fill_area_style.fill_styles
+                    | ('AIC_DRAUGHTING_ANNOTATION.FILL_AREA_STYLE_TILES'
+                       IN TYPEOF (fs)))) <= 1)
+       AND (SIZEOF (QUERY (fst <* QUERY (fs <*
+                           fas.styles[1]\fill_area_style.fill_styles |
+              ('AIC_DRAUGHTING_ANNOTATION.FILL_AREA_STYLE_TILES'
+                  IN TYPEOF (fs))) |
+                 NOT (SIZEOF (fst\fill_area_style_tiles.tiles) = 1)
+           )) = 0))
+    )) = 0;
+  WR18:	-- hatching_constraints:
+    SIZEOF (QUERY (fas <* QUERY (sty <* SELF.styles |
+           ('AIC_DRAUGHTING_ANNOTATION.FILL_AREA_STYLE' 
+            IN TYPEOF (sty.styles[1]))) |
+             NOT (SIZEOF (QUERY (fsh <* QUERY (fs <*
+                          fas.styles[1]\fill_area_style.fill_styles |
+             ('AIC_DRAUGHTING_ANNOTATION.FILL_AREA_STYLE_HATCHING'
+               IN TYPEOF (fs))) |
+        NOT (fsh\fill_area_style_hatching.point_of_reference_hatch_line :=:
+             fsh\fill_area_style_hatching.pattern_start)  )) = 0)  )) = 0;
+  WR19:	-- text_style_constraint:
+    SIZEOF (QUERY (ts <* QUERY (sty <* SELF.styles |
+         ('AIC_DRAUGHTING_ANNOTATION.TEXT_STYLE' 
+         IN TYPEOF(sty.styles[1]))) |
+             NOT ('AIC_DRAUGHTING_ANNOTATION.' +
+                  'TEXT_STYLE_WITH_BOX_CHARACTERISTICS'
+             IN TYPEOF (ts.styles[1])))) = 0;
+  WR20:	-- text_style_characteristics:
+    SIZEOF (QUERY (ts <* QUERY (sty <* SELF.styles |
+         ('AIC_DRAUGHTING_ANNOTATION.TEXT_STYLE_WITH_BOX_CHARACTERISTICS'
+             IN TYPEOF (sty.styles[1]))) |
+           NOT (SIZEOF (ts.styles[1]\text_style_with_box_characteristics.
+                characteristics) = 4) )) = 0;
+END_ENTITY;
+
+ENTITY draughting_subfigure_representation
+  SUBTYPE OF (symbol_representation);
+WHERE
+  WR1: SIZEOF (QUERY (item <* SELF\representation.items |
+         NOT (SIZEOF (['AIC_DRAUGHTING_ANNOTATION.ANNOTATION_OCCURRENCE',
+              'AIC_DRAUGHTING_ANNOTATION.DRAUGHTING_CALLOUT',
+              'GEOMETRY_SCHEMA.AXIS2_PLACEMENT']
+               * TYPEOF (item)) = 1))) = 0;
+  WR2: SIZEOF (QUERY (item <* SELF\representation.items |
+         SIZEOF (['AIC_DRAUGHTING_ANNOTATION.ANNOTATION_OCCURRENCE',
+                  'AIC_DRAUGHTING_ANNOTATION.DRAUGHTING_CALLOUT'] *
+           TYPEOF (item)) = 1)) >= 1;
+  WR3: SIZEOF (QUERY (srm <* QUERY (rm <*
+          USEDIN (SELF, 'REPRESENTATION_SCHEMA.' +
+                        'REPRESENTATION_MAP.MAPPED_REPRESENTATION') |
+          ('AIC_DRAUGHTING_ANNOTATION.SYMBOL_REPRESENTATION_MAP'
+             IN TYPEOF(rm))) | 
+            NOT (SIZEOF (QUERY (a_s <* QUERY (mi <* srm.map_usage |
+            ('AIC_DRAUGHTING_ANNOTATION.ANNOTATION_SYMBOL' IN TYPEOF(mi)))
+          | NOT (SIZEOF (QUERY (aso <*
+            USEDIN (a_s, 'PRESENTATION_APPEARANCE_SCHEMA.' + 
+                         'STYLED_ITEM.ITEM') |
+          NOT ('AIC_DRAUGHTING_ANNOTATION.ANNOTATION_SUBFIGURE_OCCURRENCE'
+            IN TYPEOF(aso)))) = 0))) = 0))) > 0;
+  WR4: NOT (acyclic_mapped_item_usage (SELF));
+  WR5: SIZEOF (SELF.context_of_items.representations_in_context) = 1;
+END_ENTITY;
+
+ENTITY draughting_symbol_representation
+  SUBTYPE of (symbol_representation);
+UNIQUE
+  UR1: SELF\representation.name;
+WHERE
+  WR1: 
+    SIZEOF (QUERY (item <* SELF\representation.items |
+         NOT (SIZEOF (TYPEOF (item) *
+            ['AIC_DRAUGHTING_ANNOTATION.ANNOTATION_CURVE_OCCURRENCE',
+             'AIC_DRAUGHTING_ANNOTATION.ANNOTATION_SYMBOL_OCCURRENCE',
+             'AIC_DRAUGHTING_ANNOTATION.ANNOTATION_FILL_AREA_OCCURRENCE',
+             'AIC_DRAUGHTING_ANNOTATION.ANNOTATION_TEXT_OCCURRENCE',
+             'GEOMETRY_SCHEMA.AXIS2_PLACEMENT']) = 1)
+       )) = 0;
+  WR2: 
+    SIZEOF (QUERY (item <* SELF\representation.items |
+         (SIZEOF (TYPEOF (item) *
+            ['AIC_DRAUGHTING_ANNOTATION.ANNOTATION_CURVE_OCCURRENCE',
+             'AIC_DRAUGHTING_ANNOTATION.ANNOTATION_SYMBOL_OCCURRENCE',
+             'AIC_DRAUGHTING_ANNOTATION.ANNOTATION_FILL_AREA_OCCURRENCE',
+             'AIC_DRAUGHTING_ANNOTATION.ANNOTATION_TEXT_OCCURRENCE']) = 1)
+       )) >= 1;
+  WR3: 
+    SIZEOF (QUERY (item <* SELF\representation.items |
+         'AIC_DRAUGHTING_ANNOTATION.ANNOTATION_SUBFIGURE_OCCURRENCE'
+          IN TYPEOF (item))) = 0;
+  WR4: 
+    SIZEOF (QUERY (srm <* QUERY (rm <*
+          USEDIN (SELF, 'REPRESENTATION_SCHEMA.' +
+                        'REPRESENTATION_MAP.MAPPED_REPRESENTATION') |
+          ('REPRESENTATION_SCHEMA.SYMBOL_REPRESENTATION_MAP'
+             IN TYPEOF(rm))) |
+         NOT (SIZEOF (QUERY (a_s <* QUERY (mi <* srm.map_usage |
+           ('AIC_DRAUGHTING_ANNOTATION.ANNOTATION_SYMBOL' IN TYPEOF(mi))) |
+         NOT (SIZEOF (QUERY(aso <*
+             USEDIN(a_s, 'PRESENTATION_APPEARANCE_SCHEMA.' +
+                         'STYLED_ITEM.ITEM') |
+             NOT ('AIC_DRAUGHTING_ANNOTATION.ANNOTATION_SYMBOL_OCCURRENCE'
+                  IN TYPEOF(aso))
+          )) = 0) )) = 0) )) > 0;
+  WR5: 
+    NOT (acyclic_mapped_item_usage (SELF));
+  WR6: 
+    SIZEOF (SELF.context_of_items.representations_in_context) = 1;
+END_ENTITY;
+
+ENTITY draughting_text_literal_with_delineation
+  SUBTYPE OF (text_literal_with_delineation);
+WHERE
+  WR1: SELF.delineation IN ['underline', 'overline'];
+END_ENTITY;
+
+FUNCTION acyclic_mapped_item_usage (rep: representation) : BOOLEAN;
+  -- returns TRUE if the representation contains one or more mapped_items
+  -- that are a mapping of the representation itself
+  LOCAL
+    items : SET OF representation_item;
+  END_LOCAL;
+
+  items := QUERY (item <* rep.items |
+           'AIC_DRAUGHTING_ANNOTATION.MAPPED_ITEM' IN TYPEOF (item));
+  IF SIZEOF (items) = 0
+  THEN 
+    RETURN (FALSE);
+  ELSE 
+    REPEAT i := 1 TO HIINDEX (items);
+      IF items[i]\mapped_item.mapping_source.mapped_representation :=: rep
+      THEN 
+        RETURN (TRUE);
+      ELSE 
+        RETURN (acyclic_mapped_item_usage(items[i]\
+                  mapped_item.mapping_source.mapped_representation));
+      END_IF;
+    END_REPEAT;
+  RETURN (FALSE);
+  END_IF;
+END_FUNCTION;
+
+FUNCTION check_text_alignment (ct : composite_text) : BOOLEAN;
+
+  LOCAL
+    a : SET OF text_alignment := [];
+  END_LOCAL;
+
+  -- create a set of all the alignments
+  REPEAT i := 1 TO HIINDEX (ct.collected_text);
+    a := a + [ct.collected_text[i]\text_literal.alignment];
+  END_REPEAT;
+
+  -- if there is more than one element in the set
+  -- then not all alignments were the same
+  RETURN (SIZEOF(a) = 1);
+END_FUNCTION;
+
+FUNCTION check_text_font (ct : composite_text) : BOOLEAN;
+
+  LOCAL
+    f : SET OF font_select := [];
+  END_LOCAL;
+
+  -- build a set of all the fonts
+  REPEAT i := 1 TO HIINDEX (ct.collected_text);
+    f := f + [ct.collected_text[i]\text_literal.font];
+  END_REPEAT;
+
+  -- if there is more than one element in the set
+  -- then not all fonts were the same
+  RETURN (SIZEOF(f) <= 1);
+END_FUNCTION;
+
+END_SCHEMA; -- aic_draughting_annotation

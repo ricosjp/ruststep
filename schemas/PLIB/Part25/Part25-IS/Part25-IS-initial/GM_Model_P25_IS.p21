@@ -1,0 +1,121 @@
+ISO-10303-21;
+HEADER;
+
+FILE_DESCRIPTION (('THIS IS AN EXAMPLE OF AN EXPLICIT GENERAL MODEL'), '2');
+FILE_NAME('P25_gm_explicit.p21',
+          '2000-11-28T17:38:14',
+          (''),
+          ('LISI/ENSMA'),
+          'ECCO RUNTIME SYSTEM BUILT-IN PREPROCESSOR V2.3beta1',
+          'ECCO RUNTIME SYSTEM V2.3beta1',
+          '');
+FILE_SCHEMA (('ISO13584_25_IEC61360_5_LIBRARY_IMPLICIT_SCHEMA'));
+ENDSEC;
+
+DATA;
+
+/* Global library description */
+#2 = LIBRARY_IN_STANDARD_FORMAT ($, $, $, $, (), #20, #11, (), (), (#20), (#50, #60), (), #3, $, $, ());
+#3 = ITEM_NAMES (LABEL('Explicit general model example'), (), LABEL(''), $, $);
+#10 = GLOBAL_LANGUAGE_ASSIGNMENT ('en');
+#11 = LIBRARY_IIM_IDENTIFICATION ($, 'IS', 'ISO13584_25_IEC61360_5', 2003, '5', $, ());
+
+/* DICTIONARY DESCRIPTION */
+/*BSU for supplier */
+#20 = SUPPLIER_BSU ('INA', *);
+
+/* BSU for component_class */
+#50 = CLASS_BSU ('BEARING', '001', #20);
+#60 = CLASS_BSU ('PAW', '001', #20);
+
+/* BSU for properties */
+#90 = PROPERTY_BSU ('d_in', '001', #50);
+#100 = PROPERTY_BSU ('d_out', '001', #50);
+#110 = PROPERTY_BSU ('e', '001', #60);
+
+/* Dictionary properties description */
+/* supplier description */
+#21 = SUPPLIER_ELEMENT (#20, $, '001', #22, #23);
+#22 = ORGANIZATION ($, 'INA', '');
+#23 = ADDRESS ($, $, $, $, $, $, $, 'GERMANY', $, $, $, $);
+
+/* d_in */
+#91 = NON_DEPENDENT_P_DET (#90, $, '001', #92, TEXT('inner diameter'), $, $, 
+$, $, (), $, 'TO3', #93, $);
+#92 = ITEM_NAMES (LABEL('inner diameter'), (), LABEL(''), $, $);
+#93 = REAL_MEASURE_TYPE ('NR2..3.3', #94);
+#94 = DIC_UNIT (#95, $);
+#95 = SI_UNIT (*, .MILLI., .METRE.);
+/* d_out */
+#101 = NON_DEPENDENT_P_DET (#100, $, '001', #102, TEXT('outer diameter'), $, 
+$, $, $, (), $, 'TO3', #93, $);
+#102 = ITEM_NAMES (LABEL('outer diameter'), (), LABEL(''), $, $);
+#103 = REAL_MEASURE_TYPE ('NR2..3.3', #104);
+#104 = DIC_UNIT (#105, $);
+#105 = SI_UNIT (*, .MILLI., .METRE.);
+
+/* e */
+#111 = NON_DEPENDENT_P_DET (#110, $, '001', #112, TEXT('thickness'), $, $, $, 
+$, (), $, 'TO3', #93, $);
+#112 = ITEM_NAMES (LABEL('thickness'), (), LABEL(''), $, $);
+#113 = REAL_MEASURE_TYPE ('NR2..3.3', #114);
+#114 = DIC_UNIT (#115, $);
+#115 = SI_UNIT (*, .MILLI., .METRE.);
+
+/* Dictionary class description */
+/* Part class */
+#71 = COMPONENT_CLASS (#50, $, '001', #72, TEXT('Class associated to the 
+generic bearing family'), $, $, $, $, (#90, #100), (), $, (),(), $);
+#72 = ITEM_NAMES (LABEL('Generic bearing family'), (), LABEL('Bearing family'), $, 
+$);
+
+/* PAW class */
+#81 = COMPONENT_CLASS (#60, $, '001', #82, TEXT('Class associated to the PAW 
+part family'), $, $, $, #50, (#110), (), $, (),(), $);
+#82 = ITEM_NAMES (LABEL('PAW family'), (), LABEL('PAW'), $, $);
+
+/* Library extension */
+/* Extension of a class */
+#8000= EXPLICIT_ITEM_CLASS_EXTENSION(#60,(),(),(),'001','001',(),(),(#90),
+(#8100,#8200,#8300,#8400,#8500),.T.,$,$,(),$,(),());
+
+/* Extension of a library component */
+#8100=LIB_COMPONENT_INSTANCE(#60, (#8101, #8102, #8103), (), $, $, $, $, .T., $);
+/* Property values of the extension of a class */
+#8101=PROPERTY_VALUE(REAL_VALUE(10.0), #90);
+#8102=PROPERTY_VALUE(REAL_VALUE(1.0), #100);
+#8103=PROPERTY_VALUE(REAL_VALUE(15.0), #110);
+
+/* Extension of a library component */
+#8200=LIB_COMPONENT_INSTANCE(#60, (#8201, #8202, #8203), (), $, $, $, $, .T., $);
+/* Property values of the extension of a class */
+#8201=PROPERTY_VALUE(REAL_VALUE(11.0), #90);
+#8202=PROPERTY_VALUE(REAL_VALUE(1.0), #100);
+#8203=PROPERTY_VALUE(REAL_VALUE(16.5), #110);
+
+/* Extension of a library component */
+#8300=LIB_COMPONENT_INSTANCE(#60, (#8301, #8302, #8303), (), $, $, $, $, .T., $);
+
+/* Property values of the extension of a class */
+#8301=PROPERTY_VALUE(REAL_VALUE(13.0), #90);
+#8302=PROPERTY_VALUE(REAL_VALUE(2.0), #100);
+#8303=PROPERTY_VALUE(REAL_VALUE(19.5), #110);
+
+/* Extension of a library component */
+#8400=LIB_COMPONENT_INSTANCE(#60, (#8401, #8402, #8403), (), $, $, $, $, .T., $);
+
+/* Property values of the extension of a class */
+#8401=PROPERTY_VALUE(REAL_VALUE(17.0), #90);
+#8402=PROPERTY_VALUE(REAL_VALUE(3.0), #100);
+#8403=PROPERTY_VALUE(REAL_VALUE(25.5), #110);
+
+/* Extension of a library component */
+#8500=LIB_COMPONENT_INSTANCE(#60, (#8501, #8502, #8503), (), $, $, $, $, .T., $);
+
+/* Property values of the extension of a class */
+#8501=PROPERTY_VALUE(REAL_VALUE(19.0), #90);
+#8502=PROPERTY_VALUE(REAL_VALUE(4.0), #100);
+#8503=PROPERTY_VALUE(REAL_VALUE(28.5), #110);
+
+ENDSEC;
+END-ISO-10303-21;

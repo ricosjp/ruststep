@@ -1,0 +1,92 @@
+(*
+   $Id: 10303-1144-arm-building_item.exp,v 1.2 2006/08/03 13:23:53 wg12deputy Exp $
+   ISO/TC184/SC4 WG12N2572 - ISO/TS - 10303-1144 Building_item - EXPRESS ARM
+   Supersedes ISO TC184/SC4/WG12N1781
+*)
+
+SCHEMA Building_item_arm;
+
+USE FROM Product_view_definition_arm;
+
+TYPE fixture_equipment_functional_type = ENUMERATION OF
+	(ceiling,
+	 covering_element,
+	 door,
+	 floor_covering,
+	 furniture,
+	 wall_covering,
+	 window);
+END_TYPE;
+
+TYPE fixture_equipment_type = SELECT
+	(fixture_equipment_type_name,
+	 fixture_equipment_functional_type);
+END_TYPE;
+
+TYPE fixture_equipment_type_name = STRING;
+END_TYPE;
+
+TYPE service_functional_type = ENUMERATION OF
+	(electrical_system,
+	 HVAC_system,
+	 plumbing_system,
+	 transport_system);
+END_TYPE;
+
+TYPE service_type = SELECT
+	(service_type_name,
+	 service_functional_type);
+END_TYPE;
+
+TYPE service_type_name = STRING;
+END_TYPE;
+
+TYPE structure_enclosure_functional_type = ENUMERATION OF
+	(beam,
+	 brace,
+	 column,
+	 floor,
+	 foundation,
+	 structural_wire,
+	 wall);
+END_TYPE;
+
+TYPE structure_enclosure_type = SELECT
+	(structure_enclosure_type_name,
+	 structure_enclosure_functional_type);
+END_TYPE;
+
+TYPE structure_enclosure_type_name = STRING;
+END_TYPE;
+
+ENTITY Building_element
+	SUPERTYPE OF (ONEOF(Structure_enclosure_element,Fixture_equipment_element,Service_element))
+	SUBTYPE OF (Building_item);
+END_ENTITY;
+
+ENTITY Building_item
+	ABSTRACT SUPERTYPE OF (ONEOF(Space,Building_element))
+	SUBTYPE OF (Product_view_definition);
+END_ENTITY;
+
+ENTITY Fixture_equipment_element
+	SUBTYPE OF (Building_element);
+	functional_type : fixture_equipment_type;
+END_ENTITY;
+
+ENTITY Service_element
+	SUBTYPE OF (Building_element);
+	functional_type : service_type;
+END_ENTITY;
+
+ENTITY Space
+	SUBTYPE OF (Building_item);
+END_ENTITY;
+
+ENTITY Structure_enclosure_element
+	SUBTYPE OF (Building_element);
+	functional_type : structure_enclosure_type;
+	load_bearing : LOGICAL;
+END_ENTITY;
+
+END_SCHEMA;

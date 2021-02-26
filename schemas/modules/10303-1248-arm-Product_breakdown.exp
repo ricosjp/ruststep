@@ -1,0 +1,97 @@
+(*
+ $Id: 10303-1248-arm-Product_breakdown.exp,v 1.2 2006/08/07 07:44:45 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N3109 - ISO/TS 10303-1248 Product breakdown - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG12 N2294
+*) 
+
+
+SCHEMA Product_breakdown_arm;
+
+USE FROM Product_identification_arm;    -- ISO/TS 10303-1017
+
+USE FROM Product_version_arm;    -- ISO/TS 10303-1018
+
+USE FROM Product_view_definition_arm;    -- ISO/TS 10303-1019
+
+USE FROM Product_view_definition_relationship_arm;    -- ISO/TS 10303-1041
+
+USE FROM Property_assignment_arm;    -- ISO/TS 10303-1030
+
+
+TYPE breakdown_element_realization_property_assignment_select = SELECT BASED_ON property_assignment_select WITH 
+   (Breakdown_element_realization, 
+    Breakdown_element_usage);
+END_TYPE; 
+
+TYPE breakdown_item = EXTENSIBLE SELECT
+   (Breakdown_element_definition, 
+    Breakdown_element_usage);
+END_TYPE; 
+
+TYPE product_item = EXTENSIBLE SELECT
+   (Product_view_definition, 
+    View_definition_usage);
+END_TYPE; 
+
+ENTITY Breakdown
+  SUBTYPE OF (Product);
+END_ENTITY;
+
+ENTITY Breakdown_context;
+  id : STRING;
+  name : STRING;
+  description : OPTIONAL STRING;
+  breakdown : Breakdown_version;
+  breakdown_element : Breakdown_element_definition;
+END_ENTITY;
+
+ENTITY Breakdown_element
+  SUBTYPE OF (Product);
+END_ENTITY;
+
+ENTITY Breakdown_element_definition
+  SUBTYPE OF (Product_view_definition);
+  SELF\Product_view_definition.defined_version : Breakdown_element_version;
+END_ENTITY;
+
+ENTITY Breakdown_element_realization
+  SUBTYPE OF (Product_definition_element_relationship);
+END_ENTITY;
+
+ENTITY Breakdown_element_usage
+  SUBTYPE OF (View_definition_usage);
+  name : STRING;
+  SELF\View_definition_relationship.relating_view RENAMED parent_element : Breakdown_element_definition;
+  SELF\View_definition_relationship.related_view RENAMED child_element : Breakdown_element_definition;
+END_ENTITY;
+
+ENTITY Breakdown_element_version
+  SUBTYPE OF (Product_version);
+  SELF\Product_version.of_product : Breakdown_element;
+END_ENTITY;
+
+ENTITY Breakdown_of;
+  id : STRING;
+  name : STRING;
+  description : OPTIONAL STRING;
+  breakdown : Breakdown_version;
+  of_view : Product_view_definition;
+END_ENTITY;
+
+ENTITY Breakdown_version
+  SUBTYPE OF (Product_version);
+  SELF\Product_version.of_product : Breakdown;
+INVERSE
+  breakdown_of : SET[1:?] OF Breakdown_of FOR breakdown;
+END_ENTITY;
+
+ENTITY Product_definition_element_relationship;
+  id : STRING;
+  name : STRING;
+  description : OPTIONAL STRING;
+  breakdown : breakdown_item;
+  product : product_item;
+END_ENTITY;
+
+END_SCHEMA;  -- Product_breakdown_arm
+

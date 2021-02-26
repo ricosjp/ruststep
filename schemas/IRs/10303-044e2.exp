@@ -1,0 +1,277 @@
+SCHEMA product_structure_schema;
+
+  REFERENCE FROM product_definition_schema
+    (product,
+     product_definition,
+     product_definition_relationship,
+     acyclic_product_definition_relationship);
+
+  REFERENCE FROM measure_schema
+     (measure_with_unit);
+
+  REFERENCE FROM support_resource_schema
+     (identifier, label, text);
+
+ENTITY alternate_product_relationship;
+  name        : label;
+  definition  : OPTIONAL text;
+  alternate   : product;
+  base        : product;
+  basis       : text;
+UNIQUE
+  UR1: alternate, base;
+WHERE
+  WR1: alternate :<>: base;
+END_ENTITY;
+
+ENTITY assembly_component_usage
+  SUPERTYPE OF (ONEOF (next_assembly_usage_occurrence,
+                       specified_higher_usage_occurrence,
+                       promissory_usage_occurrence))
+  SUBTYPE OF (product_definition_usage);
+  reference_designator : OPTIONAL identifier;
+END_ENTITY;
+
+ENTITY assembly_component_usage_substitute;
+  name              : label;
+  definition        : OPTIONAL text;
+  base              : assembly_component_usage;
+  substitute        : assembly_component_usage;
+UNIQUE
+  UR1: base,substitute;
+WHERE
+  WR1: base.relating_product_definition :=:
+       substitute.relating_product_definition;
+  WR2: base :<>: substitute;
+END_ENTITY;
+
+ENTITY assembly_component_usage_substitute_with_ranking
+  SUBTYPE OF (assembly_component_usage_substitute);
+  ranking           : INTEGER;
+  ranking_rationale : text;
+END_ENTITY;
+
+ENTITY make_from_usage_option
+  SUBTYPE OF (product_definition_usage);
+  ranking           : INTEGER;
+  ranking_rationale : text;
+  quantity          : measure_with_unit;
+WHERE
+  WR1: (NOT ('NUMBER' IN TYPEOF(quantity.value_component)))
+       OR (quantity.value_component > 0);
+END_ENTITY;
+
+ENTITY make_from_usage_option_group;
+  members : SET [2:?] OF make_from_usage_option;
+WHERE
+  WR1: SIZEOF (QUERY (example <* members |
+       example.related_product_definition
+       :=: members[1].related_product_definition)) =SIZEOF(members);
+END_ENTITY;
+
+ENTITY next_assembly_usage_occurrence
+  SUBTYPE OF (assembly_component_usage);
+END_ENTITY;
+
+ENTITY product_definition_occurrence_relationship;
+  name             : label;
+  description      : OPTIONAL text;
+  occurrence       : product_definition;
+  occurrence_usage : assembly_component_usage;
+WHERE
+  WR1: occurrence_usage.relating_product_definition :<>: 
+       occurrence;
+  WR2: occurrence_usage.related_product_definition :<>: 
+       occurrence;
+  WR3: occurrence.formation :=:
+       occurrence_usage.related_product_definition.formation;
+END_ENTITY;
+
+ENTITY product_definition_usage
+  SUPERTYPE OF (ONEOF (make_from_usage_option,
+                       assembly_component_usage))
+  SUBTYPE OF (product_definition_relationship);
+UNIQUE
+  UR1: SELF\product_definition_relationship.id,
+       SELF\product_definition_relationship.relating_product_definition,
+       SELF\product_definition_relationship.related_product_definition;
+WHERE
+  WR1:  acyclic_product_definition_relationship
+         (SELF,
+         [SELF\product_definition_relationship.related_product_definition],
+         'PRODUCT_STRUCTURE_SCHEMA.PRODUCT_DEFINITION_USAGE');
+END_ENTITY;
+
+ENTITY promissory_usage_occurrence
+  SUBTYPE OF (assembly_component_usage);
+END_ENTITY;
+
+ENTITY quantified_assembly_component_usage
+  SUBTYPE OF (assembly_component_usage);
+  quantity   : measure_with_unit;
+WHERE
+  WR1: (NOT ('NUMBER' IN TYPEOF(quantity.value_component)))
+       OR (quantity.value_component > 0);
+END_ENTITY;
+
+ENTITY specified_higher_usage_occurrence
+  SUBTYPE OF (assembly_component_usage);
+  upper_usage   : assembly_component_usage;
+  next_usage    : next_assembly_usage_occurrence;
+UNIQUE
+  UR1: upper_usage, next_usage;
+WHERE
+  WR1: SELF :<>: upper_usage;
+  WR2: SELF\product_definition_relationship.relating_product_definition
+       :=: upper_usage.relating_product_definition;
+  WR3: SELF\product_definition_relationship.related_product_definition
+       :=: next_usage.related_product_definition;
+  WR4: (upper_usage.related_product_definition :=:
+       next_usage.relating_product_definition) OR
+       (SIZEOF (QUERY (pdr <* USEDIN (upper_usage.related_product_definition,
+       'PRODUCT_DEFINITION_SCHEMA.PRODUCT_DEFINITION_RELATIONSHIP.' +
+       'RELATED_PRODUCT_DEFINITION') |
+        pdr.relating_product_definition :=: 
+        next_usage.relating_product_definition)) = 1);
+  WR5: SIZEOF (['PRODUCT_STRUCTURE_SCHEMA.NEXT_ASSEMBLY_USAGE_OCCURRENCE',
+       'PRODUCT_STRUCTURE_SCHEMA.SPECIFIED_HIGHER_USAGE_OCCURRENCE']
+       * TYPEOF(upper_usage)) = 1;
+END_ENTITY;
+
+END_SCHEMA; -- product_structure
+
+SCHEMA product_concept_schema;
+
+  REFERENCE FROM support_resource_schema
+    (text, label, identifier);
+
+  REFERENCE FROM application_context_schema
+    (product_concept_context);
+
+ENTITY concept_feature_operator;
+  name        : label;
+  description : OPTIONAL text;
+END_ENTITY;
+
+ENTITY concept_feature_relationship;
+  name                              : label;
+  description                       : OPTIONAL text;
+  relating_product_concept_feature  : product_concept_feature;
+  related_product_concept_feature   : product_concept_feature;
+END_ENTITY;
+
+ENTITY concept_feature_relationship_with_condition
+  SUBTYPE OF (concept_feature_relationship);
+  conditional_operator : concept_feature_operator;
+END_ENTITY;
+
+ENTITY conditional_concept_feature
+  SUBTYPE OF (product_concept_feature);
+  condition : concept_feature_relationship_with_condition;
+END_ENTITY;
+
+ENTITY product_concept;
+  id                  : identifier;
+  name                : label;
+  description         : OPTIONAL text;
+  market_context      : product_concept_context;
+UNIQUE
+  UR1: id;
+END_ENTITY;
+
+ENTITY product_concept_feature;
+  id          : identifier;
+  name        : label;
+  description : OPTIONAL text;
+END_ENTITY;
+
+ENTITY product_concept_feature_association;
+  name        : label;
+  description : OPTIONAL text;
+  concept     : product_concept;
+  feature     : product_concept_feature;
+END_ENTITY;
+
+ENTITY product_concept_relationship;
+  name                     : label;
+  description              : OPTIONAL text;
+  relating_product_concept : product_concept;
+  related_product_concept  : product_concept;
+END_ENTITY;
+
+END_SCHEMA; -- product_concept_schema
+
+SCHEMA configuration_management_schema;
+
+  REFERENCE FROM product_definition_schema
+    (product_definition,
+     product_definition_formation,
+     product_definition_effectivity);
+
+  REFERENCE FROM product_structure_schema
+    (product_definition_usage);
+
+  REFERENCE FROM product_concept_schema
+    (product_concept,
+     product_concept_feature_association);
+
+  REFERENCE FROM basic_attribute_schema
+    (get_description_value,
+     get_name_value);
+
+  REFERENCE FROM support_resource_schema
+    (text, label, identifier, bag_to_set);
+
+TYPE configuration_design_item = SELECT
+   (product_definition,
+    product_definition_formation);
+END_TYPE;
+
+ENTITY configurable_item
+  SUBTYPE OF (configuration_item);
+  item_concept_feature : SET[1:?] OF product_concept_feature_association;
+END_ENTITY;
+
+ENTITY configuration_design;
+  configuration : configuration_item;
+  design        : configuration_design_item;
+DERIVE
+  name          : label := get_name_value (SELF);
+  description   : text := get_description_value (SELF);
+UNIQUE
+  UR1: configuration, design;
+WHERE
+  WR1: SIZEOF (USEDIN (SELF, 'BASIC_ATTRIBUTE_SCHEMA.' +
+                             'NAME_ATTRIBUTE.NAMED_ITEM')) <= 1;
+  WR2: SIZEOF (USEDIN (SELF, 'BASIC_ATTRIBUTE_SCHEMA.' +
+                             'DESCRIPTION_ATTRIBUTE.DESCRIBED_ITEM')) <= 1;
+END_ENTITY;
+
+ENTITY configuration_effectivity
+  SUBTYPE OF (product_definition_effectivity);
+  configuration : configuration_design;
+UNIQUE
+  UR1: configuration,
+       usage,
+       id;
+WHERE
+  WR1: 'PRODUCT_STRUCTURE_SCHEMA.PRODUCT_DEFINITION_USAGE' IN
+        TYPEOF (SELF\product_definition_effectivity.usage);
+END_ENTITY;
+
+ENTITY configuration_item;
+   id                  :  identifier;
+   name                :  label;
+   description         :  OPTIONAL text;
+   item_concept        :  product_concept;
+   purpose             :  OPTIONAL label;
+END_ENTITY;
+
+ENTITY configuration_item_relationship;
+  name                        : label;
+  description                 : OPTIONAL text;
+  relating_configuration_item : configuration_item;
+  related_configuration_item  : configuration_item;
+END_ENTITY;
+
+END_SCHEMA; -- configuration_management_schema

@@ -1,0 +1,29 @@
+(*
+ $Id: 10303-1044-mim-certification.exp,v 1.5 2006/08/07 09:42:03 wg12deputy Exp $
+ISO TC184/SC4/WG12 N1148 - ISO/TS 10303-1044 Certification - EXPRESS MIM
+*) 
+
+
+SCHEMA Certification_mim;
+
+USE FROM basic_attribute_schema   -- ISO 10303-41
+  (role_association,
+   role_select); 
+
+USE FROM certification_schema   -- ISO 10303-41
+  (certification,
+   certification_type); 
+
+USE FROM management_resources_schema   -- ISO 10303-41
+  (certification_assignment); 
+
+
+TYPE certification_item = EXTENSIBLE GENERIC_ENTITY SELECT;
+END_TYPE; 
+
+ENTITY applied_certification_assignment
+  SUBTYPE OF (certification_assignment);
+  items : SET[1:?] OF certification_item;
+END_ENTITY;
+
+END_SCHEMA;  -- Certification_mim

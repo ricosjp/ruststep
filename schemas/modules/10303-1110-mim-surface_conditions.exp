@@ -1,0 +1,251 @@
+(* 
+   $Id: 10303-1110-mim-surface_conditions.exp,v 1.1 2006/08/03 15:03:34 wg12deputy Exp $
+   ISO/TC184/SC4 WG12N2605 - ISO/TS 10303-1110 Surface_conditions - Express MIM 
+   Supersedes ISO TC184/SC4/WG12N1739
+*)
+
+SCHEMA Surface_conditions_mim;
+
+USE FROM Construction_geometry_mim;
+
+USE FROM Dimension_tolerance_mim;
+
+USE FROM Document_and_version_identification_mim;
+
+USE FROM Extended_measure_representation_mim;
+
+USE FROM Measure_representation_mim;
+
+USE FROM Pdm_material_aspects_mim;
+
+USE FROM Product_view_definition_mim;
+
+USE FROM Shape_property_assignment_mim;
+
+USE FROM product_property_definition_schema(
+	property_definition);
+
+USE FROM product_property_representation_schema(
+	property_definition_representation);
+
+REFERENCE FROM Single_part_representation_mim
+	(categories_of_product);
+
+
+ENTITY contact_ratio_representation
+  SUBTYPE OF (representation);
+WHERE
+ WR1: ( SIZEOF ( SELF.items ) =1 ) AND ( SIZEOF ( QUERY ( i <*
+     SELF.items | ( SIZEOF ( ['SURFACE_CONDITIONS_MIM.'+
+     'MEASURE_REPRESENTATION_ITEM' , 'SURFACE_CONDITIONS_MIM.'+
+     'VALUE_RANGE']* TYPEOF ( i ) ) =1 ) AND ( i.name =
+     'ratio value' ) ) ) =1 ) ;
+ WR2: ( SIZEOF ( QUERY ( pdr <* USEDIN ( SELF ,
+     'SURFACE_CONDITIONS_MIM.'+'PROPERTY_DEFINITION_REPRESENTATION.'+
+     'USED_REPRESENTATION' ) | pdr. name =
+     'contact ratio reference' ) ) =1 ) AND ( SIZEOF ( QUERY (
+     pdr <* USEDIN ( SELF ,
+     'SURFACE_CONDITIONS_MIM.'+'PROPERTY_DEFINITION_REPRESENTATION.'+
+     'USED_REPRESENTATION' ) | ( pdr. name =
+     'contact ratio reference' ) AND ( 'SURFACE_CONDITIONS_MIM.'+
+     'PHYSICALLY_MODELLED_PRODUCT_DEFINITION' IN TYPEOF ( pdr.
+     definition.definition ) ) ) ) =1 ) ;
+ WR3: ( SIZEOF ( USEDIN ( SELF ,
+     'SURFACE_CONDITIONS_MIM.'+'PROPERTY_DEFINITION_REPRESENTATION.'+
+     'USED_REPRESENTATION' ) ) =1 ) AND ( SIZEOF ( QUERY ( pdr
+     <* USEDIN ( SELF ,
+     'SURFACE_CONDITIONS_MIM.'+'PROPERTY_DEFINITION_REPRESENTATION.'+
+     'USED_REPRESENTATION' ) | SIZEOF ( QUERY ( gpa <* USEDIN (
+     pdr. definition ,
+     'SURFACE_CONDITIONS_MIM.'+'GENERAL_PROPERTY_ASSOCIATION.'+
+     'DERIVED_DEFINITION' ) | ( 'SURFACE_CONDITIONS_MIM.'+
+     'GENERAL_PROPERTY' IN TYPEOF ( gpa. base_definition ) ) AND
+     ( gpa. base_definition.name ='surface_condition' ) ) ) =1 )
+     ) =1 ) ;
+END_ENTITY;
+
+ENTITY hardness_representation
+  SUBTYPE OF (representation);
+WHERE
+ WR1: ( {2<= SIZEOF ( SELF.items ) <=4} ) AND ( SIZEOF ( QUERY (
+     i <* items | ( 'SURFACE_CONDITIONS_MIM.'+
+     'DESCRIPTIVE_REPRESENTATION_ITEM' IN TYPEOF ( i ) ) AND (
+     i.name IN [ 'measuring method' , 'measuring position' ] ) )
+     ) + SIZEOF ( QUERY ( i <* items | ( SIZEOF (
+     ['SURFACE_CONDITIONS_MIM.'+ 'MEASURE_REPRESENTATION_ITEM' ,
+     'SURFACE_CONDITIONS_MIM.'+ 'VALUE_RANGE']* TYPEOF ( i ) ) =1 )
+     AND ( i.name IN ['depth' , 'hardness'] ) ) ) = SIZEOF (
+     SELF.items ) ) ;
+ WR2: SIZEOF ( QUERY ( i <* SELF.items | i.name =
+     'measuring method' ) ) =1;
+ WR3: SIZEOF ( QUERY ( i <* SELF.items | i.name ='hardness' ) )
+     =1;
+ WR4: SIZEOF ( QUERY ( i <* SELF.items | i.name =
+     'measuring position' ) ) <=1;
+ WR5: SIZEOF ( QUERY ( i <* SELF.items | i.name ='depth' ) )
+     <=1;
+ WR6: ( SIZEOF ( USEDIN ( SELF ,
+     'SURFACE_CONDITIONS_MIM.'+'PROPERTY_DEFINITION_REPRESENTATION.'+
+     'USED_REPRESENTATION' ) ) =1 ) AND ( SIZEOF ( QUERY ( pdr
+     <* USEDIN ( SELF ,
+     'SURFACE_CONDITIONS_MIM.'+'PROPERTY_DEFINITION_REPRESENTATION.'+
+     'USED_REPRESENTATION' ) | SIZEOF ( QUERY ( gpa <* USEDIN (
+     pdr. definition ,
+     'SURFACE_CONDITIONS_MIM.'+'GENERAL_PROPERTY_ASSOCIATION.'+
+     'DERIVED_DEFINITION' ) | ( 'SURFACE_CONDITIONS_MIM.'+
+     'GENERAL_PROPERTY' IN TYPEOF ( gpa. base_definition ) ) AND
+     ( gpa. base_definition.name ='surface_condition' ) ) ) =1 )
+     ) =1 ) ;
+END_ENTITY;
+
+ENTITY physically_modelled_product_definition 
+SUBTYPE OF (product_definition); 
+WHERE 
+WR1: SELF.frame_of_reference\application_context_element.name = 'physical model occurrence'; 
+WR2: 'document' IN categories_of_product(SELF\product_definition.formation.of_product);
+END_ENTITY; 
+
+ENTITY surface_texture_representation
+  SUBTYPE OF (representation);
+WHERE
+ WR1: SIZEOF ( QUERY ( i <* SELF.items | SIZEOF (
+     ['SURFACE_CONDITIONS_MIM.'+ 'MEASURE_REPRESENTATION_ITEM' ,
+     'SURFACE_CONDITIONS_MIM.'+ 'VALUE_RANGE' , 'SURFACE_CONDITIONS_MIM.'+
+     'DESCRIPTIVE_REPRESENTATION_ITEM']* TYPEOF ( i ) ) <>1 ) )
+     =0;
+ WR2: ( SIZEOF ( QUERY ( i <* SELF.items | 'SURFACE_CONDITIONS_MIM.'+
+     'DESCRIPTIVE_REPRESENTATION_ITEM' IN TYPEOF ( i ) ) ) =1 )
+     AND ( SIZEOF ( QUERY ( i <* SELF.items | (
+     'SURFACE_CONDITIONS_MIM.'+ 'DESCRIPTIVE_REPRESENTATION_ITEM' IN
+     TYPEOF ( i ) ) AND ( i.name = 'measuring method' ) ) ) =1 )
+     ;
+ WR3: SIZEOF ( QUERY ( i <* SELF.items | SIZEOF (
+     ['SURFACE_CONDITIONS_MIM.'+ 'MEASURE_REPRESENTATION_ITEM' ,
+     'SURFACE_CONDITIONS_MIM.'+ 'VALUE_RANGE']* TYPEOF ( i ) ) =1 ) )
+     >0;
+ WR4: ( SIZEOF ( USEDIN ( SELF ,
+     'SURFACE_CONDITIONS_MIM.'+'REPRESENTATION_RELATIONSHIP.'+
+     'REP_1' ) ) <=1 ) AND ( SIZEOF ( USEDIN ( SELF ,
+     'SURFACE_CONDITIONS_MIM.'+'REPRESENTATION_RELATIONSHIP.'+
+     'REP_2' ) ) =0 ) AND ( SIZEOF ( QUERY ( rr <* USEDIN ( SELF
+     , 'SURFACE_CONDITIONS_MIM.'+'REPRESENTATION_RELATIONSHIP.'+
+     'REP_1' ) | rr. rep_2.name = 'measuring direction' ) ) =
+     SIZEOF ( USEDIN ( SELF ,
+     'SURFACE_CONDITIONS_MIM.'+'REPRESENTATION_RELATIONSHIP.'+
+     'REP_1' ) ) ) ;
+ WR5: ( SIZEOF ( USEDIN ( SELF ,
+     'SURFACE_CONDITIONS_MIM.'+'PROPERTY_DEFINITION_REPRESENTATION.'+
+     'USED_REPRESENTATION' ) ) =1 ) AND ( SIZEOF ( QUERY ( pdr
+     <* USEDIN ( SELF ,
+     'SURFACE_CONDITIONS_MIM.'+'PROPERTY_DEFINITION_REPRESENTATION.'+
+     'USED_REPRESENTATION' ) | SIZEOF ( QUERY ( gpa <* USEDIN (
+     pdr. definition ,
+     'SURFACE_CONDITIONS_MIM.'+'GENERAL_PROPERTY_ASSOCIATION.'+
+     'DERIVED_DEFINITION' ) | ( 'SURFACE_CONDITIONS_MIM.'+
+     'GENERAL_PROPERTY' IN TYPEOF ( gpa. base_definition ) ) AND
+     ( gpa. base_definition.name ='surface_condition' ) ) ) =1 )
+     ) =1 ) ;
+END_ENTITY;
+
+ENTITY tactile_appearance_representation
+  SUBTYPE OF (representation);
+WHERE
+ WR1: SIZEOF ( QUERY ( i <* SELF.items | SIZEOF (
+     ['SURFACE_CONDITIONS_MIM.'+ 'MEASURE_REPRESENTATION_ITEM' ,
+     'SURFACE_CONDITIONS_MIM.'+ 'VALUE_RANGE']* TYPEOF ( i ) ) <>1 )
+     ) =0;
+ WR2: SIZEOF ( QUERY ( i <* SELF.items | name ='depth' ) ) <=1;
+ WR3: ( SIZEOF ( USEDIN ( SELF ,
+     'SURFACE_CONDITIONS_MIM.'+'PROPERTY_DEFINITION_REPRESENTATION.'+
+     'USED_REPRESENTATION' ) ) =1 ) AND ( SIZEOF ( QUERY ( pdr
+     <* USEDIN ( SELF ,
+     'SURFACE_CONDITIONS_MIM.'+'PROPERTY_DEFINITION_REPRESENTATION.'+
+     'USED_REPRESENTATION' ) | SIZEOF ( QUERY ( gpa <* USEDIN (
+     pdr. definition ,
+     'SURFACE_CONDITIONS_MIM.'+'GENERAL_PROPERTY_ASSOCIATION.'+
+     'DERIVED_DEFINITION' ) | ( 'SURFACE_CONDITIONS_MIM.'+
+     'GENERAL_PROPERTY' IN TYPEOF ( gpa. base_definition ) ) AND
+     ( gpa. base_definition.name ='surface_condition' ) ) ) =1 )
+     ) =1 ) ;
+END_ENTITY;
+
+ENTITY visual_appearance_representation
+  SUBTYPE OF (representation);
+WHERE
+ WR1: ( {2<= SIZEOF ( SELF.items ) <=5} ) AND ( SIZEOF ( QUERY (
+     i <* items | ( 'SURFACE_CONDITIONS_MIM.'+
+     'DESCRIPTIVE_REPRESENTATION_ITEM' IN TYPEOF ( i ) ) AND (
+     i.name IN [ 'colour id' , 'colour name' , 'lustre' ,
+     'pattern' , 'transparency'] ) ) ) = SIZEOF ( SELF.items ) )
+     ;
+ WR2: SIZEOF ( QUERY ( i <* SELF.items | i.name = 'colour id' )
+     ) =1;
+ WR3: SIZEOF ( QUERY ( i <* SELF.items | i.name ='lustre' ) )
+     =1;
+ WR4: SIZEOF ( QUERY ( i <* SELF.items | i.name = 'colour name'
+     ) ) <=1;
+ WR5: SIZEOF ( QUERY ( i <* SELF.items | i.name ='pattern' ) )
+     <=1;
+ WR6: SIZEOF ( QUERY ( i <* SELF.items | i.name ='transparency'
+     ) ) <=1;
+ WR7: ( SIZEOF ( USEDIN ( SELF ,
+     'SURFACE_CONDITIONS_MIM.'+'PROPERTY_DEFINITION_REPRESENTATION.'+
+     'USED_REPRESENTATION' ) ) =1 ) AND ( SIZEOF ( QUERY ( pdr
+     <* USEDIN ( SELF ,
+     'SURFACE_CONDITIONS_MIM.'+'PROPERTY_DEFINITION_REPRESENTATION.'+
+     'USED_REPRESENTATION' ) | SIZEOF ( QUERY ( gpa <* USEDIN (
+     pdr. definition ,
+     'SURFACE_CONDITIONS_MIM.'+'GENERAL_PROPERTY_ASSOCIATION.'+
+     'DERIVED_DEFINITION' ) | ( 'SURFACE_CONDITIONS_MIM.'+
+     'GENERAL_PROPERTY' IN TYPEOF ( gpa. base_definition ) ) AND
+     ( gpa. base_definition.name ='surface_condition' ) ) ) =1 )
+     ) =1 ) ;
+END_ENTITY;
+
+FUNCTION surface_condition_correlation (pd: property_definition; rep: representation): LOGICAL;
+
+CASE pd.name OF
+'visual appearance', 'tactile appearance', 'contact ratio', 'hardness', 'treatment result', 'surface texture' : 
+	RETURN(pd.name = rep.name);
+
+OTHERWISE : RETURN(UNKNOWN);
+END_CASE;
+
+END_FUNCTION;
+RULE restrict_representation_for_surface_condition FOR (property_definition_representation);
+WHERE
+WR1 : SIZEOF(QUERY(pdr <* product_definition_representation | 
+	NOT surface_condition_correlation(pdr.definition, pdr.used_representation) ))=0;
+END_RULE;
+
+RULE restrict_treatment_result FOR (representation);
+LOCAL
+  treatment_results: SET OF representation := [];
+END_LOCAL;
+  treatment_results:= QUERY( r <* representation | 
+		(r.name = 'treatment result') );
+WHERE 
+WR1: (SIZEOF( QUERY( r <* treatment_results | (SIZEOF(r.items) > 2) )) = 0) AND
+     (SIZEOF( QUERY( r <* treatment_results |
+	 (SIZEOF( QUERY( i <* r.items | 
+	NOT ('SURFACE_CONDITIONS_MIM.DESCRIPTIVE_REPRESENTATION_ITEM' IN TYPEOF(i)) )) > 0) )) 
+	= 0); 
+WR2: SIZEOF( QUERY( r <* treatment_results | 
+	(SIZEOF( QUERY( i <* r.items | i.name = 'result' )) = 0) )) = 0; 
+WR3: SIZEOF( QUERY( r <* treatment_results | 
+	(SIZEOF( QUERY( i <* r.items | i.name = 'purpose' )) > 1) )) = 0; 
+END_RULE; 
+
+RULE material_for_coating_layer FOR (shape_aspect);
+LOCAL
+  coating_layers: SET OF shape_aspect := [];
+END_LOCAL;
+  coating_layers:= QUERY( r <* shape_aspect | 
+		(r.name = 'coating layer') );
+WHERE 
+WR1: SIZEOF( QUERY( r <* coating_layers |
+	SIZEOF(USEDIN(r , 'SURFACE_CONDITIONS_MIM.MATERIAL_DESIGNATION.DEFINITIONS'))<>1
+	)) = 0; 
+END_RULE;
+
+END_SCHEMA;

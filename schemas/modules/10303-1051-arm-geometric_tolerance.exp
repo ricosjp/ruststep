@@ -1,0 +1,228 @@
+(*
+$Id: 10303-1051-arm-geometric_tolerance.exp,v 1.2 2005/02/22 16:53:08 wg12deputy Exp $
+ISO TC184/SC4/WG12 N2876 - ISO/TS 10303-1051 Geometric tolerance - EXPRESS ARM
+Supersedes ISO TC184/SC4/WG12 N1550
+*) 
+
+
+SCHEMA Geometric_tolerance_arm;
+
+USE FROM Derived_shape_element_arm;    -- ISO/TS 10303-1130
+
+USE FROM Elemental_geometric_shape_arm;    -- ISO/TS 10303-1004
+
+USE FROM Measure_representation_arm;    -- ISO/TS 10303-1118
+
+USE FROM Shape_property_assignment_arm;    -- ISO/TS 10303-1032
+
+USE FROM Value_with_unit_arm;    -- ISO/TS 10303-1054
+
+
+ENTITY Angularity_tolerance
+  SUBTYPE OF (Geometric_tolerance);
+  reference_datum : SET[1:2] OF Datum_reference;
+END_ENTITY;
+
+ENTITY Circular_runout_tolerance
+  SUBTYPE OF (Geometric_tolerance);
+  angle : OPTIONAL REAL;
+  reference_datum : SET[1:2] OF Datum_reference;
+END_ENTITY;
+
+ENTITY Coaxiality_tolerance
+  SUBTYPE OF (Geometric_tolerance);
+  reference_datum : SET[1:2] OF Datum_reference;
+END_ENTITY;
+
+ENTITY Common_datum
+  SUBTYPE OF (Datum);
+  made_up_by : SET[2:?] OF Single_datum;
+END_ENTITY;
+
+ENTITY Concentricity_tolerance
+  SUBTYPE OF (Geometric_tolerance);
+  reference_datum : SET[1:2] OF Datum_reference;
+END_ENTITY;
+
+ENTITY Cylindricity_tolerance
+  SUBTYPE OF (Geometric_tolerance);
+END_ENTITY;
+
+ENTITY Datum;
+END_ENTITY;
+
+ENTITY Datum_defined_by_derived_shape
+  SUBTYPE OF (Derived_geometry, Single_datum);
+END_ENTITY;
+
+ENTITY Datum_defined_by_feature
+  SUBTYPE OF (Single_datum);
+  defined_by : Shape_element;
+END_ENTITY;
+
+ENTITY Datum_defined_by_targets
+  SUBTYPE OF (Single_datum);
+  defined_by : SET[1:?] OF Datum_target;
+  rule_description : STRING;
+END_ENTITY;
+
+ENTITY Datum_reference;
+  precedence : INTEGER;
+  referenced_datum : Datum;
+END_ENTITY;
+
+ENTITY Datum_target;
+  id : STRING;
+END_ENTITY;
+
+ENTITY Flatness_tolerance
+  SUBTYPE OF (Geometric_tolerance);
+END_ENTITY;
+
+ENTITY Geometric_tolerance
+  ABSTRACT SUPERTYPE OF (ONEOF (Angularity_tolerance,
+                                Circular_runout_tolerance,
+                                Coaxiality_tolerance,
+                                Concentricity_tolerance,
+                                Cylindricity_tolerance,
+                                Flatness_tolerance,
+                                Line_profile_tolerance,
+                                Parallelism_tolerance,
+                                Perpendicularity_tolerance,
+                                Position_tolerance,
+                                Roundness_tolerance,
+                                Straightness_tolerance,
+                                Surface_profile_tolerance,
+                                Symmetry_tolerance,
+                                Total_runout_tolerance));
+  name : OPTIONAL STRING;
+  applied_to : Shape_element;
+  modification : OPTIONAL Tolerance_condition;
+  qualifying_note : OPTIONAL STRING;
+  segment_size : OPTIONAL Value_with_unit;
+  significant_digits : OPTIONAL INTEGER;
+  tolerance_value : Value_with_unit;
+  value_determination : OPTIONAL STRING;
+WHERE
+  WR1: (NOT (EXISTS(segment_size))) OR ('GEOMETRIC_TOLERANCE_ARM.LENGTH_MEASURE' IN TYPEOF(segment_size.value_component));
+  WR2: (NOT (EXISTS(tolerance_value))) OR ('GEOMETRIC_TOLERANCE_ARM.LENGTH_MEASURE' IN TYPEOF(tolerance_value.value_component));
+  WR3: (NOT (EXISTS(significant_digits))) OR (significant_digits > 0);
+END_ENTITY;
+
+ENTITY Geometric_tolerance_relationship;
+  relation_type : STRING;
+  relating : Geometric_tolerance;
+  related : Geometric_tolerance;
+END_ENTITY;
+
+ENTITY Line_profile_tolerance
+  SUBTYPE OF (Geometric_tolerance);
+  affected_plane : OPTIONAL Axis_placement;
+  reference_datum : SET[0:3] OF Datum_reference;
+END_ENTITY;
+
+ENTITY Parallelism_tolerance
+  SUBTYPE OF (Geometric_tolerance);
+  affected_plane : OPTIONAL Axis_placement;
+  reference_datum : SET[1:2] OF Datum_reference;
+END_ENTITY;
+
+ENTITY Perpendicularity_tolerance
+  SUBTYPE OF (Geometric_tolerance);
+  affected_plane : OPTIONAL Axis_placement;
+  reference_datum : SET[1:3] OF Datum_reference;
+END_ENTITY;
+
+ENTITY Placed_target
+  ABSTRACT SUPERTYPE OF (ONEOF (Target_circle,
+                                Target_point,
+                                Target_rectangle,
+                                Target_straight_line))
+  SUBTYPE OF (Datum_target);
+  defined_in : Geometric_coordinate_space;
+  parameter_reference : Axis_placement;
+END_ENTITY;
+
+ENTITY Position_tolerance
+  SUBTYPE OF (Geometric_tolerance);
+  affected_plane : OPTIONAL Axis_placement;
+  reference_datum : SET[0:3] OF Datum_reference;
+END_ENTITY;
+
+ENTITY Projection
+  SUBTYPE OF (Tolerance_zone_definition);
+  projection_end : Shape_element;
+  projection_length : Value_with_unit;
+END_ENTITY;
+
+ENTITY Roundness_tolerance
+  SUBTYPE OF (Geometric_tolerance);
+END_ENTITY;
+
+ENTITY Single_datum
+  SUBTYPE OF (Datum);
+  datum_name : STRING;
+  modification : OPTIONAL Tolerance_condition;
+END_ENTITY;
+
+ENTITY Straightness_tolerance
+  SUBTYPE OF (Geometric_tolerance);
+  affected_plane : OPTIONAL Axis_placement;
+END_ENTITY;
+
+ENTITY Surface_profile_tolerance
+  SUBTYPE OF (Geometric_tolerance);
+  reference_datum : SET[0:3] OF Datum_reference;
+END_ENTITY;
+
+ENTITY Symmetry_tolerance
+  SUBTYPE OF (Geometric_tolerance);
+  affected_plane : OPTIONAL Axis_placement;
+  reference_datum : SET[1:3] OF Datum_reference;
+END_ENTITY;
+
+ENTITY Target_area
+  SUBTYPE OF (Datum_target);
+END_ENTITY;
+
+ENTITY Target_circle
+  SUBTYPE OF (Placed_target);
+  diameter : Numerical_item_with_unit;
+END_ENTITY;
+
+ENTITY Target_point
+  SUBTYPE OF (Placed_target);
+END_ENTITY;
+
+ENTITY Target_rectangle
+  SUBTYPE OF (Placed_target);
+  target_length : Numerical_item_with_unit;
+  target_width : Numerical_item_with_unit;
+END_ENTITY;
+
+ENTITY Target_straight_line
+  SUBTYPE OF (Placed_target);
+END_ENTITY;
+
+ENTITY Tolerance_condition;
+  condition : STRING;
+END_ENTITY;
+
+ENTITY Tolerance_zone;
+  form_type : STRING;
+  zone_for : SET[1:?] OF Geometric_tolerance;
+END_ENTITY;
+
+ENTITY Tolerance_zone_definition;
+  defining : Tolerance_zone;
+  first_element : Shape_element;
+  second_element : OPTIONAL Shape_element;
+END_ENTITY;
+
+ENTITY Total_runout_tolerance
+  SUBTYPE OF (Geometric_tolerance);
+  angle : REAL;
+  reference_datum : SET[1:2] OF Datum_reference;
+END_ENTITY;
+
+END_SCHEMA;  -- Geometric_tolerance_arm

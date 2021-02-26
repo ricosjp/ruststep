@@ -1,0 +1,54 @@
+(*
+   $Id: 10303-1143-arm-building_component.exp,v 1.2 2006/08/03 13:23:25 wg12deputy Exp $
+   ISO/TC184/SC4 WG12N2569 - ISO/TS - 10303-1143 Building_component - EXPRESS ARM
+   Supersedes ISO TC184/SC4/WG12N1778
+*)
+
+SCHEMA Building_component_arm;
+
+USE FROM Shape_property_assignment_arm;
+
+TYPE main = ENUMERATION OF
+  (main,
+   not_main);
+END_TYPE;
+
+TYPE opening_functional_type = ENUMERATION OF
+  (door_opening,
+   service_opening,
+   window_opening);
+END_TYPE;
+
+TYPE opening_name = STRING;
+END_TYPE;
+
+TYPE opening_type = SELECT
+  (opening_name,
+   opening_functional_type);
+END_TYPE;
+
+ENTITY Building_element_component
+  ABSTRACT SUPERTYPE OF (ONEOF(Positive_component, Negative_component))
+  SUBTYPE OF (Shape_element);
+END_ENTITY;
+
+ENTITY Negative_component
+  SUPERTYPE OF (ONEOF(Recess,Opening))
+  SUBTYPE OF (Building_element_component);
+END_ENTITY;
+
+ENTITY Opening
+  SUBTYPE OF (Negative_component);
+  opening_type : opening_type;
+END_ENTITY;
+
+ENTITY Positive_component
+  SUBTYPE OF (Building_element_component);
+  component_functional_type : main;	
+END_ENTITY;
+
+ENTITY Recess
+  SUBTYPE OF (Negative_component);
+END_ENTITY;
+
+END_SCHEMA;

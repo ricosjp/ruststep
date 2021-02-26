@@ -1,0 +1,15 @@
+(*
+WG12 N669
+ISO/TS 10303-1009
+Product data representation and exchange: Application module: Shape appearance and layers
+*)
+
+SCHEMA Shape_appearance_layer_mim;
+USE FROM Appearance_assignment_mim; 	-- ISO/TS 10303-1001
+USE FROM Elemental_topology_mim; 		-- ISO/TS 10303-1005
+USE FROM Foundation_representation_mim; 	-- ISO/TS 10303-1006
+USE FROM General_surface_appearance_mim; 	-- ISO/TS 10303-1007
+USE FROM Layer_assignment_mim; 		-- ISO/TS 10303-1008
+
+END_SCHEMA;
+

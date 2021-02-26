@@ -1,0 +1,28 @@
+(*
+ $Id: 10303-1015-mim-security_classification.exp,v 1.5 2006/08/07 09:42:02 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N1097 - ISO/TS 10303-1015 Security classification - EXPRESS MIM
+*)
+
+SCHEMA Security_classification_mim;
+
+USE FROM security_classification_schema -- ISO 10303-41
+  (security_classification,
+   security_classification_level);
+USE FROM management_resources_schema -- ISO 10303-41
+  (security_classification_assignment);
+  
+TYPE security_classification_item = EXTENSIBLE SELECT; 
+END_TYPE;
+
+ENTITY applied_security_classification_assignment
+  SUBTYPE OF (security_classification_assignment);
+  items : SET [1:?] OF security_classification_item;
+END_ENTITY;
+
+END_SCHEMA;
+
+
+
+
+
+

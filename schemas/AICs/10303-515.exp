@@ -1,0 +1,55 @@
+SCHEMA aic_csg;
+
+USE FROM aic_advanced_brep; 	-- ISO 10303-514
+
+USE FROM aic_faceted_brep; 	-- ISO 10303-512
+
+USE FROM geometric_model_schema 	-- ISO 10303-42  
+     (block,
+     boolean_operand,
+     boolean_operator,
+     boolean_result,
+     box_domain,
+     boxed_half_space,
+     csg_primitive,
+     csg_select,
+     csg_solid,
+     extruded_face_solid,
+     half_space_solid,
+     revolved_face_solid,
+     right_angular_wedge,
+     right_circular_cone,
+     right_circular_cylinder,
+     solid_replica, 
+     sphere,
+     torus);
+
+ENTITY csg_shape_representation
+  SUBTYPE OF (shape_representation);
+WHERE
+  WR1: SELF.context_of_items\
+       geometric_representation_context.coordinate_space_dimension = 3;
+
+  WR2: SIZEOF(QUERY (it <* SELF.items |
+         SIZEOF(['AIC_CSG.CSG_SOLID',
+                 'AIC_CSG.MAPPED_ITEM', 'AIC_CSG.AXIS2_PLACEMENT_3D',
+                 'AIC_CSG.SOLID_REPLICA', 'AIC_CSG.REVOLVED_FACE_SOLID',
+                 'AIC_CSG.EXTRUDED_FACE_SOLID'] * TYPEOF(it)) <> 1)) = 0;
+
+  WR3: SIZEOF(QUERY (mi <* QUERY (it <* SELF.items |
+              'AIC_CSG.MAPPED_ITEM' IN TYPEOF(it)) |
+               NOT('AIC_CSG.CSG_SHAPE_REPRESENTATION' IN
+       TYPEOF(mi\mapped_item.mapping_source.mapped_representation)))) = 0;
+
+  WR4: SIZEOF(QUERY (sr <* QUERY (it <* SELF.items |
+              'AIC_CSG.SOLID_REPLICA' IN TYPEOF(it)) |
+              SIZEOF(['AIC_CSG.CSG_SOLID', 'AIC_CSG.REVOLVED_FACE_SOLID',
+                      'AIC_CSG.EXTRUDED_FACE_SOLID'] *
+                      TYPEOF(sr\solid_replica.parent_solid)) = 0)) = 0;
+
+  WR5: SIZEOF(QUERY(it <* SELF.items | 
+                    NOT('AIC_CSG.AXIS2_PLACEMENT_3D' IN TYPEOF(it)))) > 0;
+
+END_ENTITY;
+
+END_SCHEMA; -- aic_csg

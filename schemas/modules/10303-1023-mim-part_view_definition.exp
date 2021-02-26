@@ -1,0 +1,14 @@
+(*
+ $Id: 10303-1023-mim-part_view_definition.exp,v 1.5 2006/08/07 09:42:02 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2919 - ISO/TS 10303-1023 Part view definition - EXPRESS MIM
+*)
+
+
+SCHEMA Part_view_definition_mim;
+
+USE FROM Part_and_version_identification_mim;    -- ISO/TS 10303-1022
+
+USE FROM Product_view_definition_mim;    -- ISO/TS 10303-1019
+
+
+END_SCHEMA;  -- Part_view_definition_mim

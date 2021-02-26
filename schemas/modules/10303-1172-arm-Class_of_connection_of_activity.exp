@@ -1,0 +1,19 @@
+(*
+ $Id: 10303-1172-arm-Class_of_connection_of_activity.exp,v 1.4 2006/08/04 12:01:50 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2729 - ISO/TS 10303-1172 Class of connection of activity - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG12 N1846
+*)
+
+SCHEMA Class_of_connection_of_activity_arm;
+
+USE FROM Activity_arm;    -- ISO/TS 10303-1047
+USE FROM Class_arm;    -- ISO/TS 10303-1070
+USE FROM Class_of_activity_arm;    -- ISO/TS 10303-1071
+
+ENTITY Class_of_connection_of_activity
+  SUBTYPE OF (Activity_relationship, Class);
+  SELF\Activity_relationship.relating_activity : Class_of_activity;
+  SELF\Activity_relationship.related_activity : Class_of_activity;
+END_ENTITY;
+
+END_SCHEMA;

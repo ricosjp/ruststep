@@ -1,0 +1,186 @@
+(*
+$Id: 10303-051.exp,v 1.4 2005/02/24 07:43:20 wg12deputy Exp $
+
+From ISO TC184/SC4/WG12 N3251 - ISO/IS 10303-51 Mathematical representation - EXPRESS
+Supersedes ISO TC184/SC4/WG12 N1001
+*) 
+
+
+SCHEMA mathematical_context_schema;
+
+REFERENCE FROM action_schema   -- ISO 10303-41
+  (action,
+   action_method); 
+
+REFERENCE FROM mathematical_functions_schema   -- ISO 10303-50
+  (maths_space,
+   maths_value); 
+
+REFERENCE FROM measure_schema   -- ISO 10303-41
+  (unit); 
+
+REFERENCE FROM product_definition_schema   -- ISO 10303-41
+  (product_definition); 
+
+REFERENCE FROM product_property_definition_schema   -- ISO 10303-41
+  (general_property,
+   shape_aspect); 
+
+REFERENCE FROM representation_schema   -- ISO 10303-43
+  (representation_context,
+   representation_item); 
+
+REFERENCE FROM support_resource_schema   -- ISO 10303-41
+  (identifier,
+   label,
+   text); 
+
+REFERENCE FROM ISO13584_generic_expressions_schema   -- ISO 13584-20
+  (generic_expression); 
+
+
+TYPE space_context_select = EXTENSIBLE SELECT
+   (action, 
+    action_method, 
+    general_property, 
+    product_definition, 
+    representation_item, 
+    shape_aspect);
+END_TYPE; 
+
+TYPE value_context_select = EXTENSIBLE SELECT
+   (action, 
+    action_method, 
+    general_property, 
+    product_definition, 
+    representation_item, 
+    shape_aspect);
+END_TYPE; 
+
+ENTITY compound_maths_space_context
+  SUBTYPE OF (maths_space_context);
+  components : LIST[2:?] OF maths_space_context;
+END_ENTITY;
+
+ENTITY defined_maths_space_context
+  SUBTYPE OF (maths_space_context);
+END_ENTITY;
+
+ENTITY explicitly_enumerated_maths_space_context
+  SUBTYPE OF (maths_space_context);
+  members : SET[1:?] OF maths_value_context;
+END_ENTITY;
+
+ENTITY maths_space_context
+  SUPERTYPE OF (ONEOF (compound_maths_space_context,
+                       defined_maths_space_context,
+                       explicitly_enumerated_maths_space_context));
+  id : identifier;
+  name : label;
+  description : OPTIONAL text;
+  abstract_space : maths_space;
+  physical_space : space_context_select;
+END_ENTITY;
+
+ENTITY maths_value_context;
+  id : identifier;
+  name : label;
+  description : OPTIONAL text;
+  abstract_value : maths_value;
+  physical_value : value_context_select;
+END_ENTITY;
+
+ENTITY membership_of_maths_space_context;
+  space_context : maths_space_context;
+  value_context : maths_value_context;
+END_ENTITY;
+
+ENTITY normalized_maths_space_context
+  SUBTYPE OF (defined_maths_space_context);
+  normalization_basis : value_context_select;
+END_ENTITY;
+
+ENTITY representation_context_defined_maths_space_context
+  SUBTYPE OF (defined_maths_space_context);
+  representation_basis : representation_context;
+END_ENTITY;
+
+ENTITY unit_defined_maths_space_context
+  SUBTYPE OF (defined_maths_space_context);
+  unit_basis : unit;
+END_ENTITY;
+
+END_SCHEMA;  -- mathematical_context_schema
+(*
+$Id: 10303-051.exp,v 1.4 2005/02/24 07:43:20 wg12deputy Exp $
+From ISO TC184/SC4/WG12 N3251 - ISO/IS 10303-51 Mathematical representation - EXPRESS
+Supersedes ISO TC184/SC4/WG12 N1001
+*) 
+
+
+SCHEMA mathematical_description_of_distribution_schema;
+
+REFERENCE FROM mathematical_context_schema   -- ISO 10303-51
+  (maths_space_context); 
+
+REFERENCE FROM mathematical_functions_schema   -- ISO 10303-50
+  (maths_function); 
+
+REFERENCE FROM process_property_schema   -- ISO 10303-49
+  (action_property,
+   resource_property); 
+
+REFERENCE FROM product_property_definition_schema   -- ISO 10303-41
+  (property_definition,
+   general_property_relationship); 
+
+REFERENCE FROM support_resource_schema   -- ISO 10303-41
+  (identifier,
+   label,
+   text); 
+
+
+TYPE property_distribution_select = EXTENSIBLE SELECT
+   (action_property, 
+    general_property_relationship, 
+    property_definition, 
+    resource_property);
+END_TYPE; 
+
+ENTITY maths_space_context_relationship;
+  id : identifier;
+  name : label;
+  description : OPTIONAL text;
+  relating_context : maths_space_context;
+  related_context : maths_space_context;
+END_ENTITY;
+
+ENTITY maths_space_context_relationship_description;
+  id : identifier;
+  name : label;
+  description : OPTIONAL text;
+  described_relationship : maths_space_context_relationship;
+  describing_relationship : maths_function;
+END_ENTITY;
+
+ENTITY normalized_property_distribution_description;
+  id : identifier;
+  name : label;
+  description : OPTIONAL text;
+  abstract_function : maths_function;
+  domain_context : maths_space_context;
+  normalization_basis : property_distribution_select;
+  physical_function : property_distribution_select;
+END_ENTITY;
+
+ENTITY property_distribution_description;
+  id : identifier;
+  name : label;
+  description : OPTIONAL text;
+  abstract_function : maths_function;
+  domain_context : maths_space_context;
+  physical_function : property_distribution_select;
+  range_context : maths_space_context;
+END_ENTITY;
+
+END_SCHEMA;  -- mathematical_description_of_distribution_schema

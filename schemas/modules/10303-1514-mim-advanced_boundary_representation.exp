@@ -1,0 +1,9 @@
+(* ISO/TC184/SC4 WG12N1289  $Id: 10303-1514-mim-advanced_boundary_representation.exp,v 1.4 2003/10/21 12:49:19 wg12deputy Exp $ *) 
+SCHEMA Advanced_boundary_representation_mim;
+
+USE FROM Elemental_geometric_shape_mim;
+
+USE FROM aic_advanced_brep;
+
+END_SCHEMA;
+

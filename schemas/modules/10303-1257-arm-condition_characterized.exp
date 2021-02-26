@@ -1,0 +1,64 @@
+(*
+ $Id: 10303-1257-arm-condition_characterized.exp,v 1.1 2006/08/07 07:44:45 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N3028 - ISO/TS 10303-1257 Condition characterized - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG12 N2321
+*) 
+
+
+SCHEMA Condition_characterized_arm;
+
+USE FROM Approval_arm;    -- ISO/TS 10303-1012
+
+USE FROM Attribute_classification_arm;    -- ISO/TS 10303-1246
+
+USE FROM Condition_arm;    -- ISO/TS 10303-1253
+
+USE FROM Date_time_assignment_arm;    -- ISO/TS 10303-1014
+
+USE FROM Identification_assignment_arm;    -- ISO/TS 10303-1021
+
+USE FROM Multi_linguism_arm;    -- ISO/TS 10303-1105
+
+USE FROM Person_organization_assignment_arm;    -- ISO/TS 10303-1013
+
+USE FROM Process_property_assignment_arm;    -- ISO/TS 10303-1040
+
+
+TYPE condition_approval_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON approval_item WITH 
+   (Condition, 
+    Condition_assignment);
+END_TYPE; 
+
+TYPE condition_characterized_activity_definition = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON characterized_activity_definition WITH 
+   (Condition, 
+    Condition_relationship);
+END_TYPE; 
+
+TYPE condition_classified_attribute_select = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON classified_attribute_select WITH 
+   (Condition, 
+    Condition_parameter, 
+    Condition_relationship);
+END_TYPE; 
+
+TYPE condition_date_or_date_time_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON date_or_date_time_item WITH 
+   (Condition, 
+    Condition_assignment);
+END_TYPE; 
+
+TYPE condition_identification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON identification_item WITH 
+   (Condition);
+END_TYPE; 
+
+TYPE condition_organization_or_person_in_organization_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON organization_or_person_in_organization_item WITH 
+   (Condition, 
+    Condition_assignment);
+END_TYPE; 
+
+TYPE condition_string_select = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON string_select WITH 
+   (Condition, 
+    Condition_parameter, 
+    Condition_relationship);
+END_TYPE; 
+
+END_SCHEMA;  -- Condition_characterized_arm
+

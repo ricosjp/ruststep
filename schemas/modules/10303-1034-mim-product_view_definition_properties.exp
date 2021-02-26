@@ -1,0 +1,24 @@
+(*
+ $Id: 10303-1034-mim-product_view_definition_properties.exp,v 1.5 2006/08/07 09:42:03 wg12deputy Exp $
+ISO TC184/SC4/WG12 N3228 - ISO/TS 10303-1034 Product view definition properties - EXPRESS MIM
+Supersedes ISO TC184/SC4/WG12 N2127
+*) 
+
+
+SCHEMA Product_view_definition_properties_mim;
+
+USE FROM basic_attribute_schema   -- ISO 10303-41
+  (id_attribute,
+   id_attribute_select); 
+
+USE FROM product_property_definition_schema   -- ISO 10303-41
+  (characterized_product_definition); 
+
+USE FROM Product_view_definition_mim;    -- ISO/TS 10303-1019
+
+USE FROM Product_view_definition_relationship_mim;    -- ISO/TS 10303-1041
+
+USE FROM Property_assignment_mim;    -- ISO/TS 10303-1030
+
+
+END_SCHEMA;  -- Product_view_definition_properties_mim

@@ -1,0 +1,13 @@
+(* ISO/TC184/SC4 WG12N1269 ISO/TS 10303-1502 Shell based wireframe
+  $Id: 10303-1502-arm-shell_based_wireframe.exp,v 1.4 2003/10/21 12:20:22 wg12deputy Exp $*)
+
+SCHEMA Shell_based_wireframe_arm;
+
+USE FROM Elemental_geometric_shape_arm; -- ISO 10303-1004
+
+ENTITY Shell_based_wireframe_shape_representation
+SUBTYPE OF (Geometric_model);
+END_ENTITY;
+
+END_SCHEMA;
+

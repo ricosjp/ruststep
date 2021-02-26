@@ -1,0 +1,68 @@
+(* 
+   $Id: 10303-1342-mim-expression.exp,v 1.2 2005/02/22 15:24:27 wg12deputy Exp $
+   ISO/TC184/SC4 WG12N2556 - ISO/TS 10303-1342 Expression - Express MIM 
+   Supersedes ISO TC184/SC4/WG12N1797
+*)
+
+SCHEMA Expression_mim;
+
+USE FROM Generic_expression_mim;
+
+USE FROM ISO13584_expressions_schema(
+	and_expression,
+	binary_boolean_expression,
+	binary_function_call,
+	binary_numeric_expression,
+	boolean_defined_function,
+	boolean_expression,
+	boolean_literal,
+	boolean_variable,
+	comparison_equal,
+	comparison_expression,
+	comparison_greater,
+	comparison_greater_equal,
+	comparison_less,
+	comparison_less_equal,
+	comparison_not_equal,
+	concat_expression,
+	defined_function,
+	div_expression,
+	equals_expression,
+	expression,
+	format_function,
+	index_expression,
+	int_literal,
+	int_numeric_variable,
+	interval_expression,
+	like_expression,
+	literal_number,
+	minus_expression,
+	mod_expression,
+	mult_expression,
+	multiple_arity_boolean_expression,
+	multiple_arity_function_call,
+	multiple_arity_numeric_expression,
+	not_expression,
+	numeric_expression,
+	numeric_variable,
+	or_expression,
+	plus_expression,
+	power_expression,
+	real_literal,
+	real_numeric_variable,
+	simple_boolean_expression,
+	simple_numeric_expression,
+	simple_string_expression,
+	slash_expression,
+	SQL_mappable_defined_function,
+	string_defined_function,
+	string_expression,
+	string_literal,
+	string_variable,
+	substring_expression,
+	unary_boolean_expression,
+	unary_numeric_expression,
+	xor_expression
+	);
+	
+END_SCHEMA;

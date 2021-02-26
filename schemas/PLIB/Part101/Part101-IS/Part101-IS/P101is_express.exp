@@ -1,0 +1,305 @@
+SCHEMA ISO13584_101_vcv_range_constraints_schema;
+
+REFERENCE FROM ISO13584_extended_dictionary_schema(
+	abstract_functional_model_class,
+	view_control_variable_range);
+
+RULE ISO13584_101_side_and_geometry_level_compatibility_rule FOR
+	(abstract_functional_model_class);
+LOCAL
+	geometry_level_set: SET OF view_control_variable_range;
+	side_set: SET OF view_control_variable_range;
+	is_2D, is_2D_or_3D, is_3D: BOOLEAN;
+	no_side, with_side, side_or_no_side, res: BOOLEAN;
+	compatible_side_and_geometry_level: BOOLEAN := TRUE;
+END_LOCAL;
+
+REPEAT i := 1 TO SIZEOF(abstract_functional_model_class);
+
+	geometry_level_set := QUERY(vcvr <*
+		abstract_functional_model_class[i].v_c_v_range |
+		(vcvr.parameter_type.name_scope.code = 'basic_geometry')
+		AND (vcvr.parameter_type.name_scope.defined_by.code =
+			'0112/1///13584_101_1')
+		AND(vcvr.parameter_type.code = 'geometry_level'));
+
+	side_set := QUERY(vcvr <*
+		abstract_functional_model_class[i].v_c_v_range |
+		(vcvr.parameter_type.name_scope.code = 'basic_geometry')
+		AND (vcvr.parameter_type.name_scope.defined_by.code =
+			'0112/1///13584_101_1')
+		AND (vcvr.parameter_type.code = 'side'));
+
+	is_2D := (SIZEOF(QUERY(vcvr <* geometry_level_set |
+		((vcvr.range_lobound = 1) AND (vcvr.range_hibound = 1))))
+		= 1);
+	is_2D_or_3D := (SIZEOF(QUERY(vcvr <* geometry_level_set |
+		((vcvr.range_lobound = 1) AND (vcvr.range_hibound > 1))))
+		= 1);
+	is_3D := (SIZEOF(QUERY(vcvr <* geometry_level_set |
+		(vcvr.range_lobound > 1) AND (vcvr.range_hibound > 1))) = 1);
+
+	no_side := (SIZEOF(QUERY(vcvr <* side_set |
+		((vcvr.range_lobound = 0) AND (vcvr.range_hibound = 0))))
+		= 1);
+	side_or_no_side := (SIZEOF(QUERY(vcvr <* side_set |
+		((vcvr.range_lobound = 0) AND (vcvr.range_hibound >= 0))))
+		= 1);
+
+	IF is_2D OR ((NOT(is_2D_or_3D) OR
+		side_or_no_side) AND (NOT(is_3D) OR no_side))
+	THEN
+		res := TRUE;
+	ELSE
+		res := FALSE;
+	END_IF;
+
+	compatible_side_and_geometry_level :=
+		compatible_side_and_geometry_level AND res;
+END_REPEAT;
+
+WHERE
+	WR1: compatible_side_and_geometry_level;
+END_RULE; -- ISO13584_101_side_and_geometry_level_compatibility_rule
+
+RULE ISO13584_101_variant_and_unregistered_variant_compatibility_rule FOR
+	(abstract_functional_model_class);
+LOCAL
+	variant_set: SET OF view_control_variable_range := [];
+	unreg_variant_set: SET OF view_control_variable_range := [];
+	is_variant, is_unreg_variant: BOOLEAN;
+	may_be_variant, may_be_unreg_variant: BOOLEAN;
+	variant_1_mandatory, unreg_variant_greater_than_0: BOOLEAN;
+	res, compatible_variant_and_unreg_variant: BOOLEAN := TRUE;
+END_LOCAL;
+
+REPEAT i := 1 TO SIZEOF(abstract_functional_model_class);
+
+	variant_set := QUERY(vcvr <* 
+		abstract_functional_model_class[i].v_c_v_range | 
+			(vcvr.parameter_type.name_scope.code = 'basic_geometry')
+		AND (vcvr.parameter_type.name_scope.defined_by.code = 
+			'0112/1///13584_101_1')
+		AND(vcvr.parameter_type.code = 'variant'));
+
+	unreg_variant_set := QUERY(vcvr <* 
+		abstract_functional_model_class[i].v_c_v_range | 
+			(vcvr.parameter_type.name_scope.code = 'basic_geometry')
+		AND (vcvr.parameter_type.name_scope.defined_by.code = 
+			'0112/1///13584_101_1')
+		AND (vcvr.parameter_type.code = 'unreg_variant'));
+	
+	is_unreg_variant := (SIZEOF(QUERY(vcvr <* variant_set 
+		|(vcvr.range_lobound = 0) AND (vcvr.range_hibound = 0))) 
+		= 1);
+	may_be_unreg_variant := (SIZEOF(QUERY(vcvr <* variant_set 
+		|(vcvr.range_lobound = 0) AND (vcvr.range_hibound > 0))) 
+		= 1);
+	variant_1_mandatory := (SIZEOF(QUERY(vcvr <* variant_set 
+		|(vcvr.range_lobound = 1))) = 1);
+	is_variant := (SIZEOF(QUERY(vcvr <* unreg_variant_set 
+		|(vcvr.range_lobound = 0) AND (vcvr.range_hibound = 0))) 
+		= 1);
+	may_be_variant := (SIZEOF(QUERY(vcvr <* unreg_variant_set 
+		|(vcvr.range_lobound = 0) AND (vcvr.range_hibound > 0))) 
+		= 1);
+	unreg_variant_greater_than_0 := (SIZEOF(QUERY(vcvr <* 
+		unreg_variant_set |(vcvr.range_lobound >= 1))) = 1);
+
+	IF (is_variant AND variant_1_mandatory) OR (is_unreg_variant AND 
+		unreg_variant_greater_than_0) OR (may_be_unreg_variant AND 
+		may_be_variant)
+	THEN
+		res := TRUE;
+	ELSE
+		res := FALSE;
+	END_IF;
+	
+	compatible_variant_and_unreg_variant := 
+		compatible_variant_and_unreg_variant AND res;
+	variant_set := [];
+	unreg_variant_set := [];
+END_REPEAT;
+
+WHERE
+	WR1: compatible_variant_and_unreg_variant;
+END_RULE; -- ISO13584_101_variant_and_unregistered_variant_compatibility_rule
+END_SCHEMA; -- ISO13584_101_vcv_range_constraints_schema
+
+SCHEMA ISO13584_101_cc_1_or_2_or_3_schema;
+
+REFERENCE FROM ISO13584_IEC61360_dictionary_schema(
+	item_names);
+
+REFERENCE FROM ISO13584_extended_dictionary_schema(
+	data_exchange_specification_identification,
+	view_exchange_protocol_identification);
+
+REFERENCE FROM ISO13584_external_file_schema(
+	external_file_protocol,
+	program_status,
+	simple_program_protocol,
+	standard_simple_program_protocol);
+
+REFERENCE FROM person_organization_schema(
+	organization);
+RULE ISO13584_101_allowed_reference_to_conformance_class_1_2_and_3_rule FOR (
+	view_exchange_protocol_identification);
+WHERE
+WR1: QUERY(vep_id <* view_exchange_protocol_identification |
+	(vep_id\data_exchange_specification_identification.name 
+	= 'ISO_13584_101')
+	AND
+	(SIZEOF(vep_id\data_exchange_specification_identification
+	.external_file_protocols) <> 1)) = [];
+WR2: QUERY(vep_id <* view_exchange_protocol_identification |
+	(vep_id\data_exchange_specification_identification.name 
+	= 'ISO_13584_101')
+	AND
+	(QUERY(efp <* vep_id\data_exchange_specification_identification
+	.external_file_protocols | NOT(efp.level = vep_id.application)
+	) <> [])) = [];
+WR3: QUERY(vep_id <* view_exchange_protocol_identification |
+		((vep_id\data_exchange_specification_identification.status
+		= 'WD')
+		OR (vep_id\data_exchange_specification_identification.status 
+		= 'CD')
+		OR (vep_id\data_exchange_specification_identification.status 
+		= 'DIS')
+		OR (vep_id\data_exchange_specification_identification.status 
+		= 'FDIS')
+		OR (vep_id\data_exchange_specification_identification.status 
+		= 'IS'))
+	AND
+		(vep_id\data_exchange_specification_identification.name 
+		= 'ISO_13584_101')
+	AND
+		((vep_id\data_exchange_specification_identification
+		.application = '1')
+		OR (vep_id\data_exchange_specification_identification
+		.application = '2')
+		OR (vep_id\data_exchange_specification_identification
+		.application = '3'))
+	AND
+		(QUERY( efp <* 
+		vep_id\data_exchange_specification_identification
+		.external_file_protocols | 
+		NOT(ISO13584_101_protocol_compliant_to_cc_1_or_2_or_3(efp))) = []))
+	= QUERY(vep_id <* view_exchange_protocol_identification | 
+		(vep_id\data_exchange_specification_identification.name 
+		= 'ISO_13584_101')
+	AND
+		(vep_id\data_exchange_specification_identification
+		.application LIKE '#'));
+END_RULE; -- ISO13584_101_allowed_reference_to_conformance_class_1_2_and_3_rule
+FUNCTION ISO13584_101_protocol_compliant_to_cc_1_or_2_or_3(
+	p: external_file_protocol): BOOLEAN;
+	
+	IF (('ISO13584_EXTERNAL_FILE_SCHEMA'
+		+ '.STANDARD_SIMPLE_PROGRAM_PROTOCOL' IN TYPEOF(p))
+		AND
+		(ISO13584_101_organization_compliant_to_cc_1_or_2_or_3(
+			p.organisation))
+		AND (p.protocol_name = 'ISO_13584_31')
+		AND (NOT EXISTS(p.level) OR
+			((p.level = '1') OR (p.level = '2') OR (p.level = '3')))
+		AND (ISO13584_101_item_names_compliant_to_cc_1_or_2_or_3(
+			p.designation))
+		AND (p\simple_program_protocol.language = 'FORTRAN')
+		AND ((p\simple_program_protocol.status = SOURCE)
+			OR (p\simple_program_protocol.status = COMPILED)))
+	THEN
+		RETURN(TRUE);
+	ELSE
+		RETURN(FALSE);
+	END_IF;
+END_FUNCTION; -- ISO13584_101_protocol_compliant_to_cc_1_or_2_or_3
+FUNCTION ISO13584_101_item_names_compliant_to_cc_1_or_2_or_3(
+		name: item_names): BOOLEAN;
+	IF ((name.preferred_name = 'ISO_13584_31')
+		AND (name.short_name = 'ISO_13584_31'))
+	THEN
+		RETURN(TRUE);
+	ELSE
+		RETURN(FALSE);
+	END_IF;
+END_FUNCTION; -- ISO13584_101_item_names_compliant_to_cc_1_or_2_or_3
+FUNCTION ISO13584_101_organization_compliant_to_cc_1_or_2_or_3(
+	org: organization): BOOLEAN;
+	IF ((org.id = 'ISO') AND (org.name =
+		'International Organization for Standardization'))
+	THEN
+		RETURN(TRUE);
+	ELSE
+		RETURN(FALSE);
+	END_IF;
+END_FUNCTION; -- ISO13584_101_organization_compliant_to_cc_1_or_2_or_3
+
+
+END_SCHEMA; -- ISO13584_101_cc_1_or_2_or_3_schema
+
+SCHEMA ISO13584_101_cc_1E_or_2E_or_3E_schema;
+
+REFERENCE FROM ISO13584_extended_dictionary_schema(
+	data_exchange_specification_identification,
+	view_exchange_protocol_identification);
+
+REFERENCE FROM ISO13584_external_file_schema(
+	external_file_protocol,
+	non_standard_simple_program_protocol);
+
+RULE ISO13584_101_allowed_reference_to_conformance_class_1E_2E_and_3E_rule FOR (
+	view_exchange_protocol_identification);
+WHERE
+WR1: QUERY(vep_id <* view_exchange_protocol_identification |
+	(vep_id\data_exchange_specification_identification.name
+	= 'ISO_13584_101')
+	AND (SIZEOF(vep_id\data_exchange_specification_identification
+	.external_file_protocols) <> 1 )) = [];
+WR2: QUERY(vep_id <* view_exchange_protocol_identification |(
+		(vep_id\data_exchange_specification_identification.status
+		= 'WD')
+		OR (vep_id\data_exchange_specification_identification.status
+		= 'CD')
+		OR (vep_id\data_exchange_specification_identification.status 
+		= 'DIS')
+		OR (vep_id\data_exchange_specification_identification.status 
+		= 'FDIS')
+		OR (vep_id\data_exchange_specification_identification.status 
+		= 'IS'))
+	AND
+		(vep_id\data_exchange_specification_identification.name 
+		= 'ISO_13584_101')
+	AND
+		((vep_id\data_exchange_specification_identification
+		.application = '1E')
+		OR (vep_id\data_exchange_specification_identification
+		.application = '2E')
+		OR (vep_id\data_exchange_specification_identification
+		.application = '3E'))
+	AND
+		(QUERY(efp <* 
+		vep_id\data_exchange_specification_identification
+		.external_file_protocols 
+		| NOT(ISO13584_101_protocol_compliant_to_cc_1E_or_2E_or_3E(efp))
+		) = []))
+	= QUERY(vep_id <* view_exchange_protocol_identification | 
+		(vep_id\data_exchange_specification_identification.name 
+		= 'ISO_13584_101')
+	AND
+		(vep_id\data_exchange_specification_identification
+		.application LIKE '#E'));
+END_RULE; -- ISO13584_101_allowed_reference_to_conformance_class_1E_2E_and_3E_rule
+FUNCTION ISO13584_101_protocol_compliant_to_cc_1E_or_2E_or_3E(
+	p: external_file_protocol): BOOLEAN;
+	
+	IF (('ISO13584_EXTERNAL_FILE_SCHEMA'
+		+ '.NON_STANDARD_SIMPLE_PROGRAM_PROTOCOL' IN TYPEOF(p)))
+	THEN
+		RETURN (TRUE);
+	ELSE
+		RETURN (FALSE);
+	END_IF;
+END_FUNCTION; -- ISO13584_101_protocol_compliant_to_cc_1E_or_2E_or_3E
+
+END_SCHEMA; -- ISO13584_101_cc_1E_or_2E_or_3E_schema

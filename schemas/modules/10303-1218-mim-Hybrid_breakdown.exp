@@ -1,0 +1,23 @@
+(*
+ $Id: 10303-1218-mim-Hybrid_breakdown.exp,v 1.2 2006/08/07 09:42:04 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N3056 - ISO/TS 10303-1218 Hybrid breakdown - EXPRESS MIM
+ Supersedes ISO TC184/SC4/WG12 N2271
+*) 
+
+
+SCHEMA Hybrid_breakdown_mim;
+
+USE FROM Product_breakdown_mim;    -- ISO/TS 10303-1248
+
+
+ENTITY hybrid_breakdown_context
+  SUBTYPE OF (breakdown_context);
+END_ENTITY;
+
+ENTITY hybrid_element_usage
+  SUBTYPE OF (breakdown_element_usage);
+END_ENTITY;
+
+END_SCHEMA;  -- Hybrid_breakdown_mim
+
+

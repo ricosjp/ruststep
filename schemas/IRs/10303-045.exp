@@ -1,0 +1,220 @@
+(*
+
+The following EXPRESS incorporates ISO 10303-45 
+   Technical Corrigendum 1 into the IS version of the
+   EXPRESS.  This document is ISO TC 184/SC4/WG12 N256
+
+*)
+SCHEMA material_property_definition_schema;
+
+REFERENCE FROM product_definition_schema
+      (product_definition_relationship);
+
+REFERENCE FROM product_property_definition_schema
+      (characterized_definition,
+      property_definition);
+
+REFERENCE FROM support_resource_schema
+     (label,
+      text,
+      bag_to_set);
+
+REFERENCE FROM measure_schema
+     (measure_with_unit);
+
+REFERENCE FROM material_property_representation_schema
+     (material_property_representation);
+
+TYPE characterized_material_property = SELECT
+  (material_property_representation,
+   product_material_composition_relationship);
+END_TYPE;
+
+ENTITY material_property
+SUBTYPE OF (property_definition);
+UNIQUE
+  UR1 : SELF\property_definition.name, SELF\property_definition.definition;
+WHERE
+  WR1 : ('PRODUCT_PROPERTY_DEFINITION_SCHEMA.CHARACTERIZED_OBJECT' IN
+          TYPEOF(SELF\property_definition.definition)) OR
+       (SIZEOF(bag_to_set(USEDIN(SELF ,
+                     'PRODUCT_PROPERTY_REPRESENTATION_SCHEMA.' +
+                     'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION')) -
+              QUERY(temp <* bag_to_set(USEDIN(SELF ,
+                       'PRODUCT_PROPERTY_REPRESENTATION_SCHEMA.' +
+                       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION')) |
+                       ('MATERIAL_PROPERTY_REPRESENTATION_SCHEMA.' +
+                      'MATERIAL_PROPERTY_REPRESENTATION' IN
+                      TYPEOF(temp)))) = 0);
+END_ENTITY;
+
+ENTITY property_definition_relationship;
+  name                       : label;
+  description                 : text;
+  relating_property_definition : property_definition;
+  related_property_definition  : property_definition;
+END_ENTITY;
+
+ENTITY material_designation;
+  name       : label;
+  definitions : SET [1:?] OF characterized_definition;
+END_ENTITY;
+
+ENTITY material_designation_characterization;
+  name       : label;
+  description : text;
+  designation : material_designation;
+  property    : characterized_material_property;
+END_ENTITY;
+
+ENTITY product_material_composition_relationship
+SUBTYPE OF (product_definition_relationship);
+  class               : label;
+  constituent_amount   : SET [1:?] OF measure_with_unit;
+  composition_basis    : label;
+  determination_method : text;
+END_ENTITY;
+
+FUNCTION acyclic_property_definition_relationship
+  (relation          : property_definition_relationship;
+   relatives         : SET [1:?] OF property_definition;
+   specific_relation : STRING) : LOGICAL;
+
+  LOCAL
+    x                : SET OF property_definition_relationship;
+  END_LOCAL;
+
+  IF relation.relating_property_definition IN 
+            relatives THEN
+    RETURN (FALSE);
+  END_IF;             -- IN is based in instance equality
+
+  x := QUERY (pd <* bag_to_set (USEDIN
+       (relation.relating_property_definition,
+        'MATERIAL_PROPERTY_DEFINITION_SCHEMA.' +
+        'PROPERTY_DEFINITION_RELATIONSHIP.' +
+        'RELATED_PROPERTY_DEFINITION')) |
+         specific_relation IN TYPEOF (pd));
+
+  REPEAT I := 1 TO HIINDEX(x);             -- pre-checked loop
+    IF NOT acyclic_property_definition_relationship
+      (x[i],
+       relatives + relation.relating_property_definition,
+       specific_relation) THEN
+      RETURN(FALSE);
+    END_IF;
+  END_REPEAT;
+
+  RETURN(TRUE);
+END_FUNCTION;  -- acyclic_property_definition_relationship
+
+END_SCHEMA;    -- material_property_definition_schema
+
+SCHEMA material_property_representation_schema;
+
+REFERENCE FROM product_property_representation_schema
+     (property_definition_representation);
+
+REFERENCE FROM support_resource_schema
+     (label,
+      text);
+
+ENTITY material_property_representation
+  SUBTYPE OF (property_definition_representation);
+  dependent_environment : data_environment;
+END_ENTITY;
+
+ENTITY data_environment;
+  name       : label;
+  description : text;
+  elements    : SET [1:?] OF property_definition_representation;
+END_ENTITY;
+
+ENTITY data_environment_relationship;
+  name                    : label;
+  description              : text;
+  relating_data_environment : data_environment;
+  related_data_environment  : data_environment;
+END_ENTITY;
+
+END_SCHEMA;    -- material_property_representation_schema
+
+SCHEMA qualified_measure_schema;
+
+REFERENCE FROM support_resource_schema
+     (label,
+      text);
+
+REFERENCE FROM measure_schema
+     (measure_with_unit);
+
+REFERENCE FROM representation_schema
+     (representation_item);
+
+TYPE value_qualifier = SELECT
+  (precision_qualifier,
+   type_qualifier,
+   uncertainty_qualifier);
+END_TYPE;
+
+ENTITY type_qualifier;
+  name : label;
+END_ENTITY;
+
+ENTITY precision_qualifier;
+  precision_value : INTEGER;
+END_ENTITY;
+
+ENTITY uncertainty_qualifier
+  SUPERTYPE OF (ONEOF (standard_uncertainty,
+                     qualitative_uncertainty));
+  measure_name : label;
+  description  : text;
+END_ENTITY;
+
+ENTITY qualitative_uncertainty
+  SUBTYPE OF (uncertainty_qualifier);
+  uncertainty_value : text;
+END_ENTITY;
+
+ENTITY standard_uncertainty
+  SUPERTYPE OF (expanded_uncertainty)
+  SUBTYPE OF (uncertainty_qualifier);
+  uncertainty_value : REAL;
+END_ENTITY;
+
+ENTITY expanded_uncertainty
+  SUBTYPE OF (standard_uncertainty);
+  coverage_factor : REAL;
+END_ENTITY;
+
+ENTITY measure_representation_item
+  SUBTYPE OF (representation_item, measure_with_unit);
+END_ENTITY;
+
+ENTITY descriptive_representation_item
+  SUBTYPE OF (representation_item);
+  description : text;
+END_ENTITY;
+
+ENTITY qualified_representation_item
+  SUBTYPE OF (representation_item);
+  qualifiers : SET [1:?] OF value_qualifier;
+WHERE
+  WR1: SIZEOF(QUERY(temp <* qualifiers |
+             'QUALIFIED_MEASURE_SCHEMA.PRECISION_QUALIFIER'
+             IN TYPEOF(temp))) < 2;
+END_ENTITY;
+
+ENTITY measure_qualification;
+  name : label;
+  description : text;
+  qualified_measure : measure_with_unit;
+  qualifiers : SET [1:?] OF value_qualifier;
+WHERE
+  WR1: SIZEOF(QUERY(temp <* qualifiers |
+             'QUALIFIED_MEASURE_SCHEMA.PRECISION_QUALIFIER'
+             IN TYPEOF(temp))) < 2;
+END_ENTITY;
+
+END_SCHEMA;  -- qualified_measure_schema

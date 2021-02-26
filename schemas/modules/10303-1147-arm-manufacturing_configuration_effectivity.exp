@@ -1,0 +1,44 @@
+(*
+   $Id: 10303-1147-arm-manufacturing_configuration_effectivity.exp,v 1.1 2006/08/03 14:41:10 wg12deputy Exp $
+   ISO/TC184/SC4 WG12N2628 - ISO/TS 10303-1147 Manufacturing_configuration_effectivity - EXPRESS ARM
+   Supersedes ISO TC184/SC4/WG12N1790
+*)
+
+SCHEMA Manufacturing_configuration_effectivity_arm;
+
+USE FROM Configuration_effectivity_arm;
+
+USE FROM Person_organization_arm;
+
+USE FROM Product_occurrence_arm;
+
+USE FROM Specified_product_arm;
+
+
+ENTITY Dated_configuration
+SUBTYPE OF (Manufacturing_configuration);
+  SELF\Item_usage_effectivity.effectivity_domain: Dated_effectivity;
+END_ENTITY;
+
+ENTITY Lot_configuration
+SUBTYPE OF (Manufacturing_configuration);
+  SELF\Item_usage_effectivity.effectivity_domain: Lot_effectivity;
+END_ENTITY;
+
+ENTITY Manufacturing_configuration
+ABSTRACT SUPERTYPE OF (ONEOF(Serial_configuration,Dated_configuration,
+                         Lot_configuration))
+SUBTYPE OF (Item_usage_effectivity);
+  concerned_organization : SET[0:?] OF Organization;
+WHERE
+WR1: ('MANUFACTURING_CONFIGURATION_EFFECTIVITY_ARM' + '.PRODUCT_SPECIFICATION') IN TYPEOF(resolved_configuration.watched_item);
+WR2: ('MANUFACTURING_CONFIGURATION_EFFECTIVITY_ARM' + '.PRODUCT_OCCURRENCE') IN
+TYPEOF(item_usage_relationship\View_definition_relationship.related_view); 
+END_ENTITY;
+
+ENTITY Serial_configuration
+ SUBTYPE OF (Manufacturing_configuration);
+  SELF\Item_usage_effectivity.effectivity_domain: Serial_effectivity;
+END_ENTITY;
+
+END_SCHEMA;

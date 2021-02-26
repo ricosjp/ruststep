@@ -1,0 +1,24 @@
+(*
+ $Id: 10303-1364-mim-Event_assignment.exp,v 1.2 2006/08/07 09:42:07 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2117 - ISO/TS 10303-1364 Event assignment - EXPRESS MIM
+*)
+
+
+
+SCHEMA Event_assignment_mim; 
+
+USE FROM Event_mim;    -- ISO/TS 10303-1064
+
+USE FROM management_resources_schema   -- ISO 10303-41
+  (event_occurrence_assignment); 
+
+
+TYPE event_occurrence_item = EXTENSIBLE GENERIC_ENTITY SELECT;
+END_TYPE; 
+
+ENTITY applied_event_occurrence_assignment
+  SUBTYPE OF (event_occurrence_assignment);
+  items : SET[1:?] OF event_occurrence_item;
+END_ENTITY;
+
+END_SCHEMA;  -- Event_assignment_mim

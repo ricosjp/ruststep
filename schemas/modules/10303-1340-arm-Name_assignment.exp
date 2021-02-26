@@ -1,0 +1,22 @@
+(*
+ $Id: 10303-1340-arm-Name_assignment.exp,v 1.2 2006/08/07 07:44:47 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N3085 - ISO/TS 10303-1340 Name assignment - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG12 N2282
+*) 
+
+
+SCHEMA Name_assignment_arm;
+
+
+TYPE assigned_name_select = EXTENSIBLE GENERIC_ENTITY SELECT;
+END_TYPE; 
+
+ENTITY Name_assignment;
+  name : STRING;
+  role : STRING;
+  items : assigned_name_select;
+END_ENTITY;
+
+END_SCHEMA;  -- Name_assignment_arm
+
+

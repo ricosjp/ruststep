@@ -1,0 +1,11 @@
+(* ISO/TC184/SC4 WG12N1274 ISO/TS 10303-1507 Geometrically bounded surface MIM
+$Id: 10303-1507-mim-geometrically_bounded_surface.exp,v 1.4 2003/10/21 12:49:19 wg12deputy Exp $ *)
+
+SCHEMA Geometrically_bounded_surface_mim;
+
+USE FROM aic_geometrically_bounded_surface;
+
+USE FROM Elemental_geometric_shape_mim;
+
+END_SCHEMA;
+

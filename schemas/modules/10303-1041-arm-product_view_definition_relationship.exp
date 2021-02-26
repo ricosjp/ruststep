@@ -1,0 +1,24 @@
+(*
+ $Id: 10303-1041-arm-product_view_definition_relationship.exp,v 1.5 2006/08/07 07:44:42 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2939 - ISO/TS 10303-1041 Product view definition relationship - EXPRESS ARM
+*)
+
+
+SCHEMA Product_view_definition_relationship_arm;
+
+USE FROM Product_view_definition_arm;    -- ISO/TS 10303-1019
+
+
+ENTITY View_definition_relationship;
+  id : OPTIONAL STRING;
+  relation_type : OPTIONAL STRING;
+  description : OPTIONAL STRING;
+  relating_view : Product_view_definition;
+  related_view : Product_view_definition;
+END_ENTITY;
+
+ENTITY View_definition_usage
+  SUBTYPE OF (View_definition_relationship);
+END_ENTITY;
+
+END_SCHEMA;  -- Product_view_definition_relationship_arm

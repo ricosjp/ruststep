@@ -1,0 +1,810 @@
+(*
+ $Id: 10303-1293-arm-ap239_part_definition_information.exp,v 1.1 2006/08/07 07:44:46 wg12deputy Exp $
+ ISO TC184/SC4/WG3 N1556 - ISO/TS 10303-1293 AP239 part definition information - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG3 N1381
+*) 
+
+SCHEMA Ap239_part_definition_information_arm;
+
+USE FROM Alias_identification_arm;    -- ISO/TS 10303-1025
+
+USE FROM Ap239_document_management_arm;    -- ISO/TS 10303-1297
+
+USE FROM Ap239_properties_arm;    -- ISO/TS 10303-1295
+
+USE FROM Approval_arm;    -- ISO/TS 10303-1012
+
+USE FROM Attribute_classification_arm;    -- ISO/TS 10303-1246
+
+USE FROM Certification_arm;    -- ISO/TS 10303-1044
+
+USE FROM Classification_assignment_arm;    -- ISO/TS 10303-1114
+
+USE FROM Condition_arm;    -- ISO/TS 10303-1253
+
+USE FROM Condition_characterized_arm;    -- ISO/TS 10303-1257
+
+USE FROM Condition_evaluation_arm;    -- ISO/TS 10303-1254
+
+USE FROM Condition_evaluation_characterized_arm;    -- ISO/TS 10303-1296
+
+USE FROM Contract_arm;    -- ISO/TS 10303-1062
+
+USE FROM Date_time_arm;    -- ISO/TS 10303-1010
+
+USE FROM Date_time_assignment_arm;    -- ISO/TS 10303-1014
+
+USE FROM Document_and_version_identification_arm;    -- ISO/TS 10303-1121
+
+USE FROM Document_assignment_arm;    -- ISO/TS 10303-1122
+
+USE FROM Document_definition_arm;    -- ISO/TS 10303-1123
+
+USE FROM Document_properties_arm;    -- ISO/TS 10303-1126
+
+USE FROM Document_structure_arm;    -- ISO/TS 10303-1124
+
+USE FROM Effectivity_application_arm;    -- ISO/TS 10303-1059
+
+USE FROM Effectivity_arm;    -- ISO/TS 10303-1057
+
+USE FROM File_identification_arm;    -- ISO/TS 10303-1127
+
+USE FROM Foundation_representation_arm;    -- ISO/TS 10303-1006
+
+USE FROM Identification_assignment_arm;    -- ISO/TS 10303-1021
+
+USE FROM Independent_property_arm;    -- ISO/TS 10303-1036
+
+USE FROM Independent_property_representation_arm;    -- ISO/TS 10303-1038
+
+USE FROM Information_rights_arm;    -- ISO/TS 10303-1241
+
+USE FROM Interface_arm;    -- ISO/TS 10303-1251
+
+USE FROM Interface_lifecycle_arm;    -- ISO/TS 10303-1294
+
+USE FROM Justification_arm;    -- ISO/TS 10303-1263
+
+USE FROM Message_arm;    -- ISO/TS 10303-1270
+
+USE FROM Multi_linguism_arm;    -- ISO/TS 10303-1105
+
+USE FROM Part_and_version_identification_arm;    -- ISO/TS 10303-1022
+
+USE FROM Part_view_definition_arm;    -- ISO/TS 10303-1023
+
+USE FROM Person_organization_arm;    -- ISO/TS 10303-1011
+
+USE FROM Person_organization_assignment_arm;    -- ISO/TS 10303-1013
+
+USE FROM Product_as_individual_arm;    -- ISO/TS 10303-1164
+
+USE FROM Product_categorization_arm;    -- ISO/TS 10303-1016
+
+USE FROM Product_concept_identification_arm;    -- ISO/TS 10303-1060
+
+USE FROM Product_identification_arm;    -- ISO/TS 10303-1017
+
+USE FROM Product_version_arm;    -- ISO/TS 10303-1018
+
+USE FROM Product_version_relationship_arm;    -- ISO/TS 10303-1020
+
+USE FROM Product_view_definition_arm;    -- ISO/TS 10303-1019
+
+USE FROM Product_view_definition_relationship_arm;    -- ISO/TS 10303-1041
+
+USE FROM Project_arm;    -- ISO/TS 10303-1061
+
+USE FROM Property_assignment_arm;    -- ISO/TS 10303-1030
+
+USE FROM Requirement_assignment_arm;    -- ISO/TS 10303-1233
+
+USE FROM Requirement_identification_and_version_arm;    -- ISO/TS 10303-1140
+
+USE FROM Requirement_management_arm;    -- ISO/TS 10303-1348
+
+USE FROM Requirement_view_definition_arm;    -- ISO/TS 10303-1141
+
+USE FROM Requirement_view_definition_relationship_arm;    -- ISO/TS 10303-1142
+
+USE FROM Security_classification_arm;    -- ISO/TS 10303-1015
+
+USE FROM State_characterized_arm;    -- ISO/TS 10303-1271
+
+USE FROM State_definition_arm;    -- ISO/TS 10303-1255
+
+USE FROM State_observed_arm;    -- ISO/TS 10303-1256
+
+
+TYPE ap239_padi_alias_identification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON alias_identification_item WITH 
+   (Identification_assignment, 
+    Interface_connection, 
+    Interface_connector, 
+    Interface_connector_as_planned, 
+    Interface_connector_as_realized, 
+    Interface_connector_definition, 
+    Interface_connector_design, 
+    Interface_connector_occurrence, 
+    Interface_connector_version, 
+    Interface_definition_connection, 
+    Interface_definition_for, 
+    Interface_specification, 
+    Interface_specification_definition, 
+    Interface_specification_version, 
+    Justification, 
+    Justification_assignment, 
+    Justification_relationship, 
+    Justification_support_assignment, 
+    Part, 
+    Part_version, 
+    Part_view_definition, 
+    Product_as_individual, 
+    Product_as_individual_view, 
+    Product_as_planned, 
+    Product_as_realized, 
+    Product_concept);
+END_TYPE; 
+
+TYPE ap239_padi_approval_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON approval_item WITH 
+   (Applied_state_assignment, 
+    Applied_state_definition_assignment, 
+    Effectivity, 
+    Effectivity_assignment, 
+    Interface_connection, 
+    Interface_connector_as_planned, 
+    Interface_connector_as_realized, 
+    Interface_connector_definition, 
+    Interface_connector_design, 
+    Interface_connector_design_to_planned, 
+    Interface_connector_design_to_realized, 
+    Interface_connector_occurrence, 
+    Interface_connector_planned_to_realized, 
+    Interface_connector_version, 
+    Interface_definition_for, 
+    Interface_specification, 
+    Interface_specification_definition, 
+    Interface_specification_version, 
+    Justification, 
+    Justification_assignment, 
+    Justification_relationship, 
+    Justification_support_assignment, 
+    Part, 
+    Part_version, 
+    Part_view_definition, 
+    Product_as_individual, 
+    Product_as_planned, 
+    Product_as_realized, 
+    Product_category_assignment, 
+    Product_concept, 
+    Product_design_to_individual, 
+    Product_design_version_to_individual, 
+    Product_planned_to_realized, 
+    Product_version_relationship, 
+    Product_view_definition, 
+    View_definition_context, 
+    View_definition_relationship);
+END_TYPE; 
+
+TYPE ap239_padi_certification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON certification_item WITH 
+   (Document, 
+    Document_version, 
+    Interface_connection, 
+    Interface_connector_version, 
+    Interface_definition_connection, 
+    Interface_specification_version, 
+    Part, 
+    Part_version, 
+    Product_as_individual, 
+    Product_as_planned, 
+    Product_as_realized, 
+    Product_version_relationship);
+END_TYPE; 
+
+TYPE ap239_padi_classification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON classification_item WITH 
+   (Defined_state_relationship, 
+    Effectivity, 
+    Effectivity_assignment, 
+    Effectivity_relationship, 
+    Interface_connection, 
+    Interface_connector, 
+    Interface_connector_as_planned, 
+    Interface_connector_as_realized, 
+    Interface_connector_definition, 
+    Interface_connector_design, 
+    Interface_connector_design_to_planned, 
+    Interface_connector_design_to_realized, 
+    Interface_connector_occurrence, 
+    Interface_connector_planned_to_realized, 
+    Interface_connector_version, 
+    Interface_definition_connection, 
+    Interface_definition_for, 
+    Interface_specification, 
+    Interface_specification_definition, 
+    Interface_specification_version, 
+    Justification, 
+    Justification_assignment, 
+    Justification_relationship, 
+    Justification_support_assignment, 
+    Market, 
+    Part, 
+    Part_version, 
+    Part_view_definition, 
+    Product, 
+    Product_as_planned, 
+    Product_as_realized, 
+    Product_category, 
+    Product_concept, 
+    Product_design_to_individual, 
+    Product_design_version_to_individual, 
+    Product_planned_to_realized, 
+    Product_version, 
+    Product_version_relationship, 
+    Product_view_definition, 
+    Requirement, 
+    Requirement_assignment, 
+    Requirement_collection_relationship, 
+    Requirement_source, 
+    Requirement_version, 
+    Requirement_version_relationship, 
+    Requirement_view_definition, 
+    State_assertion, 
+    State_assessment, 
+    Supplied_part_relationship, 
+    Tracing_relationship, 
+    View_definition_context);
+END_TYPE; 
+
+TYPE ap239_padi_classified_attribute_select = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON classified_attribute_select WITH 
+   (Effectivity, 
+    Effectivity_assignment, 
+    Interface_connection, 
+    Interface_connector_definition, 
+    Interface_definition_connection, 
+    Interface_specification_definition, 
+    Justification, 
+    Justification_assignment, 
+    Justification_support_assignment, 
+    Market, 
+    Part_view_definition, 
+    Product, 
+    Product_category, 
+    Product_concept, 
+    Product_version_relationship, 
+    Product_view_definition, 
+    Requirement_version_relationship, 
+    Requirement_view_definition, 
+    View_definition_context, 
+    View_definition_relationship);
+END_TYPE; 
+
+TYPE ap239_padi_condition_evaluation_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON condition_evaluation_item WITH 
+   (Approval, 
+    Approval_assignment, 
+    Assigned_property, 
+    Document_assignment, 
+    Hierarchical_interface_connection, 
+    Interface_connection, 
+    Interface_definition_connection);
+END_TYPE; 
+
+TYPE ap239_padi_condition_evaluation_parameter_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON condition_evaluation_parameter_item WITH 
+   (Approval, 
+    Approval_assignment, 
+    Assigned_property, 
+    Calendar_date, 
+    Certification_assignment, 
+    Classification_assignment, 
+    Contract_assignment, 
+    Date_or_date_time_assignment, 
+    Date_time, 
+    Document_assignment, 
+    Hierarchical_interface_connection, 
+    Identification_assignment, 
+    Independent_property_representation, 
+    Interface_connection, 
+    Interface_connector_occurrence, 
+    Interface_definition_connection, 
+    Organization_or_person_in_organization_assignment, 
+    Product, 
+    Product_as_individual, 
+    Product_category_assignment, 
+    Product_concept, 
+    Product_version, 
+    Product_view_definition, 
+    Property_representation, 
+    Representation, 
+    State, 
+    State_definition);
+END_TYPE; 
+
+TYPE ap239_padi_condition_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON condition_item WITH 
+   (Approval, 
+    Approval_assignment, 
+    Assigned_property, 
+    Document_assignment, 
+    Hierarchical_interface_connection, 
+    Interface_connection, 
+    Interface_definition_connection);
+END_TYPE; 
+
+TYPE ap239_padi_condition_parameter_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON condition_parameter_item WITH 
+   (Approval, 
+    Approval_assignment, 
+    Assigned_property, 
+    Calendar_date, 
+    Certification_assignment, 
+    Classification_assignment, 
+    Contract_assignment, 
+    Date_or_date_time_assignment, 
+    Date_time, 
+    Document_assignment, 
+    Hierarchical_interface_connection, 
+    Identification_assignment, 
+    Independent_property_representation, 
+    Interface_connection, 
+    Interface_connector_occurrence, 
+    Interface_definition_connection, 
+    Organization_or_person_in_organization_assignment, 
+    Product, 
+    Product_as_individual, 
+    Product_category_assignment, 
+    Product_concept, 
+    Product_version, 
+    Product_view_definition, 
+    Property_representation, 
+    Representation, 
+    State, 
+    State_definition);
+END_TYPE; 
+
+TYPE ap239_padi_contract_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON contract_item WITH 
+   (Interface_connector_as_planned, 
+    Interface_connector_as_realized, 
+    Interface_connector_design, 
+    Interface_connector_version, 
+    Interface_specification_version, 
+    Part, 
+    Part_version, 
+    Product_as_individual, 
+    Product_as_planned, 
+    Product_as_realized, 
+    Project);
+END_TYPE; 
+
+TYPE ap239_padi_date_and_time_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON date_or_date_time_item WITH 
+   (Effectivity, 
+    Effectivity_assignment, 
+    Hierarchical_interface_connection, 
+    Interface_connection, 
+    Interface_connector_as_planned, 
+    Interface_connector_as_realized, 
+    Interface_connector_definition, 
+    Interface_connector_design_to_planned, 
+    Interface_connector_design_to_realized, 
+    Interface_connector_occurrence, 
+    Interface_connector_planned_to_realized, 
+    Interface_connector_version, 
+    Interface_definition_connection, 
+    Interface_definition_for, 
+    Interface_specification_definition, 
+    Interface_specification_version, 
+    Justification, 
+    Justification_assignment, 
+    Justification_relationship, 
+    Justification_support_assignment, 
+    Part, 
+    Part_version, 
+    Part_view_definition, 
+    Product_as_planned, 
+    Product_as_realized, 
+    Product_category_assignment, 
+    Product_concept, 
+    Product_design_to_individual, 
+    Product_design_version_to_individual, 
+    Product_planned_to_realized, 
+    Product_version, 
+    Product_version_relationship, 
+    Product_view_definition, 
+    Project, 
+    Project_assignment, 
+    View_definition_context);
+END_TYPE; 
+
+TYPE ap239_padi_documented_element_select = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON documented_element_select WITH 
+   (Condition, 
+    Condition_evaluation, 
+    Document, 
+    Document_definition, 
+    Document_version, 
+    Effectivity, 
+    Effectivity_assignment, 
+    Interface_connection, 
+    Interface_connector_as_planned, 
+    Interface_connector_as_realized, 
+    Interface_connector_design, 
+    Interface_connector_design_to_planned, 
+    Interface_connector_design_to_realized, 
+    Interface_connector_occurrence, 
+    Interface_connector_planned_to_realized, 
+    Interface_connector_version, 
+    Interface_definition_connection, 
+    Interface_specification, 
+    Interface_specification_version, 
+    Market, 
+    Part, 
+    Part_version, 
+    Part_view_definition, 
+    Product, 
+    Product_as_planned, 
+    Product_as_realized, 
+    Product_concept, 
+    Product_design_to_individual, 
+    Product_design_version_to_individual, 
+    Product_planned_to_realized, 
+    Product_version, 
+    Product_version_relationship, 
+    Product_view_definition, 
+    Project, 
+    Requirement, 
+    Requirement_assignment, 
+    Requirement_source, 
+    Requirement_version, 
+    Security_classification, 
+    Security_classification_assignment, 
+    State, 
+    State_assertion, 
+    State_assessment, 
+    State_definition);
+END_TYPE; 
+
+TYPE ap239_padi_effectivity_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON effectivity_item WITH 
+   (Address_assignment, 
+    Applied_information_usage_right, 
+    Approval_assignment, 
+    Assigned_property, 
+    Certification_assignment, 
+    Contract_assignment, 
+    Date_or_date_time_assignment, 
+    Document_assignment, 
+    Document_definition, 
+    Document_definition_relationship, 
+    Document_location_identification, 
+    Effectivity_assignment, 
+    File, 
+    File_relationship, 
+    Identification_assignment, 
+    Interface_connection, 
+    Interface_connector_design_to_planned, 
+    Interface_connector_design_to_realized, 
+    Interface_connector_occurrence, 
+    Interface_connector_planned_to_realized, 
+    Interface_definition_for, 
+    Justification, 
+    Justification_assignment, 
+    Justification_relationship, 
+    Justification_support_assignment, 
+    Organization_or_person_in_organization_assignment, 
+    Organization_relationship, 
+    Person_in_organization, 
+    Product, 
+    Product_as_individual, 
+    Product_design_to_individual, 
+    Product_design_version_to_individual, 
+    Product_planned_to_realized, 
+    Product_version, 
+    Product_version_relationship, 
+    Product_view_definition, 
+    Project_assignment, 
+    Requirement_assignment, 
+    Requirement_collection_relationship, 
+    Requirement_source, 
+    Requirement_version_relationship, 
+    Security_classification_assignment);
+END_TYPE; 
+
+TYPE ap239_padi_identification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON identification_item WITH 
+   (Effectivity, 
+    Information_right, 
+    Information_usage_right, 
+    Interface_connection, 
+    Interface_connector, 
+    Interface_connector_as_planned, 
+    Interface_connector_as_realized, 
+    Interface_connector_definition, 
+    Interface_connector_design, 
+    Interface_connector_occurrence, 
+    Interface_connector_version, 
+    Interface_definition_connection, 
+    Interface_specification, 
+    Interface_specification_definition, 
+    Interface_specification_version, 
+    Justification, 
+    Justification_assignment, 
+    Justification_relationship, 
+    Justification_support_assignment, 
+    Market, 
+    Part, 
+    Part_version, 
+    Part_view_definition, 
+    Product_as_individual, 
+    Product_as_individual_view, 
+    Product_as_planned, 
+    Product_as_realized, 
+    Product_concept);
+END_TYPE; 
+
+TYPE ap239_padi_information_usage_right_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON information_usage_right_item WITH 
+   (Interface_connection, 
+    Interface_connector, 
+    Interface_connector_as_planned, 
+    Interface_connector_as_realized, 
+    Interface_connector_definition, 
+    Interface_connector_design, 
+    Interface_connector_occurrence, 
+    Interface_connector_version, 
+    Interface_definition_connection, 
+    Interface_definition_for, 
+    Interface_specification, 
+    Interface_specification_definition, 
+    Interface_specification_version, 
+    Part, 
+    Part_version, 
+    Part_view_definition, 
+    Product_as_individual, 
+    Product_as_individual_view, 
+    Product_as_planned, 
+    Product_as_realized, 
+    Requirement, 
+    Requirement_assignment, 
+    Requirement_version, 
+    Requirement_view_definition, 
+    Security_classification, 
+    Security_classification_assignment, 
+    Supplied_part_relationship);
+END_TYPE; 
+
+TYPE ap239_padi_justification_item = SELECT BASED_ON justification_item WITH 
+   (Approval, 
+    Approval_assignment, 
+    Assigned_property, 
+    Classification_assignment, 
+    Descriptive_document_property, 
+    Document_assignment, 
+    Document_definition, 
+    Document_definition_relationship, 
+    Effectivity, 
+    File_relationship, 
+    Independent_property, 
+    Independent_property_relationship, 
+    Interface_connection, 
+    Interface_connector_occurrence, 
+    Interface_definition_connection, 
+    Message, 
+    Numerical_document_property, 
+    Product, 
+    Product_version, 
+    Product_version_relationship, 
+    Product_view_definition, 
+    State_assertion, 
+    State_assessment, 
+    View_definition_relationship);
+END_TYPE; 
+
+TYPE ap239_padi_justification_support_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON justification_support_item WITH 
+   (Applied_state_assignment, 
+    Applied_state_definition_assignment, 
+    Approval, 
+    Assigned_property, 
+    Certification, 
+    Contract, 
+    Descriptive_document_property, 
+    Document_definition, 
+    Document_definition_relationship, 
+    Effectivity, 
+    File_relationship, 
+    Independent_property, 
+    Independent_property_relationship, 
+    Interface_connection, 
+    Interface_connector_occurrence, 
+    Interface_definition_connection, 
+    Message, 
+    Numerical_document_property, 
+    Product, 
+    Product_version, 
+    Product_version_relationship, 
+    Product_view_definition, 
+    State, 
+    State_definition, 
+    State_definition_relationship, 
+    State_relationship, 
+    View_definition_relationship);
+END_TYPE; 
+
+TYPE ap239_padi_organization_or_person_in_organization = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON organization_or_person_in_organization_item WITH 
+   (Alias_identification, 
+    Effectivity, 
+    Effectivity_assignment, 
+    Interface_connection, 
+    Interface_connector, 
+    Interface_connector_as_planned, 
+    Interface_connector_as_realized, 
+    Interface_connector_definition, 
+    Interface_connector_occurrence, 
+    Interface_connector_version, 
+    Interface_definition_connection, 
+    Interface_definition_for, 
+    Interface_specification, 
+    Interface_specification_definition, 
+    Interface_specification_version, 
+    Justification, 
+    Justification_assignment, 
+    Justification_relationship, 
+    Justification_support_assignment, 
+    Part, 
+    Part_version, 
+    Part_view_definition, 
+    Product_as_individual, 
+    Product_as_planned, 
+    Product_as_realized, 
+    Product_category, 
+    Product_category_assignment, 
+    Product_version, 
+    Product_view_definition, 
+    View_definition_context);
+END_TYPE; 
+
+TYPE ap239_padi_project_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON project_item WITH 
+   (Independent_property, 
+    Product, 
+    Product_concept, 
+    Product_version);
+END_TYPE; 
+
+TYPE ap239_padi_property_assignment_select = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON property_assignment_select WITH 
+   (Address, 
+    Hierarchical_interface_connection, 
+    Interface_connection, 
+    Interface_connector_occurrence, 
+    Interface_definition_connection, 
+    Organization_or_person_in_organization_assignment, 
+    Part_view_definition, 
+    Person, 
+    Person_in_organization, 
+    Project);
+END_TYPE; 
+
+TYPE ap239_padi_requirement_assignment_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON requirement_assignment_item WITH 
+   (Document_version, 
+    Interface_connector_occurrence, 
+    Interface_specification, 
+    Part_version, 
+    Product_as_individual_version, 
+    Product_as_planned, 
+    Product_as_realized, 
+    Product_view_definition, 
+    Project);
+END_TYPE; 
+
+TYPE ap239_padi_requirement_source_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON requirement_source_item WITH 
+   (Document_version, 
+    Interface_connector_occurrence, 
+    Part_version, 
+    Product_as_individual_version, 
+    Product_view_definition);
+END_TYPE; 
+
+TYPE ap239_padi_security_classification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON security_classification_item WITH 
+   (Hierarchical_interface_connection, 
+    Interface_connection, 
+    Interface_connector, 
+    Interface_connector_as_planned, 
+    Interface_connector_as_realized, 
+    Interface_connector_definition, 
+    Interface_connector_design, 
+    Interface_connector_occurrence, 
+    Interface_connector_version, 
+    Interface_definition_connection, 
+    Interface_definition_for, 
+    Interface_specification_definition, 
+    Interface_specification_version, 
+    Part, 
+    Part_version, 
+    Part_view_definition, 
+    Product_as_individual, 
+    Product_as_individual_view, 
+    Product_as_planned, 
+    Product_as_realized, 
+    Product_design_to_individual, 
+    Product_design_version_to_individual);
+END_TYPE; 
+
+TYPE ap239_padi_state_definition_of_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON state_definition_of_item WITH 
+   (Certification, 
+    Contract, 
+    Interface_connection, 
+    Interface_connector_as_planned, 
+    Interface_connector_as_realized, 
+    Interface_connector_definition, 
+    Interface_connector_design, 
+    Interface_connector_occurrence, 
+    Interface_connector_version, 
+    Interface_definition_connection, 
+    Interface_specification, 
+    Interface_specification_definition, 
+    Interface_specification_version, 
+    Organization, 
+    Part, 
+    Part_version, 
+    Part_view_definition, 
+    Person_in_organization, 
+    Product_as_individual, 
+    Product_as_individual_view, 
+    Product_as_planned, 
+    Product_as_realized, 
+    Product_category, 
+    Project, 
+    Security_classification);
+END_TYPE; 
+
+TYPE ap239_padi_state_of_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON state_of_item WITH 
+   (Certification, 
+    Contract, 
+    Interface_connection, 
+    Interface_connector_as_planned, 
+    Interface_connector_as_realized, 
+    Interface_connector_definition, 
+    Interface_connector_design, 
+    Interface_connector_occurrence, 
+    Interface_connector_version, 
+    Interface_definition_connection, 
+    Interface_specification, 
+    Interface_specification_definition, 
+    Interface_specification_version, 
+    Organization, 
+    Part, 
+    Part_version, 
+    Part_view_definition, 
+    Person_in_organization, 
+    Product_as_individual, 
+    Product_as_individual_view, 
+    Product_as_planned, 
+    Product_as_realized, 
+    Project, 
+    Security_classification);
+END_TYPE; 
+
+TYPE ap239_padi_string_select = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON string_select WITH 
+   (Interface_connection, 
+    Interface_connector, 
+    Interface_connector_definition, 
+    Interface_connector_occurrence, 
+    Interface_connector_version, 
+    Interface_definition_connection, 
+    Interface_definition_for, 
+    Justification, 
+    Justification_assignment, 
+    Justification_relationship, 
+    Justification_support_assignment, 
+    Part, 
+    Part_version, 
+    Part_view_definition, 
+    Product_as_individual, 
+    Product_as_individual_version, 
+    Product_as_individual_view);
+END_TYPE; 
+
+ENTITY Product_as_individual_effectivity
+  SUBTYPE OF (Effectivity);
+  items : SET[1:?] OF Product_as_individual;
+END_ENTITY;
+
+SUBTYPE_CONSTRAINT ap239_padi_restrict_effectivity_subtypes FOR Effectivity;
+  ONEOF (Dated_effectivity,
+         Lot_effectivity,
+         Product_as_individual_effectivity,
+         Serial_effectivity,
+         Time_interval_effectivity);
+END_SUBTYPE_CONSTRAINT;
+
+END_SCHEMA;  -- Ap239_part_definition_information_arm

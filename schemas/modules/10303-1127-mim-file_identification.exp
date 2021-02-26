@@ -1,0 +1,38 @@
+(*
+ $Id: 10303-1127-mim-file_identification.exp,v 1.5 2006/08/07 09:42:04 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N1205 - ISO/TS 10303-1127 File identification - EXPRESS MIM
+*)
+
+SCHEMA File_identification_mim;
+
+USE FROM Identification_assignment_mim;
+ 
+USE FROM External_item_identification_assignment_mim;
+
+USE FROM document_schema   -- ISO 10303-41
+  (document,
+   document_representation_type); 
+
+USE FROM product_property_definition_schema   -- ISO 10303-41
+  (characterized_object); 
+
+TYPE file_identification_item = SELECT BASED_ON identification_item WITH (document_file);
+END_TYPE; 
+
+TYPE file_version_item = SELECT BASED_ON versionable_item WITH
+  (document_file);
+END_TYPE;
+
+TYPE file_location_select = SELECT BASED_ON external_identification_item WITH (document_file);
+END_TYPE;
+
+ENTITY document_file
+SUBTYPE OF (document, characterized_object);
+WHERE
+  WR1: SELF\characterized_object.name = '';
+  WR2: NOT EXISTS(SELF\characterized_object.description);
+  WR3: SIZEOF( QUERY( drt <* SELF\document.representation_types |
+               drt.name IN ['digital','physical'])) = 1;
+END_ENTITY;
+
+END_SCHEMA;

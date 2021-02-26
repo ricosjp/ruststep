@@ -1,0 +1,43 @@
+(*
+   $Id: 10303-1350-arm-inertia_characteristics.exp,v 1.1 2006/08/03 14:41:11 wg12deputy Exp $
+   ISO/TC184/SC4 WG12N2637 - ISO/TS - 10303- inertia_characteristics - EXPRESS ARM
+   Supersedes ISO TC184/SC4/WG12N2074
+*)
+
+SCHEMA Inertia_characteristics_arm;
+
+USE FROM Elemental_geometric_shape_arm;
+
+USE FROM Shape_property_assignment_arm;
+
+USE FROM Value_with_unit_arm;
+
+ENTITY Centre_of_mass
+SUBTYPE OF (Shape_dependent_property_representation);
+WHERE
+WR1: SIZEOF(SELF\Shape_dependent_property_representation.property_representation.items)=1;
+WR2: SIZEOF(QUERY (it <* SELF\Shape_dependent_property_representation.property_representation.items |
+   'INERTIA_CHARACTERISTICS_ARM' + '.CARTESIAN_POINT' IN TYPEOF(it) ))=1;
+WR3: 'INERTIA_CHARACTERISTICS_ARM' + '.GEOMETRIC_COORDINATE_SPACE' IN 
+	TYPEOF(SELF\Shape_dependent_property_representation.property_representation.context_of_items);
+END_ENTITY;
+
+ENTITY Inertia_matrix_item
+SUBTYPE OF (Representation_item);
+  inertia_values : ARRAY[1:6] OF REAL;
+  common_unit: Unit;
+END_ENTITY;
+
+ENTITY Moments_of_inertia
+SUBTYPE OF (Shape_dependent_property_representation);
+WHERE
+WR1: SIZEOF(QUERY (it <* SELF\Shape_dependent_property_representation.property_representation.items |
+   'INERTIA_CHARACTERISTICS_ARM' + '.AXIS_PLACEMENT'IN TYPEOF(it) ))=1;
+WR2: SIZEOF(QUERY (it <* SELF\Shape_dependent_property_representation.property_representation.items |
+   'INERTIA_CHARACTERISTICS_ARM' + '.INERTIA_MATRIX_ITEM' IN TYPEOF(it) ))=1;
+WR3: 'INERTIA_CHARACTERISTICS_ARM' + '.GEOMETRIC_COORDINATE_SPACE' IN 
+	TYPEOF(SELF\Shape_dependent_property_representation.property_representation.context_of_items);
+END_ENTITY;
+
+
+END_SCHEMA;

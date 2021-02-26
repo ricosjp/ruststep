@@ -1,0 +1,40 @@
+(*
+ $Id: 10303-1134-arm-product_structure.exp,v 1.2 2006/08/07 07:44:44 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2546 - ISO/TS 10303-1134 Product structure - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG12 N1670
+*) 
+
+
+SCHEMA Product_structure_arm;
+
+USE FROM Assembly_structure_arm;    -- ISO/TS 10303-1026
+
+USE FROM Contextual_shape_positioning_arm;    -- ISO/TS 10303-1027
+
+USE FROM Part_and_version_identification_arm;    -- ISO/TS 10303-1022
+
+USE FROM Part_definition_relationship_arm;    -- ISO/TS 10303-1055
+
+USE FROM Product_replacement_arm;    -- ISO/TS 10303-1046
+
+USE FROM Product_version_relationship_arm;    -- ISO/TS 10303-1020
+
+USE FROM Product_view_definition_relationship_arm;    -- ISO/TS 10303-1041
+
+USE FROM Property_assignment_arm;    -- ISO/TS 10303-1030
+
+USE FROM Single_part_representation_arm;    -- ISO/TS 10303-1133
+
+
+TYPE ps_product_property_assignment = SELECT BASED_ON property_assignment_select WITH 
+   (View_definition_relationship);
+END_TYPE; 
+
+ENTITY Alternate_part_relationship
+  SUBTYPE OF (Alternate_product_relationship);
+  SELF\Alternate_product_relationship.alternate_product : Part;
+  SELF\Alternate_product_relationship.base_product : Part;
+END_ENTITY;
+
+END_SCHEMA;  -- Product_structure_arm
+

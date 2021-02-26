@@ -1,0 +1,143 @@
+(*
+ISO TC184/SC4/WG12 N5968 - ISO/DIS 10303-61 Systems engineering representation - EXPRESS
+Supersedes ISO TC184/SC4/WG12 N4909
+*) 
+
+SCHEMA systems_engineering_representation_schema;
+
+REFERENCE FROM action_schema
+  (action_method);
+
+REFERENCE FROM ISO13584_expressions_schema
+  (expression);
+
+REFERENCE FROM management_resources_schema
+  (action_method_assignment);
+
+REFERENCE FROM product_analysis_schema;
+
+REFERENCE FROM representation_schema
+  (representation,
+   representation_context,
+   representation_item);
+
+REFERENCE FROM state_type_schema;
+
+REFERENCE FROM support_resource_schema
+  (identifier,
+   label,
+   text);
+
+TYPE analysis_model_idealisation_item = EXTENSIBLE GENERIC_ENTITY SELECT 
+  (physical_product_domain);
+END_TYPE;
+
+TYPE expression_element = SELECT 
+  (expression);
+END_TYPE;
+
+TYPE representation_proxy_select = EXTENSIBLE GENERIC_ENTITY SELECT ;
+END_TYPE;
+
+TYPE se_representation_proxy_select = SELECT BASED_ON representation_proxy_select WITH
+  (action_method,
+   state_type,
+   state_type_relationship);
+END_TYPE;
+
+TYPE state_based_behaviour_element = SELECT 
+  (state_type,
+   state_type_relationship);
+END_TYPE;
+
+ENTITY action_method_assignment_relationship;
+  relating_assignment : action_method_assignment;
+  related_assignment : action_method_assignment;
+END_ENTITY;
+
+ENTITY analysis_model
+SUBTYPE OF (representation);
+  SELF\representation.context_of_items : analysis_representation_context;
+END_ENTITY;
+
+ENTITY analysis_model_relationship;
+  id : identifier;
+  name : label;
+  description : text;
+  idealised : analysis_model;
+  idealisation : analysis_model_idealisation_item;
+END_ENTITY;
+
+ENTITY analysis_representation_context
+SUBTYPE OF (representation_context);
+END_ENTITY;
+
+ENTITY description_text;
+  description : text;
+END_ENTITY;
+
+ENTITY description_text_assignment ABSTRACT SUPERTYPE;
+  description : description_text;
+END_ENTITY;
+
+ENTITY expression_assignment ABSTRACT SUPERTYPE;
+  assigned_expression : expression;
+  role : expression_role;
+END_ENTITY;
+
+ENTITY expression_item_representation_item
+SUBTYPE OF (representation_item);
+  item : expression_element;
+END_ENTITY;
+
+ENTITY expression_representation
+SUBTYPE OF (representation);
+  SELF\representation.context_of_items : expression_representation_context;
+  SELF\representation.items : SET [1 : ?] OF expression_item_representation_item;
+END_ENTITY;
+
+ENTITY expression_representation_context
+SUBTYPE OF (representation_context);
+END_ENTITY;
+
+ENTITY expression_role;
+  name : label;
+  description : OPTIONAL text;
+END_ENTITY;
+
+ENTITY functional_model
+SUBTYPE OF (representation);
+  SELF\representation.context_of_items : functional_representation_context;
+  SELF\representation.items : SET [1 : ?] OF functional_representation_item;
+END_ENTITY;
+
+ENTITY functional_representation_context
+SUBTYPE OF (representation_context);
+END_ENTITY;
+
+ENTITY functional_representation_item
+SUBTYPE OF (representation_proxy_item);
+  SELF\representation_proxy_item.item : action_method;
+END_ENTITY;
+
+ENTITY representation_proxy_item
+SUBTYPE OF (representation_item);
+  item : representation_proxy_select;
+END_ENTITY;
+
+ENTITY state_based_behaviour_model
+SUBTYPE OF (representation);
+  SELF\representation.context_of_items : state_based_behaviour_representation_context;
+  SELF\representation.items : SET [1 : ?] OF state_based_behaviour_representation_item;
+END_ENTITY;
+
+ENTITY state_based_behaviour_representation_context
+SUBTYPE OF (representation_context);
+END_ENTITY;
+
+ENTITY state_based_behaviour_representation_item
+SUBTYPE OF (representation_proxy_item);
+  SELF\representation_proxy_item.item : state_based_behaviour_element;
+END_ENTITY;
+
+END_SCHEMA;

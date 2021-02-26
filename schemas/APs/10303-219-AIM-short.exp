@@ -1,0 +1,2403 @@
+(* AIM EXPRESS short form for ISO/CD 10303-219
+   2004-10-15
+   Len Slovensky
+   ISO TC184/SC4/WG3 N1516
+*)
+
+SCHEMA Dimensional_Inspection_Schema;
+USE FROM aic_machining_feature;
+USE FROM aic_geometric_tolerances;                     -- ISO 10303-519  
+    
+USE FROM aic_advanced_brep;                            -- ISO 10303-514
+   
+USE FROM action_schema                                 -- ISO 10303-41
+   (action,
+    action_method,
+    action_resource,
+    executed_action);
+USE FROM application_context_schema                   -- ISO 10303-41
+     (application_context,
+     application_context_element,
+     application_protocol_definition,
+      product_definition_context);  
+ 
+USE FROM date_time_schema                             -- ISO 10303-41
+     (calendar_date,
+      coordinated_universal_time_offset,
+      date,
+      date_and_time,
+      date_role,
+      date_time_select,
+      local_time);   
+      
+USE FROM document_schema                             -- ISO 10303-41   
+      (document,
+       document_usage_constraint,
+       document_with_class);   
+  REFERENCE FROM geometry_schema        -- ISO 10303-42
+      (dummy_gri);
+USE FROM geometry_schema                              -- ISO 10303-42
+     (axis1_placement,
+     axis2_placement_3d,
+     b_spline_curve_with_knots,
+     bezier_curve,
+     bezier_surface,
+     cartesian_point, 
+     circle,
+     elementary_surface,
+     ellipse,
+     geometric_representation_item,
+     hyperbola,
+     line,
+     oriented_surface,
+     parabola,
+     placement,
+     plane,
+     point,
+     quasi_uniform_curve,
+     quasi_uniform_surface,
+     surface);
+USE FROM geometric_model_schema                       -- ISO 10303-42
+     (faceted_brep,
+      manifold_solid_brep);
+USE FROM process_property_schema                      -- ISO 10303-49
+     (resource_property);          
+USE FROM process_property_representation_schema       -- ISO 10303-49
+     (action_property_representation);
+USE FROM material_property_definition_schema          -- ISO 10303-45
+     (property_definition_relationship);
+         
+USE FROM management_resources_schema                  -- ISO 10303-41
+     (date_assignment,
+      document_reference,
+      organization_assignment,
+     person_and_organization_assignment,
+     security_classification_assignment);
+ USE FROM measure_schema                               -- ISO 10303-41
+      (amount_of_substance_measure,
+      area_measure,
+      celsius_temperature_measure,
+      conversion_based_unit,
+      context_dependent_unit,
+      count_measure,
+      derived_unit,
+      electric_current_measure,
+      global_unit_assigned_context,
+      length_measure,
+      length_measure_with_unit,
+      length_unit,
+      luminous_intensity_measure,
+      mass_measure_with_unit,
+      mass_unit,
+      mass_measure,
+      measure_value,
+      measure_with_unit,
+      unit,
+      named_unit,
+      plane_angle_measure,
+      plane_angle_measure_with_unit,
+      plane_angle_unit,
+      positive_plane_angle_measure,
+      ratio_measure,
+      ratio_unit,
+      si_unit,
+      solid_angle_measure,
+      solid_angle_unit,
+      time_measure,
+      time_measure_with_unit,
+      time_unit,
+      thermodynamic_temperature_measure,
+      volume_measure);       
+   
+USE FROM person_organization_schema                  -- ISO 10303-41
+     (address,
+      organization,
+      organization_role,
+      organizational_address,
+      organizational_project,
+      person,
+      person_and_organization,
+      person_organization_select,
+      personal_address);
+   
+USE FROM process_property_schema                      -- ISO 10303-49
+     (action_property,
+      action_resource_requirement);   
+      
+  USE FROM product_definition_schema              -- ISO 10303-41
+      (product,
+       product_definition,
+       product_definition_formation);
+USE FROM product_property_representation_schema       -- ISO 10303-41
+     (property_definition_representation,
+      represented_definition,
+      shape_definition_representation,
+      shape_representation);
+USE FROM qualified_measure_schema                     -- ISO 10303-45
+     (descriptive_representation_item,
+      measure_qualification,
+      measure_representation_item,
+      precision_qualifier,
+     qualified_representation_item,
+     standard_uncertainty,
+     type_qualifier,
+     uncertainty_qualifier,
+     value_qualifier);
+       
+USE FROM representation_schema                        -- ISO 10303-43
+     (compound_representation_item,
+       global_uncertainty_assigned_context,
+       representation_item,
+      set_representation_item,
+      representation,
+     uncertainty_measure_with_unit);
+USE FROM security_classification_schema
+     (security_classification,
+      security_classification_level);
+      
+  USE FROM shape_dimension_schema                 -- ISO 10303-47
+      (angular_location,
+       angular_size,
+       dimensional_characteristic_representation,
+       dimensional_location,
+       dimensional_location_with_path,
+       dimensional_size,
+       dimensional_size_with_path,
+       shape_dimension_representation);
+USE FROM shape_tolerance_schema
+     (geometric_tolerance,
+      limits_and_fits,
+      plus_minus_tolerance,
+      tolerance_value,
+      tolerance_zone);
+  REFERENCE FROM topology_schema        -- ISO 10303-42
+      (dummy_tri);
+USE FROM topology_schema
+     (closed_shell,
+      connected_face_set,
+      edge,
+      edge_loop,
+      face,
+      face_surface,
+      open_shell,
+      poly_loop,
+      shell,
+      topological_representation_item);
+TYPE date_item = SELECT
+      (dm_program_run);
+END_TYPE; 
+TYPE document_reference_item = SELECT
+      (product_definition_formation,
+       externally_defined_feature_definition,
+       externally_defined_dimension_definition);
+END_TYPE;
+TYPE organization_item = SELECT
+      (dm_program_identification,
+       dm_program_run);
+END_TYPE; 
+TYPE person_and_organization_item = SELECT
+      (dm_program_identification,
+       dm_program_run);
+END_TYPE; 
+TYPE security_classification_item = SELECT
+  (product_definition_formation);
+END_TYPE;
+ 
+ENTITY applied_date_assignment
+      SUBTYPE OF (date_assignment);
+      items: SET[1:?] OF date_item;
+END_ENTITY;
+ 
+ENTITY applied_document_reference
+      SUBTYPE OF (document_reference);
+      items: SET[1:?] OF document_reference_item;
+END_ENTITY;
+           
+ENTITY applied_organization_assignment
+      SUBTYPE OF (organization_assignment);
+      items: SET[1:?] OF organization_item;
+END_ENTITY;
+ENTITY applied_person_organization_assignment
+  SUBTYPE OF (person_and_organization_assignment);
+  items : SET [1:?] OF person_and_organization_item;
+END_ENTITY;
+ENTITY applied_security_classification_assignment
+  SUBTYPE OF (security_classification_assignment);
+  items : SET [1:?] OF security_classification_item;
+END_ENTITY;
+  ENTITY block_shape_representation
+    SUBTYPE OF (shape_representation_with_parameters);
+    WHERE
+      wr1: (SIZEOF(SELF.items) = 4);
+      wr2: (SIZEOF(QUERY ( it <* SELF.items | 
+           (('DIMENSIONAL_INSPECTION_SCHEMA.PLACEMENT' 
+           IN TYPEOF(it)) AND (it.name = 'orientation')) )) = 1);
+      wr3: (SIZEOF(QUERY ( it <* SELF.items | 
+           ((SIZEOF(
+           ['DIMENSIONAL_INSPECTION_SCHEMA.MEASURE_REPRESENTATION_ITEM',
+           'DIMENSIONAL_INSPECTION_SCHEMA.LENGTH_MEASURE_WITH_UNIT'] *
+            TYPEOF(it)) = 2) AND (it.name = 'length')) )) = 1);
+      wr4: (SIZEOF(QUERY ( it <* SELF.items | 
+           ((SIZEOF([
+           'DIMENSIONAL_INSPECTION_SCHEMA.MEASURE_REPRESENTATION_ITEM',
+           'DIMENSIONAL_INSPECTION_SCHEMA.LENGTH_MEASURE_WITH_UNIT'] *
+           TYPEOF(it)) = 2) AND (it.name = 'width')) )) = 1);
+      wr5: (SIZEOF(QUERY ( it <* SELF.items | 
+           ((SIZEOF([
+           'DIMENSIONAL_INSPECTION_SCHEMA.MEASURE_REPRESENTATION_ITEM',
+           'DIMENSIONAL_INSPECTION_SCHEMA.LENGTH_MEASURE_WITH_UNIT'] *
+           TYPEOF(it)) = 2) AND (it.name = 'height')) )) = 1);
+  END_ENTITY; -- block_shape_representation
+  ENTITY cylindrical_shape_representation
+    SUBTYPE OF (shape_representation_with_parameters);
+    WHERE
+      wr1: (SIZEOF(SELF.items) = 3);
+      wr2: (SIZEOF(QUERY ( it <* SELF.items | ((
+           'DIMENSIONAL_INSPECTION_SCHEMA.PLACEMENT' 
+           IN TYPEOF(it)) AND (it.name = 'orientation')) )) = 1);
+      wr3: (SIZEOF(QUERY ( it <* SELF.items | ((SIZEOF([
+           'DIMENSIONAL_INSPECTION_SCHEMA.MEASURE_REPRESENTATION_ITEM',
+           'DIMENSIONAL_INSPECTION_SCHEMA.LENGTH_MEASURE_WITH_UNIT'] *
+            TYPEOF(it)) = 2) AND (it.name = 'length')) )) = 1);
+      wr4: (SIZEOF(QUERY ( it <* SELF.items | ((SIZEOF([
+           'DIMENSIONAL_INSPECTION_SCHEMA.MEASURE_REPRESENTATION_ITEM',
+           'DIMENSIONAL_INSPECTION_SCHEMA.LENGTH_MEASURE_WITH_UNIT'] *
+            TYPEOF(it)) = 2) AND (it.name = 'diameter')) )) = 1);
+  END_ENTITY; -- cylindrical_shape_representation
+ENTITY dimensional_measurement_representation
+     SUBTYPE OF (representation);
+END_ENTITY;
+  ENTITY directed_dimensional_location
+    SUBTYPE OF (dimensional_location);
+  END_ENTITY; -- directed_dimensional_location
+ENTITY dm_analysis_dofs_dml
+     SUBTYPE OF (dimensional_measurement_representation);
+WHERE     
+  wr1: (SIZEOF( QUERY( repi <* SELF.items |
+       ((SIZEOF([
+      'DIMENSIONAL_INSPECTION_SCHEMA.MEASURE_REPRESENTATION_ITEM',
+      'DIMENSIONAL_INSPECTION_SCHEMA.QUALIFIED_REPRESENTATION_ITEM'] *
+      TYPEOF(repi)) = 2) AND (repi.name = 'transx')) 
+      ))=1);
+  wr2: (SIZEOF( QUERY( repi <* SELF.items |
+       ((SIZEOF([
+      'DIMENSIONAL_INSPECTION_SCHEMA.MEASURE_REPRESENTATION_ITEM',
+      'DIMENSIONAL_INSPECTION_SCHEMA.QUALIFIED_REPRESENTATION_ITEM'] *
+      TYPEOF(repi)) = 2) AND (repi.name = 'transy')) 
+      ))=1);
+  wr3: (SIZEOF( QUERY( repi <* SELF.items |
+       ((SIZEOF([
+      'DIMENSIONAL_INSPECTION_SCHEMA.MEASURE_REPRESENTATION_ITEM',
+      'DIMENSIONAL_INSPECTION_SCHEMA.QUALIFIED_REPRESENTATION_ITEM'] *
+      TYPEOF(repi)) = 2) AND (repi.name = 'transz')) 
+      ))=1);
+  wr4: (SIZEOF( QUERY( repi <* SELF.items |
+       ((SIZEOF([
+      'DIMENSIONAL_INSPECTION_SCHEMA.MEASURE_REPRESENTATION_ITEM',
+      'DIMENSIONAL_INSPECTION_SCHEMA.QUALIFIED_REPRESENTATION_ITEM'] *
+      TYPEOF(repi)) = 2) AND (repi.name = 'rotx')) 
+      ))=1);
+  wr5: (SIZEOF( QUERY( repi <* SELF.items |
+       ((SIZEOF([
+      'DIMENSIONAL_INSPECTION_SCHEMA.MEASURE_REPRESENTATION_ITEM',
+      'DIMENSIONAL_INSPECTION_SCHEMA.QUALIFIED_REPRESENTATION_ITEM'] *
+      TYPEOF(repi)) = 2) AND (repi.name = 'roty')) 
+      ))=1);
+  wr6: (SIZEOF( QUERY( repi <* SELF.items |
+      ((SIZEOF([
+      'DIMENSIONAL_INSPECTION_SCHEMA.MEASURE_REPRESENTATION_ITEM',
+      'DIMENSIONAL_INSPECTION_SCHEMA.QUALIFIED_REPRESENTATION_ITEM'] *
+      TYPEOF(repi)) = 2) AND (repi.name = 'rotz')) 
+      ))=1);
+END_ENTITY;
+ENTITY dmf_arc
+  SUBTYPE OF (dm_feature_definition);
+WHERE   
+  wr1: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT (SIZEOF(QUERY ( impl_rep <* QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') | 
+   (('DIMENSIONAL_INSPECTION_SCHEMA.DM_SHAPE_REPRESENTATION_WITH_PARAMETERS') 
+       IN TYPEOF(pdr.used_representation)) ) | 
+      (NOT (SIZEOF(impl_rep.used_representation.items) = 2)) )) = 0)) )) = 0;
+  wr2: SIZEOF( QUERY( pd <* USEDIN( SELF, 
+         'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION') |
+         SIZEOF( QUERY( pdr <* USEDIN( pd, 
+         'DIMENSIONAL_INSPECTION_SCHEMA.'+
+         'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') | 
+  ('DIMENSIONAL_INSPECTION_SCHEMA.DM_SHAPE_REPRESENTATION_WITH_PARAMETERS' IN
+         TYPEOF(pdr.used_representation)) AND
+         (SIZEOF( QUERY( srwp_i <* pdr.used_representation.items |
+         (srwp_i.name = 'orientation') OR
+         (srwp_i.name = 'inner outer'))) 
+         = SIZEOF(pdr.used_representation.items)) )) = 1 )) = 1;
+    WR3: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT (SIZEOF(QUERY ( impl_rep <* QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+        'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  ((
+     'DIMENSIONAL_INSPECTION_SCHEMA.DM_SHAPE_REPRESENTATION_WITH_PARAMETERS') 
+       IN TYPEOF(pdr.used_representation)) ) | 
+       (NOT (SIZEOF(QUERY ( it <* impl_rep.used_representation.items | 
+       ((('DIMENSIONAL_INSPECTION_SCHEMA.DESCRIPTIVE_REPRESENTATION_ITEM' 
+       IN TYPEOF(it)) AND 
+       (it.name = 'inner outer')) AND 
+       ((it.description = 'inner') OR (it.description = 'outer'))) )) = 
+       1)) )) = 0)) )) = 0;
+        
+    WR4: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  
+       (('DIMENSIONAL_INSPECTION_SCHEMA.DM_VECTOR_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+       (pdr.used_representation.name = 'start vector')) )) = 1) ))) = 0;
+    WR5: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  
+       (('DIMENSIONAL_INSPECTION_SCHEMA.DM_VECTOR_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+       (pdr.used_representation.name = 'end vector')) )) = 1) ))) = 0;
+    WR6: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  
+       (('DIMENSIONAL_INSPECTION_SCHEMA.DM_VECTOR_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+   (pdr.used_representation.name = 'axis direction vector')) )) = 1) ))) = 0;
+    WR7: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  ((
+       'DIMENSIONAL_INSPECTION_SCHEMA.DM_POINT_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+       (pdr.used_representation.name = 'center point')) )) = 1) ))) = 0;
+    WR8: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  
+       (('DIMENSIONAL_INSPECTION_SCHEMA.DM_DIMENSION_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+       (pdr.used_representation.name = 'radius')) )) = 1) ))) = 0;
+END_ENTITY;
+  ENTITY dmf_circle
+    SUBTYPE OF (dm_feature_definition);
+    WHERE
+  wr1: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT (SIZEOF(QUERY ( impl_rep <* QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+        'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  
+   (('DIMENSIONAL_INSPECTION_SCHEMA.DM_SHAPE_REPRESENTATION_WITH_PARAMETERS') 
+       IN TYPEOF(pdr.used_representation)) ) | 
+      (NOT (SIZEOF(impl_rep.used_representation.items) = 2)) )) = 0)) )) = 0;
+      
+  wr2: SIZEOF( QUERY( pd <* USEDIN( SELF, 
+         'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION') |
+         SIZEOF( QUERY( pdr <* USEDIN( pd, 
+         'DIMENSIONAL_INSPECTION_SCHEMA.'+
+          'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') | 
+  ('DIMENSIONAL_INSPECTION_SCHEMA.DM_SHAPE_REPRESENTATION_WITH_PARAMETERS' IN
+         TYPEOF(pdr.used_representation)) AND
+         (SIZEOF( QUERY( srwp_i <* pdr.used_representation.items |
+         (srwp_i.name = 'orientation') OR
+         (srwp_i.name = 'inner outer'))) 
+         = SIZEOF(pdr.used_representation.items)) )) = 1 )) = 1;
+       
+  wr3: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT (SIZEOF(QUERY ( impl_rep <* QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+        'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  ((
+     'DIMENSIONAL_INSPECTION_SCHEMA.DM_SHAPE_REPRESENTATION_WITH_PARAMETERS') 
+       IN TYPEOF(pdr.used_representation)) ) | 
+       (NOT (SIZEOF(QUERY ( it <* impl_rep.used_representation.items | 
+       ((('DIMENSIONAL_INSPECTION_SCHEMA.DESCRIPTIVE_REPRESENTATION_ITEM' 
+       IN TYPEOF(it)) AND 
+       (it.name = 'inner outer')) AND 
+       ((it.description = 'inner') OR (it.description = 'outer'))) )) = 
+       1)) )) = 0)) )) = 0;
+       
+  wr4: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  
+       (('DIMENSIONAL_INSPECTION_SCHEMA.DM_VECTOR_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+   (pdr.used_representation.name = 'axis direction vector')) )) = 1) ))) = 0;
+    
+  wr5: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  ((
+       'DIMENSIONAL_INSPECTION_SCHEMA.DM_POINT_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+       (pdr.used_representation.name = 'center point')) )) = 1) ))) = 0;
+       
+  wr6: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  
+       (('DIMENSIONAL_INSPECTION_SCHEMA.DM_DIMENSION_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+       (pdr.used_representation.name = 'diameter')) )) = 1) ))) = 0;
+       
+  END_ENTITY; -- dmf_circle
+ENTITY dmf_cone
+  SUBTYPE OF (dm_feature_definition);
+WHERE   
+  wr1: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT (SIZEOF(QUERY ( impl_rep <* QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  
+   (('DIMENSIONAL_INSPECTION_SCHEMA.DM_SHAPE_REPRESENTATION_WITH_PARAMETERS') 
+       IN TYPEOF(pdr.used_representation)) ) | 
+      (NOT (SIZEOF(impl_rep.used_representation.items) = 2)) )) = 0)) )) = 0;
+                    
+  wr2: SIZEOF( QUERY( pd <* USEDIN( SELF, 
+         'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION') |
+         SIZEOF( QUERY( pdr <* USEDIN( pd, 
+         'DIMENSIONAL_INSPECTION_SCHEMA.'+
+          'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') | 
+  ('DIMENSIONAL_INSPECTION_SCHEMA.DM_SHAPE_REPRESENTATION_WITH_PARAMETERS' IN
+         TYPEOF(pdr.used_representation)) AND
+         (SIZEOF( QUERY( srwp_i <* pdr.used_representation.items |
+         (srwp_i.name = 'orientation') OR
+         (srwp_i.name = 'inner outer'))) 
+         = SIZEOF(pdr.used_representation.items)) )) = 1 )) = 1;
+    WR3: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT (SIZEOF(QUERY ( impl_rep <* QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  ((
+    'DIMENSIONAL_INSPECTION_SCHEMA.DM_SHAPE_REPRESENTATION_WITH_PARAMETERS') 
+       IN TYPEOF(pdr.used_representation)) ) | 
+       (NOT (SIZEOF(QUERY ( it <* impl_rep.used_representation.items | 
+       ((('DIMENSIONAL_INSPECTION_SCHEMA.DESCRIPTIVE_REPRESENTATION_ITEM' 
+       IN TYPEOF(it)) AND 
+       (it.name = 'inner outer')) AND 
+       ((it.description = 'inner') OR (it.description = 'outer'))) )) = 
+       1)) )) = 0)) )) = 0;
+        
+    WR4: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  
+       (('DIMENSIONAL_INSPECTION_SCHEMA.DM_VECTOR_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+       (pdr.used_representation.name = 'start vector')) )) <= 1) ))) = 0;
+        
+    WR5: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  
+       (('DIMENSIONAL_INSPECTION_SCHEMA.DM_VECTOR_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+       (pdr.used_representation.name = 'end vector')) )) <= 1) ))) = 0;
+        
+    WR6: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  
+       (('DIMENSIONAL_INSPECTION_SCHEMA.DM_VECTOR_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+   (pdr.used_representation.name = 'axis direction vector')) )) = 1) ))) = 0;
+        
+    WR7: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  
+       (('DIMENSIONAL_INSPECTION_SCHEMA.DM_DIMENSION_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+       (pdr.used_representation.name = 'diameter')) )) = 1) ))) = 0;     
+        
+    WR8: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  
+       (('DIMENSIONAL_INSPECTION_SCHEMA.DM_DIMENSION_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+       (pdr.used_representation.name = 'start length dml')) )) <= 1) ))) = 0;
+        
+    WR9: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  
+       (('DIMENSIONAL_INSPECTION_SCHEMA.DM_DIMENSION_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+       (pdr.used_representation.name = 'end length dml')) )) <= 1) ))) = 0;
+        
+    WR10: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  
+       (('DIMENSIONAL_INSPECTION_SCHEMA.DM_DIMENSION_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+       (pdr.used_representation.name = 'include angle')) )) = 1) ))) = 0;
+        
+    WR11:  SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  ((
+       'DIMENSIONAL_INSPECTION_SCHEMA.DM_POINT_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+       (pdr.used_representation.name = 'start point')) )) <= 1) ))) = 0;
+        
+    WR12: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  ((
+       'DIMENSIONAL_INSPECTION_SCHEMA.DM_POINT_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+       (pdr.used_representation.name = 'end point')) )) <= 1) ))) = 0;
+        
+    WR13:  SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  ((
+       'DIMENSIONAL_INSPECTION_SCHEMA.DM_POINT_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+       (pdr.used_representation.name = 'apex point')) )) = 1) ))) = 0;
+END_ENTITY;  -- dmf_cone
+ENTITY dmf_cylinder
+  SUBTYPE OF (dm_feature_definition);
+WHERE   
+  wr1: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT (SIZEOF(QUERY ( impl_rep <* QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  
+  (('DIMENSIONAL_INSPECTION_SCHEMA.DM_SHAPE_REPRESENTATION_WITH_PARAMETERS') 
+       IN TYPEOF(pdr.used_representation)) ) | 
+     (NOT (SIZEOF(impl_rep.used_representation.items) = 2)) )) = 0)) )) = 0;
+                    
+  wr2: SIZEOF( QUERY( pd <* USEDIN( SELF, 
+         'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION') |
+         SIZEOF( QUERY( pdr <* USEDIN( pd, 
+         'DIMENSIONAL_INSPECTION_SCHEMA.'+
+         'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') | 
+  ('DIMENSIONAL_INSPECTION_SCHEMA.DM_SHAPE_REPRESENTATION_WITH_PARAMETERS' IN
+         TYPEOF(pdr.used_representation)) AND
+         (SIZEOF( QUERY( srwp_i <* pdr.used_representation.items |
+         (srwp_i.name = 'orientation') OR
+         (srwp_i.name = 'inner outer'))) 
+         = SIZEOF(pdr.used_representation.items)) )) = 1 )) = 1;
+    WR3: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT (SIZEOF(QUERY ( impl_rep <* QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  ((
+    'DIMENSIONAL_INSPECTION_SCHEMA.DM_SHAPE_REPRESENTATION_WITH_PARAMETERS') 
+       IN TYPEOF(pdr.used_representation)) ) | 
+       (NOT (SIZEOF(QUERY ( it <* impl_rep.used_representation.items | 
+       ((('DIMENSIONAL_INSPECTION_SCHEMA.DESCRIPTIVE_REPRESENTATION_ITEM' 
+       IN TYPEOF(it)) AND 
+       (it.name = 'inner outer')) AND 
+       ((it.description = 'inner') OR (it.description = 'outer'))) )) = 
+       1)) )) = 0)) )) = 0;
+        
+    WR4: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  
+       (('DIMENSIONAL_INSPECTION_SCHEMA.DM_VECTOR_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+   (pdr.used_representation.name = 'axis direction vector')) )) = 1) ))) = 0;
+        
+    WR5: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  
+       (('DIMENSIONAL_INSPECTION_SCHEMA.DM_DIMENSION_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+       (pdr.used_representation.name = 'diameter')) )) = 1) ))) = 0;  
+        
+    WR6: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+        'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  
+       (('DIMENSIONAL_INSPECTION_SCHEMA.DM_DIMENSION_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+       (pdr.used_representation.name = 'length dml')) )) <= 1) ))) = 0;       
+       
+    WR7: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  ((
+       'DIMENSIONAL_INSPECTION_SCHEMA.DM_POINT_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+       (pdr.used_representation.name = 'start point')) )) = 1) ))) = 0;
+        
+    WR8: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  ((
+       'DIMENSIONAL_INSPECTION_SCHEMA.DM_POINT_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+       (pdr.used_representation.name = 'end point')) )) = 1) ))) = 0; 
+        
+    WR9: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  ((
+       'DIMENSIONAL_INSPECTION_SCHEMA.DM_POINT_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+       (pdr.used_representation.name = 'center point')) )) = 1) ))) = 0;
+        
+    WR10:  SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  ((
+       'DIMENSIONAL_INSPECTION_SCHEMA.DM_POINT_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+       (pdr.used_representation.name = 'boundary')) )) >= 2) ))) = 0;          END_ENTITY;  -- dmf_cylinder
+ENTITY dmf_edge_point
+  SUBTYPE OF (dm_feature_definition);
+WHERE   
+  wr1: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT (SIZEOF(QUERY ( impl_rep <* QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  
+   (('DIMENSIONAL_INSPECTION_SCHEMA.DM_SHAPE_REPRESENTATION_WITH_PARAMETERS') 
+       IN TYPEOF(pdr.used_representation)) ) | 
+      (NOT (SIZEOF(impl_rep.used_representation.items) = 1)) )) = 0)) )) = 0;                       
+  wr2: SIZEOF( QUERY( pd <* USEDIN( SELF, 
+         'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION') |
+         SIZEOF( QUERY( pdr <* USEDIN( pd, 
+         'DIMENSIONAL_INSPECTION_SCHEMA.'+
+         'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') | 
+  ('DIMENSIONAL_INSPECTION_SCHEMA.DM_SHAPE_REPRESENTATION_WITH_PARAMETERS' IN
+         TYPEOF(pdr.used_representation)) AND
+         (SIZEOF( QUERY( srwp_i <* pdr.used_representation.items |
+         (srwp_i.name = 'orientation') )) 
+         = SIZEOF(pdr.used_representation.items)) )) = 1 )) = 1;
+        
+    WR3: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  
+       (('DIMENSIONAL_INSPECTION_SCHEMA.DM_VECTOR_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+      (pdr.used_representation.name = 'edge normal vector')) )) = 1) ))) = 0;
+        
+    WR4: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  
+       (('DIMENSIONAL_INSPECTION_SCHEMA.DM_VECTOR_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+   (pdr.used_representation.name = 'surface normal vector')) )) = 1) ))) = 0;
+        
+    WR5:  SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  ((
+       'DIMENSIONAL_INSPECTION_SCHEMA.DM_POINT_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+       (pdr.used_representation.name = 'location point')) )) = 1) ))) = 0;  
+END_ENTITY;   -- dmf_edge_point
+ENTITY dmf_ellipse
+  SUBTYPE OF (dm_feature_definition);
+WHERE   
+  wr1: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT (SIZEOF(QUERY ( impl_rep <* QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  
+   (('DIMENSIONAL_INSPECTION_SCHEMA.DM_SHAPE_REPRESENTATION_WITH_PARAMETERS') 
+       IN TYPEOF(pdr.used_representation)) ) | 
+      (NOT (SIZEOF(impl_rep.used_representation.items) = 2)) )) = 0)) )) = 0;                       
+  wr2: SIZEOF( QUERY( pd <* USEDIN( SELF, 
+         'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION') |
+         SIZEOF( QUERY( pdr <* USEDIN( pd, 
+         'DIMENSIONAL_INSPECTION_SCHEMA.'+
+         'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') | 
+  ('DIMENSIONAL_INSPECTION_SCHEMA.DM_SHAPE_REPRESENTATION_WITH_PARAMETERS' IN
+         TYPEOF(pdr.used_representation)) AND
+         (SIZEOF( QUERY( srwp_i <* pdr.used_representation.items |
+         (srwp_i.name = 'orientation') OR
+         (srwp_i.name = 'inner outer'))) 
+         = SIZEOF(pdr.used_representation.items)) )) = 1 )) = 1;
+    WR3: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT (SIZEOF(QUERY ( impl_rep <* QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  ((
+    'DIMENSIONAL_INSPECTION_SCHEMA.DM_SHAPE_REPRESENTATION_WITH_PARAMETERS') 
+       IN TYPEOF(pdr.used_representation)) ) | 
+       (NOT (SIZEOF(QUERY ( it <* impl_rep.used_representation.items | 
+       ((('DIMENSIONAL_INSPECTION_SCHEMA.DESCRIPTIVE_REPRESENTATION_ITEM' 
+       IN TYPEOF(it)) AND 
+       (it.name = 'inner outer')) AND 
+       ((it.description = 'inner') OR (it.description = 'outer'))) )) = 
+       1)) )) = 0)) )) = 0;
+        
+    WR4: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  
+       (('DIMENSIONAL_INSPECTION_SCHEMA.DM_VECTOR_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+       (pdr.used_representation.name = 'normal direction')) )) = 1) ))) = 0;
+        
+    WR5: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  
+       (('DIMENSIONAL_INSPECTION_SCHEMA.DM_VECTOR_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+       (pdr.used_representation.name = 'major axis vector')) )) = 1) ))) = 0;
+        
+    WR6: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  ((
+       'DIMENSIONAL_INSPECTION_SCHEMA.DM_POINT_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+       (pdr.used_representation.name = 'center point')) )) = 1) ))) = 0;      
+        
+    WR7:  SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  ((
+       'DIMENSIONAL_INSPECTION_SCHEMA.DM_POINT_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+    (pdr.used_representation.name = 'focus point one dml')) )) <= 1) ))) = 0;
+        
+    WR8:  SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  ((
+       'DIMENSIONAL_INSPECTION_SCHEMA.DM_POINT_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+    (pdr.used_representation.name = 'focus point two dml')) )) <= 1) ))) = 0;
+        
+    WR9: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  
+       (('DIMENSIONAL_INSPECTION_SCHEMA.DM_DIMENSION_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+       (pdr.used_representation.name = 'minor diameter')) )) = 1) ))) = 0;
+        
+    WR10: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  
+       (('DIMENSIONAL_INSPECTION_SCHEMA.DM_DIMENSION_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+       (pdr.used_representation.name = 'major diameter')) )) = 1) ))) = 0;         
+  
+END_ENTITY; -- dmf_ellipse
+ENTITY dmf_generic_feature
+  SUBTYPE OF (dm_feature_definition);
+WHERE   
+  wr1: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT (SIZEOF(QUERY ( impl_rep <* QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  
+   (('DIMENSIONAL_INSPECTION_SCHEMA.DM_SHAPE_REPRESENTATION_WITH_PARAMETERS') 
+       IN TYPEOF(pdr.used_representation)) ) | 
+     (NOT (SIZEOF(impl_rep.used_representation.items) = 1)) )) = 0)) )) = 0; 
+                    
+  wr2: SIZEOF( QUERY( pd <* USEDIN( SELF, 
+         'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION') |
+         SIZEOF( QUERY( pdr <* USEDIN( pd, 
+         'DIMENSIONAL_INSPECTION_SCHEMA.'+
+         'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') | 
+  ('DIMENSIONAL_INSPECTION_SCHEMA.DM_SHAPE_REPRESENTATION_WITH_PARAMETERS' IN
+         TYPEOF(pdr.used_representation)) AND
+         (SIZEOF( QUERY( srwp_i <* pdr.used_representation.items |
+         (srwp_i.name = 'orientation') )) 
+         = SIZEOF(pdr.used_representation.items)) )) = 1 )) = 1;
+        
+    WR3: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  ((
+       'DIMENSIONAL_INSPECTION_SCHEMA.DM_POINT_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+       (pdr.used_representation.name = 'center point')) )) = 1) ))) = 0;
+        
+    WR4: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  
+       (('DIMENSIONAL_INSPECTION_SCHEMA.DM_VECTOR_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+       (pdr.used_representation.name = 'secondary vector')) )) <= 1) ))) = 0;
+        
+    WR5: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  
+       (('DIMENSIONAL_INSPECTION_SCHEMA.DM_VECTOR_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+       (pdr.used_representation.name = 'vector from center of object')) )) 
+        = 1) ))) = 0;
+        
+    WR6: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  
+       (('DIMENSIONAL_INSPECTION_SCHEMA.DM_DIMENSION_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+       (pdr.used_representation.name = 'parameters')) )) <= 1) ))) = 0; 
+ 
+END_ENTITY;  -- dmf_generic_feature
+ENTITY dmf_geometric_curve
+  SUBTYPE OF (dm_feature_definition);
+WHERE   
+  wr1: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT (SIZEOF(QUERY ( impl_rep <* QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+        'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  
+   (('DIMENSIONAL_INSPECTION_SCHEMA.DM_SHAPE_REPRESENTATION_WITH_PARAMETERS') 
+       IN TYPEOF(pdr.used_representation)) ) | 
+      (NOT (SIZEOF(impl_rep.used_representation.items) = 1)) )) = 0)) )) = 0; 
+                    
+  wr2: SIZEOF( QUERY( pd <* USEDIN( SELF, 
+         'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION') |
+         SIZEOF( QUERY( pdr <* USEDIN( pd, 
+         'DIMENSIONAL_INSPECTION_SCHEMA.'+
+         'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') | 
+  ('DIMENSIONAL_INSPECTION_SCHEMA.DM_SHAPE_REPRESENTATION_WITH_PARAMETERS' IN
+         TYPEOF(pdr.used_representation)) AND
+         (SIZEOF( QUERY( srwp_i <* pdr.used_representation.items |
+         (srwp_i.name = 'orientation') )) 
+         = SIZEOF(pdr.used_representation.items)) )) = 1 )) = 1;
+        
+    WR3: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+        'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  
+       (('DIMENSIONAL_INSPECTION_SCHEMA.DM_VECTOR_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+   (pdr.used_representation.name = 'curve plane direction')) )) = 1) ))) = 0;
+        
+    WR4:  SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  ((
+       'DIMENSIONAL_INSPECTION_SCHEMA.DM_POINT_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+ (pdr.used_representation.name = 'point on plane or curve')) )) = 1) ))) = 0;
+        
+    WR5:  SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  ((
+       'DIMENSIONAL_INSPECTION_SCHEMA.DM_POINT_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+       (pdr.used_representation.name = 'data point')) )) >= 2) ))) = 0;
+  
+END_ENTITY;  -- dmf_geometric_curve
+ENTITY dmf_geometric_surface
+  SUBTYPE OF (dm_feature_definition);
+WHERE   
+  wr1: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT (SIZEOF(QUERY ( impl_rep <* QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  
+   (('DIMENSIONAL_INSPECTION_SCHEMA.DM_SHAPE_REPRESENTATION_WITH_PARAMETERS') 
+       IN TYPEOF(pdr.used_representation)) ) | 
+      (NOT (SIZEOF(impl_rep.used_representation.items) = 1)) )) = 0)) )) = 0;
+                    
+  wr2: SIZEOF( QUERY( pd <* USEDIN( SELF, 
+         'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION') |
+         SIZEOF( QUERY( pdr <* USEDIN( pd, 
+         'DIMENSIONAL_INSPECTION_SCHEMA.'+
+         'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') | 
+  ('DIMENSIONAL_INSPECTION_SCHEMA.DM_SHAPE_REPRESENTATION_WITH_PARAMETERS' IN
+         TYPEOF(pdr.used_representation)) AND
+         (SIZEOF( QUERY( srwp_i <* pdr.used_representation.items |
+         (srwp_i.name = 'orientation') )) 
+         = SIZEOF(pdr.used_representation.items)) )) = 1 )) = 1;
+        
+    WR3: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  
+       (('DIMENSIONAL_INSPECTION_SCHEMA.DM_VECTOR_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+   (pdr.used_representation.name = 'curve plane direction')) )) = 1) ))) = 0;
+    WR4:  SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+        'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  ((
+       'DIMENSIONAL_INSPECTION_SCHEMA.DM_POINT_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+ (pdr.used_representation.name = 'point on plane or curve')) )) = 1) ))) = 0;
+        
+    WR5: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  ((
+       'DIMENSIONAL_INSPECTION_SCHEMA.DM_POINT_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+       (pdr.used_representation.name = 'data point')) )) >= 2) ))) = 0;
+  
+END_ENTITY;  -- dmf_geometric_surface
+ENTITY dmf_line_bounded
+  SUBTYPE OF (dm_feature_definition);
+WHERE   
+  wr1: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT (SIZEOF(QUERY ( impl_rep <* QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  
+   (('DIMENSIONAL_INSPECTION_SCHEMA.DM_SHAPE_REPRESENTATION_WITH_PARAMETERS') 
+       IN TYPEOF(pdr.used_representation)) ) | 
+      (NOT (SIZEOF(impl_rep.used_representation.items) = 1)) )) = 0)) )) = 0; 
+                    
+  wr2: SIZEOF( QUERY( pd <* USEDIN( SELF, 
+         'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION') |
+         SIZEOF( QUERY( pdr <* USEDIN( pd, 
+         'DIMENSIONAL_INSPECTION_SCHEMA.'+
+         'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') | 
+  ('DIMENSIONAL_INSPECTION_SCHEMA.DM_SHAPE_REPRESENTATION_WITH_PARAMETERS' IN
+         TYPEOF(pdr.used_representation)) AND
+         (SIZEOF( QUERY( srwp_i <* pdr.used_representation.items |
+         (srwp_i.name = 'orientation') )) 
+         = SIZEOF(pdr.used_representation.items)) )) = 1 )) = 1;
+        
+    WR3:  SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  ((
+       'DIMENSIONAL_INSPECTION_SCHEMA.DM_POINT_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+       (pdr.used_representation.name = 'first end point')) )) = 1) ))) = 0;
+        
+    WR4:  SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  ((
+       'DIMENSIONAL_INSPECTION_SCHEMA.DM_POINT_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+       (pdr.used_representation.name = 'second end point')) )) = 1) ))) = 0;
+        
+    WR5:SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  
+       (('DIMENSIONAL_INSPECTION_SCHEMA.DM_VECTOR_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+       (pdr.used_representation.name = 'vector dml')) )) = 1) ))) = 0;
+        
+    WR6: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  
+       (('DIMENSIONAL_INSPECTION_SCHEMA.DM_VECTOR_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+       (pdr.used_representation.name = 'surface approach vector'))
+        )) = 1) ))) = 0;
+        
+    WR7: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  
+       (('DIMENSIONAL_INSPECTION_SCHEMA.DM_DIMENSION_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+       (pdr.used_representation.name = 'length dml')) )) = 1) ))) = 0;        
+  
+END_ENTITY;   --  dmf_line_bounded
+ENTITY dmf_line_closed_parallel
+  SUBTYPE OF (dm_feature_definition);
+WHERE   
+  wr1: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT (SIZEOF(QUERY ( impl_rep <* QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+        'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  
+   (('DIMENSIONAL_INSPECTION_SCHEMA.DM_SHAPE_REPRESENTATION_WITH_PARAMETERS') 
+       IN TYPEOF(pdr.used_representation)) ) | 
+      (NOT (SIZEOF(impl_rep.used_representation.items) = 3)) )) = 0)) )) = 0; 
+                    
+  wr2: SIZEOF( QUERY( pd <* USEDIN( SELF, 
+         'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION') |
+         SIZEOF( QUERY( pdr <* USEDIN( pd, 
+         'DIMENSIONAL_INSPECTION_SCHEMA.'+
+         'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') | 
+  ('DIMENSIONAL_INSPECTION_SCHEMA.DM_SHAPE_REPRESENTATION_WITH_PARAMETERS' IN
+         TYPEOF(pdr.used_representation)) AND
+         (SIZEOF( QUERY( srwp_i <* pdr.used_representation.items |
+         (srwp_i.name = 'orientation') OR
+         (srwp_i.name = 'inner outer')OR
+         (srwp_i.name = 'end kind'))) 
+         = SIZEOF(pdr.used_representation.items)) )) = 1 )) = 1;
+        
+    WR3: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  ((
+       'DIMENSIONAL_INSPECTION_SCHEMA.DM_POINT_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+       (pdr.used_representation.name = 'center point')) )) = 1) ))) = 0;
+        
+    WR4: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  
+       (('DIMENSIONAL_INSPECTION_SCHEMA.DM_VECTOR_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+   (pdr.used_representation.name = 'axis direction vector')) )) = 1) ))) = 0;
+        
+    WR5:  SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  
+       (('DIMENSIONAL_INSPECTION_SCHEMA.DM_VECTOR_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+       (pdr.used_representation.name = 'longitude vector')) )) = 1) ))) = 0;
+        
+    WR6: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  
+       (('DIMENSIONAL_INSPECTION_SCHEMA.DM_DIMENSION_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+       (pdr.used_representation.name = 'feature length')) )) = 1) ))) = 0;  
+        
+    WR7: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  
+       (('DIMENSIONAL_INSPECTION_SCHEMA.DM_DIMENSION_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+       (pdr.used_representation.name = 'width')) )) = 1) ))) = 0;  
+    WR8: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT (SIZEOF(QUERY ( impl_rep <* QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  ((
+    'DIMENSIONAL_INSPECTION_SCHEMA.DM_SHAPE_REPRESENTATION_WITH_PARAMETERS') 
+       IN TYPEOF(pdr.used_representation)) ) | 
+       (NOT (SIZEOF(QUERY ( it <* impl_rep.used_representation.items | 
+       ((('DIMENSIONAL_INSPECTION_SCHEMA.DESCRIPTIVE_REPRESENTATION_ITEM' 
+       IN TYPEOF(it)) AND 
+       (it.name = 'inner outer')) AND 
+       ((it.description = 'inner') OR (it.description = 'outer'))) )) = 
+       1)) )) = 0)) )) = 0;
+    WR9: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT (SIZEOF(QUERY ( impl_rep <* QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  ((
+    'DIMENSIONAL_INSPECTION_SCHEMA.DM_SHAPE_REPRESENTATION_WITH_PARAMETERS') 
+       IN TYPEOF(pdr.used_representation)) ) | 
+       (NOT (SIZEOF(QUERY ( it <* impl_rep.used_representation.items | 
+       ((('DIMENSIONAL_INSPECTION_SCHEMA.DESCRIPTIVE_REPRESENTATION_ITEM' 
+       IN TYPEOF(it)) AND 
+       (it.name = 'end kind')) AND 
+       ((it.description = 'round') OR (it.description = 'square'))) )) = 
+       1)) )) = 0)) )) = 0;
+END_ENTITY;   --  dmf_line_closed_parallel
+ENTITY dmf_line_unbounded
+  SUBTYPE OF (dm_feature_definition);
+WHERE   
+  wr1: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT (SIZEOF(QUERY ( impl_rep <* QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  
+   (('DIMENSIONAL_INSPECTION_SCHEMA.DM_SHAPE_REPRESENTATION_WITH_PARAMETERS') 
+       IN TYPEOF(pdr.used_representation)) ) | 
+      (NOT (SIZEOF(impl_rep.used_representation.items) = 1)) )) = 0)) )) = 0; 
+                    
+  wr2: SIZEOF( QUERY( pd <* USEDIN( SELF, 
+         'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION') |
+         SIZEOF( QUERY( pdr <* USEDIN( pd, 
+         'DIMENSIONAL_INSPECTION_SCHEMA.'+
+         'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') | 
+  ('DIMENSIONAL_INSPECTION_SCHEMA.DM_SHAPE_REPRESENTATION_WITH_PARAMETERS' IN
+         TYPEOF(pdr.used_representation)) AND
+         (SIZEOF( QUERY( srwp_i <* pdr.used_representation.items |
+         (srwp_i.name = 'orientation') )) 
+         = SIZEOF(pdr.used_representation.items)) )) = 1 )) = 1;
+        
+    WR3:  SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  ((
+       'DIMENSIONAL_INSPECTION_SCHEMA.DM_POINT_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+       (pdr.used_representation.name = 'point on line')) )) = 1) ))) = 0;
+        
+    WR4: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  
+       (('DIMENSIONAL_INSPECTION_SCHEMA.DM_VECTOR_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+ (pdr.used_representation.name = 'surface approach vector')) )) = 1) ))) = 0;
+        
+    WR5: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  
+       (('DIMENSIONAL_INSPECTION_SCHEMA.DM_VECTOR_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+       (pdr.used_representation.name = 'direction vector')) )) = 1) ))) = 0;
+  
+END_ENTITY;  --  dmf_line_unbounded
+ENTITY dmf_pattern
+  SUBTYPE OF (dm_feature_definition);
+WHERE   
+  wr1: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT (SIZEOF(QUERY ( impl_rep <* QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  
+   (('DIMENSIONAL_INSPECTION_SCHEMA.DM_SHAPE_REPRESENTATION_WITH_PARAMETERS') 
+       IN TYPEOF(pdr.used_representation)) ) | 
+      (NOT (SIZEOF(impl_rep.used_representation.items) = 1)) )) = 0)) )) = 0; 
+                    
+  wr2: SIZEOF( QUERY( pd <* USEDIN( SELF, 
+         'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION') |
+         SIZEOF( QUERY( pdr <* USEDIN( pd, 
+         'DIMENSIONAL_INSPECTION_SCHEMA.'+
+         'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') | 
+ ('DIMENSIONAL_INSPECTION_SCHEMA.DM_SHAPE_REPRESENTATION_WITH_PARAMETERS' IN
+         TYPEOF(pdr.used_representation)) AND
+         (SIZEOF( QUERY( srwp_i <* pdr.used_representation.items |
+         (srwp_i.name = 'orientation') )) 
+         = SIZEOF(pdr.used_representation.items)) )) = 1 )) = 1;
+        
+    WR4: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  ((
+       'DIMENSIONAL_INSPECTION_SCHEMA.DM_POINT_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+       (pdr.used_representation.name = 'point')) )) <= 1) ))) = 0;
+        
+    WR5: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  
+       (('DIMENSIONAL_INSPECTION_SCHEMA.DM_VECTOR_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+       (pdr.used_representation.name = 'direction vector')) )) = 1) ))) = 0;
+         
+  WR6: SIZEOF( QUERY( pd <* USEDIN( SELF,   
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'SHAPE_ASPECT_RELATIONSHIP.RELATING_SHAPE_ASPECT') |
+       ('DIMENSIONAL_INSPECTION_SCHEMA.DM_FEATURE_RELATIONSHIP' 
+       IN TYPEOF (pd))))>=2;
+  
+END_ENTITY;   --  dmf_pattern
+ENTITY dmf_plane
+  SUBTYPE OF (dm_feature_definition);
+WHERE   
+  wr1: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT (SIZEOF(QUERY ( impl_rep <* QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  
+   (('DIMENSIONAL_INSPECTION_SCHEMA.DM_SHAPE_REPRESENTATION_WITH_PARAMETERS') 
+       IN TYPEOF(pdr.used_representation)) ) | 
+    (NOT (SIZEOF(impl_rep.used_representation.items) = 3)) )) = 0)) )) = 0; 
+       
+                    
+  wr2: SIZEOF( QUERY( pd <* USEDIN( SELF, 
+         'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION') |
+         SIZEOF( QUERY( pdr <* USEDIN( pd, 
+         'DIMENSIONAL_INSPECTION_SCHEMA.'+
+         'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') | 
+  ('DIMENSIONAL_INSPECTION_SCHEMA.DM_SHAPE_REPRESENTATION_WITH_PARAMETERS' IN
+         TYPEOF(pdr.used_representation)) AND
+         (SIZEOF( QUERY( srwp_i <* pdr.used_representation.items |
+         (srwp_i.name = 'orientation') OR
+         (srwp_i.name = 'inner outer')OR
+         (srwp_i.name = 'boundary'))) 
+         = SIZEOF(pdr.used_representation.items)) )) = 1 )) = 1;
+        
+    WR3:  SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  ((
+       'DIMENSIONAL_INSPECTION_SCHEMA.DM_POINT_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+       (pdr.used_representation.name = 'point on plane')) )) = 1) ))) = 0;         
+        
+    WR4:  SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  ((
+       'DIMENSIONAL_INSPECTION_SCHEMA.DM_POINT_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+       (pdr.used_representation.name = 'point dml')) )) = 1) ))) = 0;                   
+    WR5: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+        'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  
+       (('DIMENSIONAL_INSPECTION_SCHEMA.DM_VECTOR_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+       (pdr.used_representation.name = 'direction vector')) )) = 1) ))) = 0;
+        
+    WR6: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  
+       (('DIMENSIONAL_INSPECTION_SCHEMA.CARTESIAN_POINT' 
+       IN TYPEOF(pdr.used_representation)) AND 
+       (pdr.used_representation.name = 'boundary')) )) >= 2) ))) = 0;  
+  
+END_ENTITY;   -- dmf_plane
+ENTITY dmf_plane_closed_parallel
+  SUBTYPE OF (dm_feature_definition);
+WHERE   
+  wr1: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT (SIZEOF(QUERY ( impl_rep <* QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  
+  (('DIMENSIONAL_INSPECTION_SCHEMA.DM_SHAPE_REPRESENTATION_WITH_PARAMETERS') 
+       IN TYPEOF(pdr.used_representation)) ) | 
+      (NOT (SIZEOF(impl_rep.used_representation.items) = 3)) )) = 0)) )) = 0; 
+                    
+  wr2: SIZEOF( QUERY( pd <* USEDIN( SELF, 
+         'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION') |
+         SIZEOF( QUERY( pdr <* USEDIN( pd, 
+         'DIMENSIONAL_INSPECTION_SCHEMA.'+
+         'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') | 
+  ('DIMENSIONAL_INSPECTION_SCHEMA.DM_SHAPE_REPRESENTATION_WITH_PARAMETERS' IN
+         TYPEOF(pdr.used_representation)) AND
+         (SIZEOF( QUERY( srwp_i <* pdr.used_representation.items |
+         (srwp_i.name = 'orientation') OR
+         (srwp_i.name = 'inner outer')OR
+         (srwp_i.name = 'end kind'))) 
+         = SIZEOF(pdr.used_representation.items)) )) = 1 )) = 1;
+        
+    WR3: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  ((
+       'DIMENSIONAL_INSPECTION_SCHEMA.DM_POINT_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+       (pdr.used_representation.name = 'center point')) )) = 1) ))) = 0;           
+        
+    WR4: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  
+       (('DIMENSIONAL_INSPECTION_SCHEMA.DM_VECTOR_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+   (pdr.used_representation.name = 'axis direction vector')) )) = 1) ))) = 0;
+        
+    WR5: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  
+       (('DIMENSIONAL_INSPECTION_SCHEMA.DM_VECTOR_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+       (pdr.used_representation.name = 'longitude vector')) )) = 1) ))) = 0;
+        
+    WR6: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  
+       (('DIMENSIONAL_INSPECTION_SCHEMA.DM_VECTOR_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+       (pdr.used_representation.name = 'normal dml')) )) = 1) ))) = 0;
+        
+    WR7: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  
+       (('DIMENSIONAL_INSPECTION_SCHEMA.DM_DIMENSION_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+       (pdr.used_representation.name = 'feature length')) )) = 1) ))) = 0;            
+        
+    WR8: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  
+       (('DIMENSIONAL_INSPECTION_SCHEMA.DM_DIMENSION_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+       (pdr.used_representation.name = 'width')) )) = 1) ))) = 0;          
+        
+    WR9: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  
+       (('DIMENSIONAL_INSPECTION_SCHEMA.DM_DIMENSION_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+       (pdr.used_representation.name = 'height')) )) = 1) ))) = 0;   
+    WR10: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT (SIZEOF(QUERY ( impl_rep <* QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  ((
+     'DIMENSIONAL_INSPECTION_SCHEMA.DM_SHAPE_REPRESENTATION_WITH_PARAMETERS') 
+       IN TYPEOF(pdr.used_representation)) ) | 
+       (NOT (SIZEOF(QUERY ( it <* impl_rep.used_representation.items | 
+       ((('DIMENSIONAL_INSPECTION_SCHEMA.DESCRIPTIVE_REPRESENTATION_ITEM' 
+       IN TYPEOF(it)) AND 
+       (it.name = 'inner outer')) AND 
+       ((it.description = 'inner') OR (it.description = 'outer'))) )) = 
+       1)) )) = 0)) )) = 0;
+    WR11: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT (SIZEOF(QUERY ( impl_rep <* QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  ((
+     'DIMENSIONAL_INSPECTION_SCHEMA.DM_SHAPE_REPRESENTATION_WITH_PARAMETERS') 
+       IN TYPEOF(pdr.used_representation)) ) | 
+       (NOT (SIZEOF(QUERY ( it <* impl_rep.used_representation.items | 
+       ((('DIMENSIONAL_INSPECTION_SCHEMA.DESCRIPTIVE_REPRESENTATION_ITEM' 
+       IN TYPEOF(it)) AND 
+       (it.name = 'end kind')) AND 
+       ((it.description = 'round') OR (it.description = 'square'))) )) = 
+       1)) )) = 0)) )) = 0;
+  
+END_ENTITY;   -- dmf_plane_closed_parallel
+ENTITY dmf_plane_symmetric
+  SUBTYPE OF (dm_feature_definition);
+WHERE   
+  wr1: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT (SIZEOF(QUERY ( impl_rep <* QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+      'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  
+   (('DIMENSIONAL_INSPECTION_SCHEMA.DM_SHAPE_REPRESENTATION_WITH_PARAMETERS') 
+       IN TYPEOF(pdr.used_representation)) ) | 
+    (NOT (SIZEOF(impl_rep.used_representation.items) = 2)) )) = 0)) )) = 0;
+                    
+  wr2: SIZEOF( QUERY( pd <* USEDIN( SELF, 
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION') |
+       SIZEOF( QUERY( pdr <* USEDIN( pd, 
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') | 
+  ('DIMENSIONAL_INSPECTION_SCHEMA.DM_SHAPE_REPRESENTATION_WITH_PARAMETERS' IN
+         TYPEOF(pdr.used_representation)) AND
+         (SIZEOF( QUERY( srwp_i <* pdr.used_representation.items |
+         (srwp_i.name = 'orientation') OR
+         (srwp_i.name = 'inner outer'))) 
+         = SIZEOF(pdr.used_representation.items)) )) = 1 )) = 1;
+        
+    WR3:  SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  ((
+       'DIMENSIONAL_INSPECTION_SCHEMA.DM_POINT_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+       (pdr.used_representation.name = 'point on one side')) )) = 1) ))) = 0; 
+        
+    WR4:  SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  ((
+       'DIMENSIONAL_INSPECTION_SCHEMA.DM_POINT_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+     (pdr.used_representation.name = 'point on other side')) )) = 1) ))) = 0; 
+        
+    WR5:  SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  ((
+       'DIMENSIONAL_INSPECTION_SCHEMA.DM_POINT_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+       (pdr.used_representation.name = 'point on mid side')) )) = 1) ))) = 0; 
+        
+    WR6: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  
+       (('DIMENSIONAL_INSPECTION_SCHEMA.DM_VECTOR_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+       (pdr.used_representation.name = 'direction vector side one')) 
+       )) = 1) ))) = 0;
+        
+    WR7: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  
+       (('DIMENSIONAL_INSPECTION_SCHEMA.DM_VECTOR_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+        (pdr.used_representation.name = 'direction vector side two'))
+         )) = 1) ))) = 0;
+        
+    WR8: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  
+       (('DIMENSIONAL_INSPECTION_SCHEMA.DM_DIMENSION_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+       (pdr.used_representation.name = 'width at mid point'))
+        )) = 1) ))) = 0;  
+    WR9: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT (SIZEOF(QUERY ( impl_rep <* QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  ((
+   'DIMENSIONAL_INSPECTION_SCHEMA.DM_SHAPE_REPRESENTATION_WITH_PARAMETERS') 
+       IN TYPEOF(pdr.used_representation)) ) | 
+       (NOT (SIZEOF(QUERY ( it <* impl_rep.used_representation.items | 
+       ((('DIMENSIONAL_INSPECTION_SCHEMA.DESCRIPTIVE_REPRESENTATION_ITEM' 
+       IN TYPEOF(it)) AND 
+       (it.name = 'inner outer')) AND 
+       ((it.description = 'inner') OR (it.description = 'outer'))) )) = 
+       1)) )) = 0)) )) = 0;
+  
+END_ENTITY;   --  dmf_plane_symmetric
+ENTITY dmf_point
+  SUBTYPE OF (dm_feature_definition);
+WHERE   
+  wr1: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT (SIZEOF(QUERY ( impl_rep <* QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  
+   (('DIMENSIONAL_INSPECTION_SCHEMA.DM_SHAPE_REPRESENTATION_WITH_PARAMETERS') 
+       IN TYPEOF(pdr.used_representation)) ) | 
+      (NOT (SIZEOF(impl_rep.used_representation.items) = 2)) )) = 0)) )) = 0; 
+                    
+  wr2: SIZEOF( QUERY( pd <* USEDIN( SELF, 
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION') |
+       SIZEOF( QUERY( pdr <* USEDIN( pd, 
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') | 
+  ('DIMENSIONAL_INSPECTION_SCHEMA.DM_SHAPE_REPRESENTATION_WITH_PARAMETERS' IN
+       TYPEOF(pdr.used_representation)) AND
+       (SIZEOF( QUERY( srwp_i <* pdr.used_representation.items |
+       (srwp_i.name = 'orientation') OR
+       (srwp_i.name = 'point type dml'))) 
+       = SIZEOF(pdr.used_representation.items)) )) = 1 )) = 1;
+        
+    WR3:  SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  ((
+       'DIMENSIONAL_INSPECTION_SCHEMA.DM_POINT_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+       (pdr.used_representation.name = 'point')) )) = 1) ))) = 0;         
+        
+    WR4: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  
+       (('DIMENSIONAL_INSPECTION_SCHEMA.DM_VECTOR_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+       (pdr.used_representation.name = 'direction vector')) )) = 1) ))) = 0;
+ 
+    WR5: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT (SIZEOF(QUERY ( impl_rep <* QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  ((
+       'DIMENSIONAL_INSPECTION_SCHEMA.DM_SHAPE_REPRESENTATION_WITH_PARAMETERS') 
+       IN TYPEOF(pdr.used_representation)) ) | 
+       (NOT (SIZEOF(QUERY ( it <* impl_rep.used_representation.items | 
+       ((('DIMENSIONAL_INSPECTION_SCHEMA.DESCRIPTIVE_REPRESENTATION_ITEM' 
+       IN TYPEOF(it)) AND 
+       (it.name = 'point type dml')) AND 
+       ((it.description = 'h edge') OR (it.description = 't edge'))) )) = 
+       1)) )) = 0)) )) = 0;
+  
+END_ENTITY;   -- dmf_point
+ENTITY dmf_sphere
+  SUBTYPE OF (dm_feature_definition);
+WHERE   
+  wr1: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT (SIZEOF(QUERY ( impl_rep <* QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  
+  (('DIMENSIONAL_INSPECTION_SCHEMA.DM_SHAPE_REPRESENTATION_WITH_PARAMETERS') 
+       IN TYPEOF(pdr.used_representation)) ) | 
+    (NOT (SIZEOF(impl_rep.used_representation.items) = 2)) )) = 0)) )) = 0; 
+                    
+  wr2: SIZEOF( QUERY( pd <* USEDIN( SELF, 
+         'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION') |
+         SIZEOF( QUERY( pdr <* USEDIN( pd, 
+         'DIMENSIONAL_INSPECTION_SCHEMA.'+
+        'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') | 
+  ('DIMENSIONAL_INSPECTION_SCHEMA.DM_SHAPE_REPRESENTATION_WITH_PARAMETERS' IN
+         TYPEOF(pdr.used_representation)) AND
+         (SIZEOF( QUERY( srwp_i <* pdr.used_representation.items |
+         (srwp_i.name = 'orientation') OR
+         (srwp_i.name = 'boundary'))) 
+         = SIZEOF(pdr.used_representation.items)) )) = 1 )) = 1;
+        
+    WR3: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  ((
+       'DIMENSIONAL_INSPECTION_SCHEMA.DM_POINT_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+       (pdr.used_representation.name = 'center point')) )) = 1) ))) = 0;  
+        
+    WR4: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  
+       (('DIMENSIONAL_INSPECTION_SCHEMA.DM_VECTOR_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+       (pdr.used_representation.name = 'north pole vector')) )) = 1) ))) = 0;
+        
+    WR5: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  
+       (('DIMENSIONAL_INSPECTION_SCHEMA.DM_VECTOR_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+   (pdr.used_representation.name = 'prime meridian vector')) )) = 1) ))) = 0;
+        
+    WR6:  SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  
+       (('DIMENSIONAL_INSPECTION_SCHEMA.DM_DIMENSION_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+    (pdr.used_representation.name = 'latitude start angle')) )) = 1) ))) = 0; 
+        
+    WR7:  SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+        'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  
+       (('DIMENSIONAL_INSPECTION_SCHEMA.DM_DIMENSION_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+     (pdr.used_representation.name = 'latitude stop point')) )) = 1) ))) = 0;          
+    WR8:  SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  
+       (('DIMENSIONAL_INSPECTION_SCHEMA.DM_DIMENSION_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+   (pdr.used_representation.name = 'longitude start point')) )) = 1) ))) = 0;
+        
+    WR9:  SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  
+       (('DIMENSIONAL_INSPECTION_SCHEMA.DM_DIMENSION_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+    (pdr.used_representation.name = 'longitude stop point')) )) = 1) ))) = 0;
+        
+    WR10: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  
+       (('DIMENSIONAL_INSPECTION_SCHEMA.DM_DIMENSION_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+       (pdr.used_representation.name = 'diameter')) )) = 1) ))) = 0; 
+        
+    WR11: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  
+       (('DIMENSIONAL_INSPECTION_SCHEMA.CARTESIAN_POINT' 
+       IN TYPEOF(pdr.used_representation)) AND 
+       (pdr.used_representation.name = 'boundary')) )) >= 2) ))) = 0;  
+   
+END_ENTITY;   --  dmf_sphere
+ENTITY dmf_torus
+  SUBTYPE OF (dm_feature_definition);
+WHERE   
+  wr1: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT (SIZEOF(QUERY ( impl_rep <* QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  
+   (('DIMENSIONAL_INSPECTION_SCHEMA.DM_SHAPE_REPRESENTATION_WITH_PARAMETERS') 
+       IN TYPEOF(pdr.used_representation)) ) | 
+     (NOT (SIZEOF(impl_rep.used_representation.items) = 2)) )) = 0)) )) = 0; 
+                    
+  wr2: SIZEOF( QUERY( pd <* USEDIN( SELF, 
+         'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION') |
+         SIZEOF( QUERY( pdr <* USEDIN( pd, 
+         'DIMENSIONAL_INSPECTION_SCHEMA.'+
+         'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') | 
+  ('DIMENSIONAL_INSPECTION_SCHEMA.DM_SHAPE_REPRESENTATION_WITH_PARAMETERS' IN
+         TYPEOF(pdr.used_representation)) AND
+         (SIZEOF( QUERY( srwp_i <* pdr.used_representation.items |
+         (srwp_i.name = 'orientation') OR
+         (srwp_i.name = 'inner outer'))) 
+         = SIZEOF(pdr.used_representation.items)) )) = 1 )) = 1;
+        
+    WR3: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  ((
+       'DIMENSIONAL_INSPECTION_SCHEMA.DM_POINT_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+       (pdr.used_representation.name = 'center point')) )) = 1) ))) = 0;  
+        
+    WR4: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  
+       (('DIMENSIONAL_INSPECTION_SCHEMA.DM_VECTOR_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+       (pdr.used_representation.name = 'vector or plane')) )) = 1) ))) = 0;
+        
+    WR5: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  
+       (('DIMENSIONAL_INSPECTION_SCHEMA.DM_DIMENSION_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+       (pdr.used_representation.name = 'major diameter')) )) = 1) ))) = 0; 
+        
+    WR6: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT(SIZEOF(QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  
+       (('DIMENSIONAL_INSPECTION_SCHEMA.DM_DIMENSION_PARAMETER' 
+       IN TYPEOF(pdr.used_representation)) AND 
+       (pdr.used_representation.name = 'minor diameter')) )) = 1) ))) = 0; 
+    WR7: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT (SIZEOF(QUERY ( impl_rep <* QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  ((
+    'DIMENSIONAL_INSPECTION_SCHEMA.DM_SHAPE_REPRESENTATION_WITH_PARAMETERS') 
+       IN TYPEOF(pdr.used_representation)) ) | 
+       (NOT (SIZEOF(QUERY ( it <* impl_rep.used_representation.items | 
+       ((('DIMENSIONAL_INSPECTION_SCHEMA.DESCRIPTIVE_REPRESENTATION_ITEM' 
+       IN TYPEOF(it)) AND 
+       (it.name = 'inner outer')) AND 
+       ((it.description = 'inner') OR (it.description = 'outer'))) )) = 
+       1)) )) = 0)) )) = 0;
+  
+END_ENTITY;   --  dmf_torus
+ENTITY dmf_surface_of_revolution_dml
+  SUBTYPE OF (dm_feature_definition);
+WHERE   
+  wr1: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+       (NOT (SIZEOF(QUERY ( impl_rep <* QUERY ( pdr <* USEDIN(pd,
+       'DIMENSIONAL_INSPECTION_SCHEMA.'+
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  
+  (('DIMENSIONAL_INSPECTION_SCHEMA.DM_SHAPE_REPRESENTATION_WITH_PARAMETERS') 
+       IN TYPEOF(pdr.used_representation)) ) | 
+     (NOT (SIZEOF(impl_rep.used_representation.items) = 1)) )) = 0)) )) = 0; 
+                    
+  wr2: SIZEOF( QUERY( pd <* USEDIN( SELF, 
+         'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION') |
+         SIZEOF( QUERY( pdr <* USEDIN( pd, 
+         'DIMENSIONAL_INSPECTION_SCHEMA.'+
+         'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') | 
+ ('DIMENSIONAL_INSPECTION_SCHEMA.DM_SHAPE_REPRESENTATION_WITH_PARAMETERS' IN
+         TYPEOF(pdr.used_representation)) AND
+         (SIZEOF( QUERY( srwp_i <* pdr.used_representation.items |
+         (srwp_i.name = 'orientation') )) 
+         = SIZEOF(pdr.used_representation.items)) )) = 1 )) = 1;
+  
+END_ENTITY;   --  dmf_surface_of_revolution_dml
+ENTITY dm_dimension_parameter
+   SUBTYPE OF (dm_result_parameter);
+WHERE   
+          
+      WR1: (SIZEOF(QUERY(pdr <* USEDIN(SELF,
+            'DIMENSIONAL_INSPECTION_SCHEMA.'+
+            'PROPERTY_DEFINITION_REPRESENTATION.USED_REPRESENTATION') |
+            (('DIMENSIONAL_INSPECTION_SCHEMA.SHAPE_ASPECT') 
+            IN TYPEOF(pdr.definition.definition) )
+            )) <=0);
+         
+    wr2:  SIZEOF(QUERY( sri <* SELF.items |
+          (('DIMENSIONAL_INSPECTION_SCHEMA.MEASURE_REPRESENTATION_ITEM' IN
+           TYPEOF(sri)) AND 
+           (sri.name='specification')
+           )  )) <=1;       
+    wr3:  SIZEOF(QUERY( sri <* SELF.items |
+          ('DIMENSIONAL_INSPECTION_SCHEMA.MEASURE_REPRESENTATION_ITEM' IN
+           TYPEOF(sri)))) <=2;  
+END_ENTITY;  --  dm_dimension_parameter
+ENTITY dm_execution_result
+   SUBTYPE OF (executed_action);
+   
+WHERE 
+  wr1: ('DIMENSIONAL_INSPECTION_SCHEMA.DM_PROGRAM_RUN' IN TYPEOF (SELF.chosen_method));
+  wr2: (SIZEOF(QUERY ( rp <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.ACTION_PROPERTY.DEFINITION') |
+       ('DIMENSIONAL_INSPECTION_SCHEMA.DM_EXECUTION_RESULT_MEASUREMENT' IN TYPEOF (RP))
+       ))>=1);
+END_ENTITY;
+  ENTITY dm_execution_result_measurement
+    SUBTYPE OF (action_property);
+    WHERE
+      wr1: NOT (SIZEOF(QUERY ( apr <* USEDIN(SELF,
+    'DIMENSIONAL_INSPECTION_SCHEMA.ACTION_PROPERTY_REPRESENTATION.PROPERTY')| 
+           ( SIZEOF( QUERY ( it <* apr.representation.items | 
+           (('DIMENSIONAL_INSPECTION_SCHEMA.DESCRIPTIVE_REPRESENTATION_ITEM' 
+           IN TYPEOF(it)) AND (it.name = 'application name')))) <= 1))) = 0);
+           
+      wr2: NOT (SIZEOF(QUERY ( apr <* USEDIN(SELF,
+    'DIMENSIONAL_INSPECTION_SCHEMA.ACTION_PROPERTY_REPRESENTATION.PROPERTY')| 
+           ( SIZEOF( QUERY ( it <* apr.representation.items | 
+           (('DIMENSIONAL_INSPECTION_SCHEMA.DESCRIPTIVE_REPRESENTATION_ITEM' 
+        IN TYPEOF(it)) AND (it.name = 'application version')))) <= 1))) = 0);
+         
+      wr3: NOT (SIZEOF(QUERY ( apr <* USEDIN(SELF,
+    'DIMENSIONAL_INSPECTION_SCHEMA.ACTION_PROPERTY_REPRESENTATION.PROPERTY')| 
+           ( SIZEOF( QUERY ( it <* apr.representation.items | 
+           (('DIMENSIONAL_INSPECTION_SCHEMA.DESCRIPTIVE_REPRESENTATION_ITEM' 
+           IN TYPEOF(it)) AND (it.name = 'vendor name')))) <= 1))) = 0);
+           
+      wr4: SIZEOF(QUERY ( apr <* USEDIN(SELF,
+    'DIMENSIONAL_INSPECTION_SCHEMA.ACTION_PROPERTY_REPRESENTATION.PROPERTY')| 
+           ((apr.representation.name = 'measurement points') AND 
+           ('DIMENSIONAL_INSPECTION_SCHEMA.DM_POINT' 
+           IN TYPEOF(apr.representation))) )) <= 1;
+           
+      wr5: SIZEOF(QUERY ( apr <* USEDIN(SELF,
+    'DIMENSIONAL_INSPECTION_SCHEMA.ACTION_PROPERTY_REPRESENTATION.PROPERTY')| 
+           (('DIMENSIONAL_INSPECTION_SCHEMA.DM_RESULT_PARAMETER' 
+           IN TYPEOF(apr.representation))))) = 1;
+    END_ENTITY; -- dm_execution_result_measurement
+ENTITY dm_feature_analysis_mode_dml
+     SUBTYPE OF (dimensional_measurement_representation);
+WHERE
+    WR1: (SIZEOF( QUERY( repi <* SELF.items |
+        NOT (('DIMENSIONAL_INSPECTION_SCHEMA.DESCRIPTIVE_REPRESENTATION_ITEM' 
+         IN TYPEOF(repi)) AND (repi.name='axis'))AND 
+         (SELF.description IN ['least square', 'minimum radius', 
+         'cross section centers'])
+         ))<=1); 
+    WR2: (SIZEOF( QUERY( repi <* SELF.items |
+        NOT (('DIMENSIONAL_INSPECTION_SCHEMA.DESCRIPTIVE_REPRESENTATION_ITEM' 
+         IN TYPEOF(repi)) AND (repi.name='aelpr'))AND 
+         (SELF.description IN ['least square', 'minimum maximum'])
+         ))<=1); 
+    WR3: (SIZEOF( QUERY( repi <* SELF.items |
+        NOT (('DIMENSIONAL_INSPECTION_SCHEMA.DESCRIPTIVE_REPRESENTATION_ITEM' 
+         IN TYPEOF(repi)) AND (repi.name='cccpst'))AND 
+         (SELF.description IN ['least square', 'minimum maximum',
+         'circumscribed circle or cylinder', 
+         'maximum inscribed circle or cylinder'])
+         ))<=1); 
+    WR4: (SIZEOF( QUERY( repi <* SELF.items |
+        NOT (('DIMENSIONAL_INSPECTION_SCHEMA.DESCRIPTIVE_REPRESENTATION_ITEM' 
+         IN TYPEOF(repi)) AND (repi.name='curve'))AND 
+         (SELF.description IN ['least square', 'minimum maximum', 'bspline'])
+         ))<=1); 
+    WR5: (SIZEOF( QUERY( repi <* SELF.items |
+        NOT (('DIMENSIONAL_INSPECTION_SCHEMA.DESCRIPTIVE_REPRESENTATION_ITEM' 
+         IN TYPEOF(repi)) AND (repi.name='limits'))AND 
+         (SELF.description IN ['functional', 'mrs average', 'two point'])
+         ))<=1); 
+    WR6: (SIZEOF( QUERY( repi <* SELF.items |
+        NOT (('DIMENSIONAL_INSPECTION_SCHEMA.DESCRIPTIVE_REPRESENTATION_ITEM' 
+         IN TYPEOF(repi)) AND (repi.name='surface'))AND 
+         (SELF.description IN ['least square', 'minimum maximum',
+         'nurbs', 'bezier'])
+         ))<=1); 
+    WR7: (SIZEOF( QUERY( repi <* SELF.items |
+        NOT (('DIMENSIONAL_INSPECTION_SCHEMA.DESCRIPTIVE_REPRESENTATION_ITEM' 
+         IN TYPEOF(repi)) AND (repi.name='axis extrapolate'))AND 
+         (SELF.description IN ['TRUE', 'FALSE'])
+         ))<=1); 
+END_ENTITY;
+  ENTITY dm_feature_definition
+    SUBTYPE OF (characterized_object);
+    WHERE
+      wr1: SIZEOF(QUERY ( pdr <* get_property_definition_representations(
+               SELF) | 
+ ('DIMENSIONAL_INSPECTION_SCHEMA.DM_SHAPE_REPRESENTATION_WITH_PARAMETERS' 
+               IN TYPEOF(pdr.used_representation)) )) >= 1;
+    wr2: SIZEOF(QUERY ( pd <* USEDIN(SELF,
+         'DIMENSIONAL_INSPECTION_SCHEMA.PROPERTY_DEFINITION.DEFINITION')| 
+         (NOT (SIZEOF(QUERY ( impl_rep <* QUERY ( pdr <* USEDIN(pd,
+         'DIMENSIONAL_INSPECTION_SCHEMA.'+
+         'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |  
+  (('DIMENSIONAL_INSPECTION_SCHEMA.DM_SHAPE_REPRESENTATION_WITH_PARAMETERS') 
+         IN TYPEOF(pdr.used_representation)) ) | 
+         (NOT (SIZEOF(QUERY ( it <* impl_rep.used_representation.items | 
+         (('DIMENSIONAL_INSPECTION_SCHEMA.PLACEMENT' IN TYPEOF(it)) AND
+        (it.name = 'orientation')) )) = 1)) )) = 0)) )) = 0;
+        
+      wr3: SIZEOF(['DIMENSIONAL_INSPECTION_SCHEMA.DMF_ARC',
+               'DIMENSIONAL_INSPECTION_SCHEMA.DMF_LINE_UNBOUNDED',
+               'DIMENSIONAL_INSPECTION_SCHEMA.DMF_CIRCLE',
+               'DIMENSIONAL_INSPECTION_SCHEMA.DMF_PATTERN',
+               'DIMENSIONAL_INSPECTION_SCHEMA.DMF_CONE',
+               'DIMENSIONAL_INSPECTION_SCHEMA.DMF_PLANE',
+               'DIMENSIONAL_INSPECTION_SCHEMA.DMF_PLANE_CLOSED_PARALLEL',
+               'DIMENSIONAL_INSPECTION_SCHEMA.DMF_CYLINDER',
+               'DIMENSIONAL_INSPECTION_SCHEMA.DMF_ELLIPSE',
+               'DIMENSIONAL_INSPECTION_SCHEMA.DMF_PLANE_SYMMETRIC',
+               'DIMENSIONAL_INSPECTION_SCHEMA.DMF_GEOMETRIC_CURVE',
+               'DIMENSIONAL_INSPECTION_SCHEMA.DMF_POINT',
+               'DIMENSIONAL_INSPECTION_SCHEMA.DMF_GEOMETRIC_SURFACE',
+               'DIMENSIONAL_INSPECTION_SCHEMA.DMF_EDGE_POINT',
+               'DIMENSIONAL_INSPECTION_SCHEMA.DMF_SPHERE',
+               'DIMENSIONAL_INSPECTION_SCHEMA.DMF_GENERIC_FEATURE',
+               'DIMENSIONAL_INSPECTION_SCHEMA.DMF_LINE_BOUNDED',
+               'DIMENSIONAL_INSPECTION_SCHEMA.DMF_TORUS',
+               'DIMENSIONAL_INSPECTION_SCHEMA.DMF_LINE_CLOSED_PARALLEL',
+               'DIMENSIONAL_INSPECTION_SCHEMA.DMF_SURFACE_OF_REVOLUTION_DML'] 
+               * TYPEOF(SELF)) = 1;
+  END_ENTITY; -- dm_feature_definition
+ENTITY dm_feature_relationship
+  SUBTYPE OF (shape_aspect_relationship);
+  
+END_ENTITY;
+ENTITY dm_instanced_feature
+  SUBTYPE OF (dm_feature_definition, shape_aspect);
+WHERE
+  WR1: 'DIMENSIONAL_INSPECTION_SCHEMA.PRODUCT_DEFINITION' IN 
+       TYPEOF (SELF.of_shape.definition);
+  WR2: SELF.product_definitional;
+END_ENTITY;
+ENTITY dm_tolerance_analysis_mode_dml
+     SUBTYPE OF (dimensional_measurement_representation);
+WHERE
+    WR1: (SIZEOF( QUERY( repi <* SELF.items |
+        NOT (('DIMENSIONAL_INSPECTION_SCHEMA.DESCRIPTIVE_REPRESENTATION_ITEM' 
+         IN TYPEOF(repi)) AND (repi.name='method'))AND 
+         (SELF.description IN ['least square 3d', 'least square normal',
+          'minimum deviation 3d', 'standard'])
+         ))<=1); 
+    WR2: (SIZEOF( QUERY( repi <* SELF.items |
+        NOT (('DIMENSIONAL_INSPECTION_SCHEMA.DESCRIPTIVE_REPRESENTATION_ITEM' 
+         IN TYPEOF(repi)) AND (repi.name='option'))AND 
+         (SELF.description IN ['high point', 'best fit'])
+         ))<=1); 
+    WR3: (SIZEOF( QUERY( repi <* SELF.items |
+       NOT (('DIMENSIONAL_INSPECTION_SCHEMA.DESCRIPTIVE_REPRESENTATION_ITEM' 
+         IN TYPEOF(repi)) AND (repi.name='setting'))AND 
+         (SELF.description IN ['inner', 'outer', 'standard'])
+         ))<=1); 
+END_ENTITY;
+ENTITY dm_result_parameter
+   SUBTYPE OF (representation);
+WHERE   
+          
+wr1:  SIZEOF(QUERY( sri <* SELF.items |
+  ('DIMENSIONAL_INSPECTION_SCHEMA.DM_PARAMETER_VALUE_LIMITS' 
+  IN TYPEOF (sri))))=1;
+  
+    wr2:  SIZEOF(QUERY( sri <* SELF.items |
+        (('DIMENSIONAL_INSPECTION_SCHEMA.DESCRIPTIVE_REPRESENTATION_ITEM' IN
+           TYPEOF(sri)) AND 
+           (sri.name='calculation method')
+           )  )) <=1;   
+      wr3: SIZEOF(QUERY ( apr <* USEDIN(SELF,
+'DIMENSIONAL_INSPECTION_SCHEMA.ACTION_PROPERTY_REPRESENTATION.REPRESENTATION')| 
+           ('DIMENSIONAL_INSPECTION_SCHEMA.DM_PARAMETER_ANALYSIS_DML' 
+           IN TYPEOF(apr.property ))))<= 1;
+END_ENTITY;
+  ENTITY dm_parameter_analysis_dml
+    SUBTYPE OF (action_property);
+    WHERE
+      wr1: (SIZEOF(QUERY ( apr <* USEDIN(SELF,
+     'DIMENSIONAL_INSPECTION_SCHEMA.ACTION_PROPERTY_REPRESENTATION.PROPERTY')
+       | ('DIMENSIONAL_INSPECTION_SCHEMA.DM_FEATURE_ANALYSIS_MODE_DML' 
+               IN TYPEOF(apr.representation)) )) = 1);
+      wr2: (SIZEOF(QUERY ( apr <* USEDIN(SELF,
+    'DIMENSIONAL_INSPECTION_SCHEMA.ACTION_PROPERTY_REPRESENTATION.PROPERTY')
+        | ('DIMENSIONAL_INSPECTION_SCHEMA.DM_TOLERANCE_ANALYSIS_MODE_DML' 
+               IN TYPEOF(apr.representation)) )) = 1);
+      wr3: (SIZEOF(QUERY ( apr <* USEDIN(SELF,
+     'DIMENSIONAL_INSPECTION_SCHEMA.ACTION_PROPERTY_REPRESENTATION.PROPERTY')
+                | ('DIMENSIONAL_INSPECTION_SCHEMA.DM_ANALYSIS_DOFS_DML' IN 
+               TYPEOF(apr.representation)) )) = 1);
+END_ENTITY; -- dm_parameter_analysis_dml 
+  ENTITY dm_parameter_value_limits
+    SUBTYPE OF (compound_representation_item);
+    WHERE
+        WR1: (SIZEOF(QUERY ( it <* SELF.item_element |        
+             (((SIZEOF([
+             'DIMENSIONAL_INSPECTION_SCHEMA.MEASURE_REPRESENTATION_ITEM',
+             'DIMENSIONAL_INSPECTION_SCHEMA.QUALIFIED_REPRESENTATION_ITEM'] *
+             TYPEOF(it)) = 2) AND (it.name = 'calculated limit')) AND 
+             ((SIZEOF(QUERY(qri <* it.qualifiers|
+         (('DIMENSIONAL_INSPECTION_SCHEMA.TYPE_QUALIFIER' IN TYPEOF(qri)) AND 
+         (qri.name='limits method')  )))>0)))))=1); 
+END_ENTITY; -- dm_parameter_value_limits
+ENTITY dm_point
+   SUBTYPE OF (representation);
+WHERE         
+    WR1: (SIZEOF( QUERY( repi <* SELF.items |
+         NOT (('DIMENSIONAL_INSPECTION_SCHEMA.CARTESIAN_POINT' 
+         IN TYPEOF(repi)) AND (repi.name='measured point'))
+         ))=1);       
+    WR2: (SIZEOF( QUERY( repi <* SELF.items |
+         NOT (('DIMENSIONAL_INSPECTION_SCHEMA.CARTESIAN_POINT' 
+         IN TYPEOF(repi)) AND (repi.name='expected point'))
+         ))<=1);   
+END_ENTITY;   --  dm_point
+ENTITY dm_point_parameter
+   SUBTYPE OF (dm_result_parameter);
+   
+WHERE   
+wr1:  SIZEOF(QUERY( repi <* SELF.items |
+  ('DIMENSIONAL_INSPECTION_SCHEMA.CARTESIAN_POINT' 
+  IN TYPEOF (repi))))=1;          
+END_ENTITY;
+ENTITY dm_program_identification
+   SUBTYPE OF (action_resource_requirement);
+WHERE
+  wr1: (SIZEOF(QUERY ( rp <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.RESOURCE_PROPERTY.RESOURCE') |
+       (rp.name='angular units dml')))<=1);
+  wr2: (SIZEOF(QUERY ( rp <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.RESOURCE_PROPERTY.RESOURCE') |
+       (rp.name='linear units dml')))<=1);
+  wr3: (SIZEOF(QUERY ( rp <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.RESOURCE_PROPERTY.RESOURCE') |
+       (rp.name='tolerance standard dml')))<=1);
+  wr4: ((SIZEOF(QUERY (adr <* USEDIN(SELF,
+     'DIMENSIONAL_INSPECTION_SCHEMA.APPLIED_ORGANIZATION_ASSIGNMENT.ITEMS')| 
+       ((adr.role.name='program custodian') AND 
+       ('DIMENSIONAL_INSPECTION_SCHEMA.ORGANIZATION' IN TYPEOF
+       (adr.assigned_organization)))))<=1) OR 
+       (SIZEOF(QUERY (adr <* USEDIN(SELF,
+'DIMENSIONAL_INSPECTION_SCHEMA.APPLIED_PERSON_ORGANIZATION_ASSIGNMENT.ITEMS')| 
+        ((adr.role.name='program custodian') AND 
+       ('DIMENSIONAL_INSPECTION_SCHEMA.PERSON_AND_ORGANIZATION' IN TYPEOF
+       (adr.assigned_person_and_organization)))))<=1));
+       
+END_ENTITY;
+ENTITY dm_program_run
+   SUBTYPE OF (action_method);
+WHERE  
+   
+ wr1: SIZEOF(QUERY ( ap <* USEDIN(SELF,
+      'DIMENSIONAL_INSPECTION_SCHEMA.ACTION_PROPERTY.DEFINITION') | 
+      (NOT (SIZEOF(QUERY ( apr <* USEDIN(ap,
+   'DIMENSIONAL_INSPECTION_SCHEMA.ACTION_PROPERTY_REPRESENTATION.PROPERTY') | 
+      NOT (SIZEOF(QUERY ( it <* apr.representation.items | 
+      ((SIZEOF([
+      'DIMENSIONAL_INSPECTION_SCHEMA.MEASURE_REPRESENTATION_ITEM',
+      'DIMENSIONAL_INSPECTION_SCHEMA.QUALIFIED_REPRESENTATION_ITEM'] *
+      TYPEOF(it)) = 2) AND (it.name = 'measurement temperature')) 
+      )) >= 0) ))  = 0)) )) = 0;
+   
+ wr2: SIZEOF(QUERY ( ap <* USEDIN(SELF,
+      'DIMENSIONAL_INSPECTION_SCHEMA.ACTION_PROPERTY.DEFINITION') | 
+      (NOT (SIZEOF(QUERY ( apr <* USEDIN(ap,
+      'DIMENSIONAL_INSPECTION_SCHEMA.ACTION_PROPERTY_REPRESENTATION.PROPERTY') | 
+      NOT (SIZEOF(QUERY ( it <* apr.representation.items | 
+      ((SIZEOF([
+      'DIMENSIONAL_INSPECTION_SCHEMA.MEASURE_REPRESENTATION_ITEM',
+      'DIMENSIONAL_INSPECTION_SCHEMA.QUALIFIED_REPRESENTATION_ITEM'] *
+      TYPEOF(it)) = 2) AND (it.name = 'workpiece temperature')) 
+      )) >= 0) ))  = 0)) )) = 0;
+   
+ wr3: SIZEOF(QUERY ( ap <* USEDIN(SELF,
+      'DIMENSIONAL_INSPECTION_SCHEMA.ACTION_PROPERTY.DEFINITION') | 
+      (NOT (SIZEOF(QUERY ( apr <* USEDIN(ap,
+      'DIMENSIONAL_INSPECTION_SCHEMA.ACTION_PROPERTY_REPRESENTATION.PROPERTY') | 
+      NOT (SIZEOF(QUERY ( it <* apr.representation.items | 
+      ((SIZEOF([
+      'DIMENSIONAL_INSPECTION_SCHEMA.MEASURE_REPRESENTATION_ITEM',
+      'DIMENSIONAL_INSPECTION_SCHEMA.QUALIFIED_REPRESENTATION_ITEM'] *
+      TYPEOF(it)) = 2) AND (it.name = 'measurement humidity')) 
+      )) >= 0) ))  = 0)) )) = 0;
+ 
+ wr4: SIZEOF(QUERY ( ap <* USEDIN(SELF,
+      'DIMENSIONAL_INSPECTION_SCHEMA.ACTION_RESOURCE.USAGE') | 
+      (ap.name = 'part inspection status') )) <= 1;
+ 
+ wr5: SIZEOF(QUERY ( ap <* USEDIN(SELF,
+      'DIMENSIONAL_INSPECTION_SCHEMA.ACTION_RESOURCE.USAGE') | 
+      (ap.name = 'url') )) <= 1;
+ wr6: SIZEOF(QUERY ( arr <* USEDIN(SELF,
+     'DIMENSIONAL_INSPECTION_SCHEMA.ACTION_RESOURCE_REQUIREMENT.OPERATIONS')| 
+      ('DIMENSIONAL_INSPECTION_SCHEMA.DM_PROGRAM_IDENTIFICATION' 
+      IN TYPEOF(arr)) ))=1;
+  wr7: ((SIZEOF(QUERY (adr <* USEDIN(SELF,
+     'DIMENSIONAL_INSPECTION_SCHEMA.APPLIED_ORGANIZATION_ASSIGNMENT.ITEMS')| 
+       ((adr.role.name='run administrator') AND 
+       ('DIMENSIONAL_INSPECTION_SCHEMA.ORGANIZATION' IN TYPEOF
+       (adr.assigned_organization)))))<=1) OR 
+       (SIZEOF(QUERY (adr <* USEDIN(SELF,
+'DIMENSIONAL_INSPECTION_SCHEMA.APPLIED_PERSON_ORGANIZATION_ASSIGNMENT.ITEMS')| 
+        ((adr.role.name='run administrator') AND 
+       ('DIMENSIONAL_INSPECTION_SCHEMA.PERSON_AND_ORGANIZATION' IN TYPEOF
+       (adr.assigned_person_and_organization)))))<=1));
+  wr8: (SIZEOF(QUERY ( rp <* USEDIN(SELF,
+       'DIMENSIONAL_INSPECTION_SCHEMA.ACTION_PROPERTY.DEFINITION') |
+       ('DIMENSIONAL_INSPECTION_SCHEMA.MEASURMENT_LOCATION' IN TYPEOF (RP))
+       ))<=1);
+  wr9: ((SIZEOF(QUERY (adr <* USEDIN(SELF,
+        'DIMENSIONAL_INSPECTION_SCHEMA.APPLIED_DATE_ASSIGNMENT.ITEMS')| 
+       ((adr.role.name='run end') AND 
+       ('DIMENSIONAL_INSPECTION_SCHEMA.DATE' IN TYPEOF
+       (adr.assigned_date)))))<=1) OR 
+       (SIZEOF(QUERY (adr <* USEDIN(SELF,
+        'DIMENSIONAL_INSPECTION_SCHEMA.APPLIED_DATE_ASSIGNMENT.ITEMS')| 
+        ((adr.role.name='run end') AND 
+       ('DIMENSIONAL_INSPECTION_SCHEMA.CALENDAR_DATE' IN TYPEOF
+       (adr.assigned_date)))))<=1));
+  wr10: ((SIZEOF(QUERY (adr <* USEDIN(SELF,
+        'DIMENSIONAL_INSPECTION_SCHEMA.APPLIED_DATE_ASSIGNMENT.ITEMS')| 
+       ((adr.role.name='run start') AND 
+       ('DIMENSIONAL_INSPECTION_SCHEMA.DATE' IN TYPEOF
+       (adr.assigned_date)))))<=1) OR 
+       (SIZEOF(QUERY (adr <* USEDIN(SELF,
+        'DIMENSIONAL_INSPECTION_SCHEMA.APPLIED_DATE_ASSIGNMENT.ITEMS')| 
+        ((adr.role.name='run start') AND 
+       ('DIMENSIONAL_INSPECTION_SCHEMA.CALENDAR_DATE' IN TYPEOF
+       (adr.assigned_date)))))<=1));
+  wr11: ((SIZEOF(QUERY (adr <* USEDIN(SELF,
+        'DIMENSIONAL_INSPECTION_SCHEMA.APPLIED_DATE_ASSIGNMENT.ITEMS')| 
+       ((adr.role.name='run date') AND 
+       ('DIMENSIONAL_INSPECTION_SCHEMA.DATE' IN TYPEOF
+       (adr.assigned_date)))))<=1) OR 
+       (SIZEOF(QUERY (adr <* USEDIN(SELF,
+        'DIMENSIONAL_INSPECTION_SCHEMA.APPLIED_DATE_ASSIGNMENT.ITEMS')| 
+        ((adr.role.name='run date') AND 
+       ('DIMENSIONAL_INSPECTION_SCHEMA.CALENDAR_DATE' IN TYPEOF
+       (adr.assigned_date)))))<=1));
+       
+END_ENTITY;
+ENTITY dm_shape_representation_with_parameters
+  SUBTYPE OF (shape_representation);
+   WHERE
+    WR1: (SIZEOF(QUERY ( it <* SELF.items | 
+        (NOT (SIZEOF([
+        'DIMENSIONAL_INSPECTION_SCHEMA.PLACEMENT',
+        'DIMENSIONAL_INSPECTION_SCHEMA.MEASURE_REPRESENTATION_ITEM',
+        'DIMENSIONAL_INSPECTION_SCHEMA.COMPOUND_REPRESENTATION_ITEM',
+        'DIMENSIONAL_INSPECTION_SCHEMA.DESCRIPTIVE_REPRESENTATION_ITEM'] *
+        TYPEOF(it)) = 1)) )) = 0);
+END_ENTITY; -- shape_representation_with_parameters
+ENTITY dm_vector_parameter
+   SUBTYPE OF (dm_result_parameter);
+WHERE   
+          
+wr1:  SIZEOF(QUERY( repi <* SELF.items |
+     ('DIMENSIONAL_INSPECTION_SCHEMA.VECTOR' 
+      IN TYPEOF (repi))))=1;    
+        
+END_ENTITY;
+ENTITY externally_defined_dimension_definition
+     SUBTYPE OF (externally_defined_item, dimensional_size);
+WHERE 
+  
+ wr1: SELF.source.description = 'externally dimension specification';  
+     
+  wr2: SIZEOF(QUERY ( adr <* USEDIN(SELF,
+      'DIMENSIONAL_INSPECTION_SCHEMA.APPLIED_DOCUMENT_REFERENCE.ITEMS')| 
+      (adr.assigned_document.description =
+      'externally dimension specification')
+      ) ) <= 1; 
+         
+END_ENTITY;
+ENTITY measurment_location
+   SUBTYPE OF (action_property);
+WHERE 
+  wr1: ('DIMENSIONAL_INSPECTION_SCHEMA.DM_PROGRAM_RUN' 
+  IN TYPEOF (SELF.definition));   
+END_ENTITY;
+  ENTITY ngon_shape_representation
+    SUBTYPE OF (shape_representation_with_parameters);
+    WHERE
+ wr1: SIZEOF(SELF.items) = 5;
+ wr2: SIZEOF(QUERY ( it <* SELF.items | ((
+      'DIMENSIONAL_INSPECTION_SCHEMA.PLACEMENT' IN TYPEOF(it)) AND (it.
+      name = 'orientation')) )) = 1;
+ wr3: SIZEOF(QUERY ( it <* SELF.items | ((SIZEOF([
+      'DIMENSIONAL_INSPECTION_SCHEMA.MEASURE_REPRESENTATION_ITEM',
+      'DIMENSIONAL_INSPECTION_SCHEMA.LENGTH_MEASURE_WITH_UNIT'] * 
+      TYPEOF(it)) = 2) AND (it.name = 'length')) )) = 1;
+ wr4: SIZEOF(QUERY ( it <* SELF.items | ((SIZEOF([
+      'DIMENSIONAL_INSPECTION_SCHEMA.MEASURE_REPRESENTATION_ITEM',
+      'DIMENSIONAL_INSPECTION_SCHEMA.LENGTH_MEASURE_WITH_UNIT'] * 
+      TYPEOF(it)) = 2) AND (it.name = 'corner radius')) )) = 1;
+ wr5: SIZEOF(QUERY ( it <* SELF.items | ((SIZEOF([
+      'DIMENSIONAL_INSPECTION_SCHEMA.MEASURE_REPRESENTATION_ITEM',
+      'DIMENSIONAL_INSPECTION_SCHEMA.LENGTH_MEASURE_WITH_UNIT'] * 
+      TYPEOF(it)) = 2) AND (it.name IN ['circumscribed diameter',
+      'diameter across flats'])) )) = 1;
+ wr6: SIZEOF(QUERY ( it <* SELF.items | (((
+      'DIMENSIONAL_INSPECTION_SCHEMA.MEASURE_REPRESENTATION_ITEM' IN 
+      TYPEOF(it)) AND ('DIMENSIONAL_INSPECTION_SCHEMA.COUNT_MEASURE' IN 
+      TYPEOF(it\measure_with_unit.value_component))) AND (it.name 
+      = 'number of sides')) )) = 1;
+  END_ENTITY; -- ngon_shape_representation
+ENTITY value_range
+   SUBTYPE OF (compound_representation_item);
+ 
+WHERE
+wr1:  SIZEOF(QUERY ( mri <* QUERY( sri <* SELF.item_element |
+      ('DIMENSIONAL_INSPECTION_SCHEMA.SET_REPRESENTATION_ITEM' 
+      IN TYPEOF (sri))) | 
+      ('DIMENSIONAL_INSPECTION_SCHEMA.MEASURE_REPRESENTATION_ITEM' 
+      IN TYPEOF (mri))
+       ))=2;
+wr2:  SIZEOF(QUERY ( mri <* QUERY( sri <* SELF.item_element |
+      ('DIMENSIONAL_INSPECTION_SCHEMA.SET_REPRESENTATION_ITEM' 
+      IN TYPEOF (sri))) | 
+  (('DIMENSIONAL_INSPECTION_SCHEMA.MEASURE_REPRESENTATION_ITEM' 
+  IN TYPEOF (mri)) AND
+      (mri.name='lower limit'))
+       ))=1;
+wr3:  SIZEOF(QUERY ( mri <* QUERY( sri <* SELF.item_element |
+      ('DIMENSIONAL_INSPECTION_SCHEMA.SET_REPRESENTATION_ITEM' 
+      IN TYPEOF (sri))) | 
+  (('DIMENSIONAL_INSPECTION_SCHEMA.MEASURE_REPRESENTATION_ITEM' 
+  IN TYPEOF (mri)) AND
+      (mri.name='upper limit'))
+       ))=1;
+      
+wr4: SIZEOF(QUERY( i1 <* SELF.item_element |
+ ('DIMENSIONAL_INSPECTION_SCHEMA.MEASURE_REPRESENTATION_ITEM' 
+ IN TYPEOF (i1)) AND 
+     (SIZEOF ( QUERY (i2 <* SELF.item_element |
+ ('DIMENSIONAL_INSPECTION_SCHEMA.MEASURE_REPRESENTATION_ITEM' 
+ IN TYPEOF (i2)) AND 
+     (i1 :<>: i2) AND 
+     (i1\measure_with_unit.unit_component :=:
+      i2\measure_with_unit.unit_component) 
+     ) ) = 1 ))) = 2 ;
+          
+END_ENTITY;
+RULE dependent_instantiable_shape_representation FOR (shape_representation);
+WHERE
+  WR1: SIZEOF (QUERY (sr <* shape_representation |
+       NOT (SIZEOF (USEDIN (sr, '')) >= 1))) = 0;
+END_RULE;
+RULE dependent_instantiable_security_classification_level FOR 
+  (security_classification_level);
+WHERE
+  WR1: SIZEOF (QUERY (scl <* security_classification_level |
+       NOT (SIZEOF (USEDIN (scl, '')) >= 1))) = 0;
+END_RULE;
+RULE geometric_tolerance_subtype_exclusiveness FOR (geometric_tolerance);
+WHERE
+  WR1: SIZEOF (QUERY (gt <* geometric_tolerance |
+       NOT (SIZEOF (TYPEOF (gt) *
+       ['DIMENSIONAL_INSPECTION_SCHEMA.ANGULARITY_TOLERANCE',
+       'DIMENSIONAL_INSPECTION_SCHEMA.CIRCULAR_RUNOUT_TOLERANCE',
+       'DIMENSIONAL_INSPECTION_SCHEMA.CONCENTRICITY_TOLERANCE',
+       'DIMENSIONAL_INSPECTION_SCHEMA.CYLINDRICITY_TOLERANCE',
+       'DIMENSIONAL_INSPECTION_SCHEMA.FLATNESS_TOLERANCE',
+       'DIMENSIONAL_INSPECTION_SCHEMA.LINE_PROFILE_TOLERANCE',
+       'DIMENSIONAL_INSPECTION_SCHEMA.PARALLELISM_TOLERANCE', 
+       'DIMENSIONAL_INSPECTION_SCHEMA.PERPENDICULARITY_TOLERANCE',
+       'DIMENSIONAL_INSPECTION_SCHEMA.POSITION_TOLERANCE',
+       'DIMENSIONAL_INSPECTION_SCHEMA.ROUNDNESS_TOLERANCE',
+       'DIMENSIONAL_INSPECTION_SCHEMA.STRAIGHTNESS_TOLERANCE',
+       'DIMENSIONAL_INSPECTION_SCHEMA.SURFACE_PROFILE_TOLERANCE', 
+       'DIMENSIONAL_INSPECTION_SCHEMA.SYMMETRY_TOLERANCE',
+       'DIMENSIONAL_INSPECTION_SCHEMA.TOTAL_RUNOUT_TOLERANCE'])
+       <= 2))) = 0;
+END_RULE;
+RULE machining_feature_life_cycle FOR    
+ (instanced_feature);
+WHERE
+  WR1: SIZEOF (QUERY (mf <* instanced_feature |
+       NOT (mf.of_shape.definition.frame_of_reference.life_cycle_stage =
+       'manufacturing planning'))) = 0;
+END_RULE;
+RULE product_requires_version FOR (product, product_definition_formation);
+WHERE
+  WR1: SIZEOF (QUERY (prod <* product |
+       NOT (SIZEOF (QUERY (pdf <* product_definition_formation | 
+       prod :=: pdf.of_product )) >= 1 ))) = 0;
+END_RULE;
+RULE product_definition_formation_requires_security_classification FOR
+  (product_definition_formation,
+  applied_security_classification_assignment);
+WHERE
+  WR1: SIZEOF (QUERY (pdf <* product_definition_formation |
+       NOT (SIZEOF (QUERY (asca <* 
+       applied_security_classification_assignment | 
+       pdf IN asca.items )) = 1 ))) = 0;
+END_RULE;
+RULE representation_subtype_exclusiveness FOR (representation);
+WHERE
+  WR1: SIZEOF (QUERY (rep <* representation |
+       NOT (SIZEOF (TYPEOF (rep) *
+       ['DIMENSIONAL_INSPECTION_SCHEMA.SHAPE_REPRESENTATION',
+       'DIMENSIONAL_INSPECTION_SCHEMA.DEFINITIONAL_REPRESENTATION', 
+       'DIMENSIONAL_INSPECTION_SCHEMA.DIRECTION_SHAPE_REPRESENTATION',
+       'DIMENSIONAL_INSPECTION_SCHEMA.FACE_SHAPE_REPRESENTATION',
+       'DIMENSIONAL_INSPECTION_SCHEMA.PLANAR_SHAPE_REPRESENTATION',
+       'DIMENSIONAL_INSPECTION_SCHEMA.LOCATION_SHAPE_REPRESENTATION',
+       'DIMENSIONAL_INSPECTION_SCHEMA.PATH_SHAPE_REPRESENTATION']) 
+       <= 2))) = 0;
+END_RULE;
+RULE restrict_security_classification_level FOR
+  (security_classification_level);
+WHERE
+  WR1: SIZEOF (QUERY (scl <* security_classification_level |
+       NOT (scl.name IN 
+       ['unclassified', 'classified', 'proprietary','confidential', 'secret',
+       'top_secret']))) = 0;
+END_RULE;
+RULE shape_aspect_subtype_exclusiveness FOR (shape_aspect);
+  WHERE
+    wr1: (SIZEOF(QUERY ( sr <* shape_aspect | (NOT (SIZEOF(TYPEOF(sr) * [
+             'DIMENSIONAL_INSPECTION_SCHEMA.PATH_FEATURE_COMPONENT',
+             'DIMENSIONAL_INSPECTION_SCHEMA.SLOT_END',
+             'DIMENSIONAL_INSPECTION_SCHEMA.POCKET_BOTTOM',
+             'DIMENSIONAL_INSPECTION_SCHEMA.PROFILE_FLOOR',
+             'DIMENSIONAL_INSPECTION_SCHEMA.RIB_TOP_FLOOR',
+             'DIMENSIONAL_INSPECTION_SCHEMA.BOSS_TOP',
+             'DIMENSIONAL_INSPECTION_SCHEMA.HOLE_BOTTOM',
+             'DIMENSIONAL_INSPECTION_SCHEMA.APPLIED_AREA',
+             'DIMENSIONAL_INSPECTION_SCHEMA.TAPER',
+             'DIMENSIONAL_INSPECTION_SCHEMA.CHAMFER_OFFSET',
+             'DIMENSIONAL_INSPECTION_SCHEMA.CIRCULAR_CLOSED_PROFILE',
+             'DIMENSIONAL_INSPECTION_SCHEMA.NGON_CLOSED_PROFILE',
+             'DIMENSIONAL_INSPECTION_SCHEMA.CLOSED_PATH_PROFILE',
+             'DIMENSIONAL_INSPECTION_SCHEMA.SQUARE_U_PROFILE',
+             'DIMENSIONAL_INSPECTION_SCHEMA.LINEAR_PROFILE',
+             'DIMENSIONAL_INSPECTION_SCHEMA.TEE_PROFILE',
+             'DIMENSIONAL_INSPECTION_SCHEMA.VEE_PROFILE',
+             'DIMENSIONAL_INSPECTION_SCHEMA.RECTANGULAR_CLOSED_PROFILE',
+             'DIMENSIONAL_INSPECTION_SCHEMA.PARTIAL_CIRCULAR_PROFILE',
+             'DIMENSIONAL_INSPECTION_SCHEMA.ROUNDED_U_PROFILE',
+             'DIMENSIONAL_INSPECTION_SCHEMA.OPEN_PATH_PROFILE',
+             'DIMENSIONAL_INSPECTION_SCHEMA.INSTANCED_FEATURE',
+             'DIMENSIONAL_INSPECTION_SCHEMA.REPLICATE_FEATURE',
+             'DIMENSIONAL_INSPECTION_SCHEMA.TRANSITION_FEATURE',
+             'DIMENSIONAL_INSPECTION_SCHEMA.DATUM',
+             'DIMENSIONAL_INSPECTION_SCHEMA.DATUM_FEATURE',
+             'DIMENSIONAL_INSPECTION_SCHEMA.DATUM_TARGET']) <= 2)) )) 
+             = 0);
+  END_RULE; -- shape_aspect_subtype_exclusiveness
+RULE shape_aspect_relationship_subtype_exclusiveness FOR 
+  (shape_aspect_relationship);
+WHERE
+  WR1: SIZEOF (QUERY (sr <* shape_aspect_relationship |
+       NOT (SIZEOF (TYPEOF (sr) *
+       ['DIMENSIONAL_INSPECTION_SCHEMA.DIMENSIONAL_LOCATION',
+       'DIMENSIONAL_INSPECTION_SCHEMA.GEOMETRIC_TOLERANCE_RELATIONSHIP',
+       'DIMENSIONAL_INSPECTION_SCHEMA.FEATURE_COMPONENT_RELATIONSHIP',
+       'DIMENSIONAL_INSPECTION_SCHEMA.SHAPE_DEFINING_RELATIONSHIP'])
+       <= 2))) = 0;
+END_RULE;
+RULE shape_representation_subtype_exclusiveness FOR (shape_representation);
+WHERE
+  WR1: SIZEOF (QUERY (sr <* shape_representation |
+       NOT (SIZEOF (TYPEOF (sr) *
+      ['DIMENSIONAL_INSPECTION_SCHEMA.ADVANCED_BREP_SHAPE_REPRESENTATION', 
+     'DIMENSIONAL_INSPECTION_SCHEMA.SHAPE_REPRESENTATION_WITH_PARAMETERS',
+     'DIMENSIONAL_INSPECTION_SCHEMA.SHAPE_DIMENSION_REPRESENTATION']) 
+       <= 2))) = 0;
+END_RULE;
+RULE subtype_mandatory_characterized_object FOR (characterized_object);
+  WHERE
+    wr1: ((SIZEOF(QUERY ( csa <* characterized_object | 
+         (NOT (SIZEOF([
+         'DIMENSIONAL_INSPECTION_SCHEMA.DM_FEATURE_DEFINITION',
+         'DIMENSIONAL_INSPECTION_SCHEMA.FEATURE_DEFINITION',
+         'DIMENSIONAL_INSPECTION_SCHEMA.FEATURE_COMPONENT_DEFINITION'] * 
+         TYPEOF(csa)) = 1))  
+            )) = 0) );
+  END_RULE; -- subtype_mandatory_characterized_object
+RULE transition_feature_life_cycle FOR    
+ (transition_feature);
+WHERE
+  WR1: SIZEOF (QUERY (tf <* transition_feature |
+       NOT (tf.of_shape.definition.frame_of_reference.life_cycle_stage =
+       'manufacturing planning'))) = 0;
+END_RULE;
+RULE transition_feature_on_part_boundary FOR    
+ (transition_feature);
+WHERE
+  WR1: SIZEOF (QUERY (tf <* transition_feature |
+       NOT (tf.product_definitional))) = 0;
+END_RULE;
+
+
+END_SCHEMA;

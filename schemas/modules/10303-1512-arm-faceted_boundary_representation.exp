@@ -1,0 +1,13 @@
+(* ISO/TC184/SC4 WG12N1285  ISO/TS 10303-1512
+$Id: 10303-1512-arm-faceted_boundary_representation.exp,v 1.4 2003/10/21 12:20:22 wg12deputy Exp $ *)
+ 
+SCHEMA Faceted_boundary_representation_arm;
+
+USE FROM Elemental_geometric_shape_arm;
+
+ENTITY Faceted_brep_shape_representation
+SUBTYPE OF (Geometric_model);
+END_ENTITY;
+
+END_SCHEMA;
+

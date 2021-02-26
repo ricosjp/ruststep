@@ -1,0 +1,31 @@
+(*
+ $Id: 10303-1275-arm-External_class.exp,v 1.2 2006/08/07 07:44:46 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N3049 - ISO/TS 10303-1275 External class - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG12 N2264
+*) 
+
+
+SCHEMA External_class_arm;
+
+USE FROM Class_arm;    -- ISO/TS 10303-1070
+
+USE FROM Name_assignment_arm;    -- ISO/TS 10303-1340
+
+
+TYPE external_class_assigned_name_select = SELECT BASED_ON assigned_name_select WITH 
+   (External_class_library);
+END_TYPE; 
+
+ENTITY External_class
+  SUBTYPE OF (Class);
+  external_source : External_class_library;
+END_ENTITY;
+
+ENTITY External_class_library;
+  id : STRING;
+  description : OPTIONAL STRING;
+END_ENTITY;
+
+END_SCHEMA;  -- External_class_arm
+
+

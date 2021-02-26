@@ -1,0 +1,288 @@
+(*
+
+The following permission notice and disclaimer shall be included in all copies of these EXPRESS schemas 
+("the Schema"), and derivations of the Schema:
+
+© ISO 2010 — All rights reserved
+
+Permission is hereby granted, free of charge in perpetuity, to any person obtaining a copy of the Schema, 
+to use, copy, modify, merge and distribute free of charge, copies of the Schema for the purposes of 
+developing, implementing, installing and using software based on the Schema, and to permit persons to 
+whom the Schema is furnished to do so, subject to the following conditions:
+
+THE SCHEMA IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT 
+LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO 
+EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER 
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SCHEMA OR THE 
+USE OR OTHER DEALINGS IN THE SCHEMA.
+
+In addition, any modified copy of the Schema shall include the following notice:
+
+THIS SCHEMA HAS BEEN MODIFIED FROM THE SCHEMA DEFINED IN ISO 13584-42Ed2, AND SHOULD NOT BE INTERPRETED AS 
+COMPLYING WITH THAT STANDARD.
+
+*)
+
+SCHEMA ISO13584_IEC61360_item_class_case_of_schema;
+
+REFERENCE FROM ISO13584_IEC61360_dictionary_schema
+	(all_class_descriptions_reachable,
+	class,
+	class_BSU,
+	data_type_BSU,
+	item_class,
+	property_BSU);
+
+REFERENCE FROM ISO13584_IEC61360_class_constraint_schema
+	(constraint,
+	integrity_constraint,
+	context_restriction_constraint,
+	property_constraint,
+	domain_constraint);
+
+REFERENCE FROM ISO13584_extended_dictionary_schema
+	(document_BSU,
+	table_BSU,
+	visible_properties,
+	applicable_properties,
+	visible_types,
+	applicable_types,
+	data_type_named_type);
+
+
+ENTITY a_priori_semantic_relationship
+ABSTRACT SUPERTYPE
+SUBTYPE OF(class);
+	referenced_classes: SET [1:?] OF class_BSU;
+	referenced_properties: LIST [0:?] OF property_BSU;
+	referenced_data_types: SET [0:?] OF data_type_BSU;
+	referenced_tables: SET [0:?] OF table_BSU;
+	referenced_documents: SET [0:?] OF document_BSU;
+	referenced_constraints: SET [0:?] OF constraint_or_constraint_id;
+WHERE
+	WR1: QUERY (cons <* SELF.referenced_constraints
+		| NOT(('ISO13584_IEC61360_DICTIONARY_SCHEMA' +
+		'.ISO_29002_IRDI_TYPE') IN TYPEOF(cons))
+		AND NOT (('ISO13584_IEC61360_CLASS_CONSTRAINT_SCHEMA' 
+		+'.PROPERTY_CONSTRAINT') IN TYPEOF (cons)))
+ 		=[];
+	WR2: QUERY (cons <* SELF.referenced_constraints
+		| (('ISO13584_IEC61360_CLASS_CONSTRAINT_SCHEMA' 
+		+'.PROPERTY_CONSTRAINT') IN TYPEOF (cons))
+		AND NOT (cons\property_constraint.constrained_property
+		IN SELF.referenced_properties))
+ 		=[];
+	WR3: compute_known_referenced_property_constraints(SELF)
+		<= SELF.referenced_constraints;
+	WR4: QUERY(prop <* SELF.referenced_properties
+		| QUERY(cl <* SELF.referenced_classes
+		| visible_properties(cl, [prop])
+		OR applicable_properties(cl, [prop]))
+		= []) = [];
+	WR5: QUERY(typ <* SELF.referenced_data_types
+		| QUERY(cl <* SELF.referenced_classes
+		| visible_types(cl, [typ])
+		OR applicable_types(cl, [typ]))
+		= []) = [];
+END_ENTITY; -- a_priori_semantic_relationship
+(*
+
+
+
+*)
+ENTITY item_class_case_of
+SUBTYPE OF(item_class, a_priori_semantic_relationship);
+	is_case_of: SET [1:?] OF class_BSU;
+	imported_properties: LIST [0:?] OF property_BSU;
+	imported_types: SET [0:?]OF data_type_BSU;
+	imported_tables: SET [0:?] OF table_BSU;
+	imported_documents: SET [0:?] OF document_BSU;
+	imported_constraints: SET [0:?] OF constraint_or_constraint_id;
+DERIVE
+	SELF\a_priori_semantic_relationship.referenced_classes:
+		SET [1:?] OF class_BSU
+		:= SELF.is_case_of;
+	SELF\a_priori_semantic_relationship.referenced_properties:
+		LIST [0:?] OF property_BSU := SELF.imported_properties;
+	SELF\a_priori_semantic_relationship.referenced_data_types:
+		SET [0:?] OF data_type_BSU := SELF.imported_types;
+	SELF\a_priori_semantic_relationship.referenced_tables:
+		SET [0:?] OF table_BSU := SELF.imported_tables;
+	SELF\a_priori_semantic_relationship.referenced_documents:
+		SET [0:?] OF document_BSU := SELF.imported_documents;
+	SELF\a_priori_semantic_relationship
+		.referenced_constraints:
+		SET [0:?] OF property_constraint
+		:= SELF.imported_constraints;
+WHERE
+	WR1: superclass_of_item_is_item(SELF);
+	WR2: check_is_case_of_referenced_classes_definition(SELF);
+	WR3: QUERY(p <* SELF\class.sub_class_properties
+		| NOT((p IN SELF.described_by) 
+		OR (p IN SELF.imported_properties))) = [];
+	WR4: QUERY(p <* SELF\class.sub_class_properties
+		| (p IN SELF.imported_properties) 
+		AND (QUERY(cl<*SELF.is_case_of
+		| all_class_descriptions_reachable(cl) AND
+		(p IN compute_known_applicable_properties(cl)) AND
+		(NOT is_class_valued_property(p, cl)))<>[]))
+		=[];
+	WR5: QUERY(ccv <* SELF\class.class_constant_values
+		| (ccv.super_class_defined_property 
+		IN SELF.imported_properties) 
+		AND (QUERY(cl<*SELF.is_case_of
+		| all_class_descriptions_reachable(cl) AND
+		(ccv.super_class_defined_property
+		 IN compute_known_applicable_properties(cl)) AND
+		(QUERY (v<*class_value_assigned(
+		ccv.super_class_defined_property, cl) 
+		|v<> ccv.assigned_value) <> []))<>[]))
+		=[];		
+	WR6: QUERY(prop <* imported_properties
+		| (QUERY(cl<*SELF.is_case_of
+		| is_class_valued_property(prop, cl)) <>[])
+		AND NOT is_class_valued_property(prop, SELF.identified_by))
+		=[];
+	WR7: QUERY(ccv <* SELF\class.class_constant_values
+		| QUERY(cl<*SELF.is_case_of
+		| (class_value_assigned 
+		(ccv.super_class_defined_property, cl) <> [])
+		AND (QUERY(v <* class_value_assigned 
+		(ccv.super_class_defined_property, cl) 
+		| v <> ccv. assigned_value)<>[])) <> [])
+		=[]; 
+END_ENTITY; -- item_class_case_of
+(*
+
+
+
+
+*)
+FUNCTION compute_known_property_constraints(classes: SET OF class_BSU): 
+	SET OF property_constraint;
+
+LOCAL 
+	s: SET OF property_constraint := [];
+END_LOCAL;
+
+REPEAT nb := 1 TO SIZEOF (classes);
+IF SIZEOF(classes[nb].definition)=1
+THEN 
+	REPEAT i := 1 TO
+			SIZEOF(classes[nb].definition[1]\class.constraints);
+		IF (('ISO13584_IEC61360_CLASS_CONSTRAINT_SCHEMA' 
+		+'.PROPERTY_CONSTRAINT') 
+		IN TYPEOF
+ 			(classes[nb].definition[1]\class.constraints[i]))
+		THEN
+			s := s + classes[nb].definition[1]\class.constraints[i];
+			END_IF;
+	END_REPEAT;
+
+	IF (('ISO13584_IEC61360_ITEM_CLASS_CASE_OF_SCHEMA.'
+		+ 'A_PRIORI_SEMANTIC_RELATIONSHIP') 
+		IN TYPEOF (classes[nb].definition[1])) 
+	THEN 
+		REPEAT i := 1 TO
+			SIZEOF(classes[nb].definition[1]
+		\a_priori_semantic_relationship
+		 .referenced_constraints);
+
+				IF (('ISO13584_IEC61360_CLASS_CONSTRAINT_SCHEMA' 
+					+'.PROPERTY_CONSTRAINT') IN TYPEOF
+ 					(classes[nb].definition[1]
+					\a_priori_semantic_relationship
+		 		.referenced_constraints[i]))
+			THEN
+					s := s + classes[nb].definition[1]
+					\a_priori_semantic_relationship
+		 			.referenced_constraints [i];
+				END_IF;
+		END_REPEAT;
+		END_IF;
+
+ 	IF EXISTS(classes[nb].definition[1]\class.its_superclass) 
+	THEN 
+		s := s + compute_known_property_constraints(
+			[classes[nb].definition[1]\class.its_superclass]);
+	END_IF;
+
+END_IF;
+END_REPEAT;
+RETURN(s); 
+
+END_FUNCTION; -- compute_known_property_constraints
+(*
+
+
+*)
+FUNCTION compute_known_referenced_property_constraints(
+						ap: a_priori_semantic_relationship): 
+						SET OF property_constraint;
+
+LOCAL 
+	s: SET OF property_constraint := []; 	-- result
+	prop: SET OF property_BSU := list_to_set(ap.referenced_properties); 
+													--imported properties
+	cl: SET OF class_BSU := ap.referenced_classes;
+													--source of importation 
+	cons:SET OF property_constraint
+			:= compute_known_property_constraints(cl);
+		-- all those property_constraints existing in the various classes 
+		-- from cl that may be computed in the current exchange context. 
+END_LOCAL;
+
+	REPEAT n_cons := 1 TO SIZEOF(cons);
+		IF cons[n_cons].constrained_property IN prop
+		THEN s := s + cons[n_cons];
+		END_IF;
+	END_REPEAT;
+RETURN(s); 
+
+END_FUNCTION; -- compute_known_referenced_property_constraints
+(*
+
+*)
+FUNCTION superclass_of_item_is_item(cl: item_class): LOGICAL;
+
+IF NOT EXISTS(cl\class.its_superclass)
+THEN
+	RETURN(TRUE);
+END_IF;
+
+IF SIZEOF(cl\class.its_superclass.definition) = 0
+THEN
+	RETURN(UNKNOWN);
+END_IF;
+
+RETURN(('ISO13584_IEC61360_DICTIONARY_SCHEMA.ITEM_CLASS')
+	IN TYPEOF(cl\class.its_superclass.definition[1]));
+
+END_FUNCTION; -- superclass_of_item_is_item
+(*
+
+*)
+FUNCTION check_is_case_of_referenced_classes_definition(
+	cl: item_class_case_of): BOOLEAN;
+LOCAL 
+	class_def_ok: BOOLEAN := TRUE;
+END_LOCAL;
+
+REPEAT i := 1 TO SIZEOF(cl.is_case_of);
+	IF (SIZEOF(cl.is_case_of[i].definition) = 1)
+	THEN
+		IF (NOT('ISO13584_IEC61360_DICTIONARY_SCHEMA' + 
+			'.ITEM_CLASS'
+			IN TYPEOF(cl.is_case_of[i].definition[1])))
+		THEN
+			class_def_ok := FALSE;
+		END_IF;
+		
+	END_IF;
+END_REPEAT;
+
+RETURN(class_def_ok);
+
+END_FUNCTION; -- check_is_case_of_referenced_classes_definition
+
+END_SCHEMA; -- ISO13584_IEC61360_item_class_case_of_schema

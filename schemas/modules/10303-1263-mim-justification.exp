@@ -1,0 +1,56 @@
+(*
+ $Id: 10303-1263-mim-justification.exp,v 1.1 2006/08/07 09:42:05 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N3068 - ISO/TS 10303-1263 Justification - EXPRESS MIM
+ Supersedes ISO TC184/SC4/WG12 N2385
+*) 
+
+
+SCHEMA Justification_mim;
+
+USE FROM application_context_schema   -- ISO 10303-41
+  (application_context_element,
+   product_context); 
+
+USE FROM group_schema   -- ISO 10303-41
+  (group); 
+
+USE FROM management_resources_schema   -- ISO 10303-41
+  (group_assignment); 
+
+USE FROM product_definition_schema   -- ISO 10303-41
+  (product,
+   product_category,
+   product_related_product_category,
+   product_relationship); 
+
+
+TYPE justification_item = EXTENSIBLE GENERIC_ENTITY SELECT;
+END_TYPE; 
+
+TYPE justification_support_item = EXTENSIBLE GENERIC_ENTITY SELECT;
+END_TYPE; 
+
+ENTITY justification_assignment
+  SUBTYPE OF (group);
+END_ENTITY;
+
+ENTITY justification_group_assignment
+  SUBTYPE OF (group_assignment);
+  items : SET[1:1] OF product;
+END_ENTITY;
+
+ENTITY justification_item_group_assignment
+  SUBTYPE OF (group_assignment);
+  items : SET[1:1] OF justification_item;
+END_ENTITY;
+
+ENTITY justification_support_assignment
+  SUBTYPE OF (group);
+END_ENTITY;
+
+ENTITY justification_support_item_group_assignment
+  SUBTYPE OF (group_assignment);
+  items : SET[1:1] OF justification_support_item;
+END_ENTITY;
+
+END_SCHEMA;  -- Justification_mim

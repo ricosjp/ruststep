@@ -1,0 +1,39 @@
+(*
+  $Id: 10303-1267-mim-cdts_required_resource.exp,v 1.1 2003/07/15 09:43:14 wg12deputy Exp $
+  ISO/TC184/SC4 WG12N1467 - ISO/TS - 10303-1267 Required resource - EXPRESS MIM 
+*)
+
+SCHEMA Required_resource_mim;
+
+USE FROM action_schema
+(action_method);
+
+USE FROM Activity_method_assignment_mim
+(applied_action_method_assignment);
+
+USE FROM Classification_assignment_mim;
+
+USE FROM management_resources_schema
+(action_method_assignment,
+ action_method_role);
+
+USE FROM process_property_schema
+(action_resource_requirement,
+ action_resource_requirement_relationship,
+ characterized_action_definition,
+ characterized_resource_definition,
+ requirement_for_action_resource,
+ resource_property,
+ resource_requirement_type);
+
+USE FROM Resource_item_mim;
+
+USE FROM Value_with_unit_mim;
+
+TYPE required_resource_classification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON classification_item WITH
+(action_method,
+ action_resource_requirement,
+ action_resource_requirement_relationship);
+END_TYPE;
+
+END_SCHEMA;

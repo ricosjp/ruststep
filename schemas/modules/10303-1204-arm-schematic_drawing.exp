@@ -1,0 +1,39 @@
+(*
+ $Id: 10303-1204-arm-schematic_drawing.exp,v 1.1 2006/08/04 12:01:51 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2825 - ISO/TS 10303-1204 Schematic drawing - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG12 N2192
+*)
+
+SCHEMA Schematic_drawing_arm;
+
+USE FROM Drawing_structure_and_administration_arm;    --  ISO/TS 10303-1207
+USE FROM Schematic_element_arm;    --  ISO/TS 10303-1205
+USE FROM Foundation_representation_arm;    --  ISO/TS 10303-1006
+
+ENTITY Intra_page_connector
+  SUBTYPE OF (Page_connector);
+END_ENTITY;
+
+ENTITY Off_page_connector
+  SUBTYPE OF (Page_connector);
+END_ENTITY;
+
+ENTITY On_page_connector
+  SUBTYPE OF (Page_connector);
+END_ENTITY;
+
+ENTITY Page_connector
+  SUBTYPE OF (Schematic_element_definition);
+END_ENTITY;
+
+ENTITY Schematic_drawing
+  SUBTYPE OF (Schematic_element_definition, Drawing_sheet_revision);
+END_ENTITY;
+
+ENTITY Reference_between_page_connectors
+  SUBTYPE OF (Representation_relationship);
+  SELF\Representation_relationship.rep_1 : Page_connector;
+  SELF\Representation_relationship.rep_2 : Page_connector;
+END_ENTITY;
+
+END_SCHEMA;

@@ -1,0 +1,65 @@
+(*
+ $Id: 10303-1205-arm-schematic_element.exp,v 1.1 2006/08/04 12:01:51 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2828 - ISO/TS 10303-1205 Schematic element - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG12 N2195
+*)
+
+SCHEMA Schematic_element_arm;
+
+USE FROM Class_arm;    --  ISO/TS 10303-1070
+USE FROM Set_theory_arm;    --  ISO/TS 10303-1210
+USE FROM Draughting_annotation_arm;    --  ISO/TS 10303-1206
+USE FROM Foundation_representation_arm;    --  ISO/TS 10303-1006
+
+ENTITY Composition_of_schematic_element_occurrence;
+  part : Schematic_element_occurrence;
+  whole : Schematic_element_occurrence;
+END_ENTITY;
+
+ENTITY Connection_of_schematic_element_occurrence;
+  side_1 : Schematic_element_occurrence;
+  side_2 : Schematic_element_occurrence;
+END_ENTITY;
+
+ENTITY Definition_of_schematic_element_occurrence
+  SUBTYPE OF (Subset);
+  SELF\Subset.subset : Schematic_element_occurrence;
+  SELF\Subset.superset : Schematic_element_definition;
+END_ENTITY;
+
+ENTITY Derivation_of_schematic_element_definition;
+  base : Schematic_element_definition;
+  derived : Implicit_schematic_element_definition;
+END_ENTITY;
+
+ENTITY Explicit_schematic_element_definition
+  SUBTYPE OF (Schematic_element_definition);
+  explicit_parts : SET[1:?] OF Draughting_annotation_occurrence;
+END_ENTITY;
+
+ENTITY Implicit_schematic_element_definition
+  SUBTYPE OF (Schematic_element_definition);
+END_ENTITY;
+
+ENTITY Schematic_element
+  ABSTRACT SUPERTYPE OF (ONEOF (Schematic_element_definition,
+                                Schematic_element_occurrence))
+  SUBTYPE OF (Class, Representation);
+END_ENTITY;
+
+ENTITY Schematic_element_definition
+  ABSTRACT SUPERTYPE OF (ONEOF (Explicit_schematic_element_definition,
+                                Implicit_schematic_element_definition))
+  SUBTYPE OF (Schematic_element);
+END_ENTITY;
+
+ENTITY Schematic_element_occurrence
+  SUBTYPE OF (Schematic_element);
+END_ENTITY;
+
+ENTITY Usage_of_schematic_element_occurrence;
+  part : Schematic_element_occurrence;
+  whole : Implicit_schematic_element_definition;
+END_ENTITY;
+
+END_SCHEMA;

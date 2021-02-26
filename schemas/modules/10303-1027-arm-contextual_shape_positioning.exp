@@ -1,0 +1,35 @@
+(*
+ $Id: 10303-1027-arm-contextual_shape_positioning.exp,v 1.5 2006/08/07 07:44:42 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N1138 - ISO/TS 10303-1027 Contextual shape positioning - EXPRESS ARM
+*)
+   
+SCHEMA Contextual_shape_positioning_arm;
+
+USE FROM Elemental_geometric_shape_arm; 		
+USE FROM Foundation_representation_arm; 		
+USE FROM Shape_property_assignment_arm; 
+
+TYPE template_instance = SELECT (Mapping_based_template_instance, Transformation_based_template_instance);
+END_TYPE;
+
+ENTITY Contextual_shape_representation_inclusion;
+  contextual_shape		: Contextual_item_shape;
+  context_representation	: Geometric_model;
+  positioned_representation	: template_instance;
+END_ENTITY;
+
+ENTITY Mapping_based_template_instance
+SUBTYPE OF (Detailed_geometric_model_element);
+  replicated_model: shape_model;
+  source		: Axis_placement;
+  target		: geometric_mapping_target;
+END_ENTITY;
+
+ENTITY Transformation_based_template_instance
+SUBTYPE OF (Detailed_geometric_model_element);
+ replicated_model    		: shape_model;
+ replication_transformation	: cartesian_transformation;
+END_ENTITY;
+
+END_SCHEMA;
+

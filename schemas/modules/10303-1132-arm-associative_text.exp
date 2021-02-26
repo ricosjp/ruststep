@@ -1,0 +1,56 @@
+(*
+ISO TC184/SC4/WG12 N2693 - ISO/TS 10303-1132 Associative text - EXPRESS ARM
+*) 
+
+
+SCHEMA Associative_text_arm;
+
+USE FROM Appearance_assignment_arm;    -- ISO/TS 10303-1001
+
+USE FROM Construction_geometry_arm;    -- ISO/CD-TS 10303-1131
+
+USE FROM Elemental_geometric_shape_arm;    -- ISO/TS 10303-1004
+
+USE FROM Shape_property_assignment_arm;    -- ISO/TS 10303-1032
+
+USE FROM Text_appearance_arm;    -- ISO/TS 10303-1136
+
+
+TYPE text_or_composite_text = SELECT
+   (Composite_presentable_text, 
+    Presentable_text_item);
+END_TYPE; 
+
+ENTITY Annotation_curve
+  ABSTRACT SUPERTYPE 
+  SUBTYPE OF (Annotation_element);
+  annotation_curve_type : OPTIONAL STRING;
+END_ENTITY;
+
+ENTITY Annotation_element
+  ABSTRACT SUPERTYPE 
+  SUBTYPE OF (Styled_element);
+END_ENTITY;
+
+ENTITY Item_text_association;
+  target_geometry : Detailed_geometric_model_element;
+  target_item : Shape_element;
+  text_occurrence : Text;
+END_ENTITY;
+
+ENTITY Leader
+  SUBTYPE OF (Annotation_curve);
+  curve : Curve;
+END_ENTITY;
+
+ENTITY Text
+  SUBTYPE OF (Annotation_element);
+  text : text_or_composite_text;
+END_ENTITY;
+
+ENTITY Text_with_leader
+  SUBTYPE OF (Text);
+  leader : Leader;
+END_ENTITY;
+
+END_SCHEMA;  -- Associative_text_arm

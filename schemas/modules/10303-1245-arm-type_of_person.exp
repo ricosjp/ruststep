@@ -1,0 +1,68 @@
+(*
+ $Id: 10303-1245-arm-type_of_person.exp,v 1.2 2006/08/07 07:44:44 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N3184 - ISO/TS 10303-1245 Type of person - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG12 N2450
+*) 
+
+
+SCHEMA Type_of_person_arm;
+
+USE FROM Classification_assignment_arm;    -- ISO/TS 10303-1114
+
+USE FROM Experience_arm;    -- ISO/TS 10303-1243
+
+USE FROM Property_assignment_arm;    -- ISO/TS 10303-1030
+
+USE FROM Qualifications_arm;    -- ISO/TS 10303-1244
+
+
+TYPE defined_attributes = EXTENSIBLE GENERIC_ENTITY SELECT
+   (Experience_type, 
+    Qualification_type);
+END_TYPE; 
+
+TYPE type_of_person_classified_select = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON classification_item WITH 
+   (Type_of_person, 
+    Type_of_person_assignment, 
+    Type_of_person_definition, 
+    Type_of_person_definition_relationship, 
+    Type_of_person_definition_required_attributes_relationship);
+END_TYPE; 
+
+TYPE type_of_person_item_select = EXTENSIBLE GENERIC_ENTITY SELECT;
+END_TYPE; 
+
+TYPE type_of_person_property_assignment_select = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON property_assignment_select WITH 
+   (Type_of_person_definition);
+END_TYPE; 
+
+ENTITY Type_of_person;
+  name : STRING;
+  description : OPTIONAL STRING;
+  has : SET[0:?] OF Type_of_person_definition;
+END_ENTITY;
+
+ENTITY Type_of_person_assignment;
+  assigned_type_of_person : Type_of_person;
+  items : SET[1:?] OF type_of_person_item_select;
+  role : STRING;
+END_ENTITY;
+
+ENTITY Type_of_person_definition;
+  name : STRING;
+  description : OPTIONAL STRING;
+END_ENTITY;
+
+ENTITY Type_of_person_definition_relationship;
+  name : STRING;
+  description : OPTIONAL STRING;
+  relating : Type_of_person_definition;
+  related : Type_of_person_definition;
+END_ENTITY;
+
+ENTITY Type_of_person_definition_required_attributes_relationship;
+  assigned_required_attributes : Type_of_person_definition;
+  required_attributes : SET[0:?] OF defined_attributes;
+END_ENTITY;
+
+END_SCHEMA;  -- Type_of_person_arm

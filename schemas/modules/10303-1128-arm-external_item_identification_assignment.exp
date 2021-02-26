@@ -1,0 +1,24 @@
+(*
+ $Id: 10303-1128-arm-external_item_identification_assignment.exp,v 1.5 2006/08/07 07:44:44 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N1207 - ISO/TS 10303-1128 External item identification assignment - EXPRESS ARM
+*)
+
+ 
+SCHEMA External_item_identification_assignment_arm;
+
+TYPE external_identification_item = EXTENSIBLE GENERIC_ENTITY SELECT;
+END_TYPE;
+
+ENTITY External_item_identification
+SUBTYPE OF (External_source_identification);
+  external_id : STRING;
+END_ENTITY;
+
+ENTITY External_source_identification;
+  source_id	  : STRING;
+  source_type : STRING;
+  item 	  : external_identification_item;
+  description : OPTIONAL STRING;
+END_ENTITY;
+
+END_SCHEMA;

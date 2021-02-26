@@ -1,0 +1,125 @@
+(*
+ $Id: 10303-1282-arm-resource_management_characterized.exp,v 1.2 2006/08/07 07:44:46 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N3154 - ISO/TS 10303-1282 Resource management characterized - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG12 N2435
+*) 
+
+
+SCHEMA Resource_management_characterized_arm;
+
+USE FROM Approval_arm;    -- ISO/TS 10303-1012
+
+USE FROM Attribute_classification_arm;    -- ISO/TS 10303-1246
+
+USE FROM Condition_arm;    -- ISO/TS 10303-1253
+
+USE FROM Contract_arm;    -- ISO/TS 10303-1062
+
+USE FROM Date_time_assignment_arm;    -- ISO/TS 10303-1014
+
+USE FROM Document_assignment_arm;    -- ISO/TS 10303-1122
+
+USE FROM Identification_assignment_arm;    -- ISO/TS 10303-1021
+
+USE FROM Justification_arm;    -- ISO/TS 10303-1263
+
+USE FROM Multi_linguism_arm;    -- ISO/TS 10303-1105
+
+USE FROM Person_organization_assignment_arm;    -- ISO/TS 10303-1013
+
+USE FROM Process_property_assignment_arm;    -- ISO/TS 10303-1040
+
+USE FROM Required_resource_characterized_arm;    -- ISO/TS 10303-1280
+
+USE FROM Resource_management_arm;    -- ISO/TS 10303-1266
+
+USE FROM Resource_property_assignment_arm;    -- ISO/TS 10303-1273
+
+USE FROM State_definition_arm;    -- ISO/TS 10303-1255
+
+USE FROM State_observed_arm;    -- ISO/TS 10303-1256
+
+
+TYPE managed_resource_approval_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON approval_item WITH 
+   (Managed_resource, 
+    Managed_resource_relationship, 
+    Resource_event);
+END_TYPE; 
+
+TYPE resource_management_characterized_activity_definition = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON characterized_activity_definition WITH 
+   (Resource_event);
+END_TYPE; 
+
+TYPE resource_management_characterized_resource_select = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON characterized_resource_select WITH 
+   (Managed_resource);
+END_TYPE; 
+
+TYPE resource_management_characterized_state_definition_of_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON state_definition_of_item WITH 
+   (Resource_event, 
+    Resource_event_correspondence_relationship, 
+    Resource_event_relationship);
+END_TYPE; 
+
+TYPE resource_management_characterized_state_of_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON state_of_item WITH 
+   (Resource_event, 
+    Resource_event_correspondence_relationship, 
+    Resource_event_relationship);
+END_TYPE; 
+
+TYPE resource_management_classified_attribute_select = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON classified_attribute_select WITH 
+   (Managed_resource, 
+    Managed_resource_relationship, 
+    Resource_event, 
+    Resource_event_correspondence_relationship, 
+    Resource_event_relationship);
+END_TYPE; 
+
+TYPE resource_management_condition_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON condition_item WITH 
+   (Managed_resource, 
+    Managed_resource_relationship, 
+    Resource_event, 
+    Resource_event_relationship);
+END_TYPE; 
+
+TYPE resource_management_contract_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON contract_item WITH 
+   (Managed_resource, 
+    Resource_event);
+END_TYPE; 
+
+TYPE resource_management_date_or_date_time_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON date_or_date_time_item WITH 
+   (Managed_resource, 
+    Managed_resource_relationship, 
+    Resource_event);
+END_TYPE; 
+
+TYPE resource_management_documented_element_select = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON documented_element_select WITH 
+   (Resource_event);
+END_TYPE; 
+
+TYPE resource_management_identification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON identification_item WITH 
+   (Managed_resource, 
+    Resource_event);
+END_TYPE; 
+
+TYPE resource_management_justification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON justification_item WITH 
+   (Managed_resource_relationship, 
+    Resource_event);
+END_TYPE; 
+
+TYPE resource_management_organization_or_person_in_organization_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON organization_or_person_in_organization_item WITH 
+   (Managed_resource, 
+    Managed_resource_relationship, 
+    Resource_event);
+END_TYPE; 
+
+TYPE resource_management_string_select = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON string_select WITH 
+   (Managed_resource, 
+    Managed_resource_relationship, 
+    Resource_event, 
+    Resource_event_correspondence_relationship, 
+    Resource_event_relationship);
+END_TYPE; 
+
+END_SCHEMA;  -- Resource_management_characterized_arm
+
+

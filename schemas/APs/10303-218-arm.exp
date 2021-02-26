@@ -1,0 +1,2973 @@
+(* 
+ARM long form for ISO/IS 10303-218
+Len Slovensky
+2003-06-20
+ISO TC184/SC4/WG3 N1349
+*)
+SCHEMA AP218_ARM;
+
+  CONSTANT
+    SEP : STRING := '.';
+    SEP_CV : STRING := '-';
+    SEP_ID : STRING := '.';
+    SUPPLIER_CODE_LEN : INTEGER := 18;
+    CLASS_CODE_LEN : INTEGER := 14;
+    VERSION_LEN : INTEGER := 3;
+  END_CONSTANT;
+
+  TYPE axis2_placement_2d = STRING;
+  END_TYPE;
+
+  TYPE axis2_placement_3d = STRING;
+  END_TYPE;
+
+  TYPE bounded_curve = STRING;
+  END_TYPE;
+
+  TYPE cartesian_point = STRING;
+  END_TYPE;
+
+  TYPE curve = STRING;
+  END_TYPE;
+
+  TYPE date_and_time = STRING;
+  END_TYPE;
+
+  TYPE direction = STRING;
+  END_TYPE;
+
+  TYPE edge = STRING;
+  END_TYPE;
+
+  TYPE edge_based_wireframe_model = STRING;
+  END_TYPE;
+
+  TYPE line = STRING;
+  END_TYPE;
+
+  TYPE organization = STRING;
+  END_TYPE;
+
+  TYPE person_and_organization = STRING;
+  END_TYPE;
+
+  TYPE plane = STRING;
+  END_TYPE;
+
+  TYPE point = STRING;
+  END_TYPE;
+
+  TYPE point_on_curve = STRING;
+  END_TYPE;
+
+  TYPE representation = STRING;
+  END_TYPE;
+
+  TYPE shape_representation = SELECT
+    (non_manifold_surface_shape,
+     edge_based_wireframe_shape,
+     geometrically_bounded_wireframe_shape,
+     advanced_brep_shape);
+  END_TYPE;
+
+  TYPE surface = STRING;
+  END_TYPE;
+
+  TYPE vector = STRING;
+  END_TYPE;
+
+  TYPE approval_status = ENUMERATION OF
+    (APPROVED,
+     REJECTED,
+     UNAPPROVED,
+     USER_DEFINED);
+  END_TYPE;
+
+  TYPE ship_identifier = SELECT
+    (imo_number,
+     pennant_hull_number);
+  END_TYPE;
+
+  TYPE imo_number = text;
+  END_TYPE;
+
+  TYPE text = STRING;
+  END_TYPE;
+
+  TYPE pennant_hull_number = text;
+  END_TYPE;
+
+  TYPE shipyard_role = ENUMERATION OF
+    (PRIME,
+     PRIME_BUILD,
+     PRIME_DESIGN,
+     PRIME_REPAIR,
+     SUBCONTRACTOR);
+  END_TYPE;
+
+  TYPE heavy_cargo = ENUMERATION OF
+    (HC,
+     HC_E,
+     HC_EA);
+  END_TYPE;
+
+  TYPE any_author = SELECT
+    (organization,
+     person_and_organization);
+  END_TYPE;
+
+  TYPE any_address = SELECT
+    (external_storage,
+     universal_resource_locator);
+  END_TYPE;
+
+  TYPE label = STRING;
+  END_TYPE;
+
+  TYPE global_co_ordinate_system_orientation = ENUMERATION OF
+    (AFT_POINTING,
+     FORWARD_POINTING);
+  END_TYPE;
+
+  TYPE code_type = identifier;
+    WHERE
+      WR1 : NOT (SELF LIKE '*.*');
+      WR2 : NOT (SELF LIKE '*-*');
+      WR3 : NOT (SELF LIKE '* *');
+  END_TYPE;
+
+  TYPE identifier = STRING;
+  END_TYPE;
+
+  TYPE supplier_code_type = code_type;
+    WHERE
+      WR1 : LENGTH(SELF) <= SUPPLIER_CODE_LEN;
+  END_TYPE;
+
+  TYPE class_code_type = code_type;
+    WHERE
+      WR1 : LENGTH(SELF) <= CLASS_CODE_LEN;
+  END_TYPE;
+
+  TYPE version_type = code_type;
+    WHERE
+      WR1 : LENGTH(SELF) = version_len;
+      WR2 : SELF LIKE '###';
+  END_TYPE;
+
+  TYPE location_reference = SELECT
+    (spacing_position,
+     length_measure);
+  END_TYPE;
+
+  TYPE length_measure = REAL;
+  END_TYPE;
+
+  TYPE ship_seam = SELECT
+    (curve,
+     seam_curve_relationship);
+  END_TYPE;
+
+  TYPE positive_length_measure = length_measure;
+    WHERE
+      WR1 : SELF > 0;
+  END_TYPE;
+
+  TYPE plane_angle_measure = REAL;
+  END_TYPE;
+
+  TYPE structure_class = ENUMERATION OF
+    (GENERAL_STRUCTURAL_SYSTEM_CLASS,
+     SECTION_CLASS,
+     PANEL_SYSTEM_CLASS,
+     CORRUGATED_STRUCTURE_CLASS,
+     BLOCK_CLASS,
+     PLATE_STRAKE_CLASS,
+     BUILT_PROFILE_CLASS,
+     USER_DEFINED_CLASS);
+  END_TYPE;
+
+  TYPE ratio_measure = REAL;
+  END_TYPE;
+
+  TYPE area_measure = REAL;
+  END_TYPE;
+
+  TYPE panel_system_boundary = SELECT
+    (panel_system_curve_boundary,
+     panel_system_plane_boundary,
+     structural_system_adjacency_relationship,
+     panel_system_boundary_relationship);
+  END_TYPE;
+
+  TYPE structural_system_moulded_surface = SELECT
+    (surface,
+     external_instance_reference,
+     non_manifold_surface_shape);
+  END_TYPE;
+
+  TYPE corrugated_structure_boundary = SELECT
+    (structural_system_adjacency_relationship,
+     corrugated_structure_boundary_relationship);
+  END_TYPE;
+
+  TYPE tightness_type = ENUMERATION OF
+    (UNSPECIFIED,
+     NON_TIGHT,
+     AIR_TIGHT,
+     FUME_TIGHT,
+     GAS_TIGHT,
+     OIL_TIGHT,
+     WATER_TIGHT,
+     WEATHER_TIGHT,
+     USER_DEFINED);
+  END_TYPE;
+
+  TYPE intermittent_weld_rule = ENUMERATION OF
+    (NONE,
+     FIXED_RULE,
+     MEMBER_DEPTH,
+     PERCENT_LENGTH);
+  END_TYPE;
+
+  TYPE alignment = ENUMERATION OF
+    (STAGGERED,
+     CHAINED);
+  END_TYPE;
+
+  TYPE weld_sidedness = ENUMERATION OF
+    (ONE_SIDE,
+     BOTH_SIDES);
+  END_TYPE;
+
+  TYPE fillet_shape = ENUMERATION OF
+    (FILLET_V,
+     FILLET_J,
+     USED_DEFINED);
+  END_TYPE;
+
+  TYPE bevel_shape = ENUMERATION OF
+    (FLARE_SINGLE_V,
+     FLARE_DOUBLE_V,
+     FLARE_SINGLE_BEVEL,
+     FLARE_DOUBLE_BEVEL,
+     SINGLE_BEVEL,
+     DOUBLE_BEVEL,
+     SINGLE_V,
+     DOUBLE_V,
+     SINGLE_J,
+     DOUBLE_J,
+     SINGLE_U,
+     DOUBLE_U,
+     USER_DEFINED);
+  END_TYPE;
+
+  TYPE taper_type = ENUMERATION OF
+    (NON_TAPER,
+     ONE_SIDE_TAPER,
+     BOTH_SIDES_TAPER);
+  END_TYPE;
+
+  TYPE butt_shape = ENUMERATION OF
+    (SQUARE,
+     SCARF,
+     USER_DEFINED);
+  END_TYPE;
+
+  TYPE backing_type = ENUMERATION OF
+    (NONE,
+     PERMANENT,
+     COPPER_BACKING_BAR,
+     CERAMIC_TAPE,
+     FLARE_BACKING_RING,
+     PERMANENT_BACKING_RING,
+     REMOVABLE_BACKING_RING,
+     USER_DEFINED);
+  END_TYPE;
+
+  TYPE spot_seam_weld_context = ENUMERATION OF
+    (SPOT_WELD,
+     SEAM_WELD);
+  END_TYPE;
+
+  TYPE structural_part_joint_type = ENUMERATION OF
+    (FIXED_JOINT,
+     MOVABLE_JOINT);
+  END_TYPE;
+
+  TYPE welded_joint_configuration = ENUMERATION OF
+    (BUTT,
+     TEE,
+     CORNER,
+     LAP,
+     EDGE_JOINT,
+     CRUCIFORM,
+     STUD,
+     SURFACING,
+     FLARE_GROOVE,
+     USER_DEFINED);
+  END_TYPE;
+
+  TYPE weld_joint_penetration = ENUMERATION OF
+    (FULL,
+     PARTIAL);
+  END_TYPE;
+
+  TYPE joint_tightness = ENUMERATION OF
+    (NON_TIGHT,
+     AIR_TIGHT,
+     FUME_TIGHT,
+     OIL_TIGHT,
+     WEATHER_TIGHT,
+     WATER_TIGHT,
+     UNDEFINED);
+  END_TYPE;
+
+  TYPE structural_part_joint_form = ENUMERATION OF
+    (FACE_FACE,
+     FACE_EDGE,
+     EDGE_EDGE);
+  END_TYPE;
+
+  TYPE weld_surface_shape = ENUMERATION OF
+    (FLUSH,
+     CONVEX,
+     CONCAVE,
+     NONE);
+  END_TYPE;
+
+  TYPE shrinkage_margin = length_measure;
+  END_TYPE;
+
+  TYPE mass_measure = REAL;
+  END_TYPE;
+
+  TYPE weight_per_length_measure = REAL;
+  END_TYPE;
+
+  TYPE assembly_class = SELECT
+    (label);
+  END_TYPE;
+
+  TYPE document_referent = SELECT
+    (document,
+     document_portion);
+  END_TYPE;
+
+  TYPE welding_position = ENUMERATION OF
+    (FLAT,
+     HORIZONTAL,
+     VERTICAL,
+     OVERHEAD,
+     OTHER);
+  END_TYPE;
+
+  TYPE welding_process = ENUMERATION OF
+    (SMAW,
+     SAW,
+     GMAW,
+     FCAW,
+     USER_DEFINED);
+  END_TYPE;
+
+  TYPE welding_automation_degree = ENUMERATION OF
+    (MANUAL,
+     SELF_RUN,
+     AUTOMATIC,
+     ROBOTIC,
+     MECHANIZED,
+     USER_DEFINED);
+  END_TYPE;
+
+  TYPE deposition_sequence = ENUMERATION OF
+    (PROGRESSIVE,
+     BACKSTEP,
+     WANDERING,
+     USER_DEFINED);
+  END_TYPE;
+
+  TYPE non_destructive_testing = ENUMERATION OF
+    (VISUAL_EXAMINATION,
+     DYE_PENETRANT,
+     MAGNETIC_PARTICLE,
+     RADIOGRAPHIC,
+     ULTRASONIC);
+  END_TYPE;
+
+  TYPE weld_qualification_status = ENUMERATION OF
+    (PRE_QUALIFIED,
+     REJECTED,
+     PENDING,
+     OTHER);
+  END_TYPE;
+
+  TYPE welding_environment = ENUMERATION OF
+    (FIELD,
+     SHOP);
+  END_TYPE;
+
+  TYPE plate_boundary = SELECT
+    (panel_system_boundary,
+     plate_boundary_relationship,
+     bounded_curve);
+  END_TYPE;
+
+  TYPE any_surface = SELECT
+    (surface,
+     external_instance_reference,
+     non_manifold_surface_shape);
+  END_TYPE;
+
+  TYPE profile_trace_line = SELECT
+    (profile_curve_trace_line,
+     profile_trace_line_relationship,
+     external_instance_reference);
+  END_TYPE;
+
+  TYPE profile_boundary = SELECT
+    (line,
+     profile_boundary_relationship,
+     point_on_curve,
+     cartesian_point);
+  END_TYPE;
+
+  TYPE corrugated_part_boundary = SELECT
+    (surface,
+     corrugated_structure_boundary);
+  END_TYPE;
+
+  TYPE section_modulus_measure = REAL;
+  END_TYPE;
+
+  TYPE stress_measure = REAL;
+  END_TYPE;
+
+  TYPE moment_measure = REAL;
+  END_TYPE;
+
+  TYPE inertia_moment_measure = REAL;
+  END_TYPE;
+
+  TYPE force_measure = REAL;
+  END_TYPE;
+
+  TYPE unit = SELECT
+    (named_unit,
+     derived_unit);
+  END_TYPE;
+
+  TYPE single_or_multiple_hulls = ENUMERATION OF
+    (DESIGN_FOR_SINGLE_HULL,
+     DESIGN_FOR_MULTIPLE_HULLS);
+  END_TYPE;
+
+  TYPE co_ordinate_system = SELECT
+    (local_co_ordinate_system,
+     global_axis_placement);
+  END_TYPE;
+
+  TYPE speed_measure = REAL;
+  END_TYPE;
+
+  TYPE freeboard_type = ENUMERATION OF
+    (A,
+     A_PLUS,
+     B,
+     B_PLUS,
+     B_60,
+     B_100,
+     OTHER);
+  END_TYPE;
+
+  TYPE volume_measure = REAL;
+  END_TYPE;
+
+  TYPE load_line_convention_type = ENUMERATION OF
+    (ILLC_1930,
+     ILLC_1966,
+     OTHER);
+  END_TYPE;
+
+  TYPE dilatation_measure = REAL;
+  END_TYPE;
+
+  TYPE percentage = REAL;
+    WHERE
+      WR1 : (0.0 <= SELF) AND (SELF <= 100.0);
+  END_TYPE;
+
+  TYPE density_measure = REAL;
+  END_TYPE;
+
+  TYPE edge_cutout_functionality = ENUMERATION OF
+    (ACCESS_HOLE,
+     AIR_ESCAPE,
+     AIR_LIQUID_ESCAPE,
+     LIQUID_ESCAPE,
+     PENETRATION,
+     USER_DEFINED);
+  END_TYPE;
+
+  TYPE edge_feature_functionality = ENUMERATION OF
+    (BEVEL,
+     CHAMFER,
+     USER_DEFINED);
+  END_TYPE;
+
+  TYPE interior_cutout_functionality = ENUMERATION OF
+    (ACCESS_HOLE,
+     AIR_ESCAPE,
+     AIR_LIQUID_ESCAPE,
+     FOOTHOLD,
+     LIGHTENING_HOLE,
+     LIQUID_ESCAPE,
+     PENETRATION,
+     USER_DEFINED);
+  END_TYPE;
+
+  TYPE carrier_ship_type = ENUMERATION OF
+    (BARGE,
+     BARGE_FOR_DECK_LOADING,
+     BARGE_FOR_LIQUEFIED_GAS,
+     BARGE_FOR_OIL,
+     BARGE_PONTOON,
+     BULK_CARRIER,
+     CAR_CARRIER,
+     CAR_FERRY,
+     CARGO_SHIP_CARRYING_PASSENGERS,
+     CHEMICAL_TANKER,
+     CHEMICAL_TANKER_TYPE_1,
+     CONTAINER_CARRIER,
+     CRUISE_LINER,
+     DRY_CARGO_VESSEL,
+     FERRY,
+     GAS_CARRIER,
+     GENERAL_CARGO_CARRIER,
+     HIGHSPEEDCRAFT_CARGO,
+     HIGHSPEEDCRAFT_PASSENGER,
+     HYDROFOIL,
+     LIQUEFIED_GAS_TANKER,
+     LNG_CARRIER,
+     LPG_CARRIER,
+     OIL_TANKER,
+     ORE_CARRIER,
+     PASSENGER_VESSEL,
+     PRODUCT_TANKER,
+     REFRIGERATED_CARGO_CARRYING_SHIP,
+     RORO_VESSEL,
+     TANKER_FOR_REFRIGERATED_FRUIT_JUICE,
+     USER_DEFINED);
+  END_TYPE;
+
+  TYPE working_ship_type = ENUMERATION OF
+    (CRANE_VESSEL,
+     DREDGER,
+     DRILLING_VESSEL,
+     FIRE_FIGHTER,
+     FISHING_VESSEL,
+     FLOATING_DOCK,
+     FLOATING_HOTEL,
+     FPGO,
+     FPSO,
+     ICE_BREAKER,
+     OFFSHORE_SUPPLY_VESSEL,
+     OIL_PRODUCTION_AND_STORAGE_VESSEL,
+     OIL_PRODUCTION_VESSEL,
+     OIL_STORAGE_VESSEL,
+     PILOT_BOAT,
+     PIPE_LAYING_VESSEL,
+     PUSHER,
+     REEFER,
+     SEALER,
+     SHUTTLE_TANKER,
+     STERN_TRAWLER,
+     SUPPLY_VESSEL,
+     TUG,
+     USER_DEFINED,
+     WELL_STIMULATION_VESSEL);
+  END_TYPE;
+
+  TYPE research_ship_type = ENUMERATION OF
+    (USER_DEFINED);
+  END_TYPE;
+
+  TYPE navy_ship_type = ENUMERATION OF
+    (AIRCRAFT_CARRIER,
+     AUXILIARY_OILER,
+     CORVETTE,
+     CRUISER,
+     DESTROYER,
+     FLEET_AUXILIARY_VESSEL,
+     FRIGATE,
+     LANDING_PLATFORM_DOCK,
+     LANDING_PLATFORM_HELICOPTER,
+     MINE_WARFARE_SHIP,
+     PATROL_FORCE_VESSEL,
+     SERVICE_CRAFT,
+     SUBMARINE,
+     USER_DEFINED);
+  END_TYPE;
+
+  TYPE structural_part_functionality = ENUMERATION OF
+    (STANDARD_PLATE,
+     DOUBLING_PLATE,
+     SHEDDING_PLATE,
+     CLIP,
+     WATERTIGHT_CLIP,
+     LUG,
+     BRACKET,
+     FACE_PLATE,
+     STIFFENER,
+     LONGITUDINAL_STIFFENER,
+     TRANSVERSAL_STIFFENER,
+     CARLING,
+     BEAM,
+     DECK_BEAM,
+     PILLAR,
+     HOLD_PILLAR,
+     FLANGE,
+     WEB,
+     FRAME,
+     BILGE_PLATE,
+     USER_DEFINED);
+  END_TYPE;
+
+  TYPE structural_system_functionality = ENUMERATION OF
+    (SHIP_STRUCTURE,
+     DECK,
+     STRENGTH_DECK,
+     ACCOMODATION_DECK,
+     MAIN_DECK,
+     WEATHER_DECK,
+     NAVIGATION_DECK,
+     PLATFORM_DECK,
+     DECK_IN_SUPERSTRUCTURE,
+     BOTTOM,
+     INNER_BOTTOM,
+     DOUBLE_BOTTOM,
+     OUTER_SHELL,
+     INNER_SHELL,
+     DOUBLE_SHELL,
+     BULKHEAD,
+     LONGITUDINAL_BULKHEAD,
+     TRANSVERSAL_BULKHEAD,
+     STRENGTH_BULKHEAD,
+     WASH_BULKHEAD,
+     COLLISION_BULKHEAD,
+     HOLD_BULKHEAD,
+     TANK_BULKHEAD,
+     WING_BULKHEAD,
+     SUPERSTRUCTURE_FRONT_BULKHEAD,
+     SUPERSTRUCTURE_SIDE_BULKHEAD,
+     SUPERSTRUCTURE_AFT_BULKHEAD,
+     STOOL,
+     WALL,
+     PLATING,
+     TRANSOM,
+     DECK_HOUSE,
+     SUPERSTRUCTURE,
+     MID_SHIP,
+     FORE_SHIP,
+     AFT_SHIP,
+     ENGINE_AREA,
+     CARGO_AREA,
+     ACCOMODATION_AREA,
+     MACHINERY_CASING,
+     SHEER_STRAKE,
+     TANK_BOTTOM,
+     TANK_SIDE,
+     TANK_TOP,
+     HATCH_COVER,
+     KEEL,
+     DUCT_KEEL,
+     HATCHWAY_COAMING,
+     HATCHWAY_SIDECOAMING,
+     HATCHWAY_ENDCOAMING,
+     UPPER_BOOM,
+     LOWER_BOOM,
+     FRAME,
+     WEB_FRAME,
+     VERTICAL_WEB_FRAME,
+     TRANSVERSE_WEB_FRAME,
+     FLOOR,
+     TRANSVERSE_FLOOR,
+     CROSS_TIE,
+     STRINGER,
+     GIRDER,
+     LONGITUDINAL_GIRDER,
+     DECK_BEAM,
+     ENGINE_FOUNDATION,
+     BRACKET,
+     HOPPER,
+     STERN_FRAME,
+     USER_DEFINED);
+  END_TYPE;
+
+  TYPE count_measure = NUMBER;
+  END_TYPE;
+
+  TYPE object_description = SELECT
+    (document_reference,
+     text);
+  END_TYPE;
+
+  TYPE item_for_assembly = SELECT
+    (assembly,
+     part);
+  END_TYPE;
+
+  ENTITY non_manifold_surface_shape;
+  END_ENTITY;
+
+  ENTITY edge_based_wireframe_shape;
+  END_ENTITY;
+
+  ENTITY geometrically_bounded_wireframe_shape;
+  END_ENTITY;
+
+  ENTITY advanced_brep_shape;
+  END_ENTITY;
+
+  ENTITY external_storage;
+      location : label;
+  END_ENTITY;
+
+  ENTITY universal_resource_locator;
+      location : label;
+  END_ENTITY;
+
+  ENTITY spacing_position
+    ABSTRACT SUPERTYPE OF (ONEOF(longitudinal_position, transversal_position, vertical_position) ANDOR spacing_position_with_offset);
+      position_number : REAL;
+      name            : OPTIONAL text;
+      position        : length_measure;
+    WHERE
+      WR1 : ('AP218_SHORT.Longitudinal_position' IN TYPEOF(self)) OR
+            ('AP218_SHORT.Vertical_position' IN TYPEOF(self)) OR
+            ('AP218_SHORT.Transversal_position' IN TYPEOF(self));
+  END_ENTITY;
+
+  ENTITY longitudinal_position
+    SUBTYPE OF(spacing_position);
+  END_ENTITY;
+
+  ENTITY transversal_position
+    SUBTYPE OF(spacing_position);
+  END_ENTITY;
+
+  ENTITY vertical_position
+    SUBTYPE OF(spacing_position);
+  END_ENTITY;
+
+  ENTITY spacing_position_with_offset
+    SUBTYPE OF(spacing_position);
+      offset                         : length_measure;
+      relating_spacing_position      : spacing_position;
+    DERIVE
+      SELF\spacing_position.position : length_measure := offset + 
+                                       relating_spacing_position.position;
+    WHERE
+      WR1 : NOT (TYPEOF (relating_spacing_position)=['SPACING_POSITION', 
+            'SPACING_POSITION_WITH_OFFSET']);
+  END_ENTITY;
+
+  ENTITY seam_curve_relationship
+    SUBTYPE OF(position_feature_relationship);
+      displacement   : OPTIONAL length_measure;
+      boundary_index : OPTIONAL INTEGER;
+    WHERE
+      WR1 : SIZEOF(['STRUCTURAL_SYSTEMS_EXPORT.PANEL_SYSTEM',
+            'AP218_SHORT.SEAM'] *
+            
+            TYPEOF (SELF\Item_relationship.item_2)) = 1;
+      WR2 : (('STRUCTURAL_SYSTEMS_EXPORT.PANEL_SYSTEM' IN
+            TYPEOF(SELF\Item_relationship.item_2)) AND
+            EXISTS(boundary_index)) XOR
+            NOT(EXISTS(boundary_index));
+  END_ENTITY;
+
+  ENTITY position_feature_relationship
+    ABSTRACT SUPERTYPE
+    SUBTYPE OF(structural_feature_relationship);
+      SELF\structural_feature_relationship.item_1 : position_feature;
+  END_ENTITY;
+
+  ENTITY structural_feature_relationship
+    ABSTRACT SUPERTYPE OF (ONEOF(position_feature_relationship, structural_cutout_boundary_relationship, structural_added_material_boundary_relationship))
+    SUBTYPE OF(feature_relationship);
+      SELF\feature_relationship.item_1 : structural_feature;
+  END_ENTITY;
+
+  ENTITY feature_relationship
+    ABSTRACT SUPERTYPE
+    SUBTYPE OF(item_relationship);
+      SELF\item_relationship.item_1 : feature;
+  END_ENTITY;
+
+  ENTITY item_relationship
+    ABSTRACT SUPERTYPE OF (ONEOF(assembly_relationship, feature_relationship, system_relationship, structural_part_penetration_relationship, structural_system_penetration_relationship, structural_part_joint, part_relationship))
+    SUBTYPE OF(definable_object, versionable_object);
+      item_1          : OPTIONAL item;
+      external_item_1 : OPTIONAL external_instance_reference;
+      item_2          : OPTIONAL item;
+      external_item_2 : OPTIONAL external_instance_reference;
+    WHERE
+      WR1 : external_item_1.entity_type IN TYPEOF(item_1);
+      WR2 : external_item_2.entity_type IN TYPEOF(item_2);
+      WR3 : EXISTS(item_1) XOR EXISTS(external_item_1);
+      WR4 : EXISTS(item_2) XOR EXISTS(external_item_2);
+  END_ENTITY;
+
+  ENTITY definable_object
+    ABSTRACT SUPERTYPE OF (ONEOF(item, item_relationship, item_structure));
+      id : global_id;
+    UNIQUE
+      ID_IS_UNIQUE : id;
+  END_ENTITY;
+
+  ENTITY item
+    ABSTRACT SUPERTYPE OF (ONEOF(change, feature, ship, structural_part_connection_implementation, part, system, assembly, hull_cross_section))
+    SUBTYPE OF(definable_object);
+      name          : label;
+      documentation : SET OF external_reference;
+      description   : OPTIONAL text;
+      ship_context  : OPTIONAL ship;
+    WHERE
+      WR1 : ('SHIPS_EXPORT.SHIP' IN TYPEOF(SELF)) XOR
+            EXISTS(ship_context);
+  END_ENTITY;
+
+  ENTITY change
+    SUBTYPE OF(item);
+      the_class : label;
+  END_ENTITY;
+
+  ENTITY feature
+    ABSTRACT SUPERTYPE OF (ONEOF(composite_feature, structural_feature))
+    SUBTYPE OF(item);
+  END_ENTITY;
+
+  ENTITY composite_feature
+    SUBTYPE OF(feature);
+      composed_of : SET [2:?] OF feature;
+  END_ENTITY;
+
+  ENTITY structural_feature
+    ABSTRACT SUPERTYPE OF (ONEOF(position_feature, structural_cutout, structural_manufacturing_feature))
+    SUBTYPE OF(feature);
+      parent : item;
+  END_ENTITY;
+
+  ENTITY position_feature
+    ABSTRACT SUPERTYPE
+    SUBTYPE OF(structural_feature);
+  END_ENTITY;
+
+  ENTITY seam
+    SUBTYPE OF(position_feature);
+      SELF\structural_feature.parent : panel_system;
+  END_ENTITY;
+
+  ENTITY panel_system
+    SUBTYPE OF(structural_system);
+    DERIVE
+      SELF\structural_system.the_class : structure_class := Structure_class.PANEL_SYSTEM_CLASS;
+  END_ENTITY;
+
+  ENTITY structural_system
+    SUPERTYPE OF (ONEOF(panel_system, corrugated_structure, plate_strake, built_profile))
+    SUBTYPE OF(system);
+      the_class      : structure_class;
+      user_def_class : OPTIONAL label;
+    WHERE
+      WR1 : EXISTS(user_def_class) XOR
+            (the_class <> Structure_class.USER_DEFINED_CLASS);
+      WR2 : SIZEOF(QUERY(it <* SELF\Item_structure.items |
+            SIZEOF(['AP218_SHORT.STRUCTURAL_PART',
+            'AP218_SHORT.STRUCTURAL_SYSTEM'] *
+            TYPEOF(it)) = 0)) = 0;
+      WR3 : SIZEOF(QUERY(it <* SELF\Item_structure.relationships |
+            SIZEOF(['AP218_SHORT.STRUCTURAL_PARTS_RELATIONSHIP',
+            'AP218_SHORT.STRUCTURAL_SYSTEM_RELATIONSHIP'] *
+            TYPEOF(it)) = 0)) = 0;
+      WR4 : (the_class <> Structure_class.PANEL_SYSTEM_CLASS) OR
+            ((SIZEOF(QUERY(it <* SELF\Item_structure.items |
+            SIZEOF(['AP218_SHORT.STRUCTURAL_PART',
+            'AP218_SHORT.PANEL_SYSTEM'] *
+            TYPEOF(it)) = 0)) = 0) AND
+            (SIZEOF(QUERY(it <* SELF\Item_structure.relationships |
+            SIZEOF(['AP218_SHORT.STRUCTURAL_PART_RELATIONSHIP',
+            'AP218_SHORT.PANEL_SYSTEM_RELATIONSHIP'] *
+            TYPEOF(it)) = 0)) = 0) AND
+            (SIZEOF(QUERY(it <* SELF\Item_structure.items |
+            'AP218_SHORT.PLATE' IN TYPEOF(it))) > 0));
+      WR5 : (the_class <> Structure_class.PLATE_STRAKE_CLASS) OR
+            ((SIZEOF(QUERY(it <* SELF\Item_structure.items |
+            SIZEOF(['AP218_SHORT.PLATE'] *
+            TYPEOF(it)) = 0)) = 0) AND
+            (SIZEOF(QUERY(it <* SELF\Item_structure.relationships |
+            SIZEOF(['AP218_SHORT.STRUCTURAL_PART_RELATIONSHIP'] *
+            TYPEOF(it)) = 0)) = 0));
+      WR6 : (the_class <> Structure_class.CORRUGATED_STRUCTURE_CLASS) OR
+            ((SIZEOF(QUERY(it <* SELF\Item_structure.items |
+            SIZEOF(['AP218_SHORT.CORRUGATED_PART',
+            'AP218_SHORT.PLATE'] *
+            TYPEOF(it)) = 0)) = 0) AND
+            (SIZEOF(QUERY(it <* SELF\Item_structure.relationships |
+            SIZEOF(['AP218_SHORT.STRUCTURAL_PART_RELATIONSHIP'] *
+            TYPEOF(it)) = 0)) = 0));
+      WR7 : (the_class <> Structure_class.BUILT_PROFILE_CLASS) OR
+            ((SIZEOF(QUERY(it <* SELF\Item_structure.items |
+            SIZEOF(['AP218_SHORT.PLATE',
+            'AP218_SHORT.PROFILE'] *
+            TYPEOF(it)) = 0)) = 0) AND
+            (SIZEOF(QUERY(it <* SELF\Item_structure.relationships |
+            SIZEOF(['AP218_SHORT.STRUCTURAL_PART_RELATIONSHIP'] *
+            
+            TYPEOF(it)) = 0)) = 0));
+  END_ENTITY;
+
+  ENTITY system
+    ABSTRACT SUPERTYPE
+    SUBTYPE OF(item, item_structure);
+    WHERE
+      WR1 : SIZEOF(QUERY (it <* SELF.items | it :=: SELF)) = 0;
+      WR2 : SIZEOF(QUERY (rel <* SELF.relationships |
+            ('AP218_SHORT.SYSTEM_RELATIONSHIP' IN TYPEOF
+            (rel)) AND ((rel.item_1 :=: SELF) OR (rel.item_2 :=: SELF)))) = 0;
+      WR3 : SIZEOF(QUERY (it <* SELF.items | NOT(SIZEOF
+            (['AP218_SHORT.PART',
+            'AP218_SHORT.SYSTEM'] * TYPEOF
+            (it)) = 1))) = 0;
+      WR4 : SIZEOF(QUERY (rel <* SELF.relationships | 
+            NOT (SIZEOF(['AP218_SHORT.PART_RELATIONSHIP',
+            'AP218_SHORT.SYSTEM_RELATIONSHIP']
+            
+            * TYPEOF (rel))= 1))) = 0;
+  END_ENTITY;
+
+  ENTITY item_structure
+    ABSTRACT SUPERTYPE OF (ONEOF(system, assembly, hull_cross_section))
+    SUBTYPE OF(definable_object, versionable_object);
+      items                  : SET OF item;
+      external_items         : SET OF external_instance_reference;
+      relationships          : SET OF item_relationship;
+      external_relationships : SET OF external_instance_reference;
+    WHERE
+      WR1 : SIZEOF(QUERY(i <* external_items |
+            NOT(i.entity_type IN TYPEOF(items)))) = 0;
+      WR2 : SIZEOF(QUERY(i <* external_relationships |
+            NOT(i.entity_type IN TYPEOF(relationships))))
+            = 0;
+  END_ENTITY;
+
+  ENTITY versionable_object
+    ABSTRACT SUPERTYPE OF (ONEOF(definition, item_relationship, item_structure, document, revision));
+      description : OPTIONAL text;
+      version_id  : identifier;
+  END_ENTITY;
+
+  ENTITY definition
+    ABSTRACT SUPERTYPE OF (ONEOF(change_definition, plate_renewal_definition, profile_renewal_definition, lightship_definition, local_co_ordinate_system, ship_material_property, spacing_table, general_characteristics_definition, design_definition, library_definition, functional_definition, manufacturing_definition))
+    SUBTYPE OF(versionable_object);
+      id          : global_id;
+      local_units : SET OF unit;
+      defined_for : SET [1:?] OF definable_object;
+    UNIQUE
+      ID_IS_UNIQUE : id;
+  END_ENTITY;
+
+  ENTITY change_definition
+    ABSTRACT SUPERTYPE OF (ONEOF(change_request, change_plan, change_realization))
+    SUBTYPE OF(definition);
+      SELF\definition.defined_for : SET [1:?] OF change;
+      SELF\definition.local_units : SET OF unit;
+      author                      : person_and_organization;
+      date_time                   : date_and_time;
+  END_ENTITY;
+
+  ENTITY change_request
+    SUBTYPE OF(change_definition);
+      initiator             : person_and_organization;
+      addressee             : OPTIONAL person_and_organization;
+      problem               : text;
+      solution_description  : OPTIONAL text;
+      solution_alternatives : SET OF change_impact;
+  END_ENTITY;
+
+  ENTITY change_impact;
+      impact : SET [1:?] OF versionable_object_change_event;
+  END_ENTITY;
+
+  ENTITY versionable_object_change_event
+    ABSTRACT SUPERTYPE OF (ONEOF(envisaged_version_creation, version_creation, version_modification, version_deletion))
+    SUBTYPE OF(event);
+  END_ENTITY;
+
+  ENTITY event
+    ABSTRACT SUPERTYPE OF (ONEOF(approval_event, check, versionable_object_change_event));
+      caused_by   : person_and_organization;
+      caused_when : date_and_time;
+      description : text;
+  END_ENTITY;
+
+  ENTITY approval_event
+    SUBTYPE OF(event);
+      result              : approval_status;
+      user_defined_result : OPTIONAL label;
+    INVERSE
+      approval_reference  : approval_history FOR approvals;
+    UNIQUE
+       approval_reference, caused_when;
+    WHERE
+      WR1 : (result <> Approval_status.USER_DEFINED) XOR
+            (SELF.user_defined_result <> '');
+  END_ENTITY;
+
+  ENTITY approval_history;
+      approvals : LIST [1:?] OF approval_event;
+      subject   : definition;
+    DERIVE
+      status    : approval_status := 
+                  current_approval_status(approvals);
+  END_ENTITY;
+
+  ENTITY structural_class_approval_result
+    ABSTRACT SUPERTYPE OF (ONEOF(hull_cross_section_result, structural_class_approval, structural_class_rejection, structural_class_conditional_approval))
+    SUBTYPE OF(approval_history);
+      explanations : SET OF reason_for_decision;
+  END_ENTITY;
+
+  ENTITY hull_cross_section_result
+    SUPERTYPE OF (ONEOF(hull_cross_section_approval, hull_cross_section_rejection))
+    SUBTYPE OF(structural_class_approval_result);
+      SELF\approval_history.subject           : hull_cross_section_design_definition;
+      required_section_modulus_deck           : section_modulus_measure;
+      required_section_modulus_bottom         : section_modulus_measure;
+      required_section_modulus_coaming        : section_modulus_measure;
+      required_stress_deck                    : stress_measure;
+      required_stress_bottom                  : stress_measure;
+      required_stress_coaming                 : stress_measure;
+      actual_section_modulus_deck             : section_modulus_measure;
+      actual_section_modulus_bottom           : section_modulus_measure;
+      actual_section_modulus_coaming          : section_modulus_measure;
+      actual_stress_deck                      : stress_measure;
+      actual_stress_bottom                    : stress_measure;
+      actual_stress_coaming                   : stress_measure;
+      actual_section_area                     : area_measure;
+      actual_neutral_axis_position_vertical   : length_measure;
+      actual_neutral_axis_position_horizontal : length_measure;
+      actual_first_moment_vertical            : moment_measure;
+      actual_first_moment_horizontal          : moment_measure;
+      actual_inertia_vertical                 : inertia_moment_measure;
+      actual_inertia_horizontal               : inertia_moment_measure;
+      actual_inertia_cross                    : inertia_moment_measure;
+      actual_inertia_torsion                  : inertia_moment_measure;
+      actual_twist_centre_vertical            : length_measure;
+      actual_twist_centre_horizontal          : length_measure;
+      direction_largest_inertia               : plane_angle_measure;
+      direction_least_inertia                 : plane_angle_measure;
+      max_moment                              : moment_measure;
+      min_moment                              : moment_measure;
+      max_shear_force                         : force_measure;
+      min_shear_force                         : force_measure;
+      meter_weight                            : mass_measure;
+  END_ENTITY;
+
+  ENTITY hull_cross_section_approval
+    SUBTYPE OF(structural_class_approval, hull_cross_section_result);
+  END_ENTITY;
+
+  ENTITY structural_class_approval
+    ABSTRACT SUPERTYPE OF (ONEOF(corrugated_part_approval, hull_cross_section_approval, plate_approval, profile_approval))
+    SUBTYPE OF(structural_class_approval_result);
+    WHERE
+       (SELF\Approval_history.status = Approval_status.approved)
+         OR
+         (SELF\Approval_history.status = Approval_status.user_defined);
+  END_ENTITY;
+
+  ENTITY corrugated_part_approval
+    SUBTYPE OF(structural_class_approval);
+      SELF\approval_history.subject : corrugated_part_design_definition;
+  END_ENTITY;
+
+  ENTITY corrugated_part_design_definition
+    SUBTYPE OF(structural_part_design_definition);
+      SELF\structural_part_design_definition.defined_for : SET [1:?] OF corrugated_part;
+      thickness                                          : positive_length_measure;
+      shape_aspect                                       : corrugation;
+      mirrored                                           : BOOLEAN;
+      offset                                             : length_measure;
+      repetition                                         : INTEGER;
+      border                                             : SET [2:2] OF corrugated_part_boundary;
+  END_ENTITY;
+
+  ENTITY structural_part_design_definition
+    ABSTRACT SUPERTYPE OF (ONEOF(corrugated_part_design_definition, plate_design_definition, profile_design_definition))
+    SUBTYPE OF(design_definition);
+      SELF\definition.defined_for            : SET [1:?] OF structural_part;
+      SELF\design_definition.representations : SET OF shape_representation;
+      mass                                   : OPTIONAL mass_measure;
+  END_ENTITY;
+
+  ENTITY design_definition
+    ABSTRACT SUPERTYPE OF (ONEOF(feature_design_definition, hull_cross_section_design_definition, system_design_definition, structural_part_design_definition, structural_part_joint_design_definition, weld_design_definition, library_design_definition))
+    SUBTYPE OF(definition);
+      representations : SET OF representation;
+  END_ENTITY;
+
+  ENTITY feature_design_definition
+    ABSTRACT SUPERTYPE OF (ONEOF(corner_cutout_design_definition, part_edge_cutout_design_definition, drain_hole_cutout_design_definition, explicit_feature_design_definition, interior_cutout_design_definition, position_feature_design_definition, structural_added_material_feature_design_definition, structural_weld_shrinkage_allowance_feature_design_definition))
+    SUBTYPE OF(design_definition);
+      SELF\definition.defined_for : SET [1:?] OF feature;
+  END_ENTITY;
+
+  ENTITY corner_cutout_design_definition
+    ABSTRACT SUPERTYPE OF (ONEOF(round_corner_design_definition, bevel_design_definition, rectangular_cutback_corner_design_definition))
+    SUBTYPE OF(feature_design_definition);
+      z_depth : OPTIONAL positive_length_measure;
+    WHERE
+      WR1 : SIZEOF (QUERY(def <* SELF\Definition.defined_for |
+            NOT (SIZEOF(['AP218_SHORT.CORNER_CUTOUT',
+            'AP218_SHORT.EDGE_FEATURE'] * TYPEOF
+            
+            (def)) = 1))) = 0;
+  END_ENTITY;
+
+  ENTITY round_corner_design_definition
+    ABSTRACT SUPERTYPE OF (ONEOF(inward_round_corner_design_definition, outward_round_corner_design_definition))
+    SUBTYPE OF(corner_cutout_design_definition);
+      radius : positive_length_measure;
+  END_ENTITY;
+
+  ENTITY inward_round_corner_design_definition
+    SUBTYPE OF(round_corner_design_definition);
+      x_offset : length_measure;
+      y_offset : length_measure;
+  END_ENTITY;
+
+  ENTITY outward_round_corner_design_definition
+    SUBTYPE OF(round_corner_design_definition);
+      x_offset : positive_length_measure;
+      y_offset : positive_length_measure;
+  END_ENTITY;
+
+  ENTITY bevel_design_definition
+    SUBTYPE OF(corner_cutout_design_definition);
+      x_y_angle : plane_angle_measure;
+      offset    : positive_length_measure;
+  END_ENTITY;
+
+  ENTITY shear_bevel_design_definition
+    SUBTYPE OF(bevel_design_definition);
+      x_z_angle : plane_angle_measure;
+  END_ENTITY;
+
+  ENTITY rectangular_cutback_corner_design_definition
+    SUBTYPE OF(corner_cutout_design_definition);
+      x_depth : positive_length_measure;
+      y_depth : positive_length_measure;
+      radius  : positive_length_measure;
+  END_ENTITY;
+
+  ENTITY part_edge_cutout_design_definition
+    SUBTYPE OF(feature_design_definition);
+      SELF\feature_design_definition.defined_for : SET [1:?] OF edge_cutout;
+      x_d                                        : positive_length_measure;
+      x_a                                        : positive_length_measure;
+      r_left                                     : positive_length_measure;
+      r_right                                    : positive_length_measure;
+      x_b                                        : length_measure;
+      y_b                                        : length_measure;
+      x_c                                        : length_measure;
+      y_c                                        : length_measure;
+  END_ENTITY;
+
+  ENTITY edge_cutout
+    SUBTYPE OF(structural_cutout);
+  END_ENTITY;
+
+  ENTITY structural_cutout
+    ABSTRACT SUPERTYPE OF (ONEOF(corner_cutout, edge_cutout, edge_feature, interior_cutout))
+    SUBTYPE OF(structural_feature);
+    WHERE
+      WR1 : SIZEOF (['STRUCTURAL_PARTS_EXPORT.STRUCTURAL_PART',
+            'STRUCTURAL_SYSTEMS_EXPORT.STRUCTURAL_SYSTEM'] *
+            TYPEOF (SELF.parent)) = 1;
+  END_ENTITY;
+
+  ENTITY corner_cutout
+    SUBTYPE OF(structural_cutout);
+  END_ENTITY;
+
+  ENTITY edge_feature
+    SUBTYPE OF(structural_cutout);
+  END_ENTITY;
+
+  ENTITY interior_cutout
+    SUBTYPE OF(structural_cutout);
+  END_ENTITY;
+
+  ENTITY drain_hole_cutout_design_definition
+    SUBTYPE OF(feature_design_definition);
+      SELF\feature_design_definition.defined_for : SET [1:?] OF edge_cutout;
+      gap                                        : positive_length_measure;
+      gap_radius                                 : positive_length_measure;
+      depth                                      : positive_length_measure;
+      width                                      : positive_length_measure;
+      drain_hole_radius                          : positive_length_measure;
+  END_ENTITY;
+
+  ENTITY explicit_feature_design_definition
+    SUBTYPE OF(feature_design_definition);
+      SELF\design_definition.representations : SET [1:1] OF shape_representation;
+  END_ENTITY;
+
+  ENTITY interior_cutout_design_definition
+    ABSTRACT SUPERTYPE OF (ONEOF(free_form_interior_cutout_design_definition, circular_cutout_design_definition, elliptical_cutout_design_definition, elongated_oval_cutout_design_definition, rectangular_cutout_design_definition, triangular_cutout_design_definition))
+    SUBTYPE OF(feature_design_definition);
+      SELF\feature_design_definition.defined_for : SET [1:?] OF interior_cutout;
+  END_ENTITY;
+
+  ENTITY free_form_interior_cutout_design_definition
+    SUBTYPE OF(interior_cutout_design_definition);
+      bounding_curve : curve;
+  END_ENTITY;
+
+  ENTITY circular_cutout_design_definition
+    SUBTYPE OF(interior_cutout_design_definition);
+      radius : positive_length_measure;
+  END_ENTITY;
+
+  ENTITY elliptical_cutout_design_definition
+    SUBTYPE OF(interior_cutout_design_definition);
+      half_axis_a : positive_length_measure;
+      half_axis_b : positive_length_measure;
+  END_ENTITY;
+
+  ENTITY elongated_oval_cutout_design_definition
+    SUBTYPE OF(interior_cutout_design_definition);
+      r1       : positive_length_measure;
+      r2       : positive_length_measure;
+      distance : positive_length_measure;
+      r3       : OPTIONAL positive_length_measure;
+      r3_x     : OPTIONAL length_measure;
+      r3_y     : OPTIONAL length_measure;
+  END_ENTITY;
+
+  ENTITY rectangular_cutout_design_definition
+    SUPERTYPE OF (ONEOF(round_corner_rectangular_cutout_design_definition, round_edge_rectangular_cutout_design_definition))
+    SUBTYPE OF(interior_cutout_design_definition);
+      width     : positive_length_measure;
+      length_of : positive_length_measure;
+  END_ENTITY;
+
+  ENTITY round_corner_rectangular_cutout_design_definition
+    SUBTYPE OF(rectangular_cutout_design_definition);
+      corner_radius : positive_length_measure;
+  END_ENTITY;
+
+  ENTITY round_edge_rectangular_cutout_design_definition
+    SUBTYPE OF(rectangular_cutout_design_definition);
+      edge_radius : positive_length_measure;
+      distance    : length_measure;
+  END_ENTITY;
+
+  ENTITY triangular_cutout_design_definition
+    SUBTYPE OF(interior_cutout_design_definition);
+      c2_x      : positive_length_measure;
+      c3_x      : length_measure;
+      c3_y      : positive_length_measure;
+      c1_radius : positive_length_measure;
+      c2_radius : positive_length_measure;
+      c3_radius : positive_length_measure;
+  END_ENTITY;
+
+  ENTITY position_feature_design_definition
+    ABSTRACT SUPERTYPE
+    SUBTYPE OF(feature_design_definition);
+      SELF\feature_design_definition.defined_for : SET [1:?] OF position_feature;
+      SELF\design_definition.representations     : SET OF shape_representation;
+  END_ENTITY;
+
+  ENTITY seam_design_definition
+    SUBTYPE OF(position_feature_design_definition);
+      SELF\position_feature_design_definition.defined_for : SET [1:?] OF seam;
+      seam_curve                                          : OPTIONAL ship_seam;
+      border                                              : LIST [0:2] OF seam;
+  END_ENTITY;
+
+  ENTITY structural_added_material_feature_design_definition
+    SUBTYPE OF(feature_design_definition);
+      SELF\feature_design_definition.defined_for : SET [1:?] OF structural_added_material_feature;
+      added_material_length                      : positive_length_measure;
+  END_ENTITY;
+
+  ENTITY structural_added_material_feature
+    SUBTYPE OF(structural_manufacturing_feature);
+    WHERE
+      WR1 : SIZEOF (['STRUCTURAL_PARTS_EXPORT.PLATE',
+            
+            'STRUCTURAL_PARTS_EXPORT.PROFILE','STRUCTURAL_PARTS_EXPORT.CORRUGATED_PART']
+            *
+            TYPEOF (SELF.parent)) = 1;
+  END_ENTITY;
+
+  ENTITY structural_manufacturing_feature
+    SUPERTYPE OF (ONEOF(structural_added_material_feature, structural_weld_shrinkage_allowance_feature))
+    SUBTYPE OF(structural_feature);
+      SELF\structural_feature.parent : structural_part;
+  END_ENTITY;
+
+  ENTITY structural_weld_shrinkage_allowance_feature
+    SUBTYPE OF(structural_manufacturing_feature);
+    WHERE
+      WR1 : SIZEOF (['STRUCTURAL_PARTS_EXPORT.PLATE',
+            'STRUCTURAL_PARTS_EXPORT.PROFILE'] *
+            TYPEOF (SELF.parent)) = 1;
+  END_ENTITY;
+
+  ENTITY structural_part
+    ABSTRACT SUPERTYPE OF (ONEOF(profile, plate, corrugated_part))
+    SUBTYPE OF(part);
+  END_ENTITY;
+
+  ENTITY part
+    ABSTRACT SUPERTYPE
+    SUBTYPE OF(item);
+  END_ENTITY;
+
+  ENTITY profile
+    SUBTYPE OF(structural_part);
+  END_ENTITY;
+
+  ENTITY built_profile
+    SUBTYPE OF(structural_system, profile);
+    DERIVE
+      SELF\structural_system.the_class : structure_class := 
+                                         Structure_class.BUILT_PROFILE_CLASS;
+  END_ENTITY;
+
+  ENTITY plate
+    SUBTYPE OF(structural_part);
+  END_ENTITY;
+
+  ENTITY corrugated_part
+    SUBTYPE OF(structural_part);
+  END_ENTITY;
+
+  ENTITY structural_weld_shrinkage_allowance_feature_design_definition
+    SUBTYPE OF(feature_design_definition);
+      SELF\feature_design_definition.defined_for : SET [1:?] OF structural_weld_shrinkage_allowance_feature;
+      longitudinal_allowance                     : OPTIONAL ratio_measure;
+      transverse_allowance                       : OPTIONAL ratio_measure;
+      vertical_allowance                         : OPTIONAL ratio_measure;
+  END_ENTITY;
+
+  ENTITY hull_cross_section_design_definition
+    SUBTYPE OF(design_definition);
+      SELF\definition.defined_for : SET [1:1] OF hull_cross_section;
+      flare_area_buckling         : flare_area;
+      mirrored_symmetry           : BOOLEAN;
+    WHERE
+      WR1 : SIZEOF(QUERY (rep <* SELF.representations | NOT(SIZEOF
+            (['AIC_EDGE_BASED_WIREFRAME.' +
+            'EDGE_BASED_WIREFRAME_SHAPE_REPRESENTATION',
+            'AIC_NON_MANIFOLD_SURFACE.' +
+            'NON_MANIFOLD_SURFACE_SHAPE_REPRESENTATION']
+            * TYPEOF(rep)) = 1))) = 0;
+  END_ENTITY;
+
+  ENTITY hull_cross_section
+    SUBTYPE OF(item, item_structure);
+      SELF\item_structure.relationships          : SET OF item_relationship;
+      SELF\item_structure.external_relationships : SET OF external_instance_reference;
+    WHERE
+      WR1 : SIZEOF(QUERY (it <* SELF.items | NOT(SIZEOF
+            (['COMPARTMENTS_EXPORT.COMPARTMENT',
+            'STRUCTURAL_SYSTEMS_EXPORT.STRUCTURAL_SYSTEM'] * TYPEOF(it)) =
+            1))) = 0;
+  END_ENTITY;
+
+  ENTITY external_instance_reference;
+      schema_name : label;
+      entity_type : label;
+      target_guid : global_id;
+  END_ENTITY;
+
+  ENTITY global_id;
+      id         : STRING;
+    DERIVE
+      company_id : STRING := get_company_id(id);
+      local_id   : STRING := get_local_id(id);
+    WHERE
+      WR1 : id LIKE ('*' + SEP + '*');
+  END_ENTITY;
+
+  ENTITY flare_area;
+      area   : area_measure;
+      height : positive_length_measure;
+  END_ENTITY;
+
+  ENTITY system_design_definition
+    ABSTRACT SUPERTYPE
+    SUBTYPE OF(design_definition);
+      SELF\definition.defined_for : SET [1:?] OF system;
+  END_ENTITY;
+
+  ENTITY structural_system_design_definition
+    SUPERTYPE OF (ONEOF(panel_system_design_definition, corrugated_structure_design_definition))
+    SUBTYPE OF(system_design_definition);
+      SELF\system_design_definition.defined_for : SET [1:?] OF structural_system;
+      tightness                                 : tightness_type;
+      user_defined_tightness                    : OPTIONAL label;
+      SELF\design_definition.representations    : SET OF shape_representation;
+    WHERE
+      WR1 : (tightness <> Tightness_type.USER_DEFINED) XOR
+            EXISTS(user_defined_tightness);
+  END_ENTITY;
+
+  ENTITY panel_system_design_definition
+    SUBTYPE OF(structural_system_design_definition);
+      SELF\structural_system_design_definition.defined_for : SET [1:?] OF panel_system;
+      thickness                                            : length_measure;
+      material_offset                                      : REAL;
+      stiffener_spacing                                    : OPTIONAL length_measure;
+      border                                               : LIST [1:?] OF panel_system_boundary;
+      moulded_surface                                      : OPTIONAL structural_system_moulded_surface;
+  END_ENTITY;
+
+  ENTITY panel_system_curve_boundary;
+      curve        : bounded_curve;
+      displacement : OPTIONAL length_measure;
+  END_ENTITY;
+
+  ENTITY panel_system_plane_boundary;
+      plane : plane;
+  END_ENTITY;
+
+  ENTITY structural_system_adjacency_relationship
+    SUBTYPE OF(structural_system_relationship);
+      SELF\item_relationship.item_2 : structural_system;
+      boundary_index                : INTEGER;
+      displacement                  : OPTIONAL length_measure;
+  END_ENTITY;
+
+  ENTITY structural_system_relationship
+    ABSTRACT SUPERTYPE OF (ONEOF(structural_system_adjacency_relationship, panel_system_relationship, corrugated_structure_relationship, structural_system_symmetry_relationship))
+    SUBTYPE OF(system_relationship);
+      SELF\system_relationship.item_1 : structural_system;
+    WHERE
+      WR1 : SIZEOF(['STRUCTURAL_FEATURES_EXPORT.STRUCTURAL_FEATURE',
+            'STRUCTURAL_PARTS_EXPORT.STRUCTURAL_PART',
+            'AP218_SHORT.STRUCTURAL_SYSTEM'] *
+            
+            TYPEOF (SELF\Item_relationship.item_2)) = 1;
+  END_ENTITY;
+
+  ENTITY system_relationship
+    ABSTRACT SUPERTYPE
+    SUBTYPE OF(item_relationship);
+      SELF\item_relationship.item_1 : system;
+    WHERE
+      WR1 : ('AP218_SHORT.PART' IN TYPEOF (SELF.item_2)) OR
+            ('AP218_SHORT.SYSTEM' IN TYPEOF 
+            
+            (SELF.item_2));
+  END_ENTITY;
+
+  ENTITY panel_system_relationship
+    ABSTRACT SUPERTYPE
+    SUBTYPE OF(structural_system_relationship);
+      SELF\structural_system_relationship.item_1 : panel_system;
+  END_ENTITY;
+
+  ENTITY panel_system_boundary_relationship
+    SUBTYPE OF(panel_system_relationship);
+      displacement : OPTIONAL length_measure;
+    WHERE
+      WR1 : SIZEOF(['STRUCTURAL_FEATURES_EXPORT.SEAM',
+            'STRUCTURAL_PARTS_EXPORT.PROFILE',
+            'AP218_SHORT.PANEL_SYSTEM'] *
+            
+            TYPEOF (SELF\Item_relationship.item_2)) = 1;
+  END_ENTITY;
+
+  ENTITY corrugated_structure_relationship
+    ABSTRACT SUPERTYPE
+    SUBTYPE OF(structural_system_relationship);
+      SELF\structural_system_relationship.item_1 : corrugated_structure;
+  END_ENTITY;
+
+  ENTITY corrugated_structure_boundary_relationship
+    SUBTYPE OF(corrugated_structure_relationship);
+      displacement : OPTIONAL length_measure;
+    WHERE
+      WR1 : SIZEOF(['STRUCTURAL_FEATURES_EXPORT.SEAM',
+            'STRUCTURAL_SYSTEM_MODEL.PANEL_SYSTEM',
+            'STRUCTURAL_SYSTEM_MODEL.CORRUGATED_STRUCTURE'] *
+            TYPEOF (SELF\Item_relationship.item_2)) = 1;
+  END_ENTITY;
+
+  ENTITY corrugated_structure
+    SUBTYPE OF(structural_system);
+    DERIVE
+      SELF\structural_system.the_class : structure_class := 
+                                         Structure_class.CORRUGATED_STRUCTURE_CLASS;
+  END_ENTITY;
+
+  ENTITY structural_system_symmetry_relationship
+    SUBTYPE OF(structural_system_relationship);
+      SELF\item_relationship.item_2 : structural_system;
+      mirroring_plane               : plane;
+  END_ENTITY;
+
+  ENTITY corrugated_structure_design_definition
+    SUBTYPE OF(structural_system_design_definition);
+      SELF\structural_system_design_definition.defined_for : SET [1:?] OF corrugated_structure;
+      thickness                                            : length_measure;
+      corrugation_width                                    : OPTIONAL length_measure;
+      border                                               : LIST [1:?] OF corrugated_structure_boundary;
+      moulded_surface                                      : OPTIONAL structural_system_moulded_surface;	
+  END_ENTITY;
+
+  ENTITY structural_part_joint_design_definition
+    SUBTYPE OF(design_definition);
+      SELF\definition.defined_for : SET [1:?] OF structural_part_joint;
+      tightness                   : joint_tightness;
+      joint_orientation           : structural_part_joint_form;
+  END_ENTITY;
+
+  ENTITY welded_joint_design_definition
+    SUPERTYPE OF (ONEOF(fillet_weld, groove_weld, spot_seam_weld))
+    SUBTYPE OF(structural_part_joint_design_definition);
+      SELF\structural_part_joint_design_definition.defined_for : SET [1:?] OF welded_joint;
+      configuration                                            : welded_joint_configuration;
+      SELF\design_definition.representations                   : SET OF shape_representation;
+      penetration                                              : weld_joint_penetration;
+  END_ENTITY;
+
+  ENTITY fillet_weld
+    SUPERTYPE OF (ONEOF(continuous_fillet_weld, intermittent_fillet_weld))
+    SUBTYPE OF(welded_joint_design_definition);
+      sidedness         : weld_sidedness;
+      endcut_shape_type : fillet_shape;
+  END_ENTITY;
+
+  ENTITY continuous_fillet_weld
+    SUBTYPE OF(fillet_weld);
+  END_ENTITY;
+
+  ENTITY intermittent_fillet_weld
+    SUBTYPE OF(fillet_weld);
+      end_rules           : intermittent_weld_rule;
+      cutout_rules        : intermittent_weld_rule;
+      penetration_rules   : intermittent_weld_rule;
+      fillet_weld_length  : length_measure;
+      fillet_weld_spacing : length_measure;
+      fillet_alignment    : alignment;
+  END_ENTITY;
+
+  ENTITY groove_weld
+    SUPERTYPE OF (ONEOF(beveled_groove_weld, butt_groove_weld))
+    SUBTYPE OF(welded_joint_design_definition);
+      sidedness         : weld_sidedness;
+      weld_backing_type : OPTIONAL backing_type;
+      weld_joint_spacer : BOOLEAN;
+  END_ENTITY;
+
+  ENTITY beveled_groove_weld
+    SUBTYPE OF(groove_weld);
+      endcut_shape : bevel_shape;
+      taper        : taper_type;
+      taper_angle  : OPTIONAL plane_angle_measure;
+  END_ENTITY;
+
+  ENTITY butt_groove_weld
+    SUBTYPE OF(groove_weld);
+      face_shape : butt_shape;
+  END_ENTITY;
+
+  ENTITY spot_seam_weld
+    SUBTYPE OF(welded_joint_design_definition);
+      weld_context : spot_seam_weld_context;
+  END_ENTITY;
+
+  ENTITY structural_part_joint
+    SUBTYPE OF(item_relationship);
+      joint_type  : structural_part_joint_type;
+    INVERSE
+      realization : SET OF structural_part_connection_implementation FOR realization_of;
+  END_ENTITY;
+
+  ENTITY welded_joint
+    SUBTYPE OF(structural_part_joint);
+    DERIVE
+      SELF\structural_part_joint.joint_type : structural_part_joint_type := Structural_part_joint_type.fixed_joint;
+  END_ENTITY;
+
+  ENTITY structural_part_connection_implementation
+    SUBTYPE OF(item);
+      realization_of : structural_part_joint;
+  END_ENTITY;
+
+  ENTITY weld
+    SUBTYPE OF(structural_part_connection_implementation);
+      SELF\structural_part_connection_implementation.realization_of : welded_joint;
+  END_ENTITY;
+
+  ENTITY weld_design_definition
+    SUBTYPE OF(design_definition);
+      SELF\definition.defined_for : SET [1:?] OF weld;
+      weld_size                   : OPTIONAL length_measure;
+      shape_of_weld_surface       : weld_surface_shape;
+      weld_geometry               : curve;
+      start_suspension            : OPTIONAL length_measure;
+      end_suspension              : OPTIONAL length_measure;
+      connection_angle            : plane_angle_measure;
+      rotation_angle              : plane_angle_measure;
+      inclination_angle           : plane_angle_measure;
+      shrinkage                   : shrinkage_margin;
+      weld_cross_section_area     : OPTIONAL area_measure;
+  END_ENTITY;
+
+  ENTITY library_design_definition
+    SUBTYPE OF(design_definition, library_definition);
+  END_ENTITY;
+
+  ENTITY library_definition
+    SUPERTYPE OF (ONEOF(library_design_definition, library_manufacturing_definition))
+    SUBTYPE OF(definition);
+      source : library_element_reference;
+  END_ENTITY;
+
+  ENTITY library_manufacturing_definition
+    SUBTYPE OF(manufacturing_definition, library_definition);
+  END_ENTITY;
+
+  ENTITY manufacturing_definition
+    ABSTRACT SUPERTYPE OF (ONEOF(assembly_manufacturing_definition, structural_part_manufacturing_definition, library_manufacturing_definition, weld_manufacturing_definition))
+    SUBTYPE OF(definition);
+      representations : SET OF representation;
+  END_ENTITY;
+
+  ENTITY assembly_manufacturing_definition
+    SUBTYPE OF(manufacturing_definition);
+      mass                        : mass_measure;
+      centre_of_gravity           : centre_location;
+      assembly_positions          : SET OF assembly_manufacturing_position;
+      SELF\definition.defined_for : SET [1:?] OF assembly;
+      assembly_stage              : label;
+      assembly_method             : label;
+      assembly_drawing            : document_reference;
+      production_date             : date_and_time;
+  END_ENTITY;
+
+  ENTITY centre_location;
+      longitudinal_location : length_measure;
+      transversal_location  : length_measure;
+      vertical_location     : length_measure;
+  END_ENTITY;
+
+  ENTITY assembly_manufacturing_position;
+      assembly_footprint : bounded_curve;
+      orientation        : direction;
+      bounding_box       : assembly_bounding_box;
+  END_ENTITY;
+
+  ENTITY assembly_bounding_box;
+      point_min : centre_location;
+      point_max : centre_location;
+  END_ENTITY;
+
+  ENTITY assembly
+    SUBTYPE OF(item, item_structure);
+      the_class : assembly_class;
+    WHERE
+      WR1 : SIZEOF(QUERY (it <* SELF.items | it :=: SELF)) = 0;
+      WR2 : SIZEOF(QUERY (rel <* SELF.relationships |
+            ('AP218_SHORT.ASSEMBLY_RELATIONSHIP' 
+            IN TYPEOF (rel)) AND ((rel.item_1 :=: SELF) 
+            OR (rel.item_2 :=: SELF)))) = 0;
+      WR3 : SIZEOF(QUERY (it <* SELF.items | NOT(SIZEOF (['AP218_SHORT.PART',
+            'AP218_SHORT.ASSEMBLY'] * TYPEOF 
+            (it)) = 1))) = 0;
+      WR4 : SIZEOF(QUERY (rel <* SELF.relationships | 
+            NOT (SIZEOF(['AP218_SHORT.PART_RELATIONSHIP',
+            'AP218_SHORT.ASSEMBLY_RELATIONSHIP'] 
+            
+            * TYPEOF (rel))= 1))) = 0;
+  END_ENTITY;
+
+  ENTITY document_reference;
+      assigned_document : document_referent;
+  END_ENTITY;
+
+  ENTITY document_reference_with_address
+    SUBTYPE OF(document_reference, external_reference);
+  END_ENTITY;
+
+  ENTITY external_reference;
+      location    : any_address;
+      description : text;
+  END_ENTITY;
+
+  ENTITY document
+    SUBTYPE OF(versionable_object);
+      author      : any_author;
+      title       : label;
+      source_type : label;
+      summary     : OPTIONAL text;
+  END_ENTITY;
+
+  ENTITY document_portion;
+      source        : document;
+      element_type  : label;
+      element_value : text;
+  END_ENTITY;
+
+  ENTITY annotation;
+	location	: cartesian_point;
+	text		: STRING;
+  END_ENTITY;
+
+  ENTITY structural_part_manufacturing_definition
+    SUPERTYPE OF (ONEOF(plate_manufacturing_definition, profile_manufacturing_definition))
+    SUBTYPE OF(manufacturing_definition);
+      	SELF\definition.defined_for 		: SET [1:?] OF structural_part;
+      	bottom_annotation			: OPTIONAL SET [0:?] of annotation;
+		bottom_layout_marks    		: OPTIONAL SET [0:?] of curve;
+		bottom_punch_points		: OPTIONAL SET [0:?] of point;
+		inner_contours			: SET OF edge;
+		top_annotation			: OPTIONAL SET [0:?] of annotation;
+		top_layout_marks		: OPTIONAL SET [0:?] of curve;
+		top_punch_points		: OPTIONAL SET [0:?] of point;
+  END_ENTITY;
+
+  ENTITY plate_manufacturing_definition
+    SUBTYPE OF(structural_part_manufacturing_definition);
+      outer_contour : edge_based_wireframe_model;
+    WHERE
+      WR1 : SIZEOF (QUERY(def <* SELF\Definition.defined_for |
+            NOT (SIZEOF(['AP218_SHORT.PLATE',
+            'AP218_SHORT.CORRUGATED_PART'] * TYPEOF
+            
+            (def)) = 1))) = 0;
+  END_ENTITY;
+
+  ENTITY profile_manufacturing_definition
+    SUBTYPE OF(structural_part_manufacturing_definition);
+      SELF\structural_part_manufacturing_definition.defined_for : SET [1:?] OF profile;
+      inverse_bend_trace                                        : SET OF curve;
+      outer_flange_contour                                      : SET OF curve;
+      outer_web_contour                                         : SET OF curve;
+  END_ENTITY;
+
+  ENTITY weld_manufacturing_definition
+    SUBTYPE OF(manufacturing_definition);
+      SELF\definition.defined_for  : SET [1:?] OF weld;
+      torch_vector                 : vector;
+      position                     : welding_position;
+      process                      : welding_process;
+      degree_of_automations        : welding_automation_degree;
+      number_of_weld_passes        : INTEGER;
+      welding_deposition_sequences : deposition_sequence;
+      weld_test                    : SET [1:?] OF weld_testing;
+      sequences                    : SET [1:?] OF welding_sequence;
+      welding_procedures           : SET [1:?] OF document;
+      environment                  : welding_environment;
+      tack_weld_used               : BOOLEAN;
+  END_ENTITY;
+
+  ENTITY weld_testing;
+      test_methods  : BAG [1:?] OF non_destructive_testing;
+      test_sequence : SET OF document;
+      test_results  : weld_qualification_status;
+  END_ENTITY;
+
+  ENTITY welding_sequence;
+      name         : label;
+      start_offset : length_measure;
+      end_offset   : length_measure;
+      direction    : BOOLEAN;
+  END_ENTITY;
+
+  ENTITY library_element_reference;
+      library_identifier   : class_bsu;
+      property_value_pairs : SET OF property_value;
+  END_ENTITY;
+
+  ENTITY library_profile_cross_section
+    SUBTYPE OF(profile_cross_section, library_element_reference);
+  END_ENTITY;
+
+  ENTITY profile_cross_section
+    SUPERTYPE OF (ONEOF(explicit_profile_cross_section, library_profile_cross_section, parametric_profile_cross_section));
+      section_properties : OPTIONAL section_properties;
+      designation        : label;
+  END_ENTITY;
+
+  ENTITY explicit_profile_cross_section
+    SUBTYPE OF(profile_cross_section);
+      cross_section_geometry  : bounded_curve;
+      local_coordinate_system : axis2_placement_2d;
+  END_ENTITY;
+
+  ENTITY parametric_profile_cross_section
+    ABSTRACT SUPERTYPE OF (ONEOF(flanged_profile_cross_section, channel_profile_cross_section, bar_profile_cross_section, angle_profile_cross_section, non_circular_hollow_profile_cross_section, circular_hollow_profile_cross_section, proprietary_profile_cross_section))
+    SUBTYPE OF(profile_cross_section);
+  END_ENTITY;
+
+  ENTITY flanged_profile_cross_section
+    ABSTRACT SUPERTYPE OF (ONEOF(w_shape_cross_section, t_bar_cross_section))
+    SUBTYPE OF(parametric_profile_cross_section);
+  END_ENTITY;
+
+  ENTITY w_shape_cross_section
+    SUBTYPE OF(flanged_profile_cross_section);
+      depth      : positive_length_measure;
+      width      : positive_length_measure;
+      web_thk    : positive_length_measure;
+      flange_thk : positive_length_measure;
+      radius     : positive_length_measure;
+      k          : positive_length_measure;
+  END_ENTITY;
+
+  ENTITY t_bar_cross_section
+    SUBTYPE OF(flanged_profile_cross_section);
+      depth      : positive_length_measure;
+      width      : positive_length_measure;
+      web_thk    : positive_length_measure;
+      flange_thk : positive_length_measure;
+      radius     : positive_length_measure;
+      k          : positive_length_measure;
+  END_ENTITY;
+
+  ENTITY channel_profile_cross_section
+    ABSTRACT SUPERTYPE
+    SUBTYPE OF(parametric_profile_cross_section);
+  END_ENTITY;
+
+  ENTITY channel_cross_section
+    SUBTYPE OF(channel_profile_cross_section);
+      depth      : positive_length_measure;
+      width      : positive_length_measure;
+      web_thk    : positive_length_measure;
+      flange_thk : positive_length_measure;
+      radius     : positive_length_measure;
+      k          : positive_length_measure;
+  END_ENTITY;
+
+  ENTITY bar_profile_cross_section
+    ABSTRACT SUPERTYPE OF (ONEOF(bulbflat_cross_section, flat_bar_cross_section, round_bar_cross_section))
+    SUBTYPE OF(parametric_profile_cross_section);
+  END_ENTITY;
+
+  ENTITY bulbflat_cross_section
+    SUBTYPE OF(bar_profile_cross_section);
+      depth       : positive_length_measure;
+      bulb_width  : positive_length_measure;
+      bulb_radius : positive_length_measure;
+      tw          : positive_length_measure;
+  END_ENTITY;
+
+  ENTITY flat_bar_cross_section
+    SUBTYPE OF(bar_profile_cross_section);
+      depth : positive_length_measure;
+      width : positive_length_measure;
+  END_ENTITY;
+
+  ENTITY round_bar_cross_section
+    SUBTYPE OF(bar_profile_cross_section);
+      diameter : positive_length_measure;
+  END_ENTITY;
+
+  ENTITY angle_profile_cross_section
+    ABSTRACT SUPERTYPE
+    SUBTYPE OF(parametric_profile_cross_section);
+  END_ENTITY;
+
+  ENTITY angle_bar_cross_section
+    SUBTYPE OF(angle_profile_cross_section);
+      depth  : positive_length_measure;
+      width  : positive_length_measure;
+      radius : positive_length_measure;
+      thk    : positive_length_measure;
+  END_ENTITY;
+
+  ENTITY non_circular_hollow_profile_cross_section
+    ABSTRACT SUPERTYPE
+    SUBTYPE OF(parametric_profile_cross_section);
+  END_ENTITY;
+
+  ENTITY square_tube_cross_section
+    SUBTYPE OF(non_circular_hollow_profile_cross_section);
+      depth    : positive_length_measure;
+      width    : positive_length_measure;
+      wall_thk : positive_length_measure;
+  END_ENTITY;
+
+  ENTITY circular_hollow_profile_cross_section
+    SUBTYPE OF(parametric_profile_cross_section);
+      outer_diameter : positive_length_measure;
+      inner_diameter : positive_length_measure;
+  END_ENTITY;
+
+  ENTITY proprietary_profile_cross_section
+    ABSTRACT SUPERTYPE
+    SUBTYPE OF(parametric_profile_cross_section);
+  END_ENTITY;
+
+  ENTITY flanged_plate_cross_section
+    SUBTYPE OF(proprietary_profile_cross_section);
+      depth  : positive_length_measure;
+      width  : positive_length_measure;
+      radius : positive_length_measure;
+      thk    : length_measure;
+  END_ENTITY;
+
+  ENTITY section_properties;
+      nominal_mass_per_len : weight_per_length_measure;
+      area                 : area_measure;
+      na_u                 : positive_length_measure;
+      na_v                 : positive_length_measure;
+      moi_u                : inertia_moment_measure;
+      moi_v                : inertia_moment_measure;
+      moi_uv               : inertia_moment_measure;
+      tr                   : inertia_moment_measure;
+  END_ENTITY;
+
+  ENTITY class_bsu
+    SUBTYPE OF(bsu);
+      SELF\bsu.code  : class_code_type;
+      delivered_by   : supplier_bsu;
+      version        : version_type;
+    DERIVE
+      dic_identifier : identifier := code + SEP_CV + version;
+      absolute_id    : identifier := delivered_by.code + SEP_ID + dic_identifier;
+    UNIQUE
+      UR1 : delivered_by, code, version;
+  END_ENTITY;
+
+  ENTITY bsu
+    ABSTRACT SUPERTYPE OF (ONEOF(supplier_bsu, class_bsu, property_bsu));
+      code : code_type;
+  END_ENTITY;
+
+  ENTITY supplier_bsu
+    SUBTYPE OF(bsu);
+      SELF\bsu.code : supplier_code_type;
+    UNIQUE
+      UR1 : code;
+  END_ENTITY;
+
+  ENTITY property_bsu
+    SUBTYPE OF(bsu);
+      name_scope     : class_bsu;
+      version        : version_type;
+    DERIVE
+      dic_identifier : identifier := code + SEP_CV + version;
+  END_ENTITY;
+
+  ENTITY property_value
+    ABSTRACT SUPERTYPE OF (ONEOF(real_property_value, integer_property_value, number_property_value, string_property_value, boolean_property_value, logical_property_value));
+      property_identifier : property_bsu;
+  END_ENTITY;
+
+  ENTITY real_property_value
+    SUBTYPE OF(property_value);
+      val : REAL;
+  END_ENTITY;
+
+  ENTITY integer_property_value
+    SUBTYPE OF(property_value);
+      val : INTEGER;
+  END_ENTITY;
+
+  ENTITY number_property_value
+    SUBTYPE OF(property_value);
+      val : NUMBER;
+  END_ENTITY;
+
+  ENTITY string_property_value
+    SUBTYPE OF(property_value);
+      val : STRING;
+  END_ENTITY;
+
+  ENTITY boolean_property_value
+    SUBTYPE OF(property_value);
+      val : BOOLEAN;
+  END_ENTITY;
+
+  ENTITY logical_property_value
+    SUBTYPE OF(property_value);
+      val : LOGICAL;
+  END_ENTITY;
+
+  ENTITY plate_design_definition
+    SUBTYPE OF(structural_part_design_definition);
+      SELF\structural_part_design_definition.defined_for : SET [1:?] OF plate;
+      thickness                                          : positive_length_measure;
+      material_offset                                    : REAL;
+      border                                             : LIST [1:?] OF plate_boundary;
+      moulded_surface                                    : OPTIONAL any_surface;
+      interior_point                                     : OPTIONAL cartesian_point;
+  END_ENTITY;
+
+  ENTITY plate_boundary_relationship
+    SUBTYPE OF(plate_relationship);
+      SELF\item_relationship.item_2 : seam;
+  END_ENTITY;
+
+  ENTITY plate_relationship
+    ABSTRACT SUPERTYPE
+    SUBTYPE OF(structural_part_relationship);
+      SELF\structural_part_relationship.item_1 : plate;
+  END_ENTITY;
+
+  ENTITY structural_cutout_manufacturing_relationship
+    SUBTYPE OF(structural_feature_relationship);
+      SELF\structural_feature_relationship.item_1 : structural_cutout;
+      outer_contour_index			  : count_measure;
+  END_ENTITY;
+
+  ENTITY structural_part_relationship
+    ABSTRACT SUPERTYPE OF (ONEOF(profile_relationship, plate_relationship, structural_part_symmetry_relationship))
+    SUBTYPE OF(part_relationship);
+      SELF\part_relationship.item_1 : structural_part;
+    WHERE
+      WR1 : SIZEOF(['STRUCTURAL_FEATURES_EXPORT.STRUCTURAL_FEATURE',
+            'AP218_SHORT.STRUCTURAL_PART',
+            
+            'STRUCTURAL_SYSTEMS_EXPORT.STRUCTURAL_SYSTEM'] *
+            TYPEOF (SELF\Item_relationship.item_2)) = 1;
+  END_ENTITY;
+
+  ENTITY part_relationship
+    ABSTRACT SUPERTYPE
+    SUBTYPE OF(item_relationship);
+      SELF\item_relationship.item_1 : part;
+  END_ENTITY;
+
+  ENTITY profile_relationship
+    ABSTRACT SUPERTYPE OF (ONEOF(profile_trace_line_relationship, profile_boundary_relationship))
+    SUBTYPE OF(structural_part_relationship);
+      SELF\structural_part_relationship.item_1 : profile;
+  END_ENTITY;
+
+  ENTITY profile_trace_line_relationship
+    SUBTYPE OF(profile_relationship);
+      displacement   : length_measure;
+      auxiliary_line : OPTIONAL line;
+      boundary_index : OPTIONAL INTEGER;
+    WHERE
+      WR1 : SIZEOF(['INTERIOR_CUTOUTS_EXPORT.INTERIOR_CUTOUT',
+            'STRUCTURAL_SYSTEMS_EXPORT.PANEL_SYSTEM',
+            'POSITION_FEATURES_EXPORT.SEAM'] *
+            TYPEOF (SELF\Item_relationship.item_2)) = 1;
+      WR2 : (('STRUCTURAL_SYSTEMS_EXPORT.PANEL_SYSTEM' IN
+            TYPEOF(SELF\Item_relationship.item_2)) AND
+            EXISTS(boundary_index)) XOR
+            NOT(EXISTS(boundary_index));
+      WR3 : ('STRUCTURAL_SYSTEMS_EXPORT.PANEL_SYSTEM' IN 
+            TYPEOF(SELF\Item_relationship.item_2)) XOR
+            NOT(EXISTS(auxiliary_line));
+  END_ENTITY;
+
+  ENTITY profile_boundary_relationship
+    SUBTYPE OF(profile_relationship);
+      boundary_index : OPTIONAL INTEGER;
+      displacement   : OPTIONAL length_measure;
+    WHERE
+      WR1 : SIZEOF(['INTERIOR_CUTOUTS_EXPORT.INTERIOR_CUTOUT',
+            'POSITION_FEATURES_EXPORT.SEAM',
+            'AP218_SHORT.PROFILE',
+            'AP218_SHORT.PLATE',
+            
+            'STRUCTURAL_SYSTEMS_EXPORT.PANEL_SYSTEM'] *
+            TYPEOF(SELF\Item_relationship.item_2)) = 1;
+      WR2 : NOT(EXISTS(boundary_index)) OR
+            ('STRUCTURAL_SYSTEMS_EXPORT.PANEL_SYSTEM' IN
+            TYPEOF(SELF\Item_relationship.item_2));
+      WR3 : TRUE;
+      WR4 : TRUE;
+  END_ENTITY;
+
+  ENTITY structural_part_symmetry_relationship
+    SUBTYPE OF(structural_part_relationship);
+      SELF\item_relationship.item_2 : structural_part;
+      mirroring_plane               : plane;
+  END_ENTITY;
+
+  ENTITY profile_design_definition
+    SUBTYPE OF(structural_part_design_definition);
+      SELF\structural_part_design_definition.defined_for : SET [1:?] OF profile;
+      cross_section                                      : profile_cross_section;
+      cross_section_placement                            : axis2_placement_3d;
+      mirrored                                           : BOOLEAN;
+      trace_line                                         : OPTIONAL profile_trace_line;
+      twist                                              : SET OF twist_location;
+      border                                             : OPTIONAL SET [2:2] OF profile_boundary;
+    WHERE
+      WR1 : TRUE;
+      WR2 : TRUE;
+  END_ENTITY;
+
+  ENTITY profile_curve_trace_line;
+      curve        : curve;
+      displacement : OPTIONAL vector;
+  END_ENTITY;
+
+  ENTITY twist_location;
+      location    : point_on_curve;
+      orientation : direction;
+  END_ENTITY;
+
+  ENTITY corrugation;
+      flat_width_1 : positive_length_measure;
+      flat_width_2 : positive_length_measure;
+      slope_width  : positive_length_measure;
+      depth        : positive_length_measure;
+      radius_1     : OPTIONAL positive_length_measure;
+      radius_2     : OPTIONAL positive_length_measure;
+  END_ENTITY;
+
+  ENTITY plate_approval
+    SUBTYPE OF(structural_class_approval);
+      SELF\approval_history.subject : plate_design_definition;
+  END_ENTITY;
+
+  ENTITY profile_approval
+    SUBTYPE OF(structural_class_approval);
+      SELF\approval_history.subject : profile_design_definition;
+  END_ENTITY;
+
+  ENTITY hull_cross_section_rejection
+    SUBTYPE OF(structural_class_rejection, hull_cross_section_result);
+  END_ENTITY;
+
+  ENTITY structural_class_rejection
+    ABSTRACT SUPERTYPE OF (ONEOF(corrugated_part_rejection, hull_cross_section_rejection, plate_rejection, profile_rejection))
+    SUBTYPE OF(structural_class_approval_result);
+      proposed_alternative                               : SET OF definition;
+      SELF\structural_class_approval_result.explanations : SET [1:?] OF reason_for_decision;
+    WHERE
+       (SELF\Approval_history.status = Approval_status.rejected)
+         OR
+         (SELF\Approval_history.status = Approval_status.user_defined);
+  END_ENTITY;
+
+  ENTITY corrugated_part_rejection
+    SUBTYPE OF(structural_class_rejection);
+      SELF\approval_history.subject : corrugated_part_design_definition;
+  END_ENTITY;
+
+  ENTITY plate_rejection
+    SUBTYPE OF(structural_class_rejection);
+      SELF\approval_history.subject : plate_design_definition;
+  END_ENTITY;
+
+  ENTITY profile_rejection
+    SUBTYPE OF(structural_class_rejection);
+      SELF\approval_history.subject : profile_design_definition;
+  END_ENTITY;
+
+  ENTITY reason_for_decision;
+      rule_reference : document_reference;
+      annotations    : text;
+  END_ENTITY;
+
+  ENTITY structural_class_conditional_approval
+    SUBTYPE OF(structural_class_approval_result);
+      SELF\structural_class_approval_result.explanations : SET [1:?] OF reason_for_decision;
+    WHERE
+      WR1 : SELF\Approval_history.status = Approval_status.user_defined;
+  END_ENTITY;
+
+  ENTITY check
+    SUBTYPE OF(event);
+  END_ENTITY;
+
+  ENTITY envisaged_version_creation
+    SUBTYPE OF(versionable_object_change_event);
+      base     : SET OF versionable_object;
+      category : label;
+  END_ENTITY;
+
+  ENTITY version_creation
+    SUBTYPE OF(versionable_object_change_event);
+      base    : SET OF versionable_object;
+      subject : versionable_object;
+  END_ENTITY;
+
+  ENTITY version_modification
+    SUBTYPE OF(versionable_object_change_event);
+      base    : SET [1:?] OF versionable_object;
+      subject : versionable_object;
+  END_ENTITY;
+
+  ENTITY version_deletion
+    SUBTYPE OF(versionable_object_change_event);
+      subject : versionable_object;
+  END_ENTITY;
+
+  ENTITY change_plan
+    SUBTYPE OF(change_definition);
+      chosen_solution_for : change_request;
+      checks              : SET OF check;
+      planned_impact      : change_impact;
+  END_ENTITY;
+
+  ENTITY change_realization
+    SUBTYPE OF(change_definition);
+      realization_of : change_plan;
+      checks         : SET OF check;
+      impact         : change_impact;
+  END_ENTITY;
+
+  ENTITY named_unit;
+  END_ENTITY;
+
+  ENTITY derived_unit;
+  END_ENTITY;
+
+  ENTITY plate_renewal_definition
+    SUBTYPE OF(definition);
+      SELF\definition.defined_for : SET [1:?] OF plate;
+      rule_thickness              : length_measure;
+      renewal_thickness           : length_measure;
+  END_ENTITY;
+
+  ENTITY profile_renewal_definition
+    SUBTYPE OF(definition);
+      SELF\definition.defined_for : SET [1:?] OF profile;
+      rule_inertia                : inertia_moment_measure;
+      rule_section_modulus        : section_modulus_measure;
+      renewal_modulus             : section_modulus_measure;
+  END_ENTITY;
+
+  ENTITY lightship_definition
+    SUBTYPE OF(definition);
+      lightship_weight            : mass_measure;
+      lightship_centre_of_gravity : centre_location;
+      lightship_items             : SET OF lightship_weight_item;
+      SELF\definition.defined_for : SET [1:1] OF ship;
+  END_ENTITY;
+
+  ENTITY lightship_weight_item
+    SUBTYPE OF(weight_and_centre_of_gravity);
+      lightship_item_description : text;
+      aft_weight_extent          : length_measure;
+      fwd_weight_extent          : length_measure;
+  END_ENTITY;
+
+  ENTITY weight_and_centre_of_gravity;
+      mass              : mass_measure;
+      centre_of_gravity : centre_location;
+      moment            : moment_3d;
+  END_ENTITY;
+
+  ENTITY moment_3d;
+      longitudinal_moment : moment_measure;
+      transverse_moment   : moment_measure;
+      vertical_moment     : moment_measure;
+      origin              : centre_location;
+  END_ENTITY;
+
+  ENTITY ship
+    SUBTYPE OF(item);
+      units                : SET OF unit;
+      single_hull_or_class : single_or_multiple_hulls;
+    INVERSE
+      ship_items           : SET OF item FOR ship_context;
+  END_ENTITY;
+
+  ENTITY local_co_ordinate_system
+    SUBTYPE OF(definition);
+      parent : co_ordinate_system;
+  END_ENTITY;
+
+  ENTITY local_co_ordinate_system_with_position_reference
+    SUBTYPE OF(local_co_ordinate_system);
+      longitudinal_ref : OPTIONAL location_reference;
+      transversal_ref  : OPTIONAL location_reference;
+      vertical_ref     : OPTIONAL location_reference;
+    WHERE
+      AT_LEAST_ONE_REFERENCE            : (* At least one reference has to be defined *)
+                                          (EXISTS(longitudinal_ref) OR EXISTS(vertical_ref) OR EXISTS(transversal_ref));
+      RELATES_DIRECTLY_TO_GLOBAL_SYSTEM : 
+                                          ('AP218_SHORT.GLOBAL_AXIS_PLACEMENT' IN 
+                                          
+                                          TYPEOF(SELF\Local_co_ordinate_system.parent));
+      CORRECT_LONGITUDINAL_REF          : 
+                                          (NOT ('SPACING_GRIDS_EXPORT.SPACING_POSITION' IN TYPEOF (longitudinal_ref)) OR 
+                                          ('SPACING_GRIDS_EXPORT.LONGITUDINAL_POSITION' IN TYPEOF (longitudinal_ref)));
+      CORRECT_TRANSVERSAL_REF           : 
+                                          (NOT ('SPACING_GRIDS_EXPORT.SPACING_POSITION' IN TYPEOF (transversal_ref)) OR 
+                                          ('SPACING_GRIDS_EXPORT.TRANSVERSAL_POSITION' IN TYPEOF (transversal_ref)));
+      CORRECT_VERTICAL_REF              : 
+                                          (NOT ('SPACING_GRIDS_EXPORT.SPACING_POSITION' IN TYPEOF (vertical_ref)) OR 
+                                          ('SPACING_GRIDS_EXPORT.VERTICAL_POSITION' IN TYPEOF (vertical_ref)));
+  END_ENTITY;
+
+  ENTITY global_axis_placement
+    SUBTYPE OF(general_characteristics_definition);
+      orientation                : global_co_ordinate_system_orientation;
+      after_perpendicular_offset : length_measure;
+  END_ENTITY;
+
+  ENTITY general_characteristics_definition
+    ABSTRACT SUPERTYPE OF (ONEOF(global_axis_placement, ship_designation, owner_designation, shipyard_designation, class_and_statutory_designation, class_parameters, design_load, principal_characteristics, freeboard_characteristics))
+    SUBTYPE OF(definition);
+      SELF\definition.defined_for : SET [1:?] OF ship;
+  END_ENTITY;
+
+  ENTITY ship_designation
+    SUBTYPE OF(general_characteristics_definition);
+      flag_state                          : text;
+      ship_name                           : text;
+      port_of_registration                : text;
+      call_sign                           : text;
+      ship_identification                 : ship_identifier;
+      SELF\versionable_object.description : text;
+      SELF\definition.local_units         : SET OF unit;
+  END_ENTITY;
+
+  ENTITY owner_designation
+    SUBTYPE OF(general_characteristics_definition);
+      ordering_company            : organization;
+      managing_company            : organization;
+      owning_company              : organization;
+      owner_approval              : OPTIONAL STRING;
+      SELF\definition.local_units : SET OF unit;
+  END_ENTITY;
+
+  ENTITY shipyard_designation
+    SUBTYPE OF(general_characteristics_definition);
+      shipyard_new_building_id    : OPTIONAL label;
+      shipyard_project_name       : text;
+      role                        : shipyard_role;
+      shipyard                    : organization;
+      SELF\definition.local_units : SET OF unit;
+  END_ENTITY;
+
+  ENTITY class_and_statutory_designation
+    SUBTYPE OF(general_characteristics_definition);
+      the_class                   : class_notation;
+      the_statutory               : regulation;
+      class_number                : label;
+      SELF\definition.local_units : SET OF unit;
+  END_ENTITY;
+
+  ENTITY class_notation;
+      class_society                               : organization;
+      class_notations_hull                        : SET [1:?] OF text;
+      class_notations_machinery                   : SET [1:?] OF text;
+      ice_class_notation                          : OPTIONAL text;
+      service_area                                : text;
+      service_factor                              : OPTIONAL REAL;
+      approval_required_for_oil_cargo             : BOOLEAN;
+      approval_required_loading_unloading_aground : BOOLEAN;
+      approval_required_loading_unloading_grabs   : BOOLEAN;
+      approval_required_for_heavy_cargo           : OPTIONAL heavy_cargo;
+  END_ENTITY;
+
+  ENTITY regulation;
+      international_regulations : SET OF external_reference;
+      national_regulations      : SET OF external_reference;
+      standards                 : SET OF external_reference;
+  END_ENTITY;
+
+  ENTITY class_parameters
+    SUBTYPE OF(general_characteristics_definition);
+      length_class            : length_measure;
+      length_solas            : length_measure;
+      scantlings_draught      : length_measure;
+      block_coefficient_class : ratio_measure;
+      design_speed_ahead      : speed_measure;
+      design_speed_astern     : speed_measure;
+  END_ENTITY;
+
+  ENTITY design_load
+    ABSTRACT SUPERTYPE OF (ONEOF(bending_moment, shear_force))
+    SUBTYPE OF(general_characteristics_definition);
+      SELF\general_characteristics_definition.defined_for : SET [1:?] OF ship;
+  END_ENTITY;
+
+  ENTITY bending_moment
+    ABSTRACT SUPERTYPE OF (ONEOF(design_still_water_bending_moment, maximum_permissible_still_water_bending_moment, design_vertical_wave_bending_moment))
+    SUBTYPE OF(design_load);
+  END_ENTITY;
+
+  ENTITY design_still_water_bending_moment
+    SUBTYPE OF(bending_moment);
+      hogging_amidship : moment_measure;
+      sagging_amidship : moment_measure;
+  END_ENTITY;
+
+  ENTITY maximum_permissible_still_water_bending_moment
+    SUBTYPE OF(bending_moment);
+      table_of_max_values : SET [1:?] OF maximum_permissible_swbm_values;
+  END_ENTITY;
+
+  ENTITY maximum_permissible_swbm_values;
+      position : spacing_position;
+      hogging  : moment_measure;
+      sagging  : moment_measure;
+  END_ENTITY;
+
+  ENTITY design_vertical_wave_bending_moment
+    SUBTYPE OF(bending_moment);
+      hogging : moment_measure;
+      sagging : moment_measure;
+  END_ENTITY;
+
+  ENTITY shear_force
+    ABSTRACT SUPERTYPE OF (ONEOF(design_still_water_shear_force, maximum_permissible_still_water_shear_force, design_vertical_wave_shear_force))
+    SUBTYPE OF(design_load);
+  END_ENTITY;
+
+  ENTITY design_still_water_shear_force
+    SUBTYPE OF(shear_force);
+      table_of_shear_force_values : SET [1:?] OF design_swsf_values;
+  END_ENTITY;
+
+  ENTITY design_swsf_values;
+      position       : spacing_position;
+      positive_value : force_measure;
+      negative_value : force_measure;
+  END_ENTITY;
+
+  ENTITY maximum_permissible_still_water_shear_force
+    SUBTYPE OF(shear_force);
+      table_of_max_shear_force_values : SET [1:?] OF maximum_permissible_swsf_values;
+  END_ENTITY;
+
+  ENTITY maximum_permissible_swsf_values;
+      position       : spacing_position;
+      positive_value : force_measure;
+      negative_value : force_measure;
+  END_ENTITY;
+
+  ENTITY design_vertical_wave_shear_force
+    SUBTYPE OF(shear_force);
+      positive_value : force_measure;
+      negative_value : force_measure;
+  END_ENTITY;
+
+  ENTITY principal_characteristics
+    SUBTYPE OF(general_characteristics_definition);
+      length_between_perpendiculars : length_measure;
+      moulded_breadth               : length_measure;
+      moulded_depth                 : length_measure;
+      design_draught                : OPTIONAL length_measure;
+      block_coefficient             : OPTIONAL ratio_measure;
+      design_deadweight             : OPTIONAL mass_measure;
+      min_draught_at_fp             : OPTIONAL length_measure;
+      max_draught_at_fp             : OPTIONAL length_measure;
+      min_draught_at_ap             : OPTIONAL length_measure;
+      max_draught_at_ap             : OPTIONAL length_measure;
+  END_ENTITY;
+
+  ENTITY freeboard_characteristics
+    SUBTYPE OF(general_characteristics_definition);
+      date_freeboard_assigned : date_and_time;
+      freeboard_assigned_by   : organization;
+      assigned_code           : freeboard_type;
+      freeboard               : length_measure;
+      applicable_loadline     : loadline;
+  END_ENTITY;
+
+  ENTITY loadline;
+      load_line_length            : length_measure;
+      load_line_depth             : length_measure;
+      load_line_displacement      : volume_measure;
+      load_line_block_coefficient : ratio_measure;
+      load_line_regulation        : load_line_convention_type;
+    DERIVE
+      load_line_draught           : length_measure := load_line_depth * 0.85 ;
+  END_ENTITY;
+
+  ENTITY ship_material_property
+    SUPERTYPE OF (ONEOF(homogeneous_ship_material_property, weld_filler_material))
+    SUBTYPE OF(definition);
+      material_reference                  : OPTIONAL external_reference;
+      SELF\versionable_object.description : OPTIONAL text;
+      density                             : density_measure;
+    WHERE
+      WR1 : (SIZEOF(TYPEOF(SELF)) > 2) OR EXISTS(material_reference);
+      WR2 : TRUE;
+  END_ENTITY;
+
+  ENTITY homogeneous_ship_material_property
+    SUBTYPE OF(ship_material_property);
+      SELF\definition.defined_for   : SET [1:?] OF part;
+      youngs_module                 : stress_measure;
+      poisson_ratio                 : ratio_measure;
+      yield_point                   : stress_measure;
+      stress_of_fracture            : stress_measure;
+      thermal_expansion_coefficient : dilatation_measure;
+  END_ENTITY;
+
+  ENTITY weld_filler_material
+    SUBTYPE OF(ship_material_property);
+      SELF\definition.defined_for : SET [1:?] OF weld;
+      electrode_id                : OPTIONAL identifier;
+      material_strength_id        : OPTIONAL identifier;
+      notch_impact_work_id        : OPTIONAL identifier;
+      chemical_composition        : OPTIONAL electrode_chemical_composition;
+      chemical_composition_id     : OPTIONAL identifier;
+  END_ENTITY;
+
+  ENTITY electrode_chemical_composition;
+      carbon     : percentage;
+      silicon    : percentage;
+      manganese  : percentage;
+      phosphorus : percentage;
+      sulphur    : percentage;
+      nickel     : percentage;
+      molybdenum : percentage;
+      aluminium  : percentage;
+      titanium   : percentage;
+      zirconium  : percentage;
+      chromium   : percentage;
+      copper     : percentage;
+      vanadium   : percentage;
+  END_ENTITY;
+
+  ENTITY spacing_table
+    SUPERTYPE OF (ONEOF(longitudinal_table, transversal_table, vertical_table))
+    SUBTYPE OF(definition);
+      spacing_table_representations : LIST OF spacing_position;
+      name                          : OPTIONAL text;
+  END_ENTITY;
+
+  ENTITY longitudinal_table
+    SUPERTYPE OF (ONEOF(frame_table, station_table))
+    SUBTYPE OF(spacing_table);
+      SELF\spacing_table.spacing_table_representations : LIST OF longitudinal_position;
+  END_ENTITY;
+
+  ENTITY frame_table
+    SUBTYPE OF(longitudinal_table);
+  END_ENTITY;
+
+  ENTITY station_table
+    SUBTYPE OF(longitudinal_table);
+  END_ENTITY;
+
+  ENTITY transversal_table
+    SUBTYPE OF(spacing_table);
+      SELF\spacing_table.spacing_table_representations : LIST OF transversal_position;
+  END_ENTITY;
+
+  ENTITY buttock_table
+    SUBTYPE OF(transversal_table);
+  END_ENTITY;
+
+  ENTITY vertical_table
+    SUBTYPE OF(spacing_table);
+      SELF\spacing_table.spacing_table_representations : LIST OF vertical_position;
+  END_ENTITY;
+
+  ENTITY waterline_table
+    SUBTYPE OF(vertical_table);
+  END_ENTITY;
+
+  ENTITY functional_definition
+    ABSTRACT SUPERTYPE OF (ONEOF(edge_cutout_functional_definition, edge_feature_functional_definition, interior_cutout_functional_definition, shiptype, structural_part_functional_definition, structural_system_functional_definition))
+    SUBTYPE OF(definition);
+      user_def_function           : OPTIONAL label;
+      SELF\definition.local_units : SET OF unit;
+  END_ENTITY;
+
+  ENTITY edge_cutout_functional_definition
+    SUBTYPE OF(functional_definition);
+      SELF\definition.defined_for : SET [1:?] OF edge_cutout;
+      the_function                : edge_cutout_functionality;
+    WHERE
+      WR1 : EXISTS(SELF\Functional_definition.user_def_function) XOR
+            (the_function <> Edge_cutout_functionality.user_defined);
+  END_ENTITY;
+
+  ENTITY edge_feature_functional_definition
+    SUBTYPE OF(functional_definition);
+      SELF\definition.defined_for : SET [1:?] OF edge_feature;
+      the_function                : edge_feature_functionality;
+    WHERE
+      WR1 : EXISTS(SELF\Functional_definition.user_def_function) XOR
+            (the_function <> Edge_feature_functionality.user_defined);
+  END_ENTITY;
+
+  ENTITY interior_cutout_functional_definition
+    SUBTYPE OF(functional_definition);
+      SELF\definition.defined_for : SET [1:?] OF interior_cutout;
+      the_function                : interior_cutout_functionality;
+    WHERE
+      WR1 : EXISTS(SELF\Functional_definition.user_def_function) XOR
+            (the_function <> 
+            Interior_cutout_functionality.user_defined);
+  END_ENTITY;
+
+  ENTITY shiptype
+    ABSTRACT SUPERTYPE OF (ONEOF(carrier, working_ship, research_ship, navy_ship))
+    SUBTYPE OF(functional_definition);
+      SELF\versionable_object.description : OPTIONAL text;
+      SELF\definition.defined_for         : SET [1:?] OF ship;
+  END_ENTITY;
+
+  ENTITY carrier
+    SUBTYPE OF(shiptype);
+      has_type : carrier_ship_type;
+    WHERE
+      WR1 : (NOT EXISTS(SELF.user_def_function)) OR
+            (has_type = Carrier_Ship_Type.user_defined);
+  END_ENTITY;
+
+  ENTITY working_ship
+    SUBTYPE OF(shiptype);
+      has_type : working_ship_type;
+    WHERE
+      WR1 : (NOT EXISTS(SELF.user_def_function)) OR
+            (has_type = Working_Ship_Type.user_defined);
+  END_ENTITY;
+
+  ENTITY research_ship
+    SUBTYPE OF(shiptype);
+      has_type : research_ship_type;
+    WHERE
+      WR1 : (NOT EXISTS(SELF.user_def_function)) OR
+            (has_type = Research_Ship_Type.user_defined);
+  END_ENTITY;
+
+  ENTITY navy_ship
+    SUBTYPE OF(shiptype);
+      has_type : navy_ship_type;
+    WHERE
+      WR1 : (NOT EXISTS(SELF.user_def_function)) OR
+            (has_type = Navy_Ship_Type.user_defined);
+  END_ENTITY;
+
+  ENTITY structural_part_functional_definition
+    ABSTRACT SUPERTYPE OF (ONEOF(plate_functional_definition, profile_functional_definition))
+    SUBTYPE OF(functional_definition);
+      SELF\definition.defined_for : SET [1:?] OF structural_part;
+      the_function                : structural_part_functionality;
+    WHERE
+      WR1 : EXISTS(SELF\Functional_definition.user_def_function) XOR
+            (the_function <> Structural_part_functionality.USER_DEFINED);
+  END_ENTITY;
+
+  ENTITY plate_functional_definition
+    SUBTYPE OF(structural_part_functional_definition);
+      SELF\structural_part_functional_definition.defined_for : SET [1:?] OF plate;
+    WHERE
+      WR1 : EXISTS(SELF\Functional_definition.user_def_function) XOR
+            (SELF\Structural_part_functional_definition.the_function IN
+            [Structural_part_functionality.STANDARD_PLATE,
+            Structural_part_functionality.DOUBLING_PLATE,
+            Structural_part_functionality.SHEDDING_PLATE,
+            Structural_part_functionality.CLIP,
+            Structural_part_functionality.WATERTIGHT_CLIP,
+            Structural_part_functionality.LUG,
+            Structural_part_functionality.BRACKET,
+            Structural_part_functionality.FACE_PLATE,
+            Structural_part_functionality.BILGE_PLATE]);
+  END_ENTITY;
+
+  ENTITY profile_functional_definition
+    SUBTYPE OF(structural_part_functional_definition);
+      SELF\structural_part_functional_definition.defined_for : SET [1:?] OF profile;
+    WHERE
+      WR1 : EXISTS(SELF\Functional_definition.user_def_function) XOR
+            (SELF\Structural_part_functional_definition.the_function IN
+            [Structural_part_functionality.STIFFENER,
+            Structural_part_functionality.LONGITUDINAL_STIFFENER,
+            Structural_part_functionality.TRANSVERSAL_STIFFENER,
+            Structural_part_functionality.CARLING,
+            Structural_part_functionality.BEAM,
+            Structural_part_functionality.DECK_BEAM,
+            Structural_part_functionality.PILLAR,
+            Structural_part_functionality.HOLD_PILLAR,
+            Structural_part_functionality.FLANGE,
+            Structural_part_functionality.WEB,
+            Structural_part_functionality.FRAME]);
+  END_ENTITY;
+
+  ENTITY structural_system_functional_definition
+    SUPERTYPE OF (ONEOF(panel_system_functional_definition, plate_strake_functional_definition, corrugated_structure_functional_definition))
+    SUBTYPE OF(functional_definition);
+      SELF\definition.defined_for : SET [1:?] OF structural_system;
+      the_function                : structural_system_functionality;
+    WHERE
+      WR1 : EXISTS(SELF\Functional_definition.user_def_function) XOR
+            (the_function <>
+            Structural_system_functionality.USER_DEFINED);
+  END_ENTITY;
+
+  ENTITY panel_system_functional_definition
+    SUBTYPE OF(structural_system_functional_definition);
+      SELF\structural_system_functional_definition.defined_for : SET [1:?] OF panel_system;
+    WHERE
+      WR1 : EXISTS(SELF\Functional_definition.user_def_function) XOR
+            (SELF\Structural_system_functional_definition.the_function
+            IN
+            [Structural_system_functionality.DECK,
+            Structural_system_functionality.STRENGTH_DECK,
+            Structural_system_functionality.ACCOMODATION_DECK,
+            Structural_system_functionality.MAIN_DECK,
+            Structural_system_functionality.WEATHER_DECK,
+            Structural_system_functionality.NAVIGATION_DECK,
+            Structural_system_functionality.PLATFORM_DECK,
+            Structural_system_functionality.DECK_IN_SUPERSTRUCTURE,
+            Structural_system_functionality.BOTTOM,
+            Structural_system_functionality.INNER_BOTTOM,
+            Structural_system_functionality.DOUBLE_BOTTOM,
+            Structural_system_functionality.OUTER_SHELL,
+            Structural_system_functionality.INNER_SHELL,
+            Structural_system_functionality.DOUBLE_SHELL,
+            Structural_system_functionality.BULKHEAD,
+            Structural_system_functionality.LONGITUDINAL_BULKHEAD,
+            Structural_system_functionality.TRANSVERSAL_BULKHEAD,
+            Structural_system_functionality.STRENGTH_BULKHEAD,
+            Structural_system_functionality.WASH_BULKHEAD,
+            Structural_system_functionality.COLLISION_BULKHEAD,
+            Structural_system_functionality.HOLD_BULKHEAD,
+            Structural_system_functionality.TANK_BULKHEAD,
+            Structural_system_functionality.WING_BULKHEAD,
+            
+            Structural_system_functionality.SUPERSTRUCTURE_FRONT_BULKHEAD,
+            
+            Structural_system_functionality.SUPERSTRUCTURE_SIDE_BULKHEAD,
+            
+            Structural_system_functionality.SUPERSTRUCTURE_AFT_BULKHEAD,
+            Structural_system_functionality.STOOL,
+            Structural_system_functionality.WALL,
+            Structural_system_functionality.TRANSOM,
+            Structural_system_functionality.SHEER_STRAKE,
+            Structural_system_functionality.TANK_BOTTOM,
+            Structural_system_functionality.TANK_SIDE,
+            Structural_system_functionality.TANK_TOP,
+            Structural_system_functionality.HATCH_COVER,
+            Structural_system_functionality.KEEL,
+            Structural_system_functionality.DUCT_KEEL,
+            Structural_system_functionality.HATCHWAY_COAMING,
+            Structural_system_functionality.HATCHWAY_SIDECOAMING,
+            Structural_system_functionality.HATCHWAY_ENDCOAMING,
+            Structural_system_functionality.UPPER_BOOM,
+            Structural_system_functionality.LOWER_BOOM,
+            Structural_system_functionality.FRAME,
+            Structural_system_functionality.WEB_FRAME,
+            Structural_system_functionality.VERTICAL_WEB_FRAME,
+            Structural_system_functionality.TRANSVERSE_WEB_FRAME,
+            Structural_system_functionality.FLOOR,
+            Structural_system_functionality.TRANSVERSE_FLOOR,
+            Structural_system_functionality.BRACKET,
+            Structural_system_functionality.HOPPER,
+            Structural_system_functionality.STERN_FRAME]);
+  END_ENTITY;
+
+  ENTITY plate_strake_functional_definition
+    SUBTYPE OF(structural_system_functional_definition);
+      SELF\structural_system_functional_definition.defined_for : SET [1:?] OF plate_strake;
+    WHERE
+      WR1 : EXISTS(SELF\Functional_definition.user_def_function) XOR
+            (SELF\Structural_system_functional_definition.the_function
+            IN
+            [Structural_system_functionality.PLATING,
+            Structural_system_functionality.TRANSOM]);
+  END_ENTITY;
+
+  ENTITY plate_strake
+    SUBTYPE OF(structural_system);
+    DERIVE
+      SELF\structural_system.the_class : structure_class := 
+                                         Structure_class.PLATE_STRAKE_CLASS;
+  END_ENTITY;
+
+  ENTITY corrugated_structure_functional_definition
+    SUBTYPE OF(structural_system_functional_definition);
+      SELF\structural_system_functional_definition.defined_for : SET [1:?] OF corrugated_structure;
+    WHERE
+      WR1 : EXISTS(SELF\Functional_definition.user_def_function) XOR
+            (SELF\Structural_system_functional_definition.the_function
+            IN
+            [Structural_system_functionality.DECK,
+            Structural_system_functionality.STRENGTH_DECK,
+            Structural_system_functionality.ACCOMODATION_DECK,
+            Structural_system_functionality.MAIN_DECK,
+            Structural_system_functionality.WEATHER_DECK,
+            Structural_system_functionality.NAVIGATION_DECK,
+            Structural_system_functionality.PLATFORM_DECK,
+            Structural_system_functionality.DECK_IN_SUPERSTRUCTURE,
+            Structural_system_functionality.BULKHEAD,
+            Structural_system_functionality.LONGITUDINAL_BULKHEAD,
+            Structural_system_functionality.TRANSVERSAL_BULKHEAD,
+            Structural_system_functionality.STRENGTH_BULKHEAD,
+            Structural_system_functionality.WASH_BULKHEAD,
+            Structural_system_functionality.COLLISION_BULKHEAD,
+            Structural_system_functionality.HOLD_BULKHEAD,
+            Structural_system_functionality.TANK_BULKHEAD,
+            Structural_system_functionality.WING_BULKHEAD,
+            
+            Structural_system_functionality.SUPERSTRUCTURE_FRONT_BULKHEAD,
+            
+            Structural_system_functionality.SUPERSTRUCTURE_SIDE_BULKHEAD,
+            
+            Structural_system_functionality.SUPERSTRUCTURE_AFT_BULKHEAD,
+            Structural_system_functionality.STOOL,
+            Structural_system_functionality.WALL,
+            Structural_system_functionality.HATCH_COVER]);
+  END_ENTITY;
+
+  ENTITY revision
+    SUBTYPE OF(versionable_object);
+      name                                : label;
+      members                             : SET [1:?] OF versionable_object;
+      SELF\versionable_object.description : text;
+  END_ENTITY;
+
+  ENTITY revision_with_context
+    SUBTYPE OF(revision);
+      context_of_revision : definable_object;
+  END_ENTITY;
+
+  ENTITY assembly_relationship
+    SUBTYPE OF(item_relationship);
+      SELF\item_relationship.item_1 : assembly;
+    WHERE
+      WR1 : ('AP218_SHORT.PART' IN TYPEOF (SELF.item_2)) OR
+            ('AP218_SHORT.ASSEMBLY' IN TYPEOF 
+            
+            (SELF.item_2));
+  END_ENTITY;
+
+  ENTITY structural_part_penetration_relationship
+    SUBTYPE OF(item_relationship);
+      penetration_result            : SET [1:?] OF structural_cutout;
+      SELF\item_relationship.item_1 : structural_part;
+    WHERE
+      WR1 : SIZEOF (['AP218_SHORT.PART',
+            'AP218_SHORT.SYSTEM'] * TYPEOF
+            
+            (SELF.item_2)) = 1;
+  END_ENTITY;
+
+  ENTITY structural_system_penetration_relationship
+    SUBTYPE OF(item_relationship);
+      penetration_result            : SET [1:?] OF structural_cutout;
+      SELF\item_relationship.item_1 : structural_system;
+    WHERE
+      WR1 : SIZEOF (['AP218_SHORT.PART',
+            'AP218_SHORT.SYSTEM'] * TYPEOF
+            
+            (SELF.item_2)) = 1;
+  END_ENTITY;
+
+  ENTITY structural_cutout_boundary_relationship
+    SUBTYPE OF(structural_feature_relationship);
+      SELF\structural_feature_relationship.item_1 : structural_cutout;
+      boundary_index                              : count_measure;
+    WHERE
+      WR1 : SIZEOF (['STRUCTURAL_SYSTEMS_EXPORT.PANEL_SYSTEM',
+            'STRUCTURAL_PARTS_EXPORT.PLATE'] * TYPEOF (SELF.item_2)) = 1;
+  END_ENTITY;
+
+  ENTITY corner_cutout_boundary_relationship
+    SUBTYPE OF(structural_cutout_boundary_relationship);
+      SELF\structural_cutout_boundary_relationship.item_1 : corner_cutout;
+      boundary_index_2                                    : count_measure;
+  END_ENTITY;
+
+  ENTITY structural_added_material_boundary_relationship
+    SUBTYPE OF(structural_feature_relationship);
+      SELF\structural_feature_relationship.item_1 : structural_added_material_feature;
+      boundary_index                              : count_measure;
+    WHERE
+      WR1 : SIZEOF (['STRUCTURAL_SYSTEMS_EXPORT.PLATE',
+            'STRUCTURAL_PARTS_EXPORT.PROFILE',
+            'STRUCTURAL_PARTS_EXPORT.CORRUGATED_PART'] * TYPEOF (SELF.item_2)) = 1;
+  END_ENTITY;
+
+  ENTITY hull_applicability;
+      start_hull            : label;
+      end_hull              : OPTIONAL label;
+      items_for_hulls       : SET OF item;
+      definitions_for_hulls : SET OF definition;
+  END_ENTITY;
+
+  ENTITY precision;
+      minimum_point_spacing : length_measure;
+  END_ENTITY;
+
+  ENTITY version_history;
+      versions        : SET [1:?] OF versionable_object;
+      relationships   : SET OF version_relationship;
+      current_version : versionable_object;
+  END_ENTITY;
+
+  ENTITY version_relationship;
+      predecessor : versionable_object;
+      successor   : versionable_object;
+      reason      : text;
+    WHERE
+       TRUE;
+  END_ENTITY;
+
+  ENTITY alternative_version_relationship;
+      alternative_1 : versionable_object;
+      alternative_2 : versionable_object;
+      reason        : text;
+    WHERE
+       TRUE;
+  END_ENTITY;
+
+  RULE unique_global_placement FOR
+    (global_axis_placement);
+    WHERE
+      WR1 : (* there is exactly one global axis placement for a ship 
+                        to which all local co-ordinate systems may refer.
+                     *)SIZEOF(Global_axis_placement) = 1;
+  END_RULE;
+
+  FUNCTION current_approval_status
+  (  history: LIST[1:?] OF Approval_event
+              (*the approval history the current approval status is
+                 to be derived from. *)
+        ): Approval_status;
+           (*The <current_approval_status> function returns the
+              approval status being the <result> of the last
+              <Approval_event> in the approval history. *)
+  
+        LOCAL
+           a: Approval_event;
+        END_LOCAL;
+  
+        a := history[HIINDEX(history)];
+        RETURN (a.result);
+  END_FUNCTION;
+
+  FUNCTION get_company_id
+  (id: STRING): STRING;
+        LOCAL
+           company_id: STRING;
+        END_LOCAL;
+  
+        (* extract the company id *)
+  
+        RETURN (company_id);
+  END_FUNCTION;
+
+  FUNCTION get_local_id
+  (id: STRING): STRING;
+        LOCAL
+           local_id: STRING;
+        END_LOCAL;
+  
+        (* extract the local id *)
+  
+        RETURN (local_id);
+  END_FUNCTION;
+
+END_SCHEMA;

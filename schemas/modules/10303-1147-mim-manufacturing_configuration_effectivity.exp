@@ -1,0 +1,24 @@
+(*
+   $Id: 10303-1147-mim-manufacturing_configuration_effectivity.exp,v 1.1 2006/08/03 15:03:35 wg12deputy Exp $
+   ISO/TC184/SC4 WG12N2629 - ISO/TS 10303-1147 Manufacturing_configuration_effectivity - EXPRESS MIM
+   Supersedes ISO TC184/SC4/WG12N1791
+*)
+
+SCHEMA Manufacturing_configuration_effectivity_mim;
+
+USE FROM Configuration_effectivity_mim;
+
+USE FROM Person_organization_mim;
+
+USE FROM Person_organization_assignment_mim;
+
+USE FROM Product_occurrence_mim;
+
+USE FROM Specified_product_mim;
+
+
+TYPE mce_organization_item = SELECT BASED_ON organization_item WITH
+	(configuration_effectivity);
+END_TYPE;
+
+END_SCHEMA;

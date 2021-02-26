@@ -1,0 +1,13 @@
+(*
+ $Id: 10303-1038-mim-independent_property_representation.exp,v 1.5 2006/08/07 09:42:03 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N1244 - ISO/TS 10303-1038 Independent property representation - EXPRESS MIM
+*)
+SCHEMA Independent_property_representation_mim;
+
+USE FROM Foundation_representation_mim;	-- ISO 10303-1006
+USE FROM Independent_property_mim;
+
+USE FROM product_property_representation_schema
+  (property_definition_representation);	-- ISO 10303-41
+
+END_SCHEMA;

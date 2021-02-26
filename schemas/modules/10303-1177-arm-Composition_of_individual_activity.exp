@@ -1,0 +1,18 @@
+(*
+ $Id: 10303-1177-arm-Composition_of_individual_activity.exp,v 1.4 2006/08/04 12:01:50 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2759 - ISO/TS 10303-1177 Composition of individual activity - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG12 N1861
+*)
+
+SCHEMA Composition_of_individual_activity_arm;
+
+USE FROM Activity_arm;    -- ISO/TS 10303-1047
+USE FROM Individual_activity_arm;    -- ISO/TS 10303-1176
+
+ENTITY Composition_of_individual_activity
+  SUBTYPE OF (Activity_relationship);
+  SELF\Activity_relationship.relating_activity : Individual_activity;
+  SELF\Activity_relationship.related_activity : Individual_activity;
+END_ENTITY;
+
+END_SCHEMA;

@@ -1,0 +1,369 @@
+
+ALL THE CHANGES ARE IMPLEMENTED IN THE RELEASED SCHEMAS
+
+
+=====================================================================
+
+ISSUE NUMBER: 1
+AUTHOR: E. SARDET
+ENTITY or RESOURCE MODIFIED: ENTITY dictionary
+DESCRIPTION: The dictionary entity data type references an entity called semantic_relationship through its a_posteriori_semantic_relationships attribute. But the semantic_relationship entity data type name has been updated by a new one: a_posteriori_semantic_relationship.
+OLD CONTENT: 
+NEW CONTENT: 
+Wherever semantic_relationship appears, replace by a_posteriori_semantic_relationship.
+
+=====================================================================
+
+=====================================================================
+
+ISSUE NUMBER: 2
+AUTHOR: E. SARDET
+ENTITY or RESOURCE MODIFIED: imported_documents_are_visible_or_applicable_rule rule
+DESCRIPTION: The imported_documents_are_visible_or_applicable_rule does not appear in the long form, whereas it should have been implicitly imported through the a_priori_semantics_relationship and document_element entity data types.
+OLD CONTENT: 
+NEW CONTENT: 
+Add the following global rule in the long form:
+
+RULE imported_documents_are_visible_or_applicable_rule FOR (
+		a_priori_semantics_relationship, document_element);
+WHERE
+	WR1: QUERY (rel <* a_priori_semantics_relationship  
+		| QUERY ( doc <* rel.referenced_documents
+		| QUERY ( cl <* rel.referenced_classes
+		| NOT visible_documents (cl, [doc])
+		AND NOT applicable_documents (cl, [doc])) 
+		= rel.referenced_classes) <> [] ) 
+	 = [];
+END_RULE; -- imported_documents_are_visible_or_applicable_rule
+
+=====================================================================
+
+=====================================================================
+
+ISSUE NUMBER: 3
+AUTHOR: E. SARDET
+ENTITY or RESOURCE MODIFIED: imported_documents_are_visible_or_applicable_rule rule
+DESCRIPTION: Consequently to ISSUE NUMBER 2, the following functions must be added to the liim_24_3 schema:
+- applicable_documents
+- retrieve_documents
+OLD CONTENT: 
+NEW CONTENT: 
+
+FUNCTION applicable_documents (cl: class_BSU;
+			doc: AGGREGATE OF document_BSU): LOGICAL;
+
+IF SIZEOF(doc) = 0 
+THEN 
+	RETURN(TRUE); 
+END_IF;
+
+IF NOT EXISTS(cl)
+THEN
+	RETURN(UNKNOWN); 
+END_IF;
+
+IF SIZEOF(cl.definition) = 0 
+THEN 
+	RETURN(UNKNOWN);
+END_IF;
+
+doc := doc - retrieve_documents (cl);
+
+IF 
+'ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA.A_PRIORI_SEMANTICS_RELATIONSHIP' 
+	IN TYPEOF(cl.definition[1])
+THEN
+	doc:= doc-
+cl.definition[1]\a_priori_semantics_relationship.referenced_documents;
+END_IF;
+
+IF SIZEOF(doc) = 0 
+THEN
+	RETURN(TRUE);
+ELSE 
+	IF EXISTS(cl.definition[1]\class.its_superclass) 
+	THEN 
+		RETURN (applicable_documents(cl.definition[1]
+		\class.its_superclass, doc));
+	ELSE 
+		RETURN(FALSE);
+	END_IF;
+END_IF;
+
+END_FUNCTION; 
+-- applicable_documents 
+
+FUNCTION retrieve_documents (cl: class_BSU): SET[0:?] OF document_BSU;
+-- requires: { SIZEOF (cl.definition) <> O } 
+ 
+LOCAL  
+
+	s: SET[0:?] OF document_BSU; 
+END_LOCAL; 
+ 
+s := []; 
+REPEAT i := 1 TO SIZEOF(cl.definition[1]\class.associated_items); 
+	IF 'ISO13584_F_M_IIM_LIBRARY_IMPLICIT_SCHEMA'+ 
+						'.CLASS_DOCUMENT_RELATIONSHIP'  
+		IN TYPEOF(cl.definition[1]\class.associated_items[i]) 
+	THEN  
+		s := s+ cl.definition[1]\class.associated_items[i] 
+		\class_document_relationship.related_tokens; 
+	END_IF; 
+END_REPEAT; 
+ 
+RETURN(s); 
+ 
+END_FUNCTION; -- retrieve_documents  
+
+=====================================================================
+
+=====================================================================
+
+ISSUE NUMBER: 4
+AUTHOR: E. SARDET
+ENTITY or RESOURCE MODIFIED: functional_view_class
+DESCRIPTION: The functional_view_class entity data type where rule 1 (WR1) is incomplete.
+
+OLD CONTENT: 
+
+ENTITY functional_view_class
+...
+WHERE
+   wr1 : QUERY(v_c_v <* SELF.view_control_variables 
+   		| NOT ((data_type_typeof(v_c_v) = []) 
+		 OR ('ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA'
+		 				+'.NON_QUANTITATIVE_INT_TYPE' 
+		IN data_type_typeof(v_c_v)))) = [];
+...
+END_ENTITY;
+
+
+NEW CONTENT: 
+
+ENTITY functional_view_class
+...
+WHERE
+	WR1: QUERY (v_c_v <* SELF.view_control_variables
+		| NOT ((data_type_typeof (v_c_v) = [])
+		OR (('ISO13584_IEC61360_DICTIONARY_SCHEMA'
+						+'.NON_QUANTITATIVE_INT_TYPE' 
+		IN data_type_typeof (v_c_v))
+		AND ordered_index_value (
+		data_type_non_quantitative_int_type(v_c_v)[1].domain))))
+		 = [];
+...
+END_ENTITY;
+
+=====================================================================
+
+=====================================================================
+
+ISSUE NUMBER: 5
+AUTHOR: E. SARDET
+ENTITY or RESOURCE MODIFIED: functional_view_class
+DESCRIPTION: Consequently to ISSUE NUMBER 4, the following functions must be added to the liim_24_3 schema:
+- ordered_index_value 
+- data_type_non_quantitative_int_type
+OLD CONTENT: 
+NEW CONTENT
+Insert the following functions:
+
+FUNCTION data_type_non_quantitative_int_type( 
+		type_spec: Property_or_data_type_BSU)  
+			: SET [0 :1] OF non_quantitative_int_type ; 
+LOCAL 
+	res: BOOLEAN; 
+	s : SET [0:1] OF non_quantitative_int_type ; 
+	x: data_type; 
+END_LOCAL; 
+ 
+res := FALSE; 
+s:=[]; 
+
+IF NOT EXISTS(type_spec)
+THEN
+	RETURN([]); -- type_spec is indeterminate
+END_IF;
+
+IF 'ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA.PROPERTY_BSU' IN  
+	TYPEOF(type_spec) 
+THEN  
+	IF NOT(SIZEOF(type_spec.definition)=0)  
+	THEN  
+		x := type_spec.definition[1]\property_DET.domain; 
+		res := TRUE; 
+	END_IF; 
+ELSE  
+	IF NOT(SIZEOF(type_spec.definition)=0)  
+	THEN  
+		x := type_spec.definition[1]\ 
+		data_type_element.type_definition; 
+		res := TRUE; 
+	END_IF; 
+END_IF; 
+ 
+ 
+IF res 
+THEN  
+	IF ('ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA'+ 
+	'.NON_QUANTITATIVE_INT_TYPE') IN TYPEOF(x) 
+	THEN  
+		s := s + x; 
+		RETURN(s); 
+	END_IF; 
+ 
+	IF ('ISO13584_F_V_IIM_LIBRARY_IMPLICIT_SCHEMA.NAMED_TYPE')  
+		IN TYPEOF(x) 
+	THEN 
+	s:=data_type_non_quantitative_int_type( 
+			x\named_type.referred_type); 
+		RETURN(s) ; 
+	END_IF; 
+END_IF; 
+ 
+RETURN([ ]); 
+ 
+END_FUNCTION; -- data_type_non_quantitative_int_type 
+
+and
+
+FUNCTION ordered_index_value (x: value_domain): BOOLEAN;
+
+LOCAL
+	i: integer;
+END_LOCAL;
+
+REPEAT i := (LOBOUND (x.its_values)+ 1) TO HIINDEX (x.its_values);
+	IF x.its_values[i].value_code <> x.its_values[i-1].value_code + 1
+	THEN
+		RETURN (FALSE);
+	END_IF;
+END_REPEAT;
+
+RETURN (TRUE);
+
+END_FUNCTION; -- ordered_index_value 
+
+=====================================================================
+
+=====================================================================
+
+ISSUE NUMBER: 6
+AUTHOR: E. SARDET
+ENTITY or RESOURCE MODIFIED: geometric_representation_context_type entity data type
+DESCRIPTION: This entity appears in liim_24-3 long form, but it is never used.
+OLD CONTENT: 
+NEW CONTENT:
+Remove geometric_representation_context_type from the liim_24-3 long form.
+
+=====================================================================
+
+=====================================================================
+
+ISSUE NUMBER: 7
+AUTHOR: E. SARDET
+ENTITY or RESOURCE MODIFIED: 
+DESCRIPTION: Some group references were not correctly used in some entity 
+data types and functions. These have been updated.
+OLD CONTENT
+
+1 - FUNCTION acyclic_superclass_relationship (1, 2, 3)...
+   IF current.definition[1]\class IN visited
+...
+        RETURN (acyclic_superclass_relationship(current.definition[1]\class.
+         its_superclass,visited + current.definition[1]\class));
+
+2 - FUNCTION compliant_http_protocol_24_3
+...
+IF ef.designation.short_name\label  --some tools may require \label
+
+NEW CONTENT:
+
+1 - FUNCTION acyclic_superclass_relationship (1, 2, 3)...
+   IF current.definition[1] IN visited
+...
+        RETURN (acyclic_superclass_relationship(current.definition[1]\class.
+         its_superclass,visited + current.definition[1]));
+
+2 - FUNCTION compliant_http_protocol_24_3
+...
+IF ef.designation.short_name
+
+=====================================================================
+
+=====================================================================
+
+ISSUE NUMBER: 8
+AUTHOR: E. SARDET
+ENTITY or RESOURCE MODIFIED: class_document_relationship and 
+functional_view_class
+DESCRIPTION: Two attributes redefinitions have been badly redefined.
+OLD CONTENT:
+1 - ENTITY class_document_relationship
+SELF\class_bsu_relationship.related_tokens : SET[0:?] OF document_bsu;
+
+2 - ENTITY functional_view_class
+   SELF\class.described_by : LIST[0:?] OF property_bsu := ...
+
+NEW CONTENT:
+1 - ENTITY class_document_relationship
+SELF\class_bsu_relationship.related_tokens : SET[1:?] OF document_bsu;
+
+2 - ENTITY functional_view_class
+   SELF\class.described_by : LIST[0:?] OF UNIQUE property_bsu := ...
+
+=====================================================================
+
+=====================================================================
+
+ISSUE NUMBER: 9
+AUTHOR: E. SARDET
+ENTITY or RESOURCE MODIFIED: Function makes_reference_outside 
+DESCRIPTION: The local attribute temp is never initialized
+OLD CONTENT:
+FUNCTION makes_reference_outside(...)
+...
+IF  NOT (temp[1] IN l) ...
+...
+END_FUNCTION;
+
+NEW CONTENT:
+
+FUNCTION makes_reference_outside(...)
+...
+temp := data_type_class_of(p[j]);
+IF  NOT (temp[1] IN l) ...
+...
+END_FUNCTION;		
+
+=====================================================================
+
+=====================================================================
+
+ISSUE NUMBER: 10
+AUTHOR: E. SARDET
+ENTITY or RESOURCE MODIFIED: table_code_type and document_code_type datatypes 
+DESCRIPTION: the underlying type of these two datatypes must be code_type 
+in place of identifier.
+OLD CONTENT:
+
+TYPE table_code_type = identifier;
+TYPE document_code_type = identifier;
+
+NEW CONTENT:
+
+TYPE table_code_type = code_type;
+TYPE document_code_type = code_type;
+
+=====================================================================
+
+=====================================================================
+
+ISSUE NUMBER: 11
+AUTHOR: E. SARDET
+ENTITY or RESOURCE MODIFIED: sub_list_until, visible_properties, and
+visible_types functions
+DESCRIPTION: these functions are not used in liim 24-3. They must be removed.
+OLD CONTENT:
+NEW CONTENT:

@@ -1,0 +1,97 @@
+(* 
+   $Id: 10303-1103-arm-product_class.exp,v 1.1 2006/08/03 14:41:10 wg12deputy Exp $
+   ISO/TC184/SC4 WG12N2640 - ISO/TS 10303-1103 Product class - Express ARM 
+   Supersedes ISO TC184/SC4/WG12N1586
+*)
+
+SCHEMA Product_class_arm;
+
+USE FROM Product_concept_identification_arm;
+
+TYPE expression_operator = ENUMERATION OF (or_operator, and_operator, oneof_operator, not_operator);
+END_TYPE;
+
+ TYPE specification_operand_select = SELECT
+      (Specification_expression, Specification);
+ END_TYPE;
+
+
+ ENTITY Class_category_association;
+  associated_product_class : Product_class;
+  mandatory : BOOLEAN;
+  associated_category : Specification_category;
+ END_ENTITY;
+
+ ENTITY Class_condition_association;
+  condition_type : STRING;
+  associated_product_class : Product_class;
+  description : OPTIONAL STRING;
+  associated_condition : Specification_expression;
+ END_ENTITY;
+
+ ENTITY Class_inclusion_association;
+  associated_product_class : Product_class;
+  description : OPTIONAL STRING;
+  associated_inclusion : Specification_inclusion;
+ END_ENTITY;
+
+ ENTITY Class_specification_association;
+  associated_product_class : Product_class;
+  association_type : STRING;
+  associated_specification : Specification;
+ END_ENTITY;
+
+ENTITY Product_class
+  SUBTYPE OF (Product_concept);
+  version_id : OPTIONAL STRING;
+  level_type : OPTIONAL STRING;
+WHERE
+WR1: NOT EXISTS(SELF\Product_concept.target_market);
+END_ENTITY;
+
+ ENTITY Product_class_relationship;
+  description : OPTIONAL STRING;
+  relating : Product_class;
+  related : Product_class;
+  relation_type : STRING;
+ END_ENTITY;
+
+ ENTITY Specification;
+  id : STRING;
+  version_id : OPTIONAL STRING;
+  name : OPTIONAL STRING;
+  description : OPTIONAL STRING;
+  category : Specification_category;
+  package : BOOLEAN;
+ END_ENTITY;
+
+ ENTITY Specification_category;
+  id : STRING;
+  description : STRING;
+  implicit_exclusive_condition : BOOLEAN;
+ END_ENTITY;
+
+ ENTITY Specification_category_hierarchy;
+  sub_category : Specification_category;
+  super_category : Specification_category;
+ END_ENTITY;
+
+ ENTITY Specification_expression;
+  id : OPTIONAL STRING;
+  description : OPTIONAL STRING;
+  operation : expression_operator;
+  operand : SET[1:?] OF specification_operand_select;
+ WHERE
+ WR1: (operation <> not_operator) OR (SIZEOF(operand)=1); 
+ END_ENTITY;
+
+ ENTITY Specification_inclusion;
+  id : OPTIONAL STRING;
+  description : OPTIONAL STRING;
+  if_condition : specification_operand_select;
+  included_specification : specification_operand_select;
+ END_ENTITY;
+
+
+END_SCHEMA;
+

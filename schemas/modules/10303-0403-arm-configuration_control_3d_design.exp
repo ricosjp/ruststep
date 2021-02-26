@@ -1,0 +1,344 @@
+(*
+ISO TC184/SC4/WG3 N1197 - ISO/CD-TS 10303-403 Configuration control 3d design ed2 - EXPRESS ARM
+*) 
+
+
+SCHEMA Configuration_control_3d_design_ed2_arm; 
+
+USE FROM Activity_arm;    -- ISO/TS 10303-1047
+
+USE FROM Activity_method_arm;    -- ISO/TS 10303-1049
+
+USE FROM Advanced_boundary_representation_arm;    -- ISO/TS 10303-1514
+
+USE FROM Alias_identification_arm;    -- ISO/TS 10303-1025
+
+USE FROM Appearance_assignment_arm;    -- ISO/CD-TS 10303-1001
+
+USE FROM Approval_arm;    -- ISO/TS 10303-1012
+
+USE FROM Associative_text_arm;    -- ISO/CD-TS 10303-1132
+
+USE FROM Certification_arm;    -- ISO/TS 10303-1044
+
+USE FROM Classification_assignment_arm;    -- ISO/TS 10303-1114
+
+USE FROM Configuration_effectivity_arm;    -- ISO/TS 10303-1058
+
+USE FROM Configuration_item_arm;    -- ISO/TS 10303-1056
+
+USE FROM Construction_geometry_arm;    -- ISO/CD-TS 10303-1131
+
+USE FROM Constructive_solid_geometry_3d_arm;    -- ISO/TS 10303-1068
+
+USE FROM Contract_arm;    -- ISO/TS 10303-1062
+
+USE FROM Curve_appearance_arm;    -- ISO/TS 10303-1003
+
+USE FROM Date_time_assignment_arm;    -- ISO/TS 10303-1014
+
+USE FROM Default_tolerance_arm;    -- ISO/CD-TS 10303-1052
+
+USE FROM Derived_shape_element_arm;    -- ISO/CD-TS 10303-1130
+
+USE FROM Dimension_tolerance_arm;    -- ISO/CD-TS 10303-1050
+
+USE FROM Document_and_version_identification_arm;    -- ISO/TS 10303-1121
+
+USE FROM Document_assignment_arm;    -- ISO/TS 10303-1122
+
+USE FROM Document_definition_arm;    -- ISO/TS 10303-1123
+
+USE FROM Document_management_arm;    -- ISO/CD-TS 10303-1290
+
+USE FROM Document_structure_arm;    -- ISO/TS 10303-1124
+
+USE FROM Edge_based_wireframe_arm;    -- ISO/TS 10303-1501
+
+USE FROM Effectivity_application_arm;    -- ISO/TS 10303-1059
+
+USE FROM Effectivity_arm;    -- ISO/TS 10303-1057
+
+USE FROM Elemental_geometric_shape_arm;    -- ISO/TS 10303-1004
+
+USE FROM Event_arm;    -- ISO/TS 10303-1064
+
+USE FROM Event_assignment_arm;    -- ISO/TS 10303-1364
+
+USE FROM External_item_identification_assignment_arm;    -- ISO/TS 10303-1128
+
+USE FROM External_model_arm;    -- ISO/TS 10303-1033
+
+USE FROM Faceted_boundary_representation_arm;    -- ISO/TS 10303-1512
+
+USE FROM File_identification_arm;    -- ISO/TS 10303-1127
+
+USE FROM Foundation_representation_arm;    -- ISO/TS 10303-1006
+
+USE FROM Geometric_tolerance_arm;    -- ISO/CD-TS 10303-1051
+
+USE FROM Geometric_validation_property_representation_arm;    -- ISO/TS 10303-1039
+
+USE FROM Geometrically_bounded_surface_arm;    -- ISO/TS 10303-1507
+
+USE FROM Geometrically_bounded_wireframe_arm;    -- ISO/TS 10303-1510
+
+USE FROM Identification_assignment_arm;    -- ISO/TS 10303-1021
+
+USE FROM Incomplete_data_reference_mechanism_arm;    -- ISO/CD-TS 10303-1349
+
+USE FROM Independent_property_arm;    -- ISO/TS 10303-1036
+
+USE FROM Independent_property_representation_arm;    -- ISO/TS 10303-1038
+
+USE FROM Management_resource_information_arm;    -- ISO/CD-TS 10303-1288
+
+USE FROM Manifold_surface_arm;    -- ISO/TS 10303-1509
+
+USE FROM Multi_linguism_arm;    -- ISO/TS 10303-1105
+
+USE FROM Part_and_version_identification_arm;    -- ISO/TS 10303-1022
+
+USE FROM Part_definition_relationship_arm;    -- ISO/TS 10303-1055
+
+USE FROM Part_view_definition_arm;    -- ISO/TS 10303-1023
+
+USE FROM Person_organization_arm;    -- ISO/TS 10303-1011
+
+USE FROM Person_organization_assignment_arm;    -- ISO/TS 10303-1013
+
+USE FROM Process_property_assignment_arm;    -- ISO/TS 10303-1040
+
+USE FROM Product_categorization_arm;    -- ISO/TS 10303-1016
+
+USE FROM Product_concept_identification_arm;    -- ISO/TS 10303-1060
+
+USE FROM Product_identification_arm;    -- ISO/TS 10303-1017
+
+USE FROM Product_replacement_arm;    -- ISO/TS 10303-1046
+
+USE FROM Product_structure_arm;    -- ISO/CD-TS 10303-1134
+
+USE FROM Product_version_arm;    -- ISO/TS 10303-1018
+
+USE FROM Product_version_relationship_arm;    -- ISO/TS 10303-1020
+
+USE FROM Product_view_definition_arm;    -- ISO/TS 10303-1019
+
+USE FROM Product_view_definition_properties_arm;    -- ISO/TS 10303-1034
+
+USE FROM Product_view_definition_relationship_arm;    -- ISO/TS 10303-1041
+
+USE FROM Project_arm;    -- ISO/TS 10303-1061
+
+USE FROM Property_assignment_arm;    -- ISO/TS 10303-1030
+
+USE FROM Representation_with_uncertainty_arm;    -- ISO/CD-TS 10303-1228
+
+USE FROM Security_classification_arm;    -- ISO/TS 10303-1015
+
+USE FROM Shape_appearance_layers_arm;    -- ISO/CD-TS 10303-1009
+
+USE FROM Shape_property_assignment_arm;    -- ISO/TS 10303-1032
+
+USE FROM Shell_based_wireframe_arm;    -- ISO/TS 10303-1502
+
+USE FROM Time_interval_arm;    -- ISO/TS 10303-1065
+
+USE FROM Time_interval_assignment_arm;    -- ISO/CD-TS 10303-1365
+
+USE FROM Value_with_unit_arm;    -- ISO/TS 10303-1054
+
+USE FROM Work_order_arm;    -- ISO/TS 10303-1043
+
+USE FROM Work_request_arm;    -- ISO/TS 10303-1042
+
+
+TYPE activity_item_203e2 = SELECT BASED_ON activity_item WITH 
+   (Item_usage_effectivity, 
+    Product_version, 
+    Product_version_relationship, 
+    Product_view_definition);
+END_TYPE; 
+
+TYPE affected_item_select_203e2 = SELECT BASED_ON affected_item_select WITH 
+   (Assigned_property, 
+    Product_version, 
+    Product_version_relationship, 
+    Product_view_definition);
+END_TYPE; 
+
+TYPE alias_identification_item_203e2 = SELECT BASED_ON alias_identification_item WITH 
+   (Approval_status, 
+    Document, 
+    Document_definition, 
+    Document_version, 
+    Geometric_model, 
+    Independent_property, 
+    Organization, 
+    Part, 
+    Part_version, 
+    Part_view_definition, 
+    Security_classification);
+END_TYPE; 
+
+TYPE appearance_context_203e2 = SELECT BASED_ON appearance_context WITH 
+   (Representation);
+END_TYPE; 
+
+TYPE appearance_select_203e2 = SELECT BASED_ON appearance_select WITH 
+   (Curve_appearance, 
+    Point_appearance, 
+    Vector_appearance);
+END_TYPE; 
+
+TYPE approval_item_203e2 = SELECT BASED_ON approval_item WITH 
+   (Activity, 
+    Alternate_part_relationship, 
+    Applied_activity_assignment, 
+    Assembly_relationship_substitution, 
+    Document, 
+    Document_definition, 
+    Document_version, 
+    File, 
+    Item_usage_effectivity, 
+    Part_version, 
+    Part_view_definition, 
+    Work_request);
+END_TYPE; 
+
+TYPE certification_item_203e2 = SELECT BASED_ON certification_item WITH 
+   (Product_version_relationship);
+END_TYPE; 
+
+TYPE contract_item_203e2 = SELECT BASED_ON contract_item WITH 
+   (Activity, 
+    Part_version);
+END_TYPE; 
+
+TYPE documented_element_select_203e2 = SELECT BASED_ON documented_element_select WITH 
+   (Activity_method, 
+    Part, 
+    Part_version, 
+    Part_view_definition, 
+    Shape_element, 
+    Shape_element_relationship, 
+    View_definition_relationship, 
+    Work_request);
+END_TYPE; 
+
+TYPE effectivity_item_203e2 = SELECT BASED_ON effectivity_item WITH 
+   (Assembly_relationship_substitution, 
+    Document, 
+    Document_definition, 
+    Document_definition_relationship, 
+    Document_version, 
+    Part, 
+    Part_version, 
+    Part_view_definition, 
+    View_definition_relationship);
+END_TYPE; 
+
+TYPE event_item_203e2 = SELECT BASED_ON event_item WITH 
+   (Project);
+END_TYPE; 
+
+TYPE identification_item_203e2 = SELECT BASED_ON identification_item WITH 
+   (Approval_status, 
+    Document, 
+    Document_definition, 
+    Document_version, 
+    Geometric_model, 
+    Independent_property, 
+    Organization, 
+    Part, 
+    Part_version, 
+    Part_view_definition, 
+    Security_classification, 
+    Shape_element_relationship);
+END_TYPE; 
+
+TYPE organization_or_person_in_organization_item_203e2 = SELECT BASED_ON organization_or_person_in_organization_item WITH 
+   (Activity, 
+    Alternate_part_relationship, 
+    Applied_activity_assignment, 
+    Applied_independent_property, 
+    Approval, 
+    Assembly_relationship_substitution, 
+    Certification, 
+    Configuration_watched_item, 
+    Contract, 
+    Document, 
+    Document_definition, 
+    Document_version, 
+    File, 
+    Geometric_model, 
+    Independent_property, 
+    Part, 
+    Part_version, 
+    Part_view_definition, 
+    Product_version_relationship, 
+    Project, 
+    Security_classification_assignment, 
+    Work_request);
+END_TYPE; 
+
+TYPE project_item_203e2 = SELECT BASED_ON project_item WITH 
+   (Activity, 
+    Product_concept);
+END_TYPE; 
+
+TYPE security_classification_item_203e2 = SELECT BASED_ON security_classification_item WITH 
+   (Document_definition, 
+    Document_version, 
+    File, 
+    Part_version, 
+    Part_view_definition, 
+    View_definition_usage);
+END_TYPE; 
+
+TYPE string_select_203e2 = SELECT BASED_ON string_select WITH 
+   (Alias_identification, 
+    Alternate_part_relationship, 
+    Applied_independent_property, 
+    Approval_relationship, 
+    Assembly_relationship_substitution, 
+    Certification_assignment, 
+    Contract, 
+    Detailed_geometric_model_element, 
+    Effectivity, 
+    Effectivity_relationship, 
+    Event, 
+    External_geometric_model, 
+    Independent_property, 
+    Independent_property_relationship, 
+    Item_shape, 
+    Make_from_relationship, 
+    Organization_relationship, 
+    Product, 
+    Product_category, 
+    Product_version, 
+    Product_version_relationship, 
+    Product_view_definition, 
+    Project, 
+    Project_relationship, 
+    Representation, 
+    Security_classification_assignment, 
+    Shape_element, 
+    Shape_element_relationship, 
+    Shape_element_relationship, 
+    String_representation_item, 
+    Uncertainty_with_unit, 
+    View_definition_context);
+END_TYPE; 
+
+TYPE time_interval_item_203e2 = SELECT BASED_ON time_interval_item WITH 
+   (Time_interval_effectivity);
+END_TYPE; 
+
+SUBTYPE_CONSTRAINT exclusive_product_versions_203e2 FOR Product_version;
+  ONEOF (Document_version,
+         Part_version);
+END_SUBTYPE_CONSTRAINT;
+
+END_SCHEMA;  -- Configuration_control_3d_design_ed2_arm

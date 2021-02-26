@@ -1,0 +1,6142 @@
+(*
+
+The following permission notice and disclaimer shall be included in all copies of these EXPRESS schemas 
+("the Schema"), and derivations of the Schema:
+
+© ISO 2010 — All rights reserved
+
+Permission is hereby granted, free of charge in perpetuity, to any person obtaining a copy of the Schema, 
+to use, copy, modify, merge and distribute free of charge, copies of the Schema for the purposes of 
+developing, implementing, installing and using software based on the Schema, and to permit persons to 
+whom the Schema is furnished to do so, subject to the following conditions:
+
+THE SCHEMA IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT 
+LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO 
+EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER 
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SCHEMA OR THE 
+USE OR OTHER DEALINGS IN THE SCHEMA.
+
+In addition, any modified copy of the Schema shall include the following notice:
+
+THIS SCHEMA HAS BEEN MODIFIED FROM THE SCHEMA DEFINED IN ISO 13584-42Ed2, AND SHOULD NOT BE INTERPRETED AS 
+COMPLYING WITH THAT STANDARD.
+
+*)
+
+SCHEMA ISO13584_42_2_LONG_FORM_SCHEMA;
+
+CONSTANT 
+	dictionary_code_len: INTEGER := 131;
+	property_code_len: INTEGER := 35;
+	class_code_len: INTEGER := 35;
+	data_type_code_len:INTEGER := 35;
+	supplier_code_len: INTEGER := 149;
+	version_len: INTEGER := 10;
+	revision_len: INTEGER := 3;
+	value_code_len: INTEGER :=35; 
+	pref_name_len: INTEGER := 255;
+	short_name_len: INTEGER := 30; 
+	syn_name_len: INTEGER := pref_name_len;
+	DET_classification_len: INTEGER := 3;
+	source_doc_len: INTEGER := 255;
+	value_format_len: INTEGER := 80;
+	sep_cv: STRING := '#';
+	sep_id: STRING := '#';	
+	element_code_len: INTEGER := 14;
+	external_file_address_length: INTEGER := 18;
+	external_item_code_length: INTEGER := 128;
+	http_file_name_length: INTEGER := 128;
+	http_directory_name_length: INTEGER := 128;
+	
+END_CONSTANT;
+
+(*
+
+*)
+ENTITY dictionary_identification;
+	code: dictionary_code_type;
+	version: version_type;
+	revision: revision_type;
+	defined_by: supplier_bsu;
+DERIVE
+	absolute_id: identifier := defined_by.absolute_id + sep_id + code + sep_cv + version;
+UNIQUE
+	UR1: absolute_id;
+END_ENTITY;
+(*
+
+*)
+ENTITY basic_semantic_unit
+ABSTRACT SUPERTYPE OF(ONEOF(
+	supplier_BSU,
+	class_BSU,
+	property_BSU,
+	data_type_BSU,
+	supplier_related_BSU,
+	class_related_BSU));
+	code: code_type;
+	version: version_type;
+DERIVE
+	dic_identifier: identifier := code + sep_cv + version;
+INVERSE
+	definition: SET [0:1] OF dictionary_element FOR 	identified_by;
+	referenced_by: SET [0:1] OF content_item 
+		FOR dictionary_definition;
+END_ENTITY; -- basic_semantic_unit
+(*
+
+
+*)
+ENTITY dictionary_element
+ABSTRACT SUPERTYPE OF(ONEOF(
+	supplier_element,
+	class_and_property_elements,
+	data_type_element));	
+	identified_by: basic_semantic_unit;
+	time_stamps: OPTIONAL dates;
+	revision: revision_type;
+	administration : OPTIONAL administrative_data ;
+	is_deprecated : OPTIONAL BOOLEAN ;
+	is_deprecated_interpretation : OPTIONAL note_type ;
+WHERE
+WR1: NOT EXISTS (SELF. is_deprecated) 
+OR EXISTS (SELF. is_deprecated_interpretation);
+END_ENTITY; -- dictionary_element
+(*
+
+
+
+*)
+ENTITY content_item
+ABSTRACT SUPERTYPE;
+	dictionary_definition: basic_semantic_unit;
+END_ENTITY; -- content_item
+(*
+
+
+
+*)
+ENTITY supplier_related_BSU
+ABSTRACT SUPERTYPE
+SUBTYPE OF(basic_semantic_unit);
+END_ENTITY; -- supplier_related_BSU
+(*
+
+
+*)
+ENTITY class_related_BSU
+ABSTRACT SUPERTYPE
+SUBTYPE OF(basic_semantic_unit);
+END_ENTITY; -- class_related_BSU
+(*
+
+
+*)
+ENTITY supplier_BSU_relationship
+ABSTRACT SUPERTYPE;
+	relating_supplier: supplier_element;
+	related_tokens: SET [1:?] OF supplier_related_BSU;
+END_ENTITY; -- supplier_BSU_relationship
+(*
+
+
+*)
+ENTITY class_BSU_relationship
+ABSTRACT SUPERTYPE;
+	relating_class: class;
+	related_tokens: SET [1:?] OF class_related_BSU;
+END_ENTITY; -- class_BSU_relationship
+(*
+
+ 
+
+*)
+ENTITY supplier_BSU 
+SUBTYPE OF(basic_semantic_unit); 
+	SELF\basic_semantic_unit.code: supplier_code_type; 
+DERIVE 
+	SELF\basic_semantic_unit.version: version_type := '1';
+	absolute_id: identifier := SELF\basic_semantic_unit.code; 
+UNIQUE 
+	UR1: absolute_id; 
+END_ENTITY; -- supplier_BSU
+(*
+
+
+*)
+ENTITY supplier_element
+SUBTYPE OF(dictionary_element);
+	SELF\dictionary_element.identified_by: supplier_BSU;
+	org: organization;
+	addr: address;
+INVERSE
+	associated_items: SET [0:?] OF supplier_BSU_relationship 
+		FOR relating_supplier;
+END_ENTITY; -- supplier_element
+(*
+
+
+*)
+ENTITY class_BSU
+SUBTYPE OF(basic_semantic_unit);
+	SELF\basic_semantic_unit.code: class_code_type;
+	defined_by: supplier_BSU;
+DERIVE
+	absolute_id: identifier 
+		:= defined_by.absolute_id + sep_id + dic_identifier; 
+	known_visible_properties : SET [0:?]OF property_BSU
+		:=compute_known_visible_properties(SELF);
+	known_visible_data_types: SET [0:?]OF data_type_BSU
+		:=compute_known_visible_data_types(SELF);
+INVERSE
+	subclasses: SET [0:?] OF class FOR its_superclass;
+	added_visible_properties:SET [0:?] OF property_BSU 
+		FOR name_scope;
+	added_visible_data_types:SET [0:?] OF data_type_BSU 
+		FOR name_scope;
+UNIQUE
+	UR1: absolute_id; 
+END_ENTITY; -- class_BSU
+(*
+
+
+*)
+ENTITY class_and_property_elements
+ABSTRACT SUPERTYPE OF(ONEOF(
+	property_DET, 
+	class))
+SUBTYPE OF(dictionary_element);
+	names: item_names;
+	definition: definition_type;
+	source_doc_of_definition: OPTIONAL document;
+	note: OPTIONAL note_type;
+	remark: OPTIONAL remark_type;
+END_ENTITY; -- class_and_property_elements
+(*
+
+
+*)
+ENTITY class
+ABSTRACT SUPERTYPE OF( ONEOF (item_class, categorization_class))
+SUBTYPE OF(class_and_property_elements);
+	SELF\dictionary_element.identified_by: class_BSU;
+	its_superclass: OPTIONAL class_BSU;
+	described_by: LIST [0:?] OF UNIQUE property_BSU;
+	defined_types: SET [0:?] OF data_type_BSU;
+	constraints: SET [0 : ?] OF constraint_or_constraint_id ;
+	hierarchical_position: OPTIONAL hierarchical_position_type ;
+	keywords: SET [0:?] OF keyword_type ;
+	sub_class_properties: SET [0:?] OF property_BSU;
+	class_constant_values: SET [0:?] OF class_value_assignment;
+DERIVE
+	subclasses: SET [0:?] OF class := identified_by.subclasses;
+	known_applicable_properties: SET [0:?] OF property_BSU
+		:= compute_known_applicable_properties(
+			SELF\dictionary_element.identified_by);
+	known_applicable_data_types: SET [0:?] OF data_type_BSU
+		:= compute_known_applicable_data_types(
+			SELF\dictionary_element.identified_by);
+	known_property_constraints: SET [0:?] OF property_constraint
+		:= compute_known_property_constraints(
+			[SELF\dictionary_element.identified_by]);
+INVERSE
+	associated_items: SET [0:?] OF class_BSU_relationship 
+		FOR relating_class;
+WHERE
+	WR1: acyclic_superclass_relationship(SELF.identified_by, []);
+	WR2: NOT all_class_descriptions_reachable(
+		SELF\dictionary_element.identified_by)
+		OR (list_to_set(SELF.described_by) <= 
+		SELF\dictionary_element.identified_by
+		\class_BSU.known_visible_properties);
+	WR3: NOT all_class_descriptions_reachable(
+		SELF\dictionary_element.identified_by)
+		OR (SELF.defined_types <= 
+		SELF\dictionary_element.identified_by
+		\class_BSU.known_visible_data_types); 
+	WR4: check_properties_applicability(SELF);
+	WR5: NOT all_class_descriptions_reachable(
+		SELF\dictionary_element.identified_by)
+		OR (QUERY (cdp <* described_by
+		| (SIZEOF (cdp\basic_semantic_unit.definition)=1)
+		AND (('ISO13584_42_2_LONG_FORM_SCHEMA'
+		+'.DEPENDENT_P_DET') IN TYPEOF
+		(cdp\basic_semantic_unit.definition[1]))
+		AND NOT 
+		(cdp\basic_semantic_unit.definition[1].depends_on
+		<= known_applicable_properties))=[]); 
+	WR6: check_datatypes_applicability(SELF);
+	WR7: QUERY (cons <* constraints
+		| ('ISO13584_42_2_LONG_FORM_SCHEMA'
+		+'.INTEGRITY_CONSTRAINT' IN TYPEOF (cons))
+		AND (SIZEOF (cons\property_constraint.constrained_property 
+		.definition) =1)
+		AND NOT correct_constraint_type(
+		cons\integrity_constraint.redefined_domain,
+		cons\property_constraint.constrained_property 
+		.definition[1].domain)) = [];
+	WR8: QUERY (cons <* constraints
+		| (('ISO13584_42_2_LONG_FORM_SCHEMA'
+		+'.CONFIGURATION_CONTROL_CONSTRAINT') IN TYPEOF (cons))
+		AND NOT correct_precondition (cons, SELF)) = [];
+	WR9: NOT all_class_descriptions_reachable(
+		SELF\dictionary_element.identified_by)
+		OR (QUERY (cons <* constraints
+		| (('ISO13584_42_2_LONG_FORM_SCHEMA'
+		+'.PROPERTY_CONSTRAINT') IN TYPEOF (cons))
+		AND NOT 
+		((cons\property_constraint.constrained_property
+		IN SELF\dictionary_element.identified_by
+		\class_BSU.known_visible_properties)
+		OR (cons\property_constraint.constrained_property
+		IN known_applicable_properties)))=[]); 
+	WR10: (SIZEOF( QUERY (lab <* keywords
+		| ('ISO13584_42_2_LONG_FORM_SCHEMA'
+		+'.LABEL_WITH_LANGUAGE') IN TYPEOF (lab)))
+		= SIZEOF( keywords))
+		OR (SIZEOF (QUERY (lab <* keywords
+		| ('ISO13584_42_2_LONG_FORM_SCHEMA'
+		+'.LABEL_WITH_LANGUAGE') IN TYPEOF (lab)))
+		= SIZEOF( keywords));
+	WR11: (('ISO13584_42_2_LONG_FORM_SCHEMA'
+		+ '.A_PRIORI_SEMANTIC_RELATIONSHIP') 
+		IN TYPEOF (SELF)) OR
+		( QUERY(p <* sub_class_properties
+		| NOT(p IN SELF.described_by)) = []);
+	WR12: NOT all_class_descriptions_reachable(SELF.identified_by) OR
+		(QUERY(va <* class_constant_values | 
+		NOT is_class_valued_property(
+		va. super_class_defined_property, SELF.identified_by)) = []);
+	WR13: QUERY(val <* SELF.class_constant_values 
+		| QUERY (v <* class_value_assigned (
+		val.super_class_defined_property, SELF.identified_by)
+		| val. assigned_value <> v) <>[]) = [];
+END_ENTITY; -- class
+
+(*
+
+
+*)
+ENTITY item_class 
+SUBTYPE OF(class);
+	simplified_drawing: OPTIONAL graphics;
+	coded_name: OPTIONAL value_code_type;
+	instance_sharable: OPTIONAL BOOLEAN;
+END_ENTITY; -- item_class
+(*
+
+
+*)
+ENTITY categorization_class 
+SUBTYPE OF(class);
+	categorization_class_superclasses: SET [0:?] OF class_BSU;
+WHERE
+	WR1: QUERY (cl <* SELF. categorization_class_superclasses
+		| NOT (('ISO13584_42_2_LONG_FORM_SCHEMA'
+		+'.CATEGORIZATION_CLASS') IN TYPEOF(cl.definition[1])))
+		= []; 
+	WR2: NOT EXISTS(SELF\class.its_superclass);
+	WR3: SIZEOF(SELF\class.described_by) = 0;
+	WR4: SIZEOF(SELF\class.defined_types) = 0;
+	WR5: SIZEOF(SELF\class.constraints) = 0;
+	WR6: SIZEOF(compute_known_visible_properties
+ 		(SELF\dictionary_element.identified_by)) = 0;
+	WR7: SIZEOF(SELF\class.sub_class_properties) = 0; 
+	WR8: SIZEOF(SELF\class.class_constant_values) = 0; 
+END_ENTITY; -- categorization_class
+(*
+
+
+
+*)
+ENTITY property_BSU
+SUBTYPE OF(basic_semantic_unit);
+	SELF\basic_semantic_unit.code: property_code_type;
+	name_scope: class_BSU;
+DERIVE
+	absolute_id: identifier :=
+		name_scope.defined_by.absolute_id
+		+ sep_id + dic_identifier;
+INVERSE
+	describes_classes: SET OF class FOR described_by;
+UNIQUE
+	UR1: absolute_id;
+WHERE
+	WR1: QUERY(c <* describes_classes |
+		NOT(is_subclass(c, name_scope.definition[1])))= [];
+END_ENTITY; -- property_BSU
+(*
+
+
+*)
+ENTITY property_DET
+ABSTRACT SUPERTYPE OF(ONEOF(
+	condition_DET, dependent_P_DET, non_dependent_P_DET))
+SUBTYPE OF(class_and_property_elements);
+	SELF\dictionary_element.identified_by: property_BSU;
+	preferred_symbol: OPTIONAL mathematical_string;
+	synonymous_symbols: SET [0:?] OF mathematical_string;
+	figure: OPTIONAL graphics;
+	det_classification: OPTIONAL DET_classification_type;
+	domain: data_type;
+	formula: OPTIONAL mathematical_string;
+DERIVE
+	describes_classes: SET [0:?] OF class
+		:= identified_by.describes_classes;
+END_ENTITY; -- property_DET
+(*
+
+ 
+
+*)
+ENTITY condition_DET
+SUBTYPE OF(property_DET);
+END_ENTITY; -- condition_DET
+(*
+
+
+*)
+ENTITY dependent_P_DET
+SUBTYPE OF(property_DET);
+	depends_on: SET [1:?] OF property_BSU;
+WHERE
+	WR1: QUERY(p <* depends_on | NOT(definition_available_implies(
+		p, ('ISO13584_42_2_LONG_FORM_SCHEMA.CONDITION_DET'
+		IN TYPEOF(p.definition[1]))))) = [];
+END_ENTITY; -- dependent_P_DET
+(*
+
+
+*)
+ENTITY non_dependent_P_DET
+SUBTYPE OF(property_DET);
+END_ENTITY; -- non_dependent_P_DET
+(*
+
+
+*)
+ENTITY class_value_assignment;
+	super_class_defined_property: property_BSU;
+	assigned_value: primitive_value;
+WHERE
+	WR1: definition_available_implies(super_class_defined_property, 
+		compatible_data_type_and_value( super_class_defined_property.
+		definition[1]\property_DET.domain,assigned_value));
+END_ENTITY; -- class_value_assignment
+(*
+
+*)
+ENTITY data_type_BSU
+SUBTYPE OF(basic_semantic_unit);
+	SELF\basic_semantic_unit.code: data_type_code_type;
+	name_scope: class_BSU;
+DERIVE
+	absolute_id: identifier := 
+		name_scope.defined_by.absolute_id 	(* Supplier*)
+		+ sep_id + dic_identifier; 			(* Data_type *)
+INVERSE
+	defining_class: SET OF class FOR defined_types;
+UNIQUE
+	absolute_id;
+WHERE
+	WR1: is_subclass(defining_class[1], name_scope.definition[1]); 
+END_ENTITY; -- data_type_BSU
+(*
+
+
+*)
+ENTITY data_type_element
+SUBTYPE OF(dictionary_element);
+	SELF\dictionary_element.identified_by: data_type_BSU;
+	names: item_names;
+	type_definition: data_type;
+END_ENTITY; -- data_type_element
+(*
+
+
+*)
+ENTITY data_type
+ABSTRACT SUPERTYPE OF(ONEOF(
+	simple_type,
+	complex_type,
+	named_type));
+	constraints: SET [0 : ?] OF domain_constraint ;
+WHERE
+	WR1: QUERY (cons <* constraints
+		|NOT correct_constraint_type(cons, SELF)) = [];
+END_ENTITY; -- data_type
+(*
+
+
+*)
+ENTITY simple_type
+ABSTRACT SUPERTYPE OF(ONEOF(
+	number_type,
+	Boolean_type,
+	string_type))
+SUBTYPE OF(data_type);
+	value_format: OPTIONAL value_format_type;
+END_ENTITY; -- simple_type
+
+(*
+
+
+*)
+ENTITY number_type
+ABSTRACT SUPERTYPE OF(ONEOF(
+	int_type,
+	real_type,
+	rational_type))
+SUBTYPE OF(simple_type); 
+END_ENTITY; -- number_type
+(*
+
+
+*)
+ENTITY int_type
+SUPERTYPE OF(ONEOF(
+	int_measure_type,
+	int_currency_type,
+	non_quantitative_int_type))
+SUBTYPE OF(number_type);
+END_ENTITY; -- int_type
+(*
+
+
+*)
+ENTITY int_measure_type
+SUBTYPE OF(int_type);
+	unit: OPTIONAL dic_unit ;
+	alternative_units: OPTIONAL LIST [1 : ?] OF dic_unit;
+	unit_id : OPTIONAL dic_unit_identifier ;
+	alternative_unit_ids: 
+			OPTIONAL LIST [1 : ?] OF dic_unit_identifier;
+WHERE
+	WR1: EXISTS(unit) OR EXISTS(unit_id); 
+	WR2: NOT EXISTS(alternative_units) OR
+		NOT EXISTS(alternative_unit_ids) OR
+		(SIZEOF(alternative_units) = SIZEOF(alternative_unit_ids)); 
+	WR3: NOT EXISTS(alternative_units) 
+		OR (QUERY (un <* SELF.alternative_units 
+		|NOT EXISTS (un.string_representation))
+		= []);
+END_ENTITY; -- int_measure_type
+(*
+
+
+*)
+ENTITY int_currency_type
+SUBTYPE OF(int_type);
+	currency: OPTIONAL currency_code; 
+END_ENTITY; -- int_currency_type
+(*
+
+
+*)
+ENTITY non_quantitative_int_type
+SUBTYPE OF(int_type);
+	domain: value_domain;
+WHERE
+	WR1: QUERY(v <* domain.its_values | 
+		'ISO13584_42_2_LONG_FORM_SCHEMA.VALUE_CODE_TYPE' IN
+		TYPEOF(v.value_code)) = [];
+END_ENTITY; -- non_quantitative_int_type
+(*
+
+
+*)
+ENTITY real_type
+SUPERTYPE OF(ONEOF(
+	real_measure_type,
+	real_currency_type))
+SUBTYPE OF(number_type);
+END_ENTITY; -- real_type
+(*
+
+
+*)
+ENTITY real_measure_type
+SUBTYPE OF(real_type);
+	unit: OPTIONAL dic_unit ;
+	alternative_units: OPTIONAL LIST [1 : ?] OF dic_unit;
+	unit_id : OPTIONAL dic_unit_identifier ;
+	alternative_unit_ids: 
+			OPTIONAL LIST [1 : ?] OF dic_unit_identifier;
+WHERE
+WR1: EXISTS(unit) OR EXISTS(unit_id); 
+WR2: NOT EXISTS(alternative_units) OR NOT EXISTS(alternative_unit_ids) OR (SIZEOF(alternative_units) = SIZEOF(alternative_unit_ids)); 
+WR3: NOT EXISTS(alternative_units) OR (QUERY (un <* SELF.alternative_units 
+		|NOT EXISTS (un.string_representation))
+		= []);
+END_ENTITY; -- real_measure_type
+(*
+
+
+*)
+ENTITY real_currency_type
+SUBTYPE OF(real_type);
+	currency: OPTIONAL currency_code; 
+END_ENTITY; -- real_currency_type
+(*
+
+*)
+ENTITY rational_type
+SUPERTYPE OF(
+	rational_measure_type)
+SUBTYPE OF(number_type);
+END_ENTITY; -- rational_type
+(*
+
+*)
+ENTITY rational_measure_type
+SUBTYPE OF(rational_type);
+	unit: OPTIONAL dic_unit ;
+	alternative_units: OPTIONAL LIST [1 : ?] OF dic_unit;
+	unit_id : OPTIONAL dic_unit_identifier ;
+	alternative_unit_ids: 
+			OPTIONAL LIST [1 : ?] OF dic_unit_identifier;
+WHERE
+WR1: EXISTS(unit) OR EXISTS(unit_id); 
+WR2: NOT EXISTS(alternative_units) OR NOT EXISTS(alternative_unit_ids) OR (SIZEOF(alternative_units) = SIZEOF(alternative_unit_ids)); 
+WR3: NOT EXISTS(alternative_units) OR (QUERY (un <* SELF.alternative_units 
+		|NOT EXISTS (un.string_representation))
+		= []);
+END_ENTITY; -- rational_measure_type
+
+(*
+
+
+*)
+ENTITY Boolean_type
+SUBTYPE OF(simple_type);
+END_ENTITY; -- Boolean_type
+(*
+
+
+*)
+ENTITY string_type
+SUPERTYPE OF ( ONEOF (
+			translatable_string_type,
+			non_translatable_string_type,
+			URI_type,
+			non_quantitative_code_type,
+			date_time_data_type,
+			date_data_type,
+			time_data_type))
+SUBTYPE OF(simple_type);
+END_ENTITY; -- string_type
+(*
+
+
+*)
+ENTITY translatable_string_type
+SUBTYPE OF(string_type);
+END_ENTITY; -- translatable_string_type
+(*
+
+
+*)
+ENTITY non_translatable_string_type
+SUBTYPE OF(string_type);
+END_ENTITY; -- non_translatable_string_type
+(*
+
+
+*)
+ENTITY URI_type
+SUBTYPE OF(string_type);
+END_ENTITY; -- URI_type
+(*
+
+
+*)
+ENTITY date_time_data_type
+SUBTYPE OF(string_type);
+END_ENTITY; -- date_time_data_type
+(*
+
+1999-05-31T13:20:00-05:00
+*)
+ENTITY date_data_type
+SUBTYPE OF(string_type);
+END_ENTITY; -- date_data_type
+(*
+
+
+*)
+ENTITY time_data_type
+SUBTYPE OF(string_type);
+END_ENTITY; -- time_data_type
+(*
+
+
+*)
+ENTITY non_quantitative_code_type
+SUBTYPE OF(string_type);
+	domain: value_domain;
+WHERE
+	WR1: QUERY(v <* domain.its_values | 
+		NOT('ISO13584_42_2_LONG_FORM_SCHEMA.VALUE_CODE_TYPE' IN
+		TYPEOF(v.value_code))) = [];
+END_ENTITY; -- non_quantitative_code_type
+(*
+
+
+*)
+ENTITY complex_type
+ABSTRACT SUPERTYPE OF(ONEOF(
+	level_type,
+	class_reference_type,
+	entity_instance_type))
+SUBTYPE OF(data_type);
+END_ENTITY; -- complex_type
+(*
+
+
+*)
+ENTITY level_type
+SUBTYPE OF(complex_type);
+	levels: LIST [1:4] OF UNIQUE level;
+	value_type: simple_type;
+WHERE
+	WR1: ('ISO13584_42_2_LONG_FORM_SCHEMA.INT_MEASURE_TYPE'
+		IN TYPEOF(value_type))
+		OR ('ISO13584_42_2_LONG_FORM_SCHEMA.REAL_MEASURE_TYPE'
+		IN TYPEOF(value_type));
+	WR2 : NOT EXISTS(SELF.levels[2]) OR
+		 (SELF.levels[1] < SELF.levels[2]) ;
+	WR3 : NOT EXISTS(SELF.levels[2]) OR NOT EXISTS(SELF.levels[3]) OR
+		(SELF.levels[2] < SELF.levels[3]) ;
+	WR4 : NOT EXISTS(SELF.levels[3]) OR NOT EXISTS(SELF.levels[4]) OR
+		(SELF.levels[3] < SELF.levels[4]) ;
+END_ENTITY; -- level_type
+(*
+
+
+*)
+TYPE level = ENUMERATION OF(
+	min,		(* the minimal value of the physical quantity *)
+	nom,		(* the nominal value of the physical quantity *)
+	typ,		(* the typical value of the physical quantity *)
+	max);	(* the maximal value of the physical quantity *)
+END_TYPE; -- level 
+(*
+
+
+*)
+ENTITY class_reference_type
+SUBTYPE OF(complex_type);
+	domain: class_BSU;
+END_ENTITY; -- class_reference_type
+(*
+
+
+*)
+ENTITY entity_instance_type
+SUBTYPE OF(complex_type);
+	type_name: SET OF STRING;
+END_ENTITY; -- entity_instance_type
+(*
+
+
+*)
+ENTITY placement_type
+SUPERTYPE OF(ONEOF(
+	axis1_placement_type,
+	axis2_placement_2d_type,
+	axis2_placement_3d_type))
+SUBTYPE OF(entity_instance_type);
+WHERE
+	WR1: 'ISO13584_42_2_LONG_FORM_SCHEMA.PLACEMENT' 
+		IN SELF\entity_instance_type.type_name;
+END_ENTITY; -- placement_type
+(*
+
+
+*)
+ENTITY axis1_placement_type
+SUBTYPE OF(placement_type);
+WHERE
+	WR1: 'ISO13584_42_2_LONG_FORM_SCHEMA.AXIS1_PLACEMENT' IN
+		SELF\entity_instance_type.type_name;
+END_ENTITY; -- axis1_placement_type
+(*
+
+
+*)
+ENTITY axis2_placement_2d_type
+SUBTYPE OF(placement_type);
+WHERE
+	WR1: 'ISO13584_42_2_LONG_FORM_SCHEMA.AXIS2_PLACEMENT_2D'
+		IN SELF\entity_instance_type.type_name;
+END_ENTITY; -- axis2_placement_2d_type
+(*
+
+
+*)
+ENTITY axis2_placement_3d_type
+SUBTYPE OF(placement_type);
+WHERE
+	WR1: 'ISO13584_42_2_LONG_FORM_SCHEMA.AXIS2_PLACEMENT_3D' 
+		IN SELF\entity_instance_type.type_name;
+END_ENTITY; -- axis2_placement_3d_type
+(*
+
+
+*)
+ENTITY named_type
+SUBTYPE OF(data_type );
+	referred_type: data_type_BSU;
+END_ENTITY; -- named_type
+(*
+
+
+*)
+ENTITY value_domain;
+	its_values: LIST [1:?] OF dic_value;
+	source_doc_of_value_domain: OPTIONAL document;
+	languages: OPTIONAL present_translations;
+	terms: LIST [0:?] OF item_names;
+	definition: OPTIONAL definition_type;
+	icon : OPTIONAL graphics;
+WHERE
+	WR1: NOT EXISTS(languages) OR (QUERY(v <* its_values |
+		languages :<>: v.meaning.languages) = []);
+	WR2: codes_are_unique(its_values);
+	WR3: EXISTS(languages) OR (QUERY(v <* its_values |
+		EXISTS(v.meaning.languages)) = []);
+	WR4: EXISTS(languages) OR (QUERY(v <* its_values |
+		EXISTS(v.definition.languages)) = []);
+END_ENTITY; -- value_domain
+(*
+
+
+*)
+TYPE integer_type = INTEGER; 
+END_TYPE; -- integer_type
+
+TYPE value_type = SELECT(value_code_type, integer_type); 
+END_TYPE; -- value_type
+(*
+
+
+*)
+ENTITY dic_VALUE;
+	value_code: value_type;
+	meaning: item_names;
+	source_doc_of_definition: OPTIONAL document;
+	definition: OPTIONAL definition_type;
+	status : OPTIONAL status_type ;
+	is_deprecated : OPTIONAL BOOLEAN ;
+	is_deprecated_interpretation : OPTIONAL note_type ;
+	value_meaning_id : OPTIONAL dic_value_identifier ;
+WHERE
+WR1: NOT EXISTS (SELF. is_deprecated) 
+OR EXISTS (SELF. is_deprecated_interpretation);
+END_ENTITY; -- dic_value
+(*
+
+
+*)
+ENTITY administrative_data;
+	status : OPTIONAL status_type;
+	translation : LIST[0 : ?] OF translation_data ;
+	source_language : language_code ;
+INVERSE 
+	administrated_element : dictionary_element FOR administration ;
+WHERE
+	WR1 : one_language_per_translation(SELF) ;
+	WR2 : SIZEOF(QUERY (trans <* SELF.translation |
+				 trans.language = source_language))=0 ;
+END_ENTITY; -- administrative_data
+(*
+
+
+*)
+ENTITY translation_data;
+	language : language_code ;
+	responsible_translator : supplier_BSU ;
+	translation_revision : revision_type ;
+	date_of_current_translation_revision: OPTIONAL date_type;
+INVERSE 
+	belongs_to : administrative_data FOR translation ; 
+END_ENTITY; -- translation_data
+(*
+
+
+*)
+ENTITY non_si_unit
+SUBTYPE OF(named_unit);
+	name: label;
+END_ENTITY; -- non_si_unit
+(*
+
+
+*)
+RULE assert_ONEOF FOR(named_unit);
+WHERE
+	QUERY(u <* named_unit | 
+		('ISO13584_42_2_LONG_FORM_SCHEMA.NON_SI_UNIT' 
+		IN TYPEOF(u)) AND
+		('ISO13584_42_2_LONG_FORM_SCHEMA.SI_UNIT' IN TYPEOF(u))
+		OR ('ISO13584_42_2_LONG_FORM_SCHEMA.NON_SI_UNIT' 
+		IN TYPEOF(u)) AND
+		('ISO13584_42_2_LONG_FORM_SCHEMA.CONTEXT_DEPENDENT_UNIT' IN TYPEOF(u))
+		OR ('ISO13584_42_2_LONG_FORM_SCHEMA.NON_SI_UNIT'
+		IN TYPEOF(u)) AND
+		('ISO13584_42_2_LONG_FORM_SCHEMA.CONVERSION_BASED_UNIT' IN TYPEOF(u))
+		) = []; 
+END_RULE; -- assert_ONEOF
+(*
+
+
+*)
+ENTITY dic_unit;
+	structured_representation: unit; 
+	string_representation: OPTIONAL mathematical_string;
+END_ENTITY; -- dic_unit
+(*
+
+
+*)
+TYPE class_code_type = code_type; 
+WHERE 
+	WR1: LENGTH(SELF) <= class_code_len;
+END_TYPE; -- class_code_type
+(*
+
+
+*)
+TYPE code_type = identifier; 
+WHERE 
+	WR1: NOT(SELF LIKE '*\#*');
+	WR2: NOT(SELF LIKE '* *');
+	WR3: NOT(SELF = '');
+END_TYPE; -- code_type
+(*
+
+
+*)
+TYPE currency_code = identifier;
+WHERE
+	WR1: LENGTH(SELF) = 3;
+END_TYPE; -- currency_code
+(*
+
+*)
+TYPE data_type_code_type = code_type; 
+WHERE 
+	WR1: LENGTH(SELF) = data_type_code_len;
+END_TYPE; -- data_type_code_type
+(*
+
+
+*)
+TYPE date_type = STRING(10) FIXED;
+WHERE
+	WR1: SELF LIKE '####-##-##';
+END_TYPE; -- date_type
+(*
+
+
+*)
+TYPE definition_type = translatable_text;
+END_TYPE; -- definition_type
+(*
+
+
+*)
+TYPE DET_classification_type = identifier;
+WHERE
+	WR1: LENGTH(SELF) = DET_classification_len; 
+END_TYPE; -- DET_classification_type
+(*
+
+
+*)
+TYPE note_type = translatable_text;
+END_TYPE; -- note_type
+(*
+
+
+*)
+TYPE pref_name_type = translatable_label;
+WHERE
+	WR1: check_label_length(SELF, pref_name_len);
+END_TYPE; -- pref_name_type
+(*
+
+
+*)
+TYPE property_code_type = code_type; 
+WHERE 
+	WR1: LENGTH(SELF) <= property_code_len;
+END_TYPE; -- property_code_type
+(*
+
+
+*)
+TYPE remark_type = translatable_text; 
+END_TYPE; -- remark_type
+(*
+
+
+*)
+TYPE hierarchical_position_type = identifier; 
+END_TYPE; -- hierarchical_position_type
+(*
+
+
+*)
+TYPE revision_type = code_type; 
+WHERE 
+	WR1: LENGTH(SELF) <= revision_len; 
+	WR2: EXISTS(VALUE(SELF)) AND ('INTEGER' IN TYPEOF(VALUE(SELF)))
+		AND (VALUE(SELF) >= 0);
+END_TYPE; -- revision_type
+(*
+
+
+*)
+TYPE short_name_type = translatable_label;
+WHERE
+	WR1: check_label_length(SELF, short_name_len); 
+END_TYPE; -- short_name_type
+(*
+
+
+*)
+TYPE supplier_code_type = code_type;
+WHERE
+	WR1: LENGTH(SELF) <= supplier_code_len; 
+END_TYPE; -- supplier_code_type
+(*
+
+
+*)
+TYPE syn_name_type = SELECT(label_with_language, label);
+WHERE
+	WR1: check_syn_length(SELF, syn_name_len); 
+END_TYPE; -- syn_name_type
+(*
+
+
+*)
+TYPE keyword_type = SELECT(label_with_language, label);
+END_TYPE; -- keyword_type
+(*
+
+
+*)
+TYPE ISO_29002_IRDI_type = identifier;
+WHERE
+	WR1: LENGTH (SELF)<= 290;
+END_TYPE; -- syn_name_type
+(*
+
+
+*)
+TYPE constraint_identifier = ISO_29002_IRDI_type;
+END_TYPE; -- constraint_identifier
+(*
+
+
+*)
+TYPE dic_unit_identifier = ISO_29002_IRDI_type;
+END_TYPE; -- dic_unit_identifier
+(*
+
+
+*)
+TYPE dic_value_identifier = ISO_29002_IRDI_type;
+END_TYPE; -- dic_value_identifier
+(*
+
+
+*)
+TYPE value_code_type = identifier;
+WHERE
+	WR1: LENGTH(SELF) <= value_code_len; 
+END_TYPE; -- value_code_type
+(*
+
+
+*)
+TYPE value_format_type = identifier;
+WHERE
+	WR1: LENGTH(SELF) <= value_format_len; 
+END_TYPE; -- value_format_type
+(*
+
+
+*)
+TYPE version_type = code_type; 
+WHERE 
+	WR1: LENGTH(SELF) <= version_len; 
+	WR2: EXISTS(VALUE(SELF)) AND ('INTEGER' IN TYPEOF(VALUE(SELF)))
+		AND (VALUE(SELF) >= 0);
+END_TYPE; -- version_type
+(*
+
+
+*)
+TYPE status_type = identifier; 
+END_TYPE; -- status_type
+(*
+
+*)
+TYPE dictionary_code_type = identifier;
+WHERE
+	WR1: LENGTH(SELF) <= dictionary_code_len; 
+END_TYPE; -- dictionary_code_type
+(*
+
+
+*)
+ENTITY dates;
+	date_of_original_definition: date_type;
+	date_of_current_version: date_type;
+	date_of_current_revision: OPTIONAL date_type;
+END_ENTITY; -- dates
+(*
+
+
+
+*)
+ENTITY document
+ABSTRACT SUPERTYPE;
+END_ENTITY; -- document
+(*
+
+
+*)
+ENTITY graphics
+ABSTRACT SUPERTYPE;
+END_ENTITY; -- graphics
+(*
+
+
+*)
+ENTITY external_graphics
+SUBTYPE OF (graphics);
+	representation: graphic_files;
+END_ENTITY; -- external_graphics
+(*
+
+
+*)
+ENTITY graphic_files
+SUBTYPE OF (external_item);
+END_ENTITY; -- graphic_files
+(*
+
+
+*)
+ENTITY identified_document
+SUBTYPE OF(document);
+	document_identifier: translatable_label;
+WHERE
+	WR1: check_label_length(SELF.document_identifier,source_doc_len);
+END_ENTITY; -- identified_document
+(*
+
+
+*)
+ENTITY item_names;
+	preferred_name: pref_name_type;
+	synonymous_names: SET OF syn_name_type;
+	short_name: OPTIONAL short_name_type;
+	languages: OPTIONAL present_translations;
+	icon : OPTIONAL graphics;
+WHERE
+	WR1: NOT(EXISTS(languages )) OR (
+		('ISO13584_42_2_LONG_FORM_SCHEMA'
+		+ '.TRANSLATED_LABEL' IN TYPEOF(preferred_name))
+		AND (languages :=: preferred_name\translated_label.languages)
+		AND (NOT(EXISTS(short_name)) OR 	
+		('ISO13584_42_2_LONG_FORM_SCHEMA'
+		+ '.TRANSLATED_LABEL' IN TYPEOF(short_name))
+		AND (languages :=: short_name\translated_label.languages))
+		AND (QUERY(s <* synonymous_names |
+		NOT('ISO13584_42_2_LONG_FORM_SCHEMA' +
+		'.LABEL_WITH_LANGUAGE' IN TYPEOF(s))) = []));
+	WR2: NOT EXISTS(languages) OR (QUERY(s <* synonymous_names |
+		EXISTS(s.language) AND NOT(s.language IN
+		QUERY(l <* languages.language_codes | TRUE
+		))) = []);
+	WR3: EXISTS(languages) OR
+		(('ISO13584_42_2_LONG_FORM_SCHEMA.LABEL' IN
+		TYPEOF(preferred_name))
+		AND (NOT(EXISTS(short_name)) OR
+		('ISO13584_42_2_LONG_FORM_SCHEMA.LABEL' IN
+		TYPEOF(short_name)))
+		AND (QUERY(s <* synonymous_names |
+		'ISO13584_42_2_LONG_FORM_SCHEMA.LABEL_WITH_LANGUAGE' IN
+		TYPEOF(s)) = []));
+END_ENTITY; -- item_names
+(*
+
+
+*)
+ENTITY label_with_language;
+	l: label;
+	language: language_code;
+END_ENTITY; -- label_with_language
+(*
+
+
+*)
+ENTITY mathematical_string;
+	text_representation: text; 
+	MathML_representation: OPTIONAL text;
+END_ENTITY; -- mathematical_string
+(*
+
+
+*)
+FUNCTION acyclic_superclass_relationship(
+	current: class_BSU; visited: SET OF class): LOGICAL;
+
+IF SIZEOF(current.definition) = 1 THEN 
+	IF current.definition[1] IN visited THEN
+		RETURN(FALSE);
+	(* wrong: current declares a subclass as its superclass *)
+	ELSE
+		IF EXISTS(current.definition[1]\class.its_superclass)
+		THEN 
+			RETURN(acyclic_superclass_relationship(
+				current.definition[1]\class.its_superclass,
+				visited + current.definition[1])); 
+		ELSE
+			RETURN(TRUE);
+		END_IF;
+	END_IF;
+ELSE
+	RETURN(UNKNOWN);
+END_IF;
+END_FUNCTION; -- acyclic_superclass_relationship
+(*
+
+
+*)
+FUNCTION check_syn_length(s: syn_name_type; s_length: INTEGER):BOOLEAN;
+
+IF 'ISO13584_42_2_LONG_FORM_SCHEMA.LABEL_WITH_LANGUAGE' 
+	IN TYPEOF(s)
+THEN 
+	RETURN(LENGTH(s.l) <= s_length); 
+ELSE
+	RETURN(LENGTH(s) <= s_length); 
+END_IF;
+END_FUNCTION; -- check_syn_length 
+(*
+
+
+*)
+FUNCTION codes_are_unique(values: LIST OF dic_value): BOOLEAN;
+LOCAL
+	ls: SET OF STRING := [];
+	li: SET OF INTEGER := [];
+END_LOCAL;
+
+IF('ISO13584_42_2_LONG_FORM_SCHEMA.VALUE_CODE_TYPE' IN 
+	TYPEOF(values[1].value_code))
+THEN
+	REPEAT i := 1 TO SIZEOF(values);
+		ls := ls + values[i].value_code;
+	END_REPEAT;
+
+	RETURN(SIZEOF(values) = SIZEOF(ls));
+ELSE
+	IF('ISO13584_42_2_LONG_FORM_SCHEMA.INTEGER_TYPE' IN 
+		TYPEOF(values[1].value_code))
+	THEN
+		REPEAT i := 1 TO SIZEOF(values);
+			li := li + values[i].value_code;
+		END_REPEAT;
+
+		RETURN(SIZEOF(values) = SIZEOF(li));
+	ELSE
+		RETURN(?);
+	END_IF;
+END_IF;
+
+END_FUNCTION; -- codes_are_unique
+(*
+
+
+*)
+FUNCTION definition_available_implies(
+	BSU: basic_semantic_unit;
+	expression: LOGICAL): LOGICAL;
+
+RETURN(NOT(SIZEOF(BSU.definition) = 1) OR expression);
+
+END_FUNCTION; -- definition_available_implies
+(*
+
+
+*)
+FUNCTION is_subclass(sub, super: class): LOGICAL;
+	IF (NOT EXISTS(sub)) OR (NOT EXISTS(super)) THEN
+		RETURN(UNKNOWN);
+	END_IF;
+	
+	IF sub = super
+	THEN
+		RETURN(TRUE);
+	END_IF;
+	
+	IF NOT EXISTS(sub.its_superclass) 
+	THEN
+		(* end of chain reached, didn't meet super so far *)
+		RETURN(FALSE); 
+	END_IF;
+	
+	IF SIZEOF(sub.its_superclass.definition) = 1 
+	THEN
+	(* definition available *)
+		IF (sub.its_superclass.definition[1] = super) 
+		THEN
+			RETURN(TRUE);
+		ELSE
+			RETURN(is_subclass(sub.its_superclass.definition[1],
+				super));
+		END_IF;
+	ELSE
+		RETURN(UNKNOWN);
+	END_IF;
+
+END_FUNCTION; -- is_subclass
+(*
+
+
+*)
+FUNCTION string_for_derived_unit(u: derived_unit): STRING;
+
+	FUNCTION string_for_derived_unit_element(
+		u: derived_unit_element; neg_exp: BOOLEAN
+		(* print negative exponents with power -1 *)): STRING;
+		(* returns a STRING representation of the 
+			derived_unit_element (according to ISO 10303-41) 
+			passed as parameter *)
+	
+	LOCAL
+		result: STRING;
+	END_LOCAL;
+		
+	result := string_for_named_unit(u.unit);
+	IF (u.exponent <> 0) 
+	THEN 
+		IF (u.exponent > 0) OR NOT neg_exp 
+		THEN
+			result := result + '**' + FORMAT(
+				ABS(u.exponent), '2I')[2];
+		ELSE
+			result := result + '**' + FORMAT(u.exponent, '2I')[2];
+		END_IF;
+	END_IF;
+		RETURN(result); 
+	END_FUNCTION; -- string_for_derived_unit_element
+
+LOCAL
+	pos, neg: SET OF derived_unit_element;
+	us: STRING;
+END_LOCAL;
+	
+(* separate unit elements according to the sign of the exponents: *)
+pos := QUERY(ue <* u.elements | ue.exponent > 0); 
+neg := QUERY(ue <* u.elements | ue.exponent < 0); 
+us := '';
+IF SIZEOF(pos) > 0 THEN
+	(* there are unit elements with positive sign *)
+	REPEAT i := LOINDEX(pos) TO HIINDEX(pos);
+		us := us + string_for_derived_unit_element(pos[i], FALSE);
+		IF i <> HIINDEX(pos) 
+		THEN
+			us := us + '.'; 
+		END_IF;
+	END_REPEAT;
+
+	IF SIZEOF(neg) > 0 
+	THEN 
+		(* there are unit elements with negative sign, use '/' 
+			notation: *)
+		us := us + '/';
+
+		IF SIZEOF(neg) > 1 
+		THEN
+			us := us + '('; 
+		END_IF;
+
+		REPEAT i := LOINDEX(neg) TO HIINDEX(neg);
+			us := us + string_for_derived_unit_element(
+				neg[i], FALSE);
+			IF i <> HIINDEX(neg) 
+			THEN 
+				us := us + '.'; 
+			END_IF;
+		END_REPEAT;
+
+		IF SIZEOF(neg) > 1 
+		THEN 
+			us := us + ')'; 
+		END_IF;
+	END_IF;
+ELSE 
+	(* only negative signs, use u-e notation *)
+	IF SIZEOF(neg) > 0 THEN
+		REPEAT i := LOINDEX(neg) TO HIINDEX(neg);
+			us := us + string_for_derived_unit_element(
+				neg[i], TRUE);
+			IF i <> HIINDEX(neg) 
+			THEN 
+				us := us + '.'; 
+			END_IF;
+		END_REPEAT;
+	END_IF;
+END_IF;
+
+RETURN(us);
+
+END_FUNCTION; -- string_for_derived_unit
+(*
+
+
+*)
+FUNCTION string_for_named_unit(u: named_unit): STRING;
+
+IF 'ISO13584_42_2_LONG_FORM_SCHEMA.SI_UNIT' IN TYPEOF(u) THEN
+	RETURN(string_for_SI_unit(u));
+ELSE
+	IF 'ISO13584_42_2_LONG_FORM_SCHEMA.CONTEXT_DEPENDENT_UNIT' IN TYPEOF(u)
+	THEN
+		RETURN(u\context_dependent_unit.name);
+	ELSE
+		IF 'ISO13584_42_2_LONG_FORM_SCHEMA.CONVERSION_BASED_UNIT' IN TYPEOF(u)
+		THEN
+			RETURN(u\conversion_based_unit.name);
+		ELSE
+			IF 'ISO13584_42_2_LONG_FORM_SCHEMA'
+				+'.NON_SI_UNIT' IN TYPEOF(u)
+			THEN
+				RETURN(u\non_si_unit.name);
+			ELSE
+				RETURN('name_unknown');
+			END_IF;
+		END_IF;
+	END_IF;
+END_IF;
+
+END_FUNCTION; -- string_for_named_unit
+(*
+
+
+*)
+FUNCTION string_for_SI_unit(unit: si_unit): STRING;
+
+LOCAL
+	prefix_string, unit_string: STRING;
+END_LOCAL;
+
+	prefix_string := '';
+	unit_string := '';
+
+IF EXISTS(unit.prefix) THEN
+	CASE unit.prefix OF
+		exa		: prefix_string := 'E';
+		peta		: prefix_string := 'P';
+		tera		: prefix_string := 'T';
+		giga		: prefix_string := 'G';
+		mega		: prefix_string := 'M';
+		kilo		: prefix_string := 'k';
+		hecto	: prefix_string := 'h';
+		deca		: prefix_string := 'da';
+		deci		: prefix_string := 'd';
+		centi	: prefix_string := 'c';
+		milli	: prefix_string := 'm';
+		micro	: prefix_string := 'u';
+		nano		: prefix_string := 'n';
+		pico		: prefix_string := 'p';
+		femto	: prefix_string := 'f';
+		atto		: prefix_string := 'a';
+	END_CASE;
+ELSE
+	prefix_string := '';
+END_IF;
+
+CASE unit.name OF
+	metre			: unit_string:= 'm'; 
+	gram				: unit_string := 'g'; 
+	second			: unit_string := 's'; 
+	ampere			: unit_string := 'A'; 
+	kelvin			: unit_string := 'K'; 
+	mole				: unit_string := 'mol'; 
+	candela			: unit_string := 'cd'; 
+	radian			: unit_string := 'rad'; 
+	steradian			: unit_string := 'sr'; 
+	hertz			: unit_string := 'Hz'; 
+	newton			: unit_string := 'N'; 
+	pascal			: unit_string := 'Pa'; 
+	joule			: unit_string := 'J'; 
+	watt				: unit_string := 'W'; 
+	coulomb			: unit_string := 'C'; 
+	volt				: unit_string := 'V'; 
+	farad			: unit_string := 'F'; 
+	ohm				: unit_string := 'Ohm';
+	siemens			: unit_string := 'S'; 
+	weber			: unit_string := 'Wb'; 
+	tesla			: unit_string := 'T'; 
+	henry			: unit_string := 'H'; 
+	degree_Celsius		: unit_string := 'Cel';
+	lumen			: unit_string := 'lm'; 
+	lux				: unit_string := 'lx'; 
+	becquerel			: unit_string := 'Bq'; 
+	gray				: unit_string := 'Gy';
+	sievert			: unit_string := 'Sv';
+END_CASE;
+
+RETURN(prefix_string + unit_string); 
+
+END_FUNCTION; -- string_for_SI_unit
+(*
+
+
+*)
+FUNCTION string_for_unit(u: unit): STRING;
+	IF 'ISO13584_42_2_LONG_FORM_SCHEMA.DERIVED_UNIT' IN TYPEOF(u) 
+	THEN
+		RETURN(string_for_derived_unit(u));
+	ELSE (* 'ISO13584_42_2_LONG_FORM_SCHEMA.NAMED_UNIT' IN TYPEOF(u) holds true *)
+		RETURN(string_for_named_unit(u));
+	END_IF;
+END_FUNCTION; -- string_for_unit
+(*
+
+
+*)
+FUNCTION all_class_descriptions_reachable(cl: class_BSU): BOOLEAN;
+
+IF NOT EXISTS(cl)
+THEN
+	RETURN(?);
+END_IF;
+
+IF SIZEOF(cl.definition) = 0
+THEN
+	RETURN(FALSE);
+END_IF;
+
+IF NOT(EXISTS(cl.definition[1]\class.its_superclass))
+THEN
+	RETURN(TRUE);
+ELSE
+	RETURN(all_class_descriptions_reachable(
+		cl.definition[1]\class.its_superclass));
+END_IF;
+
+END_FUNCTION; -- all_class_descriptions_reachable
+(*
+
+
+*)
+FUNCTION compute_known_visible_properties(cl: class_BSU):
+	SET OF property_BSU;
+LOCAL
+	s: SET OF property_BSU := [];
+END_LOCAL;
+
+s := s + USEDIN(cl, 'ISO13584_42_2_LONG_FORM_SCHEMA' + 
+	'.PROPERTY_BSU.NAME_SCOPE');
+IF SIZEOF(cl.definition) = 0
+THEN
+	RETURN(s);
+ELSE
+	IF EXISTS(cl.definition[1]\class.its_superclass) THEN
+		s := s + compute_known_visible_properties(
+			cl.definition[1]\class.its_superclass);
+	END_IF;
+	
+	RETURN(s);
+END_IF;
+
+END_FUNCTION; -- compute_known_visible_properties
+(*
+
+
+*)
+FUNCTION compute_known_visible_data_types(cl: class_BSU):
+	SET OF data_type_BSU;
+LOCAL
+	s: SET OF data_type_BSU :=[ ];
+END_LOCAL;
+
+s := s + USEDIN(cl, 'ISO13584_42_2_LONG_FORM_SCHEMA' + 
+	'.DATA_TYPE_BSU.NAME_SCOPE');
+
+IF SIZEOF(cl.definition) = 0
+THEN
+	RETURN(s);
+ELSE
+	IF EXISTS(cl.definition[1]\class.its_superclass) 
+	THEN
+		s := s + compute_known_visible_data_types(
+			cl.definition[1]\class.its_superclass);
+	END_IF;
+
+	RETURN(s);
+END_IF;
+
+END_FUNCTION; -- compute_known_visible_data_types
+(*
+
+
+*)
+FUNCTION compute_known_applicable_properties(cl: class_BSU): 
+	SET OF property_BSU;
+
+LOCAL 
+	s: SET OF property_BSU := [];
+END_LOCAL;
+
+IF SIZEOF(cl.definition)=0
+THEN 
+	RETURN(s);
+ELSE
+	REPEAT i := 1 TO SIZEOF(cl.definition[1]\class.described_by);
+		s := s + cl.definition[1]\class.described_by[i];
+	END_REPEAT;
+
+	IF (('ISO13584_42_2_LONG_FORM_SCHEMA.'
+		+ 'A_PRIORI_SEMANTIC_RELATIONSHIP') 
+		IN TYPEOF (cl.definition[1]))
+	THEN 
+		s := s + 	cl.definition[1]\a_priori_semantic_relationship .referenced_properties;
+	END_IF;
+
+	IF EXISTS(cl.definition[1]\class.its_superclass) 
+	THEN 
+		s := s + compute_known_applicable_properties(
+			cl.definition[1]\class.its_superclass);
+	END_IF;
+
+	RETURN(s); 
+END_IF;
+END_FUNCTION; -- compute_known_applicable_properties
+(*
+
+
+*)
+FUNCTION compute_known_applicable_data_types(cl: class_BSU):
+	SET OF data_type_BSU;
+LOCAL
+	s: SET OF data_type_BSU := [];
+END_LOCAL;
+
+IF SIZEOF(cl.definition) = 0
+THEN
+	RETURN(s);
+ELSE
+	REPEAT i := 1 TO SIZEOF(cl.definition[1]\class.defined_types);
+		s := s + cl.definition[1]\class.defined_types[i];
+	END_REPEAT;
+	
+	IF (('ISO13584_42_2_LONG_FORM_SCHEMA.'
+		+ 'A_PRIORI_SEMANTIC_RELATIONSHIP') 
+		IN TYPEOF (cl.definition[1]))
+	THEN 
+		s := s + 	cl.definition[1]\a_priori_semantic_relationship .referenced_data_types;
+	END_IF;
+
+	IF EXISTS(cl.definition[1]\class.its_superclass) 
+	THEN
+		s := s + compute_known_applicable_data_types(
+			cl.definition[1]\class.its_superclass);
+	END_IF;
+	
+	RETURN(s);
+END_IF;
+
+END_FUNCTION; -- compute_known_applicable_data_types
+(*
+
+
+*)
+FUNCTION list_to_set(l: LIST [0:?] OF GENERIC:type_elem):
+	SET OF GENERIC: type_elem;
+
+LOCAL
+	s: SET OF GENERIC: type_elem := [];
+END_LOCAL;
+
+REPEAT i := 1 TO SIZEOF(l);
+	s := s + l[i];
+END_REPEAT;
+
+RETURN(s);
+END_FUNCTION; -- list_to_set
+(*
+
+
+*)
+FUNCTION check_properties_applicability(cl: class): LOGICAL;
+LOCAL
+	inter: SET OF property_bsu := [];
+END_LOCAL;
+
+IF EXISTS(cl.its_superclass)
+THEN
+	IF (SIZEOF(cl.its_superclass.definition)=1)
+	THEN
+		inter := (list_to_set(cl.described_by) * 
+			cl.its_superclass.definition[1]\class.
+			known_applicable_properties);
+		RETURN(inter = []);
+	ELSE
+		RETURN(UNKNOWN);
+	END_IF;
+ELSE
+	RETURN(TRUE);
+END_IF;
+
+END_FUNCTION; -- check_properties_applicability
+(*
+
+
+*)
+FUNCTION check_datatypes_applicability(cl: class): LOGICAL;
+LOCAL
+	inter: SET OF data_type_bsu := [];
+END_LOCAL;
+
+IF EXISTS(cl.its_superclass)
+THEN
+	IF (SIZEOF(cl.its_superclass.definition) = 1)
+	THEN
+		inter := cl.defined_types * 
+			cl.its_superclass.definition[1]\class.
+			known_applicable_data_types;
+		RETURN(inter = []);
+	ELSE
+		RETURN(UNKNOWN);
+	END_IF;
+ELSE
+	RETURN(TRUE);
+END_IF;
+
+END_FUNCTION; -- check_datatypes_applicability
+(*
+
+
+*)
+FUNCTION one_language_per_translation (adm : administrative_data)
+					: LOGICAL;
+	LOCAL
+		count : INTEGER ;
+		lang : language_code;
+	END_LOCAL ;
+
+	REPEAT i :=1 TO SIZEOF (adm.translation) ;
+		lang := adm.translation[i].language ;
+		count := 0 ;
+		REPEAT j :=1 TO SIZEOF (adm.translation) ;
+			IF lang = adm.translation[j].language 
+			THEN count := count+1 ;
+			END_IF ;
+		END_REPEAT ;
+		IF count >1 
+		THEN RETURN (FALSE) ; 
+		END_IF ;
+	END_REPEAT ;
+	RETURN(TRUE) ;
+
+END_FUNCTION ; -- one_language_per_translation
+(*
+
+
+*)
+FUNCTION allowed_values_integer_types (nqit: non_quantitative_int_type)
+					: SET OF integer_type;
+LOCAL 
+	s : SET OF Integer_type :=[];
+END_LOCAL;
+
+REPEAT i:=1 TO SIZEOF (nqit.domain.its_values);
+	s := s + nqit.domain.its_values[i].value_code;
+END_REPEAT;
+RETURN(s);
+
+END_FUNCTION ; -- allowed_values_integer_types
+(*
+
+
+*)
+
+FUNCTION is_class_valued_property(prop: property_BSU; cl: class_BSU)
+							: LOGICAL;
+	IF (SIZEOF(cl.definition) = 0)
+	THEN
+		RETURN (UNKNOWN);
+	ELSE
+		IF NOT (('ISO13584_42_2_LONG_FORM_SCHEMA'
+			+'.ITEM_CLASS') IN TYPEOF(cl.definition[1]))
+		THEN
+			RETURN (FALSE);
+		END_IF;
+		IF prop IN cl.definition[1].sub_class_properties
+		THEN RETURN (TRUE);
+		END_IF;
+		IF NOT EXISTS(cl.definition[1].its_superclass) 
+		THEN
+		(* end of chain reached, didn't meet super so far *)
+			RETURN(FALSE); 
+		END_IF;
+		RETURN(is_class_valued_property(prop,
+				 cl.definition[1].its_superclass));
+	END_IF;
+
+END_FUNCTION; -- is_class_valued_property
+(*
+
+
+*)
+FUNCTION class_value_assigned
+		(prop: property_BSU; cl: class_BSU) : SET OF primitive_value;
+	LOCAL
+		val:SET OF primitive_value :=[];
+		cva : SET OF class_value_assignment :=[];
+	END_LOCAL;
+	IF (SIZEOF(cl.definition) = 0)
+	THEN
+		RETURN (val);
+	END_IF;
+	IF NOT (('ISO13584_42_2_LONG_FORM_SCHEMA'
+		+'.ITEM_CLASS') IN TYPEOF(cl.definition[1]))
+	THEN
+		RETURN (val);
+	END_IF;
+	IF EXISTS(cl.definition[1])
+	THEN
+		cva:= QUERY 
+			(a <* cl.definition[1].class_constant_values
+			| a.super_class_defined_property = prop);
+		REPEAT i :=1 TO SIZEOF (cva);
+			val := val + cva[i].assigned_value;
+		END_REPEAT;
+		IF NOT EXISTS(cl.definition[1].its_superclass)
+		THEN
+			RETURN (val);
+		ELSE RETURN (val + class_value_assigned
+			(prop,cl.definition[1].its_superclass));
+		END_IF;
+	END_IF;
+END_FUNCTION; -- class_value_assigned
+
+
+(************************************************************************************)
+(************************************************************************************)
+(************************************************************************************)
+(************************************************************************************)
+(************************************************************************************)
+(************************************************************************************)
+(************************************************************************************)
+
+ENTITY language_code;
+	language_id : identifier; 
+	country_id : OPTIONAL identifier;
+WHERE
+	WR1: (LENGTH (language_id)= 2) OR (LENGTH (language_id)= 3);
+	WR2: LENGTH (country_id)= 2;
+END_ENTITY; -- language_code
+(*
+
+
+*)
+ENTITY global_language_assignment;
+	language: language_code;
+END_ENTITY; -- global_language_assignment
+(*
+
+
+*)
+ENTITY present_translations; 
+	language_codes: LIST [1:?] OF UNIQUE language_code;
+UNIQUE
+	UR1: language_codes;
+END_ENTITY; -- present_translations
+(*
+
+
+*)
+TYPE translatable_label = SELECT(label, translated_label);
+END_TYPE; -- translatable_label
+(*
+
+
+*)
+ENTITY translated_label; 
+	labels: LIST [1:?] OF label;
+	languages: present_translations; 
+WHERE
+	WR1: SIZEOF(labels) = SIZEOF(languages.language_codes);
+END_ENTITY; -- translated_label
+(*
+
+
+*)
+TYPE translatable_text = SELECT(text, translated_text);
+END_TYPE; -- translatable_text
+(*
+
+
+*)
+ENTITY translated_text; 
+	texts: LIST [1:?] OF text;
+	languages: present_translations; 
+WHERE
+	WR1: SIZEOF(texts) = SIZEOF(languages.language_codes);
+END_ENTITY; -- translated_text
+(*
+
+
+*)
+FUNCTION check_label_length(l: translatable_label;
+	l_length: INTEGER): BOOLEAN;
+
+IF 'ISO13584_42_2_LONG_FORM_SCHEMA.TRANSLATED_LABEL' 
+	IN TYPEOF(l) 
+THEN 
+	REPEAT i :=1 TO SIZEOF(l.labels);
+		IF LENGTH(l.labels[i]) > l_length 
+		THEN
+			RETURN(FALSE);
+		END_IF;
+	END_REPEAT;
+
+	RETURN(TRUE);
+
+ELSE (* the argument l is a single string *)
+	RETURN(LENGTH(l) <= l_length); 
+END_IF;
+END_FUNCTION; -- check_label_length 
+(*
+
+
+*)
+RULE single_language_assignment FOR(global_language_assignment);
+WHERE
+	SIZEOF(global_language_assignment) <= 1;
+END_RULE; -- single_language_assignment
+
+
+
+
+(************************************************************************************)
+(************************************************************************************)
+(************************************************************************************)
+(************************************************************************************)
+(************************************************************************************)
+(************************************************************************************)
+(************************************************************************************)
+
+
+ENTITY constraint
+ABSTRACT SUPERTYPE OF ( ONEOF (
+				property_constraint,
+				class_constraint));
+	constraint_id: OPTIONAL constraint_identifier;
+END_ENTITY; -- constraint
+
+(*
+
+*)
+ENTITY property_constraint 
+ABSTRACT SUPERTYPE OF ( ONEOF (
+				integrity_constraint,
+				context_restriction_constraint))
+SUBTYPE OF (constraint);
+	constrained_property : property_BSU; 
+END_ENTITY; -- property_constraint
+(*
+
+
+*)
+ENTITY class_constraint 
+ABSTRACT SUPERTYPE OF (configuration_control_constraint)
+SUBTYPE OF (constraint);
+END_ENTITY; -- class_constraint
+(*
+
+
+*)
+ENTITY configuration_control_constraint 
+SUBTYPE OF (class_constraint);
+	PRECONDITION : SET [0:?] OF filter; 
+	POSTCONDITION : SET [1:?] OF filter; 
+END_ENTITY; -- configuration_control_constraint
+(*
+
+
+*)
+ENTITY filter; 
+	referenced_property : property_BSU ;
+	domain : enumeration_constraint ;
+WHERE
+	WR1: definition_available_implies (
+		referenced_property,
+		(('ISO13584_42_2_LONG_FORM_SCHEMA'
+		+'.NON_QUANTITATIVE_CODE_TYPE') IN TYPEOF(
+		referenced_property.
+		definition[1]\property_DET.domain))
+		OR 
+		(('ISO13584_42_2_LONG_FORM_SCHEMA'
+		+'.NON_QUANTITATIVE_INT_TYPE') IN TYPEOF(
+		referenced_property.
+		definition[1]\property_DET.domain)));
+	WR2: definition_available_implies (
+		referenced_property,
+		correct_constraint_type(domain,
+		referenced_property.definition[1].domain));
+END_ENTITY; -- filter
+(*
+
+
+*)
+ENTITY integrity_constraint 
+SUBTYPE OF (property_constraint);
+	redefined_domain : domain_constraint ;
+WHERE
+	WR1: definition_available_implies (constrained_property,
+		correct_constraint_type(redefined_domain,
+		constrained_property.definition[1].domain));
+END_ENTITY; -- integrity_constraint
+(*
+
+
+*)
+ENTITY context_restriction_constraint 
+SUBTYPE OF (property_constraint);
+	context_parameter_constraints : SET [1:?] OF property_constraint;
+WHERE
+	WR1 : definition_available_implies(constrained_property,
+		QUERY (cp <*SELF.context_parameter_constraints
+		| NOT (cp.constrained_property IN
+		constrained_property.definition[1].depends_on))=[]);
+	WR2 : QUERY (cp <*SELF.context_parameter_constraints
+		| NOT (('ISO13584_42_2_LONG_FORM_SCHEMA'
+		+'.INTEGRITY_CONSTRAINT') IN TYPEOF (cp))) =[]; 
+	WR3 :definition_available_implies(constrained_property,
+		'ISO13584_42_2_LONG_FORM_SCHEMA.DEPENDENT_P_DET'
+		IN TYPEOF(constrained_property.definition[1])); 
+END_ENTITY; -- context_restriction_constraint
+(*
+
+
+*)
+ENTITY domain_constraint
+ABSTRACT SUPERTYPE OF(ONEOF(
+	subclass_constraint,
+	entity_subtype_constraint,
+	enumeration_constraint,
+	range_constraint,
+	string_size_constraint,
+	string_pattern_constraint,
+	cardinality_constraint
+	));
+END_ENTITY; -- domain_constraint
+(*
+
+
+*)
+ENTITY subclass_constraint
+SUBTYPE OF(domain_constraint);
+	subclasses : SET [1:?] OF class_BSU ;
+END_ENTITY; -- subclass_constraint
+(*
+
+
+*)
+ENTITY entity_subtype_constraint
+SUBTYPE OF(domain_constraint);
+	subtype_names : SET[1 : ?] OF STRING ;
+END_ENTITY; -- entity_subtype_constraint
+ (*
+
+
+*)
+ENTITY enumeration_constraint
+SUBTYPE OF ( domain_constraint);
+	subset : LIST [1 : ?] OF UNIQUE primitive_value ;
+	value_meaning: OPTIONAL non_quantitative_int_type;
+WHERE
+	WR1: (NOT(EXISTS(SELF.value_meaning)))
+		OR
+		(integer_values_in_range(1, SIZEOF(SELF.subset)) 
+			= allowed_values_integer_types ( SELF.value_meaning));
+END_ENTITY; -- enumeration_constraint
+(*
+
+
+
+*)
+ENTITY range_constraint
+SUBTYPE OF (domain_constraint) ;
+	min_value, max_value : OPTIONAL NUMBER ;
+	min_inclusive, max_inclusive: OPTIONAL BOOLEAN ;
+WHERE
+	WR1 : min_value <= max_value ;
+	WR2 : TYPEOF(min_value) = TYPEOF(max_value) ;
+	WR3 : NOT EXISTS (min_value) OR EXISTS (min_inclusive) ;
+	WR4 : NOT EXISTS (max_value) OR EXISTS (max_inclusive) ;
+END_ENTITY; -- range_constraint
+(*
+
+
+*)
+ENTITY string_size_constraint
+SUBTYPE OF (domain_constraint) ;
+	min_length, max_length : OPTIONAL INTEGER ;
+WHERE 
+	WR1 : (min_length >= 0) AND (max_length >= min_length) ;
+END_ENTITY; -- string_size_constraint
+(*
+
+	
+
+*)
+ENTITY string_pattern_constraint
+SUBTYPE OF (domain_constraint) ;
+	pattern : STRING ;
+END_ENTITY; -- string_pattern_constraint
+(*
+
+
+*)
+ENTITY cardinality_constraint
+SUBTYPE OF (domain_constraint) ;
+	bound_1, bound_2 : OPTIONAL INTEGER ;
+WHERE 
+	WR1 : (bound_1 >= 0) AND (bound_2 >= bound_1) ;
+END_ENTITY; -- cardinality_constraint
+(*
+
+
+*)
+TYPE constraint_or_constraint_id = 
+			SELECT (constraint, constraint_identifier);
+END_TYPE; -- constraint_or_constraint_id
+(*
+
+
+*)
+FUNCTION integer_values_in_range(
+	low_bound, high_bound: INTEGER): SET OF INTEGER;
+LOCAL
+	result: SET OF INTEGER:= [];
+END_LOCAL;
+	IF EXISTS (low_bound) AND EXISTS (high_bound) 
+	THEN 
+		REPEAT i := low_bound TO high_bound;
+			result := result + [i];
+		END_REPEAT;
+		RETURN(result);
+	ELSE
+		RETURN(?);
+	END_IF;
+END_FUNCTION; -- integer_values_in_range
+(*
+
+
+*)
+FUNCTION correct_precondition(
+	cons: configuration_control_constraint ; cl:class): LOGICAL;
+
+LOCAL
+	prop: SET OF property_BSU:= [];
+END_LOCAL;
+	REPEAT i:=1 TO SIZEOF (cons.PRECONDITION);
+		prop := prop + cons.PRECONDITION[i].referenced_property ;
+	END_REPEAT;
+
+	IF prop <= cl.known_applicable_properties 
+	THEN RETURN (TRUE); 
+	ELSE 
+		IF all_class_descriptions_reachable(cl.identified_by)
+		THEN RETURN (FALSE);
+		ELSE RETURN (UNKNOWN);
+		END_IF;
+	END_IF;
+END_FUNCTION; -- correct_precondition
+(*
+
+
+*)
+FUNCTION correct_constraint_type(
+	cons: domain_constraint; typ:data_type): LOGICAL;
+
+(*case subclass constraint*)
+
+IF ('ISO13584_42_2_LONG_FORM_SCHEMA'
+	+'.SUBCLASS_CONSTRAINT') IN TYPEOF(cons)
+THEN
+	(*the data type shall be class_reference_type*)
+	IF NOT ('ISO13584_42_2_LONG_FORM_SCHEMA.CLASS_REFERENCE_TYPE'
+		IN TYPEOF (typ))
+	THEN RETURN(FALSE);
+	END_IF;
+
+	(*the cons.subclasses shall consist of subclasses for the class
+	that defined the initial domain of typ.*)
+IF NOT (QUERY (sc <* cons.subclasses |
+		definition_available_implies
+	(sc,definition_available_implies
+	(typ\class_reference_type.domain,is_subclass(sc.definition[1],
+	typ\class_reference_type.domain.definition[1])))= FALSE) 
+	= [])
+	THEN RETURN(FALSE);
+	END_IF;
+
+	RETURN (TRUE);
+END_IF;
+(*case entity subtype constraint*)
+
+IF (('ISO13584_42_2_LONG_FORM_SCHEMA'
+	+'.ENTITY_SUBTYPE_CONSTRAINT') IN TYPEOF (CONS))
+THEN
+
+(* the data type is a class_reference_type*)
+	IF NOT (('ISO13584_42_2_LONG_FORM_SCHEMA'
+	+'.ENTITY_INSTANCE_TYPE') IN TYPEOF (typ))
+	THEN RETURN(FALSE);
+ 	END_IF;
+(* the subtype_name shall define a subtype for the entity_instance_type of the constrained *)
+	IF NOT (cons\entity_subtype_constraint.subtype_names
+		>= typ\entity_instance_type.type_name)
+	THEN RETURN(FALSE);
+ 	END_IF; 
+
+RETURN (TRUE);
+END_IF;
+
+(*case enumeration_constraint *)
+
+IF ('ISO13584_42_2_LONG_FORM_SCHEMA'
+	+'.ENUMERATION_CONSTRAINT') IN TYPEOF (CONS)
+THEN
+
+(* all the values belonging to the subset of values shall be compatible with the typ data type *)
+	IF (QUERY (val<*cons.subset | 
+		NOT compatible_data_type_and_value ( typ, val))<> [])
+	THEN RETURN(FALSE);
+ 	END_IF; 
+
+RETURN (TRUE);
+END_IF;
+
+
+(*case range_constraint *)
+
+IF ('ISO13584_42_2_LONG_FORM_SCHEMA.RANGE_CONSTRAINT'
+	 IN TYPEOF (CONS))
+THEN
+
+(*if the data type is an integer_type then min_value and max_value shall be INTEGERs.*)
+	IF ('ISO13584_42_2_LONG_FORM_SCHEMA.INTEGER_TYPE'
+		IN TYPEOF (typ)) AND 
+		NOT ('INTEGER' IN TYPEOF (cons.min_value))
+	THEN RETURN(FALSE);
+ 	END_IF; 
+
+(*if the data type is a rational_type then min_value and max_value shall be rational.*)
+	IF ('ISO13584_42_2_LONG_FORM_SCHEMA.RATIONAL_TYPE'
+		IN TYPEOF (typ)) AND 
+		NOT ('ISO13584_42_2_LONG_FORM_SCHEMA.RATIONAL_VALUE' IN TYPEOF (cons.min_value))
+	THEN RETURN(FALSE);
+ 	END_IF; 
+
+(*if the data type is a real_type then min_value and max_value shall be REALs.*)
+	IF ('ISO13584_42_2_LONG_FORM_SCHEMA.REAL_TYPE'
+		IN TYPEOF (typ)) AND NOT ('REAL' IN TYPEOF (cons.min_value))
+	THEN RETURN(FALSE);
+ 	END_IF; 
+
+(*all values of the range shall belong to the allowed values defined by the type.*)
+	IF (('ISO13584_42_2_LONG_FORM_SCHEMA'
+		+ '.NON_QUANTITATIVE_INT_TYPE') IN TYPEOF (typ))
+	AND NOT
+		(integer_values_in_range(cons.min_value, cons.max_value)
+		<= allowed_values_integer_types (typ))
+	THEN RETURN(FALSE);
+ 	END_IF; 
+
+RETURN (TRUE);
+END_IF;
+
+(*case entity string_size_constraint*)
+
+IF ('ISO13584_42_2_LONG_FORM_SCHEMA'
+	+'.STRING_SIZE_CONSTRAINT') IN TYPEOF (CONS)
+THEN
+
+(* the data type shall be a string_type or any of its subtypes *)
+IF NOT	('ISO13584_42_2_LONG_FORM_SCHEMA.STRING_TYPE'
+		IN TYPEOF (typ))
+THEN RETURN(FALSE);
+END_IF; 
+
+RETURN (TRUE);
+END_IF;
+
+(*case entity string_pattern_constraint *)
+
+IF ('ISO13584_42_2_LONG_FORM_SCHEMA'
+	+'.STRING_PATTERN_CONSTRAINT') IN TYPEOF (CONS)
+THEN
+
+(* the data type shall be a string_type or any of its subtypes *)
+	IF NOT ('ISO13584_42_2_LONG_FORM_SCHEMA.STRING_TYPE'
+		IN TYPEOF (typ))
+	THEN RETURN(FALSE);
+ 	END_IF; 
+RETURN (TRUE);
+END_IF;
+
+(*case entity cardinality_constraint *)
+
+IF ('ISO13584_42_2_LONG_FORM_SCHEMA'
+	+'.CARDINALITY_CONSTRAINT') IN TYPEOF (CONS)
+THEN
+
+(* the data type shall be an aggregate type but not an array*)
+	IF (NOT(
+	('ISO13584_42_2_LONG_FORM_SCHEMA'
+	+ '.ENTITY_INSTANCE_TYPE_FOR_AGGREGATE')
+	 IN TYPEOF(typ)))
+	THEN
+		RETURN(FALSE);
+	END_IF;
+
+	IF (
+	'ISO13584_42_2_LONG_FORM_SCHEMA'
+ + '.ARRAY_TYPE' IN TYPEOF(typ.type_structure))
+	THEN
+		RETURN(FALSE);
+	END_IF;
+	RETURN (TRUE);
+END_IF;
+
+RETURN (UNKNOWN);
+
+END_FUNCTION; -- correct_constraint_type
+(*
+
+
+*)
+FUNCTION compatible_data_type_and_value(dom: data_type;
+	val: primitive_value): LOGICAL;
+
+LOCAL
+	temp: class_BSU;
+	set_string: SET OF STRING := [];
+	set_integer: SET OF INTEGER := [];
+	code_type: non_quantitative_code_type;
+	int_type: non_quantitative_int_type;
+END_LOCAL;
+
+(* The following express statements deal with simple types *)
+
+IF ('ISO13584_42_2_LONG_FORM_SCHEMA.INTEGER_VALUE' IN TYPEOF(val))
+THEN
+	IF ('ISO13584_42_2_LONG_FORM_SCHEMA.' + 
+		'NON_QUANTITATIVE_INT_TYPE' IN TYPEOF (dom))
+	THEN
+		set_integer := [];
+		int_type := dom;
+		REPEAT j := 1 TO SIZEOF(int_type.domain.its_values);
+			set_integer := set_integer + 
+				int_type.domain.its_values[j].value_code;
+		END_REPEAT;
+		
+		RETURN(val IN set_integer);
+
+	ELSE
+		RETURN(('ISO13584_42_2_LONG_FORM_SCHEMA.INT_TYPE'
+			IN TYPEOF (dom)) OR
+			(('ISO13584_42_2_LONG_FORM_SCHEMA.NUMBER_TYPE'
+			IN TYPEOF (dom))
+			AND NOT(('ISO13584_42_2_LONG_FORM_SCHEMA.REAL_TYPE'
+			IN TYPEOF (dom))
+			OR ('ISO13584_42_2_LONG_FORM_SCHEMA.RATIONAL_TYPE'
+			IN TYPEOF (dom)))));
+	END_IF;
+END_IF;
+
+IF ('ISO13584_42_2_LONG_FORM_SCHEMA.REAL_VALUE' IN TYPEOF(val))
+THEN
+	RETURN(('ISO13584_42_2_LONG_FORM_SCHEMA.REAL_TYPE'
+		IN TYPEOF (dom)) OR
+		(('ISO13584_42_2_LONG_FORM_SCHEMA.NUMBER_TYPE'
+		IN TYPEOF (dom))
+		AND NOT(('ISO13584_42_2_LONG_FORM_SCHEMA.INT_TYPE'
+		IN TYPEOF (dom))
+		OR ('ISO13584_42_2_LONG_FORM_SCHEMA.RATIONAL_TYPE'
+			IN TYPEOF (dom)))));
+END_IF;
+
+IF ('ISO13584_42_2_LONG_FORM_SCHEMA.RATIONAL_VALUE' IN TYPEOF(val))
+THEN
+	RETURN(('ISO13584_42_2_LONG_FORM_SCHEMA.RATIONAL_TYPE'
+		IN TYPEOF (dom)) OR
+		(('ISO13584_42_2_LONG_FORM_SCHEMA.NUMBER_TYPE'
+		IN TYPEOF (dom))
+		AND NOT(('ISO13584_42_2_LONG_FORM_SCHEMA.INT_TYPE'
+		IN TYPEOF (dom))
+		OR ('ISO13584_42_2_LONG_FORM_SCHEMA.REAL_TYPE'
+			IN TYPEOF (dom)))));
+END_IF;
+
+IF ('ISO13584_42_2_LONG_FORM_SCHEMA.STRING_VALUE' 
+	IN TYPEOF(val))
+THEN
+	IF (('ISO13584_42_2_LONG_FORM_SCHEMA' +
+		'.NON_QUANTITATIVE_CODE_TYPE') IN TYPEOF (dom))
+	THEN
+		set_string := [];
+		code_type := dom;
+		REPEAT j := 1 TO SIZEOF(code_type.domain.its_values);
+			set_string := set_string + 
+				code_type.domain.its_values[j].value_code;
+		END_REPEAT;
+
+			RETURN(val IN set_string);
+
+	ELSE
+		RETURN('ISO13584_42_2_LONG_FORM_SCHEMA' +
+			'.STRING_TYPE' IN TYPEOF (dom));
+	END_IF;
+END_IF;
+
+IF ('ISO13584_42_2_LONG_FORM_SCHEMA.TRANSLATED_STRING_VALUE' 
+	IN TYPEOF(val))
+THEN
+		RETURN('ISO13584_42_2_LONG_FORM_SCHEMA' +
+			'.TRANSLATABLE_STRING_TYPE' IN TYPEOF (dom));
+END_IF;
+
+(* The following express statements deal with complex types *)
+
+IF 'ISO13584_42_2_LONG_FORM_SCHEMA.DIC_CLASS_INSTANCE'
+	IN TYPEOF(val) 
+THEN
+	IF ('ISO13584_42_2_LONG_FORM_SCHEMA.CLASS_REFERENCE_TYPE'
+		IN TYPEOF (dom))
+	THEN
+		temp := dom.domain;
+		RETURN(compatible_class_and_class(temp,
+			val\dic_class_instance.class_def));
+	ELSE
+		RETURN(FALSE);
+	END_IF;
+END_IF;
+
+IF 'ISO13584_42_2_LONG_FORM_SCHEMA.LEVEL_SPEC_VALUE' IN TYPEOF(val) THEN	
+	IF ('ISO13584_42_2_LONG_FORM_SCHEMA.LEVEL_TYPE'
+		IN TYPEOF (dom))
+	THEN
+		RETURN(compatible_level_type_and_instance(
+			dom.levels,
+			TYPEOF(dom.value_type),
+			val));
+	ELSE
+		RETURN(FALSE);
+	END_IF;
+END_IF;
+
+
+(* The following express statements deal with aggregate types *)
+
+IF 'ISO13584_42_2_LONG_FORM_SCHEMA.AGGREGATE_ENTITY_INSTANCE_VALUE' IN TYPEOF(val) THEN	
+
+	IF (NOT(
+	'ISO13584_42_2_LONG_FORM_SCHEMA.ENTITY_INSTANCE_TYPE'
+	 IN TYPEOF(dom)))
+	THEN
+		RETURN(FALSE);
+	END_IF;
+
+	IF (NOT(
+	'ISO13584_42_2_LONG_FORM_SCHEMA'
+ + '.AGGREGATE_TYPE' IN dom.type_name))
+	THEN
+		RETURN(FALSE);
+	END_IF;
+	
+	RETURN(compatible_aggregate_type_and_value(dom, val));
+
+END_IF;
+
+IF 'ISO13584_42_2_LONG_FORM_SCHEMA.ENTITY_INSTANCE_VALUE'
+	IN TYPEOF(val)
+THEN
+	IF 'ISO13584_42_2_LONG_FORM_SCHEMA' +
+		'.UNCONTROLLED_ENTITY_INSTANCE_VALUE'
+		IN TYPEOF(val)
+	THEN
+		RETURN(UNKNOWN);
+	END_IF;
+	IF ('ISO13584_42_2_LONG_FORM_SCHEMA.ENTITY_INSTANCE_TYPE'
+		IN TYPEOF (dom))
+		AND (dom.type_name <= TYPEOF(val))
+	THEN 
+		RETURN(TRUE);
+	ELSE 
+		RETURN(FALSE);
+	END_IF;
+END_IF;
+
+RETURN(UNKNOWN);
+
+END_FUNCTION; -- compatible_data_type_and_value
+(*
+
+*)
+RULE unique_constraint_id FOR(constraint);
+WHERE
+	QUERY(c1 <* constraint | 
+		SIZEOF(QUERY(c2 <* constraint |
+		c1.constraint_id=c2.constraint_id))>1) =[];
+END_RULE; -- unique_constraint_id
+
+
+
+(************************************************************************************)
+(************************************************************************************)
+(************************************************************************************)
+(************************************************************************************)
+(************************************************************************************)
+(************************************************************************************)
+(************************************************************************************)
+
+
+ENTITY a_priori_semantic_relationship
+ABSTRACT SUPERTYPE
+SUBTYPE OF(class);
+	referenced_classes: SET [1:?] OF class_BSU;
+	referenced_properties: LIST [0:?] OF property_BSU;
+	referenced_data_types: SET [0:?] OF data_type_BSU;
+	referenced_tables: SET [0:?] OF table_BSU;
+	referenced_documents: SET [0:?] OF document_BSU;
+	referenced_constraints: SET [0:?] OF constraint_or_constraint_id;
+WHERE
+	WR1: QUERY (cons <* SELF.referenced_constraints
+		| NOT(('ISO13584_42_2_LONG_FORM_SCHEMA' +
+		'.ISO_29002_IRDI_TYPE') IN TYPEOF(cons))
+		AND NOT (('ISO13584_42_2_LONG_FORM_SCHEMA' 
+		+'.PROPERTY_CONSTRAINT') IN TYPEOF (cons)))
+ 		=[];
+	WR2: QUERY (cons <* SELF.referenced_constraints
+		| (('ISO13584_42_2_LONG_FORM_SCHEMA' 
+		+'.PROPERTY_CONSTRAINT') IN TYPEOF (cons))
+		AND NOT (cons\property_constraint.constrained_property
+		IN SELF.referenced_properties))
+ 		=[];
+	WR3: compute_known_referenced_property_constraints(SELF)
+		<= SELF.referenced_constraints;
+	WR4: QUERY(prop <* SELF.referenced_properties
+		| QUERY(cl <* SELF.referenced_classes
+		| visible_properties(cl, [prop])
+		OR applicable_properties(cl, [prop]))
+		= []) = [];
+	WR5: QUERY(typ <* SELF.referenced_data_types
+		| QUERY(cl <* SELF.referenced_classes
+		| visible_types(cl, [typ])
+		OR applicable_types(cl, [typ]))
+		= []) = [];
+END_ENTITY; -- a_priori_semantic_relationship
+(*
+
+
+
+*)
+ENTITY item_class_case_of
+SUBTYPE OF(item_class, a_priori_semantic_relationship);
+	is_case_of: SET [1:?] OF class_BSU;
+	imported_properties: LIST [0:?] OF property_BSU;
+	imported_types: SET [0:?]OF data_type_BSU;
+	imported_tables: SET [0:?] OF table_BSU;
+	imported_documents: SET [0:?] OF document_BSU;
+	imported_constraints: SET [0:?] OF constraint_or_constraint_id;
+DERIVE
+	SELF\a_priori_semantic_relationship.referenced_classes:
+		SET [1:?] OF class_BSU
+		:= SELF.is_case_of;
+	SELF\a_priori_semantic_relationship.referenced_properties:
+		LIST [0:?] OF property_BSU := SELF.imported_properties;
+	SELF\a_priori_semantic_relationship.referenced_data_types:
+		SET [0:?] OF data_type_BSU := SELF.imported_types;
+	SELF\a_priori_semantic_relationship.referenced_tables:
+		SET [0:?] OF table_BSU := SELF.imported_tables;
+	SELF\a_priori_semantic_relationship.referenced_documents:
+		SET [0:?] OF document_BSU := SELF.imported_documents;
+	SELF\a_priori_semantic_relationship
+		.referenced_constraints:
+		SET [0:?] OF property_constraint
+		:= SELF.imported_constraints;
+WHERE
+	WR1: superclass_of_item_is_item(SELF);
+	WR2: check_is_case_of_referenced_classes_definition(SELF);
+	WR3: QUERY(p <* SELF\class.sub_class_properties
+		| NOT((p IN SELF.described_by) 
+		OR (p IN SELF.imported_properties))) = [];
+	WR4: QUERY(p <* SELF\class.sub_class_properties
+		| (p IN SELF.imported_properties) 
+		AND (QUERY(cl<*SELF.is_case_of
+		| all_class_descriptions_reachable(cl) AND
+		(p IN compute_known_applicable_properties(cl)) AND
+		(NOT is_class_valued_property(p, cl)))<>[]))
+		=[];
+	WR5: QUERY(ccv <* SELF\class.class_constant_values
+		| (ccv.super_class_defined_property 
+		IN SELF.imported_properties) 
+		AND (QUERY(cl<*SELF.is_case_of
+		| all_class_descriptions_reachable(cl) AND
+		(ccv.super_class_defined_property
+		 IN compute_known_applicable_properties(cl)) AND
+		(QUERY (v<*class_value_assigned(
+		ccv.super_class_defined_property, cl) 
+		|v<> ccv.assigned_value) <> []))<>[]))
+		=[];		
+	WR6: QUERY(prop <* imported_properties
+		| (QUERY(cl<*SELF.is_case_of
+		| is_class_valued_property(prop, cl)) <>[])
+		AND NOT is_class_valued_property(prop, SELF.identified_by))
+		=[];
+	WR7: QUERY(ccv <* SELF\class.class_constant_values
+		| QUERY(cl<*SELF.is_case_of
+		| (class_value_assigned 
+		(ccv.super_class_defined_property, cl) <> [])
+		AND (QUERY(v <* class_value_assigned 
+		(ccv.super_class_defined_property, cl) 
+		| v <> ccv. assigned_value)<>[])) <> [])
+		=[]; 
+END_ENTITY; -- item_class_case_of
+(*
+
+
+
+
+*)
+FUNCTION compute_known_property_constraints(classes: SET OF class_BSU): 
+	SET OF property_constraint;
+
+LOCAL 
+	s: SET OF property_constraint := [];
+END_LOCAL;
+
+REPEAT nb := 1 TO SIZEOF (classes);
+IF SIZEOF(classes[nb].definition)=1
+THEN 
+	REPEAT i := 1 TO
+			SIZEOF(classes[nb].definition[1]\class.constraints);
+		IF (('ISO13584_42_2_LONG_FORM_SCHEMA' 
+		+'.PROPERTY_CONSTRAINT') 
+		IN TYPEOF
+ 			(classes[nb].definition[1]\class.constraints[i]))
+		THEN
+			s := s + classes[nb].definition[1]\class.constraints[i];
+			END_IF;
+	END_REPEAT;
+
+	IF (('ISO13584_42_2_LONG_FORM_SCHEMA.'
+		+ 'A_PRIORI_SEMANTIC_RELATIONSHIP') 
+		IN TYPEOF (classes[nb].definition[1])) 
+	THEN 
+		REPEAT i := 1 TO
+			SIZEOF(classes[nb].definition[1]
+		\a_priori_semantic_relationship
+		 .referenced_constraints);
+
+				IF (('ISO13584_42_2_LONG_FORM_SCHEMA' 
+					+'.PROPERTY_CONSTRAINT') IN TYPEOF
+ 					(classes[nb].definition[1]
+					\a_priori_semantic_relationship
+		 		.referenced_constraints[i]))
+			THEN
+					s := s + classes[nb].definition[1]
+					\a_priori_semantic_relationship
+		 			.referenced_constraints [i];
+				END_IF;
+		END_REPEAT;
+		END_IF;
+
+ 	IF EXISTS(classes[nb].definition[1]\class.its_superclass) 
+	THEN 
+		s := s + compute_known_property_constraints(
+			[classes[nb].definition[1]\class.its_superclass]);
+	END_IF;
+
+END_IF;
+END_REPEAT;
+RETURN(s); 
+
+END_FUNCTION; -- compute_known_property_constraints
+(*
+
+
+*)
+FUNCTION compute_known_referenced_property_constraints(
+						ap: a_priori_semantic_relationship): 
+						SET OF property_constraint;
+
+LOCAL 
+	s: SET OF property_constraint := []; 	-- result
+	prop: SET OF property_BSU := list_to_set(ap.referenced_properties); 
+													--imported properties
+	cl: SET OF class_BSU := ap.referenced_classes;
+													--source of importation 
+	cons:SET OF property_constraint
+			:= compute_known_property_constraints(cl);
+		-- all those property_constraints existing in the various classes 
+		-- from cl that may be computed in the current exchange context. 
+END_LOCAL;
+
+	REPEAT n_cons := 1 TO SIZEOF(cons);
+		IF cons[n_cons].constrained_property IN prop
+		THEN s := s + cons[n_cons];
+		END_IF;
+	END_REPEAT;
+RETURN(s); 
+
+END_FUNCTION; -- compute_known_referenced_property_constraints
+
+FUNCTION superclass_of_item_is_item(cl: item_class): LOGICAL;
+
+IF NOT EXISTS(cl\class.its_superclass)
+THEN
+	RETURN(TRUE);
+END_IF;
+
+IF SIZEOF(cl\class.its_superclass.definition) = 0
+THEN
+	RETURN(UNKNOWN);
+END_IF;
+
+RETURN(('ISO13584_42_2_LONG_FORM_SCHEMA.ITEM_CLASS')
+	IN TYPEOF(cl\class.its_superclass.definition[1]));
+
+END_FUNCTION; -- superclass_of_item_is_item
+
+FUNCTION check_is_case_of_referenced_classes_definition(
+	cl: item_class_case_of): BOOLEAN;
+LOCAL 
+	class_def_ok: BOOLEAN := TRUE;
+END_LOCAL;
+
+REPEAT i := 1 TO SIZEOF(cl.is_case_of);
+	IF (SIZEOF(cl.is_case_of[i].definition) = 1)
+	THEN
+		IF (NOT('ISO13584_42_2_LONG_FORM_SCHEMA' + 
+			'.ITEM_CLASS'
+			IN TYPEOF(cl.is_case_of[i].definition[1])))
+		THEN
+			class_def_ok := FALSE;
+		END_IF;
+		
+	END_IF;
+END_REPEAT;
+
+RETURN(class_def_ok);
+
+END_FUNCTION; -- check_is_case_of_referenced_classes_definition
+
+
+(************************************************************************************)
+(************************************************************************************)
+(************************************************************************************)
+(************************************************************************************)
+(************************************************************************************)
+(************************************************************************************)
+(************************************************************************************)
+
+
+
+ENTITY entity_instance_type_for_aggregate
+SUBTYPE OF(entity_instance_type);
+	type_structure: aggregate_type;
+WHERE
+	WR1: SELF\entity_instance_type.type_name =
+		['ISO13584_42_2_LONG_FORM_SCHEMA' 
+		+ '.AGGREGATE_TYPE'];
+END_ENTITY;
+
+ENTITY aggregate_type 
+ABSTRACT SUPERTYPE OF(ONEOF(
+		list_type,
+		set_type,
+		bag_type,
+		array_type,	set_with_subset_constraint_type ));
+	bound_1: OPTIONAL INTEGER;
+	bound_2: OPTIONAL INTEGER;
+	value_type: data_type;
+WHERE
+	WR1: bound_1 <= bound_2;
+END_ENTITY;
+
+ENTITY list_type 
+SUBTYPE OF(aggregate_type);
+	uniqueness: BOOLEAN;
+WHERE
+	WR1: EXISTS(bound_1) OR NOT(EXISTS(bound_2));
+	WR2: NOT(EXISTS(bound_1)) OR (bound_1 >= 0);
+END_ENTITY;
+
+ENTITY set_type 
+SUBTYPE OF(aggregate_type);
+WHERE
+	WR1: EXISTS(bound_1) OR NOT(EXISTS(bound_2));
+	WR2: NOT(EXISTS(bound_1)) OR (bound_1 >= 0);
+END_ENTITY;
+
+ENTITY bag_type 
+SUBTYPE OF(aggregate_type);
+WHERE
+	WR1: EXISTS(bound_1) OR NOT(EXISTS(bound_2));
+	WR2: NOT(EXISTS(bound_1)) OR (bound_1 >= 0);
+END_ENTITY;
+
+ENTITY array_type
+SUBTYPE OF (aggregate_type);
+	SELF\aggregate_type.bound_1: INTEGER;
+	SELF\aggregate_type.bound_2: INTEGER;
+	uniqueness: BOOLEAN;
+	are_optional: BOOLEAN;
+END_ENTITY;
+
+ENTITY set_with_subset_constraint_type 
+SUBTYPE OF (aggregate_type);
+	cardinal_min: OPTIONAL INTEGER;
+	cardinal_max: OPTIONAL INTEGER;
+WHERE
+	WR1: cardinal_min <= cardinal_max ;
+	WR2: NOT EXISTS (bound_2) OR NOT EXISTS (cardinal_max) 	
+		OR (cardinal_max <= bound_2);
+	WR3: NOT EXISTS (bound_1) OR NOT EXISTS (cardinal_min) 
+		OR (cardinal_min <= bound_1);
+END_ENTITY;
+
+(************************************************************************************)
+(************************************************************************************)
+(************************************************************************************)
+(************************************************************************************)
+(************************************************************************************)
+(************************************************************************************)
+(************************************************************************************)
+
+
+
+ENTITY aggregate_entity_instance_value 
+SUBTYPE OF (uncontrolled_entity_instance_value);
+	the_value: aggregate_value;
+END_ENTITY;
+
+ENTITY aggregate_value 
+ABSTRACT SUPERTYPE OF(ONEOF(
+		list_value,
+		set_value,
+		bag_value,
+		array_value,
+		set_with_subset_constraint_value ));
+		values: LIST OF null_or_primitive_value;
+END_ENTITY;
+
+ENTITY list_value 
+SUBTYPE OF (aggregate_value);
+	SELF\aggregate_value.values: LIST OF primitive_value;
+END_ENTITY;
+
+ENTITY set_value 
+SUBTYPE OF (aggregate_value);
+	SELF\aggregate_value.values: LIST OF primitive_value;
+WHERE
+	WR1: VALUE_UNIQUE(values);
+END_ENTITY;
+
+ENTITY bag_value 
+SUBTYPE OF (aggregate_value);
+	SELF\aggregate_value.values: LIST OF primitive_value;
+END_ENTITY;
+
+ENTITY array_value 
+SUBTYPE OF (aggregate_value);
+	bound_1: INTEGER;
+	bound_2: INTEGER;
+WHERE
+	WR1: SIZEOF(SELF\aggregate_value.values) = 
+		SELF.bound_2 - SELF.bound_1 + 1;
+END_ENTITY;
+
+ENTITY set_with_subset_constraint_value  
+SUBTYPE OF (aggregate_value);
+	SELF\aggregate_value.values: LIST OF primitive_value;
+	min: OPTIONAL INTEGER;
+	max: OPTIONAL INTEGER;
+WHERE
+	WR1: NOT EXISTS (min) OR NOT EXISTS (max) OR (min <= max) ;
+	WR2: VALUE_UNIQUE(values);
+END_ENTITY;
+
+RULE allowed_aggregate_values FOR (
+	property_value,
+	entity_instance_type_for_aggregate);
+
+WHERE
+	WR1: QUERY (prop <* property_value |
+		NOT(compatible_complete_types_and_value(
+		prop.prop_def, prop.its_value))) = [];
+END_RULE; -- allowed_aggregate_values
+
+FUNCTION compatible_complete_types_and_value(
+	dom: property_or_data_type_BSU; 
+	val: primitive_value): LOGICAL;
+
+IF (data_type_typeof(dom) = [])
+THEN
+	RETURN(UNKNOWN);
+END_IF;
+
+-- checking that values are primitive values but are not aggregate
+-- values.
+IF ('ISO13584_42_2_LONG_FORM_SCHEMA.PRIMITIVE_VALUE' IN TYPEOF(val))
+	AND (NOT('ISO13584_42_2_LONG_FORM_SCHEMA.' +
+	'AGGREGATE_ENTITY_INSTANCE_VALUE' IN TYPEOF(val)))
+THEN
+	RETURN(compatible_type_and_value(dom, val));
+END_IF;
+
+IF 'ISO13584_42_2_LONG_FORM_SCHEMA.' +
+	'AGGREGATE_ENTITY_INSTANCE_VALUE' IN TYPEOF(val)
+THEN
+	RETURN(compatible_aggregate_domain_and_aggregate_value(
+		dom, val));
+END_IF;
+
+-- neither primitive value nor aggregate value
+RETURN(UNKNOWN);
+
+END_FUNCTION; -- compatible_complete_types_and_value
+
+FUNCTION compatible_aggregate_domain_and_aggregate_value(
+	dom: property_or_data_type_BSU; 
+	val: aggregate_entity_instance_value) : LOGICAL;
+
+LOCAL
+	the_data_type: data_type;
+END_LOCAL;
+
+-- Check the avalability of the final type of a property or a
+-- data type BSU.
+IF data_type_typeof(dom) = []
+THEN (* the final domain of the type is not available *)
+	RETURN(UNKNOWN);
+END_IF;
+
+-- Check that the final type of the property or data type BSU
+-- is an entity_instance_type whose type_name_attribute
+-- references the aggregate_type entity
+
+IF (NOT('ISO13584_42_2_LONG_FORM_SCHEMA.ENTITY_INSTANCE_TYPE' IN 
+data_type_typeof(dom)))
+THEN
+	RETURN(FALSE);
+END_IF;
+
+IF (NOT('ISO13584_42_2_LONG_FORM_SCHEMA' + 
+	'.AGGREGATE_TYPE' IN data_type_type_name(dom)))
+THEN
+	RETURN(FALSE);
+END_IF;
+
+-- Compute the final type of the dom property or data_type_BSU
+
+the_data_type := data_type_final_type(dom)[1];
+
+RETURN(compatible_aggregate_type_and_value(the_data_type, val));
+
+END_FUNCTION; -- compatible_aggregate_domain_and_value
+
+FUNCTION data_type_final_type(
+	type_spec: property_or_data_type_BSU): SET [0:1] OF data_type;
+
+LOCAL
+	res: BOOLEAN := FALSE;
+	x: data_type;
+END_LOCAL;
+
+IF NOT EXISTS(type_spec)
+THEN
+	RETURN([]); -- type_spec is indeterminate
+END_IF;
+
+IF ('ISO13584_42_2_LONG_FORM_SCHEMA.PROPERTY_BSU' IN 
+	TYPEOF(type_spec))
+THEN
+	IF NOT(SIZEOF(type_spec.definition) = 0)
+	THEN
+		x := type_spec.definition[1]\property_DET.domain;
+		res := TRUE;
+	END_IF;
+ELSE
+	IF NOT(SIZEOF(type_spec.definition) = 0)
+	THEN
+		x := type_spec.definition[1]\data_type_element.
+			type_definition;
+		res := TRUE;
+	END_IF;
+END_IF;
+
+IF NOT(res)
+THEN
+	RETURN([]);
+END_IF;
+
+IF ('ISO13584_42_2_LONG_FORM_SCHEMA.NAMED_TYPE' IN TYPEOF(x))
+THEN
+	IF NOT(SIZEOF(x\named_type.referred_type.definition) = 0)
+	THEN
+		RETURN(data_type_final_type(x\named_type.referred_type));
+	ELSE
+		RETURN([]);
+	END_IF;
+ELSE
+	RETURN([x]);
+END_IF;
+
+END_FUNCTION; -- data_type_final_type
+
+FUNCTION compatible_aggregate_type_and_value(
+	the_data_type: entity_instance_type_for_aggregate;
+	val: aggregate_entity_instance_value): LOGICAL;
+
+LOCAL
+	elements: LIST OF null_or_primitive_value;
+	type_of_elements: data_type;
+	result: LOGICAL;
+	tmp: LIST OF primitive_value := [];
+END_LOCAL;
+
+elements := val.the_value.values;
+
+-- Compute type of elements contained in the aggregate
+IF ('ISO13584_42_2_LONG_FORM_SCHEMA.NAMED_TYPE' IN
+	TYPEOF(the_data_type.type_structure.value_type))
+THEN
+	IF (data_type_typeof(the_data_type.type_structure.
+		value_type\named_type.referred_type) = [])
+	THEN 
+	(* the final domain of the type of elements is not available *)
+		RETURN(UNKNOWN);
+	END_IF;
+	type_of_elements := data_type_final_type(the_data_type.
+		type_structure.value_type\named_type.referred_type)[1];
+ELSE
+	type_of_elements := the_data_type.type_structure.value_type;
+END_IF;
+
+-- check that a value aggregate is compatible with its type 
+-- aggregate declaration
+IF ('ISO13584_42_2_LONG_FORM_SCHEMA.LIST_VALUE' 
+	IN TYPEOF (val.the_value))
+	AND NOT
+	('ISO13584_42_2_LONG_FORM_SCHEMA'+ 
+	'.LIST_TYPE' IN TYPEOF(the_data_type.type_structure))
+THEN
+	RETURN(FALSE);
+END_IF;
+
+IF ('ISO13584_42_2_LONG_FORM_SCHEMA.BAG_VALUE' IN TYPEOF(
+	val.the_value)) AND NOT
+	('ISO13584_42_2_LONG_FORM_SCHEMA.'+ 
+	'BAG_TYPE' IN TYPEOF(the_data_type.type_structure))
+THEN
+	RETURN(FALSE);
+END_IF;
+
+IF ('ISO13584_42_2_LONG_FORM_SCHEMA.SET_VALUE' IN TYPEOF(
+	val.the_value)) AND NOT
+	('ISO13584_42_2_LONG_FORM_SCHEMA.'+ 
+	'SET_TYPE' IN TYPEOF(the_data_type.type_structure))
+THEN
+	RETURN(FALSE);
+END_IF;
+
+IF ('ISO13584_42_2_LONG_FORM_SCHEMA.ARRAY_VALUE' IN TYPEOF(
+	val.the_value)) AND NOT
+	('ISO13584_42_2_LONG_FORM_SCHEMA.'+
+	'ARRAY_TYPE' IN TYPEOF(the_data_type.type_structure))
+THEN
+	RETURN(FALSE);
+END_IF;
+
+IF ('ISO13584_42_2_LONG_FORM_SCHEMA.SET_WITH_SUBSET_CONSTRAINT_VALUE' 
+		IN TYPEOF(val.the_value)) AND NOT
+	('ISO13584_42_2_LONG_FORM_SCHEMA.'+
+			'SET_WITH_SUBSET_CONSTRAINT_TYPE' 
+		IN TYPEOF(the_data_type.type_structure))
+THEN
+	RETURN(FALSE);
+END_IF;
+
+-- check that that low and high bounds of the values are compatible
+-- with the type declaration.
+IF 	(('ISO13584_42_2_LONG_FORM_SCHEMA.LIST_VALUE' 
+		IN TYPEOF (val.the_value))
+	OR ('ISO13584_42_2_LONG_FORM_SCHEMA.BAG_VALUE'
+		IN TYPEOF (val.the_value))
+	OR ('ISO13584_42_2_LONG_FORM_SCHEMA.SET_VALUE'
+		IN TYPEOF (val.the_value))
+	OR 
+('ISO13584_42_2_LONG_FORM_SCHEMA.SET_WITH_SUBSET_CONSTRAINT_VALUE'
+		IN TYPEOF (val.the_value)))
+	AND (
+	(EXISTS(the_data_type.type_structure.bound_1))
+	AND NOT
+	(SIZEOF(elements) >= the_data_type.type_structure.bound_1)
+	)
+THEN
+	RETURN(FALSE);
+END_IF;
+
+IF (('ISO13584_42_2_LONG_FORM_SCHEMA.LIST_VALUE' IN TYPEOF(
+		val.the_value))
+	OR ('ISO13584_42_2_LONG_FORM_SCHEMA.BAG_VALUE' IN TYPEOF(
+		val.the_value))
+	OR ('ISO13584_42_2_LONG_FORM_SCHEMA.SET_VALUE' IN TYPEOF(
+		val.the_value))
+	OR 
+('ISO13584_42_2_LONG_FORM_SCHEMA.SET_WITH_SUBSET_CONSTRAINT_VALUE'
+		IN TYPEOF (val.the_value)))
+	AND (
+	(EXISTS(the_data_type.type_structure.bound_2))
+	AND NOT
+	(SIZEOF(elements) <= the_data_type.type_structure.bound_2))
+THEN
+	RETURN(FALSE);
+END_IF;
+
+
+-- For array data type and values, check that size of the storage 
+-- list of values is size compatible with the type declaration.
+IF ('ISO13584_42_2_LONG_FORM_SCHEMA.ARRAY_VALUE' IN TYPEOF(
+	val.the_value))
+THEN
+	IF (NOT(val.the_value\array_value.bound_1 = 
+		the_data_type.type_structure.bound_1) OR
+		NOT(val.the_value\array_value.bound_2 = 
+		the_data_type.type_structure.bound_2))
+	THEN
+		RETURN(FALSE);
+	END_IF;
+END_IF;
+
+-- For set_with_subset_constraint_type, check that the possible 
+
+-- with those defined at the type level.
+IF
+('ISO13584_42_2_LONG_FORM_SCHEMA.SET_WITH_SUBSET_CONSTRAINT_VALUE'
+		IN TYPEOF (val.the_value))
+	AND NOT
+	((the_data_type.type_structure.cardinal_min
+	<= val.the_value\set_with_subset_constraint_value.min)
+	AND
+	(val.the_value\set_with_subset_constraint_value.min 
+	<= val.the_value\set_with_subset_constraint_value.max)
+	AND
+	(val.the_value\set_with_subset_constraint_value.max 
+	<= the_data_type.type_structure.cardinal_max))
+THEN
+	RETURN(FALSE);
+END_IF;
+
+-- In case of a list or array of unique values, check that no 
+-- value is duplicated
+IF ('ISO13584_42_2_LONG_FORM_SCHEMA.LIST_VALUE' IN TYPEOF(
+	val.the_value)) OR 
+	('ISO13584_42_2_LONG_FORM_SCHEMA.ARRAY_VALUE'
+	IN TYPEOF (val.the_value))
+THEN
+	IF (the_data_type.type_structure.uniqueness)
+	THEN
+		REPEAT i := 1 TO SIZEOF(val.the_value.values);
+			IF NOT('ISO13584_42_2_LONG_FORM_SCHEMA.NULL_VALUE' 
+				IN TYPEOF(val.the_value.values[i]))
+			THEN
+				tmp := tmp + val.the_value.values[i];
+			END_IF;
+		END_REPEAT;
+
+		IF NOT(VALUE_UNIQUE(tmp))
+		THEN
+			RETURN(FALSE);
+		END_IF;
+	END_IF;
+END_IF;
+
+-- For an array where optional values are not allowed, check that 
+-- no null_value is provided
+IF ('ISO13584_42_2_LONG_FORM_SCHEMA.ARRAY_VALUE' 
+	IN TYPEOF(val.the_value))
+THEN
+	IF NOT(the_data_type.type_structure.are_optional)
+	THEN
+		REPEAT i := 1 TO SIZEOF(val.the_value.values);
+			IF ('ISO13584_42_2_LONG_FORM_SCHEMA.NULL_VALUE' 
+				IN TYPEOF(val.the_value.values[i]))
+			THEN
+				RETURN(FALSE);
+			END_IF;
+		END_REPEAT;
+	END_IF;
+END_IF;
+
+-- Check for value/type compatibility for all the elements contained 
+-- in the aggregate 
+
+result := TRUE;
+
+REPEAT i := 1 TO SIZEOF(elements);
+	IF NOT('ISO13584_42_2_LONG_FORM_SCHEMA.NULL_VALUE'
+		 IN TYPEOF(elements[i]))
+	THEN
+		IF('ISO13584_42_2_LONG_FORM_SCHEMA.'
+			+ 'ENTITY_INSTANCE_TYPE_FOR_AGGREGATE' 
+			IN TYPEOF(type_of_elements))
+		THEN
+			IF ('ISO13584_42_2_LONG_FORM_SCHEMA.'+
+				'AGGREGATE_ENTITY_INSTANCE_VALUE' IN 
+				TYPEOF(elements[i]))
+			THEN
+				result := result AND
+					compatible_aggregate_type_and_value(
+					type_of_elements, elements[i]);
+			ELSE
+				RETURN(FALSE);
+			END_IF;
+		ELSE
+			result := result AND compatible_final_type_and_value(
+				type_of_elements, elements[i]);
+		END_IF;
+
+		IF NOT(result)
+		THEN
+			RETURN(FALSE);
+		END_IF;
+	END_IF;
+END_REPEAT;
+
+RETURN(result);
+
+END_FUNCTION; -- compatible_aggregate_type_and_value
+
+FUNCTION compatible_final_type_and_value(
+	typ: data_type; val: primitive_value): LOGICAL;
+
+LOCAL
+	set_string: SET OF STRING := [];
+	set_integer: SET OF INTEGER := [];
+	code_type: non_quantitative_code_type;
+	int_type: non_quantitative_int_type;
+END_LOCAL;
+
+IF ('ISO13584_42_2_LONG_FORM_SCHEMA.INTEGER_VALUE' IN TYPEOF(val))
+THEN
+	IF (('ISO13584_42_2_LONG_FORM_SCHEMA.' + 
+		'NON_QUANTITATIVE_INT_TYPE' IN TYPEOF(typ)))
+	THEN
+		set_integer := [];
+		code_type := typ;
+
+		REPEAT j := 1 TO SIZEOF(code_type.domain.its_values);
+			set_integer := set_integer + 
+				code_type.domain.its_values[j].value_code;
+		END_REPEAT;
+		
+		RETURN(val IN set_integer);
+	ELSE
+		RETURN(('ISO13584_42_2_LONG_FORM_SCHEMA.INT_TYPE'
+			IN TYPEOF(typ)) OR
+			(('ISO13584_42_2_LONG_FORM_SCHEMA.NUMBER_TYPE'
+			IN TYPEOF(typ))
+			AND NOT('ISO13584_42_2_LONG_FORM_SCHEMA.REAL_TYPE'
+			IN TYPEOF(typ))));
+	END_IF;
+END_IF;
+
+IF ('ISO13584_42_2_LONG_FORM_SCHEMA.REAL_VALUE' IN TYPEOF(val))
+THEN
+	RETURN(('ISO13584_42_2_LONG_FORM_SCHEMA.REAL_TYPE'
+		IN TYPEOF(typ)) OR
+		(('ISO13584_42_2_LONG_FORM_SCHEMA.NUMBER_TYPE'
+		IN TYPEOF(typ))
+		AND NOT('ISO13584_42_2_LONG_FORM_SCHEMA.INT_TYPE'
+		IN TYPEOF(typ))));
+END_IF;
+
+IF ('ISO13584_42_2_LONG_FORM_SCHEMA.NUMBER_VALUE' IN TYPEOF(val))
+THEN
+	RETURN('ISO13584_42_2_LONG_FORM_SCHEMA.NUMBER_TYPE'
+		IN TYPEOF(typ));
+END_IF;
+
+IF ('ISO13584_42_2_LONG_FORM_SCHEMA.BOOLEAN_VALUE' IN TYPEOF(val))
+THEN
+	RETURN('ISO13584_42_2_LONG_FORM_SCHEMA.BOOLEAN_TYPE'
+		IN TYPEOF(typ));
+END_IF;
+
+IF ('ISO13584_42_2_LONG_FORM_SCHEMA.TRANSLATABLE_STRING_VALUE' IN
+TYPEOF(val))
+THEN
+	IF (('ISO13584_42_2_LONG_FORM_SCHEMA' +
+		'.NON_QUANTITATIVE_CODE_TYPE') IN TYPEOF(typ))
+	THEN
+			set_string := [];
+			code_type := typ;
+			REPEAT j := 1 TO SIZEOF(code_type.domain.its_values);
+				set_string := set_string + 
+					code_type.domain.its_values[j].value_code;
+			END_REPEAT;
+
+			RETURN(('ISO13584_42_2_LONG_FORM_SCHEMA.STRING_VALUE' 
+				IN TYPEOF(val)) AND (val IN set_string));
+
+	ELSE
+		RETURN('ISO13584_42_2_LONG_FORM_SCHEMA.STRING_TYPE'
+			IN TYPEOF(typ));
+	END_IF;
+END_IF;
+
+IF 'ISO13584_42_2_LONG_FORM_SCHEMA.ENTITY_INSTANCE_VALUE'
+	IN TYPEOF(val)
+THEN
+	IF 'ISO13584_42_2_LONG_FORM_SCHEMA' +
+		'.UNCONTROLLED_ENTITY_INSTANCE_VALUE' IN TYPEOF(val)
+	THEN
+		RETURN(UNKNOWN);
+	END_IF;
+	IF ('ISO13584_42_2_LONG_FORM_SCHEMA.ENTITY_INSTANCE_TYPE'
+		IN TYPEOF(typ)) AND 
+		(typ\entity_instance_type.type_name <= TYPEOF(val))
+	THEN
+		RETURN(TRUE);
+	ELSE
+		RETURN(FALSE);
+	END_IF;
+END_IF;
+
+IF 'ISO13584_42_2_LONG_FORM_SCHEMA.DIC_CLASS_INSTANCE'
+	IN TYPEOF(val)
+THEN
+	IF ('ISO13584_42_2_LONG_FORM_SCHEMA.CLASS_REFERENCE_TYPE'
+		IN TYPEOF(typ))
+	THEN
+		RETURN(compatible_class_and_class(typ\class_reference_type.
+			domain,val\dic_class_instance.class_def));
+	ELSE
+		RETURN(FALSE);
+	END_IF;
+END_IF;
+
+IF 'ISO13584_42_2_LONG_FORM_SCHEMA.LEVEL_SPEC_VALUE' IN TYPEOF(val)
+THEN
+	IF ('ISO13584_42_2_LONG_FORM_SCHEMA.LEVEL_TYPE'
+		IN TYPEOF(typ))
+	THEN
+		RETURN(compatible_level_type_and_instance(
+			typ\level_type.levels,
+			TYPEOF(typ\level_type.value_type), val));
+	ELSE
+		RETURN(FALSE);
+	END_IF;
+END_IF;
+
+RETURN(FALSE);
+
+END_FUNCTION; -- compatible_final_type_and_value
+
+
+(************************************************************************************)
+(************************************************************************************)
+(************************************************************************************)
+(************************************************************************************)
+(************************************************************************************)
+(************************************************************************************)
+(************************************************************************************)
+
+TYPE identifier = STRING;
+END_TYPE; -- identifier
+
+TYPE label = STRING;
+END_TYPE; -- label
+
+TYPE text = STRING;
+END_TYPE; -- text
+
+TYPE dimension_count = INTEGER;
+WHERE
+  WR1: SELF > 0;
+END_TYPE;
+
+ENTITY organization;
+  id          : OPTIONAL identifier;
+  name        : label;
+  description : OPTIONAL text;
+END_ENTITY; -- organization
+
+
+ENTITY address;
+  internal_location       : OPTIONAL label;
+  street_number           : OPTIONAL label;
+  street                  : OPTIONAL label;
+  postal_box              : OPTIONAL label;
+  town                    : OPTIONAL label;
+  region                  : OPTIONAL label;
+  postal_code             : OPTIONAL label;
+  country                 : OPTIONAL label;
+  facsimile_number        : OPTIONAL label;
+  telephone_number        : OPTIONAL label;
+  electronic_mail_address : OPTIONAL label;
+  telex_number            : OPTIONAL label;
+WHERE
+  WR1: EXISTS(internal_location)       OR
+       EXISTS(street_number)           OR
+       EXISTS(street)                  OR
+       EXISTS(postal_box)              OR
+       EXISTS(town)                    OR
+       EXISTS(region)                  OR
+       EXISTS(postal_code)             OR
+       EXISTS(country)                 OR
+       EXISTS(facsimile_number)        OR
+       EXISTS(telephone_number)        OR
+       EXISTS(electronic_mail_address) OR
+       EXISTS(telex_number);
+END_ENTITY; -- address
+
+ENTITY person;
+  id            : identifier;
+  last_name     : OPTIONAL label;
+  first_name    : OPTIONAL label;
+  middle_names  : OPTIONAL LIST [1:?] OF label;
+  prefix_titles : OPTIONAL LIST [1:?] OF label;
+  suffix_titles : OPTIONAL LIST [1:?] OF label;
+WHERE
+  WR1: EXISTS(last_name) OR EXISTS(first_name);
+END_ENTITY; -- person
+
+ENTITY representation;
+  name             : label;
+  items            : SET[1:?] OF representation_item;
+  context_of_items : representation_context;
+END_ENTITY;
+
+ENTITY representation_context;
+  context_identifier : identifier;
+  context_type       : text;
+INVERSE
+  representations_in_context : SET [1:?] OF representation
+    FOR context_of_items;
+END_ENTITY;
+
+ENTITY representation_item;
+  name : label;
+--WHERE
+--  WR1: SIZEOF(using_representations(SELF)) > 0;
+END_ENTITY;
+
+ENTITY geometric_representation_context
+  SUBTYPE OF (representation_context);
+  coordinate_space_dimension : dimension_count;
+END_ENTITY;
+
+ENTITY geometric_representation_item
+  SUPERTYPE OF (ONEOF(point, direction, placement))
+  SUBTYPE OF (representation_item);
+--DERIVE
+--    dim : dimension_count := dimension_of(SELF);
+--WHERE
+--  WR1: SIZEOF (QUERY (using_rep <* using_representations (SELF) |
+--     NOT ('ISO13584_42_2_LONG_FORM_SCHEMA.GEOMETRIC_REPRESENTATION_CONTEXT' IN
+--      TYPEOF (using_rep.context_of_items)))) = 0;
+END_ENTITY;
+
+ENTITY placement
+   SUPERTYPE OF (ONEOF(axis1_placement,axis2_placement_2d,axis2_placement_3d))
+   SUBTYPE OF (geometric_representation_item);
+   location : cartesian_point;
+END_ENTITY;
+
+ENTITY axis1_placement
+ SUBTYPE OF (placement);
+   axis     : OPTIONAL direction;
+--DERIVE
+--   z : direction := NVL(normalise(axis), dummy_gri ||
+--                                 direction([0.0,0.0,1.0]));
+--WHERE
+--   WR1: SELF\geometric_representation_item.dim  = 3;
+END_ENTITY;
+
+ENTITY axis2_placement_2d
+   SUBTYPE OF (placement);
+   ref_direction : OPTIONAL direction;
+--DERIVE
+--   p             : LIST [2:2] OF direction := build_2axes(ref_direction);
+--WHERE
+--   WR1: SELF\geometric_representation_item.dim = 2;
+END_ENTITY;
+
+ENTITY axis2_placement_3d
+   SUBTYPE OF (placement);
+   axis          : OPTIONAL direction;
+   ref_direction : OPTIONAL direction;
+--DERIVE
+--   p             : LIST [3:3] OF direction := build_axes(axis,ref_direction);
+--WHERE
+--   WR1: SELF\placement.location.dim = 3;
+--   WR2: (NOT (EXISTS (axis))) OR (axis.dim = 3);
+--   WR3: (NOT (EXISTS (ref_direction))) OR (ref_direction.dim = 3);
+--   WR4: (NOT (EXISTS (axis))) OR (NOT (EXISTS (ref_direction))) OR
+--          (cross_product(axis,ref_direction).magnitude > 0.0);
+END_ENTITY;
+
+ENTITY direction
+   SUBTYPE OF (geometric_representation_item);
+   direction_ratios : LIST [2:3] OF REAL;
+WHERE
+   WR1: SIZEOF(QUERY(tmp <* direction_ratios | tmp <> 0.0)) > 0;
+END_ENTITY;
+
+ENTITY point
+   SUPERTYPE OF (cartesian_point)
+   SUBTYPE OF (geometric_representation_item);
+END_ENTITY;
+
+ENTITY cartesian_point
+--   SUPERTYPE OF (ONEOF(cylindrical_point, polar_point, spherical_point))
+   SUBTYPE OF (point);
+    coordinates  : LIST [1:3] OF length_measure;
+END_ENTITY;
+
+ENTITY application_protocol_definition;
+  status                                    : label;
+  application_interpreted_model_schema_name : label;
+  application_protocol_year                 : year_number;
+  application                               : application_context;
+END_ENTITY; -- application_protocol_definition;
+
+ENTITY application_context;
+  application      : label;
+--DERIVE
+--  description      : text := get_description_value (SELF);
+--  id               : identifier := get_id_value (SELF);
+INVERSE
+  context_elements : SET [1:?] OF application_context_element
+                              FOR frame_of_reference;
+WHERE
+  WR1 : SIZEOF (USEDIN (SELF, 'ISO13584_42_2_LONG_FORM_SCHEMA.' +
+               'DESCRIPTION_ATTRIBUTE.DESCRIBED_ITEM')) <= 1;
+  WR2 : SIZEOF (USEDIN (SELF, 'ISO13584_42_2_LONG_FORM_SCHEMA.' +
+               'ID_ATTRIBUTE.IDENTIFIED_ITEM')) <= 1;
+END_ENTITY; -- application_context
+
+ENTITY application_context_element;
+  name               : label;
+  frame_of_reference : application_context;
+END_ENTITY; -- application_context_element
+
+
+(************************************************************************************)
+(************************************************************************************)
+(************************************************************************************)
+(************************************************************************************)
+(************************************************************************************)
+(************************************************************************************)
+(************************************************************************************)
+
+TYPE amount_of_substance_measure = REAL;
+END_TYPE; -- amount_of_substance_measure
+
+TYPE area_measure = REAL;
+END_TYPE; -- area_measure
+
+TYPE celsius_temperature_measure = REAL;
+END_TYPE; -- celsius_temperature_measure
+
+TYPE context_dependent_measure = REAL;
+END_TYPE; -- context_dependent_measure
+
+TYPE count_measure = NUMBER;
+END_TYPE; -- count_measure
+
+TYPE descriptive_measure= STRING;
+END_TYPE; -- descriptive_measure
+
+TYPE electric_current_measure= REAL;
+END_TYPE; -- electric_current_measure
+
+TYPE length_measure = REAL;
+END_TYPE; -- length_measure
+
+TYPE luminous_intensity_measure = REAL;
+END_TYPE; -- luminous_intensity_measure
+
+TYPE mass_measure = REAL;
+END_TYPE; -- mass_measure
+
+TYPE measure_value = SELECT
+  (length_measure,
+   mass_measure,
+   time_measure,
+   electric_current_measure,
+   thermodynamic_temperature_measure,
+   celsius_temperature_measure,
+   amount_of_substance_measure,
+   luminous_intensity_measure,
+   plane_angle_measure,
+   solid_angle_measure,
+   area_measure,
+   volume_measure,
+   ratio_measure,
+   parameter_value,
+   numeric_measure,
+   context_dependent_measure,
+   descriptive_measure,
+   positive_length_measure,
+   positive_plane_angle_measure,
+   positive_ratio_measure,
+   count_measure);
+END_TYPE; -- measure_value
+
+TYPE numeric_measure = NUMBER;
+END_TYPE; -- numeric_measure
+
+TYPE parameter_value = REAL;
+END_TYPE; -- parameter_value
+
+TYPE plane_angle_measure = REAL;
+END_TYPE; -- plane_angle_measure
+
+TYPE positive_length_measure = length_measure;
+WHERE
+  WR1: SELF > 0.0;
+END_TYPE; -- positive_length_measure
+
+TYPE positive_plane_angle_measure = plane_angle_measure;
+WHERE
+  WR1: SELF > 0.0;
+END_TYPE; -- positive_plane_angle_measure
+
+TYPE positive_ratio_measure = ratio_measure;
+WHERE
+  WR1: SELF > 0.0;
+END_TYPE; -- positive_ratio_measure
+
+TYPE ratio_measure = REAL;
+END_TYPE; -- ratio_measure
+
+TYPE si_prefix = ENUMERATION OF
+  (exa,
+   peta,
+   tera,
+   giga,
+   mega,
+   kilo,
+   hecto,
+   deca,
+   deci,
+   centi,
+   milli,
+   micro,
+   nano,
+   pico,
+   femto,
+   atto);
+END_TYPE; -- si_prefix
+
+TYPE si_unit_name = ENUMERATION OF
+  (metre,
+   gram,
+   second,
+   ampere,
+   kelvin,
+   mole,
+   candela,
+   radian,
+   steradian,
+   hertz,
+   newton,
+   pascal,
+   joule,
+   watt,
+   coulomb,
+   volt,
+   farad,
+   ohm,
+   siemens,
+   weber,
+   tesla,
+   henry,
+   degree_Celsius,
+   lumen,
+   lux,
+   becquerel,
+   gray,
+   sievert);
+END_TYPE; -- si_unit_name
+
+TYPE solid_angle_measure = REAL;
+END_TYPE; -- solid_angle_measure 
+
+TYPE thermodynamic_temperature_measure = REAL;
+END_TYPE; -- thermodynamic_temperature_measure
+
+TYPE time_measure = REAL;
+END_TYPE; -- time_measure
+
+TYPE unit = SELECT
+  (named_unit,
+   derived_unit);
+END_TYPE; -- unit
+
+TYPE volume_measure = REAL;
+END_TYPE; -- volume_measure
+
+ENTITY amount_of_substance_measure_with_unit
+  SUBTYPE OF (measure_with_unit);
+WHERE
+  WR1: 'ISO13584_42_2_LONG_FORM_SCHEMA.AMOUNT_OF_SUBSTANCE_UNIT' IN TYPEOF 
+         (SELF\measure_with_unit.unit_component);
+END_ENTITY; -- amount_of_substance_measure_with_unit
+
+ENTITY amount_of_substance_unit
+  SUBTYPE OF (named_unit);
+WHERE
+  WR1:(SELF\named_unit.dimensions.length_exponent = 0.0) AND
+   (SELF\named_unit.dimensions.mass_exponent = 0.0) AND
+   (SELF\named_unit.dimensions.time_exponent = 0.0) AND
+   (SELF\named_unit.dimensions.electric_current_exponent = 0.0) AND
+     (SELF\named_unit.dimensions.thermodynamic_temperature_exponent = 0.0) AND
+   (SELF\named_unit.dimensions.amount_of_substance_exponent = 1.0) AND
+   (SELF\named_unit.dimensions.luminous_intensity_exponent = 0.0);
+END_ENTITY; -- amount_of_substance_unit
+
+ENTITY area_measure_with_unit
+  SUBTYPE OF (measure_with_unit);
+WHERE
+  WR1: 'ISO13584_42_2_LONG_FORM_SCHEMA.AREA_UNIT' IN TYPEOF
+          (SELF\measure_with_unit.unit_component);
+END_ENTITY; -- area_measure_with_unit
+
+ENTITY area_unit
+  SUBTYPE OF (named_unit);
+WHERE
+  WR1:(SELF\named_unit.dimensions.length_exponent = 2.0) AND
+   (SELF\named_unit.dimensions.mass_exponent = 0.0) AND
+   (SELF\named_unit.dimensions.time_exponent = 0.0) AND
+   (SELF\named_unit.dimensions.electric_current_exponent = 0.0) AND
+     (SELF\named_unit.dimensions.thermodynamic_temperature_exponent = 0.0) AND
+   (SELF\named_unit.dimensions.amount_of_substance_exponent = 0.0) AND
+   (SELF\named_unit.dimensions.luminous_intensity_exponent = 0.0);
+END_ENTITY; -- area_unit
+
+ENTITY celsius_temperature_measure_with_unit
+  SUBTYPE OF (measure_with_unit);
+WHERE
+  WR1: 'ISO13584_42_2_LONG_FORM_SCHEMA.THERMODYNAMIC_TEMPERATURE_UNIT' IN TYPEOF 
+         (SELF\measure_with_unit.unit_component);
+END_ENTITY; -- celsius_temperature_measure_with_unit
+
+ENTITY context_dependent_unit
+  SUBTYPE OF (named_unit);
+  name : label;
+END_ENTITY; -- context_dependent_unit
+
+ENTITY conversion_based_unit
+  SUBTYPE OF (named_unit);
+  name              : label;
+  conversion_factor : measure_with_unit;
+END_ENTITY; -- conversion_based_unit
+
+ENTITY derived_unit;
+  elements : SET [1:?] OF derived_unit_element;
+WHERE
+  WR1 : (SIZEOF (elements) > 1) OR
+        ((SIZEOF (elements) = 1) AND (elements[1].exponent <> 1.0));
+  WR2 : SIZEOF (USEDIN (SELF, 'ISO13584_42_2_LONG_FORM_SCHEMA.' +
+                       'NAME_ATTRIBUTE.NAMED_ITEM')) <= 1;
+END_ENTITY; -- derived_unit
+
+ENTITY derived_unit_element;
+  unit     : named_unit;
+  exponent : REAL;
+END_ENTITY; -- derived_unit_element
+
+ENTITY dimensional_exponents;
+  length_exponent                    : REAL;
+  mass_exponent                      : REAL;
+  time_exponent                      : REAL;
+  electric_current_exponent          : REAL;
+  thermodynamic_temperature_exponent : REAL;
+  amount_of_substance_exponent       : REAL;
+  luminous_intensity_exponent        : REAL;
+END_ENTITY; -- dimensional_exponents
+
+ENTITY electric_current_measure_with_unit
+  SUBTYPE OF (measure_with_unit);
+WHERE
+  WR1: 'ISO13584_42_2_LONG_FORM_SCHEMA.ELECTRIC_CURRENT_UNIT' IN TYPEOF 
+          (SELF\measure_with_unit.unit_component);
+END_ENTITY; -- electric_current_measure_with_unit
+
+ENTITY electric_current_unit
+  SUBTYPE OF (named_unit);
+WHERE
+  WR1:(SELF\named_unit.dimensions.length_exponent = 0.0) AND
+   (SELF\named_unit.dimensions.mass_exponent = 0.0) AND
+   (SELF\named_unit.dimensions.time_exponent = 0.0) AND
+   (SELF\named_unit.dimensions.electric_current_exponent = 1.0) AND
+     (SELF\named_unit.dimensions.thermodynamic_temperature_exponent = 0.0) AND
+   (SELF\named_unit.dimensions.amount_of_substance_exponent = 0.0) AND
+   (SELF\named_unit.dimensions.luminous_intensity_exponent = 0.0);
+END_ENTITY; -- electric_current_unit
+
+ENTITY global_unit_assigned_context
+  SUBTYPE OF (representation_context);
+  units : SET [1:?] OF unit;
+END_ENTITY; -- global_unit_assigned_context
+
+ENTITY length_measure_with_unit
+  SUBTYPE OF (measure_with_unit);
+WHERE
+  WR1: 'ISO13584_42_2_LONG_FORM_SCHEMA.LENGTH_UNIT' IN TYPEOF 
+          (SELF\measure_with_unit.unit_component);
+END_ENTITY; -- length_measure_with_unit
+
+ENTITY length_unit
+  SUBTYPE OF (named_unit);
+WHERE
+  WR1:(SELF\named_unit.dimensions.length_exponent = 1.0) AND
+   (SELF\named_unit.dimensions.mass_exponent = 0.0) AND
+   (SELF\named_unit.dimensions.time_exponent = 0.0) AND
+   (SELF\named_unit.dimensions.electric_current_exponent = 0.0) AND
+     (SELF\named_unit.dimensions.thermodynamic_temperature_exponent = 0.0) AND
+   (SELF\named_unit.dimensions.amount_of_substance_exponent = 0.0) AND
+   (SELF\named_unit.dimensions.luminous_intensity_exponent = 0.0);
+END_ENTITY; -- length_unit
+
+ENTITY luminous_intensity_measure_with_unit
+  SUBTYPE OF (measure_with_unit);
+WHERE
+  WR1: 'ISO13584_42_2_LONG_FORM_SCHEMA.LUMINOUS_INTENSITY_UNIT' IN TYPEOF 
+         (SELF\measure_with_unit.unit_component);
+END_ENTITY; -- luminous_intensity_measure_with_unit
+
+ENTITY luminous_intensity_unit
+  SUBTYPE OF (named_unit);
+WHERE
+  WR1:(SELF\named_unit.dimensions.length_exponent = 0.0) AND
+   (SELF\named_unit.dimensions.mass_exponent = 0.0) AND
+   (SELF\named_unit.dimensions.time_exponent = 0.0) AND
+   (SELF\named_unit.dimensions.electric_current_exponent = 0.0) AND
+     (SELF\named_unit.dimensions.thermodynamic_temperature_exponent = 0.0) AND
+   (SELF\named_unit.dimensions.amount_of_substance_exponent = 0.0) AND
+   (SELF\named_unit.dimensions.luminous_intensity_exponent = 1.0);
+END_ENTITY; -- luminous_intensity_unit
+
+ENTITY mass_measure_with_unit
+  SUBTYPE OF (measure_with_unit);
+WHERE
+  WR1: 'ISO13584_42_2_LONG_FORM_SCHEMA.MASS_UNIT' IN TYPEOF 
+          (SELF\measure_with_unit.unit_component);
+END_ENTITY; -- mass_measure_with_unit
+
+ENTITY mass_unit
+  SUBTYPE OF (named_unit);
+WHERE
+  WR1:(SELF\named_unit.dimensions.length_exponent = 0.0) AND
+   (SELF\named_unit.dimensions.mass_exponent = 1.0) AND
+   (SELF\named_unit.dimensions.time_exponent = 0.0) AND
+   (SELF\named_unit.dimensions.electric_current_exponent = 0.0) AND
+     (SELF\named_unit.dimensions.thermodynamic_temperature_exponent = 0.0) AND
+   (SELF\named_unit.dimensions.amount_of_substance_exponent = 0.0) AND
+   (SELF\named_unit.dimensions.luminous_intensity_exponent = 0.0);
+END_ENTITY; -- mass_unit
+
+ENTITY measure_with_unit
+  SUPERTYPE OF (ONEOF (length_measure_with_unit,
+                      mass_measure_with_unit,
+                      time_measure_with_unit,
+                      electric_current_measure_with_unit,
+                      thermodynamic_temperature_measure_with_unit,
+                      celsius_temperature_measure_with_unit,
+                      amount_of_substance_measure_with_unit,
+                      luminous_intensity_measure_with_unit,
+                      plane_angle_measure_with_unit,
+                      solid_angle_measure_with_unit,
+                      area_measure_with_unit,
+                      volume_measure_with_unit,
+                      ratio_measure_with_unit ));
+  value_component : measure_value;
+  unit_component  : unit;
+WHERE
+  WR1: valid_units (SELF);
+END_ENTITY; -- measure_with_unit
+
+ENTITY named_unit
+  SUPERTYPE OF (ONEOF (si_unit,
+                       conversion_based_unit,
+                       context_dependent_unit)
+               ANDOR
+               ONEOF  (length_unit,
+                       mass_unit,
+                       time_unit,
+                       electric_current_unit,
+                       thermodynamic_temperature_unit,
+                       amount_of_substance_unit,
+                       luminous_intensity_unit,
+                       plane_angle_unit,
+                       solid_angle_unit,
+                       area_unit,
+                       volume_unit,
+                       ratio_unit ));
+  dimensions : dimensional_exponents;
+END_ENTITY; -- named_unit
+
+ENTITY plane_angle_measure_with_unit
+  SUBTYPE OF (measure_with_unit);
+WHERE
+  WR1: 'ISO13584_42_2_LONG_FORM_SCHEMA.PLANE_ANGLE_UNIT' IN TYPEOF 
+         (SELF\measure_with_unit.unit_component);
+END_ENTITY; -- plane_angle_measure_with_unit
+
+ENTITY plane_angle_unit
+  SUBTYPE OF (named_unit);
+WHERE
+  WR1:(SELF\named_unit.dimensions.length_exponent = 0.0) AND
+   (SELF\named_unit.dimensions.mass_exponent = 0.0) AND
+   (SELF\named_unit.dimensions.time_exponent = 0.0) AND
+   (SELF\named_unit.dimensions.electric_current_exponent = 0.0) AND
+    (SELF\named_unit.dimensions.thermodynamic_temperature_exponent = 0.0) AND
+   (SELF\named_unit.dimensions.amount_of_substance_exponent = 0.0) AND
+   (SELF\named_unit.dimensions.luminous_intensity_exponent = 0.0);
+END_ENTITY; -- plane_angle_unit
+
+ENTITY ratio_measure_with_unit
+  SUBTYPE OF (measure_with_unit);
+WHERE
+  WR1: 'ISO13584_42_2_LONG_FORM_SCHEMA.RATIO_UNIT' IN TYPEOF
+           (SELF\measure_with_unit.unit_component);
+END_ENTITY; -- ratio_measure_with_unit
+
+ENTITY ratio_unit
+  SUBTYPE OF (named_unit);
+WHERE
+  WR1:(SELF\named_unit.dimensions.length_exponent = 0.0) AND
+   (SELF\named_unit.dimensions.mass_exponent = 0.0) AND
+   (SELF\named_unit.dimensions.time_exponent = 0.0) AND
+   (SELF\named_unit.dimensions.electric_current_exponent = 0.0) AND
+    (SELF\named_unit.dimensions.thermodynamic_temperature_exponent = 0.0) AND
+   (SELF\named_unit.dimensions.amount_of_substance_exponent = 0.0) AND
+   (SELF\named_unit.dimensions.luminous_intensity_exponent = 0.0);
+END_ENTITY; -- ratio_unit
+
+ENTITY si_unit
+  SUBTYPE OF (named_unit);
+  prefix     : OPTIONAL si_prefix;
+  name       : si_unit_name;
+DERIVE
+  SELF\named_unit.dimensions : dimensional_exponents
+                            := dimensions_for_si_unit (name);
+END_ENTITY; -- si_unit
+
+ENTITY solid_angle_measure_with_unit
+  SUBTYPE OF (measure_with_unit);
+WHERE
+  WR1: 'ISO13584_42_2_LONG_FORM_SCHEMA.SOLID_ANGLE_UNIT' IN TYPEOF 
+          (SELF\measure_with_unit.unit_component);
+END_ENTITY; -- solid_angle_measure_with_unit
+
+ENTITY solid_angle_unit
+  SUBTYPE OF (named_unit);
+WHERE
+  WR1:(SELF\named_unit.dimensions.length_exponent = 0.0) AND
+   (SELF\named_unit.dimensions.mass_exponent = 0.0) AND
+   (SELF\named_unit.dimensions.time_exponent = 0.0) AND
+   (SELF\named_unit.dimensions.electric_current_exponent = 0.0) AND
+     (SELF\named_unit.dimensions.thermodynamic_temperature_exponent = 0.0) AND
+   (SELF\named_unit.dimensions.amount_of_substance_exponent = 0.0) AND
+   (SELF\named_unit.dimensions.luminous_intensity_exponent = 0.0);
+END_ENTITY; -- solid_angle_unit
+
+ENTITY thermodynamic_temperature_measure_with_unit
+  SUBTYPE OF (measure_with_unit);
+WHERE
+  WR1: 'ISO13584_42_2_LONG_FORM_SCHEMA.THERMODYNAMIC_TEMPERATURE_UNIT' IN TYPEOF 
+         (SELF\measure_with_unit.unit_component);
+END_ENTITY; -- thermodynamic_temperature_measure_with_unit
+
+ENTITY thermodynamic_temperature_unit
+  SUBTYPE OF (named_unit);
+WHERE
+  WR1:(SELF\named_unit.dimensions.length_exponent = 0.0) AND
+   (SELF\named_unit.dimensions.mass_exponent = 0.0) AND
+   (SELF\named_unit.dimensions.time_exponent = 0.0) AND
+   (SELF\named_unit.dimensions.electric_current_exponent = 0.0) AND
+     (SELF\named_unit.dimensions.thermodynamic_temperature_exponent = 1.0) AND
+   (SELF\named_unit.dimensions.amount_of_substance_exponent = 0.0) AND
+   (SELF\named_unit.dimensions.luminous_intensity_exponent = 0.0);
+END_ENTITY; -- thermodynamic_temperature_unit
+
+ENTITY time_measure_with_unit
+  SUBTYPE OF (measure_with_unit);
+WHERE
+  WR1:'ISO13584_42_2_LONG_FORM_SCHEMA.TIME_UNIT' IN TYPEOF
+        (SELF\measure_with_unit.unit_component);
+END_ENTITY; -- time_measure_with_unit
+
+ENTITY time_unit
+  SUBTYPE OF (named_unit);
+WHERE
+  WR1:(SELF\named_unit.dimensions.length_exponent = 0.0) AND
+   (SELF\named_unit.dimensions.mass_exponent = 0.0) AND
+   (SELF\named_unit.dimensions.time_exponent = 1.0) AND
+   (SELF\named_unit.dimensions.electric_current_exponent = 0.0) AND
+     (SELF\named_unit.dimensions.thermodynamic_temperature_exponent = 0.0) AND
+   (SELF\named_unit.dimensions.amount_of_substance_exponent = 0.0) AND
+   (SELF\named_unit.dimensions.luminous_intensity_exponent = 0.0);
+END_ENTITY; -- time_unit
+
+ENTITY volume_measure_with_unit
+  SUBTYPE OF (measure_with_unit);
+WHERE
+  WR1: 'ISO13584_42_2_LONG_FORM_SCHEMA.VOLUME_UNIT' IN TYPEOF
+           (SELF\measure_with_unit.unit_component);
+END_ENTITY; -- volume_measure_with_unit
+
+ENTITY volume_unit
+  SUBTYPE OF (named_unit);
+WHERE
+  WR1:(SELF\named_unit.dimensions.length_exponent = 3.0) AND
+   (SELF\named_unit.dimensions.mass_exponent = 0.0) AND
+   (SELF\named_unit.dimensions.time_exponent = 0.0) AND
+   (SELF\named_unit.dimensions.electric_current_exponent = 0.0) AND
+    (SELF\named_unit.dimensions.thermodynamic_temperature_exponent = 0.0) AND
+   (SELF\named_unit.dimensions.amount_of_substance_exponent = 0.0) AND
+   (SELF\named_unit.dimensions.luminous_intensity_exponent = 0.0);
+END_ENTITY; -- volume_unit
+
+FUNCTION derive_dimensional_exponents (x : unit) : dimensional_exponents;
+  LOCAL
+    result : dimensional_exponents :=
+            dimensional_exponents(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+  END_LOCAL;
+  IF 'ISO13584_42_2_LONG_FORM_SCHEMA.DERIVED_UNIT' IN TYPEOF(x) THEN -- x is a derived unit
+    REPEAT i := LOINDEX(x.elements) TO HIINDEX(x.elements);
+      result.length_exponent                   :=
+        result.length_exponent +
+        (x.elements[i].exponent *
+         x.elements[i].unit.dimensions.length_exponent);
+      result.mass_exponent                     :=
+        result.mass_exponent +
+        (x.elements[i].exponent *
+         x.elements[i].unit.dimensions.mass_exponent);
+     result.time_exponent :=
+        result.time_exponent +
+        (x.elements[i].exponent *
+         x.elements[i].unit.dimensions.time_exponent);
+      result.electric_current_exponent         :=
+        result.electric_current_exponent +
+        (x.elements[i].exponent *
+         x.elements[i].unit.dimensions.electric_current_exponent);
+      result.thermodynamic_temperature_exponent :=
+        result.thermodynamic_temperature_exponent +
+        (x.elements[i].exponent *
+         x.elements[i].unit.dimensions.thermodynamic_temperature_exponent);
+      result.amount_of_substance_exponent       :=
+        result.amount_of_substance_exponent +
+        (x.elements[i].exponent *
+         x.elements[i].unit.dimensions.amount_of_substance_exponent);
+      result.luminous_intensity_exponent        :=
+        result.luminous_intensity_exponent +
+        (x.elements[i].exponent *
+         x.elements[i].unit.dimensions.luminous_intensity_exponent);
+    END_REPEAT;
+  ELSE -- x is a unitless or a named unit
+    result := x.dimensions;
+  END_IF;
+  RETURN (result);
+END_FUNCTION; -- derive_dimensional_exponents 
+
+FUNCTION dimensions_for_si_unit (n : si_unit_name) : dimensional_exponents;
+  CASE n OF
+    metre          : RETURN (dimensional_exponents
+                          (1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
+    gram           : RETURN (dimensional_exponents
+                         (0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0));
+    second         : RETURN (dimensional_exponents
+                         (0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0));
+    ampere         : RETURN (dimensional_exponents
+                         (0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0));
+    kelvin         : RETURN (dimensional_exponents
+                         (0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0));
+    mole           : RETURN (dimensional_exponents
+                         (0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0));
+    candela        : RETURN (dimensional_exponents
+                         (0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0));
+    radian         : RETURN (dimensional_exponents
+                           (0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
+    steradian      : RETURN (dimensional_exponents
+                         (0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
+    hertz          : RETURN (dimensional_exponents
+                         (0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0));
+    newton         : RETURN (dimensional_exponents
+                         (1.0, 1.0, -2.0, 0.0, 0.0, 0.0, 0.0));
+    pascal         : RETURN (dimensional_exponents
+                         (-1.0, 1.0, -2.0, 0.0, 0.0, 0.0, 0.0));
+    joule          : RETURN (dimensional_exponents
+                         (2.0, 1.0, -2.0, 0.0, 0.0, 0.0, 0.0));
+    watt           : RETURN (dimensional_exponents
+                         (2.0, 1.0, -3.0, 0.0, 0.0, 0.0, 0.0));
+    coulomb        : RETURN (dimensional_exponents
+                         (0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0));
+    volt           : RETURN (dimensional_exponents
+                         (2.0, 1.0, -3.0, -1.0, 0.0, 0.0, 0.0));
+    farad          : RETURN (dimensional_exponents
+                         (-2.0, -1.0, 4.0, 1.0, 0.0, 0.0, 0.0));
+    ohm            : RETURN (dimensional_exponents
+                         (2.0, 1.0, -3.0, -2.0, 0.0, 0.0, 0.0));
+    siemens        : RETURN (dimensional_exponents
+                         (-2.0, -1.0, 3.0, 2.0, 0.0, 0.0, 0.0));
+    weber          : RETURN (dimensional_exponents
+                         (2.0, 1.0, -2.0, -1.0, 0.0, 0.0, 0.0));
+    tesla          : RETURN (dimensional_exponents
+                         (0.0, 1.0, -2.0, -1.0, 0.0, 0.0, 0.0));
+    henry          : RETURN (dimensional_exponents
+                         (2.0, 1.0, -2.0, -2.0, 0.0, 0.0, 0.0));
+    degree_Celsius : RETURN (dimensional_exponents
+                         (0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0));
+    lumen          : RETURN (dimensional_exponents
+                         (0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0));
+    lux            : RETURN (dimensional_exponents
+                         (-2.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0));
+    becquerel      : RETURN (dimensional_exponents
+                         (0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0));
+    gray           : RETURN (dimensional_exponents
+                         (2.0, 0.0, -2.0, 0.0, 0.0, 0.0, 0.0));
+    sievert        : RETURN (dimensional_exponents
+                         (2.0, 0.0, -2.0, 0.0, 0.0, 0.0, 0.0));
+    OTHERWISE      : RETURN (?);
+  END_CASE;
+END_FUNCTION; -- dimensions_for_si_unit
+
+FUNCTION valid_units ( m : measure_with_unit ) : BOOLEAN ;
+  IF 'ISO13584_42_2_LONG_FORM_SCHEMA.LENGTH_MEASURE' IN TYPEOF ( m.value_component ) THEN
+    IF derive_dimensional_exponents ( m.unit_component ) <>
+       dimensional_exponents ( 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ) THEN
+      RETURN (FALSE);
+    END_IF;
+  END_IF;
+  IF 'ISO13584_42_2_LONG_FORM_SCHEMA.MASS_MEASURE' IN TYPEOF ( m.value_component ) THEN
+    IF derive_dimensional_exponents ( m.unit_component ) <>
+       dimensional_exponents ( 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0 ) THEN
+      RETURN (FALSE);
+    END_IF;
+  END_IF;
+  IF 'ISO13584_42_2_LONG_FORM_SCHEMA.TIME_MEASURE' IN TYPEOF ( m.value_component ) THEN
+    IF derive_dimensional_exponents ( m.unit_component ) <>
+       dimensional_exponents ( 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0 ) THEN
+      RETURN (FALSE);
+    END_IF;
+  END_IF;
+  IF 'ISO13584_42_2_LONG_FORM_SCHEMA.ELECTRIC_CURRENT_MEASURE' 
+  IN TYPEOF ( m.value_component ) THEN
+    IF derive_dimensional_exponents ( m.unit_component ) <>
+       dimensional_exponents ( 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0 ) THEN
+      RETURN (FALSE);
+    END_IF;
+  END_IF;
+  IF 'ISO13584_42_2_LONG_FORM_SCHEMA.THERMODYNAMIC_TEMPERATURE_MEASURE'
+  IN TYPEOF ( m.value_component ) THEN
+    IF derive_dimensional_exponents ( m.unit_component ) <>
+       dimensional_exponents ( 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0 ) THEN
+      RETURN (FALSE);
+    END_IF;
+  END_IF;
+  IF 'ISO13584_42_2_LONG_FORM_SCHEMA.CELSIUS_TEMPERATURE_MEASURE'
+  IN TYPEOF ( m.value_component ) THEN
+    IF derive_dimensional_exponents ( m.unit_component ) <>
+       dimensional_exponents ( 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0 ) THEN
+      RETURN (FALSE);
+    END_IF;
+  END_IF;
+  IF 'ISO13584_42_2_LONG_FORM_SCHEMA.AMOUNT_OF_SUBSTANCE_MEASURE' 
+  IN TYPEOF ( m.value_component ) THEN
+    IF derive_dimensional_exponents ( m.unit_component ) <>
+       dimensional_exponents ( 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0 ) THEN
+      RETURN (FALSE);
+    END_IF;
+  END_IF;
+  IF 'ISO13584_42_2_LONG_FORM_SCHEMA.LUMINOUS_INTENSITY_MEASURE' 
+  IN TYPEOF ( m.value_component ) THEN
+    IF derive_dimensional_exponents ( m.unit_component ) <>
+       dimensional_exponents ( 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0 ) THEN
+      RETURN (FALSE);
+    END_IF;
+  END_IF;
+  IF 'ISO13584_42_2_LONG_FORM_SCHEMA.PLANE_ANGLE_MEASURE' IN TYPEOF ( m.value_component ) THEN
+    IF derive_dimensional_exponents ( m.unit_component ) <>
+       dimensional_exponents ( 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ) THEN
+      RETURN (FALSE);
+    END_IF;
+  END_IF;
+  IF 'ISO13584_42_2_LONG_FORM_SCHEMA.SOLID_ANGLE_MEASURE' IN TYPEOF ( m.value_component ) THEN
+    IF derive_dimensional_exponents ( m.unit_component ) <>
+       dimensional_exponents ( 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ) THEN
+      RETURN (FALSE);
+    END_IF;
+  END_IF;
+  IF 'ISO13584_42_2_LONG_FORM_SCHEMA.AREA_MEASURE' IN TYPEOF ( m.value_component ) THEN
+    IF derive_dimensional_exponents ( m.unit_component ) <>
+       dimensional_exponents ( 2.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ) THEN
+      RETURN (FALSE);
+    END_IF;
+  END_IF;
+  IF 'ISO13584_42_2_LONG_FORM_SCHEMA.VOLUME_MEASURE' IN TYPEOF ( m.value_component ) THEN
+    IF derive_dimensional_exponents ( m.unit_component ) <>
+       dimensional_exponents ( 3.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ) THEN
+      RETURN (FALSE);
+    END_IF;
+  END_IF;
+  IF 'ISO13584_42_2_LONG_FORM_SCHEMA.RATIO_MEASURE' IN TYPEOF ( m.value_component ) THEN
+    IF derive_dimensional_exponents ( m.unit_component ) <>
+       dimensional_exponents ( 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ) THEN
+      RETURN (FALSE);
+    END_IF;
+  END_IF;
+  IF 'ISO13584_42_2_LONG_FORM_SCHEMA.POSITIVE_LENGTH_MEASURE' 
+  IN TYPEOF ( m.value_component ) THEN
+    IF derive_dimensional_exponents ( m.unit_component ) <>
+       dimensional_exponents ( 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ) THEN
+      RETURN (FALSE);
+    END_IF;
+  END_IF;
+  IF 'ISO13584_42_2_LONG_FORM_SCHEMA.POSITIVE_PLANE_ANGLE_MEASURE' 
+  IN TYPEOF ( m.value_component ) THEN
+    IF derive_dimensional_exponents ( m.unit_component ) <>
+       dimensional_exponents ( 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ) THEN
+      RETURN (FALSE);
+    END_IF;
+  END_IF;
+  RETURN (TRUE);
+END_FUNCTION; -- valid_units
+
+(************************************************************************************)
+(************************************************************************************)
+(************************************************************************************)
+(************************************************************************************)
+(************************************************************************************)
+(************************************************************************************)
+(************************************************************************************)
+
+TYPE ahead_or_behind = ENUMERATION OF
+  (ahead,
+   exact,
+   behind);
+END_TYPE; -- ahead_or_behind
+
+TYPE day_in_month_number = INTEGER;
+WHERE
+  WR1: {1 <= SELF <= 31};
+END_TYPE; -- day_in_month_number
+
+TYPE day_in_week_number = INTEGER;
+WHERE
+  WR1: { 1 <= SELF <= 7 };
+END_TYPE; -- day_in_week_number
+
+TYPE day_in_year_number = INTEGER;
+WHERE
+  WR1: {1 <= SELF <= 366};
+END_TYPE; -- day_in_year_number
+
+TYPE hour_in_day = INTEGER;
+WHERE
+  WR1: { 0 <= SELF < 24 };
+END_TYPE; -- hour_in_day
+
+TYPE minute_in_hour = INTEGER;
+WHERE
+  WR1: { 0 <= SELF <= 59 };
+END_TYPE; -- minute_in_hour 
+
+TYPE month_in_year_number = INTEGER;
+WHERE
+  WR1: { 1 <= SELF <= 12 };
+END_TYPE; -- month_in_year_number
+
+TYPE second_in_minute = REAL;
+WHERE
+  WR1: { 0 <= SELF <= 60.0 };
+END_TYPE; -- second_in_minute 
+
+TYPE week_in_year_number = INTEGER;
+WHERE
+  WR1: { 1 <= SELF <= 53 };
+END_TYPE; -- week_in_year_number
+
+
+TYPE year_number = INTEGER;
+END_TYPE; -- year_number
+
+ENTITY coordinated_universal_time_offset;
+hour_offset : INTEGER;
+minute_offset : OPTIONAL INTEGER;
+sense : ahead_or_behind; 
+DERIVE 
+actual_minute_offset: INTEGER := NVL(minute_offset,0);
+WHERE
+WR1: { 0 <= hour_offset < 24 };
+WR2: { 0 <= actual_minute_offset <= 59 };
+WR3: NOT (((hour_offset <> 0) OR (actual_minute_offset <>0)) AND (sense = exact));
+END_ENTITY; -- coordinated_universal_time_offset
+
+
+ENTITY date
+  SUPERTYPE OF (ONEOF (calendar_date,
+                       ordinal_date,
+                       week_of_year_and_day_date));
+  year_component : year_number;
+END_ENTITY; -- date
+
+ENTITY date_and_time;
+  date_component : date;
+  time_component : local_time;
+END_ENTITY; -- date_and_time
+
+ENTITY calendar_date
+  SUBTYPE OF (date);
+  day_component   : day_in_month_number;
+  month_component : month_in_year_number;
+WHERE
+  WR1: valid_calendar_date (SELF);
+END_ENTITY; -- calendar_date
+
+ENTITY local_time;
+  hour_component   : hour_in_day;
+  minute_component : OPTIONAL minute_in_hour;
+  second_component : OPTIONAL second_in_minute;
+  zone             : coordinated_universal_time_offset;
+WHERE
+  WR1: valid_time (SELF);
+END_ENTITY; -- local_time
+
+ENTITY ordinal_date
+  SUBTYPE OF (date);
+  day_component : day_in_year_number;
+WHERE
+  WR1: (NOT leap_year(SELF.year_component) AND { 1 <= day_component <= 365 })
+       OR
+       (leap_year(SELF.year_component) AND { 1 <= day_component <= 366 });
+END_ENTITY; -- ordinal_date
+
+ENTITY week_of_year_and_day_date
+  SUBTYPE OF (date);
+  week_component : week_in_year_number;
+  day_component  : OPTIONAL day_in_week_number;
+END_ENTITY; -- week_of_year_and_day_date
+
+FUNCTION leap_year (year : year_number) : BOOLEAN;
+  IF ((((year MOD 4) = 0) AND ((year MOD 100) <> 0)) OR
+       ((year MOD 400) = 0)) THEN
+    RETURN(TRUE);
+  ELSE
+    RETURN(FALSE);
+  END_IF;
+END_FUNCTION; -- leap_year
+
+FUNCTION valid_calendar_date (date : calendar_date) : LOGICAL;
+  CASE date.month_component OF
+    1  : RETURN({ 1 <= date.day_component <= 31 });
+    2  : BEGIN
+           IF (leap_year(date.year_component)) THEN
+             RETURN({ 1 <= date.day_component <= 29 });
+           ELSE
+             RETURN({ 1 <= date.day_component <= 28 });
+           END_IF;
+         END;
+    3  : RETURN({ 1 <= date.day_component <= 31 });
+    4  : RETURN({ 1 <= date.day_component <= 30 });
+    5  : RETURN({ 1 <= date.day_component <= 31 });
+    6  : RETURN({ 1 <= date.day_component <= 30 });
+    7  : RETURN({ 1 <= date.day_component <= 31 });
+    8  : RETURN({ 1 <= date.day_component <= 31 });
+    9  : RETURN({ 1 <= date.day_component <= 30 });
+    10 : RETURN({ 1 <= date.day_component <= 31 });
+    11 : RETURN({ 1 <= date.day_component <= 30 });
+    12 : RETURN({ 1 <= date.day_component <= 31 });
+  END_CASE;
+       RETURN (FALSE);
+END_FUNCTION; -- valid_calendar_date
+
+FUNCTION valid_time (time: local_time) : BOOLEAN;
+  IF EXISTS (time.second_component) THEN
+    RETURN (EXISTS (time.minute_component));
+  ELSE
+    RETURN (TRUE);
+  END_IF;
+END_FUNCTION; -- valid_time
+
+
+(************************************************************************************)
+(************************************************************************************)
+(************************************************************************************)
+(************************************************************************************)
+(************************************************************************************)
+(************************************************************************************)
+(************************************************************************************)
+
+
+ENTITY null_value;
+END_ENTITY; -- null_value
+
+TYPE primitive_value = SELECT(
+	simple_value,
+	complex_value);
+END_TYPE; -- primitive_value
+
+TYPE null_or_primitive_value = SELECT(
+	null_value,
+	primitive_value);
+END_TYPE; -- null_or_primitive_value
+
+TYPE simple_value = SELECT(
+	number_value,
+	translatable_string_value,
+	boolean_value);
+END_TYPE; -- simple_value
+
+TYPE null_or_simple_value = SELECT(
+	null_value,
+	simple_value);
+END_TYPE; -- null_or_simple_value
+
+TYPE number_value = SELECT(
+	integer_value,
+	real_value);
+END_TYPE; -- nunmber_value
+
+TYPE null_or_number_value = SELECT(
+	null_value,
+	number_value);
+END_TYPE; -- nunmber_value
+
+TYPE integer_value = INTEGER;
+END_TYPE; -- integer_value
+
+TYPE null_or_integer_value = SELECT(
+	null_value,
+	integer_value);
+END_TYPE; -- null_or_integer_value
+
+TYPE real_value = REAL;
+END_TYPE; -- real_value
+
+TYPE null_or_real_value = SELECT(
+	null_value,
+	real_value);
+END_TYPE; -- null_or_real_value
+
+TYPE boolean_value = BOOLEAN;
+END_TYPE; -- boolean_value
+
+TYPE null_or_boolean_value = SELECT(
+	null_value,
+	boolean_value);
+END_TYPE; -- null_or_boolean_value
+
+TYPE translatable_string_value = SELECT(string_value,
+	translated_string_value);
+END_TYPE; -- translatable_string_value
+
+ENTITY translated_string_value; 
+	string_values: LIST [1:?] OF string_value;
+	languages: present_translations; 
+WHERE
+	WR1: SIZEOF(string_values) = SIZEOF(languages.language_codes);
+END_ENTITY; -- translated_string_value
+
+TYPE string_value = STRING;
+END_TYPE; -- string_value
+
+TYPE null_or_translatable_string_value = SELECT(
+	null_value,
+	translatable_string_value);
+END_TYPE; -- null_or_translatable_string_value
+
+TYPE complex_value = SELECT(
+	entity_instance_value,
+	level_spec_value,
+	dic_class_instance);
+END_TYPE; -- complex_value
+
+TYPE null_or_complex_value = SELECT(
+	null_value,
+	complex_value);
+END_TYPE; -- null_or_complex_value
+
+TYPE entity_instance_value = SELECT(
+	defined_entity_instance_value,
+	controlled_entity_instance_value,
+	uncontrolled_entity_instance_value);
+END_TYPE; -- entity_instance_value
+
+TYPE null_or_entity_instance_value = SELECT(
+	null_value,
+	entity_instance_value);
+END_TYPE; -- null_or_entity_instance_value
+
+TYPE defined_entity_instance_value = SELECT(
+	placement,
+	axis1_placement,
+	axis2_placement_2d,
+	axis2_placement_3d);
+END_TYPE; -- defined_entity_instance_value
+
+TYPE controlled_entity_instance_value = SELECT(
+	STEP_entity_instance_value,
+	PLIB_entity_instance_value);
+END_TYPE; -- controlled_entity_instance_value
+
+TYPE STEP_entity_instance_value = SELECT(
+	representation,
+	representation_context,
+	geometric_representation_context,
+	representation_item,
+	date,
+	date_and_time,
+	local_time,
+	calendar_date,
+	ordinal_date,
+	week_of_year_and_day_date,
+	person, 
+	organization,
+	address);
+END_TYPE; -- STEP_entity_instance_value
+
+TYPE PLIB_entity_instance_value = SELECT(
+	property_value_external_item);
+END_TYPE; -- PLIB_entity_instance_value
+
+ENTITY uncontrolled_entity_instance_value
+ABSTRACT SUPERTYPE;
+END_ENTITY; -- uncontrolled_entity_instance_value
+
+TYPE property_or_data_type_BSU = SELECT(
+	property_BSU,
+	data_type_BSU);
+END_TYPE; -- property_or_data_type_BSU
+
+ENTITY level_spec_value
+ABSTRACT SUPERTYPE OF(ONEOF(
+	int_level_spec_value,
+	real_level_spec_value));
+	values: ARRAY [1:4] OF OPTIONAL NUMBER;
+END_ENTITY; -- level_spec_value
+
+TYPE null_or_level_spec_value = SELECT(
+	null_value,
+	level_spec_value);
+END_TYPE; -- null_or_level_spec_value
+
+ENTITY int_level_spec_value
+SUBTYPE OF(level_spec_value);
+	SELF\level_spec_value.values: ARRAY [1:4] OF OPTIONAL INTEGER;
+END_ENTITY; -- int_level_spec_value
+
+TYPE null_or_int_level_spec_value = SELECT(
+	null_value,
+	int_level_spec_value);
+END_TYPE; -- null_or_int_level_spec_value
+
+ENTITY real_level_spec_value
+SUBTYPE OF(level_spec_value);
+	SELF\level_spec_value.values: ARRAY [1:4] OF OPTIONAL REAL;
+END_ENTITY; -- real_level_spec_value
+
+TYPE null_or_real_level_spec_value = SELECT(
+	null_value,
+	real_level_spec_value);
+END_TYPE; -- null_or_real_level_spec_value
+
+ENTITY dic_class_instance
+ABSTRACT SUPERTYPE OF(dic_item_instance);
+	class_def: class_BSU;
+	properties: LIST [0:?] OF property_value;
+	case_of: SET [0:?] OF class_BSU;
+WHERE
+	WR1: (QUERY(prop <* SELF.properties | 
+		NOT((applicable_properties(
+		SELF.class_def, [prop.prop_def])))) = [ ]);
+	WR2: QUERY(prop <* SELF.properties
+		| (SIZEOF(QUERY (prop1 <* SELF.properties
+		| prop1.prop_def = prop.prop_def)) = 1))
+		= SELF.properties;
+	WR3: check_property_values_translations(QUERY(prop_val <* 
+		properties | 'ISO13584_42_2_LONG_FORM_SCHEMA.' +
+		'TRANSLATED_STRING_VALUE' IN TYPEOF(prop_val.its_value)));
+END_ENTITY; -- dic_class_instance
+
+TYPE null_or_dic_class_instance = SELECT(
+	null_value,
+	dic_class_instance);
+END_TYPE; -- null_or_dic_class_instance
+
+ENTITY dic_item_instance
+SUPERTYPE OF(lib_item_instance)
+SUBTYPE OF(dic_class_instance);
+WHERE
+	WR1: check_class_type_for_dic_item_instance(SELF);
+	WR2: QUERY(prop <* SELF.properties
+		| (SIZEOF(prop.prop_def.definition) = 1)
+		AND (('ISO13584_42_2_LONG_FORM_SCHEMA' +
+		'.DEPENDENT_P_DET')
+		IN TYPEOF(prop.prop_def.definition[1]))
+		AND (prop.prop_def.definition[1]\dependent_P_DET.depends_on
+		>= collects_property_context(prop.prop_def, SELF)))
+		= [];
+	WR3: compatible_item_caseof_with_class_definition(SELF);
+END_ENTITY; -- dic_item_instance
+
+ENTITY lib_item_instance
+SUBTYPE OF(dic_item_instance);
+	supplier_identification: OPTIONAL STRING;
+	supplier_designation: OPTIONAL translatable_label;
+	user_identification: OPTIONAL STRING;
+	user_designation: OPTIONAL translatable_label;
+	is_global_id: BOOLEAN;
+	source_class_content: OPTIONAL version_type;
+END_ENTITY; -- lib_item_instance
+
+ENTITY property_value;
+	its_value: OPTIONAL primitive_value;
+	prop_def: property_BSU;
+WHERE
+	WR1: (EXISTS(SELF.its_value) AND (compatible_type_and_value(
+		SELF.prop_def, SELF.its_value)))
+		OR NOT EXISTS(SELF.its_value);
+END_ENTITY; -- property_value
+
+ENTITY context_dependent_property_value
+SUBTYPE OF(property_value);
+	the_context: LIST[1:?] OF property_value;
+WHERE
+	WR1: QUERY(c <* SELF.the_context | NOT(is_condition_det(c)))
+		= [];
+	WR2: is_dependent_p_det(SELF\property_value.prop_def);
+	WR3: all_context_parameters_referenced(SELF);
+END_ENTITY; -- context_dependent_property_value
+
+
+FUNCTION compatible_class_and_class(cl1:class_BSU; 
+	cl2:class_BSU): LOGICAL;
+
+IF (cl1.defined_by\basic_semantic_unit.code =
+	cl2.defined_by\basic_semantic_unit.code) AND
+	(cl1\basic_semantic_unit.code =
+	cl2\basic_semantic_unit.code) AND
+	(cl1\basic_semantic_unit.version >=
+	cl2\basic_semantic_unit.version)
+THEN (* the two classes have the same identification and are version
+	compatible *)
+	RETURN(TRUE);
+END_IF;
+
+IF (SIZEOF(cl2\basic_semantic_unit.definition) = 0)
+THEN (* the superclass of cl2 is not available *)
+	RETURN(UNKNOWN);
+END_IF;
+
+IF (SIZEOF(cl2\basic_semantic_unit.definition) = 1)
+	AND (NOT EXISTS(cl2\basic_semantic_unit.
+	definition[1]\class.its_superclass))
+THEN (* cl2 has no superclass *)
+	RETURN(FALSE);
+END_IF;
+
+RETURN(compatible_class_and_class(cl1, cl2\basic_semantic_unit.
+	definition[1]\class.its_superclass));
+
+END_FUNCTION; -- compatible_class_and_class
+
+FUNCTION right_values_for_level_spec(
+	levels: LIST [1:4] OF UNIQUE level;
+	val: level_spec_value): BOOLEAN;
+
+LOCAL
+	c_place: BOOLEAN;
+	lev: SET [1:4] OF level;
+END_LOCAL;
+
+c_place := TRUE;
+lev := list_to_set(levels);
+
+IF EXISTS(val.values[1])
+THEN
+	IF level.min IN lev
+	THEN 
+		lev := lev - [level.min];
+	ELSE 
+		c_place := FALSE;
+	END_IF;
+END_IF;
+
+IF EXISTS(val.values[2])
+THEN
+	IF level.nom IN lev
+	THEN 
+		lev := lev - [level.nom];
+	ELSE 
+		c_place := FALSE;
+	END_IF;
+END_IF;
+
+IF EXISTS(val.values[3])
+THEN
+	IF level.typ IN lev
+	THEN 
+		lev := lev - [level.typ];
+	ELSE 
+		c_place := FALSE;
+	END_IF;
+END_IF;
+
+IF EXISTS(val.values[4])
+THEN
+	IF level.max IN lev
+	THEN 
+		lev := lev - [level.max];
+	ELSE 
+		c_place := FALSE;
+	END_IF;
+END_IF;
+
+IF (c_place)
+THEN
+	RETURN(TRUE);
+ELSE
+	RETURN(FALSE);
+END_IF;
+
+END_FUNCTION; -- right_values_for_level_spec
+
+FUNCTION compatible_level_type_and_instance(
+	levels: LIST [1:4] OF UNIQUE level; value_typeof: SET OF STRING;
+	val: level_spec_value): BOOLEAN;
+
+LOCAL
+	c_val: BOOLEAN;
+END_LOCAL;
+
+c_val := FALSE;
+
+IF ('ISO13584_42_2_LONG_FORM_SCHEMA.INT_LEVEL_SPEC_VALUE'
+	IN TYPEOF(val))
+	AND NOT('ISO13584_42_2_LONG_FORM_SCHEMA.REAL_TYPE' IN 	value_typeof)
+THEN
+	c_val := TRUE;
+END_IF;
+
+IF ('ISO13584_42_2_LONG_FORM_SCHEMA.REAL_LEVEL_SPEC_VALUE'
+	IN TYPEOF(val))
+	AND NOT('ISO13584_42_2_LONG_FORM_SCHEMA.INT_TYPE'
+	IN value_typeof)
+THEN
+	c_val := TRUE;
+END_IF;
+
+RETURN(c_val AND (right_values_for_level_spec(levels, val)));
+
+END_FUNCTION; -- compatible_level_type_and_instance
+
+FUNCTION compatible_type_and_value(dom: property_or_data_type_BSU;
+	val: primitive_value): LOGICAL;
+
+LOCAL
+	temp: SET[0:1] OF class_BSU;
+	set_string: SET OF STRING := [];
+	set_integer: SET OF INTEGER := [];
+	code_type: non_quantitative_code_type;
+	int_type: non_quantitative_int_type;
+END_LOCAL;
+
+IF data_type_typeof(dom) = []
+THEN (* the final domain of the type is not available *)
+	RETURN(UNKNOWN);
+END_IF;
+
+(* The following express statements deal with simple types *)
+
+IF ('ISO13584_42_2_LONG_FORM_SCHEMA.INTEGER_VALUE' IN TYPEOF(val))
+THEN
+	IF (('ISO13584_42_2_LONG_FORM_SCHEMA.' + 
+		'NON_QUANTITATIVE_INT_TYPE' IN data_type_typeof(dom))
+		AND (SIZEOF(data_type_non_quantitative_int_type(dom)) = 1))
+	THEN
+		set_integer := [];
+		int_type := data_type_non_quantitative_int_type(dom)[1];
+
+		REPEAT j := 1 TO SIZEOF(int_type.domain.its_values);
+			set_integer := set_integer + 
+				int_type.domain.its_values[j].value_code;
+		END_REPEAT;
+		
+		RETURN(val IN set_integer);
+
+	ELSE
+		RETURN(('ISO13584_42_2_LONG_FORM_SCHEMA.INT_TYPE'
+			IN data_type_typeof(dom)) OR
+			(('ISO13584_42_2_LONG_FORM_SCHEMA.NUMBER_TYPE'
+			IN data_type_typeof(dom))
+			AND NOT('ISO13584_42_2_LONG_FORM_SCHEMA.REAL_TYPE'
+			IN data_type_typeof(dom))));
+	END_IF;
+END_IF;
+
+IF ('ISO13584_42_2_LONG_FORM_SCHEMA.REAL_VALUE' IN TYPEOF(val))
+THEN
+	RETURN(('ISO13584_42_2_LONG_FORM_SCHEMA.REAL_TYPE'
+		IN data_type_typeof(dom)) OR
+		(('ISO13584_42_2_LONG_FORM_SCHEMA.NUMBER_TYPE'
+		IN data_type_typeof(dom))
+		AND NOT('ISO13584_42_2_LONG_FORM_SCHEMA.INT_TYPE'
+		IN data_type_typeof(dom))));
+END_IF;
+
+IF ('ISO13584_42_2_LONG_FORM_SCHEMA.NUMBER_VALUE' IN TYPEOF(val))
+THEN
+	RETURN('ISO13584_42_2_LONG_FORM_SCHEMA.NUMBER_TYPE'
+		IN data_type_typeof(dom));
+END_IF;
+
+IF ('ISO13584_42_2_LONG_FORM_SCHEMA.BOOLEAN_VALUE' IN TYPEOF(val))
+THEN
+	RETURN('ISO13584_42_2_LONG_FORM_SCHEMA.BOOLEAN_TYPE'
+		IN data_type_typeof(dom));
+END_IF;
+
+IF ('ISO13584_42_2_LONG_FORM_SCHEMA.TRANSLATABLE_STRING_VALUE' 
+	IN TYPEOF(val))
+THEN
+	IF (('ISO13584_42_2_LONG_FORM_SCHEMA' +
+		'.NON_QUANTITATIVE_CODE_TYPE') IN  data_type_typeof(dom))
+	THEN
+		IF (SIZEOF(data_type_non_quantitative_code_type(dom)) = 1)
+		THEN
+			set_string := [];
+			code_type := 
+				data_type_non_quantitative_code_type(dom)[1];
+
+			REPEAT j := 1 TO SIZEOF(code_type.domain.its_values);
+				set_string := set_string + 
+					code_type.domain.its_values[j].value_code;
+			END_REPEAT;
+
+			RETURN(('ISO13584_42_2_LONG_FORM_SCHEMA.STRING_VALUE' 
+				IN TYPEOF(val)) AND (val IN set_string));
+
+		ELSE
+			RETURN(UNKNOWN);
+		END_IF;
+	ELSE
+		RETURN('ISO13584_42_2_LONG_FORM_SCHEMA' +
+			'.STRING_TYPE' IN data_type_typeof(dom));
+	END_IF;
+END_IF;
+
+(* The following express statements deal with complex types *)
+
+IF 'ISO13584_42_2_LONG_FORM_SCHEMA.ENTITY_INSTANCE_VALUE'
+	IN TYPEOF(val)
+THEN
+	IF 'ISO13584_42_2_LONG_FORM_SCHEMA' +
+		'.UNCONTROLLED_ENTITY_INSTANCE_VALUE'
+		IN TYPEOF(val)
+	THEN
+		RETURN(UNKNOWN);
+	END_IF;
+	IF ('ISO13584_42_2_LONG_FORM_SCHEMA.ENTITY_INSTANCE_TYPE'
+		IN data_type_typeof(dom))
+AND (SIZEOF(data_type_type_name(dom)) <> 0)
+		AND (data_type_type_name(dom) <= TYPEOF(val))
+	THEN 
+		RETURN(TRUE);
+	ELSE 
+		RETURN(FALSE);
+	END_IF;
+END_IF;
+
+IF 'ISO13584_42_2_LONG_FORM_SCHEMA.DIC_CLASS_INSTANCE'
+	IN TYPEOF(val) 
+THEN
+	IF ('ISO13584_42_2_LONG_FORM_SCHEMA.CLASS_INSTANCE_TYPE'
+		IN data_type_typeof(dom))
+		AND (SIZEOF(data_type_class_of(dom)) <> 0)
+	THEN
+		temp := data_type_class_of(dom);
+		RETURN(compatible_class_and_class(temp[1],
+			val\dic_class_instance.class_def));
+	ELSE
+		RETURN(FALSE);
+	END_IF;
+END_IF;
+
+IF 'ISO13584_42_2_LONG_FORM_SCHEMA.LEVEL_SPEC_VALUE' IN TYPEOF(val) THEN	
+	IF ('ISO13584_42_2_LONG_FORM_SCHEMA.LEVEL_TYPE'
+		IN data_type_typeof(dom))
+	THEN
+		RETURN(compatible_level_type_and_instance(
+			data_type_level_spec(dom),
+			data_type_level_value_typeof(dom),
+			val));
+	ELSE
+		RETURN(FALSE);
+	END_IF;
+END_IF;
+
+RETURN(FALSE);
+
+END_FUNCTION; -- compatible_type_and_value
+
+FUNCTION collects_assigned_instance_properties(
+	props: SET [0:?] OF property_value): SET OF property_BSU;
+
+LOCAL
+	assign_prop: SET OF property_BSU;
+		-- assigned properties of the dic_class_instance
+END_LOCAL;
+
+assign_prop := [];
+
+REPEAT i := 1 TO SIZEOF(props);
+	assign_prop := assign_prop + props[i].prop_def;
+END_REPEAT;
+
+RETURN(assign_prop);
+
+END_FUNCTION; -- collects_assigned_instance_properties
+
+FUNCTION is_condition_det(prop: property_value): LOGICAL;
+
+IF(SIZEOF(prop.prop_def.definition) > 0) THEN
+	RETURN('ISO13584_42_2_LONG_FORM_SCHEMA.CONDITION_DET'
+		IN TYPEOF(prop.prop_def.definition[1]));
+ELSE
+	RETURN(UNKNOWN);
+END_IF;
+
+END_FUNCTION; -- is_condition_det
+
+FUNCTION is_dependent_p_det(prop: property_bsu): LOGICAL;
+
+IF(SIZEOF(prop.definition) > 0) THEN
+	RETURN('ISO13584_42_2_LONG_FORM_SCHEMA.DEPENDENT_P_DET'
+		IN TYPEOF(prop.definition[1]));
+ELSE
+	RETURN(UNKNOWN);
+END_IF;
+
+END_FUNCTION; -- is_dependent_p_det
+
+FUNCTION all_context_parameters_referenced(
+	cdpv: context_dependent_property_value): LOGICAL;
+
+IF(SIZEOF(cdpv\property_value.prop_def.definition) > 0) THEN
+	RETURN(cdpv\property_value.prop_def.definition[1]\
+		dependent_p_det.depends_on
+		>= collects_assigned_instance_properties(
+		list_to_set(cdpv.the_context)));
+ELSE
+	RETURN(UNKNOWN);
+END_IF;
+
+END_FUNCTION; -- all_context_parameters_referenced
+
+FUNCTION collects_property_context(prop: property_BSU;
+	inst: dic_class_instance): SET OF property_BSU;
+
+LOCAL
+	assigned_context_parameters: SET OF property_BSU;
+		--assigned context parameters of the dic_class_instance
+	correct: BOOLEAN; --prop belongs to inst properties
+END_LOCAL;
+
+assigned_context_parameters := [];
+correct := FALSE;
+
+REPEAT i := 1 TO SIZEOF(inst.properties);
+
+	IF inst.properties[i].prop_def :=: prop
+	THEN 
+		correct := TRUE;
+	END_IF;
+
+	IF ((SIZEOF(inst.properties[i].prop_def.definition) = 0)
+		OR ((SIZEOF(inst.properties[i].prop_def.definition) = 1)
+	AND (('ISO13584_42_2_LONG_FORM_SCHEMA.CONDITION_DET')
+	IN TYPEOF(inst.properties[i].prop_def.definition[1]))))
+	THEN 
+		assigned_context_parameters := assigned_context_parameters
+			+ inst.properties[i].prop_def;
+	END_IF;
+
+	IF (('ISO13584_42_2_LONG_FORM_SCHEMA' +
+	'.CONTEXT_DEPENDENT_PROPERTY_VALUE') IN 
+	TYPEOF(inst.properties[i]))
+	THEN 
+		assigned_context_parameters := assigned_context_parameters
+			+ collects_assigned_instance_properties(list_to_set(
+			inst.properties[i].the_context));
+	END_IF;
+
+END_REPEAT;
+
+IF NOT correct
+THEN
+	assigned_context_parameters := [];
+END_IF;
+
+RETURN(assigned_context_parameters);
+
+END_FUNCTION; -- collects_property_context
+
+FUNCTION check_class_type_for_dic_item_instance(
+	dic_cl: dic_item_instance): LOGICAL;
+
+IF (SIZEOF(dic_cl.class_def.definition) = 1) THEN
+
+	IF ('ISO13584_42_2_LONG_FORM_SCHEMA.' +
+		'DIC_ITEM_INSTANCE') IN TYPEOF(dic_cl)
+	THEN
+			RETURN(('ISO13584_42_2_LONG_FORM_SCHEMA'
+				+ '.ITEM_CLASS'
+				IN TYPEOF(dic_cl.class_def.definition[1])));
+	END_IF;
+
+ELSE
+	RETURN(UNKNOWN);
+END_IF;
+END_FUNCTION; -- check_class_type_for_dic_item_instance
+
+FUNCTION check_property_values_translations(props: 
+	LIST OF property_value): LOGICAL;
+LOCAL
+	translated_string_values: SET OF translated_string_value := [];
+END_LOCAL;
+
+REPEAT i := 1 TO SIZEOF(props);
+	translated_string_values := 
+		translated_string_values + props[i].its_value;
+END_REPEAT;
+
+RETURN(same_translations(translated_string_values));
+
+END_FUNCTION; -- check_property_values_translations
+
+FUNCTION same_translations(translated_string_values: SET OF 
+	translated_string_value): LOGICAL;
+LOCAL
+	comp: translated_string_value;
+END_LOCAL;
+
+IF (SIZEOF(translated_string_values) <> 0)
+THEN
+	comp := translated_string_values[1];
+	REPEAT i := 2 TO SIZEOF(translated_string_values);
+		IF (translated_string_values[i].languages <> 
+			comp.languages)
+		THEN
+			RETURN(FALSE);
+		END_IF;
+	END_REPEAT;
+
+	RETURN(TRUE);
+ELSE
+	RETURN(UNKNOWN);
+END_IF;
+
+END_FUNCTION; -- same_translations
+
+FUNCTION compatible_item_caseof_with_class_definition(
+	inst: dic_item_instance): LOGICAL;
+
+IF (SIZEOF(inst.case_of) > 0)
+THEN
+	IF (SIZEOF(inst.class_def.definition) = 1)
+	THEN
+		RETURN ( inst.case_of 
+				<=  item_caseof_closure( [inst.class_def]));
+	ELSE
+		RETURN(UNKNOWN);
+	END_IF;
+ELSE
+	RETURN(TRUE);
+END_IF;
+
+END_FUNCTION; -- compatible_item_caseof_with_class_definition
+
+FUNCTION superclass_closure (
+	current: SET OF class_BSU)    -- which classes
+	:SET OF class_BSU;  -- all their superclasses or ?
+ LOCAL
+       superclasses : SET OF class_BSU := [];
+ END_LOCAL;
+
+        compute_superclass_closure (current, superclasses);
+        RETURN (superclasses);
+
+END_FUNCTION; -- superclass_closure
+
+PROCEDURE compute_superclass_closure (
+	current: SET OF class_BSU;    	-- new superclasses
+	VAR visited: SET OF class_BSU); -- already known superclasses
+
+IF EXISTS(current)  THEN
+	IF SIZEOF(current) <> 0 THEN
+		REPEAT i := 1 TO SIZEOF(current);
+			IF SIZEOF (current[i].definition) = 0
+	          THEN 	visited := ?;  
+					-- all superclasses cannot be computed
+	                	SKIP;
+	          ELSE
+	            IF  EXISTS 
+				(current[i].definition[1]\class.its_superclass)
+	               AND NOT
+				(current[i].definition[1]\class.its_superclass 
+				IN visited)
+	             THEN 	visited := visited 
+				+ [ current[i].definition[1]\class.its_superclass];
+				compute_superclass_closure( 
+				[current[i].definition[1]\class.its_superclass]
+				, visited );
+	        		END_IF;
+			END_IF;
+		 END_REPEAT;
+	END_IF;
+ELSE
+     visited := ?;       -- all superclasses cannot be computed
+END_IF;
+END_PROCEDURE; -- compute_superclass_closure
+
+FUNCTION item_caseof_closure (
+	current: SET OF class_BSU)    -- which classes
+	:SET OF class_BSU;  -- all classes they are caseof or ?
+ LOCAL
+       caseof : SET OF class_BSU 
+			:= next_item_caseof(superclass_closure (current));
+ END_LOCAL;
+        compute_item_caseof_closure (caseof, caseof);
+        RETURN (caseof);
+END_FUNCTION; -- item_caseof_closure
+
+FUNCTION next_item_caseof (
+	current: SET OF class_BSU)    -- which classes
+	:SET OF class_BSU;  -- classes they are directly caseof or ?
+ LOCAL
+       caseof : SET OF class_BSU := [];
+ END_LOCAL;
+	IF  EXISTS(current) THEN
+ 		REPEAT i := 1 TO SIZEOF(current);
+			IF SIZEOF (current[i].definition) = 0
+                	THEN 	caseof := ?;       
+				-- all classes they are caseof cannot be computed
+                		SKIP;
+                	ELSE
+				IF ('ISO13584_42_2_LONG_FORM_SCHEMA.' 
+					+'ITEM_CLASS_CASE_OF' IN
+					TYPEOF(current[i].definition[1]))
+                	THEN 	caseof := caseof 
+						+ current[i].definition[1]
+						\item_class_case_of.is_case_of;
+         			END_IF;
+			END_IF;
+		END_REPEAT;
+        	RETURN (caseof);
+	ELSE
+	  	RETURN (?); -- all classes they are caseof cannot be computed
+	END_IF;
+END_FUNCTION; -- next_item_caseof
+
+PROCEDURE compute_item_caseof_closure (
+	current: SET OF class_BSU;    	-- last found caseof
+	VAR visited: SET OF class_BSU); 
+		-- already known classes that are caseof (including current)
+ LOCAL
+       next : SET OF class_BSU ;        	-- computed new caseof
+ END_LOCAL;
+ IF  EXISTS(current) THEN
+	IF SIZEOF(current) <> 0 THEN
+        	next := superclass_closure (current);-- caseof by inheritance
+		next := next_item_caseof ( next )+ next;
+								-- and caseof by transitivity
+		REPEAT i := 1 TO SIZEOF(next);
+                	IF  NOT  (next[i] IN visited)
+                 	THEN
+				  visited := visited + next[i] ;
+				  compute_item_caseof_closure([next[i]], visited );
+        			END_IF;
+		 END_REPEAT;
+	END_IF;
+ELSE
+	visited := ?;       
+-- all classes that are caseof cannot be computed
+END_IF;
+END_PROCEDURE; -- compute_item_caseof_closure
+
+
+(************************************************************************************)
+(************************************************************************************)
+(************************************************************************************)
+(************************************************************************************)
+(************************************************************************************)
+(************************************************************************************)
+(************************************************************************************)
+
+TYPE document_code_type = code_type;
+WHERE
+	WR1: LENGTH(SELF) <= element_code_len;
+END_TYPE; -- document_code_type
+
+TYPE program_library_code_type = code_type;
+WHERE
+	WR1: LENGTH(SELF) <= element_code_len;
+END_TYPE; -- program_library_code_type
+
+TYPE table_code_type = code_type;
+WHERE
+	WR1: LENGTH(SELF) <= element_code_len;
+END_TYPE; -- table_code_type
+
+TYPE absolute_URL_type = identifier;
+WHERE
+	WR1: SELF LIKE '*://*';
+END_TYPE; -- absolute_URL_type
+
+ENTITY representation_type
+	SUBTYPE OF(entity_instance_type);
+WHERE
+	WR1:'ISO13584_42_2_LONG_FORM_SCHEMA.REPRESENTATION'
+		IN SELF\entity_instance_type.type_name;
+END_ENTITY; -- representation_type
+
+ENTITY geometric_representation_context_type
+	SUBTYPE OF(entity_instance_type);
+WHERE
+	WR1:'ISO13584_42_2_LONG_FORM_SCHEMA.GEOMETRIC_REPRESENTATION_CONTEXT'
+		IN SELF\entity_instance_type.type_name;
+END_ENTITY; -- geometric_representation_context_type
+
+ENTITY representation_reference_type
+	SUBTYPE OF(entity_instance_type);
+WHERE
+	WR1:'ISO13584_42_2_LONG_FORM_SCHEMA.REPRESENTATION_REFERENCE'
+		IN SELF\entity_instance_type.type_name;
+END_ENTITY; -- representation_reference_type
+
+ENTITY program_reference_type
+	SUBTYPE OF(entity_instance_type);
+WHERE
+	WR1: 'ISO13584_42_2_LONG_FORM_SCHEMA.PROGRAM_REFERENCE'
+		IN SELF\entity_instance_type.type_name;
+END_ENTITY; -- program_reference_type
+
+ENTITY table_BSU
+SUBTYPE OF(class_related_BSU);
+END_ENTITY; -- table_BSU
+
+ENTITY document_BSU
+SUBTYPE OF(class_related_BSU);
+	name_scope: class_BSU;
+	SELF\basic_semantic_unit.code: document_code_type;
+DERIVE
+	absolute_id: identifier :=
+		name_scope.defined_by.dic_identifier + sep_id
+		+ name_scope.dic_identifier + sep_id
+		+ dic_identifier;
+INVERSE
+	associate_to_class: class_BSU_relationship FOR related_tokens;
+UNIQUE
+	UR1: absolute_id;
+END_ENTITY; -- document_BSU
+
+ENTITY referenced_graphics
+SUBTYPE OF(graphics);
+	graphics_reference: document_BSU;
+END_ENTITY; -- referenced_graphics
+
+FUNCTION visible_properties(cl: class_BSU;
+	prop: AGGREGATE OF property_BSU): LOGICAL;
+
+LOCAL
+	ok: BOOLEAN := TRUE;
+END_LOCAL;
+
+IF NOT EXISTS(cl)
+THEN
+	RETURN(UNKNOWN);
+END_IF;
+
+REPEAT i := 1 TO SIZEOF(prop);
+	IF NOT(prop[i] IN compute_known_visible_properties(cl))
+		THEN ok := FALSE;
+	END_IF;
+END_REPEAT;
+
+IF NOT(ok) AND NOT(all_class_descriptions_reachable(cl))
+	THEN RETURN(UNKNOWN);
+END_IF;
+
+IF NOT(ok) AND all_class_descriptions_reachable(cl)
+	THEN RETURN(FALSE);
+END_IF;
+
+RETURN(TRUE);
+
+END_FUNCTION; -- visible_properties
+
+FUNCTION visible_types(cl: class_BSU;
+	typ: AGGREGATE OF data_type_BSU): LOGICAL;
+
+LOCAL
+	ok: BOOLEAN := TRUE;
+END_LOCAL;
+
+IF NOT EXISTS(cl)
+THEN
+	RETURN(UNKNOWN);
+END_IF;
+
+REPEAT i := 1 TO SIZEOF(typ);
+IF NOT(typ[i] IN compute_known_visible_data_types(cl))
+	THEN ok := FALSE;
+END_IF;
+END_REPEAT;
+
+IF NOT(ok) AND NOT(all_class_descriptions_reachable(cl))
+	THEN RETURN(UNKNOWN);
+END_IF;
+
+IF NOT(ok) AND all_class_descriptions_reachable(cl)
+	THEN RETURN(FALSE);
+END_IF;
+
+RETURN(TRUE);
+
+END_FUNCTION; -- visible_types
+
+FUNCTION applicable_properties(cl: class_BSU;
+	prop: AGGREGATE OF property_BSU): LOGICAL;
+
+IF SIZEOF(prop) = 0
+THEN
+	RETURN(TRUE);
+END_IF;
+
+IF NOT EXISTS(cl)
+THEN
+	RETURN(UNKNOWN);
+END_IF;
+
+IF SIZEOF(cl.definition) = 0
+THEN
+	RETURN(UNKNOWN);
+END_IF;
+
+prop := prop - list_to_set(cl.definition[1]\class.described_by);
+
+IF 'ISO13584_42_2_LONG_FORM_SCHEMA' +
+	'.A_PRIORI_SEMANTIC_RELATIONSHIP' IN TYPEOF(cl.definition[1])
+THEN
+	prop := prop - list_to_set(cl.definition[1]
+		\a_priori_semantic_relationship.referenced_properties);
+END_IF;
+
+IF SIZEOF(prop) = 0
+THEN
+	RETURN(TRUE);
+ELSE
+	IF EXISTS(cl.definition[1]\class.its_superclass)
+	THEN
+		RETURN(applicable_properties(cl.definition[1]
+			\class.its_superclass, prop));
+	ELSE
+		RETURN(FALSE);
+	END_IF;
+END_IF;
+
+END_FUNCTION; -- applicable_properties
+
+FUNCTION applicable_types(cl: class_BSU;
+	typ: AGGREGATE OF data_type_BSU): LOGICAL;
+
+IF SIZEOF(typ) = 0
+THEN
+	RETURN(TRUE);
+END_IF;
+
+IF NOT EXISTS(cl)
+THEN
+	RETURN(UNKNOWN);
+END_IF;
+
+IF SIZEOF(cl.definition) = 0
+THEN
+	RETURN(UNKNOWN);
+END_IF;
+
+typ := typ - cl.definition[1]\class.defined_types;
+
+IF ('ISO13584_42_2_LONG_FORM_SCHEMA' +
+	'.A_PRIORI_SEMANTIC_RELATIONSHIP' IN TYPEOF(cl.definition[1]))
+THEN
+	typ := typ -
+		cl.definition[1]\a_priori_semantic_relationship
+		.referenced_data_types;
+END_IF;
+
+IF SIZEOF(typ) = 0
+THEN
+	RETURN(TRUE);
+ELSE
+	IF EXISTS(cl.definition[1]\class.its_superclass)
+	THEN
+		RETURN(applicable_types(cl.definition[1]
+			\class.its_superclass, typ));
+	ELSE
+		RETURN(FALSE);
+	END_IF;
+END_IF;
+
+END_FUNCTION; -- applicable_types
+
+FUNCTION data_type_named_type(type_spec: property_or_data_type_BSU):
+	SET[0:1] OF data_type_BSU;
+
+LOCAL
+	res: BOOLEAN := FALSE;
+	s: SET[0:1] OF data_type_BSU := [];
+	x: data_type;
+END_LOCAL;
+
+IF NOT EXISTS(type_spec)
+THEN
+	RETURN([]); -- type_spec is indeterminate
+END_IF;
+
+IF ('ISO13584_42_2_LONG_FORM_SCHEMA.PROPERTY_BSU' IN
+	TYPEOF(type_spec))
+THEN
+	IF NOT(SIZEOF(type_spec.definition) = 0)
+	THEN
+		x := type_spec.definition[1]\property_DET.domain;
+		res := TRUE;
+	END_IF;
+ELSE
+	IF NOT(SIZEOF(type_spec.definition) = 0)
+	THEN
+		x := type_spec.definition[1]\data_type_element
+			.type_definition;
+		res := TRUE;
+	END_IF;
+END_IF;
+
+IF res
+THEN
+	IF ('ISO13584_42_2_LONG_FORM_SCHEMA.NAMED_TYPE' 
+		IN TYPEOF(x))
+	THEN
+		s := s + x\named_type.referred_type;
+	END_IF;
+END_IF;
+
+RETURN(s);
+
+END_FUNCTION; -- data_type_named_type
+
+FUNCTION data_type_typeof(type_spec: property_or_data_type_BSU):
+	SET OF STRING;
+
+LOCAL
+	res: BOOLEAN := FALSE;
+	x: data_type;
+END_LOCAL;
+
+IF NOT EXISTS(type_spec)
+THEN
+	RETURN([]); -- type_spec is indeterminate
+END_IF;
+
+IF ('ISO13584_42_2_LONG_FORM_SCHEMA.PROPERTY_BSU' IN
+	TYPEOF(type_spec))
+THEN
+	IF NOT(SIZEOF(type_spec.definition) = 0)
+	THEN
+		x := type_spec.definition[1]\property_DET.domain;
+		res := TRUE;
+	END_IF;
+ELSE
+	IF NOT(SIZEOF(type_spec.definition) = 0)
+	THEN
+		x := type_spec.definition[1]
+			\data_type_element.type_definition;
+		res := TRUE;
+	END_IF;
+END_IF;
+
+IF NOT(res)
+THEN
+	RETURN([]);
+END_IF;
+
+IF ('ISO13584_42_2_LONG_FORM_SCHEMA.NAMED_TYPE' IN TYPEOF(x))
+THEN
+	IF NOT(SIZEOF(x\named_type.referred_type.definition) = 0)
+	THEN
+		RETURN(data_type_typeof(x\named_type.referred_type));
+	ELSE
+		RETURN([]);
+	END_IF;
+ELSE
+	RETURN(TYPEOF(x));
+END_IF;
+
+END_FUNCTION; -- data_type_typeof
+
+FUNCTION data_type_class_of(type_spec: property_or_data_type_BSU):
+	SET[0:1] OF class_BSU;
+
+LOCAL
+	res: BOOLEAN := FALSE;
+	s: SET[0:1] OF class_BSU := [];
+	x: data_type;
+END_LOCAL;
+
+IF NOT EXISTS(type_spec)
+THEN
+	RETURN([]); -- type_spec is indeterminate
+END_IF;
+
+IF ('ISO13584_42_2_LONG_FORM_SCHEMA.PROPERTY_BSU' IN
+	TYPEOF(type_spec))
+THEN
+	IF NOT(SIZEOF(type_spec.definition) = 0)
+	THEN
+		x := type_spec.definition[1]\property_DET.domain;
+		res := TRUE;
+	END_IF;
+ELSE
+	IF NOT(SIZEOF(type_spec.definition) = 0)
+	THEN
+		x := type_spec.definition[1]\data_type_element
+			.type_definition;
+		res := TRUE;
+	END_IF;
+END_IF;
+
+IF res
+THEN
+	IF ('ISO13584_42_2_LONG_FORM_SCHEMA.CLASS_REFERENCE_TYPE' IN
+		TYPEOF(x))
+	THEN
+		s := s + x\class_reference_type.domain;
+		RETURN(s);
+	END_IF;
+
+	IF ('ISO13584_42_2_LONG_FORM_SCHEMA.NAMED_TYPE' 
+		IN TYPEOF(x))
+	THEN
+		s := data_type_class_of(x\named_type.referred_type);
+		RETURN(s);
+	END_IF;
+END_IF;
+
+RETURN(s);
+
+END_FUNCTION; -- data_type_class_of
+
+FUNCTION data_type_type_name(t: property_or_data_type_BSU):
+	SET [0:?] OF STRING;
+
+LOCAL
+	res: BOOLEAN := FALSE;
+	s: SET [0:1] OF STRING := [];
+	x: data_type;
+END_LOCAL;
+
+IF NOT EXISTS(t)
+THEN
+	RETURN([]); -- t is indeterminate
+END_IF;
+
+IF ('ISO13584_42_2_LONG_FORM_SCHEMA.PROPERTY_BSU' IN TYPEOF(t))
+THEN
+	IF NOT(SIZEOF(t.definition) = 0)
+	THEN
+		x := t.definition[1]\property_DET.domain;
+		res := TRUE;
+	END_IF;
+ELSE
+	IF NOT(SIZEOF(t.definition) = 0)
+	THEN
+		x := t.definition[1]\data_type_element.type_definition;
+		res := TRUE;
+	END_IF;
+END_IF;
+
+IF res
+THEN
+	IF ('ISO13584_42_2_LONG_FORM_SCHEMA.ENTITY_INSTANCE_TYPE'
+		IN TYPEOF(x))
+	THEN
+		s := x\entity_instance_type.type_name;
+	END_IF;
+
+	IF ('ISO13584_42_2_LONG_FORM_SCHEMA.NAMED_TYPE' 
+		IN TYPEOF(x))
+	THEN
+		s := data_type_type_name(x\named_type.referred_type);
+	END_IF;
+END_IF;
+
+RETURN(s);
+
+END_FUNCTION; -- data_type_type_name
+
+FUNCTION data_type_level_spec(t: property_or_data_type_BSU):
+	LIST[0:4] OF UNIQUE Level;
+
+LOCAL
+	res: BOOLEAN := FALSE;
+	s: LIST[0:4] OF UNIQUE level := [];
+	x: data_type;
+END_LOCAL;
+
+IF NOT EXISTS(t)
+THEN
+	RETURN([]); -- t is indeterminate
+END_IF;
+
+IF ('ISO13584_42_2_LONG_FORM_SCHEMA.PROPERTY_BSU' IN TYPEOF(t))
+THEN
+	IF NOT(SIZEOF(t.definition) = 0)
+	THEN
+		x := t.definition[1]\property_DET.domain;
+		res := TRUE;
+	END_IF;
+ELSE
+	IF NOT(SIZEOF(t.definition) = 0)
+	THEN
+		x := t.definition[1]\data_type_element.type_definition;
+		res := TRUE;
+	END_IF;
+END_IF;
+
+IF res
+THEN
+	IF ('ISO13584_42_2_LONG_FORM_SCHEMA.LEVEL_TYPE' 
+		IN TYPEOF(x))
+	THEN
+		s := x\level_type.levels;
+	END_IF;
+
+	IF ('ISO13584_42_2_LONG_FORM_SCHEMA.NAMED_TYPE' 
+		IN TYPEOF(x))
+	THEN
+		s := data_type_level_spec(x\named_type.referred_type);
+	END_IF;
+END_IF;
+
+RETURN(s);
+
+END_FUNCTION; -- data_type_level_spec
+
+FUNCTION data_type_level_value_typeof(t: property_or_data_type_BSU):
+	SET OF STRING;
+
+LOCAL
+	res: BOOLEAN := FALSE;
+	s: SET OF STRING := [];
+	x: data_type;
+END_LOCAL;
+
+IF NOT EXISTS(t)
+THEN
+	RETURN([]); -- t is indeterminate
+END_IF;
+
+IF ('ISO13584_42_2_LONG_FORM_SCHEMA.PROPERTY_BSU' IN TYPEOF(t))
+THEN
+	IF NOT(SIZEOF(t.definition) = 0)
+	THEN
+		x := t.definition[1]\property_DET.domain;
+		res := TRUE;
+	END_IF;
+ELSE
+	IF NOT(SIZEOF(t.definition) = 0)
+	THEN
+		x := t.definition[1]\data_type_element.type_definition;
+		res := TRUE;
+	END_IF;
+END_IF;
+
+IF res
+THEN
+	IF ('ISO13584_42_2_LONG_FORM_SCHEMA.LEVEL_TYPE' 
+		IN TYPEOF(x))
+	THEN
+		s := TYPEOF(x\level_type.value_type);
+	END_IF;
+
+	IF ('ISO13584_42_2_LONG_FORM_SCHEMA.NAMED_TYPE' 
+		IN TYPEOF(x))
+	THEN
+		s := data_type_level_value_typeof(
+			x\named_type.referred_type);
+	END_IF;
+
+END_IF;
+
+RETURN(s);
+
+END_FUNCTION; -- data_type_level_value_typeof
+
+FUNCTION compatible_subclass(c1, c2: class_BSU): LOGICAL;
+
+IF (NOT EXISTS(c1)) OR (NOT EXISTS(c2))
+THEN
+	RETURN(UNKNOWN); -- c1 or c2 indeterminate
+END_IF;
+
+IF c1 = c2
+THEN
+	RETURN(TRUE);
+END_IF;
+
+IF ((c1.code = c2.code) AND (c1.version >= c2.version)
+	AND (c1.defined_by.code = c2.defined_by.code))
+THEN
+	RETURN(TRUE);
+END_IF;
+
+IF SIZEOF(c2.definition) = 0
+THEN
+	RETURN(UNKNOWN);
+ELSE
+	IF EXISTS(c2.definition[1]\class.its_superclass)
+	THEN
+		RETURN(compatible_subclass(c1, c2.definition[1]
+			\class.its_superclass));
+	ELSE
+		RETURN(FALSE);
+	END_IF;
+END_IF;
+
+END_FUNCTION; -- compatible_subclass
+
+(*
+
+
+*)
+
+FUNCTION data_type_non_quantitative_int_type(
+	type_spec: property_or_data_type_BSU):
+	SET [0:1] OF non_quantitative_int_type;
+LOCAL
+	res: BOOLEAN := FALSE;
+	s: SET [0:1] OF non_quantitative_int_type := [];
+	x: data_type;
+END_LOCAL;
+
+IF NOT EXISTS(type_spec)
+THEN
+	RETURN([]); -- type_spec is indeterminate
+END_IF;
+
+IF ('ISO13584_42_2_LONG_FORM_SCHEMA.PROPERTY_BSU' IN
+	TYPEOF(type_spec))
+THEN
+	IF NOT(SIZEOF(type_spec.definition) = 0)
+	THEN
+		x := type_spec.definition[1]\property_DET.domain;
+		res := TRUE;
+	END_IF;
+ELSE
+	IF NOT(SIZEOF(type_spec.definition) = 0)
+	THEN
+		x := type_spec.definition[1]\
+		data_type_element.type_definition;
+		res := TRUE;
+	END_IF;
+END_IF;
+
+IF res
+THEN
+	IF ('ISO13584_42_2_LONG_FORM_SCHEMA'+
+		'.NON_QUANTITATIVE_INT_TYPE') IN TYPEOF(x)
+	THEN
+		s := s + x;
+		RETURN(s);
+	END_IF;
+
+	IF ('ISO13584_42_2_LONG_FORM_SCHEMA.NAMED_TYPE')
+		IN TYPEOF(x)
+	THEN
+		s := data_type_non_quantitative_int_type(
+			x\named_type.referred_type);
+		RETURN(s);
+	END_IF;
+END_IF;
+
+RETURN([]);
+
+END_FUNCTION; -- data_type_non_quantitative_int_type
+
+FUNCTION data_type_non_quantitative_code_type(
+	type_spec: property_or_data_type_BSU):
+	SET [0:1] OF non_quantitative_code_type;
+LOCAL
+	res: BOOLEAN := FALSE;
+	s: SET [0:1] OF non_quantitative_code_type := [];
+	x: data_type;
+END_LOCAL;
+
+IF NOT EXISTS(type_spec)
+THEN
+	RETURN([]); -- type_spec is indeterminate
+END_IF;
+
+IF ('ISO13584_42_2_LONG_FORM_SCHEMA.PROPERTY_BSU' IN
+	TYPEOF(type_spec))
+THEN
+	IF NOT(SIZEOF(type_spec.definition) = 0)
+	THEN
+		x := type_spec.definition[1]\property_DET.domain;
+		res := TRUE;
+	END_IF;
+ELSE
+	IF NOT(SIZEOF(type_spec.definition) = 0)
+	THEN
+		x := type_spec.definition[1]\
+		data_type_element.type_definition;
+		res := TRUE;
+	END_IF;
+END_IF;
+
+IF res
+THEN
+	IF ('ISO13584_42_2_LONG_FORM_SCHEMA'+
+		'.NON_QUANTITATIVE_CODE_TYPE') IN TYPEOF(x)
+	THEN
+		s := s + x;
+		RETURN(s);
+	END_IF;
+
+	IF ('ISO13584_42_2_LONG_FORM_SCHEMA.NAMED_TYPE')
+		IN TYPEOF(x)
+	THEN
+		s := data_type_non_quantitative_code_type(
+			x\named_type.referred_type);
+		RETURN(s);
+	END_IF;
+END_IF;
+
+RETURN([]);
+
+END_FUNCTION; -- data_type_non_quantitative_code_type
+
+
+(************************************************************************************)
+(************************************************************************************)
+(************************************************************************************)
+(************************************************************************************)
+(************************************************************************************)
+(************************************************************************************)
+(************************************************************************************)
+
+TYPE external_file_address = identifier;
+WHERE
+	WR1: LENGTH(SELF) <= external_file_address_length;
+	WR2: NOT(SELF LIKE '* *');
+END_TYPE; -- external_file_address
+
+TYPE external_item_code_type = identifier;
+WHERE
+	WR1: LENGTH(SELF) <= external_item_code_length;
+	WR2: NOT(SELF LIKE '* *');
+END_TYPE; -- external_item_code_type
+
+TYPE http_file_name_type = identifier;
+WHERE
+	WR1: LENGTH(SELF) <= http_file_name_length;
+	WR2: NOT(SELF LIKE '* *');
+	WR3: NOT(SELF LIKE '*.*.*');
+	WR4: ((NOT(SELF LIKE '*.*'))
+		AND (LENGTH(SELF) <= http_file_name_length - 4))
+		OR ((SELF LIKE '*.?')
+		AND (LENGTH(SELF) <= http_file_name_length - 2))
+		OR ((SELF LIKE '*.??')
+		AND (LENGTH(SELF) <= http_file_name_length - 1))
+		OR (SELF LIKE '*.???');
+END_TYPE; -- http_file_name_type
+
+TYPE http_directory_name_type = identifier;
+WHERE
+	WR1: LENGTH(SELF) <= http_directory_name_length;
+	WR2: NOT(SELF LIKE '* *');
+END_TYPE; -- http_directory_name_type
+
+TYPE MIME_type = identifier;
+WHERE
+	WR1: NOT(SELF LIKE '* *');
+END_TYPE; -- MIME_type
+
+TYPE MIME_subtype = identifier;
+WHERE
+	WR1: NOT(SELF LIKE '* *');
+END_TYPE; -- MIME_subtype
+
+TYPE IAB_RFC = INTEGER;
+WHERE
+	WR1: SELF > 0;
+END_TYPE; -- IAB_RFC
+
+TYPE character_set_type = identifier;
+END_TYPE; -- character_set_type
+
+TYPE content_encoding_type = identifier;
+WHERE
+	WR1: (SELF = '7bit') OR (SELF = '8bit') OR (SELF = 'binary') 
+		OR (SELF = 'quoted-printable') OR (SELF = 'base64');
+END_TYPE; -- content_encoding_type
+
+ENTITY external_file_protocol
+ABSTRACT SUPERTYPE OF(
+	(standard_protocol) ANDOR (data_protocol));
+	organisation: organization;
+	country: OPTIONAL identifier;
+	protocol_name: identifier;
+	protocol_version: identifier;
+	level: OPTIONAL identifier;
+	designation: item_names;
+	base_protocol: OPTIONAL program_protocol;
+WHERE
+	WR1: (NOT(SELF.protocol_name LIKE '* *'))
+		AND (NOT(SELF.protocol_name LIKE '*.*'))
+		AND (NOT(SELF.protocol_name LIKE '*-*'));
+	WR2: NOT(SELF.protocol_version LIKE '* *');
+END_ENTITY; -- external_file_protocol
+
+ENTITY standard_protocol
+ABSTRACT SUPERTYPE OF(standard_data_protocol)
+SUBTYPE OF(external_file_protocol);
+END_ENTITY; -- standard_protocol
+
+
+ENTITY data_protocol
+ABSTRACT SUPERTYPE OF(standard_data_protocol)
+SUBTYPE OF(external_file_protocol);
+END_ENTITY; -- data_protocol
+
+ENTITY program_protocol
+ABSTRACT SUPERTYPE
+SUBTYPE OF(external_file_protocol);
+END_ENTITY; -- program_protocol
+
+ENTITY standard_data_protocol
+SUBTYPE OF(data_protocol, standard_protocol);
+WHERE
+	WR1: NOT EXISTS(SELF\external_file_protocol.base_protocol);
+END_ENTITY; -- standard_data_protocol
+
+ENTITY http_protocol
+SUBTYPE OF(standard_data_protocol);
+	http_RFC: IAB_RFC;
+END_ENTITY; -- http_protocol
+
+ENTITY external_item
+ABSTRACT SUPERTYPE OF(property_value_external_item);
+	used_protocol: external_file_protocol;
+	content: external_content;
+END_ENTITY; -- external_item
+
+ENTITY property_value_external_item
+SUBTYPE OF(external_item);
+END_ENTITY; -- property_value_external_item
+
+RULE unique_http_directory_name_per_supplier_rule FOR(
+	http_class_directory);
+WHERE
+	WR1: QUERY(dir_1 <* http_class_directory
+		| QUERY(dir_2 <* http_class_directory
+		| (dir_1.name = dir_2.name) AND
+		(dir_1.class.defined_by = dir_2.class.defined_by))
+		<> [dir_1])
+		= [];
+END_RULE; -- unique_http_directory_name_per_supplier_rule
+
+
+ENTITY external_content
+ABSTRACT SUPERTYPE OF(ONEOF(
+	translated_external_content,
+	not_translated_external_content,
+	not_translatable_external_content));
+	consists_of: LIST[1:?] OF language_specific_content;
+INVERSE
+	content_of: external_item FOR content;
+END_ENTITY; -- external_content
+
+ENTITY translated_external_content
+SUBTYPE OF(external_content);
+	languages: present_translations;
+WHERE
+	WR1: SIZEOF(SELF\external_content.consists_of)
+		= SIZEOF(SELF.languages.language_codes);
+END_ENTITY; -- translated_external_content
+
+ENTITY not_translated_external_content
+SUBTYPE OF(external_content);
+WHERE
+	WR1: SIZEOF(SELF\external_content.consists_of) = 1;
+END_ENTITY; -- not_translated_external_content
+
+ENTITY not_translatable_external_content
+SUBTYPE OF(external_content);
+WHERE
+	WR1: SIZEOF(SELF\external_content.consists_of) = 1;
+END_ENTITY; -- not_translatable_external_content
+
+ENTITY language_specific_content;
+	content_files: SET [1:?] OF external_file_unit;
+	main_file: OPTIONAL external_file_unit;
+	character_encoding: OPTIONAL character_set_type;
+INVERSE
+	content_of: external_content FOR consists_of;
+WHERE
+	WR1: NOT EXISTS(main_file) OR (main_file IN content_files);
+	WR2: EXISTS(main_file) XOR
+		('ISO13584_42_2_LONG_FORM_SCHEMA.PROGRAM_LIBRARY_CONTENT'
+		IN TYPEOF(SELF.content_of.content_of));
+	WR3: EXISTS(character_encoding) OR NOT
+		('ISO13584_42_2_LONG_FORM_SCHEMA.HTTP_PROTOCOL'
+		IN TYPEOF(SELF.content_of.content_of.used_protocol));
+END_ENTITY; -- language_specific_content
+
+ENTITY external_file_unit
+SUPERTYPE OF(http_file);
+	file: external_file_address;
+	content_encoding: OPTIONAL content_encoding_type;
+INVERSE
+	unit_of: language_specific_content FOR content_files;
+WHERE
+	WR1: (('ISO13584_42_2_LONG_FORM_SCHEMA.HTTP_PROTOCOL'
+		IN TYPEOF(SELF.unit_of.content_of.content_of.used_protocol))
+		AND ('ISO13584_42_2_LONG_FORM_SCHEMA.HTTP_FILE' 
+		IN TYPEOF(SELF)))
+		XOR NOT
+		(('ISO13584_42_2_LONG_FORM_SCHEMA.HTTP_PROTOCOL'
+		IN TYPEOF(SELF.unit_of.content_of.content_of.used_protocol))
+		OR ('ISO13584_42_2_LONG_FORM_SCHEMA.HTTP_FILE'
+		IN TYPEOF(SELF)));
+END_ENTITY; -- external_file_unit
+
+ENTITY http_file
+SUBTYPE OF(external_file_unit);
+	mime: MIME_type;
+	exchange_format: MIME_subtype;
+	format_RFC: OPTIONAL IAB_RFC;
+	http_file_name: http_file_name_type;
+	http_directory: OPTIONAL http_class_directory;
+	remote_access: OPTIONAL absolute_URL_type;
+UNIQUE
+	UR1: http_file_name, http_directory;
+WHERE
+	WR1: EXISTS(http_directory) XOR
+		('ISO13584_42_2_LONG_FORM_SCHEMA.SUPPLIER_BSU_RELATED_CONTENT'
+		IN TYPEOF(SELF.unit_of.content_of.content_of));
+	WR2: NOT EXISTS(http_directory) XOR
+	('ISO13584_42_2_LONG_FORM_SCHEMA.CLASS_EXTENSION_EXTERNAL_ITEM'
+		IN TYPEOF(SELF.unit_of.content_of.content_of));
+END_ENTITY; -- http_file
+
+ENTITY http_class_directory;
+	name: http_directory_name_type;
+	class: class_BSU;
+UNIQUE
+	UR1: class;
+END_ENTITY; -- http_class_directory
+
+(****************************************************)
+
+RULE imported_properties_are_visible_or_applicable_rule FOR(
+	a_priori_semantic_relationship, property_DET);
+WHERE
+	WR1: QUERY(rel <* a_priori_semantic_relationship
+		| QUERY(prop <* rel.referenced_properties
+		| QUERY(cl <* rel.referenced_classes
+		| NOT visible_properties(cl, [prop])
+		AND NOT applicable_properties(cl, [prop]))
+		= rel.referenced_classes) = []) 
+		= a_priori_semantic_relationship;
+END_RULE; -- imported_properties_are_visible_or_applicable_rule
+
+RULE imported_data_types_are_visible_or_applicable_rule FOR(
+	a_priori_semantic_relationship, data_type_element);
+WHERE
+	WR1: QUERY(rel <* a_priori_semantic_relationship
+		| QUERY(typ <* rel.referenced_data_types
+		| QUERY(cl <* rel.referenced_classes
+		| NOT visible_types(cl, [typ])
+		AND NOT applicable_types(cl, [typ]))
+		= rel.referenced_classes) = [])
+		= a_priori_semantic_relationship;
+END_RULE; -- imported_data_types_are_visible_or_applicable_rule
+
+RULE allowed_named_type_usage_rule FOR(class);
+LOCAL
+	named_type_usage_allowed: LOGICAL := TRUE;
+	is_app: LOGICAL;
+	prop: property_bsu;
+	cl: class;
+	dtnt: SET[0:1] OF data_type_bsu := [];
+END_LOCAL;
+
+REPEAT i := 1 TO SIZEOF(class);
+	cl := class[i];
+	REPEAT j := 1 TO SIZEOF(class[i].described_by);
+		prop := cl.described_by[j];
+		dtnt := data_type_named_type(prop);
+		
+		IF (SIZEOF(dtnt) = 1) THEN
+			is_app := applicable_types(cl.identified_by, dtnt);
+			IF (NOT is_app) THEN
+				named_type_usage_allowed := FALSE;
+			END_IF;
+		END_IF;
+	END_REPEAT;
+END_REPEAT;
+
+WHERE
+	WR1: named_type_usage_allowed;
+END_RULE; -- allowed_named_type_usage_rule
+
+
+
+
+END_SCHEMA; -- ISO13584_42_2_LONG_FORM_SCHEMA

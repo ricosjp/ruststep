@@ -1,0 +1,26 @@
+(*
+ $Id: 10303-1340-mim-Name_assignment.exp,v 1.2 2006/08/07 09:42:07 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N3086 - ISO/TS 10303-1340 Name assignment - EXPRESS MIM
+ Supersedes ISO TC184/SC4/WG12 N2283
+*) 
+
+
+SCHEMA Name_assignment_mim;
+
+USE FROM management_resources_schema   -- ISO 10303-41
+  (name_assignment); 
+
+
+TYPE name_item = EXTENSIBLE GENERIC_ENTITY SELECT;
+END_TYPE; 
+
+ENTITY applied_name_assignment
+  SUBTYPE OF (name_assignment);
+  item : name_item;
+END_ENTITY;
+
+END_SCHEMA;  -- Name_assignment_mim
+
+
+
+

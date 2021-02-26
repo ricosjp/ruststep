@@ -1,0 +1,28 @@
+(*
+ $Id: 10303-1019-arm-product_view_definition.exp,v 1.5 2006/08/07 07:44:41 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N1532 - ISO/TS 10303-1019 Product view definition - EXPRESS ARM
+*)
+   
+SCHEMA Product_view_definition_arm;
+
+USE FROM Product_version_arm;
+         
+ENTITY Product_view_definition;
+  id              	: STRING;
+  name  	      	: OPTIONAL STRING;
+  additional_characterization	      : OPTIONAL STRING;
+  initial_context 	: View_definition_context;
+  additional_contexts   : SET [0:?] OF View_definition_context;
+  defined_version  	: Product_version;
+WHERE
+WR1: NOT (initial_context IN additional_contexts);
+END_ENTITY;
+   
+ENTITY View_definition_context;
+  application_domain	: STRING;
+  life_cycle_stage 	: STRING;
+  description	 	: OPTIONAL STRING;
+END_ENTITY;
+   
+END_SCHEMA;
+

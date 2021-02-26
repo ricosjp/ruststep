@@ -1,0 +1,65 @@
+(*
+ $Id: 10303-1164-arm-Product_as_individual.exp,v 1.2 2006/08/07 07:44:44 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N3106 - ISO/TS 10303-1164 Product as individual - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG12 N2291
+*) 
+
+
+SCHEMA Product_as_individual_arm;
+
+USE FROM Identification_assignment_arm;    -- ISO/TS 10303-1021
+
+USE FROM Product_identification_arm;    -- ISO/TS 10303-1017
+
+USE FROM Product_version_arm;    -- ISO/TS 10303-1018
+
+USE FROM Product_view_definition_arm;    -- ISO/TS 10303-1019
+
+
+TYPE product_as_individual_identification_item = SELECT BASED_ON identification_item WITH 
+   (Product_as_individual, 
+    Product_as_individual_version, 
+    Product_as_individual_view);
+END_TYPE; 
+
+ENTITY Product_as_individual
+  SUBTYPE OF (Product);
+END_ENTITY;
+
+ENTITY Product_as_individual_version
+  ABSTRACT SUPERTYPE OF (ONEOF (Product_as_planned,
+                                Product_as_realized))
+  SUBTYPE OF (Product_version);
+  SELF\Product_version.of_product : Product_as_individual;
+END_ENTITY;
+
+ENTITY Product_as_individual_view
+  SUBTYPE OF (Product_view_definition);
+  SELF\Product_view_definition.defined_version : Product_as_individual_version;
+END_ENTITY;
+
+ENTITY Product_as_planned
+  SUBTYPE OF (Product_as_individual_version);
+END_ENTITY;
+
+ENTITY Product_as_realized
+  SUBTYPE OF (Product_as_individual_version);
+END_ENTITY;
+
+ENTITY Product_design_to_individual;
+  product_design : Product;
+  individual_product : Product_as_individual;
+END_ENTITY;
+
+ENTITY Product_design_version_to_individual;
+  product_design_version : Product_version;
+  individual_product : Product_as_individual_version;
+END_ENTITY;
+
+ENTITY Product_planned_to_realized;
+  planned_product : Product_as_planned;
+  realized_product : Product_as_realized;
+END_ENTITY;
+
+END_SCHEMA;  -- Product_as_individual_arm
+

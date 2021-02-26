@@ -1,0 +1,16 @@
+(*
+ $Id: 10303-0439-arm-ap239_product_life_cycle_support.exp,v 1.1 2006/08/07 07:44:41 wg12deputy Exp $
+ ISO TC184/SC4/WG3 N1553 - ISO/TS 10303-439 AP239 product life cycle support - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG3 N1399
+*) 
+
+
+SCHEMA Ap239_product_life_cycle_support_arm;
+
+USE FROM Ap239_activity_recording_arm;    -- ISO/TS 10303-1287
+
+USE FROM Ap239_product_status_recording_arm;    -- ISO/TS 10303-1304
+
+
+END_SCHEMA;  -- Ap239_product_life_cycle_support_arm
+

@@ -1,0 +1,23 @@
+(*
+   $Id: 10303-1349-mim-incomplete_data_reference_mechanism.exp,v 1.1 2006/08/03 15:03:35 wg12deputy Exp $
+   ISO/TC184/SC4 WG12N2635 - ISO/TS 10303- incomplete_data_reference_mechanism - EXPRESS MIM
+   Supersedes ISO TC184/SC4/WG12N2069
+*)
+
+SCHEMA Incomplete_data_reference_mechanism_mim;
+
+USE FROM Classification_assignment_mim;
+
+USE FROM Document_definition_mim;
+
+USE FROM File_identification_mim;
+
+USE FROM Part_view_definition_mim;
+
+
+TYPE idrm_marked_item  = EXTENSIBLE SELECT BASED_ON classification_item WITH
+      (product_definition, document_file);
+END_TYPE;
+
+
+END_SCHEMA;

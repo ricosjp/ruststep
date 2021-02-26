@@ -1,0 +1,32 @@
+(*
+ $Id: 10303-1207-arm-drawing_structure_and_administration.exp,v 1.1 2006/08/04 12:01:51 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2777 - ISO/TS 10303-1207 Drawing structure and administration - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG12 N2201
+*)
+
+SCHEMA Drawing_structure_and_administration_arm;
+
+USE FROM Foundation_representation_arm;    --  ISO/TS 10303-1006
+(* USE FROM Approval_arm;    --  ISO/TS 10303-1012 *)
+
+(* TYPE draughting_approval_item = SELECT BASED_ON approval_item WITH *)
+TYPE draughting_approval_item = SELECT
+   (Drawing_revision, 
+    Drawing_sheet_revision);
+END_TYPE; 
+
+ENTITY Draughting_approval_assignment;
+(*  SUBTYPE OF (Approval_assignment); 
+    SELF\Approval_assignment.items : SET[1:?] OF draughting_approval_item; *)
+  items : SET[1:?] OF draughting_approval_item;
+END_ENTITY;
+
+ENTITY Drawing_revision
+  SUBTYPE OF (Representation);
+END_ENTITY;
+
+ENTITY Drawing_sheet_revision
+  SUBTYPE OF (Representation);
+END_ENTITY;
+
+END_SCHEMA;

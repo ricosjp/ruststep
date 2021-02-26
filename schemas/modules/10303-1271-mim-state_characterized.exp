@@ -1,0 +1,168 @@
+(*
+ $Id: 10303-1271-mim-state_characterized.exp,v 1.1 2006/08/07 09:42:05 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N3170 - ISO/TS 10303-1271 State characterized - EXPRESS MIM
+ Supersedes ISO TC184/SC4/WG12 N2361
+*) 
+
+
+SCHEMA State_characterized_mim;
+
+USE FROM Activity_method_assignment_mim;    -- ISO/TS 10303-1249
+
+USE FROM Activity_mim;    -- ISO/TS 10303-1047
+
+USE FROM Attribute_classification_mim;    -- ISO/TS 10303-1246
+
+USE FROM Classification_assignment_mim;    -- ISO/TS 10303-1114
+
+USE FROM Condition_characterized_mim;    -- ISO/TS 10303-1257
+
+USE FROM Condition_evaluation_characterized_mim;    -- ISO/TS 10303-1296
+
+USE FROM Condition_evaluation_mim;    -- ISO/TS 10303-1254
+
+USE FROM Condition_mim;    -- ISO/TS 10303-1253
+
+USE FROM Date_time_assignment_mim;    -- ISO/TS 10303-1014
+
+USE FROM Identification_assignment_mim;    -- ISO/TS 10303-1021
+
+USE FROM Multi_linguism_mim;    -- ISO/TS 10303-1105
+
+USE FROM Person_organization_assignment_mim;    -- ISO/TS 10303-1013
+
+USE FROM product_property_definition_schema   -- ISO 10303-41
+  (characterized_object); 
+
+USE FROM Property_assignment_mim;    -- ISO/TS 10303-1030
+
+USE FROM State_definition_mim;    -- ISO/TS 10303-1255
+
+USE FROM State_observed_mim;    -- ISO/TS 10303-1256
+
+USE FROM state_observed_schema   -- ISO 10303-56
+  (ascribable_state,
+   ascribable_state_relationship,
+   state_observed,
+   state_observed_assignment,
+   state_observed_relationship,
+   state_observed_role); 
+
+USE FROM state_type_schema   -- ISO 10303-56
+  (state_type,
+   state_type_assignment,
+   state_type_relationship); 
+
+
+TYPE state_observed_role_classification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON classification_item WITH 
+   (state_observed_role);
+END_TYPE; 
+
+TYPE statechar_action_items = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON action_items WITH 
+   (ascribable_state);
+END_TYPE; 
+
+TYPE statechar_action_method_items = EXTENSIBLE SELECT BASED_ON action_method_items WITH 
+   (state_type, 
+    state_type_relationship);
+END_TYPE; 
+
+TYPE statechar_attribute_classification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON attribute_classification_item WITH 
+   (state_observed, 
+    state_observed_assignment, 
+    state_observed_relationship, 
+    state_type, 
+    state_type_assignment, 
+    state_type_relationship);
+END_TYPE; 
+
+TYPE statechar_attribute_language_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON attribute_language_item WITH 
+   (state_observed, 
+    state_observed_relationship, 
+    state_type, 
+    state_type_relationship);
+END_TYPE; 
+
+TYPE statechar_date_and_time_item = EXTENSIBLE SELECT BASED_ON date_and_time_item WITH 
+   (ascribable_state, 
+    state_observed, 
+    state_observed_assignment, 
+    state_observed_relationship, 
+    state_type, 
+    state_type_assignment, 
+    state_type_relationship);
+END_TYPE; 
+
+TYPE statechar_date_item = EXTENSIBLE SELECT BASED_ON date_item WITH 
+   (ascribable_state, 
+    state_observed, 
+    state_observed_assignment, 
+    state_observed_relationship, 
+    state_type, 
+    state_type_assignment, 
+    state_type_relationship);
+END_TYPE; 
+
+TYPE statechar_identification_item = EXTENSIBLE SELECT BASED_ON identification_item WITH 
+   (ascribable_state, 
+    ascribable_state_relationship, 
+    state_observed, 
+    state_observed_assignment, 
+    state_observed_relationship, 
+    state_type, 
+    state_type_assignment, 
+    state_type_relationship);
+END_TYPE; 
+
+TYPE statechar_multi_language_attribute_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON multi_language_attribute_item WITH 
+   (state_observed, 
+    state_observed_relationship, 
+    state_type, 
+    state_type_relationship);
+END_TYPE; 
+
+TYPE statechar_organization_item = EXTENSIBLE SELECT BASED_ON organization_item WITH 
+   (ascribable_state, 
+    state_observed, 
+    state_observed_assignment, 
+    state_observed_relationship, 
+    state_type, 
+    state_type_assignment, 
+    state_type_relationship);
+END_TYPE; 
+
+TYPE statechar_person_and_organization_item = EXTENSIBLE SELECT BASED_ON person_and_organization_item WITH 
+   (ascribable_state, 
+    state_observed, 
+    state_observed_assignment, 
+    state_observed_relationship, 
+    state_type, 
+    state_type_assignment, 
+    state_type_relationship);
+END_TYPE; 
+
+ENTITY statechar_applied_object
+  SUBTYPE OF (characterized_object, state_observed_assignment);
+END_ENTITY;
+
+ENTITY statechar_object
+  SUBTYPE OF (characterized_object, state_observed);
+END_ENTITY;
+
+ENTITY statechar_relationship_object
+  SUBTYPE OF (characterized_object, state_observed_relationship);
+END_ENTITY;
+
+ENTITY statechar_type_applied_object
+  SUBTYPE OF (characterized_object, state_type_assignment);
+END_ENTITY;
+
+ENTITY statechar_type_object
+  SUBTYPE OF (characterized_object, state_type);
+END_ENTITY;
+
+ENTITY statechar_type_relationship_object
+  SUBTYPE OF (characterized_object, state_type_relationship);
+END_ENTITY;
+
+END_SCHEMA;  -- State_characterized_mim

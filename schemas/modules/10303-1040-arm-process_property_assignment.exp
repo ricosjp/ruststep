@@ -1,0 +1,45 @@
+(*
+ $Id: 10303-1040-arm-process_property_assignment.exp,v 1.5 2006/08/07 07:44:42 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2970 - ISO/TS 10303-1040 Process property assignment - EXPRESS ARM
+*)
+
+
+SCHEMA Process_property_assignment_arm; 
+
+USE FROM Activity_arm;    -- ISO/TS 10303-1047
+
+USE FROM Activity_method_arm;    -- ISO/TS 10303-1049
+
+USE FROM Foundation_representation_arm;    -- ISO/TS 10303-1006
+
+USE FROM Independent_property_arm;    -- ISO/TS 10303-1036
+
+
+TYPE characterized_activity_definition = EXTENSIBLE SELECT
+   (Activity, 
+    Activity_method);
+END_TYPE; 
+
+ENTITY Activity_property;
+  name : STRING;
+  description : STRING;
+  described_element : characterized_activity_definition;
+END_ENTITY;
+
+ENTITY Activity_property_representation;
+  description : OPTIONAL STRING;
+  property : Activity_property;
+  rep : Representation;
+  role : STRING;
+END_ENTITY;
+
+ENTITY Applied_independent_activity_property
+  SUBTYPE OF (Activity_property);
+  base_element_property : Independent_property;
+DERIVE
+  SELF\Activity_property.name : STRING := base_element_property.property_type;
+END_ENTITY;
+
+END_SCHEMA;  -- Process_property_assignment_arm
+
+

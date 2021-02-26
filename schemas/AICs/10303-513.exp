@@ -1,0 +1,160 @@
+(*
+  This is ISO 10303-513
+  This is WG12 N476
+*)
+ SCHEMA aic_elementary_brep;
+  USE FROM geometry_schema(axis2_placement_3d,
+                           cartesian_point,
+                           cartesian_transformation_operator_3d,
+                           circle,
+                           conical_surface,
+                           cylindrical_surface,
+                           degenerate_toroidal_surface,
+                           direction,
+                           ellipse,
+                           hyperbola,
+                           line,
+                           parabola,
+                           plane,
+                           polyline,
+                           spherical_surface,
+                           toroidal_surface,
+                           vector);
+  USE FROM geometric_model_schema(manifold_solid_brep,
+                                  brep_with_voids);
+
+REFERENCE FROM geometric_model_schema(msb_shells);
+
+USE FROM topology_schema(closed_shell,
+                           connected_face_set,
+                           edge_curve,
+                           edge_loop,
+                           face_bound,
+                           face_outer_bound,
+                           face_surface,
+                           oriented_closed_shell,
+                           vertex_loop,
+                           vertex_point);
+
+
+  USE FROM representation_schema(mapped_item);
+
+  USE FROM product_property_representation_schema(shape_representation);
+
+ ENTITY elementary_brep_shape_representation
+ SUBTYPE OF (shape_representation);
+ WHERE
+   WR1 : SIZEOF (QUERY (it <* SELF.items |
+          NOT (SIZEOF (['AIC_ELEMENTARY_BREP.MANIFOLD_SOLID_BREP',
+                'AIC_ELEMENTARY_BREP.FACETED_BREP',
+                'AIC_ELEMENTARY_BREP.MAPPED_ITEM',
+                'AIC_ELEMENTARY_BREP.AXIS2_PLACEMENT_3D'] *
+                   TYPEOF(it)) = 1))) = 0;
+   WR2 : SIZEOF (QUERY (it <* SELF.items |
+         SIZEOF(['AIC_ELEMENTARY_BREP.MANIFOLD_SOLID_BREP',
+         'AIC_ELEMENTARY_BREP.MAPPED_ITEM'] * TYPEOF(it)) =1 )) > 0;
+   WR3 : SIZEOF (QUERY (msb <* QUERY (it <* SELF.items |
+           'AIC_ELEMENTARY_BREP.MANIFOLD_SOLID_BREP' IN TYPEOF(it)) |
+           NOT (SIZEOF (QUERY (csh <* msb_shells(msb) |
+            NOT (SIZEOF (QUERY(fcs <* csh.cfs_faces |
+              NOT('AIC_ELEMENTARY_BREP.FACE_SURFACE' IN TYPEOF(fcs)))) = 0
+                 ))) = 0
+                   ))) = 0;
+   WR4 : SIZEOF (QUERY (msb <* QUERY (it <* SELF.items |
+           'AIC_ELEMENTARY_BREP.MANIFOLD_SOLID_BREP' IN TYPEOF(it)) |
+           NOT (SIZEOF (QUERY (csh <* msb_shells(msb) |
+            NOT (SIZEOF (QUERY(fcs <* csh\connected_face_set.cfs_faces |
+              NOT(('AIC_ELEMENTARY_BREP.ELEMENTARY_SURFACE' IN
+                   TYPEOF(fcs\face_surface.face_geometry))
+             ))) = 0
+                 ))) = 0
+                   ))) = 0;
+   WR5 : SIZEOF (QUERY (msb <* QUERY (it <* SELF.items |
+           'AIC_ELEMENTARY_BREP.MANIFOLD_SOLID_BREP' IN TYPEOF(it)) |
+           NOT (SIZEOF (QUERY (csh <* msb_shells(msb) |
+             NOT (SIZEOF (QUERY(fcs <* csh\connected_face_set.cfs_faces |
+               NOT (SIZEOF(QUERY (elp_fbnds <* QUERY (bnds <* fcs.bounds |
+         'AIC_ELEMENTARY_BREP.EDGE_LOOP' IN TYPEOF(bnds.bound)) |
+                NOT (SIZEOF (QUERY (oe <* elp_fbnds.bound\path.edge_list |
+                  NOT('AIC_ELEMENTARY_BREP.EDGE_CURVE' IN
+            TYPEOF(oe.edge_element)))) = 0
+                   ))) = 0
+                 ))) = 0
+               ))) = 0
+             ))) = 0;
+   WR6 : SIZEOF (QUERY (msb <* QUERY (it <* SELF.items |
+           'AIC_ELEMENTARY_BREP.MANIFOLD_SOLID_BREP' IN TYPEOF(it)) |
+           NOT (SIZEOF (QUERY (csh <* msb_shells(msb) |
+             NOT (SIZEOF (QUERY(fcs <* csh\connected_face_set.cfs_faces |
+               NOT (SIZEOF(QUERY (elp_fbnds <* QUERY (bnds <* fcs.bounds |
+         'AIC_ELEMENTARY_BREP.EDGE_LOOP' IN TYPEOF(bnds.bound)) |
+                 NOT (SIZEOF (QUERY (oe <* elp_fbnds.bound\path.edge_list |
+                   NOT (SIZEOF (['AIC_ELEMENTARY_BREP.LINE',
+                         'AIC_ELEMENTARY_BREP.CONIC',
+                         'AIC_ELEMENTARY_BREP.POLYLINE'] *
+            TYPEOF(oe.edge_element\edge_curve.edge_geometry)) = 1 )
+               )) = 0
+               ))) = 0
+                 ))) = 0
+                   ))) = 0
+                    ))) = 0;
+   WR7 : SIZEOF (QUERY (msb <* QUERY (it <* SELF.items |
+           'AIC_ELEMENTARY_BREP.MANIFOLD_SOLID_BREP' IN TYPEOF(it)) |
+           NOT (SIZEOF (QUERY (csh <* msb_shells(msb) |
+             NOT (SIZEOF (QUERY(fcs <* csh\connected_face_set.cfs_faces |
+               NOT (SIZEOF(QUERY (elp_fbnds <* QUERY (bnds <* fcs.bounds |
+         'AIC_ELEMENTARY_BREP.EDGE_LOOP' IN TYPEOF(bnds.bound)) |
+                 NOT (SIZEOF (QUERY (oe <* elp_fbnds.bound\path.edge_list |
+            NOT(('AIC_ELEMENTARY_BREP.VERTEX_POINT' IN TYPEOF(oe.edge_start))
+                AND ('AIC_ELEMENTARY_BREP.VERTEX_POINT' IN
+                 TYPEOF(oe.edge_end))
+            ))) = 0
+              ))) = 0
+               ))) = 0
+                 ))) = 0
+                   ))) = 0;
+   WR8 : SIZEOF (QUERY (msb <* QUERY (it <* SELF.items |
+           'AIC_ELEMENTARY_BREP.MANIFOLD_SOLID_BREP' IN TYPEOF(it)) |
+           NOT (SIZEOF (QUERY (csh <* msb_shells(msb) |
+             NOT (SIZEOF (QUERY(fcs <* csh\connected_face_set.cfs_faces |
+               NOT (SIZEOF(QUERY (elp_fbnds <* QUERY (bnds <* fcs.bounds |
+         'AIC_ELEMENTARY_BREP.EDGE_LOOP' IN TYPEOF(bnds.bound)) |
+                NOT (SIZEOF (QUERY (oe <* elp_fbnds.bound\path.edge_list |
+                   ('AIC_ELEMENTARY_BREP.POLYLINE' IN
+            TYPEOF(oe.edge_element\edge_curve.edge_geometry)) AND
+            (NOT (SIZEOF (oe\oriented_edge.edge_element\
+                  edge_curve.edge_geometry\polyline.points) >= 3))
+               )) = 0
+               ))) = 0
+                 ))) = 0
+                   ))) = 0
+                    ))) = 0;
+   WR9 : SIZEOF (QUERY (msb <* QUERY (it <* items |
+          'AIC_ELEMENTARY_BREP.MANIFOLD_SOLID_BREP' IN TYPEOF(it)) |
+          'AIC_ELEMENTARY_BREP.ORIENTED_CLOSED_SHELL' IN TYPEOF
+              (msb\manifold_solid_brep.outer)))
+             = 0;
+   WR10 : SIZEOF (QUERY (brv <* QUERY (it <* items |
+          'AIC_ELEMENTARY_BREP.BREP_WITH_VOIDS' IN TYPEOF(it)) |
+          NOT (SIZEOF (QUERY (csh <* brv\brep_with_voids.voids |
+           csh\oriented_closed_shell.orientation)) = 0))) = 0;
+   WR11 : SIZEOF (QUERY (mi <*  QUERY (it <* items |
+                 'AIC_ELEMENTARY_BREP.MAPPED_ITEM' IN TYPEOF(it)) |
+          NOT ('AIC_ELEMENTARY_BREP.ELEMENTARY_BREP_SHAPE_REPRESENTATION' IN
+             TYPEOF(mi\mapped_item.mapping_source.
+                           mapped_representation)))) = 0;
+   WR12 : SIZEOF (QUERY (msb <* QUERY (it <* SELF.items |
+            'AIC_ELEMENTARY_BREP.MANIFOLD_SOLID_BREP' IN TYPEOF(it)) |
+            NOT (SIZEOF (QUERY (csh <* msb_shells(msb) |
+              NOT (SIZEOF (QUERY(fcs <* csh\connected_face_set.cfs_faces |
+               NOT (SIZEOF(QUERY (vlp_fbnds <* QUERY (bnds <* fcs.bounds |
+         'AIC_ELEMENTARY_BREP.VERTEX_LOOP' IN TYPEOF(bnds.bound)) |
+           NOT(('AIC_ELEMENTARY_BREP.VERTEX_POINT' IN
+               TYPEOF(vlp_fbnds\face_bound.bound\vertex_loop.loop_vertex)) AND
+                ('AIC_ELEMENTARY_BREP.CARTESIAN_POINT' IN
+                   TYPEOF(vlp_fbnds\face_bound.bound\vertex_loop.
+                     loop_vertex\vertex_point.vertex_geometry))
+            ))) = 0))) = 0))) = 0))) =0;
+ END_ENTITY;
+
+END_SCHEMA; -- end AIC_ELEMENTARY_BREP SCHEMA

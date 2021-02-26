@@ -1,0 +1,411 @@
+(* 
+This is WG12 N548.  This incorporates the changes identified in ISO 10303-47 TC1 
+  into the EXPRESS of the document
+*)
+
+SCHEMA shape_aspect_definition_schema;
+REFERENCE FROM product_property_definition_schema
+    (shape_aspect,
+     shape_aspect_relationship);
+REFERENCE FROM measure_schema
+    (measure_with_unit);
+REFERENCE FROM support_resource_schema
+    (bag_to_set, label, identifier);
+
+TYPE limit_condition = ENUMERATION OF
+  (maximum_material_condition,
+   least_material_condition,
+   regardless_of_feature_size);
+END_TYPE;
+
+ENTITY datum
+  SUBTYPE OF (shape_aspect);
+  identification               :identifier;
+INVERSE
+  established_by_relationships : SET [1:?] OF shape_aspect_relationship
+                                 FOR related_shape_aspect;
+WHERE
+  WR1: SIZEOF (QUERY (x<*SELF\datum.established_by_relationships |
+       SIZEOF (TYPEOF(x\shape_aspect_relationship.relating_shape_aspect)* 
+       ['SHAPE_ASPECT_DEFINITION_SCHEMA.DATUM_FEATURE', 
+       'SHAPE_ASPECT_DEFINITION_SCHEMA.DATUM_TARGET']) <> 1))=0;
+END_ENTITY;
+
+ENTITY datum_feature
+   SUBTYPE OF (shape_aspect);
+INVERSE 
+   feature_basis_relationship : shape_aspect_relationship
+                              FOR relating_shape_aspect;
+WHERE
+   WR1: SIZEOF (QUERY (sar<* bag_to_set (USEDIN (SELF,
+     'PRODUCT_PROPERTY_DEFINITION_SCHEMA.SHAPE_ASPECT_RELATIONSHIP.'+
+       'RELATING_SHAPE_ASPECT'))
+       | NOT ('SHAPE_ASPECT_DEFINITION_SCHEMA.DATUM' IN TYPEOF
+       (sar\shape_aspect_relationship.related_shape_aspect))))=0;
+  WR2: SELF\shape_aspect.product_definitional = TRUE;
+END_ENTITY;
+
+ENTITY datum_target
+  SUBTYPE OF (shape_aspect);
+  target_id             : identifier; 
+INVERSE
+  target_basis_relationship : shape_aspect_relationship FOR
+                              relating_shape_aspect;
+WHERE
+   WR1: SIZEOF (QUERY (sar<* bag_to_set (USEDIN (SELF,
+     'PRODUCT_PROPERTY_DEFINITION_SCHEMA.SHAPE_ASPECT_RELATIONSHIP.' +
+       'RELATING_SHAPE_ASPECT'))
+      | NOT ('SHAPE_ASPECT_DEFINITION_SCHEMA.DATUM' IN TYPEOF 
+      (sar\shape_aspect_relationship.related_shape_aspect))))=0;
+   WR2: SELF\shape_aspect.product_definitional = TRUE;
+END_ENTITY;
+
+ENTITY datum_reference;
+  precedence       : INTEGER;
+  referenced_datum : datum;
+WHERE
+  WR1: precedence > 0;
+END_ENTITY;
+
+ENTITY referenced_modified_datum
+  SUBTYPE OF (datum_reference);
+  modifier : limit_condition;
+END_ENTITY;
+
+ENTITY composite_shape_aspect
+  SUBTYPE OF (shape_aspect);
+INVERSE
+  component_relationships : SET [2:?] OF shape_aspect_relationship
+                            FOR relating_shape_aspect;
+END_ENTITY;
+
+ENTITY derived_shape_aspect
+  SUPERTYPE OF (ONEOF (apex,
+                       centre_of_symmetry,
+                       geometric_alignment,
+                       geometric_intersection,
+                       parallel_offset,
+                       perpendicular_to,
+                       extension,
+                       tangent))
+  SUBTYPE OF (shape_aspect);
+INVERSE
+  deriving_relationships : SET [1:?] OF
+          shape_aspect_relationship FOR relating_shape_aspect;
+WHERE
+   WR1: SIZEOF (QUERY (dr <*
+          SELF\derived_shape_aspect.deriving_relationships |
+          NOT ('SHAPE_ASPECT_DEFINITION_SCHEMA.' +
+               'SHAPE_ASPECT_DERIVING_RELATIONSHIP'
+          IN TYPEOF (dr)))) = 0;
+END_ENTITY;
+
+ENTITY apex
+  SUBTYPE OF (derived_shape_aspect);
+END_ENTITY;
+
+ENTITY centre_of_symmetry 
+   SUBTYPE OF (derived_shape_aspect);
+WHERE
+    WR1: SIZEOF
+        (QUERY(sadr<*SELF\derived_shape_aspect.deriving_relationships|
+    NOT('SHAPE_ASPECT_DEFINITION_SCHEMA.SYMMETRIC_SHAPE_ASPECT'
+     IN TYPEOF
+     (sadr\shape_aspect_relationship.related_shape_aspect))))=0; 
+END_ENTITY;
+
+ENTITY geometric_alignment
+  SUBTYPE OF (derived_shape_aspect);
+WHERE
+  WR1: SIZEOF (SELF\derived_shape_aspect.deriving_relationships)> 1;
+END_ENTITY;
+
+ENTITY geometric_intersection
+  SUBTYPE OF (derived_shape_aspect);
+WHERE
+  WR1: SIZEOF (SELF\derived_shape_aspect.deriving_relationships)> 1;
+END_ENTITY;
+
+ENTITY parallel_offset
+  SUBTYPE OF (derived_shape_aspect);
+  offset               : measure_with_unit;
+WHERE
+  WR1: SIZEOF (SELF\derived_shape_aspect.deriving_relationships)= 1;
+END_ENTITY;
+
+ENTITY perpendicular_to
+  SUBTYPE OF (derived_shape_aspect);
+WHERE
+  WR1: SIZEOF (SELF\derived_shape_aspect.deriving_relationships)= 1;
+END_ENTITY;
+
+ENTITY extension
+  SUBTYPE OF (derived_shape_aspect);
+WHERE
+  WR1: SIZEOF (SELF\derived_shape_aspect.deriving_relationships)= 1;
+END_ENTITY;
+
+ENTITY tangent
+  SUBTYPE OF (derived_shape_aspect);
+WHERE
+  WR1: SIZEOF (SELF\derived_shape_aspect.deriving_relationships)= 1;
+END_ENTITY;
+
+ENTITY shape_aspect_deriving_relationship
+       SUBTYPE OF (shape_aspect_relationship);
+     WHERE
+       WR1: 'SHAPE_ASPECT_DEFINITION_SCHEMA.DERIVED_SHAPE_ASPECT' IN
+TYPEOF
+            (SELF\SHAPE_ASPECT_RELATIONSHIP.RELATING_SHAPE_ASPECT);
+     END_ENTITY;
+
+ENTITY symmetric_shape_aspect
+  SUBTYPE OF (shape_aspect);
+INVERSE
+  basis_relationships : SET [1:?] OF shape_aspect_relationship
+                        FOR relating_shape_aspect;
+WHERE
+  WR1: SIZEOF (QUERY (x<*SELF\symmetric_shape_aspect.basis_relationships |
+       'SHAPE_ASPECT_DEFINITION_SCHEMA.CENTRE_OF_SYMMETRY' IN TYPEOF 
+       (x\shape_aspect_relationship.related_shape_aspect)))>=1;
+END_ENTITY;
+
+END_SCHEMA;  --  shape_aspect_definition_schema
+
+SCHEMA shape_dimension_schema;
+REFERENCE FROM measure_schema
+   (measure_with_unit);
+REFERENCE FROM representation_schema
+    (representation);
+REFERENCE FROM qualified_measure_schema
+    (measure_representation_item, 
+     qualified_representation_item);
+REFERENCE FROM product_property_representation_schema
+    (shape_representation);
+REFERENCE FROM product_property_definition_schema
+    (shape_aspect,
+     shape_aspect_relationship);
+REFERENCE FROM support_resource_schema
+    (label,
+     text);
+
+TYPE angle_relator = ENUMERATION OF
+  (equal,
+   large,
+   small);
+END_TYPE;
+
+TYPE dimensional_characteristic = SELECT (dimensional_location,
+                                          dimensional_size);
+END_TYPE;
+
+ENTITY angular_location
+  SUBTYPE OF (dimensional_location);
+  angle_selection : angle_relator;
+END_ENTITY;
+
+ENTITY angular_size
+  SUBTYPE OF (dimensional_size);
+  angle_selection : angle_relator;
+END_ENTITY;
+
+ENTITY dimensional_characteristic_representation;
+  dimension      : dimensional_characteristic; 
+  representation : shape_dimension_representation;
+END_ENTITY;
+
+ENTITY dimensional_location
+  SUPERTYPE OF (ONEOF (angular_location,
+                       dimensional_location_with_path))
+  SUBTYPE OF (shape_aspect_relationship);
+END_ENTITY;
+
+ENTITY dimensional_location_with_path
+  SUBTYPE OF (dimensional_location);
+  path : shape_aspect;
+END_ENTITY;
+
+ENTITY dimensional_size
+  SUPERTYPE OF (ONEOF (angular_size,
+                       dimensional_size_with_path));
+  applies_to : shape_aspect;
+  name       : label;
+WHERE
+  WR1: applies_to.product_definitional = TRUE;
+END_ENTITY;
+
+ENTITY dimensional_size_with_path
+  SUBTYPE OF (dimensional_size);
+  path : shape_aspect;
+END_ENTITY;
+
+ENTITY shape_dimension_representation
+                SUBTYPE OF (shape_representation);
+  WHERE
+   WR1: SIZEOF (QUERY (temp <* SELF\representation.items | 
+    NOT ('QUALIFIED_MEASURE_SCHEMA.MEASURE_REPRESENTATION_ITEM' 
+        IN TYPEOF (temp)))) = 0;
+   WR2: SIZEOF (SELF\representation.items) <= 3;
+   WR3: SIZEOF (QUERY (pos_mri <* QUERY (real_mri <*
+        SELF\representation.items | 'REAL' IN TYPEOF
+        (real_mri\measure_with_unit.value_component) ) |        
+     NOT  (pos_mri\measure_with_unit.value_component > 0.0 ))) = 0;
+END_ENTITY;
+
+END_SCHEMA;   --  shape_dimension_schema
+
+SCHEMA shape_tolerance_schema;
+REFERENCE FROM product_property_definition_schema
+    (shape_aspect,
+     shape_aspect_relationship);
+REFERENCE FROM measure_schema
+   (derive_dimensional_exponents,
+    dimensional_exponents,
+    measure_with_unit,
+    measure_value);
+REFERENCE FROM representation_schema
+    (representation);
+REFERENCE FROM support_resource_schema
+    (label,
+     text);
+REFERENCE FROM shape_aspect_definition_schema
+    (datum_reference,
+     limit_condition);
+REFERENCE FROM shape_dimension_schema
+    (dimensional_characteristic,
+     dimensional_location);
+
+TYPE tolerance_method_definition = SELECT
+  (tolerance_value,
+   limits_and_fits);
+END_TYPE;
+
+TYPE  shape_tolerance_select = SELECT
+     (geometric_tolerance,
+      plus_minus_tolerance);
+END_TYPE;
+
+ENTITY dimension_related_tolerance_zone_element;
+  related_dimension : dimensional_location; 
+  related_element   : tolerance_zone_definition;
+END_ENTITY;
+
+ENTITY geometric_tolerance;
+  name                    : label;
+  description             : text;
+  magnitude               : measure_with_unit; 
+  toleranced_shape_aspect : shape_aspect; 
+WHERE
+  WR1: ('NUMBER' IN TYPEOF
+       (magnitude\measure_with_unit.value_component)) AND
+       (magnitude\measure_with_unit.value_component >= 0.0);
+END_ENTITY;
+
+ENTITY geometric_tolerance_relationship;
+                                   name                         :label;
+                                   description                  :text;
+                                   relating_geometric_tolerance : geometric_tolerance; 
+                                   related_geometric_tolerance  : geometric_tolerance; 
+END_ENTITY;
+
+ENTITY geometric_tolerance_with_datum_reference
+   SUBTYPE OF (geometric_tolerance);
+   datum_system : SET [1:?] OF  datum_reference;
+END_ENTITY;
+
+ENTITY geometric_tolerance_with_defined_unit
+  SUBTYPE OF (geometric_tolerance);
+  unit_size : measure_with_unit;
+WHERE
+  WR1: ('NUMBER' IN TYPEOF
+       (unit_size\measure_with_unit.value_component)) AND
+       (unit_size\measure_with_unit.value_component > 0.0);
+END_ENTITY;
+
+ENTITY modified_geometric_tolerance
+  SUBTYPE OF (geometric_tolerance);
+  modifier : limit_condition;
+END_ENTITY;
+
+ENTITY projected_zone_definition 
+  SUBTYPE OF (tolerance_zone_definition);  
+  projection_end   : shape_aspect; 
+  projected_length : measure_with_unit;
+WHERE 
+  WR1: ('NUMBER' IN TYPEOF
+       (projected_length\measure_with_unit.value_component)) AND
+       (projected_length\measure_with_unit.value_component > 0.0);
+  WR2: (derive_dimensional_exponents
+       (projected_length\measure_with_unit.unit_component)=
+        dimensional_exponents(1,0,0,0,0,0,0));
+END_ENTITY;
+
+ENTITY runout_zone_definition
+  SUBTYPE OF (tolerance_zone_definition); 
+  orientation  : runout_zone_orientation;
+END_ENTITY;
+
+ENTITY runout_zone_orientation;
+  angle : measure_with_unit;
+END_ENTITY;
+
+ENTITY runout_zone_orientation_reference_direction
+  SUBTYPE OF (runout_zone_orientation); 
+  orientation_defining_relationship: shape_aspect_relationship;
+END_ENTITY;
+
+ENTITY statistical_distribution_for_tolerance
+  SUBTYPE OF (representation);
+WHERE
+  WR1: SIZEOF (QUERY (item <* SELF\representation.items |
+       NOT ('QUALIFIED_MEASURE_SCHEMA.MEASURE_REPRESENTATION_ITEM' 
+       IN TYPEOF (item)))) = 0;
+END_ENTITY;
+
+ENTITY tolerance_with_statistical_distribution;
+   associated_tolerance : shape_tolerance_select;
+   tolerance_allocation : statistical_distribution_for_tolerance;
+END_ENTITY;
+
+ENTITY tolerance_zone
+  SUBTYPE OF (shape_aspect);
+  defining_tolerance : SET [1:?] OF geometric_tolerance; 
+  form               : tolerance_zone_form;
+END_ENTITY;
+
+ENTITY tolerance_zone_form;
+  name : label;
+END_ENTITY;
+
+ENTITY tolerance_zone_definition
+  SUPERTYPE OF (ONEOF (projected_zone_definition,
+                       runout_zone_definition));
+  zone : tolerance_zone;
+  boundaries: SET [1:?] OF shape_aspect;
+END_ENTITY;
+
+ENTITY limits_and_fits;
+  form_variance   : label;
+  zone_variance   : label;
+  grade           : label;
+  source          : text;
+END_ENTITY;
+
+ENTITY  plus_minus_tolerance;
+  range                : tolerance_method_definition; 
+  toleranced_dimension : dimensional_characteristic;
+UNIQUE
+  UR1: toleranced_dimension;
+END_ENTITY;
+
+ENTITY tolerance_value; 
+   lower_bound : measure_with_unit; 
+   upper_bound : measure_with_unit;
+WHERE 
+   WR1: upper_bound\measure_with_unit.value_component >
+        lower_bound\measure_with_unit.value_component;  
+   WR2: upper_bound\measure_with_unit.unit_component =
+        lower_bound\measure_with_unit.unit_component;
+END_ENTITY;
+
+END_SCHEMA;   -- End of shape_tolerance_schema

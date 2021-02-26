@@ -1,0 +1,564 @@
+SCHEMA SDAI_dictionary_schema;
+
+TYPE base_type = SELECT
+  (simple_type,
+  aggregation_type,
+  named_type);
+END_TYPE;
+
+TYPE constructed_type = SELECT
+  (enumeration_type,
+  select_type);
+END_TYPE;
+
+TYPE underlying_type = SELECT
+  (simple_type,
+  aggregation_type,
+  defined_type,
+  constructed_type);
+END_TYPE;
+
+TYPE type_or_rule =  SELECT
+  (named_type,
+  global_rule);
+END_TYPE;
+
+TYPE explicit_or_derived = SELECT
+  (explicit_attribute,
+  derived_attribute);
+END_TYPE;
+
+TYPE express_id = STRING;
+END_TYPE;
+
+TYPE info_object_id = STRING;
+END_TYPE;
+
+ENTITY schema_definition;
+  name           : express_id;
+  identification : OPTIONAL info_object_id;
+INVERSE
+  entities         : SET [0:?] OF entity_definition FOR parent_schema;
+  types            : SET [0:?] OF defined_type FOR parent_schema;
+  global_rules     : SET [0:?] OF global_rule FOR parent_schema;
+  external_schemas : SET [0:?] OF external_schema FOR native_schema;
+UNIQUE
+  UR1 : identification;
+END_ENTITY;
+
+ENTITY interface_specification;
+  current_schema_id : express_id;
+  explicit_items    : SET [1:?] OF explicit_item_id;
+  implicit_items    : SET [0:?] OF implicit_item_id;
+END_ENTITY;
+
+ENTITY interfaced_item
+  ABSTRACT SUPERTYPE OF (ONEOF (explicit_item_id, implicit_item_id));
+  foreign_schema_id : express_id;
+END_ENTITY;
+
+ENTITY explicit_item_id
+  ABSTRACT SUPERTYPE OF (ONEOF (used_item, referenced_item))
+  SUBTYPE OF ( interfaced_item );
+  local_definition : named_type;
+  original_id      : OPTIONAL express_id;
+END_ENTITY;
+
+ENTITY used_item
+  SUBTYPE OF ( explicit_item_id );
+END_ENTITY;
+
+ENTITY referenced_item
+  SUBTYPE OF ( explicit_item_id );
+END_ENTITY;
+
+ENTITY implicit_item_id
+  SUBTYPE OF ( interfaced_item );
+  local_definition : type_or_rule;
+END_ENTITY;
+
+ENTITY external_schema;
+  name          : express_id;
+  native_schema : schema_definition;
+INVERSE
+  for_types : SET [1:?] OF domain_equivalent_type FOR owner;
+END_ENTITY;
+
+ENTITY domain_equivalent_type;
+  external_type_id : express_id;
+  native_type      : named_type;
+  owner            : external_schema;
+END_ENTITY;
+
+ENTITY named_type
+  ABSTRACT SUPERTYPE OF (ONEOF(entity_definition, defined_type));
+  name          : express_id;
+  where_rules   : LIST [0:?] OF where_rule;
+  parent_schema : schema_definition;
+END_ENTITY;
+
+ENTITY defined_type
+  SUBTYPE OF (named_type);
+  domain : underlying_type;
+END_ENTITY;
+
+ENTITY entity_definition
+  SUBTYPE OF (named_type);
+  supertypes   : LIST [0:?] OF UNIQUE entity_definition;
+  complex      : BOOLEAN;
+  instantiable : BOOLEAN;
+  independent  : BOOLEAN;
+INVERSE
+  attributes       : SET [0:?] OF attribute FOR parent_entity;
+  uniqueness_rules : SET [0:?] OF uniqueness_rule FOR parent_entity;
+  global_rules     : SET [0:?] OF global_rule FOR entities;
+END_ENTITY;
+
+ENTITY attribute
+  ABSTRACT SUPERTYPE OF (ONEOF(derived_attribute, explicit_attribute,
+   inverse_attribute));
+  name          : express_id;
+  parent_entity : entity_definition;
+END_ENTITY;
+
+ENTITY derived_attribute
+  SUBTYPE OF (attribute);
+  domain      : base_type;
+  redeclaring : OPTIONAL explicit_or_derived;
+END_ENTITY;
+
+ENTITY explicit_attribute
+  SUBTYPE OF (attribute);
+  domain        : base_type;
+  redeclaring   : OPTIONAL explicit_attribute;
+  optional_flag : BOOLEAN;
+END_ENTITY;
+
+ENTITY inverse_attribute
+  SUBTYPE OF (attribute);
+  domain          : entity_definition;
+  redeclaring     : OPTIONAL inverse_attribute;
+  inverted_attr   : explicit_attribute;
+  min_cardinality : OPTIONAL bound;
+  max_cardinality : OPTIONAL bound;
+  duplicates      : BOOLEAN;
+END_ENTITY;
+
+ENTITY uniqueness_rule;
+  label         : OPTIONAL express_id;
+  attributes    : LIST [1:?] OF attribute;
+  parent_entity : entity_definition;
+END_ENTITY;
+
+ENTITY where_rule;
+  label       : OPTIONAL express_id;
+  parent_item : type_or_rule;
+END_ENTITY;
+
+ENTITY global_rule;
+  name          : express_id;
+  entities      : LIST [1:?] OF entity_definition;
+  where_rules   : LIST [1:?] OF where_rule; 
+  parent_schema : schema_definition;
+END_ENTITY;
+
+ENTITY simple_type
+  ABSTRACT SUPERTYPE OF (ONEOF(integer_type, real_type, string_type,
+   binary_type, logical_type, boolean_type, number_type));
+END_ENTITY;
+
+ENTITY number_type
+  SUBTYPE OF (simple_type);
+END_ENTITY;
+
+ENTITY integer_type
+  SUBTYPE OF (simple_type);
+END_ENTITY;
+
+ENTITY real_type
+  SUBTYPE OF (simple_type);
+  precision : OPTIONAL bound;
+END_ENTITY;
+
+ENTITY string_type
+  SUBTYPE OF (simple_type);
+  width       : OPTIONAL bound;
+  fixed_width : BOOLEAN;
+END_ENTITY;
+
+ENTITY binary_type
+  SUBTYPE OF (simple_type);
+  width       : OPTIONAL bound;
+  fixed_width : BOOLEAN;
+END_ENTITY;
+
+ENTITY logical_type
+  SUBTYPE OF (simple_type);
+END_ENTITY;
+
+ENTITY boolean_type
+  SUBTYPE OF (simple_type);
+END_ENTITY;
+
+ENTITY enumeration_type;
+  elements : LIST [1:?] OF UNIQUE express_id;
+END_ENTITY;
+
+ENTITY select_type;
+  selections : SET [1:?] OF named_type;
+END_ENTITY;
+
+ENTITY aggregation_type
+  ABSTRACT SUPERTYPE OF (ONEOF(variable_size_aggregation_type,
+  array_type));
+  element_type : base_type;
+END_ENTITY;
+
+ENTITY variable_size_aggregation_type
+  ABSTRACT SUPERTYPE OF (ONEOF(set_type, bag_type, list_type))
+  SUBTYPE OF (aggregation_type);
+  lower_bound : bound;
+  upper_bound : OPTIONAL bound;
+END_ENTITY;
+
+ENTITY set_type
+  SUBTYPE OF (variable_size_aggregation_type);
+END_ENTITY;
+
+ENTITY bag_type
+  SUBTYPE OF (variable_size_aggregation_type);
+END_ENTITY;
+
+ENTITY list_type
+  SUBTYPE OF (variable_size_aggregation_type);
+  unique_flag : BOOLEAN;
+END_ENTITY;
+
+ENTITY array_type
+  SUBTYPE OF (aggregation_type);
+  lower_index   : bound;
+  upper_index   : bound;
+  unique_flag   : BOOLEAN;
+  optional_flag : BOOLEAN;
+END_ENTITY;
+
+ENTITY bound
+  ABSTRACT SUPERTYPE OF (ONEOF(integer_bound, population_dependent_bound));
+END_ENTITY;
+
+ENTITY population_dependent_bound
+  SUBTYPE OF (bound);
+END_ENTITY;
+
+ENTITY integer_bound
+  SUBTYPE OF (bound);
+  bound_value : INTEGER;
+END_ENTITY;
+
+END_SCHEMA; -- SDAI_dictionary_schema
+SCHEMA SDAI_session_schema;
+
+REFERENCE FROM SDAI_parameter_data_schema
+  ( entity_instance,
+  aggregate_instance );
+
+USE FROM SDAI_population_schema;
+
+TYPE access_type = ENUMERATION OF
+  (read_only,
+  read_write);
+END_TYPE;
+
+TYPE error_base = SELECT
+  (entity_instance,
+  aggregate_instance);
+END_TYPE;
+
+TYPE time_stamp = STRING(256);
+END_TYPE;
+
+ENTITY sdai_session;
+  sdai_implementation : implementation;
+  recording_active    : BOOLEAN;
+  errors              : LIST [0:?] OF error_event;
+  known_servers       : SET [1:?] OF sdai_repository;
+  active_servers      : SET [1:?] OF sdai_repository;
+  active_models       : SET [1:?] OF sdai_model;
+  data_dictionary     : OPTIONAL schema_instance;
+INVERSE
+  active_transaction : SET [0:1] OF sdai_transaction FOR owning_session;
+END_ENTITY;
+
+ENTITY implementation;
+  name                     : STRING;
+  level                    : STRING;
+  sdai_version             : STRING;
+  binding_version          : STRING;
+  implementation_class     : INTEGER;
+  transaction_level        : INTEGER;
+  expression_level         : INTEGER;
+  recording_level          : INTEGER;
+  scope_level              : INTEGER;
+  domain_equivalence_level : INTEGER;
+END_ENTITY;
+
+ENTITY sdai_repository;
+  name        : STRING;
+  contents    : sdai_repository_contents;
+  description : STRING;
+INVERSE
+  session : sdai_session FOR known_servers;
+UNIQUE
+  UR1: name, session;
+END_ENTITY;
+
+ENTITY sdai_repository_contents;
+  models  : SET [0:?] OF sdai_model;
+  schemas : SET [0:?] OF schema_instance;
+INVERSE
+  repository : sdai_repository FOR contents;
+END_ENTITY;
+
+ENTITY sdai_transaction;
+  mode           : access_type;
+  owning_session : sdai_session;
+END_ENTITY;
+
+ENTITY event
+  ABSTRACT SUPERTYPE OF (error_event);
+  function_id : STRING;
+  time        : time_stamp;
+END_ENTITY;
+
+ENTITY error_event
+  SUBTYPE OF (event);
+  error       : INTEGER;
+  description : OPTIONAL STRING;
+  base        : OPTIONAL error_base;
+END_ENTITY;
+
+END_SCHEMA; -- SDAI_session_schema
+SCHEMA SDAI_population_schema;
+
+REFERENCE FROM SDAI_parameter_data_schema
+  ( entity_instance,
+    application_instance );
+
+REFERENCE FROM SDAI_session_schema
+  ( sdai_session,
+    sdai_repository,
+    access_type,
+    time_stamp );
+
+TYPE schema_definition = STRING;
+END_TYPE;
+
+TYPE entity_definition = STRING;
+END_TYPE;
+
+ENTITY schema_instance;
+  name              : STRING;
+  associated_models : SET [0:?] OF sdai_model;
+  native_schema     : schema_definition;
+  repository        : sdai_repository;
+  change_date       : OPTIONAL time_stamp;
+  validation_date   : time_stamp;
+  validation_result : LOGICAL;
+  validation_level  : INTEGER;
+UNIQUE
+  UR1: name, repository;
+WHERE
+  WR1: SELF IN SELF.repository.contents.schemas;
+END_ENTITY;
+
+ENTITY sdai_model;
+  name              : STRING;
+  contents          : sdai_model_contents;
+  underlying_schema : schema_definition;
+  repository        : sdai_repository;
+  change_date       : OPTIONAL time_stamp;
+  mode              : OPTIONAL access_type;
+INVERSE
+  associated_with : SET [0:?] OF schema_instance FOR associated_models;
+UNIQUE
+  UR1: repository, name;
+WHERE
+  WR1: SELF IN SELF.repository.contents.models;
+END_ENTITY;
+
+ENTITY sdai_model_contents;
+  instances         : SET [0:?] OF entity_instance;
+  folders           : SET [0:?] OF entity_extent;
+  populated_folders : SET [0:?] OF entity_extent;
+END_ENTITY;
+
+ENTITY entity_extent;
+  definition : entity_definition;
+  instances  : SET [0:?] OF entity_instance;
+INVERSE
+  owned_by : sdai_model_contents FOR folders;
+END_ENTITY;
+
+ENTITY scope;
+  owner       : application_instance;
+  owned       : SET [1:?] OF application_instance;
+  export_list : SET [0:?] OF application_instance;
+UNIQUE
+  UR1: owner;
+WHERE
+  WR2: NOT (owner IN owned);
+END_ENTITY;
+
+END_SCHEMA; -- SDAI_population_schema
+SCHEMA SDAI_parameter_data_schema;
+
+REFERENCE FROM SDAI_population_schema
+  ( schema_instance,
+    sdai_model,
+    sdai_model_contents );
+
+REFERENCE FROM SDAI_session_schema
+  ( sdai_repository );
+
+TYPE primitive = SELECT
+  (aggregate_instance,
+  assignable_primitive);
+END_TYPE;
+
+TYPE assignable_primitive = SELECT
+  (entity_instance,
+  string_value,
+  binary_value,
+  integer_value,
+  number_value,
+  enumeration_value,
+  select_value,
+  real_value,
+  boolean_value,
+  logical_value);
+END_TYPE;
+
+TYPE aggregate_primitive = SELECT
+  (aggregate_instance,
+  select_aggregate_instance);
+END_TYPE;
+
+TYPE string_value = STRING;
+END_TYPE;
+
+TYPE binary_value = BINARY;
+END_TYPE;
+
+TYPE integer_value = INTEGER;
+END_TYPE;
+
+TYPE real_value = REAL;
+END_TYPE;
+
+TYPE number_value = SELECT
+  (real_value,
+  integer_value);
+END_TYPE;
+
+TYPE boolean_value = BOOLEAN;
+END_TYPE;
+
+TYPE logical_value = LOGICAL;
+END_TYPE;
+
+TYPE bound_instance_value = INTEGER;
+END_TYPE;
+
+TYPE query_source = SELECT
+  (aggregate_instance,
+   sdai_model,
+   sdai_repository,
+   schema_instance) ;
+END_TYPE;
+
+ENTITY iterator;
+  subject        : aggregate_instance;
+  current_member : OPTIONAL primitive;
+END_ENTITY;
+
+ENTITY entity_instance
+  ABSTRACT SUPERTYPE OF (ONEOF(sdai_instance, application_instance));
+END_ENTITY;
+
+ENTITY application_instance
+  SUBTYPE OF (entity_instance);
+END_ENTITY;
+
+ENTITY sdai_instance
+  ABSTRACT SUPERTYPE OF (ONEOF(dictionary_instance, session_instance))
+  SUBTYPE OF (entity_instance);
+END_ENTITY;
+
+ENTITY dictionary_instance
+  SUBTYPE OF (sdai_instance);
+END_ENTITY;
+
+ENTITY session_instance
+  SUBTYPE OF (sdai_instance);
+END_ENTITY;
+
+ENTITY attribute_value;
+END_ENTITY;
+
+ENTITY select_value
+  SUPERTYPE OF (ONEOF(select_aggregate_instance));
+END_ENTITY;
+
+ENTITY select_aggregate_instance
+  SUBTYPE OF (select_value);
+END_ENTITY;
+
+ENTITY enumeration_value;
+END_ENTITY;
+
+ENTITY aggregate_instance
+  ABSTRACT SUPERTYPE OF (ONEOF(unordered_collection, ordered_collection));
+END_ENTITY;
+
+ENTITY unordered_collection
+  ABSTRACT SUPERTYPE OF (ONEOF(set_instance, bag_instance))
+  SUBTYPE OF (aggregate_instance);    
+END_ENTITY;
+
+ENTITY set_instance
+  SUBTYPE OF (unordered_collection);
+END_ENTITY;
+
+ENTITY bag_instance
+  SUBTYPE OF (unordered_collection);
+END_ENTITY;
+
+ENTITY ordered_collection
+  ABSTRACT SUPERTYPE OF (ONEOF(list_instance, array_instance))
+  SUBTYPE OF (aggregate_instance);
+END_ENTITY;
+
+ENTITY list_instance
+  ABSTRACT SUPERTYPE OF (ONEOF(non_persistent_list_instance,
+  schema_defined_list_instance))
+  SUBTYPE OF (ordered_collection);
+END_ENTITY;
+
+ENTITY schema_defined_list_instance
+  SUBTYPE OF (list_instance);
+END_ENTITY;
+
+ENTITY non_persistent_list_instance
+  SUBTYPE OF (list_instance);
+END_ENTITY;
+
+ENTITY array_instance
+  SUPERTYPE OF (ONEOF(application_indexed_array_instance))
+  SUBTYPE OF (ordered_collection);
+END_ENTITY;
+
+ENTITY application_indexed_array_instance
+  SUBTYPE OF (array_instance);
+END_ENTITY;
+
+END_SCHEMA; -- SDAI_parameter_data_schema

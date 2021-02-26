@@ -1,0 +1,19 @@
+(*
+ $Id: 10303-1159-mim-Class_of_connection_of_product.exp,v 1.4 2006/08/04 12:11:54 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2733 - ISO/TS 10303-1159 Class of connection of product - EXPRESS MIM
+ Supersedes ISO TC184/SC4/WG12 N1966
+*)
+
+SCHEMA Class_of_connection_of_product_mim;
+
+USE FROM Class_mim;    --  ISO/TS 10303-1070
+USE FROM Class_of_product_mim;    --  ISO/TS 10303-1077
+USE FROM Product_version_relationship_mim;    --  ISO/TS 10303-1020
+
+ENTITY class_of_connection_of_product
+  SUBTYPE OF (product_definition_formation_relationship, class);
+  SELF\product_definition_formation_relationship.relating_product_definition_formation : class_of_product;
+  SELF\product_definition_formation_relationship.related_product_definition_formation : class_of_product;
+END_ENTITY;
+
+END_SCHEMA;

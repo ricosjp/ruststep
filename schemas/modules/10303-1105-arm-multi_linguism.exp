@@ -1,0 +1,34 @@
+(* 
+ $Id: 10303-1105-arm-multi_linguism.exp,v 1.1 2006/08/07 07:44:43 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N3242 - ISO/TS 10303-1105 Multi linguism - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG12 N2223
+*)
+
+SCHEMA Multi_linguism_arm;
+
+TYPE string_select = EXTENSIBLE GENERIC_ENTITY SELECT;
+END_TYPE;
+
+ENTITY Language;
+  language_code : STRING;
+  country_code : OPTIONAL STRING;
+UNIQUE
+  UR1: language_code;
+END_ENTITY;
+
+ENTITY Language_indication;
+   considered_instance: string_select;
+   considered_attribute: STRING;
+   used_language:  Language;
+END_ENTITY;
+
+ENTITY Attribute_translation_assignment;
+   considered_instance: string_select;
+   considered_attribute: STRING;
+   translation_text : STRING;
+   translation_language: Language;
+UNIQUE
+  UR1: considered_instance, considered_attribute, translation_language;
+END_ENTITY;
+
+END_SCHEMA; -- Multi_linguism_arm

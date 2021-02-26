@@ -1,0 +1,54 @@
+(*
+ $Id: 10303-1294-mim-Interface_lifecycle.exp,v 1.2 2006/08/07 09:42:06 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N3065 - ISO/TS 10303-1294 Interface lifecycle - EXPRESS MIM
+ Supersedes ISO TC184/SC4/WG12 N2277
+*) 
+
+
+SCHEMA Interface_lifecycle_mim;
+
+USE FROM Interface_mim;    -- ISO/TS 10303-1251
+
+USE FROM product_definition_schema   -- ISO 10303-41
+  (product_definition_formation,
+   product_definition_formation_relationship); 
+
+
+ENTITY interface_connector_as_planned
+  SUBTYPE OF (product_definition_formation);
+END_ENTITY;
+
+ENTITY interface_connector_as_realized
+  SUBTYPE OF (product_definition_formation);
+END_ENTITY;
+
+ENTITY interface_connector_design
+  SUBTYPE OF (product_definition_formation);
+END_ENTITY;
+
+ENTITY interface_connector_design_to_planned
+  SUBTYPE OF (product_definition_formation_relationship);
+  SELF\product_definition_formation_relationship.relating_product_definition_formation : interface_connector_design;
+  SELF\product_definition_formation_relationship.related_product_definition_formation : interface_connector_as_planned;
+WHERE
+  WR1: SELF.relating_product_definition_formation.of_product :=: SELF.related_product_definition_formation.of_product;
+END_ENTITY;
+
+ENTITY interface_connector_design_to_realized
+  SUBTYPE OF (product_definition_formation_relationship);
+  SELF\product_definition_formation_relationship.relating_product_definition_formation : interface_connector_design;
+  SELF\product_definition_formation_relationship.related_product_definition_formation : interface_connector_as_realized;
+WHERE
+  WR1: SELF.relating_product_definition_formation.of_product :=: SELF.related_product_definition_formation.of_product;
+END_ENTITY;
+
+ENTITY interface_connector_planned_to_realized
+  SUBTYPE OF (product_definition_formation_relationship);
+  SELF\product_definition_formation_relationship.relating_product_definition_formation : interface_connector_as_planned;
+  SELF\product_definition_formation_relationship.related_product_definition_formation : interface_connector_as_realized;
+WHERE
+  WR1: SELF.relating_product_definition_formation.of_product :=: SELF.related_product_definition_formation.of_product;
+END_ENTITY;
+
+END_SCHEMA;  -- Interface_lifecycle_mim
+

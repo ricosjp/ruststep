@@ -1,0 +1,12 @@
+(*
+ $Id: 10303-1010-mim-date_time.exp,v 1.5 2006/08/07 09:42:02 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N1082 - ISO/TS 10303-1010 Date time - EXPRESS MIM
+*)       
+SCHEMA Date_time_mim;
+USE FROM date_time_schema -- ISO 10303-41
+  (calendar_date,
+   date_and_time,
+   coordinated_universal_time_offset);
+
+END_SCHEMA;
+

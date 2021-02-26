@@ -1,0 +1,23 @@
+(*
+ $Id: 10303-1085-mim-Property_identification.exp,v 1.4 2006/08/04 12:11:54 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2817 - ISO/TS 10303-1085 Property identification - EXPRESS MIM
+ Supersedes ISO TC184/SC4/WG12 N2055
+*)
+
+SCHEMA Property_identification_mim;
+
+USE FROM Independent_property_definition_mim;    --  ISO/TS 10303-1099
+USE FROM Maths_space_mim;    --  ISO/TS 10303-1091
+USE FROM Maths_value_mim;    --  ISO/TS 10303-1092
+USE FROM Property_space_mim;    --  ISO/TS 10303-1080
+USE FROM mathematical_context_schema    --  ISO 10303-51
+  (compound_maths_space_context,
+   defined_maths_space_context,
+   explicitly_enumerated_maths_space_context,
+   maths_space_context,
+   maths_value_context,
+   membership_of_maths_space_context,
+   representation_context_defined_maths_space_context,
+   unit_defined_maths_space_context); 
+
+END_SCHEMA;

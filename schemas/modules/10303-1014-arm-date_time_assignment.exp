@@ -1,0 +1,20 @@
+(*
+ $Id: 10303-1014-arm-date_time_assignment.exp,v 1.5 2006/08/07 07:44:41 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N1093 - ISO/TS 10303-1014 Date time assignment - EXPRESS ARM
+*)
+SCHEMA Date_time_assignment_arm;
+
+USE FROM Date_time_arm; -- ISO/TS 10303-1010
+
+   
+TYPE date_or_date_time_item = EXTENSIBLE SELECT;
+END_TYPE;
+   
+ENTITY Date_or_date_time_assignment;
+  assigned_date : date_or_date_time_select;
+  role          : STRING;
+  items         : SET [1:?] OF date_or_date_time_item;
+END_ENTITY;
+  
+END_SCHEMA;
+

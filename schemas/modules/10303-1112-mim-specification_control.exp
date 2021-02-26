@@ -1,0 +1,142 @@
+(* 
+   $Id: 10303-1112-mim-specification_control.exp,v 1.1 2006/08/03 15:03:35 wg12deputy Exp $
+   ISO/TC184/SC4 WG12N2623 - ISO/TS 10303-1112 Specification control - Express MIM 
+   Supersedes ISO TC184/SC4/WG12N1770
+*)
+
+SCHEMA Specification_control_mim;
+
+USE FROM Alternative_solution_mim;
+
+USE FROM Effectivity_application_mim;
+
+USE FROM Functional_breakdown_mim;
+
+USE FROM Part_collection_mim;
+
+USE FROM Product_occurrence_mim;
+
+USE FROM Product_placement_mim;
+
+USE FROM Physical_breakdown_mim;
+
+USE FROM Requirement_identification_and_version_mim;
+
+USE FROM Specification_based_configuration_mim;
+
+USE FROM Specified_product_mim;
+
+
+TYPE class_usage_effectivity_context_item = SELECT
+  (product_definition);
+END_TYPE;
+
+TYPE effectivity_specification_for_replacement  = SELECT BASED_ON effectivity_item WITH
+  (product_definition_substitute);
+END_TYPE;
+
+TYPE instance_usage_context_select  = EXTENSIBLE GENERIC_ENTITY SELECT 
+  (product_definition_relationship,
+   product_definition_usage);
+END_TYPE;
+
+
+ENTITY class_usage_effectivity_context_assignment 
+SUBTYPE OF (effectivity_context_assignment); 
+items : SET [1:?] OF class_usage_effectivity_context_item; 
+WHERE 
+WR1: SELF.role.name = 'class usage influence'; 
+WR2: SIZEOF( QUERY( i <* SELF.items | NOT ('SPECIFICATION_CONTROL_MIM.PRODUCT_DEFINITION' IN TYPEOF(i)) )) = 0; 
+WR3: ('SPECIFICATION_CONTROL_MIM.APPLIED_EFFECTIVITY_ASSIGNMENT' IN TYPEOF(SELF.assigned_effectivity_assignment)) AND 
+  (SIZEOF(TYPEOF(SELF.assigned_effectivity_assignment.assigned_effectivity) ) = 1) AND 
+  (SELF.assigned_effectivity_assignment.assigned_effectivity.id = 'class usage') AND 
+ (SIZEOF( QUERY( i <* SELF.assigned_effectivity_assignment\applied_effectivity_assignment.items | 
+   NOT('SPECIFICATION_CONTROL_MIM.PRODUCT_CONCEPT_FEATURE_CATEGORY_USAGE' IN TYPEOF(i)) )) = 0); 
+END_ENTITY; 
+
+ENTITY instance_usage_context_assignment 
+SUBTYPE OF (product_definition_context); 
+items : SET [1:?] OF instance_usage_context_select; 
+END_ENTITY; 
+
+
+RULE breakdown_element_requires_product_definition FOR 
+	(product_definition_formation);
+WHERE
+WR1: SIZEOF ( QUERY ( pdf <* product_definition_formation | 
+     ( SIZEOF ( QUERY ( prpc <* USEDIN ( pdf.of_product ,
+     'SPECIFICATION_CONTROL_MIM.PRODUCT_RELATED_PRODUCT_CATEGORY.PRODUCTS' ) | 
+	prpc.name =  'functionality' ) ) =  1 ) AND 
+	( SIZEOF ( QUERY ( pd <* USEDIN ( pdf ,'SPECIFICATION_CONTROL_MIM.PRODUCT_DEFINITION.FORMATION') | 
+	pd.frame_of_reference.name =  'functional definition' ) ) <1 ) ) ) =  0;
+WR2: SIZEOF ( QUERY ( pdf <* product_definition_formation | 
+     ( SIZEOF ( QUERY ( prpc <* USEDIN ( pdf.of_product , 
+	'SPECIFICATION_CONTROL_MIM.PRODUCT_RELATED_PRODUCT_CATEGORY.PRODUCTS' ) | 
+     prpc.name =  'conceptual design' ) ) =  1 ) AND 
+     ( SIZEOF (QUERY ( pd <* USEDIN ( pdf , 'SPECIFICATION_CONTROL_MIM.PRODUCT_DEFINITION.FORMATION' ) | 
+     pd.frame_of_reference.name =  'conceptual definition' ) ) <1) ) ) =  0;
+END_RULE;
+
+RULE restrict_product_definitions_for_design_constraint_association FOR
+    (product_definition_relationship);
+WHERE
+WR1: SIZEOF ( QUERY ( pdr <* product_definition_relationship |
+     ( pdr. name = 'design constraint association' ) AND 
+	( (pdr. relating_product_definition.frame_of_reference.name<>'design constraint definition' ) OR 
+	NOT ( pdr.related_product_definition.frame_of_reference.name IN 
+	['alternative definition' , 'functional definition' ,'conceptual definition' ] ) ) ) ) =0;
+END_RULE;
+
+RULE constraint_definition_requires_constraint_category FOR (product_definition);
+LOCAL
+  constraint_definitions: SET OF product_definition := [];
+END_LOCAL;
+  constraint_definitions :=  QUERY( pd <* product_definition |
+	(pd.frame_of_reference.name = 'design constraint definition'));
+WHERE
+WR1: SIZEOF ( QUERY ( pd <* constraint_definitions | 
+	( SIZEOF ( QUERY ( prpc <* USEDIN ( pd.formation.of_product ,
+     'SPECIFICATION_CONTROL_MIM.PRODUCT_RELATED_PRODUCT_CATEGORY.PRODUCTS' ) | 
+	prpc. name ='requirement' ) ) =0 ) ) ) =0;
+END_RULE;
+
+RULE design_constraint_requires_product_definition 
+    FOR (product_definition_formation);
+WHERE
+WR1: SIZEOF ( QUERY ( pdf <* product_definition_formation | (
+     SIZEOF ( QUERY ( prpc <* USEDIN ( pdf.of_product ,
+     'SPECIFICATION_CONTROL_MIM.PRODUCT_RELATED_PRODUCT_CATEGORY.PRODUCTS' ) | 
+	prpc.name =  'requirement' ) ) >0 ) AND 
+     ( SIZEOF ( QUERY ( pd <* USEDIN ( pdf , 'SPECIFICATION_CONTROL_MIM.PRODUCT_DEFINITION.FORMATION') | 
+	pd.frame_of_reference.name = 'design constraint definition' ) ) <1 ) ) ) =  0;
+END_RULE; 
+
+RULE restrict_configuration_design_for_design_constraint FOR (configuration_design); 
+WHERE 
+WR1: SIZEOF ( QUERY (cd <* configuration_design | 
+	(cd.name = 'design constraint usage') AND 
+	(NOT('SPECIFICATION_CONTROL_MIM.PRODUCT_DEFINITION' IN TYPEOF ( cd.design ) ) OR 
+	(cd.design\product_definition.frame_of_reference.name <> 'design constraint definition')))) = 0; 
+END_RULE;
+
+RULE restrict_configuration_design_for_class_breakdown_association FOR
+    (configuration_design);
+WHERE
+WR1: SIZEOF ( QUERY ( cd <* configuration_design | 
+	( cd.name ='functionality' ) AND 
+	( NOT ( 'SPECIFICATION_CONTROL_MIM.PRODUCT_DEFINITION' IN TYPEOF ( cd. design ) ) OR 
+	( cd.design\product_definition.frame_of_reference.name<> 'functional definition' ) ) 
+	) ) =0;
+WR2: SIZEOF ( QUERY ( cd <* configuration_design | 
+	( cd.name='realization' ) AND 
+	( NOT ( 'SPECIFICATION_CONTROL_MIM.PRODUCT_DEFINITION' IN TYPEOF ( cd.design ) ) OR 
+	( cd.design\product_definition.frame_of_reference.name<> 'conceptual definition' ) ) 
+	) ) =0;
+WR3: SIZEOF ( QUERY ( cd <* configuration_design | 
+	( cd.name IN ['functionality' , 'realization'] ) AND 
+	( NOT ('SPECIFICATION_CONTROL_MIM.PRODUCT_CLASS' IN TYPEOF ( cd.configuration.item_concept ) ) ) 
+	) ) =0;
+END_RULE;
+
+END_SCHEMA;
+

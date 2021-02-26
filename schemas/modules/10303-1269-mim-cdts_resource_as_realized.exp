@@ -1,0 +1,31 @@
+(*
+  $Id: 10303-1269-mim-cdts_resource_as_realized.exp,v 1.1 2003/07/15 09:43:14 wg12deputy Exp $
+  ISO/TC184/SC4 WG12N1473 - ISO/TS - 10303-1269 Resource as realized - EXPRESS MIM 
+*)
+
+SCHEMA Resource_as_realized_mim;
+
+USE FROM action_schema
+(action_method,
+ action_resource,
+ action_resource_relationship);
+
+USE FROM Activity_method_assignment_mim;
+
+USE FROM Classification_assignment_mim;
+
+USE FROM Required_resource_mim;
+
+USE FROM Resource_item_mim;
+
+USE FROM Resource_management_mim;
+
+USE FROM Value_with_unit_mim;
+
+TYPE resource_as_realized_classification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON classification_item WITH
+(action_method,
+ action_resource,
+ action_resource_relationship);
+END_TYPE;
+
+END_SCHEMA;

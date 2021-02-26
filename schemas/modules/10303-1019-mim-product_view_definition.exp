@@ -1,0 +1,26 @@
+(*
+ $Id: 10303-1019-mim-product_view_definition.exp,v 1.5 2006/08/07 09:42:02 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2928 - ISO/TS 10303-1019 Product view definition - EXPRESS MIM
+*) 
+
+
+SCHEMA Product_view_definition_mim;
+
+USE FROM application_context_schema   -- ISO 10303-41
+  (product_definition_context); 
+
+USE FROM basic_attribute_schema   -- ISO 10303-41
+  (name_attribute,
+   name_attribute_select); 
+
+USE FROM product_definition_schema   -- ISO 10303-41
+  (product_definition,
+   product_definition_context_association); 
+
+USE FROM Product_version_mim;    -- ISO/TS 10303-1018
+
+REFERENCE FROM support_resource_schema   -- ISO 10303-41
+  (bag_to_set); 
+
+
+END_SCHEMA;  -- Product_view_definition_mim

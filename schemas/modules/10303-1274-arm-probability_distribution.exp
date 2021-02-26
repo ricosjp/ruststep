@@ -1,0 +1,64 @@
+(*
+ $Id: 10303-1274-arm-probability_distribution.exp,v 1.2 2006/08/07 07:44:46 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N3103 - ISO/TS 10303-1274 Probability distribution - EXPRESS ARM
+ Supersedes ISO TC184/SC4/WG12 N2408
+*) 
+
+
+SCHEMA Probability_distribution_arm;
+
+USE FROM Classification_assignment_arm;    -- ISO/TS 10303-1114
+
+USE FROM Measure_representation_arm;    -- ISO/TS 10303-1118
+
+USE FROM Probability_arm;    -- ISO/TS 10303-1252
+
+
+TYPE probability_distribution_classification = SELECT BASED_ON classification_item WITH 
+   (Probability_distribution);
+END_TYPE; 
+
+ENTITY Distribution_by_value
+  SUBTYPE OF (Probability_distribution);
+  defined_function : Value_function;
+  distribution_function : STRING;
+END_ENTITY;
+
+ENTITY Function_value_pair;
+  function_value : Probability_function_value;
+  variable_value : Random_variable;
+END_ENTITY;
+
+ENTITY Parameterized_distribution
+  SUBTYPE OF (Probability_distribution);
+  has_parameters : LIST[1:?] OF Probability_distribution_parameter;
+  parameterization_name : STRING;
+END_ENTITY;
+
+ENTITY Probability_distribution
+  ABSTRACT SUPERTYPE 
+  SUBTYPE OF (Probability_generator);
+  distribution_name : OPTIONAL STRING;
+  is_continuous : STRING;
+  mean : REAL;
+  variance : REAL;
+END_ENTITY;
+
+ENTITY Probability_distribution_parameter
+  SUBTYPE OF (Numerical_item_with_global_unit);
+END_ENTITY;
+
+ENTITY Probability_function_value
+  SUBTYPE OF (Numerical_item_with_global_unit);
+END_ENTITY;
+
+ENTITY Random_variable
+  SUBTYPE OF (Numerical_item_with_global_unit);
+END_ENTITY;
+
+ENTITY Value_function;
+  function_element : LIST[1:?] OF Function_value_pair;
+END_ENTITY;
+
+END_SCHEMA;  -- Probability_distribution_arm
+

@@ -1,0 +1,27 @@
+(*
+ $Id: 10303-1207-mim-drawing_structure_and_administration.exp,v 1.1 2006/08/04 12:11:55 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N2778 - ISO/TS 10303-1207 Drawing structure and administration - EXPRESS MIM
+ Supersedes ISO TC184/SC4/WG12 N2202
+*)
+
+SCHEMA Drawing_structure_and_administration_mim;
+
+USE FROM Foundation_representation_mim;    --  ISO/TS 10303-1006
+(* USE FROM Approval_mim;    --  ISO/TS 10303-1012 *)
+USE FROM aic_drawing_structure_and_administration;    --  ISO 10303-505
+
+(* 
+
+TYPE draughting_approval_item = SELECT BASED_ON approval_item WITH 
+   (drawing_revision, 
+    drawing_sheet_revision);
+END_TYPE; 
+
+ENTITY draughting_approval_assignment
+  SUBTYPE OF (applied_approval_assignment);
+  SELF\applied_approval_assignment.items : SET[1:?] OF draughting_approval_item;
+END_ENTITY;
+
+*)
+
+END_SCHEMA;

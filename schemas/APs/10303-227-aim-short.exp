@@ -1,0 +1,3189 @@
+	-- AIM EXPRESS short form for ISO/IS 10303-227:2000
+	-- Mark Palmer
+	-- 2000-08-01
+	-- ISO TC184/SC4/WG3/N937
+	-- Supercedes: None
+
+SCHEMA plant_spatial_configuration;
+
+USE FROM action_schema
+  (action_directive,
+   action_method_relationship,
+   action_relationship,
+   action_request_solution,
+   action_request_status,
+   action_status,
+   directed_action,
+   versioned_action_request);
+
+USE FROM application_context_schema
+  (application_context,
+   application_protocol_definition,
+   product_context,
+   product_definition_context);
+
+USE FROM approval_schema
+  (approval,
+   approval_date_time,
+   approval_person_organization);
+
+USE FROM basic_attribute_schema
+  (description_attribute,
+   id_attribute,
+   name_attribute,
+   role_association);
+
+USE FROM date_time_schema
+  (calendar_date,
+   date_and_time);
+
+USE FROM document_schema
+  (document,
+   document_relationship,
+   document_usage_constraint);
+
+USE FROM external_reference_schema
+  (external_source,
+   externally_defined_item,
+   externally_defined_item_relationship,
+   pre_defined_item);
+
+USE FROM geometric_model_schema
+  (block,
+   boolean_operator,
+   boolean_operand,
+   boolean_result,
+   brep_with_voids,
+   csg_solid,
+   cyclide_segment_solid,
+   eccentric_cone,
+   ellipsoid,
+   extruded_area_solid,
+   extruded_face_solid,
+   faceted_brep,
+   geometric_curve_set,
+   geometric_set,
+   geometric_set_replica,
+   manifold_solid_brep,
+   rectangular_pyramid,   
+   revolved_area_solid,
+   revolved_face_solid,
+   right_angular_wedge,
+   right_circular_cone,
+   right_circular_cylinder,
+   shell_based_wireframe_model,
+   solid_model,
+   sphere,
+   swept_face_solid,
+   swept_area_solid,
+   torus);
+
+USE FROM geometry_schema
+  (axis2_placement_2d,
+   axis2_placement_3d,
+   b_spline_curve,
+   b_spline_curve_with_knots,
+   b_spline_surface,
+   b_spline_surface_with_knots,
+   bezier_curve,
+   bezier_surface,
+   boundary_curve,
+   bounded_pcurve,
+   bounded_surface_curve,
+   cartesian_point,
+   circle,
+   composite_curve,
+   composite_curve_on_surface,
+   composite_curve_segment,
+    conical_surface,
+   curve_bounded_surface,
+   curve_replica,
+   cylindrical_surface,
+   degenerate_pcurve,
+   degenerate_toroidal_surface,
+   direction,
+   ellipse,
+   evaluated_degenerate_pcurve,
+   geometric_representation_context,
+   geometric_representation_item,
+   hyperbola,
+   intersection_curve,
+   line,
+   offset_curve_2d,
+   offset_curve_3d,
+   offset_surface,
+   outer_boundary_curve,
+   parabola,
+   pcurve,
+   plane,
+   point,
+   point_on_curve,
+   point_on_surface,
+   point_replica,
+   polyline,
+   quasi_uniform_curve,
+   quasi_uniform_surface,
+   rational_b_spline_curve,
+   rational_b_spline_surface,
+   reparametrised_composite_curve_segment,
+   rectangular_composite_surface,
+   rectangular_trimmed_surface,
+   seam_curve,
+   spherical_surface,
+   surface_curve,
+   surface_of_linear_extrusion,
+   surface_of_revolution,
+   surface_patch,
+   surface_replica,
+   toroidal_surface,
+   trimmed_curve,
+   uniform_curve,
+   uniform_surface);
+
+USE FROM group_schema
+  (group,
+   group_relationship);
+
+USE FROM management_resources_schema
+  (action_assignment,
+   action_request_assignment,
+   approval_assignment,
+   classification_assignment,
+   date_and_time_assignment,
+   date_assignment,
+   document_reference,
+   group_assignment,
+   name_assignment,
+   organization_assignment,
+   person_and_organization_assignment,
+   person_assignment);
+
+USE FROM material_property_definition_schema
+  (characterized_material_property,
+   material_designation,
+   material_designation_characterization,
+   material_property,
+   product_material_composition_relationship,
+   property_definition_relationship);
+
+USE FROM material_property_representation_schema
+  (material_property_representation);
+
+USE FROM measure_schema
+  (amount_of_substance_measure,
+   amount_of_substance_measure_with_unit,
+   amount_of_substance_unit,
+   area_measure, 
+   context_dependent_measure,
+   context_dependent_unit,
+   conversion_based_unit,
+   count_measure,
+   derived_unit,
+   electric_current_measure,
+   electric_current_measure_with_unit,
+   electric_current_unit,
+   global_unit_assigned_context,
+   length_measure,
+   length_measure_with_unit,
+   length_unit,
+   luminous_intensity_measure,
+   luminous_intensity_measure_with_unit,
+   luminous_intensity_unit,
+   mass_measure,
+   mass_measure_with_unit,
+   mass_unit,
+   named_unit,
+   numeric_measure,
+   parameter_value,
+   plane_angle_measure_with_unit,
+   plane_angle_unit,
+   positive_length_measure,
+   positive_plane_angle_measure,
+   positive_ratio_measure,
+   ratio_measure,
+   ratio_measure_with_unit,
+   ratio_unit,
+   si_unit,
+   solid_angle_measure,
+   solid_angle_measure_with_unit,
+   solid_angle_unit,
+   thermodynamic_temperature_measure,
+   thermodynamic_temperature_measure_with_unit,
+   thermodynamic_temperature_unit,
+   time_measure,
+   time_measure_with_unit,
+   time_unit,
+   volume_measure
+   );
+
+USE FROM qualified_measure_schema
+  (descriptive_representation_item,
+   measure_representation_item,
+   qualified_representation_item,
+   precision_qualifier,
+   type_qualifier);
+
+USE FROM person_organization_schema
+  (organization,
+   organizational_project);
+
+USE FROM presentation_organization_schema
+  (presentation_layer_assignment);
+
+USE FROM presentation_resource_schema
+  (colour,
+   colour_rgb);
+
+USE FROM product_definition_schema
+  (product,
+   product_definition,
+   product_definition_formation,
+   product_definition_formation_relationship,
+   product_definition_formation_with_specified_source,
+   product_definition_relationship,
+   product_definition_substitute,
+   product_definition_with_associated_documents
+   );
+
+USE FROM product_property_definition_schema
+  (characterized_object,
+   product_definition_shape, 
+   property_definition, 
+   shape_aspect,
+   shape_aspect_relationship);
+
+USE FROM product_property_representation_schema
+  (item_identified_representation_usage,
+   property_definition_representation, 
+   shape_definition_representation, 
+   shape_representation);
+
+USE FROM product_structure_schema
+  (assembly_component_usage,
+   make_from_usage_option,
+   product_definition_usage);
+
+USE FROM representation_schema
+  (item_identified_representation_usage,
+   mapped_item,
+   parametric_representation_context,
+   representation,
+   representation_context,
+   representation_item,
+   representation_item_relationship);
+
+USE FROM shape_aspect_definition_schema
+  (centre_of_symmetry,
+   derived_shape_aspect,
+   symmetric_shape_aspect);
+
+USE FROM shape_dimension_schema
+  (angular_location,
+   dimensional_characteristic_representation,
+   dimensional_location,
+   dimensional_size,
+   shape_dimension_representation);
+
+USE FROM topology_schema
+  (connected_face_set,
+   edge,
+   edge_curve,
+   edge_loop,
+   face,
+   face_bound,
+   face_outer_bound,
+   face_surface,
+   loop,
+   oriented_closed_shell,
+   oriented_edge,
+   oriented_open_shell,
+   path,
+   poly_loop,
+   topological_representation_item,
+   vertex_shell,
+   wire_shell);
+
+
+TYPE approval_item = SELECT
+  (change_action,
+   versioned_action_request);
+END_TYPE;
+
+
+TYPE change_item = SELECT
+  (assembly_component_usage,
+   axis2_placement_2d,
+   axis2_placement_3d,
+   document,
+   ducting_system,
+   electrical_system,
+   externally_defined_plant_item_definition,
+   instrumentation_and_control_system,
+   line_branch_connection,
+   line_plant_item_branch_connection,
+   line_plant_item_connection,
+   line_termination_connection,
+   piping_system,
+   plant,
+   plant_item_connection,
+   plant_item_connector,
+   plant_line_definition,
+   plant_line_segment_definition,
+   plant_line_segment_termination,
+   process_capability,
+   product,
+   product_definition,
+   product_definition_relationship,
+   product_definition_shape,
+   property_definition,
+   reference_geometry,
+   site,
+   site_feature,
+   sited_plant,
+   structural_system);
+END_TYPE;
+
+
+TYPE change_life_cycle_item = SELECT
+   (directed_action);
+END_TYPE;
+
+
+TYPE classification_item = SELECT
+   (ducting_system,
+    electrical_system,
+    instrumentation_and_control_system,
+    piping_component_definition,
+    piping_system,
+    plant_item_connection,
+    plant_item_connector,
+    applied_document_reference,
+    product,
+    product_definition,
+    structural_system);
+END_TYPE;
+
+
+TYPE design_project_item = SELECT
+  (product_definition);
+END_TYPE;
+
+
+TYPE action_request_item = SELECT
+  (product);
+END_TYPE;
+
+
+TYPE date_and_time_item = SELECT
+  (change_action,
+   change_item,
+   change_life_cycle_stage_assignment,
+   product);
+END_TYPE;
+
+
+TYPE dated_item = SELECT
+  (action_directive,
+   change_action,
+   change_item,
+   product);
+END_TYPE;
+
+
+TYPE document_item = SELECT
+  (heat_tracing_representation,
+   piping_component_class,
+   piping_system,
+   plant_item_connector,
+   plant_line_segment_definition,
+   product,
+   product_definition,
+   product_definition_relationship,
+   property_definition,
+   representation,
+   representation_item,
+   site);
+END_TYPE;
+
+
+TYPE plant_spatial_configuration_organization_item = SELECT
+  (catalogue,
+   change_action,
+   design_project,
+   document,
+   plant,
+   product_definition_formation,
+   product_definition_relationship,
+   site);
+END_TYPE;
+
+
+TYPE plant_spatial_configuration_person_item = SELECT
+  (document,
+   plant,
+   product_definition_relationship,
+   site);
+END_TYPE;
+
+
+TYPE plant_spatial_configuration_person_and_organization_item = SELECT
+  (change_item,
+   plant,
+   site);
+END_TYPE;
+
+
+TYPE purchase_item = SELECT
+  (product);
+END_TYPE;
+
+
+ENTITY blank_fitting_class
+  SUBTYPE OF (group);
+WHERE
+  WR1: SIZEOF (QUERY (aca <* QUERY (ca <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.CLASSIFICATION_ASSIGNMENT.' + 
+       'ASSIGNED_CLASSIFICATION') |
+       'PLANT_SPATIAL_CONFIGURATION.APPLIED_CLASSIFICATION_ASSIGNMENT' IN 
+       TYPEOF (ca)) |
+       NOT (SIZEOF (QUERY (it <* aca.items |
+       NOT ('PLANT_SPATIAL_CONFIGURATION.PIPING_COMPONENT_DEFINITION' IN
+       TYPEOF (it)))) = 0))) = 0;
+  WR2: SIZEOF (QUERY (aca <* QUERY (ca <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.CLASSIFICATION_ASSIGNMENT.' +
+       'ASSIGNED_CLASSIFICATION') |
+       'PLANT_SPATIAL_CONFIGURATION.APPLIED_CLASSIFICATION_ASSIGNMENT' IN 
+       TYPEOF (ca)) |
+       NOT (SIZEOF (QUERY (pcd <* QUERY (it <* aca.items |
+       'PLANT_SPATIAL_CONFIGURATION.PIPING_COMPONENT_DEFINITION' IN
+       TYPEOF (it)) |
+       NOT (SIZEOF (QUERY (aca1 <* USEDIN (pcd.formation.of_product,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+        'APPLIED_CLASSIFICATION_ASSIGNMENT.ITEMS') |
+       class_in_tree (aca1.assigned_classification, 'blank'))) = 1))) = 0))) =
+0;
+END_ENTITY;
+
+
+ENTITY catalogue
+  SUBTYPE OF (document, external_source);
+END_ENTITY;
+
+
+ENTITY catalogue_connector
+  SUBTYPE OF (shape_aspect, externally_defined_item);
+WHERE
+  WR1: 'PLANT_SPATIAL_CONFIGURATION.CHARACTERIZED_OBJECT' IN 
+       TYPEOF (SELF.of_shape);
+  WR2: 'PLANT_SPATIAL_CONFIGURATION.CATALOGUE' IN TYPEOF (SELF.source);
+END_ENTITY;
+
+
+ENTITY catalogue_item
+  SUBTYPE OF (externally_defined_plant_item_definition);
+WHERE
+  WR1: 'PLANT_SPATIAL_CONFIGURATION.CATALOGUE' IN TYPEOF (SELF.source);
+  WR2: SELF.frame_of_reference.name = 'physical definition';
+END_ENTITY;
+
+
+ENTITY change_action
+  SUBTYPE OF (directed_action);
+WHERE
+  WR1: SIZEOF (QUERY (ca <* USEDIN (SELF, 'PLANT_SPATIAL_CONFIGURATION.' +
+       'ACTION_ASSIGNMENT.ASSIGNED_ACTION') |
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PLANT_SPATIAL_CONFIGURATION_CHANGE_ASSIGNMENT' IN 
+       TYPEOF (ca))) >= 1;
+  WR2: SIZEOF (QUERY (ar <* SELF\directed_action.directive.requests |
+       NOT (SIZEOF (USEDIN (ar, 'PLANT_SPATIAL_CONFIGURATION.' +
+       'ACTION_REQUEST_SOLUTION.REQUEST')) = 1))) = 0;
+  WR3: SIZEOF (USEDIN (SELF, 'PLANT_SPATIAL_CONFIGURATION.ACTION_STATUS.' +
+       'ASSIGNED_ACTION')) = 1;
+END_ENTITY;
+
+
+ENTITY change_item_id_assignment
+  SUBTYPE OF (name_assignment);
+  items : SET [1:?] OF change_item;
+END_ENTITY;
+
+
+ENTITY change_life_cycle_stage_assignment
+  SUBTYPE OF (group_assignment);
+  items : SET [1:?] OF change_life_cycle_item;
+END_ENTITY;
+
+
+ENTITY applied_classification_assignment
+  SUBTYPE OF (classification_assignment);
+  items : SET [1:?] OF classification_item;
+WHERE
+  WR1: (NOT (SIZEOF (QUERY (item <* SELF.items |
+       NOT ('PLANT_SPATIAL_CONFIGURATION.PLANT_ITEM_CONNECTION' IN
+       TYPEOF(item)))) = 0)) OR 
+       (SIZEOF (TYPEOF (SELF.assigned_classification) *
+       ['PLANT_SPATIAL_CONFIGURATION.CONNECTION_FUNCTIONAL_CLASS',
+       'PLANT_SPATIAL_CONFIGURATION.CONNECTION_MOTION_CLASS'])
+       >= 1);
+  WR2: (NOT (SIZEOF (QUERY (item <* SELF.items | 
+       NOT ('PLANT_SPATIAL_CONFIGURATION.PLANT_ITEM_CONNECTOR' IN
+       TYPEOF(item)))) = 0)) OR
+       (SIZEOF (TYPEOF (SELF.assigned_classification) *
+       ['PLANT_SPATIAL_CONFIGURATION.CONNECTOR_END_TYPE_CLASS',
+       'PLANT_SPATIAL_CONFIGURATION.ELECTRICAL_CONNECTOR_CLASS',
+       'PLANT_SPATIAL_CONFIGURATION.PIPING_CONNECTOR_CLASS',
+       'PLANT_SPATIAL_CONFIGURATION.EXTERNALLY_DEFINED_CLASS',
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'STRUCTURAL_LOAD_CONNECTOR_CLASS']) >= 1);
+  WR3: (NOT (SIZEOF (QUERY (item <* SELF.items |
+       NOT ('PLANT_SPATIAL_CONFIGURATION.PIPING_COMPONENT_DEFINITION' IN
+       TYPEOF(item)))) = 0)) OR
+       (SIZEOF (TYPEOF (SELF.assigned_classification) *
+       ['PLANT_SPATIAL_CONFIGURATION.BLANK_FITTING_CLASS',
+       'PLANT_SPATIAL_CONFIGURATION.ELBOW_FITTING_CLASS',
+       'PLANT_SPATIAL_CONFIGURATION.FLANGE_FITTING_CLASS',
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'FLANGE_FITTING_NECK_TYPE_CLASS',
+       'PLANT_SPATIAL_CONFIGURATION.PIPE_CLOSURE_FITTING_CLASS',
+       'PLANT_SPATIAL_CONFIGURATION.PIPE_CLASS',
+       'PLANT_SPATIAL_CONFIGURATION.REDUCER_FITTING_CLASS',
+       'PLANT_SPATIAL_CONFIGURATION.SPACER_FITTING_CLASS',
+       'PLANT_SPATIAL_CONFIGURATION.SPECIALTY_ITEM_CLASS',
+       'PLANT_SPATIAL_CONFIGURATION.SWAGE_FITTING_CLASS',
+       'PLANT_SPATIAL_CONFIGURATION.VALVE_CLASS']) >= 1);
+END_ENTITY;
+
+
+ENTITY connection_functional_class
+  SUBTYPE OF (group);
+END_ENTITY;
+
+
+ENTITY connection_motion_class
+  SUBTYPE OF (group);
+WHERE
+  WR1: SELF.name IN ['flexible', 'locked orientation'];
+END_ENTITY;
+
+
+ENTITY connection_node
+  SUBTYPE OF (shape_aspect);
+WHERE
+  WR1: 'PLANT_SPATIAL_CONFIGURATION.PIPING_SYSTEM'
+       IN TYPEOF (SELF.of_shape.definition);
+  WR2: SIZEOF (QUERY (sar <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.SHAPE_ASPECT_RELATIONSHIP.' +
+       'RELATING_SHAPE_ASPECT') |
+       'PLANT_SPATIAL_CONFIGURATION.LINE_TERMINATION_CONNECTION' IN
+       TYPEOF (sar))) >= 2;
+END_ENTITY;
+
+
+ENTITY connector_end_type_class
+  SUBTYPE OF (group);
+END_ENTITY;
+
+
+ENTITY descriptive_colour
+  SUBTYPE OF (colour, descriptive_representation_item);
+END_ENTITY;
+
+
+ENTITY design_project
+  SUBTYPE OF (organization);
+WHERE
+  WR1: SIZEOF (USEDIN (SELF, 'PLANT_SPATIAL_CONFIGURATION.' +
+       'ORGANIZATION_ASSIGNMENT.ASSIGNED_ORGANIZATION')) >= 1;
+END_ENTITY;
+
+
+ENTITY design_project_assignment
+  SUBTYPE OF (organization_assignment);
+  items : SET [1:?] OF design_project_item;
+WHERE
+  WR1: 'PLANT_SPATIAL_CONFIGURATION.DESIGN_PROJECT' IN
+       TYPEOF (SELF.assigned_organization);
+END_ENTITY;
+
+
+ENTITY ducting_system
+  SUBTYPE OF (product_definition);
+WHERE
+  WR1: SIZEOF (QUERY (pdr <* USEDIN (SELF, 'PLANT_SPATIAL_CONFIGURATION.' +
+       'PRODUCT_DEFINITION_RELATIONSHIP.RELATED_PRODUCT_DEFINITION') |
+       ('PLANT_SPATIAL_CONFIGURATION.PLANT' IN TYPEOF
+       (pdr.relating_product_definition.formation.of_product)) AND
+       (pdr.relating_product_definition.frame_of_reference.name =
+       'functional occurrence'))) = 1;
+END_ENTITY;
+
+
+ENTITY elbow_fitting_class
+  SUBTYPE OF (group);
+WHERE
+  WR1: SIZEOF (QUERY (aca <* QUERY (ca <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' + 
+       'CLASSIFICATION_ASSIGNMENT.ASSIGNED_CLASSIFICATION') |
+       'PLANT_SPATIAL_CONFIGURATION.APPLIED_CLASSIFICATION_ASSIGNMENT' IN 
+       TYPEOF (ca)) |
+       NOT (SIZEOF (QUERY (it <* aca.items |
+       NOT ('PLANT_SPATIAL_CONFIGURATION.PIPING_COMPONENT_DEFINITION' IN
+       TYPEOF (it)))) = 0))) = 0;
+  WR2: SIZEOF (QUERY (aca <* QUERY (ca <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.CLASSIFICATION_ASSIGNMENT.' + 
+       'ASSIGNED_CLASSIFICATION') |
+       'PLANT_SPATIAL_CONFIGURATION.APPLIED_CLASSIFICATION_ASSIGNMENT' IN 
+       TYPEOF (ca)) |
+       NOT (SIZEOF (QUERY (pcd <* QUERY (it <* aca.items |
+       'PLANT_SPATIAL_CONFIGURATION.PIPING_COMPONENT_DEFINITION' IN
+       TYPEOF (it)) |
+       NOT (SIZEOF (QUERY (aca1 <* USEDIN (pcd.formation.of_product,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'APPLIED_CLASSIFICATION_ASSIGNMENT.ITEMS') |
+       class_in_tree (aca1.assigned_classification, 'elbow'))) = 1))) = 0))) =
+0;
+END_ENTITY;
+
+
+ENTITY electrical_connector_class
+  SUBTYPE OF (group);
+END_ENTITY;
+
+
+ENTITY electrical_system
+  SUBTYPE OF (product_definition);
+WHERE
+  WR1: SIZEOF (QUERY (pdr <* USEDIN (SELF, 'PLANT_SPATIAL_CONFIGURATION.' +
+       'PRODUCT_DEFINITION_RELATIONSHIP.RELATED_PRODUCT_DEFINITION') |
+       ('PLANT_SPATIAL_CONFIGURATION.PLANT' IN TYPEOF
+       (pdr.relating_product_definition.formation.of_product)) AND
+       (pdr.relating_product_definition.frame_of_reference.name =
+       'functional occurrence'))) = 1;
+END_ENTITY;
+
+
+ENTITY externally_defined_class
+  SUBTYPE OF (group, externally_defined_item);
+WHERE
+  WR1: SIZEOF (QUERY (aca <* QUERY (ca <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.CLASSIFICATION_ASSIGNMENT.' + 
+       'ASSIGNED_CLASSIFICATION') |
+       'PLANT_SPATIAL_CONFIGURATION.APPLIED_CLASSIFICATION_ASSIGNMENT' IN 
+       TYPEOF (ca)) |
+       NOT (SIZEOF (QUERY (it <* aca.items |
+       NOT ((SIZEOF (TYPEOF (it) *
+       ['PLANT_SPATIAL_CONFIGURATION.ELECTRICAL_SYSTEM',
+       'PLANT_SPATIAL_CONFIGURATION.DUCTING_SYSTEM',
+       'PLANT_SPATIAL_CONFIGURATION.INSTRUMENTATION_AND_CONTROL_SYSTEM',
+       'PLANT_SPATIAL_CONFIGURATION.PIPING_SYSTEM',
+       'PLANT_SPATIAL_CONFIGURATION.PLANT',
+       'PLANT_SPATIAL_CONFIGURATION.PLANT_ITEM_CONNECTOR',
+       'PLANT_SPATIAL_CONFIGURATION.PIPING_COMPONENT_DEFINITION',
+       'PLANT_SPATIAL_CONFIGURATION.STRUCTURAL_SYSTEM']) = 1) OR
+       (('PLANT_SPATIAL_CONFIGURATION.PRODUCT_DEFINITION'
+       IN TYPEOF (it)) AND
+       (SIZEOF (QUERY (pc <*
+       it.formation.of_product.frame_of_reference |
+       pc.discipline_type = 'process plant')) = 1))))) = 0))) = 0;
+END_ENTITY;
+
+
+ENTITY externally_defined_plant_item_definition
+  SUBTYPE OF (product_definition, externally_defined_item);
+END_ENTITY;
+
+
+ENTITY externally_defined_representation_item
+  SUBTYPE OF (representation_item, externally_defined_item);
+END_ENTITY;
+
+
+ENTITY flange_fitting_class
+  SUBTYPE OF (group);
+WHERE
+  WR1: SIZEOF (QUERY (aca <* QUERY (ca <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'CLASSIFICATION_ASSIGNMENT.ASSIGNED_CLASSIFICATION') |
+       'PLANT_SPATIAL_CONFIGURATION.APPLIED_CLASSIFICATION_ASSIGNMENT' IN 
+       TYPEOF (ca)) |
+       NOT (SIZEOF (QUERY (it <* aca.items |
+       NOT ('PLANT_SPATIAL_CONFIGURATION.PIPING_COMPONENT_DEFINITION' IN
+       TYPEOF (it)))) = 0))) = 0;
+  WR2: SIZEOF (QUERY (aca <* QUERY (ca <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'CLASSIFICATION_ASSIGNMENT.ASSIGNED_CLASSIFICATION') |
+       'PLANT_SPATIAL_CONFIGURATION.APPLIED_CLASSIFICATION_ASSIGNMENT' IN 
+       TYPEOF (ca)) |
+       NOT (SIZEOF (QUERY (pcd <* QUERY (it <* aca.items |
+       'PLANT_SPATIAL_CONFIGURATION.PIPING_COMPONENT_DEFINITION' IN
+       TYPEOF (it)) |
+       NOT (SIZEOF (QUERY (aca1 <* USEDIN (pcd.formation.of_product,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'APPLIED_CLASSIFICATION_ASSIGNMENT.ITEMS') |
+       class_in_tree (aca1.assigned_classification, 'flange'))) = 1))) = 0)))
+= 0;
+END_ENTITY;
+
+
+ENTITY flange_fitting_neck_type_class
+  SUBTYPE OF (group);
+WHERE
+  WR1: SIZEOF (QUERY (aca <* QUERY (ca <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.CLASSIFICATION_ASSIGNMENT.' + 
+       'ASSIGNED_CLASSIFICATION') |
+       'PLANT_SPATIAL_CONFIGURATION.APPLIED_CLASSIFICATION_ASSIGNMENT' IN 
+       TYPEOF (ca)) |
+       NOT (SIZEOF (QUERY (it <* aca.items |
+       NOT ('PLANT_SPATIAL_CONFIGURATION.PIPING_COMPONENT_DEFINITION' IN
+       TYPEOF (it)))) = 0))) = 0;
+  WR2: SIZEOF (QUERY (aca <* QUERY (ca <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.CLASSIFICATION_ASSIGNMENT.' + 
+       'ASSIGNED_CLASSIFICATION') |
+       'PLANT_SPATIAL_CONFIGURATION.APPLIED_CLASSIFICATION_ASSIGNMENT' IN 
+       TYPEOF (ca)) |
+       NOT (SIZEOF (QUERY (pcd <* QUERY (it <* aca.items |
+       'PLANT_SPATIAL_CONFIGURATION.PIPING_COMPONENT_DEFINITION' IN
+       TYPEOF (it)) |
+       NOT (SIZEOF (QUERY (aca1 <* USEDIN (pcd.formation.of_product,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'APPLIED_CLASSIFICATION_ASSIGNMENT.ITEMS') |
+       class_in_tree (aca1.assigned_classification, 'flange'))) 
+       = 1))) = 0))) = 0;
+END_ENTITY;
+
+
+ENTITY heat_tracing_representation
+  SUBTYPE OF (representation);
+END_ENTITY;
+
+
+ENTITY hybrid_shape_representation
+  SUBTYPE OF (shape_representation);
+WHERE
+  WR1: SIZEOF (QUERY (i <* SELF\representation.items |
+       NOT (SIZEOF (['PLANT_SPATIAL_CONFIGURATION.BOOLEAN_RESULT',
+       'PLANT_SPATIAL_CONFIGURATION.CSG_SOLID',
+       'PLANT_SPATIAL_CONFIGURATION.RECTANGULAR_PYRAMID',
+       'PLANT_SPATIAL_CONFIGURATION.TRUNCATED_PYRAMID',
+       'PLANT_SPATIAL_CONFIGURATION.BLOCK',
+       'PLANT_SPATIAL_CONFIGURATION.TORUS',
+       'PLANT_SPATIAL_CONFIGURATION.RIGHT_CIRCULAR_CYLINDER',
+       'PLANT_SPATIAL_CONFIGURATION.SPHERE',
+       'PLANT_SPATIAL_CONFIGURATION.RIGHT_CIRCULAR_CONE',
+       'PLANT_SPATIAL_CONFIGURATION.EXTRUDED_AREA_SOLID',
+       'PLANT_SPATIAL_CONFIGURATION.REVOLVED_AREA_SOLID',
+       'PLANT_SPATIAL_CONFIGURATION.AXIS2_PLACEMENT_3D',
+       'PLANT_SPATIAL_CONFIGURATION.MANIFOLD_SOLID_BREP',
+       'PLANT_SPATIAL_CONFIGURATION.SHELL_BASED_WIREFRAME_MODEL',
+       'PLANT_SPATIAL_CONFIGURATION.CURVE',
+       'PLANT_SPATIAL_CONFIGURATION.POINT',
+       'PLANT_SPATIAL_CONFIGURATION.SURFACE',
+       'PLANT_SPATIAL_CONFIGURATION.VECTOR',
+       'PLANT_SPATIAL_CONFIGURATION.MEASURE_REPRESENTATION_ITEM',
+       'PLANT_SPATIAL_CONFIGURATION.MAPPED_ITEM'] *
+       TYPEOF(i)) = 1))) = 0;
+  WR2: SIZEOF (QUERY (mi <* QUERY (item <* SELF\representation.items |
+       'PLANT_SPATIAL_CONFIGURATION.MAPPED_ITEM' IN TYPEOF(item)) |
+       NOT (SIZEOF (['PLANT_SPATIAL_CONFIGURATION.' +
+       'PLANT_CSG_SHAPE_REPRESENTATION',
+       'PLANT_SPATIAL_CONFIGURATION.HYBRID_SHAPE_REPRESENTATION'] *
+       TYPEOF(mi\mapped_item.mapping_source.mapped_representation)) 
+       = 1))) = 0;
+END_ENTITY;
+
+
+ENTITY inline_equipment
+  SUBTYPE OF (piping_component_definition);
+END_ENTITY;
+
+
+ENTITY instrumentation_and_control_system
+  SUBTYPE OF (product_definition);
+WHERE
+  WR1: SIZEOF (QUERY (pdr <* USEDIN (SELF, 'PLANT_SPATIAL_CONFIGURATION.' +
+       'PRODUCT_DEFINITION_RELATIONSHIP.RELATED_PRODUCT_DEFINITION') |
+       ('PLANT_SPATIAL_CONFIGURATION.PLANT' IN TYPEOF
+       (pdr.relating_product_definition.formation.of_product)) AND
+       (pdr.relating_product_definition.frame_of_reference.name =
+       'functional occurrence'))) = 1;
+END_ENTITY;
+
+
+ENTITY interfering_shape_element
+  SUBTYPE OF (shape_aspect, shape_aspect_relationship);
+END_ENTITY;
+
+
+ENTITY known_source
+SUBTYPE OF (external_source, pre_defined_item);
+WHERE
+  WR1: SELF\pre_defined_item.name IN
+       ['ISO 13584 Dictionary','ISO 13584 Parts Library'];
+END_ENTITY;
+
+
+ENTITY line_branch_connection
+  SUBTYPE OF (shape_aspect_relationship);
+WHERE
+  WR1: SELF.description = 'branch location';
+  WR2: 'PLANT_SPATIAL_CONFIGURATION.PLANT_LINE_SEGMENT_DEFINITION'
+       IN TYPEOF (SELF.relating_shape_aspect.of_shape.definition);
+  WR3: 'PLANT_SPATIAL_CONFIGURATION.PLANT_LINE_SEGMENT_TERMINATION'
+       IN TYPEOF (SELF.related_shape_aspect);
+END_ENTITY;
+
+
+ENTITY line_less_piping_system
+  SUBTYPE OF (product_definition);
+END_ENTITY;
+
+
+ENTITY line_plant_item_branch_connection
+  SUBTYPE OF (shape_aspect_relationship);
+END_ENTITY;
+
+
+ENTITY line_plant_item_connection
+  SUBTYPE OF (shape_aspect_relationship);
+WHERE
+  WR1: 'PLANT_SPATIAL_CONFIGURATION.PLANT_LINE_SEGMENT_TERMINATION'
+       IN TYPEOF (SELF.relating_shape_aspect);
+  WR2: 'PLANT_SPATIAL_CONFIGURATION.PLANT_ITEM_CONNECTOR'
+       IN TYPEOF (SELF.related_shape_aspect);
+  WR3: SELF\shape_aspect_relationship.related_shape_aspect.
+       of_shape\property_definition.
+       definition\product_definition.
+       frame_of_reference\application_context_element.
+       name = 'physical occurrence';
+END_ENTITY;
+
+
+ENTITY line_termination_connection
+  SUBTYPE OF (shape_aspect_relationship);
+WHERE
+  WR1: SIZEOF (TYPEOF (SELF.relating_shape_aspect) *
+       ['PLANT_SPATIAL_CONFIGURATION.CONNECTION_NODE',
+       'PLANT_SPATIAL_CONFIGURATION.PLANT_LINE_SEGMENT_TERMINATION']
+       ) >= 1;
+  WR2: 'PLANT_SPATIAL_CONFIGURATION.PLANT_LINE_SEGMENT_TERMINATION'
+       IN TYPEOF (SELF.related_shape_aspect);
+END_ENTITY;
+
+
+ENTITY pipe_class
+  SUBTYPE OF (group);
+WHERE
+  WR1: SIZEOF (QUERY (aca <* QUERY (ca <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.CLASSIFICATION_ASSIGNMENT.' + 
+       'ASSIGNED_CLASSIFICATION') |
+       'PLANT_SPATIAL_CONFIGURATION.APPLIED_CLASSIFICATION_ASSIGNMENT' IN 
+       TYPEOF (ca)) |
+       NOT (SIZEOF (QUERY (it <* aca.items |
+       NOT ('PLANT_SPATIAL_CONFIGURATION.PIPING_COMPONENT_DEFINITION' IN
+       TYPEOF (it)))) = 0))) = 0;
+  WR2: SIZEOF (QUERY (aca <* QUERY (ca <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.CLASSIFICATION_ASSIGNMENT.' + 
+       'ASSIGNED_CLASSIFICATION') |
+       'PLANT_SPATIAL_CONFIGURATION.APPLIED_CLASSIFICATION_ASSIGNMENT' IN 
+       TYPEOF (ca)) |
+       NOT (SIZEOF (QUERY (pcd <* QUERY (it <* aca.items |
+       'PLANT_SPATIAL_CONFIGURATION.PIPING_COMPONENT_DEFINITION' IN
+       TYPEOF (it)) |
+       NOT (SIZEOF (QUERY (aca1 <* USEDIN (pcd.formation.of_product,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'APPLIED_CLASSIFICATION_ASSIGNMENT.ITEMS') |
+       class_in_tree (aca1.assigned_classification, 'pipe'))) = 1))) = 0))) =
+0;
+END_ENTITY;
+
+
+ENTITY pipe_closure_fitting_class
+  SUBTYPE OF (group);
+WHERE
+  WR1: SIZEOF (QUERY (aca <* QUERY (ca <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.CLASSIFICATION_ASSIGNMENT.' + 
+       'ASSIGNED_CLASSIFICATION') |
+       'PLANT_SPATIAL_CONFIGURATION.APPLIED_CLASSIFICATION_ASSIGNMENT' IN 
+       TYPEOF (ca)) |
+       NOT (SIZEOF (QUERY (it <* aca.items |
+       NOT ('PLANT_SPATIAL_CONFIGURATION.PIPING_COMPONENT_DEFINITION' IN
+       TYPEOF (it)))) = 0))) = 0;
+  WR2: SIZEOF (QUERY (aca <* QUERY (ca <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.CLASSIFICATION_ASSIGNMENT.' + 
+       'ASSIGNED_CLASSIFICATION') |
+       'PLANT_SPATIAL_CONFIGURATION.APPLIED_CLASSIFICATION_ASSIGNMENT' IN 
+       TYPEOF (ca)) |
+       NOT (SIZEOF (QUERY (pcd <* QUERY (it <* aca.items |
+       'PLANT_SPATIAL_CONFIGURATION.PIPING_COMPONENT_DEFINITION' IN
+       TYPEOF (it)) |
+       NOT (SIZEOF (QUERY (aca1 <* USEDIN (pcd.formation.of_product,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'APPLIED_CLASSIFICATION_ASSIGNMENT.ITEMS') |
+       class_in_tree (aca1.assigned_classification, 'pipe closure'))) 
+       = 1))) = 0))) = 0;
+END_ENTITY;
+
+
+ENTITY piping_component_class
+  SUBTYPE OF (group, characterized_object);
+END_ENTITY;
+
+
+ENTITY piping_component_definition
+  SUBTYPE OF (product_definition);
+END_ENTITY;
+
+
+ENTITY piping_connector_class
+  SUBTYPE OF (group);
+END_ENTITY;
+
+
+ENTITY piping_system
+  SUBTYPE OF (product_definition);
+WHERE
+  WR1: SIZEOF (QUERY (pdr <* USEDIN (SELF, 'PLANT_SPATIAL_CONFIGURATION.' +
+       'PRODUCT_DEFINITION_RELATIONSHIP.RELATED_PRODUCT_DEFINITION') |
+       ('PLANT_SPATIAL_CONFIGURATION.PLANT' IN TYPEOF
+       (pdr.relating_product_definition.formation.of_product)) AND
+       (pdr.relating_product_definition.frame_of_reference.name =
+       'functional occurrence'))) = 1;
+END_ENTITY;
+
+
+ENTITY plant
+  SUBTYPE OF (product);
+WHERE
+  WR1: SIZEOF (QUERY (pscoa <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PLANT_SPATIAL_CONFIGURATION_ORGANIZATION_ASSIGNMENT.ITEMS')  |
+       pscoa.role.name =
+       'plant operator')) +
+       SIZEOF (QUERY (pscpaoa <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PLANT_SPATIAL_CONFIGURATION_PERSON_AND_ORGANIZATION_ASSIGNMENT.' +
+       'ITEMS') | 
+       pscpaoa.role.name =
+       'plant operator')) <= 1;
+  WR2: SIZEOF (QUERY (pscoa <* USEDIN(SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PLANT_SPATIAL_CONFIGURATION_ORGANIZATION_ASSIGNMENT.ITEMS') |
+       pscoa.role.name = 'plant owner')) +
+       SIZEOF (QUERY (pscpaoa <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PLANT_SPATIAL_CONFIGURATION_PERSON_AND_ORGANIZATION_ASSIGNMENT.' +
+       'ITEMS') | 
+       pscpaoa.role.name =
+       'plant owner')) +
+       SIZEOF (QUERY (pscpa <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PLANT_SPATIAL_CONFIGURATION_PERSON_ASSIGNMENT.ITEMS') |
+       pscpa.role.name = 'plant owner')) >= 1;
+  WR3: SIZEOF (QUERY (pscoa <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PLANT_SPATIAL_CONFIGURATION_ORGANIZATION_ASSIGNMENT.ITEMS')  |
+       pscoa\organization_assignment.role.name = 
+       'plant project owner')) +
+       SIZEOF (QUERY (pscpaoa <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PLANT_SPATIAL_CONFIGURATION_PERSON_AND_ORGANIZATION_ASSIGNMENT.' +
+       'ITEMS') | 
+       pscpaoa\person_and_organization_assignment.role.name =
+       'plant project owner')) >= 1;
+  WR4:  SIZEOF (QUERY (pdf <* USEDIN (SELF, 
+        'PLANT_SPATIAL_CONFIGURATION.' +
+        'PRODUCT_DEFINITION_FORMATION.OF_PRODUCT') |
+        NOT (SIZEOF (QUERY (pd <* USEDIN (pdf,
+        'PLANT_SPATIAL_CONFIGURATION.PRODUCT_DEFINITION.FORMATION') |
+        pd.frame_of_reference.name = 'functional occurrence')) <= 1))) = 0;
+END_ENTITY;
+
+
+ENTITY plant_csg_shape_representation
+  SUBTYPE OF (shape_representation);
+WHERE
+  WR1: SIZEOF (QUERY (item <* SELF.items |
+       NOT (SIZEOF (['PLANT_SPATIAL_CONFIGURATION.CSG_SOLID',
+       'PLANT_SPATIAL_CONFIGURATION.EXTRUDED_AREA_SOLID',
+       'PLANT_SPATIAL_CONFIGURATION.REVOLVED_AREA_SOLID',
+       'PLANT_SPATIAL_CONFIGURATION.AXIS2_PLACEMENT_3D',
+       'PLANT_SPATIAL_CONFIGURATION.MAPPED_ITEM'] * TYPEOF (item)) = 1))) 
+       = 0;
+  WR2: SIZEOF (QUERY (item <* SELF.items |
+       SIZEOF (['PLANT_SPATIAL_CONFIGURATION.CSG_SOLID',
+       'PLANT_SPATIAL_CONFIGURATION.EXTRUDED_AREA_SOLID',
+       'PLANT_SPATIAL_CONFIGURATION.REVOLVED_AREA_SOLID',
+       'PLANT_SPATIAL_CONFIGURATION.MAPPED_ITEM'] * TYPEOF (item)) 
+       = 1)) >= 1;
+  WR3: SIZEOF (QUERY (item <* SELF.items |
+       ('PLANT_SPATIAL_CONFIGURATION.CSG_SOLID' IN TYPEOF (item)) AND
+       (NOT (valid_advanced_csg_tree
+               (item\csg_solid.tree_root_expression))))) = 0;
+  WR4: SIZEOF (QUERY (mi <* QUERY (item <* SELF.items |
+       'PLANT_SPATIAL_CONFIGURATION.MAPPED_ITEM' IN TYPEOF (item)) |
+       NOT ('PLANT_SPATIAL_CONFIGURATION.' +
+       'PLANT_CSG_SHAPE_REPRESENTATION' IN
+       TYPEOF (mi\mapped_item.mapping_source.mapped_representation)))) = 0;
+END_ENTITY;
+
+ENTITY plant_design_csg_primitive
+  SUBTYPE OF (shape_representation, solid_model);
+WHERE
+  WR1: SELF.context_of_items.coordinate_space_dimension = 3;
+  WR2: SELF\representation.name = SELF\representation_item.name;
+  WR3: SELF\representation.name IN ['hemisphere', 'rectangle to ellipse',
+       'trimmed sphere', 'trimmed pyramid'];
+  WR4: (NOT (SELF\representation.name = 'hemisphere')) OR 
+       (SIZEOF (SELF.items) = 2);
+  WR5: (NOT (SELF\representation.name = 'hemisphere')) OR
+       (SIZEOF (QUERY (it <* SELF.items | 
+       (it.name = 'position') AND
+       ('PLANT_SPATIAL_CONFIGURATION.AXIS2_PLACEMENT_3D' IN 
+       TYPEOF (it)))) = 1);
+  WR6: (NOT (SELF\representation.name = 'hemisphere')) OR
+       (SIZEOF (QUERY (it <* SELF.items | 
+       (it.name = 'radius') AND
+       (SIZEOF (['PLANT_SPATIAL_CONFIGURATION.MEASURE_REPRESENTATION_ITEM',
+       'PLANT_SPATIAL_CONFIGURATION.LENGTH_MEASURE_WITH_UNIT'] * 
+       TYPEOF (it)) = 2))) = 1);
+  WR7: (NOT (SELF\representation.name = 'rectangle to ellipse')) OR
+       (SIZEOF (SELF.items) = 8);
+  WR8: (NOT (SELF\representation.name = 'rectangle to ellipse')) OR
+       (SIZEOF (QUERY (it <* SELF.items |
+       (it.name = 'position') AND 
+       ('PLANT_SPATIAL_CONFIGURATION.AXIS2_PLACEMENT_3D' IN
+       TYPEOF (it)))) = 1);
+  WR9: (NOT (SELF\representation.name = 'rectangle to ellipse')) OR
+       (SIZEOF (QUERY (it <* SELF.items | 
+       (it.name = 'x size') AND
+       (SIZEOF (['PLANT_SPATIAL_CONFIGURATION.MEASURE_REPRESENTATION_ITEM',
+       'PLANT_SPATIAL_CONFIGURATION.LENGTH_MEASURE_WITH_UNIT'] *
+       TYPEOF (it)) = 2) AND
+       ('PLANT_SPATIAL_CONFIGURATION.POSITIVE_LENGTH_MEASURE' IN
+       TYPEOF (it\measure_with_unit.value_component)))) = 1);
+ WR10: (NOT (SELF\representation.name = 'rectangle to ellipse')) OR
+       (SIZEOF (QUERY (it <* SELF.items | 
+       (it.name = 'y size') AND
+       (SIZEOF (['PLANT_SPATIAL_CONFIGURATION.MEASURE_REPRESENTATION_ITEM',
+       'PLANT_SPATIAL_CONFIGURATION.LENGTH_MEASURE_WITH_UNIT'] *
+       TYPEOF (it)) = 2) AND
+       ('PLANT_SPATIAL_CONFIGURATION.POSITIVE_LENGTH_MEASURE' IN
+       TYPEOF (it\measure_with_unit.value_component)))) = 1);
+ WR11: (NOT (SELF\representation.name = 'rectangle to ellipse')) OR
+       (SIZEOF (QUERY (it <* SELF.items | 
+       (it.name = 'height') AND
+       (SIZEOF (['PLANT_SPATIAL_CONFIGURATION.MEASURE_REPRESENTATION_ITEM',
+       'PLANT_SPATIAL_CONFIGURATION.LENGTH_MEASURE_WITH_UNIT'] *
+       TYPEOF (it)) = 2) AND
+       ('PLANT_SPATIAL_CONFIGURATION.POSITIVE_LENGTH_MEASURE' IN
+       TYPEOF (it\measure_with_unit.value_component)))) = 1);
+ WR12: (NOT (SELF\representation.name = 'rectangle to ellipse')) OR
+       (SIZEOF (QUERY (it <* SELF.items | 
+       (it.name = 'x offset') AND
+       (SIZEOF (['PLANT_SPATIAL_CONFIGURATION.MEASURE_REPRESENTATION_ITEM',
+       'PLANT_SPATIAL_CONFIGURATION.LENGTH_MEASURE_WITH_UNIT'] *
+       TYPEOF (it)) = 2))) = 1);
+ WR13: (NOT (SELF\representation.name = 'rectangle to ellipse')) OR
+       (SIZEOF (QUERY (it <* SELF.items | 
+       (it.name = 'y offset') AND
+       (SIZEOF (['PLANT_SPATIAL_CONFIGURATION.MEASURE_REPRESENTATION_ITEM',
+       'PLANT_SPATIAL_CONFIGURATION.LENGTH_MEASURE_WITH_UNIT'] *
+       TYPEOF (it)) = 2))) = 1);
+ WR14: (NOT (SELF\representation.name = 'rectangle to ellipse')) OR
+       (SIZEOF (QUERY (it <* SELF.items | 
+       (it.name = 'semi axis 1') AND
+       (SIZEOF (['PLANT_SPATIAL_CONFIGURATION.MEASURE_REPRESENTATION_ITEM',
+       'PLANT_SPATIAL_CONFIGURATION.LENGTH_MEASURE_WITH_UNIT'] *
+       TYPEOF (it)) = 2))) = 1);
+ WR15: (NOT (SELF\representation.name = 'rectangle to ellipse')) OR
+       (SIZEOF (QUERY (it <* SELF.items | 
+       (it.name = 'semi axis 2') AND
+       (SIZEOF (['PLANT_SPATIAL_CONFIGURATION.MEASURE_REPRESENTATION_ITEM',
+       'PLANT_SPATIAL_CONFIGURATION.LENGTH_MEASURE_WITH_UNIT'] *
+       TYPEOF (it)) = 2))) = 1);
+ WR16: (NOT (SELF\representation.name = 'trimmed sphere')) OR 
+       (SIZEOF (SELF.items) = 3);
+ WR17: (NOT (SELF\representation.name = 'trimmed sphere')) OR
+       (SIZEOF (QUERY (it <* SELF.items | 
+       (it.name = 'base sphere') AND
+       ('PLANT_SPATIAL_CONFIGURATION.SPHERE' IN 
+       TYPEOF (it)))) = 1);
+ WR18: (NOT (SELF\representation.name = 'trimmed sphere')) OR
+       (SIZEOF (QUERY (it <* SELF.items | 
+       (it.name = 'cutting plane normal direction') AND
+       ('PLANT_SPATIAL_CONFIGURATION.DIRECTION' IN 
+       TYPEOF (it)))) = 1);
+ WR19: (NOT (SELF\representation.name = 'trimmed sphere')) OR
+       (SIZEOF (QUERY (it <* SELF.items | 
+       (it.name = 'height') AND
+       (SIZEOF (['PLANT_SPATIAL_CONFIGURATION.MEASURE_REPRESENTATION_ITEM',
+       'PLANT_SPATIAL_CONFIGURATION.LENGTH_MEASURE_WITH_UNIT'] *
+       TYPEOF (it)) = 2))) = 1);
+ WR20: (NOT (SELF\representation.name = 'trimmed sphere')) OR
+       (SIZEOF (QUERY (ht <* QUERY (it <* SELF.items | 
+       (it.name = 'height') AND
+       (SIZEOF (['PLANT_SPATIAL_CONFIGURATION.MEASURE_REPRESENTATION_ITEM',
+       'PLANT_SPATIAL_CONFIGURATION.LENGTH_MEASURE_WITH_UNIT'] *
+       TYPEOF (it)) = 2)) |
+       NOT (SIZEOF (QUERY (sphre <* QUERY (it <* SELF.items |
+       (it.name = 'base sphere') AND
+       ('PLANT_SPATIAL_CONFIGURATION.SPHERE' IN TYPEOF (it))) |
+       NOT ({-sphre.radius < ht.value_component < sphre.radius}))) 
+       = 0))) = 0);
+ WR21: (NOT (SELF\representation.name = 'trimmed pyramid')) OR 
+       (SIZEOF (SELF.items) = 8);
+ WR22: (NOT (SELF\representation.name = 'trimmed pyramid')) OR
+       (SIZEOF (QUERY (it <* SELF.items | 
+       (it.name = 'base position') AND
+       ('PLANT_SPATIAL_CONFIGURATION.AXIS2_PLACEMENT_3D' IN 
+       TYPEOF (it)))) = 1);
+ WR23: (NOT (SELF\representation.name = 'trimmed pyramid')) OR
+       (SIZEOF (QUERY (it <* SELF.items | 
+       (it.name = 'base length') AND
+       (SIZEOF (['PLANT_SPATIAL_CONFIGURATION.MEASURE_REPRESENTATION_ITEM',
+       'PLANT_SPATIAL_CONFIGURATION.LENGTH_MEASURE_WITH_UNIT'] * 
+       TYPEOF (it)) = 2))) = 1);
+ WR24: (NOT (SELF\representation.name = 'trimmed pyramid')) OR
+       (SIZEOF (QUERY (it <* SELF.items | 
+       (it.name = 'base width') AND
+       (SIZEOF (['PLANT_SPATIAL_CONFIGURATION.MEASURE_REPRESENTATION_ITEM',
+       'PLANT_SPATIAL_CONFIGURATION.LENGTH_MEASURE_WITH_UNIT'] * 
+       TYPEOF (it)) = 2))) = 1);
+ WR25: (NOT (SELF\representation.name = 'trimmed pyramid')) OR
+       (SIZEOF (QUERY (it <* SELF.items | 
+       (it.name = 'height') AND
+       (SIZEOF (['PLANT_SPATIAL_CONFIGURATION.MEASURE_REPRESENTATION_ITEM',
+       'PLANT_SPATIAL_CONFIGURATION.LENGTH_MEASURE_WITH_UNIT'] * 
+       TYPEOF (it)) = 2))) = 1);
+ WR26: (NOT (SELF\representation.name = 'trimmed pyramid')) OR
+       (SIZEOF (QUERY (it <* SELF.items | 
+       (it.name = 'top centre x') AND
+       (SIZEOF (['PLANT_SPATIAL_CONFIGURATION.MEASURE_REPRESENTATION_ITEM',
+       'PLANT_SPATIAL_CONFIGURATION.LENGTH_MEASURE_WITH_UNIT'] * 
+       TYPEOF (it)) = 2))) = 1);
+ WR27: (NOT (SELF\representation.name = 'trimmed pyramid')) OR
+       (SIZEOF (QUERY (it <* SELF.items | 
+       (it.name = 'top centre y') AND
+       (SIZEOF (['PLANT_SPATIAL_CONFIGURATION.MEASURE_REPRESENTATION_ITEM',
+       'PLANT_SPATIAL_CONFIGURATION.LENGTH_MEASURE_WITH_UNIT'] * 
+       TYPEOF (it)) = 2))) = 1);
+ WR28: (NOT (SELF\representation.name = 'trimmed pyramid')) OR
+       (SIZEOF (QUERY (it <* SELF.items | 
+       (it.name = 'top length') AND
+       (SIZEOF (['PLANT_SPATIAL_CONFIGURATION.MEASURE_REPRESENTATION_ITEM',
+       'PLANT_SPATIAL_CONFIGURATION.LENGTH_MEASURE_WITH_UNIT'] * 
+       TYPEOF (it)) = 2))) = 1);
+ WR29: (NOT (SELF\representation.name = 'trimmed pyramid')) OR
+       (SIZEOF (QUERY (it <* SELF.items | 
+       (it.name = 'top width') AND
+       (SIZEOF (['PLANT_SPATIAL_CONFIGURATION.MEASURE_REPRESENTATION_ITEM',
+       'PLANT_SPATIAL_CONFIGURATION.LENGTH_MEASURE_WITH_UNIT'] * 
+       TYPEOF (it)) = 2))) = 1);
+END_ENTITY;
+
+
+ENTITY plant_item_connection
+  SUBTYPE OF(shape_aspect, shape_aspect_relationship);
+WHERE
+  WR1: 'PLANT_SPATIAL_CONFIGURATION.PLANT_ITEM_CONNECTOR' IN
+       TYPEOF (SELF\shape_aspect_relationship.relating_shape_aspect);
+  WR2: 'PLANT_SPATIAL_CONFIGURATION.PLANT_ITEM_CONNECTOR' IN
+       TYPEOF (SELF\shape_aspect_relationship.related_shape_aspect);
+  WR3: SELF\shape_aspect.of_shape\property_definition.
+       definition\product_definition.
+       frame_of_reference\application_context_element.name IN
+       ['functional occurrence', 'physical occurrence',
+       'functional definition', 'physical definition'];
+  WR4: (SELF\shape_aspect_relationship.relating_shape_aspect.
+       of_shape\property_definition.definition\product_definition.
+       frame_of_reference\application_context_element.name =
+       SELF\shape_aspect_relationship.related_shape_aspect.
+       of_shape\property_definition.definition\product_definition.
+       frame_of_reference\application_context_element.name);
+  WR5: SIZEOF (USEDIN (SELF, 'PLANT_SPATIAL_CONFIGURATION.' +
+       'APPLIED_CLASSIFICATION_ASSIGNMENT.ITEMS')) >= 1;
+  WR6: SIZEOF (QUERY (pscca <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' + 
+       'APPLIED_CLASSIFICATION_ASSIGNMENT.ITEMS') |
+       NOT (SIZEOF (
+       ['PLANT_SPATIAL_CONFIGURATION.CONNECTION_FUNCTIONAL_CLASS',
+       'PLANT_SPATIAL_CONFIGURATION.CONNECTION_MOTION_CLASS'] *
+       TYPEOF (pscca.assigned_classification)) >= 1))) = 0;
+  WR7: SIZEOF (QUERY (pdr <* USEDIN (SELF.of_shape.definition,
+       'PLANT_SPATIAL_CONFIGURATION.PRODUCT_DEFINITION_RELATIONSHIP.' +
+       'RELATED_PRODUCT_DEFINITION') |
+       pdr.name = 'support usage connection')) <= 1;
+END_ENTITY;
+
+
+ENTITY plant_item_connector
+  SUBTYPE OF(shape_aspect);
+WHERE
+  WR1: SELF\shape_aspect.of_shape\property_definition.
+       definition\product_definition.
+       frame_of_reference\application_context_element.name IN
+       ['functional definition', 'physical definition',
+       'functional occurrence', 'physical occurrence'];
+  WR2: SIZEOF (QUERY (pic <* 
+       (bag_to_set (USEDIN (SELF,'PLANT_SPATIAL_CONFIGURATION.' + 
+       'SHAPE_ASPECT_RELATIONSHIP.RELATED_SHAPE_ASPECT')) + 
+       bag_to_set (USEDIN (SELF,'PLANT_SPATIAL_CONFIGURATION.' + 
+       'SHAPE_ASPECT_RELATIONSHIP.RELATING_SHAPE_ASPECT'))) |
+       'PLANT_SPATIAL_CONFIGURATION.PLANT_ITEM_CONNECTION' IN
+       TYPEOF (pic))) <= 1;
+  WR3: (NOT (SIZEOF (QUERY (aca <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'APPLIED_CLASSIFICATION_ASSIGNMENT.ITEMS') |
+       SIZEOF (TYPEOF (aca.assigned_classification) *
+       ['PLANT_SPATIAL_CONFIGURATION.PIPING_CONNECTOR_CLASS',
+       'PLANT_SPATIAL_CONFIGURATION.CONNECTOR_END_TYPE_CLASS'])
+       = 1)) >= 1)) OR
+       ((NOT (SIZEOF (QUERY (pd <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.PROPERTY_DEFINITION.DEFINITION') |
+       pd.name = 'service characteristics')) >= 1)) OR
+       (SIZEOF (QUERY (sc <* QUERY (pd <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.PROPERTY_DEFINITION.DEFINITION') |
+       pd.name = 'service characteristics') |
+       NOT (SIZEOF (QUERY (pdr <* USEDIN (sc,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |
+       pdr.used_representation.name = 
+       'design service characteristics')) = 1))) = 0));
+  WR4: (NOT (SIZEOF (QUERY (aca <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'APPLIED_CLASSIFICATION_ASSIGNMENT.ITEMS') |
+       SIZEOF (TYPEOF (aca.assigned_classification) *
+       ['PLANT_SPATIAL_CONFIGURATION.PIPING_CONNECTOR_CLASS',
+       'PLANT_SPATIAL_CONFIGURATION.CONNECTOR_END_TYPE_CLASS'])
+       = 1)) >= 1)) OR
+       (NOT (SIZEOF (QUERY (pd <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.PROPERTY_DEFINITION.DEFINITION') |
+       (pd.name = 'service characteristics') )) >= 1)) OR
+       (SIZEOF (QUERY (sc <* QUERY (pd <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.PROPERTY_DEFINITION.DEFINITION') |
+       pd.name = 'service characteristics') |
+       NOT (SIZEOF (QUERY (dsc <* QUERY (pdr <* USEDIN (sc,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |
+       pdr.used_representation.name = 'design service characteristics') |
+       SIZEOF (dsc.used_representation.items) >= 2)) = 1))) = 0);
+  WR5: (NOT (SIZEOF (QUERY (aca <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'APPLIED_CLASSIFICATION_ASSIGNMENT.ITEMS') |
+       SIZEOF (TYPEOF (aca.assigned_classification) *
+       ['PLANT_SPATIAL_CONFIGURATION.PIPING_CONNECTOR_CLASS',
+       'PLANT_SPATIAL_CONFIGURATION.CONNECTOR_END_TYPE_CLASS'])
+       = 1)) >= 1)) OR
+       ((NOT (SIZEOF (QUERY (pd <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.PROPERTY_DEFINITION.DEFINITION') |
+       pd.name = 'service characteristics')) >= 1)) OR
+       (SIZEOF (QUERY (sc <* QUERY (pd <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.PROPERTY_DEFINITION.DEFINITION') |
+       pd.name = 'service characteristics') |
+       NOT (SIZEOF (QUERY (dsc <* QUERY (pdr <* USEDIN (sc,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |
+       pdr.used_representation.name = 'design service characteristics') |
+       {1 <= SIZEOF (QUERY (it <* dsc.used_representation.items |
+       ('PLANT_SPATIAL_CONFIGURATION.MEASURE_REPRESENTATION_ITEM' IN
+       TYPEOF (it)) AND
+       (it.name IN ['pressure', 'minimum pressure', 
+       'maximum pressure']))) <= 2})) = 1))) = 0));
+  WR6: (NOT (SIZEOF (QUERY (aca <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'APPLIED_CLASSIFICATION_ASSIGNMENT.ITEMS') |
+       SIZEOF (TYPEOF (aca.assigned_classification) *
+       ['PLANT_SPATIAL_CONFIGURATION.PIPING_CONNECTOR_CLASS',
+       'PLANT_SPATIAL_CONFIGURATION.CONNECTOR_END_TYPE_CLASS'])
+       = 1)) >= 1)) OR
+       ((NOT (SIZEOF (QUERY (pd <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.PROPERTY_DEFINITION.DEFINITION') |
+       pd.name = 'service characteristics')) >= 1)) OR
+       (SIZEOF (QUERY (sc <* QUERY (pd <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.PROPERTY_DEFINITION.DEFINITION') |
+       pd.name = 'service characteristics') |
+       NOT (SIZEOF (QUERY (dsc <* QUERY (pdr <* USEDIN (sc,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |
+       pdr.used_representation.name = 'design service characteristics') |
+       SIZEOF (QUERY (it <* dsc.used_representation.items |
+       ('PLANT_SPATIAL_CONFIGURATION.MEASURE_REPRESENTATION_ITEM' IN
+       TYPEOF (it)) AND
+       (it.name = 'pressure'))) <= 1)) = 1))) = 0));
+  WR7: (NOT (SIZEOF (QUERY (aca <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'APPLIED_CLASSIFICATION_ASSIGNMENT.ITEMS') |
+       SIZEOF (TYPEOF (aca.assigned_classification) *
+       ['PLANT_SPATIAL_CONFIGURATION.PIPING_CONNECTOR_CLASS',
+       'PLANT_SPATIAL_CONFIGURATION.CONNECTOR_END_TYPE_CLASS'])
+       = 1)) >= 1)) OR
+       ((NOT (SIZEOF (QUERY (pd <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.PROPERTY_DEFINITION.DEFINITION') |
+       pd.name = 'service characteristics')) >= 1)) OR
+       (SIZEOF (QUERY (sc <* QUERY (pd <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.PROPERTY_DEFINITION.DEFINITION') |
+       pd.name = 'service characteristics') |
+       NOT (SIZEOF (QUERY (dsc <* QUERY (pdr <* USEDIN (sc,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |
+       pdr.used_representation.name = 'design service characteristics') |
+       SIZEOF (QUERY (it <* dsc.used_representation.items |
+       ('PLANT_SPATIAL_CONFIGURATION.MEASURE_REPRESENTATION_ITEM' IN
+       TYPEOF (it)) AND
+       (it.name = 'minimum pressure'))) <= 1)) = 1))) = 0));
+  WR8: (NOT (SIZEOF (QUERY (aca <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'APPLIED_CLASSIFICATION_ASSIGNMENT.ITEMS') |
+       SIZEOF (TYPEOF (aca.assigned_classification) *
+       ['PLANT_SPATIAL_CONFIGURATION.PIPING_CONNECTOR_CLASS',
+       'PLANT_SPATIAL_CONFIGURATION.CONNECTOR_END_TYPE_CLASS'])
+       = 1)) >= 1)) OR
+       ((NOT (SIZEOF (QUERY (pd <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.PROPERTY_DEFINITION.DEFINITION') |
+       pd.name = 'service characteristics')) >= 1)) OR
+       (SIZEOF (QUERY (sc <* QUERY (pd <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.PROPERTY_DEFINITION.DEFINITION') |
+       pd.name = 'service characteristics') |
+       NOT (SIZEOF (QUERY (dsc <* QUERY (pdr <* USEDIN (sc,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |
+       pdr.used_representation.name = 'design service characteristics') |
+       SIZEOF (QUERY (it <* dsc.used_representation.items |
+       ('PLANT_SPATIAL_CONFIGURATION.MEASURE_REPRESENTATION_ITEM' IN
+       TYPEOF (it)) AND
+       (it.name = 'maximum pressure'))) <= 1)) = 1))) = 0));
+  WR9: (NOT (SIZEOF (QUERY (aca <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'APPLIED_CLASSIFICATION_ASSIGNMENT.ITEMS') |
+       SIZEOF (TYPEOF (aca.assigned_classification) *
+       ['PLANT_SPATIAL_CONFIGURATION.PIPING_CONNECTOR_CLASS',
+       'PLANT_SPATIAL_CONFIGURATION.CONNECTOR_END_TYPE_CLASS'])
+       = 1)) >= 1)) OR
+       ((NOT (SIZEOF (QUERY (pd <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.PROPERTY_DEFINITION.DEFINITION') |
+       pd.name = 'service characteristics')) >= 1)) OR
+       (SIZEOF (QUERY (sc <* QUERY (pd <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.PROPERTY_DEFINITION.DEFINITION') |
+       pd.name = 'service characteristics') |
+       NOT (SIZEOF (QUERY (dsc <* QUERY (pdr <* USEDIN (sc,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |
+       pdr.used_representation.name = 'design service characteristics') |
+       {1 <= SIZEOF (QUERY (it <* dsc.used_representation.items |
+       (SIZEOF (TYPEOF (it) *
+       ['PLANT_SPATIAL_CONFIGURATION.MEASURE_REPRESENTATION_ITEM',
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'THERMODYNAMIC_TEMPERATURE_MEASURE_WITH_UNIT']) = 2) AND
+       (it.name IN ['temperature', 'minimum temperature', 
+       'maximum temperature']))) <= 2})) = 1))) = 0));
+ WR10: (NOT (SIZEOF (QUERY (aca <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'APPLIED_CLASSIFICATION_ASSIGNMENT.ITEMS') |
+       SIZEOF (TYPEOF (aca.assigned_classification) *
+       ['PLANT_SPATIAL_CONFIGURATION.PIPING_CONNECTOR_CLASS',
+       'PLANT_SPATIAL_CONFIGURATION.CONNECTOR_END_TYPE_CLASS'])
+       = 1)) >= 1)) OR
+       ((NOT (SIZEOF (QUERY (pd <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.PROPERTY_DEFINITION.DEFINITION') |
+       pd.name = 'service characteristics')) >= 1)) OR
+       (SIZEOF (QUERY (sc <* QUERY (pd <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.PROPERTY_DEFINITION.DEFINITION') |
+       pd.name = 'service characteristics') |
+       NOT (SIZEOF (QUERY (dsc <* QUERY (pdr <* USEDIN (sc,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |
+       pdr.used_representation.name = 'design service characteristics') |
+       SIZEOF (QUERY (it <* dsc.used_representation.items |
+       (SIZEOF (TYPEOF (it) *
+       ['PLANT_SPATIAL_CONFIGURATION.MEASURE_REPRESENTATION_ITEM',
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'THERMODYNAMIC_TEMPERATURE_MEASURE_WITH_UNIT']) = 2) AND
+       (it.name = 'temperature'))) <= 1)) = 1))) = 0));
+ WR11: (NOT (SIZEOF (QUERY (aca <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'APPLIED_CLASSIFICATION_ASSIGNMENT.ITEMS') |
+       SIZEOF (TYPEOF (aca.assigned_classification) *
+       ['PLANT_SPATIAL_CONFIGURATION.PIPING_CONNECTOR_CLASS',
+       'PLANT_SPATIAL_CONFIGURATION.CONNECTOR_END_TYPE_CLASS'])
+       = 1)) >= 1)) OR
+       ((NOT (SIZEOF (QUERY (pd <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.PROPERTY_DEFINITION.DEFINITION') |
+       pd.name = 'service characteristics')) >= 1)) OR
+       (SIZEOF (QUERY (sc <* QUERY (pd <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.PROPERTY_DEFINITION.DEFINITION') |
+       pd.name = 'service characteristics') |
+       NOT (SIZEOF (QUERY (dsc <* QUERY (pdr <* USEDIN (sc,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |
+       pdr.used_representation.name = 'design service characteristics') |
+       SIZEOF (QUERY (it <* dsc.used_representation.items |
+       (SIZEOF (TYPEOF (it) *
+       ['PLANT_SPATIAL_CONFIGURATION.MEASURE_REPRESENTATION_ITEM',
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'THERMODYNAMIC_TEMPERATURE_MEASURE_WITH_UNIT']) = 2) AND
+       (it.name = 'minimum temperature'))) <= 1)) = 1))) = 0));
+ WR12: (NOT (SIZEOF (QUERY (aca <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'APPLIED_CLASSIFICATION_ASSIGNMENT.ITEMS') |
+       SIZEOF (TYPEOF (aca.assigned_classification) *
+       ['PLANT_SPATIAL_CONFIGURATION.PIPING_CONNECTOR_CLASS',
+       'PLANT_SPATIAL_CONFIGURATION.CONNECTOR_END_TYPE_CLASS'])
+       = 1)) >= 1)) OR
+       ((NOT (SIZEOF (QUERY (pd <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.PROPERTY_DEFINITION.DEFINITION') |
+       pd.name = 'service characteristics')) >= 1)) OR
+       (SIZEOF (QUERY (sc <* QUERY (pd <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.PROPERTY_DEFINITION.DEFINITION') |
+       pd.name = 'service characteristics') |
+       NOT (SIZEOF (QUERY (dsc <* QUERY (pdr <* USEDIN (sc,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |
+       pdr.used_representation.name = 'design service characteristics') |
+       SIZEOF (QUERY (it <* dsc.used_representation.items |
+       (SIZEOF (TYPEOF (it) *
+       ['PLANT_SPATIAL_CONFIGURATION.MEASURE_REPRESENTATION_ITEM',
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'THERMODYNAMIC_TEMPERATURE_MEASURE_WITH_UNIT']) = 2) AND
+       (it.name = 'maximum temperature'))) <= 1)) = 1))) = 0));
+ WR13: (NOT (SELF\shape_aspect.of_shape\property_definition.
+       definition\product_definition.
+       frame_of_reference\application_context_element.name IN
+       ['functional definition', 'functional occurrence'])) OR
+       (SIZEOF (QUERY (pdr <* USEDIN (SELF, 'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |
+       'PLANT_SPATIAL_CONFIGURATION.SHAPE_REPRESENTATION' IN 
+       TYPEOF (pdr.used_representation))) = 0);
+END_ENTITY;
+
+
+ENTITY plant_item_interference
+  SUBTYPE OF (product_definition_relationship);
+END_ENTITY;
+
+
+ENTITY plant_item_route
+  SUBTYPE OF (product_definition_shape);
+WHERE
+  WR1: SELF\property_definition.definition\product_definition.
+       frame_of_reference\application_context_element.name =
+       'physical occurrence';
+  WR2: SIZEOF (TYPEOF (SELF\property_definition.definition) *
+       ['PLANT_SPATIAL_CONFIGURATION.PLANT_LINE_DEFINITION',
+       'PLANT_SPATIAL_CONFIGURATION.PLANT_LINE_SEGMENT_DEFINITION']) = 1;
+END_ENTITY;
+
+
+ENTITY plant_item_weight_representation
+  SUBTYPE OF (property_definition_representation);
+WHERE
+  WR1: SELF.used_representation.name = 'item weight';
+  WR2: SIZEOF (SELF.used_representation.items) >= 2;
+  WR3: SIZEOF (QUERY (it <* SELF.used_representation.items |
+       (it.name IN ['weight value', 
+       'maximum weight value', 'minimum weight value']) AND       
+       (NOT (SIZEOF (TYPEOF (it) *
+       ['PLANT_SPATIAL_CONFIGURATION.MEASURE_REPRESENTATION_ITEM',
+       'PLANT_SPATIAL_CONFIGURATION.QUALIFIED_REPRESENTATION_ITEM']) = 
+       2)))) = 0;
+  WR4: SIZEOF (QUERY (it <* SELF.used_representation.items |
+       ('PLANT_SPATIAL_CONFIGURATION.GEOMETRIC_REPRESENTATION_ITEM'
+       IN TYPEOF (it)) AND
+       (it.name = 'centre of gravity'))) = 1;
+  WR5: {1 <= SIZEOF (QUERY (it <* SELF.used_representation.items |
+       it.name IN ['weight value', 
+       'maximum weight value', 'minimum weight value'])) <= 2};
+  WR6: SIZEOF (QUERY (it <* SELF\property_definition_representation.
+       used_representation.items |
+       (it.name IN ['maximum weight value', 'minimum weight value']) AND       
+       (NOT (SIZEOF (QUERY (tq <* QUERY (qual <*
+       it\qualified_representation_item.qualifiers |
+       'PLANT_SPATIAL_CONFIGURATION.TYPE_QUALIFIER' IN TYPEOF (qual)) |
+       tq.name = 'operating')) = 1)))) = 0;
+END_ENTITY;
+
+
+ENTITY plant_line_definition
+  SUBTYPE OF (product_definition_with_associated_documents);
+WHERE
+  WR1: SIZEOF (QUERY (pdr <* USEDIN (SELF, 'PLANT_SPATIAL_CONFIGURATION.' +
+       'PRODUCT_DEFINITION_RELATIONSHIP.RELATED_PRODUCT_DEFINITION') |
+       ('PLANT_SPATIAL_CONFIGURATION.PIPING_SYSTEM' IN
+       TYPEOF (pdr.relating_product_definition)))) = 1;
+  WR2: SIZEOF (QUERY (pdr <* USEDIN (SELF, 'PLANT_SPATIAL_CONFIGURATION.' +
+       'PRODUCT_DEFINITION_RELATIONSHIP.RELATING_PRODUCT_DEFINITION') |
+       'PLANT_SPATIAL_CONFIGURATION.PLANT_LINE_SEGMENT_DEFINITION' IN
+       TYPEOF (pdr.related_product_definition))) >= 1;
+  WR3: (NOT (SIZEOF (QUERY (pd <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.PROPERTY_DEFINITION.DEFINITION') |
+       SIZEOF (USEDIN (pd, 'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION')) >= 1)) = 0))  OR
+       (SIZEOF (QUERY (pd <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.PROPERTY_DEFINITION.DEFINITION') |
+       NOT (SIZEOF (QUERY (pdr <* USEDIN (pd,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |
+       SIZEOF (QUERY (rep <* 
+       USEDIN (pdr.used_representation.context_of_items,
+       'PLANT_SPATIAL_CONFIGURATION.REPRESENTATION.CONTEXT_OF_ITEMS') |
+       SIZEOF (QUERY (prop_def_rep <* USEDIN (rep,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_REPRESENTATION.USED_REPRESENTATION') |
+       (SIZEOF (['PLANT_SPATIAL_CONFIGURATION.SITE',
+       'PLANT_SPATIAL_CONFIGURATION.SITE_BUILDING'] *
+       TYPEOF (prop_def_rep.definition)) = 1) OR
+       ('PLANT_SPATIAL_CONFIGURATION.PLANT' IN
+       TYPEOF (prop_def_rep.definition.definition.formation.of_product))))
+       >= 1)) >= 1)) >= 1))) = 0);
+  WR4: SELF.frame_of_reference.name =
+       'functional definition';
+  WR5: SIZEOF (QUERY (pds <* QUERY (pd <* USEDIN (SELF,
+      'PLANT_SPATIAL_CONFIGURATION.PROPERTY_DEFINITION.DEFINITION') |
+      'PLANT_SPATIAL_CONFIGURATION.PRODUCT_DEFINITION_SHAPE' IN
+      TYPEOF (pd)) |
+      NOT (SIZEOF (QUERY (sa <*USEDIN (pds,
+      'PLANT_SPATIAL_CONFIGURATION.SHAPE_ASPECT.OF_SHAPE') |
+      ('PLANT_SPATIAL_CONFIGURATION.PLANT_LINE_SEGMENT_TERMINATION' IN
+      TYPEOF (sa)) AND
+      (sa.description = 'piping line termination')))<= 2)))= 0;
+END_ENTITY;
+
+
+ENTITY plant_line_segment_definition
+  SUBTYPE OF (product_definition);
+WHERE
+  WR1: SIZEOF (QUERY (pdr <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PRODUCT_DEFINITION_RELATIONSHIP.RELATED_PRODUCT_DEFINITION') |
+       'PLANT_SPATIAL_CONFIGURATION.PLANT_LINE_DEFINITION'
+       IN TYPEOF (pdr.relating_product_definition))) >= 1;
+  WR2: SIZEOF (QUERY( pd <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.PROPERTY_DEFINITION.DEFINITION') |
+       'PLANT_SPATIAL_CONFIGURATION.SHAPE_DEFINITION' IN 
+       TYPEOF (pd))) >= 1;
+  WR3: SELF.frame_of_reference\application_context_element.name =
+       'functional definition';
+  WR4: SIZEOF (QUERY (pdr <* USEDIN (SELF, 'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |
+       pdr.used_representation.name = 'line segment characteristics')) = 1;
+  WR5: SIZEOF (QUERY (lsc <* QUERY (pdr <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |
+       pdr.used_representation.name = 'line segment characteristics') |
+       NOT (SIZEOF (lsc.used_representation.items) >= 2))) = 0;
+  WR6: SIZEOF (QUERY (lsc <* QUERY (pdr <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |
+       pdr.used_representation.name = 'line segment characteristics') |
+       NOT (SIZEOF (QUERY (it <* lsc.used_representation.items |
+       ('PLANT_SPATIAL_CONFIGURATION.MEASURE_REPRESENTATION_ITEM' IN
+       TYPEOF (it)) AND
+       (it.name = 'design pressure'))) = 1))) = 0;
+  WR7: SIZEOF (QUERY (lsc <* QUERY (pdr <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |
+       pdr.used_representation.name = 'line segment characteristics') |
+       NOT (SIZEOF (QUERY (it <* lsc.used_representation.items |
+       (SIZEOF (TYPEOF (it) *
+
+       ['PLANT_SPATIAL_CONFIGURATION.MEASURE_REPRESENTATION_ITEM',
+       'PLANT_SPATIAL_CONFIGURATION.' + 
+       'THERMODYNAMIC_TEMPERATURE_MEASURE_WITH_UNIT']) = 2) AND
+       (it.name = 'design temperature'))) = 1))) = 0;
+  WR8: SIZEOF (QUERY (lsc <* QUERY (pdr <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |
+       pdr.used_representation.name = 'line segment characteristics') |
+       NOT (SIZEOF (QUERY (it <* lsc.used_representation.items |
+       (SIZEOF (TYPEOF (it) *
+       ['PLANT_SPATIAL_CONFIGURATION.MEASURE_REPRESENTATION_ITEM',
+       'PLANT_SPATIAL_CONFIGURATION.LENGTH_MEASURE_WITH_UNIT']) = 2) AND
+       (it.name = 'elevation'))) <= 1))) = 0;
+  WR9: SIZEOF (QUERY (lsc <* QUERY (pdr <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |
+       pdr.used_representation.name = 'line segment characteristics') |
+       NOT (SIZEOF (QUERY (it <* lsc.used_representation.items |
+       ('PLANT_SPATIAL_CONFIGURATION.MEASURE_REPRESENTATION_ITEM' IN
+       TYPEOF (it)) AND
+       (it.name = 'corrosion allowance'))) <= 1))) = 0;
+ WR10: (NOT (SIZEOF (QUERY (pdr <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PRODUCT_DEFINITION_RELATIONSHIP.RELATED_PRODUCT_DEFINITION') |
+       pdr.name = 'segment insulation')) >= 1)) OR
+       (SIZEOF (QUERY (si <* QUERY (pdr <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PRODUCT_DEFINITION_RELATIONSHIP.RELATED_PRODUCT_DEFINITION') |
+       pdr.name = 'segment insulation') |
+       NOT (SIZEOF (QUERY (pd <* USEDIN (si,
+       'PLANT_SPATIAL_CONFIGURATION.PROPERTY_DEFINITION.DEFINITION') |
+       NOT (SIZEOF (QUERY (pds <* QUERY (pdr <* USEDIN (pd,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |
+       'PLANT_SPATIAL_CONFIGURATION.PRODUCT_DEFINITION_SHAPE' IN 
+       TYPEOF (pdr)) |
+       pds.used_representation.name = 
+       'segment insulation characteristics')) = 1))) = 0))) = 0);
+ WR11: (NOT (SIZEOF (QUERY (pdr <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PRODUCT_DEFINITION_RELATIONSHIP.RELATED_PRODUCT_DEFINITION') |
+       pdr.name = 'segment insulation')) >= 1)) OR
+       (SIZEOF (QUERY (si <* QUERY (pdr <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PRODUCT_DEFINITION_RELATIONSHIP.RELATED_PRODUCT_DEFINITION') |
+       pdr.name = 'segment insulation') |
+       NOT (SIZEOF (QUERY (pd <* USEDIN (si,
+       'PLANT_SPATIAL_CONFIGURATION.PROPERTY_DEFINITION.DEFINITION') |
+       NOT (SIZEOF (QUERY (sic <* QUERY (pds <* QUERY (pdr <* USEDIN (pd,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |
+       'PLANT_SPATIAL_CONFIGURATION.PRODUCT_DEFINITION_SHAPE' IN
+       TYPEOF (pdr)) |
+       pds.used_representation.name = 
+       'segment insulation characteristics') |
+       SIZEOF (sic.used_representation.items) >= 1)) = 1))) = 0))) = 0);
+ WR12: (NOT (SIZEOF (QUERY (pdr <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PRODUCT_DEFINITION_RELATIONSHIP.RELATED_PRODUCT_DEFINITION') |
+       pdr.name = 'segment insulation')) >= 1)) OR
+       (SIZEOF (QUERY (si <* QUERY (pdr <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PRODUCT_DEFINITION_RELATIONSHIP.RELATED_PRODUCT_DEFINITION') |
+       pdr.name = 'segment insulation') |
+       NOT (SIZEOF (QUERY (pd <* USEDIN (si,
+       'PLANT_SPATIAL_CONFIGURATION.PROPERTY_DEFINITION.DEFINITION') |
+       NOT (SIZEOF (QUERY (sic <* QUERY (pds <* QUERY (pdr <* USEDIN (pd,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |
+       'PLANT_SPATIAL_CONFIGURATION.PRODUCT_DEFINITION_SHAPE' IN
+       TYPEOF (pdr)) |
+       pds.used_representation.name = 
+       'segment insulation characteristics') |
+       {1 <= SIZEOF (QUERY (it <* sic.used_representation.items |
+       (SIZEOF (TYPEOF (it) *
+       ['PLANT_SPATIAL_CONFIGURATION.MEASURE_REPRESENTATION_ITEM',
+       'PLANT_SPATIAL_CONFIGURATION.LENGTH_MEASURE_WITH_UNIT']) = 2) AND
+       (it.name IN ['thickness', 'minimum thickness', 
+       'maximum thickness']))) <= 2})) = 1))) = 0))) = 0);
+ WR13: (NOT (SIZEOF (QUERY (pdr <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PRODUCT_DEFINITION_RELATIONSHIP.RELATED_PRODUCT_DEFINITION') |
+       pdr.name = 'segment insulation')) >= 1)) OR
+       (SIZEOF (QUERY (si <* QUERY (pdr <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PRODUCT_DEFINITION_RELATIONSHIP.RELATED_PRODUCT_DEFINITION') |
+       pdr.name = 'segment insulation') |
+       NOT (SIZEOF (QUERY (pd <* USEDIN (si,
+       'PLANT_SPATIAL_CONFIGURATION.PROPERTY_DEFINITION.DEFINITION') |
+       NOT (SIZEOF (QUERY (sic <* QUERY (pds <* QUERY (pdr <* USEDIN (pd,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |
+       'PLANT_SPATIAL_CONFIGURATION.PRODUCT_DEFINITION_SHAPE' IN
+       TYPEOF (pdr)) |
+       pds.used_representation.name = 
+       'segment insulation characteristics') |
+       SIZEOF (QUERY (it <* sic.used_representation.items |
+       (SIZEOF (TYPEOF (it) *
+       ['PLANT_SPATIAL_CONFIGURATION.MEASURE_REPRESENTATION_ITEM',
+       'PLANT_SPATIAL_CONFIGURATION.LENGTH_MEASURE_WITH_UNIT']) = 2) AND
+       (it.name = 'thickness'))) <= 1)) = 1))) = 0))) = 0);
+ WR14: (NOT (SIZEOF (QUERY (pdr <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PRODUCT_DEFINITION_RELATIONSHIP.RELATED_PRODUCT_DEFINITION') |
+       pdr.name = 'segment insulation')) >= 1)) OR
+       (SIZEOF (QUERY (si <* QUERY (pdr <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PRODUCT_DEFINITION_RELATIONSHIP.RELATED_PRODUCT_DEFINITION') |
+       pdr.name = 'segment insulation') |
+       NOT (SIZEOF (QUERY (pd <* USEDIN (si,
+       'PLANT_SPATIAL_CONFIGURATION.PROPERTY_DEFINITION.DEFINITION') |
+       NOT (SIZEOF (QUERY (sic <* QUERY (pds <* QUERY (pdr <* USEDIN (pd,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |
+       'PLANT_SPATIAL_CONFIGURATION.PRODUCT_DEFINITION_SHAPE' IN
+       TYPEOF (pdr)) |
+       pds.used_representation.name = 
+       'segment insulation characteristics') |
+       SIZEOF (QUERY (it <* sic.used_representation.items |
+       (SIZEOF (TYPEOF (it) *
+       ['PLANT_SPATIAL_CONFIGURATION.MEASURE_REPRESENTATION_ITEM',
+       'PLANT_SPATIAL_CONFIGURATION.LENGTH_MEASURE_WITH_UNIT']) = 2) AND
+       (it.name = 'minimum thickness'))) <= 1)) = 1))) = 0))) = 0);
+ WR15: (NOT (SIZEOF (QUERY (pdr <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PRODUCT_DEFINITION_RELATIONSHIP.RELATED_PRODUCT_DEFINITION') |
+       pdr.name = 'segment insulation')) >= 1)) OR
+       (SIZEOF (QUERY (si <* QUERY (pdr <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PRODUCT_DEFINITION_RELATIONSHIP.RELATED_PRODUCT_DEFINITION') |
+       pdr.name = 'segment insulation') |
+       NOT (SIZEOF (QUERY (pd <* USEDIN (si,
+       'PLANT_SPATIAL_CONFIGURATION.PROPERTY_DEFINITION.DEFINITION') |
+       NOT (SIZEOF (QUERY (sic <* QUERY (pds <* QUERY (pdr <* USEDIN (pd,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |
+       'PLANT_SPATIAL_CONFIGURATION.PRODUCT_DEFINITION_SHAPE' IN
+       TYPEOF (pdr)) |
+       pds.used_representation.name = 
+       'segment insulation characteristics') |
+       SIZEOF (QUERY (it <* sic.used_representation.items |
+       (SIZEOF (TYPEOF (it) *
+       ['PLANT_SPATIAL_CONFIGURATION.MEASURE_REPRESENTATION_ITEM',
+       'PLANT_SPATIAL_CONFIGURATION.LENGTH_MEASURE_WITH_UNIT']) = 2) AND
+       (it.name = 'maximum thickness'))) <= 1)) = 1))) = 0))) = 0);
+ WR16: (NOT (SIZEOF (QUERY (pdr <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PRODUCT_DEFINITION_RELATIONSHIP.RELATED_PRODUCT_DEFINITION') |
+       pdr.name = 'segment insulation')) >= 1)) OR
+       (SIZEOF (QUERY (si <* QUERY (pdr <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PRODUCT_DEFINITION_RELATIONSHIP.RELATED_PRODUCT_DEFINITION') |
+       pdr.name = 'segment insulation') |
+       NOT (SIZEOF (QUERY (pd <* USEDIN (si,
+       'PLANT_SPATIAL_CONFIGURATION.PROPERTY_DEFINITION.DEFINITION') |
+       NOT (SIZEOF (QUERY (sic <* QUERY (pds <* QUERY (pdr <* USEDIN (pd,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |
+       'PLANT_SPATIAL_CONFIGURATION.PRODUCT_DEFINITION_SHAPE' IN
+       TYPEOF (pdr)) |
+       pds.used_representation.name = 
+       'segment insulation characteristics') |
+       SIZEOF (QUERY (it <* sic.used_representation.items |
+       ('PLANT_SPATIAL_CONFIGURATION.DESCRIPTIVE_REPRESENTATION_ITEM' IN
+       TYPEOF (it)) AND
+       (it.name = 'boundaries'))) <= 1)) = 1))) = 0))) = 0);
+ WR17: SIZEOF (QUERY (pds <* QUERY (pd <* USEDIN (SELF,
+      'PLANT_SPATIAL_CONFIGURATION.PROPERTY_DEFINITION.DEFINITION') |
+      'PLANT_SPATIAL_CONFIGURATION.PRODUCT_DEFINITION_SHAPE' IN
+      TYPEOF (pd)) |
+      NOT (SIZEOF (QUERY (sa <*USEDIN (pds,
+      'PLANT_SPATIAL_CONFIGURATION.SHAPE_ASPECT.OF_SHAPE') |
+      'PLANT_SPATIAL_CONFIGURATION.PLANT_LINE_SEGMENT_TERMINATION' IN
+      TYPEOF (sa))) = 2))) = 0;
+END_ENTITY;
+
+
+ENTITY plant_line_segment_termination
+  SUBTYPE OF (shape_aspect);
+WHERE
+  WR1: ((SELF.description = 'piping line segment termination') AND
+       ('PLANT_SPATIAL_CONFIGURATION.PLANT_LINE_SEGMENT_DEFINITION'
+       IN TYPEOF (SELF.of_shape.definition))) XOR
+       ((SELF.description = 'piping line termination') AND
+       ('PLANT_SPATIAL_CONFIGURATION.PRODUCT_DEFINITION_RELATIONSHIP'
+       IN TYPEOF (SELF.of_shape.definition)) AND
+       ('PLANT_SPATIAL_CONFIGURATION.PLANT_LINE_SEGMENT_DEFINITION' 
+       IN TYPEOF (SELF.of_shape.definition.related_product_definition)) AND
+       ('PLANT_SPATIAL_CONFIGURATION.PLANT_LINE_DEFINITION' 
+       IN TYPEOF (SELF.of_shape.definition.relating_product_definition)));
+  WR2: SIZEOF (QUERY (sar <*
+       USEDIN (SELF, 'PLANT_SPATIAL_CONFIGURATION.' +
+       'SHAPE_ASPECT_RELATIONSHIP.RELATING_SHAPE_ASPECT') +
+       USEDIN (SELF, 'PLANT_SPATIAL_CONFIGURATION.' +
+       'SHAPE_ASPECT_RELATIONSHIP.RELATED_SHAPE_ASPECT') |
+       NOT (SIZEOF (TYPEOF (sar) *
+       ['PLANT_SPATIAL_CONFIGURATION.LINE_BRANCH_CONNECTION',
+       'PLANT_SPATIAL_CONFIGURATION.LINE_PLANT_ITEM_CONNECTION',
+       'PLANT_SPATIAL_CONFIGURATION.LINE_TERMINATION_CONNECTION'])
+       = 1))) = 0;
+
+  WR3: SIZEOF (QUERY (sar <*
+       USEDIN (SELF, 'PLANT_SPATIAL_CONFIGURATION.'+
+       'SHAPE_ASPECT_RELATIONSHIP.RELATED_SHAPE_ASPECT') |
+       SIZEOF (TYPEOF (sar) * 
+       ['PLANT_SPATIAL_CONFIGURATION.LINE_BRANCH_CONNECTION',
+       'PLANT_SPATIAL_CONFIGURATION.LINE_PLANT_ITEM_CONNECTION']) = 1))= 1;
+
+END_ENTITY;
+
+
+ENTITY applied_action_request_assignment
+  SUBTYPE OF (action_request_assignment);
+  items : SET [1:?] OF action_request_item;
+END_ENTITY;
+
+
+ENTITY applied_approval_assignment
+  SUBTYPE OF (approval_assignment);
+  items : SET [1:?] OF approval_item;
+END_ENTITY;
+
+
+ENTITY plant_spatial_configuration_change_assignment
+  SUBTYPE OF (action_assignment);
+  items : SET [1:?] OF change_item;
+WHERE
+  WR1: 'PLANT_SPATIAL_CONFIGURATION.CHANGE_ACTION'
+       IN TYPEOF (SELF.assigned_action);
+END_ENTITY;
+
+
+ENTITY applied_date_and_time_assignment
+  SUBTYPE OF (date_and_time_assignment);
+  items : SET [1:?] OF date_and_time_item;
+END_ENTITY;
+
+
+ENTITY applied_date_assignment
+  SUBTYPE OF (date_assignment);
+  items : SET [1:?] OF dated_item;
+END_ENTITY;
+
+
+ENTITY applied_document_reference
+  SUBTYPE OF (document_reference);
+  items : SET [1:?] OF document_item;
+END_ENTITY;
+
+
+ENTITY plant_spatial_configuration_organization_assignment
+  SUBTYPE OF (organization_assignment);
+  items : SET [1:?] OF plant_spatial_configuration_organization_item;
+WHERE
+  WR1: plant_spatial_configuration_organization_correlation (SELF);
+END_ENTITY;
+
+
+ENTITY plant_spatial_configuration_person_and_organization_assignment
+  SUBTYPE OF (person_and_organization_assignment);
+  items : SET [1:?] OF 
+          plant_spatial_configuration_person_and_organization_item;
+WHERE
+  WR1: plant_spatial_configuration_person_and_organization_correlation
+           (SELF);
+END_ENTITY;
+
+
+ENTITY plant_spatial_configuration_person_assignment
+  SUBTYPE OF (person_assignment);
+  items : SET [1:?] OF plant_spatial_configuration_person_item;
+WHERE
+  WR1: plant_spatial_configuration_person_correlation (SELF);
+END_ENTITY;
+
+
+ENTITY process_capability
+  SUBTYPE OF (property_definition);
+WHERE
+  WR1: 'PLANT_SPATIAL_CONFIGURATION.PLANT' IN
+       TYPEOF(SELF.definition\product_definition.formation.of_product);
+  WR2: SIZEOF (QUERY (pdr <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.PROPERTY_DEFINITION_REPRESENTATION.' +
+       'DEFINITION') |
+       (pdr.used_representation.name = 'production capacity') AND
+       (NOT (SIZEOF (QUERY (it <* pdr.used_representation.items |
+       ('PLANT_SPATIAL_CONFIGURATION.DESCRIPTIVE_REPRESENTATION_ITEM'
+       IN TYPEOF (it)) AND 
+       (it.name = 'production type'))) = 1)))) = 0;
+END_ENTITY;
+
+
+ENTITY purchase_assignment
+  SUBTYPE OF (action_assignment);
+  items : SET [1:?] OF purchase_item;
+END_ENTITY;
+
+
+ENTITY reducer_fitting_class
+  SUBTYPE OF (group);
+WHERE
+  WR1: SIZEOF (QUERY (aca <* QUERY (ca <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.CLASSIFICATION_ASSIGNMENT.' + 
+       'ASSIGNED_CLASSIFICATION') |
+       'PLANT_SPATIAL_CONFIGURATION.APPLIED_CLASSIFICATION_ASSIGNMENT' IN 
+       TYPEOF (ca)) |
+       NOT (SIZEOF (QUERY (it <* aca.items |
+       NOT ('PLANT_SPATIAL_CONFIGURATION.PIPING_COMPONENT_DEFINITION' IN
+       TYPEOF (it)))) = 0))) = 0;
+  WR2: SIZEOF (QUERY (aca <* QUERY (ca <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.CLASSIFICATION_ASSIGNMENT.' + 
+       'ASSIGNED_CLASSIFICATION') |
+       'PLANT_SPATIAL_CONFIGURATION.APPLIED_CLASSIFICATION_ASSIGNMENT' IN 
+       TYPEOF (ca)) |
+       NOT (SIZEOF (QUERY (pcd <* QUERY (it <* aca.items |
+       'PLANT_SPATIAL_CONFIGURATION.PIPING_COMPONENT_DEFINITION' IN
+       TYPEOF (it)) |
+       NOT (SIZEOF (QUERY (aca1 <* USEDIN (pcd.formation.of_product,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'APPLIED_CLASSIFICATION_ASSIGNMENT.ITEMS') |
+       class_in_tree (aca1.assigned_classification, 'reducer'))) 
+       = 1))) = 0))) = 0;
+END_ENTITY;
+
+
+ENTITY reference_geometry
+  SUBTYPE OF (derived_shape_aspect);
+WHERE
+  WR1: SIZEOF (QUERY (pd <* USEDIN (SELF, 'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION.DEFINITION') |
+       NOT (SIZEOF (USEDIN (pd, 'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION')) >= 1))) = 0;
+END_ENTITY;
+
+
+ENTITY required_material_property
+  SUBTYPE OF (material_property);
+WHERE
+  WR1: (SIZEOF (TYPEOF (SELF\property_definition.definition) *
+       ['PLANT_SPATIAL_CONFIGURATION.PLANT_ITEM_CONNECTOR',
+       'PLANT_SPATIAL_CONFIGURATION.' + 
+       'EXTERNALLY_DEFINED_PLANT_ITEM_DEFINITION']) = 1) OR
+       (('PLANT_SPATIAL_CONFIGURATION.PRODUCT_DEFINITION' IN 
+       TYPEOF (SELF.definition)) AND
+       (SIZEOF (QUERY (pc <* SELF\property_definition.
+       definition\product_definition.formation.of_product.
+       frame_of_reference |
+       pc.discipline_type = 'process plant')) = 1));
+  WR2: SIZEOF (QUERY (ra <* QUERY (pdr <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_RELATIONSHIP.RELATED_PROPERTY_DEFINITION') |
+       pdr.name = 'requirement allocation') |
+       'PLANT_SPATIAL_CONFIGURATION.MATERIAL_PROPERTY' IN 
+       TYPEOF (ra.relating_property_definition))) >= 1;
+END_ENTITY;
+
+
+ENTITY reserved_space
+  SUBTYPE OF (shape_aspect);
+WHERE
+  WR1: SELF\shape_aspect.of_shape\property_definition.
+       definition\product_definition.
+       frame_of_reference\application_context_element.name =
+       'physical occurrence';
+END_ENTITY;
+
+
+ENTITY site
+  SUBTYPE OF (characterized_object, property_definition);
+WHERE
+  WR1: 'PLANT_SPATIAL_CONFIGURATION.PLANT' IN 
+       TYPEOF (SELF\property_definition.definition\product_definition.
+       formation.of_product);
+END_ENTITY;
+
+
+ENTITY site_building
+  SUBTYPE OF (property_definition);
+WHERE
+  WR1: 'PLANT_SPATIAL_CONFIGURATION.SITE' IN
+       TYPEOF (SELF.definition);
+  WR2: SIZEOF (QUERY (pdr <* USEDIN (SELF, 
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |
+       (pdr.used_representation.name = 'building number') AND
+       (SIZEOF (QUERY (it <* pdr.used_representation.items |
+       ('PLANT_SPATIAL_CONFIGURATION.DESCRIPTIVE_REPRESENTATION_ITEM' IN
+       TYPEOF (it)))) = 1))) = 1;
+  WR3: SIZEOF (QUERY (pdr <* USEDIN (SELF, 
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |
+       SIZEOF (QUERY (it <* pdr.used_representation.items |
+       (SIZEOF (['PLANT_SPATIAL_CONFIGURATION.AXIS2_PLACEMENT_2D',
+       'PLANT_SPATIAL_CONFIGURATION.AXIS2_PLACEMENT_3D'] * 
+       TYPEOF (it)) = 1) AND
+       (it.name = 'building orientation') AND
+       (it.location.name = 'building location'))) = 1)) <= 1; 
+END_ENTITY;
+
+
+ENTITY site_feature
+  SUBTYPE OF (property_definition);
+WHERE
+  WR1: 'PLANT_SPATIAL_CONFIGURATION.SITE' IN
+       TYPEOF(SELF.definition);
+  WR2: SIZEOF (USEDIN (SELF, 'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION')) = 3;
+  WR3: SIZEOF (QUERY (pdr <* USEDIN (SELF, 
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |
+       SIZEOF (QUERY (it <* pdr.used_representation.items |
+       ('PLANT_SPATIAL_CONFIGURATION.DESCRIPTIVE_REPRESENTATION_ITEM' IN
+       TYPEOF (it)) AND   
+       (it.name = 'site feature type'))) = 1)) = 1;
+  WR4: SIZEOF (QUERY (pdr <* USEDIN (SELF, 
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |
+       SIZEOF (QUERY (it <* pdr.used_representation.items |
+       (SIZEOF (['PLANT_SPATIAL_CONFIGURATION.AXIS2_PLACEMENT_2D',
+       'PLANT_SPATIAL_CONFIGURATION.AXIS2_PLACEMENT_3D'] * 
+       TYPEOF (it)) = 1) AND
+       (it.name = 'feature orientation') AND
+       (it.location.name = 'feature location'))) = 1)) = 1;
+  WR5: SIZEOF (QUERY (pdr <* USEDIN (SELF, 
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |
+       SIZEOF (QUERY (it <* pdr.used_representation.items |
+       ('PLANT_SPATIAL_CONFIGURATION.DESCRIPTIVE_REPRESENTATION_ITEM' IN
+       TYPEOF (pdr.used_representation)) AND   
+       (it.name = 'origin type') AND
+       (it.description IN ['man made', 'natural']))) = 1)) = 1;
+END_ENTITY;
+
+
+ENTITY site_representation
+  SUBTYPE OF (shape_representation);
+WHERE
+  WR1: SIZEOF (QUERY (pdr <* USEDIN (SELF,'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_REPRESENTATION.USED_REPRESENTATION') |
+       NOT('PLANT_SPATIAL_CONFIGURATION.SITE' IN 
+       TYPEOF (pdr.definition.definition)))) = 0;
+  WR2: SIZEOF (QUERY (item <* SELF.items |
+       NOT (SIZEOF (['PLANT_SPATIAL_CONFIGURATION.CONNECTED_FACE_SET',
+       'PLANT_SPATIAL_CONFIGURATION.GEOMETRIC_CURVE_SET'] *
+       TYPEOF (item)) = 1))) = 1;
+  WR3: SIZEOF (QUERY (cfs <* QUERY (item <* SELF.items |
+       'PLANT_SPATIAL_CONFIGURATION.CONNECTED_FACE_SET' IN TYPEOF (item)) |
+       NOT (SIZEOF (QUERY (fcs <* cfs\connected_face_set.cfs_faces |
+       NOT (SIZEOF (QUERY (bnds <* fcs.bounds |
+       NOT ('PLANT_SPATIAL_CONFIGURATION.POLY_LOOP' 
+       IN TYPEOF (bnds.bound)))) 
+       = 0))) = 0))) = 0;
+  WR4: SIZEOF (QUERY (cfs <* QUERY (item <* SELF.items |
+       'PLANT_SPATIAL_CONFIGURATION.CONNECTED_FACE_SET' IN TYPEOF (item)) |
+       NOT (SIZEOF (QUERY (fcs <* cfs\connected_face_set.cfs_faces |
+       NOT (SIZEOF (QUERY (bnds <* fcs.bounds |
+       NOT (SIZEOF (bnds.bound\poly_loop.polygon) = 3))) 
+       = 0))) = 0))) = 0;
+  WR5: SIZEOF (QUERY (gcs <* QUERY (item <* SELF.items |
+       'PLANT_SPATIAL_CONFIGURATION.GEOMETRIC_CURVE_SET' 
+       IN TYPEOF (item)) |
+       NOT (SIZEOF (QUERY (el <* gcs\geometric_set.elements |
+       NOT (SIZEOF (['PLANT_SPATIAL_CONFIGURATION.CARTESIAN_POINT',
+       'PLANT_SPATIAL_CONFIGURATION.POLYLINE'] * TYPEOF (el)) 
+       = 1))) = 0))) = 0;
+  WR6: SIZEOF (QUERY (gcs <* QUERY (item <* SELF.items |
+       'PLANT_SPATIAL_CONFIGURATION.GEOMETRIC_CURVE_SET' 
+       IN TYPEOF (item)) |
+       NOT (SIZEOF (QUERY (el <* gcs\geometric_set.elements |
+       'PLANT_SPATIAL_CONFIGURATION.CARTESIAN_POINT' IN TYPEOF (el))) 
+       >= 1))) = 0;
+  WR7: SIZEOF (QUERY (gcs <* QUERY (item <* SELF.items |
+       'PLANT_SPATIAL_CONFIGURATION.GEOMETRIC_CURVE_SET' 
+       IN TYPEOF (item)) |
+       NOT (SIZEOF (QUERY (pline <* QUERY (el <* 
+       gcs\geometric_set.elements |
+       'PLANT_SPATIAL_CONFIGURATION.POLYLINE' IN TYPEOF (el)) |
+       NOT (SIZEOF (QUERY (pline_pt <* pline\polyline.points |
+       NOT (pline_pt IN gcs\geometric_set.elements))) = 0))) = 0))) = 0;
+END_ENTITY;
+
+ENTITY sited_plant
+  SUBTYPE OF (property_definition);
+UNIQUE
+  UR1: SELF\property_definition.definition;
+WHERE
+  WR1: 'PLANT_SPATIAL_CONFIGURATION.PRODUCT_DEFINITION' IN TYPEOF
+       (SELF.definition);
+  WR2: SELF.definition.frame_of_reference.name = 'physical occurrence';
+END_ENTITY;
+
+ENTITY spacer_fitting_class
+  SUBTYPE OF (group);
+WHERE
+  WR1: SIZEOF (QUERY (aca <* QUERY (ca <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.CLASSIFICATION_ASSIGNMENT.' + 
+       'ASSIGNED_CLASSIFICATION') |
+       'PLANT_SPATIAL_CONFIGURATION.APPLIED_CLASSIFICATION_ASSIGNMENT' IN 
+       TYPEOF (ca)) |
+       NOT (SIZEOF (QUERY (it <* aca.items |
+       NOT ('PLANT_SPATIAL_CONFIGURATION.PIPING_COMPONENT_DEFINITION' IN
+       TYPEOF (it)))) = 0))) = 0;
+  WR2: SIZEOF (QUERY (aca <* QUERY (ca <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.CLASSIFICATION_ASSIGNMENT.' + 
+       'ASSIGNED_CLASSIFICATION') |
+       'PLANT_SPATIAL_CONFIGURATION.APPLIED_CLASSIFICATION_ASSIGNMENT' IN 
+       TYPEOF (ca)) |
+       NOT (SIZEOF (QUERY (pcd <* QUERY (it <* aca.items |
+       'PLANT_SPATIAL_CONFIGURATION.PIPING_COMPONENT_DEFINITION' IN
+       TYPEOF (it)) |
+       NOT (SIZEOF (QUERY (aca1 <* USEDIN (pcd.formation.of_product,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'APPLIED_CLASSIFICATION_ASSIGNMENT.ITEMS') |
+       class_in_tree (aca1.assigned_classification, 'spacer'))) 
+       = 1))) = 0))) = 0;
+END_ENTITY;
+
+
+ENTITY specialty_item_class
+  SUBTYPE OF (group);
+END_ENTITY;
+
+
+ENTITY stream_design_case
+  SUBTYPE OF (property_definition, characterized_object);
+WHERE
+  WR1: SIZEOF (QUERY (pd <* USEDIN (SELF, 'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION.DEFINITION') |
+       'PLANT_SPATIAL_CONFIGURATION.STREAM_PHASE' IN
+       TYPEOF (pd))) >= 1;
+  WR2: SIZEOF (QUERY (pdr <* USEDIN (SELF, 'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |
+       pdr.used_representation.name = 'stream flow characteristics')) = 1;
+  WR3: SIZEOF (QUERY (sfc <* QUERY (pdr <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |
+       pdr.used_representation.name = 'stream flow characteristics') |
+       NOT (SIZEOF (sfc.used_representation.items) >= 2))) = 0;
+  WR4: SIZEOF (QUERY (sfc <* QUERY (pdr <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |
+       pdr.used_representation.name = 'stream flow characteristics') |
+       NOT ({1 <= SIZEOF (QUERY (it <* sfc.used_representation.items |
+       ('PLANT_SPATIAL_CONFIGURATION.MEASURE_REPRESENTATION_ITEM' IN
+       TYPEOF (it)) AND
+       (it.name IN ['flow rate', 'minimum flow rate', 
+       'maximum flow rate']))) <= 2}))) = 0;
+  WR5: SIZEOF (QUERY (sfc <* QUERY (pdr <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |
+       pdr.used_representation.name = 'stream flow characteristics') |
+       NOT (SIZEOF (QUERY (it <* sfc.used_representation.items |
+       ('PLANT_SPATIAL_CONFIGURATION.MEASURE_REPRESENTATION_ITEM' IN
+       TYPEOF (it)) AND
+       (it.name = 'flow rate'))) <= 1))) = 0;
+  WR6: SIZEOF (QUERY (sfc <* QUERY (pdr <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |
+       pdr.used_representation.name = 'stream flow characteristics') |
+       NOT (SIZEOF (QUERY (it <* sfc.used_representation.items |
+       ('PLANT_SPATIAL_CONFIGURATION.MEASURE_REPRESENTATION_ITEM' IN
+       TYPEOF (it)) AND
+       (it.name = 'minimum flow rate'))) <= 1))) = 0;
+  WR7: SIZEOF (QUERY (sfc <* QUERY (pdr <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |
+       pdr.used_representation.name = 'stream flow characteristics') |
+       NOT (SIZEOF (QUERY (it <* sfc.used_representation.items |
+       ('PLANT_SPATIAL_CONFIGURATION.MEASURE_REPRESENTATION_ITEM' IN
+       TYPEOF (it)) AND
+       (it.name = 'maximum flow rate'))) <= 1))) = 0;
+  WR8: SIZEOF (QUERY (sfc <* QUERY (pdr <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |
+       pdr.used_representation.name = 'stream flow characteristics') |
+       NOT ({1 <= SIZEOF (QUERY (it <* sfc.used_representation.items |
+       ('PLANT_SPATIAL_CONFIGURATION.MEASURE_REPRESENTATION_ITEM' IN
+       TYPEOF (it)) AND
+       (it.name IN ['pressure', 'minimum pressure', 
+       'maximum pressure']))) <= 2}))) = 0;
+  WR9: SIZEOF (QUERY (sfc <* QUERY (pdr <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |
+       pdr.used_representation.name = 'stream flow characteristics') |
+       NOT (SIZEOF (QUERY (it <* sfc.used_representation.items |
+       ('PLANT_SPATIAL_CONFIGURATION.MEASURE_REPRESENTATION_ITEM' IN
+       TYPEOF (it)) AND
+       (it.name = 'pressure'))) <= 1))) = 0;
+ WR10: SIZEOF (QUERY (sfc <* QUERY (pdr <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |
+       pdr.used_representation.name = 'stream flow characteristics') |
+       NOT (SIZEOF (QUERY (it <* sfc.used_representation.items |
+       ('PLANT_SPATIAL_CONFIGURATION.MEASURE_REPRESENTATION_ITEM' IN
+       TYPEOF (it)) AND
+       (it.name = 'minimum pressure'))) <= 1))) = 0;
+ WR11: SIZEOF (QUERY (sfc <* QUERY (pdr <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |
+       pdr.used_representation.name = 'stream flow characteristics') |
+       NOT (SIZEOF (QUERY (it <* sfc.used_representation.items |
+       ('PLANT_SPATIAL_CONFIGURATION.MEASURE_REPRESENTATION_ITEM' IN
+       TYPEOF (it)) AND
+       (it.name = 'maximum pressure'))) <= 1))) = 0;
+ WR12: SIZEOF (QUERY (sfc <* QUERY (pdr <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |
+       pdr.used_representation.name = 'stream flow characteristics') |
+       NOT (SIZEOF (QUERY (it <* sfc.used_representation.items |
+       ('PLANT_SPATIAL_CONFIGURATION.DESCRIPTIVE_REPRESENTATION_ITEM' IN
+       TYPEOF (it)) AND
+       (it.name = 'stream data reference'))) <= 1))) = 0;
+ WR13: (NOT (SIZEOF (QUERY (pdr <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_RELATIONSHIP.RELATING_PROPERTY_DEFINITION') |
+       pdr.related_property_definition.name = 
+       'service characteristics')) >= 1)) OR
+       (SIZEOF (QUERY (sc <* QUERY (pdr <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_RELATIONSHIP.RELATING_PROPERTY_DEFINITION') |
+       pdr.related_property_definition.name = 
+       'service characteristics') |
+       NOT (SIZEOF (QUERY (pdr <* USEDIN (sc.related_property_definition,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |
+       pdr.used_representation.name = 
+       'service operating characteristics')) = 1))) = 0);
+ WR14: (NOT (SIZEOF (QUERY (pdr <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_RELATIONSHIP.RELATING_PROPERTY_DEFINITION') |
+       pdr.related_property_definition.name = 
+       'service characteristics')) >= 1)) OR
+       (SIZEOF (QUERY (sc <* QUERY (pdr <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_RELATIONSHIP.RELATING_PROPERTY_DEFINITION') |
+       pdr.related_property_definition.name = 
+       'service characteristics') |
+       NOT (SIZEOF (QUERY (soc <* QUERY (pdr <* 
+       USEDIN (sc.related_property_definition, 
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |
+       pdr.used_representation.name = 
+       'service operating characteristics') |
+       NOT (SIZEOF (soc.used_representation.items) >= 3))) = 0))) = 0);
+ WR15: (NOT (SIZEOF (QUERY (pdr <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_RELATIONSHIP.RELATING_PROPERTY_DEFINITION') |
+       pdr.related_property_definition.name = 
+       'service characteristics')) >= 1)) OR
+       (SIZEOF (QUERY (sc <* QUERY (pdr <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_RELATIONSHIP.RELATING_PROPERTY_DEFINITION') |
+       pdr.related_property_definition.name = 'service characteristics') |
+       NOT (SIZEOF (QUERY (soc <* QUERY (pdr <* 
+       USEDIN (sc.related_property_definition,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |
+       pdr.used_representation.name = 
+       'service operating characteristics') |
+       {1 <= SIZEOF (QUERY (it <* soc.used_representation.items |
+       (SIZEOF (TYPEOF (it) *
+       ['PLANT_SPATIAL_CONFIGURATION.MEASURE_REPRESENTATION_ITEM',
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'THERMODYNAMIC_TEMPERATURE_MEASURE_WITH_UNIT']) = 2) AND
+       (it.name IN ['temperature', 'minimum temperature', 
+       'maximum temperature']))) <= 2})) = 1))) = 0);
+ WR16: (NOT (SIZEOF (QUERY (pdr <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_RELATIONSHIP.RELATING_PROPERTY_DEFINITION') |
+       pdr.related_property_definition.name = 
+       'service characteristics')) >= 1)) OR 
+       (SIZEOF (QUERY (sc <* QUERY (pdr <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_RELATIONSHIP.RELATING_PROPERTY_DEFINITION') |
+       pdr.related_property_definition.name = 'service characteristics') |
+       NOT (SIZEOF (QUERY (soc <* QUERY (pdr <* 
+       USEDIN (sc.related_property_definition,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |
+       pdr.used_representation.name = 
+       'service operating characteristics') |
+       SIZEOF (QUERY (it <* soc.used_representation.items |
+       (SIZEOF (TYPEOF (it) *
+       ['PLANT_SPATIAL_CONFIGURATION.MEASURE_REPRESENTATION_ITEM',
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'THERMODYNAMIC_TEMPERATURE_MEASURE_WITH_UNIT']) = 2) AND
+       (it.name = 'temperature'))) <= 1)) = 1))) = 0);
+ WR17: (NOT (SIZEOF (QUERY (pdr <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_RELATIONSHIP.RELATING_PROPERTY_DEFINITION') |
+       pdr.related_property_definition.name = 
+       'service characteristics')) >= 1)) OR 
+       (SIZEOF (QUERY (sc <* QUERY (pdr <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_RELATIONSHIP.RELATING_PROPERTY_DEFINITION') |
+       pdr.related_property_definition.name = 'service characteristics') |
+       NOT (SIZEOF (QUERY (soc <* QUERY (pdr <* 
+       USEDIN (sc.related_property_definition,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |
+       pdr.used_representation.name = 
+       'service operating characteristics') |
+       SIZEOF (QUERY (it <* soc.used_representation.items |
+       (SIZEOF (TYPEOF (it) *
+       ['PLANT_SPATIAL_CONFIGURATION.MEASURE_REPRESENTATION_ITEM',
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'THERMODYNAMIC_TEMPERATURE_MEASURE_WITH_UNIT']) = 2) AND
+       (it.name = 'minimum temperature'))) <= 1)) = 1))) = 0);
+ WR18: (NOT (SIZEOF (QUERY (pdr <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_RELATIONSHIP.RELATING_PROPERTY_DEFINITION') |
+       pdr.related_property_definition.name = 
+       'service characteristics')) >= 1)) OR 
+       (SIZEOF (QUERY (sc <* QUERY (pdr <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_RELATIONSHIP.RELATING_PROPERTY_DEFINITION') |
+       pdr.related_property_definition.name = 'service characteristics') |
+       NOT (SIZEOF (QUERY (soc <* QUERY (pdr <* 
+       USEDIN (sc.related_property_definition,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |
+       pdr.used_representation.name = 
+       'service operating characteristics') |
+       SIZEOF (QUERY (it <* soc.used_representation.items |
+       (SIZEOF (TYPEOF (it) *
+       ['PLANT_SPATIAL_CONFIGURATION.MEASURE_REPRESENTATION_ITEM',
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'THERMODYNAMIC_TEMPERATURE_MEASURE_WITH_UNIT']) = 2) AND
+       (it.name = 'maximum temperature'))) <= 1)) = 1))) = 0);
+ WR19: (NOT (SIZEOF (QUERY (pdr <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_RELATIONSHIP.RELATING_PROPERTY_DEFINITION') |
+       pdr.related_property_definition.name = 
+       'service characteristics')) >= 1)) OR
+       (SIZEOF (QUERY (sc <* QUERY (pdr <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_RELATIONSHIP.RELATING_PROPERTY_DEFINITION') |
+       pdr.related_property_definition.name = 'service characteristics') |
+       NOT (SIZEOF (QUERY (soc <* QUERY (pdr <* 
+       USEDIN (sc.related_property_definition,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |
+       pdr.used_representation.name = 
+       'service operating characteristics') |
+       {1 <= SIZEOF (QUERY (it <* soc.used_representation.items |
+       ('PLANT_SPATIAL_CONFIGURATION.MEASURE_REPRESENTATION_ITEM' IN
+       TYPEOF (it)) AND
+       (it.name IN ['pressure', 'minimum pressure', 
+       'maximum pressure']))) <= 2})) = 1))) = 0);
+ WR20: (NOT (SIZEOF (QUERY (pdr <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_RELATIONSHIP.RELATING_PROPERTY_DEFINITION') |
+       pdr.related_property_definition.name = 
+       'service characteristics')) >= 1)) OR
+       (SIZEOF (QUERY (sc <* QUERY (pdr <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_RELATIONSHIP.RELATING_PROPERTY_DEFINITION') |
+       pdr.related_property_definition.name = 'service characteristics') |
+       NOT (SIZEOF (QUERY (soc <* QUERY (pdr <* 
+       USEDIN (sc.related_property_definition,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |
+       pdr.used_representation.name = 
+       'service operating characteristics') |
+       SIZEOF (QUERY (it <* soc.used_representation.items |
+       ('PLANT_SPATIAL_CONFIGURATION.MEASURE_REPRESENTATION_ITEM' IN
+       TYPEOF (it)) AND
+       (it.name = 'pressure'))) <= 1)) = 1))) = 0);
+ WR21: (NOT (SIZEOF (QUERY (pdr <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_RELATIONSHIP.RELATING_PROPERTY_DEFINITION') |
+       pdr.related_property_definition.name = 
+       'service characteristics')) >= 1)) OR
+       (SIZEOF (QUERY (sc <* QUERY (pdr <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_RELATIONSHIP.RELATING_PROPERTY_DEFINITION') |
+       pdr.related_property_definition.name = 'service characteristics') |
+       NOT (SIZEOF (QUERY (soc <* QUERY (pdr <* 
+       USEDIN (sc.related_property_definition,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |
+       pdr.used_representation.name = 
+       'service operating characteristics') |
+       SIZEOF (QUERY (it <* soc.used_representation.items |
+       ('PLANT_SPATIAL_CONFIGURATION.MEASURE_REPRESENTATION_ITEM' IN
+       TYPEOF (it)) AND
+       (it.name = 'minimum pressure'))) <= 1)) = 1))) = 0);
+ WR22: (NOT (SIZEOF (QUERY (pdr <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_RELATIONSHIP.RELATING_PROPERTY_DEFINITION') |
+       pdr.related_property_definition.name = 
+       'service characteristics')) >= 1)) OR
+       (SIZEOF (QUERY (sc <* QUERY (pdr <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_RELATIONSHIP.RELATING_PROPERTY_DEFINITION') |
+       pdr.related_property_definition.name = 'service characteristics') |
+       NOT (SIZEOF (QUERY (soc <* QUERY (pdr <* 
+       USEDIN (sc.related_property_definition,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |
+       pdr.used_representation.name = 
+       'service operating characteristics') |
+       SIZEOF (QUERY (it <* soc.used_representation.items |
+       ('PLANT_SPATIAL_CONFIGURATION.MEASURE_REPRESENTATION_ITEM' IN
+       TYPEOF (it)) AND
+       (it.name = 'maximum pressure'))) <= 1)) = 1))) = 0);
+ WR23: (NOT (SIZEOF (QUERY (pdr <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_RELATIONSHIP.RELATING_PROPERTY_DEFINITION') |
+       pdr.related_property_definition.name = 
+       'service characteristics')) >= 1)) OR
+       (SIZEOF (QUERY (sc <* QUERY (pdr <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_RELATIONSHIP.RELATING_PROPERTY_DEFINITION') |
+       pdr.related_property_definition.name = 'service characteristics') |
+       NOT (SIZEOF (QUERY (soc <* QUERY (pdr <* 
+       USEDIN (sc.related_property_definition,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |
+       pdr.used_representation.name = 
+       'service operating characteristics') |
+       {1 <= SIZEOF (QUERY (it <* soc.used_representation.items |
+       (SIZEOF (TYPEOF (it) *
+       ['PLANT_SPATIAL_CONFIGURATION.MEASURE_REPRESENTATION_ITEM',
+       'PLANT_SPATIAL_CONFIGURATION.TIME_MEASURE_WITH_UNIT']) = 2) AND
+       (it.name IN ['duration', 'minimum duration', 
+       'maximum duration']))) <= 2})) = 1))) = 0);
+ WR24: (NOT (SIZEOF (QUERY (pdr <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_RELATIONSHIP.RELATING_PROPERTY_DEFINITION') |
+       pdr.related_property_definition.name = 
+       'service characteristics')) >= 1)) OR 
+       (SIZEOF (QUERY (sc <* QUERY (pdr <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_RELATIONSHIP.RELATING_PROPERTY_DEFINITION') |
+       pdr.related_property_definition.name = 'service characteristics') |
+       NOT (SIZEOF (QUERY (soc <* QUERY (pdr <* 
+       USEDIN (sc.related_property_definition,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |
+       pdr.used_representation.name = 
+       'service operating characteristics') |
+       SIZEOF (QUERY (it <* soc.used_representation.items |
+       (SIZEOF (TYPEOF (it) *
+       ['PLANT_SPATIAL_CONFIGURATION.MEASURE_REPRESENTATION_ITEM',
+       'PLANT_SPATIAL_CONFIGURATION.TIME_MEASURE_WITH_UNIT']) = 2) AND
+       (it.name = 'duration'))) <= 1)) = 1))) = 0);
+ WR25: (NOT (SIZEOF (QUERY (pdr <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_RELATIONSHIP.RELATING_PROPERTY_DEFINITION') |
+       pdr.related_property_definition.name = 
+       'service characteristics')) >= 1)) OR 
+       (SIZEOF (QUERY (sc <* QUERY (pdr <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_RELATIONSHIP.RELATING_PROPERTY_DEFINITION') |
+       pdr.related_property_definition.name = 'service characteristics') |
+       NOT (SIZEOF (QUERY (soc <* QUERY (pdr <* 
+       USEDIN (sc.related_property_definition,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |
+       pdr.used_representation.name = 
+       'service operating characteristics') |
+       SIZEOF (QUERY (it <* soc.used_representation.items |
+       (SIZEOF (TYPEOF (it) *
+       ['PLANT_SPATIAL_CONFIGURATION.MEASURE_REPRESENTATION_ITEM',
+       'PLANT_SPATIAL_CONFIGURATION.TIME_MEASURE_WITH_UNIT']) = 2) AND
+       (it.name = 'minimum duration'))) <= 1)) = 1))) = 0);
+ WR26: (NOT (SIZEOF (QUERY (pdr <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_RELATIONSHIP.RELATING_PROPERTY_DEFINITION') |
+       pdr.related_property_definition.name = 
+       'service characteristics')) >= 1)) OR 
+       (SIZEOF (QUERY (sc <* QUERY (pdr <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_RELATIONSHIP.RELATING_PROPERTY_DEFINITION') |
+       pdr.related_property_definition.name = 'service characteristics') |
+       NOT (SIZEOF (QUERY (soc <* QUERY (pdr <* 
+       USEDIN (sc.related_property_definition,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |
+       pdr.used_representation.name = 
+       'service operating characteristics') |
+       SIZEOF (QUERY (it <* soc.used_representation.items |
+       (SIZEOF (TYPEOF (it) *
+       ['PLANT_SPATIAL_CONFIGURATION.MEASURE_REPRESENTATION_ITEM',
+       'PLANT_SPATIAL_CONFIGURATION.TIME_MEASURE_WITH_UNIT']) = 2) AND
+       (it.name = 'maximum duration'))) <= 1)) = 1))) = 0);
+ WR27: (NOT (SIZEOF (QUERY (pdr <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_RELATIONSHIP.RELATING_PROPERTY_DEFINITION') |
+       pdr.related_property_definition.name = 
+       'service characteristics')) >= 1)) OR 
+       (SIZEOF (QUERY (sc <* QUERY (pdr <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_RELATIONSHIP.RELATING_PROPERTY_DEFINITION') |
+       pdr.related_property_definition.name = 'service characteristics') |
+       NOT ('PLANT_SPATIAL_CONFIGURATION.PLANT_ITEM_CONNECTOR' IN 
+       TYPEOF (sc.related_property_definition.definition)))) = 0);
+END_ENTITY;
+
+
+ENTITY stream_phase
+  SUBTYPE OF (property_definition);
+WHERE
+  WR1: 'PLANT_SPATIAL_CONFIGURATION.STREAM_DESIGN_CASE' IN 
+       TYPEOF (SELF.DEFINITION);
+  WR2: SIZEOF (QUERY (pdr <* USEDIN (SELF, 'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |
+       pdr.used_representation.name = 'stream phase characteristics')) = 1;
+  WR3: SIZEOF (QUERY (spc <* QUERY (pdr <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |
+       pdr.used_representation.name = 'stream phase characteristics') |
+       NOT (SIZEOF (spc.used_representation.items) >= 5))) = 0;
+  WR4: SIZEOF (QUERY (spc <* QUERY (pdr <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |
+       pdr.used_representation.name = 'stream phase characteristics') |
+       NOT (SIZEOF (QUERY (it <* spc.used_representation.items |
+       (SIZEOF (TYPEOF (it) *
+       ['PLANT_SPATIAL_CONFIGURATION.MEASURE_REPRESENTATION_ITEM',
+       'PLANT_SPATIAL_CONFIGURATION.RATIO_MEASURE_WITH_UNIT']) = 2) AND
+       (it.name = 'constituent mole fraction'))) = 1))) = 0;
+  WR5: SIZEOF (QUERY (spc <* QUERY (pdr <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |
+       pdr.used_representation.name = 'stream phase characteristics') |
+       NOT (SIZEOF (QUERY (it <* spc.used_representation.items |
+       ('PLANT_SPATIAL_CONFIGURATION.DESCRIPTIVE_REPRESENTATION_ITEM' IN
+       TYPEOF (it)) AND
+       (it.name = 'constituents'))) = 1))) = 0;
+  WR6: SIZEOF (QUERY (spc <* QUERY (pdr <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |
+       pdr.used_representation.name = 'stream phase characteristics') |
+       NOT (SIZEOF (QUERY (it <* spc.used_representation.items |
+       ('PLANT_SPATIAL_CONFIGURATION.MEASURE_REPRESENTATION_ITEM' IN
+       TYPEOF (it)) AND
+       (it.name = 'phase density'))) = 1))) = 0;
+  WR7: SIZEOF (QUERY (spc <* QUERY (pdr <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |
+       pdr.used_representation.name = 'stream phase characteristics') |
+       NOT (SIZEOF (QUERY (it <* spc.used_representation.items |
+       (SIZEOF (TYPEOF (it) *
+       ['PLANT_SPATIAL_CONFIGURATION.MEASURE_REPRESENTATION_ITEM',
+       'PLANT_SPATIAL_CONFIGURATION.RATIO_MEASURE_WITH_UNIT']) = 2) AND
+       (it.name = 'phase fraction'))) = 1))) = 0;
+  WR8: SIZEOF (QUERY (spc <* QUERY (pdr <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |
+       pdr.used_representation.name = 'stream phase characteristics') |
+       NOT ({1 <= SIZEOF (QUERY (it <* spc.used_representation.items |
+       (SIZEOF (TYPEOF (it) *
+       ['PLANT_SPATIAL_CONFIGURATION.MEASURE_REPRESENTATION_ITEM',
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'THERMODYNAMIC_TEMPERATURE_MEASURE_WITH_UNIT']) = 2) AND
+       (it.name IN ['temperature', 'minimum temperature', 
+       'maximum temperature']))) <= 2}))) = 0;
+  WR9: SIZEOF (QUERY (spc <* QUERY (pdr <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |
+       pdr.used_representation.name = 'stream phase characteristics') |
+       NOT (SIZEOF (QUERY (it <* spc.used_representation.items |
+       (SIZEOF (TYPEOF (it) *
+       ['PLANT_SPATIAL_CONFIGURATION.MEASURE_REPRESENTATION_ITEM',
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'THERMODYNAMIC_TEMPERATURE_MEASURE_WITH_UNIT']) = 2) AND
+       (it.name = 'temperature'))) <= 1))) = 0;
+ WR10: SIZEOF (QUERY (spc <* QUERY (pdr <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |
+       pdr.used_representation.name = 'stream phase characteristics') |
+       NOT (SIZEOF (QUERY (it <* spc.used_representation.items |
+       (SIZEOF (TYPEOF (it) *
+       ['PLANT_SPATIAL_CONFIGURATION.MEASURE_REPRESENTATION_ITEM',
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'THERMODYNAMIC_TEMPERATURE_MEASURE_WITH_UNIT']) = 2) AND
+       (it.name = 'minimum temperature'))) <= 1))) = 0;
+ WR11: SIZEOF (QUERY (spc <* QUERY (pdr <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |
+       pdr.used_representation.name = 'stream phase characteristics') |
+       NOT (SIZEOF (QUERY (it <* spc.used_representation.items |
+       (SIZEOF (TYPEOF (it) *
+       ['PLANT_SPATIAL_CONFIGURATION.MEASURE_REPRESENTATION_ITEM',
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'THERMODYNAMIC_TEMPERATURE_MEASURE_WITH_UNIT']) = 2) AND
+       (it.name = 'maximum temperature'))) <= 1))) = 0;
+ WR12: SIZEOF (QUERY (spc <* QUERY (pdr <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |
+       pdr.used_representation.name = 'stream phase characteristics') |
+       NOT (SIZEOF (QUERY (it <* spc.used_representation.items |
+       ('PLANT_SPATIAL_CONFIGURATION.MEASURE_REPRESENTATION_ITEM' IN
+       TYPEOF (it)) AND
+       (it.name = 'specific gravity'))) <= 1))) = 0;
+ WR13: SIZEOF (QUERY (spc <* QUERY (pdr <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |
+       pdr.used_representation.name = 'stream phase characteristics') |
+       NOT (SIZEOF (QUERY (it <* spc.used_representation.items |
+       ('PLANT_SPATIAL_CONFIGURATION.MEASURE_REPRESENTATION_ITEM' IN
+       TYPEOF (it)) AND
+       (it.name = 'surface tension'))) <= 1))) = 0;
+ WR14: SIZEOF (QUERY (spc <* QUERY (pdr <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION') |
+       pdr.used_representation.name = 'stream phase characteristics') |
+       NOT (SIZEOF (QUERY (it <* spc.used_representation.items |
+       ('PLANT_SPATIAL_CONFIGURATION.MEASURE_REPRESENTATION_ITEM' IN
+       TYPEOF (it)) AND
+       (it.name = 'viscosity'))) <= 1))) = 0;
+END_ENTITY;
+
+
+ENTITY structural_load_connector_class
+  SUBTYPE OF (group);
+END_ENTITY;
+
+
+ENTITY structural_system
+  SUBTYPE OF (product_definition);
+WHERE
+  WR1: SIZEOF (QUERY (pdr <* USEDIN (SELF, 'PLANT_SPATIAL_CONFIGURATION.' +
+       'PRODUCT_DEFINITION_RELATIONSHIP.RELATED_PRODUCT_DEFINITION') |
+       ('PLANT_SPATIAL_CONFIGURATION.PLANT' IN TYPEOF
+       (pdr.relating_product_definition.formation.of_product)) AND
+       (pdr.relating_product_definition.frame_of_reference.name =
+       'functional occurrence'))) = 1;
+END_ENTITY;
+
+
+ENTITY support_constraint_representation
+  SUBTYPE OF (representation);
+WHERE
+  WR1: SIZEOF (SELF.items) >= 3;   
+  WR2: SIZEOF (QUERY (it <* SELF.items |
+       ('PLANT_SPATIAL_CONFIGURATION.MEASURE_REPRESENTATION_ITEM'
+       IN TYPEOF (it)) AND
+       (it.name IN ['negative x', 'positive x', 'negative y',
+       'positive y', 'negative z', 'positive z',
+       'negative x rotation', 'positive x rotation',
+       'negative y rotation', 'positive y rotation',
+       'negative z rotation', 'positive z rotation'] ))) = 1;
+  WR3: SIZEOF (QUERY (it <* SELF.items |
+       'PLANT_SPATIAL_CONFIGURATION.RATIO_MEASURE_WITH_UNIT'
+       IN TYPEOF (it))) = 1;
+  WR4: SIZEOF (QUERY (it <* SELF.items |
+       'PLANT_SPATIAL_CONFIGURATION.DESCRIPTIVE_REPRESENTATION_ITEM'
+       IN TYPEOF (it))) = 1;
+END_ENTITY;
+
+
+ENTITY swage_fitting_class
+  SUBTYPE OF (group);
+WHERE
+  WR1: SIZEOF (QUERY (aca <* QUERY (ca <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.CLASSIFICATION_ASSIGNMENT.' + 
+       'ASSIGNED_CLASSIFICATION') |
+       'PLANT_SPATIAL_CONFIGURATION.APPLIED_CLASSIFICATION_ASSIGNMENT' IN 
+       TYPEOF (ca)) |
+       NOT (SIZEOF (QUERY (it <* aca.items |
+       NOT ('PLANT_SPATIAL_CONFIGURATION.PIPING_COMPONENT_DEFINITION' IN
+       TYPEOF (it)))) = 0))) = 0;
+  WR2: SIZEOF (QUERY (aca <* QUERY (ca <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.CLASSIFICATION_ASSIGNMENT.' + 
+       'ASSIGNED_CLASSIFICATION') |
+       'PLANT_SPATIAL_CONFIGURATION.APPLIED_CLASSIFICATION_ASSIGNMENT' IN 
+       TYPEOF (ca)) |
+       NOT (SIZEOF (QUERY (pcd <* QUERY (it <* aca.items |
+       'PLANT_SPATIAL_CONFIGURATION.PIPING_COMPONENT_DEFINITION' IN
+       TYPEOF (it)) |
+       NOT (SIZEOF (QUERY (aca1 <* USEDIN (pcd.formation.of_product,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'APPLIED_CLASSIFICATION_ASSIGNMENT.ITEMS') |
+       class_in_tree (aca.assigned_classification, 'swage'))) 
+       = 1))) = 0))) = 0;
+END_ENTITY;
+
+
+ENTITY system_class
+  SUBTYPE OF (group);
+WHERE
+  WR1: SIZEOF (QUERY (aca <* QUERY (ca <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.CLASSIFICATION_ASSIGNMENT.' + 
+       'ASSIGNED_CLASSIFICATION') |
+       'PLANT_SPATIAL_CONFIGURATION.APPLIED_CLASSIFICATION_ASSIGNMENT' IN 
+       TYPEOF (ca)) |
+       NOT (SIZEOF (QUERY (it <* aca.items |
+       NOT (SIZEOF (TYPEOF (it) * 
+       ['PLANT_SPATIAL_CONFIGURATION.DUCTING_SYSTEM',
+       'PLANT_SPATIAL_CONFIGURATION.ELECTRICAL_SYSTEM',
+       'PLANT_SPATIAL_CONFIGURATION.INSTRUMENTATION_AND_CONTROL_SYSTEM',
+       'PLANT_SPATIAL_CONFIGURATION.PIPING_SYSTEM',
+       'PLANT_SPATIAL_CONFIGURATION.STRUCTURAL_SYSTEM']) = 1)
+       )) = 0))) = 0;
+END_ENTITY;
+
+
+ENTITY system_space
+  SUBTYPE OF (product_definition_shape);
+WHERE
+  WR1: SIZEOF (TYPEOF (SELF.definition) *
+       ['PLANT_SPATIAL_CONFIGURATION.ELECTRICAL_SYSTEM',
+       'PLANT_SPATIAL_CONFIGURATION.DUCTING_SYSTEM',
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'INSTRUMENTATION_AND_CONTROL_SYSTEM',
+       'PLANT_SPATIAL_CONFIGURATION.PIPING_SYSTEM',
+       'PLANT_SPATIAL_CONFIGURATION.STRUCTURAL_SYSTEM']) = 1;
+END_ENTITY;
+
+
+ENTITY truncated_pyramid
+  SUBTYPE OF (boolean_result);
+END_ENTITY;
+
+
+ENTITY valve_class
+  SUBTYPE OF (group);
+WHERE
+  WR1: SIZEOF (QUERY (aca <* QUERY (ca <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.CLASSIFICATION_ASSIGNMENT.' + 
+       'ASSIGNED_CLASSIFICATION') |
+       'PLANT_SPATIAL_CONFIGURATION.APPLIED_CLASSIFICATION_ASSIGNMENT' IN 
+       TYPEOF (ca)) |
+       NOT (SIZEOF (QUERY (it <* aca.items |
+       NOT ('PLANT_SPATIAL_CONFIGURATION.PIPING_COMPONENT_DEFINITION' IN
+       TYPEOF (it)))) = 0))) = 0;
+  WR2: SIZEOF (QUERY (aca <* QUERY (ca <* USEDIN (SELF,
+       'PLANT_SPATIAL_CONFIGURATION.CLASSIFICATION_ASSIGNMENT.' + 
+       'ASSIGNED_CLASSIFICATION') |
+       'PLANT_SPATIAL_CONFIGURATION.APPLIED_CLASSIFICATION_ASSIGNMENT' IN 
+       TYPEOF (ca)) |
+       NOT (SIZEOF (QUERY (pcd <* QUERY (it <* aca.items |
+       'PLANT_SPATIAL_CONFIGURATION.PIPING_COMPONENT_DEFINITION' IN
+       TYPEOF (it)) |
+       NOT (SIZEOF (QUERY (aca1 <* USEDIN (pcd.formation.of_product,
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'APPLIED_CLASSIFICATION_ASSIGNMENT.ITEMS') |
+       class_in_tree (aca1.assigned_classification, 'valve'))) 
+       = 1))) = 0))) = 0;
+END_ENTITY;
+
+
+RULE application_context_requires_ap_definition FOR 
+  (application_context, application_protocol_definition);
+WHERE
+  WR1: SIZEOF (QUERY (ac <* application_context | 
+       NOT (SIZEOF (QUERY (apd <* application_protocol_definition | 
+       (ac :=: apd.application) 
+       AND
+       (apd.application_interpreted_model_schema_name =   
+       'plant_spatial_configuration'))) = 1 ))) = 0;
+END_RULE;
+
+RULE approval_requires_approval_date_time FOR
+  (approval_date_time,
+   approval);
+WHERE
+  WR1: SIZEOF (QUERY (app <* approval |
+       NOT (SIZEOF (QUERY (adt <* approval_date_time |
+       (app :=: adt.dated_approval))) = 1))) = 0;
+END_RULE;
+
+
+RULE approval_requires_approval_person_organization FOR
+  (approval_person_organization,
+   approval);
+WHERE
+  WR1: SIZEOF (QUERY (app <* approval |
+       NOT (SIZEOF (QUERY (apo <* approval_person_organization |
+       (app :=: apo.authorized_approval))) = 1))) = 0;
+END_RULE;
+
+RULE change_action_requires_date FOR
+  (change_action, 
+   applied_date_assignment);
+WHERE
+  WR1: SIZEOF (QUERY (ca <* change_action |
+       NOT (SIZEOF (QUERY (pscda <*
+       applied_date_assignment |
+       (ca IN pscda.items))) = 1))) = 0;
+END_RULE;
+
+RULE change_item_requires_creation_date FOR
+  (plant_spatial_configuration_change_assignment,
+   applied_date_assignment);
+WHERE
+  WR1: SIZEOF (QUERY (pscca <* 
+           plant_spatial_configuration_change_assignment |
+       NOT (SIZEOF (QUERY (ch_it <* pscca.items |
+       NOT (SIZEOF (QUERY (pscda <* 
+           applied_date_assignment |
+       (NOT (ch_it IN pscda.items) OR
+       (pscda.role.name = 'creation date')))) = 1))) = 0))) = 0;
+END_RULE;
+
+RULE change_item_requires_id FOR
+  (plant_spatial_configuration_change_assignment,
+   change_item_id_assignment);
+WHERE
+  WR1: SIZEOF (QUERY (pscca <* 
+           plant_spatial_configuration_change_assignment |
+       NOT (SIZEOF (QUERY (ch_it <* pscca.items |
+       NOT (SIZEOF (QUERY (ciia <* change_item_id_assignment |
+       (ch_it IN ciia.items))) = 1))) = 0))) = 0;
+END_RULE;
+
+RULE change_life_cycle_stage_usage_requires_approval FOR
+  (versioned_action_request,
+   applied_approval_assignment);
+WHERE
+  WR1: SIZEOF (QUERY (vareq <* versioned_action_request |
+       NOT (SIZEOF (QUERY (pscaa <*
+       applied_approval_assignment |
+       vareq IN pscaa.items)) = 1))) = 0;
+END_RULE;
+
+RULE change_life_cycle_stage_usage_requires_stage FOR
+  (versioned_action_request,
+   action_request_status);
+WHERE
+  WR1: SIZEOF (QUERY (vareq <* versioned_action_request |
+       NOT (SIZEOF (QUERY (ars <* action_request_status |
+       vareq :=: ars.assigned_request)) = 1))) = 0;
+END_RULE;
+
+RULE dependent_instantiable_application_context FOR (application_context);
+WHERE
+  WR1: SIZEOF (QUERY (ac <* application_context |
+       NOT (SIZEOF (USEDIN (ac, '')) >= 1))) = 0;
+END_RULE;
+
+
+RULE dependent_instantiable_product_context FOR (product_context);
+WHERE
+  WR1: SIZEOF (QUERY (pc <* product_context |
+       NOT (SIZEOF (USEDIN (pc, '')) >= 1))) = 0;
+END_RULE;
+
+
+RULE dependent_instantiable_product_definition_context FOR 
+  (product_definition_context);
+WHERE
+  WR1: SIZEOF (QUERY (pdc <* product_definition_context |
+       NOT (SIZEOF (USEDIN (pdc, '')) >= 1))) = 0;
+END_RULE;
+
+
+RULE product_context_discipline_type_constraint FOR
+  (product_context);
+WHERE
+  WR1: SIZEOF (QUERY (pc <* product_context |
+       NOT (pc.discipline_type = 'process plant'))) = 0;
+END_RULE;
+
+
+RULE product_definition_context_name_constraint FOR
+  (product_definition_context);
+WHERE
+  WR1: SIZEOF (QUERY (pdc <* product_definition_context |
+       NOT (pdc.name IN
+       ['functional definition', 'physical definition',
+        'functional occurrence', 'physical occurrence',
+        'catalogue definition', 'fabrication assembly']))) = 0;
+END_RULE;
+
+
+RULE product_definition_usage_constraint FOR (product_definition);
+WHERE
+  WR1: SIZEOF (QUERY (pd <* product_definition |
+       ((pd.frame_of_reference.name = 'physical occurrence') AND
+       (NOT (SIZEOF (QUERY (pdr <* USEDIN (pd,
+       'PLANT_SPATIAL_CONFIGURATION.PRODUCT_DEFINITION_RELATIONSHIP.' +
+       'RELATED_PRODUCT_DEFINITION') |
+       SIZEOF (TYPEOF (pdr) *
+       ['PLANT_SPATIAL_CONFIGURATION.PRODUCT_DEFINITION_USAGE',
+       'PLANT_SPATIAL_CONFIGURATION.MAKE_FROM_USAGE_OPTION',
+       'PLANT_SPATIAL_CONFIGURATION.ASSEMBLY_COMPONENT_USAGE']) 
+       = 1)) <= 1))))) = 0;
+  WR2: SIZEOF (QUERY (pd <* product_definition |
+       ((pd.frame_of_reference.name = 'physical definition') AND
+       (NOT (SIZEOF (QUERY (pdr <* USEDIN (pd,
+       'PLANT_SPATIAL_CONFIGURATION.PRODUCT_DEFINITION_RELATIONSHIP.' +
+       'RELATING_PRODUCT_DEFINITION') |
+       pdr.related_product_definition.frame_of_reference.name =
+       'physical occurrence')) <= 1))))) = 0;
+END_RULE;
+
+
+RULE subtype_exclusive_characterized_object FOR 
+  (characterized_object);
+WHERE
+  WR1: SIZEOF (QUERY (co <*characterized_object |
+       NOT (SIZEOF (['PLANT_SPATIAL_CONFIGURATION.PIPING_COMPONENT_CLASS',
+       'PLANT_SPATIAL_CONFIGURATION.SITE',
+       'PLANT_SPATIAL_CONFIGURATION.STREAM_DESIGN_CASE']
+       * TYPEOF (co)) <= 1))) = 0;
+END_RULE;
+
+RULE subtype_mandatory_externally_defined_item FOR 
+  (externally_defined_item);
+WHERE
+  WR1: SIZEOF (QUERY (edi <* externally_defined_item |
+       NOT (SIZEOF (['PLANT_SPATIAL_CONFIGURATION.CATALOGUE_CONNECTOR',
+       'PLANT_SPATIAL_CONFIGURATION.EXTERNALLY_DEFINED_CLASS',
+      
+'PLANT_SPATIAL_CONFIGURATION.EXTERNALLY_DEFINED_PLANT_ITEM_DEFINITION'
+]
+       * TYPEOF (edi)) = 1))) = 0;
+END_RULE;
+
+RULE subtype_mandatory_pre_defined_item FOR 
+  (pre_defined_item);
+WHERE
+  WR1: SIZEOF (QUERY (pdi <* pre_defined_item |
+       NOT ('PLANT_SPATIAL_CONFIGURATION.KNOWN_SOURCE' IN
+       TYPEOF (pdi)))) = 0;
+END_RULE;
+
+RULE subtype_mandatory_shape_representation FOR 
+  (shape_representation);
+WHERE
+  WR1: SIZEOF (QUERY (sr <* shape_representation |
+       NOT (SIZEOF (['PLANT_SPATIAL_CONFIGURATION.' +
+       'PLANT_CSG_SHAPE_REPRESENTATION',
+       'PLANT_SPATIAL_CONFIGURATION.HYBRID_SHAPE_REPRESENTATION',
+       'PLANT_SPATIAL_CONFIGURATION.SHAPE_DIMENSION_REPRESENTATION',
+       'PLANT_SPATIAL_CONFIGURATION.' +
+       'SITE_REPRESENTATION',
+       'PLANT_SPATIAL_CONFIGURATION.PLANT_DESIGN_CSG_PRIMITIVE']
+       * TYPEOF (sr)) = 1))) = 0;
+END_RULE;
+
+RULE value_for_application_context FOR
+  (application_context);
+WHERE
+  WR1: SIZEOF (QUERY (ac <* application_context |
+       NOT (ac.application = 'plant spatial configuration'))) = 0;
+END_RULE;
+
+RULE versioned_action_request_requires_change_action FOR
+  (change_action, 
+   versioned_action_request);
+WHERE
+  WR1: SIZEOF (QUERY (vareq <* versioned_action_request |
+       NOT (SIZEOF (QUERY (ca <* change_action |
+       (vareq IN ca.directive.requests))) = 1))) = 0;
+END_RULE;
+
+RULE version2_p41_object_role_selection FOR
+  (role_association);
+WHERE
+  WR1: SIZEOF (QUERY (ra <* role_association |
+       NOT ('PLANT_SPATIAL_CONFIGURATION.' + 
+       'PLANT_SPATIAL_CONFIGURATION_CHANGE_ASSIGNMENT' IN 
+       TYPEOF (ra.item_with_role)))) = 0;
+END_RULE;
+
+RULE version2_p41_uninstantiable_basic_attributes FOR
+  (description_attribute, id_attribute, name_attribute);
+WHERE
+  WR1: SIZEOF (bag_to_set (description_attribute)) = 0;
+  WR2: SIZEOF (bag_to_set (id_attribute)) = 0;
+  WR3: SIZEOF (bag_to_set (name_attribute)) = 0;
+END_RULE;
+
+FUNCTION bag_to_set (the_bag: BAG OF GENERIC:intype) :
+    SET OF GENERIC:intype;
+
+  LOCAL
+    the_set : SET OF GENERIC:intype := [];
+    i       : INTEGER;
+  END_LOCAL;
+  IF SIZEOF(the_bag) > 0 THEN
+    REPEAT i := 1 TO HIINDEX(the_bag) BY 1;
+      the_set := the_set + the_bag[i];
+    END_REPEAT;
+  END_IF;
+  RETURN(the_set);
+END_FUNCTION;
+
+
+FUNCTION class_in_tree (class : group; val : STRING) : BOOLEAN;
+  IF class.name = val THEN RETURN (TRUE);
+  ELSE
+    RETURN (SIZEOF (QUERY (gr <* USEDIN (class,
+    'PLANT_SPATIAL_CONFIGURATION.' +
+    'GROUP_RELATIONSHIP.RELATED_GROUP') |
+    class_in_tree (gr.relating_group, val))) = 1);
+  END_IF;
+  RETURN (FALSE);
+END_FUNCTION;
+
+
+FUNCTION plant_spatial_configuration_organization_correlation
+  (e : plant_spatial_configuration_organization_assignment ) : BOOLEAN;
+  LOCAL
+    o_role : STRING;
+  END_LOCAL;
+    o_role := e\organization_assignment.role.name;
+  CASE o_role OF
+    'vendor'            : IF SIZEOF (e.items) <>
+                          SIZEOF (QUERY (x <* e.items |
+                          SIZEOF(['PLANT_SPATIAL_CONFIGURATION.PRODUCT',
+                                  'PLANT_SPATIAL_CONFIGURATION.DOCUMENT'] *
+                          TYPEOF (x)) = 1))
+                          THEN RETURN(FALSE);
+                          END_IF;
+    'owner'             : IF SIZEOF (e.items) <>
+                          SIZEOF (QUERY (x <* e.items |
+                          SIZEOF(['PLANT_SPATIAL_CONFIGURATION.SITE',
+                                 'PLANT_SPATIAL_CONFIGURATION.DOCUMENT'] *
+                          TYPEOF (x)) = 1))
+                          THEN RETURN(FALSE);
+                          END_IF;
+    'plant operator'    : IF SIZEOF (e.items) <>
+                          SIZEOF (QUERY (x <* e.items |
+                          'PLANT_SPATIAL_CONFIGURATION.PLANT'
+                          IN TYPEOF (x)))
+                          THEN RETURN(FALSE);
+                          END_IF;
+    'plant owner'       : IF SIZEOF (e.items) <>
+                          SIZEOF (QUERY (x <* e.items |
+                          'PLANT_SPATIAL_CONFIGURATION.PLANT'
+                          IN TYPEOF (x)))
+                          THEN RETURN(FALSE);
+                          END_IF;
+    'project owner'     : IF SIZEOF (e.items) <>
+                          SIZEOF (QUERY (x <* e.items |
+                          'PLANT_SPATIAL_CONFIGURATION.DESIGN_PROJECT'
+                          IN TYPEOF (x)))
+                          THEN RETURN(FALSE);
+                          END_IF;
+    'assessor'          : IF SIZEOF (e.items) <>
+                          SIZEOF (QUERY (x <* e.items |
+                          'PLANT_SPATIAL_CONFIGURATION.' +
+                          'PRODUCT_DEFINITION_RELATIONSHIP'
+                          IN TYPEOF (x)))
+                          THEN RETURN(FALSE);
+                          END_IF;
+    OTHERWISE : RETURN(TRUE);
+  END_CASE;
+  RETURN (TRUE);
+END_FUNCTION;
+
+
+FUNCTION plant_spatial_configuration_person_and_organization_correlation
+  (e : plant_spatial_configuration_person_and_organization_assignment )
+  : BOOLEAN;
+  LOCAL
+    po_role : STRING;
+  END_LOCAL;
+    po_role := e\person_and_organization_assignment.role.name;
+  CASE po_role OF
+    'owner'             : IF SIZEOF (e.items) <>
+                          SIZEOF (QUERY (x <* e.items |
+                          SIZEOF(['PLANT_SPATIAL_CONFIGURATION.SITE',
+                                 'PLANT_SPATIAL_CONFIGURATION.' +
+                                 'CHANGE_ITEM'] *
+                          TYPEOF (x)) = 1))
+                          THEN RETURN(FALSE);
+                          END_IF;
+    'plant owner'       : IF SIZEOF (e.items) <>
+                          SIZEOF (QUERY (x <* e.items |
+                          'PLANT_SPATIAL_CONFIGURATION.PLANT'
+                          IN TYPEOF (x)))
+                          THEN RETURN(FALSE);
+                          END_IF;
+    'plant operator'    : IF SIZEOF (e.items) <>
+                          SIZEOF (QUERY (x <* e.items |
+                          'PLANT_SPATIAL_CONFIGURATION.PLANT'
+                          IN TYPEOF (x)))
+                          THEN RETURN(FALSE);
+                          END_IF;
+    OTHERWISE : RETURN(TRUE);
+  END_CASE;
+  RETURN (TRUE);
+END_FUNCTION;
+
+
+FUNCTION plant_spatial_configuration_person_correlation
+  (e : plant_spatial_configuration_person_assignment ) : BOOLEAN;
+  LOCAL
+    p_role : STRING;
+  END_LOCAL;
+    p_role := e\person_assignment.role.name;
+  CASE p_role OF
+    'vendor'            : IF SIZEOF (e.items) <>
+                          SIZEOF (QUERY (x <* e.items |
+                          'PLANT_SPATIAL_CONFIGURATION.DOCUMENT'
+                          IN TYPEOF (x)))
+                          THEN RETURN(FALSE);
+                          END_IF;
+    'owner'             : IF SIZEOF (e.items) <>
+                          SIZEOF (QUERY (x <* e.items |
+                          SIZEOF(['PLANT_SPATIAL_CONFIGURATION.SITE',
+                                 'PLANT_SPATIAL_CONFIGURATION.DOCUMENT'] *
+                          TYPEOF (x)) = 1))
+                          THEN RETURN(FALSE);
+                          END_IF;
+    'plant owner'       : IF SIZEOF (e.items) <>
+                          SIZEOF (QUERY (x <* e.items |
+                          'PLANT_SPATIAL_CONFIGURATION.PLANT'
+                          IN TYPEOF (x)))
+                          THEN RETURN(FALSE);
+                          END_IF;
+    'assessor'          : IF SIZEOF (e.items) <>
+                          SIZEOF (QUERY (x <* e.items |
+                          'PLANT_SPATIAL_CONFIGURATION.' +
+                          'PRODUCT_DEFINITION_RELATIONSHIP'
+                          IN TYPEOF (x)))
+                          THEN RETURN(FALSE);
+                          END_IF;
+    OTHERWISE : RETURN(TRUE);
+  END_CASE;
+  RETURN (TRUE);
+END_FUNCTION;
+
+
+FUNCTION valid_advanced_csg_tree (tree_element : boolean_operand) : BOOLEAN;
+
+  -- return true if the tree_element is a valid primitive
+
+  IF SIZEOF (TYPEOF (tree_element) *
+    ['PLANT_SPATIAL_CONFIGURATION.BLOCK',
+    'PLANT_SPATIAL_CONFIGURATION.TORUS',
+    'PLANT_SPATIAL_CONFIGURATION.RIGHT_CIRCULAR_CYLINDER', 
+    'PLANT_SPATIAL_CONFIGURATION.SPHERE',
+    'PLANT_SPATIAL_CONFIGURATION.RIGHT_CIRCULAR_CONE',
+    'PLANT_SPATIAL_CONFIGURATION.' + 
+    'ADVANCED_FACE_WITH_THICKNESS_SHAPE_REPRESENTATION',
+    'PLANT_SPATIAL_CONFIGURATION.EXTRUDED_AREA_SOLID',
+    'PLANT_SPATIAL_CONFIGURATION.REVOLVED_AREA_SOLID',
+    'PLANT_SPATIAL_CONFIGURATION.HALF_SPACE_SOLID']) = 1
+    THEN RETURN (TRUE); 
+    ELSE 
+
+    -- if the tree_element is a boolean_result check its operations and
+    -- operands
+
+    IF 'PLANT_SPATIAL_CONFIGURATION.BOOLEAN_RESULT' 
+    IN TYPEOF (tree_element) 
+      THEN
+
+      -- addition and subtraction are the only valid operations
+
+      IF NOT (tree_element\boolean_result.operator
+        IN [boolean_operator.union, boolean_operator.difference])
+        THEN RETURN (FALSE);
+      END_IF;
+
+      -- if the operand is a half_space_solid, check for advanced surface
+      -- otherwise return false and recursively check second operand
+
+      IF 'PLANT_SPATIAL_CONFIGURATION.HALF_SPACE_SOLID' IN 
+        TYPEOF (tree_element\boolean_result.first_operand) THEN
+        IF 'PLANT_SPATIAL_CONFIGURATION.ELEMENTARY_SURFACE' IN
+          TYPEOF (tree_element\boolean_result.
+                  first_operand\half_space_solid.base_surface) THEN
+          IF 'PLANT_SPATIAL_CONFIGURATION.HALF_SPACE_SOLID' IN 
+            TYPEOF (tree_element\boolean_result.second_operand) THEN
+            IF 'PLANT_SPATIAL_CONFIGURATION.ELEMENTARY_SURFACE' IN
+              TYPEOF (tree_element\boolean_result.
+                      second_operand\half_space_solid.base_surface) THEN
+              RETURN (TRUE);
+              ELSE RETURN (FALSE);
+            END_IF;
+            ELSE RETURN (valid_advanced_csg_tree
+            (tree_element\boolean_result.second_operand));
+          END_IF;
+          ELSE RETURN (FALSE);
+        END_IF;
+        ELSE
+          IF 'PLANT_SPATIAL_CONFIGURATION.HALF_SPACE_SOLID' IN 
+            TYPEOF (tree_element\boolean_result.second_operand) THEN
+            IF 'PLANT_SPATIAL_CONFIGURATION.ELEMENTARY_SURFACE' IN TYPEOF
+              (tree_element\boolean_result.second_operand\half_space_solid.
+               base_surface) THEN
+              RETURN (valid_advanced_csg_tree
+                        (tree_element\boolean_result.first_operand));
+              ELSE
+              RETURN (FALSE);
+            END_IF;
+            ELSE
+            RETURN (valid_advanced_csg_tree
+                      (tree_element\boolean_result.first_operand) AND
+                    valid_advanced_csg_tree
+                      (tree_element\boolean_result.second_operand));
+          END_IF;
+      END_IF;
+    END_IF;
+  END_IF;
+  RETURN (FALSE);
+END_FUNCTION;
+
+END_SCHEMA;
+
+
+

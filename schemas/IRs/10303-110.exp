@@ -1,0 +1,812 @@
+(* Corrected 20008/10/27 to remove duplicate and add missing type and entity  removed false 
+REFERENCE  model_product_distribution 
+2008/11/20 Added reference from basis_schema of mbna_property_distribution_select to  domain and results schemas *)
+(* Part 110 DIS EXPRESS WG12 N5952 November 2008 - from DIS document WG12 N5951 *)
+SCHEMA basis_schema;
+  REFERENCE FROM analysis_schema                        -- ISO 10303-53
+                 (model_property_distribution);
+  REFERENCE FROM conditions_schema                      -- ISO 10303-110
+                 (Riemann_1D_data_name);
+  REFERENCE FROM domain_schema                          -- ISO 10303-110
+                 (coordinate_data_name);
+  REFERENCE FROM equations_schema                       -- ISO 10303-110
+                 (force_moment_data_name,
+                  gas_model_data_name,
+                  thermal_conductivity_model_data_name,
+                  turbulence_closure_data_name,
+                  turbulence_model_data_name,
+                  viscosity_model_data_name);
+  REFERENCE FROM external_reference_schema              -- ISO 10303-41
+                 (externally_defined_item);
+  REFERENCE FROM mathematical_context_schema            -- ISO 10303-51
+                 (value_context_select);
+  REFERENCE FROM mathematical_description_of_distribution_schema -- ISO 10303-51
+                 (property_distribution_select);
+  REFERENCE FROM product_property_definition_schema     -- ISO 10303-41
+                 (general_property);
+  REFERENCE FROM product_property_representation_schema -- ISO 10303-41
+                 (shape_representation);
+  REFERENCE FROM representation_schema                  -- ISO 10303-43
+                 (representation_context);
+  REFERENCE FROM results_schema                         -- ISO 10303-110
+                 (flow_solution_data_name);
+  REFERENCE FROM support_resource_schema                -- ISO 10303-41
+                 (text);
+TYPE choose_general_property_identifier = EXTENSIBLE SELECT
+     (externally_defined_item,
+      defined_data_name);
+END_TYPE;
+
+
+TYPE choose_geometry_location = EXTENSIBLE SELECT
+    (externally_defined_item,
+     shape_representation);
+END_TYPE;
+TYPE choose_representation_context_identifier = EXTENSIBLE SELECT
+     (externally_defined_item,
+      defined_data_class);
+END_TYPE;
+
+TYPE defined_data_class = EXTENSIBLE ENUMERATION OF
+     (unspecified,
+      application_defined,
+      dimensional,
+      normalised_by_dimensional,
+      normalise_by_unknown_dimensional,
+      dimensionless_parameter,
+      dimensionless_constant);
+END_TYPE;
+
+TYPE defined_data_name = EXTENSIBLE SELECT
+     (coordinate_data_name,
+      fd_defined_data_name);
+END_TYPE;
+
+TYPE fd_defined_data_name = EXTENSIBLE SELECT
+     (fd_nondimensional_parameter_name,
+      Riemann_1D_data_name,
+      force_moment_data_name,
+      gas_model_data_name,
+      viscosity_model_data_name,
+      thermal_conductivity_model_data_name,
+      turbulence_closure_data_name,
+      turbulence_model_data_name,
+      flow_solution_data_name);
+END_TYPE;
+
+TYPE fd_nondimensional_parameter_name = EXTENSIBLE ENUMERATION OF  
+     (Mach,
+      Mach_velocity,
+      Mach_velocity_sound,
+      Reynolds,
+      Reynolds_velocity,
+      Reynolds_length,
+      Reynolds_viscosity_kinematic,
+      Prandtl,
+      Prandtl_thermal_conductivity,
+      Prandtl_viscosity_molecular,
+      Prandtl_specific_heat_pressure,
+      specific_heat_ratio,
+      specific_heat_ratio_pressure,
+      specific_heat_ratio_volume,
+      coef_pressure,
+      coef_skin_friction_x,
+      coef_skin_friction_y,
+      coef_skin_friction_z,
+      coef_pressure_dynamic,
+      coef_pressure_reference,
+      length_reference);
+END_TYPE;
+
+TYPE mbna_property_distribution_select = EXTENSIBLE SELECT
+     BASED_ON property_distribution_select WITH
+     (model_property_distribution);
+END_TYPE;
+
+TYPE mbna_value_context_select = EXTENSIBLE SELECT
+     BASED_ON value_context_select WITH
+     (choose_representation_context_identifier);
+END_TYPE;
+
+ENTITY geometry_reference;
+  description : text;
+  data        : choose_geometry_location;
+END_ENTITY;
+
+ENTITY specified_general_property
+  SUBTYPE OF (general_property);
+  name_specifier : choose_general_property_identifier;
+END_ENTITY;
+
+ENTITY specified_representation_context
+  SUBTYPE OF (representation_context);
+  class_specifier : choose_representation_context_identifier;
+END_ENTITY;
+
+END_SCHEMA; -- basis_schema
+
+SCHEMA hierarchy_schema;
+  REFERENCE FROM analysis_schema                    -- ISO 10303-53
+                 (model_action_domain,
+                  model_product_domain,
+                  model_product_domain_with_mesh,
+                  model_state_domain,
+                  numerical_model);
+  REFERENCE FROM conditions_schema                  -- ISO 10303-110
+                 (fd_zone_bc,
+                  mbna_reference_state,
+                  mbna_zone_bc);
+  REFERENCE FROM domain_schema                      -- ISO 10303-110
+                 (grid_coordinates);
+  REFERENCE FROM equations_schema                   -- ISO 10303-110
+                 (flow_equation_set,
+                  mbna_equation_set);
+  REFERENCE FROM mesh_connectivity_schema           -- ISO 10303-52
+                 (multiple_mesh_block);
+  REFERENCE FROM mesh_topology_schema               -- ISO 10303-52
+                 (structured_mesh,
+                  unstructured_mesh);
+  REFERENCE FROM results_schema                     -- ISO 10303-110
+                 (mbna_discrete_data,
+                  mbna_history,
+                  mbna_solution);
+ 
+
+ENTITY fd_step
+  SUBTYPE OF (mbna_step);
+  SELF\mbna_step.equations : SET OF flow_equation_set;  
+  SELF\mbna_step.zones     : LIST OF fd_zone;
+END_ENTITY;
+
+ENTITY fd_zone
+  SUBTYPE OF (mbna_zone);
+  SELF\mbna_zone.conditions : SET OF fd_zone_bc;
+  SELF\mbna_zone.equations  : SET OF flow_equation_set;
+END_ENTITY;
+
+ENTITY mbna_model
+  SUBTYPE OF (model_product_domain);
+  SELF\model_product_domain.temporal_parts : LIST OF mbna_step;
+  equations : SET OF mbna_equation_set;  
+  INVERSE
+  history : SET OF mbna_history for domain;  
+END_ENTITY;
+
+ENTITY mbna_state
+  SUBTYPE OF (model_state_domain);
+END_ENTITY;  
+
+ENTITY mbna_step
+  SUBTYPE OF (model_action_domain);
+  
+  SELF\model_action_domain.final : mbna_state;
+  equations          : SET OF mbna_equation_set;  
+  refstate           : SET OF mbna_reference_state;
+  zones              : LIST OF mbna_zone;
+INVERSE
+  history : SET OF mbna_history for domain;  
+END_ENTITY;
+
+ENTITY mbna_zone
+  SUBTYPE OF (model_product_domain_with_mesh);
+  conditions         : SET OF mbna_zone_bc;
+  equations          : SET OF mbna_equation_set;
+  grid_connectivity  : OPTIONAL multiple_mesh_block;
+  rstate             : SET OF mbna_reference_state;
+INVERSE
+  coordinates : SET OF grid_coordinates FOR domain;
+  field_data  : SET OF mbna_discrete_data FOR domain;
+  history     : SET OF mbna_history FOR domain;
+  solution    : SET OF mbna_solution FOR domain;
+END_ENTITY;
+
+END_SCHEMA;  -- end of hierarchy_schema
+
+SCHEMA domain_schema;
+  REFERENCE FROM analysis_schema                  -- ISO 10303-53
+                 (model_product_domain_with_mesh,
+                  model_property_distribution);
+  REFERENCE FROM basis_schema                     -- ISO 10303-110
+                 (mbna_property_distribution_select,
+                 specified_general_property);
+  REFERENCE FROM mathematical_description_of_distribution_schema  -- ISO 10303-51
+                 (property_distribution_description);
+  REFERENCE FROM mesh_topology_schema             -- ISO 10303-52
+                 (rind);
+
+TYPE coordinate_data_name = EXTENSIBLE ENUMERATION OF
+     (coordinate_x,
+      coordinate_y,
+      coordinate_z,
+      coordinate_r,
+      coordinate_theta,
+      coordinate_phi,
+      coordinate_normal,
+      coordinate_tangential,
+      coordinate_xi,
+      coordinate_eta,
+      coordinate_zeta,
+      coordinate_transform);
+END_TYPE;
+
+ENTITY grid_coordinates
+  SUBTYPE OF (model_property_distribution);
+  SELF\model_property_distribution.domain : model_product_domain_with_mesh;
+  SELF\model_property_distribution.range  : specified_general_property;
+INVERSE
+  data : SET OF property_distribution_description FOR physical_function;
+WHERE
+  wr1 : is_coordinate_property(range);
+END_ENTITY;
+
+ENTITY grid_coordinates_with_rind
+  SUBTYPE OF (grid_coordinates);
+  rind_planes : rind;
+END_ENTITY;
+
+FUNCTION is_coordinate_property(arg : specified_general_property) : BOOLEAN;
+  IF ('EXTERNAL_REFERENCE_SCHEMA.EXTERNALLY_DEFINED_ITEM' IN
+      TYPEOF(arg) ) THEN
+    RETURN(TRUE);
+  END_IF;
+  RETURN ('DOMAIN_SCHEMA.COORDINATE_DATA_NAME' IN TYPEOF(arg));
+END_FUNCTION;
+
+END_SCHEMA;  -- end of domain_schema
+
+SCHEMA conditions_schema;
+  REFERENCE FROM analysis_schema               -- ISO 10303-53
+                 (model_property_distribution,
+                  model_state_domain);
+  REFERENCE FROM basis_schema                  -- ISO 10303-110
+                 (geometry_reference);
+  REFERENCE FROM mesh_topology_schema          -- ISO 10303-52
+                 (indices_group,
+                  indices_list,
+                  mesh_location,
+                  vertex_defined_cell);
+  REFERENCE FROM support_resource_schema       -- ISO 10303-41
+                 (label,
+                  text);
+
+TYPE fd_bc_type_compound = EXTENSIBLE ENUMERATION 
+     BASED_ON mbna_bc_type_compound WITH
+     (bc_inflow,
+      bc_outflow,
+      bc_farfield);
+END_TYPE;
+
+TYPE fd_bc_type_simple = EXTENSIBLE ENUMERATION 
+     BASED_ON mbna_bc_type_simple WITH
+     (bc_wall_inviscid,
+      bc_wall_viscous_heat_flux,
+      bc_wall_viscous_isothermal,
+      bc_wall_viscous,
+      bc_wall,
+      bc_inflow_subsonic,
+      bc_inflow_supersonic,
+      bc_outflow_subsonic,
+      bc_outflow_supersonic,
+      bc_tunnel_inflow,
+      bc_tunnel_outflow,
+      bc_degenerate_line,
+      bc_degenerate_point,
+      bc_symmetry_polar,
+      bc_axissymmetric_wedge);
+END_TYPE;
+
+TYPE ijk_minmax = ENUMERATION OF 
+     (i_min,
+      j_min,
+      k_min,
+      i_max,
+      j_max,
+      k_max);
+END_TYPE;
+
+TYPE mbna_bc_type = EXTENSIBLE SELECT 
+     (mbna_bc_type_simple, 
+      mbna_bc_type_compound);
+END_TYPE;
+
+TYPE mbna_bc_type_compound = EXTENSIBLE ENUMERATION OF 
+     (unspecified,
+      application_defined);
+END_TYPE;
+
+TYPE mbna_bc_type_simple = EXTENSIBLE ENUMERATION OF 
+     (unspecified,
+      application_defined,
+      bc_general,
+      bc_Dirichlet,
+      bc_Neumann,
+      bc_extrapolate,
+      bc_symmetry_plane);
+END_TYPE;
+
+TYPE Riemann_1D_data_name = EXTENSIBLE ENUMERATION OF  
+     (Riemann_invariant_plus,
+      Riemann_invariant_minus,
+      characteristic_entropy,
+      characteristic_vorticity1,
+      characteristic_vorticity2,
+      characteristic_acoustic_plus,
+      characteristic_acoustic_minus);
+END_TYPE;
+
+ENTITY elements_bc
+  SUBTYPE OF (mbna_bc);
+  elements : LIST OF vertex_defined_cell;
+END_ENTITY;
+
+ENTITY fd_bc
+  SUBTYPE OF (mbna_bc);
+  SELF\mbna_bc.datasets : SET OF fd_bc_dataset;
+END_ENTITY;
+
+ENTITY fd_bc_dataset
+  SUBTYPE OF (mbna_bc_dataset);
+  SELF\mbna_bc_dataset.the_type : fd_bc_type_simple;
+END_ENTITY;
+
+ENTITY fd_zone_bc
+  SUBTYPE OF (mbna_zone_bc);
+  SELF\mbna_zone_bc.conditions : SET OF fd_bc;
+END_ENTITY;
+
+ENTITY indexed_elements_bc
+  SUBTYPE OF (mbna_bc);
+  element_indices : indices_group;
+END_ENTITY;
+
+ENTITY indexed_points_bc
+  SUBTYPE OF (mbna_bc);
+  point_indices : indices_group;
+END_ENTITY;
+
+ENTITY mbna_bc
+  SUPERTYPE OF(ONEOF(elements_bc,
+        indexed_elements_bc,
+        indexed_points_bc)) 
+  SUBTYPE OF (mbna_condition);
+  datasets            : SET OF mbna_bc_dataset;
+  gridloc             : mesh_location;
+  inward_normal_index : OPTIONAL ijk_minmax;
+  inward_normal_list  : OPTIONAL indices_list;
+  rstate              : SET OF mbna_reference_state;
+  the_type            : mbna_bc_type;
+END_ENTITY;
+
+ENTITY mbna_bc_data
+  SUBTYPE OF (mbna_condition);
+END_ENTITY;
+
+SUBTYPE_CONSTRAINT sc1_mbna_bc_data FOR mbna_bc_data;
+  ABSTRACT SUPERTYPE;
+END_SUBTYPE_CONSTRAINT;
+
+ENTITY mbna_bc_data_global
+  SUBTYPE OF (mbna_bc_data);
+INVERSE
+  data_global : SET OF model_property_distribution FOR domain;
+END_ENTITY;
+
+ENTITY mbna_bc_data_local
+  SUBTYPE OF (mbna_bc_data);
+INVERSE
+  data_local : SET OF model_property_distribution FOR domain;
+END_ENTITY;
+
+ENTITY mbna_bc_dataset
+  SUPERTYPE OF (ONEOF(mbna_Dirichlet_bc_dataset,
+               mbna_Neumann_bc_dataset))
+  SUBTYPE OF (mbna_condition);
+  gridloc  : mesh_location;
+  rstate   : SET OF mbna_reference_state;
+  the_type : mbna_bc_type_simple;
+END_ENTITY;
+
+
+
+ENTITY mbna_condition
+  ABSTRACT SUPERTYPE OF(ONEOF(
+        mbna_zone_bc,
+        mbna_bc,
+        mbna_bc_dataset,
+        mbna_bc_data,
+        mbna_reference_state))
+   SUBTYPE OF (model_state_domain);
+END_ENTITY;
+
+
+ENTITY mbna_Dirichlet_bc_dataset
+  SUBTYPE OF (mbna_bc_dataset);
+  data : mbna_bc_data;
+END_ENTITY;
+
+ENTITY mbna_Neumann_bc_dataset
+  SUBTYPE OF (mbna_bc_dataset);
+  data : mbna_bc_data;
+END_ENTITY;
+
+ENTITY mbna_reference_state
+  SUBTYPE OF (mbna_condition);
+INVERSE
+  data : SET OF model_property_distribution FOR domain;
+END_ENTITY;
+
+ENTITY mbna_zone_bc
+  SUBTYPE OF (mbna_condition);
+  conditions : SET OF mbna_bc;
+  rstate     : SET OF mbna_reference_state;
+END_ENTITY;
+
+END_SCHEMA;  -- end of conditions_schema
+
+SCHEMA equations_schema;
+  REFERENCE FROM analysis_schema               -- ISO 10303-53
+                 (model_product_domain,
+                  model_property_distribution);
+
+TYPE fd_behaviour_models = EXTENSIBLE SELECT
+  (gas_model,
+   turbulence_closure,
+   turbulence_model,
+   viscosity_model);
+END_TYPE;
+
+TYPE fd_governing_equation_type = EXTENSIBLE ENUMERATION 
+     BASED_ON mbna_governing_equation_type WITH
+     (full_potential,
+      Euler,
+      NS_laminar,
+      NS_turbulent,
+      NS_laminar_incompressible,
+      NS_turbulent_incompressible);
+END_TYPE;
+
+TYPE force_moment_data_name = EXTENSIBLE ENUMERATION OF
+     (force_x,
+      force_y,
+      force_z,
+      force_r,
+      force_theta,
+      force_phi,
+      moment_x,
+      moment_y,
+      moment_z,
+      moment_r,
+      moment_theta,
+      moment_phi,
+      moment_xi,
+      moment_eta,
+      moment_zeta,
+      moment_center_x,
+      moment_center_y,
+      moment_center_z,
+      lift,
+      drag,
+      coef_lift,
+      coef_drag,
+      coef_moment_x,
+      coef_moment_y,
+      coef_moment_z,
+      coef_moment_r,
+      coef_moment_theta,
+      coef_moment_phi,
+      coef_moment_xi,
+      coef_moment_eta,
+      coef_moment_zeta,
+      coef_moment_pressure_dynamic,
+      coef_moment_area,
+      coef_length);
+END_TYPE;
+
+TYPE gas_model_data_name = EXTENSIBLE ENUMERATION OF
+     (ideal_gas_constant,
+      specific_heat_ratio,
+      specific_heat_pressure,
+      specific_heat_volume);
+END_TYPE;
+
+TYPE gas_model_type = EXTENSIBLE ENUMERATION OF
+     (unspecified,
+      application_defined,
+      ideal,
+      Van_der_Waals);
+END_TYPE;
+
+TYPE mbna_behaviour_models = EXTENSIBLE SELECT
+  (thermal_conductivity_model);
+END_TYPE;
+
+TYPE mbna_governing_equation_type = EXTENSIBLE ENUMERATION OF
+     (unspecified,
+      application_defined);
+END_TYPE;
+
+TYPE thermal_conductivity_model_data_name = EXTENSIBLE ENUMERATION OF
+     (power_law_exponent,
+      temperature_reference,
+      thermal_conductivity_reference,
+      Sutherland_constant_conductivity,
+      constant_Prandtl);
+END_TYPE;
+
+TYPE thermal_conductivity_model_type = EXTENSIBLE ENUMERATION OF
+     (unspecified,
+      application_defined,
+      independent,
+      power_law,
+      Sutherland_law,
+      constant_Prandtl);
+END_TYPE;
+
+TYPE turbulence_closure_data_name = EXTENSIBLE ENUMERATION OF
+     (eddy_viscosity,
+      Prandtl_turbulent);
+END_TYPE;
+
+TYPE turbulence_closure_type = EXTENSIBLE ENUMERATION OF
+     (unspecified,
+      application_defined,
+      eddy_viscosity,
+      Reynolds_stress,
+      Reynolds_stress_algebraic);
+END_TYPE;
+
+TYPE turbulence_model_data_name = EXTENSIBLE ENUMERATION OF
+     (turbulent_distance,
+      turbulent_energy_kinetic,
+      turbulent_dissipation,
+      turbulent_dissipation_rate,
+      turbulent_BB_Reynolds,
+      turbulent_SA_nu_tilde,
+      turbulent_SA_chi,
+      turbulent_SA_cb1,
+      turbulent_SA_cb2,
+      turbulent_SA_sigma,
+      turbulent_SA_kappa,
+      turbulent_SA_cw1,
+      turbulent_SA_cw2,
+      turbulent_SA_cw3,
+      turbulent_SA_cv1,
+      turbulent_SA_ct1,
+      turbulent_SA_ct2,
+      turbulent_SA_ct3,
+      turbulent_SA_ct4);
+END_TYPE;
+
+TYPE turbulence_model_type = EXTENSIBLE ENUMERATION OF
+     (unspecified,
+      application_defined,
+      algebraic_Baldwin_Lomax,
+      algebraic_Cebeci_Smith,
+      half_equation_Johnson_King,
+      one_equation_Baldwin_Barth,
+      one_equation_Spalart_Allmaras,
+      two_equation_Jones_Launder,
+      two_equation_Menter_SST,
+      two_equation_Wilcox);
+END_TYPE;
+
+
+TYPE viscosity_model_data_name = EXTENSIBLE ENUMERATION OF
+     (viscosity_molecular_reference,
+      Sutherland_constant_viscosity);
+END_TYPE;
+
+TYPE viscosity_model_type = EXTENSIBLE ENUMERATION OF
+     (unspecified,
+      application_defined,
+      constant_viscosity,
+      power_law,
+      Sutherland_law);
+END_TYPE;
+
+ENTITY fd_diffusion_equation
+  SUBTYPE OF (fd_governing_equation);
+  diffusion_model : fd_diffusion_model;
+END_ENTITY;
+
+ENTITY fd_diffusion_model;
+  terms : ARRAY [1:diff] OF BOOLEAN;
+  diff  : INTEGER;
+END_ENTITY;
+
+ENTITY fd_governing_equation
+  SUBTYPE OF (mbna_governing_equation);
+  SELF\mbna_governing_equation.equation_type
+                  : fd_governing_equation_type;
+END_ENTITY;
+
+ENTITY flow_equation_set
+  SUBTYPE OF (mbna_equation_set);
+  SELF\mbna_equation_set.equations : fd_governing_equation;
+  fd_models                        : SET OF fd_behaviour_models;
+END_ENTITY;
+
+ENTITY gas_model
+  SUBTYPE OF (mbna_behaviour_model);
+  model_type : gas_model_type;
+END_ENTITY;
+
+ENTITY mbna_behaviour_model
+  SUBTYPE OF (mbna_equation);
+INVERSE
+  data : SET OF model_property_distribution FOR domain;
+END_ENTITY;
+
+SUBTYPE_CONSTRAINT sc1_mbna_behaviour_model FOR mbna_behaviour_model;
+  ABSTRACT SUPERTYPE;
+  ONEOF(thermal_conductivity_model,
+        gas_model,
+        turbulence_closure,
+        turbulence_model,
+        viscosity_model);
+END_SUBTYPE_CONSTRAINT;
+
+ENTITY mbna_equation
+  SUBTYPE OF (model_product_domain);
+END_ENTITY;
+
+SUBTYPE_CONSTRAINT sc1_mbna_equation FOR mbna_equation;
+  ONEOF(mbna_equation_set,
+        mbna_governing_equation,
+        mbna_behaviour_model);
+END_SUBTYPE_CONSTRAINT;
+
+ENTITY mbna_equation_set
+  SUBTYPE OF (mbna_equation);
+  dimension   : INTEGER;
+  equations   : mbna_governing_equation;
+  mbna_models : SET OF mbna_behaviour_models;
+END_ENTITY;
+
+ENTITY mbna_governing_equation
+  SUBTYPE OF (mbna_equation);
+  equation_type : mbna_governing_equation_type;
+END_ENTITY;
+
+ENTITY thermal_conductivity_model
+  SUBTYPE OF (mbna_behaviour_model);
+  model_type : thermal_conductivity_model_type;
+END_ENTITY;
+
+ENTITY turbulence_closure
+  SUBTYPE OF (mbna_behaviour_model);
+  closure_type : turbulence_closure_type;
+END_ENTITY;
+
+ENTITY turbulence_model
+  SUBTYPE OF (mbna_behaviour_model);
+  model_type      : turbulence_model_type;
+  diffusion_model : OPTIONAL fd_diffusion_model;
+END_ENTITY;
+
+ENTITY viscosity_model
+  SUBTYPE OF (mbna_behaviour_model);
+  model_type : viscosity_model_type;
+END_ENTITY;
+
+END_SCHEMA; -- end of equations_schema
+
+
+SCHEMA results_schema;
+  REFERENCE FROM analysis_schema           -- ISO 10303-53
+                 (model_property_distribution);
+  REFERENCE FROM basis_schema                     -- ISO 10303-110
+                 (mbna_property_distribution_select);
+  REFERENCE FROM mathematical_description_of_distribution_schema -- ISO 10303-51
+                 (property_distribution_description);
+  REFERENCE FROM mesh_topology_schema      -- ISO 10303-52
+                 (mesh_location,
+                  rind);
+  REFERENCE FROM support_resource_schema   -- ISO 10303-41
+                 (text);
+
+TYPE flow_solution_data_name = EXTENSIBLE ENUMERATION OF
+     (potential,
+      stream_function,
+      density,
+      pressure,
+      temperature,
+      energy_internal,
+      enthalpy,
+      entropy,
+      entropy_approx,
+      density_stagnation,
+      pressure_stagnation,
+      temperature_stagnation,
+      energy_stagnation,
+      enthalpy_stagnation,
+      energy_stagnation_density,
+      velocity_x,
+      velocity_y,
+      velocity_z,
+      velocity_r,
+      velocity_theta,
+      velocity_phi,
+      velocity_magnitude,
+      velocity_normal,
+      velocity_tangential,
+      velocity_sound,
+      velocity_sound_stagnation,
+      momentum_x,
+      momentum_y,
+      momentum_z,
+      momentum_magnitude,
+      energy_kinetic,
+      pressure_dynamic,
+      vorticity_x,
+      vorticity_y,
+      vorticity_z,
+      vorticity_magnitude,
+      skin_friction_x,
+      skin_friction_y,
+      skin_friction_z,
+      skin_friction_magnitude,
+      velocity_angle_x,
+      velocity_angle_y,
+      velocity_angle_z,
+      velocity_unit_vector_x,
+      velocity_unit_vector_y,
+      velocity_unit_vector_z,
+      mass_flow,
+      viscosity_kinematic,
+      viscosity_molecular,
+      viscosity_eddy,
+      thermal_conductivity,
+      ideal_gas_constant,
+      specific_heat_pressure,
+      specific_heat_volume,
+      Reynolds_stress_xx,
+      Reynolds_stress_xy,
+      Reynolds_stress_xz,
+      Reynolds_stress_yy,
+      Reynolds_stress_yz,
+      Reynolds_stress_zz);
+END_TYPE;
+
+ENTITY mbna_discrete_data
+  SUBTYPE OF (mbna_result);
+  gridloc : mesh_location;
+INVERSE
+  data : SET OF property_distribution_description FOR physical_function;
+END_ENTITY;
+
+ENTITY mbna_discrete_data_with_rind
+  SUBTYPE OF (mbna_discrete_data);
+  rind_planes : rind;
+END_ENTITY;
+
+ENTITY mbna_history
+  SUBTYPE OF (mbna_result);
+  notes : LIST OF text;
+INVERSE
+  data : SET OF property_distribution_description FOR physical_function;
+END_ENTITY;
+
+ENTITY mbna_result
+  SUBTYPE OF (model_property_distribution);  
+END_ENTITY;
+
+SUBTYPE_CONSTRAINT sc1_mbna_result FOR mbna_result;
+  ONEOF(mbna_solution,
+        mbna_history,
+        mbna_discrete_data);
+END_SUBTYPE_CONSTRAINT;
+
+ENTITY mbna_solution
+  SUBTYPE OF (mbna_result);
+  gridloc  : mesh_location;
+INVERSE
+  solution : SET OF property_distribution_description FOR physical_function;
+END_ENTITY;
+
+ENTITY mbna_solution_with_rind
+  SUBTYPE OF (mbna_solution);
+  rind_planes : rind;
+END_ENTITY;
+
+END_SCHEMA; -- end of results_schema

@@ -1,0 +1,151 @@
+(*
+ $Id: 10303-1262-mim-task_specification.exp,v 1.1 2006/08/07 09:42:05 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N3182 - ISO/TS 10303-1262 Task specification - EXPRESS MIM
+Supersedes ISO TC184/SC4/WG12 N2448
+*) 
+
+
+SCHEMA Task_specification_mim;
+
+USE FROM action_schema   -- ISO 10303-41
+  (action_method,
+   action_method_relationship); 
+
+USE FROM Activity_method_assignment_mim;    -- ISO/TS 10303-1249
+
+USE FROM Activity_method_mim;    -- ISO/TS 10303-1049
+
+USE FROM Classification_assignment_mim;    -- ISO/TS 10303-1114
+
+USE FROM Condition_mim;    -- ISO/TS 10303-1253
+
+USE FROM Group_mim;    -- ISO/TS 10303-1113
+
+USE FROM method_definition_schema   -- ISO 10303-49
+  (action_method_to_select_from,
+   concurrent_action_method,
+   relationship_condition,
+   sequential_method,
+   serial_action_method); 
+
+USE FROM State_definition_mim;    -- ISO/TS 10303-1255
+
+USE FROM State_observed_mim;    -- ISO/TS 10303-1256
+
+USE FROM state_observed_schema   -- ISO 10303-56
+  (state_observed); 
+
+USE FROM state_type_schema   -- ISO 10303-56
+  (state_type); 
+
+
+TYPE task_classification_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON classification_item WITH 
+   (action_method, 
+    action_method_relationship, 
+    applied_action_method_assignment, 
+    applied_state_observed_assignment, 
+    applied_state_type_assignment);
+END_TYPE; 
+
+TYPE task_specification_groupable_item = EXTENSIBLE GENERIC_ENTITY SELECT BASED_ON groupable_item WITH 
+   (action_method, 
+    action_method_relationship);
+END_TYPE; 
+
+TYPE task_state_items = EXTENSIBLE SELECT BASED_ON action_method_items WITH 
+   (applied_state_observed_assignment, 
+    applied_state_type_assignment, 
+    state_observed, 
+    state_type);
+END_TYPE; 
+
+ENTITY advisory_task_element
+  SUBTYPE OF (task_element);
+END_ENTITY;
+
+ENTITY concurrent_task_element
+  SUBTYPE OF (task_element);
+END_ENTITY;
+
+ENTITY end_task
+  SUBTYPE OF (task_element);
+END_ENTITY;
+
+ENTITY exit_loop
+  SUBTYPE OF (task_element);
+END_ENTITY;
+
+ENTITY looping_element
+  SUBTYPE OF (task_element);
+END_ENTITY;
+
+ENTITY simultaneous_task_element
+  SUBTYPE OF (concurrent_task_element);
+END_ENTITY;
+
+ENTITY task_element
+  SUBTYPE OF (action_method);
+END_ENTITY;
+
+ENTITY task_element_relationship
+  SUBTYPE OF (action_method_relationship);
+END_ENTITY;
+
+ENTITY task_element_sequence
+  SUBTYPE OF (task_element);
+END_ENTITY;
+
+ENTITY task_invocation
+  SUBTYPE OF (task_element);
+END_ENTITY;
+
+ENTITY task_method
+  SUBTYPE OF (action_method);
+END_ENTITY;
+
+ENTITY task_method_relationship
+  SUBTYPE OF (action_method_relationship);
+END_ENTITY;
+
+ENTITY task_method_version
+  SUBTYPE OF (action_method);
+END_ENTITY;
+
+ENTITY task_method_version_relationship
+  SUBTYPE OF (action_method_relationship);
+END_ENTITY;
+
+ENTITY task_objective
+  SUBTYPE OF (action_method);
+END_ENTITY;
+
+ENTITY task_step
+  SUBTYPE OF (task_element);
+END_ENTITY;
+
+SUBTYPE_CONSTRAINT restrict_action_method_relationship_subtypes FOR action_method_relationship;
+  ONEOF (task_element_relationship,
+         task_method_relationship,
+         task_method_version_relationship);
+END_SUBTYPE_CONSTRAINT;
+
+SUBTYPE_CONSTRAINT restrict_task_action_method_subtypes FOR action_method;
+  ONEOF (task_element,
+         task_method,
+         task_method_version,
+         task_objective);
+END_SUBTYPE_CONSTRAINT;
+
+SUBTYPE_CONSTRAINT restrict_task_method_subtypes FOR task_element;
+  ONEOF (advisory_task_element,
+         concurrent_task_element,
+         end_task,
+         exit_loop,
+         looping_element,
+         task_element_sequence,
+         task_invocation,
+         task_step);
+END_SUBTYPE_CONSTRAINT;
+
+END_SCHEMA;  -- Task_specification_mim
+

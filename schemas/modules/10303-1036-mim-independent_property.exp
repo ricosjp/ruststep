@@ -1,0 +1,12 @@
+(*
+ $Id: 10303-1036-mim-independent_property.exp,v 1.5 2006/08/07 09:42:03 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N1238 - ISO/TS 10303-1036 Independent property - EXPRESS MIM
+*)
+SCHEMA Independent_property_mim;
+
+USE FROM product_property_definition_schema
+(general_property,
+ general_property_relationship);
+
+END_SCHEMA;
+

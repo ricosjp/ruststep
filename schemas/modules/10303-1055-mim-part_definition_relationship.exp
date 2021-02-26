@@ -1,0 +1,15 @@
+(*
+ $Id: 10303-1055-mim-part_definition_relationship.exp,v 1.4 2006/08/07 09:42:03 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N1327 - ISO/TS 10303-1055 Part definition relationship - EXPRESS MIM
+*)
+   
+SCHEMA Part_definition_relationship_mim;
+
+USE FROM Part_view_definition_mim;
+USE FROM Product_view_definition_relationship_mim;
+USE FROM Value_with_unit_mim; -- ISO/TS 10303-1054
+
+USE FROM product_structure_schema
+	(make_from_usage_option);
+
+END_SCHEMA;

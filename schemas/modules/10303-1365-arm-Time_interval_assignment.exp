@@ -1,0 +1,27 @@
+(*
+ $Id: 10303-1365-arm-Time_interval_assignment.exp,v 1.2 2006/08/07 07:44:47 wg12deputy Exp $ 
+ ISO TC184/SC4/WG12 N2120 - ISO/TS 10303-1365 Time interval assignment - EXPRESS ARM
+*) 
+
+
+SCHEMA Time_interval_assignment_arm; 
+
+USE FROM Time_interval_arm;    -- ISO/TS 10303-1065
+
+
+TYPE time_interval_item = EXTENSIBLE SELECT;
+END_TYPE; 
+
+ENTITY Time_interval_assignment;
+  assigned_time_interval : Time_interval;
+  role : Time_interval_role;
+  items : SET[1:?] OF time_interval_item;
+END_ENTITY;
+
+ENTITY Time_interval_role;
+  name : STRING;
+  description : STRING;
+END_ENTITY;
+
+END_SCHEMA;  -- Time_interval_assignment_arm
+

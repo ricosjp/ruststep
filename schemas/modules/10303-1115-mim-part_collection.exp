@@ -1,0 +1,41 @@
+(*
+   $Id: 10303-1115-mim-part_collection.exp,v 1.1 2006/08/03 15:03:35 wg12deputy Exp $
+   ISO/TC184/SC4 WG12N2602 - ISO/TS 10303-1115 part_collection - EXPRESS MIM
+   Supersedes ISO TC184/SC4/WG12N1736
+*)
+
+SCHEMA Part_collection_mim;
+
+USE FROM Product_occurrence_mim;
+
+USE FROM Part_view_definition_mim;
+
+REFERENCE FROM Single_part_representation_mim
+	(categories_of_product);
+
+
+RULE restrict_collection_category FOR (product_definition);
+LOCAL
+  collection_definitions: SET OF product_definition := [];
+END_LOCAL;
+  collection_definitions :=  QUERY( pd <* product_definition | 
+  SIZEOF( QUERY( pdca <* USEDIN( pd, 'PART_COLLECTION_MIM' + '.PRODUCT_DEFINITION_CONTEXT_ASSOCIATION.DEFINITION') |
+  pdca.frame_of_reference.name= 'collection definition')) > 0 );
+WHERE
+WR1: SIZEOF( QUERY( pd <* collection_definitions | 
+	NOT ('collection' IN categories_of_product(pd.formation.of_product)) ))= 0;
+END_RULE;
+
+RULE restrict_product_definitions_for_collection FOR
+    (product_definition_relationship);
+WHERE
+WR1: SIZEOF ( QUERY ( pdr <* product_definition_relationship |
+     ( pdr. name = 'collection membership' ) AND 
+	( ( pdr.relating_product_definition.frame_of_reference.name<>'part definition' ) OR 
+	( pdr.related_product_definition.frame_of_reference.name<>'part occurrence' ) OR 
+	( SIZEOF ( QUERY ( pdca <* USEDIN (pdr.relating_product_definition ,
+     'PART_COLLECTION_MIM' + '.PRODUCT_DEFINITION_CONTEXT_ASSOCIATION.DEFINITION') | 
+	( pdca.role.name = 'part definition type' ) AND 
+	( pdca.frame_of_reference.name = 'collection definition' ) )) =0 ) ) ) ) =0;
+END_RULE;
+END_SCHEMA;

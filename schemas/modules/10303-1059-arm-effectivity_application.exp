@@ -1,0 +1,22 @@
+(*
+ $Id: 10303-1059-arm-effectivity_application.exp,v 1.5 2006/08/07 07:44:43 wg12deputy Exp $
+ ISO TC184/SC4/WG12 N1174 - ISO/TS 10303-1059 Effectivity application - EXPRESS ARM
+*)
+   
+SCHEMA Effectivity_application_arm;
+   
+USE FROM Effectivity_arm; -- ISO/TS 10303-1057
+   
+TYPE effectivity_item = EXTENSIBLE SELECT; 
+END_TYPE;
+   
+ENTITY Effectivity_assignment;
+  assigned_effectivity  : Effectivity;
+  role                  : STRING;
+  items                 : SET [1:?] OF effectivity_item;
+END_ENTITY;
+
+   
+END_SCHEMA;
+
+(* Last update -  10 Apr 2002 *)

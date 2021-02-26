@@ -1,0 +1,1836 @@
+(***********************************************************************
+  AIM EXPRESS short form for ISO/IS 10303-232
+  ISO TC184/SC4/WG3 N1062
+  Glen Ziolko
+  2001-11-15
+***********************************************************************)
+
+SCHEMA technical_data_packaging;
+
+USE FROM action_schema                            -- ISO 10303-41
+  (action,
+   action_directive,
+   action_method,
+   action_relationship,
+   action_request_solution,
+   action_request_status,
+   action_resource,
+   action_resource_relationship,
+   action_resource_type,
+   action_status,
+   directed_action,
+   executed_action,
+   versioned_action_request);
+
+USE FROM aic_advanced_brep;                       -- ISO 10303-514
+
+USE FROM aic_csg;                                 -- ISO 10303-515
+
+USE FROM aic_drawing_structure_and_administration -- ISO 10303-505
+  (draughting_approval_assignment,
+   draughting_drawing_revision);             
+
+USE FROM aic_edge_based_wireframe;                -- ISO 10303-501
+
+USE FROM aic_elementary_brep;                     -- ISO 10303-513
+
+USE FROM aic_faceted_brep;                        -- ISO 10303-512
+
+USE FROM aic_geometrically_bounded_2d_wireframe;  -- ISO 10303-503
+
+USE FROM aic_geometrically_bounded_surface;       -- ISO 10303-507
+
+USE FROM aic_geometrically_bounded_wireframe;          -- ISO 10303-510
+
+USE FROM aic_manifold_surface;                    -- ISO 10303-509
+
+USE FROM aic_mechanical_design_geometric_presentation;-- ISO 10303-517
+
+USE FROM aic_mechanical_design_shaded_presentation;    -- ISO 10303-518
+
+USE FROM aic_non_manifold_surface;                -- ISO 10303-508
+
+USE FROM aic_shell_based_wireframe;                    -- ISO 10303-502
+
+USE FROM aic_topologically_bounded_surface;       -- ISO 10303-511
+
+USE FROM application_context_schema                    -- ISO 10303-41
+  (application_context,
+   application_context_relationship,
+   application_protocol_definition,
+   library_context,
+   product_concept_context,
+   product_context,
+   product_definition_context);
+
+USE FROM approval_schema                     -- ISO 10303-41
+  (approval,
+   approval_date_time,
+   approval_person_organization,
+   approval_relationship,
+   approval_status);
+
+USE FROM basic_attribute_schema                   -- ISO 10303-41
+  (description_attribute,
+   id_attribute,
+   name_attribute,
+   role_association);
+
+USE FROM configuration_management_schema               -- ISO 10303-44
+  (configuration_design,
+   configuration_effectivity,
+   configuration_item);
+
+USE FROM certification_schema                     -- ISO 10303-41
+  (certification,
+   certification_type);
+
+USE FROM contract_schema                     -- ISO 10303-41
+  (contract,
+   contract_relationship);
+
+USE FROM date_time_schema                         -- ISO 10303-41
+  (calendar_date,
+   date_and_time,
+   date_time_select,
+   event_occurrence,
+   event_occurrence_relationship,
+   relative_event_occurrence,
+   time_interval,
+   time_interval_relationship,
+   time_interval_with_bounds);
+
+REFERENCE FROM date_time_schema                   -- ISO 10303-41
+  (leap_year);
+
+USE FROM document_schema                     -- ISO 10303-41
+  (document,
+   document_product_association,
+   document_relationship,
+   document_representation_type,
+   document_type,
+   document_usage_constraint,
+   product_or_formation_or_definition);
+   
+USE FROM draughting_element_schema                -- ISO 10303-101
+  (draughting_callout);
+
+USE FROM drawing_definition_schema                -- ISO 10303-101
+  (draughting_title,
+   drawing_revision,
+   drawing_sheet_revision);
+
+USE FROM effectivity_schema                       -- ISO 10303-41
+  (dated_effectivity,
+   effectivity_relationship,
+   lot_effectivity,
+   serial_numbered_effectivity,
+   time_interval_based_effectivity);
+
+USE FROM external_reference_schema                -- ISO 10303-41
+  (externally_defined_item,
+   message);
+
+REFERENCE FROM geometry_schema                    -- ISO 10303-42
+  (dummy_gri);
+
+USE FROM geometry_schema                     -- ISO 10303-42
+  (cartesian_transformation_operator_2d,
+   geometric_representation_item
+   oriented_surface,
+   placement,
+   surface_curve);
+
+USE FROM group_schema                             -- ISO 10303-41
+  (group,
+   group_relationship);
+
+USE FROM management_resources_schema              -- ISO 10303-41
+  (action_assignment,
+   action_request_assignment,
+   approval_assignment,
+   certification_assignment,
+   classification_assignment,
+   contract_assignment,
+   date_and_time_assignment,
+   date_assignment,
+   document_reference,
+   document_usage_constraint_assignment,
+   effectivity_assignment,
+   effectivity_context_assignment,
+   event_occurrence_assignment,
+   external_identification_assignment,
+   identification_assignment,
+   identification_assignment_relationship,
+   organization_assignment,
+   organizational_project_assignment,
+   person_and_organization_assignment,
+   security_classification_assignment);
+
+USE FROM material_property_definition_schema      -- ISO 10303-45
+  (material_designation,
+   property_definition_relationship);
+
+USE FROM measure_schema                           -- ISO 10303-41
+  (amount_of_substance_measure,
+   amount_of_substance_measure_with_unit,
+   amount_of_substance_unit,
+   area_measure,
+   area_measure_with_unit,
+   area_unit,
+   celsius_temperature_measure,
+   context_dependent_measure,
+   context_dependent_unit,
+   conversion_based_unit,
+   count_measure,
+   derived_unit,
+   descriptive_measure,
+   electric_current_measure,
+   electric_current_measure_with_unit,
+   electric_current_unit,
+   global_unit_assigned_context,
+   length_measure,
+   length_measure_with_unit,
+   length_unit,
+   luminous_intensity_measure,
+   luminous_intensity_measure_with_unit,
+   luminous_intensity_unit,
+   mass_measure,
+   mass_measure_with_unit,
+   mass_unit,
+   measure_value,
+   measure_with_unit,
+   named_unit,
+   numeric_measure,
+   parameter_value,
+   plane_angle_measure,
+   plane_angle_measure_with_unit,
+   plane_angle_unit,
+   positive_length_measure,
+   positive_plane_angle_measure,
+   positive_ratio_measure,
+   ratio_measure,
+   ratio_measure_with_unit,
+   ratio_unit,
+   si_unit,
+   solid_angle_measure,
+   solid_angle_measure_with_unit,
+   solid_angle_unit,
+   thermodynamic_temperature_measure,
+   thermodynamic_temperature_measure_with_unit,
+   thermodynamic_temperature_unit,
+   time_measure,
+   time_measure_with_unit,
+   time_unit,
+   volume_measure,
+   volume_measure_with_unit,
+   volume_unit);
+
+USE FROM method_definition_schema                 -- ISO 10303-49
+   (action_method_with_associated_documents);
+
+USE FROM person_organization_schema                    -- ISO 10303-41
+   (address,
+   organization,
+   organization_relationship,
+   organizational_address,
+   organizational_project,
+   organizational_project_relationship,
+   person,
+   person_and_organization,
+   person_organization_select,
+   personal_address);
+
+USE FROM presentation_appearance_schema           -- ISO 10303-46
+     (character_glyph_style_outline,
+     character_glyph_style_stroke,
+     externally_defined_style,
+     styled_item,
+     text_style,
+     text_style_for_defined_font);
+
+USE FROM presentation_definition_schema           -- ISO 10303-46
+  (annotation_occurrence,
+     annotation_curve_occurrence,
+     annotation_point_occurrence,
+     annotation_text,
+     annotation_text_character,
+     annotation_text_occurrence,
+     composite_text,
+     defined_character_glyph,
+     externally_defined_character_glyph,
+     externally_defined_symbol,
+     pre_defined_character_glyph,
+     text_literal,
+     text_string_representation);
+
+USE FROM presentation_organization_schema              -- ISO 10303-46
+  (area_dependent_annotation_representation,
+   camera_model,
+   camera_usage,
+   presentation_area,
+   presentation_representation,
+   presentation_representation_select,
+   presentation_set,
+   presented_item,
+   presented_item_representation);
+
+USE FROM presentation_resource_schema             -- ISO 10303-46
+  (character_glyph_symbol,
+     externally_defined_text_font,
+     pre_defined_text_font);
+
+USE FROM process_property_schema                  -- ISO 10303-49
+  (action_property,
+   product_definition_process,
+   process_product_association);
+
+USE FROM process_property_representation_schema        -- ISO 10303-49
+  (action_property_representation);
+
+USE FROM product_concept_schema                   -- ISO 10303-44
+  (product_concept);
+
+USE FROM product_definition_schema                -- ISO 10303-41
+  (product,
+   product_category,
+   product_category_relationship,
+   product_definition,
+   product_definition_context_association,
+   product_definition_effectivity,
+   product_definition_formation,
+   product_definition_formation_relationship,
+   product_definition_formation_with_specified_source,
+   product_definition_relationship,
+   product_definition_substitute,
+   product_definition_with_associated_documents,
+   product_related_product_category,
+   product_relationship);
+
+USE FROM product_property_definition_schema       -- ISO 10303-41
+  (characterized_object,
+   characterized_product_definition,
+   general_property,
+   general_property_association,
+   general_property_relationship,
+   product_definition_shape,
+   property_definition,
+   shape_aspect,
+   shape_aspect_relationship,
+   shape_definition);
+
+USE FROM product_property_representation_schema        -- ISO 10303-41
+  (context_dependent_shape_representation,
+   item_identified_representation_usage,
+   property_definition_representation,
+   shape_definition_representation,
+   shape_representation,
+   shape_representation_relationship);
+
+USE FROM product_structure_schema                 -- ISO 10303-44
+  (alternate_product_relationship,
+   assembly_component_usage,
+   assembly_component_usage_substitute,
+   assembly_component_usage_substitute_with_ranking,
+   make_from_usage_option,
+   next_assembly_usage_occurrence,
+   product_definition_occurrence_relationship,
+   promissory_usage_occurrence,
+   quantified_assembly_component_usage,
+   specified_higher_usage_occurrence);
+
+USE FROM qualified_measure_schema                 -- ISO 10303-45
+  (descriptive_representation_item,
+   measure_qualification,
+   measure_representation_item,
+     precision_qualifier,
+   qualified_representation_item,
+   type_qualifier,
+   value_qualifier);
+
+USE FROM representation_schema                    -- ISO 10303-43
+  (compound_representation_item,
+   compound_item_definition,
+   global_uncertainty_assigned_context,
+   item_defined_transformation,
+   list_representation_item,
+   mapped_item,
+   representation,
+   representation_context,
+   representation_item,
+   representation_item_relationship,
+   representation_map,
+   representation_relationship,
+   representation_relationship_with_transformation,
+   uncertainty_measure_with_unit,
+   value_representation_item);
+
+USE FROM security_classification_schema           -- ISO 10303-41
+  (security_classification,
+   security_classification_level);
+
+REFERENCE FROM support_resource_schema            -- ISO 10303-41
+   (label);
+
+REFERENCE FROM topology_schema                    -- ISO 10303-42
+  (dummy_tri);
+
+TYPE action_item = SELECT
+  (configuration_effectivity,
+   document_file,
+   product_definition,
+   product_definition_with_associated_documents,
+   product_definition_relationship,
+   product_definition_formation,
+   representation);
+END_TYPE;
+
+TYPE action_request_item = SELECT
+  (product_definition,
+   product_definition_formation,
+   product_definition_relationship,
+   property_definition);
+END_TYPE;
+
+TYPE approval_item = SELECT
+  (action,
+   applied_action_assignment,
+   applied_certification_assignment,
+   applied_effectivity_assignment,
+   certification,
+   configuration_effectivity,
+   configuration_item,
+   contract,
+   document_file,
+   product_definition,
+   product_definition_formation,
+   product_definition_relationship,   
+   property_definition,
+   versioned_action_request);
+END_TYPE;
+
+TYPE certification_item = SELECT
+  (product_definition_formation_relationship);
+END_TYPE;
+
+TYPE classification_item = SELECT
+  (action_status,
+   approval,
+   descriptive_representation_item,
+   product_definition);
+END_TYPE;
+
+TYPE contract_item = SELECT
+  (action,
+   product_definition,
+   product_definition_formation,
+   product_definition_with_associated_documents,
+   property_definition);
+END_TYPE;
+
+TYPE date_and_time_item = SELECT
+  (action,
+   applied_action_assignment,
+   applied_contract_assignment,
+   applied_security_classification_assignment,
+   approval_person_organization,
+   certification,
+   contract,
+   event_occurrence,
+   organizational_project,
+   product_definition, 
+   product_definition_formation,
+   representation,
+   security_classification,
+   versioned_action_request);
+END_TYPE;
+
+TYPE date_item = SELECT
+  (action,
+   applied_action_assignment,
+   applied_contract_assignment,
+   applied_security_classification_assignment,
+   approval_person_organization,
+   certification,
+   contract,
+   event_occurrence,
+   organizational_project,
+   product_definition, 
+   product_definition_formation,
+   representation,
+   security_classification,
+   versioned_action_request);
+END_TYPE;
+
+TYPE document_reference_item = SELECT
+  (action,
+   action_method,
+  alternate_product_relationship,
+   applied_document_reference,
+   assembly_component_usage_substitute,
+   descriptive_representation_item,
+   document_file,
+   document_relationship,
+   executed_action,
+   externally_defined_symbol_and_placement,
+   make_from_usage_option,
+   make_from_usage_option_with_reference_designator,
+   next_assembly_usage_occurrence,
+   product,
+   product_definition,
+   product_definition_formation,
+   product_definition_formation_relationship,
+   product_definition_occurrence_relationship, 
+   product_definition_relationship,
+   product_definition_with_associated_documents,
+   promissory_usage_occurrence,
+   property_definition,
+   quantified_assembly_component_usage,
+   shape_aspect,
+   shape_aspect_relationship,
+   specified_higher_usage_occurrence,
+  versioned_action_request);
+END_TYPE;
+
+TYPE effectivity_context_item  = SELECT
+  (organization,
+   product_definition_formation);
+END_TYPE;
+
+TYPE effectivity_item  = SELECT
+  (product_definition,
+   product_definition_formation,
+   product_definition_relationship);
+END_TYPE;
+
+TYPE event_occurrence_item  = SELECT
+  (organizational_project);
+END_TYPE;
+
+TYPE external_identification_item  = SELECT
+  (document_file,
+   product_definition);
+END_TYPE;
+
+TYPE identification_item  = SELECT
+  (application_context,
+   applied_document_reference,
+   applied_document_usage_constraint_assignment,
+   approval_status,
+   document_file,
+   organization,
+   product,
+   product_definition,
+   product_definition_formation,
+   security_classification_level,
+   shape_aspect_relationship);
+END_TYPE;
+
+TYPE language_item = SELECT
+   (representation);
+END_TYPE;
+
+TYPE organization_item = SELECT
+  (action,
+   applied_action_assignment,
+   applied_contract_assignment,
+   applied_identification_assignment,
+   configuration_item,
+   contract,
+   document_file,
+   event_occurrence,
+   organizational_project,
+   product,
+   product_definition,
+   product_definition_formation,
+   security_classification,
+   versioned_action_request);
+END_TYPE;
+
+TYPE organizational_project_item = SELECT
+   (action, product_concept);
+END_TYPE;
+
+TYPE person_and_organization_item = SELECT
+  (action,
+   applied_action_assignment,
+   applied_contract_assignment,
+   applied_identification_assignment,
+   configuration_item,
+   contract,
+   document_file,
+   event_occurrence,
+   organizational_project,
+   product,
+   product_definition,
+   product_definition_formation,
+   security_classification,
+   versioned_action_request);
+END_TYPE;
+
+TYPE presented_item_item = SELECT
+  (product_definition_formation);
+END_TYPE;
+
+TYPE security_classification_item  = SELECT
+  (document_file,
+   product_definition,
+   product_definition_formation,
+   product_definition_relationship,
+   property_definition);
+END_TYPE;
+
+ENTITY applied_action_assignment
+  SUBTYPE OF (action_assignment);
+  items : SET [1:?] OF action_item; 
+END_ENTITY;
+
+ENTITY applied_action_request_assignment
+  SUBTYPE OF (action_request_assignment);
+  items : SET [1:?] OF action_request_item; 
+END_ENTITY;
+
+ENTITY applied_approval_assignment
+  SUBTYPE OF (approval_assignment);
+  items : SET [1:?] OF approval_item;
+END_ENTITY;
+
+ENTITY applied_certification_assignment
+  SUBTYPE OF (certification_assignment);
+  items : SET [1:?] OF certification_item;
+END_ENTITY;
+
+ENTITY applied_classification_assignment
+  SUBTYPE OF (classification_assignment);
+  items : SET [1:?] OF classification_item;
+END_ENTITY;
+
+ENTITY applied_contract_assignment
+  SUBTYPE OF (contract_assignment);
+  items : SET [1:?] OF contract_item;
+END_ENTITY;
+
+ENTITY applied_date_and_time_assignment
+  SUBTYPE OF (date_and_time_assignment);
+  items : SET [1:?] OF date_and_time_item;
+END_ENTITY;
+
+ENTITY applied_date_assignment
+  SUBTYPE OF (date_assignment);
+  items : SET [1:?] OF date_item;
+END_ENTITY;
+
+ENTITY applied_document_reference
+  SUBTYPE OF (document_reference);
+  items : SET [1:?] OF document_reference_item;
+END_ENTITY;
+
+ENTITY applied_document_usage_constraint_assignment
+  SUBTYPE OF (document_usage_constraint_assignment);
+  items : SET [1:?] OF document_reference_item;
+END_ENTITY;
+
+ENTITY applied_effectivity_assignment
+  SUBTYPE OF (effectivity_assignment);
+  items : SET [1:?] OF effectivity_item;
+END_ENTITY;
+
+ENTITY applied_effectivity_context_assignment
+  SUBTYPE OF (effectivity_context_assignment);
+  items : SET [1:?] OF effectivity_context_item;
+END_ENTITY;
+
+ENTITY applied_event_occurrence_assignment
+  SUBTYPE OF (event_occurrence_assignment);
+  items : SET [1:?] OF event_occurrence_item;
+END_ENTITY;
+
+ENTITY applied_external_identification_assignment
+  SUBTYPE OF (external_identification_assignment);
+  items : SET [1:?] OF external_identification_item;
+END_ENTITY;
+
+ENTITY applied_identification_assignment
+  SUBTYPE OF (identification_assignment);
+  items : SET [1:?] OF identification_item;
+END_ENTITY;
+
+ENTITY applied_organization_assignment
+  SUBTYPE OF (organization_assignment);
+  items : SET [1:?] OF organization_item;
+END_ENTITY;
+
+ENTITY applied_organizational_project_assignment
+  SUBTYPE OF (organizational_project_assignment);
+  items : SET [1:?] OF organizational_project_item;
+END_ENTITY;
+
+ENTITY applied_person_and_organization_assignment
+  SUBTYPE OF (person_and_organization_assignment);
+  items : SET [1:?] OF person_and_organization_item;
+END_ENTITY;
+
+ENTITY applied_presented_item
+  SUBTYPE OF (presented_item);
+  items : SET [1:?] OF presented_item_item;
+END_ENTITY;
+
+ENTITY applied_security_classification_assignment
+  SUBTYPE OF (security_classification_assignment);
+  items : SET [1:?] OF security_classification_item;
+END_ENTITY;
+
+ENTITY class
+  SUBTYPE OF (group);
+END_ENTITY;
+
+ENTITY class_system
+  SUBTYPE OF (group);
+END_ENTITY;
+
+ENTITY design_make_from_relationship
+  SUBTYPE OF (product_definition_relationship);
+END_ENTITY;
+
+ENTITY document_file
+   SUBTYPE OF (document, 
+     characterized_object);
+WHERE
+  WR1: (SELF\characterized_object.name = '');
+  WR2: (NOT EXISTS(SELF\characterized_object.description));
+  WR3: (SIZEOF (QUERY( drt <* SELF\document.representation_types | (drt.name
+IN ['digital','physical']) )) = 1);
+END_ENTITY;
+
+ENTITY document_product_equivalence
+   SUBTYPE OF (document_product_association);
+WHERE
+WR1: SELF.name = 'equivalence';
+WR2: NOT('TECHNICAL_DATA_PACKAGING.PRODUCT' 
+IN TYPEOF(SELF.related_product)) OR
+((SELF.relating_document.kind.
+product_data_type = 'configuration controlled document') AND
+(SIZEOF( QUERY(
+prpc <* USEDIN(SELF.related_product,'TECHNICAL_DATA_PACKAGING.' +
+'PRODUCT_RELATED_PRODUCT_CATEGORY.PRODUCTS') |
+prpc.name = 'document')) = 1));
+WR3: NOT('TECHNICAL_DATA_PACKAGING.PRODUCT_DEFINITION_FORMATION' IN
+TYPEOF(SELF.related_product)) OR
+((SELF.relating_document.kind.product_data_type =
+'configuration controlled document version') AND
+(SIZEOF( QUERY( prpc <* USEDIN(SELF.related_product\
+product_definition_formation.of_product,
+'TECHNICAL_DATA_PACKAGING.PRODUCT_RELATED_PRODUCT_CATEGORY.PRODUCTS') |
+prpc.name = 'document')) = 1));
+WR4: NOT('TECHNICAL_DATA_PACKAGING.PRODUCT_DEFINITION' IN
+TYPEOF(SELF.related_product)) OR
+((SELF.relating_document.kind.product_data_type =
+'configuration controlled document definition') AND
+(SIZEOF( QUERY( prpc <* USEDIN(SELF.related_product\
+product_definition.formation.of_product,
+'TECHNICAL_DATA_PACKAGING.PRODUCT_RELATED_PRODUCT_CATEGORY.PRODUCTS') |
+prpc.name = 'document'
+)) = 1));
+END_ENTITY;
+
+ENTITY externally_defined_class
+SUBTYPE OF (externally_defined_item, 
+  class);
+END_ENTITY;
+
+ENTITY externally_defined_general_property
+SUBTYPE OF (externally_defined_item, 
+  general_property);
+END_ENTITY;
+
+ENTITY externally_defined_planar_box
+SUBTYPE OF (externally_defined_item, 
+  planar_box);
+END_ENTITY;
+
+ENTITY externally_defined_symbol_and_placement
+SUBTYPE OF (externally_defined_symbol, 
+  placement);
+END_ENTITY;
+
+ENTITY language_assignment
+  SUBTYPE OF (classification_assignment);
+ items : SET [1:?] OF language_item;
+END_ENTITY;
+
+ENTITY make_from_usage_option_with_reference_designator
+ SUBTYPE OF (make_from_usage_option, assembly_component_usage);
+END_ENTITY;
+
+ENTITY other_list_table_representation
+  SUBTYPE OF (representation);
+END_ENTITY;
+
+RULE access_file_requires_external_identification
+     FOR (document_file);
+LOCAL
+  result :  BOOLEAN  := TRUE;
+  df     : SET OF document_file;
+  aeia   : BAG OF applied_external_identification_assignment;
+END_LOCAL;
+  df := document_file;
+  REPEAT  i := 1 TO SIZEOF (df);
+    IF df[i]\document.description = 'access data file' THEN
+      aeia := USEDIN(df[i], 'TECHNICAL_DATA_PACKAGING.'+
+                     'APPLIED_EXTERNAL_IDENTIFICATION_ASSIGNMENT.ITEMS');
+      IF (SIZEOF(aeia) < 1) THEN
+        result := FALSE;
+      END_IF;
+    END_IF;
+  END_REPEAT;
+WHERE
+  wr1 : result;
+END_RULE;
+
+RULE applied_document_usage_constraint_assignment_restriction 
+        FOR (document_file, externally_defined_symbol_and_placement);
+LOCAL
+  result : BOOLEAN := TRUE;
+  aduca : BAG OF applied_document_usage_constraint_assignment;
+  df  :  SET OF document_file;
+  exds  :  SET OF externally_defined_symbol_and_placement;
+END_LOCAL;
+  df := document_file;
+  REPEAT i := 1 TO SIZEOF (df);
+    aduca := USEDIN(df[i], 'TECHNICAL_DATA_PACKAGING.'+
+                   'APPLIED_DOCUMENT_USAGE_CONSTRAINT_ASSIGNMENT.ITEMS');
+     IF (SIZEOF(aduca ) > 0) THEN
+          result := FALSE;
+     END_IF;
+  END_REPEAT;
+  exds := externally_defined_symbol_and_placement;
+  REPEAT i := 1 TO SIZEOF (exds);
+    aduca := USEDIN(exds[i], 'TECHNICAL_DATA_PACKAGING.'+
+                   'APPLIED_DOCUMENT_USAGE_CONSTRAINT_ASSIGNMENT.ITEMS');
+    IF (SIZEOF(aduca ) > 0) THEN
+          result := FALSE;
+    END_IF;
+  END_REPEAT;
+WHERE
+  wr1 : result;
+END_RULE;
+
+RULE approval_requires_approval_date_time FOR (approval, approval_date_time);
+WHERE
+  wr1: SIZEOF (QUERY (app <* approval |
+                  NOT (SIZEOF (QUERY (adt <* approval_date_time |
+                      app :=: adt.dated_approval )) = 1 ))) = 0;
+END_RULE;
+
+RULE approval_requires_approval_person_organization 
+   FOR (approval, approval_person_organization);
+WHERE
+  wr1: SIZEOF(QUERY(app <* approval | NOT (SIZEOF(QUERY(apo <* 
+   approval_person_organization |
+   app :=: apo.authorized_approval )) >= 1 ))) = 0;
+END_RULE;
+
+RULE change_identification_restricts_executed_action
+     FOR (executed_action);
+LOCAL
+  result  : BOOLEAN := TRUE;
+  found   : BOOLEAN := FALSE;
+  exeact  : SET OF executed_action;
+  acta    : BAG OF action_assignment;
+END_LOCAL;
+  exeact := executed_action;
+  REPEAT i := 1 TO SIZEOF(exeact);
+    IF (exeact[i].description = 'change identification') THEN
+      acta := USEDIN(exeact[i], 
+     'TECHNICAL_DATA_PACKAGING.ACTION_ASSIGNMENT.ASSIGNED_ACTION');
+      found := FALSE;
+      REPEAT j := 1 TO SIZEOF(acta);
+        IF (EXISTS(acta[j].role)) then
+          IF ((acta[j].role.name = 'change identification') XOR
+              (acta[j].role.name = 'revision history')) THEN
+            found := TRUE;
+          END_IF;
+        END_IF;
+      END_REPEAT;
+      IF (NOT found) THEN
+        result := FALSE;
+        ESCAPE;
+      END_IF;
+    END_IF;
+  END_REPEAT; 
+WHERE
+  wr1 : result;
+END_RULE;
+
+RULE compatible_dimension FOR 
+  (cartesian_point,
+  direction,
+  representation_context,
+  geometric_representation_context);
+WHERE
+
+  -- ensure that the count of coordinates of each cartesian_point
+  -- matches the coordinate_space_dimension of each geometric_context in
+  -- which it is geometrically founded
+  WR1: SIZEOF(QUERY(x <* cartesian_point| SIZEOF(QUERY
+       (y <* geometric_representation_context | item_in_context(x,y) AND
+       (HIINDEX(x.coordinates) <> y.coordinate_space_dimension))) > 0 ))
+         =0;
+
+  -- ensure that the count of direction_ratios of each direction
+  -- matches the coordinate_space_dimension of each geometric_context in
+  -- which it is geometrically founded
+  WR2: SIZEOF(QUERY(x <* direction | SIZEOF( QUERY
+       (y <* geometric_representation_context | item_in_context(x,y) AND
+       (HIINDEX(x.direction_ratios) <> y.coordinate_space_dimension)))
+       > 0 )) = 0;
+END_RULE;
+
+RULE contract_submission_requires_date_and_organization
+    FOR (applied_contract_assignment);
+LOCAL
+  result : BOOLEAN := TRUE;
+  found : BOOLEAN;
+  apc :  SET OF applied_contract_assignment;
+  adta : BAG OF applied_date_and_time_assignment;
+  ada :  BAG OF applied_date_assignment;
+  aoa :  BAG OF applied_organization_assignment;
+  oadr : BAG OF organizational_address;
+  padr : BAG OF personal_address;
+  apoa : BAG OF applied_person_and_organization_assignment;
+END_LOCAL;
+  apc := applied_contract_assignment;
+  REPEAT i := 1 TO SIZEOF(apc);
+    IF (EXISTS(apc[i]\contract_assignment.role)) THEN
+     IF (apc[i]\contract_assignment.role.name = 'contract submission') THEN
+        adta := USEDIN(apc[i], 'TECHNICAL_DATA_PACKAGING.'+
+                       'APPLIED_DATE_AND_TIME_ASSIGNMENT.ITEMS');
+        found := FALSE;
+        REPEAT j := 1 TO SIZEOF(adta);
+          IF (EXISTS(adta[j]\date_and_time_assignment.role)) then
+            IF (adta[j]\date_and_time_assignment.role.name = 
+                'date and time of submission') THEN
+              found := TRUE;
+            END_IF;
+          END_IF;
+        END_REPEAT;
+        IF (NOT found) THEN
+          result := FALSE;
+          ESCAPE;
+        END_IF;
+        ada := USEDIN(apc[i], 'TECHNICAL_DATA_PACKAGING.'+
+                      'APPLIED_DATE_ASSIGNMENT.ITEMS');
+        found := FALSE;
+        REPEAT j := 1 TO SIZEOF(ada);
+          IF (EXISTS(ada[j]\date_assignment.role)) THEN
+            IF (ada[j]\date_assignment.role.name = 'date of submission')
+            THEN
+              found := TRUE;
+            END_IF;
+          END_IF;
+        END_REPEAT;
+        IF (NOT found) THEN
+          result := FALSE;
+          ESCAPE;
+        END_IF;
+        aoa := USEDIN(apc[i], 'TECHNICAL_DATA_PACKAGING.'+
+                       'APPLIED_ORGANIZATION_ASSIGNMENT.ITEMS');
+        found := FALSE;
+        REPEAT j := 1 TO SIZEOF(aoa);
+          IF (EXISTS(aoa[j]\organization_assignment.role)) then
+            IF (aoa[j]\organization_assignment.role.name = 
+                'location of contract submission') THEN
+
+                oadr := USEDIN (aoa[j]\
+                organization_assignment.assigned_organization,
+                'TECHNICAL_DATA_PACKAGING.'+
+                'ORGANIZATIONAL_ADDRESS.ORGANIZATIONS');
+               IF (SIZEOF(oadr)>=1)THEN
+                found := TRUE;
+               END_IF;   
+            END_IF;
+          END_IF;
+        END_REPEAT;
+        IF (NOT found) THEN
+          result := FALSE;
+          ESCAPE;
+        END_IF;
+        apoa := USEDIN(apc[i], 'TECHNICAL_DATA_PACKAGING.'+
+                     'APPLIED_PERSON_AND_ORGANIZATION_ASSIGNMENT.ITEMS');
+        found := FALSE;
+        REPEAT j := 1 TO SIZEOF(apoa);
+          IF (EXISTS(apoa[j]\person_and_organization_assignment.role)) then
+            IF (apoa[j]\person_and_organization_assignment.role.name = 
+                'location of contract submission') THEN
+                oadr := USEDIN (apoa[j]\person_and_organization_assignment.
+                   assigned_person_and_organization.the_organization,
+                   'TECHNICAL_DATA_PACKAGING.'+
+                   'ORGANIZATIONAL_ADDRESS.ORGANIZATIONS');
+               IF (SIZEOF(oadr)>=1)THEN
+                found := TRUE;
+               END_IF;
+               padr := USEDIN (apoa[j]\person_and_organization_assignment.
+                     assigned_person_and_organization.the_person,
+                'TECHNICAL_DATA_PACKAGING.PERSONAL_ADDRESS.PEOPLE');
+               IF (SIZEOF(padr)>=1)THEN
+                found := TRUE;
+               END_IF;
+            END_IF;
+          END_IF;
+        END_REPEAT;
+        IF (NOT found) THEN
+          result := FALSE;
+          ESCAPE;
+        END_IF;
+
+      END_IF;
+    END_IF;
+  END_REPEAT;
+WHERE
+  wr1 : result;
+END_RULE;
+
+RULE data_definition_entry_string_restrict_for_superseded_element
+FOR (product_definition) ;
+LOCAL
+  found : BOOLEAN;
+  result1 : BOOLEAN;
+  result2 : BOOLEAN;
+  pd : SET OF product_definition;
+  pdca : BAG OF product_definition_context_association;
+  pdc : product_definition_context;
+  pdf : product_definition_formation;
+END_LOCAL;
+  result1 := TRUE;
+  result2 := TRUE;
+  pd :=product_definition;
+  REPEAT i := 1 TO SIZEOF (pd);
+  found :=FALSE;
+  pdca :=USEDIN (pd[i], 'TECHNICAL_DATA_PACKAGING.'+
+        'PRODUCT_DEFINITION_CONTEXT_ASSOCIATION.DEFINITION');
+  REPEAT j :=1 TO SIZEOF (pdca);
+     pdc :=pdca [j].frame_of_reference;
+     IF (pdc\application_context_element.name IN
+       ['document version',
+        'a representation of a document version',
+        'data definition entry',
+        'indentured data list entry']) THEN
+      found :=TRUE;
+     END_IF;
+  END_REPEAT;
+  IF (found) THEN
+    IF ((SIZEOF (QUERY(pdr <* USEDIN(pd[i], 'TECHNICAL_DATA_PACKAGING.'+
+               'PRODUCT_DEFINITION_RELATIONSHIP.'+
+               'RELATED_PRODUCT_DEFINITION') |
+       (pdr.name = 'superseded element')))) > 1) THEN
+  result1 :=FALSE;
+    END_IF;
+    pdf := pd[i].formation;
+    IF ((SIZEOF(QUERY(pdfr <* USEDIN(pdf, 'TECHNICAL_DATA_PACKAGING.'+
+               'PRODUCT_DEFINITION_FORMATION_RELATIONSHIP.'+
+               'RELATED_PRODUCT_DEFINITION_FORMATION') |
+       (pdfr.name = 'superseded version')))) > 1) THEN
+  result2 := FALSE;
+    END_IF;
+    END_IF;
+    END_REPEAT;
+WHERE
+    wr1 : result1;
+    wr2 : result2;
+END_RULE;
+
+RULE data_definition_exchange_categorized_as_document
+   FOR (product_related_product_category);
+LOCAL
+  result : BOOLEAN := TRUE;
+  prpc   : SET OF product_related_product_category;
+  prds   : SET OF product := [];
+  pdf    : BAG OF product_definition_formation;
+  pc     : SET OF product_category;
+END_LOCAL;
+  prpc := QUERY(v <* product_related_product_category |
+                v.name = 'data definition exchange');
+  REPEAT i := 1 TO SIZEOF(prpc);
+    prds := prpc[i].products;
+    REPEAT j := 1 TO SIZEOF(prds);
+      pdf := USEDIN(prds[j], 'TECHNICAL_DATA_PACKAGING.'+
+              'PRODUCT_DEFINITION_FORMATION.OF_PRODUCT');
+      IF (SIZEOF(pdf) > 0) THEN
+        pc := product_category_graph_members(prpc[i]);
+        IF (SIZEOF(QUERY(v <* pc | v.name = 'document')) < 1) THEN
+          result := FALSE;
+        END_IF;
+      END_IF;
+    END_REPEAT;
+  END_REPEAT;
+WHERE
+  wr1 : result;
+END_RULE;
+
+RULE data_definition_exchange_restrict_to_one_presentation
+   FOR (product_related_product_category);
+LOCAL
+  result : BOOLEAN := TRUE;
+  prpc   : SET OF product_related_product_category;
+  prds   : SET OF product := [];
+  pdf    : BAG OF product_definition_formation;
+END_LOCAL;
+  prpc := product_related_product_category;
+  REPEAT i := 1 TO SIZEOF(prpc);
+    IF (prpc[i]\product_category.name = 'data definition exchange') THEN
+      prds := prds + prpc[i].products;
+    END_IF;
+  END_REPEAT;
+  REPEAT i := 1 TO SIZEOF(prds);
+    pdf := USEDIN(prds[i], 'TECHNICAL_DATA_PACKAGING.'+
+                   'PRODUCT_DEFINITION_FORMATION.OF_PRODUCT');
+    REPEAT j := 1 TO SIZEOF(pdf);
+      IF (SIZEOF(USEDIN(pdf[j], 'TECHNICAL_DATA_PACKAGING.'+
+                        'APPLIED_PRESENTED_ITEM.ITEMS')) > 1) THEN
+        result := FALSE;
+      END_IF;
+    END_REPEAT;
+  END_REPEAT;
+WHERE
+  wr1 : result;
+END_RULE;
+
+RULE dependent_instantiable_named_unit
+  FOR (named_unit);
+LOCAL
+  result : BOOLEAN := TRUE;
+  nu     : SET OF named_unit;
+END_LOCAL;
+  nu := named_unit;
+  REPEAT i := 1 TO SIZEOF(nu);
+    IF (SIZEOF(USEDIN(nu[i], '')) < 1) THEN
+      result := FALSE;
+    END_IF;
+  END_REPEAT;
+WHERE
+  wr1 : result;
+END_RULE;
+
+RULE distribution_notice_approval_requires_supporting_data
+   FOR (applied_approval_assignment);
+LOCAL
+  result  : BOOLEAN := TRUE;
+  found   : BOOLEAN;
+  aaa     : SET OF applied_approval_assignment;
+  ap      : approval;
+  apo     : BAG OF approval_person_organization;
+  aca     : BAG OF applied_classification_assignment;
+END_LOCAL;
+  aaa := applied_approval_assignment;
+  REPEAT i := 1 TO SIZEOF(aaa);
+    IF (EXISTS(aaa[i].role)) THEN
+      IF (aaa[i].role.name = 'distribution notice') THEN
+        ap := aaa[i].assigned_approval;
+        found := FALSE;
+        IF (LENGTH(ap.level) > 0) THEN
+          found := TRUE;
+        END_IF;
+        apo := USEDIN(ap, 'TECHNICAL_DATA_PACKAGING.'+
+                       'APPROVAL_PERSON_ORGANIZATION.AUTHORIZED_APPROVAL');
+        REPEAT j := 1 TO SIZEOF(apo);
+          IF (apo[j].role.role = 'distribution authorization') THEN
+            found := TRUE;
+          END_IF;
+        END_REPEAT;
+        aca := USEDIN(ap, 'TECHNICAL_DATA_PACKAGING.'+
+                        'APPLIED_CLASSIFICATION_ASSIGNMENT.ITEMS');
+        REPEAT j := 1 TO SIZEOF(aca);
+         IF (EXISTS(aca[j]\classification_assignment.role)) THEN
+          IF ((aca[j]\classification_assignment.role.name =
+                'distribution notice code') AND
+                (('TECHNICAL_DATA_PACKAGING.CLASS') IN            
+TYPEOF(aca[j]\classification_assignment.assigned_class))) THEN
+              found := TRUE;
+            END_IF;
+          END_IF;
+        END_REPEAT;
+        IF (NOT found) THEN
+          result := FALSE;
+        END_IF;
+      END_IF;
+    END_IF;
+  END_REPEAT;
+WHERE
+  wr1 : result;
+END_RULE;
+
+RULE drawing_suffix_number_combination_identification_constraint
+    FOR (product_relationship);
+LOCAL
+  result  : BOOLEAN := TRUE;
+  tresult : BOOLEAN;
+  pr      : SET OF product_relationship;
+  p       : product;
+  prpc    : BAG OF product_related_product_category;
+END_LOCAL;
+  pr := QUERY(v <* product_relationship | 
+              v.name = 'drawing suffix number combination');
+  REPEAT i := 1 to SIZEOF(pr);
+    p := pr[i].relating_product;
+    prpc := USEDIN(p, 'TECHNICAL_DATA_PACKAGING.'+
+                    'PRODUCT_RELATED_PRODUCT_CATEGORY.PRODUCTS');
+    REPEAT j := 1 TO SIZEOF(prpc);
+      IF (prpc[j]\product_category.name = 'document') THEN
+        result := FALSE;
+      END_IF;
+    END_REPEAT;
+    p := pr[i].related_product;
+    prpc := USEDIN(p, 'TECHNICAL_DATA_PACKAGING.'+
+                    'PRODUCT_RELATED_PRODUCT_CATEGORY.PRODUCTS');
+    tresult := FALSE;
+    REPEAT j := 1 TO SIZEOF(prpc);
+      IF (prpc[j]\product_category.name = 'document') THEN
+        tresult := TRUE;
+      END_IF;
+    END_REPEAT;
+    IF (NOT tresult) THEN
+      result := FALSE;
+    END_IF;
+  END_REPEAT;
+WHERE
+  wr1 : result;
+END_RULE;
+
+RULE exchange_reason_existence_required
+    FOR (property_definition);
+LOCAL
+  result : BOOLEAN  := TRUE;
+  prpd   : SET OF property_definition;
+  prdr   : BAG OF property_definition_representation;
+  repi   : representation;
+  dri    : descriptive_representation_item;
+END_LOCAL;
+  prpd := property_definition;
+  REPEAT i := 1 TO SIZEOF(prpd);
+    IF (prpd[i].name = 'data definition exchange header') THEN
+      result := FALSE;
+      prdr := USEDIN(prpd[i],'TECHNICAL_DATA_PACKAGING.'+
+                     'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION');
+      REPEAT j := 1 TO SIZEOF (prdr);
+        repi := prdr[j].used_representation;
+        IF (NOT (repi.name = 'exchange reason')) THEN 
+          ESCAPE;
+        ELSE -- (cycle through representation items)
+          REPEAT k := 1 TO SIZEOF (repi.items);
+            IF ('TECHNICAL_DATA_PACKAGING.DESCRIPTIVE_REPRESENTATION_ITEM' IN
+TYPEOF(repi.items[k])) THEN
+              dri := repi.items[k];
+              IF ((dri.name = 'exchange purpose') XOR
+                  (dri.name = 'base exchange reason')) THEN
+                     -- (having an additional dri.name = 'exchange purpose' 
+                     -- is irrelevant since the above condition already 
+                     -- entail a TRUE condition)
+                result := TRUE;
+                ESCAPE;
+              END_IF;
+            END_IF;
+          END_REPEAT;
+        END_IF;
+      END_REPEAT;
+    END_IF;
+  END_REPEAT;
+WHERE
+  wr1 : result;
+END_RULE;
+
+RULE existence_dependent_drawing_sheet_revision
+    FOR (drawing_sheet_revision);
+LOCAL
+  result : BOOLEAN := TRUE;
+  dsr    : SET OF drawing_sheet_revision;
+  pir    : BAG OF presented_item_representation;
+  pdf    : SET OF product_definition_formation;
+  prpc   : BAG OF product_related_product_category;
+END_LOCAL;
+  dsr := drawing_sheet_revision;
+  REPEAT i := 1 TO SIZEOF(dsr);
+    pir := USEDIN(dsr[i], 'TECHNICAL_DATA_PACKAGING.'+
+                  'PRESENTED_ITEM_REPRESENTATION.PRESENTATION');
+      IF (SIZEOF(pir) < 1) THEN
+        result := FALSE;
+      END_IF;
+      REPEAT j := 1 TO SIZEOF(pir);
+        pdf := pir[j].item\applied_presented_item.items;
+        IF (SIZEOF(pdf) < 1) THEN
+          result := FALSE;
+        END_IF;
+        REPEAT k := 1 TO SIZEOF(pdf);
+          prpc := USEDIN(pdf[k].of_product, 'TECHNICAL_DATA_PACKAGING.' +
+                         'PRODUCT_RELATED_PRODUCT_CATEGORY.PRODUCTS');
+          IF (SIZEOF(prpc) < 1) THEN
+            result := FALSE;
+          END_IF;
+          REPEAT l := 1 TO SIZEOF(prpc);
+            IF (prpc[l]\product_category.name <> 'sheet') THEN
+              result := FALSE;
+            END_IF;
+          END_REPEAT;
+        END_REPEAT;
+      END_REPEAT;
+    END_REPEAT;
+WHERE
+  wr1 : result;
+END_RULE;
+
+RULE file_format_restricted_to_one_data_definition_entry
+    FOR (product_definition);
+LOCAL
+  result   :  BOOLEAN  := TRUE;
+  pd       :  SET OF product_definition;
+  propd : BAG OF property_definition;
+END_LOCAL;
+  pd := product_definition;
+  REPEAT i := 1 TO SIZEOF(pd);
+    IF ((pd[i].frame_of_reference.name = 'document version') XOR
+        (pd[i].frame_of_reference.name = 
+                'a representation of a document version')) THEN
+      propd := USEDIN(pd[i], 'TECHNICAL_DATA_PACKAGING.'+
+                       'PROPERTY_DEFINITION.DEFINITION');
+      IF (SIZEOF(QUERY(p <* propd | p.name = 'document format')) > 1) THEN
+        result := FALSE;
+      END_IF;
+    END_IF;
+  END_REPEAT;
+WHERE
+  wr1 : result;
+END_RULE;
+
+RULE header_configuration_restricts_property_definition
+    FOR (property_definition);
+LOCAL
+  result  : BOOLEAN := TRUE;
+  found   : BOOLEAN;
+  pd      : SET OF property_definition;
+  apa     : BAG OF applied_approval_assignment;
+END_LOCAL;
+  pd := QUERY(v <* property_definition | v.name LIKE '* header');
+  REPEAT i := 1 TO SIZEOF(pd);
+    found := FALSE;
+    apa := USEDIN(pd[i], 
+   'TECHNICAL_DATA_PACKAGING.APPLIED_APPROVAL_ASSIGNMENT.ITEMS');
+    REPEAT j := 1 TO SIZEOF(apa);
+      IF (EXISTS(apa[j]\approval_assignment.role)) THEN
+        IF ((apa[j]\approval_assignment.role.name = 'release authentication')
+OR
+            (apa[j]\approval_assignment.role.name = 'data usage rights')) THEN
+          found := TRUE;
+        END_IF;
+      END_IF;
+    END_REPEAT;
+    IF (SIZEOF(USEDIN(pd[i], 'TECHNICAL_DATA_PACKAGING.' +
+                     'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION')) > 0)
+THEN
+      found := TRUE;
+    END_IF;
+    IF (NOT found) THEN
+      result := FALSE;
+    END_IF;
+  END_REPEAT;
+WHERE
+  wr1 : result;
+END_RULE;
+
+RULE identification_of_sheet_constraint
+    FOR (product_definition_formation);
+LOCAL
+  found  : BOOLEAN;
+  result : BOOLEAN := TRUE;
+  pdf    : SET OF product_definition_formation;
+  prpc   : BAG OF product_related_product_category;
+  pc     : SET OF product_category;
+END_LOCAL;
+  pdf := product_definition_formation;
+  REPEAT i := 1 TO SIZEOF(pdf);
+    prpc := USEDIN(pdf[i].of_product, 'TECHNICAL_DATA_PACKAGING.' +
+                   'PRODUCT_RELATED_PRODUCT_CATEGORY.PRODUCTS');
+    REPEAT j := 1 TO SIZEOF(prpc);
+      IF (prpc[j]\product_category.name = 'sheet') THEN
+        pc := product_category_graph_members(prpc[j]);
+        found := FALSE;
+        REPEAT k := 1 TO SIZEOF(pc);
+          IF (pc[k].name = 'document') THEN
+            found := TRUE;
+          END_IF;
+        END_REPEAT;
+        IF (NOT found) THEN
+          result := FALSE;
+          ESCAPE;
+        END_IF;
+      END_IF;
+    END_REPEAT;
+  END_REPEAT;
+WHERE
+  wr1 : result;
+END_RULE;
+
+RULE indentured_data_list_identification_constraint
+  FOR (product_definition_formation);
+LOCAL
+  result : BOOLEAN := TRUE;
+  pdf : SET OF product_definition_formation;
+  prpc : BAG OF product_related_product_category;
+  pc : SET OF product_category;
+END_LOCAL;
+  pdf := product_definition_formation;
+  REPEAT i := 1 TO SIZEOF(pdf);
+    prpc := USEDIN(pdf[i].of_product, 
+   'TECHNICAL_DATA_PACKAGING.PRODUCT_RELATED_PRODUCT_CATEGORY.PRODUCTS');
+    REPEAT j  := 1 TO SIZEOF(prpc);
+      IF (prpc[j]\product_category.name = 'indentured data list') THEN
+        pc := product_category_graph_members(prpc[j]);
+        result := FALSE;
+        REPEAT k := 1 TO SIZEOF(pc);
+          IF (pc[k].name = 'document') THEN
+            result := TRUE;
+          END_IF;
+        END_REPEAT;
+        IF (result = FALSE) THEN
+          ESCAPE;
+        END_IF;
+      END_IF;
+    END_REPEAT;
+  END_REPEAT;
+WHERE
+  wr1 : result;
+END_RULE;
+
+RULE indentured_level_tag_identification_constraint
+    FOR (property_definition_representation);
+LOCAL
+  result : BOOLEAN := TRUE;
+  pdr    : SET OF property_definition_representation;
+END_LOCAL;
+  pdr := property_definition_representation;
+  REPEAT  i := 1 TO SIZEOF(pdr);
+    IF (pdr[i].used_representation.name = 'indentured level tag') THEN
+      IF NOT ((pdr[i].definition.name = 'exchange entry property') XOR
+              (pdr[i].definition.name = 
+                     'indentured data list entry property')) THEN
+        result := FALSE;
+      END_IF;
+    END_IF;
+  END_REPEAT;
+WHERE
+  wr1 : result;
+END_RULE;
+
+RULE indentured_list_method_identification_constraint
+  FOR (applied_document_reference);
+LOCAL
+  result : BOOLEAN := TRUE;
+  adr : SET OF applied_document_reference;
+  d : document;
+  dpa : BAG OF document_product_association;
+  pfd : product_or_formation_or_definition;
+  p : product;
+  prpc : BAG OF product_related_product_category;
+END_LOCAL;
+  adr := applied_document_reference;
+  REPEAT i := 1 TO SIZEOF(adr);
+   IF (EXISTS(adr[i]\document_reference.role)) THEN
+    IF ((adr[i]\document_reference.role.name = 'indentured by document') OR
+       (adr[i]\document_reference.role.name = 'indentured by item') OR
+       (adr[i]\document_reference.role.name =
+                    'indentured by item and document'))
+THEN
+        d := adr[i]\document_reference.assigned_document;
+        dpa := USEDIN(d, 'TECHNICAL_DATA_PACKAGING.'+
+                      'DOCUMENT_PRODUCT_ASSOCIATION.RELATING_DOCUMENT');
+        REPEAT j := 1 TO SIZEOF(dpa);
+          pfd := dpa[j].related_product;
+          IF ('TECHNICAL_DATA_PACKAGING.PRODUCT' IN TYPEOF(pfd)) THEN
+            p := pfd;
+          ELSE
+           IF ('TECHNICAL_DATA_PACKAGING.PRODUCT_DEFINITION_FORMATION' IN
+TYPEOF(pfd)) THEN
+              p := pfd\product_definition_formation.of_product;
+            ELSE
+              IF ('TECHNICAL_DATA_PACKAGING.PRODUCT_DEFINITION' IN
+TYPEOF(pfd)) THEN
+              p := pfd\product_definition.formation.of_product;
+              END_IF;
+            END_IF;
+          END_IF;
+          result := FALSE;
+          prpc := USEDIN(p, 'TECHNICAL_DATA_PACKAGING.'+
+
+
+          'PRODUCT_RELATED_PRODUCT_CATEGORY.PRODUCTS');
+          REPEAT k := 1 TO SIZEOF(prpc);
+            IF ((prpc[k].name = 'data definition exchange') OR
+                (prpc[k].name = 'indentured data list')) THEN
+              result := TRUE;
+            END_IF;
+          END_REPEAT;
+        END_REPEAT;
+      END_IF;
+    END_IF;
+  END_REPEAT;
+WHERE
+  wr1 : result;
+END_RULE;
+
+RULE item_source_information_identification_constraint
+  FOR (property_definition);
+LOCAL
+  result : BOOLEAN  := TRUE;
+  prpd   : SET OF property_definition;
+  prdr   : BAG OF property_definition_representation;
+END_LOCAL;
+  prpd := property_definition;
+  REPEAT i := 1 TO SIZEOF(prpd);
+    IF (prpd[i].name = 'source information') THEN
+      result := FALSE;
+      prdr := USEDIN(prpd[i],'TECHNICAL_DATA_PACKAGING.'+
+                     'PROPERTY_DEFINITION_REPRESENTATION.DEFINITION');
+      REPEAT j := 1 TO SIZEOF(prdr);
+        IF (prdr[j].used_representation.name = 'source information type') THEN
+          result := TRUE;
+        END_IF;
+      END_REPEAT;
+    END_IF;
+  END_REPEAT;
+WHERE
+  wr1 : result;
+END_RULE;
+
+RULE notation_type_identification_constraint
+  FOR (representation);
+LOCAL
+  result : BOOLEAN;
+  note : SET OF representation;
+END_LOCAL;
+  note := QUERY(rep <* representation | rep.name='notation');
+  result := FALSE;
+   IF (SIZEOF (note)< 1)THEN
+     result := TRUE;
+   END_IF;
+  REPEAT i := 1 TO SIZEOF(note);
+    REPEAT j := 1 TO SIZEOF(note[i].items);
+      IF ('TECHNICAL_DATA_PACKAGING.DESCRIPTIVE_REPRESENTATION_ITEM' IN
+TYPEOF(note[i].items[j])) then
+        result := TRUE;
+        ESCAPE;
+      END_IF;
+    END_REPEAT;
+  END_REPEAT;
+WHERE
+  wr1 : result;
+END_RULE;
+
+RULE product_requires_category
+   FOR (product,
+        product_related_product_category);
+WHERE
+ WR1: SIZEOF ( QUERY (p <* product | SIZEOF (USEDIN (p,
+      'TECHNICAL_DATA_PACKAGING.PRODUCT_RELATED_PRODUCT_CATEGORY.PRODUCTS'
+      ) ) =0 ) ) =0;
+END_RULE;
+
+ RULE product_requires_version FOR (product);
+  WHERE
+   wr1 : SIZEOF(QUERY(prod <* product |
+         (SIZEOF(USEDIN(prod,'TECHNICAL_DATA_PACKAGING.' + 
+         'PRODUCT_DEFINITION_FORMATION.' + 'OF_PRODUCT')) = 0))) = 0;
+ END_RULE;
+
+RULE product_version_requires_person_organization
+   FOR (product_definition_formation);
+LOCAL
+  found  : BOOLEAN;
+  result : BOOLEAN := TRUE;
+  pdf    : SET OF product_definition_formation; 
+  apos   : BAG OF applied_person_and_organization_assignment;
+  apoa   : BAG OF applied_organization_assignment;
+END_LOCAL;
+  pdf := product_definition_formation;
+  REPEAT i := 1 TO SIZEOF(pdf);
+    apos := USEDIN(pdf[i], 'TECHNICAL_DATA_PACKAGING.' +
+                   'APPLIED_PERSON_AND_ORGANIZATION_ASSIGNMENT.ITEMS');
+    found := FALSE;
+    REPEAT j := 1 TO SIZEOF(apos) BY 1;
+      IF (EXISTS(apos[j].role)) THEN
+        IF ((apos[j].role.name = 'creator') OR
+            (apos[j].role.name = 'id owner')) THEN
+          found := TRUE;
+        END_IF;
+      END_IF;
+    END_REPEAT;
+    IF (found) THEN
+      result := TRUE;
+      ESCAPE;
+    END_IF;
+    apoa := USEDIN(pdf[i], 'TECHNICAL_DATA_PACKAGING.' +
+                   'APPLIED_ORGANIZATION_ASSIGNMENT.ITEMS');
+    REPEAT j := 1 TO SIZEOF(apoa) BY 1;
+      IF (EXISTS(apoa[j].role)) THEN
+        IF ((apoa[j].role.name = 'creator') OR
+            (apoa[j].role.name = 'id owner')) THEN
+          found := TRUE;
+        END_IF;
+      END_IF;
+    END_REPEAT;
+    IF (NOT found) THEN
+      result := FALSE;
+      ESCAPE;
+    END_IF;
+  END_REPEAT;
+WHERE
+  wr1 : result;
+END_RULE; 
+
+RULE reference_document_requires_subcategorization
+    FOR (product_related_product_category);
+LOCAL
+  result : BOOLEAN := TRUE;
+  prpc : SET OF product_related_product_category;
+  pcr : BAG OF product_category_relationship;
+END_LOCAL;
+  prpc := QUERY(v <* product_related_product_category |
+                          v\product_category.name = 'reference document');
+  REPEAT i := 1 TO SIZEOF(prpc);
+  pcr := USEDIN(prpc[i], 'TECHNICAL_DATA_PACKAGING.'+
+                  'PRODUCT_CATEGORY_RELATIONSHIP.CATEGORY');
+    IF SIZEOF(pcr) < 1 THEN
+      result := FALSE;
+    END_IF;
+  END_REPEAT;
+WHERE
+  wr1 : result;
+END_RULE;
+
+RULE release_authentication_string_restriction
+  FOR (approval);
+LOCAL
+  result1 : BOOLEAN := TRUE;
+  result2 : BOOLEAN := TRUE;
+  found   : BOOLEAN;
+  ar      : STRING := 'release authentication';
+  appr    : SET OF approval;
+  aaa     : BAG OF applied_approval_assignment;
+  apo     : BAG OF approval_person_organization;
+  adt     : BAG OF approval_date_time;
+END_LOCAL;
+  appr := approval;
+  
+  REPEAT i := 1 TO SIZEOF(appr);
+    aaa := USEDIN(appr[i],'TECHNICAL_DATA_PACKAGING.'+
+                  'APPROVAL_ASSIGNMENT.ASSIGNED_APPROVAL');
+    
+    found := FALSE;
+    REPEAT j := 1 TO SIZEOF(aaa);
+      IF (EXISTS(aaa[j]\approval_assignment.role)) THEN
+        IF (aaa[j].role.name = ar) THEN
+          found := TRUE;
+        END_IF;
+      END_IF;
+    END_REPEAT;
+    IF (found) THEN 
+      
+      apo := USEDIN(appr[i], 'TECHNICAL_DATA_PACKAGING.'+
+                    'APPROVAL_PERSON_ORGANIZATION.AUTHORIZED_APPROVAL');
+      found := FALSE;
+      REPEAT j := 1 TO SIZEOF(apo);
+        IF (EXISTS(apo[j].role)) THEN
+          IF (apo[j].role.role = ar) THEN
+            found := TRUE;
+          END_IF;
+        END_IF;
+      END_REPEAT;
+      IF (NOT found) THEN
+        result1 := FALSE;
+      END_IF;
+      
+      adt := USEDIN(appr[i], 'TECHNICAL_DATA_PACKAGING.'+
+                    'APPROVAL_DATE_TIME.DATED_APPROVAL');
+      found := FALSE;
+      REPEAT j := 1 TO SIZEOF(adt);
+        IF (EXISTS(adt[j].role)) then
+          IF (adt[j].role.name = ar) THEN
+            found := TRUE;
+          END_IF;
+        END_IF;
+      END_REPEAT;
+      IF (NOT found) THEN
+        result2 := FALSE;
+      END_IF;
+    END_IF;
+  END_REPEAT;
+WHERE
+  wr1 : result1;
+  wr2 : result2;
+END_RULE;
+
+RULE security_classification_date_string_restriction
+    FOR (applied_security_classification_assignment);
+LOCAL
+  result  : BOOLEAN  := TRUE;   -- If there is no "security_assignment", 
+                                -- constraint does not apply  
+  tresult : BOOLEAN;   -- Temporary result for each iteration
+  asca    : SET OF applied_security_classification_assignment;
+  adta    : BAG OF applied_date_and_time_assignment;
+  ada     : BAG OF applied_date_assignment;
+END_LOCAL;
+  asca := applied_security_classification_assignment;
+  REPEAT i := 1 TO SIZEOF (asca);
+    adta := USEDIN(asca[i],'TECHNICAL_DATA_PACKAGING.'+
+                   'APPLIED_DATE_AND_TIME_ASSIGNMENT.ITEMS');
+    tresult := FALSE;
+    REPEAT j := 1 TO SIZEOF (adta);
+      REPEAT k := 1 TO SIZEOF (adta[j].items);
+        IF (adta[j].items[k] = asca[i]) THEN
+          IF (EXISTS(adta[j]\date_and_time_assignment.role)) then
+            IF (adta[j]\date_and_time_assignment.role.name = 
+                  'classification date') THEN
+              tresult := TRUE;
+            END_IF;
+          END_IF;
+          result := result AND tresult;
+        END_IF;
+      END_REPEAT;
+    END_REPEAT;
+    ada := USEDIN(asca[i],'TECHNICAL_DATA_PACKAGING.'+
+                  'APPLIED_DATE_ASSIGNMENT.ITEMS');
+    REPEAT j := 1 TO SIZEOF (ada);
+      REPEAT k := 1 TO SIZEOF (ada[j].items);
+        IF (ada[j].items[k] = asca[i]) THEN
+          IF (EXISTS(ada[j]\date_assignment.role)) THEN
+            IF (ada[j]\date_assignment.role.name = 'classification date') THEN
+              tresult := TRUE;
+            END_IF;
+          END_IF;
+          result := result AND tresult;
+        END_IF;
+      END_REPEAT;
+    END_REPEAT;
+  END_REPEAT;
+WHERE
+  wr1: result;
+END_RULE;
+
+RULE simple_list_of_elements_constraint
+  FOR (applied_document_reference);
+LOCAL
+  result : BOOLEAN := TRUE;
+  adr    : SET OF applied_document_reference;
+  dri    : SET OF document_reference_item;
+END_LOCAL;
+  adr := applied_document_reference;
+  REPEAT i := 1 TO SIZEOF(adr);
+    IF (EXISTS(adr[i]\document_reference.role)) THEN
+      IF (adr[i]\document_reference.role.name = 'list of elements') then
+        dri := adr[i].items;
+        IF (SIZEOF(dri) < 1) THEN
+          result := FALSE;
+        END_IF;
+        REPEAT j := 1 TO SIZEOF(dri);
+          IF (NOT
+      ('TECHNICAL_DATA_PACKAGING.PRODUCT_DEFINITION_FORMATION' IN       
+TYPEOF(dri[j]))) THEN
+            result := FALSE;
+          END_IF;
+        END_REPEAT;
+      END_IF;
+    END_IF;
+  END_REPEAT;
+WHERE
+  wr1 : result;
+END_RULE;
+
+RULE simple_list_of_files_constraint
+    FOR (applied_document_reference);
+LOCAL
+  result : BOOLEAN := TRUE;
+  nameok : BOOLEAN;
+  adr    : SET OF applied_document_reference;
+  dri    : SET OF document_reference_item;
+  drt    : SET OF document_representation_type;
+END_LOCAL;
+  adr := applied_document_reference;
+  REPEAT i := 1 TO SIZEOF(adr);
+    IF (EXISTS(adr[i]\document_reference.role)) THEN
+      IF (adr[i]\document_reference.role.name = 'list of files') THEN
+        dri := adr[i].items;
+        IF (SIZEOF(dri) < 1) THEN
+          result := FALSE;
+        END_IF;
+        REPEAT j := 1 TO SIZEOF(dri);
+          IF (NOT ('TECHNICAL_DATA_PACKAGING.DOCUMENT_FILE' IN
+TYPEOF(dri[j]))) THEN
+            result := FALSE;
+          END_IF;
+          drt := dri[j].representation_types;
+          nameok := FALSE;
+          REPEAT k := 1 TO SIZEOF(drt);
+            IF ((drt[k].name = 'digital') OR (drt[k].name = 'physical'))       
+      THEN
+              nameok := TRUE;
+            END_IF;
+          END_REPEAT;
+          IF (NOT nameok) THEN
+            result := FALSE;
+          END_IF;
+        END_REPEAT;
+      END_IF;
+    END_IF;
+  END_REPEAT;
+WHERE
+  wr1 : result;
+END_RULE;
+
+RULE text_literal_alignment_baseline_constraint
+  FOR (text_literal);
+WHERE
+ wr1 : SIZEOF(QUERY(t <* text_literal|
+          NOT (t.alignment IN
+               ['left', 'center', 'right']))) = 0;
+END_RULE;
+
+RULE text_literal_font_requires_externally_defined_text_font
+  FOR (text_literal);
+WHERE
+ wr1 : SIZEOF(QUERY(t <* text_literal |
+        NOT (('TECHNICAL_DATA_PACKAGING.EXTERNALLY_DEFINED_TEXT_FONT') IN
+           TYPEOF (t.font)))) = 0;
+END_RULE;
+
+RULE versioned_action_request_requires_status FOR
+(action_request_status,
+versioned_action_request);
+WHERE
+WR1: SIZEOF ( QUERY ( ar <* versioned_action_request | NOT (
+SIZEOF ( QUERY ( ars <* action_request_status | ar:=:ars.
+assigned_request ) ) =1 ) ) ) =0;
+END_RULE;
+
+FUNCTION product_category_graph_members (p : product_category) :
+     SET OF product_category;
+LOCAL
+  result : SET OF product_category := [];
+  pcr : BAG OF product_category_relationship;
+END_LOCAL;
+  pcr := USEDIN(p, 'TECHNICAL_DATA_PACKAGING.'+
+                 'PRODUCT_CATEGORY_RELATIONSHIP.CATEGORY');
+  IF (SIZEOF(pcr) > 0) THEN
+    result := result + p;
+    REPEAT i := 1 TO SIZEOF(pcr);
+      result := result + product_category_graph_members(pcr[i].sub_category);
+    END_REPEAT;
+  END_IF;
+  pcr := USEDIN(p, 'TECHNICAL_DATA_PACKAGING.'+
+                  'PRODUCT_CATEGORY_RELATIONSHIP.SUB_CATEGORY');
+  IF (SIZEOF(pcr) > 0) THEN
+    result := result + p;
+    REPEAT i := 1 TO SIZEOF(pcr);
+      result := result + product_category_graph_members(pcr[i].category);
+    END_REPEAT;
+  END_IF;
+  RETURN(result);
+END_FUNCTION;
+
+END_SCHEMA;

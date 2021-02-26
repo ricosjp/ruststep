@@ -1,0 +1,1161 @@
+(***********************************************************************
+Title:  ARM EXPRESS for ISO/IS 10303-209
+Author: Keith Hunten and Adnan Yucel
+Date: 2001-06-01
+N-number: ISO TC184/SC4/WG3 N970
+***********************************************************************)
+SCHEMA AP209_ARM;
+
+TYPE angle_select = SELECT
+          (DIRECTION,
+           CURVE,
+           point_path);
+END_TYPE;
+
+TYPE boundary_class_zone = SELECT 
+          (boundary_curve_representation, 
+           LOOP);
+END_TYPE;
+
+TYPE component_class_for_assembly = SELECT 
+          (ply,
+           ply_laminate,
+           filament_laminate,
+           processed_core,
+           composite_assembly);
+END_TYPE;
+
+TYPE composite_assembly_shape = SELECT 
+          (advanced_boundary_representation, 
+           three_d_geometry_set, 
+           faceted_boundary_representation, 
+           manifold_surface_with_topology, 
+           non_topological_surface_and_wireframe,
+           wireframe_with_topology);
+END_TYPE;
+
+TYPE constraint_definition_reference = SELECT
+          (geometry_element,
+           group,
+           node);
+END_TYPE;
+
+TYPE core_shape = SELECT 
+          (advanced_boundary_representation,
+           beveled_sheet_representation, 
+           faceted_boundary_representation);
+END_TYPE;
+
+TYPE cross_section_shape_select = SELECT
+          (idealized_analysis_shape,
+           nominal_design_shape);
+END_TYPE;
+
+TYPE definition_element = SELECT
+          (curve_element,
+           shape_aspect,
+           surface_element,
+           volume_element);
+END_TYPE;
+
+TYPE definition_reference = SELECT
+          (element,
+           geometry_element,
+           group,
+           node);
+END_TYPE;
+
+TYPE design_or_analysis = SELECT 
+          (analysis_version,
+           analysis_discipline_product_definition,
+           assembly,
+           design_discipline_product_definition,
+           part_version);
+END_TYPE;
+
+TYPE element_property_select = SELECT
+          (curve_property,
+           surface_property);
+END_TYPE;
+
+TYPE material_select = SELECT
+          (anisotropic_material,
+           isotropic_material,
+           laminate_table);
+END_TYPE;
+
+TYPE ply_laminate_shape = SELECT 
+           (composite_sheet_representation,
+            three_d_geometry_set);
+END_TYPE;
+
+TYPE ply_piece_shape = SELECT 
+           (ply_shape);
+END_TYPE;
+
+TYPE ply_stock_material = SELECT
+           (discontinuous_fiber_assembly,
+            filament_assembly, 
+            isotropic_material);
+END_TYPE;
+
+TYPE projection_method = ENUMERATION OF
+           (projection_reference,
+            surface_normal);
+END_TYPE;
+
+TYPE retention_data_select = SELECT 
+          (additional_design_information,
+           analysis,
+           analysis_discipline_product_definition,
+           analysis_report_representation,
+           analysis_version,
+           assembly,
+           design_discipline_product_definition,
+           design_material,
+           fe_analysis,
+           fe_analysis_results,
+           fea_model,
+           material_property,
+           material_specification,
+           part,
+           part_version);
+END_TYPE;
+
+TYPE thickness_laminate_table_component = SELECT 
+          (filament_laminate,
+           ply,
+           processed_core);
+END_TYPE;
+
+ENTITY additional_design_information;
+ additional_information  : SET [1:?] OF specification;
+ design                  : design_discipline_product_definition;
+END_ENTITY;
+
+ENTITY advanced_boundary_representation
+  SUBTYPE OF (geometric_model_representation);
+END_ENTITY;
+
+ENTITY alternate_part;
+ alternate  : part;
+END_ENTITY;
+
+ENTITY analysis;
+ analysis_type   : TEXT;
+ owner           : person_organization;
+END_ENTITY;
+
+ENTITY analysis_design_version_relationship;
+ analysis  : analysis_version;
+ design    : part_version;
+END_ENTITY;
+
+ENTITY analysis_discipline_product_definition;
+ approved_by                : OPTIONAL approval;
+ creation_date              : DATE;
+ creator                    : person_organization;
+ description                : TEXT;
+ discipline_identification  : IDENTIFIER;
+ version                    : analysis_version;
+END_ENTITY;
+
+ENTITY analysis_message
+  SUBTYPE OF (fe_analysis_state_definition);
+ message_level  : LABEL;
+ quality        : TEXT;
+END_ENTITY;
+
+ENTITY analysis_report_representation
+  SUPERTYPE OF (graphical_representation ANDOR 
+                tabular_representation);
+ control    : OPTIONAL fe_analysis;
+ model_ref  : fea_model;
+ result     : OPTIONAL fe_analysis_results;
+END_ENTITY;
+
+ENTITY analysis_shape
+  SUPERTYPE OF (idealized_analysis_shape ANDOR
+                node_shape);
+ analysis_view  : analysis_discipline_product_definition;
+END_ENTITY;
+
+ENTITY analysis_version;
+ analysis_number  : analysis;
+ approved_by      : OPTIONAL approval;
+ contract_number  : OPTIONAL IDENTIFIER;
+ creator          : person_organization;
+ release_status   : LABEL;
+ revision_letter  : IDENTIFIER;
+ security_code    : LABEL;
+END_ENTITY;
+
+ENTITY ANGLE_MEASURE;
+END_ENTITY;
+
+ENTITY anisotropic_material
+  SUBTYPE OF (stock_material);
+END_ENTITY;
+
+ENTITY approval;
+ authorized_by   : SET [1:?] OF person_organization;
+ effective_date  : DATE;
+ purpose         : TEXT;
+ status          : LABEL;
+END_ENTITY;
+
+ENTITY assembly
+  SUPERTYPE OF (ONEOF (next_higher_assembly,
+                       promissory_usage));
+ assembly_part   : design_discipline_product_definition;
+ component_part  : design_discipline_product_definition;
+ security_code   : LABEL;
+END_ENTITY;
+
+ENTITY beveled_sheet_representation
+  SUBTYPE OF (constituent_shape_representation);
+ bevel_angle              : ANGLE_MEASURE;
+ boundary_surface         : composite_sheet_representation;
+ vertical_profile_height  : LENGTH_MEASURE;
+END_ENTITY;
+
+ENTITY boundary_curve_representation;
+ bounds  : SET [1:?] OF CURVE;
+END_ENTITY;
+
+ENTITY calculated_state
+  SUBTYPE OF (fe_analysis_state);
+END_ENTITY;
+
+ENTITY change_order
+  SUBTYPE OF (work_order);
+ adopted_solution  : TEXT;
+ change_date       : DATE;
+END_ENTITY;
+
+ENTITY change_request
+  SUBTYPE OF (work_request);
+ consequence           : TEXT;
+ recommended_solution  : TEXT;
+ version               : LABEL;
+END_ENTITY;
+
+ENTITY component_assembly_position;
+ assembly_shape   : geometric_model_representation;
+ component_shape  : geometric_model_representation;
+ definition       : next_higher_assembly;
+ transformation   : LABEL;
+END_ENTITY;
+
+ENTITY composite_assembly
+  SUBTYPE OF (constituent_part);
+ layup_part  : composite_assembly_table;
+ shape       : OPTIONAL composite_assembly_shape;
+END_ENTITY;
+
+ENTITY composite_assembly_sequence_definition;
+ components_in_sequence  : BAG [1:?] OF component_class_for_assembly;
+ properties              : OPTIONAL fea_material_property;
+END_ENTITY;
+
+ENTITY composite_assembly_table
+  SUBTYPE OF (part_laminate_table);
+ sequence_groups  : LIST [2:?] OF
+                     composite_assembly_sequence_definition;
+END_ENTITY;
+
+ENTITY composite_sheet_representation
+  SUPERTYPE OF (ONEOF (face_based_sheet_representation, 
+                       geometric_sheet_representation))
+  SUBTYPE OF (constituent_shape_representation);
+END_ENTITY;
+
+ENTITY constituent_part
+  SUPERTYPE OF (ONEOF (ply,
+                       ply_piece,
+                       ply_laminate,
+                       filament_laminate,
+                       processed_core,
+                       composite_assembly));
+ constituent_part_identification  : IDENTIFIER;
+ of_part                          : part_version;
+ weight                           : OPTIONAL MASS_MEASURE;
+END_ENTITY;
+
+ENTITY constituent_shape_representation
+  SUPERTYPE OF (ONEOF (three_d_geometry_set,
+                       composite_sheet_representation,
+                       beveled_sheet_representation))
+  SUBTYPE OF (geometric_model_representation);
+END_ENTITY;
+
+ENTITY constraint
+  SUPERTYPE OF (ONEOF (single_point_constraint,
+                       linear_constraint_equation,
+                       nodal_degree_of_freedom_reduction));
+ identification  : IDENTIFIER;
+ steps           : SET [1:?] OF fe_analysis_control_step;
+END_ENTITY;
+
+ENTITY CURVE;
+END_ENTITY;
+
+ENTITY curve_cross_section;
+ property  : curve_property;
+ section   : OPTIONAL cross_section_shape_select;
+END_ENTITY;
+
+ENTITY curve_element
+  SUBTYPE OF (element);
+END_ENTITY;
+
+ENTITY curve_property;
+ defined_elements   : SET [1:?] OF curve_element;
+END_ENTITY;
+
+ENTITY curve_section_properties;
+ property  : curve_property; 
+END_ENTITY;
+
+ENTITY damping_matrix
+  SUBTYPE OF (matrix);
+END_ENTITY;
+
+ENTITY DATE;
+END_ENTITY;
+
+ENTITY date_effectivity
+  SUBTYPE OF (effectivity);
+ end_date    : OPTIONAL DATE;
+ start_date  : DATE;
+END_ENTITY;
+
+ENTITY design_discipline_product_definition;
+ approved_by                : OPTIONAL approval;
+ cad_filename               : OPTIONAL FILE;
+ creation_date              : DATE;
+ creator                    : person_organization;
+ description                : TEXT;
+ discipline_identification  : IDENTIFIER;
+ version                    : part_version;
+END_ENTITY;
+
+ENTITY design_material;
+ material_callout  : material_select;
+ part_defined      : design_discipline_product_definition;
+END_ENTITY;
+
+ENTITY design_specification
+  SUBTYPE OF (specification);
+END_ENTITY;
+
+ENTITY DIRECTION;
+END_ENTITY;
+
+ENTITY directionally_explicit_element
+  SUBTYPE OF (element);
+ associated_matrix  : matrix;
+END_ENTITY;
+
+ENTITY discontinuous_fiber_assembly
+  SUBTYPE OF (stock_material);
+END_ENTITY;
+
+ENTITY draped_orientation_angle
+  SUBTYPE OF (ply_orientation_angle);
+END_ENTITY;
+
+ENTITY edge_zone_shape
+  SUBTYPE OF (zone_structural_makeup_shape_representation);
+ boundary  : boundary_class_zone;
+END_ENTITY;
+
+ENTITY effectivity
+  SUPERTYPE OF (ONEOF (sequence_effectivity,
+                       lot_effectivity,
+                       date_effectivity));
+ affected_assemblies  : SET [1:?] OF assembly;
+ approved_by          : OPTIONAL approval;
+ configuration_item   : product_configuration;
+END_ENTITY;
+
+ENTITY element
+  SUPERTYPE OF (ONEOF (volume_element,
+                       surface_element,
+                       substructure_element,
+                       curve_element,
+                       point_element,
+                       directionally_explicit_element,
+                       explicit_element));
+ description             : OPTIONAL element_description;
+ element_identification  : IDENTIFIER;
+ model_ref               : fea_model;
+ node_list               : LIST [1:?] OF node;
+END_ENTITY;
+
+ENTITY element_description;
+ description  : TEXT;
+END_ENTITY;
+
+ENTITY element_field_variable_definition
+  SUBTYPE OF (fe_analysis_state_definition);
+END_ENTITY;
+
+ENTITY element_nodal_freedom_actions
+  SUBTYPE OF (fe_analysis_state_definition);
+END_ENTITY;
+
+ENTITY element_property_geometric_relationship;
+ geometry_ref  : geometry_element;
+ section_ref   : element_property_aspect;
+END_ENTITY;
+
+ENTITY element_shape_aspect;
+END_ENTITY;
+
+ENTITY element_shape_relationship;
+ element_aspect     : element_shape_aspect;
+ element_reference  : element;
+ role               : TEXT;
+ shape              : geometry_element;
+END_ENTITY;
+
+ENTITY environment;
+END_ENTITY;
+
+ENTITY explicit_element
+  SUBTYPE OF (element);
+ associated_matrix  : matrix;
+END_ENTITY;
+
+ENTITY face_based_sheet_representation
+  SUBTYPE OF (composite_sheet_representation);
+ face_surface  : SURFACE;
+ inner_bounds  : OPTIONAL SET [1:?] OF LOOP;
+ outer_bound   : LOOP;
+END_ENTITY;
+
+ENTITY faceted_boundary_representation
+  SUBTYPE OF (geometric_model_representation);
+END_ENTITY;
+
+ENTITY fe_analysis;
+ approved_by             : OPTIONAL approval;
+ intended_analysis_code  : LABEL;   
+ model_ref               : fea_model;
+END_ENTITY; 
+
+ENTITY fe_analysis_control_step
+  SUPERTYPE OF (ONEOF (modes_and_frequencies_control_step,
+                       static_control_step));
+ analysis             : fe_analysis;
+ identification       : IDENTIFIER;
+ initial_input_state  : fe_analysis_state;
+ sequence             : INTEGER;
+END_ENTITY;
+
+ENTITY fe_analysis_results;
+ approved_by  : OPTIONAL approval;
+END_ENTITY;
+
+ENTITY fe_analysis_results_step
+  SUPERTYPE OF (ONEOF (modes_and_frequencies_results_step,
+                       static_results_step));
+ control  : fe_analysis_control_step;
+ result   : fe_analysis_results;
+END_ENTITY;
+
+ENTITY fe_analysis_state
+  SUPERTYPE OF (ONEOF (calculated_state,
+                       linearly_superimposed_state,
+                       output_request_state,
+                       specified_state));
+ definitions  : SET [1:?] OF fe_analysis_state_definition;
+END_ENTITY;
+
+ENTITY fe_analysis_state_definition
+  SUPERTYPE OF (ONEOF (analysis_message,
+                       element_field_variable_definition,
+                       element_nodal_freedom_actions,
+                       linear_constraint_equation_value,
+                       nodal_freedom_definitions,
+                       single_point_constraint_values));
+ ref  : definition_reference;
+END_ENTITY;
+
+ENTITY fea_material_definition;
+ description              : TEXT;
+ elements                 : SET [0:?] OF definition_element;
+ material_identification  : IDENTIFIER;
+END_ENTITY;
+
+ENTITY fea_material_property
+  SUBTYPE OF (material_property);
+ property_use  : fea_material_definition;
+END_ENTITY;
+
+ENTITY fea_material_specification
+  SUBTYPE OF (material_specification);
+ specification_use  : fea_material_definition;
+END_ENTITY;
+
+ENTITY fea_model;
+ analysis_type           : LABEL;
+ approved_by             : OPTIONAL approval;
+ cae_filename            : OPTIONAL TEXT;
+ creating_software       : LABEL;
+ definition              : analysis_discipline_product_definition;
+ description             : fea_model_description;
+ identification          : IDENTIFIER;
+ intended_analysis_code  : LABEL;
+END_ENTITY;
+
+ENTITY fea_model_description;
+ description  : TEXT;
+END_ENTITY;
+
+ENTITY filament_assembly
+  SUBTYPE OF (stock_material);
+END_ENTITY;
+
+ENTITY filament_laminate
+  SUBTYPE OF (constituent_part);
+ made_from  : filament_assembly;
+ shape      : OPTIONAL filament_laminate_shape;
+END_ENTITY;
+
+ENTITY filament_laminate_shape;
+ cross_section  : cross_section_shape_select;
+END_ENTITY;
+
+ENTITY FILE;
+END_ENTITY;
+
+ENTITY flat_pattern_ply_shape
+  SUBTYPE OF (ply_shape);
+ wrapup_origin_on_flat_pattern  : LOCATION;
+ wrapup_origin_on_surface       : LOCATION;
+END_ENTITY;
+
+ENTITY geometric_model_representation
+  SUPERTYPE OF (ONEOF (advanced_boundary_representation,
+                       point_model,                 
+                       manifold_surface_with_topology,
+                       wireframe_with_topology,
+                       faceted_boundary_representation,  
+                       non_topological_surface_and_wireframe,
+                       constituent_shape_representation));
+ elements  : SET [1:?] OF geometry_element;
+ role      : TEXT;
+END_ENTITY;
+
+ENTITY geometric_sheet_representation
+  SUBTYPE OF (composite_sheet_representation);
+ basis_surface  : SURFACE;
+ cutouts        : OPTIONAL SET [1:?] OF boundary_curve_representation;
+ outer_edge     : boundary_curve_representation;
+END_ENTITY;
+
+ENTITY geometry_element;
+END_ENTITY;
+
+ENTITY graphical_representation
+  SUBTYPE OF (analysis_report_representation);
+ graphical_filename  : TEXT;
+END_ENTITY;
+
+ENTITY group;
+ description           : TEXT;
+ elements              : OPTIONAL SET [1:?] OF element;
+ group_identification  : IDENTIFIER;
+ nodes                 : OPTIONAL SET [1:?] OF node;
+END_ENTITY;
+
+ENTITY group_relationship;
+ related_group   : group;
+ relating_group  : group;
+END_ENTITY;
+
+ENTITY idealized_analysis_shape
+  SUBTYPE OF (shape, analysis_shape);
+ basis           : nominal_design_shape;
+ defining_shape  : geometric_model_representation;
+END_ENTITY;
+
+ENTITY IDENTIFIER;
+END_ENTITY;
+
+ENTITY isotropic_material
+  SUBTYPE OF (stock_material);
+END_ENTITY;
+
+ENTITY LABEL;
+END_ENTITY;
+
+ENTITY laid_orientation_angle
+  SUBTYPE OF (ply_orientation_angle);
+END_ENTITY;
+
+ENTITY laid_ply_shape
+  SUBTYPE OF (ply_shape);
+END_ENTITY;
+
+ENTITY laminate_table
+  SUPERTYPE OF (ONEOF (zone_structural_makeup,
+                       part_laminate_table));
+ base_surface       : OPTIONAL surface_with_direction;
+ basis              : reinforcement_orientation_basis;
+ properties         : OPTIONAL fea_material_property;
+ resulting_surface  : OPTIONAL SURFACE;
+END_ENTITY;
+
+ENTITY LENGTH_MEASURE;
+END_ENTITY;
+
+ENTITY linear_constraint_equation
+  SUBTYPE OF (constraint);
+ freedoms_and_coefficients_nodes : SET [1:?] OF
+                                   constraint_definition_reference;
+END_ENTITY;
+
+ENTITY linear_constraint_equation_value
+  SUBTYPE OF (fe_analysis_state_definition);
+ equation  : linear_constraint_equation;
+END_ENTITY;
+
+ENTITY linearly_superimposed_state
+  SUBTYPE OF (fe_analysis_state);
+END_ENTITY;
+
+ENTITY LOCATION;
+END_ENTITY;
+
+ENTITY LOOP;
+END_ENTITY;
+
+ENTITY lot_effectivity
+  SUBTYPE OF (effectivity);
+ lot_number                : NUMBER;
+ lot_size                  : NUMBER;
+ lot_size_unit_of_measure  : LABEL;
+END_ENTITY;
+
+ENTITY make_from;
+ basis      : design_discipline_product_definition;
+ resultant  : design_discipline_product_definition;
+END_ENTITY;
+
+ENTITY manifold_surface_with_topology
+  SUBTYPE OF (geometric_model_representation);
+END_ENTITY;
+
+ENTITY mass_matrix
+  SUBTYPE OF (matrix);
+END_ENTITY;
+
+ENTITY MASS_MEASURE;
+END_ENTITY;
+
+ENTITY material_direction;
+ material_orientation  : DIRECTION;
+END_ENTITY;
+
+ENTITY material_property
+  SUPERTYPE OF (fea_material_property);
+ ambient         : environment;
+ property_name   : LABEL;
+ property_value  : OPTIONAL MEASURE_VALUE;
+END_ENTITY;
+
+ENTITY material_specification
+  SUPERTYPE OF (fea_material_specification)
+  SUBTYPE OF (specification);
+END_ENTITY;
+
+ENTITY matrix
+  SUPERTYPE OF (ONEOF (mass_matrix,
+                       stiffness_matrix,
+                       damping_matrix));
+END_ENTITY;
+
+ENTITY MEASURE_VALUE;
+END_ENTITY;
+
+ENTITY modes_and_frequencies_control_step
+  SUBTYPE OF (fe_analysis_control_step);
+ final_input_state  : fe_analysis_state;
+ frequency_range    : LIST [1:2] OF REAL;
+ number_of_modes    : INTEGER;
+END_ENTITY;
+
+ENTITY modes_and_frequencies_results_step
+  SUBTYPE OF (fe_analysis_results_step);
+ resulting_states  : SET [1:?] OF calculated_state;
+END_ENTITY;
+
+ENTITY next_higher_assembly
+  SUBTYPE OF (assembly);
+ as_required           : LOGICAL;
+ component_quantity    : NUMBER;
+ reference_designator  : OPTIONAL LABEL;
+ unit_of_measure       : LABEL;
+END_ENTITY;
+
+ENTITY nodal_degree_of_freedom_reduction
+  SUBTYPE OF (constraint);
+ node  : constraint_definition_reference;
+END_ENTITY;
+
+ENTITY nodal_freedom_definitions
+  SUBTYPE OF (fe_analysis_state_definition);
+END_ENTITY;
+
+ENTITY nodal_results_coordinate_system;
+END_ENTITY;
+
+ENTITY node;
+ description               : OPTIONAL node_description;
+ location                  : geometry_element;
+ model_ref                 : fea_model;
+ node_identification       : IDENTIFIER;
+ results_coordinate_space  : OPTIONAL nodal_results_coordinate_system;
+END_ENTITY;
+
+ENTITY node_description;
+ description  : TEXT;
+END_ENTITY;
+
+ENTITY node_shape
+  SUBTYPE OF (shape, analysis_shape);
+ defining_shape  : point_model;
+END_ENTITY;
+
+ENTITY node_shape_relationship;
+ node_reference  : node;
+ role            : TEXT;
+ shape           : geometry_element;
+END_ENTITY;
+
+ENTITY nominal_design_shape
+  SUBTYPE OF (shape);
+ defining_shape  : geometric_model_representation;
+ design_view     : design_discipline_product_definition;
+END_ENTITY;
+
+ENTITY non_topological_surface_and_wireframe
+  SUBTYPE OF (geometric_model_representation);
+END_ENTITY;
+
+ENTITY output_request_state
+  SUBTYPE OF (fe_analysis_state);
+ steps  : SET [1:?] OF fe_analysis_control_step;
+END_ENTITY;
+
+ENTITY part;
+ owner                : person_organization;
+ part_classification  : OPTIONAL LABEL;
+ part_nomenclature    : LABEL;
+ part_number          : IDENTIFIER;
+ part_type            : LABEL;
+ standard_part        : LOGICAL;
+UNIQUE 
+ part_number;
+END_ENTITY;
+
+ENTITY part_laminate_table
+  SUPERTYPE OF (ONEOF (composite_assembly_table,
+                       ply_laminate_table))
+  SUBTYPE OF (laminate_table);
+END_ENTITY;
+
+ENTITY part_version;
+ approved_by       : OPTIONAL approval;
+ contract_number   : OPTIONAL IDENTIFIER;
+ creator           : person_organization;
+ make_or_buy_code  : OPTIONAL LABEL;
+ part_number       : part;
+ release_status    : LABEL;
+ revision_letter   : IDENTIFIER;
+ security_code     : LABEL;
+ weight            : OPTIONAL MASS_MEASURE;
+END_ENTITY;
+
+ENTITY PERCENTAGE;
+END_ENTITY;
+
+ENTITY percentage_laminate_table
+  SUBTYPE OF (zone_structural_makeup);
+ table_components  : SET [1:?] OF percentage_ply;
+ total_thickness   : LENGTH_MEASURE;
+END_ENTITY;
+
+ENTITY percentage_ply;
+ strength_orientation   : OPTIONAL ply_orientation_angle;
+ material               : stock_material;
+ makeup_and_properties  : OPTIONAL zone_structural_makeup;
+ volume_percent         : PERCENTAGE;
+END_ENTITY;
+
+ENTITY person_organization;
+ address                             : LABEL;
+ organization                        : LABEL;
+ person                              : LABEL;
+ person_organization_identification  : IDENTIFIER;
+END_ENTITY;
+
+ENTITY ply
+  SUBTYPE OF (constituent_part);
+ constituents          : OPTIONAL LIST [1:?] OF ply_piece;
+ material_type         : ply_stock_material;
+ material_orientation  : ply_orientation_angle;
+ ply_thickness         : LENGTH_MEASURE;  
+ shape                 : OPTIONAL ply_shape;
+END_ENTITY;
+
+ENTITY ply_laminate
+  SUBTYPE OF (constituent_part);
+ ply_table  : ply_laminate_table;
+ shape      : OPTIONAL ply_laminate_shape;
+END_ENTITY;
+
+ENTITY ply_laminate_sequence_definition;
+ plies_in_sequence  : SET [1:?] OF ply;
+ properties         : OPTIONAL fea_material_property;
+END_ENTITY;
+
+ENTITY ply_laminate_table
+  SUBTYPE OF (part_laminate_table);
+ sequence  : LIST [2:?] OF ply_laminate_sequence_definition;
+END_ENTITY;
+
+ENTITY ply_orientation_angle
+  SUPERTYPE OF (ONEOF (draped_orientation_angle,
+                       laid_orientation_angle));
+ angle_reference  : angle_select;
+ basis            : reinforcement_orientation_basis;
+END_ENTITY;
+
+ENTITY ply_piece
+  SUBTYPE OF (constituent_part);
+ shape         : OPTIONAL ply_piece_shape;
+ warp_surface  : LOGICAL;
+END_ENTITY;
+
+ENTITY ply_shape
+  SUPERTYPE OF (ONEOF (projected_ply_shape,
+                       laid_ply_shape,
+                       flat_pattern_ply_shape));
+ basis           : OPTIONAL ply_shape;
+ defining_model  : composite_sheet_representation;
+END_ENTITY;
+
+ENTITY POINT;
+END_ENTITY;
+
+ENTITY point_and_vector;
+ location  : POINT;
+ vector    : LIST [1:2] OF DIRECTION;
+END_ENTITY;
+
+ENTITY point_element
+  SUBTYPE OF (element);
+ associated_matrix  : matrix;
+END_ENTITY;
+
+ENTITY point_model
+  SUBTYPE OF (geometric_model_representation);
+END_ENTITY;
+
+ENTITY point_path;
+ directions  : LIST [1:?] OF point_and_vector;
+END_ENTITY;
+
+ENTITY point_zone_shape
+  SUBTYPE OF (zone_structural_makeup_shape_representation);
+ location  : POINT;
+END_ENTITY;
+
+ENTITY process_specification
+  SUBTYPE OF (specification);
+END_ENTITY;
+
+ENTITY processed_core
+  SUBTYPE OF (constituent_part);
+ added_material            : OPTIONAL LIST [0:?] OF ply;
+ cell_direction            : ply_orientation_angle;
+ made_from_processed_core  : OPTIONAL SET [1:?] OF processed_core;
+ made_from_stock           : stock_core;
+ shape                     : OPTIONAL core_shape;
+END_ENTITY;
+
+ENTITY product_configuration;
+ approved_by          : OPTIONAL approval;
+ item_identification  : IDENTIFIER;
+ model_name           : product_model;
+ parts_configured     : OPTIONAL SET [1:?] OF part;
+ phase_of_product     : LABEL;
+UNIQUE
+ item_identification;
+END_ENTITY;
+
+ENTITY product_model;
+ model_name  : LABEL;
+END_ENTITY;
+
+ENTITY projected_ply_shape
+  SUPERTYPE OF (ONEOF (view_ply_shape,
+                       surface_ply_shape))
+  SUBTYPE OF (ply_shape);
+ method                : projection_method;
+ projection_direction  : OPTIONAL DIRECTION;
+END_ENTITY;
+
+ENTITY promissory_usage
+  SUBTYPE OF (assembly);
+END_ENTITY;
+
+ENTITY reinforcement_orientation_basis;
+ basis_location  : LOCATION;
+ orientation     : DIRECTION;
+END_ENTITY;
+
+ENTITY retention_period;
+ approved_by              : OPTIONAL approval;
+ earliest_end_definition  : DATE;
+ is_applied_to            : SET [1:?] OF retention_data_select;
+ latest_end_definition    : DATE;
+ retention_purpose        : OPTIONAL TEXT;
+ start_definition         : DATE;
+END_ENTITY;
+
+ENTITY sequence_effectivity
+  SUBTYPE OF (effectivity);
+ component_quantity               : NUMBER;
+ quantity_unit_of_measure         : LABEL;
+ from_effectivity_identification  : NUMBER;
+ to_effectivity_identification    : NUMBER;
+END_ENTITY;
+
+ENTITY shape
+  SUPERTYPE OF (ONEOF (nominal_design_shape,
+                       node_shape,
+                       idealized_analysis_shape));
+ role  : TEXT;
+END_ENTITY;
+
+ENTITY shape_aspect;
+ characteristics  : SET [0:?] OF specification;
+ geometry         : geometric_model_representation;
+ parent_shape     : shape;
+END_ENTITY;
+
+ENTITY single_point_constraint
+  SUBTYPE OF (constraint);
+ required_node  : constraint_definition_reference;
+END_ENTITY;
+
+ENTITY single_point_constraint_values
+  SUBTYPE OF (fe_analysis_state_definition);
+ element  : single_point_constraint;
+END_ENTITY;
+
+ENTITY smeared_material
+  SUBTYPE OF (zone_structural_makeup);
+ total_thickness  : LENGTH_MEASURE;
+END_ENTITY;
+
+ENTITY specification
+  SUPERTYPE OF (ONEOF (design_specification,
+                      surface_finish_specification,
+                      process_specification,
+                      material_specification));
+ specification_code    : TEXT;
+ specification_source  : TEXT;
+END_ENTITY;
+
+ENTITY specified_state
+  SUBTYPE OF (fe_analysis_state);
+END_ENTITY;
+
+ENTITY start_order
+  SUBTYPE OF (work_order);
+END_ENTITY;
+
+ENTITY start_request
+  SUBTYPE OF (work_request);
+END_ENTITY;
+
+ENTITY static_control_step
+  SUBTYPE OF (fe_analysis_control_step);
+ final_input_state  : fe_analysis_state;
+END_ENTITY;
+
+ENTITY static_results_step
+  SUBTYPE OF (fe_analysis_results_step);
+ resulting_state  : calculated_state;
+END_ENTITY;
+
+ENTITY stiffness_matrix
+  SUBTYPE OF (matrix);
+END_ENTITY;
+
+ENTITY stock_core
+  SUBTYPE OF (stock_material);
+END_ENTITY;
+
+ENTITY stock_material
+  SUPERTYPE OF (ONEOF (anisotropic_material,
+                       discontinuous_fiber_assembly,
+                       filament_assembly,
+                       isotropic_material,
+                       stock_core));
+ approved_by          : OPTIONAL approval;
+ property             : material_property;
+ reference_direction  : material_direction;
+ of_part              : part_version;
+ specified_material   : material_specification;
+END_ENTITY;
+
+ENTITY substitute_part;
+ base        : assembly;
+ substitute  : part;
+END_ENTITY;
+
+ENTITY substructure_element
+  SUBTYPE OF (element);
+ substructure_model_ref  : fea_model;
+END_ENTITY;
+
+ENTITY substructure_node_relationship;
+ related_node   : node;
+ relating_node  : node;
+END_ENTITY;
+
+ENTITY supplied_part_version;
+ approved_by             : OPTIONAL approval;
+ certification_required  : LOGICAL;
+ is_identified_as        : part_version;
+ produced_by             : supplier;
+ supplier_part_number    : OPTIONAL IDENTIFIER;
+END_ENTITY;
+
+ENTITY supplier;
+ identified_as            : person_organization;
+ supplier_identification  : IDENTIFIER;
+END_ENTITY;
+
+ENTITY SURFACE;
+END_ENTITY;
+
+ENTITY surface_element
+  SUBTYPE OF (element);
+END_ENTITY;
+
+ENTITY surface_finish_specification
+  SUBTYPE OF (specification);
+END_ENTITY;
+
+ENTITY surface_ply_shape
+  SUBTYPE OF (projected_ply_shape);
+ offset        : LENGTH_MEASURE;
+ surface_role  : LABEL;
+END_ENTITY;
+
+ENTITY surface_property;
+ defined_elements  : SET [1:?] OF surface_element;
+END_ENTITY;
+
+ENTITY surface_thickness;
+ property   : surface_property;
+ thickness  : LENGTH_MEASURE;
+END_ENTITY;
+
+ENTITY surface_with_direction;
+ defining_surface    : SURFACE;
+ material_direction  : DIRECTION;
+END_ENTITY;
+
+ENTITY tabular_representation
+  SUBTYPE OF (analysis_report_representation);
+ tabular_filename  : TEXT;
+END_ENTITY;
+
+ENTITY TEXT;
+END_ENTITY;
+
+ENTITY thickness_laminate_table
+  SUBTYPE OF (zone_structural_makeup);
+ table_components  : LIST [2:?] OF thickness_laminate_table_component;
+END_ENTITY;
+
+ENTITY three_d_geometry_set
+  SUBTYPE OF (constituent_shape_representation);
+ basis_role         : LABEL;
+ basis_surface      : SURFACE;  
+ defining_boundary  : SET [1:?] OF CURVE;
+END_ENTITY;
+
+ENTITY usage_constraint;
+ constrains     : specification;
+ usage_element  : TEXT;
+ usage_value    : TEXT;
+END_ENTITY;
+
+ENTITY view_ply_shape
+  SUBTYPE OF (projected_ply_shape);
+END_ENTITY;
+
+ENTITY volume_element
+  SUBTYPE OF (element);
+END_ENTITY;
+
+ENTITY wireframe_with_topology
+  SUBTYPE OF (geometric_model_representation);
+END_ENTITY;
+
+ENTITY work_order
+  SUPERTYPE OF (ONEOF (start_order,         
+                       change_order));
+ additional_data            : OPTIONAL FILE;
+ analysis_data              : OPTIONAL FILE;
+ approved_by                : OPTIONAL approval;
+ incorporates               : SET [1:?] OF work_request;
+ versions                   : SET [1:?] OF design_or_analysis;
+ work_order_identification  : IDENTIFIER;
+UNIQUE
+ work_order_identification;
+END_ENTITY;
+
+ENTITY work_request
+  SUPERTYPE OF (ONEOF (change_request,
+                       start_request));
+ affective_parts               : OPTIONAL SET [1:?] OF design_or_analysis;
+ approved_by                   : OPTIONAL approval;
+ description                   : TEXT;
+ recipients                    : SET [1:?] OF person_organization;
+ reason                        : TEXT;
+ request_date                  : DATE;
+ status                        : LABEL;
+ work_request_identification   : IDENTIFIER;
+UNIQUE
+ work_request_identification;
+END_ENTITY;
+
+ENTITY zone_structural_makeup
+  SUPERTYPE OF (ONEOF (thickness_laminate_table,
+                       percentage_laminate_table,
+                       smeared_material,
+                       (thickness_laminate_table AND 
+                        smeared_material),
+                       (percentage_laminate_table AND
+                        smeared_material)))
+  SUBTYPE OF (laminate_table);
+ boundary  : OPTIONAL zone_structural_makeup_shape_representation;
+END_ENTITY;
+
+ENTITY zone_structural_makeup_shape_representation
+  SUPERTYPE OF (ONEOF (point_zone_shape,
+                       edge_zone_shape));
+END_ENTITY;
+
+END_SCHEMA;
