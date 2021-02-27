@@ -1,3 +1,5 @@
+**This is pre-release version. Several necessary features are not implemented.**
+
 ruststep
 =========
 
