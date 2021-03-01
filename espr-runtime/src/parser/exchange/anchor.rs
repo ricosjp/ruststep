@@ -51,11 +51,11 @@ pub enum AnchorItem {
 pub fn anchor_item(input: &str) -> ParseResult<AnchorItem> {
     alt((
         char_('$').map(|_| AnchorItem::NotProvided),
-        integer.map(|val| AnchorItem::Integer(val)),
-        real.map(|val| AnchorItem::Real(val)),
-        string.map(|val| AnchorItem::String(val)),
-        rhs_occurrence_name.map(|val| AnchorItem::RValue(val)),
-        enumeration.map(|val| AnchorItem::Enumeration(val)),
+        integer.map(AnchorItem::Integer),
+        real.map(AnchorItem::Real),
+        string.map(AnchorItem::String),
+        rhs_occurrence_name.map(AnchorItem::RValue),
+        enumeration.map(AnchorItem::Enumeration),
         // FIXME binary
         anchor_item_list,
     ))
