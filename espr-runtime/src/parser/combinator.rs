@@ -82,7 +82,7 @@ pub fn comment(input: &str) -> ParseResult<String> {
 ///
 pub fn separator(input: &str) -> ParseResult<()> {
     let comment = many1(tuple((multispace0, comment, multispace0))).map(|_| ());
-    alt((comment, value((), multispace1))).parse(input)
+    Ok(alt((comment, value((), multispace1))).parse(input)?)
 }
 
 pub fn many0_<'a, O>(f: impl ExchangeParser<'a, O>) -> impl ExchangeParser<'a, Vec<O>> {
@@ -112,7 +112,7 @@ pub fn many1_<'a, O>(f: impl ExchangeParser<'a, O>) -> impl ExchangeParser<'a, V
 
 pub fn ignorable(input: &str) -> ParseResult<()> {
     let comment = many1(tuple((multispace0, comment, multispace0))).map(|_| ());
-    alt((comment, value((), multispace0))).parse(input)
+    Ok(alt((comment, value((), multispace0))).parse(input)?)
 }
 
 pub fn separated<'a, O>(c: char, f: impl ExchangeParser<'a, O>) -> impl ExchangeParser<'a, Vec<O>> {
