@@ -25,16 +25,32 @@ use nom::{
 pub type ParseResult<'a, X> = IResult<&'a str, X, VerboseError<&'a str>>;
 
 /// Alias of `nom::Parser`
-pub trait ExchangeParser<'a, X>:
-    Clone + nom::Parser<&'a str, X, VerboseError<&'a str>> + FnMut(&'a str) -> ParseResult<'a, X>
+pub trait ExchangeParser<'a, X>: Clone + nom::Parser<&'a str, X, VerboseError<&'a str>> {}
+
+impl<'a, X, T> ExchangeParser<'a, X> for T where
+    T: Clone + nom::Parser<&'a str, X, VerboseError<&'a str>>
 {
 }
 
-impl<'a, X, T> ExchangeParser<'a, X> for T where
-    T: Clone
-        + nom::Parser<&'a str, X, VerboseError<&'a str>>
-        + FnMut(&'a str) -> ParseResult<'a, X>
-{
+pub fn char_<'a>(c: char) -> impl ExchangeParser<'a, char> {
+    move |input| {
+        let (input, c) = nom::character::complete::char(c)(input)?;
+        Ok((input, c))
+    }
+}
+
+pub fn tag_<'a>(name: &'static str) -> impl ExchangeParser<'a, &'a str> {
+    move |input| {
+        let (input, c) = nom::bytes::complete::tag(name)(input)?;
+        Ok((input, c))
+    }
+}
+
+pub fn opt_<'a, O>(f: impl ExchangeParser<'a, O>) -> impl ExchangeParser<'a, Option<O>> {
+    move |input| {
+        let (input, c) = nom::combinator::opt(f.clone())(input)?;
+        Ok((input, c))
+    }
 }
 
 /// Comment
@@ -75,7 +91,7 @@ pub fn many0_<'a, O>(f: impl ExchangeParser<'a, O>) -> impl ExchangeParser<'a, V
         if first.is_none() {
             return Ok((input, Vec::new()));
         };
-        let (input, tail) = many0(tuple((separator, f.clone())).map(|(_sep, v)| v)).parse(input)?;
+        let (input, tail) = many0(tuple((ignorable, f.clone())).map(|(_sep, v)| v)).parse(input)?;
         let first = vec![first.unwrap()];
         let list = first.into_iter().chain(tail).collect();
         Ok((input, list))
@@ -84,7 +100,7 @@ pub fn many0_<'a, O>(f: impl ExchangeParser<'a, O>) -> impl ExchangeParser<'a, V
 
 pub fn many1_<'a, O>(f: impl ExchangeParser<'a, O>) -> impl ExchangeParser<'a, Vec<O>> {
     move |input| {
-        tuple((f.clone(), many0(tuple((separator, f.clone())))))
+        tuple((f.clone(), many0(tuple((ignorable, f.clone())))))
             .map(|(first, tail)| {
                 let first = vec![first];
                 let tail = tail.into_iter().map(|(_sep, val)| val);
@@ -131,13 +147,13 @@ pub trait Tuple<'a, O>: Clone {
     fn parse(&mut self, input: &'a str) -> ParseResult<'a, O>;
 }
 
-/// Expand `tuple_gen!(f1, f2, f3)` to `tuple((f1, separator, tuple((f2, separator, f3))))`
+/// Expand `tuple_gen!(f1, f2, f3)` to `tuple((f1, ignorable, tuple((f2, ignorable, f3))))`
 macro_rules! tuple_gen {
     ($head:ident, $($tail:ident),*) => {
-        tuple(($head, separator, tuple_gen!($($tail),*)))
+        tuple(($head.clone(), ignorable, tuple_gen!($($tail),*)))
     };
     ($head:ident) => {
-        $head
+        $head.clone()
     };
 }
 

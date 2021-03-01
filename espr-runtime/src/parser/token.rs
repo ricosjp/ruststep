@@ -7,15 +7,14 @@
 //! ```text
 //! HEX               = `0` | `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8` | `9` | `A` | `B` | `C` | `D` | `E` | `F` .
 //! BINARY            = ```` ( `0` | `1` | `2` | `3` ) { HEX } ```` .
-//! SIGNATURE_CONTENT = BASE64 .
 //! ```
 
 use super::{basic::*, combinator::*};
 use nom::{
     branch::alt,
-    character::complete::{char, digit1, multispace0, none_of},
+    character::complete::{char, digit1, multispace0, none_of, satisfy},
     combinator::opt,
-    multi::many0,
+    multi::{many0, many1},
     number::complete::double,
     sequence::tuple,
     Parser,
@@ -39,7 +38,7 @@ pub fn integer(input: &str) -> ParseResult<i64> {
         .parse(input)
 }
 
-/// real = \[ [sign] \] [digit] { [digit] } `.` { [digit] } \[ `e` \[ [sign] \] [digit] { [digit] } \] .
+/// real = \[ [sign] \] [digit] { [digit] } `.` { [digit] } \[ `E` \[ [sign] \] [digit] { [digit] } \] .
 pub fn real(input: &str) -> ParseResult<f64> {
     tuple((opt(sign), multispace0, double))
         .map(|(sign, _space, number)| match sign {
@@ -56,12 +55,15 @@ pub fn string(input: &str) -> ParseResult<String> {
         .parse(input)
 }
 
-/// anchor_name = `<` URI_FRAGMENT_IDENTIFIER `>` .
+#[derive(Debug, Clone, PartialEq)]
+pub struct URI(pub String);
+
+/// resource = `<` UNIVERSAL_RESOURCE_IDENTIFIER `>` .
 ///
-/// Parse as string, without validating as URI fragment identifier
-pub fn anchor_name(input: &str) -> ParseResult<String> {
+/// Parse as string, without validating as URI
+pub fn resource(input: &str) -> ParseResult<URI> {
     tuple((char('<'), many0(none_of(">")), char('>')))
-        .map(|(_start, s, _end)| s.iter().collect())
+        .map(|(_start, s, _end)| URI(s.iter().collect()))
         .parse(input)
 }
 
@@ -70,6 +72,28 @@ pub fn enumeration(input: &str) -> ParseResult<String> {
     tuple((char('.'), standard_keyword, char('.')))
         .map(|(_head, name, _tail)| name)
         .parse(input)
+}
+
+/// Left hand side value
+#[derive(Debug, Clone, PartialEq)]
+pub enum LValue {
+    /// Like `#11`
+    Entity(String),
+    /// Like `@11`
+    Value(String),
+}
+
+/// Right hand side value
+#[derive(Debug, Clone, PartialEq)]
+pub enum RValue {
+    /// Like `#11`
+    Entity(String),
+    /// Like `@11`
+    Value(String),
+    /// Like `#CONST_ENTITY`
+    ConstantEntity(String),
+    /// Like `@CONST_VALUE`
+    ConstantValue(String),
 }
 
 /// entity_instance_name = `#` ( [digit] ) { [digit] } .
@@ -101,19 +125,32 @@ pub fn constant_value_name(input: &str) -> ParseResult<String> {
 }
 
 /// lhs_occurrence_name = ( [entity_instance_name] | [value_instance_name] ) .
-pub fn lhs_occurrence_name(input: &str) -> ParseResult<String> {
-    alt((entity_instance_name, value_instance_name)).parse(input)
+pub fn lhs_occurrence_name(input: &str) -> ParseResult<LValue> {
+    alt((
+        entity_instance_name.map(|e| LValue::Entity(e)),
+        value_instance_name.map(|v| LValue::Value(v)),
+    ))
+    .parse(input)
 }
 
 /// rhs_occurrence_name = ( [entity_instance_name] | [value_instance_name] | [constant_entity_name] | [constant_value_name]) .
-pub fn rhs_occurrence_name(input: &str) -> ParseResult<String> {
+pub fn rhs_occurrence_name(input: &str) -> ParseResult<RValue> {
     alt((
-        entity_instance_name,
-        value_instance_name,
-        constant_entity_name,
-        constant_value_name,
+        entity_instance_name.map(|e| RValue::Entity(e)),
+        value_instance_name.map(|v| RValue::Value(v)),
+        constant_entity_name.map(|e| RValue::ConstantEntity(e)),
+        constant_value_name.map(|v| RValue::ConstantValue(v)),
     ))
     .parse(input)
+}
+
+/// anchor_name = `<` URI_FRAGMENT_IDENTIFIER `>` .
+///
+/// Parse as string, without validating as URI fragment identifier
+pub fn anchor_name(input: &str) -> ParseResult<String> {
+    tuple((char('<'), many0(none_of(">")), char('>')))
+        .map(|(_start, s, _end)| s.iter().collect())
+        .parse(input)
 }
 
 /// keyword = [user_defined_keyword] | [standard_keyword] .
@@ -145,6 +182,14 @@ pub fn tag_name(input: &str) -> ParseResult<String> {
             let head = &[first];
             head.iter().chain(tail.iter()).collect()
         })
+        .parse(input)
+}
+
+/// signature_content = BASE64 .
+pub fn signature_content(input: &str) -> ParseResult<String> {
+    let base_char = satisfy(|c| matches!(c, '0'..='9' | 'a'..='z' | 'A'..='Z' | '+' | '/' | '='));
+    many1(base_char)
+        .map(|chars| chars.iter().collect())
         .parse(input)
 }
 
