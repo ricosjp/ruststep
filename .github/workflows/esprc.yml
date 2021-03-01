@@ -1,0 +1,24 @@
+name: esprc
+
+on:
+  push:
+    branches:
+      - master
+  pull_request: {}
+
+jobs:
+  parse-ap201:
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v1
+    - uses: actions-rs/cargo@v1
+      with:
+        command: run --bin esprc -- ./schemas/APs/10303-201-aim-long.exp --check
+
+  parse-ap203:
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v1
+    - uses: actions-rs/cargo@v1
+      with:
+        command: run --bin esprc -- ./schemas/APs/10303-203-aim-long.exp --check
