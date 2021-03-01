@@ -52,8 +52,8 @@ pub fn typed_parameter(input: &str) -> ParseResult<Parameter> {
 pub fn untyped_parameter(input: &str) -> ParseResult<Parameter> {
     alt((
         char_('$').map(|_| UntypedParameter::NotProvided),
-        integer.map(|val| UntypedParameter::Integer(val)),
         real.map(|val| UntypedParameter::Real(val)),
+        integer.map(|val| UntypedParameter::Integer(val)),
         string.map(|val| UntypedParameter::String(val)),
         rhs_occurrence_name.map(|val| UntypedParameter::RValue(val)),
         enumeration.map(|val| UntypedParameter::Enumeration(val)),

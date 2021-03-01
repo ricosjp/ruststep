@@ -94,7 +94,7 @@ mod tests {
 
     #[test]
     fn simple_recode1() {
-        let (res, record) = super::simple_record("A(1, 2)").finish().unwrap();
+        let (res, record) = super::simple_record("A(1, 2.0)").finish().unwrap();
         dbg!(record);
         assert_eq!(res, "");
     }
