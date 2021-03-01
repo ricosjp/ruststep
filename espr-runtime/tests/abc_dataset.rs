@@ -26,9 +26,24 @@ fn format_example() -> anyhow::Result<String> {
 }
 
 #[test]
-fn abc_dataset_data() -> anyhow::Result<()> {
-    for line in format_example()?.lines() {
-        dbg!(line);
+fn abc_dataset_data_line() -> anyhow::Result<()> {
+    let mut failed = false;
+    for line in format_example()?
+        .lines()
+        .skip(7 /* lines before DATA; */)
+        .take(1671 /* lines in DATA secition */)
+    {
+        match parser::exchange::entity_instance(line).finish() {
+            Ok(_) => continue,
+            Err(err) => {
+                dbg!(line);
+                dbg!(err);
+                failed = true;
+            }
+        }
+    }
+    if failed {
+        anyhow::bail!("Parse failed");
     }
     Ok(())
 }
