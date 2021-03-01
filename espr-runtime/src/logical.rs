@@ -75,7 +75,7 @@ impl BitAnd<&Logical> for Logical {
     type Output = Logical;
     #[inline(always)]
     fn bitand(self, other: &Logical) -> Logical {
-        &self & *other
+        self & *other
     }
 }
 
