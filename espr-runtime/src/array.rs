@@ -58,7 +58,7 @@ impl<'a, T, E: AsRef<[T]>> IntoIterator for &'a Array<T, E> {
     type IntoIter = std::slice::Iter<'a, T>;
     #[inline(always)]
     fn into_iter(self) -> Self::IntoIter {
-        self.as_ref().into_iter()
+        self.as_ref().iter()
     }
 }
 
@@ -67,7 +67,7 @@ impl<'a, T, E: AsMut<[T]>> IntoIterator for &'a mut Array<T, E> {
     type IntoIter = std::slice::IterMut<'a, T>;
     #[inline(always)]
     fn into_iter(self) -> Self::IntoIter {
-        self.as_mut().into_iter()
+        self.as_mut().iter_mut()
     }
 }
 

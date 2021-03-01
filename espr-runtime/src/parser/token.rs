@@ -127,8 +127,8 @@ pub fn constant_value_name(input: &str) -> ParseResult<String> {
 /// lhs_occurrence_name = ( [entity_instance_name] | [value_instance_name] ) .
 pub fn lhs_occurrence_name(input: &str) -> ParseResult<LValue> {
     alt((
-        entity_instance_name.map(|e| LValue::Entity(e)),
-        value_instance_name.map(|v| LValue::Value(v)),
+        entity_instance_name.map(LValue::Entity),
+        value_instance_name.map(LValue::Value),
     ))
     .parse(input)
 }
@@ -136,10 +136,10 @@ pub fn lhs_occurrence_name(input: &str) -> ParseResult<LValue> {
 /// rhs_occurrence_name = ( [entity_instance_name] | [value_instance_name] | [constant_entity_name] | [constant_value_name]) .
 pub fn rhs_occurrence_name(input: &str) -> ParseResult<RValue> {
     alt((
-        entity_instance_name.map(|e| RValue::Entity(e)),
-        value_instance_name.map(|v| RValue::Value(v)),
-        constant_entity_name.map(|e| RValue::ConstantEntity(e)),
-        constant_value_name.map(|v| RValue::ConstantValue(v)),
+        entity_instance_name.map(RValue::Entity),
+        value_instance_name.map(RValue::Value),
+        constant_entity_name.map(RValue::ConstantEntity),
+        constant_value_name.map(RValue::ConstantValue),
     ))
     .parse(input)
 }

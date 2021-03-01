@@ -52,15 +52,15 @@ pub fn typed_parameter(input: &str) -> ParseResult<Parameter> {
 pub fn untyped_parameter(input: &str) -> ParseResult<Parameter> {
     alt((
         char_('$').map(|_| UntypedParameter::NotProvided),
-        real.map(|val| UntypedParameter::Real(val)),
-        integer.map(|val| UntypedParameter::Integer(val)),
-        string.map(|val| UntypedParameter::String(val)),
-        rhs_occurrence_name.map(|val| UntypedParameter::RValue(val)),
-        enumeration.map(|val| UntypedParameter::Enumeration(val)),
+        real.map(UntypedParameter::Real),
+        integer.map(UntypedParameter::Integer),
+        string.map(UntypedParameter::String),
+        rhs_occurrence_name.map(UntypedParameter::RValue),
+        enumeration.map(UntypedParameter::Enumeration),
         // FIXME binary
         list,
     ))
-    .map(|untyped| Parameter::Untyped(untyped))
+    .map(Parameter::Untyped)
     .parse(input)
 }
 
