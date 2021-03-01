@@ -87,3 +87,26 @@ pub fn subsuper_record(input: &str) -> ParseResult<Vec<Record>> {
         .map(|(_open, records, _close)| records)
         .parse(input)
 }
+
+#[cfg(test)]
+mod tests {
+    use nom::Finish;
+
+    #[test]
+    fn simple_recode1() {
+        let (res, record) = super::simple_record("A(1, 2)").finish().unwrap();
+        dbg!(record);
+        assert_eq!(res, "");
+    }
+
+    #[test]
+    fn simple_recode2() {
+        let (res, record) = super::simple_record(
+            "LENGTH_MEASURE_WITH_UNIT( LENGTH_MEASURE( 1.00000000000000 ), #359 )",
+        )
+        .finish()
+        .unwrap();
+        dbg!(record);
+        assert_eq!(res, "");
+    }
+}
