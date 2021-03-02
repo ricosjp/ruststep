@@ -5,24 +5,15 @@ pub mod combinator;
 pub mod exchange;
 pub mod token;
 
-use std::fmt;
+use crate::error::*;
+use nom::Finish;
 
-#[derive(Debug)]
-pub struct ParseError {
-    errors: Vec<String>,
-}
-
-impl fmt::Display for ParseError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        for error in &self.errors {
-            write!(f, "{}", error)?;
+pub fn parse(input: &str) -> Result<exchange::Exchange> {
+    match exchange::exchange_file(input).finish() {
+        Ok((_residual, ex)) => Ok(ex),
+        Err(e) => {
+            let error = nom::error::convert_error(input, e);
+            Err(Error::ParseFailed(error))
         }
-        Ok(())
     }
-}
-
-impl std::error::Error for ParseError {}
-
-pub fn parse(input: &str) -> Result<exchange::Exchange, ParseError> {
-    todo!()
 }
