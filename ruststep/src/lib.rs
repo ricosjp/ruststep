@@ -9,5 +9,7 @@
 //! [ARCHITECTURE]: https://github.com/ricosjp/ruststep/blob/master/ARCHITECTURE.md
 //!
 
+#![deny(broken_intra_doc_links)]
+
 pub mod parser;
 pub mod primitive;
