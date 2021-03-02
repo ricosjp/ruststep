@@ -1,7 +1,7 @@
 //! Integration test for parsing STEP file downloaded from ABC Dataset
 
-use espr_runtime::parser;
 use nom::Finish;
+use ruststep::parser;
 use std::{fs, path::*};
 
 #[test]
