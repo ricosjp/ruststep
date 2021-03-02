@@ -11,5 +11,6 @@
 
 #![deny(broken_intra_doc_links)]
 
+pub mod error;
 pub mod parser;
 pub mod primitive;
