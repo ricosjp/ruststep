@@ -107,7 +107,6 @@ impl From<Logical> for Option<bool> {
 
 impl BitAnd for Logical {
     type Output = Self;
-    #[inline(always)]
     fn bitand(self, other: Self) -> Self {
         match (self, other) {
             (Logical::False, _) => Logical::False,
@@ -121,7 +120,6 @@ impl BitAnd for Logical {
 
 impl BitOr for Logical {
     type Output = Self;
-    #[inline(always)]
     fn bitor(self, other: Self) -> Self {
         match (self, other) {
             (Logical::True, _) => Logical::True,
@@ -135,7 +133,6 @@ impl BitOr for Logical {
 
 impl BitXor for Logical {
     type Output = Logical;
-    #[inline(always)]
     fn bitxor(self, other: Self) -> Logical {
         match (self, other) {
             (Logical::Unknown, _) => Logical::Unknown,
@@ -147,7 +144,6 @@ impl BitXor for Logical {
 
 impl Not for Logical {
     type Output = Logical;
-    #[inline(always)]
     fn not(self) -> Logical {
         match self {
             Logical::True => Logical::False,
