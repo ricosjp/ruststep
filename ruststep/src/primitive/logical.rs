@@ -119,30 +119,6 @@ impl BitAnd for Logical {
     }
 }
 
-impl BitAnd<&Logical> for Logical {
-    type Output = Logical;
-    #[inline(always)]
-    fn bitand(self, other: &Logical) -> Logical {
-        self & *other
-    }
-}
-
-impl BitAnd<Logical> for &Logical {
-    type Output = Logical;
-    #[inline(always)]
-    fn bitand(self, other: Logical) -> Logical {
-        *self & other
-    }
-}
-
-impl BitAnd for &Logical {
-    type Output = Logical;
-    #[inline(always)]
-    fn bitand(self, other: &Logical) -> Logical {
-        *self & *other
-    }
-}
-
 impl BitOr for Logical {
     type Output = Self;
     #[inline(always)]
@@ -154,30 +130,6 @@ impl BitOr for Logical {
             (_, Logical::Unknown) => Logical::Unknown,
             (Logical::False, Logical::False) => Logical::False,
         }
-    }
-}
-
-impl BitOr<&Logical> for Logical {
-    type Output = Logical;
-    #[inline(always)]
-    fn bitor(self, other: &Logical) -> Logical {
-        self | *other
-    }
-}
-
-impl BitOr<Logical> for &Logical {
-    type Output = Logical;
-    #[inline(always)]
-    fn bitor(self, other: Logical) -> Logical {
-        *self | other
-    }
-}
-
-impl BitOr for &Logical {
-    type Output = Logical;
-    #[inline(always)]
-    fn bitor(self, other: &Logical) -> Logical {
-        *self | *other
     }
 }
 
@@ -193,30 +145,6 @@ impl BitXor for Logical {
     }
 }
 
-impl BitXor<&Logical> for Logical {
-    type Output = Logical;
-    #[inline(always)]
-    fn bitxor(self, other: &Logical) -> Logical {
-        self ^ *other
-    }
-}
-
-impl BitXor<Logical> for &Logical {
-    type Output = Logical;
-    #[inline(always)]
-    fn bitxor(self, other: Logical) -> Logical {
-        *self ^ other
-    }
-}
-
-impl BitXor for &Logical {
-    type Output = Logical;
-    #[inline(always)]
-    fn bitxor(self, other: &Logical) -> Logical {
-        *self ^ *other
-    }
-}
-
 impl Not for Logical {
     type Output = Logical;
     #[inline(always)]
@@ -226,13 +154,5 @@ impl Not for Logical {
             Logical::Unknown => Logical::Unknown,
             Logical::False => Logical::True,
         }
-    }
-}
-
-impl Not for &Logical {
-    type Output = Logical;
-    #[inline(always)]
-    fn not(self) -> Logical {
-        !*self
     }
 }
