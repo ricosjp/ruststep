@@ -1,13 +1,4 @@
 //! Parser for tokens defined in the table 2 of ISO-10303-21
-//!
-//! TODO
-//! -----
-//! Implement followings:
-//!
-//! ```text
-//! HEX               = `0` | `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8` | `9` | `A` | `B` | `C` | `D` | `E` | `F` .
-//! BINARY            = ```` ( `0` | `1` | `2` | `3` ) { HEX } ```` .
-//! ```
 
 use super::{basic::*, combinator::*};
 use nom::{
