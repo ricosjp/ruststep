@@ -1,6 +1,5 @@
 [workspace]
 members = [
-  "espr-runtime",
   "espr",
   "ruststep",
 ]

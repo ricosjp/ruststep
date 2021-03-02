@@ -44,7 +44,7 @@ impl From<Option<bool>> for Logical {
 
 impl From<Logical> for Option<bool> {
     /// ```
-    /// use espr_runtime::Logical;
+    /// use ruststep::Logical;
     /// assert_eq!(Option::<bool>::from(Logical::False), Some(false));
     /// assert_eq!(Option::<bool>::from(Logical::Unknown), None);
     /// assert_eq!(Option::<bool>::from(Logical::True), Some(true));
