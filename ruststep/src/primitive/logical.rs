@@ -43,12 +43,6 @@ impl From<Option<bool>> for Logical {
 }
 
 impl From<Logical> for Option<bool> {
-    /// ```
-    /// use ruststep::Logical;
-    /// assert_eq!(Option::<bool>::from(Logical::False), Some(false));
-    /// assert_eq!(Option::<bool>::from(Logical::Unknown), None);
-    /// assert_eq!(Option::<bool>::from(Logical::True), Some(true));
-    /// ```
     fn from(l: Logical) -> Option<bool> {
         match l {
             Logical::Unknown => None,
@@ -189,48 +183,60 @@ impl Not for &Logical {
     }
 }
 
-#[test]
-fn and_test() {
-    assert_eq!(Logical::True & Logical::True, Logical::True);
-    assert_eq!(&Logical::True & Logical::Unknown, Logical::Unknown);
-    assert_eq!(Logical::True & &Logical::False, Logical::False);
-    assert_eq!(&Logical::Unknown & &Logical::True, Logical::Unknown);
-    assert_eq!(Logical::Unknown & Logical::Unknown, Logical::Unknown);
-    assert_eq!(&Logical::Unknown & Logical::False, Logical::False);
-    assert_eq!(Logical::False & &Logical::True, Logical::False);
-    assert_eq!(&Logical::False & &Logical::Unknown, Logical::False);
-    assert_eq!(Logical::False & Logical::False, Logical::False);
-}
+#[cfg(test)]
+mod tests {
+    use super::*;
 
-#[test]
-fn or_test() {
-    assert_eq!(Logical::True | Logical::True, Logical::True);
-    assert_eq!(&Logical::True | Logical::Unknown, Logical::True);
-    assert_eq!(Logical::True | &Logical::False, Logical::True);
-    assert_eq!(&Logical::Unknown | &Logical::True, Logical::True);
-    assert_eq!(Logical::Unknown | Logical::Unknown, Logical::Unknown);
-    assert_eq!(&Logical::Unknown | Logical::False, Logical::Unknown);
-    assert_eq!(Logical::False | &Logical::True, Logical::True);
-    assert_eq!(&Logical::False | &Logical::Unknown, Logical::Unknown);
-    assert_eq!(Logical::False | Logical::False, Logical::False);
-}
+    #[test]
+    fn from_opt_bool() {
+        assert_eq!(Option::<bool>::from(Logical::False), Some(false));
+        assert_eq!(Option::<bool>::from(Logical::Unknown), None);
+        assert_eq!(Option::<bool>::from(Logical::True), Some(true));
+    }
 
-#[test]
-fn xor_test() {
-    assert_eq!(Logical::True ^ Logical::True, Logical::False);
-    assert_eq!(&Logical::True ^ Logical::Unknown, Logical::Unknown);
-    assert_eq!(Logical::True ^ &Logical::False, Logical::True);
-    assert_eq!(&Logical::Unknown ^ &Logical::True, Logical::Unknown);
-    assert_eq!(Logical::Unknown ^ Logical::Unknown, Logical::Unknown);
-    assert_eq!(&Logical::Unknown ^ Logical::False, Logical::Unknown);
-    assert_eq!(Logical::False ^ &Logical::True, Logical::True);
-    assert_eq!(&Logical::False ^ &Logical::Unknown, Logical::Unknown);
-    assert_eq!(Logical::False ^ Logical::False, Logical::False);
-}
+    #[test]
+    fn and_test() {
+        assert_eq!(Logical::True & Logical::True, Logical::True);
+        assert_eq!(&Logical::True & Logical::Unknown, Logical::Unknown);
+        assert_eq!(Logical::True & &Logical::False, Logical::False);
+        assert_eq!(&Logical::Unknown & &Logical::True, Logical::Unknown);
+        assert_eq!(Logical::Unknown & Logical::Unknown, Logical::Unknown);
+        assert_eq!(&Logical::Unknown & Logical::False, Logical::False);
+        assert_eq!(Logical::False & &Logical::True, Logical::False);
+        assert_eq!(&Logical::False & &Logical::Unknown, Logical::False);
+        assert_eq!(Logical::False & Logical::False, Logical::False);
+    }
 
-#[test]
-fn not_test() {
-    assert_eq!(!Logical::True, Logical::False);
-    assert_eq!(!Logical::Unknown, Logical::Unknown);
-    assert_eq!(!&Logical::False, Logical::True);
+    #[test]
+    fn or_test() {
+        assert_eq!(Logical::True | Logical::True, Logical::True);
+        assert_eq!(&Logical::True | Logical::Unknown, Logical::True);
+        assert_eq!(Logical::True | &Logical::False, Logical::True);
+        assert_eq!(&Logical::Unknown | &Logical::True, Logical::True);
+        assert_eq!(Logical::Unknown | Logical::Unknown, Logical::Unknown);
+        assert_eq!(&Logical::Unknown | Logical::False, Logical::Unknown);
+        assert_eq!(Logical::False | &Logical::True, Logical::True);
+        assert_eq!(&Logical::False | &Logical::Unknown, Logical::Unknown);
+        assert_eq!(Logical::False | Logical::False, Logical::False);
+    }
+
+    #[test]
+    fn xor_test() {
+        assert_eq!(Logical::True ^ Logical::True, Logical::False);
+        assert_eq!(&Logical::True ^ Logical::Unknown, Logical::Unknown);
+        assert_eq!(Logical::True ^ &Logical::False, Logical::True);
+        assert_eq!(&Logical::Unknown ^ &Logical::True, Logical::Unknown);
+        assert_eq!(Logical::Unknown ^ Logical::Unknown, Logical::Unknown);
+        assert_eq!(&Logical::Unknown ^ Logical::False, Logical::Unknown);
+        assert_eq!(Logical::False ^ &Logical::True, Logical::True);
+        assert_eq!(&Logical::False ^ &Logical::Unknown, Logical::Unknown);
+        assert_eq!(Logical::False ^ Logical::False, Logical::False);
+    }
+
+    #[test]
+    fn not_test() {
+        assert_eq!(!Logical::True, Logical::False);
+        assert_eq!(!Logical::Unknown, Logical::Unknown);
+        assert_eq!(!&Logical::False, Logical::True);
+    }
 }
