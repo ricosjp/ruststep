@@ -8,6 +8,7 @@ edition = "2018"
 
 [dependencies]
 nom = "6.1.0"
+thiserror = "1.0.24"
 
 [dev-dependencies]
 anyhow = "1.0"
