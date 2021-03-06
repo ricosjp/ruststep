@@ -15,5 +15,4 @@ pub mod error;
 pub mod parser;
 pub mod primitive;
 
-#[cfg(test)]
-mod example_test_schema;
+pub mod example_test_schema;

@@ -1,49 +1,74 @@
 //! Experimental schema definitions corresponding following EXPRESS Schema
 //!
-//! ```
-//! ENTITY a;
-//!   x: INTEGER;
-//!   y: INTEGER;
-//! END_ENTITY;
+//! ```text
+//! SCHEMA ap000;
+//!   ENTITY a;
+//!     x: INTEGER;
+//!     y: INTEGER;
+//!   END_ENTITY;
 //!
-//! ENTITY b;
-//!   z: INTEGER;
-//!   w: a;
-//! END_ENTITY;
+//!   ENTITY b;
+//!     z: INTEGER;
+//!     w: a;
+//!   END_ENTITY;
+//! END_SCHEMA;
 //! ```
 
-use std::marker::PhantomData;
+use std::collections::HashMap;
 
-pub trait Table {
-    type Entity: Sized;
+type Table<T> = HashMap<usize, T>;
+
+#[derive(Debug)]
+pub struct Ap000 {
+    a: Table<A>,
+    b: Table<B>,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
-pub struct Index<Entity> {
-    index: usize,
-    marker: PhantomData<Entity>,
-}
+impl Ap000 {
+    pub fn a_iter(&self) -> impl Iterator<Item = (&usize, &A)> {
+        self.a.iter()
+    }
 
-impl<Entity> Index<Entity> {
-    pub fn get<'table>(&self, table: &'table impl Table<Entity = Entity>) -> &'table Entity {
-        todo!()
+    pub fn b_iter(&self) -> impl Iterator<Item = (&usize, BRef)> {
+        self.b
+            .iter()
+            .map(move |(id, B { z, w })| (id, BRef { z, w: &self.a[w] }))
+    }
+
+    pub fn b_get(&self, id: usize) -> BRef {
+        let B { z, w } = &self.b[&id];
+        BRef { z, w: &self.a[w] }
+    }
+
+    pub fn b_get_mut(&mut self, id: usize) -> BMut {
+        let B { z, w } = self.b.get_mut(&id).unwrap();
+        BMut {
+            z,
+            w: self.a.get_mut(w).unwrap(),
+        }
     }
 }
 
-/* ENTITY a */
-
-#[derive(Debug, Clone, PartialEq, Hash)]
+#[derive(Debug, PartialEq, Hash)]
 pub struct A {
     x: u64,
     y: u64,
 }
 
-#[derive(Debug, Clone, PartialEq)]
-pub struct TableA {
-    x: Vec<u64>,
-    y: Vec<u64>,
+#[derive(Debug, PartialEq, Hash)]
+pub struct B {
+    z: u64,
+    w: usize, // ref to A
 }
 
-impl Table for TableA {
-    type Entity = A;
+#[derive(Debug, PartialEq, Hash)]
+pub struct BRef<'schema> {
+    z: &'schema u64,
+    w: &'schema A,
+}
+
+#[derive(Debug, PartialEq, Hash)]
+pub struct BMut<'schema> {
+    z: &'schema mut u64,
+    w: &'schema mut A,
 }
