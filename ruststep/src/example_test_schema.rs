@@ -30,22 +30,31 @@ impl Ap000 {
     }
 
     pub fn b_iter(&self) -> impl Iterator<Item = (&usize, BRef)> {
-        self.b
-            .iter()
-            .map(move |(id, B { z, w })| (id, BRef { z, w: &self.a[w] }))
+        self.b.iter().map(move |(id, B { z, w })| {
+            (
+                id,
+                BRef {
+                    z,
+                    w: self.a.get(w).unwrap(),
+                },
+            )
+        })
     }
 
-    pub fn b_get(&self, id: usize) -> BRef {
-        let B { z, w } = &self.b[&id];
-        BRef { z, w: &self.a[w] }
+    pub fn b_get(&self, id: usize) -> Option<BRef> {
+        let B { z, w } = &self.b.get(&id)?;
+        Some(BRef {
+            z,
+            w: self.a.get(w).unwrap(),
+        })
     }
 
-    pub fn b_get_mut(&mut self, id: usize) -> BMut {
-        let B { z, w } = self.b.get_mut(&id).unwrap();
-        BMut {
+    pub fn b_get_mut(&mut self, id: usize) -> Option<BMut> {
+        let B { z, w } = self.b.get_mut(&id)?;
+        Some(BMut {
             z,
             w: self.a.get_mut(w).unwrap(),
-        }
+        })
     }
 }
 
@@ -56,7 +65,7 @@ pub struct A {
 }
 
 #[derive(Debug, PartialEq, Hash)]
-pub struct B {
+struct B {
     z: u64,
     w: usize, // ref to A
 }
