@@ -11,6 +11,11 @@
 //!     z: INTEGER;
 //!     w: a;
 //!   END_ENTITY;
+//!
+//!   ENTITY c;
+//!     p: a;
+//!     q: b;
+//!   END_ENTITY;
 //! END_SCHEMA;
 //! ```
 
@@ -22,6 +27,7 @@ type Table<T> = HashMap<usize, T>;
 pub struct Ap000 {
     a: Table<A>,
     b: Table<BEntry>,
+    c: Table<CEntry>,
 }
 
 impl Ap000 {
@@ -29,11 +35,28 @@ impl Ap000 {
         self.a.iter().map(|(_id, a)| a)
     }
 
-    pub fn b_iter(&self) -> impl Iterator<Item = BRef> {
-        self.b.iter().map(move |(_id, BEntry { z, w })| BRef {
+    fn b_ref<'s, 'e: 's>(&'s self, entry: &'e BEntry) -> BRef<'s> {
+        let BEntry { z, w } = entry;
+        BRef {
             z,
             w: self.a.get(w).unwrap(),
-        })
+        }
+    }
+
+    pub fn b_iter(&self) -> impl Iterator<Item = BRef> {
+        self.b.iter().map(move |(_id, entry)| self.b_ref(entry))
+    }
+
+    fn c_ref<'s, 'e: 's>(&'s self, entry: &'e CEntry) -> CRef<'s> {
+        let CEntry { p, q } = entry;
+        CRef {
+            p: self.a.get(p).unwrap(),
+            q: self.b_ref(&self.b.get(q).unwrap()),
+        }
+    }
+
+    pub fn c_iter(&self) -> impl Iterator<Item = CRef> {
+        self.c.iter().map(move |(_id, entry)| self.c_ref(entry))
     }
 }
 
@@ -42,6 +65,8 @@ pub struct A {
     pub x: u64,
     pub y: u64,
 }
+
+/* ENTITY b */
 
 #[derive(Debug, Clone, PartialEq, Hash)]
 pub struct B {
@@ -74,6 +99,43 @@ impl<'schema> BRef<'schema> {
         B {
             z: self.z.clone(),
             w: self.w.clone(),
+        }
+    }
+}
+
+/* ENTITY b */
+
+#[derive(Debug, Clone, PartialEq, Hash)]
+pub struct C {
+    pub p: A,
+    pub q: B,
+}
+
+#[derive(Debug, PartialEq, Hash)]
+struct CEntry {
+    p: usize, // ref to A
+    q: usize, // ref to B
+}
+
+/// Element-wise immutable reference to [C]
+#[derive(Debug, Clone, PartialEq, Hash)]
+pub struct CRef<'schema> {
+    pub p: &'schema A,
+    pub q: BRef<'schema>,
+}
+
+impl<'schema> From<&'schema C> for CRef<'schema> {
+    fn from(c: &'schema C) -> Self {
+        let C { p, q } = c;
+        CRef { p, q: q.into() }
+    }
+}
+
+impl<'schema> CRef<'schema> {
+    pub fn to_owned(&self) -> C {
+        C {
+            p: self.p.clone(),
+            q: self.q.to_owned(),
         }
     }
 }
