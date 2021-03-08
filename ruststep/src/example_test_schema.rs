@@ -39,8 +39,8 @@ impl<T: 'static> Eq for Id<T> {}
 
 pub trait Entity<'rf> {
     type Schema;
-    type Entry;
-    type Ref: 'rf + Reference<Entity = Self>;
+    type Entry: TableEntry<'rf, Schema = Self::Schema>;
+    type Ref: 'rf + EntityRef<Entity = Self>;
 
     fn iter<'schema: 'rf>(
         schema: &'schema Self::Schema,
@@ -49,7 +49,7 @@ pub trait Entity<'rf> {
 
 pub trait TableEntry<'rf> {
     type Schema;
-    type Ref: 'rf + Reference;
+    type Ref: 'rf + EntityRef;
 
     fn as_ref<'schema: 'rf, 'entity: 'rf>(
         &'entity self,
@@ -57,7 +57,7 @@ pub trait TableEntry<'rf> {
     ) -> Self::Ref;
 }
 
-pub trait Reference {
+pub trait EntityRef {
     type Entity;
     fn to_instance(&self) -> Self::Entity;
 }
@@ -127,7 +127,7 @@ impl<'rf> TableEntry<'rf> for AEntry {
     }
 }
 
-impl<'schema> Reference for ARef<'schema> {
+impl<'schema> EntityRef for ARef<'schema> {
     type Entity = A;
     fn to_instance(&self) -> A {
         A {
@@ -186,7 +186,7 @@ impl<'rf> TableEntry<'rf> for BEntry {
     }
 }
 
-impl<'schema> Reference for BRef<'schema> {
+impl<'schema> EntityRef for BRef<'schema> {
     type Entity = B;
     fn to_instance(&self) -> B {
         B {
@@ -245,7 +245,7 @@ impl<'rf> TableEntry<'rf> for CEntry {
     }
 }
 
-impl<'schema> Reference for CRef<'schema> {
+impl<'schema> EntityRef for CRef<'schema> {
     type Entity = C;
     fn to_instance(&self) -> C {
         C {
