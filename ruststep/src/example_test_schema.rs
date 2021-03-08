@@ -60,26 +60,6 @@ pub trait Entity<'rf> {
     ) -> Box<dyn Iterator<Item = Self::Ref> + 'rf>;
 }
 
-impl<'rf> Entity<'rf> for A {
-    type Schema = Ap000;
-    type Entry = AEntry;
-    type Ref = ARef<'rf>;
-
-    fn as_ref<'schema: 'rf, 'entity: 'rf>(
-        _schema: &'schema Self::Schema,
-        entry: &'entity Self::Entry,
-    ) -> Self::Ref {
-        let AEntry { x, y } = entry;
-        ARef { x, y }
-    }
-
-    fn iter<'schema: 'rf>(
-        schema: &'schema Self::Schema,
-    ) -> Box<dyn Iterator<Item = Self::Ref> + 'rf> {
-        Box::new(schema.a.iter().map(move |(_id, a)| Self::as_ref(schema, a)))
-    }
-}
-
 #[derive(Debug)]
 pub struct Ap000 {
     a: Table<AEntry>,
@@ -141,6 +121,26 @@ pub struct ARef<'schema> {
     pub y: &'schema u64,
 }
 
+impl<'rf> Entity<'rf> for A {
+    type Schema = Ap000;
+    type Entry = AEntry;
+    type Ref = ARef<'rf>;
+
+    fn as_ref<'schema: 'rf, 'entity: 'rf>(
+        _schema: &'schema Self::Schema,
+        entry: &'entity Self::Entry,
+    ) -> Self::Ref {
+        let AEntry { x, y } = entry;
+        ARef { x, y }
+    }
+
+    fn iter<'schema: 'rf>(
+        schema: &'schema Self::Schema,
+    ) -> Box<dyn Iterator<Item = Self::Ref> + 'rf> {
+        Box::new(schema.a.iter().map(move |(_id, a)| Self::as_ref(schema, a)))
+    }
+}
+
 impl<'schema> ToInstance for ARef<'schema> {
     type Entity = A;
     fn to_instance(&self) -> A {
@@ -160,7 +160,7 @@ pub struct B {
 }
 
 #[derive(Debug, PartialEq, Hash)]
-struct BEntry {
+pub struct BEntry {
     z: u64,
     w: Id<AEntry>,
 }
@@ -170,6 +170,29 @@ struct BEntry {
 pub struct BRef<'schema> {
     pub z: &'schema u64,
     pub w: ARef<'schema>,
+}
+
+impl<'rf> Entity<'rf> for B {
+    type Schema = Ap000;
+    type Entry = BEntry;
+    type Ref = BRef<'rf>;
+
+    fn as_ref<'schema: 'rf, 'entity: 'rf>(
+        schema: &'schema Self::Schema,
+        entry: &'entity Self::Entry,
+    ) -> Self::Ref {
+        let BEntry { z, w } = entry;
+        BRef {
+            z,
+            w: A::as_ref(schema, schema.a.get(w).unwrap()),
+        }
+    }
+
+    fn iter<'schema: 'rf>(
+        schema: &'schema Self::Schema,
+    ) -> Box<dyn Iterator<Item = Self::Ref> + 'rf> {
+        Box::new(schema.b.iter().map(move |(_id, b)| Self::as_ref(schema, b)))
+    }
 }
 
 impl<'schema> ToInstance for BRef<'schema> {
@@ -191,7 +214,7 @@ pub struct C {
 }
 
 #[derive(Debug, PartialEq, Hash)]
-struct CEntry {
+pub struct CEntry {
     p: Id<AEntry>,
     q: Id<BEntry>,
 }
@@ -201,6 +224,29 @@ struct CEntry {
 pub struct CRef<'schema> {
     pub p: ARef<'schema>,
     pub q: BRef<'schema>,
+}
+
+impl<'rf> Entity<'rf> for C {
+    type Schema = Ap000;
+    type Entry = CEntry;
+    type Ref = CRef<'rf>;
+
+    fn as_ref<'schema: 'rf, 'entity: 'rf>(
+        schema: &'schema Self::Schema,
+        entry: &'entity Self::Entry,
+    ) -> Self::Ref {
+        let CEntry { p, q } = entry;
+        CRef {
+            p: A::as_ref(schema, schema.a.get(p).unwrap()),
+            q: B::as_ref(schema, schema.b.get(q).unwrap()),
+        }
+    }
+
+    fn iter<'schema: 'rf>(
+        schema: &'schema Self::Schema,
+    ) -> Box<dyn Iterator<Item = Self::Ref> + 'rf> {
+        Box::new(schema.c.iter().map(move |(_id, c)| Self::as_ref(schema, c)))
+    }
 }
 
 impl<'schema> ToInstance for CRef<'schema> {
