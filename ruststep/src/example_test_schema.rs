@@ -54,6 +54,10 @@ pub trait Entity<'rf> {
         schema: &'schema Self::Schema,
         entry: &'entity Self::Entry,
     ) -> Self::Ref;
+
+    fn iter<'schema: 'rf>(
+        schema: &'schema Self::Schema,
+    ) -> Box<dyn Iterator<Item = Self::Ref> + 'rf>;
 }
 
 impl<'rf> Entity<'rf> for A {
@@ -67,6 +71,12 @@ impl<'rf> Entity<'rf> for A {
     ) -> Self::Ref {
         let AEntry { x, y } = entry;
         ARef { x, y }
+    }
+
+    fn iter<'schema: 'rf>(
+        schema: &'schema Self::Schema,
+    ) -> Box<dyn Iterator<Item = Self::Ref> + 'rf> {
+        Box::new(schema.a.iter().map(move |(_id, a)| Self::as_ref(schema, a)))
     }
 }
 
