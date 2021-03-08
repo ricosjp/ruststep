@@ -23,6 +23,14 @@ use std::collections::HashMap;
 
 type Table<T> = HashMap<usize, T>;
 
+/// Similar to [ToOwned], but not assure that `Instance: Borrow<Self>`.
+///
+/// [ToOwned]: https://doc.rust-lang.org/std/borrow/trait.ToOwned.html
+pub trait ToInstance {
+    type Entity;
+    fn to_instance(&self) -> Self::Entity;
+}
+
 #[derive(Debug)]
 pub struct Ap000 {
     a: Table<A>,
@@ -94,8 +102,9 @@ impl<'schema> From<&'schema B> for BRef<'schema> {
     }
 }
 
-impl<'schema> BRef<'schema> {
-    pub fn to_owned(&self) -> B {
+impl<'schema> ToInstance for BRef<'schema> {
+    type Entity = B;
+    fn to_instance(&self) -> B {
         B {
             z: self.z.clone(),
             w: self.w.clone(),
@@ -131,11 +140,12 @@ impl<'schema> From<&'schema C> for CRef<'schema> {
     }
 }
 
-impl<'schema> CRef<'schema> {
-    pub fn to_owned(&self) -> C {
+impl<'schema> ToInstance for CRef<'schema> {
+    type Entity = C;
+    fn to_instance(&self) -> C {
         C {
             p: self.p.clone(),
-            q: self.q.to_owned(),
+            q: self.q.to_instance(),
         }
     }
 }
