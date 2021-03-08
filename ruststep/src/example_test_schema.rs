@@ -21,7 +21,7 @@
 
 use std::collections::HashMap;
 
-type Table<T> = HashMap<usize, T>;
+type Table<T> = HashMap<Id<T>, T>;
 
 /// Similar to [ToOwned], but not assure that `Instance: Borrow<Self>`.
 ///
@@ -30,6 +30,20 @@ pub trait ToInstance {
     type Entity;
     fn to_instance(&self) -> Self::Entity;
 }
+
+#[derive(Debug, Hash)]
+pub struct Id<T: 'static> {
+    id: usize,
+    phantom: std::marker::PhantomData<&'static T>,
+}
+
+impl<T: 'static> PartialEq for Id<T> {
+    fn eq(&self, other: &Self) -> bool {
+        self.id == other.id
+    }
+}
+
+impl<T: 'static> Eq for Id<T> {}
 
 #[derive(Debug)]
 pub struct Ap000 {
@@ -113,7 +127,7 @@ pub struct B {
 #[derive(Debug, PartialEq, Hash)]
 struct BEntry {
     z: u64,
-    w: usize, // ref to A
+    w: Id<AEntry>,
 }
 
 /// Element-wise immutable reference to [B]
@@ -143,8 +157,8 @@ pub struct C {
 
 #[derive(Debug, PartialEq, Hash)]
 struct CEntry {
-    p: usize, // ref to A
-    q: usize, // ref to B
+    p: Id<AEntry>,
+    q: Id<BEntry>,
 }
 
 /// Element-wise immutable reference to [C]
