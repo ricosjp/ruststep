@@ -45,6 +45,31 @@ impl<T: 'static> PartialEq for Id<T> {
 
 impl<T: 'static> Eq for Id<T> {}
 
+pub trait Entity<'rf> {
+    type Schema;
+    type Entry;
+    type Ref: 'rf;
+
+    fn as_ref<'schema: 'rf, 'entity: 'rf>(
+        schema: &'schema Self::Schema,
+        entry: &'entity Self::Entry,
+    ) -> Self::Ref;
+}
+
+impl<'rf> Entity<'rf> for A {
+    type Schema = Ap000;
+    type Entry = AEntry;
+    type Ref = ARef<'rf>;
+
+    fn as_ref<'schema: 'rf, 'entity: 'rf>(
+        _schema: &'schema Self::Schema,
+        entry: &'entity Self::Entry,
+    ) -> Self::Ref {
+        let AEntry { x, y } = entry;
+        ARef { x, y }
+    }
+}
+
 #[derive(Debug)]
 pub struct Ap000 {
     a: Table<AEntry>,
