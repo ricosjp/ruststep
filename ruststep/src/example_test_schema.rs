@@ -38,7 +38,7 @@ impl<T: 'static> PartialEq for Id<T> {
 impl<T: 'static> Eq for Id<T> {}
 
 pub trait Entity<'rf> {
-    type Schema;
+    type Schema: EntryTable<'rf, Self::Entry>;
     type Entry: TableEntry<'rf, Schema = Self::Schema>;
     type Ref: 'rf + EntityRef<Entity = Self>;
 
@@ -47,8 +47,8 @@ pub trait Entity<'rf> {
     ) -> Box<dyn Iterator<Item = Self::Ref> + 'rf>;
 }
 
-pub trait TableEntry<'rf> {
-    type Schema;
+pub trait TableEntry<'rf>: Sized {
+    type Schema: EntryTable<'rf, Self>;
     type Ref: 'rf + EntityRef;
 
     fn as_ref<'schema: 'rf, 'entity: 'rf>(
@@ -62,11 +62,43 @@ pub trait EntityRef {
     fn to_instance(&self) -> Self::Entity;
 }
 
+pub trait EntryTable<'rf, E: TableEntry<'rf>> {
+    fn get_entry(&self, id: &Id<E>) -> &E;
+    fn entries<'schema>(&'schema self) -> Box<dyn Iterator<Item = &E> + 'schema>;
+}
+
 #[derive(Debug)]
 pub struct Ap000 {
     a: Table<AEntry>,
     b: Table<BEntry>,
     c: Table<CEntry>,
+}
+
+impl<'rf> EntryTable<'rf, AEntry> for Ap000 {
+    fn get_entry(&self, id: &Id<AEntry>) -> &AEntry {
+        self.a.get(id).unwrap()
+    }
+    fn entries<'schema>(&'schema self) -> Box<dyn Iterator<Item = &AEntry> + 'schema> {
+        Box::new(self.a.iter().map(|(_id, entry)| entry))
+    }
+}
+
+impl<'rf> EntryTable<'rf, BEntry> for Ap000 {
+    fn get_entry(&self, id: &Id<BEntry>) -> &BEntry {
+        self.b.get(id).unwrap()
+    }
+    fn entries<'schema>(&'schema self) -> Box<dyn Iterator<Item = &BEntry> + 'schema> {
+        Box::new(self.b.iter().map(|(_id, entry)| entry))
+    }
+}
+
+impl<'rf> EntryTable<'rf, CEntry> for Ap000 {
+    fn get_entry(&self, id: &Id<CEntry>) -> &CEntry {
+        self.c.get(id).unwrap()
+    }
+    fn entries<'schema>(&'schema self) -> Box<dyn Iterator<Item = &CEntry> + 'schema> {
+        Box::new(self.c.iter().map(|(_id, entry)| entry))
+    }
 }
 
 impl Ap000 {
