@@ -42,14 +42,19 @@ pub trait Entity<'rf> {
     type Entry;
     type Ref: 'rf + Reference<Entity = Self>;
 
-    fn as_ref<'schema: 'rf, 'entity: 'rf>(
-        schema: &'schema Self::Schema,
-        entry: &'entity Self::Entry,
-    ) -> Self::Ref;
-
     fn iter<'schema: 'rf>(
         schema: &'schema Self::Schema,
     ) -> Box<dyn Iterator<Item = Self::Ref> + 'rf>;
+}
+
+pub trait TableEntry<'rf> {
+    type Schema;
+    type Ref: 'rf + Reference;
+
+    fn as_ref<'schema: 'rf, 'entity: 'rf>(
+        &'entity self,
+        schema: &'schema Self::Schema,
+    ) -> Self::Ref;
 }
 
 pub trait Reference {
@@ -65,37 +70,16 @@ pub struct Ap000 {
 }
 
 impl Ap000 {
-    fn a_ref<'s, 'e: 's>(&'s self, entry: &'e AEntry) -> ARef<'s> {
-        let AEntry { x, y } = entry;
-        ARef { x, y }
-    }
-
     pub fn a_iter(&self) -> impl Iterator<Item = ARef> {
-        self.a.iter().map(move |(_id, a)| self.a_ref(a))
-    }
-
-    fn b_ref<'s, 'e: 's>(&'s self, entry: &'e BEntry) -> BRef<'s> {
-        let BEntry { z, w } = entry;
-        BRef {
-            z,
-            w: self.a_ref(self.a.get(w).unwrap()),
-        }
+        A::iter(self)
     }
 
     pub fn b_iter(&self) -> impl Iterator<Item = BRef> {
-        self.b.iter().map(move |(_id, entry)| self.b_ref(entry))
-    }
-
-    fn c_ref<'s, 'e: 's>(&'s self, entry: &'e CEntry) -> CRef<'s> {
-        let CEntry { p, q } = entry;
-        CRef {
-            p: self.a_ref(self.a.get(p).unwrap()),
-            q: self.b_ref(&self.b.get(q).unwrap()),
-        }
+        B::iter(self)
     }
 
     pub fn c_iter(&self) -> impl Iterator<Item = CRef> {
-        self.c.iter().map(move |(_id, entry)| self.c_ref(entry))
+        C::iter(self)
     }
 }
 
@@ -123,18 +107,23 @@ impl<'rf> Entity<'rf> for A {
     type Entry = AEntry;
     type Ref = ARef<'rf>;
 
-    fn as_ref<'schema: 'rf, 'entity: 'rf>(
-        _schema: &'schema Self::Schema,
-        entry: &'entity Self::Entry,
-    ) -> Self::Ref {
-        let AEntry { x, y } = entry;
-        ARef { x, y }
-    }
-
     fn iter<'schema: 'rf>(
         schema: &'schema Self::Schema,
     ) -> Box<dyn Iterator<Item = Self::Ref> + 'rf> {
-        Box::new(schema.a.iter().map(move |(_id, a)| Self::as_ref(schema, a)))
+        Box::new(schema.a.iter().map(move |(_id, a)| a.as_ref(schema)))
+    }
+}
+
+impl<'rf> TableEntry<'rf> for AEntry {
+    type Schema = Ap000;
+    type Ref = ARef<'rf>;
+
+    fn as_ref<'schema: 'rf, 'entry: 'rf>(
+        &'entry self,
+        _schema: &'schema Self::Schema,
+    ) -> Self::Ref {
+        let AEntry { x, y } = self;
+        ARef { x, y }
     }
 }
 
@@ -174,21 +163,26 @@ impl<'rf> Entity<'rf> for B {
     type Entry = BEntry;
     type Ref = BRef<'rf>;
 
-    fn as_ref<'schema: 'rf, 'entity: 'rf>(
-        schema: &'schema Self::Schema,
-        entry: &'entity Self::Entry,
-    ) -> Self::Ref {
-        let BEntry { z, w } = entry;
-        BRef {
-            z,
-            w: A::as_ref(schema, schema.a.get(w).unwrap()),
-        }
-    }
-
     fn iter<'schema: 'rf>(
         schema: &'schema Self::Schema,
     ) -> Box<dyn Iterator<Item = Self::Ref> + 'rf> {
-        Box::new(schema.b.iter().map(move |(_id, b)| Self::as_ref(schema, b)))
+        Box::new(schema.b.iter().map(move |(_id, b)| b.as_ref(schema)))
+    }
+}
+
+impl<'rf> TableEntry<'rf> for BEntry {
+    type Schema = Ap000;
+    type Ref = BRef<'rf>;
+
+    fn as_ref<'schema: 'rf, 'entity: 'rf>(
+        &'entity self,
+        schema: &'schema Self::Schema,
+    ) -> Self::Ref {
+        let BEntry { z, w } = self;
+        BRef {
+            z,
+            w: schema.a.get(w).unwrap().as_ref(schema),
+        }
     }
 }
 
@@ -228,21 +222,26 @@ impl<'rf> Entity<'rf> for C {
     type Entry = CEntry;
     type Ref = CRef<'rf>;
 
-    fn as_ref<'schema: 'rf, 'entity: 'rf>(
-        schema: &'schema Self::Schema,
-        entry: &'entity Self::Entry,
-    ) -> Self::Ref {
-        let CEntry { p, q } = entry;
-        CRef {
-            p: A::as_ref(schema, schema.a.get(p).unwrap()),
-            q: B::as_ref(schema, schema.b.get(q).unwrap()),
-        }
-    }
-
     fn iter<'schema: 'rf>(
         schema: &'schema Self::Schema,
     ) -> Box<dyn Iterator<Item = Self::Ref> + 'rf> {
-        Box::new(schema.c.iter().map(move |(_id, c)| Self::as_ref(schema, c)))
+        Box::new(schema.c.iter().map(move |(_id, c)| c.as_ref(schema)))
+    }
+}
+
+impl<'rf> TableEntry<'rf> for CEntry {
+    type Schema = Ap000;
+    type Ref = CRef<'rf>;
+
+    fn as_ref<'schema: 'rf, 'entity: 'rf>(
+        &'entity self,
+        schema: &'schema Self::Schema,
+    ) -> Self::Ref {
+        let CEntry { p, q } = self;
+        CRef {
+            p: schema.a.get(p).unwrap().as_ref(schema),
+            q: schema.b.get(q).unwrap().as_ref(schema),
+        }
     }
 }
 
