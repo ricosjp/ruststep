@@ -23,14 +23,6 @@ use std::collections::HashMap;
 
 type Table<T> = HashMap<Id<T>, T>;
 
-/// Similar to [ToOwned], but not assure that `Instance: Borrow<Self>`.
-///
-/// [ToOwned]: https://doc.rust-lang.org/std/borrow/trait.ToOwned.html
-pub trait ToInstance {
-    type Entity;
-    fn to_instance(&self) -> Self::Entity;
-}
-
 #[derive(Debug, Hash)]
 pub struct Id<T: 'static> {
     id: usize,
@@ -48,7 +40,7 @@ impl<T: 'static> Eq for Id<T> {}
 pub trait Entity<'rf> {
     type Schema;
     type Entry;
-    type Ref: 'rf;
+    type Ref: 'rf + Reference<Entity = Self>;
 
     fn as_ref<'schema: 'rf, 'entity: 'rf>(
         schema: &'schema Self::Schema,
@@ -58,6 +50,11 @@ pub trait Entity<'rf> {
     fn iter<'schema: 'rf>(
         schema: &'schema Self::Schema,
     ) -> Box<dyn Iterator<Item = Self::Ref> + 'rf>;
+}
+
+pub trait Reference {
+    type Entity;
+    fn to_instance(&self) -> Self::Entity;
 }
 
 #[derive(Debug)]
@@ -141,7 +138,7 @@ impl<'rf> Entity<'rf> for A {
     }
 }
 
-impl<'schema> ToInstance for ARef<'schema> {
+impl<'schema> Reference for ARef<'schema> {
     type Entity = A;
     fn to_instance(&self) -> A {
         A {
@@ -195,7 +192,7 @@ impl<'rf> Entity<'rf> for B {
     }
 }
 
-impl<'schema> ToInstance for BRef<'schema> {
+impl<'schema> Reference for BRef<'schema> {
     type Entity = B;
     fn to_instance(&self) -> B {
         B {
@@ -249,7 +246,7 @@ impl<'rf> Entity<'rf> for C {
     }
 }
 
-impl<'schema> ToInstance for CRef<'schema> {
+impl<'schema> Reference for CRef<'schema> {
     type Entity = C;
     fn to_instance(&self) -> C {
         C {
