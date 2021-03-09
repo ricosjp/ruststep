@@ -32,17 +32,26 @@ impl<'rf> EntryTable<'rf, AEntry> for Ap000 {
     fn get_entry(&self, id: &Id<AEntry>) -> &AEntry {
         self.a.get(id).unwrap()
     }
+    fn entry_iter(&'rf self) -> Box<dyn Iterator<Item = &AEntry> + 'rf> {
+        Box::new(self.a.iter().map(|(_id, entry)| entry))
+    }
 }
 
 impl<'rf> EntryTable<'rf, BEntry> for Ap000 {
     fn get_entry(&self, id: &Id<BEntry>) -> &BEntry {
         self.b.get(id).unwrap()
     }
+    fn entry_iter(&'rf self) -> Box<dyn Iterator<Item = &BEntry> + 'rf> {
+        Box::new(self.b.iter().map(|(_id, entry)| entry))
+    }
 }
 
 impl<'rf> EntryTable<'rf, CEntry> for Ap000 {
     fn get_entry(&self, id: &Id<CEntry>) -> &CEntry {
         self.c.get(id).unwrap()
+    }
+    fn entry_iter(&'rf self) -> Box<dyn Iterator<Item = &CEntry> + 'rf> {
+        Box::new(self.c.iter().map(|(_id, entry)| entry))
     }
 }
 

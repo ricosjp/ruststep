@@ -38,7 +38,7 @@ pub trait Entity<'rf> {
 }
 
 /// Trait for table entry struct. See module level document for detail.
-pub trait TableEntry<'rf>: Sized {
+pub trait TableEntry<'rf>: 'rf + Sized {
     type Schema: EntryTable<'rf, Self>;
     type Ref: 'rf + EntityRef;
     fn as_ref(&'rf self, schema: &'rf Self::Schema) -> Self::Ref;
@@ -51,8 +51,13 @@ pub trait EntityRef {
 
 pub trait EntryTable<'rf, E: TableEntry<'rf, Schema = Self>> {
     fn get_entry(&self, id: &Id<E>) -> &E;
+    fn entry_iter(&'rf self) -> Box<dyn Iterator<Item = &E> + 'rf>;
 
     fn get_ref(&'rf self, id: &Id<E>) -> E::Ref {
         self.get_entry(id).as_ref(self)
+    }
+
+    fn iter(&'rf self) -> Box<dyn Iterator<Item = E::Ref> + 'rf> {
+        Box::new(self.entry_iter().map(move |entry| entry.as_ref(self)))
     }
 }
