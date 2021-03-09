@@ -14,3 +14,7 @@
 pub mod error;
 pub mod parser;
 pub mod primitive;
+pub mod tables;
+
+#[cfg(any(test, doc))]
+pub mod manual_codegen_test;
