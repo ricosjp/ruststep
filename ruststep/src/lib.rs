@@ -16,4 +16,5 @@ pub mod parser;
 pub mod primitive;
 pub mod tables;
 
-pub mod example_test_schema;
+#[cfg(test)]
+pub mod manual_codegen_test;
