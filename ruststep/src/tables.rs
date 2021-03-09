@@ -31,17 +31,17 @@ impl<T: 'static> Hash for Id<T> {
     }
 }
 
-pub trait Entity<'rf> {
-    type Schema: EntryTable<'rf, Self::Entry>;
-    type Entry: TableEntry<'rf, Schema = Self::Schema>;
-    type Ref: 'rf + EntityRef<Entity = Self>;
+pub trait Entity<'tables> {
+    type Schema: EntryTable<'tables, Self::Entry>;
+    type Entry: TableEntry<'tables, Schema = Self::Schema>;
+    type Ref: 'tables + EntityRef<Entity = Self>;
 }
 
 /// Trait for table entry struct. See module level document for detail.
-pub trait TableEntry<'rf>: 'rf + Sized {
-    type Schema: EntryTable<'rf, Self>;
-    type Ref: 'rf + EntityRef;
-    fn as_ref(&'rf self, schema: &'rf Self::Schema) -> Self::Ref;
+pub trait TableEntry<'tables>: 'tables + Sized {
+    type Schema: EntryTable<'tables, Self>;
+    type Ref: 'tables + EntityRef;
+    fn as_ref(&'tables self, schema: &'tables Self::Schema) -> Self::Ref;
 }
 
 pub trait EntityRef {
@@ -49,15 +49,15 @@ pub trait EntityRef {
     fn to_instance(&self) -> Self::Entity;
 }
 
-pub trait EntryTable<'rf, E: TableEntry<'rf, Schema = Self>> {
+pub trait EntryTable<'tables, E: TableEntry<'tables, Schema = Self>> {
     fn get_entry(&self, id: &Id<E>) -> &E;
-    fn entry_iter(&'rf self) -> Box<dyn Iterator<Item = &E> + 'rf>;
+    fn entry_iter(&'tables self) -> Box<dyn Iterator<Item = &E> + 'tables>;
 
-    fn get_ref(&'rf self, id: &Id<E>) -> E::Ref {
+    fn get_ref(&'tables self, id: &Id<E>) -> E::Ref {
         self.get_entry(id).as_ref(self)
     }
 
-    fn iter(&'rf self) -> Box<dyn Iterator<Item = E::Ref> + 'rf> {
+    fn iter(&'tables self) -> Box<dyn Iterator<Item = E::Ref> + 'tables> {
         Box::new(self.entry_iter().map(move |entry| entry.as_ref(self)))
     }
 }

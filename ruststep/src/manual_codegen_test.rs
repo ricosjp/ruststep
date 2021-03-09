@@ -28,29 +28,29 @@ pub struct Ap000 {
     c: Table<CEntry>,
 }
 
-impl<'rf> EntryTable<'rf, AEntry> for Ap000 {
+impl<'tables> EntryTable<'tables, AEntry> for Ap000 {
     fn get_entry(&self, id: &Id<AEntry>) -> &AEntry {
         self.a.get(id).unwrap()
     }
-    fn entry_iter(&'rf self) -> Box<dyn Iterator<Item = &AEntry> + 'rf> {
+    fn entry_iter(&'tables self) -> Box<dyn Iterator<Item = &AEntry> + 'tables> {
         Box::new(self.a.iter().map(|(_id, entry)| entry))
     }
 }
 
-impl<'rf> EntryTable<'rf, BEntry> for Ap000 {
+impl<'tables> EntryTable<'tables, BEntry> for Ap000 {
     fn get_entry(&self, id: &Id<BEntry>) -> &BEntry {
         self.b.get(id).unwrap()
     }
-    fn entry_iter(&'rf self) -> Box<dyn Iterator<Item = &BEntry> + 'rf> {
+    fn entry_iter(&'tables self) -> Box<dyn Iterator<Item = &BEntry> + 'tables> {
         Box::new(self.b.iter().map(|(_id, entry)| entry))
     }
 }
 
-impl<'rf> EntryTable<'rf, CEntry> for Ap000 {
+impl<'tables> EntryTable<'tables, CEntry> for Ap000 {
     fn get_entry(&self, id: &Id<CEntry>) -> &CEntry {
         self.c.get(id).unwrap()
     }
-    fn entry_iter(&'rf self) -> Box<dyn Iterator<Item = &CEntry> + 'rf> {
+    fn entry_iter(&'tables self) -> Box<dyn Iterator<Item = &CEntry> + 'tables> {
         Box::new(self.c.iter().map(|(_id, entry)| entry))
     }
 }
@@ -69,28 +69,28 @@ pub struct AEntry {
 }
 
 #[derive(Debug, Clone, PartialEq, Hash)]
-pub struct ARef<'schema> {
-    pub x: &'schema u64,
-    pub y: &'schema u64,
+pub struct ARef<'tables> {
+    pub x: &'tables u64,
+    pub y: &'tables u64,
 }
 
-impl<'rf> Entity<'rf> for A {
+impl<'tables> Entity<'tables> for A {
     type Schema = Ap000;
     type Entry = AEntry;
-    type Ref = ARef<'rf>;
+    type Ref = ARef<'tables>;
 }
 
-impl<'rf> TableEntry<'rf> for AEntry {
+impl<'tables> TableEntry<'tables> for AEntry {
     type Schema = Ap000;
-    type Ref = ARef<'rf>;
+    type Ref = ARef<'tables>;
 
-    fn as_ref(&'rf self, _schema: &'rf Self::Schema) -> Self::Ref {
+    fn as_ref(&'tables self, _schema: &'tables Self::Schema) -> Self::Ref {
         let AEntry { x, y } = self;
         ARef { x, y }
     }
 }
 
-impl<'schema> EntityRef for ARef<'schema> {
+impl<'tables> EntityRef for ARef<'tables> {
     type Entity = A;
     fn to_instance(&self) -> A {
         A {
@@ -116,22 +116,22 @@ pub struct BEntry {
 
 /// Element-wise immutable reference to [B]
 #[derive(Debug, Clone, PartialEq, Hash)]
-pub struct BRef<'schema> {
-    pub z: &'schema u64,
-    pub w: ARef<'schema>,
+pub struct BRef<'tables> {
+    pub z: &'tables u64,
+    pub w: ARef<'tables>,
 }
 
-impl<'rf> Entity<'rf> for B {
+impl<'tables> Entity<'tables> for B {
     type Schema = Ap000;
     type Entry = BEntry;
-    type Ref = BRef<'rf>;
+    type Ref = BRef<'tables>;
 }
 
-impl<'rf> TableEntry<'rf> for BEntry {
+impl<'tables> TableEntry<'tables> for BEntry {
     type Schema = Ap000;
-    type Ref = BRef<'rf>;
+    type Ref = BRef<'tables>;
 
-    fn as_ref(&'rf self, schema: &'rf Self::Schema) -> Self::Ref {
+    fn as_ref(&'tables self, schema: &'tables Self::Schema) -> Self::Ref {
         let BEntry { z, w } = self;
         BRef {
             z,
@@ -140,7 +140,7 @@ impl<'rf> TableEntry<'rf> for BEntry {
     }
 }
 
-impl<'schema> EntityRef for BRef<'schema> {
+impl<'tables> EntityRef for BRef<'tables> {
     type Entity = B;
     fn to_instance(&self) -> B {
         B {
@@ -166,22 +166,22 @@ pub struct CEntry {
 
 /// Element-wise immutable reference to [C]
 #[derive(Debug, Clone, PartialEq, Hash)]
-pub struct CRef<'schema> {
-    pub p: ARef<'schema>,
-    pub q: BRef<'schema>,
+pub struct CRef<'tables> {
+    pub p: ARef<'tables>,
+    pub q: BRef<'tables>,
 }
 
-impl<'rf> Entity<'rf> for C {
+impl<'tables> Entity<'tables> for C {
     type Schema = Ap000;
     type Entry = CEntry;
-    type Ref = CRef<'rf>;
+    type Ref = CRef<'tables>;
 }
 
-impl<'rf> TableEntry<'rf> for CEntry {
+impl<'tables> TableEntry<'tables> for CEntry {
     type Schema = Ap000;
-    type Ref = CRef<'rf>;
+    type Ref = CRef<'tables>;
 
-    fn as_ref(&'rf self, schema: &'rf Self::Schema) -> Self::Ref {
+    fn as_ref(&'tables self, schema: &'tables Self::Schema) -> Self::Ref {
         let CEntry { p, q } = self;
         CRef {
             p: schema.a.get(p).unwrap().as_ref(schema),
@@ -190,7 +190,7 @@ impl<'rf> TableEntry<'rf> for CEntry {
     }
 }
 
-impl<'schema> EntityRef for CRef<'schema> {
+impl<'tables> EntityRef for CRef<'tables> {
     type Entity = C;
     fn to_instance(&self) -> C {
         C {
