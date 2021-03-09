@@ -1,1 +1,1 @@
-initSidebarItems({"mod":[["error",""],["parser","Parse ASCII exchange structure defined by ISO-10303-21"],["primitive","Primitive types exists in STEP but not in Rust"]]});
+initSidebarItems({"mod":[["error",""],["manual_codegen_test","Experimental schema definitions corresponding following EXPRESS Schema"],["parser","Parse ASCII exchange structure defined by ISO-10303-21"],["primitive","Primitive types exists in STEP but not in Rust"],["tables",""]]});

@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["Id",""]],"trait":[["Entity",""],["EntityRef",""],["EntryTable",""],["TableEntry","Trait for table entry struct. See module level document for detail."]],"type":[["Table",""]]});
