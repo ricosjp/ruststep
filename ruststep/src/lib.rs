@@ -16,5 +16,5 @@ pub mod parser;
 pub mod primitive;
 pub mod tables;
 
-#[cfg(test)]
+#[cfg(any(test, doc))]
 pub mod manual_codegen_test;
