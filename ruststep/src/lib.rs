@@ -14,5 +14,6 @@
 pub mod error;
 pub mod parser;
 pub mod primitive;
+pub mod tables;
 
 pub mod example_test_schema;
