@@ -55,20 +55,6 @@ impl<'rf> EntryTable<'rf, CEntry> for Ap000 {
     }
 }
 
-impl Ap000 {
-    pub fn a_iter(&self) -> impl Iterator<Item = ARef> {
-        A::iter(self)
-    }
-
-    pub fn b_iter(&self) -> impl Iterator<Item = BRef> {
-        B::iter(self)
-    }
-
-    pub fn c_iter(&self) -> impl Iterator<Item = CRef> {
-        C::iter(self)
-    }
-}
-
 #[derive(Debug, Clone, PartialEq, Hash)]
 pub struct A {
     pub x: u64,
@@ -92,12 +78,6 @@ impl<'rf> Entity<'rf> for A {
     type Schema = Ap000;
     type Entry = AEntry;
     type Ref = ARef<'rf>;
-
-    fn iter<'schema: 'rf>(
-        schema: &'schema Self::Schema,
-    ) -> Box<dyn Iterator<Item = Self::Ref> + 'rf> {
-        Box::new(schema.a.iter().map(move |(_id, a)| a.as_ref(schema)))
-    }
 }
 
 impl<'rf> TableEntry<'rf> for AEntry {
@@ -148,12 +128,6 @@ impl<'rf> Entity<'rf> for B {
     type Schema = Ap000;
     type Entry = BEntry;
     type Ref = BRef<'rf>;
-
-    fn iter<'schema: 'rf>(
-        schema: &'schema Self::Schema,
-    ) -> Box<dyn Iterator<Item = Self::Ref> + 'rf> {
-        Box::new(schema.b.iter().map(move |(_id, b)| b.as_ref(schema)))
-    }
 }
 
 impl<'rf> TableEntry<'rf> for BEntry {
@@ -207,12 +181,6 @@ impl<'rf> Entity<'rf> for C {
     type Schema = Ap000;
     type Entry = CEntry;
     type Ref = CRef<'rf>;
-
-    fn iter<'schema: 'rf>(
-        schema: &'schema Self::Schema,
-    ) -> Box<dyn Iterator<Item = Self::Ref> + 'rf> {
-        Box::new(schema.c.iter().map(move |(_id, c)| c.as_ref(schema)))
-    }
 }
 
 impl<'rf> TableEntry<'rf> for CEntry {

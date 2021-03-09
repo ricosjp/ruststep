@@ -35,10 +35,6 @@ pub trait Entity<'rf> {
     type Schema: EntryTable<'rf, Self::Entry>;
     type Entry: TableEntry<'rf, Schema = Self::Schema>;
     type Ref: 'rf + EntityRef<Entity = Self>;
-
-    fn iter<'schema: 'rf>(
-        schema: &'schema Self::Schema,
-    ) -> Box<dyn Iterator<Item = Self::Ref> + 'rf>;
 }
 
 pub trait TableEntry<'rf>: Sized {
