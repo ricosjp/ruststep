@@ -233,7 +233,7 @@ mod tests {
     }
 
     #[test]
-    fn u64_overflow() {
+    fn instance_name() {
         let (res, s) = super::entity_instance_name("#18446744073709551615" /* u64::MAX */)
             .finish()
             .unwrap();
@@ -246,6 +246,7 @@ mod tests {
         assert_eq!(res, "");
         assert_eq!(s, std::u64::MAX);
 
+        // u64 overflow
         assert!(
             super::entity_instance_name("#18446744073709551616" /* u64::MAX + 1 */)
                 .finish()
@@ -256,5 +257,13 @@ mod tests {
                 .finish()
                 .is_err()
         );
+
+        // zeros should be ignored
+        let (res, s) = super::entity_instance_name("#001").finish().unwrap();
+        assert_eq!(res, "");
+        assert_eq!(s, 1);
+        let (res, s) = super::value_instance_name("@001").finish().unwrap();
+        assert_eq!(res, "");
+        assert_eq!(s, 1);
     }
 }
