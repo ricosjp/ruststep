@@ -87,6 +87,15 @@ pub enum RValue {
     ConstantValue(String),
 }
 
+// Root error for u64 overflow
+//
+// FIXME Though it works, should we use `VerboseErrorKind::Context` for this usage?
+fn u64_overflow(input: &str) -> nom::Err<nom::error::VerboseError<&str>> {
+    nom::Err::Failure(nom::error::VerboseError {
+        errors: vec![(input, nom::error::VerboseErrorKind::Context("u64-overflow"))],
+    })
+}
+
 /// entity_instance_name = `#` ( [digit] ) { [digit] } .
 ///
 /// As discussed in ISO-10303-21 6.4.4.3 Entity instance names,
@@ -95,28 +104,38 @@ pub enum RValue {
 ///
 /// leading zeros are ignored, and convert into `u64` type.
 ///
-/// Panics
+/// Error
 /// -------
 /// - FIXME: If the input cannot be represented by `u64`, i.e. larger than [std::u64::MAX]
 ///
 pub fn entity_instance_name(input: &str) -> ParseResult<u64> {
-    tuple((char('#'), digit1))
-        .map(|(_sharp, name): (_, &str)| name.parse().expect("Cannot represented in u64"))
-        .parse(input)
+    let (input, name) = tuple((char('#'), digit1))
+        .map(|(_sharp, name): (_, &str)| name.parse())
+        .parse(input)?;
+    if let Ok(name) = name {
+        Ok((input, name))
+    } else {
+        Err(u64_overflow(input))
+    }
 }
 
 /// value_instance_name = `@` ( [digit] ) { [digit] } .
 ///
 /// Leading zeros are ignored like as [entity_instance_name].
 ///
-/// Panics
+/// Error
 /// -------
 /// - FIXME: If the input cannot be represented by `u64`, i.e. larger than [std::u64::MAX]
 ///
 pub fn value_instance_name(input: &str) -> ParseResult<u64> {
-    tuple((char('@'), digit1))
-        .map(|(_sharp, name): (_, &str)| name.parse().expect("Cannot represented in u64"))
-        .parse(input)
+    let (input, name) = tuple((char('@'), digit1))
+        .map(|(_sharp, name): (_, &str)| name.parse())
+        .parse(input)?;
+    if let Ok(name) = name {
+        Ok((input, name))
+    } else {
+        Err(u64_overflow(input))
+    }
 }
 
 /// constant_entity_name = `#` ( [upper] ) { [upper] | [digit] } .
@@ -211,5 +230,31 @@ mod tests {
         let (res, s) = super::string("'vim'").finish().unwrap();
         assert_eq!(res, "");
         assert_eq!(s, "vim");
+    }
+
+    #[test]
+    fn u64_overflow() {
+        let (res, s) = super::entity_instance_name("#18446744073709551615" /* u64::MAX */)
+            .finish()
+            .unwrap();
+        assert_eq!(res, "");
+        assert_eq!(s, std::u64::MAX);
+
+        let (res, s) = super::value_instance_name("@18446744073709551615" /* u64::MAX */)
+            .finish()
+            .unwrap();
+        assert_eq!(res, "");
+        assert_eq!(s, std::u64::MAX);
+
+        assert!(
+            super::entity_instance_name("#18446744073709551616" /* u64::MAX + 1 */)
+                .finish()
+                .is_err()
+        );
+        assert!(
+            super::value_instance_name("@18446744073709551616" /* u64::MAX + 1 */)
+                .finish()
+                .is_err()
+        );
     }
 }
