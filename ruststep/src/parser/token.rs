@@ -69,18 +69,18 @@ pub fn enumeration(input: &str) -> ParseResult<String> {
 #[derive(Debug, Clone, PartialEq)]
 pub enum LValue {
     /// Like `#11`
-    Entity(String),
+    Entity(u64),
     /// Like `@11`
-    Value(String),
+    Value(u64),
 }
 
 /// Right hand side value
 #[derive(Debug, Clone, PartialEq)]
 pub enum RValue {
     /// Like `#11`
-    Entity(String),
+    Entity(u64),
     /// Like `@11`
-    Value(String),
+    Value(u64),
     /// Like `#CONST_ENTITY`
     ConstantEntity(String),
     /// Like `@CONST_VALUE`
@@ -88,16 +88,34 @@ pub enum RValue {
 }
 
 /// entity_instance_name = `#` ( [digit] ) { [digit] } .
-pub fn entity_instance_name(input: &str) -> ParseResult<String> {
+///
+/// As discussed in ISO-10303-21 6.4.4.3 Entity instance names,
+///
+/// > NOTE 2 Leading zeros in entity instance names are ignored so "#001" is the same identifier as "#1".
+///
+/// leading zeros are ignored, and convert into `u64` type.
+///
+/// Panics
+/// -------
+/// - FIXME: If the input cannot be represented by `u64`, i.e. larger than [std::u64::MAX]
+///
+pub fn entity_instance_name(input: &str) -> ParseResult<u64> {
     tuple((char('#'), digit1))
-        .map(|(_sharp, name): (_, &str)| name.to_string())
+        .map(|(_sharp, name): (_, &str)| name.parse().expect("Cannot represented in u64"))
         .parse(input)
 }
 
 /// value_instance_name = `@` ( [digit] ) { [digit] } .
-pub fn value_instance_name(input: &str) -> ParseResult<String> {
+///
+/// Leading zeros are ignored like as [entity_instance_name].
+///
+/// Panics
+/// -------
+/// - FIXME: If the input cannot be represented by `u64`, i.e. larger than [std::u64::MAX]
+///
+pub fn value_instance_name(input: &str) -> ParseResult<u64> {
     tuple((char('@'), digit1))
-        .map(|(_sharp, name): (_, &str)| name.to_string())
+        .map(|(_sharp, name): (_, &str)| name.parse().expect("Cannot represented in u64"))
         .parse(input)
 }
 
