@@ -1,4 +1,10 @@
-//! Parse ASCII exchange structure defined by ISO-10303-21
+//! Tokenize ASCII exchange structure defined by ISO-10303-21
+//!
+//! Be sure that this submodule responsible only for tokenize into abstract syntax tree (AST),
+//! not for semantic validation.
+//!
+//! Example
+//! --------
 //!
 //! ```
 //! use std::{fs, path::*};
@@ -17,15 +23,39 @@ pub mod combinator;
 pub mod exchange;
 pub mod token;
 
-use crate::error::*;
 use nom::Finish;
+use std::fmt;
 
-pub fn parse(input: &str) -> Result<exchange::Exchange> {
+/// Error while tokenizing STEP input
+#[derive(Debug)]
+pub struct TokenizeFailed {
+    rendered_error: String,
+}
+
+impl fmt::Display for TokenizeFailed {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> Result<(), fmt::Error> {
+        write!(
+            f,
+            "Error while tokenizing STEP input\n{}",
+            self.rendered_error
+        )?;
+        Ok(())
+    }
+}
+
+impl std::error::Error for TokenizeFailed {}
+
+impl TokenizeFailed {
+    fn new(input: &str, err: nom::error::VerboseError<&str>) -> Self {
+        TokenizeFailed {
+            rendered_error: nom::error::convert_error(input, err),
+        }
+    }
+}
+
+pub fn parse(input: &str) -> Result<exchange::Exchange, TokenizeFailed> {
     match exchange::exchange_file(input).finish() {
         Ok((_residual, ex)) => Ok(ex),
-        Err(e) => {
-            let error = nom::error::convert_error(input, e);
-            Err(Error::ParseFailed(error))
-        }
+        Err(e) => Err(TokenizeFailed::new(input, e)),
     }
 }
