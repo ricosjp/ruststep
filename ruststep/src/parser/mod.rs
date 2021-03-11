@@ -40,6 +40,8 @@ pub mod token;
 use nom::Finish;
 use std::fmt;
 
+pub use exchange::Record;
+
 /// Error while tokenizing STEP input
 #[derive(Debug)]
 pub struct TokenizeFailed {
@@ -67,6 +69,39 @@ impl TokenizeFailed {
     }
 }
 
+/// Parse HEADER section
+///
+/// Example
+/// --------
+///
+/// ```
+/// let step_str = r#"
+/// HEADER;
+///   FILE_DESCRIPTION(('叛逆の物語', '魔法少女まどか☆マギカ'), '4;3');
+///   FILE_NAME(
+///     '/madoka/magica/rebellion.step',
+///     '2013-10-26T10:30:00+09:00',
+///     ('Mami Tomoe', 'Madoka Kaname', 'Sayaka Miki', 'Kyoko Sakura', 'Homura Akemi'),
+///     ('Puella Magi Holy Quintet'),
+///     'homu',
+///     'Magica Quartet',
+///     'qb@incubator.com'
+///   );
+///   FILE_SCHEMA(('MAGICAL_GIRL'));
+/// ENDSEC;
+/// "#.trim();
+///
+/// let (residual, header) = ruststep::parser::parse_header(&step_str).unwrap();
+/// assert_eq!(residual, ""); // consume HEADER section of `step_str`
+/// ```
+pub fn parse_header(input: &str) -> Result<(&str, Vec<Record>), TokenizeFailed> {
+    match exchange::header_section(input).finish() {
+        Ok((input, records)) => Ok((input, records)),
+        Err(e) => Err(TokenizeFailed::new(input, e)),
+    }
+}
+
+/// Parse entire STEP file
 pub fn parse(input: &str) -> Result<exchange::Exchange, TokenizeFailed> {
     match exchange::exchange_file(input).finish() {
         Ok((_residual, ex)) => Ok(ex),
