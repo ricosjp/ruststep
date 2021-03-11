@@ -1,7 +1,21 @@
-//! Tokenize ASCII exchange structure defined by ISO-10303-21
+//! Tokenize ASCII exchange structure (or STEP-file) defined by ISO-10303-21
 //!
-//! Be sure that this submodule responsible only for tokenize into abstract syntax tree (AST),
+//! This submodule responsible only for tokenize into abstract syntax tree (AST),
 //! not for semantic validation.
+//!
+//! STEP-file consists of following sections:
+//!
+//! - HEADER
+//! - ANCHOR (optional)
+//! - REFERENCE (optional)
+//! - DATA
+//! - SIGNATURE (optional)
+//!
+//! ANCHOR, REFERENCE, and SIGNATURE sections are optional.
+//! The syntax of STEP-file is common through schemas,
+//! i.e. the tokenize of STEP-file can be done without reading any EXPRESS schema.
+//! A target schema is specified in the HEADER section,
+//! and it determines how we should understand AST.
 //!
 //! Example
 //! --------
