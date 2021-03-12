@@ -1,5 +1,28 @@
-use crate::{error::*, parser::*};
-use std::path::PathBuf;
+use crate::parser::*;
+use std::convert::TryFrom;
+
+#[derive(Debug, thiserror::Error)]
+pub enum InvalidHeader {
+    #[error("Required record is missing: {name}")]
+    RequiredRecordMissing { name: &'static str },
+
+    #[error("Unknown Record: {name}")]
+    UnknownRecord { name: String },
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct FileDescription {
+    description: Vec<String>,
+    implementation_level: String,
+}
+
+impl TryFrom<Record> for FileDescription {
+    type Error = crate::error::Error;
+    fn try_from(record: Record) -> Result<Self, Self::Error> {
+        assert_eq!(record.name, "FILE_DESCRIPTION");
+        todo!()
+    }
+}
 
 /// STEP-file HEADER section
 ///
@@ -13,7 +36,7 @@ pub struct Header {
     implementation_level: String,
 
     // file_name
-    name: PathBuf,
+    name: String,
     time_stamp: String,
     author: Vec<String>,
     organization: Vec<String>,
@@ -26,7 +49,20 @@ pub struct Header {
 }
 
 impl Header {
-    pub fn from_records(records: &[Record]) -> Result<Self> {
+    pub fn from_records(records: &[Record]) -> Result<Self, InvalidHeader> {
+        if records.len() == 0 {
+            return Err(InvalidHeader::RequiredRecordMissing {
+                name: "FILE_DESCRIPTION",
+            });
+        }
+
+        let desc = &records[0];
+        if desc.name != "FILE_DESCRIPTION" {
+            return Err(InvalidHeader::UnknownRecord {
+                name: desc.name.clone(),
+            });
+        }
+
         todo!()
     }
 }
