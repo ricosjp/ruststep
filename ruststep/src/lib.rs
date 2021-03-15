@@ -14,6 +14,7 @@
 pub mod error;
 pub mod parser;
 pub mod primitive;
+pub mod serde;
 pub mod tables;
 
 #[cfg(any(test, doc))]
