@@ -1,9 +1,11 @@
-//! Mapping STEP data into serde data model
+//! Mapping STEP data into [serde data model]
+//!
+//! [serde data model]: https://serde.rs/data-model.html
 
 use serde::{de, forward_to_deserialize_any, Deserialize};
 use std::fmt;
 
-use crate::parser::Record;
+use crate::parser::{Parameter, Record, UntypedParameter};
 
 #[derive(Debug)]
 pub struct RecordDeserializer<'de> {
@@ -12,7 +14,8 @@ pub struct RecordDeserializer<'de> {
     position: usize,
 }
 
-pub fn from_record<'de, T>(record: &'de Record) -> Result<T, DeserializeError>
+/// Interpret STEP record into a `Deserialize`-able structure
+pub fn from_step_record<'de, T>(record: &'de Record) -> Result<T, DeserializeError>
 where
     T: Deserialize<'de>,
 {
@@ -28,6 +31,9 @@ where
 pub enum DeserializeError {
     #[error("{0}")]
     Message(String),
+
+    #[error("Reach to the end of record")]
+    Eof,
 }
 
 impl de::Error for DeserializeError {
@@ -46,7 +52,19 @@ impl<'de, 'a> de::Deserializer<'de> for &'a mut RecordDeserializer<'de> {
     where
         V: de::Visitor<'de>,
     {
-        todo!()
+        if self.position >= self.record.parameters.len() {
+            return Err(DeserializeError::Eof);
+        }
+        let value = match &self.record.parameters[self.position] {
+            Parameter::Typed { name: _, ty: _ } => unimplemented!(),
+            Parameter::Untyped(p) => match p {
+                UntypedParameter::Integer(i) => visitor.visit_i64(*i)?,
+                _ => todo!(),
+            },
+            Parameter::Omitted => unimplemented!(),
+        };
+        self.position += 1;
+        Ok(value)
     }
 
     forward_to_deserialize_any! {

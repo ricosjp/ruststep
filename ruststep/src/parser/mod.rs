@@ -40,7 +40,7 @@ pub mod token;
 use nom::Finish;
 use std::fmt;
 
-pub use exchange::Record;
+pub use exchange::{Parameter, Record, UntypedParameter};
 
 /// Error while tokenizing STEP input
 #[derive(Debug)]
