@@ -58,7 +58,9 @@ impl<'de, 'a> de::Deserializer<'de> for &'a mut RecordDeserializer<'de> {
         let value = match &self.record.parameters[self.position] {
             Parameter::Typed { name: _, ty: _ } => unimplemented!(),
             Parameter::Untyped(p) => match p {
-                UntypedParameter::Integer(i) => visitor.visit_i64(*i)?,
+                UntypedParameter::Integer(val) => visitor.visit_i64(*val)?,
+                UntypedParameter::Real(val) => visitor.visit_f64(*val)?,
+                UntypedParameter::String(val) => visitor.visit_str(val)?,
                 _ => todo!(),
             },
             Parameter::Omitted => unimplemented!(),
@@ -71,5 +73,27 @@ impl<'de, 'a> de::Deserializer<'de> for &'a mut RecordDeserializer<'de> {
         bool i8 i16 i32 i64 i128 u8 u16 u32 u64 u128 f32 f64 char str string
         bytes byte_buf option unit unit_struct newtype_struct seq tuple
         tuple_struct map struct enum identifier ignored_any
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::parser;
+    use nom::Finish;
+    use serde::Deserialize;
+
+    #[derive(Debug, Deserialize)]
+    struct A {
+        x: f64,
+        y: f64,
+    }
+
+    #[test]
+    fn test_from_step_record() {
+        let (_, record) = parser::exchange::simple_record("A(1.0, 2.0)")
+            .finish()
+            .unwrap();
+        let a: A = super::from_step_record(&record).unwrap();
+        dbg!(a);
     }
 }

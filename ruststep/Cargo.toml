@@ -8,7 +8,7 @@ edition = "2018"
 
 [dependencies]
 nom = "6.1.0"
-serde = "1.0.124"
+serde = { version = "1.0.124", features = ["derive"]}
 thiserror = "1.0.24"
 
 [dev-dependencies]
