@@ -32,8 +32,8 @@ pub fn entity_instance_list(input: &str) -> ParseResult<Vec<EntityInstance>> {
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum EntityInstance {
-    Simple { name: String, record: Record },
-    Complex { name: String, subsuper: Vec<Record> },
+    Simple { name: u64, record: Record },
+    Complex { name: u64, subsuper: Vec<Record> },
 }
 
 /// entity_instance = [simple_entity_instance] | [complex_entity_instance] .

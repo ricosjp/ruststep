@@ -69,36 +69,73 @@ pub fn enumeration(input: &str) -> ParseResult<String> {
 #[derive(Debug, Clone, PartialEq)]
 pub enum LValue {
     /// Like `#11`
-    Entity(String),
+    Entity(u64),
     /// Like `@11`
-    Value(String),
+    Value(u64),
 }
 
 /// Right hand side value
 #[derive(Debug, Clone, PartialEq)]
 pub enum RValue {
     /// Like `#11`
-    Entity(String),
+    Entity(u64),
     /// Like `@11`
-    Value(String),
+    Value(u64),
     /// Like `#CONST_ENTITY`
     ConstantEntity(String),
     /// Like `@CONST_VALUE`
     ConstantValue(String),
 }
 
+// Root error for u64 overflow
+//
+// FIXME Though it works, should we use `VerboseErrorKind::Context` for this usage?
+fn u64_overflow(input: &str) -> nom::Err<nom::error::VerboseError<&str>> {
+    nom::Err::Failure(nom::error::VerboseError {
+        errors: vec![(input, nom::error::VerboseErrorKind::Context("u64-overflow"))],
+    })
+}
+
 /// entity_instance_name = `#` ( [digit] ) { [digit] } .
-pub fn entity_instance_name(input: &str) -> ParseResult<String> {
-    tuple((char('#'), digit1))
-        .map(|(_sharp, name): (_, &str)| name.to_string())
-        .parse(input)
+///
+/// As discussed in ISO-10303-21 6.4.4.3 Entity instance names,
+///
+/// > NOTE 2 Leading zeros in entity instance names are ignored so "#001" is the same identifier as "#1".
+///
+/// leading zeros are ignored, and convert into `u64` type.
+///
+/// Error
+/// -------
+/// - FIXME: If the input cannot be represented by `u64`, i.e. larger than [std::u64::MAX]
+///
+pub fn entity_instance_name(input: &str) -> ParseResult<u64> {
+    let (input, name) = tuple((char('#'), digit1))
+        .map(|(_sharp, name): (_, &str)| name.parse())
+        .parse(input)?;
+    if let Ok(name) = name {
+        Ok((input, name))
+    } else {
+        Err(u64_overflow(input))
+    }
 }
 
 /// value_instance_name = `@` ( [digit] ) { [digit] } .
-pub fn value_instance_name(input: &str) -> ParseResult<String> {
-    tuple((char('@'), digit1))
-        .map(|(_sharp, name): (_, &str)| name.to_string())
-        .parse(input)
+///
+/// Leading zeros are ignored like as [entity_instance_name].
+///
+/// Error
+/// -------
+/// - FIXME: If the input cannot be represented by `u64`, i.e. larger than [std::u64::MAX]
+///
+pub fn value_instance_name(input: &str) -> ParseResult<u64> {
+    let (input, name) = tuple((char('@'), digit1))
+        .map(|(_sharp, name): (_, &str)| name.parse())
+        .parse(input)?;
+    if let Ok(name) = name {
+        Ok((input, name))
+    } else {
+        Err(u64_overflow(input))
+    }
 }
 
 /// constant_entity_name = `#` ( [upper] ) { [upper] | [digit] } .
@@ -193,5 +230,40 @@ mod tests {
         let (res, s) = super::string("'vim'").finish().unwrap();
         assert_eq!(res, "");
         assert_eq!(s, "vim");
+    }
+
+    #[test]
+    fn instance_name() {
+        let (res, s) = super::entity_instance_name("#18446744073709551615" /* u64::MAX */)
+            .finish()
+            .unwrap();
+        assert_eq!(res, "");
+        assert_eq!(s, std::u64::MAX);
+
+        let (res, s) = super::value_instance_name("@18446744073709551615" /* u64::MAX */)
+            .finish()
+            .unwrap();
+        assert_eq!(res, "");
+        assert_eq!(s, std::u64::MAX);
+
+        // u64 overflow
+        assert!(
+            super::entity_instance_name("#18446744073709551616" /* u64::MAX + 1 */)
+                .finish()
+                .is_err()
+        );
+        assert!(
+            super::value_instance_name("@18446744073709551616" /* u64::MAX + 1 */)
+                .finish()
+                .is_err()
+        );
+
+        // zeros should be ignored
+        let (res, s) = super::entity_instance_name("#001").finish().unwrap();
+        assert_eq!(res, "");
+        assert_eq!(s, 1);
+        let (res, s) = super::value_instance_name("@001").finish().unwrap();
+        assert_eq!(res, "");
+        assert_eq!(s, 1);
     }
 }
