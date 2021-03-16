@@ -75,7 +75,7 @@ pub fn parameter_list(input: &str) -> ParseResult<Vec<Parameter>> {
     comma_separated(parameter).parse(input)
 }
 
-impl<'de, 'p> de::Deserializer<'de> for &'p Parameter {
+impl<'de, 'param> de::Deserializer<'de> for &'param Parameter {
     type Error = crate::error::Error;
 
     fn deserialize_any<V>(self, visitor: V) -> Result<V::Value, Self::Error>
@@ -88,7 +88,7 @@ impl<'de, 'p> de::Deserializer<'de> for &'p Parameter {
                 UntypedParameter::Integer(val) => visitor.visit_i64(*val),
                 UntypedParameter::Real(val) => visitor.visit_f64(*val),
                 UntypedParameter::String(val) => visitor.visit_str(val),
-                _ => todo!(),
+                _ => unimplemented!(),
             },
             Parameter::Omitted => unimplemented!(),
         }
@@ -111,8 +111,15 @@ mod tests {
         let p = Parameter::Untyped(UntypedParameter::Integer(2));
         let a: i64 = Deserialize::deserialize(&p).unwrap();
         assert_eq!(a, 2);
-
+        // can be deserialized as unsigned
         let a: u32 = Deserialize::deserialize(&p).unwrap();
         assert_eq!(a, 2);
+
+        let p = Parameter::Untyped(UntypedParameter::Integer(-2));
+        let a: i64 = Deserialize::deserialize(&p).unwrap();
+        assert_eq!(a, -2);
+        // cannot be deserialized negative integer into unsigned
+        let res: Result<u32, _> = Deserialize::deserialize(&p);
+        assert!(res.is_err());
     }
 }
