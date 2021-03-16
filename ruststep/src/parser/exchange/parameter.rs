@@ -1,5 +1,6 @@
 use crate::parser::{combinator::*, token::*};
 use nom::{branch::alt, combinator::value, Parser};
+use serde::{de, forward_to_deserialize_any};
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum UntypedParameter {
@@ -72,4 +73,46 @@ pub fn omitted_parameter(input: &str) -> ParseResult<Parameter> {
 /// parameter_list = [parameter] { `,` [parameter] } .
 pub fn parameter_list(input: &str) -> ParseResult<Vec<Parameter>> {
     comma_separated(parameter).parse(input)
+}
+
+impl<'de, 'p> de::Deserializer<'de> for &'p Parameter {
+    type Error = crate::error::Error;
+
+    fn deserialize_any<V>(self, visitor: V) -> Result<V::Value, Self::Error>
+    where
+        V: de::Visitor<'de>,
+    {
+        match self {
+            Parameter::Typed { name: _, ty: _ } => unimplemented!(),
+            Parameter::Untyped(p) => match p {
+                UntypedParameter::Integer(val) => visitor.visit_i64(*val),
+                UntypedParameter::Real(val) => visitor.visit_f64(*val),
+                UntypedParameter::String(val) => visitor.visit_str(val),
+                _ => todo!(),
+            },
+            Parameter::Omitted => unimplemented!(),
+        }
+    }
+
+    forward_to_deserialize_any! {
+        bool i8 i16 i32 i64 i128 u8 u16 u32 u64 u128 f32 f64 char str string
+        bytes byte_buf option unit unit_struct newtype_struct seq tuple
+        tuple_struct map struct enum identifier ignored_any
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use serde::Deserialize;
+
+    #[test]
+    fn deserialize_int() {
+        let p = Parameter::Untyped(UntypedParameter::Integer(2));
+        let a: i64 = Deserialize::deserialize(&p).unwrap();
+        assert_eq!(a, 2);
+
+        let a: u32 = Deserialize::deserialize(&p).unwrap();
+        assert_eq!(a, 2);
+    }
 }
