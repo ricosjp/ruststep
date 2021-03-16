@@ -34,6 +34,44 @@ pub enum Parameter {
     Omitted,
 }
 
+impl Parameter {
+    pub fn integer(i: i64) -> Self {
+        Parameter::Untyped(UntypedParameter::Integer(i))
+    }
+
+    pub fn real(x: f64) -> Self {
+        Parameter::Untyped(UntypedParameter::Real(x))
+    }
+
+    pub fn string(s: &str) -> Self {
+        Parameter::Untyped(UntypedParameter::String(s.to_string()))
+    }
+}
+
+impl From<i64> for Parameter {
+    fn from(value: i64) -> Self {
+        Self::integer(value)
+    }
+}
+
+impl From<f64> for Parameter {
+    fn from(value: f64) -> Self {
+        Self::real(value)
+    }
+}
+
+impl From<String> for Parameter {
+    fn from(value: String) -> Self {
+        Parameter::Untyped(UntypedParameter::String(value))
+    }
+}
+
+impl std::iter::FromIterator<Parameter> for Parameter {
+    fn from_iter<Iter: IntoIterator<Item = Parameter>>(iter: Iter) -> Self {
+        Parameter::Untyped(UntypedParameter::List(iter.into_iter().collect()))
+    }
+}
+
 /// parameter = [typed_parameter] | [untyped_parameter] | [omitted_parameter] .
 pub fn parameter(input: &str) -> ParseResult<Parameter> {
     alt((typed_parameter, untyped_parameter, omitted_parameter)).parse(input)
