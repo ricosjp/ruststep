@@ -132,6 +132,10 @@ impl<'de, 'param> de::Deserializer<'de> for &'param Parameter {
                 UntypedParameter::Integer(val) => visitor.visit_i64(*val),
                 UntypedParameter::Real(val) => visitor.visit_f64(*val),
                 UntypedParameter::String(val) => visitor.visit_str(val),
+                UntypedParameter::List(params) => {
+                    let seq = de::value::SeqDeserializer::new(params.iter());
+                    visitor.visit_seq(seq)
+                }
                 _ => unimplemented!(),
             },
             Parameter::Omitted => unimplemented!(),
@@ -142,6 +146,13 @@ impl<'de, 'param> de::Deserializer<'de> for &'param Parameter {
         bool i8 i16 i32 i64 i128 u8 u16 u32 u64 u128 f32 f64 char str string
         bytes byte_buf option unit unit_struct newtype_struct seq tuple
         tuple_struct map struct enum identifier ignored_any
+    }
+}
+
+impl<'de, 'param> de::IntoDeserializer<'de, crate::error::Error> for &'param Parameter {
+    type Deserializer = Self;
+    fn into_deserializer(self) -> Self::Deserializer {
+        self
     }
 }
 
@@ -173,5 +184,20 @@ mod tests {
         // cannot be deserialized negative integer into unsigned
         let res: Result<u32, _> = Deserialize::deserialize(&p);
         assert!(res.is_err());
+    }
+
+    #[derive(Debug, Deserialize)]
+    struct A {
+        x: f64,
+        y: f64,
+    }
+
+    #[test]
+    fn deserialize_parameter_list_to_struct() {
+        let p: Parameter = [Parameter::real(1.0), Parameter::real(2.0)]
+            .iter()
+            .collect();
+        let a: A = Deserialize::deserialize(&p).unwrap();
+        dbg!(a);
     }
 }
