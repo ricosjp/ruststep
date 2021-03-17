@@ -72,6 +72,12 @@ impl std::iter::FromIterator<Parameter> for Parameter {
     }
 }
 
+impl<'a> std::iter::FromIterator<&'a Parameter> for Parameter {
+    fn from_iter<Iter: IntoIterator<Item = &'a Parameter>>(iter: Iter) -> Self {
+        iter.into_iter().cloned().collect()
+    }
+}
+
 /// parameter = [typed_parameter] | [untyped_parameter] | [omitted_parameter] .
 pub fn parameter(input: &str) -> ParseResult<Parameter> {
     alt((typed_parameter, untyped_parameter, omitted_parameter)).parse(input)
@@ -143,6 +149,14 @@ impl<'de, 'param> de::Deserializer<'de> for &'param Parameter {
 mod tests {
     use super::*;
     use serde::Deserialize;
+
+    #[test]
+    fn list_from_iter() {
+        let l: Parameter = [Parameter::integer(1), Parameter::real(2.0)]
+            .iter()
+            .collect();
+        assert!(matches!(l, Parameter::Untyped(UntypedParameter::List(_))));
+    }
 
     #[test]
     fn deserialize_int() {
