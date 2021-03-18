@@ -23,7 +23,35 @@ pub fn list(input: &str) -> ParseResult<UntypedParameter> {
         .parse(input)
 }
 
-/// Primitive value type in STEP data
+/// Primitive value type in STEP data, parsed by [parameter]
+///
+/// Parse
+/// ------
+///
+/// ```
+/// use nom::Finish;
+/// use ruststep::parser::{Parameter, UntypedParameter, exchange};
+///
+/// // Real number
+/// let (residual, p) = exchange::parameter("1.0").finish().unwrap();
+/// assert_eq!(residual, "");
+/// assert_eq!(p, Parameter::real(1.0));
+///
+/// // String
+/// let (residual, p) = exchange::parameter("'ruststep'").finish().unwrap();
+/// assert_eq!(residual, "");
+/// assert_eq!(p, Parameter::string("ruststep"));
+///
+/// // non-uniform list
+/// let (residual, p) = exchange::parameter("('ruststep', 1.0)").finish().unwrap();
+/// assert_eq!(residual, "");
+/// assert_eq!(p, [Parameter::string("ruststep"), Parameter::real(1.0)].iter().collect());
+///
+/// // typed
+/// let (residual, p) = exchange::parameter("FILE_NAME('ruststep')").finish().unwrap();
+/// assert_eq!(residual, "");
+/// assert!(matches!(p, Parameter::Typed { .. }));
+/// ```
 ///
 /// FromIterator
 /// -------------
@@ -31,7 +59,7 @@ pub fn list(input: &str) -> ParseResult<UntypedParameter> {
 /// or `Iterator<Item=&Parameter>`.
 ///
 /// ```
-/// use ruststep::parser::Parameter;
+/// use ruststep::parser::{Parameter, UntypedParameter};
 ///
 /// let p: Parameter = [Parameter::real(1.0), Parameter::real(2.0)]
 ///     .iter()
