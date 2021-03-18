@@ -96,7 +96,10 @@ impl<'de, 'record> de::Deserializer<'de> for &'record Record {
     where
         V: de::Visitor<'de>,
     {
-        panic!("STEP Record must be deserialized as a struct")
+        Err(de::Error::invalid_type(
+            de::Unexpected::Other("any"),
+            &self.name.as_str(),
+        ))
     }
 
     fn deserialize_struct<V>(
