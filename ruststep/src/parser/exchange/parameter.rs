@@ -102,7 +102,7 @@ pub fn list(input: &str) -> ParseResult<UntypedParameter> {
 /// [serde::Deserializer]: https://docs.serde.rs/serde/trait.Deserializer.html
 #[derive(Debug, Clone, PartialEq)]
 pub enum Parameter {
-    /// *Typed* in EXPRESS schema
+    /// Inline *Typed* struct
     Typed { name: String, ty: Box<Parameter> },
     /// Primitive types e.g. integer. See [UntypedParameter] for detail.
     Untyped(UntypedParameter),
