@@ -72,6 +72,7 @@ pub fn complex_entity_instance(input: &str) -> ParseResult<EntityInstance> {
 /// ```
 /// use nom::Finish;
 /// use serde::Deserialize;
+/// use ruststep::parser::exchange;
 ///
 /// #[derive(Debug, Deserialize)]
 /// struct MyStruct {
@@ -80,12 +81,12 @@ pub fn complex_entity_instance(input: &str) -> ParseResult<EntityInstance> {
 /// }
 ///
 /// // `MyStruct` as Rust struct must be parsed from `MY_STRUCT` STEP record
-/// let (_, record) = super::simple_record("MY_STRUCT(1.0, 2.0)").finish().unwrap();
+/// let (_, record) = exchange::simple_record("MY_STRUCT(1.0, 2.0)").finish().unwrap();
 /// let a: MyStruct = Deserialize::deserialize(&record).unwrap();
 ///
 /// // Other type `YOUR_STRUCT` cannot be deserialized
 /// // even if internal data `(f64, f64)` is matched.
-/// let (_, record) = super::simple_record("YOUR_STRUCT(1.0, 2.0)").finish().unwrap();
+/// let (_, record) = exchange::simple_record("YOUR_STRUCT(1.0, 2.0)").finish().unwrap();
 /// let a: Result<MyStruct, _> = Deserialize::deserialize(&record);
 /// assert!(a.is_err());
 /// ```
