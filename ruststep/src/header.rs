@@ -1,41 +1,14 @@
-use crate::parser::*;
-use std::convert::TryFrom;
+use crate::{error::Result, parser::*};
+use serde::Deserialize;
 
-#[derive(Debug, thiserror::Error)]
-pub enum InvalidHeader {
-    #[error("Required record is missing: {name}")]
-    RequiredRecordMissing { name: &'static str },
-
-    #[error("Unknown Record: {name}")]
-    UnknownRecord { name: String },
-}
-
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Deserialize)]
 pub struct FileDescription {
     description: Vec<String>,
     implementation_level: String,
 }
 
-impl TryFrom<Record> for FileDescription {
-    type Error = crate::error::Error;
-    fn try_from(record: Record) -> Result<Self, Self::Error> {
-        assert_eq!(record.name, "FILE_DESCRIPTION");
-        todo!()
-    }
-}
-
-/// STEP-file HEADER section
-///
-/// There is a schema for HEADER section,
-/// but we do not generate this structure from it to simplify build process.
-///
-#[derive(Debug, Clone, PartialEq, Default)]
-pub struct Header {
-    // file_description
-    description: Vec<String>,
-    implementation_level: String,
-
-    // file_name
+#[derive(Debug, Clone, PartialEq, Deserialize)]
+pub struct FileName {
     name: String,
     time_stamp: String,
     author: Vec<String>,
@@ -43,26 +16,57 @@ pub struct Header {
     preprocessor_version: String,
     originating_system: String,
     authorization: String,
+}
 
-    // file_schema
+#[derive(Debug, Clone, PartialEq, Deserialize)]
+pub struct FileSchema {
     schema: Vec<String>,
 }
 
+/// STEP-file HEADER section
+///
+/// There is a schema for HEADER section,
+/// but we do not generate this structure from it to simplify build process.
+///
+#[derive(Debug, Clone, PartialEq)]
+pub struct Header {
+    file_description: FileDescription,
+    file_name: FileName,
+    file_schema: FileSchema,
+}
+
 impl Header {
-    pub fn from_records(records: &[Record]) -> Result<Self, InvalidHeader> {
-        if records.len() == 0 {
-            return Err(InvalidHeader::RequiredRecordMissing {
-                name: "FILE_DESCRIPTION",
-            });
-        }
+    pub fn from_records(records: &[Record]) -> Result<Self> {
+        assert!(records.len() >= 3);
+        let file_description = FileDescription::deserialize(&records[0])?;
+        let file_name = FileName::deserialize(&records[1])?;
+        let file_schema = FileSchema::deserialize(&records[2])?;
+        Ok(Header {
+            file_description,
+            file_name,
+            file_schema,
+        })
+    }
+}
 
-        let desc = &records[0];
-        if desc.name != "FILE_DESCRIPTION" {
-            return Err(InvalidHeader::UnknownRecord {
-                name: desc.name.clone(),
-            });
-        }
+#[cfg(test)]
+mod tests {
+    use nom::Finish;
 
-        todo!()
+    #[test]
+    fn header() {
+        // From ABC dataset example
+        let header = r#"
+        HEADER;
+            FILE_DESCRIPTION( ( '' ), ' ' );
+            FILE_NAME( '/vol/tmp/translate-2747021839723325609/5ae2de121ced560fc658f4c5.step', '2018-04-27T08:23:47', ( '' ), ( '' ), ' ', ' ', ' ' );
+            FILE_SCHEMA( ( 'AUTOMOTIVE_DESIGN { 1 0 10303 214 1 1 1 1 }' ) );
+        ENDSEC;
+        "#.trim();
+        let (_residual, records) = crate::parser::exchange::header_section(&header)
+            .finish()
+            .unwrap();
+        let header = super::Header::from_records(&records).unwrap();
+        dbg!(header);
     }
 }

@@ -1,4 +1,4 @@
-use crate::{header::InvalidHeader, parser::TokenizeFailed};
+use crate::parser::TokenizeFailed;
 use serde::de;
 use std::fmt;
 
@@ -8,9 +8,6 @@ pub type Result<T> = std::result::Result<T, Error>;
 pub enum Error {
     #[error(transparent)]
     TokenizeFailed(#[from] TokenizeFailed),
-
-    #[error(transparent)]
-    InvalidHeader(#[from] InvalidHeader),
 
     #[error("Error while deserialize STEP struct: {0}")]
     DeserializeFailed(String),
