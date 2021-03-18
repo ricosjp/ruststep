@@ -1,4 +1,3 @@
-use crate::parser::TokenizeFailed;
 use serde::de;
 use std::fmt;
 
@@ -19,5 +18,32 @@ impl de::Error for Error {
         T: fmt::Display,
     {
         Error::DeserializeFailed(msg.to_string())
+    }
+}
+
+/// Error while tokenizing STEP input
+#[derive(Debug)]
+pub struct TokenizeFailed {
+    rendered_error: String,
+}
+
+impl fmt::Display for TokenizeFailed {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> std::result::Result<(), fmt::Error> {
+        write!(
+            f,
+            "Error while tokenizing STEP input\n{}",
+            self.rendered_error
+        )?;
+        Ok(())
+    }
+}
+
+impl std::error::Error for TokenizeFailed {}
+
+impl TokenizeFailed {
+    pub fn new(input: &str, err: nom::error::VerboseError<&str>) -> Self {
+        TokenizeFailed {
+            rendered_error: nom::error::convert_error(input, err),
+        }
     }
 }

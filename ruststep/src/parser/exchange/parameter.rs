@@ -23,14 +23,90 @@ pub fn list(input: &str) -> ParseResult<UntypedParameter> {
         .parse(input)
 }
 
+/// Primitive value type in STEP data, parsed by [parameter]
+///
+/// Parse
+/// ------
+///
+/// ```
+/// use nom::Finish;
+/// use ruststep::parser::{Parameter, UntypedParameter, exchange};
+///
+/// // Real number
+/// let (residual, p) = exchange::parameter("1.0").finish().unwrap();
+/// assert_eq!(residual, "");
+/// assert_eq!(p, Parameter::real(1.0));
+///
+/// // String
+/// let (residual, p) = exchange::parameter("'ruststep'").finish().unwrap();
+/// assert_eq!(residual, "");
+/// assert_eq!(p, Parameter::string("ruststep"));
+///
+/// // non-uniform list
+/// let (residual, p) = exchange::parameter("('ruststep', 1.0)").finish().unwrap();
+/// assert_eq!(residual, "");
+/// assert_eq!(p, [Parameter::string("ruststep"), Parameter::real(1.0)].iter().collect());
+///
+/// // typed
+/// let (residual, p) = exchange::parameter("FILE_NAME('ruststep')").finish().unwrap();
+/// assert_eq!(residual, "");
+/// assert!(matches!(p, Parameter::Typed { .. }));
+/// ```
+///
+/// FromIterator
+/// -------------
+/// Create a list as `Parameter::Untyped(UntypedParameter::List)` from `Iterator<Item=Parameter>`
+/// or `Iterator<Item=&Parameter>`.
+///
+/// ```
+/// use ruststep::parser::{Parameter, UntypedParameter};
+///
+/// let p: Parameter = [Parameter::real(1.0), Parameter::real(2.0)]
+///     .iter()
+///     .collect();
+/// assert!(matches!(p, Parameter::Untyped(UntypedParameter::List(_))));
+/// ```
+///
+/// serde::Deserializer
+/// -------------------
+///
+/// This implements a [serde::Deserializer], i.e. a **data format**.
+///
+/// ```
+/// use serde::Deserialize;
+/// use ruststep::parser::Parameter;
+///
+/// #[derive(Debug, Deserialize)]
+/// struct A {
+///     x: f64,
+///     y: f64,
+/// }
+///
+/// // Create a list as `Parameter::Untyped(UntypedParameter::List)`
+/// let p: Parameter = [Parameter::real(1.0), Parameter::real(2.0)]
+///     .iter()
+///     .collect();
+///
+/// // Deserialize the `Parameter` sequence into `A`
+/// let a: A = Deserialize::deserialize(&p).unwrap();
+/// println!("{:?}", a);
+///
+/// // Input types will be checked at runtime:
+/// let p: Parameter = [Parameter::string("a"), Parameter::integer(2)]
+///     .iter()
+///     .collect();
+/// let result: Result<A, _> = Deserialize::deserialize(&p);
+/// assert!(result.is_err());
+/// ```
+///
+/// [serde::Deserializer]: https://docs.serde.rs/serde/trait.Deserializer.html
 #[derive(Debug, Clone, PartialEq)]
 pub enum Parameter {
-    Typed {
-        name: String,
-        ty: Box<Parameter>,
-    },
+    /// Inline *Typed* struct
+    Typed { name: String, ty: Box<Parameter> },
+    /// Primitive types e.g. integer. See [UntypedParameter] for detail.
     Untyped(UntypedParameter),
-    /// `*`
+    /// Omitted parameter denoted by `*`
     Omitted,
 }
 
