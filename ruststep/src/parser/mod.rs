@@ -37,37 +37,10 @@ pub mod combinator;
 pub mod exchange;
 pub mod token;
 
+use crate::error::{Result, TokenizeFailed};
 use nom::Finish;
-use std::fmt;
 
 pub use exchange::{Parameter, Record, UntypedParameter};
-
-/// Error while tokenizing STEP input
-#[derive(Debug)]
-pub struct TokenizeFailed {
-    rendered_error: String,
-}
-
-impl fmt::Display for TokenizeFailed {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> Result<(), fmt::Error> {
-        write!(
-            f,
-            "Error while tokenizing STEP input\n{}",
-            self.rendered_error
-        )?;
-        Ok(())
-    }
-}
-
-impl std::error::Error for TokenizeFailed {}
-
-impl TokenizeFailed {
-    fn new(input: &str, err: nom::error::VerboseError<&str>) -> Self {
-        TokenizeFailed {
-            rendered_error: nom::error::convert_error(input, err),
-        }
-    }
-}
 
 /// Parse HEADER section
 ///
@@ -94,17 +67,17 @@ impl TokenizeFailed {
 /// let (residual, header) = ruststep::parser::parse_header(&step_str).unwrap();
 /// assert_eq!(residual, ""); // consume HEADER section of `step_str`
 /// ```
-pub fn parse_header(input: &str) -> Result<(&str, Vec<Record>), TokenizeFailed> {
+pub fn parse_header(input: &str) -> Result<(&str, Vec<Record>)> {
     match exchange::header_section(input).finish() {
         Ok((input, records)) => Ok((input, records)),
-        Err(e) => Err(TokenizeFailed::new(input, e)),
+        Err(e) => Err(TokenizeFailed::new(input, e).into()),
     }
 }
 
 /// Parse entire STEP file
-pub fn parse(input: &str) -> Result<exchange::Exchange, TokenizeFailed> {
+pub fn parse(input: &str) -> Result<exchange::Exchange> {
     match exchange::exchange_file(input).finish() {
         Ok((_residual, ex)) => Ok(ex),
-        Err(e) => Err(TokenizeFailed::new(input, e)),
+        Err(e) => Err(TokenizeFailed::new(input, e).into()),
     }
 }
