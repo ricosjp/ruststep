@@ -1,4 +1,5 @@
 use crate::parser::{combinator::*, exchange::*, token::*};
+use inflector::Inflector;
 use nom::{branch::alt, Parser};
 use serde::{de, forward_to_deserialize_any};
 
@@ -111,7 +112,7 @@ impl<'de, 'record> de::Deserializer<'de> for &'record Record {
     where
         V: de::Visitor<'de>,
     {
-        if name != self.name {
+        if name != self.name.to_pascal_case() {
             return Err(de::Error::invalid_type(
                 de::Unexpected::StructVariant,
                 &self.name.as_str(),
@@ -152,21 +153,25 @@ mod tests {
     }
 
     #[derive(Debug, Deserialize)]
-    struct A {
+    struct MyStruct {
         x: f64,
         y: f64,
     }
 
     #[test]
     fn deserialize_record_to_struct() {
-        let (res, record) = super::simple_record("A(1.0, 2.0)").finish().unwrap();
+        let (res, record) = super::simple_record("MY_STRUCT(1.0, 2.0)")
+            .finish()
+            .unwrap();
         assert_eq!(res, "");
-        let a: A = Deserialize::deserialize(&record).unwrap();
+        let a: MyStruct = Deserialize::deserialize(&record).unwrap();
         dbg!(a);
 
-        let (res, record) = super::simple_record("B(1.0, 2.0)").finish().unwrap();
+        let (res, record) = super::simple_record("YOUR_STRUCT(1.0, 2.0)")
+            .finish()
+            .unwrap();
         assert_eq!(res, "");
-        let a: Result<A, _> = Deserialize::deserialize(&record);
+        let a: Result<MyStruct, _> = Deserialize::deserialize(&record);
         assert!(a.is_err());
     }
 }

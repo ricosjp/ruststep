@@ -305,7 +305,7 @@ mod tests {
         // match to empty
         let (res, digits) = many0_digit("").finish().unwrap();
         assert_eq!(res, "");
-        assert_eq!(digits, &[]);
+        assert!(digits.is_empty());
 
         let (res, digits) = many1_digit("1").finish().unwrap();
         assert_eq!(res, "");
@@ -319,7 +319,7 @@ mod tests {
         // does not match to head space
         let (res, digits) = many0_digit(" 1 /* comment */ 2").finish().unwrap();
         assert_eq!(res, " 1 /* comment */ 2"); // match to nothing
-        assert_eq!(digits, &[]);
+        assert!(digits.is_empty());
     }
 
     fn many1_digit(input: &str) -> ParseResult<Vec<char>> {

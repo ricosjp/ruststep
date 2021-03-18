@@ -10,6 +10,7 @@ edition = "2018"
 nom = "6.1.0"
 serde = { version = "1.0.124", features = ["derive"]}
 thiserror = "1.0.24"
+Inflector = "0.11.4"
 
 [dev-dependencies]
 anyhow = "1.0"
