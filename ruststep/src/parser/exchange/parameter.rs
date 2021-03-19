@@ -212,6 +212,10 @@ impl<'de, 'param> de::Deserializer<'de> for &'param Parameter {
                     let seq = de::value::SeqDeserializer::new(params.iter());
                     visitor.visit_seq(seq)
                 }
+                UntypedParameter::RValue(rvalue) => match rvalue {
+                    RValue::Value(id) | RValue::Entity(id) => visitor.visit_u64(*id),
+                    RValue::ConstantValue(c) | RValue::ConstantEntity(c) => visitor.visit_str(c),
+                },
                 _ => unimplemented!(),
             },
             Parameter::Omitted => unimplemented!(),
