@@ -1,3 +1,4 @@
+use serde::Deserialize;
 use std::{
     collections::HashMap,
     fmt,
@@ -6,6 +7,7 @@ use std::{
 
 pub type Table<T> = HashMap<Id<T>, T>;
 
+#[derive(Deserialize)]
 pub struct Id<T: 'static> {
     id: usize,
     phantom: std::marker::PhantomData<&'static T>,
