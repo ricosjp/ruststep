@@ -60,7 +60,7 @@ use serde::{de, forward_to_deserialize_any};
 ///     y: f64,
 /// }
 ///
-/// // Create a list as `Parameter::Untyped(Parameter::List)`
+/// // Create a list as `Parameter::List`
 /// let p: Parameter = [Parameter::real(1.0), Parameter::real(2.0)]
 ///     .iter()
 ///     .collect();
@@ -81,19 +81,21 @@ use serde::{de, forward_to_deserialize_any};
 #[derive(Debug, Clone, PartialEq)]
 pub enum Parameter {
     /// Inline *Typed* struct
-    Typed {
-        name: String,
-        ty: Box<Parameter>,
-    },
+    Typed { name: String, ty: Box<Parameter> },
 
+    /// Signed integer
     Integer(i64),
+    /// Real number
     Real(f64),
+    /// string literal
     String(String),
+    /// Enumeration defined in EXPRESS schema, like `.TRUE.`
     Enumeration(String),
-    /// A reference to entity or value, parsed by [rhs_occurrence_name]
-    RValue(RValue),
     /// List of other parameters
     List(Vec<Parameter>),
+
+    /// A reference to entity or value, parsed by [rhs_occurrence_name]
+    RValue(RValue),
 
     /// The special token dollar sign (`$`) is used to represent an object whose value is not provided in the exchange structure.
     NotProvided,
