@@ -1,4 +1,4 @@
-use crate::parser::{combinator::*, token::*};
+use crate::parser::{combinator::*, token::*, value::*};
 use inflector::Inflector;
 use nom::{branch::alt, combinator::value, Parser};
 use serde::{de, forward_to_deserialize_any};

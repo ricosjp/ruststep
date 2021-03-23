@@ -1,6 +1,6 @@
 //! Parser for tokens defined in the table 2 of ISO-10303-21
 
-use super::{basic::*, combinator::*};
+use super::{basic::*, combinator::*, value::*};
 use nom::{
     branch::alt,
     character::complete::{char, digit1, multispace0, none_of, satisfy},
@@ -63,28 +63,6 @@ pub fn enumeration(input: &str) -> ParseResult<String> {
     tuple((char('.'), standard_keyword, char('.')))
         .map(|(_head, name, _tail)| name)
         .parse(input)
-}
-
-/// Left hand side value
-#[derive(Debug, Clone, PartialEq)]
-pub enum LValue {
-    /// Like `#11`
-    Entity(u64),
-    /// Like `@11`
-    Value(u64),
-}
-
-/// Right hand side value
-#[derive(Debug, Clone, PartialEq)]
-pub enum RValue {
-    /// Like `#11`
-    Entity(u64),
-    /// Like `@11`
-    Value(u64),
-    /// Like `#CONST_ENTITY`
-    ConstantEntity(String),
-    /// Like `@CONST_VALUE`
-    ConstantValue(String),
 }
 
 // Root error for u64 overflow
