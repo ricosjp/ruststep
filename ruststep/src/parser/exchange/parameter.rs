@@ -336,4 +336,29 @@ mod tests {
         let a: Result<A, _> = Deserialize::deserialize(&dbg!(p));
         assert!(a.is_err());
     }
+
+    // For nested structure test
+    #[derive(Debug, Deserialize)]
+    struct B {
+        z: f64,
+        a: A,
+    }
+
+    #[test]
+    fn deserialize_parameter_typed_nested() {
+        let (res, p) = super::parameter("B((1.0, A((2.0, 3.0))))")
+            .finish()
+            .unwrap();
+        assert_eq!(res, "");
+        let b: B = Deserialize::deserialize(dbg!(&p)).unwrap();
+        dbg!(b);
+
+        // C(...) should not be parsed as A
+        let (res, p) = super::parameter("B((1.0, C((2.0, 3.0))))")
+            .finish()
+            .unwrap();
+        assert_eq!(res, "");
+        let b: Result<B, _> = Deserialize::deserialize(dbg!(&p));
+        assert!(b.is_err());
+    }
 }
