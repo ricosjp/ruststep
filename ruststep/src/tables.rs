@@ -36,6 +36,13 @@ impl<T: 'static> Hash for Id<T> {
     }
 }
 
+/// Owned value or reference to entity/value
+#[derive(Debug, Clone, PartialEq)]
+pub enum PlaceHolder<T> {
+    Ref(RValue),
+    Owned(T),
+}
+
 pub trait Entity<'tables> {
     type Schema: EntryTable<'tables, Self::Entry>;
     type Entry: TableEntry<'tables, Schema = Self::Schema>;
