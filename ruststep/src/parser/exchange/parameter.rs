@@ -75,6 +75,8 @@ use serde::{de, forward_to_deserialize_any};
 /// -------------------
 ///
 /// This implements a [serde::Deserializer], i.e. a **data format**.
+/// For untyped parameters, e.g. real number, can be deserialized into any types
+/// as far as compatible in terms of the serde data model.
 ///
 /// ```
 /// use serde::Deserialize;
@@ -103,7 +105,34 @@ use serde::{de, forward_to_deserialize_any};
 /// assert!(result.is_err());
 /// ```
 ///
+/// On the other hand, typed parameter, e.g. `A(1)`, must be deserialized into a struct
+/// whose name is "A".
+///
+/// ```
+/// use serde::Deserialize;
+/// use ruststep::parser::{Parameter, exchange};
+/// use nom::Finish;
+///
+/// #[derive(Debug, Deserialize)]
+/// struct A {
+///     x: f64,
+///     y: f64,
+/// }
+///
+/// // can be deserialized into `A`
+/// let (res, p) = exchange::parameter("A((1.0, 2.0))").finish().unwrap();
+/// assert_eq!(res, "");
+/// let a: A = Deserialize::deserialize(&p).unwrap();
+///
+/// // B(...) cannot be parsed as `A`
+/// let (res, p) = exchange::parameter("B((1.0, 2.0))").finish().unwrap();
+/// assert_eq!(res, "");
+/// let a: Result<A, _> = Deserialize::deserialize(&p);
+/// assert!(a.is_err());
+/// ```
+///
 /// [serde::Deserializer]: https://docs.serde.rs/serde/trait.Deserializer.html
+///
 #[derive(Debug, Clone, PartialEq)]
 pub enum Parameter {
     /// Inline *Typed* struct
@@ -284,14 +313,6 @@ mod tests {
     use serde::Deserialize;
 
     #[test]
-    fn list_from_iter() {
-        let l: Parameter = [Parameter::integer(1), Parameter::real(2.0)]
-            .iter()
-            .collect();
-        assert!(matches!(l, Parameter::List(_)));
-    }
-
-    #[test]
     fn deserialize_int() {
         let p = Parameter::Integer(2);
         let a: i64 = Deserialize::deserialize(&p).unwrap();
@@ -314,30 +335,6 @@ mod tests {
         y: f64,
     }
 
-    #[test]
-    fn deserialize_parameter_list_to_struct() {
-        let p: Parameter = [Parameter::real(1.0), Parameter::real(2.0)]
-            .iter()
-            .collect();
-        let a: A = Deserialize::deserialize(&p).unwrap();
-        dbg!(a);
-    }
-
-    #[test]
-    fn deserialize_parameter_typed() {
-        let (res, p) = super::parameter("A((1.0, 2.0))").finish().unwrap();
-        assert_eq!(res, "");
-        let a: A = Deserialize::deserialize(&dbg!(p)).unwrap();
-        dbg!(a);
-
-        // B(...) cannot be parsed as A
-        let (res, p) = super::parameter("B((1.0, 2.0))").finish().unwrap();
-        assert_eq!(res, "");
-        let a: Result<A, _> = Deserialize::deserialize(&dbg!(p));
-        assert!(a.is_err());
-    }
-
-    // For nested structure test
     #[derive(Debug, Deserialize)]
     struct B {
         z: f64,
