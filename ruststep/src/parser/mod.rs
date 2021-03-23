@@ -40,7 +40,7 @@ pub mod token;
 use crate::error::{Result, TokenizeFailed};
 use nom::Finish;
 
-pub use exchange::{Parameter, Record, UntypedParameter};
+pub use exchange::{Parameter, Record};
 
 /// Parse HEADER section
 ///
