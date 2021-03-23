@@ -7,7 +7,7 @@ use serde::{de, forward_to_deserialize_any};
 /// serde::Deserialize
 /// -------------------
 ///
-/// Different from [Parameter], this checks the target struct name:
+/// Similar to typed [Parameter], this checks the target struct name:
 ///
 /// ```
 /// use nom::Finish;
