@@ -1,5 +1,8 @@
 use serde::{de, forward_to_deserialize_any, Deserialize};
 
+#[cfg(doc)] // for doc-link
+use super::exchange::Record;
+
 /// Left hand side value
 #[derive(Debug, Clone, PartialEq, Deserialize)]
 pub enum LValue {
@@ -14,8 +17,10 @@ pub enum LValue {
 /// serde::Deserializer
 /// -------------------
 ///
-/// Since RValue may appear in [Record], this should supports [serde::Deserializer]
+/// Since [RValue] may appear in [Record], this should supports [serde::Deserializer]
 /// as like done in [serde::de::value].
+/// This enum is also [serde::Deserialize].
+/// [Deserialize::deserialize] returns same value as following:
 ///
 /// ```
 /// use serde::Deserialize;
@@ -37,9 +42,6 @@ pub enum LValue {
 /// let a: RValue = Deserialize::deserialize(&value).unwrap();
 /// assert_eq!(a, value);
 /// ```
-///
-/// [serde::de::value]: https://docs.serde.rs/serde/de/value/index.html
-/// [serde::Deserializer]: https://docs.serde.rs/serde/trait.Deserializer.html
 ///
 #[derive(Debug, Clone, PartialEq, Deserialize)]
 pub enum RValue {
