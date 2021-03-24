@@ -43,6 +43,15 @@ pub enum LValue {
 /// assert_eq!(a, value);
 /// ```
 ///
+/// Enum representation
+/// --------------------
+///
+/// [Deserialize] is derived without `#[serde(...)]` attribute,
+/// which means it is "externally tagged" as described in [enum representations].
+/// For example, `RValue::Entity(11)` will be deserialized from `{ "Entity": 11 }`.
+///
+/// [enum representations]: https://serde.rs/enum-representations.html
+///
 #[derive(Debug, Clone, PartialEq, Deserialize)]
 pub enum RValue {
     /// Like `#11`
@@ -58,28 +67,33 @@ pub enum RValue {
 impl<'de, 'value> de::Deserializer<'de> for &'value RValue {
     type Error = crate::error::Error;
 
-    fn deserialize_any<V>(self, _visitor: V) -> Result<V::Value, Self::Error>
+    fn deserialize_any<V>(self, visitor: V) -> Result<V::Value, Self::Error>
     where
         V: de::Visitor<'de>,
     {
-        todo!()
-    }
-
-    fn deserialize_struct<V>(
-        self,
-        _name: &'static str,
-        _fields: &'static [&'static str],
-        _visitor: V,
-    ) -> Result<V::Value, Self::Error>
-    where
-        V: de::Visitor<'de>,
-    {
-        todo!()
+        match self {
+            RValue::Entity(id) => visitor.visit_enum(de::value::MapAccessDeserializer::new(
+                de::value::MapDeserializer::new([("Entity", *id)].iter().cloned()),
+            )),
+            RValue::Value(id) => visitor.visit_enum(de::value::MapAccessDeserializer::new(
+                de::value::MapDeserializer::new([("Value", *id)].iter().cloned()),
+            )),
+            RValue::ConstantEntity(name) => visitor.visit_enum(
+                de::value::MapAccessDeserializer::new(de::value::MapDeserializer::new(
+                    [("ConstantEntity", name.clone())].iter().cloned(),
+                )),
+            ),
+            RValue::ConstantValue(name) => visitor.visit_enum(
+                de::value::MapAccessDeserializer::new(de::value::MapDeserializer::new(
+                    [("ConstantValue", name.clone())].iter().cloned(),
+                )),
+            ),
+        }
     }
 
     forward_to_deserialize_any! {
         bool i8 i16 i32 i64 i128 u8 u16 u32 u64 u128 f32 f64 char str string
         bytes byte_buf option unit unit_struct newtype_struct seq tuple
-        tuple_struct map enum identifier ignored_any
+        enum tuple_struct struct map identifier ignored_any
     }
 }
