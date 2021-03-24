@@ -37,7 +37,27 @@ impl<T: 'static> Hash for Id<T> {
 }
 
 /// Owned value or reference to entity/value
-#[derive(Debug, Clone, PartialEq)]
+///
+/// ```
+/// use serde::Deserialize;
+/// use nom::Finish;
+/// use ruststep::{parser::{value::RValue, exchange}, tables::PlaceHolder};
+///
+/// #[derive(Debug, Deserialize)]
+/// struct A {
+///     x: f64,
+///     y: f64,
+/// }
+///
+/// let value = RValue::Entity(11);
+/// let a: PlaceHolder<A> = Deserialize::deserialize(&value).unwrap();
+/// dbg!(a);
+///
+/// let (_, record) = exchange::simple_record("A(1.0, 2.0)").finish().unwrap();
+/// let a: PlaceHolder<A> = Deserialize::deserialize(&record).unwrap();
+/// dbg!(a);
+/// ```
+#[derive(Debug, Clone, PartialEq, Deserialize)]
 pub enum PlaceHolder<T> {
     Ref(RValue),
     Owned(T),
