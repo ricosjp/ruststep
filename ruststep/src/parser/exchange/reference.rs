@@ -8,7 +8,7 @@ pub fn reference_section(input: &str) -> ParseResult<Vec<ReferenceEntry>> {
         .parse(input)
 }
 
-/// reference_list = { [reference] } .
+/// reference_list = { [reference()] } .
 pub fn reference_list(input: &str) -> ParseResult<Vec<ReferenceEntry>> {
     many0_(reference).parse(input)
 }
