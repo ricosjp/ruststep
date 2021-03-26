@@ -75,8 +75,9 @@ use serde::{de, forward_to_deserialize_any};
 /// -------------------
 ///
 /// This implements a [serde::Deserializer], i.e. a **data format**.
-/// For untyped parameters, e.g. real number, can be deserialized into any types
-/// as far as compatible in terms of the serde data model.
+///
+/// - For untyped parameters, e.g. real number, can be deserialized into any types
+///   as far as compatible in terms of the serde data model.
 ///
 /// ```
 /// use serde::Deserialize;
@@ -105,8 +106,8 @@ use serde::{de, forward_to_deserialize_any};
 /// assert!(result.is_err());
 /// ```
 ///
-/// On the other hand, typed parameter, e.g. `A(1)`, must be deserialized into a struct
-/// whose name is "A".
+/// - Typed parameter, e.g. `A(1)`, must be deserialized into a struct
+///   whose name is "A".
 ///
 /// ```
 /// use serde::Deserialize;
@@ -129,6 +130,18 @@ use serde::{de, forward_to_deserialize_any};
 /// assert_eq!(res, "");
 /// let a: Result<A, _> = Deserialize::deserialize(&p);
 /// assert!(a.is_err());
+/// ```
+///
+/// - For [RValue]
+///
+/// ```
+/// use serde::Deserialize;
+/// use ruststep::parser::{exchange, value::RValue, Parameter};
+/// use nom::Finish;
+///
+/// let (res, p) = exchange::parameter("#11").finish().unwrap();
+/// let a: RValue = Deserialize::deserialize(&p).unwrap();
+/// assert_eq!(a, RValue::Entity(11))
 /// ```
 ///
 /// [serde::Deserializer]: https://docs.serde.rs/serde/trait.Deserializer.html
@@ -262,15 +275,11 @@ impl<'de, 'param> de::Deserializer<'de> for &'param Parameter {
             Parameter::Real(val) => visitor.visit_f64(*val),
             Parameter::String(val) => visitor.visit_str(val),
             Parameter::List(params) => {
-                let seq = de::value::SeqDeserializer::new(params.iter());
-                visitor.visit_seq(seq)
+                visitor.visit_seq(de::value::SeqDeserializer::new(params.iter()))
             }
-            Parameter::RValue(rvalue) => match rvalue {
-                RValue::Value(id) | RValue::Entity(id) => visitor.visit_u64(*id),
-                RValue::ConstantValue(c) | RValue::ConstantEntity(c) => visitor.visit_str(c),
-            },
-            Parameter::Omitted => unimplemented!(),
-            _ => unimplemented!(),
+            Parameter::RValue(rvalue) => de::Deserializer::deserialize_any(rvalue, visitor),
+            Parameter::NotProvided | Parameter::Omitted => visitor.visit_none(),
+            Parameter::Enumeration(_) => unimplemented!(),
         }
     }
 
