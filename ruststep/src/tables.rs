@@ -1,4 +1,3 @@
-use crate::parser::value::RValue;
 use serde::Deserialize;
 use std::{
     collections::HashMap,
@@ -34,33 +33,6 @@ impl<T: 'static> Hash for Id<T> {
     fn hash<H: Hasher>(&self, state: &mut H) {
         self.id.hash(state);
     }
-}
-
-/// Owned value or reference to entity/value
-///
-/// ```
-/// use serde::Deserialize;
-/// use nom::Finish;
-/// use ruststep::{parser::{value::RValue, exchange}, tables::PlaceHolder};
-///
-/// #[derive(Debug, Deserialize)]
-/// struct A {
-///     x: f64,
-///     y: f64,
-/// }
-///
-/// let value = RValue::Entity(11);
-/// let a: PlaceHolder<A> = Deserialize::deserialize(&value).unwrap();
-/// dbg!(a);
-///
-/// let (_, record) = exchange::simple_record("A(1.0, 2.0)").finish().unwrap();
-/// let a: PlaceHolder<A> = Deserialize::deserialize(&record).unwrap();
-/// dbg!(a);
-/// ```
-#[derive(Debug, Clone, PartialEq, Deserialize)]
-pub enum PlaceHolder<T> {
-    Ref(RValue),
-    Owned(T),
 }
 
 pub trait Entity<'tables> {

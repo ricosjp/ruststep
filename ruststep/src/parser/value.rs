@@ -1,4 +1,5 @@
 use serde::{de, forward_to_deserialize_any, Deserialize};
+use std::{fmt, marker::PhantomData};
 
 #[cfg(doc)] // for doc-link
 use super::exchange::Record;
@@ -95,5 +96,82 @@ impl<'de, 'value> de::Deserializer<'de> for &'value RValue {
         bool i8 i16 i32 i64 i128 u8 u16 u32 u64 u128 f32 f64 char str string
         bytes byte_buf option unit unit_struct newtype_struct seq tuple
         enum tuple_struct struct map identifier ignored_any
+    }
+}
+
+/// Owned value or reference to entity/value
+#[derive(Debug, Clone, PartialEq)]
+pub enum PlaceHolder<T> {
+    Ref(RValue),
+    Owned(T),
+}
+
+impl<'de, T> Deserialize<'de> for PlaceHolder<T> {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: de::Deserializer<'de>,
+    {
+        deserializer.deserialize_struct(
+            "A",
+            &[],
+            PlaceHolderVisitor::<T> {
+                phantom: PhantomData,
+            },
+        )
+    }
+}
+
+struct PlaceHolderVisitor<T> {
+    phantom: PhantomData<T>,
+}
+
+impl<'de, T> de::Visitor<'de> for PlaceHolderVisitor<T> {
+    type Value = PlaceHolder<T>;
+
+    fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+        formatter.write_str("PlaceHolder")
+    }
+
+    // For Ref(RValue)
+    fn visit_enum<A>(self, _data: A) -> Result<Self::Value, A::Error>
+    where
+        A: de::EnumAccess<'de>,
+    {
+        dbg!(std::any::type_name::<A>());
+        Ok(PlaceHolder::Ref(RValue::Entity(11)))
+    }
+
+    // For Owned(T)
+    fn visit_seq<A>(self, _seq: A) -> Result<Self::Value, A::Error>
+    where
+        A: de::SeqAccess<'de>,
+    {
+        dbg!(std::any::type_name::<A>());
+        Ok(PlaceHolder::Ref(RValue::Entity(111)))
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::parser::exchange;
+    use nom::Finish;
+    use serde::Deserialize;
+
+    #[derive(Debug, Deserialize)]
+    struct A {
+        x: f64,
+        y: f64,
+    }
+
+    #[test]
+    fn place_holder() {
+        let value = RValue::Entity(11);
+        let a: PlaceHolder<A> = Deserialize::deserialize(&value).unwrap();
+        dbg!(a);
+
+        let (_, record) = exchange::simple_record("A(1.0, 2.0)").finish().unwrap();
+        let a: PlaceHolder<A> = Deserialize::deserialize(&record).unwrap();
+        dbg!(a);
     }
 }
