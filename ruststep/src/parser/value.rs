@@ -115,11 +115,7 @@ impl<'de, T: Deserialize<'de>> Deserialize<'de> for PlaceHolder<T> {
     where
         D: de::Deserializer<'de>,
     {
-        // This first try to deserialize input as struct `T`,
-        // and defaults into `RValue` if failed.
-        // Because neither `Parameter` nor `Record` does not returns "map"
-        // in serde data model except for RValue,
-        // this behavior can map the input to PlaceHolder correctly
+        // Dispatched dynamically:
         //
         // For Ref(RValue)
         // ----------------
@@ -135,7 +131,7 @@ impl<'de, T: Deserialize<'de>> Deserialize<'de> for PlaceHolder<T> {
         // > Record::deserialize_struct(PlaceHolderVisitor)
         // > PlaceHolderVisitor::visit_seq(SeqDeserializer)
         deserializer.deserialize_struct(
-            "A", /* FIXME */
+            std::any::type_name::<T>(),
             &[],
             PlaceHolderVisitor::<T> {
                 phantom: PhantomData,

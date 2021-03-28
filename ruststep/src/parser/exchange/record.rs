@@ -59,7 +59,7 @@ impl<'de, 'record> de::Deserializer<'de> for &'record Record {
     where
         V: de::Visitor<'de>,
     {
-        if name != self.name.to_pascal_case() {
+        if get_struct_name(name) != self.name.to_pascal_case() {
             return Err(de::Error::invalid_type(
                 de::Unexpected::StructVariant,
                 &self.name.as_str(),
@@ -74,6 +74,14 @@ impl<'de, 'record> de::Deserializer<'de> for &'record Record {
         bytes byte_buf option unit unit_struct newtype_struct seq tuple
         tuple_struct map enum identifier ignored_any
     }
+}
+
+fn get_struct_name(name: &str) -> &str {
+    let name = match name.find("<") {
+        Some(pos) => &name[..pos],
+        None => name,
+    };
+    name.rsplit("::").next().unwrap()
 }
 
 #[cfg(test)]
@@ -102,5 +110,14 @@ mod tests {
         assert_eq!(res, "");
         let a: Result<MyStruct, _> = Deserialize::deserialize(&record);
         assert!(a.is_err());
+    }
+
+    #[test]
+    fn get_struct_name() {
+        let name = super::get_struct_name("some::namespace::A");
+        assert_eq!(name, "A");
+
+        let name = super::get_struct_name("some::namespace::A<T>");
+        assert_eq!(name, "A");
     }
 }
