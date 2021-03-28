@@ -31,31 +31,36 @@ use serde::{de, forward_to_deserialize_any, Deserialize};
 /// let (residual, p) = exchange::parameter("FILE_NAME('ruststep')").finish().unwrap();
 /// assert_eq!(residual, "");
 /// assert!(matches!(p, Parameter::Typed { .. }));
+/// ```
 ///
-/// // inline struct or list can be nested, i.e. `Parameter` can be a tree.
-/// let (residual, p) = exchange::parameter("B((1.0, A((2.0, 3.0))))").finish().unwrap();
+/// Inline struct or list can be nested, i.e. `Parameter` can be a tree.
+///
+/// ```
+/// use nom::Finish;
+/// use ruststep::parser::{Parameter, exchange};
+///
+/// let (residual, p) = exchange::parameter("B((1.0, A((2.0, 3.0))))")
+///     .finish()
+///     .unwrap();
 /// assert_eq!(residual, "");
-/// if let Parameter::Typed { name, ty } = p {
-///     assert_eq!(name, "B");
-///     if let Parameter::List(parameters) = *ty {
-///         assert_eq!(parameters.len(), 2);
-///         assert_eq!(parameters[0], Parameter::real(1.0));
-///         if let Parameter::Typed { name, ty } = &parameters[1] {
-///             assert_eq!(name, "A");
-///             if let Parameter::List(inner) = &**ty {
-///                 assert_eq!(inner.len(), 2);
-///                 assert_eq!(inner[0], Parameter::real(2.0));
-///                 assert_eq!(inner[1], Parameter::real(3.0));
-///             }
-///         } else {
-///             unreachable!()
-///         }
-///     } else {
-///         unreachable!()
-///     }
-/// } else {
-///     unreachable!()
-/// }
+///
+/// // A((2.0, 3.0))
+/// let a = Parameter::Typed {
+///     name: "A".to_string(),
+///     ty: Box::new(
+///         [Parameter::real(2.0), Parameter::real(3.0)]
+///             .iter()
+///             .collect(),
+///     ),
+/// };
+///
+/// // B((1.0, a))
+/// let b = Parameter::Typed {
+///     name: "B".to_string(),
+///     ty: Box::new([Parameter::real(1.0), a].iter().collect()),
+/// };
+///
+/// assert_eq!(p, b);
 /// ```
 ///
 /// FromIterator
