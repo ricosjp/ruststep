@@ -1,4 +1,7 @@
-use serde::{de, forward_to_deserialize_any, Deserialize};
+use serde::{
+    de::{self, VariantAccess},
+    forward_to_deserialize_any, Deserialize,
+};
 use std::{fmt, marker::PhantomData};
 
 #[cfg(doc)] // for doc-link
@@ -111,8 +114,13 @@ impl<'de, T> Deserialize<'de> for PlaceHolder<T> {
     where
         D: de::Deserializer<'de>,
     {
+        // This first try to deserialize input as struct `T`,
+        // and defaults into `RValue` if failed.
+        // Because neither `Parameter` nor `Record` does not returns "map"
+        // in serde data model except for RValue,
+        // this behavior can map the input to PlaceHolder correctly
         deserializer.deserialize_struct(
-            "A",
+            "A", /* FIXME */
             &[],
             PlaceHolderVisitor::<T> {
                 phantom: PhantomData,
@@ -133,12 +141,30 @@ impl<'de, T> de::Visitor<'de> for PlaceHolderVisitor<T> {
     }
 
     // For Ref(RValue)
-    fn visit_enum<A>(self, _data: A) -> Result<Self::Value, A::Error>
+    fn visit_enum<A>(self, data: A) -> Result<Self::Value, A::Error>
     where
         A: de::EnumAccess<'de>,
     {
-        dbg!(std::any::type_name::<A>());
-        Ok(PlaceHolder::Ref(RValue::Entity(11)))
+        let (key, variant): (String, _) = data.variant()?;
+        match key.as_str() {
+            "Entity" => {
+                let value: u64 = variant.newtype_variant()?;
+                Ok(PlaceHolder::Ref(RValue::Entity(value)))
+            }
+            "Value" => {
+                let value: u64 = variant.newtype_variant()?;
+                Ok(PlaceHolder::Ref(RValue::Value(value)))
+            }
+            "ConstantEntity" => {
+                let name: String = variant.newtype_variant()?;
+                Ok(PlaceHolder::Ref(RValue::ConstantEntity(name)))
+            }
+            "ConstantValue" => {
+                let name: String = variant.newtype_variant()?;
+                Ok(PlaceHolder::Ref(RValue::ConstantValue(name)))
+            }
+            _ => unreachable!("Invalid key while deserializing PlaceHolder"),
+        }
     }
 
     // For Owned(T)
@@ -167,6 +193,10 @@ mod tests {
     #[test]
     fn place_holder() {
         let value = RValue::Entity(11);
+        let a: PlaceHolder<A> = Deserialize::deserialize(&value).unwrap();
+        dbg!(a);
+
+        let value = RValue::ConstantValue("VIM".into());
         let a: PlaceHolder<A> = Deserialize::deserialize(&value).unwrap();
         dbg!(a);
 
