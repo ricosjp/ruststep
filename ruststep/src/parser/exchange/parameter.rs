@@ -1,7 +1,7 @@
 use crate::parser::{combinator::*, token::*, value::*};
 use inflector::Inflector;
 use nom::{branch::alt, combinator::value, Parser};
-use serde::{de, forward_to_deserialize_any};
+use serde::{de, forward_to_deserialize_any, Deserialize};
 
 /// Primitive value type in STEP data, parsed by [parameter]
 ///
@@ -146,7 +146,7 @@ use serde::{de, forward_to_deserialize_any};
 ///
 /// [serde::Deserializer]: https://docs.serde.rs/serde/trait.Deserializer.html
 ///
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Deserialize)]
 pub enum Parameter {
     /// Inline *Typed* struct
     Typed { name: String, ty: Box<Parameter> },

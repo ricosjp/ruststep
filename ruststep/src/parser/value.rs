@@ -1,3 +1,4 @@
+use super::exchange::Parameter;
 use serde::{
     de::{self, VariantAccess},
     forward_to_deserialize_any, Deserialize,
@@ -109,7 +110,7 @@ pub enum PlaceHolder<T> {
     Owned(T),
 }
 
-impl<'de, T> Deserialize<'de> for PlaceHolder<T> {
+impl<'de, T: Deserialize<'de>> Deserialize<'de> for PlaceHolder<T> {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
     where
         D: de::Deserializer<'de>,
@@ -119,6 +120,20 @@ impl<'de, T> Deserialize<'de> for PlaceHolder<T> {
         // Because neither `Parameter` nor `Record` does not returns "map"
         // in serde data model except for RValue,
         // this behavior can map the input to PlaceHolder correctly
+        //
+        // For Ref(RValue)
+        // ----------------
+        // PlaceHolder::deserialize(RValue)
+        // > RValue::deserialize_struct(PlaceHolderVisitor)
+        // > (forward_to_deserialize_any)
+        // > RValue::deserialize_any(PlaceHolderVisitor)
+        // > PlaceHolderVisitor::visit_enum(MapAccessDeserializer)
+        //
+        // For Owned(T)
+        // -------------
+        // PlaceHolder::deserialize(Record)
+        // > Record::deserialize_struct(PlaceHolderVisitor)
+        // > PlaceHolderVisitor::visit_seq(SeqDeserializer)
         deserializer.deserialize_struct(
             "A", /* FIXME */
             &[],
@@ -133,7 +148,7 @@ struct PlaceHolderVisitor<T> {
     phantom: PhantomData<T>,
 }
 
-impl<'de, T> de::Visitor<'de> for PlaceHolderVisitor<T> {
+impl<'de, T: Deserialize<'de>> de::Visitor<'de> for PlaceHolderVisitor<T> {
     type Value = PlaceHolder<T>;
 
     fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
@@ -168,12 +183,16 @@ impl<'de, T> de::Visitor<'de> for PlaceHolderVisitor<T> {
     }
 
     // For Owned(T)
-    fn visit_seq<A>(self, _seq: A) -> Result<Self::Value, A::Error>
+    fn visit_seq<A>(self, mut seq: A) -> Result<Self::Value, A::Error>
     where
         A: de::SeqAccess<'de>,
     {
-        dbg!(std::any::type_name::<A>());
-        Ok(PlaceHolder::Ref(RValue::Entity(111)))
+        let mut components: Vec<Parameter> = Vec::new();
+        while let Some(component) = seq.next_element()? {
+            components.push(component);
+        }
+        let seq = de::value::SeqDeserializer::new(components.iter());
+        Ok(PlaceHolder::Owned(T::deserialize(seq).unwrap()))
     }
 }
 
