@@ -76,7 +76,7 @@ impl<'de, 'record> de::Deserializer<'de> for &'record Record {
     }
 }
 
-fn get_struct_name(name: &str) -> &str {
+pub(super) fn get_struct_name(name: &str) -> &str {
     let name = match name.find('<') {
         Some(pos) => &name[..pos],
         None => name,

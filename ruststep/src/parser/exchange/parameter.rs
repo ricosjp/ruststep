@@ -301,7 +301,7 @@ impl<'de, 'param> de::Deserializer<'de> for &'param Parameter {
         V: de::Visitor<'de>,
     {
         if let Parameter::Typed { name, ty } = self {
-            if struct_name != name.to_pascal_case() {
+            if super::get_struct_name(struct_name) != name.to_pascal_case() {
                 return Err(de::Error::invalid_type(
                     de::Unexpected::Other(name),
                     &struct_name,
