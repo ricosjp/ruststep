@@ -148,7 +148,7 @@ impl<'de, T: Deserialize<'de>> de::Visitor<'de> for PlaceHolderVisitor<T> {
     type Value = PlaceHolder<T>;
 
     fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-        formatter.write_str("PlaceHolder")
+        write!(formatter, "PlaceHolder<{}>", std::any::type_name::<T>())
     }
 
     // For Ref(RValue)
