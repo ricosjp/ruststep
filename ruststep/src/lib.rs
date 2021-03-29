@@ -18,4 +18,4 @@ pub mod primitive;
 pub mod tables;
 
 #[cfg(any(test, doc))]
-pub mod manual_codegen_test;
+pub mod ap000;
