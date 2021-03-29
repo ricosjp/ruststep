@@ -1,7 +1,8 @@
-use crate::parser::{combinator::*, token::*};
+use crate::parser::{combinator::*, token::*, value::*};
 use inflector::Inflector;
 use nom::{branch::alt, combinator::value, Parser};
-use serde::{de, forward_to_deserialize_any};
+use serde::{de, forward_to_deserialize_any, Deserialize};
+use std::fmt;
 
 /// Primitive value type in STEP data, parsed by [parameter]
 ///
@@ -31,31 +32,36 @@ use serde::{de, forward_to_deserialize_any};
 /// let (residual, p) = exchange::parameter("FILE_NAME('ruststep')").finish().unwrap();
 /// assert_eq!(residual, "");
 /// assert!(matches!(p, Parameter::Typed { .. }));
+/// ```
 ///
-/// // inline struct or list can be nested, i.e. `Parameter` can be a tree.
-/// let (residual, p) = exchange::parameter("B((1.0, A((2.0, 3.0))))").finish().unwrap();
+/// Inline struct or list can be nested, i.e. `Parameter` can be a tree.
+///
+/// ```
+/// use nom::Finish;
+/// use ruststep::parser::{Parameter, exchange};
+///
+/// let (residual, p) = exchange::parameter("B((1.0, A((2.0, 3.0))))")
+///     .finish()
+///     .unwrap();
 /// assert_eq!(residual, "");
-/// if let Parameter::Typed { name, ty } = p {
-///     assert_eq!(name, "B");
-///     if let Parameter::List(parameters) = *ty {
-///         assert_eq!(parameters.len(), 2);
-///         assert_eq!(parameters[0], Parameter::real(1.0));
-///         if let Parameter::Typed { name, ty } = &parameters[1] {
-///             assert_eq!(name, "A");
-///             if let Parameter::List(inner) = &**ty {
-///                 assert_eq!(inner.len(), 2);
-///                 assert_eq!(inner[0], Parameter::real(2.0));
-///                 assert_eq!(inner[1], Parameter::real(3.0));
-///             }
-///         } else {
-///             unreachable!()
-///         }
-///     } else {
-///         unreachable!()
-///     }
-/// } else {
-///     unreachable!()
-/// }
+///
+/// // A((2.0, 3.0))
+/// let a = Parameter::Typed {
+///     name: "A".to_string(),
+///     ty: Box::new(
+///         [Parameter::real(2.0), Parameter::real(3.0)]
+///             .iter()
+///             .collect(),
+///     ),
+/// };
+///
+/// // B((1.0, a))
+/// let b = Parameter::Typed {
+///     name: "B".to_string(),
+///     ty: Box::new([Parameter::real(1.0), a].iter().collect()),
+/// };
+///
+/// assert_eq!(p, b);
 /// ```
 ///
 /// FromIterator
@@ -75,8 +81,9 @@ use serde::{de, forward_to_deserialize_any};
 /// -------------------
 ///
 /// This implements a [serde::Deserializer], i.e. a **data format**.
-/// For untyped parameters, e.g. real number, can be deserialized into any types
-/// as far as compatible in terms of the serde data model.
+///
+/// - For untyped parameters, e.g. real number, can be deserialized into any types
+///   as far as compatible in terms of the serde data model.
 ///
 /// ```
 /// use serde::Deserialize;
@@ -105,8 +112,8 @@ use serde::{de, forward_to_deserialize_any};
 /// assert!(result.is_err());
 /// ```
 ///
-/// On the other hand, typed parameter, e.g. `A(1)`, must be deserialized into a struct
-/// whose name is "A".
+/// - Typed parameter, e.g. `A(1)`, must be deserialized into a struct
+///   whose name is "A".
 ///
 /// ```
 /// use serde::Deserialize;
@@ -129,6 +136,18 @@ use serde::{de, forward_to_deserialize_any};
 /// assert_eq!(res, "");
 /// let a: Result<A, _> = Deserialize::deserialize(&p);
 /// assert!(a.is_err());
+/// ```
+///
+/// - For [RValue]
+///
+/// ```
+/// use serde::Deserialize;
+/// use ruststep::parser::{exchange, value::RValue, Parameter};
+/// use nom::Finish;
+///
+/// let (res, p) = exchange::parameter("#11").finish().unwrap();
+/// let a: RValue = Deserialize::deserialize(&p).unwrap();
+/// assert_eq!(a, RValue::Entity(11))
 /// ```
 ///
 /// [serde::Deserializer]: https://docs.serde.rs/serde/trait.Deserializer.html
@@ -257,16 +276,18 @@ impl<'de, 'param> de::Deserializer<'de> for &'param Parameter {
         V: de::Visitor<'de>,
     {
         match self {
-            Parameter::Typed { .. } => unimplemented!(),
+            Parameter::Typed { name, ty } => visitor.visit_map(de::value::MapDeserializer::new(
+                [(name.as_str(), &**ty)].iter().cloned(),
+            )),
             Parameter::Integer(val) => visitor.visit_i64(*val),
             Parameter::Real(val) => visitor.visit_f64(*val),
             Parameter::String(val) => visitor.visit_str(val),
             Parameter::List(params) => {
-                let seq = de::value::SeqDeserializer::new(params.iter());
-                visitor.visit_seq(seq)
+                visitor.visit_seq(de::value::SeqDeserializer::new(params.iter()))
             }
-            Parameter::Omitted => unimplemented!(),
-            _ => unimplemented!(),
+            Parameter::RValue(rvalue) => de::Deserializer::deserialize_any(rvalue, visitor),
+            Parameter::NotProvided | Parameter::Omitted => visitor.visit_none(),
+            Parameter::Enumeration(_) => unimplemented!(),
         }
     }
 
@@ -299,10 +320,70 @@ impl<'de, 'param> de::Deserializer<'de> for &'param Parameter {
     }
 }
 
+// To support SeqDeserializer
 impl<'de, 'param> de::IntoDeserializer<'de, crate::error::Error> for &'param Parameter {
     type Deserializer = Self;
     fn into_deserializer(self) -> Self::Deserializer {
         self
+    }
+}
+
+impl<'de> Deserialize<'de> for Parameter {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: de::Deserializer<'de>,
+    {
+        deserializer.deserialize_any(ParameterVisitor {})
+    }
+}
+
+struct ParameterVisitor {}
+
+impl<'de> de::Visitor<'de> for ParameterVisitor {
+    type Value = Parameter;
+
+    fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+        formatter.write_str("Parameter")
+    }
+
+    fn visit_i64<E>(self, value: i64) -> Result<Self::Value, E>
+    where
+        E: de::Error,
+    {
+        Ok(Parameter::integer(value))
+    }
+
+    fn visit_f64<E>(self, value: f64) -> Result<Self::Value, E>
+    where
+        E: de::Error,
+    {
+        Ok(Parameter::real(value))
+    }
+
+    fn visit_str<E>(self, value: &str) -> Result<Self::Value, E>
+    where
+        E: de::Error,
+    {
+        Ok(Parameter::string(value))
+    }
+
+    fn visit_seq<A>(self, mut seq: A) -> Result<Self::Value, A::Error>
+    where
+        A: de::SeqAccess<'de>,
+    {
+        let mut components: Vec<Parameter> = Vec::new();
+        while let Some(component) = seq.next_element()? {
+            components.push(component);
+        }
+        Ok(Parameter::List(components))
+    }
+
+    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
+    where
+        A: de::MapAccess<'de>,
+    {
+        let (name, ty) = map.next_entry()?.unwrap();
+        Ok(Parameter::Typed { name, ty })
     }
 }
 
@@ -327,6 +408,34 @@ mod tests {
         // cannot be deserialized negative integer into unsigned
         let res: Result<u32, _> = Deserialize::deserialize(&p);
         assert!(res.is_err());
+    }
+
+    #[test]
+    fn deserialize_identity() {
+        let p = Parameter::integer(2);
+        let q: Parameter = Deserialize::deserialize(&p).unwrap();
+        assert_eq!(p, q);
+
+        let p = Parameter::real(2.0);
+        let q: Parameter = Deserialize::deserialize(&p).unwrap();
+        assert_eq!(p, q);
+
+        let p = Parameter::string("vim");
+        let q: Parameter = Deserialize::deserialize(&p).unwrap();
+        assert_eq!(p, q);
+
+        let p: Parameter = [Parameter::integer(1), Parameter::real(2.0)]
+            .iter()
+            .collect();
+        let q: Parameter = Deserialize::deserialize(&p).unwrap();
+        assert_eq!(p, q);
+
+        let (res, p) = super::parameter("B((1.0, A((2.0, 3.0))))")
+            .finish()
+            .unwrap();
+        assert_eq!(res, "");
+        let q: Parameter = Deserialize::deserialize(&p).unwrap();
+        assert_eq!(p, q);
     }
 
     #[derive(Debug, Deserialize)]

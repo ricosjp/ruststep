@@ -36,6 +36,7 @@ pub mod basic;
 pub mod combinator;
 pub mod exchange;
 pub mod token;
+pub mod value;
 
 use crate::error::{Result, TokenizeFailed};
 use nom::Finish;

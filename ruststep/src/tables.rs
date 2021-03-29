@@ -7,7 +7,7 @@ use std::{
 pub type Table<T> = HashMap<Id<T>, T>;
 
 pub struct Id<T: 'static> {
-    id: usize,
+    id: u64,
     phantom: std::marker::PhantomData<&'static T>,
 }
 

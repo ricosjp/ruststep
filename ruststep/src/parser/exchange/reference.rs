@@ -1,4 +1,4 @@
-use crate::parser::{combinator::*, token::*};
+use crate::parser::{combinator::*, token::*, value::*};
 use nom::Parser;
 
 /// reference_section = `REFERENCE;` [reference_list] `ENDSEC;` .
@@ -8,7 +8,7 @@ pub fn reference_section(input: &str) -> ParseResult<Vec<ReferenceEntry>> {
         .parse(input)
 }
 
-/// reference_list = { [reference] } .
+/// reference_list = { [reference()] } .
 pub fn reference_list(input: &str) -> ParseResult<Vec<ReferenceEntry>> {
     many0_(reference).parse(input)
 }
