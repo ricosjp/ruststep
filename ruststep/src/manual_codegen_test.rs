@@ -20,7 +20,6 @@
 //! ```
 
 use crate::tables::*;
-use serde::Deserialize;
 
 #[derive(Debug)]
 pub struct Ap000 {
@@ -56,14 +55,14 @@ impl<'tables> EntryTable<'tables, CEntry> for Ap000 {
     }
 }
 
-#[derive(Debug, Clone, PartialEq, Hash, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Hash)]
 pub struct A {
     pub x: u64,
     pub y: u64,
 }
 
 // same as [A]
-#[derive(Debug, Clone, PartialEq, Hash, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Hash)]
 pub struct AEntry {
     pub x: u64,
     pub y: u64,
@@ -103,13 +102,13 @@ impl<'tables> EntityRef for ARef<'tables> {
 
 /* ENTITY b */
 
-#[derive(Debug, Clone, PartialEq, Hash, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Hash)]
 pub struct B {
     pub z: u64,
     pub w: A,
 }
 
-#[derive(Debug, PartialEq, Hash, Deserialize)]
+#[derive(Debug, PartialEq, Hash)]
 pub struct BEntry {
     z: u64,
     w: Id<AEntry>,
@@ -153,13 +152,13 @@ impl<'tables> EntityRef for BRef<'tables> {
 
 /* ENTITY b */
 
-#[derive(Debug, Clone, PartialEq, Hash, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Hash)]
 pub struct C {
     pub p: A,
     pub q: B,
 }
 
-#[derive(Debug, PartialEq, Hash, Deserialize)]
+#[derive(Debug, PartialEq, Hash)]
 pub struct CEntry {
     p: Id<AEntry>,
     q: Id<BEntry>,

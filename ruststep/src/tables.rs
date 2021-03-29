@@ -1,4 +1,3 @@
-use serde::Deserialize;
 use std::{
     collections::HashMap,
     fmt,
@@ -7,11 +6,8 @@ use std::{
 
 pub type Table<T> = HashMap<Id<T>, T>;
 
-#[derive(Deserialize)]
-#[serde(transparent)]
 pub struct Id<T: 'static> {
     id: u64,
-    #[serde(skip)]
     phantom: std::marker::PhantomData<&'static T>,
 }
 
@@ -63,21 +59,5 @@ pub trait EntryTable<'tables, E: TableEntry<'tables, Schema = Self>> {
 
     fn iter(&'tables self) -> Box<dyn Iterator<Item = E::Ref> + 'tables> {
         Box::new(self.entry_iter().map(move |entry| entry.as_ref(self)))
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use nom::Finish;
-    use serde::Deserialize;
-
-    struct A {}
-
-    #[test]
-    fn deserialize_id() {
-        let (res, p) = crate::parser::exchange::parameter("#10").finish().unwrap();
-        assert_eq!(res, "");
-        let id: super::Id<A> = Deserialize::deserialize(&p).unwrap();
-        assert_eq!(id.id, 10);
     }
 }
