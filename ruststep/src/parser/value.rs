@@ -1,6 +1,6 @@
 use super::exchange::Parameter;
 use serde::{
-    de::{self, VariantAccess},
+    de::{self, IntoDeserializer, VariantAccess},
     forward_to_deserialize_any, Deserialize,
 };
 use std::{fmt, marker::PhantomData};
@@ -149,6 +149,27 @@ impl<'de, T: Deserialize<'de>> de::Visitor<'de> for PlaceHolderVisitor<T> {
 
     fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         write!(formatter, "PlaceHolder<{}>", std::any::type_name::<T>())
+    }
+
+    fn visit_i64<E>(self, v: i64) -> Result<Self::Value, E>
+    where
+        E: de::Error,
+    {
+        Ok(PlaceHolder::Owned(T::deserialize(v.into_deserializer())?))
+    }
+
+    fn visit_f64<E>(self, v: f64) -> Result<Self::Value, E>
+    where
+        E: de::Error,
+    {
+        Ok(PlaceHolder::Owned(T::deserialize(v.into_deserializer())?))
+    }
+
+    fn visit_str<E>(self, v: &str) -> Result<Self::Value, E>
+    where
+        E: de::Error,
+    {
+        Ok(PlaceHolder::Owned(T::deserialize(v.into_deserializer())?))
     }
 
     // For Ref(RValue)
