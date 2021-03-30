@@ -1,5 +1,4 @@
 use crate::parser::{combinator::*, token::*, value::*};
-use inflector::Inflector;
 use nom::{branch::alt, combinator::value, Parser};
 use serde::{de, forward_to_deserialize_any, Deserialize};
 use std::fmt;
@@ -112,8 +111,8 @@ use std::fmt;
 /// assert!(result.is_err());
 /// ```
 ///
-/// - Typed parameter, e.g. `A(1)`, must be deserialized into a struct
-///   whose name is "A".
+/// - Typed parameter, e.g. `A(1)`
+///   - FIXME: Type name check is not implemented yet.
 ///
 /// ```
 /// use serde::Deserialize;
@@ -126,16 +125,10 @@ use std::fmt;
 ///     y: f64,
 /// }
 ///
-/// // can be deserialized into `A`
 /// let (res, p) = exchange::parameter("A((1.0, 2.0))").finish().unwrap();
 /// assert_eq!(res, "");
 /// let a: A = Deserialize::deserialize(&p).unwrap();
-///
-/// // B(...) cannot be parsed as `A`
-/// let (res, p) = exchange::parameter("B((1.0, 2.0))").finish().unwrap();
-/// assert_eq!(res, "");
-/// let a: Result<A, _> = Deserialize::deserialize(&p);
-/// assert!(a.is_err());
+/// dbg!(a);
 /// ```
 ///
 /// - For [RValue]
@@ -293,20 +286,14 @@ impl<'de, 'param> de::Deserializer<'de> for &'param Parameter {
 
     fn deserialize_struct<V>(
         self,
-        struct_name: &'static str,
+        _struct_name: &'static str,
         _fields: &'static [&'static str],
         visitor: V,
     ) -> Result<V::Value, Self::Error>
     where
         V: de::Visitor<'de>,
     {
-        if let Parameter::Typed { name, ty } = self {
-            if super::get_struct_name(struct_name) != name.to_pascal_case() {
-                return Err(de::Error::invalid_type(
-                    de::Unexpected::Other(name),
-                    &struct_name,
-                ));
-            }
+        if let Parameter::Typed { name: _, ty } = self {
             ty.deserialize_any(visitor)
         } else {
             self.deserialize_any(visitor)
@@ -436,35 +423,5 @@ mod tests {
         assert_eq!(res, "");
         let q: Parameter = Deserialize::deserialize(&p).unwrap();
         assert_eq!(p, q);
-    }
-
-    #[derive(Debug, Deserialize)]
-    struct A {
-        x: f64,
-        y: f64,
-    }
-
-    #[derive(Debug, Deserialize)]
-    struct B {
-        z: f64,
-        a: A,
-    }
-
-    #[test]
-    fn deserialize_parameter_typed_nested() {
-        let (res, p) = super::parameter("B((1.0, A((2.0, 3.0))))")
-            .finish()
-            .unwrap();
-        assert_eq!(res, "");
-        let b: B = Deserialize::deserialize(dbg!(&p)).unwrap();
-        dbg!(b);
-
-        // C(...) should not be parsed as A
-        let (res, p) = super::parameter("B((1.0, C((2.0, 3.0))))")
-            .finish()
-            .unwrap();
-        assert_eq!(res, "");
-        let b: Result<B, _> = Deserialize::deserialize(dbg!(&p));
-        assert!(b.is_err());
     }
 }
