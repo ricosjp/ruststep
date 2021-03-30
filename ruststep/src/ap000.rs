@@ -43,7 +43,6 @@ pub struct B {
 }
 
 #[derive(Debug, Clone, PartialEq, Deserialize)]
-#[serde(rename = "B")]
 pub struct BHolder {
     pub z: f64,
     pub a: PlaceHolder<A>,
