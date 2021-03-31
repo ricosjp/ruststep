@@ -19,7 +19,10 @@
 //! END_SCHEMA;
 //! ```
 
-use crate::parser::value::{PlaceHolder, RValue};
+use crate::{
+    error::*,
+    parser::value::{PlaceHolder, RValue},
+};
 use serde::Deserialize;
 use std::collections::HashMap;
 
@@ -49,16 +52,12 @@ pub struct BHolder {
 }
 
 impl BHolder {
-    pub fn into_owned(self, tables: &Ap000) -> B {
+    pub fn into_owned(self, tables: &Ap000) -> Result<B> {
         let BHolder { z, a } = self;
-        let a = match a {
-            PlaceHolder::Ref(id) => match id {
-                RValue::Entity(id) => tables.a[&id].clone(),
-                _ => unreachable!("Invalid STEP record"),
-            },
-            PlaceHolder::Owned(a) => a,
-        };
-        B { z, a }
+        Ok(B {
+            z,
+            a: a.into_owned(&tables.a)?,
+        })
     }
 }
 
@@ -76,27 +75,12 @@ pub struct CHolder {
 }
 
 impl CHolder {
-    pub fn into_owned(self, tables: &Ap000) -> C {
+    pub fn into_owned(self, tables: &Ap000) -> Result<C> {
         let CHolder { p, q } = self;
-
-        let p = match p {
-            PlaceHolder::Ref(id) => match id {
-                RValue::Entity(id) => tables.a[&id].clone(),
-                _ => unreachable!("Invalid STEP record"),
-            },
-            PlaceHolder::Owned(value) => value,
-        };
-
-        let q = match q {
-            PlaceHolder::Ref(id) => match id {
-                RValue::Entity(id) => tables.b[&id].clone(),
-                _ => unreachable!("Invalid STEP record"),
-            },
-            PlaceHolder::Owned(value) => value,
-        }
-        .into_owned(tables);
-
-        C { p, q }
+        Ok(C {
+            p: p.into_owned(&tables.a)?,
+            q: q.into_owned(&tables.b)?.into_owned(&tables)?,
+        })
     }
 }
 
@@ -150,11 +134,11 @@ mod tests {
             .finish()
             .unwrap();
         let b = BHolder::deserialize(&record).unwrap();
-        dbg!(b.into_owned(&tables));
+        dbg!(b.into_owned(&tables).unwrap());
 
         let (_, record) = exchange::simple_record("B(1.0, #2)").finish().unwrap();
         let b = BHolder::deserialize(&record).unwrap();
-        dbg!(b.into_owned(&tables));
+        dbg!(b.into_owned(&tables).unwrap());
     }
 
     #[test]
@@ -166,30 +150,30 @@ mod tests {
             .finish()
             .unwrap();
         let c = CHolder::deserialize(&record).unwrap();
-        dbg!(c.into_owned(&tables));
+        dbg!(c.into_owned(&tables).unwrap());
 
         // Use B with inline A
         let (_, record) = exchange::simple_record("C(A((1.0, 2.0)), #4)")
             .finish()
             .unwrap();
         let c = CHolder::deserialize(&record).unwrap();
-        dbg!(c.into_owned(&tables));
+        dbg!(c.into_owned(&tables).unwrap());
 
         // Use B with ref A
         let (_, record) = exchange::simple_record("C(A((1.0, 2.0)), #5)")
             .finish()
             .unwrap();
         let c = CHolder::deserialize(&record).unwrap();
-        dbg!(c.into_owned(&tables));
+        dbg!(c.into_owned(&tables).unwrap());
 
         // Use both reference
         let (_, record) = exchange::simple_record("C(#2, #4)").finish().unwrap();
         let c = CHolder::deserialize(&record).unwrap();
-        dbg!(c.into_owned(&tables));
+        dbg!(c.into_owned(&tables).unwrap());
 
         // Use both reference with DAG
         let (_, record) = exchange::simple_record("C(#2, #5)").finish().unwrap();
         let c = CHolder::deserialize(&record).unwrap();
-        dbg!(c.into_owned(&tables));
+        dbg!(c.into_owned(&tables).unwrap());
     }
 }

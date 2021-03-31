@@ -3,7 +3,7 @@ use serde::{
     de::{self, IntoDeserializer, VariantAccess},
     forward_to_deserialize_any, Deserialize,
 };
-use std::{fmt, marker::PhantomData};
+use std::{collections::HashMap, fmt, marker::PhantomData};
 
 #[cfg(doc)] // for doc-link
 use super::exchange::Record;
@@ -108,6 +108,26 @@ impl<'de, 'value> de::Deserializer<'de> for &'value RValue {
 pub enum PlaceHolder<T> {
     Ref(RValue),
     Owned(T),
+}
+
+impl<T> PlaceHolder<T> {
+    /// Get owned value, or look up entity table and clone it for a reference.
+    pub fn into_owned(self, table: &HashMap<u64, T>) -> Result<T, crate::error::Error>
+    where
+        T: Clone,
+    {
+        let value = match self {
+            PlaceHolder::Ref(id) => match id {
+                RValue::Entity(id) => table
+                    .get(&id)
+                    .ok_or_else(|| crate::error::Error::UnknownEntity(id))?
+                    .clone(),
+                _ => unimplemented!("ENTITY is only supported now"),
+            },
+            PlaceHolder::Owned(a) => a,
+        };
+        Ok(value)
+    }
 }
 
 impl<'de, T: Deserialize<'de>> Deserialize<'de> for PlaceHolder<T> {
