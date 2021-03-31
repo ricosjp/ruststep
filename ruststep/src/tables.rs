@@ -1,3 +1,5 @@
+//! Helper submodule for espr-generated Rust code
+
 use std::collections::HashMap;
 
 pub trait Holder {

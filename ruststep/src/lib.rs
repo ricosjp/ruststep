@@ -17,5 +17,4 @@ pub mod parser;
 pub mod primitive;
 pub mod tables;
 
-#[cfg(any(test, doc))]
 pub mod ap000;
