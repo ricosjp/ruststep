@@ -23,7 +23,7 @@ use crate::{
     error::*,
     parser::{
         exchange::{DataSection, EntityInstance},
-        value::{PlaceHolder, RValue},
+        value::PlaceHolder,
     },
     tables::*,
 };
@@ -76,16 +76,17 @@ impl EntityTable<CHolder> for Ap000 {
     }
 }
 
-#[derive(Debug, Clone, PartialEq, Deserialize)]
+/// Corresponds to `ENTITY a`
+#[derive(Debug, Clone, PartialEq)]
 pub struct A {
     pub x: f64,
     pub y: f64,
 }
 
 #[derive(Debug, Clone, PartialEq, Deserialize)]
-pub struct AHolder {
-    pub x: f64,
-    pub y: f64,
+struct AHolder {
+    x: f64,
+    y: f64,
 }
 
 impl Holder for AHolder {
@@ -97,16 +98,17 @@ impl Holder for AHolder {
     }
 }
 
-#[derive(Debug, Clone, PartialEq, Deserialize)]
+/// Corresponds to `ENTITY b`
+#[derive(Debug, Clone, PartialEq)]
 pub struct B {
     pub z: f64,
     pub a: A,
 }
 
 #[derive(Debug, Clone, PartialEq, Deserialize)]
-pub struct BHolder {
-    pub z: f64,
-    pub a: PlaceHolder<AHolder>,
+struct BHolder {
+    z: f64,
+    a: PlaceHolder<AHolder>,
 }
 
 impl Holder for BHolder {
@@ -121,16 +123,17 @@ impl Holder for BHolder {
     }
 }
 
-#[derive(Debug, Clone, PartialEq, Deserialize)]
+/// Corresponds to `ENTITY c`
+#[derive(Debug, Clone, PartialEq)]
 pub struct C {
     pub p: A,
     pub q: B,
 }
 
 #[derive(Debug, Clone, PartialEq, Deserialize)]
-pub struct CHolder {
-    pub p: PlaceHolder<AHolder>,
-    pub q: PlaceHolder<BHolder>,
+struct CHolder {
+    p: PlaceHolder<AHolder>,
+    q: PlaceHolder<BHolder>,
 }
 
 impl Holder for CHolder {
@@ -148,13 +151,13 @@ impl Holder for CHolder {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::parser::exchange;
+    use crate::parser::{exchange, value::RValue};
     use nom::Finish;
 
     #[test]
     fn a_from_record() {
         let (_, record) = exchange::simple_record("A(1.0, 2.0)").finish().unwrap();
-        let a = A::deserialize(&record).unwrap();
+        let a = AHolder::deserialize(&record).unwrap();
         dbg!(a);
     }
 
