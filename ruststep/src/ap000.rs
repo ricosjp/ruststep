@@ -21,17 +21,41 @@
 
 use crate::{
     error::*,
-    parser::value::{PlaceHolder, RValue},
+    parser::{
+        exchange::{DataSection, EntityInstance},
+        value::{PlaceHolder, RValue},
+    },
     tables::*,
 };
 use serde::Deserialize;
 use std::collections::HashMap;
 
-#[derive(Debug, Default)]
+#[derive(Debug, Clone, PartialEq, Default)]
 pub struct Ap000 {
     a: HashMap<u64, AHolder>,
     b: HashMap<u64, BHolder>,
     c: HashMap<u64, CHolder>,
+}
+
+impl Ap000 {
+    pub fn from_section(sec: &DataSection) -> Result<Self> {
+        let mut a = HashMap::new();
+        let mut b = HashMap::new();
+        let mut c = HashMap::new();
+
+        for entity in &sec.entities {
+            match entity {
+                EntityInstance::Simple { name, record } => match record.name.as_str() {
+                    "A" => a.insert(*name, AHolder::deserialize(record)?).is_none(),
+                    "B" => b.insert(*name, BHolder::deserialize(record)?).is_none(),
+                    "C" => c.insert(*name, CHolder::deserialize(record)?).is_none(),
+                    _ => panic!(),
+                },
+                EntityInstance::Complex { .. } => unimplemented!(),
+            };
+        }
+        Ok(Ap000 { a, b, c })
+    }
 }
 
 impl EntityTable<AHolder> for Ap000 {
@@ -138,14 +162,14 @@ mod tests {
     //
     // ```
     // DATA;
-    //   #2 = A((1.0, 2.0))
-    //   #4 = B((2.0, A((4.0, 5.0))));
-    //   #5 = B((2.0, #2));
+    //   #2 = A(1.0, 2.0);
+    //   #4 = B(2.0, A((4.0, 5.0)));
+    //   #5 = B(2.0, #2);
     // ENDSEC;
     // ```
     fn example_table() -> Ap000 {
         let mut tables = Ap000::default();
-        tables.a.insert(2, AHolder { x: 2.0, y: 3.0 });
+        tables.a.insert(2, AHolder { x: 1.0, y: 2.0 });
         tables.b.insert(
             4,
             BHolder {
@@ -161,6 +185,27 @@ mod tests {
             },
         );
         tables
+    }
+
+    #[test]
+    fn section_to_table() {
+        let (_, sec) = exchange::data_section(
+            r#"
+            DATA;
+              #2 = A(1.0, 2.0);
+              #4 = B(2.0, A((4.0, 5.0)));
+              #5 = B(2.0, #2);
+            ENDSEC;
+            "#
+            .trim(),
+        )
+        .finish()
+        .unwrap();
+        dbg!(&sec);
+
+        let table = Ap000::from_section(&sec).unwrap();
+        dbg!(&table);
+        assert_eq!(table, example_table());
     }
 
     #[test]
