@@ -26,6 +26,12 @@ use crate::{
 use serde::Deserialize;
 use std::collections::HashMap;
 
+pub trait Holder {
+    type Owned;
+    type Table;
+    fn into_owned(self, table: &Self::Table) -> Result<Self::Owned>;
+}
+
 #[derive(Debug, Default)]
 pub struct Ap000 {
     a: HashMap<u64, A>,
@@ -51,8 +57,10 @@ pub struct BHolder {
     pub a: PlaceHolder<A>,
 }
 
-impl BHolder {
-    pub fn into_owned(self, tables: &Ap000) -> Result<B> {
+impl Holder for BHolder {
+    type Table = Ap000;
+    type Owned = B;
+    fn into_owned(self, tables: &Ap000) -> Result<B> {
         let BHolder { z, a } = self;
         Ok(B {
             z,
@@ -68,7 +76,6 @@ pub struct C {
 }
 
 #[derive(Debug, Clone, PartialEq, Deserialize)]
-#[serde(rename = "C")]
 pub struct CHolder {
     pub p: PlaceHolder<A>,
     pub q: PlaceHolder<BHolder>,
