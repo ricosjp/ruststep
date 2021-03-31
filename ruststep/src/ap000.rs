@@ -109,8 +109,10 @@ pub struct CHolder {
     pub q: PlaceHolder<BHolder>,
 }
 
-impl CHolder {
-    pub fn into_owned(self, tables: &Ap000) -> Result<C> {
+impl Holder for CHolder {
+    type Table = Ap000;
+    type Owned = C;
+    fn into_owned(self, tables: &Ap000) -> Result<C> {
         let CHolder { p, q } = self;
         Ok(C {
             p: p.into_owned(tables)?,
