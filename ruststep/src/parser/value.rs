@@ -1,9 +1,10 @@
 use super::exchange::Parameter;
+use crate::tables::*;
 use serde::{
     de::{self, IntoDeserializer, VariantAccess},
     forward_to_deserialize_any, Deserialize,
 };
-use std::{collections::HashMap, fmt, marker::PhantomData};
+use std::{fmt, marker::PhantomData};
 
 #[cfg(doc)] // for doc-link
 use super::exchange::Record;
@@ -110,23 +111,21 @@ pub enum PlaceHolder<T> {
     Owned(T),
 }
 
-impl<T> PlaceHolder<T> {
+impl<T: Holder> PlaceHolder<T> {
     /// Get owned value, or look up entity table and clone it for a reference.
-    pub fn into_owned(self, table: &HashMap<u64, T>) -> Result<T, crate::error::Error>
+    pub fn into_owned<Table>(self, table: &Table) -> Result<T::Owned, crate::error::Error>
     where
-        T: Clone,
+        T: Holder<Table = Table> + Clone,
+        Table: EntityTable<T>,
     {
         let value = match self {
             PlaceHolder::Ref(id) => match id {
-                RValue::Entity(id) => table
-                    .get(&id)
-                    .ok_or_else(|| crate::error::Error::UnknownEntity(id))?
-                    .clone(),
+                RValue::Entity(id) => table.get_entity(id)?.clone(),
                 _ => unimplemented!("ENTITY is only supported now"),
             },
             PlaceHolder::Owned(a) => a,
         };
-        Ok(value)
+        Ok(value.into_owned(table)?)
     }
 }
 

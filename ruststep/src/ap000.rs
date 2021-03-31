@@ -22,27 +22,55 @@
 use crate::{
     error::*,
     parser::value::{PlaceHolder, RValue},
+    tables::*,
 };
 use serde::Deserialize;
 use std::collections::HashMap;
 
-pub trait Holder {
-    type Owned;
-    type Table;
-    fn into_owned(self, table: &Self::Table) -> Result<Self::Owned>;
-}
-
 #[derive(Debug, Default)]
 pub struct Ap000 {
-    a: HashMap<u64, A>,
+    a: HashMap<u64, AHolder>,
     b: HashMap<u64, BHolder>,
     c: HashMap<u64, CHolder>,
+}
+
+impl EntityTable<AHolder> for Ap000 {
+    fn get_entity(&self, id: u64) -> Result<&AHolder> {
+        self.a.get_entity(id)
+    }
+}
+
+impl EntityTable<BHolder> for Ap000 {
+    fn get_entity(&self, id: u64) -> Result<&BHolder> {
+        self.b.get_entity(id)
+    }
+}
+
+impl EntityTable<CHolder> for Ap000 {
+    fn get_entity(&self, id: u64) -> Result<&CHolder> {
+        self.c.get_entity(id)
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, Deserialize)]
 pub struct A {
     pub x: f64,
     pub y: f64,
+}
+
+#[derive(Debug, Clone, PartialEq, Deserialize)]
+pub struct AHolder {
+    pub x: f64,
+    pub y: f64,
+}
+
+impl Holder for AHolder {
+    type Table = Ap000;
+    type Owned = A;
+    fn into_owned(self, _tables: &Ap000) -> Result<A> {
+        let AHolder { x, y } = self;
+        Ok(A { x, y })
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, Deserialize)]
@@ -54,7 +82,7 @@ pub struct B {
 #[derive(Debug, Clone, PartialEq, Deserialize)]
 pub struct BHolder {
     pub z: f64,
-    pub a: PlaceHolder<A>,
+    pub a: PlaceHolder<AHolder>,
 }
 
 impl Holder for BHolder {
@@ -64,7 +92,7 @@ impl Holder for BHolder {
         let BHolder { z, a } = self;
         Ok(B {
             z,
-            a: a.into_owned(&tables.a)?,
+            a: a.into_owned(tables)?,
         })
     }
 }
@@ -77,7 +105,7 @@ pub struct C {
 
 #[derive(Debug, Clone, PartialEq, Deserialize)]
 pub struct CHolder {
-    pub p: PlaceHolder<A>,
+    pub p: PlaceHolder<AHolder>,
     pub q: PlaceHolder<BHolder>,
 }
 
@@ -85,8 +113,8 @@ impl CHolder {
     pub fn into_owned(self, tables: &Ap000) -> Result<C> {
         let CHolder { p, q } = self;
         Ok(C {
-            p: p.into_owned(&tables.a)?,
-            q: q.into_owned(&tables.b)?.into_owned(&tables)?,
+            p: p.into_owned(tables)?,
+            q: q.into_owned(tables)?,
         })
     }
 }
@@ -115,12 +143,12 @@ mod tests {
     // ```
     fn example_table() -> Ap000 {
         let mut tables = Ap000::default();
-        tables.a.insert(2, A { x: 2.0, y: 3.0 });
+        tables.a.insert(2, AHolder { x: 2.0, y: 3.0 });
         tables.b.insert(
             4,
             BHolder {
                 z: 2.0,
-                a: PlaceHolder::Owned(A { x: 4.0, y: 5.0 }),
+                a: PlaceHolder::Owned(AHolder { x: 4.0, y: 5.0 }),
             },
         );
         tables.b.insert(
