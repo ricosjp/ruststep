@@ -1,6 +1,7 @@
 use super::exchange::Parameter;
+use crate::tables::*;
 use serde::{
-    de::{self, VariantAccess},
+    de::{self, IntoDeserializer, VariantAccess},
     forward_to_deserialize_any, Deserialize,
 };
 use std::{fmt, marker::PhantomData};
@@ -110,6 +111,24 @@ pub enum PlaceHolder<T> {
     Owned(T),
 }
 
+impl<T: Holder> PlaceHolder<T> {
+    /// Get owned value, or look up entity table and clone it for a reference.
+    pub fn into_owned<Table>(self, table: &Table) -> Result<T::Owned, crate::error::Error>
+    where
+        T: Holder<Table = Table> + Clone,
+        Table: EntityTable<T>,
+    {
+        let value = match self {
+            PlaceHolder::Ref(id) => match id {
+                RValue::Entity(id) => table.get_entity(id)?.clone(),
+                _ => unimplemented!("ENTITY is only supported now"),
+            },
+            PlaceHolder::Owned(a) => a,
+        };
+        Ok(value.into_owned(table)?)
+    }
+}
+
 impl<'de, T: Deserialize<'de>> Deserialize<'de> for PlaceHolder<T> {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
     where
@@ -148,7 +167,28 @@ impl<'de, T: Deserialize<'de>> de::Visitor<'de> for PlaceHolderVisitor<T> {
     type Value = PlaceHolder<T>;
 
     fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-        formatter.write_str("PlaceHolder")
+        write!(formatter, "PlaceHolder<{}>", std::any::type_name::<T>())
+    }
+
+    fn visit_i64<E>(self, v: i64) -> Result<Self::Value, E>
+    where
+        E: de::Error,
+    {
+        Ok(PlaceHolder::Owned(T::deserialize(v.into_deserializer())?))
+    }
+
+    fn visit_f64<E>(self, v: f64) -> Result<Self::Value, E>
+    where
+        E: de::Error,
+    {
+        Ok(PlaceHolder::Owned(T::deserialize(v.into_deserializer())?))
+    }
+
+    fn visit_str<E>(self, v: &str) -> Result<Self::Value, E>
+    where
+        E: de::Error,
+    {
+        Ok(PlaceHolder::Owned(T::deserialize(v.into_deserializer())?))
     }
 
     // For Ref(RValue)

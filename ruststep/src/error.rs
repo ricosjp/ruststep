@@ -10,6 +10,9 @@ pub enum Error {
 
     #[error("Error while deserialize STEP struct: {0}")]
     DeserializeFailed(String),
+
+    #[error("Lookup failed for #{0}")]
+    UnknownEntity(u64),
 }
 
 impl de::Error for Error {
