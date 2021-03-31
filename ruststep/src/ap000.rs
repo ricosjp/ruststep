@@ -1,4 +1,6 @@
-//! Experimental manual schema definitions corresponding following EXPRESS Schema
+//! Manually generated schema definitions corresponding following EXPRESS Schema.
+//!
+//! This is for testing espr code generator.
 //!
 //! ```text
 //! SCHEMA ap000;
@@ -18,6 +20,7 @@
 //!   END_ENTITY;
 //! END_SCHEMA;
 //! ```
+//!
 
 use crate::{
     error::*,
@@ -30,6 +33,56 @@ use crate::{
 use serde::Deserialize;
 use std::collections::HashMap;
 
+/// Tables containing entities with id
+///
+/// Examples
+/// ---------
+///
+/// Convert STEP data section into tables.
+///
+/// ```
+/// use ruststep::{parser::exchange, ap000::Ap000};
+/// use nom::Finish;
+///
+/// let (_, data_section) = exchange::data_section(
+///     r#"
+///     DATA;
+///       #2 = A(1.0, 2.0);
+///       #4 = B(2.0, A((4.0, 5.0)));
+///       #5 = B(2.0, #2);
+///     ENDSEC;
+///     "#
+///     .trim(),
+/// )
+/// .finish()
+/// .unwrap();
+///
+/// // Entity reference `#2` is not resolved at this point.
+/// let table = Ap000::from_section(&data_section).unwrap();
+///
+/// for a in table.a_iter() { // Iterate over top-level `A`s.
+///   dbg!(a);                // Do not iterate over the inline struct `A((4.0, 5.0))` in `#4`
+/// }
+///
+/// for b in table.b_iter() { // Because reference lookup is done while iteration,
+///   dbg!(b);                // `b` may be `Result::Err` if reference is undefined.
+/// }
+///
+/// for c in table.c_iter() { // No iteration occurs since `C` is not defined
+///   dbg!(c);
+/// }
+/// ```
+///
+/// STEP exchange structure AST is converted into Rust structure in two steps:
+///
+/// 1.  Parse AST to `*Holder` private struct without resolving entity references,
+///    e.g. `B(2.0, #2)` will be converted into a Rust struct
+///         `BHolder { z: 2.0, a: RValue::Entity(2)}`.
+///     - `Ap000::from_section` as above example
+/// 2. Resolve reference `#2` to `A(1.0, 2.0)`.
+///    This will be done while the iteration.
+///     - `a_iter()` as above example
+///
 #[derive(Debug, Clone, PartialEq, Default)]
 pub struct Ap000 {
     a: HashMap<u64, AHolder>,
@@ -55,6 +108,27 @@ impl Ap000 {
             };
         }
         Ok(Ap000 { a, b, c })
+    }
+
+    pub fn a_iter<'table>(&'table self) -> impl Iterator<Item = Result<A>> + 'table {
+        self.a
+            .values()
+            .cloned()
+            .map(move |value| value.into_owned(&self))
+    }
+
+    pub fn b_iter<'table>(&'table self) -> impl Iterator<Item = Result<B>> + 'table {
+        self.b
+            .values()
+            .cloned()
+            .map(move |value| value.into_owned(&self))
+    }
+
+    pub fn c_iter<'table>(&'table self) -> impl Iterator<Item = Result<C>> + 'table {
+        self.c
+            .values()
+            .cloned()
+            .map(move |value| value.into_owned(&self))
     }
 }
 
