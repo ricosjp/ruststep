@@ -24,10 +24,7 @@
 
 use crate::{
     error::*,
-    parser::{
-        exchange::{DataSection, EntityInstance},
-        value::PlaceHolder,
-    },
+    parser::exchange::{DataSection, EntityInstance},
     tables::*,
 };
 use serde::Deserialize;
