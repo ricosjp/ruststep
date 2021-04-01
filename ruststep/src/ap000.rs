@@ -30,56 +30,6 @@ use crate::{
 use serde::Deserialize;
 use std::collections::HashMap;
 
-/// Tables containing entities with id
-///
-/// Examples
-/// ---------
-///
-/// Convert STEP data section into tables.
-///
-/// ```
-/// use ruststep::{parser::exchange, ap000::Ap000};
-/// use nom::Finish;
-///
-/// let (_, data_section) = exchange::data_section(
-///     r#"
-///     DATA;
-///       #2 = A(1.0, 2.0);
-///       #4 = B(2.0, A((4.0, 5.0)));
-///       #5 = B(2.0, #2);
-///     ENDSEC;
-///     "#
-///     .trim(),
-/// )
-/// .finish()
-/// .unwrap();
-///
-/// // Entity reference `#2` is not resolved at this point.
-/// let table = Ap000::from_section(&data_section).unwrap();
-///
-/// for a in table.a_iter() { // Iterate over top-level `A`s.
-///   dbg!(a);                // Do not iterate over the inline struct `A((4.0, 5.0))` in `#4`
-/// }
-///
-/// for b in table.b_iter() { // Because reference lookup is done while iteration,
-///   dbg!(b);                // `b` may be `Result::Err` if reference is undefined.
-/// }
-///
-/// for c in table.c_iter() { // No iteration occurs since `C` is not defined
-///   dbg!(c);
-/// }
-/// ```
-///
-/// STEP exchange structure AST is converted into Rust structure in two steps:
-///
-/// 1.  Parse AST to `*Holder` private struct without resolving entity references,
-///    e.g. `B(2.0, #2)` will be converted into a Rust struct
-///         `BHolder { z: 2.0, a: RValue::Entity(2)}`.
-///     - `Ap000::from_section` as above example
-/// 2. Resolve reference `#2` to `A(1.0, 2.0)`.
-///    This will be done while the iteration.
-///     - `a_iter()` as above example
-///
 #[derive(Debug, Clone, PartialEq, Default)]
 pub struct Ap000 {
     a: HashMap<u64, AHolder>,
