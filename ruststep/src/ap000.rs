@@ -1,7 +1,5 @@
 //! Manually generated schema definitions corresponding following EXPRESS Schema.
 //!
-//! This is for testing espr code generator.
-//!
 //! ```text
 //! SCHEMA ap000;
 //!   ENTITY a;
@@ -21,6 +19,8 @@
 //! END_SCHEMA;
 //! ```
 //!
+//! This is for testing espr code generator. See the document of [tables] for detail.
+//!
 
 use crate::{
     error::*,
@@ -30,6 +30,10 @@ use crate::{
 use serde::Deserialize;
 use std::collections::HashMap;
 
+#[cfg(doc)]
+use crate::tables;
+
+/// Tables including entities `A`, `B`, and `C` as their holders.
 #[derive(Debug, Clone, PartialEq, Default)]
 pub struct Ap000 {
     a: HashMap<u64, AHolder>,
@@ -104,8 +108,9 @@ pub struct A {
     pub y: f64,
 }
 
+/// Holder for [A]
 #[derive(Debug, Clone, PartialEq, Deserialize)]
-struct AHolder {
+pub struct AHolder {
     x: f64,
     y: f64,
 }
@@ -126,8 +131,9 @@ pub struct B {
     pub a: A,
 }
 
+/// Holder for [B]
 #[derive(Debug, Clone, PartialEq, Deserialize)]
-struct BHolder {
+pub struct BHolder {
     z: f64,
     a: PlaceHolder<AHolder>,
 }
@@ -151,8 +157,9 @@ pub struct C {
     pub q: B,
 }
 
+/// Holder for [C]
 #[derive(Debug, Clone, PartialEq, Deserialize)]
-struct CHolder {
+pub struct CHolder {
     p: PlaceHolder<AHolder>,
     q: PlaceHolder<BHolder>,
 }
