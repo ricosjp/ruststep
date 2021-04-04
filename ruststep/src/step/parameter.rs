@@ -2,7 +2,7 @@ use crate::step::*;
 use serde::{de, forward_to_deserialize_any, Deserialize};
 use std::fmt;
 
-/// Primitive value type in STEP data, parsed by [parameter]
+/// Primitive value type in STEP data
 ///
 /// Parse
 /// ------
@@ -160,7 +160,7 @@ pub enum Parameter {
     /// List of other parameters
     List(Vec<Parameter>),
 
-    /// A reference to entity or value, parsed by [rhs_occurrence_name]
+    /// A reference to entity or value
     RValue(RValue),
 
     /// The special token dollar sign (`$`) is used to represent an object whose value is not provided in the exchange structure.
