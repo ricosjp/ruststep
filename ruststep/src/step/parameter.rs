@@ -1,5 +1,5 @@
-use crate::step::*;
-use serde::{de, forward_to_deserialize_any, Deserialize};
+use crate::{error::*, step::*};
+use serde::{de, forward_to_deserialize_any, ser, Deserialize};
 use std::fmt;
 
 /// Primitive value type in STEP data
@@ -214,9 +214,9 @@ impl<'a> std::iter::FromIterator<&'a Parameter> for Parameter {
 }
 
 impl<'de, 'param> de::Deserializer<'de> for &'param Parameter {
-    type Error = crate::error::Error;
+    type Error = Error;
 
-    fn deserialize_any<V>(self, visitor: V) -> Result<V::Value, Self::Error>
+    fn deserialize_any<V>(self, visitor: V) -> Result<V::Value>
     where
         V: de::Visitor<'de>,
     {
@@ -241,7 +241,7 @@ impl<'de, 'param> de::Deserializer<'de> for &'param Parameter {
         _struct_name: &'static str,
         _fields: &'static [&'static str],
         visitor: V,
-    ) -> Result<V::Value, Self::Error>
+    ) -> Result<V::Value>
     where
         V: de::Visitor<'de>,
     {
@@ -268,7 +268,7 @@ impl<'de, 'param> de::IntoDeserializer<'de, crate::error::Error> for &'param Par
 }
 
 impl<'de> Deserialize<'de> for Parameter {
-    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    fn deserialize<D>(deserializer: D) -> std::result::Result<Self, D::Error>
     where
         D: de::Deserializer<'de>,
     {
@@ -285,28 +285,28 @@ impl<'de> de::Visitor<'de> for ParameterVisitor {
         formatter.write_str("Parameter")
     }
 
-    fn visit_i64<E>(self, value: i64) -> Result<Self::Value, E>
+    fn visit_i64<E>(self, value: i64) -> std::result::Result<Self::Value, E>
     where
         E: de::Error,
     {
         Ok(Parameter::integer(value))
     }
 
-    fn visit_f64<E>(self, value: f64) -> Result<Self::Value, E>
+    fn visit_f64<E>(self, value: f64) -> std::result::Result<Self::Value, E>
     where
         E: de::Error,
     {
         Ok(Parameter::real(value))
     }
 
-    fn visit_str<E>(self, value: &str) -> Result<Self::Value, E>
+    fn visit_str<E>(self, value: &str) -> std::result::Result<Self::Value, E>
     where
         E: de::Error,
     {
         Ok(Parameter::string(value))
     }
 
-    fn visit_seq<A>(self, mut seq: A) -> Result<Self::Value, A::Error>
+    fn visit_seq<A>(self, mut seq: A) -> std::result::Result<Self::Value, A::Error>
     where
         A: de::SeqAccess<'de>,
     {
@@ -317,12 +317,279 @@ impl<'de> de::Visitor<'de> for ParameterVisitor {
         Ok(Parameter::List(components))
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
+    fn visit_map<A>(self, mut map: A) -> std::result::Result<Self::Value, A::Error>
     where
         A: de::MapAccess<'de>,
     {
         let (name, ty) = map.next_entry()?.unwrap();
         Ok(Parameter::Typed { name, ty })
+    }
+}
+
+impl<'param> ser::Serializer for &'param mut Parameter {
+    type Ok = ();
+    type Error = Error;
+    type SerializeSeq = Self;
+    type SerializeTuple = Self;
+    type SerializeTupleStruct = Self;
+    type SerializeTupleVariant = Self;
+    type SerializeMap = Self;
+    type SerializeStruct = Self;
+    type SerializeStructVariant = Self;
+
+    fn serialize_bool(self, v: bool) -> Result<()> {
+        todo!()
+    }
+
+    fn serialize_i8(self, v: i8) -> Result<()> {
+        todo!()
+    }
+    fn serialize_i16(self, v: i16) -> Result<()> {
+        todo!()
+    }
+    fn serialize_i32(self, v: i32) -> Result<()> {
+        todo!()
+    }
+    fn serialize_i64(self, v: i64) -> Result<()> {
+        todo!()
+    }
+
+    fn serialize_u8(self, v: u8) -> Result<()> {
+        todo!()
+    }
+    fn serialize_u16(self, v: u16) -> Result<()> {
+        todo!()
+    }
+    fn serialize_u32(self, v: u32) -> Result<()> {
+        todo!()
+    }
+    fn serialize_u64(self, v: u64) -> Result<()> {
+        todo!()
+    }
+
+    fn serialize_f32(self, v: f32) -> Result<()> {
+        todo!()
+    }
+    fn serialize_f64(self, v: f64) -> Result<()> {
+        todo!()
+    }
+
+    fn serialize_char(self, v: char) -> Result<()> {
+        todo!()
+    }
+    fn serialize_str(self, v: &str) -> Result<()> {
+        todo!()
+    }
+    fn serialize_bytes(self, v: &[u8]) -> Result<()> {
+        todo!()
+    }
+
+    fn serialize_none(self) -> Result<()> {
+        todo!()
+    }
+
+    fn serialize_some<T>(self, value: &T) -> Result<()>
+    where
+        T: ?Sized + ser::Serialize,
+    {
+        todo!()
+    }
+
+    fn serialize_unit(self) -> Result<()> {
+        todo!()
+    }
+
+    fn serialize_unit_struct(self, _name: &'static str) -> Result<()> {
+        todo!()
+    }
+
+    fn serialize_unit_variant(
+        self,
+        _name: &'static str,
+        _variant_index: u32,
+        variant: &'static str,
+    ) -> Result<()> {
+        todo!()
+    }
+
+    fn serialize_newtype_struct<T>(self, _name: &'static str, value: &T) -> Result<()>
+    where
+        T: ?Sized + ser::Serialize,
+    {
+        todo!()
+    }
+
+    fn serialize_newtype_variant<T>(
+        self,
+        _name: &'static str,
+        _variant_index: u32,
+        variant: &'static str,
+        value: &T,
+    ) -> Result<()>
+    where
+        T: ?Sized + ser::Serialize,
+    {
+        todo!()
+    }
+
+    fn serialize_seq(self, _len: Option<usize>) -> Result<Self::SerializeSeq> {
+        todo!()
+    }
+
+    fn serialize_tuple(self, len: usize) -> Result<Self::SerializeTuple> {
+        todo!()
+    }
+
+    fn serialize_tuple_struct(
+        self,
+        _name: &'static str,
+        len: usize,
+    ) -> Result<Self::SerializeTupleStruct> {
+        todo!()
+    }
+
+    fn serialize_tuple_variant(
+        self,
+        _name: &'static str,
+        _variant_index: u32,
+        variant: &'static str,
+        _len: usize,
+    ) -> Result<Self::SerializeTupleVariant> {
+        todo!()
+    }
+
+    fn serialize_map(self, _len: Option<usize>) -> Result<Self::SerializeMap> {
+        todo!()
+    }
+
+    fn serialize_struct(self, _name: &'static str, len: usize) -> Result<Self::SerializeStruct> {
+        todo!()
+    }
+
+    fn serialize_struct_variant(
+        self,
+        _name: &'static str,
+        _variant_index: u32,
+        variant: &'static str,
+        _len: usize,
+    ) -> Result<Self::SerializeStructVariant> {
+        todo!()
+    }
+}
+
+impl<'param> ser::SerializeSeq for &'param mut Parameter {
+    type Ok = ();
+    type Error = Error;
+    fn serialize_element<T>(&mut self, value: &T) -> Result<()>
+    where
+        T: ?Sized + ser::Serialize,
+    {
+        todo!()
+    }
+    fn end(self) -> Result<()> {
+        todo!()
+    }
+}
+
+impl<'param> ser::SerializeTuple for &'param mut Parameter {
+    type Ok = ();
+    type Error = Error;
+    fn serialize_element<T>(&mut self, value: &T) -> Result<()>
+    where
+        T: ?Sized + ser::Serialize,
+    {
+        todo!()
+    }
+
+    fn end(self) -> Result<()> {
+        todo!()
+    }
+}
+
+impl<'param> ser::SerializeTupleStruct for &'param mut Parameter {
+    type Ok = ();
+    type Error = Error;
+
+    fn serialize_field<T>(&mut self, value: &T) -> Result<()>
+    where
+        T: ?Sized + ser::Serialize,
+    {
+        todo!()
+    }
+
+    fn end(self) -> Result<()> {
+        todo!()
+    }
+}
+
+impl<'param> ser::SerializeTupleVariant for &'param mut Parameter {
+    type Ok = ();
+    type Error = Error;
+
+    fn serialize_field<T>(&mut self, value: &T) -> Result<()>
+    where
+        T: ?Sized + ser::Serialize,
+    {
+        todo!()
+    }
+
+    fn end(self) -> Result<()> {
+        todo!()
+    }
+}
+
+impl<'param> ser::SerializeMap for &'param mut Parameter {
+    type Ok = ();
+    type Error = Error;
+
+    fn serialize_key<T>(&mut self, key: &T) -> Result<()>
+    where
+        T: ?Sized + ser::Serialize,
+    {
+        todo!()
+    }
+
+    fn serialize_value<T>(&mut self, value: &T) -> Result<()>
+    where
+        T: ?Sized + ser::Serialize,
+    {
+        todo!()
+    }
+
+    fn end(self) -> Result<()> {
+        todo!()
+    }
+}
+
+impl<'param> ser::SerializeStruct for &'param mut Parameter {
+    type Ok = ();
+    type Error = Error;
+
+    fn serialize_field<T>(&mut self, key: &'static str, value: &T) -> Result<()>
+    where
+        T: ?Sized + ser::Serialize,
+    {
+        todo!()
+    }
+
+    fn end(self) -> Result<()> {
+        todo!()
+    }
+}
+
+impl<'param> ser::SerializeStructVariant for &'param mut Parameter {
+    type Ok = ();
+    type Error = Error;
+
+    fn serialize_field<T>(&mut self, key: &'static str, value: &T) -> Result<()>
+    where
+        T: ?Sized + ser::Serialize,
+    {
+        todo!()
+    }
+
+    fn end(self) -> Result<()> {
+        todo!()
     }
 }
 
@@ -345,7 +612,7 @@ mod tests {
         let a: i64 = Deserialize::deserialize(&p).unwrap();
         assert_eq!(a, -2);
         // cannot be deserialized negative integer into unsigned
-        let res: Result<u32, _> = Deserialize::deserialize(&p);
+        let res: Result<u32> = Deserialize::deserialize(&p);
         assert!(res.is_err());
     }
 
