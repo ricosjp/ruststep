@@ -1,4 +1,7 @@
-use crate::parser::{combinator::*, exchange::*, token::*};
+use crate::{
+    parser::{combinator::*, exchange::*, token::*},
+    step::*,
+};
 use nom::{branch::alt, Parser};
 
 #[derive(Debug, Clone, PartialEq)]
