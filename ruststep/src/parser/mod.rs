@@ -37,10 +37,11 @@ pub mod combinator;
 pub mod exchange;
 pub mod token;
 
-use crate::error::{Result, TokenizeFailed};
+use crate::{
+    error::{Result, TokenizeFailed},
+    step::*,
+};
 use nom::Finish;
-
-pub use exchange::Record;
 
 /// Parse HEADER section
 ///

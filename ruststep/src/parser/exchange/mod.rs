@@ -4,17 +4,18 @@ mod anchor;
 mod data;
 mod header;
 mod parameter;
-mod record;
 mod reference;
 
 pub use anchor::*;
 pub use data::*;
 pub use header::*;
 pub use parameter::*;
-pub use record::*;
 pub use reference::*;
 
-use crate::parser::{combinator::*, token::*};
+use crate::{
+    parser::{combinator::*, token::*},
+    step::*,
+};
 use nom::Parser;
 
 #[derive(Debug, Clone, PartialEq)]
