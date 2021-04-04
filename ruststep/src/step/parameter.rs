@@ -9,7 +9,7 @@ use std::fmt;
 ///
 /// ```
 /// use nom::Finish;
-/// use ruststep::parser::{Parameter, exchange};
+/// use ruststep::{parser::exchange, step::Parameter};
 ///
 /// // Real number
 /// let (residual, p) = exchange::parameter("1.0").finish().unwrap();
@@ -36,7 +36,7 @@ use std::fmt;
 ///
 /// ```
 /// use nom::Finish;
-/// use ruststep::parser::{Parameter, exchange};
+/// use ruststep::{parser::exchange, step::Parameter};
 ///
 /// let (residual, p) = exchange::parameter("B((1.0, A((2.0, 3.0))))")
 ///     .finish()
@@ -67,7 +67,7 @@ use std::fmt;
 /// Create a list as `Parameter::List` from `Iterator<Item=Parameter>` or `Iterator<Item=&Parameter>`.
 ///
 /// ```
-/// use ruststep::parser::Parameter;
+/// use ruststep::step::Parameter;
 ///
 /// let p: Parameter = [Parameter::real(1.0), Parameter::real(2.0)]
 ///     .iter()
@@ -85,7 +85,7 @@ use std::fmt;
 ///
 /// ```
 /// use serde::Deserialize;
-/// use ruststep::parser::Parameter;
+/// use ruststep::step::Parameter;
 ///
 /// #[derive(Debug, Deserialize)]
 /// struct A {
@@ -115,7 +115,7 @@ use std::fmt;
 ///
 /// ```
 /// use serde::Deserialize;
-/// use ruststep::parser::{Parameter, exchange};
+/// use ruststep::parser::exchange;
 /// use nom::Finish;
 ///
 /// #[derive(Debug, Deserialize)]
@@ -134,7 +134,7 @@ use std::fmt;
 ///
 /// ```
 /// use serde::Deserialize;
-/// use ruststep::parser::{exchange, value::RValue, Parameter};
+/// use ruststep::{parser::exchange, step::RValue};
 /// use nom::Finish;
 ///
 /// let (res, p) = exchange::parameter("#11").finish().unwrap();

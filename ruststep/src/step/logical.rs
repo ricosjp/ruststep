@@ -3,7 +3,7 @@ use std::ops::*;
 /// `LOGICAL` type
 ///
 /// ```
-/// use ruststep::primitive::Logical;
+/// use ruststep::step::Logical;
 ///
 /// // Default
 /// assert_eq!(Logical::default(), Logical::Unknown);

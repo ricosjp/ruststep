@@ -1,7 +1,7 @@
 use serde::{de, forward_to_deserialize_any, Deserialize};
 
 #[cfg(doc)] // for doc-link
-use super::exchange::Record;
+use super::Record;
 
 /// Left hand side value
 #[derive(Debug, Clone, PartialEq, Deserialize)]
@@ -24,7 +24,7 @@ pub enum LValue {
 ///
 /// ```
 /// use serde::Deserialize;
-/// use ruststep::parser::value::RValue;
+/// use ruststep::step::RValue;
 ///
 /// let value = RValue::Entity(11);
 /// let a: RValue = Deserialize::deserialize(&value).unwrap();
