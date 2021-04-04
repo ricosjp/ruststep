@@ -1,6 +1,9 @@
 //! Parser for tokens defined in the table 2 of ISO-10303-21
 
-use super::{basic::*, combinator::*, value::*};
+use crate::{
+    parser::{basic::*, combinator::*},
+    step::*,
+};
 use nom::{
     branch::alt,
     character::complete::{char, digit1, multispace0, none_of, satisfy},

@@ -179,7 +179,7 @@ impl Holder for CHolder {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::parser::{exchange, value::RValue};
+    use crate::{parser::exchange, step::*};
     use nom::Finish;
 
     #[test]
