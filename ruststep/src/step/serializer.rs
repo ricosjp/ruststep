@@ -2,6 +2,7 @@ use crate::{error::*, step::*};
 use serde::ser;
 use std::convert::TryFrom;
 
+/// Serialize struct into STEP [Record]
 pub fn to_record(obj: &impl ser::Serialize) -> Result<Record> {
     let mut ser = RecordSerializer::default();
     obj.serialize(&mut ser)?;
@@ -81,7 +82,7 @@ impl<'se> ser::Serializer for &'se mut RecordSerializer {
         self.parameters.push(Parameter::String(v.to_string()));
         Ok(())
     }
-    fn serialize_bytes(self, v: &[u8]) -> Result<()> {
+    fn serialize_bytes(self, _v: &[u8]) -> Result<()> {
         todo!()
     }
 
@@ -124,8 +125,8 @@ impl<'se> ser::Serializer for &'se mut RecordSerializer {
         self,
         _name: &'static str,
         _variant_index: u32,
-        variant: &'static str,
-        value: &T,
+        _variant: &'static str,
+        _value: &T,
     ) -> Result<()>
     where
         T: ?Sized + ser::Serialize,
@@ -153,7 +154,7 @@ impl<'se> ser::Serializer for &'se mut RecordSerializer {
         self,
         _name: &'static str,
         _variant_index: u32,
-        variant: &'static str,
+        _variant: &'static str,
         _len: usize,
     ) -> Result<Self::SerializeTupleVariant> {
         todo!()
@@ -163,15 +164,20 @@ impl<'se> ser::Serializer for &'se mut RecordSerializer {
         Ok(self)
     }
 
-    fn serialize_struct(self, _name: &'static str, len: usize) -> Result<Self::SerializeStruct> {
-        self.serialize_map(Some(len))
+    fn serialize_struct(self, name: &'static str, _len: usize) -> Result<Self::SerializeStruct> {
+        if self.name.is_empty() {
+            self.name = name.to_string();
+        } else {
+            dbg!(name);
+        }
+        Ok(self)
     }
 
     fn serialize_struct_variant(
         self,
         _name: &'static str,
         _variant_index: u32,
-        variant: &'static str,
+        _variant: &'static str,
         _len: usize,
     ) -> Result<Self::SerializeStructVariant> {
         todo!()
@@ -185,10 +191,10 @@ impl<'se> ser::SerializeSeq for &'se mut RecordSerializer {
     where
         T: ?Sized + ser::Serialize,
     {
-        todo!()
+        value.serialize(&mut **self)
     }
     fn end(self) -> Result<()> {
-        todo!()
+        Ok(())
     }
 }
 
@@ -199,11 +205,11 @@ impl<'se> ser::SerializeTuple for &'se mut RecordSerializer {
     where
         T: ?Sized + ser::Serialize,
     {
-        todo!()
+        value.serialize(&mut **self)
     }
 
     fn end(self) -> Result<()> {
-        todo!()
+        Ok(())
     }
 }
 
@@ -215,11 +221,11 @@ impl<'se> ser::SerializeTupleStruct for &'se mut RecordSerializer {
     where
         T: ?Sized + ser::Serialize,
     {
-        todo!()
+        value.serialize(&mut **self)
     }
 
     fn end(self) -> Result<()> {
-        todo!()
+        Ok(())
     }
 }
 
@@ -231,11 +237,11 @@ impl<'se> ser::SerializeTupleVariant for &'se mut RecordSerializer {
     where
         T: ?Sized + ser::Serialize,
     {
-        todo!()
+        value.serialize(&mut **self)
     }
 
     fn end(self) -> Result<()> {
-        todo!()
+        Ok(())
     }
 }
 
@@ -243,14 +249,14 @@ impl<'se> ser::SerializeMap for &'se mut RecordSerializer {
     type Ok = ();
     type Error = Error;
 
-    fn serialize_key<T>(&mut self, key: &T) -> Result<()>
+    fn serialize_key<T>(&mut self, _key: &T) -> Result<()>
     where
         T: ?Sized + ser::Serialize,
     {
         todo!()
     }
 
-    fn serialize_value<T>(&mut self, value: &T) -> Result<()>
+    fn serialize_value<T>(&mut self, _value: &T) -> Result<()>
     where
         T: ?Sized + ser::Serialize,
     {
@@ -266,15 +272,15 @@ impl<'se> ser::SerializeStruct for &'se mut RecordSerializer {
     type Ok = ();
     type Error = Error;
 
-    fn serialize_field<T>(&mut self, key: &'static str, value: &T) -> Result<()>
+    fn serialize_field<T>(&mut self, _key: &'static str, value: &T) -> Result<()>
     where
         T: ?Sized + ser::Serialize,
     {
-        todo!()
+        value.serialize(&mut **self)
     }
 
     fn end(self) -> Result<()> {
-        todo!()
+        Ok(())
     }
 }
 
@@ -282,25 +288,65 @@ impl<'se> ser::SerializeStructVariant for &'se mut RecordSerializer {
     type Ok = ();
     type Error = Error;
 
-    fn serialize_field<T>(&mut self, key: &'static str, value: &T) -> Result<()>
+    fn serialize_field<T>(&mut self, _key: &'static str, value: &T) -> Result<()>
     where
         T: ?Sized + ser::Serialize,
     {
-        todo!()
+        value.serialize(&mut **self)
     }
 
     fn end(self) -> Result<()> {
-        todo!()
+        Ok(())
     }
 }
 
 #[cfg(test)]
 mod tests {
     use crate::ap000;
+    use crate::step::{Parameter, Record};
 
     #[test]
-    fn serialize_to_record() {
+    fn serialize_to_record_a() {
         let record = super::to_record(&ap000::A { x: 1.0, y: 2.0 }).unwrap();
-        dbg!(record);
+        assert_eq!(
+            record,
+            Record {
+                name: "A".to_string(),
+                parameters: [Parameter::real(1.0), Parameter::real(2.0)]
+                    .iter()
+                    .cloned()
+                    .collect()
+            }
+        );
+    }
+
+    #[test]
+    fn serialize_to_record_b() {
+        let record = super::to_record(&ap000::B {
+            z: 3.0,
+            a: ap000::A { x: 1.0, y: 2.0 },
+        })
+        .unwrap();
+        assert_eq!(
+            record,
+            Record {
+                name: "B".to_string(),
+                parameters: [
+                    Parameter::real(1.0),
+                    Parameter::Typed {
+                        name: "A".to_string(),
+                        ty: Box::new(
+                            [Parameter::real(1.0), Parameter::real(2.0)]
+                                .iter()
+                                .cloned()
+                                .collect()
+                        )
+                    }
+                ]
+                .iter()
+                .cloned()
+                .collect()
+            }
+        );
     }
 }
