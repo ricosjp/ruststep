@@ -27,7 +27,7 @@ use crate::{
     parser::exchange::{DataSection, EntityInstance},
     tables::*,
 };
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
 #[cfg(doc)]
@@ -102,7 +102,7 @@ impl EntityTable<CHolder> for Ap000 {
 }
 
 /// Corresponds to `ENTITY a`
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 pub struct A {
     pub x: f64,
     pub y: f64,
@@ -125,7 +125,7 @@ impl Holder for AHolder {
 }
 
 /// Corresponds to `ENTITY b`
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 pub struct B {
     pub z: f64,
     pub a: A,
@@ -151,7 +151,7 @@ impl Holder for BHolder {
 }
 
 /// Corresponds to `ENTITY c`
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 pub struct C {
     pub p: A,
     pub q: B,

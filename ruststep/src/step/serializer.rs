@@ -2,8 +2,17 @@ use crate::{error::*, step::*};
 use serde::ser;
 use std::convert::TryFrom;
 
+pub fn to_record(obj: &impl ser::Serialize) -> Result<Record> {
+    let mut ser = RecordSerializer::default();
+    obj.serialize(&mut ser)?;
+    Ok(Record {
+        name: ser.name,
+        parameters: ser.parameters,
+    })
+}
+
 #[derive(Default, Debug)]
-pub struct RecordSerializer {
+struct RecordSerializer {
     name: String,
     parameters: Vec<Parameter>,
 }
@@ -287,13 +296,11 @@ impl<'se> ser::SerializeStructVariant for &'se mut RecordSerializer {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-    use serde::Serialize;
+    use crate::ap000;
 
     #[test]
-    fn serialize_parameter() {
-        let mut ser = RecordSerializer::default();
-        let p = Serialize::serialize(&1, &mut ser).unwrap();
-        dbg!(p);
+    fn serialize_to_record() {
+        let record = super::to_record(&ap000::A { x: 1.0, y: 2.0 }).unwrap();
+        dbg!(record);
     }
 }
