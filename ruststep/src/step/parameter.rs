@@ -1,6 +1,6 @@
 use crate::{error::*, step::*};
 use serde::{de, forward_to_deserialize_any, ser, Deserialize};
-use std::fmt;
+use std::{convert::TryFrom, fmt};
 
 /// Primitive value type in STEP data
 ///
@@ -342,40 +342,40 @@ impl<'param> ser::Serializer for &'param mut Parameter {
     }
 
     fn serialize_i8(self, v: i8) -> Result<()> {
-        todo!()
+        self.serialize_i64(i64::from(v))
     }
     fn serialize_i16(self, v: i16) -> Result<()> {
-        todo!()
+        self.serialize_i64(i64::from(v))
     }
     fn serialize_i32(self, v: i32) -> Result<()> {
-        todo!()
+        self.serialize_i64(i64::from(v))
     }
     fn serialize_i64(self, v: i64) -> Result<()> {
         todo!()
     }
 
     fn serialize_u8(self, v: u8) -> Result<()> {
-        todo!()
+        self.serialize_i64(i64::from(v))
     }
     fn serialize_u16(self, v: u16) -> Result<()> {
-        todo!()
+        self.serialize_i64(i64::from(v))
     }
     fn serialize_u32(self, v: u32) -> Result<()> {
-        todo!()
+        self.serialize_i64(i64::from(v))
     }
     fn serialize_u64(self, v: u64) -> Result<()> {
-        todo!()
+        self.serialize_i64(i64::try_from(v).expect("integer larger than i64::MAX is not supported"))
     }
 
     fn serialize_f32(self, v: f32) -> Result<()> {
-        todo!()
+        self.serialize_f64(f64::from(v))
     }
     fn serialize_f64(self, v: f64) -> Result<()> {
         todo!()
     }
 
     fn serialize_char(self, v: char) -> Result<()> {
-        todo!()
+        self.serialize_str(&v.to_string())
     }
     fn serialize_str(self, v: &str) -> Result<()> {
         todo!()
@@ -385,7 +385,7 @@ impl<'param> ser::Serializer for &'param mut Parameter {
     }
 
     fn serialize_none(self) -> Result<()> {
-        todo!()
+        self.serialize_unit()
     }
 
     fn serialize_some<T>(self, value: &T) -> Result<()>
