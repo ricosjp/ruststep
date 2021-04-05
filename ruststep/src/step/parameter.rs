@@ -392,7 +392,7 @@ impl<'param> ser::Serializer for &'param mut Parameter {
     where
         T: ?Sized + ser::Serialize,
     {
-        todo!()
+        value.serialize(self)
     }
 
     fn serialize_unit(self) -> Result<()> {
@@ -400,7 +400,7 @@ impl<'param> ser::Serializer for &'param mut Parameter {
     }
 
     fn serialize_unit_struct(self, _name: &'static str) -> Result<()> {
-        todo!()
+        self.serialize_unit()
     }
 
     fn serialize_unit_variant(
@@ -409,14 +409,14 @@ impl<'param> ser::Serializer for &'param mut Parameter {
         _variant_index: u32,
         variant: &'static str,
     ) -> Result<()> {
-        todo!()
+        self.serialize_str(variant)
     }
 
     fn serialize_newtype_struct<T>(self, _name: &'static str, value: &T) -> Result<()>
     where
         T: ?Sized + ser::Serialize,
     {
-        todo!()
+        value.serialize(self)
     }
 
     fn serialize_newtype_variant<T>(
@@ -433,11 +433,11 @@ impl<'param> ser::Serializer for &'param mut Parameter {
     }
 
     fn serialize_seq(self, _len: Option<usize>) -> Result<Self::SerializeSeq> {
-        todo!()
+        Ok(self)
     }
 
     fn serialize_tuple(self, len: usize) -> Result<Self::SerializeTuple> {
-        todo!()
+        self.serialize_seq(Some(len))
     }
 
     fn serialize_tuple_struct(
@@ -445,7 +445,7 @@ impl<'param> ser::Serializer for &'param mut Parameter {
         _name: &'static str,
         len: usize,
     ) -> Result<Self::SerializeTupleStruct> {
-        todo!()
+        self.serialize_seq(Some(len))
     }
 
     fn serialize_tuple_variant(
@@ -459,11 +459,11 @@ impl<'param> ser::Serializer for &'param mut Parameter {
     }
 
     fn serialize_map(self, _len: Option<usize>) -> Result<Self::SerializeMap> {
-        todo!()
+        Ok(self)
     }
 
     fn serialize_struct(self, _name: &'static str, len: usize) -> Result<Self::SerializeStruct> {
-        todo!()
+        self.serialize_map(Some(len))
     }
 
     fn serialize_struct_variant(
