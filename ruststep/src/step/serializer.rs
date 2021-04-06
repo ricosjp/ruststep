@@ -6,6 +6,7 @@ use std::convert::TryFrom;
 pub fn to_record(obj: &impl ser::Serialize) -> Result<Record> {
     let mut ser = RecordSerializer::default();
     obj.serialize(&mut ser)?;
+    assert!(ser.stack.is_empty()); // should panic because this must be bug, not a valid input
     Ok(Record {
         name: ser.name,
         parameters: ser.parameters,
@@ -16,6 +17,8 @@ pub fn to_record(obj: &impl ser::Serialize) -> Result<Record> {
 struct RecordSerializer {
     name: String,
     parameters: Vec<Parameter>,
+    // For supporting nested record e.g. `B(3.0, A((1.0, 2.0)))`
+    stack: Vec<(String, Vec<Parameter>)>,
 }
 
 impl<'se> ser::Serializer for &'se mut RecordSerializer {
@@ -168,7 +171,20 @@ impl<'se> ser::Serializer for &'se mut RecordSerializer {
         if self.name.is_empty() {
             self.name = name.to_string();
         } else {
-            dbg!(name);
+            // Entering sub struct e.g.
+            //
+            // ```
+            // B(3.0, A((1.0, 2.0)))
+            //        ^ here
+            // ```
+            //
+            // Put current parameters (`3.0` as above) onto the top of stack,
+            // and start serializing `A((1.0, 2.0))`.
+            // This stack will be popped in SerializeStruct::end()
+            //
+            let current_name = std::mem::replace(&mut self.name, name.to_string());
+            let current_params = std::mem::replace(&mut self.parameters, Vec::new());
+            self.stack.push((current_name, current_params));
         }
         Ok(self)
     }
@@ -280,6 +296,15 @@ impl<'se> ser::SerializeStruct for &'se mut RecordSerializer {
     }
 
     fn end(self) -> Result<()> {
+        if let Some((name, params)) = self.stack.pop() {
+            // restore stacked state
+            let name = std::mem::replace(&mut self.name, name);
+            let params = std::mem::replace(&mut self.parameters, params);
+            self.parameters.push(Parameter::Typed {
+                name,
+                ty: Box::new(params.into_iter().collect()),
+            });
+        }
         Ok(())
     }
 }
@@ -332,7 +357,7 @@ mod tests {
             Record {
                 name: "B".to_string(),
                 parameters: [
-                    Parameter::real(1.0),
+                    Parameter::real(3.0),
                     Parameter::Typed {
                         name: "A".to_string(),
                         ty: Box::new(
