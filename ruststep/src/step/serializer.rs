@@ -327,22 +327,14 @@ impl<'se> ser::SerializeStructVariant for &'se mut RecordSerializer {
 
 #[cfg(test)]
 mod tests {
-    use crate::ap000;
-    use crate::step::{Parameter, Record};
+    use crate::{ap000, parser::exchange};
+    use nom::Finish;
 
     #[test]
     fn serialize_to_record_a() {
         let record = super::to_record(&ap000::A { x: 1.0, y: 2.0 }).unwrap();
-        assert_eq!(
-            record,
-            Record {
-                name: "A".to_string(),
-                parameters: [Parameter::real(1.0), Parameter::real(2.0)]
-                    .iter()
-                    .cloned()
-                    .collect()
-            }
-        );
+        let (_, ans) = exchange::simple_record("A(1.0, 2.0)").finish().unwrap();
+        assert_eq!(record, ans);
     }
 
     #[test]
@@ -352,26 +344,25 @@ mod tests {
             a: ap000::A { x: 1.0, y: 2.0 },
         })
         .unwrap();
-        assert_eq!(
-            record,
-            Record {
-                name: "B".to_string(),
-                parameters: [
-                    Parameter::real(3.0),
-                    Parameter::Typed {
-                        name: "A".to_string(),
-                        ty: Box::new(
-                            [Parameter::real(1.0), Parameter::real(2.0)]
-                                .iter()
-                                .cloned()
-                                .collect()
-                        )
-                    }
-                ]
-                .iter()
-                .cloned()
-                .collect()
-            }
-        );
+        let (_, ans) = exchange::simple_record("B(3.0, A((1.0, 2.0)))")
+            .finish()
+            .unwrap();
+        assert_eq!(record, ans);
+    }
+
+    #[test]
+    fn serialize_to_record_c() {
+        let record = super::to_record(&ap000::C {
+            p: ap000::A { x: 1.0, y: 2.0 },
+            q: ap000::B {
+                z: 3.0,
+                a: ap000::A { x: 4.0, y: 5.0 },
+            },
+        })
+        .unwrap();
+        let (_, ans) = exchange::simple_record("C(A((1.0, 2.0)), B((3.0, A((4.0, 5.0)))))")
+            .finish()
+            .unwrap();
+        assert_eq!(record, ans);
     }
 }
