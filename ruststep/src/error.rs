@@ -1,4 +1,4 @@
-use serde::de;
+use serde::{de, ser};
 use std::fmt;
 
 pub type Result<T> = std::result::Result<T, Error>;
@@ -16,6 +16,15 @@ pub enum Error {
 }
 
 impl de::Error for Error {
+    fn custom<T>(msg: T) -> Self
+    where
+        T: fmt::Display,
+    {
+        Error::DeserializeFailed(msg.to_string())
+    }
+}
+
+impl ser::Error for Error {
     fn custom<T>(msg: T) -> Self
     where
         T: fmt::Display,
