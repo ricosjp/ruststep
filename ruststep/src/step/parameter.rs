@@ -1,4 +1,4 @@
-use crate::{error::*, step::*};
+use crate::step::*;
 use serde::{de, forward_to_deserialize_any, Deserialize};
 use std::fmt;
 
@@ -213,10 +213,10 @@ impl<'a> std::iter::FromIterator<&'a Parameter> for Parameter {
     }
 }
 
-impl<'de, 'se> de::Deserializer<'de> for &'se Parameter {
-    type Error = Error;
+impl<'de, 'param> de::Deserializer<'de> for &'param Parameter {
+    type Error = crate::error::Error;
 
-    fn deserialize_any<V>(self, visitor: V) -> Result<V::Value>
+    fn deserialize_any<V>(self, visitor: V) -> Result<V::Value, Self::Error>
     where
         V: de::Visitor<'de>,
     {
@@ -241,7 +241,7 @@ impl<'de, 'se> de::Deserializer<'de> for &'se Parameter {
         _struct_name: &'static str,
         _fields: &'static [&'static str],
         visitor: V,
-    ) -> Result<V::Value>
+    ) -> Result<V::Value, Self::Error>
     where
         V: de::Visitor<'de>,
     {
@@ -260,7 +260,7 @@ impl<'de, 'se> de::Deserializer<'de> for &'se Parameter {
 }
 
 // To support SeqDeserializer
-impl<'de, 'se> de::IntoDeserializer<'de, crate::error::Error> for &'se Parameter {
+impl<'de, 'param> de::IntoDeserializer<'de, crate::error::Error> for &'param Parameter {
     type Deserializer = Self;
     fn into_deserializer(self) -> Self::Deserializer {
         self
@@ -268,7 +268,7 @@ impl<'de, 'se> de::IntoDeserializer<'de, crate::error::Error> for &'se Parameter
 }
 
 impl<'de> Deserialize<'de> for Parameter {
-    fn deserialize<D>(deserializer: D) -> std::result::Result<Self, D::Error>
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
     where
         D: de::Deserializer<'de>,
     {
@@ -285,28 +285,28 @@ impl<'de> de::Visitor<'de> for ParameterVisitor {
         formatter.write_str("Parameter")
     }
 
-    fn visit_i64<E>(self, value: i64) -> std::result::Result<Self::Value, E>
+    fn visit_i64<E>(self, value: i64) -> Result<Self::Value, E>
     where
         E: de::Error,
     {
         Ok(Parameter::integer(value))
     }
 
-    fn visit_f64<E>(self, value: f64) -> std::result::Result<Self::Value, E>
+    fn visit_f64<E>(self, value: f64) -> Result<Self::Value, E>
     where
         E: de::Error,
     {
         Ok(Parameter::real(value))
     }
 
-    fn visit_str<E>(self, value: &str) -> std::result::Result<Self::Value, E>
+    fn visit_str<E>(self, value: &str) -> Result<Self::Value, E>
     where
         E: de::Error,
     {
         Ok(Parameter::string(value))
     }
 
-    fn visit_seq<A>(self, mut seq: A) -> std::result::Result<Self::Value, A::Error>
+    fn visit_seq<A>(self, mut seq: A) -> Result<Self::Value, A::Error>
     where
         A: de::SeqAccess<'de>,
     {
@@ -317,7 +317,7 @@ impl<'de> de::Visitor<'de> for ParameterVisitor {
         Ok(Parameter::List(components))
     }
 
-    fn visit_map<A>(self, mut map: A) -> std::result::Result<Self::Value, A::Error>
+    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
     where
         A: de::MapAccess<'de>,
     {
@@ -345,7 +345,7 @@ mod tests {
         let a: i64 = Deserialize::deserialize(&p).unwrap();
         assert_eq!(a, -2);
         // cannot be deserialized negative integer into unsigned
-        let res: Result<u32> = Deserialize::deserialize(&p);
+        let res: Result<u32, _> = Deserialize::deserialize(&p);
         assert!(res.is_err());
     }
 
