@@ -86,7 +86,7 @@ impl<'se> ser::Serializer for &'se mut RecordSerializer {
         Ok(())
     }
     fn serialize_bytes(self, _v: &[u8]) -> Result<()> {
-        todo!()
+        unimplemented!("Bytes is not supported yet")
     }
 
     fn serialize_none(self) -> Result<()> {
@@ -101,7 +101,8 @@ impl<'se> ser::Serializer for &'se mut RecordSerializer {
     }
 
     fn serialize_unit(self) -> Result<()> {
-        todo!()
+        self.parameters.push(Parameter::NotProvided);
+        Ok(())
     }
 
     fn serialize_unit_struct(self, _name: &'static str) -> Result<()> {
@@ -134,7 +135,7 @@ impl<'se> ser::Serializer for &'se mut RecordSerializer {
     where
         T: ?Sized + ser::Serialize,
     {
-        todo!()
+        unimplemented!("Newtype variant is not suuported yet.")
     }
 
     fn serialize_seq(self, _len: Option<usize>) -> Result<Self::SerializeSeq> {
@@ -160,7 +161,7 @@ impl<'se> ser::Serializer for &'se mut RecordSerializer {
         _variant: &'static str,
         _len: usize,
     ) -> Result<Self::SerializeTupleVariant> {
-        todo!()
+        unimplemented!("Tuple variant is not suuported yet.")
     }
 
     fn serialize_map(self, _len: Option<usize>) -> Result<Self::SerializeMap> {
@@ -196,7 +197,7 @@ impl<'se> ser::Serializer for &'se mut RecordSerializer {
         _variant: &'static str,
         _len: usize,
     ) -> Result<Self::SerializeStructVariant> {
-        todo!()
+        unimplemented!("Struct variant is not suuported yet.")
     }
 }
 
@@ -269,18 +270,18 @@ impl<'se> ser::SerializeMap for &'se mut RecordSerializer {
     where
         T: ?Sized + ser::Serialize,
     {
-        todo!()
+        unimplemented!("Serialize Map to Record is not supported yet.")
     }
 
     fn serialize_value<T>(&mut self, _value: &T) -> Result<()>
     where
         T: ?Sized + ser::Serialize,
     {
-        todo!()
+        unimplemented!("Serialize Map to Record is not supported yet.")
     }
 
     fn end(self) -> Result<()> {
-        todo!()
+        unimplemented!("Serialize Map to Record is not supported yet.")
     }
 }
 
