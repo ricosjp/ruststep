@@ -288,5 +288,12 @@ mod tests {
         let (_, record) = exchange::simple_record("C(#2, #5)").finish().unwrap();
         let c = CHolder::deserialize(&record).unwrap();
         dbg!(c.into_owned(&tables).unwrap());
+
+        // Inline struct with reference
+        let (_, record) = exchange::simple_record("C(#1, B((6.0, #1)))")
+            .finish()
+            .unwrap();
+        let c = CHolder::deserialize(&record).unwrap();
+        dbg!(c.into_owned(&tables).unwrap());
     }
 }
