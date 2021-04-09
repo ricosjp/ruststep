@@ -290,7 +290,7 @@ mod tests {
         dbg!(c.into_owned(&tables).unwrap());
 
         // Inline struct with reference
-        let (_, record) = exchange::simple_record("C(#1, B((6.0, #1)))")
+        let (_, record) = exchange::simple_record("C(#2, B((6.0, #2)))")
             .finish()
             .unwrap();
         let c = CHolder::deserialize(&record).unwrap();
