@@ -22,12 +22,21 @@ END-ISO-10303-21;
 "#;
 
 fn main() -> anyhow::Result<()> {
+    // Parse input string into an exchange structure
     let step = parser::parse(STEP_INPUT.trim())?;
+
+    // STEP file can contain multiple DATA section,
+    // and assumes it be 1 here.
     assert_eq!(step.data.len(), 1);
 
+    // Load DATA section as tables of each entity
     let table = ap000::Ap000::from_section(&step.data[0])?;
+
+    // Iterate over entity instances
     for c in table.c_iter() {
-        println!("C = {:?}", c?);
+        println!("C = {:?}", c?); // Entity reference e.g. `#1` is resolved here.
+                                  // If an undefined entity is contained, `c` will be
+                                  // `ruststep::error::Error::UnknownEntity`
     }
     Ok(())
 }
