@@ -1,4 +1,4 @@
-//! Helper submodule for espr-generated Rust code
+//! Traits for espr-generated structures
 //!
 //! Examples
 //! ---------
