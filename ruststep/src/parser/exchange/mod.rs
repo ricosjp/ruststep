@@ -18,15 +18,6 @@ use crate::{
 };
 use nom::Parser;
 
-#[derive(Debug, Clone, PartialEq)]
-pub struct Exchange {
-    pub header: Vec<Record>,
-    pub anchor: Vec<Anchor>,
-    pub reference: Vec<ReferenceEntry>,
-    pub data: Vec<DataSection>,
-    pub signature: Vec<String>,
-}
-
 /// exchange_file = `ISO-10303-21;`
 ///                 [header_section]
 ///              \[ [anchor_section] \]

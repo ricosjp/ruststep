@@ -16,13 +16,6 @@ pub fn anchor_list(input: &str) -> ParseResult<Vec<Anchor>> {
     many0_(anchor).parse(input)
 }
 
-#[derive(Debug, Clone, PartialEq)]
-pub struct Anchor {
-    pub name: String,
-    pub item: AnchorItem,
-    pub tags: Vec<(String, AnchorItem)>,
-}
-
 /// anchor = [anchor_name] `=` [anchor_item] { [anchor_tag] } `;` .
 pub fn anchor(input: &str) -> ParseResult<Anchor> {
     tuple_((
@@ -34,20 +27,6 @@ pub fn anchor(input: &str) -> ParseResult<Anchor> {
     ))
     .map(|(name, _eq, item, tags, _semicolon)| Anchor { name, item, tags })
     .parse(input)
-}
-
-#[derive(Debug, Clone, PartialEq)]
-pub enum AnchorItem {
-    Integer(i64),
-    Real(f64),
-    String(String),
-    Enumeration(String),
-    /// The special token dollar sign (`$`) is used to represent an object whose value is not provided in the exchange structure.
-    NotProvided,
-    /// A reference to entity or value, parsed by [rhs_occurrence_name]
-    RValue(RValue),
-    /// List of other parameters
-    List(Vec<AnchorItem>),
 }
 
 /// anchor_item = `$` | [integer] | [real] | [string] | [enumeration] | binary | [rhs_occurrence_name] | [resource] | [anchor_item_list] .

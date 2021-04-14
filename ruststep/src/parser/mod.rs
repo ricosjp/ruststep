@@ -76,7 +76,7 @@ pub fn parse_header(input: &str) -> Result<(&str, Vec<Record>)> {
 }
 
 /// Parse entire STEP file
-pub fn parse(input: &str) -> Result<exchange::Exchange> {
+pub fn parse(input: &str) -> Result<Exchange> {
     match exchange::exchange_file(input).finish() {
         Ok((_residual, ex)) => Ok(ex),
         Err(e) => Err(TokenizeFailed::new(input, e).into()),

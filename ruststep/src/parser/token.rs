@@ -49,9 +49,6 @@ pub fn string(input: &str) -> ParseResult<String> {
         .parse(input)
 }
 
-#[derive(Debug, Clone, PartialEq)]
-pub struct URI(pub String);
-
 /// resource = `<` UNIVERSAL_RESOURCE_IDENTIFIER `>` .
 ///
 /// Parse as string, without validating as URI
