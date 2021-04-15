@@ -11,10 +11,10 @@
 
 #![deny(broken_intra_doc_links)]
 
+pub mod ast;
 pub mod error;
 pub mod header;
 pub mod parser;
-pub mod step;
 pub mod tables;
 
 pub mod ap000;

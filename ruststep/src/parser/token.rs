@@ -1,8 +1,8 @@
 //! Parser for tokens defined in the table 2 of ISO-10303-21
 
 use crate::{
+    ast::*,
     parser::{basic::*, combinator::*},
-    step::*,
 };
 use nom::{
     branch::alt,

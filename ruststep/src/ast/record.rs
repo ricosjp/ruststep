@@ -1,4 +1,4 @@
-use crate::{error::*, step::*};
+use crate::{ast::*, error::*};
 use serde::{de, forward_to_deserialize_any, ser};
 use std::convert::TryFrom;
 
@@ -69,16 +69,16 @@ impl<'de, 'record> de::Deserializer<'de> for &'record Record {
 /// [serde::Serialize] struct can be serialized into [Record]
 ///
 /// ```
-/// use ruststep::{step, ap000, parser::exchange};
+/// use ruststep::{ast, ap000, parser::exchange};
 /// use nom::Finish;
 ///
 /// // For A(1.0, 2.0)
-/// let record = step::to_record(&ap000::A { x: 1.0, y: 2.0 }).unwrap();
+/// let record = ast::to_record(&ap000::A { x: 1.0, y: 2.0 }).unwrap();
 /// let (_, ans) = exchange::simple_record("A(1.0, 2.0)").finish().unwrap();
 /// assert_eq!(record, ans);
 ///
 /// // For nested struct B(3.0, A((1.0, 2.0)))
-/// let record = step::to_record(&ap000::B {
+/// let record = ast::to_record(&ap000::B {
 ///     z: 3.0,
 ///     a: ap000::A { x: 1.0, y: 2.0 },
 /// })

@@ -24,7 +24,7 @@ pub enum LValue {
 ///
 /// ```
 /// use serde::Deserialize;
-/// use ruststep::step::RValue;
+/// use ruststep::ast::RValue;
 ///
 /// let value = RValue::Entity(11);
 /// let a: RValue = Deserialize::deserialize(&value).unwrap();

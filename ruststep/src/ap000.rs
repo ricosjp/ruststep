@@ -70,8 +70,8 @@
 //!
 
 use crate::{
+    ast::{DataSection, EntityInstance},
     error::*,
-    step::{DataSection, EntityInstance},
     tables::*,
 };
 use serde::{Deserialize, Serialize};
@@ -226,7 +226,7 @@ impl Holder for CHolder {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::{parser::exchange, step::*};
+    use crate::{ast::*, parser::exchange};
     use nom::Finish;
 
     #[test]
