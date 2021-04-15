@@ -1,8 +1,8 @@
 //! Parser for tokens defined in the table 2 of ISO-10303-21
 
 use crate::{
+    ast::*,
     parser::{basic::*, combinator::*},
-    step::*,
 };
 use nom::{
     branch::alt,
@@ -48,9 +48,6 @@ pub fn string(input: &str) -> ParseResult<String> {
         .map(|(_start, s, _end)| s.iter().collect())
         .parse(input)
 }
-
-#[derive(Debug, Clone, PartialEq)]
-pub struct URI(pub String);
 
 /// resource = `<` UNIVERSAL_RESOURCE_IDENTIFIER `>` .
 ///

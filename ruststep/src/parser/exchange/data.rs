@@ -1,20 +1,8 @@
 use crate::{
+    ast::*,
     parser::{combinator::*, exchange::*, token::*},
-    step::*,
 };
 use nom::{branch::alt, Parser};
-
-#[derive(Debug, Clone, PartialEq)]
-pub struct DataSection {
-    pub meta: Vec<Parameter>,
-    pub entities: Vec<EntityInstance>,
-}
-
-#[derive(Debug, Clone, PartialEq)]
-pub enum EntityInstance {
-    Simple { name: u64, record: Record },
-    Complex { name: u64, subsuper: Vec<Record> },
-}
 
 /// data_section = `DATA` \[ `(` [parameter_list] `)` \] `;` [entity_instance_list] `ENDSEC;` .
 pub fn data_section(input: &str) -> ParseResult<DataSection> {

@@ -1,4 +1,4 @@
-//! Helper submodule for espr-generated Rust code
+//! Traits for espr-generated structures
 //!
 //! Examples
 //! ---------
@@ -49,7 +49,7 @@
 //!     - `a_iter()` as above example
 //!
 
-use crate::step::*;
+use crate::ast::*;
 use serde::{
     de::{self, IntoDeserializer, VariantAccess},
     Deserialize,

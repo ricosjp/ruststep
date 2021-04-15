@@ -1,6 +1,6 @@
 use crate::{
+    ast::*,
     parser::{combinator::*, token::*},
-    step::*,
 };
 use nom::Parser;
 
@@ -14,12 +14,6 @@ pub fn reference_section(input: &str) -> ParseResult<Vec<ReferenceEntry>> {
 /// reference_list = { [reference()] } .
 pub fn reference_list(input: &str) -> ParseResult<Vec<ReferenceEntry>> {
     many0_(reference).parse(input)
-}
-
-#[derive(Debug, Clone, PartialEq)]
-pub struct ReferenceEntry {
-    pub name: LValue,
-    pub resource: URI,
 }
 
 /// reference = [lhs_occurrence_name] `=` [resource] `;` .

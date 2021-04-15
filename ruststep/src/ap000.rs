@@ -1,4 +1,4 @@
-//! Manually generated schema definitions corresponding following EXPRESS Schema.
+//! Manually generated schema definitions corresponding following EXPRESS Schema
 //!
 //! ```text
 //! SCHEMA ap000;
@@ -19,12 +19,59 @@
 //! END_SCHEMA;
 //! ```
 //!
-//! This is for testing espr code generator. See the document of [tables] for detail.
+//! This sub-module is for help designing and testing generated code.
+//! Most functionality in generated codes are supplied as trait in [tables].
+//!
+//! Examples
+//! ---------
+//!
+//! ```
+//! use ruststep::*;
+//!
+//! const STEP_INPUT: &str = r#"
+//! ISO-10303-21;
+//! HEADER;
+//!   FILE_DESCRIPTION((''), '');
+//!   FILE_NAME('ruststep/examples/ap000/read.step', '2018-04-27T08:23:47', (''), (''), '', '', '');
+//!   FILE_SCHEMA(('AP000'));
+//! ENDSEC;
+//! DATA;
+//!   #1 = A(1.0, 2.0);
+//!   #2 = B(3.0, #1);
+//!   #3 = B(3.0, A((4.0, 5.0)));
+//!   #4 = C(#1, #2);
+//!   #5 = C(#1, #3);
+//!   #6 = C(#1, B((6.0, #1)));
+//!   #7 = C(#1, B((6.0, A((7.0, 8.0)))));
+//!   #8 = C(A((9.0, 10.0)), #2);
+//!   #9 = C(A((11.0, 12.0)), #3);
+//! ENDSEC;
+//! END-ISO-10303-21;
+//! "#;
+//!
+//! // Parse input string into an exchange structure
+//! let step = parser::parse(STEP_INPUT.trim()).unwrap();
+//!
+//! // STEP file can contain multiple DATA section,
+//! // and assumes it be 1 here.
+//! assert_eq!(step.data.len(), 1);
+//!
+//! // Load DATA section as tables of each entity
+//! let table = ap000::Ap000::from_section(&step.data[0]).unwrap();
+//!
+//! // Iterate over entity instances
+//! for c in table.c_iter() {
+//!     let c_owned = c.unwrap(); // Entity reference e.g. `#1` is resolved here.
+//!                               // If an undefined entity is contained, `c` will be
+//!                               // `ruststep::error::Error::UnknownEntity`
+//!     println!("C = {:?}", c_owned);
+//! }
+//! ```
 //!
 
 use crate::{
+    ast::{DataSection, EntityInstance},
     error::*,
-    parser::exchange::{DataSection, EntityInstance},
     tables::*,
 };
 use serde::{Deserialize, Serialize};
@@ -179,7 +226,7 @@ impl Holder for CHolder {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::{parser::exchange, step::*};
+    use crate::{ast::*, parser::exchange};
     use nom::Finish;
 
     #[test]
@@ -286,6 +333,13 @@ mod tests {
 
         // Use both reference with DAG
         let (_, record) = exchange::simple_record("C(#2, #5)").finish().unwrap();
+        let c = CHolder::deserialize(&record).unwrap();
+        dbg!(c.into_owned(&tables).unwrap());
+
+        // Inline struct with reference
+        let (_, record) = exchange::simple_record("C(#2, B((6.0, #2)))")
+            .finish()
+            .unwrap();
         let c = CHolder::deserialize(&record).unwrap();
         dbg!(c.into_owned(&tables).unwrap());
     }

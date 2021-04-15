@@ -1,5 +1,8 @@
-use crate::step::*;
-use serde::{de, forward_to_deserialize_any, Deserialize};
+use crate::ast::*;
+use serde::{
+    de::{self, VariantAccess},
+    forward_to_deserialize_any, Deserialize,
+};
 use std::fmt;
 
 /// Primitive value type in STEP data
@@ -9,7 +12,7 @@ use std::fmt;
 ///
 /// ```
 /// use nom::Finish;
-/// use ruststep::{parser::exchange, step::Parameter};
+/// use ruststep::{parser::exchange, ast::Parameter};
 ///
 /// // Real number
 /// let (residual, p) = exchange::parameter("1.0").finish().unwrap();
@@ -36,7 +39,7 @@ use std::fmt;
 ///
 /// ```
 /// use nom::Finish;
-/// use ruststep::{parser::exchange, step::Parameter};
+/// use ruststep::{parser::exchange, ast::Parameter};
 ///
 /// let (residual, p) = exchange::parameter("B((1.0, A((2.0, 3.0))))")
 ///     .finish()
@@ -67,7 +70,7 @@ use std::fmt;
 /// Create a list as `Parameter::List` from `Iterator<Item=Parameter>` or `Iterator<Item=&Parameter>`.
 ///
 /// ```
-/// use ruststep::step::Parameter;
+/// use ruststep::ast::Parameter;
 ///
 /// let p: Parameter = [Parameter::real(1.0), Parameter::real(2.0)]
 ///     .iter()
@@ -85,7 +88,7 @@ use std::fmt;
 ///
 /// ```
 /// use serde::Deserialize;
-/// use ruststep::step::Parameter;
+/// use ruststep::ast::Parameter;
 ///
 /// #[derive(Debug, Deserialize)]
 /// struct A {
@@ -134,7 +137,7 @@ use std::fmt;
 ///
 /// ```
 /// use serde::Deserialize;
-/// use ruststep::{parser::exchange, step::RValue};
+/// use ruststep::{parser::exchange, ast::RValue};
 /// use nom::Finish;
 ///
 /// let (res, p) = exchange::parameter("#11").finish().unwrap();
@@ -323,6 +326,20 @@ impl<'de> de::Visitor<'de> for ParameterVisitor {
     {
         let (name, ty) = map.next_entry()?.unwrap();
         Ok(Parameter::Typed { name, ty })
+    }
+
+    fn visit_enum<A>(self, data: A) -> Result<Self::Value, A::Error>
+    where
+        A: de::EnumAccess<'de>,
+    {
+        let (kind, value): (String, _) = data.variant()?;
+        match kind.as_str() {
+            "Entity" => {
+                let id = value.newtype_variant()?;
+                return Ok(Parameter::RValue(RValue::Entity(id)));
+            }
+            _ => unimplemented!("enum to Parameter is not implemented yet"),
+        }
     }
 }
 
