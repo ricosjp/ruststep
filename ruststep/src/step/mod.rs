@@ -10,21 +10,31 @@ pub use parameter::*;
 pub use record::*;
 pub use value::*;
 
+/// Entire exchange structure
 #[derive(Debug, Clone, PartialEq)]
 pub struct Exchange {
+    /// `HEADER` section
     pub header: Vec<Record>,
+    /// `ANCHOR` section
     pub anchor: Vec<Anchor>,
+    /// `REFERENCE` section
     pub reference: Vec<ReferenceEntry>,
+    /// `DATA` section
     pub data: Vec<DataSection>,
+    /// `SIGNATURE` section
     pub signature: Vec<String>,
 }
 
+/// `DATA` section in STEP file
 #[derive(Debug, Clone, PartialEq)]
 pub struct DataSection {
+    /// Metadata
     pub meta: Vec<Parameter>,
+    /// Each lines in data section
     pub entities: Vec<EntityInstance>,
 }
 
+/// Each line of data section
 #[derive(Debug, Clone, PartialEq)]
 pub enum EntityInstance {
     Simple { name: u64, record: Record },
@@ -55,7 +65,7 @@ pub enum AnchorItem {
     Enumeration(String),
     /// The special token dollar sign (`$`) is used to represent an object whose value is not provided in the exchange structure.
     NotProvided,
-    /// A reference to entity or value, parsed by [rhs_occurrence_name]
+    /// A reference to entity or value
     RValue(RValue),
     /// List of other parameters
     List(Vec<AnchorItem>),
