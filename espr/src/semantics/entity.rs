@@ -21,6 +21,7 @@ impl Legalize for EntityAttribute {
 
     fn legalize(ns: &Namespace, scope: &Scope, attr: &Self::Input) -> Result<Self, SemanticError> {
         use crate::ast::types::ParameterType::*;
+        dbg!(&attr);
         let ty = match &attr.ty {
             Named(name) => ns.lookup_type(scope, name)?,
             Simple(ty) => namespace::TypeRef::SimpleType(*ty),
