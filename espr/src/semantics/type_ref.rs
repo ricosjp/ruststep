@@ -1,4 +1,4 @@
-use super::scope::*;
+use super::{namespace::*, scope::*, *};
 use crate::parser;
 use inflector::Inflector;
 use proc_macro2::TokenStream;
@@ -7,6 +7,18 @@ use quote::*;
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Bound {}
 
+impl Legalize for Bound {
+    type Input = parser::Bound;
+    fn legalize(
+        _ns: &Namespace,
+        _scope: &Scope,
+        _input: &Self::Input,
+    ) -> Result<Self, SemanticError> {
+        // FIXME
+        Ok(Bound {})
+    }
+}
+
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum TypeRef {
     Named {
@@ -14,12 +26,7 @@ pub enum TypeRef {
         scope: Scope,
     },
     SimpleType(parser::SimpleType),
-
     Set {
-        ty: Box<TypeRef>,
-        bound_spec: Option<Bound>,
-    },
-    Bag {
         ty: Box<TypeRef>,
         bound_spec: Option<Bound>,
     },
@@ -28,18 +35,52 @@ pub enum TypeRef {
         bound_spec: Option<Bound>,
         unique: bool,
     },
-    Array {
-        ty: Box<TypeRef>,
-        bound_spec: Option<Bound>,
-        unique: bool,
-        optional: bool,
-    },
-    Aggregate {
-        ty: Box<TypeRef>,
-        label: Option<String>,
-    },
-    GenericEntity(Option<String>),
-    Generic(Option<String>),
+}
+
+impl Legalize for TypeRef {
+    type Input = parser::ParameterType;
+
+    fn legalize(
+        ns: &Namespace,
+        scope: &Scope,
+        ty: &parser::ParameterType,
+    ) -> Result<Self, SemanticError> {
+        use parser::ParameterType::*;
+        Ok(match ty {
+            Simple(ty) => Self::SimpleType(*ty),
+            Named(name) => ns.lookup_type(scope, name)?,
+            Set { ty, bound_spec } => {
+                let ty = TypeRef::legalize(ns, scope, ty.as_ref())?;
+                let bound_spec = if let Some(bound_spec) = bound_spec {
+                    Some(Legalize::legalize(ns, scope, bound_spec)?)
+                } else {
+                    None
+                };
+                Self::Set {
+                    ty: Box::new(ty),
+                    bound_spec,
+                }
+            }
+            List {
+                ty,
+                bound_spec,
+                unique,
+            } => {
+                let ty = TypeRef::legalize(ns, scope, ty.as_ref())?;
+                let bound_spec = if let Some(bound_spec) = bound_spec {
+                    Some(Legalize::legalize(ns, scope, bound_spec)?)
+                } else {
+                    None
+                };
+                Self::List {
+                    ty: Box::new(ty),
+                    bound_spec,
+                    unique: *unique,
+                }
+            }
+            _ => todo!(),
+        })
+    }
 }
 
 impl ToTokens for TypeRef {
@@ -60,17 +101,11 @@ impl ToTokens for TypeRef {
             }
             Named { name, .. } => {
                 let name = format_ident!("{}", name.to_pascal_case());
-                // FIXME This type name should be full path like
-                //
-                // ```
-                // tokens.append_all(quote! { #scope :: #name })
-                // ```
-                //
-                // But it does not work as desired.
-                // See https://gitlab.ritc.jp/ricos/truck/ruststep/-/merge_requests/12/diffs#note_14506
                 tokens.append_all(quote! { #name })
             }
-            _ => unimplemented!(),
+            Set { ty, .. } | List { ty, .. } => {
+                ty.to_tokens(tokens);
+            }
         }
     }
 }

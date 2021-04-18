@@ -22,11 +22,7 @@ impl Legalize for EntityAttribute {
     fn legalize(ns: &Namespace, scope: &Scope, attr: &Self::Input) -> Result<Self, SemanticError> {
         use crate::ast::types::ParameterType::*;
         dbg!(&attr);
-        let ty = match &attr.ty {
-            Named(name) => ns.lookup_type(scope, name)?,
-            Simple(ty) => type_ref::TypeRef::SimpleType(*ty),
-            _ => unimplemented!(),
-        };
+        let ty = TypeRef::legalize(ns, scope, &attr.ty)?;
         let name = match &attr.name {
             crate::ast::entity::AttributeDecl::Reference(name) => name.clone(),
             _ => unimplemented!(),
