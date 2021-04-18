@@ -1,4 +1,5 @@
 use super::super::{combinator::*, expression::*, identifier::*};
+use crate::ast::expression::*;
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct WhereClause {

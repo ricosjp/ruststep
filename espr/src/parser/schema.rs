@@ -1,7 +1,7 @@
 use super::{
     combinator::*, entity::*, expression::*, identifier::*, stmt::*, subsuper::*, types::*,
 };
-use crate::ast::types::*;
+use crate::ast::{expression::*, types::*};
 
 /// Parsed result of EXPRESS's SCHEMA
 #[derive(Debug, Clone, PartialEq)]

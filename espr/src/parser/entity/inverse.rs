@@ -125,7 +125,7 @@ pub fn inverse_attr(input: &str) -> ParseResult<InverseAttribute> {
 #[cfg(test)]
 mod tests {
     use super::AggregationOption;
-    use crate::{ast::types::*, parser::expression::*};
+    use crate::ast::{expression::*, types::*};
     use nom::Finish;
 
     #[test]

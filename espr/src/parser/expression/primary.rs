@@ -3,6 +3,7 @@ use super::{
     aggregate_initializer::*,
     simple::*,
 };
+use crate::ast::expression::*;
 
 /// 269 primary = [literal] | ( [qualifiable_factor] { [qualifier] } ) .
 pub fn primary(input: &str) -> ParseResult<Expression> {
@@ -14,19 +15,6 @@ pub fn primary(input: &str) -> ParseResult<Expression> {
     .parse(input)
 }
 
-#[derive(Debug, Clone, PartialEq)]
-pub enum QualifiableFactor {
-    /// [attribute_ref], [general_ref], [population], or [constant_ref]
-    Reference(String),
-    /// [built_in_constant]
-    BuiltInConstant(BuiltInConstant),
-    /// [function_call]
-    FunctionCall {
-        name: Function,
-        args: Vec<Expression>,
-    },
-}
-
 /// 274 qualifiable_factor = [attribute_ref] | [constant_factor] | [function_call] | [general_ref] | [population] .
 pub fn qualifiable_factor(input: &str) -> ParseResult<QualifiableFactor> {
     alt((
@@ -35,12 +23,6 @@ pub fn qualifiable_factor(input: &str) -> ParseResult<QualifiableFactor> {
         constant_factor,
     ))
     .parse(input)
-}
-
-#[derive(Debug, Clone, PartialEq)]
-pub enum Function {
-    BuiltInFunction(BuiltInFunction),
-    Reference(String),
 }
 
 /// 999 function_call = ( [built_in_function] | [function_ref] ) [actual_parameter_list] .
@@ -77,40 +59,6 @@ pub fn actual_parameter_list(input: &str) -> ParseResult<Vec<Expression>> {
 /// 264 parameter = [expression] .
 pub fn parameter(input: &str) -> ParseResult<Expression> {
     expression(input)
-}
-
-#[allow(non_camel_case_types)] // to use original identifiers
-#[derive(Debug, Clone, PartialEq, Eq, Hash)]
-pub enum BuiltInFunction {
-    ABS,
-    ACOS,
-    ASIN,
-    ATAN,
-    BLENGTH,
-    COS,
-    EXISTS,
-    EXP,
-    FORMAT,
-    HIBOUND,
-    HIINDEX,
-    LENGTH,
-    LOBOUND,
-    LOINDEX,
-    LOG,
-    LOG2,
-    LOG10,
-    NVL,
-    ODD,
-    ROLESOF,
-    SIN,
-    SIZEOF,
-    SQRT,
-    TAN,
-    TYPEOF,
-    USEDIN,
-    VALUE,
-    VALUE_IN,
-    VALUE_UNIQUE,
 }
 
 /// 187 built_in_function = ABS
@@ -198,19 +146,6 @@ pub fn constant_factor(input: &str) -> ParseResult<QualifiableFactor> {
     .parse(input)
 }
 
-/// Output of [qualifier]
-#[derive(Debug, Clone, PartialEq)]
-pub enum Qualifier {
-    /// Like `.x`
-    Attribute(String),
-    /// Like `\point`
-    Group(String),
-    /// Like `[1]`
-    Index(Expression),
-    /// Like `[1:3]`
-    Range { begin: Expression, end: Expression },
-}
-
 /// 276 qualifier = [attribute_qualifier] | [group_qualifier] | [index_qualifier] .
 pub fn qualifier(input: &str) -> ParseResult<Qualifier> {
     alt((
@@ -266,19 +201,6 @@ pub fn index_1(input: &str) -> ParseResult<Expression> {
 /// 238 index_2 = [index] .
 pub fn index_2(input: &str) -> ParseResult<Expression> {
     index(input)
-}
-
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub enum BuiltInConstant {
-    /// `CONST_E`, Napier's constant `e = 2.71828 …`
-    NAPIER,
-    /// The ratio of a circle's circumference to its diameter, `π = 3.14159 …`
-    PI,
-    /// `SELF` is not a constant, but behaves as one in every context in which it can appear.
-    SELF,
-    /// The indeterminate symbol `?` stands for an ambiguous value.
-    /// It is compatible with all data types.
-    INDETERMINATE,
 }
 
 /// 186 built_in_constant = `CONST_E` | `PI` | `SELF` | `?` .

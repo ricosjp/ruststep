@@ -136,8 +136,8 @@ pub fn general_set_type(input: &str) -> ParseResult<ParameterType> {
 
 #[cfg(test)]
 mod tests {
-    use super::super::super::expression::Expression;
     use super::*;
+    use crate::ast::expression::Expression;
     use nom::Finish;
 
     #[test]

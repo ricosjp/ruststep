@@ -1,19 +1,5 @@
 use super::{basis::*, combinator::*};
-use derive_more::From;
-
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub enum Logical {
-    False,
-    True,
-    Unknown,
-}
-
-#[derive(Debug, Clone, PartialEq, From)]
-pub enum Literal {
-    Real(f64),
-    String(String),
-    Logial(Logical),
-}
+use crate::ast::expression::*;
 
 /// 251 literal = binary_literal | [logical_literal] | [real_literal] | [string_literal] .
 ///
