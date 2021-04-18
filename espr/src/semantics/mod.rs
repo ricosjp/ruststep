@@ -4,6 +4,7 @@ pub mod entity;
 pub mod namespace;
 pub mod schema;
 pub mod scope;
+pub mod type_ref;
 
 use namespace::Namespace;
 use schema::Schema;

@@ -1,4 +1,4 @@
-use super::{namespace::*, scope::*, *};
+use super::{namespace::*, scope::*, type_ref::*, *};
 use inflector::Inflector;
 use proc_macro2::TokenStream;
 use quote::*;
@@ -24,7 +24,7 @@ impl Legalize for EntityAttribute {
         dbg!(&attr);
         let ty = match &attr.ty {
             Named(name) => ns.lookup_type(scope, name)?,
-            Simple(ty) => namespace::TypeRef::SimpleType(*ty),
+            Simple(ty) => type_ref::TypeRef::SimpleType(*ty),
             _ => unimplemented!(),
         };
         let name = match &attr.name {
