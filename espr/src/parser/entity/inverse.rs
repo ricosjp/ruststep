@@ -1,5 +1,8 @@
 use super::attribute::*;
-use crate::parser::{combinator::*, identifier::*, types::*};
+use crate::{
+    ast::types::*,
+    parser::{combinator::*, identifier::*, types::*},
+};
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct InverseClause {
@@ -122,7 +125,7 @@ pub fn inverse_attr(input: &str) -> ParseResult<InverseAttribute> {
 #[cfg(test)]
 mod tests {
     use super::AggregationOption;
-    use crate::parser::{expression::*, types::*};
+    use crate::{ast::types::*, parser::expression::*};
     use nom::Finish;
 
     #[test]

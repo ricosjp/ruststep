@@ -1,4 +1,7 @@
-use crate::parser::{combinator::*, expression::*, identifier::*, types::*};
+use crate::{
+    ast::types::*,
+    parser::{combinator::*, expression::*, identifier::*},
+};
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum AttributeDecl {

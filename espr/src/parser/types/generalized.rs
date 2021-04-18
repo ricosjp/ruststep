@@ -3,37 +3,6 @@ use super::{
     *,
 };
 
-#[derive(Debug, Clone, PartialEq)]
-pub enum ParameterType {
-    Named(String),
-    Simple(SimpleType),
-    Set {
-        ty: Box<ParameterType>,
-        bound_spec: Option<Bound>,
-    },
-    Bag {
-        ty: Box<ParameterType>,
-        bound_spec: Option<Bound>,
-    },
-    List {
-        ty: Box<ParameterType>,
-        bound_spec: Option<Bound>,
-        unique: bool,
-    },
-    Array {
-        ty: Box<ParameterType>,
-        bound_spec: Option<Bound>,
-        unique: bool,
-        optional: bool,
-    },
-    Aggregate {
-        ty: Box<ParameterType>,
-        label: Option<String>,
-    },
-    GenericEntity(Option<String>),
-    Generic(Option<String>),
-}
-
 /// 258 named_types = [entity_ref] | [type_ref] .
 pub fn named_types(input: &str) -> ParseResult<String> {
     alt((entity_ref, type_ref)).parse(input)

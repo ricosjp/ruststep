@@ -3,13 +3,6 @@ use super::{
     *,
 };
 
-/// Output of [select_type]
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub struct SelectType {
-    pub extensiblity: Extensiblity,
-    pub types: Vec<String>,
-}
-
 /// 301 select_list = `(` [named_types] { `,` [named_types] } `)` .
 pub fn select_list(input: &str) -> ParseResult<Vec<String>> {
     tuple((char('('), comma_separated(named_types), char(')')))

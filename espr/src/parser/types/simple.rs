@@ -1,30 +1,5 @@
 use super::super::combinator::*;
-
-/// Output of [width_spec]
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct WidthSpec {
-    pub width: usize,
-    pub fixed: bool,
-}
-
-/// Output of [simple_types]
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum SimpleType {
-    /// 8.1.1 Number data type
-    Number,
-    /// 8.1.2 Real data type
-    Real,
-    /// 8.1.3 Integer data type
-    Integer,
-    /// 8.1.4 Logical data type
-    Logical,
-    /// 8.1.5 Boolen data type
-    Boolen,
-    /// 8.1.6 String data type
-    String_ { width_spec: Option<WidthSpec> },
-    /// 8.1.7 Binary data type
-    Binary { width_spec: Option<WidthSpec> },
-}
+use crate::ast::types::*;
 
 /// 307 simple_types = [binary_type] | [boolean_type] | [integer_type] | [logical_type] | [number_type] | [real_type] | [string_type] .
 pub fn simple_types(input: &str) -> ParseResult<SimpleType> {
@@ -98,7 +73,7 @@ pub fn width_spec(input: &str) -> ParseResult<WidthSpec> {
 
 #[cfg(test)]
 mod tests {
-    use super::{SimpleType, WidthSpec};
+    use crate::ast::types::{SimpleType, WidthSpec};
     use nom::Finish;
 
     #[test]

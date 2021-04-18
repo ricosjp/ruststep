@@ -1,5 +1,8 @@
 use super::attribute::*;
-use crate::parser::{combinator::*, expression::*, types::*};
+use crate::{
+    ast::types::*,
+    parser::{combinator::*, expression::*, types::*},
+};
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct DeriveClause {
