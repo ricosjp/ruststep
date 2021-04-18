@@ -37,8 +37,8 @@ pub fn qualifiable_factor(input: &str) -> ParseResult<QualifiableFactor> {
 /// other reference types.
 pub fn function_call(input: &str) -> ParseResult<QualifiableFactor> {
     let function_name = alt((
-        built_in_function.map(|f| Function::BuiltInFunction(f)),
-        function_ref.map(|f| Function::Reference(f)),
+        built_in_function.map(|f| FunctionCallName::BuiltInFunction(f)),
+        function_ref.map(|f| FunctionCallName::Reference(f)),
     ));
     tuple((function_name, actual_parameter_list))
         .map(|(name, args)| QualifiableFactor::FunctionCall { name, args })
@@ -216,7 +216,7 @@ pub fn built_in_constant(input: &str) -> ParseResult<BuiltInConstant> {
 
 #[cfg(test)]
 mod tests {
-    use super::{Expression, Function, QualifiableFactor, Qualifier};
+    use super::{Expression, FunctionCallName, QualifiableFactor, Qualifier};
     use nom::Finish;
 
     #[test]
@@ -262,7 +262,7 @@ mod tests {
         if let Expression::QualifiableFactor { factor, qualifiers } = q {
             match factor {
                 QualifiableFactor::FunctionCall { name, args } => {
-                    assert_eq!(name, Function::Reference("f".to_string()));
+                    assert_eq!(name, FunctionCallName::Reference("f".to_string()));
                     assert_eq!(args.len(), 1);
                 }
                 _ => panic!("Must be reference"),

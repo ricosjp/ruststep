@@ -1,7 +1,7 @@
 use super::{
     combinator::*, entity::*, expression::*, identifier::*, stmt::*, subsuper::*, types::*,
 };
-use crate::ast::{expression::*, types::*};
+use crate::ast::{algorithm::*, types::*};
 
 /// Parsed result of EXPRESS's SCHEMA
 #[derive(Debug, Clone, PartialEq)]
@@ -91,16 +91,6 @@ pub fn declaration(input: &str) -> ParseResult<Declaration> {
     .parse(input)
 }
 
-#[derive(Debug, Clone, PartialEq)]
-pub struct Procedure {
-    pub name: String,
-    pub parameters: Vec<FormalParameter>,
-    pub declarations: Vec<Declaration>,
-    pub constants: Vec<Constant>,
-    pub variables: Vec<LocalVariable>,
-    pub statements: Vec<Statement>,
-}
-
 /// 271 procedure_decl = [procedure_head] [algorithm_head] { [stmt] } END_PROCEDURE `;` .
 pub fn procedure_decl(input: &str) -> ParseResult<Procedure> {
     tuple((
@@ -163,17 +153,6 @@ pub fn procedure_head(input: &str) -> ParseResult<(String, Vec<FormalParameter>)
     .parse(input)
 }
 
-#[derive(Debug, Clone, PartialEq)]
-pub struct Function {
-    pub name: String,
-    pub parameters: Vec<FormalParameter>,
-    pub declarations: Vec<Declaration>,
-    pub constants: Vec<Constant>,
-    pub variables: Vec<LocalVariable>,
-    pub statements: Vec<Statement>,
-    pub return_type: ParameterType,
-}
-
 /// 220 function_decl = [function_head] [algorithm_head] [stmt] { [stmt] } END_FUNCTION `;` .
 pub fn function_decl(input: &str) -> ParseResult<Function> {
     tuple((
@@ -230,14 +209,6 @@ pub fn function_head(input: &str) -> ParseResult<(String, Vec<FormalParameter>, 
     .parse(input)
 }
 
-#[derive(Debug, Clone, PartialEq)]
-pub struct FormalParameter {
-    pub name: String,
-    pub ty: ParameterType,
-    /// `true` if specified with `VAR` in `PROCEDURE`. Always `false` for `FUNCTION`
-    pub is_variable: bool,
-}
-
 /// 218 formal_parameter = [parameter_id] { `,` [parameter_id] } `:` [parameter_type] .
 pub fn formal_parameter(input: &str) -> ParseResult<Vec<FormalParameter>> {
     tuple((comma_separated(parameter_id), char(':'), parameter_type))
@@ -252,13 +223,6 @@ pub fn formal_parameter(input: &str) -> ParseResult<Vec<FormalParameter>> {
                 .collect()
         })
         .parse(input)
-}
-
-#[derive(Debug, Clone, PartialEq)]
-pub struct Constant {
-    pub name: String,
-    pub ty: ConcreteType,
-    pub expr: Expression,
 }
 
 /// 195 constant_decl = CONSTANT [constant_body] { [constant_body] } END_CONSTANT `;` .
@@ -285,17 +249,6 @@ pub fn constant_body(input: &str) -> ParseResult<Constant> {
     ))
     .map(|(name, _colon, ty, _def, expr, _semicolon)| Constant { name, ty, expr })
     .parse(input)
-}
-
-#[derive(Debug, Clone, PartialEq)]
-pub struct Rule {
-    pub name: String,
-    pub references: Vec<String>,
-    pub declarations: Vec<Declaration>,
-    pub constants: Vec<Constant>,
-    pub variables: Vec<LocalVariable>,
-    pub statements: Vec<Statement>,
-    pub where_clause: WhereClause,
 }
 
 /// 291 rule_decl = [rule_head] [algorithm_head] { [stmt] } [where_clause] END_RULE `;` .
@@ -373,13 +326,6 @@ pub fn local_decl(input: &str) -> ParseResult<Vec<LocalVariable>> {
     .parse(input)
 }
 
-#[derive(Debug, Clone, PartialEq)]
-pub struct LocalVariable {
-    pub name: String,
-    pub ty: ParameterType,
-    pub expr: Option<Expression>,
-}
-
 /// 253 local_variable = [variable_id] { `,` [variable_id] } `:` [parameter_type] \[ `:=` [expression] \] `;` .
 pub fn local_variable(input: &str) -> ParseResult<Vec<LocalVariable>> {
     tuple((
@@ -400,18 +346,6 @@ pub fn local_variable(input: &str) -> ParseResult<Vec<LocalVariable>> {
             .collect()
     })
     .parse(input)
-}
-
-#[derive(Debug, Clone, PartialEq)]
-pub enum InterfaceSpec {
-    Reference {
-        name: String,
-        resources: Vec<(String, Option<String>)>,
-    },
-    Use {
-        name: String,
-        types: Vec<(String, Option<String>)>,
-    },
 }
 
 /// 242 interface_specification = [reference_clause] | [use_clause] .

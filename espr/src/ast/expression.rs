@@ -141,13 +141,13 @@ pub enum QualifiableFactor {
     BuiltInConstant(BuiltInConstant),
     /// [function_call]
     FunctionCall {
-        name: Function,
+        name: FunctionCallName,
         args: Vec<Expression>,
     },
 }
 
 #[derive(Debug, Clone, PartialEq)]
-pub enum Function {
+pub enum FunctionCallName {
     BuiltInFunction(BuiltInFunction),
     Reference(String),
 }
