@@ -1,5 +1,6 @@
 #![allow(dead_code)]
 mod explicit_draughting {
+    use crate::primitive::*;
     #[derive(Clone, Debug, PartialEq)]
     pub struct Address {
         internal_location: Option<Label>,
@@ -257,16 +258,16 @@ mod explicit_draughting {
         degree: i64,
         control_points_list: CartesianPoint,
         curve_form: BSplineCurveForm,
-        closed_curve: ::espr_runtime::Logical,
-        self_intersect: ::espr_runtime::Logical,
+        closed_curve: Logical,
+        self_intersect: Logical,
     }
     impl BSplineCurve {
         pub fn new(
             degree: i64,
             control_points_list: CartesianPoint,
             curve_form: BSplineCurveForm,
-            closed_curve: ::espr_runtime::Logical,
-            self_intersect: ::espr_runtime::Logical,
+            closed_curve: Logical,
+            self_intersect: Logical,
         ) -> Self {
             Self {
                 degree,
@@ -408,13 +409,10 @@ mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq)]
     pub struct CompositeCurve {
         segments: CompositeCurveSegment,
-        self_intersect: ::espr_runtime::Logical,
+        self_intersect: Logical,
     }
     impl CompositeCurve {
-        pub fn new(
-            segments: CompositeCurveSegment,
-            self_intersect: ::espr_runtime::Logical,
-        ) -> Self {
+        pub fn new(segments: CompositeCurveSegment, self_intersect: Logical) -> Self {
             Self {
                 segments,
                 self_intersect,
@@ -1380,14 +1378,10 @@ mod explicit_draughting {
     pub struct OffsetCurve2D {
         basis_curve: Curve,
         distance: LengthMeasure,
-        self_intersect: ::espr_runtime::Logical,
+        self_intersect: Logical,
     }
     impl OffsetCurve2D {
-        pub fn new(
-            basis_curve: Curve,
-            distance: LengthMeasure,
-            self_intersect: ::espr_runtime::Logical,
-        ) -> Self {
+        pub fn new(basis_curve: Curve, distance: LengthMeasure, self_intersect: Logical) -> Self {
             Self {
                 basis_curve,
                 distance,
