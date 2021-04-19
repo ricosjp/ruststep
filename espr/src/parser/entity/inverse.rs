@@ -1,75 +1,14 @@
 use super::attribute::*;
 use crate::{
-    ast::types::*,
+    ast::entity::*,
     parser::{combinator::*, identifier::*, types::*},
 };
-
-#[derive(Debug, Clone, PartialEq)]
-pub struct InverseClause {
-    pub attributes: Vec<InverseAttribute>,
-}
 
 /// 249 inverse_clause = INVERSE [inverse_attr] { [inverse_attr] } .
 pub fn inverse_clause(input: &str) -> ParseResult<InverseClause> {
     tuple((tag("INVERSE"), many1(inverse_attr)))
         .map(|(_inverse, attributes)| InverseClause { attributes })
         .parse(input)
-}
-
-/// Attribute of an inverse clause parsed by [inverse_attr]
-///
-/// From ISO 10303-11 document,
-///
-/// ```text
-/// ENTITY door;
-///   handle : knob;                -- inverse relationship for this attribute
-///   hinges : SET [1:?] OF hinge;
-/// END_ENTITY;
-///
-/// ENTITY knob;
-/// ...
-/// INVERSE
-///   opens : door FOR handle;
-/// (* ^      ^        ^
-///    |      |        attribute name used in the parent entity
-///    |      The entity which has `SELF` as attribute
-///    name of this inverse relationship *)
-/// END_ENTITY;
-/// ```
-///
-/// This means
-///
-/// > knobs can only exist if they are used in the role of handle in one instance of a door
-///
-#[derive(Debug, Clone, PartialEq)]
-pub struct InverseAttribute {
-    /// Name of this inverse relationship
-    ///
-    /// `opens` in above example
-    name: AttributeDecl,
-
-    /// The entity name which has `SELF` as an attribute
-    ///
-    /// `door` in above example
-    dest: String,
-
-    /// Used if `SET` or `BAG` for parent entity specification
-    dest_aggregation: AggregationOption,
-
-    /// The attribute name used in the parent entity
-    ///
-    /// `handle` in above example
-    attribute: String,
-
-    /// Prefix of the attribute, used if the attribute is a sub-attribute of `dest` entity
-    attribute_prefix: Option<String>,
-}
-
-#[derive(Debug, Clone, PartialEq)]
-pub enum AggregationOption {
-    Set { bound: Option<Bound> },
-    Bag { bound: Option<Bound> },
-    None,
 }
 
 /// 248 inverse_attr = [attribute_decl] `:`

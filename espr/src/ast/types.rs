@@ -1,4 +1,4 @@
-use crate::{ast::expression::*, parser::*};
+use crate::ast::{algorithm::*, expression::*};
 use derive_more::From;
 
 /// `EXTENSIBLE` and `GENERIC_ENTITY` keywords for [select_type] and [enumeration_type]

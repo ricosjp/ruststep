@@ -1,25 +1,8 @@
 use super::{attribute::*, derive::*, domain::*, inverse::*, unique::*};
-use crate::parser::{combinator::*, identifier::*, subsuper::*, types::*};
-
-/// Parsed result of EXPRESS's ENTITY
-#[derive(Debug, Clone, PartialEq)]
-pub struct Entity {
-    /// Name of this entity type
-    pub name: String,
-
-    /// attribute name and types
-    ///
-    /// Be sure that this "type" is a string, not validated type in this timing
-    pub attributes: Vec<EntityAttribute>,
-
-    pub constraint: Option<Constraint>,
-    pub subtype: Option<SubTypeDecl>,
-
-    pub derive_clause: Option<DeriveClause>,
-    pub inverse_clause: Option<InverseClause>,
-    pub unique_clause: Option<UniqueClause>,
-    pub where_clause: Option<WhereClause>,
-}
+use crate::{
+    ast::entity::*,
+    parser::{combinator::*, identifier::*, subsuper::*, types::*},
+};
 
 /// 215 explicit_attr = [attribute_decl] { `,` [attribute_decl] } `:` \[ OPTIONAL \] [parameter_type] `;` .
 pub fn explicit_attr(input: &str) -> ParseResult<Vec<EntityAttribute>> {
@@ -53,16 +36,6 @@ pub fn entity_head(input: &str) -> ParseResult<(String, Option<Constraint>, Opti
     ))
     .map(|(_start, id, (constraint, subtype), _semicolon)| (id, constraint, subtype))
     .parse(input)
-}
-
-/// Intermediate output of [entity_body]
-#[derive(Debug, Clone, PartialEq)]
-pub struct EntityBody {
-    pub attributes: Vec<EntityAttribute>,
-    pub derive_clause: Option<DeriveClause>,
-    pub inverse_clause: Option<InverseClause>,
-    pub unique_clause: Option<UniqueClause>,
-    pub where_clause: Option<WhereClause>,
 }
 
 /// 204 entity_body = { [explicit_attr] } \[ [derive_clause] \] \[ [inverse_clause] \] \[ [unique_clause] \] \[ [where_clause] \] .

@@ -142,3 +142,14 @@ pub enum InterfaceSpec {
         types: Vec<(String, Option<String>)>,
     },
 }
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct WhereClause {
+    pub rules: Vec<DomainRule>,
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct DomainRule {
+    pub label: Option<String>,
+    pub expr: Expression,
+}

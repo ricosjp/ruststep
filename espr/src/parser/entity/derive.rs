@@ -1,20 +1,8 @@
 use super::attribute::*;
 use crate::{
-    ast::{expression::*, types::*},
+    ast::entity::*,
     parser::{combinator::*, expression::*, types::*},
 };
-
-#[derive(Debug, Clone, PartialEq)]
-pub struct DeriveClause {
-    pub attributes: Vec<DerivedAttribute>,
-}
-
-#[derive(Debug, Clone, PartialEq)]
-pub struct DerivedAttribute {
-    pub attr: AttributeDecl,
-    pub ty: ParameterType,
-    pub expr: Expression,
-}
 
 /// 201 derive_clause = DERIVE [derived_attr] { [derived_attr] } .
 pub fn derive_clause(input: &str) -> ParseResult<DeriveClause> {

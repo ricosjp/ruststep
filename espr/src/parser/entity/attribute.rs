@@ -1,37 +1,7 @@
 use crate::{
-    ast::types::*,
+    ast::entity::*,
     parser::{combinator::*, expression::*, identifier::*},
 };
-
-#[derive(Debug, Clone, PartialEq)]
-pub enum AttributeDecl {
-    Reference(String),
-    Qualified {
-        /// Like `\point`
-        group: Option<String>,
-        /// Like `.x`
-        attribute: Option<String>,
-        /// For [redeclared_attribute]
-        rename: Option<String>,
-    },
-}
-
-// for easy testing
-impl<'a> PartialEq<&'a str> for AttributeDecl {
-    fn eq(&self, other: &&'a str) -> bool {
-        match self {
-            AttributeDecl::Reference(name) => other.eq(name),
-            _ => false,
-        }
-    }
-}
-
-#[derive(Debug, Clone, PartialEq)]
-pub struct EntityAttribute {
-    pub name: AttributeDecl,
-    pub ty: ParameterType,
-    pub optional: bool,
-}
 
 /// 177 attribute_decl = [attribute_id] | [redeclared_attribute] .
 pub fn attribute_decl(input: &str) -> ParseResult<AttributeDecl> {

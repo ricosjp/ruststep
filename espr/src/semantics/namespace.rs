@@ -1,8 +1,5 @@
 use super::{scope::*, SemanticError};
-use crate::{
-    ast::types::*,
-    parser::{self, SyntaxTree},
-};
+use crate::{ast::types::*, parser::SyntaxTree};
 use inflector::Inflector;
 use maplit::hashmap;
 use proc_macro2::TokenStream;
@@ -83,7 +80,7 @@ impl Namespace {
                     .attributes
                     .iter()
                     .map(|attr| match &attr.name {
-                        parser::AttributeDecl::Reference(name) => name.clone(),
+                        crate::ast::entity::AttributeDecl::Reference(name) => name.clone(),
                         _ => unimplemented!(),
                     })
                     .collect();

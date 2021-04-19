@@ -1,16 +1,5 @@
 use super::super::{combinator::*, expression::*, identifier::*};
-use crate::ast::expression::*;
-
-#[derive(Debug, Clone, PartialEq)]
-pub struct WhereClause {
-    rules: Vec<DomainRule>,
-}
-
-#[derive(Debug, Clone, PartialEq)]
-pub struct DomainRule {
-    label: Option<String>,
-    expr: Expression,
-}
+use crate::ast::algorithm::*;
 
 /// 338 where_clause = WHERE [domain_rule] `;` { [domain_rule] `;` } .
 pub fn where_clause(input: &str) -> ParseResult<WhereClause> {
