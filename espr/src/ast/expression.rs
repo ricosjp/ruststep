@@ -1,3 +1,5 @@
+//! AST for expression
+
 use derive_more::From;
 
 #[cfg(doc)]

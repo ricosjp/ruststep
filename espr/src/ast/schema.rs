@@ -1,3 +1,5 @@
+//! AST of schema declarations
+
 use crate::ast::{algorithm::*, entity::*, types::*};
 
 /// Parsed result of EXPRESS's SCHEMA

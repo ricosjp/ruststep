@@ -10,6 +10,7 @@ use crate::ast::schema::Schema;
 use crate::parser::{combinator::*, *};
 use nom::Finish;
 
+/// Remarks in EXPRESS input, `(* ... *)` or `-- ...`
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Remark {
     pub tag: Option<Vec<String>>,

@@ -1,3 +1,5 @@
+//! AST for type declaration
+
 use crate::ast::{algorithm::*, expression::*};
 use derive_more::From;
 

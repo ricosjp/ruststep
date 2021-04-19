@@ -1,3 +1,5 @@
+//! AST for entity declarations
+
 use crate::ast::{algorithm::*, expression::*, types::*};
 
 #[cfg(doc)]

@@ -1,3 +1,5 @@
+//! AST for function, procedure, and rule declarations
+
 use crate::ast::{entity::*, expression::*, types::*};
 
 #[derive(Debug, Clone, PartialEq)]
