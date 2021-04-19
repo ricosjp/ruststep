@@ -1,4 +1,6 @@
 use crate::ast::{algorithm::*, expression::*, types::*};
+
+#[cfg(doc)]
 use crate::parser::*;
 
 /// Parsed result of EXPRESS's ENTITY
@@ -161,4 +163,15 @@ pub struct SubTypeConstraint {
     pub is_abstract: bool,
     pub total_over: Option<Vec<String>>,
     pub expr: Option<SuperTypeExpression>,
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct UniqueClause {
+    pub rules: Vec<UniqueRule>,
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct UniqueRule {
+    pub name: Option<String>,
+    pub attributes: Vec<AttributeDecl>,
 }
