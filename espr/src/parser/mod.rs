@@ -6,6 +6,9 @@
 //!
 //! This submodule is based on [nom](https://github.com/Geal/nom) parser combinater.
 
+#[cfg(doc)]
+use crate::ast::*;
+
 pub mod combinator;
 
 mod basis;
