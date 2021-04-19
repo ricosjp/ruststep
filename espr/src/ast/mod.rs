@@ -10,6 +10,12 @@ use crate::ast::schema::Schema;
 use crate::parser::{combinator::*, *};
 use nom::Finish;
 
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct Remark {
+    pub tag: Option<Vec<String>>,
+    pub remark: String,
+}
+
 /// Entire syntax tree parsed from EXPRESS Language string
 #[derive(Debug, Clone, PartialEq)]
 pub struct SyntaxTree {
