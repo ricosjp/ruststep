@@ -1,6 +1,9 @@
 use crate::ast::{algorithm::*, expression::*};
 use derive_more::From;
 
+#[cfg(doc)]
+use crate::parser::*;
+
 /// `EXTENSIBLE` and `GENERIC_ENTITY` keywords for [select_type] and [enumeration_type]
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum Extensiblity {
