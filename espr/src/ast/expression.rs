@@ -152,7 +152,7 @@ pub enum FunctionCallName {
     Reference(String),
 }
 
-#[allow(non_camel_case_types)] // to use original identifiers
+#[allow(non_camel_case_types, clippy::upper_case_acronyms)] // to use original identifiers
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub enum BuiltInFunction {
     ABS,
