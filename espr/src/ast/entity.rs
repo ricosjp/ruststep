@@ -133,3 +133,32 @@ pub enum AggregationOption {
     Bag { bound: Option<Bound> },
     None,
 }
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum Constraint {
+    AbstractEntity,
+    AbstractSuperType(Option<SuperTypeExpression>),
+    SuperTypeRule(SuperTypeExpression),
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct SubTypeDecl {
+    pub entity_references: Vec<String>,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum SuperTypeExpression {
+    Reference(String),
+    AndOr { factors: Vec<SuperTypeExpression> },
+    And { terms: Vec<SuperTypeExpression> },
+    OneOf { exprs: Vec<SuperTypeExpression> },
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct SubTypeConstraint {
+    pub name: String,
+    pub entity: String,
+    pub is_abstract: bool,
+    pub total_over: Option<Vec<String>>,
+    pub expr: Option<SuperTypeExpression>,
+}
