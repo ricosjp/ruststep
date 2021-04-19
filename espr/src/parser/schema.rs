@@ -1,21 +1,7 @@
 use super::{
     combinator::*, entity::*, expression::*, identifier::*, stmt::*, subsuper::*, types::*,
 };
-use crate::ast::{algorithm::*, entity::*, types::*};
-
-/// Parsed result of EXPRESS's SCHEMA
-#[derive(Debug, Clone, PartialEq)]
-pub struct Schema {
-    pub name: String,
-    pub entities: Vec<Entity>,
-    pub types: Vec<TypeDecl>,
-    pub functions: Vec<Function>,
-    pub procedures: Vec<Procedure>,
-    pub rules: Vec<Rule>,
-    pub constants: Vec<Constant>,
-    pub interfaces: Vec<InterfaceSpec>,
-    pub subtype_constraints: Vec<SubTypeConstraint>,
-}
+use crate::ast::{algorithm::*, schema::*, types::*};
 
 /// 296 schema_decl = SCHEMA [schema_id] \[ schema_version_id \] `;` [schema_body] END_SCHEMA `;` .
 pub fn schema_decl(input: &str) -> ParseResult<Schema> {
@@ -67,16 +53,6 @@ pub fn schema_body(
         many0(alt((declaration, rule_decl.map(|r| Declaration::Rule(r))))),
     ))
     .parse(input)
-}
-
-#[derive(Debug, Clone, PartialEq)]
-pub enum Declaration {
-    Entity(Entity),
-    Type(TypeDecl),
-    Function(Function),
-    Procedure(Procedure),
-    Rule(Rule),
-    SubTypeConstraint(SubTypeConstraint),
 }
 
 /// 199 declaration = [entity_decl] | [function_decl] | [procedure_decl] | [subtype_constraint_decl] | [type_decl] .

@@ -1,7 +1,4 @@
-use crate::{
-    ast::{expression::*, types::*},
-    parser::*,
-};
+use crate::ast::{entity::*, expression::*, types::*};
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum Statement {
@@ -152,4 +149,14 @@ pub struct WhereClause {
 pub struct DomainRule {
     pub label: Option<String>,
     pub expr: Expression,
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub enum Declaration {
+    Entity(Entity),
+    Type(TypeDecl),
+    Function(Function),
+    Procedure(Procedure),
+    Rule(Rule),
+    SubTypeConstraint(SubTypeConstraint),
 }

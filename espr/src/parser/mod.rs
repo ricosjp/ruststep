@@ -17,7 +17,6 @@ mod remark;
 mod schema;
 mod stmt;
 mod subsuper;
-mod syntax_tree;
 mod types;
 
 pub use basis::*;
@@ -29,5 +28,4 @@ pub use remark::*;
 pub use schema::*;
 pub use stmt::*;
 pub use subsuper::*;
-pub use syntax_tree::*;
 pub use types::*;

@@ -1,5 +1,5 @@
 use super::{scope::*, SemanticError};
-use crate::{ast::types::*, parser::SyntaxTree};
+use crate::ast::{types::*, SyntaxTree};
 use inflector::Inflector;
 use maplit::hashmap;
 use proc_macro2::TokenStream;
