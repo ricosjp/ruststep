@@ -1,15 +1,10 @@
 use super::{basis::simple_id, combinator::RawParseResult};
+use crate::ast::Remark;
 use itertools::Itertools;
 use nom::{
     branch::alt, bytes::complete::*, character::complete::*, combinator::opt, multi::*,
     sequence::*, Parser,
 };
-
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub struct Remark {
-    pub tag: Option<Vec<String>>,
-    pub remark: String,
-}
 
 fn begin(input: &str) -> RawParseResult<()> {
     tag("(*").map(|_| ()).parse(input)

@@ -1,39 +1,12 @@
-use crate::parser::{combinator::*, expression::*, identifier::*, types::*};
-
-#[derive(Debug, Clone, PartialEq)]
-pub enum AttributeDecl {
-    Reference(String),
-    Qualified {
-        /// Like `\point`
-        group: Option<String>,
-        /// Like `.x`
-        attribute: Option<String>,
-        /// For [redeclared_attribute]
-        rename: Option<String>,
-    },
-}
-
-// for easy testing
-impl<'a> PartialEq<&'a str> for AttributeDecl {
-    fn eq(&self, other: &&'a str) -> bool {
-        match self {
-            AttributeDecl::Reference(name) => other.eq(name),
-            _ => false,
-        }
-    }
-}
-
-#[derive(Debug, Clone, PartialEq)]
-pub struct EntityAttribute {
-    pub name: AttributeDecl,
-    pub ty: ParameterType,
-    pub optional: bool,
-}
+use crate::{
+    ast::entity::*,
+    parser::{combinator::*, expression::*, identifier::*},
+};
 
 /// 177 attribute_decl = [attribute_id] | [redeclared_attribute] .
 pub fn attribute_decl(input: &str) -> ParseResult<AttributeDecl> {
     alt((
-        attribute_id.map(|id| AttributeDecl::Reference(id)),
+        attribute_id.map(AttributeDecl::Reference),
         redeclared_attribute,
     ))
     .parse(input)
@@ -42,7 +15,7 @@ pub fn attribute_decl(input: &str) -> ParseResult<AttributeDecl> {
 /// 280 referenced_attribute = [attribute_ref] | [qualified_attribute] .
 pub fn referenced_attribute(input: &str) -> ParseResult<AttributeDecl> {
     alt((
-        attribute_ref.map(|r| AttributeDecl::Reference(r)),
+        attribute_ref.map(AttributeDecl::Reference),
         qualified_attribute,
     ))
     .parse(input)

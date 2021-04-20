@@ -1,20 +1,15 @@
 use super::{super::combinator::*, *};
+use crate::ast::expression::*;
 
 /// 169 aggregate_initializer = `[` \[ [element] { `,` [element] } \] `]` .
 pub fn aggregate_initializer(input: &str) -> ParseResult<Expression> {
     tuple((
         char('['),
-        opt(comma_separated(element)).map(|opt| opt.unwrap_or(Vec::new())),
+        opt(comma_separated(element)).map(|opt| opt.unwrap_or_default()),
         char(']'),
     ))
     .map(|(_open, elements, _close)| Expression::AggregateInitializer { elements })
     .parse(input)
-}
-
-#[derive(Debug, Clone, PartialEq)]
-pub struct Element {
-    pub expr: Expression,
-    pub repetition: Option<Expression>,
 }
 
 /// 203 element = [expression] \[ `:` [repetition] \] .
@@ -39,7 +34,6 @@ pub fn numeric_expression(input: &str) -> ParseResult<Expression> {
 
 #[cfg(test)]
 mod tests {
-    use super::super::super::literal::*;
     use super::*;
     use nom::Finish;
 

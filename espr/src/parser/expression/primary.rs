@@ -3,6 +3,7 @@ use super::{
     aggregate_initializer::*,
     simple::*,
 };
+use crate::ast::expression::*;
 
 /// 269 primary = [literal] | ( [qualifiable_factor] { [qualifier] } ) .
 pub fn primary(input: &str) -> ParseResult<Expression> {
@@ -14,33 +15,14 @@ pub fn primary(input: &str) -> ParseResult<Expression> {
     .parse(input)
 }
 
-#[derive(Debug, Clone, PartialEq)]
-pub enum QualifiableFactor {
-    /// [attribute_ref], [general_ref], [population], or [constant_ref]
-    Reference(String),
-    /// [built_in_constant]
-    BuiltInConstant(BuiltInConstant),
-    /// [function_call]
-    FunctionCall {
-        name: Function,
-        args: Vec<Expression>,
-    },
-}
-
 /// 274 qualifiable_factor = [attribute_ref] | [constant_factor] | [function_call] | [general_ref] | [population] .
 pub fn qualifiable_factor(input: &str) -> ParseResult<QualifiableFactor> {
     alt((
         function_call,
-        alt((attribute_ref, general_ref, population)).map(|id| QualifiableFactor::Reference(id)),
+        alt((attribute_ref, general_ref, population)).map(QualifiableFactor::Reference),
         constant_factor,
     ))
     .parse(input)
-}
-
-#[derive(Debug, Clone, PartialEq)]
-pub enum Function {
-    BuiltInFunction(BuiltInFunction),
-    Reference(String),
 }
 
 /// 999 function_call = ( [built_in_function] | [function_ref] ) [actual_parameter_list] .
@@ -55,8 +37,8 @@ pub enum Function {
 /// other reference types.
 pub fn function_call(input: &str) -> ParseResult<QualifiableFactor> {
     let function_name = alt((
-        built_in_function.map(|f| Function::BuiltInFunction(f)),
-        function_ref.map(|f| Function::Reference(f)),
+        built_in_function.map(|f| FunctionCallName::BuiltInFunction(f)),
+        function_ref.map(|f| FunctionCallName::Reference(f)),
     ));
     tuple((function_name, actual_parameter_list))
         .map(|(name, args)| QualifiableFactor::FunctionCall { name, args })
@@ -67,7 +49,7 @@ pub fn function_call(input: &str) -> ParseResult<QualifiableFactor> {
 pub fn actual_parameter_list(input: &str) -> ParseResult<Vec<Expression>> {
     tuple((
         char('('),
-        opt(comma_separated(parameter)).map(|opt| opt.unwrap_or(Vec::new())),
+        opt(comma_separated(parameter)).map(|opt| opt.unwrap_or_default()),
         char(')'),
     ))
     .map(|(_open, parameters, _close)| parameters)
@@ -77,40 +59,6 @@ pub fn actual_parameter_list(input: &str) -> ParseResult<Vec<Expression>> {
 /// 264 parameter = [expression] .
 pub fn parameter(input: &str) -> ParseResult<Expression> {
     expression(input)
-}
-
-#[allow(non_camel_case_types)] // to use original identifiers
-#[derive(Debug, Clone, PartialEq, Eq, Hash)]
-pub enum BuiltInFunction {
-    ABS,
-    ACOS,
-    ASIN,
-    ATAN,
-    BLENGTH,
-    COS,
-    EXISTS,
-    EXP,
-    FORMAT,
-    HIBOUND,
-    HIINDEX,
-    LENGTH,
-    LOBOUND,
-    LOINDEX,
-    LOG,
-    LOG2,
-    LOG10,
-    NVL,
-    ODD,
-    ROLESOF,
-    SIN,
-    SIZEOF,
-    SQRT,
-    TAN,
-    TYPEOF,
-    USEDIN,
-    VALUE,
-    VALUE_IN,
-    VALUE_UNIQUE,
 }
 
 /// 187 built_in_function = ABS
@@ -192,30 +140,17 @@ pub fn population(input: &str) -> ParseResult<String> {
 /// 196 constant_factor = [built_in_constant] | [constant_ref] .
 pub fn constant_factor(input: &str) -> ParseResult<QualifiableFactor> {
     alt((
-        built_in_constant.map(|c| QualifiableFactor::BuiltInConstant(c)),
-        constant_ref.map(|name| QualifiableFactor::Reference(name)),
+        built_in_constant.map(QualifiableFactor::BuiltInConstant),
+        constant_ref.map(QualifiableFactor::Reference),
     ))
     .parse(input)
-}
-
-/// Output of [qualifier]
-#[derive(Debug, Clone, PartialEq)]
-pub enum Qualifier {
-    /// Like `.x`
-    Attribute(String),
-    /// Like `\point`
-    Group(String),
-    /// Like `[1]`
-    Index(Expression),
-    /// Like `[1:3]`
-    Range { begin: Expression, end: Expression },
 }
 
 /// 276 qualifier = [attribute_qualifier] | [group_qualifier] | [index_qualifier] .
 pub fn qualifier(input: &str) -> ParseResult<Qualifier> {
     alt((
-        attribute_qualifier.map(|s| Qualifier::Attribute(s)),
-        group_qualifier.map(|s| Qualifier::Group(s)),
+        attribute_qualifier.map(Qualifier::Attribute),
+        group_qualifier.map(Qualifier::Group),
         index_qualifier,
     ))
     .parse(input)
@@ -268,33 +203,20 @@ pub fn index_2(input: &str) -> ParseResult<Expression> {
     index(input)
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub enum BuiltInConstant {
-    /// `CONST_E`, Napier's constant `e = 2.71828 …`
-    NAPIER,
-    /// The ratio of a circle's circumference to its diameter, `π = 3.14159 …`
-    PI,
-    /// `SELF` is not a constant, but behaves as one in every context in which it can appear.
-    SELF,
-    /// The indeterminate symbol `?` stands for an ambiguous value.
-    /// It is compatible with all data types.
-    INDETERMINATE,
-}
-
 /// 186 built_in_constant = `CONST_E` | `PI` | `SELF` | `?` .
 pub fn built_in_constant(input: &str) -> ParseResult<BuiltInConstant> {
     alt((
-        value(BuiltInConstant::NAPIER, tag("CONST_E")),
-        value(BuiltInConstant::PI, tag("PI")),
-        value(BuiltInConstant::SELF, tag("SELF")),
-        value(BuiltInConstant::INDETERMINATE, char('?')),
+        value(BuiltInConstant::Napier, tag("CONST_E")),
+        value(BuiltInConstant::Pi, tag("PI")),
+        value(BuiltInConstant::Self_, tag("SELF")),
+        value(BuiltInConstant::Indeterminate, char('?')),
     ))
     .parse(input)
 }
 
 #[cfg(test)]
 mod tests {
-    use super::{Expression, Function, QualifiableFactor, Qualifier};
+    use super::{Expression, FunctionCallName, QualifiableFactor, Qualifier};
     use nom::Finish;
 
     #[test]
@@ -340,7 +262,7 @@ mod tests {
         if let Expression::QualifiableFactor { factor, qualifiers } = q {
             match factor {
                 QualifiableFactor::FunctionCall { name, args } => {
-                    assert_eq!(name, Function::Reference("f".to_string()));
+                    assert_eq!(name, FunctionCallName::Reference("f".to_string()));
                     assert_eq!(args.len(), 1);
                 }
                 _ => panic!("Must be reference"),
@@ -413,7 +335,7 @@ mod tests {
                         end,
                         &Expression::QualifiableFactor {
                             factor: QualifiableFactor::BuiltInConstant(
-                                BuiltInConstant::INDETERMINATE
+                                BuiltInConstant::Indeterminate
                             ),
                             qualifiers: Vec::new()
                         }

@@ -9,7 +9,7 @@ use namespace::Namespace;
 use schema::Schema;
 use scope::Scope;
 
-use crate::parser::SyntaxTree;
+use crate::ast::SyntaxTree;
 use proc_macro2::TokenStream;
 use quote::*;
 use std::fmt;

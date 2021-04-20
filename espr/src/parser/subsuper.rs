@@ -1,11 +1,5 @@
 use super::{combinator::*, identifier::*};
-
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub enum Constraint {
-    AbstractEntity,
-    AbstractSuperType(Option<SuperTypeExpression>),
-    SuperTypeRule(SuperTypeExpression),
-}
+use crate::ast::entity::*;
 
 /// 164 abstract_entity_declaration = ABSTRACT .
 pub fn abstract_entity_declaration(input: &str) -> ParseResult<Constraint> {
@@ -26,11 +20,6 @@ pub fn subsuper(input: &str) -> ParseResult<(Option<Constraint>, Option<SubTypeD
     tuple((opt(supertype_constraint), opt(subtype_declaration))).parse(input)
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub struct SubTypeDecl {
-    pub entity_references: Vec<String>,
-}
-
 /// 318 subtype_declaration = SUBTYPE OF `(` [entity_ref] { `,` [entity_ref] } `)` .
 pub fn subtype_declaration(input: &str) -> ParseResult<SubTypeDecl> {
     tuple((
@@ -49,14 +38,6 @@ pub fn subtype_constraint(input: &str) -> ParseResult<SuperTypeExpression> {
     tuple((tag("OF"), char('('), supertype_expression, char(')')))
         .map(|(_of, _open, expr, _close)| expr)
         .parse(input)
-}
-
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub enum SuperTypeExpression {
-    Reference(String),
-    AndOr { factors: Vec<SuperTypeExpression> },
-    And { terms: Vec<SuperTypeExpression> },
-    OneOf { exprs: Vec<SuperTypeExpression> },
 }
 
 /// 319 supertype_constraint = [abstract_entity_declaration] | [abstract_supertype_declaration] | [supertype_rule] .
@@ -135,15 +116,6 @@ pub fn one_of(input: &str) -> ParseResult<SuperTypeExpression> {
     ))
     .map(|(_oneof, _open, exprs, _close)| SuperTypeExpression::OneOf { exprs })
     .parse(input)
-}
-
-#[derive(Debug, Clone, PartialEq)]
-pub struct SubTypeConstraint {
-    pub name: String,
-    pub entity: String,
-    pub is_abstract: bool,
-    pub total_over: Option<Vec<String>>,
-    pub expr: Option<SuperTypeExpression>,
 }
 
 /// 315 subtype_constraint_decl = [subtype_constraint_head] [subtype_constraint_body] END_SUBTYPE_CONSTRAINT `;` .

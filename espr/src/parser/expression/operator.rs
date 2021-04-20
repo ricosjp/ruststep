@@ -1,43 +1,17 @@
 use super::super::combinator::*;
-
-/// Relation operators parsed by [rel_op] and [rel_op_extended]
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum RelationOperator {
-    /// `=`
-    Equal,
-    /// `<>`
-    NotEqual,
-    /// `<`
-    LT,
-    /// `>`
-    GT,
-    /// `<=`
-    LEQ,
-    /// `>=`
-    GEQ,
-    /// `:=:`
-    InstanceEqual,
-    /// `:<>:`
-    InstanceNotEqual,
-
-    /* extended */
-    /// `IN`
-    In,
-    /// `LIKE`
-    Like,
-}
+use crate::ast::expression::*;
 
 /// 282 rel_op = `<` | `>` | `<=` | `>=` | `<>` | `=` | `:<>:` | `:=:` .
 pub fn rel_op(input: &str) -> ParseResult<RelationOperator> {
     alt((
         value(RelationOperator::InstanceEqual, tag(":=:")),
         value(RelationOperator::InstanceNotEqual, tag(":<>:")),
-        value(RelationOperator::LEQ, tag("<=")),
-        value(RelationOperator::GEQ, tag(">=")),
+        value(RelationOperator::Leq, tag("<=")),
+        value(RelationOperator::Geq, tag(">=")),
         value(RelationOperator::Equal, tag("=")),
         value(RelationOperator::NotEqual, tag("<>")),
-        value(RelationOperator::LT, tag("<")),
-        value(RelationOperator::GT, tag(">")),
+        value(RelationOperator::Lt, tag("<")),
+        value(RelationOperator::Gt, tag(">")),
     ))
     .parse(input)
 }
@@ -54,17 +28,6 @@ pub fn rel_op_extended(input: &str) -> ParseResult<RelationOperator> {
     .parse(input)
 }
 
-/// Unary operators parsed by [unary_op]
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum UnaryOperator {
-    /// `+`
-    Plus,
-    /// `-`
-    Minus,
-    /// `NOT`
-    Not,
-}
-
 /// 331 unary_op = `+` | `-` | `NOT` .
 pub fn unary_op(input: &str) -> ParseResult<UnaryOperator> {
     alt((
@@ -73,38 +36,6 @@ pub fn unary_op(input: &str) -> ParseResult<UnaryOperator> {
         value(UnaryOperator::Not, tag("NOT")),
     ))
     .parse(input)
-}
-
-/// Binary operators parsed by [add_like_op], [multiplication_like_op], and [power_op]
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum BinaryOperator {
-    /* Mul-like */
-    /// `*`
-    Mul,
-    /// `/`
-    RealDiv,
-    /// `DIV`
-    IntegerDiv,
-    /// `MOD`
-    Mod,
-    /// `AND`
-    And,
-    /// `||`, Complex entity instance construction operator (12.10)
-    ComplexEntityInstanceConstruction,
-
-    /* Add-like */
-    /// `+`
-    Add,
-    /// `-`
-    Sub,
-    /// `OR`
-    Or,
-    /// `XOR`
-    Xor,
-
-    /* power */
-    /// `**`
-    Power,
 }
 
 /// 168 add_like_op = `+` | `-` | `OR` | `XOR` .
@@ -137,14 +68,6 @@ pub fn multiplication_like_op(input: &str) -> ParseResult<BinaryOperator> {
 /// Additional trivial rule for managing operators uniformly
 pub fn power_op(input: &str) -> ParseResult<BinaryOperator> {
     value(BinaryOperator::Power, tag("**")).parse(input)
-}
-
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub enum IntervalOperator {
-    /// `<`
-    LessThan,
-    /// `<=`
-    LessThanEqual,
 }
 
 /// 247 interval_op = `<` | `<=` .

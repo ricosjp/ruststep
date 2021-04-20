@@ -1,5 +1,21 @@
-use super::{combinator::*, remark::*, schema::*};
+//! Abstract Syntax Tree (AST) of EXPRESS Language
+
+pub mod algorithm;
+pub mod entity;
+pub mod expression;
+pub mod schema;
+pub mod types;
+
+use crate::ast::schema::Schema;
+use crate::parser::{combinator::*, *};
 use nom::Finish;
+
+/// Remarks in EXPRESS input, `(* ... *)` or `-- ...`
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct Remark {
+    pub tag: Option<Vec<String>>,
+    pub remark: String,
+}
 
 /// Entire syntax tree parsed from EXPRESS Language string
 #[derive(Debug, Clone, PartialEq)]

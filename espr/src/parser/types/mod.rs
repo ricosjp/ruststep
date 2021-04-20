@@ -11,33 +11,7 @@ pub use select::*;
 pub use simple::*;
 
 use super::{combinator::*, entity::*, identifier::*};
-use derive_more::From;
-
-/// `EXTENSIBLE` and `GENERIC_ENTITY` keywords for [select_type] and [enumeration_type]
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub enum Extensiblity {
-    /// No `EXTENSIBLE`
-    None,
-    /// `EXTENSIBLE`
-    Extensible,
-    /// `EXTENSIBLE GENERIC_ENTITY`, which is allowed only for `SELECT`
-    GenericEntity,
-}
-
-/// Output of [type_decl]
-#[derive(Debug, Clone, PartialEq)]
-pub struct TypeDecl {
-    type_id: String,
-    underlying_type: UnderlyingType,
-    where_clause: Option<WhereClause>,
-}
-
-/// Output of [constructed_types]
-#[derive(Debug, Clone, PartialEq, Eq, From)]
-pub enum ConstructedType {
-    Enumeration(EnumerationType),
-    Select(SelectType),
-}
+use crate::ast::types::*;
 
 /// 198 constructed_types = [enumeration_type] | [select_type] .
 pub fn constructed_types(input: &str) -> ParseResult<ConstructedType> {
@@ -46,13 +20,6 @@ pub fn constructed_types(input: &str) -> ParseResult<ConstructedType> {
         select_type.map(|s| ConstructedType::Select(s)),
     ))
     .parse(input)
-}
-
-/// Output of [underlying_type]
-#[derive(Debug, Clone, PartialEq, From)]
-pub enum UnderlyingType {
-    Constructed(ConstructedType),
-    Concrete(ConcreteType),
 }
 
 /// 332 underlying_type = [concrete_types] | [constructed_types] .

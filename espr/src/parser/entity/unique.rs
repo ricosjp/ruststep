@@ -1,10 +1,8 @@
 use super::attribute::*;
-use crate::parser::{combinator::*, identifier::*};
-
-#[derive(Debug, Clone, PartialEq)]
-pub struct UniqueClause {
-    rules: Vec<UniqueRule>,
-}
+use crate::{
+    ast::entity::*,
+    parser::{combinator::*, identifier::*},
+};
 
 /// 333 unique_clause = UNIQUE [unique_rule] `;` { [unique_rule] `;` } .
 pub fn unique_clause(input: &str) -> ParseResult<UniqueClause> {
@@ -13,12 +11,6 @@ pub fn unique_clause(input: &str) -> ParseResult<UniqueClause> {
             rules: seq.into_iter().map(|(rule, _semicolon)| rule).collect(),
         })
         .parse(input)
-}
-
-#[derive(Debug, Clone, PartialEq)]
-pub struct UniqueRule {
-    pub name: Option<String>,
-    pub attributes: Vec<AttributeDecl>,
 }
 
 /// 334 unique_rule = \[ [rule_label_id] `:` \] [referenced_attribute] { `,` [referenced_attribute] } .

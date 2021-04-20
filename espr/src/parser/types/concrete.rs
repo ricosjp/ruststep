@@ -2,32 +2,7 @@ use super::{
     super::{combinator::*, expression::*, identifier::*},
     *,
 };
-
-/// Output of [concrete_types]
-#[derive(Debug, Clone, PartialEq)]
-pub enum ConcreteType {
-    Simple(SimpleType),
-    Reference(String),
-    Set {
-        bound: Option<Bound>,
-        base: Box<ConcreteType>,
-    },
-    Bag {
-        bound: Option<Bound>,
-        base: Box<ConcreteType>,
-    },
-    List {
-        unique: bool,
-        bound: Option<Bound>,
-        base: Box<ConcreteType>,
-    },
-    Array {
-        unique: bool,
-        optional: bool,
-        bound: Bound,
-        base: Box<ConcreteType>,
-    },
-}
+use crate::ast::expression::*;
 
 /// 193 concrete_types = [aggregation_types] | [simple_types] | [type_ref].
 pub fn concrete_types(input: &str) -> ParseResult<ConcreteType> {
@@ -100,12 +75,6 @@ pub fn set_type(input: &str) -> ParseResult<ConcreteType> {
             base: Box::new(base),
         })
         .parse(input)
-}
-
-#[derive(Debug, Clone, PartialEq)]
-pub struct Bound {
-    pub lower: Expression,
-    pub upper: Expression,
 }
 
 /// 183 bound_1 = [numeric_expression] .

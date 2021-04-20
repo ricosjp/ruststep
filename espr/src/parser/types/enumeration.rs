@@ -3,13 +3,6 @@ use super::{
     *,
 };
 
-/// Output of [enumeration_type]
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub struct EnumerationType {
-    pub extensiblity: Extensiblity,
-    pub items: Vec<String>,
-}
-
 /// 211 enumeration_items = `(` [enumeration_id] { `,` [enumeration_id] } `)` .
 pub fn enumeration_items(input: &str) -> ParseResult<Vec<String>> {
     tuple((char('('), comma_separated(enumeration_id), char(')')))

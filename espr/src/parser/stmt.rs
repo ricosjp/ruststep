@@ -1,54 +1,5 @@
 use super::{combinator::*, expression::*, identifier::*, types::*};
-
-#[derive(Debug, Clone, PartialEq)]
-pub enum Statement {
-    Alias {
-        name: String,
-        dest: String,
-        qualifiers: Vec<Qualifier>,
-        statements: Vec<Statement>,
-    },
-
-    Assignment {
-        name: String,
-        qualifiers: Vec<Qualifier>,
-        expr: Expression,
-    },
-
-    Compound {
-        statements: Vec<Statement>,
-    },
-
-    If {
-        condition: Expression,
-        then_branch: Vec<Statement>,
-        else_branch: Option<Vec<Statement>>,
-    },
-
-    Case {
-        selector: Expression,
-        actions: Vec<(Vec<Expression>, Statement)>,
-        otherwise: Option<Box<Statement>>,
-    },
-
-    Repeat {
-        control: RepeatControl,
-        statements: Vec<Statement>,
-    },
-
-    Return {
-        value: Option<Expression>,
-    },
-
-    ProcedureCall {
-        procedure: Procedure,
-        parameters: Option<Vec<Expression>>,
-    },
-
-    Skip,
-    Escape,
-    Null,
-}
+use crate::ast::{algorithm::*, expression::*};
 
 /// 309 stmt = [alias_stmt] | [assignment_stmt] | [case_stmt] | [compound_stmt] | [escape_stmt] | [if_stmt] | [null_stmt] | [procedure_call_stmt] | [repeat_stmt] | [return_stmt] | [skip_stmt] .
 pub fn stmt(input: &str) -> ParseResult<Statement> {
@@ -197,7 +148,7 @@ pub fn procedure_call_stmt(input: &str) -> ParseResult<Statement> {
     tuple((
         alt((
             built_in_procedure,
-            procedure_ref.map(|name| Procedure::Reference(name)),
+            procedure_ref.map(|name| ProcedureCallName::Reference(name)),
         )),
         opt(actual_parameter_list),
         char(';'),
@@ -211,20 +162,11 @@ pub fn procedure_call_stmt(input: &str) -> ParseResult<Statement> {
     .parse(input)
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Hash)]
-pub enum Procedure {
-    Reference(String),
-    /// Built-in procedure `INSERT`
-    Insert,
-    /// Built-in procedure `REMOVE`
-    Remove,
-}
-
 /// 188 built_in_procedure = INSERT | REMOVE .
-pub fn built_in_procedure(input: &str) -> ParseResult<Procedure> {
+pub fn built_in_procedure(input: &str) -> ParseResult<ProcedureCallName> {
     alt((
-        tag("INSERT").map(|_| Procedure::Insert),
-        tag("REMOVE").map(|_| Procedure::Remove),
+        tag("INSERT").map(|_| ProcedureCallName::Insert),
+        tag("REMOVE").map(|_| ProcedureCallName::Remove),
     ))
     .parse(input)
 }
@@ -248,13 +190,6 @@ pub fn repeat_stmt(input: &str) -> ParseResult<Statement> {
     .parse(input)
 }
 
-#[derive(Debug, Clone, PartialEq)]
-pub struct RepeatControl {
-    pub increment: Option<RepeatIncrement>,
-    pub while_: Option<Expression>,
-    pub until: Option<Expression>,
-}
-
 /// 285 repeat_control = \[ [increment_control] \] \[ [while_control] \] \[ [until_control] \] .
 pub fn repeat_control(input: &str) -> ParseResult<RepeatControl> {
     tuple((
@@ -268,14 +203,6 @@ pub fn repeat_control(input: &str) -> ParseResult<RepeatControl> {
         until,
     })
     .parse(input)
-}
-
-#[derive(Debug, Clone, PartialEq)]
-pub struct RepeatIncrement {
-    pub variable: String,
-    pub begin: Expression,
-    pub end: Expression,
-    pub increment: Option<Expression>,
 }
 
 /// 235 increment_control = [variable_id] `:=` [bound_1] TO [bound_2] \[ BY [increment] \] .
