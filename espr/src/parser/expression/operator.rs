@@ -6,12 +6,12 @@ pub fn rel_op(input: &str) -> ParseResult<RelationOperator> {
     alt((
         value(RelationOperator::InstanceEqual, tag(":=:")),
         value(RelationOperator::InstanceNotEqual, tag(":<>:")),
-        value(RelationOperator::LEQ, tag("<=")),
-        value(RelationOperator::GEQ, tag(">=")),
+        value(RelationOperator::Leq, tag("<=")),
+        value(RelationOperator::Geq, tag(">=")),
         value(RelationOperator::Equal, tag("=")),
         value(RelationOperator::NotEqual, tag("<>")),
-        value(RelationOperator::LT, tag("<")),
-        value(RelationOperator::GT, tag(">")),
+        value(RelationOperator::Lt, tag("<")),
+        value(RelationOperator::Gt, tag(">")),
     ))
     .parse(input)
 }

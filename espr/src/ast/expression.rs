@@ -84,7 +84,7 @@ impl Expression {
     /// `SELF` constant with qualifiers
     pub fn self_qualified(qualifiers: Vec<Qualifier>) -> Self {
         Expression::QualifiableFactor {
-            factor: QualifiableFactor::BuiltInConstant(BuiltInConstant::SELF),
+            factor: QualifiableFactor::BuiltInConstant(BuiltInConstant::Self_),
             qualifiers,
         }
     }
@@ -92,7 +92,7 @@ impl Expression {
     /// `?` constant
     pub fn indeterminate() -> Self {
         Expression::QualifiableFactor {
-            factor: QualifiableFactor::BuiltInConstant(BuiltInConstant::INDETERMINATE),
+            factor: QualifiableFactor::BuiltInConstant(BuiltInConstant::Indeterminate),
             qualifiers: Vec::new(),
         }
     }
@@ -102,10 +102,10 @@ impl Expression {
         Expression::Literal(Literal::Real(value))
     }
 
-    impl_relation_op_expression!(leq, RelationOperator::LEQ);
-    impl_relation_op_expression!(geq, RelationOperator::GEQ);
-    impl_relation_op_expression!(lt, RelationOperator::LT);
-    impl_relation_op_expression!(gt, RelationOperator::GT);
+    impl_relation_op_expression!(leq, RelationOperator::Leq);
+    impl_relation_op_expression!(geq, RelationOperator::Geq);
+    impl_relation_op_expression!(lt, RelationOperator::Lt);
+    impl_relation_op_expression!(gt, RelationOperator::Gt);
     impl_relation_op_expression!(eq, RelationOperator::Equal);
     impl_relation_op_expression!(neq, RelationOperator::NotEqual);
     impl_relation_op_expression!(in_, RelationOperator::In);
@@ -204,14 +204,14 @@ pub enum Qualifier {
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum BuiltInConstant {
     /// `CONST_E`, Napier's constant `e = 2.71828 …`
-    NAPIER,
+    Napier,
     /// The ratio of a circle's circumference to its diameter, `π = 3.14159 …`
-    PI,
+    Pi,
     /// `SELF` is not a constant, but behaves as one in every context in which it can appear.
-    SELF,
+    Self_,
     /// The indeterminate symbol `?` stands for an ambiguous value.
     /// It is compatible with all data types.
-    INDETERMINATE,
+    Indeterminate,
 }
 
 /// Relation operators parsed by [rel_op] and [rel_op_extended]
@@ -222,13 +222,13 @@ pub enum RelationOperator {
     /// `<>`
     NotEqual,
     /// `<`
-    LT,
+    Lt,
     /// `>`
-    GT,
+    Gt,
     /// `<=`
-    LEQ,
+    Leq,
     /// `>=`
-    GEQ,
+    Geq,
     /// `:=:`
     InstanceEqual,
     /// `:<>:`

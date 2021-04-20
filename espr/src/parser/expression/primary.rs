@@ -206,10 +206,10 @@ pub fn index_2(input: &str) -> ParseResult<Expression> {
 /// 186 built_in_constant = `CONST_E` | `PI` | `SELF` | `?` .
 pub fn built_in_constant(input: &str) -> ParseResult<BuiltInConstant> {
     alt((
-        value(BuiltInConstant::NAPIER, tag("CONST_E")),
-        value(BuiltInConstant::PI, tag("PI")),
-        value(BuiltInConstant::SELF, tag("SELF")),
-        value(BuiltInConstant::INDETERMINATE, char('?')),
+        value(BuiltInConstant::Napier, tag("CONST_E")),
+        value(BuiltInConstant::Pi, tag("PI")),
+        value(BuiltInConstant::Self_, tag("SELF")),
+        value(BuiltInConstant::Indeterminate, char('?')),
     ))
     .parse(input)
 }
@@ -335,7 +335,7 @@ mod tests {
                         end,
                         &Expression::QualifiableFactor {
                             factor: QualifiableFactor::BuiltInConstant(
-                                BuiltInConstant::INDETERMINATE
+                                BuiltInConstant::Indeterminate
                             ),
                             qualifiers: Vec::new()
                         }
