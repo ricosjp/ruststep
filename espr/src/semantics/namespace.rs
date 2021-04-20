@@ -2,18 +2,6 @@ use super::{scope::*, type_ref::*, SemanticError};
 use crate::ast::{self, SyntaxTree};
 use std::collections::HashMap;
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub enum IdentifierType {
-    /// Declared as `SCHEMA`
-    Schema,
-    /// Declared as `ENTITY`
-    Entity,
-    /// Declared in `ENTITY` as an attribute
-    Attribute,
-    /// Declared as `TYPE`
-    Type,
-}
-
 /// Names in each scopes
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Default)]
 pub struct Names {

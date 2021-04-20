@@ -1,6 +1,152 @@
 #![allow(dead_code)]
 mod explicit_draughting {
     use crate::primitive::*;
+    #[derive(Debug, Clone, PartialEq)]
+    pub struct ApprovedItem {}
+    #[derive(Debug, Clone, PartialEq)]
+    pub struct AreaOrView {}
+    #[derive(Debug, Clone, PartialEq)]
+    pub struct Axis2Placement {}
+    #[derive(Debug, Clone, PartialEq)]
+    pub struct BSplineCurveForm {}
+    #[derive(Debug, Clone, PartialEq)]
+    pub struct BoxCharacteristicSelect {}
+    #[derive(Debug, Clone, PartialEq)]
+    pub struct BoxHeight {}
+    #[derive(Debug, Clone, PartialEq)]
+    pub struct BoxRotateAngle {}
+    #[derive(Debug, Clone, PartialEq)]
+    pub struct BoxSlantAngle {}
+    #[derive(Debug, Clone, PartialEq)]
+    pub struct BoxWidth {}
+    #[derive(Debug, Clone, PartialEq)]
+    pub struct CharacterSpacingSelect {}
+    #[derive(Debug, Clone, PartialEq)]
+    pub struct CharacterStyleSelect {}
+    #[derive(Debug, Clone, PartialEq)]
+    pub struct CharacterizedDefinition {}
+    #[derive(Debug, Clone, PartialEq)]
+    pub struct CharacterizedProductDefinition {}
+    #[derive(Debug, Clone, PartialEq)]
+    pub struct ClassifiedItem {}
+    #[derive(Debug, Clone, PartialEq)]
+    pub struct ContractedItem {}
+    #[derive(Debug, Clone, PartialEq)]
+    pub struct CurveFontOrScaledCurveFontSelect {}
+    #[derive(Debug, Clone, PartialEq)]
+    pub struct CurveOrAnnotationCurveOccurrence {}
+    #[derive(Debug, Clone, PartialEq)]
+    pub struct CurveOrRender {}
+    #[derive(Debug, Clone, PartialEq)]
+    pub struct CurveStyleFontSelect {}
+    #[derive(Debug, Clone, PartialEq)]
+    pub struct DateTimeSelect {}
+    #[derive(Debug, Clone, PartialEq)]
+    pub struct DayInMonthNumber {}
+    #[derive(Debug, Clone, PartialEq)]
+    pub struct DefinedSymbolSelect {}
+    #[derive(Debug, Clone, PartialEq)]
+    pub struct DimensionCount {}
+    #[derive(Debug, Clone, PartialEq)]
+    pub struct DimensionExtentUsage {}
+    #[derive(Debug, Clone, PartialEq)]
+    pub struct DraughtingCalloutElement {}
+    #[derive(Debug, Clone, PartialEq)]
+    pub struct DraughtingGroupedItem {}
+    #[derive(Debug, Clone, PartialEq)]
+    pub struct DraughtingOrganizationItem {}
+    #[derive(Debug, Clone, PartialEq)]
+    pub struct DraughtingPresentedItemSelect {}
+    #[derive(Debug, Clone, PartialEq)]
+    pub struct DraughtingTitledItem {}
+    #[derive(Debug, Clone, PartialEq)]
+    pub struct FillAreaStyleTileShapeSelect {}
+    #[derive(Debug, Clone, PartialEq)]
+    pub struct FillStyleSelect {}
+    #[derive(Debug, Clone, PartialEq)]
+    pub struct FontSelect {}
+    #[derive(Debug, Clone, PartialEq)]
+    pub struct GeometricSetSelect {}
+    #[derive(Debug, Clone, PartialEq)]
+    pub struct HidingOrBlankingSelect {}
+    #[derive(Debug, Clone, PartialEq)]
+    pub struct Identifier {}
+    #[derive(Debug, Clone, PartialEq)]
+    pub struct InvisibilityContext {}
+    #[derive(Debug, Clone, PartialEq)]
+    pub struct InvisibleItem {}
+    #[derive(Debug, Clone, PartialEq)]
+    pub struct KnotType {}
+    #[derive(Debug, Clone, PartialEq)]
+    pub struct Label {}
+    #[derive(Debug, Clone, PartialEq)]
+    pub struct LayeredItem {}
+    #[derive(Debug, Clone, PartialEq)]
+    pub struct LengthMeasure {}
+    #[derive(Debug, Clone, PartialEq)]
+    pub struct MeasureValue {}
+    #[derive(Debug, Clone, PartialEq)]
+    pub struct MonthInYearNumber {}
+    #[derive(Debug, Clone, PartialEq)]
+    pub struct NullStyle {}
+    #[derive(Debug, Clone, PartialEq)]
+    pub struct ParameterValue {}
+    #[derive(Debug, Clone, PartialEq)]
+    pub struct PersonOrganizationSelect {}
+    #[derive(Debug, Clone, PartialEq)]
+    pub struct PlaneAngleMeasure {}
+    #[derive(Debug, Clone, PartialEq)]
+    pub struct PositiveLengthMeasure {}
+    #[derive(Debug, Clone, PartialEq)]
+    pub struct PositiveRatioMeasure {}
+    #[derive(Debug, Clone, PartialEq)]
+    pub struct PresentableText {}
+    #[derive(Debug, Clone, PartialEq)]
+    pub struct PresentationRepresentationSelect {}
+    #[derive(Debug, Clone, PartialEq)]
+    pub struct PresentationSizeAssignmentSelect {}
+    #[derive(Debug, Clone, PartialEq)]
+    pub struct PresentationStyleSelect {}
+    #[derive(Debug, Clone, PartialEq)]
+    pub struct RatioMeasure {}
+    #[derive(Debug, Clone, PartialEq)]
+    pub struct ShapeDefinition {}
+    #[derive(Debug, Clone, PartialEq)]
+    pub struct SiPrefix {}
+    #[derive(Debug, Clone, PartialEq)]
+    pub struct SiUnitName {}
+    #[derive(Debug, Clone, PartialEq)]
+    pub struct SizeSelect {}
+    #[derive(Debug, Clone, PartialEq)]
+    pub struct SourceItem {}
+    #[derive(Debug, Clone, PartialEq)]
+    pub struct SpecifiedItem {}
+    #[derive(Debug, Clone, PartialEq)]
+    pub struct StyleContextSelect {}
+    #[derive(Debug, Clone, PartialEq)]
+    pub struct SymbolStyleSelect {}
+    #[derive(Debug, Clone, PartialEq)]
+    pub struct Text {}
+    #[derive(Debug, Clone, PartialEq)]
+    pub struct TextAlignment {}
+    #[derive(Debug, Clone, PartialEq)]
+    pub struct TextDelineation {}
+    #[derive(Debug, Clone, PartialEq)]
+    pub struct TextOrCharacter {}
+    #[derive(Debug, Clone, PartialEq)]
+    pub struct TextPath {}
+    #[derive(Debug, Clone, PartialEq)]
+    pub struct TransitionCode {}
+    #[derive(Debug, Clone, PartialEq)]
+    pub struct TrimmingPreference {}
+    #[derive(Debug, Clone, PartialEq)]
+    pub struct TrimmingSelect {}
+    #[derive(Debug, Clone, PartialEq)]
+    pub struct Unit {}
+    #[derive(Debug, Clone, PartialEq)]
+    pub struct VectorOrDirection {}
+    #[derive(Debug, Clone, PartialEq)]
+    pub struct YearNumber {}
     #[derive(Clone, Debug, PartialEq)]
     pub struct Address {
         internal_location: Option<Label>,

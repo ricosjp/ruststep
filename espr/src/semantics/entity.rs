@@ -21,8 +21,6 @@ impl Legalize for EntityAttribute {
     type Input = ast::entity::EntityAttribute;
 
     fn legalize(ns: &Namespace, scope: &Scope, attr: &Self::Input) -> Result<Self, SemanticError> {
-        use crate::ast::types::ParameterType::*;
-        dbg!(&attr);
         let ty = TypeRef::legalize(ns, scope, &attr.ty)?;
         let name = match &attr.name {
             ast::entity::AttributeDecl::Reference(name) => name.clone(),
