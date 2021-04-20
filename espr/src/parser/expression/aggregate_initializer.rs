@@ -5,7 +5,7 @@ use crate::ast::expression::*;
 pub fn aggregate_initializer(input: &str) -> ParseResult<Expression> {
     tuple((
         char('['),
-        opt(comma_separated(element)).map(|opt| opt.unwrap_or(Vec::new())),
+        opt(comma_separated(element)).map(|opt| opt.unwrap_or_default()),
         char(']'),
     ))
     .map(|(_open, elements, _close)| Expression::AggregateInitializer { elements })

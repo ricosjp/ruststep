@@ -19,7 +19,7 @@ pub fn primary(input: &str) -> ParseResult<Expression> {
 pub fn qualifiable_factor(input: &str) -> ParseResult<QualifiableFactor> {
     alt((
         function_call,
-        alt((attribute_ref, general_ref, population)).map(|id| QualifiableFactor::Reference(id)),
+        alt((attribute_ref, general_ref, population)).map(QualifiableFactor::Reference),
         constant_factor,
     ))
     .parse(input)
@@ -49,7 +49,7 @@ pub fn function_call(input: &str) -> ParseResult<QualifiableFactor> {
 pub fn actual_parameter_list(input: &str) -> ParseResult<Vec<Expression>> {
     tuple((
         char('('),
-        opt(comma_separated(parameter)).map(|opt| opt.unwrap_or(Vec::new())),
+        opt(comma_separated(parameter)).map(|opt| opt.unwrap_or_default()),
         char(')'),
     ))
     .map(|(_open, parameters, _close)| parameters)
@@ -140,8 +140,8 @@ pub fn population(input: &str) -> ParseResult<String> {
 /// 196 constant_factor = [built_in_constant] | [constant_ref] .
 pub fn constant_factor(input: &str) -> ParseResult<QualifiableFactor> {
     alt((
-        built_in_constant.map(|c| QualifiableFactor::BuiltInConstant(c)),
-        constant_ref.map(|name| QualifiableFactor::Reference(name)),
+        built_in_constant.map(QualifiableFactor::BuiltInConstant),
+        constant_ref.map(QualifiableFactor::Reference),
     ))
     .parse(input)
 }
@@ -149,8 +149,8 @@ pub fn constant_factor(input: &str) -> ParseResult<QualifiableFactor> {
 /// 276 qualifier = [attribute_qualifier] | [group_qualifier] | [index_qualifier] .
 pub fn qualifier(input: &str) -> ParseResult<Qualifier> {
     alt((
-        attribute_qualifier.map(|s| Qualifier::Attribute(s)),
-        group_qualifier.map(|s| Qualifier::Group(s)),
+        attribute_qualifier.map(Qualifier::Attribute),
+        group_qualifier.map(Qualifier::Group),
         index_qualifier,
     ))
     .parse(input)
