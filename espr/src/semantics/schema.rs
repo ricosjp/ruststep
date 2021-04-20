@@ -1,4 +1,5 @@
 use super::{entity::*, namespace::*, scope::*, *};
+use crate::ast;
 use proc_macro2::TokenStream;
 use quote::*;
 
@@ -9,7 +10,7 @@ pub struct Schema {
 }
 
 impl Legalize for Schema {
-    type Input = crate::ast::schema::Schema;
+    type Input = ast::schema::Schema;
     fn legalize(
         ns: &Namespace,
         scope: &Scope,
