@@ -1,5 +1,5 @@
 #![allow(dead_code)]
-mod explicit_draughting {
+pub mod explicit_draughting {
     use crate::primitive::*;
     #[derive(Debug, Clone, PartialEq)]
     pub struct ApprovedItem {}
@@ -42,11 +42,11 @@ mod explicit_draughting {
     #[derive(Debug, Clone, PartialEq)]
     pub struct DateTimeSelect {}
     #[derive(Debug, Clone, PartialEq)]
-    pub struct DayInMonthNumber {}
+    pub struct DayInMonthNumber(pub i64);
     #[derive(Debug, Clone, PartialEq)]
     pub struct DefinedSymbolSelect {}
     #[derive(Debug, Clone, PartialEq)]
-    pub struct DimensionCount {}
+    pub struct DimensionCount(pub i64);
     #[derive(Debug, Clone, PartialEq)]
     pub struct DimensionExtentUsage {}
     #[derive(Debug, Clone, PartialEq)]
@@ -70,7 +70,7 @@ mod explicit_draughting {
     #[derive(Debug, Clone, PartialEq)]
     pub struct HidingOrBlankingSelect {}
     #[derive(Debug, Clone, PartialEq)]
-    pub struct Identifier {}
+    pub struct Identifier(pub String);
     #[derive(Debug, Clone, PartialEq)]
     pub struct InvisibilityContext {}
     #[derive(Debug, Clone, PartialEq)]
@@ -78,29 +78,29 @@ mod explicit_draughting {
     #[derive(Debug, Clone, PartialEq)]
     pub struct KnotType {}
     #[derive(Debug, Clone, PartialEq)]
-    pub struct Label {}
+    pub struct Label(pub String);
     #[derive(Debug, Clone, PartialEq)]
     pub struct LayeredItem {}
     #[derive(Debug, Clone, PartialEq)]
-    pub struct LengthMeasure {}
+    pub struct LengthMeasure(pub f64);
     #[derive(Debug, Clone, PartialEq)]
     pub struct MeasureValue {}
     #[derive(Debug, Clone, PartialEq)]
-    pub struct MonthInYearNumber {}
+    pub struct MonthInYearNumber(pub i64);
     #[derive(Debug, Clone, PartialEq)]
     pub struct NullStyle {}
     #[derive(Debug, Clone, PartialEq)]
-    pub struct ParameterValue {}
+    pub struct ParameterValue(pub f64);
     #[derive(Debug, Clone, PartialEq)]
     pub struct PersonOrganizationSelect {}
     #[derive(Debug, Clone, PartialEq)]
-    pub struct PlaneAngleMeasure {}
+    pub struct PlaneAngleMeasure(pub f64);
     #[derive(Debug, Clone, PartialEq)]
     pub struct PositiveLengthMeasure {}
     #[derive(Debug, Clone, PartialEq)]
     pub struct PositiveRatioMeasure {}
     #[derive(Debug, Clone, PartialEq)]
-    pub struct PresentableText {}
+    pub struct PresentableText(pub String);
     #[derive(Debug, Clone, PartialEq)]
     pub struct PresentationRepresentationSelect {}
     #[derive(Debug, Clone, PartialEq)]
@@ -108,7 +108,7 @@ mod explicit_draughting {
     #[derive(Debug, Clone, PartialEq)]
     pub struct PresentationStyleSelect {}
     #[derive(Debug, Clone, PartialEq)]
-    pub struct RatioMeasure {}
+    pub struct RatioMeasure(pub f64);
     #[derive(Debug, Clone, PartialEq)]
     pub struct ShapeDefinition {}
     #[derive(Debug, Clone, PartialEq)]
@@ -126,7 +126,7 @@ mod explicit_draughting {
     #[derive(Debug, Clone, PartialEq)]
     pub struct SymbolStyleSelect {}
     #[derive(Debug, Clone, PartialEq)]
-    pub struct Text {}
+    pub struct Text(pub String);
     #[derive(Debug, Clone, PartialEq)]
     pub struct TextAlignment {}
     #[derive(Debug, Clone, PartialEq)]
@@ -146,7 +146,7 @@ mod explicit_draughting {
     #[derive(Debug, Clone, PartialEq)]
     pub struct VectorOrDirection {}
     #[derive(Debug, Clone, PartialEq)]
-    pub struct YearNumber {}
+    pub struct YearNumber(pub i64);
     #[derive(Clone, Debug, PartialEq)]
     pub struct Address {
         internal_location: Option<Label>,

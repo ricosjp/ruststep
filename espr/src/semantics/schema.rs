@@ -43,7 +43,7 @@ impl ToTokens for Schema {
         let types = &self.types;
         let entities = &self.entities;
         tokens.append_all(quote! {
-            mod #name {
+            pub mod #name {
                 use crate::primitive::*;
                 #(#types)*
                 #(#entities)*
