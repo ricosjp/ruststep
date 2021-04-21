@@ -12,8 +12,8 @@ pub fn named_types(input: &str) -> ParseResult<String> {
 pub fn parameter_type(input: &str) -> ParseResult<ParameterType> {
     alt((
         generalized_types,
-        named_types.map(|ty| ParameterType::Named(ty)),
-        simple_types.map(|ty| ParameterType::Simple(ty)),
+        named_types.map(ParameterType::Named),
+        simple_types.map(ParameterType::Simple),
     ))
     .parse(input)
 }
@@ -38,8 +38,8 @@ pub fn aggregate_type(input: &str) -> ParseResult<ParameterType> {
         parameter_type,
     ))
     .map(
-        |(_aggregate, opt_type_label, _of, ty)| ParameterType::Aggregate {
-            ty: Box::new(ty),
+        |(_aggregate, opt_type_label, _of, base)| ParameterType::Aggregate {
+            base: Box::new(base),
             label: opt_type_label.map(|(_colon, label)| label),
         },
     )
@@ -87,9 +87,9 @@ pub fn general_array_type(input: &str) -> ParseResult<ParameterType> {
         parameter_type,
     ))
     .map(
-        |(_bag, bound_spec, _of, optional, unique, ty)| ParameterType::Array {
-            ty: Box::new(ty),
-            bound_spec,
+        |(_bag, bound, _of, optional, unique, base)| ParameterType::Array {
+            base: Box::new(base),
+            bound,
             unique: unique.is_some(),
             optional: optional.is_some(),
         },
@@ -100,9 +100,9 @@ pub fn general_array_type(input: &str) -> ParseResult<ParameterType> {
 /// 226 general_bag_type = BAG \[ [bound_spec] \] OF [parameter_type] .
 pub fn general_bag_type(input: &str) -> ParseResult<ParameterType> {
     tuple((tag("BAG"), opt(bound_spec), tag("OF"), parameter_type))
-        .map(|(_bag, bound_spec, _of, ty)| ParameterType::Bag {
-            ty: Box::new(ty),
-            bound_spec,
+        .map(|(_bag, bound, _of, base)| ParameterType::Bag {
+            base: Box::new(base),
+            bound,
         })
         .parse(input)
 }
@@ -116,10 +116,10 @@ pub fn general_list_type(input: &str) -> ParseResult<ParameterType> {
         opt(tag("UNIQUE")),
         parameter_type,
     ))
-    .map(|(_list, bound_spec, _of, unique, ty)| ParameterType::List {
-        ty: Box::new(ty),
+    .map(|(_list, bound, _of, unique, base)| ParameterType::List {
+        base: Box::new(base),
         unique: unique.is_some(),
-        bound_spec,
+        bound,
     })
     .parse(input)
 }
@@ -127,9 +127,9 @@ pub fn general_list_type(input: &str) -> ParseResult<ParameterType> {
 /// 229 general_set_type = SET \[ [bound_spec] \] OF [parameter_type] .
 pub fn general_set_type(input: &str) -> ParseResult<ParameterType> {
     tuple((tag("SET"), opt(bound_spec), tag("OF"), parameter_type))
-        .map(|(_set, bound_spec, _of, ty)| ParameterType::Set {
-            ty: Box::new(ty),
-            bound_spec,
+        .map(|(_set, bound, _of, base)| ParameterType::Set {
+            base: Box::new(base),
+            bound,
         })
         .parse(input)
 }
@@ -169,8 +169,8 @@ mod tests {
         assert_eq!(
             set,
             ParameterType::Set {
-                ty: Box::new(ParameterType::Named("curve".to_string())),
-                bound_spec: Some(Bound {
+                base: Box::new(ParameterType::Named("curve".to_string())),
+                bound: Some(Bound {
                     upper: Expression::indeterminate(),
                     lower: Expression::real(1.0),
                 })

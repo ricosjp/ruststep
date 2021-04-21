@@ -5,18 +5,7 @@ use crate::ast::{algorithm::*, expression::*};
 #[cfg(doc)]
 use crate::parser::*;
 
-/// `EXTENSIBLE` and `GENERIC_ENTITY` keywords for [select_type] and [enumeration_type]
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub enum Extensiblity {
-    /// No `EXTENSIBLE`
-    None,
-    /// `EXTENSIBLE`
-    Extensible,
-    /// `EXTENSIBLE GENERIC_ENTITY`, which is allowed only for `SELECT`
-    GenericEntity,
-}
-
-/// Output of [type_decl]
+/// Type declaration by [type_decl].
 #[derive(Debug, Clone, PartialEq)]
 pub struct TypeDecl {
     pub type_id: String,
@@ -24,30 +13,30 @@ pub struct TypeDecl {
     pub where_clause: Option<WhereClause>,
 }
 
-/// Output of [underlying_type]
+/// Underlying type of a type declaration
 #[derive(Debug, Clone, PartialEq)]
 pub enum UnderlyingType {
     // Concrete Types
     Simple(SimpleType),
     Reference(String),
     Set {
-        bound: Option<Bound>,
         base: Box<UnderlyingType>,
+        bound: Option<Bound>,
     },
     Bag {
-        bound: Option<Bound>,
         base: Box<UnderlyingType>,
+        bound: Option<Bound>,
     },
     List {
-        unique: bool,
-        bound: Option<Bound>,
         base: Box<UnderlyingType>,
+        bound: Option<Bound>,
+        unique: bool,
     },
     Array {
+        base: Box<UnderlyingType>,
+        bound: Bound,
         unique: bool,
         optional: bool,
-        bound: Bound,
-        base: Box<UnderlyingType>,
     },
 
     // Constructed Types
@@ -61,14 +50,42 @@ pub enum UnderlyingType {
     },
 }
 
-/// Output of [width_spec]
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct WidthSpec {
-    pub width: usize,
-    pub fixed: bool,
+/// Parameter type appears when *using* the type
+/// e.g. in attribute definition, function parameter, and so on.
+#[derive(Debug, Clone, PartialEq)]
+pub enum ParameterType {
+    Simple(SimpleType),
+    Named(String),
+    Set {
+        base: Box<ParameterType>,
+        bound: Option<Bound>,
+    },
+    Bag {
+        base: Box<ParameterType>,
+        bound: Option<Bound>,
+    },
+    List {
+        base: Box<ParameterType>,
+        bound: Option<Bound>,
+        unique: bool,
+    },
+    Array {
+        base: Box<ParameterType>,
+        bound: Option<Bound>,
+        unique: bool,
+        optional: bool,
+    },
+
+    Aggregate {
+        base: Box<ParameterType>,
+        label: Option<String>,
+    },
+
+    GenericEntity(Option<String>),
+    Generic(Option<String>),
 }
 
-/// Output of [simple_types]
+/// Primitive types parsed by [simple_types]
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum SimpleType {
     /// 8.1.1 Number data type
@@ -87,39 +104,26 @@ pub enum SimpleType {
     Binary { width_spec: Option<WidthSpec> },
 }
 
-#[derive(Debug, Clone, PartialEq)]
-pub enum ParameterType {
-    Named(String),
-    Simple(SimpleType),
-    Set {
-        ty: Box<ParameterType>,
-        bound_spec: Option<Bound>,
-    },
-    Bag {
-        ty: Box<ParameterType>,
-        bound_spec: Option<Bound>,
-    },
-    List {
-        ty: Box<ParameterType>,
-        bound_spec: Option<Bound>,
-        unique: bool,
-    },
-    Array {
-        ty: Box<ParameterType>,
-        bound_spec: Option<Bound>,
-        unique: bool,
-        optional: bool,
-    },
-    Aggregate {
-        ty: Box<ParameterType>,
-        label: Option<String>,
-    },
-    GenericEntity(Option<String>),
-    Generic(Option<String>),
+/// Output of [width_spec]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct WidthSpec {
+    pub width: usize,
+    pub fixed: bool,
 }
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct Bound {
     pub lower: Expression,
     pub upper: Expression,
+}
+
+/// `EXTENSIBLE` and `GENERIC_ENTITY` keywords for [select_type] and [enumeration_type]
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum Extensiblity {
+    /// No `EXTENSIBLE`
+    None,
+    /// `EXTENSIBLE`
+    Extensible,
+    /// `EXTENSIBLE GENERIC_ENTITY`, which is allowed only for `SELECT`
+    GenericEntity,
 }
