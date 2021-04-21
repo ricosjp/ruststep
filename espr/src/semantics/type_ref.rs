@@ -1,5 +1,5 @@
 use super::{namespace::*, scope::*, *};
-use crate::parser;
+use crate::ast;
 use inflector::Inflector;
 use proc_macro2::TokenStream;
 use quote::*;
@@ -8,7 +8,7 @@ use quote::*;
 pub struct Bound {}
 
 impl Legalize for Bound {
-    type Input = parser::Bound;
+    type Input = ast::types::Bound;
     fn legalize(
         _ns: &Namespace,
         _scope: &Scope,
@@ -25,7 +25,7 @@ pub enum TypeRef {
         name: String,
         scope: Scope,
     },
-    SimpleType(parser::SimpleType),
+    SimpleType(ast::types::SimpleType),
     Set {
         ty: Box<TypeRef>,
         bound_spec: Option<Bound>,
@@ -38,14 +38,14 @@ pub enum TypeRef {
 }
 
 impl Legalize for TypeRef {
-    type Input = parser::ParameterType;
+    type Input = ast::types::ParameterType;
 
     fn legalize(
         ns: &Namespace,
         scope: &Scope,
-        ty: &parser::ParameterType,
+        ty: &ast::types::ParameterType,
     ) -> Result<Self, SemanticError> {
-        use parser::ParameterType::*;
+        use ast::types::ParameterType::*;
         Ok(match ty {
             Simple(ty) => Self::SimpleType(*ty),
             Named(name) => ns.lookup_type(scope, name)?,
@@ -88,7 +88,7 @@ impl ToTokens for TypeRef {
         use TypeRef::*;
         match self {
             SimpleType(ty) => {
-                use parser::SimpleType::*;
+                use ast::types::SimpleType::*;
                 match ty {
                     Number => tokens.append(format_ident!("f64")),
                     Real => tokens.append(format_ident!("f64")),
