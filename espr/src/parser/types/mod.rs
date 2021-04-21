@@ -16,7 +16,7 @@ use crate::ast::types::*;
 /// 198 constructed_types = [enumeration_type] | [select_type] .
 pub fn constructed_types(input: &str) -> ParseResult<UnderlyingType> {
     alt((
-        enumeration_type.map(|e| UnderlyingType::Enumeration(e)),
+        enumeration_type,
         select_type.map(|s| UnderlyingType::Select(s)),
     ))
     .parse(input)

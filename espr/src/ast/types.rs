@@ -51,7 +51,10 @@ pub enum UnderlyingType {
     },
 
     // Constructed Types
-    Enumeration(EnumerationType),
+    Enumeration {
+        extensiblity: Extensiblity,
+        items: Vec<String>,
+    },
     Select(SelectType),
 }
 
@@ -117,13 +120,6 @@ pub enum ParameterType {
     },
     GenericEntity(Option<String>),
     Generic(Option<String>),
-}
-
-/// Output of [enumeration_type]
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub struct EnumerationType {
-    pub extensiblity: Extensiblity,
-    pub items: Vec<String>,
 }
 
 #[derive(Debug, Clone, PartialEq)]

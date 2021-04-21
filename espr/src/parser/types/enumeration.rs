@@ -11,7 +11,7 @@ pub fn enumeration_items(input: &str) -> ParseResult<Vec<String>> {
 }
 
 /// 213 enumeration_type = \[ EXTENSIBLE \] ENUMERATION \[ ( OF [enumeration_items] ) | enumeration_extension \] .
-pub fn enumeration_type(input: &str) -> ParseResult<EnumerationType> {
+pub fn enumeration_type(input: &str) -> ParseResult<UnderlyingType> {
     // FIXME enumeration_extension
     tuple((
         opt(tag("EXTENSIBLE")),
@@ -19,14 +19,16 @@ pub fn enumeration_type(input: &str) -> ParseResult<EnumerationType> {
         tag("OF"),
         enumeration_items,
     ))
-    .map(|(extensiblility, _start, _of, items)| EnumerationType {
-        extensiblity: if extensiblility.is_some() {
-            Extensiblity::Extensible
-        } else {
-            Extensiblity::None
+    .map(
+        |(extensiblility, _start, _of, items)| UnderlyingType::Enumeration {
+            extensiblity: if extensiblility.is_some() {
+                Extensiblity::Extensible
+            } else {
+                Extensiblity::None
+            },
+            items,
         },
-        items,
-    })
+    )
     .parse(input)
 }
 
@@ -43,7 +45,7 @@ mod tests {
         assert_eq!(residual, "");
         assert_eq!(
             e,
-            super::EnumerationType {
+            super::UnderlyingType::Enumeration {
                 extensiblity: super::Extensiblity::None,
                 items: vec![
                     "up".to_string(),
@@ -64,7 +66,7 @@ mod tests {
         assert_eq!(residual, "");
         assert_eq!(
             e,
-            super::EnumerationType {
+            super::UnderlyingType::Enumeration {
                 extensiblity: super::Extensiblity::Extensible,
                 items: vec![
                     "up".to_string(),
