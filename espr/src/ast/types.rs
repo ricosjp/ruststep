@@ -55,14 +55,10 @@ pub enum UnderlyingType {
         extensiblity: Extensiblity,
         items: Vec<String>,
     },
-    Select(SelectType),
-}
-
-/// Output of [select_type]
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub struct SelectType {
-    pub extensiblity: Extensiblity,
-    pub types: Vec<String>,
+    Select {
+        extensiblity: Extensiblity,
+        types: Vec<String>,
+    },
 }
 
 /// Output of [width_spec]
