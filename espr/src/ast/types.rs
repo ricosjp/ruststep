@@ -1,7 +1,6 @@
 //! AST for type declaration
 
 use crate::ast::{algorithm::*, expression::*};
-use derive_more::From;
 
 #[cfg(doc)]
 use crate::parser::*;
@@ -25,18 +24,35 @@ pub struct TypeDecl {
     pub where_clause: Option<WhereClause>,
 }
 
-/// Output of [constructed_types]
-#[derive(Debug, Clone, PartialEq, Eq, From)]
-pub enum ConstructedType {
+/// Output of [underlying_type]
+#[derive(Debug, Clone, PartialEq)]
+pub enum UnderlyingType {
+    // Concrete Types
+    Simple(SimpleType),
+    Reference(String),
+    Set {
+        bound: Option<Bound>,
+        base: Box<UnderlyingType>,
+    },
+    Bag {
+        bound: Option<Bound>,
+        base: Box<UnderlyingType>,
+    },
+    List {
+        unique: bool,
+        bound: Option<Bound>,
+        base: Box<UnderlyingType>,
+    },
+    Array {
+        unique: bool,
+        optional: bool,
+        bound: Bound,
+        base: Box<UnderlyingType>,
+    },
+
+    // Constructed Types
     Enumeration(EnumerationType),
     Select(SelectType),
-}
-
-/// Output of [underlying_type]
-#[derive(Debug, Clone, PartialEq, From)]
-pub enum UnderlyingType {
-    Constructed(ConstructedType),
-    Concrete(ConcreteType),
 }
 
 /// Output of [select_type]
@@ -108,32 +124,6 @@ pub enum ParameterType {
 pub struct EnumerationType {
     pub extensiblity: Extensiblity,
     pub items: Vec<String>,
-}
-
-/// Output of [concrete_types]
-#[derive(Debug, Clone, PartialEq)]
-pub enum ConcreteType {
-    Simple(SimpleType),
-    Reference(String),
-    Set {
-        bound: Option<Bound>,
-        base: Box<ConcreteType>,
-    },
-    Bag {
-        bound: Option<Bound>,
-        base: Box<ConcreteType>,
-    },
-    List {
-        unique: bool,
-        bound: Option<Bound>,
-        base: Box<ConcreteType>,
-    },
-    Array {
-        unique: bool,
-        optional: bool,
-        bound: Bound,
-        base: Box<ConcreteType>,
-    },
 }
 
 #[derive(Debug, Clone, PartialEq)]
