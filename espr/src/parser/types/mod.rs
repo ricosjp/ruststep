@@ -14,21 +14,13 @@ use super::{combinator::*, entity::*, identifier::*};
 use crate::ast::types::*;
 
 /// 198 constructed_types = [enumeration_type] | [select_type] .
-pub fn constructed_types(input: &str) -> ParseResult<ConstructedType> {
-    alt((
-        enumeration_type.map(|e| ConstructedType::Enumeration(e)),
-        select_type.map(|s| ConstructedType::Select(s)),
-    ))
-    .parse(input)
+pub fn constructed_types(input: &str) -> ParseResult<UnderlyingType> {
+    alt((enumeration_type, select_type)).parse(input)
 }
 
 /// 332 underlying_type = [concrete_types] | [constructed_types] .
 pub fn underlying_type(input: &str) -> ParseResult<UnderlyingType> {
-    alt((
-        concrete_types.map(|ty| UnderlyingType::Concrete(ty)),
-        constructed_types.map(|ty| UnderlyingType::Constructed(ty)),
-    ))
-    .parse(input)
+    alt((concrete_types, constructed_types)).parse(input)
 }
 
 /// 327 type_decl = TYPE [type_id] `=` [underlying_type] `;` \[ [where_clause] \] END_TYPE `;` .
@@ -78,9 +70,9 @@ mod tests {
             ty,
             super::TypeDecl {
                 type_id: "my_type".to_string(),
-                underlying_type: super::UnderlyingType::Concrete(super::ConcreteType::Simple(
-                    super::SimpleType::String_ { width_spec: None }
-                )),
+                underlying_type: super::UnderlyingType::Simple(super::SimpleType::String_ {
+                    width_spec: None
+                }),
                 where_clause: None,
             }
         );
