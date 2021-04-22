@@ -25,7 +25,7 @@ impl Legalize for TypeDecl {
     ) -> Result<Self, SemanticError> {
         dbg!(&type_decl);
         let underlying_type = match type_decl.underlying_type {
-            ast::types::UnderlyingType::Concrete(ast::types::ConcreteType::Simple(simple)) => {
+            ast::types::UnderlyingType::Simple(simple) => {
                 UnderlyingType::Reference(TypeRef::SimpleType(simple))
             }
             _ => UnderlyingType::Unsupported,

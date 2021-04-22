@@ -27,12 +27,12 @@ pub enum TypeRef {
     },
     SimpleType(ast::types::SimpleType),
     Set {
-        ty: Box<TypeRef>,
-        bound_spec: Option<Bound>,
+        base: Box<TypeRef>,
+        bound: Option<Bound>,
     },
     List {
-        ty: Box<TypeRef>,
-        bound_spec: Option<Bound>,
+        base: Box<TypeRef>,
+        bound: Option<Bound>,
         unique: bool,
     },
 }
@@ -49,32 +49,32 @@ impl Legalize for TypeRef {
         Ok(match ty {
             Simple(ty) => Self::SimpleType(*ty),
             Named(name) => ns.lookup_type(scope, name)?,
-            Set { ty, bound_spec } => {
-                let ty = TypeRef::legalize(ns, scope, ty.as_ref())?;
-                let bound_spec = if let Some(bound_spec) = bound_spec {
-                    Some(Legalize::legalize(ns, scope, bound_spec)?)
+            Set { base, bound } => {
+                let base = TypeRef::legalize(ns, scope, base.as_ref())?;
+                let bound = if let Some(bound) = bound {
+                    Some(Legalize::legalize(ns, scope, bound)?)
                 } else {
                     None
                 };
                 Self::Set {
-                    ty: Box::new(ty),
-                    bound_spec,
+                    base: Box::new(base),
+                    bound,
                 }
             }
             List {
-                ty,
-                bound_spec,
+                base,
+                bound,
                 unique,
             } => {
-                let ty = TypeRef::legalize(ns, scope, ty.as_ref())?;
-                let bound_spec = if let Some(bound_spec) = bound_spec {
-                    Some(Legalize::legalize(ns, scope, bound_spec)?)
+                let base = TypeRef::legalize(ns, scope, base.as_ref())?;
+                let bound = if let Some(bound) = bound {
+                    Some(Legalize::legalize(ns, scope, bound)?)
                 } else {
                     None
                 };
                 Self::List {
-                    ty: Box::new(ty),
-                    bound_spec,
+                    base: Box::new(base),
+                    bound,
                     unique: *unique,
                 }
             }
@@ -103,8 +103,8 @@ impl ToTokens for TypeRef {
                 let name = format_ident!("{}", name.to_pascal_case());
                 tokens.append_all(quote! { #name })
             }
-            Set { ty, .. } | List { ty, .. } => {
-                ty.to_tokens(tokens);
+            Set { base, .. } | List { base, .. } => {
+                base.to_tokens(tokens);
             }
         }
     }
