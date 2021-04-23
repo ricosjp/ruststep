@@ -23,32 +23,32 @@ pub fn select_type(input: &str) -> ParseResult<UnderlyingType> {
     // FIXME support select_extension
 
     // `GENERIC_ENTITY` only appears in `select_type` declaration.
-    let extensiblity = tuple((
+    let extensibility = tuple((
         tag("EXTENSIBLE"),
         opt(tuple((spaces, tag("GENERIC_ENTITY")))),
     ))
     .map(|(_extensible, opt)| {
         if opt.is_some() {
-            Extensiblity::GenericEntity
+            Extensibility::GenericEntity
         } else {
-            Extensiblity::Extensible
+            Extensibility::Extensible
         }
     });
 
     tuple((
-        opt(tuple((extensiblity, spaces))),
+        opt(tuple((extensibility, spaces))),
         tag("SELECT"),
         select_list,
     ))
     .map(|(opt, _select, types)| {
-        if let Some((extensiblity, _spaces)) = opt {
+        if let Some((extensibility, _spaces)) = opt {
             UnderlyingType::Select {
-                extensiblity,
+                extensibility,
                 types,
             }
         } else {
             UnderlyingType::Select {
-                extensiblity: Extensiblity::None,
+                extensibility: Extensibility::None,
                 types,
             }
         }
@@ -66,11 +66,11 @@ mod tests {
         let (res, (s, _remarks)) = super::select_type("SELECT (a, b)").finish().unwrap();
         assert_eq!(res, "");
         if let UnderlyingType::Select {
-            extensiblity,
+            extensibility,
             types,
         } = s
         {
-            assert_eq!(extensiblity, Extensiblity::None);
+            assert_eq!(extensibility, Extensibility::None);
             assert_eq!(types[0], "a");
             assert_eq!(types[1], "b");
         } else {

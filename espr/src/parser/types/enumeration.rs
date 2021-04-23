@@ -21,10 +21,10 @@ pub fn enumeration_type(input: &str) -> ParseResult<UnderlyingType> {
     ))
     .map(
         |(extensiblility, _start, _of, items)| UnderlyingType::Enumeration {
-            extensiblity: if extensiblility.is_some() {
-                Extensiblity::Extensible
+            extensibility: if extensiblility.is_some() {
+                Extensibility::Extensible
             } else {
-                Extensiblity::None
+                Extensibility::None
             },
             items,
         },
@@ -46,7 +46,7 @@ mod tests {
         assert_eq!(
             e,
             super::UnderlyingType::Enumeration {
-                extensiblity: super::Extensiblity::None,
+                extensibility: super::Extensibility::None,
                 items: vec![
                     "up".to_string(),
                     "down".to_string(),
@@ -67,7 +67,7 @@ mod tests {
         assert_eq!(
             e,
             super::UnderlyingType::Enumeration {
-                extensiblity: super::Extensiblity::Extensible,
+                extensibility: super::Extensibility::Extensible,
                 items: vec![
                     "up".to_string(),
                     "down".to_string(),

@@ -41,11 +41,11 @@ pub enum UnderlyingType {
 
     // Constructed Types
     Enumeration {
-        extensiblity: Extensiblity,
+        extensibility: Extensibility,
         items: Vec<String>,
     },
     Select {
-        extensiblity: Extensiblity,
+        extensibility: Extensibility,
         types: Vec<String>,
     },
 }
@@ -119,7 +119,7 @@ pub struct Bound {
 
 /// `EXTENSIBLE` and `GENERIC_ENTITY` keywords for [select_type] and [enumeration_type]
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub enum Extensiblity {
+pub enum Extensibility {
     /// No `EXTENSIBLE`
     None,
     /// `EXTENSIBLE`
