@@ -6,6 +6,7 @@ use inflector::Inflector;
 pub enum UnderlyingType {
     Simple(TypeRef),
     Reference(TypeRef),
+    Enumeration(Vec<String>),
     Select(Vec<TypeRef>),
     // FIXME
     Unsupported,
@@ -20,6 +21,9 @@ impl Legalize for UnderlyingType {
             }
             ast::types::UnderlyingType::Reference(name) => {
                 UnderlyingType::Reference(ns.lookup_type(scope, name)?)
+            }
+            ast::types::UnderlyingType::Enumeration { items, .. } => {
+                UnderlyingType::Enumeration(items.clone())
             }
             ast::types::UnderlyingType::Select { types, .. } => {
                 let refs: Result<Vec<TypeRef>, _> =
@@ -61,16 +65,31 @@ impl ToTokens for TypeDecl {
                     #[derive(Debug, Clone, PartialEq)]
                     pub struct #id(pub #type_ref);
                 }),
+            UnderlyingType::Enumeration(items) => {
+                let items: Vec<_> = items
+                    .into_iter()
+                    .map(|i| format_ident!("{}", i.to_pascal_case()))
+                    .collect();
+                tokens.append_all(quote! {
+                    #[derive(Debug, Clone, PartialEq)]
+                    pub enum #id {
+                        #( #items ),*
+                    }
+                });
+            }
             UnderlyingType::Select(types) => tokens.append_all(quote! {
                 #[derive(Debug, Clone, PartialEq)]
                 pub enum #id {
                     #(#types(Box<#types>)),*
                 }
             }),
-            _ => tokens.append_all(quote! {
-                #[derive(Debug, Clone, PartialEq)]
-                pub struct #id {}
-            }),
+            _ => {
+                dbg!(&self);
+                tokens.append_all(quote! {
+                    #[derive(Debug, Clone, PartialEq)]
+                    pub struct #id {}
+                });
+            }
         }
     }
 }

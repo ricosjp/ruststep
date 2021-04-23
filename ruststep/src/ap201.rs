@@ -16,7 +16,14 @@ pub mod explicit_draughting {
         Axis2Placement2D(Box<Axis2Placement2D>),
     }
     #[derive(Debug, Clone, PartialEq)]
-    pub struct BSplineCurveForm {}
+    pub enum BSplineCurveForm {
+        EllipticArc,
+        PolylineForm,
+        ParabolicArc,
+        CircularArc,
+        Unspecified,
+        HyperbolicArc,
+    }
     #[derive(Debug, Clone, PartialEq)]
     pub enum BoxCharacteristicSelect {
         BoxHeight(Box<BoxHeight>),
@@ -93,7 +100,10 @@ pub mod explicit_draughting {
     #[derive(Debug, Clone, PartialEq)]
     pub struct DimensionCount(pub i64);
     #[derive(Debug, Clone, PartialEq)]
-    pub struct DimensionExtentUsage {}
+    pub enum DimensionExtentUsage {
+        Origin,
+        Target,
+    }
     #[derive(Debug, Clone, PartialEq)]
     pub enum DraughtingCalloutElement {
         AnnotationTextOccurrence(Box<AnnotationTextOccurrence>),
@@ -163,7 +173,12 @@ pub mod explicit_draughting {
         PresentationRepresentation(Box<PresentationRepresentation>),
     }
     #[derive(Debug, Clone, PartialEq)]
-    pub struct KnotType {}
+    pub enum KnotType {
+        UniformKnots,
+        QuasiUniformKnots,
+        PiecewiseBezierKnots,
+        Unspecified,
+    }
     #[derive(Debug, Clone, PartialEq)]
     pub struct Label(pub String);
     #[derive(Debug, Clone, PartialEq)]
@@ -185,7 +200,9 @@ pub mod explicit_draughting {
     #[derive(Debug, Clone, PartialEq)]
     pub struct MonthInYearNumber(pub i64);
     #[derive(Debug, Clone, PartialEq)]
-    pub struct NullStyle {}
+    pub enum NullStyle {
+        Null,
+    }
     #[derive(Debug, Clone, PartialEq)]
     pub struct ParameterValue(pub f64);
     #[derive(Debug, Clone, PartialEq)]
@@ -228,9 +245,55 @@ pub mod explicit_draughting {
         ProductDefinitionShape(Box<ProductDefinitionShape>),
     }
     #[derive(Debug, Clone, PartialEq)]
-    pub struct SiPrefix {}
+    pub enum SiPrefix {
+        Exa,
+        Pico,
+        Mega,
+        Femto,
+        Atto,
+        Centi,
+        Nano,
+        Hecto,
+        Micro,
+        Tera,
+        Giga,
+        Milli,
+        Peta,
+        Deci,
+        Kilo,
+        Deca,
+    }
     #[derive(Debug, Clone, PartialEq)]
-    pub struct SiUnitName {}
+    pub enum SiUnitName {
+        Hertz,
+        DegreeCelsius,
+        Siemens,
+        Sievert,
+        Lux,
+        Watt,
+        Ohm,
+        Second,
+        Becquerel,
+        Pascal,
+        Henry,
+        Tesla,
+        Volt,
+        Joule,
+        Kelvin,
+        Ampere,
+        Gram,
+        Steradian,
+        Mole,
+        Lumen,
+        Gray,
+        Candela,
+        Farad,
+        Radian,
+        Newton,
+        Metre,
+        Weber,
+        Coulomb,
+    }
     #[derive(Debug, Clone, PartialEq)]
     pub enum SizeSelect {
         PositiveLengthMeasure(Box<PositiveLengthMeasure>),
@@ -267,11 +330,25 @@ pub mod explicit_draughting {
         TextLiteral(Box<TextLiteral>),
     }
     #[derive(Debug, Clone, PartialEq)]
-    pub struct TextPath {}
+    pub enum TextPath {
+        Up,
+        Right,
+        Down,
+        Left,
+    }
     #[derive(Debug, Clone, PartialEq)]
-    pub struct TransitionCode {}
+    pub enum TransitionCode {
+        Discontinuous,
+        ContSameGradientSameCurvature,
+        ContSameGradient,
+        Continuous,
+    }
     #[derive(Debug, Clone, PartialEq)]
-    pub struct TrimmingPreference {}
+    pub enum TrimmingPreference {
+        Parameter,
+        Unspecified,
+        Cartesian,
+    }
     #[derive(Debug, Clone, PartialEq)]
     pub enum TrimmingSelect {
         CartesianPoint(Box<CartesianPoint>),
