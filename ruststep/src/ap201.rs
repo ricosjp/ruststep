@@ -3,26 +3,26 @@ pub mod explicit_draughting {
     use crate::primitive::*;
     #[derive(Debug, Clone, PartialEq)]
     pub enum ApprovedItem {
-        DrawingRevision(DrawingRevision),
-        DrawingSheetRevision(DrawingSheetRevision),
+        DrawingRevision(Box<DrawingRevision>),
+        DrawingSheetRevision(Box<DrawingSheetRevision>),
     }
     #[derive(Debug, Clone, PartialEq)]
     pub enum AreaOrView {
-        PresentationArea(PresentationArea),
-        PresentationView(PresentationView),
+        PresentationArea(Box<PresentationArea>),
+        PresentationView(Box<PresentationView>),
     }
     #[derive(Debug, Clone, PartialEq)]
     pub enum Axis2Placement {
-        Axis2Placement2D(Axis2Placement2D),
+        Axis2Placement2D(Box<Axis2Placement2D>),
     }
     #[derive(Debug, Clone, PartialEq)]
     pub struct BSplineCurveForm {}
     #[derive(Debug, Clone, PartialEq)]
     pub enum BoxCharacteristicSelect {
-        BoxHeight(BoxHeight),
-        BoxWidth(BoxWidth),
-        BoxSlantAngle(BoxSlantAngle),
-        BoxRotateAngle(BoxRotateAngle),
+        BoxHeight(Box<BoxHeight>),
+        BoxWidth(Box<BoxWidth>),
+        BoxSlantAngle(Box<BoxSlantAngle>),
+        BoxRotateAngle(Box<BoxRotateAngle>),
     }
     #[derive(Debug, Clone, PartialEq)]
     pub struct BoxHeight(pub PositiveRatioMeasure);
@@ -34,61 +34,61 @@ pub mod explicit_draughting {
     pub struct BoxWidth(pub PositiveRatioMeasure);
     #[derive(Debug, Clone, PartialEq)]
     pub enum CharacterSpacingSelect {
-        LengthMeasure(LengthMeasure),
-        RatioMeasure(RatioMeasure),
-        MeasureWithUnit(MeasureWithUnit),
+        LengthMeasure(Box<LengthMeasure>),
+        RatioMeasure(Box<RatioMeasure>),
+        MeasureWithUnit(Box<MeasureWithUnit>),
     }
     #[derive(Debug, Clone, PartialEq)]
     pub enum CharacterStyleSelect {
-        TextStyleForDefinedFont(TextStyleForDefinedFont),
+        TextStyleForDefinedFont(Box<TextStyleForDefinedFont>),
     }
     #[derive(Debug, Clone, PartialEq)]
     pub enum CharacterizedDefinition {
-        CharacterizedProductDefinition(CharacterizedProductDefinition),
-        ShapeDefinition(ShapeDefinition),
+        CharacterizedProductDefinition(Box<CharacterizedProductDefinition>),
+        ShapeDefinition(Box<ShapeDefinition>),
     }
     #[derive(Debug, Clone, PartialEq)]
     pub enum CharacterizedProductDefinition {
-        ProductDefinition(ProductDefinition),
+        ProductDefinition(Box<ProductDefinition>),
     }
     #[derive(Debug, Clone, PartialEq)]
     pub enum ClassifiedItem {
-        DrawingRevision(DrawingRevision),
-        DrawingSheetRevision(DrawingSheetRevision),
+        DrawingRevision(Box<DrawingRevision>),
+        DrawingSheetRevision(Box<DrawingSheetRevision>),
     }
     #[derive(Debug, Clone, PartialEq)]
     pub enum ContractedItem {
-        DrawingRevision(DrawingRevision),
+        DrawingRevision(Box<DrawingRevision>),
     }
     #[derive(Debug, Clone, PartialEq)]
     pub enum CurveFontOrScaledCurveFontSelect {
-        CurveStyleFontSelect(CurveStyleFontSelect),
+        CurveStyleFontSelect(Box<CurveStyleFontSelect>),
     }
     #[derive(Debug, Clone, PartialEq)]
     pub enum CurveOrAnnotationCurveOccurrence {
-        Curve(Curve),
-        AnnotationCurveOccurrence(AnnotationCurveOccurrence),
+        Curve(Box<Curve>),
+        AnnotationCurveOccurrence(Box<AnnotationCurveOccurrence>),
     }
     #[derive(Debug, Clone, PartialEq)]
     pub enum CurveOrRender {
-        CurveStyle(CurveStyle),
+        CurveStyle(Box<CurveStyle>),
     }
     #[derive(Debug, Clone, PartialEq)]
     pub enum CurveStyleFontSelect {
-        CurveStyleFont(CurveStyleFont),
-        PreDefinedCurveFont(PreDefinedCurveFont),
-        ExternallyDefinedCurveFont(ExternallyDefinedCurveFont),
+        CurveStyleFont(Box<CurveStyleFont>),
+        PreDefinedCurveFont(Box<PreDefinedCurveFont>),
+        ExternallyDefinedCurveFont(Box<ExternallyDefinedCurveFont>),
     }
     #[derive(Debug, Clone, PartialEq)]
     pub enum DateTimeSelect {
-        Date(Date),
+        Date(Box<Date>),
     }
     #[derive(Debug, Clone, PartialEq)]
     pub struct DayInMonthNumber(pub i64);
     #[derive(Debug, Clone, PartialEq)]
     pub enum DefinedSymbolSelect {
-        PreDefinedSymbol(PreDefinedSymbol),
-        ExternallyDefinedSymbol(ExternallyDefinedSymbol),
+        PreDefinedSymbol(Box<PreDefinedSymbol>),
+        ExternallyDefinedSymbol(Box<ExternallyDefinedSymbol>),
     }
     #[derive(Debug, Clone, PartialEq)]
     pub struct DimensionCount(pub i64);
@@ -96,71 +96,71 @@ pub mod explicit_draughting {
     pub struct DimensionExtentUsage {}
     #[derive(Debug, Clone, PartialEq)]
     pub enum DraughtingCalloutElement {
-        AnnotationTextOccurrence(AnnotationTextOccurrence),
-        AnnotationSymbolOccurrence(AnnotationSymbolOccurrence),
-        AnnotationCurveOccurrence(AnnotationCurveOccurrence),
+        AnnotationTextOccurrence(Box<AnnotationTextOccurrence>),
+        AnnotationSymbolOccurrence(Box<AnnotationSymbolOccurrence>),
+        AnnotationCurveOccurrence(Box<AnnotationCurveOccurrence>),
     }
     #[derive(Debug, Clone, PartialEq)]
     pub enum DraughtingGroupedItem {
-        AnnotationOccurrence(AnnotationOccurrence),
-        GeometricSetSelect(GeometricSetSelect),
+        AnnotationOccurrence(Box<AnnotationOccurrence>),
+        GeometricSetSelect(Box<GeometricSetSelect>),
     }
     #[derive(Debug, Clone, PartialEq)]
     pub enum DraughtingOrganizationItem {
-        ProductDefinitionFormation(ProductDefinitionFormation),
-        DrawingRevision(DrawingRevision),
-        DrawingSheetRevision(DrawingSheetRevision),
+        ProductDefinitionFormation(Box<ProductDefinitionFormation>),
+        DrawingRevision(Box<DrawingRevision>),
+        DrawingSheetRevision(Box<DrawingSheetRevision>),
     }
     #[derive(Debug, Clone, PartialEq)]
     pub enum DraughtingPresentedItemSelect {
-        ProductDefinitionFormation(ProductDefinitionFormation),
+        ProductDefinitionFormation(Box<ProductDefinitionFormation>),
     }
     #[derive(Debug, Clone, PartialEq)]
     pub enum DraughtingTitledItem {
-        DrawingRevision(DrawingRevision),
-        DrawingSheetRevision(DrawingSheetRevision),
+        DrawingRevision(Box<DrawingRevision>),
+        DrawingSheetRevision(Box<DrawingSheetRevision>),
     }
     #[derive(Debug, Clone, PartialEq)]
     pub enum FillAreaStyleTileShapeSelect {
-        FillAreaStyleTileSymbolWithStyle(FillAreaStyleTileSymbolWithStyle),
+        FillAreaStyleTileSymbolWithStyle(Box<FillAreaStyleTileSymbolWithStyle>),
     }
     #[derive(Debug, Clone, PartialEq)]
     pub enum FillStyleSelect {
-        FillAreaStyleColour(FillAreaStyleColour),
-        ExternallyDefinedTileStyle(ExternallyDefinedTileStyle),
-        FillAreaStyleTiles(FillAreaStyleTiles),
-        ExternallyDefinedHatchStyle(ExternallyDefinedHatchStyle),
-        FillAreaStyleHatching(FillAreaStyleHatching),
+        FillAreaStyleColour(Box<FillAreaStyleColour>),
+        ExternallyDefinedTileStyle(Box<ExternallyDefinedTileStyle>),
+        FillAreaStyleTiles(Box<FillAreaStyleTiles>),
+        ExternallyDefinedHatchStyle(Box<ExternallyDefinedHatchStyle>),
+        FillAreaStyleHatching(Box<FillAreaStyleHatching>),
     }
     #[derive(Debug, Clone, PartialEq)]
     pub enum FontSelect {
-        PreDefinedTextFont(PreDefinedTextFont),
-        ExternallyDefinedTextFont(ExternallyDefinedTextFont),
+        PreDefinedTextFont(Box<PreDefinedTextFont>),
+        ExternallyDefinedTextFont(Box<ExternallyDefinedTextFont>),
     }
     #[derive(Debug, Clone, PartialEq)]
     pub enum GeometricSetSelect {
-        Point(Point),
-        Curve(Curve),
+        Point(Box<Point>),
+        Curve(Box<Curve>),
     }
     #[derive(Debug, Clone, PartialEq)]
     pub enum HidingOrBlankingSelect {
-        PresentationArea(PresentationArea),
-        PresentationView(PresentationView),
-        AnnotationFillArea(AnnotationFillArea),
+        PresentationArea(Box<PresentationArea>),
+        PresentationView(Box<PresentationView>),
+        AnnotationFillArea(Box<AnnotationFillArea>),
     }
     #[derive(Debug, Clone, PartialEq)]
     pub struct Identifier(pub String);
     #[derive(Debug, Clone, PartialEq)]
     pub enum InvisibilityContext {
-        PresentationLayerUsage(PresentationLayerUsage),
-        PresentationRepresentation(PresentationRepresentation),
-        PresentationSet(PresentationSet),
+        PresentationLayerUsage(Box<PresentationLayerUsage>),
+        PresentationRepresentation(Box<PresentationRepresentation>),
+        PresentationSet(Box<PresentationSet>),
     }
     #[derive(Debug, Clone, PartialEq)]
     pub enum InvisibleItem {
-        StyledItem(StyledItem),
-        PresentationLayerAssignment(PresentationLayerAssignment),
-        PresentationRepresentation(PresentationRepresentation),
+        StyledItem(Box<StyledItem>),
+        PresentationLayerAssignment(Box<PresentationLayerAssignment>),
+        PresentationRepresentation(Box<PresentationRepresentation>),
     }
     #[derive(Debug, Clone, PartialEq)]
     pub struct KnotType {}
@@ -168,19 +168,19 @@ pub mod explicit_draughting {
     pub struct Label(pub String);
     #[derive(Debug, Clone, PartialEq)]
     pub enum LayeredItem {
-        PresentationRepresentation(PresentationRepresentation),
-        RepresentationItem(RepresentationItem),
+        PresentationRepresentation(Box<PresentationRepresentation>),
+        RepresentationItem(Box<RepresentationItem>),
     }
     #[derive(Debug, Clone, PartialEq)]
     pub struct LengthMeasure(pub f64);
     #[derive(Debug, Clone, PartialEq)]
     pub enum MeasureValue {
-        LengthMeasure(LengthMeasure),
-        PlaneAngleMeasure(PlaneAngleMeasure),
-        RatioMeasure(RatioMeasure),
-        ParameterValue(ParameterValue),
-        PositiveLengthMeasure(PositiveLengthMeasure),
-        PositiveRatioMeasure(PositiveRatioMeasure),
+        LengthMeasure(Box<LengthMeasure>),
+        PlaneAngleMeasure(Box<PlaneAngleMeasure>),
+        RatioMeasure(Box<RatioMeasure>),
+        ParameterValue(Box<ParameterValue>),
+        PositiveLengthMeasure(Box<PositiveLengthMeasure>),
+        PositiveRatioMeasure(Box<PositiveRatioMeasure>),
     }
     #[derive(Debug, Clone, PartialEq)]
     pub struct MonthInYearNumber(pub i64);
@@ -190,9 +190,9 @@ pub mod explicit_draughting {
     pub struct ParameterValue(pub f64);
     #[derive(Debug, Clone, PartialEq)]
     pub enum PersonOrganizationSelect {
-        Person(Person),
-        Organization(Organization),
-        PersonAndOrganization(PersonAndOrganization),
+        Person(Box<Person>),
+        Organization(Box<Organization>),
+        PersonAndOrganization(Box<PersonAndOrganization>),
     }
     #[derive(Debug, Clone, PartialEq)]
     pub struct PlaneAngleMeasure(pub f64);
@@ -204,28 +204,28 @@ pub mod explicit_draughting {
     pub struct PresentableText(pub String);
     #[derive(Debug, Clone, PartialEq)]
     pub enum PresentationRepresentationSelect {
-        PresentationRepresentation(PresentationRepresentation),
-        PresentationSet(PresentationSet),
+        PresentationRepresentation(Box<PresentationRepresentation>),
+        PresentationSet(Box<PresentationSet>),
     }
     #[derive(Debug, Clone, PartialEq)]
     pub enum PresentationSizeAssignmentSelect {
-        PresentationView(PresentationView),
-        PresentationArea(PresentationArea),
-        AreaInSet(AreaInSet),
+        PresentationView(Box<PresentationView>),
+        PresentationArea(Box<PresentationArea>),
+        AreaInSet(Box<AreaInSet>),
     }
     #[derive(Debug, Clone, PartialEq)]
     pub enum PresentationStyleSelect {
-        CurveStyle(CurveStyle),
-        SymbolStyle(SymbolStyle),
-        FillAreaStyle(FillAreaStyle),
-        TextStyle(TextStyle),
-        NullStyle(NullStyle),
+        CurveStyle(Box<CurveStyle>),
+        SymbolStyle(Box<SymbolStyle>),
+        FillAreaStyle(Box<FillAreaStyle>),
+        TextStyle(Box<TextStyle>),
+        NullStyle(Box<NullStyle>),
     }
     #[derive(Debug, Clone, PartialEq)]
     pub struct RatioMeasure(pub f64);
     #[derive(Debug, Clone, PartialEq)]
     pub enum ShapeDefinition {
-        ProductDefinitionShape(ProductDefinitionShape),
+        ProductDefinitionShape(Box<ProductDefinitionShape>),
     }
     #[derive(Debug, Clone, PartialEq)]
     pub struct SiPrefix {}
@@ -233,26 +233,26 @@ pub mod explicit_draughting {
     pub struct SiUnitName {}
     #[derive(Debug, Clone, PartialEq)]
     pub enum SizeSelect {
-        PositiveLengthMeasure(PositiveLengthMeasure),
-        MeasureWithUnit(MeasureWithUnit),
+        PositiveLengthMeasure(Box<PositiveLengthMeasure>),
+        MeasureWithUnit(Box<MeasureWithUnit>),
     }
     #[derive(Debug, Clone, PartialEq)]
     pub enum SourceItem {
-        Identifier(Identifier),
+        Identifier(Box<Identifier>),
     }
     #[derive(Debug, Clone, PartialEq)]
     pub enum SpecifiedItem {
-        DrawingRevision(DrawingRevision),
+        DrawingRevision(Box<DrawingRevision>),
     }
     #[derive(Debug, Clone, PartialEq)]
     pub enum StyleContextSelect {
-        Representation(Representation),
-        RepresentationItem(RepresentationItem),
-        PresentationSet(PresentationSet),
+        Representation(Box<Representation>),
+        RepresentationItem(Box<RepresentationItem>),
+        PresentationSet(Box<PresentationSet>),
     }
     #[derive(Debug, Clone, PartialEq)]
     pub enum SymbolStyleSelect {
-        SymbolColour(SymbolColour),
+        SymbolColour(Box<SymbolColour>),
     }
     #[derive(Debug, Clone, PartialEq)]
     pub struct Text(pub String);
@@ -262,9 +262,9 @@ pub mod explicit_draughting {
     pub struct TextDelineation(pub Label);
     #[derive(Debug, Clone, PartialEq)]
     pub enum TextOrCharacter {
-        AnnotationText(AnnotationText),
-        CompositeText(CompositeText),
-        TextLiteral(TextLiteral),
+        AnnotationText(Box<AnnotationText>),
+        CompositeText(Box<CompositeText>),
+        TextLiteral(Box<TextLiteral>),
     }
     #[derive(Debug, Clone, PartialEq)]
     pub struct TextPath {}
@@ -274,17 +274,17 @@ pub mod explicit_draughting {
     pub struct TrimmingPreference {}
     #[derive(Debug, Clone, PartialEq)]
     pub enum TrimmingSelect {
-        CartesianPoint(CartesianPoint),
-        ParameterValue(ParameterValue),
+        CartesianPoint(Box<CartesianPoint>),
+        ParameterValue(Box<ParameterValue>),
     }
     #[derive(Debug, Clone, PartialEq)]
     pub enum Unit {
-        NamedUnit(NamedUnit),
+        NamedUnit(Box<NamedUnit>),
     }
     #[derive(Debug, Clone, PartialEq)]
     pub enum VectorOrDirection {
-        Vector(Vector),
-        Direction(Direction),
+        Vector(Box<Vector>),
+        Direction(Box<Direction>),
     }
     #[derive(Debug, Clone, PartialEq)]
     pub struct YearNumber(pub i64);

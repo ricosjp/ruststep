@@ -64,7 +64,7 @@ impl ToTokens for TypeDecl {
             UnderlyingType::Select(types) => tokens.append_all(quote! {
                 #[derive(Debug, Clone, PartialEq)]
                 pub enum #id {
-                    #(#types(#types)),*
+                    #(#types(Box<#types>)),*
                 }
             }),
             _ => tokens.append_all(quote! {
