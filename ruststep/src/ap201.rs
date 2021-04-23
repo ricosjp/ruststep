@@ -12,13 +12,13 @@ pub mod explicit_draughting {
     #[derive(Debug, Clone, PartialEq)]
     pub struct BoxCharacteristicSelect {}
     #[derive(Debug, Clone, PartialEq)]
-    pub struct BoxHeight {}
+    pub struct BoxHeight(pub PositiveRatioMeasure);
     #[derive(Debug, Clone, PartialEq)]
-    pub struct BoxRotateAngle {}
+    pub struct BoxRotateAngle(pub PlaneAngleMeasure);
     #[derive(Debug, Clone, PartialEq)]
-    pub struct BoxSlantAngle {}
+    pub struct BoxSlantAngle(pub PlaneAngleMeasure);
     #[derive(Debug, Clone, PartialEq)]
-    pub struct BoxWidth {}
+    pub struct BoxWidth(pub PositiveRatioMeasure);
     #[derive(Debug, Clone, PartialEq)]
     pub struct CharacterSpacingSelect {}
     #[derive(Debug, Clone, PartialEq)]
@@ -96,9 +96,9 @@ pub mod explicit_draughting {
     #[derive(Debug, Clone, PartialEq)]
     pub struct PlaneAngleMeasure(pub f64);
     #[derive(Debug, Clone, PartialEq)]
-    pub struct PositiveLengthMeasure {}
+    pub struct PositiveLengthMeasure(pub LengthMeasure);
     #[derive(Debug, Clone, PartialEq)]
-    pub struct PositiveRatioMeasure {}
+    pub struct PositiveRatioMeasure(pub RatioMeasure);
     #[derive(Debug, Clone, PartialEq)]
     pub struct PresentableText(pub String);
     #[derive(Debug, Clone, PartialEq)]
@@ -128,9 +128,9 @@ pub mod explicit_draughting {
     #[derive(Debug, Clone, PartialEq)]
     pub struct Text(pub String);
     #[derive(Debug, Clone, PartialEq)]
-    pub struct TextAlignment {}
+    pub struct TextAlignment(pub Label);
     #[derive(Debug, Clone, PartialEq)]
-    pub struct TextDelineation {}
+    pub struct TextDelineation(pub Label);
     #[derive(Debug, Clone, PartialEq)]
     pub struct TextOrCharacter {}
     #[derive(Debug, Clone, PartialEq)]
