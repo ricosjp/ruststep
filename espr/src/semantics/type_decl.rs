@@ -6,6 +6,7 @@ use inflector::Inflector;
 pub enum UnderlyingType {
     Simple(TypeRef),
     Reference(TypeRef),
+    Select(Vec<TypeRef>),
     // FIXME
     Unsupported,
 }
@@ -19,6 +20,11 @@ impl Legalize for UnderlyingType {
             }
             ast::types::UnderlyingType::Reference(name) => {
                 UnderlyingType::Reference(ns.lookup_type(scope, name)?)
+            }
+            ast::types::UnderlyingType::Select { types, .. } => {
+                let refs: Result<Vec<TypeRef>, _> =
+                    types.iter().map(|ty| ns.lookup_type(scope, ty)).collect();
+                UnderlyingType::Select(refs?)
             }
             _ => UnderlyingType::Unsupported,
         };
@@ -55,6 +61,12 @@ impl ToTokens for TypeDecl {
                     #[derive(Debug, Clone, PartialEq)]
                     pub struct #id(pub #type_ref);
                 }),
+            UnderlyingType::Select(types) => tokens.append_all(quote! {
+                #[derive(Debug, Clone, PartialEq)]
+                pub enum #id {
+                    #(#types(#types)),*
+                }
+            }),
             _ => tokens.append_all(quote! {
                 #[derive(Debug, Clone, PartialEq)]
                 pub struct #id {}

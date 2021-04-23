@@ -2,15 +2,28 @@
 pub mod explicit_draughting {
     use crate::primitive::*;
     #[derive(Debug, Clone, PartialEq)]
-    pub struct ApprovedItem {}
+    pub enum ApprovedItem {
+        DrawingRevision(DrawingRevision),
+        DrawingSheetRevision(DrawingSheetRevision),
+    }
     #[derive(Debug, Clone, PartialEq)]
-    pub struct AreaOrView {}
+    pub enum AreaOrView {
+        PresentationArea(PresentationArea),
+        PresentationView(PresentationView),
+    }
     #[derive(Debug, Clone, PartialEq)]
-    pub struct Axis2Placement {}
+    pub enum Axis2Placement {
+        Axis2Placement2D(Axis2Placement2D),
+    }
     #[derive(Debug, Clone, PartialEq)]
     pub struct BSplineCurveForm {}
     #[derive(Debug, Clone, PartialEq)]
-    pub struct BoxCharacteristicSelect {}
+    pub enum BoxCharacteristicSelect {
+        BoxHeight(BoxHeight),
+        BoxWidth(BoxWidth),
+        BoxSlantAngle(BoxSlantAngle),
+        BoxRotateAngle(BoxRotateAngle),
+    }
     #[derive(Debug, Clone, PartialEq)]
     pub struct BoxHeight(pub PositiveRatioMeasure);
     #[derive(Debug, Clone, PartialEq)]
@@ -20,71 +33,155 @@ pub mod explicit_draughting {
     #[derive(Debug, Clone, PartialEq)]
     pub struct BoxWidth(pub PositiveRatioMeasure);
     #[derive(Debug, Clone, PartialEq)]
-    pub struct CharacterSpacingSelect {}
+    pub enum CharacterSpacingSelect {
+        LengthMeasure(LengthMeasure),
+        RatioMeasure(RatioMeasure),
+        MeasureWithUnit(MeasureWithUnit),
+    }
     #[derive(Debug, Clone, PartialEq)]
-    pub struct CharacterStyleSelect {}
+    pub enum CharacterStyleSelect {
+        TextStyleForDefinedFont(TextStyleForDefinedFont),
+    }
     #[derive(Debug, Clone, PartialEq)]
-    pub struct CharacterizedDefinition {}
+    pub enum CharacterizedDefinition {
+        CharacterizedProductDefinition(CharacterizedProductDefinition),
+        ShapeDefinition(ShapeDefinition),
+    }
     #[derive(Debug, Clone, PartialEq)]
-    pub struct CharacterizedProductDefinition {}
+    pub enum CharacterizedProductDefinition {
+        ProductDefinition(ProductDefinition),
+    }
     #[derive(Debug, Clone, PartialEq)]
-    pub struct ClassifiedItem {}
+    pub enum ClassifiedItem {
+        DrawingRevision(DrawingRevision),
+        DrawingSheetRevision(DrawingSheetRevision),
+    }
     #[derive(Debug, Clone, PartialEq)]
-    pub struct ContractedItem {}
+    pub enum ContractedItem {
+        DrawingRevision(DrawingRevision),
+    }
     #[derive(Debug, Clone, PartialEq)]
-    pub struct CurveFontOrScaledCurveFontSelect {}
+    pub enum CurveFontOrScaledCurveFontSelect {
+        CurveStyleFontSelect(CurveStyleFontSelect),
+    }
     #[derive(Debug, Clone, PartialEq)]
-    pub struct CurveOrAnnotationCurveOccurrence {}
+    pub enum CurveOrAnnotationCurveOccurrence {
+        Curve(Curve),
+        AnnotationCurveOccurrence(AnnotationCurveOccurrence),
+    }
     #[derive(Debug, Clone, PartialEq)]
-    pub struct CurveOrRender {}
+    pub enum CurveOrRender {
+        CurveStyle(CurveStyle),
+    }
     #[derive(Debug, Clone, PartialEq)]
-    pub struct CurveStyleFontSelect {}
+    pub enum CurveStyleFontSelect {
+        CurveStyleFont(CurveStyleFont),
+        PreDefinedCurveFont(PreDefinedCurveFont),
+        ExternallyDefinedCurveFont(ExternallyDefinedCurveFont),
+    }
     #[derive(Debug, Clone, PartialEq)]
-    pub struct DateTimeSelect {}
+    pub enum DateTimeSelect {
+        Date(Date),
+    }
     #[derive(Debug, Clone, PartialEq)]
     pub struct DayInMonthNumber(pub i64);
     #[derive(Debug, Clone, PartialEq)]
-    pub struct DefinedSymbolSelect {}
+    pub enum DefinedSymbolSelect {
+        PreDefinedSymbol(PreDefinedSymbol),
+        ExternallyDefinedSymbol(ExternallyDefinedSymbol),
+    }
     #[derive(Debug, Clone, PartialEq)]
     pub struct DimensionCount(pub i64);
     #[derive(Debug, Clone, PartialEq)]
     pub struct DimensionExtentUsage {}
     #[derive(Debug, Clone, PartialEq)]
-    pub struct DraughtingCalloutElement {}
+    pub enum DraughtingCalloutElement {
+        AnnotationTextOccurrence(AnnotationTextOccurrence),
+        AnnotationSymbolOccurrence(AnnotationSymbolOccurrence),
+        AnnotationCurveOccurrence(AnnotationCurveOccurrence),
+    }
     #[derive(Debug, Clone, PartialEq)]
-    pub struct DraughtingGroupedItem {}
+    pub enum DraughtingGroupedItem {
+        AnnotationOccurrence(AnnotationOccurrence),
+        GeometricSetSelect(GeometricSetSelect),
+    }
     #[derive(Debug, Clone, PartialEq)]
-    pub struct DraughtingOrganizationItem {}
+    pub enum DraughtingOrganizationItem {
+        ProductDefinitionFormation(ProductDefinitionFormation),
+        DrawingRevision(DrawingRevision),
+        DrawingSheetRevision(DrawingSheetRevision),
+    }
     #[derive(Debug, Clone, PartialEq)]
-    pub struct DraughtingPresentedItemSelect {}
+    pub enum DraughtingPresentedItemSelect {
+        ProductDefinitionFormation(ProductDefinitionFormation),
+    }
     #[derive(Debug, Clone, PartialEq)]
-    pub struct DraughtingTitledItem {}
+    pub enum DraughtingTitledItem {
+        DrawingRevision(DrawingRevision),
+        DrawingSheetRevision(DrawingSheetRevision),
+    }
     #[derive(Debug, Clone, PartialEq)]
-    pub struct FillAreaStyleTileShapeSelect {}
+    pub enum FillAreaStyleTileShapeSelect {
+        FillAreaStyleTileSymbolWithStyle(FillAreaStyleTileSymbolWithStyle),
+    }
     #[derive(Debug, Clone, PartialEq)]
-    pub struct FillStyleSelect {}
+    pub enum FillStyleSelect {
+        FillAreaStyleColour(FillAreaStyleColour),
+        ExternallyDefinedTileStyle(ExternallyDefinedTileStyle),
+        FillAreaStyleTiles(FillAreaStyleTiles),
+        ExternallyDefinedHatchStyle(ExternallyDefinedHatchStyle),
+        FillAreaStyleHatching(FillAreaStyleHatching),
+    }
     #[derive(Debug, Clone, PartialEq)]
-    pub struct FontSelect {}
+    pub enum FontSelect {
+        PreDefinedTextFont(PreDefinedTextFont),
+        ExternallyDefinedTextFont(ExternallyDefinedTextFont),
+    }
     #[derive(Debug, Clone, PartialEq)]
-    pub struct GeometricSetSelect {}
+    pub enum GeometricSetSelect {
+        Point(Point),
+        Curve(Curve),
+    }
     #[derive(Debug, Clone, PartialEq)]
-    pub struct HidingOrBlankingSelect {}
+    pub enum HidingOrBlankingSelect {
+        PresentationArea(PresentationArea),
+        PresentationView(PresentationView),
+        AnnotationFillArea(AnnotationFillArea),
+    }
     #[derive(Debug, Clone, PartialEq)]
     pub struct Identifier(pub String);
     #[derive(Debug, Clone, PartialEq)]
-    pub struct InvisibilityContext {}
+    pub enum InvisibilityContext {
+        PresentationLayerUsage(PresentationLayerUsage),
+        PresentationRepresentation(PresentationRepresentation),
+        PresentationSet(PresentationSet),
+    }
     #[derive(Debug, Clone, PartialEq)]
-    pub struct InvisibleItem {}
+    pub enum InvisibleItem {
+        StyledItem(StyledItem),
+        PresentationLayerAssignment(PresentationLayerAssignment),
+        PresentationRepresentation(PresentationRepresentation),
+    }
     #[derive(Debug, Clone, PartialEq)]
     pub struct KnotType {}
     #[derive(Debug, Clone, PartialEq)]
     pub struct Label(pub String);
     #[derive(Debug, Clone, PartialEq)]
-    pub struct LayeredItem {}
+    pub enum LayeredItem {
+        PresentationRepresentation(PresentationRepresentation),
+        RepresentationItem(RepresentationItem),
+    }
     #[derive(Debug, Clone, PartialEq)]
     pub struct LengthMeasure(pub f64);
     #[derive(Debug, Clone, PartialEq)]
-    pub struct MeasureValue {}
+    pub enum MeasureValue {
+        LengthMeasure(LengthMeasure),
+        PlaneAngleMeasure(PlaneAngleMeasure),
+        RatioMeasure(RatioMeasure),
+        ParameterValue(ParameterValue),
+        PositiveLengthMeasure(PositiveLengthMeasure),
+        PositiveRatioMeasure(PositiveRatioMeasure),
+    }
     #[derive(Debug, Clone, PartialEq)]
     pub struct MonthInYearNumber(pub i64);
     #[derive(Debug, Clone, PartialEq)]
@@ -92,7 +189,11 @@ pub mod explicit_draughting {
     #[derive(Debug, Clone, PartialEq)]
     pub struct ParameterValue(pub f64);
     #[derive(Debug, Clone, PartialEq)]
-    pub struct PersonOrganizationSelect {}
+    pub enum PersonOrganizationSelect {
+        Person(Person),
+        Organization(Organization),
+        PersonAndOrganization(PersonAndOrganization),
+    }
     #[derive(Debug, Clone, PartialEq)]
     pub struct PlaneAngleMeasure(pub f64);
     #[derive(Debug, Clone, PartialEq)]
@@ -102,29 +203,57 @@ pub mod explicit_draughting {
     #[derive(Debug, Clone, PartialEq)]
     pub struct PresentableText(pub String);
     #[derive(Debug, Clone, PartialEq)]
-    pub struct PresentationRepresentationSelect {}
+    pub enum PresentationRepresentationSelect {
+        PresentationRepresentation(PresentationRepresentation),
+        PresentationSet(PresentationSet),
+    }
     #[derive(Debug, Clone, PartialEq)]
-    pub struct PresentationSizeAssignmentSelect {}
+    pub enum PresentationSizeAssignmentSelect {
+        PresentationView(PresentationView),
+        PresentationArea(PresentationArea),
+        AreaInSet(AreaInSet),
+    }
     #[derive(Debug, Clone, PartialEq)]
-    pub struct PresentationStyleSelect {}
+    pub enum PresentationStyleSelect {
+        CurveStyle(CurveStyle),
+        SymbolStyle(SymbolStyle),
+        FillAreaStyle(FillAreaStyle),
+        TextStyle(TextStyle),
+        NullStyle(NullStyle),
+    }
     #[derive(Debug, Clone, PartialEq)]
     pub struct RatioMeasure(pub f64);
     #[derive(Debug, Clone, PartialEq)]
-    pub struct ShapeDefinition {}
+    pub enum ShapeDefinition {
+        ProductDefinitionShape(ProductDefinitionShape),
+    }
     #[derive(Debug, Clone, PartialEq)]
     pub struct SiPrefix {}
     #[derive(Debug, Clone, PartialEq)]
     pub struct SiUnitName {}
     #[derive(Debug, Clone, PartialEq)]
-    pub struct SizeSelect {}
+    pub enum SizeSelect {
+        PositiveLengthMeasure(PositiveLengthMeasure),
+        MeasureWithUnit(MeasureWithUnit),
+    }
     #[derive(Debug, Clone, PartialEq)]
-    pub struct SourceItem {}
+    pub enum SourceItem {
+        Identifier(Identifier),
+    }
     #[derive(Debug, Clone, PartialEq)]
-    pub struct SpecifiedItem {}
+    pub enum SpecifiedItem {
+        DrawingRevision(DrawingRevision),
+    }
     #[derive(Debug, Clone, PartialEq)]
-    pub struct StyleContextSelect {}
+    pub enum StyleContextSelect {
+        Representation(Representation),
+        RepresentationItem(RepresentationItem),
+        PresentationSet(PresentationSet),
+    }
     #[derive(Debug, Clone, PartialEq)]
-    pub struct SymbolStyleSelect {}
+    pub enum SymbolStyleSelect {
+        SymbolColour(SymbolColour),
+    }
     #[derive(Debug, Clone, PartialEq)]
     pub struct Text(pub String);
     #[derive(Debug, Clone, PartialEq)]
@@ -132,7 +261,11 @@ pub mod explicit_draughting {
     #[derive(Debug, Clone, PartialEq)]
     pub struct TextDelineation(pub Label);
     #[derive(Debug, Clone, PartialEq)]
-    pub struct TextOrCharacter {}
+    pub enum TextOrCharacter {
+        AnnotationText(AnnotationText),
+        CompositeText(CompositeText),
+        TextLiteral(TextLiteral),
+    }
     #[derive(Debug, Clone, PartialEq)]
     pub struct TextPath {}
     #[derive(Debug, Clone, PartialEq)]
@@ -140,11 +273,19 @@ pub mod explicit_draughting {
     #[derive(Debug, Clone, PartialEq)]
     pub struct TrimmingPreference {}
     #[derive(Debug, Clone, PartialEq)]
-    pub struct TrimmingSelect {}
+    pub enum TrimmingSelect {
+        CartesianPoint(CartesianPoint),
+        ParameterValue(ParameterValue),
+    }
     #[derive(Debug, Clone, PartialEq)]
-    pub struct Unit {}
+    pub enum Unit {
+        NamedUnit(NamedUnit),
+    }
     #[derive(Debug, Clone, PartialEq)]
-    pub struct VectorOrDirection {}
+    pub enum VectorOrDirection {
+        Vector(Vector),
+        Direction(Direction),
+    }
     #[derive(Debug, Clone, PartialEq)]
     pub struct YearNumber(pub i64);
     #[derive(Clone, Debug, PartialEq)]
