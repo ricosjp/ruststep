@@ -8,8 +8,6 @@ pub enum UnderlyingType {
     Reference(TypeRef),
     Enumeration(Vec<String>),
     Select(Vec<TypeRef>),
-    // FIXME
-    Unsupported,
 }
 
 impl Legalize for UnderlyingType {
@@ -23,14 +21,16 @@ impl Legalize for UnderlyingType {
                 UnderlyingType::Reference(ns.lookup_type(scope, name)?)
             }
             ast::types::UnderlyingType::Enumeration { items, .. } => {
+                // FIXME extensibility
                 UnderlyingType::Enumeration(items.clone())
             }
             ast::types::UnderlyingType::Select { types, .. } => {
+                // FIXME extensibility
                 let refs: Result<Vec<TypeRef>, _> =
                     types.iter().map(|ty| ns.lookup_type(scope, ty)).collect();
                 UnderlyingType::Select(refs?)
             }
-            _ => UnderlyingType::Unsupported,
+            _ => unimplemented!(),
         };
         Ok(underlying_type)
     }
@@ -83,13 +83,6 @@ impl ToTokens for TypeDecl {
                     #(#types(Box<#types>)),*
                 }
             }),
-            _ => {
-                dbg!(&self);
-                tokens.append_all(quote! {
-                    #[derive(Debug, Clone, PartialEq)]
-                    pub struct #id {}
-                });
-            }
         }
     }
 }
