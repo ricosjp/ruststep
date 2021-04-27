@@ -31,14 +31,10 @@ pub mod explicit_draughting {
         BoxSlantAngle(Box<BoxSlantAngle>),
         BoxRotateAngle(Box<BoxRotateAngle>),
     }
-    #[derive(Debug, Clone, PartialEq)]
-    pub struct BoxHeight(pub PositiveRatioMeasure);
-    #[derive(Debug, Clone, PartialEq)]
-    pub struct BoxRotateAngle(pub PlaneAngleMeasure);
-    #[derive(Debug, Clone, PartialEq)]
-    pub struct BoxSlantAngle(pub PlaneAngleMeasure);
-    #[derive(Debug, Clone, PartialEq)]
-    pub struct BoxWidth(pub PositiveRatioMeasure);
+    pub type BoxHeight = PositiveRatioMeasure;
+    pub type BoxRotateAngle = PlaneAngleMeasure;
+    pub type BoxSlantAngle = PlaneAngleMeasure;
+    pub type BoxWidth = PositiveRatioMeasure;
     #[derive(Debug, Clone, PartialEq)]
     pub enum CharacterSpacingSelect {
         LengthMeasure(Box<LengthMeasure>),
@@ -90,15 +86,13 @@ pub mod explicit_draughting {
     pub enum DateTimeSelect {
         Date(Box<Date>),
     }
-    #[derive(Debug, Clone, PartialEq)]
-    pub struct DayInMonthNumber(pub i64);
+    pub type DayInMonthNumber = i64;
     #[derive(Debug, Clone, PartialEq)]
     pub enum DefinedSymbolSelect {
         PreDefinedSymbol(Box<PreDefinedSymbol>),
         ExternallyDefinedSymbol(Box<ExternallyDefinedSymbol>),
     }
-    #[derive(Debug, Clone, PartialEq)]
-    pub struct DimensionCount(pub i64);
+    pub type DimensionCount = i64;
     #[derive(Debug, Clone, PartialEq)]
     pub enum DimensionExtentUsage {
         Origin,
@@ -158,8 +152,7 @@ pub mod explicit_draughting {
         PresentationView(Box<PresentationView>),
         AnnotationFillArea(Box<AnnotationFillArea>),
     }
-    #[derive(Debug, Clone, PartialEq)]
-    pub struct Identifier(pub String);
+    pub type Identifier = String;
     #[derive(Debug, Clone, PartialEq)]
     pub enum InvisibilityContext {
         PresentationLayerUsage(Box<PresentationLayerUsage>),
@@ -179,15 +172,13 @@ pub mod explicit_draughting {
         PiecewiseBezierKnots,
         Unspecified,
     }
-    #[derive(Debug, Clone, PartialEq)]
-    pub struct Label(pub String);
+    pub type Label = String;
     #[derive(Debug, Clone, PartialEq)]
     pub enum LayeredItem {
         PresentationRepresentation(Box<PresentationRepresentation>),
         RepresentationItem(Box<RepresentationItem>),
     }
-    #[derive(Debug, Clone, PartialEq)]
-    pub struct LengthMeasure(pub f64);
+    pub type LengthMeasure = f64;
     #[derive(Debug, Clone, PartialEq)]
     pub enum MeasureValue {
         LengthMeasure(Box<LengthMeasure>),
@@ -197,28 +188,22 @@ pub mod explicit_draughting {
         PositiveLengthMeasure(Box<PositiveLengthMeasure>),
         PositiveRatioMeasure(Box<PositiveRatioMeasure>),
     }
-    #[derive(Debug, Clone, PartialEq)]
-    pub struct MonthInYearNumber(pub i64);
+    pub type MonthInYearNumber = i64;
     #[derive(Debug, Clone, PartialEq)]
     pub enum NullStyle {
         Null,
     }
-    #[derive(Debug, Clone, PartialEq)]
-    pub struct ParameterValue(pub f64);
+    pub type ParameterValue = f64;
     #[derive(Debug, Clone, PartialEq)]
     pub enum PersonOrganizationSelect {
         Person(Box<Person>),
         Organization(Box<Organization>),
         PersonAndOrganization(Box<PersonAndOrganization>),
     }
-    #[derive(Debug, Clone, PartialEq)]
-    pub struct PlaneAngleMeasure(pub f64);
-    #[derive(Debug, Clone, PartialEq)]
-    pub struct PositiveLengthMeasure(pub LengthMeasure);
-    #[derive(Debug, Clone, PartialEq)]
-    pub struct PositiveRatioMeasure(pub RatioMeasure);
-    #[derive(Debug, Clone, PartialEq)]
-    pub struct PresentableText(pub String);
+    pub type PlaneAngleMeasure = f64;
+    pub type PositiveLengthMeasure = LengthMeasure;
+    pub type PositiveRatioMeasure = RatioMeasure;
+    pub type PresentableText = String;
     #[derive(Debug, Clone, PartialEq)]
     pub enum PresentationRepresentationSelect {
         PresentationRepresentation(Box<PresentationRepresentation>),
@@ -238,8 +223,7 @@ pub mod explicit_draughting {
         TextStyle(Box<TextStyle>),
         NullStyle(Box<NullStyle>),
     }
-    #[derive(Debug, Clone, PartialEq)]
-    pub struct RatioMeasure(pub f64);
+    pub type RatioMeasure = f64;
     #[derive(Debug, Clone, PartialEq)]
     pub enum ShapeDefinition {
         ProductDefinitionShape(Box<ProductDefinitionShape>),
@@ -317,12 +301,9 @@ pub mod explicit_draughting {
     pub enum SymbolStyleSelect {
         SymbolColour(Box<SymbolColour>),
     }
-    #[derive(Debug, Clone, PartialEq)]
-    pub struct Text(pub String);
-    #[derive(Debug, Clone, PartialEq)]
-    pub struct TextAlignment(pub Label);
-    #[derive(Debug, Clone, PartialEq)]
-    pub struct TextDelineation(pub Label);
+    pub type Text = String;
+    pub type TextAlignment = Label;
+    pub type TextDelineation = Label;
     #[derive(Debug, Clone, PartialEq)]
     pub enum TextOrCharacter {
         AnnotationText(Box<AnnotationText>),
@@ -363,8 +344,7 @@ pub mod explicit_draughting {
         Vector(Box<Vector>),
         Direction(Box<Direction>),
     }
-    #[derive(Debug, Clone, PartialEq)]
-    pub struct YearNumber(pub i64);
+    pub type YearNumber = i64;
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Address {
         pub internal_location: Option<Label>,
