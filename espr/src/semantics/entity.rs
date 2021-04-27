@@ -90,17 +90,11 @@ impl ToTokens for Entity {
             .collect();
 
         tokens.append_all(quote! {
-            #[derive(Clone, Debug, PartialEq)]
+            #[derive(Clone, Debug, PartialEq, derive_new::new)]
             pub struct #name {
                 #(
                 #attr_name : #attr_type,
                 )*
-            }
-
-            impl #name {
-                pub fn new(#(#attr_name : #attr_type),*) -> Self {
-                    Self { #(#attr_name),* }
-                }
             }
         })
     }
