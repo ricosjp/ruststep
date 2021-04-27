@@ -1,4 +1,5 @@
-use super::{namespace::*, scope::*, *};
+use super::{namespace::*, scope::*, type_ref::*, *};
+use crate::ast;
 use inflector::Inflector;
 use proc_macro2::TokenStream;
 use quote::*;
@@ -17,17 +18,12 @@ pub struct EntityAttribute {
 }
 
 impl Legalize for EntityAttribute {
-    type Input = crate::ast::entity::EntityAttribute;
+    type Input = ast::entity::EntityAttribute;
 
     fn legalize(ns: &Namespace, scope: &Scope, attr: &Self::Input) -> Result<Self, SemanticError> {
-        use crate::ast::types::ParameterType::*;
-        let ty = match &attr.ty {
-            Named(name) => ns.lookup_type(scope, name)?,
-            Simple(ty) => namespace::TypeRef::SimpleType(*ty),
-            _ => unimplemented!(),
-        };
+        let ty = TypeRef::legalize(ns, scope, &attr.ty)?;
         let name = match &attr.name {
-            crate::ast::entity::AttributeDecl::Reference(name) => name.clone(),
+            ast::entity::AttributeDecl::Reference(name) => name.clone(),
             _ => unimplemented!(),
         };
         Ok(EntityAttribute {
@@ -39,7 +35,7 @@ impl Legalize for EntityAttribute {
 }
 
 impl Legalize for Entity {
-    type Input = crate::ast::entity::Entity;
+    type Input = ast::entity::Entity;
 
     fn legalize(
         ns: &Namespace,

@@ -4,10 +4,13 @@ pub mod entity;
 pub mod namespace;
 pub mod schema;
 pub mod scope;
+pub mod type_decl;
+pub mod type_ref;
 
 use namespace::Namespace;
 use schema::Schema;
 use scope::Scope;
+use type_ref::*;
 
 use crate::ast::SyntaxTree;
 use proc_macro2::TokenStream;
