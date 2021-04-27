@@ -90,7 +90,7 @@ impl ToTokens for Entity {
             .collect();
 
         if let Some(subtypes) = &self.subtypes {
-            let ty: Vec<_> = subtypes
+            let attrs: Vec<_> = subtypes
                 .iter()
                 .map(|ty| match ty {
                     TypeRef::Named { name, .. } => format_ident!("{}", name),
@@ -101,13 +101,27 @@ impl ToTokens for Entity {
                 #[derive(Clone, Debug, PartialEq, derive_new::new)]
                 pub struct #name {
                     #(
-                    pub #ty : #subtypes,
+                    pub #attrs: #subtypes,
                     )*
                     #(
                     pub #attr_name : #attr_type,
                     )*
                 }
-            })
+            });
+
+            // impl Deref for single subtype case
+            if subtypes.len() == 1 {
+                let attr = &attrs[0];
+                let subtype = &subtypes[0];
+                tokens.append_all(quote! {
+                    impl ::std::ops::Deref for #name {
+                        type Target = #subtype;
+                        fn deref(&self) -> &Self::Target {
+                            &self.#attr
+                        }
+                    }
+                });
+            }
         } else {
             tokens.append_all(quote! {
                 #[derive(Clone, Debug, PartialEq, derive_new::new)]
