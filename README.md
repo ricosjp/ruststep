@@ -44,12 +44,12 @@ Why ruststep?
     - product data management (PDM/EDM)
     - manufacturing resource planning (MRP)
     - enterprise resource planning (ERP)
-- We have to generate several codes from schema
+- We have to generate many codes from EXPRESS schemas
   - Tables for SQL or NoSQL database, Object-Record Mapper (ORM)
   - on-wire, on-memory format
     - ASCII / XML are inefficient than binary format e.g. protocol buffers
-  - Extensible EXPRESS compiler is required
-    - Like as protoc generates gRPC binding using gRPC-plugin
+- Extensible EXPRESS compiler is required
+  - Like as protoc generates gRPC binding using gRPC-plugin
 
 Architecture
 -------------
