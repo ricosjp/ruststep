@@ -97,6 +97,13 @@ impl ToTokens for Entity {
                     _ => panic!(),
                 })
                 .collect();
+            let as_ty: Vec<_> = subtypes
+                .iter()
+                .map(|ty| match ty {
+                    TypeRef::Named { name, .. } => format_ident!("as_{}", name),
+                    _ => panic!(),
+                })
+                .collect();
             tokens.append_all(quote! {
                 #[derive(Clone, Debug, PartialEq, derive_new::new)]
                 pub struct #name {
@@ -105,6 +112,14 @@ impl ToTokens for Entity {
                     )*
                     #(
                     pub #attr_name : #attr_type,
+                    )*
+                }
+
+                impl #name {
+                    #(
+                    pub fn #as_ty(&self) -> & #subtypes {
+                        &self.#ty
+                    }
                     )*
                 }
             })
