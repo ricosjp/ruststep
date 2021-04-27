@@ -30,6 +30,27 @@ What is STEP?
 [pbspec]: https://developers.google.com/protocol-buffers/docs/reference/proto3-spec
 [pbencoding]: https://developers.google.com/protocol-buffers/docs/encoding
 
+Why ruststep?
+--------------
+
+- STEP is not only for CAD
+  - EXPRESS is a general data schema like [Protocol Buffers](pbspec)
+  - Later ISOs also uses EXPRESS
+    - [ISO 13584 "Industrial automation systems and integration - Parts library"](https://www.iso.org/standard/43423.html)
+    - [ISO 13399 "Cutting tool data representation and exchange"](https://www.iso.org/standard/36757.html)
+  - For computer-aided technologies (CAx) including:
+    - computer-aided manufacturing (CAM)
+    - computer-aided engineering (CAE)
+    - product data management (PDM/EDM)
+    - manufacturing resource planning (MRP)
+    - enterprise resource planning (ERP)
+- We have to generate several codes from schema
+  - Tables for SQL or NoSQL database, Object-Record Mapper (ORM)
+  - on-wire, on-memory format
+    - ASCII / XML are inefficient than binary format e.g. protocol buffers
+  - Extensible EXPRESS compiler is required
+    - Like as protoc generates gRPC binding using gRPC-plugin
+
 Architecture
 -------------
 
