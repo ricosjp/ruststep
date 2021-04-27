@@ -101,10 +101,10 @@ impl ToTokens for Entity {
                 #[derive(Clone, Debug, PartialEq, derive_new::new)]
                 pub struct #name {
                     #(
-                    #ty : #subtypes,
+                    pub #ty : #subtypes,
                     )*
                     #(
-                    #attr_name : #attr_type,
+                    pub #attr_name : #attr_type,
                     )*
                 }
             })
@@ -113,7 +113,7 @@ impl ToTokens for Entity {
                 #[derive(Clone, Debug, PartialEq, derive_new::new)]
                 pub struct #name {
                     #(
-                    #attr_name : #attr_type,
+                    pub #attr_name : #attr_type,
                     )*
                 }
             })

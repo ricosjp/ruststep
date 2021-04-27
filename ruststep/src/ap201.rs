@@ -367,1084 +367,1084 @@ pub mod explicit_draughting {
     pub struct YearNumber(pub i64);
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Address {
-        internal_location: Option<Label>,
-        street_number: Option<Label>,
-        street: Option<Label>,
-        postal_box: Option<Label>,
-        town: Option<Label>,
-        region: Option<Label>,
-        postal_code: Option<Label>,
-        country: Option<Label>,
-        facsimile_number: Option<Label>,
-        telephone_number: Option<Label>,
-        electronic_mail_address: Option<Label>,
-        telex_number: Option<Label>,
+        pub internal_location: Option<Label>,
+        pub street_number: Option<Label>,
+        pub street: Option<Label>,
+        pub postal_box: Option<Label>,
+        pub town: Option<Label>,
+        pub region: Option<Label>,
+        pub postal_code: Option<Label>,
+        pub country: Option<Label>,
+        pub facsimile_number: Option<Label>,
+        pub telephone_number: Option<Label>,
+        pub electronic_mail_address: Option<Label>,
+        pub telex_number: Option<Label>,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct AngularDimension {
-        dimension_curve_directed_callout: DimensionCurveDirectedCallout,
+        pub dimension_curve_directed_callout: DimensionCurveDirectedCallout,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct AnnotationCurveOccurrence {
-        annotation_occurrence: AnnotationOccurrence,
+        pub annotation_occurrence: AnnotationOccurrence,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct AnnotationFillArea {
-        geometric_representation_item: GeometricRepresentationItem,
-        boundaries: Curve,
+        pub geometric_representation_item: GeometricRepresentationItem,
+        pub boundaries: Curve,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct AnnotationFillAreaOccurrence {
-        annotation_occurrence: AnnotationOccurrence,
-        fill_style_target: Point,
+        pub annotation_occurrence: AnnotationOccurrence,
+        pub fill_style_target: Point,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct AnnotationOccurrence {
-        styled_item: StyledItem,
+        pub styled_item: StyledItem,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct AnnotationSubfigureOccurrence {
-        annotation_symbol_occurrence: AnnotationSymbolOccurrence,
+        pub annotation_symbol_occurrence: AnnotationSymbolOccurrence,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct AnnotationSymbol {
-        mapped_item: MappedItem,
+        pub mapped_item: MappedItem,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct AnnotationSymbolOccurrence {
-        annotation_occurrence: AnnotationOccurrence,
+        pub annotation_occurrence: AnnotationOccurrence,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct AnnotationText {
-        mapped_item: MappedItem,
+        pub mapped_item: MappedItem,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct AnnotationTextOccurrence {
-        annotation_occurrence: AnnotationOccurrence,
+        pub annotation_occurrence: AnnotationOccurrence,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ApplicationContext {
-        application: Text,
+        pub application: Text,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ApplicationContextElement {
-        name: Label,
-        frame_of_reference: ApplicationContext,
+        pub name: Label,
+        pub frame_of_reference: ApplicationContext,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ApplicationProtocolDefinition {
-        status: Label,
-        application_interpreted_model_schema_name: Label,
-        application_protocol_year: YearNumber,
-        application: ApplicationContext,
+        pub status: Label,
+        pub application_interpreted_model_schema_name: Label,
+        pub application_protocol_year: YearNumber,
+        pub application: ApplicationContext,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Approval {
-        status: ApprovalStatus,
-        level: Label,
+        pub status: ApprovalStatus,
+        pub level: Label,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ApprovalAssignment {
-        assigned_approval: Approval,
+        pub assigned_approval: Approval,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ApprovalDateTime {
-        date_time: DateTimeSelect,
-        dated_approval: Approval,
+        pub date_time: DateTimeSelect,
+        pub dated_approval: Approval,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ApprovalPersonOrganization {
-        person_organization: PersonOrganizationSelect,
-        authorized_approval: Approval,
-        role: ApprovalRole,
+        pub person_organization: PersonOrganizationSelect,
+        pub authorized_approval: Approval,
+        pub role: ApprovalRole,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ApprovalRole {
-        role: Label,
+        pub role: Label,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ApprovalStatus {
-        name: Label,
+        pub name: Label,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct AreaInSet {
-        area: PresentationArea,
-        in_set: PresentationSet,
+        pub area: PresentationArea,
+        pub in_set: PresentationSet,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Axis2Placement2D {
-        placement: Placement,
-        ref_direction: Option<Direction>,
+        pub placement: Placement,
+        pub ref_direction: Option<Direction>,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct BSplineCurve {
-        bounded_curve: BoundedCurve,
-        degree: i64,
-        control_points_list: CartesianPoint,
-        curve_form: BSplineCurveForm,
-        closed_curve: Logical,
-        self_intersect: Logical,
+        pub bounded_curve: BoundedCurve,
+        pub degree: i64,
+        pub control_points_list: CartesianPoint,
+        pub curve_form: BSplineCurveForm,
+        pub closed_curve: Logical,
+        pub self_intersect: Logical,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct BSplineCurveWithKnots {
-        b_spline_curve: BSplineCurve,
-        knot_multiplicities: i64,
-        knots: ParameterValue,
-        knot_spec: KnotType,
+        pub b_spline_curve: BSplineCurve,
+        pub knot_multiplicities: i64,
+        pub knots: ParameterValue,
+        pub knot_spec: KnotType,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct BezierCurve {
-        b_spline_curve: BSplineCurve,
+        pub b_spline_curve: BSplineCurve,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct BoundedCurve {
-        curve: Curve,
+        pub curve: Curve,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct CalendarDate {
-        date: Date,
-        day_component: DayInMonthNumber,
-        month_component: MonthInYearNumber,
+        pub date: Date,
+        pub day_component: DayInMonthNumber,
+        pub month_component: MonthInYearNumber,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct CameraImage {
-        mapped_item: MappedItem,
+        pub mapped_item: MappedItem,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct CameraImage2DWithScale {
-        camera_image: CameraImage,
+        pub camera_image: CameraImage,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct CameraModel {
-        geometric_representation_item: GeometricRepresentationItem,
+        pub geometric_representation_item: GeometricRepresentationItem,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct CameraModelD2 {
-        camera_model: CameraModel,
-        view_window: PlanarBox,
-        view_window_clipping: bool,
+        pub camera_model: CameraModel,
+        pub view_window: PlanarBox,
+        pub view_window_clipping: bool,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct CameraUsage {
-        representation_map: RepresentationMap,
+        pub representation_map: RepresentationMap,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct CartesianPoint {
-        point: Point,
-        coordinates: LengthMeasure,
+        pub point: Point,
+        pub coordinates: LengthMeasure,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Circle {
-        conic: Conic,
-        radius: PositiveLengthMeasure,
+        pub conic: Conic,
+        pub radius: PositiveLengthMeasure,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Colour {}
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ColourRgb {
-        colour_specification: ColourSpecification,
-        red: f64,
-        green: f64,
-        blue: f64,
+        pub colour_specification: ColourSpecification,
+        pub red: f64,
+        pub green: f64,
+        pub blue: f64,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ColourSpecification {
-        colour: Colour,
-        name: Colour,
+        pub colour: Colour,
+        pub name: Colour,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct CompositeCurve {
-        bounded_curve: BoundedCurve,
-        segments: CompositeCurveSegment,
-        self_intersect: Logical,
+        pub bounded_curve: BoundedCurve,
+        pub segments: CompositeCurveSegment,
+        pub self_intersect: Logical,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct CompositeCurveSegment {
-        transition: TransitionCode,
-        same_sense: bool,
-        parent_curve: Curve,
+        pub transition: TransitionCode,
+        pub same_sense: bool,
+        pub parent_curve: Curve,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct CompositeText {
-        geometric_representation_item: GeometricRepresentationItem,
-        collected_text: TextOrCharacter,
+        pub geometric_representation_item: GeometricRepresentationItem,
+        pub collected_text: TextOrCharacter,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct CompositeTextWithAssociatedCurves {
-        composite_text: CompositeText,
-        associated_curves: Curve,
+        pub composite_text: CompositeText,
+        pub associated_curves: Curve,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct CompositeTextWithBlankingBox {
-        composite_text: CompositeText,
-        blanking: PlanarBox,
+        pub composite_text: CompositeText,
+        pub blanking: PlanarBox,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct CompositeTextWithExtent {
-        composite_text: CompositeText,
-        extent: PlanarExtent,
+        pub composite_text: CompositeText,
+        pub extent: PlanarExtent,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Conic {
-        curve: Curve,
-        position: Axis2Placement,
+        pub curve: Curve,
+        pub position: Axis2Placement,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ContextDependentInvisibility {
-        invisibility: Invisibility,
-        presentation_context: InvisibilityContext,
+        pub invisibility: Invisibility,
+        pub presentation_context: InvisibilityContext,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Contract {
-        name: Label,
-        purpose: Text,
-        kind: ContractType,
+        pub name: Label,
+        pub purpose: Text,
+        pub kind: ContractType,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ContractAssignment {
-        assigned_contract: Contract,
+        pub assigned_contract: Contract,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ContractType {
-        description: Label,
+        pub description: Label,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ConversionBasedUnit {
-        named_unit: NamedUnit,
-        name: Label,
-        conversion_factor: MeasureWithUnit,
+        pub named_unit: NamedUnit,
+        pub name: Label,
+        pub conversion_factor: MeasureWithUnit,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Curve {
-        geometric_representation_item: GeometricRepresentationItem,
+        pub geometric_representation_item: GeometricRepresentationItem,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct CurveDimension {
-        dimension_curve_directed_callout: DimensionCurveDirectedCallout,
+        pub dimension_curve_directed_callout: DimensionCurveDirectedCallout,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct CurveStyle {
-        name: Label,
-        curve_font: CurveFontOrScaledCurveFontSelect,
-        curve_width: SizeSelect,
-        curve_colour: Colour,
+        pub name: Label,
+        pub curve_font: CurveFontOrScaledCurveFontSelect,
+        pub curve_width: SizeSelect,
+        pub curve_colour: Colour,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct CurveStyleFont {
-        name: Label,
-        pattern_list: CurveStyleFontPattern,
+        pub name: Label,
+        pub pattern_list: CurveStyleFontPattern,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct CurveStyleFontPattern {
-        visible_segment_length: PositiveLengthMeasure,
-        invisible_segment_length: PositiveLengthMeasure,
+        pub visible_segment_length: PositiveLengthMeasure,
+        pub invisible_segment_length: PositiveLengthMeasure,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Date {
-        year_component: YearNumber,
+        pub year_component: YearNumber,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DatumFeatureCallout {
-        draughting_callout: DraughtingCallout,
+        pub draughting_callout: DraughtingCallout,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DatumTargetCallout {
-        draughting_callout: DraughtingCallout,
+        pub draughting_callout: DraughtingCallout,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DefinedSymbol {
-        geometric_representation_item: GeometricRepresentationItem,
-        definition: DefinedSymbolSelect,
-        target: SymbolTarget,
+        pub geometric_representation_item: GeometricRepresentationItem,
+        pub definition: DefinedSymbolSelect,
+        pub target: SymbolTarget,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DiameterDimension {
-        dimension_curve_directed_callout: DimensionCurveDirectedCallout,
+        pub dimension_curve_directed_callout: DimensionCurveDirectedCallout,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DimensionCalloutComponentRelationship {
-        draughting_callout_relationship: DraughtingCalloutRelationship,
+        pub draughting_callout_relationship: DraughtingCalloutRelationship,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DimensionCalloutRelationship {
-        draughting_callout_relationship: DraughtingCalloutRelationship,
+        pub draughting_callout_relationship: DraughtingCalloutRelationship,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DimensionCurve {
-        annotation_curve_occurrence: AnnotationCurveOccurrence,
+        pub annotation_curve_occurrence: AnnotationCurveOccurrence,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DimensionCurveDirectedCallout {
-        draughting_callout: DraughtingCallout,
+        pub draughting_callout: DraughtingCallout,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DimensionCurveTerminator {
-        terminator_symbol: TerminatorSymbol,
-        role: DimensionExtentUsage,
+        pub terminator_symbol: TerminatorSymbol,
+        pub role: DimensionExtentUsage,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DimensionPair {
-        draughting_callout_relationship: DraughtingCalloutRelationship,
+        pub draughting_callout_relationship: DraughtingCalloutRelationship,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DimensionalExponents {
-        length_exponent: f64,
-        mass_exponent: f64,
-        time_exponent: f64,
-        electric_current_exponent: f64,
-        thermodynamic_temperature_exponent: f64,
-        amount_of_substance_exponent: f64,
-        luminous_intensity_exponent: f64,
+        pub length_exponent: f64,
+        pub mass_exponent: f64,
+        pub time_exponent: f64,
+        pub electric_current_exponent: f64,
+        pub thermodynamic_temperature_exponent: f64,
+        pub amount_of_substance_exponent: f64,
+        pub luminous_intensity_exponent: f64,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Direction {
-        geometric_representation_item: GeometricRepresentationItem,
-        direction_ratios: f64,
+        pub geometric_representation_item: GeometricRepresentationItem,
+        pub direction_ratios: f64,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Document {
-        id: Identifier,
-        name: Label,
-        description: Text,
-        kind: DocumentType,
+        pub id: Identifier,
+        pub name: Label,
+        pub description: Text,
+        pub kind: DocumentType,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DocumentReference {
-        assigned_document: Document,
-        source: Label,
+        pub assigned_document: Document,
+        pub source: Label,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DocumentType {
-        product_data_type: Label,
+        pub product_data_type: Label,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DraughtingAnnotationOccurrence {
-        annotation_occurrence: AnnotationOccurrence,
+        pub annotation_occurrence: AnnotationOccurrence,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DraughtingApprovalAssignment {
-        approval_assignment: ApprovalAssignment,
-        approved_items: ApprovedItem,
+        pub approval_assignment: ApprovalAssignment,
+        pub approved_items: ApprovedItem,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DraughtingCallout {
-        geometric_representation_item: GeometricRepresentationItem,
-        contents: DraughtingCalloutElement,
+        pub geometric_representation_item: GeometricRepresentationItem,
+        pub contents: DraughtingCalloutElement,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DraughtingCalloutRelationship {
-        name: Label,
-        description: Text,
-        relating_draughting_callout: DraughtingCallout,
-        related_draughting_callout: DraughtingCallout,
+        pub name: Label,
+        pub description: Text,
+        pub relating_draughting_callout: DraughtingCallout,
+        pub related_draughting_callout: DraughtingCallout,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DraughtingContractAssignment {
-        contract_assignment: ContractAssignment,
-        items: ContractedItem,
+        pub contract_assignment: ContractAssignment,
+        pub items: ContractedItem,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DraughtingDrawingRevision {
-        drawing_revision: DrawingRevision,
+        pub drawing_revision: DrawingRevision,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DraughtingElements {
-        draughting_callout: DraughtingCallout,
+        pub draughting_callout: DraughtingCallout,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DraughtingGroupAssignment {
-        group_assignment: GroupAssignment,
-        items: DraughtingGroupedItem,
+        pub group_assignment: GroupAssignment,
+        pub items: DraughtingGroupedItem,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DraughtingModel {
-        representation: Representation,
+        pub representation: Representation,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DraughtingOrganizationAssignment {
-        organization_assignment: OrganizationAssignment,
-        assigned_items: DraughtingOrganizationItem,
+        pub organization_assignment: OrganizationAssignment,
+        pub assigned_items: DraughtingOrganizationItem,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DraughtingPersonAndOrganizationAssignment {
-        person_and_organization_assignment: PersonAndOrganizationAssignment,
-        assigned_items: DraughtingOrganizationItem,
+        pub person_and_organization_assignment: PersonAndOrganizationAssignment,
+        pub assigned_items: DraughtingOrganizationItem,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DraughtingPersonAssignment {
-        person_assignment: PersonAssignment,
-        assigned_items: DraughtingOrganizationItem,
+        pub person_assignment: PersonAssignment,
+        pub assigned_items: DraughtingOrganizationItem,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DraughtingPreDefinedColour {
-        pre_defined_colour: PreDefinedColour,
+        pub pre_defined_colour: PreDefinedColour,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DraughtingPreDefinedCurveFont {
-        pre_defined_curve_font: PreDefinedCurveFont,
+        pub pre_defined_curve_font: PreDefinedCurveFont,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DraughtingPreDefinedTextFont {
-        pre_defined_text_font: PreDefinedTextFont,
+        pub pre_defined_text_font: PreDefinedTextFont,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DraughtingPresentedItem {
-        presented_item: PresentedItem,
-        items: DraughtingPresentedItemSelect,
+        pub presented_item: PresentedItem,
+        pub items: DraughtingPresentedItemSelect,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DraughtingSecurityClassificationAssignment {
-        security_classification_assignment: SecurityClassificationAssignment,
-        assigned_items: ClassifiedItem,
+        pub security_classification_assignment: SecurityClassificationAssignment,
+        pub assigned_items: ClassifiedItem,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DraughtingSpecificationReference {
-        document_reference: DocumentReference,
-        specified_items: SpecifiedItem,
+        pub document_reference: DocumentReference,
+        pub specified_items: SpecifiedItem,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DraughtingSubfigureRepresentation {
-        symbol_representation: SymbolRepresentation,
+        pub symbol_representation: SymbolRepresentation,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DraughtingSymbolRepresentation {
-        symbol_representation: SymbolRepresentation,
+        pub symbol_representation: SymbolRepresentation,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DraughtingTextLiteralWithDelineation {
-        text_literal_with_delineation: TextLiteralWithDelineation,
+        pub text_literal_with_delineation: TextLiteralWithDelineation,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DraughtingTitle {
-        items: DraughtingTitledItem,
-        language: Label,
-        contents: Text,
+        pub items: DraughtingTitledItem,
+        pub language: Label,
+        pub contents: Text,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DrawingDefinition {
-        drawing_number: Identifier,
-        drawing_type: Option<Label>,
+        pub drawing_number: Identifier,
+        pub drawing_type: Option<Label>,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DrawingRevision {
-        presentation_set: PresentationSet,
-        revision_identifier: Identifier,
-        drawing_identifier: DrawingDefinition,
-        intended_scale: Option<Text>,
+        pub presentation_set: PresentationSet,
+        pub revision_identifier: Identifier,
+        pub drawing_identifier: DrawingDefinition,
+        pub intended_scale: Option<Text>,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DrawingSheetLayout {
-        draughting_symbol_representation: DraughtingSymbolRepresentation,
+        pub draughting_symbol_representation: DraughtingSymbolRepresentation,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DrawingSheetRevision {
-        presentation_area: PresentationArea,
-        revision_identifier: Identifier,
+        pub presentation_area: PresentationArea,
+        pub revision_identifier: Identifier,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DrawingSheetRevisionUsage {
-        area_in_set: AreaInSet,
-        sheet_number: Identifier,
+        pub area_in_set: AreaInSet,
+        pub sheet_number: Identifier,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Ellipse {
-        conic: Conic,
-        semi_axis_1: PositiveLengthMeasure,
-        semi_axis_2: PositiveLengthMeasure,
+        pub conic: Conic,
+        pub semi_axis_1: PositiveLengthMeasure,
+        pub semi_axis_2: PositiveLengthMeasure,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ExternalSource {
-        source_id: SourceItem,
+        pub source_id: SourceItem,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ExternallyDefinedCurveFont {
-        externally_defined_item: ExternallyDefinedItem,
+        pub externally_defined_item: ExternallyDefinedItem,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ExternallyDefinedHatchStyle {
-        externally_defined_item: ExternallyDefinedItem,
-        geometric_representation_item: GeometricRepresentationItem,
+        pub externally_defined_item: ExternallyDefinedItem,
+        pub geometric_representation_item: GeometricRepresentationItem,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ExternallyDefinedItem {
-        item_id: SourceItem,
-        source: ExternalSource,
+        pub item_id: SourceItem,
+        pub source: ExternalSource,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ExternallyDefinedSymbol {
-        externally_defined_item: ExternallyDefinedItem,
+        pub externally_defined_item: ExternallyDefinedItem,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ExternallyDefinedTextFont {
-        externally_defined_item: ExternallyDefinedItem,
+        pub externally_defined_item: ExternallyDefinedItem,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ExternallyDefinedTileStyle {
-        externally_defined_item: ExternallyDefinedItem,
-        geometric_representation_item: GeometricRepresentationItem,
+        pub externally_defined_item: ExternallyDefinedItem,
+        pub geometric_representation_item: GeometricRepresentationItem,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct FillAreaStyle {
-        name: Label,
-        fill_styles: FillStyleSelect,
+        pub name: Label,
+        pub fill_styles: FillStyleSelect,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct FillAreaStyleColour {
-        name: Label,
-        fill_colour: Colour,
+        pub name: Label,
+        pub fill_colour: Colour,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct FillAreaStyleHatching {
-        geometric_representation_item: GeometricRepresentationItem,
-        hatch_line_appearance: CurveStyle,
-        start_of_next_hatch_line: OneDirectionRepeatFactor,
-        point_of_reference_hatch_line: CartesianPoint,
-        pattern_start: CartesianPoint,
-        hatch_line_angle: PlaneAngleMeasure,
+        pub geometric_representation_item: GeometricRepresentationItem,
+        pub hatch_line_appearance: CurveStyle,
+        pub start_of_next_hatch_line: OneDirectionRepeatFactor,
+        pub point_of_reference_hatch_line: CartesianPoint,
+        pub pattern_start: CartesianPoint,
+        pub hatch_line_angle: PlaneAngleMeasure,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct FillAreaStyleTileSymbolWithStyle {
-        geometric_representation_item: GeometricRepresentationItem,
-        symbol: AnnotationSymbolOccurrence,
+        pub geometric_representation_item: GeometricRepresentationItem,
+        pub symbol: AnnotationSymbolOccurrence,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct FillAreaStyleTiles {
-        geometric_representation_item: GeometricRepresentationItem,
-        tiling_pattern: TwoDirectionRepeatFactor,
-        tiles: FillAreaStyleTileShapeSelect,
-        tiling_scale: PositiveRatioMeasure,
+        pub geometric_representation_item: GeometricRepresentationItem,
+        pub tiling_pattern: TwoDirectionRepeatFactor,
+        pub tiles: FillAreaStyleTileShapeSelect,
+        pub tiling_scale: PositiveRatioMeasure,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct GeometricCurveSet {
-        geometric_set: GeometricSet,
+        pub geometric_set: GeometricSet,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct GeometricRepresentationContext {
-        representation_context: RepresentationContext,
-        coordinate_space_dimension: DimensionCount,
+        pub representation_context: RepresentationContext,
+        pub coordinate_space_dimension: DimensionCount,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct GeometricRepresentationItem {
-        representation_item: RepresentationItem,
+        pub representation_item: RepresentationItem,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct GeometricSet {
-        geometric_representation_item: GeometricRepresentationItem,
-        elements: GeometricSetSelect,
+        pub geometric_representation_item: GeometricRepresentationItem,
+        pub elements: GeometricSetSelect,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct GeometricalToleranceCallout {
-        draughting_callout: DraughtingCallout,
+        pub draughting_callout: DraughtingCallout,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct GeometricallyBounded2DWireframeRepresentation {
-        shape_representation: ShapeRepresentation,
+        pub shape_representation: ShapeRepresentation,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct GlobalUnitAssignedContext {
-        representation_context: RepresentationContext,
-        units: Unit,
+        pub representation_context: RepresentationContext,
+        pub units: Unit,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Group {
-        name: Label,
-        description: Text,
+        pub name: Label,
+        pub description: Text,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct GroupAssignment {
-        assigned_group: Group,
+        pub assigned_group: Group,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct GroupRelationship {
-        name: Label,
-        description: Text,
-        relating_group: Group,
-        related_group: Group,
+        pub name: Label,
+        pub description: Text,
+        pub relating_group: Group,
+        pub related_group: Group,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Hyperbola {
-        conic: Conic,
-        semi_axis: PositiveLengthMeasure,
-        semi_imag_axis: PositiveLengthMeasure,
+        pub conic: Conic,
+        pub semi_axis: PositiveLengthMeasure,
+        pub semi_imag_axis: PositiveLengthMeasure,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Invisibility {
-        invisible_items: InvisibleItem,
+        pub invisible_items: InvisibleItem,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct LeaderCurve {
-        annotation_curve_occurrence: AnnotationCurveOccurrence,
+        pub annotation_curve_occurrence: AnnotationCurveOccurrence,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct LeaderDirectedCallout {
-        draughting_callout: DraughtingCallout,
+        pub draughting_callout: DraughtingCallout,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct LeaderDirectedDimension {
-        leader_directed_callout: LeaderDirectedCallout,
+        pub leader_directed_callout: LeaderDirectedCallout,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct LeaderTerminator {
-        terminator_symbol: TerminatorSymbol,
+        pub terminator_symbol: TerminatorSymbol,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct LengthMeasureWithUnit {
-        measure_with_unit: MeasureWithUnit,
+        pub measure_with_unit: MeasureWithUnit,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct LengthUnit {
-        named_unit: NamedUnit,
+        pub named_unit: NamedUnit,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Line {
-        curve: Curve,
-        pnt: CartesianPoint,
-        dir: Vector,
+        pub curve: Curve,
+        pub pnt: CartesianPoint,
+        pub dir: Vector,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct LinearDimension {
-        dimension_curve_directed_callout: DimensionCurveDirectedCallout,
+        pub dimension_curve_directed_callout: DimensionCurveDirectedCallout,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct MappedItem {
-        representation_item: RepresentationItem,
-        mapping_source: RepresentationMap,
-        mapping_target: RepresentationItem,
+        pub representation_item: RepresentationItem,
+        pub mapping_source: RepresentationMap,
+        pub mapping_target: RepresentationItem,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct MeasureWithUnit {
-        value_component: MeasureValue,
-        unit_component: Unit,
+        pub value_component: MeasureValue,
+        pub unit_component: Unit,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct NamedUnit {
-        dimensions: DimensionalExponents,
+        pub dimensions: DimensionalExponents,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct OffsetCurve2D {
-        curve: Curve,
-        basis_curve: Curve,
-        distance: LengthMeasure,
-        self_intersect: Logical,
+        pub curve: Curve,
+        pub basis_curve: Curve,
+        pub distance: LengthMeasure,
+        pub self_intersect: Logical,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct OneDirectionRepeatFactor {
-        geometric_representation_item: GeometricRepresentationItem,
-        repeat_factor: Vector,
+        pub geometric_representation_item: GeometricRepresentationItem,
+        pub repeat_factor: Vector,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct OrdinateDimension {
-        projection_directed_callout: ProjectionDirectedCallout,
+        pub projection_directed_callout: ProjectionDirectedCallout,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Organization {
-        id: Option<Identifier>,
-        name: Label,
-        description: Text,
+        pub id: Option<Identifier>,
+        pub name: Label,
+        pub description: Text,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct OrganizationAssignment {
-        assigned_organization: Organization,
-        role: OrganizationRole,
+        pub assigned_organization: Organization,
+        pub role: OrganizationRole,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct OrganizationRole {
-        name: Label,
+        pub name: Label,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct OrganizationalAddress {
-        address: Address,
-        organizations: Organization,
-        description: Text,
+        pub address: Address,
+        pub organizations: Organization,
+        pub description: Text,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Parabola {
-        conic: Conic,
-        focal_dist: LengthMeasure,
+        pub conic: Conic,
+        pub focal_dist: LengthMeasure,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Person {
-        id: Identifier,
-        last_name: Option<Label>,
-        first_name: Option<Label>,
-        middle_names: Option<Label>,
-        prefix_titles: Option<Label>,
-        suffix_titles: Option<Label>,
+        pub id: Identifier,
+        pub last_name: Option<Label>,
+        pub first_name: Option<Label>,
+        pub middle_names: Option<Label>,
+        pub prefix_titles: Option<Label>,
+        pub suffix_titles: Option<Label>,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PersonAndOrganization {
-        the_person: Person,
-        the_organization: Organization,
+        pub the_person: Person,
+        pub the_organization: Organization,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PersonAndOrganizationAssignment {
-        assigned_person_and_organization: PersonAndOrganization,
-        role: PersonAndOrganizationRole,
+        pub assigned_person_and_organization: PersonAndOrganization,
+        pub role: PersonAndOrganizationRole,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PersonAndOrganizationRole {
-        name: Label,
+        pub name: Label,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PersonAssignment {
-        assigned_person: Person,
-        role: PersonRole,
+        pub assigned_person: Person,
+        pub role: PersonRole,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PersonRole {
-        name: Label,
+        pub name: Label,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PersonalAddress {
-        address: Address,
-        people: Person,
-        description: Text,
+        pub address: Address,
+        pub people: Person,
+        pub description: Text,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Placement {
-        geometric_representation_item: GeometricRepresentationItem,
-        location: CartesianPoint,
+        pub geometric_representation_item: GeometricRepresentationItem,
+        pub location: CartesianPoint,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PlanarBox {
-        planar_extent: PlanarExtent,
-        placement: Axis2Placement,
+        pub planar_extent: PlanarExtent,
+        pub placement: Axis2Placement,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PlanarExtent {
-        geometric_representation_item: GeometricRepresentationItem,
-        size_in_x: LengthMeasure,
-        size_in_y: LengthMeasure,
+        pub geometric_representation_item: GeometricRepresentationItem,
+        pub size_in_x: LengthMeasure,
+        pub size_in_y: LengthMeasure,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PlaneAngleMeasureWithUnit {
-        measure_with_unit: MeasureWithUnit,
+        pub measure_with_unit: MeasureWithUnit,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PlaneAngleUnit {
-        named_unit: NamedUnit,
+        pub named_unit: NamedUnit,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Point {
-        geometric_representation_item: GeometricRepresentationItem,
+        pub geometric_representation_item: GeometricRepresentationItem,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PointOnCurve {
-        point: Point,
-        basis_curve: Curve,
-        point_parameter: ParameterValue,
+        pub point: Point,
+        pub basis_curve: Curve,
+        pub point_parameter: ParameterValue,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Polyline {
-        bounded_curve: BoundedCurve,
-        points: CartesianPoint,
+        pub bounded_curve: BoundedCurve,
+        pub points: CartesianPoint,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PreDefinedColour {
-        pre_defined_item: PreDefinedItem,
-        colour: Colour,
+        pub pre_defined_item: PreDefinedItem,
+        pub colour: Colour,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PreDefinedCurveFont {
-        pre_defined_item: PreDefinedItem,
+        pub pre_defined_item: PreDefinedItem,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PreDefinedDimensionSymbol {
-        pre_defined_symbol: PreDefinedSymbol,
+        pub pre_defined_symbol: PreDefinedSymbol,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PreDefinedGeometricalToleranceSymbol {
-        pre_defined_symbol: PreDefinedSymbol,
+        pub pre_defined_symbol: PreDefinedSymbol,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PreDefinedItem {
-        name: Label,
+        pub name: Label,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PreDefinedPointMarkerSymbol {
-        pre_defined_symbol: PreDefinedSymbol,
+        pub pre_defined_symbol: PreDefinedSymbol,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PreDefinedSymbol {
-        pre_defined_item: PreDefinedItem,
+        pub pre_defined_item: PreDefinedItem,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PreDefinedTerminatorSymbol {
-        pre_defined_symbol: PreDefinedSymbol,
+        pub pre_defined_symbol: PreDefinedSymbol,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PreDefinedTextFont {
-        pre_defined_item: PreDefinedItem,
+        pub pre_defined_item: PreDefinedItem,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PresentationArea {
-        presentation_representation: PresentationRepresentation,
+        pub presentation_representation: PresentationRepresentation,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PresentationLayerAssignment {
-        name: Label,
-        description: Text,
-        assigned_items: LayeredItem,
+        pub name: Label,
+        pub description: Text,
+        pub assigned_items: LayeredItem,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PresentationLayerUsage {
-        assignment: PresentationLayerAssignment,
-        presentation: PresentationRepresentation,
+        pub assignment: PresentationLayerAssignment,
+        pub presentation: PresentationRepresentation,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PresentationRepresentation {
-        representation: Representation,
+        pub representation: Representation,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PresentationSet {}
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PresentationSize {
-        unit: PresentationSizeAssignmentSelect,
-        size: PlanarBox,
+        pub unit: PresentationSizeAssignmentSelect,
+        pub size: PlanarBox,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PresentationStyleAssignment {
-        styles: PresentationStyleSelect,
+        pub styles: PresentationStyleSelect,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PresentationStyleByContext {
-        presentation_style_assignment: PresentationStyleAssignment,
-        style_context: StyleContextSelect,
+        pub presentation_style_assignment: PresentationStyleAssignment,
+        pub style_context: StyleContextSelect,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PresentationView {
-        presentation_representation: PresentationRepresentation,
+        pub presentation_representation: PresentationRepresentation,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PresentedItem {}
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PresentedItemRepresentation {
-        presentation: PresentationRepresentationSelect,
-        item: PresentedItem,
+        pub presentation: PresentationRepresentationSelect,
+        pub item: PresentedItem,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Product {
-        id: Identifier,
-        name: Label,
-        description: Text,
-        frame_of_reference: ProductContext,
+        pub id: Identifier,
+        pub name: Label,
+        pub description: Text,
+        pub frame_of_reference: ProductContext,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ProductContext {
-        application_context_element: ApplicationContextElement,
-        discipline_type: Label,
+        pub application_context_element: ApplicationContextElement,
+        pub discipline_type: Label,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ProductDefinition {
-        id: Identifier,
-        description: Text,
-        formation: ProductDefinitionFormation,
-        frame_of_reference: ProductDefinitionContext,
+        pub id: Identifier,
+        pub description: Text,
+        pub formation: ProductDefinitionFormation,
+        pub frame_of_reference: ProductDefinitionContext,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ProductDefinitionContext {
-        application_context_element: ApplicationContextElement,
-        life_cycle_stage: Label,
+        pub application_context_element: ApplicationContextElement,
+        pub life_cycle_stage: Label,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ProductDefinitionFormation {
-        id: Identifier,
-        description: Text,
-        of_product: Product,
+        pub id: Identifier,
+        pub description: Text,
+        pub of_product: Product,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ProductDefinitionShape {
-        property_definition: PropertyDefinition,
+        pub property_definition: PropertyDefinition,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ProjectionCurve {
-        annotation_curve_occurrence: AnnotationCurveOccurrence,
+        pub annotation_curve_occurrence: AnnotationCurveOccurrence,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ProjectionDirectedCallout {
-        draughting_callout: DraughtingCallout,
+        pub draughting_callout: DraughtingCallout,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PropertyDefinition {
-        name: Label,
-        description: Text,
-        definition: CharacterizedDefinition,
+        pub name: Label,
+        pub description: Text,
+        pub definition: CharacterizedDefinition,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PropertyDefinitionRepresentation {
-        definition: PropertyDefinition,
-        used_representation: Representation,
+        pub definition: PropertyDefinition,
+        pub used_representation: Representation,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct QuasiUniformCurve {
-        b_spline_curve: BSplineCurve,
+        pub b_spline_curve: BSplineCurve,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct RadiusDimension {
-        dimension_curve_directed_callout: DimensionCurveDirectedCallout,
+        pub dimension_curve_directed_callout: DimensionCurveDirectedCallout,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct RationalBSplineCurve {
-        b_spline_curve: BSplineCurve,
-        weights_data: f64,
+        pub b_spline_curve: BSplineCurve,
+        pub weights_data: f64,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Representation {
-        name: Label,
-        items: RepresentationItem,
-        context_of_items: RepresentationContext,
+        pub name: Label,
+        pub items: RepresentationItem,
+        pub context_of_items: RepresentationContext,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct RepresentationContext {
-        context_identifier: Identifier,
-        context_type: Text,
+        pub context_identifier: Identifier,
+        pub context_type: Text,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct RepresentationItem {
-        name: Label,
+        pub name: Label,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct RepresentationMap {
-        mapping_origin: RepresentationItem,
-        mapped_representation: Representation,
+        pub mapping_origin: RepresentationItem,
+        pub mapped_representation: Representation,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct SecurityClassification {
-        name: Label,
-        purpose: Text,
-        security_level: SecurityClassificationLevel,
+        pub name: Label,
+        pub purpose: Text,
+        pub security_level: SecurityClassificationLevel,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct SecurityClassificationAssignment {
-        assigned_security_classification: SecurityClassification,
+        pub assigned_security_classification: SecurityClassification,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct SecurityClassificationLevel {
-        name: Label,
+        pub name: Label,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ShapeDefinitionRepresentation {
-        property_definition_representation: PropertyDefinitionRepresentation,
+        pub property_definition_representation: PropertyDefinitionRepresentation,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ShapeRepresentation {
-        representation: Representation,
+        pub representation: Representation,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct SiUnit {
-        named_unit: NamedUnit,
-        prefix: Option<SiPrefix>,
-        name: SiUnitName,
+        pub named_unit: NamedUnit,
+        pub prefix: Option<SiPrefix>,
+        pub name: SiUnitName,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct StructuredDimensionCallout {
-        draughting_callout: DraughtingCallout,
+        pub draughting_callout: DraughtingCallout,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct StyledItem {
-        representation_item: RepresentationItem,
-        styles: PresentationStyleAssignment,
-        item: RepresentationItem,
+        pub representation_item: RepresentationItem,
+        pub styles: PresentationStyleAssignment,
+        pub item: RepresentationItem,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct SymbolColour {
-        colour_of_symbol: Colour,
+        pub colour_of_symbol: Colour,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct SymbolRepresentation {
-        representation: Representation,
+        pub representation: Representation,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct SymbolRepresentationMap {
-        representation_map: RepresentationMap,
+        pub representation_map: RepresentationMap,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct SymbolStyle {
-        name: Label,
-        style_of_symbol: SymbolStyleSelect,
+        pub name: Label,
+        pub style_of_symbol: SymbolStyleSelect,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct SymbolTarget {
-        geometric_representation_item: GeometricRepresentationItem,
-        placement: Axis2Placement,
-        x_scale: PositiveRatioMeasure,
-        y_scale: PositiveRatioMeasure,
+        pub geometric_representation_item: GeometricRepresentationItem,
+        pub placement: Axis2Placement,
+        pub x_scale: PositiveRatioMeasure,
+        pub y_scale: PositiveRatioMeasure,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct TerminatorSymbol {
-        annotation_symbol_occurrence: AnnotationSymbolOccurrence,
-        annotated_curve: AnnotationCurveOccurrence,
+        pub annotation_symbol_occurrence: AnnotationSymbolOccurrence,
+        pub annotated_curve: AnnotationCurveOccurrence,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct TextLiteral {
-        geometric_representation_item: GeometricRepresentationItem,
-        literal: PresentableText,
-        placement: Axis2Placement,
-        alignment: TextAlignment,
-        path: TextPath,
-        font: FontSelect,
+        pub geometric_representation_item: GeometricRepresentationItem,
+        pub literal: PresentableText,
+        pub placement: Axis2Placement,
+        pub alignment: TextAlignment,
+        pub path: TextPath,
+        pub font: FontSelect,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct TextLiteralWithAssociatedCurves {
-        text_literal: TextLiteral,
-        associated_curves: Curve,
+        pub text_literal: TextLiteral,
+        pub associated_curves: Curve,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct TextLiteralWithBlankingBox {
-        text_literal: TextLiteral,
-        blanking: PlanarBox,
+        pub text_literal: TextLiteral,
+        pub blanking: PlanarBox,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct TextLiteralWithDelineation {
-        text_literal: TextLiteral,
-        delineation: TextDelineation,
+        pub text_literal: TextLiteral,
+        pub delineation: TextDelineation,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct TextLiteralWithExtent {
-        text_literal: TextLiteral,
-        extent: PlanarExtent,
+        pub text_literal: TextLiteral,
+        pub extent: PlanarExtent,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct TextStyle {
-        name: Label,
-        character_appearance: CharacterStyleSelect,
+        pub name: Label,
+        pub character_appearance: CharacterStyleSelect,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct TextStyleForDefinedFont {
-        text_colour: Colour,
+        pub text_colour: Colour,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct TextStyleWithBoxCharacteristics {
-        text_style: TextStyle,
-        characteristics: BoxCharacteristicSelect,
+        pub text_style: TextStyle,
+        pub characteristics: BoxCharacteristicSelect,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct TextStyleWithMirror {
-        text_style: TextStyle,
-        mirror_placement: Axis2Placement,
+        pub text_style: TextStyle,
+        pub mirror_placement: Axis2Placement,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct TrimmedCurve {
-        bounded_curve: BoundedCurve,
-        basis_curve: Curve,
-        trim_1: TrimmingSelect,
-        trim_2: TrimmingSelect,
-        sense_agreement: bool,
-        master_representation: TrimmingPreference,
+        pub bounded_curve: BoundedCurve,
+        pub basis_curve: Curve,
+        pub trim_1: TrimmingSelect,
+        pub trim_2: TrimmingSelect,
+        pub sense_agreement: bool,
+        pub master_representation: TrimmingPreference,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct TwoDirectionRepeatFactor {
-        one_direction_repeat_factor: OneDirectionRepeatFactor,
-        second_repeat_factor: Vector,
+        pub one_direction_repeat_factor: OneDirectionRepeatFactor,
+        pub second_repeat_factor: Vector,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct UniformCurve {
-        b_spline_curve: BSplineCurve,
+        pub b_spline_curve: BSplineCurve,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Vector {
-        geometric_representation_item: GeometricRepresentationItem,
-        orientation: Direction,
-        magnitude: LengthMeasure,
+        pub geometric_representation_item: GeometricRepresentationItem,
+        pub orientation: Direction,
+        pub magnitude: LengthMeasure,
     }
 }
