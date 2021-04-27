@@ -89,14 +89,35 @@ impl ToTokens for Entity {
             })
             .collect();
 
-        tokens.append_all(quote! {
-            #[derive(Clone, Debug, PartialEq, derive_new::new)]
-            pub struct #name {
-                #(
-                #attr_name : #attr_type,
-                )*
-            }
-        })
+        if let Some(subtypes) = &self.subtypes {
+            let ty: Vec<_> = subtypes
+                .iter()
+                .map(|ty| match ty {
+                    TypeRef::Named { name, .. } => format_ident!("{}", name),
+                    _ => panic!(),
+                })
+                .collect();
+            tokens.append_all(quote! {
+                #[derive(Clone, Debug, PartialEq, derive_new::new)]
+                pub struct #name {
+                    #(
+                    #ty : #subtypes,
+                    )*
+                    #(
+                    #attr_name : #attr_type,
+                    )*
+                }
+            })
+        } else {
+            tokens.append_all(quote! {
+                #[derive(Clone, Debug, PartialEq, derive_new::new)]
+                pub struct #name {
+                    #(
+                    #attr_name : #attr_type,
+                    )*
+                }
+            })
+        }
     }
 }
 
