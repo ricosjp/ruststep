@@ -8,6 +8,7 @@ use quote::*;
 pub struct Entity {
     name: String,
     attributes: Vec<EntityAttribute>,
+    subtypes: Option<Vec<TypeRef>>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -47,9 +48,21 @@ impl Legalize for Entity {
             .iter()
             .map(|attr| EntityAttribute::legalize(ns, scope, attr))
             .collect::<Result<Vec<_>, _>>()?;
+        let subtypes = entity
+            .subtype
+            .as_ref()
+            .map(|subtype| {
+                subtype
+                    .entity_references
+                    .iter()
+                    .map(|name| ns.lookup_type(scope, &name))
+                    .collect::<Result<Vec<_>, _>>()
+            })
+            .transpose()?;
         Ok(Entity {
             name: entity.name.clone(),
             attributes,
+            subtypes,
         })
     }
 }
@@ -76,20 +89,49 @@ impl ToTokens for Entity {
             })
             .collect();
 
-        tokens.append_all(quote! {
-            #[derive(Clone, Debug, PartialEq)]
-            pub struct #name {
-                #(
-                #attr_name : #attr_type,
-                )*
-            }
-
-            impl #name {
-                pub fn new(#(#attr_name : #attr_type),*) -> Self {
-                    Self { #(#attr_name),* }
+        if let Some(subtypes) = &self.subtypes {
+            let attrs: Vec<_> = subtypes
+                .iter()
+                .map(|ty| match ty {
+                    TypeRef::Named { name, .. } => format_ident!("{}", name),
+                    _ => panic!(),
+                })
+                .collect();
+            tokens.append_all(quote! {
+                #[derive(Clone, Debug, PartialEq, derive_new::new)]
+                pub struct #name {
+                    #(
+                    pub #attrs: #subtypes,
+                    )*
+                    #(
+                    pub #attr_name : #attr_type,
+                    )*
                 }
+            });
+
+            // impl Deref for single subtype case
+            if subtypes.len() == 1 {
+                let attr = &attrs[0];
+                let subtype = &subtypes[0];
+                tokens.append_all(quote! {
+                    impl ::std::ops::Deref for #name {
+                        type Target = #subtype;
+                        fn deref(&self) -> &Self::Target {
+                            &self.#attr
+                        }
+                    }
+                });
             }
-        })
+        } else {
+            tokens.append_all(quote! {
+                #[derive(Clone, Debug, PartialEq, derive_new::new)]
+                pub struct #name {
+                    #(
+                    pub #attr_name : #attr_type,
+                    )*
+                }
+            })
+        }
     }
 }
 

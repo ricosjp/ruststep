@@ -62,8 +62,7 @@ impl ToTokens for TypeDecl {
         match &self.underlying_type {
             UnderlyingType::Simple(type_ref) | UnderlyingType::Reference(type_ref) => tokens
                 .append_all(quote! {
-                    #[derive(Debug, Clone, PartialEq)]
-                    pub struct #id(pub #type_ref);
+                    pub type #id = #type_ref;
                 }),
             UnderlyingType::Enumeration(items) => {
                 let items: Vec<_> = items

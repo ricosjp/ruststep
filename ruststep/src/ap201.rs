@@ -31,14 +31,10 @@ pub mod explicit_draughting {
         BoxSlantAngle(Box<BoxSlantAngle>),
         BoxRotateAngle(Box<BoxRotateAngle>),
     }
-    #[derive(Debug, Clone, PartialEq)]
-    pub struct BoxHeight(pub PositiveRatioMeasure);
-    #[derive(Debug, Clone, PartialEq)]
-    pub struct BoxRotateAngle(pub PlaneAngleMeasure);
-    #[derive(Debug, Clone, PartialEq)]
-    pub struct BoxSlantAngle(pub PlaneAngleMeasure);
-    #[derive(Debug, Clone, PartialEq)]
-    pub struct BoxWidth(pub PositiveRatioMeasure);
+    pub type BoxHeight = PositiveRatioMeasure;
+    pub type BoxRotateAngle = PlaneAngleMeasure;
+    pub type BoxSlantAngle = PlaneAngleMeasure;
+    pub type BoxWidth = PositiveRatioMeasure;
     #[derive(Debug, Clone, PartialEq)]
     pub enum CharacterSpacingSelect {
         LengthMeasure(Box<LengthMeasure>),
@@ -90,15 +86,13 @@ pub mod explicit_draughting {
     pub enum DateTimeSelect {
         Date(Box<Date>),
     }
-    #[derive(Debug, Clone, PartialEq)]
-    pub struct DayInMonthNumber(pub i64);
+    pub type DayInMonthNumber = i64;
     #[derive(Debug, Clone, PartialEq)]
     pub enum DefinedSymbolSelect {
         PreDefinedSymbol(Box<PreDefinedSymbol>),
         ExternallyDefinedSymbol(Box<ExternallyDefinedSymbol>),
     }
-    #[derive(Debug, Clone, PartialEq)]
-    pub struct DimensionCount(pub i64);
+    pub type DimensionCount = i64;
     #[derive(Debug, Clone, PartialEq)]
     pub enum DimensionExtentUsage {
         Origin,
@@ -158,8 +152,7 @@ pub mod explicit_draughting {
         PresentationView(Box<PresentationView>),
         AnnotationFillArea(Box<AnnotationFillArea>),
     }
-    #[derive(Debug, Clone, PartialEq)]
-    pub struct Identifier(pub String);
+    pub type Identifier = String;
     #[derive(Debug, Clone, PartialEq)]
     pub enum InvisibilityContext {
         PresentationLayerUsage(Box<PresentationLayerUsage>),
@@ -179,15 +172,13 @@ pub mod explicit_draughting {
         PiecewiseBezierKnots,
         Unspecified,
     }
-    #[derive(Debug, Clone, PartialEq)]
-    pub struct Label(pub String);
+    pub type Label = String;
     #[derive(Debug, Clone, PartialEq)]
     pub enum LayeredItem {
         PresentationRepresentation(Box<PresentationRepresentation>),
         RepresentationItem(Box<RepresentationItem>),
     }
-    #[derive(Debug, Clone, PartialEq)]
-    pub struct LengthMeasure(pub f64);
+    pub type LengthMeasure = f64;
     #[derive(Debug, Clone, PartialEq)]
     pub enum MeasureValue {
         LengthMeasure(Box<LengthMeasure>),
@@ -197,28 +188,22 @@ pub mod explicit_draughting {
         PositiveLengthMeasure(Box<PositiveLengthMeasure>),
         PositiveRatioMeasure(Box<PositiveRatioMeasure>),
     }
-    #[derive(Debug, Clone, PartialEq)]
-    pub struct MonthInYearNumber(pub i64);
+    pub type MonthInYearNumber = i64;
     #[derive(Debug, Clone, PartialEq)]
     pub enum NullStyle {
         Null,
     }
-    #[derive(Debug, Clone, PartialEq)]
-    pub struct ParameterValue(pub f64);
+    pub type ParameterValue = f64;
     #[derive(Debug, Clone, PartialEq)]
     pub enum PersonOrganizationSelect {
         Person(Box<Person>),
         Organization(Box<Organization>),
         PersonAndOrganization(Box<PersonAndOrganization>),
     }
-    #[derive(Debug, Clone, PartialEq)]
-    pub struct PlaneAngleMeasure(pub f64);
-    #[derive(Debug, Clone, PartialEq)]
-    pub struct PositiveLengthMeasure(pub LengthMeasure);
-    #[derive(Debug, Clone, PartialEq)]
-    pub struct PositiveRatioMeasure(pub RatioMeasure);
-    #[derive(Debug, Clone, PartialEq)]
-    pub struct PresentableText(pub String);
+    pub type PlaneAngleMeasure = f64;
+    pub type PositiveLengthMeasure = LengthMeasure;
+    pub type PositiveRatioMeasure = RatioMeasure;
+    pub type PresentableText = String;
     #[derive(Debug, Clone, PartialEq)]
     pub enum PresentationRepresentationSelect {
         PresentationRepresentation(Box<PresentationRepresentation>),
@@ -238,8 +223,7 @@ pub mod explicit_draughting {
         TextStyle(Box<TextStyle>),
         NullStyle(Box<NullStyle>),
     }
-    #[derive(Debug, Clone, PartialEq)]
-    pub struct RatioMeasure(pub f64);
+    pub type RatioMeasure = f64;
     #[derive(Debug, Clone, PartialEq)]
     pub enum ShapeDefinition {
         ProductDefinitionShape(Box<ProductDefinitionShape>),
@@ -317,12 +301,9 @@ pub mod explicit_draughting {
     pub enum SymbolStyleSelect {
         SymbolColour(Box<SymbolColour>),
     }
-    #[derive(Debug, Clone, PartialEq)]
-    pub struct Text(pub String);
-    #[derive(Debug, Clone, PartialEq)]
-    pub struct TextAlignment(pub Label);
-    #[derive(Debug, Clone, PartialEq)]
-    pub struct TextDelineation(pub Label);
+    pub type Text = String;
+    pub type TextAlignment = Label;
+    pub type TextDelineation = Label;
     #[derive(Debug, Clone, PartialEq)]
     pub enum TextOrCharacter {
         AnnotationText(Box<AnnotationText>),
@@ -363,2320 +344,1969 @@ pub mod explicit_draughting {
         Vector(Box<Vector>),
         Direction(Box<Direction>),
     }
-    #[derive(Debug, Clone, PartialEq)]
-    pub struct YearNumber(pub i64);
-    #[derive(Clone, Debug, PartialEq)]
+    pub type YearNumber = i64;
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Address {
-        internal_location: Option<Label>,
-        street_number: Option<Label>,
-        street: Option<Label>,
-        postal_box: Option<Label>,
-        town: Option<Label>,
-        region: Option<Label>,
-        postal_code: Option<Label>,
-        country: Option<Label>,
-        facsimile_number: Option<Label>,
-        telephone_number: Option<Label>,
-        electronic_mail_address: Option<Label>,
-        telex_number: Option<Label>,
+        pub internal_location: Option<Label>,
+        pub street_number: Option<Label>,
+        pub street: Option<Label>,
+        pub postal_box: Option<Label>,
+        pub town: Option<Label>,
+        pub region: Option<Label>,
+        pub postal_code: Option<Label>,
+        pub country: Option<Label>,
+        pub facsimile_number: Option<Label>,
+        pub telephone_number: Option<Label>,
+        pub electronic_mail_address: Option<Label>,
+        pub telex_number: Option<Label>,
     }
-    impl Address {
-        pub fn new(
-            internal_location: Option<Label>,
-            street_number: Option<Label>,
-            street: Option<Label>,
-            postal_box: Option<Label>,
-            town: Option<Label>,
-            region: Option<Label>,
-            postal_code: Option<Label>,
-            country: Option<Label>,
-            facsimile_number: Option<Label>,
-            telephone_number: Option<Label>,
-            electronic_mail_address: Option<Label>,
-            telex_number: Option<Label>,
-        ) -> Self {
-            Self {
-                internal_location,
-                street_number,
-                street,
-                postal_box,
-                town,
-                region,
-                postal_code,
-                country,
-                facsimile_number,
-                telephone_number,
-                electronic_mail_address,
-                telex_number,
-            }
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
+    pub struct AngularDimension {
+        pub dimension_curve_directed_callout: DimensionCurveDirectedCallout,
+    }
+    impl ::std::ops::Deref for AngularDimension {
+        type Target = DimensionCurveDirectedCallout;
+        fn deref(&self) -> &Self::Target {
+            &self.dimension_curve_directed_callout
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct AngularDimension {}
-    impl AngularDimension {
-        pub fn new() -> Self {
-            Self {}
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
+    pub struct AnnotationCurveOccurrence {
+        pub annotation_occurrence: AnnotationOccurrence,
+    }
+    impl ::std::ops::Deref for AnnotationCurveOccurrence {
+        type Target = AnnotationOccurrence;
+        fn deref(&self) -> &Self::Target {
+            &self.annotation_occurrence
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct AnnotationCurveOccurrence {}
-    impl AnnotationCurveOccurrence {
-        pub fn new() -> Self {
-            Self {}
-        }
-    }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct AnnotationFillArea {
-        boundaries: Curve,
+        pub geometric_representation_item: GeometricRepresentationItem,
+        pub boundaries: Curve,
     }
-    impl AnnotationFillArea {
-        pub fn new(boundaries: Curve) -> Self {
-            Self { boundaries }
+    impl ::std::ops::Deref for AnnotationFillArea {
+        type Target = GeometricRepresentationItem;
+        fn deref(&self) -> &Self::Target {
+            &self.geometric_representation_item
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct AnnotationFillAreaOccurrence {
-        fill_style_target: Point,
+        pub annotation_occurrence: AnnotationOccurrence,
+        pub fill_style_target: Point,
     }
-    impl AnnotationFillAreaOccurrence {
-        pub fn new(fill_style_target: Point) -> Self {
-            Self { fill_style_target }
+    impl ::std::ops::Deref for AnnotationFillAreaOccurrence {
+        type Target = AnnotationOccurrence;
+        fn deref(&self) -> &Self::Target {
+            &self.annotation_occurrence
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct AnnotationOccurrence {}
-    impl AnnotationOccurrence {
-        pub fn new() -> Self {
-            Self {}
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
+    pub struct AnnotationOccurrence {
+        pub styled_item: StyledItem,
+    }
+    impl ::std::ops::Deref for AnnotationOccurrence {
+        type Target = StyledItem;
+        fn deref(&self) -> &Self::Target {
+            &self.styled_item
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct AnnotationSubfigureOccurrence {}
-    impl AnnotationSubfigureOccurrence {
-        pub fn new() -> Self {
-            Self {}
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
+    pub struct AnnotationSubfigureOccurrence {
+        pub annotation_symbol_occurrence: AnnotationSymbolOccurrence,
+    }
+    impl ::std::ops::Deref for AnnotationSubfigureOccurrence {
+        type Target = AnnotationSymbolOccurrence;
+        fn deref(&self) -> &Self::Target {
+            &self.annotation_symbol_occurrence
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct AnnotationSymbol {}
-    impl AnnotationSymbol {
-        pub fn new() -> Self {
-            Self {}
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
+    pub struct AnnotationSymbol {
+        pub mapped_item: MappedItem,
+    }
+    impl ::std::ops::Deref for AnnotationSymbol {
+        type Target = MappedItem;
+        fn deref(&self) -> &Self::Target {
+            &self.mapped_item
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct AnnotationSymbolOccurrence {}
-    impl AnnotationSymbolOccurrence {
-        pub fn new() -> Self {
-            Self {}
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
+    pub struct AnnotationSymbolOccurrence {
+        pub annotation_occurrence: AnnotationOccurrence,
+    }
+    impl ::std::ops::Deref for AnnotationSymbolOccurrence {
+        type Target = AnnotationOccurrence;
+        fn deref(&self) -> &Self::Target {
+            &self.annotation_occurrence
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct AnnotationText {}
-    impl AnnotationText {
-        pub fn new() -> Self {
-            Self {}
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
+    pub struct AnnotationText {
+        pub mapped_item: MappedItem,
+    }
+    impl ::std::ops::Deref for AnnotationText {
+        type Target = MappedItem;
+        fn deref(&self) -> &Self::Target {
+            &self.mapped_item
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct AnnotationTextOccurrence {}
-    impl AnnotationTextOccurrence {
-        pub fn new() -> Self {
-            Self {}
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
+    pub struct AnnotationTextOccurrence {
+        pub annotation_occurrence: AnnotationOccurrence,
+    }
+    impl ::std::ops::Deref for AnnotationTextOccurrence {
+        type Target = AnnotationOccurrence;
+        fn deref(&self) -> &Self::Target {
+            &self.annotation_occurrence
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ApplicationContext {
-        application: Text,
+        pub application: Text,
     }
-    impl ApplicationContext {
-        pub fn new(application: Text) -> Self {
-            Self { application }
-        }
-    }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ApplicationContextElement {
-        name: Label,
-        frame_of_reference: ApplicationContext,
+        pub name: Label,
+        pub frame_of_reference: ApplicationContext,
     }
-    impl ApplicationContextElement {
-        pub fn new(name: Label, frame_of_reference: ApplicationContext) -> Self {
-            Self {
-                name,
-                frame_of_reference,
-            }
-        }
-    }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ApplicationProtocolDefinition {
-        status: Label,
-        application_interpreted_model_schema_name: Label,
-        application_protocol_year: YearNumber,
-        application: ApplicationContext,
+        pub status: Label,
+        pub application_interpreted_model_schema_name: Label,
+        pub application_protocol_year: YearNumber,
+        pub application: ApplicationContext,
     }
-    impl ApplicationProtocolDefinition {
-        pub fn new(
-            status: Label,
-            application_interpreted_model_schema_name: Label,
-            application_protocol_year: YearNumber,
-            application: ApplicationContext,
-        ) -> Self {
-            Self {
-                status,
-                application_interpreted_model_schema_name,
-                application_protocol_year,
-                application,
-            }
-        }
-    }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Approval {
-        status: ApprovalStatus,
-        level: Label,
+        pub status: ApprovalStatus,
+        pub level: Label,
     }
-    impl Approval {
-        pub fn new(status: ApprovalStatus, level: Label) -> Self {
-            Self { status, level }
-        }
-    }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ApprovalAssignment {
-        assigned_approval: Approval,
+        pub assigned_approval: Approval,
     }
-    impl ApprovalAssignment {
-        pub fn new(assigned_approval: Approval) -> Self {
-            Self { assigned_approval }
-        }
-    }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ApprovalDateTime {
-        date_time: DateTimeSelect,
-        dated_approval: Approval,
+        pub date_time: DateTimeSelect,
+        pub dated_approval: Approval,
     }
-    impl ApprovalDateTime {
-        pub fn new(date_time: DateTimeSelect, dated_approval: Approval) -> Self {
-            Self {
-                date_time,
-                dated_approval,
-            }
-        }
-    }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ApprovalPersonOrganization {
-        person_organization: PersonOrganizationSelect,
-        authorized_approval: Approval,
-        role: ApprovalRole,
+        pub person_organization: PersonOrganizationSelect,
+        pub authorized_approval: Approval,
+        pub role: ApprovalRole,
     }
-    impl ApprovalPersonOrganization {
-        pub fn new(
-            person_organization: PersonOrganizationSelect,
-            authorized_approval: Approval,
-            role: ApprovalRole,
-        ) -> Self {
-            Self {
-                person_organization,
-                authorized_approval,
-                role,
-            }
-        }
-    }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ApprovalRole {
-        role: Label,
+        pub role: Label,
     }
-    impl ApprovalRole {
-        pub fn new(role: Label) -> Self {
-            Self { role }
-        }
-    }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ApprovalStatus {
-        name: Label,
+        pub name: Label,
     }
-    impl ApprovalStatus {
-        pub fn new(name: Label) -> Self {
-            Self { name }
-        }
-    }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct AreaInSet {
-        area: PresentationArea,
-        in_set: PresentationSet,
+        pub area: PresentationArea,
+        pub in_set: PresentationSet,
     }
-    impl AreaInSet {
-        pub fn new(area: PresentationArea, in_set: PresentationSet) -> Self {
-            Self { area, in_set }
-        }
-    }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Axis2Placement2D {
-        ref_direction: Option<Direction>,
+        pub placement: Placement,
+        pub ref_direction: Option<Direction>,
     }
-    impl Axis2Placement2D {
-        pub fn new(ref_direction: Option<Direction>) -> Self {
-            Self { ref_direction }
+    impl ::std::ops::Deref for Axis2Placement2D {
+        type Target = Placement;
+        fn deref(&self) -> &Self::Target {
+            &self.placement
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct BSplineCurve {
-        degree: i64,
-        control_points_list: CartesianPoint,
-        curve_form: BSplineCurveForm,
-        closed_curve: Logical,
-        self_intersect: Logical,
+        pub bounded_curve: BoundedCurve,
+        pub degree: i64,
+        pub control_points_list: CartesianPoint,
+        pub curve_form: BSplineCurveForm,
+        pub closed_curve: Logical,
+        pub self_intersect: Logical,
     }
-    impl BSplineCurve {
-        pub fn new(
-            degree: i64,
-            control_points_list: CartesianPoint,
-            curve_form: BSplineCurveForm,
-            closed_curve: Logical,
-            self_intersect: Logical,
-        ) -> Self {
-            Self {
-                degree,
-                control_points_list,
-                curve_form,
-                closed_curve,
-                self_intersect,
-            }
+    impl ::std::ops::Deref for BSplineCurve {
+        type Target = BoundedCurve;
+        fn deref(&self) -> &Self::Target {
+            &self.bounded_curve
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct BSplineCurveWithKnots {
-        knot_multiplicities: i64,
-        knots: ParameterValue,
-        knot_spec: KnotType,
+        pub b_spline_curve: BSplineCurve,
+        pub knot_multiplicities: i64,
+        pub knots: ParameterValue,
+        pub knot_spec: KnotType,
     }
-    impl BSplineCurveWithKnots {
-        pub fn new(knot_multiplicities: i64, knots: ParameterValue, knot_spec: KnotType) -> Self {
-            Self {
-                knot_multiplicities,
-                knots,
-                knot_spec,
-            }
+    impl ::std::ops::Deref for BSplineCurveWithKnots {
+        type Target = BSplineCurve;
+        fn deref(&self) -> &Self::Target {
+            &self.b_spline_curve
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct BezierCurve {}
-    impl BezierCurve {
-        pub fn new() -> Self {
-            Self {}
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
+    pub struct BezierCurve {
+        pub b_spline_curve: BSplineCurve,
+    }
+    impl ::std::ops::Deref for BezierCurve {
+        type Target = BSplineCurve;
+        fn deref(&self) -> &Self::Target {
+            &self.b_spline_curve
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct BoundedCurve {}
-    impl BoundedCurve {
-        pub fn new() -> Self {
-            Self {}
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
+    pub struct BoundedCurve {
+        pub curve: Curve,
+    }
+    impl ::std::ops::Deref for BoundedCurve {
+        type Target = Curve;
+        fn deref(&self) -> &Self::Target {
+            &self.curve
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct CalendarDate {
-        day_component: DayInMonthNumber,
-        month_component: MonthInYearNumber,
+        pub date: Date,
+        pub day_component: DayInMonthNumber,
+        pub month_component: MonthInYearNumber,
     }
-    impl CalendarDate {
-        pub fn new(day_component: DayInMonthNumber, month_component: MonthInYearNumber) -> Self {
-            Self {
-                day_component,
-                month_component,
-            }
+    impl ::std::ops::Deref for CalendarDate {
+        type Target = Date;
+        fn deref(&self) -> &Self::Target {
+            &self.date
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct CameraImage {}
-    impl CameraImage {
-        pub fn new() -> Self {
-            Self {}
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
+    pub struct CameraImage {
+        pub mapped_item: MappedItem,
+    }
+    impl ::std::ops::Deref for CameraImage {
+        type Target = MappedItem;
+        fn deref(&self) -> &Self::Target {
+            &self.mapped_item
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct CameraImage2DWithScale {}
-    impl CameraImage2DWithScale {
-        pub fn new() -> Self {
-            Self {}
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
+    pub struct CameraImage2DWithScale {
+        pub camera_image: CameraImage,
+    }
+    impl ::std::ops::Deref for CameraImage2DWithScale {
+        type Target = CameraImage;
+        fn deref(&self) -> &Self::Target {
+            &self.camera_image
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct CameraModel {}
-    impl CameraModel {
-        pub fn new() -> Self {
-            Self {}
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
+    pub struct CameraModel {
+        pub geometric_representation_item: GeometricRepresentationItem,
+    }
+    impl ::std::ops::Deref for CameraModel {
+        type Target = GeometricRepresentationItem;
+        fn deref(&self) -> &Self::Target {
+            &self.geometric_representation_item
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct CameraModelD2 {
-        view_window: PlanarBox,
-        view_window_clipping: bool,
+        pub camera_model: CameraModel,
+        pub view_window: PlanarBox,
+        pub view_window_clipping: bool,
     }
-    impl CameraModelD2 {
-        pub fn new(view_window: PlanarBox, view_window_clipping: bool) -> Self {
-            Self {
-                view_window,
-                view_window_clipping,
-            }
+    impl ::std::ops::Deref for CameraModelD2 {
+        type Target = CameraModel;
+        fn deref(&self) -> &Self::Target {
+            &self.camera_model
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct CameraUsage {}
-    impl CameraUsage {
-        pub fn new() -> Self {
-            Self {}
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
+    pub struct CameraUsage {
+        pub representation_map: RepresentationMap,
+    }
+    impl ::std::ops::Deref for CameraUsage {
+        type Target = RepresentationMap;
+        fn deref(&self) -> &Self::Target {
+            &self.representation_map
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct CartesianPoint {
-        coordinates: LengthMeasure,
+        pub point: Point,
+        pub coordinates: LengthMeasure,
     }
-    impl CartesianPoint {
-        pub fn new(coordinates: LengthMeasure) -> Self {
-            Self { coordinates }
+    impl ::std::ops::Deref for CartesianPoint {
+        type Target = Point;
+        fn deref(&self) -> &Self::Target {
+            &self.point
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Circle {
-        radius: PositiveLengthMeasure,
+        pub conic: Conic,
+        pub radius: PositiveLengthMeasure,
     }
-    impl Circle {
-        pub fn new(radius: PositiveLengthMeasure) -> Self {
-            Self { radius }
+    impl ::std::ops::Deref for Circle {
+        type Target = Conic;
+        fn deref(&self) -> &Self::Target {
+            &self.conic
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Colour {}
-    impl Colour {
-        pub fn new() -> Self {
-            Self {}
-        }
-    }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ColourRgb {
-        red: f64,
-        green: f64,
-        blue: f64,
+        pub colour_specification: ColourSpecification,
+        pub red: f64,
+        pub green: f64,
+        pub blue: f64,
     }
-    impl ColourRgb {
-        pub fn new(red: f64, green: f64, blue: f64) -> Self {
-            Self { red, green, blue }
+    impl ::std::ops::Deref for ColourRgb {
+        type Target = ColourSpecification;
+        fn deref(&self) -> &Self::Target {
+            &self.colour_specification
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ColourSpecification {
-        name: Colour,
+        pub colour: Colour,
+        pub name: Colour,
     }
-    impl ColourSpecification {
-        pub fn new(name: Colour) -> Self {
-            Self { name }
+    impl ::std::ops::Deref for ColourSpecification {
+        type Target = Colour;
+        fn deref(&self) -> &Self::Target {
+            &self.colour
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct CompositeCurve {
-        segments: CompositeCurveSegment,
-        self_intersect: Logical,
+        pub bounded_curve: BoundedCurve,
+        pub segments: CompositeCurveSegment,
+        pub self_intersect: Logical,
     }
-    impl CompositeCurve {
-        pub fn new(segments: CompositeCurveSegment, self_intersect: Logical) -> Self {
-            Self {
-                segments,
-                self_intersect,
-            }
+    impl ::std::ops::Deref for CompositeCurve {
+        type Target = BoundedCurve;
+        fn deref(&self) -> &Self::Target {
+            &self.bounded_curve
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct CompositeCurveSegment {
-        transition: TransitionCode,
-        same_sense: bool,
-        parent_curve: Curve,
+        pub transition: TransitionCode,
+        pub same_sense: bool,
+        pub parent_curve: Curve,
     }
-    impl CompositeCurveSegment {
-        pub fn new(transition: TransitionCode, same_sense: bool, parent_curve: Curve) -> Self {
-            Self {
-                transition,
-                same_sense,
-                parent_curve,
-            }
-        }
-    }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct CompositeText {
-        collected_text: TextOrCharacter,
+        pub geometric_representation_item: GeometricRepresentationItem,
+        pub collected_text: TextOrCharacter,
     }
-    impl CompositeText {
-        pub fn new(collected_text: TextOrCharacter) -> Self {
-            Self { collected_text }
+    impl ::std::ops::Deref for CompositeText {
+        type Target = GeometricRepresentationItem;
+        fn deref(&self) -> &Self::Target {
+            &self.geometric_representation_item
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct CompositeTextWithAssociatedCurves {
-        associated_curves: Curve,
+        pub composite_text: CompositeText,
+        pub associated_curves: Curve,
     }
-    impl CompositeTextWithAssociatedCurves {
-        pub fn new(associated_curves: Curve) -> Self {
-            Self { associated_curves }
+    impl ::std::ops::Deref for CompositeTextWithAssociatedCurves {
+        type Target = CompositeText;
+        fn deref(&self) -> &Self::Target {
+            &self.composite_text
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct CompositeTextWithBlankingBox {
-        blanking: PlanarBox,
+        pub composite_text: CompositeText,
+        pub blanking: PlanarBox,
     }
-    impl CompositeTextWithBlankingBox {
-        pub fn new(blanking: PlanarBox) -> Self {
-            Self { blanking }
+    impl ::std::ops::Deref for CompositeTextWithBlankingBox {
+        type Target = CompositeText;
+        fn deref(&self) -> &Self::Target {
+            &self.composite_text
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct CompositeTextWithExtent {
-        extent: PlanarExtent,
+        pub composite_text: CompositeText,
+        pub extent: PlanarExtent,
     }
-    impl CompositeTextWithExtent {
-        pub fn new(extent: PlanarExtent) -> Self {
-            Self { extent }
+    impl ::std::ops::Deref for CompositeTextWithExtent {
+        type Target = CompositeText;
+        fn deref(&self) -> &Self::Target {
+            &self.composite_text
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Conic {
-        position: Axis2Placement,
+        pub curve: Curve,
+        pub position: Axis2Placement,
     }
-    impl Conic {
-        pub fn new(position: Axis2Placement) -> Self {
-            Self { position }
+    impl ::std::ops::Deref for Conic {
+        type Target = Curve;
+        fn deref(&self) -> &Self::Target {
+            &self.curve
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ContextDependentInvisibility {
-        presentation_context: InvisibilityContext,
+        pub invisibility: Invisibility,
+        pub presentation_context: InvisibilityContext,
     }
-    impl ContextDependentInvisibility {
-        pub fn new(presentation_context: InvisibilityContext) -> Self {
-            Self {
-                presentation_context,
-            }
+    impl ::std::ops::Deref for ContextDependentInvisibility {
+        type Target = Invisibility;
+        fn deref(&self) -> &Self::Target {
+            &self.invisibility
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Contract {
-        name: Label,
-        purpose: Text,
-        kind: ContractType,
+        pub name: Label,
+        pub purpose: Text,
+        pub kind: ContractType,
     }
-    impl Contract {
-        pub fn new(name: Label, purpose: Text, kind: ContractType) -> Self {
-            Self {
-                name,
-                purpose,
-                kind,
-            }
-        }
-    }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ContractAssignment {
-        assigned_contract: Contract,
+        pub assigned_contract: Contract,
     }
-    impl ContractAssignment {
-        pub fn new(assigned_contract: Contract) -> Self {
-            Self { assigned_contract }
-        }
-    }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ContractType {
-        description: Label,
+        pub description: Label,
     }
-    impl ContractType {
-        pub fn new(description: Label) -> Self {
-            Self { description }
-        }
-    }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ConversionBasedUnit {
-        name: Label,
-        conversion_factor: MeasureWithUnit,
+        pub named_unit: NamedUnit,
+        pub name: Label,
+        pub conversion_factor: MeasureWithUnit,
     }
-    impl ConversionBasedUnit {
-        pub fn new(name: Label, conversion_factor: MeasureWithUnit) -> Self {
-            Self {
-                name,
-                conversion_factor,
-            }
+    impl ::std::ops::Deref for ConversionBasedUnit {
+        type Target = NamedUnit;
+        fn deref(&self) -> &Self::Target {
+            &self.named_unit
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct Curve {}
-    impl Curve {
-        pub fn new() -> Self {
-            Self {}
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
+    pub struct Curve {
+        pub geometric_representation_item: GeometricRepresentationItem,
+    }
+    impl ::std::ops::Deref for Curve {
+        type Target = GeometricRepresentationItem;
+        fn deref(&self) -> &Self::Target {
+            &self.geometric_representation_item
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct CurveDimension {}
-    impl CurveDimension {
-        pub fn new() -> Self {
-            Self {}
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
+    pub struct CurveDimension {
+        pub dimension_curve_directed_callout: DimensionCurveDirectedCallout,
+    }
+    impl ::std::ops::Deref for CurveDimension {
+        type Target = DimensionCurveDirectedCallout;
+        fn deref(&self) -> &Self::Target {
+            &self.dimension_curve_directed_callout
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct CurveStyle {
-        name: Label,
-        curve_font: CurveFontOrScaledCurveFontSelect,
-        curve_width: SizeSelect,
-        curve_colour: Colour,
+        pub name: Label,
+        pub curve_font: CurveFontOrScaledCurveFontSelect,
+        pub curve_width: SizeSelect,
+        pub curve_colour: Colour,
     }
-    impl CurveStyle {
-        pub fn new(
-            name: Label,
-            curve_font: CurveFontOrScaledCurveFontSelect,
-            curve_width: SizeSelect,
-            curve_colour: Colour,
-        ) -> Self {
-            Self {
-                name,
-                curve_font,
-                curve_width,
-                curve_colour,
-            }
-        }
-    }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct CurveStyleFont {
-        name: Label,
-        pattern_list: CurveStyleFontPattern,
+        pub name: Label,
+        pub pattern_list: CurveStyleFontPattern,
     }
-    impl CurveStyleFont {
-        pub fn new(name: Label, pattern_list: CurveStyleFontPattern) -> Self {
-            Self { name, pattern_list }
-        }
-    }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct CurveStyleFontPattern {
-        visible_segment_length: PositiveLengthMeasure,
-        invisible_segment_length: PositiveLengthMeasure,
+        pub visible_segment_length: PositiveLengthMeasure,
+        pub invisible_segment_length: PositiveLengthMeasure,
     }
-    impl CurveStyleFontPattern {
-        pub fn new(
-            visible_segment_length: PositiveLengthMeasure,
-            invisible_segment_length: PositiveLengthMeasure,
-        ) -> Self {
-            Self {
-                visible_segment_length,
-                invisible_segment_length,
-            }
-        }
-    }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Date {
-        year_component: YearNumber,
+        pub year_component: YearNumber,
     }
-    impl Date {
-        pub fn new(year_component: YearNumber) -> Self {
-            Self { year_component }
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
+    pub struct DatumFeatureCallout {
+        pub draughting_callout: DraughtingCallout,
+    }
+    impl ::std::ops::Deref for DatumFeatureCallout {
+        type Target = DraughtingCallout;
+        fn deref(&self) -> &Self::Target {
+            &self.draughting_callout
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct DatumFeatureCallout {}
-    impl DatumFeatureCallout {
-        pub fn new() -> Self {
-            Self {}
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
+    pub struct DatumTargetCallout {
+        pub draughting_callout: DraughtingCallout,
+    }
+    impl ::std::ops::Deref for DatumTargetCallout {
+        type Target = DraughtingCallout;
+        fn deref(&self) -> &Self::Target {
+            &self.draughting_callout
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct DatumTargetCallout {}
-    impl DatumTargetCallout {
-        pub fn new() -> Self {
-            Self {}
-        }
-    }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DefinedSymbol {
-        definition: DefinedSymbolSelect,
-        target: SymbolTarget,
+        pub geometric_representation_item: GeometricRepresentationItem,
+        pub definition: DefinedSymbolSelect,
+        pub target: SymbolTarget,
     }
-    impl DefinedSymbol {
-        pub fn new(definition: DefinedSymbolSelect, target: SymbolTarget) -> Self {
-            Self { definition, target }
+    impl ::std::ops::Deref for DefinedSymbol {
+        type Target = GeometricRepresentationItem;
+        fn deref(&self) -> &Self::Target {
+            &self.geometric_representation_item
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct DiameterDimension {}
-    impl DiameterDimension {
-        pub fn new() -> Self {
-            Self {}
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
+    pub struct DiameterDimension {
+        pub dimension_curve_directed_callout: DimensionCurveDirectedCallout,
+    }
+    impl ::std::ops::Deref for DiameterDimension {
+        type Target = DimensionCurveDirectedCallout;
+        fn deref(&self) -> &Self::Target {
+            &self.dimension_curve_directed_callout
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct DimensionCalloutComponentRelationship {}
-    impl DimensionCalloutComponentRelationship {
-        pub fn new() -> Self {
-            Self {}
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
+    pub struct DimensionCalloutComponentRelationship {
+        pub draughting_callout_relationship: DraughtingCalloutRelationship,
+    }
+    impl ::std::ops::Deref for DimensionCalloutComponentRelationship {
+        type Target = DraughtingCalloutRelationship;
+        fn deref(&self) -> &Self::Target {
+            &self.draughting_callout_relationship
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct DimensionCalloutRelationship {}
-    impl DimensionCalloutRelationship {
-        pub fn new() -> Self {
-            Self {}
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
+    pub struct DimensionCalloutRelationship {
+        pub draughting_callout_relationship: DraughtingCalloutRelationship,
+    }
+    impl ::std::ops::Deref for DimensionCalloutRelationship {
+        type Target = DraughtingCalloutRelationship;
+        fn deref(&self) -> &Self::Target {
+            &self.draughting_callout_relationship
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct DimensionCurve {}
-    impl DimensionCurve {
-        pub fn new() -> Self {
-            Self {}
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
+    pub struct DimensionCurve {
+        pub annotation_curve_occurrence: AnnotationCurveOccurrence,
+    }
+    impl ::std::ops::Deref for DimensionCurve {
+        type Target = AnnotationCurveOccurrence;
+        fn deref(&self) -> &Self::Target {
+            &self.annotation_curve_occurrence
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct DimensionCurveDirectedCallout {}
-    impl DimensionCurveDirectedCallout {
-        pub fn new() -> Self {
-            Self {}
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
+    pub struct DimensionCurveDirectedCallout {
+        pub draughting_callout: DraughtingCallout,
+    }
+    impl ::std::ops::Deref for DimensionCurveDirectedCallout {
+        type Target = DraughtingCallout;
+        fn deref(&self) -> &Self::Target {
+            &self.draughting_callout
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DimensionCurveTerminator {
-        role: DimensionExtentUsage,
+        pub terminator_symbol: TerminatorSymbol,
+        pub role: DimensionExtentUsage,
     }
-    impl DimensionCurveTerminator {
-        pub fn new(role: DimensionExtentUsage) -> Self {
-            Self { role }
+    impl ::std::ops::Deref for DimensionCurveTerminator {
+        type Target = TerminatorSymbol;
+        fn deref(&self) -> &Self::Target {
+            &self.terminator_symbol
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct DimensionPair {}
-    impl DimensionPair {
-        pub fn new() -> Self {
-            Self {}
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
+    pub struct DimensionPair {
+        pub draughting_callout_relationship: DraughtingCalloutRelationship,
+    }
+    impl ::std::ops::Deref for DimensionPair {
+        type Target = DraughtingCalloutRelationship;
+        fn deref(&self) -> &Self::Target {
+            &self.draughting_callout_relationship
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DimensionalExponents {
-        length_exponent: f64,
-        mass_exponent: f64,
-        time_exponent: f64,
-        electric_current_exponent: f64,
-        thermodynamic_temperature_exponent: f64,
-        amount_of_substance_exponent: f64,
-        luminous_intensity_exponent: f64,
+        pub length_exponent: f64,
+        pub mass_exponent: f64,
+        pub time_exponent: f64,
+        pub electric_current_exponent: f64,
+        pub thermodynamic_temperature_exponent: f64,
+        pub amount_of_substance_exponent: f64,
+        pub luminous_intensity_exponent: f64,
     }
-    impl DimensionalExponents {
-        pub fn new(
-            length_exponent: f64,
-            mass_exponent: f64,
-            time_exponent: f64,
-            electric_current_exponent: f64,
-            thermodynamic_temperature_exponent: f64,
-            amount_of_substance_exponent: f64,
-            luminous_intensity_exponent: f64,
-        ) -> Self {
-            Self {
-                length_exponent,
-                mass_exponent,
-                time_exponent,
-                electric_current_exponent,
-                thermodynamic_temperature_exponent,
-                amount_of_substance_exponent,
-                luminous_intensity_exponent,
-            }
-        }
-    }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Direction {
-        direction_ratios: f64,
+        pub geometric_representation_item: GeometricRepresentationItem,
+        pub direction_ratios: f64,
     }
-    impl Direction {
-        pub fn new(direction_ratios: f64) -> Self {
-            Self { direction_ratios }
+    impl ::std::ops::Deref for Direction {
+        type Target = GeometricRepresentationItem;
+        fn deref(&self) -> &Self::Target {
+            &self.geometric_representation_item
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Document {
-        id: Identifier,
-        name: Label,
-        description: Text,
-        kind: DocumentType,
+        pub id: Identifier,
+        pub name: Label,
+        pub description: Text,
+        pub kind: DocumentType,
     }
-    impl Document {
-        pub fn new(id: Identifier, name: Label, description: Text, kind: DocumentType) -> Self {
-            Self {
-                id,
-                name,
-                description,
-                kind,
-            }
-        }
-    }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DocumentReference {
-        assigned_document: Document,
-        source: Label,
+        pub assigned_document: Document,
+        pub source: Label,
     }
-    impl DocumentReference {
-        pub fn new(assigned_document: Document, source: Label) -> Self {
-            Self {
-                assigned_document,
-                source,
-            }
-        }
-    }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DocumentType {
-        product_data_type: Label,
+        pub product_data_type: Label,
     }
-    impl DocumentType {
-        pub fn new(product_data_type: Label) -> Self {
-            Self { product_data_type }
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
+    pub struct DraughtingAnnotationOccurrence {
+        pub annotation_occurrence: AnnotationOccurrence,
+    }
+    impl ::std::ops::Deref for DraughtingAnnotationOccurrence {
+        type Target = AnnotationOccurrence;
+        fn deref(&self) -> &Self::Target {
+            &self.annotation_occurrence
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct DraughtingAnnotationOccurrence {}
-    impl DraughtingAnnotationOccurrence {
-        pub fn new() -> Self {
-            Self {}
-        }
-    }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DraughtingApprovalAssignment {
-        approved_items: ApprovedItem,
+        pub approval_assignment: ApprovalAssignment,
+        pub approved_items: ApprovedItem,
     }
-    impl DraughtingApprovalAssignment {
-        pub fn new(approved_items: ApprovedItem) -> Self {
-            Self { approved_items }
+    impl ::std::ops::Deref for DraughtingApprovalAssignment {
+        type Target = ApprovalAssignment;
+        fn deref(&self) -> &Self::Target {
+            &self.approval_assignment
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DraughtingCallout {
-        contents: DraughtingCalloutElement,
+        pub geometric_representation_item: GeometricRepresentationItem,
+        pub contents: DraughtingCalloutElement,
     }
-    impl DraughtingCallout {
-        pub fn new(contents: DraughtingCalloutElement) -> Self {
-            Self { contents }
+    impl ::std::ops::Deref for DraughtingCallout {
+        type Target = GeometricRepresentationItem;
+        fn deref(&self) -> &Self::Target {
+            &self.geometric_representation_item
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DraughtingCalloutRelationship {
-        name: Label,
-        description: Text,
-        relating_draughting_callout: DraughtingCallout,
-        related_draughting_callout: DraughtingCallout,
+        pub name: Label,
+        pub description: Text,
+        pub relating_draughting_callout: DraughtingCallout,
+        pub related_draughting_callout: DraughtingCallout,
     }
-    impl DraughtingCalloutRelationship {
-        pub fn new(
-            name: Label,
-            description: Text,
-            relating_draughting_callout: DraughtingCallout,
-            related_draughting_callout: DraughtingCallout,
-        ) -> Self {
-            Self {
-                name,
-                description,
-                relating_draughting_callout,
-                related_draughting_callout,
-            }
-        }
-    }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DraughtingContractAssignment {
-        items: ContractedItem,
+        pub contract_assignment: ContractAssignment,
+        pub items: ContractedItem,
     }
-    impl DraughtingContractAssignment {
-        pub fn new(items: ContractedItem) -> Self {
-            Self { items }
+    impl ::std::ops::Deref for DraughtingContractAssignment {
+        type Target = ContractAssignment;
+        fn deref(&self) -> &Self::Target {
+            &self.contract_assignment
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct DraughtingDrawingRevision {}
-    impl DraughtingDrawingRevision {
-        pub fn new() -> Self {
-            Self {}
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
+    pub struct DraughtingDrawingRevision {
+        pub drawing_revision: DrawingRevision,
+    }
+    impl ::std::ops::Deref for DraughtingDrawingRevision {
+        type Target = DrawingRevision;
+        fn deref(&self) -> &Self::Target {
+            &self.drawing_revision
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct DraughtingElements {}
-    impl DraughtingElements {
-        pub fn new() -> Self {
-            Self {}
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
+    pub struct DraughtingElements {
+        pub draughting_callout: DraughtingCallout,
+    }
+    impl ::std::ops::Deref for DraughtingElements {
+        type Target = DraughtingCallout;
+        fn deref(&self) -> &Self::Target {
+            &self.draughting_callout
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DraughtingGroupAssignment {
-        items: DraughtingGroupedItem,
+        pub group_assignment: GroupAssignment,
+        pub items: DraughtingGroupedItem,
     }
-    impl DraughtingGroupAssignment {
-        pub fn new(items: DraughtingGroupedItem) -> Self {
-            Self { items }
+    impl ::std::ops::Deref for DraughtingGroupAssignment {
+        type Target = GroupAssignment;
+        fn deref(&self) -> &Self::Target {
+            &self.group_assignment
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct DraughtingModel {}
-    impl DraughtingModel {
-        pub fn new() -> Self {
-            Self {}
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
+    pub struct DraughtingModel {
+        pub representation: Representation,
+    }
+    impl ::std::ops::Deref for DraughtingModel {
+        type Target = Representation;
+        fn deref(&self) -> &Self::Target {
+            &self.representation
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DraughtingOrganizationAssignment {
-        assigned_items: DraughtingOrganizationItem,
+        pub organization_assignment: OrganizationAssignment,
+        pub assigned_items: DraughtingOrganizationItem,
     }
-    impl DraughtingOrganizationAssignment {
-        pub fn new(assigned_items: DraughtingOrganizationItem) -> Self {
-            Self { assigned_items }
+    impl ::std::ops::Deref for DraughtingOrganizationAssignment {
+        type Target = OrganizationAssignment;
+        fn deref(&self) -> &Self::Target {
+            &self.organization_assignment
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DraughtingPersonAndOrganizationAssignment {
-        assigned_items: DraughtingOrganizationItem,
+        pub person_and_organization_assignment: PersonAndOrganizationAssignment,
+        pub assigned_items: DraughtingOrganizationItem,
     }
-    impl DraughtingPersonAndOrganizationAssignment {
-        pub fn new(assigned_items: DraughtingOrganizationItem) -> Self {
-            Self { assigned_items }
+    impl ::std::ops::Deref for DraughtingPersonAndOrganizationAssignment {
+        type Target = PersonAndOrganizationAssignment;
+        fn deref(&self) -> &Self::Target {
+            &self.person_and_organization_assignment
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DraughtingPersonAssignment {
-        assigned_items: DraughtingOrganizationItem,
+        pub person_assignment: PersonAssignment,
+        pub assigned_items: DraughtingOrganizationItem,
     }
-    impl DraughtingPersonAssignment {
-        pub fn new(assigned_items: DraughtingOrganizationItem) -> Self {
-            Self { assigned_items }
+    impl ::std::ops::Deref for DraughtingPersonAssignment {
+        type Target = PersonAssignment;
+        fn deref(&self) -> &Self::Target {
+            &self.person_assignment
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct DraughtingPreDefinedColour {}
-    impl DraughtingPreDefinedColour {
-        pub fn new() -> Self {
-            Self {}
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
+    pub struct DraughtingPreDefinedColour {
+        pub pre_defined_colour: PreDefinedColour,
+    }
+    impl ::std::ops::Deref for DraughtingPreDefinedColour {
+        type Target = PreDefinedColour;
+        fn deref(&self) -> &Self::Target {
+            &self.pre_defined_colour
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct DraughtingPreDefinedCurveFont {}
-    impl DraughtingPreDefinedCurveFont {
-        pub fn new() -> Self {
-            Self {}
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
+    pub struct DraughtingPreDefinedCurveFont {
+        pub pre_defined_curve_font: PreDefinedCurveFont,
+    }
+    impl ::std::ops::Deref for DraughtingPreDefinedCurveFont {
+        type Target = PreDefinedCurveFont;
+        fn deref(&self) -> &Self::Target {
+            &self.pre_defined_curve_font
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct DraughtingPreDefinedTextFont {}
-    impl DraughtingPreDefinedTextFont {
-        pub fn new() -> Self {
-            Self {}
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
+    pub struct DraughtingPreDefinedTextFont {
+        pub pre_defined_text_font: PreDefinedTextFont,
+    }
+    impl ::std::ops::Deref for DraughtingPreDefinedTextFont {
+        type Target = PreDefinedTextFont;
+        fn deref(&self) -> &Self::Target {
+            &self.pre_defined_text_font
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DraughtingPresentedItem {
-        items: DraughtingPresentedItemSelect,
+        pub presented_item: PresentedItem,
+        pub items: DraughtingPresentedItemSelect,
     }
-    impl DraughtingPresentedItem {
-        pub fn new(items: DraughtingPresentedItemSelect) -> Self {
-            Self { items }
+    impl ::std::ops::Deref for DraughtingPresentedItem {
+        type Target = PresentedItem;
+        fn deref(&self) -> &Self::Target {
+            &self.presented_item
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DraughtingSecurityClassificationAssignment {
-        assigned_items: ClassifiedItem,
+        pub security_classification_assignment: SecurityClassificationAssignment,
+        pub assigned_items: ClassifiedItem,
     }
-    impl DraughtingSecurityClassificationAssignment {
-        pub fn new(assigned_items: ClassifiedItem) -> Self {
-            Self { assigned_items }
+    impl ::std::ops::Deref for DraughtingSecurityClassificationAssignment {
+        type Target = SecurityClassificationAssignment;
+        fn deref(&self) -> &Self::Target {
+            &self.security_classification_assignment
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DraughtingSpecificationReference {
-        specified_items: SpecifiedItem,
+        pub document_reference: DocumentReference,
+        pub specified_items: SpecifiedItem,
     }
-    impl DraughtingSpecificationReference {
-        pub fn new(specified_items: SpecifiedItem) -> Self {
-            Self { specified_items }
+    impl ::std::ops::Deref for DraughtingSpecificationReference {
+        type Target = DocumentReference;
+        fn deref(&self) -> &Self::Target {
+            &self.document_reference
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct DraughtingSubfigureRepresentation {}
-    impl DraughtingSubfigureRepresentation {
-        pub fn new() -> Self {
-            Self {}
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
+    pub struct DraughtingSubfigureRepresentation {
+        pub symbol_representation: SymbolRepresentation,
+    }
+    impl ::std::ops::Deref for DraughtingSubfigureRepresentation {
+        type Target = SymbolRepresentation;
+        fn deref(&self) -> &Self::Target {
+            &self.symbol_representation
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct DraughtingSymbolRepresentation {}
-    impl DraughtingSymbolRepresentation {
-        pub fn new() -> Self {
-            Self {}
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
+    pub struct DraughtingSymbolRepresentation {
+        pub symbol_representation: SymbolRepresentation,
+    }
+    impl ::std::ops::Deref for DraughtingSymbolRepresentation {
+        type Target = SymbolRepresentation;
+        fn deref(&self) -> &Self::Target {
+            &self.symbol_representation
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct DraughtingTextLiteralWithDelineation {}
-    impl DraughtingTextLiteralWithDelineation {
-        pub fn new() -> Self {
-            Self {}
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
+    pub struct DraughtingTextLiteralWithDelineation {
+        pub text_literal_with_delineation: TextLiteralWithDelineation,
+    }
+    impl ::std::ops::Deref for DraughtingTextLiteralWithDelineation {
+        type Target = TextLiteralWithDelineation;
+        fn deref(&self) -> &Self::Target {
+            &self.text_literal_with_delineation
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DraughtingTitle {
-        items: DraughtingTitledItem,
-        language: Label,
-        contents: Text,
+        pub items: DraughtingTitledItem,
+        pub language: Label,
+        pub contents: Text,
     }
-    impl DraughtingTitle {
-        pub fn new(items: DraughtingTitledItem, language: Label, contents: Text) -> Self {
-            Self {
-                items,
-                language,
-                contents,
-            }
-        }
-    }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DrawingDefinition {
-        drawing_number: Identifier,
-        drawing_type: Option<Label>,
+        pub drawing_number: Identifier,
+        pub drawing_type: Option<Label>,
     }
-    impl DrawingDefinition {
-        pub fn new(drawing_number: Identifier, drawing_type: Option<Label>) -> Self {
-            Self {
-                drawing_number,
-                drawing_type,
-            }
-        }
-    }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DrawingRevision {
-        revision_identifier: Identifier,
-        drawing_identifier: DrawingDefinition,
-        intended_scale: Option<Text>,
+        pub presentation_set: PresentationSet,
+        pub revision_identifier: Identifier,
+        pub drawing_identifier: DrawingDefinition,
+        pub intended_scale: Option<Text>,
     }
-    impl DrawingRevision {
-        pub fn new(
-            revision_identifier: Identifier,
-            drawing_identifier: DrawingDefinition,
-            intended_scale: Option<Text>,
-        ) -> Self {
-            Self {
-                revision_identifier,
-                drawing_identifier,
-                intended_scale,
-            }
+    impl ::std::ops::Deref for DrawingRevision {
+        type Target = PresentationSet;
+        fn deref(&self) -> &Self::Target {
+            &self.presentation_set
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct DrawingSheetLayout {}
-    impl DrawingSheetLayout {
-        pub fn new() -> Self {
-            Self {}
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
+    pub struct DrawingSheetLayout {
+        pub draughting_symbol_representation: DraughtingSymbolRepresentation,
+    }
+    impl ::std::ops::Deref for DrawingSheetLayout {
+        type Target = DraughtingSymbolRepresentation;
+        fn deref(&self) -> &Self::Target {
+            &self.draughting_symbol_representation
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DrawingSheetRevision {
-        revision_identifier: Identifier,
+        pub presentation_area: PresentationArea,
+        pub revision_identifier: Identifier,
     }
-    impl DrawingSheetRevision {
-        pub fn new(revision_identifier: Identifier) -> Self {
-            Self {
-                revision_identifier,
-            }
+    impl ::std::ops::Deref for DrawingSheetRevision {
+        type Target = PresentationArea;
+        fn deref(&self) -> &Self::Target {
+            &self.presentation_area
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DrawingSheetRevisionUsage {
-        sheet_number: Identifier,
+        pub area_in_set: AreaInSet,
+        pub sheet_number: Identifier,
     }
-    impl DrawingSheetRevisionUsage {
-        pub fn new(sheet_number: Identifier) -> Self {
-            Self { sheet_number }
+    impl ::std::ops::Deref for DrawingSheetRevisionUsage {
+        type Target = AreaInSet;
+        fn deref(&self) -> &Self::Target {
+            &self.area_in_set
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Ellipse {
-        semi_axis_1: PositiveLengthMeasure,
-        semi_axis_2: PositiveLengthMeasure,
+        pub conic: Conic,
+        pub semi_axis_1: PositiveLengthMeasure,
+        pub semi_axis_2: PositiveLengthMeasure,
     }
-    impl Ellipse {
-        pub fn new(semi_axis_1: PositiveLengthMeasure, semi_axis_2: PositiveLengthMeasure) -> Self {
-            Self {
-                semi_axis_1,
-                semi_axis_2,
-            }
+    impl ::std::ops::Deref for Ellipse {
+        type Target = Conic;
+        fn deref(&self) -> &Self::Target {
+            &self.conic
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ExternalSource {
-        source_id: SourceItem,
+        pub source_id: SourceItem,
     }
-    impl ExternalSource {
-        pub fn new(source_id: SourceItem) -> Self {
-            Self { source_id }
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
+    pub struct ExternallyDefinedCurveFont {
+        pub externally_defined_item: ExternallyDefinedItem,
+    }
+    impl ::std::ops::Deref for ExternallyDefinedCurveFont {
+        type Target = ExternallyDefinedItem;
+        fn deref(&self) -> &Self::Target {
+            &self.externally_defined_item
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct ExternallyDefinedCurveFont {}
-    impl ExternallyDefinedCurveFont {
-        pub fn new() -> Self {
-            Self {}
-        }
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
+    pub struct ExternallyDefinedHatchStyle {
+        pub externally_defined_item: ExternallyDefinedItem,
+        pub geometric_representation_item: GeometricRepresentationItem,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct ExternallyDefinedHatchStyle {}
-    impl ExternallyDefinedHatchStyle {
-        pub fn new() -> Self {
-            Self {}
-        }
-    }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ExternallyDefinedItem {
-        item_id: SourceItem,
-        source: ExternalSource,
+        pub item_id: SourceItem,
+        pub source: ExternalSource,
     }
-    impl ExternallyDefinedItem {
-        pub fn new(item_id: SourceItem, source: ExternalSource) -> Self {
-            Self { item_id, source }
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
+    pub struct ExternallyDefinedSymbol {
+        pub externally_defined_item: ExternallyDefinedItem,
+    }
+    impl ::std::ops::Deref for ExternallyDefinedSymbol {
+        type Target = ExternallyDefinedItem;
+        fn deref(&self) -> &Self::Target {
+            &self.externally_defined_item
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct ExternallyDefinedSymbol {}
-    impl ExternallyDefinedSymbol {
-        pub fn new() -> Self {
-            Self {}
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
+    pub struct ExternallyDefinedTextFont {
+        pub externally_defined_item: ExternallyDefinedItem,
+    }
+    impl ::std::ops::Deref for ExternallyDefinedTextFont {
+        type Target = ExternallyDefinedItem;
+        fn deref(&self) -> &Self::Target {
+            &self.externally_defined_item
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct ExternallyDefinedTextFont {}
-    impl ExternallyDefinedTextFont {
-        pub fn new() -> Self {
-            Self {}
-        }
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
+    pub struct ExternallyDefinedTileStyle {
+        pub externally_defined_item: ExternallyDefinedItem,
+        pub geometric_representation_item: GeometricRepresentationItem,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct ExternallyDefinedTileStyle {}
-    impl ExternallyDefinedTileStyle {
-        pub fn new() -> Self {
-            Self {}
-        }
-    }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct FillAreaStyle {
-        name: Label,
-        fill_styles: FillStyleSelect,
+        pub name: Label,
+        pub fill_styles: FillStyleSelect,
     }
-    impl FillAreaStyle {
-        pub fn new(name: Label, fill_styles: FillStyleSelect) -> Self {
-            Self { name, fill_styles }
-        }
-    }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct FillAreaStyleColour {
-        name: Label,
-        fill_colour: Colour,
+        pub name: Label,
+        pub fill_colour: Colour,
     }
-    impl FillAreaStyleColour {
-        pub fn new(name: Label, fill_colour: Colour) -> Self {
-            Self { name, fill_colour }
-        }
-    }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct FillAreaStyleHatching {
-        hatch_line_appearance: CurveStyle,
-        start_of_next_hatch_line: OneDirectionRepeatFactor,
-        point_of_reference_hatch_line: CartesianPoint,
-        pattern_start: CartesianPoint,
-        hatch_line_angle: PlaneAngleMeasure,
+        pub geometric_representation_item: GeometricRepresentationItem,
+        pub hatch_line_appearance: CurveStyle,
+        pub start_of_next_hatch_line: OneDirectionRepeatFactor,
+        pub point_of_reference_hatch_line: CartesianPoint,
+        pub pattern_start: CartesianPoint,
+        pub hatch_line_angle: PlaneAngleMeasure,
     }
-    impl FillAreaStyleHatching {
-        pub fn new(
-            hatch_line_appearance: CurveStyle,
-            start_of_next_hatch_line: OneDirectionRepeatFactor,
-            point_of_reference_hatch_line: CartesianPoint,
-            pattern_start: CartesianPoint,
-            hatch_line_angle: PlaneAngleMeasure,
-        ) -> Self {
-            Self {
-                hatch_line_appearance,
-                start_of_next_hatch_line,
-                point_of_reference_hatch_line,
-                pattern_start,
-                hatch_line_angle,
-            }
+    impl ::std::ops::Deref for FillAreaStyleHatching {
+        type Target = GeometricRepresentationItem;
+        fn deref(&self) -> &Self::Target {
+            &self.geometric_representation_item
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct FillAreaStyleTileSymbolWithStyle {
-        symbol: AnnotationSymbolOccurrence,
+        pub geometric_representation_item: GeometricRepresentationItem,
+        pub symbol: AnnotationSymbolOccurrence,
     }
-    impl FillAreaStyleTileSymbolWithStyle {
-        pub fn new(symbol: AnnotationSymbolOccurrence) -> Self {
-            Self { symbol }
+    impl ::std::ops::Deref for FillAreaStyleTileSymbolWithStyle {
+        type Target = GeometricRepresentationItem;
+        fn deref(&self) -> &Self::Target {
+            &self.geometric_representation_item
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct FillAreaStyleTiles {
-        tiling_pattern: TwoDirectionRepeatFactor,
-        tiles: FillAreaStyleTileShapeSelect,
-        tiling_scale: PositiveRatioMeasure,
+        pub geometric_representation_item: GeometricRepresentationItem,
+        pub tiling_pattern: TwoDirectionRepeatFactor,
+        pub tiles: FillAreaStyleTileShapeSelect,
+        pub tiling_scale: PositiveRatioMeasure,
     }
-    impl FillAreaStyleTiles {
-        pub fn new(
-            tiling_pattern: TwoDirectionRepeatFactor,
-            tiles: FillAreaStyleTileShapeSelect,
-            tiling_scale: PositiveRatioMeasure,
-        ) -> Self {
-            Self {
-                tiling_pattern,
-                tiles,
-                tiling_scale,
-            }
+    impl ::std::ops::Deref for FillAreaStyleTiles {
+        type Target = GeometricRepresentationItem;
+        fn deref(&self) -> &Self::Target {
+            &self.geometric_representation_item
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct GeometricCurveSet {}
-    impl GeometricCurveSet {
-        pub fn new() -> Self {
-            Self {}
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
+    pub struct GeometricCurveSet {
+        pub geometric_set: GeometricSet,
+    }
+    impl ::std::ops::Deref for GeometricCurveSet {
+        type Target = GeometricSet;
+        fn deref(&self) -> &Self::Target {
+            &self.geometric_set
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct GeometricRepresentationContext {
-        coordinate_space_dimension: DimensionCount,
+        pub representation_context: RepresentationContext,
+        pub coordinate_space_dimension: DimensionCount,
     }
-    impl GeometricRepresentationContext {
-        pub fn new(coordinate_space_dimension: DimensionCount) -> Self {
-            Self {
-                coordinate_space_dimension,
-            }
+    impl ::std::ops::Deref for GeometricRepresentationContext {
+        type Target = RepresentationContext;
+        fn deref(&self) -> &Self::Target {
+            &self.representation_context
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct GeometricRepresentationItem {}
-    impl GeometricRepresentationItem {
-        pub fn new() -> Self {
-            Self {}
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
+    pub struct GeometricRepresentationItem {
+        pub representation_item: RepresentationItem,
+    }
+    impl ::std::ops::Deref for GeometricRepresentationItem {
+        type Target = RepresentationItem;
+        fn deref(&self) -> &Self::Target {
+            &self.representation_item
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct GeometricSet {
-        elements: GeometricSetSelect,
+        pub geometric_representation_item: GeometricRepresentationItem,
+        pub elements: GeometricSetSelect,
     }
-    impl GeometricSet {
-        pub fn new(elements: GeometricSetSelect) -> Self {
-            Self { elements }
+    impl ::std::ops::Deref for GeometricSet {
+        type Target = GeometricRepresentationItem;
+        fn deref(&self) -> &Self::Target {
+            &self.geometric_representation_item
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct GeometricalToleranceCallout {}
-    impl GeometricalToleranceCallout {
-        pub fn new() -> Self {
-            Self {}
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
+    pub struct GeometricalToleranceCallout {
+        pub draughting_callout: DraughtingCallout,
+    }
+    impl ::std::ops::Deref for GeometricalToleranceCallout {
+        type Target = DraughtingCallout;
+        fn deref(&self) -> &Self::Target {
+            &self.draughting_callout
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct GeometricallyBounded2DWireframeRepresentation {}
-    impl GeometricallyBounded2DWireframeRepresentation {
-        pub fn new() -> Self {
-            Self {}
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
+    pub struct GeometricallyBounded2DWireframeRepresentation {
+        pub shape_representation: ShapeRepresentation,
+    }
+    impl ::std::ops::Deref for GeometricallyBounded2DWireframeRepresentation {
+        type Target = ShapeRepresentation;
+        fn deref(&self) -> &Self::Target {
+            &self.shape_representation
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct GlobalUnitAssignedContext {
-        units: Unit,
+        pub representation_context: RepresentationContext,
+        pub units: Unit,
     }
-    impl GlobalUnitAssignedContext {
-        pub fn new(units: Unit) -> Self {
-            Self { units }
+    impl ::std::ops::Deref for GlobalUnitAssignedContext {
+        type Target = RepresentationContext;
+        fn deref(&self) -> &Self::Target {
+            &self.representation_context
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Group {
-        name: Label,
-        description: Text,
+        pub name: Label,
+        pub description: Text,
     }
-    impl Group {
-        pub fn new(name: Label, description: Text) -> Self {
-            Self { name, description }
-        }
-    }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct GroupAssignment {
-        assigned_group: Group,
+        pub assigned_group: Group,
     }
-    impl GroupAssignment {
-        pub fn new(assigned_group: Group) -> Self {
-            Self { assigned_group }
-        }
-    }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct GroupRelationship {
-        name: Label,
-        description: Text,
-        relating_group: Group,
-        related_group: Group,
+        pub name: Label,
+        pub description: Text,
+        pub relating_group: Group,
+        pub related_group: Group,
     }
-    impl GroupRelationship {
-        pub fn new(
-            name: Label,
-            description: Text,
-            relating_group: Group,
-            related_group: Group,
-        ) -> Self {
-            Self {
-                name,
-                description,
-                relating_group,
-                related_group,
-            }
-        }
-    }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Hyperbola {
-        semi_axis: PositiveLengthMeasure,
-        semi_imag_axis: PositiveLengthMeasure,
+        pub conic: Conic,
+        pub semi_axis: PositiveLengthMeasure,
+        pub semi_imag_axis: PositiveLengthMeasure,
     }
-    impl Hyperbola {
-        pub fn new(
-            semi_axis: PositiveLengthMeasure,
-            semi_imag_axis: PositiveLengthMeasure,
-        ) -> Self {
-            Self {
-                semi_axis,
-                semi_imag_axis,
-            }
+    impl ::std::ops::Deref for Hyperbola {
+        type Target = Conic;
+        fn deref(&self) -> &Self::Target {
+            &self.conic
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Invisibility {
-        invisible_items: InvisibleItem,
+        pub invisible_items: InvisibleItem,
     }
-    impl Invisibility {
-        pub fn new(invisible_items: InvisibleItem) -> Self {
-            Self { invisible_items }
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
+    pub struct LeaderCurve {
+        pub annotation_curve_occurrence: AnnotationCurveOccurrence,
+    }
+    impl ::std::ops::Deref for LeaderCurve {
+        type Target = AnnotationCurveOccurrence;
+        fn deref(&self) -> &Self::Target {
+            &self.annotation_curve_occurrence
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct LeaderCurve {}
-    impl LeaderCurve {
-        pub fn new() -> Self {
-            Self {}
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
+    pub struct LeaderDirectedCallout {
+        pub draughting_callout: DraughtingCallout,
+    }
+    impl ::std::ops::Deref for LeaderDirectedCallout {
+        type Target = DraughtingCallout;
+        fn deref(&self) -> &Self::Target {
+            &self.draughting_callout
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct LeaderDirectedCallout {}
-    impl LeaderDirectedCallout {
-        pub fn new() -> Self {
-            Self {}
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
+    pub struct LeaderDirectedDimension {
+        pub leader_directed_callout: LeaderDirectedCallout,
+    }
+    impl ::std::ops::Deref for LeaderDirectedDimension {
+        type Target = LeaderDirectedCallout;
+        fn deref(&self) -> &Self::Target {
+            &self.leader_directed_callout
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct LeaderDirectedDimension {}
-    impl LeaderDirectedDimension {
-        pub fn new() -> Self {
-            Self {}
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
+    pub struct LeaderTerminator {
+        pub terminator_symbol: TerminatorSymbol,
+    }
+    impl ::std::ops::Deref for LeaderTerminator {
+        type Target = TerminatorSymbol;
+        fn deref(&self) -> &Self::Target {
+            &self.terminator_symbol
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct LeaderTerminator {}
-    impl LeaderTerminator {
-        pub fn new() -> Self {
-            Self {}
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
+    pub struct LengthMeasureWithUnit {
+        pub measure_with_unit: MeasureWithUnit,
+    }
+    impl ::std::ops::Deref for LengthMeasureWithUnit {
+        type Target = MeasureWithUnit;
+        fn deref(&self) -> &Self::Target {
+            &self.measure_with_unit
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct LengthMeasureWithUnit {}
-    impl LengthMeasureWithUnit {
-        pub fn new() -> Self {
-            Self {}
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
+    pub struct LengthUnit {
+        pub named_unit: NamedUnit,
+    }
+    impl ::std::ops::Deref for LengthUnit {
+        type Target = NamedUnit;
+        fn deref(&self) -> &Self::Target {
+            &self.named_unit
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct LengthUnit {}
-    impl LengthUnit {
-        pub fn new() -> Self {
-            Self {}
-        }
-    }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Line {
-        pnt: CartesianPoint,
-        dir: Vector,
+        pub curve: Curve,
+        pub pnt: CartesianPoint,
+        pub dir: Vector,
     }
-    impl Line {
-        pub fn new(pnt: CartesianPoint, dir: Vector) -> Self {
-            Self { pnt, dir }
+    impl ::std::ops::Deref for Line {
+        type Target = Curve;
+        fn deref(&self) -> &Self::Target {
+            &self.curve
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct LinearDimension {}
-    impl LinearDimension {
-        pub fn new() -> Self {
-            Self {}
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
+    pub struct LinearDimension {
+        pub dimension_curve_directed_callout: DimensionCurveDirectedCallout,
+    }
+    impl ::std::ops::Deref for LinearDimension {
+        type Target = DimensionCurveDirectedCallout;
+        fn deref(&self) -> &Self::Target {
+            &self.dimension_curve_directed_callout
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct MappedItem {
-        mapping_source: RepresentationMap,
-        mapping_target: RepresentationItem,
+        pub representation_item: RepresentationItem,
+        pub mapping_source: RepresentationMap,
+        pub mapping_target: RepresentationItem,
     }
-    impl MappedItem {
-        pub fn new(mapping_source: RepresentationMap, mapping_target: RepresentationItem) -> Self {
-            Self {
-                mapping_source,
-                mapping_target,
-            }
+    impl ::std::ops::Deref for MappedItem {
+        type Target = RepresentationItem;
+        fn deref(&self) -> &Self::Target {
+            &self.representation_item
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct MeasureWithUnit {
-        value_component: MeasureValue,
-        unit_component: Unit,
+        pub value_component: MeasureValue,
+        pub unit_component: Unit,
     }
-    impl MeasureWithUnit {
-        pub fn new(value_component: MeasureValue, unit_component: Unit) -> Self {
-            Self {
-                value_component,
-                unit_component,
-            }
-        }
-    }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct NamedUnit {
-        dimensions: DimensionalExponents,
+        pub dimensions: DimensionalExponents,
     }
-    impl NamedUnit {
-        pub fn new(dimensions: DimensionalExponents) -> Self {
-            Self { dimensions }
-        }
-    }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct OffsetCurve2D {
-        basis_curve: Curve,
-        distance: LengthMeasure,
-        self_intersect: Logical,
+        pub curve: Curve,
+        pub basis_curve: Curve,
+        pub distance: LengthMeasure,
+        pub self_intersect: Logical,
     }
-    impl OffsetCurve2D {
-        pub fn new(basis_curve: Curve, distance: LengthMeasure, self_intersect: Logical) -> Self {
-            Self {
-                basis_curve,
-                distance,
-                self_intersect,
-            }
+    impl ::std::ops::Deref for OffsetCurve2D {
+        type Target = Curve;
+        fn deref(&self) -> &Self::Target {
+            &self.curve
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct OneDirectionRepeatFactor {
-        repeat_factor: Vector,
+        pub geometric_representation_item: GeometricRepresentationItem,
+        pub repeat_factor: Vector,
     }
-    impl OneDirectionRepeatFactor {
-        pub fn new(repeat_factor: Vector) -> Self {
-            Self { repeat_factor }
+    impl ::std::ops::Deref for OneDirectionRepeatFactor {
+        type Target = GeometricRepresentationItem;
+        fn deref(&self) -> &Self::Target {
+            &self.geometric_representation_item
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct OrdinateDimension {}
-    impl OrdinateDimension {
-        pub fn new() -> Self {
-            Self {}
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
+    pub struct OrdinateDimension {
+        pub projection_directed_callout: ProjectionDirectedCallout,
+    }
+    impl ::std::ops::Deref for OrdinateDimension {
+        type Target = ProjectionDirectedCallout;
+        fn deref(&self) -> &Self::Target {
+            &self.projection_directed_callout
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Organization {
-        id: Option<Identifier>,
-        name: Label,
-        description: Text,
+        pub id: Option<Identifier>,
+        pub name: Label,
+        pub description: Text,
     }
-    impl Organization {
-        pub fn new(id: Option<Identifier>, name: Label, description: Text) -> Self {
-            Self {
-                id,
-                name,
-                description,
-            }
-        }
-    }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct OrganizationAssignment {
-        assigned_organization: Organization,
-        role: OrganizationRole,
+        pub assigned_organization: Organization,
+        pub role: OrganizationRole,
     }
-    impl OrganizationAssignment {
-        pub fn new(assigned_organization: Organization, role: OrganizationRole) -> Self {
-            Self {
-                assigned_organization,
-                role,
-            }
-        }
-    }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct OrganizationRole {
-        name: Label,
+        pub name: Label,
     }
-    impl OrganizationRole {
-        pub fn new(name: Label) -> Self {
-            Self { name }
-        }
-    }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct OrganizationalAddress {
-        organizations: Organization,
-        description: Text,
+        pub address: Address,
+        pub organizations: Organization,
+        pub description: Text,
     }
-    impl OrganizationalAddress {
-        pub fn new(organizations: Organization, description: Text) -> Self {
-            Self {
-                organizations,
-                description,
-            }
+    impl ::std::ops::Deref for OrganizationalAddress {
+        type Target = Address;
+        fn deref(&self) -> &Self::Target {
+            &self.address
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Parabola {
-        focal_dist: LengthMeasure,
+        pub conic: Conic,
+        pub focal_dist: LengthMeasure,
     }
-    impl Parabola {
-        pub fn new(focal_dist: LengthMeasure) -> Self {
-            Self { focal_dist }
+    impl ::std::ops::Deref for Parabola {
+        type Target = Conic;
+        fn deref(&self) -> &Self::Target {
+            &self.conic
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Person {
-        id: Identifier,
-        last_name: Option<Label>,
-        first_name: Option<Label>,
-        middle_names: Option<Label>,
-        prefix_titles: Option<Label>,
-        suffix_titles: Option<Label>,
+        pub id: Identifier,
+        pub last_name: Option<Label>,
+        pub first_name: Option<Label>,
+        pub middle_names: Option<Label>,
+        pub prefix_titles: Option<Label>,
+        pub suffix_titles: Option<Label>,
     }
-    impl Person {
-        pub fn new(
-            id: Identifier,
-            last_name: Option<Label>,
-            first_name: Option<Label>,
-            middle_names: Option<Label>,
-            prefix_titles: Option<Label>,
-            suffix_titles: Option<Label>,
-        ) -> Self {
-            Self {
-                id,
-                last_name,
-                first_name,
-                middle_names,
-                prefix_titles,
-                suffix_titles,
-            }
-        }
-    }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PersonAndOrganization {
-        the_person: Person,
-        the_organization: Organization,
+        pub the_person: Person,
+        pub the_organization: Organization,
     }
-    impl PersonAndOrganization {
-        pub fn new(the_person: Person, the_organization: Organization) -> Self {
-            Self {
-                the_person,
-                the_organization,
-            }
-        }
-    }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PersonAndOrganizationAssignment {
-        assigned_person_and_organization: PersonAndOrganization,
-        role: PersonAndOrganizationRole,
+        pub assigned_person_and_organization: PersonAndOrganization,
+        pub role: PersonAndOrganizationRole,
     }
-    impl PersonAndOrganizationAssignment {
-        pub fn new(
-            assigned_person_and_organization: PersonAndOrganization,
-            role: PersonAndOrganizationRole,
-        ) -> Self {
-            Self {
-                assigned_person_and_organization,
-                role,
-            }
-        }
-    }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PersonAndOrganizationRole {
-        name: Label,
+        pub name: Label,
     }
-    impl PersonAndOrganizationRole {
-        pub fn new(name: Label) -> Self {
-            Self { name }
-        }
-    }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PersonAssignment {
-        assigned_person: Person,
-        role: PersonRole,
+        pub assigned_person: Person,
+        pub role: PersonRole,
     }
-    impl PersonAssignment {
-        pub fn new(assigned_person: Person, role: PersonRole) -> Self {
-            Self {
-                assigned_person,
-                role,
-            }
-        }
-    }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PersonRole {
-        name: Label,
+        pub name: Label,
     }
-    impl PersonRole {
-        pub fn new(name: Label) -> Self {
-            Self { name }
-        }
-    }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PersonalAddress {
-        people: Person,
-        description: Text,
+        pub address: Address,
+        pub people: Person,
+        pub description: Text,
     }
-    impl PersonalAddress {
-        pub fn new(people: Person, description: Text) -> Self {
-            Self {
-                people,
-                description,
-            }
+    impl ::std::ops::Deref for PersonalAddress {
+        type Target = Address;
+        fn deref(&self) -> &Self::Target {
+            &self.address
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Placement {
-        location: CartesianPoint,
+        pub geometric_representation_item: GeometricRepresentationItem,
+        pub location: CartesianPoint,
     }
-    impl Placement {
-        pub fn new(location: CartesianPoint) -> Self {
-            Self { location }
+    impl ::std::ops::Deref for Placement {
+        type Target = GeometricRepresentationItem;
+        fn deref(&self) -> &Self::Target {
+            &self.geometric_representation_item
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PlanarBox {
-        placement: Axis2Placement,
+        pub planar_extent: PlanarExtent,
+        pub placement: Axis2Placement,
     }
-    impl PlanarBox {
-        pub fn new(placement: Axis2Placement) -> Self {
-            Self { placement }
+    impl ::std::ops::Deref for PlanarBox {
+        type Target = PlanarExtent;
+        fn deref(&self) -> &Self::Target {
+            &self.planar_extent
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PlanarExtent {
-        size_in_x: LengthMeasure,
-        size_in_y: LengthMeasure,
+        pub geometric_representation_item: GeometricRepresentationItem,
+        pub size_in_x: LengthMeasure,
+        pub size_in_y: LengthMeasure,
     }
-    impl PlanarExtent {
-        pub fn new(size_in_x: LengthMeasure, size_in_y: LengthMeasure) -> Self {
-            Self {
-                size_in_x,
-                size_in_y,
-            }
+    impl ::std::ops::Deref for PlanarExtent {
+        type Target = GeometricRepresentationItem;
+        fn deref(&self) -> &Self::Target {
+            &self.geometric_representation_item
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct PlaneAngleMeasureWithUnit {}
-    impl PlaneAngleMeasureWithUnit {
-        pub fn new() -> Self {
-            Self {}
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
+    pub struct PlaneAngleMeasureWithUnit {
+        pub measure_with_unit: MeasureWithUnit,
+    }
+    impl ::std::ops::Deref for PlaneAngleMeasureWithUnit {
+        type Target = MeasureWithUnit;
+        fn deref(&self) -> &Self::Target {
+            &self.measure_with_unit
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct PlaneAngleUnit {}
-    impl PlaneAngleUnit {
-        pub fn new() -> Self {
-            Self {}
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
+    pub struct PlaneAngleUnit {
+        pub named_unit: NamedUnit,
+    }
+    impl ::std::ops::Deref for PlaneAngleUnit {
+        type Target = NamedUnit;
+        fn deref(&self) -> &Self::Target {
+            &self.named_unit
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct Point {}
-    impl Point {
-        pub fn new() -> Self {
-            Self {}
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
+    pub struct Point {
+        pub geometric_representation_item: GeometricRepresentationItem,
+    }
+    impl ::std::ops::Deref for Point {
+        type Target = GeometricRepresentationItem;
+        fn deref(&self) -> &Self::Target {
+            &self.geometric_representation_item
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PointOnCurve {
-        basis_curve: Curve,
-        point_parameter: ParameterValue,
+        pub point: Point,
+        pub basis_curve: Curve,
+        pub point_parameter: ParameterValue,
     }
-    impl PointOnCurve {
-        pub fn new(basis_curve: Curve, point_parameter: ParameterValue) -> Self {
-            Self {
-                basis_curve,
-                point_parameter,
-            }
+    impl ::std::ops::Deref for PointOnCurve {
+        type Target = Point;
+        fn deref(&self) -> &Self::Target {
+            &self.point
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Polyline {
-        points: CartesianPoint,
+        pub bounded_curve: BoundedCurve,
+        pub points: CartesianPoint,
     }
-    impl Polyline {
-        pub fn new(points: CartesianPoint) -> Self {
-            Self { points }
+    impl ::std::ops::Deref for Polyline {
+        type Target = BoundedCurve;
+        fn deref(&self) -> &Self::Target {
+            &self.bounded_curve
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct PreDefinedColour {}
-    impl PreDefinedColour {
-        pub fn new() -> Self {
-            Self {}
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
+    pub struct PreDefinedColour {
+        pub pre_defined_item: PreDefinedItem,
+        pub colour: Colour,
+    }
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
+    pub struct PreDefinedCurveFont {
+        pub pre_defined_item: PreDefinedItem,
+    }
+    impl ::std::ops::Deref for PreDefinedCurveFont {
+        type Target = PreDefinedItem;
+        fn deref(&self) -> &Self::Target {
+            &self.pre_defined_item
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct PreDefinedCurveFont {}
-    impl PreDefinedCurveFont {
-        pub fn new() -> Self {
-            Self {}
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
+    pub struct PreDefinedDimensionSymbol {
+        pub pre_defined_symbol: PreDefinedSymbol,
+    }
+    impl ::std::ops::Deref for PreDefinedDimensionSymbol {
+        type Target = PreDefinedSymbol;
+        fn deref(&self) -> &Self::Target {
+            &self.pre_defined_symbol
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct PreDefinedDimensionSymbol {}
-    impl PreDefinedDimensionSymbol {
-        pub fn new() -> Self {
-            Self {}
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
+    pub struct PreDefinedGeometricalToleranceSymbol {
+        pub pre_defined_symbol: PreDefinedSymbol,
+    }
+    impl ::std::ops::Deref for PreDefinedGeometricalToleranceSymbol {
+        type Target = PreDefinedSymbol;
+        fn deref(&self) -> &Self::Target {
+            &self.pre_defined_symbol
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct PreDefinedGeometricalToleranceSymbol {}
-    impl PreDefinedGeometricalToleranceSymbol {
-        pub fn new() -> Self {
-            Self {}
-        }
-    }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PreDefinedItem {
-        name: Label,
+        pub name: Label,
     }
-    impl PreDefinedItem {
-        pub fn new(name: Label) -> Self {
-            Self { name }
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
+    pub struct PreDefinedPointMarkerSymbol {
+        pub pre_defined_symbol: PreDefinedSymbol,
+    }
+    impl ::std::ops::Deref for PreDefinedPointMarkerSymbol {
+        type Target = PreDefinedSymbol;
+        fn deref(&self) -> &Self::Target {
+            &self.pre_defined_symbol
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct PreDefinedPointMarkerSymbol {}
-    impl PreDefinedPointMarkerSymbol {
-        pub fn new() -> Self {
-            Self {}
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
+    pub struct PreDefinedSymbol {
+        pub pre_defined_item: PreDefinedItem,
+    }
+    impl ::std::ops::Deref for PreDefinedSymbol {
+        type Target = PreDefinedItem;
+        fn deref(&self) -> &Self::Target {
+            &self.pre_defined_item
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct PreDefinedSymbol {}
-    impl PreDefinedSymbol {
-        pub fn new() -> Self {
-            Self {}
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
+    pub struct PreDefinedTerminatorSymbol {
+        pub pre_defined_symbol: PreDefinedSymbol,
+    }
+    impl ::std::ops::Deref for PreDefinedTerminatorSymbol {
+        type Target = PreDefinedSymbol;
+        fn deref(&self) -> &Self::Target {
+            &self.pre_defined_symbol
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct PreDefinedTerminatorSymbol {}
-    impl PreDefinedTerminatorSymbol {
-        pub fn new() -> Self {
-            Self {}
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
+    pub struct PreDefinedTextFont {
+        pub pre_defined_item: PreDefinedItem,
+    }
+    impl ::std::ops::Deref for PreDefinedTextFont {
+        type Target = PreDefinedItem;
+        fn deref(&self) -> &Self::Target {
+            &self.pre_defined_item
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct PreDefinedTextFont {}
-    impl PreDefinedTextFont {
-        pub fn new() -> Self {
-            Self {}
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
+    pub struct PresentationArea {
+        pub presentation_representation: PresentationRepresentation,
+    }
+    impl ::std::ops::Deref for PresentationArea {
+        type Target = PresentationRepresentation;
+        fn deref(&self) -> &Self::Target {
+            &self.presentation_representation
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct PresentationArea {}
-    impl PresentationArea {
-        pub fn new() -> Self {
-            Self {}
-        }
-    }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PresentationLayerAssignment {
-        name: Label,
-        description: Text,
-        assigned_items: LayeredItem,
+        pub name: Label,
+        pub description: Text,
+        pub assigned_items: LayeredItem,
     }
-    impl PresentationLayerAssignment {
-        pub fn new(name: Label, description: Text, assigned_items: LayeredItem) -> Self {
-            Self {
-                name,
-                description,
-                assigned_items,
-            }
-        }
-    }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PresentationLayerUsage {
-        assignment: PresentationLayerAssignment,
-        presentation: PresentationRepresentation,
+        pub assignment: PresentationLayerAssignment,
+        pub presentation: PresentationRepresentation,
     }
-    impl PresentationLayerUsage {
-        pub fn new(
-            assignment: PresentationLayerAssignment,
-            presentation: PresentationRepresentation,
-        ) -> Self {
-            Self {
-                assignment,
-                presentation,
-            }
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
+    pub struct PresentationRepresentation {
+        pub representation: Representation,
+    }
+    impl ::std::ops::Deref for PresentationRepresentation {
+        type Target = Representation;
+        fn deref(&self) -> &Self::Target {
+            &self.representation
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct PresentationRepresentation {}
-    impl PresentationRepresentation {
-        pub fn new() -> Self {
-            Self {}
-        }
-    }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PresentationSet {}
-    impl PresentationSet {
-        pub fn new() -> Self {
-            Self {}
-        }
-    }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PresentationSize {
-        unit: PresentationSizeAssignmentSelect,
-        size: PlanarBox,
+        pub unit: PresentationSizeAssignmentSelect,
+        pub size: PlanarBox,
     }
-    impl PresentationSize {
-        pub fn new(unit: PresentationSizeAssignmentSelect, size: PlanarBox) -> Self {
-            Self { unit, size }
-        }
-    }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PresentationStyleAssignment {
-        styles: PresentationStyleSelect,
+        pub styles: PresentationStyleSelect,
     }
-    impl PresentationStyleAssignment {
-        pub fn new(styles: PresentationStyleSelect) -> Self {
-            Self { styles }
-        }
-    }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PresentationStyleByContext {
-        style_context: StyleContextSelect,
+        pub presentation_style_assignment: PresentationStyleAssignment,
+        pub style_context: StyleContextSelect,
     }
-    impl PresentationStyleByContext {
-        pub fn new(style_context: StyleContextSelect) -> Self {
-            Self { style_context }
+    impl ::std::ops::Deref for PresentationStyleByContext {
+        type Target = PresentationStyleAssignment;
+        fn deref(&self) -> &Self::Target {
+            &self.presentation_style_assignment
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct PresentationView {}
-    impl PresentationView {
-        pub fn new() -> Self {
-            Self {}
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
+    pub struct PresentationView {
+        pub presentation_representation: PresentationRepresentation,
+    }
+    impl ::std::ops::Deref for PresentationView {
+        type Target = PresentationRepresentation;
+        fn deref(&self) -> &Self::Target {
+            &self.presentation_representation
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PresentedItem {}
-    impl PresentedItem {
-        pub fn new() -> Self {
-            Self {}
-        }
-    }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PresentedItemRepresentation {
-        presentation: PresentationRepresentationSelect,
-        item: PresentedItem,
+        pub presentation: PresentationRepresentationSelect,
+        pub item: PresentedItem,
     }
-    impl PresentedItemRepresentation {
-        pub fn new(presentation: PresentationRepresentationSelect, item: PresentedItem) -> Self {
-            Self { presentation, item }
-        }
-    }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Product {
-        id: Identifier,
-        name: Label,
-        description: Text,
-        frame_of_reference: ProductContext,
+        pub id: Identifier,
+        pub name: Label,
+        pub description: Text,
+        pub frame_of_reference: ProductContext,
     }
-    impl Product {
-        pub fn new(
-            id: Identifier,
-            name: Label,
-            description: Text,
-            frame_of_reference: ProductContext,
-        ) -> Self {
-            Self {
-                id,
-                name,
-                description,
-                frame_of_reference,
-            }
-        }
-    }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ProductContext {
-        discipline_type: Label,
+        pub application_context_element: ApplicationContextElement,
+        pub discipline_type: Label,
     }
-    impl ProductContext {
-        pub fn new(discipline_type: Label) -> Self {
-            Self { discipline_type }
+    impl ::std::ops::Deref for ProductContext {
+        type Target = ApplicationContextElement;
+        fn deref(&self) -> &Self::Target {
+            &self.application_context_element
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ProductDefinition {
-        id: Identifier,
-        description: Text,
-        formation: ProductDefinitionFormation,
-        frame_of_reference: ProductDefinitionContext,
+        pub id: Identifier,
+        pub description: Text,
+        pub formation: ProductDefinitionFormation,
+        pub frame_of_reference: ProductDefinitionContext,
     }
-    impl ProductDefinition {
-        pub fn new(
-            id: Identifier,
-            description: Text,
-            formation: ProductDefinitionFormation,
-            frame_of_reference: ProductDefinitionContext,
-        ) -> Self {
-            Self {
-                id,
-                description,
-                formation,
-                frame_of_reference,
-            }
-        }
-    }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ProductDefinitionContext {
-        life_cycle_stage: Label,
+        pub application_context_element: ApplicationContextElement,
+        pub life_cycle_stage: Label,
     }
-    impl ProductDefinitionContext {
-        pub fn new(life_cycle_stage: Label) -> Self {
-            Self { life_cycle_stage }
+    impl ::std::ops::Deref for ProductDefinitionContext {
+        type Target = ApplicationContextElement;
+        fn deref(&self) -> &Self::Target {
+            &self.application_context_element
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ProductDefinitionFormation {
-        id: Identifier,
-        description: Text,
-        of_product: Product,
+        pub id: Identifier,
+        pub description: Text,
+        pub of_product: Product,
     }
-    impl ProductDefinitionFormation {
-        pub fn new(id: Identifier, description: Text, of_product: Product) -> Self {
-            Self {
-                id,
-                description,
-                of_product,
-            }
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
+    pub struct ProductDefinitionShape {
+        pub property_definition: PropertyDefinition,
+    }
+    impl ::std::ops::Deref for ProductDefinitionShape {
+        type Target = PropertyDefinition;
+        fn deref(&self) -> &Self::Target {
+            &self.property_definition
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct ProductDefinitionShape {}
-    impl ProductDefinitionShape {
-        pub fn new() -> Self {
-            Self {}
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
+    pub struct ProjectionCurve {
+        pub annotation_curve_occurrence: AnnotationCurveOccurrence,
+    }
+    impl ::std::ops::Deref for ProjectionCurve {
+        type Target = AnnotationCurveOccurrence;
+        fn deref(&self) -> &Self::Target {
+            &self.annotation_curve_occurrence
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct ProjectionCurve {}
-    impl ProjectionCurve {
-        pub fn new() -> Self {
-            Self {}
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
+    pub struct ProjectionDirectedCallout {
+        pub draughting_callout: DraughtingCallout,
+    }
+    impl ::std::ops::Deref for ProjectionDirectedCallout {
+        type Target = DraughtingCallout;
+        fn deref(&self) -> &Self::Target {
+            &self.draughting_callout
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct ProjectionDirectedCallout {}
-    impl ProjectionDirectedCallout {
-        pub fn new() -> Self {
-            Self {}
-        }
-    }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PropertyDefinition {
-        name: Label,
-        description: Text,
-        definition: CharacterizedDefinition,
+        pub name: Label,
+        pub description: Text,
+        pub definition: CharacterizedDefinition,
     }
-    impl PropertyDefinition {
-        pub fn new(name: Label, description: Text, definition: CharacterizedDefinition) -> Self {
-            Self {
-                name,
-                description,
-                definition,
-            }
-        }
-    }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PropertyDefinitionRepresentation {
-        definition: PropertyDefinition,
-        used_representation: Representation,
+        pub definition: PropertyDefinition,
+        pub used_representation: Representation,
     }
-    impl PropertyDefinitionRepresentation {
-        pub fn new(definition: PropertyDefinition, used_representation: Representation) -> Self {
-            Self {
-                definition,
-                used_representation,
-            }
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
+    pub struct QuasiUniformCurve {
+        pub b_spline_curve: BSplineCurve,
+    }
+    impl ::std::ops::Deref for QuasiUniformCurve {
+        type Target = BSplineCurve;
+        fn deref(&self) -> &Self::Target {
+            &self.b_spline_curve
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct QuasiUniformCurve {}
-    impl QuasiUniformCurve {
-        pub fn new() -> Self {
-            Self {}
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
+    pub struct RadiusDimension {
+        pub dimension_curve_directed_callout: DimensionCurveDirectedCallout,
+    }
+    impl ::std::ops::Deref for RadiusDimension {
+        type Target = DimensionCurveDirectedCallout;
+        fn deref(&self) -> &Self::Target {
+            &self.dimension_curve_directed_callout
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct RadiusDimension {}
-    impl RadiusDimension {
-        pub fn new() -> Self {
-            Self {}
-        }
-    }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct RationalBSplineCurve {
-        weights_data: f64,
+        pub b_spline_curve: BSplineCurve,
+        pub weights_data: f64,
     }
-    impl RationalBSplineCurve {
-        pub fn new(weights_data: f64) -> Self {
-            Self { weights_data }
+    impl ::std::ops::Deref for RationalBSplineCurve {
+        type Target = BSplineCurve;
+        fn deref(&self) -> &Self::Target {
+            &self.b_spline_curve
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Representation {
-        name: Label,
-        items: RepresentationItem,
-        context_of_items: RepresentationContext,
+        pub name: Label,
+        pub items: RepresentationItem,
+        pub context_of_items: RepresentationContext,
     }
-    impl Representation {
-        pub fn new(
-            name: Label,
-            items: RepresentationItem,
-            context_of_items: RepresentationContext,
-        ) -> Self {
-            Self {
-                name,
-                items,
-                context_of_items,
-            }
-        }
-    }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct RepresentationContext {
-        context_identifier: Identifier,
-        context_type: Text,
+        pub context_identifier: Identifier,
+        pub context_type: Text,
     }
-    impl RepresentationContext {
-        pub fn new(context_identifier: Identifier, context_type: Text) -> Self {
-            Self {
-                context_identifier,
-                context_type,
-            }
-        }
-    }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct RepresentationItem {
-        name: Label,
+        pub name: Label,
     }
-    impl RepresentationItem {
-        pub fn new(name: Label) -> Self {
-            Self { name }
-        }
-    }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct RepresentationMap {
-        mapping_origin: RepresentationItem,
-        mapped_representation: Representation,
+        pub mapping_origin: RepresentationItem,
+        pub mapped_representation: Representation,
     }
-    impl RepresentationMap {
-        pub fn new(
-            mapping_origin: RepresentationItem,
-            mapped_representation: Representation,
-        ) -> Self {
-            Self {
-                mapping_origin,
-                mapped_representation,
-            }
-        }
-    }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct SecurityClassification {
-        name: Label,
-        purpose: Text,
-        security_level: SecurityClassificationLevel,
+        pub name: Label,
+        pub purpose: Text,
+        pub security_level: SecurityClassificationLevel,
     }
-    impl SecurityClassification {
-        pub fn new(
-            name: Label,
-            purpose: Text,
-            security_level: SecurityClassificationLevel,
-        ) -> Self {
-            Self {
-                name,
-                purpose,
-                security_level,
-            }
-        }
-    }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct SecurityClassificationAssignment {
-        assigned_security_classification: SecurityClassification,
+        pub assigned_security_classification: SecurityClassification,
     }
-    impl SecurityClassificationAssignment {
-        pub fn new(assigned_security_classification: SecurityClassification) -> Self {
-            Self {
-                assigned_security_classification,
-            }
-        }
-    }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct SecurityClassificationLevel {
-        name: Label,
+        pub name: Label,
     }
-    impl SecurityClassificationLevel {
-        pub fn new(name: Label) -> Self {
-            Self { name }
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
+    pub struct ShapeDefinitionRepresentation {
+        pub property_definition_representation: PropertyDefinitionRepresentation,
+    }
+    impl ::std::ops::Deref for ShapeDefinitionRepresentation {
+        type Target = PropertyDefinitionRepresentation;
+        fn deref(&self) -> &Self::Target {
+            &self.property_definition_representation
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct ShapeDefinitionRepresentation {}
-    impl ShapeDefinitionRepresentation {
-        pub fn new() -> Self {
-            Self {}
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
+    pub struct ShapeRepresentation {
+        pub representation: Representation,
+    }
+    impl ::std::ops::Deref for ShapeRepresentation {
+        type Target = Representation;
+        fn deref(&self) -> &Self::Target {
+            &self.representation
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct ShapeRepresentation {}
-    impl ShapeRepresentation {
-        pub fn new() -> Self {
-            Self {}
-        }
-    }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct SiUnit {
-        prefix: Option<SiPrefix>,
-        name: SiUnitName,
+        pub named_unit: NamedUnit,
+        pub prefix: Option<SiPrefix>,
+        pub name: SiUnitName,
     }
-    impl SiUnit {
-        pub fn new(prefix: Option<SiPrefix>, name: SiUnitName) -> Self {
-            Self { prefix, name }
+    impl ::std::ops::Deref for SiUnit {
+        type Target = NamedUnit;
+        fn deref(&self) -> &Self::Target {
+            &self.named_unit
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct StructuredDimensionCallout {}
-    impl StructuredDimensionCallout {
-        pub fn new() -> Self {
-            Self {}
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
+    pub struct StructuredDimensionCallout {
+        pub draughting_callout: DraughtingCallout,
+    }
+    impl ::std::ops::Deref for StructuredDimensionCallout {
+        type Target = DraughtingCallout;
+        fn deref(&self) -> &Self::Target {
+            &self.draughting_callout
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct StyledItem {
-        styles: PresentationStyleAssignment,
-        item: RepresentationItem,
+        pub representation_item: RepresentationItem,
+        pub styles: PresentationStyleAssignment,
+        pub item: RepresentationItem,
     }
-    impl StyledItem {
-        pub fn new(styles: PresentationStyleAssignment, item: RepresentationItem) -> Self {
-            Self { styles, item }
+    impl ::std::ops::Deref for StyledItem {
+        type Target = RepresentationItem;
+        fn deref(&self) -> &Self::Target {
+            &self.representation_item
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct SymbolColour {
-        colour_of_symbol: Colour,
+        pub colour_of_symbol: Colour,
     }
-    impl SymbolColour {
-        pub fn new(colour_of_symbol: Colour) -> Self {
-            Self { colour_of_symbol }
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
+    pub struct SymbolRepresentation {
+        pub representation: Representation,
+    }
+    impl ::std::ops::Deref for SymbolRepresentation {
+        type Target = Representation;
+        fn deref(&self) -> &Self::Target {
+            &self.representation
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct SymbolRepresentation {}
-    impl SymbolRepresentation {
-        pub fn new() -> Self {
-            Self {}
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
+    pub struct SymbolRepresentationMap {
+        pub representation_map: RepresentationMap,
+    }
+    impl ::std::ops::Deref for SymbolRepresentationMap {
+        type Target = RepresentationMap;
+        fn deref(&self) -> &Self::Target {
+            &self.representation_map
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct SymbolRepresentationMap {}
-    impl SymbolRepresentationMap {
-        pub fn new() -> Self {
-            Self {}
-        }
-    }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct SymbolStyle {
-        name: Label,
-        style_of_symbol: SymbolStyleSelect,
+        pub name: Label,
+        pub style_of_symbol: SymbolStyleSelect,
     }
-    impl SymbolStyle {
-        pub fn new(name: Label, style_of_symbol: SymbolStyleSelect) -> Self {
-            Self {
-                name,
-                style_of_symbol,
-            }
-        }
-    }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct SymbolTarget {
-        placement: Axis2Placement,
-        x_scale: PositiveRatioMeasure,
-        y_scale: PositiveRatioMeasure,
+        pub geometric_representation_item: GeometricRepresentationItem,
+        pub placement: Axis2Placement,
+        pub x_scale: PositiveRatioMeasure,
+        pub y_scale: PositiveRatioMeasure,
     }
-    impl SymbolTarget {
-        pub fn new(
-            placement: Axis2Placement,
-            x_scale: PositiveRatioMeasure,
-            y_scale: PositiveRatioMeasure,
-        ) -> Self {
-            Self {
-                placement,
-                x_scale,
-                y_scale,
-            }
+    impl ::std::ops::Deref for SymbolTarget {
+        type Target = GeometricRepresentationItem;
+        fn deref(&self) -> &Self::Target {
+            &self.geometric_representation_item
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct TerminatorSymbol {
-        annotated_curve: AnnotationCurveOccurrence,
+        pub annotation_symbol_occurrence: AnnotationSymbolOccurrence,
+        pub annotated_curve: AnnotationCurveOccurrence,
     }
-    impl TerminatorSymbol {
-        pub fn new(annotated_curve: AnnotationCurveOccurrence) -> Self {
-            Self { annotated_curve }
+    impl ::std::ops::Deref for TerminatorSymbol {
+        type Target = AnnotationSymbolOccurrence;
+        fn deref(&self) -> &Self::Target {
+            &self.annotation_symbol_occurrence
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct TextLiteral {
-        literal: PresentableText,
-        placement: Axis2Placement,
-        alignment: TextAlignment,
-        path: TextPath,
-        font: FontSelect,
+        pub geometric_representation_item: GeometricRepresentationItem,
+        pub literal: PresentableText,
+        pub placement: Axis2Placement,
+        pub alignment: TextAlignment,
+        pub path: TextPath,
+        pub font: FontSelect,
     }
-    impl TextLiteral {
-        pub fn new(
-            literal: PresentableText,
-            placement: Axis2Placement,
-            alignment: TextAlignment,
-            path: TextPath,
-            font: FontSelect,
-        ) -> Self {
-            Self {
-                literal,
-                placement,
-                alignment,
-                path,
-                font,
-            }
+    impl ::std::ops::Deref for TextLiteral {
+        type Target = GeometricRepresentationItem;
+        fn deref(&self) -> &Self::Target {
+            &self.geometric_representation_item
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct TextLiteralWithAssociatedCurves {
-        associated_curves: Curve,
+        pub text_literal: TextLiteral,
+        pub associated_curves: Curve,
     }
-    impl TextLiteralWithAssociatedCurves {
-        pub fn new(associated_curves: Curve) -> Self {
-            Self { associated_curves }
+    impl ::std::ops::Deref for TextLiteralWithAssociatedCurves {
+        type Target = TextLiteral;
+        fn deref(&self) -> &Self::Target {
+            &self.text_literal
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct TextLiteralWithBlankingBox {
-        blanking: PlanarBox,
+        pub text_literal: TextLiteral,
+        pub blanking: PlanarBox,
     }
-    impl TextLiteralWithBlankingBox {
-        pub fn new(blanking: PlanarBox) -> Self {
-            Self { blanking }
+    impl ::std::ops::Deref for TextLiteralWithBlankingBox {
+        type Target = TextLiteral;
+        fn deref(&self) -> &Self::Target {
+            &self.text_literal
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct TextLiteralWithDelineation {
-        delineation: TextDelineation,
+        pub text_literal: TextLiteral,
+        pub delineation: TextDelineation,
     }
-    impl TextLiteralWithDelineation {
-        pub fn new(delineation: TextDelineation) -> Self {
-            Self { delineation }
+    impl ::std::ops::Deref for TextLiteralWithDelineation {
+        type Target = TextLiteral;
+        fn deref(&self) -> &Self::Target {
+            &self.text_literal
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct TextLiteralWithExtent {
-        extent: PlanarExtent,
+        pub text_literal: TextLiteral,
+        pub extent: PlanarExtent,
     }
-    impl TextLiteralWithExtent {
-        pub fn new(extent: PlanarExtent) -> Self {
-            Self { extent }
+    impl ::std::ops::Deref for TextLiteralWithExtent {
+        type Target = TextLiteral;
+        fn deref(&self) -> &Self::Target {
+            &self.text_literal
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct TextStyle {
-        name: Label,
-        character_appearance: CharacterStyleSelect,
+        pub name: Label,
+        pub character_appearance: CharacterStyleSelect,
     }
-    impl TextStyle {
-        pub fn new(name: Label, character_appearance: CharacterStyleSelect) -> Self {
-            Self {
-                name,
-                character_appearance,
-            }
-        }
-    }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct TextStyleForDefinedFont {
-        text_colour: Colour,
+        pub text_colour: Colour,
     }
-    impl TextStyleForDefinedFont {
-        pub fn new(text_colour: Colour) -> Self {
-            Self { text_colour }
-        }
-    }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct TextStyleWithBoxCharacteristics {
-        characteristics: BoxCharacteristicSelect,
+        pub text_style: TextStyle,
+        pub characteristics: BoxCharacteristicSelect,
     }
-    impl TextStyleWithBoxCharacteristics {
-        pub fn new(characteristics: BoxCharacteristicSelect) -> Self {
-            Self { characteristics }
+    impl ::std::ops::Deref for TextStyleWithBoxCharacteristics {
+        type Target = TextStyle;
+        fn deref(&self) -> &Self::Target {
+            &self.text_style
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct TextStyleWithMirror {
-        mirror_placement: Axis2Placement,
+        pub text_style: TextStyle,
+        pub mirror_placement: Axis2Placement,
     }
-    impl TextStyleWithMirror {
-        pub fn new(mirror_placement: Axis2Placement) -> Self {
-            Self { mirror_placement }
+    impl ::std::ops::Deref for TextStyleWithMirror {
+        type Target = TextStyle;
+        fn deref(&self) -> &Self::Target {
+            &self.text_style
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct TrimmedCurve {
-        basis_curve: Curve,
-        trim_1: TrimmingSelect,
-        trim_2: TrimmingSelect,
-        sense_agreement: bool,
-        master_representation: TrimmingPreference,
+        pub bounded_curve: BoundedCurve,
+        pub basis_curve: Curve,
+        pub trim_1: TrimmingSelect,
+        pub trim_2: TrimmingSelect,
+        pub sense_agreement: bool,
+        pub master_representation: TrimmingPreference,
     }
-    impl TrimmedCurve {
-        pub fn new(
-            basis_curve: Curve,
-            trim_1: TrimmingSelect,
-            trim_2: TrimmingSelect,
-            sense_agreement: bool,
-            master_representation: TrimmingPreference,
-        ) -> Self {
-            Self {
-                basis_curve,
-                trim_1,
-                trim_2,
-                sense_agreement,
-                master_representation,
-            }
+    impl ::std::ops::Deref for TrimmedCurve {
+        type Target = BoundedCurve;
+        fn deref(&self) -> &Self::Target {
+            &self.bounded_curve
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct TwoDirectionRepeatFactor {
-        second_repeat_factor: Vector,
+        pub one_direction_repeat_factor: OneDirectionRepeatFactor,
+        pub second_repeat_factor: Vector,
     }
-    impl TwoDirectionRepeatFactor {
-        pub fn new(second_repeat_factor: Vector) -> Self {
-            Self {
-                second_repeat_factor,
-            }
+    impl ::std::ops::Deref for TwoDirectionRepeatFactor {
+        type Target = OneDirectionRepeatFactor;
+        fn deref(&self) -> &Self::Target {
+            &self.one_direction_repeat_factor
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
-    pub struct UniformCurve {}
-    impl UniformCurve {
-        pub fn new() -> Self {
-            Self {}
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
+    pub struct UniformCurve {
+        pub b_spline_curve: BSplineCurve,
+    }
+    impl ::std::ops::Deref for UniformCurve {
+        type Target = BSplineCurve;
+        fn deref(&self) -> &Self::Target {
+            &self.b_spline_curve
         }
     }
-    #[derive(Clone, Debug, PartialEq)]
+    #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Vector {
-        orientation: Direction,
-        magnitude: LengthMeasure,
+        pub geometric_representation_item: GeometricRepresentationItem,
+        pub orientation: Direction,
+        pub magnitude: LengthMeasure,
     }
-    impl Vector {
-        pub fn new(orientation: Direction, magnitude: LengthMeasure) -> Self {
-            Self {
-                orientation,
-                magnitude,
-            }
+    impl ::std::ops::Deref for Vector {
+        type Target = GeometricRepresentationItem;
+        fn deref(&self) -> &Self::Target {
+            &self.geometric_representation_item
         }
     }
 }
