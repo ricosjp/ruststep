@@ -8,6 +8,7 @@ use quote::*;
 pub struct Entity {
     name: String,
     attributes: Vec<EntityAttribute>,
+    subtypes: Option<Vec<TypeRef>>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -47,9 +48,21 @@ impl Legalize for Entity {
             .iter()
             .map(|attr| EntityAttribute::legalize(ns, scope, attr))
             .collect::<Result<Vec<_>, _>>()?;
+        let subtypes = entity
+            .subtype
+            .as_ref()
+            .map(|subtype| {
+                subtype
+                    .entity_references
+                    .iter()
+                    .map(|name| ns.lookup_type(scope, &name))
+                    .collect::<Result<Vec<_>, _>>()
+            })
+            .transpose()?;
         Ok(Entity {
             name: entity.name.clone(),
             attributes,
+            subtypes,
         })
     }
 }
