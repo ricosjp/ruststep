@@ -383,7 +383,7 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct AnnotationFillArea {
         pub geometric_representation_item: GeometricRepresentationItem,
-        pub boundaries: Curve,
+        pub boundaries: Vec<Curve>,
     }
     impl ::std::ops::Deref for AnnotationFillArea {
         type Target = GeometricRepresentationItem;
@@ -526,7 +526,7 @@ pub mod explicit_draughting {
     pub struct BSplineCurve {
         pub bounded_curve: BoundedCurve,
         pub degree: i64,
-        pub control_points_list: CartesianPoint,
+        pub control_points_list: Vec<CartesianPoint>,
         pub curve_form: BSplineCurveForm,
         pub closed_curve: Logical,
         pub self_intersect: Logical,
@@ -540,8 +540,8 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct BSplineCurveWithKnots {
         pub b_spline_curve: BSplineCurve,
-        pub knot_multiplicities: i64,
-        pub knots: ParameterValue,
+        pub knot_multiplicities: Vec<i64>,
+        pub knots: Vec<ParameterValue>,
         pub knot_spec: KnotType,
     }
     impl ::std::ops::Deref for BSplineCurveWithKnots {
@@ -637,7 +637,7 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct CartesianPoint {
         pub point: Point,
-        pub coordinates: LengthMeasure,
+        pub coordinates: Vec<LengthMeasure>,
     }
     impl ::std::ops::Deref for CartesianPoint {
         type Target = Point;
@@ -685,7 +685,7 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct CompositeCurve {
         pub bounded_curve: BoundedCurve,
-        pub segments: CompositeCurveSegment,
+        pub segments: Vec<CompositeCurveSegment>,
         pub self_intersect: Logical,
     }
     impl ::std::ops::Deref for CompositeCurve {
@@ -703,7 +703,7 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct CompositeText {
         pub geometric_representation_item: GeometricRepresentationItem,
-        pub collected_text: TextOrCharacter,
+        pub collected_text: Vec<TextOrCharacter>,
     }
     impl ::std::ops::Deref for CompositeText {
         type Target = GeometricRepresentationItem;
@@ -714,7 +714,7 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct CompositeTextWithAssociatedCurves {
         pub composite_text: CompositeText,
-        pub associated_curves: Curve,
+        pub associated_curves: Vec<Curve>,
     }
     impl ::std::ops::Deref for CompositeTextWithAssociatedCurves {
         type Target = CompositeText;
@@ -822,7 +822,7 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct CurveStyleFont {
         pub name: Label,
-        pub pattern_list: CurveStyleFontPattern,
+        pub pattern_list: Vec<CurveStyleFontPattern>,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct CurveStyleFontPattern {
@@ -949,7 +949,7 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Direction {
         pub geometric_representation_item: GeometricRepresentationItem,
-        pub direction_ratios: f64,
+        pub direction_ratios: Vec<f64>,
     }
     impl ::std::ops::Deref for Direction {
         type Target = GeometricRepresentationItem;
@@ -986,7 +986,7 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DraughtingApprovalAssignment {
         pub approval_assignment: ApprovalAssignment,
-        pub approved_items: ApprovedItem,
+        pub approved_items: Vec<ApprovedItem>,
     }
     impl ::std::ops::Deref for DraughtingApprovalAssignment {
         type Target = ApprovalAssignment;
@@ -997,7 +997,7 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DraughtingCallout {
         pub geometric_representation_item: GeometricRepresentationItem,
-        pub contents: DraughtingCalloutElement,
+        pub contents: Vec<DraughtingCalloutElement>,
     }
     impl ::std::ops::Deref for DraughtingCallout {
         type Target = GeometricRepresentationItem;
@@ -1015,7 +1015,7 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DraughtingContractAssignment {
         pub contract_assignment: ContractAssignment,
-        pub items: ContractedItem,
+        pub items: Vec<ContractedItem>,
     }
     impl ::std::ops::Deref for DraughtingContractAssignment {
         type Target = ContractAssignment;
@@ -1046,7 +1046,7 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DraughtingGroupAssignment {
         pub group_assignment: GroupAssignment,
-        pub items: DraughtingGroupedItem,
+        pub items: Vec<DraughtingGroupedItem>,
     }
     impl ::std::ops::Deref for DraughtingGroupAssignment {
         type Target = GroupAssignment;
@@ -1067,7 +1067,7 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DraughtingOrganizationAssignment {
         pub organization_assignment: OrganizationAssignment,
-        pub assigned_items: DraughtingOrganizationItem,
+        pub assigned_items: Vec<DraughtingOrganizationItem>,
     }
     impl ::std::ops::Deref for DraughtingOrganizationAssignment {
         type Target = OrganizationAssignment;
@@ -1078,7 +1078,7 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DraughtingPersonAndOrganizationAssignment {
         pub person_and_organization_assignment: PersonAndOrganizationAssignment,
-        pub assigned_items: DraughtingOrganizationItem,
+        pub assigned_items: Vec<DraughtingOrganizationItem>,
     }
     impl ::std::ops::Deref for DraughtingPersonAndOrganizationAssignment {
         type Target = PersonAndOrganizationAssignment;
@@ -1089,7 +1089,7 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DraughtingPersonAssignment {
         pub person_assignment: PersonAssignment,
-        pub assigned_items: DraughtingOrganizationItem,
+        pub assigned_items: Vec<DraughtingOrganizationItem>,
     }
     impl ::std::ops::Deref for DraughtingPersonAssignment {
         type Target = PersonAssignment;
@@ -1130,7 +1130,7 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DraughtingPresentedItem {
         pub presented_item: PresentedItem,
-        pub items: DraughtingPresentedItemSelect,
+        pub items: Vec<DraughtingPresentedItemSelect>,
     }
     impl ::std::ops::Deref for DraughtingPresentedItem {
         type Target = PresentedItem;
@@ -1141,7 +1141,7 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DraughtingSecurityClassificationAssignment {
         pub security_classification_assignment: SecurityClassificationAssignment,
-        pub assigned_items: ClassifiedItem,
+        pub assigned_items: Vec<ClassifiedItem>,
     }
     impl ::std::ops::Deref for DraughtingSecurityClassificationAssignment {
         type Target = SecurityClassificationAssignment;
@@ -1152,7 +1152,7 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DraughtingSpecificationReference {
         pub document_reference: DocumentReference,
-        pub specified_items: SpecifiedItem,
+        pub specified_items: Vec<SpecifiedItem>,
     }
     impl ::std::ops::Deref for DraughtingSpecificationReference {
         type Target = DocumentReference;
@@ -1192,7 +1192,7 @@ pub mod explicit_draughting {
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DraughtingTitle {
-        pub items: DraughtingTitledItem,
+        pub items: Vec<DraughtingTitledItem>,
         pub language: Label,
         pub contents: Text,
     }
@@ -1310,7 +1310,7 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct FillAreaStyle {
         pub name: Label,
-        pub fill_styles: FillStyleSelect,
+        pub fill_styles: Vec<FillStyleSelect>,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct FillAreaStyleColour {
@@ -1347,7 +1347,7 @@ pub mod explicit_draughting {
     pub struct FillAreaStyleTiles {
         pub geometric_representation_item: GeometricRepresentationItem,
         pub tiling_pattern: TwoDirectionRepeatFactor,
-        pub tiles: FillAreaStyleTileShapeSelect,
+        pub tiles: Vec<FillAreaStyleTileShapeSelect>,
         pub tiling_scale: PositiveRatioMeasure,
     }
     impl ::std::ops::Deref for FillAreaStyleTiles {
@@ -1390,7 +1390,7 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct GeometricSet {
         pub geometric_representation_item: GeometricRepresentationItem,
-        pub elements: GeometricSetSelect,
+        pub elements: Vec<GeometricSetSelect>,
     }
     impl ::std::ops::Deref for GeometricSet {
         type Target = GeometricRepresentationItem;
@@ -1421,7 +1421,7 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct GlobalUnitAssignedContext {
         pub representation_context: RepresentationContext,
-        pub units: Unit,
+        pub units: Vec<Unit>,
     }
     impl ::std::ops::Deref for GlobalUnitAssignedContext {
         type Target = RepresentationContext;
@@ -1459,7 +1459,7 @@ pub mod explicit_draughting {
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Invisibility {
-        pub invisible_items: InvisibleItem,
+        pub invisible_items: Vec<InvisibleItem>,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct LeaderCurve {
@@ -1616,7 +1616,7 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct OrganizationalAddress {
         pub address: Address,
-        pub organizations: Organization,
+        pub organizations: Vec<Organization>,
         pub description: Text,
     }
     impl ::std::ops::Deref for OrganizationalAddress {
@@ -1641,9 +1641,9 @@ pub mod explicit_draughting {
         pub id: Identifier,
         pub last_name: Option<Label>,
         pub first_name: Option<Label>,
-        pub middle_names: Option<Label>,
-        pub prefix_titles: Option<Label>,
-        pub suffix_titles: Option<Label>,
+        pub middle_names: Option<Vec<Label>>,
+        pub prefix_titles: Option<Vec<Label>>,
+        pub suffix_titles: Option<Vec<Label>>,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PersonAndOrganization {
@@ -1671,7 +1671,7 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PersonalAddress {
         pub address: Address,
-        pub people: Person,
+        pub people: Vec<Person>,
         pub description: Text,
     }
     impl ::std::ops::Deref for PersonalAddress {
@@ -1759,7 +1759,7 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Polyline {
         pub bounded_curve: BoundedCurve,
-        pub points: CartesianPoint,
+        pub points: Vec<CartesianPoint>,
     }
     impl ::std::ops::Deref for Polyline {
         type Target = BoundedCurve;
@@ -1860,7 +1860,7 @@ pub mod explicit_draughting {
     pub struct PresentationLayerAssignment {
         pub name: Label,
         pub description: Text,
-        pub assigned_items: LayeredItem,
+        pub assigned_items: Vec<LayeredItem>,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PresentationLayerUsage {
@@ -1886,7 +1886,7 @@ pub mod explicit_draughting {
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PresentationStyleAssignment {
-        pub styles: PresentationStyleSelect,
+        pub styles: Vec<PresentationStyleSelect>,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PresentationStyleByContext {
@@ -1921,7 +1921,7 @@ pub mod explicit_draughting {
         pub id: Identifier,
         pub name: Label,
         pub description: Text,
-        pub frame_of_reference: ProductContext,
+        pub frame_of_reference: Vec<ProductContext>,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ProductContext {
@@ -2022,7 +2022,7 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct RationalBSplineCurve {
         pub b_spline_curve: BSplineCurve,
-        pub weights_data: f64,
+        pub weights_data: Vec<f64>,
     }
     impl ::std::ops::Deref for RationalBSplineCurve {
         type Target = BSplineCurve;
@@ -2033,7 +2033,7 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Representation {
         pub name: Label,
-        pub items: RepresentationItem,
+        pub items: Vec<RepresentationItem>,
         pub context_of_items: RepresentationContext,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
@@ -2109,7 +2109,7 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct StyledItem {
         pub representation_item: RepresentationItem,
-        pub styles: PresentationStyleAssignment,
+        pub styles: Vec<PresentationStyleAssignment>,
         pub item: RepresentationItem,
     }
     impl ::std::ops::Deref for StyledItem {
@@ -2189,7 +2189,7 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct TextLiteralWithAssociatedCurves {
         pub text_literal: TextLiteral,
-        pub associated_curves: Curve,
+        pub associated_curves: Vec<Curve>,
     }
     impl ::std::ops::Deref for TextLiteralWithAssociatedCurves {
         type Target = TextLiteral;
@@ -2242,7 +2242,7 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct TextStyleWithBoxCharacteristics {
         pub text_style: TextStyle,
-        pub characteristics: BoxCharacteristicSelect,
+        pub characteristics: Vec<BoxCharacteristicSelect>,
     }
     impl ::std::ops::Deref for TextStyleWithBoxCharacteristics {
         type Target = TextStyle;
@@ -2265,8 +2265,8 @@ pub mod explicit_draughting {
     pub struct TrimmedCurve {
         pub bounded_curve: BoundedCurve,
         pub basis_curve: Curve,
-        pub trim_1: TrimmingSelect,
-        pub trim_2: TrimmingSelect,
+        pub trim_1: Vec<TrimmingSelect>,
+        pub trim_2: Vec<TrimmingSelect>,
         pub sense_agreement: bool,
         pub master_representation: TrimmingPreference,
     }
