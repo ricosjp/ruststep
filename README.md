@@ -34,7 +34,7 @@ Why ruststep?
 --------------
 
 - STEP is not only for CAD
-  - EXPRESS is a general data schema like [Protocol Buffers](pbspec)
+  - EXPRESS is a general data schema like [Protocol Buffers][pbspec]
   - Later ISOs also uses EXPRESS
     - [ISO 13584 "Industrial automation systems and integration - Parts library"](https://www.iso.org/standard/43423.html)
     - [ISO 13399 "Cutting tool data representation and exchange"](https://www.iso.org/standard/36757.html)
