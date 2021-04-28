@@ -101,10 +101,10 @@ impl ToTokens for TypeRef {
             }
             Named { name, .. } => {
                 let name = format_ident!("{}", name.to_pascal_case());
-                tokens.append_all(quote! { #name })
+                tokens.append_all(quote! { #name });
             }
             Set { base, .. } | List { base, .. } => {
-                base.to_tokens(tokens);
+                tokens.append_all(quote! { Vec<#base> });
             }
         }
     }
