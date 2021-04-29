@@ -7,9 +7,10 @@ use quote::*;
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Entity {
     /// Name of entity in PascalCase
-    name: String,
-    attributes: Vec<EntityAttribute>,
-    subtypes: Option<Vec<TypeRef>>,
+    pub name: String,
+    pub holder_name: String,
+    pub attributes: Vec<EntityAttribute>,
+    pub subtypes: Option<Vec<TypeRef>>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -60,8 +61,10 @@ impl Legalize for Entity {
                     .collect::<Result<Vec<_>, _>>()
             })
             .transpose()?;
+        let name = entity.name.to_pascal_case();
         Ok(Entity {
-            name: entity.name.to_pascal_case(),
+            holder_name: format!("{}Holder", name),
+            name,
             attributes,
             subtypes,
         })
@@ -71,7 +74,7 @@ impl Legalize for Entity {
 impl ToTokens for Entity {
     fn to_tokens(&self, tokens: &mut TokenStream) {
         let name = format_ident!("{}", self.name);
-        let holder_name = format_ident!("{}Holder", self.name);
+        let holder_name = format_ident!("{}", self.holder_name);
 
         let mut attr_name = Vec::new();
         let mut attr_type = Vec::new();
@@ -106,6 +109,7 @@ impl ToTokens for Entity {
                 };
 
                 // impl Deref for single subtype case
+                // This is in for-loop to use `attr` and `ty` in `quote!`
                 if subtypes.len() == 1 {
                     tokens.append_all(quote! {
                         impl ::std::ops::Deref for #name {

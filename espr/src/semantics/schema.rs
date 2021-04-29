@@ -1,5 +1,6 @@
 use super::{entity::*, namespace::*, scope::*, type_decl::*, *};
 use crate::ast;
+use inflector::Inflector;
 use proc_macro2::TokenStream;
 use quote::*;
 
@@ -42,9 +43,26 @@ impl ToTokens for Schema {
         let name = format_ident!("{}", self.name);
         let types = &self.types;
         let entities = &self.entities;
+        let holder_name: Vec<_> = entities
+            .iter()
+            .map(|e| format_ident!("{}", e.name.to_snake_case()))
+            .collect();
+        let holder_type: Vec<_> = entities
+            .iter()
+            .map(|e| format_ident!("{}", e.holder_name))
+            .collect();
         tokens.append_all(quote! {
             pub mod #name {
                 use crate::{primitive::*, tables::*};
+                use std::collections::HashMap;
+
+                #[derive(Debug, Clone, PartialEq, Default)]
+                pub struct Tables {
+                    #(
+                    #holder_name: HashMap<u64, #holder_type>,
+                    )*
+                }
+
                 #(#types)*
                 #(#entities)*
             }
