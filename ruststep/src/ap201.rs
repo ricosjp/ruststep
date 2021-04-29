@@ -3,7 +3,7 @@ pub mod explicit_draughting {
     use crate::{primitive::*, tables::*};
     use std::collections::HashMap;
     #[derive(Debug, Clone, PartialEq, Default)]
-    pub struct Table {
+    pub struct Tables {
         address: HashMap<u64, AddressHolder>,
         angular_dimension: HashMap<u64, AngularDimensionHolder>,
         annotation_curve_occurrence: HashMap<u64, AnnotationCurveOccurrenceHolder>,
