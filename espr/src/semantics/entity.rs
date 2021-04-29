@@ -144,6 +144,14 @@ impl ToTokens for Entity {
                 pub #attr_name : #holder_attr_type,
                 )*
             }
+
+            impl Holder for #holder_name {
+                type Table = Tables;
+                type Owned = #name;
+                fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+                    todo!()
+                }
+            }
         });
     }
 }

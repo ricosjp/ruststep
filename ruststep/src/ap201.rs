@@ -1,6 +1,6 @@
 #![allow(dead_code)]
 pub mod explicit_draughting {
-    use crate::{primitive::*, tables::*};
+    use crate::{error::Result, primitive::*, tables::*};
     use std::collections::HashMap;
     #[derive(Debug, Clone, PartialEq, Default)]
     pub struct Tables {
@@ -607,6 +607,13 @@ pub mod explicit_draughting {
         pub electronic_mail_address: Option<PlaceHolder<Label>>,
         pub telex_number: Option<PlaceHolder<Label>>,
     }
+    impl Holder for AddressHolder {
+        type Table = Tables;
+        type Owned = Address;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     impl ::std::ops::Deref for AngularDimension {
         type Target = DimensionCurveDirectedCallout;
         fn deref(&self) -> &Self::Target {
@@ -621,6 +628,13 @@ pub mod explicit_draughting {
     pub struct AngularDimensionHolder {
         pub dimension_curve_directed_callout: PlaceHolder<DimensionCurveDirectedCallout>,
     }
+    impl Holder for AngularDimensionHolder {
+        type Table = Tables;
+        type Owned = AngularDimension;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     impl ::std::ops::Deref for AnnotationCurveOccurrence {
         type Target = AnnotationOccurrence;
         fn deref(&self) -> &Self::Target {
@@ -634,6 +648,13 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq)]
     pub struct AnnotationCurveOccurrenceHolder {
         pub annotation_occurrence: PlaceHolder<AnnotationOccurrence>,
+    }
+    impl Holder for AnnotationCurveOccurrenceHolder {
+        type Table = Tables;
+        type Owned = AnnotationCurveOccurrence;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     impl ::std::ops::Deref for AnnotationFillArea {
         type Target = GeometricRepresentationItem;
@@ -651,6 +672,13 @@ pub mod explicit_draughting {
         pub boundaries: PlaceHolder<Vec<Curve>>,
         pub geometric_representation_item: PlaceHolder<GeometricRepresentationItem>,
     }
+    impl Holder for AnnotationFillAreaHolder {
+        type Table = Tables;
+        type Owned = AnnotationFillArea;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     impl ::std::ops::Deref for AnnotationFillAreaOccurrence {
         type Target = AnnotationOccurrence;
         fn deref(&self) -> &Self::Target {
@@ -667,6 +695,13 @@ pub mod explicit_draughting {
         pub fill_style_target: PlaceHolder<Point>,
         pub annotation_occurrence: PlaceHolder<AnnotationOccurrence>,
     }
+    impl Holder for AnnotationFillAreaOccurrenceHolder {
+        type Table = Tables;
+        type Owned = AnnotationFillAreaOccurrence;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     impl ::std::ops::Deref for AnnotationOccurrence {
         type Target = StyledItem;
         fn deref(&self) -> &Self::Target {
@@ -680,6 +715,13 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq)]
     pub struct AnnotationOccurrenceHolder {
         pub styled_item: PlaceHolder<StyledItem>,
+    }
+    impl Holder for AnnotationOccurrenceHolder {
+        type Table = Tables;
+        type Owned = AnnotationOccurrence;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     impl ::std::ops::Deref for AnnotationSubfigureOccurrence {
         type Target = AnnotationSymbolOccurrence;
@@ -695,6 +737,13 @@ pub mod explicit_draughting {
     pub struct AnnotationSubfigureOccurrenceHolder {
         pub annotation_symbol_occurrence: PlaceHolder<AnnotationSymbolOccurrence>,
     }
+    impl Holder for AnnotationSubfigureOccurrenceHolder {
+        type Table = Tables;
+        type Owned = AnnotationSubfigureOccurrence;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     impl ::std::ops::Deref for AnnotationSymbol {
         type Target = MappedItem;
         fn deref(&self) -> &Self::Target {
@@ -708,6 +757,13 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq)]
     pub struct AnnotationSymbolHolder {
         pub mapped_item: PlaceHolder<MappedItem>,
+    }
+    impl Holder for AnnotationSymbolHolder {
+        type Table = Tables;
+        type Owned = AnnotationSymbol;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     impl ::std::ops::Deref for AnnotationSymbolOccurrence {
         type Target = AnnotationOccurrence;
@@ -723,6 +779,13 @@ pub mod explicit_draughting {
     pub struct AnnotationSymbolOccurrenceHolder {
         pub annotation_occurrence: PlaceHolder<AnnotationOccurrence>,
     }
+    impl Holder for AnnotationSymbolOccurrenceHolder {
+        type Table = Tables;
+        type Owned = AnnotationSymbolOccurrence;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     impl ::std::ops::Deref for AnnotationText {
         type Target = MappedItem;
         fn deref(&self) -> &Self::Target {
@@ -736,6 +799,13 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq)]
     pub struct AnnotationTextHolder {
         pub mapped_item: PlaceHolder<MappedItem>,
+    }
+    impl Holder for AnnotationTextHolder {
+        type Table = Tables;
+        type Owned = AnnotationText;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     impl ::std::ops::Deref for AnnotationTextOccurrence {
         type Target = AnnotationOccurrence;
@@ -751,6 +821,13 @@ pub mod explicit_draughting {
     pub struct AnnotationTextOccurrenceHolder {
         pub annotation_occurrence: PlaceHolder<AnnotationOccurrence>,
     }
+    impl Holder for AnnotationTextOccurrenceHolder {
+        type Table = Tables;
+        type Owned = AnnotationTextOccurrence;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ApplicationContext {
         pub application: Text,
@@ -758,6 +835,13 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq)]
     pub struct ApplicationContextHolder {
         pub application: PlaceHolder<Text>,
+    }
+    impl Holder for ApplicationContextHolder {
+        type Table = Tables;
+        type Owned = ApplicationContext;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ApplicationContextElement {
@@ -768,6 +852,13 @@ pub mod explicit_draughting {
     pub struct ApplicationContextElementHolder {
         pub name: PlaceHolder<Label>,
         pub frame_of_reference: PlaceHolder<ApplicationContext>,
+    }
+    impl Holder for ApplicationContextElementHolder {
+        type Table = Tables;
+        type Owned = ApplicationContextElement;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ApplicationProtocolDefinition {
@@ -783,6 +874,13 @@ pub mod explicit_draughting {
         pub application_protocol_year: PlaceHolder<YearNumber>,
         pub application: PlaceHolder<ApplicationContext>,
     }
+    impl Holder for ApplicationProtocolDefinitionHolder {
+        type Table = Tables;
+        type Owned = ApplicationProtocolDefinition;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Approval {
         pub status: ApprovalStatus,
@@ -793,6 +891,13 @@ pub mod explicit_draughting {
         pub status: PlaceHolder<ApprovalStatus>,
         pub level: PlaceHolder<Label>,
     }
+    impl Holder for ApprovalHolder {
+        type Table = Tables;
+        type Owned = Approval;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ApprovalAssignment {
         pub assigned_approval: Approval,
@@ -800,6 +905,13 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq)]
     pub struct ApprovalAssignmentHolder {
         pub assigned_approval: PlaceHolder<Approval>,
+    }
+    impl Holder for ApprovalAssignmentHolder {
+        type Table = Tables;
+        type Owned = ApprovalAssignment;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ApprovalDateTime {
@@ -810,6 +922,13 @@ pub mod explicit_draughting {
     pub struct ApprovalDateTimeHolder {
         pub date_time: PlaceHolder<DateTimeSelect>,
         pub dated_approval: PlaceHolder<Approval>,
+    }
+    impl Holder for ApprovalDateTimeHolder {
+        type Table = Tables;
+        type Owned = ApprovalDateTime;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ApprovalPersonOrganization {
@@ -823,6 +942,13 @@ pub mod explicit_draughting {
         pub authorized_approval: PlaceHolder<Approval>,
         pub role: PlaceHolder<ApprovalRole>,
     }
+    impl Holder for ApprovalPersonOrganizationHolder {
+        type Table = Tables;
+        type Owned = ApprovalPersonOrganization;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ApprovalRole {
         pub role: Label,
@@ -831,6 +957,13 @@ pub mod explicit_draughting {
     pub struct ApprovalRoleHolder {
         pub role: PlaceHolder<Label>,
     }
+    impl Holder for ApprovalRoleHolder {
+        type Table = Tables;
+        type Owned = ApprovalRole;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ApprovalStatus {
         pub name: Label,
@@ -838,6 +971,13 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq)]
     pub struct ApprovalStatusHolder {
         pub name: PlaceHolder<Label>,
+    }
+    impl Holder for ApprovalStatusHolder {
+        type Table = Tables;
+        type Owned = ApprovalStatus;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct AreaInSet {
@@ -848,6 +988,13 @@ pub mod explicit_draughting {
     pub struct AreaInSetHolder {
         pub area: PlaceHolder<PresentationArea>,
         pub in_set: PlaceHolder<PresentationSet>,
+    }
+    impl Holder for AreaInSetHolder {
+        type Table = Tables;
+        type Owned = AreaInSet;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     impl ::std::ops::Deref for Axis2Placement2D {
         type Target = Placement;
@@ -864,6 +1011,13 @@ pub mod explicit_draughting {
     pub struct Axis2Placement2DHolder {
         pub ref_direction: Option<PlaceHolder<Direction>>,
         pub placement: PlaceHolder<Placement>,
+    }
+    impl Holder for Axis2Placement2DHolder {
+        type Table = Tables;
+        type Owned = Axis2Placement2D;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     impl ::std::ops::Deref for BSplineCurve {
         type Target = BoundedCurve;
@@ -889,6 +1043,13 @@ pub mod explicit_draughting {
         pub self_intersect: Logical,
         pub bounded_curve: PlaceHolder<BoundedCurve>,
     }
+    impl Holder for BSplineCurveHolder {
+        type Table = Tables;
+        type Owned = BSplineCurve;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     impl ::std::ops::Deref for BSplineCurveWithKnots {
         type Target = BSplineCurve;
         fn deref(&self) -> &Self::Target {
@@ -909,6 +1070,13 @@ pub mod explicit_draughting {
         pub knot_spec: PlaceHolder<KnotType>,
         pub b_spline_curve: PlaceHolder<BSplineCurve>,
     }
+    impl Holder for BSplineCurveWithKnotsHolder {
+        type Table = Tables;
+        type Owned = BSplineCurveWithKnots;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     impl ::std::ops::Deref for BezierCurve {
         type Target = BSplineCurve;
         fn deref(&self) -> &Self::Target {
@@ -923,6 +1091,13 @@ pub mod explicit_draughting {
     pub struct BezierCurveHolder {
         pub b_spline_curve: PlaceHolder<BSplineCurve>,
     }
+    impl Holder for BezierCurveHolder {
+        type Table = Tables;
+        type Owned = BezierCurve;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     impl ::std::ops::Deref for BoundedCurve {
         type Target = Curve;
         fn deref(&self) -> &Self::Target {
@@ -936,6 +1111,13 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq)]
     pub struct BoundedCurveHolder {
         pub curve: PlaceHolder<Curve>,
+    }
+    impl Holder for BoundedCurveHolder {
+        type Table = Tables;
+        type Owned = BoundedCurve;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     impl ::std::ops::Deref for CalendarDate {
         type Target = Date;
@@ -955,6 +1137,13 @@ pub mod explicit_draughting {
         pub month_component: PlaceHolder<MonthInYearNumber>,
         pub date: PlaceHolder<Date>,
     }
+    impl Holder for CalendarDateHolder {
+        type Table = Tables;
+        type Owned = CalendarDate;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     impl ::std::ops::Deref for CameraImage {
         type Target = MappedItem;
         fn deref(&self) -> &Self::Target {
@@ -968,6 +1157,13 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq)]
     pub struct CameraImageHolder {
         pub mapped_item: PlaceHolder<MappedItem>,
+    }
+    impl Holder for CameraImageHolder {
+        type Table = Tables;
+        type Owned = CameraImage;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     impl ::std::ops::Deref for CameraImage2DWithScale {
         type Target = CameraImage;
@@ -983,6 +1179,13 @@ pub mod explicit_draughting {
     pub struct CameraImage2DWithScaleHolder {
         pub camera_image: PlaceHolder<CameraImage>,
     }
+    impl Holder for CameraImage2DWithScaleHolder {
+        type Table = Tables;
+        type Owned = CameraImage2DWithScale;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     impl ::std::ops::Deref for CameraModel {
         type Target = GeometricRepresentationItem;
         fn deref(&self) -> &Self::Target {
@@ -996,6 +1199,13 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq)]
     pub struct CameraModelHolder {
         pub geometric_representation_item: PlaceHolder<GeometricRepresentationItem>,
+    }
+    impl Holder for CameraModelHolder {
+        type Table = Tables;
+        type Owned = CameraModel;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     impl ::std::ops::Deref for CameraModelD2 {
         type Target = CameraModel;
@@ -1015,6 +1225,13 @@ pub mod explicit_draughting {
         pub view_window_clipping: bool,
         pub camera_model: PlaceHolder<CameraModel>,
     }
+    impl Holder for CameraModelD2Holder {
+        type Table = Tables;
+        type Owned = CameraModelD2;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     impl ::std::ops::Deref for CameraUsage {
         type Target = RepresentationMap;
         fn deref(&self) -> &Self::Target {
@@ -1028,6 +1245,13 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq)]
     pub struct CameraUsageHolder {
         pub representation_map: PlaceHolder<RepresentationMap>,
+    }
+    impl Holder for CameraUsageHolder {
+        type Table = Tables;
+        type Owned = CameraUsage;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     impl ::std::ops::Deref for CartesianPoint {
         type Target = Point;
@@ -1045,6 +1269,13 @@ pub mod explicit_draughting {
         pub coordinates: PlaceHolder<Vec<LengthMeasure>>,
         pub point: PlaceHolder<Point>,
     }
+    impl Holder for CartesianPointHolder {
+        type Table = Tables;
+        type Owned = CartesianPoint;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     impl ::std::ops::Deref for Circle {
         type Target = Conic;
         fn deref(&self) -> &Self::Target {
@@ -1061,10 +1292,24 @@ pub mod explicit_draughting {
         pub radius: PlaceHolder<PositiveLengthMeasure>,
         pub conic: PlaceHolder<Conic>,
     }
+    impl Holder for CircleHolder {
+        type Table = Tables;
+        type Owned = Circle;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Colour {}
     #[derive(Clone, Debug, PartialEq)]
     pub struct ColourHolder {}
+    impl Holder for ColourHolder {
+        type Table = Tables;
+        type Owned = Colour;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     impl ::std::ops::Deref for ColourRgb {
         type Target = ColourSpecification;
         fn deref(&self) -> &Self::Target {
@@ -1085,6 +1330,13 @@ pub mod explicit_draughting {
         pub blue: f64,
         pub colour_specification: PlaceHolder<ColourSpecification>,
     }
+    impl Holder for ColourRgbHolder {
+        type Table = Tables;
+        type Owned = ColourRgb;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     impl ::std::ops::Deref for ColourSpecification {
         type Target = Colour;
         fn deref(&self) -> &Self::Target {
@@ -1100,6 +1352,13 @@ pub mod explicit_draughting {
     pub struct ColourSpecificationHolder {
         pub name: PlaceHolder<Colour>,
         pub colour: PlaceHolder<Colour>,
+    }
+    impl Holder for ColourSpecificationHolder {
+        type Table = Tables;
+        type Owned = ColourSpecification;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     impl ::std::ops::Deref for CompositeCurve {
         type Target = BoundedCurve;
@@ -1119,6 +1378,13 @@ pub mod explicit_draughting {
         pub self_intersect: Logical,
         pub bounded_curve: PlaceHolder<BoundedCurve>,
     }
+    impl Holder for CompositeCurveHolder {
+        type Table = Tables;
+        type Owned = CompositeCurve;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct CompositeCurveSegment {
         pub transition: TransitionCode,
@@ -1130,6 +1396,13 @@ pub mod explicit_draughting {
         pub transition: PlaceHolder<TransitionCode>,
         pub same_sense: bool,
         pub parent_curve: PlaceHolder<Curve>,
+    }
+    impl Holder for CompositeCurveSegmentHolder {
+        type Table = Tables;
+        type Owned = CompositeCurveSegment;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     impl ::std::ops::Deref for CompositeText {
         type Target = GeometricRepresentationItem;
@@ -1147,6 +1420,13 @@ pub mod explicit_draughting {
         pub collected_text: PlaceHolder<Vec<TextOrCharacter>>,
         pub geometric_representation_item: PlaceHolder<GeometricRepresentationItem>,
     }
+    impl Holder for CompositeTextHolder {
+        type Table = Tables;
+        type Owned = CompositeText;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     impl ::std::ops::Deref for CompositeTextWithAssociatedCurves {
         type Target = CompositeText;
         fn deref(&self) -> &Self::Target {
@@ -1162,6 +1442,13 @@ pub mod explicit_draughting {
     pub struct CompositeTextWithAssociatedCurvesHolder {
         pub associated_curves: PlaceHolder<Vec<Curve>>,
         pub composite_text: PlaceHolder<CompositeText>,
+    }
+    impl Holder for CompositeTextWithAssociatedCurvesHolder {
+        type Table = Tables;
+        type Owned = CompositeTextWithAssociatedCurves;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     impl ::std::ops::Deref for CompositeTextWithBlankingBox {
         type Target = CompositeText;
@@ -1179,6 +1466,13 @@ pub mod explicit_draughting {
         pub blanking: PlaceHolder<PlanarBox>,
         pub composite_text: PlaceHolder<CompositeText>,
     }
+    impl Holder for CompositeTextWithBlankingBoxHolder {
+        type Table = Tables;
+        type Owned = CompositeTextWithBlankingBox;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     impl ::std::ops::Deref for CompositeTextWithExtent {
         type Target = CompositeText;
         fn deref(&self) -> &Self::Target {
@@ -1194,6 +1488,13 @@ pub mod explicit_draughting {
     pub struct CompositeTextWithExtentHolder {
         pub extent: PlaceHolder<PlanarExtent>,
         pub composite_text: PlaceHolder<CompositeText>,
+    }
+    impl Holder for CompositeTextWithExtentHolder {
+        type Table = Tables;
+        type Owned = CompositeTextWithExtent;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     impl ::std::ops::Deref for Conic {
         type Target = Curve;
@@ -1211,6 +1512,13 @@ pub mod explicit_draughting {
         pub position: PlaceHolder<Axis2Placement>,
         pub curve: PlaceHolder<Curve>,
     }
+    impl Holder for ConicHolder {
+        type Table = Tables;
+        type Owned = Conic;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     impl ::std::ops::Deref for ContextDependentInvisibility {
         type Target = Invisibility;
         fn deref(&self) -> &Self::Target {
@@ -1227,6 +1535,13 @@ pub mod explicit_draughting {
         pub presentation_context: PlaceHolder<InvisibilityContext>,
         pub invisibility: PlaceHolder<Invisibility>,
     }
+    impl Holder for ContextDependentInvisibilityHolder {
+        type Table = Tables;
+        type Owned = ContextDependentInvisibility;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Contract {
         pub name: Label,
@@ -1239,6 +1554,13 @@ pub mod explicit_draughting {
         pub purpose: PlaceHolder<Text>,
         pub kind: PlaceHolder<ContractType>,
     }
+    impl Holder for ContractHolder {
+        type Table = Tables;
+        type Owned = Contract;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ContractAssignment {
         pub assigned_contract: Contract,
@@ -1247,6 +1569,13 @@ pub mod explicit_draughting {
     pub struct ContractAssignmentHolder {
         pub assigned_contract: PlaceHolder<Contract>,
     }
+    impl Holder for ContractAssignmentHolder {
+        type Table = Tables;
+        type Owned = ContractAssignment;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ContractType {
         pub description: Label,
@@ -1254,6 +1583,13 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq)]
     pub struct ContractTypeHolder {
         pub description: PlaceHolder<Label>,
+    }
+    impl Holder for ContractTypeHolder {
+        type Table = Tables;
+        type Owned = ContractType;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     impl ::std::ops::Deref for ConversionBasedUnit {
         type Target = NamedUnit;
@@ -1273,6 +1609,13 @@ pub mod explicit_draughting {
         pub conversion_factor: PlaceHolder<MeasureWithUnit>,
         pub named_unit: PlaceHolder<NamedUnit>,
     }
+    impl Holder for ConversionBasedUnitHolder {
+        type Table = Tables;
+        type Owned = ConversionBasedUnit;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     impl ::std::ops::Deref for Curve {
         type Target = GeometricRepresentationItem;
         fn deref(&self) -> &Self::Target {
@@ -1286,6 +1629,13 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq)]
     pub struct CurveHolder {
         pub geometric_representation_item: PlaceHolder<GeometricRepresentationItem>,
+    }
+    impl Holder for CurveHolder {
+        type Table = Tables;
+        type Owned = Curve;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     impl ::std::ops::Deref for CurveDimension {
         type Target = DimensionCurveDirectedCallout;
@@ -1301,6 +1651,13 @@ pub mod explicit_draughting {
     pub struct CurveDimensionHolder {
         pub dimension_curve_directed_callout: PlaceHolder<DimensionCurveDirectedCallout>,
     }
+    impl Holder for CurveDimensionHolder {
+        type Table = Tables;
+        type Owned = CurveDimension;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct CurveStyle {
         pub name: Label,
@@ -1315,6 +1672,13 @@ pub mod explicit_draughting {
         pub curve_width: PlaceHolder<SizeSelect>,
         pub curve_colour: PlaceHolder<Colour>,
     }
+    impl Holder for CurveStyleHolder {
+        type Table = Tables;
+        type Owned = CurveStyle;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct CurveStyleFont {
         pub name: Label,
@@ -1324,6 +1688,13 @@ pub mod explicit_draughting {
     pub struct CurveStyleFontHolder {
         pub name: PlaceHolder<Label>,
         pub pattern_list: PlaceHolder<Vec<CurveStyleFontPattern>>,
+    }
+    impl Holder for CurveStyleFontHolder {
+        type Table = Tables;
+        type Owned = CurveStyleFont;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct CurveStyleFontPattern {
@@ -1335,6 +1706,13 @@ pub mod explicit_draughting {
         pub visible_segment_length: PlaceHolder<PositiveLengthMeasure>,
         pub invisible_segment_length: PlaceHolder<PositiveLengthMeasure>,
     }
+    impl Holder for CurveStyleFontPatternHolder {
+        type Table = Tables;
+        type Owned = CurveStyleFontPattern;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Date {
         pub year_component: YearNumber,
@@ -1342,6 +1720,13 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq)]
     pub struct DateHolder {
         pub year_component: PlaceHolder<YearNumber>,
+    }
+    impl Holder for DateHolder {
+        type Table = Tables;
+        type Owned = Date;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     impl ::std::ops::Deref for DatumFeatureCallout {
         type Target = DraughtingCallout;
@@ -1357,6 +1742,13 @@ pub mod explicit_draughting {
     pub struct DatumFeatureCalloutHolder {
         pub draughting_callout: PlaceHolder<DraughtingCallout>,
     }
+    impl Holder for DatumFeatureCalloutHolder {
+        type Table = Tables;
+        type Owned = DatumFeatureCallout;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     impl ::std::ops::Deref for DatumTargetCallout {
         type Target = DraughtingCallout;
         fn deref(&self) -> &Self::Target {
@@ -1370,6 +1762,13 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq)]
     pub struct DatumTargetCalloutHolder {
         pub draughting_callout: PlaceHolder<DraughtingCallout>,
+    }
+    impl Holder for DatumTargetCalloutHolder {
+        type Table = Tables;
+        type Owned = DatumTargetCallout;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     impl ::std::ops::Deref for DefinedSymbol {
         type Target = GeometricRepresentationItem;
@@ -1389,6 +1788,13 @@ pub mod explicit_draughting {
         pub target: PlaceHolder<SymbolTarget>,
         pub geometric_representation_item: PlaceHolder<GeometricRepresentationItem>,
     }
+    impl Holder for DefinedSymbolHolder {
+        type Table = Tables;
+        type Owned = DefinedSymbol;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     impl ::std::ops::Deref for DiameterDimension {
         type Target = DimensionCurveDirectedCallout;
         fn deref(&self) -> &Self::Target {
@@ -1402,6 +1808,13 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq)]
     pub struct DiameterDimensionHolder {
         pub dimension_curve_directed_callout: PlaceHolder<DimensionCurveDirectedCallout>,
+    }
+    impl Holder for DiameterDimensionHolder {
+        type Table = Tables;
+        type Owned = DiameterDimension;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     impl ::std::ops::Deref for DimensionCalloutComponentRelationship {
         type Target = DraughtingCalloutRelationship;
@@ -1417,6 +1830,13 @@ pub mod explicit_draughting {
     pub struct DimensionCalloutComponentRelationshipHolder {
         pub draughting_callout_relationship: PlaceHolder<DraughtingCalloutRelationship>,
     }
+    impl Holder for DimensionCalloutComponentRelationshipHolder {
+        type Table = Tables;
+        type Owned = DimensionCalloutComponentRelationship;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     impl ::std::ops::Deref for DimensionCalloutRelationship {
         type Target = DraughtingCalloutRelationship;
         fn deref(&self) -> &Self::Target {
@@ -1430,6 +1850,13 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq)]
     pub struct DimensionCalloutRelationshipHolder {
         pub draughting_callout_relationship: PlaceHolder<DraughtingCalloutRelationship>,
+    }
+    impl Holder for DimensionCalloutRelationshipHolder {
+        type Table = Tables;
+        type Owned = DimensionCalloutRelationship;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     impl ::std::ops::Deref for DimensionCurve {
         type Target = AnnotationCurveOccurrence;
@@ -1445,6 +1872,13 @@ pub mod explicit_draughting {
     pub struct DimensionCurveHolder {
         pub annotation_curve_occurrence: PlaceHolder<AnnotationCurveOccurrence>,
     }
+    impl Holder for DimensionCurveHolder {
+        type Table = Tables;
+        type Owned = DimensionCurve;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     impl ::std::ops::Deref for DimensionCurveDirectedCallout {
         type Target = DraughtingCallout;
         fn deref(&self) -> &Self::Target {
@@ -1458,6 +1892,13 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq)]
     pub struct DimensionCurveDirectedCalloutHolder {
         pub draughting_callout: PlaceHolder<DraughtingCallout>,
+    }
+    impl Holder for DimensionCurveDirectedCalloutHolder {
+        type Table = Tables;
+        type Owned = DimensionCurveDirectedCallout;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     impl ::std::ops::Deref for DimensionCurveTerminator {
         type Target = TerminatorSymbol;
@@ -1475,6 +1916,13 @@ pub mod explicit_draughting {
         pub role: PlaceHolder<DimensionExtentUsage>,
         pub terminator_symbol: PlaceHolder<TerminatorSymbol>,
     }
+    impl Holder for DimensionCurveTerminatorHolder {
+        type Table = Tables;
+        type Owned = DimensionCurveTerminator;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     impl ::std::ops::Deref for DimensionPair {
         type Target = DraughtingCalloutRelationship;
         fn deref(&self) -> &Self::Target {
@@ -1488,6 +1936,13 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq)]
     pub struct DimensionPairHolder {
         pub draughting_callout_relationship: PlaceHolder<DraughtingCalloutRelationship>,
+    }
+    impl Holder for DimensionPairHolder {
+        type Table = Tables;
+        type Owned = DimensionPair;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DimensionalExponents {
@@ -1509,6 +1964,13 @@ pub mod explicit_draughting {
         pub amount_of_substance_exponent: f64,
         pub luminous_intensity_exponent: f64,
     }
+    impl Holder for DimensionalExponentsHolder {
+        type Table = Tables;
+        type Owned = DimensionalExponents;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     impl ::std::ops::Deref for Direction {
         type Target = GeometricRepresentationItem;
         fn deref(&self) -> &Self::Target {
@@ -1525,6 +1987,13 @@ pub mod explicit_draughting {
         pub direction_ratios: PlaceHolder<Vec<f64>>,
         pub geometric_representation_item: PlaceHolder<GeometricRepresentationItem>,
     }
+    impl Holder for DirectionHolder {
+        type Table = Tables;
+        type Owned = Direction;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Document {
         pub id: Identifier,
@@ -1539,6 +2008,13 @@ pub mod explicit_draughting {
         pub description: PlaceHolder<Text>,
         pub kind: PlaceHolder<DocumentType>,
     }
+    impl Holder for DocumentHolder {
+        type Table = Tables;
+        type Owned = Document;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DocumentReference {
         pub assigned_document: Document,
@@ -1549,6 +2025,13 @@ pub mod explicit_draughting {
         pub assigned_document: PlaceHolder<Document>,
         pub source: PlaceHolder<Label>,
     }
+    impl Holder for DocumentReferenceHolder {
+        type Table = Tables;
+        type Owned = DocumentReference;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DocumentType {
         pub product_data_type: Label,
@@ -1556,6 +2039,13 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq)]
     pub struct DocumentTypeHolder {
         pub product_data_type: PlaceHolder<Label>,
+    }
+    impl Holder for DocumentTypeHolder {
+        type Table = Tables;
+        type Owned = DocumentType;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     impl ::std::ops::Deref for DraughtingAnnotationOccurrence {
         type Target = AnnotationOccurrence;
@@ -1570,6 +2060,13 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq)]
     pub struct DraughtingAnnotationOccurrenceHolder {
         pub annotation_occurrence: PlaceHolder<AnnotationOccurrence>,
+    }
+    impl Holder for DraughtingAnnotationOccurrenceHolder {
+        type Table = Tables;
+        type Owned = DraughtingAnnotationOccurrence;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     impl ::std::ops::Deref for DraughtingApprovalAssignment {
         type Target = ApprovalAssignment;
@@ -1587,6 +2084,13 @@ pub mod explicit_draughting {
         pub approved_items: PlaceHolder<Vec<ApprovedItem>>,
         pub approval_assignment: PlaceHolder<ApprovalAssignment>,
     }
+    impl Holder for DraughtingApprovalAssignmentHolder {
+        type Table = Tables;
+        type Owned = DraughtingApprovalAssignment;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     impl ::std::ops::Deref for DraughtingCallout {
         type Target = GeometricRepresentationItem;
         fn deref(&self) -> &Self::Target {
@@ -1603,6 +2107,13 @@ pub mod explicit_draughting {
         pub contents: PlaceHolder<Vec<DraughtingCalloutElement>>,
         pub geometric_representation_item: PlaceHolder<GeometricRepresentationItem>,
     }
+    impl Holder for DraughtingCalloutHolder {
+        type Table = Tables;
+        type Owned = DraughtingCallout;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DraughtingCalloutRelationship {
         pub name: Label,
@@ -1616,6 +2127,13 @@ pub mod explicit_draughting {
         pub description: PlaceHolder<Text>,
         pub relating_draughting_callout: PlaceHolder<DraughtingCallout>,
         pub related_draughting_callout: PlaceHolder<DraughtingCallout>,
+    }
+    impl Holder for DraughtingCalloutRelationshipHolder {
+        type Table = Tables;
+        type Owned = DraughtingCalloutRelationship;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     impl ::std::ops::Deref for DraughtingContractAssignment {
         type Target = ContractAssignment;
@@ -1633,6 +2151,13 @@ pub mod explicit_draughting {
         pub items: PlaceHolder<Vec<ContractedItem>>,
         pub contract_assignment: PlaceHolder<ContractAssignment>,
     }
+    impl Holder for DraughtingContractAssignmentHolder {
+        type Table = Tables;
+        type Owned = DraughtingContractAssignment;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     impl ::std::ops::Deref for DraughtingDrawingRevision {
         type Target = DrawingRevision;
         fn deref(&self) -> &Self::Target {
@@ -1647,6 +2172,13 @@ pub mod explicit_draughting {
     pub struct DraughtingDrawingRevisionHolder {
         pub drawing_revision: PlaceHolder<DrawingRevision>,
     }
+    impl Holder for DraughtingDrawingRevisionHolder {
+        type Table = Tables;
+        type Owned = DraughtingDrawingRevision;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     impl ::std::ops::Deref for DraughtingElements {
         type Target = DraughtingCallout;
         fn deref(&self) -> &Self::Target {
@@ -1660,6 +2192,13 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq)]
     pub struct DraughtingElementsHolder {
         pub draughting_callout: PlaceHolder<DraughtingCallout>,
+    }
+    impl Holder for DraughtingElementsHolder {
+        type Table = Tables;
+        type Owned = DraughtingElements;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     impl ::std::ops::Deref for DraughtingGroupAssignment {
         type Target = GroupAssignment;
@@ -1677,6 +2216,13 @@ pub mod explicit_draughting {
         pub items: PlaceHolder<Vec<DraughtingGroupedItem>>,
         pub group_assignment: PlaceHolder<GroupAssignment>,
     }
+    impl Holder for DraughtingGroupAssignmentHolder {
+        type Table = Tables;
+        type Owned = DraughtingGroupAssignment;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     impl ::std::ops::Deref for DraughtingModel {
         type Target = Representation;
         fn deref(&self) -> &Self::Target {
@@ -1690,6 +2236,13 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq)]
     pub struct DraughtingModelHolder {
         pub representation: PlaceHolder<Representation>,
+    }
+    impl Holder for DraughtingModelHolder {
+        type Table = Tables;
+        type Owned = DraughtingModel;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     impl ::std::ops::Deref for DraughtingOrganizationAssignment {
         type Target = OrganizationAssignment;
@@ -1707,6 +2260,13 @@ pub mod explicit_draughting {
         pub assigned_items: PlaceHolder<Vec<DraughtingOrganizationItem>>,
         pub organization_assignment: PlaceHolder<OrganizationAssignment>,
     }
+    impl Holder for DraughtingOrganizationAssignmentHolder {
+        type Table = Tables;
+        type Owned = DraughtingOrganizationAssignment;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     impl ::std::ops::Deref for DraughtingPersonAndOrganizationAssignment {
         type Target = PersonAndOrganizationAssignment;
         fn deref(&self) -> &Self::Target {
@@ -1722,6 +2282,13 @@ pub mod explicit_draughting {
     pub struct DraughtingPersonAndOrganizationAssignmentHolder {
         pub assigned_items: PlaceHolder<Vec<DraughtingOrganizationItem>>,
         pub person_and_organization_assignment: PlaceHolder<PersonAndOrganizationAssignment>,
+    }
+    impl Holder for DraughtingPersonAndOrganizationAssignmentHolder {
+        type Table = Tables;
+        type Owned = DraughtingPersonAndOrganizationAssignment;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     impl ::std::ops::Deref for DraughtingPersonAssignment {
         type Target = PersonAssignment;
@@ -1739,6 +2306,13 @@ pub mod explicit_draughting {
         pub assigned_items: PlaceHolder<Vec<DraughtingOrganizationItem>>,
         pub person_assignment: PlaceHolder<PersonAssignment>,
     }
+    impl Holder for DraughtingPersonAssignmentHolder {
+        type Table = Tables;
+        type Owned = DraughtingPersonAssignment;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     impl ::std::ops::Deref for DraughtingPreDefinedColour {
         type Target = PreDefinedColour;
         fn deref(&self) -> &Self::Target {
@@ -1752,6 +2326,13 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq)]
     pub struct DraughtingPreDefinedColourHolder {
         pub pre_defined_colour: PlaceHolder<PreDefinedColour>,
+    }
+    impl Holder for DraughtingPreDefinedColourHolder {
+        type Table = Tables;
+        type Owned = DraughtingPreDefinedColour;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     impl ::std::ops::Deref for DraughtingPreDefinedCurveFont {
         type Target = PreDefinedCurveFont;
@@ -1767,6 +2348,13 @@ pub mod explicit_draughting {
     pub struct DraughtingPreDefinedCurveFontHolder {
         pub pre_defined_curve_font: PlaceHolder<PreDefinedCurveFont>,
     }
+    impl Holder for DraughtingPreDefinedCurveFontHolder {
+        type Table = Tables;
+        type Owned = DraughtingPreDefinedCurveFont;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     impl ::std::ops::Deref for DraughtingPreDefinedTextFont {
         type Target = PreDefinedTextFont;
         fn deref(&self) -> &Self::Target {
@@ -1780,6 +2368,13 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq)]
     pub struct DraughtingPreDefinedTextFontHolder {
         pub pre_defined_text_font: PlaceHolder<PreDefinedTextFont>,
+    }
+    impl Holder for DraughtingPreDefinedTextFontHolder {
+        type Table = Tables;
+        type Owned = DraughtingPreDefinedTextFont;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     impl ::std::ops::Deref for DraughtingPresentedItem {
         type Target = PresentedItem;
@@ -1797,6 +2392,13 @@ pub mod explicit_draughting {
         pub items: PlaceHolder<Vec<DraughtingPresentedItemSelect>>,
         pub presented_item: PlaceHolder<PresentedItem>,
     }
+    impl Holder for DraughtingPresentedItemHolder {
+        type Table = Tables;
+        type Owned = DraughtingPresentedItem;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     impl ::std::ops::Deref for DraughtingSecurityClassificationAssignment {
         type Target = SecurityClassificationAssignment;
         fn deref(&self) -> &Self::Target {
@@ -1812,6 +2414,13 @@ pub mod explicit_draughting {
     pub struct DraughtingSecurityClassificationAssignmentHolder {
         pub assigned_items: PlaceHolder<Vec<ClassifiedItem>>,
         pub security_classification_assignment: PlaceHolder<SecurityClassificationAssignment>,
+    }
+    impl Holder for DraughtingSecurityClassificationAssignmentHolder {
+        type Table = Tables;
+        type Owned = DraughtingSecurityClassificationAssignment;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     impl ::std::ops::Deref for DraughtingSpecificationReference {
         type Target = DocumentReference;
@@ -1829,6 +2438,13 @@ pub mod explicit_draughting {
         pub specified_items: PlaceHolder<Vec<SpecifiedItem>>,
         pub document_reference: PlaceHolder<DocumentReference>,
     }
+    impl Holder for DraughtingSpecificationReferenceHolder {
+        type Table = Tables;
+        type Owned = DraughtingSpecificationReference;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     impl ::std::ops::Deref for DraughtingSubfigureRepresentation {
         type Target = SymbolRepresentation;
         fn deref(&self) -> &Self::Target {
@@ -1842,6 +2458,13 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq)]
     pub struct DraughtingSubfigureRepresentationHolder {
         pub symbol_representation: PlaceHolder<SymbolRepresentation>,
+    }
+    impl Holder for DraughtingSubfigureRepresentationHolder {
+        type Table = Tables;
+        type Owned = DraughtingSubfigureRepresentation;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     impl ::std::ops::Deref for DraughtingSymbolRepresentation {
         type Target = SymbolRepresentation;
@@ -1857,6 +2480,13 @@ pub mod explicit_draughting {
     pub struct DraughtingSymbolRepresentationHolder {
         pub symbol_representation: PlaceHolder<SymbolRepresentation>,
     }
+    impl Holder for DraughtingSymbolRepresentationHolder {
+        type Table = Tables;
+        type Owned = DraughtingSymbolRepresentation;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     impl ::std::ops::Deref for DraughtingTextLiteralWithDelineation {
         type Target = TextLiteralWithDelineation;
         fn deref(&self) -> &Self::Target {
@@ -1871,6 +2501,13 @@ pub mod explicit_draughting {
     pub struct DraughtingTextLiteralWithDelineationHolder {
         pub text_literal_with_delineation: PlaceHolder<TextLiteralWithDelineation>,
     }
+    impl Holder for DraughtingTextLiteralWithDelineationHolder {
+        type Table = Tables;
+        type Owned = DraughtingTextLiteralWithDelineation;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DraughtingTitle {
         pub items: Vec<DraughtingTitledItem>,
@@ -1883,6 +2520,13 @@ pub mod explicit_draughting {
         pub language: PlaceHolder<Label>,
         pub contents: PlaceHolder<Text>,
     }
+    impl Holder for DraughtingTitleHolder {
+        type Table = Tables;
+        type Owned = DraughtingTitle;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DrawingDefinition {
         pub drawing_number: Identifier,
@@ -1892,6 +2536,13 @@ pub mod explicit_draughting {
     pub struct DrawingDefinitionHolder {
         pub drawing_number: PlaceHolder<Identifier>,
         pub drawing_type: Option<PlaceHolder<Label>>,
+    }
+    impl Holder for DrawingDefinitionHolder {
+        type Table = Tables;
+        type Owned = DrawingDefinition;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     impl ::std::ops::Deref for DrawingRevision {
         type Target = PresentationSet;
@@ -1913,6 +2564,13 @@ pub mod explicit_draughting {
         pub intended_scale: Option<PlaceHolder<Text>>,
         pub presentation_set: PlaceHolder<PresentationSet>,
     }
+    impl Holder for DrawingRevisionHolder {
+        type Table = Tables;
+        type Owned = DrawingRevision;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     impl ::std::ops::Deref for DrawingSheetLayout {
         type Target = DraughtingSymbolRepresentation;
         fn deref(&self) -> &Self::Target {
@@ -1926,6 +2584,13 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq)]
     pub struct DrawingSheetLayoutHolder {
         pub draughting_symbol_representation: PlaceHolder<DraughtingSymbolRepresentation>,
+    }
+    impl Holder for DrawingSheetLayoutHolder {
+        type Table = Tables;
+        type Owned = DrawingSheetLayout;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     impl ::std::ops::Deref for DrawingSheetRevision {
         type Target = PresentationArea;
@@ -1943,6 +2608,13 @@ pub mod explicit_draughting {
         pub revision_identifier: PlaceHolder<Identifier>,
         pub presentation_area: PlaceHolder<PresentationArea>,
     }
+    impl Holder for DrawingSheetRevisionHolder {
+        type Table = Tables;
+        type Owned = DrawingSheetRevision;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     impl ::std::ops::Deref for DrawingSheetRevisionUsage {
         type Target = AreaInSet;
         fn deref(&self) -> &Self::Target {
@@ -1958,6 +2630,13 @@ pub mod explicit_draughting {
     pub struct DrawingSheetRevisionUsageHolder {
         pub sheet_number: PlaceHolder<Identifier>,
         pub area_in_set: PlaceHolder<AreaInSet>,
+    }
+    impl Holder for DrawingSheetRevisionUsageHolder {
+        type Table = Tables;
+        type Owned = DrawingSheetRevisionUsage;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     impl ::std::ops::Deref for Ellipse {
         type Target = Conic;
@@ -1977,6 +2656,13 @@ pub mod explicit_draughting {
         pub semi_axis_2: PlaceHolder<PositiveLengthMeasure>,
         pub conic: PlaceHolder<Conic>,
     }
+    impl Holder for EllipseHolder {
+        type Table = Tables;
+        type Owned = Ellipse;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ExternalSource {
         pub source_id: SourceItem,
@@ -1984,6 +2670,13 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq)]
     pub struct ExternalSourceHolder {
         pub source_id: PlaceHolder<SourceItem>,
+    }
+    impl Holder for ExternalSourceHolder {
+        type Table = Tables;
+        type Owned = ExternalSource;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     impl ::std::ops::Deref for ExternallyDefinedCurveFont {
         type Target = ExternallyDefinedItem;
@@ -1999,6 +2692,13 @@ pub mod explicit_draughting {
     pub struct ExternallyDefinedCurveFontHolder {
         pub externally_defined_item: PlaceHolder<ExternallyDefinedItem>,
     }
+    impl Holder for ExternallyDefinedCurveFontHolder {
+        type Table = Tables;
+        type Owned = ExternallyDefinedCurveFont;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ExternallyDefinedHatchStyle {
         pub externally_defined_item: ExternallyDefinedItem,
@@ -2009,6 +2709,13 @@ pub mod explicit_draughting {
         pub externally_defined_item: PlaceHolder<ExternallyDefinedItem>,
         pub geometric_representation_item: PlaceHolder<GeometricRepresentationItem>,
     }
+    impl Holder for ExternallyDefinedHatchStyleHolder {
+        type Table = Tables;
+        type Owned = ExternallyDefinedHatchStyle;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ExternallyDefinedItem {
         pub item_id: SourceItem,
@@ -2018,6 +2725,13 @@ pub mod explicit_draughting {
     pub struct ExternallyDefinedItemHolder {
         pub item_id: PlaceHolder<SourceItem>,
         pub source: PlaceHolder<ExternalSource>,
+    }
+    impl Holder for ExternallyDefinedItemHolder {
+        type Table = Tables;
+        type Owned = ExternallyDefinedItem;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     impl ::std::ops::Deref for ExternallyDefinedSymbol {
         type Target = ExternallyDefinedItem;
@@ -2033,6 +2747,13 @@ pub mod explicit_draughting {
     pub struct ExternallyDefinedSymbolHolder {
         pub externally_defined_item: PlaceHolder<ExternallyDefinedItem>,
     }
+    impl Holder for ExternallyDefinedSymbolHolder {
+        type Table = Tables;
+        type Owned = ExternallyDefinedSymbol;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     impl ::std::ops::Deref for ExternallyDefinedTextFont {
         type Target = ExternallyDefinedItem;
         fn deref(&self) -> &Self::Target {
@@ -2047,6 +2768,13 @@ pub mod explicit_draughting {
     pub struct ExternallyDefinedTextFontHolder {
         pub externally_defined_item: PlaceHolder<ExternallyDefinedItem>,
     }
+    impl Holder for ExternallyDefinedTextFontHolder {
+        type Table = Tables;
+        type Owned = ExternallyDefinedTextFont;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ExternallyDefinedTileStyle {
         pub externally_defined_item: ExternallyDefinedItem,
@@ -2056,6 +2784,13 @@ pub mod explicit_draughting {
     pub struct ExternallyDefinedTileStyleHolder {
         pub externally_defined_item: PlaceHolder<ExternallyDefinedItem>,
         pub geometric_representation_item: PlaceHolder<GeometricRepresentationItem>,
+    }
+    impl Holder for ExternallyDefinedTileStyleHolder {
+        type Table = Tables;
+        type Owned = ExternallyDefinedTileStyle;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct FillAreaStyle {
@@ -2067,6 +2802,13 @@ pub mod explicit_draughting {
         pub name: PlaceHolder<Label>,
         pub fill_styles: PlaceHolder<Vec<FillStyleSelect>>,
     }
+    impl Holder for FillAreaStyleHolder {
+        type Table = Tables;
+        type Owned = FillAreaStyle;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct FillAreaStyleColour {
         pub name: Label,
@@ -2076,6 +2818,13 @@ pub mod explicit_draughting {
     pub struct FillAreaStyleColourHolder {
         pub name: PlaceHolder<Label>,
         pub fill_colour: PlaceHolder<Colour>,
+    }
+    impl Holder for FillAreaStyleColourHolder {
+        type Table = Tables;
+        type Owned = FillAreaStyleColour;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     impl ::std::ops::Deref for FillAreaStyleHatching {
         type Target = GeometricRepresentationItem;
@@ -2101,6 +2850,13 @@ pub mod explicit_draughting {
         pub hatch_line_angle: PlaceHolder<PlaneAngleMeasure>,
         pub geometric_representation_item: PlaceHolder<GeometricRepresentationItem>,
     }
+    impl Holder for FillAreaStyleHatchingHolder {
+        type Table = Tables;
+        type Owned = FillAreaStyleHatching;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     impl ::std::ops::Deref for FillAreaStyleTileSymbolWithStyle {
         type Target = GeometricRepresentationItem;
         fn deref(&self) -> &Self::Target {
@@ -2116,6 +2872,13 @@ pub mod explicit_draughting {
     pub struct FillAreaStyleTileSymbolWithStyleHolder {
         pub symbol: PlaceHolder<AnnotationSymbolOccurrence>,
         pub geometric_representation_item: PlaceHolder<GeometricRepresentationItem>,
+    }
+    impl Holder for FillAreaStyleTileSymbolWithStyleHolder {
+        type Table = Tables;
+        type Owned = FillAreaStyleTileSymbolWithStyle;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     impl ::std::ops::Deref for FillAreaStyleTiles {
         type Target = GeometricRepresentationItem;
@@ -2137,6 +2900,13 @@ pub mod explicit_draughting {
         pub tiling_scale: PlaceHolder<PositiveRatioMeasure>,
         pub geometric_representation_item: PlaceHolder<GeometricRepresentationItem>,
     }
+    impl Holder for FillAreaStyleTilesHolder {
+        type Table = Tables;
+        type Owned = FillAreaStyleTiles;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     impl ::std::ops::Deref for GeometricCurveSet {
         type Target = GeometricSet;
         fn deref(&self) -> &Self::Target {
@@ -2150,6 +2920,13 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq)]
     pub struct GeometricCurveSetHolder {
         pub geometric_set: PlaceHolder<GeometricSet>,
+    }
+    impl Holder for GeometricCurveSetHolder {
+        type Table = Tables;
+        type Owned = GeometricCurveSet;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     impl ::std::ops::Deref for GeometricRepresentationContext {
         type Target = RepresentationContext;
@@ -2167,6 +2944,13 @@ pub mod explicit_draughting {
         pub coordinate_space_dimension: PlaceHolder<DimensionCount>,
         pub representation_context: PlaceHolder<RepresentationContext>,
     }
+    impl Holder for GeometricRepresentationContextHolder {
+        type Table = Tables;
+        type Owned = GeometricRepresentationContext;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     impl ::std::ops::Deref for GeometricRepresentationItem {
         type Target = RepresentationItem;
         fn deref(&self) -> &Self::Target {
@@ -2180,6 +2964,13 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq)]
     pub struct GeometricRepresentationItemHolder {
         pub representation_item: PlaceHolder<RepresentationItem>,
+    }
+    impl Holder for GeometricRepresentationItemHolder {
+        type Table = Tables;
+        type Owned = GeometricRepresentationItem;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     impl ::std::ops::Deref for GeometricSet {
         type Target = GeometricRepresentationItem;
@@ -2197,6 +2988,13 @@ pub mod explicit_draughting {
         pub elements: PlaceHolder<Vec<GeometricSetSelect>>,
         pub geometric_representation_item: PlaceHolder<GeometricRepresentationItem>,
     }
+    impl Holder for GeometricSetHolder {
+        type Table = Tables;
+        type Owned = GeometricSet;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     impl ::std::ops::Deref for GeometricalToleranceCallout {
         type Target = DraughtingCallout;
         fn deref(&self) -> &Self::Target {
@@ -2211,6 +3009,13 @@ pub mod explicit_draughting {
     pub struct GeometricalToleranceCalloutHolder {
         pub draughting_callout: PlaceHolder<DraughtingCallout>,
     }
+    impl Holder for GeometricalToleranceCalloutHolder {
+        type Table = Tables;
+        type Owned = GeometricalToleranceCallout;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     impl ::std::ops::Deref for GeometricallyBounded2DWireframeRepresentation {
         type Target = ShapeRepresentation;
         fn deref(&self) -> &Self::Target {
@@ -2224,6 +3029,13 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq)]
     pub struct GeometricallyBounded2DWireframeRepresentationHolder {
         pub shape_representation: PlaceHolder<ShapeRepresentation>,
+    }
+    impl Holder for GeometricallyBounded2DWireframeRepresentationHolder {
+        type Table = Tables;
+        type Owned = GeometricallyBounded2DWireframeRepresentation;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     impl ::std::ops::Deref for GlobalUnitAssignedContext {
         type Target = RepresentationContext;
@@ -2241,6 +3053,13 @@ pub mod explicit_draughting {
         pub units: PlaceHolder<Vec<Unit>>,
         pub representation_context: PlaceHolder<RepresentationContext>,
     }
+    impl Holder for GlobalUnitAssignedContextHolder {
+        type Table = Tables;
+        type Owned = GlobalUnitAssignedContext;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Group {
         pub name: Label,
@@ -2251,6 +3070,13 @@ pub mod explicit_draughting {
         pub name: PlaceHolder<Label>,
         pub description: PlaceHolder<Text>,
     }
+    impl Holder for GroupHolder {
+        type Table = Tables;
+        type Owned = Group;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct GroupAssignment {
         pub assigned_group: Group,
@@ -2258,6 +3084,13 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq)]
     pub struct GroupAssignmentHolder {
         pub assigned_group: PlaceHolder<Group>,
+    }
+    impl Holder for GroupAssignmentHolder {
+        type Table = Tables;
+        type Owned = GroupAssignment;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct GroupRelationship {
@@ -2272,6 +3105,13 @@ pub mod explicit_draughting {
         pub description: PlaceHolder<Text>,
         pub relating_group: PlaceHolder<Group>,
         pub related_group: PlaceHolder<Group>,
+    }
+    impl Holder for GroupRelationshipHolder {
+        type Table = Tables;
+        type Owned = GroupRelationship;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     impl ::std::ops::Deref for Hyperbola {
         type Target = Conic;
@@ -2291,6 +3131,13 @@ pub mod explicit_draughting {
         pub semi_imag_axis: PlaceHolder<PositiveLengthMeasure>,
         pub conic: PlaceHolder<Conic>,
     }
+    impl Holder for HyperbolaHolder {
+        type Table = Tables;
+        type Owned = Hyperbola;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Invisibility {
         pub invisible_items: Vec<InvisibleItem>,
@@ -2298,6 +3145,13 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq)]
     pub struct InvisibilityHolder {
         pub invisible_items: PlaceHolder<Vec<InvisibleItem>>,
+    }
+    impl Holder for InvisibilityHolder {
+        type Table = Tables;
+        type Owned = Invisibility;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     impl ::std::ops::Deref for LeaderCurve {
         type Target = AnnotationCurveOccurrence;
@@ -2313,6 +3167,13 @@ pub mod explicit_draughting {
     pub struct LeaderCurveHolder {
         pub annotation_curve_occurrence: PlaceHolder<AnnotationCurveOccurrence>,
     }
+    impl Holder for LeaderCurveHolder {
+        type Table = Tables;
+        type Owned = LeaderCurve;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     impl ::std::ops::Deref for LeaderDirectedCallout {
         type Target = DraughtingCallout;
         fn deref(&self) -> &Self::Target {
@@ -2326,6 +3187,13 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq)]
     pub struct LeaderDirectedCalloutHolder {
         pub draughting_callout: PlaceHolder<DraughtingCallout>,
+    }
+    impl Holder for LeaderDirectedCalloutHolder {
+        type Table = Tables;
+        type Owned = LeaderDirectedCallout;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     impl ::std::ops::Deref for LeaderDirectedDimension {
         type Target = LeaderDirectedCallout;
@@ -2341,6 +3209,13 @@ pub mod explicit_draughting {
     pub struct LeaderDirectedDimensionHolder {
         pub leader_directed_callout: PlaceHolder<LeaderDirectedCallout>,
     }
+    impl Holder for LeaderDirectedDimensionHolder {
+        type Table = Tables;
+        type Owned = LeaderDirectedDimension;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     impl ::std::ops::Deref for LeaderTerminator {
         type Target = TerminatorSymbol;
         fn deref(&self) -> &Self::Target {
@@ -2354,6 +3229,13 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq)]
     pub struct LeaderTerminatorHolder {
         pub terminator_symbol: PlaceHolder<TerminatorSymbol>,
+    }
+    impl Holder for LeaderTerminatorHolder {
+        type Table = Tables;
+        type Owned = LeaderTerminator;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     impl ::std::ops::Deref for LengthMeasureWithUnit {
         type Target = MeasureWithUnit;
@@ -2369,6 +3251,13 @@ pub mod explicit_draughting {
     pub struct LengthMeasureWithUnitHolder {
         pub measure_with_unit: PlaceHolder<MeasureWithUnit>,
     }
+    impl Holder for LengthMeasureWithUnitHolder {
+        type Table = Tables;
+        type Owned = LengthMeasureWithUnit;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     impl ::std::ops::Deref for LengthUnit {
         type Target = NamedUnit;
         fn deref(&self) -> &Self::Target {
@@ -2382,6 +3271,13 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq)]
     pub struct LengthUnitHolder {
         pub named_unit: PlaceHolder<NamedUnit>,
+    }
+    impl Holder for LengthUnitHolder {
+        type Table = Tables;
+        type Owned = LengthUnit;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     impl ::std::ops::Deref for Line {
         type Target = Curve;
@@ -2401,6 +3297,13 @@ pub mod explicit_draughting {
         pub dir: PlaceHolder<Vector>,
         pub curve: PlaceHolder<Curve>,
     }
+    impl Holder for LineHolder {
+        type Table = Tables;
+        type Owned = Line;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     impl ::std::ops::Deref for LinearDimension {
         type Target = DimensionCurveDirectedCallout;
         fn deref(&self) -> &Self::Target {
@@ -2414,6 +3317,13 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq)]
     pub struct LinearDimensionHolder {
         pub dimension_curve_directed_callout: PlaceHolder<DimensionCurveDirectedCallout>,
+    }
+    impl Holder for LinearDimensionHolder {
+        type Table = Tables;
+        type Owned = LinearDimension;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     impl ::std::ops::Deref for MappedItem {
         type Target = RepresentationItem;
@@ -2433,6 +3343,13 @@ pub mod explicit_draughting {
         pub mapping_target: PlaceHolder<RepresentationItem>,
         pub representation_item: PlaceHolder<RepresentationItem>,
     }
+    impl Holder for MappedItemHolder {
+        type Table = Tables;
+        type Owned = MappedItem;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct MeasureWithUnit {
         pub value_component: MeasureValue,
@@ -2443,6 +3360,13 @@ pub mod explicit_draughting {
         pub value_component: PlaceHolder<MeasureValue>,
         pub unit_component: PlaceHolder<Unit>,
     }
+    impl Holder for MeasureWithUnitHolder {
+        type Table = Tables;
+        type Owned = MeasureWithUnit;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct NamedUnit {
         pub dimensions: DimensionalExponents,
@@ -2450,6 +3374,13 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq)]
     pub struct NamedUnitHolder {
         pub dimensions: PlaceHolder<DimensionalExponents>,
+    }
+    impl Holder for NamedUnitHolder {
+        type Table = Tables;
+        type Owned = NamedUnit;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     impl ::std::ops::Deref for OffsetCurve2D {
         type Target = Curve;
@@ -2471,6 +3402,13 @@ pub mod explicit_draughting {
         pub self_intersect: Logical,
         pub curve: PlaceHolder<Curve>,
     }
+    impl Holder for OffsetCurve2DHolder {
+        type Table = Tables;
+        type Owned = OffsetCurve2D;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     impl ::std::ops::Deref for OneDirectionRepeatFactor {
         type Target = GeometricRepresentationItem;
         fn deref(&self) -> &Self::Target {
@@ -2487,6 +3425,13 @@ pub mod explicit_draughting {
         pub repeat_factor: PlaceHolder<Vector>,
         pub geometric_representation_item: PlaceHolder<GeometricRepresentationItem>,
     }
+    impl Holder for OneDirectionRepeatFactorHolder {
+        type Table = Tables;
+        type Owned = OneDirectionRepeatFactor;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     impl ::std::ops::Deref for OrdinateDimension {
         type Target = ProjectionDirectedCallout;
         fn deref(&self) -> &Self::Target {
@@ -2501,6 +3446,13 @@ pub mod explicit_draughting {
     pub struct OrdinateDimensionHolder {
         pub projection_directed_callout: PlaceHolder<ProjectionDirectedCallout>,
     }
+    impl Holder for OrdinateDimensionHolder {
+        type Table = Tables;
+        type Owned = OrdinateDimension;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Organization {
         pub id: Option<Identifier>,
@@ -2513,6 +3465,13 @@ pub mod explicit_draughting {
         pub name: PlaceHolder<Label>,
         pub description: PlaceHolder<Text>,
     }
+    impl Holder for OrganizationHolder {
+        type Table = Tables;
+        type Owned = Organization;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct OrganizationAssignment {
         pub assigned_organization: Organization,
@@ -2523,6 +3482,13 @@ pub mod explicit_draughting {
         pub assigned_organization: PlaceHolder<Organization>,
         pub role: PlaceHolder<OrganizationRole>,
     }
+    impl Holder for OrganizationAssignmentHolder {
+        type Table = Tables;
+        type Owned = OrganizationAssignment;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct OrganizationRole {
         pub name: Label,
@@ -2530,6 +3496,13 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq)]
     pub struct OrganizationRoleHolder {
         pub name: PlaceHolder<Label>,
+    }
+    impl Holder for OrganizationRoleHolder {
+        type Table = Tables;
+        type Owned = OrganizationRole;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     impl ::std::ops::Deref for OrganizationalAddress {
         type Target = Address;
@@ -2549,6 +3522,13 @@ pub mod explicit_draughting {
         pub description: PlaceHolder<Text>,
         pub address: PlaceHolder<Address>,
     }
+    impl Holder for OrganizationalAddressHolder {
+        type Table = Tables;
+        type Owned = OrganizationalAddress;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     impl ::std::ops::Deref for Parabola {
         type Target = Conic;
         fn deref(&self) -> &Self::Target {
@@ -2564,6 +3544,13 @@ pub mod explicit_draughting {
     pub struct ParabolaHolder {
         pub focal_dist: PlaceHolder<LengthMeasure>,
         pub conic: PlaceHolder<Conic>,
+    }
+    impl Holder for ParabolaHolder {
+        type Table = Tables;
+        type Owned = Parabola;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Person {
@@ -2583,6 +3570,13 @@ pub mod explicit_draughting {
         pub prefix_titles: Option<PlaceHolder<Vec<Label>>>,
         pub suffix_titles: Option<PlaceHolder<Vec<Label>>>,
     }
+    impl Holder for PersonHolder {
+        type Table = Tables;
+        type Owned = Person;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PersonAndOrganization {
         pub the_person: Person,
@@ -2592,6 +3586,13 @@ pub mod explicit_draughting {
     pub struct PersonAndOrganizationHolder {
         pub the_person: PlaceHolder<Person>,
         pub the_organization: PlaceHolder<Organization>,
+    }
+    impl Holder for PersonAndOrganizationHolder {
+        type Table = Tables;
+        type Owned = PersonAndOrganization;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PersonAndOrganizationAssignment {
@@ -2603,6 +3604,13 @@ pub mod explicit_draughting {
         pub assigned_person_and_organization: PlaceHolder<PersonAndOrganization>,
         pub role: PlaceHolder<PersonAndOrganizationRole>,
     }
+    impl Holder for PersonAndOrganizationAssignmentHolder {
+        type Table = Tables;
+        type Owned = PersonAndOrganizationAssignment;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PersonAndOrganizationRole {
         pub name: Label,
@@ -2610,6 +3618,13 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq)]
     pub struct PersonAndOrganizationRoleHolder {
         pub name: PlaceHolder<Label>,
+    }
+    impl Holder for PersonAndOrganizationRoleHolder {
+        type Table = Tables;
+        type Owned = PersonAndOrganizationRole;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PersonAssignment {
@@ -2621,6 +3636,13 @@ pub mod explicit_draughting {
         pub assigned_person: PlaceHolder<Person>,
         pub role: PlaceHolder<PersonRole>,
     }
+    impl Holder for PersonAssignmentHolder {
+        type Table = Tables;
+        type Owned = PersonAssignment;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PersonRole {
         pub name: Label,
@@ -2628,6 +3650,13 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq)]
     pub struct PersonRoleHolder {
         pub name: PlaceHolder<Label>,
+    }
+    impl Holder for PersonRoleHolder {
+        type Table = Tables;
+        type Owned = PersonRole;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     impl ::std::ops::Deref for PersonalAddress {
         type Target = Address;
@@ -2647,6 +3676,13 @@ pub mod explicit_draughting {
         pub description: PlaceHolder<Text>,
         pub address: PlaceHolder<Address>,
     }
+    impl Holder for PersonalAddressHolder {
+        type Table = Tables;
+        type Owned = PersonalAddress;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     impl ::std::ops::Deref for Placement {
         type Target = GeometricRepresentationItem;
         fn deref(&self) -> &Self::Target {
@@ -2663,6 +3699,13 @@ pub mod explicit_draughting {
         pub location: PlaceHolder<CartesianPoint>,
         pub geometric_representation_item: PlaceHolder<GeometricRepresentationItem>,
     }
+    impl Holder for PlacementHolder {
+        type Table = Tables;
+        type Owned = Placement;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     impl ::std::ops::Deref for PlanarBox {
         type Target = PlanarExtent;
         fn deref(&self) -> &Self::Target {
@@ -2678,6 +3721,13 @@ pub mod explicit_draughting {
     pub struct PlanarBoxHolder {
         pub placement: PlaceHolder<Axis2Placement>,
         pub planar_extent: PlaceHolder<PlanarExtent>,
+    }
+    impl Holder for PlanarBoxHolder {
+        type Table = Tables;
+        type Owned = PlanarBox;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     impl ::std::ops::Deref for PlanarExtent {
         type Target = GeometricRepresentationItem;
@@ -2697,6 +3747,13 @@ pub mod explicit_draughting {
         pub size_in_y: PlaceHolder<LengthMeasure>,
         pub geometric_representation_item: PlaceHolder<GeometricRepresentationItem>,
     }
+    impl Holder for PlanarExtentHolder {
+        type Table = Tables;
+        type Owned = PlanarExtent;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     impl ::std::ops::Deref for PlaneAngleMeasureWithUnit {
         type Target = MeasureWithUnit;
         fn deref(&self) -> &Self::Target {
@@ -2710,6 +3767,13 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq)]
     pub struct PlaneAngleMeasureWithUnitHolder {
         pub measure_with_unit: PlaceHolder<MeasureWithUnit>,
+    }
+    impl Holder for PlaneAngleMeasureWithUnitHolder {
+        type Table = Tables;
+        type Owned = PlaneAngleMeasureWithUnit;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     impl ::std::ops::Deref for PlaneAngleUnit {
         type Target = NamedUnit;
@@ -2725,6 +3789,13 @@ pub mod explicit_draughting {
     pub struct PlaneAngleUnitHolder {
         pub named_unit: PlaceHolder<NamedUnit>,
     }
+    impl Holder for PlaneAngleUnitHolder {
+        type Table = Tables;
+        type Owned = PlaneAngleUnit;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     impl ::std::ops::Deref for Point {
         type Target = GeometricRepresentationItem;
         fn deref(&self) -> &Self::Target {
@@ -2738,6 +3809,13 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq)]
     pub struct PointHolder {
         pub geometric_representation_item: PlaceHolder<GeometricRepresentationItem>,
+    }
+    impl Holder for PointHolder {
+        type Table = Tables;
+        type Owned = Point;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     impl ::std::ops::Deref for PointOnCurve {
         type Target = Point;
@@ -2757,6 +3835,13 @@ pub mod explicit_draughting {
         pub point_parameter: PlaceHolder<ParameterValue>,
         pub point: PlaceHolder<Point>,
     }
+    impl Holder for PointOnCurveHolder {
+        type Table = Tables;
+        type Owned = PointOnCurve;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     impl ::std::ops::Deref for Polyline {
         type Target = BoundedCurve;
         fn deref(&self) -> &Self::Target {
@@ -2773,6 +3858,13 @@ pub mod explicit_draughting {
         pub points: PlaceHolder<Vec<CartesianPoint>>,
         pub bounded_curve: PlaceHolder<BoundedCurve>,
     }
+    impl Holder for PolylineHolder {
+        type Table = Tables;
+        type Owned = Polyline;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PreDefinedColour {
         pub pre_defined_item: PreDefinedItem,
@@ -2782,6 +3874,13 @@ pub mod explicit_draughting {
     pub struct PreDefinedColourHolder {
         pub pre_defined_item: PlaceHolder<PreDefinedItem>,
         pub colour: PlaceHolder<Colour>,
+    }
+    impl Holder for PreDefinedColourHolder {
+        type Table = Tables;
+        type Owned = PreDefinedColour;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     impl ::std::ops::Deref for PreDefinedCurveFont {
         type Target = PreDefinedItem;
@@ -2797,6 +3896,13 @@ pub mod explicit_draughting {
     pub struct PreDefinedCurveFontHolder {
         pub pre_defined_item: PlaceHolder<PreDefinedItem>,
     }
+    impl Holder for PreDefinedCurveFontHolder {
+        type Table = Tables;
+        type Owned = PreDefinedCurveFont;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     impl ::std::ops::Deref for PreDefinedDimensionSymbol {
         type Target = PreDefinedSymbol;
         fn deref(&self) -> &Self::Target {
@@ -2810,6 +3916,13 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq)]
     pub struct PreDefinedDimensionSymbolHolder {
         pub pre_defined_symbol: PlaceHolder<PreDefinedSymbol>,
+    }
+    impl Holder for PreDefinedDimensionSymbolHolder {
+        type Table = Tables;
+        type Owned = PreDefinedDimensionSymbol;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     impl ::std::ops::Deref for PreDefinedGeometricalToleranceSymbol {
         type Target = PreDefinedSymbol;
@@ -2825,6 +3938,13 @@ pub mod explicit_draughting {
     pub struct PreDefinedGeometricalToleranceSymbolHolder {
         pub pre_defined_symbol: PlaceHolder<PreDefinedSymbol>,
     }
+    impl Holder for PreDefinedGeometricalToleranceSymbolHolder {
+        type Table = Tables;
+        type Owned = PreDefinedGeometricalToleranceSymbol;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PreDefinedItem {
         pub name: Label,
@@ -2832,6 +3952,13 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq)]
     pub struct PreDefinedItemHolder {
         pub name: PlaceHolder<Label>,
+    }
+    impl Holder for PreDefinedItemHolder {
+        type Table = Tables;
+        type Owned = PreDefinedItem;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     impl ::std::ops::Deref for PreDefinedPointMarkerSymbol {
         type Target = PreDefinedSymbol;
@@ -2847,6 +3974,13 @@ pub mod explicit_draughting {
     pub struct PreDefinedPointMarkerSymbolHolder {
         pub pre_defined_symbol: PlaceHolder<PreDefinedSymbol>,
     }
+    impl Holder for PreDefinedPointMarkerSymbolHolder {
+        type Table = Tables;
+        type Owned = PreDefinedPointMarkerSymbol;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     impl ::std::ops::Deref for PreDefinedSymbol {
         type Target = PreDefinedItem;
         fn deref(&self) -> &Self::Target {
@@ -2860,6 +3994,13 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq)]
     pub struct PreDefinedSymbolHolder {
         pub pre_defined_item: PlaceHolder<PreDefinedItem>,
+    }
+    impl Holder for PreDefinedSymbolHolder {
+        type Table = Tables;
+        type Owned = PreDefinedSymbol;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     impl ::std::ops::Deref for PreDefinedTerminatorSymbol {
         type Target = PreDefinedSymbol;
@@ -2875,6 +4016,13 @@ pub mod explicit_draughting {
     pub struct PreDefinedTerminatorSymbolHolder {
         pub pre_defined_symbol: PlaceHolder<PreDefinedSymbol>,
     }
+    impl Holder for PreDefinedTerminatorSymbolHolder {
+        type Table = Tables;
+        type Owned = PreDefinedTerminatorSymbol;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     impl ::std::ops::Deref for PreDefinedTextFont {
         type Target = PreDefinedItem;
         fn deref(&self) -> &Self::Target {
@@ -2888,6 +4036,13 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq)]
     pub struct PreDefinedTextFontHolder {
         pub pre_defined_item: PlaceHolder<PreDefinedItem>,
+    }
+    impl Holder for PreDefinedTextFontHolder {
+        type Table = Tables;
+        type Owned = PreDefinedTextFont;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     impl ::std::ops::Deref for PresentationArea {
         type Target = PresentationRepresentation;
@@ -2903,6 +4058,13 @@ pub mod explicit_draughting {
     pub struct PresentationAreaHolder {
         pub presentation_representation: PlaceHolder<PresentationRepresentation>,
     }
+    impl Holder for PresentationAreaHolder {
+        type Table = Tables;
+        type Owned = PresentationArea;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PresentationLayerAssignment {
         pub name: Label,
@@ -2915,6 +4077,13 @@ pub mod explicit_draughting {
         pub description: PlaceHolder<Text>,
         pub assigned_items: PlaceHolder<Vec<LayeredItem>>,
     }
+    impl Holder for PresentationLayerAssignmentHolder {
+        type Table = Tables;
+        type Owned = PresentationLayerAssignment;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PresentationLayerUsage {
         pub assignment: PresentationLayerAssignment,
@@ -2924,6 +4093,13 @@ pub mod explicit_draughting {
     pub struct PresentationLayerUsageHolder {
         pub assignment: PlaceHolder<PresentationLayerAssignment>,
         pub presentation: PlaceHolder<PresentationRepresentation>,
+    }
+    impl Holder for PresentationLayerUsageHolder {
+        type Table = Tables;
+        type Owned = PresentationLayerUsage;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     impl ::std::ops::Deref for PresentationRepresentation {
         type Target = Representation;
@@ -2939,10 +4115,24 @@ pub mod explicit_draughting {
     pub struct PresentationRepresentationHolder {
         pub representation: PlaceHolder<Representation>,
     }
+    impl Holder for PresentationRepresentationHolder {
+        type Table = Tables;
+        type Owned = PresentationRepresentation;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PresentationSet {}
     #[derive(Clone, Debug, PartialEq)]
     pub struct PresentationSetHolder {}
+    impl Holder for PresentationSetHolder {
+        type Table = Tables;
+        type Owned = PresentationSet;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PresentationSize {
         pub unit: PresentationSizeAssignmentSelect,
@@ -2953,6 +4143,13 @@ pub mod explicit_draughting {
         pub unit: PlaceHolder<PresentationSizeAssignmentSelect>,
         pub size: PlaceHolder<PlanarBox>,
     }
+    impl Holder for PresentationSizeHolder {
+        type Table = Tables;
+        type Owned = PresentationSize;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PresentationStyleAssignment {
         pub styles: Vec<PresentationStyleSelect>,
@@ -2960,6 +4157,13 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq)]
     pub struct PresentationStyleAssignmentHolder {
         pub styles: PlaceHolder<Vec<PresentationStyleSelect>>,
+    }
+    impl Holder for PresentationStyleAssignmentHolder {
+        type Table = Tables;
+        type Owned = PresentationStyleAssignment;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     impl ::std::ops::Deref for PresentationStyleByContext {
         type Target = PresentationStyleAssignment;
@@ -2977,6 +4181,13 @@ pub mod explicit_draughting {
         pub style_context: PlaceHolder<StyleContextSelect>,
         pub presentation_style_assignment: PlaceHolder<PresentationStyleAssignment>,
     }
+    impl Holder for PresentationStyleByContextHolder {
+        type Table = Tables;
+        type Owned = PresentationStyleByContext;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     impl ::std::ops::Deref for PresentationView {
         type Target = PresentationRepresentation;
         fn deref(&self) -> &Self::Target {
@@ -2991,10 +4202,24 @@ pub mod explicit_draughting {
     pub struct PresentationViewHolder {
         pub presentation_representation: PlaceHolder<PresentationRepresentation>,
     }
+    impl Holder for PresentationViewHolder {
+        type Table = Tables;
+        type Owned = PresentationView;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PresentedItem {}
     #[derive(Clone, Debug, PartialEq)]
     pub struct PresentedItemHolder {}
+    impl Holder for PresentedItemHolder {
+        type Table = Tables;
+        type Owned = PresentedItem;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PresentedItemRepresentation {
         pub presentation: PresentationRepresentationSelect,
@@ -3004,6 +4229,13 @@ pub mod explicit_draughting {
     pub struct PresentedItemRepresentationHolder {
         pub presentation: PlaceHolder<PresentationRepresentationSelect>,
         pub item: PlaceHolder<PresentedItem>,
+    }
+    impl Holder for PresentedItemRepresentationHolder {
+        type Table = Tables;
+        type Owned = PresentedItemRepresentation;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Product {
@@ -3018,6 +4250,13 @@ pub mod explicit_draughting {
         pub name: PlaceHolder<Label>,
         pub description: PlaceHolder<Text>,
         pub frame_of_reference: PlaceHolder<Vec<ProductContext>>,
+    }
+    impl Holder for ProductHolder {
+        type Table = Tables;
+        type Owned = Product;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     impl ::std::ops::Deref for ProductContext {
         type Target = ApplicationContextElement;
@@ -3035,6 +4274,13 @@ pub mod explicit_draughting {
         pub discipline_type: PlaceHolder<Label>,
         pub application_context_element: PlaceHolder<ApplicationContextElement>,
     }
+    impl Holder for ProductContextHolder {
+        type Table = Tables;
+        type Owned = ProductContext;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ProductDefinition {
         pub id: Identifier,
@@ -3048,6 +4294,13 @@ pub mod explicit_draughting {
         pub description: PlaceHolder<Text>,
         pub formation: PlaceHolder<ProductDefinitionFormation>,
         pub frame_of_reference: PlaceHolder<ProductDefinitionContext>,
+    }
+    impl Holder for ProductDefinitionHolder {
+        type Table = Tables;
+        type Owned = ProductDefinition;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     impl ::std::ops::Deref for ProductDefinitionContext {
         type Target = ApplicationContextElement;
@@ -3065,6 +4318,13 @@ pub mod explicit_draughting {
         pub life_cycle_stage: PlaceHolder<Label>,
         pub application_context_element: PlaceHolder<ApplicationContextElement>,
     }
+    impl Holder for ProductDefinitionContextHolder {
+        type Table = Tables;
+        type Owned = ProductDefinitionContext;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ProductDefinitionFormation {
         pub id: Identifier,
@@ -3076,6 +4336,13 @@ pub mod explicit_draughting {
         pub id: PlaceHolder<Identifier>,
         pub description: PlaceHolder<Text>,
         pub of_product: PlaceHolder<Product>,
+    }
+    impl Holder for ProductDefinitionFormationHolder {
+        type Table = Tables;
+        type Owned = ProductDefinitionFormation;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     impl ::std::ops::Deref for ProductDefinitionShape {
         type Target = PropertyDefinition;
@@ -3091,6 +4358,13 @@ pub mod explicit_draughting {
     pub struct ProductDefinitionShapeHolder {
         pub property_definition: PlaceHolder<PropertyDefinition>,
     }
+    impl Holder for ProductDefinitionShapeHolder {
+        type Table = Tables;
+        type Owned = ProductDefinitionShape;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     impl ::std::ops::Deref for ProjectionCurve {
         type Target = AnnotationCurveOccurrence;
         fn deref(&self) -> &Self::Target {
@@ -3104,6 +4378,13 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq)]
     pub struct ProjectionCurveHolder {
         pub annotation_curve_occurrence: PlaceHolder<AnnotationCurveOccurrence>,
+    }
+    impl Holder for ProjectionCurveHolder {
+        type Table = Tables;
+        type Owned = ProjectionCurve;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     impl ::std::ops::Deref for ProjectionDirectedCallout {
         type Target = DraughtingCallout;
@@ -3119,6 +4400,13 @@ pub mod explicit_draughting {
     pub struct ProjectionDirectedCalloutHolder {
         pub draughting_callout: PlaceHolder<DraughtingCallout>,
     }
+    impl Holder for ProjectionDirectedCalloutHolder {
+        type Table = Tables;
+        type Owned = ProjectionDirectedCallout;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PropertyDefinition {
         pub name: Label,
@@ -3131,6 +4419,13 @@ pub mod explicit_draughting {
         pub description: PlaceHolder<Text>,
         pub definition: PlaceHolder<CharacterizedDefinition>,
     }
+    impl Holder for PropertyDefinitionHolder {
+        type Table = Tables;
+        type Owned = PropertyDefinition;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PropertyDefinitionRepresentation {
         pub definition: PropertyDefinition,
@@ -3140,6 +4435,13 @@ pub mod explicit_draughting {
     pub struct PropertyDefinitionRepresentationHolder {
         pub definition: PlaceHolder<PropertyDefinition>,
         pub used_representation: PlaceHolder<Representation>,
+    }
+    impl Holder for PropertyDefinitionRepresentationHolder {
+        type Table = Tables;
+        type Owned = PropertyDefinitionRepresentation;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     impl ::std::ops::Deref for QuasiUniformCurve {
         type Target = BSplineCurve;
@@ -3155,6 +4457,13 @@ pub mod explicit_draughting {
     pub struct QuasiUniformCurveHolder {
         pub b_spline_curve: PlaceHolder<BSplineCurve>,
     }
+    impl Holder for QuasiUniformCurveHolder {
+        type Table = Tables;
+        type Owned = QuasiUniformCurve;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     impl ::std::ops::Deref for RadiusDimension {
         type Target = DimensionCurveDirectedCallout;
         fn deref(&self) -> &Self::Target {
@@ -3168,6 +4477,13 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq)]
     pub struct RadiusDimensionHolder {
         pub dimension_curve_directed_callout: PlaceHolder<DimensionCurveDirectedCallout>,
+    }
+    impl Holder for RadiusDimensionHolder {
+        type Table = Tables;
+        type Owned = RadiusDimension;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     impl ::std::ops::Deref for RationalBSplineCurve {
         type Target = BSplineCurve;
@@ -3185,6 +4501,13 @@ pub mod explicit_draughting {
         pub weights_data: PlaceHolder<Vec<f64>>,
         pub b_spline_curve: PlaceHolder<BSplineCurve>,
     }
+    impl Holder for RationalBSplineCurveHolder {
+        type Table = Tables;
+        type Owned = RationalBSplineCurve;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Representation {
         pub name: Label,
@@ -3197,6 +4520,13 @@ pub mod explicit_draughting {
         pub items: PlaceHolder<Vec<RepresentationItem>>,
         pub context_of_items: PlaceHolder<RepresentationContext>,
     }
+    impl Holder for RepresentationHolder {
+        type Table = Tables;
+        type Owned = Representation;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct RepresentationContext {
         pub context_identifier: Identifier,
@@ -3207,6 +4537,13 @@ pub mod explicit_draughting {
         pub context_identifier: PlaceHolder<Identifier>,
         pub context_type: PlaceHolder<Text>,
     }
+    impl Holder for RepresentationContextHolder {
+        type Table = Tables;
+        type Owned = RepresentationContext;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct RepresentationItem {
         pub name: Label,
@@ -3214,6 +4551,13 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq)]
     pub struct RepresentationItemHolder {
         pub name: PlaceHolder<Label>,
+    }
+    impl Holder for RepresentationItemHolder {
+        type Table = Tables;
+        type Owned = RepresentationItem;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct RepresentationMap {
@@ -3224,6 +4568,13 @@ pub mod explicit_draughting {
     pub struct RepresentationMapHolder {
         pub mapping_origin: PlaceHolder<RepresentationItem>,
         pub mapped_representation: PlaceHolder<Representation>,
+    }
+    impl Holder for RepresentationMapHolder {
+        type Table = Tables;
+        type Owned = RepresentationMap;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct SecurityClassification {
@@ -3237,6 +4588,13 @@ pub mod explicit_draughting {
         pub purpose: PlaceHolder<Text>,
         pub security_level: PlaceHolder<SecurityClassificationLevel>,
     }
+    impl Holder for SecurityClassificationHolder {
+        type Table = Tables;
+        type Owned = SecurityClassification;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct SecurityClassificationAssignment {
         pub assigned_security_classification: SecurityClassification,
@@ -3245,6 +4603,13 @@ pub mod explicit_draughting {
     pub struct SecurityClassificationAssignmentHolder {
         pub assigned_security_classification: PlaceHolder<SecurityClassification>,
     }
+    impl Holder for SecurityClassificationAssignmentHolder {
+        type Table = Tables;
+        type Owned = SecurityClassificationAssignment;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct SecurityClassificationLevel {
         pub name: Label,
@@ -3252,6 +4617,13 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq)]
     pub struct SecurityClassificationLevelHolder {
         pub name: PlaceHolder<Label>,
+    }
+    impl Holder for SecurityClassificationLevelHolder {
+        type Table = Tables;
+        type Owned = SecurityClassificationLevel;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     impl ::std::ops::Deref for ShapeDefinitionRepresentation {
         type Target = PropertyDefinitionRepresentation;
@@ -3267,6 +4639,13 @@ pub mod explicit_draughting {
     pub struct ShapeDefinitionRepresentationHolder {
         pub property_definition_representation: PlaceHolder<PropertyDefinitionRepresentation>,
     }
+    impl Holder for ShapeDefinitionRepresentationHolder {
+        type Table = Tables;
+        type Owned = ShapeDefinitionRepresentation;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     impl ::std::ops::Deref for ShapeRepresentation {
         type Target = Representation;
         fn deref(&self) -> &Self::Target {
@@ -3280,6 +4659,13 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq)]
     pub struct ShapeRepresentationHolder {
         pub representation: PlaceHolder<Representation>,
+    }
+    impl Holder for ShapeRepresentationHolder {
+        type Table = Tables;
+        type Owned = ShapeRepresentation;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     impl ::std::ops::Deref for SiUnit {
         type Target = NamedUnit;
@@ -3299,6 +4685,13 @@ pub mod explicit_draughting {
         pub name: PlaceHolder<SiUnitName>,
         pub named_unit: PlaceHolder<NamedUnit>,
     }
+    impl Holder for SiUnitHolder {
+        type Table = Tables;
+        type Owned = SiUnit;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     impl ::std::ops::Deref for StructuredDimensionCallout {
         type Target = DraughtingCallout;
         fn deref(&self) -> &Self::Target {
@@ -3312,6 +4705,13 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq)]
     pub struct StructuredDimensionCalloutHolder {
         pub draughting_callout: PlaceHolder<DraughtingCallout>,
+    }
+    impl Holder for StructuredDimensionCalloutHolder {
+        type Table = Tables;
+        type Owned = StructuredDimensionCallout;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     impl ::std::ops::Deref for StyledItem {
         type Target = RepresentationItem;
@@ -3331,6 +4731,13 @@ pub mod explicit_draughting {
         pub item: PlaceHolder<RepresentationItem>,
         pub representation_item: PlaceHolder<RepresentationItem>,
     }
+    impl Holder for StyledItemHolder {
+        type Table = Tables;
+        type Owned = StyledItem;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct SymbolColour {
         pub colour_of_symbol: Colour,
@@ -3338,6 +4745,13 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq)]
     pub struct SymbolColourHolder {
         pub colour_of_symbol: PlaceHolder<Colour>,
+    }
+    impl Holder for SymbolColourHolder {
+        type Table = Tables;
+        type Owned = SymbolColour;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     impl ::std::ops::Deref for SymbolRepresentation {
         type Target = Representation;
@@ -3353,6 +4767,13 @@ pub mod explicit_draughting {
     pub struct SymbolRepresentationHolder {
         pub representation: PlaceHolder<Representation>,
     }
+    impl Holder for SymbolRepresentationHolder {
+        type Table = Tables;
+        type Owned = SymbolRepresentation;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     impl ::std::ops::Deref for SymbolRepresentationMap {
         type Target = RepresentationMap;
         fn deref(&self) -> &Self::Target {
@@ -3367,6 +4788,13 @@ pub mod explicit_draughting {
     pub struct SymbolRepresentationMapHolder {
         pub representation_map: PlaceHolder<RepresentationMap>,
     }
+    impl Holder for SymbolRepresentationMapHolder {
+        type Table = Tables;
+        type Owned = SymbolRepresentationMap;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct SymbolStyle {
         pub name: Label,
@@ -3376,6 +4804,13 @@ pub mod explicit_draughting {
     pub struct SymbolStyleHolder {
         pub name: PlaceHolder<Label>,
         pub style_of_symbol: PlaceHolder<SymbolStyleSelect>,
+    }
+    impl Holder for SymbolStyleHolder {
+        type Table = Tables;
+        type Owned = SymbolStyle;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     impl ::std::ops::Deref for SymbolTarget {
         type Target = GeometricRepresentationItem;
@@ -3397,6 +4832,13 @@ pub mod explicit_draughting {
         pub y_scale: PlaceHolder<PositiveRatioMeasure>,
         pub geometric_representation_item: PlaceHolder<GeometricRepresentationItem>,
     }
+    impl Holder for SymbolTargetHolder {
+        type Table = Tables;
+        type Owned = SymbolTarget;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     impl ::std::ops::Deref for TerminatorSymbol {
         type Target = AnnotationSymbolOccurrence;
         fn deref(&self) -> &Self::Target {
@@ -3412,6 +4854,13 @@ pub mod explicit_draughting {
     pub struct TerminatorSymbolHolder {
         pub annotated_curve: PlaceHolder<AnnotationCurveOccurrence>,
         pub annotation_symbol_occurrence: PlaceHolder<AnnotationSymbolOccurrence>,
+    }
+    impl Holder for TerminatorSymbolHolder {
+        type Table = Tables;
+        type Owned = TerminatorSymbol;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     impl ::std::ops::Deref for TextLiteral {
         type Target = GeometricRepresentationItem;
@@ -3437,6 +4886,13 @@ pub mod explicit_draughting {
         pub font: PlaceHolder<FontSelect>,
         pub geometric_representation_item: PlaceHolder<GeometricRepresentationItem>,
     }
+    impl Holder for TextLiteralHolder {
+        type Table = Tables;
+        type Owned = TextLiteral;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     impl ::std::ops::Deref for TextLiteralWithAssociatedCurves {
         type Target = TextLiteral;
         fn deref(&self) -> &Self::Target {
@@ -3452,6 +4908,13 @@ pub mod explicit_draughting {
     pub struct TextLiteralWithAssociatedCurvesHolder {
         pub associated_curves: PlaceHolder<Vec<Curve>>,
         pub text_literal: PlaceHolder<TextLiteral>,
+    }
+    impl Holder for TextLiteralWithAssociatedCurvesHolder {
+        type Table = Tables;
+        type Owned = TextLiteralWithAssociatedCurves;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     impl ::std::ops::Deref for TextLiteralWithBlankingBox {
         type Target = TextLiteral;
@@ -3469,6 +4932,13 @@ pub mod explicit_draughting {
         pub blanking: PlaceHolder<PlanarBox>,
         pub text_literal: PlaceHolder<TextLiteral>,
     }
+    impl Holder for TextLiteralWithBlankingBoxHolder {
+        type Table = Tables;
+        type Owned = TextLiteralWithBlankingBox;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     impl ::std::ops::Deref for TextLiteralWithDelineation {
         type Target = TextLiteral;
         fn deref(&self) -> &Self::Target {
@@ -3484,6 +4954,13 @@ pub mod explicit_draughting {
     pub struct TextLiteralWithDelineationHolder {
         pub delineation: PlaceHolder<TextDelineation>,
         pub text_literal: PlaceHolder<TextLiteral>,
+    }
+    impl Holder for TextLiteralWithDelineationHolder {
+        type Table = Tables;
+        type Owned = TextLiteralWithDelineation;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     impl ::std::ops::Deref for TextLiteralWithExtent {
         type Target = TextLiteral;
@@ -3501,6 +4978,13 @@ pub mod explicit_draughting {
         pub extent: PlaceHolder<PlanarExtent>,
         pub text_literal: PlaceHolder<TextLiteral>,
     }
+    impl Holder for TextLiteralWithExtentHolder {
+        type Table = Tables;
+        type Owned = TextLiteralWithExtent;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct TextStyle {
         pub name: Label,
@@ -3511,6 +4995,13 @@ pub mod explicit_draughting {
         pub name: PlaceHolder<Label>,
         pub character_appearance: PlaceHolder<CharacterStyleSelect>,
     }
+    impl Holder for TextStyleHolder {
+        type Table = Tables;
+        type Owned = TextStyle;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct TextStyleForDefinedFont {
         pub text_colour: Colour,
@@ -3518,6 +5009,13 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq)]
     pub struct TextStyleForDefinedFontHolder {
         pub text_colour: PlaceHolder<Colour>,
+    }
+    impl Holder for TextStyleForDefinedFontHolder {
+        type Table = Tables;
+        type Owned = TextStyleForDefinedFont;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     impl ::std::ops::Deref for TextStyleWithBoxCharacteristics {
         type Target = TextStyle;
@@ -3535,6 +5033,13 @@ pub mod explicit_draughting {
         pub characteristics: PlaceHolder<Vec<BoxCharacteristicSelect>>,
         pub text_style: PlaceHolder<TextStyle>,
     }
+    impl Holder for TextStyleWithBoxCharacteristicsHolder {
+        type Table = Tables;
+        type Owned = TextStyleWithBoxCharacteristics;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     impl ::std::ops::Deref for TextStyleWithMirror {
         type Target = TextStyle;
         fn deref(&self) -> &Self::Target {
@@ -3550,6 +5055,13 @@ pub mod explicit_draughting {
     pub struct TextStyleWithMirrorHolder {
         pub mirror_placement: PlaceHolder<Axis2Placement>,
         pub text_style: PlaceHolder<TextStyle>,
+    }
+    impl Holder for TextStyleWithMirrorHolder {
+        type Table = Tables;
+        type Owned = TextStyleWithMirror;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     impl ::std::ops::Deref for TrimmedCurve {
         type Target = BoundedCurve;
@@ -3575,6 +5087,13 @@ pub mod explicit_draughting {
         pub master_representation: PlaceHolder<TrimmingPreference>,
         pub bounded_curve: PlaceHolder<BoundedCurve>,
     }
+    impl Holder for TrimmedCurveHolder {
+        type Table = Tables;
+        type Owned = TrimmedCurve;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     impl ::std::ops::Deref for TwoDirectionRepeatFactor {
         type Target = OneDirectionRepeatFactor;
         fn deref(&self) -> &Self::Target {
@@ -3591,6 +5110,13 @@ pub mod explicit_draughting {
         pub second_repeat_factor: PlaceHolder<Vector>,
         pub one_direction_repeat_factor: PlaceHolder<OneDirectionRepeatFactor>,
     }
+    impl Holder for TwoDirectionRepeatFactorHolder {
+        type Table = Tables;
+        type Owned = TwoDirectionRepeatFactor;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
+    }
     impl ::std::ops::Deref for UniformCurve {
         type Target = BSplineCurve;
         fn deref(&self) -> &Self::Target {
@@ -3604,6 +5130,13 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq)]
     pub struct UniformCurveHolder {
         pub b_spline_curve: PlaceHolder<BSplineCurve>,
+    }
+    impl Holder for UniformCurveHolder {
+        type Table = Tables;
+        type Owned = UniformCurve;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
     impl ::std::ops::Deref for Vector {
         type Target = GeometricRepresentationItem;
@@ -3622,5 +5155,12 @@ pub mod explicit_draughting {
         pub orientation: PlaceHolder<Direction>,
         pub magnitude: PlaceHolder<LengthMeasure>,
         pub geometric_representation_item: PlaceHolder<GeometricRepresentationItem>,
+    }
+    impl Holder for VectorHolder {
+        type Table = Tables;
+        type Owned = Vector;
+        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+            todo!()
+        }
     }
 }
