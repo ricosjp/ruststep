@@ -6,6 +6,7 @@ use quote::*;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Entity {
+    /// Name of entity in PascalCase
     name: String,
     attributes: Vec<EntityAttribute>,
     subtypes: Option<Vec<TypeRef>>,
@@ -60,7 +61,7 @@ impl Legalize for Entity {
             })
             .transpose()?;
         Ok(Entity {
-            name: entity.name.clone(),
+            name: entity.name.to_pascal_case(),
             attributes,
             subtypes,
         })
@@ -69,25 +70,33 @@ impl Legalize for Entity {
 
 impl ToTokens for Entity {
     fn to_tokens(&self, tokens: &mut TokenStream) {
-        // EXPRESS identifier should be snake_case, but Rust struct should be PascalCase.
-        let name = format_ident!("{}", self.name.to_pascal_case());
+        let name = format_ident!("{}", self.name);
+        let holder_name = format_ident!("{}Holder", self.name);
 
-        let mut attr_name: Vec<_> = self
-            .attributes
-            .iter()
-            .map(|EntityAttribute { name, .. }| format_ident!("{}", name))
-            .collect();
-        let mut attr_type: Vec<_> = self
-            .attributes
-            .iter()
-            .map(|EntityAttribute { ty, optional, .. }| {
-                if *optional {
+        let mut attr_name = Vec::new();
+        let mut attr_type = Vec::new();
+        let mut holder_attr_type = Vec::new();
+
+        for EntityAttribute { name, ty, optional } in &self.attributes {
+            attr_name.push(format_ident!("{}", name));
+            attr_type.push(if *optional {
+                quote! { Option<#ty> }
+            } else {
+                quote! { #ty }
+            });
+            match ty {
+                TypeRef::SimpleType(..) => holder_attr_type.push(if *optional {
                     quote! { Option<#ty> }
                 } else {
                     quote! { #ty }
-                }
-            })
-            .collect();
+                }),
+                _ => holder_attr_type.push(if *optional {
+                    quote! { Option<PlaceHolder<#ty>> }
+                } else {
+                    quote! { PlaceHolder<#ty> }
+                }),
+            }
+        }
 
         if let Some(subtypes) = &self.subtypes {
             for ty in subtypes {
@@ -110,13 +119,25 @@ impl ToTokens for Entity {
 
                 attr_name.push(attr);
                 attr_type.push(ty.to_token_stream());
+                match ty {
+                    TypeRef::SimpleType(..) => holder_attr_type.push(quote! { #ty }),
+                    _ => holder_attr_type.push(quote! { PlaceHolder<#ty> }),
+                }
             }
         }
+
         tokens.append_all(quote! {
             #[derive(Clone, Debug, PartialEq, derive_new::new)]
             pub struct #name {
                 #(
                 pub #attr_name : #attr_type,
+                )*
+            }
+
+            #[derive(Clone, Debug, PartialEq)]
+            pub struct #holder_name {
+                #(
+                pub #attr_name : #holder_attr_type,
                 )*
             }
         });

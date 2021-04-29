@@ -1,6 +1,6 @@
 #![allow(dead_code)]
 pub mod explicit_draughting {
-    use crate::primitive::*;
+    use crate::{primitive::*, tables::*};
     #[derive(Debug, Clone, PartialEq)]
     pub enum ApprovedItem {
         DrawingRevision(Box<DrawingRevision>),
@@ -360,6 +360,21 @@ pub mod explicit_draughting {
         pub electronic_mail_address: Option<Label>,
         pub telex_number: Option<Label>,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct AddressHolder {
+        pub internal_location: Option<PlaceHolder<Label>>,
+        pub street_number: Option<PlaceHolder<Label>>,
+        pub street: Option<PlaceHolder<Label>>,
+        pub postal_box: Option<PlaceHolder<Label>>,
+        pub town: Option<PlaceHolder<Label>>,
+        pub region: Option<PlaceHolder<Label>>,
+        pub postal_code: Option<PlaceHolder<Label>>,
+        pub country: Option<PlaceHolder<Label>>,
+        pub facsimile_number: Option<PlaceHolder<Label>>,
+        pub telephone_number: Option<PlaceHolder<Label>>,
+        pub electronic_mail_address: Option<PlaceHolder<Label>>,
+        pub telex_number: Option<PlaceHolder<Label>>,
+    }
     impl ::std::ops::Deref for AngularDimension {
         type Target = DimensionCurveDirectedCallout;
         fn deref(&self) -> &Self::Target {
@@ -370,6 +385,10 @@ pub mod explicit_draughting {
     pub struct AngularDimension {
         pub dimension_curve_directed_callout: DimensionCurveDirectedCallout,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct AngularDimensionHolder {
+        pub dimension_curve_directed_callout: PlaceHolder<DimensionCurveDirectedCallout>,
+    }
     impl ::std::ops::Deref for AnnotationCurveOccurrence {
         type Target = AnnotationOccurrence;
         fn deref(&self) -> &Self::Target {
@@ -379,6 +398,10 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct AnnotationCurveOccurrence {
         pub annotation_occurrence: AnnotationOccurrence,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct AnnotationCurveOccurrenceHolder {
+        pub annotation_occurrence: PlaceHolder<AnnotationOccurrence>,
     }
     impl ::std::ops::Deref for AnnotationFillArea {
         type Target = GeometricRepresentationItem;
@@ -391,6 +414,11 @@ pub mod explicit_draughting {
         pub boundaries: Vec<Curve>,
         pub geometric_representation_item: GeometricRepresentationItem,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct AnnotationFillAreaHolder {
+        pub boundaries: PlaceHolder<Vec<Curve>>,
+        pub geometric_representation_item: PlaceHolder<GeometricRepresentationItem>,
+    }
     impl ::std::ops::Deref for AnnotationFillAreaOccurrence {
         type Target = AnnotationOccurrence;
         fn deref(&self) -> &Self::Target {
@@ -402,6 +430,11 @@ pub mod explicit_draughting {
         pub fill_style_target: Point,
         pub annotation_occurrence: AnnotationOccurrence,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct AnnotationFillAreaOccurrenceHolder {
+        pub fill_style_target: PlaceHolder<Point>,
+        pub annotation_occurrence: PlaceHolder<AnnotationOccurrence>,
+    }
     impl ::std::ops::Deref for AnnotationOccurrence {
         type Target = StyledItem;
         fn deref(&self) -> &Self::Target {
@@ -411,6 +444,10 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct AnnotationOccurrence {
         pub styled_item: StyledItem,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct AnnotationOccurrenceHolder {
+        pub styled_item: PlaceHolder<StyledItem>,
     }
     impl ::std::ops::Deref for AnnotationSubfigureOccurrence {
         type Target = AnnotationSymbolOccurrence;
@@ -422,6 +459,10 @@ pub mod explicit_draughting {
     pub struct AnnotationSubfigureOccurrence {
         pub annotation_symbol_occurrence: AnnotationSymbolOccurrence,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct AnnotationSubfigureOccurrenceHolder {
+        pub annotation_symbol_occurrence: PlaceHolder<AnnotationSymbolOccurrence>,
+    }
     impl ::std::ops::Deref for AnnotationSymbol {
         type Target = MappedItem;
         fn deref(&self) -> &Self::Target {
@@ -431,6 +472,10 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct AnnotationSymbol {
         pub mapped_item: MappedItem,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct AnnotationSymbolHolder {
+        pub mapped_item: PlaceHolder<MappedItem>,
     }
     impl ::std::ops::Deref for AnnotationSymbolOccurrence {
         type Target = AnnotationOccurrence;
@@ -442,6 +487,10 @@ pub mod explicit_draughting {
     pub struct AnnotationSymbolOccurrence {
         pub annotation_occurrence: AnnotationOccurrence,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct AnnotationSymbolOccurrenceHolder {
+        pub annotation_occurrence: PlaceHolder<AnnotationOccurrence>,
+    }
     impl ::std::ops::Deref for AnnotationText {
         type Target = MappedItem;
         fn deref(&self) -> &Self::Target {
@@ -451,6 +500,10 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct AnnotationText {
         pub mapped_item: MappedItem,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct AnnotationTextHolder {
+        pub mapped_item: PlaceHolder<MappedItem>,
     }
     impl ::std::ops::Deref for AnnotationTextOccurrence {
         type Target = AnnotationOccurrence;
@@ -462,14 +515,27 @@ pub mod explicit_draughting {
     pub struct AnnotationTextOccurrence {
         pub annotation_occurrence: AnnotationOccurrence,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct AnnotationTextOccurrenceHolder {
+        pub annotation_occurrence: PlaceHolder<AnnotationOccurrence>,
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ApplicationContext {
         pub application: Text,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct ApplicationContextHolder {
+        pub application: PlaceHolder<Text>,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ApplicationContextElement {
         pub name: Label,
         pub frame_of_reference: ApplicationContext,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct ApplicationContextElementHolder {
+        pub name: PlaceHolder<Label>,
+        pub frame_of_reference: PlaceHolder<ApplicationContext>,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ApplicationProtocolDefinition {
@@ -478,19 +544,40 @@ pub mod explicit_draughting {
         pub application_protocol_year: YearNumber,
         pub application: ApplicationContext,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct ApplicationProtocolDefinitionHolder {
+        pub status: PlaceHolder<Label>,
+        pub application_interpreted_model_schema_name: PlaceHolder<Label>,
+        pub application_protocol_year: PlaceHolder<YearNumber>,
+        pub application: PlaceHolder<ApplicationContext>,
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Approval {
         pub status: ApprovalStatus,
         pub level: Label,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct ApprovalHolder {
+        pub status: PlaceHolder<ApprovalStatus>,
+        pub level: PlaceHolder<Label>,
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ApprovalAssignment {
         pub assigned_approval: Approval,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct ApprovalAssignmentHolder {
+        pub assigned_approval: PlaceHolder<Approval>,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ApprovalDateTime {
         pub date_time: DateTimeSelect,
         pub dated_approval: Approval,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct ApprovalDateTimeHolder {
+        pub date_time: PlaceHolder<DateTimeSelect>,
+        pub dated_approval: PlaceHolder<Approval>,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ApprovalPersonOrganization {
@@ -498,18 +585,37 @@ pub mod explicit_draughting {
         pub authorized_approval: Approval,
         pub role: ApprovalRole,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct ApprovalPersonOrganizationHolder {
+        pub person_organization: PlaceHolder<PersonOrganizationSelect>,
+        pub authorized_approval: PlaceHolder<Approval>,
+        pub role: PlaceHolder<ApprovalRole>,
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ApprovalRole {
         pub role: Label,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct ApprovalRoleHolder {
+        pub role: PlaceHolder<Label>,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ApprovalStatus {
         pub name: Label,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct ApprovalStatusHolder {
+        pub name: PlaceHolder<Label>,
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct AreaInSet {
         pub area: PresentationArea,
         pub in_set: PresentationSet,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct AreaInSetHolder {
+        pub area: PlaceHolder<PresentationArea>,
+        pub in_set: PlaceHolder<PresentationSet>,
     }
     impl ::std::ops::Deref for Axis2Placement2D {
         type Target = Placement;
@@ -521,6 +627,11 @@ pub mod explicit_draughting {
     pub struct Axis2Placement2D {
         pub ref_direction: Option<Direction>,
         pub placement: Placement,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct Axis2Placement2DHolder {
+        pub ref_direction: Option<PlaceHolder<Direction>>,
+        pub placement: PlaceHolder<Placement>,
     }
     impl ::std::ops::Deref for BSplineCurve {
         type Target = BoundedCurve;
@@ -537,6 +648,15 @@ pub mod explicit_draughting {
         pub self_intersect: Logical,
         pub bounded_curve: BoundedCurve,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct BSplineCurveHolder {
+        pub degree: i64,
+        pub control_points_list: PlaceHolder<Vec<CartesianPoint>>,
+        pub curve_form: PlaceHolder<BSplineCurveForm>,
+        pub closed_curve: Logical,
+        pub self_intersect: Logical,
+        pub bounded_curve: PlaceHolder<BoundedCurve>,
+    }
     impl ::std::ops::Deref for BSplineCurveWithKnots {
         type Target = BSplineCurve;
         fn deref(&self) -> &Self::Target {
@@ -550,6 +670,13 @@ pub mod explicit_draughting {
         pub knot_spec: KnotType,
         pub b_spline_curve: BSplineCurve,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct BSplineCurveWithKnotsHolder {
+        pub knot_multiplicities: PlaceHolder<Vec<i64>>,
+        pub knots: PlaceHolder<Vec<ParameterValue>>,
+        pub knot_spec: PlaceHolder<KnotType>,
+        pub b_spline_curve: PlaceHolder<BSplineCurve>,
+    }
     impl ::std::ops::Deref for BezierCurve {
         type Target = BSplineCurve;
         fn deref(&self) -> &Self::Target {
@@ -560,6 +687,10 @@ pub mod explicit_draughting {
     pub struct BezierCurve {
         pub b_spline_curve: BSplineCurve,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct BezierCurveHolder {
+        pub b_spline_curve: PlaceHolder<BSplineCurve>,
+    }
     impl ::std::ops::Deref for BoundedCurve {
         type Target = Curve;
         fn deref(&self) -> &Self::Target {
@@ -569,6 +700,10 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct BoundedCurve {
         pub curve: Curve,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct BoundedCurveHolder {
+        pub curve: PlaceHolder<Curve>,
     }
     impl ::std::ops::Deref for CalendarDate {
         type Target = Date;
@@ -582,6 +717,12 @@ pub mod explicit_draughting {
         pub month_component: MonthInYearNumber,
         pub date: Date,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct CalendarDateHolder {
+        pub day_component: PlaceHolder<DayInMonthNumber>,
+        pub month_component: PlaceHolder<MonthInYearNumber>,
+        pub date: PlaceHolder<Date>,
+    }
     impl ::std::ops::Deref for CameraImage {
         type Target = MappedItem;
         fn deref(&self) -> &Self::Target {
@@ -591,6 +732,10 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct CameraImage {
         pub mapped_item: MappedItem,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct CameraImageHolder {
+        pub mapped_item: PlaceHolder<MappedItem>,
     }
     impl ::std::ops::Deref for CameraImage2DWithScale {
         type Target = CameraImage;
@@ -602,6 +747,10 @@ pub mod explicit_draughting {
     pub struct CameraImage2DWithScale {
         pub camera_image: CameraImage,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct CameraImage2DWithScaleHolder {
+        pub camera_image: PlaceHolder<CameraImage>,
+    }
     impl ::std::ops::Deref for CameraModel {
         type Target = GeometricRepresentationItem;
         fn deref(&self) -> &Self::Target {
@@ -611,6 +760,10 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct CameraModel {
         pub geometric_representation_item: GeometricRepresentationItem,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct CameraModelHolder {
+        pub geometric_representation_item: PlaceHolder<GeometricRepresentationItem>,
     }
     impl ::std::ops::Deref for CameraModelD2 {
         type Target = CameraModel;
@@ -624,6 +777,12 @@ pub mod explicit_draughting {
         pub view_window_clipping: bool,
         pub camera_model: CameraModel,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct CameraModelD2Holder {
+        pub view_window: PlaceHolder<PlanarBox>,
+        pub view_window_clipping: bool,
+        pub camera_model: PlaceHolder<CameraModel>,
+    }
     impl ::std::ops::Deref for CameraUsage {
         type Target = RepresentationMap;
         fn deref(&self) -> &Self::Target {
@@ -633,6 +792,10 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct CameraUsage {
         pub representation_map: RepresentationMap,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct CameraUsageHolder {
+        pub representation_map: PlaceHolder<RepresentationMap>,
     }
     impl ::std::ops::Deref for CartesianPoint {
         type Target = Point;
@@ -645,6 +808,11 @@ pub mod explicit_draughting {
         pub coordinates: Vec<LengthMeasure>,
         pub point: Point,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct CartesianPointHolder {
+        pub coordinates: PlaceHolder<Vec<LengthMeasure>>,
+        pub point: PlaceHolder<Point>,
+    }
     impl ::std::ops::Deref for Circle {
         type Target = Conic;
         fn deref(&self) -> &Self::Target {
@@ -656,8 +824,15 @@ pub mod explicit_draughting {
         pub radius: PositiveLengthMeasure,
         pub conic: Conic,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct CircleHolder {
+        pub radius: PlaceHolder<PositiveLengthMeasure>,
+        pub conic: PlaceHolder<Conic>,
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Colour {}
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct ColourHolder {}
     impl ::std::ops::Deref for ColourRgb {
         type Target = ColourSpecification;
         fn deref(&self) -> &Self::Target {
@@ -671,6 +846,13 @@ pub mod explicit_draughting {
         pub blue: f64,
         pub colour_specification: ColourSpecification,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct ColourRgbHolder {
+        pub red: f64,
+        pub green: f64,
+        pub blue: f64,
+        pub colour_specification: PlaceHolder<ColourSpecification>,
+    }
     impl ::std::ops::Deref for ColourSpecification {
         type Target = Colour;
         fn deref(&self) -> &Self::Target {
@@ -681,6 +863,11 @@ pub mod explicit_draughting {
     pub struct ColourSpecification {
         pub name: Colour,
         pub colour: Colour,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct ColourSpecificationHolder {
+        pub name: PlaceHolder<Colour>,
+        pub colour: PlaceHolder<Colour>,
     }
     impl ::std::ops::Deref for CompositeCurve {
         type Target = BoundedCurve;
@@ -694,11 +881,23 @@ pub mod explicit_draughting {
         pub self_intersect: Logical,
         pub bounded_curve: BoundedCurve,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct CompositeCurveHolder {
+        pub segments: PlaceHolder<Vec<CompositeCurveSegment>>,
+        pub self_intersect: Logical,
+        pub bounded_curve: PlaceHolder<BoundedCurve>,
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct CompositeCurveSegment {
         pub transition: TransitionCode,
         pub same_sense: bool,
         pub parent_curve: Curve,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct CompositeCurveSegmentHolder {
+        pub transition: PlaceHolder<TransitionCode>,
+        pub same_sense: bool,
+        pub parent_curve: PlaceHolder<Curve>,
     }
     impl ::std::ops::Deref for CompositeText {
         type Target = GeometricRepresentationItem;
@@ -711,6 +910,11 @@ pub mod explicit_draughting {
         pub collected_text: Vec<TextOrCharacter>,
         pub geometric_representation_item: GeometricRepresentationItem,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct CompositeTextHolder {
+        pub collected_text: PlaceHolder<Vec<TextOrCharacter>>,
+        pub geometric_representation_item: PlaceHolder<GeometricRepresentationItem>,
+    }
     impl ::std::ops::Deref for CompositeTextWithAssociatedCurves {
         type Target = CompositeText;
         fn deref(&self) -> &Self::Target {
@@ -721,6 +925,11 @@ pub mod explicit_draughting {
     pub struct CompositeTextWithAssociatedCurves {
         pub associated_curves: Vec<Curve>,
         pub composite_text: CompositeText,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct CompositeTextWithAssociatedCurvesHolder {
+        pub associated_curves: PlaceHolder<Vec<Curve>>,
+        pub composite_text: PlaceHolder<CompositeText>,
     }
     impl ::std::ops::Deref for CompositeTextWithBlankingBox {
         type Target = CompositeText;
@@ -733,6 +942,11 @@ pub mod explicit_draughting {
         pub blanking: PlanarBox,
         pub composite_text: CompositeText,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct CompositeTextWithBlankingBoxHolder {
+        pub blanking: PlaceHolder<PlanarBox>,
+        pub composite_text: PlaceHolder<CompositeText>,
+    }
     impl ::std::ops::Deref for CompositeTextWithExtent {
         type Target = CompositeText;
         fn deref(&self) -> &Self::Target {
@@ -743,6 +957,11 @@ pub mod explicit_draughting {
     pub struct CompositeTextWithExtent {
         pub extent: PlanarExtent,
         pub composite_text: CompositeText,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct CompositeTextWithExtentHolder {
+        pub extent: PlaceHolder<PlanarExtent>,
+        pub composite_text: PlaceHolder<CompositeText>,
     }
     impl ::std::ops::Deref for Conic {
         type Target = Curve;
@@ -755,6 +974,11 @@ pub mod explicit_draughting {
         pub position: Axis2Placement,
         pub curve: Curve,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct ConicHolder {
+        pub position: PlaceHolder<Axis2Placement>,
+        pub curve: PlaceHolder<Curve>,
+    }
     impl ::std::ops::Deref for ContextDependentInvisibility {
         type Target = Invisibility;
         fn deref(&self) -> &Self::Target {
@@ -766,19 +990,38 @@ pub mod explicit_draughting {
         pub presentation_context: InvisibilityContext,
         pub invisibility: Invisibility,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct ContextDependentInvisibilityHolder {
+        pub presentation_context: PlaceHolder<InvisibilityContext>,
+        pub invisibility: PlaceHolder<Invisibility>,
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Contract {
         pub name: Label,
         pub purpose: Text,
         pub kind: ContractType,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct ContractHolder {
+        pub name: PlaceHolder<Label>,
+        pub purpose: PlaceHolder<Text>,
+        pub kind: PlaceHolder<ContractType>,
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ContractAssignment {
         pub assigned_contract: Contract,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct ContractAssignmentHolder {
+        pub assigned_contract: PlaceHolder<Contract>,
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ContractType {
         pub description: Label,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct ContractTypeHolder {
+        pub description: PlaceHolder<Label>,
     }
     impl ::std::ops::Deref for ConversionBasedUnit {
         type Target = NamedUnit;
@@ -792,6 +1035,12 @@ pub mod explicit_draughting {
         pub conversion_factor: MeasureWithUnit,
         pub named_unit: NamedUnit,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct ConversionBasedUnitHolder {
+        pub name: PlaceHolder<Label>,
+        pub conversion_factor: PlaceHolder<MeasureWithUnit>,
+        pub named_unit: PlaceHolder<NamedUnit>,
+    }
     impl ::std::ops::Deref for Curve {
         type Target = GeometricRepresentationItem;
         fn deref(&self) -> &Self::Target {
@@ -801,6 +1050,10 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Curve {
         pub geometric_representation_item: GeometricRepresentationItem,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct CurveHolder {
+        pub geometric_representation_item: PlaceHolder<GeometricRepresentationItem>,
     }
     impl ::std::ops::Deref for CurveDimension {
         type Target = DimensionCurveDirectedCallout;
@@ -812,6 +1065,10 @@ pub mod explicit_draughting {
     pub struct CurveDimension {
         pub dimension_curve_directed_callout: DimensionCurveDirectedCallout,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct CurveDimensionHolder {
+        pub dimension_curve_directed_callout: PlaceHolder<DimensionCurveDirectedCallout>,
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct CurveStyle {
         pub name: Label,
@@ -819,19 +1076,40 @@ pub mod explicit_draughting {
         pub curve_width: SizeSelect,
         pub curve_colour: Colour,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct CurveStyleHolder {
+        pub name: PlaceHolder<Label>,
+        pub curve_font: PlaceHolder<CurveFontOrScaledCurveFontSelect>,
+        pub curve_width: PlaceHolder<SizeSelect>,
+        pub curve_colour: PlaceHolder<Colour>,
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct CurveStyleFont {
         pub name: Label,
         pub pattern_list: Vec<CurveStyleFontPattern>,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct CurveStyleFontHolder {
+        pub name: PlaceHolder<Label>,
+        pub pattern_list: PlaceHolder<Vec<CurveStyleFontPattern>>,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct CurveStyleFontPattern {
         pub visible_segment_length: PositiveLengthMeasure,
         pub invisible_segment_length: PositiveLengthMeasure,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct CurveStyleFontPatternHolder {
+        pub visible_segment_length: PlaceHolder<PositiveLengthMeasure>,
+        pub invisible_segment_length: PlaceHolder<PositiveLengthMeasure>,
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Date {
         pub year_component: YearNumber,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct DateHolder {
+        pub year_component: PlaceHolder<YearNumber>,
     }
     impl ::std::ops::Deref for DatumFeatureCallout {
         type Target = DraughtingCallout;
@@ -843,6 +1121,10 @@ pub mod explicit_draughting {
     pub struct DatumFeatureCallout {
         pub draughting_callout: DraughtingCallout,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct DatumFeatureCalloutHolder {
+        pub draughting_callout: PlaceHolder<DraughtingCallout>,
+    }
     impl ::std::ops::Deref for DatumTargetCallout {
         type Target = DraughtingCallout;
         fn deref(&self) -> &Self::Target {
@@ -852,6 +1134,10 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DatumTargetCallout {
         pub draughting_callout: DraughtingCallout,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct DatumTargetCalloutHolder {
+        pub draughting_callout: PlaceHolder<DraughtingCallout>,
     }
     impl ::std::ops::Deref for DefinedSymbol {
         type Target = GeometricRepresentationItem;
@@ -865,6 +1151,12 @@ pub mod explicit_draughting {
         pub target: SymbolTarget,
         pub geometric_representation_item: GeometricRepresentationItem,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct DefinedSymbolHolder {
+        pub definition: PlaceHolder<DefinedSymbolSelect>,
+        pub target: PlaceHolder<SymbolTarget>,
+        pub geometric_representation_item: PlaceHolder<GeometricRepresentationItem>,
+    }
     impl ::std::ops::Deref for DiameterDimension {
         type Target = DimensionCurveDirectedCallout;
         fn deref(&self) -> &Self::Target {
@@ -874,6 +1166,10 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DiameterDimension {
         pub dimension_curve_directed_callout: DimensionCurveDirectedCallout,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct DiameterDimensionHolder {
+        pub dimension_curve_directed_callout: PlaceHolder<DimensionCurveDirectedCallout>,
     }
     impl ::std::ops::Deref for DimensionCalloutComponentRelationship {
         type Target = DraughtingCalloutRelationship;
@@ -885,6 +1181,10 @@ pub mod explicit_draughting {
     pub struct DimensionCalloutComponentRelationship {
         pub draughting_callout_relationship: DraughtingCalloutRelationship,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct DimensionCalloutComponentRelationshipHolder {
+        pub draughting_callout_relationship: PlaceHolder<DraughtingCalloutRelationship>,
+    }
     impl ::std::ops::Deref for DimensionCalloutRelationship {
         type Target = DraughtingCalloutRelationship;
         fn deref(&self) -> &Self::Target {
@@ -894,6 +1194,10 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DimensionCalloutRelationship {
         pub draughting_callout_relationship: DraughtingCalloutRelationship,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct DimensionCalloutRelationshipHolder {
+        pub draughting_callout_relationship: PlaceHolder<DraughtingCalloutRelationship>,
     }
     impl ::std::ops::Deref for DimensionCurve {
         type Target = AnnotationCurveOccurrence;
@@ -905,6 +1209,10 @@ pub mod explicit_draughting {
     pub struct DimensionCurve {
         pub annotation_curve_occurrence: AnnotationCurveOccurrence,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct DimensionCurveHolder {
+        pub annotation_curve_occurrence: PlaceHolder<AnnotationCurveOccurrence>,
+    }
     impl ::std::ops::Deref for DimensionCurveDirectedCallout {
         type Target = DraughtingCallout;
         fn deref(&self) -> &Self::Target {
@@ -914,6 +1222,10 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DimensionCurveDirectedCallout {
         pub draughting_callout: DraughtingCallout,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct DimensionCurveDirectedCalloutHolder {
+        pub draughting_callout: PlaceHolder<DraughtingCallout>,
     }
     impl ::std::ops::Deref for DimensionCurveTerminator {
         type Target = TerminatorSymbol;
@@ -926,6 +1238,11 @@ pub mod explicit_draughting {
         pub role: DimensionExtentUsage,
         pub terminator_symbol: TerminatorSymbol,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct DimensionCurveTerminatorHolder {
+        pub role: PlaceHolder<DimensionExtentUsage>,
+        pub terminator_symbol: PlaceHolder<TerminatorSymbol>,
+    }
     impl ::std::ops::Deref for DimensionPair {
         type Target = DraughtingCalloutRelationship;
         fn deref(&self) -> &Self::Target {
@@ -936,8 +1253,22 @@ pub mod explicit_draughting {
     pub struct DimensionPair {
         pub draughting_callout_relationship: DraughtingCalloutRelationship,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct DimensionPairHolder {
+        pub draughting_callout_relationship: PlaceHolder<DraughtingCalloutRelationship>,
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DimensionalExponents {
+        pub length_exponent: f64,
+        pub mass_exponent: f64,
+        pub time_exponent: f64,
+        pub electric_current_exponent: f64,
+        pub thermodynamic_temperature_exponent: f64,
+        pub amount_of_substance_exponent: f64,
+        pub luminous_intensity_exponent: f64,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct DimensionalExponentsHolder {
         pub length_exponent: f64,
         pub mass_exponent: f64,
         pub time_exponent: f64,
@@ -957,6 +1288,11 @@ pub mod explicit_draughting {
         pub direction_ratios: Vec<f64>,
         pub geometric_representation_item: GeometricRepresentationItem,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct DirectionHolder {
+        pub direction_ratios: PlaceHolder<Vec<f64>>,
+        pub geometric_representation_item: PlaceHolder<GeometricRepresentationItem>,
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Document {
         pub id: Identifier,
@@ -964,14 +1300,30 @@ pub mod explicit_draughting {
         pub description: Text,
         pub kind: DocumentType,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct DocumentHolder {
+        pub id: PlaceHolder<Identifier>,
+        pub name: PlaceHolder<Label>,
+        pub description: PlaceHolder<Text>,
+        pub kind: PlaceHolder<DocumentType>,
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DocumentReference {
         pub assigned_document: Document,
         pub source: Label,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct DocumentReferenceHolder {
+        pub assigned_document: PlaceHolder<Document>,
+        pub source: PlaceHolder<Label>,
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DocumentType {
         pub product_data_type: Label,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct DocumentTypeHolder {
+        pub product_data_type: PlaceHolder<Label>,
     }
     impl ::std::ops::Deref for DraughtingAnnotationOccurrence {
         type Target = AnnotationOccurrence;
@@ -982,6 +1334,10 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DraughtingAnnotationOccurrence {
         pub annotation_occurrence: AnnotationOccurrence,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct DraughtingAnnotationOccurrenceHolder {
+        pub annotation_occurrence: PlaceHolder<AnnotationOccurrence>,
     }
     impl ::std::ops::Deref for DraughtingApprovalAssignment {
         type Target = ApprovalAssignment;
@@ -994,6 +1350,11 @@ pub mod explicit_draughting {
         pub approved_items: Vec<ApprovedItem>,
         pub approval_assignment: ApprovalAssignment,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct DraughtingApprovalAssignmentHolder {
+        pub approved_items: PlaceHolder<Vec<ApprovedItem>>,
+        pub approval_assignment: PlaceHolder<ApprovalAssignment>,
+    }
     impl ::std::ops::Deref for DraughtingCallout {
         type Target = GeometricRepresentationItem;
         fn deref(&self) -> &Self::Target {
@@ -1005,12 +1366,24 @@ pub mod explicit_draughting {
         pub contents: Vec<DraughtingCalloutElement>,
         pub geometric_representation_item: GeometricRepresentationItem,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct DraughtingCalloutHolder {
+        pub contents: PlaceHolder<Vec<DraughtingCalloutElement>>,
+        pub geometric_representation_item: PlaceHolder<GeometricRepresentationItem>,
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DraughtingCalloutRelationship {
         pub name: Label,
         pub description: Text,
         pub relating_draughting_callout: DraughtingCallout,
         pub related_draughting_callout: DraughtingCallout,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct DraughtingCalloutRelationshipHolder {
+        pub name: PlaceHolder<Label>,
+        pub description: PlaceHolder<Text>,
+        pub relating_draughting_callout: PlaceHolder<DraughtingCallout>,
+        pub related_draughting_callout: PlaceHolder<DraughtingCallout>,
     }
     impl ::std::ops::Deref for DraughtingContractAssignment {
         type Target = ContractAssignment;
@@ -1023,6 +1396,11 @@ pub mod explicit_draughting {
         pub items: Vec<ContractedItem>,
         pub contract_assignment: ContractAssignment,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct DraughtingContractAssignmentHolder {
+        pub items: PlaceHolder<Vec<ContractedItem>>,
+        pub contract_assignment: PlaceHolder<ContractAssignment>,
+    }
     impl ::std::ops::Deref for DraughtingDrawingRevision {
         type Target = DrawingRevision;
         fn deref(&self) -> &Self::Target {
@@ -1033,6 +1411,10 @@ pub mod explicit_draughting {
     pub struct DraughtingDrawingRevision {
         pub drawing_revision: DrawingRevision,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct DraughtingDrawingRevisionHolder {
+        pub drawing_revision: PlaceHolder<DrawingRevision>,
+    }
     impl ::std::ops::Deref for DraughtingElements {
         type Target = DraughtingCallout;
         fn deref(&self) -> &Self::Target {
@@ -1042,6 +1424,10 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DraughtingElements {
         pub draughting_callout: DraughtingCallout,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct DraughtingElementsHolder {
+        pub draughting_callout: PlaceHolder<DraughtingCallout>,
     }
     impl ::std::ops::Deref for DraughtingGroupAssignment {
         type Target = GroupAssignment;
@@ -1054,6 +1440,11 @@ pub mod explicit_draughting {
         pub items: Vec<DraughtingGroupedItem>,
         pub group_assignment: GroupAssignment,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct DraughtingGroupAssignmentHolder {
+        pub items: PlaceHolder<Vec<DraughtingGroupedItem>>,
+        pub group_assignment: PlaceHolder<GroupAssignment>,
+    }
     impl ::std::ops::Deref for DraughtingModel {
         type Target = Representation;
         fn deref(&self) -> &Self::Target {
@@ -1063,6 +1454,10 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DraughtingModel {
         pub representation: Representation,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct DraughtingModelHolder {
+        pub representation: PlaceHolder<Representation>,
     }
     impl ::std::ops::Deref for DraughtingOrganizationAssignment {
         type Target = OrganizationAssignment;
@@ -1075,6 +1470,11 @@ pub mod explicit_draughting {
         pub assigned_items: Vec<DraughtingOrganizationItem>,
         pub organization_assignment: OrganizationAssignment,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct DraughtingOrganizationAssignmentHolder {
+        pub assigned_items: PlaceHolder<Vec<DraughtingOrganizationItem>>,
+        pub organization_assignment: PlaceHolder<OrganizationAssignment>,
+    }
     impl ::std::ops::Deref for DraughtingPersonAndOrganizationAssignment {
         type Target = PersonAndOrganizationAssignment;
         fn deref(&self) -> &Self::Target {
@@ -1085,6 +1485,11 @@ pub mod explicit_draughting {
     pub struct DraughtingPersonAndOrganizationAssignment {
         pub assigned_items: Vec<DraughtingOrganizationItem>,
         pub person_and_organization_assignment: PersonAndOrganizationAssignment,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct DraughtingPersonAndOrganizationAssignmentHolder {
+        pub assigned_items: PlaceHolder<Vec<DraughtingOrganizationItem>>,
+        pub person_and_organization_assignment: PlaceHolder<PersonAndOrganizationAssignment>,
     }
     impl ::std::ops::Deref for DraughtingPersonAssignment {
         type Target = PersonAssignment;
@@ -1097,6 +1502,11 @@ pub mod explicit_draughting {
         pub assigned_items: Vec<DraughtingOrganizationItem>,
         pub person_assignment: PersonAssignment,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct DraughtingPersonAssignmentHolder {
+        pub assigned_items: PlaceHolder<Vec<DraughtingOrganizationItem>>,
+        pub person_assignment: PlaceHolder<PersonAssignment>,
+    }
     impl ::std::ops::Deref for DraughtingPreDefinedColour {
         type Target = PreDefinedColour;
         fn deref(&self) -> &Self::Target {
@@ -1106,6 +1516,10 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DraughtingPreDefinedColour {
         pub pre_defined_colour: PreDefinedColour,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct DraughtingPreDefinedColourHolder {
+        pub pre_defined_colour: PlaceHolder<PreDefinedColour>,
     }
     impl ::std::ops::Deref for DraughtingPreDefinedCurveFont {
         type Target = PreDefinedCurveFont;
@@ -1117,6 +1531,10 @@ pub mod explicit_draughting {
     pub struct DraughtingPreDefinedCurveFont {
         pub pre_defined_curve_font: PreDefinedCurveFont,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct DraughtingPreDefinedCurveFontHolder {
+        pub pre_defined_curve_font: PlaceHolder<PreDefinedCurveFont>,
+    }
     impl ::std::ops::Deref for DraughtingPreDefinedTextFont {
         type Target = PreDefinedTextFont;
         fn deref(&self) -> &Self::Target {
@@ -1126,6 +1544,10 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DraughtingPreDefinedTextFont {
         pub pre_defined_text_font: PreDefinedTextFont,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct DraughtingPreDefinedTextFontHolder {
+        pub pre_defined_text_font: PlaceHolder<PreDefinedTextFont>,
     }
     impl ::std::ops::Deref for DraughtingPresentedItem {
         type Target = PresentedItem;
@@ -1138,6 +1560,11 @@ pub mod explicit_draughting {
         pub items: Vec<DraughtingPresentedItemSelect>,
         pub presented_item: PresentedItem,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct DraughtingPresentedItemHolder {
+        pub items: PlaceHolder<Vec<DraughtingPresentedItemSelect>>,
+        pub presented_item: PlaceHolder<PresentedItem>,
+    }
     impl ::std::ops::Deref for DraughtingSecurityClassificationAssignment {
         type Target = SecurityClassificationAssignment;
         fn deref(&self) -> &Self::Target {
@@ -1148,6 +1575,11 @@ pub mod explicit_draughting {
     pub struct DraughtingSecurityClassificationAssignment {
         pub assigned_items: Vec<ClassifiedItem>,
         pub security_classification_assignment: SecurityClassificationAssignment,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct DraughtingSecurityClassificationAssignmentHolder {
+        pub assigned_items: PlaceHolder<Vec<ClassifiedItem>>,
+        pub security_classification_assignment: PlaceHolder<SecurityClassificationAssignment>,
     }
     impl ::std::ops::Deref for DraughtingSpecificationReference {
         type Target = DocumentReference;
@@ -1160,6 +1592,11 @@ pub mod explicit_draughting {
         pub specified_items: Vec<SpecifiedItem>,
         pub document_reference: DocumentReference,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct DraughtingSpecificationReferenceHolder {
+        pub specified_items: PlaceHolder<Vec<SpecifiedItem>>,
+        pub document_reference: PlaceHolder<DocumentReference>,
+    }
     impl ::std::ops::Deref for DraughtingSubfigureRepresentation {
         type Target = SymbolRepresentation;
         fn deref(&self) -> &Self::Target {
@@ -1169,6 +1606,10 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DraughtingSubfigureRepresentation {
         pub symbol_representation: SymbolRepresentation,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct DraughtingSubfigureRepresentationHolder {
+        pub symbol_representation: PlaceHolder<SymbolRepresentation>,
     }
     impl ::std::ops::Deref for DraughtingSymbolRepresentation {
         type Target = SymbolRepresentation;
@@ -1180,6 +1621,10 @@ pub mod explicit_draughting {
     pub struct DraughtingSymbolRepresentation {
         pub symbol_representation: SymbolRepresentation,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct DraughtingSymbolRepresentationHolder {
+        pub symbol_representation: PlaceHolder<SymbolRepresentation>,
+    }
     impl ::std::ops::Deref for DraughtingTextLiteralWithDelineation {
         type Target = TextLiteralWithDelineation;
         fn deref(&self) -> &Self::Target {
@@ -1190,16 +1635,31 @@ pub mod explicit_draughting {
     pub struct DraughtingTextLiteralWithDelineation {
         pub text_literal_with_delineation: TextLiteralWithDelineation,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct DraughtingTextLiteralWithDelineationHolder {
+        pub text_literal_with_delineation: PlaceHolder<TextLiteralWithDelineation>,
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DraughtingTitle {
         pub items: Vec<DraughtingTitledItem>,
         pub language: Label,
         pub contents: Text,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct DraughtingTitleHolder {
+        pub items: PlaceHolder<Vec<DraughtingTitledItem>>,
+        pub language: PlaceHolder<Label>,
+        pub contents: PlaceHolder<Text>,
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DrawingDefinition {
         pub drawing_number: Identifier,
         pub drawing_type: Option<Label>,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct DrawingDefinitionHolder {
+        pub drawing_number: PlaceHolder<Identifier>,
+        pub drawing_type: Option<PlaceHolder<Label>>,
     }
     impl ::std::ops::Deref for DrawingRevision {
         type Target = PresentationSet;
@@ -1214,6 +1674,13 @@ pub mod explicit_draughting {
         pub intended_scale: Option<Text>,
         pub presentation_set: PresentationSet,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct DrawingRevisionHolder {
+        pub revision_identifier: PlaceHolder<Identifier>,
+        pub drawing_identifier: PlaceHolder<DrawingDefinition>,
+        pub intended_scale: Option<PlaceHolder<Text>>,
+        pub presentation_set: PlaceHolder<PresentationSet>,
+    }
     impl ::std::ops::Deref for DrawingSheetLayout {
         type Target = DraughtingSymbolRepresentation;
         fn deref(&self) -> &Self::Target {
@@ -1223,6 +1690,10 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DrawingSheetLayout {
         pub draughting_symbol_representation: DraughtingSymbolRepresentation,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct DrawingSheetLayoutHolder {
+        pub draughting_symbol_representation: PlaceHolder<DraughtingSymbolRepresentation>,
     }
     impl ::std::ops::Deref for DrawingSheetRevision {
         type Target = PresentationArea;
@@ -1235,6 +1706,11 @@ pub mod explicit_draughting {
         pub revision_identifier: Identifier,
         pub presentation_area: PresentationArea,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct DrawingSheetRevisionHolder {
+        pub revision_identifier: PlaceHolder<Identifier>,
+        pub presentation_area: PlaceHolder<PresentationArea>,
+    }
     impl ::std::ops::Deref for DrawingSheetRevisionUsage {
         type Target = AreaInSet;
         fn deref(&self) -> &Self::Target {
@@ -1245,6 +1721,11 @@ pub mod explicit_draughting {
     pub struct DrawingSheetRevisionUsage {
         pub sheet_number: Identifier,
         pub area_in_set: AreaInSet,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct DrawingSheetRevisionUsageHolder {
+        pub sheet_number: PlaceHolder<Identifier>,
+        pub area_in_set: PlaceHolder<AreaInSet>,
     }
     impl ::std::ops::Deref for Ellipse {
         type Target = Conic;
@@ -1258,9 +1739,19 @@ pub mod explicit_draughting {
         pub semi_axis_2: PositiveLengthMeasure,
         pub conic: Conic,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct EllipseHolder {
+        pub semi_axis_1: PlaceHolder<PositiveLengthMeasure>,
+        pub semi_axis_2: PlaceHolder<PositiveLengthMeasure>,
+        pub conic: PlaceHolder<Conic>,
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ExternalSource {
         pub source_id: SourceItem,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct ExternalSourceHolder {
+        pub source_id: PlaceHolder<SourceItem>,
     }
     impl ::std::ops::Deref for ExternallyDefinedCurveFont {
         type Target = ExternallyDefinedItem;
@@ -1272,15 +1763,29 @@ pub mod explicit_draughting {
     pub struct ExternallyDefinedCurveFont {
         pub externally_defined_item: ExternallyDefinedItem,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct ExternallyDefinedCurveFontHolder {
+        pub externally_defined_item: PlaceHolder<ExternallyDefinedItem>,
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ExternallyDefinedHatchStyle {
         pub externally_defined_item: ExternallyDefinedItem,
         pub geometric_representation_item: GeometricRepresentationItem,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct ExternallyDefinedHatchStyleHolder {
+        pub externally_defined_item: PlaceHolder<ExternallyDefinedItem>,
+        pub geometric_representation_item: PlaceHolder<GeometricRepresentationItem>,
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ExternallyDefinedItem {
         pub item_id: SourceItem,
         pub source: ExternalSource,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct ExternallyDefinedItemHolder {
+        pub item_id: PlaceHolder<SourceItem>,
+        pub source: PlaceHolder<ExternalSource>,
     }
     impl ::std::ops::Deref for ExternallyDefinedSymbol {
         type Target = ExternallyDefinedItem;
@@ -1292,6 +1797,10 @@ pub mod explicit_draughting {
     pub struct ExternallyDefinedSymbol {
         pub externally_defined_item: ExternallyDefinedItem,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct ExternallyDefinedSymbolHolder {
+        pub externally_defined_item: PlaceHolder<ExternallyDefinedItem>,
+    }
     impl ::std::ops::Deref for ExternallyDefinedTextFont {
         type Target = ExternallyDefinedItem;
         fn deref(&self) -> &Self::Target {
@@ -1302,20 +1811,39 @@ pub mod explicit_draughting {
     pub struct ExternallyDefinedTextFont {
         pub externally_defined_item: ExternallyDefinedItem,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct ExternallyDefinedTextFontHolder {
+        pub externally_defined_item: PlaceHolder<ExternallyDefinedItem>,
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ExternallyDefinedTileStyle {
         pub externally_defined_item: ExternallyDefinedItem,
         pub geometric_representation_item: GeometricRepresentationItem,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct ExternallyDefinedTileStyleHolder {
+        pub externally_defined_item: PlaceHolder<ExternallyDefinedItem>,
+        pub geometric_representation_item: PlaceHolder<GeometricRepresentationItem>,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct FillAreaStyle {
         pub name: Label,
         pub fill_styles: Vec<FillStyleSelect>,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct FillAreaStyleHolder {
+        pub name: PlaceHolder<Label>,
+        pub fill_styles: PlaceHolder<Vec<FillStyleSelect>>,
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct FillAreaStyleColour {
         pub name: Label,
         pub fill_colour: Colour,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct FillAreaStyleColourHolder {
+        pub name: PlaceHolder<Label>,
+        pub fill_colour: PlaceHolder<Colour>,
     }
     impl ::std::ops::Deref for FillAreaStyleHatching {
         type Target = GeometricRepresentationItem;
@@ -1332,6 +1860,15 @@ pub mod explicit_draughting {
         pub hatch_line_angle: PlaneAngleMeasure,
         pub geometric_representation_item: GeometricRepresentationItem,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct FillAreaStyleHatchingHolder {
+        pub hatch_line_appearance: PlaceHolder<CurveStyle>,
+        pub start_of_next_hatch_line: PlaceHolder<OneDirectionRepeatFactor>,
+        pub point_of_reference_hatch_line: PlaceHolder<CartesianPoint>,
+        pub pattern_start: PlaceHolder<CartesianPoint>,
+        pub hatch_line_angle: PlaceHolder<PlaneAngleMeasure>,
+        pub geometric_representation_item: PlaceHolder<GeometricRepresentationItem>,
+    }
     impl ::std::ops::Deref for FillAreaStyleTileSymbolWithStyle {
         type Target = GeometricRepresentationItem;
         fn deref(&self) -> &Self::Target {
@@ -1342,6 +1879,11 @@ pub mod explicit_draughting {
     pub struct FillAreaStyleTileSymbolWithStyle {
         pub symbol: AnnotationSymbolOccurrence,
         pub geometric_representation_item: GeometricRepresentationItem,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct FillAreaStyleTileSymbolWithStyleHolder {
+        pub symbol: PlaceHolder<AnnotationSymbolOccurrence>,
+        pub geometric_representation_item: PlaceHolder<GeometricRepresentationItem>,
     }
     impl ::std::ops::Deref for FillAreaStyleTiles {
         type Target = GeometricRepresentationItem;
@@ -1356,6 +1898,13 @@ pub mod explicit_draughting {
         pub tiling_scale: PositiveRatioMeasure,
         pub geometric_representation_item: GeometricRepresentationItem,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct FillAreaStyleTilesHolder {
+        pub tiling_pattern: PlaceHolder<TwoDirectionRepeatFactor>,
+        pub tiles: PlaceHolder<Vec<FillAreaStyleTileShapeSelect>>,
+        pub tiling_scale: PlaceHolder<PositiveRatioMeasure>,
+        pub geometric_representation_item: PlaceHolder<GeometricRepresentationItem>,
+    }
     impl ::std::ops::Deref for GeometricCurveSet {
         type Target = GeometricSet;
         fn deref(&self) -> &Self::Target {
@@ -1365,6 +1914,10 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct GeometricCurveSet {
         pub geometric_set: GeometricSet,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct GeometricCurveSetHolder {
+        pub geometric_set: PlaceHolder<GeometricSet>,
     }
     impl ::std::ops::Deref for GeometricRepresentationContext {
         type Target = RepresentationContext;
@@ -1377,6 +1930,11 @@ pub mod explicit_draughting {
         pub coordinate_space_dimension: DimensionCount,
         pub representation_context: RepresentationContext,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct GeometricRepresentationContextHolder {
+        pub coordinate_space_dimension: PlaceHolder<DimensionCount>,
+        pub representation_context: PlaceHolder<RepresentationContext>,
+    }
     impl ::std::ops::Deref for GeometricRepresentationItem {
         type Target = RepresentationItem;
         fn deref(&self) -> &Self::Target {
@@ -1386,6 +1944,10 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct GeometricRepresentationItem {
         pub representation_item: RepresentationItem,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct GeometricRepresentationItemHolder {
+        pub representation_item: PlaceHolder<RepresentationItem>,
     }
     impl ::std::ops::Deref for GeometricSet {
         type Target = GeometricRepresentationItem;
@@ -1398,6 +1960,11 @@ pub mod explicit_draughting {
         pub elements: Vec<GeometricSetSelect>,
         pub geometric_representation_item: GeometricRepresentationItem,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct GeometricSetHolder {
+        pub elements: PlaceHolder<Vec<GeometricSetSelect>>,
+        pub geometric_representation_item: PlaceHolder<GeometricRepresentationItem>,
+    }
     impl ::std::ops::Deref for GeometricalToleranceCallout {
         type Target = DraughtingCallout;
         fn deref(&self) -> &Self::Target {
@@ -1408,6 +1975,10 @@ pub mod explicit_draughting {
     pub struct GeometricalToleranceCallout {
         pub draughting_callout: DraughtingCallout,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct GeometricalToleranceCalloutHolder {
+        pub draughting_callout: PlaceHolder<DraughtingCallout>,
+    }
     impl ::std::ops::Deref for GeometricallyBounded2DWireframeRepresentation {
         type Target = ShapeRepresentation;
         fn deref(&self) -> &Self::Target {
@@ -1417,6 +1988,10 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct GeometricallyBounded2DWireframeRepresentation {
         pub shape_representation: ShapeRepresentation,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct GeometricallyBounded2DWireframeRepresentationHolder {
+        pub shape_representation: PlaceHolder<ShapeRepresentation>,
     }
     impl ::std::ops::Deref for GlobalUnitAssignedContext {
         type Target = RepresentationContext;
@@ -1429,14 +2004,28 @@ pub mod explicit_draughting {
         pub units: Vec<Unit>,
         pub representation_context: RepresentationContext,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct GlobalUnitAssignedContextHolder {
+        pub units: PlaceHolder<Vec<Unit>>,
+        pub representation_context: PlaceHolder<RepresentationContext>,
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Group {
         pub name: Label,
         pub description: Text,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct GroupHolder {
+        pub name: PlaceHolder<Label>,
+        pub description: PlaceHolder<Text>,
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct GroupAssignment {
         pub assigned_group: Group,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct GroupAssignmentHolder {
+        pub assigned_group: PlaceHolder<Group>,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct GroupRelationship {
@@ -1444,6 +2033,13 @@ pub mod explicit_draughting {
         pub description: Text,
         pub relating_group: Group,
         pub related_group: Group,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct GroupRelationshipHolder {
+        pub name: PlaceHolder<Label>,
+        pub description: PlaceHolder<Text>,
+        pub relating_group: PlaceHolder<Group>,
+        pub related_group: PlaceHolder<Group>,
     }
     impl ::std::ops::Deref for Hyperbola {
         type Target = Conic;
@@ -1457,9 +2053,19 @@ pub mod explicit_draughting {
         pub semi_imag_axis: PositiveLengthMeasure,
         pub conic: Conic,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct HyperbolaHolder {
+        pub semi_axis: PlaceHolder<PositiveLengthMeasure>,
+        pub semi_imag_axis: PlaceHolder<PositiveLengthMeasure>,
+        pub conic: PlaceHolder<Conic>,
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Invisibility {
         pub invisible_items: Vec<InvisibleItem>,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct InvisibilityHolder {
+        pub invisible_items: PlaceHolder<Vec<InvisibleItem>>,
     }
     impl ::std::ops::Deref for LeaderCurve {
         type Target = AnnotationCurveOccurrence;
@@ -1471,6 +2077,10 @@ pub mod explicit_draughting {
     pub struct LeaderCurve {
         pub annotation_curve_occurrence: AnnotationCurveOccurrence,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct LeaderCurveHolder {
+        pub annotation_curve_occurrence: PlaceHolder<AnnotationCurveOccurrence>,
+    }
     impl ::std::ops::Deref for LeaderDirectedCallout {
         type Target = DraughtingCallout;
         fn deref(&self) -> &Self::Target {
@@ -1480,6 +2090,10 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct LeaderDirectedCallout {
         pub draughting_callout: DraughtingCallout,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct LeaderDirectedCalloutHolder {
+        pub draughting_callout: PlaceHolder<DraughtingCallout>,
     }
     impl ::std::ops::Deref for LeaderDirectedDimension {
         type Target = LeaderDirectedCallout;
@@ -1491,6 +2105,10 @@ pub mod explicit_draughting {
     pub struct LeaderDirectedDimension {
         pub leader_directed_callout: LeaderDirectedCallout,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct LeaderDirectedDimensionHolder {
+        pub leader_directed_callout: PlaceHolder<LeaderDirectedCallout>,
+    }
     impl ::std::ops::Deref for LeaderTerminator {
         type Target = TerminatorSymbol;
         fn deref(&self) -> &Self::Target {
@@ -1500,6 +2118,10 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct LeaderTerminator {
         pub terminator_symbol: TerminatorSymbol,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct LeaderTerminatorHolder {
+        pub terminator_symbol: PlaceHolder<TerminatorSymbol>,
     }
     impl ::std::ops::Deref for LengthMeasureWithUnit {
         type Target = MeasureWithUnit;
@@ -1511,6 +2133,10 @@ pub mod explicit_draughting {
     pub struct LengthMeasureWithUnit {
         pub measure_with_unit: MeasureWithUnit,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct LengthMeasureWithUnitHolder {
+        pub measure_with_unit: PlaceHolder<MeasureWithUnit>,
+    }
     impl ::std::ops::Deref for LengthUnit {
         type Target = NamedUnit;
         fn deref(&self) -> &Self::Target {
@@ -1520,6 +2146,10 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct LengthUnit {
         pub named_unit: NamedUnit,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct LengthUnitHolder {
+        pub named_unit: PlaceHolder<NamedUnit>,
     }
     impl ::std::ops::Deref for Line {
         type Target = Curve;
@@ -1533,6 +2163,12 @@ pub mod explicit_draughting {
         pub dir: Vector,
         pub curve: Curve,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct LineHolder {
+        pub pnt: PlaceHolder<CartesianPoint>,
+        pub dir: PlaceHolder<Vector>,
+        pub curve: PlaceHolder<Curve>,
+    }
     impl ::std::ops::Deref for LinearDimension {
         type Target = DimensionCurveDirectedCallout;
         fn deref(&self) -> &Self::Target {
@@ -1542,6 +2178,10 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct LinearDimension {
         pub dimension_curve_directed_callout: DimensionCurveDirectedCallout,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct LinearDimensionHolder {
+        pub dimension_curve_directed_callout: PlaceHolder<DimensionCurveDirectedCallout>,
     }
     impl ::std::ops::Deref for MappedItem {
         type Target = RepresentationItem;
@@ -1555,14 +2195,29 @@ pub mod explicit_draughting {
         pub mapping_target: RepresentationItem,
         pub representation_item: RepresentationItem,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct MappedItemHolder {
+        pub mapping_source: PlaceHolder<RepresentationMap>,
+        pub mapping_target: PlaceHolder<RepresentationItem>,
+        pub representation_item: PlaceHolder<RepresentationItem>,
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct MeasureWithUnit {
         pub value_component: MeasureValue,
         pub unit_component: Unit,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct MeasureWithUnitHolder {
+        pub value_component: PlaceHolder<MeasureValue>,
+        pub unit_component: PlaceHolder<Unit>,
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct NamedUnit {
         pub dimensions: DimensionalExponents,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct NamedUnitHolder {
+        pub dimensions: PlaceHolder<DimensionalExponents>,
     }
     impl ::std::ops::Deref for OffsetCurve2D {
         type Target = Curve;
@@ -1577,6 +2232,13 @@ pub mod explicit_draughting {
         pub self_intersect: Logical,
         pub curve: Curve,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct OffsetCurve2DHolder {
+        pub basis_curve: PlaceHolder<Curve>,
+        pub distance: PlaceHolder<LengthMeasure>,
+        pub self_intersect: Logical,
+        pub curve: PlaceHolder<Curve>,
+    }
     impl ::std::ops::Deref for OneDirectionRepeatFactor {
         type Target = GeometricRepresentationItem;
         fn deref(&self) -> &Self::Target {
@@ -1588,6 +2250,11 @@ pub mod explicit_draughting {
         pub repeat_factor: Vector,
         pub geometric_representation_item: GeometricRepresentationItem,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct OneDirectionRepeatFactorHolder {
+        pub repeat_factor: PlaceHolder<Vector>,
+        pub geometric_representation_item: PlaceHolder<GeometricRepresentationItem>,
+    }
     impl ::std::ops::Deref for OrdinateDimension {
         type Target = ProjectionDirectedCallout;
         fn deref(&self) -> &Self::Target {
@@ -1598,20 +2265,39 @@ pub mod explicit_draughting {
     pub struct OrdinateDimension {
         pub projection_directed_callout: ProjectionDirectedCallout,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct OrdinateDimensionHolder {
+        pub projection_directed_callout: PlaceHolder<ProjectionDirectedCallout>,
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Organization {
         pub id: Option<Identifier>,
         pub name: Label,
         pub description: Text,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct OrganizationHolder {
+        pub id: Option<PlaceHolder<Identifier>>,
+        pub name: PlaceHolder<Label>,
+        pub description: PlaceHolder<Text>,
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct OrganizationAssignment {
         pub assigned_organization: Organization,
         pub role: OrganizationRole,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct OrganizationAssignmentHolder {
+        pub assigned_organization: PlaceHolder<Organization>,
+        pub role: PlaceHolder<OrganizationRole>,
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct OrganizationRole {
         pub name: Label,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct OrganizationRoleHolder {
+        pub name: PlaceHolder<Label>,
     }
     impl ::std::ops::Deref for OrganizationalAddress {
         type Target = Address;
@@ -1625,6 +2311,12 @@ pub mod explicit_draughting {
         pub description: Text,
         pub address: Address,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct OrganizationalAddressHolder {
+        pub organizations: PlaceHolder<Vec<Organization>>,
+        pub description: PlaceHolder<Text>,
+        pub address: PlaceHolder<Address>,
+    }
     impl ::std::ops::Deref for Parabola {
         type Target = Conic;
         fn deref(&self) -> &Self::Target {
@@ -1636,6 +2328,11 @@ pub mod explicit_draughting {
         pub focal_dist: LengthMeasure,
         pub conic: Conic,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct ParabolaHolder {
+        pub focal_dist: PlaceHolder<LengthMeasure>,
+        pub conic: PlaceHolder<Conic>,
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Person {
         pub id: Identifier,
@@ -1645,28 +2342,60 @@ pub mod explicit_draughting {
         pub prefix_titles: Option<Vec<Label>>,
         pub suffix_titles: Option<Vec<Label>>,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct PersonHolder {
+        pub id: PlaceHolder<Identifier>,
+        pub last_name: Option<PlaceHolder<Label>>,
+        pub first_name: Option<PlaceHolder<Label>>,
+        pub middle_names: Option<PlaceHolder<Vec<Label>>>,
+        pub prefix_titles: Option<PlaceHolder<Vec<Label>>>,
+        pub suffix_titles: Option<PlaceHolder<Vec<Label>>>,
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PersonAndOrganization {
         pub the_person: Person,
         pub the_organization: Organization,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct PersonAndOrganizationHolder {
+        pub the_person: PlaceHolder<Person>,
+        pub the_organization: PlaceHolder<Organization>,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PersonAndOrganizationAssignment {
         pub assigned_person_and_organization: PersonAndOrganization,
         pub role: PersonAndOrganizationRole,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct PersonAndOrganizationAssignmentHolder {
+        pub assigned_person_and_organization: PlaceHolder<PersonAndOrganization>,
+        pub role: PlaceHolder<PersonAndOrganizationRole>,
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PersonAndOrganizationRole {
         pub name: Label,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct PersonAndOrganizationRoleHolder {
+        pub name: PlaceHolder<Label>,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PersonAssignment {
         pub assigned_person: Person,
         pub role: PersonRole,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct PersonAssignmentHolder {
+        pub assigned_person: PlaceHolder<Person>,
+        pub role: PlaceHolder<PersonRole>,
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PersonRole {
         pub name: Label,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct PersonRoleHolder {
+        pub name: PlaceHolder<Label>,
     }
     impl ::std::ops::Deref for PersonalAddress {
         type Target = Address;
@@ -1680,6 +2409,12 @@ pub mod explicit_draughting {
         pub description: Text,
         pub address: Address,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct PersonalAddressHolder {
+        pub people: PlaceHolder<Vec<Person>>,
+        pub description: PlaceHolder<Text>,
+        pub address: PlaceHolder<Address>,
+    }
     impl ::std::ops::Deref for Placement {
         type Target = GeometricRepresentationItem;
         fn deref(&self) -> &Self::Target {
@@ -1691,6 +2426,11 @@ pub mod explicit_draughting {
         pub location: CartesianPoint,
         pub geometric_representation_item: GeometricRepresentationItem,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct PlacementHolder {
+        pub location: PlaceHolder<CartesianPoint>,
+        pub geometric_representation_item: PlaceHolder<GeometricRepresentationItem>,
+    }
     impl ::std::ops::Deref for PlanarBox {
         type Target = PlanarExtent;
         fn deref(&self) -> &Self::Target {
@@ -1701,6 +2441,11 @@ pub mod explicit_draughting {
     pub struct PlanarBox {
         pub placement: Axis2Placement,
         pub planar_extent: PlanarExtent,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct PlanarBoxHolder {
+        pub placement: PlaceHolder<Axis2Placement>,
+        pub planar_extent: PlaceHolder<PlanarExtent>,
     }
     impl ::std::ops::Deref for PlanarExtent {
         type Target = GeometricRepresentationItem;
@@ -1714,6 +2459,12 @@ pub mod explicit_draughting {
         pub size_in_y: LengthMeasure,
         pub geometric_representation_item: GeometricRepresentationItem,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct PlanarExtentHolder {
+        pub size_in_x: PlaceHolder<LengthMeasure>,
+        pub size_in_y: PlaceHolder<LengthMeasure>,
+        pub geometric_representation_item: PlaceHolder<GeometricRepresentationItem>,
+    }
     impl ::std::ops::Deref for PlaneAngleMeasureWithUnit {
         type Target = MeasureWithUnit;
         fn deref(&self) -> &Self::Target {
@@ -1723,6 +2474,10 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PlaneAngleMeasureWithUnit {
         pub measure_with_unit: MeasureWithUnit,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct PlaneAngleMeasureWithUnitHolder {
+        pub measure_with_unit: PlaceHolder<MeasureWithUnit>,
     }
     impl ::std::ops::Deref for PlaneAngleUnit {
         type Target = NamedUnit;
@@ -1734,6 +2489,10 @@ pub mod explicit_draughting {
     pub struct PlaneAngleUnit {
         pub named_unit: NamedUnit,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct PlaneAngleUnitHolder {
+        pub named_unit: PlaceHolder<NamedUnit>,
+    }
     impl ::std::ops::Deref for Point {
         type Target = GeometricRepresentationItem;
         fn deref(&self) -> &Self::Target {
@@ -1743,6 +2502,10 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Point {
         pub geometric_representation_item: GeometricRepresentationItem,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct PointHolder {
+        pub geometric_representation_item: PlaceHolder<GeometricRepresentationItem>,
     }
     impl ::std::ops::Deref for PointOnCurve {
         type Target = Point;
@@ -1756,6 +2519,12 @@ pub mod explicit_draughting {
         pub point_parameter: ParameterValue,
         pub point: Point,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct PointOnCurveHolder {
+        pub basis_curve: PlaceHolder<Curve>,
+        pub point_parameter: PlaceHolder<ParameterValue>,
+        pub point: PlaceHolder<Point>,
+    }
     impl ::std::ops::Deref for Polyline {
         type Target = BoundedCurve;
         fn deref(&self) -> &Self::Target {
@@ -1767,10 +2536,20 @@ pub mod explicit_draughting {
         pub points: Vec<CartesianPoint>,
         pub bounded_curve: BoundedCurve,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct PolylineHolder {
+        pub points: PlaceHolder<Vec<CartesianPoint>>,
+        pub bounded_curve: PlaceHolder<BoundedCurve>,
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PreDefinedColour {
         pub pre_defined_item: PreDefinedItem,
         pub colour: Colour,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct PreDefinedColourHolder {
+        pub pre_defined_item: PlaceHolder<PreDefinedItem>,
+        pub colour: PlaceHolder<Colour>,
     }
     impl ::std::ops::Deref for PreDefinedCurveFont {
         type Target = PreDefinedItem;
@@ -1782,6 +2561,10 @@ pub mod explicit_draughting {
     pub struct PreDefinedCurveFont {
         pub pre_defined_item: PreDefinedItem,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct PreDefinedCurveFontHolder {
+        pub pre_defined_item: PlaceHolder<PreDefinedItem>,
+    }
     impl ::std::ops::Deref for PreDefinedDimensionSymbol {
         type Target = PreDefinedSymbol;
         fn deref(&self) -> &Self::Target {
@@ -1791,6 +2574,10 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PreDefinedDimensionSymbol {
         pub pre_defined_symbol: PreDefinedSymbol,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct PreDefinedDimensionSymbolHolder {
+        pub pre_defined_symbol: PlaceHolder<PreDefinedSymbol>,
     }
     impl ::std::ops::Deref for PreDefinedGeometricalToleranceSymbol {
         type Target = PreDefinedSymbol;
@@ -1802,9 +2589,17 @@ pub mod explicit_draughting {
     pub struct PreDefinedGeometricalToleranceSymbol {
         pub pre_defined_symbol: PreDefinedSymbol,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct PreDefinedGeometricalToleranceSymbolHolder {
+        pub pre_defined_symbol: PlaceHolder<PreDefinedSymbol>,
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PreDefinedItem {
         pub name: Label,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct PreDefinedItemHolder {
+        pub name: PlaceHolder<Label>,
     }
     impl ::std::ops::Deref for PreDefinedPointMarkerSymbol {
         type Target = PreDefinedSymbol;
@@ -1816,6 +2611,10 @@ pub mod explicit_draughting {
     pub struct PreDefinedPointMarkerSymbol {
         pub pre_defined_symbol: PreDefinedSymbol,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct PreDefinedPointMarkerSymbolHolder {
+        pub pre_defined_symbol: PlaceHolder<PreDefinedSymbol>,
+    }
     impl ::std::ops::Deref for PreDefinedSymbol {
         type Target = PreDefinedItem;
         fn deref(&self) -> &Self::Target {
@@ -1825,6 +2624,10 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PreDefinedSymbol {
         pub pre_defined_item: PreDefinedItem,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct PreDefinedSymbolHolder {
+        pub pre_defined_item: PlaceHolder<PreDefinedItem>,
     }
     impl ::std::ops::Deref for PreDefinedTerminatorSymbol {
         type Target = PreDefinedSymbol;
@@ -1836,6 +2639,10 @@ pub mod explicit_draughting {
     pub struct PreDefinedTerminatorSymbol {
         pub pre_defined_symbol: PreDefinedSymbol,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct PreDefinedTerminatorSymbolHolder {
+        pub pre_defined_symbol: PlaceHolder<PreDefinedSymbol>,
+    }
     impl ::std::ops::Deref for PreDefinedTextFont {
         type Target = PreDefinedItem;
         fn deref(&self) -> &Self::Target {
@@ -1845,6 +2652,10 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PreDefinedTextFont {
         pub pre_defined_item: PreDefinedItem,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct PreDefinedTextFontHolder {
+        pub pre_defined_item: PlaceHolder<PreDefinedItem>,
     }
     impl ::std::ops::Deref for PresentationArea {
         type Target = PresentationRepresentation;
@@ -1856,16 +2667,31 @@ pub mod explicit_draughting {
     pub struct PresentationArea {
         pub presentation_representation: PresentationRepresentation,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct PresentationAreaHolder {
+        pub presentation_representation: PlaceHolder<PresentationRepresentation>,
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PresentationLayerAssignment {
         pub name: Label,
         pub description: Text,
         pub assigned_items: Vec<LayeredItem>,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct PresentationLayerAssignmentHolder {
+        pub name: PlaceHolder<Label>,
+        pub description: PlaceHolder<Text>,
+        pub assigned_items: PlaceHolder<Vec<LayeredItem>>,
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PresentationLayerUsage {
         pub assignment: PresentationLayerAssignment,
         pub presentation: PresentationRepresentation,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct PresentationLayerUsageHolder {
+        pub assignment: PlaceHolder<PresentationLayerAssignment>,
+        pub presentation: PlaceHolder<PresentationRepresentation>,
     }
     impl ::std::ops::Deref for PresentationRepresentation {
         type Target = Representation;
@@ -1877,16 +2703,31 @@ pub mod explicit_draughting {
     pub struct PresentationRepresentation {
         pub representation: Representation,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct PresentationRepresentationHolder {
+        pub representation: PlaceHolder<Representation>,
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PresentationSet {}
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct PresentationSetHolder {}
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PresentationSize {
         pub unit: PresentationSizeAssignmentSelect,
         pub size: PlanarBox,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct PresentationSizeHolder {
+        pub unit: PlaceHolder<PresentationSizeAssignmentSelect>,
+        pub size: PlaceHolder<PlanarBox>,
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PresentationStyleAssignment {
         pub styles: Vec<PresentationStyleSelect>,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct PresentationStyleAssignmentHolder {
+        pub styles: PlaceHolder<Vec<PresentationStyleSelect>>,
     }
     impl ::std::ops::Deref for PresentationStyleByContext {
         type Target = PresentationStyleAssignment;
@@ -1899,6 +2740,11 @@ pub mod explicit_draughting {
         pub style_context: StyleContextSelect,
         pub presentation_style_assignment: PresentationStyleAssignment,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct PresentationStyleByContextHolder {
+        pub style_context: PlaceHolder<StyleContextSelect>,
+        pub presentation_style_assignment: PlaceHolder<PresentationStyleAssignment>,
+    }
     impl ::std::ops::Deref for PresentationView {
         type Target = PresentationRepresentation;
         fn deref(&self) -> &Self::Target {
@@ -1909,12 +2755,23 @@ pub mod explicit_draughting {
     pub struct PresentationView {
         pub presentation_representation: PresentationRepresentation,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct PresentationViewHolder {
+        pub presentation_representation: PlaceHolder<PresentationRepresentation>,
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PresentedItem {}
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct PresentedItemHolder {}
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PresentedItemRepresentation {
         pub presentation: PresentationRepresentationSelect,
         pub item: PresentedItem,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct PresentedItemRepresentationHolder {
+        pub presentation: PlaceHolder<PresentationRepresentationSelect>,
+        pub item: PlaceHolder<PresentedItem>,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Product {
@@ -1922,6 +2779,13 @@ pub mod explicit_draughting {
         pub name: Label,
         pub description: Text,
         pub frame_of_reference: Vec<ProductContext>,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct ProductHolder {
+        pub id: PlaceHolder<Identifier>,
+        pub name: PlaceHolder<Label>,
+        pub description: PlaceHolder<Text>,
+        pub frame_of_reference: PlaceHolder<Vec<ProductContext>>,
     }
     impl ::std::ops::Deref for ProductContext {
         type Target = ApplicationContextElement;
@@ -1934,12 +2798,24 @@ pub mod explicit_draughting {
         pub discipline_type: Label,
         pub application_context_element: ApplicationContextElement,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct ProductContextHolder {
+        pub discipline_type: PlaceHolder<Label>,
+        pub application_context_element: PlaceHolder<ApplicationContextElement>,
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ProductDefinition {
         pub id: Identifier,
         pub description: Text,
         pub formation: ProductDefinitionFormation,
         pub frame_of_reference: ProductDefinitionContext,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct ProductDefinitionHolder {
+        pub id: PlaceHolder<Identifier>,
+        pub description: PlaceHolder<Text>,
+        pub formation: PlaceHolder<ProductDefinitionFormation>,
+        pub frame_of_reference: PlaceHolder<ProductDefinitionContext>,
     }
     impl ::std::ops::Deref for ProductDefinitionContext {
         type Target = ApplicationContextElement;
@@ -1952,11 +2828,22 @@ pub mod explicit_draughting {
         pub life_cycle_stage: Label,
         pub application_context_element: ApplicationContextElement,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct ProductDefinitionContextHolder {
+        pub life_cycle_stage: PlaceHolder<Label>,
+        pub application_context_element: PlaceHolder<ApplicationContextElement>,
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ProductDefinitionFormation {
         pub id: Identifier,
         pub description: Text,
         pub of_product: Product,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct ProductDefinitionFormationHolder {
+        pub id: PlaceHolder<Identifier>,
+        pub description: PlaceHolder<Text>,
+        pub of_product: PlaceHolder<Product>,
     }
     impl ::std::ops::Deref for ProductDefinitionShape {
         type Target = PropertyDefinition;
@@ -1968,6 +2855,10 @@ pub mod explicit_draughting {
     pub struct ProductDefinitionShape {
         pub property_definition: PropertyDefinition,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct ProductDefinitionShapeHolder {
+        pub property_definition: PlaceHolder<PropertyDefinition>,
+    }
     impl ::std::ops::Deref for ProjectionCurve {
         type Target = AnnotationCurveOccurrence;
         fn deref(&self) -> &Self::Target {
@@ -1977,6 +2868,10 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ProjectionCurve {
         pub annotation_curve_occurrence: AnnotationCurveOccurrence,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct ProjectionCurveHolder {
+        pub annotation_curve_occurrence: PlaceHolder<AnnotationCurveOccurrence>,
     }
     impl ::std::ops::Deref for ProjectionDirectedCallout {
         type Target = DraughtingCallout;
@@ -1988,16 +2883,31 @@ pub mod explicit_draughting {
     pub struct ProjectionDirectedCallout {
         pub draughting_callout: DraughtingCallout,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct ProjectionDirectedCalloutHolder {
+        pub draughting_callout: PlaceHolder<DraughtingCallout>,
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PropertyDefinition {
         pub name: Label,
         pub description: Text,
         pub definition: CharacterizedDefinition,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct PropertyDefinitionHolder {
+        pub name: PlaceHolder<Label>,
+        pub description: PlaceHolder<Text>,
+        pub definition: PlaceHolder<CharacterizedDefinition>,
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PropertyDefinitionRepresentation {
         pub definition: PropertyDefinition,
         pub used_representation: Representation,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct PropertyDefinitionRepresentationHolder {
+        pub definition: PlaceHolder<PropertyDefinition>,
+        pub used_representation: PlaceHolder<Representation>,
     }
     impl ::std::ops::Deref for QuasiUniformCurve {
         type Target = BSplineCurve;
@@ -2009,6 +2919,10 @@ pub mod explicit_draughting {
     pub struct QuasiUniformCurve {
         pub b_spline_curve: BSplineCurve,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct QuasiUniformCurveHolder {
+        pub b_spline_curve: PlaceHolder<BSplineCurve>,
+    }
     impl ::std::ops::Deref for RadiusDimension {
         type Target = DimensionCurveDirectedCallout;
         fn deref(&self) -> &Self::Target {
@@ -2018,6 +2932,10 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct RadiusDimension {
         pub dimension_curve_directed_callout: DimensionCurveDirectedCallout,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct RadiusDimensionHolder {
+        pub dimension_curve_directed_callout: PlaceHolder<DimensionCurveDirectedCallout>,
     }
     impl ::std::ops::Deref for RationalBSplineCurve {
         type Target = BSplineCurve;
@@ -2030,25 +2948,50 @@ pub mod explicit_draughting {
         pub weights_data: Vec<f64>,
         pub b_spline_curve: BSplineCurve,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct RationalBSplineCurveHolder {
+        pub weights_data: PlaceHolder<Vec<f64>>,
+        pub b_spline_curve: PlaceHolder<BSplineCurve>,
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Representation {
         pub name: Label,
         pub items: Vec<RepresentationItem>,
         pub context_of_items: RepresentationContext,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct RepresentationHolder {
+        pub name: PlaceHolder<Label>,
+        pub items: PlaceHolder<Vec<RepresentationItem>>,
+        pub context_of_items: PlaceHolder<RepresentationContext>,
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct RepresentationContext {
         pub context_identifier: Identifier,
         pub context_type: Text,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct RepresentationContextHolder {
+        pub context_identifier: PlaceHolder<Identifier>,
+        pub context_type: PlaceHolder<Text>,
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct RepresentationItem {
         pub name: Label,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct RepresentationItemHolder {
+        pub name: PlaceHolder<Label>,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct RepresentationMap {
         pub mapping_origin: RepresentationItem,
         pub mapped_representation: Representation,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct RepresentationMapHolder {
+        pub mapping_origin: PlaceHolder<RepresentationItem>,
+        pub mapped_representation: PlaceHolder<Representation>,
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct SecurityClassification {
@@ -2056,13 +2999,27 @@ pub mod explicit_draughting {
         pub purpose: Text,
         pub security_level: SecurityClassificationLevel,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct SecurityClassificationHolder {
+        pub name: PlaceHolder<Label>,
+        pub purpose: PlaceHolder<Text>,
+        pub security_level: PlaceHolder<SecurityClassificationLevel>,
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct SecurityClassificationAssignment {
         pub assigned_security_classification: SecurityClassification,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct SecurityClassificationAssignmentHolder {
+        pub assigned_security_classification: PlaceHolder<SecurityClassification>,
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct SecurityClassificationLevel {
         pub name: Label,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct SecurityClassificationLevelHolder {
+        pub name: PlaceHolder<Label>,
     }
     impl ::std::ops::Deref for ShapeDefinitionRepresentation {
         type Target = PropertyDefinitionRepresentation;
@@ -2074,6 +3031,10 @@ pub mod explicit_draughting {
     pub struct ShapeDefinitionRepresentation {
         pub property_definition_representation: PropertyDefinitionRepresentation,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct ShapeDefinitionRepresentationHolder {
+        pub property_definition_representation: PlaceHolder<PropertyDefinitionRepresentation>,
+    }
     impl ::std::ops::Deref for ShapeRepresentation {
         type Target = Representation;
         fn deref(&self) -> &Self::Target {
@@ -2083,6 +3044,10 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ShapeRepresentation {
         pub representation: Representation,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct ShapeRepresentationHolder {
+        pub representation: PlaceHolder<Representation>,
     }
     impl ::std::ops::Deref for SiUnit {
         type Target = NamedUnit;
@@ -2096,6 +3061,12 @@ pub mod explicit_draughting {
         pub name: SiUnitName,
         pub named_unit: NamedUnit,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct SiUnitHolder {
+        pub prefix: Option<PlaceHolder<SiPrefix>>,
+        pub name: PlaceHolder<SiUnitName>,
+        pub named_unit: PlaceHolder<NamedUnit>,
+    }
     impl ::std::ops::Deref for StructuredDimensionCallout {
         type Target = DraughtingCallout;
         fn deref(&self) -> &Self::Target {
@@ -2105,6 +3076,10 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct StructuredDimensionCallout {
         pub draughting_callout: DraughtingCallout,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct StructuredDimensionCalloutHolder {
+        pub draughting_callout: PlaceHolder<DraughtingCallout>,
     }
     impl ::std::ops::Deref for StyledItem {
         type Target = RepresentationItem;
@@ -2118,9 +3093,19 @@ pub mod explicit_draughting {
         pub item: RepresentationItem,
         pub representation_item: RepresentationItem,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct StyledItemHolder {
+        pub styles: PlaceHolder<Vec<PresentationStyleAssignment>>,
+        pub item: PlaceHolder<RepresentationItem>,
+        pub representation_item: PlaceHolder<RepresentationItem>,
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct SymbolColour {
         pub colour_of_symbol: Colour,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct SymbolColourHolder {
+        pub colour_of_symbol: PlaceHolder<Colour>,
     }
     impl ::std::ops::Deref for SymbolRepresentation {
         type Target = Representation;
@@ -2132,6 +3117,10 @@ pub mod explicit_draughting {
     pub struct SymbolRepresentation {
         pub representation: Representation,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct SymbolRepresentationHolder {
+        pub representation: PlaceHolder<Representation>,
+    }
     impl ::std::ops::Deref for SymbolRepresentationMap {
         type Target = RepresentationMap;
         fn deref(&self) -> &Self::Target {
@@ -2142,10 +3131,19 @@ pub mod explicit_draughting {
     pub struct SymbolRepresentationMap {
         pub representation_map: RepresentationMap,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct SymbolRepresentationMapHolder {
+        pub representation_map: PlaceHolder<RepresentationMap>,
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct SymbolStyle {
         pub name: Label,
         pub style_of_symbol: SymbolStyleSelect,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct SymbolStyleHolder {
+        pub name: PlaceHolder<Label>,
+        pub style_of_symbol: PlaceHolder<SymbolStyleSelect>,
     }
     impl ::std::ops::Deref for SymbolTarget {
         type Target = GeometricRepresentationItem;
@@ -2160,6 +3158,13 @@ pub mod explicit_draughting {
         pub y_scale: PositiveRatioMeasure,
         pub geometric_representation_item: GeometricRepresentationItem,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct SymbolTargetHolder {
+        pub placement: PlaceHolder<Axis2Placement>,
+        pub x_scale: PlaceHolder<PositiveRatioMeasure>,
+        pub y_scale: PlaceHolder<PositiveRatioMeasure>,
+        pub geometric_representation_item: PlaceHolder<GeometricRepresentationItem>,
+    }
     impl ::std::ops::Deref for TerminatorSymbol {
         type Target = AnnotationSymbolOccurrence;
         fn deref(&self) -> &Self::Target {
@@ -2170,6 +3175,11 @@ pub mod explicit_draughting {
     pub struct TerminatorSymbol {
         pub annotated_curve: AnnotationCurveOccurrence,
         pub annotation_symbol_occurrence: AnnotationSymbolOccurrence,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct TerminatorSymbolHolder {
+        pub annotated_curve: PlaceHolder<AnnotationCurveOccurrence>,
+        pub annotation_symbol_occurrence: PlaceHolder<AnnotationSymbolOccurrence>,
     }
     impl ::std::ops::Deref for TextLiteral {
         type Target = GeometricRepresentationItem;
@@ -2186,6 +3196,15 @@ pub mod explicit_draughting {
         pub font: FontSelect,
         pub geometric_representation_item: GeometricRepresentationItem,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct TextLiteralHolder {
+        pub literal: PlaceHolder<PresentableText>,
+        pub placement: PlaceHolder<Axis2Placement>,
+        pub alignment: PlaceHolder<TextAlignment>,
+        pub path: PlaceHolder<TextPath>,
+        pub font: PlaceHolder<FontSelect>,
+        pub geometric_representation_item: PlaceHolder<GeometricRepresentationItem>,
+    }
     impl ::std::ops::Deref for TextLiteralWithAssociatedCurves {
         type Target = TextLiteral;
         fn deref(&self) -> &Self::Target {
@@ -2196,6 +3215,11 @@ pub mod explicit_draughting {
     pub struct TextLiteralWithAssociatedCurves {
         pub associated_curves: Vec<Curve>,
         pub text_literal: TextLiteral,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct TextLiteralWithAssociatedCurvesHolder {
+        pub associated_curves: PlaceHolder<Vec<Curve>>,
+        pub text_literal: PlaceHolder<TextLiteral>,
     }
     impl ::std::ops::Deref for TextLiteralWithBlankingBox {
         type Target = TextLiteral;
@@ -2208,6 +3232,11 @@ pub mod explicit_draughting {
         pub blanking: PlanarBox,
         pub text_literal: TextLiteral,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct TextLiteralWithBlankingBoxHolder {
+        pub blanking: PlaceHolder<PlanarBox>,
+        pub text_literal: PlaceHolder<TextLiteral>,
+    }
     impl ::std::ops::Deref for TextLiteralWithDelineation {
         type Target = TextLiteral;
         fn deref(&self) -> &Self::Target {
@@ -2218,6 +3247,11 @@ pub mod explicit_draughting {
     pub struct TextLiteralWithDelineation {
         pub delineation: TextDelineation,
         pub text_literal: TextLiteral,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct TextLiteralWithDelineationHolder {
+        pub delineation: PlaceHolder<TextDelineation>,
+        pub text_literal: PlaceHolder<TextLiteral>,
     }
     impl ::std::ops::Deref for TextLiteralWithExtent {
         type Target = TextLiteral;
@@ -2230,14 +3264,28 @@ pub mod explicit_draughting {
         pub extent: PlanarExtent,
         pub text_literal: TextLiteral,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct TextLiteralWithExtentHolder {
+        pub extent: PlaceHolder<PlanarExtent>,
+        pub text_literal: PlaceHolder<TextLiteral>,
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct TextStyle {
         pub name: Label,
         pub character_appearance: CharacterStyleSelect,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct TextStyleHolder {
+        pub name: PlaceHolder<Label>,
+        pub character_appearance: PlaceHolder<CharacterStyleSelect>,
+    }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct TextStyleForDefinedFont {
         pub text_colour: Colour,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct TextStyleForDefinedFontHolder {
+        pub text_colour: PlaceHolder<Colour>,
     }
     impl ::std::ops::Deref for TextStyleWithBoxCharacteristics {
         type Target = TextStyle;
@@ -2250,6 +3298,11 @@ pub mod explicit_draughting {
         pub characteristics: Vec<BoxCharacteristicSelect>,
         pub text_style: TextStyle,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct TextStyleWithBoxCharacteristicsHolder {
+        pub characteristics: PlaceHolder<Vec<BoxCharacteristicSelect>>,
+        pub text_style: PlaceHolder<TextStyle>,
+    }
     impl ::std::ops::Deref for TextStyleWithMirror {
         type Target = TextStyle;
         fn deref(&self) -> &Self::Target {
@@ -2260,6 +3313,11 @@ pub mod explicit_draughting {
     pub struct TextStyleWithMirror {
         pub mirror_placement: Axis2Placement,
         pub text_style: TextStyle,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct TextStyleWithMirrorHolder {
+        pub mirror_placement: PlaceHolder<Axis2Placement>,
+        pub text_style: PlaceHolder<TextStyle>,
     }
     impl ::std::ops::Deref for TrimmedCurve {
         type Target = BoundedCurve;
@@ -2276,6 +3334,15 @@ pub mod explicit_draughting {
         pub master_representation: TrimmingPreference,
         pub bounded_curve: BoundedCurve,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct TrimmedCurveHolder {
+        pub basis_curve: PlaceHolder<Curve>,
+        pub trim_1: PlaceHolder<Vec<TrimmingSelect>>,
+        pub trim_2: PlaceHolder<Vec<TrimmingSelect>>,
+        pub sense_agreement: bool,
+        pub master_representation: PlaceHolder<TrimmingPreference>,
+        pub bounded_curve: PlaceHolder<BoundedCurve>,
+    }
     impl ::std::ops::Deref for TwoDirectionRepeatFactor {
         type Target = OneDirectionRepeatFactor;
         fn deref(&self) -> &Self::Target {
@@ -2287,6 +3354,11 @@ pub mod explicit_draughting {
         pub second_repeat_factor: Vector,
         pub one_direction_repeat_factor: OneDirectionRepeatFactor,
     }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct TwoDirectionRepeatFactorHolder {
+        pub second_repeat_factor: PlaceHolder<Vector>,
+        pub one_direction_repeat_factor: PlaceHolder<OneDirectionRepeatFactor>,
+    }
     impl ::std::ops::Deref for UniformCurve {
         type Target = BSplineCurve;
         fn deref(&self) -> &Self::Target {
@@ -2296,6 +3368,10 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct UniformCurve {
         pub b_spline_curve: BSplineCurve,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct UniformCurveHolder {
+        pub b_spline_curve: PlaceHolder<BSplineCurve>,
     }
     impl ::std::ops::Deref for Vector {
         type Target = GeometricRepresentationItem;
@@ -2308,5 +3384,11 @@ pub mod explicit_draughting {
         pub orientation: Direction,
         pub magnitude: LengthMeasure,
         pub geometric_representation_item: GeometricRepresentationItem,
+    }
+    #[derive(Clone, Debug, PartialEq)]
+    pub struct VectorHolder {
+        pub orientation: PlaceHolder<Direction>,
+        pub magnitude: PlaceHolder<LengthMeasure>,
+        pub geometric_representation_item: PlaceHolder<GeometricRepresentationItem>,
     }
 }
