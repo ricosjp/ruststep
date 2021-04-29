@@ -139,9 +139,9 @@ impl ToTokens for Entity {
             }
 
             #[derive(Clone, Debug, PartialEq)]
-            pub struct #holder_name {
+            struct #holder_name {
                 #(
-                pub #attr_name : #holder_attr_type,
+                #attr_name : #holder_attr_type,
                 )*
             }
 
