@@ -16,6 +16,11 @@
 //!     p: a;
 //!     q: b;
 //!   END_ENTITY;
+//!
+//!   ENTITY a_sub;
+//!     SUBTYPE OF (a)
+//!     xx: f64;
+//!   END_ENTITY;
 //! END_SCHEMA;
 //! ```
 //!
@@ -221,6 +226,33 @@ impl Holder for CHolder {
             q: q.into_owned(tables)?,
         })
     }
+}
+
+// ```
+// ENTITY a_sub;
+//   SUBTYPE OF (a)
+//   xx: f64;
+// END_ENTITY;
+// ```
+
+pub trait ARef {}
+
+impl dyn ARef + 'static {
+    pub fn is<Sub: ARef + 'static>(&self) -> bool {
+        todo!()
+    }
+    pub fn downcast<Sub: ARef + 'static>(&self) -> Option<&Sub> {
+        todo!()
+    }
+    pub fn downcast_mut<Sub: ARef + 'static>(&mut self) -> Option<&mut Sub> {
+        todo!()
+    }
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct ASub {
+    a: A,
+    xx: f64,
 }
 
 #[cfg(test)]
