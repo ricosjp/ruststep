@@ -72,12 +72,12 @@ impl ToTokens for Entity {
         // EXPRESS identifier should be snake_case, but Rust struct should be PascalCase.
         let name = format_ident!("{}", self.name.to_pascal_case());
 
-        let attr_name: Vec<_> = self
+        let mut attr_name: Vec<_> = self
             .attributes
             .iter()
             .map(|EntityAttribute { name, .. }| format_ident!("{}", name))
             .collect();
-        let attr_type: Vec<_> = self
+        let mut attr_type: Vec<_> = self
             .attributes
             .iter()
             .map(|EntityAttribute { ty, optional, .. }| {
@@ -90,48 +90,36 @@ impl ToTokens for Entity {
             .collect();
 
         if let Some(subtypes) = &self.subtypes {
-            let attrs: Vec<_> = subtypes
-                .iter()
-                .map(|ty| match ty {
-                    TypeRef::Named { name, .. } => format_ident!("{}", name),
-                    _ => panic!(),
-                })
-                .collect();
-            tokens.append_all(quote! {
-                #[derive(Clone, Debug, PartialEq, derive_new::new)]
-                pub struct #name {
-                    #(
-                    pub #attrs: #subtypes,
-                    )*
-                    #(
-                    pub #attr_name : #attr_type,
-                    )*
-                }
-            });
+            for ty in subtypes {
+                let (attr, ty) = match ty {
+                    TypeRef::Named { name, .. } => (format_ident!("{}", name), ty),
+                    _ => unreachable!(),
+                };
 
-            // impl Deref for single subtype case
-            if subtypes.len() == 1 {
-                let attr = &attrs[0];
-                let subtype = &subtypes[0];
-                tokens.append_all(quote! {
-                    impl ::std::ops::Deref for #name {
-                        type Target = #subtype;
-                        fn deref(&self) -> &Self::Target {
-                            &self.#attr
+                // impl Deref for single subtype case
+                if subtypes.len() == 1 {
+                    tokens.append_all(quote! {
+                        impl ::std::ops::Deref for #name {
+                            type Target = #ty;
+                            fn deref(&self) -> &Self::Target {
+                                &self.#attr
+                            }
                         }
-                    }
-                });
-            }
-        } else {
-            tokens.append_all(quote! {
-                #[derive(Clone, Debug, PartialEq, derive_new::new)]
-                pub struct #name {
-                    #(
-                    pub #attr_name : #attr_type,
-                    )*
+                    });
                 }
-            })
+
+                attr_name.push(attr);
+                attr_type.push(ty.to_token_stream());
+            }
         }
+        tokens.append_all(quote! {
+            #[derive(Clone, Debug, PartialEq, derive_new::new)]
+            pub struct #name {
+                #(
+                pub #attr_name : #attr_type,
+                )*
+            }
+        });
     }
 }
 
