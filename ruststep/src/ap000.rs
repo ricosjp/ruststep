@@ -80,7 +80,11 @@ use crate::{
     tables::*,
 };
 use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
+use std::{
+    any::{Any, TypeId},
+    collections::HashMap,
+    fmt::Debug,
+};
 
 #[cfg(doc)]
 use crate::tables;
@@ -235,25 +239,54 @@ impl Holder for CHolder {
 // END_ENTITY;
 // ```
 
-pub trait ARef {}
+/// custom `Any` trait for entity `a`
+///
+/// ```
+/// use ruststep::ap000::*;
+///
+/// let a = A { x: 1.0, y: 1.0 };
+/// let sub = ASub { a, xx: 1.0 };
+///
+/// let sub_r = &sub as &dyn ARef;
+///
+/// // call Debug for ASub by dispatch
+/// dbg!(&sub_r);
+///
+/// let sub2: &ASub = sub_r.downcast_ref().unwrap();
+/// ```
+pub trait ARef: Any + Debug {}
+impl ARef for A {}
 
 impl dyn ARef + 'static {
     pub fn is<Sub: ARef + 'static>(&self) -> bool {
-        todo!()
+        self.type_id() == TypeId::of::<Sub>()
     }
-    pub fn downcast<Sub: ARef + 'static>(&self) -> Option<&Sub> {
-        todo!()
+    pub fn downcast_ref<Sub: ARef + 'static>(&self) -> Option<&Sub> {
+        if self.is::<Sub>() {
+            // See also the document of core::any::Any
+            // https://doc.rust-lang.org/src/core/any.rs.html#220
+            unsafe { Some(&*(self as *const dyn ARef as *const Sub)) }
+        } else {
+            None
+        }
     }
     pub fn downcast_mut<Sub: ARef + 'static>(&mut self) -> Option<&mut Sub> {
-        todo!()
+        if self.is::<Sub>() {
+            // See also the document of core::any::Any
+            // https://doc.rust-lang.org/src/core/any.rs.html#256
+            unsafe { Some(&mut *(self as *mut dyn ARef as *mut Sub)) }
+        } else {
+            None
+        }
     }
 }
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct ASub {
-    a: A,
-    xx: f64,
+    pub a: A,
+    pub xx: f64,
 }
+impl ARef for ASub {}
 
 #[cfg(test)]
 mod tests {
