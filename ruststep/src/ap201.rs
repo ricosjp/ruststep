@@ -1976,6 +1976,1112 @@ pub mod explicit_draughting {
                 .map(move |value| value.into_owned(&self))
         }
     }
+    impl EntityTable<AddressHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&AddressHolder> {
+            self.address.get_entity(id)
+        }
+    }
+    impl EntityTable<AngularDimensionHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&AngularDimensionHolder> {
+            self.angular_dimension.get_entity(id)
+        }
+    }
+    impl EntityTable<AnnotationCurveOccurrenceHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&AnnotationCurveOccurrenceHolder> {
+            self.annotation_curve_occurrence.get_entity(id)
+        }
+    }
+    impl EntityTable<AnnotationFillAreaHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&AnnotationFillAreaHolder> {
+            self.annotation_fill_area.get_entity(id)
+        }
+    }
+    impl EntityTable<AnnotationFillAreaOccurrenceHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&AnnotationFillAreaOccurrenceHolder> {
+            self.annotation_fill_area_occurrence.get_entity(id)
+        }
+    }
+    impl EntityTable<AnnotationOccurrenceHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&AnnotationOccurrenceHolder> {
+            self.annotation_occurrence.get_entity(id)
+        }
+    }
+    impl EntityTable<AnnotationSubfigureOccurrenceHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&AnnotationSubfigureOccurrenceHolder> {
+            self.annotation_subfigure_occurrence.get_entity(id)
+        }
+    }
+    impl EntityTable<AnnotationSymbolHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&AnnotationSymbolHolder> {
+            self.annotation_symbol.get_entity(id)
+        }
+    }
+    impl EntityTable<AnnotationSymbolOccurrenceHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&AnnotationSymbolOccurrenceHolder> {
+            self.annotation_symbol_occurrence.get_entity(id)
+        }
+    }
+    impl EntityTable<AnnotationTextHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&AnnotationTextHolder> {
+            self.annotation_text.get_entity(id)
+        }
+    }
+    impl EntityTable<AnnotationTextOccurrenceHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&AnnotationTextOccurrenceHolder> {
+            self.annotation_text_occurrence.get_entity(id)
+        }
+    }
+    impl EntityTable<ApplicationContextHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&ApplicationContextHolder> {
+            self.application_context.get_entity(id)
+        }
+    }
+    impl EntityTable<ApplicationContextElementHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&ApplicationContextElementHolder> {
+            self.application_context_element.get_entity(id)
+        }
+    }
+    impl EntityTable<ApplicationProtocolDefinitionHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&ApplicationProtocolDefinitionHolder> {
+            self.application_protocol_definition.get_entity(id)
+        }
+    }
+    impl EntityTable<ApprovalHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&ApprovalHolder> {
+            self.approval.get_entity(id)
+        }
+    }
+    impl EntityTable<ApprovalAssignmentHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&ApprovalAssignmentHolder> {
+            self.approval_assignment.get_entity(id)
+        }
+    }
+    impl EntityTable<ApprovalDateTimeHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&ApprovalDateTimeHolder> {
+            self.approval_date_time.get_entity(id)
+        }
+    }
+    impl EntityTable<ApprovalPersonOrganizationHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&ApprovalPersonOrganizationHolder> {
+            self.approval_person_organization.get_entity(id)
+        }
+    }
+    impl EntityTable<ApprovalRoleHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&ApprovalRoleHolder> {
+            self.approval_role.get_entity(id)
+        }
+    }
+    impl EntityTable<ApprovalStatusHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&ApprovalStatusHolder> {
+            self.approval_status.get_entity(id)
+        }
+    }
+    impl EntityTable<AreaInSetHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&AreaInSetHolder> {
+            self.area_in_set.get_entity(id)
+        }
+    }
+    impl EntityTable<Axis2Placement2DHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&Axis2Placement2DHolder> {
+            self.axis_2_placement_2d.get_entity(id)
+        }
+    }
+    impl EntityTable<BSplineCurveHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&BSplineCurveHolder> {
+            self.b_spline_curve.get_entity(id)
+        }
+    }
+    impl EntityTable<BSplineCurveWithKnotsHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&BSplineCurveWithKnotsHolder> {
+            self.b_spline_curve_with_knots.get_entity(id)
+        }
+    }
+    impl EntityTable<BezierCurveHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&BezierCurveHolder> {
+            self.bezier_curve.get_entity(id)
+        }
+    }
+    impl EntityTable<BoundedCurveHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&BoundedCurveHolder> {
+            self.bounded_curve.get_entity(id)
+        }
+    }
+    impl EntityTable<CalendarDateHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&CalendarDateHolder> {
+            self.calendar_date.get_entity(id)
+        }
+    }
+    impl EntityTable<CameraImageHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&CameraImageHolder> {
+            self.camera_image.get_entity(id)
+        }
+    }
+    impl EntityTable<CameraImage2DWithScaleHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&CameraImage2DWithScaleHolder> {
+            self.camera_image_2d_with_scale.get_entity(id)
+        }
+    }
+    impl EntityTable<CameraModelHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&CameraModelHolder> {
+            self.camera_model.get_entity(id)
+        }
+    }
+    impl EntityTable<CameraModelD2Holder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&CameraModelD2Holder> {
+            self.camera_model_d2.get_entity(id)
+        }
+    }
+    impl EntityTable<CameraUsageHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&CameraUsageHolder> {
+            self.camera_usage.get_entity(id)
+        }
+    }
+    impl EntityTable<CartesianPointHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&CartesianPointHolder> {
+            self.cartesian_point.get_entity(id)
+        }
+    }
+    impl EntityTable<CircleHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&CircleHolder> {
+            self.circle.get_entity(id)
+        }
+    }
+    impl EntityTable<ColourHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&ColourHolder> {
+            self.colour.get_entity(id)
+        }
+    }
+    impl EntityTable<ColourRgbHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&ColourRgbHolder> {
+            self.colour_rgb.get_entity(id)
+        }
+    }
+    impl EntityTable<ColourSpecificationHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&ColourSpecificationHolder> {
+            self.colour_specification.get_entity(id)
+        }
+    }
+    impl EntityTable<CompositeCurveHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&CompositeCurveHolder> {
+            self.composite_curve.get_entity(id)
+        }
+    }
+    impl EntityTable<CompositeCurveSegmentHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&CompositeCurveSegmentHolder> {
+            self.composite_curve_segment.get_entity(id)
+        }
+    }
+    impl EntityTable<CompositeTextHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&CompositeTextHolder> {
+            self.composite_text.get_entity(id)
+        }
+    }
+    impl EntityTable<CompositeTextWithAssociatedCurvesHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&CompositeTextWithAssociatedCurvesHolder> {
+            self.composite_text_with_associated_curves.get_entity(id)
+        }
+    }
+    impl EntityTable<CompositeTextWithBlankingBoxHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&CompositeTextWithBlankingBoxHolder> {
+            self.composite_text_with_blanking_box.get_entity(id)
+        }
+    }
+    impl EntityTable<CompositeTextWithExtentHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&CompositeTextWithExtentHolder> {
+            self.composite_text_with_extent.get_entity(id)
+        }
+    }
+    impl EntityTable<ConicHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&ConicHolder> {
+            self.conic.get_entity(id)
+        }
+    }
+    impl EntityTable<ContextDependentInvisibilityHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&ContextDependentInvisibilityHolder> {
+            self.context_dependent_invisibility.get_entity(id)
+        }
+    }
+    impl EntityTable<ContractHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&ContractHolder> {
+            self.contract.get_entity(id)
+        }
+    }
+    impl EntityTable<ContractAssignmentHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&ContractAssignmentHolder> {
+            self.contract_assignment.get_entity(id)
+        }
+    }
+    impl EntityTable<ContractTypeHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&ContractTypeHolder> {
+            self.contract_type.get_entity(id)
+        }
+    }
+    impl EntityTable<ConversionBasedUnitHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&ConversionBasedUnitHolder> {
+            self.conversion_based_unit.get_entity(id)
+        }
+    }
+    impl EntityTable<CurveHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&CurveHolder> {
+            self.curve.get_entity(id)
+        }
+    }
+    impl EntityTable<CurveDimensionHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&CurveDimensionHolder> {
+            self.curve_dimension.get_entity(id)
+        }
+    }
+    impl EntityTable<CurveStyleHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&CurveStyleHolder> {
+            self.curve_style.get_entity(id)
+        }
+    }
+    impl EntityTable<CurveStyleFontHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&CurveStyleFontHolder> {
+            self.curve_style_font.get_entity(id)
+        }
+    }
+    impl EntityTable<CurveStyleFontPatternHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&CurveStyleFontPatternHolder> {
+            self.curve_style_font_pattern.get_entity(id)
+        }
+    }
+    impl EntityTable<DateHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&DateHolder> {
+            self.date.get_entity(id)
+        }
+    }
+    impl EntityTable<DatumFeatureCalloutHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&DatumFeatureCalloutHolder> {
+            self.datum_feature_callout.get_entity(id)
+        }
+    }
+    impl EntityTable<DatumTargetCalloutHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&DatumTargetCalloutHolder> {
+            self.datum_target_callout.get_entity(id)
+        }
+    }
+    impl EntityTable<DefinedSymbolHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&DefinedSymbolHolder> {
+            self.defined_symbol.get_entity(id)
+        }
+    }
+    impl EntityTable<DiameterDimensionHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&DiameterDimensionHolder> {
+            self.diameter_dimension.get_entity(id)
+        }
+    }
+    impl EntityTable<DimensionCalloutComponentRelationshipHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&DimensionCalloutComponentRelationshipHolder> {
+            self.dimension_callout_component_relationship.get_entity(id)
+        }
+    }
+    impl EntityTable<DimensionCalloutRelationshipHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&DimensionCalloutRelationshipHolder> {
+            self.dimension_callout_relationship.get_entity(id)
+        }
+    }
+    impl EntityTable<DimensionCurveHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&DimensionCurveHolder> {
+            self.dimension_curve.get_entity(id)
+        }
+    }
+    impl EntityTable<DimensionCurveDirectedCalloutHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&DimensionCurveDirectedCalloutHolder> {
+            self.dimension_curve_directed_callout.get_entity(id)
+        }
+    }
+    impl EntityTable<DimensionCurveTerminatorHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&DimensionCurveTerminatorHolder> {
+            self.dimension_curve_terminator.get_entity(id)
+        }
+    }
+    impl EntityTable<DimensionPairHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&DimensionPairHolder> {
+            self.dimension_pair.get_entity(id)
+        }
+    }
+    impl EntityTable<DimensionalExponentsHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&DimensionalExponentsHolder> {
+            self.dimensional_exponents.get_entity(id)
+        }
+    }
+    impl EntityTable<DirectionHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&DirectionHolder> {
+            self.direction.get_entity(id)
+        }
+    }
+    impl EntityTable<DocumentHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&DocumentHolder> {
+            self.document.get_entity(id)
+        }
+    }
+    impl EntityTable<DocumentReferenceHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&DocumentReferenceHolder> {
+            self.document_reference.get_entity(id)
+        }
+    }
+    impl EntityTable<DocumentTypeHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&DocumentTypeHolder> {
+            self.document_type.get_entity(id)
+        }
+    }
+    impl EntityTable<DraughtingAnnotationOccurrenceHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&DraughtingAnnotationOccurrenceHolder> {
+            self.draughting_annotation_occurrence.get_entity(id)
+        }
+    }
+    impl EntityTable<DraughtingApprovalAssignmentHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&DraughtingApprovalAssignmentHolder> {
+            self.draughting_approval_assignment.get_entity(id)
+        }
+    }
+    impl EntityTable<DraughtingCalloutHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&DraughtingCalloutHolder> {
+            self.draughting_callout.get_entity(id)
+        }
+    }
+    impl EntityTable<DraughtingCalloutRelationshipHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&DraughtingCalloutRelationshipHolder> {
+            self.draughting_callout_relationship.get_entity(id)
+        }
+    }
+    impl EntityTable<DraughtingContractAssignmentHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&DraughtingContractAssignmentHolder> {
+            self.draughting_contract_assignment.get_entity(id)
+        }
+    }
+    impl EntityTable<DraughtingDrawingRevisionHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&DraughtingDrawingRevisionHolder> {
+            self.draughting_drawing_revision.get_entity(id)
+        }
+    }
+    impl EntityTable<DraughtingElementsHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&DraughtingElementsHolder> {
+            self.draughting_elements.get_entity(id)
+        }
+    }
+    impl EntityTable<DraughtingGroupAssignmentHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&DraughtingGroupAssignmentHolder> {
+            self.draughting_group_assignment.get_entity(id)
+        }
+    }
+    impl EntityTable<DraughtingModelHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&DraughtingModelHolder> {
+            self.draughting_model.get_entity(id)
+        }
+    }
+    impl EntityTable<DraughtingOrganizationAssignmentHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&DraughtingOrganizationAssignmentHolder> {
+            self.draughting_organization_assignment.get_entity(id)
+        }
+    }
+    impl EntityTable<DraughtingPersonAndOrganizationAssignmentHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&DraughtingPersonAndOrganizationAssignmentHolder> {
+            self.draughting_person_and_organization_assignment
+                .get_entity(id)
+        }
+    }
+    impl EntityTable<DraughtingPersonAssignmentHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&DraughtingPersonAssignmentHolder> {
+            self.draughting_person_assignment.get_entity(id)
+        }
+    }
+    impl EntityTable<DraughtingPreDefinedColourHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&DraughtingPreDefinedColourHolder> {
+            self.draughting_pre_defined_colour.get_entity(id)
+        }
+    }
+    impl EntityTable<DraughtingPreDefinedCurveFontHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&DraughtingPreDefinedCurveFontHolder> {
+            self.draughting_pre_defined_curve_font.get_entity(id)
+        }
+    }
+    impl EntityTable<DraughtingPreDefinedTextFontHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&DraughtingPreDefinedTextFontHolder> {
+            self.draughting_pre_defined_text_font.get_entity(id)
+        }
+    }
+    impl EntityTable<DraughtingPresentedItemHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&DraughtingPresentedItemHolder> {
+            self.draughting_presented_item.get_entity(id)
+        }
+    }
+    impl EntityTable<DraughtingSecurityClassificationAssignmentHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&DraughtingSecurityClassificationAssignmentHolder> {
+            self.draughting_security_classification_assignment
+                .get_entity(id)
+        }
+    }
+    impl EntityTable<DraughtingSpecificationReferenceHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&DraughtingSpecificationReferenceHolder> {
+            self.draughting_specification_reference.get_entity(id)
+        }
+    }
+    impl EntityTable<DraughtingSubfigureRepresentationHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&DraughtingSubfigureRepresentationHolder> {
+            self.draughting_subfigure_representation.get_entity(id)
+        }
+    }
+    impl EntityTable<DraughtingSymbolRepresentationHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&DraughtingSymbolRepresentationHolder> {
+            self.draughting_symbol_representation.get_entity(id)
+        }
+    }
+    impl EntityTable<DraughtingTextLiteralWithDelineationHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&DraughtingTextLiteralWithDelineationHolder> {
+            self.draughting_text_literal_with_delineation.get_entity(id)
+        }
+    }
+    impl EntityTable<DraughtingTitleHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&DraughtingTitleHolder> {
+            self.draughting_title.get_entity(id)
+        }
+    }
+    impl EntityTable<DrawingDefinitionHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&DrawingDefinitionHolder> {
+            self.drawing_definition.get_entity(id)
+        }
+    }
+    impl EntityTable<DrawingRevisionHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&DrawingRevisionHolder> {
+            self.drawing_revision.get_entity(id)
+        }
+    }
+    impl EntityTable<DrawingSheetLayoutHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&DrawingSheetLayoutHolder> {
+            self.drawing_sheet_layout.get_entity(id)
+        }
+    }
+    impl EntityTable<DrawingSheetRevisionHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&DrawingSheetRevisionHolder> {
+            self.drawing_sheet_revision.get_entity(id)
+        }
+    }
+    impl EntityTable<DrawingSheetRevisionUsageHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&DrawingSheetRevisionUsageHolder> {
+            self.drawing_sheet_revision_usage.get_entity(id)
+        }
+    }
+    impl EntityTable<EllipseHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&EllipseHolder> {
+            self.ellipse.get_entity(id)
+        }
+    }
+    impl EntityTable<ExternalSourceHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&ExternalSourceHolder> {
+            self.external_source.get_entity(id)
+        }
+    }
+    impl EntityTable<ExternallyDefinedCurveFontHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&ExternallyDefinedCurveFontHolder> {
+            self.externally_defined_curve_font.get_entity(id)
+        }
+    }
+    impl EntityTable<ExternallyDefinedHatchStyleHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&ExternallyDefinedHatchStyleHolder> {
+            self.externally_defined_hatch_style.get_entity(id)
+        }
+    }
+    impl EntityTable<ExternallyDefinedItemHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&ExternallyDefinedItemHolder> {
+            self.externally_defined_item.get_entity(id)
+        }
+    }
+    impl EntityTable<ExternallyDefinedSymbolHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&ExternallyDefinedSymbolHolder> {
+            self.externally_defined_symbol.get_entity(id)
+        }
+    }
+    impl EntityTable<ExternallyDefinedTextFontHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&ExternallyDefinedTextFontHolder> {
+            self.externally_defined_text_font.get_entity(id)
+        }
+    }
+    impl EntityTable<ExternallyDefinedTileStyleHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&ExternallyDefinedTileStyleHolder> {
+            self.externally_defined_tile_style.get_entity(id)
+        }
+    }
+    impl EntityTable<FillAreaStyleHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&FillAreaStyleHolder> {
+            self.fill_area_style.get_entity(id)
+        }
+    }
+    impl EntityTable<FillAreaStyleColourHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&FillAreaStyleColourHolder> {
+            self.fill_area_style_colour.get_entity(id)
+        }
+    }
+    impl EntityTable<FillAreaStyleHatchingHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&FillAreaStyleHatchingHolder> {
+            self.fill_area_style_hatching.get_entity(id)
+        }
+    }
+    impl EntityTable<FillAreaStyleTileSymbolWithStyleHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&FillAreaStyleTileSymbolWithStyleHolder> {
+            self.fill_area_style_tile_symbol_with_style.get_entity(id)
+        }
+    }
+    impl EntityTable<FillAreaStyleTilesHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&FillAreaStyleTilesHolder> {
+            self.fill_area_style_tiles.get_entity(id)
+        }
+    }
+    impl EntityTable<GeometricCurveSetHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&GeometricCurveSetHolder> {
+            self.geometric_curve_set.get_entity(id)
+        }
+    }
+    impl EntityTable<GeometricRepresentationContextHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&GeometricRepresentationContextHolder> {
+            self.geometric_representation_context.get_entity(id)
+        }
+    }
+    impl EntityTable<GeometricRepresentationItemHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&GeometricRepresentationItemHolder> {
+            self.geometric_representation_item.get_entity(id)
+        }
+    }
+    impl EntityTable<GeometricSetHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&GeometricSetHolder> {
+            self.geometric_set.get_entity(id)
+        }
+    }
+    impl EntityTable<GeometricalToleranceCalloutHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&GeometricalToleranceCalloutHolder> {
+            self.geometrical_tolerance_callout.get_entity(id)
+        }
+    }
+    impl EntityTable<GeometricallyBounded2DWireframeRepresentationHolder> for Tables {
+        fn get_entity(
+            &self,
+            id: u64,
+        ) -> Result<&GeometricallyBounded2DWireframeRepresentationHolder> {
+            self.geometrically_bounded_2d_wireframe_representation
+                .get_entity(id)
+        }
+    }
+    impl EntityTable<GlobalUnitAssignedContextHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&GlobalUnitAssignedContextHolder> {
+            self.global_unit_assigned_context.get_entity(id)
+        }
+    }
+    impl EntityTable<GroupHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&GroupHolder> {
+            self.group.get_entity(id)
+        }
+    }
+    impl EntityTable<GroupAssignmentHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&GroupAssignmentHolder> {
+            self.group_assignment.get_entity(id)
+        }
+    }
+    impl EntityTable<GroupRelationshipHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&GroupRelationshipHolder> {
+            self.group_relationship.get_entity(id)
+        }
+    }
+    impl EntityTable<HyperbolaHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&HyperbolaHolder> {
+            self.hyperbola.get_entity(id)
+        }
+    }
+    impl EntityTable<InvisibilityHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&InvisibilityHolder> {
+            self.invisibility.get_entity(id)
+        }
+    }
+    impl EntityTable<LeaderCurveHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&LeaderCurveHolder> {
+            self.leader_curve.get_entity(id)
+        }
+    }
+    impl EntityTable<LeaderDirectedCalloutHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&LeaderDirectedCalloutHolder> {
+            self.leader_directed_callout.get_entity(id)
+        }
+    }
+    impl EntityTable<LeaderDirectedDimensionHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&LeaderDirectedDimensionHolder> {
+            self.leader_directed_dimension.get_entity(id)
+        }
+    }
+    impl EntityTable<LeaderTerminatorHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&LeaderTerminatorHolder> {
+            self.leader_terminator.get_entity(id)
+        }
+    }
+    impl EntityTable<LengthMeasureWithUnitHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&LengthMeasureWithUnitHolder> {
+            self.length_measure_with_unit.get_entity(id)
+        }
+    }
+    impl EntityTable<LengthUnitHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&LengthUnitHolder> {
+            self.length_unit.get_entity(id)
+        }
+    }
+    impl EntityTable<LineHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&LineHolder> {
+            self.line.get_entity(id)
+        }
+    }
+    impl EntityTable<LinearDimensionHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&LinearDimensionHolder> {
+            self.linear_dimension.get_entity(id)
+        }
+    }
+    impl EntityTable<MappedItemHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&MappedItemHolder> {
+            self.mapped_item.get_entity(id)
+        }
+    }
+    impl EntityTable<MeasureWithUnitHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&MeasureWithUnitHolder> {
+            self.measure_with_unit.get_entity(id)
+        }
+    }
+    impl EntityTable<NamedUnitHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&NamedUnitHolder> {
+            self.named_unit.get_entity(id)
+        }
+    }
+    impl EntityTable<OffsetCurve2DHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&OffsetCurve2DHolder> {
+            self.offset_curve_2d.get_entity(id)
+        }
+    }
+    impl EntityTable<OneDirectionRepeatFactorHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&OneDirectionRepeatFactorHolder> {
+            self.one_direction_repeat_factor.get_entity(id)
+        }
+    }
+    impl EntityTable<OrdinateDimensionHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&OrdinateDimensionHolder> {
+            self.ordinate_dimension.get_entity(id)
+        }
+    }
+    impl EntityTable<OrganizationHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&OrganizationHolder> {
+            self.organization.get_entity(id)
+        }
+    }
+    impl EntityTable<OrganizationAssignmentHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&OrganizationAssignmentHolder> {
+            self.organization_assignment.get_entity(id)
+        }
+    }
+    impl EntityTable<OrganizationRoleHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&OrganizationRoleHolder> {
+            self.organization_role.get_entity(id)
+        }
+    }
+    impl EntityTable<OrganizationalAddressHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&OrganizationalAddressHolder> {
+            self.organizational_address.get_entity(id)
+        }
+    }
+    impl EntityTable<ParabolaHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&ParabolaHolder> {
+            self.parabola.get_entity(id)
+        }
+    }
+    impl EntityTable<PersonHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&PersonHolder> {
+            self.person.get_entity(id)
+        }
+    }
+    impl EntityTable<PersonAndOrganizationHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&PersonAndOrganizationHolder> {
+            self.person_and_organization.get_entity(id)
+        }
+    }
+    impl EntityTable<PersonAndOrganizationAssignmentHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&PersonAndOrganizationAssignmentHolder> {
+            self.person_and_organization_assignment.get_entity(id)
+        }
+    }
+    impl EntityTable<PersonAndOrganizationRoleHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&PersonAndOrganizationRoleHolder> {
+            self.person_and_organization_role.get_entity(id)
+        }
+    }
+    impl EntityTable<PersonAssignmentHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&PersonAssignmentHolder> {
+            self.person_assignment.get_entity(id)
+        }
+    }
+    impl EntityTable<PersonRoleHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&PersonRoleHolder> {
+            self.person_role.get_entity(id)
+        }
+    }
+    impl EntityTable<PersonalAddressHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&PersonalAddressHolder> {
+            self.personal_address.get_entity(id)
+        }
+    }
+    impl EntityTable<PlacementHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&PlacementHolder> {
+            self.placement.get_entity(id)
+        }
+    }
+    impl EntityTable<PlanarBoxHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&PlanarBoxHolder> {
+            self.planar_box.get_entity(id)
+        }
+    }
+    impl EntityTable<PlanarExtentHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&PlanarExtentHolder> {
+            self.planar_extent.get_entity(id)
+        }
+    }
+    impl EntityTable<PlaneAngleMeasureWithUnitHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&PlaneAngleMeasureWithUnitHolder> {
+            self.plane_angle_measure_with_unit.get_entity(id)
+        }
+    }
+    impl EntityTable<PlaneAngleUnitHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&PlaneAngleUnitHolder> {
+            self.plane_angle_unit.get_entity(id)
+        }
+    }
+    impl EntityTable<PointHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&PointHolder> {
+            self.point.get_entity(id)
+        }
+    }
+    impl EntityTable<PointOnCurveHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&PointOnCurveHolder> {
+            self.point_on_curve.get_entity(id)
+        }
+    }
+    impl EntityTable<PolylineHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&PolylineHolder> {
+            self.polyline.get_entity(id)
+        }
+    }
+    impl EntityTable<PreDefinedColourHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&PreDefinedColourHolder> {
+            self.pre_defined_colour.get_entity(id)
+        }
+    }
+    impl EntityTable<PreDefinedCurveFontHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&PreDefinedCurveFontHolder> {
+            self.pre_defined_curve_font.get_entity(id)
+        }
+    }
+    impl EntityTable<PreDefinedDimensionSymbolHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&PreDefinedDimensionSymbolHolder> {
+            self.pre_defined_dimension_symbol.get_entity(id)
+        }
+    }
+    impl EntityTable<PreDefinedGeometricalToleranceSymbolHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&PreDefinedGeometricalToleranceSymbolHolder> {
+            self.pre_defined_geometrical_tolerance_symbol.get_entity(id)
+        }
+    }
+    impl EntityTable<PreDefinedItemHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&PreDefinedItemHolder> {
+            self.pre_defined_item.get_entity(id)
+        }
+    }
+    impl EntityTable<PreDefinedPointMarkerSymbolHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&PreDefinedPointMarkerSymbolHolder> {
+            self.pre_defined_point_marker_symbol.get_entity(id)
+        }
+    }
+    impl EntityTable<PreDefinedSymbolHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&PreDefinedSymbolHolder> {
+            self.pre_defined_symbol.get_entity(id)
+        }
+    }
+    impl EntityTable<PreDefinedTerminatorSymbolHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&PreDefinedTerminatorSymbolHolder> {
+            self.pre_defined_terminator_symbol.get_entity(id)
+        }
+    }
+    impl EntityTable<PreDefinedTextFontHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&PreDefinedTextFontHolder> {
+            self.pre_defined_text_font.get_entity(id)
+        }
+    }
+    impl EntityTable<PresentationAreaHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&PresentationAreaHolder> {
+            self.presentation_area.get_entity(id)
+        }
+    }
+    impl EntityTable<PresentationLayerAssignmentHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&PresentationLayerAssignmentHolder> {
+            self.presentation_layer_assignment.get_entity(id)
+        }
+    }
+    impl EntityTable<PresentationLayerUsageHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&PresentationLayerUsageHolder> {
+            self.presentation_layer_usage.get_entity(id)
+        }
+    }
+    impl EntityTable<PresentationRepresentationHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&PresentationRepresentationHolder> {
+            self.presentation_representation.get_entity(id)
+        }
+    }
+    impl EntityTable<PresentationSetHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&PresentationSetHolder> {
+            self.presentation_set.get_entity(id)
+        }
+    }
+    impl EntityTable<PresentationSizeHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&PresentationSizeHolder> {
+            self.presentation_size.get_entity(id)
+        }
+    }
+    impl EntityTable<PresentationStyleAssignmentHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&PresentationStyleAssignmentHolder> {
+            self.presentation_style_assignment.get_entity(id)
+        }
+    }
+    impl EntityTable<PresentationStyleByContextHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&PresentationStyleByContextHolder> {
+            self.presentation_style_by_context.get_entity(id)
+        }
+    }
+    impl EntityTable<PresentationViewHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&PresentationViewHolder> {
+            self.presentation_view.get_entity(id)
+        }
+    }
+    impl EntityTable<PresentedItemHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&PresentedItemHolder> {
+            self.presented_item.get_entity(id)
+        }
+    }
+    impl EntityTable<PresentedItemRepresentationHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&PresentedItemRepresentationHolder> {
+            self.presented_item_representation.get_entity(id)
+        }
+    }
+    impl EntityTable<ProductHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&ProductHolder> {
+            self.product.get_entity(id)
+        }
+    }
+    impl EntityTable<ProductContextHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&ProductContextHolder> {
+            self.product_context.get_entity(id)
+        }
+    }
+    impl EntityTable<ProductDefinitionHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&ProductDefinitionHolder> {
+            self.product_definition.get_entity(id)
+        }
+    }
+    impl EntityTable<ProductDefinitionContextHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&ProductDefinitionContextHolder> {
+            self.product_definition_context.get_entity(id)
+        }
+    }
+    impl EntityTable<ProductDefinitionFormationHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&ProductDefinitionFormationHolder> {
+            self.product_definition_formation.get_entity(id)
+        }
+    }
+    impl EntityTable<ProductDefinitionShapeHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&ProductDefinitionShapeHolder> {
+            self.product_definition_shape.get_entity(id)
+        }
+    }
+    impl EntityTable<ProjectionCurveHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&ProjectionCurveHolder> {
+            self.projection_curve.get_entity(id)
+        }
+    }
+    impl EntityTable<ProjectionDirectedCalloutHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&ProjectionDirectedCalloutHolder> {
+            self.projection_directed_callout.get_entity(id)
+        }
+    }
+    impl EntityTable<PropertyDefinitionHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&PropertyDefinitionHolder> {
+            self.property_definition.get_entity(id)
+        }
+    }
+    impl EntityTable<PropertyDefinitionRepresentationHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&PropertyDefinitionRepresentationHolder> {
+            self.property_definition_representation.get_entity(id)
+        }
+    }
+    impl EntityTable<QuasiUniformCurveHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&QuasiUniformCurveHolder> {
+            self.quasi_uniform_curve.get_entity(id)
+        }
+    }
+    impl EntityTable<RadiusDimensionHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&RadiusDimensionHolder> {
+            self.radius_dimension.get_entity(id)
+        }
+    }
+    impl EntityTable<RationalBSplineCurveHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&RationalBSplineCurveHolder> {
+            self.rational_b_spline_curve.get_entity(id)
+        }
+    }
+    impl EntityTable<RepresentationHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&RepresentationHolder> {
+            self.representation.get_entity(id)
+        }
+    }
+    impl EntityTable<RepresentationContextHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&RepresentationContextHolder> {
+            self.representation_context.get_entity(id)
+        }
+    }
+    impl EntityTable<RepresentationItemHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&RepresentationItemHolder> {
+            self.representation_item.get_entity(id)
+        }
+    }
+    impl EntityTable<RepresentationMapHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&RepresentationMapHolder> {
+            self.representation_map.get_entity(id)
+        }
+    }
+    impl EntityTable<SecurityClassificationHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&SecurityClassificationHolder> {
+            self.security_classification.get_entity(id)
+        }
+    }
+    impl EntityTable<SecurityClassificationAssignmentHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&SecurityClassificationAssignmentHolder> {
+            self.security_classification_assignment.get_entity(id)
+        }
+    }
+    impl EntityTable<SecurityClassificationLevelHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&SecurityClassificationLevelHolder> {
+            self.security_classification_level.get_entity(id)
+        }
+    }
+    impl EntityTable<ShapeDefinitionRepresentationHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&ShapeDefinitionRepresentationHolder> {
+            self.shape_definition_representation.get_entity(id)
+        }
+    }
+    impl EntityTable<ShapeRepresentationHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&ShapeRepresentationHolder> {
+            self.shape_representation.get_entity(id)
+        }
+    }
+    impl EntityTable<SiUnitHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&SiUnitHolder> {
+            self.si_unit.get_entity(id)
+        }
+    }
+    impl EntityTable<StructuredDimensionCalloutHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&StructuredDimensionCalloutHolder> {
+            self.structured_dimension_callout.get_entity(id)
+        }
+    }
+    impl EntityTable<StyledItemHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&StyledItemHolder> {
+            self.styled_item.get_entity(id)
+        }
+    }
+    impl EntityTable<SymbolColourHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&SymbolColourHolder> {
+            self.symbol_colour.get_entity(id)
+        }
+    }
+    impl EntityTable<SymbolRepresentationHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&SymbolRepresentationHolder> {
+            self.symbol_representation.get_entity(id)
+        }
+    }
+    impl EntityTable<SymbolRepresentationMapHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&SymbolRepresentationMapHolder> {
+            self.symbol_representation_map.get_entity(id)
+        }
+    }
+    impl EntityTable<SymbolStyleHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&SymbolStyleHolder> {
+            self.symbol_style.get_entity(id)
+        }
+    }
+    impl EntityTable<SymbolTargetHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&SymbolTargetHolder> {
+            self.symbol_target.get_entity(id)
+        }
+    }
+    impl EntityTable<TerminatorSymbolHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&TerminatorSymbolHolder> {
+            self.terminator_symbol.get_entity(id)
+        }
+    }
+    impl EntityTable<TextLiteralHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&TextLiteralHolder> {
+            self.text_literal.get_entity(id)
+        }
+    }
+    impl EntityTable<TextLiteralWithAssociatedCurvesHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&TextLiteralWithAssociatedCurvesHolder> {
+            self.text_literal_with_associated_curves.get_entity(id)
+        }
+    }
+    impl EntityTable<TextLiteralWithBlankingBoxHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&TextLiteralWithBlankingBoxHolder> {
+            self.text_literal_with_blanking_box.get_entity(id)
+        }
+    }
+    impl EntityTable<TextLiteralWithDelineationHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&TextLiteralWithDelineationHolder> {
+            self.text_literal_with_delineation.get_entity(id)
+        }
+    }
+    impl EntityTable<TextLiteralWithExtentHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&TextLiteralWithExtentHolder> {
+            self.text_literal_with_extent.get_entity(id)
+        }
+    }
+    impl EntityTable<TextStyleHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&TextStyleHolder> {
+            self.text_style.get_entity(id)
+        }
+    }
+    impl EntityTable<TextStyleForDefinedFontHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&TextStyleForDefinedFontHolder> {
+            self.text_style_for_defined_font.get_entity(id)
+        }
+    }
+    impl EntityTable<TextStyleWithBoxCharacteristicsHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&TextStyleWithBoxCharacteristicsHolder> {
+            self.text_style_with_box_characteristics.get_entity(id)
+        }
+    }
+    impl EntityTable<TextStyleWithMirrorHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&TextStyleWithMirrorHolder> {
+            self.text_style_with_mirror.get_entity(id)
+        }
+    }
+    impl EntityTable<TrimmedCurveHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&TrimmedCurveHolder> {
+            self.trimmed_curve.get_entity(id)
+        }
+    }
+    impl EntityTable<TwoDirectionRepeatFactorHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&TwoDirectionRepeatFactorHolder> {
+            self.two_direction_repeat_factor.get_entity(id)
+        }
+    }
+    impl EntityTable<UniformCurveHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&UniformCurveHolder> {
+            self.uniform_curve.get_entity(id)
+        }
+    }
+    impl EntityTable<VectorHolder> for Tables {
+        fn get_entity(&self, id: u64) -> Result<&VectorHolder> {
+            self.vector.get_entity(id)
+        }
+    }
     #[derive(Debug, Clone, PartialEq)]
     pub enum ApprovedItem {
         DrawingRevision(Box<DrawingRevision>),
