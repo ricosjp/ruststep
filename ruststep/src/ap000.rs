@@ -16,6 +16,17 @@
 //!     p: a;
 //!     q: b;
 //!   END_ENTITY;
+//!
+//!   -- For subtype/supertype
+//!   ENTITY base;
+//!     SUPERTYPE OF (sub)
+//!     a: f64;
+//!   END_ENTITY;
+//!
+//!   ENTITY sub;
+//!     SUBTYPE OF (base);
+//!     b: f64;
+//!   END_ENTITY;
 //! END_SCHEMA;
 //! ```
 //!
@@ -75,7 +86,12 @@ use crate::{
     tables::*,
 };
 use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
+use std::{
+    any::{Any, TypeId},
+    collections::HashMap,
+    fmt::Debug,
+    ops::{Deref, DerefMut},
+};
 
 #[cfg(doc)]
 use crate::tables;
@@ -220,6 +236,70 @@ impl Holder for CHolder {
             p: p.into_owned(tables)?,
             q: q.into_owned(tables)?,
         })
+    }
+}
+
+/// custom `Any` trait for entity `a`
+///
+/// ```
+/// use ruststep::ap000::*;
+///
+/// let base = Base { a: 1.0 };
+/// let sub = Sub { base, b: 1.0 };
+///
+/// let sub_r = &sub as &dyn BaseAny;
+///
+/// // call Debug for Sub by dispatch
+/// dbg!(&sub_r);
+///
+/// let sub2: &Sub = sub_r.downcast_ref().unwrap();
+/// ```
+pub trait BaseAny: Any + Debug {}
+impl dyn BaseAny + 'static {
+    pub fn is<Sub: BaseAny + 'static>(&self) -> bool {
+        self.type_id() == TypeId::of::<Sub>()
+    }
+    pub fn downcast_ref<Sub: BaseAny + 'static>(&self) -> Option<&Sub> {
+        if self.is::<Sub>() {
+            // See also the document of core::any::Any
+            // https://doc.rust-lang.org/src/core/any.rs.html#220
+            unsafe { Some(&*(self as *const dyn BaseAny as *const Sub)) }
+        } else {
+            None
+        }
+    }
+    pub fn downcast_mut<Sub: BaseAny + 'static>(&mut self) -> Option<&mut Sub> {
+        if self.is::<Sub>() {
+            // See also the document of core::any::Any
+            // https://doc.rust-lang.org/src/core/any.rs.html#256
+            unsafe { Some(&mut *(self as *mut dyn BaseAny as *mut Sub)) }
+        } else {
+            None
+        }
+    }
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct Base {
+    pub a: f64,
+}
+impl BaseAny for Base {}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct Sub {
+    pub base: Base,
+    pub b: f64,
+}
+impl BaseAny for Sub {}
+impl Deref for Sub {
+    type Target = Base;
+    fn deref(&self) -> &Self::Target {
+        &self.base
+    }
+}
+impl DerefMut for Sub {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.base
     }
 }
 
