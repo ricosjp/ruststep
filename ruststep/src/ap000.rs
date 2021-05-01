@@ -17,9 +17,15 @@
 //!     q: b;
 //!   END_ENTITY;
 //!
-//!   ENTITY a_sub;
-//!     SUBTYPE OF (a)
-//!     xx: f64;
+//!   -- For subtype/supertype
+//!   ENTITY base;
+//!     SUPERTYPE OF (sub)
+//!     a: f64;
+//!   END_ENTITY;
+//!
+//!   ENTITY sub;
+//!     SUBTYPE OF (base);
+//!     b: f64;
 //!   END_ENTITY;
 //! END_SCHEMA;
 //! ```
@@ -84,6 +90,7 @@ use std::{
     any::{Any, TypeId},
     collections::HashMap,
     fmt::Debug,
+    ops::{Deref, DerefMut},
 };
 
 #[cfg(doc)]
@@ -232,49 +239,40 @@ impl Holder for CHolder {
     }
 }
 
-// ```
-// ENTITY a_sub;
-//   SUBTYPE OF (a)
-//   xx: f64;
-// END_ENTITY;
-// ```
-
 /// custom `Any` trait for entity `a`
 ///
 /// ```
 /// use ruststep::ap000::*;
 ///
-/// let a = A { x: 1.0, y: 1.0 };
-/// let sub = ASub { a, xx: 1.0 };
+/// let base = Base { a: 1.0 };
+/// let sub = Sub { base, b: 1.0 };
 ///
-/// let sub_r = &sub as &dyn ARef;
+/// let sub_r = &sub as &dyn BaseAny;
 ///
-/// // call Debug for ASub by dispatch
+/// // call Debug for Sub by dispatch
 /// dbg!(&sub_r);
 ///
-/// let sub2: &ASub = sub_r.downcast_ref().unwrap();
+/// let sub2: &Sub = sub_r.downcast_ref().unwrap();
 /// ```
-pub trait ARef: Any + Debug {}
-impl ARef for A {}
-
-impl dyn ARef + 'static {
-    pub fn is<Sub: ARef + 'static>(&self) -> bool {
+pub trait BaseAny: Any + Debug {}
+impl dyn BaseAny + 'static {
+    pub fn is<Sub: BaseAny + 'static>(&self) -> bool {
         self.type_id() == TypeId::of::<Sub>()
     }
-    pub fn downcast_ref<Sub: ARef + 'static>(&self) -> Option<&Sub> {
+    pub fn downcast_ref<Sub: BaseAny + 'static>(&self) -> Option<&Sub> {
         if self.is::<Sub>() {
             // See also the document of core::any::Any
             // https://doc.rust-lang.org/src/core/any.rs.html#220
-            unsafe { Some(&*(self as *const dyn ARef as *const Sub)) }
+            unsafe { Some(&*(self as *const dyn BaseAny as *const Sub)) }
         } else {
             None
         }
     }
-    pub fn downcast_mut<Sub: ARef + 'static>(&mut self) -> Option<&mut Sub> {
+    pub fn downcast_mut<Sub: BaseAny + 'static>(&mut self) -> Option<&mut Sub> {
         if self.is::<Sub>() {
             // See also the document of core::any::Any
             // https://doc.rust-lang.org/src/core/any.rs.html#256
-            unsafe { Some(&mut *(self as *mut dyn ARef as *mut Sub)) }
+            unsafe { Some(&mut *(self as *mut dyn BaseAny as *mut Sub)) }
         } else {
             None
         }
@@ -282,11 +280,28 @@ impl dyn ARef + 'static {
 }
 
 #[derive(Debug, Clone, PartialEq)]
-pub struct ASub {
-    pub a: A,
-    pub xx: f64,
+pub struct Base {
+    pub a: f64,
 }
-impl ARef for ASub {}
+impl BaseAny for Base {}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct Sub {
+    pub base: Base,
+    pub b: f64,
+}
+impl BaseAny for Sub {}
+impl Deref for Sub {
+    type Target = Base;
+    fn deref(&self) -> &Self::Target {
+        &self.base
+    }
+}
+impl DerefMut for Sub {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.base
+    }
+}
 
 #[cfg(test)]
 mod tests {
