@@ -8,7 +8,7 @@ pub struct Names {
     /// Declared as `SCHEMA`
     schemas: Vec<String>,
     /// Declared as `ENTITY`
-    entities: Vec<String>,
+    entities: Vec<(String, bool /* is supertype */)>,
     /// Declared as an attribute
     attributes: Vec<String>,
     /// Declared as `TYPE`
@@ -53,7 +53,23 @@ impl Namespace {
                 current_scope.clone(),
                 Names {
                     schemas: Vec::new(),
-                    entities: schema.entities.iter().map(|e| e.name.clone()).collect(),
+                    entities: schema
+                        .entities
+                        .iter()
+                        .map(|e| {
+                            let name = e.name.clone();
+                            if let Some(c) = e.constraint {
+                                use ast::entity::Constraint;
+                                match c {
+                                    Constraint::AbstractSuperType(..)
+                                    | Constraint::SuperTypeRule(..) => (name, true),
+                                    Constraint::AbstractEntity => (name, false),
+                                }
+                            } else {
+                                (name, false)
+                            }
+                        })
+                        .collect(),
                     attributes: Vec::new(),
                     types: schema.types.iter().map(|e| e.type_id.clone()).collect(),
                 },
@@ -84,11 +100,12 @@ impl Namespace {
                 .0
                 .get(&scope)
                 .expect("Scope is not belong to the namespace");
-            for entity_name in &ns.entities {
+            for (entity_name, is_supertype) in &ns.entities {
                 if name == entity_name {
-                    return Ok(TypeRef::Named {
+                    return Ok(TypeRef::Entity {
                         name: name.to_string(),
-                        scope: scope,
+                        scope,
+                        is_supertype: *is_supertype,
                     });
                 }
             }
@@ -96,7 +113,7 @@ impl Namespace {
                 if name == ty {
                     return Ok(TypeRef::Named {
                         name: ty.to_string(),
-                        scope: scope,
+                        scope,
                     });
                 }
             }

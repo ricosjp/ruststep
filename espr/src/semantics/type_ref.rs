@@ -25,6 +25,11 @@ pub enum TypeRef {
         name: String,
         scope: Scope,
     },
+    Entity {
+        name: String,
+        scope: Scope,
+        is_supertype: bool,
+    },
     SimpleType(ast::types::SimpleType),
     Set {
         base: Box<TypeRef>,
@@ -102,6 +107,18 @@ impl ToTokens for TypeRef {
             Named { name, .. } => {
                 let name = format_ident!("{}", name.to_pascal_case());
                 tokens.append_all(quote! { #name });
+            }
+            Entity {
+                name, is_supertype, ..
+            } => {
+                if *is_supertype {
+                    // TODO use Box<dyn Any>
+                    let name = format_ident!("{}", name.to_pascal_case());
+                    tokens.append_all(quote! { #name });
+                } else {
+                    let name = format_ident!("{}", name.to_pascal_case());
+                    tokens.append_all(quote! { #name });
+                }
             }
             Set { base, .. } | List { base, .. } => {
                 tokens.append_all(quote! { Vec<#base> });
