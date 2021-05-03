@@ -70,18 +70,44 @@ impl ToTokens for TypeDecl {
                     .map(|i| format_ident!("{}", i.to_pascal_case()))
                     .collect();
                 tokens.append_all(quote! {
-                    #[derive(Debug, Clone, PartialEq)]
+                    #[derive(Debug)]
                     pub enum #id {
                         #( #items ),*
                     }
                 });
             }
-            UnderlyingType::Select(types) => tokens.append_all(quote! {
-                #[derive(Debug, Clone, PartialEq)]
-                pub enum #id {
-                    #(#types(Box<#types>)),*
+            UnderlyingType::Select(types) => {
+                let mut entries = Vec::new();
+                let mut entry_types = Vec::new();
+                for ty in types {
+                    match ty {
+                        TypeRef::Entity {
+                            name,
+                            has_supertype_decl,
+                            ..
+                        } => {
+                            let name = format_ident!("{}", name.to_pascal_case());
+                            entries.push(quote! { #name });
+                            if *has_supertype_decl {
+                                // avoid Box<Box<XxxAny>>
+                                entry_types.push(quote! { #ty });
+                            } else {
+                                entry_types.push(quote! { Box<#ty> });
+                            }
+                        }
+                        _ => {
+                            entries.push(ty.to_token_stream());
+                            entry_types.push(quote! { Box<#ty> });
+                        }
+                    }
                 }
-            }),
+                tokens.append_all(quote! {
+                    #[derive(Debug)]
+                    pub enum #id {
+                        #(#entries(#entry_types)),*
+                    }
+                });
+            }
         }
     }
 }

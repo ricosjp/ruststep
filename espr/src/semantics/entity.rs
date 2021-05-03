@@ -11,6 +11,8 @@ pub struct Entity {
     pub holder_name: String,
     pub attributes: Vec<EntityAttribute>,
     pub subtypes: Option<Vec<TypeRef>>,
+    /// FIXME This assumes that `SUPERTYPE` declaration exists for all supertypes.
+    pub has_supertype_decl: bool,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -67,6 +69,7 @@ impl Legalize for Entity {
             name,
             attributes,
             subtypes,
+            has_supertype_decl: entity.has_supertype_decl(),
         })
     }
 }
@@ -104,34 +107,38 @@ impl ToTokens for Entity {
         if let Some(subtypes) = &self.subtypes {
             for ty in subtypes {
                 let (attr, ty) = match ty {
-                    TypeRef::Named { name, .. } => (format_ident!("{}", name), ty),
+                    TypeRef::Named { name, .. } | TypeRef::Entity { name, .. } => {
+                        (format_ident!("{}", name), ty)
+                    }
                     _ => unreachable!(),
                 };
 
-                // impl Deref for single subtype case
-                // This is in for-loop to use `attr` and `ty` in `quote!`
-                if subtypes.len() == 1 {
-                    tokens.append_all(quote! {
-                        impl ::std::ops::Deref for #name {
-                            type Target = #ty;
-                            fn deref(&self) -> &Self::Target {
-                                &self.#attr
-                            }
-                        }
-                    });
-                }
-
                 attr_name.push(attr);
                 attr_type.push(ty.to_token_stream());
+
                 match ty {
                     TypeRef::SimpleType(..) => holder_attr_type.push(quote! { #ty }),
                     _ => holder_attr_type.push(quote! { PlaceHolder<#ty> }),
+                }
+
+                if let TypeRef::Entity {
+                    name: supertype_name,
+                    has_supertype_decl,
+                    ..
+                } = ty
+                {
+                    if *has_supertype_decl {
+                        let any_trait = format_ident!("{}Any", supertype_name.to_pascal_case());
+                        tokens.append_all(quote! {
+                            impl #any_trait for #name {}
+                        });
+                    }
                 }
             }
         }
 
         tokens.append_all(quote! {
-            #[derive(Clone, Debug, PartialEq, derive_new::new)]
+            #[derive(Debug, derive_new::new)]
             pub struct #name {
                 #(
                 pub #attr_name : #attr_type,
@@ -153,6 +160,16 @@ impl ToTokens for Entity {
                 }
             }
         });
+
+        if self.has_supertype_decl {
+            let trait_name = format_ident!("{}Any", name);
+            tokens.append_all(quote! {
+                pub trait #trait_name : ::std::any::Any + ::std::fmt::Debug {}
+            });
+            tokens.append_all(quote! {
+                impl #trait_name for #name {}
+            });
+        }
     }
 }
 
