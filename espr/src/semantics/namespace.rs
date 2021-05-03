@@ -58,7 +58,7 @@ impl Namespace {
                         .iter()
                         .map(|e| {
                             let name = e.name.clone();
-                            if let Some(c) = e.constraint {
+                            if let Some(c) = &e.constraint {
                                 use ast::entity::Constraint;
                                 match c {
                                     Constraint::AbstractSuperType(..)
