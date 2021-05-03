@@ -376,6 +376,7 @@ pub mod explicit_draughting {
             &self.annotation_occurrence
         }
     }
+    impl AnnotationOccurrenceAny for AnnotationCurveOccurrence {}
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct AnnotationCurveOccurrence {
         pub annotation_occurrence: AnnotationOccurrence,
@@ -386,6 +387,7 @@ pub mod explicit_draughting {
             &self.geometric_representation_item
         }
     }
+    impl GeometricRepresentationItemAny for AnnotationFillArea {}
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct AnnotationFillArea {
         pub boundaries: Vec<Curve>,
@@ -397,6 +399,7 @@ pub mod explicit_draughting {
             &self.annotation_occurrence
         }
     }
+    impl AnnotationOccurrenceAny for AnnotationFillAreaOccurrence {}
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct AnnotationFillAreaOccurrence {
         pub fill_style_target: Point,
@@ -440,6 +443,7 @@ pub mod explicit_draughting {
             &self.annotation_occurrence
         }
     }
+    impl AnnotationOccurrenceAny for AnnotationSymbolOccurrence {}
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct AnnotationSymbolOccurrence {
         pub annotation_occurrence: AnnotationOccurrence,
@@ -460,6 +464,7 @@ pub mod explicit_draughting {
             &self.annotation_occurrence
         }
     }
+    impl AnnotationOccurrenceAny for AnnotationTextOccurrence {}
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct AnnotationTextOccurrence {
         pub annotation_occurrence: AnnotationOccurrence,
@@ -523,6 +528,7 @@ pub mod explicit_draughting {
             &self.placement
         }
     }
+    impl PlacementAny for Axis2Placement2D {}
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Axis2Placement2D {
         pub ref_direction: Option<Direction>,
@@ -534,6 +540,7 @@ pub mod explicit_draughting {
             &self.bounded_curve
         }
     }
+    impl BoundedCurveAny for BSplineCurve {}
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct BSplineCurve {
         pub degree: i64,
@@ -551,6 +558,7 @@ pub mod explicit_draughting {
             &self.b_spline_curve
         }
     }
+    impl BSplineCurveAny for BSplineCurveWithKnots {}
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct BSplineCurveWithKnots {
         pub knot_multiplicities: Vec<i64>,
@@ -564,6 +572,7 @@ pub mod explicit_draughting {
             &self.b_spline_curve
         }
     }
+    impl BSplineCurveAny for BezierCurve {}
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct BezierCurve {
         pub b_spline_curve: BSplineCurve,
@@ -574,6 +583,7 @@ pub mod explicit_draughting {
             &self.curve
         }
     }
+    impl CurveAny for BoundedCurve {}
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct BoundedCurve {
         pub curve: Curve,
@@ -586,6 +596,7 @@ pub mod explicit_draughting {
             &self.date
         }
     }
+    impl DateAny for CalendarDate {}
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct CalendarDate {
         pub day_component: DayInMonthNumber,
@@ -618,6 +629,7 @@ pub mod explicit_draughting {
             &self.geometric_representation_item
         }
     }
+    impl GeometricRepresentationItemAny for CameraModel {}
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct CameraModel {
         pub geometric_representation_item: GeometricRepresentationItem,
@@ -630,6 +642,7 @@ pub mod explicit_draughting {
             &self.camera_model
         }
     }
+    impl CameraModelAny for CameraModelD2 {}
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct CameraModelD2 {
         pub view_window: PlanarBox,
@@ -652,6 +665,7 @@ pub mod explicit_draughting {
             &self.point
         }
     }
+    impl PointAny for CartesianPoint {}
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct CartesianPoint {
         pub coordinates: Vec<LengthMeasure>,
@@ -663,6 +677,7 @@ pub mod explicit_draughting {
             &self.conic
         }
     }
+    impl ConicAny for Circle {}
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Circle {
         pub radius: PositiveLengthMeasure,
@@ -700,6 +715,7 @@ pub mod explicit_draughting {
             &self.bounded_curve
         }
     }
+    impl BoundedCurveAny for CompositeCurve {}
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct CompositeCurve {
         pub segments: Vec<CompositeCurveSegment>,
@@ -718,6 +734,7 @@ pub mod explicit_draughting {
             &self.geometric_representation_item
         }
     }
+    impl GeometricRepresentationItemAny for CompositeText {}
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct CompositeText {
         pub collected_text: Vec<TextOrCharacter>,
@@ -762,6 +779,7 @@ pub mod explicit_draughting {
             &self.curve
         }
     }
+    impl CurveAny for Conic {}
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Conic {
         pub position: Axis2Placement,
@@ -802,6 +820,7 @@ pub mod explicit_draughting {
             &self.named_unit
         }
     }
+    impl NamedUnitAny for ConversionBasedUnit {}
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ConversionBasedUnit {
         pub name: Label,
@@ -814,6 +833,7 @@ pub mod explicit_draughting {
             &self.geometric_representation_item
         }
     }
+    impl GeometricRepresentationItemAny for Curve {}
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Curve {
         pub geometric_representation_item: GeometricRepresentationItem,
@@ -879,6 +899,7 @@ pub mod explicit_draughting {
             &self.geometric_representation_item
         }
     }
+    impl GeometricRepresentationItemAny for DefinedSymbol {}
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DefinedSymbol {
         pub definition: DefinedSymbolSelect,
@@ -972,6 +993,7 @@ pub mod explicit_draughting {
             &self.geometric_representation_item
         }
     }
+    impl GeometricRepresentationItemAny for Direction {}
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Direction {
         pub direction_ratios: Vec<f64>,
@@ -1001,6 +1023,7 @@ pub mod explicit_draughting {
             &self.annotation_occurrence
         }
     }
+    impl AnnotationOccurrenceAny for DraughtingAnnotationOccurrence {}
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DraughtingAnnotationOccurrence {
         pub annotation_occurrence: AnnotationOccurrence,
@@ -1011,6 +1034,7 @@ pub mod explicit_draughting {
             &self.approval_assignment
         }
     }
+    impl ApprovalAssignmentAny for DraughtingApprovalAssignment {}
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DraughtingApprovalAssignment {
         pub approved_items: Vec<ApprovedItem>,
@@ -1022,6 +1046,7 @@ pub mod explicit_draughting {
             &self.geometric_representation_item
         }
     }
+    impl GeometricRepresentationItemAny for DraughtingCallout {}
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DraughtingCallout {
         pub contents: Vec<DraughtingCalloutElement>,
@@ -1040,6 +1065,7 @@ pub mod explicit_draughting {
             &self.contract_assignment
         }
     }
+    impl ContractAssignmentAny for DraughtingContractAssignment {}
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DraughtingContractAssignment {
         pub items: Vec<ContractedItem>,
@@ -1071,6 +1097,7 @@ pub mod explicit_draughting {
             &self.group_assignment
         }
     }
+    impl GroupAssignmentAny for DraughtingGroupAssignment {}
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DraughtingGroupAssignment {
         pub items: Vec<DraughtingGroupedItem>,
@@ -1092,6 +1119,7 @@ pub mod explicit_draughting {
             &self.organization_assignment
         }
     }
+    impl OrganizationAssignmentAny for DraughtingOrganizationAssignment {}
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DraughtingOrganizationAssignment {
         pub assigned_items: Vec<DraughtingOrganizationItem>,
@@ -1103,6 +1131,7 @@ pub mod explicit_draughting {
             &self.person_and_organization_assignment
         }
     }
+    impl PersonAndOrganizationAssignmentAny for DraughtingPersonAndOrganizationAssignment {}
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DraughtingPersonAndOrganizationAssignment {
         pub assigned_items: Vec<DraughtingOrganizationItem>,
@@ -1114,6 +1143,7 @@ pub mod explicit_draughting {
             &self.person_assignment
         }
     }
+    impl PersonAssignmentAny for DraughtingPersonAssignment {}
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DraughtingPersonAssignment {
         pub assigned_items: Vec<DraughtingOrganizationItem>,
@@ -1155,6 +1185,7 @@ pub mod explicit_draughting {
             &self.presented_item
         }
     }
+    impl PresentedItemAny for DraughtingPresentedItem {}
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DraughtingPresentedItem {
         pub items: Vec<DraughtingPresentedItemSelect>,
@@ -1166,6 +1197,7 @@ pub mod explicit_draughting {
             &self.security_classification_assignment
         }
     }
+    impl SecurityClassificationAssignmentAny for DraughtingSecurityClassificationAssignment {}
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DraughtingSecurityClassificationAssignment {
         pub assigned_items: Vec<ClassifiedItem>,
@@ -1177,6 +1209,7 @@ pub mod explicit_draughting {
             &self.document_reference
         }
     }
+    impl DocumentReferenceAny for DraughtingSpecificationReference {}
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DraughtingSpecificationReference {
         pub specified_items: Vec<SpecifiedItem>,
@@ -1274,6 +1307,7 @@ pub mod explicit_draughting {
             &self.conic
         }
     }
+    impl ConicAny for Ellipse {}
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Ellipse {
         pub semi_axis_1: PositiveLengthMeasure,
@@ -1294,6 +1328,7 @@ pub mod explicit_draughting {
     pub struct ExternallyDefinedCurveFont {
         pub externally_defined_item: ExternallyDefinedItem,
     }
+    impl GeometricRepresentationItemAny for ExternallyDefinedHatchStyle {}
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ExternallyDefinedHatchStyle {
         pub externally_defined_item: ExternallyDefinedItem,
@@ -1324,6 +1359,7 @@ pub mod explicit_draughting {
     pub struct ExternallyDefinedTextFont {
         pub externally_defined_item: ExternallyDefinedItem,
     }
+    impl GeometricRepresentationItemAny for ExternallyDefinedTileStyle {}
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ExternallyDefinedTileStyle {
         pub externally_defined_item: ExternallyDefinedItem,
@@ -1345,6 +1381,7 @@ pub mod explicit_draughting {
             &self.geometric_representation_item
         }
     }
+    impl GeometricRepresentationItemAny for FillAreaStyleHatching {}
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct FillAreaStyleHatching {
         pub hatch_line_appearance: CurveStyle,
@@ -1360,6 +1397,7 @@ pub mod explicit_draughting {
             &self.geometric_representation_item
         }
     }
+    impl GeometricRepresentationItemAny for FillAreaStyleTileSymbolWithStyle {}
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct FillAreaStyleTileSymbolWithStyle {
         pub symbol: AnnotationSymbolOccurrence,
@@ -1371,6 +1409,7 @@ pub mod explicit_draughting {
             &self.geometric_representation_item
         }
     }
+    impl GeometricRepresentationItemAny for FillAreaStyleTiles {}
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct FillAreaStyleTiles {
         pub tiling_pattern: TwoDirectionRepeatFactor,
@@ -1384,6 +1423,7 @@ pub mod explicit_draughting {
             &self.geometric_set
         }
     }
+    impl GeometricSetAny for GeometricCurveSet {}
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct GeometricCurveSet {
         pub geometric_set: GeometricSet,
@@ -1417,6 +1457,7 @@ pub mod explicit_draughting {
             &self.geometric_representation_item
         }
     }
+    impl GeometricRepresentationItemAny for GeometricSet {}
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct GeometricSet {
         pub elements: Vec<GeometricSetSelect>,
@@ -1479,6 +1520,7 @@ pub mod explicit_draughting {
             &self.conic
         }
     }
+    impl ConicAny for Hyperbola {}
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Hyperbola {
         pub semi_axis: PositiveLengthMeasure,
@@ -1535,6 +1577,7 @@ pub mod explicit_draughting {
             &self.measure_with_unit
         }
     }
+    impl MeasureWithUnitAny for LengthMeasureWithUnit {}
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct LengthMeasureWithUnit {
         pub measure_with_unit: MeasureWithUnit,
@@ -1545,6 +1588,7 @@ pub mod explicit_draughting {
             &self.named_unit
         }
     }
+    impl NamedUnitAny for LengthUnit {}
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct LengthUnit {
         pub named_unit: NamedUnit,
@@ -1555,6 +1599,7 @@ pub mod explicit_draughting {
             &self.curve
         }
     }
+    impl CurveAny for Line {}
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Line {
         pub pnt: CartesianPoint,
@@ -1602,6 +1647,7 @@ pub mod explicit_draughting {
             &self.curve
         }
     }
+    impl CurveAny for OffsetCurve2D {}
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct OffsetCurve2D {
         pub basis_curve: Curve,
@@ -1615,6 +1661,7 @@ pub mod explicit_draughting {
             &self.geometric_representation_item
         }
     }
+    impl GeometricRepresentationItemAny for OneDirectionRepeatFactor {}
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct OneDirectionRepeatFactor {
         pub repeat_factor: Vector,
@@ -1665,6 +1712,7 @@ pub mod explicit_draughting {
             &self.conic
         }
     }
+    impl ConicAny for Parabola {}
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Parabola {
         pub focal_dist: LengthMeasure,
@@ -1724,6 +1772,7 @@ pub mod explicit_draughting {
             &self.geometric_representation_item
         }
     }
+    impl GeometricRepresentationItemAny for Placement {}
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Placement {
         pub location: CartesianPoint,
@@ -1748,6 +1797,7 @@ pub mod explicit_draughting {
             &self.geometric_representation_item
         }
     }
+    impl GeometricRepresentationItemAny for PlanarExtent {}
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PlanarExtent {
         pub size_in_x: LengthMeasure,
@@ -1760,6 +1810,7 @@ pub mod explicit_draughting {
             &self.measure_with_unit
         }
     }
+    impl MeasureWithUnitAny for PlaneAngleMeasureWithUnit {}
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PlaneAngleMeasureWithUnit {
         pub measure_with_unit: MeasureWithUnit,
@@ -1770,6 +1821,7 @@ pub mod explicit_draughting {
             &self.named_unit
         }
     }
+    impl NamedUnitAny for PlaneAngleUnit {}
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PlaneAngleUnit {
         pub named_unit: NamedUnit,
@@ -1780,6 +1832,7 @@ pub mod explicit_draughting {
             &self.geometric_representation_item
         }
     }
+    impl GeometricRepresentationItemAny for Point {}
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Point {
         pub geometric_representation_item: GeometricRepresentationItem,
@@ -1792,6 +1845,7 @@ pub mod explicit_draughting {
             &self.point
         }
     }
+    impl PointAny for PointOnCurve {}
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PointOnCurve {
         pub basis_curve: Curve,
@@ -1804,6 +1858,7 @@ pub mod explicit_draughting {
             &self.bounded_curve
         }
     }
+    impl BoundedCurveAny for Polyline {}
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Polyline {
         pub points: Vec<CartesianPoint>,
@@ -1973,6 +2028,7 @@ pub mod explicit_draughting {
             &self.application_context_element
         }
     }
+    impl ApplicationContextElementAny for ProductContext {}
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ProductContext {
         pub discipline_type: Label,
@@ -1991,6 +2047,7 @@ pub mod explicit_draughting {
             &self.application_context_element
         }
     }
+    impl ApplicationContextElementAny for ProductDefinitionContext {}
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ProductDefinitionContext {
         pub life_cycle_stage: Label,
@@ -2049,6 +2106,7 @@ pub mod explicit_draughting {
             &self.b_spline_curve
         }
     }
+    impl BSplineCurveAny for QuasiUniformCurve {}
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct QuasiUniformCurve {
         pub b_spline_curve: BSplineCurve,
@@ -2069,6 +2127,7 @@ pub mod explicit_draughting {
             &self.b_spline_curve
         }
     }
+    impl BSplineCurveAny for RationalBSplineCurve {}
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct RationalBSplineCurve {
         pub weights_data: Vec<f64>,
@@ -2136,6 +2195,7 @@ pub mod explicit_draughting {
             &self.named_unit
         }
     }
+    impl NamedUnitAny for SiUnit {}
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct SiUnit {
         pub prefix: Option<SiPrefix>,
@@ -2199,6 +2259,7 @@ pub mod explicit_draughting {
             &self.geometric_representation_item
         }
     }
+    impl GeometricRepresentationItemAny for SymbolTarget {}
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct SymbolTarget {
         pub placement: Axis2Placement,
@@ -2223,6 +2284,7 @@ pub mod explicit_draughting {
             &self.geometric_representation_item
         }
     }
+    impl GeometricRepresentationItemAny for TextLiteral {}
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct TextLiteral {
         pub literal: PresentableText,
@@ -2313,6 +2375,7 @@ pub mod explicit_draughting {
             &self.bounded_curve
         }
     }
+    impl BoundedCurveAny for TrimmedCurve {}
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct TrimmedCurve {
         pub basis_curve: Curve,
@@ -2339,6 +2402,7 @@ pub mod explicit_draughting {
             &self.b_spline_curve
         }
     }
+    impl BSplineCurveAny for UniformCurve {}
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct UniformCurve {
         pub b_spline_curve: BSplineCurve,
@@ -2349,6 +2413,7 @@ pub mod explicit_draughting {
             &self.geometric_representation_item
         }
     }
+    impl GeometricRepresentationItemAny for Vector {}
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct Vector {
         pub orientation: Direction,

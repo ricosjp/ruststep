@@ -88,12 +88,12 @@ impl Namespace {
                 .0
                 .get(&scope)
                 .expect("Scope is not belong to the namespace");
-            for (entity_name, is_supertype) in &ns.entities {
+            for (entity_name, has_supertype_decl) in &ns.entities {
                 if name == entity_name {
                     return Ok(TypeRef::Entity {
                         name: name.to_string(),
                         scope,
-                        is_supertype: *is_supertype,
+                        has_supertype_decl: *has_supertype_decl,
                     });
                 }
             }

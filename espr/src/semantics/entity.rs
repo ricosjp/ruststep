@@ -116,6 +116,20 @@ impl ToTokens for Entity {
 
                 attr_name.push(attr);
                 attr_type.push(ty.to_token_stream());
+
+                if let TypeRef::Entity {
+                    name: supertype_name,
+                    has_supertype_decl,
+                    ..
+                } = ty
+                {
+                    if *has_supertype_decl {
+                        let any_trait = format_ident!("{}Any", supertype_name.to_pascal_case());
+                        tokens.append_all(quote! {
+                            impl #any_trait for #name {}
+                        });
+                    }
+                }
             }
         }
         tokens.append_all(quote! {
