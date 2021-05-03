@@ -121,7 +121,7 @@ impl ToTokens for Entity {
             }
         }
         tokens.append_all(quote! {
-            #[derive(Debug, derive_new::new)]
+            #[derive(Debug, Clone, derive_new::new)]
             pub struct #name {
                 #(
                 pub #attr_name : #attr_type,
