@@ -8,7 +8,7 @@ pub struct Names {
     /// Declared as `SCHEMA`
     schemas: Vec<String>,
     /// Declared as `ENTITY`
-    entities: Vec<(String, bool /* is supertype */)>,
+    entities: Vec<(String, bool /* has supertype decl */)>,
     /// Declared as an attribute
     attributes: Vec<String>,
     /// Declared as `TYPE`
@@ -56,21 +56,7 @@ impl Namespace {
                     entities: schema
                         .entities
                         .iter()
-                        .map(|e| {
-                            // FIXME This assumes that `SUPERTYPE` declaration exists for all
-                            // supertypes. There is no guarantee for it generally.
-                            let name = e.name.clone();
-                            if let Some(c) = &e.constraint {
-                                use ast::entity::Constraint;
-                                match c {
-                                    Constraint::AbstractSuperType(..)
-                                    | Constraint::SuperTypeRule(..) => (name, true),
-                                    Constraint::AbstractEntity => (name, false),
-                                }
-                            } else {
-                                (name, false)
-                            }
-                        })
+                        .map(|e| (e.name.clone(), e.has_supertype_decl()))
                         .collect(),
                     attributes: Vec::new(),
                     types: schema.types.iter().map(|e| e.type_id.clone()).collect(),

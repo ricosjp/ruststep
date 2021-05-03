@@ -412,6 +412,8 @@ pub mod explicit_draughting {
     pub struct AnnotationOccurrence {
         pub styled_item: StyledItem,
     }
+    pub trait AnnotationOccurrenceAny: ::std::any::Any + ::std::fmt::Debug {}
+    impl AnnotationOccurrenceAny for AnnotationOccurrence {}
     impl ::std::ops::Deref for AnnotationSubfigureOccurrence {
         type Target = AnnotationSymbolOccurrence;
         fn deref(&self) -> &Self::Target {
@@ -471,6 +473,8 @@ pub mod explicit_draughting {
         pub name: Label,
         pub frame_of_reference: ApplicationContext,
     }
+    pub trait ApplicationContextElementAny: ::std::any::Any + ::std::fmt::Debug {}
+    impl ApplicationContextElementAny for ApplicationContextElement {}
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ApplicationProtocolDefinition {
         pub status: Label,
@@ -487,6 +491,8 @@ pub mod explicit_draughting {
     pub struct ApprovalAssignment {
         pub assigned_approval: Approval,
     }
+    pub trait ApprovalAssignmentAny: ::std::any::Any + ::std::fmt::Debug {}
+    impl ApprovalAssignmentAny for ApprovalAssignment {}
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ApprovalDateTime {
         pub date_time: DateTimeSelect,
@@ -537,6 +543,8 @@ pub mod explicit_draughting {
         pub self_intersect: Logical,
         pub bounded_curve: BoundedCurve,
     }
+    pub trait BSplineCurveAny: ::std::any::Any + ::std::fmt::Debug {}
+    impl BSplineCurveAny for BSplineCurve {}
     impl ::std::ops::Deref for BSplineCurveWithKnots {
         type Target = BSplineCurve;
         fn deref(&self) -> &Self::Target {
@@ -570,6 +578,8 @@ pub mod explicit_draughting {
     pub struct BoundedCurve {
         pub curve: Curve,
     }
+    pub trait BoundedCurveAny: ::std::any::Any + ::std::fmt::Debug {}
+    impl BoundedCurveAny for BoundedCurve {}
     impl ::std::ops::Deref for CalendarDate {
         type Target = Date;
         fn deref(&self) -> &Self::Target {
@@ -612,6 +622,8 @@ pub mod explicit_draughting {
     pub struct CameraModel {
         pub geometric_representation_item: GeometricRepresentationItem,
     }
+    pub trait CameraModelAny: ::std::any::Any + ::std::fmt::Debug {}
+    impl CameraModelAny for CameraModel {}
     impl ::std::ops::Deref for CameraModelD2 {
         type Target = CameraModel;
         fn deref(&self) -> &Self::Target {
@@ -755,6 +767,8 @@ pub mod explicit_draughting {
         pub position: Axis2Placement,
         pub curve: Curve,
     }
+    pub trait ConicAny: ::std::any::Any + ::std::fmt::Debug {}
+    impl ConicAny for Conic {}
     impl ::std::ops::Deref for ContextDependentInvisibility {
         type Target = Invisibility;
         fn deref(&self) -> &Self::Target {
@@ -776,6 +790,8 @@ pub mod explicit_draughting {
     pub struct ContractAssignment {
         pub assigned_contract: Contract,
     }
+    pub trait ContractAssignmentAny: ::std::any::Any + ::std::fmt::Debug {}
+    impl ContractAssignmentAny for ContractAssignment {}
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct ContractType {
         pub description: Label,
@@ -802,6 +818,8 @@ pub mod explicit_draughting {
     pub struct Curve {
         pub geometric_representation_item: GeometricRepresentationItem,
     }
+    pub trait CurveAny: ::std::any::Any + ::std::fmt::Debug {}
+    impl CurveAny for Curve {}
     impl ::std::ops::Deref for CurveDimension {
         type Target = DimensionCurveDirectedCallout;
         fn deref(&self) -> &Self::Target {
@@ -833,6 +851,8 @@ pub mod explicit_draughting {
     pub struct Date {
         pub year_component: YearNumber,
     }
+    pub trait DateAny: ::std::any::Any + ::std::fmt::Debug {}
+    impl DateAny for Date {}
     impl ::std::ops::Deref for DatumFeatureCallout {
         type Target = DraughtingCallout;
         fn deref(&self) -> &Self::Target {
@@ -969,6 +989,8 @@ pub mod explicit_draughting {
         pub assigned_document: Document,
         pub source: Label,
     }
+    pub trait DocumentReferenceAny: ::std::any::Any + ::std::fmt::Debug {}
+    impl DocumentReferenceAny for DocumentReference {}
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct DocumentType {
         pub product_data_type: Label,
@@ -1387,6 +1409,8 @@ pub mod explicit_draughting {
     pub struct GeometricRepresentationItem {
         pub representation_item: RepresentationItem,
     }
+    pub trait GeometricRepresentationItemAny: ::std::any::Any + ::std::fmt::Debug {}
+    impl GeometricRepresentationItemAny for GeometricRepresentationItem {}
     impl ::std::ops::Deref for GeometricSet {
         type Target = GeometricRepresentationItem;
         fn deref(&self) -> &Self::Target {
@@ -1398,6 +1422,8 @@ pub mod explicit_draughting {
         pub elements: Vec<GeometricSetSelect>,
         pub geometric_representation_item: GeometricRepresentationItem,
     }
+    pub trait GeometricSetAny: ::std::any::Any + ::std::fmt::Debug {}
+    impl GeometricSetAny for GeometricSet {}
     impl ::std::ops::Deref for GeometricalToleranceCallout {
         type Target = DraughtingCallout;
         fn deref(&self) -> &Self::Target {
@@ -1438,6 +1464,8 @@ pub mod explicit_draughting {
     pub struct GroupAssignment {
         pub assigned_group: Group,
     }
+    pub trait GroupAssignmentAny: ::std::any::Any + ::std::fmt::Debug {}
+    impl GroupAssignmentAny for GroupAssignment {}
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct GroupRelationship {
         pub name: Label,
@@ -1560,10 +1588,14 @@ pub mod explicit_draughting {
         pub value_component: MeasureValue,
         pub unit_component: Unit,
     }
+    pub trait MeasureWithUnitAny: ::std::any::Any + ::std::fmt::Debug {}
+    impl MeasureWithUnitAny for MeasureWithUnit {}
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct NamedUnit {
         pub dimensions: DimensionalExponents,
     }
+    pub trait NamedUnitAny: ::std::any::Any + ::std::fmt::Debug {}
+    impl NamedUnitAny for NamedUnit {}
     impl ::std::ops::Deref for OffsetCurve2D {
         type Target = Curve;
         fn deref(&self) -> &Self::Target {
@@ -1609,6 +1641,8 @@ pub mod explicit_draughting {
         pub assigned_organization: Organization,
         pub role: OrganizationRole,
     }
+    pub trait OrganizationAssignmentAny: ::std::any::Any + ::std::fmt::Debug {}
+    impl OrganizationAssignmentAny for OrganizationAssignment {}
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct OrganizationRole {
         pub name: Label,
@@ -1655,6 +1689,8 @@ pub mod explicit_draughting {
         pub assigned_person_and_organization: PersonAndOrganization,
         pub role: PersonAndOrganizationRole,
     }
+    pub trait PersonAndOrganizationAssignmentAny: ::std::any::Any + ::std::fmt::Debug {}
+    impl PersonAndOrganizationAssignmentAny for PersonAndOrganizationAssignment {}
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PersonAndOrganizationRole {
         pub name: Label,
@@ -1664,6 +1700,8 @@ pub mod explicit_draughting {
         pub assigned_person: Person,
         pub role: PersonRole,
     }
+    pub trait PersonAssignmentAny: ::std::any::Any + ::std::fmt::Debug {}
+    impl PersonAssignmentAny for PersonAssignment {}
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PersonRole {
         pub name: Label,
@@ -1691,6 +1729,8 @@ pub mod explicit_draughting {
         pub location: CartesianPoint,
         pub geometric_representation_item: GeometricRepresentationItem,
     }
+    pub trait PlacementAny: ::std::any::Any + ::std::fmt::Debug {}
+    impl PlacementAny for Placement {}
     impl ::std::ops::Deref for PlanarBox {
         type Target = PlanarExtent;
         fn deref(&self) -> &Self::Target {
@@ -1744,6 +1784,8 @@ pub mod explicit_draughting {
     pub struct Point {
         pub geometric_representation_item: GeometricRepresentationItem,
     }
+    pub trait PointAny: ::std::any::Any + ::std::fmt::Debug {}
+    impl PointAny for Point {}
     impl ::std::ops::Deref for PointOnCurve {
         type Target = Point;
         fn deref(&self) -> &Self::Target {
@@ -1911,6 +1953,8 @@ pub mod explicit_draughting {
     }
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PresentedItem {}
+    pub trait PresentedItemAny: ::std::any::Any + ::std::fmt::Debug {}
+    impl PresentedItemAny for PresentedItem {}
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct PresentedItemRepresentation {
         pub presentation: PresentationRepresentationSelect,
@@ -2060,6 +2104,8 @@ pub mod explicit_draughting {
     pub struct SecurityClassificationAssignment {
         pub assigned_security_classification: SecurityClassification,
     }
+    pub trait SecurityClassificationAssignmentAny: ::std::any::Any + ::std::fmt::Debug {}
+    impl SecurityClassificationAssignmentAny for SecurityClassificationAssignment {}
     #[derive(Clone, Debug, PartialEq, derive_new :: new)]
     pub struct SecurityClassificationLevel {
         pub name: Label,

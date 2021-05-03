@@ -9,6 +9,9 @@ pub struct Entity {
     name: String,
     attributes: Vec<EntityAttribute>,
     subtypes: Option<Vec<TypeRef>>,
+
+    // FIXME This assumes that `SUPERTYPE` declaration exists for all supertypes.
+    has_supertype_decl: bool,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -63,6 +66,7 @@ impl Legalize for Entity {
             name: entity.name.clone(),
             attributes,
             subtypes,
+            has_supertype_decl: entity.has_supertype_decl(),
         })
     }
 }
@@ -122,6 +126,16 @@ impl ToTokens for Entity {
                 )*
             }
         });
+
+        if self.has_supertype_decl {
+            let trait_name = format_ident!("{}Any", name);
+            tokens.append_all(quote! {
+                pub trait #trait_name : ::std::any::Any + ::std::fmt::Debug {}
+            });
+            tokens.append_all(quote! {
+                impl #trait_name for #name {}
+            });
+        }
     }
 }
 
