@@ -70,7 +70,7 @@ impl ToTokens for TypeDecl {
                     .map(|i| format_ident!("{}", i.to_pascal_case()))
                     .collect();
                 tokens.append_all(quote! {
-                    #[derive(Debug, Clone, PartialEq)]
+                    #[derive(Debug)]
                     pub enum #id {
                         #( #items ),*
                     }
@@ -102,7 +102,7 @@ impl ToTokens for TypeDecl {
                     }
                 }
                 tokens.append_all(quote! {
-                    #[derive(Debug, Clone, PartialEq)]
+                    #[derive(Debug)]
                     pub enum #id {
                         #(#entries(#entry_types)),*
                     }

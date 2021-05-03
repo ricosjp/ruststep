@@ -133,7 +133,7 @@ impl ToTokens for Entity {
             }
         }
         tokens.append_all(quote! {
-            #[derive(Clone, Debug, PartialEq, derive_new::new)]
+            #[derive(Debug, derive_new::new)]
             pub struct #name {
                 #(
                 pub #attr_name : #attr_type,
