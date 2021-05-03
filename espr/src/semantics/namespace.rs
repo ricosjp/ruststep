@@ -57,6 +57,8 @@ impl Namespace {
                         .entities
                         .iter()
                         .map(|e| {
+                            // FIXME This assumes that `SUPERTYPE` declaration exists for all
+                            // supertypes. There is no guarantee for it generally.
                             let name = e.name.clone();
                             if let Some(c) = &e.constraint {
                                 use ast::entity::Constraint;
