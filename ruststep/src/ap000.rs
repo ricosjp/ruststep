@@ -90,7 +90,6 @@ use std::{
     any::{Any, TypeId},
     collections::HashMap,
     fmt::Debug,
-    ops::{Deref, DerefMut},
 };
 
 #[cfg(doc)]
@@ -291,17 +290,6 @@ pub struct Sub {
     pub b: f64,
 }
 impl BaseAny for Sub {}
-impl Deref for Sub {
-    type Target = Base;
-    fn deref(&self) -> &Self::Target {
-        &self.base
-    }
-}
-impl DerefMut for Sub {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        &mut self.base
-    }
-}
 
 #[cfg(test)]
 mod tests {

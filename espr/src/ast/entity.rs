@@ -25,6 +25,19 @@ pub struct Entity {
     pub where_clause: Option<WhereClause>,
 }
 
+impl Entity {
+    pub fn has_supertype_decl(&self) -> bool {
+        if let Some(c) = &self.constraint {
+            match c {
+                Constraint::AbstractSuperType(..) | Constraint::SuperTypeRule(..) => true,
+                Constraint::AbstractEntity => false,
+            }
+        } else {
+            false
+        }
+    }
+}
+
 /// Intermediate output of [entity_body]
 #[derive(Debug, Clone, PartialEq)]
 pub struct EntityBody {
