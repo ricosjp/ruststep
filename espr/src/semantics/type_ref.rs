@@ -114,9 +114,8 @@ impl ToTokens for TypeRef {
                 ..
             } => {
                 if *has_supertype_decl {
-                    // TODO use Box<dyn Any>
-                    let name = format_ident!("{}", name.to_pascal_case());
-                    tokens.append_all(quote! { #name });
+                    let name = format_ident!("{}Any", name.to_pascal_case());
+                    tokens.append_all(quote! { Box<dyn #name> });
                 } else {
                     let name = format_ident!("{}", name.to_pascal_case());
                     tokens.append_all(quote! { #name });
