@@ -360,32 +360,14 @@ pub mod explicit_draughting {
         pub electronic_mail_address: Option<Label>,
         pub telex_number: Option<Label>,
     }
-    impl ::std::ops::Deref for AngularDimension {
-        type Target = DimensionCurveDirectedCallout;
-        fn deref(&self) -> &Self::Target {
-            &self.dimension_curve_directed_callout
-        }
-    }
     #[derive(Debug, derive_new :: new)]
     pub struct AngularDimension {
         pub dimension_curve_directed_callout: DimensionCurveDirectedCallout,
-    }
-    impl ::std::ops::Deref for AnnotationCurveOccurrence {
-        type Target = Box<dyn AnnotationOccurrenceAny>;
-        fn deref(&self) -> &Self::Target {
-            &self.annotation_occurrence
-        }
     }
     impl AnnotationOccurrenceAny for AnnotationCurveOccurrence {}
     #[derive(Debug, derive_new :: new)]
     pub struct AnnotationCurveOccurrence {
         pub annotation_occurrence: Box<dyn AnnotationOccurrenceAny>,
-    }
-    impl ::std::ops::Deref for AnnotationFillArea {
-        type Target = Box<dyn GeometricRepresentationItemAny>;
-        fn deref(&self) -> &Self::Target {
-            &self.geometric_representation_item
-        }
     }
     impl GeometricRepresentationItemAny for AnnotationFillArea {}
     #[derive(Debug, derive_new :: new)]
@@ -393,23 +375,11 @@ pub mod explicit_draughting {
         pub boundaries: Vec<Box<dyn CurveAny>>,
         pub geometric_representation_item: Box<dyn GeometricRepresentationItemAny>,
     }
-    impl ::std::ops::Deref for AnnotationFillAreaOccurrence {
-        type Target = Box<dyn AnnotationOccurrenceAny>;
-        fn deref(&self) -> &Self::Target {
-            &self.annotation_occurrence
-        }
-    }
     impl AnnotationOccurrenceAny for AnnotationFillAreaOccurrence {}
     #[derive(Debug, derive_new :: new)]
     pub struct AnnotationFillAreaOccurrence {
         pub fill_style_target: Box<dyn PointAny>,
         pub annotation_occurrence: Box<dyn AnnotationOccurrenceAny>,
-    }
-    impl ::std::ops::Deref for AnnotationOccurrence {
-        type Target = StyledItem;
-        fn deref(&self) -> &Self::Target {
-            &self.styled_item
-        }
     }
     #[derive(Debug, derive_new :: new)]
     pub struct AnnotationOccurrence {
@@ -417,52 +387,22 @@ pub mod explicit_draughting {
     }
     pub trait AnnotationOccurrenceAny: ::std::any::Any + ::std::fmt::Debug {}
     impl AnnotationOccurrenceAny for AnnotationOccurrence {}
-    impl ::std::ops::Deref for AnnotationSubfigureOccurrence {
-        type Target = AnnotationSymbolOccurrence;
-        fn deref(&self) -> &Self::Target {
-            &self.annotation_symbol_occurrence
-        }
-    }
     #[derive(Debug, derive_new :: new)]
     pub struct AnnotationSubfigureOccurrence {
         pub annotation_symbol_occurrence: AnnotationSymbolOccurrence,
     }
-    impl ::std::ops::Deref for AnnotationSymbol {
-        type Target = MappedItem;
-        fn deref(&self) -> &Self::Target {
-            &self.mapped_item
-        }
-    }
     #[derive(Debug, derive_new :: new)]
     pub struct AnnotationSymbol {
         pub mapped_item: MappedItem,
-    }
-    impl ::std::ops::Deref for AnnotationSymbolOccurrence {
-        type Target = Box<dyn AnnotationOccurrenceAny>;
-        fn deref(&self) -> &Self::Target {
-            &self.annotation_occurrence
-        }
     }
     impl AnnotationOccurrenceAny for AnnotationSymbolOccurrence {}
     #[derive(Debug, derive_new :: new)]
     pub struct AnnotationSymbolOccurrence {
         pub annotation_occurrence: Box<dyn AnnotationOccurrenceAny>,
     }
-    impl ::std::ops::Deref for AnnotationText {
-        type Target = MappedItem;
-        fn deref(&self) -> &Self::Target {
-            &self.mapped_item
-        }
-    }
     #[derive(Debug, derive_new :: new)]
     pub struct AnnotationText {
         pub mapped_item: MappedItem,
-    }
-    impl ::std::ops::Deref for AnnotationTextOccurrence {
-        type Target = Box<dyn AnnotationOccurrenceAny>;
-        fn deref(&self) -> &Self::Target {
-            &self.annotation_occurrence
-        }
     }
     impl AnnotationOccurrenceAny for AnnotationTextOccurrence {}
     #[derive(Debug, derive_new :: new)]
@@ -522,23 +462,11 @@ pub mod explicit_draughting {
         pub area: PresentationArea,
         pub in_set: PresentationSet,
     }
-    impl ::std::ops::Deref for Axis2Placement2D {
-        type Target = Box<dyn PlacementAny>;
-        fn deref(&self) -> &Self::Target {
-            &self.placement
-        }
-    }
     impl PlacementAny for Axis2Placement2D {}
     #[derive(Debug, derive_new :: new)]
     pub struct Axis2Placement2D {
         pub ref_direction: Option<Direction>,
         pub placement: Box<dyn PlacementAny>,
-    }
-    impl ::std::ops::Deref for BSplineCurve {
-        type Target = Box<dyn BoundedCurveAny>;
-        fn deref(&self) -> &Self::Target {
-            &self.bounded_curve
-        }
     }
     impl BoundedCurveAny for BSplineCurve {}
     #[derive(Debug, derive_new :: new)]
@@ -552,12 +480,6 @@ pub mod explicit_draughting {
     }
     pub trait BSplineCurveAny: ::std::any::Any + ::std::fmt::Debug {}
     impl BSplineCurveAny for BSplineCurve {}
-    impl ::std::ops::Deref for BSplineCurveWithKnots {
-        type Target = Box<dyn BSplineCurveAny>;
-        fn deref(&self) -> &Self::Target {
-            &self.b_spline_curve
-        }
-    }
     impl BSplineCurveAny for BSplineCurveWithKnots {}
     #[derive(Debug, derive_new :: new)]
     pub struct BSplineCurveWithKnots {
@@ -566,22 +488,10 @@ pub mod explicit_draughting {
         pub knot_spec: KnotType,
         pub b_spline_curve: Box<dyn BSplineCurveAny>,
     }
-    impl ::std::ops::Deref for BezierCurve {
-        type Target = Box<dyn BSplineCurveAny>;
-        fn deref(&self) -> &Self::Target {
-            &self.b_spline_curve
-        }
-    }
     impl BSplineCurveAny for BezierCurve {}
     #[derive(Debug, derive_new :: new)]
     pub struct BezierCurve {
         pub b_spline_curve: Box<dyn BSplineCurveAny>,
-    }
-    impl ::std::ops::Deref for BoundedCurve {
-        type Target = Box<dyn CurveAny>;
-        fn deref(&self) -> &Self::Target {
-            &self.curve
-        }
     }
     impl CurveAny for BoundedCurve {}
     #[derive(Debug, derive_new :: new)]
@@ -590,12 +500,6 @@ pub mod explicit_draughting {
     }
     pub trait BoundedCurveAny: ::std::any::Any + ::std::fmt::Debug {}
     impl BoundedCurveAny for BoundedCurve {}
-    impl ::std::ops::Deref for CalendarDate {
-        type Target = Box<dyn DateAny>;
-        fn deref(&self) -> &Self::Target {
-            &self.date
-        }
-    }
     impl DateAny for CalendarDate {}
     #[derive(Debug, derive_new :: new)]
     pub struct CalendarDate {
@@ -603,31 +507,13 @@ pub mod explicit_draughting {
         pub month_component: MonthInYearNumber,
         pub date: Box<dyn DateAny>,
     }
-    impl ::std::ops::Deref for CameraImage {
-        type Target = MappedItem;
-        fn deref(&self) -> &Self::Target {
-            &self.mapped_item
-        }
-    }
     #[derive(Debug, derive_new :: new)]
     pub struct CameraImage {
         pub mapped_item: MappedItem,
     }
-    impl ::std::ops::Deref for CameraImage2DWithScale {
-        type Target = CameraImage;
-        fn deref(&self) -> &Self::Target {
-            &self.camera_image
-        }
-    }
     #[derive(Debug, derive_new :: new)]
     pub struct CameraImage2DWithScale {
         pub camera_image: CameraImage,
-    }
-    impl ::std::ops::Deref for CameraModel {
-        type Target = Box<dyn GeometricRepresentationItemAny>;
-        fn deref(&self) -> &Self::Target {
-            &self.geometric_representation_item
-        }
     }
     impl GeometricRepresentationItemAny for CameraModel {}
     #[derive(Debug, derive_new :: new)]
@@ -636,12 +522,6 @@ pub mod explicit_draughting {
     }
     pub trait CameraModelAny: ::std::any::Any + ::std::fmt::Debug {}
     impl CameraModelAny for CameraModel {}
-    impl ::std::ops::Deref for CameraModelD2 {
-        type Target = Box<dyn CameraModelAny>;
-        fn deref(&self) -> &Self::Target {
-            &self.camera_model
-        }
-    }
     impl CameraModelAny for CameraModelD2 {}
     #[derive(Debug, derive_new :: new)]
     pub struct CameraModelD2 {
@@ -649,33 +529,15 @@ pub mod explicit_draughting {
         pub view_window_clipping: bool,
         pub camera_model: Box<dyn CameraModelAny>,
     }
-    impl ::std::ops::Deref for CameraUsage {
-        type Target = RepresentationMap;
-        fn deref(&self) -> &Self::Target {
-            &self.representation_map
-        }
-    }
     #[derive(Debug, derive_new :: new)]
     pub struct CameraUsage {
         pub representation_map: RepresentationMap,
-    }
-    impl ::std::ops::Deref for CartesianPoint {
-        type Target = Box<dyn PointAny>;
-        fn deref(&self) -> &Self::Target {
-            &self.point
-        }
     }
     impl PointAny for CartesianPoint {}
     #[derive(Debug, derive_new :: new)]
     pub struct CartesianPoint {
         pub coordinates: Vec<LengthMeasure>,
         pub point: Box<dyn PointAny>,
-    }
-    impl ::std::ops::Deref for Circle {
-        type Target = Box<dyn ConicAny>;
-        fn deref(&self) -> &Self::Target {
-            &self.conic
-        }
     }
     impl ConicAny for Circle {}
     #[derive(Debug, derive_new :: new)]
@@ -685,12 +547,6 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, derive_new :: new)]
     pub struct Colour {}
-    impl ::std::ops::Deref for ColourRgb {
-        type Target = ColourSpecification;
-        fn deref(&self) -> &Self::Target {
-            &self.colour_specification
-        }
-    }
     #[derive(Debug, derive_new :: new)]
     pub struct ColourRgb {
         pub red: f64,
@@ -698,22 +554,10 @@ pub mod explicit_draughting {
         pub blue: f64,
         pub colour_specification: ColourSpecification,
     }
-    impl ::std::ops::Deref for ColourSpecification {
-        type Target = Colour;
-        fn deref(&self) -> &Self::Target {
-            &self.colour
-        }
-    }
     #[derive(Debug, derive_new :: new)]
     pub struct ColourSpecification {
         pub name: Colour,
         pub colour: Colour,
-    }
-    impl ::std::ops::Deref for CompositeCurve {
-        type Target = Box<dyn BoundedCurveAny>;
-        fn deref(&self) -> &Self::Target {
-            &self.bounded_curve
-        }
     }
     impl BoundedCurveAny for CompositeCurve {}
     #[derive(Debug, derive_new :: new)]
@@ -728,56 +572,26 @@ pub mod explicit_draughting {
         pub same_sense: bool,
         pub parent_curve: Box<dyn CurveAny>,
     }
-    impl ::std::ops::Deref for CompositeText {
-        type Target = Box<dyn GeometricRepresentationItemAny>;
-        fn deref(&self) -> &Self::Target {
-            &self.geometric_representation_item
-        }
-    }
     impl GeometricRepresentationItemAny for CompositeText {}
     #[derive(Debug, derive_new :: new)]
     pub struct CompositeText {
         pub collected_text: Vec<TextOrCharacter>,
         pub geometric_representation_item: Box<dyn GeometricRepresentationItemAny>,
     }
-    impl ::std::ops::Deref for CompositeTextWithAssociatedCurves {
-        type Target = CompositeText;
-        fn deref(&self) -> &Self::Target {
-            &self.composite_text
-        }
-    }
     #[derive(Debug, derive_new :: new)]
     pub struct CompositeTextWithAssociatedCurves {
         pub associated_curves: Vec<Box<dyn CurveAny>>,
         pub composite_text: CompositeText,
-    }
-    impl ::std::ops::Deref for CompositeTextWithBlankingBox {
-        type Target = CompositeText;
-        fn deref(&self) -> &Self::Target {
-            &self.composite_text
-        }
     }
     #[derive(Debug, derive_new :: new)]
     pub struct CompositeTextWithBlankingBox {
         pub blanking: PlanarBox,
         pub composite_text: CompositeText,
     }
-    impl ::std::ops::Deref for CompositeTextWithExtent {
-        type Target = CompositeText;
-        fn deref(&self) -> &Self::Target {
-            &self.composite_text
-        }
-    }
     #[derive(Debug, derive_new :: new)]
     pub struct CompositeTextWithExtent {
         pub extent: PlanarExtent,
         pub composite_text: CompositeText,
-    }
-    impl ::std::ops::Deref for Conic {
-        type Target = Box<dyn CurveAny>;
-        fn deref(&self) -> &Self::Target {
-            &self.curve
-        }
     }
     impl CurveAny for Conic {}
     #[derive(Debug, derive_new :: new)]
@@ -787,12 +601,6 @@ pub mod explicit_draughting {
     }
     pub trait ConicAny: ::std::any::Any + ::std::fmt::Debug {}
     impl ConicAny for Conic {}
-    impl ::std::ops::Deref for ContextDependentInvisibility {
-        type Target = Invisibility;
-        fn deref(&self) -> &Self::Target {
-            &self.invisibility
-        }
-    }
     #[derive(Debug, derive_new :: new)]
     pub struct ContextDependentInvisibility {
         pub presentation_context: InvisibilityContext,
@@ -814,24 +622,12 @@ pub mod explicit_draughting {
     pub struct ContractType {
         pub description: Label,
     }
-    impl ::std::ops::Deref for ConversionBasedUnit {
-        type Target = Box<dyn NamedUnitAny>;
-        fn deref(&self) -> &Self::Target {
-            &self.named_unit
-        }
-    }
     impl NamedUnitAny for ConversionBasedUnit {}
     #[derive(Debug, derive_new :: new)]
     pub struct ConversionBasedUnit {
         pub name: Label,
         pub conversion_factor: Box<dyn MeasureWithUnitAny>,
         pub named_unit: Box<dyn NamedUnitAny>,
-    }
-    impl ::std::ops::Deref for Curve {
-        type Target = Box<dyn GeometricRepresentationItemAny>;
-        fn deref(&self) -> &Self::Target {
-            &self.geometric_representation_item
-        }
     }
     impl GeometricRepresentationItemAny for Curve {}
     #[derive(Debug, derive_new :: new)]
@@ -840,12 +636,6 @@ pub mod explicit_draughting {
     }
     pub trait CurveAny: ::std::any::Any + ::std::fmt::Debug {}
     impl CurveAny for Curve {}
-    impl ::std::ops::Deref for CurveDimension {
-        type Target = DimensionCurveDirectedCallout;
-        fn deref(&self) -> &Self::Target {
-            &self.dimension_curve_directed_callout
-        }
-    }
     #[derive(Debug, derive_new :: new)]
     pub struct CurveDimension {
         pub dimension_curve_directed_callout: DimensionCurveDirectedCallout,
@@ -873,31 +663,13 @@ pub mod explicit_draughting {
     }
     pub trait DateAny: ::std::any::Any + ::std::fmt::Debug {}
     impl DateAny for Date {}
-    impl ::std::ops::Deref for DatumFeatureCallout {
-        type Target = DraughtingCallout;
-        fn deref(&self) -> &Self::Target {
-            &self.draughting_callout
-        }
-    }
     #[derive(Debug, derive_new :: new)]
     pub struct DatumFeatureCallout {
         pub draughting_callout: DraughtingCallout,
     }
-    impl ::std::ops::Deref for DatumTargetCallout {
-        type Target = DraughtingCallout;
-        fn deref(&self) -> &Self::Target {
-            &self.draughting_callout
-        }
-    }
     #[derive(Debug, derive_new :: new)]
     pub struct DatumTargetCallout {
         pub draughting_callout: DraughtingCallout,
-    }
-    impl ::std::ops::Deref for DefinedSymbol {
-        type Target = Box<dyn GeometricRepresentationItemAny>;
-        fn deref(&self) -> &Self::Target {
-            &self.geometric_representation_item
-        }
     }
     impl GeometricRepresentationItemAny for DefinedSymbol {}
     #[derive(Debug, derive_new :: new)]
@@ -906,72 +678,30 @@ pub mod explicit_draughting {
         pub target: SymbolTarget,
         pub geometric_representation_item: Box<dyn GeometricRepresentationItemAny>,
     }
-    impl ::std::ops::Deref for DiameterDimension {
-        type Target = DimensionCurveDirectedCallout;
-        fn deref(&self) -> &Self::Target {
-            &self.dimension_curve_directed_callout
-        }
-    }
     #[derive(Debug, derive_new :: new)]
     pub struct DiameterDimension {
         pub dimension_curve_directed_callout: DimensionCurveDirectedCallout,
-    }
-    impl ::std::ops::Deref for DimensionCalloutComponentRelationship {
-        type Target = DraughtingCalloutRelationship;
-        fn deref(&self) -> &Self::Target {
-            &self.draughting_callout_relationship
-        }
     }
     #[derive(Debug, derive_new :: new)]
     pub struct DimensionCalloutComponentRelationship {
         pub draughting_callout_relationship: DraughtingCalloutRelationship,
     }
-    impl ::std::ops::Deref for DimensionCalloutRelationship {
-        type Target = DraughtingCalloutRelationship;
-        fn deref(&self) -> &Self::Target {
-            &self.draughting_callout_relationship
-        }
-    }
     #[derive(Debug, derive_new :: new)]
     pub struct DimensionCalloutRelationship {
         pub draughting_callout_relationship: DraughtingCalloutRelationship,
-    }
-    impl ::std::ops::Deref for DimensionCurve {
-        type Target = AnnotationCurveOccurrence;
-        fn deref(&self) -> &Self::Target {
-            &self.annotation_curve_occurrence
-        }
     }
     #[derive(Debug, derive_new :: new)]
     pub struct DimensionCurve {
         pub annotation_curve_occurrence: AnnotationCurveOccurrence,
     }
-    impl ::std::ops::Deref for DimensionCurveDirectedCallout {
-        type Target = DraughtingCallout;
-        fn deref(&self) -> &Self::Target {
-            &self.draughting_callout
-        }
-    }
     #[derive(Debug, derive_new :: new)]
     pub struct DimensionCurveDirectedCallout {
         pub draughting_callout: DraughtingCallout,
-    }
-    impl ::std::ops::Deref for DimensionCurveTerminator {
-        type Target = TerminatorSymbol;
-        fn deref(&self) -> &Self::Target {
-            &self.terminator_symbol
-        }
     }
     #[derive(Debug, derive_new :: new)]
     pub struct DimensionCurveTerminator {
         pub role: DimensionExtentUsage,
         pub terminator_symbol: TerminatorSymbol,
-    }
-    impl ::std::ops::Deref for DimensionPair {
-        type Target = DraughtingCalloutRelationship;
-        fn deref(&self) -> &Self::Target {
-            &self.draughting_callout_relationship
-        }
     }
     #[derive(Debug, derive_new :: new)]
     pub struct DimensionPair {
@@ -986,12 +716,6 @@ pub mod explicit_draughting {
         pub thermodynamic_temperature_exponent: f64,
         pub amount_of_substance_exponent: f64,
         pub luminous_intensity_exponent: f64,
-    }
-    impl ::std::ops::Deref for Direction {
-        type Target = Box<dyn GeometricRepresentationItemAny>;
-        fn deref(&self) -> &Self::Target {
-            &self.geometric_representation_item
-        }
     }
     impl GeometricRepresentationItemAny for Direction {}
     #[derive(Debug, derive_new :: new)]
@@ -1017,34 +741,16 @@ pub mod explicit_draughting {
     pub struct DocumentType {
         pub product_data_type: Label,
     }
-    impl ::std::ops::Deref for DraughtingAnnotationOccurrence {
-        type Target = Box<dyn AnnotationOccurrenceAny>;
-        fn deref(&self) -> &Self::Target {
-            &self.annotation_occurrence
-        }
-    }
     impl AnnotationOccurrenceAny for DraughtingAnnotationOccurrence {}
     #[derive(Debug, derive_new :: new)]
     pub struct DraughtingAnnotationOccurrence {
         pub annotation_occurrence: Box<dyn AnnotationOccurrenceAny>,
-    }
-    impl ::std::ops::Deref for DraughtingApprovalAssignment {
-        type Target = Box<dyn ApprovalAssignmentAny>;
-        fn deref(&self) -> &Self::Target {
-            &self.approval_assignment
-        }
     }
     impl ApprovalAssignmentAny for DraughtingApprovalAssignment {}
     #[derive(Debug, derive_new :: new)]
     pub struct DraughtingApprovalAssignment {
         pub approved_items: Vec<ApprovedItem>,
         pub approval_assignment: Box<dyn ApprovalAssignmentAny>,
-    }
-    impl ::std::ops::Deref for DraughtingCallout {
-        type Target = Box<dyn GeometricRepresentationItemAny>;
-        fn deref(&self) -> &Self::Target {
-            &self.geometric_representation_item
-        }
     }
     impl GeometricRepresentationItemAny for DraughtingCallout {}
     #[derive(Debug, derive_new :: new)]
@@ -1059,43 +765,19 @@ pub mod explicit_draughting {
         pub relating_draughting_callout: DraughtingCallout,
         pub related_draughting_callout: DraughtingCallout,
     }
-    impl ::std::ops::Deref for DraughtingContractAssignment {
-        type Target = Box<dyn ContractAssignmentAny>;
-        fn deref(&self) -> &Self::Target {
-            &self.contract_assignment
-        }
-    }
     impl ContractAssignmentAny for DraughtingContractAssignment {}
     #[derive(Debug, derive_new :: new)]
     pub struct DraughtingContractAssignment {
         pub items: Vec<ContractedItem>,
         pub contract_assignment: Box<dyn ContractAssignmentAny>,
     }
-    impl ::std::ops::Deref for DraughtingDrawingRevision {
-        type Target = DrawingRevision;
-        fn deref(&self) -> &Self::Target {
-            &self.drawing_revision
-        }
-    }
     #[derive(Debug, derive_new :: new)]
     pub struct DraughtingDrawingRevision {
         pub drawing_revision: DrawingRevision,
     }
-    impl ::std::ops::Deref for DraughtingElements {
-        type Target = DraughtingCallout;
-        fn deref(&self) -> &Self::Target {
-            &self.draughting_callout
-        }
-    }
     #[derive(Debug, derive_new :: new)]
     pub struct DraughtingElements {
         pub draughting_callout: DraughtingCallout,
-    }
-    impl ::std::ops::Deref for DraughtingGroupAssignment {
-        type Target = Box<dyn GroupAssignmentAny>;
-        fn deref(&self) -> &Self::Target {
-            &self.group_assignment
-        }
     }
     impl GroupAssignmentAny for DraughtingGroupAssignment {}
     #[derive(Debug, derive_new :: new)]
@@ -1103,21 +785,9 @@ pub mod explicit_draughting {
         pub items: Vec<DraughtingGroupedItem>,
         pub group_assignment: Box<dyn GroupAssignmentAny>,
     }
-    impl ::std::ops::Deref for DraughtingModel {
-        type Target = Representation;
-        fn deref(&self) -> &Self::Target {
-            &self.representation
-        }
-    }
     #[derive(Debug, derive_new :: new)]
     pub struct DraughtingModel {
         pub representation: Representation,
-    }
-    impl ::std::ops::Deref for DraughtingOrganizationAssignment {
-        type Target = Box<dyn OrganizationAssignmentAny>;
-        fn deref(&self) -> &Self::Target {
-            &self.organization_assignment
-        }
     }
     impl OrganizationAssignmentAny for DraughtingOrganizationAssignment {}
     #[derive(Debug, derive_new :: new)]
@@ -1125,23 +795,11 @@ pub mod explicit_draughting {
         pub assigned_items: Vec<DraughtingOrganizationItem>,
         pub organization_assignment: Box<dyn OrganizationAssignmentAny>,
     }
-    impl ::std::ops::Deref for DraughtingPersonAndOrganizationAssignment {
-        type Target = Box<dyn PersonAndOrganizationAssignmentAny>;
-        fn deref(&self) -> &Self::Target {
-            &self.person_and_organization_assignment
-        }
-    }
     impl PersonAndOrganizationAssignmentAny for DraughtingPersonAndOrganizationAssignment {}
     #[derive(Debug, derive_new :: new)]
     pub struct DraughtingPersonAndOrganizationAssignment {
         pub assigned_items: Vec<DraughtingOrganizationItem>,
         pub person_and_organization_assignment: Box<dyn PersonAndOrganizationAssignmentAny>,
-    }
-    impl ::std::ops::Deref for DraughtingPersonAssignment {
-        type Target = Box<dyn PersonAssignmentAny>;
-        fn deref(&self) -> &Self::Target {
-            &self.person_assignment
-        }
     }
     impl PersonAssignmentAny for DraughtingPersonAssignment {}
     #[derive(Debug, derive_new :: new)]
@@ -1149,41 +807,17 @@ pub mod explicit_draughting {
         pub assigned_items: Vec<DraughtingOrganizationItem>,
         pub person_assignment: Box<dyn PersonAssignmentAny>,
     }
-    impl ::std::ops::Deref for DraughtingPreDefinedColour {
-        type Target = PreDefinedColour;
-        fn deref(&self) -> &Self::Target {
-            &self.pre_defined_colour
-        }
-    }
     #[derive(Debug, derive_new :: new)]
     pub struct DraughtingPreDefinedColour {
         pub pre_defined_colour: PreDefinedColour,
-    }
-    impl ::std::ops::Deref for DraughtingPreDefinedCurveFont {
-        type Target = PreDefinedCurveFont;
-        fn deref(&self) -> &Self::Target {
-            &self.pre_defined_curve_font
-        }
     }
     #[derive(Debug, derive_new :: new)]
     pub struct DraughtingPreDefinedCurveFont {
         pub pre_defined_curve_font: PreDefinedCurveFont,
     }
-    impl ::std::ops::Deref for DraughtingPreDefinedTextFont {
-        type Target = PreDefinedTextFont;
-        fn deref(&self) -> &Self::Target {
-            &self.pre_defined_text_font
-        }
-    }
     #[derive(Debug, derive_new :: new)]
     pub struct DraughtingPreDefinedTextFont {
         pub pre_defined_text_font: PreDefinedTextFont,
-    }
-    impl ::std::ops::Deref for DraughtingPresentedItem {
-        type Target = Box<dyn PresentedItemAny>;
-        fn deref(&self) -> &Self::Target {
-            &self.presented_item
-        }
     }
     impl PresentedItemAny for DraughtingPresentedItem {}
     #[derive(Debug, derive_new :: new)]
@@ -1191,23 +825,11 @@ pub mod explicit_draughting {
         pub items: Vec<DraughtingPresentedItemSelect>,
         pub presented_item: Box<dyn PresentedItemAny>,
     }
-    impl ::std::ops::Deref for DraughtingSecurityClassificationAssignment {
-        type Target = Box<dyn SecurityClassificationAssignmentAny>;
-        fn deref(&self) -> &Self::Target {
-            &self.security_classification_assignment
-        }
-    }
     impl SecurityClassificationAssignmentAny for DraughtingSecurityClassificationAssignment {}
     #[derive(Debug, derive_new :: new)]
     pub struct DraughtingSecurityClassificationAssignment {
         pub assigned_items: Vec<ClassifiedItem>,
         pub security_classification_assignment: Box<dyn SecurityClassificationAssignmentAny>,
-    }
-    impl ::std::ops::Deref for DraughtingSpecificationReference {
-        type Target = Box<dyn DocumentReferenceAny>;
-        fn deref(&self) -> &Self::Target {
-            &self.document_reference
-        }
     }
     impl DocumentReferenceAny for DraughtingSpecificationReference {}
     #[derive(Debug, derive_new :: new)]
@@ -1215,31 +837,13 @@ pub mod explicit_draughting {
         pub specified_items: Vec<SpecifiedItem>,
         pub document_reference: Box<dyn DocumentReferenceAny>,
     }
-    impl ::std::ops::Deref for DraughtingSubfigureRepresentation {
-        type Target = SymbolRepresentation;
-        fn deref(&self) -> &Self::Target {
-            &self.symbol_representation
-        }
-    }
     #[derive(Debug, derive_new :: new)]
     pub struct DraughtingSubfigureRepresentation {
         pub symbol_representation: SymbolRepresentation,
     }
-    impl ::std::ops::Deref for DraughtingSymbolRepresentation {
-        type Target = SymbolRepresentation;
-        fn deref(&self) -> &Self::Target {
-            &self.symbol_representation
-        }
-    }
     #[derive(Debug, derive_new :: new)]
     pub struct DraughtingSymbolRepresentation {
         pub symbol_representation: SymbolRepresentation,
-    }
-    impl ::std::ops::Deref for DraughtingTextLiteralWithDelineation {
-        type Target = TextLiteralWithDelineation;
-        fn deref(&self) -> &Self::Target {
-            &self.text_literal_with_delineation
-        }
     }
     #[derive(Debug, derive_new :: new)]
     pub struct DraughtingTextLiteralWithDelineation {
@@ -1256,12 +860,6 @@ pub mod explicit_draughting {
         pub drawing_number: Identifier,
         pub drawing_type: Option<Label>,
     }
-    impl ::std::ops::Deref for DrawingRevision {
-        type Target = PresentationSet;
-        fn deref(&self) -> &Self::Target {
-            &self.presentation_set
-        }
-    }
     #[derive(Debug, derive_new :: new)]
     pub struct DrawingRevision {
         pub revision_identifier: Identifier,
@@ -1269,43 +867,19 @@ pub mod explicit_draughting {
         pub intended_scale: Option<Text>,
         pub presentation_set: PresentationSet,
     }
-    impl ::std::ops::Deref for DrawingSheetLayout {
-        type Target = DraughtingSymbolRepresentation;
-        fn deref(&self) -> &Self::Target {
-            &self.draughting_symbol_representation
-        }
-    }
     #[derive(Debug, derive_new :: new)]
     pub struct DrawingSheetLayout {
         pub draughting_symbol_representation: DraughtingSymbolRepresentation,
-    }
-    impl ::std::ops::Deref for DrawingSheetRevision {
-        type Target = PresentationArea;
-        fn deref(&self) -> &Self::Target {
-            &self.presentation_area
-        }
     }
     #[derive(Debug, derive_new :: new)]
     pub struct DrawingSheetRevision {
         pub revision_identifier: Identifier,
         pub presentation_area: PresentationArea,
     }
-    impl ::std::ops::Deref for DrawingSheetRevisionUsage {
-        type Target = AreaInSet;
-        fn deref(&self) -> &Self::Target {
-            &self.area_in_set
-        }
-    }
     #[derive(Debug, derive_new :: new)]
     pub struct DrawingSheetRevisionUsage {
         pub sheet_number: Identifier,
         pub area_in_set: AreaInSet,
-    }
-    impl ::std::ops::Deref for Ellipse {
-        type Target = Box<dyn ConicAny>;
-        fn deref(&self) -> &Self::Target {
-            &self.conic
-        }
     }
     impl ConicAny for Ellipse {}
     #[derive(Debug, derive_new :: new)]
@@ -1317,12 +891,6 @@ pub mod explicit_draughting {
     #[derive(Debug, derive_new :: new)]
     pub struct ExternalSource {
         pub source_id: SourceItem,
-    }
-    impl ::std::ops::Deref for ExternallyDefinedCurveFont {
-        type Target = ExternallyDefinedItem;
-        fn deref(&self) -> &Self::Target {
-            &self.externally_defined_item
-        }
     }
     #[derive(Debug, derive_new :: new)]
     pub struct ExternallyDefinedCurveFont {
@@ -1339,21 +907,9 @@ pub mod explicit_draughting {
         pub item_id: SourceItem,
         pub source: ExternalSource,
     }
-    impl ::std::ops::Deref for ExternallyDefinedSymbol {
-        type Target = ExternallyDefinedItem;
-        fn deref(&self) -> &Self::Target {
-            &self.externally_defined_item
-        }
-    }
     #[derive(Debug, derive_new :: new)]
     pub struct ExternallyDefinedSymbol {
         pub externally_defined_item: ExternallyDefinedItem,
-    }
-    impl ::std::ops::Deref for ExternallyDefinedTextFont {
-        type Target = ExternallyDefinedItem;
-        fn deref(&self) -> &Self::Target {
-            &self.externally_defined_item
-        }
     }
     #[derive(Debug, derive_new :: new)]
     pub struct ExternallyDefinedTextFont {
@@ -1375,12 +931,6 @@ pub mod explicit_draughting {
         pub name: Label,
         pub fill_colour: Colour,
     }
-    impl ::std::ops::Deref for FillAreaStyleHatching {
-        type Target = Box<dyn GeometricRepresentationItemAny>;
-        fn deref(&self) -> &Self::Target {
-            &self.geometric_representation_item
-        }
-    }
     impl GeometricRepresentationItemAny for FillAreaStyleHatching {}
     #[derive(Debug, derive_new :: new)]
     pub struct FillAreaStyleHatching {
@@ -1391,23 +941,11 @@ pub mod explicit_draughting {
         pub hatch_line_angle: PlaneAngleMeasure,
         pub geometric_representation_item: Box<dyn GeometricRepresentationItemAny>,
     }
-    impl ::std::ops::Deref for FillAreaStyleTileSymbolWithStyle {
-        type Target = Box<dyn GeometricRepresentationItemAny>;
-        fn deref(&self) -> &Self::Target {
-            &self.geometric_representation_item
-        }
-    }
     impl GeometricRepresentationItemAny for FillAreaStyleTileSymbolWithStyle {}
     #[derive(Debug, derive_new :: new)]
     pub struct FillAreaStyleTileSymbolWithStyle {
         pub symbol: AnnotationSymbolOccurrence,
         pub geometric_representation_item: Box<dyn GeometricRepresentationItemAny>,
-    }
-    impl ::std::ops::Deref for FillAreaStyleTiles {
-        type Target = Box<dyn GeometricRepresentationItemAny>;
-        fn deref(&self) -> &Self::Target {
-            &self.geometric_representation_item
-        }
     }
     impl GeometricRepresentationItemAny for FillAreaStyleTiles {}
     #[derive(Debug, derive_new :: new)]
@@ -1417,33 +955,15 @@ pub mod explicit_draughting {
         pub tiling_scale: PositiveRatioMeasure,
         pub geometric_representation_item: Box<dyn GeometricRepresentationItemAny>,
     }
-    impl ::std::ops::Deref for GeometricCurveSet {
-        type Target = Box<dyn GeometricSetAny>;
-        fn deref(&self) -> &Self::Target {
-            &self.geometric_set
-        }
-    }
     impl GeometricSetAny for GeometricCurveSet {}
     #[derive(Debug, derive_new :: new)]
     pub struct GeometricCurveSet {
         pub geometric_set: Box<dyn GeometricSetAny>,
     }
-    impl ::std::ops::Deref for GeometricRepresentationContext {
-        type Target = RepresentationContext;
-        fn deref(&self) -> &Self::Target {
-            &self.representation_context
-        }
-    }
     #[derive(Debug, derive_new :: new)]
     pub struct GeometricRepresentationContext {
         pub coordinate_space_dimension: DimensionCount,
         pub representation_context: RepresentationContext,
-    }
-    impl ::std::ops::Deref for GeometricRepresentationItem {
-        type Target = RepresentationItem;
-        fn deref(&self) -> &Self::Target {
-            &self.representation_item
-        }
     }
     #[derive(Debug, derive_new :: new)]
     pub struct GeometricRepresentationItem {
@@ -1451,12 +971,6 @@ pub mod explicit_draughting {
     }
     pub trait GeometricRepresentationItemAny: ::std::any::Any + ::std::fmt::Debug {}
     impl GeometricRepresentationItemAny for GeometricRepresentationItem {}
-    impl ::std::ops::Deref for GeometricSet {
-        type Target = Box<dyn GeometricRepresentationItemAny>;
-        fn deref(&self) -> &Self::Target {
-            &self.geometric_representation_item
-        }
-    }
     impl GeometricRepresentationItemAny for GeometricSet {}
     #[derive(Debug, derive_new :: new)]
     pub struct GeometricSet {
@@ -1465,31 +979,13 @@ pub mod explicit_draughting {
     }
     pub trait GeometricSetAny: ::std::any::Any + ::std::fmt::Debug {}
     impl GeometricSetAny for GeometricSet {}
-    impl ::std::ops::Deref for GeometricalToleranceCallout {
-        type Target = DraughtingCallout;
-        fn deref(&self) -> &Self::Target {
-            &self.draughting_callout
-        }
-    }
     #[derive(Debug, derive_new :: new)]
     pub struct GeometricalToleranceCallout {
         pub draughting_callout: DraughtingCallout,
     }
-    impl ::std::ops::Deref for GeometricallyBounded2DWireframeRepresentation {
-        type Target = ShapeRepresentation;
-        fn deref(&self) -> &Self::Target {
-            &self.shape_representation
-        }
-    }
     #[derive(Debug, derive_new :: new)]
     pub struct GeometricallyBounded2DWireframeRepresentation {
         pub shape_representation: ShapeRepresentation,
-    }
-    impl ::std::ops::Deref for GlobalUnitAssignedContext {
-        type Target = RepresentationContext;
-        fn deref(&self) -> &Self::Target {
-            &self.representation_context
-        }
     }
     #[derive(Debug, derive_new :: new)]
     pub struct GlobalUnitAssignedContext {
@@ -1514,12 +1010,6 @@ pub mod explicit_draughting {
         pub relating_group: Group,
         pub related_group: Group,
     }
-    impl ::std::ops::Deref for Hyperbola {
-        type Target = Box<dyn ConicAny>;
-        fn deref(&self) -> &Self::Target {
-            &self.conic
-        }
-    }
     impl ConicAny for Hyperbola {}
     #[derive(Debug, derive_new :: new)]
     pub struct Hyperbola {
@@ -1531,73 +1021,31 @@ pub mod explicit_draughting {
     pub struct Invisibility {
         pub invisible_items: Vec<InvisibleItem>,
     }
-    impl ::std::ops::Deref for LeaderCurve {
-        type Target = AnnotationCurveOccurrence;
-        fn deref(&self) -> &Self::Target {
-            &self.annotation_curve_occurrence
-        }
-    }
     #[derive(Debug, derive_new :: new)]
     pub struct LeaderCurve {
         pub annotation_curve_occurrence: AnnotationCurveOccurrence,
-    }
-    impl ::std::ops::Deref for LeaderDirectedCallout {
-        type Target = DraughtingCallout;
-        fn deref(&self) -> &Self::Target {
-            &self.draughting_callout
-        }
     }
     #[derive(Debug, derive_new :: new)]
     pub struct LeaderDirectedCallout {
         pub draughting_callout: DraughtingCallout,
     }
-    impl ::std::ops::Deref for LeaderDirectedDimension {
-        type Target = LeaderDirectedCallout;
-        fn deref(&self) -> &Self::Target {
-            &self.leader_directed_callout
-        }
-    }
     #[derive(Debug, derive_new :: new)]
     pub struct LeaderDirectedDimension {
         pub leader_directed_callout: LeaderDirectedCallout,
     }
-    impl ::std::ops::Deref for LeaderTerminator {
-        type Target = TerminatorSymbol;
-        fn deref(&self) -> &Self::Target {
-            &self.terminator_symbol
-        }
-    }
     #[derive(Debug, derive_new :: new)]
     pub struct LeaderTerminator {
         pub terminator_symbol: TerminatorSymbol,
-    }
-    impl ::std::ops::Deref for LengthMeasureWithUnit {
-        type Target = Box<dyn MeasureWithUnitAny>;
-        fn deref(&self) -> &Self::Target {
-            &self.measure_with_unit
-        }
     }
     impl MeasureWithUnitAny for LengthMeasureWithUnit {}
     #[derive(Debug, derive_new :: new)]
     pub struct LengthMeasureWithUnit {
         pub measure_with_unit: Box<dyn MeasureWithUnitAny>,
     }
-    impl ::std::ops::Deref for LengthUnit {
-        type Target = Box<dyn NamedUnitAny>;
-        fn deref(&self) -> &Self::Target {
-            &self.named_unit
-        }
-    }
     impl NamedUnitAny for LengthUnit {}
     #[derive(Debug, derive_new :: new)]
     pub struct LengthUnit {
         pub named_unit: Box<dyn NamedUnitAny>,
-    }
-    impl ::std::ops::Deref for Line {
-        type Target = Box<dyn CurveAny>;
-        fn deref(&self) -> &Self::Target {
-            &self.curve
-        }
     }
     impl CurveAny for Line {}
     #[derive(Debug, derive_new :: new)]
@@ -1606,21 +1054,9 @@ pub mod explicit_draughting {
         pub dir: Vector,
         pub curve: Box<dyn CurveAny>,
     }
-    impl ::std::ops::Deref for LinearDimension {
-        type Target = DimensionCurveDirectedCallout;
-        fn deref(&self) -> &Self::Target {
-            &self.dimension_curve_directed_callout
-        }
-    }
     #[derive(Debug, derive_new :: new)]
     pub struct LinearDimension {
         pub dimension_curve_directed_callout: DimensionCurveDirectedCallout,
-    }
-    impl ::std::ops::Deref for MappedItem {
-        type Target = RepresentationItem;
-        fn deref(&self) -> &Self::Target {
-            &self.representation_item
-        }
     }
     #[derive(Debug, derive_new :: new)]
     pub struct MappedItem {
@@ -1641,12 +1077,6 @@ pub mod explicit_draughting {
     }
     pub trait NamedUnitAny: ::std::any::Any + ::std::fmt::Debug {}
     impl NamedUnitAny for NamedUnit {}
-    impl ::std::ops::Deref for OffsetCurve2D {
-        type Target = Box<dyn CurveAny>;
-        fn deref(&self) -> &Self::Target {
-            &self.curve
-        }
-    }
     impl CurveAny for OffsetCurve2D {}
     #[derive(Debug, derive_new :: new)]
     pub struct OffsetCurve2D {
@@ -1655,23 +1085,11 @@ pub mod explicit_draughting {
         pub self_intersect: Logical,
         pub curve: Box<dyn CurveAny>,
     }
-    impl ::std::ops::Deref for OneDirectionRepeatFactor {
-        type Target = Box<dyn GeometricRepresentationItemAny>;
-        fn deref(&self) -> &Self::Target {
-            &self.geometric_representation_item
-        }
-    }
     impl GeometricRepresentationItemAny for OneDirectionRepeatFactor {}
     #[derive(Debug, derive_new :: new)]
     pub struct OneDirectionRepeatFactor {
         pub repeat_factor: Vector,
         pub geometric_representation_item: Box<dyn GeometricRepresentationItemAny>,
-    }
-    impl ::std::ops::Deref for OrdinateDimension {
-        type Target = ProjectionDirectedCallout;
-        fn deref(&self) -> &Self::Target {
-            &self.projection_directed_callout
-        }
     }
     #[derive(Debug, derive_new :: new)]
     pub struct OrdinateDimension {
@@ -1694,23 +1112,11 @@ pub mod explicit_draughting {
     pub struct OrganizationRole {
         pub name: Label,
     }
-    impl ::std::ops::Deref for OrganizationalAddress {
-        type Target = Address;
-        fn deref(&self) -> &Self::Target {
-            &self.address
-        }
-    }
     #[derive(Debug, derive_new :: new)]
     pub struct OrganizationalAddress {
         pub organizations: Vec<Organization>,
         pub description: Text,
         pub address: Address,
-    }
-    impl ::std::ops::Deref for Parabola {
-        type Target = Box<dyn ConicAny>;
-        fn deref(&self) -> &Self::Target {
-            &self.conic
-        }
     }
     impl ConicAny for Parabola {}
     #[derive(Debug, derive_new :: new)]
@@ -1754,23 +1160,11 @@ pub mod explicit_draughting {
     pub struct PersonRole {
         pub name: Label,
     }
-    impl ::std::ops::Deref for PersonalAddress {
-        type Target = Address;
-        fn deref(&self) -> &Self::Target {
-            &self.address
-        }
-    }
     #[derive(Debug, derive_new :: new)]
     pub struct PersonalAddress {
         pub people: Vec<Person>,
         pub description: Text,
         pub address: Address,
-    }
-    impl ::std::ops::Deref for Placement {
-        type Target = Box<dyn GeometricRepresentationItemAny>;
-        fn deref(&self) -> &Self::Target {
-            &self.geometric_representation_item
-        }
     }
     impl GeometricRepresentationItemAny for Placement {}
     #[derive(Debug, derive_new :: new)]
@@ -1780,22 +1174,10 @@ pub mod explicit_draughting {
     }
     pub trait PlacementAny: ::std::any::Any + ::std::fmt::Debug {}
     impl PlacementAny for Placement {}
-    impl ::std::ops::Deref for PlanarBox {
-        type Target = PlanarExtent;
-        fn deref(&self) -> &Self::Target {
-            &self.planar_extent
-        }
-    }
     #[derive(Debug, derive_new :: new)]
     pub struct PlanarBox {
         pub placement: Axis2Placement,
         pub planar_extent: PlanarExtent,
-    }
-    impl ::std::ops::Deref for PlanarExtent {
-        type Target = Box<dyn GeometricRepresentationItemAny>;
-        fn deref(&self) -> &Self::Target {
-            &self.geometric_representation_item
-        }
     }
     impl GeometricRepresentationItemAny for PlanarExtent {}
     #[derive(Debug, derive_new :: new)]
@@ -1804,33 +1186,15 @@ pub mod explicit_draughting {
         pub size_in_y: LengthMeasure,
         pub geometric_representation_item: Box<dyn GeometricRepresentationItemAny>,
     }
-    impl ::std::ops::Deref for PlaneAngleMeasureWithUnit {
-        type Target = Box<dyn MeasureWithUnitAny>;
-        fn deref(&self) -> &Self::Target {
-            &self.measure_with_unit
-        }
-    }
     impl MeasureWithUnitAny for PlaneAngleMeasureWithUnit {}
     #[derive(Debug, derive_new :: new)]
     pub struct PlaneAngleMeasureWithUnit {
         pub measure_with_unit: Box<dyn MeasureWithUnitAny>,
     }
-    impl ::std::ops::Deref for PlaneAngleUnit {
-        type Target = Box<dyn NamedUnitAny>;
-        fn deref(&self) -> &Self::Target {
-            &self.named_unit
-        }
-    }
     impl NamedUnitAny for PlaneAngleUnit {}
     #[derive(Debug, derive_new :: new)]
     pub struct PlaneAngleUnit {
         pub named_unit: Box<dyn NamedUnitAny>,
-    }
-    impl ::std::ops::Deref for Point {
-        type Target = Box<dyn GeometricRepresentationItemAny>;
-        fn deref(&self) -> &Self::Target {
-            &self.geometric_representation_item
-        }
     }
     impl GeometricRepresentationItemAny for Point {}
     #[derive(Debug, derive_new :: new)]
@@ -1839,24 +1203,12 @@ pub mod explicit_draughting {
     }
     pub trait PointAny: ::std::any::Any + ::std::fmt::Debug {}
     impl PointAny for Point {}
-    impl ::std::ops::Deref for PointOnCurve {
-        type Target = Box<dyn PointAny>;
-        fn deref(&self) -> &Self::Target {
-            &self.point
-        }
-    }
     impl PointAny for PointOnCurve {}
     #[derive(Debug, derive_new :: new)]
     pub struct PointOnCurve {
         pub basis_curve: Box<dyn CurveAny>,
         pub point_parameter: ParameterValue,
         pub point: Box<dyn PointAny>,
-    }
-    impl ::std::ops::Deref for Polyline {
-        type Target = Box<dyn BoundedCurveAny>;
-        fn deref(&self) -> &Self::Target {
-            &self.bounded_curve
-        }
     }
     impl BoundedCurveAny for Polyline {}
     #[derive(Debug, derive_new :: new)]
@@ -1869,31 +1221,13 @@ pub mod explicit_draughting {
         pub pre_defined_item: PreDefinedItem,
         pub colour: Colour,
     }
-    impl ::std::ops::Deref for PreDefinedCurveFont {
-        type Target = PreDefinedItem;
-        fn deref(&self) -> &Self::Target {
-            &self.pre_defined_item
-        }
-    }
     #[derive(Debug, derive_new :: new)]
     pub struct PreDefinedCurveFont {
         pub pre_defined_item: PreDefinedItem,
     }
-    impl ::std::ops::Deref for PreDefinedDimensionSymbol {
-        type Target = PreDefinedSymbol;
-        fn deref(&self) -> &Self::Target {
-            &self.pre_defined_symbol
-        }
-    }
     #[derive(Debug, derive_new :: new)]
     pub struct PreDefinedDimensionSymbol {
         pub pre_defined_symbol: PreDefinedSymbol,
-    }
-    impl ::std::ops::Deref for PreDefinedGeometricalToleranceSymbol {
-        type Target = PreDefinedSymbol;
-        fn deref(&self) -> &Self::Target {
-            &self.pre_defined_symbol
-        }
     }
     #[derive(Debug, derive_new :: new)]
     pub struct PreDefinedGeometricalToleranceSymbol {
@@ -1903,51 +1237,21 @@ pub mod explicit_draughting {
     pub struct PreDefinedItem {
         pub name: Label,
     }
-    impl ::std::ops::Deref for PreDefinedPointMarkerSymbol {
-        type Target = PreDefinedSymbol;
-        fn deref(&self) -> &Self::Target {
-            &self.pre_defined_symbol
-        }
-    }
     #[derive(Debug, derive_new :: new)]
     pub struct PreDefinedPointMarkerSymbol {
         pub pre_defined_symbol: PreDefinedSymbol,
-    }
-    impl ::std::ops::Deref for PreDefinedSymbol {
-        type Target = PreDefinedItem;
-        fn deref(&self) -> &Self::Target {
-            &self.pre_defined_item
-        }
     }
     #[derive(Debug, derive_new :: new)]
     pub struct PreDefinedSymbol {
         pub pre_defined_item: PreDefinedItem,
     }
-    impl ::std::ops::Deref for PreDefinedTerminatorSymbol {
-        type Target = PreDefinedSymbol;
-        fn deref(&self) -> &Self::Target {
-            &self.pre_defined_symbol
-        }
-    }
     #[derive(Debug, derive_new :: new)]
     pub struct PreDefinedTerminatorSymbol {
         pub pre_defined_symbol: PreDefinedSymbol,
     }
-    impl ::std::ops::Deref for PreDefinedTextFont {
-        type Target = PreDefinedItem;
-        fn deref(&self) -> &Self::Target {
-            &self.pre_defined_item
-        }
-    }
     #[derive(Debug, derive_new :: new)]
     pub struct PreDefinedTextFont {
         pub pre_defined_item: PreDefinedItem,
-    }
-    impl ::std::ops::Deref for PresentationArea {
-        type Target = PresentationRepresentation;
-        fn deref(&self) -> &Self::Target {
-            &self.presentation_representation
-        }
     }
     #[derive(Debug, derive_new :: new)]
     pub struct PresentationArea {
@@ -1964,12 +1268,6 @@ pub mod explicit_draughting {
         pub assignment: PresentationLayerAssignment,
         pub presentation: PresentationRepresentation,
     }
-    impl ::std::ops::Deref for PresentationRepresentation {
-        type Target = Representation;
-        fn deref(&self) -> &Self::Target {
-            &self.representation
-        }
-    }
     #[derive(Debug, derive_new :: new)]
     pub struct PresentationRepresentation {
         pub representation: Representation,
@@ -1985,22 +1283,10 @@ pub mod explicit_draughting {
     pub struct PresentationStyleAssignment {
         pub styles: Vec<PresentationStyleSelect>,
     }
-    impl ::std::ops::Deref for PresentationStyleByContext {
-        type Target = PresentationStyleAssignment;
-        fn deref(&self) -> &Self::Target {
-            &self.presentation_style_assignment
-        }
-    }
     #[derive(Debug, derive_new :: new)]
     pub struct PresentationStyleByContext {
         pub style_context: StyleContextSelect,
         pub presentation_style_assignment: PresentationStyleAssignment,
-    }
-    impl ::std::ops::Deref for PresentationView {
-        type Target = PresentationRepresentation;
-        fn deref(&self) -> &Self::Target {
-            &self.presentation_representation
-        }
     }
     #[derive(Debug, derive_new :: new)]
     pub struct PresentationView {
@@ -2022,12 +1308,6 @@ pub mod explicit_draughting {
         pub description: Text,
         pub frame_of_reference: Vec<ProductContext>,
     }
-    impl ::std::ops::Deref for ProductContext {
-        type Target = Box<dyn ApplicationContextElementAny>;
-        fn deref(&self) -> &Self::Target {
-            &self.application_context_element
-        }
-    }
     impl ApplicationContextElementAny for ProductContext {}
     #[derive(Debug, derive_new :: new)]
     pub struct ProductContext {
@@ -2041,12 +1321,6 @@ pub mod explicit_draughting {
         pub formation: ProductDefinitionFormation,
         pub frame_of_reference: ProductDefinitionContext,
     }
-    impl ::std::ops::Deref for ProductDefinitionContext {
-        type Target = Box<dyn ApplicationContextElementAny>;
-        fn deref(&self) -> &Self::Target {
-            &self.application_context_element
-        }
-    }
     impl ApplicationContextElementAny for ProductDefinitionContext {}
     #[derive(Debug, derive_new :: new)]
     pub struct ProductDefinitionContext {
@@ -2059,31 +1333,13 @@ pub mod explicit_draughting {
         pub description: Text,
         pub of_product: Product,
     }
-    impl ::std::ops::Deref for ProductDefinitionShape {
-        type Target = PropertyDefinition;
-        fn deref(&self) -> &Self::Target {
-            &self.property_definition
-        }
-    }
     #[derive(Debug, derive_new :: new)]
     pub struct ProductDefinitionShape {
         pub property_definition: PropertyDefinition,
     }
-    impl ::std::ops::Deref for ProjectionCurve {
-        type Target = AnnotationCurveOccurrence;
-        fn deref(&self) -> &Self::Target {
-            &self.annotation_curve_occurrence
-        }
-    }
     #[derive(Debug, derive_new :: new)]
     pub struct ProjectionCurve {
         pub annotation_curve_occurrence: AnnotationCurveOccurrence,
-    }
-    impl ::std::ops::Deref for ProjectionDirectedCallout {
-        type Target = DraughtingCallout;
-        fn deref(&self) -> &Self::Target {
-            &self.draughting_callout
-        }
     }
     #[derive(Debug, derive_new :: new)]
     pub struct ProjectionDirectedCallout {
@@ -2100,32 +1356,14 @@ pub mod explicit_draughting {
         pub definition: PropertyDefinition,
         pub used_representation: Representation,
     }
-    impl ::std::ops::Deref for QuasiUniformCurve {
-        type Target = Box<dyn BSplineCurveAny>;
-        fn deref(&self) -> &Self::Target {
-            &self.b_spline_curve
-        }
-    }
     impl BSplineCurveAny for QuasiUniformCurve {}
     #[derive(Debug, derive_new :: new)]
     pub struct QuasiUniformCurve {
         pub b_spline_curve: Box<dyn BSplineCurveAny>,
     }
-    impl ::std::ops::Deref for RadiusDimension {
-        type Target = DimensionCurveDirectedCallout;
-        fn deref(&self) -> &Self::Target {
-            &self.dimension_curve_directed_callout
-        }
-    }
     #[derive(Debug, derive_new :: new)]
     pub struct RadiusDimension {
         pub dimension_curve_directed_callout: DimensionCurveDirectedCallout,
-    }
-    impl ::std::ops::Deref for RationalBSplineCurve {
-        type Target = Box<dyn BSplineCurveAny>;
-        fn deref(&self) -> &Self::Target {
-            &self.b_spline_curve
-        }
     }
     impl BSplineCurveAny for RationalBSplineCurve {}
     #[derive(Debug, derive_new :: new)]
@@ -2169,31 +1407,13 @@ pub mod explicit_draughting {
     pub struct SecurityClassificationLevel {
         pub name: Label,
     }
-    impl ::std::ops::Deref for ShapeDefinitionRepresentation {
-        type Target = PropertyDefinitionRepresentation;
-        fn deref(&self) -> &Self::Target {
-            &self.property_definition_representation
-        }
-    }
     #[derive(Debug, derive_new :: new)]
     pub struct ShapeDefinitionRepresentation {
         pub property_definition_representation: PropertyDefinitionRepresentation,
     }
-    impl ::std::ops::Deref for ShapeRepresentation {
-        type Target = Representation;
-        fn deref(&self) -> &Self::Target {
-            &self.representation
-        }
-    }
     #[derive(Debug, derive_new :: new)]
     pub struct ShapeRepresentation {
         pub representation: Representation,
-    }
-    impl ::std::ops::Deref for SiUnit {
-        type Target = Box<dyn NamedUnitAny>;
-        fn deref(&self) -> &Self::Target {
-            &self.named_unit
-        }
     }
     impl NamedUnitAny for SiUnit {}
     #[derive(Debug, derive_new :: new)]
@@ -2202,21 +1422,9 @@ pub mod explicit_draughting {
         pub name: SiUnitName,
         pub named_unit: Box<dyn NamedUnitAny>,
     }
-    impl ::std::ops::Deref for StructuredDimensionCallout {
-        type Target = DraughtingCallout;
-        fn deref(&self) -> &Self::Target {
-            &self.draughting_callout
-        }
-    }
     #[derive(Debug, derive_new :: new)]
     pub struct StructuredDimensionCallout {
         pub draughting_callout: DraughtingCallout,
-    }
-    impl ::std::ops::Deref for StyledItem {
-        type Target = RepresentationItem;
-        fn deref(&self) -> &Self::Target {
-            &self.representation_item
-        }
     }
     #[derive(Debug, derive_new :: new)]
     pub struct StyledItem {
@@ -2228,21 +1436,9 @@ pub mod explicit_draughting {
     pub struct SymbolColour {
         pub colour_of_symbol: Colour,
     }
-    impl ::std::ops::Deref for SymbolRepresentation {
-        type Target = Representation;
-        fn deref(&self) -> &Self::Target {
-            &self.representation
-        }
-    }
     #[derive(Debug, derive_new :: new)]
     pub struct SymbolRepresentation {
         pub representation: Representation,
-    }
-    impl ::std::ops::Deref for SymbolRepresentationMap {
-        type Target = RepresentationMap;
-        fn deref(&self) -> &Self::Target {
-            &self.representation_map
-        }
     }
     #[derive(Debug, derive_new :: new)]
     pub struct SymbolRepresentationMap {
@@ -2253,12 +1449,6 @@ pub mod explicit_draughting {
         pub name: Label,
         pub style_of_symbol: SymbolStyleSelect,
     }
-    impl ::std::ops::Deref for SymbolTarget {
-        type Target = Box<dyn GeometricRepresentationItemAny>;
-        fn deref(&self) -> &Self::Target {
-            &self.geometric_representation_item
-        }
-    }
     impl GeometricRepresentationItemAny for SymbolTarget {}
     #[derive(Debug, derive_new :: new)]
     pub struct SymbolTarget {
@@ -2267,22 +1457,10 @@ pub mod explicit_draughting {
         pub y_scale: PositiveRatioMeasure,
         pub geometric_representation_item: Box<dyn GeometricRepresentationItemAny>,
     }
-    impl ::std::ops::Deref for TerminatorSymbol {
-        type Target = AnnotationSymbolOccurrence;
-        fn deref(&self) -> &Self::Target {
-            &self.annotation_symbol_occurrence
-        }
-    }
     #[derive(Debug, derive_new :: new)]
     pub struct TerminatorSymbol {
         pub annotated_curve: AnnotationCurveOccurrence,
         pub annotation_symbol_occurrence: AnnotationSymbolOccurrence,
-    }
-    impl ::std::ops::Deref for TextLiteral {
-        type Target = Box<dyn GeometricRepresentationItemAny>;
-        fn deref(&self) -> &Self::Target {
-            &self.geometric_representation_item
-        }
     }
     impl GeometricRepresentationItemAny for TextLiteral {}
     #[derive(Debug, derive_new :: new)]
@@ -2294,44 +1472,20 @@ pub mod explicit_draughting {
         pub font: FontSelect,
         pub geometric_representation_item: Box<dyn GeometricRepresentationItemAny>,
     }
-    impl ::std::ops::Deref for TextLiteralWithAssociatedCurves {
-        type Target = TextLiteral;
-        fn deref(&self) -> &Self::Target {
-            &self.text_literal
-        }
-    }
     #[derive(Debug, derive_new :: new)]
     pub struct TextLiteralWithAssociatedCurves {
         pub associated_curves: Vec<Box<dyn CurveAny>>,
         pub text_literal: TextLiteral,
-    }
-    impl ::std::ops::Deref for TextLiteralWithBlankingBox {
-        type Target = TextLiteral;
-        fn deref(&self) -> &Self::Target {
-            &self.text_literal
-        }
     }
     #[derive(Debug, derive_new :: new)]
     pub struct TextLiteralWithBlankingBox {
         pub blanking: PlanarBox,
         pub text_literal: TextLiteral,
     }
-    impl ::std::ops::Deref for TextLiteralWithDelineation {
-        type Target = TextLiteral;
-        fn deref(&self) -> &Self::Target {
-            &self.text_literal
-        }
-    }
     #[derive(Debug, derive_new :: new)]
     pub struct TextLiteralWithDelineation {
         pub delineation: TextDelineation,
         pub text_literal: TextLiteral,
-    }
-    impl ::std::ops::Deref for TextLiteralWithExtent {
-        type Target = TextLiteral;
-        fn deref(&self) -> &Self::Target {
-            &self.text_literal
-        }
     }
     #[derive(Debug, derive_new :: new)]
     pub struct TextLiteralWithExtent {
@@ -2347,33 +1501,15 @@ pub mod explicit_draughting {
     pub struct TextStyleForDefinedFont {
         pub text_colour: Colour,
     }
-    impl ::std::ops::Deref for TextStyleWithBoxCharacteristics {
-        type Target = TextStyle;
-        fn deref(&self) -> &Self::Target {
-            &self.text_style
-        }
-    }
     #[derive(Debug, derive_new :: new)]
     pub struct TextStyleWithBoxCharacteristics {
         pub characteristics: Vec<BoxCharacteristicSelect>,
         pub text_style: TextStyle,
     }
-    impl ::std::ops::Deref for TextStyleWithMirror {
-        type Target = TextStyle;
-        fn deref(&self) -> &Self::Target {
-            &self.text_style
-        }
-    }
     #[derive(Debug, derive_new :: new)]
     pub struct TextStyleWithMirror {
         pub mirror_placement: Axis2Placement,
         pub text_style: TextStyle,
-    }
-    impl ::std::ops::Deref for TrimmedCurve {
-        type Target = Box<dyn BoundedCurveAny>;
-        fn deref(&self) -> &Self::Target {
-            &self.bounded_curve
-        }
     }
     impl BoundedCurveAny for TrimmedCurve {}
     #[derive(Debug, derive_new :: new)]
@@ -2385,33 +1521,15 @@ pub mod explicit_draughting {
         pub master_representation: TrimmingPreference,
         pub bounded_curve: Box<dyn BoundedCurveAny>,
     }
-    impl ::std::ops::Deref for TwoDirectionRepeatFactor {
-        type Target = OneDirectionRepeatFactor;
-        fn deref(&self) -> &Self::Target {
-            &self.one_direction_repeat_factor
-        }
-    }
     #[derive(Debug, derive_new :: new)]
     pub struct TwoDirectionRepeatFactor {
         pub second_repeat_factor: Vector,
         pub one_direction_repeat_factor: OneDirectionRepeatFactor,
     }
-    impl ::std::ops::Deref for UniformCurve {
-        type Target = Box<dyn BSplineCurveAny>;
-        fn deref(&self) -> &Self::Target {
-            &self.b_spline_curve
-        }
-    }
     impl BSplineCurveAny for UniformCurve {}
     #[derive(Debug, derive_new :: new)]
     pub struct UniformCurve {
         pub b_spline_curve: Box<dyn BSplineCurveAny>,
-    }
-    impl ::std::ops::Deref for Vector {
-        type Target = Box<dyn GeometricRepresentationItemAny>;
-        fn deref(&self) -> &Self::Target {
-            &self.geometric_representation_item
-        }
     }
     impl GeometricRepresentationItemAny for Vector {}
     #[derive(Debug, derive_new :: new)]

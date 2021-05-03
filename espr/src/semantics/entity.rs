@@ -102,18 +102,6 @@ impl ToTokens for Entity {
                     _ => unreachable!(),
                 };
 
-                // impl Deref for single subtype case
-                if subtypes.len() == 1 {
-                    tokens.append_all(quote! {
-                        impl ::std::ops::Deref for #name {
-                            type Target = #ty;
-                            fn deref(&self) -> &Self::Target {
-                                &self.#attr
-                            }
-                        }
-                    });
-                }
-
                 attr_name.push(attr);
                 attr_type.push(ty.to_token_stream());
 
