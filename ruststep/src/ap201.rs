@@ -385,7 +385,11 @@ pub mod explicit_draughting {
     pub struct AnnotationOccurrence {
         pub styled_item: StyledItem,
     }
-    pub trait AnnotationOccurrenceAny: ::std::any::Any + ::std::fmt::Debug {}
+    pub trait AnnotationOccurrenceAny:
+        ::std::any::Any + ::std::fmt::Debug + dyn_clone::DynClone
+    {
+    }
+    dyn_clone::clone_trait_object!(AnnotationOccurrenceAny);
     impl AnnotationOccurrenceAny for AnnotationOccurrence {}
     #[derive(Debug, derive_new :: new)]
     pub struct AnnotationSubfigureOccurrence {
@@ -418,7 +422,11 @@ pub mod explicit_draughting {
         pub name: Label,
         pub frame_of_reference: ApplicationContext,
     }
-    pub trait ApplicationContextElementAny: ::std::any::Any + ::std::fmt::Debug {}
+    pub trait ApplicationContextElementAny:
+        ::std::any::Any + ::std::fmt::Debug + dyn_clone::DynClone
+    {
+    }
+    dyn_clone::clone_trait_object!(ApplicationContextElementAny);
     impl ApplicationContextElementAny for ApplicationContextElement {}
     #[derive(Debug, derive_new :: new)]
     pub struct ApplicationProtocolDefinition {
@@ -436,7 +444,11 @@ pub mod explicit_draughting {
     pub struct ApprovalAssignment {
         pub assigned_approval: Approval,
     }
-    pub trait ApprovalAssignmentAny: ::std::any::Any + ::std::fmt::Debug {}
+    pub trait ApprovalAssignmentAny:
+        ::std::any::Any + ::std::fmt::Debug + dyn_clone::DynClone
+    {
+    }
+    dyn_clone::clone_trait_object!(ApprovalAssignmentAny);
     impl ApprovalAssignmentAny for ApprovalAssignment {}
     #[derive(Debug, derive_new :: new)]
     pub struct ApprovalDateTime {
@@ -478,7 +490,8 @@ pub mod explicit_draughting {
         pub self_intersect: Logical,
         pub bounded_curve: Box<dyn BoundedCurveAny>,
     }
-    pub trait BSplineCurveAny: ::std::any::Any + ::std::fmt::Debug {}
+    pub trait BSplineCurveAny: ::std::any::Any + ::std::fmt::Debug + dyn_clone::DynClone {}
+    dyn_clone::clone_trait_object!(BSplineCurveAny);
     impl BSplineCurveAny for BSplineCurve {}
     impl BSplineCurveAny for BSplineCurveWithKnots {}
     #[derive(Debug, derive_new :: new)]
@@ -498,7 +511,8 @@ pub mod explicit_draughting {
     pub struct BoundedCurve {
         pub curve: Box<dyn CurveAny>,
     }
-    pub trait BoundedCurveAny: ::std::any::Any + ::std::fmt::Debug {}
+    pub trait BoundedCurveAny: ::std::any::Any + ::std::fmt::Debug + dyn_clone::DynClone {}
+    dyn_clone::clone_trait_object!(BoundedCurveAny);
     impl BoundedCurveAny for BoundedCurve {}
     impl DateAny for CalendarDate {}
     #[derive(Debug, derive_new :: new)]
@@ -520,7 +534,8 @@ pub mod explicit_draughting {
     pub struct CameraModel {
         pub geometric_representation_item: Box<dyn GeometricRepresentationItemAny>,
     }
-    pub trait CameraModelAny: ::std::any::Any + ::std::fmt::Debug {}
+    pub trait CameraModelAny: ::std::any::Any + ::std::fmt::Debug + dyn_clone::DynClone {}
+    dyn_clone::clone_trait_object!(CameraModelAny);
     impl CameraModelAny for CameraModel {}
     impl CameraModelAny for CameraModelD2 {}
     #[derive(Debug, derive_new :: new)]
@@ -599,7 +614,8 @@ pub mod explicit_draughting {
         pub position: Axis2Placement,
         pub curve: Box<dyn CurveAny>,
     }
-    pub trait ConicAny: ::std::any::Any + ::std::fmt::Debug {}
+    pub trait ConicAny: ::std::any::Any + ::std::fmt::Debug + dyn_clone::DynClone {}
+    dyn_clone::clone_trait_object!(ConicAny);
     impl ConicAny for Conic {}
     #[derive(Debug, derive_new :: new)]
     pub struct ContextDependentInvisibility {
@@ -616,7 +632,11 @@ pub mod explicit_draughting {
     pub struct ContractAssignment {
         pub assigned_contract: Contract,
     }
-    pub trait ContractAssignmentAny: ::std::any::Any + ::std::fmt::Debug {}
+    pub trait ContractAssignmentAny:
+        ::std::any::Any + ::std::fmt::Debug + dyn_clone::DynClone
+    {
+    }
+    dyn_clone::clone_trait_object!(ContractAssignmentAny);
     impl ContractAssignmentAny for ContractAssignment {}
     #[derive(Debug, derive_new :: new)]
     pub struct ContractType {
@@ -634,7 +654,8 @@ pub mod explicit_draughting {
     pub struct Curve {
         pub geometric_representation_item: Box<dyn GeometricRepresentationItemAny>,
     }
-    pub trait CurveAny: ::std::any::Any + ::std::fmt::Debug {}
+    pub trait CurveAny: ::std::any::Any + ::std::fmt::Debug + dyn_clone::DynClone {}
+    dyn_clone::clone_trait_object!(CurveAny);
     impl CurveAny for Curve {}
     #[derive(Debug, derive_new :: new)]
     pub struct CurveDimension {
@@ -661,7 +682,8 @@ pub mod explicit_draughting {
     pub struct Date {
         pub year_component: YearNumber,
     }
-    pub trait DateAny: ::std::any::Any + ::std::fmt::Debug {}
+    pub trait DateAny: ::std::any::Any + ::std::fmt::Debug + dyn_clone::DynClone {}
+    dyn_clone::clone_trait_object!(DateAny);
     impl DateAny for Date {}
     #[derive(Debug, derive_new :: new)]
     pub struct DatumFeatureCallout {
@@ -735,7 +757,11 @@ pub mod explicit_draughting {
         pub assigned_document: Document,
         pub source: Label,
     }
-    pub trait DocumentReferenceAny: ::std::any::Any + ::std::fmt::Debug {}
+    pub trait DocumentReferenceAny:
+        ::std::any::Any + ::std::fmt::Debug + dyn_clone::DynClone
+    {
+    }
+    dyn_clone::clone_trait_object!(DocumentReferenceAny);
     impl DocumentReferenceAny for DocumentReference {}
     #[derive(Debug, derive_new :: new)]
     pub struct DocumentType {
@@ -969,7 +995,11 @@ pub mod explicit_draughting {
     pub struct GeometricRepresentationItem {
         pub representation_item: RepresentationItem,
     }
-    pub trait GeometricRepresentationItemAny: ::std::any::Any + ::std::fmt::Debug {}
+    pub trait GeometricRepresentationItemAny:
+        ::std::any::Any + ::std::fmt::Debug + dyn_clone::DynClone
+    {
+    }
+    dyn_clone::clone_trait_object!(GeometricRepresentationItemAny);
     impl GeometricRepresentationItemAny for GeometricRepresentationItem {}
     impl GeometricRepresentationItemAny for GeometricSet {}
     #[derive(Debug, derive_new :: new)]
@@ -977,7 +1007,8 @@ pub mod explicit_draughting {
         pub elements: Vec<GeometricSetSelect>,
         pub geometric_representation_item: Box<dyn GeometricRepresentationItemAny>,
     }
-    pub trait GeometricSetAny: ::std::any::Any + ::std::fmt::Debug {}
+    pub trait GeometricSetAny: ::std::any::Any + ::std::fmt::Debug + dyn_clone::DynClone {}
+    dyn_clone::clone_trait_object!(GeometricSetAny);
     impl GeometricSetAny for GeometricSet {}
     #[derive(Debug, derive_new :: new)]
     pub struct GeometricalToleranceCallout {
@@ -1001,7 +1032,11 @@ pub mod explicit_draughting {
     pub struct GroupAssignment {
         pub assigned_group: Group,
     }
-    pub trait GroupAssignmentAny: ::std::any::Any + ::std::fmt::Debug {}
+    pub trait GroupAssignmentAny:
+        ::std::any::Any + ::std::fmt::Debug + dyn_clone::DynClone
+    {
+    }
+    dyn_clone::clone_trait_object!(GroupAssignmentAny);
     impl GroupAssignmentAny for GroupAssignment {}
     #[derive(Debug, derive_new :: new)]
     pub struct GroupRelationship {
@@ -1069,13 +1104,18 @@ pub mod explicit_draughting {
         pub value_component: MeasureValue,
         pub unit_component: Unit,
     }
-    pub trait MeasureWithUnitAny: ::std::any::Any + ::std::fmt::Debug {}
+    pub trait MeasureWithUnitAny:
+        ::std::any::Any + ::std::fmt::Debug + dyn_clone::DynClone
+    {
+    }
+    dyn_clone::clone_trait_object!(MeasureWithUnitAny);
     impl MeasureWithUnitAny for MeasureWithUnit {}
     #[derive(Debug, derive_new :: new)]
     pub struct NamedUnit {
         pub dimensions: DimensionalExponents,
     }
-    pub trait NamedUnitAny: ::std::any::Any + ::std::fmt::Debug {}
+    pub trait NamedUnitAny: ::std::any::Any + ::std::fmt::Debug + dyn_clone::DynClone {}
+    dyn_clone::clone_trait_object!(NamedUnitAny);
     impl NamedUnitAny for NamedUnit {}
     impl CurveAny for OffsetCurve2D {}
     #[derive(Debug, derive_new :: new)]
@@ -1106,7 +1146,11 @@ pub mod explicit_draughting {
         pub assigned_organization: Organization,
         pub role: OrganizationRole,
     }
-    pub trait OrganizationAssignmentAny: ::std::any::Any + ::std::fmt::Debug {}
+    pub trait OrganizationAssignmentAny:
+        ::std::any::Any + ::std::fmt::Debug + dyn_clone::DynClone
+    {
+    }
+    dyn_clone::clone_trait_object!(OrganizationAssignmentAny);
     impl OrganizationAssignmentAny for OrganizationAssignment {}
     #[derive(Debug, derive_new :: new)]
     pub struct OrganizationRole {
@@ -1143,7 +1187,11 @@ pub mod explicit_draughting {
         pub assigned_person_and_organization: PersonAndOrganization,
         pub role: PersonAndOrganizationRole,
     }
-    pub trait PersonAndOrganizationAssignmentAny: ::std::any::Any + ::std::fmt::Debug {}
+    pub trait PersonAndOrganizationAssignmentAny:
+        ::std::any::Any + ::std::fmt::Debug + dyn_clone::DynClone
+    {
+    }
+    dyn_clone::clone_trait_object!(PersonAndOrganizationAssignmentAny);
     impl PersonAndOrganizationAssignmentAny for PersonAndOrganizationAssignment {}
     #[derive(Debug, derive_new :: new)]
     pub struct PersonAndOrganizationRole {
@@ -1154,7 +1202,11 @@ pub mod explicit_draughting {
         pub assigned_person: Person,
         pub role: PersonRole,
     }
-    pub trait PersonAssignmentAny: ::std::any::Any + ::std::fmt::Debug {}
+    pub trait PersonAssignmentAny:
+        ::std::any::Any + ::std::fmt::Debug + dyn_clone::DynClone
+    {
+    }
+    dyn_clone::clone_trait_object!(PersonAssignmentAny);
     impl PersonAssignmentAny for PersonAssignment {}
     #[derive(Debug, derive_new :: new)]
     pub struct PersonRole {
@@ -1172,7 +1224,8 @@ pub mod explicit_draughting {
         pub location: CartesianPoint,
         pub geometric_representation_item: Box<dyn GeometricRepresentationItemAny>,
     }
-    pub trait PlacementAny: ::std::any::Any + ::std::fmt::Debug {}
+    pub trait PlacementAny: ::std::any::Any + ::std::fmt::Debug + dyn_clone::DynClone {}
+    dyn_clone::clone_trait_object!(PlacementAny);
     impl PlacementAny for Placement {}
     #[derive(Debug, derive_new :: new)]
     pub struct PlanarBox {
@@ -1201,7 +1254,8 @@ pub mod explicit_draughting {
     pub struct Point {
         pub geometric_representation_item: Box<dyn GeometricRepresentationItemAny>,
     }
-    pub trait PointAny: ::std::any::Any + ::std::fmt::Debug {}
+    pub trait PointAny: ::std::any::Any + ::std::fmt::Debug + dyn_clone::DynClone {}
+    dyn_clone::clone_trait_object!(PointAny);
     impl PointAny for Point {}
     impl PointAny for PointOnCurve {}
     #[derive(Debug, derive_new :: new)]
@@ -1294,7 +1348,8 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, derive_new :: new)]
     pub struct PresentedItem {}
-    pub trait PresentedItemAny: ::std::any::Any + ::std::fmt::Debug {}
+    pub trait PresentedItemAny: ::std::any::Any + ::std::fmt::Debug + dyn_clone::DynClone {}
+    dyn_clone::clone_trait_object!(PresentedItemAny);
     impl PresentedItemAny for PresentedItem {}
     #[derive(Debug, derive_new :: new)]
     pub struct PresentedItemRepresentation {
@@ -1401,7 +1456,11 @@ pub mod explicit_draughting {
     pub struct SecurityClassificationAssignment {
         pub assigned_security_classification: SecurityClassification,
     }
-    pub trait SecurityClassificationAssignmentAny: ::std::any::Any + ::std::fmt::Debug {}
+    pub trait SecurityClassificationAssignmentAny:
+        ::std::any::Any + ::std::fmt::Debug + dyn_clone::DynClone
+    {
+    }
+    dyn_clone::clone_trait_object!(SecurityClassificationAssignmentAny);
     impl SecurityClassificationAssignmentAny for SecurityClassificationAssignment {}
     #[derive(Debug, derive_new :: new)]
     pub struct SecurityClassificationLevel {
