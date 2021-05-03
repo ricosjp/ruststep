@@ -92,7 +92,9 @@ impl ToTokens for Entity {
         if let Some(subtypes) = &self.subtypes {
             for ty in subtypes {
                 let (attr, ty) = match ty {
-                    TypeRef::Named { name, .. } => (format_ident!("{}", name), ty),
+                    TypeRef::Named { name, .. } | TypeRef::Entity { name, .. } => {
+                        (format_ident!("{}", name), ty)
+                    }
                     _ => unreachable!(),
                 };
 
