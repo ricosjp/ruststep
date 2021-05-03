@@ -8,6 +8,7 @@ edition = "2018"
 
 [dependencies]
 derive-new = "0.5.9"
+dyn-clone = "1.0.4"
 nom = "6.1.0"
 serde = { version = "1.0.124", features = ["derive"]}
 thiserror = "1.0.24"
