@@ -138,7 +138,7 @@ impl ToTokens for Entity {
         }
 
         tokens.append_all(quote! {
-            #[derive(Debug, derive_new::new)]
+            #[derive(Debug, Clone, derive_new::new)]
             pub struct #name {
                 #(
                 pub #attr_name : #attr_type,
@@ -164,7 +164,12 @@ impl ToTokens for Entity {
         if self.has_supertype_decl {
             let trait_name = format_ident!("{}Any", name);
             tokens.append_all(quote! {
-                pub trait #trait_name : ::std::any::Any + ::std::fmt::Debug {}
+                pub trait #trait_name:
+                    ::std::any::Any
+                  + ::std::fmt::Debug
+                  + dyn_clone::DynClone
+                {}
+                dyn_clone::clone_trait_object!(#trait_name);
             });
             tokens.append_all(quote! {
                 impl #trait_name for #name {}
