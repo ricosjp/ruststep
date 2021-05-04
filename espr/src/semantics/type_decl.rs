@@ -10,6 +10,38 @@ pub enum UnderlyingType {
     Select(Vec<TypeRef>),
 }
 
+/// Rename of primitive type,
+/// e.g. `TYPE label = STRING; ENDTYPE;`
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct Simple {
+    id: String,
+    ty: ast::types::SimpleType,
+}
+
+/// Rename of user defined type,
+/// e.g. `TYPE box_height = positive_ratio_measure; END_TYPE;`
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct Rename {
+    id: String,
+    ty: TypeRef,
+}
+
+/// Enumeration of values,
+/// e.g. `TYPE text_path = ENUMERATION OF (up, right, down, left); END_TYPE;`
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct Enumeration {
+    id: String,
+    values: Vec<String>,
+}
+
+/// Select of user defined types,
+/// e.g. `TYPE geometric_set_select = SELECT (point, curve); END_TYPE;`
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct Select {
+    id: String,
+    types: Vec<TypeRef>,
+}
+
 impl Legalize for UnderlyingType {
     type Input = ast::types::UnderlyingType;
     fn legalize(ns: &Namespace, scope: &Scope, input: &Self::Input) -> Result<Self, SemanticError> {
