@@ -5,6 +5,35 @@ use proc_macro2::TokenStream;
 use quote::*;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
+pub struct SimpleType(pub ast::types::SimpleType);
+
+impl Legalize for SimpleType {
+    type Input = ast::types::SimpleType;
+    fn legalize(
+        _ns: &Namespace,
+        _scope: &Scope,
+        input: &Self::Input,
+    ) -> Result<Self, SemanticError> {
+        Ok(SimpleType(input.clone()))
+    }
+}
+
+impl ToTokens for SimpleType {
+    fn to_tokens(&self, tokens: &mut TokenStream) {
+        use ast::types::SimpleType::*;
+        match self.0 {
+            Number => tokens.append(format_ident!("f64")),
+            Real => tokens.append(format_ident!("f64")),
+            Integer => tokens.append(format_ident!("i64")),
+            Logical => tokens.append_all(quote! { Logical }),
+            Boolen => tokens.append(format_ident!("bool")),
+            String_ { .. } => tokens.append(format_ident!("String")),
+            Binary { .. } => unimplemented!("Binary type is not supported yet"),
+        }
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Bound {}
 
 impl Legalize for Bound {
@@ -30,7 +59,7 @@ pub enum TypeRef {
         scope: Scope,
         has_supertype_decl: bool,
     },
-    SimpleType(ast::types::SimpleType),
+    SimpleType(SimpleType),
     Set {
         base: Box<TypeRef>,
         bound: Option<Bound>,
@@ -52,7 +81,7 @@ impl Legalize for TypeRef {
     ) -> Result<Self, SemanticError> {
         use ast::types::ParameterType::*;
         Ok(match ty {
-            Simple(ty) => Self::SimpleType(*ty),
+            Simple(ty) => Self::SimpleType(SimpleType(*ty)),
             Named(name) => ns.lookup_type(scope, name)?,
             Set { base, bound } => {
                 let base = TypeRef::legalize(ns, scope, base.as_ref())?;
@@ -92,18 +121,7 @@ impl ToTokens for TypeRef {
     fn to_tokens(&self, tokens: &mut TokenStream) {
         use TypeRef::*;
         match self {
-            SimpleType(ty) => {
-                use ast::types::SimpleType::*;
-                match ty {
-                    Number => tokens.append(format_ident!("f64")),
-                    Real => tokens.append(format_ident!("f64")),
-                    Integer => tokens.append(format_ident!("i64")),
-                    Logical => tokens.append_all(quote! { Logical }),
-                    Boolen => tokens.append(format_ident!("bool")),
-                    String_ { .. } => tokens.append(format_ident!("String")),
-                    Binary { .. } => unimplemented!("Binary type is not supported yet"),
-                }
-            }
+            SimpleType(ty) => ty.to_tokens(tokens),
             Named { name, .. } => {
                 let name = format_ident!("{}", name.to_pascal_case());
                 tokens.append_all(quote! { #name });

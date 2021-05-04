@@ -15,7 +15,17 @@ pub enum UnderlyingType {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Simple {
     id: String,
-    ty: ast::types::SimpleType,
+    ty: SimpleType,
+}
+
+impl ToTokens for Simple {
+    fn to_tokens(&self, tokens: &mut TokenStream) {
+        let id = format_ident!("{}", &self.id.to_pascal_case());
+        let ty = &self.ty;
+        tokens.append_all(quote! {
+            pub type #id = #ty;
+        });
+    }
 }
 
 /// Rename of user defined type,
@@ -47,7 +57,7 @@ impl Legalize for UnderlyingType {
     fn legalize(ns: &Namespace, scope: &Scope, input: &Self::Input) -> Result<Self, SemanticError> {
         let underlying_type = match input {
             ast::types::UnderlyingType::Simple(simple) => {
-                UnderlyingType::Simple(TypeRef::SimpleType(*simple))
+                UnderlyingType::Simple(TypeRef::SimpleType(SimpleType(*simple)))
             }
             ast::types::UnderlyingType::Reference(name) => {
                 UnderlyingType::Reference(ns.lookup_type(scope, name)?)
