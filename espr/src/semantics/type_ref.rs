@@ -50,16 +50,33 @@ impl Legalize for Bound {
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum TypeRef {
+    SimpleType(SimpleType),
     Named {
         name: String,
+
+        /// Scope where the named type is declared
         scope: Scope,
+
+        /// True if the underlying type of named type is a simple type:
+        ///
+        /// ```text
+        /// TYPE a = INTEGER; ENDTYPE;
+        /// TYPE b = a; ENDTYPE;
+        /// ```
+        ///
+        /// Then both `a` and `b` are simple.
+        ///
+        is_simple: bool,
     },
+
+    /* Declared as `ENTITY` */
     Entity {
         name: String,
         scope: Scope,
         has_supertype_decl: bool,
     },
-    SimpleType(SimpleType),
+
+    /* Aggregated */
     Set {
         base: Box<TypeRef>,
         bound: Option<Bound>,
@@ -69,6 +86,16 @@ pub enum TypeRef {
         bound: Option<Bound>,
         unique: bool,
     },
+}
+
+impl TypeRef {
+    pub fn is_simple(&self) -> bool {
+        match self {
+            TypeRef::SimpleType(..) => true,
+            TypeRef::Named { is_simple, .. } => *is_simple,
+            _ => false,
+        }
+    }
 }
 
 impl Legalize for TypeRef {

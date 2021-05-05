@@ -126,20 +126,38 @@ impl Namespace {
                     });
                 }
             }
-            for ty in ns
-                .simple_types
-                .iter()
-                .chain(ns.rename_types.iter())
-                .chain(ns.enumeration_types.iter())
-                .chain(ns.select_types.iter())
-            {
+
+            for ty in &ns.simple_types {
                 if name == ty {
                     return Ok(TypeRef::Named {
                         name: ty.to_string(),
                         scope,
+                        is_simple: true,
                     });
                 }
             }
+
+            for ty in ns.enumeration_types.iter().chain(ns.select_types.iter()) {
+                if name == ty {
+                    return Ok(TypeRef::Named {
+                        name: ty.to_string(),
+                        scope,
+                        is_simple: false,
+                    });
+                }
+            }
+
+            for ty in &ns.rename_types {
+                if name == ty {
+                    let underlying_type = self.lookup_type(&scope, &name)?;
+                    return Ok(TypeRef::Named {
+                        name: ty.to_string(),
+                        scope,
+                        is_simple: underlying_type.is_simple(),
+                    });
+                }
+            }
+
             if let Some(popped) = scope.popped() {
                 scope = popped;
             } else {
