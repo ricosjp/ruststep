@@ -16,7 +16,7 @@ pub struct Names {
     simple_types: Vec<String>,
     /// Renames of user defined type,
     /// e.g. `TYPE box_height = positive_ratio_measure; END_TYPE;`
-    rename_types: Vec<String>,
+    rename_types: Vec<(String, String /* underlying type */)>,
     /// Enumeration of values,
     /// e.g. `TYPE text_path = ENUMERATION OF (up, right, down, left); END_TYPE;`
     enumeration_types: Vec<String>,
@@ -65,9 +65,11 @@ impl Namespace {
             let mut select_types = Vec::new();
             for ty in &schema.types {
                 use ast::types::UnderlyingType;
-                match ty.underlying_type {
+                match &ty.underlying_type {
                     UnderlyingType::Simple(..) => simple_types.push(ty.type_id.clone()),
-                    UnderlyingType::Reference(..) => rename_types.push(ty.type_id.clone()),
+                    UnderlyingType::Reference(underlying_type) => {
+                        rename_types.push((ty.type_id.clone(), underlying_type.clone()))
+                    }
                     UnderlyingType::Enumeration { .. } => {
                         enumeration_types.push(ty.type_id.clone())
                     }
@@ -147,9 +149,9 @@ impl Namespace {
                 }
             }
 
-            for ty in &ns.rename_types {
+            for (ty, underlying_type) in &ns.rename_types {
                 if name == ty {
-                    let underlying_type = self.lookup_type(&scope, &name)?;
+                    let underlying_type = self.lookup_type(&scope, &underlying_type)?;
                     return Ok(TypeRef::Named {
                         name: ty.to_string(),
                         scope,
