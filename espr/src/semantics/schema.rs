@@ -45,19 +45,19 @@ impl ToTokens for Schema {
         let entities = &self.entities;
         let entity_name: Vec<_> = entities
             .iter()
-            .map(|e| format_ident!("{}", e.name))
+            .map(|e| format_ident!("{}", e.name.to_pascal_case()))
             .collect();
         let holder_name: Vec<_> = entities
             .iter()
-            .map(|e| format_ident!("{}", e.name.to_snake_case()))
+            .map(|e| format_ident!("{}", e.name))
             .collect();
         let holder_type: Vec<_> = entities
             .iter()
-            .map(|e| format_ident!("{}", e.holder_name))
+            .map(|e| format_ident!("{}Holder", e.name.to_pascal_case()))
             .collect();
         let iter_name: Vec<_> = entities
             .iter()
-            .map(|e| format_ident!("{}_iter", e.name.to_snake_case()))
+            .map(|e| format_ident!("{}_iter", e.name))
             .collect();
         tokens.append_all(quote! {
             pub mod #name {

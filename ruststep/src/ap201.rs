@@ -25,7 +25,7 @@ pub mod explicit_draughting {
         approval_role: HashMap<u64, ApprovalRoleHolder>,
         approval_status: HashMap<u64, ApprovalStatusHolder>,
         area_in_set: HashMap<u64, AreaInSetHolder>,
-        axis_2_placement_2d: HashMap<u64, Axis2Placement2DHolder>,
+        axis2_placement_2d: HashMap<u64, Axis2Placement2DHolder>,
         b_spline_curve: HashMap<u64, BSplineCurveHolder>,
         b_spline_curve_with_knots: HashMap<u64, BSplineCurveWithKnotsHolder>,
         bezier_curve: HashMap<u64, BezierCurveHolder>,
@@ -402,10 +402,10 @@ pub mod explicit_draughting {
                 .cloned()
                 .map(move |value| value.into_owned(&self))
         }
-        pub fn axis_2_placement_2d_iter<'table>(
+        pub fn axis2_placement_2d_iter<'table>(
             &'table self,
         ) -> impl Iterator<Item = Result<Axis2Placement2D>> + 'table {
-            self.axis_2_placement_2d
+            self.axis2_placement_2d
                 .values()
                 .cloned()
                 .map(move |value| value.into_owned(&self))
@@ -2083,7 +2083,7 @@ pub mod explicit_draughting {
     }
     impl EntityTable<Axis2Placement2DHolder> for Tables {
         fn get_entity(&self, id: u64) -> Result<&Axis2Placement2DHolder> {
-            self.axis_2_placement_2d.get_entity(id)
+            self.axis2_placement_2d.get_entity(id)
         }
     }
     impl EntityTable<BSplineCurveHolder> for Tables {
