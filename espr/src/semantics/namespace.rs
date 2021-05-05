@@ -11,8 +11,18 @@ pub struct Names {
     entities: Vec<(String, bool /* has supertype decl */)>,
     /// Declared as an attribute
     attributes: Vec<String>,
-    /// Declared as `TYPE`
-    types: Vec<String>,
+
+    /// Renames of primitive type, e.g. `TYPE label = STRING; ENDTYPE;`
+    simple_types: Vec<String>,
+    /// Renames of user defined type,
+    /// e.g. `TYPE box_height = positive_ratio_measure; END_TYPE;`
+    rename_types: Vec<String>,
+    /// Enumeration of values,
+    /// e.g. `TYPE text_path = ENUMERATION OF (up, right, down, left); END_TYPE;`
+    enumeration_types: Vec<String>,
+    /// Select of user defined types,
+    /// e.g. `TYPE geometric_set_select = SELECT (point, curve); END_TYPE;`
+    select_types: Vec<String>,
 }
 
 impl Names {
@@ -49,6 +59,22 @@ impl Namespace {
 
         for schema in &syn.schemas {
             current_scope = current_scope.pushed(ScopeType::Schema, &schema.name);
+            let mut simple_types = Vec::new();
+            let mut rename_types = Vec::new();
+            let mut enumeration_types = Vec::new();
+            let mut select_types = Vec::new();
+            for ty in &schema.types {
+                use ast::types::UnderlyingType;
+                match ty.underlying_type {
+                    UnderlyingType::Simple(..) => simple_types.push(ty.type_id.clone()),
+                    UnderlyingType::Reference(..) => rename_types.push(ty.type_id.clone()),
+                    UnderlyingType::Enumeration { .. } => {
+                        enumeration_types.push(ty.type_id.clone())
+                    }
+                    UnderlyingType::Select { .. } => select_types.push(ty.type_id.clone()),
+                    _ => unimplemented!(),
+                }
+            }
             names.insert(
                 current_scope.clone(),
                 Names {
@@ -59,7 +85,10 @@ impl Namespace {
                         .map(|e| (e.name.clone(), e.has_supertype_decl()))
                         .collect(),
                     attributes: Vec::new(),
-                    types: schema.types.iter().map(|e| e.type_id.clone()).collect(),
+                    simple_types,
+                    rename_types,
+                    enumeration_types,
+                    select_types,
                 },
             );
 
@@ -97,7 +126,13 @@ impl Namespace {
                     });
                 }
             }
-            for ty in &ns.types {
+            for ty in ns
+                .simple_types
+                .iter()
+                .chain(ns.rename_types.iter())
+                .chain(ns.enumeration_types.iter())
+                .chain(ns.select_types.iter())
+            {
                 if name == ty {
                     return Ok(TypeRef::Named {
                         name: ty.to_string(),
