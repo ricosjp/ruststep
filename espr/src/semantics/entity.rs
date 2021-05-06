@@ -83,22 +83,20 @@ impl ToTokens for Entity {
 
         for EntityAttribute { name, ty, optional } in &self.attributes {
             attr_name.push(format_ident!("{}", name));
-            attr_type.push(if *optional {
-                quote! { Option<#ty> }
+            if *optional {
+                attr_type.push(quote! { Option<#ty> });
+                if ty.is_simple() {
+                    holder_attr_type.push(quote! { Option<#ty> });
+                } else {
+                    holder_attr_type.push(quote! { Option<PlaceHolder<#ty>> });
+                }
             } else {
-                quote! { #ty }
-            });
-            match ty {
-                TypeRef::SimpleType(..) => holder_attr_type.push(if *optional {
-                    quote! { Option<#ty> }
+                attr_type.push(quote! { #ty });
+                if ty.is_simple() {
+                    holder_attr_type.push(quote! { #ty });
                 } else {
-                    quote! { #ty }
-                }),
-                _ => holder_attr_type.push(if *optional {
-                    quote! { Option<PlaceHolder<#ty>> }
-                } else {
-                    quote! { PlaceHolder<#ty> }
-                }),
+                    holder_attr_type.push(quote! { PlaceHolder<#ty> });
+                }
             }
         }
 
@@ -114,9 +112,10 @@ impl ToTokens for Entity {
                 attr_name.push(attr);
                 attr_type.push(ty.to_token_stream());
 
-                match ty {
-                    TypeRef::SimpleType(..) => holder_attr_type.push(quote! { #ty }),
-                    _ => holder_attr_type.push(quote! { PlaceHolder<#ty> }),
+                if ty.is_simple() {
+                    holder_attr_type.push(quote! { #ty });
+                } else {
+                    holder_attr_type.push(quote! { PlaceHolder<#ty> });
                 }
 
                 if let TypeRef::Entity {

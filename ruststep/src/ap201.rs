@@ -3443,18 +3443,18 @@ pub mod explicit_draughting {
     }
     #[derive(Clone, Debug)]
     struct AddressHolder {
-        internal_location: Option<PlaceHolder<Label>>,
-        street_number: Option<PlaceHolder<Label>>,
-        street: Option<PlaceHolder<Label>>,
-        postal_box: Option<PlaceHolder<Label>>,
-        town: Option<PlaceHolder<Label>>,
-        region: Option<PlaceHolder<Label>>,
-        postal_code: Option<PlaceHolder<Label>>,
-        country: Option<PlaceHolder<Label>>,
-        facsimile_number: Option<PlaceHolder<Label>>,
-        telephone_number: Option<PlaceHolder<Label>>,
-        electronic_mail_address: Option<PlaceHolder<Label>>,
-        telex_number: Option<PlaceHolder<Label>>,
+        internal_location: Option<Label>,
+        street_number: Option<Label>,
+        street: Option<Label>,
+        postal_box: Option<Label>,
+        town: Option<Label>,
+        region: Option<Label>,
+        postal_code: Option<Label>,
+        country: Option<Label>,
+        facsimile_number: Option<Label>,
+        telephone_number: Option<Label>,
+        electronic_mail_address: Option<Label>,
+        telex_number: Option<Label>,
     }
     impl Holder for AddressHolder {
         type Table = Tables;
@@ -3634,7 +3634,7 @@ pub mod explicit_draughting {
     }
     #[derive(Clone, Debug)]
     struct ApplicationContextHolder {
-        application: PlaceHolder<Text>,
+        application: Text,
     }
     impl Holder for ApplicationContextHolder {
         type Table = Tables;
@@ -3650,7 +3650,7 @@ pub mod explicit_draughting {
     }
     #[derive(Clone, Debug)]
     struct ApplicationContextElementHolder {
-        name: PlaceHolder<Label>,
+        name: Label,
         frame_of_reference: PlaceHolder<ApplicationContext>,
     }
     impl Holder for ApplicationContextElementHolder {
@@ -3675,9 +3675,9 @@ pub mod explicit_draughting {
     }
     #[derive(Clone, Debug)]
     struct ApplicationProtocolDefinitionHolder {
-        status: PlaceHolder<Label>,
-        application_interpreted_model_schema_name: PlaceHolder<Label>,
-        application_protocol_year: PlaceHolder<YearNumber>,
+        status: Label,
+        application_interpreted_model_schema_name: Label,
+        application_protocol_year: YearNumber,
         application: PlaceHolder<ApplicationContext>,
     }
     impl Holder for ApplicationProtocolDefinitionHolder {
@@ -3695,7 +3695,7 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug)]
     struct ApprovalHolder {
         status: PlaceHolder<ApprovalStatus>,
-        level: PlaceHolder<Label>,
+        level: Label,
     }
     impl Holder for ApprovalHolder {
         type Table = Tables;
@@ -3767,7 +3767,7 @@ pub mod explicit_draughting {
     }
     #[derive(Clone, Debug)]
     struct ApprovalRoleHolder {
-        role: PlaceHolder<Label>,
+        role: Label,
     }
     impl Holder for ApprovalRoleHolder {
         type Table = Tables;
@@ -3782,7 +3782,7 @@ pub mod explicit_draughting {
     }
     #[derive(Clone, Debug)]
     struct ApprovalStatusHolder {
-        name: PlaceHolder<Label>,
+        name: Label,
     }
     impl Holder for ApprovalStatusHolder {
         type Table = Tables;
@@ -3921,8 +3921,8 @@ pub mod explicit_draughting {
     }
     #[derive(Clone, Debug)]
     struct CalendarDateHolder {
-        day_component: PlaceHolder<DayInMonthNumber>,
-        month_component: PlaceHolder<MonthInYearNumber>,
+        day_component: DayInMonthNumber,
+        month_component: MonthInYearNumber,
         date: PlaceHolder<Box<dyn DateAny>>,
     }
     impl Holder for CalendarDateHolder {
@@ -4042,7 +4042,7 @@ pub mod explicit_draughting {
     }
     #[derive(Clone, Debug)]
     struct CircleHolder {
-        radius: PlaceHolder<PositiveLengthMeasure>,
+        radius: PositiveLengthMeasure,
         conic: PlaceHolder<Box<dyn ConicAny>>,
     }
     impl Holder for CircleHolder {
@@ -4255,8 +4255,8 @@ pub mod explicit_draughting {
     }
     #[derive(Clone, Debug)]
     struct ContractHolder {
-        name: PlaceHolder<Label>,
-        purpose: PlaceHolder<Text>,
+        name: Label,
+        purpose: Text,
         kind: PlaceHolder<ContractType>,
     }
     impl Holder for ContractHolder {
@@ -4293,7 +4293,7 @@ pub mod explicit_draughting {
     }
     #[derive(Clone, Debug)]
     struct ContractTypeHolder {
-        description: PlaceHolder<Label>,
+        description: Label,
     }
     impl Holder for ContractTypeHolder {
         type Table = Tables;
@@ -4311,7 +4311,7 @@ pub mod explicit_draughting {
     }
     #[derive(Clone, Debug)]
     struct ConversionBasedUnitHolder {
-        name: PlaceHolder<Label>,
+        name: Label,
         conversion_factor: PlaceHolder<Box<dyn MeasureWithUnitAny>>,
         named_unit: PlaceHolder<Box<dyn NamedUnitAny>>,
     }
@@ -4365,7 +4365,7 @@ pub mod explicit_draughting {
     }
     #[derive(Clone, Debug)]
     struct CurveStyleHolder {
-        name: PlaceHolder<Label>,
+        name: Label,
         curve_font: PlaceHolder<CurveFontOrScaledCurveFontSelect>,
         curve_width: PlaceHolder<SizeSelect>,
         curve_colour: PlaceHolder<Colour>,
@@ -4384,7 +4384,7 @@ pub mod explicit_draughting {
     }
     #[derive(Clone, Debug)]
     struct CurveStyleFontHolder {
-        name: PlaceHolder<Label>,
+        name: Label,
         pattern_list: PlaceHolder<Vec<CurveStyleFontPattern>>,
     }
     impl Holder for CurveStyleFontHolder {
@@ -4401,8 +4401,8 @@ pub mod explicit_draughting {
     }
     #[derive(Clone, Debug)]
     struct CurveStyleFontPatternHolder {
-        visible_segment_length: PlaceHolder<PositiveLengthMeasure>,
-        invisible_segment_length: PlaceHolder<PositiveLengthMeasure>,
+        visible_segment_length: PositiveLengthMeasure,
+        invisible_segment_length: PositiveLengthMeasure,
     }
     impl Holder for CurveStyleFontPatternHolder {
         type Table = Tables;
@@ -4417,7 +4417,7 @@ pub mod explicit_draughting {
     }
     #[derive(Clone, Debug)]
     struct DateHolder {
-        year_component: PlaceHolder<YearNumber>,
+        year_component: YearNumber,
     }
     impl Holder for DateHolder {
         type Table = Tables;
@@ -4640,9 +4640,9 @@ pub mod explicit_draughting {
     }
     #[derive(Clone, Debug)]
     struct DocumentHolder {
-        id: PlaceHolder<Identifier>,
-        name: PlaceHolder<Label>,
-        description: PlaceHolder<Text>,
+        id: Identifier,
+        name: Label,
+        description: Text,
         kind: PlaceHolder<DocumentType>,
     }
     impl Holder for DocumentHolder {
@@ -4660,7 +4660,7 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug)]
     struct DocumentReferenceHolder {
         assigned_document: PlaceHolder<Document>,
-        source: PlaceHolder<Label>,
+        source: Label,
     }
     impl Holder for DocumentReferenceHolder {
         type Table = Tables;
@@ -4681,7 +4681,7 @@ pub mod explicit_draughting {
     }
     #[derive(Clone, Debug)]
     struct DocumentTypeHolder {
-        product_data_type: PlaceHolder<Label>,
+        product_data_type: Label,
     }
     impl Holder for DocumentTypeHolder {
         type Table = Tables;
@@ -4751,8 +4751,8 @@ pub mod explicit_draughting {
     }
     #[derive(Clone, Debug)]
     struct DraughtingCalloutRelationshipHolder {
-        name: PlaceHolder<Label>,
-        description: PlaceHolder<Text>,
+        name: Label,
+        description: Text,
         relating_draughting_callout: PlaceHolder<DraughtingCallout>,
         related_draughting_callout: PlaceHolder<DraughtingCallout>,
     }
@@ -5053,8 +5053,8 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug)]
     struct DraughtingTitleHolder {
         items: PlaceHolder<Vec<DraughtingTitledItem>>,
-        language: PlaceHolder<Label>,
-        contents: PlaceHolder<Text>,
+        language: Label,
+        contents: Text,
     }
     impl Holder for DraughtingTitleHolder {
         type Table = Tables;
@@ -5070,8 +5070,8 @@ pub mod explicit_draughting {
     }
     #[derive(Clone, Debug)]
     struct DrawingDefinitionHolder {
-        drawing_number: PlaceHolder<Identifier>,
-        drawing_type: Option<PlaceHolder<Label>>,
+        drawing_number: Identifier,
+        drawing_type: Option<Label>,
     }
     impl Holder for DrawingDefinitionHolder {
         type Table = Tables;
@@ -5089,9 +5089,9 @@ pub mod explicit_draughting {
     }
     #[derive(Clone, Debug)]
     struct DrawingRevisionHolder {
-        revision_identifier: PlaceHolder<Identifier>,
+        revision_identifier: Identifier,
         drawing_identifier: PlaceHolder<DrawingDefinition>,
-        intended_scale: Option<PlaceHolder<Text>>,
+        intended_scale: Option<Text>,
         presentation_set: PlaceHolder<PresentationSet>,
     }
     impl Holder for DrawingRevisionHolder {
@@ -5123,7 +5123,7 @@ pub mod explicit_draughting {
     }
     #[derive(Clone, Debug)]
     struct DrawingSheetRevisionHolder {
-        revision_identifier: PlaceHolder<Identifier>,
+        revision_identifier: Identifier,
         presentation_area: PlaceHolder<PresentationArea>,
     }
     impl Holder for DrawingSheetRevisionHolder {
@@ -5140,7 +5140,7 @@ pub mod explicit_draughting {
     }
     #[derive(Clone, Debug)]
     struct DrawingSheetRevisionUsageHolder {
-        sheet_number: PlaceHolder<Identifier>,
+        sheet_number: Identifier,
         area_in_set: PlaceHolder<AreaInSet>,
     }
     impl Holder for DrawingSheetRevisionUsageHolder {
@@ -5159,8 +5159,8 @@ pub mod explicit_draughting {
     }
     #[derive(Clone, Debug)]
     struct EllipseHolder {
-        semi_axis_1: PlaceHolder<PositiveLengthMeasure>,
-        semi_axis_2: PlaceHolder<PositiveLengthMeasure>,
+        semi_axis_1: PositiveLengthMeasure,
+        semi_axis_2: PositiveLengthMeasure,
         conic: PlaceHolder<Box<dyn ConicAny>>,
     }
     impl Holder for EllipseHolder {
@@ -5290,7 +5290,7 @@ pub mod explicit_draughting {
     }
     #[derive(Clone, Debug)]
     struct FillAreaStyleHolder {
-        name: PlaceHolder<Label>,
+        name: Label,
         fill_styles: PlaceHolder<Vec<FillStyleSelect>>,
     }
     impl Holder for FillAreaStyleHolder {
@@ -5307,7 +5307,7 @@ pub mod explicit_draughting {
     }
     #[derive(Clone, Debug)]
     struct FillAreaStyleColourHolder {
-        name: PlaceHolder<Label>,
+        name: Label,
         fill_colour: PlaceHolder<Colour>,
     }
     impl Holder for FillAreaStyleColourHolder {
@@ -5333,7 +5333,7 @@ pub mod explicit_draughting {
         start_of_next_hatch_line: PlaceHolder<OneDirectionRepeatFactor>,
         point_of_reference_hatch_line: PlaceHolder<CartesianPoint>,
         pattern_start: PlaceHolder<CartesianPoint>,
-        hatch_line_angle: PlaceHolder<PlaneAngleMeasure>,
+        hatch_line_angle: PlaneAngleMeasure,
         geometric_representation_item: PlaceHolder<Box<dyn GeometricRepresentationItemAny>>,
     }
     impl Holder for FillAreaStyleHatchingHolder {
@@ -5373,7 +5373,7 @@ pub mod explicit_draughting {
     struct FillAreaStyleTilesHolder {
         tiling_pattern: PlaceHolder<TwoDirectionRepeatFactor>,
         tiles: PlaceHolder<Vec<FillAreaStyleTileShapeSelect>>,
-        tiling_scale: PlaceHolder<PositiveRatioMeasure>,
+        tiling_scale: PositiveRatioMeasure,
         geometric_representation_item: PlaceHolder<Box<dyn GeometricRepresentationItemAny>>,
     }
     impl Holder for FillAreaStyleTilesHolder {
@@ -5406,7 +5406,7 @@ pub mod explicit_draughting {
     }
     #[derive(Clone, Debug)]
     struct GeometricRepresentationContextHolder {
-        coordinate_space_dimension: PlaceHolder<DimensionCount>,
+        coordinate_space_dimension: DimensionCount,
         representation_context: PlaceHolder<RepresentationContext>,
     }
     impl Holder for GeometricRepresentationContextHolder {
@@ -5512,8 +5512,8 @@ pub mod explicit_draughting {
     }
     #[derive(Clone, Debug)]
     struct GroupHolder {
-        name: PlaceHolder<Label>,
-        description: PlaceHolder<Text>,
+        name: Label,
+        description: Text,
     }
     impl Holder for GroupHolder {
         type Table = Tables;
@@ -5552,8 +5552,8 @@ pub mod explicit_draughting {
     }
     #[derive(Clone, Debug)]
     struct GroupRelationshipHolder {
-        name: PlaceHolder<Label>,
-        description: PlaceHolder<Text>,
+        name: Label,
+        description: Text,
         relating_group: PlaceHolder<Group>,
         related_group: PlaceHolder<Group>,
     }
@@ -5573,8 +5573,8 @@ pub mod explicit_draughting {
     }
     #[derive(Clone, Debug)]
     struct HyperbolaHolder {
-        semi_axis: PlaceHolder<PositiveLengthMeasure>,
-        semi_imag_axis: PlaceHolder<PositiveLengthMeasure>,
+        semi_axis: PositiveLengthMeasure,
+        semi_imag_axis: PositiveLengthMeasure,
         conic: PlaceHolder<Box<dyn ConicAny>>,
     }
     impl Holder for HyperbolaHolder {
@@ -5797,7 +5797,7 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug)]
     struct OffsetCurve2DHolder {
         basis_curve: PlaceHolder<Box<dyn CurveAny>>,
-        distance: PlaceHolder<LengthMeasure>,
+        distance: LengthMeasure,
         self_intersect: Logical,
         curve: PlaceHolder<Box<dyn CurveAny>>,
     }
@@ -5849,9 +5849,9 @@ pub mod explicit_draughting {
     }
     #[derive(Clone, Debug)]
     struct OrganizationHolder {
-        id: Option<PlaceHolder<Identifier>>,
-        name: PlaceHolder<Label>,
-        description: PlaceHolder<Text>,
+        id: Option<Identifier>,
+        name: Label,
+        description: Text,
     }
     impl Holder for OrganizationHolder {
         type Table = Tables;
@@ -5889,7 +5889,7 @@ pub mod explicit_draughting {
     }
     #[derive(Clone, Debug)]
     struct OrganizationRoleHolder {
-        name: PlaceHolder<Label>,
+        name: Label,
     }
     impl Holder for OrganizationRoleHolder {
         type Table = Tables;
@@ -5907,7 +5907,7 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug)]
     struct OrganizationalAddressHolder {
         organizations: PlaceHolder<Vec<Organization>>,
-        description: PlaceHolder<Text>,
+        description: Text,
         address: PlaceHolder<Address>,
     }
     impl Holder for OrganizationalAddressHolder {
@@ -5925,7 +5925,7 @@ pub mod explicit_draughting {
     }
     #[derive(Clone, Debug)]
     struct ParabolaHolder {
-        focal_dist: PlaceHolder<LengthMeasure>,
+        focal_dist: LengthMeasure,
         conic: PlaceHolder<Box<dyn ConicAny>>,
     }
     impl Holder for ParabolaHolder {
@@ -5946,9 +5946,9 @@ pub mod explicit_draughting {
     }
     #[derive(Clone, Debug)]
     struct PersonHolder {
-        id: PlaceHolder<Identifier>,
-        last_name: Option<PlaceHolder<Label>>,
-        first_name: Option<PlaceHolder<Label>>,
+        id: Identifier,
+        last_name: Option<Label>,
+        first_name: Option<Label>,
         middle_names: Option<PlaceHolder<Vec<Label>>>,
         prefix_titles: Option<PlaceHolder<Vec<Label>>>,
         suffix_titles: Option<PlaceHolder<Vec<Label>>>,
@@ -6006,7 +6006,7 @@ pub mod explicit_draughting {
     }
     #[derive(Clone, Debug)]
     struct PersonAndOrganizationRoleHolder {
-        name: PlaceHolder<Label>,
+        name: Label,
     }
     impl Holder for PersonAndOrganizationRoleHolder {
         type Table = Tables;
@@ -6044,7 +6044,7 @@ pub mod explicit_draughting {
     }
     #[derive(Clone, Debug)]
     struct PersonRoleHolder {
-        name: PlaceHolder<Label>,
+        name: Label,
     }
     impl Holder for PersonRoleHolder {
         type Table = Tables;
@@ -6062,7 +6062,7 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug)]
     struct PersonalAddressHolder {
         people: PlaceHolder<Vec<Person>>,
-        description: PlaceHolder<Text>,
+        description: Text,
         address: PlaceHolder<Address>,
     }
     impl Holder for PersonalAddressHolder {
@@ -6119,8 +6119,8 @@ pub mod explicit_draughting {
     }
     #[derive(Clone, Debug)]
     struct PlanarExtentHolder {
-        size_in_x: PlaceHolder<LengthMeasure>,
-        size_in_y: PlaceHolder<LengthMeasure>,
+        size_in_x: LengthMeasure,
+        size_in_y: LengthMeasure,
         geometric_representation_item: PlaceHolder<Box<dyn GeometricRepresentationItemAny>>,
     }
     impl Holder for PlanarExtentHolder {
@@ -6191,7 +6191,7 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug)]
     struct PointOnCurveHolder {
         basis_curve: PlaceHolder<Box<dyn CurveAny>>,
-        point_parameter: PlaceHolder<ParameterValue>,
+        point_parameter: ParameterValue,
         point: PlaceHolder<Box<dyn PointAny>>,
     }
     impl Holder for PointOnCurveHolder {
@@ -6287,7 +6287,7 @@ pub mod explicit_draughting {
     }
     #[derive(Clone, Debug)]
     struct PreDefinedItemHolder {
-        name: PlaceHolder<Label>,
+        name: Label,
     }
     impl Holder for PreDefinedItemHolder {
         type Table = Tables;
@@ -6379,8 +6379,8 @@ pub mod explicit_draughting {
     }
     #[derive(Clone, Debug)]
     struct PresentationLayerAssignmentHolder {
-        name: PlaceHolder<Label>,
-        description: PlaceHolder<Text>,
+        name: Label,
+        description: Text,
         assigned_items: PlaceHolder<Vec<LayeredItem>>,
     }
     impl Holder for PresentationLayerAssignmentHolder {
@@ -6537,9 +6537,9 @@ pub mod explicit_draughting {
     }
     #[derive(Clone, Debug)]
     struct ProductHolder {
-        id: PlaceHolder<Identifier>,
-        name: PlaceHolder<Label>,
-        description: PlaceHolder<Text>,
+        id: Identifier,
+        name: Label,
+        description: Text,
         frame_of_reference: PlaceHolder<Vec<ProductContext>>,
     }
     impl Holder for ProductHolder {
@@ -6557,7 +6557,7 @@ pub mod explicit_draughting {
     }
     #[derive(Clone, Debug)]
     struct ProductContextHolder {
-        discipline_type: PlaceHolder<Label>,
+        discipline_type: Label,
         application_context_element: PlaceHolder<Box<dyn ApplicationContextElementAny>>,
     }
     impl Holder for ProductContextHolder {
@@ -6576,8 +6576,8 @@ pub mod explicit_draughting {
     }
     #[derive(Clone, Debug)]
     struct ProductDefinitionHolder {
-        id: PlaceHolder<Identifier>,
-        description: PlaceHolder<Text>,
+        id: Identifier,
+        description: Text,
         formation: PlaceHolder<ProductDefinitionFormation>,
         frame_of_reference: PlaceHolder<ProductDefinitionContext>,
     }
@@ -6596,7 +6596,7 @@ pub mod explicit_draughting {
     }
     #[derive(Clone, Debug)]
     struct ProductDefinitionContextHolder {
-        life_cycle_stage: PlaceHolder<Label>,
+        life_cycle_stage: Label,
         application_context_element: PlaceHolder<Box<dyn ApplicationContextElementAny>>,
     }
     impl Holder for ProductDefinitionContextHolder {
@@ -6614,8 +6614,8 @@ pub mod explicit_draughting {
     }
     #[derive(Clone, Debug)]
     struct ProductDefinitionFormationHolder {
-        id: PlaceHolder<Identifier>,
-        description: PlaceHolder<Text>,
+        id: Identifier,
+        description: Text,
         of_product: PlaceHolder<Product>,
     }
     impl Holder for ProductDefinitionFormationHolder {
@@ -6678,8 +6678,8 @@ pub mod explicit_draughting {
     }
     #[derive(Clone, Debug)]
     struct PropertyDefinitionHolder {
-        name: PlaceHolder<Label>,
-        description: PlaceHolder<Text>,
+        name: Label,
+        description: Text,
         definition: PlaceHolder<CharacterizedDefinition>,
     }
     impl Holder for PropertyDefinitionHolder {
@@ -6763,7 +6763,7 @@ pub mod explicit_draughting {
     }
     #[derive(Clone, Debug)]
     struct RepresentationHolder {
-        name: PlaceHolder<Label>,
+        name: Label,
         items: PlaceHolder<Vec<RepresentationItem>>,
         context_of_items: PlaceHolder<RepresentationContext>,
     }
@@ -6781,8 +6781,8 @@ pub mod explicit_draughting {
     }
     #[derive(Clone, Debug)]
     struct RepresentationContextHolder {
-        context_identifier: PlaceHolder<Identifier>,
-        context_type: PlaceHolder<Text>,
+        context_identifier: Identifier,
+        context_type: Text,
     }
     impl Holder for RepresentationContextHolder {
         type Table = Tables;
@@ -6797,7 +6797,7 @@ pub mod explicit_draughting {
     }
     #[derive(Clone, Debug)]
     struct RepresentationItemHolder {
-        name: PlaceHolder<Label>,
+        name: Label,
     }
     impl Holder for RepresentationItemHolder {
         type Table = Tables;
@@ -6831,8 +6831,8 @@ pub mod explicit_draughting {
     }
     #[derive(Clone, Debug)]
     struct SecurityClassificationHolder {
-        name: PlaceHolder<Label>,
-        purpose: PlaceHolder<Text>,
+        name: Label,
+        purpose: Text,
         security_level: PlaceHolder<SecurityClassificationLevel>,
     }
     impl Holder for SecurityClassificationHolder {
@@ -6869,7 +6869,7 @@ pub mod explicit_draughting {
     }
     #[derive(Clone, Debug)]
     struct SecurityClassificationLevelHolder {
-        name: PlaceHolder<Label>,
+        name: Label,
     }
     impl Holder for SecurityClassificationLevelHolder {
         type Table = Tables;
@@ -7014,7 +7014,7 @@ pub mod explicit_draughting {
     }
     #[derive(Clone, Debug)]
     struct SymbolStyleHolder {
-        name: PlaceHolder<Label>,
+        name: Label,
         style_of_symbol: PlaceHolder<SymbolStyleSelect>,
     }
     impl Holder for SymbolStyleHolder {
@@ -7035,8 +7035,8 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug)]
     struct SymbolTargetHolder {
         placement: PlaceHolder<Axis2Placement>,
-        x_scale: PlaceHolder<PositiveRatioMeasure>,
-        y_scale: PlaceHolder<PositiveRatioMeasure>,
+        x_scale: PositiveRatioMeasure,
+        y_scale: PositiveRatioMeasure,
         geometric_representation_item: PlaceHolder<Box<dyn GeometricRepresentationItemAny>>,
     }
     impl Holder for SymbolTargetHolder {
@@ -7075,9 +7075,9 @@ pub mod explicit_draughting {
     }
     #[derive(Clone, Debug)]
     struct TextLiteralHolder {
-        literal: PlaceHolder<PresentableText>,
+        literal: PresentableText,
         placement: PlaceHolder<Axis2Placement>,
-        alignment: PlaceHolder<TextAlignment>,
+        alignment: TextAlignment,
         path: PlaceHolder<TextPath>,
         font: PlaceHolder<FontSelect>,
         geometric_representation_item: PlaceHolder<Box<dyn GeometricRepresentationItemAny>>,
@@ -7130,7 +7130,7 @@ pub mod explicit_draughting {
     }
     #[derive(Clone, Debug)]
     struct TextLiteralWithDelineationHolder {
-        delineation: PlaceHolder<TextDelineation>,
+        delineation: TextDelineation,
         text_literal: PlaceHolder<TextLiteral>,
     }
     impl Holder for TextLiteralWithDelineationHolder {
@@ -7164,7 +7164,7 @@ pub mod explicit_draughting {
     }
     #[derive(Clone, Debug)]
     struct TextStyleHolder {
-        name: PlaceHolder<Label>,
+        name: Label,
         character_appearance: PlaceHolder<CharacterStyleSelect>,
     }
     impl Holder for TextStyleHolder {
@@ -7292,7 +7292,7 @@ pub mod explicit_draughting {
     #[derive(Clone, Debug)]
     struct VectorHolder {
         orientation: PlaceHolder<Direction>,
-        magnitude: PlaceHolder<LengthMeasure>,
+        magnitude: LengthMeasure,
         geometric_representation_item: PlaceHolder<Box<dyn GeometricRepresentationItemAny>>,
     }
     impl Holder for VectorHolder {
