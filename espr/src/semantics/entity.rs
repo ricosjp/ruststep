@@ -80,9 +80,11 @@ impl ToTokens for Entity {
         let mut attr_name = Vec::new();
         let mut attr_type = Vec::new();
         let mut holder_attr_type = Vec::new();
+        let mut holder_attr_expr = Vec::new();
 
         for EntityAttribute { name, ty, optional } in &self.attributes {
-            attr_name.push(format_ident!("{}", name));
+            let name = format_ident!("{}", name);
+            attr_name.push(name.clone());
             if *optional {
                 attr_type.push(quote! { Option<#ty> });
                 if ty.is_simple() {
@@ -94,8 +96,10 @@ impl ToTokens for Entity {
                 attr_type.push(quote! { #ty });
                 if ty.is_simple() {
                     holder_attr_type.push(quote! { #ty });
+                    holder_attr_expr.push(quote! { #name })
                 } else {
                     holder_attr_type.push(quote! { PlaceHolder<#ty> });
+                    holder_attr_expr.push(quote! { #name.into_owned(tables)? })
                 }
             }
         }
@@ -109,13 +113,15 @@ impl ToTokens for Entity {
                     _ => unreachable!(),
                 };
 
-                attr_name.push(attr);
+                attr_name.push(attr.clone());
                 attr_type.push(ty.to_token_stream());
 
                 if ty.is_simple() {
                     holder_attr_type.push(quote! { #ty });
+                    holder_attr_expr.push(quote! { #attr })
                 } else {
                     holder_attr_type.push(quote! { PlaceHolder<#ty> });
+                    holder_attr_expr.push(quote! { #attr.into_owned(tables)? })
                 }
 
                 if let TypeRef::Entity {
@@ -133,6 +139,10 @@ impl ToTokens for Entity {
                 }
             }
         }
+
+        assert_eq!(attr_name.len(), attr_type.len());
+        assert_eq!(attr_name.len(), holder_attr_type.len());
+        assert_eq!(attr_name.len(), holder_attr_expr.len());
 
         tokens.append_all(quote! {
             #[derive(Debug, Clone, derive_new::new)]
@@ -153,7 +163,10 @@ impl ToTokens for Entity {
                 type Table = Tables;
                 type Owned = #name;
                 fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-                    todo!()
+                    let #holder_name { #(#attr_name),* } = self;
+                    Ok(#name {
+                        #(#attr_name : #holder_attr_expr),*
+                    })
                 }
             }
         });
