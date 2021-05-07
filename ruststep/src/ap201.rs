@@ -3460,21 +3460,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = Address;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let AddressHolder {
-                internal_location,
-                street_number,
-                street,
-                postal_box,
-                town,
-                region,
-                postal_code,
-                country,
-                facsimile_number,
-                telephone_number,
-                electronic_mail_address,
-                telex_number,
-            } = self;
-            Ok(Address {})
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -3489,13 +3475,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = AngularDimension;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let AngularDimensionHolder {
-                dimension_curve_directed_callout,
-            } = self;
-            Ok(AngularDimension {
-                dimension_curve_directed_callout: dimension_curve_directed_callout
-                    .into_owned(tables)?,
-            })
+            todo!()
         }
     }
     impl AnnotationOccurrenceAny for AnnotationCurveOccurrence {}
@@ -3511,12 +3491,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = AnnotationCurveOccurrence;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let AnnotationCurveOccurrenceHolder {
-                annotation_occurrence,
-            } = self;
-            Ok(AnnotationCurveOccurrence {
-                annotation_occurrence: annotation_occurrence.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     impl GeometricRepresentationItemAny for AnnotationFillArea {}
@@ -3534,14 +3509,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = AnnotationFillArea;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let AnnotationFillAreaHolder {
-                boundaries,
-                geometric_representation_item,
-            } = self;
-            Ok(AnnotationFillArea {
-                boundaries: boundaries.into_owned(tables)?,
-                geometric_representation_item: geometric_representation_item.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     impl AnnotationOccurrenceAny for AnnotationFillAreaOccurrence {}
@@ -3559,14 +3527,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = AnnotationFillAreaOccurrence;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let AnnotationFillAreaOccurrenceHolder {
-                fill_style_target,
-                annotation_occurrence,
-            } = self;
-            Ok(AnnotationFillAreaOccurrence {
-                fill_style_target: fill_style_target.into_owned(tables)?,
-                annotation_occurrence: annotation_occurrence.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -3581,10 +3542,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = AnnotationOccurrence;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let AnnotationOccurrenceHolder { styled_item } = self;
-            Ok(AnnotationOccurrence {
-                styled_item: styled_item.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     pub trait AnnotationOccurrenceAny:
@@ -3605,12 +3563,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = AnnotationSubfigureOccurrence;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let AnnotationSubfigureOccurrenceHolder {
-                annotation_symbol_occurrence,
-            } = self;
-            Ok(AnnotationSubfigureOccurrence {
-                annotation_symbol_occurrence: annotation_symbol_occurrence.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -3625,10 +3578,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = AnnotationSymbol;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let AnnotationSymbolHolder { mapped_item } = self;
-            Ok(AnnotationSymbol {
-                mapped_item: mapped_item.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     impl AnnotationOccurrenceAny for AnnotationSymbolOccurrence {}
@@ -3644,12 +3594,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = AnnotationSymbolOccurrence;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let AnnotationSymbolOccurrenceHolder {
-                annotation_occurrence,
-            } = self;
-            Ok(AnnotationSymbolOccurrence {
-                annotation_occurrence: annotation_occurrence.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -3664,10 +3609,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = AnnotationText;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let AnnotationTextHolder { mapped_item } = self;
-            Ok(AnnotationText {
-                mapped_item: mapped_item.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     impl AnnotationOccurrenceAny for AnnotationTextOccurrence {}
@@ -3683,12 +3625,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = AnnotationTextOccurrence;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let AnnotationTextOccurrenceHolder {
-                annotation_occurrence,
-            } = self;
-            Ok(AnnotationTextOccurrence {
-                annotation_occurrence: annotation_occurrence.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -3703,10 +3640,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = ApplicationContext;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let ApplicationContextHolder { application } = self;
-            Ok(ApplicationContext {
-                application: application,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -3723,14 +3657,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = ApplicationContextElement;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let ApplicationContextElementHolder {
-                name,
-                frame_of_reference,
-            } = self;
-            Ok(ApplicationContextElement {
-                name: name,
-                frame_of_reference: frame_of_reference.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     pub trait ApplicationContextElementAny:
@@ -3757,19 +3684,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = ApplicationProtocolDefinition;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let ApplicationProtocolDefinitionHolder {
-                status,
-                application_interpreted_model_schema_name,
-                application_protocol_year,
-                application,
-            } = self;
-            Ok(ApplicationProtocolDefinition {
-                status: status,
-                application_interpreted_model_schema_name:
-                    application_interpreted_model_schema_name,
-                application_protocol_year: application_protocol_year,
-                application: application.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -3786,11 +3701,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = Approval;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let ApprovalHolder { status, level } = self;
-            Ok(Approval {
-                status: status.into_owned(tables)?,
-                level: level,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -3805,10 +3716,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = ApprovalAssignment;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let ApprovalAssignmentHolder { assigned_approval } = self;
-            Ok(ApprovalAssignment {
-                assigned_approval: assigned_approval.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     pub trait ApprovalAssignmentAny:
@@ -3831,14 +3739,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = ApprovalDateTime;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let ApprovalDateTimeHolder {
-                date_time,
-                dated_approval,
-            } = self;
-            Ok(ApprovalDateTime {
-                date_time: date_time.into_owned(tables)?,
-                dated_approval: dated_approval.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -3857,16 +3758,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = ApprovalPersonOrganization;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let ApprovalPersonOrganizationHolder {
-                person_organization,
-                authorized_approval,
-                role,
-            } = self;
-            Ok(ApprovalPersonOrganization {
-                person_organization: person_organization.into_owned(tables)?,
-                authorized_approval: authorized_approval.into_owned(tables)?,
-                role: role.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -3881,8 +3773,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = ApprovalRole;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let ApprovalRoleHolder { role } = self;
-            Ok(ApprovalRole { role: role })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -3897,8 +3788,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = ApprovalStatus;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let ApprovalStatusHolder { name } = self;
-            Ok(ApprovalStatus { name: name })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -3915,11 +3805,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = AreaInSet;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let AreaInSetHolder { area, in_set } = self;
-            Ok(AreaInSet {
-                area: area.into_owned(tables)?,
-                in_set: in_set.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     impl PlacementAny for Axis2Placement2D {}
@@ -3937,13 +3823,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = Axis2Placement2D;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let Axis2Placement2DHolder {
-                ref_direction,
-                placement,
-            } = self;
-            Ok(Axis2Placement2D {
-                ref_direction: placement.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     impl BoundedCurveAny for BSplineCurve {}
@@ -3969,22 +3849,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = BSplineCurve;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let BSplineCurveHolder {
-                degree,
-                control_points_list,
-                curve_form,
-                closed_curve,
-                self_intersect,
-                bounded_curve,
-            } = self;
-            Ok(BSplineCurve {
-                degree: degree,
-                control_points_list: control_points_list.into_owned(tables)?,
-                curve_form: curve_form.into_owned(tables)?,
-                closed_curve: closed_curve,
-                self_intersect: self_intersect,
-                bounded_curve: bounded_curve.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     pub trait BSplineCurveAny: ::std::any::Any + ::std::fmt::Debug + dyn_clone::DynClone {}
@@ -4009,18 +3874,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = BSplineCurveWithKnots;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let BSplineCurveWithKnotsHolder {
-                knot_multiplicities,
-                knots,
-                knot_spec,
-                b_spline_curve,
-            } = self;
-            Ok(BSplineCurveWithKnots {
-                knot_multiplicities: knot_multiplicities.into_owned(tables)?,
-                knots: knots.into_owned(tables)?,
-                knot_spec: knot_spec.into_owned(tables)?,
-                b_spline_curve: b_spline_curve.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     impl BSplineCurveAny for BezierCurve {}
@@ -4036,10 +3890,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = BezierCurve;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let BezierCurveHolder { b_spline_curve } = self;
-            Ok(BezierCurve {
-                b_spline_curve: b_spline_curve.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     impl CurveAny for BoundedCurve {}
@@ -4055,10 +3906,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = BoundedCurve;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let BoundedCurveHolder { curve } = self;
-            Ok(BoundedCurve {
-                curve: curve.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     pub trait BoundedCurveAny: ::std::any::Any + ::std::fmt::Debug + dyn_clone::DynClone {}
@@ -4081,16 +3929,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = CalendarDate;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let CalendarDateHolder {
-                day_component,
-                month_component,
-                date,
-            } = self;
-            Ok(CalendarDate {
-                day_component: day_component,
-                month_component: month_component,
-                date: date.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -4105,10 +3944,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = CameraImage;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let CameraImageHolder { mapped_item } = self;
-            Ok(CameraImage {
-                mapped_item: mapped_item.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -4123,10 +3959,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = CameraImage2DWithScale;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let CameraImage2DWithScaleHolder { camera_image } = self;
-            Ok(CameraImage2DWithScale {
-                camera_image: camera_image.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     impl GeometricRepresentationItemAny for CameraModel {}
@@ -4142,12 +3975,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = CameraModel;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let CameraModelHolder {
-                geometric_representation_item,
-            } = self;
-            Ok(CameraModel {
-                geometric_representation_item: geometric_representation_item.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     pub trait CameraModelAny: ::std::any::Any + ::std::fmt::Debug + dyn_clone::DynClone {}
@@ -4170,16 +3998,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = CameraModelD2;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let CameraModelD2Holder {
-                view_window,
-                view_window_clipping,
-                camera_model,
-            } = self;
-            Ok(CameraModelD2 {
-                view_window: view_window.into_owned(tables)?,
-                view_window_clipping: view_window_clipping,
-                camera_model: camera_model.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -4194,10 +4013,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = CameraUsage;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let CameraUsageHolder { representation_map } = self;
-            Ok(CameraUsage {
-                representation_map: representation_map.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     impl PointAny for CartesianPoint {}
@@ -4215,11 +4031,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = CartesianPoint;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let CartesianPointHolder { coordinates, point } = self;
-            Ok(CartesianPoint {
-                coordinates: coordinates.into_owned(tables)?,
-                point: point.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     impl ConicAny for Circle {}
@@ -4237,11 +4049,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = Circle;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let CircleHolder { radius, conic } = self;
-            Ok(Circle {
-                radius: radius,
-                conic: conic.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -4252,8 +4060,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = Colour;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let ColourHolder {} = self;
-            Ok(Colour {})
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -4274,18 +4081,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = ColourRgb;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let ColourRgbHolder {
-                red,
-                green,
-                blue,
-                colour_specification,
-            } = self;
-            Ok(ColourRgb {
-                red: red,
-                green: green,
-                blue: blue,
-                colour_specification: colour_specification.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -4302,11 +4098,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = ColourSpecification;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let ColourSpecificationHolder { name, colour } = self;
-            Ok(ColourSpecification {
-                name: name.into_owned(tables)?,
-                colour: colour.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     impl BoundedCurveAny for CompositeCurve {}
@@ -4326,16 +4118,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = CompositeCurve;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let CompositeCurveHolder {
-                segments,
-                self_intersect,
-                bounded_curve,
-            } = self;
-            Ok(CompositeCurve {
-                segments: segments.into_owned(tables)?,
-                self_intersect: self_intersect,
-                bounded_curve: bounded_curve.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -4354,16 +4137,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = CompositeCurveSegment;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let CompositeCurveSegmentHolder {
-                transition,
-                same_sense,
-                parent_curve,
-            } = self;
-            Ok(CompositeCurveSegment {
-                transition: transition.into_owned(tables)?,
-                same_sense: same_sense,
-                parent_curve: parent_curve.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     impl GeometricRepresentationItemAny for CompositeText {}
@@ -4381,14 +4155,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = CompositeText;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let CompositeTextHolder {
-                collected_text,
-                geometric_representation_item,
-            } = self;
-            Ok(CompositeText {
-                collected_text: collected_text.into_owned(tables)?,
-                geometric_representation_item: geometric_representation_item.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -4405,14 +4172,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = CompositeTextWithAssociatedCurves;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let CompositeTextWithAssociatedCurvesHolder {
-                associated_curves,
-                composite_text,
-            } = self;
-            Ok(CompositeTextWithAssociatedCurves {
-                associated_curves: associated_curves.into_owned(tables)?,
-                composite_text: composite_text.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -4429,14 +4189,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = CompositeTextWithBlankingBox;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let CompositeTextWithBlankingBoxHolder {
-                blanking,
-                composite_text,
-            } = self;
-            Ok(CompositeTextWithBlankingBox {
-                blanking: blanking.into_owned(tables)?,
-                composite_text: composite_text.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -4453,14 +4206,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = CompositeTextWithExtent;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let CompositeTextWithExtentHolder {
-                extent,
-                composite_text,
-            } = self;
-            Ok(CompositeTextWithExtent {
-                extent: extent.into_owned(tables)?,
-                composite_text: composite_text.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     impl CurveAny for Conic {}
@@ -4478,11 +4224,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = Conic;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let ConicHolder { position, curve } = self;
-            Ok(Conic {
-                position: position.into_owned(tables)?,
-                curve: curve.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     pub trait ConicAny: ::std::any::Any + ::std::fmt::Debug + dyn_clone::DynClone {}
@@ -4502,14 +4244,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = ContextDependentInvisibility;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let ContextDependentInvisibilityHolder {
-                presentation_context,
-                invisibility,
-            } = self;
-            Ok(ContextDependentInvisibility {
-                presentation_context: presentation_context.into_owned(tables)?,
-                invisibility: invisibility.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -4528,16 +4263,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = Contract;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let ContractHolder {
-                name,
-                purpose,
-                kind,
-            } = self;
-            Ok(Contract {
-                name: name,
-                purpose: purpose,
-                kind: kind.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -4552,10 +4278,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = ContractAssignment;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let ContractAssignmentHolder { assigned_contract } = self;
-            Ok(ContractAssignment {
-                assigned_contract: assigned_contract.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     pub trait ContractAssignmentAny:
@@ -4576,10 +4299,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = ContractType;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let ContractTypeHolder { description } = self;
-            Ok(ContractType {
-                description: description,
-            })
+            todo!()
         }
     }
     impl NamedUnitAny for ConversionBasedUnit {}
@@ -4599,16 +4319,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = ConversionBasedUnit;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let ConversionBasedUnitHolder {
-                name,
-                conversion_factor,
-                named_unit,
-            } = self;
-            Ok(ConversionBasedUnit {
-                name: name,
-                conversion_factor: conversion_factor.into_owned(tables)?,
-                named_unit: named_unit.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     impl GeometricRepresentationItemAny for Curve {}
@@ -4624,12 +4335,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = Curve;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let CurveHolder {
-                geometric_representation_item,
-            } = self;
-            Ok(Curve {
-                geometric_representation_item: geometric_representation_item.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     pub trait CurveAny: ::std::any::Any + ::std::fmt::Debug + dyn_clone::DynClone {}
@@ -4647,13 +4353,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = CurveDimension;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let CurveDimensionHolder {
-                dimension_curve_directed_callout,
-            } = self;
-            Ok(CurveDimension {
-                dimension_curve_directed_callout: dimension_curve_directed_callout
-                    .into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -4674,18 +4374,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = CurveStyle;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let CurveStyleHolder {
-                name,
-                curve_font,
-                curve_width,
-                curve_colour,
-            } = self;
-            Ok(CurveStyle {
-                name: name,
-                curve_font: curve_font.into_owned(tables)?,
-                curve_width: curve_width.into_owned(tables)?,
-                curve_colour: curve_colour.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -4702,11 +4391,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = CurveStyleFont;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let CurveStyleFontHolder { name, pattern_list } = self;
-            Ok(CurveStyleFont {
-                name: name,
-                pattern_list: pattern_list.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -4723,14 +4408,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = CurveStyleFontPattern;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let CurveStyleFontPatternHolder {
-                visible_segment_length,
-                invisible_segment_length,
-            } = self;
-            Ok(CurveStyleFontPattern {
-                visible_segment_length: visible_segment_length,
-                invisible_segment_length: invisible_segment_length,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -4745,10 +4423,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = Date;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let DateHolder { year_component } = self;
-            Ok(Date {
-                year_component: year_component,
-            })
+            todo!()
         }
     }
     pub trait DateAny: ::std::any::Any + ::std::fmt::Debug + dyn_clone::DynClone {}
@@ -4766,10 +4441,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = DatumFeatureCallout;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let DatumFeatureCalloutHolder { draughting_callout } = self;
-            Ok(DatumFeatureCallout {
-                draughting_callout: draughting_callout.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -4784,10 +4456,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = DatumTargetCallout;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let DatumTargetCalloutHolder { draughting_callout } = self;
-            Ok(DatumTargetCallout {
-                draughting_callout: draughting_callout.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     impl GeometricRepresentationItemAny for DefinedSymbol {}
@@ -4807,16 +4476,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = DefinedSymbol;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let DefinedSymbolHolder {
-                definition,
-                target,
-                geometric_representation_item,
-            } = self;
-            Ok(DefinedSymbol {
-                definition: definition.into_owned(tables)?,
-                target: target.into_owned(tables)?,
-                geometric_representation_item: geometric_representation_item.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -4831,13 +4491,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = DiameterDimension;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let DiameterDimensionHolder {
-                dimension_curve_directed_callout,
-            } = self;
-            Ok(DiameterDimension {
-                dimension_curve_directed_callout: dimension_curve_directed_callout
-                    .into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -4852,13 +4506,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = DimensionCalloutComponentRelationship;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let DimensionCalloutComponentRelationshipHolder {
-                draughting_callout_relationship,
-            } = self;
-            Ok(DimensionCalloutComponentRelationship {
-                draughting_callout_relationship: draughting_callout_relationship
-                    .into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -4873,13 +4521,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = DimensionCalloutRelationship;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let DimensionCalloutRelationshipHolder {
-                draughting_callout_relationship,
-            } = self;
-            Ok(DimensionCalloutRelationship {
-                draughting_callout_relationship: draughting_callout_relationship
-                    .into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -4894,12 +4536,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = DimensionCurve;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let DimensionCurveHolder {
-                annotation_curve_occurrence,
-            } = self;
-            Ok(DimensionCurve {
-                annotation_curve_occurrence: annotation_curve_occurrence.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -4914,10 +4551,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = DimensionCurveDirectedCallout;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let DimensionCurveDirectedCalloutHolder { draughting_callout } = self;
-            Ok(DimensionCurveDirectedCallout {
-                draughting_callout: draughting_callout.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -4934,14 +4568,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = DimensionCurveTerminator;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let DimensionCurveTerminatorHolder {
-                role,
-                terminator_symbol,
-            } = self;
-            Ok(DimensionCurveTerminator {
-                role: role.into_owned(tables)?,
-                terminator_symbol: terminator_symbol.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -4956,13 +4583,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = DimensionPair;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let DimensionPairHolder {
-                draughting_callout_relationship,
-            } = self;
-            Ok(DimensionPair {
-                draughting_callout_relationship: draughting_callout_relationship
-                    .into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -4989,24 +4610,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = DimensionalExponents;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let DimensionalExponentsHolder {
-                length_exponent,
-                mass_exponent,
-                time_exponent,
-                electric_current_exponent,
-                thermodynamic_temperature_exponent,
-                amount_of_substance_exponent,
-                luminous_intensity_exponent,
-            } = self;
-            Ok(DimensionalExponents {
-                length_exponent: length_exponent,
-                mass_exponent: mass_exponent,
-                time_exponent: time_exponent,
-                electric_current_exponent: electric_current_exponent,
-                thermodynamic_temperature_exponent: thermodynamic_temperature_exponent,
-                amount_of_substance_exponent: amount_of_substance_exponent,
-                luminous_intensity_exponent: luminous_intensity_exponent,
-            })
+            todo!()
         }
     }
     impl GeometricRepresentationItemAny for Direction {}
@@ -5024,14 +4628,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = Direction;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let DirectionHolder {
-                direction_ratios,
-                geometric_representation_item,
-            } = self;
-            Ok(Direction {
-                direction_ratios: direction_ratios.into_owned(tables)?,
-                geometric_representation_item: geometric_representation_item.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -5052,18 +4649,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = Document;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let DocumentHolder {
-                id,
-                name,
-                description,
-                kind,
-            } = self;
-            Ok(Document {
-                id: id,
-                name: name,
-                description: description,
-                kind: kind.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -5080,14 +4666,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = DocumentReference;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let DocumentReferenceHolder {
-                assigned_document,
-                source,
-            } = self;
-            Ok(DocumentReference {
-                assigned_document: assigned_document.into_owned(tables)?,
-                source: source,
-            })
+            todo!()
         }
     }
     pub trait DocumentReferenceAny:
@@ -5108,10 +4687,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = DocumentType;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let DocumentTypeHolder { product_data_type } = self;
-            Ok(DocumentType {
-                product_data_type: product_data_type,
-            })
+            todo!()
         }
     }
     impl AnnotationOccurrenceAny for DraughtingAnnotationOccurrence {}
@@ -5127,12 +4703,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = DraughtingAnnotationOccurrence;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let DraughtingAnnotationOccurrenceHolder {
-                annotation_occurrence,
-            } = self;
-            Ok(DraughtingAnnotationOccurrence {
-                annotation_occurrence: annotation_occurrence.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     impl ApprovalAssignmentAny for DraughtingApprovalAssignment {}
@@ -5150,14 +4721,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = DraughtingApprovalAssignment;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let DraughtingApprovalAssignmentHolder {
-                approved_items,
-                approval_assignment,
-            } = self;
-            Ok(DraughtingApprovalAssignment {
-                approved_items: approved_items.into_owned(tables)?,
-                approval_assignment: approval_assignment.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     impl GeometricRepresentationItemAny for DraughtingCallout {}
@@ -5175,14 +4739,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = DraughtingCallout;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let DraughtingCalloutHolder {
-                contents,
-                geometric_representation_item,
-            } = self;
-            Ok(DraughtingCallout {
-                contents: contents.into_owned(tables)?,
-                geometric_representation_item: geometric_representation_item.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -5203,18 +4760,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = DraughtingCalloutRelationship;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let DraughtingCalloutRelationshipHolder {
-                name,
-                description,
-                relating_draughting_callout,
-                related_draughting_callout,
-            } = self;
-            Ok(DraughtingCalloutRelationship {
-                name: name,
-                description: description,
-                relating_draughting_callout: relating_draughting_callout.into_owned(tables)?,
-                related_draughting_callout: related_draughting_callout.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     impl ContractAssignmentAny for DraughtingContractAssignment {}
@@ -5232,14 +4778,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = DraughtingContractAssignment;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let DraughtingContractAssignmentHolder {
-                items,
-                contract_assignment,
-            } = self;
-            Ok(DraughtingContractAssignment {
-                items: items.into_owned(tables)?,
-                contract_assignment: contract_assignment.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -5254,10 +4793,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = DraughtingDrawingRevision;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let DraughtingDrawingRevisionHolder { drawing_revision } = self;
-            Ok(DraughtingDrawingRevision {
-                drawing_revision: drawing_revision.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -5272,10 +4808,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = DraughtingElements;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let DraughtingElementsHolder { draughting_callout } = self;
-            Ok(DraughtingElements {
-                draughting_callout: draughting_callout.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     impl GroupAssignmentAny for DraughtingGroupAssignment {}
@@ -5293,14 +4826,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = DraughtingGroupAssignment;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let DraughtingGroupAssignmentHolder {
-                items,
-                group_assignment,
-            } = self;
-            Ok(DraughtingGroupAssignment {
-                items: items.into_owned(tables)?,
-                group_assignment: group_assignment.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -5315,10 +4841,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = DraughtingModel;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let DraughtingModelHolder { representation } = self;
-            Ok(DraughtingModel {
-                representation: representation.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     impl OrganizationAssignmentAny for DraughtingOrganizationAssignment {}
@@ -5336,14 +4859,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = DraughtingOrganizationAssignment;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let DraughtingOrganizationAssignmentHolder {
-                assigned_items,
-                organization_assignment,
-            } = self;
-            Ok(DraughtingOrganizationAssignment {
-                assigned_items: assigned_items.into_owned(tables)?,
-                organization_assignment: organization_assignment.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     impl PersonAndOrganizationAssignmentAny for DraughtingPersonAndOrganizationAssignment {}
@@ -5362,15 +4878,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = DraughtingPersonAndOrganizationAssignment;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let DraughtingPersonAndOrganizationAssignmentHolder {
-                assigned_items,
-                person_and_organization_assignment,
-            } = self;
-            Ok(DraughtingPersonAndOrganizationAssignment {
-                assigned_items: assigned_items.into_owned(tables)?,
-                person_and_organization_assignment: person_and_organization_assignment
-                    .into_owned(tables)?,
-            })
+            todo!()
         }
     }
     impl PersonAssignmentAny for DraughtingPersonAssignment {}
@@ -5388,14 +4896,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = DraughtingPersonAssignment;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let DraughtingPersonAssignmentHolder {
-                assigned_items,
-                person_assignment,
-            } = self;
-            Ok(DraughtingPersonAssignment {
-                assigned_items: assigned_items.into_owned(tables)?,
-                person_assignment: person_assignment.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -5410,10 +4911,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = DraughtingPreDefinedColour;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let DraughtingPreDefinedColourHolder { pre_defined_colour } = self;
-            Ok(DraughtingPreDefinedColour {
-                pre_defined_colour: pre_defined_colour.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -5428,12 +4926,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = DraughtingPreDefinedCurveFont;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let DraughtingPreDefinedCurveFontHolder {
-                pre_defined_curve_font,
-            } = self;
-            Ok(DraughtingPreDefinedCurveFont {
-                pre_defined_curve_font: pre_defined_curve_font.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -5448,12 +4941,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = DraughtingPreDefinedTextFont;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let DraughtingPreDefinedTextFontHolder {
-                pre_defined_text_font,
-            } = self;
-            Ok(DraughtingPreDefinedTextFont {
-                pre_defined_text_font: pre_defined_text_font.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     impl PresentedItemAny for DraughtingPresentedItem {}
@@ -5471,14 +4959,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = DraughtingPresentedItem;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let DraughtingPresentedItemHolder {
-                items,
-                presented_item,
-            } = self;
-            Ok(DraughtingPresentedItem {
-                items: items.into_owned(tables)?,
-                presented_item: presented_item.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     impl SecurityClassificationAssignmentAny for DraughtingSecurityClassificationAssignment {}
@@ -5497,15 +4978,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = DraughtingSecurityClassificationAssignment;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let DraughtingSecurityClassificationAssignmentHolder {
-                assigned_items,
-                security_classification_assignment,
-            } = self;
-            Ok(DraughtingSecurityClassificationAssignment {
-                assigned_items: assigned_items.into_owned(tables)?,
-                security_classification_assignment: security_classification_assignment
-                    .into_owned(tables)?,
-            })
+            todo!()
         }
     }
     impl DocumentReferenceAny for DraughtingSpecificationReference {}
@@ -5523,14 +4996,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = DraughtingSpecificationReference;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let DraughtingSpecificationReferenceHolder {
-                specified_items,
-                document_reference,
-            } = self;
-            Ok(DraughtingSpecificationReference {
-                specified_items: specified_items.into_owned(tables)?,
-                document_reference: document_reference.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -5545,12 +5011,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = DraughtingSubfigureRepresentation;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let DraughtingSubfigureRepresentationHolder {
-                symbol_representation,
-            } = self;
-            Ok(DraughtingSubfigureRepresentation {
-                symbol_representation: symbol_representation.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -5565,12 +5026,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = DraughtingSymbolRepresentation;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let DraughtingSymbolRepresentationHolder {
-                symbol_representation,
-            } = self;
-            Ok(DraughtingSymbolRepresentation {
-                symbol_representation: symbol_representation.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -5585,12 +5041,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = DraughtingTextLiteralWithDelineation;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let DraughtingTextLiteralWithDelineationHolder {
-                text_literal_with_delineation,
-            } = self;
-            Ok(DraughtingTextLiteralWithDelineation {
-                text_literal_with_delineation: text_literal_with_delineation.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -5609,16 +5060,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = DraughtingTitle;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let DraughtingTitleHolder {
-                items,
-                language,
-                contents,
-            } = self;
-            Ok(DraughtingTitle {
-                items: items.into_owned(tables)?,
-                language: language,
-                contents: contents,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -5635,13 +5077,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = DrawingDefinition;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let DrawingDefinitionHolder {
-                drawing_number,
-                drawing_type,
-            } = self;
-            Ok(DrawingDefinition {
-                drawing_number: drawing_number,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -5662,17 +5098,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = DrawingRevision;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let DrawingRevisionHolder {
-                revision_identifier,
-                drawing_identifier,
-                intended_scale,
-                presentation_set,
-            } = self;
-            Ok(DrawingRevision {
-                revision_identifier: revision_identifier,
-                drawing_identifier: drawing_identifier.into_owned(tables)?,
-                intended_scale: presentation_set.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -5687,13 +5113,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = DrawingSheetLayout;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let DrawingSheetLayoutHolder {
-                draughting_symbol_representation,
-            } = self;
-            Ok(DrawingSheetLayout {
-                draughting_symbol_representation: draughting_symbol_representation
-                    .into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -5710,14 +5130,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = DrawingSheetRevision;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let DrawingSheetRevisionHolder {
-                revision_identifier,
-                presentation_area,
-            } = self;
-            Ok(DrawingSheetRevision {
-                revision_identifier: revision_identifier,
-                presentation_area: presentation_area.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -5734,14 +5147,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = DrawingSheetRevisionUsage;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let DrawingSheetRevisionUsageHolder {
-                sheet_number,
-                area_in_set,
-            } = self;
-            Ok(DrawingSheetRevisionUsage {
-                sheet_number: sheet_number,
-                area_in_set: area_in_set.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     impl ConicAny for Ellipse {}
@@ -5761,16 +5167,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = Ellipse;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let EllipseHolder {
-                semi_axis_1,
-                semi_axis_2,
-                conic,
-            } = self;
-            Ok(Ellipse {
-                semi_axis_1: semi_axis_1,
-                semi_axis_2: semi_axis_2,
-                conic: conic.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -5785,10 +5182,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = ExternalSource;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let ExternalSourceHolder { source_id } = self;
-            Ok(ExternalSource {
-                source_id: source_id.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -5803,12 +5197,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = ExternallyDefinedCurveFont;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let ExternallyDefinedCurveFontHolder {
-                externally_defined_item,
-            } = self;
-            Ok(ExternallyDefinedCurveFont {
-                externally_defined_item: externally_defined_item.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     impl GeometricRepresentationItemAny for ExternallyDefinedHatchStyle {}
@@ -5826,14 +5215,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = ExternallyDefinedHatchStyle;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let ExternallyDefinedHatchStyleHolder {
-                externally_defined_item,
-                geometric_representation_item,
-            } = self;
-            Ok(ExternallyDefinedHatchStyle {
-                externally_defined_item: externally_defined_item.into_owned(tables)?,
-                geometric_representation_item: geometric_representation_item.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -5850,11 +5232,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = ExternallyDefinedItem;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let ExternallyDefinedItemHolder { item_id, source } = self;
-            Ok(ExternallyDefinedItem {
-                item_id: item_id.into_owned(tables)?,
-                source: source.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -5869,12 +5247,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = ExternallyDefinedSymbol;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let ExternallyDefinedSymbolHolder {
-                externally_defined_item,
-            } = self;
-            Ok(ExternallyDefinedSymbol {
-                externally_defined_item: externally_defined_item.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -5889,12 +5262,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = ExternallyDefinedTextFont;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let ExternallyDefinedTextFontHolder {
-                externally_defined_item,
-            } = self;
-            Ok(ExternallyDefinedTextFont {
-                externally_defined_item: externally_defined_item.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     impl GeometricRepresentationItemAny for ExternallyDefinedTileStyle {}
@@ -5912,14 +5280,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = ExternallyDefinedTileStyle;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let ExternallyDefinedTileStyleHolder {
-                externally_defined_item,
-                geometric_representation_item,
-            } = self;
-            Ok(ExternallyDefinedTileStyle {
-                externally_defined_item: externally_defined_item.into_owned(tables)?,
-                geometric_representation_item: geometric_representation_item.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -5936,11 +5297,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = FillAreaStyle;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let FillAreaStyleHolder { name, fill_styles } = self;
-            Ok(FillAreaStyle {
-                name: name,
-                fill_styles: fill_styles.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -5957,11 +5314,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = FillAreaStyleColour;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let FillAreaStyleColourHolder { name, fill_colour } = self;
-            Ok(FillAreaStyleColour {
-                name: name,
-                fill_colour: fill_colour.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     impl GeometricRepresentationItemAny for FillAreaStyleHatching {}
@@ -5987,22 +5340,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = FillAreaStyleHatching;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let FillAreaStyleHatchingHolder {
-                hatch_line_appearance,
-                start_of_next_hatch_line,
-                point_of_reference_hatch_line,
-                pattern_start,
-                hatch_line_angle,
-                geometric_representation_item,
-            } = self;
-            Ok(FillAreaStyleHatching {
-                hatch_line_appearance: hatch_line_appearance.into_owned(tables)?,
-                start_of_next_hatch_line: start_of_next_hatch_line.into_owned(tables)?,
-                point_of_reference_hatch_line: point_of_reference_hatch_line.into_owned(tables)?,
-                pattern_start: pattern_start.into_owned(tables)?,
-                hatch_line_angle: hatch_line_angle,
-                geometric_representation_item: geometric_representation_item.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     impl GeometricRepresentationItemAny for FillAreaStyleTileSymbolWithStyle {}
@@ -6020,14 +5358,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = FillAreaStyleTileSymbolWithStyle;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let FillAreaStyleTileSymbolWithStyleHolder {
-                symbol,
-                geometric_representation_item,
-            } = self;
-            Ok(FillAreaStyleTileSymbolWithStyle {
-                symbol: symbol.into_owned(tables)?,
-                geometric_representation_item: geometric_representation_item.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     impl GeometricRepresentationItemAny for FillAreaStyleTiles {}
@@ -6049,18 +5380,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = FillAreaStyleTiles;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let FillAreaStyleTilesHolder {
-                tiling_pattern,
-                tiles,
-                tiling_scale,
-                geometric_representation_item,
-            } = self;
-            Ok(FillAreaStyleTiles {
-                tiling_pattern: tiling_pattern.into_owned(tables)?,
-                tiles: tiles.into_owned(tables)?,
-                tiling_scale: tiling_scale,
-                geometric_representation_item: geometric_representation_item.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     impl GeometricSetAny for GeometricCurveSet {}
@@ -6076,10 +5396,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = GeometricCurveSet;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let GeometricCurveSetHolder { geometric_set } = self;
-            Ok(GeometricCurveSet {
-                geometric_set: geometric_set.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -6096,14 +5413,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = GeometricRepresentationContext;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let GeometricRepresentationContextHolder {
-                coordinate_space_dimension,
-                representation_context,
-            } = self;
-            Ok(GeometricRepresentationContext {
-                coordinate_space_dimension: coordinate_space_dimension,
-                representation_context: representation_context.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -6118,12 +5428,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = GeometricRepresentationItem;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let GeometricRepresentationItemHolder {
-                representation_item,
-            } = self;
-            Ok(GeometricRepresentationItem {
-                representation_item: representation_item.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     pub trait GeometricRepresentationItemAny:
@@ -6147,14 +5452,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = GeometricSet;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let GeometricSetHolder {
-                elements,
-                geometric_representation_item,
-            } = self;
-            Ok(GeometricSet {
-                elements: elements.into_owned(tables)?,
-                geometric_representation_item: geometric_representation_item.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     pub trait GeometricSetAny: ::std::any::Any + ::std::fmt::Debug + dyn_clone::DynClone {}
@@ -6172,10 +5470,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = GeometricalToleranceCallout;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let GeometricalToleranceCalloutHolder { draughting_callout } = self;
-            Ok(GeometricalToleranceCallout {
-                draughting_callout: draughting_callout.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -6190,12 +5485,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = GeometricallyBounded2DWireframeRepresentation;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let GeometricallyBounded2DWireframeRepresentationHolder {
-                shape_representation,
-            } = self;
-            Ok(GeometricallyBounded2DWireframeRepresentation {
-                shape_representation: shape_representation.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -6212,14 +5502,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = GlobalUnitAssignedContext;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let GlobalUnitAssignedContextHolder {
-                units,
-                representation_context,
-            } = self;
-            Ok(GlobalUnitAssignedContext {
-                units: units.into_owned(tables)?,
-                representation_context: representation_context.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -6236,11 +5519,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = Group;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let GroupHolder { name, description } = self;
-            Ok(Group {
-                name: name,
-                description: description,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -6255,10 +5534,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = GroupAssignment;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let GroupAssignmentHolder { assigned_group } = self;
-            Ok(GroupAssignment {
-                assigned_group: assigned_group.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     pub trait GroupAssignmentAny:
@@ -6285,18 +5561,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = GroupRelationship;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let GroupRelationshipHolder {
-                name,
-                description,
-                relating_group,
-                related_group,
-            } = self;
-            Ok(GroupRelationship {
-                name: name,
-                description: description,
-                relating_group: relating_group.into_owned(tables)?,
-                related_group: related_group.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     impl ConicAny for Hyperbola {}
@@ -6316,16 +5581,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = Hyperbola;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let HyperbolaHolder {
-                semi_axis,
-                semi_imag_axis,
-                conic,
-            } = self;
-            Ok(Hyperbola {
-                semi_axis: semi_axis,
-                semi_imag_axis: semi_imag_axis,
-                conic: conic.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -6340,10 +5596,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = Invisibility;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let InvisibilityHolder { invisible_items } = self;
-            Ok(Invisibility {
-                invisible_items: invisible_items.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -6358,12 +5611,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = LeaderCurve;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let LeaderCurveHolder {
-                annotation_curve_occurrence,
-            } = self;
-            Ok(LeaderCurve {
-                annotation_curve_occurrence: annotation_curve_occurrence.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -6378,10 +5626,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = LeaderDirectedCallout;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let LeaderDirectedCalloutHolder { draughting_callout } = self;
-            Ok(LeaderDirectedCallout {
-                draughting_callout: draughting_callout.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -6396,12 +5641,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = LeaderDirectedDimension;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let LeaderDirectedDimensionHolder {
-                leader_directed_callout,
-            } = self;
-            Ok(LeaderDirectedDimension {
-                leader_directed_callout: leader_directed_callout.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -6416,10 +5656,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = LeaderTerminator;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let LeaderTerminatorHolder { terminator_symbol } = self;
-            Ok(LeaderTerminator {
-                terminator_symbol: terminator_symbol.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     impl MeasureWithUnitAny for LengthMeasureWithUnit {}
@@ -6435,10 +5672,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = LengthMeasureWithUnit;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let LengthMeasureWithUnitHolder { measure_with_unit } = self;
-            Ok(LengthMeasureWithUnit {
-                measure_with_unit: measure_with_unit.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     impl NamedUnitAny for LengthUnit {}
@@ -6454,10 +5688,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = LengthUnit;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let LengthUnitHolder { named_unit } = self;
-            Ok(LengthUnit {
-                named_unit: named_unit.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     impl CurveAny for Line {}
@@ -6477,12 +5708,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = Line;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let LineHolder { pnt, dir, curve } = self;
-            Ok(Line {
-                pnt: pnt.into_owned(tables)?,
-                dir: dir.into_owned(tables)?,
-                curve: curve.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -6497,13 +5723,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = LinearDimension;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let LinearDimensionHolder {
-                dimension_curve_directed_callout,
-            } = self;
-            Ok(LinearDimension {
-                dimension_curve_directed_callout: dimension_curve_directed_callout
-                    .into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -6522,16 +5742,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = MappedItem;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let MappedItemHolder {
-                mapping_source,
-                mapping_target,
-                representation_item,
-            } = self;
-            Ok(MappedItem {
-                mapping_source: mapping_source.into_owned(tables)?,
-                mapping_target: mapping_target.into_owned(tables)?,
-                representation_item: representation_item.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -6548,14 +5759,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = MeasureWithUnit;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let MeasureWithUnitHolder {
-                value_component,
-                unit_component,
-            } = self;
-            Ok(MeasureWithUnit {
-                value_component: value_component.into_owned(tables)?,
-                unit_component: unit_component.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     pub trait MeasureWithUnitAny:
@@ -6576,10 +5780,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = NamedUnit;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let NamedUnitHolder { dimensions } = self;
-            Ok(NamedUnit {
-                dimensions: dimensions.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     pub trait NamedUnitAny: ::std::any::Any + ::std::fmt::Debug + dyn_clone::DynClone {}
@@ -6604,18 +5805,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = OffsetCurve2D;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let OffsetCurve2DHolder {
-                basis_curve,
-                distance,
-                self_intersect,
-                curve,
-            } = self;
-            Ok(OffsetCurve2D {
-                basis_curve: basis_curve.into_owned(tables)?,
-                distance: distance,
-                self_intersect: self_intersect,
-                curve: curve.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     impl GeometricRepresentationItemAny for OneDirectionRepeatFactor {}
@@ -6633,14 +5823,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = OneDirectionRepeatFactor;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let OneDirectionRepeatFactorHolder {
-                repeat_factor,
-                geometric_representation_item,
-            } = self;
-            Ok(OneDirectionRepeatFactor {
-                repeat_factor: repeat_factor.into_owned(tables)?,
-                geometric_representation_item: geometric_representation_item.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -6655,12 +5838,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = OrdinateDimension;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let OrdinateDimensionHolder {
-                projection_directed_callout,
-            } = self;
-            Ok(OrdinateDimension {
-                projection_directed_callout: projection_directed_callout.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -6679,15 +5857,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = Organization;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let OrganizationHolder {
-                id,
-                name,
-                description,
-            } = self;
-            Ok(Organization {
-                id: name,
-                name: description,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -6704,14 +5874,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = OrganizationAssignment;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let OrganizationAssignmentHolder {
-                assigned_organization,
-                role,
-            } = self;
-            Ok(OrganizationAssignment {
-                assigned_organization: assigned_organization.into_owned(tables)?,
-                role: role.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     pub trait OrganizationAssignmentAny:
@@ -6732,8 +5895,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = OrganizationRole;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let OrganizationRoleHolder { name } = self;
-            Ok(OrganizationRole { name: name })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -6752,16 +5914,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = OrganizationalAddress;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let OrganizationalAddressHolder {
-                organizations,
-                description,
-                address,
-            } = self;
-            Ok(OrganizationalAddress {
-                organizations: organizations.into_owned(tables)?,
-                description: description,
-                address: address.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     impl ConicAny for Parabola {}
@@ -6779,11 +5932,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = Parabola;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let ParabolaHolder { focal_dist, conic } = self;
-            Ok(Parabola {
-                focal_dist: focal_dist,
-                conic: conic.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -6808,15 +5957,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = Person;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let PersonHolder {
-                id,
-                last_name,
-                first_name,
-                middle_names,
-                prefix_titles,
-                suffix_titles,
-            } = self;
-            Ok(Person { id: id })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -6833,14 +5974,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = PersonAndOrganization;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let PersonAndOrganizationHolder {
-                the_person,
-                the_organization,
-            } = self;
-            Ok(PersonAndOrganization {
-                the_person: the_person.into_owned(tables)?,
-                the_organization: the_organization.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -6857,15 +5991,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = PersonAndOrganizationAssignment;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let PersonAndOrganizationAssignmentHolder {
-                assigned_person_and_organization,
-                role,
-            } = self;
-            Ok(PersonAndOrganizationAssignment {
-                assigned_person_and_organization: assigned_person_and_organization
-                    .into_owned(tables)?,
-                role: role.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     pub trait PersonAndOrganizationAssignmentAny:
@@ -6886,8 +6012,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = PersonAndOrganizationRole;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let PersonAndOrganizationRoleHolder { name } = self;
-            Ok(PersonAndOrganizationRole { name: name })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -6904,14 +6029,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = PersonAssignment;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let PersonAssignmentHolder {
-                assigned_person,
-                role,
-            } = self;
-            Ok(PersonAssignment {
-                assigned_person: assigned_person.into_owned(tables)?,
-                role: role.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     pub trait PersonAssignmentAny:
@@ -6932,8 +6050,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = PersonRole;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let PersonRoleHolder { name } = self;
-            Ok(PersonRole { name: name })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -6952,16 +6069,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = PersonalAddress;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let PersonalAddressHolder {
-                people,
-                description,
-                address,
-            } = self;
-            Ok(PersonalAddress {
-                people: people.into_owned(tables)?,
-                description: description,
-                address: address.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     impl GeometricRepresentationItemAny for Placement {}
@@ -6979,14 +6087,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = Placement;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let PlacementHolder {
-                location,
-                geometric_representation_item,
-            } = self;
-            Ok(Placement {
-                location: location.into_owned(tables)?,
-                geometric_representation_item: geometric_representation_item.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     pub trait PlacementAny: ::std::any::Any + ::std::fmt::Debug + dyn_clone::DynClone {}
@@ -7006,14 +6107,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = PlanarBox;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let PlanarBoxHolder {
-                placement,
-                planar_extent,
-            } = self;
-            Ok(PlanarBox {
-                placement: placement.into_owned(tables)?,
-                planar_extent: planar_extent.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     impl GeometricRepresentationItemAny for PlanarExtent {}
@@ -7033,16 +6127,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = PlanarExtent;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let PlanarExtentHolder {
-                size_in_x,
-                size_in_y,
-                geometric_representation_item,
-            } = self;
-            Ok(PlanarExtent {
-                size_in_x: size_in_x,
-                size_in_y: size_in_y,
-                geometric_representation_item: geometric_representation_item.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     impl MeasureWithUnitAny for PlaneAngleMeasureWithUnit {}
@@ -7058,10 +6143,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = PlaneAngleMeasureWithUnit;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let PlaneAngleMeasureWithUnitHolder { measure_with_unit } = self;
-            Ok(PlaneAngleMeasureWithUnit {
-                measure_with_unit: measure_with_unit.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     impl NamedUnitAny for PlaneAngleUnit {}
@@ -7077,10 +6159,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = PlaneAngleUnit;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let PlaneAngleUnitHolder { named_unit } = self;
-            Ok(PlaneAngleUnit {
-                named_unit: named_unit.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     impl GeometricRepresentationItemAny for Point {}
@@ -7096,12 +6175,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = Point;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let PointHolder {
-                geometric_representation_item,
-            } = self;
-            Ok(Point {
-                geometric_representation_item: geometric_representation_item.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     pub trait PointAny: ::std::any::Any + ::std::fmt::Debug + dyn_clone::DynClone {}
@@ -7124,16 +6198,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = PointOnCurve;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let PointOnCurveHolder {
-                basis_curve,
-                point_parameter,
-                point,
-            } = self;
-            Ok(PointOnCurve {
-                basis_curve: basis_curve.into_owned(tables)?,
-                point_parameter: point_parameter,
-                point: point.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     impl BoundedCurveAny for Polyline {}
@@ -7151,14 +6216,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = Polyline;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let PolylineHolder {
-                points,
-                bounded_curve,
-            } = self;
-            Ok(Polyline {
-                points: points.into_owned(tables)?,
-                bounded_curve: bounded_curve.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -7175,14 +6233,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = PreDefinedColour;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let PreDefinedColourHolder {
-                pre_defined_item,
-                colour,
-            } = self;
-            Ok(PreDefinedColour {
-                pre_defined_item: pre_defined_item.into_owned(tables)?,
-                colour: colour.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -7197,10 +6248,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = PreDefinedCurveFont;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let PreDefinedCurveFontHolder { pre_defined_item } = self;
-            Ok(PreDefinedCurveFont {
-                pre_defined_item: pre_defined_item.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -7215,10 +6263,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = PreDefinedDimensionSymbol;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let PreDefinedDimensionSymbolHolder { pre_defined_symbol } = self;
-            Ok(PreDefinedDimensionSymbol {
-                pre_defined_symbol: pre_defined_symbol.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -7233,10 +6278,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = PreDefinedGeometricalToleranceSymbol;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let PreDefinedGeometricalToleranceSymbolHolder { pre_defined_symbol } = self;
-            Ok(PreDefinedGeometricalToleranceSymbol {
-                pre_defined_symbol: pre_defined_symbol.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -7251,8 +6293,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = PreDefinedItem;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let PreDefinedItemHolder { name } = self;
-            Ok(PreDefinedItem { name: name })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -7267,10 +6308,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = PreDefinedPointMarkerSymbol;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let PreDefinedPointMarkerSymbolHolder { pre_defined_symbol } = self;
-            Ok(PreDefinedPointMarkerSymbol {
-                pre_defined_symbol: pre_defined_symbol.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -7285,10 +6323,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = PreDefinedSymbol;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let PreDefinedSymbolHolder { pre_defined_item } = self;
-            Ok(PreDefinedSymbol {
-                pre_defined_item: pre_defined_item.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -7303,10 +6338,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = PreDefinedTerminatorSymbol;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let PreDefinedTerminatorSymbolHolder { pre_defined_symbol } = self;
-            Ok(PreDefinedTerminatorSymbol {
-                pre_defined_symbol: pre_defined_symbol.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -7321,10 +6353,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = PreDefinedTextFont;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let PreDefinedTextFontHolder { pre_defined_item } = self;
-            Ok(PreDefinedTextFont {
-                pre_defined_item: pre_defined_item.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -7339,12 +6368,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = PresentationArea;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let PresentationAreaHolder {
-                presentation_representation,
-            } = self;
-            Ok(PresentationArea {
-                presentation_representation: presentation_representation.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -7363,16 +6387,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = PresentationLayerAssignment;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let PresentationLayerAssignmentHolder {
-                name,
-                description,
-                assigned_items,
-            } = self;
-            Ok(PresentationLayerAssignment {
-                name: name,
-                description: description,
-                assigned_items: assigned_items.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -7389,14 +6404,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = PresentationLayerUsage;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let PresentationLayerUsageHolder {
-                assignment,
-                presentation,
-            } = self;
-            Ok(PresentationLayerUsage {
-                assignment: assignment.into_owned(tables)?,
-                presentation: presentation.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -7411,10 +6419,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = PresentationRepresentation;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let PresentationRepresentationHolder { representation } = self;
-            Ok(PresentationRepresentation {
-                representation: representation.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -7425,8 +6430,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = PresentationSet;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let PresentationSetHolder {} = self;
-            Ok(PresentationSet {})
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -7443,11 +6447,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = PresentationSize;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let PresentationSizeHolder { unit, size } = self;
-            Ok(PresentationSize {
-                unit: unit.into_owned(tables)?,
-                size: size.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -7462,10 +6462,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = PresentationStyleAssignment;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let PresentationStyleAssignmentHolder { styles } = self;
-            Ok(PresentationStyleAssignment {
-                styles: styles.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -7482,14 +6479,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = PresentationStyleByContext;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let PresentationStyleByContextHolder {
-                style_context,
-                presentation_style_assignment,
-            } = self;
-            Ok(PresentationStyleByContext {
-                style_context: style_context.into_owned(tables)?,
-                presentation_style_assignment: presentation_style_assignment.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -7504,12 +6494,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = PresentationView;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let PresentationViewHolder {
-                presentation_representation,
-            } = self;
-            Ok(PresentationView {
-                presentation_representation: presentation_representation.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -7520,8 +6505,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = PresentedItem;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let PresentedItemHolder {} = self;
-            Ok(PresentedItem {})
+            todo!()
         }
     }
     pub trait PresentedItemAny: ::std::any::Any + ::std::fmt::Debug + dyn_clone::DynClone {}
@@ -7541,11 +6525,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = PresentedItemRepresentation;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let PresentedItemRepresentationHolder { presentation, item } = self;
-            Ok(PresentedItemRepresentation {
-                presentation: presentation.into_owned(tables)?,
-                item: item.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -7566,18 +6546,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = Product;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let ProductHolder {
-                id,
-                name,
-                description,
-                frame_of_reference,
-            } = self;
-            Ok(Product {
-                id: id,
-                name: name,
-                description: description,
-                frame_of_reference: frame_of_reference.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     impl ApplicationContextElementAny for ProductContext {}
@@ -7595,14 +6564,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = ProductContext;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let ProductContextHolder {
-                discipline_type,
-                application_context_element,
-            } = self;
-            Ok(ProductContext {
-                discipline_type: discipline_type,
-                application_context_element: application_context_element.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -7623,18 +6585,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = ProductDefinition;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let ProductDefinitionHolder {
-                id,
-                description,
-                formation,
-                frame_of_reference,
-            } = self;
-            Ok(ProductDefinition {
-                id: id,
-                description: description,
-                formation: formation.into_owned(tables)?,
-                frame_of_reference: frame_of_reference.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     impl ApplicationContextElementAny for ProductDefinitionContext {}
@@ -7652,14 +6603,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = ProductDefinitionContext;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let ProductDefinitionContextHolder {
-                life_cycle_stage,
-                application_context_element,
-            } = self;
-            Ok(ProductDefinitionContext {
-                life_cycle_stage: life_cycle_stage,
-                application_context_element: application_context_element.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -7678,16 +6622,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = ProductDefinitionFormation;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let ProductDefinitionFormationHolder {
-                id,
-                description,
-                of_product,
-            } = self;
-            Ok(ProductDefinitionFormation {
-                id: id,
-                description: description,
-                of_product: of_product.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -7702,12 +6637,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = ProductDefinitionShape;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let ProductDefinitionShapeHolder {
-                property_definition,
-            } = self;
-            Ok(ProductDefinitionShape {
-                property_definition: property_definition.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -7722,12 +6652,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = ProjectionCurve;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let ProjectionCurveHolder {
-                annotation_curve_occurrence,
-            } = self;
-            Ok(ProjectionCurve {
-                annotation_curve_occurrence: annotation_curve_occurrence.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -7742,10 +6667,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = ProjectionDirectedCallout;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let ProjectionDirectedCalloutHolder { draughting_callout } = self;
-            Ok(ProjectionDirectedCallout {
-                draughting_callout: draughting_callout.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -7764,16 +6686,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = PropertyDefinition;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let PropertyDefinitionHolder {
-                name,
-                description,
-                definition,
-            } = self;
-            Ok(PropertyDefinition {
-                name: name,
-                description: description,
-                definition: definition.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -7790,14 +6703,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = PropertyDefinitionRepresentation;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let PropertyDefinitionRepresentationHolder {
-                definition,
-                used_representation,
-            } = self;
-            Ok(PropertyDefinitionRepresentation {
-                definition: definition.into_owned(tables)?,
-                used_representation: used_representation.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     impl BSplineCurveAny for QuasiUniformCurve {}
@@ -7813,10 +6719,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = QuasiUniformCurve;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let QuasiUniformCurveHolder { b_spline_curve } = self;
-            Ok(QuasiUniformCurve {
-                b_spline_curve: b_spline_curve.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -7831,13 +6734,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = RadiusDimension;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let RadiusDimensionHolder {
-                dimension_curve_directed_callout,
-            } = self;
-            Ok(RadiusDimension {
-                dimension_curve_directed_callout: dimension_curve_directed_callout
-                    .into_owned(tables)?,
-            })
+            todo!()
         }
     }
     impl BSplineCurveAny for RationalBSplineCurve {}
@@ -7855,14 +6752,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = RationalBSplineCurve;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let RationalBSplineCurveHolder {
-                weights_data,
-                b_spline_curve,
-            } = self;
-            Ok(RationalBSplineCurve {
-                weights_data: weights_data.into_owned(tables)?,
-                b_spline_curve: b_spline_curve.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -7881,16 +6771,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = Representation;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let RepresentationHolder {
-                name,
-                items,
-                context_of_items,
-            } = self;
-            Ok(Representation {
-                name: name,
-                items: items.into_owned(tables)?,
-                context_of_items: context_of_items.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -7907,14 +6788,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = RepresentationContext;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let RepresentationContextHolder {
-                context_identifier,
-                context_type,
-            } = self;
-            Ok(RepresentationContext {
-                context_identifier: context_identifier,
-                context_type: context_type,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -7929,8 +6803,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = RepresentationItem;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let RepresentationItemHolder { name } = self;
-            Ok(RepresentationItem { name: name })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -7947,14 +6820,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = RepresentationMap;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let RepresentationMapHolder {
-                mapping_origin,
-                mapped_representation,
-            } = self;
-            Ok(RepresentationMap {
-                mapping_origin: mapping_origin.into_owned(tables)?,
-                mapped_representation: mapped_representation.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -7973,16 +6839,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = SecurityClassification;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let SecurityClassificationHolder {
-                name,
-                purpose,
-                security_level,
-            } = self;
-            Ok(SecurityClassification {
-                name: name,
-                purpose: purpose,
-                security_level: security_level.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -7997,13 +6854,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = SecurityClassificationAssignment;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let SecurityClassificationAssignmentHolder {
-                assigned_security_classification,
-            } = self;
-            Ok(SecurityClassificationAssignment {
-                assigned_security_classification: assigned_security_classification
-                    .into_owned(tables)?,
-            })
+            todo!()
         }
     }
     pub trait SecurityClassificationAssignmentAny:
@@ -8024,8 +6875,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = SecurityClassificationLevel;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let SecurityClassificationLevelHolder { name } = self;
-            Ok(SecurityClassificationLevel { name: name })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -8040,13 +6890,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = ShapeDefinitionRepresentation;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let ShapeDefinitionRepresentationHolder {
-                property_definition_representation,
-            } = self;
-            Ok(ShapeDefinitionRepresentation {
-                property_definition_representation: property_definition_representation
-                    .into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -8061,10 +6905,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = ShapeRepresentation;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let ShapeRepresentationHolder { representation } = self;
-            Ok(ShapeRepresentation {
-                representation: representation.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     impl NamedUnitAny for SiUnit {}
@@ -8084,15 +6925,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = SiUnit;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let SiUnitHolder {
-                prefix,
-                name,
-                named_unit,
-            } = self;
-            Ok(SiUnit {
-                prefix: name.into_owned(tables)?,
-                name: named_unit.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -8107,10 +6940,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = StructuredDimensionCallout;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let StructuredDimensionCalloutHolder { draughting_callout } = self;
-            Ok(StructuredDimensionCallout {
-                draughting_callout: draughting_callout.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -8129,16 +6959,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = StyledItem;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let StyledItemHolder {
-                styles,
-                item,
-                representation_item,
-            } = self;
-            Ok(StyledItem {
-                styles: styles.into_owned(tables)?,
-                item: item.into_owned(tables)?,
-                representation_item: representation_item.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -8153,10 +6974,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = SymbolColour;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let SymbolColourHolder { colour_of_symbol } = self;
-            Ok(SymbolColour {
-                colour_of_symbol: colour_of_symbol.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -8171,10 +6989,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = SymbolRepresentation;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let SymbolRepresentationHolder { representation } = self;
-            Ok(SymbolRepresentation {
-                representation: representation.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -8189,10 +7004,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = SymbolRepresentationMap;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let SymbolRepresentationMapHolder { representation_map } = self;
-            Ok(SymbolRepresentationMap {
-                representation_map: representation_map.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -8209,14 +7021,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = SymbolStyle;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let SymbolStyleHolder {
-                name,
-                style_of_symbol,
-            } = self;
-            Ok(SymbolStyle {
-                name: name,
-                style_of_symbol: style_of_symbol.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     impl GeometricRepresentationItemAny for SymbolTarget {}
@@ -8238,18 +7043,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = SymbolTarget;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let SymbolTargetHolder {
-                placement,
-                x_scale,
-                y_scale,
-                geometric_representation_item,
-            } = self;
-            Ok(SymbolTarget {
-                placement: placement.into_owned(tables)?,
-                x_scale: x_scale,
-                y_scale: y_scale,
-                geometric_representation_item: geometric_representation_item.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -8266,14 +7060,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = TerminatorSymbol;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let TerminatorSymbolHolder {
-                annotated_curve,
-                annotation_symbol_occurrence,
-            } = self;
-            Ok(TerminatorSymbol {
-                annotated_curve: annotated_curve.into_owned(tables)?,
-                annotation_symbol_occurrence: annotation_symbol_occurrence.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     impl GeometricRepresentationItemAny for TextLiteral {}
@@ -8299,22 +7086,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = TextLiteral;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let TextLiteralHolder {
-                literal,
-                placement,
-                alignment,
-                path,
-                font,
-                geometric_representation_item,
-            } = self;
-            Ok(TextLiteral {
-                literal: literal,
-                placement: placement.into_owned(tables)?,
-                alignment: alignment,
-                path: path.into_owned(tables)?,
-                font: font.into_owned(tables)?,
-                geometric_representation_item: geometric_representation_item.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -8331,14 +7103,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = TextLiteralWithAssociatedCurves;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let TextLiteralWithAssociatedCurvesHolder {
-                associated_curves,
-                text_literal,
-            } = self;
-            Ok(TextLiteralWithAssociatedCurves {
-                associated_curves: associated_curves.into_owned(tables)?,
-                text_literal: text_literal.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -8355,14 +7120,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = TextLiteralWithBlankingBox;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let TextLiteralWithBlankingBoxHolder {
-                blanking,
-                text_literal,
-            } = self;
-            Ok(TextLiteralWithBlankingBox {
-                blanking: blanking.into_owned(tables)?,
-                text_literal: text_literal.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -8379,14 +7137,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = TextLiteralWithDelineation;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let TextLiteralWithDelineationHolder {
-                delineation,
-                text_literal,
-            } = self;
-            Ok(TextLiteralWithDelineation {
-                delineation: delineation,
-                text_literal: text_literal.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -8403,14 +7154,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = TextLiteralWithExtent;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let TextLiteralWithExtentHolder {
-                extent,
-                text_literal,
-            } = self;
-            Ok(TextLiteralWithExtent {
-                extent: extent.into_owned(tables)?,
-                text_literal: text_literal.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -8427,14 +7171,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = TextStyle;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let TextStyleHolder {
-                name,
-                character_appearance,
-            } = self;
-            Ok(TextStyle {
-                name: name,
-                character_appearance: character_appearance.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -8449,10 +7186,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = TextStyleForDefinedFont;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let TextStyleForDefinedFontHolder { text_colour } = self;
-            Ok(TextStyleForDefinedFont {
-                text_colour: text_colour.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -8469,14 +7203,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = TextStyleWithBoxCharacteristics;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let TextStyleWithBoxCharacteristicsHolder {
-                characteristics,
-                text_style,
-            } = self;
-            Ok(TextStyleWithBoxCharacteristics {
-                characteristics: characteristics.into_owned(tables)?,
-                text_style: text_style.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -8493,14 +7220,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = TextStyleWithMirror;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let TextStyleWithMirrorHolder {
-                mirror_placement,
-                text_style,
-            } = self;
-            Ok(TextStyleWithMirror {
-                mirror_placement: mirror_placement.into_owned(tables)?,
-                text_style: text_style.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     impl BoundedCurveAny for TrimmedCurve {}
@@ -8526,22 +7246,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = TrimmedCurve;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let TrimmedCurveHolder {
-                basis_curve,
-                trim_1,
-                trim_2,
-                sense_agreement,
-                master_representation,
-                bounded_curve,
-            } = self;
-            Ok(TrimmedCurve {
-                basis_curve: basis_curve.into_owned(tables)?,
-                trim_1: trim_1.into_owned(tables)?,
-                trim_2: trim_2.into_owned(tables)?,
-                sense_agreement: sense_agreement,
-                master_representation: master_representation.into_owned(tables)?,
-                bounded_curve: bounded_curve.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -8558,14 +7263,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = TwoDirectionRepeatFactor;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let TwoDirectionRepeatFactorHolder {
-                second_repeat_factor,
-                one_direction_repeat_factor,
-            } = self;
-            Ok(TwoDirectionRepeatFactor {
-                second_repeat_factor: second_repeat_factor.into_owned(tables)?,
-                one_direction_repeat_factor: one_direction_repeat_factor.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     impl BSplineCurveAny for UniformCurve {}
@@ -8581,10 +7279,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = UniformCurve;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let UniformCurveHolder { b_spline_curve } = self;
-            Ok(UniformCurve {
-                b_spline_curve: b_spline_curve.into_owned(tables)?,
-            })
+            todo!()
         }
     }
     impl GeometricRepresentationItemAny for Vector {}
@@ -8604,16 +7299,7 @@ pub mod explicit_draughting {
         type Table = Tables;
         type Owned = Vector;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            let VectorHolder {
-                orientation,
-                magnitude,
-                geometric_representation_item,
-            } = self;
-            Ok(Vector {
-                orientation: orientation.into_owned(tables)?,
-                magnitude: magnitude,
-                geometric_representation_item: geometric_representation_item.into_owned(tables)?,
-            })
+            todo!()
         }
     }
 }
