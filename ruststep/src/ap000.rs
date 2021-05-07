@@ -27,6 +27,10 @@
 //!     SUBTYPE OF (base);
 //!     b: f64;
 //!   END_ENTITY;
+//!
+//!   ENTITY user;
+//!     data: base;
+//!   END_ENTITY;
 //! END_SCHEMA;
 //! ```
 //!
@@ -253,7 +257,8 @@ impl Holder for CHolder {
 ///
 /// let sub2: &Sub = sub_r.downcast_ref().unwrap();
 /// ```
-pub trait BaseAny: Any + Debug {}
+pub trait BaseAny: Any + Debug + dyn_clone::DynClone {}
+dyn_clone::clone_trait_object!(BaseAny);
 impl dyn BaseAny + 'static {
     pub fn is<Sub: BaseAny + 'static>(&self) -> bool {
         self.type_id() == TypeId::of::<Sub>()
@@ -278,18 +283,23 @@ impl dyn BaseAny + 'static {
     }
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone)]
 pub struct Base {
     pub a: f64,
 }
 impl BaseAny for Base {}
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone)]
 pub struct Sub {
     pub base: Base,
     pub b: f64,
 }
 impl BaseAny for Sub {}
+
+#[derive(Debug, Clone)]
+pub struct User {
+    pub data: Box<dyn BaseAny>,
+}
 
 #[cfg(test)]
 mod tests {
