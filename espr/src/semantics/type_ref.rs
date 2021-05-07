@@ -5,6 +5,35 @@ use proc_macro2::TokenStream;
 use quote::*;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
+pub struct SimpleType(pub ast::types::SimpleType);
+
+impl Legalize for SimpleType {
+    type Input = ast::types::SimpleType;
+    fn legalize(
+        _ns: &Namespace,
+        _scope: &Scope,
+        input: &Self::Input,
+    ) -> Result<Self, SemanticError> {
+        Ok(SimpleType(input.clone()))
+    }
+}
+
+impl ToTokens for SimpleType {
+    fn to_tokens(&self, tokens: &mut TokenStream) {
+        use ast::types::SimpleType::*;
+        match self.0 {
+            Number => tokens.append(format_ident!("f64")),
+            Real => tokens.append(format_ident!("f64")),
+            Integer => tokens.append(format_ident!("i64")),
+            Logical => tokens.append_all(quote! { Logical }),
+            Boolen => tokens.append(format_ident!("bool")),
+            String_ { .. } => tokens.append(format_ident!("String")),
+            Binary { .. } => unimplemented!("Binary type is not supported yet"),
+        }
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Bound {}
 
 impl Legalize for Bound {
@@ -21,16 +50,33 @@ impl Legalize for Bound {
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum TypeRef {
+    SimpleType(SimpleType),
     Named {
         name: String,
+
+        /// Scope where the named type is declared
         scope: Scope,
+
+        /// True if the underlying type of named type is a simple type:
+        ///
+        /// ```text
+        /// TYPE a = INTEGER; ENDTYPE;
+        /// TYPE b = a; ENDTYPE;
+        /// ```
+        ///
+        /// Then both `a` and `b` are simple.
+        ///
+        is_simple: bool,
     },
+
+    /* Declared as `ENTITY` */
     Entity {
         name: String,
         scope: Scope,
         has_supertype_decl: bool,
     },
-    SimpleType(ast::types::SimpleType),
+
+    /* Aggregated */
     Set {
         base: Box<TypeRef>,
         bound: Option<Bound>,
@@ -40,6 +86,16 @@ pub enum TypeRef {
         bound: Option<Bound>,
         unique: bool,
     },
+}
+
+impl TypeRef {
+    pub fn is_simple(&self) -> bool {
+        match self {
+            TypeRef::SimpleType(..) => true,
+            TypeRef::Named { is_simple, .. } => *is_simple,
+            _ => false,
+        }
+    }
 }
 
 impl Legalize for TypeRef {
@@ -52,7 +108,7 @@ impl Legalize for TypeRef {
     ) -> Result<Self, SemanticError> {
         use ast::types::ParameterType::*;
         Ok(match ty {
-            Simple(ty) => Self::SimpleType(*ty),
+            Simple(ty) => Self::SimpleType(SimpleType(*ty)),
             Named(name) => ns.lookup_type(scope, name)?,
             Set { base, bound } => {
                 let base = TypeRef::legalize(ns, scope, base.as_ref())?;
@@ -92,18 +148,7 @@ impl ToTokens for TypeRef {
     fn to_tokens(&self, tokens: &mut TokenStream) {
         use TypeRef::*;
         match self {
-            SimpleType(ty) => {
-                use ast::types::SimpleType::*;
-                match ty {
-                    Number => tokens.append(format_ident!("f64")),
-                    Real => tokens.append(format_ident!("f64")),
-                    Integer => tokens.append(format_ident!("i64")),
-                    Logical => tokens.append_all(quote! { Logical }),
-                    Boolen => tokens.append(format_ident!("bool")),
-                    String_ { .. } => tokens.append(format_ident!("String")),
-                    Binary { .. } => unimplemented!("Binary type is not supported yet"),
-                }
-            }
+            SimpleType(ty) => ty.to_tokens(tokens),
             Named { name, .. } => {
                 let name = format_ident!("{}", name.to_pascal_case());
                 tokens.append_all(quote! { #name });

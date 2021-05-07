@@ -6,12 +6,12 @@ use quote::*;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Entity {
-    name: String,
-    attributes: Vec<EntityAttribute>,
-    subtypes: Option<Vec<TypeRef>>,
-
-    // FIXME This assumes that `SUPERTYPE` declaration exists for all supertypes.
-    has_supertype_decl: bool,
+    /// Name of entity in snake_case
+    pub name: String,
+    pub attributes: Vec<EntityAttribute>,
+    pub subtypes: Option<Vec<TypeRef>>,
+    /// FIXME This assumes that `SUPERTYPE` declaration exists for all supertypes.
+    pub has_supertype_decl: bool,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -62,8 +62,9 @@ impl Legalize for Entity {
                     .collect::<Result<Vec<_>, _>>()
             })
             .transpose()?;
+        let name = entity.name.clone();
         Ok(Entity {
-            name: entity.name.clone(),
+            name,
             attributes,
             subtypes,
             has_supertype_decl: entity.has_supertype_decl(),
@@ -73,25 +74,36 @@ impl Legalize for Entity {
 
 impl ToTokens for Entity {
     fn to_tokens(&self, tokens: &mut TokenStream) {
-        // EXPRESS identifier should be snake_case, but Rust struct should be PascalCase.
         let name = format_ident!("{}", self.name.to_pascal_case());
+        let holder_name = format_ident!("{}Holder", self.name.to_pascal_case());
 
-        let mut attr_name: Vec<_> = self
-            .attributes
-            .iter()
-            .map(|EntityAttribute { name, .. }| format_ident!("{}", name))
-            .collect();
-        let mut attr_type: Vec<_> = self
-            .attributes
-            .iter()
-            .map(|EntityAttribute { ty, optional, .. }| {
-                if *optional {
-                    quote! { Option<#ty> }
+        let mut attr_name = Vec::new();
+        let mut attr_type = Vec::new();
+        let mut holder_attr_type = Vec::new();
+        let mut holder_attr_expr = Vec::new();
+
+        for EntityAttribute { name, ty, optional } in &self.attributes {
+            let name = format_ident!("{}", name);
+            attr_name.push(name.clone());
+            if *optional {
+                attr_type.push(quote! { Option<#ty> });
+                holder_attr_expr.push(quote! { #name });
+                if ty.is_simple() {
+                    holder_attr_type.push(quote! { Option<#ty> });
                 } else {
-                    quote! { #ty }
+                    holder_attr_type.push(quote! { Option<PlaceHolder<#ty>> });
                 }
-            })
-            .collect();
+            } else {
+                attr_type.push(quote! { #ty });
+                if ty.is_simple() {
+                    holder_attr_type.push(quote! { #ty });
+                    holder_attr_expr.push(quote! { #name });
+                } else {
+                    holder_attr_type.push(quote! { PlaceHolder<#ty> });
+                    holder_attr_expr.push(quote! { #name.into_owned(tables)? });
+                }
+            }
+        }
 
         if let Some(subtypes) = &self.subtypes {
             for ty in subtypes {
@@ -102,8 +114,16 @@ impl ToTokens for Entity {
                     _ => unreachable!(),
                 };
 
-                attr_name.push(attr);
+                attr_name.push(attr.clone());
                 attr_type.push(ty.to_token_stream());
+
+                if ty.is_simple() {
+                    holder_attr_type.push(quote! { #ty });
+                    holder_attr_expr.push(quote! { #attr });
+                } else {
+                    holder_attr_type.push(quote! { PlaceHolder<#ty> });
+                    holder_attr_expr.push(quote! { #attr.into_owned(tables)? });
+                }
 
                 if let TypeRef::Entity {
                     name: supertype_name,
@@ -120,12 +140,32 @@ impl ToTokens for Entity {
                 }
             }
         }
+
+        assert_eq!(attr_name.len(), attr_type.len());
+        assert_eq!(attr_name.len(), holder_attr_type.len());
+        assert_eq!(attr_name.len(), holder_attr_expr.len());
+
         tokens.append_all(quote! {
             #[derive(Debug, Clone, derive_new::new)]
             pub struct #name {
                 #(
                 pub #attr_name : #attr_type,
                 )*
+            }
+
+            #[derive(Clone, Debug)]
+            struct #holder_name {
+                #(
+                #attr_name : #holder_attr_type,
+                )*
+            }
+
+            impl Holder for #holder_name {
+                type Table = Tables;
+                type Owned = #name;
+                fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
+                    todo!()
+                }
             }
         });
 
