@@ -83,18 +83,30 @@
 //! }
 //! ```
 //!
+//! custom `Any` trait for entity `a`
+//!
+//! ```
+//! use ruststep::ap000::*;
+//!
+//! let base = Base { a: 1.0 };
+//! let sub = Sub { base, b: 1.0 };
+//!
+//! let sub_r = &sub as &dyn BaseAny;
+//!
+//! // call Debug for Sub by dispatch
+//! dbg!(&sub_r);
+//!
+//! let sub2: &Sub = sub_r.downcast_ref().unwrap();
+//! ```
 
 use crate::{
     ast::{DataSection, EntityInstance},
+    custom_any,
     error::*,
     tables::*,
 };
 use serde::{Deserialize, Serialize};
-use std::{
-    any::{Any, TypeId},
-    collections::HashMap,
-    fmt::Debug,
-};
+use std::{collections::HashMap, fmt::Debug};
 
 #[cfg(doc)]
 use crate::tables;
@@ -242,46 +254,7 @@ impl Holder for CHolder {
     }
 }
 
-/// custom `Any` trait for entity `a`
-///
-/// ```
-/// use ruststep::ap000::*;
-///
-/// let base = Base { a: 1.0 };
-/// let sub = Sub { base, b: 1.0 };
-///
-/// let sub_r = &sub as &dyn BaseAny;
-///
-/// // call Debug for Sub by dispatch
-/// dbg!(&sub_r);
-///
-/// let sub2: &Sub = sub_r.downcast_ref().unwrap();
-/// ```
-pub trait BaseAny: Any + Debug + dyn_clone::DynClone {}
-dyn_clone::clone_trait_object!(BaseAny);
-impl dyn BaseAny + 'static {
-    pub fn is<Sub: BaseAny + 'static>(&self) -> bool {
-        self.type_id() == TypeId::of::<Sub>()
-    }
-    pub fn downcast_ref<Sub: BaseAny + 'static>(&self) -> Option<&Sub> {
-        if self.is::<Sub>() {
-            // See also the document of core::any::Any
-            // https://doc.rust-lang.org/src/core/any.rs.html#220
-            unsafe { Some(&*(self as *const dyn BaseAny as *const Sub)) }
-        } else {
-            None
-        }
-    }
-    pub fn downcast_mut<Sub: BaseAny + 'static>(&mut self) -> Option<&mut Sub> {
-        if self.is::<Sub>() {
-            // See also the document of core::any::Any
-            // https://doc.rust-lang.org/src/core/any.rs.html#256
-            unsafe { Some(&mut *(self as *mut dyn BaseAny as *mut Sub)) }
-        } else {
-            None
-        }
-    }
-}
+custom_any!(BaseAny);
 
 #[derive(Debug, Clone)]
 pub struct Base {
