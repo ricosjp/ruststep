@@ -46,6 +46,7 @@ mod schema;
 mod stmt;
 mod subsuper;
 mod types;
+mod constant;
 
 pub use basis::*;
 pub use entity::*;

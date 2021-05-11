@@ -5,6 +5,7 @@ pub mod entity;
 pub mod expression;
 pub mod schema;
 pub mod types;
+pub mod constant;
 
 use crate::ast::schema::Schema;
 use crate::parser::{combinator::*, *};
