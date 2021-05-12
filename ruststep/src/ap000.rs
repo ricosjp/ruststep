@@ -101,7 +101,6 @@
 
 use crate::{
     ast::{DataSection, EntityInstance},
-    custom_any,
     error::*,
     tables::*,
 };
@@ -187,24 +186,52 @@ pub struct C {
     pub q: B,
 }
 
-custom_any!(BaseAny);
+pub trait SuperTypeAny: ::std::ops::Deref<Target = Self::SuperType> + ::std::ops::DerefMut {
+    type SuperType;
+}
+
+#[derive(Debug, Clone, derive_more::From)]
+pub enum BaseAny {
+    Sub(Sub),
+}
+
+impl ::std::ops::Deref for BaseAny {
+    type Target = Base;
+    fn deref(&self) -> &Base {
+        match self {
+            BaseAny::Sub(sub) => sub.deref(),
+        }
+    }
+}
+
+impl ::std::ops::DerefMut for BaseAny {
+    fn deref_mut(&mut self) -> &mut Base {
+        match self {
+            BaseAny::Sub(sub) => sub.deref_mut(),
+        }
+    }
+}
+
+impl SuperTypeAny for BaseAny {
+    type SuperType = Base;
+}
 
 #[derive(Debug, Clone)]
 pub struct Base {
     pub a: f64,
 }
-impl BaseAny for Base {}
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, derive_more::Deref, derive_more::DerefMut)]
 pub struct Sub {
+    #[deref]
+    #[deref_mut]
     pub base: Base,
     pub b: f64,
 }
-impl BaseAny for Sub {}
 
 #[derive(Debug, Clone)]
 pub struct User {
-    pub data: Box<dyn BaseAny>,
+    pub data: BaseAny,
 }
 
 #[cfg(test)]
