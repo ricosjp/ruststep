@@ -19,13 +19,18 @@
 //!
 //!   -- For subtype/supertype
 //!   ENTITY base;
-//!     SUPERTYPE OF (sub)
+//!     SUPERTYPE OF (sub1, sub2)
 //!     a: f64;
 //!   END_ENTITY;
 //!
-//!   ENTITY sub;
+//!   ENTITY sub1;
 //!     SUBTYPE OF (base);
 //!     b: f64;
+//!   END_ENTITY;
+//!
+//!   ENTITY sub2;
+//!     SUBTYPE OF (base);
+//!     c: f64;
 //!   END_ENTITY;
 //!
 //!   ENTITY user;
@@ -89,14 +94,14 @@
 //! use ruststep::ap000::*;
 //!
 //! let base = Base { a: 1.0 };
-//! let sub = Sub { base, b: 1.0 };
+//! let sub = Sub1 { base, b: 1.0 };
 //!
-//! let sub_r = &sub as &dyn BaseAny;
+//! let any: BaseAny = sub.into();
 //!
 //! // call Debug for Sub by dispatch
-//! dbg!(&sub_r);
+//! dbg!(&any);
 //!
-//! let sub2: &Sub = sub_r.downcast_ref().unwrap();
+//! let sub = any.as_sub1().unwrap();
 //! ```
 
 use crate::{
@@ -192,14 +197,31 @@ pub trait SuperTypeAny: ::std::ops::Deref<Target = Self::SuperType> + ::std::ops
 
 #[derive(Debug, Clone, derive_more::From)]
 pub enum BaseAny {
-    Sub(Sub),
+    Sub1(Sub1),
+    Sub2(Sub2),
+}
+
+impl BaseAny {
+    pub fn as_sub1(self) -> ::std::result::Result<Sub1, Self> {
+        match self {
+            BaseAny::Sub1(sub) => Ok(sub),
+            _ => Err(self),
+        }
+    }
+    pub fn as_sub2(self) -> ::std::result::Result<Sub2, Self> {
+        match self {
+            BaseAny::Sub2(sub) => Ok(sub),
+            _ => Err(self),
+        }
+    }
 }
 
 impl ::std::ops::Deref for BaseAny {
     type Target = Base;
     fn deref(&self) -> &Base {
         match self {
-            BaseAny::Sub(sub) => sub.deref(),
+            BaseAny::Sub1(sub) => sub.deref(),
+            BaseAny::Sub2(sub) => sub.deref(),
         }
     }
 }
@@ -207,13 +229,10 @@ impl ::std::ops::Deref for BaseAny {
 impl ::std::ops::DerefMut for BaseAny {
     fn deref_mut(&mut self) -> &mut Base {
         match self {
-            BaseAny::Sub(sub) => sub.deref_mut(),
+            BaseAny::Sub1(sub) => sub.deref_mut(),
+            BaseAny::Sub2(sub) => sub.deref_mut(),
         }
     }
-}
-
-impl SuperTypeAny for BaseAny {
-    type SuperType = Base;
 }
 
 #[derive(Debug, Clone)]
@@ -222,11 +241,19 @@ pub struct Base {
 }
 
 #[derive(Debug, Clone, derive_more::Deref, derive_more::DerefMut)]
-pub struct Sub {
+pub struct Sub1 {
     #[deref]
     #[deref_mut]
     pub base: Base,
     pub b: f64,
+}
+
+#[derive(Debug, Clone, derive_more::Deref, derive_more::DerefMut)]
+pub struct Sub2 {
+    #[deref]
+    #[deref_mut]
+    pub base: Base,
+    pub c: f64,
 }
 
 #[derive(Debug, Clone)]
