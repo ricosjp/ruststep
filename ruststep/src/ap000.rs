@@ -109,6 +109,7 @@ use crate::{
     error::*,
     tables::*,
 };
+use derive_more::{Deref, DerefMut, From};
 use ruststep_derive::{as_holder, Holder};
 use serde::{Deserialize, Serialize};
 use std::{collections::HashMap, fmt::Debug};
@@ -195,7 +196,8 @@ pub trait SuperTypeAny: ::std::ops::Deref<Target = Self::SuperType> + ::std::ops
     type SuperType;
 }
 
-#[derive(Debug, Clone, derive_more::From)]
+#[derive(Debug, Clone, Serialize, From)]
+#[serde(untagged)]
 pub enum BaseAny {
     Sub1(Sub1),
     Sub2(Sub2),
@@ -235,12 +237,12 @@ impl ::std::ops::DerefMut for BaseAny {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize)]
 pub struct Base {
     pub a: f64,
 }
 
-#[derive(Debug, Clone, derive_more::Deref, derive_more::DerefMut)]
+#[derive(Debug, Clone, Serialize, Deref, DerefMut)]
 pub struct Sub1 {
     #[deref]
     #[deref_mut]
@@ -248,7 +250,7 @@ pub struct Sub1 {
     pub b: f64,
 }
 
-#[derive(Debug, Clone, derive_more::Deref, derive_more::DerefMut)]
+#[derive(Debug, Clone, Serialize, Deref, DerefMut)]
 pub struct Sub2 {
     #[deref]
     #[deref_mut]
@@ -256,7 +258,7 @@ pub struct Sub2 {
     pub c: f64,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize)]
 pub struct User {
     pub data: BaseAny,
 }
