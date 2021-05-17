@@ -198,7 +198,16 @@ pub trait SuperTypeAny: ::std::ops::Deref<Target = Self::SuperType> + ::std::ops
     type SuperType;
 }
 
-#[derive(Debug, Clone)]
+/// Enum-based supertype implementation for
+///
+/// ```text
+/// ENTITY base;
+///   SUPERTYPE OF (sub1, sub2)
+///   a: f64;
+/// END_ENTITY;
+/// ```
+#[derive(Debug, Clone, Serialize)]
+#[serde(untagged)]
 pub enum BaseAny {
     Sub1(Box<Sub1>),
     Sub2(Box<Sub2>),
@@ -238,12 +247,42 @@ impl ::std::ops::DerefMut for BaseAny {
     }
 }
 
-#[derive(Debug, Clone)]
+/// Raw state of
+///
+/// ```text
+/// ENTITY base;
+///   SUPERTYPE OF (sub1, sub2)
+///   a: f64;
+/// END_ENTITY;
+/// ```
+#[derive(Debug, Clone, Serialize)]
 pub struct Base {
     pub a: f64,
 }
 
-#[derive(Debug, Clone, Deref, DerefMut)]
+/// PlaceHolder for
+///
+/// ```text
+/// ENTITY base;
+///   SUPERTYPE OF (sub1, sub2)
+///   a: f64;
+/// END_ENTITY;
+/// ```
+#[derive(Debug, Clone, Deserialize)]
+pub struct BaseHolder {
+    pub a: f64,
+}
+
+impl Holder for BaseHolder {
+    type Table = Ap000;
+    type Owned = Base;
+    fn into_owned(self, _tables: &Ap000) -> Result<Base> {
+        let BaseHolder { a } = self;
+        Ok(Base { a })
+    }
+}
+
+#[derive(Debug, Clone, Serialize, Deref, DerefMut)]
 pub struct Sub1 {
     #[deref]
     #[deref_mut]
