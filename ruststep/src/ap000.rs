@@ -121,61 +121,59 @@ pub struct Ap000 {
 
 impl Ap000 {
     pub fn from_section(sec: &DataSection) -> Result<Self> {
-        let mut a = HashMap::new();
-        let mut b = HashMap::new();
-        let mut c = HashMap::new();
+        let mut table = Ap000::default();
 
         for entity in &sec.entities {
             match entity {
                 EntityInstance::Simple { name, record } => match record.name.as_str() {
-                    "A" => a.insert(*name, AHolder::deserialize(record)?).is_none(),
-                    "B" => b.insert(*name, BHolder::deserialize(record)?).is_none(),
-                    "C" => c.insert(*name, CHolder::deserialize(record)?).is_none(),
+                    "A" => table
+                        .a
+                        .insert(*name, AHolder::deserialize(record)?)
+                        .is_none(),
+                    "B" => table
+                        .b
+                        .insert(*name, BHolder::deserialize(record)?)
+                        .is_none(),
+                    "C" => table
+                        .c
+                        .insert(*name, CHolder::deserialize(record)?)
+                        .is_none(),
                     _ => panic!(),
                 },
                 EntityInstance::Complex { .. } => unimplemented!(),
             };
         }
-        Ok(Ap000 { a, b, c })
+        Ok(table)
     }
 
     pub fn a_iter<'table>(&'table self) -> impl Iterator<Item = Result<A>> + 'table {
-        self.a
-            .values()
-            .cloned()
-            .map(move |value| value.into_owned(&self))
+        EntityTable::<AHolder>::owned_iter(self)
     }
 
     pub fn b_iter<'table>(&'table self) -> impl Iterator<Item = Result<B>> + 'table {
-        self.b
-            .values()
-            .cloned()
-            .map(move |value| value.into_owned(&self))
+        EntityTable::<BHolder>::owned_iter(self)
     }
 
     pub fn c_iter<'table>(&'table self) -> impl Iterator<Item = Result<C>> + 'table {
-        self.c
-            .values()
-            .cloned()
-            .map(move |value| value.into_owned(&self))
+        EntityTable::<CHolder>::owned_iter(self)
     }
 }
 
 impl EntityTable<AHolder> for Ap000 {
-    fn get_entity(&self, id: u64) -> Result<&AHolder> {
-        self.a.get_entity(id)
+    fn get_table(&self) -> &HashMap<u64, AHolder> {
+        &self.a
     }
 }
 
 impl EntityTable<BHolder> for Ap000 {
-    fn get_entity(&self, id: u64) -> Result<&BHolder> {
-        self.b.get_entity(id)
+    fn get_table(&self) -> &HashMap<u64, BHolder> {
+        &self.b
     }
 }
 
 impl EntityTable<CHolder> for Ap000 {
-    fn get_entity(&self, id: u64) -> Result<&CHolder> {
-        self.c.get_entity(id)
+    fn get_table(&self) -> &HashMap<u64, CHolder> {
+        &self.c
     }
 }
 
