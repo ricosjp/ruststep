@@ -1977,1109 +1977,1187 @@ pub mod explicit_draughting {
         }
     }
     impl EntityTable<AddressHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&AddressHolder> {
-            self.address.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, AddressHolder> {
+            &self.address
         }
     }
     impl EntityTable<AngularDimensionHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&AngularDimensionHolder> {
-            self.angular_dimension.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, AngularDimensionHolder> {
+            &self.angular_dimension
         }
     }
     impl EntityTable<AnnotationCurveOccurrenceHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&AnnotationCurveOccurrenceHolder> {
-            self.annotation_curve_occurrence.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, AnnotationCurveOccurrenceHolder> {
+            &self.annotation_curve_occurrence
         }
     }
     impl EntityTable<AnnotationFillAreaHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&AnnotationFillAreaHolder> {
-            self.annotation_fill_area.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, AnnotationFillAreaHolder> {
+            &self.annotation_fill_area
         }
     }
     impl EntityTable<AnnotationFillAreaOccurrenceHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&AnnotationFillAreaOccurrenceHolder> {
-            self.annotation_fill_area_occurrence.get_entity(id)
+        fn get_table(
+            &self,
+        ) -> &::std::collections::HashMap<u64, AnnotationFillAreaOccurrenceHolder> {
+            &self.annotation_fill_area_occurrence
         }
     }
     impl EntityTable<AnnotationOccurrenceHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&AnnotationOccurrenceHolder> {
-            self.annotation_occurrence.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, AnnotationOccurrenceHolder> {
+            &self.annotation_occurrence
         }
     }
     impl EntityTable<AnnotationSubfigureOccurrenceHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&AnnotationSubfigureOccurrenceHolder> {
-            self.annotation_subfigure_occurrence.get_entity(id)
+        fn get_table(
+            &self,
+        ) -> &::std::collections::HashMap<u64, AnnotationSubfigureOccurrenceHolder> {
+            &self.annotation_subfigure_occurrence
         }
     }
     impl EntityTable<AnnotationSymbolHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&AnnotationSymbolHolder> {
-            self.annotation_symbol.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, AnnotationSymbolHolder> {
+            &self.annotation_symbol
         }
     }
     impl EntityTable<AnnotationSymbolOccurrenceHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&AnnotationSymbolOccurrenceHolder> {
-            self.annotation_symbol_occurrence.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, AnnotationSymbolOccurrenceHolder> {
+            &self.annotation_symbol_occurrence
         }
     }
     impl EntityTable<AnnotationTextHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&AnnotationTextHolder> {
-            self.annotation_text.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, AnnotationTextHolder> {
+            &self.annotation_text
         }
     }
     impl EntityTable<AnnotationTextOccurrenceHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&AnnotationTextOccurrenceHolder> {
-            self.annotation_text_occurrence.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, AnnotationTextOccurrenceHolder> {
+            &self.annotation_text_occurrence
         }
     }
     impl EntityTable<ApplicationContextHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&ApplicationContextHolder> {
-            self.application_context.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, ApplicationContextHolder> {
+            &self.application_context
         }
     }
     impl EntityTable<ApplicationContextElementHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&ApplicationContextElementHolder> {
-            self.application_context_element.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, ApplicationContextElementHolder> {
+            &self.application_context_element
         }
     }
     impl EntityTable<ApplicationProtocolDefinitionHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&ApplicationProtocolDefinitionHolder> {
-            self.application_protocol_definition.get_entity(id)
+        fn get_table(
+            &self,
+        ) -> &::std::collections::HashMap<u64, ApplicationProtocolDefinitionHolder> {
+            &self.application_protocol_definition
         }
     }
     impl EntityTable<ApprovalHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&ApprovalHolder> {
-            self.approval.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, ApprovalHolder> {
+            &self.approval
         }
     }
     impl EntityTable<ApprovalAssignmentHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&ApprovalAssignmentHolder> {
-            self.approval_assignment.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, ApprovalAssignmentHolder> {
+            &self.approval_assignment
         }
     }
     impl EntityTable<ApprovalDateTimeHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&ApprovalDateTimeHolder> {
-            self.approval_date_time.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, ApprovalDateTimeHolder> {
+            &self.approval_date_time
         }
     }
     impl EntityTable<ApprovalPersonOrganizationHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&ApprovalPersonOrganizationHolder> {
-            self.approval_person_organization.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, ApprovalPersonOrganizationHolder> {
+            &self.approval_person_organization
         }
     }
     impl EntityTable<ApprovalRoleHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&ApprovalRoleHolder> {
-            self.approval_role.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, ApprovalRoleHolder> {
+            &self.approval_role
         }
     }
     impl EntityTable<ApprovalStatusHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&ApprovalStatusHolder> {
-            self.approval_status.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, ApprovalStatusHolder> {
+            &self.approval_status
         }
     }
     impl EntityTable<AreaInSetHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&AreaInSetHolder> {
-            self.area_in_set.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, AreaInSetHolder> {
+            &self.area_in_set
         }
     }
     impl EntityTable<Axis2Placement2DHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&Axis2Placement2DHolder> {
-            self.axis2_placement_2d.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, Axis2Placement2DHolder> {
+            &self.axis2_placement_2d
         }
     }
     impl EntityTable<BSplineCurveHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&BSplineCurveHolder> {
-            self.b_spline_curve.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, BSplineCurveHolder> {
+            &self.b_spline_curve
         }
     }
     impl EntityTable<BSplineCurveWithKnotsHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&BSplineCurveWithKnotsHolder> {
-            self.b_spline_curve_with_knots.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, BSplineCurveWithKnotsHolder> {
+            &self.b_spline_curve_with_knots
         }
     }
     impl EntityTable<BezierCurveHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&BezierCurveHolder> {
-            self.bezier_curve.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, BezierCurveHolder> {
+            &self.bezier_curve
         }
     }
     impl EntityTable<BoundedCurveHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&BoundedCurveHolder> {
-            self.bounded_curve.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, BoundedCurveHolder> {
+            &self.bounded_curve
         }
     }
     impl EntityTable<CalendarDateHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&CalendarDateHolder> {
-            self.calendar_date.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, CalendarDateHolder> {
+            &self.calendar_date
         }
     }
     impl EntityTable<CameraImageHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&CameraImageHolder> {
-            self.camera_image.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, CameraImageHolder> {
+            &self.camera_image
         }
     }
     impl EntityTable<CameraImage2DWithScaleHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&CameraImage2DWithScaleHolder> {
-            self.camera_image_2d_with_scale.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, CameraImage2DWithScaleHolder> {
+            &self.camera_image_2d_with_scale
         }
     }
     impl EntityTable<CameraModelHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&CameraModelHolder> {
-            self.camera_model.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, CameraModelHolder> {
+            &self.camera_model
         }
     }
     impl EntityTable<CameraModelD2Holder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&CameraModelD2Holder> {
-            self.camera_model_d2.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, CameraModelD2Holder> {
+            &self.camera_model_d2
         }
     }
     impl EntityTable<CameraUsageHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&CameraUsageHolder> {
-            self.camera_usage.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, CameraUsageHolder> {
+            &self.camera_usage
         }
     }
     impl EntityTable<CartesianPointHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&CartesianPointHolder> {
-            self.cartesian_point.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, CartesianPointHolder> {
+            &self.cartesian_point
         }
     }
     impl EntityTable<CircleHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&CircleHolder> {
-            self.circle.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, CircleHolder> {
+            &self.circle
         }
     }
     impl EntityTable<ColourHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&ColourHolder> {
-            self.colour.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, ColourHolder> {
+            &self.colour
         }
     }
     impl EntityTable<ColourRgbHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&ColourRgbHolder> {
-            self.colour_rgb.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, ColourRgbHolder> {
+            &self.colour_rgb
         }
     }
     impl EntityTable<ColourSpecificationHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&ColourSpecificationHolder> {
-            self.colour_specification.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, ColourSpecificationHolder> {
+            &self.colour_specification
         }
     }
     impl EntityTable<CompositeCurveHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&CompositeCurveHolder> {
-            self.composite_curve.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, CompositeCurveHolder> {
+            &self.composite_curve
         }
     }
     impl EntityTable<CompositeCurveSegmentHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&CompositeCurveSegmentHolder> {
-            self.composite_curve_segment.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, CompositeCurveSegmentHolder> {
+            &self.composite_curve_segment
         }
     }
     impl EntityTable<CompositeTextHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&CompositeTextHolder> {
-            self.composite_text.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, CompositeTextHolder> {
+            &self.composite_text
         }
     }
     impl EntityTable<CompositeTextWithAssociatedCurvesHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&CompositeTextWithAssociatedCurvesHolder> {
-            self.composite_text_with_associated_curves.get_entity(id)
+        fn get_table(
+            &self,
+        ) -> &::std::collections::HashMap<u64, CompositeTextWithAssociatedCurvesHolder> {
+            &self.composite_text_with_associated_curves
         }
     }
     impl EntityTable<CompositeTextWithBlankingBoxHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&CompositeTextWithBlankingBoxHolder> {
-            self.composite_text_with_blanking_box.get_entity(id)
+        fn get_table(
+            &self,
+        ) -> &::std::collections::HashMap<u64, CompositeTextWithBlankingBoxHolder> {
+            &self.composite_text_with_blanking_box
         }
     }
     impl EntityTable<CompositeTextWithExtentHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&CompositeTextWithExtentHolder> {
-            self.composite_text_with_extent.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, CompositeTextWithExtentHolder> {
+            &self.composite_text_with_extent
         }
     }
     impl EntityTable<ConicHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&ConicHolder> {
-            self.conic.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, ConicHolder> {
+            &self.conic
         }
     }
     impl EntityTable<ContextDependentInvisibilityHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&ContextDependentInvisibilityHolder> {
-            self.context_dependent_invisibility.get_entity(id)
+        fn get_table(
+            &self,
+        ) -> &::std::collections::HashMap<u64, ContextDependentInvisibilityHolder> {
+            &self.context_dependent_invisibility
         }
     }
     impl EntityTable<ContractHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&ContractHolder> {
-            self.contract.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, ContractHolder> {
+            &self.contract
         }
     }
     impl EntityTable<ContractAssignmentHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&ContractAssignmentHolder> {
-            self.contract_assignment.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, ContractAssignmentHolder> {
+            &self.contract_assignment
         }
     }
     impl EntityTable<ContractTypeHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&ContractTypeHolder> {
-            self.contract_type.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, ContractTypeHolder> {
+            &self.contract_type
         }
     }
     impl EntityTable<ConversionBasedUnitHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&ConversionBasedUnitHolder> {
-            self.conversion_based_unit.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, ConversionBasedUnitHolder> {
+            &self.conversion_based_unit
         }
     }
     impl EntityTable<CurveHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&CurveHolder> {
-            self.curve.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, CurveHolder> {
+            &self.curve
         }
     }
     impl EntityTable<CurveDimensionHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&CurveDimensionHolder> {
-            self.curve_dimension.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, CurveDimensionHolder> {
+            &self.curve_dimension
         }
     }
     impl EntityTable<CurveStyleHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&CurveStyleHolder> {
-            self.curve_style.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, CurveStyleHolder> {
+            &self.curve_style
         }
     }
     impl EntityTable<CurveStyleFontHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&CurveStyleFontHolder> {
-            self.curve_style_font.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, CurveStyleFontHolder> {
+            &self.curve_style_font
         }
     }
     impl EntityTable<CurveStyleFontPatternHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&CurveStyleFontPatternHolder> {
-            self.curve_style_font_pattern.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, CurveStyleFontPatternHolder> {
+            &self.curve_style_font_pattern
         }
     }
     impl EntityTable<DateHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&DateHolder> {
-            self.date.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, DateHolder> {
+            &self.date
         }
     }
     impl EntityTable<DatumFeatureCalloutHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&DatumFeatureCalloutHolder> {
-            self.datum_feature_callout.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, DatumFeatureCalloutHolder> {
+            &self.datum_feature_callout
         }
     }
     impl EntityTable<DatumTargetCalloutHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&DatumTargetCalloutHolder> {
-            self.datum_target_callout.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, DatumTargetCalloutHolder> {
+            &self.datum_target_callout
         }
     }
     impl EntityTable<DefinedSymbolHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&DefinedSymbolHolder> {
-            self.defined_symbol.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, DefinedSymbolHolder> {
+            &self.defined_symbol
         }
     }
     impl EntityTable<DiameterDimensionHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&DiameterDimensionHolder> {
-            self.diameter_dimension.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, DiameterDimensionHolder> {
+            &self.diameter_dimension
         }
     }
     impl EntityTable<DimensionCalloutComponentRelationshipHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&DimensionCalloutComponentRelationshipHolder> {
-            self.dimension_callout_component_relationship.get_entity(id)
+        fn get_table(
+            &self,
+        ) -> &::std::collections::HashMap<u64, DimensionCalloutComponentRelationshipHolder>
+        {
+            &self.dimension_callout_component_relationship
         }
     }
     impl EntityTable<DimensionCalloutRelationshipHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&DimensionCalloutRelationshipHolder> {
-            self.dimension_callout_relationship.get_entity(id)
+        fn get_table(
+            &self,
+        ) -> &::std::collections::HashMap<u64, DimensionCalloutRelationshipHolder> {
+            &self.dimension_callout_relationship
         }
     }
     impl EntityTable<DimensionCurveHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&DimensionCurveHolder> {
-            self.dimension_curve.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, DimensionCurveHolder> {
+            &self.dimension_curve
         }
     }
     impl EntityTable<DimensionCurveDirectedCalloutHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&DimensionCurveDirectedCalloutHolder> {
-            self.dimension_curve_directed_callout.get_entity(id)
+        fn get_table(
+            &self,
+        ) -> &::std::collections::HashMap<u64, DimensionCurveDirectedCalloutHolder> {
+            &self.dimension_curve_directed_callout
         }
     }
     impl EntityTable<DimensionCurveTerminatorHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&DimensionCurveTerminatorHolder> {
-            self.dimension_curve_terminator.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, DimensionCurveTerminatorHolder> {
+            &self.dimension_curve_terminator
         }
     }
     impl EntityTable<DimensionPairHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&DimensionPairHolder> {
-            self.dimension_pair.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, DimensionPairHolder> {
+            &self.dimension_pair
         }
     }
     impl EntityTable<DimensionalExponentsHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&DimensionalExponentsHolder> {
-            self.dimensional_exponents.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, DimensionalExponentsHolder> {
+            &self.dimensional_exponents
         }
     }
     impl EntityTable<DirectionHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&DirectionHolder> {
-            self.direction.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, DirectionHolder> {
+            &self.direction
         }
     }
     impl EntityTable<DocumentHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&DocumentHolder> {
-            self.document.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, DocumentHolder> {
+            &self.document
         }
     }
     impl EntityTable<DocumentReferenceHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&DocumentReferenceHolder> {
-            self.document_reference.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, DocumentReferenceHolder> {
+            &self.document_reference
         }
     }
     impl EntityTable<DocumentTypeHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&DocumentTypeHolder> {
-            self.document_type.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, DocumentTypeHolder> {
+            &self.document_type
         }
     }
     impl EntityTable<DraughtingAnnotationOccurrenceHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&DraughtingAnnotationOccurrenceHolder> {
-            self.draughting_annotation_occurrence.get_entity(id)
+        fn get_table(
+            &self,
+        ) -> &::std::collections::HashMap<u64, DraughtingAnnotationOccurrenceHolder> {
+            &self.draughting_annotation_occurrence
         }
     }
     impl EntityTable<DraughtingApprovalAssignmentHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&DraughtingApprovalAssignmentHolder> {
-            self.draughting_approval_assignment.get_entity(id)
+        fn get_table(
+            &self,
+        ) -> &::std::collections::HashMap<u64, DraughtingApprovalAssignmentHolder> {
+            &self.draughting_approval_assignment
         }
     }
     impl EntityTable<DraughtingCalloutHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&DraughtingCalloutHolder> {
-            self.draughting_callout.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, DraughtingCalloutHolder> {
+            &self.draughting_callout
         }
     }
     impl EntityTable<DraughtingCalloutRelationshipHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&DraughtingCalloutRelationshipHolder> {
-            self.draughting_callout_relationship.get_entity(id)
+        fn get_table(
+            &self,
+        ) -> &::std::collections::HashMap<u64, DraughtingCalloutRelationshipHolder> {
+            &self.draughting_callout_relationship
         }
     }
     impl EntityTable<DraughtingContractAssignmentHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&DraughtingContractAssignmentHolder> {
-            self.draughting_contract_assignment.get_entity(id)
+        fn get_table(
+            &self,
+        ) -> &::std::collections::HashMap<u64, DraughtingContractAssignmentHolder> {
+            &self.draughting_contract_assignment
         }
     }
     impl EntityTable<DraughtingDrawingRevisionHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&DraughtingDrawingRevisionHolder> {
-            self.draughting_drawing_revision.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, DraughtingDrawingRevisionHolder> {
+            &self.draughting_drawing_revision
         }
     }
     impl EntityTable<DraughtingElementsHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&DraughtingElementsHolder> {
-            self.draughting_elements.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, DraughtingElementsHolder> {
+            &self.draughting_elements
         }
     }
     impl EntityTable<DraughtingGroupAssignmentHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&DraughtingGroupAssignmentHolder> {
-            self.draughting_group_assignment.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, DraughtingGroupAssignmentHolder> {
+            &self.draughting_group_assignment
         }
     }
     impl EntityTable<DraughtingModelHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&DraughtingModelHolder> {
-            self.draughting_model.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, DraughtingModelHolder> {
+            &self.draughting_model
         }
     }
     impl EntityTable<DraughtingOrganizationAssignmentHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&DraughtingOrganizationAssignmentHolder> {
-            self.draughting_organization_assignment.get_entity(id)
+        fn get_table(
+            &self,
+        ) -> &::std::collections::HashMap<u64, DraughtingOrganizationAssignmentHolder> {
+            &self.draughting_organization_assignment
         }
     }
     impl EntityTable<DraughtingPersonAndOrganizationAssignmentHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&DraughtingPersonAndOrganizationAssignmentHolder> {
-            self.draughting_person_and_organization_assignment
-                .get_entity(id)
+        fn get_table(
+            &self,
+        ) -> &::std::collections::HashMap<u64, DraughtingPersonAndOrganizationAssignmentHolder>
+        {
+            &self.draughting_person_and_organization_assignment
         }
     }
     impl EntityTable<DraughtingPersonAssignmentHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&DraughtingPersonAssignmentHolder> {
-            self.draughting_person_assignment.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, DraughtingPersonAssignmentHolder> {
+            &self.draughting_person_assignment
         }
     }
     impl EntityTable<DraughtingPreDefinedColourHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&DraughtingPreDefinedColourHolder> {
-            self.draughting_pre_defined_colour.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, DraughtingPreDefinedColourHolder> {
+            &self.draughting_pre_defined_colour
         }
     }
     impl EntityTable<DraughtingPreDefinedCurveFontHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&DraughtingPreDefinedCurveFontHolder> {
-            self.draughting_pre_defined_curve_font.get_entity(id)
+        fn get_table(
+            &self,
+        ) -> &::std::collections::HashMap<u64, DraughtingPreDefinedCurveFontHolder> {
+            &self.draughting_pre_defined_curve_font
         }
     }
     impl EntityTable<DraughtingPreDefinedTextFontHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&DraughtingPreDefinedTextFontHolder> {
-            self.draughting_pre_defined_text_font.get_entity(id)
+        fn get_table(
+            &self,
+        ) -> &::std::collections::HashMap<u64, DraughtingPreDefinedTextFontHolder> {
+            &self.draughting_pre_defined_text_font
         }
     }
     impl EntityTable<DraughtingPresentedItemHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&DraughtingPresentedItemHolder> {
-            self.draughting_presented_item.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, DraughtingPresentedItemHolder> {
+            &self.draughting_presented_item
         }
     }
     impl EntityTable<DraughtingSecurityClassificationAssignmentHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&DraughtingSecurityClassificationAssignmentHolder> {
-            self.draughting_security_classification_assignment
-                .get_entity(id)
+        fn get_table(
+            &self,
+        ) -> &::std::collections::HashMap<u64, DraughtingSecurityClassificationAssignmentHolder>
+        {
+            &self.draughting_security_classification_assignment
         }
     }
     impl EntityTable<DraughtingSpecificationReferenceHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&DraughtingSpecificationReferenceHolder> {
-            self.draughting_specification_reference.get_entity(id)
+        fn get_table(
+            &self,
+        ) -> &::std::collections::HashMap<u64, DraughtingSpecificationReferenceHolder> {
+            &self.draughting_specification_reference
         }
     }
     impl EntityTable<DraughtingSubfigureRepresentationHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&DraughtingSubfigureRepresentationHolder> {
-            self.draughting_subfigure_representation.get_entity(id)
+        fn get_table(
+            &self,
+        ) -> &::std::collections::HashMap<u64, DraughtingSubfigureRepresentationHolder> {
+            &self.draughting_subfigure_representation
         }
     }
     impl EntityTable<DraughtingSymbolRepresentationHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&DraughtingSymbolRepresentationHolder> {
-            self.draughting_symbol_representation.get_entity(id)
+        fn get_table(
+            &self,
+        ) -> &::std::collections::HashMap<u64, DraughtingSymbolRepresentationHolder> {
+            &self.draughting_symbol_representation
         }
     }
     impl EntityTable<DraughtingTextLiteralWithDelineationHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&DraughtingTextLiteralWithDelineationHolder> {
-            self.draughting_text_literal_with_delineation.get_entity(id)
+        fn get_table(
+            &self,
+        ) -> &::std::collections::HashMap<u64, DraughtingTextLiteralWithDelineationHolder> {
+            &self.draughting_text_literal_with_delineation
         }
     }
     impl EntityTable<DraughtingTitleHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&DraughtingTitleHolder> {
-            self.draughting_title.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, DraughtingTitleHolder> {
+            &self.draughting_title
         }
     }
     impl EntityTable<DrawingDefinitionHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&DrawingDefinitionHolder> {
-            self.drawing_definition.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, DrawingDefinitionHolder> {
+            &self.drawing_definition
         }
     }
     impl EntityTable<DrawingRevisionHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&DrawingRevisionHolder> {
-            self.drawing_revision.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, DrawingRevisionHolder> {
+            &self.drawing_revision
         }
     }
     impl EntityTable<DrawingSheetLayoutHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&DrawingSheetLayoutHolder> {
-            self.drawing_sheet_layout.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, DrawingSheetLayoutHolder> {
+            &self.drawing_sheet_layout
         }
     }
     impl EntityTable<DrawingSheetRevisionHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&DrawingSheetRevisionHolder> {
-            self.drawing_sheet_revision.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, DrawingSheetRevisionHolder> {
+            &self.drawing_sheet_revision
         }
     }
     impl EntityTable<DrawingSheetRevisionUsageHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&DrawingSheetRevisionUsageHolder> {
-            self.drawing_sheet_revision_usage.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, DrawingSheetRevisionUsageHolder> {
+            &self.drawing_sheet_revision_usage
         }
     }
     impl EntityTable<EllipseHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&EllipseHolder> {
-            self.ellipse.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, EllipseHolder> {
+            &self.ellipse
         }
     }
     impl EntityTable<ExternalSourceHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&ExternalSourceHolder> {
-            self.external_source.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, ExternalSourceHolder> {
+            &self.external_source
         }
     }
     impl EntityTable<ExternallyDefinedCurveFontHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&ExternallyDefinedCurveFontHolder> {
-            self.externally_defined_curve_font.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, ExternallyDefinedCurveFontHolder> {
+            &self.externally_defined_curve_font
         }
     }
     impl EntityTable<ExternallyDefinedHatchStyleHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&ExternallyDefinedHatchStyleHolder> {
-            self.externally_defined_hatch_style.get_entity(id)
+        fn get_table(
+            &self,
+        ) -> &::std::collections::HashMap<u64, ExternallyDefinedHatchStyleHolder> {
+            &self.externally_defined_hatch_style
         }
     }
     impl EntityTable<ExternallyDefinedItemHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&ExternallyDefinedItemHolder> {
-            self.externally_defined_item.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, ExternallyDefinedItemHolder> {
+            &self.externally_defined_item
         }
     }
     impl EntityTable<ExternallyDefinedSymbolHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&ExternallyDefinedSymbolHolder> {
-            self.externally_defined_symbol.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, ExternallyDefinedSymbolHolder> {
+            &self.externally_defined_symbol
         }
     }
     impl EntityTable<ExternallyDefinedTextFontHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&ExternallyDefinedTextFontHolder> {
-            self.externally_defined_text_font.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, ExternallyDefinedTextFontHolder> {
+            &self.externally_defined_text_font
         }
     }
     impl EntityTable<ExternallyDefinedTileStyleHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&ExternallyDefinedTileStyleHolder> {
-            self.externally_defined_tile_style.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, ExternallyDefinedTileStyleHolder> {
+            &self.externally_defined_tile_style
         }
     }
     impl EntityTable<FillAreaStyleHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&FillAreaStyleHolder> {
-            self.fill_area_style.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, FillAreaStyleHolder> {
+            &self.fill_area_style
         }
     }
     impl EntityTable<FillAreaStyleColourHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&FillAreaStyleColourHolder> {
-            self.fill_area_style_colour.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, FillAreaStyleColourHolder> {
+            &self.fill_area_style_colour
         }
     }
     impl EntityTable<FillAreaStyleHatchingHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&FillAreaStyleHatchingHolder> {
-            self.fill_area_style_hatching.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, FillAreaStyleHatchingHolder> {
+            &self.fill_area_style_hatching
         }
     }
     impl EntityTable<FillAreaStyleTileSymbolWithStyleHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&FillAreaStyleTileSymbolWithStyleHolder> {
-            self.fill_area_style_tile_symbol_with_style.get_entity(id)
+        fn get_table(
+            &self,
+        ) -> &::std::collections::HashMap<u64, FillAreaStyleTileSymbolWithStyleHolder> {
+            &self.fill_area_style_tile_symbol_with_style
         }
     }
     impl EntityTable<FillAreaStyleTilesHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&FillAreaStyleTilesHolder> {
-            self.fill_area_style_tiles.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, FillAreaStyleTilesHolder> {
+            &self.fill_area_style_tiles
         }
     }
     impl EntityTable<GeometricCurveSetHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&GeometricCurveSetHolder> {
-            self.geometric_curve_set.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, GeometricCurveSetHolder> {
+            &self.geometric_curve_set
         }
     }
     impl EntityTable<GeometricRepresentationContextHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&GeometricRepresentationContextHolder> {
-            self.geometric_representation_context.get_entity(id)
+        fn get_table(
+            &self,
+        ) -> &::std::collections::HashMap<u64, GeometricRepresentationContextHolder> {
+            &self.geometric_representation_context
         }
     }
     impl EntityTable<GeometricRepresentationItemHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&GeometricRepresentationItemHolder> {
-            self.geometric_representation_item.get_entity(id)
+        fn get_table(
+            &self,
+        ) -> &::std::collections::HashMap<u64, GeometricRepresentationItemHolder> {
+            &self.geometric_representation_item
         }
     }
     impl EntityTable<GeometricSetHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&GeometricSetHolder> {
-            self.geometric_set.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, GeometricSetHolder> {
+            &self.geometric_set
         }
     }
     impl EntityTable<GeometricalToleranceCalloutHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&GeometricalToleranceCalloutHolder> {
-            self.geometrical_tolerance_callout.get_entity(id)
+        fn get_table(
+            &self,
+        ) -> &::std::collections::HashMap<u64, GeometricalToleranceCalloutHolder> {
+            &self.geometrical_tolerance_callout
         }
     }
     impl EntityTable<GeometricallyBounded2DWireframeRepresentationHolder> for Tables {
-        fn get_entity(
+        fn get_table(
             &self,
-            id: u64,
-        ) -> Result<&GeometricallyBounded2DWireframeRepresentationHolder> {
-            self.geometrically_bounded_2d_wireframe_representation
-                .get_entity(id)
+        ) -> &::std::collections::HashMap<u64, GeometricallyBounded2DWireframeRepresentationHolder>
+        {
+            &self.geometrically_bounded_2d_wireframe_representation
         }
     }
     impl EntityTable<GlobalUnitAssignedContextHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&GlobalUnitAssignedContextHolder> {
-            self.global_unit_assigned_context.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, GlobalUnitAssignedContextHolder> {
+            &self.global_unit_assigned_context
         }
     }
     impl EntityTable<GroupHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&GroupHolder> {
-            self.group.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, GroupHolder> {
+            &self.group
         }
     }
     impl EntityTable<GroupAssignmentHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&GroupAssignmentHolder> {
-            self.group_assignment.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, GroupAssignmentHolder> {
+            &self.group_assignment
         }
     }
     impl EntityTable<GroupRelationshipHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&GroupRelationshipHolder> {
-            self.group_relationship.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, GroupRelationshipHolder> {
+            &self.group_relationship
         }
     }
     impl EntityTable<HyperbolaHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&HyperbolaHolder> {
-            self.hyperbola.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, HyperbolaHolder> {
+            &self.hyperbola
         }
     }
     impl EntityTable<InvisibilityHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&InvisibilityHolder> {
-            self.invisibility.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, InvisibilityHolder> {
+            &self.invisibility
         }
     }
     impl EntityTable<LeaderCurveHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&LeaderCurveHolder> {
-            self.leader_curve.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, LeaderCurveHolder> {
+            &self.leader_curve
         }
     }
     impl EntityTable<LeaderDirectedCalloutHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&LeaderDirectedCalloutHolder> {
-            self.leader_directed_callout.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, LeaderDirectedCalloutHolder> {
+            &self.leader_directed_callout
         }
     }
     impl EntityTable<LeaderDirectedDimensionHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&LeaderDirectedDimensionHolder> {
-            self.leader_directed_dimension.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, LeaderDirectedDimensionHolder> {
+            &self.leader_directed_dimension
         }
     }
     impl EntityTable<LeaderTerminatorHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&LeaderTerminatorHolder> {
-            self.leader_terminator.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, LeaderTerminatorHolder> {
+            &self.leader_terminator
         }
     }
     impl EntityTable<LengthMeasureWithUnitHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&LengthMeasureWithUnitHolder> {
-            self.length_measure_with_unit.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, LengthMeasureWithUnitHolder> {
+            &self.length_measure_with_unit
         }
     }
     impl EntityTable<LengthUnitHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&LengthUnitHolder> {
-            self.length_unit.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, LengthUnitHolder> {
+            &self.length_unit
         }
     }
     impl EntityTable<LineHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&LineHolder> {
-            self.line.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, LineHolder> {
+            &self.line
         }
     }
     impl EntityTable<LinearDimensionHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&LinearDimensionHolder> {
-            self.linear_dimension.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, LinearDimensionHolder> {
+            &self.linear_dimension
         }
     }
     impl EntityTable<MappedItemHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&MappedItemHolder> {
-            self.mapped_item.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, MappedItemHolder> {
+            &self.mapped_item
         }
     }
     impl EntityTable<MeasureWithUnitHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&MeasureWithUnitHolder> {
-            self.measure_with_unit.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, MeasureWithUnitHolder> {
+            &self.measure_with_unit
         }
     }
     impl EntityTable<NamedUnitHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&NamedUnitHolder> {
-            self.named_unit.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, NamedUnitHolder> {
+            &self.named_unit
         }
     }
     impl EntityTable<OffsetCurve2DHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&OffsetCurve2DHolder> {
-            self.offset_curve_2d.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, OffsetCurve2DHolder> {
+            &self.offset_curve_2d
         }
     }
     impl EntityTable<OneDirectionRepeatFactorHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&OneDirectionRepeatFactorHolder> {
-            self.one_direction_repeat_factor.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, OneDirectionRepeatFactorHolder> {
+            &self.one_direction_repeat_factor
         }
     }
     impl EntityTable<OrdinateDimensionHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&OrdinateDimensionHolder> {
-            self.ordinate_dimension.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, OrdinateDimensionHolder> {
+            &self.ordinate_dimension
         }
     }
     impl EntityTable<OrganizationHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&OrganizationHolder> {
-            self.organization.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, OrganizationHolder> {
+            &self.organization
         }
     }
     impl EntityTable<OrganizationAssignmentHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&OrganizationAssignmentHolder> {
-            self.organization_assignment.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, OrganizationAssignmentHolder> {
+            &self.organization_assignment
         }
     }
     impl EntityTable<OrganizationRoleHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&OrganizationRoleHolder> {
-            self.organization_role.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, OrganizationRoleHolder> {
+            &self.organization_role
         }
     }
     impl EntityTable<OrganizationalAddressHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&OrganizationalAddressHolder> {
-            self.organizational_address.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, OrganizationalAddressHolder> {
+            &self.organizational_address
         }
     }
     impl EntityTable<ParabolaHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&ParabolaHolder> {
-            self.parabola.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, ParabolaHolder> {
+            &self.parabola
         }
     }
     impl EntityTable<PersonHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&PersonHolder> {
-            self.person.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, PersonHolder> {
+            &self.person
         }
     }
     impl EntityTable<PersonAndOrganizationHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&PersonAndOrganizationHolder> {
-            self.person_and_organization.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, PersonAndOrganizationHolder> {
+            &self.person_and_organization
         }
     }
     impl EntityTable<PersonAndOrganizationAssignmentHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&PersonAndOrganizationAssignmentHolder> {
-            self.person_and_organization_assignment.get_entity(id)
+        fn get_table(
+            &self,
+        ) -> &::std::collections::HashMap<u64, PersonAndOrganizationAssignmentHolder> {
+            &self.person_and_organization_assignment
         }
     }
     impl EntityTable<PersonAndOrganizationRoleHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&PersonAndOrganizationRoleHolder> {
-            self.person_and_organization_role.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, PersonAndOrganizationRoleHolder> {
+            &self.person_and_organization_role
         }
     }
     impl EntityTable<PersonAssignmentHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&PersonAssignmentHolder> {
-            self.person_assignment.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, PersonAssignmentHolder> {
+            &self.person_assignment
         }
     }
     impl EntityTable<PersonRoleHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&PersonRoleHolder> {
-            self.person_role.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, PersonRoleHolder> {
+            &self.person_role
         }
     }
     impl EntityTable<PersonalAddressHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&PersonalAddressHolder> {
-            self.personal_address.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, PersonalAddressHolder> {
+            &self.personal_address
         }
     }
     impl EntityTable<PlacementHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&PlacementHolder> {
-            self.placement.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, PlacementHolder> {
+            &self.placement
         }
     }
     impl EntityTable<PlanarBoxHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&PlanarBoxHolder> {
-            self.planar_box.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, PlanarBoxHolder> {
+            &self.planar_box
         }
     }
     impl EntityTable<PlanarExtentHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&PlanarExtentHolder> {
-            self.planar_extent.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, PlanarExtentHolder> {
+            &self.planar_extent
         }
     }
     impl EntityTable<PlaneAngleMeasureWithUnitHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&PlaneAngleMeasureWithUnitHolder> {
-            self.plane_angle_measure_with_unit.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, PlaneAngleMeasureWithUnitHolder> {
+            &self.plane_angle_measure_with_unit
         }
     }
     impl EntityTable<PlaneAngleUnitHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&PlaneAngleUnitHolder> {
-            self.plane_angle_unit.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, PlaneAngleUnitHolder> {
+            &self.plane_angle_unit
         }
     }
     impl EntityTable<PointHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&PointHolder> {
-            self.point.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, PointHolder> {
+            &self.point
         }
     }
     impl EntityTable<PointOnCurveHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&PointOnCurveHolder> {
-            self.point_on_curve.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, PointOnCurveHolder> {
+            &self.point_on_curve
         }
     }
     impl EntityTable<PolylineHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&PolylineHolder> {
-            self.polyline.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, PolylineHolder> {
+            &self.polyline
         }
     }
     impl EntityTable<PreDefinedColourHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&PreDefinedColourHolder> {
-            self.pre_defined_colour.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, PreDefinedColourHolder> {
+            &self.pre_defined_colour
         }
     }
     impl EntityTable<PreDefinedCurveFontHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&PreDefinedCurveFontHolder> {
-            self.pre_defined_curve_font.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, PreDefinedCurveFontHolder> {
+            &self.pre_defined_curve_font
         }
     }
     impl EntityTable<PreDefinedDimensionSymbolHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&PreDefinedDimensionSymbolHolder> {
-            self.pre_defined_dimension_symbol.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, PreDefinedDimensionSymbolHolder> {
+            &self.pre_defined_dimension_symbol
         }
     }
     impl EntityTable<PreDefinedGeometricalToleranceSymbolHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&PreDefinedGeometricalToleranceSymbolHolder> {
-            self.pre_defined_geometrical_tolerance_symbol.get_entity(id)
+        fn get_table(
+            &self,
+        ) -> &::std::collections::HashMap<u64, PreDefinedGeometricalToleranceSymbolHolder> {
+            &self.pre_defined_geometrical_tolerance_symbol
         }
     }
     impl EntityTable<PreDefinedItemHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&PreDefinedItemHolder> {
-            self.pre_defined_item.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, PreDefinedItemHolder> {
+            &self.pre_defined_item
         }
     }
     impl EntityTable<PreDefinedPointMarkerSymbolHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&PreDefinedPointMarkerSymbolHolder> {
-            self.pre_defined_point_marker_symbol.get_entity(id)
+        fn get_table(
+            &self,
+        ) -> &::std::collections::HashMap<u64, PreDefinedPointMarkerSymbolHolder> {
+            &self.pre_defined_point_marker_symbol
         }
     }
     impl EntityTable<PreDefinedSymbolHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&PreDefinedSymbolHolder> {
-            self.pre_defined_symbol.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, PreDefinedSymbolHolder> {
+            &self.pre_defined_symbol
         }
     }
     impl EntityTable<PreDefinedTerminatorSymbolHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&PreDefinedTerminatorSymbolHolder> {
-            self.pre_defined_terminator_symbol.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, PreDefinedTerminatorSymbolHolder> {
+            &self.pre_defined_terminator_symbol
         }
     }
     impl EntityTable<PreDefinedTextFontHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&PreDefinedTextFontHolder> {
-            self.pre_defined_text_font.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, PreDefinedTextFontHolder> {
+            &self.pre_defined_text_font
         }
     }
     impl EntityTable<PresentationAreaHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&PresentationAreaHolder> {
-            self.presentation_area.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, PresentationAreaHolder> {
+            &self.presentation_area
         }
     }
     impl EntityTable<PresentationLayerAssignmentHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&PresentationLayerAssignmentHolder> {
-            self.presentation_layer_assignment.get_entity(id)
+        fn get_table(
+            &self,
+        ) -> &::std::collections::HashMap<u64, PresentationLayerAssignmentHolder> {
+            &self.presentation_layer_assignment
         }
     }
     impl EntityTable<PresentationLayerUsageHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&PresentationLayerUsageHolder> {
-            self.presentation_layer_usage.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, PresentationLayerUsageHolder> {
+            &self.presentation_layer_usage
         }
     }
     impl EntityTable<PresentationRepresentationHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&PresentationRepresentationHolder> {
-            self.presentation_representation.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, PresentationRepresentationHolder> {
+            &self.presentation_representation
         }
     }
     impl EntityTable<PresentationSetHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&PresentationSetHolder> {
-            self.presentation_set.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, PresentationSetHolder> {
+            &self.presentation_set
         }
     }
     impl EntityTable<PresentationSizeHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&PresentationSizeHolder> {
-            self.presentation_size.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, PresentationSizeHolder> {
+            &self.presentation_size
         }
     }
     impl EntityTable<PresentationStyleAssignmentHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&PresentationStyleAssignmentHolder> {
-            self.presentation_style_assignment.get_entity(id)
+        fn get_table(
+            &self,
+        ) -> &::std::collections::HashMap<u64, PresentationStyleAssignmentHolder> {
+            &self.presentation_style_assignment
         }
     }
     impl EntityTable<PresentationStyleByContextHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&PresentationStyleByContextHolder> {
-            self.presentation_style_by_context.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, PresentationStyleByContextHolder> {
+            &self.presentation_style_by_context
         }
     }
     impl EntityTable<PresentationViewHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&PresentationViewHolder> {
-            self.presentation_view.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, PresentationViewHolder> {
+            &self.presentation_view
         }
     }
     impl EntityTable<PresentedItemHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&PresentedItemHolder> {
-            self.presented_item.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, PresentedItemHolder> {
+            &self.presented_item
         }
     }
     impl EntityTable<PresentedItemRepresentationHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&PresentedItemRepresentationHolder> {
-            self.presented_item_representation.get_entity(id)
+        fn get_table(
+            &self,
+        ) -> &::std::collections::HashMap<u64, PresentedItemRepresentationHolder> {
+            &self.presented_item_representation
         }
     }
     impl EntityTable<ProductHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&ProductHolder> {
-            self.product.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, ProductHolder> {
+            &self.product
         }
     }
     impl EntityTable<ProductContextHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&ProductContextHolder> {
-            self.product_context.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, ProductContextHolder> {
+            &self.product_context
         }
     }
     impl EntityTable<ProductDefinitionHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&ProductDefinitionHolder> {
-            self.product_definition.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, ProductDefinitionHolder> {
+            &self.product_definition
         }
     }
     impl EntityTable<ProductDefinitionContextHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&ProductDefinitionContextHolder> {
-            self.product_definition_context.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, ProductDefinitionContextHolder> {
+            &self.product_definition_context
         }
     }
     impl EntityTable<ProductDefinitionFormationHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&ProductDefinitionFormationHolder> {
-            self.product_definition_formation.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, ProductDefinitionFormationHolder> {
+            &self.product_definition_formation
         }
     }
     impl EntityTable<ProductDefinitionShapeHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&ProductDefinitionShapeHolder> {
-            self.product_definition_shape.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, ProductDefinitionShapeHolder> {
+            &self.product_definition_shape
         }
     }
     impl EntityTable<ProjectionCurveHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&ProjectionCurveHolder> {
-            self.projection_curve.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, ProjectionCurveHolder> {
+            &self.projection_curve
         }
     }
     impl EntityTable<ProjectionDirectedCalloutHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&ProjectionDirectedCalloutHolder> {
-            self.projection_directed_callout.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, ProjectionDirectedCalloutHolder> {
+            &self.projection_directed_callout
         }
     }
     impl EntityTable<PropertyDefinitionHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&PropertyDefinitionHolder> {
-            self.property_definition.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, PropertyDefinitionHolder> {
+            &self.property_definition
         }
     }
     impl EntityTable<PropertyDefinitionRepresentationHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&PropertyDefinitionRepresentationHolder> {
-            self.property_definition_representation.get_entity(id)
+        fn get_table(
+            &self,
+        ) -> &::std::collections::HashMap<u64, PropertyDefinitionRepresentationHolder> {
+            &self.property_definition_representation
         }
     }
     impl EntityTable<QuasiUniformCurveHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&QuasiUniformCurveHolder> {
-            self.quasi_uniform_curve.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, QuasiUniformCurveHolder> {
+            &self.quasi_uniform_curve
         }
     }
     impl EntityTable<RadiusDimensionHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&RadiusDimensionHolder> {
-            self.radius_dimension.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, RadiusDimensionHolder> {
+            &self.radius_dimension
         }
     }
     impl EntityTable<RationalBSplineCurveHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&RationalBSplineCurveHolder> {
-            self.rational_b_spline_curve.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, RationalBSplineCurveHolder> {
+            &self.rational_b_spline_curve
         }
     }
     impl EntityTable<RepresentationHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&RepresentationHolder> {
-            self.representation.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, RepresentationHolder> {
+            &self.representation
         }
     }
     impl EntityTable<RepresentationContextHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&RepresentationContextHolder> {
-            self.representation_context.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, RepresentationContextHolder> {
+            &self.representation_context
         }
     }
     impl EntityTable<RepresentationItemHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&RepresentationItemHolder> {
-            self.representation_item.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, RepresentationItemHolder> {
+            &self.representation_item
         }
     }
     impl EntityTable<RepresentationMapHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&RepresentationMapHolder> {
-            self.representation_map.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, RepresentationMapHolder> {
+            &self.representation_map
         }
     }
     impl EntityTable<SecurityClassificationHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&SecurityClassificationHolder> {
-            self.security_classification.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, SecurityClassificationHolder> {
+            &self.security_classification
         }
     }
     impl EntityTable<SecurityClassificationAssignmentHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&SecurityClassificationAssignmentHolder> {
-            self.security_classification_assignment.get_entity(id)
+        fn get_table(
+            &self,
+        ) -> &::std::collections::HashMap<u64, SecurityClassificationAssignmentHolder> {
+            &self.security_classification_assignment
         }
     }
     impl EntityTable<SecurityClassificationLevelHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&SecurityClassificationLevelHolder> {
-            self.security_classification_level.get_entity(id)
+        fn get_table(
+            &self,
+        ) -> &::std::collections::HashMap<u64, SecurityClassificationLevelHolder> {
+            &self.security_classification_level
         }
     }
     impl EntityTable<ShapeDefinitionRepresentationHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&ShapeDefinitionRepresentationHolder> {
-            self.shape_definition_representation.get_entity(id)
+        fn get_table(
+            &self,
+        ) -> &::std::collections::HashMap<u64, ShapeDefinitionRepresentationHolder> {
+            &self.shape_definition_representation
         }
     }
     impl EntityTable<ShapeRepresentationHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&ShapeRepresentationHolder> {
-            self.shape_representation.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, ShapeRepresentationHolder> {
+            &self.shape_representation
         }
     }
     impl EntityTable<SiUnitHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&SiUnitHolder> {
-            self.si_unit.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, SiUnitHolder> {
+            &self.si_unit
         }
     }
     impl EntityTable<StructuredDimensionCalloutHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&StructuredDimensionCalloutHolder> {
-            self.structured_dimension_callout.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, StructuredDimensionCalloutHolder> {
+            &self.structured_dimension_callout
         }
     }
     impl EntityTable<StyledItemHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&StyledItemHolder> {
-            self.styled_item.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, StyledItemHolder> {
+            &self.styled_item
         }
     }
     impl EntityTable<SymbolColourHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&SymbolColourHolder> {
-            self.symbol_colour.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, SymbolColourHolder> {
+            &self.symbol_colour
         }
     }
     impl EntityTable<SymbolRepresentationHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&SymbolRepresentationHolder> {
-            self.symbol_representation.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, SymbolRepresentationHolder> {
+            &self.symbol_representation
         }
     }
     impl EntityTable<SymbolRepresentationMapHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&SymbolRepresentationMapHolder> {
-            self.symbol_representation_map.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, SymbolRepresentationMapHolder> {
+            &self.symbol_representation_map
         }
     }
     impl EntityTable<SymbolStyleHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&SymbolStyleHolder> {
-            self.symbol_style.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, SymbolStyleHolder> {
+            &self.symbol_style
         }
     }
     impl EntityTable<SymbolTargetHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&SymbolTargetHolder> {
-            self.symbol_target.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, SymbolTargetHolder> {
+            &self.symbol_target
         }
     }
     impl EntityTable<TerminatorSymbolHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&TerminatorSymbolHolder> {
-            self.terminator_symbol.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, TerminatorSymbolHolder> {
+            &self.terminator_symbol
         }
     }
     impl EntityTable<TextLiteralHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&TextLiteralHolder> {
-            self.text_literal.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, TextLiteralHolder> {
+            &self.text_literal
         }
     }
     impl EntityTable<TextLiteralWithAssociatedCurvesHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&TextLiteralWithAssociatedCurvesHolder> {
-            self.text_literal_with_associated_curves.get_entity(id)
+        fn get_table(
+            &self,
+        ) -> &::std::collections::HashMap<u64, TextLiteralWithAssociatedCurvesHolder> {
+            &self.text_literal_with_associated_curves
         }
     }
     impl EntityTable<TextLiteralWithBlankingBoxHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&TextLiteralWithBlankingBoxHolder> {
-            self.text_literal_with_blanking_box.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, TextLiteralWithBlankingBoxHolder> {
+            &self.text_literal_with_blanking_box
         }
     }
     impl EntityTable<TextLiteralWithDelineationHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&TextLiteralWithDelineationHolder> {
-            self.text_literal_with_delineation.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, TextLiteralWithDelineationHolder> {
+            &self.text_literal_with_delineation
         }
     }
     impl EntityTable<TextLiteralWithExtentHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&TextLiteralWithExtentHolder> {
-            self.text_literal_with_extent.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, TextLiteralWithExtentHolder> {
+            &self.text_literal_with_extent
         }
     }
     impl EntityTable<TextStyleHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&TextStyleHolder> {
-            self.text_style.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, TextStyleHolder> {
+            &self.text_style
         }
     }
     impl EntityTable<TextStyleForDefinedFontHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&TextStyleForDefinedFontHolder> {
-            self.text_style_for_defined_font.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, TextStyleForDefinedFontHolder> {
+            &self.text_style_for_defined_font
         }
     }
     impl EntityTable<TextStyleWithBoxCharacteristicsHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&TextStyleWithBoxCharacteristicsHolder> {
-            self.text_style_with_box_characteristics.get_entity(id)
+        fn get_table(
+            &self,
+        ) -> &::std::collections::HashMap<u64, TextStyleWithBoxCharacteristicsHolder> {
+            &self.text_style_with_box_characteristics
         }
     }
     impl EntityTable<TextStyleWithMirrorHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&TextStyleWithMirrorHolder> {
-            self.text_style_with_mirror.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, TextStyleWithMirrorHolder> {
+            &self.text_style_with_mirror
         }
     }
     impl EntityTable<TrimmedCurveHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&TrimmedCurveHolder> {
-            self.trimmed_curve.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, TrimmedCurveHolder> {
+            &self.trimmed_curve
         }
     }
     impl EntityTable<TwoDirectionRepeatFactorHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&TwoDirectionRepeatFactorHolder> {
-            self.two_direction_repeat_factor.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, TwoDirectionRepeatFactorHolder> {
+            &self.two_direction_repeat_factor
         }
     }
     impl EntityTable<UniformCurveHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&UniformCurveHolder> {
-            self.uniform_curve.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, UniformCurveHolder> {
+            &self.uniform_curve
         }
     }
     impl EntityTable<VectorHolder> for Tables {
-        fn get_entity(&self, id: u64) -> Result<&VectorHolder> {
-            self.vector.get_entity(id)
+        fn get_table(&self) -> &::std::collections::HashMap<u64, VectorHolder> {
+            &self.vector
         }
     }
     #[derive(Debug, Clone)]

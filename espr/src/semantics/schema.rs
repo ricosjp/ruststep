@@ -86,8 +86,8 @@ impl ToTokens for Schema {
 
                 #(
                 impl EntityTable<#holder_type> for Tables {
-                    fn get_entity(&self, id: u64) -> Result<&#holder_type> {
-                        self.#holder_name.get_entity(id)
+                    fn get_table(&self) -> & ::std::collections::HashMap<u64, #holder_type> {
+                        &self.#holder_name
                     }
                 }
                 )*
