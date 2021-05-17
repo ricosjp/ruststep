@@ -121,22 +121,29 @@ pub struct Ap000 {
 
 impl Ap000 {
     pub fn from_section(sec: &DataSection) -> Result<Self> {
-        let mut a = HashMap::new();
-        let mut b = HashMap::new();
-        let mut c = HashMap::new();
+        let mut table = Ap000::default();
 
         for entity in &sec.entities {
             match entity {
                 EntityInstance::Simple { name, record } => match record.name.as_str() {
-                    "A" => a.insert(*name, AHolder::deserialize(record)?).is_none(),
-                    "B" => b.insert(*name, BHolder::deserialize(record)?).is_none(),
-                    "C" => c.insert(*name, CHolder::deserialize(record)?).is_none(),
+                    "A" => table
+                        .a
+                        .insert(*name, AHolder::deserialize(record)?)
+                        .is_none(),
+                    "B" => table
+                        .b
+                        .insert(*name, BHolder::deserialize(record)?)
+                        .is_none(),
+                    "C" => table
+                        .c
+                        .insert(*name, CHolder::deserialize(record)?)
+                        .is_none(),
                     _ => panic!(),
                 },
                 EntityInstance::Complex { .. } => unimplemented!(),
             };
         }
-        Ok(Ap000 { a, b, c })
+        Ok(table)
     }
 
     pub fn a_iter<'table>(&'table self) -> impl Iterator<Item = Result<A>> + 'table {
