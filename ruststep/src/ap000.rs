@@ -140,24 +140,15 @@ impl Ap000 {
     }
 
     pub fn a_iter<'table>(&'table self) -> impl Iterator<Item = Result<A>> + 'table {
-        self.a
-            .values()
-            .cloned()
-            .map(move |value| value.into_owned(&self))
+        EntityTable::<AHolder>::owned_iter(self)
     }
 
     pub fn b_iter<'table>(&'table self) -> impl Iterator<Item = Result<B>> + 'table {
-        self.b
-            .values()
-            .cloned()
-            .map(move |value| value.into_owned(&self))
+        EntityTable::<BHolder>::owned_iter(self)
     }
 
     pub fn c_iter<'table>(&'table self) -> impl Iterator<Item = Result<C>> + 'table {
-        self.c
-            .values()
-            .cloned()
-            .map(move |value| value.into_owned(&self))
+        EntityTable::<CHolder>::owned_iter(self)
     }
 }
 
