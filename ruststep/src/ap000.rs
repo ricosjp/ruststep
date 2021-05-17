@@ -162,20 +162,20 @@ impl Ap000 {
 }
 
 impl EntityTable<AHolder> for Ap000 {
-    fn get_entity(&self, id: u64) -> Result<&AHolder> {
-        self.a.get_entity(id)
+    fn get_table(&self) -> &HashMap<u64, AHolder> {
+        &self.a
     }
 }
 
 impl EntityTable<BHolder> for Ap000 {
-    fn get_entity(&self, id: u64) -> Result<&BHolder> {
-        self.b.get_entity(id)
+    fn get_table(&self) -> &HashMap<u64, BHolder> {
+        &self.b
     }
 }
 
 impl EntityTable<CHolder> for Ap000 {
-    fn get_entity(&self, id: u64) -> Result<&CHolder> {
-        self.c.get_entity(id)
+    fn get_table(&self) -> &HashMap<u64, CHolder> {
+        &self.c
     }
 }
 
