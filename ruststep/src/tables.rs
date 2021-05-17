@@ -76,21 +76,21 @@ pub trait Holder: Clone + 'static {
 }
 
 /// Trait for tables which pulls an entity (`T`) from an entity id (`u64`)
-pub trait EntityTable<T> {
+pub trait EntityTable<T: Holder<Table = Self>> {
     fn get_table(&self) -> &HashMap<u64, T>;
-    fn get_entity(&self, entity_id: u64) -> Result<&T, crate::error::Error> {
-        Ok(self
-            .get_table()
-            .get(&entity_id)
-            .ok_or_else(|| crate::error::Error::UnknownEntity(entity_id))?)
+
+    /// Get owned entity from table
+    fn get_owned(&self, entity_id: u64) -> Result<T::Owned, crate::error::Error> {
+        match self.get_table().get(&entity_id) {
+            Some(holder) => holder.clone().into_owned(self),
+            None => Err(crate::error::Error::UnknownEntity(entity_id)),
+        }
     }
 
+    /// Get owned entities as an iterator
     fn owned_iter<'table>(
         &'table self,
-    ) -> Box<dyn Iterator<Item = Result<T::Owned, crate::error::Error>> + 'table>
-    where
-        T: Holder<Table = Self>,
-    {
+    ) -> Box<dyn Iterator<Item = Result<T::Owned, crate::error::Error>> + 'table> {
         Box::new(
             self.get_table()
                 .values()
@@ -119,14 +119,13 @@ impl<T: Holder> PlaceHolder<T> {
         T: Holder<Table = Table> + Clone,
         Table: EntityTable<T>,
     {
-        let value = match self {
+        match self {
             PlaceHolder::Ref(id) => match id {
-                RValue::Entity(id) => table.get_entity(id)?.clone(),
+                RValue::Entity(id) => table.get_owned(id),
                 _ => unimplemented!("ENTITY is only supported now"),
             },
-            PlaceHolder::Owned(a) => a,
-        };
-        Ok(value.into_owned(table)?)
+            PlaceHolder::Owned(a) => a.into_owned(table),
+        }
     }
 }
 
