@@ -100,6 +100,36 @@ pub trait EntityTable<T: Holder<Table = Self>> {
     }
 }
 
+pub(crate) fn get_owned<T, Table>(
+    table: &Table,
+    map: &HashMap<u64, T>,
+    entity_id: u64,
+) -> Result<T::Owned, crate::error::Error>
+where
+    T: Holder<Table = Table>,
+    Table: EntityTable<T>,
+{
+    match map.get(&entity_id) {
+        Some(holder) => holder.clone().into_owned(table),
+        None => Err(crate::error::Error::UnknownEntity(entity_id)),
+    }
+}
+
+pub(crate) fn owned_iter<'table, T, Table>(
+    table: &'table Table,
+    map: &'table HashMap<u64, T>,
+) -> Box<dyn Iterator<Item = Result<T::Owned, crate::error::Error>> + 'table>
+where
+    T: Holder<Table = Table>,
+    Table: EntityTable<T>,
+{
+    Box::new(
+        map.values()
+            .cloned()
+            .map(move |value| value.into_owned(table)),
+    )
+}
+
 /// Owned value or reference through entity/value id
 #[derive(Debug, Clone, PartialEq)]
 pub enum PlaceHolder<T> {
