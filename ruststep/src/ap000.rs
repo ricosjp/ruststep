@@ -125,6 +125,9 @@ pub struct Ap000 {
     a: HashMap<u64, as_holder!(A)>,
     b: HashMap<u64, as_holder!(B)>,
     c: HashMap<u64, as_holder!(C)>,
+    base: HashMap<u64, BaseHolder>,
+    sub1: HashMap<u64, Sub1Holder>,
+    sub2: HashMap<u64, Sub2Holder>,
 }
 
 impl Ap000 {
@@ -167,6 +170,24 @@ impl Ap000 {
     }
 }
 
+impl EntityTable<BaseHolder> for Ap000 {
+    fn get_table(&self) -> &HashMap<u64, BaseHolder> {
+        &self.base
+    }
+}
+
+impl EntityTable<Sub1Holder> for Ap000 {
+    fn get_table(&self) -> &HashMap<u64, Sub1Holder> {
+        &self.sub1
+    }
+}
+
+impl EntityTable<Sub2Holder> for Ap000 {
+    fn get_table(&self) -> &HashMap<u64, Sub2Holder> {
+        &self.sub2
+    }
+}
+
 /// Corresponds to `ENTITY a`
 #[derive(Debug, Clone, PartialEq, Serialize, Holder)]
 #[holder(table = Ap000, field = a)]
@@ -206,7 +227,7 @@ pub trait SuperTypeAny: ::std::ops::Deref<Target = Self::SuperType> + ::std::ops
 ///   a: f64;
 /// END_ENTITY;
 /// ```
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 pub enum BaseAny {
     Sub1(Box<Sub1>),
@@ -255,7 +276,7 @@ impl ::std::ops::DerefMut for BaseAny {
 ///   a: f64;
 /// END_ENTITY;
 /// ```
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 pub struct Base {
     pub a: f64,
 }
@@ -268,7 +289,7 @@ pub struct Base {
 ///   a: f64;
 /// END_ENTITY;
 /// ```
-#[derive(Debug, Clone, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Deserialize)]
 pub struct BaseHolder {
     pub a: f64,
 }
@@ -282,7 +303,7 @@ impl Holder for BaseHolder {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deref, DerefMut)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deref, DerefMut)]
 pub struct Sub1 {
     #[deref]
     #[deref_mut]
@@ -296,7 +317,25 @@ impl Into<BaseAny> for Sub1 {
     }
 }
 
-#[derive(Debug, Clone, Deref, DerefMut)]
+#[derive(Debug, Clone, Deref, DerefMut, PartialEq, Deserialize)]
+pub struct Sub1Holder {
+    base: PlaceHolder<BaseHolder>,
+    b: f64,
+}
+
+impl Holder for Sub1Holder {
+    type Table = Ap000;
+    type Owned = Sub1;
+    fn into_owned(self, table: &Ap000) -> Result<Self::Owned> {
+        let Sub1Holder { base, b } = self;
+        Ok(Sub1 {
+            base: base.into_owned(table)?,
+            b,
+        })
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deref, DerefMut)]
 pub struct Sub2 {
     #[deref]
     #[deref_mut]
@@ -310,7 +349,25 @@ impl Into<BaseAny> for Sub2 {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Deserialize)]
+pub struct Sub2Holder {
+    base: PlaceHolder<BaseHolder>,
+    c: f64,
+}
+
+impl Holder for Sub2Holder {
+    type Table = Ap000;
+    type Owned = Sub2;
+    fn into_owned(self, table: &Ap000) -> Result<Self::Owned> {
+        let Sub2Holder { base, c } = self;
+        Ok(Sub2 {
+            base: base.into_owned(table)?,
+            c,
+        })
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize)]
 pub struct User {
     pub data: BaseAny,
 }
