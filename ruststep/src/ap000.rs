@@ -268,6 +268,24 @@ impl ::std::ops::DerefMut for BaseAny {
     }
 }
 
+#[derive(Debug, Clone, PartialEq, Deserialize)]
+#[serde(untagged)]
+enum BaseAnyHolder {
+    Sub1(Sub1Holder),
+    Sub2(Sub2Holder),
+}
+
+impl Holder for BaseAnyHolder {
+    type Table = Ap000;
+    type Owned = BaseAny;
+    fn into_owned(self, table: &Self::Table) -> Result<Self::Owned> {
+        Ok(match self {
+            BaseAnyHolder::Sub1(holder) => BaseAny::Sub1(holder.into_owned(table)?),
+            BaseAnyHolder::Sub2(holder) => BaseAny::Sub2(holder.into_owned(table)?),
+        })
+    }
+}
+
 /// Raw state of
 ///
 /// ```text
@@ -370,6 +388,19 @@ impl Holder for Sub2Holder {
 #[derive(Debug, Clone, PartialEq, Serialize)]
 pub struct User {
     pub data: BaseAny,
+}
+
+#[derive(Debug, Clone, PartialEq, Deserialize)]
+struct UserHolder {
+    data: PlaceHolder<BaseAnyHolder>,
+}
+
+impl Holder for UserHolder {
+    type Table = Ap000;
+    type Owned = User;
+    fn into_owned(self, table: &Self::Table) -> Result<Self::Owned> {
+        todo!()
+    }
 }
 
 #[cfg(test)]
