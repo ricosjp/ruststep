@@ -197,6 +197,25 @@ impl EntityTable<Sub2Holder> for Ap000 {
     }
 }
 
+impl EntityTable<BaseAnyHolder> for Ap000 {
+    fn get_owned(&self, entity_id: u64) -> Result<BaseAny> {
+        if let Ok(owned) = crate::tables::get_owned(self, &self.sub1, entity_id) {
+            return Ok(BaseAny::Sub1(owned));
+        }
+        if let Ok(owned) = crate::tables::get_owned(self, &self.sub2, entity_id) {
+            return Ok(BaseAny::Sub2(owned));
+        }
+        Err(crate::error::Error::UnknownEntity(entity_id))
+    }
+    fn owned_iter<'table>(&'table self) -> Box<dyn Iterator<Item = Result<BaseAny>> + 'table> {
+        let sub1 =
+            crate::tables::owned_iter(self, &self.sub1).map(|owned| owned.map(BaseAny::Sub1));
+        let sub2 =
+            crate::tables::owned_iter(self, &self.sub2).map(|owned| owned.map(BaseAny::Sub2));
+        Box::new(sub1.chain(sub2))
+    }
+}
+
 /// Corresponds to `ENTITY a`
 #[derive(Debug, Clone, PartialEq, Serialize, Holder)]
 #[holder(table = Ap000, field = a)]
@@ -408,7 +427,10 @@ impl Holder for UserHolder {
     type Table = Ap000;
     type Owned = User;
     fn into_owned(self, table: &Self::Table) -> Result<Self::Owned> {
-        todo!()
+        let UserHolder { data } = self;
+        Ok(User {
+            data: data.into_owned(table)?,
+        })
     }
 }
 
