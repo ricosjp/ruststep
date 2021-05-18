@@ -199,6 +199,7 @@ impl EntityTable<Sub2Holder> for Ap000 {
 
 impl EntityTable<BaseAnyHolder> for Ap000 {
     fn get_owned(&self, entity_id: u64) -> Result<BaseAny> {
+        // assume here that the intersection of sub1.key and sub2.key is empty
         if let Ok(owned) = crate::tables::get_owned(self, &self.sub1, entity_id) {
             return Ok(BaseAny::Sub1(owned));
         }
