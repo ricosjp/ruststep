@@ -171,20 +171,29 @@ impl Ap000 {
 }
 
 impl EntityTable<BaseHolder> for Ap000 {
-    fn get_table(&self) -> &HashMap<u64, BaseHolder> {
-        &self.base
+    fn get_owned(&self, entity_id: u64) -> Result<Base> {
+        crate::tables::get_owned(self, &self.base, entity_id)
+    }
+    fn owned_iter<'table>(&'table self) -> Box<dyn Iterator<Item = Result<Base>> + 'table> {
+        crate::tables::owned_iter(self, &self.base)
     }
 }
 
 impl EntityTable<Sub1Holder> for Ap000 {
-    fn get_table(&self) -> &HashMap<u64, Sub1Holder> {
-        &self.sub1
+    fn get_owned(&self, entity_id: u64) -> Result<Sub1> {
+        crate::tables::get_owned(self, &self.sub1, entity_id)
+    }
+    fn owned_iter<'table>(&'table self) -> Box<dyn Iterator<Item = Result<Sub1>> + 'table> {
+        crate::tables::owned_iter(self, &self.sub1)
     }
 }
 
 impl EntityTable<Sub2Holder> for Ap000 {
-    fn get_table(&self) -> &HashMap<u64, Sub2Holder> {
-        &self.sub2
+    fn get_owned(&self, entity_id: u64) -> Result<Sub2> {
+        crate::tables::get_owned(self, &self.sub2, entity_id)
+    }
+    fn owned_iter<'table>(&'table self) -> Box<dyn Iterator<Item = Result<Sub2>> + 'table> {
+        crate::tables::owned_iter(self, &self.sub2)
     }
 }
 
