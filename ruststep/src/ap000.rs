@@ -567,4 +567,18 @@ mod tests {
         let c = CHolder::deserialize(&record).unwrap();
         dbg!(c.into_owned(&tables).unwrap());
     }
+
+    #[test]
+    fn base_from_record() {
+        let tables = example_table();
+        let (_, record) = exchange::simple_record("BASE(1.0)").finish().unwrap();
+        let holder = BaseHolder::deserialize(&record).unwrap();
+        dbg!(holder.into_owned(&tables).unwrap());
+
+        let (_, record) = exchange::simple_record("SUB1(BASE((1.0)), 1.0)")
+            .finish()
+            .unwrap();
+        let holder = Sub1Holder::deserialize(&record).unwrap();
+        dbg!(holder.into_owned(&tables).unwrap());
+    }
 }
