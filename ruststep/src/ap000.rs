@@ -581,6 +581,7 @@ mod tests {
         let holder = Sub1Holder::deserialize(&record).unwrap();
         dbg!(holder.into_owned(&tables).unwrap());
 
+        // Sub1 should be deserialized also as BaseAnyHolder
         let (_, record) = exchange::simple_record("SUB1(BASE((1.0)), 1.0)")
             .finish()
             .unwrap();
