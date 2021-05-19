@@ -141,6 +141,18 @@ impl Ap000 {
                         "A" => table.a.insert(*id, AHolder::deserialize(record)?).is_none(),
                         "B" => table.b.insert(*id, BHolder::deserialize(record)?).is_none(),
                         "C" => table.c.insert(*id, CHolder::deserialize(record)?).is_none(),
+                        "BASE" => table
+                            .base
+                            .insert(*id, BaseHolder::deserialize(record)?)
+                            .is_none(),
+                        "SUB1" => table
+                            .sub1
+                            .insert(*id, Sub1Holder::deserialize(record)?)
+                            .is_none(),
+                        "SUB2" => table
+                            .sub2
+                            .insert(*id, Sub2Holder::deserialize(record)?)
+                            .is_none(),
                         name @ _ => {
                             return Err(Error::UnknownEntityName {
                                 entity_name: name.to_string(),
