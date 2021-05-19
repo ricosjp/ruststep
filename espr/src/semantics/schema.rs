@@ -86,8 +86,11 @@ impl ToTokens for Schema {
 
                 #(
                 impl EntityTable<#holder_type> for Tables {
-                    fn get_table(&self) -> & ::std::collections::HashMap<u64, #holder_type> {
-                        &self.#holder_name
+                    fn get_owned(&self, entity_id: u64) -> Result<#entity_name> {
+                        crate::tables::get_owned(self, &self.#holder_name, entity_id)
+                    }
+                    fn owned_iter<'table>(&'table self) -> Box<dyn Iterator<Item = Result<#entity_name>> + 'table> {
+                        crate::tables::owned_iter(self, &self.#holder_name)
                     }
                 }
                 )*
