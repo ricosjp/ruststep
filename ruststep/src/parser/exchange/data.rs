@@ -35,7 +35,7 @@ pub fn entity_instance(input: &str) -> ParseResult<EntityInstance> {
 /// simple_entity_instance = [entity_instance_name] `=` [simple_record] `;` .
 pub fn simple_entity_instance(input: &str) -> ParseResult<EntityInstance> {
     tuple_((entity_instance_name, char_('='), simple_record, char_(';')))
-        .map(|(name, _eq, record, _semicolon)| EntityInstance::Simple { name, record })
+        .map(|(id, _eq, record, _semicolon)| EntityInstance::Simple { id, record })
         .parse(input)
 }
 
@@ -47,7 +47,7 @@ pub fn complex_entity_instance(input: &str) -> ParseResult<EntityInstance> {
         subsuper_record,
         char_(';'),
     ))
-    .map(|(name, _eq, subsuper, _semicolon)| EntityInstance::Complex { name, subsuper })
+    .map(|(id, _eq, subsuper, _semicolon)| EntityInstance::Complex { id, subsuper })
     .parse(input)
 }
 
