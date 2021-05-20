@@ -52,7 +52,7 @@
 use std::collections::HashMap;
 
 #[cfg(doc)]
-use crate::ap000;
+use crate::{ap000, place_holder::*};
 
 /// Trait for resolving a reference through entity id
 ///
