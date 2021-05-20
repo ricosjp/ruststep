@@ -163,20 +163,27 @@ impl<'de, T: Deserialize<'de>> Deserialize<'de> for PlaceHolder<T> {
         // For Owned(T)
         // -------------
         // PlaceHolder::deserialize(Record)
-        // > Record::deserialize_struct(PlaceHolderVisitor)
+        // > (forward_to_deserialize_any)
+        // > Record::deserialize_any(PlaceHolderVisitor)
         // > PlaceHolderVisitor::visit_seq(SeqDeserializer)
         deserializer.deserialize_struct(
             std::any::type_name::<T>(),
             &[],
-            PlaceHolderVisitor::<T> {
-                phantom: PhantomData,
-            },
+            PlaceHolderVisitor::<T>::default(),
         )
     }
 }
 
 struct PlaceHolderVisitor<T> {
     phantom: PhantomData<T>,
+}
+
+impl<T> Default for PlaceHolderVisitor<T> {
+    fn default() -> Self {
+        PlaceHolderVisitor {
+            phantom: PhantomData,
+        }
+    }
 }
 
 impl<'de, T: Deserialize<'de>> de::Visitor<'de> for PlaceHolderVisitor<T> {
