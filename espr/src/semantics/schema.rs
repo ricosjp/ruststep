@@ -61,7 +61,7 @@ impl ToTokens for Schema {
             .collect();
         tokens.append_all(quote! {
             pub mod #name {
-                use crate::{primitive::*, tables::*, error::Result};
+                use crate::{primitive::*, place_holder::*, tables::*, error::Result};
                 use std::collections::HashMap;
 
                 #[derive(Debug, Clone, Default)]
