@@ -105,7 +105,7 @@ where
 
 pub fn tag<'a>(tag_str: &'static str) -> impl EsprParser<'a, &'a str> {
     move |input: &'a str| {
-        let (input, tag) = nom::bytes::complete::tag(tag_str)(input)?;
+        let (input, tag) = nom::bytes::complete::tag_no_case(tag_str)(input)?;
         Ok((input, (tag, Vec::new())))
     }
 }
@@ -162,6 +162,24 @@ pub fn many1<'a, O>(f: impl EsprParser<'a, O>) -> impl EsprParser<'a, Vec<O>> {
                 (outputs, remarks)
             })
             .parse(input)
+    }
+}
+
+pub fn many_till<'a, O, J>(f: impl EsprParser<'a, O>, g: impl EsprParser<'a, J>) -> impl EsprParser<'a, Vec<O>> {
+    use nom::Parser;
+    move |input| {
+        nom::multi::many_till(pair(spaces_or_remarks, f.clone()), g.clone())
+        .map(|(pairs, _)| {
+            let mut outputs = Vec::new();
+            let mut remarks = Vec::new();
+            for (mut r1, (out, mut r2)) in pairs {
+                outputs.push(out);
+                remarks.append(&mut r1);
+                remarks.append(&mut r2);
+            }
+            (outputs, remarks)
+        })
+        .parse(input)
     }
 }
 
