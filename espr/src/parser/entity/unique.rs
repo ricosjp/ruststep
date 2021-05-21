@@ -1,12 +1,12 @@
 use super::attribute::*;
 use crate::{
     ast::entity::*,
-    parser::{combinator::*, identifier::*},
+    parser::{combinator::*, identifier::*, reserved::*},
 };
 
 /// 333 unique_clause = UNIQUE [unique_rule] `;` { [unique_rule] `;` } .
 pub fn unique_clause(input: &str) -> ParseResult<UniqueClause> {
-    tuple((tag("UNIQUE"), many1(tuple((unique_rule, char(';'))))))
+    tuple((tag("UNIQUE"), many_till(tuple((unique_rule, char(';'))), is_reserved)))
         .map(|(_unique, seq)| UniqueClause {
             rules: seq.into_iter().map(|(rule, _semicolon)| rule).collect(),
         })
@@ -36,6 +36,7 @@ mod tests {
             r#"
             UNIQUE
               ur1 : revision_identifier, drawing_identifier;
+            END_ENTITY;
             "#
             .trim(),
         )
@@ -43,5 +44,22 @@ mod tests {
         .unwrap();
         assert_eq!(residual, "");
         assert_eq!(c.rules.len(), 1);
+    }
+
+    #[test]
+    fn unique_clause_termination() {
+        let (residual, (c, _remarks)) = super::unique_clause(
+            r#"
+            UNIQUE
+              ur1 : revision_identifier1, drawing_identifier1;
+              ur2 : revision_identifier2, drawing_identifier2;
+            END_ENTITY;
+            "#
+            .trim(),
+        )
+        .finish()
+        .unwrap();
+        assert_eq!(residual, "");
+        assert_eq!(c.rules.len(), 2);
     }
 }
