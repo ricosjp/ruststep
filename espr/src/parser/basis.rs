@@ -3,7 +3,7 @@ use nom::{branch::*, character::complete::*, multi::*, sequence::*, Parser};
 
 /// 128 letter = `a` | `b` | `c` | `d` | `e` | `f` | `g` | `h` | `i` | `j` | `k` | `l` |`m` | `n` | `o` | `p` | `q` | `r` | `s` | `t` | `u` | `v` | `w` | `x` |`y` | `z` .
 pub fn letter(input: &str) -> RawParseResult<char> {
-    satisfy(|c| matches!(c, 'a'..='z')).parse(input)
+    satisfy(|c| matches!(c, 'A'..='Z' | 'a'..='z')).parse(input)
 }
 
 /// 124 digit = `0` | `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8` | `9` .
@@ -13,7 +13,7 @@ pub fn digit(input: &str) -> RawParseResult<char> {
 
 /// 127 hex_digit = [digit] | `a` | `b` | `c` | `d` | `e` | `f` .
 pub fn hex_digit(input: &str) -> RawParseResult<u8> {
-    let hex_letter = satisfy(|c| matches!(c, 'a'..='f'));
+    let hex_letter = satisfy(|c| matches!(c, 'A'..='Z' | 'a'..='f'));
     alt((digit, hex_letter))
         .map(|c| c.to_digit(16).unwrap() as u8)
         .parse(input)
@@ -75,10 +75,19 @@ mod tests {
         assert_eq!(l, 'a');
         assert_eq!(residual, "bc");
 
-        // Capital is not allowed
-        assert!(super::letter("H").finish().is_err());
+        let (residual, l) = super::letter("H").finish().unwrap();
+        assert_eq!(l, 'H');
+        assert_eq!(residual, "");
+
+        let (residual, l) = super::letter("Hi").finish().unwrap();
+        assert_eq!(l, 'H');
+        assert_eq!(residual, "i");
+
         // Number is not allowed
         assert!(super::letter("2").finish().is_err());
+
+        // Symbols are not allowed
+        assert!(super::letter("\\").finish().is_err());
     }
 
     #[test]
@@ -95,6 +104,10 @@ mod tests {
     fn hex_digit() {
         let (residual, l) = super::hex_digit("a23").finish().unwrap();
         assert_eq!(l, 10);
+        assert_eq!(residual, "23");
+
+        let (residual, l) = super::hex_digit("F23").finish().unwrap();
+        assert_eq!(l, 15);
         assert_eq!(residual, "23");
 
         assert!(super::hex_digit("x").finish().is_err());
@@ -117,6 +130,10 @@ mod tests {
         assert_eq!(id, "homhom");
         assert_eq!(residual, "");
 
+        let (residual, id) = super::simple_id("homHom").finish().unwrap();
+        assert_eq!(id, "homHom");
+        assert_eq!(residual, "");
+
         let (residual, id) = super::simple_id("ho_mhom").finish().unwrap();
         assert_eq!(id, "ho_mhom");
         assert_eq!(residual, "");
@@ -128,8 +145,6 @@ mod tests {
 
     #[test]
     fn simple_id_invalid() {
-        // Capital is not allowed
-        assert!(super::simple_id("HomHom").finish().is_err());
         // `_` cannot use as first
         assert!(super::simple_id("_homhom").finish().is_err());
         // digit cannot use as first
