@@ -1977,1187 +1977,2205 @@ pub mod explicit_draughting {
         }
     }
     impl EntityTable<AddressHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, AddressHolder> {
-            &self.address
+        fn get_owned(&self, entity_id: u64) -> Result<Address> {
+            crate::tables::get_owned(self, &self.address, entity_id)
+        }
+        fn owned_iter<'table>(&'table self) -> Box<dyn Iterator<Item = Result<Address>> + 'table> {
+            crate::tables::owned_iter(self, &self.address)
         }
     }
     impl EntityTable<AngularDimensionHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, AngularDimensionHolder> {
-            &self.angular_dimension
+        fn get_owned(&self, entity_id: u64) -> Result<AngularDimension> {
+            crate::tables::get_owned(self, &self.angular_dimension, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<AngularDimension>> + 'table> {
+            crate::tables::owned_iter(self, &self.angular_dimension)
         }
     }
     impl EntityTable<AnnotationCurveOccurrenceHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, AnnotationCurveOccurrenceHolder> {
-            &self.annotation_curve_occurrence
+        fn get_owned(&self, entity_id: u64) -> Result<AnnotationCurveOccurrence> {
+            crate::tables::get_owned(self, &self.annotation_curve_occurrence, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<AnnotationCurveOccurrence>> + 'table> {
+            crate::tables::owned_iter(self, &self.annotation_curve_occurrence)
         }
     }
     impl EntityTable<AnnotationFillAreaHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, AnnotationFillAreaHolder> {
-            &self.annotation_fill_area
+        fn get_owned(&self, entity_id: u64) -> Result<AnnotationFillArea> {
+            crate::tables::get_owned(self, &self.annotation_fill_area, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<AnnotationFillArea>> + 'table> {
+            crate::tables::owned_iter(self, &self.annotation_fill_area)
         }
     }
     impl EntityTable<AnnotationFillAreaOccurrenceHolder> for Tables {
-        fn get_table(
-            &self,
-        ) -> &::std::collections::HashMap<u64, AnnotationFillAreaOccurrenceHolder> {
-            &self.annotation_fill_area_occurrence
+        fn get_owned(&self, entity_id: u64) -> Result<AnnotationFillAreaOccurrence> {
+            crate::tables::get_owned(self, &self.annotation_fill_area_occurrence, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<AnnotationFillAreaOccurrence>> + 'table> {
+            crate::tables::owned_iter(self, &self.annotation_fill_area_occurrence)
         }
     }
     impl EntityTable<AnnotationOccurrenceHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, AnnotationOccurrenceHolder> {
-            &self.annotation_occurrence
+        fn get_owned(&self, entity_id: u64) -> Result<AnnotationOccurrence> {
+            crate::tables::get_owned(self, &self.annotation_occurrence, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<AnnotationOccurrence>> + 'table> {
+            crate::tables::owned_iter(self, &self.annotation_occurrence)
         }
     }
     impl EntityTable<AnnotationSubfigureOccurrenceHolder> for Tables {
-        fn get_table(
-            &self,
-        ) -> &::std::collections::HashMap<u64, AnnotationSubfigureOccurrenceHolder> {
-            &self.annotation_subfigure_occurrence
+        fn get_owned(&self, entity_id: u64) -> Result<AnnotationSubfigureOccurrence> {
+            crate::tables::get_owned(self, &self.annotation_subfigure_occurrence, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<AnnotationSubfigureOccurrence>> + 'table> {
+            crate::tables::owned_iter(self, &self.annotation_subfigure_occurrence)
         }
     }
     impl EntityTable<AnnotationSymbolHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, AnnotationSymbolHolder> {
-            &self.annotation_symbol
+        fn get_owned(&self, entity_id: u64) -> Result<AnnotationSymbol> {
+            crate::tables::get_owned(self, &self.annotation_symbol, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<AnnotationSymbol>> + 'table> {
+            crate::tables::owned_iter(self, &self.annotation_symbol)
         }
     }
     impl EntityTable<AnnotationSymbolOccurrenceHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, AnnotationSymbolOccurrenceHolder> {
-            &self.annotation_symbol_occurrence
+        fn get_owned(&self, entity_id: u64) -> Result<AnnotationSymbolOccurrence> {
+            crate::tables::get_owned(self, &self.annotation_symbol_occurrence, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<AnnotationSymbolOccurrence>> + 'table> {
+            crate::tables::owned_iter(self, &self.annotation_symbol_occurrence)
         }
     }
     impl EntityTable<AnnotationTextHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, AnnotationTextHolder> {
-            &self.annotation_text
+        fn get_owned(&self, entity_id: u64) -> Result<AnnotationText> {
+            crate::tables::get_owned(self, &self.annotation_text, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<AnnotationText>> + 'table> {
+            crate::tables::owned_iter(self, &self.annotation_text)
         }
     }
     impl EntityTable<AnnotationTextOccurrenceHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, AnnotationTextOccurrenceHolder> {
-            &self.annotation_text_occurrence
+        fn get_owned(&self, entity_id: u64) -> Result<AnnotationTextOccurrence> {
+            crate::tables::get_owned(self, &self.annotation_text_occurrence, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<AnnotationTextOccurrence>> + 'table> {
+            crate::tables::owned_iter(self, &self.annotation_text_occurrence)
         }
     }
     impl EntityTable<ApplicationContextHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, ApplicationContextHolder> {
-            &self.application_context
+        fn get_owned(&self, entity_id: u64) -> Result<ApplicationContext> {
+            crate::tables::get_owned(self, &self.application_context, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<ApplicationContext>> + 'table> {
+            crate::tables::owned_iter(self, &self.application_context)
         }
     }
     impl EntityTable<ApplicationContextElementHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, ApplicationContextElementHolder> {
-            &self.application_context_element
+        fn get_owned(&self, entity_id: u64) -> Result<ApplicationContextElement> {
+            crate::tables::get_owned(self, &self.application_context_element, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<ApplicationContextElement>> + 'table> {
+            crate::tables::owned_iter(self, &self.application_context_element)
         }
     }
     impl EntityTable<ApplicationProtocolDefinitionHolder> for Tables {
-        fn get_table(
-            &self,
-        ) -> &::std::collections::HashMap<u64, ApplicationProtocolDefinitionHolder> {
-            &self.application_protocol_definition
+        fn get_owned(&self, entity_id: u64) -> Result<ApplicationProtocolDefinition> {
+            crate::tables::get_owned(self, &self.application_protocol_definition, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<ApplicationProtocolDefinition>> + 'table> {
+            crate::tables::owned_iter(self, &self.application_protocol_definition)
         }
     }
     impl EntityTable<ApprovalHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, ApprovalHolder> {
-            &self.approval
+        fn get_owned(&self, entity_id: u64) -> Result<Approval> {
+            crate::tables::get_owned(self, &self.approval, entity_id)
+        }
+        fn owned_iter<'table>(&'table self) -> Box<dyn Iterator<Item = Result<Approval>> + 'table> {
+            crate::tables::owned_iter(self, &self.approval)
         }
     }
     impl EntityTable<ApprovalAssignmentHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, ApprovalAssignmentHolder> {
-            &self.approval_assignment
+        fn get_owned(&self, entity_id: u64) -> Result<ApprovalAssignment> {
+            crate::tables::get_owned(self, &self.approval_assignment, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<ApprovalAssignment>> + 'table> {
+            crate::tables::owned_iter(self, &self.approval_assignment)
         }
     }
     impl EntityTable<ApprovalDateTimeHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, ApprovalDateTimeHolder> {
-            &self.approval_date_time
+        fn get_owned(&self, entity_id: u64) -> Result<ApprovalDateTime> {
+            crate::tables::get_owned(self, &self.approval_date_time, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<ApprovalDateTime>> + 'table> {
+            crate::tables::owned_iter(self, &self.approval_date_time)
         }
     }
     impl EntityTable<ApprovalPersonOrganizationHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, ApprovalPersonOrganizationHolder> {
-            &self.approval_person_organization
+        fn get_owned(&self, entity_id: u64) -> Result<ApprovalPersonOrganization> {
+            crate::tables::get_owned(self, &self.approval_person_organization, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<ApprovalPersonOrganization>> + 'table> {
+            crate::tables::owned_iter(self, &self.approval_person_organization)
         }
     }
     impl EntityTable<ApprovalRoleHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, ApprovalRoleHolder> {
-            &self.approval_role
+        fn get_owned(&self, entity_id: u64) -> Result<ApprovalRole> {
+            crate::tables::get_owned(self, &self.approval_role, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<ApprovalRole>> + 'table> {
+            crate::tables::owned_iter(self, &self.approval_role)
         }
     }
     impl EntityTable<ApprovalStatusHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, ApprovalStatusHolder> {
-            &self.approval_status
+        fn get_owned(&self, entity_id: u64) -> Result<ApprovalStatus> {
+            crate::tables::get_owned(self, &self.approval_status, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<ApprovalStatus>> + 'table> {
+            crate::tables::owned_iter(self, &self.approval_status)
         }
     }
     impl EntityTable<AreaInSetHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, AreaInSetHolder> {
-            &self.area_in_set
+        fn get_owned(&self, entity_id: u64) -> Result<AreaInSet> {
+            crate::tables::get_owned(self, &self.area_in_set, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<AreaInSet>> + 'table> {
+            crate::tables::owned_iter(self, &self.area_in_set)
         }
     }
     impl EntityTable<Axis2Placement2DHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, Axis2Placement2DHolder> {
-            &self.axis2_placement_2d
+        fn get_owned(&self, entity_id: u64) -> Result<Axis2Placement2D> {
+            crate::tables::get_owned(self, &self.axis2_placement_2d, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<Axis2Placement2D>> + 'table> {
+            crate::tables::owned_iter(self, &self.axis2_placement_2d)
         }
     }
     impl EntityTable<BSplineCurveHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, BSplineCurveHolder> {
-            &self.b_spline_curve
+        fn get_owned(&self, entity_id: u64) -> Result<BSplineCurve> {
+            crate::tables::get_owned(self, &self.b_spline_curve, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<BSplineCurve>> + 'table> {
+            crate::tables::owned_iter(self, &self.b_spline_curve)
         }
     }
     impl EntityTable<BSplineCurveWithKnotsHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, BSplineCurveWithKnotsHolder> {
-            &self.b_spline_curve_with_knots
+        fn get_owned(&self, entity_id: u64) -> Result<BSplineCurveWithKnots> {
+            crate::tables::get_owned(self, &self.b_spline_curve_with_knots, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<BSplineCurveWithKnots>> + 'table> {
+            crate::tables::owned_iter(self, &self.b_spline_curve_with_knots)
         }
     }
     impl EntityTable<BezierCurveHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, BezierCurveHolder> {
-            &self.bezier_curve
+        fn get_owned(&self, entity_id: u64) -> Result<BezierCurve> {
+            crate::tables::get_owned(self, &self.bezier_curve, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<BezierCurve>> + 'table> {
+            crate::tables::owned_iter(self, &self.bezier_curve)
         }
     }
     impl EntityTable<BoundedCurveHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, BoundedCurveHolder> {
-            &self.bounded_curve
+        fn get_owned(&self, entity_id: u64) -> Result<BoundedCurve> {
+            crate::tables::get_owned(self, &self.bounded_curve, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<BoundedCurve>> + 'table> {
+            crate::tables::owned_iter(self, &self.bounded_curve)
         }
     }
     impl EntityTable<CalendarDateHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, CalendarDateHolder> {
-            &self.calendar_date
+        fn get_owned(&self, entity_id: u64) -> Result<CalendarDate> {
+            crate::tables::get_owned(self, &self.calendar_date, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<CalendarDate>> + 'table> {
+            crate::tables::owned_iter(self, &self.calendar_date)
         }
     }
     impl EntityTable<CameraImageHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, CameraImageHolder> {
-            &self.camera_image
+        fn get_owned(&self, entity_id: u64) -> Result<CameraImage> {
+            crate::tables::get_owned(self, &self.camera_image, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<CameraImage>> + 'table> {
+            crate::tables::owned_iter(self, &self.camera_image)
         }
     }
     impl EntityTable<CameraImage2DWithScaleHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, CameraImage2DWithScaleHolder> {
-            &self.camera_image_2d_with_scale
+        fn get_owned(&self, entity_id: u64) -> Result<CameraImage2DWithScale> {
+            crate::tables::get_owned(self, &self.camera_image_2d_with_scale, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<CameraImage2DWithScale>> + 'table> {
+            crate::tables::owned_iter(self, &self.camera_image_2d_with_scale)
         }
     }
     impl EntityTable<CameraModelHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, CameraModelHolder> {
-            &self.camera_model
+        fn get_owned(&self, entity_id: u64) -> Result<CameraModel> {
+            crate::tables::get_owned(self, &self.camera_model, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<CameraModel>> + 'table> {
+            crate::tables::owned_iter(self, &self.camera_model)
         }
     }
     impl EntityTable<CameraModelD2Holder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, CameraModelD2Holder> {
-            &self.camera_model_d2
+        fn get_owned(&self, entity_id: u64) -> Result<CameraModelD2> {
+            crate::tables::get_owned(self, &self.camera_model_d2, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<CameraModelD2>> + 'table> {
+            crate::tables::owned_iter(self, &self.camera_model_d2)
         }
     }
     impl EntityTable<CameraUsageHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, CameraUsageHolder> {
-            &self.camera_usage
+        fn get_owned(&self, entity_id: u64) -> Result<CameraUsage> {
+            crate::tables::get_owned(self, &self.camera_usage, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<CameraUsage>> + 'table> {
+            crate::tables::owned_iter(self, &self.camera_usage)
         }
     }
     impl EntityTable<CartesianPointHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, CartesianPointHolder> {
-            &self.cartesian_point
+        fn get_owned(&self, entity_id: u64) -> Result<CartesianPoint> {
+            crate::tables::get_owned(self, &self.cartesian_point, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<CartesianPoint>> + 'table> {
+            crate::tables::owned_iter(self, &self.cartesian_point)
         }
     }
     impl EntityTable<CircleHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, CircleHolder> {
-            &self.circle
+        fn get_owned(&self, entity_id: u64) -> Result<Circle> {
+            crate::tables::get_owned(self, &self.circle, entity_id)
+        }
+        fn owned_iter<'table>(&'table self) -> Box<dyn Iterator<Item = Result<Circle>> + 'table> {
+            crate::tables::owned_iter(self, &self.circle)
         }
     }
     impl EntityTable<ColourHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, ColourHolder> {
-            &self.colour
+        fn get_owned(&self, entity_id: u64) -> Result<Colour> {
+            crate::tables::get_owned(self, &self.colour, entity_id)
+        }
+        fn owned_iter<'table>(&'table self) -> Box<dyn Iterator<Item = Result<Colour>> + 'table> {
+            crate::tables::owned_iter(self, &self.colour)
         }
     }
     impl EntityTable<ColourRgbHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, ColourRgbHolder> {
-            &self.colour_rgb
+        fn get_owned(&self, entity_id: u64) -> Result<ColourRgb> {
+            crate::tables::get_owned(self, &self.colour_rgb, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<ColourRgb>> + 'table> {
+            crate::tables::owned_iter(self, &self.colour_rgb)
         }
     }
     impl EntityTable<ColourSpecificationHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, ColourSpecificationHolder> {
-            &self.colour_specification
+        fn get_owned(&self, entity_id: u64) -> Result<ColourSpecification> {
+            crate::tables::get_owned(self, &self.colour_specification, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<ColourSpecification>> + 'table> {
+            crate::tables::owned_iter(self, &self.colour_specification)
         }
     }
     impl EntityTable<CompositeCurveHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, CompositeCurveHolder> {
-            &self.composite_curve
+        fn get_owned(&self, entity_id: u64) -> Result<CompositeCurve> {
+            crate::tables::get_owned(self, &self.composite_curve, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<CompositeCurve>> + 'table> {
+            crate::tables::owned_iter(self, &self.composite_curve)
         }
     }
     impl EntityTable<CompositeCurveSegmentHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, CompositeCurveSegmentHolder> {
-            &self.composite_curve_segment
+        fn get_owned(&self, entity_id: u64) -> Result<CompositeCurveSegment> {
+            crate::tables::get_owned(self, &self.composite_curve_segment, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<CompositeCurveSegment>> + 'table> {
+            crate::tables::owned_iter(self, &self.composite_curve_segment)
         }
     }
     impl EntityTable<CompositeTextHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, CompositeTextHolder> {
-            &self.composite_text
+        fn get_owned(&self, entity_id: u64) -> Result<CompositeText> {
+            crate::tables::get_owned(self, &self.composite_text, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<CompositeText>> + 'table> {
+            crate::tables::owned_iter(self, &self.composite_text)
         }
     }
     impl EntityTable<CompositeTextWithAssociatedCurvesHolder> for Tables {
-        fn get_table(
-            &self,
-        ) -> &::std::collections::HashMap<u64, CompositeTextWithAssociatedCurvesHolder> {
-            &self.composite_text_with_associated_curves
+        fn get_owned(&self, entity_id: u64) -> Result<CompositeTextWithAssociatedCurves> {
+            crate::tables::get_owned(self, &self.composite_text_with_associated_curves, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<CompositeTextWithAssociatedCurves>> + 'table> {
+            crate::tables::owned_iter(self, &self.composite_text_with_associated_curves)
         }
     }
     impl EntityTable<CompositeTextWithBlankingBoxHolder> for Tables {
-        fn get_table(
-            &self,
-        ) -> &::std::collections::HashMap<u64, CompositeTextWithBlankingBoxHolder> {
-            &self.composite_text_with_blanking_box
+        fn get_owned(&self, entity_id: u64) -> Result<CompositeTextWithBlankingBox> {
+            crate::tables::get_owned(self, &self.composite_text_with_blanking_box, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<CompositeTextWithBlankingBox>> + 'table> {
+            crate::tables::owned_iter(self, &self.composite_text_with_blanking_box)
         }
     }
     impl EntityTable<CompositeTextWithExtentHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, CompositeTextWithExtentHolder> {
-            &self.composite_text_with_extent
+        fn get_owned(&self, entity_id: u64) -> Result<CompositeTextWithExtent> {
+            crate::tables::get_owned(self, &self.composite_text_with_extent, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<CompositeTextWithExtent>> + 'table> {
+            crate::tables::owned_iter(self, &self.composite_text_with_extent)
         }
     }
     impl EntityTable<ConicHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, ConicHolder> {
-            &self.conic
+        fn get_owned(&self, entity_id: u64) -> Result<Conic> {
+            crate::tables::get_owned(self, &self.conic, entity_id)
+        }
+        fn owned_iter<'table>(&'table self) -> Box<dyn Iterator<Item = Result<Conic>> + 'table> {
+            crate::tables::owned_iter(self, &self.conic)
         }
     }
     impl EntityTable<ContextDependentInvisibilityHolder> for Tables {
-        fn get_table(
-            &self,
-        ) -> &::std::collections::HashMap<u64, ContextDependentInvisibilityHolder> {
-            &self.context_dependent_invisibility
+        fn get_owned(&self, entity_id: u64) -> Result<ContextDependentInvisibility> {
+            crate::tables::get_owned(self, &self.context_dependent_invisibility, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<ContextDependentInvisibility>> + 'table> {
+            crate::tables::owned_iter(self, &self.context_dependent_invisibility)
         }
     }
     impl EntityTable<ContractHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, ContractHolder> {
-            &self.contract
+        fn get_owned(&self, entity_id: u64) -> Result<Contract> {
+            crate::tables::get_owned(self, &self.contract, entity_id)
+        }
+        fn owned_iter<'table>(&'table self) -> Box<dyn Iterator<Item = Result<Contract>> + 'table> {
+            crate::tables::owned_iter(self, &self.contract)
         }
     }
     impl EntityTable<ContractAssignmentHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, ContractAssignmentHolder> {
-            &self.contract_assignment
+        fn get_owned(&self, entity_id: u64) -> Result<ContractAssignment> {
+            crate::tables::get_owned(self, &self.contract_assignment, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<ContractAssignment>> + 'table> {
+            crate::tables::owned_iter(self, &self.contract_assignment)
         }
     }
     impl EntityTable<ContractTypeHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, ContractTypeHolder> {
-            &self.contract_type
+        fn get_owned(&self, entity_id: u64) -> Result<ContractType> {
+            crate::tables::get_owned(self, &self.contract_type, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<ContractType>> + 'table> {
+            crate::tables::owned_iter(self, &self.contract_type)
         }
     }
     impl EntityTable<ConversionBasedUnitHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, ConversionBasedUnitHolder> {
-            &self.conversion_based_unit
+        fn get_owned(&self, entity_id: u64) -> Result<ConversionBasedUnit> {
+            crate::tables::get_owned(self, &self.conversion_based_unit, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<ConversionBasedUnit>> + 'table> {
+            crate::tables::owned_iter(self, &self.conversion_based_unit)
         }
     }
     impl EntityTable<CurveHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, CurveHolder> {
-            &self.curve
+        fn get_owned(&self, entity_id: u64) -> Result<Curve> {
+            crate::tables::get_owned(self, &self.curve, entity_id)
+        }
+        fn owned_iter<'table>(&'table self) -> Box<dyn Iterator<Item = Result<Curve>> + 'table> {
+            crate::tables::owned_iter(self, &self.curve)
         }
     }
     impl EntityTable<CurveDimensionHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, CurveDimensionHolder> {
-            &self.curve_dimension
+        fn get_owned(&self, entity_id: u64) -> Result<CurveDimension> {
+            crate::tables::get_owned(self, &self.curve_dimension, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<CurveDimension>> + 'table> {
+            crate::tables::owned_iter(self, &self.curve_dimension)
         }
     }
     impl EntityTable<CurveStyleHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, CurveStyleHolder> {
-            &self.curve_style
+        fn get_owned(&self, entity_id: u64) -> Result<CurveStyle> {
+            crate::tables::get_owned(self, &self.curve_style, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<CurveStyle>> + 'table> {
+            crate::tables::owned_iter(self, &self.curve_style)
         }
     }
     impl EntityTable<CurveStyleFontHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, CurveStyleFontHolder> {
-            &self.curve_style_font
+        fn get_owned(&self, entity_id: u64) -> Result<CurveStyleFont> {
+            crate::tables::get_owned(self, &self.curve_style_font, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<CurveStyleFont>> + 'table> {
+            crate::tables::owned_iter(self, &self.curve_style_font)
         }
     }
     impl EntityTable<CurveStyleFontPatternHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, CurveStyleFontPatternHolder> {
-            &self.curve_style_font_pattern
+        fn get_owned(&self, entity_id: u64) -> Result<CurveStyleFontPattern> {
+            crate::tables::get_owned(self, &self.curve_style_font_pattern, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<CurveStyleFontPattern>> + 'table> {
+            crate::tables::owned_iter(self, &self.curve_style_font_pattern)
         }
     }
     impl EntityTable<DateHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, DateHolder> {
-            &self.date
+        fn get_owned(&self, entity_id: u64) -> Result<Date> {
+            crate::tables::get_owned(self, &self.date, entity_id)
+        }
+        fn owned_iter<'table>(&'table self) -> Box<dyn Iterator<Item = Result<Date>> + 'table> {
+            crate::tables::owned_iter(self, &self.date)
         }
     }
     impl EntityTable<DatumFeatureCalloutHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, DatumFeatureCalloutHolder> {
-            &self.datum_feature_callout
+        fn get_owned(&self, entity_id: u64) -> Result<DatumFeatureCallout> {
+            crate::tables::get_owned(self, &self.datum_feature_callout, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<DatumFeatureCallout>> + 'table> {
+            crate::tables::owned_iter(self, &self.datum_feature_callout)
         }
     }
     impl EntityTable<DatumTargetCalloutHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, DatumTargetCalloutHolder> {
-            &self.datum_target_callout
+        fn get_owned(&self, entity_id: u64) -> Result<DatumTargetCallout> {
+            crate::tables::get_owned(self, &self.datum_target_callout, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<DatumTargetCallout>> + 'table> {
+            crate::tables::owned_iter(self, &self.datum_target_callout)
         }
     }
     impl EntityTable<DefinedSymbolHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, DefinedSymbolHolder> {
-            &self.defined_symbol
+        fn get_owned(&self, entity_id: u64) -> Result<DefinedSymbol> {
+            crate::tables::get_owned(self, &self.defined_symbol, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<DefinedSymbol>> + 'table> {
+            crate::tables::owned_iter(self, &self.defined_symbol)
         }
     }
     impl EntityTable<DiameterDimensionHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, DiameterDimensionHolder> {
-            &self.diameter_dimension
+        fn get_owned(&self, entity_id: u64) -> Result<DiameterDimension> {
+            crate::tables::get_owned(self, &self.diameter_dimension, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<DiameterDimension>> + 'table> {
+            crate::tables::owned_iter(self, &self.diameter_dimension)
         }
     }
     impl EntityTable<DimensionCalloutComponentRelationshipHolder> for Tables {
-        fn get_table(
-            &self,
-        ) -> &::std::collections::HashMap<u64, DimensionCalloutComponentRelationshipHolder>
+        fn get_owned(&self, entity_id: u64) -> Result<DimensionCalloutComponentRelationship> {
+            crate::tables::get_owned(
+                self,
+                &self.dimension_callout_component_relationship,
+                entity_id,
+            )
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<DimensionCalloutComponentRelationship>> + 'table>
         {
-            &self.dimension_callout_component_relationship
+            crate::tables::owned_iter(self, &self.dimension_callout_component_relationship)
         }
     }
     impl EntityTable<DimensionCalloutRelationshipHolder> for Tables {
-        fn get_table(
-            &self,
-        ) -> &::std::collections::HashMap<u64, DimensionCalloutRelationshipHolder> {
-            &self.dimension_callout_relationship
+        fn get_owned(&self, entity_id: u64) -> Result<DimensionCalloutRelationship> {
+            crate::tables::get_owned(self, &self.dimension_callout_relationship, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<DimensionCalloutRelationship>> + 'table> {
+            crate::tables::owned_iter(self, &self.dimension_callout_relationship)
         }
     }
     impl EntityTable<DimensionCurveHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, DimensionCurveHolder> {
-            &self.dimension_curve
+        fn get_owned(&self, entity_id: u64) -> Result<DimensionCurve> {
+            crate::tables::get_owned(self, &self.dimension_curve, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<DimensionCurve>> + 'table> {
+            crate::tables::owned_iter(self, &self.dimension_curve)
         }
     }
     impl EntityTable<DimensionCurveDirectedCalloutHolder> for Tables {
-        fn get_table(
-            &self,
-        ) -> &::std::collections::HashMap<u64, DimensionCurveDirectedCalloutHolder> {
-            &self.dimension_curve_directed_callout
+        fn get_owned(&self, entity_id: u64) -> Result<DimensionCurveDirectedCallout> {
+            crate::tables::get_owned(self, &self.dimension_curve_directed_callout, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<DimensionCurveDirectedCallout>> + 'table> {
+            crate::tables::owned_iter(self, &self.dimension_curve_directed_callout)
         }
     }
     impl EntityTable<DimensionCurveTerminatorHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, DimensionCurveTerminatorHolder> {
-            &self.dimension_curve_terminator
+        fn get_owned(&self, entity_id: u64) -> Result<DimensionCurveTerminator> {
+            crate::tables::get_owned(self, &self.dimension_curve_terminator, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<DimensionCurveTerminator>> + 'table> {
+            crate::tables::owned_iter(self, &self.dimension_curve_terminator)
         }
     }
     impl EntityTable<DimensionPairHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, DimensionPairHolder> {
-            &self.dimension_pair
+        fn get_owned(&self, entity_id: u64) -> Result<DimensionPair> {
+            crate::tables::get_owned(self, &self.dimension_pair, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<DimensionPair>> + 'table> {
+            crate::tables::owned_iter(self, &self.dimension_pair)
         }
     }
     impl EntityTable<DimensionalExponentsHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, DimensionalExponentsHolder> {
-            &self.dimensional_exponents
+        fn get_owned(&self, entity_id: u64) -> Result<DimensionalExponents> {
+            crate::tables::get_owned(self, &self.dimensional_exponents, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<DimensionalExponents>> + 'table> {
+            crate::tables::owned_iter(self, &self.dimensional_exponents)
         }
     }
     impl EntityTable<DirectionHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, DirectionHolder> {
-            &self.direction
+        fn get_owned(&self, entity_id: u64) -> Result<Direction> {
+            crate::tables::get_owned(self, &self.direction, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<Direction>> + 'table> {
+            crate::tables::owned_iter(self, &self.direction)
         }
     }
     impl EntityTable<DocumentHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, DocumentHolder> {
-            &self.document
+        fn get_owned(&self, entity_id: u64) -> Result<Document> {
+            crate::tables::get_owned(self, &self.document, entity_id)
+        }
+        fn owned_iter<'table>(&'table self) -> Box<dyn Iterator<Item = Result<Document>> + 'table> {
+            crate::tables::owned_iter(self, &self.document)
         }
     }
     impl EntityTable<DocumentReferenceHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, DocumentReferenceHolder> {
-            &self.document_reference
+        fn get_owned(&self, entity_id: u64) -> Result<DocumentReference> {
+            crate::tables::get_owned(self, &self.document_reference, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<DocumentReference>> + 'table> {
+            crate::tables::owned_iter(self, &self.document_reference)
         }
     }
     impl EntityTable<DocumentTypeHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, DocumentTypeHolder> {
-            &self.document_type
+        fn get_owned(&self, entity_id: u64) -> Result<DocumentType> {
+            crate::tables::get_owned(self, &self.document_type, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<DocumentType>> + 'table> {
+            crate::tables::owned_iter(self, &self.document_type)
         }
     }
     impl EntityTable<DraughtingAnnotationOccurrenceHolder> for Tables {
-        fn get_table(
-            &self,
-        ) -> &::std::collections::HashMap<u64, DraughtingAnnotationOccurrenceHolder> {
-            &self.draughting_annotation_occurrence
+        fn get_owned(&self, entity_id: u64) -> Result<DraughtingAnnotationOccurrence> {
+            crate::tables::get_owned(self, &self.draughting_annotation_occurrence, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<DraughtingAnnotationOccurrence>> + 'table> {
+            crate::tables::owned_iter(self, &self.draughting_annotation_occurrence)
         }
     }
     impl EntityTable<DraughtingApprovalAssignmentHolder> for Tables {
-        fn get_table(
-            &self,
-        ) -> &::std::collections::HashMap<u64, DraughtingApprovalAssignmentHolder> {
-            &self.draughting_approval_assignment
+        fn get_owned(&self, entity_id: u64) -> Result<DraughtingApprovalAssignment> {
+            crate::tables::get_owned(self, &self.draughting_approval_assignment, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<DraughtingApprovalAssignment>> + 'table> {
+            crate::tables::owned_iter(self, &self.draughting_approval_assignment)
         }
     }
     impl EntityTable<DraughtingCalloutHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, DraughtingCalloutHolder> {
-            &self.draughting_callout
+        fn get_owned(&self, entity_id: u64) -> Result<DraughtingCallout> {
+            crate::tables::get_owned(self, &self.draughting_callout, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<DraughtingCallout>> + 'table> {
+            crate::tables::owned_iter(self, &self.draughting_callout)
         }
     }
     impl EntityTable<DraughtingCalloutRelationshipHolder> for Tables {
-        fn get_table(
-            &self,
-        ) -> &::std::collections::HashMap<u64, DraughtingCalloutRelationshipHolder> {
-            &self.draughting_callout_relationship
+        fn get_owned(&self, entity_id: u64) -> Result<DraughtingCalloutRelationship> {
+            crate::tables::get_owned(self, &self.draughting_callout_relationship, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<DraughtingCalloutRelationship>> + 'table> {
+            crate::tables::owned_iter(self, &self.draughting_callout_relationship)
         }
     }
     impl EntityTable<DraughtingContractAssignmentHolder> for Tables {
-        fn get_table(
-            &self,
-        ) -> &::std::collections::HashMap<u64, DraughtingContractAssignmentHolder> {
-            &self.draughting_contract_assignment
+        fn get_owned(&self, entity_id: u64) -> Result<DraughtingContractAssignment> {
+            crate::tables::get_owned(self, &self.draughting_contract_assignment, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<DraughtingContractAssignment>> + 'table> {
+            crate::tables::owned_iter(self, &self.draughting_contract_assignment)
         }
     }
     impl EntityTable<DraughtingDrawingRevisionHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, DraughtingDrawingRevisionHolder> {
-            &self.draughting_drawing_revision
+        fn get_owned(&self, entity_id: u64) -> Result<DraughtingDrawingRevision> {
+            crate::tables::get_owned(self, &self.draughting_drawing_revision, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<DraughtingDrawingRevision>> + 'table> {
+            crate::tables::owned_iter(self, &self.draughting_drawing_revision)
         }
     }
     impl EntityTable<DraughtingElementsHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, DraughtingElementsHolder> {
-            &self.draughting_elements
+        fn get_owned(&self, entity_id: u64) -> Result<DraughtingElements> {
+            crate::tables::get_owned(self, &self.draughting_elements, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<DraughtingElements>> + 'table> {
+            crate::tables::owned_iter(self, &self.draughting_elements)
         }
     }
     impl EntityTable<DraughtingGroupAssignmentHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, DraughtingGroupAssignmentHolder> {
-            &self.draughting_group_assignment
+        fn get_owned(&self, entity_id: u64) -> Result<DraughtingGroupAssignment> {
+            crate::tables::get_owned(self, &self.draughting_group_assignment, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<DraughtingGroupAssignment>> + 'table> {
+            crate::tables::owned_iter(self, &self.draughting_group_assignment)
         }
     }
     impl EntityTable<DraughtingModelHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, DraughtingModelHolder> {
-            &self.draughting_model
+        fn get_owned(&self, entity_id: u64) -> Result<DraughtingModel> {
+            crate::tables::get_owned(self, &self.draughting_model, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<DraughtingModel>> + 'table> {
+            crate::tables::owned_iter(self, &self.draughting_model)
         }
     }
     impl EntityTable<DraughtingOrganizationAssignmentHolder> for Tables {
-        fn get_table(
-            &self,
-        ) -> &::std::collections::HashMap<u64, DraughtingOrganizationAssignmentHolder> {
-            &self.draughting_organization_assignment
+        fn get_owned(&self, entity_id: u64) -> Result<DraughtingOrganizationAssignment> {
+            crate::tables::get_owned(self, &self.draughting_organization_assignment, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<DraughtingOrganizationAssignment>> + 'table> {
+            crate::tables::owned_iter(self, &self.draughting_organization_assignment)
         }
     }
     impl EntityTable<DraughtingPersonAndOrganizationAssignmentHolder> for Tables {
-        fn get_table(
-            &self,
-        ) -> &::std::collections::HashMap<u64, DraughtingPersonAndOrganizationAssignmentHolder>
+        fn get_owned(&self, entity_id: u64) -> Result<DraughtingPersonAndOrganizationAssignment> {
+            crate::tables::get_owned(
+                self,
+                &self.draughting_person_and_organization_assignment,
+                entity_id,
+            )
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<DraughtingPersonAndOrganizationAssignment>> + 'table>
         {
-            &self.draughting_person_and_organization_assignment
+            crate::tables::owned_iter(self, &self.draughting_person_and_organization_assignment)
         }
     }
     impl EntityTable<DraughtingPersonAssignmentHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, DraughtingPersonAssignmentHolder> {
-            &self.draughting_person_assignment
+        fn get_owned(&self, entity_id: u64) -> Result<DraughtingPersonAssignment> {
+            crate::tables::get_owned(self, &self.draughting_person_assignment, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<DraughtingPersonAssignment>> + 'table> {
+            crate::tables::owned_iter(self, &self.draughting_person_assignment)
         }
     }
     impl EntityTable<DraughtingPreDefinedColourHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, DraughtingPreDefinedColourHolder> {
-            &self.draughting_pre_defined_colour
+        fn get_owned(&self, entity_id: u64) -> Result<DraughtingPreDefinedColour> {
+            crate::tables::get_owned(self, &self.draughting_pre_defined_colour, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<DraughtingPreDefinedColour>> + 'table> {
+            crate::tables::owned_iter(self, &self.draughting_pre_defined_colour)
         }
     }
     impl EntityTable<DraughtingPreDefinedCurveFontHolder> for Tables {
-        fn get_table(
-            &self,
-        ) -> &::std::collections::HashMap<u64, DraughtingPreDefinedCurveFontHolder> {
-            &self.draughting_pre_defined_curve_font
+        fn get_owned(&self, entity_id: u64) -> Result<DraughtingPreDefinedCurveFont> {
+            crate::tables::get_owned(self, &self.draughting_pre_defined_curve_font, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<DraughtingPreDefinedCurveFont>> + 'table> {
+            crate::tables::owned_iter(self, &self.draughting_pre_defined_curve_font)
         }
     }
     impl EntityTable<DraughtingPreDefinedTextFontHolder> for Tables {
-        fn get_table(
-            &self,
-        ) -> &::std::collections::HashMap<u64, DraughtingPreDefinedTextFontHolder> {
-            &self.draughting_pre_defined_text_font
+        fn get_owned(&self, entity_id: u64) -> Result<DraughtingPreDefinedTextFont> {
+            crate::tables::get_owned(self, &self.draughting_pre_defined_text_font, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<DraughtingPreDefinedTextFont>> + 'table> {
+            crate::tables::owned_iter(self, &self.draughting_pre_defined_text_font)
         }
     }
     impl EntityTable<DraughtingPresentedItemHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, DraughtingPresentedItemHolder> {
-            &self.draughting_presented_item
+        fn get_owned(&self, entity_id: u64) -> Result<DraughtingPresentedItem> {
+            crate::tables::get_owned(self, &self.draughting_presented_item, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<DraughtingPresentedItem>> + 'table> {
+            crate::tables::owned_iter(self, &self.draughting_presented_item)
         }
     }
     impl EntityTable<DraughtingSecurityClassificationAssignmentHolder> for Tables {
-        fn get_table(
-            &self,
-        ) -> &::std::collections::HashMap<u64, DraughtingSecurityClassificationAssignmentHolder>
+        fn get_owned(&self, entity_id: u64) -> Result<DraughtingSecurityClassificationAssignment> {
+            crate::tables::get_owned(
+                self,
+                &self.draughting_security_classification_assignment,
+                entity_id,
+            )
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<DraughtingSecurityClassificationAssignment>> + 'table>
         {
-            &self.draughting_security_classification_assignment
+            crate::tables::owned_iter(self, &self.draughting_security_classification_assignment)
         }
     }
     impl EntityTable<DraughtingSpecificationReferenceHolder> for Tables {
-        fn get_table(
-            &self,
-        ) -> &::std::collections::HashMap<u64, DraughtingSpecificationReferenceHolder> {
-            &self.draughting_specification_reference
+        fn get_owned(&self, entity_id: u64) -> Result<DraughtingSpecificationReference> {
+            crate::tables::get_owned(self, &self.draughting_specification_reference, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<DraughtingSpecificationReference>> + 'table> {
+            crate::tables::owned_iter(self, &self.draughting_specification_reference)
         }
     }
     impl EntityTable<DraughtingSubfigureRepresentationHolder> for Tables {
-        fn get_table(
-            &self,
-        ) -> &::std::collections::HashMap<u64, DraughtingSubfigureRepresentationHolder> {
-            &self.draughting_subfigure_representation
+        fn get_owned(&self, entity_id: u64) -> Result<DraughtingSubfigureRepresentation> {
+            crate::tables::get_owned(self, &self.draughting_subfigure_representation, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<DraughtingSubfigureRepresentation>> + 'table> {
+            crate::tables::owned_iter(self, &self.draughting_subfigure_representation)
         }
     }
     impl EntityTable<DraughtingSymbolRepresentationHolder> for Tables {
-        fn get_table(
-            &self,
-        ) -> &::std::collections::HashMap<u64, DraughtingSymbolRepresentationHolder> {
-            &self.draughting_symbol_representation
+        fn get_owned(&self, entity_id: u64) -> Result<DraughtingSymbolRepresentation> {
+            crate::tables::get_owned(self, &self.draughting_symbol_representation, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<DraughtingSymbolRepresentation>> + 'table> {
+            crate::tables::owned_iter(self, &self.draughting_symbol_representation)
         }
     }
     impl EntityTable<DraughtingTextLiteralWithDelineationHolder> for Tables {
-        fn get_table(
-            &self,
-        ) -> &::std::collections::HashMap<u64, DraughtingTextLiteralWithDelineationHolder> {
-            &self.draughting_text_literal_with_delineation
+        fn get_owned(&self, entity_id: u64) -> Result<DraughtingTextLiteralWithDelineation> {
+            crate::tables::get_owned(
+                self,
+                &self.draughting_text_literal_with_delineation,
+                entity_id,
+            )
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<DraughtingTextLiteralWithDelineation>> + 'table>
+        {
+            crate::tables::owned_iter(self, &self.draughting_text_literal_with_delineation)
         }
     }
     impl EntityTable<DraughtingTitleHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, DraughtingTitleHolder> {
-            &self.draughting_title
+        fn get_owned(&self, entity_id: u64) -> Result<DraughtingTitle> {
+            crate::tables::get_owned(self, &self.draughting_title, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<DraughtingTitle>> + 'table> {
+            crate::tables::owned_iter(self, &self.draughting_title)
         }
     }
     impl EntityTable<DrawingDefinitionHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, DrawingDefinitionHolder> {
-            &self.drawing_definition
+        fn get_owned(&self, entity_id: u64) -> Result<DrawingDefinition> {
+            crate::tables::get_owned(self, &self.drawing_definition, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<DrawingDefinition>> + 'table> {
+            crate::tables::owned_iter(self, &self.drawing_definition)
         }
     }
     impl EntityTable<DrawingRevisionHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, DrawingRevisionHolder> {
-            &self.drawing_revision
+        fn get_owned(&self, entity_id: u64) -> Result<DrawingRevision> {
+            crate::tables::get_owned(self, &self.drawing_revision, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<DrawingRevision>> + 'table> {
+            crate::tables::owned_iter(self, &self.drawing_revision)
         }
     }
     impl EntityTable<DrawingSheetLayoutHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, DrawingSheetLayoutHolder> {
-            &self.drawing_sheet_layout
+        fn get_owned(&self, entity_id: u64) -> Result<DrawingSheetLayout> {
+            crate::tables::get_owned(self, &self.drawing_sheet_layout, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<DrawingSheetLayout>> + 'table> {
+            crate::tables::owned_iter(self, &self.drawing_sheet_layout)
         }
     }
     impl EntityTable<DrawingSheetRevisionHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, DrawingSheetRevisionHolder> {
-            &self.drawing_sheet_revision
+        fn get_owned(&self, entity_id: u64) -> Result<DrawingSheetRevision> {
+            crate::tables::get_owned(self, &self.drawing_sheet_revision, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<DrawingSheetRevision>> + 'table> {
+            crate::tables::owned_iter(self, &self.drawing_sheet_revision)
         }
     }
     impl EntityTable<DrawingSheetRevisionUsageHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, DrawingSheetRevisionUsageHolder> {
-            &self.drawing_sheet_revision_usage
+        fn get_owned(&self, entity_id: u64) -> Result<DrawingSheetRevisionUsage> {
+            crate::tables::get_owned(self, &self.drawing_sheet_revision_usage, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<DrawingSheetRevisionUsage>> + 'table> {
+            crate::tables::owned_iter(self, &self.drawing_sheet_revision_usage)
         }
     }
     impl EntityTable<EllipseHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, EllipseHolder> {
-            &self.ellipse
+        fn get_owned(&self, entity_id: u64) -> Result<Ellipse> {
+            crate::tables::get_owned(self, &self.ellipse, entity_id)
+        }
+        fn owned_iter<'table>(&'table self) -> Box<dyn Iterator<Item = Result<Ellipse>> + 'table> {
+            crate::tables::owned_iter(self, &self.ellipse)
         }
     }
     impl EntityTable<ExternalSourceHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, ExternalSourceHolder> {
-            &self.external_source
+        fn get_owned(&self, entity_id: u64) -> Result<ExternalSource> {
+            crate::tables::get_owned(self, &self.external_source, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<ExternalSource>> + 'table> {
+            crate::tables::owned_iter(self, &self.external_source)
         }
     }
     impl EntityTable<ExternallyDefinedCurveFontHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, ExternallyDefinedCurveFontHolder> {
-            &self.externally_defined_curve_font
+        fn get_owned(&self, entity_id: u64) -> Result<ExternallyDefinedCurveFont> {
+            crate::tables::get_owned(self, &self.externally_defined_curve_font, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<ExternallyDefinedCurveFont>> + 'table> {
+            crate::tables::owned_iter(self, &self.externally_defined_curve_font)
         }
     }
     impl EntityTable<ExternallyDefinedHatchStyleHolder> for Tables {
-        fn get_table(
-            &self,
-        ) -> &::std::collections::HashMap<u64, ExternallyDefinedHatchStyleHolder> {
-            &self.externally_defined_hatch_style
+        fn get_owned(&self, entity_id: u64) -> Result<ExternallyDefinedHatchStyle> {
+            crate::tables::get_owned(self, &self.externally_defined_hatch_style, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<ExternallyDefinedHatchStyle>> + 'table> {
+            crate::tables::owned_iter(self, &self.externally_defined_hatch_style)
         }
     }
     impl EntityTable<ExternallyDefinedItemHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, ExternallyDefinedItemHolder> {
-            &self.externally_defined_item
+        fn get_owned(&self, entity_id: u64) -> Result<ExternallyDefinedItem> {
+            crate::tables::get_owned(self, &self.externally_defined_item, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<ExternallyDefinedItem>> + 'table> {
+            crate::tables::owned_iter(self, &self.externally_defined_item)
         }
     }
     impl EntityTable<ExternallyDefinedSymbolHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, ExternallyDefinedSymbolHolder> {
-            &self.externally_defined_symbol
+        fn get_owned(&self, entity_id: u64) -> Result<ExternallyDefinedSymbol> {
+            crate::tables::get_owned(self, &self.externally_defined_symbol, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<ExternallyDefinedSymbol>> + 'table> {
+            crate::tables::owned_iter(self, &self.externally_defined_symbol)
         }
     }
     impl EntityTable<ExternallyDefinedTextFontHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, ExternallyDefinedTextFontHolder> {
-            &self.externally_defined_text_font
+        fn get_owned(&self, entity_id: u64) -> Result<ExternallyDefinedTextFont> {
+            crate::tables::get_owned(self, &self.externally_defined_text_font, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<ExternallyDefinedTextFont>> + 'table> {
+            crate::tables::owned_iter(self, &self.externally_defined_text_font)
         }
     }
     impl EntityTable<ExternallyDefinedTileStyleHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, ExternallyDefinedTileStyleHolder> {
-            &self.externally_defined_tile_style
+        fn get_owned(&self, entity_id: u64) -> Result<ExternallyDefinedTileStyle> {
+            crate::tables::get_owned(self, &self.externally_defined_tile_style, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<ExternallyDefinedTileStyle>> + 'table> {
+            crate::tables::owned_iter(self, &self.externally_defined_tile_style)
         }
     }
     impl EntityTable<FillAreaStyleHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, FillAreaStyleHolder> {
-            &self.fill_area_style
+        fn get_owned(&self, entity_id: u64) -> Result<FillAreaStyle> {
+            crate::tables::get_owned(self, &self.fill_area_style, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<FillAreaStyle>> + 'table> {
+            crate::tables::owned_iter(self, &self.fill_area_style)
         }
     }
     impl EntityTable<FillAreaStyleColourHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, FillAreaStyleColourHolder> {
-            &self.fill_area_style_colour
+        fn get_owned(&self, entity_id: u64) -> Result<FillAreaStyleColour> {
+            crate::tables::get_owned(self, &self.fill_area_style_colour, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<FillAreaStyleColour>> + 'table> {
+            crate::tables::owned_iter(self, &self.fill_area_style_colour)
         }
     }
     impl EntityTable<FillAreaStyleHatchingHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, FillAreaStyleHatchingHolder> {
-            &self.fill_area_style_hatching
+        fn get_owned(&self, entity_id: u64) -> Result<FillAreaStyleHatching> {
+            crate::tables::get_owned(self, &self.fill_area_style_hatching, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<FillAreaStyleHatching>> + 'table> {
+            crate::tables::owned_iter(self, &self.fill_area_style_hatching)
         }
     }
     impl EntityTable<FillAreaStyleTileSymbolWithStyleHolder> for Tables {
-        fn get_table(
-            &self,
-        ) -> &::std::collections::HashMap<u64, FillAreaStyleTileSymbolWithStyleHolder> {
-            &self.fill_area_style_tile_symbol_with_style
+        fn get_owned(&self, entity_id: u64) -> Result<FillAreaStyleTileSymbolWithStyle> {
+            crate::tables::get_owned(
+                self,
+                &self.fill_area_style_tile_symbol_with_style,
+                entity_id,
+            )
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<FillAreaStyleTileSymbolWithStyle>> + 'table> {
+            crate::tables::owned_iter(self, &self.fill_area_style_tile_symbol_with_style)
         }
     }
     impl EntityTable<FillAreaStyleTilesHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, FillAreaStyleTilesHolder> {
-            &self.fill_area_style_tiles
+        fn get_owned(&self, entity_id: u64) -> Result<FillAreaStyleTiles> {
+            crate::tables::get_owned(self, &self.fill_area_style_tiles, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<FillAreaStyleTiles>> + 'table> {
+            crate::tables::owned_iter(self, &self.fill_area_style_tiles)
         }
     }
     impl EntityTable<GeometricCurveSetHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, GeometricCurveSetHolder> {
-            &self.geometric_curve_set
+        fn get_owned(&self, entity_id: u64) -> Result<GeometricCurveSet> {
+            crate::tables::get_owned(self, &self.geometric_curve_set, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<GeometricCurveSet>> + 'table> {
+            crate::tables::owned_iter(self, &self.geometric_curve_set)
         }
     }
     impl EntityTable<GeometricRepresentationContextHolder> for Tables {
-        fn get_table(
-            &self,
-        ) -> &::std::collections::HashMap<u64, GeometricRepresentationContextHolder> {
-            &self.geometric_representation_context
+        fn get_owned(&self, entity_id: u64) -> Result<GeometricRepresentationContext> {
+            crate::tables::get_owned(self, &self.geometric_representation_context, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<GeometricRepresentationContext>> + 'table> {
+            crate::tables::owned_iter(self, &self.geometric_representation_context)
         }
     }
     impl EntityTable<GeometricRepresentationItemHolder> for Tables {
-        fn get_table(
-            &self,
-        ) -> &::std::collections::HashMap<u64, GeometricRepresentationItemHolder> {
-            &self.geometric_representation_item
+        fn get_owned(&self, entity_id: u64) -> Result<GeometricRepresentationItem> {
+            crate::tables::get_owned(self, &self.geometric_representation_item, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<GeometricRepresentationItem>> + 'table> {
+            crate::tables::owned_iter(self, &self.geometric_representation_item)
         }
     }
     impl EntityTable<GeometricSetHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, GeometricSetHolder> {
-            &self.geometric_set
+        fn get_owned(&self, entity_id: u64) -> Result<GeometricSet> {
+            crate::tables::get_owned(self, &self.geometric_set, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<GeometricSet>> + 'table> {
+            crate::tables::owned_iter(self, &self.geometric_set)
         }
     }
     impl EntityTable<GeometricalToleranceCalloutHolder> for Tables {
-        fn get_table(
-            &self,
-        ) -> &::std::collections::HashMap<u64, GeometricalToleranceCalloutHolder> {
-            &self.geometrical_tolerance_callout
+        fn get_owned(&self, entity_id: u64) -> Result<GeometricalToleranceCallout> {
+            crate::tables::get_owned(self, &self.geometrical_tolerance_callout, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<GeometricalToleranceCallout>> + 'table> {
+            crate::tables::owned_iter(self, &self.geometrical_tolerance_callout)
         }
     }
     impl EntityTable<GeometricallyBounded2DWireframeRepresentationHolder> for Tables {
-        fn get_table(
+        fn get_owned(
             &self,
-        ) -> &::std::collections::HashMap<u64, GeometricallyBounded2DWireframeRepresentationHolder>
+            entity_id: u64,
+        ) -> Result<GeometricallyBounded2DWireframeRepresentation> {
+            crate::tables::get_owned(
+                self,
+                &self.geometrically_bounded_2d_wireframe_representation,
+                entity_id,
+            )
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<GeometricallyBounded2DWireframeRepresentation>> + 'table>
         {
-            &self.geometrically_bounded_2d_wireframe_representation
+            crate::tables::owned_iter(
+                self,
+                &self.geometrically_bounded_2d_wireframe_representation,
+            )
         }
     }
     impl EntityTable<GlobalUnitAssignedContextHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, GlobalUnitAssignedContextHolder> {
-            &self.global_unit_assigned_context
+        fn get_owned(&self, entity_id: u64) -> Result<GlobalUnitAssignedContext> {
+            crate::tables::get_owned(self, &self.global_unit_assigned_context, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<GlobalUnitAssignedContext>> + 'table> {
+            crate::tables::owned_iter(self, &self.global_unit_assigned_context)
         }
     }
     impl EntityTable<GroupHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, GroupHolder> {
-            &self.group
+        fn get_owned(&self, entity_id: u64) -> Result<Group> {
+            crate::tables::get_owned(self, &self.group, entity_id)
+        }
+        fn owned_iter<'table>(&'table self) -> Box<dyn Iterator<Item = Result<Group>> + 'table> {
+            crate::tables::owned_iter(self, &self.group)
         }
     }
     impl EntityTable<GroupAssignmentHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, GroupAssignmentHolder> {
-            &self.group_assignment
+        fn get_owned(&self, entity_id: u64) -> Result<GroupAssignment> {
+            crate::tables::get_owned(self, &self.group_assignment, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<GroupAssignment>> + 'table> {
+            crate::tables::owned_iter(self, &self.group_assignment)
         }
     }
     impl EntityTable<GroupRelationshipHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, GroupRelationshipHolder> {
-            &self.group_relationship
+        fn get_owned(&self, entity_id: u64) -> Result<GroupRelationship> {
+            crate::tables::get_owned(self, &self.group_relationship, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<GroupRelationship>> + 'table> {
+            crate::tables::owned_iter(self, &self.group_relationship)
         }
     }
     impl EntityTable<HyperbolaHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, HyperbolaHolder> {
-            &self.hyperbola
+        fn get_owned(&self, entity_id: u64) -> Result<Hyperbola> {
+            crate::tables::get_owned(self, &self.hyperbola, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<Hyperbola>> + 'table> {
+            crate::tables::owned_iter(self, &self.hyperbola)
         }
     }
     impl EntityTable<InvisibilityHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, InvisibilityHolder> {
-            &self.invisibility
+        fn get_owned(&self, entity_id: u64) -> Result<Invisibility> {
+            crate::tables::get_owned(self, &self.invisibility, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<Invisibility>> + 'table> {
+            crate::tables::owned_iter(self, &self.invisibility)
         }
     }
     impl EntityTable<LeaderCurveHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, LeaderCurveHolder> {
-            &self.leader_curve
+        fn get_owned(&self, entity_id: u64) -> Result<LeaderCurve> {
+            crate::tables::get_owned(self, &self.leader_curve, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<LeaderCurve>> + 'table> {
+            crate::tables::owned_iter(self, &self.leader_curve)
         }
     }
     impl EntityTable<LeaderDirectedCalloutHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, LeaderDirectedCalloutHolder> {
-            &self.leader_directed_callout
+        fn get_owned(&self, entity_id: u64) -> Result<LeaderDirectedCallout> {
+            crate::tables::get_owned(self, &self.leader_directed_callout, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<LeaderDirectedCallout>> + 'table> {
+            crate::tables::owned_iter(self, &self.leader_directed_callout)
         }
     }
     impl EntityTable<LeaderDirectedDimensionHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, LeaderDirectedDimensionHolder> {
-            &self.leader_directed_dimension
+        fn get_owned(&self, entity_id: u64) -> Result<LeaderDirectedDimension> {
+            crate::tables::get_owned(self, &self.leader_directed_dimension, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<LeaderDirectedDimension>> + 'table> {
+            crate::tables::owned_iter(self, &self.leader_directed_dimension)
         }
     }
     impl EntityTable<LeaderTerminatorHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, LeaderTerminatorHolder> {
-            &self.leader_terminator
+        fn get_owned(&self, entity_id: u64) -> Result<LeaderTerminator> {
+            crate::tables::get_owned(self, &self.leader_terminator, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<LeaderTerminator>> + 'table> {
+            crate::tables::owned_iter(self, &self.leader_terminator)
         }
     }
     impl EntityTable<LengthMeasureWithUnitHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, LengthMeasureWithUnitHolder> {
-            &self.length_measure_with_unit
+        fn get_owned(&self, entity_id: u64) -> Result<LengthMeasureWithUnit> {
+            crate::tables::get_owned(self, &self.length_measure_with_unit, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<LengthMeasureWithUnit>> + 'table> {
+            crate::tables::owned_iter(self, &self.length_measure_with_unit)
         }
     }
     impl EntityTable<LengthUnitHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, LengthUnitHolder> {
-            &self.length_unit
+        fn get_owned(&self, entity_id: u64) -> Result<LengthUnit> {
+            crate::tables::get_owned(self, &self.length_unit, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<LengthUnit>> + 'table> {
+            crate::tables::owned_iter(self, &self.length_unit)
         }
     }
     impl EntityTable<LineHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, LineHolder> {
-            &self.line
+        fn get_owned(&self, entity_id: u64) -> Result<Line> {
+            crate::tables::get_owned(self, &self.line, entity_id)
+        }
+        fn owned_iter<'table>(&'table self) -> Box<dyn Iterator<Item = Result<Line>> + 'table> {
+            crate::tables::owned_iter(self, &self.line)
         }
     }
     impl EntityTable<LinearDimensionHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, LinearDimensionHolder> {
-            &self.linear_dimension
+        fn get_owned(&self, entity_id: u64) -> Result<LinearDimension> {
+            crate::tables::get_owned(self, &self.linear_dimension, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<LinearDimension>> + 'table> {
+            crate::tables::owned_iter(self, &self.linear_dimension)
         }
     }
     impl EntityTable<MappedItemHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, MappedItemHolder> {
-            &self.mapped_item
+        fn get_owned(&self, entity_id: u64) -> Result<MappedItem> {
+            crate::tables::get_owned(self, &self.mapped_item, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<MappedItem>> + 'table> {
+            crate::tables::owned_iter(self, &self.mapped_item)
         }
     }
     impl EntityTable<MeasureWithUnitHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, MeasureWithUnitHolder> {
-            &self.measure_with_unit
+        fn get_owned(&self, entity_id: u64) -> Result<MeasureWithUnit> {
+            crate::tables::get_owned(self, &self.measure_with_unit, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<MeasureWithUnit>> + 'table> {
+            crate::tables::owned_iter(self, &self.measure_with_unit)
         }
     }
     impl EntityTable<NamedUnitHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, NamedUnitHolder> {
-            &self.named_unit
+        fn get_owned(&self, entity_id: u64) -> Result<NamedUnit> {
+            crate::tables::get_owned(self, &self.named_unit, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<NamedUnit>> + 'table> {
+            crate::tables::owned_iter(self, &self.named_unit)
         }
     }
     impl EntityTable<OffsetCurve2DHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, OffsetCurve2DHolder> {
-            &self.offset_curve_2d
+        fn get_owned(&self, entity_id: u64) -> Result<OffsetCurve2D> {
+            crate::tables::get_owned(self, &self.offset_curve_2d, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<OffsetCurve2D>> + 'table> {
+            crate::tables::owned_iter(self, &self.offset_curve_2d)
         }
     }
     impl EntityTable<OneDirectionRepeatFactorHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, OneDirectionRepeatFactorHolder> {
-            &self.one_direction_repeat_factor
+        fn get_owned(&self, entity_id: u64) -> Result<OneDirectionRepeatFactor> {
+            crate::tables::get_owned(self, &self.one_direction_repeat_factor, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<OneDirectionRepeatFactor>> + 'table> {
+            crate::tables::owned_iter(self, &self.one_direction_repeat_factor)
         }
     }
     impl EntityTable<OrdinateDimensionHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, OrdinateDimensionHolder> {
-            &self.ordinate_dimension
+        fn get_owned(&self, entity_id: u64) -> Result<OrdinateDimension> {
+            crate::tables::get_owned(self, &self.ordinate_dimension, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<OrdinateDimension>> + 'table> {
+            crate::tables::owned_iter(self, &self.ordinate_dimension)
         }
     }
     impl EntityTable<OrganizationHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, OrganizationHolder> {
-            &self.organization
+        fn get_owned(&self, entity_id: u64) -> Result<Organization> {
+            crate::tables::get_owned(self, &self.organization, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<Organization>> + 'table> {
+            crate::tables::owned_iter(self, &self.organization)
         }
     }
     impl EntityTable<OrganizationAssignmentHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, OrganizationAssignmentHolder> {
-            &self.organization_assignment
+        fn get_owned(&self, entity_id: u64) -> Result<OrganizationAssignment> {
+            crate::tables::get_owned(self, &self.organization_assignment, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<OrganizationAssignment>> + 'table> {
+            crate::tables::owned_iter(self, &self.organization_assignment)
         }
     }
     impl EntityTable<OrganizationRoleHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, OrganizationRoleHolder> {
-            &self.organization_role
+        fn get_owned(&self, entity_id: u64) -> Result<OrganizationRole> {
+            crate::tables::get_owned(self, &self.organization_role, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<OrganizationRole>> + 'table> {
+            crate::tables::owned_iter(self, &self.organization_role)
         }
     }
     impl EntityTable<OrganizationalAddressHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, OrganizationalAddressHolder> {
-            &self.organizational_address
+        fn get_owned(&self, entity_id: u64) -> Result<OrganizationalAddress> {
+            crate::tables::get_owned(self, &self.organizational_address, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<OrganizationalAddress>> + 'table> {
+            crate::tables::owned_iter(self, &self.organizational_address)
         }
     }
     impl EntityTable<ParabolaHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, ParabolaHolder> {
-            &self.parabola
+        fn get_owned(&self, entity_id: u64) -> Result<Parabola> {
+            crate::tables::get_owned(self, &self.parabola, entity_id)
+        }
+        fn owned_iter<'table>(&'table self) -> Box<dyn Iterator<Item = Result<Parabola>> + 'table> {
+            crate::tables::owned_iter(self, &self.parabola)
         }
     }
     impl EntityTable<PersonHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, PersonHolder> {
-            &self.person
+        fn get_owned(&self, entity_id: u64) -> Result<Person> {
+            crate::tables::get_owned(self, &self.person, entity_id)
+        }
+        fn owned_iter<'table>(&'table self) -> Box<dyn Iterator<Item = Result<Person>> + 'table> {
+            crate::tables::owned_iter(self, &self.person)
         }
     }
     impl EntityTable<PersonAndOrganizationHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, PersonAndOrganizationHolder> {
-            &self.person_and_organization
+        fn get_owned(&self, entity_id: u64) -> Result<PersonAndOrganization> {
+            crate::tables::get_owned(self, &self.person_and_organization, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<PersonAndOrganization>> + 'table> {
+            crate::tables::owned_iter(self, &self.person_and_organization)
         }
     }
     impl EntityTable<PersonAndOrganizationAssignmentHolder> for Tables {
-        fn get_table(
-            &self,
-        ) -> &::std::collections::HashMap<u64, PersonAndOrganizationAssignmentHolder> {
-            &self.person_and_organization_assignment
+        fn get_owned(&self, entity_id: u64) -> Result<PersonAndOrganizationAssignment> {
+            crate::tables::get_owned(self, &self.person_and_organization_assignment, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<PersonAndOrganizationAssignment>> + 'table> {
+            crate::tables::owned_iter(self, &self.person_and_organization_assignment)
         }
     }
     impl EntityTable<PersonAndOrganizationRoleHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, PersonAndOrganizationRoleHolder> {
-            &self.person_and_organization_role
+        fn get_owned(&self, entity_id: u64) -> Result<PersonAndOrganizationRole> {
+            crate::tables::get_owned(self, &self.person_and_organization_role, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<PersonAndOrganizationRole>> + 'table> {
+            crate::tables::owned_iter(self, &self.person_and_organization_role)
         }
     }
     impl EntityTable<PersonAssignmentHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, PersonAssignmentHolder> {
-            &self.person_assignment
+        fn get_owned(&self, entity_id: u64) -> Result<PersonAssignment> {
+            crate::tables::get_owned(self, &self.person_assignment, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<PersonAssignment>> + 'table> {
+            crate::tables::owned_iter(self, &self.person_assignment)
         }
     }
     impl EntityTable<PersonRoleHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, PersonRoleHolder> {
-            &self.person_role
+        fn get_owned(&self, entity_id: u64) -> Result<PersonRole> {
+            crate::tables::get_owned(self, &self.person_role, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<PersonRole>> + 'table> {
+            crate::tables::owned_iter(self, &self.person_role)
         }
     }
     impl EntityTable<PersonalAddressHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, PersonalAddressHolder> {
-            &self.personal_address
+        fn get_owned(&self, entity_id: u64) -> Result<PersonalAddress> {
+            crate::tables::get_owned(self, &self.personal_address, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<PersonalAddress>> + 'table> {
+            crate::tables::owned_iter(self, &self.personal_address)
         }
     }
     impl EntityTable<PlacementHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, PlacementHolder> {
-            &self.placement
+        fn get_owned(&self, entity_id: u64) -> Result<Placement> {
+            crate::tables::get_owned(self, &self.placement, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<Placement>> + 'table> {
+            crate::tables::owned_iter(self, &self.placement)
         }
     }
     impl EntityTable<PlanarBoxHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, PlanarBoxHolder> {
-            &self.planar_box
+        fn get_owned(&self, entity_id: u64) -> Result<PlanarBox> {
+            crate::tables::get_owned(self, &self.planar_box, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<PlanarBox>> + 'table> {
+            crate::tables::owned_iter(self, &self.planar_box)
         }
     }
     impl EntityTable<PlanarExtentHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, PlanarExtentHolder> {
-            &self.planar_extent
+        fn get_owned(&self, entity_id: u64) -> Result<PlanarExtent> {
+            crate::tables::get_owned(self, &self.planar_extent, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<PlanarExtent>> + 'table> {
+            crate::tables::owned_iter(self, &self.planar_extent)
         }
     }
     impl EntityTable<PlaneAngleMeasureWithUnitHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, PlaneAngleMeasureWithUnitHolder> {
-            &self.plane_angle_measure_with_unit
+        fn get_owned(&self, entity_id: u64) -> Result<PlaneAngleMeasureWithUnit> {
+            crate::tables::get_owned(self, &self.plane_angle_measure_with_unit, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<PlaneAngleMeasureWithUnit>> + 'table> {
+            crate::tables::owned_iter(self, &self.plane_angle_measure_with_unit)
         }
     }
     impl EntityTable<PlaneAngleUnitHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, PlaneAngleUnitHolder> {
-            &self.plane_angle_unit
+        fn get_owned(&self, entity_id: u64) -> Result<PlaneAngleUnit> {
+            crate::tables::get_owned(self, &self.plane_angle_unit, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<PlaneAngleUnit>> + 'table> {
+            crate::tables::owned_iter(self, &self.plane_angle_unit)
         }
     }
     impl EntityTable<PointHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, PointHolder> {
-            &self.point
+        fn get_owned(&self, entity_id: u64) -> Result<Point> {
+            crate::tables::get_owned(self, &self.point, entity_id)
+        }
+        fn owned_iter<'table>(&'table self) -> Box<dyn Iterator<Item = Result<Point>> + 'table> {
+            crate::tables::owned_iter(self, &self.point)
         }
     }
     impl EntityTable<PointOnCurveHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, PointOnCurveHolder> {
-            &self.point_on_curve
+        fn get_owned(&self, entity_id: u64) -> Result<PointOnCurve> {
+            crate::tables::get_owned(self, &self.point_on_curve, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<PointOnCurve>> + 'table> {
+            crate::tables::owned_iter(self, &self.point_on_curve)
         }
     }
     impl EntityTable<PolylineHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, PolylineHolder> {
-            &self.polyline
+        fn get_owned(&self, entity_id: u64) -> Result<Polyline> {
+            crate::tables::get_owned(self, &self.polyline, entity_id)
+        }
+        fn owned_iter<'table>(&'table self) -> Box<dyn Iterator<Item = Result<Polyline>> + 'table> {
+            crate::tables::owned_iter(self, &self.polyline)
         }
     }
     impl EntityTable<PreDefinedColourHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, PreDefinedColourHolder> {
-            &self.pre_defined_colour
+        fn get_owned(&self, entity_id: u64) -> Result<PreDefinedColour> {
+            crate::tables::get_owned(self, &self.pre_defined_colour, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<PreDefinedColour>> + 'table> {
+            crate::tables::owned_iter(self, &self.pre_defined_colour)
         }
     }
     impl EntityTable<PreDefinedCurveFontHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, PreDefinedCurveFontHolder> {
-            &self.pre_defined_curve_font
+        fn get_owned(&self, entity_id: u64) -> Result<PreDefinedCurveFont> {
+            crate::tables::get_owned(self, &self.pre_defined_curve_font, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<PreDefinedCurveFont>> + 'table> {
+            crate::tables::owned_iter(self, &self.pre_defined_curve_font)
         }
     }
     impl EntityTable<PreDefinedDimensionSymbolHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, PreDefinedDimensionSymbolHolder> {
-            &self.pre_defined_dimension_symbol
+        fn get_owned(&self, entity_id: u64) -> Result<PreDefinedDimensionSymbol> {
+            crate::tables::get_owned(self, &self.pre_defined_dimension_symbol, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<PreDefinedDimensionSymbol>> + 'table> {
+            crate::tables::owned_iter(self, &self.pre_defined_dimension_symbol)
         }
     }
     impl EntityTable<PreDefinedGeometricalToleranceSymbolHolder> for Tables {
-        fn get_table(
-            &self,
-        ) -> &::std::collections::HashMap<u64, PreDefinedGeometricalToleranceSymbolHolder> {
-            &self.pre_defined_geometrical_tolerance_symbol
+        fn get_owned(&self, entity_id: u64) -> Result<PreDefinedGeometricalToleranceSymbol> {
+            crate::tables::get_owned(
+                self,
+                &self.pre_defined_geometrical_tolerance_symbol,
+                entity_id,
+            )
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<PreDefinedGeometricalToleranceSymbol>> + 'table>
+        {
+            crate::tables::owned_iter(self, &self.pre_defined_geometrical_tolerance_symbol)
         }
     }
     impl EntityTable<PreDefinedItemHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, PreDefinedItemHolder> {
-            &self.pre_defined_item
+        fn get_owned(&self, entity_id: u64) -> Result<PreDefinedItem> {
+            crate::tables::get_owned(self, &self.pre_defined_item, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<PreDefinedItem>> + 'table> {
+            crate::tables::owned_iter(self, &self.pre_defined_item)
         }
     }
     impl EntityTable<PreDefinedPointMarkerSymbolHolder> for Tables {
-        fn get_table(
-            &self,
-        ) -> &::std::collections::HashMap<u64, PreDefinedPointMarkerSymbolHolder> {
-            &self.pre_defined_point_marker_symbol
+        fn get_owned(&self, entity_id: u64) -> Result<PreDefinedPointMarkerSymbol> {
+            crate::tables::get_owned(self, &self.pre_defined_point_marker_symbol, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<PreDefinedPointMarkerSymbol>> + 'table> {
+            crate::tables::owned_iter(self, &self.pre_defined_point_marker_symbol)
         }
     }
     impl EntityTable<PreDefinedSymbolHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, PreDefinedSymbolHolder> {
-            &self.pre_defined_symbol
+        fn get_owned(&self, entity_id: u64) -> Result<PreDefinedSymbol> {
+            crate::tables::get_owned(self, &self.pre_defined_symbol, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<PreDefinedSymbol>> + 'table> {
+            crate::tables::owned_iter(self, &self.pre_defined_symbol)
         }
     }
     impl EntityTable<PreDefinedTerminatorSymbolHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, PreDefinedTerminatorSymbolHolder> {
-            &self.pre_defined_terminator_symbol
+        fn get_owned(&self, entity_id: u64) -> Result<PreDefinedTerminatorSymbol> {
+            crate::tables::get_owned(self, &self.pre_defined_terminator_symbol, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<PreDefinedTerminatorSymbol>> + 'table> {
+            crate::tables::owned_iter(self, &self.pre_defined_terminator_symbol)
         }
     }
     impl EntityTable<PreDefinedTextFontHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, PreDefinedTextFontHolder> {
-            &self.pre_defined_text_font
+        fn get_owned(&self, entity_id: u64) -> Result<PreDefinedTextFont> {
+            crate::tables::get_owned(self, &self.pre_defined_text_font, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<PreDefinedTextFont>> + 'table> {
+            crate::tables::owned_iter(self, &self.pre_defined_text_font)
         }
     }
     impl EntityTable<PresentationAreaHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, PresentationAreaHolder> {
-            &self.presentation_area
+        fn get_owned(&self, entity_id: u64) -> Result<PresentationArea> {
+            crate::tables::get_owned(self, &self.presentation_area, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<PresentationArea>> + 'table> {
+            crate::tables::owned_iter(self, &self.presentation_area)
         }
     }
     impl EntityTable<PresentationLayerAssignmentHolder> for Tables {
-        fn get_table(
-            &self,
-        ) -> &::std::collections::HashMap<u64, PresentationLayerAssignmentHolder> {
-            &self.presentation_layer_assignment
+        fn get_owned(&self, entity_id: u64) -> Result<PresentationLayerAssignment> {
+            crate::tables::get_owned(self, &self.presentation_layer_assignment, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<PresentationLayerAssignment>> + 'table> {
+            crate::tables::owned_iter(self, &self.presentation_layer_assignment)
         }
     }
     impl EntityTable<PresentationLayerUsageHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, PresentationLayerUsageHolder> {
-            &self.presentation_layer_usage
+        fn get_owned(&self, entity_id: u64) -> Result<PresentationLayerUsage> {
+            crate::tables::get_owned(self, &self.presentation_layer_usage, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<PresentationLayerUsage>> + 'table> {
+            crate::tables::owned_iter(self, &self.presentation_layer_usage)
         }
     }
     impl EntityTable<PresentationRepresentationHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, PresentationRepresentationHolder> {
-            &self.presentation_representation
+        fn get_owned(&self, entity_id: u64) -> Result<PresentationRepresentation> {
+            crate::tables::get_owned(self, &self.presentation_representation, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<PresentationRepresentation>> + 'table> {
+            crate::tables::owned_iter(self, &self.presentation_representation)
         }
     }
     impl EntityTable<PresentationSetHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, PresentationSetHolder> {
-            &self.presentation_set
+        fn get_owned(&self, entity_id: u64) -> Result<PresentationSet> {
+            crate::tables::get_owned(self, &self.presentation_set, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<PresentationSet>> + 'table> {
+            crate::tables::owned_iter(self, &self.presentation_set)
         }
     }
     impl EntityTable<PresentationSizeHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, PresentationSizeHolder> {
-            &self.presentation_size
+        fn get_owned(&self, entity_id: u64) -> Result<PresentationSize> {
+            crate::tables::get_owned(self, &self.presentation_size, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<PresentationSize>> + 'table> {
+            crate::tables::owned_iter(self, &self.presentation_size)
         }
     }
     impl EntityTable<PresentationStyleAssignmentHolder> for Tables {
-        fn get_table(
-            &self,
-        ) -> &::std::collections::HashMap<u64, PresentationStyleAssignmentHolder> {
-            &self.presentation_style_assignment
+        fn get_owned(&self, entity_id: u64) -> Result<PresentationStyleAssignment> {
+            crate::tables::get_owned(self, &self.presentation_style_assignment, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<PresentationStyleAssignment>> + 'table> {
+            crate::tables::owned_iter(self, &self.presentation_style_assignment)
         }
     }
     impl EntityTable<PresentationStyleByContextHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, PresentationStyleByContextHolder> {
-            &self.presentation_style_by_context
+        fn get_owned(&self, entity_id: u64) -> Result<PresentationStyleByContext> {
+            crate::tables::get_owned(self, &self.presentation_style_by_context, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<PresentationStyleByContext>> + 'table> {
+            crate::tables::owned_iter(self, &self.presentation_style_by_context)
         }
     }
     impl EntityTable<PresentationViewHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, PresentationViewHolder> {
-            &self.presentation_view
+        fn get_owned(&self, entity_id: u64) -> Result<PresentationView> {
+            crate::tables::get_owned(self, &self.presentation_view, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<PresentationView>> + 'table> {
+            crate::tables::owned_iter(self, &self.presentation_view)
         }
     }
     impl EntityTable<PresentedItemHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, PresentedItemHolder> {
-            &self.presented_item
+        fn get_owned(&self, entity_id: u64) -> Result<PresentedItem> {
+            crate::tables::get_owned(self, &self.presented_item, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<PresentedItem>> + 'table> {
+            crate::tables::owned_iter(self, &self.presented_item)
         }
     }
     impl EntityTable<PresentedItemRepresentationHolder> for Tables {
-        fn get_table(
-            &self,
-        ) -> &::std::collections::HashMap<u64, PresentedItemRepresentationHolder> {
-            &self.presented_item_representation
+        fn get_owned(&self, entity_id: u64) -> Result<PresentedItemRepresentation> {
+            crate::tables::get_owned(self, &self.presented_item_representation, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<PresentedItemRepresentation>> + 'table> {
+            crate::tables::owned_iter(self, &self.presented_item_representation)
         }
     }
     impl EntityTable<ProductHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, ProductHolder> {
-            &self.product
+        fn get_owned(&self, entity_id: u64) -> Result<Product> {
+            crate::tables::get_owned(self, &self.product, entity_id)
+        }
+        fn owned_iter<'table>(&'table self) -> Box<dyn Iterator<Item = Result<Product>> + 'table> {
+            crate::tables::owned_iter(self, &self.product)
         }
     }
     impl EntityTable<ProductContextHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, ProductContextHolder> {
-            &self.product_context
+        fn get_owned(&self, entity_id: u64) -> Result<ProductContext> {
+            crate::tables::get_owned(self, &self.product_context, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<ProductContext>> + 'table> {
+            crate::tables::owned_iter(self, &self.product_context)
         }
     }
     impl EntityTable<ProductDefinitionHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, ProductDefinitionHolder> {
-            &self.product_definition
+        fn get_owned(&self, entity_id: u64) -> Result<ProductDefinition> {
+            crate::tables::get_owned(self, &self.product_definition, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<ProductDefinition>> + 'table> {
+            crate::tables::owned_iter(self, &self.product_definition)
         }
     }
     impl EntityTable<ProductDefinitionContextHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, ProductDefinitionContextHolder> {
-            &self.product_definition_context
+        fn get_owned(&self, entity_id: u64) -> Result<ProductDefinitionContext> {
+            crate::tables::get_owned(self, &self.product_definition_context, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<ProductDefinitionContext>> + 'table> {
+            crate::tables::owned_iter(self, &self.product_definition_context)
         }
     }
     impl EntityTable<ProductDefinitionFormationHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, ProductDefinitionFormationHolder> {
-            &self.product_definition_formation
+        fn get_owned(&self, entity_id: u64) -> Result<ProductDefinitionFormation> {
+            crate::tables::get_owned(self, &self.product_definition_formation, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<ProductDefinitionFormation>> + 'table> {
+            crate::tables::owned_iter(self, &self.product_definition_formation)
         }
     }
     impl EntityTable<ProductDefinitionShapeHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, ProductDefinitionShapeHolder> {
-            &self.product_definition_shape
+        fn get_owned(&self, entity_id: u64) -> Result<ProductDefinitionShape> {
+            crate::tables::get_owned(self, &self.product_definition_shape, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<ProductDefinitionShape>> + 'table> {
+            crate::tables::owned_iter(self, &self.product_definition_shape)
         }
     }
     impl EntityTable<ProjectionCurveHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, ProjectionCurveHolder> {
-            &self.projection_curve
+        fn get_owned(&self, entity_id: u64) -> Result<ProjectionCurve> {
+            crate::tables::get_owned(self, &self.projection_curve, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<ProjectionCurve>> + 'table> {
+            crate::tables::owned_iter(self, &self.projection_curve)
         }
     }
     impl EntityTable<ProjectionDirectedCalloutHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, ProjectionDirectedCalloutHolder> {
-            &self.projection_directed_callout
+        fn get_owned(&self, entity_id: u64) -> Result<ProjectionDirectedCallout> {
+            crate::tables::get_owned(self, &self.projection_directed_callout, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<ProjectionDirectedCallout>> + 'table> {
+            crate::tables::owned_iter(self, &self.projection_directed_callout)
         }
     }
     impl EntityTable<PropertyDefinitionHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, PropertyDefinitionHolder> {
-            &self.property_definition
+        fn get_owned(&self, entity_id: u64) -> Result<PropertyDefinition> {
+            crate::tables::get_owned(self, &self.property_definition, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<PropertyDefinition>> + 'table> {
+            crate::tables::owned_iter(self, &self.property_definition)
         }
     }
     impl EntityTable<PropertyDefinitionRepresentationHolder> for Tables {
-        fn get_table(
-            &self,
-        ) -> &::std::collections::HashMap<u64, PropertyDefinitionRepresentationHolder> {
-            &self.property_definition_representation
+        fn get_owned(&self, entity_id: u64) -> Result<PropertyDefinitionRepresentation> {
+            crate::tables::get_owned(self, &self.property_definition_representation, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<PropertyDefinitionRepresentation>> + 'table> {
+            crate::tables::owned_iter(self, &self.property_definition_representation)
         }
     }
     impl EntityTable<QuasiUniformCurveHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, QuasiUniformCurveHolder> {
-            &self.quasi_uniform_curve
+        fn get_owned(&self, entity_id: u64) -> Result<QuasiUniformCurve> {
+            crate::tables::get_owned(self, &self.quasi_uniform_curve, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<QuasiUniformCurve>> + 'table> {
+            crate::tables::owned_iter(self, &self.quasi_uniform_curve)
         }
     }
     impl EntityTable<RadiusDimensionHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, RadiusDimensionHolder> {
-            &self.radius_dimension
+        fn get_owned(&self, entity_id: u64) -> Result<RadiusDimension> {
+            crate::tables::get_owned(self, &self.radius_dimension, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<RadiusDimension>> + 'table> {
+            crate::tables::owned_iter(self, &self.radius_dimension)
         }
     }
     impl EntityTable<RationalBSplineCurveHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, RationalBSplineCurveHolder> {
-            &self.rational_b_spline_curve
+        fn get_owned(&self, entity_id: u64) -> Result<RationalBSplineCurve> {
+            crate::tables::get_owned(self, &self.rational_b_spline_curve, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<RationalBSplineCurve>> + 'table> {
+            crate::tables::owned_iter(self, &self.rational_b_spline_curve)
         }
     }
     impl EntityTable<RepresentationHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, RepresentationHolder> {
-            &self.representation
+        fn get_owned(&self, entity_id: u64) -> Result<Representation> {
+            crate::tables::get_owned(self, &self.representation, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<Representation>> + 'table> {
+            crate::tables::owned_iter(self, &self.representation)
         }
     }
     impl EntityTable<RepresentationContextHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, RepresentationContextHolder> {
-            &self.representation_context
+        fn get_owned(&self, entity_id: u64) -> Result<RepresentationContext> {
+            crate::tables::get_owned(self, &self.representation_context, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<RepresentationContext>> + 'table> {
+            crate::tables::owned_iter(self, &self.representation_context)
         }
     }
     impl EntityTable<RepresentationItemHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, RepresentationItemHolder> {
-            &self.representation_item
+        fn get_owned(&self, entity_id: u64) -> Result<RepresentationItem> {
+            crate::tables::get_owned(self, &self.representation_item, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<RepresentationItem>> + 'table> {
+            crate::tables::owned_iter(self, &self.representation_item)
         }
     }
     impl EntityTable<RepresentationMapHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, RepresentationMapHolder> {
-            &self.representation_map
+        fn get_owned(&self, entity_id: u64) -> Result<RepresentationMap> {
+            crate::tables::get_owned(self, &self.representation_map, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<RepresentationMap>> + 'table> {
+            crate::tables::owned_iter(self, &self.representation_map)
         }
     }
     impl EntityTable<SecurityClassificationHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, SecurityClassificationHolder> {
-            &self.security_classification
+        fn get_owned(&self, entity_id: u64) -> Result<SecurityClassification> {
+            crate::tables::get_owned(self, &self.security_classification, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<SecurityClassification>> + 'table> {
+            crate::tables::owned_iter(self, &self.security_classification)
         }
     }
     impl EntityTable<SecurityClassificationAssignmentHolder> for Tables {
-        fn get_table(
-            &self,
-        ) -> &::std::collections::HashMap<u64, SecurityClassificationAssignmentHolder> {
-            &self.security_classification_assignment
+        fn get_owned(&self, entity_id: u64) -> Result<SecurityClassificationAssignment> {
+            crate::tables::get_owned(self, &self.security_classification_assignment, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<SecurityClassificationAssignment>> + 'table> {
+            crate::tables::owned_iter(self, &self.security_classification_assignment)
         }
     }
     impl EntityTable<SecurityClassificationLevelHolder> for Tables {
-        fn get_table(
-            &self,
-        ) -> &::std::collections::HashMap<u64, SecurityClassificationLevelHolder> {
-            &self.security_classification_level
+        fn get_owned(&self, entity_id: u64) -> Result<SecurityClassificationLevel> {
+            crate::tables::get_owned(self, &self.security_classification_level, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<SecurityClassificationLevel>> + 'table> {
+            crate::tables::owned_iter(self, &self.security_classification_level)
         }
     }
     impl EntityTable<ShapeDefinitionRepresentationHolder> for Tables {
-        fn get_table(
-            &self,
-        ) -> &::std::collections::HashMap<u64, ShapeDefinitionRepresentationHolder> {
-            &self.shape_definition_representation
+        fn get_owned(&self, entity_id: u64) -> Result<ShapeDefinitionRepresentation> {
+            crate::tables::get_owned(self, &self.shape_definition_representation, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<ShapeDefinitionRepresentation>> + 'table> {
+            crate::tables::owned_iter(self, &self.shape_definition_representation)
         }
     }
     impl EntityTable<ShapeRepresentationHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, ShapeRepresentationHolder> {
-            &self.shape_representation
+        fn get_owned(&self, entity_id: u64) -> Result<ShapeRepresentation> {
+            crate::tables::get_owned(self, &self.shape_representation, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<ShapeRepresentation>> + 'table> {
+            crate::tables::owned_iter(self, &self.shape_representation)
         }
     }
     impl EntityTable<SiUnitHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, SiUnitHolder> {
-            &self.si_unit
+        fn get_owned(&self, entity_id: u64) -> Result<SiUnit> {
+            crate::tables::get_owned(self, &self.si_unit, entity_id)
+        }
+        fn owned_iter<'table>(&'table self) -> Box<dyn Iterator<Item = Result<SiUnit>> + 'table> {
+            crate::tables::owned_iter(self, &self.si_unit)
         }
     }
     impl EntityTable<StructuredDimensionCalloutHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, StructuredDimensionCalloutHolder> {
-            &self.structured_dimension_callout
+        fn get_owned(&self, entity_id: u64) -> Result<StructuredDimensionCallout> {
+            crate::tables::get_owned(self, &self.structured_dimension_callout, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<StructuredDimensionCallout>> + 'table> {
+            crate::tables::owned_iter(self, &self.structured_dimension_callout)
         }
     }
     impl EntityTable<StyledItemHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, StyledItemHolder> {
-            &self.styled_item
+        fn get_owned(&self, entity_id: u64) -> Result<StyledItem> {
+            crate::tables::get_owned(self, &self.styled_item, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<StyledItem>> + 'table> {
+            crate::tables::owned_iter(self, &self.styled_item)
         }
     }
     impl EntityTable<SymbolColourHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, SymbolColourHolder> {
-            &self.symbol_colour
+        fn get_owned(&self, entity_id: u64) -> Result<SymbolColour> {
+            crate::tables::get_owned(self, &self.symbol_colour, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<SymbolColour>> + 'table> {
+            crate::tables::owned_iter(self, &self.symbol_colour)
         }
     }
     impl EntityTable<SymbolRepresentationHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, SymbolRepresentationHolder> {
-            &self.symbol_representation
+        fn get_owned(&self, entity_id: u64) -> Result<SymbolRepresentation> {
+            crate::tables::get_owned(self, &self.symbol_representation, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<SymbolRepresentation>> + 'table> {
+            crate::tables::owned_iter(self, &self.symbol_representation)
         }
     }
     impl EntityTable<SymbolRepresentationMapHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, SymbolRepresentationMapHolder> {
-            &self.symbol_representation_map
+        fn get_owned(&self, entity_id: u64) -> Result<SymbolRepresentationMap> {
+            crate::tables::get_owned(self, &self.symbol_representation_map, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<SymbolRepresentationMap>> + 'table> {
+            crate::tables::owned_iter(self, &self.symbol_representation_map)
         }
     }
     impl EntityTable<SymbolStyleHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, SymbolStyleHolder> {
-            &self.symbol_style
+        fn get_owned(&self, entity_id: u64) -> Result<SymbolStyle> {
+            crate::tables::get_owned(self, &self.symbol_style, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<SymbolStyle>> + 'table> {
+            crate::tables::owned_iter(self, &self.symbol_style)
         }
     }
     impl EntityTable<SymbolTargetHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, SymbolTargetHolder> {
-            &self.symbol_target
+        fn get_owned(&self, entity_id: u64) -> Result<SymbolTarget> {
+            crate::tables::get_owned(self, &self.symbol_target, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<SymbolTarget>> + 'table> {
+            crate::tables::owned_iter(self, &self.symbol_target)
         }
     }
     impl EntityTable<TerminatorSymbolHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, TerminatorSymbolHolder> {
-            &self.terminator_symbol
+        fn get_owned(&self, entity_id: u64) -> Result<TerminatorSymbol> {
+            crate::tables::get_owned(self, &self.terminator_symbol, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<TerminatorSymbol>> + 'table> {
+            crate::tables::owned_iter(self, &self.terminator_symbol)
         }
     }
     impl EntityTable<TextLiteralHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, TextLiteralHolder> {
-            &self.text_literal
+        fn get_owned(&self, entity_id: u64) -> Result<TextLiteral> {
+            crate::tables::get_owned(self, &self.text_literal, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<TextLiteral>> + 'table> {
+            crate::tables::owned_iter(self, &self.text_literal)
         }
     }
     impl EntityTable<TextLiteralWithAssociatedCurvesHolder> for Tables {
-        fn get_table(
-            &self,
-        ) -> &::std::collections::HashMap<u64, TextLiteralWithAssociatedCurvesHolder> {
-            &self.text_literal_with_associated_curves
+        fn get_owned(&self, entity_id: u64) -> Result<TextLiteralWithAssociatedCurves> {
+            crate::tables::get_owned(self, &self.text_literal_with_associated_curves, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<TextLiteralWithAssociatedCurves>> + 'table> {
+            crate::tables::owned_iter(self, &self.text_literal_with_associated_curves)
         }
     }
     impl EntityTable<TextLiteralWithBlankingBoxHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, TextLiteralWithBlankingBoxHolder> {
-            &self.text_literal_with_blanking_box
+        fn get_owned(&self, entity_id: u64) -> Result<TextLiteralWithBlankingBox> {
+            crate::tables::get_owned(self, &self.text_literal_with_blanking_box, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<TextLiteralWithBlankingBox>> + 'table> {
+            crate::tables::owned_iter(self, &self.text_literal_with_blanking_box)
         }
     }
     impl EntityTable<TextLiteralWithDelineationHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, TextLiteralWithDelineationHolder> {
-            &self.text_literal_with_delineation
+        fn get_owned(&self, entity_id: u64) -> Result<TextLiteralWithDelineation> {
+            crate::tables::get_owned(self, &self.text_literal_with_delineation, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<TextLiteralWithDelineation>> + 'table> {
+            crate::tables::owned_iter(self, &self.text_literal_with_delineation)
         }
     }
     impl EntityTable<TextLiteralWithExtentHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, TextLiteralWithExtentHolder> {
-            &self.text_literal_with_extent
+        fn get_owned(&self, entity_id: u64) -> Result<TextLiteralWithExtent> {
+            crate::tables::get_owned(self, &self.text_literal_with_extent, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<TextLiteralWithExtent>> + 'table> {
+            crate::tables::owned_iter(self, &self.text_literal_with_extent)
         }
     }
     impl EntityTable<TextStyleHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, TextStyleHolder> {
-            &self.text_style
+        fn get_owned(&self, entity_id: u64) -> Result<TextStyle> {
+            crate::tables::get_owned(self, &self.text_style, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<TextStyle>> + 'table> {
+            crate::tables::owned_iter(self, &self.text_style)
         }
     }
     impl EntityTable<TextStyleForDefinedFontHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, TextStyleForDefinedFontHolder> {
-            &self.text_style_for_defined_font
+        fn get_owned(&self, entity_id: u64) -> Result<TextStyleForDefinedFont> {
+            crate::tables::get_owned(self, &self.text_style_for_defined_font, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<TextStyleForDefinedFont>> + 'table> {
+            crate::tables::owned_iter(self, &self.text_style_for_defined_font)
         }
     }
     impl EntityTable<TextStyleWithBoxCharacteristicsHolder> for Tables {
-        fn get_table(
-            &self,
-        ) -> &::std::collections::HashMap<u64, TextStyleWithBoxCharacteristicsHolder> {
-            &self.text_style_with_box_characteristics
+        fn get_owned(&self, entity_id: u64) -> Result<TextStyleWithBoxCharacteristics> {
+            crate::tables::get_owned(self, &self.text_style_with_box_characteristics, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<TextStyleWithBoxCharacteristics>> + 'table> {
+            crate::tables::owned_iter(self, &self.text_style_with_box_characteristics)
         }
     }
     impl EntityTable<TextStyleWithMirrorHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, TextStyleWithMirrorHolder> {
-            &self.text_style_with_mirror
+        fn get_owned(&self, entity_id: u64) -> Result<TextStyleWithMirror> {
+            crate::tables::get_owned(self, &self.text_style_with_mirror, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<TextStyleWithMirror>> + 'table> {
+            crate::tables::owned_iter(self, &self.text_style_with_mirror)
         }
     }
     impl EntityTable<TrimmedCurveHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, TrimmedCurveHolder> {
-            &self.trimmed_curve
+        fn get_owned(&self, entity_id: u64) -> Result<TrimmedCurve> {
+            crate::tables::get_owned(self, &self.trimmed_curve, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<TrimmedCurve>> + 'table> {
+            crate::tables::owned_iter(self, &self.trimmed_curve)
         }
     }
     impl EntityTable<TwoDirectionRepeatFactorHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, TwoDirectionRepeatFactorHolder> {
-            &self.two_direction_repeat_factor
+        fn get_owned(&self, entity_id: u64) -> Result<TwoDirectionRepeatFactor> {
+            crate::tables::get_owned(self, &self.two_direction_repeat_factor, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<TwoDirectionRepeatFactor>> + 'table> {
+            crate::tables::owned_iter(self, &self.two_direction_repeat_factor)
         }
     }
     impl EntityTable<UniformCurveHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, UniformCurveHolder> {
-            &self.uniform_curve
+        fn get_owned(&self, entity_id: u64) -> Result<UniformCurve> {
+            crate::tables::get_owned(self, &self.uniform_curve, entity_id)
+        }
+        fn owned_iter<'table>(
+            &'table self,
+        ) -> Box<dyn Iterator<Item = Result<UniformCurve>> + 'table> {
+            crate::tables::owned_iter(self, &self.uniform_curve)
         }
     }
     impl EntityTable<VectorHolder> for Tables {
-        fn get_table(&self) -> &::std::collections::HashMap<u64, VectorHolder> {
-            &self.vector
+        fn get_owned(&self, entity_id: u64) -> Result<Vector> {
+            crate::tables::get_owned(self, &self.vector, entity_id)
+        }
+        fn owned_iter<'table>(&'table self) -> Box<dyn Iterator<Item = Result<Vector>> + 'table> {
+            crate::tables::owned_iter(self, &self.vector)
         }
     }
     #[derive(Debug, Clone)]
