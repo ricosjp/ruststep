@@ -29,7 +29,7 @@ pub fn explicit_attr(input: &str) -> ParseResult<Vec<EntityAttribute>> {
 /// 207 entity_head = ENTITY [entity_id] [subsuper] `;` .
 pub fn entity_head(input: &str) -> ParseResult<(String, Option<Constraint>, Option<SubTypeDecl>)> {
     tuple((
-        tag("ENTITY "), // parse with trailing space
+        tag("ENTITY"), // parse with trailing space
         entity_id,
         subsuper,
         char(';'),
@@ -197,19 +197,19 @@ mod tests {
     #[test]
     fn entity_decl() {
         let exp_str = r#"
-        ENTITY first;
-          m_ref : second;
+        ENTITY fiRst;
+          m_Ref : second;
           fattr : REAL;
         END_ENTITY;
         "#
         .trim();
 
         let (residual, (entity, _remark)) = super::entity_decl(exp_str).finish().unwrap();
-        assert_eq!(entity.name, "first");
+        assert_eq!(entity.name, "fiRst");
 
         assert_eq!(entity.attributes.len(), 2);
         // check `m_ref`
-        assert_eq!(entity.attributes[0].name, "m_ref");
+        assert_eq!(entity.attributes[0].name, "m_Ref");
         assert!(matches!(entity.attributes[0].ty, ParameterType::Named(_)));
         // check `fattr`
         assert_eq!(entity.attributes[1].name, "fattr");
