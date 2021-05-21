@@ -45,6 +45,7 @@ mod remark;
 mod schema;
 mod stmt;
 mod subsuper;
+mod reserved;
 mod types;
 
 pub use basis::*;
@@ -56,4 +57,5 @@ pub use remark::*;
 pub use schema::*;
 pub use stmt::*;
 pub use subsuper::*;
+pub use reserved::*;
 pub use types::*;
