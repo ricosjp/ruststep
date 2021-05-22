@@ -78,13 +78,10 @@ use std::fmt;
 /// assert!(matches!(p, Parameter::List(_)));
 /// ```
 ///
-/// serde::Deserializer
-/// -------------------
+/// serde data model
+/// ----------------
 ///
 /// This implements a [serde::Deserializer], i.e. a **data format**.
-///
-/// - For untyped parameters, e.g. real number, can be deserialized into any types
-///   as far as compatible in terms of the serde data model.
 ///
 /// | Parameter   | serde data model |
 /// |:------------|:-----------------|
@@ -95,8 +92,21 @@ use std::fmt;
 /// | List        | seq              |
 /// | NotProvided | unit             |
 /// | Omitted     | unit             |
-/// | Typed       | ???              |
-/// | RValue      | ???              |
+/// | Typed       | tuple_struct     |
+/// | RValue      | map              |
+///
+/// See [the official document of serde data model](https://serde.rs/data-model.html) for detail.
+///
+/// - `Parameter::Typed` is mapped to "tuple_struct" e.g. `struct Rgb(u8, u8, u8)`
+///   because the name of field members are not contained,
+///   and thus "struct" like `struct S { r: u8, g: u8, b: u8 }` cannot be used.
+/// - `Parameter::RValue` is mapped to "map"
+///   i.e. an entity reference `#12` will be deserialized into `{ "Entity": 12 }`.
+///
+/// ### Examples
+///
+/// - For untyped parameters, e.g. real number, can be deserialized into any types
+///   as far as compatible in terms of the serde data model.
 ///
 /// ```
 /// use serde::Deserialize;
@@ -113,7 +123,7 @@ use std::fmt;
 ///     .iter()
 ///     .collect();
 ///
-/// // Deserialize the `Parameter` sequence into `A`
+/// // Deserialize the `Parameter` sequence into `A` because serde allows upcasting seq to struct
 /// let a: A = Deserialize::deserialize(&p).unwrap();
 /// println!("{:?}", a);
 ///
