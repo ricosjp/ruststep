@@ -12,43 +12,14 @@ pub enum LValue {
     Value(u64),
 }
 
-/// Right hand side value
+/// Reference to a value in the exchange structure e.g. `#11`,
+/// or value defined in EXPRESS schema e.g. `@CONST_VALUE`
 ///
-/// serde::Deserializer
-/// -------------------
-///
-/// Since [RValue] may appear in [Record], this should supports [serde::Deserializer]
-/// as like done in [serde::de::value].
-/// This enum is also [serde::Deserialize].
-/// [Deserialize::deserialize] returns same value as following:
-///
-/// ```
-/// use serde::Deserialize;
-/// use ruststep::ast::RValue;
-///
-/// let value = RValue::Entity(11);
-/// let a: RValue = Deserialize::deserialize(&value).unwrap();
-/// assert_eq!(a, value);
-///
-/// let value = RValue::Value(11);
-/// let a: RValue = Deserialize::deserialize(&value).unwrap();
-/// assert_eq!(a, value);
-///
-/// let value = RValue::ConstantEntity("Const1".into());
-/// let a: RValue = Deserialize::deserialize(&value).unwrap();
-/// assert_eq!(a, value);
-///
-/// let value = RValue::ConstantValue("Const1".into());
-/// let a: RValue = Deserialize::deserialize(&value).unwrap();
-/// assert_eq!(a, value);
-/// ```
-///
-/// Enum representation
-/// --------------------
-///
+/// serde::Deserialize
+/// ------------------
 /// [Deserialize] is derived without `#[serde(...)]` attribute,
 /// which means it is "externally tagged" as described in [enum representations].
-/// For example, `RValue::Entity(11)` will be deserialized from `{ "Entity": 11 }`.
+/// For example, `RValue::Entity(11)` will be deserialized from `{ "Entity": 11 }` in serde data model.
 ///
 /// [enum representations]: https://serde.rs/enum-representations.html
 ///
@@ -95,5 +66,31 @@ impl<'de, 'value> de::Deserializer<'de> for &'value RValue {
         bool i8 i16 i32 i64 i128 u8 u16 u32 u64 u128 f32 f64 char str string
         bytes byte_buf option unit unit_struct newtype_struct seq tuple
         enum tuple_struct struct map identifier ignored_any
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    // Deserializer (above) and Deserialize (auto-derived) implementations
+    // must match to reproduce the original value
+    #[test]
+    fn deserialize_identity() {
+        let value = RValue::Entity(11);
+        let a: RValue = Deserialize::deserialize(&value).unwrap();
+        assert_eq!(a, value);
+
+        let value = RValue::Value(11);
+        let a: RValue = Deserialize::deserialize(&value).unwrap();
+        assert_eq!(a, value);
+
+        let value = RValue::ConstantEntity("Const1".into());
+        let a: RValue = Deserialize::deserialize(&value).unwrap();
+        assert_eq!(a, value);
+
+        let value = RValue::ConstantValue("Const1".into());
+        let a: RValue = Deserialize::deserialize(&value).unwrap();
+        assert_eq!(a, value);
     }
 }

@@ -101,7 +101,7 @@ use std::fmt;
 ///   because the name of field members are not contained,
 ///   and thus "struct" like `struct S { r: u8, g: u8, b: u8 }` cannot be used.
 /// - `Parameter::RValue` is mapped to "map"
-///   i.e. an entity reference `#12` will be deserialized into `{ "Entity": 12 }`.
+///   e.g. an entity reference `#12` will be deserialized into `{ "Entity": 12 }` (in JSON).
 ///
 /// ### Examples
 ///
