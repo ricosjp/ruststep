@@ -92,14 +92,13 @@ use std::fmt;
 /// | List        | seq              |
 /// | NotProvided | unit             |
 /// | Omitted     | unit             |
-/// | Typed       | tuple_struct     |
+/// | Typed       | map              |
 /// | RValue      | map              |
 ///
 /// See [the official document of serde data model](https://serde.rs/data-model.html) for detail.
 ///
-/// - `Parameter::Typed` is mapped to "tuple_struct" e.g. `struct Rgb(u8, u8, u8)`
-///   because the name of field members are not contained,
-///   and thus "struct" like `struct S { r: u8, g: u8, b: u8 }` cannot be used.
+/// - `Parameter::Typed` is mapped to "map"
+///   e.g. `A((1.0, 2.0))` will be deserialized into `{ "A": [1.0, 2.0] }`
 /// - `Parameter::RValue` is mapped to "map"
 ///   e.g. an entity reference `#12` will be deserialized into `{ "Entity": 12 }` (in JSON).
 ///

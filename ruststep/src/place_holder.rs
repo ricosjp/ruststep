@@ -44,15 +44,12 @@ impl<'de, T: Deserialize<'de>> Deserialize<'de> for PlaceHolder<T> {
         // For Ref(RValue)
         // ----------------
         // PlaceHolder::deserialize(RValue)
-        // > RValue::deserialize_struct(PlaceHolderVisitor)
-        // > (forward_to_deserialize_any)
         // > RValue::deserialize_any(PlaceHolderVisitor)
-        // > PlaceHolderVisitor::visit_enum(MapAccessDeserializer)
+        // > PlaceHolderVisitor::visit_map(MapDeserializer)
         //
         // For Owned(T)
         // -------------
         // PlaceHolder::deserialize(Record)
-        // > (forward_to_deserialize_any)
         // > Record::deserialize_any(PlaceHolderVisitor)
         // > PlaceHolderVisitor::visit_seq(SeqDeserializer)
         deserializer.deserialize_any(PlaceHolderVisitor::<T>::default())
