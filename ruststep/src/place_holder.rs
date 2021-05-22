@@ -96,7 +96,6 @@ impl<'de, T: Deserialize<'de>> de::Visitor<'de> for PlaceHolderVisitor<T> {
         Ok(PlaceHolder::Owned(T::deserialize(v.into_deserializer())?))
     }
 
-    // For Ref(RValue)
     fn visit_map<A>(self, mut data: A) -> Result<Self::Value, A::Error>
     where
         A: de::MapAccess<'de>,
@@ -119,7 +118,10 @@ impl<'de, T: Deserialize<'de>> de::Visitor<'de> for PlaceHolderVisitor<T> {
                 let name: String = data.next_value()?;
                 Ok(PlaceHolder::Ref(RValue::ConstantValue(name)))
             }
-            _ => unreachable!("Invalid key '{}' while deserializing PlaceHolder", key),
+            _ => {
+                let owned: T = data.next_value()?;
+                Ok(PlaceHolder::Owned(owned))
+            }
         }
     }
 
