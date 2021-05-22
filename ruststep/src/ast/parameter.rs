@@ -239,26 +239,10 @@ impl<'de, 'param> de::Deserializer<'de> for &'param Parameter {
         }
     }
 
-    fn deserialize_struct<V>(
-        self,
-        _struct_name: &'static str,
-        _fields: &'static [&'static str],
-        visitor: V,
-    ) -> Result<V::Value, Self::Error>
-    where
-        V: de::Visitor<'de>,
-    {
-        if let Parameter::Typed { name: _, ty } = self {
-            ty.deserialize_any(visitor)
-        } else {
-            self.deserialize_any(visitor)
-        }
-    }
-
     forward_to_deserialize_any! {
         bool i8 i16 i32 i64 i128 u8 u16 u32 u64 u128 f32 f64 char str string
         bytes byte_buf option unit unit_struct newtype_struct seq tuple
-        tuple_struct map enum identifier ignored_any
+        struct tuple_struct map enum identifier ignored_any
     }
 }
 
