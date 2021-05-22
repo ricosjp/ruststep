@@ -86,6 +86,18 @@ use std::fmt;
 /// - For untyped parameters, e.g. real number, can be deserialized into any types
 ///   as far as compatible in terms of the serde data model.
 ///
+/// | Parameter   | serde data model |
+/// |:------------|:-----------------|
+/// | Integer     | i64              |
+/// | Real        | f64              |
+/// | String      | string           |
+/// | Enumeration | unit_variant     |
+/// | List        | seq              |
+/// | NotProvided | unit             |
+/// | Omitted     | unit             |
+/// | Typed       | ???              |
+/// | RValue      | ???              |
+///
 /// ```
 /// use serde::Deserialize;
 /// use ruststep::ast::Parameter;
@@ -234,7 +246,7 @@ impl<'de, 'param> de::Deserializer<'de> for &'param Parameter {
                 visitor.visit_seq(de::value::SeqDeserializer::new(params.iter()))
             }
             Parameter::RValue(rvalue) => de::Deserializer::deserialize_any(rvalue, visitor),
-            Parameter::NotProvided | Parameter::Omitted => visitor.visit_none(),
+            Parameter::NotProvided | Parameter::Omitted => visitor.visit_unit(),
             Parameter::Enumeration(_) => unimplemented!(),
         }
     }
