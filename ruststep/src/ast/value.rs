@@ -1,8 +1,5 @@
 use serde::{de, forward_to_deserialize_any, Deserialize};
 
-#[cfg(doc)] // for doc-link
-use super::Record;
-
 /// Left hand side value
 #[derive(Debug, Clone, PartialEq, Deserialize)]
 pub enum LValue {
