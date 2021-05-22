@@ -1,6 +1,6 @@
 use crate::{ast::*, tables::*};
 use serde::{
-    de::{self, IntoDeserializer, VariantAccess},
+    de::{self, IntoDeserializer},
     Deserialize,
 };
 use std::{fmt, marker::PhantomData};
@@ -100,29 +100,29 @@ impl<'de, T: Deserialize<'de>> de::Visitor<'de> for PlaceHolderVisitor<T> {
     }
 
     // For Ref(RValue)
-    fn visit_enum<A>(self, data: A) -> Result<Self::Value, A::Error>
+    fn visit_map<A>(self, mut data: A) -> Result<Self::Value, A::Error>
     where
-        A: de::EnumAccess<'de>,
+        A: de::MapAccess<'de>,
     {
-        let (key, variant): (String, _) = data.variant()?;
+        let key: String = data.next_key()?.unwrap();
         match key.as_str() {
             "Entity" => {
-                let value: u64 = variant.newtype_variant()?;
+                let value: u64 = data.next_value()?;
                 Ok(PlaceHolder::Ref(RValue::Entity(value)))
             }
             "Value" => {
-                let value: u64 = variant.newtype_variant()?;
+                let value: u64 = data.next_value()?;
                 Ok(PlaceHolder::Ref(RValue::Value(value)))
             }
             "ConstantEntity" => {
-                let name: String = variant.newtype_variant()?;
+                let name: String = data.next_value()?;
                 Ok(PlaceHolder::Ref(RValue::ConstantEntity(name)))
             }
             "ConstantValue" => {
-                let name: String = variant.newtype_variant()?;
+                let name: String = data.next_value()?;
                 Ok(PlaceHolder::Ref(RValue::ConstantValue(name)))
             }
-            _ => unreachable!("Invalid key while deserializing PlaceHolder"),
+            _ => unreachable!("Invalid key '{}' while deserializing PlaceHolder", key),
         }
     }
 
