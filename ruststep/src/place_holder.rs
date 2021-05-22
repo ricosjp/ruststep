@@ -55,11 +55,7 @@ impl<'de, T: Deserialize<'de>> Deserialize<'de> for PlaceHolder<T> {
         // > (forward_to_deserialize_any)
         // > Record::deserialize_any(PlaceHolderVisitor)
         // > PlaceHolderVisitor::visit_seq(SeqDeserializer)
-        deserializer.deserialize_struct(
-            std::any::type_name::<T>(),
-            &[],
-            PlaceHolderVisitor::<T>::default(),
-        )
+        deserializer.deserialize_any(PlaceHolderVisitor::<T>::default())
     }
 }
 
