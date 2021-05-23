@@ -1,3 +1,4 @@
+use super::SingleMapDeserializer;
 use serde::{de, forward_to_deserialize_any, Deserialize};
 
 /// Left hand side value
@@ -40,18 +41,14 @@ impl<'de, 'value> de::Deserializer<'de> for &'value RValue {
         V: de::Visitor<'de>,
     {
         match self {
-            RValue::Entity(id) => visitor.visit_map(de::value::MapDeserializer::new(
-                [("Entity", *id)].iter().cloned(),
-            )),
-            RValue::Value(id) => visitor.visit_map(de::value::MapDeserializer::new(
-                [("Value", *id)].iter().cloned(),
-            )),
-            RValue::ConstantEntity(name) => visitor.visit_map(de::value::MapDeserializer::new(
-                [("ConstantEntity", name.clone())].iter().cloned(),
-            )),
-            RValue::ConstantValue(name) => visitor.visit_map(de::value::MapDeserializer::new(
-                [("ConstantValue", name.clone())].iter().cloned(),
-            )),
+            RValue::Entity(id) => visitor.visit_map(SingleMapDeserializer::new("Entity", *id)),
+            RValue::Value(id) => visitor.visit_map(SingleMapDeserializer::new("Value", *id)),
+            RValue::ConstantEntity(name) => {
+                visitor.visit_map(SingleMapDeserializer::new("ConstantEntity", name.clone()))
+            }
+            RValue::ConstantValue(name) => {
+                visitor.visit_map(SingleMapDeserializer::new("ConstantValue", name.clone()))
+            }
         }
     }
 

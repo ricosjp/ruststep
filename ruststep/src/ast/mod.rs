@@ -91,11 +91,13 @@
 mod parameter;
 mod record;
 mod ser;
+mod single_map_deserializer;
 mod value;
 
 pub use parameter::*;
 pub use record::*;
 pub use ser::*;
+pub use single_map_deserializer::*;
 pub use value::*;
 
 /// Entire exchange structure
