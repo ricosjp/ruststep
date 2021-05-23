@@ -224,9 +224,9 @@ impl<'de, 'param> de::Deserializer<'de> for &'param Parameter {
         V: de::Visitor<'de>,
     {
         match self {
-            Parameter::Typed { name, ty } => visitor.visit_map(de::value::MapDeserializer::new(
-                [(name.as_str(), &**ty)].iter().cloned(),
-            )),
+            Parameter::Typed { name, ty } => {
+                visitor.visit_map(SingleMapDeserializer::new(name, ty.as_ref()))
+            }
             Parameter::Integer(val) => visitor.visit_i64(*val),
             Parameter::Real(val) => visitor.visit_f64(*val),
             Parameter::String(val) => visitor.visit_str(val),
