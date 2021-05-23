@@ -78,75 +78,6 @@ use std::fmt;
 /// assert!(matches!(p, Parameter::List(_)));
 /// ```
 ///
-/// serde::Deserializer
-/// -------------------
-///
-/// This implements a [serde::Deserializer], i.e. a **data format**.
-///
-/// - For untyped parameters, e.g. real number, can be deserialized into any types
-///   as far as compatible in terms of the serde data model.
-///
-/// ```
-/// use serde::Deserialize;
-/// use ruststep::ast::Parameter;
-///
-/// #[derive(Debug, Deserialize)]
-/// struct A {
-///     x: f64,
-///     y: f64,
-/// }
-///
-/// // Create a list as `Parameter::List`
-/// let p: Parameter = [Parameter::real(1.0), Parameter::real(2.0)]
-///     .iter()
-///     .collect();
-///
-/// // Deserialize the `Parameter` sequence into `A`
-/// let a: A = Deserialize::deserialize(&p).unwrap();
-/// println!("{:?}", a);
-///
-/// // Input types will be checked at runtime:
-/// let p: Parameter = [Parameter::string("a"), Parameter::integer(2)]
-///     .iter()
-///     .collect();
-/// let result: Result<A, _> = Deserialize::deserialize(&p);
-/// assert!(result.is_err());
-/// ```
-///
-/// - Typed parameter, e.g. `A(1)`
-///   - FIXME: Type name check is not implemented yet.
-///
-/// ```
-/// use serde::Deserialize;
-/// use ruststep::parser::exchange;
-/// use nom::Finish;
-///
-/// #[derive(Debug, Deserialize)]
-/// struct A {
-///     x: f64,
-///     y: f64,
-/// }
-///
-/// let (res, p) = exchange::parameter("A((1.0, 2.0))").finish().unwrap();
-/// assert_eq!(res, "");
-/// let a: A = Deserialize::deserialize(&p).unwrap();
-/// dbg!(a);
-/// ```
-///
-/// - For [RValue]
-///
-/// ```
-/// use serde::Deserialize;
-/// use ruststep::{parser::exchange, ast::RValue};
-/// use nom::Finish;
-///
-/// let (res, p) = exchange::parameter("#11").finish().unwrap();
-/// let a: RValue = Deserialize::deserialize(&p).unwrap();
-/// assert_eq!(a, RValue::Entity(11))
-/// ```
-///
-/// [serde::Deserializer]: https://docs.serde.rs/serde/trait.Deserializer.html
-///
 #[derive(Debug, Clone, PartialEq)]
 pub enum Parameter {
     /// Inline *Typed* struct
@@ -166,7 +97,8 @@ pub enum Parameter {
     /// A reference to entity or value
     RValue(RValue),
 
-    /// The special token dollar sign (`$`) is used to represent an object whose value is not provided in the exchange structure.
+    /// The special token dollar sign (`$`) is used to represent
+    /// an object whose value is not provided in the exchange structure.
     NotProvided,
     /// Omitted parameter denoted by `*`
     Omitted,

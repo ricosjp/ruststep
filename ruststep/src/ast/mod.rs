@@ -1,4 +1,92 @@
 //! Data structures in STEP file
+//!
+//! serde data model
+//! ----------------
+//! | Parameter   | serde data model |
+//! |:------------|:-----------------|
+//! | Integer     | i64              |
+//! | Real        | f64              |
+//! | String      | string           |
+//! | Enumeration | unit_variant     |
+//! | List        | seq              |
+//! | NotProvided | unit             |
+//! | Omitted     | unit             |
+//! | Typed       | map              |
+//! | RValue      | map              |
+//!
+//! See [the official document of serde data model](https://serde.rs/data-model.html) for detail.
+//!
+//! - `Parameter::Typed` is mapped to "map"
+//!   e.g. `A((1.0, 2.0))` will be deserialized into `{ "A": [1.0, 2.0] }`.
+//! - `Parameter::RValue` is mapped to "map"
+//!   e.g. an entity reference `#12` will be deserialized into `{ "Entity": 12 }`.
+//!
+//! Examples
+//! ---------
+//! - For untyped parameters, e.g. real number, can be deserialized into any types
+//!   as far as compatible in terms of the serde data model.
+//!
+//! ```
+//! use serde::Deserialize;
+//! use ruststep::ast::Parameter;
+//!
+//! #[derive(Debug, Deserialize)]
+//! struct A {
+//!     x: f64,
+//!     y: f64,
+//! }
+//!
+//! // Create a list as `Parameter::List`
+//! let p: Parameter = [Parameter::real(1.0), Parameter::real(2.0)]
+//!     .iter()
+//!     .collect();
+//!
+//! // Deserialize the `Parameter` sequence into `A` because serde allows upcasting seq to struct
+//! let a: A = Deserialize::deserialize(&p).unwrap();
+//! println!("{:?}", a);
+//!
+//! // Input types will be checked at runtime:
+//! let p: Parameter = [Parameter::string("a"), Parameter::integer(2)]
+//!     .iter()
+//!     .collect();
+//! let result: Result<A, _> = Deserialize::deserialize(&p);
+//! assert!(result.is_err());
+//! ```
+//!
+//! - Typed parameter, e.g. `A(1)`
+//!   - FIXME: Type name check is not implemented yet.
+//!
+//! ```
+//! use serde::Deserialize;
+//! use ruststep::parser::exchange;
+//! use nom::Finish;
+//!
+//! #[derive(Debug, Deserialize)]
+//! struct A {
+//!     x: f64,
+//!     y: f64,
+//! }
+//!
+//! let (res, p) = exchange::parameter("A((1.0, 2.0))").finish().unwrap();
+//! assert_eq!(res, "");
+//! let a: A = Deserialize::deserialize(&p).unwrap();
+//! dbg!(a);
+//! ```
+//!
+//! - For [RValue]
+//!
+//! ```
+//! use serde::Deserialize;
+//! use ruststep::{parser::exchange, ast::RValue};
+//! use nom::Finish;
+//!
+//! let (res, p) = exchange::parameter("#11").finish().unwrap();
+//! let a: RValue = Deserialize::deserialize(&p).unwrap();
+//! assert_eq!(a, RValue::Entity(11))
+//! ```
+//!
+//! [serde::Deserializer]: https://docs.serde.rs/serde/trait.Deserializer.html
+//!
 
 mod parameter;
 mod record;
