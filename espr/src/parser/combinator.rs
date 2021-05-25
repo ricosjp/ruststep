@@ -66,6 +66,11 @@ impl<'a, Output, T> EsprParser<'a, Output> for T where
 {
 }
 
+pub fn eof(input: & str) -> ParseResult<()> {
+    let (input, _) = nom::combinator::eof(input)?;
+    Ok((input, ((), Vec::new())))
+}
+
 /// Lift up nom parser into [EsprParser] by adding empty remark.
 ///
 /// Be sure that `Vec::new` does not allocates memory until any member will be pushed.
