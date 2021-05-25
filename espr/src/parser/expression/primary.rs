@@ -19,8 +19,8 @@ pub fn primary(input: &str) -> ParseResult<Expression> {
 pub fn qualifiable_factor(input: &str) -> ParseResult<QualifiableFactor> {
     alt((
         function_call,
-        alt((attribute_ref, general_ref, population)).map(QualifiableFactor::Reference),
         constant_factor,
+        alt((attribute_ref, general_ref, population)).map(QualifiableFactor::Reference),
     ))
     .parse(input)
 }
