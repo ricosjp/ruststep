@@ -92,6 +92,10 @@ pub fn is_reserved(input: &str) -> ParseResult<()> {
     }
 }
 
+pub fn many_till_reserved<'a, O>(f: impl EsprParser<'a, O>) -> impl EsprParser<'a, Vec<O>> {
+    many_till(f, alt((is_reserved, eof)))
+}
+
 #[cfg(test)]
 mod tests {
     #[test]
