@@ -6,7 +6,7 @@ use crate::{
 
 /// 333 unique_clause = UNIQUE [unique_rule] `;` { [unique_rule] `;` } .
 pub fn unique_clause(input: &str) -> ParseResult<UniqueClause> {
-    tuple((tag("UNIQUE"), many_till(tuple((unique_rule, char(';'))), is_reserved)))
+    tuple((tag("UNIQUE"), many_till_reserved(tuple((unique_rule, char(';'))))))
         .map(|(_unique, seq)| UniqueClause {
             rules: seq.into_iter().map(|(rule, _semicolon)| rule).collect(),
         })
@@ -36,7 +36,6 @@ mod tests {
             r#"
             UNIQUE
               ur1 : revision_identifier, drawing_identifier;
-            END_ENTITY;
             "#
             .trim(),
         )
@@ -59,7 +58,7 @@ mod tests {
         )
         .finish()
         .unwrap();
-        assert_eq!(residual, "");
+        assert_eq!(residual, "END_ENTITY;");
         assert_eq!(c.rules.len(), 2);
     }
 }
