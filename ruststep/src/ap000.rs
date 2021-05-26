@@ -103,6 +103,7 @@ use crate::{
     ast::{DataSection, EntityInstance},
     custom_any,
     error::*,
+    place_holder::*,
     tables::*,
 };
 use serde::{Deserialize, Serialize};
