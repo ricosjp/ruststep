@@ -2,10 +2,12 @@
 
 mod parameter;
 mod record;
+mod ser;
 mod value;
 
 pub use parameter::*;
 pub use record::*;
+pub use ser::*;
 pub use value::*;
 
 /// Entire exchange structure
