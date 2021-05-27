@@ -92,9 +92,9 @@ pub fn supertype_term(input: &str) -> ParseResult<SuperTypeExpression> {
     let expr =
         tuple((char('('), supertype_expression, char(')'))).map(|(_open, expr, _close)| expr);
     alt((
+        entity_ref.map(|e| SuperTypeExpression::Reference(e)),
         one_of,
         expr,
-        entity_ref.map(|e| SuperTypeExpression::Reference(e)),
     ))
     .parse(input)
 }
