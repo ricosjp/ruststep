@@ -16,6 +16,7 @@ impl<T> SingleMapDeserializer<T> {
     }
 }
 
+// Entry point of `visit_map`
 impl<'de, T> de::MapAccess<'de> for SingleMapDeserializer<T>
 where
     T: IntoDeserializer<'de, crate::error::Error>,
@@ -45,6 +46,25 @@ where
             Ok(value)
         } else {
             unreachable!("next_value_seed before next_key_seed is incorrect.")
+        }
+    }
+}
+
+// Entry point of `visit_enum`
+impl<'de, T> de::EnumAccess<'de> for SingleMapDeserializer<T>
+where
+    T: IntoDeserializer<'de, crate::error::Error>,
+{
+    type Error = crate::error::Error;
+    type Variant = Self; // this requires `VariantAccess` (see below impl)
+
+    fn variant_seed<V>(mut self, seed: V) -> Result<(V::Value, Self::Variant), Self::Error>
+    where
+        V: de::DeserializeSeed<'de>,
+    {
+        match de::MapAccess::next_key_seed(&mut self, seed)? {
+            Some(key) => Ok((key, self)),
+            None => Err(de::Error::invalid_type(de::Unexpected::Map, &"enum")),
         }
     }
 }
@@ -102,23 +122,5 @@ where
     {
         let unexp = de::Unexpected::Map;
         Err(de::Error::invalid_type(unexp, &"struct variant"))
-    }
-}
-
-impl<'de, T> de::EnumAccess<'de> for SingleMapDeserializer<T>
-where
-    T: IntoDeserializer<'de, crate::error::Error>,
-{
-    type Error = crate::error::Error;
-    type Variant = Self;
-
-    fn variant_seed<V>(mut self, seed: V) -> Result<(V::Value, Self::Variant), Self::Error>
-    where
-        V: de::DeserializeSeed<'de>,
-    {
-        match de::MapAccess::next_key_seed(&mut self, seed)? {
-            Some(key) => Ok((key, self)),
-            None => Err(de::Error::invalid_type(de::Unexpected::Map, &"enum")),
-        }
     }
 }
