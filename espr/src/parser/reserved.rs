@@ -1,5 +1,3 @@
-use super::{combinator::*};
-
 pub const KEYWORDS: &'static [&'static str] = &[
     "abstract",
     "aggregate",
@@ -80,28 +78,19 @@ pub const KEYWORDS: &'static [&'static str] = &[
     "while",
     "with",];
 
-pub fn is_reserved(input: &str) -> ParseResult<()> {
-    let contains_keyword = !KEYWORDS.iter().fold(false, |acc, &keyword| {
-        let result = nom::combinator::peek(tag(keyword))(input);
-        acc || !result.is_err()
-    });
-    if !contains_keyword {
-        Ok((input, ((), Vec::new())))
-    } else {
-        Err(nom::Err::Error(nom::error::VerboseError { errors: Vec::new()}))
-    }
-}
-
-pub fn many_till_reserved<'a, O>(f: impl EsprParser<'a, O>) -> impl EsprParser<'a, Vec<O>> {
-    many_till(f, alt((is_reserved, eof)))
+pub fn is_reserved(input: &str) -> bool {
+    KEYWORDS.iter().any(|&keyword| keyword == input.to_lowercase())
 }
 
 #[cfg(test)]
 mod tests {
+
     #[test]
     fn is_reserved() {
-        assert_eq!(super::is_reserved("END_ENTITY"), Ok(("END_ENTITY", ((), Vec::new()))));
-        assert_eq!(super::is_reserved("AbsTraCt"), Ok(("AbsTraCt", ((), Vec::new()))));
-        assert_eq!(super::is_reserved("HomHom"), Err(nom::Err::Error(nom::error::VerboseError { errors: Vec::new()})))
+        assert!(super::is_reserved("end"));
+        assert!(!super::is_reserved(""));
+        assert!(super::is_reserved("end_entity"));
+        assert!(super::is_reserved("END_ENTITY"));
+        assert!(!super::is_reserved("end_homhom"));
     }
 }
