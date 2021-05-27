@@ -1,4 +1,4 @@
-use super::combinator::RawParseResult;
+use super::{combinator::RawParseResult, reserved::is_reserved, };
 use nom::{branch::*, character::complete::*, multi::*, sequence::*, Parser};
 
 /// 128 letter = `a` | `b` | `c` | `d` | `e` | `f` | `g` | `h` | `i` | `j` | `k` | `l` |`m` | `n` | `o` | `p` | `q` | `r` | `s` | `t` | `u` | `v` | `w` | `x` |`y` | `z` .
@@ -55,10 +55,22 @@ pub fn simple_string_literal(input: &str) -> RawParseResult<String> {
 }
 
 /// 143 simple_id = [letter] { [letter] | [digit] | `_` } .
+/// According to the standard, identifiers cannot be reserved keywords.
 pub fn simple_id(input: &str) -> RawParseResult<String> {
-    tuple((letter, many0(alt((letter, digit, char('_'))))))
-        .map(|(head, tail)| format!("{}{}", head, tail.into_iter().collect::<String>()))
+    if let Ok((input, id)) = tuple((letter, many0(alt((letter, digit, char('_'))))))
+        .map(|(head, tail)| {
+            format!("{}{}", head, tail.into_iter().collect::<String>())
+        })
         .parse(input)
+    {
+        if is_reserved(id.as_str()) {
+            Err(nom::Err::Error(nom::error::VerboseError { errors: Vec::new()}))
+        } else {
+            Ok((input, id))
+        }
+    } else {
+        Err(nom::Err::Error(nom::error::VerboseError { errors: Vec::new()}))
+    }
 }
 
 #[cfg(test)]
@@ -149,7 +161,10 @@ mod tests {
         assert!(super::simple_id("_homhom").finish().is_err());
         // digit cannot use as first
         assert!(super::simple_id("1homhom").finish().is_err());
-        // Empty is invlaid
+        // Empty is invalid
         assert!(super::simple_id("").finish().is_err());
+        // IDs cannot consist of reserved keywords
+        assert!(super::simple_id("end").finish().is_err());
+        assert!(super::simple_id("end_entity").finish().is_err());
     }
 }
