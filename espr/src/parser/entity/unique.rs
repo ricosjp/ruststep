@@ -1,12 +1,12 @@
 use super::attribute::*;
 use crate::{
     ast::entity::*,
-    parser::{combinator::*, identifier::*, reserved::*},
+    parser::{combinator::*, identifier::*},
 };
 
 /// 333 unique_clause = UNIQUE [unique_rule] `;` { [unique_rule] `;` } .
 pub fn unique_clause(input: &str) -> ParseResult<UniqueClause> {
-    tuple((tag("UNIQUE"), many_till_reserved(tuple((unique_rule, char(';'))))))
+    tuple((tag("UNIQUE"), many0(tuple((unique_rule, char(';'))))))
         .map(|(_unique, seq)| UniqueClause {
             rules: seq.into_iter().map(|(rule, _semicolon)| rule).collect(),
         })
