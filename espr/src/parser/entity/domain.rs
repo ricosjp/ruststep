@@ -1,9 +1,9 @@
-use super::super::{combinator::*, expression::*, identifier::*, reserved::*};
+use super::super::{combinator::*, expression::*, identifier::*,};
 use crate::ast::algorithm::*;
 
 /// 338 where_clause = WHERE [domain_rule] `;` { [domain_rule] `;` } .
 pub fn where_clause(input: &str) -> ParseResult<WhereClause> {
-    tuple((tag("WHERE"), many_till_reserved(tuple((domain_rule, char(';'))))))
+    tuple((tag("WHERE"), many0(tuple((domain_rule, char(';'))))))
         .map(|(_where, rules)| {
             let rules = rules.into_iter().map(|(rule, _semicolon)| rule).collect();
             WhereClause { rules }
