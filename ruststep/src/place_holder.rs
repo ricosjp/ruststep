@@ -47,7 +47,7 @@ impl<'de, T: Deserialize<'de>> Deserialize<'de> for PlaceHolder<T> {
         // > RValue::deserialize_struct(PlaceHolderVisitor)
         // > (forward_to_deserialize_any)
         // > RValue::deserialize_any(PlaceHolderVisitor)
-        // > PlaceHolderVisitor::visit_enum(MapAccessDeserializer)
+        // > PlaceHolderVisitor::visit_enum(SingleMapDeserializer)
         //
         // For Owned(T)
         // -------------
