@@ -66,9 +66,9 @@ impl<'a, Output, T> EsprParser<'a, Output> for T where
 {
 }
 
-pub fn eof(input: & str) -> ParseResult<()> {
+pub fn eof(input: & str) -> ParseResult<&str> {
     let (input, _) = nom::combinator::eof(input)?;
-    Ok((input, ((), Vec::new())))
+    Ok((input, ("", Vec::new())))
 }
 
 /// Lift up nom parser into [EsprParser] by adding empty remark.
@@ -119,6 +119,13 @@ pub fn is_not<'a>(pattern: &'static str) -> impl EsprParser<'a, &'a str> {
     move |input: &'a str| {
         let (input, tag) = nom::bytes::complete::is_not(pattern)(input)?;
         Ok((input, (tag, Vec::new())))
+    }
+}
+
+pub fn not<'a>(f: impl EsprParser<'a, &'a str>) -> impl EsprParser<'a, &'a str> {
+    move |input: &'a str| {
+        let (input, _) = nom::combinator::not(f.clone())(input)?;
+        Ok((input, ("", Vec::new())))
     }
 }
 
