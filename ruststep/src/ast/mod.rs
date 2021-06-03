@@ -1,13 +1,18 @@
-//! Data structures in STEP file
+//! AST (abstract syntax tree) for [exchange structure (ISO-10303-21)][ISO-10303-21]
 //!
-//! serde data model
-//! ----------------
+//! [ISO-10303-21]: https://www.iso.org/standard/63141.html
+//!
+//! Deserialize `Parameter` into Rust struct
+//! ----------------------------------------
+//!
+//! [Parameter] and [Record] can be deserialize through serde data model.
+//!
 //! | Parameter   | serde data model |
 //! |:------------|:-----------------|
 //! | Integer     | i64              |
 //! | Real        | f64              |
 //! | String      | string           |
-//! | Enumeration | unit_variant     |
+//! | Enumeration | -                |
 //! | List        | seq              |
 //! | NotProvided | unit             |
 //! | Omitted     | unit             |
@@ -20,11 +25,11 @@
 //!   e.g. `A((1.0, 2.0))` will be deserialized into `{ "A": [1.0, 2.0] }`.
 //! - `Parameter::RValue` is mapped to "map"
 //!   e.g. an entity reference `#12` will be deserialized into `{ "Entity": 12 }`.
+//! - FIXME: Enumeration is not supported yet.
 //!
 //! Examples
 //! ---------
-//! - For untyped parameters, e.g. real number, can be deserialized into any types
-//!   as far as compatible in terms of the serde data model.
+//! - Untyped parameters, e.g. real number
 //!
 //! ```
 //! use serde::Deserialize;
@@ -37,18 +42,14 @@
 //! }
 //!
 //! // Create a list as `Parameter::List`
-//! let p: Parameter = [Parameter::real(1.0), Parameter::real(2.0)]
-//!     .iter()
-//!     .collect();
+//! let p = Parameter::from_iter(&[Parameter::real(1.0), Parameter::real(2.0)]);
 //!
 //! // Deserialize the `Parameter` sequence into `A` because serde allows upcasting seq to struct
 //! let a: A = Deserialize::deserialize(&p).unwrap();
 //! println!("{:?}", a);
 //!
 //! // Input types will be checked at runtime:
-//! let p: Parameter = [Parameter::string("a"), Parameter::integer(2)]
-//!     .iter()
-//!     .collect();
+//! let p = Parameter::from_iter(&[Parameter::string("a"), Parameter::integer(2)]);
 //! let result: Result<A, _> = Deserialize::deserialize(&p);
 //! assert!(result.is_err());
 //! ```
@@ -84,8 +85,6 @@
 //! let a: RValue = Deserialize::deserialize(&p).unwrap();
 //! assert_eq!(a, RValue::Entity(11))
 //! ```
-//!
-//! [serde::Deserializer]: https://docs.serde.rs/serde/trait.Deserializer.html
 //!
 
 mod parameter;

@@ -27,7 +27,7 @@ use std::fmt;
 /// // non-uniform list
 /// let (residual, p) = exchange::parameter("('ruststep', 1.0)").finish().unwrap();
 /// assert_eq!(residual, "");
-/// assert_eq!(p, [Parameter::string("ruststep"), Parameter::real(1.0)].iter().collect());
+/// assert_eq!(p, Parameter::from_iter(&[Parameter::string("ruststep"), Parameter::real(1.0)]));
 ///
 /// // inline typed struct
 /// let (residual, p) = exchange::parameter("FILE_NAME('ruststep')").finish().unwrap();
@@ -49,17 +49,13 @@ use std::fmt;
 /// // A((2.0, 3.0))
 /// let a = Parameter::Typed {
 ///     name: "A".to_string(),
-///     ty: Box::new(
-///         [Parameter::real(2.0), Parameter::real(3.0)]
-///             .iter()
-///             .collect(),
-///     ),
+///     ty: Box::new(Parameter::from_iter(&[Parameter::real(2.0), Parameter::real(3.0)])),
 /// };
 ///
 /// // B((1.0, a))
 /// let b = Parameter::Typed {
 ///     name: "B".to_string(),
-///     ty: Box::new([Parameter::real(1.0), a].iter().collect()),
+///     ty: Box::new(Parameter::from_iter(&[Parameter::real(1.0), a])),
 /// };
 ///
 /// assert_eq!(p, b);
@@ -115,6 +111,10 @@ impl Parameter {
 
     pub fn string(s: &str) -> Self {
         Parameter::String(s.to_string())
+    }
+
+    pub fn from_iter<'a>(iter: impl IntoIterator<Item = &'a Parameter>) -> Self {
+        std::iter::FromIterator::from_iter(iter)
     }
 }
 
@@ -296,9 +296,7 @@ mod tests {
         let q: Parameter = Deserialize::deserialize(&p).unwrap();
         assert_eq!(p, q);
 
-        let p: Parameter = [Parameter::integer(1), Parameter::real(2.0)]
-            .iter()
-            .collect();
+        let p = Parameter::from_iter(&[Parameter::integer(1), Parameter::real(2.0)]);
         let q: Parameter = Deserialize::deserialize(&p).unwrap();
         assert_eq!(p, q);
 
