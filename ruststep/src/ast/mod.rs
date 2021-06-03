@@ -42,18 +42,14 @@
 //! }
 //!
 //! // Create a list as `Parameter::List`
-//! let p: Parameter = [Parameter::real(1.0), Parameter::real(2.0)]
-//!     .iter()
-//!     .collect();
+//! let p = Parameter::from_iter(&[Parameter::real(1.0), Parameter::real(2.0)]);
 //!
 //! // Deserialize the `Parameter` sequence into `A` because serde allows upcasting seq to struct
 //! let a: A = Deserialize::deserialize(&p).unwrap();
 //! println!("{:?}", a);
 //!
 //! // Input types will be checked at runtime:
-//! let p: Parameter = [Parameter::string("a"), Parameter::integer(2)]
-//!     .iter()
-//!     .collect();
+//! let p = Parameter::from_iter(&[Parameter::string("a"), Parameter::integer(2)]);
 //! let result: Result<A, _> = Deserialize::deserialize(&p);
 //! assert!(result.is_err());
 //! ```
