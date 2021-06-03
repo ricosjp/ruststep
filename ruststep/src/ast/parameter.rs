@@ -27,7 +27,7 @@ use std::fmt;
 /// // non-uniform list
 /// let (residual, p) = exchange::parameter("('ruststep', 1.0)").finish().unwrap();
 /// assert_eq!(residual, "");
-/// assert_eq!(p, [Parameter::string("ruststep"), Parameter::real(1.0)].iter().collect());
+/// assert_eq!(p, Parameter::from_iter(&[Parameter::string("ruststep"), Parameter::real(1.0)]));
 ///
 /// // inline typed struct
 /// let (residual, p) = exchange::parameter("FILE_NAME('ruststep')").finish().unwrap();
@@ -49,17 +49,13 @@ use std::fmt;
 /// // A((2.0, 3.0))
 /// let a = Parameter::Typed {
 ///     name: "A".to_string(),
-///     ty: Box::new(
-///         [Parameter::real(2.0), Parameter::real(3.0)]
-///             .iter()
-///             .collect(),
-///     ),
+///     ty: Box::new(Parameter::from_iter(&[Parameter::real(2.0), Parameter::real(3.0)])),
 /// };
 ///
 /// // B((1.0, a))
 /// let b = Parameter::Typed {
 ///     name: "B".to_string(),
-///     ty: Box::new([Parameter::real(1.0), a].iter().collect()),
+///     ty: Box::new(Parameter::from_iter(&[Parameter::real(1.0), a])),
 /// };
 ///
 /// assert_eq!(p, b);
@@ -77,75 +73,6 @@ use std::fmt;
 ///     .collect();
 /// assert!(matches!(p, Parameter::List(_)));
 /// ```
-///
-/// serde::Deserializer
-/// -------------------
-///
-/// This implements a [serde::Deserializer], i.e. a **data format**.
-///
-/// - For untyped parameters, e.g. real number, can be deserialized into any types
-///   as far as compatible in terms of the serde data model.
-///
-/// ```
-/// use serde::Deserialize;
-/// use ruststep::ast::Parameter;
-///
-/// #[derive(Debug, Deserialize)]
-/// struct A {
-///     x: f64,
-///     y: f64,
-/// }
-///
-/// // Create a list as `Parameter::List`
-/// let p: Parameter = [Parameter::real(1.0), Parameter::real(2.0)]
-///     .iter()
-///     .collect();
-///
-/// // Deserialize the `Parameter` sequence into `A`
-/// let a: A = Deserialize::deserialize(&p).unwrap();
-/// println!("{:?}", a);
-///
-/// // Input types will be checked at runtime:
-/// let p: Parameter = [Parameter::string("a"), Parameter::integer(2)]
-///     .iter()
-///     .collect();
-/// let result: Result<A, _> = Deserialize::deserialize(&p);
-/// assert!(result.is_err());
-/// ```
-///
-/// - Typed parameter, e.g. `A(1)`
-///   - FIXME: Type name check is not implemented yet.
-///
-/// ```
-/// use serde::Deserialize;
-/// use ruststep::parser::exchange;
-/// use nom::Finish;
-///
-/// #[derive(Debug, Deserialize)]
-/// struct A {
-///     x: f64,
-///     y: f64,
-/// }
-///
-/// let (res, p) = exchange::parameter("A((1.0, 2.0))").finish().unwrap();
-/// assert_eq!(res, "");
-/// let a: A = Deserialize::deserialize(&p).unwrap();
-/// dbg!(a);
-/// ```
-///
-/// - For [RValue]
-///
-/// ```
-/// use serde::Deserialize;
-/// use ruststep::{parser::exchange, ast::RValue};
-/// use nom::Finish;
-///
-/// let (res, p) = exchange::parameter("#11").finish().unwrap();
-/// let a: RValue = Deserialize::deserialize(&p).unwrap();
-/// assert_eq!(a, RValue::Entity(11))
-/// ```
-///
-/// [serde::Deserializer]: https://docs.serde.rs/serde/trait.Deserializer.html
 ///
 #[derive(Debug, Clone, PartialEq)]
 pub enum Parameter {
@@ -166,7 +93,8 @@ pub enum Parameter {
     /// A reference to entity or value
     RValue(RValue),
 
-    /// The special token dollar sign (`$`) is used to represent an object whose value is not provided in the exchange structure.
+    /// The special token dollar sign (`$`) is used to represent
+    /// an object whose value is not provided in the exchange structure.
     NotProvided,
     /// Omitted parameter denoted by `*`
     Omitted,
@@ -183,6 +111,10 @@ impl Parameter {
 
     pub fn string(s: &str) -> Self {
         Parameter::String(s.to_string())
+    }
+
+    pub fn from_iter<'a>(iter: impl IntoIterator<Item = &'a Parameter>) -> Self {
+        std::iter::FromIterator::from_iter(iter)
     }
 }
 
@@ -380,9 +312,7 @@ mod tests {
         let q: Parameter = Deserialize::deserialize(&p).unwrap();
         assert_eq!(p, q);
 
-        let p: Parameter = [Parameter::integer(1), Parameter::real(2.0)]
-            .iter()
-            .collect();
+        let p = Parameter::from_iter(&[Parameter::integer(1), Parameter::real(2.0)]);
         let q: Parameter = Deserialize::deserialize(&p).unwrap();
         assert_eq!(p, q);
 
