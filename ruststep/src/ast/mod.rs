@@ -12,12 +12,12 @@
 //! | Integer     | i64              |
 //! | Real        | f64              |
 //! | String      | string           |
-//! | Enumeration | unit_variant     |
+//! | Enumeration | -                |
 //! | List        | seq              |
 //! | NotProvided | unit             |
 //! | Omitted     | unit             |
 //! | Typed       | map              |
-//! | RValue      | map              |
+//! | RValue      | enum             |
 //!
 //! See [the official document of serde data model](https://serde.rs/data-model.html) for detail.
 //!
@@ -25,6 +25,7 @@
 //!   e.g. `A((1.0, 2.0))` will be deserialized into `{ "A": [1.0, 2.0] }`.
 //! - `Parameter::RValue` is mapped to "map"
 //!   e.g. an entity reference `#12` will be deserialized into `{ "Entity": 12 }`.
+//! - FIXME: Enumeration is not supported yet.
 //!
 //! Examples
 //! ---------
