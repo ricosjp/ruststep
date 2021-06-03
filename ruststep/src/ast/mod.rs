@@ -1,7 +1,12 @@
-//! Data structures in STEP file
+//! AST (abstract syntax tree) for [exchange structure (ISO-10303-21)][ISO-10303-21]
 //!
-//! serde data model
-//! ----------------
+//! [ISO-10303-21]: https://www.iso.org/standard/63141.html
+//!
+//! Deserialize `Parameter` into Rust struct
+//! ----------------------------------------
+//!
+//! [Parameter] and [Record] can be deserialize through serde data model.
+//!
 //! | Parameter   | serde data model |
 //! |:------------|:-----------------|
 //! | Integer     | i64              |
@@ -23,8 +28,8 @@
 //!
 //! Examples
 //! ---------
-//! - For untyped parameters, e.g. real number, can be deserialized into any types
-//!   as far as compatible in terms of the serde data model.
+//!
+//! - Untyped parameters, e.g. real number
 //!
 //! ```
 //! use serde::Deserialize;
@@ -84,8 +89,6 @@
 //! let a: RValue = Deserialize::deserialize(&p).unwrap();
 //! assert_eq!(a, RValue::Entity(11))
 //! ```
-//!
-//! [serde::Deserializer]: https://docs.serde.rs/serde/trait.Deserializer.html
 //!
 
 mod parameter;
