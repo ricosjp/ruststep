@@ -129,19 +129,6 @@ impl<'de, T: Deserialize<'de>> de::Visitor<'de> for PlaceHolderVisitor<T> {
             _ => unreachable!("Invalid key while deserializing PlaceHolder"),
         }
     }
-
-    // For Owned(T)
-    fn visit_seq<A>(self, mut seq: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::SeqAccess<'de>,
-    {
-        let mut components: Vec<Parameter> = Vec::new();
-        while let Some(component) = seq.next_element()? {
-            components.push(component);
-        }
-        let seq = de::value::SeqDeserializer::new(components.iter());
-        Ok(PlaceHolder::Owned(T::deserialize(seq).unwrap()))
-    }
 }
 
 #[cfg(test)]

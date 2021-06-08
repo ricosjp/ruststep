@@ -44,16 +44,7 @@ pub enum LValue {
 /// assert_eq!(a, value);
 /// ```
 ///
-/// Enum representation
-/// --------------------
-///
-/// [Deserialize] is derived without `#[serde(...)]` attribute,
-/// which means it is "externally tagged" as described in [enum representations].
-/// For example, `RValue::Entity(11)` will be deserialized from `{ "Entity": 11 }`.
-///
-/// [enum representations]: https://serde.rs/enum-representations.html
-///
-#[derive(Debug, Clone, PartialEq, Deserialize)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum RValue {
     /// Like `#11`
     Entity(u64),
