@@ -174,7 +174,6 @@ impl<'de, 'param> de::Deserializer<'de> for &'param Parameter {
     }
 }
 
-// To support SeqDeserializer
 impl<'de, 'param> de::IntoDeserializer<'de, crate::error::Error> for &'param Parameter {
     type Deserializer = Self;
     fn into_deserializer(self) -> Self::Deserializer {

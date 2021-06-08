@@ -34,8 +34,10 @@ impl<'de, 'record> de::Deserializer<'de> for &'record Record {
     where
         V: de::Visitor<'de>,
     {
-        let seq = de::value::SeqDeserializer::new(self.parameters.iter());
-        visitor.visit_seq(seq)
+        visitor.visit_map(SingleMapDeserializer::new(
+            &self.name,
+            self.parameters.iter().collect::<Vec<&Parameter>>(),
+        ))
     }
 
     forward_to_deserialize_any! {
