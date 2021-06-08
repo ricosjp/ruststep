@@ -278,7 +278,6 @@ impl<'de> de::Visitor<'de> for ParameterVisitor {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use nom::Finish;
     use serde::Deserialize;
 
     #[test]
@@ -298,6 +297,8 @@ mod tests {
         assert!(res.is_err());
     }
 
+    // Test `impl Deserialize for Parameter` (i.e. `impl Visitor for ParameterVisitor`)
+    // and `impl Deserializer for &Parameter` are compatible
     #[test]
     fn deserialize_identity() {
         let p = Parameter::integer(2);
@@ -312,14 +313,41 @@ mod tests {
         let q: Parameter = Deserialize::deserialize(&p).unwrap();
         assert_eq!(p, q);
 
+        // Parameter::List
         let p = Parameter::from_iter(&[Parameter::integer(1), Parameter::real(2.0)]);
         let q: Parameter = Deserialize::deserialize(&p).unwrap();
         assert_eq!(p, q);
 
-        let (res, p) = crate::parser::exchange::parameter("B((1.0, A((2.0, 3.0))))")
-            .finish()
-            .unwrap();
-        assert_eq!(res, "");
+        // Parameter::Typed `A((1))`
+        let p = Parameter::Typed {
+            name: "A".to_string(),
+            ty: Box::new(Parameter::integer(1)),
+        };
+        let q: Parameter = Deserialize::deserialize(&p).unwrap();
+        assert_eq!(p, q);
+
+        // Parameter::Typed `A((1.0, 2.0))`
+        let p = Parameter::Typed {
+            name: "A".to_string(),
+            ty: Box::new(Parameter::from_iter(&[
+                Parameter::real(1.0),
+                Parameter::real(2.0),
+            ])),
+        };
+        let q: Parameter = Deserialize::deserialize(&p).unwrap();
+        assert_eq!(p, q);
+
+        // Parameter::Typed `B((1, A((1.0))))`
+        let p = Parameter::Typed {
+            name: "B".to_string(),
+            ty: Box::new(Parameter::from_iter(&[
+                Parameter::integer(1),
+                Parameter::Typed {
+                    name: "A".to_string(),
+                    ty: Box::new(Parameter::real(1.0)),
+                },
+            ])),
+        };
         let q: Parameter = Deserialize::deserialize(&p).unwrap();
         assert_eq!(p, q);
     }
