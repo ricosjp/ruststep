@@ -77,6 +77,9 @@ impl ToTokens for Entity {
         assert_eq!(attr_name.len(), holder_attr_type.len());
         assert_eq!(attr_name.len(), holder_attr_expr.len());
 
+        let name_str = self.name.to_uppercase();
+        let attr_len = attr_name.len();
+
         tokens.append_all(quote! {
             #[derive(Debug, Clone, derive_new::new)]
             pub struct #name {
@@ -97,6 +100,12 @@ impl ToTokens for Entity {
                 type Owned = #name;
                 fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
                     todo!()
+                }
+                fn name() -> &'static str {
+                    #name_str
+                }
+                fn attr_len() -> usize {
+                    #attr_len
                 }
             }
         });
