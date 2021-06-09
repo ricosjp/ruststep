@@ -68,6 +68,8 @@ pub trait Holder: Clone + 'static {
     type Owned;
     type Table;
     fn into_owned(self, table: &Self::Table) -> Result<Self::Owned, crate::error::Error>;
+    fn name() -> &'static str;
+    fn attr_len() -> usize;
 }
 
 /// Trait for tables which pulls an entity (`T`) from an entity id (`u64`)
