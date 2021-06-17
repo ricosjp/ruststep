@@ -101,3 +101,47 @@ impl ToTokens for TypeDecl {
         }
     }
 }
+
+impl ToTokens for SimpleType {
+    fn to_tokens(&self, tokens: &mut TokenStream) {
+        use crate::ast::types::SimpleType::*;
+        match self.0 {
+            Number => tokens.append(format_ident!("f64")),
+            Real => tokens.append(format_ident!("f64")),
+            Integer => tokens.append(format_ident!("i64")),
+            Logical => tokens.append_all(quote! { Logical }),
+            Boolen => tokens.append(format_ident!("bool")),
+            String_ { .. } => tokens.append(format_ident!("String")),
+            Binary { .. } => unimplemented!("Binary type is not supported yet"),
+        }
+    }
+}
+
+impl ToTokens for TypeRef {
+    fn to_tokens(&self, tokens: &mut TokenStream) {
+        use TypeRef::*;
+        match self {
+            SimpleType(ty) => ty.to_tokens(tokens),
+            Named { name, .. } => {
+                let name = format_ident!("{}", name.to_pascal_case());
+                tokens.append_all(quote! { #name });
+            }
+            Entity {
+                name,
+                has_supertype_decl,
+                ..
+            } => {
+                if *has_supertype_decl {
+                    let name = format_ident!("{}Any", name.to_pascal_case());
+                    tokens.append_all(quote! { Box<dyn #name> });
+                } else {
+                    let name = format_ident!("{}", name.to_pascal_case());
+                    tokens.append_all(quote! { #name });
+                }
+            }
+            Set { base, .. } | List { base, .. } => {
+                tokens.append_all(quote! { Vec<#base> });
+            }
+        }
+    }
+}
