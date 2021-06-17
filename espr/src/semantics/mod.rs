@@ -15,7 +15,6 @@ pub use type_decl::*;
 pub use type_ref::*;
 
 use crate::ast::SyntaxTree;
-use proc_macro2::TokenStream;
 use quote::*;
 use std::fmt;
 use thiserror::Error;
@@ -70,14 +69,5 @@ impl Legalize for IR {
             .map(|schema| Schema::legalize(ns, scope, schema))
             .collect::<Result<Vec<Schema>, SemanticError>>()?;
         Ok(IR { schemas })
-    }
-}
-
-impl ToTokens for IR {
-    fn to_tokens(&self, tokens: &mut TokenStream) {
-        let schemas = &self.schemas;
-        tokens.append_all(quote! {
-            #(#schemas)*
-        })
     }
 }
