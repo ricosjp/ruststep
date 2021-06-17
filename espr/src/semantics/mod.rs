@@ -15,8 +15,6 @@ pub use type_decl::*;
 pub use type_ref::*;
 
 use crate::ast::SyntaxTree;
-use quote::*;
-use std::fmt;
 use thiserror::Error;
 
 /// Semantic errors
@@ -47,16 +45,6 @@ impl IR {
         let ns = Namespace::new(&st)?;
         let ir = Self::legalize(&ns, &Scope::root(), &st)?;
         Ok(ir)
-    }
-}
-
-impl fmt::Display for IR {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(
-            f,
-            "#![allow(dead_code)]\n{}",
-            self.to_token_stream().to_string()
-        )
     }
 }
 
