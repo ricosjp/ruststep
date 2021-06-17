@@ -1,5 +1,8 @@
 //! Generate Rust code using proc-macro utility crates
 
+mod entity;
+mod schema;
+
 use crate::semantics::*;
 
 use inflector::Inflector;
