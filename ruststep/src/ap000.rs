@@ -208,6 +208,12 @@ impl Holder for AHolder {
         let AHolder { x, y } = self;
         Ok(A { x, y })
     }
+    fn name() -> &'static str {
+        "A"
+    }
+    fn attr_len() -> usize {
+        2
+    }
 }
 
 /// Corresponds to `ENTITY b`
@@ -234,6 +240,12 @@ impl Holder for BHolder {
             a: a.into_owned(tables)?,
         })
     }
+    fn name() -> &'static str {
+        "B"
+    }
+    fn attr_len() -> usize {
+        2
+    }
 }
 
 /// Corresponds to `ENTITY c`
@@ -259,6 +271,12 @@ impl Holder for CHolder {
             p: p.into_owned(tables)?,
             q: q.into_owned(tables)?,
         })
+    }
+    fn name() -> &'static str {
+        "C"
+    }
+    fn attr_len() -> usize {
+        2
     }
 }
 

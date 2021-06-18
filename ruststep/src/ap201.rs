@@ -4558,6 +4558,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "ADDRESS"
+        }
+        fn attr_len() -> usize {
+            12usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct AngularDimension {
@@ -4572,6 +4578,12 @@ pub mod explicit_draughting {
         type Owned = AngularDimension;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "ANGULAR_DIMENSION"
+        }
+        fn attr_len() -> usize {
+            1usize
         }
     }
     impl AnnotationOccurrenceAny for AnnotationCurveOccurrence {}
@@ -4588,6 +4600,12 @@ pub mod explicit_draughting {
         type Owned = AnnotationCurveOccurrence;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "ANNOTATION_CURVE_OCCURRENCE"
+        }
+        fn attr_len() -> usize {
+            1usize
         }
     }
     impl GeometricRepresentationItemAny for AnnotationFillArea {}
@@ -4607,6 +4625,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "ANNOTATION_FILL_AREA"
+        }
+        fn attr_len() -> usize {
+            2usize
+        }
     }
     impl AnnotationOccurrenceAny for AnnotationFillAreaOccurrence {}
     #[derive(Debug, Clone, derive_new :: new)]
@@ -4625,6 +4649,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "ANNOTATION_FILL_AREA_OCCURRENCE"
+        }
+        fn attr_len() -> usize {
+            2usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct AnnotationOccurrence {
@@ -4639,6 +4669,12 @@ pub mod explicit_draughting {
         type Owned = AnnotationOccurrence;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "ANNOTATION_OCCURRENCE"
+        }
+        fn attr_len() -> usize {
+            1usize
         }
     }
     pub trait AnnotationOccurrenceAny:
@@ -4661,6 +4697,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "ANNOTATION_SUBFIGURE_OCCURRENCE"
+        }
+        fn attr_len() -> usize {
+            1usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct AnnotationSymbol {
@@ -4675,6 +4717,12 @@ pub mod explicit_draughting {
         type Owned = AnnotationSymbol;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "ANNOTATION_SYMBOL"
+        }
+        fn attr_len() -> usize {
+            1usize
         }
     }
     impl AnnotationOccurrenceAny for AnnotationSymbolOccurrence {}
@@ -4692,6 +4740,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "ANNOTATION_SYMBOL_OCCURRENCE"
+        }
+        fn attr_len() -> usize {
+            1usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct AnnotationText {
@@ -4706,6 +4760,12 @@ pub mod explicit_draughting {
         type Owned = AnnotationText;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "ANNOTATION_TEXT"
+        }
+        fn attr_len() -> usize {
+            1usize
         }
     }
     impl AnnotationOccurrenceAny for AnnotationTextOccurrence {}
@@ -4723,6 +4783,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "ANNOTATION_TEXT_OCCURRENCE"
+        }
+        fn attr_len() -> usize {
+            1usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct ApplicationContext {
@@ -4737,6 +4803,12 @@ pub mod explicit_draughting {
         type Owned = ApplicationContext;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "APPLICATION_CONTEXT"
+        }
+        fn attr_len() -> usize {
+            1usize
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -4754,6 +4826,12 @@ pub mod explicit_draughting {
         type Owned = ApplicationContextElement;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "APPLICATION_CONTEXT_ELEMENT"
+        }
+        fn attr_len() -> usize {
+            2usize
         }
     }
     pub trait ApplicationContextElementAny:
@@ -4782,6 +4860,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "APPLICATION_PROTOCOL_DEFINITION"
+        }
+        fn attr_len() -> usize {
+            4usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct Approval {
@@ -4799,6 +4883,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "APPROVAL"
+        }
+        fn attr_len() -> usize {
+            2usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct ApprovalAssignment {
@@ -4813,6 +4903,12 @@ pub mod explicit_draughting {
         type Owned = ApprovalAssignment;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "APPROVAL_ASSIGNMENT"
+        }
+        fn attr_len() -> usize {
+            1usize
         }
     }
     pub trait ApprovalAssignmentAny:
@@ -4837,6 +4933,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "APPROVAL_DATE_TIME"
+        }
+        fn attr_len() -> usize {
+            2usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct ApprovalPersonOrganization {
@@ -4856,6 +4958,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "APPROVAL_PERSON_ORGANIZATION"
+        }
+        fn attr_len() -> usize {
+            3usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct ApprovalRole {
@@ -4871,6 +4979,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "APPROVAL_ROLE"
+        }
+        fn attr_len() -> usize {
+            1usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct ApprovalStatus {
@@ -4885,6 +4999,12 @@ pub mod explicit_draughting {
         type Owned = ApprovalStatus;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "APPROVAL_STATUS"
+        }
+        fn attr_len() -> usize {
+            1usize
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -4903,6 +5023,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "AREA_IN_SET"
+        }
+        fn attr_len() -> usize {
+            2usize
+        }
     }
     impl PlacementAny for Axis2Placement2D {}
     #[derive(Debug, Clone, derive_new :: new)]
@@ -4920,6 +5046,12 @@ pub mod explicit_draughting {
         type Owned = Axis2Placement2D;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "AXIS2_PLACEMENT_2D"
+        }
+        fn attr_len() -> usize {
+            2usize
         }
     }
     impl BoundedCurveAny for BSplineCurve {}
@@ -4947,6 +5079,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "B_SPLINE_CURVE"
+        }
+        fn attr_len() -> usize {
+            6usize
+        }
     }
     pub trait BSplineCurveAny: ::std::any::Any + ::std::fmt::Debug + dyn_clone::DynClone {}
     dyn_clone::clone_trait_object!(BSplineCurveAny);
@@ -4972,6 +5110,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "B_SPLINE_CURVE_WITH_KNOTS"
+        }
+        fn attr_len() -> usize {
+            4usize
+        }
     }
     impl BSplineCurveAny for BezierCurve {}
     #[derive(Debug, Clone, derive_new :: new)]
@@ -4988,6 +5132,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "BEZIER_CURVE"
+        }
+        fn attr_len() -> usize {
+            1usize
+        }
     }
     impl CurveAny for BoundedCurve {}
     #[derive(Debug, Clone, derive_new :: new)]
@@ -5003,6 +5153,12 @@ pub mod explicit_draughting {
         type Owned = BoundedCurve;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "BOUNDED_CURVE"
+        }
+        fn attr_len() -> usize {
+            1usize
         }
     }
     pub trait BoundedCurveAny: ::std::any::Any + ::std::fmt::Debug + dyn_clone::DynClone {}
@@ -5027,6 +5183,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "CALENDAR_DATE"
+        }
+        fn attr_len() -> usize {
+            3usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct CameraImage {
@@ -5041,6 +5203,12 @@ pub mod explicit_draughting {
         type Owned = CameraImage;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "CAMERA_IMAGE"
+        }
+        fn attr_len() -> usize {
+            1usize
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -5057,6 +5225,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "CAMERA_IMAGE_2D_WITH_SCALE"
+        }
+        fn attr_len() -> usize {
+            1usize
+        }
     }
     impl GeometricRepresentationItemAny for CameraModel {}
     #[derive(Debug, Clone, derive_new :: new)]
@@ -5072,6 +5246,12 @@ pub mod explicit_draughting {
         type Owned = CameraModel;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "CAMERA_MODEL"
+        }
+        fn attr_len() -> usize {
+            1usize
         }
     }
     pub trait CameraModelAny: ::std::any::Any + ::std::fmt::Debug + dyn_clone::DynClone {}
@@ -5096,6 +5276,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "CAMERA_MODEL_D2"
+        }
+        fn attr_len() -> usize {
+            3usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct CameraUsage {
@@ -5110,6 +5296,12 @@ pub mod explicit_draughting {
         type Owned = CameraUsage;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "CAMERA_USAGE"
+        }
+        fn attr_len() -> usize {
+            1usize
         }
     }
     impl PointAny for CartesianPoint {}
@@ -5129,6 +5321,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "CARTESIAN_POINT"
+        }
+        fn attr_len() -> usize {
+            2usize
+        }
     }
     impl ConicAny for Circle {}
     #[derive(Debug, Clone, derive_new :: new)]
@@ -5147,6 +5345,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "CIRCLE"
+        }
+        fn attr_len() -> usize {
+            2usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct Colour {}
@@ -5157,6 +5361,12 @@ pub mod explicit_draughting {
         type Owned = Colour;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "COLOUR"
+        }
+        fn attr_len() -> usize {
+            0usize
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -5179,6 +5389,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "COLOUR_RGB"
+        }
+        fn attr_len() -> usize {
+            4usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct ColourSpecification {
@@ -5195,6 +5411,12 @@ pub mod explicit_draughting {
         type Owned = ColourSpecification;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "COLOUR_SPECIFICATION"
+        }
+        fn attr_len() -> usize {
+            2usize
         }
     }
     impl BoundedCurveAny for CompositeCurve {}
@@ -5216,6 +5438,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "COMPOSITE_CURVE"
+        }
+        fn attr_len() -> usize {
+            3usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct CompositeCurveSegment {
@@ -5235,6 +5463,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "COMPOSITE_CURVE_SEGMENT"
+        }
+        fn attr_len() -> usize {
+            3usize
+        }
     }
     impl GeometricRepresentationItemAny for CompositeText {}
     #[derive(Debug, Clone, derive_new :: new)]
@@ -5253,6 +5487,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "COMPOSITE_TEXT"
+        }
+        fn attr_len() -> usize {
+            2usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct CompositeTextWithAssociatedCurves {
@@ -5269,6 +5509,12 @@ pub mod explicit_draughting {
         type Owned = CompositeTextWithAssociatedCurves;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "COMPOSITE_TEXT_WITH_ASSOCIATED_CURVES"
+        }
+        fn attr_len() -> usize {
+            2usize
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -5287,6 +5533,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "COMPOSITE_TEXT_WITH_BLANKING_BOX"
+        }
+        fn attr_len() -> usize {
+            2usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct CompositeTextWithExtent {
@@ -5303,6 +5555,12 @@ pub mod explicit_draughting {
         type Owned = CompositeTextWithExtent;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "COMPOSITE_TEXT_WITH_EXTENT"
+        }
+        fn attr_len() -> usize {
+            2usize
         }
     }
     impl CurveAny for Conic {}
@@ -5321,6 +5579,12 @@ pub mod explicit_draughting {
         type Owned = Conic;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "CONIC"
+        }
+        fn attr_len() -> usize {
+            2usize
         }
     }
     pub trait ConicAny: ::std::any::Any + ::std::fmt::Debug + dyn_clone::DynClone {}
@@ -5342,6 +5606,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "CONTEXT_DEPENDENT_INVISIBILITY"
+        }
+        fn attr_len() -> usize {
+            2usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct Contract {
@@ -5361,6 +5631,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "CONTRACT"
+        }
+        fn attr_len() -> usize {
+            3usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct ContractAssignment {
@@ -5375,6 +5651,12 @@ pub mod explicit_draughting {
         type Owned = ContractAssignment;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "CONTRACT_ASSIGNMENT"
+        }
+        fn attr_len() -> usize {
+            1usize
         }
     }
     pub trait ContractAssignmentAny:
@@ -5397,6 +5679,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "CONTRACT_TYPE"
+        }
+        fn attr_len() -> usize {
+            1usize
+        }
     }
     impl NamedUnitAny for ConversionBasedUnit {}
     #[derive(Debug, Clone, derive_new :: new)]
@@ -5417,6 +5705,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "CONVERSION_BASED_UNIT"
+        }
+        fn attr_len() -> usize {
+            3usize
+        }
     }
     impl GeometricRepresentationItemAny for Curve {}
     #[derive(Debug, Clone, derive_new :: new)]
@@ -5432,6 +5726,12 @@ pub mod explicit_draughting {
         type Owned = Curve;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "CURVE"
+        }
+        fn attr_len() -> usize {
+            1usize
         }
     }
     pub trait CurveAny: ::std::any::Any + ::std::fmt::Debug + dyn_clone::DynClone {}
@@ -5450,6 +5750,12 @@ pub mod explicit_draughting {
         type Owned = CurveDimension;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "CURVE_DIMENSION"
+        }
+        fn attr_len() -> usize {
+            1usize
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -5472,6 +5778,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "CURVE_STYLE"
+        }
+        fn attr_len() -> usize {
+            4usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct CurveStyleFont {
@@ -5488,6 +5800,12 @@ pub mod explicit_draughting {
         type Owned = CurveStyleFont;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "CURVE_STYLE_FONT"
+        }
+        fn attr_len() -> usize {
+            2usize
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -5506,6 +5824,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "CURVE_STYLE_FONT_PATTERN"
+        }
+        fn attr_len() -> usize {
+            2usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct Date {
@@ -5520,6 +5844,12 @@ pub mod explicit_draughting {
         type Owned = Date;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "DATE"
+        }
+        fn attr_len() -> usize {
+            1usize
         }
     }
     pub trait DateAny: ::std::any::Any + ::std::fmt::Debug + dyn_clone::DynClone {}
@@ -5539,6 +5869,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "DATUM_FEATURE_CALLOUT"
+        }
+        fn attr_len() -> usize {
+            1usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct DatumTargetCallout {
@@ -5553,6 +5889,12 @@ pub mod explicit_draughting {
         type Owned = DatumTargetCallout;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "DATUM_TARGET_CALLOUT"
+        }
+        fn attr_len() -> usize {
+            1usize
         }
     }
     impl GeometricRepresentationItemAny for DefinedSymbol {}
@@ -5574,6 +5916,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "DEFINED_SYMBOL"
+        }
+        fn attr_len() -> usize {
+            3usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct DiameterDimension {
@@ -5588,6 +5936,12 @@ pub mod explicit_draughting {
         type Owned = DiameterDimension;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "DIAMETER_DIMENSION"
+        }
+        fn attr_len() -> usize {
+            1usize
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -5604,6 +5958,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "DIMENSION_CALLOUT_COMPONENT_RELATIONSHIP"
+        }
+        fn attr_len() -> usize {
+            1usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct DimensionCalloutRelationship {
@@ -5618,6 +5978,12 @@ pub mod explicit_draughting {
         type Owned = DimensionCalloutRelationship;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "DIMENSION_CALLOUT_RELATIONSHIP"
+        }
+        fn attr_len() -> usize {
+            1usize
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -5634,6 +6000,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "DIMENSION_CURVE"
+        }
+        fn attr_len() -> usize {
+            1usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct DimensionCurveDirectedCallout {
@@ -5648,6 +6020,12 @@ pub mod explicit_draughting {
         type Owned = DimensionCurveDirectedCallout;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "DIMENSION_CURVE_DIRECTED_CALLOUT"
+        }
+        fn attr_len() -> usize {
+            1usize
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -5666,6 +6044,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "DIMENSION_CURVE_TERMINATOR"
+        }
+        fn attr_len() -> usize {
+            2usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct DimensionPair {
@@ -5680,6 +6064,12 @@ pub mod explicit_draughting {
         type Owned = DimensionPair;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "DIMENSION_PAIR"
+        }
+        fn attr_len() -> usize {
+            1usize
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -5708,6 +6098,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "DIMENSIONAL_EXPONENTS"
+        }
+        fn attr_len() -> usize {
+            7usize
+        }
     }
     impl GeometricRepresentationItemAny for Direction {}
     #[derive(Debug, Clone, derive_new :: new)]
@@ -5725,6 +6121,12 @@ pub mod explicit_draughting {
         type Owned = Direction;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "DIRECTION"
+        }
+        fn attr_len() -> usize {
+            2usize
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -5747,6 +6149,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "DOCUMENT"
+        }
+        fn attr_len() -> usize {
+            4usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct DocumentReference {
@@ -5763,6 +6171,12 @@ pub mod explicit_draughting {
         type Owned = DocumentReference;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "DOCUMENT_REFERENCE"
+        }
+        fn attr_len() -> usize {
+            2usize
         }
     }
     pub trait DocumentReferenceAny:
@@ -5785,6 +6199,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "DOCUMENT_TYPE"
+        }
+        fn attr_len() -> usize {
+            1usize
+        }
     }
     impl AnnotationOccurrenceAny for DraughtingAnnotationOccurrence {}
     #[derive(Debug, Clone, derive_new :: new)]
@@ -5800,6 +6220,12 @@ pub mod explicit_draughting {
         type Owned = DraughtingAnnotationOccurrence;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "DRAUGHTING_ANNOTATION_OCCURRENCE"
+        }
+        fn attr_len() -> usize {
+            1usize
         }
     }
     impl ApprovalAssignmentAny for DraughtingApprovalAssignment {}
@@ -5819,6 +6245,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "DRAUGHTING_APPROVAL_ASSIGNMENT"
+        }
+        fn attr_len() -> usize {
+            2usize
+        }
     }
     impl GeometricRepresentationItemAny for DraughtingCallout {}
     #[derive(Debug, Clone, derive_new :: new)]
@@ -5836,6 +6268,12 @@ pub mod explicit_draughting {
         type Owned = DraughtingCallout;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "DRAUGHTING_CALLOUT"
+        }
+        fn attr_len() -> usize {
+            2usize
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -5858,6 +6296,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "DRAUGHTING_CALLOUT_RELATIONSHIP"
+        }
+        fn attr_len() -> usize {
+            4usize
+        }
     }
     impl ContractAssignmentAny for DraughtingContractAssignment {}
     #[derive(Debug, Clone, derive_new :: new)]
@@ -5876,6 +6320,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "DRAUGHTING_CONTRACT_ASSIGNMENT"
+        }
+        fn attr_len() -> usize {
+            2usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct DraughtingDrawingRevision {
@@ -5891,6 +6341,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "DRAUGHTING_DRAWING_REVISION"
+        }
+        fn attr_len() -> usize {
+            1usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct DraughtingElements {
@@ -5905,6 +6361,12 @@ pub mod explicit_draughting {
         type Owned = DraughtingElements;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "DRAUGHTING_ELEMENTS"
+        }
+        fn attr_len() -> usize {
+            1usize
         }
     }
     impl GroupAssignmentAny for DraughtingGroupAssignment {}
@@ -5924,6 +6386,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "DRAUGHTING_GROUP_ASSIGNMENT"
+        }
+        fn attr_len() -> usize {
+            2usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct DraughtingModel {
@@ -5938,6 +6406,12 @@ pub mod explicit_draughting {
         type Owned = DraughtingModel;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "DRAUGHTING_MODEL"
+        }
+        fn attr_len() -> usize {
+            1usize
         }
     }
     impl OrganizationAssignmentAny for DraughtingOrganizationAssignment {}
@@ -5956,6 +6430,12 @@ pub mod explicit_draughting {
         type Owned = DraughtingOrganizationAssignment;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "DRAUGHTING_ORGANIZATION_ASSIGNMENT"
+        }
+        fn attr_len() -> usize {
+            2usize
         }
     }
     impl PersonAndOrganizationAssignmentAny for DraughtingPersonAndOrganizationAssignment {}
@@ -5976,6 +6456,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "DRAUGHTING_PERSON_AND_ORGANIZATION_ASSIGNMENT"
+        }
+        fn attr_len() -> usize {
+            2usize
+        }
     }
     impl PersonAssignmentAny for DraughtingPersonAssignment {}
     #[derive(Debug, Clone, derive_new :: new)]
@@ -5994,6 +6480,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "DRAUGHTING_PERSON_ASSIGNMENT"
+        }
+        fn attr_len() -> usize {
+            2usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct DraughtingPreDefinedColour {
@@ -6008,6 +6500,12 @@ pub mod explicit_draughting {
         type Owned = DraughtingPreDefinedColour;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "DRAUGHTING_PRE_DEFINED_COLOUR"
+        }
+        fn attr_len() -> usize {
+            1usize
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -6024,6 +6522,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "DRAUGHTING_PRE_DEFINED_CURVE_FONT"
+        }
+        fn attr_len() -> usize {
+            1usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct DraughtingPreDefinedTextFont {
@@ -6038,6 +6542,12 @@ pub mod explicit_draughting {
         type Owned = DraughtingPreDefinedTextFont;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "DRAUGHTING_PRE_DEFINED_TEXT_FONT"
+        }
+        fn attr_len() -> usize {
+            1usize
         }
     }
     impl PresentedItemAny for DraughtingPresentedItem {}
@@ -6056,6 +6566,12 @@ pub mod explicit_draughting {
         type Owned = DraughtingPresentedItem;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "DRAUGHTING_PRESENTED_ITEM"
+        }
+        fn attr_len() -> usize {
+            2usize
         }
     }
     impl SecurityClassificationAssignmentAny for DraughtingSecurityClassificationAssignment {}
@@ -6076,6 +6592,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "DRAUGHTING_SECURITY_CLASSIFICATION_ASSIGNMENT"
+        }
+        fn attr_len() -> usize {
+            2usize
+        }
     }
     impl DocumentReferenceAny for DraughtingSpecificationReference {}
     #[derive(Debug, Clone, derive_new :: new)]
@@ -6094,6 +6616,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "DRAUGHTING_SPECIFICATION_REFERENCE"
+        }
+        fn attr_len() -> usize {
+            2usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct DraughtingSubfigureRepresentation {
@@ -6108,6 +6636,12 @@ pub mod explicit_draughting {
         type Owned = DraughtingSubfigureRepresentation;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "DRAUGHTING_SUBFIGURE_REPRESENTATION"
+        }
+        fn attr_len() -> usize {
+            1usize
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -6124,6 +6658,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "DRAUGHTING_SYMBOL_REPRESENTATION"
+        }
+        fn attr_len() -> usize {
+            1usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct DraughtingTextLiteralWithDelineation {
@@ -6138,6 +6678,12 @@ pub mod explicit_draughting {
         type Owned = DraughtingTextLiteralWithDelineation;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "DRAUGHTING_TEXT_LITERAL_WITH_DELINEATION"
+        }
+        fn attr_len() -> usize {
+            1usize
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -6158,6 +6704,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "DRAUGHTING_TITLE"
+        }
+        fn attr_len() -> usize {
+            3usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct DrawingDefinition {
@@ -6174,6 +6726,12 @@ pub mod explicit_draughting {
         type Owned = DrawingDefinition;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "DRAWING_DEFINITION"
+        }
+        fn attr_len() -> usize {
+            2usize
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -6196,6 +6754,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "DRAWING_REVISION"
+        }
+        fn attr_len() -> usize {
+            4usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct DrawingSheetLayout {
@@ -6210,6 +6774,12 @@ pub mod explicit_draughting {
         type Owned = DrawingSheetLayout;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "DRAWING_SHEET_LAYOUT"
+        }
+        fn attr_len() -> usize {
+            1usize
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -6228,6 +6798,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "DRAWING_SHEET_REVISION"
+        }
+        fn attr_len() -> usize {
+            2usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct DrawingSheetRevisionUsage {
@@ -6244,6 +6820,12 @@ pub mod explicit_draughting {
         type Owned = DrawingSheetRevisionUsage;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "DRAWING_SHEET_REVISION_USAGE"
+        }
+        fn attr_len() -> usize {
+            2usize
         }
     }
     impl ConicAny for Ellipse {}
@@ -6265,6 +6847,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "ELLIPSE"
+        }
+        fn attr_len() -> usize {
+            3usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct ExternalSource {
@@ -6280,6 +6868,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "EXTERNAL_SOURCE"
+        }
+        fn attr_len() -> usize {
+            1usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct ExternallyDefinedCurveFont {
@@ -6294,6 +6888,12 @@ pub mod explicit_draughting {
         type Owned = ExternallyDefinedCurveFont;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "EXTERNALLY_DEFINED_CURVE_FONT"
+        }
+        fn attr_len() -> usize {
+            1usize
         }
     }
     impl GeometricRepresentationItemAny for ExternallyDefinedHatchStyle {}
@@ -6313,6 +6913,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "EXTERNALLY_DEFINED_HATCH_STYLE"
+        }
+        fn attr_len() -> usize {
+            2usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct ExternallyDefinedItem {
@@ -6330,6 +6936,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "EXTERNALLY_DEFINED_ITEM"
+        }
+        fn attr_len() -> usize {
+            2usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct ExternallyDefinedSymbol {
@@ -6345,6 +6957,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "EXTERNALLY_DEFINED_SYMBOL"
+        }
+        fn attr_len() -> usize {
+            1usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct ExternallyDefinedTextFont {
@@ -6359,6 +6977,12 @@ pub mod explicit_draughting {
         type Owned = ExternallyDefinedTextFont;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "EXTERNALLY_DEFINED_TEXT_FONT"
+        }
+        fn attr_len() -> usize {
+            1usize
         }
     }
     impl GeometricRepresentationItemAny for ExternallyDefinedTileStyle {}
@@ -6378,6 +7002,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "EXTERNALLY_DEFINED_TILE_STYLE"
+        }
+        fn attr_len() -> usize {
+            2usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct FillAreaStyle {
@@ -6395,6 +7025,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "FILL_AREA_STYLE"
+        }
+        fn attr_len() -> usize {
+            2usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct FillAreaStyleColour {
@@ -6411,6 +7047,12 @@ pub mod explicit_draughting {
         type Owned = FillAreaStyleColour;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "FILL_AREA_STYLE_COLOUR"
+        }
+        fn attr_len() -> usize {
+            2usize
         }
     }
     impl GeometricRepresentationItemAny for FillAreaStyleHatching {}
@@ -6438,6 +7080,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "FILL_AREA_STYLE_HATCHING"
+        }
+        fn attr_len() -> usize {
+            6usize
+        }
     }
     impl GeometricRepresentationItemAny for FillAreaStyleTileSymbolWithStyle {}
     #[derive(Debug, Clone, derive_new :: new)]
@@ -6455,6 +7103,12 @@ pub mod explicit_draughting {
         type Owned = FillAreaStyleTileSymbolWithStyle;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "FILL_AREA_STYLE_TILE_SYMBOL_WITH_STYLE"
+        }
+        fn attr_len() -> usize {
+            2usize
         }
     }
     impl GeometricRepresentationItemAny for FillAreaStyleTiles {}
@@ -6478,6 +7132,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "FILL_AREA_STYLE_TILES"
+        }
+        fn attr_len() -> usize {
+            4usize
+        }
     }
     impl GeometricSetAny for GeometricCurveSet {}
     #[derive(Debug, Clone, derive_new :: new)]
@@ -6493,6 +7153,12 @@ pub mod explicit_draughting {
         type Owned = GeometricCurveSet;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "GEOMETRIC_CURVE_SET"
+        }
+        fn attr_len() -> usize {
+            1usize
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -6511,6 +7177,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "GEOMETRIC_REPRESENTATION_CONTEXT"
+        }
+        fn attr_len() -> usize {
+            2usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct GeometricRepresentationItem {
@@ -6525,6 +7197,12 @@ pub mod explicit_draughting {
         type Owned = GeometricRepresentationItem;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "GEOMETRIC_REPRESENTATION_ITEM"
+        }
+        fn attr_len() -> usize {
+            1usize
         }
     }
     pub trait GeometricRepresentationItemAny:
@@ -6550,6 +7228,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "GEOMETRIC_SET"
+        }
+        fn attr_len() -> usize {
+            2usize
+        }
     }
     pub trait GeometricSetAny: ::std::any::Any + ::std::fmt::Debug + dyn_clone::DynClone {}
     dyn_clone::clone_trait_object!(GeometricSetAny);
@@ -6568,6 +7252,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "GEOMETRICAL_TOLERANCE_CALLOUT"
+        }
+        fn attr_len() -> usize {
+            1usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct GeometricallyBounded2DWireframeRepresentation {
@@ -6582,6 +7272,12 @@ pub mod explicit_draughting {
         type Owned = GeometricallyBounded2DWireframeRepresentation;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "GEOMETRICALLY_BOUNDED_2D_WIREFRAME_REPRESENTATION"
+        }
+        fn attr_len() -> usize {
+            1usize
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -6600,6 +7296,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "GLOBAL_UNIT_ASSIGNED_CONTEXT"
+        }
+        fn attr_len() -> usize {
+            2usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct Group {
@@ -6617,6 +7319,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "GROUP"
+        }
+        fn attr_len() -> usize {
+            2usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct GroupAssignment {
@@ -6631,6 +7339,12 @@ pub mod explicit_draughting {
         type Owned = GroupAssignment;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "GROUP_ASSIGNMENT"
+        }
+        fn attr_len() -> usize {
+            1usize
         }
     }
     pub trait GroupAssignmentAny:
@@ -6659,6 +7373,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "GROUP_RELATIONSHIP"
+        }
+        fn attr_len() -> usize {
+            4usize
+        }
     }
     impl ConicAny for Hyperbola {}
     #[derive(Debug, Clone, derive_new :: new)]
@@ -6679,6 +7399,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "HYPERBOLA"
+        }
+        fn attr_len() -> usize {
+            3usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct Invisibility {
@@ -6693,6 +7419,12 @@ pub mod explicit_draughting {
         type Owned = Invisibility;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "INVISIBILITY"
+        }
+        fn attr_len() -> usize {
+            1usize
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -6709,6 +7441,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "LEADER_CURVE"
+        }
+        fn attr_len() -> usize {
+            1usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct LeaderDirectedCallout {
@@ -6723,6 +7461,12 @@ pub mod explicit_draughting {
         type Owned = LeaderDirectedCallout;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "LEADER_DIRECTED_CALLOUT"
+        }
+        fn attr_len() -> usize {
+            1usize
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -6739,6 +7483,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "LEADER_DIRECTED_DIMENSION"
+        }
+        fn attr_len() -> usize {
+            1usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct LeaderTerminator {
@@ -6753,6 +7503,12 @@ pub mod explicit_draughting {
         type Owned = LeaderTerminator;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "LEADER_TERMINATOR"
+        }
+        fn attr_len() -> usize {
+            1usize
         }
     }
     impl MeasureWithUnitAny for LengthMeasureWithUnit {}
@@ -6770,6 +7526,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "LENGTH_MEASURE_WITH_UNIT"
+        }
+        fn attr_len() -> usize {
+            1usize
+        }
     }
     impl NamedUnitAny for LengthUnit {}
     #[derive(Debug, Clone, derive_new :: new)]
@@ -6785,6 +7547,12 @@ pub mod explicit_draughting {
         type Owned = LengthUnit;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "LENGTH_UNIT"
+        }
+        fn attr_len() -> usize {
+            1usize
         }
     }
     impl CurveAny for Line {}
@@ -6806,6 +7574,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "LINE"
+        }
+        fn attr_len() -> usize {
+            3usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct LinearDimension {
@@ -6820,6 +7594,12 @@ pub mod explicit_draughting {
         type Owned = LinearDimension;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "LINEAR_DIMENSION"
+        }
+        fn attr_len() -> usize {
+            1usize
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -6840,6 +7620,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "MAPPED_ITEM"
+        }
+        fn attr_len() -> usize {
+            3usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct MeasureWithUnit {
@@ -6856,6 +7642,12 @@ pub mod explicit_draughting {
         type Owned = MeasureWithUnit;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "MEASURE_WITH_UNIT"
+        }
+        fn attr_len() -> usize {
+            2usize
         }
     }
     pub trait MeasureWithUnitAny:
@@ -6877,6 +7669,12 @@ pub mod explicit_draughting {
         type Owned = NamedUnit;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "NAMED_UNIT"
+        }
+        fn attr_len() -> usize {
+            1usize
         }
     }
     pub trait NamedUnitAny: ::std::any::Any + ::std::fmt::Debug + dyn_clone::DynClone {}
@@ -6903,6 +7701,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "OFFSET_CURVE_2D"
+        }
+        fn attr_len() -> usize {
+            4usize
+        }
     }
     impl GeometricRepresentationItemAny for OneDirectionRepeatFactor {}
     #[derive(Debug, Clone, derive_new :: new)]
@@ -6921,6 +7725,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "ONE_DIRECTION_REPEAT_FACTOR"
+        }
+        fn attr_len() -> usize {
+            2usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct OrdinateDimension {
@@ -6935,6 +7745,12 @@ pub mod explicit_draughting {
         type Owned = OrdinateDimension;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "ORDINATE_DIMENSION"
+        }
+        fn attr_len() -> usize {
+            1usize
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -6955,6 +7771,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "ORGANIZATION"
+        }
+        fn attr_len() -> usize {
+            3usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct OrganizationAssignment {
@@ -6971,6 +7793,12 @@ pub mod explicit_draughting {
         type Owned = OrganizationAssignment;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "ORGANIZATION_ASSIGNMENT"
+        }
+        fn attr_len() -> usize {
+            2usize
         }
     }
     pub trait OrganizationAssignmentAny:
@@ -6993,6 +7821,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "ORGANIZATION_ROLE"
+        }
+        fn attr_len() -> usize {
+            1usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct OrganizationalAddress {
@@ -7012,6 +7846,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "ORGANIZATIONAL_ADDRESS"
+        }
+        fn attr_len() -> usize {
+            3usize
+        }
     }
     impl ConicAny for Parabola {}
     #[derive(Debug, Clone, derive_new :: new)]
@@ -7029,6 +7869,12 @@ pub mod explicit_draughting {
         type Owned = Parabola;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "PARABOLA"
+        }
+        fn attr_len() -> usize {
+            2usize
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -7055,6 +7901,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "PERSON"
+        }
+        fn attr_len() -> usize {
+            6usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct PersonAndOrganization {
@@ -7072,6 +7924,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "PERSON_AND_ORGANIZATION"
+        }
+        fn attr_len() -> usize {
+            2usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct PersonAndOrganizationAssignment {
@@ -7088,6 +7946,12 @@ pub mod explicit_draughting {
         type Owned = PersonAndOrganizationAssignment;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "PERSON_AND_ORGANIZATION_ASSIGNMENT"
+        }
+        fn attr_len() -> usize {
+            2usize
         }
     }
     pub trait PersonAndOrganizationAssignmentAny:
@@ -7110,6 +7974,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "PERSON_AND_ORGANIZATION_ROLE"
+        }
+        fn attr_len() -> usize {
+            1usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct PersonAssignment {
@@ -7126,6 +7996,12 @@ pub mod explicit_draughting {
         type Owned = PersonAssignment;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "PERSON_ASSIGNMENT"
+        }
+        fn attr_len() -> usize {
+            2usize
         }
     }
     pub trait PersonAssignmentAny:
@@ -7148,6 +8024,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "PERSON_ROLE"
+        }
+        fn attr_len() -> usize {
+            1usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct PersonalAddress {
@@ -7167,6 +8049,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "PERSONAL_ADDRESS"
+        }
+        fn attr_len() -> usize {
+            3usize
+        }
     }
     impl GeometricRepresentationItemAny for Placement {}
     #[derive(Debug, Clone, derive_new :: new)]
@@ -7184,6 +8072,12 @@ pub mod explicit_draughting {
         type Owned = Placement;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "PLACEMENT"
+        }
+        fn attr_len() -> usize {
+            2usize
         }
     }
     pub trait PlacementAny: ::std::any::Any + ::std::fmt::Debug + dyn_clone::DynClone {}
@@ -7205,6 +8099,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "PLANAR_BOX"
+        }
+        fn attr_len() -> usize {
+            2usize
+        }
     }
     impl GeometricRepresentationItemAny for PlanarExtent {}
     #[derive(Debug, Clone, derive_new :: new)]
@@ -7225,6 +8125,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "PLANAR_EXTENT"
+        }
+        fn attr_len() -> usize {
+            3usize
+        }
     }
     impl MeasureWithUnitAny for PlaneAngleMeasureWithUnit {}
     #[derive(Debug, Clone, derive_new :: new)]
@@ -7240,6 +8146,12 @@ pub mod explicit_draughting {
         type Owned = PlaneAngleMeasureWithUnit;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "PLANE_ANGLE_MEASURE_WITH_UNIT"
+        }
+        fn attr_len() -> usize {
+            1usize
         }
     }
     impl NamedUnitAny for PlaneAngleUnit {}
@@ -7257,6 +8169,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "PLANE_ANGLE_UNIT"
+        }
+        fn attr_len() -> usize {
+            1usize
+        }
     }
     impl GeometricRepresentationItemAny for Point {}
     #[derive(Debug, Clone, derive_new :: new)]
@@ -7272,6 +8190,12 @@ pub mod explicit_draughting {
         type Owned = Point;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "POINT"
+        }
+        fn attr_len() -> usize {
+            1usize
         }
     }
     pub trait PointAny: ::std::any::Any + ::std::fmt::Debug + dyn_clone::DynClone {}
@@ -7296,6 +8220,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "POINT_ON_CURVE"
+        }
+        fn attr_len() -> usize {
+            3usize
+        }
     }
     impl BoundedCurveAny for Polyline {}
     #[derive(Debug, Clone, derive_new :: new)]
@@ -7314,6 +8244,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "POLYLINE"
+        }
+        fn attr_len() -> usize {
+            2usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct PreDefinedColour {
@@ -7331,6 +8267,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "PRE_DEFINED_COLOUR"
+        }
+        fn attr_len() -> usize {
+            2usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct PreDefinedCurveFont {
@@ -7345,6 +8287,12 @@ pub mod explicit_draughting {
         type Owned = PreDefinedCurveFont;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "PRE_DEFINED_CURVE_FONT"
+        }
+        fn attr_len() -> usize {
+            1usize
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -7361,6 +8309,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "PRE_DEFINED_DIMENSION_SYMBOL"
+        }
+        fn attr_len() -> usize {
+            1usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct PreDefinedGeometricalToleranceSymbol {
@@ -7375,6 +8329,12 @@ pub mod explicit_draughting {
         type Owned = PreDefinedGeometricalToleranceSymbol;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "PRE_DEFINED_GEOMETRICAL_TOLERANCE_SYMBOL"
+        }
+        fn attr_len() -> usize {
+            1usize
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -7391,6 +8351,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "PRE_DEFINED_ITEM"
+        }
+        fn attr_len() -> usize {
+            1usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct PreDefinedPointMarkerSymbol {
@@ -7405,6 +8371,12 @@ pub mod explicit_draughting {
         type Owned = PreDefinedPointMarkerSymbol;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "PRE_DEFINED_POINT_MARKER_SYMBOL"
+        }
+        fn attr_len() -> usize {
+            1usize
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -7421,6 +8393,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "PRE_DEFINED_SYMBOL"
+        }
+        fn attr_len() -> usize {
+            1usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct PreDefinedTerminatorSymbol {
@@ -7435,6 +8413,12 @@ pub mod explicit_draughting {
         type Owned = PreDefinedTerminatorSymbol;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "PRE_DEFINED_TERMINATOR_SYMBOL"
+        }
+        fn attr_len() -> usize {
+            1usize
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -7451,6 +8435,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "PRE_DEFINED_TEXT_FONT"
+        }
+        fn attr_len() -> usize {
+            1usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct PresentationArea {
@@ -7465,6 +8455,12 @@ pub mod explicit_draughting {
         type Owned = PresentationArea;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "PRESENTATION_AREA"
+        }
+        fn attr_len() -> usize {
+            1usize
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -7485,6 +8481,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "PRESENTATION_LAYER_ASSIGNMENT"
+        }
+        fn attr_len() -> usize {
+            3usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct PresentationLayerUsage {
@@ -7502,6 +8504,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "PRESENTATION_LAYER_USAGE"
+        }
+        fn attr_len() -> usize {
+            2usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct PresentationRepresentation {
@@ -7517,6 +8525,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "PRESENTATION_REPRESENTATION"
+        }
+        fn attr_len() -> usize {
+            1usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct PresentationSet {}
@@ -7527,6 +8541,12 @@ pub mod explicit_draughting {
         type Owned = PresentationSet;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "PRESENTATION_SET"
+        }
+        fn attr_len() -> usize {
+            0usize
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -7545,6 +8565,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "PRESENTATION_SIZE"
+        }
+        fn attr_len() -> usize {
+            2usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct PresentationStyleAssignment {
@@ -7559,6 +8585,12 @@ pub mod explicit_draughting {
         type Owned = PresentationStyleAssignment;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "PRESENTATION_STYLE_ASSIGNMENT"
+        }
+        fn attr_len() -> usize {
+            1usize
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -7577,6 +8609,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "PRESENTATION_STYLE_BY_CONTEXT"
+        }
+        fn attr_len() -> usize {
+            2usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct PresentationView {
@@ -7592,6 +8630,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "PRESENTATION_VIEW"
+        }
+        fn attr_len() -> usize {
+            1usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct PresentedItem {}
@@ -7602,6 +8646,12 @@ pub mod explicit_draughting {
         type Owned = PresentedItem;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "PRESENTED_ITEM"
+        }
+        fn attr_len() -> usize {
+            0usize
         }
     }
     pub trait PresentedItemAny: ::std::any::Any + ::std::fmt::Debug + dyn_clone::DynClone {}
@@ -7622,6 +8672,12 @@ pub mod explicit_draughting {
         type Owned = PresentedItemRepresentation;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "PRESENTED_ITEM_REPRESENTATION"
+        }
+        fn attr_len() -> usize {
+            2usize
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -7644,6 +8700,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "PRODUCT"
+        }
+        fn attr_len() -> usize {
+            4usize
+        }
     }
     impl ApplicationContextElementAny for ProductContext {}
     #[derive(Debug, Clone, derive_new :: new)]
@@ -7661,6 +8723,12 @@ pub mod explicit_draughting {
         type Owned = ProductContext;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "PRODUCT_CONTEXT"
+        }
+        fn attr_len() -> usize {
+            2usize
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -7683,6 +8751,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "PRODUCT_DEFINITION"
+        }
+        fn attr_len() -> usize {
+            4usize
+        }
     }
     impl ApplicationContextElementAny for ProductDefinitionContext {}
     #[derive(Debug, Clone, derive_new :: new)]
@@ -7700,6 +8774,12 @@ pub mod explicit_draughting {
         type Owned = ProductDefinitionContext;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "PRODUCT_DEFINITION_CONTEXT"
+        }
+        fn attr_len() -> usize {
+            2usize
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -7720,6 +8800,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "PRODUCT_DEFINITION_FORMATION"
+        }
+        fn attr_len() -> usize {
+            3usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct ProductDefinitionShape {
@@ -7734,6 +8820,12 @@ pub mod explicit_draughting {
         type Owned = ProductDefinitionShape;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "PRODUCT_DEFINITION_SHAPE"
+        }
+        fn attr_len() -> usize {
+            1usize
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -7750,6 +8842,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "PROJECTION_CURVE"
+        }
+        fn attr_len() -> usize {
+            1usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct ProjectionDirectedCallout {
@@ -7764,6 +8862,12 @@ pub mod explicit_draughting {
         type Owned = ProjectionDirectedCallout;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "PROJECTION_DIRECTED_CALLOUT"
+        }
+        fn attr_len() -> usize {
+            1usize
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -7784,6 +8888,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "PROPERTY_DEFINITION"
+        }
+        fn attr_len() -> usize {
+            3usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct PropertyDefinitionRepresentation {
@@ -7801,6 +8911,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "PROPERTY_DEFINITION_REPRESENTATION"
+        }
+        fn attr_len() -> usize {
+            2usize
+        }
     }
     impl BSplineCurveAny for QuasiUniformCurve {}
     #[derive(Debug, Clone, derive_new :: new)]
@@ -7817,6 +8933,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "QUASI_UNIFORM_CURVE"
+        }
+        fn attr_len() -> usize {
+            1usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct RadiusDimension {
@@ -7831,6 +8953,12 @@ pub mod explicit_draughting {
         type Owned = RadiusDimension;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "RADIUS_DIMENSION"
+        }
+        fn attr_len() -> usize {
+            1usize
         }
     }
     impl BSplineCurveAny for RationalBSplineCurve {}
@@ -7849,6 +8977,12 @@ pub mod explicit_draughting {
         type Owned = RationalBSplineCurve;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "RATIONAL_B_SPLINE_CURVE"
+        }
+        fn attr_len() -> usize {
+            2usize
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -7869,6 +9003,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "REPRESENTATION"
+        }
+        fn attr_len() -> usize {
+            3usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct RepresentationContext {
@@ -7886,6 +9026,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "REPRESENTATION_CONTEXT"
+        }
+        fn attr_len() -> usize {
+            2usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct RepresentationItem {
@@ -7900,6 +9046,12 @@ pub mod explicit_draughting {
         type Owned = RepresentationItem;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "REPRESENTATION_ITEM"
+        }
+        fn attr_len() -> usize {
+            1usize
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -7917,6 +9069,12 @@ pub mod explicit_draughting {
         type Owned = RepresentationMap;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "REPRESENTATION_MAP"
+        }
+        fn attr_len() -> usize {
+            2usize
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -7937,6 +9095,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "SECURITY_CLASSIFICATION"
+        }
+        fn attr_len() -> usize {
+            3usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct SecurityClassificationAssignment {
@@ -7951,6 +9115,12 @@ pub mod explicit_draughting {
         type Owned = SecurityClassificationAssignment;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "SECURITY_CLASSIFICATION_ASSIGNMENT"
+        }
+        fn attr_len() -> usize {
+            1usize
         }
     }
     pub trait SecurityClassificationAssignmentAny:
@@ -7973,6 +9143,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "SECURITY_CLASSIFICATION_LEVEL"
+        }
+        fn attr_len() -> usize {
+            1usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct ShapeDefinitionRepresentation {
@@ -7988,6 +9164,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "SHAPE_DEFINITION_REPRESENTATION"
+        }
+        fn attr_len() -> usize {
+            1usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct ShapeRepresentation {
@@ -8002,6 +9184,12 @@ pub mod explicit_draughting {
         type Owned = ShapeRepresentation;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "SHAPE_REPRESENTATION"
+        }
+        fn attr_len() -> usize {
+            1usize
         }
     }
     impl NamedUnitAny for SiUnit {}
@@ -8023,6 +9211,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "SI_UNIT"
+        }
+        fn attr_len() -> usize {
+            3usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct StructuredDimensionCallout {
@@ -8037,6 +9231,12 @@ pub mod explicit_draughting {
         type Owned = StructuredDimensionCallout;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "STRUCTURED_DIMENSION_CALLOUT"
+        }
+        fn attr_len() -> usize {
+            1usize
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -8057,6 +9257,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "STYLED_ITEM"
+        }
+        fn attr_len() -> usize {
+            3usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct SymbolColour {
@@ -8071,6 +9277,12 @@ pub mod explicit_draughting {
         type Owned = SymbolColour;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "SYMBOL_COLOUR"
+        }
+        fn attr_len() -> usize {
+            1usize
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -8087,6 +9299,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "SYMBOL_REPRESENTATION"
+        }
+        fn attr_len() -> usize {
+            1usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct SymbolRepresentationMap {
@@ -8101,6 +9319,12 @@ pub mod explicit_draughting {
         type Owned = SymbolRepresentationMap;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "SYMBOL_REPRESENTATION_MAP"
+        }
+        fn attr_len() -> usize {
+            1usize
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -8118,6 +9342,12 @@ pub mod explicit_draughting {
         type Owned = SymbolStyle;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "SYMBOL_STYLE"
+        }
+        fn attr_len() -> usize {
+            2usize
         }
     }
     impl GeometricRepresentationItemAny for SymbolTarget {}
@@ -8141,6 +9371,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "SYMBOL_TARGET"
+        }
+        fn attr_len() -> usize {
+            4usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct TerminatorSymbol {
@@ -8157,6 +9393,12 @@ pub mod explicit_draughting {
         type Owned = TerminatorSymbol;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "TERMINATOR_SYMBOL"
+        }
+        fn attr_len() -> usize {
+            2usize
         }
     }
     impl GeometricRepresentationItemAny for TextLiteral {}
@@ -8184,6 +9426,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "TEXT_LITERAL"
+        }
+        fn attr_len() -> usize {
+            6usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct TextLiteralWithAssociatedCurves {
@@ -8200,6 +9448,12 @@ pub mod explicit_draughting {
         type Owned = TextLiteralWithAssociatedCurves;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "TEXT_LITERAL_WITH_ASSOCIATED_CURVES"
+        }
+        fn attr_len() -> usize {
+            2usize
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -8218,6 +9472,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "TEXT_LITERAL_WITH_BLANKING_BOX"
+        }
+        fn attr_len() -> usize {
+            2usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct TextLiteralWithDelineation {
@@ -8234,6 +9494,12 @@ pub mod explicit_draughting {
         type Owned = TextLiteralWithDelineation;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "TEXT_LITERAL_WITH_DELINEATION"
+        }
+        fn attr_len() -> usize {
+            2usize
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -8252,6 +9518,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "TEXT_LITERAL_WITH_EXTENT"
+        }
+        fn attr_len() -> usize {
+            2usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct TextStyle {
@@ -8269,6 +9541,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "TEXT_STYLE"
+        }
+        fn attr_len() -> usize {
+            2usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct TextStyleForDefinedFont {
@@ -8283,6 +9561,12 @@ pub mod explicit_draughting {
         type Owned = TextStyleForDefinedFont;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "TEXT_STYLE_FOR_DEFINED_FONT"
+        }
+        fn attr_len() -> usize {
+            1usize
         }
     }
     #[derive(Debug, Clone, derive_new :: new)]
@@ -8301,6 +9585,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "TEXT_STYLE_WITH_BOX_CHARACTERISTICS"
+        }
+        fn attr_len() -> usize {
+            2usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct TextStyleWithMirror {
@@ -8317,6 +9607,12 @@ pub mod explicit_draughting {
         type Owned = TextStyleWithMirror;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "TEXT_STYLE_WITH_MIRROR"
+        }
+        fn attr_len() -> usize {
+            2usize
         }
     }
     impl BoundedCurveAny for TrimmedCurve {}
@@ -8344,6 +9640,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "TRIMMED_CURVE"
+        }
+        fn attr_len() -> usize {
+            6usize
+        }
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct TwoDirectionRepeatFactor {
@@ -8361,6 +9663,12 @@ pub mod explicit_draughting {
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
         }
+        fn name() -> &'static str {
+            "TWO_DIRECTION_REPEAT_FACTOR"
+        }
+        fn attr_len() -> usize {
+            2usize
+        }
     }
     impl BSplineCurveAny for UniformCurve {}
     #[derive(Debug, Clone, derive_new :: new)]
@@ -8376,6 +9684,12 @@ pub mod explicit_draughting {
         type Owned = UniformCurve;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "UNIFORM_CURVE"
+        }
+        fn attr_len() -> usize {
+            1usize
         }
     }
     impl GeometricRepresentationItemAny for Vector {}
@@ -8396,6 +9710,12 @@ pub mod explicit_draughting {
         type Owned = Vector;
         fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
             todo!()
+        }
+        fn name() -> &'static str {
+            "VECTOR"
+        }
+        fn attr_len() -> usize {
+            3usize
         }
     }
 }
