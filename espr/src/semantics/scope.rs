@@ -24,7 +24,7 @@ pub enum ScopeType {
 /// Scope is partially ordered in terms of the sub-scope relation:
 ///
 /// ```
-/// # use espr::semantics::scope::*;
+/// # use espr::semantics::*;
 /// let root = Scope::root();
 /// let schema = root.pushed(ScopeType::Schema, "schema");
 /// assert!(root > schema); // schema scope is sub-scope of root scope
@@ -33,7 +33,7 @@ pub enum ScopeType {
 /// Be sure that this is not total order:
 ///
 /// ```
-/// # use espr::semantics::scope::*;
+/// # use espr::semantics::*;
 /// let root = Scope::root();
 /// let schema1 = root.pushed(ScopeType::Schema, "schema1");
 /// let schema2 = root.pushed(ScopeType::Schema, "schema2");

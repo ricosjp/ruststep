@@ -7,5 +7,6 @@
 #![deny(broken_intra_doc_links)]
 
 pub mod ast;
+pub mod codegen;
 pub mod parser;
 pub mod semantics;

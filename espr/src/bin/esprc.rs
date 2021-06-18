@@ -1,6 +1,7 @@
 //! Executable for espr EXPRESS language compiler
 
 use espr::{ast::SyntaxTree, semantics::IR};
+use quote::ToTokens;
 use std::{fs, path::*};
 use structopt::StructOpt;
 
@@ -39,5 +40,5 @@ fn main() {
     }
 
     let ir = IR::from_syntax_tree(&st).expect("Failed in semantic analysis phase");
-    println!("{}", ir);
+    println!("#![allow(dead_code)]\n{}", ir.to_token_stream().to_string());
 }

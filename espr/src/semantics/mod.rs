@@ -1,21 +1,20 @@
 //! Legalize [SyntaxTree] into [IR]
 
-pub mod entity;
-pub mod namespace;
-pub mod schema;
-pub mod scope;
-pub mod type_decl;
-pub mod type_ref;
+mod entity;
+mod namespace;
+mod schema;
+mod scope;
+mod type_decl;
+mod type_ref;
 
-use namespace::Namespace;
-use schema::Schema;
-use scope::Scope;
-use type_ref::*;
+pub use entity::*;
+pub use namespace::*;
+pub use schema::*;
+pub use scope::*;
+pub use type_decl::*;
+pub use type_ref::*;
 
 use crate::ast::SyntaxTree;
-use proc_macro2::TokenStream;
-use quote::*;
-use std::fmt;
 use thiserror::Error;
 
 /// Semantic errors
@@ -49,16 +48,6 @@ impl IR {
     }
 }
 
-impl fmt::Display for IR {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(
-            f,
-            "#![allow(dead_code)]\n{}",
-            self.to_token_stream().to_string()
-        )
-    }
-}
-
 impl Legalize for IR {
     type Input = SyntaxTree;
     fn legalize(ns: &Namespace, scope: &Scope, syn: &SyntaxTree) -> Result<Self, SemanticError> {
@@ -68,14 +57,5 @@ impl Legalize for IR {
             .map(|schema| Schema::legalize(ns, scope, schema))
             .collect::<Result<Vec<Schema>, SemanticError>>()?;
         Ok(IR { schemas })
-    }
-}
-
-impl ToTokens for IR {
-    fn to_tokens(&self, tokens: &mut TokenStream) {
-        let schemas = &self.schemas;
-        tokens.append_all(quote! {
-            #(#schemas)*
-        })
     }
 }
