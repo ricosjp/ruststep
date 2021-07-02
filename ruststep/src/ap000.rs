@@ -204,7 +204,7 @@ pub struct AHolder {
     y: f64,
 }
 
-struct AHolderVisitor;
+pub struct AHolderVisitor;
 
 impl<'de> de::Visitor<'de> for AHolderVisitor {
     type Value = AHolder;
@@ -254,6 +254,7 @@ impl<'de> de::Deserialize<'de> for AHolder {
 impl Holder for AHolder {
     type Table = Ap000;
     type Owned = A;
+    type Visitor = AHolderVisitor;
     fn into_owned(self, _tables: &Ap000) -> Result<A> {
         let AHolder { x, y } = self;
         Ok(A { x, y })
@@ -263,6 +264,9 @@ impl Holder for AHolder {
     }
     fn attr_len() -> usize {
         2
+    }
+    fn visitor_new() -> Self::Visitor {
+        AHolderVisitor {}
     }
 }
 
@@ -280,18 +284,57 @@ pub struct BHolder {
     a: PlaceHolder<AHolder>,
 }
 
+pub struct BHolderVisitor;
+
+impl<'de> de::Visitor<'de> for BHolderVisitor {
+    type Value = BHolder;
+    fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+        write!(formatter, "BHolder")
+    }
+
+    fn visit_seq<A>(self, mut seq: A) -> ::std::result::Result<Self::Value, A::Error>
+    where
+        A: de::SeqAccess<'de>,
+    {
+        if let Some(size) = seq.size_hint() {
+            if size != BHolder::attr_len() {
+                todo!("Create another error and send it")
+            }
+        }
+        let z = seq.next_element()?.unwrap();
+        let a = seq.next_element()?.unwrap();
+        Ok(BHolder { z, a })
+    }
+
+    // Entry point for Record or Parameter::Typed
+    fn visit_map<A>(self, mut map: A) -> ::std::result::Result<Self::Value, A::Error>
+    where
+        A: de::MapAccess<'de>,
+    {
+        let key: String = map
+            .next_key()?
+            .expect("Empty map cannot be accepted as ruststep Holder"); // this must be a bug, not runtime error
+        if key != BHolder::name() {
+            todo!("Create Error type and send it")
+        }
+        let value = map.next_value()?; // send to Self::visit_seq
+        Ok(value)
+    }
+}
+
 impl<'de> de::Deserialize<'de> for BHolder {
-    fn deserialize<D>(_deserializer: D) -> ::std::result::Result<Self, D::Error>
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
     where
         D: de::Deserializer<'de>,
     {
-        todo!()
+        deserializer.deserialize_tuple_struct(Self::name(), Self::attr_len(), BHolderVisitor {})
     }
 }
 
 impl Holder for BHolder {
     type Table = Ap000;
     type Owned = B;
+    type Visitor = BHolderVisitor;
     fn into_owned(self, tables: &Ap000) -> Result<B> {
         let BHolder { z, a } = self;
         Ok(B {
@@ -304,6 +347,9 @@ impl Holder for BHolder {
     }
     fn attr_len() -> usize {
         2
+    }
+    fn visitor_new() -> Self::Visitor {
+        BHolderVisitor {}
     }
 }
 
@@ -330,9 +376,19 @@ impl<'de> de::Deserialize<'de> for CHolder {
     }
 }
 
+pub struct CHolderVisitor;
+
+impl<'de> de::Visitor<'de> for CHolderVisitor {
+    type Value = CHolder;
+    fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+        write!(formatter, "CHolder")
+    }
+}
+
 impl Holder for CHolder {
     type Table = Ap000;
     type Owned = C;
+    type Visitor = CHolderVisitor;
     fn into_owned(self, tables: &Ap000) -> Result<C> {
         let CHolder { p, q } = self;
         Ok(C {
@@ -345,6 +401,9 @@ impl Holder for CHolder {
     }
     fn attr_len() -> usize {
         2
+    }
+    fn visitor_new() -> Self::Visitor {
+        CHolderVisitor {}
     }
 }
 

@@ -59,7 +59,7 @@ impl<T> Default for PlaceHolderVisitor<T> {
     }
 }
 
-impl<'de, T: Deserialize<'de>> de::Visitor<'de> for PlaceHolderVisitor<T> {
+impl<'de, T: Deserialize<'de> + Holder> de::Visitor<'de> for PlaceHolderVisitor<T> {
     type Value = PlaceHolder<T>;
 
     fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
@@ -87,6 +87,14 @@ impl<'de, T: Deserialize<'de>> de::Visitor<'de> for PlaceHolderVisitor<T> {
         Ok(PlaceHolder::Owned(T::deserialize(v.into_deserializer())?))
     }
 
+    fn visit_seq<A>(self, seq: A) -> ::std::result::Result<Self::Value, A::Error>
+    where
+        A: de::SeqAccess<'de>,
+    {
+        let visitor = T::visitor_new();
+        Ok(PlaceHolder::Owned(visitor.visit_seq(seq)?))
+    }
+
     // For Ref(RValue)
     fn visit_enum<A>(self, data: A) -> Result<Self::Value, A::Error>
     where
@@ -112,5 +120,20 @@ impl<'de, T: Deserialize<'de>> de::Visitor<'de> for PlaceHolderVisitor<T> {
             }
             _ => unreachable!("Invalid key while deserializing PlaceHolder"),
         }
+    }
+
+    // Entry point for Record or Parameter::Typed
+    fn visit_map<A>(self, mut map: A) -> ::std::result::Result<Self::Value, A::Error>
+    where
+        A: de::MapAccess<'de>,
+    {
+        let key: String = map
+            .next_key()?
+            .expect("Empty map cannot be accepted as ruststep Holder"); // this must be a bug, not runtime error
+        if key != T::name() {
+            todo!("Create Error type and send it")
+        }
+        let value = map.next_value()?; // send to Self::visit_seq
+        Ok(value)
     }
 }

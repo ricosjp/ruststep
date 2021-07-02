@@ -49,6 +49,7 @@
 //!     - `a_iter()` as above example
 //!
 
+use serde::de;
 use std::collections::HashMap;
 
 #[cfg(doc)]
@@ -67,9 +68,11 @@ use crate::{ap000, place_holder::*};
 pub trait Holder: Clone + 'static {
     type Owned;
     type Table;
+    type Visitor: for<'de> de::Visitor<'de, Value = Self>;
     fn into_owned(self, table: &Self::Table) -> Result<Self::Owned, crate::error::Error>;
     fn name() -> &'static str;
     fn attr_len() -> usize;
+    fn visitor_new() -> Self::Visitor;
 }
 
 /// Trait for tables which pulls an entity (`T`) from an entity id (`u64`)
