@@ -1,13 +1,22 @@
 use crate::{ast::*, error::Result};
-use serde::Deserialize;
+use serde::{de, Deserialize};
 
-#[derive(Debug, Clone, PartialEq, Deserialize)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct FileDescription {
     description: Vec<String>,
     implementation_level: String,
 }
 
-#[derive(Debug, Clone, PartialEq, Deserialize)]
+impl<'de> de::Deserialize<'de> for FileDescription {
+    fn deserialize<D>(_deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: de::Deserializer<'de>,
+    {
+        todo!()
+    }
+}
+
+#[derive(Debug, Clone, PartialEq)]
 pub struct FileName {
     name: String,
     time_stamp: String,
@@ -18,9 +27,27 @@ pub struct FileName {
     authorization: String,
 }
 
-#[derive(Debug, Clone, PartialEq, Deserialize)]
+impl<'de> de::Deserialize<'de> for FileName {
+    fn deserialize<D>(_deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: de::Deserializer<'de>,
+    {
+        todo!()
+    }
+}
+
+#[derive(Debug, Clone, PartialEq)]
 pub struct FileSchema {
     schema: Vec<String>,
+}
+
+impl<'de> de::Deserialize<'de> for FileSchema {
+    fn deserialize<D>(_deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: de::Deserializer<'de>,
+    {
+        todo!()
+    }
 }
 
 /// STEP-file HEADER section
