@@ -106,7 +106,7 @@ use crate::{
     place_holder::*,
     tables::*,
 };
-use serde::{Deserialize, Serialize};
+use serde::{de, Deserialize, Serialize};
 use std::{collections::HashMap, fmt::Debug};
 
 #[cfg(doc)]
@@ -195,10 +195,19 @@ pub struct A {
 }
 
 /// Holder for [A]
-#[derive(Debug, Clone, PartialEq, Deserialize)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct AHolder {
     x: f64,
     y: f64,
+}
+
+impl<'de> de::Deserialize<'de> for AHolder {
+    fn deserialize<D>(_deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: de::Deserializer<'de>,
+    {
+        todo!()
+    }
 }
 
 impl Holder for AHolder {
@@ -224,10 +233,19 @@ pub struct B {
 }
 
 /// Holder for [B]
-#[derive(Debug, Clone, PartialEq, Deserialize)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct BHolder {
     z: f64,
     a: PlaceHolder<AHolder>,
+}
+
+impl<'de> de::Deserialize<'de> for BHolder {
+    fn deserialize<D>(_deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: de::Deserializer<'de>,
+    {
+        todo!()
+    }
 }
 
 impl Holder for BHolder {
@@ -256,10 +274,19 @@ pub struct C {
 }
 
 /// Holder for [C]
-#[derive(Debug, Clone, PartialEq, Deserialize)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct CHolder {
     p: PlaceHolder<AHolder>,
     q: PlaceHolder<BHolder>,
+}
+
+impl<'de> de::Deserialize<'de> for CHolder {
+    fn deserialize<D>(_deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: de::Deserializer<'de>,
+    {
+        todo!()
+    }
 }
 
 impl Holder for CHolder {
