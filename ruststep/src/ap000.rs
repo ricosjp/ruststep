@@ -247,7 +247,7 @@ impl<'de> de::Deserialize<'de> for AHolder {
     where
         D: de::Deserializer<'de>,
     {
-        deserializer.deserialize_tuple_struct(Self::name(), Self::attr_len(), AHolderVisitor {})
+        deserializer.deserialize_tuple_struct(Self::name(), Self::attr_len(), Self::visitor_new())
     }
 }
 
@@ -327,7 +327,7 @@ impl<'de> de::Deserialize<'de> for BHolder {
     where
         D: de::Deserializer<'de>,
     {
-        deserializer.deserialize_tuple_struct(Self::name(), Self::attr_len(), BHolderVisitor {})
+        deserializer.deserialize_tuple_struct(Self::name(), Self::attr_len(), Self::visitor_new())
     }
 }
 
@@ -368,11 +368,11 @@ pub struct CHolder {
 }
 
 impl<'de> de::Deserialize<'de> for CHolder {
-    fn deserialize<D>(_deserializer: D) -> ::std::result::Result<Self, D::Error>
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
     where
         D: de::Deserializer<'de>,
     {
-        todo!()
+        deserializer.deserialize_tuple_struct(Self::name(), Self::attr_len(), Self::visitor_new())
     }
 }
 
@@ -382,6 +382,35 @@ impl<'de> de::Visitor<'de> for CHolderVisitor {
     type Value = CHolder;
     fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         write!(formatter, "CHolder")
+    }
+
+    fn visit_seq<A>(self, mut seq: A) -> ::std::result::Result<Self::Value, A::Error>
+    where
+        A: de::SeqAccess<'de>,
+    {
+        if let Some(size) = seq.size_hint() {
+            if size != CHolder::attr_len() {
+                todo!("Create another error and send it")
+            }
+        }
+        let p = seq.next_element()?.unwrap();
+        let q = seq.next_element()?.unwrap();
+        Ok(CHolder { p, q })
+    }
+
+    // Entry point for Record or Parameter::Typed
+    fn visit_map<A>(self, mut map: A) -> ::std::result::Result<Self::Value, A::Error>
+    where
+        A: de::MapAccess<'de>,
+    {
+        let key: String = map
+            .next_key()?
+            .expect("Empty map cannot be accepted as ruststep Holder"); // this must be a bug, not runtime error
+        if key != CHolder::name() {
+            todo!("Create Error type and send it")
+        }
+        let value = map.next_value()?; // send to Self::visit_seq
+        Ok(value)
     }
 }
 
