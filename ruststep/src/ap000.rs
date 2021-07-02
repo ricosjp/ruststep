@@ -107,7 +107,10 @@ use crate::{
     tables::*,
 };
 use serde::{de, Deserialize, Serialize};
-use std::{collections::HashMap, fmt::Debug};
+use std::{
+    collections::HashMap,
+    fmt::{self, Debug},
+};
 
 #[cfg(doc)]
 use crate::tables;
@@ -201,12 +204,50 @@ pub struct AHolder {
     y: f64,
 }
 
+struct AHolderVisitor;
+
+impl<'de> de::Visitor<'de> for AHolderVisitor {
+    type Value = AHolder;
+    fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+        write!(formatter, "AHolder")
+    }
+
+    fn visit_seq<A>(self, mut seq: A) -> ::std::result::Result<Self::Value, A::Error>
+    where
+        A: de::SeqAccess<'de>,
+    {
+        if let Some(size) = seq.size_hint() {
+            if size != AHolder::attr_len() {
+                todo!("Create another error and send it")
+            }
+        }
+        let x = seq.next_element()?.unwrap();
+        let y = seq.next_element()?.unwrap();
+        Ok(AHolder { x, y })
+    }
+
+    // Entry point for Record or Parameter::Typed
+    fn visit_map<A>(self, mut map: A) -> ::std::result::Result<Self::Value, A::Error>
+    where
+        A: de::MapAccess<'de>,
+    {
+        let key: String = map
+            .next_key()?
+            .expect("Empty map cannot be accepted as ruststep Holder"); // this must be a bug, not runtime error
+        if key != AHolder::name() {
+            todo!("Create Error type and send it")
+        }
+        let value = map.next_value()?; // send to Self::visit_seq
+        Ok(value)
+    }
+}
+
 impl<'de> de::Deserialize<'de> for AHolder {
-    fn deserialize<D>(_deserializer: D) -> ::std::result::Result<Self, D::Error>
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
     where
         D: de::Deserializer<'de>,
     {
-        todo!()
+        deserializer.deserialize_tuple_struct(Self::name(), Self::attr_len(), AHolderVisitor {})
     }
 }
 
