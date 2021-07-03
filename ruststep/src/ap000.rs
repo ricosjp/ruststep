@@ -438,7 +438,7 @@ impl Holder for CHolder {
 
 custom_any!(BaseAny);
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, ruststep_derive::Deserialize)]
 pub struct Base {
     pub a: f64,
 }
