@@ -57,7 +57,16 @@ fn impl_holder(ast: &syn::DeriveInput) -> TokenStream2 {
     let table = get_table_ident(ast);
     let ident = &ast.ident;
     match &ast.data {
-        syn::Data::Struct(st) => impl_holder_for_struct(ident, &table, st),
+        syn::Data::Struct(st) => {
+            let visitor_tt = def_visitor_for_struct(ident, st);
+            let deserialize_tt = impl_deserialize_for_struct(ident);
+            let holder_tt = impl_holder_for_struct(ident, &table, st);
+            quote! {
+                #visitor_tt
+                #deserialize_tt
+                #holder_tt
+            }
+        }
         _ => unimplemented!("Only struct is supprted currently"),
     }
 }
@@ -68,21 +77,8 @@ fn impl_holder_for_struct(
     st: &syn::DataStruct,
 ) -> TokenStream2 {
     let visitor_ident = format_ident!("{}Visitor", ident);
-    let visitor_tt = visitor_for_struct(ident, st);
     let attr_len = st.fields.len();
     quote! {
-        #visitor_tt
-
-        impl<'de> ::serde::de::Deserialize<'de> for #ident {
-            fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
-            where
-                D: ::serde::de::Deserializer<'de>,
-            {
-                use ::ruststep::tables::Holder;
-                deserializer.deserialize_tuple_struct(Self::name(), Self::attr_len(), Self::visitor_new())
-            }
-        }
-
         impl ::ruststep::tables::Holder for #ident {
             type Table = #table;
             type Owned = A;
@@ -104,15 +100,24 @@ fn impl_holder_for_struct(
     } // quote!
 }
 
-fn visitor_for_struct(ident: &syn::Ident, st: &syn::DataStruct) -> TokenStream2 {
+fn impl_deserialize_for_struct(ident: &syn::Ident) -> TokenStream2 {
+    quote! {
+        impl<'de> ::serde::de::Deserialize<'de> for #ident {
+            fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+            where
+                D: ::serde::de::Deserializer<'de>,
+            {
+                use ::ruststep::tables::Holder;
+                deserializer.deserialize_tuple_struct(Self::name(), Self::attr_len(), Self::visitor_new())
+            }
+        }
+    } // quote!
+}
+
+fn def_visitor_for_struct(ident: &syn::Ident, st: &syn::DataStruct) -> TokenStream2 {
     let name = ident.to_string();
     let visitor_ident = format_ident!("{}Visitor", ident);
-
     let attrs: Vec<_> = st.fields.iter().map(|field| &field.ident).collect();
-    for field in &st.fields {
-        dbg!(&field.ident);
-    }
-
     quote! {
         pub struct #visitor_ident;
 
