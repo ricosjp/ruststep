@@ -25,9 +25,8 @@
 //!
 
 use proc_macro::TokenStream;
-use proc_macro2::{Span, TokenStream as TokenStream2};
-use proc_macro_crate::*;
-use quote::{format_ident, quote};
+use proc_macro2::TokenStream as TokenStream2;
+use quote::quote;
 
 mod for_struct;
 mod holder_attr;
@@ -36,25 +35,6 @@ use holder_attr::*;
 #[proc_macro_derive(Holder, attributes(holder))]
 pub fn derive_holder_entry(input: TokenStream) -> TokenStream {
     derive_holder(&syn::parse(input).unwrap()).into()
-}
-
-fn holder_ident(ident: &syn::Ident) -> syn::Ident {
-    format_ident!("{}Holder", ident)
-}
-
-fn holder_visitor_ident(ident: &syn::Ident) -> syn::Ident {
-    format_ident!("{}HolderVisitor", ident)
-}
-
-fn ruststep_path() -> TokenStream2 {
-    let path = crate_name("ruststep").unwrap();
-    match path {
-        FoundCrate::Itself => quote! { crate },
-        FoundCrate::Name(name) => {
-            let ident = syn::Ident::new(&name, Span::call_site());
-            quote! { ::#ident }
-        }
-    }
 }
 
 fn derive_holder(ast: &syn::DeriveInput) -> TokenStream2 {

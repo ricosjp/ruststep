@@ -1,4 +1,25 @@
-use super::*;
+use proc_macro2::{Span, TokenStream as TokenStream2};
+use proc_macro_crate::*;
+use quote::{format_ident, quote};
+
+fn holder_ident(ident: &syn::Ident) -> syn::Ident {
+    format_ident!("{}Holder", ident)
+}
+
+fn holder_visitor_ident(ident: &syn::Ident) -> syn::Ident {
+    format_ident!("{}HolderVisitor", ident)
+}
+
+fn ruststep_path() -> TokenStream2 {
+    let path = crate_name("ruststep").unwrap();
+    match path {
+        FoundCrate::Itself => quote! { crate },
+        FoundCrate::Name(name) => {
+            let ident = syn::Ident::new(&name, Span::call_site());
+            quote! { ::#ident }
+        }
+    }
+}
 
 pub fn def_holder(ident: &syn::Ident, st: &syn::DataStruct) -> TokenStream2 {
     let holder_ident = holder_ident(ident);
