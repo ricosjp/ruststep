@@ -25,7 +25,8 @@
 //!
 
 use proc_macro::TokenStream;
-use proc_macro2::TokenStream as TokenStream2;
+use proc_macro2::{Span, TokenStream as TokenStream2};
+use proc_macro_crate::*;
 use quote::{format_ident, quote};
 
 #[proc_macro_derive(Holder, attributes(holder))]
@@ -58,7 +59,7 @@ fn get_table_ident(ast: &syn::DeriveInput) -> syn::Ident {
             return table.name;
         }
     }
-    unreachable!()
+    panic!("Table is not specified for Holder")
 }
 
 fn holder_ident(ident: &syn::Ident) -> syn::Ident {
@@ -67,6 +68,17 @@ fn holder_ident(ident: &syn::Ident) -> syn::Ident {
 
 fn holder_visitor_ident(ident: &syn::Ident) -> syn::Ident {
     format_ident!("{}HolderVisitor", ident)
+}
+
+fn ruststep_path() -> TokenStream2 {
+    let path = crate_name("ruststep").unwrap();
+    match path {
+        FoundCrate::Itself => quote! { crate },
+        FoundCrate::Name(name) => {
+            let ident = syn::Ident::new(&name, Span::call_site());
+            quote! { ::#ident }
+        }
+    }
 }
 
 fn impl_holder(ast: &syn::DeriveInput) -> TokenStream2 {
@@ -111,12 +123,13 @@ fn impl_holder_for_struct(
     let visitor_ident = holder_visitor_ident(ident);
     let attrs: Vec<_> = st.fields.iter().map(|field| &field.ident).collect();
     let attr_len = st.fields.len();
+    let ruststep = ruststep_path();
     quote! {
-        impl ::ruststep::tables::Holder for #holder_ident {
+        impl #ruststep::tables::Holder for #holder_ident {
             type Table = #table;
             type Owned = #ident;
             type Visitor = #visitor_ident;
-            fn into_owned(self, _tables: &Self::Table) -> ::ruststep::error::Result<Self::Owned> {
+            fn into_owned(self, _tables: &Self::Table) -> #ruststep::error::Result<Self::Owned> {
                 let #holder_ident { #(#attrs),* } = self;
                 Ok(#ident { #(#attrs),* })
             }
@@ -135,13 +148,14 @@ fn impl_holder_for_struct(
 
 fn impl_deserialize_for_struct(ident: &syn::Ident) -> TokenStream2 {
     let holder_ident = holder_ident(ident);
+    let ruststep = ruststep_path();
     quote! {
         impl<'de> ::serde::de::Deserialize<'de> for #holder_ident {
             fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
             where
                 D: ::serde::de::Deserializer<'de>,
             {
-                use ::ruststep::tables::Holder;
+                use #ruststep::tables::Holder;
                 deserializer.deserialize_tuple_struct(Self::name(), Self::attr_len(), Self::visitor_new())
             }
         }
@@ -153,6 +167,7 @@ fn def_visitor_for_struct(ident: &syn::Ident, st: &syn::DataStruct) -> TokenStre
     let holder_ident = holder_ident(ident);
     let visitor_ident = holder_visitor_ident(ident);
     let attrs: Vec<_> = st.fields.iter().map(|field| &field.ident).collect();
+    let ruststep = ruststep_path();
     quote! {
         pub struct #visitor_ident;
 
@@ -166,7 +181,7 @@ fn def_visitor_for_struct(ident: &syn::Ident, st: &syn::DataStruct) -> TokenStre
             where
                 A: ::serde::de::SeqAccess<'de>,
             {
-                use ::ruststep::tables::Holder;
+                use #ruststep::tables::Holder;
                 if let Some(size) = seq.size_hint() {
                     if size != #holder_ident::attr_len() {
                         todo!("Create another error and send it")
@@ -183,7 +198,7 @@ fn def_visitor_for_struct(ident: &syn::Ident, st: &syn::DataStruct) -> TokenStre
             where
                 A: ::serde::de::MapAccess<'de>,
             {
-                use ::ruststep::tables::Holder;
+                use #ruststep::tables::Holder;
                 let key: String = map
                     .next_key()?
                     .expect("Empty map cannot be accepted as ruststep Holder"); // this must be a bug, not runtime error
