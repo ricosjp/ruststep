@@ -191,83 +191,11 @@ impl EntityTable<CHolder> for Ap000 {
 }
 
 /// Corresponds to `ENTITY a`
-#[derive(Debug, Clone, PartialEq, Serialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, ruststep_derive::Holder)]
+#[holder(table = Ap000)]
 pub struct A {
     pub x: f64,
     pub y: f64,
-}
-
-/// Holder for [A]
-#[derive(Debug, Clone, PartialEq)]
-pub struct AHolder {
-    x: f64,
-    y: f64,
-}
-
-pub struct AHolderVisitor;
-
-impl<'de> de::Visitor<'de> for AHolderVisitor {
-    type Value = AHolder;
-    fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-        write!(formatter, "AHolder")
-    }
-
-    fn visit_seq<A>(self, mut seq: A) -> ::std::result::Result<Self::Value, A::Error>
-    where
-        A: de::SeqAccess<'de>,
-    {
-        if let Some(size) = seq.size_hint() {
-            if size != AHolder::attr_len() {
-                todo!("Create another error and send it")
-            }
-        }
-        let x = seq.next_element()?.unwrap();
-        let y = seq.next_element()?.unwrap();
-        Ok(AHolder { x, y })
-    }
-
-    // Entry point for Record or Parameter::Typed
-    fn visit_map<A>(self, mut map: A) -> ::std::result::Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let key: String = map
-            .next_key()?
-            .expect("Empty map cannot be accepted as ruststep Holder"); // this must be a bug, not runtime error
-        if key != AHolder::name() {
-            todo!("Create Error type and send it")
-        }
-        let value = map.next_value()?; // send to Self::visit_seq
-        Ok(value)
-    }
-}
-
-impl<'de> de::Deserialize<'de> for AHolder {
-    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
-    where
-        D: de::Deserializer<'de>,
-    {
-        deserializer.deserialize_tuple_struct(Self::name(), Self::attr_len(), Self::visitor_new())
-    }
-}
-
-impl Holder for AHolder {
-    type Table = Ap000;
-    type Owned = A;
-    type Visitor = AHolderVisitor;
-    fn into_owned(self, _tables: &Ap000) -> Result<A> {
-        let AHolder { x, y } = self;
-        Ok(A { x, y })
-    }
-    fn name() -> &'static str {
-        "A"
-    }
-    fn attr_len() -> usize {
-        2
-    }
-    fn visitor_new() -> Self::Visitor {
-        AHolderVisitor {}
-    }
 }
 
 /// Corresponds to `ENTITY b`
