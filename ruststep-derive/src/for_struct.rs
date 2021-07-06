@@ -21,10 +21,22 @@ fn ruststep_path() -> TokenStream2 {
     }
 }
 
+fn preprocess_attributes(
+    st: &syn::DataStruct,
+) -> (Vec<&syn::Ident>, Vec<&syn::Type>, Vec<TokenStream2>) {
+    let attrs: Vec<_> = st
+        .fields
+        .iter()
+        .map(|field| field.ident.as_ref().unwrap())
+        .collect();
+    let attr_types = st.fields.iter().map(|field| &field.ty).collect();
+    let into_owned = attrs.iter().map(|attr| quote! { #attr }).collect();
+    (attrs, attr_types, into_owned)
+}
+
 pub fn def_holder(ident: &syn::Ident, st: &syn::DataStruct) -> TokenStream2 {
     let holder_ident = holder_ident(ident);
-    let attrs: Vec<_> = st.fields.iter().map(|field| &field.ident).collect();
-    let attr_types: Vec<_> = st.fields.iter().map(|field| &field.ty).collect();
+    let (attrs, attr_types, _) = preprocess_attributes(st);
     quote! {
         #[derive(Debug, Clone, PartialEq)]
         pub struct #holder_ident {
@@ -37,8 +49,8 @@ pub fn impl_holder(ident: &syn::Ident, table: &syn::Ident, st: &syn::DataStruct)
     let name = ident.to_string();
     let holder_ident = holder_ident(ident);
     let visitor_ident = holder_visitor_ident(ident);
-    let attrs: Vec<_> = st.fields.iter().map(|field| &field.ident).collect();
-    let attr_len = st.fields.len();
+    let (attrs, _, into_owned) = preprocess_attributes(st);
+    let attr_len = attrs.len();
     let ruststep = ruststep_path();
     quote! {
         impl #ruststep::tables::Holder for #holder_ident {
@@ -47,7 +59,7 @@ pub fn impl_holder(ident: &syn::Ident, table: &syn::Ident, st: &syn::DataStruct)
             type Visitor = #visitor_ident;
             fn into_owned(self, _tables: &Self::Table) -> #ruststep::error::Result<Self::Owned> {
                 let #holder_ident { #(#attrs),* } = self;
-                Ok(#ident { #(#attrs),* })
+                Ok(#ident { #(#attrs : #into_owned),* })
             }
             fn name() -> &'static str {
                 #name
@@ -82,7 +94,7 @@ pub fn def_visitor(ident: &syn::Ident, st: &syn::DataStruct) -> TokenStream2 {
     let name = ident.to_string();
     let holder_ident = holder_ident(ident);
     let visitor_ident = holder_visitor_ident(ident);
-    let attrs: Vec<_> = st.fields.iter().map(|field| &field.ident).collect();
+    let (attrs, _, _) = preprocess_attributes(st);
     let ruststep = ruststep_path();
     quote! {
         pub struct #visitor_ident;
