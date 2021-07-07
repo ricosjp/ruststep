@@ -25,3 +25,14 @@ pub fn get_table_ident(ast: &syn::DeriveInput) -> syn::Ident {
     }
     panic!("Table is not specified for Holder")
 }
+
+/// Check a struct member has `#[holder(use_place_holder)]` attribute
+pub fn is_use_place_holder(attrs: &[syn::Attribute]) -> bool {
+    for attr in attrs {
+        if attr.path.is_ident("holder") {
+            let flag: syn::Ident = attr.parse_args().unwrap();
+            return flag == "use_place_holder";
+        }
+    }
+    false
+}

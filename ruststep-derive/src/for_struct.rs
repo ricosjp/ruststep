@@ -2,6 +2,8 @@ use proc_macro2::{Span, TokenStream as TokenStream2};
 use proc_macro_crate::*;
 use quote::{format_ident, quote};
 
+use super::holder_attr::is_use_place_holder;
+
 fn holder_ident(ident: &syn::Ident) -> syn::Ident {
     format_ident!("{}Holder", ident)
 }
@@ -23,15 +25,39 @@ fn ruststep_path() -> TokenStream2 {
 
 fn preprocess_attributes(
     st: &syn::DataStruct,
-) -> (Vec<&syn::Ident>, Vec<&syn::Type>, Vec<TokenStream2>) {
-    let attrs: Vec<_> = st
-        .fields
-        .iter()
-        .map(|field| field.ident.as_ref().unwrap())
-        .collect();
-    let attr_types = st.fields.iter().map(|field| &field.ty).collect();
-    let into_owned = attrs.iter().map(|attr| quote! { #attr }).collect();
-    (attrs, attr_types, into_owned)
+) -> (Vec<&syn::Ident>, Vec<TokenStream2>, Vec<TokenStream2>) {
+    let ruststep = ruststep_path();
+    let mut attrs = Vec::new();
+    let mut types = Vec::new();
+    let mut into_owned = Vec::new();
+
+    for field in &st.fields {
+        let ident = field
+            .ident
+            .as_ref()
+            .expect("Tuple struct case is not supported");
+        attrs.push(ident);
+
+        if is_use_place_holder(&field.attrs) {
+            let ty = if let syn::Type::Path(path) = &field.ty {
+                // FIXME this should accept path (i.e. with `::`)
+                holder_ident(
+                    path.path
+                        .get_ident()
+                        .expect("Member of struct must be an ident"),
+                )
+            } else {
+                panic!("Member of struct must be a Path")
+            };
+            types.push(quote! { #ruststep::place_holder::PlaceHolder<#ty> });
+            into_owned.push(quote! { #ident.into_owned(tables)? })
+        } else {
+            let ty = &field.ty;
+            types.push(quote! { #ty });
+            into_owned.push(quote! { #ident })
+        }
+    }
+    (attrs, types, into_owned)
 }
 
 pub fn def_holder(ident: &syn::Ident, st: &syn::DataStruct) -> TokenStream2 {
@@ -57,7 +83,7 @@ pub fn impl_holder(ident: &syn::Ident, table: &syn::Ident, st: &syn::DataStruct)
             type Table = #table;
             type Owned = #ident;
             type Visitor = #visitor_ident;
-            fn into_owned(self, _tables: &Self::Table) -> #ruststep::error::Result<Self::Owned> {
+            fn into_owned(self, tables: &Self::Table) -> #ruststep::error::Result<Self::Owned> {
                 let #holder_ident { #(#attrs),* } = self;
                 Ok(#ident { #(#attrs : #into_owned),* })
             }
