@@ -23,10 +23,26 @@ fn ruststep_path() -> TokenStream2 {
     }
 }
 
+/// Map `A` to `PlaceHolder<AHolder>`
+fn type_to_place_holder(ty: &syn::Type) -> TokenStream2 {
+    let ruststep = ruststep_path();
+    if let syn::Type::Path(path) = ty {
+        let ty = holder_ident(
+            // FIXME This should accept path,
+            // e.g. `::some_schema::A` to `::some_schema::AHolder`
+            path.path
+                .get_ident()
+                .expect("Member of struct must be an ident"),
+        );
+        quote! { #ruststep::place_holder::PlaceHolder<#ty> }
+    } else {
+        panic!("Member of struct must be a Path")
+    }
+}
+
 fn preprocess_attributes(
     st: &syn::DataStruct,
 ) -> (Vec<&syn::Ident>, Vec<TokenStream2>, Vec<TokenStream2>) {
-    let ruststep = ruststep_path();
     let mut attrs = Vec::new();
     let mut types = Vec::new();
     let mut into_owned = Vec::new();
@@ -39,17 +55,7 @@ fn preprocess_attributes(
         attrs.push(ident);
 
         if is_use_place_holder(&field.attrs) {
-            let ty = if let syn::Type::Path(path) = &field.ty {
-                // FIXME this should accept path (i.e. with `::`)
-                holder_ident(
-                    path.path
-                        .get_ident()
-                        .expect("Member of struct must be an ident"),
-                )
-            } else {
-                panic!("Member of struct must be a Path")
-            };
-            types.push(quote! { #ruststep::place_holder::PlaceHolder<#ty> });
+            types.push(type_to_place_holder(&field.ty));
             into_owned.push(quote! { #ident.into_owned(tables)? })
         } else {
             let ty = &field.ty;
