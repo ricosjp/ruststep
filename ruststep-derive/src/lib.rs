@@ -4,7 +4,7 @@
 //! pub struct Table; // moc table struct
 //!
 //! #[derive(Debug, Clone, PartialEq, ruststep_derive::Holder)]
-//! #[holder(table = Table)]
+//! #[holder(table = Table, field = a)]
 //! pub struct A {
 //!     pub x: f64,
 //!     pub y: f64,
@@ -45,14 +45,14 @@
 //! }
 //!
 //! #[derive(Debug, Clone, PartialEq, ruststep_derive::Holder)]
-//! #[holder(table = Table)]
+//! #[holder(table = Table, field = a)]
 //! pub struct A {
 //!     pub x: f64,
 //!     pub y: f64,
 //! }
 //!
 //! #[derive(Debug, Clone, PartialEq, ruststep_derive::Holder)]
-//! #[holder(table = Table)]
+//! #[holder(table = Table, field = b)]
 //! pub struct B {
 //!     pub z: f64,
 //!     #[holder(use_place_holder)]
@@ -74,14 +74,14 @@ pub fn derive_holder_entry(input: TokenStream) -> TokenStream {
 }
 
 fn derive_holder(ast: &syn::DeriveInput) -> TokenStream2 {
-    let table = get_table_ident(ast);
+    let TableAttr { table_name, .. } = parse_table_attr(ast);
     let ident = &ast.ident;
     match &ast.data {
         syn::Data::Struct(st) => {
             let def_holder_tt = for_struct::def_holder(ident, st);
             let def_visitor_tt = for_struct::def_visitor(ident, st);
             let impl_deserialize_tt = for_struct::impl_deserialize(ident);
-            let impl_holder_tt = for_struct::impl_holder(ident, &table, st);
+            let impl_holder_tt = for_struct::impl_holder(ident, &table_name, st);
             quote! {
                 #def_holder_tt
                 #def_visitor_tt

@@ -192,7 +192,7 @@ impl EntityTable<CHolder> for Ap000 {
 
 /// Corresponds to `ENTITY a`
 #[derive(Debug, Clone, PartialEq, Serialize, ruststep_derive::Holder)]
-#[holder(table = Ap000)]
+#[holder(table = Ap000, field = a)]
 pub struct A {
     pub x: f64,
     pub y: f64,
