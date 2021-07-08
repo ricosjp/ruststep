@@ -2,7 +2,7 @@
 //!
 //! ```
 //! pub struct Table {
-//!    a: ::std::collections::HashMap<u64, AHolder>,
+//!    a: ::std::collections::HashMap<u64, ruststep_derive::as_holder!(A)>,
 //! }
 //!
 //! #[derive(Debug, Clone, PartialEq, ruststep_derive::Holder)]
@@ -27,8 +27,8 @@
 //!
 //! ```
 //! pub struct Table {
-//!    a: ::std::collections::HashMap<u64, AHolder>,
-//!    b: ::std::collections::HashMap<u64, BHolder>,
+//!    a: ::std::collections::HashMap<u64, ruststep_derive::as_holder!(A)>,
+//!    b: ::std::collections::HashMap<u64, ruststep_derive::as_holder!(B)>,
 //! }
 //!
 //! #[derive(Debug, Clone, PartialEq, ruststep_derive::Holder)]
@@ -80,4 +80,28 @@ fn derive_holder(ast: &syn::DeriveInput) -> TokenStream2 {
         }
         _ => unimplemented!("Only struct is supprted currently"),
     }
+}
+
+/// Resolve Holder struct from owned type, e.g. `A` to `AHolder`
+#[proc_macro]
+pub fn as_holder(input: TokenStream) -> TokenStream {
+    let path = as_holder2(&syn::parse(input).unwrap());
+    let ts = quote! { #path };
+    ts.into()
+}
+
+/// Resolve HolderVisitor struct from owned type, e.g. `A` to `AHolderVisitor`
+#[proc_macro]
+pub fn as_holder_visitor(input: TokenStream) -> TokenStream {
+    let path = as_holder_visitor2(&syn::parse(input).unwrap());
+    let ts = quote! { #path };
+    ts.into()
+}
+
+fn as_holder2(input: &syn::Ident) -> syn::Ident {
+    quote::format_ident!("{}Holder", input)
+}
+
+fn as_holder_visitor2(input: &syn::Ident) -> syn::Ident {
+    quote::format_ident!("{}HolderVisitor", input)
 }

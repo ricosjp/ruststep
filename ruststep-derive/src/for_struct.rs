@@ -1,16 +1,8 @@
 use proc_macro2::{Span, TokenStream as TokenStream2};
 use proc_macro_crate::*;
-use quote::{format_ident, quote};
+use quote::quote;
 
 use super::*;
-
-fn holder_ident(ident: &syn::Ident) -> syn::Ident {
-    format_ident!("{}Holder", ident)
-}
-
-fn holder_visitor_ident(ident: &syn::Ident) -> syn::Ident {
-    format_ident!("{}HolderVisitor", ident)
-}
 
 /// This must be same between codegens
 fn table_arg() -> syn::Ident {
@@ -32,7 +24,7 @@ fn ruststep_path() -> TokenStream2 {
 fn type_to_place_holder(ty: &syn::Type) -> TokenStream2 {
     let ruststep = ruststep_path();
     if let syn::Type::Path(path) = ty {
-        let ty = holder_ident(
+        let ty = as_holder2(
             // FIXME This should accept path,
             // e.g. `::some_schema::A` to `::some_schema::AHolder`
             path.path
@@ -74,7 +66,7 @@ fn preprocess_attributes(
 }
 
 pub fn def_holder(ident: &syn::Ident, st: &syn::DataStruct) -> TokenStream2 {
-    let holder_ident = holder_ident(ident);
+    let holder_ident = as_holder2(ident);
     let (attrs, attr_types, _) = preprocess_attributes(st);
     quote! {
         #[derive(Debug, Clone, PartialEq)]
@@ -86,8 +78,8 @@ pub fn def_holder(ident: &syn::Ident, st: &syn::DataStruct) -> TokenStream2 {
 
 pub fn impl_holder(ident: &syn::Ident, table: &TableAttr, st: &syn::DataStruct) -> TokenStream2 {
     let name = ident.to_string();
-    let holder_ident = holder_ident(ident);
-    let visitor_ident = holder_visitor_ident(ident);
+    let holder_ident = as_holder2(ident);
+    let visitor_ident = as_holder_visitor2(ident);
     let (attrs, _, into_owned) = preprocess_attributes(st);
     let attr_len = attrs.len();
     let TableAttr { table, .. } = table;
@@ -117,7 +109,7 @@ pub fn impl_holder(ident: &syn::Ident, table: &TableAttr, st: &syn::DataStruct) 
 }
 
 pub fn impl_deserialize(ident: &syn::Ident) -> TokenStream2 {
-    let holder_ident = holder_ident(ident);
+    let holder_ident = as_holder2(ident);
     let ruststep = ruststep_path();
     quote! {
         impl<'de> ::serde::de::Deserialize<'de> for #holder_ident {
@@ -134,8 +126,8 @@ pub fn impl_deserialize(ident: &syn::Ident) -> TokenStream2 {
 
 pub fn def_visitor(ident: &syn::Ident, st: &syn::DataStruct) -> TokenStream2 {
     let name = ident.to_string();
-    let holder_ident = holder_ident(ident);
-    let visitor_ident = holder_visitor_ident(ident);
+    let holder_ident = as_holder2(ident);
+    let visitor_ident = as_holder_visitor2(ident);
     let (attrs, _, _) = preprocess_attributes(st);
     let ruststep = ruststep_path();
     quote! {
@@ -184,7 +176,7 @@ pub fn def_visitor(ident: &syn::Ident, st: &syn::DataStruct) -> TokenStream2 {
 
 pub fn impl_entity_table(ident: &syn::Ident, table: &TableAttr) -> TokenStream2 {
     let TableAttr { table, field } = table;
-    let holder_ident = holder_ident(ident);
+    let holder_ident = as_holder2(ident);
     let ruststep = ruststep_path();
 
     quote! {
