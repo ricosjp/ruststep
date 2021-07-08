@@ -103,14 +103,10 @@ use crate::{
     ast::{DataSection, EntityInstance},
     custom_any,
     error::*,
-    place_holder::*,
     tables::*,
 };
-use serde::{de, Deserialize, Serialize};
-use std::{
-    collections::HashMap,
-    fmt::{self, Debug},
-};
+use serde::{Deserialize, Serialize};
+use std::{collections::HashMap, fmt::Debug};
 
 #[cfg(doc)]
 use crate::tables;
@@ -163,24 +159,6 @@ impl Ap000 {
     }
 }
 
-impl EntityTable<BHolder> for Ap000 {
-    fn get_owned(&self, entity_id: u64) -> Result<B> {
-        crate::tables::get_owned(self, &self.b, entity_id)
-    }
-    fn owned_iter<'table>(&'table self) -> Box<dyn Iterator<Item = Result<B>> + 'table> {
-        crate::tables::owned_iter(self, &self.b)
-    }
-}
-
-impl EntityTable<CHolder> for Ap000 {
-    fn get_owned(&self, entity_id: u64) -> Result<C> {
-        crate::tables::get_owned(self, &self.c, entity_id)
-    }
-    fn owned_iter<'table>(&'table self) -> Box<dyn Iterator<Item = Result<C>> + 'table> {
-        crate::tables::owned_iter(self, &self.c)
-    }
-}
-
 /// Corresponds to `ENTITY a`
 #[derive(Debug, Clone, PartialEq, Serialize, ruststep_derive::Holder)]
 #[holder(table = Ap000, field = a)]
@@ -190,169 +168,22 @@ pub struct A {
 }
 
 /// Corresponds to `ENTITY b`
-#[derive(Debug, Clone, PartialEq, Serialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, ruststep_derive::Holder)]
+#[holder(table = Ap000, field = b)]
 pub struct B {
     pub z: f64,
+    #[holder(use_place_holder)]
     pub a: A,
 }
 
-/// Holder for [B]
-#[derive(Debug, Clone, PartialEq)]
-pub struct BHolder {
-    z: f64,
-    a: PlaceHolder<AHolder>,
-}
-
-pub struct BHolderVisitor;
-
-impl<'de> de::Visitor<'de> for BHolderVisitor {
-    type Value = BHolder;
-    fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-        write!(formatter, "BHolder")
-    }
-
-    fn visit_seq<A>(self, mut seq: A) -> ::std::result::Result<Self::Value, A::Error>
-    where
-        A: de::SeqAccess<'de>,
-    {
-        if let Some(size) = seq.size_hint() {
-            if size != BHolder::attr_len() {
-                todo!("Create another error and send it")
-            }
-        }
-        let z = seq.next_element()?.unwrap();
-        let a = seq.next_element()?.unwrap();
-        Ok(BHolder { z, a })
-    }
-
-    // Entry point for Record or Parameter::Typed
-    fn visit_map<A>(self, mut map: A) -> ::std::result::Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let key: String = map
-            .next_key()?
-            .expect("Empty map cannot be accepted as ruststep Holder"); // this must be a bug, not runtime error
-        if key != BHolder::name() {
-            todo!("Create Error type and send it")
-        }
-        let value = map.next_value()?; // send to Self::visit_seq
-        Ok(value)
-    }
-}
-
-impl<'de> de::Deserialize<'de> for BHolder {
-    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
-    where
-        D: de::Deserializer<'de>,
-    {
-        deserializer.deserialize_tuple_struct(Self::name(), Self::attr_len(), Self::visitor_new())
-    }
-}
-
-impl Holder for BHolder {
-    type Table = Ap000;
-    type Owned = B;
-    type Visitor = BHolderVisitor;
-    fn into_owned(self, tables: &Ap000) -> Result<B> {
-        let BHolder { z, a } = self;
-        Ok(B {
-            z,
-            a: a.into_owned(tables)?,
-        })
-    }
-    fn name() -> &'static str {
-        "B"
-    }
-    fn attr_len() -> usize {
-        2
-    }
-    fn visitor_new() -> Self::Visitor {
-        BHolderVisitor {}
-    }
-}
-
 /// Corresponds to `ENTITY c`
-#[derive(Debug, Clone, PartialEq, Serialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, ruststep_derive::Holder)]
+#[holder(table = Ap000, field = c)]
 pub struct C {
+    #[holder(use_place_holder)]
     pub p: A,
+    #[holder(use_place_holder)]
     pub q: B,
-}
-
-/// Holder for [C]
-#[derive(Debug, Clone, PartialEq)]
-pub struct CHolder {
-    p: PlaceHolder<AHolder>,
-    q: PlaceHolder<BHolder>,
-}
-
-impl<'de> de::Deserialize<'de> for CHolder {
-    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
-    where
-        D: de::Deserializer<'de>,
-    {
-        deserializer.deserialize_tuple_struct(Self::name(), Self::attr_len(), Self::visitor_new())
-    }
-}
-
-pub struct CHolderVisitor;
-
-impl<'de> de::Visitor<'de> for CHolderVisitor {
-    type Value = CHolder;
-    fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-        write!(formatter, "CHolder")
-    }
-
-    fn visit_seq<A>(self, mut seq: A) -> ::std::result::Result<Self::Value, A::Error>
-    where
-        A: de::SeqAccess<'de>,
-    {
-        if let Some(size) = seq.size_hint() {
-            if size != CHolder::attr_len() {
-                todo!("Create another error and send it")
-            }
-        }
-        let p = seq.next_element()?.unwrap();
-        let q = seq.next_element()?.unwrap();
-        Ok(CHolder { p, q })
-    }
-
-    // Entry point for Record or Parameter::Typed
-    fn visit_map<A>(self, mut map: A) -> ::std::result::Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let key: String = map
-            .next_key()?
-            .expect("Empty map cannot be accepted as ruststep Holder"); // this must be a bug, not runtime error
-        if key != CHolder::name() {
-            todo!("Create Error type and send it")
-        }
-        let value = map.next_value()?; // send to Self::visit_seq
-        Ok(value)
-    }
-}
-
-impl Holder for CHolder {
-    type Table = Ap000;
-    type Owned = C;
-    type Visitor = CHolderVisitor;
-    fn into_owned(self, tables: &Ap000) -> Result<C> {
-        let CHolder { p, q } = self;
-        Ok(C {
-            p: p.into_owned(tables)?,
-            q: q.into_owned(tables)?,
-        })
-    }
-    fn name() -> &'static str {
-        "C"
-    }
-    fn attr_len() -> usize {
-        2
-    }
-    fn visitor_new() -> Self::Visitor {
-        CHolderVisitor {}
-    }
 }
 
 custom_any!(BaseAny);
@@ -378,7 +209,7 @@ pub struct User {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::{ast::*, parser::exchange};
+    use crate::{ast::*, parser::exchange, place_holder::PlaceHolder};
     use nom::Finish;
 
     #[test]
