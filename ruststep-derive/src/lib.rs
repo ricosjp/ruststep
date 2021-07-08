@@ -1,7 +1,9 @@
 //! proc-macro for ruststep
 //!
 //! ```
-//! pub struct Table; // moc table struct
+//! pub struct Table {
+//!    a: ::std::collections::HashMap<u64, AHolder>,
+//! }
 //!
 //! #[derive(Debug, Clone, PartialEq, ruststep_derive::Holder)]
 //! #[holder(table = Table, field = a)]
@@ -24,7 +26,10 @@
 //!     but their definition does not match for our cases.
 //!
 //! ```
-//! pub struct Table; // moc table struct
+//! pub struct Table {
+//!    a: ::std::collections::HashMap<u64, AHolder>,
+//!    b: ::std::collections::HashMap<u64, BHolder>,
+//! }
 //!
 //! #[derive(Debug, Clone, PartialEq, ruststep_derive::Holder)]
 //! #[holder(table = Table, field = a)]

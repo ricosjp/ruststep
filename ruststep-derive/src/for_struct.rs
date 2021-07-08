@@ -183,17 +183,17 @@ pub fn def_visitor(ident: &syn::Ident, st: &syn::DataStruct) -> TokenStream2 {
 }
 
 pub fn impl_entity_table(ident: &syn::Ident, table: &TableAttr) -> TokenStream2 {
-    let TableAttr { table, .. } = table;
+    let TableAttr { table, field } = table;
     let holder_ident = holder_ident(ident);
     let ruststep = ruststep_path();
 
     quote! {
         impl #ruststep::tables::EntityTable<#holder_ident> for #table {
             fn get_owned(&self, entity_id: u64) -> #ruststep::error::Result<#ident> {
-                todo!()
+                #ruststep::tables::get_owned(self, &self.#field, entity_id)
             }
             fn owned_iter<'table>(&'table self) -> Box<dyn Iterator<Item = #ruststep::error::Result<#ident>> + 'table> {
-                todo!()
+                #ruststep::tables::owned_iter(self, &self.#field)
             }
         }
     }
