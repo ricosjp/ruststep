@@ -26,24 +26,6 @@
 //! ```
 //! pub struct Table; // moc table struct
 //!
-//! impl ::ruststep::tables::EntityTable<AHolder> for Table {
-//!     fn get_owned(&self, entity_id: u64) -> ::ruststep::error::Result<A> {
-//!         todo!()
-//!     }
-//!     fn owned_iter<'table>(&'table self) -> Box<dyn Iterator<Item = ::ruststep::error::Result<A>> + 'table> {
-//!         todo!()
-//!     }
-//! }
-//!
-//! impl ::ruststep::tables::EntityTable<BHolder> for Table {
-//!     fn get_owned(&self, entity_id: u64) -> ::ruststep::error::Result<B> {
-//!         todo!()
-//!     }
-//!     fn owned_iter<'table>(&'table self) -> Box<dyn Iterator<Item = ::ruststep::error::Result<B>> + 'table> {
-//!         todo!()
-//!     }
-//! }
-//!
 //! #[derive(Debug, Clone, PartialEq, ruststep_derive::Holder)]
 //! #[holder(table = Table, field = a)]
 //! pub struct A {
@@ -82,11 +64,13 @@ fn derive_holder(ast: &syn::DeriveInput) -> TokenStream2 {
             let def_visitor_tt = for_struct::def_visitor(ident, st);
             let impl_deserialize_tt = for_struct::impl_deserialize(ident);
             let impl_holder_tt = for_struct::impl_holder(ident, &table_name, st);
+            let impl_entity_table_tt = for_struct::impl_entity_table(ident, &table_name);
             quote! {
                 #def_holder_tt
                 #def_visitor_tt
                 #impl_deserialize_tt
                 #impl_holder_tt
+                #impl_entity_table_tt
             }
         }
         _ => unimplemented!("Only struct is supprted currently"),
