@@ -12,6 +12,11 @@ fn holder_visitor_ident(ident: &syn::Ident) -> syn::Ident {
     format_ident!("{}HolderVisitor", ident)
 }
 
+/// This must be same between codegens
+fn table_arg() -> syn::Ident {
+    syn::Ident::new("table", Span::call_site())
+}
+
 fn ruststep_path() -> TokenStream2 {
     let path = crate_name("ruststep").unwrap();
     match path {
@@ -43,6 +48,8 @@ fn type_to_place_holder(ty: &syn::Type) -> TokenStream2 {
 fn preprocess_attributes(
     st: &syn::DataStruct,
 ) -> (Vec<&syn::Ident>, Vec<TokenStream2>, Vec<TokenStream2>) {
+    let table_arg = table_arg();
+
     let mut attrs = Vec::new();
     let mut types = Vec::new();
     let mut into_owned = Vec::new();
@@ -56,7 +63,7 @@ fn preprocess_attributes(
 
         if is_use_place_holder(&field.attrs) {
             types.push(type_to_place_holder(&field.ty));
-            into_owned.push(quote! { #ident.into_owned(tables)? })
+            into_owned.push(quote! { #ident.into_owned(#table_arg)? })
         } else {
             let ty = &field.ty;
             types.push(quote! { #ty });
@@ -84,6 +91,7 @@ pub fn impl_holder(ident: &syn::Ident, table: &TableAttr, st: &syn::DataStruct) 
     let (attrs, _, into_owned) = preprocess_attributes(st);
     let attr_len = attrs.len();
     let TableAttr { table, .. } = table;
+    let table_arg = table_arg();
     let ruststep = ruststep_path();
 
     quote! {
@@ -91,7 +99,7 @@ pub fn impl_holder(ident: &syn::Ident, table: &TableAttr, st: &syn::DataStruct) 
             type Table = #table;
             type Owned = #ident;
             type Visitor = #visitor_ident;
-            fn into_owned(self, tables: &Self::Table) -> #ruststep::error::Result<Self::Owned> {
+            fn into_owned(self, #table_arg: &Self::Table) -> #ruststep::error::Result<Self::Owned> {
                 let #holder_ident { #(#attrs),* } = self;
                 Ok(#ident { #(#attrs : #into_owned),* })
             }
