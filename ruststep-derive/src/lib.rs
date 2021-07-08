@@ -56,15 +56,15 @@ pub fn derive_holder_entry(input: TokenStream) -> TokenStream {
 }
 
 fn derive_holder(ast: &syn::DeriveInput) -> TokenStream2 {
-    let TableAttr { table_name, .. } = parse_table_attr(ast);
+    let table_attr = parse_table_attr(ast);
     let ident = &ast.ident;
     match &ast.data {
         syn::Data::Struct(st) => {
             let def_holder_tt = for_struct::def_holder(ident, st);
             let def_visitor_tt = for_struct::def_visitor(ident, st);
             let impl_deserialize_tt = for_struct::impl_deserialize(ident);
-            let impl_holder_tt = for_struct::impl_holder(ident, &table_name, st);
-            let impl_entity_table_tt = for_struct::impl_entity_table(ident, &table_name);
+            let impl_holder_tt = for_struct::impl_holder(ident, &table_attr, st);
+            let impl_entity_table_tt = for_struct::impl_entity_table(ident, &table_attr);
             quote! {
                 #def_holder_tt
                 #def_visitor_tt

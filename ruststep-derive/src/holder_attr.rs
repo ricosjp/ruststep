@@ -1,46 +1,39 @@
 #[derive(Debug)]
 struct TableAttrParse {
-    table: syn::Ident,
+    table_prefix: syn::Ident,
     eq1: syn::Token![=],
-    table_name: syn::Ident,
+    table: syn::Ident,
     comma: syn::Token![,],
-    field: syn::Ident,
+    field_prefix: syn::Ident,
     eq2: syn::Token![=],
-    field_name: syn::Ident,
+    field: syn::Ident,
 }
 
 impl syn::parse::Parse for TableAttrParse {
     fn parse(input: syn::parse::ParseStream) -> syn::parse::Result<Self> {
         Ok(TableAttrParse {
-            table: input.parse()?,
+            table_prefix: input.parse()?,
             eq1: input.parse()?,
-            table_name: input.parse()?,
+            table: input.parse()?,
             comma: input.parse()?,
-            field: input.parse()?,
+            field_prefix: input.parse()?,
             eq2: input.parse()?,
-            field_name: input.parse()?,
+            field: input.parse()?,
         })
     }
 }
 
 pub struct TableAttr {
-    pub table_name: syn::Ident,
-    pub field_name: syn::Ident,
+    pub table: syn::Ident,
+    pub field: syn::Ident,
 }
 
 /// To parse `#[holder(table = Table, field = a)]` attribute to get `Table`
 pub fn parse_table_attr(ast: &syn::DeriveInput) -> TableAttr {
     for attr in &ast.attrs {
         if attr.path.is_ident("holder") {
-            let TableAttrParse {
-                table_name,
-                field_name,
-                ..
-            } = attr.parse_args().unwrap();
-            return TableAttr {
-                table_name,
-                field_name,
-            };
+            let TableAttrParse { table, field, .. } = attr.parse_args().unwrap();
+            return TableAttr { table, field };
         }
     }
     panic!("Table is not specified for Holder")

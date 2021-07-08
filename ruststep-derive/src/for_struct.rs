@@ -2,7 +2,7 @@ use proc_macro2::{Span, TokenStream as TokenStream2};
 use proc_macro_crate::*;
 use quote::{format_ident, quote};
 
-use super::holder_attr::is_use_place_holder;
+use super::*;
 
 fn holder_ident(ident: &syn::Ident) -> syn::Ident {
     format_ident!("{}Holder", ident)
@@ -77,13 +77,15 @@ pub fn def_holder(ident: &syn::Ident, st: &syn::DataStruct) -> TokenStream2 {
     }
 }
 
-pub fn impl_holder(ident: &syn::Ident, table: &syn::Ident, st: &syn::DataStruct) -> TokenStream2 {
+pub fn impl_holder(ident: &syn::Ident, table: &TableAttr, st: &syn::DataStruct) -> TokenStream2 {
     let name = ident.to_string();
     let holder_ident = holder_ident(ident);
     let visitor_ident = holder_visitor_ident(ident);
     let (attrs, _, into_owned) = preprocess_attributes(st);
     let attr_len = attrs.len();
+    let TableAttr { table, .. } = table;
     let ruststep = ruststep_path();
+
     quote! {
         impl #ruststep::tables::Holder for #holder_ident {
             type Table = #table;
@@ -172,7 +174,8 @@ pub fn def_visitor(ident: &syn::Ident, st: &syn::DataStruct) -> TokenStream2 {
     } // quote
 }
 
-pub fn impl_entity_table(ident: &syn::Ident, table: &syn::Ident) -> TokenStream2 {
+pub fn impl_entity_table(ident: &syn::Ident, table: &TableAttr) -> TokenStream2 {
+    let TableAttr { table, .. } = table;
     let holder_ident = holder_ident(ident);
     let ruststep = ruststep_path();
 
