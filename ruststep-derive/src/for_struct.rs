@@ -25,8 +25,6 @@ fn type_to_place_holder(ty: &syn::Type) -> TokenStream2 {
     let ruststep = ruststep_path();
     if let syn::Type::Path(path) = ty {
         let ty = as_holder2(
-            // FIXME This should accept path,
-            // e.g. `::some_schema::A` to `::some_schema::AHolder`
             path.path
                 .get_ident()
                 .expect("Member of struct must be an ident"),
