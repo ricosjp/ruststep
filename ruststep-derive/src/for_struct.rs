@@ -1,3 +1,4 @@
+use inflector::Inflector;
 use proc_macro2::{Span, TokenStream as TokenStream2};
 use proc_macro_crate::*;
 use quote::quote;
@@ -76,7 +77,7 @@ pub fn def_holder(ident: &syn::Ident, st: &syn::DataStruct) -> TokenStream2 {
 }
 
 pub fn impl_holder(ident: &syn::Ident, table: &TableAttr, st: &syn::DataStruct) -> TokenStream2 {
-    let name = ident.to_string();
+    let name = ident.to_string().to_screaming_snake_case();
     let holder_ident = as_holder2(ident);
     let visitor_ident = as_holder_visitor2(ident);
     let (attrs, _, into_owned) = preprocess_attributes(st);

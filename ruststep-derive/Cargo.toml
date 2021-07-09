@@ -12,6 +12,7 @@ quote = "1.0.9"
 proc-macro2 = "1.0.27"
 syn = { version = "1.0.72", features = ["full", "extra-traits"] }
 proc-macro-crate = "1.0.0"
+Inflector = "0.11.4"
 
 [dev-dependencies]
 serde = "1.0"
