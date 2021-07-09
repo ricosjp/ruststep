@@ -1,22 +1,35 @@
-use crate::{ast::*, error::Result};
+use crate::{ast::*, error::Result, tables::Holder};
+use ruststep_derive::{as_holder, Holder};
 use serde::{de, Deserialize};
+use std::collections::HashMap;
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Default, Clone)]
+pub struct HeaderTable {
+    file_description: HashMap<u64, as_holder!(FileDescription)>,
+    file_name: HashMap<u64, as_holder!(FileName)>,
+    file_schema: HashMap<u64, as_holder!(FileSchema)>,
+}
+
+#[derive(Debug, Clone, PartialEq, Holder)]
+#[holder(table = HeaderTable, field = file_description)]
 pub struct FileDescription {
     description: Vec<String>,
     implementation_level: String,
 }
 
 impl<'de> de::Deserialize<'de> for FileDescription {
-    fn deserialize<D>(_deserializer: D) -> ::std::result::Result<Self, D::Error>
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
     where
         D: de::Deserializer<'de>,
     {
-        todo!()
+        let holder = <as_holder!(FileDescription)>::deserialize(deserializer)?;
+        let table = HeaderTable::default();
+        Ok(holder.into_owned(&table).unwrap())
     }
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Holder)]
+#[holder(table = HeaderTable, field = file_name)]
 pub struct FileName {
     name: String,
     time_stamp: String,
@@ -28,25 +41,30 @@ pub struct FileName {
 }
 
 impl<'de> de::Deserialize<'de> for FileName {
-    fn deserialize<D>(_deserializer: D) -> ::std::result::Result<Self, D::Error>
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
     where
         D: de::Deserializer<'de>,
     {
-        todo!()
+        let holder = <as_holder!(FileName)>::deserialize(deserializer)?;
+        let table = HeaderTable::default();
+        Ok(holder.into_owned(&table).unwrap())
     }
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Holder)]
+#[holder(table = HeaderTable, field = file_schema)]
 pub struct FileSchema {
     schema: Vec<String>,
 }
 
 impl<'de> de::Deserialize<'de> for FileSchema {
-    fn deserialize<D>(_deserializer: D) -> ::std::result::Result<Self, D::Error>
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
     where
         D: de::Deserializer<'de>,
     {
-        todo!()
+        let holder = <as_holder!(FileSchema)>::deserialize(deserializer)?;
+        let table = HeaderTable::default();
+        Ok(holder.into_owned(&table).unwrap())
     }
 }
 
