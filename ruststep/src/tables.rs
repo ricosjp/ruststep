@@ -83,7 +83,7 @@ pub trait EntityTable<T: Holder<Table = Self>> {
     ) -> Box<dyn Iterator<Item = Result<T::Owned, crate::error::Error>> + 'table>;
 }
 
-pub(crate) fn get_owned<T, Table>(
+pub fn get_owned<T, Table>(
     table: &Table,
     map: &HashMap<u64, T>,
     entity_id: u64,
@@ -98,7 +98,7 @@ where
     }
 }
 
-pub(crate) fn owned_iter<'table, T, Table>(
+pub fn owned_iter<'table, T, Table>(
     table: &'table Table,
     map: &'table HashMap<u64, T>,
 ) -> Box<dyn Iterator<Item = Result<T::Owned, crate::error::Error>> + 'table>
