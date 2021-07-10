@@ -103,9 +103,9 @@ use crate::{
     ast::{DataSection, EntityInstance},
     custom_any,
     error::*,
-    place_holder::*,
     tables::*,
 };
+use ruststep_derive::{as_holder, Holder};
 use serde::{Deserialize, Serialize};
 use std::{collections::HashMap, fmt::Debug};
 
@@ -115,9 +115,9 @@ use crate::tables;
 /// Tables including entities `A`, `B`, and `C` as their holders.
 #[derive(Debug, Clone, PartialEq, Default)]
 pub struct Ap000 {
-    a: HashMap<u64, AHolder>,
-    b: HashMap<u64, BHolder>,
-    c: HashMap<u64, CHolder>,
+    a: HashMap<u64, as_holder!(A)>,
+    b: HashMap<u64, as_holder!(B)>,
+    c: HashMap<u64, as_holder!(C)>,
 }
 
 impl Ap000 {
@@ -160,124 +160,31 @@ impl Ap000 {
     }
 }
 
-impl EntityTable<AHolder> for Ap000 {
-    fn get_owned(&self, entity_id: u64) -> Result<A> {
-        crate::tables::get_owned(self, &self.a, entity_id)
-    }
-    fn owned_iter<'table>(&'table self) -> Box<dyn Iterator<Item = Result<A>> + 'table> {
-        crate::tables::owned_iter(self, &self.a)
-    }
-}
-
-impl EntityTable<BHolder> for Ap000 {
-    fn get_owned(&self, entity_id: u64) -> Result<B> {
-        crate::tables::get_owned(self, &self.b, entity_id)
-    }
-    fn owned_iter<'table>(&'table self) -> Box<dyn Iterator<Item = Result<B>> + 'table> {
-        crate::tables::owned_iter(self, &self.b)
-    }
-}
-
-impl EntityTable<CHolder> for Ap000 {
-    fn get_owned(&self, entity_id: u64) -> Result<C> {
-        crate::tables::get_owned(self, &self.c, entity_id)
-    }
-    fn owned_iter<'table>(&'table self) -> Box<dyn Iterator<Item = Result<C>> + 'table> {
-        crate::tables::owned_iter(self, &self.c)
-    }
-}
-
 /// Corresponds to `ENTITY a`
-#[derive(Debug, Clone, PartialEq, Serialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Holder)]
+#[holder(table = Ap000, field = a)]
 pub struct A {
     pub x: f64,
     pub y: f64,
 }
 
-/// Holder for [A]
-#[derive(Debug, Clone, PartialEq, Deserialize)]
-pub struct AHolder {
-    x: f64,
-    y: f64,
-}
-
-impl Holder for AHolder {
-    type Table = Ap000;
-    type Owned = A;
-    fn into_owned(self, _tables: &Ap000) -> Result<A> {
-        let AHolder { x, y } = self;
-        Ok(A { x, y })
-    }
-    fn name() -> &'static str {
-        "A"
-    }
-    fn attr_len() -> usize {
-        2
-    }
-}
-
 /// Corresponds to `ENTITY b`
-#[derive(Debug, Clone, PartialEq, Serialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Holder)]
+#[holder(table = Ap000, field = b)]
 pub struct B {
     pub z: f64,
+    #[holder(use_place_holder)]
     pub a: A,
 }
 
-/// Holder for [B]
-#[derive(Debug, Clone, PartialEq, Deserialize)]
-pub struct BHolder {
-    z: f64,
-    a: PlaceHolder<AHolder>,
-}
-
-impl Holder for BHolder {
-    type Table = Ap000;
-    type Owned = B;
-    fn into_owned(self, tables: &Ap000) -> Result<B> {
-        let BHolder { z, a } = self;
-        Ok(B {
-            z,
-            a: a.into_owned(tables)?,
-        })
-    }
-    fn name() -> &'static str {
-        "B"
-    }
-    fn attr_len() -> usize {
-        2
-    }
-}
-
 /// Corresponds to `ENTITY c`
-#[derive(Debug, Clone, PartialEq, Serialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Holder)]
+#[holder(table = Ap000, field = c)]
 pub struct C {
+    #[holder(use_place_holder)]
     pub p: A,
+    #[holder(use_place_holder)]
     pub q: B,
-}
-
-/// Holder for [C]
-#[derive(Debug, Clone, PartialEq, Deserialize)]
-pub struct CHolder {
-    p: PlaceHolder<AHolder>,
-    q: PlaceHolder<BHolder>,
-}
-
-impl Holder for CHolder {
-    type Table = Ap000;
-    type Owned = C;
-    fn into_owned(self, tables: &Ap000) -> Result<C> {
-        let CHolder { p, q } = self;
-        Ok(C {
-            p: p.into_owned(tables)?,
-            q: q.into_owned(tables)?,
-        })
-    }
-    fn name() -> &'static str {
-        "C"
-    }
-    fn attr_len() -> usize {
-        2
-    }
 }
 
 custom_any!(BaseAny);
@@ -303,7 +210,7 @@ pub struct User {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::{ast::*, parser::exchange};
+    use crate::{ast::*, parser::exchange, place_holder::*};
     use nom::Finish;
 
     #[test]
