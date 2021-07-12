@@ -24,11 +24,12 @@ fn ruststep_path() -> TokenStream2 {
 /// Map `A` to `PlaceHolder<AHolder>`
 fn type_to_place_holder(ty: &syn::Type) -> TokenStream2 {
     let ruststep = ruststep_path();
-    if let syn::Type::Path(path) = ty {
-        let ty = as_holder_path(&path.path);
-        quote! { #ruststep::place_holder::PlaceHolder<#ty> }
-    } else {
-        panic!("Member of struct must be a Path")
+    match ty {
+        syn::Type::Path(path) => {
+            let ty = as_holder_path(&path.path);
+            quote! { #ruststep::place_holder::PlaceHolder<#ty> }
+        }
+        _ => panic!("Member of struct must be a Path"),
     }
 }
 
