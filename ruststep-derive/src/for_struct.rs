@@ -10,20 +10,38 @@ fn table_arg() -> syn::Ident {
     syn::Ident::new("table", Span::call_site())
 }
 
-fn ruststep_path() -> TokenStream2 {
+/// Returns `crate` or `::ruststep` as in ruststep crate or not
+fn ruststep_crate() -> syn::Path {
     let path = crate_name("ruststep").unwrap();
     match path {
-        FoundCrate::Itself => quote! { crate },
+        FoundCrate::Itself => {
+            let mut segments = syn::punctuated::Punctuated::new();
+            segments.push(syn::PathSegment {
+                ident: syn::Ident::new("crate", Span::call_site()),
+                arguments: syn::PathArguments::None,
+            });
+            syn::Path {
+                leading_colon: None,
+                segments,
+            }
+        }
         FoundCrate::Name(name) => {
-            let ident = syn::Ident::new(&name, Span::call_site());
-            quote! { ::#ident }
+            let mut segments = syn::punctuated::Punctuated::new();
+            segments.push(syn::PathSegment {
+                ident: syn::Ident::new(&name, Span::call_site()),
+                arguments: syn::PathArguments::None,
+            });
+            syn::Path {
+                leading_colon: Some(syn::token::Colon2::default()),
+                segments,
+            }
         }
     }
 }
 
 /// Map `A` to `PlaceHolder<AHolder>`
 fn type_to_place_holder(ty: &syn::Type) -> TokenStream2 {
-    let ruststep = ruststep_path();
+    let ruststep = ruststep_crate();
     match ty {
         syn::Type::Path(path) => {
             let ty = as_holder_path(&path.path);
@@ -80,7 +98,7 @@ pub fn impl_holder(ident: &syn::Ident, table: &TableAttr, st: &syn::DataStruct) 
     let attr_len = attrs.len();
     let TableAttr { table, .. } = table;
     let table_arg = table_arg();
-    let ruststep = ruststep_path();
+    let ruststep = ruststep_crate();
 
     quote! {
         #[automatically_derived]
@@ -104,7 +122,7 @@ pub fn impl_holder(ident: &syn::Ident, table: &TableAttr, st: &syn::DataStruct) 
 pub fn impl_entity_table(ident: &syn::Ident, table: &TableAttr) -> TokenStream2 {
     let TableAttr { table, field } = table;
     let holder_ident = as_holder_ident(ident);
-    let ruststep = ruststep_path();
+    let ruststep = ruststep_crate();
 
     quote! {
         #[automatically_derived]
