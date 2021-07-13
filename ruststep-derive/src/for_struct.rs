@@ -40,20 +40,40 @@ fn ruststep_crate() -> syn::Path {
 }
 
 /// Map `A` to `PlaceHolder<AHolder>`
-fn type_to_place_holder(ty: &syn::Type) -> TokenStream2 {
-    let ruststep = ruststep_crate();
-    match ty {
-        syn::Type::Path(path) => {
-            let ty = as_holder_path(&path.path);
-            quote! { #ruststep::place_holder::PlaceHolder<#ty> }
+fn as_place_holder(input: &syn::Path) -> syn::Path {
+    let syn::Path {
+        leading_colon,
+        mut segments,
+    } = input.clone();
+    let last_seg = segments.last_mut().unwrap();
+    match &mut last_seg.arguments {
+        // non-generic path
+        syn::PathArguments::None => {
+            let ruststep = ruststep_crate();
+            let holder_ident = as_holder_ident(&last_seg.ident);
+            return syn::parse_quote! { #ruststep::place_holder::PlaceHolder<#holder_ident> };
         }
-        _ => panic!("Member of struct must be a Path"),
+        // generic path, e.g. Option<T>
+        syn::PathArguments::AngleBracketed(syn::AngleBracketedGenericArguments {
+            args, ..
+        }) => {
+            for arg in args {
+                if let syn::GenericArgument::Type(syn::Type::Path(path)) = arg {
+                    path.path = as_place_holder(&path.path);
+                }
+            }
+            return syn::Path {
+                leading_colon,
+                segments,
+            };
+        }
+        _ => unimplemented!(),
     }
 }
 
 fn preprocess_attributes(
     st: &syn::DataStruct,
-) -> (Vec<&syn::Ident>, Vec<TokenStream2>, Vec<TokenStream2>) {
+) -> (Vec<&syn::Ident>, Vec<syn::Path>, Vec<TokenStream2>) {
     let table_arg = table_arg();
 
     let mut attrs = Vec::new();
@@ -67,12 +87,17 @@ fn preprocess_attributes(
             .expect("Tuple struct case is not supported");
         attrs.push(ident);
 
+        let path = if let syn::Type::Path(syn::TypePath { path, .. }) = &field.ty {
+            path
+        } else {
+            panic!("non-path field is not supported for derive(Holder)")
+        };
+
         if is_use_place_holder(&field.attrs) {
-            types.push(type_to_place_holder(&field.ty));
+            types.push(as_place_holder(path));
             into_owned.push(quote! { #ident.into_owned(#table_arg)? })
         } else {
-            let ty = &field.ty;
-            types.push(quote! { #ty });
+            types.push(path.clone());
             into_owned.push(quote! { #ident })
         }
     }
