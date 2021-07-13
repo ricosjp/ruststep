@@ -67,7 +67,7 @@ fn derive_holder(ast: &syn::DeriveInput) -> TokenStream2 {
 /// Resolve Holder struct from owned type, e.g. `A` to `AHolder`
 #[proc_macro]
 pub fn as_holder(input: TokenStream) -> TokenStream {
-    let path = as_holder_ident(&syn::parse(input).unwrap());
+    let path = as_holder_path(&syn::parse(input).unwrap());
     let ts = quote! { #path };
     ts.into()
 }
