@@ -33,12 +33,17 @@
 //! - `impl Holder for AHolder`
 //!
 
+#![allow(dead_code, unused_imports)] // FIXME
+
 use proc_macro::TokenStream;
 use proc_macro2::TokenStream as TokenStream2;
 use quote::quote;
 
+mod field_type;
 mod for_struct;
 mod holder_attr;
+
+use field_type::*;
 use holder_attr::*;
 
 #[proc_macro_derive(Holder, attributes(holder))]
