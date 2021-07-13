@@ -1,19 +1,22 @@
 //! Procedural macros for ruststep
 //!
 //! ```
+//! use ruststep_derive::{as_holder, Holder};
+//! use std::collections::HashMap;
+//!
 //! pub struct Table {
-//!    a: ::std::collections::HashMap<u64, ruststep_derive::as_holder!(A)>,
-//!    b: ::std::collections::HashMap<u64, ruststep_derive::as_holder!(B)>,
+//!     a: HashMap<u64, as_holder!(A)>,
+//!     b: HashMap<u64, as_holder!(B)>,
 //! }
 //!
-//! #[derive(Debug, Clone, PartialEq, ruststep_derive::Holder)]
+//! #[derive(Debug, Clone, PartialEq, Holder)]
 //! #[holder(table = Table, field = a)]
 //! pub struct A {
 //!     pub x: f64,
 //!     pub y: f64,
 //! }
 //!
-//! #[derive(Debug, Clone, PartialEq, ruststep_derive::Holder)]
+//! #[derive(Debug, Clone, PartialEq, Holder)]
 //! #[holder(table = Table, field = b)]
 //! pub struct B {
 //!     pub z: f64,
