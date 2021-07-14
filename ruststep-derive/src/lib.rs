@@ -67,13 +67,63 @@ fn derive_holder(ast: &syn::DeriveInput) -> TokenStream2 {
 /// Resolve Holder struct from owned type, e.g. `A` to `AHolder`
 #[proc_macro]
 pub fn as_holder(input: TokenStream) -> TokenStream {
-    let path = as_holder2(&syn::parse(input).unwrap());
+    let path = as_holder_path(&syn::parse(input).unwrap());
     let ts = quote! { #path };
     ts.into()
 }
 
-// FIXME This should accept `syn::Path` instead of `syn::Ident`,
-// e.g. `::some_schema::A` to `::some_schema::AHolder`
-fn as_holder2(input: &syn::Ident) -> syn::Ident {
+fn as_holder_ident(input: &syn::Ident) -> syn::Ident {
     quote::format_ident!("{}Holder", input)
+}
+
+fn as_holder_path(input: &syn::Path) -> syn::Path {
+    let syn::Path {
+        leading_colon,
+        segments,
+    } = input;
+    let mut segments = segments.clone();
+    let mut last_seg = segments.last_mut().unwrap();
+    match &mut last_seg.arguments {
+        syn::PathArguments::None => {
+            last_seg.ident = as_holder_ident(&last_seg.ident);
+        }
+        // Option<A> -> Option<AHolder>
+        //       ^^^
+        //       args
+        syn::PathArguments::AngleBracketed(syn::AngleBracketedGenericArguments {
+            args, ..
+        }) => {
+            for arg in args {
+                if let syn::GenericArgument::Type(syn::Type::Path(path)) = arg {
+                    path.path = as_holder_path(&path.path);
+                }
+            }
+        }
+        _ => unimplemented!(),
+    }
+    syn::Path {
+        leading_colon: leading_colon.clone(),
+        segments,
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn holder_path() {
+        let path: syn::Path = syn::parse_str("::some::Struct").unwrap();
+        let holder = as_holder_path(&path);
+        let ans: syn::Path = syn::parse_str("::some::StructHolder").unwrap();
+        assert_eq!(holder, ans);
+    }
+
+    #[test]
+    fn optional_holder_path() {
+        let path: syn::Path = syn::parse_str("Option<::some::Struct>").unwrap();
+        let holder = as_holder_path(&path);
+        let ans: syn::Path = syn::parse_str("Option<::some::StructHolder>").unwrap();
+        assert_eq!(holder, ans);
+    }
 }
