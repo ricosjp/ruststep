@@ -51,8 +51,24 @@ mod tests {
 
     #[test]
     fn field_type_new() {
+        let ty: syn::Type = syn::parse_str("T").unwrap();
+        let f = FieldType::new(&ty);
+        assert!(matches!(f, FieldType::Path(_)));
+
         let ty: syn::Type = syn::parse_str("Option<T>").unwrap();
         let f = FieldType::new(&ty);
         assert!(matches!(f, FieldType::Optional(_)));
+
+        let ty: syn::Type = syn::parse_str("Vec<T>").unwrap();
+        let f = FieldType::new(&ty);
+        assert!(matches!(f, FieldType::List(_)));
+
+        let ty: syn::Type = syn::parse_str("Option<Vec<T>>").unwrap();
+        let f = FieldType::new(&ty);
+        if let FieldType::Optional(ty) = f {
+            assert!(matches!(*ty, FieldType::List(_)));
+        } else {
+            panic!()
+        }
     }
 }
