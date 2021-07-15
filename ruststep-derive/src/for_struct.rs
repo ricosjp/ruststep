@@ -1,6 +1,5 @@
 use inflector::Inflector;
 use proc_macro2::{Span, TokenStream as TokenStream2};
-use proc_macro_crate::*;
 use quote::quote;
 use std::convert::*;
 
@@ -9,38 +8,6 @@ use super::*;
 /// This must be same between codegens
 fn table_arg() -> syn::Ident {
     syn::Ident::new("table", Span::call_site())
-}
-
-/// Map `A` to `PlaceHolder<AHolder>`
-fn as_place_holder(input: &syn::Path) -> syn::Path {
-    let syn::Path {
-        leading_colon,
-        mut segments,
-    } = input.clone();
-    let last_seg = segments.last_mut().unwrap();
-    match &mut last_seg.arguments {
-        // non-generic path
-        syn::PathArguments::None => {
-            let ruststep = ruststep_crate();
-            let holder_ident = as_holder_ident(&last_seg.ident);
-            return syn::parse_quote! { #ruststep::place_holder::PlaceHolder<#holder_ident> };
-        }
-        // generic path, e.g. Option<T>
-        syn::PathArguments::AngleBracketed(syn::AngleBracketedGenericArguments {
-            args, ..
-        }) => {
-            for arg in args {
-                if let syn::GenericArgument::Type(syn::Type::Path(path)) = arg {
-                    path.path = as_place_holder(&path.path);
-                }
-            }
-            return syn::Path {
-                leading_colon,
-                segments,
-            };
-        }
-        _ => unimplemented!(),
-    }
 }
 
 fn preprocess_attributes(
