@@ -36,7 +36,8 @@
 #![allow(dead_code, unused_imports)] // FIXME
 
 use proc_macro::TokenStream;
-use proc_macro2::TokenStream as TokenStream2;
+use proc_macro2::{Span, TokenStream as TokenStream2};
+use proc_macro_crate::{crate_name, FoundCrate};
 use quote::quote;
 
 mod field_type;
@@ -109,6 +110,35 @@ fn as_holder_path(input: &syn::Path) -> syn::Path {
     syn::Path {
         leading_colon: leading_colon.clone(),
         segments,
+    }
+}
+
+/// Returns `crate` or `::ruststep` as in ruststep crate or not
+fn ruststep_crate() -> syn::Path {
+    let path = crate_name("ruststep").unwrap();
+    match path {
+        FoundCrate::Itself => {
+            let mut segments = syn::punctuated::Punctuated::new();
+            segments.push(syn::PathSegment {
+                ident: syn::Ident::new("crate", Span::call_site()),
+                arguments: syn::PathArguments::None,
+            });
+            syn::Path {
+                leading_colon: None,
+                segments,
+            }
+        }
+        FoundCrate::Name(name) => {
+            let mut segments = syn::punctuated::Punctuated::new();
+            segments.push(syn::PathSegment {
+                ident: syn::Ident::new(&name, Span::call_site()),
+                arguments: syn::PathArguments::None,
+            });
+            syn::Path {
+                leading_colon: Some(syn::token::Colon2::default()),
+                segments,
+            }
+        }
     }
 }
 

@@ -10,35 +10,6 @@ fn table_arg() -> syn::Ident {
     syn::Ident::new("table", Span::call_site())
 }
 
-/// Returns `crate` or `::ruststep` as in ruststep crate or not
-fn ruststep_crate() -> syn::Path {
-    let path = crate_name("ruststep").unwrap();
-    match path {
-        FoundCrate::Itself => {
-            let mut segments = syn::punctuated::Punctuated::new();
-            segments.push(syn::PathSegment {
-                ident: syn::Ident::new("crate", Span::call_site()),
-                arguments: syn::PathArguments::None,
-            });
-            syn::Path {
-                leading_colon: None,
-                segments,
-            }
-        }
-        FoundCrate::Name(name) => {
-            let mut segments = syn::punctuated::Punctuated::new();
-            segments.push(syn::PathSegment {
-                ident: syn::Ident::new(&name, Span::call_site()),
-                arguments: syn::PathArguments::None,
-            });
-            syn::Path {
-                leading_colon: Some(syn::token::Colon2::default()),
-                segments,
-            }
-        }
-    }
-}
-
 /// Map `A` to `PlaceHolder<AHolder>`
 fn as_place_holder(input: &syn::Path) -> syn::Path {
     let syn::Path {
