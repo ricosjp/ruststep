@@ -2,6 +2,7 @@ use inflector::Inflector;
 use proc_macro2::{Span, TokenStream as TokenStream2};
 use proc_macro_crate::*;
 use quote::quote;
+use std::convert::*;
 
 use super::*;
 
@@ -44,7 +45,7 @@ fn as_place_holder(input: &syn::Path) -> syn::Path {
 
 fn preprocess_attributes(
     st: &syn::DataStruct,
-) -> (Vec<&syn::Ident>, Vec<syn::Path>, Vec<TokenStream2>) {
+) -> (Vec<&syn::Ident>, Vec<syn::Type>, Vec<TokenStream2>) {
     let table_arg = table_arg();
 
     let mut attrs = Vec::new();
@@ -58,18 +59,24 @@ fn preprocess_attributes(
             .expect("Tuple struct case is not supported");
         attrs.push(ident);
 
-        let path = if let syn::Type::Path(syn::TypePath { path, .. }) = &field.ty {
-            path
-        } else {
-            panic!("non-path field is not supported for derive(Holder)")
-        };
+        let ft: FieldType = field.ty.clone().try_into().unwrap();
 
         if is_use_place_holder(&field.attrs) {
-            types.push(as_place_holder(path));
-            into_owned.push(quote! { #ident.into_owned(#table_arg)? })
+            match &ft {
+                FieldType::Path(_) => {
+                    into_owned.push(quote! { #ident.into_owned(#table_arg)? });
+                }
+                FieldType::Optional(_) => {
+                    into_owned.push(
+                        quote! { #ident.map(|holder| holder.into_owned(#table_arg)).transpose()? },
+                    );
+                }
+                FieldType::List(_) => unimplemented!(),
+            }
+            types.push(ft.as_holder().as_place_holder().into());
         } else {
-            types.push(path.clone());
-            into_owned.push(quote! { #ident })
+            into_owned.push(quote! { #ident });
+            types.push(ft.into());
         }
     }
     (attrs, types, into_owned)

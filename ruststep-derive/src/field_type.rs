@@ -44,7 +44,7 @@ impl FieldType {
         }
     }
 
-    fn as_place_holder(self) -> Self {
+    pub fn as_place_holder(self) -> Self {
         let ruststep = ruststep_crate();
         match self {
             FieldType::Path(path) => {
