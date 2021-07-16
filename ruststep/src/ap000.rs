@@ -126,21 +126,21 @@ impl Ap000 {
 
         for entity in &sec.entities {
             match entity {
-                EntityInstance::Simple { name, record } => match record.name.as_str() {
-                    "A" => table
-                        .a
-                        .insert(*name, AHolder::deserialize(record)?)
-                        .is_none(),
-                    "B" => table
-                        .b
-                        .insert(*name, BHolder::deserialize(record)?)
-                        .is_none(),
-                    "C" => table
-                        .c
-                        .insert(*name, CHolder::deserialize(record)?)
-                        .is_none(),
-                    _ => panic!(),
-                },
+                EntityInstance::Simple { id, record } => {
+                    if !match record.name.as_str() {
+                        "A" => table.a.insert(*id, AHolder::deserialize(record)?).is_none(),
+                        "B" => table.b.insert(*id, BHolder::deserialize(record)?).is_none(),
+                        "C" => table.c.insert(*id, CHolder::deserialize(record)?).is_none(),
+                        name @ _ => {
+                            return Err(Error::UnknownEntityName {
+                                entity_name: name.to_string(),
+                                schema: "ap000".to_string(),
+                            })
+                        }
+                    } {
+                        return Err(Error::DuplicatedEntity(*id));
+                    }
+                }
                 EntityInstance::Complex { .. } => unimplemented!(),
             };
         }
