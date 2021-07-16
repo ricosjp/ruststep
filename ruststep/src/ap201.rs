@@ -4216,7 +4216,7 @@ pub mod explicit_draughting {
     pub enum CharacterSpacingSelect {
         LengthMeasure(Box<LengthMeasure>),
         RatioMeasure(Box<RatioMeasure>),
-        MeasureWithUnit(Box<dyn MeasureWithUnitAny>),
+        MeasureWithUnit(MeasureWithUnitAny),
     }
     #[derive(Debug, Clone)]
     pub enum CharacterStyleSelect {
@@ -4246,7 +4246,7 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone)]
     pub enum CurveOrAnnotationCurveOccurrence {
-        Curve(Box<dyn CurveAny>),
+        Curve(CurveAny),
         AnnotationCurveOccurrence(Box<AnnotationCurveOccurrence>),
     }
     #[derive(Debug, Clone)]
@@ -4261,7 +4261,7 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone)]
     pub enum DateTimeSelect {
-        Date(Box<dyn DateAny>),
+        Date(DateAny),
     }
     pub type DayInMonthNumber = i64;
     #[derive(Debug, Clone)]
@@ -4283,7 +4283,7 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone)]
     pub enum DraughtingGroupedItem {
-        AnnotationOccurrence(Box<dyn AnnotationOccurrenceAny>),
+        AnnotationOccurrence(AnnotationOccurrenceAny),
         GeometricSetSelect(Box<GeometricSetSelect>),
     }
     #[derive(Debug, Clone)]
@@ -4320,8 +4320,8 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone)]
     pub enum GeometricSetSelect {
-        Point(Box<dyn PointAny>),
-        Curve(Box<dyn CurveAny>),
+        Point(PointAny),
+        Curve(CurveAny),
     }
     #[derive(Debug, Clone)]
     pub enum HidingOrBlankingSelect {
@@ -4458,7 +4458,7 @@ pub mod explicit_draughting {
     #[derive(Debug, Clone)]
     pub enum SizeSelect {
         PositiveLengthMeasure(Box<PositiveLengthMeasure>),
-        MeasureWithUnit(Box<dyn MeasureWithUnitAny>),
+        MeasureWithUnit(MeasureWithUnitAny),
     }
     #[derive(Debug, Clone)]
     pub enum SourceItem {
@@ -4514,7 +4514,7 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone)]
     pub enum Unit {
-        NamedUnit(Box<dyn NamedUnitAny>),
+        NamedUnit(NamedUnitAny),
     }
     #[derive(Debug, Clone)]
     pub enum VectorOrDirection {
@@ -4586,14 +4586,18 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    impl AnnotationOccurrenceAny for AnnotationCurveOccurrence {}
+    impl Into<AnnotationOccurrence> for AnnotationCurveOccurrence {
+        fn into(self) -> AnnotationOccurrence {
+            AnnotationOccurrence::AnnotationCurveOccurrence(Box::new(self))
+        }
+    }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct AnnotationCurveOccurrence {
-        pub annotation_occurrence: Box<dyn AnnotationOccurrenceAny>,
+        pub annotation_occurrence: AnnotationOccurrenceAny,
     }
     #[derive(Clone, Debug)]
     struct AnnotationCurveOccurrenceHolder {
-        annotation_occurrence: PlaceHolder<Box<dyn AnnotationOccurrenceAny>>,
+        annotation_occurrence: PlaceHolder<AnnotationOccurrenceAny>,
     }
     impl Holder for AnnotationCurveOccurrenceHolder {
         type Table = Tables;
@@ -4608,16 +4612,20 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    impl GeometricRepresentationItemAny for AnnotationFillArea {}
+    impl Into<GeometricRepresentationItem> for AnnotationFillArea {
+        fn into(self) -> GeometricRepresentationItem {
+            GeometricRepresentationItem::AnnotationFillArea(Box::new(self))
+        }
+    }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct AnnotationFillArea {
-        pub boundaries: Vec<Box<dyn CurveAny>>,
-        pub geometric_representation_item: Box<dyn GeometricRepresentationItemAny>,
+        pub boundaries: Vec<CurveAny>,
+        pub geometric_representation_item: GeometricRepresentationItemAny,
     }
     #[derive(Clone, Debug)]
     struct AnnotationFillAreaHolder {
-        boundaries: PlaceHolder<Vec<Box<dyn CurveAny>>>,
-        geometric_representation_item: PlaceHolder<Box<dyn GeometricRepresentationItemAny>>,
+        boundaries: PlaceHolder<Vec<CurveAny>>,
+        geometric_representation_item: PlaceHolder<GeometricRepresentationItemAny>,
     }
     impl Holder for AnnotationFillAreaHolder {
         type Table = Tables;
@@ -4632,16 +4640,20 @@ pub mod explicit_draughting {
             2usize
         }
     }
-    impl AnnotationOccurrenceAny for AnnotationFillAreaOccurrence {}
+    impl Into<AnnotationOccurrence> for AnnotationFillAreaOccurrence {
+        fn into(self) -> AnnotationOccurrence {
+            AnnotationOccurrence::AnnotationFillAreaOccurrence(Box::new(self))
+        }
+    }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct AnnotationFillAreaOccurrence {
-        pub fill_style_target: Box<dyn PointAny>,
-        pub annotation_occurrence: Box<dyn AnnotationOccurrenceAny>,
+        pub fill_style_target: PointAny,
+        pub annotation_occurrence: AnnotationOccurrenceAny,
     }
     #[derive(Clone, Debug)]
     struct AnnotationFillAreaOccurrenceHolder {
-        fill_style_target: PlaceHolder<Box<dyn PointAny>>,
-        annotation_occurrence: PlaceHolder<Box<dyn AnnotationOccurrenceAny>>,
+        fill_style_target: PlaceHolder<PointAny>,
+        annotation_occurrence: PlaceHolder<AnnotationOccurrenceAny>,
     }
     impl Holder for AnnotationFillAreaOccurrenceHolder {
         type Table = Tables;
@@ -4677,12 +4689,8 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    pub trait AnnotationOccurrenceAny:
-        ::std::any::Any + ::std::fmt::Debug + dyn_clone::DynClone
-    {
-    }
-    dyn_clone::clone_trait_object!(AnnotationOccurrenceAny);
-    impl AnnotationOccurrenceAny for AnnotationOccurrence {}
+    #[derive(Debug, Clone)]
+    pub enum AnnotationOccurrenceAny {}
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct AnnotationSubfigureOccurrence {
         pub annotation_symbol_occurrence: AnnotationSymbolOccurrence,
@@ -4725,14 +4733,18 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    impl AnnotationOccurrenceAny for AnnotationSymbolOccurrence {}
+    impl Into<AnnotationOccurrence> for AnnotationSymbolOccurrence {
+        fn into(self) -> AnnotationOccurrence {
+            AnnotationOccurrence::AnnotationSymbolOccurrence(Box::new(self))
+        }
+    }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct AnnotationSymbolOccurrence {
-        pub annotation_occurrence: Box<dyn AnnotationOccurrenceAny>,
+        pub annotation_occurrence: AnnotationOccurrenceAny,
     }
     #[derive(Clone, Debug)]
     struct AnnotationSymbolOccurrenceHolder {
-        annotation_occurrence: PlaceHolder<Box<dyn AnnotationOccurrenceAny>>,
+        annotation_occurrence: PlaceHolder<AnnotationOccurrenceAny>,
     }
     impl Holder for AnnotationSymbolOccurrenceHolder {
         type Table = Tables;
@@ -4768,14 +4780,18 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    impl AnnotationOccurrenceAny for AnnotationTextOccurrence {}
+    impl Into<AnnotationOccurrence> for AnnotationTextOccurrence {
+        fn into(self) -> AnnotationOccurrence {
+            AnnotationOccurrence::AnnotationTextOccurrence(Box::new(self))
+        }
+    }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct AnnotationTextOccurrence {
-        pub annotation_occurrence: Box<dyn AnnotationOccurrenceAny>,
+        pub annotation_occurrence: AnnotationOccurrenceAny,
     }
     #[derive(Clone, Debug)]
     struct AnnotationTextOccurrenceHolder {
-        annotation_occurrence: PlaceHolder<Box<dyn AnnotationOccurrenceAny>>,
+        annotation_occurrence: PlaceHolder<AnnotationOccurrenceAny>,
     }
     impl Holder for AnnotationTextOccurrenceHolder {
         type Table = Tables;
@@ -4834,12 +4850,8 @@ pub mod explicit_draughting {
             2usize
         }
     }
-    pub trait ApplicationContextElementAny:
-        ::std::any::Any + ::std::fmt::Debug + dyn_clone::DynClone
-    {
-    }
-    dyn_clone::clone_trait_object!(ApplicationContextElementAny);
-    impl ApplicationContextElementAny for ApplicationContextElement {}
+    #[derive(Debug, Clone)]
+    pub enum ApplicationContextElementAny {}
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct ApplicationProtocolDefinition {
         pub status: Label,
@@ -4911,12 +4923,8 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    pub trait ApprovalAssignmentAny:
-        ::std::any::Any + ::std::fmt::Debug + dyn_clone::DynClone
-    {
-    }
-    dyn_clone::clone_trait_object!(ApprovalAssignmentAny);
-    impl ApprovalAssignmentAny for ApprovalAssignment {}
+    #[derive(Debug, Clone)]
+    pub enum ApprovalAssignmentAny {}
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct ApprovalDateTime {
         pub date_time: DateTimeSelect,
@@ -5030,16 +5038,20 @@ pub mod explicit_draughting {
             2usize
         }
     }
-    impl PlacementAny for Axis2Placement2D {}
+    impl Into<Placement> for Axis2Placement2D {
+        fn into(self) -> Placement {
+            Placement::Axis2Placement2D(Box::new(self))
+        }
+    }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct Axis2Placement2D {
         pub ref_direction: Option<Direction>,
-        pub placement: Box<dyn PlacementAny>,
+        pub placement: PlacementAny,
     }
     #[derive(Clone, Debug)]
     struct Axis2Placement2DHolder {
         ref_direction: Option<PlaceHolder<Direction>>,
-        placement: PlaceHolder<Box<dyn PlacementAny>>,
+        placement: PlaceHolder<PlacementAny>,
     }
     impl Holder for Axis2Placement2DHolder {
         type Table = Tables;
@@ -5054,7 +5066,11 @@ pub mod explicit_draughting {
             2usize
         }
     }
-    impl BoundedCurveAny for BSplineCurve {}
+    impl Into<BoundedCurve> for BSplineCurve {
+        fn into(self) -> BoundedCurve {
+            BoundedCurve::BSplineCurve(Box::new(self))
+        }
+    }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct BSplineCurve {
         pub degree: i64,
@@ -5062,7 +5078,7 @@ pub mod explicit_draughting {
         pub curve_form: BSplineCurveForm,
         pub closed_curve: Logical,
         pub self_intersect: Logical,
-        pub bounded_curve: Box<dyn BoundedCurveAny>,
+        pub bounded_curve: BoundedCurveAny,
     }
     #[derive(Clone, Debug)]
     struct BSplineCurveHolder {
@@ -5071,7 +5087,7 @@ pub mod explicit_draughting {
         curve_form: PlaceHolder<BSplineCurveForm>,
         closed_curve: Logical,
         self_intersect: Logical,
-        bounded_curve: PlaceHolder<Box<dyn BoundedCurveAny>>,
+        bounded_curve: PlaceHolder<BoundedCurveAny>,
     }
     impl Holder for BSplineCurveHolder {
         type Table = Tables;
@@ -5086,23 +5102,26 @@ pub mod explicit_draughting {
             6usize
         }
     }
-    pub trait BSplineCurveAny: ::std::any::Any + ::std::fmt::Debug + dyn_clone::DynClone {}
-    dyn_clone::clone_trait_object!(BSplineCurveAny);
-    impl BSplineCurveAny for BSplineCurve {}
-    impl BSplineCurveAny for BSplineCurveWithKnots {}
+    #[derive(Debug, Clone)]
+    pub enum BSplineCurveAny {}
+    impl Into<BSplineCurve> for BSplineCurveWithKnots {
+        fn into(self) -> BSplineCurve {
+            BSplineCurve::BSplineCurveWithKnots(Box::new(self))
+        }
+    }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct BSplineCurveWithKnots {
         pub knot_multiplicities: Vec<i64>,
         pub knots: Vec<ParameterValue>,
         pub knot_spec: KnotType,
-        pub b_spline_curve: Box<dyn BSplineCurveAny>,
+        pub b_spline_curve: BSplineCurveAny,
     }
     #[derive(Clone, Debug)]
     struct BSplineCurveWithKnotsHolder {
         knot_multiplicities: PlaceHolder<Vec<i64>>,
         knots: PlaceHolder<Vec<ParameterValue>>,
         knot_spec: PlaceHolder<KnotType>,
-        b_spline_curve: PlaceHolder<Box<dyn BSplineCurveAny>>,
+        b_spline_curve: PlaceHolder<BSplineCurveAny>,
     }
     impl Holder for BSplineCurveWithKnotsHolder {
         type Table = Tables;
@@ -5117,14 +5136,18 @@ pub mod explicit_draughting {
             4usize
         }
     }
-    impl BSplineCurveAny for BezierCurve {}
+    impl Into<BSplineCurve> for BezierCurve {
+        fn into(self) -> BSplineCurve {
+            BSplineCurve::BezierCurve(Box::new(self))
+        }
+    }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct BezierCurve {
-        pub b_spline_curve: Box<dyn BSplineCurveAny>,
+        pub b_spline_curve: BSplineCurveAny,
     }
     #[derive(Clone, Debug)]
     struct BezierCurveHolder {
-        b_spline_curve: PlaceHolder<Box<dyn BSplineCurveAny>>,
+        b_spline_curve: PlaceHolder<BSplineCurveAny>,
     }
     impl Holder for BezierCurveHolder {
         type Table = Tables;
@@ -5139,14 +5162,18 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    impl CurveAny for BoundedCurve {}
+    impl Into<Curve> for BoundedCurve {
+        fn into(self) -> Curve {
+            Curve::BoundedCurve(Box::new(self))
+        }
+    }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct BoundedCurve {
-        pub curve: Box<dyn CurveAny>,
+        pub curve: CurveAny,
     }
     #[derive(Clone, Debug)]
     struct BoundedCurveHolder {
-        curve: PlaceHolder<Box<dyn CurveAny>>,
+        curve: PlaceHolder<CurveAny>,
     }
     impl Holder for BoundedCurveHolder {
         type Table = Tables;
@@ -5161,21 +5188,24 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    pub trait BoundedCurveAny: ::std::any::Any + ::std::fmt::Debug + dyn_clone::DynClone {}
-    dyn_clone::clone_trait_object!(BoundedCurveAny);
-    impl BoundedCurveAny for BoundedCurve {}
-    impl DateAny for CalendarDate {}
+    #[derive(Debug, Clone)]
+    pub enum BoundedCurveAny {}
+    impl Into<Date> for CalendarDate {
+        fn into(self) -> Date {
+            Date::CalendarDate(Box::new(self))
+        }
+    }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct CalendarDate {
         pub day_component: DayInMonthNumber,
         pub month_component: MonthInYearNumber,
-        pub date: Box<dyn DateAny>,
+        pub date: DateAny,
     }
     #[derive(Clone, Debug)]
     struct CalendarDateHolder {
         day_component: DayInMonthNumber,
         month_component: MonthInYearNumber,
-        date: PlaceHolder<Box<dyn DateAny>>,
+        date: PlaceHolder<DateAny>,
     }
     impl Holder for CalendarDateHolder {
         type Table = Tables;
@@ -5232,14 +5262,18 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    impl GeometricRepresentationItemAny for CameraModel {}
+    impl Into<GeometricRepresentationItem> for CameraModel {
+        fn into(self) -> GeometricRepresentationItem {
+            GeometricRepresentationItem::CameraModel(Box::new(self))
+        }
+    }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct CameraModel {
-        pub geometric_representation_item: Box<dyn GeometricRepresentationItemAny>,
+        pub geometric_representation_item: GeometricRepresentationItemAny,
     }
     #[derive(Clone, Debug)]
     struct CameraModelHolder {
-        geometric_representation_item: PlaceHolder<Box<dyn GeometricRepresentationItemAny>>,
+        geometric_representation_item: PlaceHolder<GeometricRepresentationItemAny>,
     }
     impl Holder for CameraModelHolder {
         type Table = Tables;
@@ -5254,21 +5288,24 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    pub trait CameraModelAny: ::std::any::Any + ::std::fmt::Debug + dyn_clone::DynClone {}
-    dyn_clone::clone_trait_object!(CameraModelAny);
-    impl CameraModelAny for CameraModel {}
-    impl CameraModelAny for CameraModelD2 {}
+    #[derive(Debug, Clone)]
+    pub enum CameraModelAny {}
+    impl Into<CameraModel> for CameraModelD2 {
+        fn into(self) -> CameraModel {
+            CameraModel::CameraModelD2(Box::new(self))
+        }
+    }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct CameraModelD2 {
         pub view_window: PlanarBox,
         pub view_window_clipping: bool,
-        pub camera_model: Box<dyn CameraModelAny>,
+        pub camera_model: CameraModelAny,
     }
     #[derive(Clone, Debug)]
     struct CameraModelD2Holder {
         view_window: PlaceHolder<PlanarBox>,
         view_window_clipping: bool,
-        camera_model: PlaceHolder<Box<dyn CameraModelAny>>,
+        camera_model: PlaceHolder<CameraModelAny>,
     }
     impl Holder for CameraModelD2Holder {
         type Table = Tables;
@@ -5304,16 +5341,20 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    impl PointAny for CartesianPoint {}
+    impl Into<Point> for CartesianPoint {
+        fn into(self) -> Point {
+            Point::CartesianPoint(Box::new(self))
+        }
+    }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct CartesianPoint {
         pub coordinates: Vec<LengthMeasure>,
-        pub point: Box<dyn PointAny>,
+        pub point: PointAny,
     }
     #[derive(Clone, Debug)]
     struct CartesianPointHolder {
         coordinates: PlaceHolder<Vec<LengthMeasure>>,
-        point: PlaceHolder<Box<dyn PointAny>>,
+        point: PlaceHolder<PointAny>,
     }
     impl Holder for CartesianPointHolder {
         type Table = Tables;
@@ -5328,16 +5369,20 @@ pub mod explicit_draughting {
             2usize
         }
     }
-    impl ConicAny for Circle {}
+    impl Into<Conic> for Circle {
+        fn into(self) -> Conic {
+            Conic::Circle(Box::new(self))
+        }
+    }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct Circle {
         pub radius: PositiveLengthMeasure,
-        pub conic: Box<dyn ConicAny>,
+        pub conic: ConicAny,
     }
     #[derive(Clone, Debug)]
     struct CircleHolder {
         radius: PositiveLengthMeasure,
-        conic: PlaceHolder<Box<dyn ConicAny>>,
+        conic: PlaceHolder<ConicAny>,
     }
     impl Holder for CircleHolder {
         type Table = Tables;
@@ -5419,18 +5464,22 @@ pub mod explicit_draughting {
             2usize
         }
     }
-    impl BoundedCurveAny for CompositeCurve {}
+    impl Into<BoundedCurve> for CompositeCurve {
+        fn into(self) -> BoundedCurve {
+            BoundedCurve::CompositeCurve(Box::new(self))
+        }
+    }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct CompositeCurve {
         pub segments: Vec<CompositeCurveSegment>,
         pub self_intersect: Logical,
-        pub bounded_curve: Box<dyn BoundedCurveAny>,
+        pub bounded_curve: BoundedCurveAny,
     }
     #[derive(Clone, Debug)]
     struct CompositeCurveHolder {
         segments: PlaceHolder<Vec<CompositeCurveSegment>>,
         self_intersect: Logical,
-        bounded_curve: PlaceHolder<Box<dyn BoundedCurveAny>>,
+        bounded_curve: PlaceHolder<BoundedCurveAny>,
     }
     impl Holder for CompositeCurveHolder {
         type Table = Tables;
@@ -5449,13 +5498,13 @@ pub mod explicit_draughting {
     pub struct CompositeCurveSegment {
         pub transition: TransitionCode,
         pub same_sense: bool,
-        pub parent_curve: Box<dyn CurveAny>,
+        pub parent_curve: CurveAny,
     }
     #[derive(Clone, Debug)]
     struct CompositeCurveSegmentHolder {
         transition: PlaceHolder<TransitionCode>,
         same_sense: bool,
-        parent_curve: PlaceHolder<Box<dyn CurveAny>>,
+        parent_curve: PlaceHolder<CurveAny>,
     }
     impl Holder for CompositeCurveSegmentHolder {
         type Table = Tables;
@@ -5470,16 +5519,20 @@ pub mod explicit_draughting {
             3usize
         }
     }
-    impl GeometricRepresentationItemAny for CompositeText {}
+    impl Into<GeometricRepresentationItem> for CompositeText {
+        fn into(self) -> GeometricRepresentationItem {
+            GeometricRepresentationItem::CompositeText(Box::new(self))
+        }
+    }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct CompositeText {
         pub collected_text: Vec<TextOrCharacter>,
-        pub geometric_representation_item: Box<dyn GeometricRepresentationItemAny>,
+        pub geometric_representation_item: GeometricRepresentationItemAny,
     }
     #[derive(Clone, Debug)]
     struct CompositeTextHolder {
         collected_text: PlaceHolder<Vec<TextOrCharacter>>,
-        geometric_representation_item: PlaceHolder<Box<dyn GeometricRepresentationItemAny>>,
+        geometric_representation_item: PlaceHolder<GeometricRepresentationItemAny>,
     }
     impl Holder for CompositeTextHolder {
         type Table = Tables;
@@ -5496,12 +5549,12 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct CompositeTextWithAssociatedCurves {
-        pub associated_curves: Vec<Box<dyn CurveAny>>,
+        pub associated_curves: Vec<CurveAny>,
         pub composite_text: CompositeText,
     }
     #[derive(Clone, Debug)]
     struct CompositeTextWithAssociatedCurvesHolder {
-        associated_curves: PlaceHolder<Vec<Box<dyn CurveAny>>>,
+        associated_curves: PlaceHolder<Vec<CurveAny>>,
         composite_text: PlaceHolder<CompositeText>,
     }
     impl Holder for CompositeTextWithAssociatedCurvesHolder {
@@ -5563,16 +5616,20 @@ pub mod explicit_draughting {
             2usize
         }
     }
-    impl CurveAny for Conic {}
+    impl Into<Curve> for Conic {
+        fn into(self) -> Curve {
+            Curve::Conic(Box::new(self))
+        }
+    }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct Conic {
         pub position: Axis2Placement,
-        pub curve: Box<dyn CurveAny>,
+        pub curve: CurveAny,
     }
     #[derive(Clone, Debug)]
     struct ConicHolder {
         position: PlaceHolder<Axis2Placement>,
-        curve: PlaceHolder<Box<dyn CurveAny>>,
+        curve: PlaceHolder<CurveAny>,
     }
     impl Holder for ConicHolder {
         type Table = Tables;
@@ -5587,9 +5644,8 @@ pub mod explicit_draughting {
             2usize
         }
     }
-    pub trait ConicAny: ::std::any::Any + ::std::fmt::Debug + dyn_clone::DynClone {}
-    dyn_clone::clone_trait_object!(ConicAny);
-    impl ConicAny for Conic {}
+    #[derive(Debug, Clone)]
+    pub enum ConicAny {}
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct ContextDependentInvisibility {
         pub presentation_context: InvisibilityContext,
@@ -5659,12 +5715,8 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    pub trait ContractAssignmentAny:
-        ::std::any::Any + ::std::fmt::Debug + dyn_clone::DynClone
-    {
-    }
-    dyn_clone::clone_trait_object!(ContractAssignmentAny);
-    impl ContractAssignmentAny for ContractAssignment {}
+    #[derive(Debug, Clone)]
+    pub enum ContractAssignmentAny {}
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct ContractType {
         pub description: Label,
@@ -5686,18 +5738,22 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    impl NamedUnitAny for ConversionBasedUnit {}
+    impl Into<NamedUnit> for ConversionBasedUnit {
+        fn into(self) -> NamedUnit {
+            NamedUnit::ConversionBasedUnit(Box::new(self))
+        }
+    }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct ConversionBasedUnit {
         pub name: Label,
-        pub conversion_factor: Box<dyn MeasureWithUnitAny>,
-        pub named_unit: Box<dyn NamedUnitAny>,
+        pub conversion_factor: MeasureWithUnitAny,
+        pub named_unit: NamedUnitAny,
     }
     #[derive(Clone, Debug)]
     struct ConversionBasedUnitHolder {
         name: Label,
-        conversion_factor: PlaceHolder<Box<dyn MeasureWithUnitAny>>,
-        named_unit: PlaceHolder<Box<dyn NamedUnitAny>>,
+        conversion_factor: PlaceHolder<MeasureWithUnitAny>,
+        named_unit: PlaceHolder<NamedUnitAny>,
     }
     impl Holder for ConversionBasedUnitHolder {
         type Table = Tables;
@@ -5712,14 +5768,18 @@ pub mod explicit_draughting {
             3usize
         }
     }
-    impl GeometricRepresentationItemAny for Curve {}
+    impl Into<GeometricRepresentationItem> for Curve {
+        fn into(self) -> GeometricRepresentationItem {
+            GeometricRepresentationItem::Curve(Box::new(self))
+        }
+    }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct Curve {
-        pub geometric_representation_item: Box<dyn GeometricRepresentationItemAny>,
+        pub geometric_representation_item: GeometricRepresentationItemAny,
     }
     #[derive(Clone, Debug)]
     struct CurveHolder {
-        geometric_representation_item: PlaceHolder<Box<dyn GeometricRepresentationItemAny>>,
+        geometric_representation_item: PlaceHolder<GeometricRepresentationItemAny>,
     }
     impl Holder for CurveHolder {
         type Table = Tables;
@@ -5734,9 +5794,8 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    pub trait CurveAny: ::std::any::Any + ::std::fmt::Debug + dyn_clone::DynClone {}
-    dyn_clone::clone_trait_object!(CurveAny);
-    impl CurveAny for Curve {}
+    #[derive(Debug, Clone)]
+    pub enum CurveAny {}
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct CurveDimension {
         pub dimension_curve_directed_callout: DimensionCurveDirectedCallout,
@@ -5852,9 +5911,8 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    pub trait DateAny: ::std::any::Any + ::std::fmt::Debug + dyn_clone::DynClone {}
-    dyn_clone::clone_trait_object!(DateAny);
-    impl DateAny for Date {}
+    #[derive(Debug, Clone)]
+    pub enum DateAny {}
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct DatumFeatureCallout {
         pub draughting_callout: DraughtingCallout,
@@ -5897,18 +5955,22 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    impl GeometricRepresentationItemAny for DefinedSymbol {}
+    impl Into<GeometricRepresentationItem> for DefinedSymbol {
+        fn into(self) -> GeometricRepresentationItem {
+            GeometricRepresentationItem::DefinedSymbol(Box::new(self))
+        }
+    }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct DefinedSymbol {
         pub definition: DefinedSymbolSelect,
         pub target: SymbolTarget,
-        pub geometric_representation_item: Box<dyn GeometricRepresentationItemAny>,
+        pub geometric_representation_item: GeometricRepresentationItemAny,
     }
     #[derive(Clone, Debug)]
     struct DefinedSymbolHolder {
         definition: PlaceHolder<DefinedSymbolSelect>,
         target: PlaceHolder<SymbolTarget>,
-        geometric_representation_item: PlaceHolder<Box<dyn GeometricRepresentationItemAny>>,
+        geometric_representation_item: PlaceHolder<GeometricRepresentationItemAny>,
     }
     impl Holder for DefinedSymbolHolder {
         type Table = Tables;
@@ -6105,16 +6167,20 @@ pub mod explicit_draughting {
             7usize
         }
     }
-    impl GeometricRepresentationItemAny for Direction {}
+    impl Into<GeometricRepresentationItem> for Direction {
+        fn into(self) -> GeometricRepresentationItem {
+            GeometricRepresentationItem::Direction(Box::new(self))
+        }
+    }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct Direction {
         pub direction_ratios: Vec<f64>,
-        pub geometric_representation_item: Box<dyn GeometricRepresentationItemAny>,
+        pub geometric_representation_item: GeometricRepresentationItemAny,
     }
     #[derive(Clone, Debug)]
     struct DirectionHolder {
         direction_ratios: PlaceHolder<Vec<f64>>,
-        geometric_representation_item: PlaceHolder<Box<dyn GeometricRepresentationItemAny>>,
+        geometric_representation_item: PlaceHolder<GeometricRepresentationItemAny>,
     }
     impl Holder for DirectionHolder {
         type Table = Tables;
@@ -6179,12 +6245,8 @@ pub mod explicit_draughting {
             2usize
         }
     }
-    pub trait DocumentReferenceAny:
-        ::std::any::Any + ::std::fmt::Debug + dyn_clone::DynClone
-    {
-    }
-    dyn_clone::clone_trait_object!(DocumentReferenceAny);
-    impl DocumentReferenceAny for DocumentReference {}
+    #[derive(Debug, Clone)]
+    pub enum DocumentReferenceAny {}
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct DocumentType {
         pub product_data_type: Label,
@@ -6206,14 +6268,18 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    impl AnnotationOccurrenceAny for DraughtingAnnotationOccurrence {}
+    impl Into<AnnotationOccurrence> for DraughtingAnnotationOccurrence {
+        fn into(self) -> AnnotationOccurrence {
+            AnnotationOccurrence::DraughtingAnnotationOccurrence(Box::new(self))
+        }
+    }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct DraughtingAnnotationOccurrence {
-        pub annotation_occurrence: Box<dyn AnnotationOccurrenceAny>,
+        pub annotation_occurrence: AnnotationOccurrenceAny,
     }
     #[derive(Clone, Debug)]
     struct DraughtingAnnotationOccurrenceHolder {
-        annotation_occurrence: PlaceHolder<Box<dyn AnnotationOccurrenceAny>>,
+        annotation_occurrence: PlaceHolder<AnnotationOccurrenceAny>,
     }
     impl Holder for DraughtingAnnotationOccurrenceHolder {
         type Table = Tables;
@@ -6228,16 +6294,20 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    impl ApprovalAssignmentAny for DraughtingApprovalAssignment {}
+    impl Into<ApprovalAssignment> for DraughtingApprovalAssignment {
+        fn into(self) -> ApprovalAssignment {
+            ApprovalAssignment::DraughtingApprovalAssignment(Box::new(self))
+        }
+    }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct DraughtingApprovalAssignment {
         pub approved_items: Vec<ApprovedItem>,
-        pub approval_assignment: Box<dyn ApprovalAssignmentAny>,
+        pub approval_assignment: ApprovalAssignmentAny,
     }
     #[derive(Clone, Debug)]
     struct DraughtingApprovalAssignmentHolder {
         approved_items: PlaceHolder<Vec<ApprovedItem>>,
-        approval_assignment: PlaceHolder<Box<dyn ApprovalAssignmentAny>>,
+        approval_assignment: PlaceHolder<ApprovalAssignmentAny>,
     }
     impl Holder for DraughtingApprovalAssignmentHolder {
         type Table = Tables;
@@ -6252,16 +6322,20 @@ pub mod explicit_draughting {
             2usize
         }
     }
-    impl GeometricRepresentationItemAny for DraughtingCallout {}
+    impl Into<GeometricRepresentationItem> for DraughtingCallout {
+        fn into(self) -> GeometricRepresentationItem {
+            GeometricRepresentationItem::DraughtingCallout(Box::new(self))
+        }
+    }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct DraughtingCallout {
         pub contents: Vec<DraughtingCalloutElement>,
-        pub geometric_representation_item: Box<dyn GeometricRepresentationItemAny>,
+        pub geometric_representation_item: GeometricRepresentationItemAny,
     }
     #[derive(Clone, Debug)]
     struct DraughtingCalloutHolder {
         contents: PlaceHolder<Vec<DraughtingCalloutElement>>,
-        geometric_representation_item: PlaceHolder<Box<dyn GeometricRepresentationItemAny>>,
+        geometric_representation_item: PlaceHolder<GeometricRepresentationItemAny>,
     }
     impl Holder for DraughtingCalloutHolder {
         type Table = Tables;
@@ -6303,16 +6377,20 @@ pub mod explicit_draughting {
             4usize
         }
     }
-    impl ContractAssignmentAny for DraughtingContractAssignment {}
+    impl Into<ContractAssignment> for DraughtingContractAssignment {
+        fn into(self) -> ContractAssignment {
+            ContractAssignment::DraughtingContractAssignment(Box::new(self))
+        }
+    }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct DraughtingContractAssignment {
         pub items: Vec<ContractedItem>,
-        pub contract_assignment: Box<dyn ContractAssignmentAny>,
+        pub contract_assignment: ContractAssignmentAny,
     }
     #[derive(Clone, Debug)]
     struct DraughtingContractAssignmentHolder {
         items: PlaceHolder<Vec<ContractedItem>>,
-        contract_assignment: PlaceHolder<Box<dyn ContractAssignmentAny>>,
+        contract_assignment: PlaceHolder<ContractAssignmentAny>,
     }
     impl Holder for DraughtingContractAssignmentHolder {
         type Table = Tables;
@@ -6369,16 +6447,20 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    impl GroupAssignmentAny for DraughtingGroupAssignment {}
+    impl Into<GroupAssignment> for DraughtingGroupAssignment {
+        fn into(self) -> GroupAssignment {
+            GroupAssignment::DraughtingGroupAssignment(Box::new(self))
+        }
+    }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct DraughtingGroupAssignment {
         pub items: Vec<DraughtingGroupedItem>,
-        pub group_assignment: Box<dyn GroupAssignmentAny>,
+        pub group_assignment: GroupAssignmentAny,
     }
     #[derive(Clone, Debug)]
     struct DraughtingGroupAssignmentHolder {
         items: PlaceHolder<Vec<DraughtingGroupedItem>>,
-        group_assignment: PlaceHolder<Box<dyn GroupAssignmentAny>>,
+        group_assignment: PlaceHolder<GroupAssignmentAny>,
     }
     impl Holder for DraughtingGroupAssignmentHolder {
         type Table = Tables;
@@ -6414,16 +6496,20 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    impl OrganizationAssignmentAny for DraughtingOrganizationAssignment {}
+    impl Into<OrganizationAssignment> for DraughtingOrganizationAssignment {
+        fn into(self) -> OrganizationAssignment {
+            OrganizationAssignment::DraughtingOrganizationAssignment(Box::new(self))
+        }
+    }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct DraughtingOrganizationAssignment {
         pub assigned_items: Vec<DraughtingOrganizationItem>,
-        pub organization_assignment: Box<dyn OrganizationAssignmentAny>,
+        pub organization_assignment: OrganizationAssignmentAny,
     }
     #[derive(Clone, Debug)]
     struct DraughtingOrganizationAssignmentHolder {
         assigned_items: PlaceHolder<Vec<DraughtingOrganizationItem>>,
-        organization_assignment: PlaceHolder<Box<dyn OrganizationAssignmentAny>>,
+        organization_assignment: PlaceHolder<OrganizationAssignmentAny>,
     }
     impl Holder for DraughtingOrganizationAssignmentHolder {
         type Table = Tables;
@@ -6438,17 +6524,22 @@ pub mod explicit_draughting {
             2usize
         }
     }
-    impl PersonAndOrganizationAssignmentAny for DraughtingPersonAndOrganizationAssignment {}
+    impl Into<PersonAndOrganizationAssignment> for DraughtingPersonAndOrganizationAssignment {
+        fn into(self) -> PersonAndOrganizationAssignment {
+            PersonAndOrganizationAssignment::DraughtingPersonAndOrganizationAssignment(Box::new(
+                self,
+            ))
+        }
+    }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct DraughtingPersonAndOrganizationAssignment {
         pub assigned_items: Vec<DraughtingOrganizationItem>,
-        pub person_and_organization_assignment: Box<dyn PersonAndOrganizationAssignmentAny>,
+        pub person_and_organization_assignment: PersonAndOrganizationAssignmentAny,
     }
     #[derive(Clone, Debug)]
     struct DraughtingPersonAndOrganizationAssignmentHolder {
         assigned_items: PlaceHolder<Vec<DraughtingOrganizationItem>>,
-        person_and_organization_assignment:
-            PlaceHolder<Box<dyn PersonAndOrganizationAssignmentAny>>,
+        person_and_organization_assignment: PlaceHolder<PersonAndOrganizationAssignmentAny>,
     }
     impl Holder for DraughtingPersonAndOrganizationAssignmentHolder {
         type Table = Tables;
@@ -6463,16 +6554,20 @@ pub mod explicit_draughting {
             2usize
         }
     }
-    impl PersonAssignmentAny for DraughtingPersonAssignment {}
+    impl Into<PersonAssignment> for DraughtingPersonAssignment {
+        fn into(self) -> PersonAssignment {
+            PersonAssignment::DraughtingPersonAssignment(Box::new(self))
+        }
+    }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct DraughtingPersonAssignment {
         pub assigned_items: Vec<DraughtingOrganizationItem>,
-        pub person_assignment: Box<dyn PersonAssignmentAny>,
+        pub person_assignment: PersonAssignmentAny,
     }
     #[derive(Clone, Debug)]
     struct DraughtingPersonAssignmentHolder {
         assigned_items: PlaceHolder<Vec<DraughtingOrganizationItem>>,
-        person_assignment: PlaceHolder<Box<dyn PersonAssignmentAny>>,
+        person_assignment: PlaceHolder<PersonAssignmentAny>,
     }
     impl Holder for DraughtingPersonAssignmentHolder {
         type Table = Tables;
@@ -6550,16 +6645,20 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    impl PresentedItemAny for DraughtingPresentedItem {}
+    impl Into<PresentedItem> for DraughtingPresentedItem {
+        fn into(self) -> PresentedItem {
+            PresentedItem::DraughtingPresentedItem(Box::new(self))
+        }
+    }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct DraughtingPresentedItem {
         pub items: Vec<DraughtingPresentedItemSelect>,
-        pub presented_item: Box<dyn PresentedItemAny>,
+        pub presented_item: PresentedItemAny,
     }
     #[derive(Clone, Debug)]
     struct DraughtingPresentedItemHolder {
         items: PlaceHolder<Vec<DraughtingPresentedItemSelect>>,
-        presented_item: PlaceHolder<Box<dyn PresentedItemAny>>,
+        presented_item: PlaceHolder<PresentedItemAny>,
     }
     impl Holder for DraughtingPresentedItemHolder {
         type Table = Tables;
@@ -6574,17 +6673,22 @@ pub mod explicit_draughting {
             2usize
         }
     }
-    impl SecurityClassificationAssignmentAny for DraughtingSecurityClassificationAssignment {}
+    impl Into<SecurityClassificationAssignment> for DraughtingSecurityClassificationAssignment {
+        fn into(self) -> SecurityClassificationAssignment {
+            SecurityClassificationAssignment::DraughtingSecurityClassificationAssignment(Box::new(
+                self,
+            ))
+        }
+    }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct DraughtingSecurityClassificationAssignment {
         pub assigned_items: Vec<ClassifiedItem>,
-        pub security_classification_assignment: Box<dyn SecurityClassificationAssignmentAny>,
+        pub security_classification_assignment: SecurityClassificationAssignmentAny,
     }
     #[derive(Clone, Debug)]
     struct DraughtingSecurityClassificationAssignmentHolder {
         assigned_items: PlaceHolder<Vec<ClassifiedItem>>,
-        security_classification_assignment:
-            PlaceHolder<Box<dyn SecurityClassificationAssignmentAny>>,
+        security_classification_assignment: PlaceHolder<SecurityClassificationAssignmentAny>,
     }
     impl Holder for DraughtingSecurityClassificationAssignmentHolder {
         type Table = Tables;
@@ -6599,16 +6703,20 @@ pub mod explicit_draughting {
             2usize
         }
     }
-    impl DocumentReferenceAny for DraughtingSpecificationReference {}
+    impl Into<DocumentReference> for DraughtingSpecificationReference {
+        fn into(self) -> DocumentReference {
+            DocumentReference::DraughtingSpecificationReference(Box::new(self))
+        }
+    }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct DraughtingSpecificationReference {
         pub specified_items: Vec<SpecifiedItem>,
-        pub document_reference: Box<dyn DocumentReferenceAny>,
+        pub document_reference: DocumentReferenceAny,
     }
     #[derive(Clone, Debug)]
     struct DraughtingSpecificationReferenceHolder {
         specified_items: PlaceHolder<Vec<SpecifiedItem>>,
-        document_reference: PlaceHolder<Box<dyn DocumentReferenceAny>>,
+        document_reference: PlaceHolder<DocumentReferenceAny>,
     }
     impl Holder for DraughtingSpecificationReferenceHolder {
         type Table = Tables;
@@ -6828,18 +6936,22 @@ pub mod explicit_draughting {
             2usize
         }
     }
-    impl ConicAny for Ellipse {}
+    impl Into<Conic> for Ellipse {
+        fn into(self) -> Conic {
+            Conic::Ellipse(Box::new(self))
+        }
+    }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct Ellipse {
         pub semi_axis_1: PositiveLengthMeasure,
         pub semi_axis_2: PositiveLengthMeasure,
-        pub conic: Box<dyn ConicAny>,
+        pub conic: ConicAny,
     }
     #[derive(Clone, Debug)]
     struct EllipseHolder {
         semi_axis_1: PositiveLengthMeasure,
         semi_axis_2: PositiveLengthMeasure,
-        conic: PlaceHolder<Box<dyn ConicAny>>,
+        conic: PlaceHolder<ConicAny>,
     }
     impl Holder for EllipseHolder {
         type Table = Tables;
@@ -6896,16 +7008,20 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    impl GeometricRepresentationItemAny for ExternallyDefinedHatchStyle {}
+    impl Into<GeometricRepresentationItem> for ExternallyDefinedHatchStyle {
+        fn into(self) -> GeometricRepresentationItem {
+            GeometricRepresentationItem::ExternallyDefinedHatchStyle(Box::new(self))
+        }
+    }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct ExternallyDefinedHatchStyle {
         pub externally_defined_item: ExternallyDefinedItem,
-        pub geometric_representation_item: Box<dyn GeometricRepresentationItemAny>,
+        pub geometric_representation_item: GeometricRepresentationItemAny,
     }
     #[derive(Clone, Debug)]
     struct ExternallyDefinedHatchStyleHolder {
         externally_defined_item: PlaceHolder<ExternallyDefinedItem>,
-        geometric_representation_item: PlaceHolder<Box<dyn GeometricRepresentationItemAny>>,
+        geometric_representation_item: PlaceHolder<GeometricRepresentationItemAny>,
     }
     impl Holder for ExternallyDefinedHatchStyleHolder {
         type Table = Tables;
@@ -6985,16 +7101,20 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    impl GeometricRepresentationItemAny for ExternallyDefinedTileStyle {}
+    impl Into<GeometricRepresentationItem> for ExternallyDefinedTileStyle {
+        fn into(self) -> GeometricRepresentationItem {
+            GeometricRepresentationItem::ExternallyDefinedTileStyle(Box::new(self))
+        }
+    }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct ExternallyDefinedTileStyle {
         pub externally_defined_item: ExternallyDefinedItem,
-        pub geometric_representation_item: Box<dyn GeometricRepresentationItemAny>,
+        pub geometric_representation_item: GeometricRepresentationItemAny,
     }
     #[derive(Clone, Debug)]
     struct ExternallyDefinedTileStyleHolder {
         externally_defined_item: PlaceHolder<ExternallyDefinedItem>,
-        geometric_representation_item: PlaceHolder<Box<dyn GeometricRepresentationItemAny>>,
+        geometric_representation_item: PlaceHolder<GeometricRepresentationItemAny>,
     }
     impl Holder for ExternallyDefinedTileStyleHolder {
         type Table = Tables;
@@ -7055,7 +7175,11 @@ pub mod explicit_draughting {
             2usize
         }
     }
-    impl GeometricRepresentationItemAny for FillAreaStyleHatching {}
+    impl Into<GeometricRepresentationItem> for FillAreaStyleHatching {
+        fn into(self) -> GeometricRepresentationItem {
+            GeometricRepresentationItem::FillAreaStyleHatching(Box::new(self))
+        }
+    }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct FillAreaStyleHatching {
         pub hatch_line_appearance: CurveStyle,
@@ -7063,7 +7187,7 @@ pub mod explicit_draughting {
         pub point_of_reference_hatch_line: CartesianPoint,
         pub pattern_start: CartesianPoint,
         pub hatch_line_angle: PlaneAngleMeasure,
-        pub geometric_representation_item: Box<dyn GeometricRepresentationItemAny>,
+        pub geometric_representation_item: GeometricRepresentationItemAny,
     }
     #[derive(Clone, Debug)]
     struct FillAreaStyleHatchingHolder {
@@ -7072,7 +7196,7 @@ pub mod explicit_draughting {
         point_of_reference_hatch_line: PlaceHolder<CartesianPoint>,
         pattern_start: PlaceHolder<CartesianPoint>,
         hatch_line_angle: PlaneAngleMeasure,
-        geometric_representation_item: PlaceHolder<Box<dyn GeometricRepresentationItemAny>>,
+        geometric_representation_item: PlaceHolder<GeometricRepresentationItemAny>,
     }
     impl Holder for FillAreaStyleHatchingHolder {
         type Table = Tables;
@@ -7087,16 +7211,20 @@ pub mod explicit_draughting {
             6usize
         }
     }
-    impl GeometricRepresentationItemAny for FillAreaStyleTileSymbolWithStyle {}
+    impl Into<GeometricRepresentationItem> for FillAreaStyleTileSymbolWithStyle {
+        fn into(self) -> GeometricRepresentationItem {
+            GeometricRepresentationItem::FillAreaStyleTileSymbolWithStyle(Box::new(self))
+        }
+    }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct FillAreaStyleTileSymbolWithStyle {
         pub symbol: AnnotationSymbolOccurrence,
-        pub geometric_representation_item: Box<dyn GeometricRepresentationItemAny>,
+        pub geometric_representation_item: GeometricRepresentationItemAny,
     }
     #[derive(Clone, Debug)]
     struct FillAreaStyleTileSymbolWithStyleHolder {
         symbol: PlaceHolder<AnnotationSymbolOccurrence>,
-        geometric_representation_item: PlaceHolder<Box<dyn GeometricRepresentationItemAny>>,
+        geometric_representation_item: PlaceHolder<GeometricRepresentationItemAny>,
     }
     impl Holder for FillAreaStyleTileSymbolWithStyleHolder {
         type Table = Tables;
@@ -7111,20 +7239,24 @@ pub mod explicit_draughting {
             2usize
         }
     }
-    impl GeometricRepresentationItemAny for FillAreaStyleTiles {}
+    impl Into<GeometricRepresentationItem> for FillAreaStyleTiles {
+        fn into(self) -> GeometricRepresentationItem {
+            GeometricRepresentationItem::FillAreaStyleTiles(Box::new(self))
+        }
+    }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct FillAreaStyleTiles {
         pub tiling_pattern: TwoDirectionRepeatFactor,
         pub tiles: Vec<FillAreaStyleTileShapeSelect>,
         pub tiling_scale: PositiveRatioMeasure,
-        pub geometric_representation_item: Box<dyn GeometricRepresentationItemAny>,
+        pub geometric_representation_item: GeometricRepresentationItemAny,
     }
     #[derive(Clone, Debug)]
     struct FillAreaStyleTilesHolder {
         tiling_pattern: PlaceHolder<TwoDirectionRepeatFactor>,
         tiles: PlaceHolder<Vec<FillAreaStyleTileShapeSelect>>,
         tiling_scale: PositiveRatioMeasure,
-        geometric_representation_item: PlaceHolder<Box<dyn GeometricRepresentationItemAny>>,
+        geometric_representation_item: PlaceHolder<GeometricRepresentationItemAny>,
     }
     impl Holder for FillAreaStyleTilesHolder {
         type Table = Tables;
@@ -7139,14 +7271,18 @@ pub mod explicit_draughting {
             4usize
         }
     }
-    impl GeometricSetAny for GeometricCurveSet {}
+    impl Into<GeometricSet> for GeometricCurveSet {
+        fn into(self) -> GeometricSet {
+            GeometricSet::GeometricCurveSet(Box::new(self))
+        }
+    }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct GeometricCurveSet {
-        pub geometric_set: Box<dyn GeometricSetAny>,
+        pub geometric_set: GeometricSetAny,
     }
     #[derive(Clone, Debug)]
     struct GeometricCurveSetHolder {
-        geometric_set: PlaceHolder<Box<dyn GeometricSetAny>>,
+        geometric_set: PlaceHolder<GeometricSetAny>,
     }
     impl Holder for GeometricCurveSetHolder {
         type Table = Tables;
@@ -7205,22 +7341,22 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    pub trait GeometricRepresentationItemAny:
-        ::std::any::Any + ::std::fmt::Debug + dyn_clone::DynClone
-    {
+    #[derive(Debug, Clone)]
+    pub enum GeometricRepresentationItemAny {}
+    impl Into<GeometricRepresentationItem> for GeometricSet {
+        fn into(self) -> GeometricRepresentationItem {
+            GeometricRepresentationItem::GeometricSet(Box::new(self))
+        }
     }
-    dyn_clone::clone_trait_object!(GeometricRepresentationItemAny);
-    impl GeometricRepresentationItemAny for GeometricRepresentationItem {}
-    impl GeometricRepresentationItemAny for GeometricSet {}
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct GeometricSet {
         pub elements: Vec<GeometricSetSelect>,
-        pub geometric_representation_item: Box<dyn GeometricRepresentationItemAny>,
+        pub geometric_representation_item: GeometricRepresentationItemAny,
     }
     #[derive(Clone, Debug)]
     struct GeometricSetHolder {
         elements: PlaceHolder<Vec<GeometricSetSelect>>,
-        geometric_representation_item: PlaceHolder<Box<dyn GeometricRepresentationItemAny>>,
+        geometric_representation_item: PlaceHolder<GeometricRepresentationItemAny>,
     }
     impl Holder for GeometricSetHolder {
         type Table = Tables;
@@ -7235,9 +7371,8 @@ pub mod explicit_draughting {
             2usize
         }
     }
-    pub trait GeometricSetAny: ::std::any::Any + ::std::fmt::Debug + dyn_clone::DynClone {}
-    dyn_clone::clone_trait_object!(GeometricSetAny);
-    impl GeometricSetAny for GeometricSet {}
+    #[derive(Debug, Clone)]
+    pub enum GeometricSetAny {}
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct GeometricalToleranceCallout {
         pub draughting_callout: DraughtingCallout,
@@ -7347,12 +7482,8 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    pub trait GroupAssignmentAny:
-        ::std::any::Any + ::std::fmt::Debug + dyn_clone::DynClone
-    {
-    }
-    dyn_clone::clone_trait_object!(GroupAssignmentAny);
-    impl GroupAssignmentAny for GroupAssignment {}
+    #[derive(Debug, Clone)]
+    pub enum GroupAssignmentAny {}
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct GroupRelationship {
         pub name: Label,
@@ -7380,18 +7511,22 @@ pub mod explicit_draughting {
             4usize
         }
     }
-    impl ConicAny for Hyperbola {}
+    impl Into<Conic> for Hyperbola {
+        fn into(self) -> Conic {
+            Conic::Hyperbola(Box::new(self))
+        }
+    }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct Hyperbola {
         pub semi_axis: PositiveLengthMeasure,
         pub semi_imag_axis: PositiveLengthMeasure,
-        pub conic: Box<dyn ConicAny>,
+        pub conic: ConicAny,
     }
     #[derive(Clone, Debug)]
     struct HyperbolaHolder {
         semi_axis: PositiveLengthMeasure,
         semi_imag_axis: PositiveLengthMeasure,
-        conic: PlaceHolder<Box<dyn ConicAny>>,
+        conic: PlaceHolder<ConicAny>,
     }
     impl Holder for HyperbolaHolder {
         type Table = Tables;
@@ -7511,14 +7646,18 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    impl MeasureWithUnitAny for LengthMeasureWithUnit {}
+    impl Into<MeasureWithUnit> for LengthMeasureWithUnit {
+        fn into(self) -> MeasureWithUnit {
+            MeasureWithUnit::LengthMeasureWithUnit(Box::new(self))
+        }
+    }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct LengthMeasureWithUnit {
-        pub measure_with_unit: Box<dyn MeasureWithUnitAny>,
+        pub measure_with_unit: MeasureWithUnitAny,
     }
     #[derive(Clone, Debug)]
     struct LengthMeasureWithUnitHolder {
-        measure_with_unit: PlaceHolder<Box<dyn MeasureWithUnitAny>>,
+        measure_with_unit: PlaceHolder<MeasureWithUnitAny>,
     }
     impl Holder for LengthMeasureWithUnitHolder {
         type Table = Tables;
@@ -7533,14 +7672,18 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    impl NamedUnitAny for LengthUnit {}
+    impl Into<NamedUnit> for LengthUnit {
+        fn into(self) -> NamedUnit {
+            NamedUnit::LengthUnit(Box::new(self))
+        }
+    }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct LengthUnit {
-        pub named_unit: Box<dyn NamedUnitAny>,
+        pub named_unit: NamedUnitAny,
     }
     #[derive(Clone, Debug)]
     struct LengthUnitHolder {
-        named_unit: PlaceHolder<Box<dyn NamedUnitAny>>,
+        named_unit: PlaceHolder<NamedUnitAny>,
     }
     impl Holder for LengthUnitHolder {
         type Table = Tables;
@@ -7555,18 +7698,22 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    impl CurveAny for Line {}
+    impl Into<Curve> for Line {
+        fn into(self) -> Curve {
+            Curve::Line(Box::new(self))
+        }
+    }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct Line {
         pub pnt: CartesianPoint,
         pub dir: Vector,
-        pub curve: Box<dyn CurveAny>,
+        pub curve: CurveAny,
     }
     #[derive(Clone, Debug)]
     struct LineHolder {
         pnt: PlaceHolder<CartesianPoint>,
         dir: PlaceHolder<Vector>,
-        curve: PlaceHolder<Box<dyn CurveAny>>,
+        curve: PlaceHolder<CurveAny>,
     }
     impl Holder for LineHolder {
         type Table = Tables;
@@ -7650,12 +7797,8 @@ pub mod explicit_draughting {
             2usize
         }
     }
-    pub trait MeasureWithUnitAny:
-        ::std::any::Any + ::std::fmt::Debug + dyn_clone::DynClone
-    {
-    }
-    dyn_clone::clone_trait_object!(MeasureWithUnitAny);
-    impl MeasureWithUnitAny for MeasureWithUnit {}
+    #[derive(Debug, Clone)]
+    pub enum MeasureWithUnitAny {}
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct NamedUnit {
         pub dimensions: DimensionalExponents,
@@ -7677,23 +7820,26 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    pub trait NamedUnitAny: ::std::any::Any + ::std::fmt::Debug + dyn_clone::DynClone {}
-    dyn_clone::clone_trait_object!(NamedUnitAny);
-    impl NamedUnitAny for NamedUnit {}
-    impl CurveAny for OffsetCurve2D {}
+    #[derive(Debug, Clone)]
+    pub enum NamedUnitAny {}
+    impl Into<Curve> for OffsetCurve2D {
+        fn into(self) -> Curve {
+            Curve::OffsetCurve2D(Box::new(self))
+        }
+    }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct OffsetCurve2D {
-        pub basis_curve: Box<dyn CurveAny>,
+        pub basis_curve: CurveAny,
         pub distance: LengthMeasure,
         pub self_intersect: Logical,
-        pub curve: Box<dyn CurveAny>,
+        pub curve: CurveAny,
     }
     #[derive(Clone, Debug)]
     struct OffsetCurve2DHolder {
-        basis_curve: PlaceHolder<Box<dyn CurveAny>>,
+        basis_curve: PlaceHolder<CurveAny>,
         distance: LengthMeasure,
         self_intersect: Logical,
-        curve: PlaceHolder<Box<dyn CurveAny>>,
+        curve: PlaceHolder<CurveAny>,
     }
     impl Holder for OffsetCurve2DHolder {
         type Table = Tables;
@@ -7708,16 +7854,20 @@ pub mod explicit_draughting {
             4usize
         }
     }
-    impl GeometricRepresentationItemAny for OneDirectionRepeatFactor {}
+    impl Into<GeometricRepresentationItem> for OneDirectionRepeatFactor {
+        fn into(self) -> GeometricRepresentationItem {
+            GeometricRepresentationItem::OneDirectionRepeatFactor(Box::new(self))
+        }
+    }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct OneDirectionRepeatFactor {
         pub repeat_factor: Vector,
-        pub geometric_representation_item: Box<dyn GeometricRepresentationItemAny>,
+        pub geometric_representation_item: GeometricRepresentationItemAny,
     }
     #[derive(Clone, Debug)]
     struct OneDirectionRepeatFactorHolder {
         repeat_factor: PlaceHolder<Vector>,
-        geometric_representation_item: PlaceHolder<Box<dyn GeometricRepresentationItemAny>>,
+        geometric_representation_item: PlaceHolder<GeometricRepresentationItemAny>,
     }
     impl Holder for OneDirectionRepeatFactorHolder {
         type Table = Tables;
@@ -7801,12 +7951,8 @@ pub mod explicit_draughting {
             2usize
         }
     }
-    pub trait OrganizationAssignmentAny:
-        ::std::any::Any + ::std::fmt::Debug + dyn_clone::DynClone
-    {
-    }
-    dyn_clone::clone_trait_object!(OrganizationAssignmentAny);
-    impl OrganizationAssignmentAny for OrganizationAssignment {}
+    #[derive(Debug, Clone)]
+    pub enum OrganizationAssignmentAny {}
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct OrganizationRole {
         pub name: Label,
@@ -7853,16 +7999,20 @@ pub mod explicit_draughting {
             3usize
         }
     }
-    impl ConicAny for Parabola {}
+    impl Into<Conic> for Parabola {
+        fn into(self) -> Conic {
+            Conic::Parabola(Box::new(self))
+        }
+    }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct Parabola {
         pub focal_dist: LengthMeasure,
-        pub conic: Box<dyn ConicAny>,
+        pub conic: ConicAny,
     }
     #[derive(Clone, Debug)]
     struct ParabolaHolder {
         focal_dist: LengthMeasure,
-        conic: PlaceHolder<Box<dyn ConicAny>>,
+        conic: PlaceHolder<ConicAny>,
     }
     impl Holder for ParabolaHolder {
         type Table = Tables;
@@ -7954,12 +8104,8 @@ pub mod explicit_draughting {
             2usize
         }
     }
-    pub trait PersonAndOrganizationAssignmentAny:
-        ::std::any::Any + ::std::fmt::Debug + dyn_clone::DynClone
-    {
-    }
-    dyn_clone::clone_trait_object!(PersonAndOrganizationAssignmentAny);
-    impl PersonAndOrganizationAssignmentAny for PersonAndOrganizationAssignment {}
+    #[derive(Debug, Clone)]
+    pub enum PersonAndOrganizationAssignmentAny {}
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct PersonAndOrganizationRole {
         pub name: Label,
@@ -8004,12 +8150,8 @@ pub mod explicit_draughting {
             2usize
         }
     }
-    pub trait PersonAssignmentAny:
-        ::std::any::Any + ::std::fmt::Debug + dyn_clone::DynClone
-    {
-    }
-    dyn_clone::clone_trait_object!(PersonAssignmentAny);
-    impl PersonAssignmentAny for PersonAssignment {}
+    #[derive(Debug, Clone)]
+    pub enum PersonAssignmentAny {}
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct PersonRole {
         pub name: Label,
@@ -8056,16 +8198,20 @@ pub mod explicit_draughting {
             3usize
         }
     }
-    impl GeometricRepresentationItemAny for Placement {}
+    impl Into<GeometricRepresentationItem> for Placement {
+        fn into(self) -> GeometricRepresentationItem {
+            GeometricRepresentationItem::Placement(Box::new(self))
+        }
+    }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct Placement {
         pub location: CartesianPoint,
-        pub geometric_representation_item: Box<dyn GeometricRepresentationItemAny>,
+        pub geometric_representation_item: GeometricRepresentationItemAny,
     }
     #[derive(Clone, Debug)]
     struct PlacementHolder {
         location: PlaceHolder<CartesianPoint>,
-        geometric_representation_item: PlaceHolder<Box<dyn GeometricRepresentationItemAny>>,
+        geometric_representation_item: PlaceHolder<GeometricRepresentationItemAny>,
     }
     impl Holder for PlacementHolder {
         type Table = Tables;
@@ -8080,9 +8226,8 @@ pub mod explicit_draughting {
             2usize
         }
     }
-    pub trait PlacementAny: ::std::any::Any + ::std::fmt::Debug + dyn_clone::DynClone {}
-    dyn_clone::clone_trait_object!(PlacementAny);
-    impl PlacementAny for Placement {}
+    #[derive(Debug, Clone)]
+    pub enum PlacementAny {}
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct PlanarBox {
         pub placement: Axis2Placement,
@@ -8106,18 +8251,22 @@ pub mod explicit_draughting {
             2usize
         }
     }
-    impl GeometricRepresentationItemAny for PlanarExtent {}
+    impl Into<GeometricRepresentationItem> for PlanarExtent {
+        fn into(self) -> GeometricRepresentationItem {
+            GeometricRepresentationItem::PlanarExtent(Box::new(self))
+        }
+    }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct PlanarExtent {
         pub size_in_x: LengthMeasure,
         pub size_in_y: LengthMeasure,
-        pub geometric_representation_item: Box<dyn GeometricRepresentationItemAny>,
+        pub geometric_representation_item: GeometricRepresentationItemAny,
     }
     #[derive(Clone, Debug)]
     struct PlanarExtentHolder {
         size_in_x: LengthMeasure,
         size_in_y: LengthMeasure,
-        geometric_representation_item: PlaceHolder<Box<dyn GeometricRepresentationItemAny>>,
+        geometric_representation_item: PlaceHolder<GeometricRepresentationItemAny>,
     }
     impl Holder for PlanarExtentHolder {
         type Table = Tables;
@@ -8132,14 +8281,18 @@ pub mod explicit_draughting {
             3usize
         }
     }
-    impl MeasureWithUnitAny for PlaneAngleMeasureWithUnit {}
+    impl Into<MeasureWithUnit> for PlaneAngleMeasureWithUnit {
+        fn into(self) -> MeasureWithUnit {
+            MeasureWithUnit::PlaneAngleMeasureWithUnit(Box::new(self))
+        }
+    }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct PlaneAngleMeasureWithUnit {
-        pub measure_with_unit: Box<dyn MeasureWithUnitAny>,
+        pub measure_with_unit: MeasureWithUnitAny,
     }
     #[derive(Clone, Debug)]
     struct PlaneAngleMeasureWithUnitHolder {
-        measure_with_unit: PlaceHolder<Box<dyn MeasureWithUnitAny>>,
+        measure_with_unit: PlaceHolder<MeasureWithUnitAny>,
     }
     impl Holder for PlaneAngleMeasureWithUnitHolder {
         type Table = Tables;
@@ -8154,14 +8307,18 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    impl NamedUnitAny for PlaneAngleUnit {}
+    impl Into<NamedUnit> for PlaneAngleUnit {
+        fn into(self) -> NamedUnit {
+            NamedUnit::PlaneAngleUnit(Box::new(self))
+        }
+    }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct PlaneAngleUnit {
-        pub named_unit: Box<dyn NamedUnitAny>,
+        pub named_unit: NamedUnitAny,
     }
     #[derive(Clone, Debug)]
     struct PlaneAngleUnitHolder {
-        named_unit: PlaceHolder<Box<dyn NamedUnitAny>>,
+        named_unit: PlaceHolder<NamedUnitAny>,
     }
     impl Holder for PlaneAngleUnitHolder {
         type Table = Tables;
@@ -8176,14 +8333,18 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    impl GeometricRepresentationItemAny for Point {}
+    impl Into<GeometricRepresentationItem> for Point {
+        fn into(self) -> GeometricRepresentationItem {
+            GeometricRepresentationItem::Point(Box::new(self))
+        }
+    }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct Point {
-        pub geometric_representation_item: Box<dyn GeometricRepresentationItemAny>,
+        pub geometric_representation_item: GeometricRepresentationItemAny,
     }
     #[derive(Clone, Debug)]
     struct PointHolder {
-        geometric_representation_item: PlaceHolder<Box<dyn GeometricRepresentationItemAny>>,
+        geometric_representation_item: PlaceHolder<GeometricRepresentationItemAny>,
     }
     impl Holder for PointHolder {
         type Table = Tables;
@@ -8198,21 +8359,24 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    pub trait PointAny: ::std::any::Any + ::std::fmt::Debug + dyn_clone::DynClone {}
-    dyn_clone::clone_trait_object!(PointAny);
-    impl PointAny for Point {}
-    impl PointAny for PointOnCurve {}
+    #[derive(Debug, Clone)]
+    pub enum PointAny {}
+    impl Into<Point> for PointOnCurve {
+        fn into(self) -> Point {
+            Point::PointOnCurve(Box::new(self))
+        }
+    }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct PointOnCurve {
-        pub basis_curve: Box<dyn CurveAny>,
+        pub basis_curve: CurveAny,
         pub point_parameter: ParameterValue,
-        pub point: Box<dyn PointAny>,
+        pub point: PointAny,
     }
     #[derive(Clone, Debug)]
     struct PointOnCurveHolder {
-        basis_curve: PlaceHolder<Box<dyn CurveAny>>,
+        basis_curve: PlaceHolder<CurveAny>,
         point_parameter: ParameterValue,
-        point: PlaceHolder<Box<dyn PointAny>>,
+        point: PlaceHolder<PointAny>,
     }
     impl Holder for PointOnCurveHolder {
         type Table = Tables;
@@ -8227,16 +8391,20 @@ pub mod explicit_draughting {
             3usize
         }
     }
-    impl BoundedCurveAny for Polyline {}
+    impl Into<BoundedCurve> for Polyline {
+        fn into(self) -> BoundedCurve {
+            BoundedCurve::Polyline(Box::new(self))
+        }
+    }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct Polyline {
         pub points: Vec<CartesianPoint>,
-        pub bounded_curve: Box<dyn BoundedCurveAny>,
+        pub bounded_curve: BoundedCurveAny,
     }
     #[derive(Clone, Debug)]
     struct PolylineHolder {
         points: PlaceHolder<Vec<CartesianPoint>>,
-        bounded_curve: PlaceHolder<Box<dyn BoundedCurveAny>>,
+        bounded_curve: PlaceHolder<BoundedCurveAny>,
     }
     impl Holder for PolylineHolder {
         type Table = Tables;
@@ -8654,18 +8822,17 @@ pub mod explicit_draughting {
             0usize
         }
     }
-    pub trait PresentedItemAny: ::std::any::Any + ::std::fmt::Debug + dyn_clone::DynClone {}
-    dyn_clone::clone_trait_object!(PresentedItemAny);
-    impl PresentedItemAny for PresentedItem {}
+    #[derive(Debug, Clone)]
+    pub enum PresentedItemAny {}
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct PresentedItemRepresentation {
         pub presentation: PresentationRepresentationSelect,
-        pub item: Box<dyn PresentedItemAny>,
+        pub item: PresentedItemAny,
     }
     #[derive(Clone, Debug)]
     struct PresentedItemRepresentationHolder {
         presentation: PlaceHolder<PresentationRepresentationSelect>,
-        item: PlaceHolder<Box<dyn PresentedItemAny>>,
+        item: PlaceHolder<PresentedItemAny>,
     }
     impl Holder for PresentedItemRepresentationHolder {
         type Table = Tables;
@@ -8707,16 +8874,20 @@ pub mod explicit_draughting {
             4usize
         }
     }
-    impl ApplicationContextElementAny for ProductContext {}
+    impl Into<ApplicationContextElement> for ProductContext {
+        fn into(self) -> ApplicationContextElement {
+            ApplicationContextElement::ProductContext(Box::new(self))
+        }
+    }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct ProductContext {
         pub discipline_type: Label,
-        pub application_context_element: Box<dyn ApplicationContextElementAny>,
+        pub application_context_element: ApplicationContextElementAny,
     }
     #[derive(Clone, Debug)]
     struct ProductContextHolder {
         discipline_type: Label,
-        application_context_element: PlaceHolder<Box<dyn ApplicationContextElementAny>>,
+        application_context_element: PlaceHolder<ApplicationContextElementAny>,
     }
     impl Holder for ProductContextHolder {
         type Table = Tables;
@@ -8758,16 +8929,20 @@ pub mod explicit_draughting {
             4usize
         }
     }
-    impl ApplicationContextElementAny for ProductDefinitionContext {}
+    impl Into<ApplicationContextElement> for ProductDefinitionContext {
+        fn into(self) -> ApplicationContextElement {
+            ApplicationContextElement::ProductDefinitionContext(Box::new(self))
+        }
+    }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct ProductDefinitionContext {
         pub life_cycle_stage: Label,
-        pub application_context_element: Box<dyn ApplicationContextElementAny>,
+        pub application_context_element: ApplicationContextElementAny,
     }
     #[derive(Clone, Debug)]
     struct ProductDefinitionContextHolder {
         life_cycle_stage: Label,
-        application_context_element: PlaceHolder<Box<dyn ApplicationContextElementAny>>,
+        application_context_element: PlaceHolder<ApplicationContextElementAny>,
     }
     impl Holder for ProductDefinitionContextHolder {
         type Table = Tables;
@@ -8918,14 +9093,18 @@ pub mod explicit_draughting {
             2usize
         }
     }
-    impl BSplineCurveAny for QuasiUniformCurve {}
+    impl Into<BSplineCurve> for QuasiUniformCurve {
+        fn into(self) -> BSplineCurve {
+            BSplineCurve::QuasiUniformCurve(Box::new(self))
+        }
+    }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct QuasiUniformCurve {
-        pub b_spline_curve: Box<dyn BSplineCurveAny>,
+        pub b_spline_curve: BSplineCurveAny,
     }
     #[derive(Clone, Debug)]
     struct QuasiUniformCurveHolder {
-        b_spline_curve: PlaceHolder<Box<dyn BSplineCurveAny>>,
+        b_spline_curve: PlaceHolder<BSplineCurveAny>,
     }
     impl Holder for QuasiUniformCurveHolder {
         type Table = Tables;
@@ -8961,16 +9140,20 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    impl BSplineCurveAny for RationalBSplineCurve {}
+    impl Into<BSplineCurve> for RationalBSplineCurve {
+        fn into(self) -> BSplineCurve {
+            BSplineCurve::RationalBSplineCurve(Box::new(self))
+        }
+    }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct RationalBSplineCurve {
         pub weights_data: Vec<f64>,
-        pub b_spline_curve: Box<dyn BSplineCurveAny>,
+        pub b_spline_curve: BSplineCurveAny,
     }
     #[derive(Clone, Debug)]
     struct RationalBSplineCurveHolder {
         weights_data: PlaceHolder<Vec<f64>>,
-        b_spline_curve: PlaceHolder<Box<dyn BSplineCurveAny>>,
+        b_spline_curve: PlaceHolder<BSplineCurveAny>,
     }
     impl Holder for RationalBSplineCurveHolder {
         type Table = Tables;
@@ -9123,12 +9306,8 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    pub trait SecurityClassificationAssignmentAny:
-        ::std::any::Any + ::std::fmt::Debug + dyn_clone::DynClone
-    {
-    }
-    dyn_clone::clone_trait_object!(SecurityClassificationAssignmentAny);
-    impl SecurityClassificationAssignmentAny for SecurityClassificationAssignment {}
+    #[derive(Debug, Clone)]
+    pub enum SecurityClassificationAssignmentAny {}
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct SecurityClassificationLevel {
         pub name: Label,
@@ -9192,18 +9371,22 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    impl NamedUnitAny for SiUnit {}
+    impl Into<NamedUnit> for SiUnit {
+        fn into(self) -> NamedUnit {
+            NamedUnit::SiUnit(Box::new(self))
+        }
+    }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct SiUnit {
         pub prefix: Option<SiPrefix>,
         pub name: SiUnitName,
-        pub named_unit: Box<dyn NamedUnitAny>,
+        pub named_unit: NamedUnitAny,
     }
     #[derive(Clone, Debug)]
     struct SiUnitHolder {
         prefix: Option<PlaceHolder<SiPrefix>>,
         name: PlaceHolder<SiUnitName>,
-        named_unit: PlaceHolder<Box<dyn NamedUnitAny>>,
+        named_unit: PlaceHolder<NamedUnitAny>,
     }
     impl Holder for SiUnitHolder {
         type Table = Tables;
@@ -9350,20 +9533,24 @@ pub mod explicit_draughting {
             2usize
         }
     }
-    impl GeometricRepresentationItemAny for SymbolTarget {}
+    impl Into<GeometricRepresentationItem> for SymbolTarget {
+        fn into(self) -> GeometricRepresentationItem {
+            GeometricRepresentationItem::SymbolTarget(Box::new(self))
+        }
+    }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct SymbolTarget {
         pub placement: Axis2Placement,
         pub x_scale: PositiveRatioMeasure,
         pub y_scale: PositiveRatioMeasure,
-        pub geometric_representation_item: Box<dyn GeometricRepresentationItemAny>,
+        pub geometric_representation_item: GeometricRepresentationItemAny,
     }
     #[derive(Clone, Debug)]
     struct SymbolTargetHolder {
         placement: PlaceHolder<Axis2Placement>,
         x_scale: PositiveRatioMeasure,
         y_scale: PositiveRatioMeasure,
-        geometric_representation_item: PlaceHolder<Box<dyn GeometricRepresentationItemAny>>,
+        geometric_representation_item: PlaceHolder<GeometricRepresentationItemAny>,
     }
     impl Holder for SymbolTargetHolder {
         type Table = Tables;
@@ -9401,7 +9588,11 @@ pub mod explicit_draughting {
             2usize
         }
     }
-    impl GeometricRepresentationItemAny for TextLiteral {}
+    impl Into<GeometricRepresentationItem> for TextLiteral {
+        fn into(self) -> GeometricRepresentationItem {
+            GeometricRepresentationItem::TextLiteral(Box::new(self))
+        }
+    }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct TextLiteral {
         pub literal: PresentableText,
@@ -9409,7 +9600,7 @@ pub mod explicit_draughting {
         pub alignment: TextAlignment,
         pub path: TextPath,
         pub font: FontSelect,
-        pub geometric_representation_item: Box<dyn GeometricRepresentationItemAny>,
+        pub geometric_representation_item: GeometricRepresentationItemAny,
     }
     #[derive(Clone, Debug)]
     struct TextLiteralHolder {
@@ -9418,7 +9609,7 @@ pub mod explicit_draughting {
         alignment: TextAlignment,
         path: PlaceHolder<TextPath>,
         font: PlaceHolder<FontSelect>,
-        geometric_representation_item: PlaceHolder<Box<dyn GeometricRepresentationItemAny>>,
+        geometric_representation_item: PlaceHolder<GeometricRepresentationItemAny>,
     }
     impl Holder for TextLiteralHolder {
         type Table = Tables;
@@ -9435,12 +9626,12 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct TextLiteralWithAssociatedCurves {
-        pub associated_curves: Vec<Box<dyn CurveAny>>,
+        pub associated_curves: Vec<CurveAny>,
         pub text_literal: TextLiteral,
     }
     #[derive(Clone, Debug)]
     struct TextLiteralWithAssociatedCurvesHolder {
-        associated_curves: PlaceHolder<Vec<Box<dyn CurveAny>>>,
+        associated_curves: PlaceHolder<Vec<CurveAny>>,
         text_literal: PlaceHolder<TextLiteral>,
     }
     impl Holder for TextLiteralWithAssociatedCurvesHolder {
@@ -9615,24 +9806,28 @@ pub mod explicit_draughting {
             2usize
         }
     }
-    impl BoundedCurveAny for TrimmedCurve {}
+    impl Into<BoundedCurve> for TrimmedCurve {
+        fn into(self) -> BoundedCurve {
+            BoundedCurve::TrimmedCurve(Box::new(self))
+        }
+    }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct TrimmedCurve {
-        pub basis_curve: Box<dyn CurveAny>,
+        pub basis_curve: CurveAny,
         pub trim_1: Vec<TrimmingSelect>,
         pub trim_2: Vec<TrimmingSelect>,
         pub sense_agreement: bool,
         pub master_representation: TrimmingPreference,
-        pub bounded_curve: Box<dyn BoundedCurveAny>,
+        pub bounded_curve: BoundedCurveAny,
     }
     #[derive(Clone, Debug)]
     struct TrimmedCurveHolder {
-        basis_curve: PlaceHolder<Box<dyn CurveAny>>,
+        basis_curve: PlaceHolder<CurveAny>,
         trim_1: PlaceHolder<Vec<TrimmingSelect>>,
         trim_2: PlaceHolder<Vec<TrimmingSelect>>,
         sense_agreement: bool,
         master_representation: PlaceHolder<TrimmingPreference>,
-        bounded_curve: PlaceHolder<Box<dyn BoundedCurveAny>>,
+        bounded_curve: PlaceHolder<BoundedCurveAny>,
     }
     impl Holder for TrimmedCurveHolder {
         type Table = Tables;
@@ -9670,14 +9865,18 @@ pub mod explicit_draughting {
             2usize
         }
     }
-    impl BSplineCurveAny for UniformCurve {}
+    impl Into<BSplineCurve> for UniformCurve {
+        fn into(self) -> BSplineCurve {
+            BSplineCurve::UniformCurve(Box::new(self))
+        }
+    }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct UniformCurve {
-        pub b_spline_curve: Box<dyn BSplineCurveAny>,
+        pub b_spline_curve: BSplineCurveAny,
     }
     #[derive(Clone, Debug)]
     struct UniformCurveHolder {
-        b_spline_curve: PlaceHolder<Box<dyn BSplineCurveAny>>,
+        b_spline_curve: PlaceHolder<BSplineCurveAny>,
     }
     impl Holder for UniformCurveHolder {
         type Table = Tables;
@@ -9692,18 +9891,22 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    impl GeometricRepresentationItemAny for Vector {}
+    impl Into<GeometricRepresentationItem> for Vector {
+        fn into(self) -> GeometricRepresentationItem {
+            GeometricRepresentationItem::Vector(Box::new(self))
+        }
+    }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct Vector {
         pub orientation: Direction,
         pub magnitude: LengthMeasure,
-        pub geometric_representation_item: Box<dyn GeometricRepresentationItemAny>,
+        pub geometric_representation_item: GeometricRepresentationItemAny,
     }
     #[derive(Clone, Debug)]
     struct VectorHolder {
         orientation: PlaceHolder<Direction>,
         magnitude: LengthMeasure,
-        geometric_representation_item: PlaceHolder<Box<dyn GeometricRepresentationItemAny>>,
+        geometric_representation_item: PlaceHolder<GeometricRepresentationItemAny>,
     }
     impl Holder for VectorHolder {
         type Table = Tables;

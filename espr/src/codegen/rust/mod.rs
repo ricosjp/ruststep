@@ -131,13 +131,12 @@ impl ToTokens for TypeRef {
                 has_supertype_decl,
                 ..
             } => {
-                if *has_supertype_decl {
-                    let name = format_ident!("{}Any", name.to_pascal_case());
-                    tokens.append_all(quote! { Box<dyn #name> });
+                let name = if *has_supertype_decl {
+                    format_ident!("{}Any", name.to_pascal_case())
                 } else {
-                    let name = format_ident!("{}", name.to_pascal_case());
-                    tokens.append_all(quote! { #name });
-                }
+                    format_ident!("{}", name.to_pascal_case())
+                };
+                tokens.append_all(quote! { #name });
             }
             Set { base, .. } | List { base, .. } => {
                 tokens.append_all(quote! { Vec<#base> });

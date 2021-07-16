@@ -64,9 +64,13 @@ impl ToTokens for Entity {
                 } = ty
                 {
                     if *has_supertype_decl {
-                        let any_trait = format_ident!("{}Any", supertype_name.to_pascal_case());
+                        let any_enum = format_ident!("{}", supertype_name.to_pascal_case());
                         tokens.append_all(quote! {
-                            impl #any_trait for #name {}
+                            impl Into<#any_enum> for #name {
+                                fn into(self) -> #any_enum {
+                                    #any_enum::#name(Box::new(self))
+                                }
+                            }
                         });
                     }
                 }
@@ -111,18 +115,12 @@ impl ToTokens for Entity {
         });
 
         if self.has_supertype_decl {
-            let trait_name = format_ident!("{}Any", name);
+            let enum_name = format_ident!("{}Any", name);
             tokens.append_all(quote! {
-                pub trait #trait_name:
-                    ::std::any::Any
-                  + ::std::fmt::Debug
-                  + dyn_clone::DynClone
-                {}
-                dyn_clone::clone_trait_object!(#trait_name);
-            });
-            tokens.append_all(quote! {
-                impl #trait_name for #name {}
-            });
+                #[derive(Debug, Clone)]
+                pub enum #enum_name {
+                }
+            }); // tokens.append_all
         }
     }
 }
