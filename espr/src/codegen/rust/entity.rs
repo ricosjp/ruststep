@@ -6,8 +6,8 @@ use quote::*;
 
 impl ToTokens for Entity {
     fn to_tokens(&self, tokens: &mut TokenStream) {
+        let field_name = format_ident!("{}", self.name);
         let name = format_ident!("{}", self.name.to_pascal_case());
-        let holder_name = format_ident!("{}Holder", self.name.to_pascal_case());
 
         let mut attr_name = Vec::new();
         let mut attr_type = Vec::new();
@@ -84,36 +84,13 @@ impl ToTokens for Entity {
         assert_eq!(attr_name.len(), holder_attr_type.len());
         assert_eq!(attr_name.len(), holder_attr_expr.len());
 
-        let name_str = self.name.to_uppercase();
-        let attr_len = attr_name.len();
-
         tokens.append_all(quote! {
-            #[derive(Debug, Clone, PartialEq, derive_new::new)]
+            #[derive(Debug, Clone, PartialEq, ::derive_new::new, ::ruststep_derive::Holder)]
+            #[holder(table = Tables, field = #field_name)]
             pub struct #name {
                 #(
                 pub #attr_name : #attr_type,
                 )*
-            }
-
-            #[derive(Clone, Debug, PartialEq)]
-            struct #holder_name {
-                #(
-                #attr_name : #holder_attr_type,
-                )*
-            }
-
-            impl Holder for #holder_name {
-                type Table = Tables;
-                type Owned = #name;
-                fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-                    todo!()
-                }
-                fn name() -> &'static str {
-                    #name_str
-                }
-                fn attr_len() -> usize {
-                    #attr_len
-                }
             }
         });
 
