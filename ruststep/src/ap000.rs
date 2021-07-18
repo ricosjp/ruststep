@@ -111,7 +111,7 @@ use crate::{
     error::*,
     tables::*,
 };
-use derive_more::{Deref, DerefMut, From};
+use derive_more::{Deref, DerefMut};
 use ruststep_derive::{as_holder, Holder};
 use serde::{Deserialize, Serialize};
 use std::{collections::HashMap, fmt::Debug};
@@ -198,23 +198,22 @@ pub trait SuperTypeAny: ::std::ops::Deref<Target = Self::SuperType> + ::std::ops
     type SuperType;
 }
 
-#[derive(Debug, Clone, Serialize, From)]
-#[serde(untagged)]
+#[derive(Debug, Clone)]
 pub enum BaseAny {
-    Sub1(Sub1),
-    Sub2(Sub2),
+    Sub1(Box<Sub1>),
+    Sub2(Box<Sub2>),
 }
 
 impl BaseAny {
     pub fn as_sub1(self) -> ::std::result::Result<Sub1, Self> {
         match self {
-            BaseAny::Sub1(sub) => Ok(sub),
+            BaseAny::Sub1(sub) => Ok(*sub),
             _ => Err(self),
         }
     }
     pub fn as_sub2(self) -> ::std::result::Result<Sub2, Self> {
         match self {
-            BaseAny::Sub2(sub) => Ok(sub),
+            BaseAny::Sub2(sub) => Ok(*sub),
             _ => Err(self),
         }
     }
@@ -239,12 +238,12 @@ impl ::std::ops::DerefMut for BaseAny {
     }
 }
 
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone)]
 pub struct Base {
     pub a: f64,
 }
 
-#[derive(Debug, Clone, Serialize, Deref, DerefMut)]
+#[derive(Debug, Clone, Deref, DerefMut)]
 pub struct Sub1 {
     #[deref]
     #[deref_mut]
@@ -252,7 +251,13 @@ pub struct Sub1 {
     pub b: f64,
 }
 
-#[derive(Debug, Clone, Serialize, Deref, DerefMut)]
+impl Into<BaseAny> for Sub1 {
+    fn into(self) -> BaseAny {
+        BaseAny::Sub1(Box::new(self))
+    }
+}
+
+#[derive(Debug, Clone, Deref, DerefMut)]
 pub struct Sub2 {
     #[deref]
     #[deref_mut]
@@ -260,7 +265,13 @@ pub struct Sub2 {
     pub c: f64,
 }
 
-#[derive(Debug, Clone, Serialize)]
+impl Into<BaseAny> for Sub2 {
+    fn into(self) -> BaseAny {
+        BaseAny::Sub2(Box::new(self))
+    }
+}
+
+#[derive(Debug, Clone)]
 pub struct User {
     pub data: BaseAny,
 }
