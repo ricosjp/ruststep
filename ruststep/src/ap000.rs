@@ -96,11 +96,13 @@
 //! let base = Base { a: 1.0 };
 //! let sub = Sub1 { base, b: 1.0 };
 //!
-//! let any: BaseAny = sub.into();
+//! let mut any: BaseAny = sub.into();
 //!
-//! // call Debug for Sub by dispatch
-//! dbg!(&any);
+//! // `a` of `Base` is accessible through Deref/DerefMut
+//! println!("{}", any.a); // 1.0
+//! any.a = 2.0;
 //!
+//! // downcast to Sub1.
 //! let sub = any.as_sub1().unwrap();
 //! ```
 
