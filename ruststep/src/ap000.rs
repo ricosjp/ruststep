@@ -111,7 +111,7 @@ use crate::{
     error::*,
     tables::*,
 };
-use derive_more::{Deref, DerefMut, From};
+use derive_more::{Deref, DerefMut};
 use ruststep_derive::{as_holder, Holder};
 use serde::{Deserialize, Serialize};
 use std::{collections::HashMap, fmt::Debug};
@@ -198,7 +198,7 @@ pub trait SuperTypeAny: ::std::ops::Deref<Target = Self::SuperType> + ::std::ops
     type SuperType;
 }
 
-#[derive(Debug, Clone, From)]
+#[derive(Debug, Clone)]
 pub enum BaseAny {
     Sub1(Box<Sub1>),
     Sub2(Box<Sub2>),
@@ -251,12 +251,24 @@ pub struct Sub1 {
     pub b: f64,
 }
 
+impl Into<BaseAny> for Sub1 {
+    fn into(self) -> BaseAny {
+        BaseAny::Sub1(Box::new(self))
+    }
+}
+
 #[derive(Debug, Clone, Deref, DerefMut)]
 pub struct Sub2 {
     #[deref]
     #[deref_mut]
     pub base: Base,
     pub c: f64,
+}
+
+impl Into<BaseAny> for Sub2 {
+    fn into(self) -> BaseAny {
+        BaseAny::Sub2(Box::new(self))
+    }
 }
 
 #[derive(Debug, Clone)]
