@@ -19,13 +19,18 @@
 //!
 //!   -- For subtype/supertype
 //!   ENTITY base;
-//!     SUPERTYPE OF (sub)
+//!     SUPERTYPE OF (sub1, sub2)
 //!     a: f64;
 //!   END_ENTITY;
 //!
-//!   ENTITY sub;
+//!   ENTITY sub1;
 //!     SUBTYPE OF (base);
 //!     b: f64;
+//!   END_ENTITY;
+//!
+//!   ENTITY sub2;
+//!     SUBTYPE OF (base);
+//!     c: f64;
 //!   END_ENTITY;
 //!
 //!   ENTITY user;
@@ -89,22 +94,24 @@
 //! use ruststep::ap000::*;
 //!
 //! let base = Base { a: 1.0 };
-//! let sub = Sub { base, b: 1.0 };
+//! let sub = Sub1 { base, b: 1.0 };
 //!
-//! let sub_r = &sub as &dyn BaseAny;
+//! let mut any: BaseAny = sub.into();
 //!
-//! // call Debug for Sub by dispatch
-//! dbg!(&sub_r);
+//! // `a` of `Base` is accessible through Deref/DerefMut
+//! println!("{}", any.a); // 1.0
+//! any.a = 2.0;
 //!
-//! let sub2: &Sub = sub_r.downcast_ref().unwrap();
+//! // downcast to Sub1.
+//! let sub = any.as_sub1().unwrap();
 //! ```
 
 use crate::{
     ast::{DataSection, EntityInstance},
-    custom_any,
     error::*,
     tables::*,
 };
+use derive_more::{Deref, DerefMut, From};
 use ruststep_derive::{as_holder, Holder};
 use serde::{Deserialize, Serialize};
 use std::{collections::HashMap, fmt::Debug};
@@ -187,24 +194,75 @@ pub struct C {
     pub q: B,
 }
 
-custom_any!(BaseAny);
+pub trait SuperTypeAny: ::std::ops::Deref<Target = Self::SuperType> + ::std::ops::DerefMut {
+    type SuperType;
+}
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, From)]
+#[serde(untagged)]
+pub enum BaseAny {
+    Sub1(Sub1),
+    Sub2(Sub2),
+}
+
+impl BaseAny {
+    pub fn as_sub1(self) -> ::std::result::Result<Sub1, Self> {
+        match self {
+            BaseAny::Sub1(sub) => Ok(sub),
+            _ => Err(self),
+        }
+    }
+    pub fn as_sub2(self) -> ::std::result::Result<Sub2, Self> {
+        match self {
+            BaseAny::Sub2(sub) => Ok(sub),
+            _ => Err(self),
+        }
+    }
+}
+
+impl ::std::ops::Deref for BaseAny {
+    type Target = Base;
+    fn deref(&self) -> &Base {
+        match self {
+            BaseAny::Sub1(sub) => sub.deref(),
+            BaseAny::Sub2(sub) => sub.deref(),
+        }
+    }
+}
+
+impl ::std::ops::DerefMut for BaseAny {
+    fn deref_mut(&mut self) -> &mut Base {
+        match self {
+            BaseAny::Sub1(sub) => sub.deref_mut(),
+            BaseAny::Sub2(sub) => sub.deref_mut(),
+        }
+    }
+}
+
+#[derive(Debug, Clone, Serialize)]
 pub struct Base {
     pub a: f64,
 }
-impl BaseAny for Base {}
 
-#[derive(Debug, Clone)]
-pub struct Sub {
+#[derive(Debug, Clone, Serialize, Deref, DerefMut)]
+pub struct Sub1 {
+    #[deref]
+    #[deref_mut]
     pub base: Base,
     pub b: f64,
 }
-impl BaseAny for Sub {}
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deref, DerefMut)]
+pub struct Sub2 {
+    #[deref]
+    #[deref_mut]
+    pub base: Base,
+    pub c: f64,
+}
+
+#[derive(Debug, Clone, Serialize)]
 pub struct User {
-    pub data: Box<dyn BaseAny>,
+    pub data: BaseAny,
 }
 
 #[cfg(test)]
