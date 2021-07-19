@@ -6,14 +6,22 @@
 //!    b: ::std::collections::HashMap<u64, ruststep_derive::as_holder!(B)>,
 //! }
 //!
-//! #[derive(Debug, Clone, PartialEq, ruststep_derive::Holder)]
+//! use ruststep_derive::{as_holder, Holder};
+//! use std::collections::HashMap;
+//!
+//! pub struct Table {
+//!     a: HashMap<u64, as_holder!(A)>,
+//!     b: HashMap<u64, as_holder!(B)>,
+//! }
+//!
+//! #[derive(Debug, Clone, PartialEq, Holder)]
 //! #[holder(table = Table, field = a)]
 //! pub struct A {
 //!     pub x: f64,
 //!     pub y: f64,
 //! }
 //!
-//! #[derive(Debug, Clone, PartialEq, ruststep_derive::Holder)]
+//! #[derive(Debug, Clone, PartialEq, Holder)]
 //! #[holder(table = Table, field = b)]
 //! pub struct B {
 //!     pub z: f64,
@@ -28,6 +36,7 @@
 //!   - naming rule is `{}Holder`
 //!   - This name is obtained by `as_holder!(A)`
 //! - `impl Holder for AHolder`
+//!
 //! - `impl Deserialize for AHolder`
 //! - `AHolderVisitor` struct for implementing [serde::Deserialize](https://docs.serde.rs/serde/trait.Deserialize.html) trait
 //!   - naming rule is `{}HolderVisitor`
@@ -37,11 +46,16 @@
 //!
 
 use proc_macro::TokenStream;
-use proc_macro2::TokenStream as TokenStream2;
+use proc_macro2::{Span, TokenStream as TokenStream2};
+use proc_macro_crate::{crate_name, FoundCrate};
 use quote::quote;
+use std::convert::*;
 
+mod field_type;
 mod for_struct;
 mod holder_attr;
+
+use field_type::*;
 use holder_attr::*;
 
 #[proc_macro_derive(Holder, attributes(holder))]
@@ -74,7 +88,7 @@ fn derive_holder(ast: &syn::DeriveInput) -> TokenStream2 {
 /// Resolve Holder struct from owned type, e.g. `A` to `AHolder`
 #[proc_macro]
 pub fn as_holder(input: TokenStream) -> TokenStream {
-    let path = as_holder2(&syn::parse(input).unwrap());
+    let path = as_holder_path(syn::parse(input).unwrap());
     let ts = quote! { #path };
     ts.into()
 }
@@ -88,13 +102,68 @@ pub fn as_holder_visitor(input: TokenStream) -> TokenStream {
 }
 
 // FIXME This should accept `syn::Path` instead of `syn::Ident`,
-// e.g. `::some_schema::A` to `::some_schema::AHolder`
-fn as_holder2(input: &syn::Ident) -> syn::Ident {
-    quote::format_ident!("{}Holder", input)
-}
-
-// FIXME This should accept `syn::Path` instead of `syn::Ident`,
 // e.g. `::some_schema::A` to `::some_schema::AHolderVisitor`
 fn as_holder_visitor2(input: &syn::Ident) -> syn::Ident {
     quote::format_ident!("{}HolderVisitor", input)
+}
+
+fn as_holder_ident(input: &syn::Ident) -> syn::Ident {
+    quote::format_ident!("{}Holder", input)
+}
+
+fn as_holder_path(input: syn::Type) -> syn::Type {
+    let ft: FieldType = input
+        .try_into()
+        .expect("as_holder! only accepts espr-generated type");
+    ft.as_holder().into()
+}
+
+/// Returns `crate` or `::ruststep` as in ruststep crate or not
+fn ruststep_crate() -> syn::Path {
+    let path = crate_name("ruststep").unwrap();
+    match path {
+        FoundCrate::Itself => {
+            let mut segments = syn::punctuated::Punctuated::new();
+            segments.push(syn::PathSegment {
+                ident: syn::Ident::new("crate", Span::call_site()),
+                arguments: syn::PathArguments::None,
+            });
+            syn::Path {
+                leading_colon: None,
+                segments,
+            }
+        }
+        FoundCrate::Name(name) => {
+            let mut segments = syn::punctuated::Punctuated::new();
+            segments.push(syn::PathSegment {
+                ident: syn::Ident::new(&name, Span::call_site()),
+                arguments: syn::PathArguments::None,
+            });
+            syn::Path {
+                leading_colon: Some(syn::token::Colon2::default()),
+                segments,
+            }
+        }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn holder_path() {
+        let path = syn::parse_str("::some::Struct").unwrap();
+        let holder = as_holder_path(path);
+        let ans = syn::parse_str("::some::StructHolder").unwrap();
+        assert_eq!(holder, ans);
+    }
+
+    #[test]
+    fn optional_holder_path() {
+        let path = syn::parse_str("Option<::some::Struct>").unwrap();
+        let holder = as_holder_path(path);
+        let ans = syn::parse_str("Option<::some::StructHolder>").unwrap();
+        assert_eq!(holder, ans);
+    }
 }

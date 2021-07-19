@@ -19,13 +19,18 @@
 //!
 //!   -- For subtype/supertype
 //!   ENTITY base;
-//!     SUPERTYPE OF (sub)
+//!     SUPERTYPE OF (sub1, sub2)
 //!     a: f64;
 //!   END_ENTITY;
 //!
-//!   ENTITY sub;
+//!   ENTITY sub1;
 //!     SUBTYPE OF (base);
 //!     b: f64;
+//!   END_ENTITY;
+//!
+//!   ENTITY sub2;
+//!     SUBTYPE OF (base);
+//!     c: f64;
 //!   END_ENTITY;
 //!
 //!   ENTITY user;
@@ -89,22 +94,25 @@
 //! use ruststep::ap000::*;
 //!
 //! let base = Base { a: 1.0 };
-//! let sub = Sub { base, b: 1.0 };
+//! let sub = Sub1 { base, b: 1.0 };
 //!
-//! let sub_r = &sub as &dyn BaseAny;
+//! let mut any: BaseAny = sub.into();
 //!
-//! // call Debug for Sub by dispatch
-//! dbg!(&sub_r);
+//! // `a` of `Base` is accessible through Deref/DerefMut
+//! println!("{}", any.a); // 1.0
+//! any.a = 2.0;
 //!
-//! let sub2: &Sub = sub_r.downcast_ref().unwrap();
+//! // downcast to Sub1.
+//! let sub = any.as_sub1().unwrap();
 //! ```
 
 use crate::{
     ast::{DataSection, EntityInstance},
-    custom_any,
     error::*,
     tables::*,
 };
+use derive_more::{Deref, DerefMut};
+use ruststep_derive::{as_holder, Holder};
 use serde::{Deserialize, Serialize};
 use std::{collections::HashMap, fmt::Debug};
 
@@ -114,9 +122,9 @@ use crate::tables;
 /// Tables including entities `A`, `B`, and `C` as their holders.
 #[derive(Debug, Clone, PartialEq, Default)]
 pub struct Ap000 {
-    a: HashMap<u64, AHolder>,
-    b: HashMap<u64, BHolder>,
-    c: HashMap<u64, CHolder>,
+    a: HashMap<u64, as_holder!(A)>,
+    b: HashMap<u64, as_holder!(B)>,
+    c: HashMap<u64, as_holder!(C)>,
 }
 
 impl Ap000 {
@@ -125,21 +133,21 @@ impl Ap000 {
 
         for entity in &sec.entities {
             match entity {
-                EntityInstance::Simple { name, record } => match record.name.as_str() {
-                    "A" => table
-                        .a
-                        .insert(*name, AHolder::deserialize(record)?)
-                        .is_none(),
-                    "B" => table
-                        .b
-                        .insert(*name, BHolder::deserialize(record)?)
-                        .is_none(),
-                    "C" => table
-                        .c
-                        .insert(*name, CHolder::deserialize(record)?)
-                        .is_none(),
-                    _ => panic!(),
-                },
+                EntityInstance::Simple { id, record } => {
+                    if !match record.name.as_str() {
+                        "A" => table.a.insert(*id, AHolder::deserialize(record)?).is_none(),
+                        "B" => table.b.insert(*id, BHolder::deserialize(record)?).is_none(),
+                        "C" => table.c.insert(*id, CHolder::deserialize(record)?).is_none(),
+                        name @ _ => {
+                            return Err(Error::UnknownEntityName {
+                                entity_name: name.to_string(),
+                                schema: "ap000".to_string(),
+                            })
+                        }
+                    } {
+                        return Err(Error::DuplicatedEntity(*id));
+                    }
+                }
                 EntityInstance::Complex { .. } => unimplemented!(),
             };
         }
@@ -160,7 +168,7 @@ impl Ap000 {
 }
 
 /// Corresponds to `ENTITY a`
-#[derive(Debug, Clone, PartialEq, Serialize, ruststep_derive::Holder)]
+#[derive(Debug, Clone, PartialEq, Serialize, Holder)]
 #[holder(table = Ap000, field = a)]
 pub struct A {
     pub x: f64,
@@ -168,7 +176,7 @@ pub struct A {
 }
 
 /// Corresponds to `ENTITY b`
-#[derive(Debug, Clone, PartialEq, Serialize, ruststep_derive::Holder)]
+#[derive(Debug, Clone, PartialEq, Serialize, Holder)]
 #[holder(table = Ap000, field = b)]
 pub struct B {
     pub z: f64,
@@ -177,7 +185,7 @@ pub struct B {
 }
 
 /// Corresponds to `ENTITY c`
-#[derive(Debug, Clone, PartialEq, Serialize, ruststep_derive::Holder)]
+#[derive(Debug, Clone, PartialEq, Serialize, Holder)]
 #[holder(table = Ap000, field = c)]
 pub struct C {
     #[holder(use_place_holder)]
@@ -186,24 +194,86 @@ pub struct C {
     pub q: B,
 }
 
-custom_any!(BaseAny);
+pub trait SuperTypeAny: ::std::ops::Deref<Target = Self::SuperType> + ::std::ops::DerefMut {
+    type SuperType;
+}
+
+#[derive(Debug, Clone)]
+pub enum BaseAny {
+    Sub1(Box<Sub1>),
+    Sub2(Box<Sub2>),
+}
+
+impl BaseAny {
+    pub fn as_sub1(self) -> ::std::result::Result<Sub1, Self> {
+        match self {
+            BaseAny::Sub1(sub) => Ok(*sub),
+            _ => Err(self),
+        }
+    }
+    pub fn as_sub2(self) -> ::std::result::Result<Sub2, Self> {
+        match self {
+            BaseAny::Sub2(sub) => Ok(*sub),
+            _ => Err(self),
+        }
+    }
+}
+
+impl ::std::ops::Deref for BaseAny {
+    type Target = Base;
+    fn deref(&self) -> &Base {
+        match self {
+            BaseAny::Sub1(sub) => sub.deref(),
+            BaseAny::Sub2(sub) => sub.deref(),
+        }
+    }
+}
+
+impl ::std::ops::DerefMut for BaseAny {
+    fn deref_mut(&mut self) -> &mut Base {
+        match self {
+            BaseAny::Sub1(sub) => sub.deref_mut(),
+            BaseAny::Sub2(sub) => sub.deref_mut(),
+        }
+    }
+}
 
 #[derive(Debug, Clone)]
 pub struct Base {
     pub a: f64,
 }
-impl BaseAny for Base {}
 
-#[derive(Debug, Clone)]
-pub struct Sub {
+#[derive(Debug, Clone, Deref, DerefMut)]
+pub struct Sub1 {
+    #[deref]
+    #[deref_mut]
     pub base: Base,
     pub b: f64,
 }
-impl BaseAny for Sub {}
+
+impl Into<BaseAny> for Sub1 {
+    fn into(self) -> BaseAny {
+        BaseAny::Sub1(Box::new(self))
+    }
+}
+
+#[derive(Debug, Clone, Deref, DerefMut)]
+pub struct Sub2 {
+    #[deref]
+    #[deref_mut]
+    pub base: Base,
+    pub c: f64,
+}
+
+impl Into<BaseAny> for Sub2 {
+    fn into(self) -> BaseAny {
+        BaseAny::Sub2(Box::new(self))
+    }
+}
 
 #[derive(Debug, Clone)]
 pub struct User {
-    pub data: Box<dyn BaseAny>,
+    pub data: BaseAny,
 }
 
 #[cfg(test)]

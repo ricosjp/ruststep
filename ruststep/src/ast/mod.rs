@@ -68,8 +68,8 @@ pub struct DataSection {
 /// Each line of data section
 #[derive(Debug, Clone, PartialEq)]
 pub enum EntityInstance {
-    Simple { name: u64, record: Record },
-    Complex { name: u64, subsuper: Vec<Record> },
+    Simple { id: u64, record: Record },
+    Complex { id: u64, subsuper: Vec<Record> },
 }
 
 #[derive(Debug, Clone, PartialEq)]

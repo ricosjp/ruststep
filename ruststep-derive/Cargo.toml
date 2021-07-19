@@ -16,6 +16,7 @@ Inflector = "0.11.4"
 
 [dev-dependencies]
 serde = "1.0"
+trybuild = "1.0.42"
 
 [dev-dependencies.ruststep]
 path = "../ruststep"
