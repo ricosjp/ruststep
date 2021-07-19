@@ -114,7 +114,7 @@ use crate::{
 };
 use derive_more::{Deref, DerefMut};
 use ruststep_derive::{as_holder, Holder};
-use serde::{Deserialize, Serialize};
+use serde::{de, Deserialize, Serialize};
 use std::{collections::HashMap, fmt::Debug};
 
 #[cfg(doc)]
@@ -214,18 +214,18 @@ impl EntityTable<BaseAnyHolder> for Ap000 {
     fn get_owned(&self, entity_id: u64) -> Result<BaseAny> {
         // assume here that the intersection of sub1.key and sub2.key is empty
         if let Ok(owned) = crate::tables::get_owned(self, &self.sub1, entity_id) {
-            return Ok(BaseAny::Sub1(owned));
+            return Ok(BaseAny::Sub1(Box::new(owned)));
         }
         if let Ok(owned) = crate::tables::get_owned(self, &self.sub2, entity_id) {
-            return Ok(BaseAny::Sub2(owned));
+            return Ok(BaseAny::Sub2(Box::new(owned)));
         }
         Err(crate::error::Error::UnknownEntity(entity_id))
     }
     fn owned_iter<'table>(&'table self) -> Box<dyn Iterator<Item = Result<BaseAny>> + 'table> {
-        let sub1 =
-            crate::tables::owned_iter(self, &self.sub1).map(|owned| owned.map(BaseAny::Sub1));
-        let sub2 =
-            crate::tables::owned_iter(self, &self.sub2).map(|owned| owned.map(BaseAny::Sub2));
+        let sub1 = crate::tables::owned_iter(self, &self.sub1)
+            .map(|owned| owned.map(|v| BaseAny::Sub1(Box::new(v))));
+        let sub2 = crate::tables::owned_iter(self, &self.sub2)
+            .map(|owned| owned.map(|v| BaseAny::Sub2(Box::new(v))));
         Box::new(sub1.chain(sub2))
     }
 }
@@ -269,8 +269,7 @@ pub trait SuperTypeAny: ::std::ops::Deref<Target = Self::SuperType> + ::std::ops
 ///   a: f64;
 /// END_ENTITY;
 /// ```
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum BaseAny {
     Sub1(Box<Sub1>),
     Sub2(Box<Sub2>),
@@ -310,20 +309,34 @@ impl ::std::ops::DerefMut for BaseAny {
     }
 }
 
-#[derive(Debug, Clone, PartialEq, Deserialize)]
-#[serde(untagged)]
+#[derive(Debug, Clone, PartialEq)]
 enum BaseAnyHolder {
-    Sub1(Sub1Holder),
-    Sub2(Sub2Holder),
+    Sub1(Box<Sub1Holder>),
+    Sub2(Box<Sub2Holder>),
+}
+
+impl<'de> de::Deserialize<'de> for BaseAnyHolder {
+    fn deserialize<D>(_deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: de::Deserializer<'de>,
+    {
+        todo!()
+    }
 }
 
 impl Holder for BaseAnyHolder {
     type Table = Ap000;
     type Owned = BaseAny;
+    fn name() -> &'static str {
+        ""
+    }
+    fn attr_len() -> usize {
+        0
+    }
     fn into_owned(self, table: &Self::Table) -> Result<Self::Owned> {
         Ok(match self {
-            BaseAnyHolder::Sub1(holder) => BaseAny::Sub1(holder.into_owned(table)?),
-            BaseAnyHolder::Sub2(holder) => BaseAny::Sub2(holder.into_owned(table)?),
+            BaseAnyHolder::Sub1(holder) => BaseAny::Sub1(Box::new(holder.into_owned(table)?)),
+            BaseAnyHolder::Sub2(holder) => BaseAny::Sub2(Box::new(holder.into_owned(table)?)),
         })
     }
 }
@@ -336,7 +349,7 @@ impl Holder for BaseAnyHolder {
 ///   a: f64;
 /// END_ENTITY;
 /// ```
-#[derive(Debug, Clone, PartialEq, Serialize)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct Base {
     pub a: f64,
 }
@@ -349,7 +362,7 @@ pub struct Base {
 ///   a: f64;
 /// END_ENTITY;
 /// ```
-#[derive(Debug, Clone, PartialEq, Deserialize)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct BaseHolder {
     pub a: f64,
 }
@@ -357,13 +370,28 @@ pub struct BaseHolder {
 impl Holder for BaseHolder {
     type Table = Ap000;
     type Owned = Base;
+    fn name() -> &'static str {
+        ""
+    }
+    fn attr_len() -> usize {
+        0
+    }
     fn into_owned(self, _tables: &Ap000) -> Result<Base> {
         let BaseHolder { a } = self;
         Ok(Base { a })
     }
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deref, DerefMut)]
+impl<'de> de::Deserialize<'de> for BaseHolder {
+    fn deserialize<D>(_deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: de::Deserializer<'de>,
+    {
+        todo!()
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Deref, DerefMut)]
 pub struct Sub1 {
     #[deref]
     #[deref_mut]
@@ -377,15 +405,30 @@ impl Into<BaseAny> for Sub1 {
     }
 }
 
-#[derive(Debug, Clone, Deref, DerefMut, PartialEq, Deserialize)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct Sub1Holder {
     base: PlaceHolder<BaseHolder>,
     b: f64,
 }
 
+impl<'de> de::Deserialize<'de> for Sub1Holder {
+    fn deserialize<D>(_deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: de::Deserializer<'de>,
+    {
+        todo!()
+    }
+}
+
 impl Holder for Sub1Holder {
     type Table = Ap000;
     type Owned = Sub1;
+    fn name() -> &'static str {
+        ""
+    }
+    fn attr_len() -> usize {
+        0
+    }
     fn into_owned(self, table: &Ap000) -> Result<Self::Owned> {
         let Sub1Holder { base, b } = self;
         Ok(Sub1 {
@@ -395,7 +438,7 @@ impl Holder for Sub1Holder {
     }
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deref, DerefMut)]
+#[derive(Debug, Clone, PartialEq, Deref, DerefMut)]
 pub struct Sub2 {
     #[deref]
     #[deref_mut]
@@ -409,15 +452,30 @@ impl Into<BaseAny> for Sub2 {
     }
 }
 
-#[derive(Debug, Clone, PartialEq, Deserialize)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct Sub2Holder {
     base: PlaceHolder<BaseHolder>,
     c: f64,
 }
 
+impl<'de> de::Deserialize<'de> for Sub2Holder {
+    fn deserialize<D>(_deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: de::Deserializer<'de>,
+    {
+        todo!()
+    }
+}
+
 impl Holder for Sub2Holder {
     type Table = Ap000;
     type Owned = Sub2;
+    fn name() -> &'static str {
+        ""
+    }
+    fn attr_len() -> usize {
+        0
+    }
     fn into_owned(self, table: &Ap000) -> Result<Self::Owned> {
         let Sub2Holder { base, c } = self;
         Ok(Sub2 {
@@ -427,19 +485,34 @@ impl Holder for Sub2Holder {
     }
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct User {
     pub data: BaseAny,
 }
 
-#[derive(Debug, Clone, PartialEq, Deserialize)]
+#[derive(Debug, Clone, PartialEq)]
 struct UserHolder {
     data: PlaceHolder<BaseAnyHolder>,
+}
+
+impl<'de> de::Deserialize<'de> for UserHolder {
+    fn deserialize<D>(_deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: de::Deserializer<'de>,
+    {
+        todo!()
+    }
 }
 
 impl Holder for UserHolder {
     type Table = Ap000;
     type Owned = User;
+    fn name() -> &'static str {
+        ""
+    }
+    fn attr_len() -> usize {
+        0
+    }
     fn into_owned(self, table: &Self::Table) -> Result<Self::Owned> {
         let UserHolder { data } = self;
         Ok(User {
