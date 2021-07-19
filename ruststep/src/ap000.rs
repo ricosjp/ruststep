@@ -109,6 +109,7 @@
 use crate::{
     ast::{DataSection, EntityInstance},
     error::*,
+    place_holder::*,
     tables::*,
 };
 use derive_more::{Deref, DerefMut};
@@ -450,7 +451,7 @@ impl Holder for UserHolder {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::{ast::*, parser::exchange, place_holder::*};
+    use crate::{ast::*, parser::exchange};
     use nom::Finish;
 
     #[test]
