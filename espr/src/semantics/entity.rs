@@ -34,6 +34,22 @@ impl Legalize for EntityAttribute {
     }
 }
 
+/// Convert `SUPERTYPE OF (type_name)` to `[type_name]`, `SUPERTYPE OF ONE_OF (t1, t2)` to `[t1, t2]`
+fn flatten_super_type_expression(expr: &ast::entity::SuperTypeExpression) -> Vec<String> {
+    let mut names = Vec::new();
+    match expr {
+        ast::entity::SuperTypeExpression::Reference(name) => names.push(name.clone()),
+        ast::entity::SuperTypeExpression::OneOf { exprs } => {
+            for expr in exprs {
+                let mut sub_names = flatten_super_type_expression(expr);
+                names.append(&mut sub_names);
+            }
+        }
+        _ => {}
+    }
+    names
+}
+
 impl Legalize for Entity {
     type Input = ast::Entity;
 
@@ -58,15 +74,27 @@ impl Legalize for Entity {
                     .collect::<Result<Vec<_>, _>>()
             })
             .transpose()?;
-        let supertypes = entity
-            .constraint
-            .as_ref()
-            .iter()
-            .flat_map(|c| match c {
-                ast::entity::Constraint::SuperTypeRule(rule_expr) => todo!(),
-                _ => None,
-            })
-            .collect();
+
+        let mut supertypes = Vec::new();
+        for c in &entity.constraint {
+            use ast::entity::Constraint;
+            match c {
+                Constraint::SuperTypeRule(rule_expr)
+                | Constraint::AbstractSuperType(Some(rule_expr)) => {
+                    let names = flatten_super_type_expression(rule_expr);
+                    for name in names {
+                        supertypes.push(ns.lookup_type(scope, &name)?);
+                    }
+                }
+                _ => continue,
+            }
+        }
+        let supertypes = if supertypes.is_empty() {
+            None
+        } else {
+            Some(supertypes)
+        };
+
         let name = entity.name.clone();
         Ok(Entity {
             name,
