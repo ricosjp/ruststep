@@ -7,8 +7,7 @@ pub struct Entity {
     pub name: String,
     pub attributes: Vec<EntityAttribute>,
     pub subtypes: Option<Vec<TypeRef>>,
-    /// FIXME This assumes that `SUPERTYPE` declaration exists for all supertypes.
-    pub has_supertype_decl: bool,
+    pub supertypes: Option<Vec<TypeRef>>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -59,12 +58,21 @@ impl Legalize for Entity {
                     .collect::<Result<Vec<_>, _>>()
             })
             .transpose()?;
+        let supertypes = entity
+            .constraint
+            .as_ref()
+            .iter()
+            .flat_map(|c| match c {
+                ast::entity::Constraint::SuperTypeRule(rule_expr) => todo!(),
+                _ => None,
+            })
+            .collect();
         let name = entity.name.clone();
         Ok(Entity {
             name,
             attributes,
             subtypes,
-            has_supertype_decl: entity.has_supertype_decl(),
+            supertypes,
         })
     }
 }

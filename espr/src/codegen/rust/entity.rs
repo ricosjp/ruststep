@@ -114,7 +114,7 @@ impl ToTokens for Entity {
             }
         });
 
-        if self.has_supertype_decl {
+        if self.supertypes.is_some() {
             let enum_name = format_ident!("{}Any", name);
             tokens.append_all(quote! {
                 #[derive(Debug, Clone)]
