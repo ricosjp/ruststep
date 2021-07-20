@@ -4690,7 +4690,12 @@ pub mod explicit_draughting {
         }
     }
     #[derive(Debug, Clone)]
-    pub enum AnnotationOccurrenceAny {}
+    pub enum AnnotationOccurrenceAny {
+        AnnotationCurveOccurrence(Box<AnnotationCurveOccurrence>),
+        AnnotationFillAreaOccurrence(Box<AnnotationFillAreaOccurrence>),
+        AnnotationTextOccurrence(Box<AnnotationTextOccurrence>),
+        AnnotationSymbolOccurrence(Box<AnnotationSymbolOccurrence>),
+    }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct AnnotationSubfigureOccurrence {
         pub annotation_symbol_occurrence: AnnotationSymbolOccurrence,
@@ -4851,7 +4856,10 @@ pub mod explicit_draughting {
         }
     }
     #[derive(Debug, Clone)]
-    pub enum ApplicationContextElementAny {}
+    pub enum ApplicationContextElementAny {
+        ProductContext(Box<ProductContext>),
+        ProductDefinitionContext(Box<ProductDefinitionContext>),
+    }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct ApplicationProtocolDefinition {
         pub status: Label,
@@ -4923,8 +4931,6 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    #[derive(Debug, Clone)]
-    pub enum ApprovalAssignmentAny {}
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct ApprovalDateTime {
         pub date_time: DateTimeSelect,
@@ -5102,8 +5108,6 @@ pub mod explicit_draughting {
             6usize
         }
     }
-    #[derive(Debug, Clone)]
-    pub enum BSplineCurveAny {}
     impl Into<BSplineCurve> for BSplineCurveWithKnots {
         fn into(self) -> BSplineCurve {
             BSplineCurve::BSplineCurveWithKnots(Box::new(self))
@@ -5189,7 +5193,12 @@ pub mod explicit_draughting {
         }
     }
     #[derive(Debug, Clone)]
-    pub enum BoundedCurveAny {}
+    pub enum BoundedCurveAny {
+        Polyline(Box<Polyline>),
+        BSplineCurveAny(Box<BSplineCurveAny>),
+        TrimmedCurve(Box<TrimmedCurve>),
+        CompositeCurve(Box<CompositeCurve>),
+    }
     impl Into<Date> for CalendarDate {
         fn into(self) -> Date {
             Date::CalendarDate(Box::new(self))
@@ -5289,7 +5298,9 @@ pub mod explicit_draughting {
         }
     }
     #[derive(Debug, Clone)]
-    pub enum CameraModelAny {}
+    pub enum CameraModelAny {
+        CameraModelD2(Box<CameraModelD2>),
+    }
     impl Into<CameraModel> for CameraModelD2 {
         fn into(self) -> CameraModel {
             CameraModel::CameraModelD2(Box::new(self))
@@ -5645,7 +5656,12 @@ pub mod explicit_draughting {
         }
     }
     #[derive(Debug, Clone)]
-    pub enum ConicAny {}
+    pub enum ConicAny {
+        Circle(Box<Circle>),
+        Ellipse(Box<Ellipse>),
+        Hyperbola(Box<Hyperbola>),
+        Parabola(Box<Parabola>),
+    }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct ContextDependentInvisibility {
         pub presentation_context: InvisibilityContext,
@@ -5715,8 +5731,6 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    #[derive(Debug, Clone)]
-    pub enum ContractAssignmentAny {}
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct ContractType {
         pub description: Label,
@@ -5795,7 +5809,11 @@ pub mod explicit_draughting {
         }
     }
     #[derive(Debug, Clone)]
-    pub enum CurveAny {}
+    pub enum CurveAny {
+        Line(Box<Line>),
+        ConicAny(Box<ConicAny>),
+        OffsetCurve2D(Box<OffsetCurve2D>),
+    }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct CurveDimension {
         pub dimension_curve_directed_callout: DimensionCurveDirectedCallout,
@@ -5912,7 +5930,9 @@ pub mod explicit_draughting {
         }
     }
     #[derive(Debug, Clone)]
-    pub enum DateAny {}
+    pub enum DateAny {
+        CalendarDate(Box<CalendarDate>),
+    }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct DatumFeatureCallout {
         pub draughting_callout: DraughtingCallout,
@@ -6245,8 +6265,6 @@ pub mod explicit_draughting {
             2usize
         }
     }
-    #[derive(Debug, Clone)]
-    pub enum DocumentReferenceAny {}
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct DocumentType {
         pub product_data_type: Label,
@@ -7342,7 +7360,14 @@ pub mod explicit_draughting {
         }
     }
     #[derive(Debug, Clone)]
-    pub enum GeometricRepresentationItemAny {}
+    pub enum GeometricRepresentationItemAny {
+        PointAny(Box<PointAny>),
+        Direction(Box<Direction>),
+        Vector(Box<Vector>),
+        PlacementAny(Box<PlacementAny>),
+        CurveAny(Box<CurveAny>),
+        GeometricSetAny(Box<GeometricSetAny>),
+    }
     impl Into<GeometricRepresentationItem> for GeometricSet {
         fn into(self) -> GeometricRepresentationItem {
             GeometricRepresentationItem::GeometricSet(Box::new(self))
@@ -7372,7 +7397,9 @@ pub mod explicit_draughting {
         }
     }
     #[derive(Debug, Clone)]
-    pub enum GeometricSetAny {}
+    pub enum GeometricSetAny {
+        GeometricCurveSet(Box<GeometricCurveSet>),
+    }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct GeometricalToleranceCallout {
         pub draughting_callout: DraughtingCallout,
@@ -7482,8 +7509,6 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    #[derive(Debug, Clone)]
-    pub enum GroupAssignmentAny {}
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct GroupRelationship {
         pub name: Label,
@@ -7798,7 +7823,10 @@ pub mod explicit_draughting {
         }
     }
     #[derive(Debug, Clone)]
-    pub enum MeasureWithUnitAny {}
+    pub enum MeasureWithUnitAny {
+        LengthMeasureWithUnit(Box<LengthMeasureWithUnit>),
+        PlaneAngleMeasureWithUnit(Box<PlaneAngleMeasureWithUnit>),
+    }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct NamedUnit {
         pub dimensions: DimensionalExponents,
@@ -7820,8 +7848,6 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    #[derive(Debug, Clone)]
-    pub enum NamedUnitAny {}
     impl Into<Curve> for OffsetCurve2D {
         fn into(self) -> Curve {
             Curve::OffsetCurve2D(Box::new(self))
@@ -7951,8 +7977,6 @@ pub mod explicit_draughting {
             2usize
         }
     }
-    #[derive(Debug, Clone)]
-    pub enum OrganizationAssignmentAny {}
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct OrganizationRole {
         pub name: Label,
@@ -8104,8 +8128,6 @@ pub mod explicit_draughting {
             2usize
         }
     }
-    #[derive(Debug, Clone)]
-    pub enum PersonAndOrganizationAssignmentAny {}
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct PersonAndOrganizationRole {
         pub name: Label,
@@ -8150,8 +8172,6 @@ pub mod explicit_draughting {
             2usize
         }
     }
-    #[derive(Debug, Clone)]
-    pub enum PersonAssignmentAny {}
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct PersonRole {
         pub name: Label,
@@ -8227,7 +8247,9 @@ pub mod explicit_draughting {
         }
     }
     #[derive(Debug, Clone)]
-    pub enum PlacementAny {}
+    pub enum PlacementAny {
+        Axis2Placement2D(Box<Axis2Placement2D>),
+    }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct PlanarBox {
         pub placement: Axis2Placement,
@@ -8360,7 +8382,10 @@ pub mod explicit_draughting {
         }
     }
     #[derive(Debug, Clone)]
-    pub enum PointAny {}
+    pub enum PointAny {
+        CartesianPoint(Box<CartesianPoint>),
+        PointOnCurve(Box<PointOnCurve>),
+    }
     impl Into<Point> for PointOnCurve {
         fn into(self) -> Point {
             Point::PointOnCurve(Box::new(self))
@@ -8822,8 +8847,6 @@ pub mod explicit_draughting {
             0usize
         }
     }
-    #[derive(Debug, Clone)]
-    pub enum PresentedItemAny {}
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct PresentedItemRepresentation {
         pub presentation: PresentationRepresentationSelect,
@@ -9306,8 +9329,6 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    #[derive(Debug, Clone)]
-    pub enum SecurityClassificationAssignmentAny {}
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct SecurityClassificationLevel {
         pub name: Label,
