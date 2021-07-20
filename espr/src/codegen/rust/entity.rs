@@ -114,11 +114,12 @@ impl ToTokens for Entity {
             }
         });
 
-        if self.supertypes.is_some() {
+        if let Some(supertypes) = &self.supertypes {
             let enum_name = format_ident!("{}Any", name);
             tokens.append_all(quote! {
                 #[derive(Debug, Clone)]
                 pub enum #enum_name {
+                    #(#supertypes(Box<#supertypes>)),*
                 }
             }); // tokens.append_all
         }
