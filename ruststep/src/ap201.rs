@@ -5108,6 +5108,14 @@ pub mod explicit_draughting {
             6usize
         }
     }
+    #[derive(Debug, Clone)]
+    pub enum BSplineCurveAny {
+        UniformCurve(Box<UniformCurve>),
+        BSplineCurveWithKnots(Box<BSplineCurveWithKnots>),
+        QuasiUniformCurve(Box<QuasiUniformCurve>),
+        BezierCurve(Box<BezierCurve>),
+        RationalBSplineCurve(Box<RationalBSplineCurve>),
+    }
     impl Into<BSplineCurve> for BSplineCurveWithKnots {
         fn into(self) -> BSplineCurve {
             BSplineCurve::BSplineCurveWithKnots(Box::new(self))
@@ -7847,6 +7855,13 @@ pub mod explicit_draughting {
         fn attr_len() -> usize {
             1usize
         }
+    }
+    #[derive(Debug, Clone)]
+    pub enum NamedUnitAny {
+        SiUnit(Box<SiUnit>),
+        ConversionBasedUnit(Box<ConversionBasedUnit>),
+        LengthUnit(Box<LengthUnit>),
+        PlaneAngleUnit(Box<PlaneAngleUnit>),
     }
     impl Into<Curve> for OffsetCurve2D {
         fn into(self) -> Curve {
