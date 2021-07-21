@@ -38,13 +38,13 @@ impl Legalize for EntityAttribute {
 ///
 /// ignore the differences between `ONE_OF`, `ANDOR`, and `AND`
 ///
-fn flatten_super_type_expression(expr: &ast::entity::SuperTypeExpression) -> Vec<String> {
+fn flatten_super_type_expression(expr: &ast::SuperTypeExpression) -> Vec<String> {
     let mut names = Vec::new();
     match expr {
-        ast::entity::SuperTypeExpression::Reference(name) => names.push(name.clone()),
-        ast::entity::SuperTypeExpression::OneOf { exprs }
-        | ast::entity::SuperTypeExpression::AndOr { factors: exprs }
-        | ast::entity::SuperTypeExpression::And { terms: exprs } => {
+        ast::SuperTypeExpression::Reference(name) => names.push(name.clone()),
+        ast::SuperTypeExpression::OneOf { exprs }
+        | ast::SuperTypeExpression::AndOr { factors: exprs }
+        | ast::SuperTypeExpression::And { terms: exprs } => {
             for expr in exprs {
                 let mut sub_names = flatten_super_type_expression(expr);
                 names.append(&mut sub_names);
@@ -78,7 +78,7 @@ impl Legalize for Entity {
 
         let mut supertypes = Vec::new();
         for c in &entity.constraint {
-            use ast::entity::Constraint;
+            use ast::Constraint;
             match c {
                 Constraint::SuperTypeRule(rule_expr)
                 | Constraint::AbstractSuperType(Some(rule_expr)) => {
