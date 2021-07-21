@@ -1,5 +1,5 @@
 use super::super::combinator::*;
-use crate::ast::types::*;
+use crate::ast::*;
 
 /// 307 simple_types = [binary_type] | [boolean_type] | [integer_type] | [logical_type] | [number_type] | [real_type] | [string_type] .
 pub fn simple_types(input: &str) -> ParseResult<SimpleType> {
@@ -73,7 +73,7 @@ pub fn width_spec(input: &str) -> ParseResult<WidthSpec> {
 
 #[cfg(test)]
 mod tests {
-    use crate::ast::types::{SimpleType, WidthSpec};
+    use crate::ast::{SimpleType, WidthSpec};
     use nom::Finish;
 
     #[test]

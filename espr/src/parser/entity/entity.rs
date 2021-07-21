@@ -1,6 +1,6 @@
 use super::{attribute::*, derive::*, domain::*, inverse::*, unique::*};
 use crate::{
-    ast::entity::*,
+    ast::*,
     parser::{combinator::*, identifier::*, subsuper::*, types::*},
 };
 
@@ -91,7 +91,6 @@ pub fn entity_decl(input: &str) -> ParseResult<Entity> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::ast::types::*;
     use nom::Finish;
 
     #[test]

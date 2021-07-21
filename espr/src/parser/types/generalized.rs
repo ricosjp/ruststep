@@ -2,6 +2,7 @@ use super::{
     super::{combinator::*, identifier::*},
     *,
 };
+use crate::ast::*;
 
 /// 258 named_types = [entity_ref] | [type_ref] .
 pub fn named_types(input: &str) -> ParseResult<String> {
@@ -137,7 +138,7 @@ pub fn general_set_type(input: &str) -> ParseResult<ParameterType> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::ast::expression::Expression;
+    use crate::ast::Expression;
     use nom::Finish;
 
     #[test]

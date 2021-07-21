@@ -4,7 +4,7 @@ use super::{
     operator::*,
     primary::*,
 };
-use crate::ast::expression::*;
+use crate::ast::*;
 
 /// Create left-joined tree `1.0 + 2.0 - 3.0` into `(- (+ 1.0 2.0) 3.0)`
 fn create_tree(mut head: Expression, tails: Vec<(BinaryOperator, Expression)>) -> Expression {

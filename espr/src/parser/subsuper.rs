@@ -1,5 +1,5 @@
 use super::{combinator::*, identifier::*};
-use crate::ast::entity::*;
+use crate::ast::*;
 
 /// 164 abstract_entity_declaration = ABSTRACT .
 pub fn abstract_entity_declaration(input: &str) -> ParseResult<Constraint> {

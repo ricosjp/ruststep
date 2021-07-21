@@ -104,7 +104,7 @@ impl ToTokens for TypeDecl {
 
 impl ToTokens for SimpleType {
     fn to_tokens(&self, tokens: &mut TokenStream) {
-        use crate::ast::types::SimpleType::*;
+        use crate::ast::SimpleType::*;
         match self.0 {
             Number => tokens.append(format_ident!("f64")),
             Real => tokens.append(format_ident!("f64")),

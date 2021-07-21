@@ -2,10 +2,10 @@ use super::{namespace::*, scope::*, *};
 use crate::ast;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct SimpleType(pub ast::types::SimpleType);
+pub struct SimpleType(pub ast::SimpleType);
 
 impl Legalize for SimpleType {
-    type Input = ast::types::SimpleType;
+    type Input = ast::SimpleType;
     fn legalize(
         _ns: &Namespace,
         _scope: &Scope,
@@ -19,7 +19,7 @@ impl Legalize for SimpleType {
 pub struct Bound {}
 
 impl Legalize for Bound {
-    type Input = ast::types::Bound;
+    type Input = ast::Bound;
     fn legalize(
         _ns: &Namespace,
         _scope: &Scope,
@@ -81,14 +81,14 @@ impl TypeRef {
 }
 
 impl Legalize for TypeRef {
-    type Input = ast::types::ParameterType;
+    type Input = ast::ParameterType;
 
     fn legalize(
         ns: &Namespace,
         scope: &Scope,
-        ty: &ast::types::ParameterType,
+        ty: &ast::ParameterType,
     ) -> Result<Self, SemanticError> {
-        use ast::types::ParameterType::*;
+        use ast::ParameterType::*;
         Ok(match ty {
             Simple(ty) => Self::SimpleType(SimpleType(*ty)),
             Named(name) => ns.lookup_type(scope, name)?,

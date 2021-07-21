@@ -1,6 +1,6 @@
 use super::attribute::*;
 use crate::{
-    ast::entity::*,
+    ast::*,
     parser::{combinator::*, identifier::*, types::*},
 };
 
@@ -64,7 +64,7 @@ pub fn inverse_attr(input: &str) -> ParseResult<InverseAttribute> {
 #[cfg(test)]
 mod tests {
     use super::AggregationOption;
-    use crate::ast::{expression::*, types::*};
+    use crate::ast::*;
     use nom::Finish;
 
     #[test]
