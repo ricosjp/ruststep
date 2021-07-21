@@ -1,7 +1,7 @@
 use super::{
     combinator::*, entity::*, expression::*, identifier::*, stmt::*, subsuper::*, types::*,
 };
-use crate::ast::{algorithm::*, schema::*, types::*};
+use crate::ast::*;
 
 /// 296 schema_decl = SCHEMA [schema_id] \[ schema_version_id \] `;` [schema_body] END_SCHEMA `;` .
 pub fn schema_decl(input: &str) -> ParseResult<Schema> {

@@ -1,5 +1,5 @@
 use super::{basis::*, combinator::*};
-use crate::ast::expression::*;
+use crate::ast::*;
 
 /// 251 literal = binary_literal | [logical_literal] | [real_literal] | [string_literal] .
 ///

@@ -1,7 +1,5 @@
-use super::{
-    super::{combinator::*, types::named_types},
-    *,
-};
+use super::{super::combinator::*, *};
+use crate::ast::*;
 
 /// 301 select_list = `(` [named_types] { `,` [named_types] } `)` .
 pub fn select_list(input: &str) -> ParseResult<Vec<String>> {

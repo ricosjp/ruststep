@@ -9,7 +9,7 @@ pub struct Schema {
 }
 
 impl Legalize for Schema {
-    type Input = ast::schema::Schema;
+    type Input = ast::Schema;
     fn legalize(
         ns: &Namespace,
         scope: &Scope,

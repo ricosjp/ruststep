@@ -64,7 +64,7 @@ impl Namespace {
             let mut enumeration_types = Vec::new();
             let mut select_types = Vec::new();
             for ty in &schema.types {
-                use ast::types::UnderlyingType;
+                use ast::UnderlyingType;
                 match &ty.underlying_type {
                     UnderlyingType::Simple(..) => simple_types.push(ty.type_id.clone()),
                     UnderlyingType::Reference(underlying_type) => {
@@ -98,7 +98,7 @@ impl Namespace {
                 current_scope = current_scope.pushed(ScopeType::Entity, &entity.name);
                 let attr_names =
                     Names::from_attributes(entity.attributes.iter().map(|attr| match &attr.name {
-                        ast::entity::AttributeDecl::Reference(name) => name.clone(),
+                        ast::AttributeDecl::Reference(name) => name.clone(),
                         _ => unimplemented!(),
                     }));
                 names.insert(current_scope.clone(), attr_names);

@@ -11,7 +11,7 @@ pub use select::*;
 pub use simple::*;
 
 use super::{combinator::*, entity::*, identifier::*};
-use crate::ast::types::*;
+use crate::ast::*;
 
 /// 198 constructed_types = [enumeration_type] | [select_type] .
 pub fn constructed_types(input: &str) -> ParseResult<UnderlyingType> {

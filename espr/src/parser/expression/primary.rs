@@ -3,7 +3,7 @@ use super::{
     aggregate_initializer::*,
     simple::*,
 };
-use crate::ast::expression::*;
+use crate::ast::*;
 
 /// 269 primary = [literal] | ( [qualifiable_factor] { [qualifier] } ) .
 pub fn primary(input: &str) -> ParseResult<Expression> {
@@ -216,7 +216,7 @@ pub fn built_in_constant(input: &str) -> ParseResult<BuiltInConstant> {
 
 #[cfg(test)]
 mod tests {
-    use super::{Expression, FunctionCallName, QualifiableFactor, Qualifier};
+    use crate::ast::*;
     use nom::Finish;
 
     #[test]

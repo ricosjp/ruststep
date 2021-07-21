@@ -42,13 +42,13 @@ pub enum TypeDecl {
 }
 
 impl Legalize for TypeDecl {
-    type Input = ast::types::TypeDecl;
+    type Input = ast::TypeDecl;
     fn legalize(
         ns: &Namespace,
         scope: &Scope,
         type_decl: &Self::Input,
     ) -> Result<Self, SemanticError> {
-        use ast::types::UnderlyingType;
+        use ast::UnderlyingType;
         let id = type_decl.type_id.clone();
         Ok(match &type_decl.underlying_type {
             UnderlyingType::Simple(ty) => TypeDecl::Simple(Simple {

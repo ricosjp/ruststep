@@ -19,12 +19,12 @@ pub struct EntityAttribute {
 }
 
 impl Legalize for EntityAttribute {
-    type Input = ast::entity::EntityAttribute;
+    type Input = ast::EntityAttribute;
 
     fn legalize(ns: &Namespace, scope: &Scope, attr: &Self::Input) -> Result<Self, SemanticError> {
         let ty = TypeRef::legalize(ns, scope, &attr.ty)?;
         let name = match &attr.name {
-            ast::entity::AttributeDecl::Reference(name) => name.clone(),
+            ast::AttributeDecl::Reference(name) => name.clone(),
             _ => unimplemented!(),
         };
         Ok(EntityAttribute {
@@ -36,7 +36,7 @@ impl Legalize for EntityAttribute {
 }
 
 impl Legalize for Entity {
-    type Input = ast::entity::Entity;
+    type Input = ast::Entity;
 
     fn legalize(
         ns: &Namespace,

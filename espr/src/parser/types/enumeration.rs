@@ -1,7 +1,5 @@
-use super::{
-    super::{combinator::*, identifier::*},
-    *,
-};
+use super::super::{combinator::*, identifier::*};
+use crate::ast::*;
 
 /// 211 enumeration_items = `(` [enumeration_id] { `,` [enumeration_id] } `)` .
 pub fn enumeration_items(input: &str) -> ParseResult<Vec<String>> {
