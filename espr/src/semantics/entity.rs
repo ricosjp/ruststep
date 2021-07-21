@@ -39,13 +39,15 @@ fn flatten_super_type_expression(expr: &ast::entity::SuperTypeExpression) -> Vec
     let mut names = Vec::new();
     match expr {
         ast::entity::SuperTypeExpression::Reference(name) => names.push(name.clone()),
-        ast::entity::SuperTypeExpression::OneOf { exprs } => {
+        // ignore the differences between `ONE_OF`, `ANDOR`, and `AND`
+        ast::entity::SuperTypeExpression::OneOf { exprs }
+        | ast::entity::SuperTypeExpression::AndOr { factors: exprs }
+        | ast::entity::SuperTypeExpression::And { terms: exprs } => {
             for expr in exprs {
                 let mut sub_names = flatten_super_type_expression(expr);
                 names.append(&mut sub_names);
             }
         }
-        _ => {}
     }
     names
 }
