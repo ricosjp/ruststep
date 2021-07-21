@@ -6,8 +6,8 @@ pub struct Entity {
     /// Name of entity in snake_case
     pub name: String,
     pub attributes: Vec<EntityAttribute>,
-    pub subtypes: Option<Vec<TypeRef>>,
-    pub supertypes: Option<Vec<TypeRef>>,
+    pub subtypes: Vec<TypeRef>,
+    pub supertypes: Vec<TypeRef>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -67,17 +67,14 @@ impl Legalize for Entity {
             .iter()
             .map(|attr| EntityAttribute::legalize(ns, scope, attr))
             .collect::<Result<Vec<_>, _>>()?;
-        let subtypes = entity
-            .subtype
-            .as_ref()
-            .map(|subtype| {
-                subtype
-                    .entity_references
-                    .iter()
-                    .map(|name| ns.lookup_type(scope, &name))
-                    .collect::<Result<Vec<_>, _>>()
-            })
-            .transpose()?;
+
+        let mut subtypes = Vec::new();
+        if let Some(st) = &entity.subtype {
+            for name in &st.entity_references {
+                let ty = ns.lookup_type(scope, name)?;
+                subtypes.push(ty);
+            }
+        }
 
         let mut supertypes = Vec::new();
         for c in &entity.constraint {
@@ -97,11 +94,6 @@ impl Legalize for Entity {
                 _ => continue,
             }
         }
-        let supertypes = if supertypes.is_empty() {
-            None
-        } else {
-            Some(supertypes)
-        };
 
         let name = entity.name.clone();
         Ok(Entity {
