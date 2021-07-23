@@ -34,26 +34,6 @@ impl Legalize for EntityAttribute {
     }
 }
 
-/// Convert `SUPERTYPE OF (type_name)` to `[type_name]`, `SUPERTYPE OF ONE_OF (t1, t2)` to `[t1, t2]`
-///
-/// ignore the differences between `ONE_OF`, `ANDOR`, and `AND`
-///
-fn flatten_super_type_expression(expr: &ast::SuperTypeExpression) -> Vec<String> {
-    let mut names = Vec::new();
-    match expr {
-        ast::SuperTypeExpression::Reference(name) => names.push(name.clone()),
-        ast::SuperTypeExpression::OneOf { exprs }
-        | ast::SuperTypeExpression::AndOr { factors: exprs }
-        | ast::SuperTypeExpression::And { terms: exprs } => {
-            for expr in exprs {
-                let mut sub_names = flatten_super_type_expression(expr);
-                names.append(&mut sub_names);
-            }
-        }
-    }
-    names
-}
-
 impl Legalize for Entity {
     type Input = ast::Entity;
 
@@ -82,8 +62,7 @@ impl Legalize for Entity {
             match c {
                 Constraint::SuperTypeRule(rule_expr)
                 | Constraint::AbstractSuperType(Some(rule_expr)) => {
-                    let names = flatten_super_type_expression(rule_expr);
-                    for name in names {
+                    for name in rule_expr.as_supertype_names() {
                         supertypes.push(ns.lookup_type(scope, &name)?);
                     }
                 }
