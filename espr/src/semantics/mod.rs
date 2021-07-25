@@ -4,6 +4,7 @@ mod entity;
 mod namespace;
 mod schema;
 mod scope;
+mod subsuper;
 mod type_decl;
 mod type_ref;
 
@@ -11,6 +12,7 @@ pub use entity::*;
 pub use namespace::*;
 pub use schema::*;
 pub use scope::*;
+pub use subsuper::*;
 pub use type_decl::*;
 pub use type_ref::*;
 
