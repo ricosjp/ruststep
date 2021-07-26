@@ -81,7 +81,7 @@ impl Legalize for Entity {
                     }
                 }
                 Constraint::AbstractSuperType(None) => {
-                    if let Some(refs) = dbg!(ss.super_to_sub.get(&sup)) {
+                    if let Some(refs) = ss.super_to_sub.get(&sup) {
                         for sub in refs {
                             subtypes.push(sub.clone());
                         }
