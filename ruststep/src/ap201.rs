@@ -4911,6 +4911,12 @@ pub mod explicit_draughting {
             1usize
         }
     }
+    pub trait ApprovalAssignmentAny:
+        ::std::any::Any + ::std::fmt::Debug + dyn_clone::DynClone
+    {
+    }
+    dyn_clone::clone_trait_object!(ApprovalAssignmentAny);
+    impl ApprovalAssignmentAny for ApprovalAssignment {}
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct ApprovalDateTime {
         pub date_time: DateTimeSelect,
@@ -5653,6 +5659,12 @@ pub mod explicit_draughting {
             1usize
         }
     }
+    pub trait ContractAssignmentAny:
+        ::std::any::Any + ::std::fmt::Debug + dyn_clone::DynClone
+    {
+    }
+    dyn_clone::clone_trait_object!(ContractAssignmentAny);
+    impl ContractAssignmentAny for ContractAssignment {}
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct ContractType {
         pub description: Label,
@@ -6167,6 +6179,12 @@ pub mod explicit_draughting {
             2usize
         }
     }
+    pub trait DocumentReferenceAny:
+        ::std::any::Any + ::std::fmt::Debug + dyn_clone::DynClone
+    {
+    }
+    dyn_clone::clone_trait_object!(DocumentReferenceAny);
+    impl DocumentReferenceAny for DocumentReference {}
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct DocumentType {
         pub product_data_type: Label,
@@ -7329,6 +7347,12 @@ pub mod explicit_draughting {
             1usize
         }
     }
+    pub trait GroupAssignmentAny:
+        ::std::any::Any + ::std::fmt::Debug + dyn_clone::DynClone
+    {
+    }
+    dyn_clone::clone_trait_object!(GroupAssignmentAny);
+    impl GroupAssignmentAny for GroupAssignment {}
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct GroupRelationship {
         pub name: Label,
@@ -7777,6 +7801,12 @@ pub mod explicit_draughting {
             2usize
         }
     }
+    pub trait OrganizationAssignmentAny:
+        ::std::any::Any + ::std::fmt::Debug + dyn_clone::DynClone
+    {
+    }
+    dyn_clone::clone_trait_object!(OrganizationAssignmentAny);
+    impl OrganizationAssignmentAny for OrganizationAssignment {}
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct OrganizationRole {
         pub name: Label,
@@ -7924,6 +7954,12 @@ pub mod explicit_draughting {
             2usize
         }
     }
+    pub trait PersonAndOrganizationAssignmentAny:
+        ::std::any::Any + ::std::fmt::Debug + dyn_clone::DynClone
+    {
+    }
+    dyn_clone::clone_trait_object!(PersonAndOrganizationAssignmentAny);
+    impl PersonAndOrganizationAssignmentAny for PersonAndOrganizationAssignment {}
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct PersonAndOrganizationRole {
         pub name: Label,
@@ -7968,6 +8004,12 @@ pub mod explicit_draughting {
             2usize
         }
     }
+    pub trait PersonAssignmentAny:
+        ::std::any::Any + ::std::fmt::Debug + dyn_clone::DynClone
+    {
+    }
+    dyn_clone::clone_trait_object!(PersonAssignmentAny);
+    impl PersonAssignmentAny for PersonAssignment {}
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct PersonRole {
         pub name: Label,
@@ -8612,6 +8654,9 @@ pub mod explicit_draughting {
             0usize
         }
     }
+    pub trait PresentedItemAny: ::std::any::Any + ::std::fmt::Debug + dyn_clone::DynClone {}
+    dyn_clone::clone_trait_object!(PresentedItemAny);
+    impl PresentedItemAny for PresentedItem {}
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct PresentedItemRepresentation {
         pub presentation: PresentationRepresentationSelect,
@@ -9078,6 +9123,12 @@ pub mod explicit_draughting {
             1usize
         }
     }
+    pub trait SecurityClassificationAssignmentAny:
+        ::std::any::Any + ::std::fmt::Debug + dyn_clone::DynClone
+    {
+    }
+    dyn_clone::clone_trait_object!(SecurityClassificationAssignmentAny);
+    impl SecurityClassificationAssignmentAny for SecurityClassificationAssignment {}
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct SecurityClassificationLevel {
         pub name: Label,
