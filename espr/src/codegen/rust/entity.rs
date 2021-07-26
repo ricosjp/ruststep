@@ -37,7 +37,7 @@ impl ToTokens for Entity {
             }
         }
 
-        for ty in &self.subtypes {
+        for ty in &self.supertypes {
             let (attr, ty) = match ty {
                 TypeRef::Named { name, .. } | TypeRef::Entity { name, .. } => {
                     (format_ident!("{}", name), ty)
@@ -108,7 +108,7 @@ impl ToTokens for Entity {
             }
         });
 
-        if !self.supertypes.is_empty() {
+        if !self.subtypes.is_empty() {
             let trait_name = format_ident!("{}Any", name);
             tokens.append_all(quote! {
                 pub trait #trait_name:

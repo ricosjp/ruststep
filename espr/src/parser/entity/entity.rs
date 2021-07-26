@@ -64,7 +64,7 @@ pub fn entity_decl(input: &str) -> ParseResult<Entity> {
     tuple((entity_head, entity_body, tag("END_ENTITY"), char(';')))
         .map(
             |(
-                (name, constraint, subtype),
+                (name, constraint, subtype_of),
                 EntityBody {
                     attributes,
                     derive_clause,
@@ -78,7 +78,7 @@ pub fn entity_decl(input: &str) -> ParseResult<Entity> {
                 name,
                 attributes,
                 constraint,
-                subtype,
+                subtype_of,
                 derive_clause,
                 inverse_clause,
                 unique_clause,

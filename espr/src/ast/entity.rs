@@ -17,7 +17,7 @@ pub struct Entity {
     pub attributes: Vec<EntityAttribute>,
 
     pub constraint: Option<Constraint>,
-    pub subtype: Option<SubTypeDecl>,
+    pub subtype_of: Option<SubTypeDecl>,
 
     pub derive_clause: Option<DeriveClause>,
     pub inverse_clause: Option<InverseClause>,

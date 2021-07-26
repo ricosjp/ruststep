@@ -49,41 +49,41 @@ impl Legalize for Entity {
         entity: &Self::Input,
     ) -> Result<Self, SemanticError> {
         let name = entity.name.clone();
-        let self_as_type_ref = TypeRef::Entity {
-            name: name.clone(),
-            scope: scope.clone(),
-            has_supertype_decl: true,
-        };
-
         let attributes = entity
             .attributes
             .iter()
             .map(|attr| EntityAttribute::legalize(ns, ss, scope, attr))
             .collect::<Result<Vec<_>, _>>()?;
 
-        let mut subtypes = Vec::new();
-        if let Some(st) = &entity.subtype {
+        // `ENTITY A SUBTYPE OF (B)` means `A` is subtype of `B`, i.e. `B` is supertype of `A`
+        let mut supertypes = Vec::new();
+        if let Some(st) = &entity.subtype_of {
             for name in &st.entity_references {
                 let ty = ns.lookup_type(scope, name)?;
-                subtypes.push(ty);
+                supertypes.push(ty);
             }
         }
 
-        let mut supertypes = Vec::new();
+        // `ENTITY A SUPERTYPE OF (B)` means `A` is supertype of `B`, i.e. `B` is subtype of `A`
+        let mut subtypes = Vec::new();
+        let sup = TypeRef::Entity {
+            name: name.clone(),
+            scope: scope.clone(),
+            has_supertype_decl: true,
+        };
         for c in &entity.constraint {
             use ast::Constraint;
             match c {
                 Constraint::SuperTypeRule(rule_expr)
                 | Constraint::AbstractSuperType(Some(rule_expr)) => {
                     for name in rule_expr.as_supertype_names() {
-                        supertypes.push(ns.lookup_type(scope, &name)?);
+                        subtypes.push(ns.lookup_type(scope, &name)?);
                     }
                 }
                 Constraint::AbstractSuperType(None) => {
-                    dbg!(&self_as_type_ref);
-                    if let Some(refs) = dbg!(ss.super_to_sub.get(&self_as_type_ref)) {
+                    if let Some(refs) = dbg!(ss.super_to_sub.get(&sup)) {
                         for sub in refs {
-                            supertypes.push(sub.clone());
+                            subtypes.push(sub.clone());
                         }
                     }
                 }
