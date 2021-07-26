@@ -66,11 +66,6 @@ impl Legalize for Entity {
 
         // `ENTITY A SUPERTYPE OF (B)` means `A` is supertype of `B`, i.e. `B` is subtype of `A`
         let mut subtypes = Vec::new();
-        let sup = TypeRef::Entity {
-            name: name.clone(),
-            scope: scope.clone(),
-            has_supertype_decl: true,
-        };
         for c in &entity.constraint {
             use ast::Constraint;
             match c {
@@ -81,6 +76,11 @@ impl Legalize for Entity {
                     }
                 }
                 Constraint::AbstractSuperType(None) => {
+                    let sup = TypeRef::Entity {
+                        name: name.clone(),
+                        scope: scope.clone(),
+                        has_supertype_decl: true,
+                    };
                     if let Some(refs) = ss.super_to_sub.get(&sup) {
                         for sub in refs {
                             subtypes.push(sub.clone());
