@@ -20,8 +20,13 @@ pub struct EntityAttribute {
 impl Legalize for EntityAttribute {
     type Input = ast::EntityAttribute;
 
-    fn legalize(ns: &Namespace, scope: &Scope, attr: &Self::Input) -> Result<Self, SemanticError> {
-        let ty = TypeRef::legalize(ns, scope, &attr.ty)?;
+    fn legalize(
+        ns: &Namespace,
+        ss: &SubSuperGraph,
+        scope: &Scope,
+        attr: &Self::Input,
+    ) -> Result<Self, SemanticError> {
+        let ty = TypeRef::legalize(ns, ss, scope, &attr.ty)?;
         let name = match &attr.name {
             ast::AttributeDecl::Reference(name) => name.clone(),
             _ => unimplemented!(),
@@ -39,13 +44,21 @@ impl Legalize for Entity {
 
     fn legalize(
         ns: &Namespace,
+        ss: &SubSuperGraph,
         scope: &Scope,
         entity: &Self::Input,
     ) -> Result<Self, SemanticError> {
+        let name = entity.name.clone();
+        let self_as_type_ref = TypeRef::Entity {
+            name: name.clone(),
+            scope: scope.clone(),
+            has_supertype_decl: true,
+        };
+
         let attributes = entity
             .attributes
             .iter()
-            .map(|attr| EntityAttribute::legalize(ns, scope, attr))
+            .map(|attr| EntityAttribute::legalize(ns, ss, scope, attr))
             .collect::<Result<Vec<_>, _>>()?;
 
         let mut subtypes = Vec::new();
@@ -66,15 +79,19 @@ impl Legalize for Entity {
                         supertypes.push(ns.lookup_type(scope, &name)?);
                     }
                 }
-                // - When `ABSTRACT SUPERTYPE` constraint exists without subtypes,
-                //   we cannot get all subtype names here.
-                //   They are gathered on schema legalization
-                // - `ABSTRACT` entity is ignored
+                Constraint::AbstractSuperType(None) => {
+                    dbg!(&self_as_type_ref);
+                    if let Some(refs) = dbg!(ss.super_to_sub.get(&self_as_type_ref)) {
+                        for sub in refs {
+                            supertypes.push(sub.clone());
+                        }
+                    }
+                }
+                // `ABSTRACT` entity is ignored
                 _ => continue,
             }
         }
 
-        let name = entity.name.clone();
         Ok(Entity {
             name,
             attributes,
@@ -92,10 +109,11 @@ mod tests {
     fn legalize() {
         let example = SyntaxTree::example();
         let ns = Namespace::new(&example).unwrap();
+        let ss = SubSuperGraph::new(&ns, &example).unwrap();
         dbg!(&ns);
         let entity = &example.schemas[0].entities[0];
         let scope = Scope::root().pushed(ScopeType::Schema, &example.schemas[0].name);
-        let entity = Entity::legalize(&ns, &scope, entity).unwrap();
+        let entity = Entity::legalize(&ns, &ss, &scope, entity).unwrap();
         dbg!(&entity);
     }
 }

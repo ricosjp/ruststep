@@ -31,6 +31,7 @@ pub trait Legalize: Sized {
     type Input;
     fn legalize(
         namespace: &Namespace,
+        sub_super_graph: &SubSuperGraph,
         scope: &Scope,
         syn: &Self::Input,
     ) -> Result<Self, SemanticError>;
@@ -45,18 +46,24 @@ pub struct IR {
 impl IR {
     pub fn from_syntax_tree(st: &SyntaxTree) -> Result<Self, SemanticError> {
         let ns = Namespace::new(&st)?;
-        let ir = Self::legalize(&ns, &Scope::root(), &st)?;
+        let ss = SubSuperGraph::new(&ns, st)?;
+        let ir = Self::legalize(&ns, &ss, &Scope::root(), &st)?;
         Ok(ir)
     }
 }
 
 impl Legalize for IR {
     type Input = SyntaxTree;
-    fn legalize(ns: &Namespace, scope: &Scope, syn: &SyntaxTree) -> Result<Self, SemanticError> {
+    fn legalize(
+        ns: &Namespace,
+        ss: &SubSuperGraph,
+        scope: &Scope,
+        syn: &SyntaxTree,
+    ) -> Result<Self, SemanticError> {
         let schemas = syn
             .schemas
             .iter()
-            .map(|schema| Schema::legalize(ns, scope, schema))
+            .map(|schema| Schema::legalize(ns, ss, scope, schema))
             .collect::<Result<Vec<Schema>, SemanticError>>()?;
         Ok(IR { schemas })
     }
