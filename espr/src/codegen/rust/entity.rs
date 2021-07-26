@@ -37,38 +37,36 @@ impl ToTokens for Entity {
             }
         }
 
-        if let Some(subtypes) = &self.subtypes {
-            for ty in subtypes {
-                let (attr, ty) = match ty {
-                    TypeRef::Named { name, .. } | TypeRef::Entity { name, .. } => {
-                        (format_ident!("{}", name), ty)
-                    }
-                    _ => unreachable!(),
-                };
-
-                attr_name.push(attr.clone());
-                attr_type.push(ty.to_token_stream());
-
-                if ty.is_simple() {
-                    holder_attr_type.push(quote! { #ty });
-                    holder_attr_expr.push(quote! { #attr });
-                } else {
-                    holder_attr_type.push(quote! { PlaceHolder<#ty> });
-                    holder_attr_expr.push(quote! { #attr.into_owned(tables)? });
+        for ty in &self.supertypes {
+            let (attr, ty) = match ty {
+                TypeRef::Named { name, .. } | TypeRef::Entity { name, .. } => {
+                    (format_ident!("{}", name), ty)
                 }
+                _ => unreachable!(),
+            };
 
-                if let TypeRef::Entity {
-                    name: supertype_name,
-                    has_supertype_decl,
-                    ..
-                } = ty
-                {
-                    if *has_supertype_decl {
-                        let any_trait = format_ident!("{}Any", supertype_name.to_pascal_case());
-                        tokens.append_all(quote! {
-                            impl #any_trait for #name {}
-                        });
-                    }
+            attr_name.push(attr.clone());
+            attr_type.push(ty.to_token_stream());
+
+            if ty.is_simple() {
+                holder_attr_type.push(quote! { #ty });
+                holder_attr_expr.push(quote! { #attr });
+            } else {
+                holder_attr_type.push(quote! { PlaceHolder<#ty> });
+                holder_attr_expr.push(quote! { #attr.into_owned(tables)? });
+            }
+
+            if let TypeRef::Entity {
+                name: supertype_name,
+                has_supertype_decl,
+                ..
+            } = ty
+            {
+                if *has_supertype_decl {
+                    let any_trait = format_ident!("{}Any", supertype_name.to_pascal_case());
+                    tokens.append_all(quote! {
+                        impl #any_trait for #name {}
+                    });
                 }
             }
         }
@@ -110,7 +108,7 @@ impl ToTokens for Entity {
             }
         });
 
-        if self.has_supertype_decl {
+        if !self.subtypes.is_empty() {
             let trait_name = format_ident!("{}Any", name);
             tokens.append_all(quote! {
                 pub trait #trait_name:
