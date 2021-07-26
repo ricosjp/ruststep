@@ -63,7 +63,12 @@ impl ToTokens for Entity {
             } = ty
             {
                 if *has_supertype_decl {
-                    let any_enum = format_ident!("{}", supertype_name.to_pascal_case());
+                    let name = if self.subtypes.is_empty() {
+                        format_ident!("{}", self.name.to_pascal_case())
+                    } else {
+                        format_ident!("{}Any", self.name.to_pascal_case())
+                    };
+                    let any_enum = format_ident!("{}Any", supertype_name.to_pascal_case());
                     tokens.append_all(quote! {
                         impl Into<#any_enum> for #name {
                             fn into(self) -> #any_enum {
