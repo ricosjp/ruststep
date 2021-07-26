@@ -76,7 +76,7 @@ impl Legalize for Entity {
             match c {
                 Constraint::SuperTypeRule(rule_expr)
                 | Constraint::AbstractSuperType(Some(rule_expr)) => {
-                    for name in rule_expr.as_supertype_names() {
+                    for name in rule_expr.as_subtype_names() {
                         subtypes.push(ns.lookup_type(scope, &name)?);
                     }
                 }
