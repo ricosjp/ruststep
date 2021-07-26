@@ -4931,6 +4931,10 @@ pub mod explicit_draughting {
             1usize
         }
     }
+    #[derive(Debug, Clone)]
+    pub enum ApprovalAssignmentAny {
+        DraughtingApprovalAssignment(Box<DraughtingApprovalAssignment>),
+    }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct ApprovalDateTime {
         pub date_time: DateTimeSelect,
@@ -5739,6 +5743,10 @@ pub mod explicit_draughting {
             1usize
         }
     }
+    #[derive(Debug, Clone)]
+    pub enum ContractAssignmentAny {
+        DraughtingContractAssignment(Box<DraughtingContractAssignment>),
+    }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct ContractType {
         pub description: Label,
@@ -6272,6 +6280,10 @@ pub mod explicit_draughting {
         fn attr_len() -> usize {
             2usize
         }
+    }
+    #[derive(Debug, Clone)]
+    pub enum DocumentReferenceAny {
+        DraughtingSpecificationReference(Box<DraughtingSpecificationReference>),
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct DocumentType {
@@ -7517,6 +7529,10 @@ pub mod explicit_draughting {
             1usize
         }
     }
+    #[derive(Debug, Clone)]
+    pub enum GroupAssignmentAny {
+        DraughtingGroupAssignment(Box<DraughtingGroupAssignment>),
+    }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct GroupRelationship {
         pub name: Label,
@@ -7992,6 +8008,10 @@ pub mod explicit_draughting {
             2usize
         }
     }
+    #[derive(Debug, Clone)]
+    pub enum OrganizationAssignmentAny {
+        DraughtingOrganizationAssignment(Box<DraughtingOrganizationAssignment>),
+    }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct OrganizationRole {
         pub name: Label,
@@ -8143,6 +8163,10 @@ pub mod explicit_draughting {
             2usize
         }
     }
+    #[derive(Debug, Clone)]
+    pub enum PersonAndOrganizationAssignmentAny {
+        DraughtingPersonAndOrganizationAssignment(Box<DraughtingPersonAndOrganizationAssignment>),
+    }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct PersonAndOrganizationRole {
         pub name: Label,
@@ -8186,6 +8210,10 @@ pub mod explicit_draughting {
         fn attr_len() -> usize {
             2usize
         }
+    }
+    #[derive(Debug, Clone)]
+    pub enum PersonAssignmentAny {
+        DraughtingPersonAssignment(Box<DraughtingPersonAssignment>),
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct PersonRole {
@@ -8862,6 +8890,10 @@ pub mod explicit_draughting {
             0usize
         }
     }
+    #[derive(Debug, Clone)]
+    pub enum PresentedItemAny {
+        DraughtingPresentedItem(Box<DraughtingPresentedItem>),
+    }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct PresentedItemRepresentation {
         pub presentation: PresentationRepresentationSelect,
@@ -9343,6 +9375,10 @@ pub mod explicit_draughting {
         fn attr_len() -> usize {
             1usize
         }
+    }
+    #[derive(Debug, Clone)]
+    pub enum SecurityClassificationAssignmentAny {
+        DraughtingSecurityClassificationAssignment(Box<DraughtingSecurityClassificationAssignment>),
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct SecurityClassificationLevel {
