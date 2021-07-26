@@ -1,7 +1,7 @@
 use super::{namespace::*, scope::*, *};
 use crate::ast;
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct SimpleType(pub ast::SimpleType);
 
 impl Legalize for SimpleType {
@@ -15,7 +15,7 @@ impl Legalize for SimpleType {
     }
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct Bound {}
 
 impl Legalize for Bound {
@@ -30,7 +30,7 @@ impl Legalize for Bound {
     }
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub enum TypeRef {
     SimpleType(SimpleType),
     Named {

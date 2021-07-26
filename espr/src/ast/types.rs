@@ -86,7 +86,7 @@ pub enum ParameterType {
 }
 
 /// Primitive types parsed by [simple_types]
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum SimpleType {
     /// 8.1.1 Number data type
     Number,
@@ -105,7 +105,7 @@ pub enum SimpleType {
 }
 
 /// Output of [width_spec]
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub struct WidthSpec {
     pub width: usize,
     pub fixed: bool,
