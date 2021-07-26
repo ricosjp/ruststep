@@ -1,13 +1,14 @@
 use super::{namespace::*, scope::*, *};
 use crate::ast;
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct SimpleType(pub ast::SimpleType);
 
 impl Legalize for SimpleType {
     type Input = ast::SimpleType;
     fn legalize(
         _ns: &Namespace,
+        _ss: &SubSuperGraph,
         _scope: &Scope,
         input: &Self::Input,
     ) -> Result<Self, SemanticError> {
@@ -15,13 +16,14 @@ impl Legalize for SimpleType {
     }
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct Bound {}
 
 impl Legalize for Bound {
     type Input = ast::Bound;
     fn legalize(
         _ns: &Namespace,
+        _ss: &SubSuperGraph,
         _scope: &Scope,
         _input: &Self::Input,
     ) -> Result<Self, SemanticError> {
@@ -30,7 +32,7 @@ impl Legalize for Bound {
     }
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub enum TypeRef {
     SimpleType(SimpleType),
     Named {
@@ -85,6 +87,7 @@ impl Legalize for TypeRef {
 
     fn legalize(
         ns: &Namespace,
+        ss: &SubSuperGraph,
         scope: &Scope,
         ty: &ast::ParameterType,
     ) -> Result<Self, SemanticError> {
@@ -93,9 +96,9 @@ impl Legalize for TypeRef {
             Simple(ty) => Self::SimpleType(SimpleType(*ty)),
             Named(name) => ns.lookup_type(scope, name)?,
             Set { base, bound } => {
-                let base = TypeRef::legalize(ns, scope, base.as_ref())?;
+                let base = TypeRef::legalize(ns, ss, scope, base.as_ref())?;
                 let bound = if let Some(bound) = bound {
-                    Some(Legalize::legalize(ns, scope, bound)?)
+                    Some(Legalize::legalize(ns, ss, scope, bound)?)
                 } else {
                     None
                 };
@@ -109,9 +112,9 @@ impl Legalize for TypeRef {
                 bound,
                 unique,
             } => {
-                let base = TypeRef::legalize(ns, scope, base.as_ref())?;
+                let base = TypeRef::legalize(ns, ss, scope, base.as_ref())?;
                 let bound = if let Some(bound) = bound {
-                    Some(Legalize::legalize(ns, scope, bound)?)
+                    Some(Legalize::legalize(ns, ss, scope, bound)?)
                 } else {
                     None
                 };

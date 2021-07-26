@@ -37,7 +37,7 @@ impl ToTokens for Entity {
             }
         }
 
-        for ty in &self.subtypes {
+        for ty in &self.supertypes {
             let (attr, ty) = match ty {
                 TypeRef::Named { name, .. } | TypeRef::Entity { name, .. } => {
                     (format_ident!("{}", name), ty)
@@ -112,13 +112,13 @@ impl ToTokens for Entity {
             }
         });
 
-        if !self.supertypes.is_empty() {
-            let supertypes = &self.supertypes;
+        if !self.subtypes.is_empty() {
+            let subtypes = &self.subtypes;
             let enum_name = format_ident!("{}Any", name);
             tokens.append_all(quote! {
                 #[derive(Debug, Clone)]
                 pub enum #enum_name {
-                    #(#supertypes(Box<#supertypes>)),*
+                    #(#subtypes(Box<#subtypes>)),*
                 }
             }); // tokens.append_all
         }
