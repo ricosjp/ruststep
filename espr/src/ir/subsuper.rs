@@ -37,4 +37,26 @@ impl SubSuperGraph {
             sub_to_super,
         })
     }
+
+    pub fn get_supertypes(&self, name: &str, scope: &Scope) -> Result<&[Path], SemanticError> {
+        let sub = Path::new(scope, ScopeType::Entity, name);
+        self.sub_to_super
+            .get(&sub)
+            .map(|ty| ty.as_slice())
+            .ok_or(SemanticError::TypeNotFound {
+                name: name.to_string(),
+                scope: scope.clone(),
+            })
+    }
+
+    pub fn get_subtypes(&self, name: &str, scope: &Scope) -> Result<&[Path], SemanticError> {
+        let sup = Path::new(scope, ScopeType::Entity, name);
+        self.super_to_sub
+            .get(&sup)
+            .map(|ty| ty.as_slice())
+            .ok_or(SemanticError::TypeNotFound {
+                name: name.to_string(),
+                scope: scope.clone(),
+            })
+    }
 }

@@ -55,39 +55,16 @@ impl Legalize for Entity {
             .map(|attr| EntityAttribute::legalize(ns, ss, scope, attr))
             .collect::<Result<Vec<_>, _>>()?;
 
-        // `ENTITY A SUBTYPE OF (B)` means `A` is subtype of `B`, i.e. `B` is supertype of `A`
-        let mut supertypes = Vec::new();
-        if let Some(st) = &entity.subtype_of {
-            for name in &st.entity_references {
-                let path = ns.resolve(scope, name)?;
-                supertypes.push(TypeRef::from_path(ns, ss, &path)?);
-            }
-        }
-
-        // `ENTITY A SUPERTYPE OF (B)` means `A` is supertype of `B`, i.e. `B` is subtype of `A`
-        let mut subtypes = Vec::new();
-        for c in &entity.constraint {
-            use ast::Constraint;
-            match c {
-                Constraint::SuperTypeRule(rule_expr)
-                | Constraint::AbstractSuperType(Some(rule_expr)) => {
-                    for name in rule_expr.as_subtype_names() {
-                        let path = ns.resolve(scope, &name)?;
-                        subtypes.push(TypeRef::from_path(ns, ss, &path)?);
-                    }
-                }
-                Constraint::AbstractSuperType(None) => {
-                    let sup = Path::new(scope, ScopeType::Entity, &name);
-                    if let Some(refs) = ss.super_to_sub.get(&sup) {
-                        for sub in refs {
-                            subtypes.push(TypeRef::from_path(ns, ss, sub)?);
-                        }
-                    }
-                }
-                // `ABSTRACT` entity is ignored
-                _ => continue,
-            }
-        }
+        let supertypes = ss
+            .get_supertypes(&name, scope)?
+            .iter()
+            .map(|sup| TypeRef::from_path(ns, ss, sup))
+            .collect::<Result<Vec<_>, _>>()?;
+        let subtypes = ss
+            .get_subtypes(&name, scope)?
+            .iter()
+            .map(|sub| TypeRef::from_path(ns, ss, sub))
+            .collect::<Result<Vec<_>, _>>()?;
 
         Ok(Entity {
             name,
