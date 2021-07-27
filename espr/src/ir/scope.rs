@@ -109,6 +109,33 @@ impl Scope {
     }
 }
 
+#[derive(Clone, PartialEq, Eq, Hash)]
+pub struct Path {
+    pub scope: Scope,
+    pub name: String,
+}
+
+impl fmt::Display for Path {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{}.{}", self.scope, self.name)
+    }
+}
+
+impl fmt::Debug for Path {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{:?}.{}", self.scope, self.name)
+    }
+}
+
+impl Path {
+    pub fn new(scope: &Scope, name: &str) -> Self {
+        Path {
+            scope: scope.clone(),
+            name: name.to_string(),
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
