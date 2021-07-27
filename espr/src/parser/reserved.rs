@@ -1,0 +1,95 @@
+pub const KEYWORDS: &'static [&'static str] = &[
+    "abstract",
+    "aggregate",
+    "alias",
+    "array",
+    "as",
+    "bag",
+    "based",
+    "on",
+    "begin",
+    "binary",
+    "boolean",
+    "by",
+    "case",
+    "constant",
+    "derive",
+    "else",
+    "end",
+    "end_alias",
+    "end_case", 
+    "end_constant", 
+    "end_entity",
+    "end_function", 
+    "end_if", 
+    "end_local", 
+    "end_procedure",
+    "end_repeat", 
+    "end_rule", 
+    "end_schema", 
+    "end_subtype_constraint",
+    "end_type", 
+    "entity", 
+    "enumeration", 
+    "escape",
+    "extensible", 
+    "fixed", 
+    "for", 
+    "from",
+    "function", 
+    "generic", 
+    "generic_entity", 
+    "if",
+    "integer", 
+    "inverse", 
+    "list", 
+    "local",
+    "logical", 
+    "number", 
+    "of", 
+    "oneof",
+    "optional", 
+    "otherwise", 
+    "procedure", 
+    "query",
+    "real", 
+    "renamed", 
+    "reference", 
+    "repeat",
+    "return", 
+    "rule", 
+    "schema", 
+    "select",
+    "set", 
+    "skip", 
+    "string", 
+    "subtype",
+    "constraint", 
+    "supertype", 
+    "then", 
+    "to",
+    "total_over", 
+    "type", 
+    "unique", 
+    "until",
+    "use", 
+    "var", 
+    "where", 
+    "while",
+    "with",];
+
+pub fn is_reserved(input: &str) -> bool {
+    KEYWORDS.iter().any(|&keyword| keyword == input.to_lowercase())
+}
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn is_reserved() {
+        assert!(super::is_reserved("end"));
+        assert!(!super::is_reserved(""));
+        assert!(super::is_reserved("end_entity"));
+        assert!(super::is_reserved("END_ENTITY"));
+        assert!(!super::is_reserved("end_homhom"));
+    }
+}
