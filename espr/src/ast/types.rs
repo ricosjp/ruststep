@@ -9,45 +9,8 @@ use crate::parser::*;
 #[derive(Debug, Clone, PartialEq)]
 pub struct TypeDecl {
     pub type_id: String,
-    pub underlying_type: UnderlyingType,
+    pub underlying_type: ParameterType,
     pub where_clause: Option<WhereClause>,
-}
-
-/// Underlying type of a type declaration
-#[derive(Debug, Clone, PartialEq)]
-pub enum UnderlyingType {
-    // Concrete Types
-    Simple(SimpleType),
-    Reference(String),
-    Set {
-        base: Box<UnderlyingType>,
-        bound: Option<Bound>,
-    },
-    Bag {
-        base: Box<UnderlyingType>,
-        bound: Option<Bound>,
-    },
-    List {
-        base: Box<UnderlyingType>,
-        bound: Option<Bound>,
-        unique: bool,
-    },
-    Array {
-        base: Box<UnderlyingType>,
-        bound: Option<Bound>,
-        unique: bool,
-        optional: bool,
-    },
-
-    // Constructed Types
-    Enumeration {
-        extensibility: Extensibility,
-        items: Vec<String>,
-    },
-    Select {
-        extensibility: Extensibility,
-        types: Vec<String>,
-    },
 }
 
 /// Parameter type appears when *using* the type
@@ -76,11 +39,21 @@ pub enum ParameterType {
         optional: bool,
     },
 
+    // Constructed Types
+    Enumeration {
+        extensibility: Extensibility,
+        items: Vec<String>,
+    },
+    Select {
+        extensibility: Extensibility,
+        types: Vec<String>,
+    },
+
+    // Parameter Types
     Aggregate {
         base: Box<ParameterType>,
         label: Option<String>,
     },
-
     GenericEntity(Option<String>),
     Generic(Option<String>),
 }

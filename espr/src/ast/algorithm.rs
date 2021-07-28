@@ -108,7 +108,7 @@ pub struct FormalParameter {
 #[derive(Debug, Clone, PartialEq)]
 pub struct Constant {
     pub name: String,
-    pub ty: UnderlyingType,
+    pub ty: ParameterType,
     pub expr: Expression,
 }
 
