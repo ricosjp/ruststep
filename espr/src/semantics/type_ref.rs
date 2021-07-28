@@ -83,15 +83,15 @@ impl TypeRef {
 }
 
 impl Legalize for TypeRef {
-    type Input = ast::ParameterType;
+    type Input = ast::Type;
 
     fn legalize(
         ns: &Namespace,
         ss: &SubSuperGraph,
         scope: &Scope,
-        ty: &ast::ParameterType,
+        ty: &ast::Type,
     ) -> Result<Self, SemanticError> {
-        use ast::ParameterType::*;
+        use ast::Type::*;
         Ok(match ty {
             Simple(ty) => Self::SimpleType(SimpleType(*ty)),
             Named(name) => ns.lookup_type(scope, name)?,

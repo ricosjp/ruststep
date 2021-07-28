@@ -49,25 +49,25 @@ impl Legalize for TypeDecl {
         scope: &Scope,
         type_decl: &Self::Input,
     ) -> Result<Self, SemanticError> {
-        use ast::ParameterType;
+        use ast::Type;
         let id = type_decl.type_id.clone();
         Ok(match &type_decl.underlying_type {
-            ParameterType::Simple(ty) => TypeDecl::Simple(Simple {
+            Type::Simple(ty) => TypeDecl::Simple(Simple {
                 id,
                 ty: SimpleType(*ty),
             }),
-            ParameterType::Named(name) => {
+            Type::Named(name) => {
                 let ty = ns.lookup_type(scope, name)?;
                 TypeDecl::Rename(Rename { id, ty })
             }
-            ParameterType::Enumeration {
+            Type::Enumeration {
                 items,
                 extensibility: _,
             } => TypeDecl::Enumeration(Enumeration {
                 id,
                 items: items.clone(),
             }),
-            ParameterType::Select {
+            Type::Select {
                 types,
                 extensibility: _,
             } => {

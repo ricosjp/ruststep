@@ -9,31 +9,31 @@ use crate::parser::*;
 #[derive(Debug, Clone, PartialEq)]
 pub struct TypeDecl {
     pub type_id: String,
-    pub underlying_type: ParameterType,
+    pub underlying_type: Type,
     pub where_clause: Option<WhereClause>,
 }
 
 /// Parameter type appears when *using* the type
 /// e.g. in attribute definition, function parameter, and so on.
 #[derive(Debug, Clone, PartialEq)]
-pub enum ParameterType {
+pub enum Type {
     Simple(SimpleType),
     Named(String),
     Set {
-        base: Box<ParameterType>,
+        base: Box<Type>,
         bound: Option<Bound>,
     },
     Bag {
-        base: Box<ParameterType>,
+        base: Box<Type>,
         bound: Option<Bound>,
     },
     List {
-        base: Box<ParameterType>,
+        base: Box<Type>,
         bound: Option<Bound>,
         unique: bool,
     },
     Array {
-        base: Box<ParameterType>,
+        base: Box<Type>,
         bound: Option<Bound>,
         unique: bool,
         optional: bool,
@@ -51,7 +51,7 @@ pub enum ParameterType {
 
     // Parameter Types
     Aggregate {
-        base: Box<ParameterType>,
+        base: Box<Type>,
         label: Option<String>,
     },
     GenericEntity(Option<String>),

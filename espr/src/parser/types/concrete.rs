@@ -5,22 +5,22 @@ use super::{
 use crate::ast::*;
 
 /// 193 concrete_types = [aggregation_types] | [simple_types] | [type_ref].
-pub fn concrete_types(input: &str) -> ParseResult<ParameterType> {
+pub fn concrete_types(input: &str) -> ParseResult<Type> {
     alt((
         aggregation_types,
-        simple_types.map(|ty| ParameterType::Simple(ty)),
-        type_ref.map(|s| ParameterType::Named(s)),
+        simple_types.map(|ty| Type::Simple(ty)),
+        type_ref.map(|s| Type::Named(s)),
     ))
     .parse(input)
 }
 
 /// 172 aggregation_types = [array_type] | [bag_type] | [list_type] | [set_type] .
-pub fn aggregation_types(input: &str) -> ParseResult<ParameterType> {
+pub fn aggregation_types(input: &str) -> ParseResult<Type> {
     alt((array_type, bag_type, list_type, set_type)).parse(input)
 }
 
 /// 175 array_type = ARRAY [bound_spec] OF \[ OPTIONAL \] \[ UNIQUE \] [instantiable_type] .
-pub fn array_type(input: &str) -> ParseResult<ParameterType> {
+pub fn array_type(input: &str) -> ParseResult<Type> {
     tuple((
         tag("ARRAY"),
         bound_spec,
@@ -29,21 +29,19 @@ pub fn array_type(input: &str) -> ParseResult<ParameterType> {
         opt(tag("UNIQUE")),
         instantiable_type,
     ))
-    .map(
-        |(_set, bound, _of, optional, unique, base)| ParameterType::Array {
-            bound: Some(bound), // Maybe None for general_array_type
-            unique: unique.is_some(),
-            optional: optional.is_some(),
-            base: Box::new(base),
-        },
-    )
+    .map(|(_set, bound, _of, optional, unique, base)| Type::Array {
+        bound: Some(bound), // Maybe None for general_array_type
+        unique: unique.is_some(),
+        optional: optional.is_some(),
+        base: Box::new(base),
+    })
     .parse(input)
 }
 
 /// 180 bag_type = BAG \[ [bound_spec] \] OF [instantiable_type] .
-pub fn bag_type(input: &str) -> ParseResult<ParameterType> {
+pub fn bag_type(input: &str) -> ParseResult<Type> {
     tuple((tag("BAG"), opt(bound_spec), tag("OF"), instantiable_type))
-        .map(|(_set, bound, _of, base)| ParameterType::Bag {
+        .map(|(_set, bound, _of, base)| Type::Bag {
             bound,
             base: Box::new(base),
         })
@@ -51,7 +49,7 @@ pub fn bag_type(input: &str) -> ParseResult<ParameterType> {
 }
 
 /// 250 list_type = LIST \[ [bound_spec] \] OF \[ UNIQUE \] [instantiable_type] .
-pub fn list_type(input: &str) -> ParseResult<ParameterType> {
+pub fn list_type(input: &str) -> ParseResult<Type> {
     tuple((
         tag("LIST"),
         opt(bound_spec),
@@ -59,7 +57,7 @@ pub fn list_type(input: &str) -> ParseResult<ParameterType> {
         opt(tag("UNIQUE")),
         instantiable_type,
     ))
-    .map(|(_set, bound, _of, unique, base)| ParameterType::List {
+    .map(|(_set, bound, _of, unique, base)| Type::List {
         bound,
         unique: unique.is_some(),
         base: Box::new(base),
@@ -68,9 +66,9 @@ pub fn list_type(input: &str) -> ParseResult<ParameterType> {
 }
 
 /// 303 set_type = SET \[ [bound_spec] \] OF [instantiable_type] .
-pub fn set_type(input: &str) -> ParseResult<ParameterType> {
+pub fn set_type(input: &str) -> ParseResult<Type> {
     tuple((tag("SET"), opt(bound_spec), tag("OF"), instantiable_type))
-        .map(|(_set, bound, _of, base)| ParameterType::Set {
+        .map(|(_set, bound, _of, base)| Type::Set {
             bound,
             base: Box::new(base),
         })
@@ -95,10 +93,6 @@ pub fn bound_spec(input: &str) -> ParseResult<Bound> {
 }
 
 /// 240 instantiable_type = [concrete_types] | [entity_ref] .
-pub fn instantiable_type(input: &str) -> ParseResult<ParameterType> {
-    alt((
-        concrete_types,
-        entity_ref.map(|r| ParameterType::Named(r)),
-    ))
-    .parse(input)
+pub fn instantiable_type(input: &str) -> ParseResult<Type> {
+    alt((concrete_types, entity_ref.map(|r| Type::Named(r)))).parse(input)
 }

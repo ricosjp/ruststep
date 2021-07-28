@@ -85,7 +85,7 @@ pub struct Function {
     pub constants: Vec<Constant>,
     pub variables: Vec<LocalVariable>,
     pub statements: Vec<Statement>,
-    pub return_type: ParameterType,
+    pub return_type: Type,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
@@ -100,7 +100,7 @@ pub enum ProcedureCallName {
 #[derive(Debug, Clone, PartialEq)]
 pub struct FormalParameter {
     pub name: String,
-    pub ty: ParameterType,
+    pub ty: Type,
     /// `true` if specified with `VAR` in `PROCEDURE`. Always `false` for `FUNCTION`
     pub is_variable: bool,
 }
@@ -108,7 +108,7 @@ pub struct FormalParameter {
 #[derive(Debug, Clone, PartialEq)]
 pub struct Constant {
     pub name: String,
-    pub ty: ParameterType,
+    pub ty: Type,
     pub expr: Expression,
 }
 
@@ -126,7 +126,7 @@ pub struct Rule {
 #[derive(Debug, Clone, PartialEq)]
 pub struct LocalVariable {
     pub name: String,
-    pub ty: ParameterType,
+    pub ty: Type,
     pub expr: Option<Expression>,
 }
 

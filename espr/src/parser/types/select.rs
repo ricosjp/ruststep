@@ -17,7 +17,7 @@ pub fn select_extension(input: &str) -> ParseResult<(String, Vec<String>)> {
 }
 
 /// 302 select_type = \[ EXTENSIBLE \[ GENERIC_ENTITY \] \] SELECT \[ [select_list] | [select_extension] \] .
-pub fn select_type(input: &str) -> ParseResult<ParameterType> {
+pub fn select_type(input: &str) -> ParseResult<Type> {
     // FIXME support select_extension
 
     // `GENERIC_ENTITY` only appears in `select_type` declaration.
@@ -40,12 +40,12 @@ pub fn select_type(input: &str) -> ParseResult<ParameterType> {
     ))
     .map(|(opt, _select, types)| {
         if let Some((extensibility, _spaces)) = opt {
-            ParameterType::Select {
+            Type::Select {
                 extensibility,
                 types,
             }
         } else {
-            ParameterType::Select {
+            Type::Select {
                 extensibility: Extensibility::None,
                 types,
             }
@@ -63,7 +63,7 @@ mod tests {
     fn select() {
         let (res, (s, _remarks)) = super::select_type("SELECT (a, b)").finish().unwrap();
         assert_eq!(res, "");
-        if let ParameterType::Select {
+        if let Type::Select {
             extensibility,
             types,
         } = s

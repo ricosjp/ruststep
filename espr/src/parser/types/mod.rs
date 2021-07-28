@@ -14,12 +14,12 @@ use super::{combinator::*, entity::*, identifier::*};
 use crate::ast::*;
 
 /// 198 constructed_types = [enumeration_type] | [select_type] .
-pub fn constructed_types(input: &str) -> ParseResult<ParameterType> {
+pub fn constructed_types(input: &str) -> ParseResult<Type> {
     alt((enumeration_type, select_type)).parse(input)
 }
 
 /// 332 underlying_type = [concrete_types] | [constructed_types] .
-pub fn underlying_type(input: &str) -> ParseResult<ParameterType> {
+pub fn underlying_type(input: &str) -> ParseResult<Type> {
     alt((concrete_types, constructed_types)).parse(input)
 }
 
@@ -70,7 +70,7 @@ mod tests {
             ty,
             super::TypeDecl {
                 type_id: "my_type".to_string(),
-                underlying_type: super::ParameterType::Simple(super::SimpleType::String_ {
+                underlying_type: super::Type::Simple(super::SimpleType::String_ {
                     width_spec: None
                 }),
                 where_clause: None,
