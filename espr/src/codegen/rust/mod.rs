@@ -3,7 +3,7 @@
 mod entity;
 mod schema;
 
-use crate::semantics::*;
+use crate::ir::*;
 
 use inflector::Inflector;
 use proc_macro2::TokenStream;
