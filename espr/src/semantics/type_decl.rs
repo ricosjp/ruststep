@@ -49,25 +49,25 @@ impl Legalize for TypeDecl {
         scope: &Scope,
         type_decl: &Self::Input,
     ) -> Result<Self, SemanticError> {
-        use ast::UnderlyingType;
+        use ast::Type;
         let id = type_decl.type_id.clone();
         Ok(match &type_decl.underlying_type {
-            UnderlyingType::Simple(ty) => TypeDecl::Simple(Simple {
+            Type::Simple(ty) => TypeDecl::Simple(Simple {
                 id,
                 ty: SimpleType(*ty),
             }),
-            UnderlyingType::Reference(name) => {
+            Type::Named(name) => {
                 let ty = ns.lookup_type(scope, name)?;
                 TypeDecl::Rename(Rename { id, ty })
             }
-            UnderlyingType::Enumeration {
+            Type::Enumeration {
                 items,
                 extensibility: _,
             } => TypeDecl::Enumeration(Enumeration {
                 id,
                 items: items.clone(),
             }),
-            UnderlyingType::Select {
+            Type::Select {
                 types,
                 extensibility: _,
             } => {

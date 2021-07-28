@@ -64,16 +64,14 @@ impl Namespace {
             let mut enumeration_types = Vec::new();
             let mut select_types = Vec::new();
             for ty in &schema.types {
-                use ast::UnderlyingType;
+                use ast::Type;
                 match &ty.underlying_type {
-                    UnderlyingType::Simple(..) => simple_types.push(ty.type_id.clone()),
-                    UnderlyingType::Reference(underlying_type) => {
+                    Type::Simple(..) => simple_types.push(ty.type_id.clone()),
+                    Type::Named(underlying_type) => {
                         rename_types.push((ty.type_id.clone(), underlying_type.clone()))
                     }
-                    UnderlyingType::Enumeration { .. } => {
-                        enumeration_types.push(ty.type_id.clone())
-                    }
-                    UnderlyingType::Select { .. } => select_types.push(ty.type_id.clone()),
+                    Type::Enumeration { .. } => enumeration_types.push(ty.type_id.clone()),
+                    Type::Select { .. } => select_types.push(ty.type_id.clone()),
                     _ => unimplemented!(),
                 }
             }
