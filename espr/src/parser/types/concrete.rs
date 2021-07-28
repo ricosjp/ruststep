@@ -31,7 +31,7 @@ pub fn array_type(input: &str) -> ParseResult<UnderlyingType> {
     ))
     .map(
         |(_set, bound, _of, optional, unique, base)| UnderlyingType::Array {
-            bound,
+            bound: Some(bound), // Maybe None for general_array_type
             unique: unique.is_some(),
             optional: optional.is_some(),
             base: Box::new(base),

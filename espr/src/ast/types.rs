@@ -34,7 +34,7 @@ pub enum UnderlyingType {
     },
     Array {
         base: Box<UnderlyingType>,
-        bound: Bound,
+        bound: Option<Bound>,
         unique: bool,
         optional: bool,
     },
