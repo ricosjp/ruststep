@@ -2,6 +2,41 @@ use super::{scope::*, type_ref::*, SemanticError};
 use crate::ast::{self, SyntaxTree};
 use std::collections::HashMap;
 
+/// Named AST portion of corresponding [Path]
+pub enum Named {
+    Type(ast::TypeDecl),
+    Entity(ast::Entity),
+}
+
+pub struct Ns {
+    pub names: HashMap<Scope, Vec<String>>,
+    pub ast: HashMap<Path, Named>,
+}
+
+impl Ns {
+    pub fn new(st: &SyntaxTree) -> Self {
+        todo!()
+    }
+
+    /// Resolve a `name` used in a `scope` to full pash.
+    ///
+    /// Error
+    /// ------
+    /// - If no corresponding definition found.
+    pub fn resolve(&self, scope: &Scope, name: &str) -> Result<Path, SemanticError> {
+        todo!()
+    }
+
+    /// Get an AST portion corresponding the path
+    ///
+    /// Error
+    /// ------
+    /// - Input path is invalid, i.e. No item is specified by the path.
+    pub fn get(&self, path: &Path) -> Result<Named, SemanticError> {
+        todo!()
+    }
+}
+
 /// Names in each scopes
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Default)]
 pub struct Names {
