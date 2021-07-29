@@ -1,4 +1,4 @@
-//! Legalize [SyntaxTree] into [IR]
+//! Intermediate Representation ([IR]) legalized (semantically analyzed) from [SyntaxTree]
 
 mod entity;
 mod namespace;
