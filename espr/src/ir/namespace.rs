@@ -3,19 +3,41 @@ use crate::ast::{self, SyntaxTree};
 use std::collections::HashMap;
 
 /// Named AST portion of corresponding [Path]
-pub enum Named {
-    Type(ast::TypeDecl),
-    Entity(ast::Entity),
+pub enum Named<'st> {
+    Type(&'st ast::TypeDecl),
+    Entity(&'st ast::Entity),
 }
 
-pub struct Ns {
+pub struct Ns<'st> {
     pub names: HashMap<Scope, Vec<String>>,
-    pub ast: HashMap<Path, Named>,
+    pub ast: HashMap<Path, Named<'st>>,
 }
 
-impl Ns {
-    pub fn new(st: &SyntaxTree) -> Self {
-        todo!()
+impl<'st> Ns<'st> {
+    pub fn new(st: &'st SyntaxTree) -> Self {
+        let mut names = HashMap::new();
+        let mut ast = HashMap::new();
+        let root = Scope::root();
+
+        for schema in &st.schemas {
+            let here = root.pushed(ScopeType::Schema, &schema.name);
+            let mut current_names = Vec::new();
+            for ty in &schema.types {
+                let name = &ty.type_id;
+                current_names.push(name.to_string());
+                let path = Path::new(&here, name);
+                ast.insert(path, Named::Type(ty));
+            }
+            for entity in &schema.entities {
+                let name = &entity.name;
+                current_names.push(name.to_string());
+                let path = Path::new(&here, name);
+                ast.insert(path, Named::Entity(entity));
+            }
+            names.insert(here, current_names);
+        }
+
+        Ns { names, ast }
     }
 
     /// Resolve a `name` used in a `scope` to full pash.
