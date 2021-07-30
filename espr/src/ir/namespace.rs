@@ -3,11 +3,13 @@ use crate::ast::{self, SyntaxTree};
 use std::collections::HashMap;
 
 /// Named AST portion of corresponding [Path]
+#[derive(Debug, Clone, Copy)] // Copy since this is actually immutable reference
 pub enum Named<'st> {
     Type(&'st ast::TypeDecl),
     Entity(&'st ast::Entity),
 }
 
+#[derive(Debug, Clone)]
 pub struct Ns<'st> {
     pub names: HashMap<Scope, Vec<String>>,
     pub ast: HashMap<Path, Named<'st>>,
@@ -46,7 +48,20 @@ impl<'st> Ns<'st> {
     /// ------
     /// - If no corresponding definition found.
     pub fn resolve(&self, scope: &Scope, name: &str) -> Result<Path, SemanticError> {
-        todo!()
+        let err = || SemanticError::TypeNotFound {
+            scope: scope.clone(),
+            name: name.to_string(),
+        };
+        let mut scope = scope.clone();
+        loop {
+            let names = self.names.get(&scope).ok_or_else(err)?;
+            for n in names {
+                if name == n {
+                    return Ok(Path::new(&scope, n));
+                }
+            }
+            scope = scope.popped().ok_or_else(err)?;
+        }
     }
 
     /// Get an AST portion corresponding the path
@@ -55,7 +70,10 @@ impl<'st> Ns<'st> {
     /// ------
     /// - Input path is invalid, i.e. No item is specified by the path.
     pub fn get(&self, path: &Path) -> Result<Named, SemanticError> {
-        todo!()
+        Ok(*self
+            .ast
+            .get(path)
+            .ok_or_else(|| SemanticError::InvalidPath(path.clone()))?)
     }
 }
 

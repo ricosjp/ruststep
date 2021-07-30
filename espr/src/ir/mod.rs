@@ -24,6 +24,9 @@ use thiserror::Error;
 pub enum SemanticError {
     #[error("Type {name} not found in scope {scope}")]
     TypeNotFound { name: String, scope: Scope },
+
+    #[error("Invalid path: {0}")]
+    InvalidPath(Path),
 }
 
 /// Legalize partial parsed input into corresponding intermediate representation
