@@ -7,7 +7,7 @@ pub struct SimpleType(pub ast::SimpleType);
 impl Legalize for SimpleType {
     type Input = ast::SimpleType;
     fn legalize(
-        _ns: &Ns,
+        _ns: &Namespace,
         _ss: &SubSuperGraph,
         _scope: &Scope,
         input: &Self::Input,
@@ -22,7 +22,7 @@ pub struct Bound {}
 impl Legalize for Bound {
     type Input = ast::Bound;
     fn legalize(
-        _ns: &Ns,
+        _ns: &Namespace,
         _ss: &SubSuperGraph,
         _scope: &Scope,
         _input: &Self::Input,
@@ -90,7 +90,7 @@ impl Legalize for TypeRef {
     type Input = ast::Type;
 
     fn legalize(
-        ns: &Ns,
+        ns: &Namespace,
         ss: &SubSuperGraph,
         scope: &Scope,
         ty: &ast::Type,

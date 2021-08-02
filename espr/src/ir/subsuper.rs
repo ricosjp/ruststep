@@ -9,7 +9,7 @@ pub struct SubSuperGraph {
 }
 
 impl SubSuperGraph {
-    pub fn new(ns: &Ns, st: &SyntaxTree) -> Result<Self, SemanticError> {
+    pub fn new(ns: &Namespace, st: &SyntaxTree) -> Result<Self, SemanticError> {
         todo!()
     }
 }

@@ -10,12 +10,12 @@ pub enum Named<'st> {
 }
 
 #[derive(Debug, Clone)]
-pub struct Ns<'st> {
+pub struct Namespace<'st> {
     pub names: HashMap<Scope, Vec<(ScopeType, String)>>,
     pub ast: HashMap<Path, Named<'st>>,
 }
 
-impl<'st> Ns<'st> {
+impl<'st> Namespace<'st> {
     pub fn new(st: &'st SyntaxTree) -> Self {
         let mut names = HashMap::new();
         let mut ast = HashMap::new();
@@ -39,7 +39,7 @@ impl<'st> Ns<'st> {
             names.insert(here, current_names);
         }
 
-        Ns { names, ast }
+        Namespace { names, ast }
     }
 
     /// Resolve a `name` used in a `scope` to full pash.
@@ -104,7 +104,7 @@ mod tests {
             .trim(),
         )
         .unwrap();
-        let ns = Ns::new(&st);
+        let ns = Namespace::new(&st);
 
         assert_eq!(ns.names.len(), 2);
         let root = Scope::root();

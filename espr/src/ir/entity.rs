@@ -21,7 +21,7 @@ impl Legalize for EntityAttribute {
     type Input = ast::EntityAttribute;
 
     fn legalize(
-        ns: &Ns,
+        ns: &Namespace,
         ss: &SubSuperGraph,
         scope: &Scope,
         attr: &Self::Input,
@@ -43,7 +43,7 @@ impl Legalize for Entity {
     type Input = ast::Entity;
 
     fn legalize(
-        ns: &Ns,
+        ns: &Namespace,
         ss: &SubSuperGraph,
         scope: &Scope,
         entity: &Self::Input,
@@ -105,7 +105,7 @@ mod tests {
     #[test]
     fn legalize() {
         let example = SyntaxTree::example();
-        let ns = Ns::new(&example);
+        let ns = Namespace::new(&example);
         let ss = SubSuperGraph::new(&ns, &example).unwrap();
         dbg!(&ns);
         let entity = &example.schemas[0].entities[0];

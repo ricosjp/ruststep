@@ -44,7 +44,7 @@ pub enum TypeDecl {
 impl Legalize for TypeDecl {
     type Input = ast::TypeDecl;
     fn legalize(
-        ns: &Ns,
+        ns: &Namespace,
         _ss: &SubSuperGraph,
         scope: &Scope,
         type_decl: &Self::Input,
