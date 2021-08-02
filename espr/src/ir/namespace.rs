@@ -11,7 +11,7 @@ pub enum Named<'st> {
 
 #[derive(Debug, Clone)]
 pub struct Ns<'st> {
-    pub names: HashMap<Scope, Vec<String>>,
+    pub names: HashMap<Scope, Vec<(ScopeType, String)>>,
     pub ast: HashMap<Path, Named<'st>>,
 }
 
@@ -26,14 +26,14 @@ impl<'st> Ns<'st> {
             let mut current_names = Vec::new();
             for ty in &schema.types {
                 let name = &ty.type_id;
-                current_names.push(name.to_string());
-                let path = Path::new(&here, name);
+                current_names.push((ScopeType::Type, name.to_string()));
+                let path = Path::new(&here, ScopeType::Type, name);
                 ast.insert(path, Named::Type(ty));
             }
             for entity in &schema.entities {
                 let name = &entity.name;
-                current_names.push(name.to_string());
-                let path = Path::new(&here, name);
+                current_names.push((ScopeType::Entity, name.to_string()));
+                let path = Path::new(&here, ScopeType::Entity, name);
                 ast.insert(path, Named::Entity(entity));
             }
             names.insert(here, current_names);
@@ -55,9 +55,9 @@ impl<'st> Ns<'st> {
         let mut scope = scope.clone();
         loop {
             let names = self.names.get(&scope).ok_or_else(err)?;
-            for n in names {
+            for (ty, n) in names {
                 if name == n {
-                    return Ok(Path::new(&scope, n));
+                    return Ok(Path::new(&scope, *ty, n));
                 }
             }
             scope = scope.popped().ok_or_else(err)?;

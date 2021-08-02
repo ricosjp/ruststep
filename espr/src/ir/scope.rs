@@ -3,7 +3,7 @@ use std::{cmp, fmt};
 
 /// Identifier in EXPRESS language must be one of scopes described in
 /// "Table 9 – Scope and identifier defining items"
-#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub enum ScopeType {
     Entity,
     Alias,
@@ -112,6 +112,7 @@ impl Scope {
 #[derive(Clone, PartialEq, Eq, Hash)]
 pub struct Path {
     pub scope: Scope,
+    pub ty: ScopeType,
     pub name: String,
 }
 
@@ -123,14 +124,15 @@ impl fmt::Display for Path {
 
 impl fmt::Debug for Path {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "{:?}.{}", self.scope, self.name)
+        write!(f, "{:?}.{}[{:?}]", self.scope, self.name, self.ty)
     }
 }
 
 impl Path {
-    pub fn new(scope: &Scope, name: &str) -> Self {
+    pub fn new(scope: &Scope, ty: ScopeType, name: &str) -> Self {
         Path {
             scope: scope.clone(),
+            ty,
             name: name.to_string(),
         }
     }
