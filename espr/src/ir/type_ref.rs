@@ -80,6 +80,10 @@ impl TypeRef {
             _ => false,
         }
     }
+
+    pub fn from_path(path: &Path) -> Self {
+        todo!()
+    }
 }
 
 impl Legalize for TypeRef {

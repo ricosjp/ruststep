@@ -76,14 +76,10 @@ impl Legalize for Entity {
                     }
                 }
                 Constraint::AbstractSuperType(None) => {
-                    let sup = TypeRef::Entity {
-                        name: name.clone(),
-                        scope: scope.clone(),
-                        has_supertype_decl: true,
-                    };
+                    let sup = Path::new(scope, ScopeType::Entity, &name);
                     if let Some(refs) = ss.super_to_sub.get(&sup) {
                         for sub in refs {
-                            subtypes.push(sub.clone());
+                            subtypes.push(TypeRef::from_path(sub));
                         }
                     }
                 }
