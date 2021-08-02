@@ -7,7 +7,7 @@ pub struct SimpleType(pub ast::SimpleType);
 impl Legalize for SimpleType {
     type Input = ast::SimpleType;
     fn legalize(
-        _ns: &Namespace,
+        _ns: &Ns,
         _ss: &SubSuperGraph,
         _scope: &Scope,
         input: &Self::Input,
@@ -22,7 +22,7 @@ pub struct Bound {}
 impl Legalize for Bound {
     type Input = ast::Bound;
     fn legalize(
-        _ns: &Namespace,
+        _ns: &Ns,
         _ss: &SubSuperGraph,
         _scope: &Scope,
         _input: &Self::Input,
@@ -90,7 +90,7 @@ impl Legalize for TypeRef {
     type Input = ast::Type;
 
     fn legalize(
-        ns: &Namespace,
+        ns: &Ns,
         ss: &SubSuperGraph,
         scope: &Scope,
         ty: &ast::Type,
@@ -98,7 +98,10 @@ impl Legalize for TypeRef {
         use ast::Type::*;
         Ok(match ty {
             Simple(ty) => Self::SimpleType(SimpleType(*ty)),
-            Named(name) => ns.lookup_type(scope, name)?,
+            Named(name) => {
+                let path = ns.resolve(scope, name)?;
+                Self::from_path(&path)
+            }
             Set { base, bound } => {
                 let base = TypeRef::legalize(ns, ss, scope, base.as_ref())?;
                 let bound = if let Some(bound) = bound {

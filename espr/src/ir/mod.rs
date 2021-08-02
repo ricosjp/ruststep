@@ -33,7 +33,7 @@ pub enum SemanticError {
 pub trait Legalize: Sized {
     type Input;
     fn legalize(
-        namespace: &Namespace,
+        namespace: &Ns,
         sub_super_graph: &SubSuperGraph,
         scope: &Scope,
         syn: &Self::Input,
@@ -48,7 +48,7 @@ pub struct IR {
 
 impl IR {
     pub fn from_syntax_tree(st: &SyntaxTree) -> Result<Self, SemanticError> {
-        let ns = Namespace::new(&st)?;
+        let ns = Ns::new(&st);
         let ss = SubSuperGraph::new(&ns, st)?;
         let ir = Self::legalize(&ns, &ss, &Scope::root(), &st)?;
         Ok(ir)
@@ -58,7 +58,7 @@ impl IR {
 impl Legalize for IR {
     type Input = SyntaxTree;
     fn legalize(
-        ns: &Namespace,
+        ns: &Ns,
         ss: &SubSuperGraph,
         scope: &Scope,
         syn: &SyntaxTree,

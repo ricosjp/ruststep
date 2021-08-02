@@ -21,7 +21,7 @@ impl Legalize for EntityAttribute {
     type Input = ast::EntityAttribute;
 
     fn legalize(
-        ns: &Namespace,
+        ns: &Ns,
         ss: &SubSuperGraph,
         scope: &Scope,
         attr: &Self::Input,
@@ -43,7 +43,7 @@ impl Legalize for Entity {
     type Input = ast::Entity;
 
     fn legalize(
-        ns: &Namespace,
+        ns: &Ns,
         ss: &SubSuperGraph,
         scope: &Scope,
         entity: &Self::Input,
@@ -59,8 +59,8 @@ impl Legalize for Entity {
         let mut supertypes = Vec::new();
         if let Some(st) = &entity.subtype_of {
             for name in &st.entity_references {
-                let ty = ns.lookup_type(scope, name)?;
-                supertypes.push(ty);
+                let path = ns.resolve(scope, name)?;
+                supertypes.push(TypeRef::from_path(&path));
             }
         }
 
@@ -72,7 +72,8 @@ impl Legalize for Entity {
                 Constraint::SuperTypeRule(rule_expr)
                 | Constraint::AbstractSuperType(Some(rule_expr)) => {
                     for name in rule_expr.as_subtype_names() {
-                        subtypes.push(ns.lookup_type(scope, &name)?);
+                        let path = ns.resolve(scope, &name)?;
+                        subtypes.push(TypeRef::from_path(&path));
                     }
                 }
                 Constraint::AbstractSuperType(None) => {
@@ -104,7 +105,7 @@ mod tests {
     #[test]
     fn legalize() {
         let example = SyntaxTree::example();
-        let ns = Namespace::new(&example).unwrap();
+        let ns = Ns::new(&example);
         let ss = SubSuperGraph::new(&ns, &example).unwrap();
         dbg!(&ns);
         let entity = &example.schemas[0].entities[0];

@@ -11,7 +11,7 @@ pub struct Schema {
 impl Legalize for Schema {
     type Input = ast::Schema;
     fn legalize(
-        ns: &Namespace,
+        ns: &Ns,
         ss: &SubSuperGraph,
         scope: &Scope,
         schema: &Self::Input,
@@ -43,7 +43,7 @@ mod tests {
     #[test]
     fn legalize() {
         let example = SyntaxTree::example();
-        let ns = Namespace::new(&example).unwrap();
+        let ns = Ns::new(&example);
         let ss = SubSuperGraph::new(&ns, &example).unwrap();
         dbg!(&ns, &ss);
         let schema = &example.schemas[0];
