@@ -255,4 +255,41 @@ mod tests {
         let ns = Namespace::new(&SyntaxTree::example());
         dbg!(&ns);
     }
+
+    #[test]
+    fn ns_init() {
+        let st = SyntaxTree::parse(
+            r#"
+            SCHEMA one;
+              ENTITY first;
+                m_ref : second;
+                fattr : STRING;
+              END_ENTITY;
+              ENTITY second;
+                sattr : STRING;
+              END_ENTITY;
+            END_SCHEMA;
+
+            SCHEMA geometry0;
+              ENTITY point;
+                x, y, z: REAL;
+              END_ENTITY;
+            END_SCHEMA;
+            "#
+            .trim(),
+        )
+        .unwrap();
+        let ns = Ns::new(&st);
+
+        assert_eq!(ns.names.len(), 2);
+        let root = Scope::root();
+        for (scope, names) in &ns.names {
+            if scope == &root.pushed(ScopeType::Schema, "one") {
+                assert_eq!(names.len(), 2);
+            }
+            if scope == &root.pushed(ScopeType::Schema, "geometry0") {
+                assert_eq!(names.len(), 1);
+            }
+        }
+    }
 }
