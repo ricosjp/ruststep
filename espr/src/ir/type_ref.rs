@@ -57,7 +57,7 @@ pub enum TypeRef {
     Entity {
         name: String,
         scope: Scope,
-        has_supertype_decl: bool,
+        is_supertype: bool,
     },
 
     /* Aggregated */
@@ -80,6 +80,47 @@ impl TypeRef {
             _ => false,
         }
     }
+
+    pub fn from_path(
+        ns: &Namespace,
+        ss: &SubSuperGraph,
+        path: &Path,
+    ) -> Result<Self, SemanticError> {
+        match path.ty {
+            ScopeType::Entity => {
+                let is_supertype = ss.super_to_sub.get(&path).is_some();
+                Ok(TypeRef::Entity {
+                    name: path.name.clone(),
+                    scope: path.scope.clone(),
+                    is_supertype,
+                })
+            }
+            ScopeType::Type => {
+                let mut p = path.clone();
+                let is_simple = loop {
+                    match ns.get(&p)? {
+                        Named::Type(ast::TypeDecl {
+                            underlying_type, ..
+                        }) => match underlying_type {
+                            ast::Type::Simple(_) => break true,
+                            ast::Type::Named(name) => {
+                                p = ns.resolve(&p.scope, name)?;
+                                continue;
+                            }
+                            _ => break false,
+                        },
+                        Named::Entity(_) => break false,
+                    }
+                };
+                Ok(TypeRef::Named {
+                    scope: path.scope.clone(),
+                    name: path.name.clone(),
+                    is_simple,
+                })
+            }
+            _ => unimplemented!("Path to TypeRef conversion only supports Entity and Types yet."),
+        }
+    }
 }
 
 impl Legalize for TypeRef {
@@ -94,7 +135,10 @@ impl Legalize for TypeRef {
         use ast::Type::*;
         Ok(match ty {
             Simple(ty) => Self::SimpleType(SimpleType(*ty)),
-            Named(name) => ns.lookup_type(scope, name)?,
+            Named(name) => {
+                let path = ns.resolve(scope, name)?;
+                Self::from_path(ns, ss, &path)?
+            }
             Set { base, bound } => {
                 let base = TypeRef::legalize(ns, ss, scope, base.as_ref())?;
                 let bound = if let Some(bound) = bound {

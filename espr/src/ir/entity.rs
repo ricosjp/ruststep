@@ -55,42 +55,19 @@ impl Legalize for Entity {
             .map(|attr| EntityAttribute::legalize(ns, ss, scope, attr))
             .collect::<Result<Vec<_>, _>>()?;
 
-        // `ENTITY A SUBTYPE OF (B)` means `A` is subtype of `B`, i.e. `B` is supertype of `A`
-        let mut supertypes = Vec::new();
-        if let Some(st) = &entity.subtype_of {
-            for name in &st.entity_references {
-                let ty = ns.lookup_type(scope, name)?;
-                supertypes.push(ty);
-            }
-        }
-
-        // `ENTITY A SUPERTYPE OF (B)` means `A` is supertype of `B`, i.e. `B` is subtype of `A`
-        let mut subtypes = Vec::new();
-        for c in &entity.constraint {
-            use ast::Constraint;
-            match c {
-                Constraint::SuperTypeRule(rule_expr)
-                | Constraint::AbstractSuperType(Some(rule_expr)) => {
-                    for name in rule_expr.as_subtype_names() {
-                        subtypes.push(ns.lookup_type(scope, &name)?);
-                    }
-                }
-                Constraint::AbstractSuperType(None) => {
-                    let sup = TypeRef::Entity {
-                        name: name.clone(),
-                        scope: scope.clone(),
-                        has_supertype_decl: true,
-                    };
-                    if let Some(refs) = ss.super_to_sub.get(&sup) {
-                        for sub in refs {
-                            subtypes.push(sub.clone());
-                        }
-                    }
-                }
-                // `ABSTRACT` entity is ignored
-                _ => continue,
-            }
-        }
+        let path = Path::new(scope, ScopeType::Entity, &name);
+        let supertypes = ss
+            .get_supertypes(&path)
+            .unwrap_or_default()
+            .iter()
+            .map(|sup| TypeRef::from_path(ns, ss, sup))
+            .collect::<Result<Vec<_>, _>>()?;
+        let subtypes = ss
+            .get_subtypes(&path)
+            .unwrap_or_default()
+            .iter()
+            .map(|sub| TypeRef::from_path(ns, ss, sub))
+            .collect::<Result<Vec<_>, _>>()?;
 
         Ok(Entity {
             name,
@@ -108,7 +85,7 @@ mod tests {
     #[test]
     fn legalize() {
         let example = SyntaxTree::example();
-        let ns = Namespace::new(&example).unwrap();
+        let ns = Namespace::new(&example);
         let ss = SubSuperGraph::new(&ns, &example).unwrap();
         dbg!(&ns);
         let entity = &example.schemas[0].entities[0];
