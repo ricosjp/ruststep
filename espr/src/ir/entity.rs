@@ -55,13 +55,16 @@ impl Legalize for Entity {
             .map(|attr| EntityAttribute::legalize(ns, ss, scope, attr))
             .collect::<Result<Vec<_>, _>>()?;
 
+        let path = Path::new(scope, ScopeType::Entity, &name);
         let supertypes = ss
-            .get_supertypes(&name, scope)?
+            .get_supertypes(&path)
+            .unwrap_or_default()
             .iter()
             .map(|sup| TypeRef::from_path(ns, ss, sup))
             .collect::<Result<Vec<_>, _>>()?;
         let subtypes = ss
-            .get_subtypes(&name, scope)?
+            .get_subtypes(&path)
+            .unwrap_or_default()
             .iter()
             .map(|sub| TypeRef::from_path(ns, ss, sub))
             .collect::<Result<Vec<_>, _>>()?;
