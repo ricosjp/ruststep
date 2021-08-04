@@ -63,9 +63,18 @@ impl ToTokens for Entity {
             } = ty
             {
                 if *is_supertype {
-                    let any_trait = format_ident!("{}Any", supertype_name.to_pascal_case());
+                    let name = if self.subtypes.is_empty() {
+                        format_ident!("{}", self.name.to_pascal_case())
+                    } else {
+                        format_ident!("{}Any", self.name.to_pascal_case())
+                    };
+                    let any_enum = format_ident!("{}Any", supertype_name.to_pascal_case());
                     tokens.append_all(quote! {
-                        impl #any_trait for #name {}
+                        impl Into<#any_enum> for #name {
+                            fn into(self) -> #any_enum {
+                                #any_enum::#name(Box::new(self))
+                            }
+                        }
                     });
                 }
             }
@@ -79,14 +88,14 @@ impl ToTokens for Entity {
         let attr_len = attr_name.len();
 
         tokens.append_all(quote! {
-            #[derive(Debug, Clone, derive_new::new)]
+            #[derive(Debug, Clone, PartialEq, derive_new::new)]
             pub struct #name {
                 #(
                 pub #attr_name : #attr_type,
                 )*
             }
 
-            #[derive(Clone, Debug)]
+            #[derive(Clone, Debug, PartialEq)]
             struct #holder_name {
                 #(
                 #attr_name : #holder_attr_type,
@@ -109,18 +118,14 @@ impl ToTokens for Entity {
         });
 
         if !self.subtypes.is_empty() {
-            let trait_name = format_ident!("{}Any", name);
+            let subtypes = &self.subtypes;
+            let enum_name = format_ident!("{}Any", name);
             tokens.append_all(quote! {
-                pub trait #trait_name:
-                    ::std::any::Any
-                  + ::std::fmt::Debug
-                  + dyn_clone::DynClone
-                {}
-                dyn_clone::clone_trait_object!(#trait_name);
-            });
-            tokens.append_all(quote! {
-                impl #trait_name for #name {}
-            });
+                #[derive(Debug, Clone, PartialEq)]
+                pub enum #enum_name {
+                    #(#subtypes(Box<#subtypes>)),*
+                }
+            }); // tokens.append_all
         }
     }
 }

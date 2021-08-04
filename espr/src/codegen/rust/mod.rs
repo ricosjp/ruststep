@@ -47,7 +47,7 @@ impl ToTokens for Enumeration {
             .map(|i| format_ident!("{}", i.to_pascal_case()))
             .collect();
         tokens.append_all(quote! {
-            #[derive(Debug, Clone)]
+            #[derive(Debug, Clone, PartialEq)]
             pub enum #id {
                 #( #items ),*
             }
@@ -81,7 +81,7 @@ impl ToTokens for Select {
             }
         }
         tokens.append_all(quote! {
-            #[derive(Debug, Clone)]
+            #[derive(Debug, Clone, PartialEq)]
             pub enum #id {
                 #(#entries(#entry_types)),*
             }
@@ -127,13 +127,12 @@ impl ToTokens for TypeRef {
             Entity {
                 name, is_supertype, ..
             } => {
-                if *is_supertype {
-                    let name = format_ident!("{}Any", name.to_pascal_case());
-                    tokens.append_all(quote! { Box<dyn #name> });
+                let name = if *is_supertype {
+                    format_ident!("{}Any", name.to_pascal_case())
                 } else {
-                    let name = format_ident!("{}", name.to_pascal_case());
-                    tokens.append_all(quote! { #name });
-                }
+                    format_ident!("{}", name.to_pascal_case())
+                };
+                tokens.append_all(quote! { #name });
             }
             Set { base, .. } | List { base, .. } => {
                 tokens.append_all(quote! { Vec<#base> });

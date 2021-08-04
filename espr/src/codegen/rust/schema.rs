@@ -30,7 +30,7 @@ impl ToTokens for Schema {
                 use crate::{primitive::*, place_holder::*, tables::*, error::Result};
                 use std::collections::HashMap;
 
-                #[derive(Debug, Clone, Default)]
+                #[derive(Debug, Clone, PartialEq, Default)]
                 pub struct Tables {
                     #(
                     #holder_name: HashMap<u64, #holder_type>,
