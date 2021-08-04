@@ -4203,15 +4203,15 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone)]
     pub enum BoxCharacteristicSelect {
-        RatioMeasure(Box<RatioMeasure>),
-        RatioMeasure(Box<RatioMeasure>),
-        PlaneAngleMeasure(Box<PlaneAngleMeasure>),
-        PlaneAngleMeasure(Box<PlaneAngleMeasure>),
+        BoxHeight(Box<BoxHeight>),
+        BoxWidth(Box<BoxWidth>),
+        BoxSlantAngle(Box<BoxSlantAngle>),
+        BoxRotateAngle(Box<BoxRotateAngle>),
     }
-    pub type BoxHeight = RatioMeasure;
+    pub type BoxHeight = PositiveRatioMeasure;
     pub type BoxRotateAngle = PlaneAngleMeasure;
     pub type BoxSlantAngle = PlaneAngleMeasure;
-    pub type BoxWidth = RatioMeasure;
+    pub type BoxWidth = PositiveRatioMeasure;
     #[derive(Debug, Clone)]
     pub enum CharacterSpacingSelect {
         LengthMeasure(Box<LengthMeasure>),
@@ -4362,8 +4362,8 @@ pub mod explicit_draughting {
         PlaneAngleMeasure(Box<PlaneAngleMeasure>),
         RatioMeasure(Box<RatioMeasure>),
         ParameterValue(Box<ParameterValue>),
-        LengthMeasure(Box<LengthMeasure>),
-        RatioMeasure(Box<RatioMeasure>),
+        PositiveLengthMeasure(Box<PositiveLengthMeasure>),
+        PositiveRatioMeasure(Box<PositiveRatioMeasure>),
     }
     pub type MonthInYearNumber = i64;
     #[derive(Debug, Clone)]
@@ -4457,7 +4457,7 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone)]
     pub enum SizeSelect {
-        LengthMeasure(Box<LengthMeasure>),
+        PositiveLengthMeasure(Box<PositiveLengthMeasure>),
         MeasureWithUnit(Box<dyn MeasureWithUnitAny>),
     }
     #[derive(Debug, Clone)]
@@ -5265,11 +5265,11 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct Circle {
-        pub radius: LengthMeasure,
+        pub radius: PositiveLengthMeasure,
     }
     #[derive(Clone, Debug)]
     struct CircleHolder {
-        radius: LengthMeasure,
+        radius: PositiveLengthMeasure,
     }
     impl Holder for CircleHolder {
         type Table = Tables;
@@ -5721,13 +5721,13 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct CurveStyleFontPattern {
-        pub visible_segment_length: LengthMeasure,
-        pub invisible_segment_length: LengthMeasure,
+        pub visible_segment_length: PositiveLengthMeasure,
+        pub invisible_segment_length: PositiveLengthMeasure,
     }
     #[derive(Clone, Debug)]
     struct CurveStyleFontPatternHolder {
-        visible_segment_length: LengthMeasure,
-        invisible_segment_length: LengthMeasure,
+        visible_segment_length: PositiveLengthMeasure,
+        invisible_segment_length: PositiveLengthMeasure,
     }
     impl Holder for CurveStyleFontPatternHolder {
         type Table = Tables;
@@ -6648,13 +6648,13 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct Ellipse {
-        pub semi_axis_1: LengthMeasure,
-        pub semi_axis_2: LengthMeasure,
+        pub semi_axis_1: PositiveLengthMeasure,
+        pub semi_axis_2: PositiveLengthMeasure,
     }
     #[derive(Clone, Debug)]
     struct EllipseHolder {
-        semi_axis_1: LengthMeasure,
-        semi_axis_2: LengthMeasure,
+        semi_axis_1: PositiveLengthMeasure,
+        semi_axis_2: PositiveLengthMeasure,
     }
     impl Holder for EllipseHolder {
         type Table = Tables;
@@ -6904,13 +6904,13 @@ pub mod explicit_draughting {
     pub struct FillAreaStyleTiles {
         pub tiling_pattern: TwoDirectionRepeatFactor,
         pub tiles: Vec<FillAreaStyleTileShapeSelect>,
-        pub tiling_scale: RatioMeasure,
+        pub tiling_scale: PositiveRatioMeasure,
     }
     #[derive(Clone, Debug)]
     struct FillAreaStyleTilesHolder {
         tiling_pattern: PlaceHolder<TwoDirectionRepeatFactor>,
         tiles: PlaceHolder<Vec<FillAreaStyleTileShapeSelect>>,
-        tiling_scale: RatioMeasure,
+        tiling_scale: PositiveRatioMeasure,
     }
     impl Holder for FillAreaStyleTilesHolder {
         type Table = Tables;
@@ -7144,13 +7144,13 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct Hyperbola {
-        pub semi_axis: LengthMeasure,
-        pub semi_imag_axis: LengthMeasure,
+        pub semi_axis: PositiveLengthMeasure,
+        pub semi_imag_axis: PositiveLengthMeasure,
     }
     #[derive(Clone, Debug)]
     struct HyperbolaHolder {
-        semi_axis: LengthMeasure,
-        semi_imag_axis: LengthMeasure,
+        semi_axis: PositiveLengthMeasure,
+        semi_imag_axis: PositiveLengthMeasure,
     }
     impl Holder for HyperbolaHolder {
         type Table = Tables;
@@ -9054,14 +9054,14 @@ pub mod explicit_draughting {
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct SymbolTarget {
         pub placement: Axis2Placement,
-        pub x_scale: RatioMeasure,
-        pub y_scale: RatioMeasure,
+        pub x_scale: PositiveRatioMeasure,
+        pub y_scale: PositiveRatioMeasure,
     }
     #[derive(Clone, Debug)]
     struct SymbolTargetHolder {
         placement: PlaceHolder<Axis2Placement>,
-        x_scale: RatioMeasure,
-        y_scale: RatioMeasure,
+        x_scale: PositiveRatioMeasure,
+        y_scale: PositiveRatioMeasure,
     }
     impl Holder for SymbolTargetHolder {
         type Table = Tables;
@@ -9107,7 +9107,7 @@ pub mod explicit_draughting {
     pub struct TextLiteral {
         pub literal: PresentableText,
         pub placement: Axis2Placement,
-        pub alignment: Label,
+        pub alignment: TextAlignment,
         pub path: TextPath,
         pub font: FontSelect,
     }
@@ -9115,7 +9115,7 @@ pub mod explicit_draughting {
     struct TextLiteralHolder {
         literal: PresentableText,
         placement: PlaceHolder<Axis2Placement>,
-        alignment: Label,
+        alignment: TextAlignment,
         path: PlaceHolder<TextPath>,
         font: PlaceHolder<FontSelect>,
     }
@@ -9179,11 +9179,11 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, derive_new :: new)]
     pub struct TextLiteralWithDelineation {
-        pub delineation: Label,
+        pub delineation: TextDelineation,
     }
     #[derive(Clone, Debug)]
     struct TextLiteralWithDelineationHolder {
-        delineation: Label,
+        delineation: TextDelineation,
     }
     impl Holder for TextLiteralWithDelineationHolder {
         type Table = Tables;
