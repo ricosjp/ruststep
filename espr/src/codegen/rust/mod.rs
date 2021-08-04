@@ -63,13 +63,11 @@ impl ToTokens for Select {
         for ty in &self.types {
             match ty {
                 TypeRef::Entity {
-                    name,
-                    has_supertype_decl,
-                    ..
+                    name, is_supertype, ..
                 } => {
                     let name = format_ident!("{}", name.to_pascal_case());
                     entries.push(quote! { #name });
-                    if *has_supertype_decl {
+                    if *is_supertype {
                         // avoid Box<Box<XxxAny>>
                         entry_types.push(quote! { #ty });
                     } else {
@@ -127,11 +125,9 @@ impl ToTokens for TypeRef {
                 tokens.append_all(quote! { #name });
             }
             Entity {
-                name,
-                has_supertype_decl,
-                ..
+                name, is_supertype, ..
             } => {
-                if *has_supertype_decl {
+                if *is_supertype {
                     let name = format_ident!("{}Any", name.to_pascal_case());
                     tokens.append_all(quote! { Box<dyn #name> });
                 } else {

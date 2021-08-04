@@ -60,7 +60,7 @@ impl Legalize for Entity {
         if let Some(st) = &entity.subtype_of {
             for name in &st.entity_references {
                 let path = ns.resolve(scope, name)?;
-                supertypes.push(TypeRef::from_path(&path));
+                supertypes.push(TypeRef::from_path(ns, ss, &path)?);
             }
         }
 
@@ -73,14 +73,14 @@ impl Legalize for Entity {
                 | Constraint::AbstractSuperType(Some(rule_expr)) => {
                     for name in rule_expr.as_subtype_names() {
                         let path = ns.resolve(scope, &name)?;
-                        subtypes.push(TypeRef::from_path(&path));
+                        subtypes.push(TypeRef::from_path(ns, ss, &path)?);
                     }
                 }
                 Constraint::AbstractSuperType(None) => {
                     let sup = Path::new(scope, ScopeType::Entity, &name);
                     if let Some(refs) = ss.super_to_sub.get(&sup) {
                         for sub in refs {
-                            subtypes.push(TypeRef::from_path(sub));
+                            subtypes.push(TypeRef::from_path(ns, ss, sub)?);
                         }
                     }
                 }

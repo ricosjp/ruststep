@@ -45,7 +45,7 @@ impl Legalize for TypeDecl {
     type Input = ast::TypeDecl;
     fn legalize(
         ns: &Namespace,
-        _ss: &SubSuperGraph,
+        ss: &SubSuperGraph,
         scope: &Scope,
         type_decl: &Self::Input,
     ) -> Result<Self, SemanticError> {
@@ -60,7 +60,7 @@ impl Legalize for TypeDecl {
                 let path = ns.resolve(scope, name)?;
                 TypeDecl::Rename(Rename {
                     id,
-                    ty: TypeRef::from_path(&path),
+                    ty: TypeRef::from_path(ns, ss, &path)?,
                 })
             }
             Type::Enumeration {
@@ -78,7 +78,7 @@ impl Legalize for TypeDecl {
                     .iter()
                     .map(|ty| {
                         let path = ns.resolve(scope, ty)?;
-                        Ok(TypeRef::from_path(&path))
+                        Ok(TypeRef::from_path(ns, ss, &path)?)
                     })
                     .collect::<Result<Vec<_>, _>>()?;
                 TypeDecl::Select(Select { id, types })

@@ -58,11 +58,11 @@ impl ToTokens for Entity {
 
             if let TypeRef::Entity {
                 name: supertype_name,
-                has_supertype_decl,
+                is_supertype,
                 ..
             } = ty
             {
-                if *has_supertype_decl {
+                if *is_supertype {
                     let any_trait = format_ident!("{}Any", supertype_name.to_pascal_case());
                     tokens.append_all(quote! {
                         impl #any_trait for #name {}
