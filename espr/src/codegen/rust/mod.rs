@@ -47,7 +47,7 @@ impl ToTokens for Enumeration {
             .map(|i| format_ident!("{}", i.to_pascal_case()))
             .collect();
         tokens.append_all(quote! {
-            #[derive(Debug, Clone)]
+            #[derive(Debug, Clone, PartialEq)]
             pub enum #id {
                 #( #items ),*
             }
@@ -81,7 +81,7 @@ impl ToTokens for Select {
             }
         }
         tokens.append_all(quote! {
-            #[derive(Debug, Clone)]
+            #[derive(Debug, Clone, PartialEq)]
             pub enum #id {
                 #(#entries(#entry_types)),*
             }

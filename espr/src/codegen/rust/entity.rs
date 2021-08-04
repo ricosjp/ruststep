@@ -88,14 +88,14 @@ impl ToTokens for Entity {
         let attr_len = attr_name.len();
 
         tokens.append_all(quote! {
-            #[derive(Debug, Clone, derive_new::new)]
+            #[derive(Debug, Clone, PartialEq, derive_new::new)]
             pub struct #name {
                 #(
                 pub #attr_name : #attr_type,
                 )*
             }
 
-            #[derive(Clone, Debug)]
+            #[derive(Clone, Debug, PartialEq)]
             struct #holder_name {
                 #(
                 #attr_name : #holder_attr_type,
@@ -121,7 +121,7 @@ impl ToTokens for Entity {
             let subtypes = &self.subtypes;
             let enum_name = format_ident!("{}Any", name);
             tokens.append_all(quote! {
-                #[derive(Debug, Clone)]
+                #[derive(Debug, Clone, PartialEq)]
                 pub enum #enum_name {
                     #(#subtypes(Box<#subtypes>)),*
                 }

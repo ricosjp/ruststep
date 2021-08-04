@@ -2,7 +2,7 @@
 pub mod explicit_draughting {
     use crate::{error::Result, place_holder::*, primitive::*, tables::*};
     use std::collections::HashMap;
-    #[derive(Debug, Clone, Default)]
+    #[derive(Debug, Clone, PartialEq, Default)]
     pub struct Tables {
         address: HashMap<u64, AddressHolder>,
         angular_dimension: HashMap<u64, AngularDimensionHolder>,
@@ -4178,21 +4178,21 @@ pub mod explicit_draughting {
             crate::tables::owned_iter(self, &self.vector)
         }
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum ApprovedItem {
         DrawingRevision(DrawingRevisionAny),
         DrawingSheetRevision(Box<DrawingSheetRevision>),
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum AreaOrView {
         PresentationArea(PresentationAreaAny),
         PresentationView(Box<PresentationView>),
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum Axis2Placement {
         Axis2Placement2D(Box<Axis2Placement2D>),
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum BSplineCurveForm {
         EllipticArc,
         PolylineForm,
@@ -4201,7 +4201,7 @@ pub mod explicit_draughting {
         Unspecified,
         HyperbolicArc,
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum BoxCharacteristicSelect {
         BoxHeight(Box<BoxHeight>),
         BoxWidth(Box<BoxWidth>),
@@ -4212,100 +4212,100 @@ pub mod explicit_draughting {
     pub type BoxRotateAngle = PlaneAngleMeasure;
     pub type BoxSlantAngle = PlaneAngleMeasure;
     pub type BoxWidth = PositiveRatioMeasure;
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum CharacterSpacingSelect {
         LengthMeasure(Box<LengthMeasure>),
         RatioMeasure(Box<RatioMeasure>),
         MeasureWithUnit(MeasureWithUnitAny),
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum CharacterStyleSelect {
         TextStyleForDefinedFont(Box<TextStyleForDefinedFont>),
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum CharacterizedDefinition {
         CharacterizedProductDefinition(Box<CharacterizedProductDefinition>),
         ShapeDefinition(Box<ShapeDefinition>),
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum CharacterizedProductDefinition {
         ProductDefinition(Box<ProductDefinition>),
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum ClassifiedItem {
         DrawingRevision(DrawingRevisionAny),
         DrawingSheetRevision(Box<DrawingSheetRevision>),
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum ContractedItem {
         DrawingRevision(DrawingRevisionAny),
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum CurveFontOrScaledCurveFontSelect {
         CurveStyleFontSelect(Box<CurveStyleFontSelect>),
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum CurveOrAnnotationCurveOccurrence {
         Curve(CurveAny),
         AnnotationCurveOccurrence(AnnotationCurveOccurrenceAny),
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum CurveOrRender {
         CurveStyle(Box<CurveStyle>),
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum CurveStyleFontSelect {
         CurveStyleFont(Box<CurveStyleFont>),
         PreDefinedCurveFont(PreDefinedCurveFontAny),
         ExternallyDefinedCurveFont(Box<ExternallyDefinedCurveFont>),
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum DateTimeSelect {
         Date(DateAny),
     }
     pub type DayInMonthNumber = i64;
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum DefinedSymbolSelect {
         PreDefinedSymbol(PreDefinedSymbolAny),
         ExternallyDefinedSymbol(Box<ExternallyDefinedSymbol>),
     }
     pub type DimensionCount = i64;
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum DimensionExtentUsage {
         Origin,
         Target,
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum DraughtingCalloutElement {
         AnnotationTextOccurrence(Box<AnnotationTextOccurrence>),
         AnnotationSymbolOccurrence(AnnotationSymbolOccurrenceAny),
         AnnotationCurveOccurrence(AnnotationCurveOccurrenceAny),
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum DraughtingGroupedItem {
         AnnotationOccurrence(AnnotationOccurrenceAny),
         GeometricSetSelect(Box<GeometricSetSelect>),
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum DraughtingOrganizationItem {
         ProductDefinitionFormation(Box<ProductDefinitionFormation>),
         DrawingRevision(DrawingRevisionAny),
         DrawingSheetRevision(Box<DrawingSheetRevision>),
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum DraughtingPresentedItemSelect {
         ProductDefinitionFormation(Box<ProductDefinitionFormation>),
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum DraughtingTitledItem {
         DrawingRevision(DrawingRevisionAny),
         DrawingSheetRevision(Box<DrawingSheetRevision>),
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum FillAreaStyleTileShapeSelect {
         FillAreaStyleTileSymbolWithStyle(Box<FillAreaStyleTileSymbolWithStyle>),
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum FillStyleSelect {
         FillAreaStyleColour(Box<FillAreaStyleColour>),
         ExternallyDefinedTileStyle(Box<ExternallyDefinedTileStyle>),
@@ -4313,36 +4313,36 @@ pub mod explicit_draughting {
         ExternallyDefinedHatchStyle(Box<ExternallyDefinedHatchStyle>),
         FillAreaStyleHatching(Box<FillAreaStyleHatching>),
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum FontSelect {
         PreDefinedTextFont(PreDefinedTextFontAny),
         ExternallyDefinedTextFont(Box<ExternallyDefinedTextFont>),
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum GeometricSetSelect {
         Point(PointAny),
         Curve(CurveAny),
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum HidingOrBlankingSelect {
         PresentationArea(PresentationAreaAny),
         PresentationView(Box<PresentationView>),
         AnnotationFillArea(Box<AnnotationFillArea>),
     }
     pub type Identifier = String;
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum InvisibilityContext {
         PresentationLayerUsage(Box<PresentationLayerUsage>),
         PresentationRepresentation(PresentationRepresentationAny),
         PresentationSet(PresentationSetAny),
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum InvisibleItem {
         StyledItem(StyledItemAny),
         PresentationLayerAssignment(Box<PresentationLayerAssignment>),
         PresentationRepresentation(PresentationRepresentationAny),
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum KnotType {
         UniformKnots,
         QuasiUniformKnots,
@@ -4350,13 +4350,13 @@ pub mod explicit_draughting {
         Unspecified,
     }
     pub type Label = String;
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum LayeredItem {
         PresentationRepresentation(PresentationRepresentationAny),
         RepresentationItem(RepresentationItemAny),
     }
     pub type LengthMeasure = f64;
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum MeasureValue {
         LengthMeasure(Box<LengthMeasure>),
         PlaneAngleMeasure(Box<PlaneAngleMeasure>),
@@ -4366,12 +4366,12 @@ pub mod explicit_draughting {
         PositiveRatioMeasure(Box<PositiveRatioMeasure>),
     }
     pub type MonthInYearNumber = i64;
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum NullStyle {
         Null,
     }
     pub type ParameterValue = f64;
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum PersonOrganizationSelect {
         Person(Box<Person>),
         Organization(Box<Organization>),
@@ -4381,18 +4381,18 @@ pub mod explicit_draughting {
     pub type PositiveLengthMeasure = LengthMeasure;
     pub type PositiveRatioMeasure = RatioMeasure;
     pub type PresentableText = String;
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum PresentationRepresentationSelect {
         PresentationRepresentation(PresentationRepresentationAny),
         PresentationSet(PresentationSetAny),
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum PresentationSizeAssignmentSelect {
         PresentationView(Box<PresentationView>),
         PresentationArea(PresentationAreaAny),
         AreaInSet(AreaInSetAny),
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum PresentationStyleSelect {
         CurveStyle(Box<CurveStyle>),
         SymbolStyle(Box<SymbolStyle>),
@@ -4401,11 +4401,11 @@ pub mod explicit_draughting {
         NullStyle(Box<NullStyle>),
     }
     pub type RatioMeasure = f64;
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum ShapeDefinition {
         ProductDefinitionShape(Box<ProductDefinitionShape>),
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum SiPrefix {
         Exa,
         Pico,
@@ -4424,7 +4424,7 @@ pub mod explicit_draughting {
         Kilo,
         Deca,
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum SiUnitName {
         Hertz,
         DegreeCelsius,
@@ -4455,74 +4455,74 @@ pub mod explicit_draughting {
         Weber,
         Coulomb,
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum SizeSelect {
         PositiveLengthMeasure(Box<PositiveLengthMeasure>),
         MeasureWithUnit(MeasureWithUnitAny),
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum SourceItem {
         Identifier(Box<Identifier>),
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum SpecifiedItem {
         DrawingRevision(DrawingRevisionAny),
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum StyleContextSelect {
         Representation(RepresentationAny),
         RepresentationItem(RepresentationItemAny),
         PresentationSet(PresentationSetAny),
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum SymbolStyleSelect {
         SymbolColour(Box<SymbolColour>),
     }
     pub type Text = String;
     pub type TextAlignment = Label;
     pub type TextDelineation = Label;
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum TextOrCharacter {
         AnnotationText(Box<AnnotationText>),
         CompositeText(CompositeTextAny),
         TextLiteral(TextLiteralAny),
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum TextPath {
         Up,
         Right,
         Down,
         Left,
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum TransitionCode {
         Discontinuous,
         ContSameGradientSameCurvature,
         ContSameGradient,
         Continuous,
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum TrimmingPreference {
         Parameter,
         Unspecified,
         Cartesian,
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum TrimmingSelect {
         CartesianPoint(Box<CartesianPoint>),
         ParameterValue(Box<ParameterValue>),
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum Unit {
         NamedUnit(NamedUnitAny),
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum VectorOrDirection {
         Vector(Box<Vector>),
         Direction(Box<Direction>),
     }
     pub type YearNumber = i64;
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct Address {
         pub internal_location: Option<Label>,
         pub street_number: Option<Label>,
@@ -4537,7 +4537,7 @@ pub mod explicit_draughting {
         pub electronic_mail_address: Option<Label>,
         pub telex_number: Option<Label>,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct AddressHolder {
         internal_location: Option<Label>,
         street_number: Option<Label>,
@@ -4565,14 +4565,14 @@ pub mod explicit_draughting {
             12usize
         }
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum AddressAny {
         OrganizationalAddress(Box<OrganizationalAddress>),
         PersonalAddress(Box<PersonalAddress>),
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct AngularDimension {}
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct AngularDimensionHolder {}
     impl Holder for AngularDimensionHolder {
         type Table = Tables;
@@ -4587,9 +4587,9 @@ pub mod explicit_draughting {
             0usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct AnnotationCurveOccurrence {}
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct AnnotationCurveOccurrenceHolder {}
     impl Holder for AnnotationCurveOccurrenceHolder {
         type Table = Tables;
@@ -4604,17 +4604,17 @@ pub mod explicit_draughting {
             0usize
         }
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum AnnotationCurveOccurrenceAny {
         DimensionCurve(Box<DimensionCurve>),
         LeaderCurve(Box<LeaderCurve>),
         ProjectionCurve(Box<ProjectionCurve>),
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct AnnotationFillArea {
         pub boundaries: Vec<CurveAny>,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct AnnotationFillAreaHolder {
         boundaries: PlaceHolder<Vec<CurveAny>>,
     }
@@ -4631,11 +4631,11 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct AnnotationFillAreaOccurrence {
         pub fill_style_target: PointAny,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct AnnotationFillAreaOccurrenceHolder {
         fill_style_target: PlaceHolder<PointAny>,
     }
@@ -4652,9 +4652,9 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct AnnotationOccurrence {}
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct AnnotationOccurrenceHolder {}
     impl Holder for AnnotationOccurrenceHolder {
         type Table = Tables;
@@ -4669,7 +4669,7 @@ pub mod explicit_draughting {
             0usize
         }
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum AnnotationOccurrenceAny {
         AnnotationCurveOccurrence(Box<AnnotationCurveOccurrence>),
         AnnotationFillAreaOccurrence(Box<AnnotationFillAreaOccurrence>),
@@ -4677,9 +4677,9 @@ pub mod explicit_draughting {
         AnnotationTextOccurrence(Box<AnnotationTextOccurrence>),
         DraughtingAnnotationOccurrence(Box<DraughtingAnnotationOccurrence>),
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct AnnotationSubfigureOccurrence {}
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct AnnotationSubfigureOccurrenceHolder {}
     impl Holder for AnnotationSubfigureOccurrenceHolder {
         type Table = Tables;
@@ -4694,9 +4694,9 @@ pub mod explicit_draughting {
             0usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct AnnotationSymbol {}
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct AnnotationSymbolHolder {}
     impl Holder for AnnotationSymbolHolder {
         type Table = Tables;
@@ -4711,9 +4711,9 @@ pub mod explicit_draughting {
             0usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct AnnotationSymbolOccurrence {}
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct AnnotationSymbolOccurrenceHolder {}
     impl Holder for AnnotationSymbolOccurrenceHolder {
         type Table = Tables;
@@ -4728,14 +4728,14 @@ pub mod explicit_draughting {
             0usize
         }
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum AnnotationSymbolOccurrenceAny {
         AnnotationSubfigureOccurrence(Box<AnnotationSubfigureOccurrence>),
         TerminatorSymbol(Box<TerminatorSymbol>),
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct AnnotationText {}
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct AnnotationTextHolder {}
     impl Holder for AnnotationTextHolder {
         type Table = Tables;
@@ -4750,9 +4750,9 @@ pub mod explicit_draughting {
             0usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct AnnotationTextOccurrence {}
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct AnnotationTextOccurrenceHolder {}
     impl Holder for AnnotationTextOccurrenceHolder {
         type Table = Tables;
@@ -4767,11 +4767,11 @@ pub mod explicit_draughting {
             0usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct ApplicationContext {
         pub application: Text,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct ApplicationContextHolder {
         application: Text,
     }
@@ -4788,12 +4788,12 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct ApplicationContextElement {
         pub name: Label,
         pub frame_of_reference: ApplicationContext,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct ApplicationContextElementHolder {
         name: Label,
         frame_of_reference: PlaceHolder<ApplicationContext>,
@@ -4811,19 +4811,19 @@ pub mod explicit_draughting {
             2usize
         }
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum ApplicationContextElementAny {
         ProductContext(Box<ProductContext>),
         ProductDefinitionContext(Box<ProductDefinitionContext>),
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct ApplicationProtocolDefinition {
         pub status: Label,
         pub application_interpreted_model_schema_name: Label,
         pub application_protocol_year: YearNumber,
         pub application: ApplicationContext,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct ApplicationProtocolDefinitionHolder {
         status: Label,
         application_interpreted_model_schema_name: Label,
@@ -4843,12 +4843,12 @@ pub mod explicit_draughting {
             4usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct Approval {
         pub status: ApprovalStatus,
         pub level: Label,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct ApprovalHolder {
         status: PlaceHolder<ApprovalStatus>,
         level: Label,
@@ -4866,11 +4866,11 @@ pub mod explicit_draughting {
             2usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct ApprovalAssignment {
         pub assigned_approval: Approval,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct ApprovalAssignmentHolder {
         assigned_approval: PlaceHolder<Approval>,
     }
@@ -4887,16 +4887,16 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum ApprovalAssignmentAny {
         DraughtingApprovalAssignment(Box<DraughtingApprovalAssignment>),
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct ApprovalDateTime {
         pub date_time: DateTimeSelect,
         pub dated_approval: Approval,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct ApprovalDateTimeHolder {
         date_time: PlaceHolder<DateTimeSelect>,
         dated_approval: PlaceHolder<Approval>,
@@ -4914,13 +4914,13 @@ pub mod explicit_draughting {
             2usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct ApprovalPersonOrganization {
         pub person_organization: PersonOrganizationSelect,
         pub authorized_approval: Approval,
         pub role: ApprovalRole,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct ApprovalPersonOrganizationHolder {
         person_organization: PlaceHolder<PersonOrganizationSelect>,
         authorized_approval: PlaceHolder<Approval>,
@@ -4939,11 +4939,11 @@ pub mod explicit_draughting {
             3usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct ApprovalRole {
         pub role: Label,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct ApprovalRoleHolder {
         role: Label,
     }
@@ -4960,11 +4960,11 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct ApprovalStatus {
         pub name: Label,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct ApprovalStatusHolder {
         name: Label,
     }
@@ -4981,12 +4981,12 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct AreaInSet {
         pub area: PresentationAreaAny,
         pub in_set: PresentationSetAny,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct AreaInSetHolder {
         area: PlaceHolder<PresentationAreaAny>,
         in_set: PlaceHolder<PresentationSetAny>,
@@ -5004,15 +5004,15 @@ pub mod explicit_draughting {
             2usize
         }
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum AreaInSetAny {
         DrawingSheetRevisionUsage(Box<DrawingSheetRevisionUsage>),
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct Axis2Placement2D {
         pub ref_direction: Option<Direction>,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct Axis2Placement2DHolder {
         ref_direction: Option<PlaceHolder<Direction>>,
     }
@@ -5029,7 +5029,7 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct BSplineCurve {
         pub degree: i64,
         pub control_points_list: Vec<CartesianPoint>,
@@ -5037,7 +5037,7 @@ pub mod explicit_draughting {
         pub closed_curve: Logical,
         pub self_intersect: Logical,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct BSplineCurveHolder {
         degree: i64,
         control_points_list: PlaceHolder<Vec<CartesianPoint>>,
@@ -5058,7 +5058,7 @@ pub mod explicit_draughting {
             5usize
         }
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum BSplineCurveAny {
         BSplineCurveWithKnots(Box<BSplineCurveWithKnots>),
         BezierCurve(Box<BezierCurve>),
@@ -5066,13 +5066,13 @@ pub mod explicit_draughting {
         RationalBSplineCurve(Box<RationalBSplineCurve>),
         UniformCurve(Box<UniformCurve>),
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct BSplineCurveWithKnots {
         pub knot_multiplicities: Vec<i64>,
         pub knots: Vec<ParameterValue>,
         pub knot_spec: KnotType,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct BSplineCurveWithKnotsHolder {
         knot_multiplicities: PlaceHolder<Vec<i64>>,
         knots: PlaceHolder<Vec<ParameterValue>>,
@@ -5091,9 +5091,9 @@ pub mod explicit_draughting {
             3usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct BezierCurve {}
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct BezierCurveHolder {}
     impl Holder for BezierCurveHolder {
         type Table = Tables;
@@ -5108,9 +5108,9 @@ pub mod explicit_draughting {
             0usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct BoundedCurve {}
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct BoundedCurveHolder {}
     impl Holder for BoundedCurveHolder {
         type Table = Tables;
@@ -5125,19 +5125,19 @@ pub mod explicit_draughting {
             0usize
         }
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum BoundedCurveAny {
         BSplineCurve(Box<BSplineCurve>),
         CompositeCurve(Box<CompositeCurve>),
         Polyline(Box<Polyline>),
         TrimmedCurve(Box<TrimmedCurve>),
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct CalendarDate {
         pub day_component: DayInMonthNumber,
         pub month_component: MonthInYearNumber,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct CalendarDateHolder {
         day_component: DayInMonthNumber,
         month_component: MonthInYearNumber,
@@ -5155,9 +5155,9 @@ pub mod explicit_draughting {
             2usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct CameraImage {}
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct CameraImageHolder {}
     impl Holder for CameraImageHolder {
         type Table = Tables;
@@ -5172,13 +5172,13 @@ pub mod explicit_draughting {
             0usize
         }
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum CameraImageAny {
         CameraImage2DWithScale(Box<CameraImage2DWithScale>),
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct CameraImage2DWithScale {}
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct CameraImage2DWithScaleHolder {}
     impl Holder for CameraImage2DWithScaleHolder {
         type Table = Tables;
@@ -5193,9 +5193,9 @@ pub mod explicit_draughting {
             0usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct CameraModel {}
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct CameraModelHolder {}
     impl Holder for CameraModelHolder {
         type Table = Tables;
@@ -5210,16 +5210,16 @@ pub mod explicit_draughting {
             0usize
         }
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum CameraModelAny {
         CameraModelD2(Box<CameraModelD2>),
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct CameraModelD2 {
         pub view_window: PlanarBox,
         pub view_window_clipping: bool,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct CameraModelD2Holder {
         view_window: PlaceHolder<PlanarBox>,
         view_window_clipping: bool,
@@ -5237,9 +5237,9 @@ pub mod explicit_draughting {
             2usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct CameraUsage {}
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct CameraUsageHolder {}
     impl Holder for CameraUsageHolder {
         type Table = Tables;
@@ -5254,11 +5254,11 @@ pub mod explicit_draughting {
             0usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct CartesianPoint {
         pub coordinates: Vec<LengthMeasure>,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct CartesianPointHolder {
         coordinates: PlaceHolder<Vec<LengthMeasure>>,
     }
@@ -5275,11 +5275,11 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct Circle {
         pub radius: PositiveLengthMeasure,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct CircleHolder {
         radius: PositiveLengthMeasure,
     }
@@ -5296,9 +5296,9 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct Colour {}
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct ColourHolder {}
     impl Holder for ColourHolder {
         type Table = Tables;
@@ -5313,18 +5313,18 @@ pub mod explicit_draughting {
             0usize
         }
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum ColourAny {
         ColourSpecification(Box<ColourSpecification>),
         PreDefinedColour(Box<PreDefinedColour>),
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct ColourRgb {
         pub red: f64,
         pub green: f64,
         pub blue: f64,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct ColourRgbHolder {
         red: f64,
         green: f64,
@@ -5343,11 +5343,11 @@ pub mod explicit_draughting {
             3usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct ColourSpecification {
         pub name: ColourAny,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct ColourSpecificationHolder {
         name: PlaceHolder<ColourAny>,
     }
@@ -5364,16 +5364,16 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum ColourSpecificationAny {
         ColourRgb(Box<ColourRgb>),
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct CompositeCurve {
         pub segments: Vec<CompositeCurveSegment>,
         pub self_intersect: Logical,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct CompositeCurveHolder {
         segments: PlaceHolder<Vec<CompositeCurveSegment>>,
         self_intersect: Logical,
@@ -5391,13 +5391,13 @@ pub mod explicit_draughting {
             2usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct CompositeCurveSegment {
         pub transition: TransitionCode,
         pub same_sense: bool,
         pub parent_curve: CurveAny,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct CompositeCurveSegmentHolder {
         transition: PlaceHolder<TransitionCode>,
         same_sense: bool,
@@ -5416,11 +5416,11 @@ pub mod explicit_draughting {
             3usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct CompositeText {
         pub collected_text: Vec<TextOrCharacter>,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct CompositeTextHolder {
         collected_text: PlaceHolder<Vec<TextOrCharacter>>,
     }
@@ -5437,17 +5437,17 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum CompositeTextAny {
         CompositeTextWithAssociatedCurves(Box<CompositeTextWithAssociatedCurves>),
         CompositeTextWithBlankingBox(Box<CompositeTextWithBlankingBox>),
         CompositeTextWithExtent(Box<CompositeTextWithExtent>),
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct CompositeTextWithAssociatedCurves {
         pub associated_curves: Vec<CurveAny>,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct CompositeTextWithAssociatedCurvesHolder {
         associated_curves: PlaceHolder<Vec<CurveAny>>,
     }
@@ -5464,11 +5464,11 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct CompositeTextWithBlankingBox {
         pub blanking: PlanarBox,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct CompositeTextWithBlankingBoxHolder {
         blanking: PlaceHolder<PlanarBox>,
     }
@@ -5485,11 +5485,11 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct CompositeTextWithExtent {
         pub extent: PlanarExtentAny,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct CompositeTextWithExtentHolder {
         extent: PlaceHolder<PlanarExtentAny>,
     }
@@ -5506,11 +5506,11 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct Conic {
         pub position: Axis2Placement,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct ConicHolder {
         position: PlaceHolder<Axis2Placement>,
     }
@@ -5527,18 +5527,18 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum ConicAny {
         Circle(Box<Circle>),
         Ellipse(Box<Ellipse>),
         Hyperbola(Box<Hyperbola>),
         Parabola(Box<Parabola>),
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct ContextDependentInvisibility {
         pub presentation_context: InvisibilityContext,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct ContextDependentInvisibilityHolder {
         presentation_context: PlaceHolder<InvisibilityContext>,
     }
@@ -5555,13 +5555,13 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct Contract {
         pub name: Label,
         pub purpose: Text,
         pub kind: ContractType,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct ContractHolder {
         name: Label,
         purpose: Text,
@@ -5580,11 +5580,11 @@ pub mod explicit_draughting {
             3usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct ContractAssignment {
         pub assigned_contract: Contract,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct ContractAssignmentHolder {
         assigned_contract: PlaceHolder<Contract>,
     }
@@ -5601,15 +5601,15 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum ContractAssignmentAny {
         DraughtingContractAssignment(Box<DraughtingContractAssignment>),
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct ContractType {
         pub description: Label,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct ContractTypeHolder {
         description: Label,
     }
@@ -5626,12 +5626,12 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct ConversionBasedUnit {
         pub name: Label,
         pub conversion_factor: MeasureWithUnitAny,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct ConversionBasedUnitHolder {
         name: Label,
         conversion_factor: PlaceHolder<MeasureWithUnitAny>,
@@ -5649,9 +5649,9 @@ pub mod explicit_draughting {
             2usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct Curve {}
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct CurveHolder {}
     impl Holder for CurveHolder {
         type Table = Tables;
@@ -5666,16 +5666,16 @@ pub mod explicit_draughting {
             0usize
         }
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum CurveAny {
         BoundedCurve(Box<BoundedCurve>),
         Conic(Box<Conic>),
         Line(Box<Line>),
         OffsetCurve2D(Box<OffsetCurve2D>),
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct CurveDimension {}
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct CurveDimensionHolder {}
     impl Holder for CurveDimensionHolder {
         type Table = Tables;
@@ -5690,14 +5690,14 @@ pub mod explicit_draughting {
             0usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct CurveStyle {
         pub name: Label,
         pub curve_font: CurveFontOrScaledCurveFontSelect,
         pub curve_width: SizeSelect,
         pub curve_colour: ColourAny,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct CurveStyleHolder {
         name: Label,
         curve_font: PlaceHolder<CurveFontOrScaledCurveFontSelect>,
@@ -5717,12 +5717,12 @@ pub mod explicit_draughting {
             4usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct CurveStyleFont {
         pub name: Label,
         pub pattern_list: Vec<CurveStyleFontPattern>,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct CurveStyleFontHolder {
         name: Label,
         pattern_list: PlaceHolder<Vec<CurveStyleFontPattern>>,
@@ -5740,12 +5740,12 @@ pub mod explicit_draughting {
             2usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct CurveStyleFontPattern {
         pub visible_segment_length: PositiveLengthMeasure,
         pub invisible_segment_length: PositiveLengthMeasure,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct CurveStyleFontPatternHolder {
         visible_segment_length: PositiveLengthMeasure,
         invisible_segment_length: PositiveLengthMeasure,
@@ -5763,11 +5763,11 @@ pub mod explicit_draughting {
             2usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct Date {
         pub year_component: YearNumber,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct DateHolder {
         year_component: YearNumber,
     }
@@ -5784,13 +5784,13 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum DateAny {
         CalendarDate(Box<CalendarDate>),
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct DatumFeatureCallout {}
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct DatumFeatureCalloutHolder {}
     impl Holder for DatumFeatureCalloutHolder {
         type Table = Tables;
@@ -5805,9 +5805,9 @@ pub mod explicit_draughting {
             0usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct DatumTargetCallout {}
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct DatumTargetCalloutHolder {}
     impl Holder for DatumTargetCalloutHolder {
         type Table = Tables;
@@ -5822,12 +5822,12 @@ pub mod explicit_draughting {
             0usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct DefinedSymbol {
         pub definition: DefinedSymbolSelect,
         pub target: SymbolTarget,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct DefinedSymbolHolder {
         definition: PlaceHolder<DefinedSymbolSelect>,
         target: PlaceHolder<SymbolTarget>,
@@ -5845,9 +5845,9 @@ pub mod explicit_draughting {
             2usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct DiameterDimension {}
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct DiameterDimensionHolder {}
     impl Holder for DiameterDimensionHolder {
         type Table = Tables;
@@ -5862,9 +5862,9 @@ pub mod explicit_draughting {
             0usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct DimensionCalloutComponentRelationship {}
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct DimensionCalloutComponentRelationshipHolder {}
     impl Holder for DimensionCalloutComponentRelationshipHolder {
         type Table = Tables;
@@ -5879,9 +5879,9 @@ pub mod explicit_draughting {
             0usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct DimensionCalloutRelationship {}
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct DimensionCalloutRelationshipHolder {}
     impl Holder for DimensionCalloutRelationshipHolder {
         type Table = Tables;
@@ -5896,9 +5896,9 @@ pub mod explicit_draughting {
             0usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct DimensionCurve {}
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct DimensionCurveHolder {}
     impl Holder for DimensionCurveHolder {
         type Table = Tables;
@@ -5913,9 +5913,9 @@ pub mod explicit_draughting {
             0usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct DimensionCurveDirectedCallout {}
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct DimensionCurveDirectedCalloutHolder {}
     impl Holder for DimensionCurveDirectedCalloutHolder {
         type Table = Tables;
@@ -5930,7 +5930,7 @@ pub mod explicit_draughting {
             0usize
         }
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum DimensionCurveDirectedCalloutAny {
         AngularDimension(Box<AngularDimension>),
         CurveDimension(Box<CurveDimension>),
@@ -5938,11 +5938,11 @@ pub mod explicit_draughting {
         LinearDimension(Box<LinearDimension>),
         RadiusDimension(Box<RadiusDimension>),
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct DimensionCurveTerminator {
         pub role: DimensionExtentUsage,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct DimensionCurveTerminatorHolder {
         role: PlaceHolder<DimensionExtentUsage>,
     }
@@ -5959,9 +5959,9 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct DimensionPair {}
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct DimensionPairHolder {}
     impl Holder for DimensionPairHolder {
         type Table = Tables;
@@ -5976,7 +5976,7 @@ pub mod explicit_draughting {
             0usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct DimensionalExponents {
         pub length_exponent: f64,
         pub mass_exponent: f64,
@@ -5986,7 +5986,7 @@ pub mod explicit_draughting {
         pub amount_of_substance_exponent: f64,
         pub luminous_intensity_exponent: f64,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct DimensionalExponentsHolder {
         length_exponent: f64,
         mass_exponent: f64,
@@ -6009,11 +6009,11 @@ pub mod explicit_draughting {
             7usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct Direction {
         pub direction_ratios: Vec<f64>,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct DirectionHolder {
         direction_ratios: PlaceHolder<Vec<f64>>,
     }
@@ -6030,14 +6030,14 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct Document {
         pub id: Identifier,
         pub name: Label,
         pub description: Text,
         pub kind: DocumentType,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct DocumentHolder {
         id: Identifier,
         name: Label,
@@ -6057,12 +6057,12 @@ pub mod explicit_draughting {
             4usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct DocumentReference {
         pub assigned_document: Document,
         pub source: Label,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct DocumentReferenceHolder {
         assigned_document: PlaceHolder<Document>,
         source: Label,
@@ -6080,15 +6080,15 @@ pub mod explicit_draughting {
             2usize
         }
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum DocumentReferenceAny {
         DraughtingSpecificationReference(Box<DraughtingSpecificationReference>),
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct DocumentType {
         pub product_data_type: Label,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct DocumentTypeHolder {
         product_data_type: Label,
     }
@@ -6105,9 +6105,9 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct DraughtingAnnotationOccurrence {}
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct DraughtingAnnotationOccurrenceHolder {}
     impl Holder for DraughtingAnnotationOccurrenceHolder {
         type Table = Tables;
@@ -6122,11 +6122,11 @@ pub mod explicit_draughting {
             0usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct DraughtingApprovalAssignment {
         pub approved_items: Vec<ApprovedItem>,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct DraughtingApprovalAssignmentHolder {
         approved_items: PlaceHolder<Vec<ApprovedItem>>,
     }
@@ -6143,11 +6143,11 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct DraughtingCallout {
         pub contents: Vec<DraughtingCalloutElement>,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct DraughtingCalloutHolder {
         contents: PlaceHolder<Vec<DraughtingCalloutElement>>,
     }
@@ -6164,7 +6164,7 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum DraughtingCalloutAny {
         DatumFeatureCallout(Box<DatumFeatureCallout>),
         DatumTargetCallout(Box<DatumTargetCallout>),
@@ -6175,14 +6175,14 @@ pub mod explicit_draughting {
         ProjectionDirectedCallout(Box<ProjectionDirectedCallout>),
         StructuredDimensionCallout(Box<StructuredDimensionCallout>),
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct DraughtingCalloutRelationship {
         pub name: Label,
         pub description: Text,
         pub relating_draughting_callout: DraughtingCalloutAny,
         pub related_draughting_callout: DraughtingCalloutAny,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct DraughtingCalloutRelationshipHolder {
         name: Label,
         description: Text,
@@ -6202,17 +6202,17 @@ pub mod explicit_draughting {
             4usize
         }
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum DraughtingCalloutRelationshipAny {
         DimensionCalloutComponentRelationship(Box<DimensionCalloutComponentRelationship>),
         DimensionCalloutRelationship(Box<DimensionCalloutRelationship>),
         DimensionPair(Box<DimensionPair>),
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct DraughtingContractAssignment {
         pub items: Vec<ContractedItem>,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct DraughtingContractAssignmentHolder {
         items: PlaceHolder<Vec<ContractedItem>>,
     }
@@ -6229,9 +6229,9 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct DraughtingDrawingRevision {}
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct DraughtingDrawingRevisionHolder {}
     impl Holder for DraughtingDrawingRevisionHolder {
         type Table = Tables;
@@ -6246,9 +6246,9 @@ pub mod explicit_draughting {
             0usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct DraughtingElements {}
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct DraughtingElementsHolder {}
     impl Holder for DraughtingElementsHolder {
         type Table = Tables;
@@ -6263,11 +6263,11 @@ pub mod explicit_draughting {
             0usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct DraughtingGroupAssignment {
         pub items: Vec<DraughtingGroupedItem>,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct DraughtingGroupAssignmentHolder {
         items: PlaceHolder<Vec<DraughtingGroupedItem>>,
     }
@@ -6284,9 +6284,9 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct DraughtingModel {}
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct DraughtingModelHolder {}
     impl Holder for DraughtingModelHolder {
         type Table = Tables;
@@ -6301,11 +6301,11 @@ pub mod explicit_draughting {
             0usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct DraughtingOrganizationAssignment {
         pub assigned_items: Vec<DraughtingOrganizationItem>,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct DraughtingOrganizationAssignmentHolder {
         assigned_items: PlaceHolder<Vec<DraughtingOrganizationItem>>,
     }
@@ -6322,11 +6322,11 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct DraughtingPersonAndOrganizationAssignment {
         pub assigned_items: Vec<DraughtingOrganizationItem>,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct DraughtingPersonAndOrganizationAssignmentHolder {
         assigned_items: PlaceHolder<Vec<DraughtingOrganizationItem>>,
     }
@@ -6343,11 +6343,11 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct DraughtingPersonAssignment {
         pub assigned_items: Vec<DraughtingOrganizationItem>,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct DraughtingPersonAssignmentHolder {
         assigned_items: PlaceHolder<Vec<DraughtingOrganizationItem>>,
     }
@@ -6364,9 +6364,9 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct DraughtingPreDefinedColour {}
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct DraughtingPreDefinedColourHolder {}
     impl Holder for DraughtingPreDefinedColourHolder {
         type Table = Tables;
@@ -6381,9 +6381,9 @@ pub mod explicit_draughting {
             0usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct DraughtingPreDefinedCurveFont {}
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct DraughtingPreDefinedCurveFontHolder {}
     impl Holder for DraughtingPreDefinedCurveFontHolder {
         type Table = Tables;
@@ -6398,9 +6398,9 @@ pub mod explicit_draughting {
             0usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct DraughtingPreDefinedTextFont {}
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct DraughtingPreDefinedTextFontHolder {}
     impl Holder for DraughtingPreDefinedTextFontHolder {
         type Table = Tables;
@@ -6415,11 +6415,11 @@ pub mod explicit_draughting {
             0usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct DraughtingPresentedItem {
         pub items: Vec<DraughtingPresentedItemSelect>,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct DraughtingPresentedItemHolder {
         items: PlaceHolder<Vec<DraughtingPresentedItemSelect>>,
     }
@@ -6436,11 +6436,11 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct DraughtingSecurityClassificationAssignment {
         pub assigned_items: Vec<ClassifiedItem>,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct DraughtingSecurityClassificationAssignmentHolder {
         assigned_items: PlaceHolder<Vec<ClassifiedItem>>,
     }
@@ -6457,11 +6457,11 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct DraughtingSpecificationReference {
         pub specified_items: Vec<SpecifiedItem>,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct DraughtingSpecificationReferenceHolder {
         specified_items: PlaceHolder<Vec<SpecifiedItem>>,
     }
@@ -6478,9 +6478,9 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct DraughtingSubfigureRepresentation {}
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct DraughtingSubfigureRepresentationHolder {}
     impl Holder for DraughtingSubfigureRepresentationHolder {
         type Table = Tables;
@@ -6495,9 +6495,9 @@ pub mod explicit_draughting {
             0usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct DraughtingSymbolRepresentation {}
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct DraughtingSymbolRepresentationHolder {}
     impl Holder for DraughtingSymbolRepresentationHolder {
         type Table = Tables;
@@ -6512,13 +6512,13 @@ pub mod explicit_draughting {
             0usize
         }
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum DraughtingSymbolRepresentationAny {
         DrawingSheetLayout(Box<DrawingSheetLayout>),
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct DraughtingTextLiteralWithDelineation {}
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct DraughtingTextLiteralWithDelineationHolder {}
     impl Holder for DraughtingTextLiteralWithDelineationHolder {
         type Table = Tables;
@@ -6533,13 +6533,13 @@ pub mod explicit_draughting {
             0usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct DraughtingTitle {
         pub items: Vec<DraughtingTitledItem>,
         pub language: Label,
         pub contents: Text,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct DraughtingTitleHolder {
         items: PlaceHolder<Vec<DraughtingTitledItem>>,
         language: Label,
@@ -6558,12 +6558,12 @@ pub mod explicit_draughting {
             3usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct DrawingDefinition {
         pub drawing_number: Identifier,
         pub drawing_type: Option<Label>,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct DrawingDefinitionHolder {
         drawing_number: Identifier,
         drawing_type: Option<Label>,
@@ -6581,13 +6581,13 @@ pub mod explicit_draughting {
             2usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct DrawingRevision {
         pub revision_identifier: Identifier,
         pub drawing_identifier: DrawingDefinition,
         pub intended_scale: Option<Text>,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct DrawingRevisionHolder {
         revision_identifier: Identifier,
         drawing_identifier: PlaceHolder<DrawingDefinition>,
@@ -6606,13 +6606,13 @@ pub mod explicit_draughting {
             3usize
         }
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum DrawingRevisionAny {
         DraughtingDrawingRevision(Box<DraughtingDrawingRevision>),
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct DrawingSheetLayout {}
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct DrawingSheetLayoutHolder {}
     impl Holder for DrawingSheetLayoutHolder {
         type Table = Tables;
@@ -6627,11 +6627,11 @@ pub mod explicit_draughting {
             0usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct DrawingSheetRevision {
         pub revision_identifier: Identifier,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct DrawingSheetRevisionHolder {
         revision_identifier: Identifier,
     }
@@ -6648,11 +6648,11 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct DrawingSheetRevisionUsage {
         pub sheet_number: Identifier,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct DrawingSheetRevisionUsageHolder {
         sheet_number: Identifier,
     }
@@ -6669,12 +6669,12 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct Ellipse {
         pub semi_axis_1: PositiveLengthMeasure,
         pub semi_axis_2: PositiveLengthMeasure,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct EllipseHolder {
         semi_axis_1: PositiveLengthMeasure,
         semi_axis_2: PositiveLengthMeasure,
@@ -6692,11 +6692,11 @@ pub mod explicit_draughting {
             2usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct ExternalSource {
         pub source_id: SourceItem,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct ExternalSourceHolder {
         source_id: PlaceHolder<SourceItem>,
     }
@@ -6713,9 +6713,9 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct ExternallyDefinedCurveFont {}
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct ExternallyDefinedCurveFontHolder {}
     impl Holder for ExternallyDefinedCurveFontHolder {
         type Table = Tables;
@@ -6730,9 +6730,9 @@ pub mod explicit_draughting {
             0usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct ExternallyDefinedHatchStyle {}
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct ExternallyDefinedHatchStyleHolder {}
     impl Holder for ExternallyDefinedHatchStyleHolder {
         type Table = Tables;
@@ -6747,12 +6747,12 @@ pub mod explicit_draughting {
             0usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct ExternallyDefinedItem {
         pub item_id: SourceItem,
         pub source: ExternalSource,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct ExternallyDefinedItemHolder {
         item_id: PlaceHolder<SourceItem>,
         source: PlaceHolder<ExternalSource>,
@@ -6770,7 +6770,7 @@ pub mod explicit_draughting {
             2usize
         }
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum ExternallyDefinedItemAny {
         ExternallyDefinedCurveFont(Box<ExternallyDefinedCurveFont>),
         ExternallyDefinedHatchStyle(Box<ExternallyDefinedHatchStyle>),
@@ -6778,9 +6778,9 @@ pub mod explicit_draughting {
         ExternallyDefinedTextFont(Box<ExternallyDefinedTextFont>),
         ExternallyDefinedTileStyle(Box<ExternallyDefinedTileStyle>),
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct ExternallyDefinedSymbol {}
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct ExternallyDefinedSymbolHolder {}
     impl Holder for ExternallyDefinedSymbolHolder {
         type Table = Tables;
@@ -6795,9 +6795,9 @@ pub mod explicit_draughting {
             0usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct ExternallyDefinedTextFont {}
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct ExternallyDefinedTextFontHolder {}
     impl Holder for ExternallyDefinedTextFontHolder {
         type Table = Tables;
@@ -6812,9 +6812,9 @@ pub mod explicit_draughting {
             0usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct ExternallyDefinedTileStyle {}
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct ExternallyDefinedTileStyleHolder {}
     impl Holder for ExternallyDefinedTileStyleHolder {
         type Table = Tables;
@@ -6829,12 +6829,12 @@ pub mod explicit_draughting {
             0usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct FillAreaStyle {
         pub name: Label,
         pub fill_styles: Vec<FillStyleSelect>,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct FillAreaStyleHolder {
         name: Label,
         fill_styles: PlaceHolder<Vec<FillStyleSelect>>,
@@ -6852,12 +6852,12 @@ pub mod explicit_draughting {
             2usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct FillAreaStyleColour {
         pub name: Label,
         pub fill_colour: ColourAny,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct FillAreaStyleColourHolder {
         name: Label,
         fill_colour: PlaceHolder<ColourAny>,
@@ -6875,7 +6875,7 @@ pub mod explicit_draughting {
             2usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct FillAreaStyleHatching {
         pub hatch_line_appearance: CurveStyle,
         pub start_of_next_hatch_line: OneDirectionRepeatFactorAny,
@@ -6883,7 +6883,7 @@ pub mod explicit_draughting {
         pub pattern_start: CartesianPoint,
         pub hatch_line_angle: PlaneAngleMeasure,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct FillAreaStyleHatchingHolder {
         hatch_line_appearance: PlaceHolder<CurveStyle>,
         start_of_next_hatch_line: PlaceHolder<OneDirectionRepeatFactorAny>,
@@ -6904,11 +6904,11 @@ pub mod explicit_draughting {
             5usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct FillAreaStyleTileSymbolWithStyle {
         pub symbol: AnnotationSymbolOccurrenceAny,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct FillAreaStyleTileSymbolWithStyleHolder {
         symbol: PlaceHolder<AnnotationSymbolOccurrenceAny>,
     }
@@ -6925,13 +6925,13 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct FillAreaStyleTiles {
         pub tiling_pattern: TwoDirectionRepeatFactor,
         pub tiles: Vec<FillAreaStyleTileShapeSelect>,
         pub tiling_scale: PositiveRatioMeasure,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct FillAreaStyleTilesHolder {
         tiling_pattern: PlaceHolder<TwoDirectionRepeatFactor>,
         tiles: PlaceHolder<Vec<FillAreaStyleTileShapeSelect>>,
@@ -6950,9 +6950,9 @@ pub mod explicit_draughting {
             3usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct GeometricCurveSet {}
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct GeometricCurveSetHolder {}
     impl Holder for GeometricCurveSetHolder {
         type Table = Tables;
@@ -6967,11 +6967,11 @@ pub mod explicit_draughting {
             0usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct GeometricRepresentationContext {
         pub coordinate_space_dimension: DimensionCount,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct GeometricRepresentationContextHolder {
         coordinate_space_dimension: DimensionCount,
     }
@@ -6988,9 +6988,9 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct GeometricRepresentationItem {}
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct GeometricRepresentationItemHolder {}
     impl Holder for GeometricRepresentationItemHolder {
         type Table = Tables;
@@ -7005,7 +7005,7 @@ pub mod explicit_draughting {
             0usize
         }
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum GeometricRepresentationItemAny {
         AnnotationFillArea(Box<AnnotationFillArea>),
         CameraModel(Box<CameraModel>),
@@ -7028,11 +7028,11 @@ pub mod explicit_draughting {
         TextLiteral(Box<TextLiteral>),
         Vector(Box<Vector>),
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct GeometricSet {
         pub elements: Vec<GeometricSetSelect>,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct GeometricSetHolder {
         elements: PlaceHolder<Vec<GeometricSetSelect>>,
     }
@@ -7049,13 +7049,13 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum GeometricSetAny {
         GeometricCurveSet(Box<GeometricCurveSet>),
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct GeometricalToleranceCallout {}
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct GeometricalToleranceCalloutHolder {}
     impl Holder for GeometricalToleranceCalloutHolder {
         type Table = Tables;
@@ -7070,9 +7070,9 @@ pub mod explicit_draughting {
             0usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct GeometricallyBounded2DWireframeRepresentation {}
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct GeometricallyBounded2DWireframeRepresentationHolder {}
     impl Holder for GeometricallyBounded2DWireframeRepresentationHolder {
         type Table = Tables;
@@ -7087,11 +7087,11 @@ pub mod explicit_draughting {
             0usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct GlobalUnitAssignedContext {
         pub units: Vec<Unit>,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct GlobalUnitAssignedContextHolder {
         units: PlaceHolder<Vec<Unit>>,
     }
@@ -7108,12 +7108,12 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct Group {
         pub name: Label,
         pub description: Text,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct GroupHolder {
         name: Label,
         description: Text,
@@ -7131,11 +7131,11 @@ pub mod explicit_draughting {
             2usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct GroupAssignment {
         pub assigned_group: Group,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct GroupAssignmentHolder {
         assigned_group: PlaceHolder<Group>,
     }
@@ -7152,18 +7152,18 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum GroupAssignmentAny {
         DraughtingGroupAssignment(Box<DraughtingGroupAssignment>),
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct GroupRelationship {
         pub name: Label,
         pub description: Text,
         pub relating_group: Group,
         pub related_group: Group,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct GroupRelationshipHolder {
         name: Label,
         description: Text,
@@ -7183,12 +7183,12 @@ pub mod explicit_draughting {
             4usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct Hyperbola {
         pub semi_axis: PositiveLengthMeasure,
         pub semi_imag_axis: PositiveLengthMeasure,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct HyperbolaHolder {
         semi_axis: PositiveLengthMeasure,
         semi_imag_axis: PositiveLengthMeasure,
@@ -7206,11 +7206,11 @@ pub mod explicit_draughting {
             2usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct Invisibility {
         pub invisible_items: Vec<InvisibleItem>,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct InvisibilityHolder {
         invisible_items: PlaceHolder<Vec<InvisibleItem>>,
     }
@@ -7227,13 +7227,13 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum InvisibilityAny {
         ContextDependentInvisibility(Box<ContextDependentInvisibility>),
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct LeaderCurve {}
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct LeaderCurveHolder {}
     impl Holder for LeaderCurveHolder {
         type Table = Tables;
@@ -7248,9 +7248,9 @@ pub mod explicit_draughting {
             0usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct LeaderDirectedCallout {}
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct LeaderDirectedCalloutHolder {}
     impl Holder for LeaderDirectedCalloutHolder {
         type Table = Tables;
@@ -7265,13 +7265,13 @@ pub mod explicit_draughting {
             0usize
         }
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum LeaderDirectedCalloutAny {
         LeaderDirectedDimension(Box<LeaderDirectedDimension>),
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct LeaderDirectedDimension {}
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct LeaderDirectedDimensionHolder {}
     impl Holder for LeaderDirectedDimensionHolder {
         type Table = Tables;
@@ -7286,9 +7286,9 @@ pub mod explicit_draughting {
             0usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct LeaderTerminator {}
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct LeaderTerminatorHolder {}
     impl Holder for LeaderTerminatorHolder {
         type Table = Tables;
@@ -7303,9 +7303,9 @@ pub mod explicit_draughting {
             0usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct LengthMeasureWithUnit {}
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct LengthMeasureWithUnitHolder {}
     impl Holder for LengthMeasureWithUnitHolder {
         type Table = Tables;
@@ -7320,9 +7320,9 @@ pub mod explicit_draughting {
             0usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct LengthUnit {}
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct LengthUnitHolder {}
     impl Holder for LengthUnitHolder {
         type Table = Tables;
@@ -7337,12 +7337,12 @@ pub mod explicit_draughting {
             0usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct Line {
         pub pnt: CartesianPoint,
         pub dir: Vector,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct LineHolder {
         pnt: PlaceHolder<CartesianPoint>,
         dir: PlaceHolder<Vector>,
@@ -7360,9 +7360,9 @@ pub mod explicit_draughting {
             2usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct LinearDimension {}
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct LinearDimensionHolder {}
     impl Holder for LinearDimensionHolder {
         type Table = Tables;
@@ -7377,12 +7377,12 @@ pub mod explicit_draughting {
             0usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct MappedItem {
         pub mapping_source: RepresentationMapAny,
         pub mapping_target: RepresentationItemAny,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct MappedItemHolder {
         mapping_source: PlaceHolder<RepresentationMapAny>,
         mapping_target: PlaceHolder<RepresentationItemAny>,
@@ -7400,18 +7400,18 @@ pub mod explicit_draughting {
             2usize
         }
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum MappedItemAny {
         AnnotationSymbol(Box<AnnotationSymbol>),
         AnnotationText(Box<AnnotationText>),
         CameraImage(Box<CameraImage>),
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct MeasureWithUnit {
         pub value_component: MeasureValue,
         pub unit_component: Unit,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct MeasureWithUnitHolder {
         value_component: PlaceHolder<MeasureValue>,
         unit_component: PlaceHolder<Unit>,
@@ -7429,16 +7429,16 @@ pub mod explicit_draughting {
             2usize
         }
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum MeasureWithUnitAny {
         LengthMeasureWithUnit(Box<LengthMeasureWithUnit>),
         PlaneAngleMeasureWithUnit(Box<PlaneAngleMeasureWithUnit>),
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct NamedUnit {
         pub dimensions: DimensionalExponents,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct NamedUnitHolder {
         dimensions: PlaceHolder<DimensionalExponents>,
     }
@@ -7455,20 +7455,20 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum NamedUnitAny {
         ConversionBasedUnit(Box<ConversionBasedUnit>),
         LengthUnit(Box<LengthUnit>),
         PlaneAngleUnit(Box<PlaneAngleUnit>),
         SiUnit(Box<SiUnit>),
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct OffsetCurve2D {
         pub basis_curve: CurveAny,
         pub distance: LengthMeasure,
         pub self_intersect: Logical,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct OffsetCurve2DHolder {
         basis_curve: PlaceHolder<CurveAny>,
         distance: LengthMeasure,
@@ -7487,11 +7487,11 @@ pub mod explicit_draughting {
             3usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct OneDirectionRepeatFactor {
         pub repeat_factor: Vector,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct OneDirectionRepeatFactorHolder {
         repeat_factor: PlaceHolder<Vector>,
     }
@@ -7508,13 +7508,13 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum OneDirectionRepeatFactorAny {
         TwoDirectionRepeatFactor(Box<TwoDirectionRepeatFactor>),
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct OrdinateDimension {}
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct OrdinateDimensionHolder {}
     impl Holder for OrdinateDimensionHolder {
         type Table = Tables;
@@ -7529,13 +7529,13 @@ pub mod explicit_draughting {
             0usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct Organization {
         pub id: Option<Identifier>,
         pub name: Label,
         pub description: Text,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct OrganizationHolder {
         id: Option<Identifier>,
         name: Label,
@@ -7554,12 +7554,12 @@ pub mod explicit_draughting {
             3usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct OrganizationAssignment {
         pub assigned_organization: Organization,
         pub role: OrganizationRole,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct OrganizationAssignmentHolder {
         assigned_organization: PlaceHolder<Organization>,
         role: PlaceHolder<OrganizationRole>,
@@ -7577,15 +7577,15 @@ pub mod explicit_draughting {
             2usize
         }
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum OrganizationAssignmentAny {
         DraughtingOrganizationAssignment(Box<DraughtingOrganizationAssignment>),
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct OrganizationRole {
         pub name: Label,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct OrganizationRoleHolder {
         name: Label,
     }
@@ -7602,12 +7602,12 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct OrganizationalAddress {
         pub organizations: Vec<Organization>,
         pub description: Text,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct OrganizationalAddressHolder {
         organizations: PlaceHolder<Vec<Organization>>,
         description: Text,
@@ -7625,11 +7625,11 @@ pub mod explicit_draughting {
             2usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct Parabola {
         pub focal_dist: LengthMeasure,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct ParabolaHolder {
         focal_dist: LengthMeasure,
     }
@@ -7646,7 +7646,7 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct Person {
         pub id: Identifier,
         pub last_name: Option<Label>,
@@ -7655,7 +7655,7 @@ pub mod explicit_draughting {
         pub prefix_titles: Option<Vec<Label>>,
         pub suffix_titles: Option<Vec<Label>>,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct PersonHolder {
         id: Identifier,
         last_name: Option<Label>,
@@ -7677,12 +7677,12 @@ pub mod explicit_draughting {
             6usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct PersonAndOrganization {
         pub the_person: Person,
         pub the_organization: Organization,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct PersonAndOrganizationHolder {
         the_person: PlaceHolder<Person>,
         the_organization: PlaceHolder<Organization>,
@@ -7700,12 +7700,12 @@ pub mod explicit_draughting {
             2usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct PersonAndOrganizationAssignment {
         pub assigned_person_and_organization: PersonAndOrganization,
         pub role: PersonAndOrganizationRole,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct PersonAndOrganizationAssignmentHolder {
         assigned_person_and_organization: PlaceHolder<PersonAndOrganization>,
         role: PlaceHolder<PersonAndOrganizationRole>,
@@ -7723,15 +7723,15 @@ pub mod explicit_draughting {
             2usize
         }
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum PersonAndOrganizationAssignmentAny {
         DraughtingPersonAndOrganizationAssignment(Box<DraughtingPersonAndOrganizationAssignment>),
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct PersonAndOrganizationRole {
         pub name: Label,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct PersonAndOrganizationRoleHolder {
         name: Label,
     }
@@ -7748,12 +7748,12 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct PersonAssignment {
         pub assigned_person: Person,
         pub role: PersonRole,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct PersonAssignmentHolder {
         assigned_person: PlaceHolder<Person>,
         role: PlaceHolder<PersonRole>,
@@ -7771,15 +7771,15 @@ pub mod explicit_draughting {
             2usize
         }
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum PersonAssignmentAny {
         DraughtingPersonAssignment(Box<DraughtingPersonAssignment>),
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct PersonRole {
         pub name: Label,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct PersonRoleHolder {
         name: Label,
     }
@@ -7796,12 +7796,12 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct PersonalAddress {
         pub people: Vec<Person>,
         pub description: Text,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct PersonalAddressHolder {
         people: PlaceHolder<Vec<Person>>,
         description: Text,
@@ -7819,11 +7819,11 @@ pub mod explicit_draughting {
             2usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct Placement {
         pub location: CartesianPoint,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct PlacementHolder {
         location: PlaceHolder<CartesianPoint>,
     }
@@ -7840,15 +7840,15 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum PlacementAny {
         Axis2Placement2D(Box<Axis2Placement2D>),
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct PlanarBox {
         pub placement: Axis2Placement,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct PlanarBoxHolder {
         placement: PlaceHolder<Axis2Placement>,
     }
@@ -7865,12 +7865,12 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct PlanarExtent {
         pub size_in_x: LengthMeasure,
         pub size_in_y: LengthMeasure,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct PlanarExtentHolder {
         size_in_x: LengthMeasure,
         size_in_y: LengthMeasure,
@@ -7888,13 +7888,13 @@ pub mod explicit_draughting {
             2usize
         }
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum PlanarExtentAny {
         PlanarBox(Box<PlanarBox>),
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct PlaneAngleMeasureWithUnit {}
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct PlaneAngleMeasureWithUnitHolder {}
     impl Holder for PlaneAngleMeasureWithUnitHolder {
         type Table = Tables;
@@ -7909,9 +7909,9 @@ pub mod explicit_draughting {
             0usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct PlaneAngleUnit {}
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct PlaneAngleUnitHolder {}
     impl Holder for PlaneAngleUnitHolder {
         type Table = Tables;
@@ -7926,9 +7926,9 @@ pub mod explicit_draughting {
             0usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct Point {}
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct PointHolder {}
     impl Holder for PointHolder {
         type Table = Tables;
@@ -7943,17 +7943,17 @@ pub mod explicit_draughting {
             0usize
         }
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum PointAny {
         CartesianPoint(Box<CartesianPoint>),
         PointOnCurve(Box<PointOnCurve>),
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct PointOnCurve {
         pub basis_curve: CurveAny,
         pub point_parameter: ParameterValue,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct PointOnCurveHolder {
         basis_curve: PlaceHolder<CurveAny>,
         point_parameter: ParameterValue,
@@ -7971,11 +7971,11 @@ pub mod explicit_draughting {
             2usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct Polyline {
         pub points: Vec<CartesianPoint>,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct PolylineHolder {
         points: PlaceHolder<Vec<CartesianPoint>>,
     }
@@ -7992,9 +7992,9 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct PreDefinedColour {}
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct PreDefinedColourHolder {}
     impl Holder for PreDefinedColourHolder {
         type Table = Tables;
@@ -8009,13 +8009,13 @@ pub mod explicit_draughting {
             0usize
         }
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum PreDefinedColourAny {
         DraughtingPreDefinedColour(Box<DraughtingPreDefinedColour>),
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct PreDefinedCurveFont {}
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct PreDefinedCurveFontHolder {}
     impl Holder for PreDefinedCurveFontHolder {
         type Table = Tables;
@@ -8030,13 +8030,13 @@ pub mod explicit_draughting {
             0usize
         }
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum PreDefinedCurveFontAny {
         DraughtingPreDefinedCurveFont(Box<DraughtingPreDefinedCurveFont>),
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct PreDefinedDimensionSymbol {}
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct PreDefinedDimensionSymbolHolder {}
     impl Holder for PreDefinedDimensionSymbolHolder {
         type Table = Tables;
@@ -8051,9 +8051,9 @@ pub mod explicit_draughting {
             0usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct PreDefinedGeometricalToleranceSymbol {}
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct PreDefinedGeometricalToleranceSymbolHolder {}
     impl Holder for PreDefinedGeometricalToleranceSymbolHolder {
         type Table = Tables;
@@ -8068,11 +8068,11 @@ pub mod explicit_draughting {
             0usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct PreDefinedItem {
         pub name: Label,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct PreDefinedItemHolder {
         name: Label,
     }
@@ -8089,16 +8089,16 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum PreDefinedItemAny {
         PreDefinedColour(Box<PreDefinedColour>),
         PreDefinedCurveFont(Box<PreDefinedCurveFont>),
         PreDefinedSymbol(Box<PreDefinedSymbol>),
         PreDefinedTextFont(Box<PreDefinedTextFont>),
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct PreDefinedPointMarkerSymbol {}
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct PreDefinedPointMarkerSymbolHolder {}
     impl Holder for PreDefinedPointMarkerSymbolHolder {
         type Table = Tables;
@@ -8113,9 +8113,9 @@ pub mod explicit_draughting {
             0usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct PreDefinedSymbol {}
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct PreDefinedSymbolHolder {}
     impl Holder for PreDefinedSymbolHolder {
         type Table = Tables;
@@ -8130,16 +8130,16 @@ pub mod explicit_draughting {
             0usize
         }
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum PreDefinedSymbolAny {
         PreDefinedDimensionSymbol(Box<PreDefinedDimensionSymbol>),
         PreDefinedGeometricalToleranceSymbol(Box<PreDefinedGeometricalToleranceSymbol>),
         PreDefinedPointMarkerSymbol(Box<PreDefinedPointMarkerSymbol>),
         PreDefinedTerminatorSymbol(Box<PreDefinedTerminatorSymbol>),
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct PreDefinedTerminatorSymbol {}
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct PreDefinedTerminatorSymbolHolder {}
     impl Holder for PreDefinedTerminatorSymbolHolder {
         type Table = Tables;
@@ -8154,9 +8154,9 @@ pub mod explicit_draughting {
             0usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct PreDefinedTextFont {}
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct PreDefinedTextFontHolder {}
     impl Holder for PreDefinedTextFontHolder {
         type Table = Tables;
@@ -8171,13 +8171,13 @@ pub mod explicit_draughting {
             0usize
         }
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum PreDefinedTextFontAny {
         DraughtingPreDefinedTextFont(Box<DraughtingPreDefinedTextFont>),
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct PresentationArea {}
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct PresentationAreaHolder {}
     impl Holder for PresentationAreaHolder {
         type Table = Tables;
@@ -8192,17 +8192,17 @@ pub mod explicit_draughting {
             0usize
         }
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum PresentationAreaAny {
         DrawingSheetRevision(Box<DrawingSheetRevision>),
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct PresentationLayerAssignment {
         pub name: Label,
         pub description: Text,
         pub assigned_items: Vec<LayeredItem>,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct PresentationLayerAssignmentHolder {
         name: Label,
         description: Text,
@@ -8221,12 +8221,12 @@ pub mod explicit_draughting {
             3usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct PresentationLayerUsage {
         pub assignment: PresentationLayerAssignment,
         pub presentation: PresentationRepresentationAny,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct PresentationLayerUsageHolder {
         assignment: PlaceHolder<PresentationLayerAssignment>,
         presentation: PlaceHolder<PresentationRepresentationAny>,
@@ -8244,9 +8244,9 @@ pub mod explicit_draughting {
             2usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct PresentationRepresentation {}
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct PresentationRepresentationHolder {}
     impl Holder for PresentationRepresentationHolder {
         type Table = Tables;
@@ -8261,14 +8261,14 @@ pub mod explicit_draughting {
             0usize
         }
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum PresentationRepresentationAny {
         PresentationArea(Box<PresentationArea>),
         PresentationView(Box<PresentationView>),
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct PresentationSet {}
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct PresentationSetHolder {}
     impl Holder for PresentationSetHolder {
         type Table = Tables;
@@ -8283,16 +8283,16 @@ pub mod explicit_draughting {
             0usize
         }
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum PresentationSetAny {
         DrawingRevision(Box<DrawingRevision>),
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct PresentationSize {
         pub unit: PresentationSizeAssignmentSelect,
         pub size: PlanarBox,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct PresentationSizeHolder {
         unit: PlaceHolder<PresentationSizeAssignmentSelect>,
         size: PlaceHolder<PlanarBox>,
@@ -8310,11 +8310,11 @@ pub mod explicit_draughting {
             2usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct PresentationStyleAssignment {
         pub styles: Vec<PresentationStyleSelect>,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct PresentationStyleAssignmentHolder {
         styles: PlaceHolder<Vec<PresentationStyleSelect>>,
     }
@@ -8331,15 +8331,15 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum PresentationStyleAssignmentAny {
         PresentationStyleByContext(Box<PresentationStyleByContext>),
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct PresentationStyleByContext {
         pub style_context: StyleContextSelect,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct PresentationStyleByContextHolder {
         style_context: PlaceHolder<StyleContextSelect>,
     }
@@ -8356,9 +8356,9 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct PresentationView {}
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct PresentationViewHolder {}
     impl Holder for PresentationViewHolder {
         type Table = Tables;
@@ -8373,9 +8373,9 @@ pub mod explicit_draughting {
             0usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct PresentedItem {}
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct PresentedItemHolder {}
     impl Holder for PresentedItemHolder {
         type Table = Tables;
@@ -8390,16 +8390,16 @@ pub mod explicit_draughting {
             0usize
         }
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum PresentedItemAny {
         DraughtingPresentedItem(Box<DraughtingPresentedItem>),
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct PresentedItemRepresentation {
         pub presentation: PresentationRepresentationSelect,
         pub item: PresentedItemAny,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct PresentedItemRepresentationHolder {
         presentation: PlaceHolder<PresentationRepresentationSelect>,
         item: PlaceHolder<PresentedItemAny>,
@@ -8417,14 +8417,14 @@ pub mod explicit_draughting {
             2usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct Product {
         pub id: Identifier,
         pub name: Label,
         pub description: Text,
         pub frame_of_reference: Vec<ProductContext>,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct ProductHolder {
         id: Identifier,
         name: Label,
@@ -8444,11 +8444,11 @@ pub mod explicit_draughting {
             4usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct ProductContext {
         pub discipline_type: Label,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct ProductContextHolder {
         discipline_type: Label,
     }
@@ -8465,14 +8465,14 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct ProductDefinition {
         pub id: Identifier,
         pub description: Text,
         pub formation: ProductDefinitionFormation,
         pub frame_of_reference: ProductDefinitionContext,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct ProductDefinitionHolder {
         id: Identifier,
         description: Text,
@@ -8492,11 +8492,11 @@ pub mod explicit_draughting {
             4usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct ProductDefinitionContext {
         pub life_cycle_stage: Label,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct ProductDefinitionContextHolder {
         life_cycle_stage: Label,
     }
@@ -8513,13 +8513,13 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct ProductDefinitionFormation {
         pub id: Identifier,
         pub description: Text,
         pub of_product: Product,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct ProductDefinitionFormationHolder {
         id: Identifier,
         description: Text,
@@ -8538,9 +8538,9 @@ pub mod explicit_draughting {
             3usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct ProductDefinitionShape {}
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct ProductDefinitionShapeHolder {}
     impl Holder for ProductDefinitionShapeHolder {
         type Table = Tables;
@@ -8555,9 +8555,9 @@ pub mod explicit_draughting {
             0usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct ProjectionCurve {}
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct ProjectionCurveHolder {}
     impl Holder for ProjectionCurveHolder {
         type Table = Tables;
@@ -8572,9 +8572,9 @@ pub mod explicit_draughting {
             0usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct ProjectionDirectedCallout {}
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct ProjectionDirectedCalloutHolder {}
     impl Holder for ProjectionDirectedCalloutHolder {
         type Table = Tables;
@@ -8589,17 +8589,17 @@ pub mod explicit_draughting {
             0usize
         }
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum ProjectionDirectedCalloutAny {
         OrdinateDimension(Box<OrdinateDimension>),
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct PropertyDefinition {
         pub name: Label,
         pub description: Text,
         pub definition: CharacterizedDefinition,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct PropertyDefinitionHolder {
         name: Label,
         description: Text,
@@ -8618,16 +8618,16 @@ pub mod explicit_draughting {
             3usize
         }
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum PropertyDefinitionAny {
         ProductDefinitionShape(Box<ProductDefinitionShape>),
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct PropertyDefinitionRepresentation {
         pub definition: PropertyDefinitionAny,
         pub used_representation: RepresentationAny,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct PropertyDefinitionRepresentationHolder {
         definition: PlaceHolder<PropertyDefinitionAny>,
         used_representation: PlaceHolder<RepresentationAny>,
@@ -8645,13 +8645,13 @@ pub mod explicit_draughting {
             2usize
         }
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum PropertyDefinitionRepresentationAny {
         ShapeDefinitionRepresentation(Box<ShapeDefinitionRepresentation>),
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct QuasiUniformCurve {}
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct QuasiUniformCurveHolder {}
     impl Holder for QuasiUniformCurveHolder {
         type Table = Tables;
@@ -8666,9 +8666,9 @@ pub mod explicit_draughting {
             0usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct RadiusDimension {}
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct RadiusDimensionHolder {}
     impl Holder for RadiusDimensionHolder {
         type Table = Tables;
@@ -8683,11 +8683,11 @@ pub mod explicit_draughting {
             0usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct RationalBSplineCurve {
         pub weights_data: Vec<f64>,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct RationalBSplineCurveHolder {
         weights_data: PlaceHolder<Vec<f64>>,
     }
@@ -8704,13 +8704,13 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct Representation {
         pub name: Label,
         pub items: Vec<RepresentationItemAny>,
         pub context_of_items: RepresentationContextAny,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct RepresentationHolder {
         name: Label,
         items: PlaceHolder<Vec<RepresentationItemAny>>,
@@ -8729,19 +8729,19 @@ pub mod explicit_draughting {
             3usize
         }
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum RepresentationAny {
         DraughtingModel(Box<DraughtingModel>),
         PresentationRepresentation(Box<PresentationRepresentation>),
         ShapeRepresentation(Box<ShapeRepresentation>),
         SymbolRepresentation(Box<SymbolRepresentation>),
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct RepresentationContext {
         pub context_identifier: Identifier,
         pub context_type: Text,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct RepresentationContextHolder {
         context_identifier: Identifier,
         context_type: Text,
@@ -8759,16 +8759,16 @@ pub mod explicit_draughting {
             2usize
         }
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum RepresentationContextAny {
         GeometricRepresentationContext(Box<GeometricRepresentationContext>),
         GlobalUnitAssignedContext(Box<GlobalUnitAssignedContext>),
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct RepresentationItem {
         pub name: Label,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct RepresentationItemHolder {
         name: Label,
     }
@@ -8785,18 +8785,18 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum RepresentationItemAny {
         GeometricRepresentationItem(Box<GeometricRepresentationItem>),
         MappedItem(Box<MappedItem>),
         StyledItem(Box<StyledItem>),
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct RepresentationMap {
         pub mapping_origin: RepresentationItemAny,
         pub mapped_representation: RepresentationAny,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct RepresentationMapHolder {
         mapping_origin: PlaceHolder<RepresentationItemAny>,
         mapped_representation: PlaceHolder<RepresentationAny>,
@@ -8814,18 +8814,18 @@ pub mod explicit_draughting {
             2usize
         }
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum RepresentationMapAny {
         CameraUsage(Box<CameraUsage>),
         SymbolRepresentationMap(Box<SymbolRepresentationMap>),
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct SecurityClassification {
         pub name: Label,
         pub purpose: Text,
         pub security_level: SecurityClassificationLevel,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct SecurityClassificationHolder {
         name: Label,
         purpose: Text,
@@ -8844,11 +8844,11 @@ pub mod explicit_draughting {
             3usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct SecurityClassificationAssignment {
         pub assigned_security_classification: SecurityClassification,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct SecurityClassificationAssignmentHolder {
         assigned_security_classification: PlaceHolder<SecurityClassification>,
     }
@@ -8865,15 +8865,15 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum SecurityClassificationAssignmentAny {
         DraughtingSecurityClassificationAssignment(Box<DraughtingSecurityClassificationAssignment>),
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct SecurityClassificationLevel {
         pub name: Label,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct SecurityClassificationLevelHolder {
         name: Label,
     }
@@ -8890,9 +8890,9 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct ShapeDefinitionRepresentation {}
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct ShapeDefinitionRepresentationHolder {}
     impl Holder for ShapeDefinitionRepresentationHolder {
         type Table = Tables;
@@ -8907,9 +8907,9 @@ pub mod explicit_draughting {
             0usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct ShapeRepresentation {}
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct ShapeRepresentationHolder {}
     impl Holder for ShapeRepresentationHolder {
         type Table = Tables;
@@ -8924,18 +8924,18 @@ pub mod explicit_draughting {
             0usize
         }
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum ShapeRepresentationAny {
         GeometricallyBounded2DWireframeRepresentation(
             Box<GeometricallyBounded2DWireframeRepresentation>,
         ),
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct SiUnit {
         pub prefix: Option<SiPrefix>,
         pub name: SiUnitName,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct SiUnitHolder {
         prefix: Option<PlaceHolder<SiPrefix>>,
         name: PlaceHolder<SiUnitName>,
@@ -8953,9 +8953,9 @@ pub mod explicit_draughting {
             2usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct StructuredDimensionCallout {}
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct StructuredDimensionCalloutHolder {}
     impl Holder for StructuredDimensionCalloutHolder {
         type Table = Tables;
@@ -8970,12 +8970,12 @@ pub mod explicit_draughting {
             0usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct StyledItem {
         pub styles: Vec<PresentationStyleAssignmentAny>,
         pub item: RepresentationItemAny,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct StyledItemHolder {
         styles: PlaceHolder<Vec<PresentationStyleAssignmentAny>>,
         item: PlaceHolder<RepresentationItemAny>,
@@ -8993,15 +8993,15 @@ pub mod explicit_draughting {
             2usize
         }
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum StyledItemAny {
         AnnotationOccurrence(Box<AnnotationOccurrence>),
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct SymbolColour {
         pub colour_of_symbol: ColourAny,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct SymbolColourHolder {
         colour_of_symbol: PlaceHolder<ColourAny>,
     }
@@ -9018,9 +9018,9 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct SymbolRepresentation {}
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct SymbolRepresentationHolder {}
     impl Holder for SymbolRepresentationHolder {
         type Table = Tables;
@@ -9035,14 +9035,14 @@ pub mod explicit_draughting {
             0usize
         }
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum SymbolRepresentationAny {
         DraughtingSubfigureRepresentation(Box<DraughtingSubfigureRepresentation>),
         DraughtingSymbolRepresentation(Box<DraughtingSymbolRepresentation>),
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct SymbolRepresentationMap {}
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct SymbolRepresentationMapHolder {}
     impl Holder for SymbolRepresentationMapHolder {
         type Table = Tables;
@@ -9057,12 +9057,12 @@ pub mod explicit_draughting {
             0usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct SymbolStyle {
         pub name: Label,
         pub style_of_symbol: SymbolStyleSelect,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct SymbolStyleHolder {
         name: Label,
         style_of_symbol: PlaceHolder<SymbolStyleSelect>,
@@ -9080,13 +9080,13 @@ pub mod explicit_draughting {
             2usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct SymbolTarget {
         pub placement: Axis2Placement,
         pub x_scale: PositiveRatioMeasure,
         pub y_scale: PositiveRatioMeasure,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct SymbolTargetHolder {
         placement: PlaceHolder<Axis2Placement>,
         x_scale: PositiveRatioMeasure,
@@ -9105,11 +9105,11 @@ pub mod explicit_draughting {
             3usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct TerminatorSymbol {
         pub annotated_curve: AnnotationCurveOccurrenceAny,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct TerminatorSymbolHolder {
         annotated_curve: PlaceHolder<AnnotationCurveOccurrenceAny>,
     }
@@ -9126,12 +9126,12 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum TerminatorSymbolAny {
         DimensionCurveTerminator(Box<DimensionCurveTerminator>),
         LeaderTerminator(Box<LeaderTerminator>),
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct TextLiteral {
         pub literal: PresentableText,
         pub placement: Axis2Placement,
@@ -9139,7 +9139,7 @@ pub mod explicit_draughting {
         pub path: TextPath,
         pub font: FontSelect,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct TextLiteralHolder {
         literal: PresentableText,
         placement: PlaceHolder<Axis2Placement>,
@@ -9160,18 +9160,18 @@ pub mod explicit_draughting {
             5usize
         }
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum TextLiteralAny {
         TextLiteralWithAssociatedCurves(Box<TextLiteralWithAssociatedCurves>),
         TextLiteralWithBlankingBox(Box<TextLiteralWithBlankingBox>),
         TextLiteralWithDelineation(Box<TextLiteralWithDelineation>),
         TextLiteralWithExtent(Box<TextLiteralWithExtent>),
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct TextLiteralWithAssociatedCurves {
         pub associated_curves: Vec<CurveAny>,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct TextLiteralWithAssociatedCurvesHolder {
         associated_curves: PlaceHolder<Vec<CurveAny>>,
     }
@@ -9188,11 +9188,11 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct TextLiteralWithBlankingBox {
         pub blanking: PlanarBox,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct TextLiteralWithBlankingBoxHolder {
         blanking: PlaceHolder<PlanarBox>,
     }
@@ -9209,11 +9209,11 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct TextLiteralWithDelineation {
         pub delineation: TextDelineation,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct TextLiteralWithDelineationHolder {
         delineation: TextDelineation,
     }
@@ -9230,15 +9230,15 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum TextLiteralWithDelineationAny {
         DraughtingTextLiteralWithDelineation(Box<DraughtingTextLiteralWithDelineation>),
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct TextLiteralWithExtent {
         pub extent: PlanarExtentAny,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct TextLiteralWithExtentHolder {
         extent: PlaceHolder<PlanarExtentAny>,
     }
@@ -9255,12 +9255,12 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct TextStyle {
         pub name: Label,
         pub character_appearance: CharacterStyleSelect,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct TextStyleHolder {
         name: Label,
         character_appearance: PlaceHolder<CharacterStyleSelect>,
@@ -9278,16 +9278,16 @@ pub mod explicit_draughting {
             2usize
         }
     }
-    #[derive(Debug, Clone)]
+    #[derive(Debug, Clone, PartialEq)]
     pub enum TextStyleAny {
         TextStyleWithBoxCharacteristics(Box<TextStyleWithBoxCharacteristics>),
         TextStyleWithMirror(Box<TextStyleWithMirror>),
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct TextStyleForDefinedFont {
         pub text_colour: ColourAny,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct TextStyleForDefinedFontHolder {
         text_colour: PlaceHolder<ColourAny>,
     }
@@ -9304,11 +9304,11 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct TextStyleWithBoxCharacteristics {
         pub characteristics: Vec<BoxCharacteristicSelect>,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct TextStyleWithBoxCharacteristicsHolder {
         characteristics: PlaceHolder<Vec<BoxCharacteristicSelect>>,
     }
@@ -9325,11 +9325,11 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct TextStyleWithMirror {
         pub mirror_placement: Axis2Placement,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct TextStyleWithMirrorHolder {
         mirror_placement: PlaceHolder<Axis2Placement>,
     }
@@ -9346,7 +9346,7 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct TrimmedCurve {
         pub basis_curve: CurveAny,
         pub trim_1: Vec<TrimmingSelect>,
@@ -9354,7 +9354,7 @@ pub mod explicit_draughting {
         pub sense_agreement: bool,
         pub master_representation: TrimmingPreference,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct TrimmedCurveHolder {
         basis_curve: PlaceHolder<CurveAny>,
         trim_1: PlaceHolder<Vec<TrimmingSelect>>,
@@ -9375,11 +9375,11 @@ pub mod explicit_draughting {
             5usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct TwoDirectionRepeatFactor {
         pub second_repeat_factor: Vector,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct TwoDirectionRepeatFactorHolder {
         second_repeat_factor: PlaceHolder<Vector>,
     }
@@ -9396,9 +9396,9 @@ pub mod explicit_draughting {
             1usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct UniformCurve {}
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct UniformCurveHolder {}
     impl Holder for UniformCurveHolder {
         type Table = Tables;
@@ -9413,12 +9413,12 @@ pub mod explicit_draughting {
             0usize
         }
     }
-    #[derive(Debug, Clone, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
     pub struct Vector {
         pub orientation: Direction,
         pub magnitude: LengthMeasure,
     }
-    #[derive(Clone, Debug)]
+    #[derive(Clone, Debug, PartialEq)]
     struct VectorHolder {
         orientation: PlaceHolder<Direction>,
         magnitude: LengthMeasure,
