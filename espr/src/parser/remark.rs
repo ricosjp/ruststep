@@ -105,7 +105,7 @@ pub fn tail_remark(input: &str) -> RawParseResult<Remark> {
 
 /// 147 remark_tag = `"` remark_ref { `.` remark_ref } `"` .
 ///
-/// `remark_ref` is replaced by `simple_id` because it should be handled by following semantics
+/// `remark_ref` is replaced by `simple_id` because it should be handled by following ir
 /// analysis phase.
 pub fn remark_tag(input: &str) -> RawParseResult<Vec<String>> {
     delimited(char('"'), separated_list1(char('.'), simple_id), char('"')).parse(input)

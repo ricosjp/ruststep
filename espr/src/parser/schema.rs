@@ -161,7 +161,7 @@ pub fn function_decl(input: &str) -> ParseResult<Function> {
 /// 221 function_head = FUNCTION [function_id]
 ///                   \[ `(` [formal_parameter] { `;` [formal_parameter] } `)` \]
 ///                   `:` [parameter_type] `;` .
-pub fn function_head(input: &str) -> ParseResult<(String, Vec<FormalParameter>, ParameterType)> {
+pub fn function_head(input: &str) -> ParseResult<(String, Vec<FormalParameter>, Type)> {
     tuple((
         tag("FUNCTION"),
         function_id,

@@ -1,4 +1,4 @@
-use crate::semantics::*;
+use crate::ir::*;
 
 use inflector::Inflector;
 use proc_macro2::TokenStream;
@@ -58,11 +58,11 @@ impl ToTokens for Entity {
 
             if let TypeRef::Entity {
                 name: supertype_name,
-                has_supertype_decl,
+                is_supertype,
                 ..
             } = ty
             {
-                if *has_supertype_decl {
+                if *is_supertype {
                     let name = if self.subtypes.is_empty() {
                         format_ident!("{}", self.name.to_pascal_case())
                     } else {

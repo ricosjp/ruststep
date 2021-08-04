@@ -43,7 +43,7 @@ mod tests {
     #[test]
     fn legalize() {
         let example = SyntaxTree::example();
-        let ns = Namespace::new(&example).unwrap();
+        let ns = Namespace::new(&example);
         let ss = SubSuperGraph::new(&ns, &example).unwrap();
         dbg!(&ns, &ss);
         let schema = &example.schemas[0];

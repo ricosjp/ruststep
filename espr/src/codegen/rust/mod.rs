@@ -3,7 +3,7 @@
 mod entity;
 mod schema;
 
-use crate::semantics::*;
+use crate::ir::*;
 
 use inflector::Inflector;
 use proc_macro2::TokenStream;
@@ -63,13 +63,11 @@ impl ToTokens for Select {
         for ty in &self.types {
             match ty {
                 TypeRef::Entity {
-                    name,
-                    has_supertype_decl,
-                    ..
+                    name, is_supertype, ..
                 } => {
                     let name = format_ident!("{}", name.to_pascal_case());
                     entries.push(quote! { #name });
-                    if *has_supertype_decl {
+                    if *is_supertype {
                         // avoid Box<Box<XxxAny>>
                         entry_types.push(quote! { #ty });
                     } else {
@@ -127,11 +125,9 @@ impl ToTokens for TypeRef {
                 tokens.append_all(quote! { #name });
             }
             Entity {
-                name,
-                has_supertype_decl,
-                ..
+                name, is_supertype, ..
             } => {
-                let name = if *has_supertype_decl {
+                let name = if *is_supertype {
                     format_ident!("{}Any", name.to_pascal_case())
                 } else {
                     format_ident!("{}", name.to_pascal_case())
