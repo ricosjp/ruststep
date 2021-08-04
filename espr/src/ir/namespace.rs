@@ -42,25 +42,26 @@ impl<'st> Namespace<'st> {
         Namespace { names, ast }
     }
 
-    /// Resolve a `name` used in a `scope` to full pash.
+    /// Resolve a `name` referred in a `scope` into the full path.
     ///
     /// Error
     /// ------
     /// - If no corresponding definition found.
+    ///
     pub fn resolve(&self, scope: &Scope, name: &str) -> Result<Path, SemanticError> {
-        let err = || SemanticError::TypeNotFound {
-            scope: scope.clone(),
-            name: name.to_string(),
-        };
         let mut scope = scope.clone();
         loop {
-            let names = self.names.get(&scope).ok_or_else(err)?;
-            for (ty, n) in names {
-                if name == n {
-                    return Ok(Path::new(&scope, *ty, n));
+            if let Some(names) = self.names.get(&scope) {
+                for (ty, n) in names {
+                    if name == n {
+                        return Ok(Path::new(&scope, *ty, n));
+                    }
                 }
             }
-            scope = scope.popped().ok_or_else(err)?;
+            scope = scope.popped().ok_or_else(|| SemanticError::TypeNotFound {
+                scope: scope.clone(),
+                name: name.to_string(),
+            })?;
         }
     }
 

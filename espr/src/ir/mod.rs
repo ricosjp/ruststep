@@ -22,7 +22,7 @@ use thiserror::Error;
 /// Semantic errors
 #[derive(Debug, Error)]
 pub enum SemanticError {
-    #[error("Type {name} not found in scope {scope}")]
+    #[error("Not found the Type {name} referred in scope {scope}")]
     TypeNotFound { name: String, scope: Scope },
 
     #[error("Invalid path: {0}")]
