@@ -96,15 +96,15 @@ impl TypeRef {
                 })
             }
             ScopeType::Type => {
-                let mut path = path.clone();
+                let mut p = path.clone();
                 let is_simple = loop {
-                    match ns.get(&path)? {
+                    match ns.get(&p)? {
                         Named::Type(ast::TypeDecl {
                             underlying_type, ..
                         }) => match underlying_type {
                             ast::Type::Simple(_) => break true,
                             ast::Type::Named(name) => {
-                                path = ns.resolve(&path.scope, name)?;
+                                p = ns.resolve(&p.scope, name)?;
                                 continue;
                             }
                             _ => break false,
