@@ -1976,2208 +1976,6 @@ pub mod explicit_draughting {
                 .map(move |value| value.into_owned(&self))
         }
     }
-    impl EntityTable<AddressHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<Address> {
-            crate::tables::get_owned(self, &self.address, entity_id)
-        }
-        fn owned_iter<'table>(&'table self) -> Box<dyn Iterator<Item = Result<Address>> + 'table> {
-            crate::tables::owned_iter(self, &self.address)
-        }
-    }
-    impl EntityTable<AngularDimensionHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<AngularDimension> {
-            crate::tables::get_owned(self, &self.angular_dimension, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<AngularDimension>> + 'table> {
-            crate::tables::owned_iter(self, &self.angular_dimension)
-        }
-    }
-    impl EntityTable<AnnotationCurveOccurrenceHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<AnnotationCurveOccurrence> {
-            crate::tables::get_owned(self, &self.annotation_curve_occurrence, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<AnnotationCurveOccurrence>> + 'table> {
-            crate::tables::owned_iter(self, &self.annotation_curve_occurrence)
-        }
-    }
-    impl EntityTable<AnnotationFillAreaHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<AnnotationFillArea> {
-            crate::tables::get_owned(self, &self.annotation_fill_area, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<AnnotationFillArea>> + 'table> {
-            crate::tables::owned_iter(self, &self.annotation_fill_area)
-        }
-    }
-    impl EntityTable<AnnotationFillAreaOccurrenceHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<AnnotationFillAreaOccurrence> {
-            crate::tables::get_owned(self, &self.annotation_fill_area_occurrence, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<AnnotationFillAreaOccurrence>> + 'table> {
-            crate::tables::owned_iter(self, &self.annotation_fill_area_occurrence)
-        }
-    }
-    impl EntityTable<AnnotationOccurrenceHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<AnnotationOccurrence> {
-            crate::tables::get_owned(self, &self.annotation_occurrence, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<AnnotationOccurrence>> + 'table> {
-            crate::tables::owned_iter(self, &self.annotation_occurrence)
-        }
-    }
-    impl EntityTable<AnnotationSubfigureOccurrenceHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<AnnotationSubfigureOccurrence> {
-            crate::tables::get_owned(self, &self.annotation_subfigure_occurrence, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<AnnotationSubfigureOccurrence>> + 'table> {
-            crate::tables::owned_iter(self, &self.annotation_subfigure_occurrence)
-        }
-    }
-    impl EntityTable<AnnotationSymbolHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<AnnotationSymbol> {
-            crate::tables::get_owned(self, &self.annotation_symbol, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<AnnotationSymbol>> + 'table> {
-            crate::tables::owned_iter(self, &self.annotation_symbol)
-        }
-    }
-    impl EntityTable<AnnotationSymbolOccurrenceHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<AnnotationSymbolOccurrence> {
-            crate::tables::get_owned(self, &self.annotation_symbol_occurrence, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<AnnotationSymbolOccurrence>> + 'table> {
-            crate::tables::owned_iter(self, &self.annotation_symbol_occurrence)
-        }
-    }
-    impl EntityTable<AnnotationTextHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<AnnotationText> {
-            crate::tables::get_owned(self, &self.annotation_text, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<AnnotationText>> + 'table> {
-            crate::tables::owned_iter(self, &self.annotation_text)
-        }
-    }
-    impl EntityTable<AnnotationTextOccurrenceHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<AnnotationTextOccurrence> {
-            crate::tables::get_owned(self, &self.annotation_text_occurrence, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<AnnotationTextOccurrence>> + 'table> {
-            crate::tables::owned_iter(self, &self.annotation_text_occurrence)
-        }
-    }
-    impl EntityTable<ApplicationContextHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<ApplicationContext> {
-            crate::tables::get_owned(self, &self.application_context, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<ApplicationContext>> + 'table> {
-            crate::tables::owned_iter(self, &self.application_context)
-        }
-    }
-    impl EntityTable<ApplicationContextElementHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<ApplicationContextElement> {
-            crate::tables::get_owned(self, &self.application_context_element, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<ApplicationContextElement>> + 'table> {
-            crate::tables::owned_iter(self, &self.application_context_element)
-        }
-    }
-    impl EntityTable<ApplicationProtocolDefinitionHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<ApplicationProtocolDefinition> {
-            crate::tables::get_owned(self, &self.application_protocol_definition, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<ApplicationProtocolDefinition>> + 'table> {
-            crate::tables::owned_iter(self, &self.application_protocol_definition)
-        }
-    }
-    impl EntityTable<ApprovalHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<Approval> {
-            crate::tables::get_owned(self, &self.approval, entity_id)
-        }
-        fn owned_iter<'table>(&'table self) -> Box<dyn Iterator<Item = Result<Approval>> + 'table> {
-            crate::tables::owned_iter(self, &self.approval)
-        }
-    }
-    impl EntityTable<ApprovalAssignmentHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<ApprovalAssignment> {
-            crate::tables::get_owned(self, &self.approval_assignment, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<ApprovalAssignment>> + 'table> {
-            crate::tables::owned_iter(self, &self.approval_assignment)
-        }
-    }
-    impl EntityTable<ApprovalDateTimeHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<ApprovalDateTime> {
-            crate::tables::get_owned(self, &self.approval_date_time, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<ApprovalDateTime>> + 'table> {
-            crate::tables::owned_iter(self, &self.approval_date_time)
-        }
-    }
-    impl EntityTable<ApprovalPersonOrganizationHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<ApprovalPersonOrganization> {
-            crate::tables::get_owned(self, &self.approval_person_organization, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<ApprovalPersonOrganization>> + 'table> {
-            crate::tables::owned_iter(self, &self.approval_person_organization)
-        }
-    }
-    impl EntityTable<ApprovalRoleHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<ApprovalRole> {
-            crate::tables::get_owned(self, &self.approval_role, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<ApprovalRole>> + 'table> {
-            crate::tables::owned_iter(self, &self.approval_role)
-        }
-    }
-    impl EntityTable<ApprovalStatusHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<ApprovalStatus> {
-            crate::tables::get_owned(self, &self.approval_status, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<ApprovalStatus>> + 'table> {
-            crate::tables::owned_iter(self, &self.approval_status)
-        }
-    }
-    impl EntityTable<AreaInSetHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<AreaInSet> {
-            crate::tables::get_owned(self, &self.area_in_set, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<AreaInSet>> + 'table> {
-            crate::tables::owned_iter(self, &self.area_in_set)
-        }
-    }
-    impl EntityTable<Axis2Placement2DHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<Axis2Placement2D> {
-            crate::tables::get_owned(self, &self.axis2_placement_2d, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<Axis2Placement2D>> + 'table> {
-            crate::tables::owned_iter(self, &self.axis2_placement_2d)
-        }
-    }
-    impl EntityTable<BSplineCurveHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<BSplineCurve> {
-            crate::tables::get_owned(self, &self.b_spline_curve, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<BSplineCurve>> + 'table> {
-            crate::tables::owned_iter(self, &self.b_spline_curve)
-        }
-    }
-    impl EntityTable<BSplineCurveWithKnotsHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<BSplineCurveWithKnots> {
-            crate::tables::get_owned(self, &self.b_spline_curve_with_knots, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<BSplineCurveWithKnots>> + 'table> {
-            crate::tables::owned_iter(self, &self.b_spline_curve_with_knots)
-        }
-    }
-    impl EntityTable<BezierCurveHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<BezierCurve> {
-            crate::tables::get_owned(self, &self.bezier_curve, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<BezierCurve>> + 'table> {
-            crate::tables::owned_iter(self, &self.bezier_curve)
-        }
-    }
-    impl EntityTable<BoundedCurveHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<BoundedCurve> {
-            crate::tables::get_owned(self, &self.bounded_curve, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<BoundedCurve>> + 'table> {
-            crate::tables::owned_iter(self, &self.bounded_curve)
-        }
-    }
-    impl EntityTable<CalendarDateHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<CalendarDate> {
-            crate::tables::get_owned(self, &self.calendar_date, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<CalendarDate>> + 'table> {
-            crate::tables::owned_iter(self, &self.calendar_date)
-        }
-    }
-    impl EntityTable<CameraImageHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<CameraImage> {
-            crate::tables::get_owned(self, &self.camera_image, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<CameraImage>> + 'table> {
-            crate::tables::owned_iter(self, &self.camera_image)
-        }
-    }
-    impl EntityTable<CameraImage2DWithScaleHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<CameraImage2DWithScale> {
-            crate::tables::get_owned(self, &self.camera_image_2d_with_scale, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<CameraImage2DWithScale>> + 'table> {
-            crate::tables::owned_iter(self, &self.camera_image_2d_with_scale)
-        }
-    }
-    impl EntityTable<CameraModelHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<CameraModel> {
-            crate::tables::get_owned(self, &self.camera_model, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<CameraModel>> + 'table> {
-            crate::tables::owned_iter(self, &self.camera_model)
-        }
-    }
-    impl EntityTable<CameraModelD2Holder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<CameraModelD2> {
-            crate::tables::get_owned(self, &self.camera_model_d2, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<CameraModelD2>> + 'table> {
-            crate::tables::owned_iter(self, &self.camera_model_d2)
-        }
-    }
-    impl EntityTable<CameraUsageHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<CameraUsage> {
-            crate::tables::get_owned(self, &self.camera_usage, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<CameraUsage>> + 'table> {
-            crate::tables::owned_iter(self, &self.camera_usage)
-        }
-    }
-    impl EntityTable<CartesianPointHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<CartesianPoint> {
-            crate::tables::get_owned(self, &self.cartesian_point, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<CartesianPoint>> + 'table> {
-            crate::tables::owned_iter(self, &self.cartesian_point)
-        }
-    }
-    impl EntityTable<CircleHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<Circle> {
-            crate::tables::get_owned(self, &self.circle, entity_id)
-        }
-        fn owned_iter<'table>(&'table self) -> Box<dyn Iterator<Item = Result<Circle>> + 'table> {
-            crate::tables::owned_iter(self, &self.circle)
-        }
-    }
-    impl EntityTable<ColourHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<Colour> {
-            crate::tables::get_owned(self, &self.colour, entity_id)
-        }
-        fn owned_iter<'table>(&'table self) -> Box<dyn Iterator<Item = Result<Colour>> + 'table> {
-            crate::tables::owned_iter(self, &self.colour)
-        }
-    }
-    impl EntityTable<ColourRgbHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<ColourRgb> {
-            crate::tables::get_owned(self, &self.colour_rgb, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<ColourRgb>> + 'table> {
-            crate::tables::owned_iter(self, &self.colour_rgb)
-        }
-    }
-    impl EntityTable<ColourSpecificationHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<ColourSpecification> {
-            crate::tables::get_owned(self, &self.colour_specification, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<ColourSpecification>> + 'table> {
-            crate::tables::owned_iter(self, &self.colour_specification)
-        }
-    }
-    impl EntityTable<CompositeCurveHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<CompositeCurve> {
-            crate::tables::get_owned(self, &self.composite_curve, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<CompositeCurve>> + 'table> {
-            crate::tables::owned_iter(self, &self.composite_curve)
-        }
-    }
-    impl EntityTable<CompositeCurveSegmentHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<CompositeCurveSegment> {
-            crate::tables::get_owned(self, &self.composite_curve_segment, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<CompositeCurveSegment>> + 'table> {
-            crate::tables::owned_iter(self, &self.composite_curve_segment)
-        }
-    }
-    impl EntityTable<CompositeTextHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<CompositeText> {
-            crate::tables::get_owned(self, &self.composite_text, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<CompositeText>> + 'table> {
-            crate::tables::owned_iter(self, &self.composite_text)
-        }
-    }
-    impl EntityTable<CompositeTextWithAssociatedCurvesHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<CompositeTextWithAssociatedCurves> {
-            crate::tables::get_owned(self, &self.composite_text_with_associated_curves, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<CompositeTextWithAssociatedCurves>> + 'table> {
-            crate::tables::owned_iter(self, &self.composite_text_with_associated_curves)
-        }
-    }
-    impl EntityTable<CompositeTextWithBlankingBoxHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<CompositeTextWithBlankingBox> {
-            crate::tables::get_owned(self, &self.composite_text_with_blanking_box, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<CompositeTextWithBlankingBox>> + 'table> {
-            crate::tables::owned_iter(self, &self.composite_text_with_blanking_box)
-        }
-    }
-    impl EntityTable<CompositeTextWithExtentHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<CompositeTextWithExtent> {
-            crate::tables::get_owned(self, &self.composite_text_with_extent, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<CompositeTextWithExtent>> + 'table> {
-            crate::tables::owned_iter(self, &self.composite_text_with_extent)
-        }
-    }
-    impl EntityTable<ConicHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<Conic> {
-            crate::tables::get_owned(self, &self.conic, entity_id)
-        }
-        fn owned_iter<'table>(&'table self) -> Box<dyn Iterator<Item = Result<Conic>> + 'table> {
-            crate::tables::owned_iter(self, &self.conic)
-        }
-    }
-    impl EntityTable<ContextDependentInvisibilityHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<ContextDependentInvisibility> {
-            crate::tables::get_owned(self, &self.context_dependent_invisibility, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<ContextDependentInvisibility>> + 'table> {
-            crate::tables::owned_iter(self, &self.context_dependent_invisibility)
-        }
-    }
-    impl EntityTable<ContractHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<Contract> {
-            crate::tables::get_owned(self, &self.contract, entity_id)
-        }
-        fn owned_iter<'table>(&'table self) -> Box<dyn Iterator<Item = Result<Contract>> + 'table> {
-            crate::tables::owned_iter(self, &self.contract)
-        }
-    }
-    impl EntityTable<ContractAssignmentHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<ContractAssignment> {
-            crate::tables::get_owned(self, &self.contract_assignment, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<ContractAssignment>> + 'table> {
-            crate::tables::owned_iter(self, &self.contract_assignment)
-        }
-    }
-    impl EntityTable<ContractTypeHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<ContractType> {
-            crate::tables::get_owned(self, &self.contract_type, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<ContractType>> + 'table> {
-            crate::tables::owned_iter(self, &self.contract_type)
-        }
-    }
-    impl EntityTable<ConversionBasedUnitHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<ConversionBasedUnit> {
-            crate::tables::get_owned(self, &self.conversion_based_unit, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<ConversionBasedUnit>> + 'table> {
-            crate::tables::owned_iter(self, &self.conversion_based_unit)
-        }
-    }
-    impl EntityTable<CurveHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<Curve> {
-            crate::tables::get_owned(self, &self.curve, entity_id)
-        }
-        fn owned_iter<'table>(&'table self) -> Box<dyn Iterator<Item = Result<Curve>> + 'table> {
-            crate::tables::owned_iter(self, &self.curve)
-        }
-    }
-    impl EntityTable<CurveDimensionHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<CurveDimension> {
-            crate::tables::get_owned(self, &self.curve_dimension, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<CurveDimension>> + 'table> {
-            crate::tables::owned_iter(self, &self.curve_dimension)
-        }
-    }
-    impl EntityTable<CurveStyleHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<CurveStyle> {
-            crate::tables::get_owned(self, &self.curve_style, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<CurveStyle>> + 'table> {
-            crate::tables::owned_iter(self, &self.curve_style)
-        }
-    }
-    impl EntityTable<CurveStyleFontHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<CurveStyleFont> {
-            crate::tables::get_owned(self, &self.curve_style_font, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<CurveStyleFont>> + 'table> {
-            crate::tables::owned_iter(self, &self.curve_style_font)
-        }
-    }
-    impl EntityTable<CurveStyleFontPatternHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<CurveStyleFontPattern> {
-            crate::tables::get_owned(self, &self.curve_style_font_pattern, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<CurveStyleFontPattern>> + 'table> {
-            crate::tables::owned_iter(self, &self.curve_style_font_pattern)
-        }
-    }
-    impl EntityTable<DateHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<Date> {
-            crate::tables::get_owned(self, &self.date, entity_id)
-        }
-        fn owned_iter<'table>(&'table self) -> Box<dyn Iterator<Item = Result<Date>> + 'table> {
-            crate::tables::owned_iter(self, &self.date)
-        }
-    }
-    impl EntityTable<DatumFeatureCalloutHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<DatumFeatureCallout> {
-            crate::tables::get_owned(self, &self.datum_feature_callout, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<DatumFeatureCallout>> + 'table> {
-            crate::tables::owned_iter(self, &self.datum_feature_callout)
-        }
-    }
-    impl EntityTable<DatumTargetCalloutHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<DatumTargetCallout> {
-            crate::tables::get_owned(self, &self.datum_target_callout, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<DatumTargetCallout>> + 'table> {
-            crate::tables::owned_iter(self, &self.datum_target_callout)
-        }
-    }
-    impl EntityTable<DefinedSymbolHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<DefinedSymbol> {
-            crate::tables::get_owned(self, &self.defined_symbol, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<DefinedSymbol>> + 'table> {
-            crate::tables::owned_iter(self, &self.defined_symbol)
-        }
-    }
-    impl EntityTable<DiameterDimensionHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<DiameterDimension> {
-            crate::tables::get_owned(self, &self.diameter_dimension, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<DiameterDimension>> + 'table> {
-            crate::tables::owned_iter(self, &self.diameter_dimension)
-        }
-    }
-    impl EntityTable<DimensionCalloutComponentRelationshipHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<DimensionCalloutComponentRelationship> {
-            crate::tables::get_owned(
-                self,
-                &self.dimension_callout_component_relationship,
-                entity_id,
-            )
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<DimensionCalloutComponentRelationship>> + 'table>
-        {
-            crate::tables::owned_iter(self, &self.dimension_callout_component_relationship)
-        }
-    }
-    impl EntityTable<DimensionCalloutRelationshipHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<DimensionCalloutRelationship> {
-            crate::tables::get_owned(self, &self.dimension_callout_relationship, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<DimensionCalloutRelationship>> + 'table> {
-            crate::tables::owned_iter(self, &self.dimension_callout_relationship)
-        }
-    }
-    impl EntityTable<DimensionCurveHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<DimensionCurve> {
-            crate::tables::get_owned(self, &self.dimension_curve, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<DimensionCurve>> + 'table> {
-            crate::tables::owned_iter(self, &self.dimension_curve)
-        }
-    }
-    impl EntityTable<DimensionCurveDirectedCalloutHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<DimensionCurveDirectedCallout> {
-            crate::tables::get_owned(self, &self.dimension_curve_directed_callout, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<DimensionCurveDirectedCallout>> + 'table> {
-            crate::tables::owned_iter(self, &self.dimension_curve_directed_callout)
-        }
-    }
-    impl EntityTable<DimensionCurveTerminatorHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<DimensionCurveTerminator> {
-            crate::tables::get_owned(self, &self.dimension_curve_terminator, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<DimensionCurveTerminator>> + 'table> {
-            crate::tables::owned_iter(self, &self.dimension_curve_terminator)
-        }
-    }
-    impl EntityTable<DimensionPairHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<DimensionPair> {
-            crate::tables::get_owned(self, &self.dimension_pair, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<DimensionPair>> + 'table> {
-            crate::tables::owned_iter(self, &self.dimension_pair)
-        }
-    }
-    impl EntityTable<DimensionalExponentsHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<DimensionalExponents> {
-            crate::tables::get_owned(self, &self.dimensional_exponents, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<DimensionalExponents>> + 'table> {
-            crate::tables::owned_iter(self, &self.dimensional_exponents)
-        }
-    }
-    impl EntityTable<DirectionHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<Direction> {
-            crate::tables::get_owned(self, &self.direction, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<Direction>> + 'table> {
-            crate::tables::owned_iter(self, &self.direction)
-        }
-    }
-    impl EntityTable<DocumentHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<Document> {
-            crate::tables::get_owned(self, &self.document, entity_id)
-        }
-        fn owned_iter<'table>(&'table self) -> Box<dyn Iterator<Item = Result<Document>> + 'table> {
-            crate::tables::owned_iter(self, &self.document)
-        }
-    }
-    impl EntityTable<DocumentReferenceHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<DocumentReference> {
-            crate::tables::get_owned(self, &self.document_reference, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<DocumentReference>> + 'table> {
-            crate::tables::owned_iter(self, &self.document_reference)
-        }
-    }
-    impl EntityTable<DocumentTypeHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<DocumentType> {
-            crate::tables::get_owned(self, &self.document_type, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<DocumentType>> + 'table> {
-            crate::tables::owned_iter(self, &self.document_type)
-        }
-    }
-    impl EntityTable<DraughtingAnnotationOccurrenceHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<DraughtingAnnotationOccurrence> {
-            crate::tables::get_owned(self, &self.draughting_annotation_occurrence, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<DraughtingAnnotationOccurrence>> + 'table> {
-            crate::tables::owned_iter(self, &self.draughting_annotation_occurrence)
-        }
-    }
-    impl EntityTable<DraughtingApprovalAssignmentHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<DraughtingApprovalAssignment> {
-            crate::tables::get_owned(self, &self.draughting_approval_assignment, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<DraughtingApprovalAssignment>> + 'table> {
-            crate::tables::owned_iter(self, &self.draughting_approval_assignment)
-        }
-    }
-    impl EntityTable<DraughtingCalloutHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<DraughtingCallout> {
-            crate::tables::get_owned(self, &self.draughting_callout, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<DraughtingCallout>> + 'table> {
-            crate::tables::owned_iter(self, &self.draughting_callout)
-        }
-    }
-    impl EntityTable<DraughtingCalloutRelationshipHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<DraughtingCalloutRelationship> {
-            crate::tables::get_owned(self, &self.draughting_callout_relationship, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<DraughtingCalloutRelationship>> + 'table> {
-            crate::tables::owned_iter(self, &self.draughting_callout_relationship)
-        }
-    }
-    impl EntityTable<DraughtingContractAssignmentHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<DraughtingContractAssignment> {
-            crate::tables::get_owned(self, &self.draughting_contract_assignment, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<DraughtingContractAssignment>> + 'table> {
-            crate::tables::owned_iter(self, &self.draughting_contract_assignment)
-        }
-    }
-    impl EntityTable<DraughtingDrawingRevisionHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<DraughtingDrawingRevision> {
-            crate::tables::get_owned(self, &self.draughting_drawing_revision, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<DraughtingDrawingRevision>> + 'table> {
-            crate::tables::owned_iter(self, &self.draughting_drawing_revision)
-        }
-    }
-    impl EntityTable<DraughtingElementsHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<DraughtingElements> {
-            crate::tables::get_owned(self, &self.draughting_elements, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<DraughtingElements>> + 'table> {
-            crate::tables::owned_iter(self, &self.draughting_elements)
-        }
-    }
-    impl EntityTable<DraughtingGroupAssignmentHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<DraughtingGroupAssignment> {
-            crate::tables::get_owned(self, &self.draughting_group_assignment, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<DraughtingGroupAssignment>> + 'table> {
-            crate::tables::owned_iter(self, &self.draughting_group_assignment)
-        }
-    }
-    impl EntityTable<DraughtingModelHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<DraughtingModel> {
-            crate::tables::get_owned(self, &self.draughting_model, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<DraughtingModel>> + 'table> {
-            crate::tables::owned_iter(self, &self.draughting_model)
-        }
-    }
-    impl EntityTable<DraughtingOrganizationAssignmentHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<DraughtingOrganizationAssignment> {
-            crate::tables::get_owned(self, &self.draughting_organization_assignment, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<DraughtingOrganizationAssignment>> + 'table> {
-            crate::tables::owned_iter(self, &self.draughting_organization_assignment)
-        }
-    }
-    impl EntityTable<DraughtingPersonAndOrganizationAssignmentHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<DraughtingPersonAndOrganizationAssignment> {
-            crate::tables::get_owned(
-                self,
-                &self.draughting_person_and_organization_assignment,
-                entity_id,
-            )
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<DraughtingPersonAndOrganizationAssignment>> + 'table>
-        {
-            crate::tables::owned_iter(self, &self.draughting_person_and_organization_assignment)
-        }
-    }
-    impl EntityTable<DraughtingPersonAssignmentHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<DraughtingPersonAssignment> {
-            crate::tables::get_owned(self, &self.draughting_person_assignment, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<DraughtingPersonAssignment>> + 'table> {
-            crate::tables::owned_iter(self, &self.draughting_person_assignment)
-        }
-    }
-    impl EntityTable<DraughtingPreDefinedColourHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<DraughtingPreDefinedColour> {
-            crate::tables::get_owned(self, &self.draughting_pre_defined_colour, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<DraughtingPreDefinedColour>> + 'table> {
-            crate::tables::owned_iter(self, &self.draughting_pre_defined_colour)
-        }
-    }
-    impl EntityTable<DraughtingPreDefinedCurveFontHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<DraughtingPreDefinedCurveFont> {
-            crate::tables::get_owned(self, &self.draughting_pre_defined_curve_font, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<DraughtingPreDefinedCurveFont>> + 'table> {
-            crate::tables::owned_iter(self, &self.draughting_pre_defined_curve_font)
-        }
-    }
-    impl EntityTable<DraughtingPreDefinedTextFontHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<DraughtingPreDefinedTextFont> {
-            crate::tables::get_owned(self, &self.draughting_pre_defined_text_font, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<DraughtingPreDefinedTextFont>> + 'table> {
-            crate::tables::owned_iter(self, &self.draughting_pre_defined_text_font)
-        }
-    }
-    impl EntityTable<DraughtingPresentedItemHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<DraughtingPresentedItem> {
-            crate::tables::get_owned(self, &self.draughting_presented_item, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<DraughtingPresentedItem>> + 'table> {
-            crate::tables::owned_iter(self, &self.draughting_presented_item)
-        }
-    }
-    impl EntityTable<DraughtingSecurityClassificationAssignmentHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<DraughtingSecurityClassificationAssignment> {
-            crate::tables::get_owned(
-                self,
-                &self.draughting_security_classification_assignment,
-                entity_id,
-            )
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<DraughtingSecurityClassificationAssignment>> + 'table>
-        {
-            crate::tables::owned_iter(self, &self.draughting_security_classification_assignment)
-        }
-    }
-    impl EntityTable<DraughtingSpecificationReferenceHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<DraughtingSpecificationReference> {
-            crate::tables::get_owned(self, &self.draughting_specification_reference, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<DraughtingSpecificationReference>> + 'table> {
-            crate::tables::owned_iter(self, &self.draughting_specification_reference)
-        }
-    }
-    impl EntityTable<DraughtingSubfigureRepresentationHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<DraughtingSubfigureRepresentation> {
-            crate::tables::get_owned(self, &self.draughting_subfigure_representation, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<DraughtingSubfigureRepresentation>> + 'table> {
-            crate::tables::owned_iter(self, &self.draughting_subfigure_representation)
-        }
-    }
-    impl EntityTable<DraughtingSymbolRepresentationHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<DraughtingSymbolRepresentation> {
-            crate::tables::get_owned(self, &self.draughting_symbol_representation, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<DraughtingSymbolRepresentation>> + 'table> {
-            crate::tables::owned_iter(self, &self.draughting_symbol_representation)
-        }
-    }
-    impl EntityTable<DraughtingTextLiteralWithDelineationHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<DraughtingTextLiteralWithDelineation> {
-            crate::tables::get_owned(
-                self,
-                &self.draughting_text_literal_with_delineation,
-                entity_id,
-            )
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<DraughtingTextLiteralWithDelineation>> + 'table>
-        {
-            crate::tables::owned_iter(self, &self.draughting_text_literal_with_delineation)
-        }
-    }
-    impl EntityTable<DraughtingTitleHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<DraughtingTitle> {
-            crate::tables::get_owned(self, &self.draughting_title, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<DraughtingTitle>> + 'table> {
-            crate::tables::owned_iter(self, &self.draughting_title)
-        }
-    }
-    impl EntityTable<DrawingDefinitionHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<DrawingDefinition> {
-            crate::tables::get_owned(self, &self.drawing_definition, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<DrawingDefinition>> + 'table> {
-            crate::tables::owned_iter(self, &self.drawing_definition)
-        }
-    }
-    impl EntityTable<DrawingRevisionHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<DrawingRevision> {
-            crate::tables::get_owned(self, &self.drawing_revision, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<DrawingRevision>> + 'table> {
-            crate::tables::owned_iter(self, &self.drawing_revision)
-        }
-    }
-    impl EntityTable<DrawingSheetLayoutHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<DrawingSheetLayout> {
-            crate::tables::get_owned(self, &self.drawing_sheet_layout, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<DrawingSheetLayout>> + 'table> {
-            crate::tables::owned_iter(self, &self.drawing_sheet_layout)
-        }
-    }
-    impl EntityTable<DrawingSheetRevisionHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<DrawingSheetRevision> {
-            crate::tables::get_owned(self, &self.drawing_sheet_revision, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<DrawingSheetRevision>> + 'table> {
-            crate::tables::owned_iter(self, &self.drawing_sheet_revision)
-        }
-    }
-    impl EntityTable<DrawingSheetRevisionUsageHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<DrawingSheetRevisionUsage> {
-            crate::tables::get_owned(self, &self.drawing_sheet_revision_usage, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<DrawingSheetRevisionUsage>> + 'table> {
-            crate::tables::owned_iter(self, &self.drawing_sheet_revision_usage)
-        }
-    }
-    impl EntityTable<EllipseHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<Ellipse> {
-            crate::tables::get_owned(self, &self.ellipse, entity_id)
-        }
-        fn owned_iter<'table>(&'table self) -> Box<dyn Iterator<Item = Result<Ellipse>> + 'table> {
-            crate::tables::owned_iter(self, &self.ellipse)
-        }
-    }
-    impl EntityTable<ExternalSourceHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<ExternalSource> {
-            crate::tables::get_owned(self, &self.external_source, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<ExternalSource>> + 'table> {
-            crate::tables::owned_iter(self, &self.external_source)
-        }
-    }
-    impl EntityTable<ExternallyDefinedCurveFontHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<ExternallyDefinedCurveFont> {
-            crate::tables::get_owned(self, &self.externally_defined_curve_font, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<ExternallyDefinedCurveFont>> + 'table> {
-            crate::tables::owned_iter(self, &self.externally_defined_curve_font)
-        }
-    }
-    impl EntityTable<ExternallyDefinedHatchStyleHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<ExternallyDefinedHatchStyle> {
-            crate::tables::get_owned(self, &self.externally_defined_hatch_style, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<ExternallyDefinedHatchStyle>> + 'table> {
-            crate::tables::owned_iter(self, &self.externally_defined_hatch_style)
-        }
-    }
-    impl EntityTable<ExternallyDefinedItemHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<ExternallyDefinedItem> {
-            crate::tables::get_owned(self, &self.externally_defined_item, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<ExternallyDefinedItem>> + 'table> {
-            crate::tables::owned_iter(self, &self.externally_defined_item)
-        }
-    }
-    impl EntityTable<ExternallyDefinedSymbolHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<ExternallyDefinedSymbol> {
-            crate::tables::get_owned(self, &self.externally_defined_symbol, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<ExternallyDefinedSymbol>> + 'table> {
-            crate::tables::owned_iter(self, &self.externally_defined_symbol)
-        }
-    }
-    impl EntityTable<ExternallyDefinedTextFontHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<ExternallyDefinedTextFont> {
-            crate::tables::get_owned(self, &self.externally_defined_text_font, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<ExternallyDefinedTextFont>> + 'table> {
-            crate::tables::owned_iter(self, &self.externally_defined_text_font)
-        }
-    }
-    impl EntityTable<ExternallyDefinedTileStyleHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<ExternallyDefinedTileStyle> {
-            crate::tables::get_owned(self, &self.externally_defined_tile_style, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<ExternallyDefinedTileStyle>> + 'table> {
-            crate::tables::owned_iter(self, &self.externally_defined_tile_style)
-        }
-    }
-    impl EntityTable<FillAreaStyleHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<FillAreaStyle> {
-            crate::tables::get_owned(self, &self.fill_area_style, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<FillAreaStyle>> + 'table> {
-            crate::tables::owned_iter(self, &self.fill_area_style)
-        }
-    }
-    impl EntityTable<FillAreaStyleColourHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<FillAreaStyleColour> {
-            crate::tables::get_owned(self, &self.fill_area_style_colour, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<FillAreaStyleColour>> + 'table> {
-            crate::tables::owned_iter(self, &self.fill_area_style_colour)
-        }
-    }
-    impl EntityTable<FillAreaStyleHatchingHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<FillAreaStyleHatching> {
-            crate::tables::get_owned(self, &self.fill_area_style_hatching, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<FillAreaStyleHatching>> + 'table> {
-            crate::tables::owned_iter(self, &self.fill_area_style_hatching)
-        }
-    }
-    impl EntityTable<FillAreaStyleTileSymbolWithStyleHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<FillAreaStyleTileSymbolWithStyle> {
-            crate::tables::get_owned(
-                self,
-                &self.fill_area_style_tile_symbol_with_style,
-                entity_id,
-            )
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<FillAreaStyleTileSymbolWithStyle>> + 'table> {
-            crate::tables::owned_iter(self, &self.fill_area_style_tile_symbol_with_style)
-        }
-    }
-    impl EntityTable<FillAreaStyleTilesHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<FillAreaStyleTiles> {
-            crate::tables::get_owned(self, &self.fill_area_style_tiles, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<FillAreaStyleTiles>> + 'table> {
-            crate::tables::owned_iter(self, &self.fill_area_style_tiles)
-        }
-    }
-    impl EntityTable<GeometricCurveSetHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<GeometricCurveSet> {
-            crate::tables::get_owned(self, &self.geometric_curve_set, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<GeometricCurveSet>> + 'table> {
-            crate::tables::owned_iter(self, &self.geometric_curve_set)
-        }
-    }
-    impl EntityTable<GeometricRepresentationContextHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<GeometricRepresentationContext> {
-            crate::tables::get_owned(self, &self.geometric_representation_context, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<GeometricRepresentationContext>> + 'table> {
-            crate::tables::owned_iter(self, &self.geometric_representation_context)
-        }
-    }
-    impl EntityTable<GeometricRepresentationItemHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<GeometricRepresentationItem> {
-            crate::tables::get_owned(self, &self.geometric_representation_item, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<GeometricRepresentationItem>> + 'table> {
-            crate::tables::owned_iter(self, &self.geometric_representation_item)
-        }
-    }
-    impl EntityTable<GeometricSetHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<GeometricSet> {
-            crate::tables::get_owned(self, &self.geometric_set, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<GeometricSet>> + 'table> {
-            crate::tables::owned_iter(self, &self.geometric_set)
-        }
-    }
-    impl EntityTable<GeometricalToleranceCalloutHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<GeometricalToleranceCallout> {
-            crate::tables::get_owned(self, &self.geometrical_tolerance_callout, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<GeometricalToleranceCallout>> + 'table> {
-            crate::tables::owned_iter(self, &self.geometrical_tolerance_callout)
-        }
-    }
-    impl EntityTable<GeometricallyBounded2DWireframeRepresentationHolder> for Tables {
-        fn get_owned(
-            &self,
-            entity_id: u64,
-        ) -> Result<GeometricallyBounded2DWireframeRepresentation> {
-            crate::tables::get_owned(
-                self,
-                &self.geometrically_bounded_2d_wireframe_representation,
-                entity_id,
-            )
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<GeometricallyBounded2DWireframeRepresentation>> + 'table>
-        {
-            crate::tables::owned_iter(
-                self,
-                &self.geometrically_bounded_2d_wireframe_representation,
-            )
-        }
-    }
-    impl EntityTable<GlobalUnitAssignedContextHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<GlobalUnitAssignedContext> {
-            crate::tables::get_owned(self, &self.global_unit_assigned_context, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<GlobalUnitAssignedContext>> + 'table> {
-            crate::tables::owned_iter(self, &self.global_unit_assigned_context)
-        }
-    }
-    impl EntityTable<GroupHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<Group> {
-            crate::tables::get_owned(self, &self.group, entity_id)
-        }
-        fn owned_iter<'table>(&'table self) -> Box<dyn Iterator<Item = Result<Group>> + 'table> {
-            crate::tables::owned_iter(self, &self.group)
-        }
-    }
-    impl EntityTable<GroupAssignmentHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<GroupAssignment> {
-            crate::tables::get_owned(self, &self.group_assignment, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<GroupAssignment>> + 'table> {
-            crate::tables::owned_iter(self, &self.group_assignment)
-        }
-    }
-    impl EntityTable<GroupRelationshipHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<GroupRelationship> {
-            crate::tables::get_owned(self, &self.group_relationship, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<GroupRelationship>> + 'table> {
-            crate::tables::owned_iter(self, &self.group_relationship)
-        }
-    }
-    impl EntityTable<HyperbolaHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<Hyperbola> {
-            crate::tables::get_owned(self, &self.hyperbola, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<Hyperbola>> + 'table> {
-            crate::tables::owned_iter(self, &self.hyperbola)
-        }
-    }
-    impl EntityTable<InvisibilityHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<Invisibility> {
-            crate::tables::get_owned(self, &self.invisibility, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<Invisibility>> + 'table> {
-            crate::tables::owned_iter(self, &self.invisibility)
-        }
-    }
-    impl EntityTable<LeaderCurveHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<LeaderCurve> {
-            crate::tables::get_owned(self, &self.leader_curve, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<LeaderCurve>> + 'table> {
-            crate::tables::owned_iter(self, &self.leader_curve)
-        }
-    }
-    impl EntityTable<LeaderDirectedCalloutHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<LeaderDirectedCallout> {
-            crate::tables::get_owned(self, &self.leader_directed_callout, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<LeaderDirectedCallout>> + 'table> {
-            crate::tables::owned_iter(self, &self.leader_directed_callout)
-        }
-    }
-    impl EntityTable<LeaderDirectedDimensionHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<LeaderDirectedDimension> {
-            crate::tables::get_owned(self, &self.leader_directed_dimension, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<LeaderDirectedDimension>> + 'table> {
-            crate::tables::owned_iter(self, &self.leader_directed_dimension)
-        }
-    }
-    impl EntityTable<LeaderTerminatorHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<LeaderTerminator> {
-            crate::tables::get_owned(self, &self.leader_terminator, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<LeaderTerminator>> + 'table> {
-            crate::tables::owned_iter(self, &self.leader_terminator)
-        }
-    }
-    impl EntityTable<LengthMeasureWithUnitHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<LengthMeasureWithUnit> {
-            crate::tables::get_owned(self, &self.length_measure_with_unit, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<LengthMeasureWithUnit>> + 'table> {
-            crate::tables::owned_iter(self, &self.length_measure_with_unit)
-        }
-    }
-    impl EntityTable<LengthUnitHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<LengthUnit> {
-            crate::tables::get_owned(self, &self.length_unit, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<LengthUnit>> + 'table> {
-            crate::tables::owned_iter(self, &self.length_unit)
-        }
-    }
-    impl EntityTable<LineHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<Line> {
-            crate::tables::get_owned(self, &self.line, entity_id)
-        }
-        fn owned_iter<'table>(&'table self) -> Box<dyn Iterator<Item = Result<Line>> + 'table> {
-            crate::tables::owned_iter(self, &self.line)
-        }
-    }
-    impl EntityTable<LinearDimensionHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<LinearDimension> {
-            crate::tables::get_owned(self, &self.linear_dimension, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<LinearDimension>> + 'table> {
-            crate::tables::owned_iter(self, &self.linear_dimension)
-        }
-    }
-    impl EntityTable<MappedItemHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<MappedItem> {
-            crate::tables::get_owned(self, &self.mapped_item, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<MappedItem>> + 'table> {
-            crate::tables::owned_iter(self, &self.mapped_item)
-        }
-    }
-    impl EntityTable<MeasureWithUnitHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<MeasureWithUnit> {
-            crate::tables::get_owned(self, &self.measure_with_unit, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<MeasureWithUnit>> + 'table> {
-            crate::tables::owned_iter(self, &self.measure_with_unit)
-        }
-    }
-    impl EntityTable<NamedUnitHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<NamedUnit> {
-            crate::tables::get_owned(self, &self.named_unit, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<NamedUnit>> + 'table> {
-            crate::tables::owned_iter(self, &self.named_unit)
-        }
-    }
-    impl EntityTable<OffsetCurve2DHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<OffsetCurve2D> {
-            crate::tables::get_owned(self, &self.offset_curve_2d, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<OffsetCurve2D>> + 'table> {
-            crate::tables::owned_iter(self, &self.offset_curve_2d)
-        }
-    }
-    impl EntityTable<OneDirectionRepeatFactorHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<OneDirectionRepeatFactor> {
-            crate::tables::get_owned(self, &self.one_direction_repeat_factor, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<OneDirectionRepeatFactor>> + 'table> {
-            crate::tables::owned_iter(self, &self.one_direction_repeat_factor)
-        }
-    }
-    impl EntityTable<OrdinateDimensionHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<OrdinateDimension> {
-            crate::tables::get_owned(self, &self.ordinate_dimension, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<OrdinateDimension>> + 'table> {
-            crate::tables::owned_iter(self, &self.ordinate_dimension)
-        }
-    }
-    impl EntityTable<OrganizationHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<Organization> {
-            crate::tables::get_owned(self, &self.organization, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<Organization>> + 'table> {
-            crate::tables::owned_iter(self, &self.organization)
-        }
-    }
-    impl EntityTable<OrganizationAssignmentHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<OrganizationAssignment> {
-            crate::tables::get_owned(self, &self.organization_assignment, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<OrganizationAssignment>> + 'table> {
-            crate::tables::owned_iter(self, &self.organization_assignment)
-        }
-    }
-    impl EntityTable<OrganizationRoleHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<OrganizationRole> {
-            crate::tables::get_owned(self, &self.organization_role, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<OrganizationRole>> + 'table> {
-            crate::tables::owned_iter(self, &self.organization_role)
-        }
-    }
-    impl EntityTable<OrganizationalAddressHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<OrganizationalAddress> {
-            crate::tables::get_owned(self, &self.organizational_address, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<OrganizationalAddress>> + 'table> {
-            crate::tables::owned_iter(self, &self.organizational_address)
-        }
-    }
-    impl EntityTable<ParabolaHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<Parabola> {
-            crate::tables::get_owned(self, &self.parabola, entity_id)
-        }
-        fn owned_iter<'table>(&'table self) -> Box<dyn Iterator<Item = Result<Parabola>> + 'table> {
-            crate::tables::owned_iter(self, &self.parabola)
-        }
-    }
-    impl EntityTable<PersonHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<Person> {
-            crate::tables::get_owned(self, &self.person, entity_id)
-        }
-        fn owned_iter<'table>(&'table self) -> Box<dyn Iterator<Item = Result<Person>> + 'table> {
-            crate::tables::owned_iter(self, &self.person)
-        }
-    }
-    impl EntityTable<PersonAndOrganizationHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<PersonAndOrganization> {
-            crate::tables::get_owned(self, &self.person_and_organization, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<PersonAndOrganization>> + 'table> {
-            crate::tables::owned_iter(self, &self.person_and_organization)
-        }
-    }
-    impl EntityTable<PersonAndOrganizationAssignmentHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<PersonAndOrganizationAssignment> {
-            crate::tables::get_owned(self, &self.person_and_organization_assignment, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<PersonAndOrganizationAssignment>> + 'table> {
-            crate::tables::owned_iter(self, &self.person_and_organization_assignment)
-        }
-    }
-    impl EntityTable<PersonAndOrganizationRoleHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<PersonAndOrganizationRole> {
-            crate::tables::get_owned(self, &self.person_and_organization_role, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<PersonAndOrganizationRole>> + 'table> {
-            crate::tables::owned_iter(self, &self.person_and_organization_role)
-        }
-    }
-    impl EntityTable<PersonAssignmentHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<PersonAssignment> {
-            crate::tables::get_owned(self, &self.person_assignment, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<PersonAssignment>> + 'table> {
-            crate::tables::owned_iter(self, &self.person_assignment)
-        }
-    }
-    impl EntityTable<PersonRoleHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<PersonRole> {
-            crate::tables::get_owned(self, &self.person_role, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<PersonRole>> + 'table> {
-            crate::tables::owned_iter(self, &self.person_role)
-        }
-    }
-    impl EntityTable<PersonalAddressHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<PersonalAddress> {
-            crate::tables::get_owned(self, &self.personal_address, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<PersonalAddress>> + 'table> {
-            crate::tables::owned_iter(self, &self.personal_address)
-        }
-    }
-    impl EntityTable<PlacementHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<Placement> {
-            crate::tables::get_owned(self, &self.placement, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<Placement>> + 'table> {
-            crate::tables::owned_iter(self, &self.placement)
-        }
-    }
-    impl EntityTable<PlanarBoxHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<PlanarBox> {
-            crate::tables::get_owned(self, &self.planar_box, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<PlanarBox>> + 'table> {
-            crate::tables::owned_iter(self, &self.planar_box)
-        }
-    }
-    impl EntityTable<PlanarExtentHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<PlanarExtent> {
-            crate::tables::get_owned(self, &self.planar_extent, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<PlanarExtent>> + 'table> {
-            crate::tables::owned_iter(self, &self.planar_extent)
-        }
-    }
-    impl EntityTable<PlaneAngleMeasureWithUnitHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<PlaneAngleMeasureWithUnit> {
-            crate::tables::get_owned(self, &self.plane_angle_measure_with_unit, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<PlaneAngleMeasureWithUnit>> + 'table> {
-            crate::tables::owned_iter(self, &self.plane_angle_measure_with_unit)
-        }
-    }
-    impl EntityTable<PlaneAngleUnitHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<PlaneAngleUnit> {
-            crate::tables::get_owned(self, &self.plane_angle_unit, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<PlaneAngleUnit>> + 'table> {
-            crate::tables::owned_iter(self, &self.plane_angle_unit)
-        }
-    }
-    impl EntityTable<PointHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<Point> {
-            crate::tables::get_owned(self, &self.point, entity_id)
-        }
-        fn owned_iter<'table>(&'table self) -> Box<dyn Iterator<Item = Result<Point>> + 'table> {
-            crate::tables::owned_iter(self, &self.point)
-        }
-    }
-    impl EntityTable<PointOnCurveHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<PointOnCurve> {
-            crate::tables::get_owned(self, &self.point_on_curve, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<PointOnCurve>> + 'table> {
-            crate::tables::owned_iter(self, &self.point_on_curve)
-        }
-    }
-    impl EntityTable<PolylineHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<Polyline> {
-            crate::tables::get_owned(self, &self.polyline, entity_id)
-        }
-        fn owned_iter<'table>(&'table self) -> Box<dyn Iterator<Item = Result<Polyline>> + 'table> {
-            crate::tables::owned_iter(self, &self.polyline)
-        }
-    }
-    impl EntityTable<PreDefinedColourHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<PreDefinedColour> {
-            crate::tables::get_owned(self, &self.pre_defined_colour, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<PreDefinedColour>> + 'table> {
-            crate::tables::owned_iter(self, &self.pre_defined_colour)
-        }
-    }
-    impl EntityTable<PreDefinedCurveFontHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<PreDefinedCurveFont> {
-            crate::tables::get_owned(self, &self.pre_defined_curve_font, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<PreDefinedCurveFont>> + 'table> {
-            crate::tables::owned_iter(self, &self.pre_defined_curve_font)
-        }
-    }
-    impl EntityTable<PreDefinedDimensionSymbolHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<PreDefinedDimensionSymbol> {
-            crate::tables::get_owned(self, &self.pre_defined_dimension_symbol, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<PreDefinedDimensionSymbol>> + 'table> {
-            crate::tables::owned_iter(self, &self.pre_defined_dimension_symbol)
-        }
-    }
-    impl EntityTable<PreDefinedGeometricalToleranceSymbolHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<PreDefinedGeometricalToleranceSymbol> {
-            crate::tables::get_owned(
-                self,
-                &self.pre_defined_geometrical_tolerance_symbol,
-                entity_id,
-            )
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<PreDefinedGeometricalToleranceSymbol>> + 'table>
-        {
-            crate::tables::owned_iter(self, &self.pre_defined_geometrical_tolerance_symbol)
-        }
-    }
-    impl EntityTable<PreDefinedItemHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<PreDefinedItem> {
-            crate::tables::get_owned(self, &self.pre_defined_item, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<PreDefinedItem>> + 'table> {
-            crate::tables::owned_iter(self, &self.pre_defined_item)
-        }
-    }
-    impl EntityTable<PreDefinedPointMarkerSymbolHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<PreDefinedPointMarkerSymbol> {
-            crate::tables::get_owned(self, &self.pre_defined_point_marker_symbol, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<PreDefinedPointMarkerSymbol>> + 'table> {
-            crate::tables::owned_iter(self, &self.pre_defined_point_marker_symbol)
-        }
-    }
-    impl EntityTable<PreDefinedSymbolHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<PreDefinedSymbol> {
-            crate::tables::get_owned(self, &self.pre_defined_symbol, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<PreDefinedSymbol>> + 'table> {
-            crate::tables::owned_iter(self, &self.pre_defined_symbol)
-        }
-    }
-    impl EntityTable<PreDefinedTerminatorSymbolHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<PreDefinedTerminatorSymbol> {
-            crate::tables::get_owned(self, &self.pre_defined_terminator_symbol, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<PreDefinedTerminatorSymbol>> + 'table> {
-            crate::tables::owned_iter(self, &self.pre_defined_terminator_symbol)
-        }
-    }
-    impl EntityTable<PreDefinedTextFontHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<PreDefinedTextFont> {
-            crate::tables::get_owned(self, &self.pre_defined_text_font, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<PreDefinedTextFont>> + 'table> {
-            crate::tables::owned_iter(self, &self.pre_defined_text_font)
-        }
-    }
-    impl EntityTable<PresentationAreaHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<PresentationArea> {
-            crate::tables::get_owned(self, &self.presentation_area, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<PresentationArea>> + 'table> {
-            crate::tables::owned_iter(self, &self.presentation_area)
-        }
-    }
-    impl EntityTable<PresentationLayerAssignmentHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<PresentationLayerAssignment> {
-            crate::tables::get_owned(self, &self.presentation_layer_assignment, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<PresentationLayerAssignment>> + 'table> {
-            crate::tables::owned_iter(self, &self.presentation_layer_assignment)
-        }
-    }
-    impl EntityTable<PresentationLayerUsageHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<PresentationLayerUsage> {
-            crate::tables::get_owned(self, &self.presentation_layer_usage, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<PresentationLayerUsage>> + 'table> {
-            crate::tables::owned_iter(self, &self.presentation_layer_usage)
-        }
-    }
-    impl EntityTable<PresentationRepresentationHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<PresentationRepresentation> {
-            crate::tables::get_owned(self, &self.presentation_representation, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<PresentationRepresentation>> + 'table> {
-            crate::tables::owned_iter(self, &self.presentation_representation)
-        }
-    }
-    impl EntityTable<PresentationSetHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<PresentationSet> {
-            crate::tables::get_owned(self, &self.presentation_set, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<PresentationSet>> + 'table> {
-            crate::tables::owned_iter(self, &self.presentation_set)
-        }
-    }
-    impl EntityTable<PresentationSizeHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<PresentationSize> {
-            crate::tables::get_owned(self, &self.presentation_size, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<PresentationSize>> + 'table> {
-            crate::tables::owned_iter(self, &self.presentation_size)
-        }
-    }
-    impl EntityTable<PresentationStyleAssignmentHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<PresentationStyleAssignment> {
-            crate::tables::get_owned(self, &self.presentation_style_assignment, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<PresentationStyleAssignment>> + 'table> {
-            crate::tables::owned_iter(self, &self.presentation_style_assignment)
-        }
-    }
-    impl EntityTable<PresentationStyleByContextHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<PresentationStyleByContext> {
-            crate::tables::get_owned(self, &self.presentation_style_by_context, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<PresentationStyleByContext>> + 'table> {
-            crate::tables::owned_iter(self, &self.presentation_style_by_context)
-        }
-    }
-    impl EntityTable<PresentationViewHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<PresentationView> {
-            crate::tables::get_owned(self, &self.presentation_view, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<PresentationView>> + 'table> {
-            crate::tables::owned_iter(self, &self.presentation_view)
-        }
-    }
-    impl EntityTable<PresentedItemHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<PresentedItem> {
-            crate::tables::get_owned(self, &self.presented_item, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<PresentedItem>> + 'table> {
-            crate::tables::owned_iter(self, &self.presented_item)
-        }
-    }
-    impl EntityTable<PresentedItemRepresentationHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<PresentedItemRepresentation> {
-            crate::tables::get_owned(self, &self.presented_item_representation, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<PresentedItemRepresentation>> + 'table> {
-            crate::tables::owned_iter(self, &self.presented_item_representation)
-        }
-    }
-    impl EntityTable<ProductHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<Product> {
-            crate::tables::get_owned(self, &self.product, entity_id)
-        }
-        fn owned_iter<'table>(&'table self) -> Box<dyn Iterator<Item = Result<Product>> + 'table> {
-            crate::tables::owned_iter(self, &self.product)
-        }
-    }
-    impl EntityTable<ProductContextHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<ProductContext> {
-            crate::tables::get_owned(self, &self.product_context, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<ProductContext>> + 'table> {
-            crate::tables::owned_iter(self, &self.product_context)
-        }
-    }
-    impl EntityTable<ProductDefinitionHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<ProductDefinition> {
-            crate::tables::get_owned(self, &self.product_definition, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<ProductDefinition>> + 'table> {
-            crate::tables::owned_iter(self, &self.product_definition)
-        }
-    }
-    impl EntityTable<ProductDefinitionContextHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<ProductDefinitionContext> {
-            crate::tables::get_owned(self, &self.product_definition_context, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<ProductDefinitionContext>> + 'table> {
-            crate::tables::owned_iter(self, &self.product_definition_context)
-        }
-    }
-    impl EntityTable<ProductDefinitionFormationHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<ProductDefinitionFormation> {
-            crate::tables::get_owned(self, &self.product_definition_formation, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<ProductDefinitionFormation>> + 'table> {
-            crate::tables::owned_iter(self, &self.product_definition_formation)
-        }
-    }
-    impl EntityTable<ProductDefinitionShapeHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<ProductDefinitionShape> {
-            crate::tables::get_owned(self, &self.product_definition_shape, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<ProductDefinitionShape>> + 'table> {
-            crate::tables::owned_iter(self, &self.product_definition_shape)
-        }
-    }
-    impl EntityTable<ProjectionCurveHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<ProjectionCurve> {
-            crate::tables::get_owned(self, &self.projection_curve, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<ProjectionCurve>> + 'table> {
-            crate::tables::owned_iter(self, &self.projection_curve)
-        }
-    }
-    impl EntityTable<ProjectionDirectedCalloutHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<ProjectionDirectedCallout> {
-            crate::tables::get_owned(self, &self.projection_directed_callout, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<ProjectionDirectedCallout>> + 'table> {
-            crate::tables::owned_iter(self, &self.projection_directed_callout)
-        }
-    }
-    impl EntityTable<PropertyDefinitionHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<PropertyDefinition> {
-            crate::tables::get_owned(self, &self.property_definition, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<PropertyDefinition>> + 'table> {
-            crate::tables::owned_iter(self, &self.property_definition)
-        }
-    }
-    impl EntityTable<PropertyDefinitionRepresentationHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<PropertyDefinitionRepresentation> {
-            crate::tables::get_owned(self, &self.property_definition_representation, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<PropertyDefinitionRepresentation>> + 'table> {
-            crate::tables::owned_iter(self, &self.property_definition_representation)
-        }
-    }
-    impl EntityTable<QuasiUniformCurveHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<QuasiUniformCurve> {
-            crate::tables::get_owned(self, &self.quasi_uniform_curve, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<QuasiUniformCurve>> + 'table> {
-            crate::tables::owned_iter(self, &self.quasi_uniform_curve)
-        }
-    }
-    impl EntityTable<RadiusDimensionHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<RadiusDimension> {
-            crate::tables::get_owned(self, &self.radius_dimension, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<RadiusDimension>> + 'table> {
-            crate::tables::owned_iter(self, &self.radius_dimension)
-        }
-    }
-    impl EntityTable<RationalBSplineCurveHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<RationalBSplineCurve> {
-            crate::tables::get_owned(self, &self.rational_b_spline_curve, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<RationalBSplineCurve>> + 'table> {
-            crate::tables::owned_iter(self, &self.rational_b_spline_curve)
-        }
-    }
-    impl EntityTable<RepresentationHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<Representation> {
-            crate::tables::get_owned(self, &self.representation, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<Representation>> + 'table> {
-            crate::tables::owned_iter(self, &self.representation)
-        }
-    }
-    impl EntityTable<RepresentationContextHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<RepresentationContext> {
-            crate::tables::get_owned(self, &self.representation_context, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<RepresentationContext>> + 'table> {
-            crate::tables::owned_iter(self, &self.representation_context)
-        }
-    }
-    impl EntityTable<RepresentationItemHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<RepresentationItem> {
-            crate::tables::get_owned(self, &self.representation_item, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<RepresentationItem>> + 'table> {
-            crate::tables::owned_iter(self, &self.representation_item)
-        }
-    }
-    impl EntityTable<RepresentationMapHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<RepresentationMap> {
-            crate::tables::get_owned(self, &self.representation_map, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<RepresentationMap>> + 'table> {
-            crate::tables::owned_iter(self, &self.representation_map)
-        }
-    }
-    impl EntityTable<SecurityClassificationHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<SecurityClassification> {
-            crate::tables::get_owned(self, &self.security_classification, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<SecurityClassification>> + 'table> {
-            crate::tables::owned_iter(self, &self.security_classification)
-        }
-    }
-    impl EntityTable<SecurityClassificationAssignmentHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<SecurityClassificationAssignment> {
-            crate::tables::get_owned(self, &self.security_classification_assignment, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<SecurityClassificationAssignment>> + 'table> {
-            crate::tables::owned_iter(self, &self.security_classification_assignment)
-        }
-    }
-    impl EntityTable<SecurityClassificationLevelHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<SecurityClassificationLevel> {
-            crate::tables::get_owned(self, &self.security_classification_level, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<SecurityClassificationLevel>> + 'table> {
-            crate::tables::owned_iter(self, &self.security_classification_level)
-        }
-    }
-    impl EntityTable<ShapeDefinitionRepresentationHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<ShapeDefinitionRepresentation> {
-            crate::tables::get_owned(self, &self.shape_definition_representation, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<ShapeDefinitionRepresentation>> + 'table> {
-            crate::tables::owned_iter(self, &self.shape_definition_representation)
-        }
-    }
-    impl EntityTable<ShapeRepresentationHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<ShapeRepresentation> {
-            crate::tables::get_owned(self, &self.shape_representation, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<ShapeRepresentation>> + 'table> {
-            crate::tables::owned_iter(self, &self.shape_representation)
-        }
-    }
-    impl EntityTable<SiUnitHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<SiUnit> {
-            crate::tables::get_owned(self, &self.si_unit, entity_id)
-        }
-        fn owned_iter<'table>(&'table self) -> Box<dyn Iterator<Item = Result<SiUnit>> + 'table> {
-            crate::tables::owned_iter(self, &self.si_unit)
-        }
-    }
-    impl EntityTable<StructuredDimensionCalloutHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<StructuredDimensionCallout> {
-            crate::tables::get_owned(self, &self.structured_dimension_callout, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<StructuredDimensionCallout>> + 'table> {
-            crate::tables::owned_iter(self, &self.structured_dimension_callout)
-        }
-    }
-    impl EntityTable<StyledItemHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<StyledItem> {
-            crate::tables::get_owned(self, &self.styled_item, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<StyledItem>> + 'table> {
-            crate::tables::owned_iter(self, &self.styled_item)
-        }
-    }
-    impl EntityTable<SymbolColourHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<SymbolColour> {
-            crate::tables::get_owned(self, &self.symbol_colour, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<SymbolColour>> + 'table> {
-            crate::tables::owned_iter(self, &self.symbol_colour)
-        }
-    }
-    impl EntityTable<SymbolRepresentationHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<SymbolRepresentation> {
-            crate::tables::get_owned(self, &self.symbol_representation, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<SymbolRepresentation>> + 'table> {
-            crate::tables::owned_iter(self, &self.symbol_representation)
-        }
-    }
-    impl EntityTable<SymbolRepresentationMapHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<SymbolRepresentationMap> {
-            crate::tables::get_owned(self, &self.symbol_representation_map, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<SymbolRepresentationMap>> + 'table> {
-            crate::tables::owned_iter(self, &self.symbol_representation_map)
-        }
-    }
-    impl EntityTable<SymbolStyleHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<SymbolStyle> {
-            crate::tables::get_owned(self, &self.symbol_style, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<SymbolStyle>> + 'table> {
-            crate::tables::owned_iter(self, &self.symbol_style)
-        }
-    }
-    impl EntityTable<SymbolTargetHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<SymbolTarget> {
-            crate::tables::get_owned(self, &self.symbol_target, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<SymbolTarget>> + 'table> {
-            crate::tables::owned_iter(self, &self.symbol_target)
-        }
-    }
-    impl EntityTable<TerminatorSymbolHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<TerminatorSymbol> {
-            crate::tables::get_owned(self, &self.terminator_symbol, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<TerminatorSymbol>> + 'table> {
-            crate::tables::owned_iter(self, &self.terminator_symbol)
-        }
-    }
-    impl EntityTable<TextLiteralHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<TextLiteral> {
-            crate::tables::get_owned(self, &self.text_literal, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<TextLiteral>> + 'table> {
-            crate::tables::owned_iter(self, &self.text_literal)
-        }
-    }
-    impl EntityTable<TextLiteralWithAssociatedCurvesHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<TextLiteralWithAssociatedCurves> {
-            crate::tables::get_owned(self, &self.text_literal_with_associated_curves, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<TextLiteralWithAssociatedCurves>> + 'table> {
-            crate::tables::owned_iter(self, &self.text_literal_with_associated_curves)
-        }
-    }
-    impl EntityTable<TextLiteralWithBlankingBoxHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<TextLiteralWithBlankingBox> {
-            crate::tables::get_owned(self, &self.text_literal_with_blanking_box, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<TextLiteralWithBlankingBox>> + 'table> {
-            crate::tables::owned_iter(self, &self.text_literal_with_blanking_box)
-        }
-    }
-    impl EntityTable<TextLiteralWithDelineationHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<TextLiteralWithDelineation> {
-            crate::tables::get_owned(self, &self.text_literal_with_delineation, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<TextLiteralWithDelineation>> + 'table> {
-            crate::tables::owned_iter(self, &self.text_literal_with_delineation)
-        }
-    }
-    impl EntityTable<TextLiteralWithExtentHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<TextLiteralWithExtent> {
-            crate::tables::get_owned(self, &self.text_literal_with_extent, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<TextLiteralWithExtent>> + 'table> {
-            crate::tables::owned_iter(self, &self.text_literal_with_extent)
-        }
-    }
-    impl EntityTable<TextStyleHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<TextStyle> {
-            crate::tables::get_owned(self, &self.text_style, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<TextStyle>> + 'table> {
-            crate::tables::owned_iter(self, &self.text_style)
-        }
-    }
-    impl EntityTable<TextStyleForDefinedFontHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<TextStyleForDefinedFont> {
-            crate::tables::get_owned(self, &self.text_style_for_defined_font, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<TextStyleForDefinedFont>> + 'table> {
-            crate::tables::owned_iter(self, &self.text_style_for_defined_font)
-        }
-    }
-    impl EntityTable<TextStyleWithBoxCharacteristicsHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<TextStyleWithBoxCharacteristics> {
-            crate::tables::get_owned(self, &self.text_style_with_box_characteristics, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<TextStyleWithBoxCharacteristics>> + 'table> {
-            crate::tables::owned_iter(self, &self.text_style_with_box_characteristics)
-        }
-    }
-    impl EntityTable<TextStyleWithMirrorHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<TextStyleWithMirror> {
-            crate::tables::get_owned(self, &self.text_style_with_mirror, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<TextStyleWithMirror>> + 'table> {
-            crate::tables::owned_iter(self, &self.text_style_with_mirror)
-        }
-    }
-    impl EntityTable<TrimmedCurveHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<TrimmedCurve> {
-            crate::tables::get_owned(self, &self.trimmed_curve, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<TrimmedCurve>> + 'table> {
-            crate::tables::owned_iter(self, &self.trimmed_curve)
-        }
-    }
-    impl EntityTable<TwoDirectionRepeatFactorHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<TwoDirectionRepeatFactor> {
-            crate::tables::get_owned(self, &self.two_direction_repeat_factor, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<TwoDirectionRepeatFactor>> + 'table> {
-            crate::tables::owned_iter(self, &self.two_direction_repeat_factor)
-        }
-    }
-    impl EntityTable<UniformCurveHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<UniformCurve> {
-            crate::tables::get_owned(self, &self.uniform_curve, entity_id)
-        }
-        fn owned_iter<'table>(
-            &'table self,
-        ) -> Box<dyn Iterator<Item = Result<UniformCurve>> + 'table> {
-            crate::tables::owned_iter(self, &self.uniform_curve)
-        }
-    }
-    impl EntityTable<VectorHolder> for Tables {
-        fn get_owned(&self, entity_id: u64) -> Result<Vector> {
-            crate::tables::get_owned(self, &self.vector, entity_id)
-        }
-        fn owned_iter<'table>(&'table self) -> Box<dyn Iterator<Item = Result<Vector>> + 'table> {
-            crate::tables::owned_iter(self, &self.vector)
-        }
-    }
     #[derive(Debug, Clone, PartialEq)]
     pub enum ApprovedItem {
         DrawingRevision(DrawingRevisionAny),
@@ -4522,7 +2320,8 @@ pub mod explicit_draughting {
         Direction(Box<Direction>),
     }
     pub type YearNumber = i64;
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = address)]
     pub struct Address {
         pub internal_location: Option<Label>,
         pub street_number: Option<Label>,
@@ -4537,138 +2336,36 @@ pub mod explicit_draughting {
         pub electronic_mail_address: Option<Label>,
         pub telex_number: Option<Label>,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct AddressHolder {
-        internal_location: Option<Label>,
-        street_number: Option<Label>,
-        street: Option<Label>,
-        postal_box: Option<Label>,
-        town: Option<Label>,
-        region: Option<Label>,
-        postal_code: Option<Label>,
-        country: Option<Label>,
-        facsimile_number: Option<Label>,
-        telephone_number: Option<Label>,
-        electronic_mail_address: Option<Label>,
-        telex_number: Option<Label>,
-    }
-    impl Holder for AddressHolder {
-        type Table = Tables;
-        type Owned = Address;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "ADDRESS"
-        }
-        fn attr_len() -> usize {
-            12usize
-        }
-    }
     #[derive(Debug, Clone, PartialEq)]
     pub enum AddressAny {
         OrganizationalAddress(Box<OrganizationalAddress>),
         PersonalAddress(Box<PersonalAddress>),
     }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = angular_dimension)]
     pub struct AngularDimension {}
-    #[derive(Clone, Debug, PartialEq)]
-    struct AngularDimensionHolder {}
-    impl Holder for AngularDimensionHolder {
-        type Table = Tables;
-        type Owned = AngularDimension;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "ANGULAR_DIMENSION"
-        }
-        fn attr_len() -> usize {
-            0usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = annotation_curve_occurrence)]
     pub struct AnnotationCurveOccurrence {}
-    #[derive(Clone, Debug, PartialEq)]
-    struct AnnotationCurveOccurrenceHolder {}
-    impl Holder for AnnotationCurveOccurrenceHolder {
-        type Table = Tables;
-        type Owned = AnnotationCurveOccurrence;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "ANNOTATION_CURVE_OCCURRENCE"
-        }
-        fn attr_len() -> usize {
-            0usize
-        }
-    }
     #[derive(Debug, Clone, PartialEq)]
     pub enum AnnotationCurveOccurrenceAny {
         DimensionCurve(Box<DimensionCurve>),
         LeaderCurve(Box<LeaderCurve>),
         ProjectionCurve(Box<ProjectionCurve>),
     }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = annotation_fill_area)]
     pub struct AnnotationFillArea {
         pub boundaries: Vec<CurveAny>,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct AnnotationFillAreaHolder {
-        boundaries: PlaceHolder<Vec<CurveAny>>,
-    }
-    impl Holder for AnnotationFillAreaHolder {
-        type Table = Tables;
-        type Owned = AnnotationFillArea;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "ANNOTATION_FILL_AREA"
-        }
-        fn attr_len() -> usize {
-            1usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = annotation_fill_area_occurrence)]
     pub struct AnnotationFillAreaOccurrence {
         pub fill_style_target: PointAny,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct AnnotationFillAreaOccurrenceHolder {
-        fill_style_target: PlaceHolder<PointAny>,
-    }
-    impl Holder for AnnotationFillAreaOccurrenceHolder {
-        type Table = Tables;
-        type Owned = AnnotationFillAreaOccurrence;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "ANNOTATION_FILL_AREA_OCCURRENCE"
-        }
-        fn attr_len() -> usize {
-            1usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = annotation_occurrence)]
     pub struct AnnotationOccurrence {}
-    #[derive(Clone, Debug, PartialEq)]
-    struct AnnotationOccurrenceHolder {}
-    impl Holder for AnnotationOccurrenceHolder {
-        type Table = Tables;
-        type Owned = AnnotationOccurrence;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "ANNOTATION_OCCURRENCE"
-        }
-        fn attr_len() -> usize {
-            0usize
-        }
-    }
     #[derive(Debug, Clone, PartialEq)]
     pub enum AnnotationOccurrenceAny {
         AnnotationCurveOccurrence(Box<AnnotationCurveOccurrence>),
@@ -4677,386 +2374,111 @@ pub mod explicit_draughting {
         AnnotationTextOccurrence(Box<AnnotationTextOccurrence>),
         DraughtingAnnotationOccurrence(Box<DraughtingAnnotationOccurrence>),
     }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = annotation_subfigure_occurrence)]
     pub struct AnnotationSubfigureOccurrence {}
-    #[derive(Clone, Debug, PartialEq)]
-    struct AnnotationSubfigureOccurrenceHolder {}
-    impl Holder for AnnotationSubfigureOccurrenceHolder {
-        type Table = Tables;
-        type Owned = AnnotationSubfigureOccurrence;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "ANNOTATION_SUBFIGURE_OCCURRENCE"
-        }
-        fn attr_len() -> usize {
-            0usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = annotation_symbol)]
     pub struct AnnotationSymbol {}
-    #[derive(Clone, Debug, PartialEq)]
-    struct AnnotationSymbolHolder {}
-    impl Holder for AnnotationSymbolHolder {
-        type Table = Tables;
-        type Owned = AnnotationSymbol;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "ANNOTATION_SYMBOL"
-        }
-        fn attr_len() -> usize {
-            0usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = annotation_symbol_occurrence)]
     pub struct AnnotationSymbolOccurrence {}
-    #[derive(Clone, Debug, PartialEq)]
-    struct AnnotationSymbolOccurrenceHolder {}
-    impl Holder for AnnotationSymbolOccurrenceHolder {
-        type Table = Tables;
-        type Owned = AnnotationSymbolOccurrence;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "ANNOTATION_SYMBOL_OCCURRENCE"
-        }
-        fn attr_len() -> usize {
-            0usize
-        }
-    }
     #[derive(Debug, Clone, PartialEq)]
     pub enum AnnotationSymbolOccurrenceAny {
         AnnotationSubfigureOccurrence(Box<AnnotationSubfigureOccurrence>),
         TerminatorSymbol(Box<TerminatorSymbol>),
     }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = annotation_text)]
     pub struct AnnotationText {}
-    #[derive(Clone, Debug, PartialEq)]
-    struct AnnotationTextHolder {}
-    impl Holder for AnnotationTextHolder {
-        type Table = Tables;
-        type Owned = AnnotationText;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "ANNOTATION_TEXT"
-        }
-        fn attr_len() -> usize {
-            0usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = annotation_text_occurrence)]
     pub struct AnnotationTextOccurrence {}
-    #[derive(Clone, Debug, PartialEq)]
-    struct AnnotationTextOccurrenceHolder {}
-    impl Holder for AnnotationTextOccurrenceHolder {
-        type Table = Tables;
-        type Owned = AnnotationTextOccurrence;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "ANNOTATION_TEXT_OCCURRENCE"
-        }
-        fn attr_len() -> usize {
-            0usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = application_context)]
     pub struct ApplicationContext {
         pub application: Text,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct ApplicationContextHolder {
-        application: Text,
-    }
-    impl Holder for ApplicationContextHolder {
-        type Table = Tables;
-        type Owned = ApplicationContext;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "APPLICATION_CONTEXT"
-        }
-        fn attr_len() -> usize {
-            1usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = application_context_element)]
     pub struct ApplicationContextElement {
         pub name: Label,
         pub frame_of_reference: ApplicationContext,
-    }
-    #[derive(Clone, Debug, PartialEq)]
-    struct ApplicationContextElementHolder {
-        name: Label,
-        frame_of_reference: PlaceHolder<ApplicationContext>,
-    }
-    impl Holder for ApplicationContextElementHolder {
-        type Table = Tables;
-        type Owned = ApplicationContextElement;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "APPLICATION_CONTEXT_ELEMENT"
-        }
-        fn attr_len() -> usize {
-            2usize
-        }
     }
     #[derive(Debug, Clone, PartialEq)]
     pub enum ApplicationContextElementAny {
         ProductContext(Box<ProductContext>),
         ProductDefinitionContext(Box<ProductDefinitionContext>),
     }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = application_protocol_definition)]
     pub struct ApplicationProtocolDefinition {
         pub status: Label,
         pub application_interpreted_model_schema_name: Label,
         pub application_protocol_year: YearNumber,
         pub application: ApplicationContext,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct ApplicationProtocolDefinitionHolder {
-        status: Label,
-        application_interpreted_model_schema_name: Label,
-        application_protocol_year: YearNumber,
-        application: PlaceHolder<ApplicationContext>,
-    }
-    impl Holder for ApplicationProtocolDefinitionHolder {
-        type Table = Tables;
-        type Owned = ApplicationProtocolDefinition;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "APPLICATION_PROTOCOL_DEFINITION"
-        }
-        fn attr_len() -> usize {
-            4usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = approval)]
     pub struct Approval {
         pub status: ApprovalStatus,
         pub level: Label,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct ApprovalHolder {
-        status: PlaceHolder<ApprovalStatus>,
-        level: Label,
-    }
-    impl Holder for ApprovalHolder {
-        type Table = Tables;
-        type Owned = Approval;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "APPROVAL"
-        }
-        fn attr_len() -> usize {
-            2usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = approval_assignment)]
     pub struct ApprovalAssignment {
         pub assigned_approval: Approval,
-    }
-    #[derive(Clone, Debug, PartialEq)]
-    struct ApprovalAssignmentHolder {
-        assigned_approval: PlaceHolder<Approval>,
-    }
-    impl Holder for ApprovalAssignmentHolder {
-        type Table = Tables;
-        type Owned = ApprovalAssignment;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "APPROVAL_ASSIGNMENT"
-        }
-        fn attr_len() -> usize {
-            1usize
-        }
     }
     #[derive(Debug, Clone, PartialEq)]
     pub enum ApprovalAssignmentAny {
         DraughtingApprovalAssignment(Box<DraughtingApprovalAssignment>),
     }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = approval_date_time)]
     pub struct ApprovalDateTime {
         pub date_time: DateTimeSelect,
         pub dated_approval: Approval,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct ApprovalDateTimeHolder {
-        date_time: PlaceHolder<DateTimeSelect>,
-        dated_approval: PlaceHolder<Approval>,
-    }
-    impl Holder for ApprovalDateTimeHolder {
-        type Table = Tables;
-        type Owned = ApprovalDateTime;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "APPROVAL_DATE_TIME"
-        }
-        fn attr_len() -> usize {
-            2usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = approval_person_organization)]
     pub struct ApprovalPersonOrganization {
         pub person_organization: PersonOrganizationSelect,
         pub authorized_approval: Approval,
         pub role: ApprovalRole,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct ApprovalPersonOrganizationHolder {
-        person_organization: PlaceHolder<PersonOrganizationSelect>,
-        authorized_approval: PlaceHolder<Approval>,
-        role: PlaceHolder<ApprovalRole>,
-    }
-    impl Holder for ApprovalPersonOrganizationHolder {
-        type Table = Tables;
-        type Owned = ApprovalPersonOrganization;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "APPROVAL_PERSON_ORGANIZATION"
-        }
-        fn attr_len() -> usize {
-            3usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = approval_role)]
     pub struct ApprovalRole {
         pub role: Label,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct ApprovalRoleHolder {
-        role: Label,
-    }
-    impl Holder for ApprovalRoleHolder {
-        type Table = Tables;
-        type Owned = ApprovalRole;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "APPROVAL_ROLE"
-        }
-        fn attr_len() -> usize {
-            1usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = approval_status)]
     pub struct ApprovalStatus {
         pub name: Label,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct ApprovalStatusHolder {
-        name: Label,
-    }
-    impl Holder for ApprovalStatusHolder {
-        type Table = Tables;
-        type Owned = ApprovalStatus;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "APPROVAL_STATUS"
-        }
-        fn attr_len() -> usize {
-            1usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = area_in_set)]
     pub struct AreaInSet {
         pub area: PresentationAreaAny,
         pub in_set: PresentationSetAny,
-    }
-    #[derive(Clone, Debug, PartialEq)]
-    struct AreaInSetHolder {
-        area: PlaceHolder<PresentationAreaAny>,
-        in_set: PlaceHolder<PresentationSetAny>,
-    }
-    impl Holder for AreaInSetHolder {
-        type Table = Tables;
-        type Owned = AreaInSet;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "AREA_IN_SET"
-        }
-        fn attr_len() -> usize {
-            2usize
-        }
     }
     #[derive(Debug, Clone, PartialEq)]
     pub enum AreaInSetAny {
         DrawingSheetRevisionUsage(Box<DrawingSheetRevisionUsage>),
     }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = axis2_placement_2d)]
     pub struct Axis2Placement2D {
         pub ref_direction: Option<Direction>,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct Axis2Placement2DHolder {
-        ref_direction: Option<PlaceHolder<Direction>>,
-    }
-    impl Holder for Axis2Placement2DHolder {
-        type Table = Tables;
-        type Owned = Axis2Placement2D;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "AXIS2_PLACEMENT_2D"
-        }
-        fn attr_len() -> usize {
-            1usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = b_spline_curve)]
     pub struct BSplineCurve {
         pub degree: i64,
         pub control_points_list: Vec<CartesianPoint>,
         pub curve_form: BSplineCurveForm,
         pub closed_curve: Logical,
         pub self_intersect: Logical,
-    }
-    #[derive(Clone, Debug, PartialEq)]
-    struct BSplineCurveHolder {
-        degree: i64,
-        control_points_list: PlaceHolder<Vec<CartesianPoint>>,
-        curve_form: PlaceHolder<BSplineCurveForm>,
-        closed_curve: Logical,
-        self_intersect: Logical,
-    }
-    impl Holder for BSplineCurveHolder {
-        type Table = Tables;
-        type Owned = BSplineCurve;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "B_SPLINE_CURVE"
-        }
-        fn attr_len() -> usize {
-            5usize
-        }
     }
     #[derive(Debug, Clone, PartialEq)]
     pub enum BSplineCurveAny {
@@ -5066,65 +2488,19 @@ pub mod explicit_draughting {
         RationalBSplineCurve(Box<RationalBSplineCurve>),
         UniformCurve(Box<UniformCurve>),
     }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = b_spline_curve_with_knots)]
     pub struct BSplineCurveWithKnots {
         pub knot_multiplicities: Vec<i64>,
         pub knots: Vec<ParameterValue>,
         pub knot_spec: KnotType,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct BSplineCurveWithKnotsHolder {
-        knot_multiplicities: PlaceHolder<Vec<i64>>,
-        knots: PlaceHolder<Vec<ParameterValue>>,
-        knot_spec: PlaceHolder<KnotType>,
-    }
-    impl Holder for BSplineCurveWithKnotsHolder {
-        type Table = Tables;
-        type Owned = BSplineCurveWithKnots;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "B_SPLINE_CURVE_WITH_KNOTS"
-        }
-        fn attr_len() -> usize {
-            3usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = bezier_curve)]
     pub struct BezierCurve {}
-    #[derive(Clone, Debug, PartialEq)]
-    struct BezierCurveHolder {}
-    impl Holder for BezierCurveHolder {
-        type Table = Tables;
-        type Owned = BezierCurve;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "BEZIER_CURVE"
-        }
-        fn attr_len() -> usize {
-            0usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = bounded_curve)]
     pub struct BoundedCurve {}
-    #[derive(Clone, Debug, PartialEq)]
-    struct BoundedCurveHolder {}
-    impl Holder for BoundedCurveHolder {
-        type Table = Tables;
-        type Owned = BoundedCurve;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "BOUNDED_CURVE"
-        }
-        fn attr_len() -> usize {
-            0usize
-        }
-    }
     #[derive(Debug, Clone, PartialEq)]
     pub enum BoundedCurveAny {
         BSplineCurve(Box<BSplineCurve>),
@@ -5132,310 +2508,89 @@ pub mod explicit_draughting {
         Polyline(Box<Polyline>),
         TrimmedCurve(Box<TrimmedCurve>),
     }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = calendar_date)]
     pub struct CalendarDate {
         pub day_component: DayInMonthNumber,
         pub month_component: MonthInYearNumber,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct CalendarDateHolder {
-        day_component: DayInMonthNumber,
-        month_component: MonthInYearNumber,
-    }
-    impl Holder for CalendarDateHolder {
-        type Table = Tables;
-        type Owned = CalendarDate;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "CALENDAR_DATE"
-        }
-        fn attr_len() -> usize {
-            2usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = camera_image)]
     pub struct CameraImage {}
-    #[derive(Clone, Debug, PartialEq)]
-    struct CameraImageHolder {}
-    impl Holder for CameraImageHolder {
-        type Table = Tables;
-        type Owned = CameraImage;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "CAMERA_IMAGE"
-        }
-        fn attr_len() -> usize {
-            0usize
-        }
-    }
     #[derive(Debug, Clone, PartialEq)]
     pub enum CameraImageAny {
         CameraImage2DWithScale(Box<CameraImage2DWithScale>),
     }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = camera_image_2d_with_scale)]
     pub struct CameraImage2DWithScale {}
-    #[derive(Clone, Debug, PartialEq)]
-    struct CameraImage2DWithScaleHolder {}
-    impl Holder for CameraImage2DWithScaleHolder {
-        type Table = Tables;
-        type Owned = CameraImage2DWithScale;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "CAMERA_IMAGE_2D_WITH_SCALE"
-        }
-        fn attr_len() -> usize {
-            0usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = camera_model)]
     pub struct CameraModel {}
-    #[derive(Clone, Debug, PartialEq)]
-    struct CameraModelHolder {}
-    impl Holder for CameraModelHolder {
-        type Table = Tables;
-        type Owned = CameraModel;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "CAMERA_MODEL"
-        }
-        fn attr_len() -> usize {
-            0usize
-        }
-    }
     #[derive(Debug, Clone, PartialEq)]
     pub enum CameraModelAny {
         CameraModelD2(Box<CameraModelD2>),
     }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = camera_model_d2)]
     pub struct CameraModelD2 {
         pub view_window: PlanarBox,
         pub view_window_clipping: bool,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct CameraModelD2Holder {
-        view_window: PlaceHolder<PlanarBox>,
-        view_window_clipping: bool,
-    }
-    impl Holder for CameraModelD2Holder {
-        type Table = Tables;
-        type Owned = CameraModelD2;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "CAMERA_MODEL_D2"
-        }
-        fn attr_len() -> usize {
-            2usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = camera_usage)]
     pub struct CameraUsage {}
-    #[derive(Clone, Debug, PartialEq)]
-    struct CameraUsageHolder {}
-    impl Holder for CameraUsageHolder {
-        type Table = Tables;
-        type Owned = CameraUsage;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "CAMERA_USAGE"
-        }
-        fn attr_len() -> usize {
-            0usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = cartesian_point)]
     pub struct CartesianPoint {
         pub coordinates: Vec<LengthMeasure>,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct CartesianPointHolder {
-        coordinates: PlaceHolder<Vec<LengthMeasure>>,
-    }
-    impl Holder for CartesianPointHolder {
-        type Table = Tables;
-        type Owned = CartesianPoint;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "CARTESIAN_POINT"
-        }
-        fn attr_len() -> usize {
-            1usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = circle)]
     pub struct Circle {
         pub radius: PositiveLengthMeasure,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct CircleHolder {
-        radius: PositiveLengthMeasure,
-    }
-    impl Holder for CircleHolder {
-        type Table = Tables;
-        type Owned = Circle;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "CIRCLE"
-        }
-        fn attr_len() -> usize {
-            1usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = colour)]
     pub struct Colour {}
-    #[derive(Clone, Debug, PartialEq)]
-    struct ColourHolder {}
-    impl Holder for ColourHolder {
-        type Table = Tables;
-        type Owned = Colour;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "COLOUR"
-        }
-        fn attr_len() -> usize {
-            0usize
-        }
-    }
     #[derive(Debug, Clone, PartialEq)]
     pub enum ColourAny {
         ColourSpecification(Box<ColourSpecification>),
         PreDefinedColour(Box<PreDefinedColour>),
     }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = colour_rgb)]
     pub struct ColourRgb {
         pub red: f64,
         pub green: f64,
         pub blue: f64,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct ColourRgbHolder {
-        red: f64,
-        green: f64,
-        blue: f64,
-    }
-    impl Holder for ColourRgbHolder {
-        type Table = Tables;
-        type Owned = ColourRgb;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "COLOUR_RGB"
-        }
-        fn attr_len() -> usize {
-            3usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = colour_specification)]
     pub struct ColourSpecification {
         pub name: ColourAny,
-    }
-    #[derive(Clone, Debug, PartialEq)]
-    struct ColourSpecificationHolder {
-        name: PlaceHolder<ColourAny>,
-    }
-    impl Holder for ColourSpecificationHolder {
-        type Table = Tables;
-        type Owned = ColourSpecification;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "COLOUR_SPECIFICATION"
-        }
-        fn attr_len() -> usize {
-            1usize
-        }
     }
     #[derive(Debug, Clone, PartialEq)]
     pub enum ColourSpecificationAny {
         ColourRgb(Box<ColourRgb>),
     }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = composite_curve)]
     pub struct CompositeCurve {
         pub segments: Vec<CompositeCurveSegment>,
         pub self_intersect: Logical,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct CompositeCurveHolder {
-        segments: PlaceHolder<Vec<CompositeCurveSegment>>,
-        self_intersect: Logical,
-    }
-    impl Holder for CompositeCurveHolder {
-        type Table = Tables;
-        type Owned = CompositeCurve;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "COMPOSITE_CURVE"
-        }
-        fn attr_len() -> usize {
-            2usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = composite_curve_segment)]
     pub struct CompositeCurveSegment {
         pub transition: TransitionCode,
         pub same_sense: bool,
         pub parent_curve: CurveAny,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct CompositeCurveSegmentHolder {
-        transition: PlaceHolder<TransitionCode>,
-        same_sense: bool,
-        parent_curve: PlaceHolder<CurveAny>,
-    }
-    impl Holder for CompositeCurveSegmentHolder {
-        type Table = Tables;
-        type Owned = CompositeCurveSegment;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "COMPOSITE_CURVE_SEGMENT"
-        }
-        fn attr_len() -> usize {
-            3usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = composite_text)]
     pub struct CompositeText {
         pub collected_text: Vec<TextOrCharacter>,
-    }
-    #[derive(Clone, Debug, PartialEq)]
-    struct CompositeTextHolder {
-        collected_text: PlaceHolder<Vec<TextOrCharacter>>,
-    }
-    impl Holder for CompositeTextHolder {
-        type Table = Tables;
-        type Owned = CompositeText;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "COMPOSITE_TEXT"
-        }
-        fn attr_len() -> usize {
-            1usize
-        }
     }
     #[derive(Debug, Clone, PartialEq)]
     pub enum CompositeTextAny {
@@ -5443,89 +2598,25 @@ pub mod explicit_draughting {
         CompositeTextWithBlankingBox(Box<CompositeTextWithBlankingBox>),
         CompositeTextWithExtent(Box<CompositeTextWithExtent>),
     }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = composite_text_with_associated_curves)]
     pub struct CompositeTextWithAssociatedCurves {
         pub associated_curves: Vec<CurveAny>,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct CompositeTextWithAssociatedCurvesHolder {
-        associated_curves: PlaceHolder<Vec<CurveAny>>,
-    }
-    impl Holder for CompositeTextWithAssociatedCurvesHolder {
-        type Table = Tables;
-        type Owned = CompositeTextWithAssociatedCurves;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "COMPOSITE_TEXT_WITH_ASSOCIATED_CURVES"
-        }
-        fn attr_len() -> usize {
-            1usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = composite_text_with_blanking_box)]
     pub struct CompositeTextWithBlankingBox {
         pub blanking: PlanarBox,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct CompositeTextWithBlankingBoxHolder {
-        blanking: PlaceHolder<PlanarBox>,
-    }
-    impl Holder for CompositeTextWithBlankingBoxHolder {
-        type Table = Tables;
-        type Owned = CompositeTextWithBlankingBox;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "COMPOSITE_TEXT_WITH_BLANKING_BOX"
-        }
-        fn attr_len() -> usize {
-            1usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = composite_text_with_extent)]
     pub struct CompositeTextWithExtent {
         pub extent: PlanarExtentAny,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct CompositeTextWithExtentHolder {
-        extent: PlaceHolder<PlanarExtentAny>,
-    }
-    impl Holder for CompositeTextWithExtentHolder {
-        type Table = Tables;
-        type Owned = CompositeTextWithExtent;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "COMPOSITE_TEXT_WITH_EXTENT"
-        }
-        fn attr_len() -> usize {
-            1usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = conic)]
     pub struct Conic {
         pub position: Axis2Placement,
-    }
-    #[derive(Clone, Debug, PartialEq)]
-    struct ConicHolder {
-        position: PlaceHolder<Axis2Placement>,
-    }
-    impl Holder for ConicHolder {
-        type Table = Tables;
-        type Owned = Conic;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "CONIC"
-        }
-        fn attr_len() -> usize {
-            1usize
-        }
     }
     #[derive(Debug, Clone, PartialEq)]
     pub enum ConicAny {
@@ -5534,138 +2625,41 @@ pub mod explicit_draughting {
         Hyperbola(Box<Hyperbola>),
         Parabola(Box<Parabola>),
     }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = context_dependent_invisibility)]
     pub struct ContextDependentInvisibility {
         pub presentation_context: InvisibilityContext,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct ContextDependentInvisibilityHolder {
-        presentation_context: PlaceHolder<InvisibilityContext>,
-    }
-    impl Holder for ContextDependentInvisibilityHolder {
-        type Table = Tables;
-        type Owned = ContextDependentInvisibility;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "CONTEXT_DEPENDENT_INVISIBILITY"
-        }
-        fn attr_len() -> usize {
-            1usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = contract)]
     pub struct Contract {
         pub name: Label,
         pub purpose: Text,
         pub kind: ContractType,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct ContractHolder {
-        name: Label,
-        purpose: Text,
-        kind: PlaceHolder<ContractType>,
-    }
-    impl Holder for ContractHolder {
-        type Table = Tables;
-        type Owned = Contract;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "CONTRACT"
-        }
-        fn attr_len() -> usize {
-            3usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = contract_assignment)]
     pub struct ContractAssignment {
         pub assigned_contract: Contract,
-    }
-    #[derive(Clone, Debug, PartialEq)]
-    struct ContractAssignmentHolder {
-        assigned_contract: PlaceHolder<Contract>,
-    }
-    impl Holder for ContractAssignmentHolder {
-        type Table = Tables;
-        type Owned = ContractAssignment;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "CONTRACT_ASSIGNMENT"
-        }
-        fn attr_len() -> usize {
-            1usize
-        }
     }
     #[derive(Debug, Clone, PartialEq)]
     pub enum ContractAssignmentAny {
         DraughtingContractAssignment(Box<DraughtingContractAssignment>),
     }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = contract_type)]
     pub struct ContractType {
         pub description: Label,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct ContractTypeHolder {
-        description: Label,
-    }
-    impl Holder for ContractTypeHolder {
-        type Table = Tables;
-        type Owned = ContractType;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "CONTRACT_TYPE"
-        }
-        fn attr_len() -> usize {
-            1usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = conversion_based_unit)]
     pub struct ConversionBasedUnit {
         pub name: Label,
         pub conversion_factor: MeasureWithUnitAny,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct ConversionBasedUnitHolder {
-        name: Label,
-        conversion_factor: PlaceHolder<MeasureWithUnitAny>,
-    }
-    impl Holder for ConversionBasedUnitHolder {
-        type Table = Tables;
-        type Owned = ConversionBasedUnit;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "CONVERSION_BASED_UNIT"
-        }
-        fn attr_len() -> usize {
-            2usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = curve)]
     pub struct Curve {}
-    #[derive(Clone, Debug, PartialEq)]
-    struct CurveHolder {}
-    impl Holder for CurveHolder {
-        type Table = Tables;
-        type Owned = Curve;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "CURVE"
-        }
-        fn attr_len() -> usize {
-            0usize
-        }
-    }
     #[derive(Debug, Clone, PartialEq)]
     pub enum CurveAny {
         BoundedCurve(Box<BoundedCurve>),
@@ -5673,263 +2667,65 @@ pub mod explicit_draughting {
         Line(Box<Line>),
         OffsetCurve2D(Box<OffsetCurve2D>),
     }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = curve_dimension)]
     pub struct CurveDimension {}
-    #[derive(Clone, Debug, PartialEq)]
-    struct CurveDimensionHolder {}
-    impl Holder for CurveDimensionHolder {
-        type Table = Tables;
-        type Owned = CurveDimension;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "CURVE_DIMENSION"
-        }
-        fn attr_len() -> usize {
-            0usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = curve_style)]
     pub struct CurveStyle {
         pub name: Label,
         pub curve_font: CurveFontOrScaledCurveFontSelect,
         pub curve_width: SizeSelect,
         pub curve_colour: ColourAny,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct CurveStyleHolder {
-        name: Label,
-        curve_font: PlaceHolder<CurveFontOrScaledCurveFontSelect>,
-        curve_width: PlaceHolder<SizeSelect>,
-        curve_colour: PlaceHolder<ColourAny>,
-    }
-    impl Holder for CurveStyleHolder {
-        type Table = Tables;
-        type Owned = CurveStyle;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "CURVE_STYLE"
-        }
-        fn attr_len() -> usize {
-            4usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = curve_style_font)]
     pub struct CurveStyleFont {
         pub name: Label,
         pub pattern_list: Vec<CurveStyleFontPattern>,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct CurveStyleFontHolder {
-        name: Label,
-        pattern_list: PlaceHolder<Vec<CurveStyleFontPattern>>,
-    }
-    impl Holder for CurveStyleFontHolder {
-        type Table = Tables;
-        type Owned = CurveStyleFont;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "CURVE_STYLE_FONT"
-        }
-        fn attr_len() -> usize {
-            2usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = curve_style_font_pattern)]
     pub struct CurveStyleFontPattern {
         pub visible_segment_length: PositiveLengthMeasure,
         pub invisible_segment_length: PositiveLengthMeasure,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct CurveStyleFontPatternHolder {
-        visible_segment_length: PositiveLengthMeasure,
-        invisible_segment_length: PositiveLengthMeasure,
-    }
-    impl Holder for CurveStyleFontPatternHolder {
-        type Table = Tables;
-        type Owned = CurveStyleFontPattern;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "CURVE_STYLE_FONT_PATTERN"
-        }
-        fn attr_len() -> usize {
-            2usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = date)]
     pub struct Date {
         pub year_component: YearNumber,
-    }
-    #[derive(Clone, Debug, PartialEq)]
-    struct DateHolder {
-        year_component: YearNumber,
-    }
-    impl Holder for DateHolder {
-        type Table = Tables;
-        type Owned = Date;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "DATE"
-        }
-        fn attr_len() -> usize {
-            1usize
-        }
     }
     #[derive(Debug, Clone, PartialEq)]
     pub enum DateAny {
         CalendarDate(Box<CalendarDate>),
     }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = datum_feature_callout)]
     pub struct DatumFeatureCallout {}
-    #[derive(Clone, Debug, PartialEq)]
-    struct DatumFeatureCalloutHolder {}
-    impl Holder for DatumFeatureCalloutHolder {
-        type Table = Tables;
-        type Owned = DatumFeatureCallout;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "DATUM_FEATURE_CALLOUT"
-        }
-        fn attr_len() -> usize {
-            0usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = datum_target_callout)]
     pub struct DatumTargetCallout {}
-    #[derive(Clone, Debug, PartialEq)]
-    struct DatumTargetCalloutHolder {}
-    impl Holder for DatumTargetCalloutHolder {
-        type Table = Tables;
-        type Owned = DatumTargetCallout;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "DATUM_TARGET_CALLOUT"
-        }
-        fn attr_len() -> usize {
-            0usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = defined_symbol)]
     pub struct DefinedSymbol {
         pub definition: DefinedSymbolSelect,
         pub target: SymbolTarget,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct DefinedSymbolHolder {
-        definition: PlaceHolder<DefinedSymbolSelect>,
-        target: PlaceHolder<SymbolTarget>,
-    }
-    impl Holder for DefinedSymbolHolder {
-        type Table = Tables;
-        type Owned = DefinedSymbol;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "DEFINED_SYMBOL"
-        }
-        fn attr_len() -> usize {
-            2usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = diameter_dimension)]
     pub struct DiameterDimension {}
-    #[derive(Clone, Debug, PartialEq)]
-    struct DiameterDimensionHolder {}
-    impl Holder for DiameterDimensionHolder {
-        type Table = Tables;
-        type Owned = DiameterDimension;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "DIAMETER_DIMENSION"
-        }
-        fn attr_len() -> usize {
-            0usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = dimension_callout_component_relationship)]
     pub struct DimensionCalloutComponentRelationship {}
-    #[derive(Clone, Debug, PartialEq)]
-    struct DimensionCalloutComponentRelationshipHolder {}
-    impl Holder for DimensionCalloutComponentRelationshipHolder {
-        type Table = Tables;
-        type Owned = DimensionCalloutComponentRelationship;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "DIMENSION_CALLOUT_COMPONENT_RELATIONSHIP"
-        }
-        fn attr_len() -> usize {
-            0usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = dimension_callout_relationship)]
     pub struct DimensionCalloutRelationship {}
-    #[derive(Clone, Debug, PartialEq)]
-    struct DimensionCalloutRelationshipHolder {}
-    impl Holder for DimensionCalloutRelationshipHolder {
-        type Table = Tables;
-        type Owned = DimensionCalloutRelationship;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "DIMENSION_CALLOUT_RELATIONSHIP"
-        }
-        fn attr_len() -> usize {
-            0usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = dimension_curve)]
     pub struct DimensionCurve {}
-    #[derive(Clone, Debug, PartialEq)]
-    struct DimensionCurveHolder {}
-    impl Holder for DimensionCurveHolder {
-        type Table = Tables;
-        type Owned = DimensionCurve;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "DIMENSION_CURVE"
-        }
-        fn attr_len() -> usize {
-            0usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = dimension_curve_directed_callout)]
     pub struct DimensionCurveDirectedCallout {}
-    #[derive(Clone, Debug, PartialEq)]
-    struct DimensionCurveDirectedCalloutHolder {}
-    impl Holder for DimensionCurveDirectedCalloutHolder {
-        type Table = Tables;
-        type Owned = DimensionCurveDirectedCallout;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "DIMENSION_CURVE_DIRECTED_CALLOUT"
-        }
-        fn attr_len() -> usize {
-            0usize
-        }
-    }
     #[derive(Debug, Clone, PartialEq)]
     pub enum DimensionCurveDirectedCalloutAny {
         AngularDimension(Box<AngularDimension>),
@@ -5938,45 +2734,16 @@ pub mod explicit_draughting {
         LinearDimension(Box<LinearDimension>),
         RadiusDimension(Box<RadiusDimension>),
     }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = dimension_curve_terminator)]
     pub struct DimensionCurveTerminator {
         pub role: DimensionExtentUsage,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct DimensionCurveTerminatorHolder {
-        role: PlaceHolder<DimensionExtentUsage>,
-    }
-    impl Holder for DimensionCurveTerminatorHolder {
-        type Table = Tables;
-        type Owned = DimensionCurveTerminator;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "DIMENSION_CURVE_TERMINATOR"
-        }
-        fn attr_len() -> usize {
-            1usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = dimension_pair)]
     pub struct DimensionPair {}
-    #[derive(Clone, Debug, PartialEq)]
-    struct DimensionPairHolder {}
-    impl Holder for DimensionPairHolder {
-        type Table = Tables;
-        type Owned = DimensionPair;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "DIMENSION_PAIR"
-        }
-        fn attr_len() -> usize {
-            0usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = dimensional_exponents)]
     pub struct DimensionalExponents {
         pub length_exponent: f64,
         pub mass_exponent: f64,
@@ -5986,183 +2753,46 @@ pub mod explicit_draughting {
         pub amount_of_substance_exponent: f64,
         pub luminous_intensity_exponent: f64,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct DimensionalExponentsHolder {
-        length_exponent: f64,
-        mass_exponent: f64,
-        time_exponent: f64,
-        electric_current_exponent: f64,
-        thermodynamic_temperature_exponent: f64,
-        amount_of_substance_exponent: f64,
-        luminous_intensity_exponent: f64,
-    }
-    impl Holder for DimensionalExponentsHolder {
-        type Table = Tables;
-        type Owned = DimensionalExponents;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "DIMENSIONAL_EXPONENTS"
-        }
-        fn attr_len() -> usize {
-            7usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = direction)]
     pub struct Direction {
         pub direction_ratios: Vec<f64>,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct DirectionHolder {
-        direction_ratios: PlaceHolder<Vec<f64>>,
-    }
-    impl Holder for DirectionHolder {
-        type Table = Tables;
-        type Owned = Direction;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "DIRECTION"
-        }
-        fn attr_len() -> usize {
-            1usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = document)]
     pub struct Document {
         pub id: Identifier,
         pub name: Label,
         pub description: Text,
         pub kind: DocumentType,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct DocumentHolder {
-        id: Identifier,
-        name: Label,
-        description: Text,
-        kind: PlaceHolder<DocumentType>,
-    }
-    impl Holder for DocumentHolder {
-        type Table = Tables;
-        type Owned = Document;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "DOCUMENT"
-        }
-        fn attr_len() -> usize {
-            4usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = document_reference)]
     pub struct DocumentReference {
         pub assigned_document: Document,
         pub source: Label,
-    }
-    #[derive(Clone, Debug, PartialEq)]
-    struct DocumentReferenceHolder {
-        assigned_document: PlaceHolder<Document>,
-        source: Label,
-    }
-    impl Holder for DocumentReferenceHolder {
-        type Table = Tables;
-        type Owned = DocumentReference;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "DOCUMENT_REFERENCE"
-        }
-        fn attr_len() -> usize {
-            2usize
-        }
     }
     #[derive(Debug, Clone, PartialEq)]
     pub enum DocumentReferenceAny {
         DraughtingSpecificationReference(Box<DraughtingSpecificationReference>),
     }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = document_type)]
     pub struct DocumentType {
         pub product_data_type: Label,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct DocumentTypeHolder {
-        product_data_type: Label,
-    }
-    impl Holder for DocumentTypeHolder {
-        type Table = Tables;
-        type Owned = DocumentType;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "DOCUMENT_TYPE"
-        }
-        fn attr_len() -> usize {
-            1usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = draughting_annotation_occurrence)]
     pub struct DraughtingAnnotationOccurrence {}
-    #[derive(Clone, Debug, PartialEq)]
-    struct DraughtingAnnotationOccurrenceHolder {}
-    impl Holder for DraughtingAnnotationOccurrenceHolder {
-        type Table = Tables;
-        type Owned = DraughtingAnnotationOccurrence;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "DRAUGHTING_ANNOTATION_OCCURRENCE"
-        }
-        fn attr_len() -> usize {
-            0usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = draughting_approval_assignment)]
     pub struct DraughtingApprovalAssignment {
         pub approved_items: Vec<ApprovedItem>,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct DraughtingApprovalAssignmentHolder {
-        approved_items: PlaceHolder<Vec<ApprovedItem>>,
-    }
-    impl Holder for DraughtingApprovalAssignmentHolder {
-        type Table = Tables;
-        type Owned = DraughtingApprovalAssignment;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "DRAUGHTING_APPROVAL_ASSIGNMENT"
-        }
-        fn attr_len() -> usize {
-            1usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = draughting_callout)]
     pub struct DraughtingCallout {
         pub contents: Vec<DraughtingCalloutElement>,
-    }
-    #[derive(Clone, Debug, PartialEq)]
-    struct DraughtingCalloutHolder {
-        contents: PlaceHolder<Vec<DraughtingCalloutElement>>,
-    }
-    impl Holder for DraughtingCalloutHolder {
-        type Table = Tables;
-        type Owned = DraughtingCallout;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "DRAUGHTING_CALLOUT"
-        }
-        fn attr_len() -> usize {
-            1usize
-        }
     }
     #[derive(Debug, Clone, PartialEq)]
     pub enum DraughtingCalloutAny {
@@ -6175,32 +2805,13 @@ pub mod explicit_draughting {
         ProjectionDirectedCallout(Box<ProjectionDirectedCallout>),
         StructuredDimensionCallout(Box<StructuredDimensionCallout>),
     }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = draughting_callout_relationship)]
     pub struct DraughtingCalloutRelationship {
         pub name: Label,
         pub description: Text,
         pub relating_draughting_callout: DraughtingCalloutAny,
         pub related_draughting_callout: DraughtingCalloutAny,
-    }
-    #[derive(Clone, Debug, PartialEq)]
-    struct DraughtingCalloutRelationshipHolder {
-        name: Label,
-        description: Text,
-        relating_draughting_callout: PlaceHolder<DraughtingCalloutAny>,
-        related_draughting_callout: PlaceHolder<DraughtingCalloutAny>,
-    }
-    impl Holder for DraughtingCalloutRelationshipHolder {
-        type Table = Tables;
-        type Owned = DraughtingCalloutRelationship;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "DRAUGHTING_CALLOUT_RELATIONSHIP"
-        }
-        fn attr_len() -> usize {
-            4usize
-        }
     }
     #[derive(Debug, Clone, PartialEq)]
     pub enum DraughtingCalloutRelationshipAny {
@@ -6208,567 +2819,136 @@ pub mod explicit_draughting {
         DimensionCalloutRelationship(Box<DimensionCalloutRelationship>),
         DimensionPair(Box<DimensionPair>),
     }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = draughting_contract_assignment)]
     pub struct DraughtingContractAssignment {
         pub items: Vec<ContractedItem>,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct DraughtingContractAssignmentHolder {
-        items: PlaceHolder<Vec<ContractedItem>>,
-    }
-    impl Holder for DraughtingContractAssignmentHolder {
-        type Table = Tables;
-        type Owned = DraughtingContractAssignment;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "DRAUGHTING_CONTRACT_ASSIGNMENT"
-        }
-        fn attr_len() -> usize {
-            1usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = draughting_drawing_revision)]
     pub struct DraughtingDrawingRevision {}
-    #[derive(Clone, Debug, PartialEq)]
-    struct DraughtingDrawingRevisionHolder {}
-    impl Holder for DraughtingDrawingRevisionHolder {
-        type Table = Tables;
-        type Owned = DraughtingDrawingRevision;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "DRAUGHTING_DRAWING_REVISION"
-        }
-        fn attr_len() -> usize {
-            0usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = draughting_elements)]
     pub struct DraughtingElements {}
-    #[derive(Clone, Debug, PartialEq)]
-    struct DraughtingElementsHolder {}
-    impl Holder for DraughtingElementsHolder {
-        type Table = Tables;
-        type Owned = DraughtingElements;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "DRAUGHTING_ELEMENTS"
-        }
-        fn attr_len() -> usize {
-            0usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = draughting_group_assignment)]
     pub struct DraughtingGroupAssignment {
         pub items: Vec<DraughtingGroupedItem>,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct DraughtingGroupAssignmentHolder {
-        items: PlaceHolder<Vec<DraughtingGroupedItem>>,
-    }
-    impl Holder for DraughtingGroupAssignmentHolder {
-        type Table = Tables;
-        type Owned = DraughtingGroupAssignment;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "DRAUGHTING_GROUP_ASSIGNMENT"
-        }
-        fn attr_len() -> usize {
-            1usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = draughting_model)]
     pub struct DraughtingModel {}
-    #[derive(Clone, Debug, PartialEq)]
-    struct DraughtingModelHolder {}
-    impl Holder for DraughtingModelHolder {
-        type Table = Tables;
-        type Owned = DraughtingModel;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "DRAUGHTING_MODEL"
-        }
-        fn attr_len() -> usize {
-            0usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = draughting_organization_assignment)]
     pub struct DraughtingOrganizationAssignment {
         pub assigned_items: Vec<DraughtingOrganizationItem>,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct DraughtingOrganizationAssignmentHolder {
-        assigned_items: PlaceHolder<Vec<DraughtingOrganizationItem>>,
-    }
-    impl Holder for DraughtingOrganizationAssignmentHolder {
-        type Table = Tables;
-        type Owned = DraughtingOrganizationAssignment;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "DRAUGHTING_ORGANIZATION_ASSIGNMENT"
-        }
-        fn attr_len() -> usize {
-            1usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = draughting_person_and_organization_assignment)]
     pub struct DraughtingPersonAndOrganizationAssignment {
         pub assigned_items: Vec<DraughtingOrganizationItem>,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct DraughtingPersonAndOrganizationAssignmentHolder {
-        assigned_items: PlaceHolder<Vec<DraughtingOrganizationItem>>,
-    }
-    impl Holder for DraughtingPersonAndOrganizationAssignmentHolder {
-        type Table = Tables;
-        type Owned = DraughtingPersonAndOrganizationAssignment;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "DRAUGHTING_PERSON_AND_ORGANIZATION_ASSIGNMENT"
-        }
-        fn attr_len() -> usize {
-            1usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = draughting_person_assignment)]
     pub struct DraughtingPersonAssignment {
         pub assigned_items: Vec<DraughtingOrganizationItem>,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct DraughtingPersonAssignmentHolder {
-        assigned_items: PlaceHolder<Vec<DraughtingOrganizationItem>>,
-    }
-    impl Holder for DraughtingPersonAssignmentHolder {
-        type Table = Tables;
-        type Owned = DraughtingPersonAssignment;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "DRAUGHTING_PERSON_ASSIGNMENT"
-        }
-        fn attr_len() -> usize {
-            1usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = draughting_pre_defined_colour)]
     pub struct DraughtingPreDefinedColour {}
-    #[derive(Clone, Debug, PartialEq)]
-    struct DraughtingPreDefinedColourHolder {}
-    impl Holder for DraughtingPreDefinedColourHolder {
-        type Table = Tables;
-        type Owned = DraughtingPreDefinedColour;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "DRAUGHTING_PRE_DEFINED_COLOUR"
-        }
-        fn attr_len() -> usize {
-            0usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = draughting_pre_defined_curve_font)]
     pub struct DraughtingPreDefinedCurveFont {}
-    #[derive(Clone, Debug, PartialEq)]
-    struct DraughtingPreDefinedCurveFontHolder {}
-    impl Holder for DraughtingPreDefinedCurveFontHolder {
-        type Table = Tables;
-        type Owned = DraughtingPreDefinedCurveFont;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "DRAUGHTING_PRE_DEFINED_CURVE_FONT"
-        }
-        fn attr_len() -> usize {
-            0usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = draughting_pre_defined_text_font)]
     pub struct DraughtingPreDefinedTextFont {}
-    #[derive(Clone, Debug, PartialEq)]
-    struct DraughtingPreDefinedTextFontHolder {}
-    impl Holder for DraughtingPreDefinedTextFontHolder {
-        type Table = Tables;
-        type Owned = DraughtingPreDefinedTextFont;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "DRAUGHTING_PRE_DEFINED_TEXT_FONT"
-        }
-        fn attr_len() -> usize {
-            0usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = draughting_presented_item)]
     pub struct DraughtingPresentedItem {
         pub items: Vec<DraughtingPresentedItemSelect>,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct DraughtingPresentedItemHolder {
-        items: PlaceHolder<Vec<DraughtingPresentedItemSelect>>,
-    }
-    impl Holder for DraughtingPresentedItemHolder {
-        type Table = Tables;
-        type Owned = DraughtingPresentedItem;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "DRAUGHTING_PRESENTED_ITEM"
-        }
-        fn attr_len() -> usize {
-            1usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = draughting_security_classification_assignment)]
     pub struct DraughtingSecurityClassificationAssignment {
         pub assigned_items: Vec<ClassifiedItem>,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct DraughtingSecurityClassificationAssignmentHolder {
-        assigned_items: PlaceHolder<Vec<ClassifiedItem>>,
-    }
-    impl Holder for DraughtingSecurityClassificationAssignmentHolder {
-        type Table = Tables;
-        type Owned = DraughtingSecurityClassificationAssignment;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "DRAUGHTING_SECURITY_CLASSIFICATION_ASSIGNMENT"
-        }
-        fn attr_len() -> usize {
-            1usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = draughting_specification_reference)]
     pub struct DraughtingSpecificationReference {
         pub specified_items: Vec<SpecifiedItem>,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct DraughtingSpecificationReferenceHolder {
-        specified_items: PlaceHolder<Vec<SpecifiedItem>>,
-    }
-    impl Holder for DraughtingSpecificationReferenceHolder {
-        type Table = Tables;
-        type Owned = DraughtingSpecificationReference;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "DRAUGHTING_SPECIFICATION_REFERENCE"
-        }
-        fn attr_len() -> usize {
-            1usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = draughting_subfigure_representation)]
     pub struct DraughtingSubfigureRepresentation {}
-    #[derive(Clone, Debug, PartialEq)]
-    struct DraughtingSubfigureRepresentationHolder {}
-    impl Holder for DraughtingSubfigureRepresentationHolder {
-        type Table = Tables;
-        type Owned = DraughtingSubfigureRepresentation;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "DRAUGHTING_SUBFIGURE_REPRESENTATION"
-        }
-        fn attr_len() -> usize {
-            0usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = draughting_symbol_representation)]
     pub struct DraughtingSymbolRepresentation {}
-    #[derive(Clone, Debug, PartialEq)]
-    struct DraughtingSymbolRepresentationHolder {}
-    impl Holder for DraughtingSymbolRepresentationHolder {
-        type Table = Tables;
-        type Owned = DraughtingSymbolRepresentation;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "DRAUGHTING_SYMBOL_REPRESENTATION"
-        }
-        fn attr_len() -> usize {
-            0usize
-        }
-    }
     #[derive(Debug, Clone, PartialEq)]
     pub enum DraughtingSymbolRepresentationAny {
         DrawingSheetLayout(Box<DrawingSheetLayout>),
     }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = draughting_text_literal_with_delineation)]
     pub struct DraughtingTextLiteralWithDelineation {}
-    #[derive(Clone, Debug, PartialEq)]
-    struct DraughtingTextLiteralWithDelineationHolder {}
-    impl Holder for DraughtingTextLiteralWithDelineationHolder {
-        type Table = Tables;
-        type Owned = DraughtingTextLiteralWithDelineation;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "DRAUGHTING_TEXT_LITERAL_WITH_DELINEATION"
-        }
-        fn attr_len() -> usize {
-            0usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = draughting_title)]
     pub struct DraughtingTitle {
         pub items: Vec<DraughtingTitledItem>,
         pub language: Label,
         pub contents: Text,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct DraughtingTitleHolder {
-        items: PlaceHolder<Vec<DraughtingTitledItem>>,
-        language: Label,
-        contents: Text,
-    }
-    impl Holder for DraughtingTitleHolder {
-        type Table = Tables;
-        type Owned = DraughtingTitle;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "DRAUGHTING_TITLE"
-        }
-        fn attr_len() -> usize {
-            3usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = drawing_definition)]
     pub struct DrawingDefinition {
         pub drawing_number: Identifier,
         pub drawing_type: Option<Label>,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct DrawingDefinitionHolder {
-        drawing_number: Identifier,
-        drawing_type: Option<Label>,
-    }
-    impl Holder for DrawingDefinitionHolder {
-        type Table = Tables;
-        type Owned = DrawingDefinition;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "DRAWING_DEFINITION"
-        }
-        fn attr_len() -> usize {
-            2usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = drawing_revision)]
     pub struct DrawingRevision {
         pub revision_identifier: Identifier,
         pub drawing_identifier: DrawingDefinition,
         pub intended_scale: Option<Text>,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct DrawingRevisionHolder {
-        revision_identifier: Identifier,
-        drawing_identifier: PlaceHolder<DrawingDefinition>,
-        intended_scale: Option<Text>,
-    }
-    impl Holder for DrawingRevisionHolder {
-        type Table = Tables;
-        type Owned = DrawingRevision;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "DRAWING_REVISION"
-        }
-        fn attr_len() -> usize {
-            3usize
-        }
-    }
     #[derive(Debug, Clone, PartialEq)]
     pub enum DrawingRevisionAny {
         DraughtingDrawingRevision(Box<DraughtingDrawingRevision>),
     }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = drawing_sheet_layout)]
     pub struct DrawingSheetLayout {}
-    #[derive(Clone, Debug, PartialEq)]
-    struct DrawingSheetLayoutHolder {}
-    impl Holder for DrawingSheetLayoutHolder {
-        type Table = Tables;
-        type Owned = DrawingSheetLayout;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "DRAWING_SHEET_LAYOUT"
-        }
-        fn attr_len() -> usize {
-            0usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = drawing_sheet_revision)]
     pub struct DrawingSheetRevision {
         pub revision_identifier: Identifier,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct DrawingSheetRevisionHolder {
-        revision_identifier: Identifier,
-    }
-    impl Holder for DrawingSheetRevisionHolder {
-        type Table = Tables;
-        type Owned = DrawingSheetRevision;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "DRAWING_SHEET_REVISION"
-        }
-        fn attr_len() -> usize {
-            1usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = drawing_sheet_revision_usage)]
     pub struct DrawingSheetRevisionUsage {
         pub sheet_number: Identifier,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct DrawingSheetRevisionUsageHolder {
-        sheet_number: Identifier,
-    }
-    impl Holder for DrawingSheetRevisionUsageHolder {
-        type Table = Tables;
-        type Owned = DrawingSheetRevisionUsage;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "DRAWING_SHEET_REVISION_USAGE"
-        }
-        fn attr_len() -> usize {
-            1usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = ellipse)]
     pub struct Ellipse {
         pub semi_axis_1: PositiveLengthMeasure,
         pub semi_axis_2: PositiveLengthMeasure,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct EllipseHolder {
-        semi_axis_1: PositiveLengthMeasure,
-        semi_axis_2: PositiveLengthMeasure,
-    }
-    impl Holder for EllipseHolder {
-        type Table = Tables;
-        type Owned = Ellipse;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "ELLIPSE"
-        }
-        fn attr_len() -> usize {
-            2usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = external_source)]
     pub struct ExternalSource {
         pub source_id: SourceItem,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct ExternalSourceHolder {
-        source_id: PlaceHolder<SourceItem>,
-    }
-    impl Holder for ExternalSourceHolder {
-        type Table = Tables;
-        type Owned = ExternalSource;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "EXTERNAL_SOURCE"
-        }
-        fn attr_len() -> usize {
-            1usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = externally_defined_curve_font)]
     pub struct ExternallyDefinedCurveFont {}
-    #[derive(Clone, Debug, PartialEq)]
-    struct ExternallyDefinedCurveFontHolder {}
-    impl Holder for ExternallyDefinedCurveFontHolder {
-        type Table = Tables;
-        type Owned = ExternallyDefinedCurveFont;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "EXTERNALLY_DEFINED_CURVE_FONT"
-        }
-        fn attr_len() -> usize {
-            0usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = externally_defined_hatch_style)]
     pub struct ExternallyDefinedHatchStyle {}
-    #[derive(Clone, Debug, PartialEq)]
-    struct ExternallyDefinedHatchStyleHolder {}
-    impl Holder for ExternallyDefinedHatchStyleHolder {
-        type Table = Tables;
-        type Owned = ExternallyDefinedHatchStyle;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "EXTERNALLY_DEFINED_HATCH_STYLE"
-        }
-        fn attr_len() -> usize {
-            0usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = externally_defined_item)]
     pub struct ExternallyDefinedItem {
         pub item_id: SourceItem,
         pub source: ExternalSource,
-    }
-    #[derive(Clone, Debug, PartialEq)]
-    struct ExternallyDefinedItemHolder {
-        item_id: PlaceHolder<SourceItem>,
-        source: PlaceHolder<ExternalSource>,
-    }
-    impl Holder for ExternallyDefinedItemHolder {
-        type Table = Tables;
-        type Owned = ExternallyDefinedItem;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "EXTERNALLY_DEFINED_ITEM"
-        }
-        fn attr_len() -> usize {
-            2usize
-        }
     }
     #[derive(Debug, Clone, PartialEq)]
     pub enum ExternallyDefinedItemAny {
@@ -6778,104 +2958,29 @@ pub mod explicit_draughting {
         ExternallyDefinedTextFont(Box<ExternallyDefinedTextFont>),
         ExternallyDefinedTileStyle(Box<ExternallyDefinedTileStyle>),
     }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = externally_defined_symbol)]
     pub struct ExternallyDefinedSymbol {}
-    #[derive(Clone, Debug, PartialEq)]
-    struct ExternallyDefinedSymbolHolder {}
-    impl Holder for ExternallyDefinedSymbolHolder {
-        type Table = Tables;
-        type Owned = ExternallyDefinedSymbol;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "EXTERNALLY_DEFINED_SYMBOL"
-        }
-        fn attr_len() -> usize {
-            0usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = externally_defined_text_font)]
     pub struct ExternallyDefinedTextFont {}
-    #[derive(Clone, Debug, PartialEq)]
-    struct ExternallyDefinedTextFontHolder {}
-    impl Holder for ExternallyDefinedTextFontHolder {
-        type Table = Tables;
-        type Owned = ExternallyDefinedTextFont;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "EXTERNALLY_DEFINED_TEXT_FONT"
-        }
-        fn attr_len() -> usize {
-            0usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = externally_defined_tile_style)]
     pub struct ExternallyDefinedTileStyle {}
-    #[derive(Clone, Debug, PartialEq)]
-    struct ExternallyDefinedTileStyleHolder {}
-    impl Holder for ExternallyDefinedTileStyleHolder {
-        type Table = Tables;
-        type Owned = ExternallyDefinedTileStyle;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "EXTERNALLY_DEFINED_TILE_STYLE"
-        }
-        fn attr_len() -> usize {
-            0usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = fill_area_style)]
     pub struct FillAreaStyle {
         pub name: Label,
         pub fill_styles: Vec<FillStyleSelect>,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct FillAreaStyleHolder {
-        name: Label,
-        fill_styles: PlaceHolder<Vec<FillStyleSelect>>,
-    }
-    impl Holder for FillAreaStyleHolder {
-        type Table = Tables;
-        type Owned = FillAreaStyle;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "FILL_AREA_STYLE"
-        }
-        fn attr_len() -> usize {
-            2usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = fill_area_style_colour)]
     pub struct FillAreaStyleColour {
         pub name: Label,
         pub fill_colour: ColourAny,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct FillAreaStyleColourHolder {
-        name: Label,
-        fill_colour: PlaceHolder<ColourAny>,
-    }
-    impl Holder for FillAreaStyleColourHolder {
-        type Table = Tables;
-        type Owned = FillAreaStyleColour;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "FILL_AREA_STYLE_COLOUR"
-        }
-        fn attr_len() -> usize {
-            2usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = fill_area_style_hatching)]
     pub struct FillAreaStyleHatching {
         pub hatch_line_appearance: CurveStyle,
         pub start_of_next_hatch_line: OneDirectionRepeatFactorAny,
@@ -6883,128 +2988,29 @@ pub mod explicit_draughting {
         pub pattern_start: CartesianPoint,
         pub hatch_line_angle: PlaneAngleMeasure,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct FillAreaStyleHatchingHolder {
-        hatch_line_appearance: PlaceHolder<CurveStyle>,
-        start_of_next_hatch_line: PlaceHolder<OneDirectionRepeatFactorAny>,
-        point_of_reference_hatch_line: PlaceHolder<CartesianPoint>,
-        pattern_start: PlaceHolder<CartesianPoint>,
-        hatch_line_angle: PlaneAngleMeasure,
-    }
-    impl Holder for FillAreaStyleHatchingHolder {
-        type Table = Tables;
-        type Owned = FillAreaStyleHatching;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "FILL_AREA_STYLE_HATCHING"
-        }
-        fn attr_len() -> usize {
-            5usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = fill_area_style_tile_symbol_with_style)]
     pub struct FillAreaStyleTileSymbolWithStyle {
         pub symbol: AnnotationSymbolOccurrenceAny,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct FillAreaStyleTileSymbolWithStyleHolder {
-        symbol: PlaceHolder<AnnotationSymbolOccurrenceAny>,
-    }
-    impl Holder for FillAreaStyleTileSymbolWithStyleHolder {
-        type Table = Tables;
-        type Owned = FillAreaStyleTileSymbolWithStyle;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "FILL_AREA_STYLE_TILE_SYMBOL_WITH_STYLE"
-        }
-        fn attr_len() -> usize {
-            1usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = fill_area_style_tiles)]
     pub struct FillAreaStyleTiles {
         pub tiling_pattern: TwoDirectionRepeatFactor,
         pub tiles: Vec<FillAreaStyleTileShapeSelect>,
         pub tiling_scale: PositiveRatioMeasure,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct FillAreaStyleTilesHolder {
-        tiling_pattern: PlaceHolder<TwoDirectionRepeatFactor>,
-        tiles: PlaceHolder<Vec<FillAreaStyleTileShapeSelect>>,
-        tiling_scale: PositiveRatioMeasure,
-    }
-    impl Holder for FillAreaStyleTilesHolder {
-        type Table = Tables;
-        type Owned = FillAreaStyleTiles;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "FILL_AREA_STYLE_TILES"
-        }
-        fn attr_len() -> usize {
-            3usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = geometric_curve_set)]
     pub struct GeometricCurveSet {}
-    #[derive(Clone, Debug, PartialEq)]
-    struct GeometricCurveSetHolder {}
-    impl Holder for GeometricCurveSetHolder {
-        type Table = Tables;
-        type Owned = GeometricCurveSet;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "GEOMETRIC_CURVE_SET"
-        }
-        fn attr_len() -> usize {
-            0usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = geometric_representation_context)]
     pub struct GeometricRepresentationContext {
         pub coordinate_space_dimension: DimensionCount,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct GeometricRepresentationContextHolder {
-        coordinate_space_dimension: DimensionCount,
-    }
-    impl Holder for GeometricRepresentationContextHolder {
-        type Table = Tables;
-        type Owned = GeometricRepresentationContext;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "GEOMETRIC_REPRESENTATION_CONTEXT"
-        }
-        fn attr_len() -> usize {
-            1usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = geometric_representation_item)]
     pub struct GeometricRepresentationItem {}
-    #[derive(Clone, Debug, PartialEq)]
-    struct GeometricRepresentationItemHolder {}
-    impl Holder for GeometricRepresentationItemHolder {
-        type Table = Tables;
-        type Owned = GeometricRepresentationItem;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "GEOMETRIC_REPRESENTATION_ITEM"
-        }
-        fn attr_len() -> usize {
-            0usize
-        }
-    }
     #[derive(Debug, Clone, PartialEq)]
     pub enum GeometricRepresentationItemAny {
         AnnotationFillArea(Box<AnnotationFillArea>),
@@ -7028,377 +3034,100 @@ pub mod explicit_draughting {
         TextLiteral(Box<TextLiteral>),
         Vector(Box<Vector>),
     }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = geometric_set)]
     pub struct GeometricSet {
         pub elements: Vec<GeometricSetSelect>,
-    }
-    #[derive(Clone, Debug, PartialEq)]
-    struct GeometricSetHolder {
-        elements: PlaceHolder<Vec<GeometricSetSelect>>,
-    }
-    impl Holder for GeometricSetHolder {
-        type Table = Tables;
-        type Owned = GeometricSet;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "GEOMETRIC_SET"
-        }
-        fn attr_len() -> usize {
-            1usize
-        }
     }
     #[derive(Debug, Clone, PartialEq)]
     pub enum GeometricSetAny {
         GeometricCurveSet(Box<GeometricCurveSet>),
     }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = geometrical_tolerance_callout)]
     pub struct GeometricalToleranceCallout {}
-    #[derive(Clone, Debug, PartialEq)]
-    struct GeometricalToleranceCalloutHolder {}
-    impl Holder for GeometricalToleranceCalloutHolder {
-        type Table = Tables;
-        type Owned = GeometricalToleranceCallout;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "GEOMETRICAL_TOLERANCE_CALLOUT"
-        }
-        fn attr_len() -> usize {
-            0usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = geometrically_bounded_2d_wireframe_representation)]
     pub struct GeometricallyBounded2DWireframeRepresentation {}
-    #[derive(Clone, Debug, PartialEq)]
-    struct GeometricallyBounded2DWireframeRepresentationHolder {}
-    impl Holder for GeometricallyBounded2DWireframeRepresentationHolder {
-        type Table = Tables;
-        type Owned = GeometricallyBounded2DWireframeRepresentation;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "GEOMETRICALLY_BOUNDED_2D_WIREFRAME_REPRESENTATION"
-        }
-        fn attr_len() -> usize {
-            0usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = global_unit_assigned_context)]
     pub struct GlobalUnitAssignedContext {
         pub units: Vec<Unit>,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct GlobalUnitAssignedContextHolder {
-        units: PlaceHolder<Vec<Unit>>,
-    }
-    impl Holder for GlobalUnitAssignedContextHolder {
-        type Table = Tables;
-        type Owned = GlobalUnitAssignedContext;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "GLOBAL_UNIT_ASSIGNED_CONTEXT"
-        }
-        fn attr_len() -> usize {
-            1usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = group)]
     pub struct Group {
         pub name: Label,
         pub description: Text,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct GroupHolder {
-        name: Label,
-        description: Text,
-    }
-    impl Holder for GroupHolder {
-        type Table = Tables;
-        type Owned = Group;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "GROUP"
-        }
-        fn attr_len() -> usize {
-            2usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = group_assignment)]
     pub struct GroupAssignment {
         pub assigned_group: Group,
-    }
-    #[derive(Clone, Debug, PartialEq)]
-    struct GroupAssignmentHolder {
-        assigned_group: PlaceHolder<Group>,
-    }
-    impl Holder for GroupAssignmentHolder {
-        type Table = Tables;
-        type Owned = GroupAssignment;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "GROUP_ASSIGNMENT"
-        }
-        fn attr_len() -> usize {
-            1usize
-        }
     }
     #[derive(Debug, Clone, PartialEq)]
     pub enum GroupAssignmentAny {
         DraughtingGroupAssignment(Box<DraughtingGroupAssignment>),
     }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = group_relationship)]
     pub struct GroupRelationship {
         pub name: Label,
         pub description: Text,
         pub relating_group: Group,
         pub related_group: Group,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct GroupRelationshipHolder {
-        name: Label,
-        description: Text,
-        relating_group: PlaceHolder<Group>,
-        related_group: PlaceHolder<Group>,
-    }
-    impl Holder for GroupRelationshipHolder {
-        type Table = Tables;
-        type Owned = GroupRelationship;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "GROUP_RELATIONSHIP"
-        }
-        fn attr_len() -> usize {
-            4usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = hyperbola)]
     pub struct Hyperbola {
         pub semi_axis: PositiveLengthMeasure,
         pub semi_imag_axis: PositiveLengthMeasure,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct HyperbolaHolder {
-        semi_axis: PositiveLengthMeasure,
-        semi_imag_axis: PositiveLengthMeasure,
-    }
-    impl Holder for HyperbolaHolder {
-        type Table = Tables;
-        type Owned = Hyperbola;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "HYPERBOLA"
-        }
-        fn attr_len() -> usize {
-            2usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = invisibility)]
     pub struct Invisibility {
         pub invisible_items: Vec<InvisibleItem>,
-    }
-    #[derive(Clone, Debug, PartialEq)]
-    struct InvisibilityHolder {
-        invisible_items: PlaceHolder<Vec<InvisibleItem>>,
-    }
-    impl Holder for InvisibilityHolder {
-        type Table = Tables;
-        type Owned = Invisibility;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "INVISIBILITY"
-        }
-        fn attr_len() -> usize {
-            1usize
-        }
     }
     #[derive(Debug, Clone, PartialEq)]
     pub enum InvisibilityAny {
         ContextDependentInvisibility(Box<ContextDependentInvisibility>),
     }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = leader_curve)]
     pub struct LeaderCurve {}
-    #[derive(Clone, Debug, PartialEq)]
-    struct LeaderCurveHolder {}
-    impl Holder for LeaderCurveHolder {
-        type Table = Tables;
-        type Owned = LeaderCurve;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "LEADER_CURVE"
-        }
-        fn attr_len() -> usize {
-            0usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = leader_directed_callout)]
     pub struct LeaderDirectedCallout {}
-    #[derive(Clone, Debug, PartialEq)]
-    struct LeaderDirectedCalloutHolder {}
-    impl Holder for LeaderDirectedCalloutHolder {
-        type Table = Tables;
-        type Owned = LeaderDirectedCallout;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "LEADER_DIRECTED_CALLOUT"
-        }
-        fn attr_len() -> usize {
-            0usize
-        }
-    }
     #[derive(Debug, Clone, PartialEq)]
     pub enum LeaderDirectedCalloutAny {
         LeaderDirectedDimension(Box<LeaderDirectedDimension>),
     }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = leader_directed_dimension)]
     pub struct LeaderDirectedDimension {}
-    #[derive(Clone, Debug, PartialEq)]
-    struct LeaderDirectedDimensionHolder {}
-    impl Holder for LeaderDirectedDimensionHolder {
-        type Table = Tables;
-        type Owned = LeaderDirectedDimension;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "LEADER_DIRECTED_DIMENSION"
-        }
-        fn attr_len() -> usize {
-            0usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = leader_terminator)]
     pub struct LeaderTerminator {}
-    #[derive(Clone, Debug, PartialEq)]
-    struct LeaderTerminatorHolder {}
-    impl Holder for LeaderTerminatorHolder {
-        type Table = Tables;
-        type Owned = LeaderTerminator;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "LEADER_TERMINATOR"
-        }
-        fn attr_len() -> usize {
-            0usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = length_measure_with_unit)]
     pub struct LengthMeasureWithUnit {}
-    #[derive(Clone, Debug, PartialEq)]
-    struct LengthMeasureWithUnitHolder {}
-    impl Holder for LengthMeasureWithUnitHolder {
-        type Table = Tables;
-        type Owned = LengthMeasureWithUnit;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "LENGTH_MEASURE_WITH_UNIT"
-        }
-        fn attr_len() -> usize {
-            0usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = length_unit)]
     pub struct LengthUnit {}
-    #[derive(Clone, Debug, PartialEq)]
-    struct LengthUnitHolder {}
-    impl Holder for LengthUnitHolder {
-        type Table = Tables;
-        type Owned = LengthUnit;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "LENGTH_UNIT"
-        }
-        fn attr_len() -> usize {
-            0usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = line)]
     pub struct Line {
         pub pnt: CartesianPoint,
         pub dir: Vector,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct LineHolder {
-        pnt: PlaceHolder<CartesianPoint>,
-        dir: PlaceHolder<Vector>,
-    }
-    impl Holder for LineHolder {
-        type Table = Tables;
-        type Owned = Line;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "LINE"
-        }
-        fn attr_len() -> usize {
-            2usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = linear_dimension)]
     pub struct LinearDimension {}
-    #[derive(Clone, Debug, PartialEq)]
-    struct LinearDimensionHolder {}
-    impl Holder for LinearDimensionHolder {
-        type Table = Tables;
-        type Owned = LinearDimension;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "LINEAR_DIMENSION"
-        }
-        fn attr_len() -> usize {
-            0usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = mapped_item)]
     pub struct MappedItem {
         pub mapping_source: RepresentationMapAny,
         pub mapping_target: RepresentationItemAny,
-    }
-    #[derive(Clone, Debug, PartialEq)]
-    struct MappedItemHolder {
-        mapping_source: PlaceHolder<RepresentationMapAny>,
-        mapping_target: PlaceHolder<RepresentationItemAny>,
-    }
-    impl Holder for MappedItemHolder {
-        type Table = Tables;
-        type Owned = MappedItem;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "MAPPED_ITEM"
-        }
-        fn attr_len() -> usize {
-            2usize
-        }
     }
     #[derive(Debug, Clone, PartialEq)]
     pub enum MappedItemAny {
@@ -7406,54 +3135,21 @@ pub mod explicit_draughting {
         AnnotationText(Box<AnnotationText>),
         CameraImage(Box<CameraImage>),
     }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = measure_with_unit)]
     pub struct MeasureWithUnit {
         pub value_component: MeasureValue,
         pub unit_component: Unit,
-    }
-    #[derive(Clone, Debug, PartialEq)]
-    struct MeasureWithUnitHolder {
-        value_component: PlaceHolder<MeasureValue>,
-        unit_component: PlaceHolder<Unit>,
-    }
-    impl Holder for MeasureWithUnitHolder {
-        type Table = Tables;
-        type Owned = MeasureWithUnit;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "MEASURE_WITH_UNIT"
-        }
-        fn attr_len() -> usize {
-            2usize
-        }
     }
     #[derive(Debug, Clone, PartialEq)]
     pub enum MeasureWithUnitAny {
         LengthMeasureWithUnit(Box<LengthMeasureWithUnit>),
         PlaneAngleMeasureWithUnit(Box<PlaneAngleMeasureWithUnit>),
     }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = named_unit)]
     pub struct NamedUnit {
         pub dimensions: DimensionalExponents,
-    }
-    #[derive(Clone, Debug, PartialEq)]
-    struct NamedUnitHolder {
-        dimensions: PlaceHolder<DimensionalExponents>,
-    }
-    impl Holder for NamedUnitHolder {
-        type Table = Tables;
-        type Owned = NamedUnit;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "NAMED_UNIT"
-        }
-        fn attr_len() -> usize {
-            1usize
-        }
     }
     #[derive(Debug, Clone, PartialEq)]
     pub enum NamedUnitAny {
@@ -7462,191 +3158,60 @@ pub mod explicit_draughting {
         PlaneAngleUnit(Box<PlaneAngleUnit>),
         SiUnit(Box<SiUnit>),
     }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = offset_curve_2d)]
     pub struct OffsetCurve2D {
         pub basis_curve: CurveAny,
         pub distance: LengthMeasure,
         pub self_intersect: Logical,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct OffsetCurve2DHolder {
-        basis_curve: PlaceHolder<CurveAny>,
-        distance: LengthMeasure,
-        self_intersect: Logical,
-    }
-    impl Holder for OffsetCurve2DHolder {
-        type Table = Tables;
-        type Owned = OffsetCurve2D;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "OFFSET_CURVE_2D"
-        }
-        fn attr_len() -> usize {
-            3usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = one_direction_repeat_factor)]
     pub struct OneDirectionRepeatFactor {
         pub repeat_factor: Vector,
-    }
-    #[derive(Clone, Debug, PartialEq)]
-    struct OneDirectionRepeatFactorHolder {
-        repeat_factor: PlaceHolder<Vector>,
-    }
-    impl Holder for OneDirectionRepeatFactorHolder {
-        type Table = Tables;
-        type Owned = OneDirectionRepeatFactor;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "ONE_DIRECTION_REPEAT_FACTOR"
-        }
-        fn attr_len() -> usize {
-            1usize
-        }
     }
     #[derive(Debug, Clone, PartialEq)]
     pub enum OneDirectionRepeatFactorAny {
         TwoDirectionRepeatFactor(Box<TwoDirectionRepeatFactor>),
     }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = ordinate_dimension)]
     pub struct OrdinateDimension {}
-    #[derive(Clone, Debug, PartialEq)]
-    struct OrdinateDimensionHolder {}
-    impl Holder for OrdinateDimensionHolder {
-        type Table = Tables;
-        type Owned = OrdinateDimension;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "ORDINATE_DIMENSION"
-        }
-        fn attr_len() -> usize {
-            0usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = organization)]
     pub struct Organization {
         pub id: Option<Identifier>,
         pub name: Label,
         pub description: Text,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct OrganizationHolder {
-        id: Option<Identifier>,
-        name: Label,
-        description: Text,
-    }
-    impl Holder for OrganizationHolder {
-        type Table = Tables;
-        type Owned = Organization;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "ORGANIZATION"
-        }
-        fn attr_len() -> usize {
-            3usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = organization_assignment)]
     pub struct OrganizationAssignment {
         pub assigned_organization: Organization,
         pub role: OrganizationRole,
-    }
-    #[derive(Clone, Debug, PartialEq)]
-    struct OrganizationAssignmentHolder {
-        assigned_organization: PlaceHolder<Organization>,
-        role: PlaceHolder<OrganizationRole>,
-    }
-    impl Holder for OrganizationAssignmentHolder {
-        type Table = Tables;
-        type Owned = OrganizationAssignment;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "ORGANIZATION_ASSIGNMENT"
-        }
-        fn attr_len() -> usize {
-            2usize
-        }
     }
     #[derive(Debug, Clone, PartialEq)]
     pub enum OrganizationAssignmentAny {
         DraughtingOrganizationAssignment(Box<DraughtingOrganizationAssignment>),
     }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = organization_role)]
     pub struct OrganizationRole {
         pub name: Label,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct OrganizationRoleHolder {
-        name: Label,
-    }
-    impl Holder for OrganizationRoleHolder {
-        type Table = Tables;
-        type Owned = OrganizationRole;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "ORGANIZATION_ROLE"
-        }
-        fn attr_len() -> usize {
-            1usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = organizational_address)]
     pub struct OrganizationalAddress {
         pub organizations: Vec<Organization>,
         pub description: Text,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct OrganizationalAddressHolder {
-        organizations: PlaceHolder<Vec<Organization>>,
-        description: Text,
-    }
-    impl Holder for OrganizationalAddressHolder {
-        type Table = Tables;
-        type Owned = OrganizationalAddress;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "ORGANIZATIONAL_ADDRESS"
-        }
-        fn attr_len() -> usize {
-            2usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = parabola)]
     pub struct Parabola {
         pub focal_dist: LengthMeasure,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct ParabolaHolder {
-        focal_dist: LengthMeasure,
-    }
-    impl Holder for ParabolaHolder {
-        type Table = Tables;
-        type Owned = Parabola;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "PARABOLA"
-        }
-        fn attr_len() -> usize {
-            1usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = person)]
     pub struct Person {
         pub id: Identifier,
         pub last_name: Option<Label>,
@@ -7655,439 +3220,121 @@ pub mod explicit_draughting {
         pub prefix_titles: Option<Vec<Label>>,
         pub suffix_titles: Option<Vec<Label>>,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct PersonHolder {
-        id: Identifier,
-        last_name: Option<Label>,
-        first_name: Option<Label>,
-        middle_names: Option<PlaceHolder<Vec<Label>>>,
-        prefix_titles: Option<PlaceHolder<Vec<Label>>>,
-        suffix_titles: Option<PlaceHolder<Vec<Label>>>,
-    }
-    impl Holder for PersonHolder {
-        type Table = Tables;
-        type Owned = Person;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "PERSON"
-        }
-        fn attr_len() -> usize {
-            6usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = person_and_organization)]
     pub struct PersonAndOrganization {
         pub the_person: Person,
         pub the_organization: Organization,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct PersonAndOrganizationHolder {
-        the_person: PlaceHolder<Person>,
-        the_organization: PlaceHolder<Organization>,
-    }
-    impl Holder for PersonAndOrganizationHolder {
-        type Table = Tables;
-        type Owned = PersonAndOrganization;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "PERSON_AND_ORGANIZATION"
-        }
-        fn attr_len() -> usize {
-            2usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = person_and_organization_assignment)]
     pub struct PersonAndOrganizationAssignment {
         pub assigned_person_and_organization: PersonAndOrganization,
         pub role: PersonAndOrganizationRole,
-    }
-    #[derive(Clone, Debug, PartialEq)]
-    struct PersonAndOrganizationAssignmentHolder {
-        assigned_person_and_organization: PlaceHolder<PersonAndOrganization>,
-        role: PlaceHolder<PersonAndOrganizationRole>,
-    }
-    impl Holder for PersonAndOrganizationAssignmentHolder {
-        type Table = Tables;
-        type Owned = PersonAndOrganizationAssignment;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "PERSON_AND_ORGANIZATION_ASSIGNMENT"
-        }
-        fn attr_len() -> usize {
-            2usize
-        }
     }
     #[derive(Debug, Clone, PartialEq)]
     pub enum PersonAndOrganizationAssignmentAny {
         DraughtingPersonAndOrganizationAssignment(Box<DraughtingPersonAndOrganizationAssignment>),
     }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = person_and_organization_role)]
     pub struct PersonAndOrganizationRole {
         pub name: Label,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct PersonAndOrganizationRoleHolder {
-        name: Label,
-    }
-    impl Holder for PersonAndOrganizationRoleHolder {
-        type Table = Tables;
-        type Owned = PersonAndOrganizationRole;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "PERSON_AND_ORGANIZATION_ROLE"
-        }
-        fn attr_len() -> usize {
-            1usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = person_assignment)]
     pub struct PersonAssignment {
         pub assigned_person: Person,
         pub role: PersonRole,
-    }
-    #[derive(Clone, Debug, PartialEq)]
-    struct PersonAssignmentHolder {
-        assigned_person: PlaceHolder<Person>,
-        role: PlaceHolder<PersonRole>,
-    }
-    impl Holder for PersonAssignmentHolder {
-        type Table = Tables;
-        type Owned = PersonAssignment;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "PERSON_ASSIGNMENT"
-        }
-        fn attr_len() -> usize {
-            2usize
-        }
     }
     #[derive(Debug, Clone, PartialEq)]
     pub enum PersonAssignmentAny {
         DraughtingPersonAssignment(Box<DraughtingPersonAssignment>),
     }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = person_role)]
     pub struct PersonRole {
         pub name: Label,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct PersonRoleHolder {
-        name: Label,
-    }
-    impl Holder for PersonRoleHolder {
-        type Table = Tables;
-        type Owned = PersonRole;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "PERSON_ROLE"
-        }
-        fn attr_len() -> usize {
-            1usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = personal_address)]
     pub struct PersonalAddress {
         pub people: Vec<Person>,
         pub description: Text,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct PersonalAddressHolder {
-        people: PlaceHolder<Vec<Person>>,
-        description: Text,
-    }
-    impl Holder for PersonalAddressHolder {
-        type Table = Tables;
-        type Owned = PersonalAddress;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "PERSONAL_ADDRESS"
-        }
-        fn attr_len() -> usize {
-            2usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = placement)]
     pub struct Placement {
         pub location: CartesianPoint,
-    }
-    #[derive(Clone, Debug, PartialEq)]
-    struct PlacementHolder {
-        location: PlaceHolder<CartesianPoint>,
-    }
-    impl Holder for PlacementHolder {
-        type Table = Tables;
-        type Owned = Placement;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "PLACEMENT"
-        }
-        fn attr_len() -> usize {
-            1usize
-        }
     }
     #[derive(Debug, Clone, PartialEq)]
     pub enum PlacementAny {
         Axis2Placement2D(Box<Axis2Placement2D>),
     }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = planar_box)]
     pub struct PlanarBox {
         pub placement: Axis2Placement,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct PlanarBoxHolder {
-        placement: PlaceHolder<Axis2Placement>,
-    }
-    impl Holder for PlanarBoxHolder {
-        type Table = Tables;
-        type Owned = PlanarBox;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "PLANAR_BOX"
-        }
-        fn attr_len() -> usize {
-            1usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = planar_extent)]
     pub struct PlanarExtent {
         pub size_in_x: LengthMeasure,
         pub size_in_y: LengthMeasure,
-    }
-    #[derive(Clone, Debug, PartialEq)]
-    struct PlanarExtentHolder {
-        size_in_x: LengthMeasure,
-        size_in_y: LengthMeasure,
-    }
-    impl Holder for PlanarExtentHolder {
-        type Table = Tables;
-        type Owned = PlanarExtent;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "PLANAR_EXTENT"
-        }
-        fn attr_len() -> usize {
-            2usize
-        }
     }
     #[derive(Debug, Clone, PartialEq)]
     pub enum PlanarExtentAny {
         PlanarBox(Box<PlanarBox>),
     }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = plane_angle_measure_with_unit)]
     pub struct PlaneAngleMeasureWithUnit {}
-    #[derive(Clone, Debug, PartialEq)]
-    struct PlaneAngleMeasureWithUnitHolder {}
-    impl Holder for PlaneAngleMeasureWithUnitHolder {
-        type Table = Tables;
-        type Owned = PlaneAngleMeasureWithUnit;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "PLANE_ANGLE_MEASURE_WITH_UNIT"
-        }
-        fn attr_len() -> usize {
-            0usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = plane_angle_unit)]
     pub struct PlaneAngleUnit {}
-    #[derive(Clone, Debug, PartialEq)]
-    struct PlaneAngleUnitHolder {}
-    impl Holder for PlaneAngleUnitHolder {
-        type Table = Tables;
-        type Owned = PlaneAngleUnit;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "PLANE_ANGLE_UNIT"
-        }
-        fn attr_len() -> usize {
-            0usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = point)]
     pub struct Point {}
-    #[derive(Clone, Debug, PartialEq)]
-    struct PointHolder {}
-    impl Holder for PointHolder {
-        type Table = Tables;
-        type Owned = Point;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "POINT"
-        }
-        fn attr_len() -> usize {
-            0usize
-        }
-    }
     #[derive(Debug, Clone, PartialEq)]
     pub enum PointAny {
         CartesianPoint(Box<CartesianPoint>),
         PointOnCurve(Box<PointOnCurve>),
     }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = point_on_curve)]
     pub struct PointOnCurve {
         pub basis_curve: CurveAny,
         pub point_parameter: ParameterValue,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct PointOnCurveHolder {
-        basis_curve: PlaceHolder<CurveAny>,
-        point_parameter: ParameterValue,
-    }
-    impl Holder for PointOnCurveHolder {
-        type Table = Tables;
-        type Owned = PointOnCurve;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "POINT_ON_CURVE"
-        }
-        fn attr_len() -> usize {
-            2usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = polyline)]
     pub struct Polyline {
         pub points: Vec<CartesianPoint>,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct PolylineHolder {
-        points: PlaceHolder<Vec<CartesianPoint>>,
-    }
-    impl Holder for PolylineHolder {
-        type Table = Tables;
-        type Owned = Polyline;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "POLYLINE"
-        }
-        fn attr_len() -> usize {
-            1usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = pre_defined_colour)]
     pub struct PreDefinedColour {}
-    #[derive(Clone, Debug, PartialEq)]
-    struct PreDefinedColourHolder {}
-    impl Holder for PreDefinedColourHolder {
-        type Table = Tables;
-        type Owned = PreDefinedColour;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "PRE_DEFINED_COLOUR"
-        }
-        fn attr_len() -> usize {
-            0usize
-        }
-    }
     #[derive(Debug, Clone, PartialEq)]
     pub enum PreDefinedColourAny {
         DraughtingPreDefinedColour(Box<DraughtingPreDefinedColour>),
     }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = pre_defined_curve_font)]
     pub struct PreDefinedCurveFont {}
-    #[derive(Clone, Debug, PartialEq)]
-    struct PreDefinedCurveFontHolder {}
-    impl Holder for PreDefinedCurveFontHolder {
-        type Table = Tables;
-        type Owned = PreDefinedCurveFont;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "PRE_DEFINED_CURVE_FONT"
-        }
-        fn attr_len() -> usize {
-            0usize
-        }
-    }
     #[derive(Debug, Clone, PartialEq)]
     pub enum PreDefinedCurveFontAny {
         DraughtingPreDefinedCurveFont(Box<DraughtingPreDefinedCurveFont>),
     }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = pre_defined_dimension_symbol)]
     pub struct PreDefinedDimensionSymbol {}
-    #[derive(Clone, Debug, PartialEq)]
-    struct PreDefinedDimensionSymbolHolder {}
-    impl Holder for PreDefinedDimensionSymbolHolder {
-        type Table = Tables;
-        type Owned = PreDefinedDimensionSymbol;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "PRE_DEFINED_DIMENSION_SYMBOL"
-        }
-        fn attr_len() -> usize {
-            0usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = pre_defined_geometrical_tolerance_symbol)]
     pub struct PreDefinedGeometricalToleranceSymbol {}
-    #[derive(Clone, Debug, PartialEq)]
-    struct PreDefinedGeometricalToleranceSymbolHolder {}
-    impl Holder for PreDefinedGeometricalToleranceSymbolHolder {
-        type Table = Tables;
-        type Owned = PreDefinedGeometricalToleranceSymbol;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "PRE_DEFINED_GEOMETRICAL_TOLERANCE_SYMBOL"
-        }
-        fn attr_len() -> usize {
-            0usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = pre_defined_item)]
     pub struct PreDefinedItem {
         pub name: Label,
-    }
-    #[derive(Clone, Debug, PartialEq)]
-    struct PreDefinedItemHolder {
-        name: Label,
-    }
-    impl Holder for PreDefinedItemHolder {
-        type Table = Tables;
-        type Owned = PreDefinedItem;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "PRE_DEFINED_ITEM"
-        }
-        fn attr_len() -> usize {
-            1usize
-        }
     }
     #[derive(Debug, Clone, PartialEq)]
     pub enum PreDefinedItemAny {
@@ -8096,40 +3343,12 @@ pub mod explicit_draughting {
         PreDefinedSymbol(Box<PreDefinedSymbol>),
         PreDefinedTextFont(Box<PreDefinedTextFont>),
     }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = pre_defined_point_marker_symbol)]
     pub struct PreDefinedPointMarkerSymbol {}
-    #[derive(Clone, Debug, PartialEq)]
-    struct PreDefinedPointMarkerSymbolHolder {}
-    impl Holder for PreDefinedPointMarkerSymbolHolder {
-        type Table = Tables;
-        type Owned = PreDefinedPointMarkerSymbol;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "PRE_DEFINED_POINT_MARKER_SYMBOL"
-        }
-        fn attr_len() -> usize {
-            0usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = pre_defined_symbol)]
     pub struct PreDefinedSymbol {}
-    #[derive(Clone, Debug, PartialEq)]
-    struct PreDefinedSymbolHolder {}
-    impl Holder for PreDefinedSymbolHolder {
-        type Table = Tables;
-        type Owned = PreDefinedSymbol;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "PRE_DEFINED_SYMBOL"
-        }
-        fn attr_len() -> usize {
-            0usize
-        }
-    }
     #[derive(Debug, Clone, PartialEq)]
     pub enum PreDefinedSymbolAny {
         PreDefinedDimensionSymbol(Box<PreDefinedDimensionSymbol>),
@@ -8137,597 +3356,171 @@ pub mod explicit_draughting {
         PreDefinedPointMarkerSymbol(Box<PreDefinedPointMarkerSymbol>),
         PreDefinedTerminatorSymbol(Box<PreDefinedTerminatorSymbol>),
     }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = pre_defined_terminator_symbol)]
     pub struct PreDefinedTerminatorSymbol {}
-    #[derive(Clone, Debug, PartialEq)]
-    struct PreDefinedTerminatorSymbolHolder {}
-    impl Holder for PreDefinedTerminatorSymbolHolder {
-        type Table = Tables;
-        type Owned = PreDefinedTerminatorSymbol;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "PRE_DEFINED_TERMINATOR_SYMBOL"
-        }
-        fn attr_len() -> usize {
-            0usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = pre_defined_text_font)]
     pub struct PreDefinedTextFont {}
-    #[derive(Clone, Debug, PartialEq)]
-    struct PreDefinedTextFontHolder {}
-    impl Holder for PreDefinedTextFontHolder {
-        type Table = Tables;
-        type Owned = PreDefinedTextFont;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "PRE_DEFINED_TEXT_FONT"
-        }
-        fn attr_len() -> usize {
-            0usize
-        }
-    }
     #[derive(Debug, Clone, PartialEq)]
     pub enum PreDefinedTextFontAny {
         DraughtingPreDefinedTextFont(Box<DraughtingPreDefinedTextFont>),
     }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = presentation_area)]
     pub struct PresentationArea {}
-    #[derive(Clone, Debug, PartialEq)]
-    struct PresentationAreaHolder {}
-    impl Holder for PresentationAreaHolder {
-        type Table = Tables;
-        type Owned = PresentationArea;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "PRESENTATION_AREA"
-        }
-        fn attr_len() -> usize {
-            0usize
-        }
-    }
     #[derive(Debug, Clone, PartialEq)]
     pub enum PresentationAreaAny {
         DrawingSheetRevision(Box<DrawingSheetRevision>),
     }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = presentation_layer_assignment)]
     pub struct PresentationLayerAssignment {
         pub name: Label,
         pub description: Text,
         pub assigned_items: Vec<LayeredItem>,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct PresentationLayerAssignmentHolder {
-        name: Label,
-        description: Text,
-        assigned_items: PlaceHolder<Vec<LayeredItem>>,
-    }
-    impl Holder for PresentationLayerAssignmentHolder {
-        type Table = Tables;
-        type Owned = PresentationLayerAssignment;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "PRESENTATION_LAYER_ASSIGNMENT"
-        }
-        fn attr_len() -> usize {
-            3usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = presentation_layer_usage)]
     pub struct PresentationLayerUsage {
         pub assignment: PresentationLayerAssignment,
         pub presentation: PresentationRepresentationAny,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct PresentationLayerUsageHolder {
-        assignment: PlaceHolder<PresentationLayerAssignment>,
-        presentation: PlaceHolder<PresentationRepresentationAny>,
-    }
-    impl Holder for PresentationLayerUsageHolder {
-        type Table = Tables;
-        type Owned = PresentationLayerUsage;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "PRESENTATION_LAYER_USAGE"
-        }
-        fn attr_len() -> usize {
-            2usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = presentation_representation)]
     pub struct PresentationRepresentation {}
-    #[derive(Clone, Debug, PartialEq)]
-    struct PresentationRepresentationHolder {}
-    impl Holder for PresentationRepresentationHolder {
-        type Table = Tables;
-        type Owned = PresentationRepresentation;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "PRESENTATION_REPRESENTATION"
-        }
-        fn attr_len() -> usize {
-            0usize
-        }
-    }
     #[derive(Debug, Clone, PartialEq)]
     pub enum PresentationRepresentationAny {
         PresentationArea(Box<PresentationArea>),
         PresentationView(Box<PresentationView>),
     }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = presentation_set)]
     pub struct PresentationSet {}
-    #[derive(Clone, Debug, PartialEq)]
-    struct PresentationSetHolder {}
-    impl Holder for PresentationSetHolder {
-        type Table = Tables;
-        type Owned = PresentationSet;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "PRESENTATION_SET"
-        }
-        fn attr_len() -> usize {
-            0usize
-        }
-    }
     #[derive(Debug, Clone, PartialEq)]
     pub enum PresentationSetAny {
         DrawingRevision(Box<DrawingRevision>),
     }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = presentation_size)]
     pub struct PresentationSize {
         pub unit: PresentationSizeAssignmentSelect,
         pub size: PlanarBox,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct PresentationSizeHolder {
-        unit: PlaceHolder<PresentationSizeAssignmentSelect>,
-        size: PlaceHolder<PlanarBox>,
-    }
-    impl Holder for PresentationSizeHolder {
-        type Table = Tables;
-        type Owned = PresentationSize;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "PRESENTATION_SIZE"
-        }
-        fn attr_len() -> usize {
-            2usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = presentation_style_assignment)]
     pub struct PresentationStyleAssignment {
         pub styles: Vec<PresentationStyleSelect>,
-    }
-    #[derive(Clone, Debug, PartialEq)]
-    struct PresentationStyleAssignmentHolder {
-        styles: PlaceHolder<Vec<PresentationStyleSelect>>,
-    }
-    impl Holder for PresentationStyleAssignmentHolder {
-        type Table = Tables;
-        type Owned = PresentationStyleAssignment;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "PRESENTATION_STYLE_ASSIGNMENT"
-        }
-        fn attr_len() -> usize {
-            1usize
-        }
     }
     #[derive(Debug, Clone, PartialEq)]
     pub enum PresentationStyleAssignmentAny {
         PresentationStyleByContext(Box<PresentationStyleByContext>),
     }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = presentation_style_by_context)]
     pub struct PresentationStyleByContext {
         pub style_context: StyleContextSelect,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct PresentationStyleByContextHolder {
-        style_context: PlaceHolder<StyleContextSelect>,
-    }
-    impl Holder for PresentationStyleByContextHolder {
-        type Table = Tables;
-        type Owned = PresentationStyleByContext;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "PRESENTATION_STYLE_BY_CONTEXT"
-        }
-        fn attr_len() -> usize {
-            1usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = presentation_view)]
     pub struct PresentationView {}
-    #[derive(Clone, Debug, PartialEq)]
-    struct PresentationViewHolder {}
-    impl Holder for PresentationViewHolder {
-        type Table = Tables;
-        type Owned = PresentationView;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "PRESENTATION_VIEW"
-        }
-        fn attr_len() -> usize {
-            0usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = presented_item)]
     pub struct PresentedItem {}
-    #[derive(Clone, Debug, PartialEq)]
-    struct PresentedItemHolder {}
-    impl Holder for PresentedItemHolder {
-        type Table = Tables;
-        type Owned = PresentedItem;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "PRESENTED_ITEM"
-        }
-        fn attr_len() -> usize {
-            0usize
-        }
-    }
     #[derive(Debug, Clone, PartialEq)]
     pub enum PresentedItemAny {
         DraughtingPresentedItem(Box<DraughtingPresentedItem>),
     }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = presented_item_representation)]
     pub struct PresentedItemRepresentation {
         pub presentation: PresentationRepresentationSelect,
         pub item: PresentedItemAny,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct PresentedItemRepresentationHolder {
-        presentation: PlaceHolder<PresentationRepresentationSelect>,
-        item: PlaceHolder<PresentedItemAny>,
-    }
-    impl Holder for PresentedItemRepresentationHolder {
-        type Table = Tables;
-        type Owned = PresentedItemRepresentation;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "PRESENTED_ITEM_REPRESENTATION"
-        }
-        fn attr_len() -> usize {
-            2usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = product)]
     pub struct Product {
         pub id: Identifier,
         pub name: Label,
         pub description: Text,
         pub frame_of_reference: Vec<ProductContext>,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct ProductHolder {
-        id: Identifier,
-        name: Label,
-        description: Text,
-        frame_of_reference: PlaceHolder<Vec<ProductContext>>,
-    }
-    impl Holder for ProductHolder {
-        type Table = Tables;
-        type Owned = Product;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "PRODUCT"
-        }
-        fn attr_len() -> usize {
-            4usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = product_context)]
     pub struct ProductContext {
         pub discipline_type: Label,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct ProductContextHolder {
-        discipline_type: Label,
-    }
-    impl Holder for ProductContextHolder {
-        type Table = Tables;
-        type Owned = ProductContext;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "PRODUCT_CONTEXT"
-        }
-        fn attr_len() -> usize {
-            1usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = product_definition)]
     pub struct ProductDefinition {
         pub id: Identifier,
         pub description: Text,
         pub formation: ProductDefinitionFormation,
         pub frame_of_reference: ProductDefinitionContext,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct ProductDefinitionHolder {
-        id: Identifier,
-        description: Text,
-        formation: PlaceHolder<ProductDefinitionFormation>,
-        frame_of_reference: PlaceHolder<ProductDefinitionContext>,
-    }
-    impl Holder for ProductDefinitionHolder {
-        type Table = Tables;
-        type Owned = ProductDefinition;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "PRODUCT_DEFINITION"
-        }
-        fn attr_len() -> usize {
-            4usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = product_definition_context)]
     pub struct ProductDefinitionContext {
         pub life_cycle_stage: Label,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct ProductDefinitionContextHolder {
-        life_cycle_stage: Label,
-    }
-    impl Holder for ProductDefinitionContextHolder {
-        type Table = Tables;
-        type Owned = ProductDefinitionContext;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "PRODUCT_DEFINITION_CONTEXT"
-        }
-        fn attr_len() -> usize {
-            1usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = product_definition_formation)]
     pub struct ProductDefinitionFormation {
         pub id: Identifier,
         pub description: Text,
         pub of_product: Product,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct ProductDefinitionFormationHolder {
-        id: Identifier,
-        description: Text,
-        of_product: PlaceHolder<Product>,
-    }
-    impl Holder for ProductDefinitionFormationHolder {
-        type Table = Tables;
-        type Owned = ProductDefinitionFormation;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "PRODUCT_DEFINITION_FORMATION"
-        }
-        fn attr_len() -> usize {
-            3usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = product_definition_shape)]
     pub struct ProductDefinitionShape {}
-    #[derive(Clone, Debug, PartialEq)]
-    struct ProductDefinitionShapeHolder {}
-    impl Holder for ProductDefinitionShapeHolder {
-        type Table = Tables;
-        type Owned = ProductDefinitionShape;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "PRODUCT_DEFINITION_SHAPE"
-        }
-        fn attr_len() -> usize {
-            0usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = projection_curve)]
     pub struct ProjectionCurve {}
-    #[derive(Clone, Debug, PartialEq)]
-    struct ProjectionCurveHolder {}
-    impl Holder for ProjectionCurveHolder {
-        type Table = Tables;
-        type Owned = ProjectionCurve;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "PROJECTION_CURVE"
-        }
-        fn attr_len() -> usize {
-            0usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = projection_directed_callout)]
     pub struct ProjectionDirectedCallout {}
-    #[derive(Clone, Debug, PartialEq)]
-    struct ProjectionDirectedCalloutHolder {}
-    impl Holder for ProjectionDirectedCalloutHolder {
-        type Table = Tables;
-        type Owned = ProjectionDirectedCallout;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "PROJECTION_DIRECTED_CALLOUT"
-        }
-        fn attr_len() -> usize {
-            0usize
-        }
-    }
     #[derive(Debug, Clone, PartialEq)]
     pub enum ProjectionDirectedCalloutAny {
         OrdinateDimension(Box<OrdinateDimension>),
     }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = property_definition)]
     pub struct PropertyDefinition {
         pub name: Label,
         pub description: Text,
         pub definition: CharacterizedDefinition,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct PropertyDefinitionHolder {
-        name: Label,
-        description: Text,
-        definition: PlaceHolder<CharacterizedDefinition>,
-    }
-    impl Holder for PropertyDefinitionHolder {
-        type Table = Tables;
-        type Owned = PropertyDefinition;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "PROPERTY_DEFINITION"
-        }
-        fn attr_len() -> usize {
-            3usize
-        }
-    }
     #[derive(Debug, Clone, PartialEq)]
     pub enum PropertyDefinitionAny {
         ProductDefinitionShape(Box<ProductDefinitionShape>),
     }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = property_definition_representation)]
     pub struct PropertyDefinitionRepresentation {
         pub definition: PropertyDefinitionAny,
         pub used_representation: RepresentationAny,
-    }
-    #[derive(Clone, Debug, PartialEq)]
-    struct PropertyDefinitionRepresentationHolder {
-        definition: PlaceHolder<PropertyDefinitionAny>,
-        used_representation: PlaceHolder<RepresentationAny>,
-    }
-    impl Holder for PropertyDefinitionRepresentationHolder {
-        type Table = Tables;
-        type Owned = PropertyDefinitionRepresentation;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "PROPERTY_DEFINITION_REPRESENTATION"
-        }
-        fn attr_len() -> usize {
-            2usize
-        }
     }
     #[derive(Debug, Clone, PartialEq)]
     pub enum PropertyDefinitionRepresentationAny {
         ShapeDefinitionRepresentation(Box<ShapeDefinitionRepresentation>),
     }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = quasi_uniform_curve)]
     pub struct QuasiUniformCurve {}
-    #[derive(Clone, Debug, PartialEq)]
-    struct QuasiUniformCurveHolder {}
-    impl Holder for QuasiUniformCurveHolder {
-        type Table = Tables;
-        type Owned = QuasiUniformCurve;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "QUASI_UNIFORM_CURVE"
-        }
-        fn attr_len() -> usize {
-            0usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = radius_dimension)]
     pub struct RadiusDimension {}
-    #[derive(Clone, Debug, PartialEq)]
-    struct RadiusDimensionHolder {}
-    impl Holder for RadiusDimensionHolder {
-        type Table = Tables;
-        type Owned = RadiusDimension;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "RADIUS_DIMENSION"
-        }
-        fn attr_len() -> usize {
-            0usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = rational_b_spline_curve)]
     pub struct RationalBSplineCurve {
         pub weights_data: Vec<f64>,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct RationalBSplineCurveHolder {
-        weights_data: PlaceHolder<Vec<f64>>,
-    }
-    impl Holder for RationalBSplineCurveHolder {
-        type Table = Tables;
-        type Owned = RationalBSplineCurve;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "RATIONAL_B_SPLINE_CURVE"
-        }
-        fn attr_len() -> usize {
-            1usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = representation)]
     pub struct Representation {
         pub name: Label,
         pub items: Vec<RepresentationItemAny>,
         pub context_of_items: RepresentationContextAny,
-    }
-    #[derive(Clone, Debug, PartialEq)]
-    struct RepresentationHolder {
-        name: Label,
-        items: PlaceHolder<Vec<RepresentationItemAny>>,
-        context_of_items: PlaceHolder<RepresentationContextAny>,
-    }
-    impl Holder for RepresentationHolder {
-        type Table = Tables;
-        type Owned = Representation;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "REPRESENTATION"
-        }
-        fn attr_len() -> usize {
-            3usize
-        }
     }
     #[derive(Debug, Clone, PartialEq)]
     pub enum RepresentationAny {
@@ -8736,54 +3529,21 @@ pub mod explicit_draughting {
         ShapeRepresentation(Box<ShapeRepresentation>),
         SymbolRepresentation(Box<SymbolRepresentation>),
     }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = representation_context)]
     pub struct RepresentationContext {
         pub context_identifier: Identifier,
         pub context_type: Text,
-    }
-    #[derive(Clone, Debug, PartialEq)]
-    struct RepresentationContextHolder {
-        context_identifier: Identifier,
-        context_type: Text,
-    }
-    impl Holder for RepresentationContextHolder {
-        type Table = Tables;
-        type Owned = RepresentationContext;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "REPRESENTATION_CONTEXT"
-        }
-        fn attr_len() -> usize {
-            2usize
-        }
     }
     #[derive(Debug, Clone, PartialEq)]
     pub enum RepresentationContextAny {
         GeometricRepresentationContext(Box<GeometricRepresentationContext>),
         GlobalUnitAssignedContext(Box<GlobalUnitAssignedContext>),
     }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = representation_item)]
     pub struct RepresentationItem {
         pub name: Label,
-    }
-    #[derive(Clone, Debug, PartialEq)]
-    struct RepresentationItemHolder {
-        name: Label,
-    }
-    impl Holder for RepresentationItemHolder {
-        type Table = Tables;
-        type Owned = RepresentationItem;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "REPRESENTATION_ITEM"
-        }
-        fn attr_len() -> usize {
-            1usize
-        }
     }
     #[derive(Debug, Clone, PartialEq)]
     pub enum RepresentationItemAny {
@@ -8791,374 +3551,116 @@ pub mod explicit_draughting {
         MappedItem(Box<MappedItem>),
         StyledItem(Box<StyledItem>),
     }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = representation_map)]
     pub struct RepresentationMap {
         pub mapping_origin: RepresentationItemAny,
         pub mapped_representation: RepresentationAny,
-    }
-    #[derive(Clone, Debug, PartialEq)]
-    struct RepresentationMapHolder {
-        mapping_origin: PlaceHolder<RepresentationItemAny>,
-        mapped_representation: PlaceHolder<RepresentationAny>,
-    }
-    impl Holder for RepresentationMapHolder {
-        type Table = Tables;
-        type Owned = RepresentationMap;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "REPRESENTATION_MAP"
-        }
-        fn attr_len() -> usize {
-            2usize
-        }
     }
     #[derive(Debug, Clone, PartialEq)]
     pub enum RepresentationMapAny {
         CameraUsage(Box<CameraUsage>),
         SymbolRepresentationMap(Box<SymbolRepresentationMap>),
     }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = security_classification)]
     pub struct SecurityClassification {
         pub name: Label,
         pub purpose: Text,
         pub security_level: SecurityClassificationLevel,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct SecurityClassificationHolder {
-        name: Label,
-        purpose: Text,
-        security_level: PlaceHolder<SecurityClassificationLevel>,
-    }
-    impl Holder for SecurityClassificationHolder {
-        type Table = Tables;
-        type Owned = SecurityClassification;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "SECURITY_CLASSIFICATION"
-        }
-        fn attr_len() -> usize {
-            3usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = security_classification_assignment)]
     pub struct SecurityClassificationAssignment {
         pub assigned_security_classification: SecurityClassification,
-    }
-    #[derive(Clone, Debug, PartialEq)]
-    struct SecurityClassificationAssignmentHolder {
-        assigned_security_classification: PlaceHolder<SecurityClassification>,
-    }
-    impl Holder for SecurityClassificationAssignmentHolder {
-        type Table = Tables;
-        type Owned = SecurityClassificationAssignment;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "SECURITY_CLASSIFICATION_ASSIGNMENT"
-        }
-        fn attr_len() -> usize {
-            1usize
-        }
     }
     #[derive(Debug, Clone, PartialEq)]
     pub enum SecurityClassificationAssignmentAny {
         DraughtingSecurityClassificationAssignment(Box<DraughtingSecurityClassificationAssignment>),
     }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = security_classification_level)]
     pub struct SecurityClassificationLevel {
         pub name: Label,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct SecurityClassificationLevelHolder {
-        name: Label,
-    }
-    impl Holder for SecurityClassificationLevelHolder {
-        type Table = Tables;
-        type Owned = SecurityClassificationLevel;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "SECURITY_CLASSIFICATION_LEVEL"
-        }
-        fn attr_len() -> usize {
-            1usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = shape_definition_representation)]
     pub struct ShapeDefinitionRepresentation {}
-    #[derive(Clone, Debug, PartialEq)]
-    struct ShapeDefinitionRepresentationHolder {}
-    impl Holder for ShapeDefinitionRepresentationHolder {
-        type Table = Tables;
-        type Owned = ShapeDefinitionRepresentation;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "SHAPE_DEFINITION_REPRESENTATION"
-        }
-        fn attr_len() -> usize {
-            0usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = shape_representation)]
     pub struct ShapeRepresentation {}
-    #[derive(Clone, Debug, PartialEq)]
-    struct ShapeRepresentationHolder {}
-    impl Holder for ShapeRepresentationHolder {
-        type Table = Tables;
-        type Owned = ShapeRepresentation;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "SHAPE_REPRESENTATION"
-        }
-        fn attr_len() -> usize {
-            0usize
-        }
-    }
     #[derive(Debug, Clone, PartialEq)]
     pub enum ShapeRepresentationAny {
         GeometricallyBounded2DWireframeRepresentation(
             Box<GeometricallyBounded2DWireframeRepresentation>,
         ),
     }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = si_unit)]
     pub struct SiUnit {
         pub prefix: Option<SiPrefix>,
         pub name: SiUnitName,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct SiUnitHolder {
-        prefix: Option<PlaceHolder<SiPrefix>>,
-        name: PlaceHolder<SiUnitName>,
-    }
-    impl Holder for SiUnitHolder {
-        type Table = Tables;
-        type Owned = SiUnit;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "SI_UNIT"
-        }
-        fn attr_len() -> usize {
-            2usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = structured_dimension_callout)]
     pub struct StructuredDimensionCallout {}
-    #[derive(Clone, Debug, PartialEq)]
-    struct StructuredDimensionCalloutHolder {}
-    impl Holder for StructuredDimensionCalloutHolder {
-        type Table = Tables;
-        type Owned = StructuredDimensionCallout;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "STRUCTURED_DIMENSION_CALLOUT"
-        }
-        fn attr_len() -> usize {
-            0usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = styled_item)]
     pub struct StyledItem {
         pub styles: Vec<PresentationStyleAssignmentAny>,
         pub item: RepresentationItemAny,
-    }
-    #[derive(Clone, Debug, PartialEq)]
-    struct StyledItemHolder {
-        styles: PlaceHolder<Vec<PresentationStyleAssignmentAny>>,
-        item: PlaceHolder<RepresentationItemAny>,
-    }
-    impl Holder for StyledItemHolder {
-        type Table = Tables;
-        type Owned = StyledItem;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "STYLED_ITEM"
-        }
-        fn attr_len() -> usize {
-            2usize
-        }
     }
     #[derive(Debug, Clone, PartialEq)]
     pub enum StyledItemAny {
         AnnotationOccurrence(Box<AnnotationOccurrence>),
     }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = symbol_colour)]
     pub struct SymbolColour {
         pub colour_of_symbol: ColourAny,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct SymbolColourHolder {
-        colour_of_symbol: PlaceHolder<ColourAny>,
-    }
-    impl Holder for SymbolColourHolder {
-        type Table = Tables;
-        type Owned = SymbolColour;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "SYMBOL_COLOUR"
-        }
-        fn attr_len() -> usize {
-            1usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = symbol_representation)]
     pub struct SymbolRepresentation {}
-    #[derive(Clone, Debug, PartialEq)]
-    struct SymbolRepresentationHolder {}
-    impl Holder for SymbolRepresentationHolder {
-        type Table = Tables;
-        type Owned = SymbolRepresentation;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "SYMBOL_REPRESENTATION"
-        }
-        fn attr_len() -> usize {
-            0usize
-        }
-    }
     #[derive(Debug, Clone, PartialEq)]
     pub enum SymbolRepresentationAny {
         DraughtingSubfigureRepresentation(Box<DraughtingSubfigureRepresentation>),
         DraughtingSymbolRepresentation(Box<DraughtingSymbolRepresentation>),
     }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = symbol_representation_map)]
     pub struct SymbolRepresentationMap {}
-    #[derive(Clone, Debug, PartialEq)]
-    struct SymbolRepresentationMapHolder {}
-    impl Holder for SymbolRepresentationMapHolder {
-        type Table = Tables;
-        type Owned = SymbolRepresentationMap;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "SYMBOL_REPRESENTATION_MAP"
-        }
-        fn attr_len() -> usize {
-            0usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = symbol_style)]
     pub struct SymbolStyle {
         pub name: Label,
         pub style_of_symbol: SymbolStyleSelect,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct SymbolStyleHolder {
-        name: Label,
-        style_of_symbol: PlaceHolder<SymbolStyleSelect>,
-    }
-    impl Holder for SymbolStyleHolder {
-        type Table = Tables;
-        type Owned = SymbolStyle;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "SYMBOL_STYLE"
-        }
-        fn attr_len() -> usize {
-            2usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = symbol_target)]
     pub struct SymbolTarget {
         pub placement: Axis2Placement,
         pub x_scale: PositiveRatioMeasure,
         pub y_scale: PositiveRatioMeasure,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct SymbolTargetHolder {
-        placement: PlaceHolder<Axis2Placement>,
-        x_scale: PositiveRatioMeasure,
-        y_scale: PositiveRatioMeasure,
-    }
-    impl Holder for SymbolTargetHolder {
-        type Table = Tables;
-        type Owned = SymbolTarget;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "SYMBOL_TARGET"
-        }
-        fn attr_len() -> usize {
-            3usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = terminator_symbol)]
     pub struct TerminatorSymbol {
         pub annotated_curve: AnnotationCurveOccurrenceAny,
-    }
-    #[derive(Clone, Debug, PartialEq)]
-    struct TerminatorSymbolHolder {
-        annotated_curve: PlaceHolder<AnnotationCurveOccurrenceAny>,
-    }
-    impl Holder for TerminatorSymbolHolder {
-        type Table = Tables;
-        type Owned = TerminatorSymbol;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "TERMINATOR_SYMBOL"
-        }
-        fn attr_len() -> usize {
-            1usize
-        }
     }
     #[derive(Debug, Clone, PartialEq)]
     pub enum TerminatorSymbolAny {
         DimensionCurveTerminator(Box<DimensionCurveTerminator>),
         LeaderTerminator(Box<LeaderTerminator>),
     }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = text_literal)]
     pub struct TextLiteral {
         pub literal: PresentableText,
         pub placement: Axis2Placement,
         pub alignment: TextAlignment,
         pub path: TextPath,
         pub font: FontSelect,
-    }
-    #[derive(Clone, Debug, PartialEq)]
-    struct TextLiteralHolder {
-        literal: PresentableText,
-        placement: PlaceHolder<Axis2Placement>,
-        alignment: TextAlignment,
-        path: PlaceHolder<TextPath>,
-        font: PlaceHolder<FontSelect>,
-    }
-    impl Holder for TextLiteralHolder {
-        type Table = Tables;
-        type Owned = TextLiteral;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "TEXT_LITERAL"
-        }
-        fn attr_len() -> usize {
-            5usize
-        }
     }
     #[derive(Debug, Clone, PartialEq)]
     pub enum TextLiteralAny {
@@ -9167,186 +3669,58 @@ pub mod explicit_draughting {
         TextLiteralWithDelineation(Box<TextLiteralWithDelineation>),
         TextLiteralWithExtent(Box<TextLiteralWithExtent>),
     }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = text_literal_with_associated_curves)]
     pub struct TextLiteralWithAssociatedCurves {
         pub associated_curves: Vec<CurveAny>,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct TextLiteralWithAssociatedCurvesHolder {
-        associated_curves: PlaceHolder<Vec<CurveAny>>,
-    }
-    impl Holder for TextLiteralWithAssociatedCurvesHolder {
-        type Table = Tables;
-        type Owned = TextLiteralWithAssociatedCurves;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "TEXT_LITERAL_WITH_ASSOCIATED_CURVES"
-        }
-        fn attr_len() -> usize {
-            1usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = text_literal_with_blanking_box)]
     pub struct TextLiteralWithBlankingBox {
         pub blanking: PlanarBox,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct TextLiteralWithBlankingBoxHolder {
-        blanking: PlaceHolder<PlanarBox>,
-    }
-    impl Holder for TextLiteralWithBlankingBoxHolder {
-        type Table = Tables;
-        type Owned = TextLiteralWithBlankingBox;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "TEXT_LITERAL_WITH_BLANKING_BOX"
-        }
-        fn attr_len() -> usize {
-            1usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = text_literal_with_delineation)]
     pub struct TextLiteralWithDelineation {
         pub delineation: TextDelineation,
-    }
-    #[derive(Clone, Debug, PartialEq)]
-    struct TextLiteralWithDelineationHolder {
-        delineation: TextDelineation,
-    }
-    impl Holder for TextLiteralWithDelineationHolder {
-        type Table = Tables;
-        type Owned = TextLiteralWithDelineation;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "TEXT_LITERAL_WITH_DELINEATION"
-        }
-        fn attr_len() -> usize {
-            1usize
-        }
     }
     #[derive(Debug, Clone, PartialEq)]
     pub enum TextLiteralWithDelineationAny {
         DraughtingTextLiteralWithDelineation(Box<DraughtingTextLiteralWithDelineation>),
     }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = text_literal_with_extent)]
     pub struct TextLiteralWithExtent {
         pub extent: PlanarExtentAny,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct TextLiteralWithExtentHolder {
-        extent: PlaceHolder<PlanarExtentAny>,
-    }
-    impl Holder for TextLiteralWithExtentHolder {
-        type Table = Tables;
-        type Owned = TextLiteralWithExtent;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "TEXT_LITERAL_WITH_EXTENT"
-        }
-        fn attr_len() -> usize {
-            1usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = text_style)]
     pub struct TextStyle {
         pub name: Label,
         pub character_appearance: CharacterStyleSelect,
-    }
-    #[derive(Clone, Debug, PartialEq)]
-    struct TextStyleHolder {
-        name: Label,
-        character_appearance: PlaceHolder<CharacterStyleSelect>,
-    }
-    impl Holder for TextStyleHolder {
-        type Table = Tables;
-        type Owned = TextStyle;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "TEXT_STYLE"
-        }
-        fn attr_len() -> usize {
-            2usize
-        }
     }
     #[derive(Debug, Clone, PartialEq)]
     pub enum TextStyleAny {
         TextStyleWithBoxCharacteristics(Box<TextStyleWithBoxCharacteristics>),
         TextStyleWithMirror(Box<TextStyleWithMirror>),
     }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = text_style_for_defined_font)]
     pub struct TextStyleForDefinedFont {
         pub text_colour: ColourAny,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct TextStyleForDefinedFontHolder {
-        text_colour: PlaceHolder<ColourAny>,
-    }
-    impl Holder for TextStyleForDefinedFontHolder {
-        type Table = Tables;
-        type Owned = TextStyleForDefinedFont;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "TEXT_STYLE_FOR_DEFINED_FONT"
-        }
-        fn attr_len() -> usize {
-            1usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = text_style_with_box_characteristics)]
     pub struct TextStyleWithBoxCharacteristics {
         pub characteristics: Vec<BoxCharacteristicSelect>,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct TextStyleWithBoxCharacteristicsHolder {
-        characteristics: PlaceHolder<Vec<BoxCharacteristicSelect>>,
-    }
-    impl Holder for TextStyleWithBoxCharacteristicsHolder {
-        type Table = Tables;
-        type Owned = TextStyleWithBoxCharacteristics;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "TEXT_STYLE_WITH_BOX_CHARACTERISTICS"
-        }
-        fn attr_len() -> usize {
-            1usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = text_style_with_mirror)]
     pub struct TextStyleWithMirror {
         pub mirror_placement: Axis2Placement,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct TextStyleWithMirrorHolder {
-        mirror_placement: PlaceHolder<Axis2Placement>,
-    }
-    impl Holder for TextStyleWithMirrorHolder {
-        type Table = Tables;
-        type Owned = TextStyleWithMirror;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "TEXT_STYLE_WITH_MIRROR"
-        }
-        fn attr_len() -> usize {
-            1usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = trimmed_curve)]
     pub struct TrimmedCurve {
         pub basis_curve: CurveAny,
         pub trim_1: Vec<TrimmingSelect>,
@@ -9354,86 +3728,18 @@ pub mod explicit_draughting {
         pub sense_agreement: bool,
         pub master_representation: TrimmingPreference,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct TrimmedCurveHolder {
-        basis_curve: PlaceHolder<CurveAny>,
-        trim_1: PlaceHolder<Vec<TrimmingSelect>>,
-        trim_2: PlaceHolder<Vec<TrimmingSelect>>,
-        sense_agreement: bool,
-        master_representation: PlaceHolder<TrimmingPreference>,
-    }
-    impl Holder for TrimmedCurveHolder {
-        type Table = Tables;
-        type Owned = TrimmedCurve;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "TRIMMED_CURVE"
-        }
-        fn attr_len() -> usize {
-            5usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = two_direction_repeat_factor)]
     pub struct TwoDirectionRepeatFactor {
         pub second_repeat_factor: Vector,
     }
-    #[derive(Clone, Debug, PartialEq)]
-    struct TwoDirectionRepeatFactorHolder {
-        second_repeat_factor: PlaceHolder<Vector>,
-    }
-    impl Holder for TwoDirectionRepeatFactorHolder {
-        type Table = Tables;
-        type Owned = TwoDirectionRepeatFactor;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "TWO_DIRECTION_REPEAT_FACTOR"
-        }
-        fn attr_len() -> usize {
-            1usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = uniform_curve)]
     pub struct UniformCurve {}
-    #[derive(Clone, Debug, PartialEq)]
-    struct UniformCurveHolder {}
-    impl Holder for UniformCurveHolder {
-        type Table = Tables;
-        type Owned = UniformCurve;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "UNIFORM_CURVE"
-        }
-        fn attr_len() -> usize {
-            0usize
-        }
-    }
-    #[derive(Debug, Clone, PartialEq, derive_new :: new)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables , field = vector)]
     pub struct Vector {
         pub orientation: Direction,
         pub magnitude: LengthMeasure,
-    }
-    #[derive(Clone, Debug, PartialEq)]
-    struct VectorHolder {
-        orientation: PlaceHolder<Direction>,
-        magnitude: LengthMeasure,
-    }
-    impl Holder for VectorHolder {
-        type Table = Tables;
-        type Owned = Vector;
-        fn into_owned(self, _tables: &Self::Table) -> Result<Self::Owned> {
-            todo!()
-        }
-        fn name() -> &'static str {
-            "VECTOR"
-        }
-        fn attr_len() -> usize {
-            2usize
-        }
     }
 }
