@@ -1,4 +1,4 @@
-use crate::semantics::*;
+use crate::ir::*;
 
 use inflector::Inflector;
 use proc_macro2::TokenStream;
@@ -9,7 +9,7 @@ impl ToTokens for Schema {
         let name = format_ident!("{}", self.name);
         let types = &self.types;
         let entities = &self.entities;
-        let entity_name: Vec<_> = entities
+        let entity_types: Vec<_> = entities
             .iter()
             .map(|e| format_ident!("{}", e.name.to_pascal_case()))
             .collect();
@@ -17,30 +17,27 @@ impl ToTokens for Schema {
             .iter()
             .map(|e| format_ident!("{}", e.name))
             .collect();
-        let holder_type: Vec<_> = entities
-            .iter()
-            .map(|e| format_ident!("{}Holder", e.name.to_pascal_case()))
-            .collect();
         let iter_name: Vec<_> = entities
             .iter()
             .map(|e| format_ident!("{}_iter", e.name))
             .collect();
         tokens.append_all(quote! {
             pub mod #name {
-                use crate::{primitive::*, place_holder::*, tables::*, error::Result};
+                use crate::{primitive::*, tables::*, error::Result};
                 use std::collections::HashMap;
+                use ruststep_derive::as_holder;
 
-                #[derive(Debug, Clone, Default)]
+                #[derive(Debug, Clone, PartialEq, Default)]
                 pub struct Tables {
                     #(
-                    #holder_name: HashMap<u64, #holder_type>,
+                    #holder_name: HashMap<u64, as_holder!(#entity_types)>,
                     )*
                 }
 
                 impl Tables {
                     #(
                     pub fn #iter_name<'table>(&'table self) ->
-                        impl Iterator<Item = Result<#entity_name>> + 'table
+                        impl Iterator<Item = Result<#entity_types>> + 'table
                     {
                         self.#holder_name
                             .values()
@@ -49,17 +46,6 @@ impl ToTokens for Schema {
                     }
                     )*
                 }
-
-                #(
-                impl EntityTable<#holder_type> for Tables {
-                    fn get_owned(&self, entity_id: u64) -> Result<#entity_name> {
-                        crate::tables::get_owned(self, &self.#holder_name, entity_id)
-                    }
-                    fn owned_iter<'table>(&'table self) -> Box<dyn Iterator<Item = Result<#entity_name>> + 'table> {
-                        crate::tables::owned_iter(self, &self.#holder_name)
-                    }
-                }
-                )*
 
                 #(#types)*
                 #(#entities)*

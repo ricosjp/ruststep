@@ -19,5 +19,5 @@ pub mod place_holder;
 pub mod primitive;
 pub mod tables;
 
-pub mod ap000;
+// Automatically generated codes
 pub mod ap201;

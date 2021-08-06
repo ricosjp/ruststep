@@ -1,5 +1,5 @@
 use super::super::{combinator::*, expression::*, identifier::*};
-use crate::ast::algorithm::*;
+use crate::ast::*;
 
 /// 338 where_clause = WHERE [domain_rule] `;` { [domain_rule] `;` } .
 pub fn where_clause(input: &str) -> ParseResult<WhereClause> {

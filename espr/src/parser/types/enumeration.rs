@@ -1,7 +1,5 @@
-use super::{
-    super::{combinator::*, identifier::*},
-    *,
-};
+use super::super::{combinator::*, identifier::*};
+use crate::ast::*;
 
 /// 211 enumeration_items = `(` [enumeration_id] { `,` [enumeration_id] } `)` .
 pub fn enumeration_items(input: &str) -> ParseResult<Vec<String>> {
@@ -11,7 +9,7 @@ pub fn enumeration_items(input: &str) -> ParseResult<Vec<String>> {
 }
 
 /// 213 enumeration_type = \[ EXTENSIBLE \] ENUMERATION \[ ( OF [enumeration_items] ) | enumeration_extension \] .
-pub fn enumeration_type(input: &str) -> ParseResult<UnderlyingType> {
+pub fn enumeration_type(input: &str) -> ParseResult<Type> {
     // FIXME enumeration_extension
     tuple((
         opt(tag("EXTENSIBLE")),
@@ -19,16 +17,14 @@ pub fn enumeration_type(input: &str) -> ParseResult<UnderlyingType> {
         tag("OF"),
         enumeration_items,
     ))
-    .map(
-        |(extensiblility, _start, _of, items)| UnderlyingType::Enumeration {
-            extensibility: if extensiblility.is_some() {
-                Extensibility::Extensible
-            } else {
-                Extensibility::None
-            },
-            items,
+    .map(|(extensiblility, _start, _of, items)| Type::Enumeration {
+        extensibility: if extensiblility.is_some() {
+            Extensibility::Extensible
+        } else {
+            Extensibility::None
         },
-    )
+        items,
+    })
     .parse(input)
 }
 
@@ -45,7 +41,7 @@ mod tests {
         assert_eq!(residual, "");
         assert_eq!(
             e,
-            super::UnderlyingType::Enumeration {
+            super::Type::Enumeration {
                 extensibility: super::Extensibility::None,
                 items: vec![
                     "up".to_string(),
@@ -66,7 +62,7 @@ mod tests {
         assert_eq!(residual, "");
         assert_eq!(
             e,
-            super::UnderlyingType::Enumeration {
+            super::Type::Enumeration {
                 extensibility: super::Extensibility::Extensible,
                 items: vec![
                     "up".to_string(),

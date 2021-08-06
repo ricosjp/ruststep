@@ -3,7 +3,7 @@
 mod entity;
 mod schema;
 
-use crate::semantics::*;
+use crate::ir::*;
 
 use inflector::Inflector;
 use proc_macro2::TokenStream;
@@ -47,7 +47,7 @@ impl ToTokens for Enumeration {
             .map(|i| format_ident!("{}", i.to_pascal_case()))
             .collect();
         tokens.append_all(quote! {
-            #[derive(Debug, Clone)]
+            #[derive(Debug, Clone, PartialEq)]
             pub enum #id {
                 #( #items ),*
             }
@@ -63,13 +63,11 @@ impl ToTokens for Select {
         for ty in &self.types {
             match ty {
                 TypeRef::Entity {
-                    name,
-                    has_supertype_decl,
-                    ..
+                    name, is_supertype, ..
                 } => {
                     let name = format_ident!("{}", name.to_pascal_case());
                     entries.push(quote! { #name });
-                    if *has_supertype_decl {
+                    if *is_supertype {
                         // avoid Box<Box<XxxAny>>
                         entry_types.push(quote! { #ty });
                     } else {
@@ -83,7 +81,7 @@ impl ToTokens for Select {
             }
         }
         tokens.append_all(quote! {
-            #[derive(Debug, Clone)]
+            #[derive(Debug, Clone, PartialEq)]
             pub enum #id {
                 #(#entries(#entry_types)),*
             }
@@ -104,7 +102,7 @@ impl ToTokens for TypeDecl {
 
 impl ToTokens for SimpleType {
     fn to_tokens(&self, tokens: &mut TokenStream) {
-        use crate::ast::types::SimpleType::*;
+        use crate::ast::SimpleType::*;
         match self.0 {
             Number => tokens.append(format_ident!("f64")),
             Real => tokens.append(format_ident!("f64")),
@@ -127,17 +125,14 @@ impl ToTokens for TypeRef {
                 tokens.append_all(quote! { #name });
             }
             Entity {
-                name,
-                has_supertype_decl,
-                ..
+                name, is_supertype, ..
             } => {
-                if *has_supertype_decl {
-                    let name = format_ident!("{}Any", name.to_pascal_case());
-                    tokens.append_all(quote! { Box<dyn #name> });
+                let name = if *is_supertype {
+                    format_ident!("{}Any", name.to_pascal_case())
                 } else {
-                    let name = format_ident!("{}", name.to_pascal_case());
-                    tokens.append_all(quote! { #name });
-                }
+                    format_ident!("{}", name.to_pascal_case())
+                };
+                tokens.append_all(quote! { #name });
             }
             Set { base, .. } | List { base, .. } => {
                 tokens.append_all(quote! { Vec<#base> });

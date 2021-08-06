@@ -1,7 +1,5 @@
-use super::{
-    super::{combinator::*, types::named_types},
-    *,
-};
+use super::{super::combinator::*, *};
+use crate::ast::*;
 
 /// 301 select_list = `(` [named_types] { `,` [named_types] } `)` .
 pub fn select_list(input: &str) -> ParseResult<Vec<String>> {
@@ -19,7 +17,7 @@ pub fn select_extension(input: &str) -> ParseResult<(String, Vec<String>)> {
 }
 
 /// 302 select_type = \[ EXTENSIBLE \[ GENERIC_ENTITY \] \] SELECT \[ [select_list] | [select_extension] \] .
-pub fn select_type(input: &str) -> ParseResult<UnderlyingType> {
+pub fn select_type(input: &str) -> ParseResult<Type> {
     // FIXME support select_extension
 
     // `GENERIC_ENTITY` only appears in `select_type` declaration.
@@ -42,12 +40,12 @@ pub fn select_type(input: &str) -> ParseResult<UnderlyingType> {
     ))
     .map(|(opt, _select, types)| {
         if let Some((extensibility, _spaces)) = opt {
-            UnderlyingType::Select {
+            Type::Select {
                 extensibility,
                 types,
             }
         } else {
-            UnderlyingType::Select {
+            Type::Select {
                 extensibility: Extensibility::None,
                 types,
             }
@@ -65,7 +63,7 @@ mod tests {
     fn select() {
         let (res, (s, _remarks)) = super::select_type("SELECT (a, b)").finish().unwrap();
         assert_eq!(res, "");
-        if let UnderlyingType::Select {
+        if let Type::Select {
             extensibility,
             types,
         } = s

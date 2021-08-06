@@ -1,7 +1,7 @@
 use super::{
     combinator::*, entity::*, expression::*, identifier::*, stmt::*, subsuper::*, types::*,
 };
-use crate::ast::{algorithm::*, schema::*, types::*};
+use crate::ast::*;
 
 /// 296 schema_decl = SCHEMA [schema_id] \[ schema_version_id \] `;` [schema_body] END_SCHEMA `;` .
 pub fn schema_decl(input: &str) -> ParseResult<Schema> {
@@ -161,7 +161,7 @@ pub fn function_decl(input: &str) -> ParseResult<Function> {
 /// 221 function_head = FUNCTION [function_id]
 ///                   \[ `(` [formal_parameter] { `;` [formal_parameter] } `)` \]
 ///                   `:` [parameter_type] `;` .
-pub fn function_head(input: &str) -> ParseResult<(String, Vec<FormalParameter>, ParameterType)> {
+pub fn function_head(input: &str) -> ParseResult<(String, Vec<FormalParameter>, Type)> {
     tuple((
         tag("FUNCTION"),
         function_id,

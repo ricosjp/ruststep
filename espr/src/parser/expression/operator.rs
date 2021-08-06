@@ -1,5 +1,5 @@
 use super::super::combinator::*;
-use crate::ast::expression::*;
+use crate::ast::*;
 
 /// 282 rel_op = `<` | `>` | `<=` | `>=` | `<>` | `=` | `:<>:` | `:=:` .
 pub fn rel_op(input: &str) -> ParseResult<RelationOperator> {
