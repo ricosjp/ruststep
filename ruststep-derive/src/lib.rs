@@ -96,7 +96,8 @@ fn derive_deserialize(ast: &syn::DeriveInput) -> TokenStream2 {
                     {
                         if let Some(size) = seq.size_hint() {
                             if size != #attr_len {
-                                todo!("Create another error and send it")
+                                use ::serde::de::Error;
+                                return Err(A::Error::invalid_length(size, &self));
                             }
                         }
                         #( let #fields = seq.next_element()?.unwrap(); )*
@@ -112,7 +113,8 @@ fn derive_deserialize(ast: &syn::DeriveInput) -> TokenStream2 {
                             .next_key()?
                             .expect("Empty map cannot be accepted as ruststep Holder"); // this must be a bug, not runtime error
                         if key != #name {
-                            todo!("Create Error type and send it")
+                            use ::serde::de::{Error, Unexpected};
+                            return Err(A::Error::invalid_value(Unexpected::Other(&key), &self));
                         }
                         let value = map.next_value()?; // send to Self::visit_seq
                         Ok(value)
