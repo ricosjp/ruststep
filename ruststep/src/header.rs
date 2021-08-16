@@ -1,13 +1,13 @@
 use crate::{ast::*, error::Result};
-use serde::Deserialize;
+use serde::{de, Deserialize};
 
-#[derive(Debug, Clone, PartialEq, Deserialize)]
+#[derive(Debug, Clone, PartialEq, ruststep_derive::Deserialize)]
 pub struct FileDescription {
     description: Vec<String>,
     implementation_level: String,
 }
 
-#[derive(Debug, Clone, PartialEq, Deserialize)]
+#[derive(Debug, Clone, PartialEq, ruststep_derive::Deserialize)]
 pub struct FileName {
     name: String,
     time_stamp: String,
@@ -18,7 +18,7 @@ pub struct FileName {
     authorization: String,
 }
 
-#[derive(Debug, Clone, PartialEq, Deserialize)]
+#[derive(Debug, Clone, PartialEq, ruststep_derive::Deserialize)]
 pub struct FileSchema {
     schema: Vec<String>,
 }

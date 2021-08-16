@@ -34,30 +34,14 @@ impl<T: Holder> PlaceHolder<T> {
     }
 }
 
-impl<'de, T: Deserialize<'de>> Deserialize<'de> for PlaceHolder<T> {
+impl<'de, T: Holder + Deserialize<'de>> Deserialize<'de> for PlaceHolder<T> {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
     where
         D: de::Deserializer<'de>,
     {
-        // Dispatched dynamically:
-        //
-        // For Ref(RValue)
-        // ----------------
-        // PlaceHolder::deserialize(RValue)
-        // > RValue::deserialize_struct(PlaceHolderVisitor)
-        // > (forward_to_deserialize_any)
-        // > RValue::deserialize_any(PlaceHolderVisitor)
-        // > PlaceHolderVisitor::visit_enum(SingleMapDeserializer)
-        //
-        // For Owned(T)
-        // -------------
-        // PlaceHolder::deserialize(Record)
-        // > (forward_to_deserialize_any)
-        // > Record::deserialize_any(PlaceHolderVisitor)
-        // > PlaceHolderVisitor::visit_seq(SeqDeserializer)
-        deserializer.deserialize_struct(
-            std::any::type_name::<T>(),
-            &[],
+        deserializer.deserialize_tuple_struct(
+            T::name(),
+            T::attr_len(),
             PlaceHolderVisitor::<T>::default(),
         )
     }
@@ -128,47 +112,5 @@ impl<'de, T: Deserialize<'de>> de::Visitor<'de> for PlaceHolderVisitor<T> {
             }
             _ => unreachable!("Invalid key while deserializing PlaceHolder"),
         }
-    }
-
-    // For Owned(T)
-    fn visit_seq<A>(self, mut seq: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::SeqAccess<'de>,
-    {
-        let mut components: Vec<Parameter> = Vec::new();
-        while let Some(component) = seq.next_element()? {
-            components.push(component);
-        }
-        let seq = de::value::SeqDeserializer::new(components.iter());
-        Ok(PlaceHolder::Owned(T::deserialize(seq).unwrap()))
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-    use crate::parser::exchange;
-    use nom::Finish;
-    use serde::Deserialize;
-
-    #[derive(Debug, Deserialize)]
-    struct A {
-        x: f64,
-        y: f64,
-    }
-
-    #[test]
-    fn place_holder() {
-        let value = RValue::Entity(11);
-        let a: PlaceHolder<A> = Deserialize::deserialize(&value).unwrap();
-        dbg!(a);
-
-        let value = RValue::ConstantValue("VIM".into());
-        let a: PlaceHolder<A> = Deserialize::deserialize(&value).unwrap();
-        dbg!(a);
-
-        let (_, record) = exchange::simple_record("A(1.0, 2.0)").finish().unwrap();
-        let a: PlaceHolder<A> = Deserialize::deserialize(&record).unwrap();
-        dbg!(a);
     }
 }
