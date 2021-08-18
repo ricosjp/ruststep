@@ -34,7 +34,7 @@ impl<T: Holder> PlaceHolder<T> {
     }
 }
 
-impl<'de, T: Holder + Deserialize<'de>> Deserialize<'de> for PlaceHolder<T> {
+impl<'de, T: Holder + WithVisitor + Deserialize<'de>> Deserialize<'de> for PlaceHolder<T> {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
     where
         D: de::Deserializer<'de>,
@@ -59,7 +59,7 @@ impl<T> Default for PlaceHolderVisitor<T> {
     }
 }
 
-impl<'de, T: Deserialize<'de> + Holder> de::Visitor<'de> for PlaceHolderVisitor<T> {
+impl<'de, T: Deserialize<'de> + Holder + WithVisitor> de::Visitor<'de> for PlaceHolderVisitor<T> {
     type Value = PlaceHolder<T>;
 
     fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {

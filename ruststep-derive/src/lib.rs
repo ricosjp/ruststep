@@ -202,17 +202,34 @@ fn as_holder_path(input: syn::Type) -> syn::Type {
 fn ruststep_crate() -> syn::Path {
     let path = crate_name("ruststep").unwrap();
     match path {
-        FoundCrate::Itself => {
-            let mut segments = syn::punctuated::Punctuated::new();
-            segments.push(syn::PathSegment {
-                ident: syn::Ident::new("crate", Span::call_site()),
-                arguments: syn::PathArguments::None,
-            });
-            syn::Path {
-                leading_colon: None,
-                segments,
+        FoundCrate::Itself => match std::env::var("CARGO_TARGET_TMPDIR") {
+            Ok(_) => {
+                // For tests and benches in ruststep crate
+                //
+                // https://doc.rust-lang.org/cargo/reference/environment-variables.html
+                // > CARGO_TARGET_TMPDIR — Only set when building integration test or benchmark code.
+                let mut segments = syn::punctuated::Punctuated::new();
+                segments.push(syn::PathSegment {
+                    ident: syn::Ident::new("ruststep", Span::call_site()),
+                    arguments: syn::PathArguments::None,
+                });
+                syn::Path {
+                    leading_colon: Some(syn::token::Colon2::default()),
+                    segments,
+                }
             }
-        }
+            Err(_) => {
+                let mut segments = syn::punctuated::Punctuated::new();
+                segments.push(syn::PathSegment {
+                    ident: syn::Ident::new("crate", Span::call_site()),
+                    arguments: syn::PathArguments::None,
+                });
+                syn::Path {
+                    leading_colon: None,
+                    segments,
+                }
+            }
+        },
         FoundCrate::Name(name) => {
             let mut segments = syn::punctuated::Punctuated::new();
             segments.push(syn::PathSegment {

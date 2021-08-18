@@ -14,6 +14,11 @@ pub trait Holder: Clone + 'static {
     fn visitor_new() -> Self::Visitor;
 }
 
+pub trait WithVisitor {
+    type Visitor: for<'de> de::Visitor<'de, Value = Self>;
+    fn visitor_new() -> Self::Visitor;
+}
+
 /// Trait for tables which pulls an entity (`T`) from an entity id (`u64`)
 pub trait EntityTable<T: Holder<Table = Self>> {
     /// Get owned entity from table
