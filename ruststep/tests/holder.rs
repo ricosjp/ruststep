@@ -1,7 +1,9 @@
-use ruststep::{ast::Record, parser::exchange, place_holder::PlaceHolder};
+use ruststep::{ast::*, error::*, parser::exchange, place_holder::PlaceHolder, tables::*};
 
 use nom::Finish;
 use serde::{de, Deserialize};
+
+struct Table;
 
 #[derive(Debug, Clone, PartialEq)]
 struct A {
@@ -64,6 +66,28 @@ impl<'de> ::serde::de::Visitor<'de> for AHolderVisitor {
     }
 }
 
+impl Holder for AHolder {
+    type Owned = A;
+    type Table = Table;
+    fn into_owned(self, _table: &Self::Table) -> Result<Self::Owned> {
+        let AHolder { x, y } = self;
+        Ok(A { x, y })
+    }
+    fn name() -> &'static str {
+        "A"
+    }
+    fn attr_len() -> usize {
+        2
+    }
+}
+
+impl WithVisitor for AHolder {
+    type Visitor = AHolderVisitor;
+    fn visitor_new() -> Self::Visitor {
+        AHolderVisitor {}
+    }
+}
+
 #[derive(Debug, Clone)]
 struct B {
     z: f64,
@@ -83,4 +107,22 @@ fn deserialize_a_holder_from_record() {
     dbg!(&p);
     let a: AHolder = Deserialize::deserialize(&p).unwrap();
     assert_eq!(a, AHolder { x: 1.0, y: 2.0 });
+}
+
+#[test]
+fn deserialize_a_holder_from_typed() {
+    let (residual, p): (_, Parameter) = exchange::parameter("A((1.0, 2.0))").finish().unwrap();
+    assert_eq!(residual, "");
+    dbg!(&p);
+    let a: AHolder = Deserialize::deserialize(&p).unwrap();
+    assert_eq!(a, AHolder { x: 1.0, y: 2.0 });
+}
+
+#[test]
+fn deserialize_a_place_holder_from_record() {
+    let (residual, p): (_, Record) = exchange::simple_record("A(1.0, 2.0)").finish().unwrap();
+    assert_eq!(residual, "");
+    dbg!(&p);
+    let a: PlaceHolder<AHolder> = Deserialize::deserialize(&p).unwrap();
+    assert_eq!(a, PlaceHolder::Owned(AHolder { x: 1.0, y: 2.0 }));
 }
