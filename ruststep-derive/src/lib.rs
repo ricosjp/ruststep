@@ -152,12 +152,14 @@ fn derive_holder(ast: &syn::DeriveInput) -> TokenStream2 {
             let def_visitor_tt = for_struct::def_visitor(ident, st);
             let impl_deserialize_tt = for_struct::impl_deserialize(ident);
             let impl_holder_tt = for_struct::impl_holder(ident, &table_attr, st);
+            let impl_with_visitor_tt = for_struct::impl_with_visitor(ident);
             let impl_entity_table_tt = for_struct::impl_entity_table(ident, &table_attr);
             quote! {
                 #def_holder_tt
                 #def_visitor_tt
                 #impl_deserialize_tt
                 #impl_holder_tt
+                #impl_with_visitor_tt
                 #impl_entity_table_tt
             }
         }

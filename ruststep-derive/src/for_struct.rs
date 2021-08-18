@@ -79,7 +79,6 @@ pub fn impl_holder(ident: &syn::Ident, table: &TableAttr, st: &syn::DataStruct) 
     let ruststep = ruststep_crate();
 
     let name = ident.to_string().to_screaming_snake_case();
-    let visitor_ident = as_holder_visitor2(ident);
     let holder_ident = as_holder_ident(ident);
 
     let TableAttr { table, .. } = table;
@@ -97,7 +96,6 @@ pub fn impl_holder(ident: &syn::Ident, table: &TableAttr, st: &syn::DataStruct) 
         impl #ruststep::tables::Holder for #holder_ident {
             type Table = #table;
             type Owned = #ident;
-            type Visitor = #visitor_ident;
             fn into_owned(self, #table_arg: &Self::Table) -> #ruststep::error::Result<Self::Owned> {
                 let #holder_ident { #(#attributes),* } = self;
                 Ok(#ident { #(#attributes: #into_owned),* })
@@ -108,6 +106,20 @@ pub fn impl_holder(ident: &syn::Ident, table: &TableAttr, st: &syn::DataStruct) 
             fn attr_len() -> usize {
                 #attr_len
             }
+        }
+    } // quote!
+}
+
+pub fn impl_with_visitor(ident: &syn::Ident) -> TokenStream2 {
+    let ruststep = ruststep_crate();
+
+    let visitor_ident = as_holder_visitor2(ident);
+    let holder_ident = as_holder_ident(ident);
+
+    quote! {
+        #[automatically_derived]
+        impl #ruststep::tables::WithVisitor for #holder_ident {
+            type Visitor = #visitor_ident;
             fn visitor_new() -> Self::Visitor {
                 #visitor_ident {}
             }
