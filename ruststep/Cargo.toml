@@ -13,6 +13,7 @@ dyn-clone = "1.0.4"
 nom = "6.1.0"
 serde = { version = "1.0.124", features = ["derive"]}
 thiserror = "1.0.24"
+Inflector = "0.11.4"
 
 [dependencies.ruststep-derive]
 path = "../ruststep-derive"
