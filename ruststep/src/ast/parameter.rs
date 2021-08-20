@@ -163,7 +163,7 @@ impl<'de, 'param> de::Deserializer<'de> for &'param Parameter {
             }
             Parameter::RValue(rvalue) => de::Deserializer::deserialize_any(rvalue, visitor),
             Parameter::NotProvided | Parameter::Omitted => visitor.visit_none(),
-            Parameter::Enumeration(_) => unimplemented!(),
+            Parameter::Enumeration(variant) => visitor.visit_enum(EnumDeserializer::new(variant)),
         }
     }
 

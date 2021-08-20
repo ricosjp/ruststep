@@ -124,3 +124,57 @@ where
         Err(de::Error::invalid_type(unexp, &"struct variant"))
     }
 }
+
+pub struct EnumDeserializer(String);
+
+impl EnumDeserializer {
+    pub fn new(variant: &str) -> Self {
+        EnumDeserializer(variant.to_string())
+    }
+}
+
+// Entry point of `visit_enum`
+impl<'de> de::EnumAccess<'de> for EnumDeserializer {
+    type Error = crate::error::Error;
+    type Variant = Self; // this requires `VariantAccess` (see below impl)
+
+    fn variant_seed<V>(self, _seed: V) -> Result<(V::Value, Self::Variant), Self::Error>
+    where
+        V: de::DeserializeSeed<'de>,
+    {
+        todo!()
+    }
+}
+
+impl<'de> de::VariantAccess<'de> for EnumDeserializer {
+    type Error = crate::error::Error;
+
+    fn unit_variant(self) -> Result<(), Self::Error> {
+        todo!()
+    }
+
+    fn newtype_variant_seed<D>(self, _seed: D) -> Result<D::Value, Self::Error>
+    where
+        D: de::DeserializeSeed<'de>,
+    {
+        todo!()
+    }
+
+    fn tuple_variant<V>(self, _len: usize, _visitor: V) -> Result<V::Value, Self::Error>
+    where
+        V: de::Visitor<'de>,
+    {
+        todo!()
+    }
+
+    fn struct_variant<V>(
+        self,
+        _fields: &'static [&'static str],
+        _visitor: V,
+    ) -> Result<V::Value, Self::Error>
+    where
+        V: de::Visitor<'de>,
+    {
+        todo!()
+    }
+}
