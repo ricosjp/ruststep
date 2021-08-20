@@ -71,10 +71,10 @@ fn derive_deserialize(ast: &syn::DeriveInput) -> TokenStream2 {
             let attr_len = fields.len();
             quote! {
                 #[automatically_derived]
-                impl<'de> de::Deserialize<'de> for #ident {
+                impl<'de> ::serde::de::Deserialize<'de> for #ident {
                     fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
                     where
-                        D: de::Deserializer<'de>,
+                        D: ::serde::de::Deserializer<'de>,
                     {
                         deserializer.deserialize_tuple_struct(#name, #attr_len, #visitor_ident {})
                     }
