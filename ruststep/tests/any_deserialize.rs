@@ -1,6 +1,7 @@
-use ruststep::{error::*, tables::*};
+use nom::Finish;
+use ruststep::{ast::*, error::*, parser::exchange, place_holder::*, tables::*};
 use ruststep_derive::as_holder;
-use serde::de;
+use serde::{de, Deserialize};
 use std::collections::HashMap;
 
 pub struct Table {
@@ -274,4 +275,23 @@ impl WithVisitor for BaseAnyHolder {
     fn visitor_new() -> Self::Visitor {
         BaseAnyHolderVisitor {}
     }
+}
+
+#[test]
+fn deserialize_base_any() {
+    let (residual, p): (_, Record) = exchange::simple_record("SUB1(BASE((1.0)), 2.0)")
+        .finish()
+        .unwrap();
+    dbg!(&p);
+    assert_eq!(residual, "");
+
+    let a: BaseAnyHolder = Deserialize::deserialize(&p).unwrap();
+    dbg!(&a);
+    assert_eq!(
+        a,
+        BaseAnyHolder::Sub1(Sub1Holder {
+            base: PlaceHolder::Owned(BaseHolder { x: 1.0 }),
+            y1: 2.0
+        })
+    );
 }
