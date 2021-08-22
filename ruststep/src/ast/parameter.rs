@@ -1,5 +1,9 @@
 use crate::ast::*;
-use serde::{de, forward_to_deserialize_any};
+use inflector::Inflector;
+use serde::{
+    de::{self, IntoDeserializer},
+    forward_to_deserialize_any,
+};
 
 /// Primitive value type in STEP data
 ///
@@ -163,7 +167,9 @@ impl<'de, 'param> de::Deserializer<'de> for &'param Parameter {
             }
             Parameter::RValue(rvalue) => de::Deserializer::deserialize_any(rvalue, visitor),
             Parameter::NotProvided | Parameter::Omitted => visitor.visit_none(),
-            Parameter::Enumeration(_) => unimplemented!(),
+            Parameter::Enumeration(variant) => {
+                visitor.visit_enum(variant.to_class_case().into_deserializer())
+            }
         }
     }
 

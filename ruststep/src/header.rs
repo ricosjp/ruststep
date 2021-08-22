@@ -1,5 +1,5 @@
 use crate::{ast::*, error::Result};
-use serde::{de, Deserialize};
+use serde::Deserialize;
 
 #[derive(Debug, Clone, PartialEq, ruststep_derive::Deserialize)]
 pub struct FileDescription {
