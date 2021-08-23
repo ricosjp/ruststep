@@ -10,7 +10,7 @@ edition = "2018"
 derive-new = "0.5.9"
 derive_more = "0.99.13"
 dyn-clone = "1.0.4"
-nom = "6.1.0"
+nom = "7.0.0"
 serde = { version = "1.0.124", features = ["derive"]}
 thiserror = "1.0.24"
 Inflector = "0.11.4"
