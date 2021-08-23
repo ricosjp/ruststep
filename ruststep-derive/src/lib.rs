@@ -55,7 +55,6 @@ pub fn derive_deserialize_entry(input: TokenStream) -> TokenStream {
 
 fn derive_deserialize(ast: &syn::DeriveInput) -> TokenStream2 {
     let ident = &ast.ident;
-    let visitor_ident = format_ident!("{}Visitor", ident);
     let name = ident.to_string().to_screaming_snake_case();
     match &ast.data {
         syn::Data::Struct(st) => {
@@ -69,10 +68,8 @@ fn derive_deserialize(ast: &syn::DeriveInput) -> TokenStream2 {
                 })
                 .collect();
             let attr_len = fields.len();
-            let def_visitor_tt =
-                for_struct::def_visitor(ident, &visitor_ident, &name, attr_len, &fields);
-            let impl_deserialize_tt =
-                for_struct::impl_deserialize(ident, &visitor_ident, &name, attr_len);
+            let def_visitor_tt = for_struct::def_visitor(ident, &name, attr_len, &fields);
+            let impl_deserialize_tt = for_struct::impl_deserialize(ident, &name, attr_len);
             quote! {
                 #def_visitor_tt
                 #impl_deserialize_tt
@@ -114,7 +111,7 @@ pub fn as_holder(input: TokenStream) -> TokenStream {
 }
 
 fn as_holder_ident(input: &syn::Ident) -> syn::Ident {
-    quote::format_ident!("{}Holder", input)
+    format_ident!("{}Holder", input)
 }
 
 fn as_holder_path(input: syn::Type) -> syn::Type {
@@ -122,6 +119,10 @@ fn as_holder_path(input: syn::Type) -> syn::Type {
         .try_into()
         .expect("as_holder! only accepts espr-generated type");
     ft.as_holder().into()
+}
+
+fn as_visitor_ident(input: &syn::Ident) -> syn::Ident {
+    format_ident!("{}Visitor", input)
 }
 
 /// Returns `crate` or `::ruststep` as in ruststep crate or not

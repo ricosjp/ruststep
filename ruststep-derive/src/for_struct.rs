@@ -127,11 +127,11 @@ pub fn impl_entity_table(ident: &syn::Ident, table: &TableAttr) -> TokenStream2 
 
 pub fn def_visitor(
     ident: &syn::Ident,
-    visitor_ident: &syn::Ident,
     name: &str,
     attr_len: usize,
     fields: &[&syn::Ident],
 ) -> TokenStream2 {
+    let visitor_ident = as_visitor_ident(ident);
     quote! {
         #[doc(hidden)]
         struct #visitor_ident;
@@ -176,12 +176,8 @@ pub fn def_visitor(
     } // quote!
 }
 
-pub fn impl_deserialize(
-    ident: &syn::Ident,
-    visitor_ident: &syn::Ident,
-    name: &str,
-    attr_len: usize,
-) -> TokenStream2 {
+pub fn impl_deserialize(ident: &syn::Ident, name: &str, attr_len: usize) -> TokenStream2 {
+    let visitor_ident = as_visitor_ident(ident);
     quote! {
         #[automatically_derived]
         impl<'de> ::serde::de::Deserialize<'de> for #ident {
