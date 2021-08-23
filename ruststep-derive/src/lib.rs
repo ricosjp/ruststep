@@ -69,57 +69,13 @@ fn derive_deserialize(ast: &syn::DeriveInput) -> TokenStream2 {
                 })
                 .collect();
             let attr_len = fields.len();
+            let def_visitor_tt =
+                for_struct::def_visitor(ident, &visitor_ident, &name, attr_len, &fields);
+            let impl_deserialize_tt =
+                for_struct::impl_deserialize(ident, &visitor_ident, &name, attr_len);
             quote! {
-                #[automatically_derived]
-                impl<'de> ::serde::de::Deserialize<'de> for #ident {
-                    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
-                    where
-                        D: ::serde::de::Deserializer<'de>,
-                    {
-                        deserializer.deserialize_tuple_struct(#name, #attr_len, #visitor_ident {})
-                    }
-                }
-
-                #[doc(hidden)]
-                struct #visitor_ident;
-
-                #[automatically_derived]
-                impl<'de> ::serde::de::Visitor<'de> for #visitor_ident {
-                    type Value = #ident;
-                    fn expecting(&self, formatter: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-                        write!(formatter, #name)
-                    }
-
-                    fn visit_seq<A>(self, mut seq: A) -> ::std::result::Result<Self::Value, A::Error>
-                    where
-                        A: ::serde::de::SeqAccess<'de>,
-                    {
-                        if let Some(size) = seq.size_hint() {
-                            if size != #attr_len {
-                                use ::serde::de::Error;
-                                return Err(A::Error::invalid_length(size, &self));
-                            }
-                        }
-                        #( let #fields = seq.next_element()?.unwrap(); )*
-                        Ok(#ident { #(#fields),* })
-                    }
-
-                    // Entry point for Record or Parameter::Typed
-                    fn visit_map<A>(self, mut map: A) -> ::std::result::Result<Self::Value, A::Error>
-                    where
-                        A: ::serde::de::MapAccess<'de>,
-                    {
-                        let key: String = map
-                            .next_key()?
-                            .expect("Empty map cannot be accepted as ruststep Holder"); // this must be a bug, not runtime error
-                        if key != #name {
-                            use ::serde::de::{Error, Unexpected};
-                            return Err(A::Error::invalid_value(Unexpected::Other(&key), &self));
-                        }
-                        let value = map.next_value()?; // send to Self::visit_seq
-                        Ok(value)
-                    }
-                }
+                #def_visitor_tt
+                #impl_deserialize_tt
             } // quote!
         }
         _ => unimplemented!("Only struct is supprted currently"),
