@@ -33,7 +33,6 @@
 //! - `impl Holder for AHolder`
 //!
 
-use inflector::Inflector;
 use proc_macro::TokenStream;
 use proc_macro2::{Span, TokenStream as TokenStream2};
 use proc_macro_crate::{crate_name, FoundCrate};
@@ -55,26 +54,8 @@ pub fn derive_deserialize_entry(input: TokenStream) -> TokenStream {
 
 fn derive_deserialize(ast: &syn::DeriveInput) -> TokenStream2 {
     let ident = &ast.ident;
-    let name = ident.to_string().to_screaming_snake_case();
     match &ast.data {
-        syn::Data::Struct(st) => {
-            let fields: Vec<_> = st
-                .fields
-                .iter()
-                .map(|f| {
-                    f.ident
-                        .as_ref()
-                        .expect("Tuple struct case is not supported")
-                })
-                .collect();
-            let attr_len = fields.len();
-            let def_visitor_tt = entity::def_visitor(ident, &name, attr_len, &fields);
-            let impl_deserialize_tt = entity::impl_deserialize(ident, &name, attr_len);
-            quote! {
-                #def_visitor_tt
-                #impl_deserialize_tt
-            } // quote!
-        }
+        syn::Data::Struct(st) => entity::derive_deserialize(&ident, st),
         _ => unimplemented!("Only struct is supprted currently"),
     }
 }
@@ -88,16 +69,7 @@ fn derive_holder(ast: &syn::DeriveInput) -> TokenStream2 {
     let table_attr = parse_table_attr(ast);
     let ident = &ast.ident;
     match &ast.data {
-        syn::Data::Struct(st) => {
-            let def_holder_tt = entity::def_holder(ident, st);
-            let impl_holder_tt = entity::impl_holder(ident, &table_attr, st);
-            let impl_entity_table_tt = entity::impl_entity_table(ident, &table_attr);
-            quote! {
-                #def_holder_tt
-                #impl_holder_tt
-                #impl_entity_table_tt
-            }
-        }
+        syn::Data::Struct(st) => entity::derive_holder(ident, st, &table_attr),
         _ => unimplemented!("Only struct is supprted currently"),
     }
 }

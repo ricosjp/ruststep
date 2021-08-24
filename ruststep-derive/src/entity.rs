@@ -5,6 +5,41 @@ use std::convert::*;
 
 use super::*;
 
+pub fn derive_deserialize(ident: &syn::Ident, st: &syn::DataStruct) -> TokenStream2 {
+    let name = ident.to_string().to_screaming_snake_case();
+    let fields: Vec<_> = st
+        .fields
+        .iter()
+        .map(|f| {
+            f.ident
+                .as_ref()
+                .expect("Tuple struct case is not supported")
+        })
+        .collect();
+    let attr_len = fields.len();
+    let def_visitor_tt = def_visitor(ident, &name, attr_len, &fields);
+    let impl_deserialize_tt = impl_deserialize(ident, &name, attr_len);
+    quote! {
+        #def_visitor_tt
+        #impl_deserialize_tt
+    } // quote!
+}
+
+pub fn derive_holder(
+    ident: &syn::Ident,
+    st: &syn::DataStruct,
+    table_attr: &TableAttr,
+) -> TokenStream2 {
+    let def_holder_tt = def_holder(ident, st);
+    let impl_holder_tt = impl_holder(ident, &table_attr, st);
+    let impl_entity_table_tt = impl_entity_table(ident, &table_attr);
+    quote! {
+        #def_holder_tt
+        #impl_holder_tt
+        #impl_entity_table_tt
+    }
+}
+
 /// This must be same between codegens
 fn table_arg() -> syn::Ident {
     syn::Ident::new("table", Span::call_site())
