@@ -42,6 +42,7 @@ use std::convert::*;
 mod entity;
 mod field_type;
 mod holder_attr;
+mod select;
 
 use field_type::*;
 use holder_attr::*;
@@ -55,7 +56,8 @@ pub fn derive_deserialize_entry(input: TokenStream) -> TokenStream {
 fn derive_deserialize(ast: &syn::DeriveInput) -> TokenStream2 {
     let ident = &ast.ident;
     match &ast.data {
-        syn::Data::Struct(st) => entity::derive_deserialize(&ident, st),
+        syn::Data::Struct(st) => entity::derive_deserialize(ident, st),
+        syn::Data::Enum(e) => select::derive_deserialize(ident, e),
         _ => unimplemented!("Only struct is supprted currently"),
     }
 }
@@ -70,6 +72,7 @@ fn derive_holder(ast: &syn::DeriveInput) -> TokenStream2 {
     let ident = &ast.ident;
     match &ast.data {
         syn::Data::Struct(st) => entity::derive_holder(ident, st, &table_attr),
+        syn::Data::Enum(e) => select::derive_holder(ident, e),
         _ => unimplemented!("Only struct is supprted currently"),
     }
 }
