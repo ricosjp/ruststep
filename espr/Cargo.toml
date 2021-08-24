@@ -6,7 +6,7 @@ edition = "2018"
 
 [dependencies]
 # For parser
-nom = "6.0.1"
+nom = "7.0.0"
 
 # For Rust code generation
 syn = "1.0.56"
