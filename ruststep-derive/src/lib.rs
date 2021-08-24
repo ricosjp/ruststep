@@ -10,14 +10,16 @@
 //! }
 //!
 //! #[derive(Debug, Clone, PartialEq, Holder)]
-//! #[holder(table = Table, field = a)]
+//! #[holder(table = Table)]
+//! #[holder(field = a)]
 //! pub struct A {
 //!     pub x: f64,
 //!     pub y: f64,
 //! }
 //!
 //! #[derive(Debug, Clone, PartialEq, Holder)]
-//! #[holder(table = Table, field = b)]
+//! #[holder(table = Table)]
+//! #[holder(field = b)]
 //! pub struct B {
 //!     pub z: f64,
 //!     #[holder(use_place_holder)]

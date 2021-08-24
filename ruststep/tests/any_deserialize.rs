@@ -11,7 +11,8 @@ pub struct Table {
 }
 
 #[derive(Clone, Debug, PartialEq, ruststep_derive::Holder)]
-#[holder(table = Table, field = base)]
+#[holder(table = Table)]
+#[holder(field = base)]
 pub struct Base {
     x: f64,
 }
@@ -72,7 +73,8 @@ impl WithVisitor for BaseHolder {
 }
 
 #[derive(Clone, Debug, PartialEq, ruststep_derive::Holder)]
-#[holder(table = Table, field = sub1)]
+#[holder(table = Table)]
+#[holder(field = sub1)]
 pub struct Sub1 {
     #[holder(use_place_holder)]
     base: Base,
@@ -136,7 +138,8 @@ impl WithVisitor for Sub1Holder {
 }
 
 #[derive(Clone, Debug, PartialEq, ruststep_derive::Holder)]
-#[holder(table = Table, field = sub2)]
+#[holder(table = Table)]
+#[holder(field = sub2)]
 pub struct Sub2 {
     #[holder(use_place_holder)]
     base: Base,
