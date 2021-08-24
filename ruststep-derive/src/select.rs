@@ -1,4 +1,5 @@
 use super::*;
+use inflector::Inflector;
 use proc_macro2::TokenStream as TokenStream2;
 use quote::quote;
 
@@ -21,8 +22,14 @@ fn decompose_box_ty(ty: &syn::Type) -> &syn::Type {
 }
 
 pub fn derive_holder(ident: &syn::Ident, e: &syn::DataEnum) -> TokenStream2 {
+    let name = ident.to_string().to_screaming_snake_case();
     let holder_ident = as_holder_ident(ident);
+    let holder_visitor_ident = as_visitor_ident(&holder_ident);
     let variants: Vec<&proc_macro2::Ident> = e.variants.iter().map(|var| &var.ident).collect();
+    let variant_names: Vec<_> = variants
+        .iter()
+        .map(|id| id.to_string().to_screaming_snake_case())
+        .collect();
     let ty: Vec<&syn::Type> = e
         .variants
         .iter()
@@ -34,50 +41,43 @@ pub fn derive_holder(ident: &syn::Ident, e: &syn::DataEnum) -> TokenStream2 {
         .collect();
     let holder_types: Vec<_> = ty.iter().map(|t| as_holder_path(t)).collect();
 
-    dbg!(holder_ident);
-    dbg!(variants);
-    dbg!(ty);
-    dbg!(holder_types);
-
     quote! {
         #[derive(Clone, Debug, PartialEq)]
-        enum BaseAnyHolder {
-            Sub1(Box<Sub1Holder>),
-            Sub2(Box<Sub2Holder>),
+        enum #holder_ident {
+            #(#variants(Box<#holder_types>)),*
         }
 
-        impl Holder for BaseAnyHolder {
-            type Owned = BaseAny;
+        impl Holder for #holder_ident {
+            type Owned = #ident;
             type Table = Table;
             fn into_owned(self, table: &Table) -> Result<Self::Owned> {
                 Ok(match self {
-                    BaseAnyHolder::Sub1(sub) => BaseAny::Sub1(Box::new(sub.into_owned(table)?)),
-                    BaseAnyHolder::Sub2(sub) => BaseAny::Sub2(Box::new(sub.into_owned(table)?)),
+                    #(#holder_ident::#variants(sub) => #ident::#variants(Box::new(sub.into_owned(table)?))),*
                 })
             }
             fn name() -> &'static str {
-                "BaseAny"
+                #name
             }
             fn attr_len() -> usize {
                 0
             }
         }
 
-        impl<'de> de::Deserialize<'de> for BaseAnyHolder {
+        impl<'de> de::Deserialize<'de> for #holder_ident {
             fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
             where
                 D: de::Deserializer<'de>,
             {
-                deserializer.deserialize_tuple_struct("A", 2, BaseAnyHolderVisitor {})
+                deserializer.deserialize_tuple_struct(#name, 0, #holder_visitor_ident {})
             }
         }
 
-        struct BaseAnyHolderVisitor;
+        struct #holder_visitor_ident;
 
-        impl<'de> ::serde::de::Visitor<'de> for BaseAnyHolderVisitor {
-            type Value = BaseAnyHolder;
+        impl<'de> ::serde::de::Visitor<'de> for #holder_visitor_ident {
+            type Value = #holder_ident;
             fn expecting(&self, formatter: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-                write!(formatter, "BaseAny")
+                write!(formatter, #name)
             }
 
             // Entry point for Record or Parameter::Typed
@@ -89,14 +89,12 @@ pub fn derive_holder(ident: &syn::Ident, e: &syn::DataEnum) -> TokenStream2 {
                     .next_key()?
                     .expect("Empty map cannot be accepted as ruststep Holder"); // this must be a bug, not runtime error
                 match key.as_str() {
-                    "SUB1" => {
-                        let value: Sub1Holder = map.next_value()?; // send to Self::visit_seq
-                        return Ok(BaseAnyHolder::Sub1(Box::new(value)));
+                    #(
+                    #variant_names => {
+                        let value: #holder_types = map.next_value()?;
+                        return Ok(#holder_ident::#variants(Box::new(value)));
                     }
-                    "SUB2" => {
-                        let value: Sub2Holder = map.next_value()?; // send to Self::visit_seq
-                        return Ok(BaseAnyHolder::Sub2(Box::new(value)));
-                    }
+                    )*
                     _ => {
                         use ::serde::de::{Error, Unexpected};
                         return Err(A::Error::invalid_value(Unexpected::Other(&key), &self));
@@ -105,10 +103,10 @@ pub fn derive_holder(ident: &syn::Ident, e: &syn::DataEnum) -> TokenStream2 {
             }
         }
 
-        impl WithVisitor for BaseAnyHolder {
-            type Visitor = BaseAnyHolderVisitor;
+        impl WithVisitor for #holder_ident {
+            type Visitor = #holder_visitor_ident;
             fn visitor_new() -> Self::Visitor {
-                BaseAnyHolderVisitor {}
+                #holder_visitor_ident {}
             }
         }
     } // quote!

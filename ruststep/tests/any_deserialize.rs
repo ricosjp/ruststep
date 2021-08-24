@@ -208,7 +208,7 @@ enum BaseAny {
 
 #[test]
 fn deserialize_base_any() {
-    let (residual, p): (_, Record) = exchange::simple_record("SUB1(BASE((1.0)), 2.0)")
+    let (residual, p): (_, Record) = exchange::simple_record("SUB_1(BASE((1.0)), 2.0)")
         .finish()
         .unwrap();
     dbg!(&p);
