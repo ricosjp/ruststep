@@ -201,14 +201,14 @@ impl WithVisitor for Sub2Holder {
 
 #[derive(Clone, Debug, PartialEq)]
 enum BaseAny {
-    Sub1(Sub1),
-    Sub2(Sub2),
+    Sub1(Box<Sub1>),
+    Sub2(Box<Sub2>),
 }
 
 #[derive(Clone, Debug, PartialEq)]
 enum BaseAnyHolder {
-    Sub1(Sub1Holder),
-    Sub2(Sub2Holder),
+    Sub1(Box<Sub1Holder>),
+    Sub2(Box<Sub2Holder>),
 }
 
 impl Holder for BaseAnyHolder {
@@ -216,8 +216,8 @@ impl Holder for BaseAnyHolder {
     type Table = Table;
     fn into_owned(self, table: &Table) -> Result<Self::Owned> {
         Ok(match self {
-            BaseAnyHolder::Sub1(sub) => BaseAny::Sub1(sub.into_owned(table)?),
-            BaseAnyHolder::Sub2(sub) => BaseAny::Sub2(sub.into_owned(table)?),
+            BaseAnyHolder::Sub1(sub) => BaseAny::Sub1(Box::new(sub.into_owned(table)?)),
+            BaseAnyHolder::Sub2(sub) => BaseAny::Sub2(Box::new(sub.into_owned(table)?)),
         })
     }
     fn name() -> &'static str {
@@ -256,11 +256,11 @@ impl<'de> ::serde::de::Visitor<'de> for BaseAnyHolderVisitor {
         match key.as_str() {
             "SUB1" => {
                 let value: Sub1Holder = map.next_value()?; // send to Self::visit_seq
-                return Ok(BaseAnyHolder::Sub1(value));
+                return Ok(BaseAnyHolder::Sub1(Box::new(value)));
             }
             "SUB2" => {
                 let value: Sub2Holder = map.next_value()?; // send to Self::visit_seq
-                return Ok(BaseAnyHolder::Sub2(value));
+                return Ok(BaseAnyHolder::Sub2(Box::new(value)));
             }
             _ => {
                 use ::serde::de::{Error, Unexpected};
@@ -289,9 +289,9 @@ fn deserialize_base_any() {
     dbg!(&a);
     assert_eq!(
         a,
-        BaseAnyHolder::Sub1(Sub1Holder {
+        BaseAnyHolder::Sub1(Box::new(Sub1Holder {
             base: PlaceHolder::Owned(BaseHolder { x: 1.0 }),
             y1: 2.0
-        })
+        }))
     );
 }
