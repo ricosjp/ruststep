@@ -200,9 +200,11 @@ impl WithVisitor for Sub2Holder {
 }
 
 #[derive(Clone, Debug, PartialEq, ruststep_derive::Holder)]
-#[holder(table = Table, field = base)]
+#[holder(table = Table)]
 enum BaseAny {
+    #[holder(field = sub1)]
     Sub1(Box<Sub1>),
+    #[holder(field = sub2)]
     Sub2(Box<Sub2>),
 }
 
