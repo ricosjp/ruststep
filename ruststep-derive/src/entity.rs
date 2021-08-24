@@ -18,7 +18,7 @@ pub fn derive_deserialize(ident: &syn::Ident, st: &syn::DataStruct) -> TokenStre
 pub fn derive_holder(
     ident: &syn::Ident,
     st: &syn::DataStruct,
-    table_attr: &TableAttr,
+    table_attr: &HolderAttr,
 ) -> TokenStream2 {
     let def_holder_tt = def_holder(ident, st);
     let impl_holder_tt = impl_holder(ident, &table_attr, st);
@@ -58,7 +58,8 @@ impl FieldEntries {
 
             let ft: FieldType = field.ty.clone().try_into().unwrap();
 
-            if is_use_place_holder(&field.attrs) {
+            let HolderAttr { place_holder, .. } = HolderAttr::parse(&field.attrs);
+            if place_holder {
                 match &ft {
                     FieldType::Path(_) => {
                         into_owned.push(quote! { #ident.into_owned(#table_arg)? });
@@ -100,7 +101,7 @@ pub fn def_holder(ident: &syn::Ident, st: &syn::DataStruct) -> TokenStream2 {
     }
 }
 
-pub fn impl_holder(ident: &syn::Ident, table: &TableAttr, st: &syn::DataStruct) -> TokenStream2 {
+pub fn impl_holder(ident: &syn::Ident, table: &HolderAttr, st: &syn::DataStruct) -> TokenStream2 {
     let name = ident.to_string().to_screaming_snake_case();
     let holder_ident = as_holder_ident(ident);
     let FieldEntries {
@@ -109,7 +110,7 @@ pub fn impl_holder(ident: &syn::Ident, table: &TableAttr, st: &syn::DataStruct) 
         ..
     } = FieldEntries::parse(st);
     let attr_len = attributes.len();
-    let TableAttr { table, .. } = table;
+    let HolderAttr { table, .. } = table;
     let table_arg = table_arg();
     let ruststep = ruststep_crate();
 
@@ -132,8 +133,8 @@ pub fn impl_holder(ident: &syn::Ident, table: &TableAttr, st: &syn::DataStruct) 
     } // quote!
 }
 
-pub fn impl_entity_table(ident: &syn::Ident, table: &TableAttr) -> TokenStream2 {
-    let TableAttr { table, field } = table;
+pub fn impl_entity_table(ident: &syn::Ident, table: &HolderAttr) -> TokenStream2 {
+    let HolderAttr { table, field, .. } = table;
     let holder_ident = as_holder_ident(ident);
     let ruststep = ruststep_crate();
 

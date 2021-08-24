@@ -68,7 +68,7 @@ pub fn derive_holder_entry(input: TokenStream) -> TokenStream {
 }
 
 fn derive_holder(ast: &syn::DeriveInput) -> TokenStream2 {
-    let table_attr = parse_table_attr(ast);
+    let table_attr = HolderAttr::parse(&ast.attrs);
     let ident = &ast.ident;
     match &ast.data {
         syn::Data::Struct(st) => entity::derive_holder(ident, st, &table_attr),
