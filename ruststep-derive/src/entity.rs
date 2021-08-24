@@ -7,18 +7,8 @@ use super::*;
 
 pub fn derive_deserialize(ident: &syn::Ident, st: &syn::DataStruct) -> TokenStream2 {
     let name = ident.to_string().to_screaming_snake_case();
-    let fields: Vec<_> = st
-        .fields
-        .iter()
-        .map(|f| {
-            f.ident
-                .as_ref()
-                .expect("Tuple struct case is not supported")
-        })
-        .collect();
-    let attr_len = fields.len();
-    let def_visitor_tt = def_visitor(ident, &name, attr_len, &fields);
-    let impl_deserialize_tt = impl_deserialize(ident, &name, attr_len);
+    let def_visitor_tt = def_visitor(ident, &name, st);
+    let impl_deserialize_tt = impl_deserialize(ident, &name, st);
     quote! {
         #def_visitor_tt
         #impl_deserialize_tt
@@ -160,13 +150,12 @@ pub fn impl_entity_table(ident: &syn::Ident, table: &TableAttr) -> TokenStream2 
     }
 }
 
-pub fn def_visitor(
-    ident: &syn::Ident,
-    name: &str,
-    attr_len: usize,
-    fields: &[&syn::Ident],
-) -> TokenStream2 {
+// `name` may be different from `ident`
+// because this will be used for both Entity struct and its `*Holder` struct.
+fn def_visitor(ident: &syn::Ident, name: &str, st: &syn::DataStruct) -> TokenStream2 {
     let visitor_ident = as_visitor_ident(ident);
+    let FieldEntries { attributes, .. } = FieldEntries::parse(st);
+    let attr_len = attributes.len();
     quote! {
         #[doc(hidden)]
         struct #visitor_ident;
@@ -188,8 +177,8 @@ pub fn def_visitor(
                         return Err(A::Error::invalid_length(size, &self));
                     }
                 }
-                #( let #fields = seq.next_element()?.unwrap(); )*
-                Ok(#ident { #(#fields),* })
+                #( let #attributes = seq.next_element()?.unwrap(); )*
+                Ok(#ident { #(#attributes),* })
             }
 
             // Entry point for Record or Parameter::Typed
@@ -211,8 +200,12 @@ pub fn def_visitor(
     } // quote!
 }
 
-pub fn impl_deserialize(ident: &syn::Ident, name: &str, attr_len: usize) -> TokenStream2 {
+// `name` may be different from `ident`
+// because this will be used for both Entity struct and its `*Holder` struct.
+fn impl_deserialize(ident: &syn::Ident, name: &str, st: &syn::DataStruct) -> TokenStream2 {
     let visitor_ident = as_visitor_ident(ident);
+    let FieldEntries { attributes, .. } = FieldEntries::parse(st);
+    let attr_len = attributes.len();
     quote! {
         #[automatically_derived]
         impl<'de> ::serde::de::Deserialize<'de> for #ident {
