@@ -113,5 +113,5 @@ pub fn derive_holder(ident: &syn::Ident, e: &syn::DataEnum) -> TokenStream2 {
 }
 
 pub fn derive_deserialize(_ident: &syn::Ident, _e: &syn::DataEnum) -> TokenStream2 {
-    todo!()
+    unimplemented!()
 }
