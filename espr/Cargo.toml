@@ -20,6 +20,3 @@ itertools = "0.10.1"
 maplit = "1.0.2"
 thiserror = "1.0.26"
 structopt = "0.3.22"
-
-# Temporary workaround for https://github.com/myrrlyn/funty/issues/3
-funty = "1.2.0"
