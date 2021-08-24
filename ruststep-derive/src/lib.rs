@@ -80,7 +80,7 @@ fn derive_holder(ast: &syn::DeriveInput) -> TokenStream2 {
 /// Resolve Holder struct from owned type, e.g. `A` to `AHolder`
 #[proc_macro]
 pub fn as_holder(input: TokenStream) -> TokenStream {
-    let path = as_holder_path(syn::parse(input).unwrap());
+    let path = as_holder_path(&syn::parse(input).unwrap());
     let ts = quote! { #path };
     ts.into()
 }
@@ -89,8 +89,9 @@ fn as_holder_ident(input: &syn::Ident) -> syn::Ident {
     format_ident!("{}Holder", input)
 }
 
-fn as_holder_path(input: syn::Type) -> syn::Type {
+fn as_holder_path(input: &syn::Type) -> syn::Type {
     let ft: FieldType = input
+        .clone()
         .try_into()
         .expect("as_holder! only accepts espr-generated type");
     ft.as_holder().into()
@@ -153,7 +154,7 @@ mod tests {
     #[test]
     fn holder_path() {
         let path = syn::parse_str("::some::Struct").unwrap();
-        let holder = as_holder_path(path);
+        let holder = as_holder_path(&path);
         let ans = syn::parse_str("::some::StructHolder").unwrap();
         assert_eq!(holder, ans);
     }
@@ -161,7 +162,7 @@ mod tests {
     #[test]
     fn optional_holder_path() {
         let path = syn::parse_str("Option<::some::Struct>").unwrap();
-        let holder = as_holder_path(path);
+        let holder = as_holder_path(&path);
         let ans = syn::parse_str("Option<::some::StructHolder>").unwrap();
         assert_eq!(holder, ans);
     }
