@@ -224,67 +224,84 @@ fn deserialize_base() {
 
 #[test]
 fn deserialize_sub1() {
-    let (residual, p): (_, Record) = exchange::simple_record("SUB_1(BASE((1.0)), 2.0)")
-        .finish()
-        .unwrap();
-    dbg!(&p);
-    assert_eq!(residual, "");
-
-    let a: Sub1Holder = Deserialize::deserialize(&p).unwrap();
-    dbg!(&a);
-    assert_eq!(
-        a,
+    test(
+        "SUB_1(BASE((1.0)), 2.0)",
         Sub1Holder {
             base: PlaceHolder::Owned(BaseHolder { x: 1.0 }),
-            y1: 2.0
-        }
+            y1: 2.0,
+        },
     );
+    test(
+        "SUB_1(#3, 2.0)",
+        Sub1Holder {
+            base: PlaceHolder::Ref(RValue::Entity(3)),
+            y1: 2.0,
+        },
+    );
+
+    fn test(input: &str, answer: Sub1Holder) {
+        let (residual, p): (_, Record) = exchange::simple_record(input).finish().unwrap();
+        dbg!(&p);
+        assert_eq!(residual, "");
+
+        let a: Sub1Holder = Deserialize::deserialize(&p).unwrap();
+        dbg!(&a);
+        assert_eq!(a, answer);
+    }
 }
 
 #[test]
 fn deserialize_base_any() {
-    let (residual, p): (_, Record) = exchange::simple_record("SUB_1(BASE((1.0)), 2.0)")
-        .finish()
-        .unwrap();
-    dbg!(&p);
-    assert_eq!(residual, "");
-
-    let a: BaseAnyHolder = Deserialize::deserialize(&p).unwrap();
-    dbg!(&a);
-    assert_eq!(
-        a,
+    test(
+        "SUB_1(BASE((1.0)), 2.0)",
         BaseAnyHolder::Sub1(Box::new(Sub1Holder {
             base: PlaceHolder::Owned(BaseHolder { x: 1.0 }),
-            y1: 2.0
-        }))
+            y1: 2.0,
+        })),
+    );
+    test(
+        "SUB_1(#3, 2.0)",
+        BaseAnyHolder::Sub1(Box::new(Sub1Holder {
+            base: PlaceHolder::Ref(RValue::Entity(3)),
+            y1: 2.0,
+        })),
     );
 
-    let a: PlaceHolder<BaseAnyHolder> = Deserialize::deserialize(&p).unwrap();
-    dbg!(&a);
-    assert_eq!(
-        a,
-        PlaceHolder::Owned(BaseAnyHolder::Sub1(Box::new(Sub1Holder {
-            base: PlaceHolder::Owned(BaseHolder { x: 1.0 }),
-            y1: 2.0
-        })))
-    );
+    fn test(input: &str, answer: BaseAnyHolder) {
+        let (residual, p): (_, Record) = exchange::simple_record(input).finish().unwrap();
+        dbg!(&p);
+        assert_eq!(residual, "");
+
+        let a: BaseAnyHolder = Deserialize::deserialize(&p).unwrap();
+        dbg!(&a);
+        assert_eq!(a, answer);
+    }
 }
 
 #[test]
 fn deserialize_base_any_placeholder() {
-    let (residual, p): (_, Record) = exchange::simple_record("SUB_1(BASE((1.0)), 2.0)")
-        .finish()
-        .unwrap();
-    dbg!(&p);
-    assert_eq!(residual, "");
-
-    let a: PlaceHolder<BaseAnyHolder> = Deserialize::deserialize(&p).unwrap();
-    dbg!(&a);
-    assert_eq!(
-        a,
+    test(
+        "SUB_1(BASE((1.0)), 2.0)",
         PlaceHolder::Owned(BaseAnyHolder::Sub1(Box::new(Sub1Holder {
             base: PlaceHolder::Owned(BaseHolder { x: 1.0 }),
-            y1: 2.0
-        })))
+            y1: 2.0,
+        }))),
     );
+    test(
+        "SUB_1(#3, 2.0)",
+        PlaceHolder::Owned(BaseAnyHolder::Sub1(Box::new(Sub1Holder {
+            base: PlaceHolder::Ref(RValue::Entity(3)),
+            y1: 2.0,
+        }))),
+    );
+
+    fn test(input: &str, answer: PlaceHolder<BaseAnyHolder>) {
+        let (residual, p): (_, Record) = exchange::simple_record(input).finish().unwrap();
+        dbg!(&p);
+        assert_eq!(residual, "");
+
+        let a: PlaceHolder<BaseAnyHolder> = Deserialize::deserialize(&p).unwrap();
+        dbg!(&a);
+        assert_eq!(a, answer);
+    }
 }
