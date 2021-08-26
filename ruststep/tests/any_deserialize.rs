@@ -4,10 +4,38 @@ use ruststep_derive::as_holder;
 use serde::{de, Deserialize};
 use std::collections::HashMap;
 
+#[derive(Debug, Clone, PartialEq, Default)]
 pub struct Table {
     base: HashMap<u64, as_holder!(Base)>,
     sub1: HashMap<u64, as_holder!(Sub1)>,
     sub2: HashMap<u64, as_holder!(Sub2)>,
+}
+
+impl Table {
+    // ```
+    // #1 = BASE(1.0);
+    // #2 = SUB_1(BASE((1.0)), 2.0);
+    // #3 = SUB_2(#1, 2.0);
+    // ```
+    fn example() -> Self {
+        let mut table = Self::default();
+        table.base.insert(1, BaseHolder { x: 1.0 });
+        table.sub1.insert(
+            2,
+            Sub1Holder {
+                base: BaseHolder { x: 1.0 }.into(),
+                y1: 2.0,
+            },
+        );
+        table.sub2.insert(
+            2,
+            Sub2Holder {
+                base: PlaceHolder::Ref(RValue::Entity(1)),
+                y2: 4.0,
+            },
+        );
+        table
+    }
 }
 
 #[derive(Clone, Debug, PartialEq, ruststep_derive::Holder)]
@@ -205,6 +233,8 @@ impl WithVisitor for Sub2Holder {
 #[derive(Clone, Debug, PartialEq, ruststep_derive::Holder)]
 #[holder(table = Table)]
 enum BaseAny {
+    #[holder(field = base)]
+    Base(Box<Base>),
     #[holder(field = sub1)]
     Sub1(Box<Sub1>),
     #[holder(field = sub2)]
@@ -303,5 +333,38 @@ fn deserialize_base_any_placeholder() {
         let a: PlaceHolder<BaseAnyHolder> = Deserialize::deserialize(&p).unwrap();
         dbg!(&a);
         assert_eq!(a, answer);
+    }
+}
+
+#[test]
+fn into_base_any() {
+    test(
+        "SUB_1(BASE((1.0)), 2.0)",
+        BaseAny::Sub1(Box::new(Sub1 {
+            base: Base { x: 1.0 },
+            y1: 2.0,
+        })),
+    );
+    test(
+        "SUB_1(#1, 2.0)",
+        BaseAny::Sub1(Box::new(Sub1 {
+            base: Base { x: 1.0 },
+            y1: 2.0,
+        })),
+    );
+
+    fn test(input: &str, answer: BaseAny) {
+        let table = Table::example();
+
+        let (residual, p): (_, Record) = exchange::simple_record(input).finish().unwrap();
+        dbg!(&p);
+        assert_eq!(residual, "");
+
+        let holder = BaseAnyHolder::deserialize(&p).unwrap();
+        dbg!(&holder);
+
+        let owned = holder.into_owned(&table).unwrap();
+        dbg!(&owned);
+        assert_eq!(owned, answer);
     }
 }
