@@ -228,4 +228,14 @@ fn deserialize_base_any() {
             y1: 2.0
         }))
     );
+
+    let a: PlaceHolder<BaseAnyHolder> = Deserialize::deserialize(&p).unwrap();
+    dbg!(&a);
+    assert_eq!(
+        a,
+        PlaceHolder::Owned(BaseAnyHolder::Sub1(Box::new(Sub1Holder {
+            base: PlaceHolder::Owned(BaseHolder { x: 1.0 }),
+            y1: 2.0
+        })))
+    );
 }
