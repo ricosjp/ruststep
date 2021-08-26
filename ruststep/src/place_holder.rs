@@ -123,17 +123,11 @@ impl<'de, T: Deserialize<'de> + Holder + WithVisitor> de::Visitor<'de> for Place
     }
 
     // Entry point for Record or Parameter::Typed
-    fn visit_map<A>(self, mut map: A) -> ::std::result::Result<Self::Value, A::Error>
+    fn visit_map<A>(self, map: A) -> ::std::result::Result<Self::Value, A::Error>
     where
         A: de::MapAccess<'de>,
     {
-        let key: String = map
-            .next_key()?
-            .expect("Empty map cannot be accepted as ruststep Holder"); // this must be a bug, not runtime error
-        if key != T::name() {
-            todo!("Create Error type and send it")
-        }
-        let value = map.next_value()?; // send to Self::visit_seq
-        Ok(value)
+        let visitor = T::visitor_new();
+        Ok(PlaceHolder::Owned(visitor.visit_map(map)?))
     }
 }
