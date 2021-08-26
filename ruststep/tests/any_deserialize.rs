@@ -22,7 +22,7 @@ impl<'de> de::Deserialize<'de> for BaseHolder {
     where
         D: de::Deserializer<'de>,
     {
-        deserializer.deserialize_tuple_struct("A", 2, BaseHolderVisitor {})
+        deserializer.deserialize_tuple_struct("BASE", 1, BaseHolderVisitor {})
     }
 }
 
@@ -31,7 +31,7 @@ pub struct BaseHolderVisitor;
 impl<'de> ::serde::de::Visitor<'de> for BaseHolderVisitor {
     type Value = BaseHolder;
     fn expecting(&self, formatter: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        write!(formatter, "Base")
+        write!(formatter, "BASE")
     }
 
     fn visit_seq<A>(self, mut seq: A) -> ::std::result::Result<Self::Value, A::Error>
@@ -86,7 +86,7 @@ impl<'de> de::Deserialize<'de> for Sub1Holder {
     where
         D: de::Deserializer<'de>,
     {
-        deserializer.deserialize_tuple_struct("A", 2, Sub1HolderVisitor {})
+        deserializer.deserialize_tuple_struct("SUB_1", 2, Sub1HolderVisitor {})
     }
 }
 
@@ -95,7 +95,7 @@ pub struct Sub1HolderVisitor;
 impl<'de> ::serde::de::Visitor<'de> for Sub1HolderVisitor {
     type Value = Sub1Holder;
     fn expecting(&self, formatter: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        write!(formatter, "Sub1")
+        write!(formatter, "SUB_1")
     }
 
     fn visit_seq<A>(self, mut seq: A) -> ::std::result::Result<Self::Value, A::Error>
@@ -121,7 +121,7 @@ impl<'de> ::serde::de::Visitor<'de> for Sub1HolderVisitor {
         let key: String = map
             .next_key()?
             .expect("Empty map cannot be accepted as ruststep Holder"); // this must be a bug, not runtime error
-        if key != "B" {
+        if key != "SUB_1" {
             use ::serde::de::{Error, Unexpected};
             return Err(A::Error::invalid_value(Unexpected::Other(&key), &self));
         }
@@ -151,7 +151,7 @@ impl<'de> de::Deserialize<'de> for Sub2Holder {
     where
         D: de::Deserializer<'de>,
     {
-        deserializer.deserialize_tuple_struct("A", 2, Sub2HolderVisitor {})
+        deserializer.deserialize_tuple_struct("SUB_2", 2, Sub2HolderVisitor {})
     }
 }
 
@@ -160,7 +160,7 @@ pub struct Sub2HolderVisitor;
 impl<'de> ::serde::de::Visitor<'de> for Sub2HolderVisitor {
     type Value = Sub2Holder;
     fn expecting(&self, formatter: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        write!(formatter, "Sub2")
+        write!(formatter, "SUB_2")
     }
 
     fn visit_seq<A>(self, mut seq: A) -> ::std::result::Result<Self::Value, A::Error>
@@ -186,7 +186,7 @@ impl<'de> ::serde::de::Visitor<'de> for Sub2HolderVisitor {
         let key: String = map
             .next_key()?
             .expect("Empty map cannot be accepted as ruststep Holder"); // this must be a bug, not runtime error
-        if key != "B" {
+        if key != "SUB_2" {
             use ::serde::de::{Error, Unexpected};
             return Err(A::Error::invalid_value(Unexpected::Other(&key), &self));
         }
@@ -212,6 +212,25 @@ enum BaseAny {
 }
 
 #[test]
+fn deserialize_sub1() {
+    let (residual, p): (_, Record) = exchange::simple_record("SUB_1(BASE((1.0)), 2.0)")
+        .finish()
+        .unwrap();
+    dbg!(&p);
+    assert_eq!(residual, "");
+
+    let a: Sub1Holder = Deserialize::deserialize(&p).unwrap();
+    dbg!(&a);
+    assert_eq!(
+        a,
+        Sub1Holder {
+            base: PlaceHolder::Owned(BaseHolder { x: 1.0 }),
+            y1: 2.0
+        }
+    );
+}
+
+#[test]
 fn deserialize_base_any() {
     let (residual, p): (_, Record) = exchange::simple_record("SUB_1(BASE((1.0)), 2.0)")
         .finish()
@@ -228,6 +247,25 @@ fn deserialize_base_any() {
             y1: 2.0
         }))
     );
+
+    let a: PlaceHolder<BaseAnyHolder> = Deserialize::deserialize(&p).unwrap();
+    dbg!(&a);
+    assert_eq!(
+        a,
+        PlaceHolder::Owned(BaseAnyHolder::Sub1(Box::new(Sub1Holder {
+            base: PlaceHolder::Owned(BaseHolder { x: 1.0 }),
+            y1: 2.0
+        })))
+    );
+}
+
+#[test]
+fn deserialize_base_any_placeholder() {
+    let (residual, p): (_, Record) = exchange::simple_record("SUB_1(BASE((1.0)), 2.0)")
+        .finish()
+        .unwrap();
+    dbg!(&p);
+    assert_eq!(residual, "");
 
     let a: PlaceHolder<BaseAnyHolder> = Deserialize::deserialize(&p).unwrap();
     dbg!(&a);
