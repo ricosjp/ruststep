@@ -56,7 +56,7 @@ impl<'de> ::serde::de::Visitor<'de> for BaseHolderVisitor {
         let key: String = map
             .next_key()?
             .expect("Empty map cannot be accepted as ruststep Holder"); // this must be a bug, not runtime error
-        if key != "Base" {
+        if key != "BASE" {
             use ::serde::de::{Error, Unexpected};
             return Err(A::Error::invalid_value(Unexpected::Other(&key), &self));
         }
@@ -209,6 +209,17 @@ enum BaseAny {
     Sub1(Box<Sub1>),
     #[holder(field = sub2)]
     Sub2(Box<Sub2>),
+}
+
+#[test]
+fn deserialize_base() {
+    let (residual, p): (_, Record) = exchange::simple_record("BASE(1.0)").finish().unwrap();
+    dbg!(&p);
+    assert_eq!(residual, "");
+
+    let a: BaseHolder = Deserialize::deserialize(&p).unwrap();
+    dbg!(&a);
+    assert_eq!(a, BaseHolder { x: 1.0 });
 }
 
 #[test]
