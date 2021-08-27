@@ -40,6 +40,12 @@ impl<T: Holder> From<T> for PlaceHolder<T> {
     }
 }
 
+impl<T> From<RValue> for PlaceHolder<T> {
+    fn from(rvalue: RValue) -> Self {
+        PlaceHolder::Ref(rvalue)
+    }
+}
+
 impl<'de, T: Holder + WithVisitor + Deserialize<'de>> Deserialize<'de> for PlaceHolder<T> {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
     where

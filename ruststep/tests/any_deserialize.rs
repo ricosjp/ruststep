@@ -30,7 +30,7 @@ impl Table {
         table.sub2.insert(
             2,
             Sub2Holder {
-                base: PlaceHolder::Ref(RValue::Entity(1)),
+                base: RValue::Entity(1).into(),
                 y2: 4.0,
             },
         );
@@ -257,14 +257,14 @@ fn deserialize_sub1() {
     test(
         "SUB_1(BASE((1.0)), 2.0)",
         Sub1Holder {
-            base: PlaceHolder::Owned(BaseHolder { x: 1.0 }),
+            base: BaseHolder { x: 1.0 }.into(),
             y1: 2.0,
         },
     );
     test(
         "SUB_1(#3, 2.0)",
         Sub1Holder {
-            base: PlaceHolder::Ref(RValue::Entity(3)),
+            base: RValue::Entity(3).into(),
             y1: 2.0,
         },
     );
@@ -285,14 +285,14 @@ fn deserialize_base_any() {
     test(
         "SUB_1(BASE((1.0)), 2.0)",
         BaseAnyHolder::Sub1(Box::new(Sub1Holder {
-            base: PlaceHolder::Owned(BaseHolder { x: 1.0 }),
+            base: BaseHolder { x: 1.0 }.into(),
             y1: 2.0,
         })),
     );
     test(
         "SUB_1(#3, 2.0)",
         BaseAnyHolder::Sub1(Box::new(Sub1Holder {
-            base: PlaceHolder::Ref(RValue::Entity(3)),
+            base: RValue::Entity(3).into(),
             y1: 2.0,
         })),
     );
@@ -313,14 +313,14 @@ fn deserialize_base_any_placeholder() {
     test(
         "SUB_1(BASE((1.0)), 2.0)",
         PlaceHolder::Owned(BaseAnyHolder::Sub1(Box::new(Sub1Holder {
-            base: PlaceHolder::Owned(BaseHolder { x: 1.0 }),
+            base: BaseHolder { x: 1.0 }.into(),
             y1: 2.0,
         }))),
     );
     test(
         "SUB_1(#3, 2.0)",
         PlaceHolder::Owned(BaseAnyHolder::Sub1(Box::new(Sub1Holder {
-            base: PlaceHolder::Ref(RValue::Entity(3)),
+            base: RValue::Entity(3).into(),
             y1: 2.0,
         }))),
     );
