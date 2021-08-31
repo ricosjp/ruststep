@@ -1,51 +1,72 @@
+//! Parse the associated attribute `#[holder(...)]` with `#[derive(Holder)]`
+//!
+//! There are three options:
+//!
+//! - `#[holder(table = {path::to::table::struct})]`
+//! - `#[holder(field = {field_ident})]`
+//! - `#[holder(use_place_holder)]`
+//!
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct HolderAttr {
+    pub table: Option<syn::Path>,
+    pub field: Option<syn::Ident>,
+    pub place_holder: bool,
+}
+
+impl HolderAttr {
+    pub fn parse(attrs: &[syn::Attribute]) -> Self {
+        let mut table = None;
+        let mut field = None;
+        let mut place_holder = false;
+
+        for attr in attrs {
+            match attr.parse_args().unwrap() {
+                Attr::Table(path) => {
+                    table = Some(path);
+                }
+                Attr::Field(ident) => {
+                    field = Some(ident);
+                }
+                Attr::PlaceHolder => {
+                    place_holder = true;
+                }
+            }
+        }
+        HolderAttr {
+            table,
+            field,
+            place_holder,
+        }
+    }
+}
+
 #[derive(Debug)]
-struct TableAttrParse {
-    table_prefix: syn::Ident,
-    eq1: syn::Token![=],
-    table: syn::Ident,
-    comma: syn::Token![,],
-    field_prefix: syn::Ident,
-    eq2: syn::Token![=],
-    field: syn::Ident,
+enum Attr {
+    Table(syn::Path),
+    Field(syn::Ident),
+    PlaceHolder,
 }
 
-impl syn::parse::Parse for TableAttrParse {
+impl syn::parse::Parse for Attr {
     fn parse(input: syn::parse::ParseStream) -> syn::parse::Result<Self> {
-        Ok(TableAttrParse {
-            table_prefix: input.parse()?,
-            eq1: input.parse()?,
-            table: input.parse()?,
-            comma: input.parse()?,
-            field_prefix: input.parse()?,
-            eq2: input.parse()?,
-            field: input.parse()?,
-        })
-    }
-}
-
-pub struct TableAttr {
-    pub table: syn::Ident,
-    pub field: syn::Ident,
-}
-
-/// To parse `#[holder(table = Table, field = a)]` attribute to get `Table`
-pub fn parse_table_attr(ast: &syn::DeriveInput) -> TableAttr {
-    for attr in &ast.attrs {
-        if attr.path.is_ident("holder") {
-            let TableAttrParse { table, field, .. } = attr.parse_args().unwrap();
-            return TableAttr { table, field };
+        let ident: syn::Ident = input.parse()?;
+        match ident.to_string().as_str() {
+            "table" => {
+                let _eq: syn::Token![=] = input.parse()?;
+                let path = input.parse()?;
+                Ok(Attr::Table(path))
+            }
+            "field" => {
+                let _eq: syn::Token![=] = input.parse()?;
+                let ident = input.parse()?;
+                Ok(Attr::Field(ident))
+            }
+            "use_place_holder" => Ok(Attr::PlaceHolder),
+            _ => Err(syn::parse::Error::new(
+                ident.span(),
+                "expected `table`, `field`, or `use_place_holder`",
+            )),
         }
     }
-    panic!("Table is not specified for Holder")
-}
-
-/// Check a struct member has `#[holder(use_place_holder)]` attribute
-pub fn is_use_place_holder(attrs: &[syn::Attribute]) -> bool {
-    for attr in attrs {
-        if attr.path.is_ident("holder") {
-            let flag: syn::Ident = attr.parse_args().unwrap();
-            return flag == "use_place_holder";
-        }
-    }
-    false
 }

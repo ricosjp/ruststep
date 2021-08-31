@@ -15,14 +15,16 @@
 //! }
 //!
 //! #[derive(Debug, Clone, PartialEq, Holder)]
-//! #[holder(table = Table, field = a)]
+//! #[holder(table = Table)]
+//! #[holder(field = a)]
 //! pub struct A {
 //!     pub x: f64,
 //!     pub y: f64,
 //! }
 //!
 //! #[derive(Debug, Clone, PartialEq, Holder)]
-//! #[holder(table = Table, field = b)]
+//! #[holder(table = Table)]
+//! #[holder(field = b)]
 //! pub struct B {
 //!     pub z: f64,
 //!     #[holder(use_place_holder)]
@@ -45,16 +47,16 @@
 //!     but their definition does not match for our cases.
 //!
 
-use inflector::Inflector;
 use proc_macro::TokenStream;
 use proc_macro2::{Span, TokenStream as TokenStream2};
 use proc_macro_crate::{crate_name, FoundCrate};
 use quote::{format_ident, quote};
 use std::convert::*;
 
+mod entity;
 mod field_type;
-mod for_struct;
 mod holder_attr;
+mod select;
 
 use field_type::*;
 use holder_attr::*;
@@ -67,73 +69,9 @@ pub fn derive_deserialize_entry(input: TokenStream) -> TokenStream {
 
 fn derive_deserialize(ast: &syn::DeriveInput) -> TokenStream2 {
     let ident = &ast.ident;
-    let visitor_ident = format_ident!("{}Visitor", ident);
-    let name = ident.to_string().to_screaming_snake_case();
     match &ast.data {
-        syn::Data::Struct(st) => {
-            let fields: Vec<_> = st
-                .fields
-                .iter()
-                .map(|f| {
-                    f.ident
-                        .as_ref()
-                        .expect("Tuple struct case is not supported")
-                })
-                .collect();
-            let attr_len = fields.len();
-            quote! {
-                #[automatically_derived]
-                impl<'de> ::serde::de::Deserialize<'de> for #ident {
-                    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
-                    where
-                        D: ::serde::de::Deserializer<'de>,
-                    {
-                        deserializer.deserialize_tuple_struct(#name, #attr_len, #visitor_ident {})
-                    }
-                }
-
-                #[doc(hidden)]
-                struct #visitor_ident;
-
-                #[automatically_derived]
-                impl<'de> ::serde::de::Visitor<'de> for #visitor_ident {
-                    type Value = #ident;
-                    fn expecting(&self, formatter: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-                        write!(formatter, #name)
-                    }
-
-                    fn visit_seq<A>(self, mut seq: A) -> ::std::result::Result<Self::Value, A::Error>
-                    where
-                        A: ::serde::de::SeqAccess<'de>,
-                    {
-                        if let Some(size) = seq.size_hint() {
-                            if size != #attr_len {
-                                use ::serde::de::Error;
-                                return Err(A::Error::invalid_length(size, &self));
-                            }
-                        }
-                        #( let #fields = seq.next_element()?.unwrap(); )*
-                        Ok(#ident { #(#fields),* })
-                    }
-
-                    // Entry point for Record or Parameter::Typed
-                    fn visit_map<A>(self, mut map: A) -> ::std::result::Result<Self::Value, A::Error>
-                    where
-                        A: ::serde::de::MapAccess<'de>,
-                    {
-                        let key: String = map
-                            .next_key()?
-                            .expect("Empty map cannot be accepted as ruststep Holder"); // this must be a bug, not runtime error
-                        if key != #name {
-                            use ::serde::de::{Error, Unexpected};
-                            return Err(A::Error::invalid_value(Unexpected::Other(&key), &self));
-                        }
-                        let value = map.next_value()?; // send to Self::visit_seq
-                        Ok(value)
-                    }
-                }
-            } // quote!
-        }
+        syn::Data::Struct(st) => entity::derive_deserialize(ident, st),
+        syn::Data::Enum(e) => select::derive_deserialize(ident, e),
         _ => unimplemented!("Only struct is supprted currently"),
     }
 }
@@ -144,25 +82,11 @@ pub fn derive_holder_entry(input: TokenStream) -> TokenStream {
 }
 
 fn derive_holder(ast: &syn::DeriveInput) -> TokenStream2 {
-    let table_attr = parse_table_attr(ast);
+    let table_attr = HolderAttr::parse(&ast.attrs);
     let ident = &ast.ident;
     match &ast.data {
-        syn::Data::Struct(st) => {
-            let def_holder_tt = for_struct::def_holder(ident, st);
-            let def_visitor_tt = for_struct::def_visitor(ident, st);
-            let impl_deserialize_tt = for_struct::impl_deserialize(ident);
-            let impl_holder_tt = for_struct::impl_holder(ident, &table_attr, st);
-            let impl_with_visitor_tt = for_struct::impl_with_visitor(ident);
-            let impl_entity_table_tt = for_struct::impl_entity_table(ident, &table_attr);
-            quote! {
-                #def_holder_tt
-                #def_visitor_tt
-                #impl_deserialize_tt
-                #impl_holder_tt
-                #impl_with_visitor_tt
-                #impl_entity_table_tt
-            }
-        }
+        syn::Data::Struct(st) => entity::derive_holder(ident, st, &table_attr),
+        syn::Data::Enum(e) => select::derive_holder(ident, e),
         _ => unimplemented!("Only struct is supprted currently"),
     }
 }
@@ -170,7 +94,7 @@ fn derive_holder(ast: &syn::DeriveInput) -> TokenStream2 {
 /// Resolve Holder struct from owned type, e.g. `A` to `AHolder`
 #[proc_macro]
 pub fn as_holder(input: TokenStream) -> TokenStream {
-    let path = as_holder_path(syn::parse(input).unwrap());
+    let path = as_holder_path(&syn::parse(input).unwrap());
     let ts = quote! { #path };
     ts.into()
 }
@@ -190,14 +114,19 @@ fn as_holder_visitor2(input: &syn::Ident) -> syn::Ident {
 }
 
 fn as_holder_ident(input: &syn::Ident) -> syn::Ident {
-    quote::format_ident!("{}Holder", input)
+    format_ident!("{}Holder", input)
 }
 
-fn as_holder_path(input: syn::Type) -> syn::Type {
+fn as_holder_path(input: &syn::Type) -> syn::Type {
     let ft: FieldType = input
+        .clone()
         .try_into()
         .expect("as_holder! only accepts espr-generated type");
     ft.as_holder().into()
+}
+
+fn as_visitor_ident(input: &syn::Ident) -> syn::Ident {
+    format_ident!("{}Visitor", input)
 }
 
 /// Returns `crate` or `::ruststep` as in ruststep crate or not
@@ -253,7 +182,7 @@ mod tests {
     #[test]
     fn holder_path() {
         let path = syn::parse_str("::some::Struct").unwrap();
-        let holder = as_holder_path(path);
+        let holder = as_holder_path(&path);
         let ans = syn::parse_str("::some::StructHolder").unwrap();
         assert_eq!(holder, ans);
     }
@@ -261,7 +190,7 @@ mod tests {
     #[test]
     fn optional_holder_path() {
         let path = syn::parse_str("Option<::some::Struct>").unwrap();
-        let holder = as_holder_path(path);
+        let holder = as_holder_path(&path);
         let ans = syn::parse_str("Option<::some::StructHolder>").unwrap();
         assert_eq!(holder, ans);
     }

@@ -86,7 +86,8 @@ impl ToTokens for Entity {
 
         tokens.append_all(quote! {
             #[derive(Debug, Clone, PartialEq, ::derive_new::new, ::ruststep_derive::Holder)]
-            #[holder(table = Tables, field = #field_name)]
+            #[holder(table = Tables)]
+            #[holder(field = #field_name)]
             pub struct #name {
                 #(
                 pub #attr_name : #attr_type,
