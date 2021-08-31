@@ -241,31 +241,6 @@ enum BaseAny {
     Sub2(Box<Sub2>),
 }
 
-impl EntityTable<as_holder!(BaseAny)> for Table {
-    fn get_owned(&self, entity_id: u64) -> Result<BaseAny> {
-        if let Ok(owned) = get_owned(self, &self.base, entity_id) {
-            return Ok(BaseAny::Base(Box::new(owned)));
-        }
-        if let Ok(owned) = get_owned(self, &self.sub1, entity_id) {
-            return Ok(BaseAny::Sub1(Box::new(owned)));
-        }
-        if let Ok(owned) = get_owned(self, &self.sub2, entity_id) {
-            return Ok(BaseAny::Sub2(Box::new(owned)));
-        }
-        Err(Error::UnknownEntity(entity_id))
-    }
-    fn owned_iter<'table>(&'table self) -> Box<dyn Iterator<Item = Result<BaseAny>> + 'table> {
-        Box::new(itertools::chain![
-            owned_iter(self, &self.base)
-                .map(|owned| owned.map(|owned| BaseAny::Base(Box::new(owned)))),
-            owned_iter(self, &self.sub1)
-                .map(|owned| owned.map(|owned| BaseAny::Sub1(Box::new(owned)))),
-            owned_iter(self, &self.sub2)
-                .map(|owned| owned.map(|owned| BaseAny::Sub2(Box::new(owned)))),
-        ])
-    }
-}
-
 #[test]
 fn deserialize_base() {
     let (residual, p): (_, Record) = exchange::simple_record("BASE(1.0)").finish().unwrap();

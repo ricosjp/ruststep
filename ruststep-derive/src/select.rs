@@ -11,6 +11,7 @@ struct Input {
     variants: Vec<syn::Ident>,
     variant_names: Vec<String>,
     holder_types: Vec<syn::Type>,
+    table_fields: Vec<syn::Ident>,
 }
 
 impl Input {
@@ -37,6 +38,14 @@ impl Input {
             .flatten()
             .collect();
         let holder_types: Vec<_> = ty.iter().map(|t| as_holder_path(t)).collect();
+        let table_fields: Vec<syn::Ident> = e
+            .variants
+            .iter()
+            .map(|var| {
+                let attr = HolderAttr::parse(&var.attrs);
+                attr.field.expect("field attribute is lacking")
+            })
+            .collect();
 
         Input {
             name,
@@ -46,6 +55,7 @@ impl Input {
             variants,
             variant_names,
             holder_types,
+            table_fields,
         }
     }
 
@@ -160,6 +170,36 @@ impl Input {
             }
         } // quote!
     }
+
+    fn impl_entity_table(&self) -> TokenStream2 {
+        let Input {
+            ident,
+            holder_ident,
+            variants,
+            table_fields,
+            ..
+        } = self;
+        quote! {
+            impl EntityTable<#holder_ident> for Table {
+                fn get_owned(&self, entity_id: u64) -> Result<#ident> {
+                    #(
+                    if let Ok(owned) = get_owned(self, &self.#table_fields, entity_id) {
+                        return Ok(#ident::#variants(Box::new(owned)));
+                    }
+                    )*
+                    Err(Error::UnknownEntity(entity_id))
+                }
+                fn owned_iter<'table>(&'table self) -> Box<dyn Iterator<Item = Result<#ident>> + 'table> {
+                    Box::new(itertools::chain![
+                        #(
+                        owned_iter(self, &self.#table_fields)
+                            .map(|owned| owned.map(|owned| #ident::#variants(Box::new(owned)))),
+                        )*
+                    ])
+                }
+            }
+        } // quote!
+    }
 }
 
 fn decompose_box_ty(ty: &syn::Type) -> &syn::Type {
@@ -186,12 +226,14 @@ pub fn derive_holder(ident: &syn::Ident, e: &syn::DataEnum) -> TokenStream2 {
     let impl_holder_tt = input.impl_holder();
     let impl_deserialize_tt = input.impl_deserialize();
     let def_visitor_tt = input.def_visitor();
+    let impl_entity_table_tt = input.impl_entity_table();
 
     quote! {
         #def_holder_tt
         #impl_holder_tt
         #impl_deserialize_tt
         #def_visitor_tt
+        #impl_entity_table_tt
     } // quote!
 }
 
