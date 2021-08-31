@@ -15,7 +15,7 @@ impl Table {
     // ```
     // #1 = BASE(1.0);
     // #2 = SUB_1(BASE((1.0)), 2.0);
-    // #3 = SUB_2(#1, 2.0);
+    // #3 = SUB_2(#1, 4.0);
     // ```
     fn example() -> Self {
         let mut table = Self::default();
@@ -28,7 +28,7 @@ impl Table {
             },
         );
         table.sub2.insert(
-            2,
+            3,
             Sub2Holder {
                 base: RValue::Entity(1).into(),
                 y2: 4.0,
@@ -242,11 +242,27 @@ enum BaseAny {
 }
 
 impl EntityTable<as_holder!(BaseAny)> for Table {
-    fn get_owned(&self, _entity_id: u64) -> Result<BaseAny> {
-        todo!()
+    fn get_owned(&self, entity_id: u64) -> Result<BaseAny> {
+        if let Ok(owned) = get_owned(self, &self.base, entity_id) {
+            return Ok(BaseAny::Base(Box::new(owned)));
+        }
+        if let Ok(owned) = get_owned(self, &self.sub1, entity_id) {
+            return Ok(BaseAny::Sub1(Box::new(owned)));
+        }
+        if let Ok(owned) = get_owned(self, &self.sub2, entity_id) {
+            return Ok(BaseAny::Sub2(Box::new(owned)));
+        }
+        Err(Error::UnknownEntity(entity_id))
     }
     fn owned_iter<'table>(&'table self) -> Box<dyn Iterator<Item = Result<BaseAny>> + 'table> {
-        todo!()
+        Box::new(itertools::chain![
+            owned_iter(self, &self.base)
+                .map(|owned| owned.map(|owned| BaseAny::Base(Box::new(owned)))),
+            owned_iter(self, &self.sub1)
+                .map(|owned| owned.map(|owned| BaseAny::Sub1(Box::new(owned)))),
+            owned_iter(self, &self.sub2)
+                .map(|owned| owned.map(|owned| BaseAny::Sub2(Box::new(owned)))),
+        ])
     }
 }
 
@@ -392,10 +408,10 @@ fn lookup_base_any() {
         })),
     );
     test(
-        Parameter::RValue(RValue::Entity(2)),
+        Parameter::RValue(RValue::Entity(3)),
         BaseAny::Sub2(Box::new(Sub2 {
             base: Base { x: 1.0 },
-            y2: 2.0,
+            y2: 4.0,
         })),
     );
 
