@@ -5,6 +5,7 @@ use quote::quote;
 
 struct Input {
     name: String,
+    table: syn::Path,
     ident: syn::Ident,
     holder_ident: syn::Ident,
     holder_visitor_ident: syn::Ident,
@@ -15,7 +16,7 @@ struct Input {
 }
 
 impl Input {
-    fn parse(ident: &syn::Ident, e: &syn::DataEnum) -> Self {
+    fn parse(ident: &syn::Ident, e: &syn::DataEnum, attr: &HolderAttr) -> Self {
         let name = ident.to_string().to_screaming_snake_case();
         let holder_ident = as_holder_ident(ident);
         let holder_visitor_ident = as_visitor_ident(&holder_ident);
@@ -46,9 +47,11 @@ impl Input {
                 attr.field.expect("field attribute is lacking")
             })
             .collect();
+        let table = attr.table.clone().expect("table attribute is lacked");
 
         Input {
             name,
+            table,
             ident: ident.clone().into(),
             holder_ident,
             holder_visitor_ident,
@@ -80,13 +83,14 @@ impl Input {
             ident,
             holder_ident,
             variants,
+            table,
             ..
         } = self;
         quote! {
             impl Holder for #holder_ident {
                 type Owned = #ident;
-                type Table = Table;
-                fn into_owned(self, table: &Table) -> Result<Self::Owned> {
+                type Table = #table;
+                fn into_owned(self, table: &Self::Table) -> Result<Self::Owned> {
                     Ok(match self {
                         #(#holder_ident::#variants(sub) => #ident::#variants(Box::new(sub.into_owned(table)?))),*
                     })
@@ -109,10 +113,10 @@ impl Input {
             ..
         } = self;
         quote! {
-            impl<'de> de::Deserialize<'de> for #holder_ident {
+            impl<'de> ::serde::de::Deserialize<'de> for #holder_ident {
                 fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
                 where
-                    D: de::Deserializer<'de>,
+                    D: ::serde::de::Deserializer<'de>,
                 {
                     deserializer.deserialize_tuple_struct(#name, 0, #holder_visitor_ident {})
                 }
@@ -177,17 +181,19 @@ impl Input {
             holder_ident,
             variants,
             table_fields,
+            table,
             ..
         } = self;
+        let ruststep = ruststep_crate();
         quote! {
-            impl EntityTable<#holder_ident> for Table {
+            impl EntityTable<#holder_ident> for #table {
                 fn get_owned(&self, entity_id: u64) -> Result<#ident> {
                     #(
                     if let Ok(owned) = get_owned(self, &self.#table_fields, entity_id) {
                         return Ok(#ident::#variants(Box::new(owned)));
                     }
                     )*
-                    Err(Error::UnknownEntity(entity_id))
+                    Err(#ruststep::error::Error::UnknownEntity(entity_id))
                 }
                 fn owned_iter<'table>(&'table self) -> Box<dyn Iterator<Item = Result<#ident>> + 'table> {
                     Box::new(itertools::chain![
@@ -220,8 +226,8 @@ fn decompose_box_ty(ty: &syn::Type) -> &syn::Type {
     unreachable!("Not Box<T>")
 }
 
-pub fn derive_holder(ident: &syn::Ident, e: &syn::DataEnum) -> TokenStream2 {
-    let input = Input::parse(ident, e);
+pub fn derive_holder(ident: &syn::Ident, e: &syn::DataEnum, attr: &HolderAttr) -> TokenStream2 {
+    let input = Input::parse(ident, e, attr);
     let def_holder_tt = input.def_holder();
     let impl_holder_tt = input.impl_holder();
     let impl_deserialize_tt = input.impl_deserialize();
