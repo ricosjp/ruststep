@@ -241,6 +241,15 @@ enum BaseAny {
     Sub2(Box<Sub2>),
 }
 
+impl EntityTable<as_holder!(BaseAny)> for Table {
+    fn get_owned(&self, _entity_id: u64) -> Result<BaseAny> {
+        todo!()
+    }
+    fn owned_iter<'table>(&'table self) -> Box<dyn Iterator<Item = Result<BaseAny>> + 'table> {
+        todo!()
+    }
+}
+
 #[test]
 fn deserialize_base() {
     let (residual, p): (_, Record) = exchange::simple_record("BASE(1.0)").finish().unwrap();
@@ -360,7 +369,40 @@ fn into_base_any() {
         dbg!(&p);
         assert_eq!(residual, "");
 
-        let holder = BaseAnyHolder::deserialize(&p).unwrap();
+        let holder = PlaceHolder::<BaseAnyHolder>::deserialize(&p).unwrap();
+        dbg!(&holder);
+
+        let owned = holder.into_owned(&table).unwrap();
+        dbg!(&owned);
+        assert_eq!(owned, answer);
+    }
+}
+
+#[test]
+fn lookup_base_any() {
+    test(
+        Parameter::RValue(RValue::Entity(1)),
+        BaseAny::Base(Box::new(Base { x: 1.0 })),
+    );
+    test(
+        Parameter::RValue(RValue::Entity(2)),
+        BaseAny::Sub1(Box::new(Sub1 {
+            base: Base { x: 1.0 },
+            y1: 2.0,
+        })),
+    );
+    test(
+        Parameter::RValue(RValue::Entity(2)),
+        BaseAny::Sub2(Box::new(Sub2 {
+            base: Base { x: 1.0 },
+            y2: 2.0,
+        })),
+    );
+
+    fn test(p: Parameter, answer: BaseAny) {
+        let table = Table::example();
+
+        let holder = PlaceHolder::<BaseAnyHolder>::deserialize(&p).unwrap();
         dbg!(&holder);
 
         let owned = holder.into_owned(&table).unwrap();
