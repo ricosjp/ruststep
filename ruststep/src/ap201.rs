@@ -1985,21 +1985,21 @@ pub mod explicit_draughting {
                 .map(move |value| value.into_owned(&self))
         }
     }
-    #[derive(Debug, Clone, PartialEq)]
+    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     pub enum ApprovedItem {
         DrawingRevision(DrawingRevisionAny),
         DrawingSheetRevision(Box<DrawingSheetRevision>),
     }
-    #[derive(Debug, Clone, PartialEq)]
+    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     pub enum AreaOrView {
         PresentationArea(PresentationAreaAny),
         PresentationView(Box<PresentationView>),
     }
-    #[derive(Debug, Clone, PartialEq)]
+    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     pub enum Axis2Placement {
         Axis2Placement2D(Box<Axis2Placement2D>),
     }
-    #[derive(Debug, Clone, PartialEq)]
+    #[derive(Debug, Clone, PartialEq, :: serde_derive :: Deserialize)]
     pub enum BSplineCurveForm {
         EllipticArc,
         PolylineForm,
@@ -2008,7 +2008,7 @@ pub mod explicit_draughting {
         Unspecified,
         HyperbolicArc,
     }
-    #[derive(Debug, Clone, PartialEq)]
+    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     pub enum BoxCharacteristicSelect {
         BoxHeight(Box<BoxHeight>),
         BoxWidth(Box<BoxWidth>),
@@ -2019,100 +2019,100 @@ pub mod explicit_draughting {
     pub type BoxRotateAngle = PlaneAngleMeasure;
     pub type BoxSlantAngle = PlaneAngleMeasure;
     pub type BoxWidth = PositiveRatioMeasure;
-    #[derive(Debug, Clone, PartialEq)]
+    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     pub enum CharacterSpacingSelect {
         LengthMeasure(Box<LengthMeasure>),
         RatioMeasure(Box<RatioMeasure>),
         MeasureWithUnit(MeasureWithUnitAny),
     }
-    #[derive(Debug, Clone, PartialEq)]
+    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     pub enum CharacterStyleSelect {
         TextStyleForDefinedFont(Box<TextStyleForDefinedFont>),
     }
-    #[derive(Debug, Clone, PartialEq)]
+    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     pub enum CharacterizedDefinition {
         CharacterizedProductDefinition(Box<CharacterizedProductDefinition>),
         ShapeDefinition(Box<ShapeDefinition>),
     }
-    #[derive(Debug, Clone, PartialEq)]
+    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     pub enum CharacterizedProductDefinition {
         ProductDefinition(Box<ProductDefinition>),
     }
-    #[derive(Debug, Clone, PartialEq)]
+    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     pub enum ClassifiedItem {
         DrawingRevision(DrawingRevisionAny),
         DrawingSheetRevision(Box<DrawingSheetRevision>),
     }
-    #[derive(Debug, Clone, PartialEq)]
+    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     pub enum ContractedItem {
         DrawingRevision(DrawingRevisionAny),
     }
-    #[derive(Debug, Clone, PartialEq)]
+    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     pub enum CurveFontOrScaledCurveFontSelect {
         CurveStyleFontSelect(Box<CurveStyleFontSelect>),
     }
-    #[derive(Debug, Clone, PartialEq)]
+    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     pub enum CurveOrAnnotationCurveOccurrence {
         Curve(CurveAny),
         AnnotationCurveOccurrence(AnnotationCurveOccurrenceAny),
     }
-    #[derive(Debug, Clone, PartialEq)]
+    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     pub enum CurveOrRender {
         CurveStyle(Box<CurveStyle>),
     }
-    #[derive(Debug, Clone, PartialEq)]
+    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     pub enum CurveStyleFontSelect {
         CurveStyleFont(Box<CurveStyleFont>),
         PreDefinedCurveFont(PreDefinedCurveFontAny),
         ExternallyDefinedCurveFont(Box<ExternallyDefinedCurveFont>),
     }
-    #[derive(Debug, Clone, PartialEq)]
+    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     pub enum DateTimeSelect {
         Date(DateAny),
     }
     pub type DayInMonthNumber = i64;
-    #[derive(Debug, Clone, PartialEq)]
+    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     pub enum DefinedSymbolSelect {
         PreDefinedSymbol(PreDefinedSymbolAny),
         ExternallyDefinedSymbol(Box<ExternallyDefinedSymbol>),
     }
     pub type DimensionCount = i64;
-    #[derive(Debug, Clone, PartialEq)]
+    #[derive(Debug, Clone, PartialEq, :: serde_derive :: Deserialize)]
     pub enum DimensionExtentUsage {
         Origin,
         Target,
     }
-    #[derive(Debug, Clone, PartialEq)]
+    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     pub enum DraughtingCalloutElement {
         AnnotationTextOccurrence(Box<AnnotationTextOccurrence>),
         AnnotationSymbolOccurrence(AnnotationSymbolOccurrenceAny),
         AnnotationCurveOccurrence(AnnotationCurveOccurrenceAny),
     }
-    #[derive(Debug, Clone, PartialEq)]
+    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     pub enum DraughtingGroupedItem {
         AnnotationOccurrence(AnnotationOccurrenceAny),
         GeometricSetSelect(Box<GeometricSetSelect>),
     }
-    #[derive(Debug, Clone, PartialEq)]
+    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     pub enum DraughtingOrganizationItem {
         ProductDefinitionFormation(Box<ProductDefinitionFormation>),
         DrawingRevision(DrawingRevisionAny),
         DrawingSheetRevision(Box<DrawingSheetRevision>),
     }
-    #[derive(Debug, Clone, PartialEq)]
+    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     pub enum DraughtingPresentedItemSelect {
         ProductDefinitionFormation(Box<ProductDefinitionFormation>),
     }
-    #[derive(Debug, Clone, PartialEq)]
+    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     pub enum DraughtingTitledItem {
         DrawingRevision(DrawingRevisionAny),
         DrawingSheetRevision(Box<DrawingSheetRevision>),
     }
-    #[derive(Debug, Clone, PartialEq)]
+    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     pub enum FillAreaStyleTileShapeSelect {
         FillAreaStyleTileSymbolWithStyle(Box<FillAreaStyleTileSymbolWithStyle>),
     }
-    #[derive(Debug, Clone, PartialEq)]
+    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     pub enum FillStyleSelect {
         FillAreaStyleColour(Box<FillAreaStyleColour>),
         ExternallyDefinedTileStyle(Box<ExternallyDefinedTileStyle>),
@@ -2120,36 +2120,36 @@ pub mod explicit_draughting {
         ExternallyDefinedHatchStyle(Box<ExternallyDefinedHatchStyle>),
         FillAreaStyleHatching(Box<FillAreaStyleHatching>),
     }
-    #[derive(Debug, Clone, PartialEq)]
+    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     pub enum FontSelect {
         PreDefinedTextFont(PreDefinedTextFontAny),
         ExternallyDefinedTextFont(Box<ExternallyDefinedTextFont>),
     }
-    #[derive(Debug, Clone, PartialEq)]
+    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     pub enum GeometricSetSelect {
         Point(PointAny),
         Curve(CurveAny),
     }
-    #[derive(Debug, Clone, PartialEq)]
+    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     pub enum HidingOrBlankingSelect {
         PresentationArea(PresentationAreaAny),
         PresentationView(Box<PresentationView>),
         AnnotationFillArea(Box<AnnotationFillArea>),
     }
     pub type Identifier = String;
-    #[derive(Debug, Clone, PartialEq)]
+    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     pub enum InvisibilityContext {
         PresentationLayerUsage(Box<PresentationLayerUsage>),
         PresentationRepresentation(PresentationRepresentationAny),
         PresentationSet(PresentationSetAny),
     }
-    #[derive(Debug, Clone, PartialEq)]
+    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     pub enum InvisibleItem {
         StyledItem(StyledItemAny),
         PresentationLayerAssignment(Box<PresentationLayerAssignment>),
         PresentationRepresentation(PresentationRepresentationAny),
     }
-    #[derive(Debug, Clone, PartialEq)]
+    #[derive(Debug, Clone, PartialEq, :: serde_derive :: Deserialize)]
     pub enum KnotType {
         UniformKnots,
         QuasiUniformKnots,
@@ -2157,13 +2157,13 @@ pub mod explicit_draughting {
         Unspecified,
     }
     pub type Label = String;
-    #[derive(Debug, Clone, PartialEq)]
+    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     pub enum LayeredItem {
         PresentationRepresentation(PresentationRepresentationAny),
         RepresentationItem(RepresentationItemAny),
     }
     pub type LengthMeasure = f64;
-    #[derive(Debug, Clone, PartialEq)]
+    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     pub enum MeasureValue {
         LengthMeasure(Box<LengthMeasure>),
         PlaneAngleMeasure(Box<PlaneAngleMeasure>),
@@ -2173,12 +2173,12 @@ pub mod explicit_draughting {
         PositiveRatioMeasure(Box<PositiveRatioMeasure>),
     }
     pub type MonthInYearNumber = i64;
-    #[derive(Debug, Clone, PartialEq)]
+    #[derive(Debug, Clone, PartialEq, :: serde_derive :: Deserialize)]
     pub enum NullStyle {
         Null,
     }
     pub type ParameterValue = f64;
-    #[derive(Debug, Clone, PartialEq)]
+    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     pub enum PersonOrganizationSelect {
         Person(Box<Person>),
         Organization(Box<Organization>),
@@ -2188,18 +2188,18 @@ pub mod explicit_draughting {
     pub type PositiveLengthMeasure = LengthMeasure;
     pub type PositiveRatioMeasure = RatioMeasure;
     pub type PresentableText = String;
-    #[derive(Debug, Clone, PartialEq)]
+    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     pub enum PresentationRepresentationSelect {
         PresentationRepresentation(PresentationRepresentationAny),
         PresentationSet(PresentationSetAny),
     }
-    #[derive(Debug, Clone, PartialEq)]
+    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     pub enum PresentationSizeAssignmentSelect {
         PresentationView(Box<PresentationView>),
         PresentationArea(PresentationAreaAny),
         AreaInSet(AreaInSetAny),
     }
-    #[derive(Debug, Clone, PartialEq)]
+    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     pub enum PresentationStyleSelect {
         CurveStyle(Box<CurveStyle>),
         SymbolStyle(Box<SymbolStyle>),
@@ -2208,11 +2208,11 @@ pub mod explicit_draughting {
         NullStyle(Box<NullStyle>),
     }
     pub type RatioMeasure = f64;
-    #[derive(Debug, Clone, PartialEq)]
+    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     pub enum ShapeDefinition {
         ProductDefinitionShape(Box<ProductDefinitionShape>),
     }
-    #[derive(Debug, Clone, PartialEq)]
+    #[derive(Debug, Clone, PartialEq, :: serde_derive :: Deserialize)]
     pub enum SiPrefix {
         Exa,
         Pico,
@@ -2231,7 +2231,7 @@ pub mod explicit_draughting {
         Kilo,
         Deca,
     }
-    #[derive(Debug, Clone, PartialEq)]
+    #[derive(Debug, Clone, PartialEq, :: serde_derive :: Deserialize)]
     pub enum SiUnitName {
         Hertz,
         DegreeCelsius,
@@ -2262,68 +2262,68 @@ pub mod explicit_draughting {
         Weber,
         Coulomb,
     }
-    #[derive(Debug, Clone, PartialEq)]
+    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     pub enum SizeSelect {
         PositiveLengthMeasure(Box<PositiveLengthMeasure>),
         MeasureWithUnit(MeasureWithUnitAny),
     }
-    #[derive(Debug, Clone, PartialEq)]
+    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     pub enum SourceItem {
         Identifier(Box<Identifier>),
     }
-    #[derive(Debug, Clone, PartialEq)]
+    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     pub enum SpecifiedItem {
         DrawingRevision(DrawingRevisionAny),
     }
-    #[derive(Debug, Clone, PartialEq)]
+    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     pub enum StyleContextSelect {
         Representation(RepresentationAny),
         RepresentationItem(RepresentationItemAny),
         PresentationSet(PresentationSetAny),
     }
-    #[derive(Debug, Clone, PartialEq)]
+    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     pub enum SymbolStyleSelect {
         SymbolColour(Box<SymbolColour>),
     }
     pub type Text = String;
     pub type TextAlignment = Label;
     pub type TextDelineation = Label;
-    #[derive(Debug, Clone, PartialEq)]
+    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     pub enum TextOrCharacter {
         AnnotationText(Box<AnnotationText>),
         CompositeText(CompositeTextAny),
         TextLiteral(TextLiteralAny),
     }
-    #[derive(Debug, Clone, PartialEq)]
+    #[derive(Debug, Clone, PartialEq, :: serde_derive :: Deserialize)]
     pub enum TextPath {
         Up,
         Right,
         Down,
         Left,
     }
-    #[derive(Debug, Clone, PartialEq)]
+    #[derive(Debug, Clone, PartialEq, :: serde_derive :: Deserialize)]
     pub enum TransitionCode {
         Discontinuous,
         ContSameGradientSameCurvature,
         ContSameGradient,
         Continuous,
     }
-    #[derive(Debug, Clone, PartialEq)]
+    #[derive(Debug, Clone, PartialEq, :: serde_derive :: Deserialize)]
     pub enum TrimmingPreference {
         Parameter,
         Unspecified,
         Cartesian,
     }
-    #[derive(Debug, Clone, PartialEq)]
+    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     pub enum TrimmingSelect {
         CartesianPoint(Box<CartesianPoint>),
         ParameterValue(Box<ParameterValue>),
     }
-    #[derive(Debug, Clone, PartialEq)]
+    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     pub enum Unit {
         NamedUnit(NamedUnitAny),
     }
-    #[derive(Debug, Clone, PartialEq)]
+    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     pub enum VectorOrDirection {
         Vector(Box<Vector>),
         Direction(Box<Direction>),
