@@ -47,7 +47,7 @@ impl ToTokens for Enumeration {
             .map(|i| format_ident!("{}", i.to_pascal_case()))
             .collect();
         tokens.append_all(quote! {
-            #[derive(Debug, Clone, PartialEq, ::serde_derive::Deserialize)]
+            #[derive(Debug, Clone, PartialEq, ::serde::Deserialize)]
             pub enum #id {
                 #( #items ),*
             }
@@ -62,17 +62,10 @@ impl ToTokens for Select {
         let mut entry_types = Vec::new();
         for ty in &self.types {
             match ty {
-                TypeRef::Entity {
-                    name, is_supertype, ..
-                } => {
+                TypeRef::Entity { name, .. } => {
                     let name = format_ident!("{}", name.to_pascal_case());
                     entries.push(quote! { #name });
-                    if *is_supertype {
-                        // avoid Box<Box<XxxAny>>
-                        entry_types.push(quote! { #ty });
-                    } else {
-                        entry_types.push(quote! { Box<#ty> });
-                    }
+                    entry_types.push(quote! { Box<#ty> });
                 }
                 _ => {
                     entries.push(ty.to_token_stream());
@@ -82,8 +75,12 @@ impl ToTokens for Select {
         }
         tokens.append_all(quote! {
             #[derive(Debug, Clone, PartialEq, ::ruststep_derive::Holder)]
+            #[holder(table = Tables)]
             pub enum #id {
-                #(#entries(#entry_types)),*
+                #(
+                #[holder(field = a)]
+                #entries(#entry_types)
+                ),*
             }
         });
     }
