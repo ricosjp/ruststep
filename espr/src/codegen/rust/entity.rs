@@ -11,29 +11,14 @@ impl ToTokens for Entity {
 
         let mut attr_name = Vec::new();
         let mut attr_type = Vec::new();
-        let mut holder_attr_type = Vec::new();
-        let mut holder_attr_expr = Vec::new();
 
         for EntityAttribute { name, ty, optional } in &self.attributes {
             let name = format_ident!("{}", name);
             attr_name.push(name.clone());
             if *optional {
                 attr_type.push(quote! { Option<#ty> });
-                holder_attr_expr.push(quote! { #name });
-                if ty.is_simple() {
-                    holder_attr_type.push(quote! { Option<#ty> });
-                } else {
-                    holder_attr_type.push(quote! { Option<PlaceHolder<#ty>> });
-                }
             } else {
                 attr_type.push(quote! { #ty });
-                if ty.is_simple() {
-                    holder_attr_type.push(quote! { #ty });
-                    holder_attr_expr.push(quote! { #name });
-                } else {
-                    holder_attr_type.push(quote! { PlaceHolder<#ty> });
-                    holder_attr_expr.push(quote! { #name.into_owned(tables)? });
-                }
             }
         }
 
@@ -47,14 +32,6 @@ impl ToTokens for Entity {
 
             attr_name.push(attr.clone());
             attr_type.push(ty.to_token_stream());
-
-            if ty.is_simple() {
-                holder_attr_type.push(quote! { #ty });
-                holder_attr_expr.push(quote! { #attr });
-            } else {
-                holder_attr_type.push(quote! { PlaceHolder<#ty> });
-                holder_attr_expr.push(quote! { #attr.into_owned(tables)? });
-            }
 
             if let TypeRef::Entity {
                 name: supertype_name,
@@ -81,8 +58,6 @@ impl ToTokens for Entity {
         }
 
         assert_eq!(attr_name.len(), attr_type.len());
-        assert_eq!(attr_name.len(), holder_attr_type.len());
-        assert_eq!(attr_name.len(), holder_attr_expr.len());
 
         tokens.append_all(quote! {
             #[derive(Debug, Clone, PartialEq, ::derive_new::new, ::ruststep_derive::Holder)]
