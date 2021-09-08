@@ -1,0 +1,25 @@
+error: List is not supported yet
+  --> $DIR/vec.rs:27:35
+   |
+27 | #[derive(Debug, Clone, PartialEq, Holder)]
+   |                                   ^^^^^^
+   |
+   = note: this error originates in the derive macro `Holder` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0412]: cannot find type `CHolder` in this scope
+  --> $DIR/vec.rs:7:32
+   |
+7  |     c: HashMap<u64, as_holder!(C)>,
+   |                                ^
+...
+10 | #[derive(Debug, Clone, PartialEq, Holder)]
+   |                                   ------ similarly named struct `AHolder` defined here
+   |
+help: a struct with a similar name exists
+   |
+7  |     c: HashMap<u64, as_holder!(AHolder)>,
+   |                                ^^^^^^^
+help: you might be missing a type parameter
+   |
+4  | pub struct Table<CHolder> {
+   |                 ^^^^^^^^^
