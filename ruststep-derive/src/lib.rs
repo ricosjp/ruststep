@@ -38,7 +38,7 @@
 use proc_macro::TokenStream;
 use proc_macro2::{Span, TokenStream as TokenStream2};
 use proc_macro_crate::{crate_name, FoundCrate};
-use proc_macro_error::{abort_call_site, proc_macro_error};
+use proc_macro_error::{abort_call_site, proc_macro_error, ResultExt};
 use quote::{format_ident, quote};
 use std::convert::*;
 
@@ -99,7 +99,7 @@ fn as_holder_path(input: &syn::Type) -> syn::Type {
     let ft: FieldType = input
         .clone()
         .try_into()
-        .expect("as_holder! only accepts espr-generated type");
+        .expect_or_abort("as_holder! only accepts espr-generated type");
     ft.as_holder().into()
 }
 

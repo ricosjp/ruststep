@@ -1,6 +1,6 @@
 use inflector::Inflector;
 use proc_macro2::{Span, TokenStream as TokenStream2};
-use proc_macro_error::abort_call_site;
+use proc_macro_error::{abort_call_site, OptionExt};
 use quote::quote;
 use std::convert::*;
 
@@ -54,7 +54,7 @@ impl FieldEntries {
             let ident = field
                 .ident
                 .as_ref()
-                .expect("Tuple struct case is not supported");
+                .expect_or_abort("Tuple struct case is not supported");
             attributes.push(ident.clone());
 
             let ft: FieldType = field.ty.clone().try_into().unwrap();
