@@ -1,11 +1,6 @@
 //! Procedural macros for ruststep
 //!
 //! ```
-//! pub struct Table {
-//!    a: ::std::collections::HashMap<u64, ruststep_derive::as_holder!(A)>,
-//!    b: ::std::collections::HashMap<u64, ruststep_derive::as_holder!(B)>,
-//! }
-//!
 //! use ruststep_derive::{as_holder, Holder};
 //! use std::collections::HashMap;
 //!
