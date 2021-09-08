@@ -13,6 +13,7 @@ proc-macro2 = "1.0.28"
 syn = { version = "1.0.75", features = ["full", "extra-traits"] }
 proc-macro-crate = "1.0.0"
 Inflector = "0.11.4"
+proc-macro-error = "1.0.4"
 
 [dev-dependencies]
 serde = "1.0.129"

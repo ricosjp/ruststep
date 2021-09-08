@@ -38,6 +38,7 @@
 use proc_macro::TokenStream;
 use proc_macro2::{Span, TokenStream as TokenStream2};
 use proc_macro_crate::{crate_name, FoundCrate};
+use proc_macro_error::proc_macro_error;
 use quote::{format_ident, quote};
 use std::convert::*;
 
@@ -50,6 +51,7 @@ use field_type::*;
 use holder_attr::*;
 
 /// Generate `impl Deserialize` for entity structs
+#[proc_macro_error]
 #[proc_macro_derive(Deserialize)]
 pub fn derive_deserialize_entry(input: TokenStream) -> TokenStream {
     derive_deserialize(&syn::parse(input).unwrap()).into()
@@ -64,6 +66,7 @@ fn derive_deserialize(ast: &syn::DeriveInput) -> TokenStream2 {
     }
 }
 
+#[proc_macro_error]
 #[proc_macro_derive(Holder, attributes(holder))]
 pub fn derive_holder_entry(input: TokenStream) -> TokenStream {
     derive_holder(&syn::parse(input).unwrap()).into()
@@ -80,6 +83,7 @@ fn derive_holder(ast: &syn::DeriveInput) -> TokenStream2 {
 }
 
 /// Resolve Holder struct from owned type, e.g. `A` to `AHolder`
+#[proc_macro_error]
 #[proc_macro]
 pub fn as_holder(input: TokenStream) -> TokenStream {
     let path = as_holder_path(&syn::parse(input).unwrap());
