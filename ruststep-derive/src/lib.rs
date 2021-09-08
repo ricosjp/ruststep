@@ -38,6 +38,7 @@
 use proc_macro::TokenStream;
 use proc_macro2::{Span, TokenStream as TokenStream2};
 use proc_macro_crate::{crate_name, FoundCrate};
+use proc_macro_error::{abort_call_site, proc_macro_error, ResultExt};
 use quote::{format_ident, quote};
 use std::convert::*;
 
@@ -50,6 +51,7 @@ use field_type::*;
 use holder_attr::*;
 
 /// Generate `impl Deserialize` for entity structs
+#[proc_macro_error]
 #[proc_macro_derive(Deserialize)]
 pub fn derive_deserialize_entry(input: TokenStream) -> TokenStream {
     derive_deserialize(&syn::parse(input).unwrap()).into()
@@ -60,10 +62,11 @@ fn derive_deserialize(ast: &syn::DeriveInput) -> TokenStream2 {
     match &ast.data {
         syn::Data::Struct(st) => entity::derive_deserialize(ident, st),
         syn::Data::Enum(e) => select::derive_deserialize(ident, e),
-        _ => unimplemented!("Only struct is supprted currently"),
+        _ => abort_call_site!("Only struct is supprted currently"),
     }
 }
 
+#[proc_macro_error]
 #[proc_macro_derive(Holder, attributes(holder))]
 pub fn derive_holder_entry(input: TokenStream) -> TokenStream {
     derive_holder(&syn::parse(input).unwrap()).into()
@@ -75,11 +78,12 @@ fn derive_holder(ast: &syn::DeriveInput) -> TokenStream2 {
     match &ast.data {
         syn::Data::Struct(st) => entity::derive_holder(ident, st, &table_attr),
         syn::Data::Enum(e) => select::derive_holder(ident, e),
-        _ => unimplemented!("Only struct is supprted currently"),
+        _ => abort_call_site!("Only struct is supprted currently"),
     }
 }
 
 /// Resolve Holder struct from owned type, e.g. `A` to `AHolder`
+#[proc_macro_error]
 #[proc_macro]
 pub fn as_holder(input: TokenStream) -> TokenStream {
     let path = as_holder_path(&syn::parse(input).unwrap());
@@ -95,7 +99,7 @@ fn as_holder_path(input: &syn::Type) -> syn::Type {
     let ft: FieldType = input
         .clone()
         .try_into()
-        .expect("as_holder! only accepts espr-generated type");
+        .expect_or_abort("as_holder! only accepts espr-generated type");
     ft.as_holder().into()
 }
 

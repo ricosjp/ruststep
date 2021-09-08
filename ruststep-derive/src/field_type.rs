@@ -1,5 +1,6 @@
 use super::*;
 
+use proc_macro_error::{Diagnostic, Level};
 use std::convert::{TryFrom, TryInto};
 
 /// espr-generated field type
@@ -65,6 +66,15 @@ impl FieldType {
 
 #[derive(Debug, Clone)]
 pub struct UnsupportedTypeError {}
+
+impl Into<Diagnostic> for UnsupportedTypeError {
+    fn into(self) -> Diagnostic {
+        Diagnostic::new(
+            Level::Error,
+            "Unsupported Type for ruststep and espr".to_string(),
+        )
+    }
+}
 
 impl Into<syn::Type> for FieldType {
     fn into(self) -> syn::Type {
