@@ -20,4 +20,5 @@ pub mod primitive;
 pub mod tables;
 
 // Automatically generated codes
+#[cfg(feature = "ap201")]
 pub mod ap201;
