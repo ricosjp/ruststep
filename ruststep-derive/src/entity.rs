@@ -167,7 +167,7 @@ fn def_visitor(ident: &syn::Ident, name: &str, st: &syn::DataStruct) -> TokenStr
     let attr_len = attributes.len();
     quote! {
         #[doc(hidden)]
-        struct #visitor_ident;
+        pub struct #visitor_ident;
 
         #[automatically_derived]
         impl<'de> ::serde::de::Visitor<'de> for #visitor_ident {
