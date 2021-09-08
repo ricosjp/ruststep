@@ -38,7 +38,7 @@
 use proc_macro::TokenStream;
 use proc_macro2::{Span, TokenStream as TokenStream2};
 use proc_macro_crate::{crate_name, FoundCrate};
-use proc_macro_error::proc_macro_error;
+use proc_macro_error::{abort_call_site, proc_macro_error};
 use quote::{format_ident, quote};
 use std::convert::*;
 
@@ -62,7 +62,7 @@ fn derive_deserialize(ast: &syn::DeriveInput) -> TokenStream2 {
     match &ast.data {
         syn::Data::Struct(st) => entity::derive_deserialize(ident, st),
         syn::Data::Enum(e) => select::derive_deserialize(ident, e),
-        _ => unimplemented!("Only struct is supprted currently"),
+        _ => abort_call_site!("Only struct is supprted currently"),
     }
 }
 
@@ -78,7 +78,7 @@ fn derive_holder(ast: &syn::DeriveInput) -> TokenStream2 {
     match &ast.data {
         syn::Data::Struct(st) => entity::derive_holder(ident, st, &table_attr),
         syn::Data::Enum(e) => select::derive_holder(ident, e),
-        _ => unimplemented!("Only struct is supprted currently"),
+        _ => abort_call_site!("Only struct is supprted currently"),
     }
 }
 
