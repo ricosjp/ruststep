@@ -67,10 +67,18 @@ impl ToTokens for Select {
                     entries.push(quote! { #name });
                     entry_types.push(quote! { Box<#ty> });
                 }
-                _ => {
-                    entries.push(ty.to_token_stream());
-                    entry_types.push(quote! { Box<#ty> });
+                TypeRef::Named {
+                    name, is_simple, ..
+                } => {
+                    let name = format_ident!("{}", name.to_pascal_case());
+                    entries.push(quote! { #name });
+                    if *is_simple {
+                        entry_types.push(quote! { #ty });
+                    } else {
+                        entry_types.push(quote! { Box<#ty> });
+                    }
                 }
+                _ => unimplemented!(),
             }
         }
         tokens.append_all(quote! {
