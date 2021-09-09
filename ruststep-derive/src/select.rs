@@ -223,7 +223,8 @@ fn decompose_box_ty(ty: &syn::Type) -> &syn::Type {
             }
         }
     }
-    unreachable!("Not Box<T>")
+    // Not a Box<T>
+    ty
 }
 
 pub fn derive_holder(ident: &syn::Ident, e: &syn::DataEnum, attr: &HolderAttr) -> TokenStream2 {
