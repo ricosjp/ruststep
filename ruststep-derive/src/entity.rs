@@ -1,6 +1,6 @@
 use inflector::Inflector;
 use proc_macro2::{Span, TokenStream as TokenStream2};
-use proc_macro_error::{abort_call_site, OptionExt};
+use proc_macro_error::OptionExt;
 use quote::quote;
 use std::convert::*;
 
@@ -70,7 +70,12 @@ impl FieldEntries {
                         quote! { #ident.map(|holder| holder.into_owned(#table_arg)).transpose()? },
                     );
                     }
-                    FieldType::List(_) => abort_call_site!("List is not supported yet"),
+                    FieldType::List(_) => into_owned.push(quote! {
+                        #ident
+                            .into_iter()
+                            .map(|v| v.into_owned(#table_arg))
+                            .collect::<Result<Vec<_>, _>>()?
+                    }),
                 }
                 holder_types.push(ft.as_holder().as_place_holder().into());
             } else {
