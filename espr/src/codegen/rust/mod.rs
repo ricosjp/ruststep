@@ -60,18 +60,19 @@ impl ToTokens for Select {
         let id = format_ident!("{}", &self.id.to_pascal_case());
         let mut entries = Vec::new();
         let mut entry_types = Vec::new();
+        let mut field_names = Vec::new();
         for ty in &self.types {
             match ty {
                 TypeRef::Entity { name, .. } => {
-                    let name = format_ident!("{}", name.to_pascal_case());
-                    entries.push(quote! { #name });
+                    field_names.push(format_ident!("{}", name));
+                    entries.push(format_ident!("{}", name.to_pascal_case()));
                     entry_types.push(quote! { Box<#ty> });
                 }
                 TypeRef::Named {
                     name, is_simple, ..
                 } => {
-                    let name = format_ident!("{}", name.to_pascal_case());
-                    entries.push(quote! { #name });
+                    field_names.push(format_ident!("{}", name));
+                    entries.push(format_ident!("{}", name.to_pascal_case()));
                     if *is_simple {
                         entry_types.push(quote! { #ty });
                     } else {
@@ -86,7 +87,7 @@ impl ToTokens for Select {
             #[holder(table = Tables)]
             pub enum #id {
                 #(
-                #[holder(field = a)]
+                #[holder(field = #field_names)]
                 #entries(#entry_types)
                 ),*
             }
