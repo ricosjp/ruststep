@@ -77,6 +77,7 @@ impl TypeRef {
         match self {
             TypeRef::SimpleType(..) => true,
             TypeRef::Named { is_simple, .. } => *is_simple,
+            TypeRef::Set { base, .. } | TypeRef::List { base, .. } => base.is_simple(),
             _ => false,
         }
     }
