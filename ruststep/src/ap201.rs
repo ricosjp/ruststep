@@ -1989,7 +1989,7 @@ pub mod explicit_draughting {
     # [holder (table = Tables)]
     pub enum ApprovedItem {
         # [holder (field = drawing_revision)]
-        DrawingRevision(Box<DrawingRevisionAny>),
+        DrawingRevision(DrawingRevisionAny),
         # [holder (field = drawing_sheet_revision)]
         DrawingSheetRevision(Box<DrawingSheetRevision>),
     }
@@ -1997,7 +1997,7 @@ pub mod explicit_draughting {
     # [holder (table = Tables)]
     pub enum AreaOrView {
         # [holder (field = presentation_area)]
-        PresentationArea(Box<PresentationAreaAny>),
+        PresentationArea(PresentationAreaAny),
         # [holder (field = presentation_view)]
         PresentationView(Box<PresentationView>),
     }
@@ -2040,7 +2040,7 @@ pub mod explicit_draughting {
         # [holder (field = ratio_measure)]
         RatioMeasure(RatioMeasure),
         # [holder (field = measure_with_unit)]
-        MeasureWithUnit(Box<MeasureWithUnitAny>),
+        MeasureWithUnit(MeasureWithUnitAny),
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
@@ -2066,7 +2066,7 @@ pub mod explicit_draughting {
     # [holder (table = Tables)]
     pub enum ClassifiedItem {
         # [holder (field = drawing_revision)]
-        DrawingRevision(Box<DrawingRevisionAny>),
+        DrawingRevision(DrawingRevisionAny),
         # [holder (field = drawing_sheet_revision)]
         DrawingSheetRevision(Box<DrawingSheetRevision>),
     }
@@ -2074,7 +2074,7 @@ pub mod explicit_draughting {
     # [holder (table = Tables)]
     pub enum ContractedItem {
         # [holder (field = drawing_revision)]
-        DrawingRevision(Box<DrawingRevisionAny>),
+        DrawingRevision(DrawingRevisionAny),
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
@@ -2086,9 +2086,9 @@ pub mod explicit_draughting {
     # [holder (table = Tables)]
     pub enum CurveOrAnnotationCurveOccurrence {
         # [holder (field = curve)]
-        Curve(Box<CurveAny>),
+        Curve(CurveAny),
         # [holder (field = annotation_curve_occurrence)]
-        AnnotationCurveOccurrence(Box<AnnotationCurveOccurrenceAny>),
+        AnnotationCurveOccurrence(AnnotationCurveOccurrenceAny),
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
@@ -2102,7 +2102,7 @@ pub mod explicit_draughting {
         # [holder (field = curve_style_font)]
         CurveStyleFont(Box<CurveStyleFont>),
         # [holder (field = pre_defined_curve_font)]
-        PreDefinedCurveFont(Box<PreDefinedCurveFontAny>),
+        PreDefinedCurveFont(PreDefinedCurveFontAny),
         # [holder (field = externally_defined_curve_font)]
         ExternallyDefinedCurveFont(Box<ExternallyDefinedCurveFont>),
     }
@@ -2110,14 +2110,14 @@ pub mod explicit_draughting {
     # [holder (table = Tables)]
     pub enum DateTimeSelect {
         # [holder (field = date)]
-        Date(Box<DateAny>),
+        Date(DateAny),
     }
     pub type DayInMonthNumber = i64;
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
     pub enum DefinedSymbolSelect {
         # [holder (field = pre_defined_symbol)]
-        PreDefinedSymbol(Box<PreDefinedSymbolAny>),
+        PreDefinedSymbol(PreDefinedSymbolAny),
         # [holder (field = externally_defined_symbol)]
         ExternallyDefinedSymbol(Box<ExternallyDefinedSymbol>),
     }
@@ -2133,15 +2133,15 @@ pub mod explicit_draughting {
         # [holder (field = annotation_text_occurrence)]
         AnnotationTextOccurrence(Box<AnnotationTextOccurrence>),
         # [holder (field = annotation_symbol_occurrence)]
-        AnnotationSymbolOccurrence(Box<AnnotationSymbolOccurrenceAny>),
+        AnnotationSymbolOccurrence(AnnotationSymbolOccurrenceAny),
         # [holder (field = annotation_curve_occurrence)]
-        AnnotationCurveOccurrence(Box<AnnotationCurveOccurrenceAny>),
+        AnnotationCurveOccurrence(AnnotationCurveOccurrenceAny),
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
     pub enum DraughtingGroupedItem {
         # [holder (field = annotation_occurrence)]
-        AnnotationOccurrence(Box<AnnotationOccurrenceAny>),
+        AnnotationOccurrence(AnnotationOccurrenceAny),
         # [holder (field = geometric_set_select)]
         GeometricSetSelect(Box<GeometricSetSelect>),
     }
@@ -2151,7 +2151,7 @@ pub mod explicit_draughting {
         # [holder (field = product_definition_formation)]
         ProductDefinitionFormation(Box<ProductDefinitionFormation>),
         # [holder (field = drawing_revision)]
-        DrawingRevision(Box<DrawingRevisionAny>),
+        DrawingRevision(DrawingRevisionAny),
         # [holder (field = drawing_sheet_revision)]
         DrawingSheetRevision(Box<DrawingSheetRevision>),
     }
@@ -2165,7 +2165,7 @@ pub mod explicit_draughting {
     # [holder (table = Tables)]
     pub enum DraughtingTitledItem {
         # [holder (field = drawing_revision)]
-        DrawingRevision(Box<DrawingRevisionAny>),
+        DrawingRevision(DrawingRevisionAny),
         # [holder (field = drawing_sheet_revision)]
         DrawingSheetRevision(Box<DrawingSheetRevision>),
     }
@@ -2193,7 +2193,7 @@ pub mod explicit_draughting {
     # [holder (table = Tables)]
     pub enum FontSelect {
         # [holder (field = pre_defined_text_font)]
-        PreDefinedTextFont(Box<PreDefinedTextFontAny>),
+        PreDefinedTextFont(PreDefinedTextFontAny),
         # [holder (field = externally_defined_text_font)]
         ExternallyDefinedTextFont(Box<ExternallyDefinedTextFont>),
     }
@@ -2201,15 +2201,15 @@ pub mod explicit_draughting {
     # [holder (table = Tables)]
     pub enum GeometricSetSelect {
         # [holder (field = point)]
-        Point(Box<PointAny>),
+        Point(PointAny),
         # [holder (field = curve)]
-        Curve(Box<CurveAny>),
+        Curve(CurveAny),
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
     pub enum HidingOrBlankingSelect {
         # [holder (field = presentation_area)]
-        PresentationArea(Box<PresentationAreaAny>),
+        PresentationArea(PresentationAreaAny),
         # [holder (field = presentation_view)]
         PresentationView(Box<PresentationView>),
         # [holder (field = annotation_fill_area)]
@@ -2222,19 +2222,19 @@ pub mod explicit_draughting {
         # [holder (field = presentation_layer_usage)]
         PresentationLayerUsage(Box<PresentationLayerUsage>),
         # [holder (field = presentation_representation)]
-        PresentationRepresentation(Box<PresentationRepresentationAny>),
+        PresentationRepresentation(PresentationRepresentationAny),
         # [holder (field = presentation_set)]
-        PresentationSet(Box<PresentationSetAny>),
+        PresentationSet(PresentationSetAny),
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
     pub enum InvisibleItem {
         # [holder (field = styled_item)]
-        StyledItem(Box<StyledItemAny>),
+        StyledItem(StyledItemAny),
         # [holder (field = presentation_layer_assignment)]
         PresentationLayerAssignment(Box<PresentationLayerAssignment>),
         # [holder (field = presentation_representation)]
-        PresentationRepresentation(Box<PresentationRepresentationAny>),
+        PresentationRepresentation(PresentationRepresentationAny),
     }
     #[derive(Debug, Clone, PartialEq, :: serde :: Deserialize)]
     pub enum KnotType {
@@ -2248,9 +2248,9 @@ pub mod explicit_draughting {
     # [holder (table = Tables)]
     pub enum LayeredItem {
         # [holder (field = presentation_representation)]
-        PresentationRepresentation(Box<PresentationRepresentationAny>),
+        PresentationRepresentation(PresentationRepresentationAny),
         # [holder (field = representation_item)]
-        RepresentationItem(Box<RepresentationItemAny>),
+        RepresentationItem(RepresentationItemAny),
     }
     pub type LengthMeasure = f64;
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
@@ -2293,9 +2293,9 @@ pub mod explicit_draughting {
     # [holder (table = Tables)]
     pub enum PresentationRepresentationSelect {
         # [holder (field = presentation_representation)]
-        PresentationRepresentation(Box<PresentationRepresentationAny>),
+        PresentationRepresentation(PresentationRepresentationAny),
         # [holder (field = presentation_set)]
-        PresentationSet(Box<PresentationSetAny>),
+        PresentationSet(PresentationSetAny),
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
@@ -2303,9 +2303,9 @@ pub mod explicit_draughting {
         # [holder (field = presentation_view)]
         PresentationView(Box<PresentationView>),
         # [holder (field = presentation_area)]
-        PresentationArea(Box<PresentationAreaAny>),
+        PresentationArea(PresentationAreaAny),
         # [holder (field = area_in_set)]
-        AreaInSet(Box<AreaInSetAny>),
+        AreaInSet(AreaInSetAny),
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
@@ -2317,7 +2317,7 @@ pub mod explicit_draughting {
         # [holder (field = fill_area_style)]
         FillAreaStyle(Box<FillAreaStyle>),
         # [holder (field = text_style)]
-        TextStyle(Box<TextStyleAny>),
+        TextStyle(TextStyleAny),
         # [holder (field = null_style)]
         NullStyle(Box<NullStyle>),
     }
@@ -2384,7 +2384,7 @@ pub mod explicit_draughting {
         # [holder (field = positive_length_measure)]
         PositiveLengthMeasure(PositiveLengthMeasure),
         # [holder (field = measure_with_unit)]
-        MeasureWithUnit(Box<MeasureWithUnitAny>),
+        MeasureWithUnit(MeasureWithUnitAny),
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
@@ -2396,17 +2396,17 @@ pub mod explicit_draughting {
     # [holder (table = Tables)]
     pub enum SpecifiedItem {
         # [holder (field = drawing_revision)]
-        DrawingRevision(Box<DrawingRevisionAny>),
+        DrawingRevision(DrawingRevisionAny),
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
     pub enum StyleContextSelect {
         # [holder (field = representation)]
-        Representation(Box<RepresentationAny>),
+        Representation(RepresentationAny),
         # [holder (field = representation_item)]
-        RepresentationItem(Box<RepresentationItemAny>),
+        RepresentationItem(RepresentationItemAny),
         # [holder (field = presentation_set)]
-        PresentationSet(Box<PresentationSetAny>),
+        PresentationSet(PresentationSetAny),
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
@@ -2423,9 +2423,9 @@ pub mod explicit_draughting {
         # [holder (field = annotation_text)]
         AnnotationText(Box<AnnotationText>),
         # [holder (field = composite_text)]
-        CompositeText(Box<CompositeTextAny>),
+        CompositeText(CompositeTextAny),
         # [holder (field = text_literal)]
-        TextLiteral(Box<TextLiteralAny>),
+        TextLiteral(TextLiteralAny),
     }
     #[derive(Debug, Clone, PartialEq, :: serde :: Deserialize)]
     pub enum TextPath {
@@ -2459,7 +2459,7 @@ pub mod explicit_draughting {
     # [holder (table = Tables)]
     pub enum Unit {
         # [holder (field = named_unit)]
-        NamedUnit(Box<NamedUnitAny>),
+        NamedUnit(NamedUnitAny),
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]

@@ -63,10 +63,16 @@ impl ToTokens for Select {
         let mut field_names = Vec::new();
         for ty in &self.types {
             match ty {
-                TypeRef::Entity { name, .. } => {
+                TypeRef::Entity {
+                    name, is_supertype, ..
+                } => {
                     field_names.push(format_ident!("{}", name));
                     entries.push(format_ident!("{}", name.to_pascal_case()));
-                    entry_types.push(quote! { Box<#ty> });
+                    if *is_supertype {
+                        entry_types.push(quote! { #ty });
+                    } else {
+                        entry_types.push(quote! { Box<#ty> });
+                    }
                 }
                 TypeRef::Named {
                     name, is_simple, ..
