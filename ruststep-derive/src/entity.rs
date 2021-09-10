@@ -82,7 +82,7 @@ impl FieldEntries {
                         #ident
                             .into_iter()
                             .map(|v| v.into_owned(#table_arg))
-                            .collect::<Result<Vec<_>, _>>()?
+                            .collect::<::std::result::Result<Vec<_>, _>>()?
                     }),
                 }
                 holder_types.push(ft.as_holder().as_place_holder().into());
