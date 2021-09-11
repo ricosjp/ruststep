@@ -25,9 +25,9 @@ pub struct B {
 #[holder(table = Table)]
 pub enum S {
     #[holder(field = a)]
-    A(A),
+    A(Box<A>),
     #[holder(field = b)]
-    B(B),
+    B(Box<B>),
 }
 
 fn main() {}
