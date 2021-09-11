@@ -82,11 +82,13 @@ impl Input {
             variants,
             ..
         } = self;
+        let ruststep = ruststep_crate();
+
         quote! {
-            impl Holder for #holder_ident {
+            impl #ruststep::tables::Holder for #holder_ident {
                 type Owned = #ident;
                 type Table = Table;
-                fn into_owned(self, table: &Table) -> Result<Self::Owned> {
+                fn into_owned(self, table: &Table) -> #ruststep::error::Result<Self::Owned> {
                     Ok(match self {
                         #(#holder_ident::#variants(sub) => #ident::#variants(Box::new(sub.into_owned(table)?))),*
                     })
@@ -109,10 +111,10 @@ impl Input {
             ..
         } = self;
         quote! {
-            impl<'de> de::Deserialize<'de> for #holder_ident {
+            impl<'de> ::serde::de::Deserialize<'de> for #holder_ident {
                 fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
                 where
-                    D: de::Deserializer<'de>,
+                    D: ::serde::de::Deserializer<'de>,
                 {
                     deserializer.deserialize_tuple_struct(#name, 0, #holder_visitor_ident {})
                 }
@@ -130,6 +132,8 @@ impl Input {
             variant_names,
             ..
         } = self;
+        let ruststep = ruststep_crate();
+
         quote! {
             struct #holder_visitor_ident;
 
@@ -162,7 +166,7 @@ impl Input {
                 }
             }
 
-            impl WithVisitor for #holder_ident {
+            impl #ruststep::tables::WithVisitor for #holder_ident {
                 type Visitor = #holder_visitor_ident;
                 fn visitor_new() -> Self::Visitor {
                     #holder_visitor_ident {}
@@ -179,20 +183,22 @@ impl Input {
             table_fields,
             ..
         } = self;
+        let ruststep = ruststep_crate();
+
         quote! {
-            impl EntityTable<#holder_ident> for Table {
-                fn get_owned(&self, entity_id: u64) -> Result<#ident> {
+            impl #ruststep::tables::EntityTable<#holder_ident> for Table {
+                fn get_owned(&self, entity_id: u64) -> #ruststep::error::Result<#ident> {
                     #(
-                    if let Ok(owned) = get_owned(self, &self.#table_fields, entity_id) {
+                    if let Ok(owned) = #ruststep::tables::get_owned(self, &self.#table_fields, entity_id) {
                         return Ok(#ident::#variants(Box::new(owned)));
                     }
                     )*
-                    Err(Error::UnknownEntity(entity_id))
+                    Err(#ruststep::error::Error::UnknownEntity(entity_id))
                 }
-                fn owned_iter<'table>(&'table self) -> Box<dyn Iterator<Item = Result<#ident>> + 'table> {
-                    Box::new(itertools::chain![
+                fn owned_iter<'table>(&'table self) -> Box<dyn Iterator<Item = #ruststep::error::Result<#ident>> + 'table> {
+                    Box::new(::itertools::chain![
                         #(
-                        owned_iter(self, &self.#table_fields)
+                        #ruststep::tables::owned_iter(self, &self.#table_fields)
                             .map(|owned| owned.map(|owned| #ident::#variants(Box::new(owned)))),
                         )*
                     ])
