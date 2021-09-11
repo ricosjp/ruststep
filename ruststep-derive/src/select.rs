@@ -1,6 +1,7 @@
 use super::*;
 use inflector::Inflector;
 use proc_macro2::TokenStream as TokenStream2;
+use proc_macro_error::*;
 use quote::quote;
 
 struct Input {
@@ -44,10 +45,13 @@ impl Input {
             .iter()
             .map(|var| {
                 let attr = HolderAttr::parse(&var.attrs);
-                attr.field.expect("field attribute is lacking")
+                attr.field.expect_or_abort("field attribute is lacking")
             })
             .collect();
-        let table = attr.table.clone().expect("table attribute is lacked");
+        let table = attr
+            .table
+            .clone()
+            .expect_or_abort("table attribute is lacked");
 
         Input {
             name,
