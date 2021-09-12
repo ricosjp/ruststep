@@ -1,5 +1,5 @@
 use nom::Finish;
-use ruststep::{ast::*, error::*, parser::exchange, place_holder::*, tables::*};
+use ruststep::{ast::*, parser::exchange, place_holder::*, tables::*};
 use ruststep_derive::as_holder;
 use serde::{de, Deserialize};
 use std::collections::HashMap;
@@ -232,6 +232,7 @@ impl WithVisitor for Sub2Holder {
 
 #[derive(Clone, Debug, PartialEq, ruststep_derive::Holder)]
 #[holder(table = Table)]
+#[holder(generate_deserialize)]
 enum BaseAny {
     #[holder(field = base)]
     Base(Box<Base>),

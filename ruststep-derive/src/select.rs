@@ -226,21 +226,28 @@ fn decompose_box_ty(ty: &syn::Type) -> &syn::Type {
     unreachable!("Not Box<T>")
 }
 
-pub fn derive_holder(ident: &syn::Ident, e: &syn::DataEnum) -> TokenStream2 {
+pub fn derive_holder(ident: &syn::Ident, e: &syn::DataEnum, attr: &HolderAttr) -> TokenStream2 {
     let input = Input::parse(ident, e);
     let def_holder_tt = input.def_holder();
     let impl_holder_tt = input.impl_holder();
-    let impl_deserialize_tt = input.impl_deserialize();
-    let def_visitor_tt = input.def_visitor();
-    let impl_entity_table_tt = input.impl_entity_table();
 
-    quote! {
-        #def_holder_tt
-        #impl_holder_tt
-        #impl_deserialize_tt
-        #def_visitor_tt
-        #impl_entity_table_tt
-    } // quote!
+    if attr.generate_deserialize {
+        let impl_deserialize_tt = input.impl_deserialize();
+        let def_visitor_tt = input.def_visitor();
+        let impl_entity_table_tt = input.impl_entity_table();
+        quote! {
+            #def_holder_tt
+            #impl_holder_tt
+            #impl_deserialize_tt
+            #def_visitor_tt
+            #impl_entity_table_tt
+        } // quote!
+    } else {
+        quote! {
+            #def_holder_tt
+            #impl_holder_tt
+        } // quote!
+    }
 }
 
 pub fn derive_deserialize(_ident: &syn::Ident, _e: &syn::DataEnum) -> TokenStream2 {

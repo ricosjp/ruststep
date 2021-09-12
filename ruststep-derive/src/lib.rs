@@ -73,11 +73,11 @@ pub fn derive_holder_entry(input: TokenStream) -> TokenStream {
 }
 
 fn derive_holder(ast: &syn::DeriveInput) -> TokenStream2 {
-    let table_attr = HolderAttr::parse(&ast.attrs);
+    let attr = HolderAttr::parse(&ast.attrs);
     let ident = &ast.ident;
     match &ast.data {
-        syn::Data::Struct(st) => entity::derive_holder(ident, st, &table_attr),
-        syn::Data::Enum(e) => select::derive_holder(ident, e),
+        syn::Data::Struct(st) => entity::derive_holder(ident, st, &attr),
+        syn::Data::Enum(e) => select::derive_holder(ident, e, &attr),
         _ => abort_call_site!("Only struct is supprted currently"),
     }
 }
