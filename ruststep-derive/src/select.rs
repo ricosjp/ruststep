@@ -125,7 +125,6 @@ impl Input {
     fn def_visitor(&self) -> TokenStream2 {
         let Input {
             holder_ident,
-            holder_types,
             holder_visitor_ident,
             name,
             variants,
@@ -154,7 +153,7 @@ impl Input {
                     match key.as_str() {
                         #(
                         #variant_names => {
-                            let value: #holder_types = map.next_value()?;
+                            let value = map.next_value()?;
                             return Ok(#holder_ident::#variants(Box::new(value)));
                         }
                         )*
