@@ -28,23 +28,25 @@ impl Input {
             .iter()
             .map(|id| id.to_string().to_screaming_snake_case())
             .collect();
-        let holder_types: Vec<syn::Type> = e
-            .variants
-            .iter()
-            .map(|var| {
-                assert_eq!(var.fields.len(), 1);
-                var.fields.iter().map(|f| as_holder_path(&f.ty))
-            })
-            .flatten()
-            .collect();
-        let table_fields: Vec<Option<syn::Ident>> = e
-            .variants
-            .iter()
-            .map(|var| {
-                let attr = HolderAttr::parse(&var.attrs);
-                attr.field
-            })
-            .collect();
+
+        let mut holder_types = Vec::new();
+        let mut table_fields = Vec::new();
+        for var in &e.variants {
+            assert_eq!(var.fields.len(), 1);
+            let HolderAttr {
+                field,
+                place_holder,
+                ..
+            } = HolderAttr::parse(&var.attrs);
+            table_fields.push(field);
+            for f in &var.fields {
+                holder_types.push(if place_holder {
+                    as_holder_path(&f.ty)
+                } else {
+                    f.ty.clone()
+                })
+            }
+        }
 
         Input {
             name,
