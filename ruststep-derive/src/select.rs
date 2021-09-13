@@ -11,7 +11,7 @@ struct Input {
     variants: Vec<syn::Ident>,
     variant_names: Vec<String>,
     holder_types: Vec<syn::Type>,
-    table_fields: Vec<syn::Ident>,
+    table_fields: Vec<Option<syn::Ident>>,
 }
 
 impl Input {
@@ -37,12 +37,12 @@ impl Input {
             })
             .flatten()
             .collect();
-        let table_fields: Vec<syn::Ident> = e
+        let table_fields: Vec<Option<syn::Ident>> = e
             .variants
             .iter()
             .map(|var| {
                 let attr = HolderAttr::parse(&var.attrs);
-                attr.field.expect("field attribute is lacking")
+                attr.field
             })
             .collect();
 
@@ -68,7 +68,7 @@ impl Input {
         quote! {
             #[derive(Clone, Debug, PartialEq)]
             enum #holder_ident {
-                #(#variants(Box<#holder_types>)),*
+                #(#variants(#holder_types)),*
             }
         } // quote!
     }
