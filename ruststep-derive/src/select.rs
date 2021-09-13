@@ -28,16 +28,15 @@ impl Input {
             .iter()
             .map(|id| id.to_string().to_screaming_snake_case())
             .collect();
-        let ty: Vec<&syn::Type> = e
+        let holder_types: Vec<syn::Type> = e
             .variants
             .iter()
             .map(|var| {
                 assert_eq!(var.fields.len(), 1);
-                var.fields.iter().map(|f| decompose_box_ty(&f.ty))
+                var.fields.iter().map(|f| as_holder_path(&f.ty))
             })
             .flatten()
             .collect();
-        let holder_types: Vec<_> = ty.iter().map(|t| as_holder_path(t)).collect();
         let table_fields: Vec<syn::Ident> = e
             .variants
             .iter()
@@ -205,24 +204,6 @@ impl Input {
             }
         } // quote!
     }
-}
-
-fn decompose_box_ty(ty: &syn::Type) -> &syn::Type {
-    if let syn::Type::Path(syn::TypePath { path, .. }) = ty {
-        assert_eq!(path.segments.len(), 1);
-        let box_path = &path.segments[0];
-        if let syn::PathArguments::AngleBracketed(syn::AngleBracketedGenericArguments {
-            args,
-            ..
-        }) = &box_path.arguments
-        {
-            assert_eq!(args.len(), 1);
-            if let syn::GenericArgument::Type(ty) = &args[0] {
-                return ty;
-            }
-        }
-    }
-    unreachable!("Not Box<T>")
 }
 
 pub fn derive_holder(ident: &syn::Ident, e: &syn::DataEnum, attr: &HolderAttr) -> TokenStream2 {
