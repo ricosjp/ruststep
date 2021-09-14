@@ -11,6 +11,7 @@ struct Input {
     variants: Vec<syn::Ident>,
     variant_names: Vec<String>,
     holder_types: Vec<syn::Type>,
+    holder_exprs: Vec<TokenStream2>,
     table_fields: Vec<Option<syn::Ident>>,
 }
 
@@ -29,22 +30,26 @@ impl Input {
             .map(|id| id.to_string().to_screaming_snake_case())
             .collect();
 
+        let mut holder_exprs = Vec::new();
         let mut holder_types = Vec::new();
         let mut table_fields = Vec::new();
         for var in &e.variants {
-            assert_eq!(var.fields.len(), 1);
             let HolderAttr {
                 field,
                 place_holder,
                 ..
             } = HolderAttr::parse(&var.attrs);
             table_fields.push(field);
+
+            assert_eq!(var.fields.len(), 1);
             for f in &var.fields {
-                holder_types.push(if place_holder {
-                    as_holder_path(&f.ty)
+                if place_holder {
+                    holder_types.push(as_holder_path(&f.ty));
+                    holder_exprs.push(quote! { Box::new(sub.into_owned(table)?) });
                 } else {
-                    f.ty.clone()
-                })
+                    holder_types.push(f.ty.clone());
+                    holder_exprs.push(quote! { sub });
+                }
             }
         }
 
@@ -56,6 +61,7 @@ impl Input {
             variants,
             variant_names,
             holder_types,
+            holder_exprs,
             table_fields,
         }
     }
@@ -81,6 +87,7 @@ impl Input {
             ident,
             holder_ident,
             variants,
+            holder_exprs,
             ..
         } = self;
         let ruststep = ruststep_crate();
@@ -91,7 +98,7 @@ impl Input {
                 type Table = Table;
                 fn into_owned(self, table: &Table) -> #ruststep::error::Result<Self::Owned> {
                     Ok(match self {
-                        #(#holder_ident::#variants(sub) => #ident::#variants(Box::new(sub.into_owned(table)?))),*
+                        #(#holder_ident::#variants(sub) => #ident::#variants(#holder_exprs)),*
                     })
                 }
                 fn name() -> &'static str {
