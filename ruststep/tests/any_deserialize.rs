@@ -41,6 +41,7 @@ impl Table {
 #[derive(Clone, Debug, PartialEq, ruststep_derive::Holder)]
 #[holder(table = Table)]
 #[holder(field = base)]
+#[holder(generate_deserialize)]
 pub struct Base {
     x: f64,
 }
@@ -48,6 +49,7 @@ pub struct Base {
 #[derive(Clone, Debug, PartialEq, ruststep_derive::Holder)]
 #[holder(table = Table)]
 #[holder(field = sub1)]
+#[holder(generate_deserialize)]
 pub struct Sub1 {
     #[holder(use_place_holder)]
     base: Base,
@@ -57,6 +59,7 @@ pub struct Sub1 {
 #[derive(Clone, Debug, PartialEq, ruststep_derive::Holder)]
 #[holder(table = Table)]
 #[holder(field = sub2)]
+#[holder(generate_deserialize)]
 pub struct Sub2 {
     #[holder(use_place_holder)]
     base: Base,

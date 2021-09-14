@@ -16,26 +16,30 @@ pub fn derive_deserialize(ident: &syn::Ident, st: &syn::DataStruct) -> TokenStre
     } // quote!
 }
 
-pub fn derive_holder(
-    ident: &syn::Ident,
-    st: &syn::DataStruct,
-    table_attr: &HolderAttr,
-) -> TokenStream2 {
+pub fn derive_holder(ident: &syn::Ident, st: &syn::DataStruct, attr: &HolderAttr) -> TokenStream2 {
     let name = ident.to_string().to_screaming_snake_case();
     let holder_ident = as_holder_ident(ident);
     let def_holder_tt = def_holder(ident, st);
-    let impl_holder_tt = impl_holder(ident, &table_attr, st);
-    let impl_entity_table_tt = impl_entity_table(ident, &table_attr);
-    let def_visitor_tt = def_visitor(&holder_ident, &name, st);
-    let impl_deserialize_tt = impl_deserialize(&holder_ident, &name, st);
-    let impl_with_visitor_tt = impl_with_visitor(ident);
-    quote! {
-        #def_holder_tt
-        #impl_holder_tt
-        #impl_entity_table_tt
-        #def_visitor_tt
-        #impl_deserialize_tt
-        #impl_with_visitor_tt
+    let impl_holder_tt = impl_holder(ident, &attr, st);
+    let impl_entity_table_tt = impl_entity_table(ident, &attr);
+    if attr.generate_deserialize {
+        let def_visitor_tt = def_visitor(&holder_ident, &name, st);
+        let impl_deserialize_tt = impl_deserialize(&holder_ident, &name, st);
+        let impl_with_visitor_tt = impl_with_visitor(ident);
+        quote! {
+            #def_holder_tt
+            #impl_holder_tt
+            #impl_entity_table_tt
+            #def_visitor_tt
+            #impl_deserialize_tt
+            #impl_with_visitor_tt
+        }
+    } else {
+        quote! {
+            #def_holder_tt
+            #impl_holder_tt
+            #impl_entity_table_tt
+        }
     }
 }
 
