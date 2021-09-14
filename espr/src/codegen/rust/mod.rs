@@ -91,6 +91,7 @@ impl ToTokens for Select {
         tokens.append_all(quote! {
             #[derive(Debug, Clone, PartialEq, ::ruststep_derive::Holder)]
             #[holder(table = Tables)]
+            #[holder(generate_deserialize)]
             pub enum #id {
                 #(
                 #[holder(field = #field_names)]

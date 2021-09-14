@@ -1987,6 +1987,7 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum ApprovedItem {
         # [holder (field = drawing_revision)]
         DrawingRevision(DrawingRevisionAny),
@@ -1995,6 +1996,7 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum AreaOrView {
         # [holder (field = presentation_area)]
         PresentationArea(PresentationAreaAny),
@@ -2003,6 +2005,7 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum Axis2Placement {
         # [holder (field = axis2_placement_2d)]
         Axis2Placement2D(Box<Axis2Placement2D>),
@@ -2018,6 +2021,7 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum BoxCharacteristicSelect {
         # [holder (field = box_height)]
         BoxHeight(BoxHeight),
@@ -2034,6 +2038,7 @@ pub mod explicit_draughting {
     pub type BoxWidth = PositiveRatioMeasure;
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum CharacterSpacingSelect {
         # [holder (field = length_measure)]
         LengthMeasure(LengthMeasure),
@@ -2044,12 +2049,14 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum CharacterStyleSelect {
         # [holder (field = text_style_for_defined_font)]
         TextStyleForDefinedFont(Box<TextStyleForDefinedFont>),
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum CharacterizedDefinition {
         # [holder (field = characterized_product_definition)]
         CharacterizedProductDefinition(Box<CharacterizedProductDefinition>),
@@ -2058,12 +2065,14 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum CharacterizedProductDefinition {
         # [holder (field = product_definition)]
         ProductDefinition(Box<ProductDefinition>),
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum ClassifiedItem {
         # [holder (field = drawing_revision)]
         DrawingRevision(DrawingRevisionAny),
@@ -2072,18 +2081,21 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum ContractedItem {
         # [holder (field = drawing_revision)]
         DrawingRevision(DrawingRevisionAny),
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum CurveFontOrScaledCurveFontSelect {
         # [holder (field = curve_style_font_select)]
         CurveStyleFontSelect(Box<CurveStyleFontSelect>),
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum CurveOrAnnotationCurveOccurrence {
         # [holder (field = curve)]
         Curve(CurveAny),
@@ -2092,12 +2104,14 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum CurveOrRender {
         # [holder (field = curve_style)]
         CurveStyle(Box<CurveStyle>),
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum CurveStyleFontSelect {
         # [holder (field = curve_style_font)]
         CurveStyleFont(Box<CurveStyleFont>),
@@ -2108,6 +2122,7 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum DateTimeSelect {
         # [holder (field = date)]
         Date(DateAny),
@@ -2115,6 +2130,7 @@ pub mod explicit_draughting {
     pub type DayInMonthNumber = i64;
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum DefinedSymbolSelect {
         # [holder (field = pre_defined_symbol)]
         PreDefinedSymbol(PreDefinedSymbolAny),
@@ -2129,6 +2145,7 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum DraughtingCalloutElement {
         # [holder (field = annotation_text_occurrence)]
         AnnotationTextOccurrence(Box<AnnotationTextOccurrence>),
@@ -2139,6 +2156,7 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum DraughtingGroupedItem {
         # [holder (field = annotation_occurrence)]
         AnnotationOccurrence(AnnotationOccurrenceAny),
@@ -2147,6 +2165,7 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum DraughtingOrganizationItem {
         # [holder (field = product_definition_formation)]
         ProductDefinitionFormation(Box<ProductDefinitionFormation>),
@@ -2157,12 +2176,14 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum DraughtingPresentedItemSelect {
         # [holder (field = product_definition_formation)]
         ProductDefinitionFormation(Box<ProductDefinitionFormation>),
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum DraughtingTitledItem {
         # [holder (field = drawing_revision)]
         DrawingRevision(DrawingRevisionAny),
@@ -2171,12 +2192,14 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum FillAreaStyleTileShapeSelect {
         # [holder (field = fill_area_style_tile_symbol_with_style)]
         FillAreaStyleTileSymbolWithStyle(Box<FillAreaStyleTileSymbolWithStyle>),
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum FillStyleSelect {
         # [holder (field = fill_area_style_colour)]
         FillAreaStyleColour(Box<FillAreaStyleColour>),
@@ -2191,6 +2214,7 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum FontSelect {
         # [holder (field = pre_defined_text_font)]
         PreDefinedTextFont(PreDefinedTextFontAny),
@@ -2199,6 +2223,7 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum GeometricSetSelect {
         # [holder (field = point)]
         Point(PointAny),
@@ -2207,6 +2232,7 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum HidingOrBlankingSelect {
         # [holder (field = presentation_area)]
         PresentationArea(PresentationAreaAny),
@@ -2218,6 +2244,7 @@ pub mod explicit_draughting {
     pub type Identifier = String;
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum InvisibilityContext {
         # [holder (field = presentation_layer_usage)]
         PresentationLayerUsage(Box<PresentationLayerUsage>),
@@ -2228,6 +2255,7 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum InvisibleItem {
         # [holder (field = styled_item)]
         StyledItem(StyledItemAny),
@@ -2246,6 +2274,7 @@ pub mod explicit_draughting {
     pub type Label = String;
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum LayeredItem {
         # [holder (field = presentation_representation)]
         PresentationRepresentation(PresentationRepresentationAny),
@@ -2255,6 +2284,7 @@ pub mod explicit_draughting {
     pub type LengthMeasure = f64;
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum MeasureValue {
         # [holder (field = length_measure)]
         LengthMeasure(LengthMeasure),
@@ -2277,6 +2307,7 @@ pub mod explicit_draughting {
     pub type ParameterValue = f64;
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum PersonOrganizationSelect {
         # [holder (field = person)]
         Person(Box<Person>),
@@ -2291,6 +2322,7 @@ pub mod explicit_draughting {
     pub type PresentableText = String;
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum PresentationRepresentationSelect {
         # [holder (field = presentation_representation)]
         PresentationRepresentation(PresentationRepresentationAny),
@@ -2299,6 +2331,7 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum PresentationSizeAssignmentSelect {
         # [holder (field = presentation_view)]
         PresentationView(Box<PresentationView>),
@@ -2309,6 +2342,7 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum PresentationStyleSelect {
         # [holder (field = curve_style)]
         CurveStyle(Box<CurveStyle>),
@@ -2324,6 +2358,7 @@ pub mod explicit_draughting {
     pub type RatioMeasure = f64;
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum ShapeDefinition {
         # [holder (field = product_definition_shape)]
         ProductDefinitionShape(Box<ProductDefinitionShape>),
@@ -2380,6 +2415,7 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum SizeSelect {
         # [holder (field = positive_length_measure)]
         PositiveLengthMeasure(PositiveLengthMeasure),
@@ -2388,18 +2424,21 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum SourceItem {
         # [holder (field = identifier)]
         Identifier(Identifier),
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum SpecifiedItem {
         # [holder (field = drawing_revision)]
         DrawingRevision(DrawingRevisionAny),
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum StyleContextSelect {
         # [holder (field = representation)]
         Representation(RepresentationAny),
@@ -2410,6 +2449,7 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum SymbolStyleSelect {
         # [holder (field = symbol_colour)]
         SymbolColour(Box<SymbolColour>),
@@ -2419,6 +2459,7 @@ pub mod explicit_draughting {
     pub type TextDelineation = Label;
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum TextOrCharacter {
         # [holder (field = annotation_text)]
         AnnotationText(Box<AnnotationText>),
@@ -2449,6 +2490,7 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum TrimmingSelect {
         # [holder (field = cartesian_point)]
         CartesianPoint(Box<CartesianPoint>),
@@ -2457,12 +2499,14 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum Unit {
         # [holder (field = named_unit)]
         NamedUnit(NamedUnitAny),
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum VectorOrDirection {
         # [holder (field = vector)]
         Vector(Box<Vector>),
