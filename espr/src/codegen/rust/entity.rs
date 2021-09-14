@@ -82,7 +82,8 @@ impl ToTokens for Entity {
             let subtypes = &self.subtypes;
             let enum_name = format_ident!("{}Any", name);
             tokens.append_all(quote! {
-                #[derive(Debug, Clone, PartialEq)]
+                #[derive(Debug, Clone, PartialEq, ::ruststep_derive::Holder)]
+                #[holder(table = Tables)]
                 pub enum #enum_name {
                     #(#subtypes(Box<#subtypes>)),*
                 }
