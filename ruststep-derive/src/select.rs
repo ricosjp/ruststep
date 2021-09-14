@@ -104,7 +104,7 @@ impl Input {
             impl #ruststep::tables::Holder for #holder_ident {
                 type Owned = #ident;
                 type Table = #table;
-                fn into_owned(self, table: &Table) -> #ruststep::error::Result<Self::Owned> {
+                fn into_owned(self, table: &Self::Table) -> #ruststep::error::Result<Self::Owned> {
                     Ok(match self {
                         #(#holder_ident::#variants(sub) => #ident::#variants(#holder_exprs)),*
                     })
