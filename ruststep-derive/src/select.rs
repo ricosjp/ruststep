@@ -13,7 +13,8 @@ struct Input {
     variants: Vec<syn::Ident>,
     variant_names: Vec<String>,
     holder_types: Vec<syn::Type>,
-    table_fields: Vec<syn::Ident>,
+    holder_exprs: Vec<TokenStream2>,
+    table_fields: Vec<Option<syn::Ident>>,
 }
 
 impl Input {
@@ -30,28 +31,33 @@ impl Input {
             .iter()
             .map(|id| id.to_string().to_screaming_snake_case())
             .collect();
-        let ty: Vec<&syn::Type> = e
-            .variants
-            .iter()
-            .map(|var| {
-                assert_eq!(var.fields.len(), 1);
-                var.fields.iter().map(|f| decompose_box_ty(&f.ty))
-            })
-            .flatten()
-            .collect();
-        let holder_types: Vec<_> = ty.iter().map(|t| as_holder_path(t)).collect();
-        let table_fields: Vec<syn::Ident> = e
-            .variants
-            .iter()
-            .map(|var| {
-                let attr = HolderAttr::parse(&var.attrs);
-                attr.field.expect_or_abort("field attribute is lacking")
-            })
-            .collect();
         let table = attr
             .table
             .clone()
             .expect_or_abort("table attribute is lacked");
+
+        let mut holder_exprs = Vec::new();
+        let mut holder_types = Vec::new();
+        let mut table_fields = Vec::new();
+        for var in &e.variants {
+            let HolderAttr {
+                field,
+                place_holder,
+                ..
+            } = HolderAttr::parse(&var.attrs);
+            table_fields.push(field);
+
+            assert_eq!(var.fields.len(), 1);
+            for f in &var.fields {
+                if place_holder {
+                    holder_types.push(as_holder_path(&f.ty));
+                    holder_exprs.push(quote! { Box::new(sub.into_owned(table)?) });
+                } else {
+                    holder_types.push(f.ty.clone());
+                    holder_exprs.push(quote! { sub });
+                }
+            }
+        }
 
         Input {
             name,
@@ -62,6 +68,7 @@ impl Input {
             variants,
             variant_names,
             holder_types,
+            holder_exprs,
             table_fields,
         }
     }
@@ -76,7 +83,7 @@ impl Input {
         quote! {
             #[derive(Clone, Debug, PartialEq)]
             enum #holder_ident {
-                #(#variants(Box<#holder_types>)),*
+                #(#variants(#holder_types)),*
             }
         } // quote!
     }
@@ -88,15 +95,18 @@ impl Input {
             holder_ident,
             variants,
             table,
+            holder_exprs,
             ..
         } = self;
+        let ruststep = ruststep_crate();
+
         quote! {
-            impl Holder for #holder_ident {
+            impl #ruststep::tables::Holder for #holder_ident {
                 type Owned = #ident;
                 type Table = #table;
-                fn into_owned(self, table: &Self::Table) -> Result<Self::Owned> {
+                fn into_owned(self, table: &Table) -> #ruststep::error::Result<Self::Owned> {
                     Ok(match self {
-                        #(#holder_ident::#variants(sub) => #ident::#variants(Box::new(sub.into_owned(table)?))),*
+                        #(#holder_ident::#variants(sub) => #ident::#variants(#holder_exprs)),*
                     })
                 }
                 fn name() -> &'static str {
@@ -131,13 +141,14 @@ impl Input {
     fn def_visitor(&self) -> TokenStream2 {
         let Input {
             holder_ident,
-            holder_types,
             holder_visitor_ident,
             name,
             variants,
             variant_names,
             ..
         } = self;
+        let ruststep = ruststep_crate();
+
         quote! {
             struct #holder_visitor_ident;
 
@@ -158,7 +169,7 @@ impl Input {
                     match key.as_str() {
                         #(
                         #variant_names => {
-                            let value: #holder_types = map.next_value()?;
+                            let value = map.next_value()?;
                             return Ok(#holder_ident::#variants(Box::new(value)));
                         }
                         )*
@@ -170,7 +181,7 @@ impl Input {
                 }
             }
 
-            impl WithVisitor for #holder_ident {
+            impl #ruststep::tables::WithVisitor for #holder_ident {
                 type Visitor = #holder_visitor_ident;
                 fn visitor_new() -> Self::Visitor {
                     #holder_visitor_ident {}
@@ -189,20 +200,21 @@ impl Input {
             ..
         } = self;
         let ruststep = ruststep_crate();
+
         quote! {
-            impl EntityTable<#holder_ident> for #table {
-                fn get_owned(&self, entity_id: u64) -> Result<#ident> {
+            impl #ruststep::tables::EntityTable<#holder_ident> for #table {
+                fn get_owned(&self, entity_id: u64) -> #ruststep::error::Result<#ident> {
                     #(
-                    if let Ok(owned) = get_owned(self, &self.#table_fields, entity_id) {
+                    if let Ok(owned) = #ruststep::tables::get_owned(self, &self.#table_fields, entity_id) {
                         return Ok(#ident::#variants(Box::new(owned)));
                     }
                     )*
                     Err(#ruststep::error::Error::UnknownEntity(entity_id))
                 }
-                fn owned_iter<'table>(&'table self) -> Box<dyn Iterator<Item = Result<#ident>> + 'table> {
-                    Box::new(itertools::chain![
+                fn owned_iter<'table>(&'table self) -> Box<dyn Iterator<Item = #ruststep::error::Result<#ident>> + 'table> {
+                    Box::new(::itertools::chain![
                         #(
-                        owned_iter(self, &self.#table_fields)
+                        #ruststep::tables::owned_iter(self, &self.#table_fields)
                             .map(|owned| owned.map(|owned| #ident::#variants(Box::new(owned)))),
                         )*
                     ])
@@ -212,40 +224,28 @@ impl Input {
     }
 }
 
-fn decompose_box_ty(ty: &syn::Type) -> &syn::Type {
-    if let syn::Type::Path(syn::TypePath { path, .. }) = ty {
-        assert_eq!(path.segments.len(), 1);
-        let box_path = &path.segments[0];
-        if let syn::PathArguments::AngleBracketed(syn::AngleBracketedGenericArguments {
-            args,
-            ..
-        }) = &box_path.arguments
-        {
-            assert_eq!(args.len(), 1);
-            if let syn::GenericArgument::Type(ty) = &args[0] {
-                return ty;
-            }
-        }
-    }
-    // Not a Box<T>
-    ty
-}
-
 pub fn derive_holder(ident: &syn::Ident, e: &syn::DataEnum, attr: &HolderAttr) -> TokenStream2 {
     let input = Input::parse(ident, e, attr);
     let def_holder_tt = input.def_holder();
     let impl_holder_tt = input.impl_holder();
-    let impl_deserialize_tt = input.impl_deserialize();
-    let def_visitor_tt = input.def_visitor();
-    let impl_entity_table_tt = input.impl_entity_table();
 
-    quote! {
-        #def_holder_tt
-        #impl_holder_tt
-        #impl_deserialize_tt
-        #def_visitor_tt
-        #impl_entity_table_tt
-    } // quote!
+    if attr.generate_deserialize {
+        let impl_deserialize_tt = input.impl_deserialize();
+        let def_visitor_tt = input.def_visitor();
+        let impl_entity_table_tt = input.impl_entity_table();
+        quote! {
+            #def_holder_tt
+            #impl_holder_tt
+            #impl_deserialize_tt
+            #def_visitor_tt
+            #impl_entity_table_tt
+        } // quote!
+    } else {
+        quote! {
+            #def_holder_tt
+            #impl_holder_tt
+        } // quote!
+    }
 }
 
 pub fn derive_deserialize(_ident: &syn::Ident, _e: &syn::DataEnum) -> TokenStream2 {

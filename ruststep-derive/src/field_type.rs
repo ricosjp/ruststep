@@ -12,6 +12,8 @@ pub enum FieldType {
     Optional(Box<FieldType>),
     /// Like `Vec<T>`
     List(Box<FieldType>),
+    /// Like `Box<T>`
+    Boxed(Box<FieldType>),
 }
 
 impl FieldType {
@@ -42,6 +44,10 @@ impl FieldType {
                 let holder = ty.as_holder();
                 FieldType::List(Box::new(holder))
             }
+            FieldType::Boxed(ty) => {
+                let holder = ty.as_holder();
+                FieldType::Boxed(Box::new(holder))
+            }
         }
     }
 
@@ -59,6 +65,10 @@ impl FieldType {
             FieldType::List(ty) => {
                 let place_holder = ty.as_place_holder();
                 FieldType::List(Box::new(place_holder))
+            }
+            FieldType::Boxed(ty) => {
+                let place_holder = ty.as_place_holder();
+                FieldType::Boxed(Box::new(place_holder))
             }
         }
     }
@@ -87,6 +97,10 @@ impl Into<syn::Type> for FieldType {
             FieldType::List(ty) => {
                 let ty: syn::Type = (*ty).into();
                 syn::parse_quote! { Vec<#ty> }
+            }
+            FieldType::Boxed(ty) => {
+                let ty: syn::Type = (*ty).into();
+                syn::parse_quote! { Box<#ty> }
             }
         };
         syn::Type::Path(syn::TypePath { qself: None, path })
@@ -121,10 +135,11 @@ impl TryFrom<syn::Type> for FieldType {
                     if last_seg.ident == "Vec" {
                         return Ok(FieldType::List(ty));
                     }
-                    return Err(UnsupportedTypeError {});
-                } else {
-                    return Err(UnsupportedTypeError {});
+                    if last_seg.ident == "Box" {
+                        return Ok(FieldType::Boxed(ty));
+                    }
                 }
+                return Err(UnsupportedTypeError {});
             }
             _ => Err(UnsupportedTypeError {}),
         }

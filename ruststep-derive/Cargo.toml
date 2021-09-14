@@ -18,6 +18,7 @@ proc-macro-error = "1.0.4"
 [dev-dependencies]
 serde = "1.0.129"
 trybuild = "1.0.45"
+itertools = "0.10.1"
 
 [dev-dependencies.ruststep]
 path = "../ruststep"

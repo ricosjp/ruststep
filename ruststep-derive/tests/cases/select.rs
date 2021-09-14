@@ -23,11 +23,23 @@ pub struct B {
 
 #[derive(Debug, Clone, PartialEq, Holder)]
 #[holder(table = Table)]
-pub enum S {
+pub enum S1 {
     #[holder(field = a)]
-    A(A),
+    #[holder(use_place_holder)]
+    A(Box<A>),
     #[holder(field = b)]
-    B(B),
+    #[holder(use_place_holder)]
+    B(Box<B>),
+}
+
+#[derive(Debug, Clone, PartialEq, Holder)]
+#[holder(table = Table)]
+pub enum S2 {
+    #[holder(field = a)]
+    #[holder(use_place_holder)]
+    A(Box<A>),
+    // mix primitive type
+    P(f64),
 }
 
 fn main() {}
