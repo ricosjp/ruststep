@@ -1,10 +1,12 @@
 use super::*;
 use inflector::Inflector;
 use proc_macro2::TokenStream as TokenStream2;
+use proc_macro_error::*;
 use quote::quote;
 
 struct Input {
     name: String,
+    table: syn::Path,
     ident: syn::Ident,
     holder_ident: syn::Ident,
     holder_visitor_ident: syn::Ident,
@@ -16,7 +18,7 @@ struct Input {
 }
 
 impl Input {
-    fn parse(ident: &syn::Ident, e: &syn::DataEnum) -> Self {
+    fn parse(ident: &syn::Ident, e: &syn::DataEnum, attr: &HolderAttr) -> Self {
         let name = ident.to_string().to_screaming_snake_case();
         let holder_ident = as_holder_ident(ident);
         let holder_visitor_ident = as_visitor_ident(&holder_ident);
@@ -29,6 +31,10 @@ impl Input {
             .iter()
             .map(|id| id.to_string().to_screaming_snake_case())
             .collect();
+        let table = attr
+            .table
+            .clone()
+            .expect_or_abort("table attribute is lacked");
 
         let mut holder_exprs = Vec::new();
         let mut holder_types = Vec::new();
@@ -55,6 +61,7 @@ impl Input {
 
         Input {
             name,
+            table,
             ident: ident.clone().into(),
             holder_ident,
             holder_visitor_ident,
@@ -87,6 +94,7 @@ impl Input {
             ident,
             holder_ident,
             variants,
+            table,
             holder_exprs,
             ..
         } = self;
@@ -95,8 +103,8 @@ impl Input {
         quote! {
             impl #ruststep::tables::Holder for #holder_ident {
                 type Owned = #ident;
-                type Table = Table;
-                fn into_owned(self, table: &Table) -> #ruststep::error::Result<Self::Owned> {
+                type Table = #table;
+                fn into_owned(self, table: &Self::Table) -> #ruststep::error::Result<Self::Owned> {
                     Ok(match self {
                         #(#holder_ident::#variants(sub) => #ident::#variants(#holder_exprs)),*
                     })
@@ -188,12 +196,13 @@ impl Input {
             holder_ident,
             variants,
             table_fields,
+            table,
             ..
         } = self;
         let ruststep = ruststep_crate();
 
         quote! {
-            impl #ruststep::tables::EntityTable<#holder_ident> for Table {
+            impl #ruststep::tables::EntityTable<#holder_ident> for #table {
                 fn get_owned(&self, entity_id: u64) -> #ruststep::error::Result<#ident> {
                     #(
                     if let Ok(owned) = #ruststep::tables::get_owned(self, &self.#table_fields, entity_id) {
@@ -216,7 +225,7 @@ impl Input {
 }
 
 pub fn derive_holder(ident: &syn::Ident, e: &syn::DataEnum, attr: &HolderAttr) -> TokenStream2 {
-    let input = Input::parse(ident, e);
+    let input = Input::parse(ident, e, attr);
     let def_holder_tt = input.def_holder();
     let impl_holder_tt = input.impl_holder();
 
