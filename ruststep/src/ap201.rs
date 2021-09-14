@@ -2024,12 +2024,16 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub enum BoxCharacteristicSelect {
         # [holder (field = box_height)]
+        #[holder(use_place_holder)]
         BoxHeight(BoxHeight),
         # [holder (field = box_width)]
+        #[holder(use_place_holder)]
         BoxWidth(BoxWidth),
         # [holder (field = box_slant_angle)]
+        #[holder(use_place_holder)]
         BoxSlantAngle(BoxSlantAngle),
         # [holder (field = box_rotate_angle)]
+        #[holder(use_place_holder)]
         BoxRotateAngle(BoxRotateAngle),
     }
     pub type BoxHeight = PositiveRatioMeasure;
@@ -2041,8 +2045,10 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub enum CharacterSpacingSelect {
         # [holder (field = length_measure)]
+        #[holder(use_place_holder)]
         LengthMeasure(LengthMeasure),
         # [holder (field = ratio_measure)]
+        #[holder(use_place_holder)]
         RatioMeasure(RatioMeasure),
         # [holder (field = measure_with_unit)]
         MeasureWithUnit(MeasureWithUnitAny),
@@ -2287,16 +2293,22 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub enum MeasureValue {
         # [holder (field = length_measure)]
+        #[holder(use_place_holder)]
         LengthMeasure(LengthMeasure),
         # [holder (field = plane_angle_measure)]
+        #[holder(use_place_holder)]
         PlaneAngleMeasure(PlaneAngleMeasure),
         # [holder (field = ratio_measure)]
+        #[holder(use_place_holder)]
         RatioMeasure(RatioMeasure),
         # [holder (field = parameter_value)]
+        #[holder(use_place_holder)]
         ParameterValue(ParameterValue),
         # [holder (field = positive_length_measure)]
+        #[holder(use_place_holder)]
         PositiveLengthMeasure(PositiveLengthMeasure),
         # [holder (field = positive_ratio_measure)]
+        #[holder(use_place_holder)]
         PositiveRatioMeasure(PositiveRatioMeasure),
     }
     pub type MonthInYearNumber = i64;
@@ -2418,6 +2430,7 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub enum SizeSelect {
         # [holder (field = positive_length_measure)]
+        #[holder(use_place_holder)]
         PositiveLengthMeasure(PositiveLengthMeasure),
         # [holder (field = measure_with_unit)]
         MeasureWithUnit(MeasureWithUnitAny),
@@ -2427,6 +2440,7 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub enum SourceItem {
         # [holder (field = identifier)]
+        #[holder(use_place_holder)]
         Identifier(Identifier),
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
@@ -2495,6 +2509,7 @@ pub mod explicit_draughting {
         # [holder (field = cartesian_point)]
         CartesianPoint(Box<CartesianPoint>),
         # [holder (field = parameter_value)]
+        #[holder(use_place_holder)]
         ParameterValue(ParameterValue),
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]

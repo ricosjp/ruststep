@@ -61,6 +61,7 @@ impl ToTokens for Select {
         let mut entries = Vec::new();
         let mut entry_types = Vec::new();
         let mut field_names = Vec::new();
+        let mut use_place_holder = Vec::new();
         for ty in &self.types {
             match ty {
                 TypeRef::Entity {
@@ -73,6 +74,7 @@ impl ToTokens for Select {
                     } else {
                         entry_types.push(quote! { Box<#ty> });
                     }
+                    use_place_holder.push(quote! {});
                 }
                 TypeRef::Named {
                     name, is_simple, ..
@@ -81,8 +83,10 @@ impl ToTokens for Select {
                     entries.push(format_ident!("{}", name.to_pascal_case()));
                     if *is_simple {
                         entry_types.push(quote! { #ty });
+                        use_place_holder.push(quote! { #[holder(use_place_holder)] });
                     } else {
                         entry_types.push(quote! { Box<#ty> });
+                        use_place_holder.push(quote! {});
                     }
                 }
                 _ => unimplemented!(),
@@ -95,6 +99,7 @@ impl ToTokens for Select {
             pub enum #id {
                 #(
                 #[holder(field = #field_names)]
+                #use_place_holder
                 #entries(#entry_types)
                 ),*
             }
