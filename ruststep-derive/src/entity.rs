@@ -66,9 +66,7 @@ impl FieldEntries {
                         into_owned.push(quote! { #ident.into_owned(#table_arg)? });
                     }
                     FieldType::Optional(_) => {
-                        into_owned.push(
-                        quote! { #ident.map(|holder| holder.into_owned(#table_arg)).transpose()? },
-                    );
+                        into_owned.push(quote! { #ident.map(|holder| holder.into_owned(#table_arg)).transpose()? });
                     }
                     FieldType::List(_) => into_owned.push(quote! {
                         #ident
@@ -76,6 +74,7 @@ impl FieldEntries {
                             .map(|v| v.into_owned(#table_arg))
                             .collect::<Result<Vec<_>, _>>()?
                     }),
+                    FieldType::Boxed(_) => abort_call_site!("Unexpected Box<T>"),
                 }
                 holder_types.push(ft.as_holder().as_place_holder().into());
             } else {

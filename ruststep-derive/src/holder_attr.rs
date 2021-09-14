@@ -5,6 +5,7 @@
 //! - `#[holder(table = {path::to::table::struct})]`
 //! - `#[holder(field = {field_ident})]`
 //! - `#[holder(use_place_holder)]`
+//! - `#[holder(generate_deserialize)]`
 //!
 
 #[derive(Debug, Clone, PartialEq)]
@@ -12,6 +13,7 @@ pub struct HolderAttr {
     pub table: Option<syn::Path>,
     pub field: Option<syn::Ident>,
     pub place_holder: bool,
+    pub generate_deserialize: bool,
 }
 
 impl HolderAttr {
@@ -19,6 +21,7 @@ impl HolderAttr {
         let mut table = None;
         let mut field = None;
         let mut place_holder = false;
+        let mut generate_deserialize = false;
 
         for attr in attrs {
             match attr.parse_args().unwrap() {
@@ -31,12 +34,16 @@ impl HolderAttr {
                 Attr::PlaceHolder => {
                     place_holder = true;
                 }
+                Attr::GenerateDeserialize => {
+                    generate_deserialize = true;
+                }
             }
         }
         HolderAttr {
             table,
             field,
             place_holder,
+            generate_deserialize,
         }
     }
 }
@@ -46,6 +53,7 @@ enum Attr {
     Table(syn::Path),
     Field(syn::Ident),
     PlaceHolder,
+    GenerateDeserialize,
 }
 
 impl syn::parse::Parse for Attr {
@@ -63,6 +71,7 @@ impl syn::parse::Parse for Attr {
                 Ok(Attr::Field(ident))
             }
             "use_place_holder" => Ok(Attr::PlaceHolder),
+            "generate_deserialize" => Ok(Attr::GenerateDeserialize),
             _ => Err(syn::parse::Error::new(
                 ident.span(),
                 "expected `table`, `field`, or `use_place_holder`",
