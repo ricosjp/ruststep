@@ -70,6 +70,7 @@ impl ToTokens for Entity {
             #[derive(Debug, Clone, PartialEq, ::derive_new::new, ::ruststep_derive::Holder)]
             #[holder(table = Tables)]
             #[holder(field = #field_name)]
+            #[holder(generate_deserialize)]
             pub struct #name {
                 #(
                 #use_place_holder
