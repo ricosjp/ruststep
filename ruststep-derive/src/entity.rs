@@ -16,18 +16,30 @@ pub fn derive_deserialize(ident: &syn::Ident, st: &syn::DataStruct) -> TokenStre
     } // quote!
 }
 
-pub fn derive_holder(
-    ident: &syn::Ident,
-    st: &syn::DataStruct,
-    table_attr: &HolderAttr,
-) -> TokenStream2 {
+pub fn derive_holder(ident: &syn::Ident, st: &syn::DataStruct, attr: &HolderAttr) -> TokenStream2 {
+    let name = ident.to_string().to_screaming_snake_case();
+    let holder_ident = as_holder_ident(ident);
     let def_holder_tt = def_holder(ident, st);
-    let impl_holder_tt = impl_holder(ident, &table_attr, st);
-    let impl_entity_table_tt = impl_entity_table(ident, &table_attr);
-    quote! {
-        #def_holder_tt
-        #impl_holder_tt
-        #impl_entity_table_tt
+    let impl_holder_tt = impl_holder(ident, &attr, st);
+    let impl_entity_table_tt = impl_entity_table(ident, &attr);
+    if attr.generate_deserialize {
+        let def_visitor_tt = def_visitor(&holder_ident, &name, st);
+        let impl_deserialize_tt = impl_deserialize(&holder_ident, &name, st);
+        let impl_with_visitor_tt = impl_with_visitor(ident);
+        quote! {
+            #def_holder_tt
+            #impl_holder_tt
+            #impl_entity_table_tt
+            #def_visitor_tt
+            #impl_deserialize_tt
+            #impl_with_visitor_tt
+        }
+    } else {
+        quote! {
+            #def_holder_tt
+            #impl_holder_tt
+            #impl_entity_table_tt
+        }
     }
 }
 
@@ -72,7 +84,7 @@ impl FieldEntries {
                         #ident
                             .into_iter()
                             .map(|v| v.into_owned(#table_arg))
-                            .collect::<Result<Vec<_>, _>>()?
+                            .collect::<::std::result::Result<Vec<_>, _>>()?
                     }),
                     FieldType::Boxed(_) => abort_call_site!("Unexpected Box<T>"),
                 }
@@ -164,7 +176,7 @@ fn def_visitor(ident: &syn::Ident, name: &str, st: &syn::DataStruct) -> TokenStr
     let attr_len = attributes.len();
     quote! {
         #[doc(hidden)]
-        struct #visitor_ident;
+        pub struct #visitor_ident;
 
         #[automatically_derived]
         impl<'de> ::serde::de::Visitor<'de> for #visitor_ident {
@@ -220,6 +232,23 @@ fn impl_deserialize(ident: &syn::Ident, name: &str, st: &syn::DataStruct) -> Tok
                 D: ::serde::de::Deserializer<'de>,
             {
                 deserializer.deserialize_tuple_struct(#name, #attr_len, #visitor_ident {})
+            }
+        }
+    } // quote!
+}
+
+fn impl_with_visitor(ident: &syn::Ident) -> TokenStream2 {
+    let ruststep = ruststep_crate();
+
+    let visitor_ident = as_holder_visitor2(ident);
+    let holder_ident = as_holder_ident(ident);
+
+    quote! {
+        #[automatically_derived]
+        impl #ruststep::tables::WithVisitor for #holder_ident {
+            type Visitor = #visitor_ident;
+            fn visitor_new() -> Self::Visitor {
+                #visitor_ident {}
             }
         }
     } // quote!
