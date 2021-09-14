@@ -13,6 +13,7 @@ pub struct Table {
 #[derive(Clone, Debug, PartialEq, ruststep_derive::Holder)]
 #[holder(table = Table)]
 #[holder(field = a)]
+#[holder(generate_deserialize)]
 pub struct A {
     x: Vec<f64>,
 }
@@ -20,6 +21,7 @@ pub struct A {
 #[derive(Clone, Debug, PartialEq, ruststep_derive::Holder)]
 #[holder(table = Table)]
 #[holder(field = b)]
+#[holder(generate_deserialize)]
 pub struct B {
     #[holder(use_place_holder)]
     a: Vec<A>,
