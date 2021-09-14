@@ -2549,8 +2549,13 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum AddressAny {
+        #[holder(use_place_holder)]
+        # [holder (field = organizational_address)]
         OrganizationalAddress(Box<OrganizationalAddress>),
+        #[holder(use_place_holder)]
+        # [holder (field = personal_address)]
         PersonalAddress(Box<PersonalAddress>),
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
@@ -2565,9 +2570,16 @@ pub mod explicit_draughting {
     pub struct AnnotationCurveOccurrence {}
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum AnnotationCurveOccurrenceAny {
+        #[holder(use_place_holder)]
+        # [holder (field = dimension_curve)]
         DimensionCurve(Box<DimensionCurve>),
+        #[holder(use_place_holder)]
+        # [holder (field = leader_curve)]
         LeaderCurve(Box<LeaderCurve>),
+        #[holder(use_place_holder)]
+        # [holder (field = projection_curve)]
         ProjectionCurve(Box<ProjectionCurve>),
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
@@ -2593,11 +2605,22 @@ pub mod explicit_draughting {
     pub struct AnnotationOccurrence {}
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum AnnotationOccurrenceAny {
+        #[holder(use_place_holder)]
+        # [holder (field = annotation_curve_occurrence)]
         AnnotationCurveOccurrence(Box<AnnotationCurveOccurrence>),
+        #[holder(use_place_holder)]
+        # [holder (field = annotation_fill_area_occurrence)]
         AnnotationFillAreaOccurrence(Box<AnnotationFillAreaOccurrence>),
+        #[holder(use_place_holder)]
+        # [holder (field = annotation_symbol_occurrence)]
         AnnotationSymbolOccurrence(Box<AnnotationSymbolOccurrence>),
+        #[holder(use_place_holder)]
+        # [holder (field = annotation_text_occurrence)]
         AnnotationTextOccurrence(Box<AnnotationTextOccurrence>),
+        #[holder(use_place_holder)]
+        # [holder (field = draughting_annotation_occurrence)]
         DraughtingAnnotationOccurrence(Box<DraughtingAnnotationOccurrence>),
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
@@ -2617,8 +2640,13 @@ pub mod explicit_draughting {
     pub struct AnnotationSymbolOccurrence {}
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum AnnotationSymbolOccurrenceAny {
+        #[holder(use_place_holder)]
+        # [holder (field = annotation_subfigure_occurrence)]
         AnnotationSubfigureOccurrence(Box<AnnotationSubfigureOccurrence>),
+        #[holder(use_place_holder)]
+        # [holder (field = terminator_symbol)]
         TerminatorSymbol(Box<TerminatorSymbol>),
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
@@ -2649,8 +2677,13 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum ApplicationContextElementAny {
+        #[holder(use_place_holder)]
+        # [holder (field = product_context)]
         ProductContext(Box<ProductContext>),
+        #[holder(use_place_holder)]
+        # [holder (field = product_definition_context)]
         ProductDefinitionContext(Box<ProductDefinitionContext>),
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
@@ -2683,7 +2716,10 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum ApprovalAssignmentAny {
+        #[holder(use_place_holder)]
+        # [holder (field = draughting_approval_assignment)]
         DraughtingApprovalAssignment(Box<DraughtingApprovalAssignment>),
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
@@ -2734,7 +2770,10 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum AreaInSetAny {
+        #[holder(use_place_holder)]
+        # [holder (field = drawing_sheet_revision_usage)]
         DrawingSheetRevisionUsage(Box<DrawingSheetRevisionUsage>),
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
@@ -2760,11 +2799,22 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum BSplineCurveAny {
+        #[holder(use_place_holder)]
+        # [holder (field = b_spline_curve_with_knots)]
         BSplineCurveWithKnots(Box<BSplineCurveWithKnots>),
+        #[holder(use_place_holder)]
+        # [holder (field = bezier_curve)]
         BezierCurve(Box<BezierCurve>),
+        #[holder(use_place_holder)]
+        # [holder (field = quasi_uniform_curve)]
         QuasiUniformCurve(Box<QuasiUniformCurve>),
+        #[holder(use_place_holder)]
+        # [holder (field = rational_b_spline_curve)]
         RationalBSplineCurve(Box<RationalBSplineCurve>),
+        #[holder(use_place_holder)]
+        # [holder (field = uniform_curve)]
         UniformCurve(Box<UniformCurve>),
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
@@ -2789,10 +2839,19 @@ pub mod explicit_draughting {
     pub struct BoundedCurve {}
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum BoundedCurveAny {
+        #[holder(use_place_holder)]
+        # [holder (field = b_spline_curve)]
         BSplineCurve(Box<BSplineCurve>),
+        #[holder(use_place_holder)]
+        # [holder (field = composite_curve)]
         CompositeCurve(Box<CompositeCurve>),
+        #[holder(use_place_holder)]
+        # [holder (field = polyline)]
         Polyline(Box<Polyline>),
+        #[holder(use_place_holder)]
+        # [holder (field = trimmed_curve)]
         TrimmedCurve(Box<TrimmedCurve>),
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
@@ -2810,7 +2869,10 @@ pub mod explicit_draughting {
     pub struct CameraImage {}
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum CameraImageAny {
+        #[holder(use_place_holder)]
+        # [holder (field = camera_image_2d_with_scale)]
         CameraImage2DWithScale(Box<CameraImage2DWithScale>),
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
@@ -2825,7 +2887,10 @@ pub mod explicit_draughting {
     pub struct CameraModel {}
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum CameraModelAny {
+        #[holder(use_place_holder)]
+        # [holder (field = camera_model_d2)]
         CameraModelD2(Box<CameraModelD2>),
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
@@ -2863,8 +2928,13 @@ pub mod explicit_draughting {
     pub struct Colour {}
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum ColourAny {
+        #[holder(use_place_holder)]
+        # [holder (field = colour_specification)]
         ColourSpecification(Box<ColourSpecification>),
+        #[holder(use_place_holder)]
+        # [holder (field = pre_defined_colour)]
         PreDefinedColour(Box<PreDefinedColour>),
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
@@ -2886,7 +2956,10 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum ColourSpecificationAny {
+        #[holder(use_place_holder)]
+        # [holder (field = colour_rgb)]
         ColourRgb(Box<ColourRgb>),
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
@@ -2919,9 +2992,16 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum CompositeTextAny {
+        #[holder(use_place_holder)]
+        # [holder (field = composite_text_with_associated_curves)]
         CompositeTextWithAssociatedCurves(Box<CompositeTextWithAssociatedCurves>),
+        #[holder(use_place_holder)]
+        # [holder (field = composite_text_with_blanking_box)]
         CompositeTextWithBlankingBox(Box<CompositeTextWithBlankingBox>),
+        #[holder(use_place_holder)]
+        # [holder (field = composite_text_with_extent)]
         CompositeTextWithExtent(Box<CompositeTextWithExtent>),
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
@@ -2958,10 +3038,19 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum ConicAny {
+        #[holder(use_place_holder)]
+        # [holder (field = circle)]
         Circle(Box<Circle>),
+        #[holder(use_place_holder)]
+        # [holder (field = ellipse)]
         Ellipse(Box<Ellipse>),
+        #[holder(use_place_holder)]
+        # [holder (field = hyperbola)]
         Hyperbola(Box<Hyperbola>),
+        #[holder(use_place_holder)]
+        # [holder (field = parabola)]
         Parabola(Box<Parabola>),
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
@@ -2992,7 +3081,10 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum ContractAssignmentAny {
+        #[holder(use_place_holder)]
+        # [holder (field = draughting_contract_assignment)]
         DraughtingContractAssignment(Box<DraughtingContractAssignment>),
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
@@ -3018,10 +3110,19 @@ pub mod explicit_draughting {
     pub struct Curve {}
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum CurveAny {
+        #[holder(use_place_holder)]
+        # [holder (field = bounded_curve)]
         BoundedCurve(Box<BoundedCurve>),
+        #[holder(use_place_holder)]
+        # [holder (field = conic)]
         Conic(Box<Conic>),
+        #[holder(use_place_holder)]
+        # [holder (field = line)]
         Line(Box<Line>),
+        #[holder(use_place_holder)]
+        # [holder (field = offset_curve_2d)]
         OffsetCurve2D(Box<OffsetCurve2D>),
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
@@ -3068,7 +3169,10 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum DateAny {
+        #[holder(use_place_holder)]
+        # [holder (field = calendar_date)]
         CalendarDate(Box<CalendarDate>),
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
@@ -3118,11 +3222,22 @@ pub mod explicit_draughting {
     pub struct DimensionCurveDirectedCallout {}
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum DimensionCurveDirectedCalloutAny {
+        #[holder(use_place_holder)]
+        # [holder (field = angular_dimension)]
         AngularDimension(Box<AngularDimension>),
+        #[holder(use_place_holder)]
+        # [holder (field = curve_dimension)]
         CurveDimension(Box<CurveDimension>),
+        #[holder(use_place_holder)]
+        # [holder (field = diameter_dimension)]
         DiameterDimension(Box<DiameterDimension>),
+        #[holder(use_place_holder)]
+        # [holder (field = linear_dimension)]
         LinearDimension(Box<LinearDimension>),
+        #[holder(use_place_holder)]
+        # [holder (field = radius_dimension)]
         RadiusDimension(Box<RadiusDimension>),
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
@@ -3180,7 +3295,10 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum DocumentReferenceAny {
+        #[holder(use_place_holder)]
+        # [holder (field = draughting_specification_reference)]
         DraughtingSpecificationReference(Box<DraughtingSpecificationReference>),
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
@@ -3213,14 +3331,31 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum DraughtingCalloutAny {
+        #[holder(use_place_holder)]
+        # [holder (field = datum_feature_callout)]
         DatumFeatureCallout(Box<DatumFeatureCallout>),
+        #[holder(use_place_holder)]
+        # [holder (field = datum_target_callout)]
         DatumTargetCallout(Box<DatumTargetCallout>),
+        #[holder(use_place_holder)]
+        # [holder (field = dimension_curve_directed_callout)]
         DimensionCurveDirectedCallout(Box<DimensionCurveDirectedCallout>),
+        #[holder(use_place_holder)]
+        # [holder (field = draughting_elements)]
         DraughtingElements(Box<DraughtingElements>),
+        #[holder(use_place_holder)]
+        # [holder (field = geometrical_tolerance_callout)]
         GeometricalToleranceCallout(Box<GeometricalToleranceCallout>),
+        #[holder(use_place_holder)]
+        # [holder (field = leader_directed_callout)]
         LeaderDirectedCallout(Box<LeaderDirectedCallout>),
+        #[holder(use_place_holder)]
+        # [holder (field = projection_directed_callout)]
         ProjectionDirectedCallout(Box<ProjectionDirectedCallout>),
+        #[holder(use_place_holder)]
+        # [holder (field = structured_dimension_callout)]
         StructuredDimensionCallout(Box<StructuredDimensionCallout>),
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
@@ -3237,9 +3372,16 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum DraughtingCalloutRelationshipAny {
+        #[holder(use_place_holder)]
+        # [holder (field = dimension_callout_component_relationship)]
         DimensionCalloutComponentRelationship(Box<DimensionCalloutComponentRelationship>),
+        #[holder(use_place_holder)]
+        # [holder (field = dimension_callout_relationship)]
         DimensionCalloutRelationship(Box<DimensionCalloutRelationship>),
+        #[holder(use_place_holder)]
+        # [holder (field = dimension_pair)]
         DimensionPair(Box<DimensionPair>),
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
@@ -3348,7 +3490,10 @@ pub mod explicit_draughting {
     pub struct DraughtingSymbolRepresentation {}
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum DraughtingSymbolRepresentationAny {
+        #[holder(use_place_holder)]
+        # [holder (field = drawing_sheet_layout)]
         DrawingSheetLayout(Box<DrawingSheetLayout>),
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
@@ -3386,7 +3531,10 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum DrawingRevisionAny {
+        #[holder(use_place_holder)]
+        # [holder (field = draughting_drawing_revision)]
         DraughtingDrawingRevision(Box<DraughtingDrawingRevision>),
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
@@ -3446,11 +3594,22 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum ExternallyDefinedItemAny {
+        #[holder(use_place_holder)]
+        # [holder (field = externally_defined_curve_font)]
         ExternallyDefinedCurveFont(Box<ExternallyDefinedCurveFont>),
+        #[holder(use_place_holder)]
+        # [holder (field = externally_defined_hatch_style)]
         ExternallyDefinedHatchStyle(Box<ExternallyDefinedHatchStyle>),
+        #[holder(use_place_holder)]
+        # [holder (field = externally_defined_symbol)]
         ExternallyDefinedSymbol(Box<ExternallyDefinedSymbol>),
+        #[holder(use_place_holder)]
+        # [holder (field = externally_defined_text_font)]
         ExternallyDefinedTextFont(Box<ExternallyDefinedTextFont>),
+        #[holder(use_place_holder)]
+        # [holder (field = externally_defined_tile_style)]
         ExternallyDefinedTileStyle(Box<ExternallyDefinedTileStyle>),
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
@@ -3539,26 +3698,67 @@ pub mod explicit_draughting {
     pub struct GeometricRepresentationItem {}
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum GeometricRepresentationItemAny {
+        #[holder(use_place_holder)]
+        # [holder (field = annotation_fill_area)]
         AnnotationFillArea(Box<AnnotationFillArea>),
+        #[holder(use_place_holder)]
+        # [holder (field = camera_model)]
         CameraModel(Box<CameraModel>),
+        #[holder(use_place_holder)]
+        # [holder (field = composite_text)]
         CompositeText(Box<CompositeText>),
+        #[holder(use_place_holder)]
+        # [holder (field = curve)]
         Curve(Box<Curve>),
+        #[holder(use_place_holder)]
+        # [holder (field = defined_symbol)]
         DefinedSymbol(Box<DefinedSymbol>),
+        #[holder(use_place_holder)]
+        # [holder (field = direction)]
         Direction(Box<Direction>),
+        #[holder(use_place_holder)]
+        # [holder (field = draughting_callout)]
         DraughtingCallout(Box<DraughtingCallout>),
+        #[holder(use_place_holder)]
+        # [holder (field = externally_defined_hatch_style)]
         ExternallyDefinedHatchStyle(Box<ExternallyDefinedHatchStyle>),
+        #[holder(use_place_holder)]
+        # [holder (field = externally_defined_tile_style)]
         ExternallyDefinedTileStyle(Box<ExternallyDefinedTileStyle>),
+        #[holder(use_place_holder)]
+        # [holder (field = fill_area_style_hatching)]
         FillAreaStyleHatching(Box<FillAreaStyleHatching>),
+        #[holder(use_place_holder)]
+        # [holder (field = fill_area_style_tile_symbol_with_style)]
         FillAreaStyleTileSymbolWithStyle(Box<FillAreaStyleTileSymbolWithStyle>),
+        #[holder(use_place_holder)]
+        # [holder (field = fill_area_style_tiles)]
         FillAreaStyleTiles(Box<FillAreaStyleTiles>),
+        #[holder(use_place_holder)]
+        # [holder (field = geometric_set)]
         GeometricSet(Box<GeometricSet>),
+        #[holder(use_place_holder)]
+        # [holder (field = one_direction_repeat_factor)]
         OneDirectionRepeatFactor(Box<OneDirectionRepeatFactor>),
+        #[holder(use_place_holder)]
+        # [holder (field = placement)]
         Placement(Box<Placement>),
+        #[holder(use_place_holder)]
+        # [holder (field = planar_extent)]
         PlanarExtent(Box<PlanarExtent>),
+        #[holder(use_place_holder)]
+        # [holder (field = point)]
         Point(Box<Point>),
+        #[holder(use_place_holder)]
+        # [holder (field = symbol_target)]
         SymbolTarget(Box<SymbolTarget>),
+        #[holder(use_place_holder)]
+        # [holder (field = text_literal)]
         TextLiteral(Box<TextLiteral>),
+        #[holder(use_place_holder)]
+        # [holder (field = vector)]
         Vector(Box<Vector>),
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
@@ -3571,7 +3771,10 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum GeometricSetAny {
+        #[holder(use_place_holder)]
+        # [holder (field = geometric_curve_set)]
         GeometricCurveSet(Box<GeometricCurveSet>),
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
@@ -3610,7 +3813,10 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum GroupAssignmentAny {
+        #[holder(use_place_holder)]
+        # [holder (field = draughting_group_assignment)]
         DraughtingGroupAssignment(Box<DraughtingGroupAssignment>),
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
@@ -3643,7 +3849,10 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum InvisibilityAny {
+        #[holder(use_place_holder)]
+        # [holder (field = context_dependent_invisibility)]
         ContextDependentInvisibility(Box<ContextDependentInvisibility>),
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
@@ -3658,7 +3867,10 @@ pub mod explicit_draughting {
     pub struct LeaderDirectedCallout {}
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum LeaderDirectedCalloutAny {
+        #[holder(use_place_holder)]
+        # [holder (field = leader_directed_dimension)]
         LeaderDirectedDimension(Box<LeaderDirectedDimension>),
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
@@ -3708,9 +3920,16 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum MappedItemAny {
+        #[holder(use_place_holder)]
+        # [holder (field = annotation_symbol)]
         AnnotationSymbol(Box<AnnotationSymbol>),
+        #[holder(use_place_holder)]
+        # [holder (field = annotation_text)]
         AnnotationText(Box<AnnotationText>),
+        #[holder(use_place_holder)]
+        # [holder (field = camera_image)]
         CameraImage(Box<CameraImage>),
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
@@ -3725,8 +3944,13 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum MeasureWithUnitAny {
+        #[holder(use_place_holder)]
+        # [holder (field = length_measure_with_unit)]
         LengthMeasureWithUnit(Box<LengthMeasureWithUnit>),
+        #[holder(use_place_holder)]
+        # [holder (field = plane_angle_measure_with_unit)]
         PlaneAngleMeasureWithUnit(Box<PlaneAngleMeasureWithUnit>),
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
@@ -3739,10 +3963,19 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum NamedUnitAny {
+        #[holder(use_place_holder)]
+        # [holder (field = conversion_based_unit)]
         ConversionBasedUnit(Box<ConversionBasedUnit>),
+        #[holder(use_place_holder)]
+        # [holder (field = length_unit)]
         LengthUnit(Box<LengthUnit>),
+        #[holder(use_place_holder)]
+        # [holder (field = plane_angle_unit)]
         PlaneAngleUnit(Box<PlaneAngleUnit>),
+        #[holder(use_place_holder)]
+        # [holder (field = si_unit)]
         SiUnit(Box<SiUnit>),
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
@@ -3765,7 +3998,10 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum OneDirectionRepeatFactorAny {
+        #[holder(use_place_holder)]
+        # [holder (field = two_direction_repeat_factor)]
         TwoDirectionRepeatFactor(Box<TwoDirectionRepeatFactor>),
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
@@ -3794,7 +4030,10 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum OrganizationAssignmentAny {
+        #[holder(use_place_holder)]
+        # [holder (field = draughting_organization_assignment)]
         DraughtingOrganizationAssignment(Box<DraughtingOrganizationAssignment>),
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
@@ -3854,7 +4093,10 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum PersonAndOrganizationAssignmentAny {
+        #[holder(use_place_holder)]
+        # [holder (field = draughting_person_and_organization_assignment)]
         DraughtingPersonAndOrganizationAssignment(Box<DraughtingPersonAndOrganizationAssignment>),
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
@@ -3876,7 +4118,10 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum PersonAssignmentAny {
+        #[holder(use_place_holder)]
+        # [holder (field = draughting_person_assignment)]
         DraughtingPersonAssignment(Box<DraughtingPersonAssignment>),
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
@@ -3905,7 +4150,10 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum PlacementAny {
+        #[holder(use_place_holder)]
+        # [holder (field = axis2_placement_2d)]
         Axis2Placement2D(Box<Axis2Placement2D>),
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
@@ -3926,7 +4174,10 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum PlanarExtentAny {
+        #[holder(use_place_holder)]
+        # [holder (field = planar_box)]
         PlanarBox(Box<PlanarBox>),
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
@@ -3946,8 +4197,13 @@ pub mod explicit_draughting {
     pub struct Point {}
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum PointAny {
+        #[holder(use_place_holder)]
+        # [holder (field = cartesian_point)]
         CartesianPoint(Box<CartesianPoint>),
+        #[holder(use_place_holder)]
+        # [holder (field = point_on_curve)]
         PointOnCurve(Box<PointOnCurve>),
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
@@ -3974,7 +4230,10 @@ pub mod explicit_draughting {
     pub struct PreDefinedColour {}
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum PreDefinedColourAny {
+        #[holder(use_place_holder)]
+        # [holder (field = draughting_pre_defined_colour)]
         DraughtingPreDefinedColour(Box<DraughtingPreDefinedColour>),
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
@@ -3984,7 +4243,10 @@ pub mod explicit_draughting {
     pub struct PreDefinedCurveFont {}
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum PreDefinedCurveFontAny {
+        #[holder(use_place_holder)]
+        # [holder (field = draughting_pre_defined_curve_font)]
         DraughtingPreDefinedCurveFont(Box<DraughtingPreDefinedCurveFont>),
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
@@ -4006,10 +4268,19 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum PreDefinedItemAny {
+        #[holder(use_place_holder)]
+        # [holder (field = pre_defined_colour)]
         PreDefinedColour(Box<PreDefinedColour>),
+        #[holder(use_place_holder)]
+        # [holder (field = pre_defined_curve_font)]
         PreDefinedCurveFont(Box<PreDefinedCurveFont>),
+        #[holder(use_place_holder)]
+        # [holder (field = pre_defined_symbol)]
         PreDefinedSymbol(Box<PreDefinedSymbol>),
+        #[holder(use_place_holder)]
+        # [holder (field = pre_defined_text_font)]
         PreDefinedTextFont(Box<PreDefinedTextFont>),
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
@@ -4024,10 +4295,19 @@ pub mod explicit_draughting {
     pub struct PreDefinedSymbol {}
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum PreDefinedSymbolAny {
+        #[holder(use_place_holder)]
+        # [holder (field = pre_defined_dimension_symbol)]
         PreDefinedDimensionSymbol(Box<PreDefinedDimensionSymbol>),
+        #[holder(use_place_holder)]
+        # [holder (field = pre_defined_geometrical_tolerance_symbol)]
         PreDefinedGeometricalToleranceSymbol(Box<PreDefinedGeometricalToleranceSymbol>),
+        #[holder(use_place_holder)]
+        # [holder (field = pre_defined_point_marker_symbol)]
         PreDefinedPointMarkerSymbol(Box<PreDefinedPointMarkerSymbol>),
+        #[holder(use_place_holder)]
+        # [holder (field = pre_defined_terminator_symbol)]
         PreDefinedTerminatorSymbol(Box<PreDefinedTerminatorSymbol>),
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
@@ -4042,7 +4322,10 @@ pub mod explicit_draughting {
     pub struct PreDefinedTextFont {}
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum PreDefinedTextFontAny {
+        #[holder(use_place_holder)]
+        # [holder (field = draughting_pre_defined_text_font)]
         DraughtingPreDefinedTextFont(Box<DraughtingPreDefinedTextFont>),
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
@@ -4052,7 +4335,10 @@ pub mod explicit_draughting {
     pub struct PresentationArea {}
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum PresentationAreaAny {
+        #[holder(use_place_holder)]
+        # [holder (field = drawing_sheet_revision)]
         DrawingSheetRevision(Box<DrawingSheetRevision>),
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
@@ -4082,8 +4368,13 @@ pub mod explicit_draughting {
     pub struct PresentationRepresentation {}
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum PresentationRepresentationAny {
+        #[holder(use_place_holder)]
+        # [holder (field = presentation_area)]
         PresentationArea(Box<PresentationArea>),
+        #[holder(use_place_holder)]
+        # [holder (field = presentation_view)]
         PresentationView(Box<PresentationView>),
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
@@ -4093,7 +4384,10 @@ pub mod explicit_draughting {
     pub struct PresentationSet {}
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum PresentationSetAny {
+        #[holder(use_place_holder)]
+        # [holder (field = drawing_revision)]
         DrawingRevision(Box<DrawingRevision>),
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
@@ -4116,7 +4410,10 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum PresentationStyleAssignmentAny {
+        #[holder(use_place_holder)]
+        # [holder (field = presentation_style_by_context)]
         PresentationStyleByContext(Box<PresentationStyleByContext>),
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
@@ -4139,7 +4436,10 @@ pub mod explicit_draughting {
     pub struct PresentedItem {}
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum PresentedItemAny {
+        #[holder(use_place_holder)]
+        # [holder (field = draughting_presented_item)]
         DraughtingPresentedItem(Box<DraughtingPresentedItem>),
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
@@ -4216,7 +4516,10 @@ pub mod explicit_draughting {
     pub struct ProjectionDirectedCallout {}
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum ProjectionDirectedCalloutAny {
+        #[holder(use_place_holder)]
+        # [holder (field = ordinate_dimension)]
         OrdinateDimension(Box<OrdinateDimension>),
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
@@ -4231,7 +4534,10 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum PropertyDefinitionAny {
+        #[holder(use_place_holder)]
+        # [holder (field = product_definition_shape)]
         ProductDefinitionShape(Box<ProductDefinitionShape>),
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
@@ -4246,7 +4552,10 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum PropertyDefinitionRepresentationAny {
+        #[holder(use_place_holder)]
+        # [holder (field = shape_definition_representation)]
         ShapeDefinitionRepresentation(Box<ShapeDefinitionRepresentation>),
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
@@ -4279,10 +4588,19 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum RepresentationAny {
+        #[holder(use_place_holder)]
+        # [holder (field = draughting_model)]
         DraughtingModel(Box<DraughtingModel>),
+        #[holder(use_place_holder)]
+        # [holder (field = presentation_representation)]
         PresentationRepresentation(Box<PresentationRepresentation>),
+        #[holder(use_place_holder)]
+        # [holder (field = shape_representation)]
         ShapeRepresentation(Box<ShapeRepresentation>),
+        #[holder(use_place_holder)]
+        # [holder (field = symbol_representation)]
         SymbolRepresentation(Box<SymbolRepresentation>),
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
@@ -4295,8 +4613,13 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum RepresentationContextAny {
+        #[holder(use_place_holder)]
+        # [holder (field = geometric_representation_context)]
         GeometricRepresentationContext(Box<GeometricRepresentationContext>),
+        #[holder(use_place_holder)]
+        # [holder (field = global_unit_assigned_context)]
         GlobalUnitAssignedContext(Box<GlobalUnitAssignedContext>),
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
@@ -4308,9 +4631,16 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum RepresentationItemAny {
+        #[holder(use_place_holder)]
+        # [holder (field = geometric_representation_item)]
         GeometricRepresentationItem(Box<GeometricRepresentationItem>),
+        #[holder(use_place_holder)]
+        # [holder (field = mapped_item)]
         MappedItem(Box<MappedItem>),
+        #[holder(use_place_holder)]
+        # [holder (field = styled_item)]
         StyledItem(Box<StyledItem>),
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
@@ -4325,8 +4655,13 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum RepresentationMapAny {
+        #[holder(use_place_holder)]
+        # [holder (field = camera_usage)]
         CameraUsage(Box<CameraUsage>),
+        #[holder(use_place_holder)]
+        # [holder (field = symbol_representation_map)]
         SymbolRepresentationMap(Box<SymbolRepresentationMap>),
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
@@ -4349,7 +4684,10 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum SecurityClassificationAssignmentAny {
+        #[holder(use_place_holder)]
+        # [holder (field = draughting_security_classification_assignment)]
         DraughtingSecurityClassificationAssignment(Box<DraughtingSecurityClassificationAssignment>),
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
@@ -4371,7 +4709,10 @@ pub mod explicit_draughting {
     pub struct ShapeRepresentation {}
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum ShapeRepresentationAny {
+        #[holder(use_place_holder)]
+        # [holder (field = geometrically_bounded_2d_wireframe_representation)]
         GeometricallyBounded2DWireframeRepresentation(
             Box<GeometricallyBounded2DWireframeRepresentation>,
         ),
@@ -4403,7 +4744,10 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum StyledItemAny {
+        #[holder(use_place_holder)]
+        # [holder (field = annotation_occurrence)]
         AnnotationOccurrence(Box<AnnotationOccurrence>),
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
@@ -4421,8 +4765,13 @@ pub mod explicit_draughting {
     pub struct SymbolRepresentation {}
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum SymbolRepresentationAny {
+        #[holder(use_place_holder)]
+        # [holder (field = draughting_subfigure_representation)]
         DraughtingSubfigureRepresentation(Box<DraughtingSubfigureRepresentation>),
+        #[holder(use_place_holder)]
+        # [holder (field = draughting_symbol_representation)]
         DraughtingSymbolRepresentation(Box<DraughtingSymbolRepresentation>),
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
@@ -4459,8 +4808,13 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum TerminatorSymbolAny {
+        #[holder(use_place_holder)]
+        # [holder (field = dimension_curve_terminator)]
         DimensionCurveTerminator(Box<DimensionCurveTerminator>),
+        #[holder(use_place_holder)]
+        # [holder (field = leader_terminator)]
         LeaderTerminator(Box<LeaderTerminator>),
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
@@ -4479,10 +4833,19 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum TextLiteralAny {
+        #[holder(use_place_holder)]
+        # [holder (field = text_literal_with_associated_curves)]
         TextLiteralWithAssociatedCurves(Box<TextLiteralWithAssociatedCurves>),
+        #[holder(use_place_holder)]
+        # [holder (field = text_literal_with_blanking_box)]
         TextLiteralWithBlankingBox(Box<TextLiteralWithBlankingBox>),
+        #[holder(use_place_holder)]
+        # [holder (field = text_literal_with_delineation)]
         TextLiteralWithDelineation(Box<TextLiteralWithDelineation>),
+        #[holder(use_place_holder)]
+        # [holder (field = text_literal_with_extent)]
         TextLiteralWithExtent(Box<TextLiteralWithExtent>),
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
@@ -4510,7 +4873,10 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum TextLiteralWithDelineationAny {
+        #[holder(use_place_holder)]
+        # [holder (field = draughting_text_literal_with_delineation)]
         DraughtingTextLiteralWithDelineation(Box<DraughtingTextLiteralWithDelineation>),
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
@@ -4532,8 +4898,13 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
+    #[holder(generate_deserialize)]
     pub enum TextStyleAny {
+        #[holder(use_place_holder)]
+        # [holder (field = text_style_with_box_characteristics)]
         TextStyleWithBoxCharacteristics(Box<TextStyleWithBoxCharacteristics>),
+        #[holder(use_place_holder)]
+        # [holder (field = text_style_with_mirror)]
         TextStyleWithMirror(Box<TextStyleWithMirror>),
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]

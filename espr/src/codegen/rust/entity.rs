@@ -81,12 +81,24 @@ impl ToTokens for Entity {
 
         if !self.subtypes.is_empty() {
             let subtypes = &self.subtypes;
+            let names: Vec<_> = subtypes
+                .iter()
+                .map(|ty| match &ty {
+                    TypeRef::Entity { name, .. } => format_ident!("{}", name),
+                    _ => unreachable!(),
+                })
+                .collect();
             let enum_name = format_ident!("{}Any", name);
             tokens.append_all(quote! {
                 #[derive(Debug, Clone, PartialEq, ::ruststep_derive::Holder)]
                 #[holder(table = Tables)]
+                #[holder(generate_deserialize)]
                 pub enum #enum_name {
-                    #(#subtypes(Box<#subtypes>)),*
+                    #(
+                    #[holder(use_place_holder)]
+                    #[holder(field = #names)]
+                    #subtypes(Box<#subtypes>)
+                    ),*
                 }
             }); // tokens.append_all
         }

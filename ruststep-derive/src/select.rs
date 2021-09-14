@@ -215,8 +215,8 @@ impl Input {
                     Box::new(::itertools::chain![
                         #(
                         #ruststep::tables::owned_iter(self, &self.#table_fields)
-                            .map(|owned| owned.map(|owned| #ident::#variants(Box::new(owned)))),
-                        )*
+                            .map(|owned| owned.map(|owned| #ident::#variants(Box::new(owned))))
+                        ),*
                     ])
                 }
             }
