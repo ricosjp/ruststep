@@ -83,10 +83,10 @@ impl ToTokens for Select {
                     entries.push(format_ident!("{}", name.to_pascal_case()));
                     if *is_simple {
                         entry_types.push(quote! { #ty });
-                        use_place_holder.push(quote! { #[holder(use_place_holder)] });
+                        use_place_holder.push(quote! {});
                     } else {
                         entry_types.push(quote! { Box<#ty> });
-                        use_place_holder.push(quote! {});
+                        use_place_holder.push(quote! { #[holder(use_place_holder)] });
                     }
                 }
                 _ => unimplemented!(),
