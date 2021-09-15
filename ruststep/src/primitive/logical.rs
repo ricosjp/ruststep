@@ -1,3 +1,4 @@
+use serde::Deserialize;
 use std::ops::*;
 
 /// `LOGICAL` type
@@ -55,7 +56,7 @@ use std::ops::*;
 /// assert_eq!(Logical::Unknown ^ Logical::Unknown, Logical::Unknown);
 /// assert_eq!(Logical::Unknown ^ Logical::False, Logical::Unknown);
 /// ```
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord, Deserialize)]
 pub enum Logical {
     False,
     Unknown,
@@ -150,5 +151,26 @@ impl Not for Logical {
             Logical::Unknown => Logical::Unknown,
             Logical::False => Logical::True,
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::ast::Parameter;
+
+    #[test]
+    fn deserialize_logical() {
+        let p = Parameter::Enumeration("TRUE".to_string());
+        let logical = Logical::deserialize(&p).unwrap();
+        assert_eq!(logical, Logical::True);
+
+        let p = Parameter::Enumeration("FALSE".to_string());
+        let logical = Logical::deserialize(&p).unwrap();
+        assert_eq!(logical, Logical::False);
+
+        let p = Parameter::Enumeration("UNKNOWN".to_string());
+        let logical = Logical::deserialize(&p).unwrap();
+        assert_eq!(logical, Logical::Unknown);
     }
 }
