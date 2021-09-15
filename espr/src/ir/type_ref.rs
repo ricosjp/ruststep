@@ -103,7 +103,14 @@ impl TypeRef {
                         Named::Type(ast::TypeDecl {
                             underlying_type, ..
                         }) => match underlying_type {
-                            ast::Type::Simple(_) => break true,
+                            // Enumeration e.g.
+                            //
+                            // ```
+                            // TYPE null_style = ENUMERATION OF (null); END_TYPE;
+                            // ```
+                            //
+                            // should be simple because it will be expressed as single integer.
+                            ast::Type::Simple(_) | ast::Type::Enumeration { .. } => break true,
                             ast::Type::Named(name) => {
                                 p = ns.resolve(&p.scope, name)?;
                                 continue;
