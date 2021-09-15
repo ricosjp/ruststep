@@ -2024,16 +2024,12 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub enum BoxCharacteristicSelect {
         # [holder (field = box_height)]
-        #[holder(use_place_holder)]
         BoxHeight(BoxHeight),
         # [holder (field = box_width)]
-        #[holder(use_place_holder)]
         BoxWidth(BoxWidth),
         # [holder (field = box_slant_angle)]
-        #[holder(use_place_holder)]
         BoxSlantAngle(BoxSlantAngle),
         # [holder (field = box_rotate_angle)]
-        #[holder(use_place_holder)]
         BoxRotateAngle(BoxRotateAngle),
     }
     pub type BoxHeight = PositiveRatioMeasure;
@@ -2045,10 +2041,8 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub enum CharacterSpacingSelect {
         # [holder (field = length_measure)]
-        #[holder(use_place_holder)]
         LengthMeasure(LengthMeasure),
         # [holder (field = ratio_measure)]
-        #[holder(use_place_holder)]
         RatioMeasure(RatioMeasure),
         # [holder (field = measure_with_unit)]
         MeasureWithUnit(MeasureWithUnitAny),
@@ -2065,8 +2059,10 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub enum CharacterizedDefinition {
         # [holder (field = characterized_product_definition)]
+        #[holder(use_place_holder)]
         CharacterizedProductDefinition(Box<CharacterizedProductDefinition>),
         # [holder (field = shape_definition)]
+        #[holder(use_place_holder)]
         ShapeDefinition(Box<ShapeDefinition>),
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
@@ -2097,6 +2093,7 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub enum CurveFontOrScaledCurveFontSelect {
         # [holder (field = curve_style_font_select)]
+        #[holder(use_place_holder)]
         CurveStyleFontSelect(Box<CurveStyleFontSelect>),
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
@@ -2167,6 +2164,7 @@ pub mod explicit_draughting {
         # [holder (field = annotation_occurrence)]
         AnnotationOccurrence(AnnotationOccurrenceAny),
         # [holder (field = geometric_set_select)]
+        #[holder(use_place_holder)]
         GeometricSetSelect(Box<GeometricSetSelect>),
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
@@ -2293,22 +2291,16 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub enum MeasureValue {
         # [holder (field = length_measure)]
-        #[holder(use_place_holder)]
         LengthMeasure(LengthMeasure),
         # [holder (field = plane_angle_measure)]
-        #[holder(use_place_holder)]
         PlaneAngleMeasure(PlaneAngleMeasure),
         # [holder (field = ratio_measure)]
-        #[holder(use_place_holder)]
         RatioMeasure(RatioMeasure),
         # [holder (field = parameter_value)]
-        #[holder(use_place_holder)]
         ParameterValue(ParameterValue),
         # [holder (field = positive_length_measure)]
-        #[holder(use_place_holder)]
         PositiveLengthMeasure(PositiveLengthMeasure),
         # [holder (field = positive_ratio_measure)]
-        #[holder(use_place_holder)]
         PositiveRatioMeasure(PositiveRatioMeasure),
     }
     pub type MonthInYearNumber = i64;
@@ -2365,7 +2357,7 @@ pub mod explicit_draughting {
         # [holder (field = text_style)]
         TextStyle(TextStyleAny),
         # [holder (field = null_style)]
-        NullStyle(Box<NullStyle>),
+        NullStyle(NullStyle),
     }
     pub type RatioMeasure = f64;
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
@@ -2430,7 +2422,6 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub enum SizeSelect {
         # [holder (field = positive_length_measure)]
-        #[holder(use_place_holder)]
         PositiveLengthMeasure(PositiveLengthMeasure),
         # [holder (field = measure_with_unit)]
         MeasureWithUnit(MeasureWithUnitAny),
@@ -2440,7 +2431,6 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub enum SourceItem {
         # [holder (field = identifier)]
-        #[holder(use_place_holder)]
         Identifier(Identifier),
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
@@ -2509,7 +2499,6 @@ pub mod explicit_draughting {
         # [holder (field = cartesian_point)]
         CartesianPoint(Box<CartesianPoint>),
         # [holder (field = parameter_value)]
-        #[holder(use_place_holder)]
         ParameterValue(ParameterValue),
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
@@ -2792,7 +2781,6 @@ pub mod explicit_draughting {
         pub degree: i64,
         #[holder(use_place_holder)]
         pub control_points_list: Vec<CartesianPoint>,
-        #[holder(use_place_holder)]
         pub curve_form: BSplineCurveForm,
         pub closed_curve: Logical,
         pub self_intersect: Logical,
@@ -2824,7 +2812,6 @@ pub mod explicit_draughting {
     pub struct BSplineCurveWithKnots {
         pub knot_multiplicities: Vec<i64>,
         pub knots: Vec<ParameterValue>,
-        #[holder(use_place_holder)]
         pub knot_spec: KnotType,
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
@@ -2976,7 +2963,6 @@ pub mod explicit_draughting {
     # [holder (field = composite_curve_segment)]
     #[holder(generate_deserialize)]
     pub struct CompositeCurveSegment {
-        #[holder(use_place_holder)]
         pub transition: TransitionCode,
         pub same_sense: bool,
         #[holder(use_place_holder)]
@@ -3245,7 +3231,6 @@ pub mod explicit_draughting {
     # [holder (field = dimension_curve_terminator)]
     #[holder(generate_deserialize)]
     pub struct DimensionCurveTerminator {
-        #[holder(use_place_holder)]
         pub role: DimensionExtentUsage,
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
@@ -4722,9 +4707,7 @@ pub mod explicit_draughting {
     # [holder (field = si_unit)]
     #[holder(generate_deserialize)]
     pub struct SiUnit {
-        #[holder(use_place_holder)]
         pub prefix: Option<SiPrefix>,
-        #[holder(use_place_holder)]
         pub name: SiUnitName,
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
@@ -4826,7 +4809,6 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub placement: Axis2Placement,
         pub alignment: TextAlignment,
-        #[holder(use_place_holder)]
         pub path: TextPath,
         #[holder(use_place_holder)]
         pub font: FontSelect,
@@ -4943,7 +4925,6 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub trim_2: Vec<TrimmingSelect>,
         pub sense_agreement: bool,
-        #[holder(use_place_holder)]
         pub master_representation: TrimmingPreference,
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
