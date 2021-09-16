@@ -123,7 +123,6 @@ struct A {
 
 The ENTITY `b` has to support both reference and inline struct like as `#4` and `#6`.
 For this purpose, [PlaceHolder][PlaceHolder] exists:
-[PlaceHolder]: https://ricosjp.github.io/ruststep/ruststep/place_holder/enum.PlaceHolder.html
 
 ```rust
 pub enum PlaceHolder<T> {
@@ -150,4 +149,6 @@ struct BHolder {
 There also a function `into_owned(BHolder) -> B` in [Holder][Holder] trait.
 `AHolder` will also be introduced to keep consistency.
 These are automated by `#[derive(ruststep_derive::Holder)]` proc-macro.
+
 [Holder]: https://ricosjp.github.io/ruststep/ruststep/tables/trait.Holder.html
+[PlaceHolder]: https://ricosjp.github.io/ruststep/ruststep/place_holder/enum.PlaceHolder.html
