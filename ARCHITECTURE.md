@@ -152,3 +152,68 @@ These are automated by `#[derive(ruststep_derive::Holder)]` proc-macro.
 [Holder]: https://ricosjp.github.io/ruststep/ruststep/tables/trait.Holder.html
 [PlaceHolder]: https://ricosjp.github.io/ruststep/ruststep/place_holder/enum.PlaceHolder.html
 [ISO-10303-21]: https://www.iso.org/standard/63141.html
+
+### Enum-based subtype
+
+EXPRESS Entity may have subtypes and/or supertypes. Let us consider following example:
+
+```
+ENTITY pet
+  ABSTRACT SUPERTYPE OF (ONEOF(cat, rabbit, dog, ...) );
+  name : pet_name;
+  ...
+END_ENTITY;
+
+ENTITY cat
+  SUBTYPE OF (pet);
+  ...
+END_ENTITY;
+
+ENTITY rabbit
+  SUBTYPE OF (pet);
+  ...
+END_ENTITY;
+
+ENTITY dog
+  SUBTYPE OF (pet);
+  ...
+END_ENTITY;
+```
+
+(from [ISO-10303-11(2004)][ISO-10303-11] 9.2.5.2) `esprc` generates `PetAny` enum for this EXPRESS:
+
+```rust
+enum PetAny {
+  Pet(Box<Pet>),
+  Cat(Box<Cat>),
+  Rabbit(Box<Rabbit>),
+  Dog(Box<Dog>)
+}
+
+struct Pet {
+  name: String,
+}
+
+struct Cat {
+  base: Pet,
+  // other field if exists
+}
+```
+
+`Rabbit` and `Dog` will be same as `Cat`.
+`Box` is used to keep the `*Any` struct size small since some varints may be large object.
+We can always upcast `Cat` into `PetAny` by `|cat: Cat| PetAny::Cat(Box::new(cat))`,
+and downcast will be
+
+```rust
+impl PetAny {
+  fn as_cat(self) -> Result<Cat, Self> {
+    match self {
+      PetAny::Cat(cat) => Ok(*cat),
+      _ => Err(self)
+    }
+  }
+}
+```
+
+[ISO-10303-11]: https://www.iso.org/standard/38047.html
