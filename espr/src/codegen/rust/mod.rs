@@ -47,7 +47,7 @@ impl ToTokens for Enumeration {
             .map(|i| format_ident!("{}", i.to_pascal_case()))
             .collect();
         tokens.append_all(quote! {
-            #[derive(Debug, Clone, PartialEq)]
+            #[derive(Debug, Clone, PartialEq, ::serde::Deserialize)]
             pub enum #id {
                 #( #items ),*
             }
@@ -60,30 +60,50 @@ impl ToTokens for Select {
         let id = format_ident!("{}", &self.id.to_pascal_case());
         let mut entries = Vec::new();
         let mut entry_types = Vec::new();
+        let mut field = Vec::new();
+        let mut use_place_holder = Vec::new();
         for ty in &self.types {
             match ty {
                 TypeRef::Entity {
                     name, is_supertype, ..
                 } => {
-                    let name = format_ident!("{}", name.to_pascal_case());
-                    entries.push(quote! { #name });
+                    entries.push(format_ident!("{}", name.to_pascal_case()));
                     if *is_supertype {
-                        // avoid Box<Box<XxxAny>>
                         entry_types.push(quote! { #ty });
+                        field.push(quote! {});
                     } else {
                         entry_types.push(quote! { Box<#ty> });
+                        let field_name = format_ident!("{}", name);
+                        field.push(quote! { #[holder(field = #field_name)] })
+                    }
+                    use_place_holder.push(quote! { #[holder(use_place_holder)] });
+                }
+                TypeRef::Named {
+                    name, is_simple, ..
+                } => {
+                    field.push(quote! {});
+                    entries.push(format_ident!("{}", name.to_pascal_case()));
+                    if *is_simple {
+                        entry_types.push(quote! { #ty });
+                        use_place_holder.push(quote! {});
+                    } else {
+                        entry_types.push(quote! { Box<#ty> });
+                        use_place_holder.push(quote! { #[holder(use_place_holder)] });
                     }
                 }
-                _ => {
-                    entries.push(ty.to_token_stream());
-                    entry_types.push(quote! { Box<#ty> });
-                }
+                _ => unimplemented!(),
             }
         }
         tokens.append_all(quote! {
-            #[derive(Debug, Clone, PartialEq)]
+            #[derive(Debug, Clone, PartialEq, ::ruststep_derive::Holder)]
+            #[holder(table = Tables)]
+            #[holder(generate_deserialize)]
             pub enum #id {
-                #(#entries(#entry_types)),*
+                #(
+                #field
+                #use_place_holder
+                #entries(#entry_types)
+                ),*
             }
         });
     }

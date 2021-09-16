@@ -11,29 +11,20 @@ impl ToTokens for Entity {
 
         let mut attr_name = Vec::new();
         let mut attr_type = Vec::new();
-        let mut holder_attr_type = Vec::new();
-        let mut holder_attr_expr = Vec::new();
+        let mut use_place_holder = Vec::new();
 
         for EntityAttribute { name, ty, optional } in &self.attributes {
             let name = format_ident!("{}", name);
             attr_name.push(name.clone());
             if *optional {
                 attr_type.push(quote! { Option<#ty> });
-                holder_attr_expr.push(quote! { #name });
-                if ty.is_simple() {
-                    holder_attr_type.push(quote! { Option<#ty> });
-                } else {
-                    holder_attr_type.push(quote! { Option<PlaceHolder<#ty>> });
-                }
             } else {
                 attr_type.push(quote! { #ty });
-                if ty.is_simple() {
-                    holder_attr_type.push(quote! { #ty });
-                    holder_attr_expr.push(quote! { #name });
-                } else {
-                    holder_attr_type.push(quote! { PlaceHolder<#ty> });
-                    holder_attr_expr.push(quote! { #name.into_owned(tables)? });
-                }
+            }
+            if ty.is_simple() {
+                use_place_holder.push(quote! {});
+            } else {
+                use_place_holder.push(quote! { #[holder(use_place_holder)] });
             }
         }
 
@@ -47,14 +38,6 @@ impl ToTokens for Entity {
 
             attr_name.push(attr.clone());
             attr_type.push(ty.to_token_stream());
-
-            if ty.is_simple() {
-                holder_attr_type.push(quote! { #ty });
-                holder_attr_expr.push(quote! { #attr });
-            } else {
-                holder_attr_type.push(quote! { PlaceHolder<#ty> });
-                holder_attr_expr.push(quote! { #attr.into_owned(tables)? });
-            }
 
             if let TypeRef::Entity {
                 name: supertype_name,
@@ -81,15 +64,16 @@ impl ToTokens for Entity {
         }
 
         assert_eq!(attr_name.len(), attr_type.len());
-        assert_eq!(attr_name.len(), holder_attr_type.len());
-        assert_eq!(attr_name.len(), holder_attr_expr.len());
+        assert_eq!(attr_name.len(), use_place_holder.len());
 
         tokens.append_all(quote! {
             #[derive(Debug, Clone, PartialEq, ::derive_new::new, ::ruststep_derive::Holder)]
             #[holder(table = Tables)]
             #[holder(field = #field_name)]
+            #[holder(generate_deserialize)]
             pub struct #name {
                 #(
+                #use_place_holder
                 pub #attr_name : #attr_type,
                 )*
             }
@@ -97,11 +81,24 @@ impl ToTokens for Entity {
 
         if !self.subtypes.is_empty() {
             let subtypes = &self.subtypes;
+            let names: Vec<_> = subtypes
+                .iter()
+                .map(|ty| match &ty {
+                    TypeRef::Entity { name, .. } => format_ident!("{}", name),
+                    _ => unreachable!(),
+                })
+                .collect();
             let enum_name = format_ident!("{}Any", name);
             tokens.append_all(quote! {
-                #[derive(Debug, Clone, PartialEq)]
+                #[derive(Debug, Clone, PartialEq, ::ruststep_derive::Holder)]
+                #[holder(table = Tables)]
+                #[holder(generate_deserialize)]
                 pub enum #enum_name {
-                    #(#subtypes(Box<#subtypes>)),*
+                    #(
+                    #[holder(use_place_holder)]
+                    #[holder(field = #names)]
+                    #subtypes(Box<#subtypes>)
+                    ),*
                 }
             }); // tokens.append_all
         }
