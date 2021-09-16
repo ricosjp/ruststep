@@ -1,29 +1,39 @@
 Architecture
 =============
 
-This document describes the high-level architecture of ruststep project for new developers.
+This document aims to show an overview of this repository for new developers before looking into the reference of each crates.
 
-Parser combinator
-------------------
+EXPRESS Language compiler (espr crate)
+---------------------------------------
 
-Tokenize phase of both EXPRESS language parser and STEP file parsers heavily depend on the [nom][nom] parser combinator.
-You should be familiar with it before touching parser parts of this project.
-There is [a tutorial][nom-tutorial].
+Compilation in `espr` crate has three phases:
+
+- **Tokenize**: Read the EXPRESS language files (usually named as `*.exp`), and parse into abstract syntax tree (AST).
+  - [espr::ast][espr_ast] defines AST types to be used in [espr::parser][espr_parser]
+  - [espr::parser][espr_parser] parses EXPRESS input using [nom][nom] parser combinator.
+- **Legalize**: Convert AST to IR (intermediate representation) to ready the following code generation
+  - [espr::ir][espr_ir] defines IR types, and they implements `Legalize` trait for legalizing from AST
+- **Code Generation**: Create a submodule of [ruststep][ruststep] based on IR
+  - [espr::codegen][espr_codegen] defines functions for generating Rust code from IR.
 
 [nom]: https://docs.rs/nom/latest/nom/
-[nom-tutorial]: https://github.com/benkay86/nom-tutorial
 
-EXPRESS Language compiler (esprc)
-----------------------------------
+[espr]:         https://ricosjp.github.io/ruststep/espr/index.html
+[espr_ast]:     https://ricosjp.github.io/ruststep/espr/ast/index.html
+[espr_parser]:  https://ricosjp.github.io/ruststep/espr/parser/index.html
+[espr_ir]:      https://ricosjp.github.io/ruststep/espr/ir/index.html
+[espr_codegen]: https://ricosjp.github.io/ruststep/espr/codegen/index.html
 
-<img src="./espr-overview.svg" width=500 />
+Rust code generation phase consists of two steps:
 
-- Compilation in `espr` crate has three phases
-  - **Tokenize**: Read the EXPRESS language files (usually named as `*.exp`), and parse into abstract syntax tree (AST).
-  - **Legalize**: Convert AST to IR (intermediate representation) to ready the following code generation
-    - Look up the references in AST
-    - Resolve sub/super relations between entities
-  - **Code Generation**: Create Rust module which will be used for STEP file I/O
+- Generate *abstract* Rust code by `esprc` (executable in [espr][espr] crate)
+- Generate *concrete* Rust code by [ruststep-derive][ruststep-derive] crate
+
+We have to generate large lines of codes, but most of them are based on a few information.
+The first step of codegen is responsible for passing necessary information from espr to proc-macro,
+and the second is responsible for generate actual code.
+
+[ruststep-derive]: https://ricosjp.github.io/ruststep/ruststep_derive/index.html
 
 STEP file I/O
 --------------
