@@ -91,12 +91,7 @@ pub fn supertype_factor(input: &str) -> ParseResult<SuperTypeExpression> {
 pub fn supertype_term(input: &str) -> ParseResult<SuperTypeExpression> {
     let expr =
         tuple((char('('), supertype_expression, char(')'))).map(|(_open, expr, _close)| expr);
-    alt((
-        entity_ref.map(SuperTypeExpression::Reference),
-        one_of,
-        expr,
-    ))
-    .parse(input)
+    alt((entity_ref.map(SuperTypeExpression::Reference), one_of, expr)).parse(input)
 }
 
 /// 322 supertype_rule = SUPERTYPE [subtype_constraint] .

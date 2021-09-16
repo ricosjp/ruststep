@@ -23,11 +23,7 @@ impl Input {
         let name = ident.to_string().to_screaming_snake_case();
         let holder_ident = as_holder_ident(ident);
         let holder_visitor_ident = as_visitor_ident(&holder_ident);
-        let variants: Vec<syn::Ident> = e
-            .variants
-            .iter()
-            .map(|var| var.ident.clone())
-            .collect();
+        let variants: Vec<syn::Ident> = e.variants.iter().map(|var| var.ident.clone()).collect();
         let variant_names: Vec<_> = variants
             .iter()
             .map(|id| id.to_string().to_screaming_snake_case())
