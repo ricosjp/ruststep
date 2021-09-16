@@ -78,7 +78,7 @@ impl Legalize for TypeDecl {
                     .iter()
                     .map(|ty| {
                         let path = ns.resolve(scope, ty)?;
-                        Ok(TypeRef::from_path(ns, ss, &path)?)
+                        TypeRef::from_path(ns, ss, &path)
                     })
                     .collect::<Result<Vec<_>, _>>()?;
                 TypeDecl::Select(Select { id, types })

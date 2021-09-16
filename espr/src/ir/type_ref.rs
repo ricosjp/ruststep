@@ -12,7 +12,7 @@ impl Legalize for SimpleType {
         _scope: &Scope,
         input: &Self::Input,
     ) -> Result<Self, SemanticError> {
-        Ok(SimpleType(input.clone()))
+        Ok(SimpleType(*input))
     }
 }
 
@@ -89,7 +89,7 @@ impl TypeRef {
     ) -> Result<Self, SemanticError> {
         match path.ty {
             ScopeType::Entity => {
-                let is_supertype = ss.super_to_sub.get(&path).is_some();
+                let is_supertype = ss.super_to_sub.get(path).is_some();
                 Ok(TypeRef::Entity {
                     name: path.name.clone(),
                     scope: path.scope.clone(),

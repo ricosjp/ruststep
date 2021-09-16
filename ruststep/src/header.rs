@@ -63,7 +63,7 @@ mod tests {
             FILE_SCHEMA( ( 'AUTOMOTIVE_DESIGN { 1 0 10303 214 1 1 1 1 }' ) );
         ENDSEC;
         "#.trim();
-        let (_residual, records) = crate::parser::exchange::header_section(&header)
+        let (_residual, records) = crate::parser::exchange::header_section(header)
             .finish()
             .unwrap();
         let header = super::Header::from_records(&records).unwrap();

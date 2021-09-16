@@ -12,7 +12,7 @@ pub fn select_list(input: &str) -> ParseResult<Vec<String>> {
 pub fn select_extension(input: &str) -> ParseResult<(String, Vec<String>)> {
     let with = tuple((tag("WITH"), select_list)).map(|(_with, list)| list);
     tuple((tag("BASED_ON"), type_ref, opt(with)))
-        .map(|(_based_on, id, opt)| (id, opt.unwrap_or(Vec::new())))
+        .map(|(_based_on, id, opt)| (id, opt.unwrap_or_default()))
         .parse(input)
 }
 

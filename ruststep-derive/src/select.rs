@@ -26,7 +26,7 @@ impl Input {
         let variants: Vec<syn::Ident> = e
             .variants
             .iter()
-            .map(|var| var.ident.clone().into())
+            .map(|var| var.ident.clone())
             .collect();
         let variant_names: Vec<_> = variants
             .iter()
@@ -79,7 +79,7 @@ impl Input {
         Input {
             name,
             table,
-            ident: ident.clone().into(),
+            ident: ident.clone(),
             holder_ident,
             holder_visitor_ident,
             variants,
