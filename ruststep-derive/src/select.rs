@@ -51,14 +51,27 @@ impl Input {
 
             assert_eq!(var.fields.len(), 1);
             for f in &var.fields {
-                if place_holder {
-                    holder_types.push(as_holder_path(&f.ty));
-                    holder_exprs.push(quote! { Box::new(sub.into_owned(table)?) });
-                    variant_exprs.push(quote! { Box::new(owned) });
+                let ty = FieldType::try_from(f.ty.clone()).unwrap();
+                if let FieldType::Boxed(_) = ty {
+                    if place_holder {
+                        // ENTITY case
+                        holder_types.push(as_holder_path(&f.ty));
+                        holder_exprs.push(quote! { Box::new(sub.into_owned(table)?) });
+                        variant_exprs.push(quote! { Box::new(owned) });
+                    } else {
+                        abort_call_site!("Simple type should not be Boxed")
+                    }
                 } else {
-                    holder_types.push(f.ty.clone());
-                    holder_exprs.push(quote! { sub });
                     variant_exprs.push(quote! { owned });
+                    if place_holder {
+                        // *Any case
+                        holder_types.push(as_holder_path(&f.ty));
+                        holder_exprs.push(quote! { sub.into_owned(table)? });
+                    } else {
+                        // SimpleType case
+                        holder_types.push(f.ty.clone());
+                        holder_exprs.push(quote! { sub });
+                    }
                 }
             }
         }
