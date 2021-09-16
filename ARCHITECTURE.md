@@ -44,7 +44,6 @@ To understand the architecture of ruststep, we start from the STEP file structur
 
 Exchange structure, as known as "STEP file" defined in [ISO-10303-21][ISO-10303-21]
 is a data serialization format consists of following sections:
-[ISO-10303-21]: https://www.iso.org/standard/63141.html
 
 - Header
 - Anchor (optional)
@@ -152,3 +151,4 @@ These are automated by `#[derive(ruststep_derive::Holder)]` proc-macro.
 
 [Holder]: https://ricosjp.github.io/ruststep/ruststep/tables/trait.Holder.html
 [PlaceHolder]: https://ricosjp.github.io/ruststep/ruststep/place_holder/enum.PlaceHolder.html
+[ISO-10303-21]: https://www.iso.org/standard/63141.html
