@@ -222,10 +222,16 @@ impl Input {
         let ruststep = ruststep_crate();
         let mut vars = Vec::new();
         let mut fields = Vec::new();
-        for (var, field) in variants.iter().zip(table_fields.iter()) {
+        let mut exprs = Vec::new();
+        for ((var, field), expr) in variants
+            .iter()
+            .zip(table_fields.iter())
+            .zip(variant_exprs.iter())
+        {
             if let Some(field) = field {
                 vars.push(var);
-                fields.push(field)
+                fields.push(field);
+                exprs.push(expr);
             }
         }
 
@@ -234,7 +240,7 @@ impl Input {
                 fn get_owned(&self, entity_id: u64) -> #ruststep::error::Result<#ident> {
                     #(
                     if let Ok(owned) = #ruststep::tables::get_owned(self, &self.#fields, entity_id) {
-                        return Ok(#ident::#vars(#variant_exprs));
+                        return Ok(#ident::#vars(#exprs));
                     }
                     )*
                     Err(#ruststep::error::Error::UnknownEntity(entity_id))
@@ -243,7 +249,7 @@ impl Input {
                     Box::new(::itertools::chain![
                         #(
                         #ruststep::tables::owned_iter(self, &self.#fields)
-                            .map(|owned| owned.map(|owned| #ident::#vars(#variant_exprs)))
+                            .map(|owned| owned.map(|owned| #ident::#vars(#exprs)))
                         ),*
                     ])
                 }
