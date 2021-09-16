@@ -76,7 +76,7 @@ impl ToTokens for Select {
                         let field_name = format_ident!("{}", name);
                         field.push(quote! { #[holder(field = #field_name)] })
                     }
-                    use_place_holder.push(quote! {});
+                    use_place_holder.push(quote! { #[holder(use_place_holder)] });
                 }
                 TypeRef::Named {
                     name, is_simple, ..
