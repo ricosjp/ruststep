@@ -12,6 +12,7 @@ struct Input {
     holder_visitor_ident: syn::Ident,
     variants: Vec<syn::Ident>,
     variant_names: Vec<String>,
+    variant_exprs: Vec<TokenStream2>,
     holder_types: Vec<syn::Type>,
     holder_exprs: Vec<TokenStream2>,
     table_fields: Vec<Option<syn::Ident>>,
@@ -39,6 +40,7 @@ impl Input {
         let mut holder_exprs = Vec::new();
         let mut holder_types = Vec::new();
         let mut table_fields = Vec::new();
+        let mut variant_exprs = Vec::new();
         for var in &e.variants {
             let HolderAttr {
                 field,
@@ -52,9 +54,11 @@ impl Input {
                 if place_holder {
                     holder_types.push(as_holder_path(&f.ty));
                     holder_exprs.push(quote! { Box::new(sub.into_owned(table)?) });
+                    variant_exprs.push(quote! { Box::new(owned) });
                 } else {
                     holder_types.push(f.ty.clone());
                     holder_exprs.push(quote! { sub });
+                    variant_exprs.push(quote! { owned });
                 }
             }
         }
@@ -67,6 +71,7 @@ impl Input {
             holder_visitor_ident,
             variants,
             variant_names,
+            variant_exprs,
             holder_types,
             holder_exprs,
             table_fields,
@@ -145,6 +150,7 @@ impl Input {
             name,
             variants,
             variant_names,
+            variant_exprs,
             ..
         } = self;
         let ruststep = ruststep_crate();
@@ -169,8 +175,8 @@ impl Input {
                     match key.as_str() {
                         #(
                         #variant_names => {
-                            let value = map.next_value()?;
-                            return Ok(#holder_ident::#variants(Box::new(value)));
+                            let owned = map.next_value()?;
+                            return Ok(#holder_ident::#variants(#variant_exprs));
                         }
                         )*
                         _ => {
@@ -197,6 +203,7 @@ impl Input {
             variants,
             table_fields,
             table,
+            variant_exprs,
             ..
         } = self;
         let ruststep = ruststep_crate();
@@ -214,7 +221,7 @@ impl Input {
                 fn get_owned(&self, entity_id: u64) -> #ruststep::error::Result<#ident> {
                     #(
                     if let Ok(owned) = #ruststep::tables::get_owned(self, &self.#fields, entity_id) {
-                        return Ok(#ident::#vars(Box::new(owned)));
+                        return Ok(#ident::#vars(#variant_exprs));
                     }
                     )*
                     Err(#ruststep::error::Error::UnknownEntity(entity_id))
@@ -223,7 +230,7 @@ impl Input {
                     Box::new(::itertools::chain![
                         #(
                         #ruststep::tables::owned_iter(self, &self.#fields)
-                            .map(|owned| owned.map(|owned| #ident::#vars(Box::new(owned))))
+                            .map(|owned| owned.map(|owned| #ident::#vars(#variant_exprs)))
                         ),*
                     ])
                 }
