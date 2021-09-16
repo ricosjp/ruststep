@@ -139,7 +139,7 @@ impl TryFrom<syn::Type> for FieldType {
                         return Ok(FieldType::Boxed(ty));
                     }
                 }
-                return Err(UnsupportedTypeError {});
+                Err(UnsupportedTypeError {})
             }
             _ => Err(UnsupportedTypeError {}),
         }

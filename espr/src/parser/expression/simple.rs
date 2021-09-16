@@ -190,7 +190,7 @@ pub fn entity_constructor(input: &str) -> ParseResult<Expression> {
     .map(
         |(name, _open, values, _close)| Expression::EntityConstructor {
             name,
-            values: values.unwrap_or(Vec::new()),
+            values: values.unwrap_or_default(),
         },
     )
     .parse(input)

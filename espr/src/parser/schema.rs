@@ -49,8 +49,8 @@ pub fn schema_body(
 ) -> ParseResult<(Vec<InterfaceSpec>, Vec<Constant>, Vec<Declaration>)> {
     tuple((
         many0(interface_specification),
-        opt(constant_decl).map(|opt| opt.unwrap_or(Vec::new())),
-        many0(alt((declaration, rule_decl.map(|r| Declaration::Rule(r))))),
+        opt(constant_decl).map(|opt| opt.unwrap_or_default()),
+        many0(alt((declaration, rule_decl.map(Declaration::Rule)))),
     ))
     .parse(input)
 }
@@ -58,11 +58,11 @@ pub fn schema_body(
 /// 199 declaration = [entity_decl] | [function_decl] | [procedure_decl] | [subtype_constraint_decl] | [type_decl] .
 pub fn declaration(input: &str) -> ParseResult<Declaration> {
     alt((
-        entity_decl.map(|e| Declaration::Entity(e)),
-        type_decl.map(|ty| Declaration::Type(ty)),
-        function_decl.map(|f| Declaration::Function(f)),
-        procedure_decl.map(|p| Declaration::Procedure(p)),
-        subtype_constraint_decl.map(|sub| Declaration::SubTypeConstraint(sub)),
+        entity_decl.map(Declaration::Entity),
+        type_decl.map(Declaration::Type),
+        function_decl.map(Declaration::Function),
+        procedure_decl.map(Declaration::Procedure),
+        subtype_constraint_decl.map(Declaration::SubTypeConstraint),
     ))
     .parse(input)
 }
@@ -122,7 +122,7 @@ pub fn procedure_head(input: &str) -> ParseResult<(String, Vec<FormalParameter>)
                 },
             ),
         )
-        .map(|opt| opt.unwrap_or(Vec::new())),
+        .map(|opt| opt.unwrap_or_default()),
         char(';'),
     ))
     .map(|(_procedure, name, parameters, _semicolon)| (name, parameters))
@@ -176,7 +176,7 @@ pub fn function_head(input: &str) -> ParseResult<(String, Vec<FormalParameter>, 
                 },
             ),
         )
-        .map(|opt| opt.unwrap_or(Vec::new())),
+        .map(|opt| opt.unwrap_or_default()),
         char(':'),
         parameter_type,
         char(';'),
@@ -279,8 +279,8 @@ pub fn algorithm_head(
 ) -> ParseResult<(Vec<Declaration>, Vec<Constant>, Vec<LocalVariable>)> {
     tuple((
         many0(declaration),
-        opt(constant_decl).map(|opt| opt.unwrap_or(Vec::new())),
-        opt(local_decl).map(|opt| opt.unwrap_or(Vec::new())),
+        opt(constant_decl).map(|opt| opt.unwrap_or_default()),
+        opt(local_decl).map(|opt| opt.unwrap_or_default()),
     ))
     .parse(input)
 }
@@ -339,7 +339,7 @@ pub fn reference_clause(input: &str) -> ParseResult<InterfaceSpec> {
             tuple((char('('), comma_separated(resource_or_rename), char(')')))
                 .map(|(_open, ty, _close)| ty),
         )
-        .map(|opt| opt.unwrap_or(Vec::new())),
+        .map(|opt| opt.unwrap_or_default()),
         char(';'),
     ))
     .map(|(_use, _from, name, resources, _semicolon)| InterfaceSpec::Reference { name, resources })
@@ -367,7 +367,7 @@ pub fn use_clause(input: &str) -> ParseResult<InterfaceSpec> {
             tuple((char('('), comma_separated(named_type_or_rename), char(')')))
                 .map(|(_open, ty, _close)| ty),
         )
-        .map(|opt| opt.unwrap_or(Vec::new())),
+        .map(|opt| opt.unwrap_or_default()),
         char(';'),
     ))
     .map(|(_use, _from, name, types, _semicolon)| InterfaceSpec::Use { name, types })

@@ -184,7 +184,7 @@ impl<'se> ser::Serializer for &'se mut RecordSerializer {
             // This stack will be popped in SerializeStruct::end()
             //
             let current_name = std::mem::replace(&mut self.name, name.to_string());
-            let current_params = std::mem::replace(&mut self.parameters, Vec::new());
+            let current_params = std::mem::take(&mut self.parameters);
             self.stack.push((current_name, current_params));
         }
         Ok(self)

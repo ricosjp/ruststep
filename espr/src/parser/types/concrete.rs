@@ -8,8 +8,8 @@ use crate::ast::*;
 pub fn concrete_types(input: &str) -> ParseResult<Type> {
     alt((
         aggregation_types,
-        simple_types.map(|ty| Type::Simple(ty)),
-        type_ref.map(|s| Type::Named(s)),
+        simple_types.map(Type::Simple),
+        type_ref.map(Type::Named),
     ))
     .parse(input)
 }
@@ -94,5 +94,5 @@ pub fn bound_spec(input: &str) -> ParseResult<Bound> {
 
 /// 240 instantiable_type = [concrete_types] | [entity_ref] .
 pub fn instantiable_type(input: &str) -> ParseResult<Type> {
-    alt((concrete_types, entity_ref.map(|r| Type::Named(r)))).parse(input)
+    alt((concrete_types, entity_ref.map(Type::Named))).parse(input)
 }

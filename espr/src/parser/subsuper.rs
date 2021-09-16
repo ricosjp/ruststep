@@ -57,7 +57,7 @@ pub fn supertype_expression(input: &str) -> ParseResult<SuperTypeExpression> {
         many0(tuple((tag("ANDOR"), supertype_factor))),
     ))
     .map(|(first, tails)| {
-        if tails.len() > 0 {
+        if !tails.is_empty() {
             let mut factors = vec![first];
             for (_andor, factor) in tails {
                 factors.push(factor)
@@ -74,7 +74,7 @@ pub fn supertype_expression(input: &str) -> ParseResult<SuperTypeExpression> {
 pub fn supertype_factor(input: &str) -> ParseResult<SuperTypeExpression> {
     tuple((supertype_term, many0(tuple((tag("AND"), supertype_term)))))
         .map(|(first, tails)| {
-            if tails.len() > 0 {
+            if !tails.is_empty() {
                 let mut terms = vec![first];
                 for (_and, term) in tails {
                     terms.push(term)
@@ -91,12 +91,7 @@ pub fn supertype_factor(input: &str) -> ParseResult<SuperTypeExpression> {
 pub fn supertype_term(input: &str) -> ParseResult<SuperTypeExpression> {
     let expr =
         tuple((char('('), supertype_expression, char(')'))).map(|(_open, expr, _close)| expr);
-    alt((
-        entity_ref.map(|e| SuperTypeExpression::Reference(e)),
-        one_of,
-        expr,
-    ))
-    .parse(input)
+    alt((entity_ref.map(SuperTypeExpression::Reference), one_of, expr)).parse(input)
 }
 
 /// 322 supertype_rule = SUPERTYPE [subtype_constraint] .

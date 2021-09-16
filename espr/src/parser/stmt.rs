@@ -148,7 +148,7 @@ pub fn procedure_call_stmt(input: &str) -> ParseResult<Statement> {
     tuple((
         alt((
             built_in_procedure,
-            procedure_ref.map(|name| ProcedureCallName::Reference(name)),
+            procedure_ref.map(ProcedureCallName::Reference),
         )),
         opt(actual_parameter_list),
         char(';'),
