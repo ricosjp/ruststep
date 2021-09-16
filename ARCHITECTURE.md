@@ -153,9 +153,9 @@ These are automated by `#[derive(ruststep_derive::Holder)]` proc-macro.
 [PlaceHolder]: https://ricosjp.github.io/ruststep/ruststep/place_holder/enum.PlaceHolder.html
 [ISO-10303-21]: https://www.iso.org/standard/63141.html
 
-### Enum-based subtype
+### Enum-based supertype
 
-EXPRESS Entity may have subtypes and/or supertypes. Let us consider following example:
+EXPRESS Entity may have supertypes and/or subtypes. Let us consider following example:
 
 ```
 ENTITY pet
@@ -203,7 +203,7 @@ struct Cat {
 `Rabbit` and `Dog` will be same as `Cat`.
 `Box` is used to keep the `*Any` struct size small since some varints may be large object.
 We can always upcast `Cat` into `PetAny` by `|cat: Cat| PetAny::Cat(Box::new(cat))`,
-and downcast will be
+and downcast will be like following:
 
 ```rust
 impl PetAny {
