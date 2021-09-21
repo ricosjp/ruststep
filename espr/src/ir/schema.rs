@@ -9,9 +9,10 @@ pub struct Schema {
 }
 
 impl Legalize for Schema {
-    type Input = ast::schema::Schema;
+    type Input = ast::Schema;
     fn legalize(
         ns: &Namespace,
+        ss: &SubSuperGraph,
         scope: &Scope,
         schema: &Self::Input,
     ) -> Result<Self, SemanticError> {
@@ -20,12 +21,12 @@ impl Legalize for Schema {
         let entities = schema
             .entities
             .iter()
-            .map(|entity| Entity::legalize(ns, &here, entity))
+            .map(|entity| Entity::legalize(ns, ss, &here, entity))
             .collect::<Result<Vec<Entity>, _>>()?;
         let types = schema
             .types
             .iter()
-            .map(|entity| TypeDecl::legalize(ns, &here, entity))
+            .map(|entity| TypeDecl::legalize(ns, ss, &here, entity))
             .collect::<Result<Vec<TypeDecl>, _>>()?;
         Ok(Schema {
             name,
@@ -42,11 +43,12 @@ mod tests {
     #[test]
     fn legalize() {
         let example = SyntaxTree::example();
-        let ns = Namespace::new(&example).unwrap();
-        dbg!(&ns);
+        let ns = Namespace::new(&example);
+        let ss = SubSuperGraph::new(&ns, &example).unwrap();
+        dbg!(&ns, &ss);
         let schema = &example.schemas[0];
         let scope = Scope::root();
-        let schema = Schema::legalize(&ns, &scope, schema).unwrap();
+        let schema = Schema::legalize(&ns, &ss, &scope, schema).unwrap();
         dbg!(&schema);
     }
 }

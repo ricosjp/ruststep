@@ -9,32 +9,32 @@ use crate::parser::*;
 #[derive(Debug, Clone, PartialEq)]
 pub struct TypeDecl {
     pub type_id: String,
-    pub underlying_type: UnderlyingType,
+    pub underlying_type: Type,
     pub where_clause: Option<WhereClause>,
 }
 
-/// Underlying type of a type declaration
+/// Parameter type appears when *using* the type
+/// e.g. in attribute definition, function parameter, and so on.
 #[derive(Debug, Clone, PartialEq)]
-pub enum UnderlyingType {
-    // Concrete Types
+pub enum Type {
     Simple(SimpleType),
-    Reference(String),
+    Named(String),
     Set {
-        base: Box<UnderlyingType>,
+        base: Box<Type>,
         bound: Option<Bound>,
     },
     Bag {
-        base: Box<UnderlyingType>,
+        base: Box<Type>,
         bound: Option<Bound>,
     },
     List {
-        base: Box<UnderlyingType>,
+        base: Box<Type>,
         bound: Option<Bound>,
         unique: bool,
     },
     Array {
-        base: Box<UnderlyingType>,
-        bound: Bound,
+        base: Box<Type>,
+        bound: Option<Bound>,
         unique: bool,
         optional: bool,
     },
@@ -48,45 +48,18 @@ pub enum UnderlyingType {
         extensibility: Extensibility,
         types: Vec<String>,
     },
-}
 
-/// Parameter type appears when *using* the type
-/// e.g. in attribute definition, function parameter, and so on.
-#[derive(Debug, Clone, PartialEq)]
-pub enum ParameterType {
-    Simple(SimpleType),
-    Named(String),
-    Set {
-        base: Box<ParameterType>,
-        bound: Option<Bound>,
-    },
-    Bag {
-        base: Box<ParameterType>,
-        bound: Option<Bound>,
-    },
-    List {
-        base: Box<ParameterType>,
-        bound: Option<Bound>,
-        unique: bool,
-    },
-    Array {
-        base: Box<ParameterType>,
-        bound: Option<Bound>,
-        unique: bool,
-        optional: bool,
-    },
-
+    // Parameter Types
     Aggregate {
-        base: Box<ParameterType>,
+        base: Box<Type>,
         label: Option<String>,
     },
-
     GenericEntity(Option<String>),
     Generic(Option<String>),
 }
 
 /// Primitive types parsed by [simple_types]
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum SimpleType {
     /// 8.1.1 Number data type
     Number,
@@ -105,7 +78,7 @@ pub enum SimpleType {
 }
 
 /// Output of [width_spec]
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub struct WidthSpec {
     pub width: usize,
     pub fixed: bool,

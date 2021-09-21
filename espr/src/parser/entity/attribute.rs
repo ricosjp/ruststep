@@ -1,5 +1,5 @@
 use crate::{
-    ast::entity::*,
+    ast::*,
     parser::{combinator::*, expression::*, identifier::*},
 };
 

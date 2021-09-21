@@ -13,6 +13,12 @@ pub enum Error {
 
     #[error("Lookup failed for #{0}")]
     UnknownEntity(u64),
+
+    #[error("Entity ID #{0} is duplicated")]
+    DuplicatedEntity(u64),
+
+    #[error("Entity '{entity_name}' is not a member of the schema '{schema}'")]
+    UnknownEntityName { entity_name: String, schema: String },
 }
 
 impl de::Error for Error {

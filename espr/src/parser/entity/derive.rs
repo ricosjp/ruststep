@@ -1,6 +1,6 @@
 use super::attribute::*;
 use crate::{
-    ast::entity::*,
+    ast::*,
     parser::{combinator::*, expression::*, types::*},
 };
 

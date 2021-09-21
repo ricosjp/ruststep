@@ -6,9 +6,8 @@ pub struct Entity {
     /// Name of entity in snake_case
     pub name: String,
     pub attributes: Vec<EntityAttribute>,
-    pub subtypes: Option<Vec<TypeRef>>,
-    /// FIXME This assumes that `SUPERTYPE` declaration exists for all supertypes.
-    pub has_supertype_decl: bool,
+    pub subtypes: Vec<TypeRef>,
+    pub supertypes: Vec<TypeRef>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -19,12 +18,17 @@ pub struct EntityAttribute {
 }
 
 impl Legalize for EntityAttribute {
-    type Input = ast::entity::EntityAttribute;
+    type Input = ast::EntityAttribute;
 
-    fn legalize(ns: &Namespace, scope: &Scope, attr: &Self::Input) -> Result<Self, SemanticError> {
-        let ty = TypeRef::legalize(ns, scope, &attr.ty)?;
+    fn legalize(
+        ns: &Namespace,
+        ss: &SubSuperGraph,
+        scope: &Scope,
+        attr: &Self::Input,
+    ) -> Result<Self, SemanticError> {
+        let ty = TypeRef::legalize(ns, ss, scope, &attr.ty)?;
         let name = match &attr.name {
-            ast::entity::AttributeDecl::Reference(name) => name.clone(),
+            ast::AttributeDecl::Reference(name) => name.clone(),
             _ => unimplemented!(),
         };
         Ok(EntityAttribute {
@@ -36,35 +40,40 @@ impl Legalize for EntityAttribute {
 }
 
 impl Legalize for Entity {
-    type Input = ast::entity::Entity;
+    type Input = ast::Entity;
 
     fn legalize(
         ns: &Namespace,
+        ss: &SubSuperGraph,
         scope: &Scope,
         entity: &Self::Input,
     ) -> Result<Self, SemanticError> {
+        let name = entity.name.clone();
         let attributes = entity
             .attributes
             .iter()
-            .map(|attr| EntityAttribute::legalize(ns, scope, attr))
+            .map(|attr| EntityAttribute::legalize(ns, ss, scope, attr))
             .collect::<Result<Vec<_>, _>>()?;
-        let subtypes = entity
-            .subtype
-            .as_ref()
-            .map(|subtype| {
-                subtype
-                    .entity_references
-                    .iter()
-                    .map(|name| ns.lookup_type(scope, &name))
-                    .collect::<Result<Vec<_>, _>>()
-            })
-            .transpose()?;
-        let name = entity.name.clone();
+
+        let path = Path::new(scope, ScopeType::Entity, &name);
+        let supertypes = ss
+            .get_supertypes(&path)
+            .unwrap_or_default()
+            .iter()
+            .map(|sup| TypeRef::from_path(ns, ss, sup))
+            .collect::<Result<Vec<_>, _>>()?;
+        let subtypes = ss
+            .get_subtypes(&path)
+            .unwrap_or_default()
+            .iter()
+            .map(|sub| TypeRef::from_path(ns, ss, sub))
+            .collect::<Result<Vec<_>, _>>()?;
+
         Ok(Entity {
             name,
             attributes,
             subtypes,
-            has_supertype_decl: entity.has_supertype_decl(),
+            supertypes,
         })
     }
 }
@@ -76,11 +85,12 @@ mod tests {
     #[test]
     fn legalize() {
         let example = SyntaxTree::example();
-        let ns = Namespace::new(&example).unwrap();
+        let ns = Namespace::new(&example);
+        let ss = SubSuperGraph::new(&ns, &example).unwrap();
         dbg!(&ns);
         let entity = &example.schemas[0].entities[0];
         let scope = Scope::root().pushed(ScopeType::Schema, &example.schemas[0].name);
-        let entity = Entity::legalize(&ns, &scope, entity).unwrap();
+        let entity = Entity::legalize(&ns, &ss, &scope, entity).unwrap();
         dbg!(&entity);
     }
 }
