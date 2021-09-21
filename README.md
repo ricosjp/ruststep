@@ -1,4 +1,4 @@
-**This is pre-release version. Several necessary features are not implemented.**
+** This project is still in experimental stage. DO NOT USE FOR PRODUCT. **
 
 ruststep
 =========
@@ -66,6 +66,26 @@ This project consists of following crates:
 [EXPRESS]: https://www.iso.org/standard/38047.html
 
 See [ARCHITECTURE.md](./ARCHITECTURE.md) for detail.
+
+Roadmap
+--------
+
+### Released features
+
+- 0.1.0
+  - Minimal EXPRESS Compiler to generate Rust struct definitions
+  - Deserialize STEP file (ASCII) to Rust struct
+
+### TODO until 1.0 release
+
+- Serialize Rust struct to STEP file (ASCII) https://github.com/ricosjp/ruststep/issues/13
+- Translate rules in EXPRESS schema into Rust code
+- Stablize AST and IR representation of espr
+
+### Planned features
+
+- Binary format convertible into STEP ASCII and XML formats
+- RDB support, ORM generation
 
 License
 --------
