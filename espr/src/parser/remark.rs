@@ -238,9 +238,7 @@ mod tests {
             Some(vec!["some".to_string(), "tag".to_string()])
         );
         assert_eq!(remark.remark, "aaa");
-        let (res, remark) = super::tail_remark("--\nblub")
-            .finish()
-            .unwrap();
+        let (res, remark) = super::tail_remark("--\nblub").finish().unwrap();
         assert_eq!(res, "blub");
         assert_eq!(remark.remark, "");
     }
