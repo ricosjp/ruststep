@@ -79,7 +79,7 @@ Roadmap
 ### TODO until 1.0 release
 
 - Serialize Rust struct to STEP file (ASCII) https://github.com/ricosjp/ruststep/issues/13
-- Translate rules in EXPRESS schema into Rust code
+- Translate rules in EXPRESS schema into Rust code https://github.com/ricosjp/ruststep/issues/43
 - Stablize AST and IR representation of espr
 
 ### Planned features
