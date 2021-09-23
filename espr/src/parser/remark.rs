@@ -89,7 +89,7 @@ pub fn embedded_remark(input: &str) -> RawParseResult<Remark> {
 pub fn tail_remark(input: &str) -> RawParseResult<Remark> {
     tuple((
         tag("--"),
-        multispace0,
+        space0,
         opt(remark_tag),
         not_line_ending,
         line_ending,
@@ -238,6 +238,9 @@ mod tests {
             Some(vec!["some".to_string(), "tag".to_string()])
         );
         assert_eq!(remark.remark, "aaa");
+        let (res, remark) = super::tail_remark("--\nblub").finish().unwrap();
+        assert_eq!(res, "blub");
+        assert_eq!(remark.remark, "");
     }
 
     #[test]
