@@ -1,8 +1,16 @@
 [package]
 name = "espr"
-version = "0.1.0"
+version = "0.1.0-alpha.0"
 authors = ["Yoshinori Tanimura <tanimura@ricos.co.jp>", "Toshiki Teramura <teramura@ricos.co.jp"]
 edition = "2018"
+
+description   = "EXPRESS Language compiler"
+documentation = "https://ricosjp.github.io/ruststep/espr/index.html"
+repository    = "https://github.com/ricosjp/ruststep"
+keywords      = ["step", "cad", "compiler"]
+license       = "Apache-2.0"
+readme        = "../README.md"
+categories    = ["science", "development-tools"]
 
 [dependencies]
 # For parser

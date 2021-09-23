@@ -1,8 +1,16 @@
 [package]
 name = "ruststep"
-version = "0.1.0"
+version = "0.1.0-alpha.0"
 authors = ["Toshiki Teramura <teramura@ricos.co.jp>", "Yoshinori Tanimura <tanimura@ricos.co.jp>"]
 edition = "2018"
+
+description   = "A STEP toolkit for Rust"
+documentation = "https://ricosjp.github.io/ruststep/ruststep/index.html"
+repository    = "https://github.com/ricosjp/ruststep"
+keywords      = ["step", "cad", "file-format"]
+license       = "Apache-2.0"
+readme        = "../README.md"
+categories    = ["science"]
 
 [features]
 default = []
