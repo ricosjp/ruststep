@@ -22,3 +22,6 @@ itertools = "0.10.1"
 
 [dev-dependencies.ruststep]
 path = "../ruststep"
+
+[package.metadata.release]
+no-dev-version = true

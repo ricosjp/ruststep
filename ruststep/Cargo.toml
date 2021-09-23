@@ -23,3 +23,6 @@ path = "../ruststep-derive"
 
 [dev-dependencies]
 anyhow = "1.0.43"
+
+[package.metadata.release]
+no-dev-version = true
