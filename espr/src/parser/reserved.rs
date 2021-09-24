@@ -1,4 +1,4 @@
-pub const KEYWORDS: &'static [&'static str] = &[
+pub const KEYWORDS: &[&str] = &[
     "abstract",
     "aggregate",
     "alias",
