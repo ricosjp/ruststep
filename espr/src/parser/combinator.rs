@@ -74,7 +74,7 @@ pub fn eof(input: & str) -> ParseResult<&str> {
 /// Lift up nom parser into [EsprParser] by adding empty remark.
 ///
 /// Be sure that `Vec::new` does not allocates memory until any member will be pushed.
-/// https://doc.rust-lang.org/std/vec/struct.Vec.html#method.new
+/// <https://doc.rust-lang.org/std/vec/struct.Vec.html#method.new>
 pub fn remarked<'a, O, F>(f: F) -> impl EsprParser<'a, O>
 where
     F: nom::Parser<&'a str, O, VerboseError<&'a str>> + Clone,

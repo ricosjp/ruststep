@@ -1,5 +1,5 @@
 use super::{super::combinator::*, *};
-use crate::ast::expression::*;
+use crate::ast::*;
 
 /// 169 aggregate_initializer = `[` \[ [element] { `,` [element] } \] `]` .
 pub fn aggregate_initializer(input: &str) -> ParseResult<Expression> {

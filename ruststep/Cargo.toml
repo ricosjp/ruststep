@@ -1,17 +1,37 @@
 [package]
 name = "ruststep"
-version = "0.1.0"
+version = "0.1.0-alpha.0"
 authors = ["Toshiki Teramura <teramura@ricos.co.jp>", "Yoshinori Tanimura <tanimura@ricos.co.jp>"]
 edition = "2018"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+description   = "A STEP toolkit for Rust"
+documentation = "https://ricosjp.github.io/ruststep/ruststep/index.html"
+repository    = "https://github.com/ricosjp/ruststep"
+keywords      = ["step", "cad", "file-format"]
+license       = "Apache-2.0"
+readme        = "../README.md"
+categories    = ["science"]
+
+[features]
+default = []
+ap201 = []
 
 [dependencies]
 derive-new = "0.5.9"
+derive_more = "0.99.16"
 dyn-clone = "1.0.4"
-nom = "6.1.0"
-serde = { version = "1.0.124", features = ["derive"]}
-thiserror = "1.0.24"
+nom = "7.0.0"
+serde = { version = "1.0.129", features = ["derive"] }
+thiserror = "1.0.26"
+Inflector = "0.11.4"
+itertools = "0.10.1"
+
+[dependencies.ruststep-derive]
+path = "../ruststep-derive"
+version = "0.1.0-alpha.0"
 
 [dev-dependencies]
-anyhow = "1.0"
+anyhow = "1.0.43"
+
+[package.metadata.release]
+no-dev-version = true

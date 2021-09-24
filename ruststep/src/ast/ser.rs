@@ -3,33 +3,6 @@ use serde::ser;
 use std::convert::TryFrom;
 
 /// Serialize struct into STEP [Record]
-///
-/// Examples
-/// ---------
-///
-/// [serde::Serialize] struct can be serialized into [Record]
-///
-/// ```
-/// use ruststep::{ast, ap000, parser::exchange};
-/// use nom::Finish;
-///
-/// // For A(1.0, 2.0)
-/// let record = ast::to_record(&ap000::A { x: 1.0, y: 2.0 }).unwrap();
-/// let (_, ans) = exchange::simple_record("A(1.0, 2.0)").finish().unwrap();
-/// assert_eq!(record, ans);
-///
-/// // For nested struct B(3.0, A((1.0, 2.0)))
-/// let record = ast::to_record(&ap000::B {
-///     z: 3.0,
-///     a: ap000::A { x: 1.0, y: 2.0 },
-/// })
-/// .unwrap();
-/// let (_, ans) = exchange::simple_record("B(3.0, A((1.0, 2.0)))")
-///     .finish()
-///     .unwrap();
-/// assert_eq!(record, ans);
-/// ```
-///
 pub fn to_record(obj: &impl ser::Serialize) -> Result<Record> {
     let mut ser = RecordSerializer::default();
     obj.serialize(&mut ser)?;
@@ -211,7 +184,7 @@ impl<'se> ser::Serializer for &'se mut RecordSerializer {
             // This stack will be popped in SerializeStruct::end()
             //
             let current_name = std::mem::replace(&mut self.name, name.to_string());
-            let current_params = std::mem::replace(&mut self.parameters, Vec::new());
+            let current_params = std::mem::take(&mut self.parameters);
             self.stack.push((current_name, current_params));
         }
         Ok(self)
@@ -350,47 +323,5 @@ impl<'se> ser::SerializeStructVariant for &'se mut RecordSerializer {
 
     fn end(self) -> Result<()> {
         Ok(())
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use crate::{ap000, parser::exchange};
-    use nom::Finish;
-
-    #[test]
-    fn serialize_to_record_a() {
-        let record = super::to_record(&ap000::A { x: 1.0, y: 2.0 }).unwrap();
-        let (_, ans) = exchange::simple_record("A(1.0, 2.0)").finish().unwrap();
-        assert_eq!(record, ans);
-    }
-
-    #[test]
-    fn serialize_to_record_b() {
-        let record = super::to_record(&ap000::B {
-            z: 3.0,
-            a: ap000::A { x: 1.0, y: 2.0 },
-        })
-        .unwrap();
-        let (_, ans) = exchange::simple_record("B(3.0, A((1.0, 2.0)))")
-            .finish()
-            .unwrap();
-        assert_eq!(record, ans);
-    }
-
-    #[test]
-    fn serialize_to_record_c() {
-        let record = super::to_record(&ap000::C {
-            p: ap000::A { x: 1.0, y: 2.0 },
-            q: ap000::B {
-                z: 3.0,
-                a: ap000::A { x: 4.0, y: 5.0 },
-            },
-        })
-        .unwrap();
-        let (_, ans) = exchange::simple_record("C(A((1.0, 2.0)), B((3.0, A((4.0, 5.0)))))")
-            .finish()
-            .unwrap();
-        assert_eq!(record, ans);
     }
 }

@@ -3,7 +3,7 @@ use std::{cmp, fmt};
 
 /// Identifier in EXPRESS language must be one of scopes described in
 /// "Table 9 – Scope and identifier defining items"
-#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub enum ScopeType {
     Entity,
     Alias,
@@ -24,7 +24,7 @@ pub enum ScopeType {
 /// Scope is partially ordered in terms of the sub-scope relation:
 ///
 /// ```
-/// # use espr::semantics::scope::*;
+/// # use espr::ir::*;
 /// let root = Scope::root();
 /// let schema = root.pushed(ScopeType::Schema, "schema");
 /// assert!(root > schema); // schema scope is sub-scope of root scope
@@ -33,7 +33,7 @@ pub enum ScopeType {
 /// Be sure that this is not total order:
 ///
 /// ```
-/// # use espr::semantics::scope::*;
+/// # use espr::ir::*;
 /// let root = Scope::root();
 /// let schema1 = root.pushed(ScopeType::Schema, "schema1");
 /// let schema2 = root.pushed(ScopeType::Schema, "schema2");
@@ -106,6 +106,35 @@ impl Scope {
         let mut new = self.clone();
         let _current = new.0.pop()?;
         Some(new)
+    }
+}
+
+#[derive(Clone, PartialEq, Eq, Hash)]
+pub struct Path {
+    pub scope: Scope,
+    pub ty: ScopeType,
+    pub name: String,
+}
+
+impl fmt::Display for Path {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{}.{}", self.scope, self.name)
+    }
+}
+
+impl fmt::Debug for Path {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{:?}.{}[{:?}]", self.scope, self.name, self.ty)
+    }
+}
+
+impl Path {
+    pub fn new(scope: &Scope, ty: ScopeType, name: &str) -> Self {
+        Path {
+            scope: scope.clone(),
+            ty,
+            name: name.to_string(),
+        }
     }
 }
 

@@ -1,3 +1,4 @@
+use super::SingleMapDeserializer;
 use serde::{de, forward_to_deserialize_any, Deserialize};
 
 #[cfg(doc)] // for doc-link
@@ -13,46 +14,7 @@ pub enum LValue {
 }
 
 /// Right hand side value
-///
-/// serde::Deserializer
-/// -------------------
-///
-/// Since [RValue] may appear in [Record], this should supports [serde::Deserializer]
-/// as like done in [serde::de::value].
-/// This enum is also [serde::Deserialize].
-/// [Deserialize::deserialize] returns same value as following:
-///
-/// ```
-/// use serde::Deserialize;
-/// use ruststep::ast::RValue;
-///
-/// let value = RValue::Entity(11);
-/// let a: RValue = Deserialize::deserialize(&value).unwrap();
-/// assert_eq!(a, value);
-///
-/// let value = RValue::Value(11);
-/// let a: RValue = Deserialize::deserialize(&value).unwrap();
-/// assert_eq!(a, value);
-///
-/// let value = RValue::ConstantEntity("Const1".into());
-/// let a: RValue = Deserialize::deserialize(&value).unwrap();
-/// assert_eq!(a, value);
-///
-/// let value = RValue::ConstantValue("Const1".into());
-/// let a: RValue = Deserialize::deserialize(&value).unwrap();
-/// assert_eq!(a, value);
-/// ```
-///
-/// Enum representation
-/// --------------------
-///
-/// [Deserialize] is derived without `#[serde(...)]` attribute,
-/// which means it is "externally tagged" as described in [enum representations].
-/// For example, `RValue::Entity(11)` will be deserialized from `{ "Entity": 11 }`.
-///
-/// [enum representations]: https://serde.rs/enum-representations.html
-///
-#[derive(Debug, Clone, PartialEq, Deserialize)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum RValue {
     /// Like `#11`
     Entity(u64),
@@ -72,22 +34,14 @@ impl<'de, 'value> de::Deserializer<'de> for &'value RValue {
         V: de::Visitor<'de>,
     {
         match self {
-            RValue::Entity(id) => visitor.visit_enum(de::value::MapAccessDeserializer::new(
-                de::value::MapDeserializer::new([("Entity", *id)].iter().cloned()),
-            )),
-            RValue::Value(id) => visitor.visit_enum(de::value::MapAccessDeserializer::new(
-                de::value::MapDeserializer::new([("Value", *id)].iter().cloned()),
-            )),
-            RValue::ConstantEntity(name) => visitor.visit_enum(
-                de::value::MapAccessDeserializer::new(de::value::MapDeserializer::new(
-                    [("ConstantEntity", name.clone())].iter().cloned(),
-                )),
-            ),
-            RValue::ConstantValue(name) => visitor.visit_enum(
-                de::value::MapAccessDeserializer::new(de::value::MapDeserializer::new(
-                    [("ConstantValue", name.clone())].iter().cloned(),
-                )),
-            ),
+            RValue::Entity(id) => visitor.visit_enum(SingleMapDeserializer::new("Entity", *id)),
+            RValue::Value(id) => visitor.visit_enum(SingleMapDeserializer::new("Value", *id)),
+            RValue::ConstantEntity(name) => {
+                visitor.visit_enum(SingleMapDeserializer::new("ConstantEntity", name.clone()))
+            }
+            RValue::ConstantValue(name) => {
+                visitor.visit_enum(SingleMapDeserializer::new("ConstantValue", name.clone()))
+            }
         }
     }
 

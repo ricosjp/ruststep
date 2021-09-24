@@ -1,12 +1,17 @@
 //! Abstract Syntax Tree (AST) of EXPRESS Language
 
-pub mod algorithm;
-pub mod entity;
-pub mod expression;
-pub mod schema;
-pub mod types;
+mod algorithm;
+mod entity;
+mod expression;
+mod schema;
+mod types;
 
-use crate::ast::schema::Schema;
+pub use algorithm::*;
+pub use entity::*;
+pub use expression::*;
+pub use schema::*;
+pub use types::*;
+
 use crate::parser::{combinator::*, *};
 use nom::Finish;
 

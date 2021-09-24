@@ -1,13 +1,44 @@
-//! Data structures in STEP file
+//! AST (abstract syntax tree) for [exchange structure (ISO-10303-21)][ISO-10303-21]
+//!
+//! [ISO-10303-21]: https://www.iso.org/standard/63141.html
+//!
+//! Serde data model
+//! -----------------
+//!
+//! [Parameter] and [Record] can be deserialize through serde data model.
+//!
+//! | Parameter     | serde data model |
+//! |:--------------|:-----------------|
+//! | Integer       | i64              |
+//! | Real          | f64              |
+//! | String        | string           |
+//! | Enumeration   | -                |
+//! | List          | seq              |
+//! | NotProvided   | unit             |
+//! | Omitted       | unit             |
+//! | Typed, Record | map              |
+//! | RValue        | enum             |
+//!
+//! See [the official document of serde data model](https://serde.rs/data-model.html) for detail.
+//!
+//! - [Parameter::Typed] e.g. `A((1.0, 2.0))` and [Record] e.g. `A(1.0, 2.0)` are mapped to "map"
+//!   in [the serde data model][serde-data-model]
+//! - [Parameter::RValue] is mapped to "enum" in [the serde data model][serde-data-model].
+//! - FIXME Enumeration is not supported yet.
+//!
+//! [serde-data-model]: https://serde.rs/data-model.html
+//!
 
 mod parameter;
 mod record;
 mod ser;
+mod single_map_deserializer;
 mod value;
 
 pub use parameter::*;
 pub use record::*;
 pub use ser::*;
+pub use single_map_deserializer::*;
 pub use value::*;
 
 /// Entire exchange structure
@@ -37,8 +68,8 @@ pub struct DataSection {
 /// Each line of data section
 #[derive(Debug, Clone, PartialEq)]
 pub enum EntityInstance {
-    Simple { name: u64, record: Record },
-    Complex { name: u64, subsuper: Vec<Record> },
+    Simple { id: u64, record: Record },
+    Complex { id: u64, subsuper: Vec<Record> },
 }
 
 #[derive(Debug, Clone, PartialEq)]
