@@ -110,3 +110,13 @@ The following directories are included for development purpose.
 
 - [schemas](./schemas)
 - [ruststep/tests/steps](./ruststep/tests/steps)
+
+Contributor License Agreement (CLA)
+----------------------------------
+
+When you contribute (code, documentation, or anything else),
+you have to be aware that your contribution is covered by the same Apache 2.0 License that is applied to ruststep itself.
+This applies to all contributors, including those contributing on behalf of a company.
+If you agree to its content, you simply have to click on the link posted by the [CLA assistant bot](https://github.com/CLAassistant) as a comment to the pull request.
+Click it to check the CLA, then accept it on the following screen if you agree to it.
+[CLA assistant](https://cla-assistant.io/) will save this decision for upcoming contributions and will notify you if there is any change to the CLA in the meantime.
