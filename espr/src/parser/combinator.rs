@@ -66,7 +66,7 @@ impl<'a, Output, T> EsprParser<'a, Output> for T where
 {
 }
 
-pub fn eof(input: & str) -> ParseResult<&str> {
+pub fn eof(input: &str) -> ParseResult<&str> {
     let (input, _) = nom::combinator::eof(input)?;
     Ok((input, ("", Vec::new())))
 }
@@ -177,21 +177,24 @@ pub fn many1<'a, O>(f: impl EsprParser<'a, O>) -> impl EsprParser<'a, Vec<O>> {
     }
 }
 
-pub fn many_till<'a, O, J>(f: impl EsprParser<'a, O>, g: impl EsprParser<'a, J>) -> impl EsprParser<'a, Vec<O>> {
+pub fn many_till<'a, O, J>(
+    f: impl EsprParser<'a, O>,
+    g: impl EsprParser<'a, J>,
+) -> impl EsprParser<'a, Vec<O>> {
     use nom::Parser;
     move |input| {
         nom::multi::many_till(pair(spaces_or_remarks, f.clone()), g.clone())
-        .map(|(pairs, _)| {
-            let mut outputs = Vec::new();
-            let mut remarks = Vec::new();
-            for (mut r1, (out, mut r2)) in pairs {
-                outputs.push(out);
-                remarks.append(&mut r1);
-                remarks.append(&mut r2);
-            }
-            (outputs, remarks)
-        })
-        .parse(input)
+            .map(|(pairs, _)| {
+                let mut outputs = Vec::new();
+                let mut remarks = Vec::new();
+                for (mut r1, (out, mut r2)) in pairs {
+                    outputs.push(out);
+                    remarks.append(&mut r1);
+                    remarks.append(&mut r2);
+                }
+                (outputs, remarks)
+            })
+            .parse(input)
     }
 }
 
