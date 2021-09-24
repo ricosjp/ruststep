@@ -58,18 +58,20 @@ pub fn simple_string_literal(input: &str) -> RawParseResult<String> {
 /// According to the standard, identifiers cannot be reserved keywords.
 pub fn simple_id(input: &str) -> RawParseResult<String> {
     if let Ok((input, id)) = tuple((letter, many0(alt((letter, digit, char('_'))))))
-        .map(|(head, tail)| {
-            format!("{}{}", head, tail.into_iter().collect::<String>())
-        })
+        .map(|(head, tail)| format!("{}{}", head, tail.into_iter().collect::<String>()))
         .parse(input)
     {
         if is_reserved(id.as_str()) {
-            Err(nom::Err::Error(nom::error::VerboseError { errors: Vec::new()}))
+            Err(nom::Err::Error(nom::error::VerboseError {
+                errors: Vec::new(),
+            }))
         } else {
             Ok((input, id))
         }
     } else {
-        Err(nom::Err::Error(nom::error::VerboseError { errors: Vec::new()}))
+        Err(nom::Err::Error(nom::error::VerboseError {
+            errors: Vec::new(),
+        }))
     }
 }
 
@@ -118,8 +120,6 @@ mod tests {
         assert_eq!(l, [0xa0, 0xb1, 0xc2, 0xd3]);
         assert_eq!(residual, "");
     }
-
-
 
     #[test]
     fn simple_id_valid() {

@@ -42,11 +42,11 @@ mod expression;
 mod identifier;
 mod literal;
 mod remark;
+mod reserved;
 mod schema;
 mod stmt;
 mod subsuper;
 mod types;
-mod reserved;
 
 pub use basis::*;
 pub use entity::*;
