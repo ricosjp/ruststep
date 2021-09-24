@@ -74,7 +74,7 @@ impl<'a> PartialEq<&'a str> for AttributeDecl {
 #[derive(Debug, Clone, PartialEq)]
 pub struct EntityAttribute {
     pub name: AttributeDecl,
-    pub ty: ParameterType,
+    pub ty: Type,
     pub optional: bool,
 }
 
@@ -86,7 +86,7 @@ pub struct DeriveClause {
 #[derive(Debug, Clone, PartialEq)]
 pub struct DerivedAttribute {
     pub attr: AttributeDecl,
-    pub ty: ParameterType,
+    pub ty: Type,
     pub expr: Expression,
 }
 

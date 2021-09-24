@@ -1,4 +1,4 @@
-//! Legalize [SyntaxTree] into [IR]
+//! Intermediate Representation ([IR]) legalized (semantically analyzed) from [SyntaxTree]
 
 mod entity;
 mod namespace;
@@ -22,8 +22,11 @@ use thiserror::Error;
 /// Semantic errors
 #[derive(Debug, Error)]
 pub enum SemanticError {
-    #[error("Type {name} not found in scope {scope}")]
+    #[error("Not found the Type {name} referred in scope {scope}")]
     TypeNotFound { name: String, scope: Scope },
+
+    #[error("Invalid path: {0}")]
+    InvalidPath(Path),
 }
 
 /// Legalize partial parsed input into corresponding intermediate representation
@@ -45,9 +48,9 @@ pub struct IR {
 
 impl IR {
     pub fn from_syntax_tree(st: &SyntaxTree) -> Result<Self, SemanticError> {
-        let ns = Namespace::new(&st)?;
+        let ns = Namespace::new(st);
         let ss = SubSuperGraph::new(&ns, st)?;
-        let ir = Self::legalize(&ns, &ss, &Scope::root(), &st)?;
+        let ir = Self::legalize(&ns, &ss, &Scope::root(), st)?;
         Ok(ir)
     }
 }

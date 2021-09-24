@@ -165,7 +165,7 @@ mod tests {
         assert_eq!(attrs.len(), 1);
         let attr = &attrs[0];
         assert_eq!(attr.name, "x");
-        assert!(matches!(attr.ty, ParameterType::Simple(SimpleType::Real)));
+        assert!(matches!(attr.ty, Type::Simple(SimpleType::Real)));
     }
 
     #[test]
@@ -175,10 +175,10 @@ mod tests {
         assert_eq!(attrs.len(), 2);
         let attr = &attrs[0];
         assert_eq!(attr.name, "x");
-        assert!(matches!(attr.ty, ParameterType::Simple(SimpleType::Real)));
+        assert!(matches!(attr.ty, Type::Simple(SimpleType::Real)));
         let attr = &attrs[1];
         assert_eq!(attr.name, "y");
-        assert!(matches!(attr.ty, ParameterType::Simple(SimpleType::Real)));
+        assert!(matches!(attr.ty, Type::Simple(SimpleType::Real)));
     }
 
     #[test]
@@ -189,7 +189,7 @@ mod tests {
         assert_eq!(attrs.len(), 1);
         let attr = &attrs[0];
         assert_eq!(attr.name, "x");
-        assert!(matches!(attr.ty, ParameterType::Simple(SimpleType::Real)));
+        assert!(matches!(attr.ty, Type::Simple(SimpleType::Real)));
         assert!(attr.optional);
     }
 
@@ -209,12 +209,12 @@ mod tests {
         assert_eq!(entity.attributes.len(), 2);
         // check `m_ref`
         assert_eq!(entity.attributes[0].name, "m_ref");
-        assert!(matches!(entity.attributes[0].ty, ParameterType::Named(_)));
+        assert!(matches!(entity.attributes[0].ty, Type::Named(_)));
         // check `fattr`
         assert_eq!(entity.attributes[1].name, "fattr");
         assert!(matches!(
             entity.attributes[1].ty,
-            ParameterType::Simple(SimpleType::Real)
+            Type::Simple(SimpleType::Real)
         ));
 
         assert_eq!(residual, "");

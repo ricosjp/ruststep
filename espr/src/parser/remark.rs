@@ -89,7 +89,7 @@ pub fn embedded_remark(input: &str) -> RawParseResult<Remark> {
 pub fn tail_remark(input: &str) -> RawParseResult<Remark> {
     tuple((
         tag("--"),
-        multispace0,
+        space0,
         opt(remark_tag),
         not_line_ending,
         line_ending,
@@ -105,7 +105,7 @@ pub fn tail_remark(input: &str) -> RawParseResult<Remark> {
 
 /// 147 remark_tag = `"` remark_ref { `.` remark_ref } `"` .
 ///
-/// `remark_ref` is replaced by `simple_id` because it should be handled by following semantics
+/// `remark_ref` is replaced by `simple_id` because it should be handled by following ir
 /// analysis phase.
 pub fn remark_tag(input: &str) -> RawParseResult<Vec<String>> {
     delimited(char('"'), separated_list1(char('.'), simple_id), char('"')).parse(input)
@@ -238,6 +238,9 @@ mod tests {
             Some(vec!["some".to_string(), "tag".to_string()])
         );
         assert_eq!(remark.remark, "aaa");
+        let (res, remark) = super::tail_remark("--\nblub").finish().unwrap();
+        assert_eq!(res, "blub");
+        assert_eq!(remark.remark, "");
     }
 
     #[test]

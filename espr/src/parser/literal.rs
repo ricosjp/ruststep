@@ -8,9 +8,9 @@ use crate::ast::*;
 pub fn literal(input: &str) -> ParseResult<Literal> {
     // FIXME binary_literal,
     alt((
-        logical_literal.map(|val| Literal::Logial(val)),
-        real_literal.map(|val| Literal::Real(val)),
-        string_literal.map(|val| Literal::String(val)),
+        logical_literal.map(Literal::Logial),
+        real_literal.map(Literal::Real),
+        string_literal.map(Literal::String),
     ))
     .parse(input)
 }

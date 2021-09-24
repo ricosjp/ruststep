@@ -1,10 +1,10 @@
 use ruststep_derive::{as_holder, Holder};
 use std::collections::HashMap;
 
+#[derive(Debug, Clone, PartialEq, Default)]
 pub struct Table {
     a: HashMap<u64, as_holder!(A)>,
     b: HashMap<u64, as_holder!(B)>,
-    c: HashMap<u64, as_holder!(C)>,
 }
 
 #[derive(Debug, Clone, PartialEq, Holder)]
@@ -12,26 +12,34 @@ pub struct Table {
 #[holder(field = a)]
 pub struct A {
     pub x: f64,
-    pub y: Option<f64>,
 }
 
 #[derive(Debug, Clone, PartialEq, Holder)]
 #[holder(table = Table)]
 #[holder(field = b)]
 pub struct B {
-    pub z: f64,
-    #[holder(use_place_holder)]
-    pub a: A,
+    pub y: f64,
 }
 
 #[derive(Debug, Clone, PartialEq, Holder)]
 #[holder(table = Table)]
-#[holder(field = c)]
-pub struct C {
+pub enum S1 {
+    #[holder(field = a)]
     #[holder(use_place_holder)]
-    pub p: A,
+    A(Box<A>),
+    #[holder(field = b)]
     #[holder(use_place_holder)]
-    pub q: Option<B>,
+    B(Box<B>),
+}
+
+#[derive(Debug, Clone, PartialEq, Holder)]
+#[holder(table = Table)]
+pub enum S2 {
+    #[holder(field = a)]
+    #[holder(use_place_holder)]
+    A(Box<A>),
+    // mix primitive type
+    P(f64),
 }
 
 fn main() {}

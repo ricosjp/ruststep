@@ -8,7 +8,7 @@ use crate::ast::*;
 /// 269 primary = [literal] | ( [qualifiable_factor] { [qualifier] } ) .
 pub fn primary(input: &str) -> ParseResult<Expression> {
     alt((
-        literal.map(|literal| Expression::Literal(literal)),
+        literal.map(Expression::Literal),
         tuple((qualifiable_factor, many0(qualifier)))
             .map(|(factor, qualifiers)| Expression::QualifiableFactor { factor, qualifiers }),
     ))
@@ -37,8 +37,8 @@ pub fn qualifiable_factor(input: &str) -> ParseResult<QualifiableFactor> {
 /// other reference types.
 pub fn function_call(input: &str) -> ParseResult<QualifiableFactor> {
     let function_name = alt((
-        built_in_function.map(|f| FunctionCallName::BuiltInFunction(f)),
-        function_ref.map(|f| FunctionCallName::Reference(f)),
+        built_in_function.map(FunctionCallName::BuiltInFunction),
+        function_ref.map(FunctionCallName::Reference),
     ));
     tuple((function_name, actual_parameter_list))
         .map(|(name, args)| QualifiableFactor::FunctionCall { name, args })

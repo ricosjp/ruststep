@@ -45,35 +45,41 @@ impl Legalize for TypeDecl {
     type Input = ast::TypeDecl;
     fn legalize(
         ns: &Namespace,
-        _ss: &SubSuperGraph,
+        ss: &SubSuperGraph,
         scope: &Scope,
         type_decl: &Self::Input,
     ) -> Result<Self, SemanticError> {
-        use ast::UnderlyingType;
+        use ast::Type;
         let id = type_decl.type_id.clone();
         Ok(match &type_decl.underlying_type {
-            UnderlyingType::Simple(ty) => TypeDecl::Simple(Simple {
+            Type::Simple(ty) => TypeDecl::Simple(Simple {
                 id,
                 ty: SimpleType(*ty),
             }),
-            UnderlyingType::Reference(name) => {
-                let ty = ns.lookup_type(scope, name)?;
-                TypeDecl::Rename(Rename { id, ty })
+            Type::Named(name) => {
+                let path = ns.resolve(scope, name)?;
+                TypeDecl::Rename(Rename {
+                    id,
+                    ty: TypeRef::from_path(ns, ss, &path)?,
+                })
             }
-            UnderlyingType::Enumeration {
+            Type::Enumeration {
                 items,
                 extensibility: _,
             } => TypeDecl::Enumeration(Enumeration {
                 id,
                 items: items.clone(),
             }),
-            UnderlyingType::Select {
+            Type::Select {
                 types,
                 extensibility: _,
             } => {
                 let types = types
                     .iter()
-                    .map(|ty| ns.lookup_type(scope, ty))
+                    .map(|ty| {
+                        let path = ns.resolve(scope, ty)?;
+                        TypeRef::from_path(ns, ss, &path)
+                    })
                     .collect::<Result<Vec<_>, _>>()?;
                 TypeDecl::Select(Select { id, types })
             }

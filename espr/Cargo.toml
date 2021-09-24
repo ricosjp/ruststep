@@ -1,25 +1,33 @@
 [package]
 name = "espr"
-version = "0.1.0"
+version = "0.1.0-alpha.0"
 authors = ["Yoshinori Tanimura <tanimura@ricos.co.jp>", "Toshiki Teramura <teramura@ricos.co.jp"]
 edition = "2018"
 
+description   = "EXPRESS Language compiler"
+documentation = "https://ricosjp.github.io/ruststep/espr/index.html"
+repository    = "https://github.com/ricosjp/ruststep"
+keywords      = ["step", "cad", "compiler"]
+license       = "Apache-2.0"
+readme        = "../README.md"
+categories    = ["science", "development-tools"]
+
 [dependencies]
 # For parser
-nom = "6.0.1"
+nom = "7.0.0"
 
 # For Rust code generation
-syn = "1.0.56"
-quote = "1.0.8"
-proc-macro2 = "1.0.24"
+syn = "1.0.75"
+quote = "1.0.9"
+proc-macro2 = "1.0.28"
 
 # Utilities
 Inflector = "0.11.4"
-derive_more = "0.99.11"
-itertools = "0.10.0"
+derive_more = "0.99.16"
+itertools = "0.10.1"
 maplit = "1.0.2"
-thiserror = "1.0.23"
-structopt = "0.3.21"
+thiserror = "1.0.26"
+structopt = "0.3.22"
 
-# Temporary workaround for https://github.com/myrrlyn/funty/issues/3
-funty = "=1.1.0"
+[package.metadata.release]
+no-dev-version = true

@@ -3,7 +3,7 @@
 mod entity;
 mod schema;
 
-use crate::semantics::*;
+use crate::ir::*;
 
 use inflector::Inflector;
 use proc_macro2::TokenStream;
@@ -47,7 +47,7 @@ impl ToTokens for Enumeration {
             .map(|i| format_ident!("{}", i.to_pascal_case()))
             .collect();
         tokens.append_all(quote! {
-            #[derive(Debug, Clone)]
+            #[derive(Debug, Clone, PartialEq, ::serde::Deserialize)]
             pub enum #id {
                 #( #items ),*
             }
@@ -60,32 +60,50 @@ impl ToTokens for Select {
         let id = format_ident!("{}", &self.id.to_pascal_case());
         let mut entries = Vec::new();
         let mut entry_types = Vec::new();
+        let mut field = Vec::new();
+        let mut use_place_holder = Vec::new();
         for ty in &self.types {
             match ty {
                 TypeRef::Entity {
-                    name,
-                    has_supertype_decl,
-                    ..
+                    name, is_supertype, ..
                 } => {
-                    let name = format_ident!("{}", name.to_pascal_case());
-                    entries.push(quote! { #name });
-                    if *has_supertype_decl {
-                        // avoid Box<Box<XxxAny>>
+                    entries.push(format_ident!("{}", name.to_pascal_case()));
+                    if *is_supertype {
                         entry_types.push(quote! { #ty });
+                        field.push(quote! {});
                     } else {
                         entry_types.push(quote! { Box<#ty> });
+                        let field_name = format_ident!("{}", name);
+                        field.push(quote! { #[holder(field = #field_name)] })
+                    }
+                    use_place_holder.push(quote! { #[holder(use_place_holder)] });
+                }
+                TypeRef::Named {
+                    name, is_simple, ..
+                } => {
+                    field.push(quote! {});
+                    entries.push(format_ident!("{}", name.to_pascal_case()));
+                    if *is_simple {
+                        entry_types.push(quote! { #ty });
+                        use_place_holder.push(quote! {});
+                    } else {
+                        entry_types.push(quote! { Box<#ty> });
+                        use_place_holder.push(quote! { #[holder(use_place_holder)] });
                     }
                 }
-                _ => {
-                    entries.push(ty.to_token_stream());
-                    entry_types.push(quote! { Box<#ty> });
-                }
+                _ => unimplemented!(),
             }
         }
         tokens.append_all(quote! {
-            #[derive(Debug, Clone)]
+            #[derive(Debug, Clone, PartialEq, ::ruststep_derive::Holder)]
+            #[holder(table = Tables)]
+            #[holder(generate_deserialize)]
             pub enum #id {
-                #(#entries(#entry_types)),*
+                #(
+                #field
+                #use_place_holder
+                #entries(#entry_types)
+                ),*
             }
         });
     }
@@ -127,17 +145,14 @@ impl ToTokens for TypeRef {
                 tokens.append_all(quote! { #name });
             }
             Entity {
-                name,
-                has_supertype_decl,
-                ..
+                name, is_supertype, ..
             } => {
-                if *has_supertype_decl {
-                    let name = format_ident!("{}Any", name.to_pascal_case());
-                    tokens.append_all(quote! { Box<dyn #name> });
+                let name = if *is_supertype {
+                    format_ident!("{}Any", name.to_pascal_case())
                 } else {
-                    let name = format_ident!("{}", name.to_pascal_case());
-                    tokens.append_all(quote! { #name });
-                }
+                    format_ident!("{}", name.to_pascal_case())
+                };
+                tokens.append_all(quote! { #name });
             }
             Set { base, .. } | List { base, .. } => {
                 tokens.append_all(quote! { Vec<#base> });
