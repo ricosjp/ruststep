@@ -306,4 +306,40 @@ mod tests {
         dbg!(&entity);
         assert_eq!(residual, "");
     }
+
+    #[test]
+    fn bspline_curve() {
+        // from AP201
+        let input = r#"
+        ENTITY b_spline_curve
+          SUPERTYPE OF (ONEOF (uniform_curve,b_spline_curve_with_knots,
+              quasi_uniform_curve,bezier_curve) ANDOR rational_b_spline_curve)
+          SUBTYPE OF (bounded_curve);
+            degree              : INTEGER;
+            control_points_list : LIST [2:?] OF cartesian_point;
+            curve_form          : b_spline_curve_form;
+            closed_curve        : LOGICAL;
+            self_intersect      : LOGICAL;
+          DERIVE
+            upper_index_on_control_points : INTEGER := SIZEOF(
+                                               control_points_list) - 1;
+            control_points                : ARRAY [0:
+                                               upper_index_on_control_points] OF
+                                                cartesian_point := list_to_array(
+                                               control_points_list,0,
+                                               upper_index_on_control_points);
+          WHERE
+            wr1: ('EXPLICIT_DRAUGHTING.UNIFORM_CURVE' IN TYPEOF(SELF)) OR (
+                     'EXPLICIT_DRAUGHTING.QUASI_UNIFORM_CURVE' IN TYPEOF(SELF)) 
+                     OR ('EXPLICIT_DRAUGHTING.BEZIER_CURVE' IN TYPEOF(SELF)) OR (
+                     'EXPLICIT_DRAUGHTING.B_SPLINE_CURVE_WITH_KNOTS' IN TYPEOF(
+                     SELF));
+        END_ENTITY; -- b_spline_curve
+        "#
+        .trim();
+
+        let (residual, (entity, _remark)) = super::entity_decl(input).finish().unwrap();
+        dbg!(&entity);
+        assert_eq!(residual, "");
+    }
 }
