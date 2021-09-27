@@ -334,7 +334,7 @@ mod tests {
                      OR ('EXPLICIT_DRAUGHTING.BEZIER_CURVE' IN TYPEOF(SELF)) OR (
                      'EXPLICIT_DRAUGHTING.B_SPLINE_CURVE_WITH_KNOTS' IN TYPEOF(
                      SELF));
-        END_ENTITY; -- b_spline_curve
+        END_ENTITY;
         "#
         .trim();
 
