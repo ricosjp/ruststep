@@ -53,9 +53,9 @@ pub enum AttributeDecl {
     Reference(String),
     Qualified {
         /// Like `\point`
-        group: Option<String>,
+        group: String,
         /// Like `.x`
-        attribute: Option<String>,
+        attribute: String,
         /// For [redeclared_attribute]
         rename: Option<String>,
     },

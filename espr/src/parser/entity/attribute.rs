@@ -23,7 +23,7 @@ pub fn referenced_attribute(input: &str) -> ParseResult<AttributeDecl> {
 
 /// 275 qualified_attribute = SELF [group_qualifier] [attribute_qualifier] .
 pub fn qualified_attribute(input: &str) -> ParseResult<AttributeDecl> {
-    tuple((tag("SELF"), opt(group_qualifier), opt(attribute_qualifier)))
+    tuple((tag("SELF"), group_qualifier, attribute_qualifier))
         .map(|(_self, group, attribute)| AttributeDecl::Qualified {
             group,
             attribute,
