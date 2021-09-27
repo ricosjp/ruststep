@@ -29,7 +29,7 @@ pub fn explicit_attr(input: &str) -> ParseResult<Vec<EntityAttribute>> {
 /// 207 entity_head = ENTITY [entity_id] [subsuper] `;` .
 pub fn entity_head(input: &str) -> ParseResult<(String, Option<Constraint>, Option<SubTypeDecl>)> {
     tuple((
-        tag("ENTITY "), // parse with trailing space
+        tag("ENTITY"), // parse with trailing space
         entity_id,
         subsuper,
         char(';'),
@@ -196,19 +196,19 @@ mod tests {
     #[test]
     fn entity_decl() {
         let exp_str = r#"
-        ENTITY first;
-          m_ref : second;
+        ENTITY fiRst;
+          m_Ref : second;
           fattr : REAL;
         END_ENTITY;
         "#
         .trim();
 
         let (residual, (entity, _remark)) = super::entity_decl(exp_str).finish().unwrap();
-        assert_eq!(entity.name, "first");
+        assert_eq!(entity.name, "fiRst");
 
         assert_eq!(entity.attributes.len(), 2);
         // check `m_ref`
-        assert_eq!(entity.attributes[0].name, "m_ref");
+        assert_eq!(entity.attributes[0].name, "m_Ref");
         assert!(matches!(entity.attributes[0].ty, Type::Named(_)));
         // check `fattr`
         assert_eq!(entity.attributes[1].name, "fattr");
@@ -303,6 +303,72 @@ mod tests {
         .trim();
 
         let (residual, (entity, _remark)) = super::entity_decl(exp_str).finish().unwrap();
+        dbg!(&entity);
+        assert_eq!(residual, "");
+    }
+
+    #[test]
+    fn b_spline_curve() {
+        // from AP201
+        let input = r#"
+        ENTITY b_spline_curve
+          SUPERTYPE OF (ONEOF (uniform_curve,b_spline_curve_with_knots,
+              quasi_uniform_curve,bezier_curve) ANDOR rational_b_spline_curve)
+          SUBTYPE OF (bounded_curve);
+            degree              : INTEGER;
+            control_points_list : LIST [2:?] OF cartesian_point;
+            curve_form          : b_spline_curve_form;
+            closed_curve        : LOGICAL;
+            self_intersect      : LOGICAL;
+          DERIVE
+            upper_index_on_control_points : INTEGER := SIZEOF(
+                                               control_points_list) - 1;
+            control_points                : ARRAY [0:
+                                               upper_index_on_control_points] OF
+                                                cartesian_point := list_to_array(
+                                               control_points_list,0,
+                                               upper_index_on_control_points);
+          WHERE
+            wr1: ('EXPLICIT_DRAUGHTING.UNIFORM_CURVE' IN TYPEOF(SELF)) OR (
+                     'EXPLICIT_DRAUGHTING.QUASI_UNIFORM_CURVE' IN TYPEOF(SELF)) 
+                     OR ('EXPLICIT_DRAUGHTING.BEZIER_CURVE' IN TYPEOF(SELF)) OR (
+                     'EXPLICIT_DRAUGHTING.B_SPLINE_CURVE_WITH_KNOTS' IN TYPEOF(
+                     SELF));
+        END_ENTITY;
+        "#
+        .trim();
+
+        let (residual, (entity, _remark)) = super::entity_decl(input).finish().unwrap();
+        dbg!(&entity);
+        assert_eq!(residual, "");
+    }
+
+    #[test]
+    fn draughting_presented_item() {
+        // from AP201
+        let input = r#"
+        ENTITY draughting_presented_item
+          SUBTYPE OF (presented_item);
+            items : SET [1:?] OF draughting_presented_item_select;
+          WHERE
+            presented_item_presentation:
+              SIZEOF(
+                QUERY (
+                  pir <* USEDIN(
+                    SELF, 'EXPLICIT_DRAUGHTING.' + 'PRESENTED_ITEM_REPRESENTATION.ITEM'
+                  )
+                  | (
+                    NOT (
+                      'EXPLICIT_DRAUGHTING.DRAWING_REVISION' IN TYPEOF(pir.presentation)
+                    )
+                  )
+                )
+              ) = 0;
+        END_ENTITY;
+        "#
+        .trim();
+
+        let (residual, (entity, _remark)) = super::entity_decl(input).finish().unwrap();
         dbg!(&entity);
         assert_eq!(residual, "");
     }

@@ -54,6 +54,7 @@ pub use expression::*;
 pub use identifier::*;
 pub use literal::*;
 pub use remark::*;
+pub use reserved::*;
 pub use schema::*;
 pub use stmt::*;
 pub use subsuper::*;
