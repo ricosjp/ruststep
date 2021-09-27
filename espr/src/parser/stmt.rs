@@ -29,7 +29,6 @@ pub fn alias_stmt(input: &str) -> ParseResult<Statement> {
         many0(qualifier),
         char(';'),
         many1(stmt),
-        //many_till_reserved(stmt),
         tag("END_ALIAS"),
         char(';'),
     ))
