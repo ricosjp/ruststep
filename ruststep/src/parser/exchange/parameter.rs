@@ -50,3 +50,20 @@ pub fn omitted_parameter(input: &str) -> ParseResult<Parameter> {
 pub fn parameter_list(input: &str) -> ParseResult<Vec<Parameter>> {
     comma_separated(parameter).parse(input)
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::parser::Parameter;
+    use nom::Finish;
+
+    #[test]
+    fn untyped_parameter() {
+        let (res, record) = super::untyped_parameter("2").finish().unwrap();
+        assert_eq!(res, "");
+        assert_eq!(record, Parameter::integer(2));
+
+        let (res, record) = super::untyped_parameter("2.0").finish().unwrap();
+        assert_eq!(res, "");
+        assert_eq!(record, Parameter::real(2.0));
+    }
+}
