@@ -1,11 +1,7 @@
 {
   "httpHeaders": [
     {
-      "urls": [
-        "https://crates.io/crates/espr",
-        "https://crates.io/crates/ruststep",
-        "https://crates.io/crates/ruststep-derive"
-      ],
+      "urls": ["https://crates.io/crates"],
       "headers": {
         "Accept": "text/html"
       }
