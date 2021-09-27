@@ -308,7 +308,7 @@ mod tests {
     }
 
     #[test]
-    fn bspline_curve() {
+    fn b_spline_curve() {
         // from AP201
         let input = r#"
         ENTITY b_spline_curve
@@ -334,6 +334,36 @@ mod tests {
                      OR ('EXPLICIT_DRAUGHTING.BEZIER_CURVE' IN TYPEOF(SELF)) OR (
                      'EXPLICIT_DRAUGHTING.B_SPLINE_CURVE_WITH_KNOTS' IN TYPEOF(
                      SELF));
+        END_ENTITY;
+        "#
+        .trim();
+
+        let (residual, (entity, _remark)) = super::entity_decl(input).finish().unwrap();
+        dbg!(&entity);
+        assert_eq!(residual, "");
+    }
+
+    #[test]
+    fn draughting_presented_item() {
+        // from AP201
+        let input = r#"
+        ENTITY draughting_presented_item
+          SUBTYPE OF (presented_item);
+            items : SET [1:?] OF draughting_presented_item_select;
+          WHERE
+            presented_item_presentation:
+              SIZEOF(
+                QUERY (
+                  pir <* USEDIN(
+                    SELF, 'EXPLICIT_DRAUGHTING.' + 'PRESENTED_ITEM_REPRESENTATION.ITEM'
+                  )
+                  | (
+                    NOT (
+                      'EXPLICIT_DRAUGHTING.DRAWING_REVISION' IN TYPEOF(pir.presentation)
+                    )
+                  )
+                )
+              ) = 0;
         END_ENTITY;
         "#
         .trim();
