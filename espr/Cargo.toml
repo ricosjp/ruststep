@@ -1,6 +1,6 @@
 [package]
 name = "espr"
-version = "0.1.0-alpha.0"
+version = "0.1.0"
 authors = ["Yoshinori Tanimura <tanimura@ricos.co.jp>", "Toshiki Teramura <teramura@ricos.co.jp"]
 edition = "2018"
 
