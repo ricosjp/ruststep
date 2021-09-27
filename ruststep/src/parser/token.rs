@@ -6,10 +6,9 @@ use crate::{
 };
 use nom::{
     branch::alt,
-    character::complete::{char, digit1, multispace0, none_of, satisfy},
+    character::complete::{char, digit0, digit1, multispace0, none_of, satisfy},
     combinator::opt,
     multi::{many0, many1},
-    number::complete::double,
     sequence::tuple,
     Parser,
 };
@@ -32,14 +31,39 @@ pub fn integer(input: &str) -> ParseResult<i64> {
         .parse(input)
 }
 
-/// real = \[ [sign] \] [digit] { [digit] } `.` { [digit] } \[ `E` \[ [sign] \] [digit] { [digit] } \] .
-pub fn real(input: &str) -> ParseResult<f64> {
-    tuple((opt(sign), multispace0, double))
-        .map(|(sign, _space, number)| match sign {
-            Some('-') => -number,
-            _ => number,
+/// `E` \[ [sign] \] [digit] { [digit] } .
+fn exponent(input: &str) -> ParseResult<i64> {
+    tuple((char('E'), multispace0, opt(sign), multispace0, digit1))
+        .map(|(_e, _sp1, sign, _sp2, digit)| {
+            let num: i64 = digit.parse().expect("Failed to parse integer in exponent");
+            match sign {
+                Some('-') => -num,
+                _ => num,
+            }
         })
         .parse(input)
+}
+
+/// real = \[ [sign] \] [digit] { [digit] } `.` { [digit] } \[ `E` \[ [sign] \] [digit] { [digit] } \] .
+pub fn real(input: &str) -> ParseResult<f64> {
+    tuple((
+        opt(sign),
+        multispace0,
+        digit1,
+        char('.'),
+        digit0,
+        opt(exponent),
+    ))
+    .map(|(sign, _space, integral, _point, fractional, exp)| {
+        let num: f64 = format!("{}.{}e{}", integral, fractional, exp.unwrap_or(0))
+            .parse()
+            .expect("Failed to parse Float");
+        match sign {
+            Some('-') => -num,
+            _ => num,
+        }
+    })
+    .parse(input)
 }
 
 /// string = `'` { [special] | [digit] | [space] | [lower] | [upper] | high_codepoint | [apostrophe] [apostrophe] | [reverse_solidus] [reverse_solidus] | control_directive } `'` .
@@ -202,6 +226,31 @@ pub fn signature_content(input: &str) -> ParseResult<String> {
 #[cfg(test)]
 mod tests {
     use nom::Finish;
+
+    #[test]
+    fn real() {
+        let (res, s) = super::real("1.23").finish().unwrap();
+        assert_eq!(res, "");
+        assert_eq!(s, 1.23);
+
+        let (res, s) = super::real("1.23E4").finish().unwrap();
+        assert_eq!(res, "");
+        assert_eq!(s, 1.23e4);
+
+        let (res, s) = super::real("1.23E-4").finish().unwrap();
+        assert_eq!(res, "");
+        assert_eq!(s, 1.23e-4);
+
+        let (res, s) = super::real("-1.23E4").finish().unwrap();
+        assert_eq!(res, "");
+        assert_eq!(s, -1.23e4);
+
+        let (res, s) = super::real("-1.23E-4").finish().unwrap();
+        assert_eq!(res, "");
+        assert_eq!(s, -1.23e-4);
+
+        assert!(super::real("123").finish().is_err());
+    }
 
     #[test]
     fn string() {
