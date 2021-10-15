@@ -11,15 +11,42 @@ impl ToTokens for Schema {
         let entities = &self.entities;
         let entity_types: Vec<_> = entities
             .iter()
-            .map(|e| format_ident!("{}", e.name.to_pascal_case()))
+            .flat_map(|e| {
+                if e.subtypes.is_empty() {
+                    vec![format_ident!("{}", e.name.to_pascal_case())]
+                } else {
+                    vec![
+                        format_ident!("{}", e.name.to_pascal_case()),
+                        format_ident!("{}Any", e.name.to_pascal_case(),
+                    )]
+                }
+            })
             .collect();
         let holder_name: Vec<_> = entities
             .iter()
-            .map(|e| format_ident!("{}", e.name))
+            .flat_map(|e| {
+                if e.subtypes.is_empty() {
+                    vec![format_ident!("{}", e.name)]
+                } else {
+                    vec![
+                        format_ident!("{}", e.name),
+                        format_ident!("{}_any", e.name),
+                    ]
+                }
+            })
             .collect();
         let iter_name: Vec<_> = entities
             .iter()
-            .map(|e| format_ident!("{}_iter", e.name))
+            .flat_map(|e| {
+                if e.subtypes.is_empty() {
+                    vec![format_ident!("{}_iter", e.name)]
+                } else {
+                    vec![
+                        format_ident!("{}_iter", e.name),
+                        format_ident!("{}_any_iter", e.name),
+                    ]
+                }
+            })
             .collect();
         tokens.append_all(quote! {
             pub mod #name {

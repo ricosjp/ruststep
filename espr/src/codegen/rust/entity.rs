@@ -42,7 +42,11 @@ impl ToTokens for Entity {
                 *is_supertype = false;
             }
             attr_type.push(ty_clone.to_token_stream());
-            use_place_holder.push(quote! {});
+            if ty.is_simple() {
+                use_place_holder.push(quote! {});
+            } else {
+                use_place_holder.push(quote! { #[holder(use_place_holder)] });
+            }
 
             if let TypeRef::Entity {
                 name: supertype_name,
@@ -89,14 +93,22 @@ impl ToTokens for Entity {
             let names: Vec<_> = subtypes
                 .iter()
                 .map(|ty| match &ty {
-                    TypeRef::Entity { name, .. } => format_ident!("{}", name),
+                    TypeRef::Entity { name, is_supertype, .. } => {
+                        if *is_supertype {
+                            format_ident!("{}_any", name)
+                        } else {
+                            format_ident!("{}", name)
+                        }
+                    }
                     _ => unreachable!(),
                 })
                 .collect();
+            let field_name = format_ident!("{}_any", field_name);
             let enum_name = format_ident!("{}Any", name);
             tokens.append_all(quote! {
                 #[derive(Debug, Clone, PartialEq, ::ruststep_derive::Holder)]
                 #[holder(table = Tables)]
+                #[holder(field = #field_name)]
                 #[holder(generate_deserialize)]
                 pub enum #enum_name {
                     #(
