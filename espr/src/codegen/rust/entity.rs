@@ -37,7 +37,12 @@ impl ToTokens for Entity {
             };
 
             attr_name.push(attr.clone());
-            attr_type.push(ty.to_token_stream());
+            let mut ty_clone = ty.clone();
+            if let TypeRef::Entity { is_supertype, .. } = &mut ty_clone {
+                *is_supertype = false;
+            }
+            attr_type.push(ty_clone.to_token_stream());
+            use_place_holder.push(quote! {});
 
             if let TypeRef::Entity {
                 name: supertype_name,
