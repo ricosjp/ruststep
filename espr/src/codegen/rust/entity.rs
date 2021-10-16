@@ -13,21 +13,6 @@ impl ToTokens for Entity {
         let mut attr_type = Vec::new();
         let mut use_place_holder = Vec::new();
 
-        for EntityAttribute { name, ty, optional } in &self.attributes {
-            let name = format_ident!("{}", name);
-            attr_name.push(name.clone());
-            if *optional {
-                attr_type.push(quote! { Option<#ty> });
-            } else {
-                attr_type.push(quote! { #ty });
-            }
-            if ty.is_simple() {
-                use_place_holder.push(quote! {});
-            } else {
-                use_place_holder.push(quote! { #[holder(use_place_holder)] });
-            }
-        }
-
         for ty in &self.supertypes {
             let (attr, ty) = match ty {
                 TypeRef::Named { name, .. } | TypeRef::Entity { name, .. } => {
@@ -69,6 +54,21 @@ impl ToTokens for Entity {
                         }
                     });
                 }
+            }
+        }
+
+        for EntityAttribute { name, ty, optional } in &self.attributes {
+            let name = format_ident!("{}", name);
+            attr_name.push(name.clone());
+            if *optional {
+                attr_type.push(quote! { Option<#ty> });
+            } else {
+                attr_type.push(quote! { #ty });
+            }
+            if ty.is_simple() {
+                use_place_holder.push(quote! {});
+            } else {
+                use_place_holder.push(quote! { #[holder(use_place_holder)] });
             }
         }
 
