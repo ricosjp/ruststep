@@ -35,6 +35,7 @@ jobs:
       with:
         toolchain: "1.56.0"
         profile: minimal
+        components: rustfmt
         default: true
         override: true
     - name: Generate AP201 binding
