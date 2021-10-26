@@ -2,7 +2,8 @@
 name = "ruststep"
 version = "0.1.0"
 authors = ["Toshiki Teramura <teramura@ricos.co.jp>", "Yoshinori Tanimura <tanimura@ricos.co.jp>"]
-edition = "2018"
+edition = "2021"
+rust-version = "1.56.0"
 
 description   = "A STEP toolkit for Rust"
 documentation = "https://ricosjp.github.io/ruststep/ruststep/index.html"
