@@ -9,16 +9,18 @@ on:
 jobs:
   test:
     runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        rust:
+          - stable
+          - "1.56.0"  # MSRV (for edition 2021)
     steps:
     - uses: actions/checkout@v1
-    - uses: actions-rs/cargo@v1
+    - uses: actions-rs/toolchain@v1
       with:
-        command: test
-
-  test-all-features:
-    runs-on: ubuntu-20.04
-    steps:
-    - uses: actions/checkout@v1
+        profile: minimal
+        toolchain: ${{ matrix.rust }}
+        override: true
     - uses: actions-rs/cargo@v1
       with:
         command: test
@@ -28,6 +30,11 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
     - uses: actions/checkout@v1
+    - uses: actions-rs/toolchain@v1
+      with:
+        toolchain: "1.56.0"
+        default: true
+        override: true
     - uses: actions-rs/cargo@v1
       with:
         command: fmt
@@ -37,6 +44,11 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
     - uses: actions/checkout@v1
+    - uses: actions-rs/toolchain@v1
+      with:
+        toolchain: "1.56.0"
+        default: true
+        override: true
     - uses: actions-rs/cargo@v1
       with:
         command: doc
@@ -46,6 +58,11 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
     - uses: actions/checkout@v1
+    - uses: actions-rs/toolchain@v1
+      with:
+        toolchain: "1.56.0"
+        default: true
+        override: true
     - uses: actions-rs/cargo@v1
       with:
         command: clippy
