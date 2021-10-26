@@ -1,8 +1,9 @@
 [package]
 name = "ruststep-derive"
 version = "0.1.0"
-edition = "2021"
 authors = ["Toshiki Teramura <toshiki.teramura@gmail.com>"]
+edition = "2021"
+rust-version = "1.56.0"
 
 description   = "proc-macro for ruststep"
 documentation = "https://ricosjp.github.io/ruststep/ruststep_derive/index.html"
