@@ -1,12 +1,13 @@
 use crate::ir::*;
 
+use check_keyword::CheckKeyword;
 use inflector::Inflector;
 use proc_macro2::TokenStream;
 use quote::*;
 
 impl ToTokens for Entity {
     fn to_tokens(&self, tokens: &mut TokenStream) {
-        let field_name = format_ident!("{}", self.name);
+        let field_name = format_ident!("{}", self.name.to_safe());
         let name = format_ident!("{}", self.name.to_pascal_case());
 
         let mut attr_name = Vec::new();
@@ -14,7 +15,7 @@ impl ToTokens for Entity {
         let mut use_place_holder = Vec::new();
 
         for EntityAttribute { name, ty, optional } in &self.attributes {
-            let name = format_ident!("{}", name);
+            let name = format_ident!("{}", name.to_safe());
             attr_name.push(name.clone());
             if *optional {
                 attr_type.push(quote! { Option<#ty> });
@@ -31,7 +32,7 @@ impl ToTokens for Entity {
         for ty in &self.supertypes {
             let (attr, ty) = match ty {
                 TypeRef::Named { name, .. } | TypeRef::Entity { name, .. } => {
-                    (format_ident!("{}", name), ty)
+                    (format_ident!("{}", name.to_safe()), ty)
                 }
                 _ => unreachable!(),
             };

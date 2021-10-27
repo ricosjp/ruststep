@@ -5,6 +5,7 @@ mod schema;
 
 use crate::ir::*;
 
+use check_keyword::CheckKeyword;
 use inflector::Inflector;
 use proc_macro2::TokenStream;
 use quote::*;
@@ -73,7 +74,7 @@ impl ToTokens for Select {
                         field.push(quote! {});
                     } else {
                         entry_types.push(quote! { Box<#ty> });
-                        let field_name = format_ident!("{}", name);
+                        let field_name = format_ident!("{}", name.to_safe());
                         field.push(quote! { #[holder(field = #field_name)] })
                     }
                     use_place_holder.push(quote! { #[holder(use_place_holder)] });
