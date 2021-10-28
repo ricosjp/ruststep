@@ -82,13 +82,16 @@ impl<'de> ::serde::de::Visitor<'de> for AHolderVisitor {
     }
 }
 
-impl Holder for AHolder {
+impl IntoOwned for AHolder {
     type Owned = A;
     type Table = Table;
     fn into_owned(self, _table: &Self::Table) -> Result<Self::Owned> {
         let AHolder { x, y } = self;
         Ok(A { x, y })
     }
+}
+
+impl Holder for AHolder {
     fn name() -> &'static str {
         "A"
     }
@@ -165,7 +168,7 @@ impl<'de> ::serde::de::Visitor<'de> for BHolderVisitor {
     }
 }
 
-impl Holder for BHolder {
+impl IntoOwned for BHolder {
     type Owned = B;
     type Table = Table;
     fn into_owned(self, table: &Self::Table) -> Result<Self::Owned> {
@@ -175,6 +178,9 @@ impl Holder for BHolder {
             a: a.into_owned(table)?,
         })
     }
+}
+
+impl Holder for BHolder {
     fn name() -> &'static str {
         "B"
     }

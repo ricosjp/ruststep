@@ -1,5 +1,5 @@
 use nom::Finish;
-use ruststep::{ast::*, parser::exchange, place_holder::*};
+use ruststep::{ast::*, parser::exchange, place_holder::*, tables::*};
 use ruststep_derive::as_holder;
 use serde::Deserialize;
 use std::collections::HashMap;

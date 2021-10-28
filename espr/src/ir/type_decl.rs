@@ -115,7 +115,7 @@ impl Legalize for TypeDecl {
                         base: Box::new(base),
                         bound,
                         unique: *unique,
-                    }
+                    },
                 })
             }
             _ => panic!("unknown type declaraticm: {:?}", type_decl),

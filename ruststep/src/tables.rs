@@ -3,11 +3,14 @@
 use serde::de;
 use std::collections::HashMap;
 
-/// Trait for resolving a reference through entity id
-pub trait Holder: Clone + 'static {
+pub trait IntoOwned: Clone + 'static {
     type Owned;
     type Table;
     fn into_owned(self, table: &Self::Table) -> Result<Self::Owned, crate::error::Error>;
+}
+
+/// Trait for resolving a reference through entity id
+pub trait Holder: IntoOwned {
     fn name() -> &'static str;
     fn attr_len() -> usize;
 }
@@ -18,7 +21,7 @@ pub trait WithVisitor {
 }
 
 /// Trait for tables which pulls an entity (`T`) from an entity id (`u64`)
-pub trait EntityTable<T: Holder<Table = Self>> {
+pub trait EntityTable<T: IntoOwned<Table = Self>> {
     /// Get owned entity from table
     fn get_owned(&self, entity_id: u64) -> Result<T::Owned, crate::error::Error>;
 
@@ -34,7 +37,7 @@ pub fn get_owned<T, Table>(
     entity_id: u64,
 ) -> Result<T::Owned, crate::error::Error>
 where
-    T: Holder<Table = Table>,
+    T: IntoOwned<Table = Table>,
     Table: EntityTable<T>,
 {
     match map.get(&entity_id) {
@@ -56,4 +59,12 @@ where
             .cloned()
             .map(move |value| value.into_owned(table)),
     )
+}
+
+impl<T: IntoOwned> IntoOwned for Vec<T> {
+    type Owned = Vec<T::Owned>;
+    type Table = T::Table;
+    fn into_owned(self, table: &Self::Table) -> Result<Self::Owned, crate::error::Error> {
+        self.into_iter().map(|e| e.into_owned(table)).collect()
+    }
 }
