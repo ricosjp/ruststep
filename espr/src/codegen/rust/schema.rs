@@ -29,7 +29,10 @@ impl ToTokens for Schema {
                 if e.subtypes.is_empty() {
                     vec![format_ident!("{}", e.name.to_safe())]
                 } else {
-                    vec![format_ident!("{}", e.name.to_safe()), format_ident!("{}_any", e.name)]
+                    vec![
+                        format_ident!("{}", e.name.to_safe()),
+                        format_ident!("{}_any", e.name),
+                    ]
                 }
             })
             .collect();
