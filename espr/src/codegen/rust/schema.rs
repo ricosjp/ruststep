@@ -17,8 +17,8 @@ impl ToTokens for Schema {
                 } else {
                     vec![
                         format_ident!("{}", e.name.to_pascal_case()),
-                        format_ident!("{}Any", e.name.to_pascal_case(),
-                    )]
+                        format_ident!("{}Any", e.name.to_pascal_case(),),
+                    ]
                 }
             })
             .collect();
@@ -28,10 +28,7 @@ impl ToTokens for Schema {
                 if e.subtypes.is_empty() {
                     vec![format_ident!("{}", e.name)]
                 } else {
-                    vec![
-                        format_ident!("{}", e.name),
-                        format_ident!("{}_any", e.name),
-                    ]
+                    vec![format_ident!("{}", e.name), format_ident!("{}_any", e.name)]
                 }
             })
             .collect();

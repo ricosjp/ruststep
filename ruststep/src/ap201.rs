@@ -3210,9 +3210,9 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub struct AnnotationFillArea {
         #[holder(use_place_holder)]
-        pub boundaries: Vec<CurveAny>,
-        #[holder(use_place_holder)]
         pub geometric_representation_item: GeometricRepresentationItem,
+        #[holder(use_place_holder)]
+        pub boundaries: Vec<CurveAny>,
     }
     impl Into<AnnotationOccurrenceAny> for AnnotationFillAreaOccurrence {
         fn into(self) -> AnnotationOccurrenceAny {
@@ -3225,9 +3225,9 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub struct AnnotationFillAreaOccurrence {
         #[holder(use_place_holder)]
-        pub fill_style_target: PointAny,
-        #[holder(use_place_holder)]
         pub annotation_occurrence: AnnotationOccurrence,
+        #[holder(use_place_holder)]
+        pub fill_style_target: PointAny,
     }
     impl Into<StyledItemAny> for AnnotationOccurrenceAny {
         fn into(self) -> StyledItemAny {
@@ -3471,9 +3471,9 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub struct Axis2Placement2D {
         #[holder(use_place_holder)]
-        pub ref_direction: Option<Direction>,
-        #[holder(use_place_holder)]
         pub placement: Placement,
+        #[holder(use_place_holder)]
+        pub ref_direction: Option<Direction>,
     }
     impl Into<BoundedCurveAny> for BSplineCurveAny {
         fn into(self) -> BoundedCurveAny {
@@ -3485,14 +3485,14 @@ pub mod explicit_draughting {
     # [holder (field = b_spline_curve)]
     #[holder(generate_deserialize)]
     pub struct BSplineCurve {
+        #[holder(use_place_holder)]
+        pub bounded_curve: BoundedCurve,
         pub degree: i64,
         #[holder(use_place_holder)]
         pub control_points_list: Vec<CartesianPoint>,
         pub curve_form: BSplineCurveForm,
         pub closed_curve: Logical,
         pub self_intersect: Logical,
-        #[holder(use_place_holder)]
-        pub bounded_curve: BoundedCurve,
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
@@ -3525,11 +3525,11 @@ pub mod explicit_draughting {
     # [holder (field = b_spline_curve_with_knots)]
     #[holder(generate_deserialize)]
     pub struct BSplineCurveWithKnots {
+        #[holder(use_place_holder)]
+        pub b_spline_curve: BSplineCurve,
         pub knot_multiplicities: Vec<i64>,
         pub knots: Vec<ParameterValue>,
         pub knot_spec: KnotType,
-        #[holder(use_place_holder)]
-        pub b_spline_curve: BSplineCurve,
     }
     impl Into<BSplineCurveAny> for BezierCurve {
         fn into(self) -> BSplineCurveAny {
@@ -3585,10 +3585,10 @@ pub mod explicit_draughting {
     # [holder (field = calendar_date)]
     #[holder(generate_deserialize)]
     pub struct CalendarDate {
-        pub day_component: DayInMonthNumber,
-        pub month_component: MonthInYearNumber,
         #[holder(use_place_holder)]
         pub date: Date,
+        pub day_component: DayInMonthNumber,
+        pub month_component: MonthInYearNumber,
     }
     impl Into<MappedItemAny> for CameraImageAny {
         fn into(self) -> MappedItemAny {
@@ -3658,10 +3658,10 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub struct CameraModelD2 {
         #[holder(use_place_holder)]
+        pub camera_model: CameraModel,
+        #[holder(use_place_holder)]
         pub view_window: PlanarBox,
         pub view_window_clipping: bool,
-        #[holder(use_place_holder)]
-        pub camera_model: CameraModel,
     }
     impl Into<RepresentationMapAny> for CameraUsage {
         fn into(self) -> RepresentationMapAny {
@@ -3686,9 +3686,9 @@ pub mod explicit_draughting {
     # [holder (field = cartesian_point)]
     #[holder(generate_deserialize)]
     pub struct CartesianPoint {
-        pub coordinates: Vec<LengthMeasure>,
         #[holder(use_place_holder)]
         pub point: Point,
+        pub coordinates: Vec<LengthMeasure>,
     }
     impl Into<ConicAny> for Circle {
         fn into(self) -> ConicAny {
@@ -3700,9 +3700,9 @@ pub mod explicit_draughting {
     # [holder (field = circle)]
     #[holder(generate_deserialize)]
     pub struct Circle {
-        pub radius: PositiveLengthMeasure,
         #[holder(use_place_holder)]
         pub conic: Conic,
+        pub radius: PositiveLengthMeasure,
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
@@ -3731,11 +3731,11 @@ pub mod explicit_draughting {
     # [holder (field = colour_rgb)]
     #[holder(generate_deserialize)]
     pub struct ColourRgb {
+        #[holder(use_place_holder)]
+        pub colour_specification: ColourSpecification,
         pub red: f64,
         pub green: f64,
         pub blue: f64,
-        #[holder(use_place_holder)]
-        pub colour_specification: ColourSpecification,
     }
     impl Into<ColourAny> for ColourSpecificationAny {
         fn into(self) -> ColourAny {
@@ -3748,9 +3748,9 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub struct ColourSpecification {
         #[holder(use_place_holder)]
-        pub name: ColourAny,
-        #[holder(use_place_holder)]
         pub colour: Colour,
+        #[holder(use_place_holder)]
+        pub name: ColourAny,
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
@@ -3772,10 +3772,10 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub struct CompositeCurve {
         #[holder(use_place_holder)]
+        pub bounded_curve: BoundedCurve,
+        #[holder(use_place_holder)]
         pub segments: Vec<CompositeCurveSegment>,
         pub self_intersect: Logical,
-        #[holder(use_place_holder)]
-        pub bounded_curve: BoundedCurve,
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
@@ -3798,9 +3798,9 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub struct CompositeText {
         #[holder(use_place_holder)]
-        pub collected_text: Vec<TextOrCharacter>,
-        #[holder(use_place_holder)]
         pub geometric_representation_item: GeometricRepresentationItem,
+        #[holder(use_place_holder)]
+        pub collected_text: Vec<TextOrCharacter>,
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
@@ -3828,9 +3828,9 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub struct CompositeTextWithAssociatedCurves {
         #[holder(use_place_holder)]
-        pub associated_curves: Vec<CurveAny>,
-        #[holder(use_place_holder)]
         pub composite_text: CompositeText,
+        #[holder(use_place_holder)]
+        pub associated_curves: Vec<CurveAny>,
     }
     impl Into<CompositeTextAny> for CompositeTextWithBlankingBox {
         fn into(self) -> CompositeTextAny {
@@ -3843,9 +3843,9 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub struct CompositeTextWithBlankingBox {
         #[holder(use_place_holder)]
-        pub blanking: PlanarBox,
-        #[holder(use_place_holder)]
         pub composite_text: CompositeText,
+        #[holder(use_place_holder)]
+        pub blanking: PlanarBox,
     }
     impl Into<CompositeTextAny> for CompositeTextWithExtent {
         fn into(self) -> CompositeTextAny {
@@ -3858,9 +3858,9 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub struct CompositeTextWithExtent {
         #[holder(use_place_holder)]
-        pub extent: PlanarExtentAny,
-        #[holder(use_place_holder)]
         pub composite_text: CompositeText,
+        #[holder(use_place_holder)]
+        pub extent: PlanarExtentAny,
     }
     impl Into<CurveAny> for ConicAny {
         fn into(self) -> CurveAny {
@@ -3873,9 +3873,9 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub struct Conic {
         #[holder(use_place_holder)]
-        pub position: Axis2Placement,
-        #[holder(use_place_holder)]
         pub curve: Curve,
+        #[holder(use_place_holder)]
+        pub position: Axis2Placement,
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
@@ -3906,9 +3906,9 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub struct ContextDependentInvisibility {
         #[holder(use_place_holder)]
-        pub presentation_context: InvisibilityContext,
-        #[holder(use_place_holder)]
         pub invisibility: Invisibility,
+        #[holder(use_place_holder)]
+        pub presentation_context: InvisibilityContext,
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
@@ -3954,11 +3954,11 @@ pub mod explicit_draughting {
     # [holder (field = conversion_based_unit)]
     #[holder(generate_deserialize)]
     pub struct ConversionBasedUnit {
+        #[holder(use_place_holder)]
+        pub named_unit: NamedUnit,
         pub name: Label,
         #[holder(use_place_holder)]
         pub conversion_factor: MeasureWithUnitAny,
-        #[holder(use_place_holder)]
-        pub named_unit: NamedUnit,
     }
     impl Into<GeometricRepresentationItemAny> for CurveAny {
         fn into(self) -> GeometricRepresentationItemAny {
@@ -4087,11 +4087,11 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub struct DefinedSymbol {
         #[holder(use_place_holder)]
+        pub geometric_representation_item: GeometricRepresentationItem,
+        #[holder(use_place_holder)]
         pub definition: DefinedSymbolSelect,
         #[holder(use_place_holder)]
         pub target: SymbolTarget,
-        #[holder(use_place_holder)]
-        pub geometric_representation_item: GeometricRepresentationItem,
     }
     impl Into<DimensionCurveDirectedCalloutAny> for DiameterDimension {
         fn into(self) -> DimensionCurveDirectedCalloutAny {
@@ -4189,9 +4189,9 @@ pub mod explicit_draughting {
     # [holder (field = dimension_curve_terminator)]
     #[holder(generate_deserialize)]
     pub struct DimensionCurveTerminator {
-        pub role: DimensionExtentUsage,
         #[holder(use_place_holder)]
         pub terminator_symbol: TerminatorSymbol,
+        pub role: DimensionExtentUsage,
     }
     impl Into<DraughtingCalloutRelationshipAny> for DimensionPair {
         fn into(self) -> DraughtingCalloutRelationshipAny {
@@ -4229,9 +4229,9 @@ pub mod explicit_draughting {
     # [holder (field = direction)]
     #[holder(generate_deserialize)]
     pub struct Direction {
-        pub direction_ratios: Vec<f64>,
         #[holder(use_place_holder)]
         pub geometric_representation_item: GeometricRepresentationItem,
+        pub direction_ratios: Vec<f64>,
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
@@ -4293,9 +4293,9 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub struct DraughtingApprovalAssignment {
         #[holder(use_place_holder)]
-        pub approved_items: Vec<ApprovedItem>,
-        #[holder(use_place_holder)]
         pub approval_assignment: ApprovalAssignment,
+        #[holder(use_place_holder)]
+        pub approved_items: Vec<ApprovedItem>,
     }
     impl Into<GeometricRepresentationItemAny> for DraughtingCalloutAny {
         fn into(self) -> GeometricRepresentationItemAny {
@@ -4308,9 +4308,9 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub struct DraughtingCallout {
         #[holder(use_place_holder)]
-        pub contents: Vec<DraughtingCalloutElement>,
-        #[holder(use_place_holder)]
         pub geometric_representation_item: GeometricRepresentationItem,
+        #[holder(use_place_holder)]
+        pub contents: Vec<DraughtingCalloutElement>,
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
@@ -4380,9 +4380,9 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub struct DraughtingContractAssignment {
         #[holder(use_place_holder)]
-        pub items: Vec<ContractedItem>,
-        #[holder(use_place_holder)]
         pub contract_assignment: ContractAssignment,
+        #[holder(use_place_holder)]
+        pub items: Vec<ContractedItem>,
     }
     impl Into<DrawingRevisionAny> for DraughtingDrawingRevision {
         fn into(self) -> DrawingRevisionAny {
@@ -4421,9 +4421,9 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub struct DraughtingGroupAssignment {
         #[holder(use_place_holder)]
-        pub items: Vec<DraughtingGroupedItem>,
-        #[holder(use_place_holder)]
         pub group_assignment: GroupAssignment,
+        #[holder(use_place_holder)]
+        pub items: Vec<DraughtingGroupedItem>,
     }
     impl Into<RepresentationAny> for DraughtingModel {
         fn into(self) -> RepresentationAny {
@@ -4449,9 +4449,9 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub struct DraughtingOrganizationAssignment {
         #[holder(use_place_holder)]
-        pub assigned_items: Vec<DraughtingOrganizationItem>,
-        #[holder(use_place_holder)]
         pub organization_assignment: OrganizationAssignment,
+        #[holder(use_place_holder)]
+        pub assigned_items: Vec<DraughtingOrganizationItem>,
     }
     impl Into<PersonAndOrganizationAssignmentAny> for DraughtingPersonAndOrganizationAssignment {
         fn into(self) -> PersonAndOrganizationAssignmentAny {
@@ -4466,9 +4466,9 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub struct DraughtingPersonAndOrganizationAssignment {
         #[holder(use_place_holder)]
-        pub assigned_items: Vec<DraughtingOrganizationItem>,
-        #[holder(use_place_holder)]
         pub person_and_organization_assignment: PersonAndOrganizationAssignment,
+        #[holder(use_place_holder)]
+        pub assigned_items: Vec<DraughtingOrganizationItem>,
     }
     impl Into<PersonAssignmentAny> for DraughtingPersonAssignment {
         fn into(self) -> PersonAssignmentAny {
@@ -4481,9 +4481,9 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub struct DraughtingPersonAssignment {
         #[holder(use_place_holder)]
-        pub assigned_items: Vec<DraughtingOrganizationItem>,
-        #[holder(use_place_holder)]
         pub person_assignment: PersonAssignment,
+        #[holder(use_place_holder)]
+        pub assigned_items: Vec<DraughtingOrganizationItem>,
     }
     impl Into<PreDefinedColourAny> for DraughtingPreDefinedColour {
         fn into(self) -> PreDefinedColourAny {
@@ -4535,9 +4535,9 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub struct DraughtingPresentedItem {
         #[holder(use_place_holder)]
-        pub items: Vec<DraughtingPresentedItemSelect>,
-        #[holder(use_place_holder)]
         pub presented_item: PresentedItem,
+        #[holder(use_place_holder)]
+        pub items: Vec<DraughtingPresentedItemSelect>,
     }
     impl Into<SecurityClassificationAssignmentAny> for DraughtingSecurityClassificationAssignment {
         fn into(self) -> SecurityClassificationAssignmentAny {
@@ -4552,9 +4552,9 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub struct DraughtingSecurityClassificationAssignment {
         #[holder(use_place_holder)]
-        pub assigned_items: Vec<ClassifiedItem>,
-        #[holder(use_place_holder)]
         pub security_classification_assignment: SecurityClassificationAssignment,
+        #[holder(use_place_holder)]
+        pub assigned_items: Vec<ClassifiedItem>,
     }
     impl Into<DocumentReferenceAny> for DraughtingSpecificationReference {
         fn into(self) -> DocumentReferenceAny {
@@ -4567,9 +4567,9 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub struct DraughtingSpecificationReference {
         #[holder(use_place_holder)]
-        pub specified_items: Vec<SpecifiedItem>,
-        #[holder(use_place_holder)]
         pub document_reference: DocumentReference,
+        #[holder(use_place_holder)]
+        pub specified_items: Vec<SpecifiedItem>,
     }
     impl Into<SymbolRepresentationAny> for DraughtingSubfigureRepresentation {
         fn into(self) -> SymbolRepresentationAny {
@@ -4647,12 +4647,12 @@ pub mod explicit_draughting {
     # [holder (field = drawing_revision)]
     #[holder(generate_deserialize)]
     pub struct DrawingRevision {
+        #[holder(use_place_holder)]
+        pub presentation_set: PresentationSet,
         pub revision_identifier: Identifier,
         #[holder(use_place_holder)]
         pub drawing_identifier: DrawingDefinition,
         pub intended_scale: Option<Text>,
-        #[holder(use_place_holder)]
-        pub presentation_set: PresentationSet,
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
@@ -4686,9 +4686,9 @@ pub mod explicit_draughting {
     # [holder (field = drawing_sheet_revision)]
     #[holder(generate_deserialize)]
     pub struct DrawingSheetRevision {
-        pub revision_identifier: Identifier,
         #[holder(use_place_holder)]
         pub presentation_area: PresentationArea,
+        pub revision_identifier: Identifier,
     }
     impl Into<AreaInSetAny> for DrawingSheetRevisionUsage {
         fn into(self) -> AreaInSetAny {
@@ -4700,9 +4700,9 @@ pub mod explicit_draughting {
     # [holder (field = drawing_sheet_revision_usage)]
     #[holder(generate_deserialize)]
     pub struct DrawingSheetRevisionUsage {
-        pub sheet_number: Identifier,
         #[holder(use_place_holder)]
         pub area_in_set: AreaInSet,
+        pub sheet_number: Identifier,
     }
     impl Into<ConicAny> for Ellipse {
         fn into(self) -> ConicAny {
@@ -4714,10 +4714,10 @@ pub mod explicit_draughting {
     # [holder (field = ellipse)]
     #[holder(generate_deserialize)]
     pub struct Ellipse {
-        pub semi_axis_1: PositiveLengthMeasure,
-        pub semi_axis_2: PositiveLengthMeasure,
         #[holder(use_place_holder)]
         pub conic: Conic,
+        pub semi_axis_1: PositiveLengthMeasure,
+        pub semi_axis_2: PositiveLengthMeasure,
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
@@ -4866,6 +4866,8 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub struct FillAreaStyleHatching {
         #[holder(use_place_holder)]
+        pub geometric_representation_item: GeometricRepresentationItem,
+        #[holder(use_place_holder)]
         pub hatch_line_appearance: CurveStyle,
         #[holder(use_place_holder)]
         pub start_of_next_hatch_line: OneDirectionRepeatFactorAny,
@@ -4874,8 +4876,6 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub pattern_start: CartesianPoint,
         pub hatch_line_angle: PlaneAngleMeasure,
-        #[holder(use_place_holder)]
-        pub geometric_representation_item: GeometricRepresentationItem,
     }
     impl Into<GeometricRepresentationItemAny> for FillAreaStyleTileSymbolWithStyle {
         fn into(self) -> GeometricRepresentationItemAny {
@@ -4888,9 +4888,9 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub struct FillAreaStyleTileSymbolWithStyle {
         #[holder(use_place_holder)]
-        pub symbol: AnnotationSymbolOccurrenceAny,
-        #[holder(use_place_holder)]
         pub geometric_representation_item: GeometricRepresentationItem,
+        #[holder(use_place_holder)]
+        pub symbol: AnnotationSymbolOccurrenceAny,
     }
     impl Into<GeometricRepresentationItemAny> for FillAreaStyleTiles {
         fn into(self) -> GeometricRepresentationItemAny {
@@ -4903,12 +4903,12 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub struct FillAreaStyleTiles {
         #[holder(use_place_holder)]
+        pub geometric_representation_item: GeometricRepresentationItem,
+        #[holder(use_place_holder)]
         pub tiling_pattern: TwoDirectionRepeatFactor,
         #[holder(use_place_holder)]
         pub tiles: Vec<FillAreaStyleTileShapeSelect>,
         pub tiling_scale: PositiveRatioMeasure,
-        #[holder(use_place_holder)]
-        pub geometric_representation_item: GeometricRepresentationItem,
     }
     impl Into<GeometricSetAny> for GeometricCurveSet {
         fn into(self) -> GeometricSetAny {
@@ -4933,9 +4933,9 @@ pub mod explicit_draughting {
     # [holder (field = geometric_representation_context)]
     #[holder(generate_deserialize)]
     pub struct GeometricRepresentationContext {
-        pub coordinate_space_dimension: DimensionCount,
         #[holder(use_place_holder)]
         pub representation_context: RepresentationContext,
+        pub coordinate_space_dimension: DimensionCount,
     }
     impl Into<RepresentationItemAny> for GeometricRepresentationItemAny {
         fn into(self) -> RepresentationItemAny {
@@ -5027,9 +5027,9 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub struct GeometricSet {
         #[holder(use_place_holder)]
-        pub elements: Vec<GeometricSetSelect>,
-        #[holder(use_place_holder)]
         pub geometric_representation_item: GeometricRepresentationItem,
+        #[holder(use_place_holder)]
+        pub elements: Vec<GeometricSetSelect>,
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
@@ -5077,9 +5077,9 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub struct GlobalUnitAssignedContext {
         #[holder(use_place_holder)]
-        pub units: Vec<Unit>,
-        #[holder(use_place_holder)]
         pub representation_context: RepresentationContext,
+        #[holder(use_place_holder)]
+        pub units: Vec<Unit>,
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
@@ -5128,10 +5128,10 @@ pub mod explicit_draughting {
     # [holder (field = hyperbola)]
     #[holder(generate_deserialize)]
     pub struct Hyperbola {
-        pub semi_axis: PositiveLengthMeasure,
-        pub semi_imag_axis: PositiveLengthMeasure,
         #[holder(use_place_holder)]
         pub conic: Conic,
+        pub semi_axis: PositiveLengthMeasure,
+        pub semi_imag_axis: PositiveLengthMeasure,
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
@@ -5248,11 +5248,11 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub struct Line {
         #[holder(use_place_holder)]
+        pub curve: Curve,
+        #[holder(use_place_holder)]
         pub pnt: CartesianPoint,
         #[holder(use_place_holder)]
         pub dir: Vector,
-        #[holder(use_place_holder)]
-        pub curve: Curve,
     }
     impl Into<DimensionCurveDirectedCalloutAny> for LinearDimension {
         fn into(self) -> DimensionCurveDirectedCalloutAny {
@@ -5278,11 +5278,11 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub struct MappedItem {
         #[holder(use_place_holder)]
+        pub representation_item: RepresentationItem,
+        #[holder(use_place_holder)]
         pub mapping_source: RepresentationMapAny,
         #[holder(use_place_holder)]
         pub mapping_target: RepresentationItemAny,
-        #[holder(use_place_holder)]
-        pub representation_item: RepresentationItem,
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
@@ -5358,11 +5358,11 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub struct OffsetCurve2D {
         #[holder(use_place_holder)]
+        pub curve: Curve,
+        #[holder(use_place_holder)]
         pub basis_curve: CurveAny,
         pub distance: LengthMeasure,
         pub self_intersect: Logical,
-        #[holder(use_place_holder)]
-        pub curve: Curve,
     }
     impl Into<GeometricRepresentationItemAny> for OneDirectionRepeatFactorAny {
         fn into(self) -> GeometricRepresentationItemAny {
@@ -5375,9 +5375,9 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub struct OneDirectionRepeatFactor {
         #[holder(use_place_holder)]
-        pub repeat_factor: Vector,
-        #[holder(use_place_holder)]
         pub geometric_representation_item: GeometricRepresentationItem,
+        #[holder(use_place_holder)]
+        pub repeat_factor: Vector,
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
@@ -5447,10 +5447,10 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub struct OrganizationalAddress {
         #[holder(use_place_holder)]
+        pub address: Address,
+        #[holder(use_place_holder)]
         pub organizations: Vec<Organization>,
         pub description: Text,
-        #[holder(use_place_holder)]
-        pub address: Address,
     }
     impl Into<ConicAny> for Parabola {
         fn into(self) -> ConicAny {
@@ -5462,9 +5462,9 @@ pub mod explicit_draughting {
     # [holder (field = parabola)]
     #[holder(generate_deserialize)]
     pub struct Parabola {
-        pub focal_dist: LengthMeasure,
         #[holder(use_place_holder)]
         pub conic: Conic,
+        pub focal_dist: LengthMeasure,
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
@@ -5551,10 +5551,10 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub struct PersonalAddress {
         #[holder(use_place_holder)]
+        pub address: Address,
+        #[holder(use_place_holder)]
         pub people: Vec<Person>,
         pub description: Text,
-        #[holder(use_place_holder)]
-        pub address: Address,
     }
     impl Into<GeometricRepresentationItemAny> for PlacementAny {
         fn into(self) -> GeometricRepresentationItemAny {
@@ -5567,9 +5567,9 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub struct Placement {
         #[holder(use_place_holder)]
-        pub location: CartesianPoint,
-        #[holder(use_place_holder)]
         pub geometric_representation_item: GeometricRepresentationItem,
+        #[holder(use_place_holder)]
+        pub location: CartesianPoint,
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
@@ -5591,9 +5591,9 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub struct PlanarBox {
         #[holder(use_place_holder)]
-        pub placement: Axis2Placement,
-        #[holder(use_place_holder)]
         pub planar_extent: PlanarExtent,
+        #[holder(use_place_holder)]
+        pub placement: Axis2Placement,
     }
     impl Into<GeometricRepresentationItemAny> for PlanarExtentAny {
         fn into(self) -> GeometricRepresentationItemAny {
@@ -5605,10 +5605,10 @@ pub mod explicit_draughting {
     # [holder (field = planar_extent)]
     #[holder(generate_deserialize)]
     pub struct PlanarExtent {
-        pub size_in_x: LengthMeasure,
-        pub size_in_y: LengthMeasure,
         #[holder(use_place_holder)]
         pub geometric_representation_item: GeometricRepresentationItem,
+        pub size_in_x: LengthMeasure,
+        pub size_in_y: LengthMeasure,
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
@@ -5681,10 +5681,10 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub struct PointOnCurve {
         #[holder(use_place_holder)]
+        pub point: Point,
+        #[holder(use_place_holder)]
         pub basis_curve: CurveAny,
         pub point_parameter: ParameterValue,
-        #[holder(use_place_holder)]
-        pub point: Point,
     }
     impl Into<BoundedCurveAny> for Polyline {
         fn into(self) -> BoundedCurveAny {
@@ -5697,9 +5697,9 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub struct Polyline {
         #[holder(use_place_holder)]
-        pub points: Vec<CartesianPoint>,
-        #[holder(use_place_holder)]
         pub bounded_curve: BoundedCurve,
+        #[holder(use_place_holder)]
+        pub points: Vec<CartesianPoint>,
     }
     impl Into<PreDefinedItemAny> for PreDefinedColourAny {
         fn into(self) -> PreDefinedItemAny {
@@ -6001,9 +6001,9 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub struct PresentationStyleByContext {
         #[holder(use_place_holder)]
-        pub style_context: StyleContextSelect,
-        #[holder(use_place_holder)]
         pub presentation_style_assignment: PresentationStyleAssignment,
+        #[holder(use_place_holder)]
+        pub style_context: StyleContextSelect,
     }
     impl Into<PresentationRepresentationAny> for PresentationView {
         fn into(self) -> PresentationRepresentationAny {
@@ -6063,9 +6063,9 @@ pub mod explicit_draughting {
     # [holder (field = product_context)]
     #[holder(generate_deserialize)]
     pub struct ProductContext {
-        pub discipline_type: Label,
         #[holder(use_place_holder)]
         pub application_context_element: ApplicationContextElement,
+        pub discipline_type: Label,
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
@@ -6089,9 +6089,9 @@ pub mod explicit_draughting {
     # [holder (field = product_definition_context)]
     #[holder(generate_deserialize)]
     pub struct ProductDefinitionContext {
-        pub life_cycle_stage: Label,
         #[holder(use_place_holder)]
         pub application_context_element: ApplicationContextElement,
+        pub life_cycle_stage: Label,
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
@@ -6225,9 +6225,9 @@ pub mod explicit_draughting {
     # [holder (field = rational_b_spline_curve)]
     #[holder(generate_deserialize)]
     pub struct RationalBSplineCurve {
-        pub weights_data: Vec<f64>,
         #[holder(use_place_holder)]
         pub b_spline_curve: BSplineCurve,
+        pub weights_data: Vec<f64>,
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
@@ -6403,10 +6403,10 @@ pub mod explicit_draughting {
     # [holder (field = si_unit)]
     #[holder(generate_deserialize)]
     pub struct SiUnit {
-        pub prefix: Option<SiPrefix>,
-        pub name: SiUnitName,
         #[holder(use_place_holder)]
         pub named_unit: NamedUnit,
+        pub prefix: Option<SiPrefix>,
+        pub name: SiUnitName,
     }
     impl Into<DraughtingCalloutAny> for StructuredDimensionCallout {
         fn into(self) -> DraughtingCalloutAny {
@@ -6432,11 +6432,11 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub struct StyledItem {
         #[holder(use_place_holder)]
+        pub representation_item: RepresentationItem,
+        #[holder(use_place_holder)]
         pub styles: Vec<PresentationStyleAssignmentAny>,
         #[holder(use_place_holder)]
         pub item: RepresentationItemAny,
-        #[holder(use_place_holder)]
-        pub representation_item: RepresentationItem,
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
@@ -6513,11 +6513,11 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub struct SymbolTarget {
         #[holder(use_place_holder)]
+        pub geometric_representation_item: GeometricRepresentationItem,
+        #[holder(use_place_holder)]
         pub placement: Axis2Placement,
         pub x_scale: PositiveRatioMeasure,
         pub y_scale: PositiveRatioMeasure,
-        #[holder(use_place_holder)]
-        pub geometric_representation_item: GeometricRepresentationItem,
     }
     impl Into<AnnotationSymbolOccurrenceAny> for TerminatorSymbolAny {
         fn into(self) -> AnnotationSymbolOccurrenceAny {
@@ -6530,9 +6530,9 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub struct TerminatorSymbol {
         #[holder(use_place_holder)]
-        pub annotated_curve: AnnotationCurveOccurrenceAny,
-        #[holder(use_place_holder)]
         pub annotation_symbol_occurrence: AnnotationSymbolOccurrence,
+        #[holder(use_place_holder)]
+        pub annotated_curve: AnnotationCurveOccurrenceAny,
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
@@ -6556,6 +6556,8 @@ pub mod explicit_draughting {
     # [holder (field = text_literal)]
     #[holder(generate_deserialize)]
     pub struct TextLiteral {
+        #[holder(use_place_holder)]
+        pub geometric_representation_item: GeometricRepresentationItem,
         pub literal: PresentableText,
         #[holder(use_place_holder)]
         pub placement: Axis2Placement,
@@ -6563,8 +6565,6 @@ pub mod explicit_draughting {
         pub path: TextPath,
         #[holder(use_place_holder)]
         pub font: FontSelect,
-        #[holder(use_place_holder)]
-        pub geometric_representation_item: GeometricRepresentationItem,
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
@@ -6595,9 +6595,9 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub struct TextLiteralWithAssociatedCurves {
         #[holder(use_place_holder)]
-        pub associated_curves: Vec<CurveAny>,
-        #[holder(use_place_holder)]
         pub text_literal: TextLiteral,
+        #[holder(use_place_holder)]
+        pub associated_curves: Vec<CurveAny>,
     }
     impl Into<TextLiteralAny> for TextLiteralWithBlankingBox {
         fn into(self) -> TextLiteralAny {
@@ -6610,9 +6610,9 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub struct TextLiteralWithBlankingBox {
         #[holder(use_place_holder)]
-        pub blanking: PlanarBox,
-        #[holder(use_place_holder)]
         pub text_literal: TextLiteral,
+        #[holder(use_place_holder)]
+        pub blanking: PlanarBox,
     }
     impl Into<TextLiteralAny> for TextLiteralWithDelineationAny {
         fn into(self) -> TextLiteralAny {
@@ -6624,9 +6624,9 @@ pub mod explicit_draughting {
     # [holder (field = text_literal_with_delineation)]
     #[holder(generate_deserialize)]
     pub struct TextLiteralWithDelineation {
-        pub delineation: TextDelineation,
         #[holder(use_place_holder)]
         pub text_literal: TextLiteral,
+        pub delineation: TextDelineation,
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
@@ -6648,9 +6648,9 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub struct TextLiteralWithExtent {
         #[holder(use_place_holder)]
-        pub extent: PlanarExtentAny,
-        #[holder(use_place_holder)]
         pub text_literal: TextLiteral,
+        #[holder(use_place_holder)]
+        pub extent: PlanarExtentAny,
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
@@ -6692,9 +6692,9 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub struct TextStyleWithBoxCharacteristics {
         #[holder(use_place_holder)]
-        pub characteristics: Vec<BoxCharacteristicSelect>,
-        #[holder(use_place_holder)]
         pub text_style: TextStyle,
+        #[holder(use_place_holder)]
+        pub characteristics: Vec<BoxCharacteristicSelect>,
     }
     impl Into<TextStyleAny> for TextStyleWithMirror {
         fn into(self) -> TextStyleAny {
@@ -6707,9 +6707,9 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub struct TextStyleWithMirror {
         #[holder(use_place_holder)]
-        pub mirror_placement: Axis2Placement,
-        #[holder(use_place_holder)]
         pub text_style: TextStyle,
+        #[holder(use_place_holder)]
+        pub mirror_placement: Axis2Placement,
     }
     impl Into<BoundedCurveAny> for TrimmedCurve {
         fn into(self) -> BoundedCurveAny {
@@ -6722,6 +6722,8 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub struct TrimmedCurve {
         #[holder(use_place_holder)]
+        pub bounded_curve: BoundedCurve,
+        #[holder(use_place_holder)]
         pub basis_curve: CurveAny,
         #[holder(use_place_holder)]
         pub trim_1: Vec<TrimmingSelect>,
@@ -6729,8 +6731,6 @@ pub mod explicit_draughting {
         pub trim_2: Vec<TrimmingSelect>,
         pub sense_agreement: bool,
         pub master_representation: TrimmingPreference,
-        #[holder(use_place_holder)]
-        pub bounded_curve: BoundedCurve,
     }
     impl Into<OneDirectionRepeatFactorAny> for TwoDirectionRepeatFactor {
         fn into(self) -> OneDirectionRepeatFactorAny {
@@ -6743,9 +6743,9 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub struct TwoDirectionRepeatFactor {
         #[holder(use_place_holder)]
-        pub second_repeat_factor: Vector,
-        #[holder(use_place_holder)]
         pub one_direction_repeat_factor: OneDirectionRepeatFactor,
+        #[holder(use_place_holder)]
+        pub second_repeat_factor: Vector,
     }
     impl Into<BSplineCurveAny> for UniformCurve {
         fn into(self) -> BSplineCurveAny {
@@ -6771,9 +6771,9 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub struct Vector {
         #[holder(use_place_holder)]
+        pub geometric_representation_item: GeometricRepresentationItem,
+        #[holder(use_place_holder)]
         pub orientation: Direction,
         pub magnitude: LengthMeasure,
-        #[holder(use_place_holder)]
-        pub geometric_representation_item: GeometricRepresentationItem,
     }
 }

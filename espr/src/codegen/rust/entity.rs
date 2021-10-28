@@ -93,7 +93,9 @@ impl ToTokens for Entity {
             let names: Vec<_> = subtypes
                 .iter()
                 .map(|ty| match &ty {
-                    TypeRef::Entity { name, is_supertype, .. } => {
+                    TypeRef::Entity {
+                        name, is_supertype, ..
+                    } => {
                         if *is_supertype {
                             format_ident!("{}_any", name)
                         } else {
