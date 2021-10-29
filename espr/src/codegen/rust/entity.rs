@@ -22,11 +22,7 @@ impl ToTokens for Entity {
             };
 
             attr_name.push(attr.clone());
-            let mut ty_clone = ty.clone();
-            if let TypeRef::Entity { is_supertype, .. } = &mut ty_clone {
-                *is_supertype = false;
-            }
-            attr_type.push(ty_clone.to_token_stream());
+            attr_type.push(ty.to_is_not_supertype().to_token_stream());
             if ty.is_simple() {
                 use_place_holder.push(quote! {});
             } else {

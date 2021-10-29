@@ -82,6 +82,17 @@ impl TypeRef {
         }
     }
 
+    pub fn to_is_not_supertype(&self) -> Self {
+        match self {
+            TypeRef::Entity { name, scope, .. } => TypeRef::Entity {
+                name: name.clone(),
+                scope: scope.clone(),
+                is_supertype: false,
+            },
+            _ => self.clone(),
+        }
+    }
+
     pub fn from_path(
         ns: &Namespace,
         ss: &SubSuperGraph,
