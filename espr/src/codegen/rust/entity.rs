@@ -13,21 +13,6 @@ impl ToTokens for Entity {
         let mut attr_type = Vec::new();
         let mut use_place_holder = Vec::new();
 
-        for EntityAttribute { name, ty, optional } in &self.attributes {
-            let name = format_ident!("{}", name);
-            attr_name.push(name.clone());
-            if *optional {
-                attr_type.push(quote! { Option<#ty> });
-            } else {
-                attr_type.push(quote! { #ty });
-            }
-            if ty.is_simple() {
-                use_place_holder.push(quote! {});
-            } else {
-                use_place_holder.push(quote! { #[holder(use_place_holder)] });
-            }
-        }
-
         for ty in &self.supertypes {
             let (attr, ty) = match ty {
                 TypeRef::Named { name, .. } | TypeRef::Entity { name, .. } => {
@@ -37,7 +22,12 @@ impl ToTokens for Entity {
             };
 
             attr_name.push(attr.clone());
-            attr_type.push(ty.to_token_stream());
+            attr_type.push(ty.to_is_not_supertype().to_token_stream());
+            if ty.is_simple() {
+                use_place_holder.push(quote! {});
+            } else {
+                use_place_holder.push(quote! { #[holder(use_place_holder)] });
+            }
 
             if let TypeRef::Entity {
                 name: supertype_name,
@@ -63,6 +53,21 @@ impl ToTokens for Entity {
             }
         }
 
+        for EntityAttribute { name, ty, optional } in &self.attributes {
+            let name = format_ident!("{}", name);
+            attr_name.push(name.clone());
+            if *optional {
+                attr_type.push(quote! { Option<#ty> });
+            } else {
+                attr_type.push(quote! { #ty });
+            }
+            if ty.is_simple() {
+                use_place_holder.push(quote! {});
+            } else {
+                use_place_holder.push(quote! { #[holder(use_place_holder)] });
+            }
+        }
+
         assert_eq!(attr_name.len(), attr_type.len());
         assert_eq!(attr_name.len(), use_place_holder.len());
 
@@ -84,14 +89,24 @@ impl ToTokens for Entity {
             let names: Vec<_> = subtypes
                 .iter()
                 .map(|ty| match &ty {
-                    TypeRef::Entity { name, .. } => format_ident!("{}", name),
+                    TypeRef::Entity {
+                        name, is_supertype, ..
+                    } => {
+                        if *is_supertype {
+                            format_ident!("{}_any", name)
+                        } else {
+                            format_ident!("{}", name)
+                        }
+                    }
                     _ => unreachable!(),
                 })
                 .collect();
+            let field_name = format_ident!("{}_any", field_name);
             let enum_name = format_ident!("{}Any", name);
             tokens.append_all(quote! {
                 #[derive(Debug, Clone, PartialEq, ::ruststep_derive::Holder)]
                 #[holder(table = Tables)]
+                #[holder(field = #field_name)]
                 #[holder(generate_deserialize)]
                 pub enum #enum_name {
                     #(
