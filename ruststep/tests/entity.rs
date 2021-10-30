@@ -125,6 +125,39 @@ fn deserialize_b_holder_parameter_ref() {
 }
 
 #[test]
+fn deserialize_b_holder_flat_list_record() {
+    let (residual, p): (_, Record) = exchange::simple_record("B(1.0, 2.0, 3.0)")
+        .finish()
+        .unwrap();
+    assert_eq!(residual, "");
+    dbg!(&p);
+    let b: BHolder = Deserialize::deserialize(&p).unwrap();
+    assert_eq!(
+        b,
+        BHolder {
+            z: 1.0,
+            a: PlaceHolder::Owned(AHolder { x: 2.0, y: 3.0 })
+        }
+    );
+}
+
+#[test]
+fn deserialize_b_holder_flat_list_parameter() {
+    // flat list to nested struct
+    let (residual, p): (_, Parameter) = exchange::parameter("B((1.0, 2.0, 3.0))").finish().unwrap();
+    assert_eq!(residual, "");
+    dbg!(&p);
+    let b: BHolder = Deserialize::deserialize(&p).unwrap();
+    assert_eq!(
+        b,
+        BHolder {
+            z: 1.0,
+            a: PlaceHolder::Owned(AHolder { x: 2.0, y: 3.0 })
+        }
+    );
+}
+
+#[test]
 fn get_owned_a() {
     let table = Tables::from_str(EXAMPLE).unwrap();
     let a = EntityTable::<AHolder>::get_owned(&table, 1).unwrap();
