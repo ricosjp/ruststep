@@ -1,5 +1,5 @@
 use nom::Finish;
-use ruststep::{ast::*, parser::exchange, place_holder::*};
+use ruststep::{ast::*, parser::exchange, place_holder::*, tables::*};
 use ruststep_derive::as_holder;
 use serde::Deserialize;
 use std::collections::HashMap;
@@ -240,4 +240,11 @@ fn lookup_base_any() {
         dbg!(&owned);
         assert_eq!(owned, answer);
     }
+}
+
+#[test]
+fn get_owned() {
+    let table = Table::example();
+    let base = EntityTable::<BaseHolder>::get_owned(&table, 1).unwrap();
+    assert_eq!(base, Base { x: 1.0 });
 }
