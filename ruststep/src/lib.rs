@@ -25,3 +25,15 @@ pub use ruststep_derive::*;
 // Automatically generated codes
 #[cfg(feature = "ap201")]
 pub mod ap201;
+
+#[cfg(all(feature = "ap201", test))]
+mod ap201_test {
+    use super::ap201::explicit_draughting::*;
+    use super::tables::*;
+
+    #[test]
+    fn get_owned() {
+        let table = Tables::default();
+        let any = EntityTable::<CurveAnyHolder>::get_owned(&table, 0).unwrap();
+    }
+}
