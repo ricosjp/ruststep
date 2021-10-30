@@ -82,7 +82,7 @@ impl TypeRef {
         }
     }
 
-    pub fn to_is_not_supertype(&self) -> Self {
+    pub fn to_not_supertype(&self) -> Self {
         match self {
             TypeRef::Entity { name, scope, .. } => TypeRef::Entity {
                 name: name.clone(),

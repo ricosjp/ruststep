@@ -22,7 +22,7 @@ impl ToTokens for Entity {
             };
 
             attr_name.push(attr.clone());
-            attr_type.push(ty.to_is_not_supertype().to_token_stream());
+            attr_type.push(ty.to_not_supertype().to_token_stream());
             if ty.is_simple() {
                 use_place_holder.push(quote! {});
             } else {
@@ -85,28 +85,21 @@ impl ToTokens for Entity {
         });
 
         if !self.subtypes.is_empty() {
-            let subtypes = &self.subtypes;
-            let names: Vec<_> = subtypes
-                .iter()
-                .map(|ty| match &ty {
-                    TypeRef::Entity {
-                        name, is_supertype, ..
-                    } => {
-                        if *is_supertype {
-                            format_ident!("{}_any", name)
-                        } else {
-                            format_ident!("{}", name)
-                        }
-                    }
-                    _ => unreachable!(),
-                })
-                .collect();
-            let field_name = format_ident!("{}_any", field_name);
+            let mut subtypes = vec![TypeRef::Entity {
+                name: self.name.clone(),
+                is_supertype: false,
+                scope: Scope::root(),
+            }];
+            subtypes.extend(self.subtypes.iter().cloned());
+            let mut names = vec![format_ident!("{}", self.name)];
+            names.extend(self.subtypes.iter().map(|ty| match &ty {
+                TypeRef::Entity { name, .. } => format_ident!("{}", name),
+                _ => unreachable!(),
+            }));
             let enum_name = format_ident!("{}Any", name);
             tokens.append_all(quote! {
                 #[derive(Debug, Clone, PartialEq, ::ruststep_derive::Holder)]
                 #[holder(table = Tables)]
-                #[holder(field = #field_name)]
                 #[holder(generate_deserialize)]
                 pub enum #enum_name {
                     #(

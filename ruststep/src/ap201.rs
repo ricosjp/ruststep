@@ -6,79 +6,61 @@ pub mod explicit_draughting {
     #[derive(Debug, Clone, PartialEq, Default)]
     pub struct Tables {
         address: HashMap<u64, as_holder!(Address)>,
-        address_any: HashMap<u64, as_holder!(AddressAny)>,
         angular_dimension: HashMap<u64, as_holder!(AngularDimension)>,
         annotation_curve_occurrence: HashMap<u64, as_holder!(AnnotationCurveOccurrence)>,
-        annotation_curve_occurrence_any: HashMap<u64, as_holder!(AnnotationCurveOccurrenceAny)>,
         annotation_fill_area: HashMap<u64, as_holder!(AnnotationFillArea)>,
         annotation_fill_area_occurrence: HashMap<u64, as_holder!(AnnotationFillAreaOccurrence)>,
         annotation_occurrence: HashMap<u64, as_holder!(AnnotationOccurrence)>,
-        annotation_occurrence_any: HashMap<u64, as_holder!(AnnotationOccurrenceAny)>,
         annotation_subfigure_occurrence: HashMap<u64, as_holder!(AnnotationSubfigureOccurrence)>,
         annotation_symbol: HashMap<u64, as_holder!(AnnotationSymbol)>,
         annotation_symbol_occurrence: HashMap<u64, as_holder!(AnnotationSymbolOccurrence)>,
-        annotation_symbol_occurrence_any: HashMap<u64, as_holder!(AnnotationSymbolOccurrenceAny)>,
         annotation_text: HashMap<u64, as_holder!(AnnotationText)>,
         annotation_text_occurrence: HashMap<u64, as_holder!(AnnotationTextOccurrence)>,
         application_context: HashMap<u64, as_holder!(ApplicationContext)>,
         application_context_element: HashMap<u64, as_holder!(ApplicationContextElement)>,
-        application_context_element_any: HashMap<u64, as_holder!(ApplicationContextElementAny)>,
         application_protocol_definition: HashMap<u64, as_holder!(ApplicationProtocolDefinition)>,
         approval: HashMap<u64, as_holder!(Approval)>,
         approval_assignment: HashMap<u64, as_holder!(ApprovalAssignment)>,
-        approval_assignment_any: HashMap<u64, as_holder!(ApprovalAssignmentAny)>,
         approval_date_time: HashMap<u64, as_holder!(ApprovalDateTime)>,
         approval_person_organization: HashMap<u64, as_holder!(ApprovalPersonOrganization)>,
         approval_role: HashMap<u64, as_holder!(ApprovalRole)>,
         approval_status: HashMap<u64, as_holder!(ApprovalStatus)>,
         area_in_set: HashMap<u64, as_holder!(AreaInSet)>,
-        area_in_set_any: HashMap<u64, as_holder!(AreaInSetAny)>,
         axis2_placement_2d: HashMap<u64, as_holder!(Axis2Placement2D)>,
         b_spline_curve: HashMap<u64, as_holder!(BSplineCurve)>,
-        b_spline_curve_any: HashMap<u64, as_holder!(BSplineCurveAny)>,
         b_spline_curve_with_knots: HashMap<u64, as_holder!(BSplineCurveWithKnots)>,
         bezier_curve: HashMap<u64, as_holder!(BezierCurve)>,
         bounded_curve: HashMap<u64, as_holder!(BoundedCurve)>,
-        bounded_curve_any: HashMap<u64, as_holder!(BoundedCurveAny)>,
         calendar_date: HashMap<u64, as_holder!(CalendarDate)>,
         camera_image: HashMap<u64, as_holder!(CameraImage)>,
-        camera_image_any: HashMap<u64, as_holder!(CameraImageAny)>,
         camera_image_2d_with_scale: HashMap<u64, as_holder!(CameraImage2DWithScale)>,
         camera_model: HashMap<u64, as_holder!(CameraModel)>,
-        camera_model_any: HashMap<u64, as_holder!(CameraModelAny)>,
         camera_model_d2: HashMap<u64, as_holder!(CameraModelD2)>,
         camera_usage: HashMap<u64, as_holder!(CameraUsage)>,
         cartesian_point: HashMap<u64, as_holder!(CartesianPoint)>,
         circle: HashMap<u64, as_holder!(Circle)>,
         colour: HashMap<u64, as_holder!(Colour)>,
-        colour_any: HashMap<u64, as_holder!(ColourAny)>,
         colour_rgb: HashMap<u64, as_holder!(ColourRgb)>,
         colour_specification: HashMap<u64, as_holder!(ColourSpecification)>,
-        colour_specification_any: HashMap<u64, as_holder!(ColourSpecificationAny)>,
         composite_curve: HashMap<u64, as_holder!(CompositeCurve)>,
         composite_curve_segment: HashMap<u64, as_holder!(CompositeCurveSegment)>,
         composite_text: HashMap<u64, as_holder!(CompositeText)>,
-        composite_text_any: HashMap<u64, as_holder!(CompositeTextAny)>,
         composite_text_with_associated_curves:
             HashMap<u64, as_holder!(CompositeTextWithAssociatedCurves)>,
         composite_text_with_blanking_box: HashMap<u64, as_holder!(CompositeTextWithBlankingBox)>,
         composite_text_with_extent: HashMap<u64, as_holder!(CompositeTextWithExtent)>,
         conic: HashMap<u64, as_holder!(Conic)>,
-        conic_any: HashMap<u64, as_holder!(ConicAny)>,
         context_dependent_invisibility: HashMap<u64, as_holder!(ContextDependentInvisibility)>,
         contract: HashMap<u64, as_holder!(Contract)>,
         contract_assignment: HashMap<u64, as_holder!(ContractAssignment)>,
-        contract_assignment_any: HashMap<u64, as_holder!(ContractAssignmentAny)>,
         contract_type: HashMap<u64, as_holder!(ContractType)>,
         conversion_based_unit: HashMap<u64, as_holder!(ConversionBasedUnit)>,
         curve: HashMap<u64, as_holder!(Curve)>,
-        curve_any: HashMap<u64, as_holder!(CurveAny)>,
         curve_dimension: HashMap<u64, as_holder!(CurveDimension)>,
         curve_style: HashMap<u64, as_holder!(CurveStyle)>,
         curve_style_font: HashMap<u64, as_holder!(CurveStyleFont)>,
         curve_style_font_pattern: HashMap<u64, as_holder!(CurveStyleFontPattern)>,
         date: HashMap<u64, as_holder!(Date)>,
-        date_any: HashMap<u64, as_holder!(DateAny)>,
         datum_feature_callout: HashMap<u64, as_holder!(DatumFeatureCallout)>,
         datum_target_callout: HashMap<u64, as_holder!(DatumTargetCallout)>,
         defined_symbol: HashMap<u64, as_holder!(DefinedSymbol)>,
@@ -88,23 +70,17 @@ pub mod explicit_draughting {
         dimension_callout_relationship: HashMap<u64, as_holder!(DimensionCalloutRelationship)>,
         dimension_curve: HashMap<u64, as_holder!(DimensionCurve)>,
         dimension_curve_directed_callout: HashMap<u64, as_holder!(DimensionCurveDirectedCallout)>,
-        dimension_curve_directed_callout_any:
-            HashMap<u64, as_holder!(DimensionCurveDirectedCalloutAny)>,
         dimension_curve_terminator: HashMap<u64, as_holder!(DimensionCurveTerminator)>,
         dimension_pair: HashMap<u64, as_holder!(DimensionPair)>,
         dimensional_exponents: HashMap<u64, as_holder!(DimensionalExponents)>,
         direction: HashMap<u64, as_holder!(Direction)>,
         document: HashMap<u64, as_holder!(Document)>,
         document_reference: HashMap<u64, as_holder!(DocumentReference)>,
-        document_reference_any: HashMap<u64, as_holder!(DocumentReferenceAny)>,
         document_type: HashMap<u64, as_holder!(DocumentType)>,
         draughting_annotation_occurrence: HashMap<u64, as_holder!(DraughtingAnnotationOccurrence)>,
         draughting_approval_assignment: HashMap<u64, as_holder!(DraughtingApprovalAssignment)>,
         draughting_callout: HashMap<u64, as_holder!(DraughtingCallout)>,
-        draughting_callout_any: HashMap<u64, as_holder!(DraughtingCalloutAny)>,
         draughting_callout_relationship: HashMap<u64, as_holder!(DraughtingCalloutRelationship)>,
-        draughting_callout_relationship_any:
-            HashMap<u64, as_holder!(DraughtingCalloutRelationshipAny)>,
         draughting_contract_assignment: HashMap<u64, as_holder!(DraughtingContractAssignment)>,
         draughting_drawing_revision: HashMap<u64, as_holder!(DraughtingDrawingRevision)>,
         draughting_elements: HashMap<u64, as_holder!(DraughtingElements)>,
@@ -126,14 +102,11 @@ pub mod explicit_draughting {
         draughting_subfigure_representation:
             HashMap<u64, as_holder!(DraughtingSubfigureRepresentation)>,
         draughting_symbol_representation: HashMap<u64, as_holder!(DraughtingSymbolRepresentation)>,
-        draughting_symbol_representation_any:
-            HashMap<u64, as_holder!(DraughtingSymbolRepresentationAny)>,
         draughting_text_literal_with_delineation:
             HashMap<u64, as_holder!(DraughtingTextLiteralWithDelineation)>,
         draughting_title: HashMap<u64, as_holder!(DraughtingTitle)>,
         drawing_definition: HashMap<u64, as_holder!(DrawingDefinition)>,
         drawing_revision: HashMap<u64, as_holder!(DrawingRevision)>,
-        drawing_revision_any: HashMap<u64, as_holder!(DrawingRevisionAny)>,
         drawing_sheet_layout: HashMap<u64, as_holder!(DrawingSheetLayout)>,
         drawing_sheet_revision: HashMap<u64, as_holder!(DrawingSheetRevision)>,
         drawing_sheet_revision_usage: HashMap<u64, as_holder!(DrawingSheetRevisionUsage)>,
@@ -142,7 +115,6 @@ pub mod explicit_draughting {
         externally_defined_curve_font: HashMap<u64, as_holder!(ExternallyDefinedCurveFont)>,
         externally_defined_hatch_style: HashMap<u64, as_holder!(ExternallyDefinedHatchStyle)>,
         externally_defined_item: HashMap<u64, as_holder!(ExternallyDefinedItem)>,
-        externally_defined_item_any: HashMap<u64, as_holder!(ExternallyDefinedItemAny)>,
         externally_defined_symbol: HashMap<u64, as_holder!(ExternallyDefinedSymbol)>,
         externally_defined_text_font: HashMap<u64, as_holder!(ExternallyDefinedTextFont)>,
         externally_defined_tile_style: HashMap<u64, as_holder!(ExternallyDefinedTileStyle)>,
@@ -155,23 +127,18 @@ pub mod explicit_draughting {
         geometric_curve_set: HashMap<u64, as_holder!(GeometricCurveSet)>,
         geometric_representation_context: HashMap<u64, as_holder!(GeometricRepresentationContext)>,
         geometric_representation_item: HashMap<u64, as_holder!(GeometricRepresentationItem)>,
-        geometric_representation_item_any: HashMap<u64, as_holder!(GeometricRepresentationItemAny)>,
         geometric_set: HashMap<u64, as_holder!(GeometricSet)>,
-        geometric_set_any: HashMap<u64, as_holder!(GeometricSetAny)>,
         geometrical_tolerance_callout: HashMap<u64, as_holder!(GeometricalToleranceCallout)>,
         geometrically_bounded_2d_wireframe_representation:
             HashMap<u64, as_holder!(GeometricallyBounded2DWireframeRepresentation)>,
         global_unit_assigned_context: HashMap<u64, as_holder!(GlobalUnitAssignedContext)>,
         group: HashMap<u64, as_holder!(Group)>,
         group_assignment: HashMap<u64, as_holder!(GroupAssignment)>,
-        group_assignment_any: HashMap<u64, as_holder!(GroupAssignmentAny)>,
         group_relationship: HashMap<u64, as_holder!(GroupRelationship)>,
         hyperbola: HashMap<u64, as_holder!(Hyperbola)>,
         invisibility: HashMap<u64, as_holder!(Invisibility)>,
-        invisibility_any: HashMap<u64, as_holder!(InvisibilityAny)>,
         leader_curve: HashMap<u64, as_holder!(LeaderCurve)>,
         leader_directed_callout: HashMap<u64, as_holder!(LeaderDirectedCallout)>,
-        leader_directed_callout_any: HashMap<u64, as_holder!(LeaderDirectedCalloutAny)>,
         leader_directed_dimension: HashMap<u64, as_holder!(LeaderDirectedDimension)>,
         leader_terminator: HashMap<u64, as_holder!(LeaderTerminator)>,
         length_measure_with_unit: HashMap<u64, as_holder!(LengthMeasureWithUnit)>,
@@ -179,18 +146,13 @@ pub mod explicit_draughting {
         line: HashMap<u64, as_holder!(Line)>,
         linear_dimension: HashMap<u64, as_holder!(LinearDimension)>,
         mapped_item: HashMap<u64, as_holder!(MappedItem)>,
-        mapped_item_any: HashMap<u64, as_holder!(MappedItemAny)>,
         measure_with_unit: HashMap<u64, as_holder!(MeasureWithUnit)>,
-        measure_with_unit_any: HashMap<u64, as_holder!(MeasureWithUnitAny)>,
         named_unit: HashMap<u64, as_holder!(NamedUnit)>,
-        named_unit_any: HashMap<u64, as_holder!(NamedUnitAny)>,
         offset_curve_2d: HashMap<u64, as_holder!(OffsetCurve2D)>,
         one_direction_repeat_factor: HashMap<u64, as_holder!(OneDirectionRepeatFactor)>,
-        one_direction_repeat_factor_any: HashMap<u64, as_holder!(OneDirectionRepeatFactorAny)>,
         ordinate_dimension: HashMap<u64, as_holder!(OrdinateDimension)>,
         organization: HashMap<u64, as_holder!(Organization)>,
         organization_assignment: HashMap<u64, as_holder!(OrganizationAssignment)>,
-        organization_assignment_any: HashMap<u64, as_holder!(OrganizationAssignmentAny)>,
         organization_role: HashMap<u64, as_holder!(OrganizationRole)>,
         organizational_address: HashMap<u64, as_holder!(OrganizationalAddress)>,
         parabola: HashMap<u64, as_holder!(Parabola)>,
@@ -198,54 +160,38 @@ pub mod explicit_draughting {
         person_and_organization: HashMap<u64, as_holder!(PersonAndOrganization)>,
         person_and_organization_assignment:
             HashMap<u64, as_holder!(PersonAndOrganizationAssignment)>,
-        person_and_organization_assignment_any:
-            HashMap<u64, as_holder!(PersonAndOrganizationAssignmentAny)>,
         person_and_organization_role: HashMap<u64, as_holder!(PersonAndOrganizationRole)>,
         person_assignment: HashMap<u64, as_holder!(PersonAssignment)>,
-        person_assignment_any: HashMap<u64, as_holder!(PersonAssignmentAny)>,
         person_role: HashMap<u64, as_holder!(PersonRole)>,
         personal_address: HashMap<u64, as_holder!(PersonalAddress)>,
         placement: HashMap<u64, as_holder!(Placement)>,
-        placement_any: HashMap<u64, as_holder!(PlacementAny)>,
         planar_box: HashMap<u64, as_holder!(PlanarBox)>,
         planar_extent: HashMap<u64, as_holder!(PlanarExtent)>,
-        planar_extent_any: HashMap<u64, as_holder!(PlanarExtentAny)>,
         plane_angle_measure_with_unit: HashMap<u64, as_holder!(PlaneAngleMeasureWithUnit)>,
         plane_angle_unit: HashMap<u64, as_holder!(PlaneAngleUnit)>,
         point: HashMap<u64, as_holder!(Point)>,
-        point_any: HashMap<u64, as_holder!(PointAny)>,
         point_on_curve: HashMap<u64, as_holder!(PointOnCurve)>,
         polyline: HashMap<u64, as_holder!(Polyline)>,
         pre_defined_colour: HashMap<u64, as_holder!(PreDefinedColour)>,
-        pre_defined_colour_any: HashMap<u64, as_holder!(PreDefinedColourAny)>,
         pre_defined_curve_font: HashMap<u64, as_holder!(PreDefinedCurveFont)>,
-        pre_defined_curve_font_any: HashMap<u64, as_holder!(PreDefinedCurveFontAny)>,
         pre_defined_dimension_symbol: HashMap<u64, as_holder!(PreDefinedDimensionSymbol)>,
         pre_defined_geometrical_tolerance_symbol:
             HashMap<u64, as_holder!(PreDefinedGeometricalToleranceSymbol)>,
         pre_defined_item: HashMap<u64, as_holder!(PreDefinedItem)>,
-        pre_defined_item_any: HashMap<u64, as_holder!(PreDefinedItemAny)>,
         pre_defined_point_marker_symbol: HashMap<u64, as_holder!(PreDefinedPointMarkerSymbol)>,
         pre_defined_symbol: HashMap<u64, as_holder!(PreDefinedSymbol)>,
-        pre_defined_symbol_any: HashMap<u64, as_holder!(PreDefinedSymbolAny)>,
         pre_defined_terminator_symbol: HashMap<u64, as_holder!(PreDefinedTerminatorSymbol)>,
         pre_defined_text_font: HashMap<u64, as_holder!(PreDefinedTextFont)>,
-        pre_defined_text_font_any: HashMap<u64, as_holder!(PreDefinedTextFontAny)>,
         presentation_area: HashMap<u64, as_holder!(PresentationArea)>,
-        presentation_area_any: HashMap<u64, as_holder!(PresentationAreaAny)>,
         presentation_layer_assignment: HashMap<u64, as_holder!(PresentationLayerAssignment)>,
         presentation_layer_usage: HashMap<u64, as_holder!(PresentationLayerUsage)>,
         presentation_representation: HashMap<u64, as_holder!(PresentationRepresentation)>,
-        presentation_representation_any: HashMap<u64, as_holder!(PresentationRepresentationAny)>,
         presentation_set: HashMap<u64, as_holder!(PresentationSet)>,
-        presentation_set_any: HashMap<u64, as_holder!(PresentationSetAny)>,
         presentation_size: HashMap<u64, as_holder!(PresentationSize)>,
         presentation_style_assignment: HashMap<u64, as_holder!(PresentationStyleAssignment)>,
-        presentation_style_assignment_any: HashMap<u64, as_holder!(PresentationStyleAssignmentAny)>,
         presentation_style_by_context: HashMap<u64, as_holder!(PresentationStyleByContext)>,
         presentation_view: HashMap<u64, as_holder!(PresentationView)>,
         presented_item: HashMap<u64, as_holder!(PresentedItem)>,
-        presented_item_any: HashMap<u64, as_holder!(PresentedItemAny)>,
         presented_item_representation: HashMap<u64, as_holder!(PresentedItemRepresentation)>,
         product: HashMap<u64, as_holder!(Product)>,
         product_context: HashMap<u64, as_holder!(ProductContext)>,
@@ -255,55 +201,38 @@ pub mod explicit_draughting {
         product_definition_shape: HashMap<u64, as_holder!(ProductDefinitionShape)>,
         projection_curve: HashMap<u64, as_holder!(ProjectionCurve)>,
         projection_directed_callout: HashMap<u64, as_holder!(ProjectionDirectedCallout)>,
-        projection_directed_callout_any: HashMap<u64, as_holder!(ProjectionDirectedCalloutAny)>,
         property_definition: HashMap<u64, as_holder!(PropertyDefinition)>,
-        property_definition_any: HashMap<u64, as_holder!(PropertyDefinitionAny)>,
         property_definition_representation:
             HashMap<u64, as_holder!(PropertyDefinitionRepresentation)>,
-        property_definition_representation_any:
-            HashMap<u64, as_holder!(PropertyDefinitionRepresentationAny)>,
         quasi_uniform_curve: HashMap<u64, as_holder!(QuasiUniformCurve)>,
         radius_dimension: HashMap<u64, as_holder!(RadiusDimension)>,
         rational_b_spline_curve: HashMap<u64, as_holder!(RationalBSplineCurve)>,
         representation: HashMap<u64, as_holder!(Representation)>,
-        representation_any: HashMap<u64, as_holder!(RepresentationAny)>,
         representation_context: HashMap<u64, as_holder!(RepresentationContext)>,
-        representation_context_any: HashMap<u64, as_holder!(RepresentationContextAny)>,
         representation_item: HashMap<u64, as_holder!(RepresentationItem)>,
-        representation_item_any: HashMap<u64, as_holder!(RepresentationItemAny)>,
         representation_map: HashMap<u64, as_holder!(RepresentationMap)>,
-        representation_map_any: HashMap<u64, as_holder!(RepresentationMapAny)>,
         security_classification: HashMap<u64, as_holder!(SecurityClassification)>,
         security_classification_assignment:
             HashMap<u64, as_holder!(SecurityClassificationAssignment)>,
-        security_classification_assignment_any:
-            HashMap<u64, as_holder!(SecurityClassificationAssignmentAny)>,
         security_classification_level: HashMap<u64, as_holder!(SecurityClassificationLevel)>,
         shape_definition_representation: HashMap<u64, as_holder!(ShapeDefinitionRepresentation)>,
         shape_representation: HashMap<u64, as_holder!(ShapeRepresentation)>,
-        shape_representation_any: HashMap<u64, as_holder!(ShapeRepresentationAny)>,
         si_unit: HashMap<u64, as_holder!(SiUnit)>,
         structured_dimension_callout: HashMap<u64, as_holder!(StructuredDimensionCallout)>,
         styled_item: HashMap<u64, as_holder!(StyledItem)>,
-        styled_item_any: HashMap<u64, as_holder!(StyledItemAny)>,
         symbol_colour: HashMap<u64, as_holder!(SymbolColour)>,
         symbol_representation: HashMap<u64, as_holder!(SymbolRepresentation)>,
-        symbol_representation_any: HashMap<u64, as_holder!(SymbolRepresentationAny)>,
         symbol_representation_map: HashMap<u64, as_holder!(SymbolRepresentationMap)>,
         symbol_style: HashMap<u64, as_holder!(SymbolStyle)>,
         symbol_target: HashMap<u64, as_holder!(SymbolTarget)>,
         terminator_symbol: HashMap<u64, as_holder!(TerminatorSymbol)>,
-        terminator_symbol_any: HashMap<u64, as_holder!(TerminatorSymbolAny)>,
         text_literal: HashMap<u64, as_holder!(TextLiteral)>,
-        text_literal_any: HashMap<u64, as_holder!(TextLiteralAny)>,
         text_literal_with_associated_curves:
             HashMap<u64, as_holder!(TextLiteralWithAssociatedCurves)>,
         text_literal_with_blanking_box: HashMap<u64, as_holder!(TextLiteralWithBlankingBox)>,
         text_literal_with_delineation: HashMap<u64, as_holder!(TextLiteralWithDelineation)>,
-        text_literal_with_delineation_any: HashMap<u64, as_holder!(TextLiteralWithDelineationAny)>,
         text_literal_with_extent: HashMap<u64, as_holder!(TextLiteralWithExtent)>,
         text_style: HashMap<u64, as_holder!(TextStyle)>,
-        text_style_any: HashMap<u64, as_holder!(TextStyleAny)>,
         text_style_for_defined_font: HashMap<u64, as_holder!(TextStyleForDefinedFont)>,
         text_style_with_box_characteristics:
             HashMap<u64, as_holder!(TextStyleWithBoxCharacteristics)>,
@@ -322,14 +251,6 @@ pub mod explicit_draughting {
                 .cloned()
                 .map(move |value| value.into_owned(&self))
         }
-        pub fn address_any_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<AddressAny>> + 'table {
-            self.address_any
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
         pub fn angular_dimension_iter<'table>(
             &'table self,
         ) -> impl Iterator<Item = Result<AngularDimension>> + 'table {
@@ -342,14 +263,6 @@ pub mod explicit_draughting {
             &'table self,
         ) -> impl Iterator<Item = Result<AnnotationCurveOccurrence>> + 'table {
             self.annotation_curve_occurrence
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn annotation_curve_occurrence_any_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<AnnotationCurveOccurrenceAny>> + 'table {
-            self.annotation_curve_occurrence_any
                 .values()
                 .cloned()
                 .map(move |value| value.into_owned(&self))
@@ -378,14 +291,6 @@ pub mod explicit_draughting {
                 .cloned()
                 .map(move |value| value.into_owned(&self))
         }
-        pub fn annotation_occurrence_any_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<AnnotationOccurrenceAny>> + 'table {
-            self.annotation_occurrence_any
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
         pub fn annotation_subfigure_occurrence_iter<'table>(
             &'table self,
         ) -> impl Iterator<Item = Result<AnnotationSubfigureOccurrence>> + 'table {
@@ -406,14 +311,6 @@ pub mod explicit_draughting {
             &'table self,
         ) -> impl Iterator<Item = Result<AnnotationSymbolOccurrence>> + 'table {
             self.annotation_symbol_occurrence
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn annotation_symbol_occurrence_any_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<AnnotationSymbolOccurrenceAny>> + 'table {
-            self.annotation_symbol_occurrence_any
                 .values()
                 .cloned()
                 .map(move |value| value.into_owned(&self))
@@ -450,14 +347,6 @@ pub mod explicit_draughting {
                 .cloned()
                 .map(move |value| value.into_owned(&self))
         }
-        pub fn application_context_element_any_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<ApplicationContextElementAny>> + 'table {
-            self.application_context_element_any
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
         pub fn application_protocol_definition_iter<'table>(
             &'table self,
         ) -> impl Iterator<Item = Result<ApplicationProtocolDefinition>> + 'table {
@@ -478,14 +367,6 @@ pub mod explicit_draughting {
             &'table self,
         ) -> impl Iterator<Item = Result<ApprovalAssignment>> + 'table {
             self.approval_assignment
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn approval_assignment_any_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<ApprovalAssignmentAny>> + 'table {
-            self.approval_assignment_any
                 .values()
                 .cloned()
                 .map(move |value| value.into_owned(&self))
@@ -530,14 +411,6 @@ pub mod explicit_draughting {
                 .cloned()
                 .map(move |value| value.into_owned(&self))
         }
-        pub fn area_in_set_any_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<AreaInSetAny>> + 'table {
-            self.area_in_set_any
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
         pub fn axis2_placement_2d_iter<'table>(
             &'table self,
         ) -> impl Iterator<Item = Result<Axis2Placement2D>> + 'table {
@@ -550,14 +423,6 @@ pub mod explicit_draughting {
             &'table self,
         ) -> impl Iterator<Item = Result<BSplineCurve>> + 'table {
             self.b_spline_curve
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn b_spline_curve_any_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<BSplineCurveAny>> + 'table {
-            self.b_spline_curve_any
                 .values()
                 .cloned()
                 .map(move |value| value.into_owned(&self))
@@ -586,14 +451,6 @@ pub mod explicit_draughting {
                 .cloned()
                 .map(move |value| value.into_owned(&self))
         }
-        pub fn bounded_curve_any_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<BoundedCurveAny>> + 'table {
-            self.bounded_curve_any
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
         pub fn calendar_date_iter<'table>(
             &'table self,
         ) -> impl Iterator<Item = Result<CalendarDate>> + 'table {
@@ -610,14 +467,6 @@ pub mod explicit_draughting {
                 .cloned()
                 .map(move |value| value.into_owned(&self))
         }
-        pub fn camera_image_any_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<CameraImageAny>> + 'table {
-            self.camera_image_any
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
         pub fn camera_image_2d_with_scale_iter<'table>(
             &'table self,
         ) -> impl Iterator<Item = Result<CameraImage2DWithScale>> + 'table {
@@ -630,14 +479,6 @@ pub mod explicit_draughting {
             &'table self,
         ) -> impl Iterator<Item = Result<CameraModel>> + 'table {
             self.camera_model
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn camera_model_any_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<CameraModelAny>> + 'table {
-            self.camera_model_any
                 .values()
                 .cloned()
                 .map(move |value| value.into_owned(&self))
@@ -678,14 +519,6 @@ pub mod explicit_draughting {
                 .cloned()
                 .map(move |value| value.into_owned(&self))
         }
-        pub fn colour_any_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<ColourAny>> + 'table {
-            self.colour_any
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
         pub fn colour_rgb_iter<'table>(
             &'table self,
         ) -> impl Iterator<Item = Result<ColourRgb>> + 'table {
@@ -698,14 +531,6 @@ pub mod explicit_draughting {
             &'table self,
         ) -> impl Iterator<Item = Result<ColourSpecification>> + 'table {
             self.colour_specification
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn colour_specification_any_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<ColourSpecificationAny>> + 'table {
-            self.colour_specification_any
                 .values()
                 .cloned()
                 .map(move |value| value.into_owned(&self))
@@ -730,14 +555,6 @@ pub mod explicit_draughting {
             &'table self,
         ) -> impl Iterator<Item = Result<CompositeText>> + 'table {
             self.composite_text
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn composite_text_any_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<CompositeTextAny>> + 'table {
-            self.composite_text_any
                 .values()
                 .cloned()
                 .map(move |value| value.into_owned(&self))
@@ -772,14 +589,6 @@ pub mod explicit_draughting {
                 .cloned()
                 .map(move |value| value.into_owned(&self))
         }
-        pub fn conic_any_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<ConicAny>> + 'table {
-            self.conic_any
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
         pub fn context_dependent_invisibility_iter<'table>(
             &'table self,
         ) -> impl Iterator<Item = Result<ContextDependentInvisibility>> + 'table {
@@ -804,14 +613,6 @@ pub mod explicit_draughting {
                 .cloned()
                 .map(move |value| value.into_owned(&self))
         }
-        pub fn contract_assignment_any_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<ContractAssignmentAny>> + 'table {
-            self.contract_assignment_any
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
         pub fn contract_type_iter<'table>(
             &'table self,
         ) -> impl Iterator<Item = Result<ContractType>> + 'table {
@@ -830,14 +631,6 @@ pub mod explicit_draughting {
         }
         pub fn curve_iter<'table>(&'table self) -> impl Iterator<Item = Result<Curve>> + 'table {
             self.curve
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn curve_any_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<CurveAny>> + 'table {
-            self.curve_any
                 .values()
                 .cloned()
                 .map(move |value| value.into_owned(&self))
@@ -876,14 +669,6 @@ pub mod explicit_draughting {
         }
         pub fn date_iter<'table>(&'table self) -> impl Iterator<Item = Result<Date>> + 'table {
             self.date
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn date_any_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<DateAny>> + 'table {
-            self.date_any
                 .values()
                 .cloned()
                 .map(move |value| value.into_owned(&self))
@@ -952,14 +737,6 @@ pub mod explicit_draughting {
                 .cloned()
                 .map(move |value| value.into_owned(&self))
         }
-        pub fn dimension_curve_directed_callout_any_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<DimensionCurveDirectedCalloutAny>> + 'table {
-            self.dimension_curve_directed_callout_any
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
         pub fn dimension_curve_terminator_iter<'table>(
             &'table self,
         ) -> impl Iterator<Item = Result<DimensionCurveTerminator>> + 'table {
@@ -1008,14 +785,6 @@ pub mod explicit_draughting {
                 .cloned()
                 .map(move |value| value.into_owned(&self))
         }
-        pub fn document_reference_any_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<DocumentReferenceAny>> + 'table {
-            self.document_reference_any
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
         pub fn document_type_iter<'table>(
             &'table self,
         ) -> impl Iterator<Item = Result<DocumentType>> + 'table {
@@ -1048,26 +817,10 @@ pub mod explicit_draughting {
                 .cloned()
                 .map(move |value| value.into_owned(&self))
         }
-        pub fn draughting_callout_any_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<DraughtingCalloutAny>> + 'table {
-            self.draughting_callout_any
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
         pub fn draughting_callout_relationship_iter<'table>(
             &'table self,
         ) -> impl Iterator<Item = Result<DraughtingCalloutRelationship>> + 'table {
             self.draughting_callout_relationship
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn draughting_callout_relationship_any_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<DraughtingCalloutRelationshipAny>> + 'table {
-            self.draughting_callout_relationship_any
                 .values()
                 .cloned()
                 .map(move |value| value.into_owned(&self))
@@ -1202,14 +955,6 @@ pub mod explicit_draughting {
                 .cloned()
                 .map(move |value| value.into_owned(&self))
         }
-        pub fn draughting_symbol_representation_any_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<DraughtingSymbolRepresentationAny>> + 'table {
-            self.draughting_symbol_representation_any
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
         pub fn draughting_text_literal_with_delineation_iter<'table>(
             &'table self,
         ) -> impl Iterator<Item = Result<DraughtingTextLiteralWithDelineation>> + 'table {
@@ -1238,14 +983,6 @@ pub mod explicit_draughting {
             &'table self,
         ) -> impl Iterator<Item = Result<DrawingRevision>> + 'table {
             self.drawing_revision
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn drawing_revision_any_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<DrawingRevisionAny>> + 'table {
-            self.drawing_revision_any
                 .values()
                 .cloned()
                 .map(move |value| value.into_owned(&self))
@@ -1310,14 +1047,6 @@ pub mod explicit_draughting {
             &'table self,
         ) -> impl Iterator<Item = Result<ExternallyDefinedItem>> + 'table {
             self.externally_defined_item
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn externally_defined_item_any_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<ExternallyDefinedItemAny>> + 'table {
-            self.externally_defined_item_any
                 .values()
                 .cloned()
                 .map(move |value| value.into_owned(&self))
@@ -1410,26 +1139,10 @@ pub mod explicit_draughting {
                 .cloned()
                 .map(move |value| value.into_owned(&self))
         }
-        pub fn geometric_representation_item_any_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<GeometricRepresentationItemAny>> + 'table {
-            self.geometric_representation_item_any
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
         pub fn geometric_set_iter<'table>(
             &'table self,
         ) -> impl Iterator<Item = Result<GeometricSet>> + 'table {
             self.geometric_set
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn geometric_set_any_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<GeometricSetAny>> + 'table {
-            self.geometric_set_any
                 .values()
                 .cloned()
                 .map(move |value| value.into_owned(&self))
@@ -1473,14 +1186,6 @@ pub mod explicit_draughting {
                 .cloned()
                 .map(move |value| value.into_owned(&self))
         }
-        pub fn group_assignment_any_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<GroupAssignmentAny>> + 'table {
-            self.group_assignment_any
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
         pub fn group_relationship_iter<'table>(
             &'table self,
         ) -> impl Iterator<Item = Result<GroupRelationship>> + 'table {
@@ -1505,14 +1210,6 @@ pub mod explicit_draughting {
                 .cloned()
                 .map(move |value| value.into_owned(&self))
         }
-        pub fn invisibility_any_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<InvisibilityAny>> + 'table {
-            self.invisibility_any
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
         pub fn leader_curve_iter<'table>(
             &'table self,
         ) -> impl Iterator<Item = Result<LeaderCurve>> + 'table {
@@ -1525,14 +1222,6 @@ pub mod explicit_draughting {
             &'table self,
         ) -> impl Iterator<Item = Result<LeaderDirectedCallout>> + 'table {
             self.leader_directed_callout
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn leader_directed_callout_any_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<LeaderDirectedCalloutAny>> + 'table {
-            self.leader_directed_callout_any
                 .values()
                 .cloned()
                 .map(move |value| value.into_owned(&self))
@@ -1591,14 +1280,6 @@ pub mod explicit_draughting {
                 .cloned()
                 .map(move |value| value.into_owned(&self))
         }
-        pub fn mapped_item_any_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<MappedItemAny>> + 'table {
-            self.mapped_item_any
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
         pub fn measure_with_unit_iter<'table>(
             &'table self,
         ) -> impl Iterator<Item = Result<MeasureWithUnit>> + 'table {
@@ -1607,26 +1288,10 @@ pub mod explicit_draughting {
                 .cloned()
                 .map(move |value| value.into_owned(&self))
         }
-        pub fn measure_with_unit_any_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<MeasureWithUnitAny>> + 'table {
-            self.measure_with_unit_any
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
         pub fn named_unit_iter<'table>(
             &'table self,
         ) -> impl Iterator<Item = Result<NamedUnit>> + 'table {
             self.named_unit
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn named_unit_any_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<NamedUnitAny>> + 'table {
-            self.named_unit_any
                 .values()
                 .cloned()
                 .map(move |value| value.into_owned(&self))
@@ -1643,14 +1308,6 @@ pub mod explicit_draughting {
             &'table self,
         ) -> impl Iterator<Item = Result<OneDirectionRepeatFactor>> + 'table {
             self.one_direction_repeat_factor
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn one_direction_repeat_factor_any_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<OneDirectionRepeatFactorAny>> + 'table {
-            self.one_direction_repeat_factor_any
                 .values()
                 .cloned()
                 .map(move |value| value.into_owned(&self))
@@ -1675,14 +1332,6 @@ pub mod explicit_draughting {
             &'table self,
         ) -> impl Iterator<Item = Result<OrganizationAssignment>> + 'table {
             self.organization_assignment
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn organization_assignment_any_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<OrganizationAssignmentAny>> + 'table {
-            self.organization_assignment_any
                 .values()
                 .cloned()
                 .map(move |value| value.into_owned(&self))
@@ -1733,14 +1382,6 @@ pub mod explicit_draughting {
                 .cloned()
                 .map(move |value| value.into_owned(&self))
         }
-        pub fn person_and_organization_assignment_any_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<PersonAndOrganizationAssignmentAny>> + 'table {
-            self.person_and_organization_assignment_any
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
         pub fn person_and_organization_role_iter<'table>(
             &'table self,
         ) -> impl Iterator<Item = Result<PersonAndOrganizationRole>> + 'table {
@@ -1753,14 +1394,6 @@ pub mod explicit_draughting {
             &'table self,
         ) -> impl Iterator<Item = Result<PersonAssignment>> + 'table {
             self.person_assignment
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn person_assignment_any_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<PersonAssignmentAny>> + 'table {
-            self.person_assignment_any
                 .values()
                 .cloned()
                 .map(move |value| value.into_owned(&self))
@@ -1789,14 +1422,6 @@ pub mod explicit_draughting {
                 .cloned()
                 .map(move |value| value.into_owned(&self))
         }
-        pub fn placement_any_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<PlacementAny>> + 'table {
-            self.placement_any
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
         pub fn planar_box_iter<'table>(
             &'table self,
         ) -> impl Iterator<Item = Result<PlanarBox>> + 'table {
@@ -1809,14 +1434,6 @@ pub mod explicit_draughting {
             &'table self,
         ) -> impl Iterator<Item = Result<PlanarExtent>> + 'table {
             self.planar_extent
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn planar_extent_any_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<PlanarExtentAny>> + 'table {
-            self.planar_extent_any
                 .values()
                 .cloned()
                 .map(move |value| value.into_owned(&self))
@@ -1839,14 +1456,6 @@ pub mod explicit_draughting {
         }
         pub fn point_iter<'table>(&'table self) -> impl Iterator<Item = Result<Point>> + 'table {
             self.point
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn point_any_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<PointAny>> + 'table {
-            self.point_any
                 .values()
                 .cloned()
                 .map(move |value| value.into_owned(&self))
@@ -1875,26 +1484,10 @@ pub mod explicit_draughting {
                 .cloned()
                 .map(move |value| value.into_owned(&self))
         }
-        pub fn pre_defined_colour_any_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<PreDefinedColourAny>> + 'table {
-            self.pre_defined_colour_any
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
         pub fn pre_defined_curve_font_iter<'table>(
             &'table self,
         ) -> impl Iterator<Item = Result<PreDefinedCurveFont>> + 'table {
             self.pre_defined_curve_font
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn pre_defined_curve_font_any_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<PreDefinedCurveFontAny>> + 'table {
-            self.pre_defined_curve_font_any
                 .values()
                 .cloned()
                 .map(move |value| value.into_owned(&self))
@@ -1923,14 +1516,6 @@ pub mod explicit_draughting {
                 .cloned()
                 .map(move |value| value.into_owned(&self))
         }
-        pub fn pre_defined_item_any_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<PreDefinedItemAny>> + 'table {
-            self.pre_defined_item_any
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
         pub fn pre_defined_point_marker_symbol_iter<'table>(
             &'table self,
         ) -> impl Iterator<Item = Result<PreDefinedPointMarkerSymbol>> + 'table {
@@ -1943,14 +1528,6 @@ pub mod explicit_draughting {
             &'table self,
         ) -> impl Iterator<Item = Result<PreDefinedSymbol>> + 'table {
             self.pre_defined_symbol
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn pre_defined_symbol_any_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<PreDefinedSymbolAny>> + 'table {
-            self.pre_defined_symbol_any
                 .values()
                 .cloned()
                 .map(move |value| value.into_owned(&self))
@@ -1971,26 +1548,10 @@ pub mod explicit_draughting {
                 .cloned()
                 .map(move |value| value.into_owned(&self))
         }
-        pub fn pre_defined_text_font_any_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<PreDefinedTextFontAny>> + 'table {
-            self.pre_defined_text_font_any
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
         pub fn presentation_area_iter<'table>(
             &'table self,
         ) -> impl Iterator<Item = Result<PresentationArea>> + 'table {
             self.presentation_area
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn presentation_area_any_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<PresentationAreaAny>> + 'table {
-            self.presentation_area_any
                 .values()
                 .cloned()
                 .map(move |value| value.into_owned(&self))
@@ -2019,26 +1580,10 @@ pub mod explicit_draughting {
                 .cloned()
                 .map(move |value| value.into_owned(&self))
         }
-        pub fn presentation_representation_any_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<PresentationRepresentationAny>> + 'table {
-            self.presentation_representation_any
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
         pub fn presentation_set_iter<'table>(
             &'table self,
         ) -> impl Iterator<Item = Result<PresentationSet>> + 'table {
             self.presentation_set
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn presentation_set_any_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<PresentationSetAny>> + 'table {
-            self.presentation_set_any
                 .values()
                 .cloned()
                 .map(move |value| value.into_owned(&self))
@@ -2055,14 +1600,6 @@ pub mod explicit_draughting {
             &'table self,
         ) -> impl Iterator<Item = Result<PresentationStyleAssignment>> + 'table {
             self.presentation_style_assignment
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn presentation_style_assignment_any_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<PresentationStyleAssignmentAny>> + 'table {
-            self.presentation_style_assignment_any
                 .values()
                 .cloned()
                 .map(move |value| value.into_owned(&self))
@@ -2087,14 +1624,6 @@ pub mod explicit_draughting {
             &'table self,
         ) -> impl Iterator<Item = Result<PresentedItem>> + 'table {
             self.presented_item
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn presented_item_any_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<PresentedItemAny>> + 'table {
-            self.presented_item_any
                 .values()
                 .cloned()
                 .map(move |value| value.into_owned(&self))
@@ -2171,14 +1700,6 @@ pub mod explicit_draughting {
                 .cloned()
                 .map(move |value| value.into_owned(&self))
         }
-        pub fn projection_directed_callout_any_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<ProjectionDirectedCalloutAny>> + 'table {
-            self.projection_directed_callout_any
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
         pub fn property_definition_iter<'table>(
             &'table self,
         ) -> impl Iterator<Item = Result<PropertyDefinition>> + 'table {
@@ -2187,26 +1708,10 @@ pub mod explicit_draughting {
                 .cloned()
                 .map(move |value| value.into_owned(&self))
         }
-        pub fn property_definition_any_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<PropertyDefinitionAny>> + 'table {
-            self.property_definition_any
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
         pub fn property_definition_representation_iter<'table>(
             &'table self,
         ) -> impl Iterator<Item = Result<PropertyDefinitionRepresentation>> + 'table {
             self.property_definition_representation
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn property_definition_representation_any_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<PropertyDefinitionRepresentationAny>> + 'table {
-            self.property_definition_representation_any
                 .values()
                 .cloned()
                 .map(move |value| value.into_owned(&self))
@@ -2243,26 +1748,10 @@ pub mod explicit_draughting {
                 .cloned()
                 .map(move |value| value.into_owned(&self))
         }
-        pub fn representation_any_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<RepresentationAny>> + 'table {
-            self.representation_any
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
         pub fn representation_context_iter<'table>(
             &'table self,
         ) -> impl Iterator<Item = Result<RepresentationContext>> + 'table {
             self.representation_context
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn representation_context_any_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<RepresentationContextAny>> + 'table {
-            self.representation_context_any
                 .values()
                 .cloned()
                 .map(move |value| value.into_owned(&self))
@@ -2275,26 +1764,10 @@ pub mod explicit_draughting {
                 .cloned()
                 .map(move |value| value.into_owned(&self))
         }
-        pub fn representation_item_any_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<RepresentationItemAny>> + 'table {
-            self.representation_item_any
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
         pub fn representation_map_iter<'table>(
             &'table self,
         ) -> impl Iterator<Item = Result<RepresentationMap>> + 'table {
             self.representation_map
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn representation_map_any_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<RepresentationMapAny>> + 'table {
-            self.representation_map_any
                 .values()
                 .cloned()
                 .map(move |value| value.into_owned(&self))
@@ -2311,14 +1784,6 @@ pub mod explicit_draughting {
             &'table self,
         ) -> impl Iterator<Item = Result<SecurityClassificationAssignment>> + 'table {
             self.security_classification_assignment
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn security_classification_assignment_any_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<SecurityClassificationAssignmentAny>> + 'table {
-            self.security_classification_assignment_any
                 .values()
                 .cloned()
                 .map(move |value| value.into_owned(&self))
@@ -2347,14 +1812,6 @@ pub mod explicit_draughting {
                 .cloned()
                 .map(move |value| value.into_owned(&self))
         }
-        pub fn shape_representation_any_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<ShapeRepresentationAny>> + 'table {
-            self.shape_representation_any
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
         pub fn si_unit_iter<'table>(&'table self) -> impl Iterator<Item = Result<SiUnit>> + 'table {
             self.si_unit
                 .values()
@@ -2377,14 +1834,6 @@ pub mod explicit_draughting {
                 .cloned()
                 .map(move |value| value.into_owned(&self))
         }
-        pub fn styled_item_any_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<StyledItemAny>> + 'table {
-            self.styled_item_any
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
         pub fn symbol_colour_iter<'table>(
             &'table self,
         ) -> impl Iterator<Item = Result<SymbolColour>> + 'table {
@@ -2397,14 +1846,6 @@ pub mod explicit_draughting {
             &'table self,
         ) -> impl Iterator<Item = Result<SymbolRepresentation>> + 'table {
             self.symbol_representation
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn symbol_representation_any_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<SymbolRepresentationAny>> + 'table {
-            self.symbol_representation_any
                 .values()
                 .cloned()
                 .map(move |value| value.into_owned(&self))
@@ -2441,26 +1882,10 @@ pub mod explicit_draughting {
                 .cloned()
                 .map(move |value| value.into_owned(&self))
         }
-        pub fn terminator_symbol_any_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<TerminatorSymbolAny>> + 'table {
-            self.terminator_symbol_any
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
         pub fn text_literal_iter<'table>(
             &'table self,
         ) -> impl Iterator<Item = Result<TextLiteral>> + 'table {
             self.text_literal
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn text_literal_any_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<TextLiteralAny>> + 'table {
-            self.text_literal_any
                 .values()
                 .cloned()
                 .map(move |value| value.into_owned(&self))
@@ -2489,14 +1914,6 @@ pub mod explicit_draughting {
                 .cloned()
                 .map(move |value| value.into_owned(&self))
         }
-        pub fn text_literal_with_delineation_any_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<TextLiteralWithDelineationAny>> + 'table {
-            self.text_literal_with_delineation_any
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
         pub fn text_literal_with_extent_iter<'table>(
             &'table self,
         ) -> impl Iterator<Item = Result<TextLiteralWithExtent>> + 'table {
@@ -2509,14 +1926,6 @@ pub mod explicit_draughting {
             &'table self,
         ) -> impl Iterator<Item = Result<TextStyle>> + 'table {
             self.text_style
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn text_style_any_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<TextStyleAny>> + 'table {
-            self.text_style_any
                 .values()
                 .cloned()
                 .map(move |value| value.into_owned(&self))
@@ -3148,9 +2557,11 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
-    # [holder (field = address_any)]
     #[holder(generate_deserialize)]
     pub enum AddressAny {
+        #[holder(use_place_holder)]
+        # [holder (field = address)]
+        Address(Box<Address>),
         #[holder(use_place_holder)]
         # [holder (field = organizational_address)]
         OrganizationalAddress(Box<OrganizationalAddress>),
@@ -3186,9 +2597,11 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
-    # [holder (field = annotation_curve_occurrence_any)]
     #[holder(generate_deserialize)]
     pub enum AnnotationCurveOccurrenceAny {
+        #[holder(use_place_holder)]
+        # [holder (field = annotation_curve_occurrence)]
+        AnnotationCurveOccurrence(Box<AnnotationCurveOccurrence>),
         #[holder(use_place_holder)]
         # [holder (field = dimension_curve)]
         DimensionCurve(Box<DimensionCurve>),
@@ -3244,17 +2657,19 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
-    # [holder (field = annotation_occurrence_any)]
     #[holder(generate_deserialize)]
     pub enum AnnotationOccurrenceAny {
         #[holder(use_place_holder)]
-        # [holder (field = annotation_curve_occurrence_any)]
+        # [holder (field = annotation_occurrence)]
+        AnnotationOccurrence(Box<AnnotationOccurrence>),
+        #[holder(use_place_holder)]
+        # [holder (field = annotation_curve_occurrence)]
         AnnotationCurveOccurrenceAny(Box<AnnotationCurveOccurrenceAny>),
         #[holder(use_place_holder)]
         # [holder (field = annotation_fill_area_occurrence)]
         AnnotationFillAreaOccurrence(Box<AnnotationFillAreaOccurrence>),
         #[holder(use_place_holder)]
-        # [holder (field = annotation_symbol_occurrence_any)]
+        # [holder (field = annotation_symbol_occurrence)]
         AnnotationSymbolOccurrenceAny(Box<AnnotationSymbolOccurrenceAny>),
         #[holder(use_place_holder)]
         # [holder (field = annotation_text_occurrence)]
@@ -3304,14 +2719,16 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
-    # [holder (field = annotation_symbol_occurrence_any)]
     #[holder(generate_deserialize)]
     pub enum AnnotationSymbolOccurrenceAny {
+        #[holder(use_place_holder)]
+        # [holder (field = annotation_symbol_occurrence)]
+        AnnotationSymbolOccurrence(Box<AnnotationSymbolOccurrence>),
         #[holder(use_place_holder)]
         # [holder (field = annotation_subfigure_occurrence)]
         AnnotationSubfigureOccurrence(Box<AnnotationSubfigureOccurrence>),
         #[holder(use_place_holder)]
-        # [holder (field = terminator_symbol_any)]
+        # [holder (field = terminator_symbol)]
         TerminatorSymbolAny(Box<TerminatorSymbolAny>),
     }
     impl Into<MappedItemAny> for AnnotationText {
@@ -3358,9 +2775,11 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
-    # [holder (field = application_context_element_any)]
     #[holder(generate_deserialize)]
     pub enum ApplicationContextElementAny {
+        #[holder(use_place_holder)]
+        # [holder (field = application_context_element)]
+        ApplicationContextElement(Box<ApplicationContextElement>),
         #[holder(use_place_holder)]
         # [holder (field = product_context)]
         ProductContext(Box<ProductContext>),
@@ -3398,9 +2817,11 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
-    # [holder (field = approval_assignment_any)]
     #[holder(generate_deserialize)]
     pub enum ApprovalAssignmentAny {
+        #[holder(use_place_holder)]
+        # [holder (field = approval_assignment)]
+        ApprovalAssignment(Box<ApprovalAssignment>),
         #[holder(use_place_holder)]
         # [holder (field = draughting_approval_assignment)]
         DraughtingApprovalAssignment(Box<DraughtingApprovalAssignment>),
@@ -3453,9 +2874,11 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
-    # [holder (field = area_in_set_any)]
     #[holder(generate_deserialize)]
     pub enum AreaInSetAny {
+        #[holder(use_place_holder)]
+        # [holder (field = area_in_set)]
+        AreaInSet(Box<AreaInSet>),
         #[holder(use_place_holder)]
         # [holder (field = drawing_sheet_revision_usage)]
         DrawingSheetRevisionUsage(Box<DrawingSheetRevisionUsage>),
@@ -3496,9 +2919,11 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
-    # [holder (field = b_spline_curve_any)]
     #[holder(generate_deserialize)]
     pub enum BSplineCurveAny {
+        #[holder(use_place_holder)]
+        # [holder (field = b_spline_curve)]
+        BSplineCurve(Box<BSplineCurve>),
         #[holder(use_place_holder)]
         # [holder (field = b_spline_curve_with_knots)]
         BSplineCurveWithKnots(Box<BSplineCurveWithKnots>),
@@ -3559,11 +2984,13 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
-    # [holder (field = bounded_curve_any)]
     #[holder(generate_deserialize)]
     pub enum BoundedCurveAny {
         #[holder(use_place_holder)]
-        # [holder (field = b_spline_curve_any)]
+        # [holder (field = bounded_curve)]
+        BoundedCurve(Box<BoundedCurve>),
+        #[holder(use_place_holder)]
+        # [holder (field = b_spline_curve)]
         BSplineCurveAny(Box<BSplineCurveAny>),
         #[holder(use_place_holder)]
         # [holder (field = composite_curve)]
@@ -3605,9 +3032,11 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
-    # [holder (field = camera_image_any)]
     #[holder(generate_deserialize)]
     pub enum CameraImageAny {
+        #[holder(use_place_holder)]
+        # [holder (field = camera_image)]
+        CameraImage(Box<CameraImage>),
         #[holder(use_place_holder)]
         # [holder (field = camera_image_2d_with_scale)]
         CameraImage2DWithScale(Box<CameraImage2DWithScale>),
@@ -3640,9 +3069,11 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
-    # [holder (field = camera_model_any)]
     #[holder(generate_deserialize)]
     pub enum CameraModelAny {
+        #[holder(use_place_holder)]
+        # [holder (field = camera_model)]
+        CameraModel(Box<CameraModel>),
         #[holder(use_place_holder)]
         # [holder (field = camera_model_d2)]
         CameraModelD2(Box<CameraModelD2>),
@@ -3711,14 +3142,16 @@ pub mod explicit_draughting {
     pub struct Colour {}
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
-    # [holder (field = colour_any)]
     #[holder(generate_deserialize)]
     pub enum ColourAny {
         #[holder(use_place_holder)]
-        # [holder (field = colour_specification_any)]
+        # [holder (field = colour)]
+        Colour(Box<Colour>),
+        #[holder(use_place_holder)]
+        # [holder (field = colour_specification)]
         ColourSpecificationAny(Box<ColourSpecificationAny>),
         #[holder(use_place_holder)]
-        # [holder (field = pre_defined_colour_any)]
+        # [holder (field = pre_defined_colour)]
         PreDefinedColourAny(Box<PreDefinedColourAny>),
     }
     impl Into<ColourSpecificationAny> for ColourRgb {
@@ -3754,9 +3187,11 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
-    # [holder (field = colour_specification_any)]
     #[holder(generate_deserialize)]
     pub enum ColourSpecificationAny {
+        #[holder(use_place_holder)]
+        # [holder (field = colour_specification)]
+        ColourSpecification(Box<ColourSpecification>),
         #[holder(use_place_holder)]
         # [holder (field = colour_rgb)]
         ColourRgb(Box<ColourRgb>),
@@ -3804,9 +3239,11 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
-    # [holder (field = composite_text_any)]
     #[holder(generate_deserialize)]
     pub enum CompositeTextAny {
+        #[holder(use_place_holder)]
+        # [holder (field = composite_text)]
+        CompositeText(Box<CompositeText>),
         #[holder(use_place_holder)]
         # [holder (field = composite_text_with_associated_curves)]
         CompositeTextWithAssociatedCurves(Box<CompositeTextWithAssociatedCurves>),
@@ -3879,9 +3316,11 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
-    # [holder (field = conic_any)]
     #[holder(generate_deserialize)]
     pub enum ConicAny {
+        #[holder(use_place_holder)]
+        # [holder (field = conic)]
+        Conic(Box<Conic>),
         #[holder(use_place_holder)]
         # [holder (field = circle)]
         Circle(Box<Circle>),
@@ -3930,9 +3369,11 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
-    # [holder (field = contract_assignment_any)]
     #[holder(generate_deserialize)]
     pub enum ContractAssignmentAny {
+        #[holder(use_place_holder)]
+        # [holder (field = contract_assignment)]
+        ContractAssignment(Box<ContractAssignment>),
         #[holder(use_place_holder)]
         # [holder (field = draughting_contract_assignment)]
         DraughtingContractAssignment(Box<DraughtingContractAssignment>),
@@ -3975,14 +3416,16 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
-    # [holder (field = curve_any)]
     #[holder(generate_deserialize)]
     pub enum CurveAny {
         #[holder(use_place_holder)]
-        # [holder (field = bounded_curve_any)]
+        # [holder (field = curve)]
+        Curve(Box<Curve>),
+        #[holder(use_place_holder)]
+        # [holder (field = bounded_curve)]
         BoundedCurveAny(Box<BoundedCurveAny>),
         #[holder(use_place_holder)]
-        # [holder (field = conic_any)]
+        # [holder (field = conic)]
         ConicAny(Box<ConicAny>),
         #[holder(use_place_holder)]
         # [holder (field = line)]
@@ -4043,9 +3486,11 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
-    # [holder (field = date_any)]
     #[holder(generate_deserialize)]
     pub enum DateAny {
+        #[holder(use_place_holder)]
+        # [holder (field = date)]
+        Date(Box<Date>),
         #[holder(use_place_holder)]
         # [holder (field = calendar_date)]
         CalendarDate(Box<CalendarDate>),
@@ -4160,9 +3605,11 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
-    # [holder (field = dimension_curve_directed_callout_any)]
     #[holder(generate_deserialize)]
     pub enum DimensionCurveDirectedCalloutAny {
+        #[holder(use_place_holder)]
+        # [holder (field = dimension_curve_directed_callout)]
+        DimensionCurveDirectedCallout(Box<DimensionCurveDirectedCallout>),
         #[holder(use_place_holder)]
         # [holder (field = angular_dimension)]
         AngularDimension(Box<AngularDimension>),
@@ -4255,9 +3702,11 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
-    # [holder (field = document_reference_any)]
     #[holder(generate_deserialize)]
     pub enum DocumentReferenceAny {
+        #[holder(use_place_holder)]
+        # [holder (field = document_reference)]
+        DocumentReference(Box<DocumentReference>),
         #[holder(use_place_holder)]
         # [holder (field = draughting_specification_reference)]
         DraughtingSpecificationReference(Box<DraughtingSpecificationReference>),
@@ -4314,9 +3763,11 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
-    # [holder (field = draughting_callout_any)]
     #[holder(generate_deserialize)]
     pub enum DraughtingCalloutAny {
+        #[holder(use_place_holder)]
+        # [holder (field = draughting_callout)]
+        DraughtingCallout(Box<DraughtingCallout>),
         #[holder(use_place_holder)]
         # [holder (field = datum_feature_callout)]
         DatumFeatureCallout(Box<DatumFeatureCallout>),
@@ -4324,7 +3775,7 @@ pub mod explicit_draughting {
         # [holder (field = datum_target_callout)]
         DatumTargetCallout(Box<DatumTargetCallout>),
         #[holder(use_place_holder)]
-        # [holder (field = dimension_curve_directed_callout_any)]
+        # [holder (field = dimension_curve_directed_callout)]
         DimensionCurveDirectedCalloutAny(Box<DimensionCurveDirectedCalloutAny>),
         #[holder(use_place_holder)]
         # [holder (field = draughting_elements)]
@@ -4333,10 +3784,10 @@ pub mod explicit_draughting {
         # [holder (field = geometrical_tolerance_callout)]
         GeometricalToleranceCallout(Box<GeometricalToleranceCallout>),
         #[holder(use_place_holder)]
-        # [holder (field = leader_directed_callout_any)]
+        # [holder (field = leader_directed_callout)]
         LeaderDirectedCalloutAny(Box<LeaderDirectedCalloutAny>),
         #[holder(use_place_holder)]
-        # [holder (field = projection_directed_callout_any)]
+        # [holder (field = projection_directed_callout)]
         ProjectionDirectedCalloutAny(Box<ProjectionDirectedCalloutAny>),
         #[holder(use_place_holder)]
         # [holder (field = structured_dimension_callout)]
@@ -4356,9 +3807,11 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
-    # [holder (field = draughting_callout_relationship_any)]
     #[holder(generate_deserialize)]
     pub enum DraughtingCalloutRelationshipAny {
+        #[holder(use_place_holder)]
+        # [holder (field = draughting_callout_relationship)]
+        DraughtingCalloutRelationship(Box<DraughtingCalloutRelationship>),
         #[holder(use_place_holder)]
         # [holder (field = dimension_callout_component_relationship)]
         DimensionCalloutComponentRelationship(Box<DimensionCalloutComponentRelationship>),
@@ -4599,9 +4052,11 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
-    # [holder (field = draughting_symbol_representation_any)]
     #[holder(generate_deserialize)]
     pub enum DraughtingSymbolRepresentationAny {
+        #[holder(use_place_holder)]
+        # [holder (field = draughting_symbol_representation)]
+        DraughtingSymbolRepresentation(Box<DraughtingSymbolRepresentation>),
         #[holder(use_place_holder)]
         # [holder (field = drawing_sheet_layout)]
         DrawingSheetLayout(Box<DrawingSheetLayout>),
@@ -4656,9 +4111,11 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
-    # [holder (field = drawing_revision_any)]
     #[holder(generate_deserialize)]
     pub enum DrawingRevisionAny {
+        #[holder(use_place_holder)]
+        # [holder (field = drawing_revision)]
+        DrawingRevision(Box<DrawingRevision>),
         #[holder(use_place_holder)]
         # [holder (field = draughting_drawing_revision)]
         DraughtingDrawingRevision(Box<DraughtingDrawingRevision>),
@@ -4772,9 +4229,11 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
-    # [holder (field = externally_defined_item_any)]
     #[holder(generate_deserialize)]
     pub enum ExternallyDefinedItemAny {
+        #[holder(use_place_holder)]
+        # [holder (field = externally_defined_item)]
+        ExternallyDefinedItem(Box<ExternallyDefinedItem>),
         #[holder(use_place_holder)]
         # [holder (field = externally_defined_curve_font)]
         ExternallyDefinedCurveFont(Box<ExternallyDefinedCurveFont>),
@@ -4952,20 +4411,22 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
-    # [holder (field = geometric_representation_item_any)]
     #[holder(generate_deserialize)]
     pub enum GeometricRepresentationItemAny {
+        #[holder(use_place_holder)]
+        # [holder (field = geometric_representation_item)]
+        GeometricRepresentationItem(Box<GeometricRepresentationItem>),
         #[holder(use_place_holder)]
         # [holder (field = annotation_fill_area)]
         AnnotationFillArea(Box<AnnotationFillArea>),
         #[holder(use_place_holder)]
-        # [holder (field = camera_model_any)]
+        # [holder (field = camera_model)]
         CameraModelAny(Box<CameraModelAny>),
         #[holder(use_place_holder)]
-        # [holder (field = composite_text_any)]
+        # [holder (field = composite_text)]
         CompositeTextAny(Box<CompositeTextAny>),
         #[holder(use_place_holder)]
-        # [holder (field = curve_any)]
+        # [holder (field = curve)]
         CurveAny(Box<CurveAny>),
         #[holder(use_place_holder)]
         # [holder (field = defined_symbol)]
@@ -4974,7 +4435,7 @@ pub mod explicit_draughting {
         # [holder (field = direction)]
         Direction(Box<Direction>),
         #[holder(use_place_holder)]
-        # [holder (field = draughting_callout_any)]
+        # [holder (field = draughting_callout)]
         DraughtingCalloutAny(Box<DraughtingCalloutAny>),
         #[holder(use_place_holder)]
         # [holder (field = externally_defined_hatch_style)]
@@ -4992,25 +4453,25 @@ pub mod explicit_draughting {
         # [holder (field = fill_area_style_tiles)]
         FillAreaStyleTiles(Box<FillAreaStyleTiles>),
         #[holder(use_place_holder)]
-        # [holder (field = geometric_set_any)]
+        # [holder (field = geometric_set)]
         GeometricSetAny(Box<GeometricSetAny>),
         #[holder(use_place_holder)]
-        # [holder (field = one_direction_repeat_factor_any)]
+        # [holder (field = one_direction_repeat_factor)]
         OneDirectionRepeatFactorAny(Box<OneDirectionRepeatFactorAny>),
         #[holder(use_place_holder)]
-        # [holder (field = placement_any)]
+        # [holder (field = placement)]
         PlacementAny(Box<PlacementAny>),
         #[holder(use_place_holder)]
-        # [holder (field = planar_extent_any)]
+        # [holder (field = planar_extent)]
         PlanarExtentAny(Box<PlanarExtentAny>),
         #[holder(use_place_holder)]
-        # [holder (field = point_any)]
+        # [holder (field = point)]
         PointAny(Box<PointAny>),
         #[holder(use_place_holder)]
         # [holder (field = symbol_target)]
         SymbolTarget(Box<SymbolTarget>),
         #[holder(use_place_holder)]
-        # [holder (field = text_literal_any)]
+        # [holder (field = text_literal)]
         TextLiteralAny(Box<TextLiteralAny>),
         #[holder(use_place_holder)]
         # [holder (field = vector)]
@@ -5033,9 +4494,11 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
-    # [holder (field = geometric_set_any)]
     #[holder(generate_deserialize)]
     pub enum GeometricSetAny {
+        #[holder(use_place_holder)]
+        # [holder (field = geometric_set)]
+        GeometricSet(Box<GeometricSet>),
         #[holder(use_place_holder)]
         # [holder (field = geometric_curve_set)]
         GeometricCurveSet(Box<GeometricCurveSet>),
@@ -5099,9 +4562,11 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
-    # [holder (field = group_assignment_any)]
     #[holder(generate_deserialize)]
     pub enum GroupAssignmentAny {
+        #[holder(use_place_holder)]
+        # [holder (field = group_assignment)]
+        GroupAssignment(Box<GroupAssignment>),
         #[holder(use_place_holder)]
         # [holder (field = draughting_group_assignment)]
         DraughtingGroupAssignment(Box<DraughtingGroupAssignment>),
@@ -5143,9 +4608,11 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
-    # [holder (field = invisibility_any)]
     #[holder(generate_deserialize)]
     pub enum InvisibilityAny {
+        #[holder(use_place_holder)]
+        # [holder (field = invisibility)]
+        Invisibility(Box<Invisibility>),
         #[holder(use_place_holder)]
         # [holder (field = context_dependent_invisibility)]
         ContextDependentInvisibility(Box<ContextDependentInvisibility>),
@@ -5178,9 +4645,11 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
-    # [holder (field = leader_directed_callout_any)]
     #[holder(generate_deserialize)]
     pub enum LeaderDirectedCalloutAny {
+        #[holder(use_place_holder)]
+        # [holder (field = leader_directed_callout)]
+        LeaderDirectedCallout(Box<LeaderDirectedCallout>),
         #[holder(use_place_holder)]
         # [holder (field = leader_directed_dimension)]
         LeaderDirectedDimension(Box<LeaderDirectedDimension>),
@@ -5286,9 +4755,11 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
-    # [holder (field = mapped_item_any)]
     #[holder(generate_deserialize)]
     pub enum MappedItemAny {
+        #[holder(use_place_holder)]
+        # [holder (field = mapped_item)]
+        MappedItem(Box<MappedItem>),
         #[holder(use_place_holder)]
         # [holder (field = annotation_symbol)]
         AnnotationSymbol(Box<AnnotationSymbol>),
@@ -5296,7 +4767,7 @@ pub mod explicit_draughting {
         # [holder (field = annotation_text)]
         AnnotationText(Box<AnnotationText>),
         #[holder(use_place_holder)]
-        # [holder (field = camera_image_any)]
+        # [holder (field = camera_image)]
         CameraImageAny(Box<CameraImageAny>),
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
@@ -5311,9 +4782,11 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
-    # [holder (field = measure_with_unit_any)]
     #[holder(generate_deserialize)]
     pub enum MeasureWithUnitAny {
+        #[holder(use_place_holder)]
+        # [holder (field = measure_with_unit)]
+        MeasureWithUnit(Box<MeasureWithUnit>),
         #[holder(use_place_holder)]
         # [holder (field = length_measure_with_unit)]
         LengthMeasureWithUnit(Box<LengthMeasureWithUnit>),
@@ -5331,9 +4804,11 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
-    # [holder (field = named_unit_any)]
     #[holder(generate_deserialize)]
     pub enum NamedUnitAny {
+        #[holder(use_place_holder)]
+        # [holder (field = named_unit)]
+        NamedUnit(Box<NamedUnit>),
         #[holder(use_place_holder)]
         # [holder (field = conversion_based_unit)]
         ConversionBasedUnit(Box<ConversionBasedUnit>),
@@ -5381,9 +4856,11 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
-    # [holder (field = one_direction_repeat_factor_any)]
     #[holder(generate_deserialize)]
     pub enum OneDirectionRepeatFactorAny {
+        #[holder(use_place_holder)]
+        # [holder (field = one_direction_repeat_factor)]
+        OneDirectionRepeatFactor(Box<OneDirectionRepeatFactor>),
         #[holder(use_place_holder)]
         # [holder (field = two_direction_repeat_factor)]
         TwoDirectionRepeatFactor(Box<TwoDirectionRepeatFactor>),
@@ -5422,9 +4899,11 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
-    # [holder (field = organization_assignment_any)]
     #[holder(generate_deserialize)]
     pub enum OrganizationAssignmentAny {
+        #[holder(use_place_holder)]
+        # [holder (field = organization_assignment)]
+        OrganizationAssignment(Box<OrganizationAssignment>),
         #[holder(use_place_holder)]
         # [holder (field = draughting_organization_assignment)]
         DraughtingOrganizationAssignment(Box<DraughtingOrganizationAssignment>),
@@ -5500,9 +4979,11 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
-    # [holder (field = person_and_organization_assignment_any)]
     #[holder(generate_deserialize)]
     pub enum PersonAndOrganizationAssignmentAny {
+        #[holder(use_place_holder)]
+        # [holder (field = person_and_organization_assignment)]
+        PersonAndOrganizationAssignment(Box<PersonAndOrganizationAssignment>),
         #[holder(use_place_holder)]
         # [holder (field = draughting_person_and_organization_assignment)]
         DraughtingPersonAndOrganizationAssignment(Box<DraughtingPersonAndOrganizationAssignment>),
@@ -5526,9 +5007,11 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
-    # [holder (field = person_assignment_any)]
     #[holder(generate_deserialize)]
     pub enum PersonAssignmentAny {
+        #[holder(use_place_holder)]
+        # [holder (field = person_assignment)]
+        PersonAssignment(Box<PersonAssignment>),
         #[holder(use_place_holder)]
         # [holder (field = draughting_person_assignment)]
         DraughtingPersonAssignment(Box<DraughtingPersonAssignment>),
@@ -5573,9 +5056,11 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
-    # [holder (field = placement_any)]
     #[holder(generate_deserialize)]
     pub enum PlacementAny {
+        #[holder(use_place_holder)]
+        # [holder (field = placement)]
+        Placement(Box<Placement>),
         #[holder(use_place_holder)]
         # [holder (field = axis2_placement_2d)]
         Axis2Placement2D(Box<Axis2Placement2D>),
@@ -5612,9 +5097,11 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
-    # [holder (field = planar_extent_any)]
     #[holder(generate_deserialize)]
     pub enum PlanarExtentAny {
+        #[holder(use_place_holder)]
+        # [holder (field = planar_extent)]
+        PlanarExtent(Box<PlanarExtent>),
         #[holder(use_place_holder)]
         # [holder (field = planar_box)]
         PlanarBox(Box<PlanarBox>),
@@ -5660,9 +5147,11 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
-    # [holder (field = point_any)]
     #[holder(generate_deserialize)]
     pub enum PointAny {
+        #[holder(use_place_holder)]
+        # [holder (field = point)]
+        Point(Box<Point>),
         #[holder(use_place_holder)]
         # [holder (field = cartesian_point)]
         CartesianPoint(Box<CartesianPoint>),
@@ -5723,9 +5212,11 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
-    # [holder (field = pre_defined_colour_any)]
     #[holder(generate_deserialize)]
     pub enum PreDefinedColourAny {
+        #[holder(use_place_holder)]
+        # [holder (field = pre_defined_colour)]
+        PreDefinedColour(Box<PreDefinedColour>),
         #[holder(use_place_holder)]
         # [holder (field = draughting_pre_defined_colour)]
         DraughtingPreDefinedColour(Box<DraughtingPreDefinedColour>),
@@ -5745,9 +5236,11 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
-    # [holder (field = pre_defined_curve_font_any)]
     #[holder(generate_deserialize)]
     pub enum PreDefinedCurveFontAny {
+        #[holder(use_place_holder)]
+        # [holder (field = pre_defined_curve_font)]
+        PreDefinedCurveFont(Box<PreDefinedCurveFont>),
         #[holder(use_place_holder)]
         # [holder (field = draughting_pre_defined_curve_font)]
         DraughtingPreDefinedCurveFont(Box<DraughtingPreDefinedCurveFont>),
@@ -5787,20 +5280,22 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
-    # [holder (field = pre_defined_item_any)]
     #[holder(generate_deserialize)]
     pub enum PreDefinedItemAny {
         #[holder(use_place_holder)]
-        # [holder (field = pre_defined_colour_any)]
+        # [holder (field = pre_defined_item)]
+        PreDefinedItem(Box<PreDefinedItem>),
+        #[holder(use_place_holder)]
+        # [holder (field = pre_defined_colour)]
         PreDefinedColourAny(Box<PreDefinedColourAny>),
         #[holder(use_place_holder)]
-        # [holder (field = pre_defined_curve_font_any)]
+        # [holder (field = pre_defined_curve_font)]
         PreDefinedCurveFontAny(Box<PreDefinedCurveFontAny>),
         #[holder(use_place_holder)]
-        # [holder (field = pre_defined_symbol_any)]
+        # [holder (field = pre_defined_symbol)]
         PreDefinedSymbolAny(Box<PreDefinedSymbolAny>),
         #[holder(use_place_holder)]
-        # [holder (field = pre_defined_text_font_any)]
+        # [holder (field = pre_defined_text_font)]
         PreDefinedTextFontAny(Box<PreDefinedTextFontAny>),
     }
     impl Into<PreDefinedSymbolAny> for PreDefinedPointMarkerSymbol {
@@ -5831,9 +5326,11 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
-    # [holder (field = pre_defined_symbol_any)]
     #[holder(generate_deserialize)]
     pub enum PreDefinedSymbolAny {
+        #[holder(use_place_holder)]
+        # [holder (field = pre_defined_symbol)]
+        PreDefinedSymbol(Box<PreDefinedSymbol>),
         #[holder(use_place_holder)]
         # [holder (field = pre_defined_dimension_symbol)]
         PreDefinedDimensionSymbol(Box<PreDefinedDimensionSymbol>),
@@ -5875,9 +5372,11 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
-    # [holder (field = pre_defined_text_font_any)]
     #[holder(generate_deserialize)]
     pub enum PreDefinedTextFontAny {
+        #[holder(use_place_holder)]
+        # [holder (field = pre_defined_text_font)]
+        PreDefinedTextFont(Box<PreDefinedTextFont>),
         #[holder(use_place_holder)]
         # [holder (field = draughting_pre_defined_text_font)]
         DraughtingPreDefinedTextFont(Box<DraughtingPreDefinedTextFont>),
@@ -5897,9 +5396,11 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
-    # [holder (field = presentation_area_any)]
     #[holder(generate_deserialize)]
     pub enum PresentationAreaAny {
+        #[holder(use_place_holder)]
+        # [holder (field = presentation_area)]
+        PresentationArea(Box<PresentationArea>),
         #[holder(use_place_holder)]
         # [holder (field = drawing_sheet_revision)]
         DrawingSheetRevision(Box<DrawingSheetRevision>),
@@ -5939,11 +5440,13 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
-    # [holder (field = presentation_representation_any)]
     #[holder(generate_deserialize)]
     pub enum PresentationRepresentationAny {
         #[holder(use_place_holder)]
-        # [holder (field = presentation_area_any)]
+        # [holder (field = presentation_representation)]
+        PresentationRepresentation(Box<PresentationRepresentation>),
+        #[holder(use_place_holder)]
+        # [holder (field = presentation_area)]
         PresentationAreaAny(Box<PresentationAreaAny>),
         #[holder(use_place_holder)]
         # [holder (field = presentation_view)]
@@ -5956,11 +5459,13 @@ pub mod explicit_draughting {
     pub struct PresentationSet {}
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
-    # [holder (field = presentation_set_any)]
     #[holder(generate_deserialize)]
     pub enum PresentationSetAny {
         #[holder(use_place_holder)]
-        # [holder (field = drawing_revision_any)]
+        # [holder (field = presentation_set)]
+        PresentationSet(Box<PresentationSet>),
+        #[holder(use_place_holder)]
+        # [holder (field = drawing_revision)]
         DrawingRevisionAny(Box<DrawingRevisionAny>),
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
@@ -5983,9 +5488,11 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
-    # [holder (field = presentation_style_assignment_any)]
     #[holder(generate_deserialize)]
     pub enum PresentationStyleAssignmentAny {
+        #[holder(use_place_holder)]
+        # [holder (field = presentation_style_assignment)]
+        PresentationStyleAssignment(Box<PresentationStyleAssignment>),
         #[holder(use_place_holder)]
         # [holder (field = presentation_style_by_context)]
         PresentationStyleByContext(Box<PresentationStyleByContext>),
@@ -6025,9 +5532,11 @@ pub mod explicit_draughting {
     pub struct PresentedItem {}
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
-    # [holder (field = presented_item_any)]
     #[holder(generate_deserialize)]
     pub enum PresentedItemAny {
+        #[holder(use_place_holder)]
+        # [holder (field = presented_item)]
+        PresentedItem(Box<PresentedItem>),
         #[holder(use_place_holder)]
         # [holder (field = draughting_presented_item)]
         DraughtingPresentedItem(Box<DraughtingPresentedItem>),
@@ -6144,9 +5653,11 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
-    # [holder (field = projection_directed_callout_any)]
     #[holder(generate_deserialize)]
     pub enum ProjectionDirectedCalloutAny {
+        #[holder(use_place_holder)]
+        # [holder (field = projection_directed_callout)]
+        ProjectionDirectedCallout(Box<ProjectionDirectedCallout>),
         #[holder(use_place_holder)]
         # [holder (field = ordinate_dimension)]
         OrdinateDimension(Box<OrdinateDimension>),
@@ -6163,9 +5674,11 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
-    # [holder (field = property_definition_any)]
     #[holder(generate_deserialize)]
     pub enum PropertyDefinitionAny {
+        #[holder(use_place_holder)]
+        # [holder (field = property_definition)]
+        PropertyDefinition(Box<PropertyDefinition>),
         #[holder(use_place_holder)]
         # [holder (field = product_definition_shape)]
         ProductDefinitionShape(Box<ProductDefinitionShape>),
@@ -6182,9 +5695,11 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
-    # [holder (field = property_definition_representation_any)]
     #[holder(generate_deserialize)]
     pub enum PropertyDefinitionRepresentationAny {
+        #[holder(use_place_holder)]
+        # [holder (field = property_definition_representation)]
+        PropertyDefinitionRepresentation(Box<PropertyDefinitionRepresentation>),
         #[holder(use_place_holder)]
         # [holder (field = shape_definition_representation)]
         ShapeDefinitionRepresentation(Box<ShapeDefinitionRepresentation>),
@@ -6242,20 +5757,22 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
-    # [holder (field = representation_any)]
     #[holder(generate_deserialize)]
     pub enum RepresentationAny {
+        #[holder(use_place_holder)]
+        # [holder (field = representation)]
+        Representation(Box<Representation>),
         #[holder(use_place_holder)]
         # [holder (field = draughting_model)]
         DraughtingModel(Box<DraughtingModel>),
         #[holder(use_place_holder)]
-        # [holder (field = presentation_representation_any)]
+        # [holder (field = presentation_representation)]
         PresentationRepresentationAny(Box<PresentationRepresentationAny>),
         #[holder(use_place_holder)]
-        # [holder (field = shape_representation_any)]
+        # [holder (field = shape_representation)]
         ShapeRepresentationAny(Box<ShapeRepresentationAny>),
         #[holder(use_place_holder)]
-        # [holder (field = symbol_representation_any)]
+        # [holder (field = symbol_representation)]
         SymbolRepresentationAny(Box<SymbolRepresentationAny>),
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
@@ -6268,9 +5785,11 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
-    # [holder (field = representation_context_any)]
     #[holder(generate_deserialize)]
     pub enum RepresentationContextAny {
+        #[holder(use_place_holder)]
+        # [holder (field = representation_context)]
+        RepresentationContext(Box<RepresentationContext>),
         #[holder(use_place_holder)]
         # [holder (field = geometric_representation_context)]
         GeometricRepresentationContext(Box<GeometricRepresentationContext>),
@@ -6287,17 +5806,19 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
-    # [holder (field = representation_item_any)]
     #[holder(generate_deserialize)]
     pub enum RepresentationItemAny {
         #[holder(use_place_holder)]
-        # [holder (field = geometric_representation_item_any)]
+        # [holder (field = representation_item)]
+        RepresentationItem(Box<RepresentationItem>),
+        #[holder(use_place_holder)]
+        # [holder (field = geometric_representation_item)]
         GeometricRepresentationItemAny(Box<GeometricRepresentationItemAny>),
         #[holder(use_place_holder)]
-        # [holder (field = mapped_item_any)]
+        # [holder (field = mapped_item)]
         MappedItemAny(Box<MappedItemAny>),
         #[holder(use_place_holder)]
-        # [holder (field = styled_item_any)]
+        # [holder (field = styled_item)]
         StyledItemAny(Box<StyledItemAny>),
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
@@ -6312,9 +5833,11 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
-    # [holder (field = representation_map_any)]
     #[holder(generate_deserialize)]
     pub enum RepresentationMapAny {
+        #[holder(use_place_holder)]
+        # [holder (field = representation_map)]
+        RepresentationMap(Box<RepresentationMap>),
         #[holder(use_place_holder)]
         # [holder (field = camera_usage)]
         CameraUsage(Box<CameraUsage>),
@@ -6342,9 +5865,11 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
-    # [holder (field = security_classification_assignment_any)]
     #[holder(generate_deserialize)]
     pub enum SecurityClassificationAssignmentAny {
+        #[holder(use_place_holder)]
+        # [holder (field = security_classification_assignment)]
+        SecurityClassificationAssignment(Box<SecurityClassificationAssignment>),
         #[holder(use_place_holder)]
         # [holder (field = draughting_security_classification_assignment)]
         DraughtingSecurityClassificationAssignment(Box<DraughtingSecurityClassificationAssignment>),
@@ -6384,9 +5909,11 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
-    # [holder (field = shape_representation_any)]
     #[holder(generate_deserialize)]
     pub enum ShapeRepresentationAny {
+        #[holder(use_place_holder)]
+        # [holder (field = shape_representation)]
+        ShapeRepresentation(Box<ShapeRepresentation>),
         #[holder(use_place_holder)]
         # [holder (field = geometrically_bounded_2d_wireframe_representation)]
         GeometricallyBounded2DWireframeRepresentation(
@@ -6440,11 +5967,13 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
-    # [holder (field = styled_item_any)]
     #[holder(generate_deserialize)]
     pub enum StyledItemAny {
         #[holder(use_place_holder)]
-        # [holder (field = annotation_occurrence_any)]
+        # [holder (field = styled_item)]
+        StyledItem(Box<StyledItem>),
+        #[holder(use_place_holder)]
+        # [holder (field = annotation_occurrence)]
         AnnotationOccurrenceAny(Box<AnnotationOccurrenceAny>),
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
@@ -6470,14 +5999,16 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
-    # [holder (field = symbol_representation_any)]
     #[holder(generate_deserialize)]
     pub enum SymbolRepresentationAny {
+        #[holder(use_place_holder)]
+        # [holder (field = symbol_representation)]
+        SymbolRepresentation(Box<SymbolRepresentation>),
         #[holder(use_place_holder)]
         # [holder (field = draughting_subfigure_representation)]
         DraughtingSubfigureRepresentation(Box<DraughtingSubfigureRepresentation>),
         #[holder(use_place_holder)]
-        # [holder (field = draughting_symbol_representation_any)]
+        # [holder (field = draughting_symbol_representation)]
         DraughtingSymbolRepresentationAny(Box<DraughtingSymbolRepresentationAny>),
     }
     impl Into<RepresentationMapAny> for SymbolRepresentationMap {
@@ -6536,9 +6067,11 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
-    # [holder (field = terminator_symbol_any)]
     #[holder(generate_deserialize)]
     pub enum TerminatorSymbolAny {
+        #[holder(use_place_holder)]
+        # [holder (field = terminator_symbol)]
+        TerminatorSymbol(Box<TerminatorSymbol>),
         #[holder(use_place_holder)]
         # [holder (field = dimension_curve_terminator)]
         DimensionCurveTerminator(Box<DimensionCurveTerminator>),
@@ -6568,9 +6101,11 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
-    # [holder (field = text_literal_any)]
     #[holder(generate_deserialize)]
     pub enum TextLiteralAny {
+        #[holder(use_place_holder)]
+        # [holder (field = text_literal)]
+        TextLiteral(Box<TextLiteral>),
         #[holder(use_place_holder)]
         # [holder (field = text_literal_with_associated_curves)]
         TextLiteralWithAssociatedCurves(Box<TextLiteralWithAssociatedCurves>),
@@ -6578,7 +6113,7 @@ pub mod explicit_draughting {
         # [holder (field = text_literal_with_blanking_box)]
         TextLiteralWithBlankingBox(Box<TextLiteralWithBlankingBox>),
         #[holder(use_place_holder)]
-        # [holder (field = text_literal_with_delineation_any)]
+        # [holder (field = text_literal_with_delineation)]
         TextLiteralWithDelineationAny(Box<TextLiteralWithDelineationAny>),
         #[holder(use_place_holder)]
         # [holder (field = text_literal_with_extent)]
@@ -6630,9 +6165,11 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
-    # [holder (field = text_literal_with_delineation_any)]
     #[holder(generate_deserialize)]
     pub enum TextLiteralWithDelineationAny {
+        #[holder(use_place_holder)]
+        # [holder (field = text_literal_with_delineation)]
+        TextLiteralWithDelineation(Box<TextLiteralWithDelineation>),
         #[holder(use_place_holder)]
         # [holder (field = draughting_text_literal_with_delineation)]
         DraughtingTextLiteralWithDelineation(Box<DraughtingTextLiteralWithDelineation>),
@@ -6663,9 +6200,11 @@ pub mod explicit_draughting {
     }
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
-    # [holder (field = text_style_any)]
     #[holder(generate_deserialize)]
     pub enum TextStyleAny {
+        #[holder(use_place_holder)]
+        # [holder (field = text_style)]
+        TextStyle(Box<TextStyle>),
         #[holder(use_place_holder)]
         # [holder (field = text_style_with_box_characteristics)]
         TextStyleWithBoxCharacteristics(Box<TextStyleWithBoxCharacteristics>),
