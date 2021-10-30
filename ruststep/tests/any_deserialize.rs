@@ -1,5 +1,5 @@
 use nom::Finish;
-use ruststep::{ast::*, parser::exchange, place_holder::*};
+use ruststep::{ast::*, parser::exchange, place_holder::*, tables::*};
 use ruststep_derive::as_holder;
 use serde::Deserialize;
 use std::collections::HashMap;
@@ -240,4 +240,53 @@ fn lookup_base_any() {
         dbg!(&owned);
         assert_eq!(owned, answer);
     }
+}
+
+#[test]
+fn get_owned_base() {
+    let table = Table::example();
+    let base = EntityTable::<BaseHolder>::get_owned(&table, 1).unwrap();
+    assert_eq!(base, Base { x: 1.0 });
+}
+
+#[test]
+fn get_owned_sub1() {
+    let table = Table::example();
+    let sub1 = EntityTable::<Sub1Holder>::get_owned(&table, 2).unwrap();
+    assert_eq!(
+        sub1,
+        Sub1 {
+            base: Base { x: 1.0 },
+            y1: 2.0
+        }
+    );
+}
+
+#[test]
+fn get_owned_any() {
+    let table = Table::example();
+
+    // #1 = BASE(1.0);
+    let any1 = EntityTable::<BaseAnyHolder>::get_owned(&table, 1).unwrap();
+    assert_eq!(any1, BaseAny::Base(Box::new(Base { x: 1.0 })));
+
+    // #2 = SUB_1(BASE((1.0)), 2.0);
+    let any2 = EntityTable::<BaseAnyHolder>::get_owned(&table, 2).unwrap();
+    assert_eq!(
+        any2,
+        BaseAny::Sub1(Box::new(Sub1 {
+            base: Base { x: 1.0 },
+            y1: 2.0
+        }))
+    );
+
+    // #3 = SUB_2(#1, 4.0);
+    let any3 = EntityTable::<BaseAnyHolder>::get_owned(&table, 3).unwrap();
+    assert_eq!(
+        any3,
+        BaseAny::Sub2(Box::new(Sub2 {
+            base: Base { x: 1.0 },
+            y2: 4.0
+        }))
+    );
 }

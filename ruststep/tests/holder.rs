@@ -8,8 +8,37 @@ use nom::Finish;
 use serde::{de, Deserialize};
 use std::collections::HashMap;
 
+#[derive(Default)]
 struct Table {
     a: HashMap<u64, AHolder>,
+    b: HashMap<u64, BHolder>,
+}
+
+impl Table {
+    // ```
+    // #1 = A(1.0, 2.0);
+    // #2 = B(3.0, A((4.0, 5.0)))
+    // #3 = B(6.0, #1);
+    // ```
+    fn example() -> Self {
+        let mut table = Self::default();
+        table.a.insert(1, AHolder { x: 1.0, y: 2.0 });
+        table.b.insert(
+            2,
+            BHolder {
+                z: 3.0,
+                a: PlaceHolder::Owned(AHolder { x: 4.0, y: 5.0 }),
+            },
+        );
+        table.b.insert(
+            3,
+            BHolder {
+                z: 6.0,
+                a: RValue::Entity(1).into(),
+            },
+        );
+        table
+    }
 }
 
 impl EntityTable<AHolder> for Table {
@@ -18,6 +47,15 @@ impl EntityTable<AHolder> for Table {
     }
     fn owned_iter<'table>(&'table self) -> Box<dyn Iterator<Item = Result<A>> + 'table> {
         owned_iter(self, &self.a)
+    }
+}
+
+impl EntityTable<BHolder> for Table {
+    fn get_owned(&self, entity_id: u64) -> Result<B> {
+        get_owned(self, &self.b, entity_id)
+    }
+    fn owned_iter<'table>(&'table self) -> Box<dyn Iterator<Item = Result<B>> + 'table> {
+        owned_iter(self, &self.b)
     }
 }
 
@@ -215,7 +253,7 @@ fn deserialize_a_holder() {
 }
 
 #[test]
-fn deserialize_b_holder() {
+fn deserialize_b_holder_record() {
     // from Record
     let (residual, p): (_, Record) = exchange::simple_record("B(1.0, A((2.0, 3.0)))")
         .finish()
@@ -230,7 +268,10 @@ fn deserialize_b_holder() {
             a: PlaceHolder::Owned(AHolder { x: 2.0, y: 3.0 })
         }
     );
+}
 
+#[test]
+fn deserialize_b_holder_record_ref() {
     // from Record with ref
     let (residual, p): (_, Record) = exchange::simple_record("B(1.0, #2)").finish().unwrap();
     assert_eq!(residual, "");
@@ -243,7 +284,10 @@ fn deserialize_b_holder() {
             a: PlaceHolder::Ref(RValue::Entity(2))
         }
     );
+}
 
+#[test]
+fn deserialize_b_holder_parameter() {
     // from Parameter::Typed
     let (residual, p): (_, Parameter) = exchange::parameter("B((1.0, A((2.0, 3.0))))")
         .finish()
@@ -258,7 +302,10 @@ fn deserialize_b_holder() {
             a: PlaceHolder::Owned(AHolder { x: 2.0, y: 3.0 })
         }
     );
+}
 
+#[test]
+fn deserialize_b_holder_parameter_ref() {
     // from Parameter::Typed with Ref
     let (residual, p): (_, Parameter) = exchange::parameter("B((1.0, #2))").finish().unwrap();
     assert_eq!(residual, "");
@@ -269,6 +316,39 @@ fn deserialize_b_holder() {
         BHolder {
             z: 1.0,
             a: PlaceHolder::Ref(RValue::Entity(2))
+        }
+    );
+}
+
+#[test]
+fn get_owned_a() {
+    let table = Table::example();
+    let a = EntityTable::<AHolder>::get_owned(&table, 1).unwrap();
+    assert_eq!(a, A { x: 1.0, y: 2.0 });
+}
+
+#[test]
+fn get_owned_b2() {
+    let table = Table::example();
+    let b = EntityTable::<BHolder>::get_owned(&table, 2).unwrap();
+    assert_eq!(
+        b,
+        B {
+            z: 3.0,
+            a: A { x: 4.0, y: 5.0 }
+        }
+    );
+}
+
+#[test]
+fn get_owned_b3() {
+    let table = Table::example();
+    let b = EntityTable::<BHolder>::get_owned(&table, 3).unwrap();
+    assert_eq!(
+        b,
+        B {
+            z: 6.0,
+            a: A { x: 1.0, y: 2.0 }
         }
     );
 }
