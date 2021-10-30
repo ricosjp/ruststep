@@ -1,4 +1,9 @@
 {
+  "ignorePatterns": [
+    {
+      "pattern": "^http://www.steptools.com/stds/"
+    }
+  ],
   "httpHeaders": [
     {
       "urls": ["https://crates.io/crates"],
