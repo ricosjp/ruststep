@@ -8,8 +8,37 @@ use nom::Finish;
 use serde::{de, Deserialize};
 use std::collections::HashMap;
 
+#[derive(Default)]
 struct Table {
     a: HashMap<u64, AHolder>,
+    b: HashMap<u64, BHolder>,
+}
+
+impl Table {
+    // ```
+    // #1 = A(1.0, 2.0);
+    // #2 = B(3.0, A((4.0, 5.0)))
+    // #3 = B(6.0, #1);
+    // ```
+    fn example() -> Self {
+        let mut table = Self::default();
+        table.a.insert(1, AHolder { x: 1.0, y: 2.0 });
+        table.b.insert(
+            2,
+            BHolder {
+                z: 3.0,
+                a: PlaceHolder::Owned(AHolder { x: 4.0, y: 5.0 }),
+            },
+        );
+        table.b.insert(
+            3,
+            BHolder {
+                z: 6.0,
+                a: RValue::Entity(1).into(),
+            },
+        );
+        table
+    }
 }
 
 impl EntityTable<AHolder> for Table {
@@ -280,4 +309,11 @@ fn deserialize_b_holder_parameter_ref() {
             a: PlaceHolder::Ref(RValue::Entity(2))
         }
     );
+}
+
+#[test]
+fn get_owned_a() {
+    let table = Table::example();
+    let a: A = table.get_owned(1).unwrap();
+    assert_eq!(a, A { x: 1.0, y: 2.0 });
 }
