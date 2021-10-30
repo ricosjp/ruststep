@@ -50,6 +50,15 @@ impl EntityTable<AHolder> for Table {
     }
 }
 
+impl EntityTable<BHolder> for Table {
+    fn get_owned(&self, entity_id: u64) -> Result<B> {
+        get_owned(self, &self.b, entity_id)
+    }
+    fn owned_iter<'table>(&'table self) -> Box<dyn Iterator<Item = Result<B>> + 'table> {
+        owned_iter(self, &self.b)
+    }
+}
+
 #[derive(Debug, Clone, PartialEq)]
 struct A {
     x: f64,
@@ -314,6 +323,32 @@ fn deserialize_b_holder_parameter_ref() {
 #[test]
 fn get_owned_a() {
     let table = Table::example();
-    let a: A = table.get_owned(1).unwrap();
+    let a = EntityTable::<AHolder>::get_owned(&table, 1).unwrap();
     assert_eq!(a, A { x: 1.0, y: 2.0 });
+}
+
+#[test]
+fn get_owned_b2() {
+    let table = Table::example();
+    let b = EntityTable::<BHolder>::get_owned(&table, 2).unwrap();
+    assert_eq!(
+        b,
+        B {
+            z: 3.0,
+            a: A { x: 4.0, y: 5.0 }
+        }
+    );
+}
+
+#[test]
+fn get_owned_b3() {
+    let table = Table::example();
+    let b = EntityTable::<BHolder>::get_owned(&table, 3).unwrap();
+    assert_eq!(
+        b,
+        B {
+            z: 6.0,
+            a: A { x: 1.0, y: 2.0 }
+        }
+    );
 }
