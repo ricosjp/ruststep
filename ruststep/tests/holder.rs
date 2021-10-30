@@ -215,7 +215,7 @@ fn deserialize_a_holder() {
 }
 
 #[test]
-fn deserialize_b_holder() {
+fn deserialize_b_holder_record() {
     // from Record
     let (residual, p): (_, Record) = exchange::simple_record("B(1.0, A((2.0, 3.0)))")
         .finish()
@@ -230,7 +230,10 @@ fn deserialize_b_holder() {
             a: PlaceHolder::Owned(AHolder { x: 2.0, y: 3.0 })
         }
     );
+}
 
+#[test]
+fn deserialize_b_holder_record_ref() {
     // from Record with ref
     let (residual, p): (_, Record) = exchange::simple_record("B(1.0, #2)").finish().unwrap();
     assert_eq!(residual, "");
@@ -243,7 +246,10 @@ fn deserialize_b_holder() {
             a: PlaceHolder::Ref(RValue::Entity(2))
         }
     );
+}
 
+#[test]
+fn deserialize_b_holder_parameter() {
     // from Parameter::Typed
     let (residual, p): (_, Parameter) = exchange::parameter("B((1.0, A((2.0, 3.0))))")
         .finish()
@@ -258,7 +264,10 @@ fn deserialize_b_holder() {
             a: PlaceHolder::Owned(AHolder { x: 2.0, y: 3.0 })
         }
     );
+}
 
+#[test]
+fn deserialize_b_holder_parameter_ref() {
     // from Parameter::Typed with Ref
     let (residual, p): (_, Parameter) = exchange::parameter("B((1.0, #2))").finish().unwrap();
     assert_eq!(residual, "");
