@@ -6,6 +6,24 @@ This document aims to show an overview of this repository for new developers bef
 EXPRESS Language compiler (espr crate)
 ---------------------------------------
 
+```
+┌───────────────────────┐
+│ EXPRESS Schema (*.exp)│
+└──┬────────────────────┘
+   │ Tokenize
+┌──▼───────────────────────────────┐
+│ Abstract Syntax Tree (espr::ast) │
+└──┬───────────────────────────────┘
+   │ Legalize
+┌──▼────────────────────────────────────┐
+│ Intermediate Representaion (espr::ir) │
+└──┬────────────────────────────────────┘
+   │ codegen
+┌──▼────────────────────────┐
+│ Rust code with proc-macro │
+└───────────────────────────┘
+```
+
 Compilation in `espr` crate has three phases:
 
 - **Tokenize**: Read the EXPRESS language files (usually named as `*.exp`), and parse into abstract syntax tree (AST).
@@ -37,6 +55,24 @@ and the second is responsible for generate actual code.
 
 STEP file I/O (ruststep crate)
 -------------------------------
+
+```
+┌────────────────────┐
+│ STEP file (*.step) │
+└──┬─────────────────┘
+   │ Tokenize
+┌──▼───────────────────────────┐
+│ STEP Records (ruststep::ast) │
+└──┬───────────────────────────┘
+   │ Deserialize
+┌──▼─────────────────────┐
+│ Tables / Holder struct │
+└──┬─────────────────────┘
+   │ into_owned
+┌──▼───────────┐
+│ Owned struct │
+└──────────────┘
+```
 
 To understand the architecture of ruststep, we start from the STEP file structure.
 
