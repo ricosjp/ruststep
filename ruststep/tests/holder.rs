@@ -40,20 +40,17 @@ impl Table {
         table
     }
 
-    fn from_data_section(data_sec: &DataSection) -> Result<Self> {
-        let mut table = Self::default();
+    fn append_from_data_section(&mut self, data_sec: &DataSection) -> Result<()> {
         for entity in &data_sec.entities {
             match entity {
                 EntityInstance::Simple { id, record } => match record.name.as_str() {
                     "A" => {
-                        table
-                            .a
+                        self.a
                             .insert(*id, Deserialize::deserialize(record)?)
                             .ok_or(Error::DuplicatedEntity(*id))?;
                     }
                     "B" => {
-                        table
-                            .b
+                        self.b
                             .insert(*id, Deserialize::deserialize(record)?)
                             .ok_or(Error::DuplicatedEntity(*id))?;
                     }
@@ -68,6 +65,20 @@ impl Table {
                     unimplemented!("Complex entity is not supported")
                 }
             }
+        }
+        Ok(())
+    }
+
+    fn from_data_section(data_sec: &DataSection) -> Result<Self> {
+        let mut table = Self::default();
+        table.append_from_data_section(data_sec)?;
+        Ok(table)
+    }
+
+    fn from_data_sections(data_sections: &[DataSection]) -> Result<Self> {
+        let mut table = Self::default();
+        for data_sec in data_sections {
+            table.append_from_data_section(data_sec)?;
         }
         Ok(table)
     }
