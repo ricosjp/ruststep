@@ -6,7 +6,7 @@ use ruststep::{ast::*, error::*, parser::exchange, place_holder::PlaceHolder, ta
 
 use nom::Finish;
 use serde::{de, Deserialize};
-use std::collections::HashMap;
+use std::{collections::HashMap, str::FromStr};
 
 #[derive(Default)]
 struct Table {
@@ -14,45 +14,41 @@ struct Table {
     b: HashMap<u64, BHolder>,
 }
 
+impl FromStr for Table {
+    type Err = Error;
+    fn from_str(input: &str) -> Result<Self> {
+        let data_sec = DataSection::from_str(input)?;
+        Ok(Self::from_data_section(&data_sec)?)
+    }
+}
+
 impl Table {
-    // ```
-    // #1 = A(1.0, 2.0);
-    // #2 = B(3.0, A((4.0, 5.0)))
-    // #3 = B(6.0, #1);
-    // ```
     fn example() -> Self {
-        let mut table = Self::default();
-        table.a.insert(1, AHolder { x: 1.0, y: 2.0 });
-        table.b.insert(
-            2,
-            BHolder {
-                z: 3.0,
-                a: PlaceHolder::Owned(AHolder { x: 4.0, y: 5.0 }),
-            },
-        );
-        table.b.insert(
-            3,
-            BHolder {
-                z: 6.0,
-                a: RValue::Entity(1).into(),
-            },
-        );
-        table
+        Self::from_str(
+            r#"
+            DATA;
+              #1 = A(1.0, 2.0);
+              #2 = B(3.0, A((4.0, 5.0)));
+              #3 = B(6.0, #1);
+            ENDSEC;
+            "#,
+        )
+        .unwrap()
     }
 
-    fn append_from_data_section(&mut self, data_sec: &DataSection) -> Result<()> {
+    fn append_data_section(&mut self, data_sec: &DataSection) -> Result<()> {
         for entity in &data_sec.entities {
             match entity {
                 EntityInstance::Simple { id, record } => match record.name.as_str() {
                     "A" => {
-                        self.a
-                            .insert(*id, Deserialize::deserialize(record)?)
-                            .ok_or(Error::DuplicatedEntity(*id))?;
+                        if let Some(_) = self.a.insert(*id, Deserialize::deserialize(record)?) {
+                            return Err(Error::DuplicatedEntity(*id));
+                        }
                     }
                     "B" => {
-                        self.b
-                            .insert(*id, Deserialize::deserialize(record)?)
-                            .ok_or(Error::DuplicatedEntity(*id))?;
+                        if let Some(_) = self.b.insert(*id, Deserialize::deserialize(record)?) {
+                            return Err(Error::DuplicatedEntity(*id));
+                        }
                     }
                     _ => {
                         return Err(Error::UnknownEntityName {
@@ -71,15 +67,7 @@ impl Table {
 
     fn from_data_section(data_sec: &DataSection) -> Result<Self> {
         let mut table = Self::default();
-        table.append_from_data_section(data_sec)?;
-        Ok(table)
-    }
-
-    fn from_data_sections(data_sections: &[DataSection]) -> Result<Self> {
-        let mut table = Self::default();
-        for data_sec in data_sections {
-            table.append_from_data_section(data_sec)?;
-        }
+        table.append_data_section(data_sec)?;
         Ok(table)
     }
 }
