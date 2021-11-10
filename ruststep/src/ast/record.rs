@@ -1,5 +1,6 @@
 use crate::{ast::*, error::*, parser::exchange::simple_record};
 use serde::{de, forward_to_deserialize_any};
+use std::str::FromStr;
 
 /// A struct typed in EXPRESS schema, e.g. `A(1.0, 2.0)`
 #[derive(Debug, Clone, PartialEq)]
@@ -28,7 +29,7 @@ impl<'de, 'record> de::Deserializer<'de> for &'record Record {
     }
 }
 
-impl std::str::FromStr for Record {
+impl FromStr for Record {
     type Err = Error;
     fn from_str(input: &str) -> Result<Self> {
         use nom::Finish;
@@ -37,5 +38,22 @@ impl std::str::FromStr for Record {
             .finish()
             .map_err(|err| TokenizeFailed::new(input, err))?;
         Ok(record)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn record_from_str() {
+        let record = Record::from_str("A(1, 2)").unwrap();
+        assert_eq!(
+            record,
+            Record {
+                name: "A".to_string(),
+                parameters: vec![Parameter::Integer(1), Parameter::Integer(2)]
+            }
+        )
     }
 }
