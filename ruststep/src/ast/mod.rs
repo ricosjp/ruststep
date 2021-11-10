@@ -29,12 +29,14 @@
 //! [serde-data-model]: https://serde.rs/data-model.html
 //!
 
+mod data_section;
 mod parameter;
 mod record;
 mod ser;
 mod single_map_deserializer;
 mod value;
 
+pub use data_section::*;
 pub use parameter::*;
 pub use record::*;
 pub use ser::*;
@@ -54,15 +56,6 @@ pub struct Exchange {
     pub data: Vec<DataSection>,
     /// `SIGNATURE` section
     pub signature: Vec<String>,
-}
-
-/// `DATA` section in STEP file
-#[derive(Debug, Clone, PartialEq)]
-pub struct DataSection {
-    /// Metadata
-    pub meta: Vec<Parameter>,
-    /// Each lines in data section
-    pub entities: Vec<EntityInstance>,
 }
 
 /// Each line of data section
