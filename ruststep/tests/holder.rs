@@ -39,6 +39,38 @@ impl Table {
         );
         table
     }
+
+    fn from_data_section(data_sec: &DataSection) -> Result<Self> {
+        let mut table = Self::default();
+        for entity in &data_sec.entities {
+            match entity {
+                EntityInstance::Simple { id, record } => match record.name.as_str() {
+                    "A" => {
+                        table
+                            .a
+                            .insert(*id, Deserialize::deserialize(record)?)
+                            .ok_or(Error::DuplicatedEntity(*id))?;
+                    }
+                    "B" => {
+                        table
+                            .b
+                            .insert(*id, Deserialize::deserialize(record)?)
+                            .ok_or(Error::DuplicatedEntity(*id))?;
+                    }
+                    _ => {
+                        return Err(Error::UnknownEntityName {
+                            entity_name: record.name.clone(),
+                            schema: "test_holder".to_string(),
+                        });
+                    }
+                },
+                EntityInstance::Complex { .. } => {
+                    unimplemented!("Complex entity is not supported")
+                }
+            }
+        }
+        Ok(table)
+    }
 }
 
 impl EntityTable<AHolder> for Table {
