@@ -4,6 +4,21 @@ use crate::{error::*, parser::exchange::data_section};
 use std::str::FromStr;
 
 /// `DATA` section in STEP file
+///
+/// ```
+/// use ruststep::ast::DataSection;
+/// use std::str::FromStr;
+///
+/// let input = r#"
+/// DATA;
+///   #1 = A(1.0, 2.0);
+///   #2 = B(3.0, A((4.0, 5.0)));
+///   #3 = B(6.0, #1);
+/// ENDSEC;
+/// "#;
+/// let data_section = DataSection::from_str(input).unwrap();
+/// dbg!(data_section);
+/// ```
 #[derive(Debug, Clone, PartialEq)]
 pub struct DataSection {
     /// Metadata
@@ -21,24 +36,5 @@ impl FromStr for DataSection {
             .finish()
             .map_err(|err| TokenizeFailed::new(input, err))?;
         Ok(record)
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn data_section_from_str() {
-        let input = r#"
-        DATA;
-          #1 = A(1.0, 2.0);
-          #2 = B(3.0, A((4.0, 5.0)));
-          #3 = B(6.0, #1);
-        ENDSEC;
-        "#
-        .trim();
-        let data_section = DataSection::from_str(input).unwrap();
-        dbg!(data_section);
     }
 }

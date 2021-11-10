@@ -3,6 +3,20 @@ use serde::{de, forward_to_deserialize_any};
 use std::str::FromStr;
 
 /// A struct typed in EXPRESS schema, e.g. `A(1.0, 2.0)`
+///
+/// ```
+/// use ruststep::ast::{Record, Parameter};
+/// use std::str::FromStr;
+///
+/// let record = Record::from_str("A(1, 2)").unwrap();
+/// assert_eq!(
+///     record,
+///     Record {
+///         name: "A".to_string(),
+///         parameters: vec![Parameter::Integer(1), Parameter::Integer(2)]
+///     }
+/// )
+/// ```
 #[derive(Debug, Clone, PartialEq)]
 pub struct Record {
     pub name: String,
@@ -38,22 +52,5 @@ impl FromStr for Record {
             .finish()
             .map_err(|err| TokenizeFailed::new(input, err))?;
         Ok(record)
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn record_from_str() {
-        let record = Record::from_str("A(1, 2)").unwrap();
-        assert_eq!(
-            record,
-            Record {
-                name: "A".to_string(),
-                parameters: vec![Parameter::Integer(1), Parameter::Integer(2)]
-            }
-        )
     }
 }
