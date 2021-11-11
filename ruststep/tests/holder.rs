@@ -40,16 +40,8 @@ impl Table {
         for entity in &data_sec.entities {
             match entity {
                 EntityInstance::Simple { id, record } => match record.name.as_str() {
-                    "A" => {
-                        if let Some(_) = self.a.insert(*id, Deserialize::deserialize(record)?) {
-                            return Err(Error::DuplicatedEntity(*id));
-                        }
-                    }
-                    "B" => {
-                        if let Some(_) = self.b.insert(*id, Deserialize::deserialize(record)?) {
-                            return Err(Error::DuplicatedEntity(*id));
-                        }
-                    }
+                    "A" => insert_record(&mut self.a, *id, record)?,
+                    "B" => insert_record(&mut self.b, *id, record)?,
                     _ => {
                         return Err(Error::UnknownEntityName {
                             entity_name: record.name.clone(),

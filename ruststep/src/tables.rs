@@ -57,3 +57,15 @@ where
             .map(move |value| value.into_owned(table)),
     )
 }
+
+pub fn insert_record<'de, T: de::Deserialize<'de>>(
+    table: &mut HashMap<u64, T>,
+    id: u64,
+    record: &crate::ast::Record,
+) -> crate::error::Result<()> {
+    if let Some(_) = table.insert(id, de::Deserialize::deserialize(record)?) {
+        Err(crate::error::Error::DuplicatedEntity(id))
+    } else {
+        Ok(())
+    }
+}
