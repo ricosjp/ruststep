@@ -22,20 +22,7 @@ impl FromStr for Table {
     }
 }
 
-impl Table {
-    fn example() -> Self {
-        Self::from_str(
-            r#"
-            DATA;
-              #1 = A(1.0, 2.0);
-              #2 = B(3.0, A((4.0, 5.0)));
-              #3 = B(6.0, #1);
-            ENDSEC;
-            "#,
-        )
-        .unwrap()
-    }
-
+impl TableInit for Table {
     fn append_data_section(&mut self, data_sec: &DataSection) -> Result<()> {
         for entity in &data_sec.entities {
             match entity {
@@ -56,11 +43,20 @@ impl Table {
         }
         Ok(())
     }
+}
 
-    fn from_data_section(data_sec: &DataSection) -> Result<Self> {
-        let mut table = Self::default();
-        table.append_data_section(data_sec)?;
-        Ok(table)
+impl Table {
+    fn example() -> Self {
+        Self::from_str(
+            r#"
+            DATA;
+              #1 = A(1.0, 2.0);
+              #2 = B(3.0, A((4.0, 5.0)));
+              #3 = B(6.0, #1);
+            ENDSEC;
+            "#,
+        )
+        .unwrap()
     }
 }
 

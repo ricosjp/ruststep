@@ -3,6 +3,8 @@
 use serde::de;
 use std::collections::HashMap;
 
+use crate::ast::DataSection;
+
 /// Trait for resolving a reference through entity id
 pub trait Holder: Clone + 'static {
     type Owned;
@@ -26,6 +28,24 @@ pub trait EntityTable<T: Holder<Table = Self>> {
     fn owned_iter<'table>(
         &'table self,
     ) -> Box<dyn Iterator<Item = Result<T::Owned, crate::error::Error>> + 'table>;
+}
+
+pub trait TableInit: Default {
+    fn append_data_section(&mut self, section: &DataSection) -> Result<(), crate::error::Error>;
+
+    fn from_data_section(section: &DataSection) -> Result<Self, crate::error::Error> {
+        let mut table = Self::default();
+        table.append_data_section(section)?;
+        Ok(table)
+    }
+
+    fn from_data_sections(sections: &[DataSection]) -> Result<Self, crate::error::Error> {
+        let mut table = Self::default();
+        for section in sections {
+            table.append_data_section(section)?;
+        }
+        Ok(table)
+    }
 }
 
 pub fn get_owned<T, Table>(
@@ -58,6 +78,7 @@ where
     )
 }
 
+/// Helper function to implement TableInit trait
 pub fn insert_record<'de, T: de::Deserialize<'de>>(
     table: &mut HashMap<u64, T>,
     id: u64,
