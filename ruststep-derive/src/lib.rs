@@ -53,9 +53,18 @@ mod entity;
 mod field_type;
 mod holder_attr;
 mod select;
+mod table_init;
 
 use field_type::*;
 use holder_attr::*;
+use table_init::*;
+
+/// Generate `impl TableInit for Table`
+#[proc_macro_error]
+#[proc_macro_derive(TableInit)]
+pub fn derive_table_init_entry(input: TokenStream) -> TokenStream {
+    derive_table_init(&syn::parse(input).unwrap()).into()
+}
 
 /// Generate `impl Deserialize` for entity structs
 #[proc_macro_error]
