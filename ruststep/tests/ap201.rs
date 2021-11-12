@@ -20,3 +20,10 @@ fn get_owned() {
     let colour = EntityTable::<ColourRgbHolder>::get_owned(&tables, 1).unwrap();
     dbg!(colour);
 }
+
+#[test]
+fn get_owned_any() {
+    let tables = example();
+    let colour = EntityTable::<ColourSpecificationAnyHolder>::get_owned(&tables, 1).unwrap();
+    dbg!(colour);
+}
