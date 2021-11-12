@@ -1,5 +1,6 @@
+use inflector::Inflector;
 use proc_macro2::TokenStream as TokenStream2;
-use proc_macro_error::abort_call_site;
+use proc_macro_error::{abort_call_site, OptionExt};
 use quote::quote;
 
 use crate::ruststep_crate;
@@ -12,18 +13,36 @@ pub fn derive_table_init(ast: &syn::DeriveInput) -> TokenStream2 {
     }
 }
 
-fn impl_table_init(ident: &syn::Ident, _st: &syn::DataStruct) -> TokenStream2 {
+fn impl_table_init(ident: &syn::Ident, st: &syn::DataStruct) -> TokenStream2 {
+    let mut table_names = Vec::new();
+    let mut entity_names = Vec::new();
+    for field in &st.fields {
+        let ident = field
+            .ident
+            .as_ref()
+            .expect_or_abort("Tuple struct case is not supported");
+        let name = ident.to_string().to_screaming_snake_case();
+        table_names.push(ident);
+        entity_names.push(name);
+    }
+    assert_eq!(table_names.len(), entity_names.len());
+
     let ruststep = ruststep_crate();
+
     quote! {
         #[automatically_derived]
         impl #ruststep::tables::TableInit for #ident {
-            fn append_data_section(&mut self, data_sec: &#ruststep::ast::DataSection) -> #ruststep::error::Result<()> {
+            fn append_data_section(
+                &mut self,
+                data_sec: &#ruststep::ast::DataSection
+            ) -> #ruststep::error::Result<()> {
                 use #ruststep::{error::Error, tables::insert_record, ast::EntityInstance};
                 for entity in &data_sec.entities {
                     match entity {
                         EntityInstance::Simple { id, record } => match record.name.as_str() {
-                            "A" => insert_record(&mut self.a, *id, record)?,
-                            "B" => insert_record(&mut self.b, *id, record)?,
+                            #(
+                            #entity_names => insert_record(&mut self.#table_names, *id, record)?,
+                            )*
                             _ => {
                                 return Err(Error::UnknownEntityName {
                                     entity_name: record.name.clone(),
