@@ -46,7 +46,7 @@ fn impl_table_init(ident: &syn::Ident, st: &syn::DataStruct) -> TokenStream2 {
                             _ => {
                                 return Err(Error::UnknownEntityName {
                                     entity_name: record.name.clone(),
-                                    schema: "test_holder".to_string(),
+                                    schema: "".to_string(),
                                 });
                             }
                         },
