@@ -25,28 +25,3 @@ pub use ruststep_derive::*;
 // Automatically generated codes
 #[cfg(feature = "ap201")]
 pub mod ap201;
-
-#[cfg(all(feature = "ap201", test))]
-mod ap201_test {
-    use super::ap201::explicit_draughting::*;
-    use super::tables::*;
-    use std::str::FromStr;
-
-    fn example() -> Tables {
-        Tables::from_str(
-            r#"
-            DATA;
-              #1 = COLOUR_RGB(1.0, 0.0, 0.0);
-            ENDSEC;
-            "#,
-        )
-        .unwrap()
-    }
-
-    #[test]
-    fn get_owned() {
-        let tables = example();
-        let colour = EntityTable::<ColourRgbHolder>::get_owned(&tables, 1).unwrap();
-        dbg!(colour);
-    }
-}
