@@ -1,9 +1,9 @@
 #![allow(dead_code)]
 pub mod explicit_draughting {
     use crate::{error::Result, primitive::*, tables::*};
-    use ruststep_derive::as_holder;
+    use ruststep_derive::{as_holder, TableInit};
     use std::collections::HashMap;
-    #[derive(Debug, Clone, PartialEq, Default)]
+    #[derive(Debug, Clone, PartialEq, Default, TableInit)]
     pub struct Tables {
         address: HashMap<u64, as_holder!(Address)>,
         angular_dimension: HashMap<u64, as_holder!(AngularDimension)>,
