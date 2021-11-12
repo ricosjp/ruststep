@@ -17,8 +17,8 @@ fn impl_table_init(ident: &syn::Ident, _st: &syn::DataStruct) -> TokenStream2 {
     quote! {
         #[automatically_derived]
         impl #ruststep::tables::TableInit for #ident {
-            use #ruststep::error::*;
-            fn append_data_section(&mut self, data_sec: &DataSection) -> Result<()> {
+            fn append_data_section(&mut self, data_sec: &#ruststep::ast::DataSection) -> #ruststep::error::Result<()> {
+                use #ruststep::{error::Error, tables::insert_record, ast::EntityInstance};
                 for entity in &data_sec.entities {
                     match entity {
                         EntityInstance::Simple { id, record } => match record.name.as_str() {
