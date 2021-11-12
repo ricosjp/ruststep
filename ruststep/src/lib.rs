@@ -30,10 +30,23 @@ pub mod ap201;
 mod ap201_test {
     use super::ap201::explicit_draughting::*;
     use super::tables::*;
+    use std::str::FromStr;
+
+    fn example() -> Tables {
+        Tables::from_str(
+            r#"
+            DATA;
+              #1 = COLOUR_RGB(1.0, 0.0, 0.0);
+            ENDSEC;
+            "#,
+        )
+        .unwrap()
+    }
 
     #[test]
     fn get_owned() {
-        let table = Tables::default();
-        let any = EntityTable::<CurveAnyHolder>::get_owned(&table, 0).unwrap();
+        let tables = example();
+        let colour = EntityTable::<ColourRgbHolder>::get_owned(&tables, 1).unwrap();
+        dbg!(colour);
     }
 }
