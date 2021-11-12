@@ -1,10 +1,10 @@
 use nom::Finish;
 use ruststep::{ast::*, parser::exchange, place_holder::*, tables::*};
-use ruststep_derive::as_holder;
+use ruststep_derive::{as_holder, TableInit};
 use serde::Deserialize;
-use std::collections::HashMap;
+use std::{collections::HashMap, str::FromStr};
 
-#[derive(Debug, Clone, PartialEq, Default)]
+#[derive(Debug, Clone, PartialEq, Default, TableInit)]
 pub struct Table {
     base: HashMap<u64, as_holder!(Base)>,
     sub1: HashMap<u64, as_holder!(Sub1)>,
@@ -12,29 +12,17 @@ pub struct Table {
 }
 
 impl Table {
-    // ```
-    // #1 = BASE(1.0);
-    // #2 = SUB_1(BASE((1.0)), 2.0);
-    // #3 = SUB_2(#1, 4.0);
-    // ```
     fn example() -> Self {
-        let mut table = Self::default();
-        table.base.insert(1, BaseHolder { x: 1.0 });
-        table.sub1.insert(
-            2,
-            Sub1Holder {
-                base: BaseHolder { x: 1.0 }.into(),
-                y1: 2.0,
-            },
-        );
-        table.sub2.insert(
-            3,
-            Sub2Holder {
-                base: RValue::Entity(1).into(),
-                y2: 4.0,
-            },
-        );
-        table
+        Self::from_str(
+            r#"
+            DATA;
+              #1 = BASE(1.0);
+              #2 = SUB_1(BASE((1.0)), 2.0);
+              #3 = SUB_2(#1, 4.0);
+            ENDSEC;
+            "#,
+        )
+        .unwrap()
     }
 }
 

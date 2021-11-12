@@ -25,9 +25,9 @@ impl ToTokens for Schema {
             pub mod #name {
                 use crate::{primitive::*, tables::*, error::Result};
                 use std::collections::HashMap;
-                use ruststep_derive::as_holder;
+                use ruststep_derive::{as_holder, TableInit};
 
-                #[derive(Debug, Clone, PartialEq, Default)]
+                #[derive(Debug, Clone, PartialEq, Default, TableInit)]
                 pub struct Tables {
                     #(
                     #holder_name: HashMap<u64, as_holder!(#entity_types)>,
