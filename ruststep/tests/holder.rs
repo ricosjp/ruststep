@@ -1,6 +1,6 @@
 // Test for deserializing Holder structs
 
-use ruststep::{ast::*, error::*, parser::exchange, place_holder::PlaceHolder, tables::*};
+use ruststep::{ast::*, parser::exchange, place_holder::PlaceHolder, tables::*};
 use ruststep_derive::{as_holder, Holder, TableInit};
 
 use nom::Finish;
@@ -11,14 +11,6 @@ use std::{collections::HashMap, str::FromStr};
 pub struct Table {
     a: HashMap<u64, as_holder!(A)>,
     b: HashMap<u64, as_holder!(B)>,
-}
-
-impl FromStr for Table {
-    type Err = Error;
-    fn from_str(input: &str) -> Result<Self> {
-        let data_sec = DataSection::from_str(input)?;
-        Ok(Self::from_data_section(&data_sec)?)
-    }
 }
 
 impl Table {

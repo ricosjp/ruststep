@@ -58,5 +58,15 @@ fn impl_table_init(ident: &syn::Ident, st: &syn::DataStruct) -> TokenStream2 {
                 Ok(())
             }
         }
+
+        #[automatically_derived]
+        impl ::std::str::FromStr for #ident {
+            type Err = #ruststep::error::Error;
+            fn from_str(input: &str) -> #ruststep::error::Result<Self> {
+                use #ruststep::{tables::TableInit, ast::DataSection};
+                let data_sec = DataSection::from_str(input)?;
+                Ok(Self::from_data_section(&data_sec)?)
+            }
+        }
     }
 }
