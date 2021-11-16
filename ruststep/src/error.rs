@@ -40,12 +40,11 @@ impl ser::Error for Error {
 }
 
 /// Error while tokenizing STEP input
-#[derive(Debug)]
 pub struct TokenizeFailed {
     rendered_error: String,
 }
 
-impl fmt::Display for TokenizeFailed {
+impl fmt::Debug for TokenizeFailed {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> std::result::Result<(), fmt::Error> {
         write!(
             f,
@@ -53,6 +52,13 @@ impl fmt::Display for TokenizeFailed {
             self.rendered_error
         )?;
         Ok(())
+    }
+}
+
+// Use same output as Debug
+impl fmt::Display for TokenizeFailed {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> std::result::Result<(), fmt::Error> {
+        fmt::Debug::fmt(self, f)
     }
 }
 

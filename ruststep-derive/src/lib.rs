@@ -53,9 +53,48 @@ mod entity;
 mod field_type;
 mod holder_attr;
 mod select;
+mod table_init;
 
 use field_type::*;
 use holder_attr::*;
+use table_init::*;
+
+/// Derive `TableInit` for tables
+///
+/// ```
+/// use ruststep_derive::{as_holder, Holder, TableInit};
+/// use std::collections::HashMap;
+///
+/// #[derive(TableInit, Default)]
+/// pub struct Table {
+///     a: HashMap<u64, as_holder!(A)>,
+///     b: HashMap<u64, as_holder!(B)>,
+/// }
+///
+/// #[derive(Debug, Clone, PartialEq, Holder)]
+/// #[holder(table = Table)]
+/// #[holder(field = a)]
+/// #[holder(generate_deserialize)]
+/// pub struct A {
+///     pub x: f64,
+///     pub y: f64,
+/// }
+///
+/// #[derive(Debug, Clone, PartialEq, Holder)]
+/// #[holder(table = Table)]
+/// #[holder(field = b)]
+/// #[holder(generate_deserialize)]
+/// pub struct B {
+///     pub z: f64,
+///     #[holder(use_place_holder)]
+///     pub a: A,
+/// }
+/// ```
+#[proc_macro_error]
+#[proc_macro_derive(TableInit)]
+pub fn derive_table_init_entry(input: TokenStream) -> TokenStream {
+    derive_table_init(&syn::parse(input).unwrap()).into()
+}
 
 /// Generate `impl Deserialize` for entity structs
 #[proc_macro_error]
