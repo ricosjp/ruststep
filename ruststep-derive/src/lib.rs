@@ -178,10 +178,8 @@ pub fn as_holder(input: TokenStream) -> TokenStream {
     ts.into()
 }
 
-// FIXME This should accept `syn::Path` instead of `syn::Ident`,
-// e.g. `::some_schema::A` to `::some_schema::AHolderVisitor`
-fn as_holder_visitor2(input: &syn::Ident) -> syn::Ident {
-    quote::format_ident!("{}HolderVisitor", input)
+fn as_holder_visitor(input: &syn::Ident) -> syn::Ident {
+    format_ident!("{}HolderVisitor", input)
 }
 
 fn as_holder_ident(input: &syn::Ident) -> syn::Ident {
