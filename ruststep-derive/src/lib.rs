@@ -109,12 +109,21 @@ fn derive_deserialize(ast: &syn::DeriveInput) -> TokenStream2 {
 /// `#[holder]` attribute
 /// ---------------------------
 ///
-/// Following attributes can be used in `#[derive(Holder)]`:
+/// Container attributes:
 ///
 /// - `#[holder(table = {path::to::table::struct})]`
+///   - Specify a "Tables" struct which contains a table of this Holder
 /// - `#[holder(field = {field_ident})]`
-/// - `#[holder(use_place_holder)]`
+///   - Identifier of table
 /// - `#[holder(generate_deserialize)]`
+///   - Flag for generating `impl Deserialize for Holder`
+///
+/// Field attributes:
+///
+/// - `#[holder(use_place_holder)]`
+///   - Specify the field is not a simple type
+///   - Whether the field is simple (e.g. `f64`) or complex (e.g. `ENTITY` or `SELECT`) is determined in espr.
+///     This attribute stores this information.
 ///
 /// Examples
 /// ---------
