@@ -6,19 +6,33 @@ use std::convert::*;
 use super::*;
 
 pub fn derive_holder(ident: &syn::Ident, st: &syn::DataStruct, attr: &HolderAttr) -> TokenStream2 {
-    //let name = ident.to_string().to_screaming_snake_case();
-    //let holder_ident = as_holder_ident(ident);
-    let def_holder_tt = def_holder(ident, st);
+    let name = ident.to_string().to_screaming_snake_case();
+    let holder_ident = as_holder_ident(ident);
+    let def_holder_tt = def_holder(ident, st, attr);
     let impl_holder_tt = impl_holder(ident, attr, st);
     let impl_entity_table_tt = impl_entity_table(ident, attr);
-    quote! {
-        #def_holder_tt
-        #impl_holder_tt
-        #impl_entity_table_tt
+    if attr.generate_deserialize {
+        let def_visitor_tt = def_visitor(&holder_ident, &name, st);
+        let impl_deserialize_tt = impl_deserialize(&holder_ident, &name, st);
+        let impl_with_visitor_tt = impl_with_visitor(ident);
+        quote! {
+            #def_holder_tt
+            #impl_holder_tt
+            #impl_entity_table_tt
+            #def_visitor_tt
+            #impl_deserialize_tt
+            #impl_with_visitor_tt
+        }
+    } else {
+        quote! {
+            #def_holder_tt
+            #impl_holder_tt
+            #impl_entity_table_tt
+        }
     }
 }
 
-pub fn def_holder(ident: &syn::Ident, st: &syn::DataStruct) -> TokenStream2 {
+pub fn def_holder(ident: &syn::Ident, st: &syn::DataStruct, _attr: &HolderAttr) -> TokenStream2 {
     let holder_ident = as_holder_ident(ident);
     let FieldEntries { holder_types, .. } = FieldEntries::parse(st);
     quote! {
@@ -74,6 +88,95 @@ pub fn impl_entity_table(ident: &syn::Ident, table: &HolderAttr) -> TokenStream2
             }
         }
     }
+}
+
+// `name` may be different from `ident`
+// because this will be used for both Entity struct and its `*Holder` struct.
+fn def_visitor(ident: &syn::Ident, name: &str, st: &syn::DataStruct) -> TokenStream2 {
+    let visitor_ident = as_visitor_ident(ident);
+    let FieldEntries { holder_types, .. } = FieldEntries::parse(st);
+    let attr_len = holder_types.len();
+    let attributes = (0..attr_len)
+        .map(|i| format_ident!("a_{}", i))
+        .collect::<Vec<_>>();
+    quote! {
+        #[doc(hidden)]
+        pub struct #visitor_ident;
+
+        #[automatically_derived]
+        impl<'de> ::serde::de::Visitor<'de> for #visitor_ident {
+            type Value = #ident;
+            fn expecting(&self, formatter: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+                write!(formatter, #name)
+            }
+
+            fn visit_seq<A>(self, mut seq: A) -> ::std::result::Result<Self::Value, A::Error>
+            where
+                A: ::serde::de::SeqAccess<'de>,
+            {
+                if let Some(size) = seq.size_hint() {
+                    if size != #attr_len {
+                        use ::serde::de::Error;
+                        return Err(A::Error::invalid_length(size, &self));
+                    }
+                }
+                #( let #attributes = seq.next_element()?.unwrap(); )*
+                Ok(#ident ( #(#attributes),* ))
+            }
+
+            // Entry point for Record or Parameter::Typed
+            fn visit_map<A>(self, mut map: A) -> ::std::result::Result<Self::Value, A::Error>
+            where
+                A: ::serde::de::MapAccess<'de>,
+            {
+                let key: String = map
+                    .next_key()?
+                    .expect("Empty map cannot be accepted as ruststep Holder"); // this must be a bug, not runtime error
+                if key != #name {
+                    use ::serde::de::{Error, Unexpected};
+                    return Err(A::Error::invalid_value(Unexpected::Other(&key), &self));
+                }
+                let value = map.next_value()?; // send to Self::visit_seq
+                Ok(value)
+            }
+        }
+    } // quote!
+}
+
+// `name` may be different from `ident`
+// because this will be used for both Entity struct and its `*Holder` struct.
+fn impl_deserialize(ident: &syn::Ident, name: &str, st: &syn::DataStruct) -> TokenStream2 {
+    let visitor_ident = as_visitor_ident(ident);
+    let FieldEntries { holder_types, .. } = FieldEntries::parse(st);
+    let attr_len = holder_types.len();
+    quote! {
+        #[automatically_derived]
+        impl<'de> ::serde::de::Deserialize<'de> for #ident {
+            fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+            where
+                D: ::serde::de::Deserializer<'de>,
+            {
+                deserializer.deserialize_tuple_struct(#name, #attr_len, #visitor_ident {})
+            }
+        }
+    } // quote!
+}
+
+fn impl_with_visitor(ident: &syn::Ident) -> TokenStream2 {
+    let ruststep = ruststep_crate();
+
+    let visitor_ident = as_holder_visitor2(ident);
+    let holder_ident = as_holder_ident(ident);
+
+    quote! {
+        #[automatically_derived]
+        impl #ruststep::tables::WithVisitor for #holder_ident {
+            type Visitor = #visitor_ident;
+            fn visitor_new() -> Self::Visitor {
+                #visitor_ident {}
+            }
+        }
+    } // quote!
 }
 
 struct FieldEntries {
