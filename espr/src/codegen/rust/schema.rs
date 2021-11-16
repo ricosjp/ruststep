@@ -26,6 +26,7 @@ impl ToTokens for Schema {
                 use crate::{primitive::*, tables::*, error::Result};
                 use std::collections::HashMap;
                 use ruststep_derive::as_holder;
+                use derive_more::*;
 
                 #[derive(Debug, Clone, PartialEq, Default)]
                 pub struct Tables {

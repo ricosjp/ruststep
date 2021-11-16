@@ -1,6 +1,7 @@
 #![allow(dead_code)]
 pub mod explicit_draughting {
     use crate::{error::Result, primitive::*, tables::*};
+    use derive_more::*;
     use ruststep_derive::as_holder;
     use std::collections::HashMap;
     #[derive(Debug, Clone, PartialEq, Default)]
@@ -2031,10 +2032,50 @@ pub mod explicit_draughting {
         BoxSlantAngle(BoxSlantAngle),
         BoxRotateAngle(BoxRotateAngle),
     }
-    pub type BoxHeight = PositiveRatioMeasure;
-    pub type BoxRotateAngle = PlaneAngleMeasure;
-    pub type BoxSlantAngle = PlaneAngleMeasure;
-    pub type BoxWidth = PositiveRatioMeasure;
+    #[derive(
+        Clone,
+        Debug,
+        PartialEq,
+        AsRef,
+        Deref,
+        DerefMut,
+        :: serde :: Serialize,
+        :: serde :: Deserialize,
+    )]
+    pub struct BoxHeight(PositiveRatioMeasure);
+    #[derive(
+        Clone,
+        Debug,
+        PartialEq,
+        AsRef,
+        Deref,
+        DerefMut,
+        :: serde :: Serialize,
+        :: serde :: Deserialize,
+    )]
+    pub struct BoxRotateAngle(PlaneAngleMeasure);
+    #[derive(
+        Clone,
+        Debug,
+        PartialEq,
+        AsRef,
+        Deref,
+        DerefMut,
+        :: serde :: Serialize,
+        :: serde :: Deserialize,
+    )]
+    pub struct BoxSlantAngle(PlaneAngleMeasure);
+    #[derive(
+        Clone,
+        Debug,
+        PartialEq,
+        AsRef,
+        Deref,
+        DerefMut,
+        :: serde :: Serialize,
+        :: serde :: Deserialize,
+    )]
+    pub struct BoxWidth(PositiveRatioMeasure);
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
@@ -2130,7 +2171,17 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         Date(DateAny),
     }
-    pub type DayInMonthNumber = i64;
+    #[derive(
+        Clone,
+        Debug,
+        PartialEq,
+        AsRef,
+        Deref,
+        DerefMut,
+        :: serde :: Serialize,
+        :: serde :: Deserialize,
+    )]
+    pub struct DayInMonthNumber(i64);
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
@@ -2141,7 +2192,17 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         ExternallyDefinedSymbol(Box<ExternallyDefinedSymbol>),
     }
-    pub type DimensionCount = i64;
+    #[derive(
+        Clone,
+        Debug,
+        PartialEq,
+        AsRef,
+        Deref,
+        DerefMut,
+        :: serde :: Serialize,
+        :: serde :: Deserialize,
+    )]
+    pub struct DimensionCount(i64);
     #[derive(Debug, Clone, PartialEq, :: serde :: Deserialize)]
     pub enum DimensionExtentUsage {
         Origin,
@@ -2259,7 +2320,17 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         AnnotationFillArea(Box<AnnotationFillArea>),
     }
-    pub type Identifier = String;
+    #[derive(
+        Clone,
+        Debug,
+        PartialEq,
+        AsRef,
+        Deref,
+        DerefMut,
+        :: serde :: Serialize,
+        :: serde :: Deserialize,
+    )]
+    pub struct Identifier(String);
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
@@ -2291,7 +2362,17 @@ pub mod explicit_draughting {
         PiecewiseBezierKnots,
         Unspecified,
     }
-    pub type Label = String;
+    #[derive(
+        Clone,
+        Debug,
+        PartialEq,
+        AsRef,
+        Deref,
+        DerefMut,
+        :: serde :: Serialize,
+        :: serde :: Deserialize,
+    )]
+    pub struct Label(String);
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
@@ -2301,7 +2382,17 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         RepresentationItem(RepresentationItemAny),
     }
-    pub type LengthMeasure = f64;
+    #[derive(
+        Clone,
+        Debug,
+        PartialEq,
+        AsRef,
+        Deref,
+        DerefMut,
+        :: serde :: Serialize,
+        :: serde :: Deserialize,
+    )]
+    pub struct LengthMeasure(f64);
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
@@ -2313,12 +2404,32 @@ pub mod explicit_draughting {
         PositiveLengthMeasure(PositiveLengthMeasure),
         PositiveRatioMeasure(PositiveRatioMeasure),
     }
-    pub type MonthInYearNumber = i64;
+    #[derive(
+        Clone,
+        Debug,
+        PartialEq,
+        AsRef,
+        Deref,
+        DerefMut,
+        :: serde :: Serialize,
+        :: serde :: Deserialize,
+    )]
+    pub struct MonthInYearNumber(i64);
     #[derive(Debug, Clone, PartialEq, :: serde :: Deserialize)]
     pub enum NullStyle {
         Null,
     }
-    pub type ParameterValue = f64;
+    #[derive(
+        Clone,
+        Debug,
+        PartialEq,
+        AsRef,
+        Deref,
+        DerefMut,
+        :: serde :: Serialize,
+        :: serde :: Deserialize,
+    )]
+    pub struct ParameterValue(f64);
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
@@ -2333,10 +2444,50 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         PersonAndOrganization(Box<PersonAndOrganization>),
     }
-    pub type PlaneAngleMeasure = f64;
-    pub type PositiveLengthMeasure = LengthMeasure;
-    pub type PositiveRatioMeasure = RatioMeasure;
-    pub type PresentableText = String;
+    #[derive(
+        Clone,
+        Debug,
+        PartialEq,
+        AsRef,
+        Deref,
+        DerefMut,
+        :: serde :: Serialize,
+        :: serde :: Deserialize,
+    )]
+    pub struct PlaneAngleMeasure(f64);
+    #[derive(
+        Clone,
+        Debug,
+        PartialEq,
+        AsRef,
+        Deref,
+        DerefMut,
+        :: serde :: Serialize,
+        :: serde :: Deserialize,
+    )]
+    pub struct PositiveLengthMeasure(LengthMeasure);
+    #[derive(
+        Clone,
+        Debug,
+        PartialEq,
+        AsRef,
+        Deref,
+        DerefMut,
+        :: serde :: Serialize,
+        :: serde :: Deserialize,
+    )]
+    pub struct PositiveRatioMeasure(RatioMeasure);
+    #[derive(
+        Clone,
+        Debug,
+        PartialEq,
+        AsRef,
+        Deref,
+        DerefMut,
+        :: serde :: Serialize,
+        :: serde :: Deserialize,
+    )]
+    pub struct PresentableText(String);
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
@@ -2375,7 +2526,17 @@ pub mod explicit_draughting {
         TextStyle(TextStyleAny),
         NullStyle(NullStyle),
     }
-    pub type RatioMeasure = f64;
+    #[derive(
+        Clone,
+        Debug,
+        PartialEq,
+        AsRef,
+        Deref,
+        DerefMut,
+        :: serde :: Serialize,
+        :: serde :: Deserialize,
+    )]
+    pub struct RatioMeasure(f64);
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
@@ -2474,9 +2635,39 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         SymbolColour(Box<SymbolColour>),
     }
-    pub type Text = String;
-    pub type TextAlignment = Label;
-    pub type TextDelineation = Label;
+    #[derive(
+        Clone,
+        Debug,
+        PartialEq,
+        AsRef,
+        Deref,
+        DerefMut,
+        :: serde :: Serialize,
+        :: serde :: Deserialize,
+    )]
+    pub struct Text(String);
+    #[derive(
+        Clone,
+        Debug,
+        PartialEq,
+        AsRef,
+        Deref,
+        DerefMut,
+        :: serde :: Serialize,
+        :: serde :: Deserialize,
+    )]
+    pub struct TextAlignment(Label);
+    #[derive(
+        Clone,
+        Debug,
+        PartialEq,
+        AsRef,
+        Deref,
+        DerefMut,
+        :: serde :: Serialize,
+        :: serde :: Deserialize,
+    )]
+    pub struct TextDelineation(Label);
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
@@ -2536,7 +2727,17 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         Direction(Box<Direction>),
     }
-    pub type YearNumber = i64;
+    #[derive(
+        Clone,
+        Debug,
+        PartialEq,
+        AsRef,
+        Deref,
+        DerefMut,
+        :: serde :: Serialize,
+        :: serde :: Deserialize,
+    )]
+    pub struct YearNumber(i64);
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
     # [holder (field = address)]
