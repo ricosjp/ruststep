@@ -1,4 +1,25 @@
-//! Procedural macros for ruststep
+//! Procedural macros for second step code generation
+//!
+//! ```text
+//! ┌────────────────┐
+//! │ EXPRESS schema │
+//! └──┬─────────────┘
+//!    │ esprc
+//! ┌──▼─────────────────┐
+//! │ Abstract Rust code │
+//! └──┬─────────────────┘
+//!    │ ruststep-derive
+//! ┌──▼───────────────┐
+//! │ Actual Rust code │
+//! └──────────────────┘
+//! ```
+//!
+//! Design
+//! -------
+//! - [espr::codegen::rust](../espr/codegen/rust/index.html)
+//!   generates Rust code with proc-macros defined in this crate.
+//! - This crate does not depends on espr explicitly.
+//!
 
 use proc_macro::TokenStream;
 use proc_macro2::{Span, TokenStream as TokenStream2};
