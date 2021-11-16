@@ -165,14 +165,6 @@ pub fn as_holder(input: TokenStream) -> TokenStream {
     ts.into()
 }
 
-/// Resolve HolderVisitor struct from owned type, e.g. `A` to `AHolderVisitor`
-#[proc_macro]
-pub fn as_holder_visitor(input: TokenStream) -> TokenStream {
-    let path = as_holder_visitor2(&syn::parse(input).unwrap());
-    let ts = quote! { #path };
-    ts.into()
-}
-
 // FIXME This should accept `syn::Path` instead of `syn::Ident`,
 // e.g. `::some_schema::A` to `::some_schema::AHolderVisitor`
 fn as_holder_visitor2(input: &syn::Ident) -> syn::Ident {
