@@ -8,7 +8,7 @@ use super::*;
 pub fn derive_holder(ident: &syn::Ident, st: &syn::DataStruct, attr: &HolderAttr) -> TokenStream2 {
     let name = ident.to_string().to_screaming_snake_case();
     let holder_ident = as_holder_ident(ident);
-    let def_holder_tt = def_holder(ident, st, attr);
+    let def_holder_tt = def_holder(ident, st);
     let impl_holder_tt = impl_holder(ident, attr, st);
     let impl_entity_table_tt = impl_entity_table(ident, attr);
     if attr.generate_deserialize {
@@ -32,7 +32,7 @@ pub fn derive_holder(ident: &syn::Ident, st: &syn::DataStruct, attr: &HolderAttr
     }
 }
 
-pub fn def_holder(ident: &syn::Ident, st: &syn::DataStruct, _attr: &HolderAttr) -> TokenStream2 {
+pub fn def_holder(ident: &syn::Ident, st: &syn::DataStruct) -> TokenStream2 {
     let holder_ident = as_holder_ident(ident);
     let FieldEntries { holder_types, .. } = FieldEntries::parse(st);
     quote! {
