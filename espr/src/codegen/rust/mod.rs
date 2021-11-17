@@ -1,6 +1,7 @@
 //! Generate Rust code using proc-macro utility crates
 
 mod entity;
+mod rename;
 mod schema;
 
 use crate::ir::*;
@@ -25,21 +26,6 @@ impl ToTokens for Simple {
         tokens.append_all(quote! {
             #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, ::serde::Serialize, ::serde::Deserialize)]
             pub struct #id(pub #ty);
-        });
-    }
-}
-
-impl ToTokens for Rename {
-    fn to_tokens(&self, tokens: &mut TokenStream) {
-        let field_name = format_ident!("{}", &self.id.to_snake_case());
-        let id = format_ident!("{}", &self.id.to_pascal_case());
-        let ty = &self.ty;
-        tokens.append_all(quote! {
-            #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, ::ruststep_derive::Holder)]
-            #[holder(table = Tables)]
-            #[holder(field = #field_name)]
-            #[holder(generate_deserialize)]
-            pub struct #id(#[holder(use_place_holder)] pub #ty);
         });
     }
 }
