@@ -5,4 +5,5 @@ fn try_build() {
     t.pass("tests/cases/optional.rs");
     t.pass("tests/cases/vec.rs");
     t.pass("tests/cases/select.rs");
+    t.pass("tests/cases/tuple.rs");
 }
