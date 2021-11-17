@@ -1,0 +1,11 @@
+name: Keep a Changelog
+
+on:
+  pull_request: {}
+
+jobs:
+  test:
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v1
+    - run: bash -c "! git diff --exit-code master... CHANGELOG.md"
