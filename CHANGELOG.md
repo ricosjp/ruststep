@@ -6,9 +6,10 @@
 
 In addition to original Keep-a-Changelog, we use following rules:
 
+- Use [GitHub Flavored Markdown](https://github.github.com/gfm/)
 - Each line in changes SHOULD include a link to Pull Request in GitHub
 - Each Pull Request MUST add a line in this file
-  - This will be tested in GitHub Actions
+  - This will be checked by GitHub Actions
 - Each Pull Request MAY correspond to one or more lines in this file
 
 ## Unreleased (will be 0.2.0)
