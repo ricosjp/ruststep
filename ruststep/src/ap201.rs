@@ -2042,7 +2042,7 @@ pub mod explicit_draughting {
         :: serde :: Serialize,
         :: serde :: Deserialize,
     )]
-    pub struct BoxHeight(PositiveRatioMeasure);
+    pub struct BoxHeight(pub PositiveRatioMeasure);
     #[derive(
         Clone,
         Debug,
@@ -2053,7 +2053,7 @@ pub mod explicit_draughting {
         :: serde :: Serialize,
         :: serde :: Deserialize,
     )]
-    pub struct BoxRotateAngle(PlaneAngleMeasure);
+    pub struct BoxRotateAngle(pub PlaneAngleMeasure);
     #[derive(
         Clone,
         Debug,
@@ -2064,7 +2064,7 @@ pub mod explicit_draughting {
         :: serde :: Serialize,
         :: serde :: Deserialize,
     )]
-    pub struct BoxSlantAngle(PlaneAngleMeasure);
+    pub struct BoxSlantAngle(pub PlaneAngleMeasure);
     #[derive(
         Clone,
         Debug,
@@ -2075,7 +2075,7 @@ pub mod explicit_draughting {
         :: serde :: Serialize,
         :: serde :: Deserialize,
     )]
-    pub struct BoxWidth(PositiveRatioMeasure);
+    pub struct BoxWidth(pub PositiveRatioMeasure);
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
@@ -2181,7 +2181,7 @@ pub mod explicit_draughting {
         :: serde :: Serialize,
         :: serde :: Deserialize,
     )]
-    pub struct DayInMonthNumber(i64);
+    pub struct DayInMonthNumber(pub i64);
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
@@ -2202,7 +2202,7 @@ pub mod explicit_draughting {
         :: serde :: Serialize,
         :: serde :: Deserialize,
     )]
-    pub struct DimensionCount(i64);
+    pub struct DimensionCount(pub i64);
     #[derive(Debug, Clone, PartialEq, :: serde :: Deserialize)]
     pub enum DimensionExtentUsage {
         Origin,
@@ -2330,7 +2330,7 @@ pub mod explicit_draughting {
         :: serde :: Serialize,
         :: serde :: Deserialize,
     )]
-    pub struct Identifier(String);
+    pub struct Identifier(pub String);
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
@@ -2372,7 +2372,7 @@ pub mod explicit_draughting {
         :: serde :: Serialize,
         :: serde :: Deserialize,
     )]
-    pub struct Label(String);
+    pub struct Label(pub String);
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
@@ -2392,7 +2392,7 @@ pub mod explicit_draughting {
         :: serde :: Serialize,
         :: serde :: Deserialize,
     )]
-    pub struct LengthMeasure(f64);
+    pub struct LengthMeasure(pub f64);
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
@@ -2414,7 +2414,7 @@ pub mod explicit_draughting {
         :: serde :: Serialize,
         :: serde :: Deserialize,
     )]
-    pub struct MonthInYearNumber(i64);
+    pub struct MonthInYearNumber(pub i64);
     #[derive(Debug, Clone, PartialEq, :: serde :: Deserialize)]
     pub enum NullStyle {
         Null,
@@ -2429,7 +2429,7 @@ pub mod explicit_draughting {
         :: serde :: Serialize,
         :: serde :: Deserialize,
     )]
-    pub struct ParameterValue(f64);
+    pub struct ParameterValue(pub f64);
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
@@ -2454,7 +2454,7 @@ pub mod explicit_draughting {
         :: serde :: Serialize,
         :: serde :: Deserialize,
     )]
-    pub struct PlaneAngleMeasure(f64);
+    pub struct PlaneAngleMeasure(pub f64);
     #[derive(
         Clone,
         Debug,
@@ -2465,7 +2465,7 @@ pub mod explicit_draughting {
         :: serde :: Serialize,
         :: serde :: Deserialize,
     )]
-    pub struct PositiveLengthMeasure(LengthMeasure);
+    pub struct PositiveLengthMeasure(pub LengthMeasure);
     #[derive(
         Clone,
         Debug,
@@ -2476,7 +2476,7 @@ pub mod explicit_draughting {
         :: serde :: Serialize,
         :: serde :: Deserialize,
     )]
-    pub struct PositiveRatioMeasure(RatioMeasure);
+    pub struct PositiveRatioMeasure(pub RatioMeasure);
     #[derive(
         Clone,
         Debug,
@@ -2487,7 +2487,7 @@ pub mod explicit_draughting {
         :: serde :: Serialize,
         :: serde :: Deserialize,
     )]
-    pub struct PresentableText(String);
+    pub struct PresentableText(pub String);
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
@@ -2536,7 +2536,7 @@ pub mod explicit_draughting {
         :: serde :: Serialize,
         :: serde :: Deserialize,
     )]
-    pub struct RatioMeasure(f64);
+    pub struct RatioMeasure(pub f64);
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
@@ -2645,7 +2645,7 @@ pub mod explicit_draughting {
         :: serde :: Serialize,
         :: serde :: Deserialize,
     )]
-    pub struct Text(String);
+    pub struct Text(pub String);
     #[derive(
         Clone,
         Debug,
@@ -2656,7 +2656,7 @@ pub mod explicit_draughting {
         :: serde :: Serialize,
         :: serde :: Deserialize,
     )]
-    pub struct TextAlignment(Label);
+    pub struct TextAlignment(pub Label);
     #[derive(
         Clone,
         Debug,
@@ -2667,7 +2667,7 @@ pub mod explicit_draughting {
         :: serde :: Serialize,
         :: serde :: Deserialize,
     )]
-    pub struct TextDelineation(Label);
+    pub struct TextDelineation(pub Label);
     #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
@@ -2737,7 +2737,7 @@ pub mod explicit_draughting {
         :: serde :: Serialize,
         :: serde :: Deserialize,
     )]
-    pub struct YearNumber(i64);
+    pub struct YearNumber(pub i64);
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
     # [holder (field = address)]
