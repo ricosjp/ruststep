@@ -54,6 +54,7 @@ mod field_type;
 mod holder_attr;
 mod select;
 mod table_init;
+mod type_decl;
 
 use field_type::*;
 use holder_attr::*;
@@ -122,7 +123,11 @@ fn derive_holder(ast: &syn::DeriveInput) -> TokenStream2 {
     let attr = HolderAttr::parse(&ast.attrs);
     let ident = &ast.ident;
     match &ast.data {
-        syn::Data::Struct(st) => entity::derive_holder(ident, st, &attr),
+        syn::Data::Struct(st) => match st.fields {
+            syn::Fields::Named(_) => entity::derive_holder(ident, st, &attr),
+            syn::Fields::Unnamed(_) => type_decl::derive_holder(ident, st, &attr),
+            syn::Fields::Unit => panic!("Unit struct is not supported."),
+        },
         syn::Data::Enum(e) => select::derive_holder(ident, e, &attr),
         _ => abort_call_site!("Only struct is supprted currently"),
     }
