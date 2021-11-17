@@ -63,7 +63,7 @@ impl FieldEntries {
         let mut into_owned = Vec::new();
 
         for field in &st.fields {
-            let ident = field.ident.as_ref().expect_or_abort("unreachable");
+            let ident = field.ident.as_ref().expect_or_abort("st is not struct");
             attributes.push(ident.clone());
 
             let ft: FieldType = field.ty.clone().try_into().unwrap();

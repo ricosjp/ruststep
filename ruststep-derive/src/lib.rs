@@ -126,7 +126,7 @@ fn derive_holder(ast: &syn::DeriveInput) -> TokenStream2 {
         syn::Data::Struct(st) => match st.fields {
             syn::Fields::Named(_) => entity::derive_holder(ident, st, &attr),
             syn::Fields::Unnamed(_) => type_decl::derive_holder(ident, st, &attr),
-            syn::Fields::Unit => panic!("Unit struct is not supported."),
+            syn::Fields::Unit => abort_call_site!("Unit struct is not supported."),
         },
         syn::Data::Enum(e) => select::derive_holder(ident, e, &attr),
         _ => abort_call_site!("Only struct is supprted currently"),
