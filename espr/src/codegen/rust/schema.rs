@@ -10,7 +10,6 @@ impl ToTokens for Schema {
         let types = &self.types;
         let entities = &self.entities;
         let type_decls = self.types.iter().filter(|e| match e {
-            TypeDecl::Simple(_) => false,
             TypeDecl::Rename(Rename {
                 ty: TypeRef::SimpleType(_),
                 ..
@@ -19,7 +18,8 @@ impl ToTokens for Schema {
                 ty: TypeRef::Named { is_simple, .. },
                 ..
             }) => !is_simple,
-            _ => true,
+            TypeDecl::Rename(Rename { .. }) => true,
+            _ => false,
         });
         let entity_types: Vec<_> = entities
             .iter()
