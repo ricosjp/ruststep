@@ -110,6 +110,19 @@ fn derive_deserialize(ast: &syn::DeriveInput) -> TokenStream2 {
 /// `#[holder]` attribute
 /// ---------------------------
 ///
+/// There are two types of attributes:
+///
+/// ```ignore
+/// #[derive(Debug, Clone, PartialEq, Holder)]
+/// #[holder(table = Table)]   // <- container attribute
+/// #[holder(field = b)]       // <- this is also a container attribute
+/// pub struct B {
+///     pub z: f64,
+///     #[holder(use_place_holder)]  // <- field attribute
+///     pub a: A,
+/// }
+/// ```
+///
 /// Container attributes:
 ///
 /// - `#[holder(table = {path::to::table::struct})]`
