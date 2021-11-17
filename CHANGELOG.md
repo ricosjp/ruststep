@@ -15,6 +15,7 @@ In addition to original Keep-a-Changelog, we use following rules:
 ## Unreleased (will be 0.2.0)
 
 ### Added
+- Check CHANGELOG is updated in each pull request https://github.com/ricosjp/ruststep/pull/155
 - #[derive(Holder)] for tuple struct https://github.com/ricosjp/ruststep/pull/146
 - Test for EntityTables https://github.com/ricosjp/ruststep/pull/136
 - Overview diagram written in asciiflow https://github.com/ricosjp/ruststep/pull/137
