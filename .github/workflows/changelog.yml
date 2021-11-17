@@ -10,4 +10,4 @@ jobs:
     - uses: actions/checkout@v1
       with:
         fetch-depth: 0
-    - run: bash -c "! git diff --exit-code master... CHANGELOG.md"
+    - run: bash -c "! git diff --exit-code origin/master... CHANGELOG.md"
