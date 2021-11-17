@@ -3,6 +3,7 @@
 use ruststep::{ast::*, parser::exchange, place_holder::PlaceHolder, tables::*};
 use ruststep_derive::{as_holder, Holder, TableInit};
 
+use derive_more::*;
 use nom::Finish;
 use serde::Deserialize;
 use std::{collections::HashMap, str::FromStr};
@@ -11,6 +12,7 @@ use std::{collections::HashMap, str::FromStr};
 pub struct Table {
     a: HashMap<u64, as_holder!(A)>,
     b: HashMap<u64, as_holder!(B)>,
+    c: HashMap<u64, as_holder!(C)>,
 }
 
 impl Table {
@@ -21,6 +23,7 @@ impl Table {
               #1 = A(1.0, 2.0);
               #2 = B(3.0, A((4.0, 5.0)));
               #3 = B(6.0, #1);
+              #4 = C(#1);
             ENDSEC;
             "#,
         )
@@ -46,6 +49,12 @@ pub struct B {
     #[holder(use_place_holder)]
     pub a: A,
 }
+
+#[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, Holder)]
+#[holder(table = Table)]
+#[holder(field = c)]
+#[holder(generate_deserialize)]
+pub struct C(#[holder(use_place_holder)] pub A);
 
 #[test]
 fn deserialize_a_holder() {
@@ -170,4 +179,11 @@ fn get_owned_b3() {
             a: A { x: 1.0, y: 2.0 }
         }
     );
+}
+
+#[test]
+fn get_owned_c() {
+    let table = Table::example();
+    let b = EntityTable::<CHolder>::get_owned(&table, 4).unwrap();
+    assert_eq!(b, C(A { x: 1.0, y: 2.0 }));
 }
