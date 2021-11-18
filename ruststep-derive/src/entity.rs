@@ -237,7 +237,7 @@ fn impl_deserialize(ident: &syn::Ident, name: &str, st: &syn::DataStruct) -> Tok
 fn impl_with_visitor(ident: &syn::Ident) -> TokenStream2 {
     let ruststep = ruststep_crate();
 
-    let visitor_ident = as_holder_visitor2(ident);
+    let visitor_ident = as_holder_visitor(ident);
     let holder_ident = as_holder_ident(ident);
 
     quote! {

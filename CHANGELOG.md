@@ -15,14 +15,16 @@ In addition to original Keep-a-Changelog, we use following rules:
 ## Unreleased (will be 0.2.0)
 
 ### Added
+- Comprehensive tests for ruststep_derive https://github.com/ricosjp/ruststep/pull/147
 - Check CHANGELOG is updated in each pull request https://github.com/ricosjp/ruststep/pull/155
-- #[derive(Holder)] for tuple struct https://github.com/ricosjp/ruststep/pull/146
-- Test for EntityTables https://github.com/ricosjp/ruststep/pull/136
+- `#[derive(Holder)]` for tuple struct https://github.com/ricosjp/ruststep/pull/146
+- Test for `EntityTables` https://github.com/ricosjp/ruststep/pull/136
 - Overview diagram written in asciiflow https://github.com/ricosjp/ruststep/pull/137
-- Tables from DataSection https://github.com/ricosjp/ruststep/pull/139
-- impl FromStr for Record and DataSection https://github.com/ricosjp/ruststep/pull/140
+- `Tables` from `DataSection` https://github.com/ricosjp/ruststep/pull/139
+- impl `FromStr` for `Record` and `DataSection` https://github.com/ricosjp/ruststep/pull/140
 
 ### Changed
+- Remove `ruststep_derive::as_holder_visitor!` https://github.com/ricosjp/ruststep/pull/147
 - Use Rust 2021 edition https://github.com/ricosjp/ruststep/pull/128
 
 ### Deprecated

@@ -48,7 +48,7 @@ impl HolderAttr {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 enum Attr {
     Table(syn::Path),
     Field(syn::Ident),
@@ -77,5 +77,50 @@ impl syn::parse::Parse for Attr {
                 "expected `table`, `field`, or `use_place_holder`",
             )),
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn parse_attr_table() {
+        let attr: Attr = syn::parse_str("table = Tables").unwrap();
+        assert_eq!(attr, Attr::Table(syn::parse_str("Tables").unwrap()));
+
+        let attr: Attr = syn::parse_str("table = ::some::path::to::Tables").unwrap();
+        assert_eq!(
+            attr,
+            Attr::Table(syn::parse_str("::some::path::to::Tables").unwrap())
+        );
+
+        // table must take path
+        assert!(syn::parse_str::<Attr>("table").is_err());
+        // path cannot be empty
+        assert!(syn::parse_str::<Attr>("table =").is_err());
+    }
+
+    #[test]
+    fn parse_attr_field() {
+        let attr: Attr = syn::parse_str("field = a").unwrap();
+        assert_eq!(attr, Attr::Field(syn::parse_str("a").unwrap()));
+
+        // field cannot accept path
+        assert!(syn::parse_str::<Attr>("field = ::some::path").is_err());
+        // field must take identifier
+        assert!(syn::parse_str::<Attr>("field").is_err());
+        // identifier is empty
+        assert!(syn::parse_str::<Attr>("field =").is_err());
+    }
+
+    #[test]
+    fn parse_attr_place_holder() {
+        let attr: Attr = syn::parse_str("use_place_holder").unwrap();
+        assert_eq!(attr, Attr::PlaceHolder);
+
+        assert!(syn::parse_str::<Attr>("use_place_holder = true").is_err());
+        // typo
+        assert!(syn::parse_str::<Attr>("use_place_helder").is_err());
     }
 }
