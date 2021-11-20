@@ -19,6 +19,8 @@ pub mod place_holder;
 pub mod primitive;
 pub mod tables;
 
+pub use ruststep_derive::*;
+
 // Automatically generated codes
 #[cfg(feature = "ap201")]
 pub mod ap201;
