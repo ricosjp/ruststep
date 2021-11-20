@@ -15,6 +15,7 @@ In addition to original Keep-a-Changelog, we use following rules:
 ## Unreleased (will be 0.2.0)
 
 ### Added
+- Expose `ruststep_derive::*` macros in `ruststep::` namespace https://github.com/ricosjp/ruststep/pull/159
 - Use rust-cache for faster CI https://github.com/ricosjp/ruststep/pull/156
 - Comprehensive tests for ruststep_derive https://github.com/ricosjp/ruststep/pull/147
 - Check CHANGELOG is updated in each pull request https://github.com/ricosjp/ruststep/pull/155
@@ -28,9 +29,11 @@ In addition to original Keep-a-Changelog, we use following rules:
 - Remove `ruststep_derive::as_holder_visitor!` https://github.com/ricosjp/ruststep/pull/147
 - Use Rust 2021 edition https://github.com/ricosjp/ruststep/pull/128
 
+### Fixed
+- Drop unused derive-new, derive_more, and dyn-clone crate dependencies https://github.com/ricosjp/ruststep/pull/159
+
 ### Deprecated
 ### Removed
-### Fixed
 ### Security
 
 ## 0.1.0 - 2021-09-28
