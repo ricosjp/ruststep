@@ -1,6 +1,5 @@
 use espr::{ast::SyntaxTree, ir::IR};
 use proc_macro::TokenStream;
-use proc_macro_error::proc_macro_error;
 use quote::ToTokens;
 
 /// Compile and expand results inline EXPRESS
@@ -17,7 +16,6 @@ use quote::ToTokens;
 /// END_SCHEMA;
 /// "#);
 /// ```
-#[proc_macro_error]
 #[proc_macro]
 pub fn inline_express(input: TokenStream) -> TokenStream {
     let input: syn::LitStr =
