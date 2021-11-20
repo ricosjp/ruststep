@@ -3,20 +3,14 @@
 mod entity;
 mod schema;
 
-use crate::ir::*;
+pub use entity::*;
+pub use schema::*;
 
 use inflector::Inflector;
 use proc_macro2::TokenStream;
 use quote::*;
 
-impl ToTokens for IR {
-    fn to_tokens(&self, tokens: &mut TokenStream) {
-        let schemas = &self.schemas;
-        tokens.append_all(quote! {
-            #(#schemas)*
-        })
-    }
-}
+use crate::ir::*;
 
 impl ToTokens for Simple {
     fn to_tokens(&self, tokens: &mut TokenStream) {
@@ -95,7 +89,7 @@ impl ToTokens for Select {
             }
         }
         tokens.append_all(quote! {
-            #[derive(Debug, Clone, PartialEq, ::ruststep_derive::Holder)]
+            #[derive(Debug, Clone, PartialEq, Holder)]
             #[holder(table = Tables)]
             #[holder(generate_deserialize)]
             pub enum #id {

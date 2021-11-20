@@ -1,6 +1,5 @@
-use espr::{ast::SyntaxTree, ir::IR};
+use espr::{ast::SyntaxTree, codegen::rust::*, ir::IR};
 use proc_macro::TokenStream;
-use quote::ToTokens;
 
 /// Compile inline EXPRESS into Rust code, and expand it on the call site.
 ///
@@ -26,5 +25,5 @@ pub fn inline_express(input: TokenStream) -> TokenStream {
         syn::parse(input).expect("inline_express! argument must be string literal");
     let st = SyntaxTree::parse(&input.value()).expect("Tokenize failed");
     let ir = IR::from_syntax_tree(&st).expect("Failed in semantic analysis phase");
-    ir.to_token_stream().into()
+    ir.to_token_stream(CratePrefix::External).into()
 }
