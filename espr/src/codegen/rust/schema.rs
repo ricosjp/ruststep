@@ -52,7 +52,7 @@ impl Schema {
 
         quote! {
             pub mod #name {
-                use #ruststep_path::{as_holder, TableInit, primitive::*, tables::*, error::Result};
+                use #ruststep_path::{as_holder, Holder, TableInit, primitive::*, tables::*, error::Result};
                 use std::collections::HashMap;
 
                 #[derive(Debug, Clone, PartialEq, Default, TableInit)]

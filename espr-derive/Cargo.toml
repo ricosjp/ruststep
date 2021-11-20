@@ -19,3 +19,4 @@ path = "../espr"
 ruststep = { version = "0.1.0", path = "../ruststep" }
 ruststep-derive = { version = "0.1.0", path = "../ruststep-derive" }
 serde = "1.0"
+derive-new = "0.5.9"
