@@ -2,7 +2,7 @@ use espr::{ast::SyntaxTree, ir::IR};
 use proc_macro::TokenStream;
 use quote::ToTokens;
 
-/// Compile and expand results inline EXPRESS
+/// Compile inline EXPRESS into Rust code, and expand it on the call site.
 ///
 /// Example
 /// --------
@@ -18,6 +18,10 @@ use quote::ToTokens;
 /// ```
 #[proc_macro]
 pub fn inline_express(input: TokenStream) -> TokenStream {
+    // FIXME Use proc-macro-error
+    //
+    // espr::Result does not match its requirement currently. We have to fix it.
+    //
     let input: syn::LitStr =
         syn::parse(input).expect("inline_express! argument must be string literal");
     let st = SyntaxTree::parse(&input.value()).expect("Tokenize failed");
