@@ -27,6 +27,7 @@ In addition to original Keep-a-Changelog, we use following rules:
 - impl `FromStr` for `Record` and `DataSection` https://github.com/ricosjp/ruststep/pull/140
 
 ### Changed
+- Add flag to switch ruststep internal/external codegen in IR::to_token_stream https://github.com/ricosjp/ruststep/pull/158
 - Remove `ruststep_derive::as_holder_visitor!` https://github.com/ricosjp/ruststep/pull/147
 - Use Rust 2021 edition https://github.com/ricosjp/ruststep/pull/128
 
