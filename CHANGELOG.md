@@ -15,6 +15,7 @@ In addition to original Keep-a-Changelog, we use following rules:
 ## Unreleased (will be 0.2.0)
 
 ### Added
+- espr_derive crate, `espr_derive::inline_express!` macro https://github.com/ricosjp/ruststep/pull/158
 - Expose `ruststep_derive::*` macros in `ruststep::` namespace https://github.com/ricosjp/ruststep/pull/159
 - Use rust-cache for faster CI https://github.com/ricosjp/ruststep/pull/156
 - Comprehensive tests for ruststep_derive https://github.com/ricosjp/ruststep/pull/147
