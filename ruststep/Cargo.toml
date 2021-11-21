@@ -32,5 +32,9 @@ version = "0.1.0"
 [dev-dependencies]
 anyhow = "1.0.43"
 
+[dev-dependencies.espr-derive]
+path = "../espr-derive"
+version = "0.1.0"
+
 [package.metadata.release]
 no-dev-version = true
