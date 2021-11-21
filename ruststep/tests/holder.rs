@@ -1,51 +1,37 @@
 // Test for deserializing Holder structs
 
+use espr_derive::inline_express;
 use ruststep::{ast::*, parser::exchange, place_holder::PlaceHolder, tables::*};
-use ruststep_derive::{as_holder, Holder, TableInit};
 
 use nom::Finish;
 use serde::Deserialize;
-use std::{collections::HashMap, str::FromStr};
+use std::str::FromStr;
 
-#[derive(TableInit, Default)]
-pub struct Table {
-    a: HashMap<u64, as_holder!(A)>,
-    b: HashMap<u64, as_holder!(B)>,
-}
+inline_express!(
+    r#"
+    SCHEMA test_schema;
+      ENTITY a;
+        x: REAL;
+        y: REAL;
+      END_ENTITY;
 
-impl Table {
-    fn example() -> Self {
-        Self::from_str(
-            r#"
-            DATA;
-              #1 = A(1.0, 2.0);
-              #2 = B(3.0, A((4.0, 5.0)));
-              #3 = B(6.0, #1);
-            ENDSEC;
-            "#,
-        )
-        .unwrap()
-    }
-}
+      ENTITY b;
+        z: REAL;
+        a: a;
+      END_ENTITY;
+    END_SCHEMA;
+    "#
+);
 
-#[derive(Debug, Clone, PartialEq, Holder)]
-#[holder(table = Table)]
-#[holder(field = a)]
-#[holder(generate_deserialize)]
-pub struct A {
-    pub x: f64,
-    pub y: f64,
-}
+use test_schema::*;
 
-#[derive(Debug, Clone, PartialEq, Holder)]
-#[holder(table = Table)]
-#[holder(field = b)]
-#[holder(generate_deserialize)]
-pub struct B {
-    pub z: f64,
-    #[holder(use_place_holder)]
-    pub a: A,
-}
+const EXAMPLE: &str = r#"
+DATA;
+  #1 = A(1.0, 2.0);
+  #2 = B(3.0, A((4.0, 5.0)));
+  #3 = B(6.0, #1);
+ENDSEC;
+"#;
 
 #[test]
 fn deserialize_a_holder() {
@@ -141,14 +127,14 @@ fn deserialize_b_holder_parameter_ref() {
 
 #[test]
 fn get_owned_a() {
-    let table = Table::example();
+    let table = Tables::from_str(EXAMPLE).unwrap();
     let a = EntityTable::<AHolder>::get_owned(&table, 1).unwrap();
     assert_eq!(a, A { x: 1.0, y: 2.0 });
 }
 
 #[test]
 fn get_owned_b2() {
-    let table = Table::example();
+    let table = Tables::from_str(EXAMPLE).unwrap();
     let b = EntityTable::<BHolder>::get_owned(&table, 2).unwrap();
     assert_eq!(
         b,
@@ -161,7 +147,7 @@ fn get_owned_b2() {
 
 #[test]
 fn get_owned_b3() {
-    let table = Table::example();
+    let table = Tables::from_str(EXAMPLE).unwrap();
     let b = EntityTable::<BHolder>::get_owned(&table, 3).unwrap();
     assert_eq!(
         b,
