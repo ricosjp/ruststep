@@ -1,9 +1,8 @@
-use espr_derive::inline_express;
 use nom::Finish;
 use ruststep::{ast::*, parser::exchange, place_holder::*};
 use serde::Deserialize;
 
-inline_express!(
+espr_derive::inline_express!(
     r#"
     SCHEMA test_schema;
       ENTITY a;

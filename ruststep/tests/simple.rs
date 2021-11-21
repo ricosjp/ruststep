@@ -1,13 +1,12 @@
 // Test for deserializing Holder structs
 
-use espr_derive::inline_express;
 use ruststep::{ast::*, parser::exchange, place_holder::PlaceHolder, tables::*};
 
 use nom::Finish;
 use serde::Deserialize;
 use std::str::FromStr;
 
-inline_express!(
+espr_derive::inline_express!(
     r#"
     SCHEMA test_schema;
       ENTITY a;
