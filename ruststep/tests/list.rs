@@ -1,31 +1,23 @@
+use espr_derive::inline_express;
 use nom::Finish;
 use ruststep::{ast::*, parser::exchange, place_holder::*};
-use ruststep_derive::as_holder;
 use serde::Deserialize;
-use std::collections::HashMap;
 
-#[derive(Debug, Clone, PartialEq, Default)]
-pub struct Table {
-    a: HashMap<u64, as_holder!(A)>,
-    b: HashMap<u64, as_holder!(B)>,
-}
+inline_express!(
+    r#"
+    SCHEMA test_schema;
+      ENTITY a;
+        x: LIST [0:?] OF REAL;
+      END_ENTITY;
 
-#[derive(Clone, Debug, PartialEq, ruststep_derive::Holder)]
-#[holder(table = Table)]
-#[holder(field = a)]
-#[holder(generate_deserialize)]
-pub struct A {
-    x: Vec<f64>,
-}
+      ENTITY b;
+        a: LIST [0:?] OF a;
+      END_ENTITY;
+    END_SCHEMA;
+    "#
+);
 
-#[derive(Clone, Debug, PartialEq, ruststep_derive::Holder)]
-#[holder(table = Table)]
-#[holder(field = b)]
-#[holder(generate_deserialize)]
-pub struct B {
-    #[holder(use_place_holder)]
-    a: Vec<A>,
-}
+use test_schema::*;
 
 #[test]
 fn deserialize_list_a() {
