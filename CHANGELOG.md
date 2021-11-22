@@ -16,6 +16,7 @@ In addition to original Keep-a-Changelog, we use following rules:
 
 ### Added
 - espr_derive crate, `espr_derive::inline_express!` macro https://github.com/ricosjp/ruststep/pull/158
+  - ruststep/tests uses `inline_express!` macro https://github.com/ricosjp/ruststep/pull/160
 - Expose `ruststep_derive::*` macros in `ruststep::` namespace https://github.com/ricosjp/ruststep/pull/159
 - Use rust-cache for faster CI https://github.com/ricosjp/ruststep/pull/156
 - Comprehensive tests for ruststep_derive https://github.com/ricosjp/ruststep/pull/147
@@ -27,6 +28,7 @@ In addition to original Keep-a-Changelog, we use following rules:
 - impl `FromStr` for `Record` and `DataSection` https://github.com/ricosjp/ruststep/pull/140
 
 ### Changed
+- Visitor struct and all fields in Holder struct become public https://github.com/ricosjp/ruststep/pull/160
 - Add flag to switch ruststep internal/external codegen in IR::to_token_stream https://github.com/ricosjp/ruststep/pull/158
 - Remove `ruststep_derive::as_holder_visitor!` https://github.com/ricosjp/ruststep/pull/147
 - Use Rust 2021 edition https://github.com/ricosjp/ruststep/pull/128
