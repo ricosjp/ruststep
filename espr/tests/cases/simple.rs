@@ -1,0 +1,40 @@
+pub mod test_schema {
+    use ruststep::{as_holder, error::Result, primitive::*, tables::*, Holder, TableInit};
+    use std::collections::HashMap;
+    #[derive(Debug, Clone, PartialEq, Default, TableInit)]
+    pub struct Tables {
+        a: HashMap<u64, as_holder!(A)>,
+        b: HashMap<u64, as_holder!(B)>,
+    }
+    impl Tables {
+        pub fn a_iter<'table>(&'table self) -> impl Iterator<Item = Result<A>> + 'table {
+            self.a
+                .values()
+                .cloned()
+                .map(move |value| value.into_owned(&self))
+        }
+        pub fn b_iter<'table>(&'table self) -> impl Iterator<Item = Result<B>> + 'table {
+            self.b
+                .values()
+                .cloned()
+                .map(move |value| value.into_owned(&self))
+        }
+    }
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    # [holder (table = Tables)]
+    # [holder (field = a)]
+    #[holder(generate_deserialize)]
+    pub struct A {
+        pub x: f64,
+        pub y: f64,
+    }
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    # [holder (table = Tables)]
+    # [holder (field = b)]
+    #[holder(generate_deserialize)]
+    pub struct B {
+        pub z: f64,
+        #[holder(use_place_holder)]
+        pub a: A,
+    }
+}

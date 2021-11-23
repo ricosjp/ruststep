@@ -23,6 +23,16 @@ fn rustfmt(tt: String) -> String {
     String::from_utf8(output.stdout).expect("Non UTF-8 string found")
 }
 
+fn diff(target: &Path, answer: &Path) {
+    let st = Command::new("diff")
+        .args([target, answer])
+        .status()
+        .expect("Failed to start diff command");
+    if !st.success() {
+        panic!("Target and answer are different");
+    }
+}
+
 fn test(exp: &Path, rs: &Path) {
     let input = fs::read_to_string(exp).unwrap();
 
@@ -34,9 +44,9 @@ fn test(exp: &Path, rs: &Path) {
 
     let mut generated = PathBuf::from(rs);
     generated.set_extension("generated.rs");
-    fs::write(generated, tt).unwrap();
+    fs::write(&generated, tt).unwrap();
 
-    // TODO compare rs and generated
+    diff(&generated, rs);
 }
 
 #[test]
