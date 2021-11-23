@@ -32,6 +32,7 @@ structopt = "0.3.22"
 
 [dev-dependencies]
 anyhow = "1.0.48"
+insta = "1.8.0"
 
 [package.metadata.release]
 no-dev-version = true
