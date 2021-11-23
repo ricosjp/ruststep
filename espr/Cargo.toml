@@ -30,5 +30,8 @@ maplit = "1.0.2"
 thiserror = "1.0.26"
 structopt = "0.3.22"
 
+[dev-dependencies]
+anyhow = "1.0.48"
+
 [package.metadata.release]
 no-dev-version = true
