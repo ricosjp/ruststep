@@ -11,6 +11,8 @@ fn rustfmt(tt: String) -> Result<String> {
         .stdin(Stdio::piped())
         .stdout(Stdio::piped())
         .spawn()?;
+    // Write input from another thread for avoiding deadlock.
+    // See https://doc.rust-lang.org/std/process/index.html#handling-io
     let mut stdin = child.stdin.take().expect("Failed to open stdin");
     std::thread::spawn(move || {
         stdin
