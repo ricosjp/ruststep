@@ -1,21 +1,20 @@
 use espr::{ast::SyntaxTree, codegen::rust::*, ir::IR};
 
+const EXPRESS: &str = r#"
+SCHEMA test_schema;
+  ENTITY a;
+    x: LIST [0:?] OF REAL;
+  END_ENTITY;
+
+  ENTITY b;
+    a: LIST [0:?] OF a;
+  END_ENTITY;
+END_SCHEMA;
+"#;
+
 #[test]
 fn list() {
-    let input = r#"
-    SCHEMA test_schema;
-      ENTITY a;
-        x: LIST [0:?] OF REAL;
-      END_ENTITY;
-
-      ENTITY b;
-        a: LIST [0:?] OF a;
-      END_ENTITY;
-    END_SCHEMA;
-    "#
-    .trim();
-
-    let st = SyntaxTree::parse(input).unwrap();
+    let st = SyntaxTree::parse(EXPRESS).unwrap();
     let ir = IR::from_syntax_tree(&st).unwrap();
     let tt = ir.to_token_stream(CratePrefix::External).to_string();
 

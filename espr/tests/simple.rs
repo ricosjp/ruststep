@@ -1,23 +1,22 @@
 use espr::{ast::SyntaxTree, codegen::rust::*, ir::IR};
 
+const EXPRESS: &str = r#"
+SCHEMA test_schema;
+  ENTITY a;
+    x: REAL;
+    y: REAL;
+  END_ENTITY;
+
+  ENTITY b;
+    z: REAL;
+    a: a;
+  END_ENTITY;
+END_SCHEMA;
+"#;
+
 #[test]
 fn simple() {
-    let input = r#"
-    SCHEMA test_schema;
-      ENTITY a;
-        x: REAL;
-        y: REAL;
-      END_ENTITY;
-
-      ENTITY b;
-        z: REAL;
-        a: a;
-      END_ENTITY;
-    END_SCHEMA;
-    "#
-    .trim();
-
-    let st = SyntaxTree::parse(input).unwrap();
+    let st = SyntaxTree::parse(EXPRESS).unwrap();
     let ir = IR::from_syntax_tree(&st).unwrap();
     let tt = ir.to_token_stream(CratePrefix::External).to_string();
 
