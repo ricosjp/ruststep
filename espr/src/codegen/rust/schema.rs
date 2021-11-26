@@ -9,17 +9,33 @@ impl ToTokens for Schema {
         let name = format_ident!("{}", self.name);
         let types = &self.types;
         let entities = &self.entities;
+        let renames = self.types.iter().filter(|e| match e {
+            TypeDecl::Simple(_) => true,
+            TypeDecl::Rename(_) => true,
+            _ => false,
+        });
         let entity_types: Vec<_> = entities
             .iter()
             .map(|e| format_ident!("{}", e.name.to_pascal_case()))
+            .chain(
+                renames
+                    .clone()
+                    .map(|e| format_ident!("{}", e.id().to_pascal_case())),
+            )
             .collect();
         let holder_name: Vec<_> = entities
             .iter()
             .map(|e| format_ident!("{}", e.name))
+            .chain(
+                renames
+                    .clone()
+                    .map(|e| format_ident!("{}", e.id().to_snake_case())),
+            )
             .collect();
         let iter_name: Vec<_> = entities
             .iter()
             .map(|e| format_ident!("{}_iter", e.name))
+            .chain(renames.map(|e| format_ident!("{}", e.id().to_snake_case())))
             .collect();
         tokens.append_all(quote! {
             pub mod #name {

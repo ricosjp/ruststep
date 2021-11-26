@@ -1,7 +1,6 @@
 //! Generate Rust code using proc-macro utility crates
 
 mod entity;
-mod rename;
 mod schema;
 
 use crate::ir::*;
@@ -21,11 +20,34 @@ impl ToTokens for IR {
 
 impl ToTokens for Simple {
     fn to_tokens(&self, tokens: &mut TokenStream) {
+        let field_name = format_ident!("{}", self.id);
         let id = format_ident!("{}", &self.id.to_pascal_case());
         let ty = &self.ty;
         tokens.append_all(quote! {
-            #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, ::serde::Serialize, ::serde::Deserialize)]
+            #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, ::ruststep_derive::Holder)]
+            #[holder(table = Tables)]
+            #[holder(field = #field_name)]
+            #[holder(generate_deserialize)]
             pub struct #id(pub #ty);
+        });
+    }
+}
+
+impl ToTokens for Rename {
+    fn to_tokens(&self, tokens: &mut TokenStream) {
+        let field_name = format_ident!("{}", self.id);
+        let id = format_ident!("{}", &self.id.to_pascal_case());
+        let ty = &self.ty;
+        let use_place_holder = match ty {
+            TypeRef::SimpleType(_) => quote! {},
+            _ => quote! {#[holder(use_place_holder)]},
+        };
+        tokens.append_all(quote! {
+            #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, ::ruststep_derive::Holder)]
+            #[holder(table = Tables)]
+            #[holder(field = #field_name)]
+            #[holder(generate_deserialize)]
+            pub struct #id(#use_place_holder pub #ty);
         });
     }
 }
@@ -70,18 +92,11 @@ impl ToTokens for Select {
                     }
                     use_place_holder.push(quote! { #[holder(use_place_holder)] });
                 }
-                TypeRef::Named {
-                    name, is_simple, ..
-                } => {
+                TypeRef::Named { name, .. } => {
                     field.push(quote! {});
                     entries.push(format_ident!("{}", name.to_pascal_case()));
-                    if *is_simple {
-                        entry_types.push(quote! { #ty });
-                        use_place_holder.push(quote! {});
-                    } else {
-                        entry_types.push(quote! { Box<#ty> });
-                        use_place_holder.push(quote! { #[holder(use_place_holder)] });
-                    }
+                    entry_types.push(quote! { Box<#ty> });
+                    use_place_holder.push(quote! { #[holder(use_place_holder)] });
                 }
                 _ => unimplemented!(),
             }

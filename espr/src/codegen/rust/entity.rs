@@ -21,11 +21,16 @@ impl ToTokens for Entity {
             } else {
                 attr_type.push(quote! { #ty });
             }
+            match ty {
+                TypeRef::SimpleType(_) => use_place_holder.push(quote! {}),
+                _ => use_place_holder.push(quote! { #[holder(use_place_holder)] }),
+            }
+            /*
             if ty.is_simple() {
                 use_place_holder.push(quote! {});
             } else {
                 use_place_holder.push(quote! { #[holder(use_place_holder)] });
-            }
+            }*/
         }
 
         for ty in &self.supertypes {

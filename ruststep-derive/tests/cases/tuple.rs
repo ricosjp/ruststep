@@ -2,12 +2,16 @@ use ruststep_derive::{as_holder, Holder};
 use std::collections::HashMap;
 
 pub struct Table {
+    simple: HashMap<u64, as_holder!(Simple)>,
     e: HashMap<u64, as_holder!(E)>,
     a: HashMap<u64, as_holder!(A)>,
     b: HashMap<u64, as_holder!(B)>,
 }
 
-#[derive(Debug, Clone, PartialEq, ::serde::Deserialize)]
+#[derive(Debug, Clone, PartialEq, Holder)]
+#[holder(table = Table)]
+#[holder(field = simple)]
+#[holder(generate_deserialize)]
 pub struct Simple(pub f64);
 
 #[derive(Debug, Clone, PartialEq, Holder)]
@@ -15,6 +19,7 @@ pub struct Simple(pub f64);
 #[holder(field = e)]
 #[holder(generate_deserialize)]
 pub struct E {
+    #[holder(use_place_holder)]
     simple: Simple,
 }
 
