@@ -18,6 +18,9 @@ espr_derive::inline_express!(
         z: REAL;
         a: a;
       END_ENTITY;
+
+      TYPE c = a;
+      END_TYPE;
     END_SCHEMA;
     "#
 );
@@ -29,6 +32,7 @@ DATA;
   #1 = A(1.0, 2.0);
   #2 = B(3.0, A((4.0, 5.0)));
   #3 = B(6.0, #1);
+  #4 = C(#1);
 ENDSEC;
 "#;
 
@@ -155,4 +159,11 @@ fn get_owned_b3() {
             a: A { x: 1.0, y: 2.0 }
         }
     );
+}
+
+#[test]
+fn get_owned_c() {
+    let table = Tables::from_str(EXAMPLE).unwrap();
+    let b = EntityTable::<CHolder>::get_owned(&table, 4).unwrap();
+    assert_eq!(b, C(A { x: 1.0, y: 2.0 }));
 }
