@@ -96,7 +96,7 @@ impl Input {
         } = self;
         quote! {
             #[derive(Clone, Debug, PartialEq)]
-            enum #holder_ident {
+            pub enum #holder_ident {
                 #(#variants(#holder_types)),*
             }
         } // quote!
@@ -165,7 +165,7 @@ impl Input {
         let ruststep = ruststep_crate();
 
         quote! {
-            struct #holder_visitor_ident;
+            pub struct #holder_visitor_ident;
 
             impl<'de> ::serde::de::Visitor<'de> for #holder_visitor_ident {
                 type Value = #holder_ident;

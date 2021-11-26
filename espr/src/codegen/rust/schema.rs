@@ -4,8 +4,34 @@ use inflector::Inflector;
 use proc_macro2::TokenStream;
 use quote::*;
 
-impl ToTokens for Schema {
-    fn to_tokens(&self, tokens: &mut TokenStream) {
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum CratePrefix {
+    Internal,
+    External,
+}
+
+impl CratePrefix {
+    pub fn as_path(&self) -> syn::Path {
+        match self {
+            CratePrefix::Internal => syn::parse_str("crate").unwrap(),
+            CratePrefix::External => syn::parse_str("::ruststep").unwrap(),
+        }
+    }
+}
+
+impl IR {
+    pub fn to_token_stream(&self, prefix: CratePrefix) -> TokenStream {
+        let schemas: Vec<_> = self
+            .schemas
+            .iter()
+            .map(|schema| schema.to_token_stream(prefix))
+            .collect();
+        quote! { #(#schemas)* }
+    }
+}
+
+impl Schema {
+    pub fn to_token_stream(&self, prefix: CratePrefix) -> TokenStream {
         let name = format_ident!("{}", self.name);
         let types = &self.types;
         let entities = &self.entities;
@@ -21,11 +47,13 @@ impl ToTokens for Schema {
             .iter()
             .map(|e| format_ident!("{}_iter", e.name))
             .collect();
-        tokens.append_all(quote! {
+
+        let ruststep_path = prefix.as_path();
+
+        quote! {
             pub mod #name {
-                use crate::{primitive::*, tables::*, error::Result};
+                use #ruststep_path::{as_holder, Holder, TableInit, primitive::*, tables::*, error::Result};
                 use std::collections::HashMap;
-                use ruststep_derive::{as_holder, TableInit};
                 use derive_more::*;
 
                 #[derive(Debug, Clone, PartialEq, Default, TableInit)]
@@ -51,6 +79,6 @@ impl ToTokens for Schema {
                 #(#types)*
                 #(#entities)*
             }
-        });
+        }
     }
 }

@@ -1,8 +1,7 @@
 #![allow(dead_code)]
 pub mod explicit_draughting {
-    use crate::{error::Result, primitive::*, tables::*};
+    use crate::{as_holder, error::Result, primitive::*, tables::*, Holder, TableInit};
     use derive_more::*;
-    use ruststep_derive::{as_holder, TableInit};
     use std::collections::HashMap;
     #[derive(Debug, Clone, PartialEq, Default, TableInit)]
     pub struct Tables {
@@ -1986,7 +1985,7 @@ pub mod explicit_draughting {
                 .map(move |value| value.into_owned(&self))
         }
     }
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum ApprovedItem {
@@ -1996,7 +1995,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         DrawingSheetRevision(Box<DrawingSheetRevision>),
     }
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum AreaOrView {
@@ -2006,7 +2005,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         PresentationView(Box<PresentationView>),
     }
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum Axis2Placement {
@@ -2023,7 +2022,7 @@ pub mod explicit_draughting {
         Unspecified,
         HyperbolicArc,
     }
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum BoxCharacteristicSelect {
@@ -2076,7 +2075,7 @@ pub mod explicit_draughting {
         :: serde :: Deserialize,
     )]
     pub struct BoxWidth(pub PositiveRatioMeasure);
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum CharacterSpacingSelect {
@@ -2085,7 +2084,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         MeasureWithUnit(MeasureWithUnitAny),
     }
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum CharacterStyleSelect {
@@ -2093,7 +2092,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         TextStyleForDefinedFont(Box<TextStyleForDefinedFont>),
     }
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum CharacterizedDefinition {
@@ -2102,7 +2101,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         ShapeDefinition(Box<ShapeDefinition>),
     }
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum CharacterizedProductDefinition {
@@ -2110,7 +2109,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         ProductDefinition(Box<ProductDefinition>),
     }
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum ClassifiedItem {
@@ -2120,21 +2119,21 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         DrawingSheetRevision(Box<DrawingSheetRevision>),
     }
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum ContractedItem {
         #[holder(use_place_holder)]
         DrawingRevision(DrawingRevisionAny),
     }
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum CurveFontOrScaledCurveFontSelect {
         #[holder(use_place_holder)]
         CurveStyleFontSelect(Box<CurveStyleFontSelect>),
     }
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum CurveOrAnnotationCurveOccurrence {
@@ -2143,7 +2142,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         AnnotationCurveOccurrence(AnnotationCurveOccurrenceAny),
     }
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum CurveOrRender {
@@ -2151,7 +2150,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         CurveStyle(Box<CurveStyle>),
     }
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum CurveStyleFontSelect {
@@ -2164,7 +2163,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         ExternallyDefinedCurveFont(Box<ExternallyDefinedCurveFont>),
     }
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum DateTimeSelect {
@@ -2182,7 +2181,7 @@ pub mod explicit_draughting {
         :: serde :: Deserialize,
     )]
     pub struct DayInMonthNumber(pub i64);
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum DefinedSymbolSelect {
@@ -2208,7 +2207,7 @@ pub mod explicit_draughting {
         Origin,
         Target,
     }
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum DraughtingCalloutElement {
@@ -2220,7 +2219,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         AnnotationCurveOccurrence(AnnotationCurveOccurrenceAny),
     }
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum DraughtingGroupedItem {
@@ -2229,7 +2228,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         GeometricSetSelect(Box<GeometricSetSelect>),
     }
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum DraughtingOrganizationItem {
@@ -2242,7 +2241,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         DrawingSheetRevision(Box<DrawingSheetRevision>),
     }
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum DraughtingPresentedItemSelect {
@@ -2250,7 +2249,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         ProductDefinitionFormation(Box<ProductDefinitionFormation>),
     }
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum DraughtingTitledItem {
@@ -2260,7 +2259,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         DrawingSheetRevision(Box<DrawingSheetRevision>),
     }
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum FillAreaStyleTileShapeSelect {
@@ -2268,7 +2267,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         FillAreaStyleTileSymbolWithStyle(Box<FillAreaStyleTileSymbolWithStyle>),
     }
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum FillStyleSelect {
@@ -2288,7 +2287,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         FillAreaStyleHatching(Box<FillAreaStyleHatching>),
     }
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum FontSelect {
@@ -2298,7 +2297,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         ExternallyDefinedTextFont(Box<ExternallyDefinedTextFont>),
     }
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum GeometricSetSelect {
@@ -2307,7 +2306,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         Curve(CurveAny),
     }
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum HidingOrBlankingSelect {
@@ -2331,7 +2330,7 @@ pub mod explicit_draughting {
         :: serde :: Deserialize,
     )]
     pub struct Identifier(pub String);
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum InvisibilityContext {
@@ -2343,7 +2342,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         PresentationSet(PresentationSetAny),
     }
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum InvisibleItem {
@@ -2373,7 +2372,7 @@ pub mod explicit_draughting {
         :: serde :: Deserialize,
     )]
     pub struct Label(pub String);
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum LayeredItem {
@@ -2393,7 +2392,7 @@ pub mod explicit_draughting {
         :: serde :: Deserialize,
     )]
     pub struct LengthMeasure(pub f64);
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum MeasureValue {
@@ -2430,7 +2429,7 @@ pub mod explicit_draughting {
         :: serde :: Deserialize,
     )]
     pub struct ParameterValue(pub f64);
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum PersonOrganizationSelect {
@@ -2488,7 +2487,7 @@ pub mod explicit_draughting {
         :: serde :: Deserialize,
     )]
     pub struct PresentableText(pub String);
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum PresentationRepresentationSelect {
@@ -2497,7 +2496,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         PresentationSet(PresentationSetAny),
     }
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum PresentationSizeAssignmentSelect {
@@ -2509,7 +2508,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         AreaInSet(AreaInSetAny),
     }
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum PresentationStyleSelect {
@@ -2537,7 +2536,7 @@ pub mod explicit_draughting {
         :: serde :: Deserialize,
     )]
     pub struct RatioMeasure(pub f64);
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum ShapeDefinition {
@@ -2595,7 +2594,7 @@ pub mod explicit_draughting {
         Weber,
         Coulomb,
     }
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum SizeSelect {
@@ -2603,20 +2602,20 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         MeasureWithUnit(MeasureWithUnitAny),
     }
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum SourceItem {
         Identifier(Identifier),
     }
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum SpecifiedItem {
         #[holder(use_place_holder)]
         DrawingRevision(DrawingRevisionAny),
     }
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum StyleContextSelect {
@@ -2627,7 +2626,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         PresentationSet(PresentationSetAny),
     }
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum SymbolStyleSelect {
@@ -2668,7 +2667,7 @@ pub mod explicit_draughting {
         :: serde :: Deserialize,
     )]
     pub struct TextDelineation(pub Label);
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum TextOrCharacter {
@@ -2700,7 +2699,7 @@ pub mod explicit_draughting {
         Unspecified,
         Cartesian,
     }
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum TrimmingSelect {
@@ -2709,14 +2708,14 @@ pub mod explicit_draughting {
         CartesianPoint(Box<CartesianPoint>),
         ParameterValue(ParameterValue),
     }
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum Unit {
         #[holder(use_place_holder)]
         NamedUnit(NamedUnitAny),
     }
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum VectorOrDirection {
@@ -2738,7 +2737,7 @@ pub mod explicit_draughting {
         :: serde :: Deserialize,
     )]
     pub struct YearNumber(pub i64);
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = address)]
     #[holder(generate_deserialize)]
@@ -2756,7 +2755,7 @@ pub mod explicit_draughting {
         pub electronic_mail_address: Option<Label>,
         pub telex_number: Option<Label>,
     }
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum AddressAny {
@@ -2767,17 +2766,17 @@ pub mod explicit_draughting {
         # [holder (field = personal_address)]
         PersonalAddress(Box<PersonalAddress>),
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = angular_dimension)]
     #[holder(generate_deserialize)]
     pub struct AngularDimension {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = annotation_curve_occurrence)]
     #[holder(generate_deserialize)]
     pub struct AnnotationCurveOccurrence {}
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum AnnotationCurveOccurrenceAny {
@@ -2791,7 +2790,7 @@ pub mod explicit_draughting {
         # [holder (field = projection_curve)]
         ProjectionCurve(Box<ProjectionCurve>),
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = annotation_fill_area)]
     #[holder(generate_deserialize)]
@@ -2799,7 +2798,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub boundaries: Vec<CurveAny>,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = annotation_fill_area_occurrence)]
     #[holder(generate_deserialize)]
@@ -2807,12 +2806,12 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub fill_style_target: PointAny,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = annotation_occurrence)]
     #[holder(generate_deserialize)]
     pub struct AnnotationOccurrence {}
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum AnnotationOccurrenceAny {
@@ -2832,22 +2831,22 @@ pub mod explicit_draughting {
         # [holder (field = draughting_annotation_occurrence)]
         DraughtingAnnotationOccurrence(Box<DraughtingAnnotationOccurrence>),
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = annotation_subfigure_occurrence)]
     #[holder(generate_deserialize)]
     pub struct AnnotationSubfigureOccurrence {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = annotation_symbol)]
     #[holder(generate_deserialize)]
     pub struct AnnotationSymbol {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = annotation_symbol_occurrence)]
     #[holder(generate_deserialize)]
     pub struct AnnotationSymbolOccurrence {}
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum AnnotationSymbolOccurrenceAny {
@@ -2858,24 +2857,24 @@ pub mod explicit_draughting {
         # [holder (field = terminator_symbol)]
         TerminatorSymbol(Box<TerminatorSymbol>),
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = annotation_text)]
     #[holder(generate_deserialize)]
     pub struct AnnotationText {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = annotation_text_occurrence)]
     #[holder(generate_deserialize)]
     pub struct AnnotationTextOccurrence {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = application_context)]
     #[holder(generate_deserialize)]
     pub struct ApplicationContext {
         pub application: Text,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = application_context_element)]
     #[holder(generate_deserialize)]
@@ -2884,7 +2883,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub frame_of_reference: ApplicationContext,
     }
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum ApplicationContextElementAny {
@@ -2895,7 +2894,7 @@ pub mod explicit_draughting {
         # [holder (field = product_definition_context)]
         ProductDefinitionContext(Box<ProductDefinitionContext>),
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = application_protocol_definition)]
     #[holder(generate_deserialize)]
@@ -2906,7 +2905,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub application: ApplicationContext,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = approval)]
     #[holder(generate_deserialize)]
@@ -2915,7 +2914,7 @@ pub mod explicit_draughting {
         pub status: ApprovalStatus,
         pub level: Label,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = approval_assignment)]
     #[holder(generate_deserialize)]
@@ -2923,7 +2922,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub assigned_approval: Approval,
     }
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum ApprovalAssignmentAny {
@@ -2931,7 +2930,7 @@ pub mod explicit_draughting {
         # [holder (field = draughting_approval_assignment)]
         DraughtingApprovalAssignment(Box<DraughtingApprovalAssignment>),
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = approval_date_time)]
     #[holder(generate_deserialize)]
@@ -2941,7 +2940,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub dated_approval: Approval,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = approval_person_organization)]
     #[holder(generate_deserialize)]
@@ -2953,21 +2952,21 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub role: ApprovalRole,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = approval_role)]
     #[holder(generate_deserialize)]
     pub struct ApprovalRole {
         pub role: Label,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = approval_status)]
     #[holder(generate_deserialize)]
     pub struct ApprovalStatus {
         pub name: Label,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = area_in_set)]
     #[holder(generate_deserialize)]
@@ -2977,7 +2976,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub in_set: PresentationSetAny,
     }
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum AreaInSetAny {
@@ -2985,7 +2984,7 @@ pub mod explicit_draughting {
         # [holder (field = drawing_sheet_revision_usage)]
         DrawingSheetRevisionUsage(Box<DrawingSheetRevisionUsage>),
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = axis2_placement_2d)]
     #[holder(generate_deserialize)]
@@ -2993,7 +2992,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub ref_direction: Option<Direction>,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = b_spline_curve)]
     #[holder(generate_deserialize)]
@@ -3005,7 +3004,7 @@ pub mod explicit_draughting {
         pub closed_curve: Logical,
         pub self_intersect: Logical,
     }
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum BSplineCurveAny {
@@ -3025,7 +3024,7 @@ pub mod explicit_draughting {
         # [holder (field = uniform_curve)]
         UniformCurve(Box<UniformCurve>),
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = b_spline_curve_with_knots)]
     #[holder(generate_deserialize)]
@@ -3034,17 +3033,17 @@ pub mod explicit_draughting {
         pub knots: Vec<ParameterValue>,
         pub knot_spec: KnotType,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = bezier_curve)]
     #[holder(generate_deserialize)]
     pub struct BezierCurve {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = bounded_curve)]
     #[holder(generate_deserialize)]
     pub struct BoundedCurve {}
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum BoundedCurveAny {
@@ -3061,7 +3060,7 @@ pub mod explicit_draughting {
         # [holder (field = trimmed_curve)]
         TrimmedCurve(Box<TrimmedCurve>),
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = calendar_date)]
     #[holder(generate_deserialize)]
@@ -3069,12 +3068,12 @@ pub mod explicit_draughting {
         pub day_component: DayInMonthNumber,
         pub month_component: MonthInYearNumber,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = camera_image)]
     #[holder(generate_deserialize)]
     pub struct CameraImage {}
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum CameraImageAny {
@@ -3082,17 +3081,17 @@ pub mod explicit_draughting {
         # [holder (field = camera_image_2d_with_scale)]
         CameraImage2DWithScale(Box<CameraImage2DWithScale>),
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = camera_image_2d_with_scale)]
     #[holder(generate_deserialize)]
     pub struct CameraImage2DWithScale {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = camera_model)]
     #[holder(generate_deserialize)]
     pub struct CameraModel {}
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum CameraModelAny {
@@ -3100,7 +3099,7 @@ pub mod explicit_draughting {
         # [holder (field = camera_model_d2)]
         CameraModelD2(Box<CameraModelD2>),
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = camera_model_d2)]
     #[holder(generate_deserialize)]
@@ -3109,31 +3108,31 @@ pub mod explicit_draughting {
         pub view_window: PlanarBox,
         pub view_window_clipping: bool,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = camera_usage)]
     #[holder(generate_deserialize)]
     pub struct CameraUsage {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = cartesian_point)]
     #[holder(generate_deserialize)]
     pub struct CartesianPoint {
         pub coordinates: Vec<LengthMeasure>,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = circle)]
     #[holder(generate_deserialize)]
     pub struct Circle {
         pub radius: PositiveLengthMeasure,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = colour)]
     #[holder(generate_deserialize)]
     pub struct Colour {}
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum ColourAny {
@@ -3144,7 +3143,7 @@ pub mod explicit_draughting {
         # [holder (field = pre_defined_colour)]
         PreDefinedColour(Box<PreDefinedColour>),
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = colour_rgb)]
     #[holder(generate_deserialize)]
@@ -3153,7 +3152,7 @@ pub mod explicit_draughting {
         pub green: f64,
         pub blue: f64,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = colour_specification)]
     #[holder(generate_deserialize)]
@@ -3161,7 +3160,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub name: ColourAny,
     }
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum ColourSpecificationAny {
@@ -3169,7 +3168,7 @@ pub mod explicit_draughting {
         # [holder (field = colour_rgb)]
         ColourRgb(Box<ColourRgb>),
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = composite_curve)]
     #[holder(generate_deserialize)]
@@ -3178,7 +3177,7 @@ pub mod explicit_draughting {
         pub segments: Vec<CompositeCurveSegment>,
         pub self_intersect: Logical,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = composite_curve_segment)]
     #[holder(generate_deserialize)]
@@ -3188,7 +3187,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub parent_curve: CurveAny,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = composite_text)]
     #[holder(generate_deserialize)]
@@ -3196,7 +3195,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub collected_text: Vec<TextOrCharacter>,
     }
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum CompositeTextAny {
@@ -3210,7 +3209,7 @@ pub mod explicit_draughting {
         # [holder (field = composite_text_with_extent)]
         CompositeTextWithExtent(Box<CompositeTextWithExtent>),
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = composite_text_with_associated_curves)]
     #[holder(generate_deserialize)]
@@ -3218,7 +3217,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub associated_curves: Vec<CurveAny>,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = composite_text_with_blanking_box)]
     #[holder(generate_deserialize)]
@@ -3226,7 +3225,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub blanking: PlanarBox,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = composite_text_with_extent)]
     #[holder(generate_deserialize)]
@@ -3234,7 +3233,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub extent: PlanarExtentAny,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = conic)]
     #[holder(generate_deserialize)]
@@ -3242,7 +3241,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub position: Axis2Placement,
     }
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum ConicAny {
@@ -3259,7 +3258,7 @@ pub mod explicit_draughting {
         # [holder (field = parabola)]
         Parabola(Box<Parabola>),
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = context_dependent_invisibility)]
     #[holder(generate_deserialize)]
@@ -3267,7 +3266,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub presentation_context: InvisibilityContext,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = contract)]
     #[holder(generate_deserialize)]
@@ -3277,7 +3276,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub kind: ContractType,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = contract_assignment)]
     #[holder(generate_deserialize)]
@@ -3285,7 +3284,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub assigned_contract: Contract,
     }
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum ContractAssignmentAny {
@@ -3293,14 +3292,14 @@ pub mod explicit_draughting {
         # [holder (field = draughting_contract_assignment)]
         DraughtingContractAssignment(Box<DraughtingContractAssignment>),
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = contract_type)]
     #[holder(generate_deserialize)]
     pub struct ContractType {
         pub description: Label,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = conversion_based_unit)]
     #[holder(generate_deserialize)]
@@ -3309,12 +3308,12 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub conversion_factor: MeasureWithUnitAny,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = curve)]
     #[holder(generate_deserialize)]
     pub struct Curve {}
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum CurveAny {
@@ -3331,12 +3330,12 @@ pub mod explicit_draughting {
         # [holder (field = offset_curve_2d)]
         OffsetCurve2D(Box<OffsetCurve2D>),
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = curve_dimension)]
     #[holder(generate_deserialize)]
     pub struct CurveDimension {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = curve_style)]
     #[holder(generate_deserialize)]
@@ -3349,7 +3348,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub curve_colour: ColourAny,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = curve_style_font)]
     #[holder(generate_deserialize)]
@@ -3358,7 +3357,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub pattern_list: Vec<CurveStyleFontPattern>,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = curve_style_font_pattern)]
     #[holder(generate_deserialize)]
@@ -3366,14 +3365,14 @@ pub mod explicit_draughting {
         pub visible_segment_length: PositiveLengthMeasure,
         pub invisible_segment_length: PositiveLengthMeasure,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = date)]
     #[holder(generate_deserialize)]
     pub struct Date {
         pub year_component: YearNumber,
     }
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum DateAny {
@@ -3381,17 +3380,17 @@ pub mod explicit_draughting {
         # [holder (field = calendar_date)]
         CalendarDate(Box<CalendarDate>),
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = datum_feature_callout)]
     #[holder(generate_deserialize)]
     pub struct DatumFeatureCallout {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = datum_target_callout)]
     #[holder(generate_deserialize)]
     pub struct DatumTargetCallout {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = defined_symbol)]
     #[holder(generate_deserialize)]
@@ -3401,32 +3400,32 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub target: SymbolTarget,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = diameter_dimension)]
     #[holder(generate_deserialize)]
     pub struct DiameterDimension {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = dimension_callout_component_relationship)]
     #[holder(generate_deserialize)]
     pub struct DimensionCalloutComponentRelationship {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = dimension_callout_relationship)]
     #[holder(generate_deserialize)]
     pub struct DimensionCalloutRelationship {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = dimension_curve)]
     #[holder(generate_deserialize)]
     pub struct DimensionCurve {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = dimension_curve_directed_callout)]
     #[holder(generate_deserialize)]
     pub struct DimensionCurveDirectedCallout {}
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum DimensionCurveDirectedCalloutAny {
@@ -3446,19 +3445,19 @@ pub mod explicit_draughting {
         # [holder (field = radius_dimension)]
         RadiusDimension(Box<RadiusDimension>),
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = dimension_curve_terminator)]
     #[holder(generate_deserialize)]
     pub struct DimensionCurveTerminator {
         pub role: DimensionExtentUsage,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = dimension_pair)]
     #[holder(generate_deserialize)]
     pub struct DimensionPair {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = dimensional_exponents)]
     #[holder(generate_deserialize)]
@@ -3471,14 +3470,14 @@ pub mod explicit_draughting {
         pub amount_of_substance_exponent: f64,
         pub luminous_intensity_exponent: f64,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = direction)]
     #[holder(generate_deserialize)]
     pub struct Direction {
         pub direction_ratios: Vec<f64>,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = document)]
     #[holder(generate_deserialize)]
@@ -3489,7 +3488,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub kind: DocumentType,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = document_reference)]
     #[holder(generate_deserialize)]
@@ -3498,7 +3497,7 @@ pub mod explicit_draughting {
         pub assigned_document: Document,
         pub source: Label,
     }
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum DocumentReferenceAny {
@@ -3506,19 +3505,19 @@ pub mod explicit_draughting {
         # [holder (field = draughting_specification_reference)]
         DraughtingSpecificationReference(Box<DraughtingSpecificationReference>),
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = document_type)]
     #[holder(generate_deserialize)]
     pub struct DocumentType {
         pub product_data_type: Label,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = draughting_annotation_occurrence)]
     #[holder(generate_deserialize)]
     pub struct DraughtingAnnotationOccurrence {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = draughting_approval_assignment)]
     #[holder(generate_deserialize)]
@@ -3526,7 +3525,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub approved_items: Vec<ApprovedItem>,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = draughting_callout)]
     #[holder(generate_deserialize)]
@@ -3534,7 +3533,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub contents: Vec<DraughtingCalloutElement>,
     }
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum DraughtingCalloutAny {
@@ -3563,7 +3562,7 @@ pub mod explicit_draughting {
         # [holder (field = structured_dimension_callout)]
         StructuredDimensionCallout(Box<StructuredDimensionCallout>),
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = draughting_callout_relationship)]
     #[holder(generate_deserialize)]
@@ -3575,7 +3574,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub related_draughting_callout: DraughtingCalloutAny,
     }
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum DraughtingCalloutRelationshipAny {
@@ -3589,7 +3588,7 @@ pub mod explicit_draughting {
         # [holder (field = dimension_pair)]
         DimensionPair(Box<DimensionPair>),
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = draughting_contract_assignment)]
     #[holder(generate_deserialize)]
@@ -3597,17 +3596,17 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub items: Vec<ContractedItem>,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = draughting_drawing_revision)]
     #[holder(generate_deserialize)]
     pub struct DraughtingDrawingRevision {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = draughting_elements)]
     #[holder(generate_deserialize)]
     pub struct DraughtingElements {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = draughting_group_assignment)]
     #[holder(generate_deserialize)]
@@ -3615,12 +3614,12 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub items: Vec<DraughtingGroupedItem>,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = draughting_model)]
     #[holder(generate_deserialize)]
     pub struct DraughtingModel {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = draughting_organization_assignment)]
     #[holder(generate_deserialize)]
@@ -3628,7 +3627,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub assigned_items: Vec<DraughtingOrganizationItem>,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = draughting_person_and_organization_assignment)]
     #[holder(generate_deserialize)]
@@ -3636,7 +3635,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub assigned_items: Vec<DraughtingOrganizationItem>,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = draughting_person_assignment)]
     #[holder(generate_deserialize)]
@@ -3644,22 +3643,22 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub assigned_items: Vec<DraughtingOrganizationItem>,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = draughting_pre_defined_colour)]
     #[holder(generate_deserialize)]
     pub struct DraughtingPreDefinedColour {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = draughting_pre_defined_curve_font)]
     #[holder(generate_deserialize)]
     pub struct DraughtingPreDefinedCurveFont {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = draughting_pre_defined_text_font)]
     #[holder(generate_deserialize)]
     pub struct DraughtingPreDefinedTextFont {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = draughting_presented_item)]
     #[holder(generate_deserialize)]
@@ -3667,7 +3666,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub items: Vec<DraughtingPresentedItemSelect>,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = draughting_security_classification_assignment)]
     #[holder(generate_deserialize)]
@@ -3675,7 +3674,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub assigned_items: Vec<ClassifiedItem>,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = draughting_specification_reference)]
     #[holder(generate_deserialize)]
@@ -3683,17 +3682,17 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub specified_items: Vec<SpecifiedItem>,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = draughting_subfigure_representation)]
     #[holder(generate_deserialize)]
     pub struct DraughtingSubfigureRepresentation {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = draughting_symbol_representation)]
     #[holder(generate_deserialize)]
     pub struct DraughtingSymbolRepresentation {}
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum DraughtingSymbolRepresentationAny {
@@ -3701,12 +3700,12 @@ pub mod explicit_draughting {
         # [holder (field = drawing_sheet_layout)]
         DrawingSheetLayout(Box<DrawingSheetLayout>),
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = draughting_text_literal_with_delineation)]
     #[holder(generate_deserialize)]
     pub struct DraughtingTextLiteralWithDelineation {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = draughting_title)]
     #[holder(generate_deserialize)]
@@ -3716,7 +3715,7 @@ pub mod explicit_draughting {
         pub language: Label,
         pub contents: Text,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = drawing_definition)]
     #[holder(generate_deserialize)]
@@ -3724,7 +3723,7 @@ pub mod explicit_draughting {
         pub drawing_number: Identifier,
         pub drawing_type: Option<Label>,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = drawing_revision)]
     #[holder(generate_deserialize)]
@@ -3734,7 +3733,7 @@ pub mod explicit_draughting {
         pub drawing_identifier: DrawingDefinition,
         pub intended_scale: Option<Text>,
     }
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum DrawingRevisionAny {
@@ -3742,26 +3741,26 @@ pub mod explicit_draughting {
         # [holder (field = draughting_drawing_revision)]
         DraughtingDrawingRevision(Box<DraughtingDrawingRevision>),
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = drawing_sheet_layout)]
     #[holder(generate_deserialize)]
     pub struct DrawingSheetLayout {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = drawing_sheet_revision)]
     #[holder(generate_deserialize)]
     pub struct DrawingSheetRevision {
         pub revision_identifier: Identifier,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = drawing_sheet_revision_usage)]
     #[holder(generate_deserialize)]
     pub struct DrawingSheetRevisionUsage {
         pub sheet_number: Identifier,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = ellipse)]
     #[holder(generate_deserialize)]
@@ -3769,7 +3768,7 @@ pub mod explicit_draughting {
         pub semi_axis_1: PositiveLengthMeasure,
         pub semi_axis_2: PositiveLengthMeasure,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = external_source)]
     #[holder(generate_deserialize)]
@@ -3777,17 +3776,17 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub source_id: SourceItem,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = externally_defined_curve_font)]
     #[holder(generate_deserialize)]
     pub struct ExternallyDefinedCurveFont {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = externally_defined_hatch_style)]
     #[holder(generate_deserialize)]
     pub struct ExternallyDefinedHatchStyle {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = externally_defined_item)]
     #[holder(generate_deserialize)]
@@ -3797,7 +3796,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub source: ExternalSource,
     }
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum ExternallyDefinedItemAny {
@@ -3817,22 +3816,22 @@ pub mod explicit_draughting {
         # [holder (field = externally_defined_tile_style)]
         ExternallyDefinedTileStyle(Box<ExternallyDefinedTileStyle>),
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = externally_defined_symbol)]
     #[holder(generate_deserialize)]
     pub struct ExternallyDefinedSymbol {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = externally_defined_text_font)]
     #[holder(generate_deserialize)]
     pub struct ExternallyDefinedTextFont {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = externally_defined_tile_style)]
     #[holder(generate_deserialize)]
     pub struct ExternallyDefinedTileStyle {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = fill_area_style)]
     #[holder(generate_deserialize)]
@@ -3841,7 +3840,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub fill_styles: Vec<FillStyleSelect>,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = fill_area_style_colour)]
     #[holder(generate_deserialize)]
@@ -3850,7 +3849,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub fill_colour: ColourAny,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = fill_area_style_hatching)]
     #[holder(generate_deserialize)]
@@ -3865,7 +3864,7 @@ pub mod explicit_draughting {
         pub pattern_start: CartesianPoint,
         pub hatch_line_angle: PlaneAngleMeasure,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = fill_area_style_tile_symbol_with_style)]
     #[holder(generate_deserialize)]
@@ -3873,7 +3872,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub symbol: AnnotationSymbolOccurrenceAny,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = fill_area_style_tiles)]
     #[holder(generate_deserialize)]
@@ -3884,24 +3883,24 @@ pub mod explicit_draughting {
         pub tiles: Vec<FillAreaStyleTileShapeSelect>,
         pub tiling_scale: PositiveRatioMeasure,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = geometric_curve_set)]
     #[holder(generate_deserialize)]
     pub struct GeometricCurveSet {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = geometric_representation_context)]
     #[holder(generate_deserialize)]
     pub struct GeometricRepresentationContext {
         pub coordinate_space_dimension: DimensionCount,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = geometric_representation_item)]
     #[holder(generate_deserialize)]
     pub struct GeometricRepresentationItem {}
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum GeometricRepresentationItemAny {
@@ -3966,7 +3965,7 @@ pub mod explicit_draughting {
         # [holder (field = vector)]
         Vector(Box<Vector>),
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = geometric_set)]
     #[holder(generate_deserialize)]
@@ -3974,7 +3973,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub elements: Vec<GeometricSetSelect>,
     }
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum GeometricSetAny {
@@ -3982,17 +3981,17 @@ pub mod explicit_draughting {
         # [holder (field = geometric_curve_set)]
         GeometricCurveSet(Box<GeometricCurveSet>),
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = geometrical_tolerance_callout)]
     #[holder(generate_deserialize)]
     pub struct GeometricalToleranceCallout {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = geometrically_bounded_2d_wireframe_representation)]
     #[holder(generate_deserialize)]
     pub struct GeometricallyBounded2DWireframeRepresentation {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = global_unit_assigned_context)]
     #[holder(generate_deserialize)]
@@ -4000,7 +3999,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub units: Vec<Unit>,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = group)]
     #[holder(generate_deserialize)]
@@ -4008,7 +4007,7 @@ pub mod explicit_draughting {
         pub name: Label,
         pub description: Text,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = group_assignment)]
     #[holder(generate_deserialize)]
@@ -4016,7 +4015,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub assigned_group: Group,
     }
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum GroupAssignmentAny {
@@ -4024,7 +4023,7 @@ pub mod explicit_draughting {
         # [holder (field = draughting_group_assignment)]
         DraughtingGroupAssignment(Box<DraughtingGroupAssignment>),
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = group_relationship)]
     #[holder(generate_deserialize)]
@@ -4036,7 +4035,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub related_group: Group,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = hyperbola)]
     #[holder(generate_deserialize)]
@@ -4044,7 +4043,7 @@ pub mod explicit_draughting {
         pub semi_axis: PositiveLengthMeasure,
         pub semi_imag_axis: PositiveLengthMeasure,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = invisibility)]
     #[holder(generate_deserialize)]
@@ -4052,7 +4051,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub invisible_items: Vec<InvisibleItem>,
     }
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum InvisibilityAny {
@@ -4060,17 +4059,17 @@ pub mod explicit_draughting {
         # [holder (field = context_dependent_invisibility)]
         ContextDependentInvisibility(Box<ContextDependentInvisibility>),
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = leader_curve)]
     #[holder(generate_deserialize)]
     pub struct LeaderCurve {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = leader_directed_callout)]
     #[holder(generate_deserialize)]
     pub struct LeaderDirectedCallout {}
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum LeaderDirectedCalloutAny {
@@ -4078,27 +4077,27 @@ pub mod explicit_draughting {
         # [holder (field = leader_directed_dimension)]
         LeaderDirectedDimension(Box<LeaderDirectedDimension>),
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = leader_directed_dimension)]
     #[holder(generate_deserialize)]
     pub struct LeaderDirectedDimension {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = leader_terminator)]
     #[holder(generate_deserialize)]
     pub struct LeaderTerminator {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = length_measure_with_unit)]
     #[holder(generate_deserialize)]
     pub struct LengthMeasureWithUnit {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = length_unit)]
     #[holder(generate_deserialize)]
     pub struct LengthUnit {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = line)]
     #[holder(generate_deserialize)]
@@ -4108,12 +4107,12 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub dir: Vector,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = linear_dimension)]
     #[holder(generate_deserialize)]
     pub struct LinearDimension {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = mapped_item)]
     #[holder(generate_deserialize)]
@@ -4123,7 +4122,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub mapping_target: RepresentationItemAny,
     }
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum MappedItemAny {
@@ -4137,7 +4136,7 @@ pub mod explicit_draughting {
         # [holder (field = camera_image)]
         CameraImage(Box<CameraImage>),
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = measure_with_unit)]
     #[holder(generate_deserialize)]
@@ -4147,7 +4146,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub unit_component: Unit,
     }
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum MeasureWithUnitAny {
@@ -4158,7 +4157,7 @@ pub mod explicit_draughting {
         # [holder (field = plane_angle_measure_with_unit)]
         PlaneAngleMeasureWithUnit(Box<PlaneAngleMeasureWithUnit>),
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = named_unit)]
     #[holder(generate_deserialize)]
@@ -4166,7 +4165,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub dimensions: DimensionalExponents,
     }
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum NamedUnitAny {
@@ -4183,7 +4182,7 @@ pub mod explicit_draughting {
         # [holder (field = si_unit)]
         SiUnit(Box<SiUnit>),
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = offset_curve_2d)]
     #[holder(generate_deserialize)]
@@ -4193,7 +4192,7 @@ pub mod explicit_draughting {
         pub distance: LengthMeasure,
         pub self_intersect: Logical,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = one_direction_repeat_factor)]
     #[holder(generate_deserialize)]
@@ -4201,7 +4200,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub repeat_factor: Vector,
     }
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum OneDirectionRepeatFactorAny {
@@ -4209,12 +4208,12 @@ pub mod explicit_draughting {
         # [holder (field = two_direction_repeat_factor)]
         TwoDirectionRepeatFactor(Box<TwoDirectionRepeatFactor>),
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = ordinate_dimension)]
     #[holder(generate_deserialize)]
     pub struct OrdinateDimension {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = organization)]
     #[holder(generate_deserialize)]
@@ -4223,7 +4222,7 @@ pub mod explicit_draughting {
         pub name: Label,
         pub description: Text,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = organization_assignment)]
     #[holder(generate_deserialize)]
@@ -4233,7 +4232,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub role: OrganizationRole,
     }
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum OrganizationAssignmentAny {
@@ -4241,14 +4240,14 @@ pub mod explicit_draughting {
         # [holder (field = draughting_organization_assignment)]
         DraughtingOrganizationAssignment(Box<DraughtingOrganizationAssignment>),
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = organization_role)]
     #[holder(generate_deserialize)]
     pub struct OrganizationRole {
         pub name: Label,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = organizational_address)]
     #[holder(generate_deserialize)]
@@ -4257,14 +4256,14 @@ pub mod explicit_draughting {
         pub organizations: Vec<Organization>,
         pub description: Text,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = parabola)]
     #[holder(generate_deserialize)]
     pub struct Parabola {
         pub focal_dist: LengthMeasure,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = person)]
     #[holder(generate_deserialize)]
@@ -4276,7 +4275,7 @@ pub mod explicit_draughting {
         pub prefix_titles: Option<Vec<Label>>,
         pub suffix_titles: Option<Vec<Label>>,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = person_and_organization)]
     #[holder(generate_deserialize)]
@@ -4286,7 +4285,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub the_organization: Organization,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = person_and_organization_assignment)]
     #[holder(generate_deserialize)]
@@ -4296,7 +4295,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub role: PersonAndOrganizationRole,
     }
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum PersonAndOrganizationAssignmentAny {
@@ -4304,14 +4303,14 @@ pub mod explicit_draughting {
         # [holder (field = draughting_person_and_organization_assignment)]
         DraughtingPersonAndOrganizationAssignment(Box<DraughtingPersonAndOrganizationAssignment>),
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = person_and_organization_role)]
     #[holder(generate_deserialize)]
     pub struct PersonAndOrganizationRole {
         pub name: Label,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = person_assignment)]
     #[holder(generate_deserialize)]
@@ -4321,7 +4320,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub role: PersonRole,
     }
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum PersonAssignmentAny {
@@ -4329,14 +4328,14 @@ pub mod explicit_draughting {
         # [holder (field = draughting_person_assignment)]
         DraughtingPersonAssignment(Box<DraughtingPersonAssignment>),
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = person_role)]
     #[holder(generate_deserialize)]
     pub struct PersonRole {
         pub name: Label,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = personal_address)]
     #[holder(generate_deserialize)]
@@ -4345,7 +4344,7 @@ pub mod explicit_draughting {
         pub people: Vec<Person>,
         pub description: Text,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = placement)]
     #[holder(generate_deserialize)]
@@ -4353,7 +4352,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub location: CartesianPoint,
     }
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum PlacementAny {
@@ -4361,7 +4360,7 @@ pub mod explicit_draughting {
         # [holder (field = axis2_placement_2d)]
         Axis2Placement2D(Box<Axis2Placement2D>),
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = planar_box)]
     #[holder(generate_deserialize)]
@@ -4369,7 +4368,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub placement: Axis2Placement,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = planar_extent)]
     #[holder(generate_deserialize)]
@@ -4377,7 +4376,7 @@ pub mod explicit_draughting {
         pub size_in_x: LengthMeasure,
         pub size_in_y: LengthMeasure,
     }
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum PlanarExtentAny {
@@ -4385,22 +4384,22 @@ pub mod explicit_draughting {
         # [holder (field = planar_box)]
         PlanarBox(Box<PlanarBox>),
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = plane_angle_measure_with_unit)]
     #[holder(generate_deserialize)]
     pub struct PlaneAngleMeasureWithUnit {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = plane_angle_unit)]
     #[holder(generate_deserialize)]
     pub struct PlaneAngleUnit {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = point)]
     #[holder(generate_deserialize)]
     pub struct Point {}
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum PointAny {
@@ -4411,7 +4410,7 @@ pub mod explicit_draughting {
         # [holder (field = point_on_curve)]
         PointOnCurve(Box<PointOnCurve>),
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = point_on_curve)]
     #[holder(generate_deserialize)]
@@ -4420,7 +4419,7 @@ pub mod explicit_draughting {
         pub basis_curve: CurveAny,
         pub point_parameter: ParameterValue,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = polyline)]
     #[holder(generate_deserialize)]
@@ -4428,12 +4427,12 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub points: Vec<CartesianPoint>,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = pre_defined_colour)]
     #[holder(generate_deserialize)]
     pub struct PreDefinedColour {}
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum PreDefinedColourAny {
@@ -4441,12 +4440,12 @@ pub mod explicit_draughting {
         # [holder (field = draughting_pre_defined_colour)]
         DraughtingPreDefinedColour(Box<DraughtingPreDefinedColour>),
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = pre_defined_curve_font)]
     #[holder(generate_deserialize)]
     pub struct PreDefinedCurveFont {}
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum PreDefinedCurveFontAny {
@@ -4454,24 +4453,24 @@ pub mod explicit_draughting {
         # [holder (field = draughting_pre_defined_curve_font)]
         DraughtingPreDefinedCurveFont(Box<DraughtingPreDefinedCurveFont>),
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = pre_defined_dimension_symbol)]
     #[holder(generate_deserialize)]
     pub struct PreDefinedDimensionSymbol {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = pre_defined_geometrical_tolerance_symbol)]
     #[holder(generate_deserialize)]
     pub struct PreDefinedGeometricalToleranceSymbol {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = pre_defined_item)]
     #[holder(generate_deserialize)]
     pub struct PreDefinedItem {
         pub name: Label,
     }
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum PreDefinedItemAny {
@@ -4488,17 +4487,17 @@ pub mod explicit_draughting {
         # [holder (field = pre_defined_text_font)]
         PreDefinedTextFont(Box<PreDefinedTextFont>),
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = pre_defined_point_marker_symbol)]
     #[holder(generate_deserialize)]
     pub struct PreDefinedPointMarkerSymbol {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = pre_defined_symbol)]
     #[holder(generate_deserialize)]
     pub struct PreDefinedSymbol {}
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum PreDefinedSymbolAny {
@@ -4515,17 +4514,17 @@ pub mod explicit_draughting {
         # [holder (field = pre_defined_terminator_symbol)]
         PreDefinedTerminatorSymbol(Box<PreDefinedTerminatorSymbol>),
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = pre_defined_terminator_symbol)]
     #[holder(generate_deserialize)]
     pub struct PreDefinedTerminatorSymbol {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = pre_defined_text_font)]
     #[holder(generate_deserialize)]
     pub struct PreDefinedTextFont {}
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum PreDefinedTextFontAny {
@@ -4533,12 +4532,12 @@ pub mod explicit_draughting {
         # [holder (field = draughting_pre_defined_text_font)]
         DraughtingPreDefinedTextFont(Box<DraughtingPreDefinedTextFont>),
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = presentation_area)]
     #[holder(generate_deserialize)]
     pub struct PresentationArea {}
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum PresentationAreaAny {
@@ -4546,7 +4545,7 @@ pub mod explicit_draughting {
         # [holder (field = drawing_sheet_revision)]
         DrawingSheetRevision(Box<DrawingSheetRevision>),
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = presentation_layer_assignment)]
     #[holder(generate_deserialize)]
@@ -4556,7 +4555,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub assigned_items: Vec<LayeredItem>,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = presentation_layer_usage)]
     #[holder(generate_deserialize)]
@@ -4566,12 +4565,12 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub presentation: PresentationRepresentationAny,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = presentation_representation)]
     #[holder(generate_deserialize)]
     pub struct PresentationRepresentation {}
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum PresentationRepresentationAny {
@@ -4582,12 +4581,12 @@ pub mod explicit_draughting {
         # [holder (field = presentation_view)]
         PresentationView(Box<PresentationView>),
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = presentation_set)]
     #[holder(generate_deserialize)]
     pub struct PresentationSet {}
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum PresentationSetAny {
@@ -4595,7 +4594,7 @@ pub mod explicit_draughting {
         # [holder (field = drawing_revision)]
         DrawingRevision(Box<DrawingRevision>),
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = presentation_size)]
     #[holder(generate_deserialize)]
@@ -4605,7 +4604,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub size: PlanarBox,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = presentation_style_assignment)]
     #[holder(generate_deserialize)]
@@ -4613,7 +4612,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub styles: Vec<PresentationStyleSelect>,
     }
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum PresentationStyleAssignmentAny {
@@ -4621,7 +4620,7 @@ pub mod explicit_draughting {
         # [holder (field = presentation_style_by_context)]
         PresentationStyleByContext(Box<PresentationStyleByContext>),
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = presentation_style_by_context)]
     #[holder(generate_deserialize)]
@@ -4629,17 +4628,17 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub style_context: StyleContextSelect,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = presentation_view)]
     #[holder(generate_deserialize)]
     pub struct PresentationView {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = presented_item)]
     #[holder(generate_deserialize)]
     pub struct PresentedItem {}
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum PresentedItemAny {
@@ -4647,7 +4646,7 @@ pub mod explicit_draughting {
         # [holder (field = draughting_presented_item)]
         DraughtingPresentedItem(Box<DraughtingPresentedItem>),
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = presented_item_representation)]
     #[holder(generate_deserialize)]
@@ -4657,7 +4656,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub item: PresentedItemAny,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = product)]
     #[holder(generate_deserialize)]
@@ -4668,14 +4667,14 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub frame_of_reference: Vec<ProductContext>,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = product_context)]
     #[holder(generate_deserialize)]
     pub struct ProductContext {
         pub discipline_type: Label,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = product_definition)]
     #[holder(generate_deserialize)]
@@ -4687,14 +4686,14 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub frame_of_reference: ProductDefinitionContext,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = product_definition_context)]
     #[holder(generate_deserialize)]
     pub struct ProductDefinitionContext {
         pub life_cycle_stage: Label,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = product_definition_formation)]
     #[holder(generate_deserialize)]
@@ -4704,22 +4703,22 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub of_product: Product,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = product_definition_shape)]
     #[holder(generate_deserialize)]
     pub struct ProductDefinitionShape {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = projection_curve)]
     #[holder(generate_deserialize)]
     pub struct ProjectionCurve {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = projection_directed_callout)]
     #[holder(generate_deserialize)]
     pub struct ProjectionDirectedCallout {}
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum ProjectionDirectedCalloutAny {
@@ -4727,7 +4726,7 @@ pub mod explicit_draughting {
         # [holder (field = ordinate_dimension)]
         OrdinateDimension(Box<OrdinateDimension>),
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = property_definition)]
     #[holder(generate_deserialize)]
@@ -4737,7 +4736,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub definition: CharacterizedDefinition,
     }
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum PropertyDefinitionAny {
@@ -4745,7 +4744,7 @@ pub mod explicit_draughting {
         # [holder (field = product_definition_shape)]
         ProductDefinitionShape(Box<ProductDefinitionShape>),
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = property_definition_representation)]
     #[holder(generate_deserialize)]
@@ -4755,7 +4754,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub used_representation: RepresentationAny,
     }
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum PropertyDefinitionRepresentationAny {
@@ -4763,24 +4762,24 @@ pub mod explicit_draughting {
         # [holder (field = shape_definition_representation)]
         ShapeDefinitionRepresentation(Box<ShapeDefinitionRepresentation>),
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = quasi_uniform_curve)]
     #[holder(generate_deserialize)]
     pub struct QuasiUniformCurve {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = radius_dimension)]
     #[holder(generate_deserialize)]
     pub struct RadiusDimension {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = rational_b_spline_curve)]
     #[holder(generate_deserialize)]
     pub struct RationalBSplineCurve {
         pub weights_data: Vec<f64>,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = representation)]
     #[holder(generate_deserialize)]
@@ -4791,7 +4790,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub context_of_items: RepresentationContextAny,
     }
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum RepresentationAny {
@@ -4808,7 +4807,7 @@ pub mod explicit_draughting {
         # [holder (field = symbol_representation)]
         SymbolRepresentation(Box<SymbolRepresentation>),
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = representation_context)]
     #[holder(generate_deserialize)]
@@ -4816,7 +4815,7 @@ pub mod explicit_draughting {
         pub context_identifier: Identifier,
         pub context_type: Text,
     }
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum RepresentationContextAny {
@@ -4827,14 +4826,14 @@ pub mod explicit_draughting {
         # [holder (field = global_unit_assigned_context)]
         GlobalUnitAssignedContext(Box<GlobalUnitAssignedContext>),
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = representation_item)]
     #[holder(generate_deserialize)]
     pub struct RepresentationItem {
         pub name: Label,
     }
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum RepresentationItemAny {
@@ -4848,7 +4847,7 @@ pub mod explicit_draughting {
         # [holder (field = styled_item)]
         StyledItem(Box<StyledItem>),
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = representation_map)]
     #[holder(generate_deserialize)]
@@ -4858,7 +4857,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub mapped_representation: RepresentationAny,
     }
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum RepresentationMapAny {
@@ -4869,7 +4868,7 @@ pub mod explicit_draughting {
         # [holder (field = symbol_representation_map)]
         SymbolRepresentationMap(Box<SymbolRepresentationMap>),
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = security_classification)]
     #[holder(generate_deserialize)]
@@ -4879,7 +4878,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub security_level: SecurityClassificationLevel,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = security_classification_assignment)]
     #[holder(generate_deserialize)]
@@ -4887,7 +4886,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub assigned_security_classification: SecurityClassification,
     }
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum SecurityClassificationAssignmentAny {
@@ -4895,24 +4894,24 @@ pub mod explicit_draughting {
         # [holder (field = draughting_security_classification_assignment)]
         DraughtingSecurityClassificationAssignment(Box<DraughtingSecurityClassificationAssignment>),
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = security_classification_level)]
     #[holder(generate_deserialize)]
     pub struct SecurityClassificationLevel {
         pub name: Label,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = shape_definition_representation)]
     #[holder(generate_deserialize)]
     pub struct ShapeDefinitionRepresentation {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = shape_representation)]
     #[holder(generate_deserialize)]
     pub struct ShapeRepresentation {}
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum ShapeRepresentationAny {
@@ -4922,7 +4921,7 @@ pub mod explicit_draughting {
             Box<GeometricallyBounded2DWireframeRepresentation>,
         ),
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = si_unit)]
     #[holder(generate_deserialize)]
@@ -4930,12 +4929,12 @@ pub mod explicit_draughting {
         pub prefix: Option<SiPrefix>,
         pub name: SiUnitName,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = structured_dimension_callout)]
     #[holder(generate_deserialize)]
     pub struct StructuredDimensionCallout {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = styled_item)]
     #[holder(generate_deserialize)]
@@ -4945,7 +4944,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub item: RepresentationItemAny,
     }
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum StyledItemAny {
@@ -4953,7 +4952,7 @@ pub mod explicit_draughting {
         # [holder (field = annotation_occurrence)]
         AnnotationOccurrence(Box<AnnotationOccurrence>),
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = symbol_colour)]
     #[holder(generate_deserialize)]
@@ -4961,12 +4960,12 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub colour_of_symbol: ColourAny,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = symbol_representation)]
     #[holder(generate_deserialize)]
     pub struct SymbolRepresentation {}
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum SymbolRepresentationAny {
@@ -4977,12 +4976,12 @@ pub mod explicit_draughting {
         # [holder (field = draughting_symbol_representation)]
         DraughtingSymbolRepresentation(Box<DraughtingSymbolRepresentation>),
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = symbol_representation_map)]
     #[holder(generate_deserialize)]
     pub struct SymbolRepresentationMap {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = symbol_style)]
     #[holder(generate_deserialize)]
@@ -4991,7 +4990,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub style_of_symbol: SymbolStyleSelect,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = symbol_target)]
     #[holder(generate_deserialize)]
@@ -5001,7 +5000,7 @@ pub mod explicit_draughting {
         pub x_scale: PositiveRatioMeasure,
         pub y_scale: PositiveRatioMeasure,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = terminator_symbol)]
     #[holder(generate_deserialize)]
@@ -5009,7 +5008,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub annotated_curve: AnnotationCurveOccurrenceAny,
     }
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum TerminatorSymbolAny {
@@ -5020,7 +5019,7 @@ pub mod explicit_draughting {
         # [holder (field = leader_terminator)]
         LeaderTerminator(Box<LeaderTerminator>),
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = text_literal)]
     #[holder(generate_deserialize)]
@@ -5033,7 +5032,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub font: FontSelect,
     }
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum TextLiteralAny {
@@ -5050,7 +5049,7 @@ pub mod explicit_draughting {
         # [holder (field = text_literal_with_extent)]
         TextLiteralWithExtent(Box<TextLiteralWithExtent>),
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = text_literal_with_associated_curves)]
     #[holder(generate_deserialize)]
@@ -5058,7 +5057,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub associated_curves: Vec<CurveAny>,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = text_literal_with_blanking_box)]
     #[holder(generate_deserialize)]
@@ -5066,14 +5065,14 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub blanking: PlanarBox,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = text_literal_with_delineation)]
     #[holder(generate_deserialize)]
     pub struct TextLiteralWithDelineation {
         pub delineation: TextDelineation,
     }
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum TextLiteralWithDelineationAny {
@@ -5081,7 +5080,7 @@ pub mod explicit_draughting {
         # [holder (field = draughting_text_literal_with_delineation)]
         DraughtingTextLiteralWithDelineation(Box<DraughtingTextLiteralWithDelineation>),
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = text_literal_with_extent)]
     #[holder(generate_deserialize)]
@@ -5089,7 +5088,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub extent: PlanarExtentAny,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = text_style)]
     #[holder(generate_deserialize)]
@@ -5098,7 +5097,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub character_appearance: CharacterStyleSelect,
     }
-    #[derive(Debug, Clone, PartialEq, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum TextStyleAny {
@@ -5109,7 +5108,7 @@ pub mod explicit_draughting {
         # [holder (field = text_style_with_mirror)]
         TextStyleWithMirror(Box<TextStyleWithMirror>),
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = text_style_for_defined_font)]
     #[holder(generate_deserialize)]
@@ -5117,7 +5116,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub text_colour: ColourAny,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = text_style_with_box_characteristics)]
     #[holder(generate_deserialize)]
@@ -5125,7 +5124,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub characteristics: Vec<BoxCharacteristicSelect>,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = text_style_with_mirror)]
     #[holder(generate_deserialize)]
@@ -5133,7 +5132,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub mirror_placement: Axis2Placement,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = trimmed_curve)]
     #[holder(generate_deserialize)]
@@ -5147,7 +5146,7 @@ pub mod explicit_draughting {
         pub sense_agreement: bool,
         pub master_representation: TrimmingPreference,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = two_direction_repeat_factor)]
     #[holder(generate_deserialize)]
@@ -5155,12 +5154,12 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub second_repeat_factor: Vector,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = uniform_curve)]
     #[holder(generate_deserialize)]
     pub struct UniformCurve {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, :: ruststep_derive :: Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = vector)]
     #[holder(generate_deserialize)]

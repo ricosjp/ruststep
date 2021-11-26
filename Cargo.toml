@@ -1,6 +1,7 @@
 [workspace]
 members = [
   "espr",
+  "espr-derive",
   "ruststep",
   "ruststep-derive",
 ]

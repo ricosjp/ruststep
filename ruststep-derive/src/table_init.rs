@@ -3,7 +3,7 @@ use proc_macro2::TokenStream as TokenStream2;
 use proc_macro_error::{abort_call_site, OptionExt};
 use quote::quote;
 
-use crate::ruststep_crate;
+use crate::common::ruststep_crate;
 
 pub fn derive_table_init(ast: &syn::DeriveInput) -> TokenStream2 {
     let ident = &ast.ident;
