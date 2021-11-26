@@ -19,6 +19,7 @@ pub mod place_holder;
 pub mod primitive;
 pub mod tables;
 
+pub use derive_more;
 pub use ruststep_derive::*;
 
 // Automatically generated codes

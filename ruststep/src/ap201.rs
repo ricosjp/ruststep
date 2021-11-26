@@ -1,7 +1,8 @@
 #![allow(dead_code)]
 pub mod explicit_draughting {
-    use crate::{as_holder, error::Result, primitive::*, tables::*, Holder, TableInit};
-    use derive_more::*;
+    use crate::{
+        as_holder, derive_more::*, error::Result, primitive::*, tables::*, Holder, TableInit,
+    };
     use std::collections::HashMap;
     #[derive(Debug, Clone, PartialEq, Default, TableInit)]
     pub struct Tables {

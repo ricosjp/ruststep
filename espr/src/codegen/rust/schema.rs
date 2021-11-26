@@ -52,9 +52,8 @@ impl Schema {
 
         quote! {
             pub mod #name {
-                use #ruststep_path::{as_holder, Holder, TableInit, primitive::*, tables::*, error::Result};
+                use #ruststep_path::{as_holder, Holder, TableInit, primitive::*, tables::*, error::Result, derive_more::*};
                 use std::collections::HashMap;
-                use derive_more::*;
 
                 #[derive(Debug, Clone, PartialEq, Default, TableInit)]
                 pub struct Tables {
