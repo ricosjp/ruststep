@@ -22,6 +22,7 @@ fn list() {
 
     insta::assert_snapshot!(tt, @r###"
     pub mod test_schema {
+        use derive_more::*;
         use ruststep::{as_holder, error::Result, primitive::*, tables::*, Holder, TableInit};
         use std::collections::HashMap;
         #[derive(Debug, Clone, PartialEq, Default, TableInit)]
