@@ -67,7 +67,7 @@ impl ToTokens for Entity {
         assert_eq!(attr_name.len(), use_place_holder.len());
 
         tokens.append_all(quote! {
-            #[derive(Debug, Clone, PartialEq, ::derive_new::new, ::ruststep_derive::Holder)]
+            #[derive(Debug, Clone, PartialEq, ::derive_new::new, Holder)]
             #[holder(table = Tables)]
             #[holder(field = #field_name)]
             #[holder(generate_deserialize)]
@@ -90,7 +90,7 @@ impl ToTokens for Entity {
                 .collect();
             let enum_name = format_ident!("{}Any", name);
             tokens.append_all(quote! {
-                #[derive(Debug, Clone, PartialEq, ::ruststep_derive::Holder)]
+                #[derive(Debug, Clone, PartialEq, Holder)]
                 #[holder(table = Tables)]
                 #[holder(generate_deserialize)]
                 pub enum #enum_name {
