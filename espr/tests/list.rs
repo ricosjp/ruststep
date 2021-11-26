@@ -22,7 +22,9 @@ fn list() {
 
     insta::assert_snapshot!(tt, @r###"
     pub mod test_schema {
-        use ruststep::{as_holder, error::Result, primitive::*, tables::*, Holder, TableInit};
+        use ruststep::{
+            as_holder, derive_more::*, error::Result, primitive::*, tables::*, Holder, TableInit,
+        };
         use std::collections::HashMap;
         #[derive(Debug, Clone, PartialEq, Default, TableInit)]
         pub struct Tables {

@@ -18,6 +18,7 @@ default = []
 ap201 = []
 
 [dependencies]
+derive_more = "0.99.16"
 derive-new = "0.5.9"
 nom = "7.0.0"
 serde = { version = "1.0.129", features = ["derive"] }

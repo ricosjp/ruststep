@@ -16,6 +16,7 @@ In addition to original Keep-a-Changelog, we use following rules:
 
 ### Added
 - ignore pending snapshot https://github.com/ricosjp/ruststep/pull/164
+- Expose the module `derive_more` in `ruststep`.
 - Snapshot testing for espr https://github.com/ricosjp/ruststep/pull/163
 - espr_derive crate, `espr_derive::inline_express!` macro https://github.com/ricosjp/ruststep/pull/158
   - ruststep/tests uses `inline_express!` macro https://github.com/ricosjp/ruststep/pull/160
@@ -30,6 +31,7 @@ In addition to original Keep-a-Changelog, we use following rules:
 - impl `FromStr` for `Record` and `DataSection` https://github.com/ricosjp/ruststep/pull/140
 
 ### Changed
+- Translates declarations of type express to Rust tuple structure.
 - Visitor struct and all fields in Holder struct become public https://github.com/ricosjp/ruststep/pull/160
 - Add flag to switch ruststep internal/external codegen in IR::to_token_stream https://github.com/ricosjp/ruststep/pull/158
 - Remove `ruststep_derive::as_holder_visitor!` https://github.com/ricosjp/ruststep/pull/147
