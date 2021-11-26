@@ -43,6 +43,6 @@ fn rename_meta(field_name: &syn::Ident) -> (TokenStream, TokenStream) {
             #[holder(field = #field_name)]
             #[holder(generate_deserialize)]
         },
-        quote! {#[use_place_holder]},
+        quote! {#[holder(use_place_holder)]},
     )
 }

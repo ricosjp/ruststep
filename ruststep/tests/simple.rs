@@ -163,7 +163,7 @@ fn get_owned_b3() {
 
 #[test]
 fn get_owned_c() {
-    let table = Table::example();
+    let table = Tables::from_str(EXAMPLE).unwrap();
     let b = EntityTable::<CHolder>::get_owned(&table, 4).unwrap();
     assert_eq!(b, C(A { x: 1.0, y: 2.0 }));
 }
