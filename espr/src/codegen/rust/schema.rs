@@ -35,17 +35,36 @@ impl Schema {
         let name = format_ident!("{}", self.name);
         let types = &self.types;
         let entities = &self.entities;
+        let type_decls = self.types.iter().filter(|e| match e {
+            TypeDecl::Rename(Rename {
+                ty: TypeRef::SimpleType(_),
+                ..
+            }) => false,
+            TypeDecl::Rename(Rename {
+                ty: TypeRef::Named { is_simple, .. },
+                ..
+            }) => !is_simple,
+            TypeDecl::Rename(Rename { .. }) => true,
+            _ => false,
+        });
         let entity_types: Vec<_> = entities
             .iter()
             .map(|e| format_ident!("{}", e.name.to_pascal_case()))
+            .chain(
+                type_decls
+                    .clone()
+                    .map(|e| format_ident!("{}", e.id().to_pascal_case())),
+            )
             .collect();
         let holder_name: Vec<_> = entities
             .iter()
             .map(|e| format_ident!("{}", e.name))
+            .chain(type_decls.clone().map(|e| format_ident!("{}", e.id())))
             .collect();
         let iter_name: Vec<_> = entities
             .iter()
             .map(|e| format_ident!("{}_iter", e.name))
+            .chain(type_decls.map(|e| format_ident!("{}_iter", e.id())))
             .collect();
 
         let ruststep_path = prefix.as_path();

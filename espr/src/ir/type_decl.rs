@@ -41,6 +41,17 @@ pub enum TypeDecl {
     Select(Select),
 }
 
+impl TypeDecl {
+    pub fn id(&self) -> &str {
+        match self {
+            TypeDecl::Simple(e) => &e.id,
+            TypeDecl::Rename(e) => &e.id,
+            TypeDecl::Enumeration(e) => &e.id,
+            TypeDecl::Select(e) => &e.id,
+        }
+    }
+}
+
 impl Legalize for TypeDecl {
     type Input = ast::TypeDecl;
     fn legalize(
