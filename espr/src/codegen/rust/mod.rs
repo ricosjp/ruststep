@@ -1,6 +1,7 @@
 //! Generate Rust code using proc-macro utility crates
 
 mod entity;
+mod rename;
 mod schema;
 
 pub use entity::*;
@@ -54,17 +55,8 @@ impl ToTokens for Simple {
         let id = format_ident!("{}", &self.id.to_pascal_case());
         let ty = &self.ty;
         tokens.append_all(quote! {
-            pub type #id = #ty;
-        });
-    }
-}
-
-impl ToTokens for Rename {
-    fn to_tokens(&self, tokens: &mut TokenStream) {
-        let id = format_ident!("{}", &self.id.to_pascal_case());
-        let ty = &self.ty;
-        tokens.append_all(quote! {
-            pub type #id = #ty;
+            #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, ::serde::Serialize, ::serde::Deserialize)]
+            pub struct #id(pub #ty);
         });
     }
 }
