@@ -1,11 +1,8 @@
 //! Generate Rust code using proc-macro utility crates
 
 mod entity;
-mod enumeration;
 mod format;
-mod rename;
 mod schema;
-mod select;
 mod simple_type;
 mod type_decl;
 mod type_ref;
