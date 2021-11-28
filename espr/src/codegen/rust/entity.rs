@@ -27,6 +27,35 @@ impl ToTokens for EntityAttribute {
     }
 }
 
+impl Entity {
+    fn generate_any_def(&self, tokens: &mut TokenStream) {
+        let name = format_ident!("{}", self.name.to_pascal_case());
+        if !self.subtypes.is_empty() {
+            let subtypes = &self.subtypes;
+            let names: Vec<_> = subtypes
+                .iter()
+                .map(|ty| match &ty {
+                    TypeRef::Entity { name, .. } => format_ident!("{}", name),
+                    _ => unreachable!(),
+                })
+                .collect();
+            let enum_name = format_ident!("{}Any", name);
+            tokens.append_all(quote! {
+                #[derive(Debug, Clone, PartialEq, Holder)]
+                #[holder(table = Tables)]
+                #[holder(generate_deserialize)]
+                pub enum #enum_name {
+                    #(
+                    #[holder(use_place_holder)]
+                    #[holder(field = #names)]
+                    #subtypes(Box<#subtypes>)
+                    ),*
+                }
+            }); // tokens.append_all
+        }
+    }
+}
+
 impl ToTokens for Entity {
     fn to_tokens(&self, tokens: &mut TokenStream) {
         let field_name = format_ident!("{}", self.name);
@@ -84,28 +113,6 @@ impl ToTokens for Entity {
             }
         });
 
-        if !self.subtypes.is_empty() {
-            let subtypes = &self.subtypes;
-            let names: Vec<_> = subtypes
-                .iter()
-                .map(|ty| match &ty {
-                    TypeRef::Entity { name, .. } => format_ident!("{}", name),
-                    _ => unreachable!(),
-                })
-                .collect();
-            let enum_name = format_ident!("{}Any", name);
-            tokens.append_all(quote! {
-                #[derive(Debug, Clone, PartialEq, Holder)]
-                #[holder(table = Tables)]
-                #[holder(generate_deserialize)]
-                pub enum #enum_name {
-                    #(
-                    #[holder(use_place_holder)]
-                    #[holder(field = #names)]
-                    #subtypes(Box<#subtypes>)
-                    ),*
-                }
-            }); // tokens.append_all
-        }
+        self.generate_any_def(tokens);
     }
 }
