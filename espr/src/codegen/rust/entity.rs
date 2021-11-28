@@ -4,6 +4,29 @@ use inflector::Inflector;
 use proc_macro2::TokenStream;
 use quote::*;
 
+impl ToTokens for EntityAttribute {
+    fn to_tokens(&self, tokens: &mut TokenStream) {
+        let EntityAttribute { name, ty, optional } = self;
+
+        let attr_name = format_ident!("{}", name);
+        let attr_type = if *optional {
+            quote! { Option<#ty> }
+        } else {
+            quote! { #ty }
+        };
+        let use_place_holder = if ty.is_simple() {
+            quote! {}
+        } else {
+            quote! { #[holder(use_place_holder)] }
+        };
+
+        tokens.append_all(quote! {
+            #use_place_holder
+            pub #attr_name : #attr_type,
+        });
+    }
+}
+
 impl ToTokens for Entity {
     fn to_tokens(&self, tokens: &mut TokenStream) {
         let field_name = format_ident!("{}", self.name);
