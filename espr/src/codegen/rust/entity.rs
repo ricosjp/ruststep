@@ -28,8 +28,19 @@ impl ToTokens for EntityAttribute {
 }
 
 impl Entity {
+    fn name_ident(&self) -> syn::Ident {
+        format_ident!("{}", self.name.to_pascal_case())
+    }
+
+    fn any_ident(&self) -> syn::Ident {
+        format_ident!("{}Any", self.name.to_pascal_case())
+    }
+
+    fn field_ident(&self) -> syn::Ident {
+        format_ident!("{}", self.name)
+    }
+
     fn generate_any_def(&self, tokens: &mut TokenStream) {
-        let name = format_ident!("{}", self.name.to_pascal_case());
         if !self.subtypes.is_empty() {
             let subtypes = &self.subtypes;
             let names: Vec<_> = subtypes
@@ -39,12 +50,12 @@ impl Entity {
                     _ => unreachable!(),
                 })
                 .collect();
-            let enum_name = format_ident!("{}Any", name);
+            let any = self.any_ident();
             tokens.append_all(quote! {
                 #[derive(Debug, Clone, PartialEq, Holder)]
                 #[holder(table = Tables)]
                 #[holder(generate_deserialize)]
-                pub enum #enum_name {
+                pub enum #any {
                     #(
                     #[holder(use_place_holder)]
                     #[holder(field = #names)]
@@ -65,9 +76,9 @@ impl Entity {
             {
                 if *is_supertype {
                     let name = if self.subtypes.is_empty() {
-                        format_ident!("{}", self.name.to_pascal_case())
+                        self.name_ident()
                     } else {
-                        format_ident!("{}Any", self.name.to_pascal_case())
+                        self.any_ident()
                     };
                     let any_enum = format_ident!("{}Any", supertype_name.to_pascal_case());
                     tokens.append_all(quote! {
@@ -100,8 +111,8 @@ impl Entity {
 
 impl ToTokens for Entity {
     fn to_tokens(&self, tokens: &mut TokenStream) {
-        let field_name = format_ident!("{}", self.name);
-        let name = format_ident!("{}", self.name.to_pascal_case());
+        let name = self.name_ident();
+        let field_name = self.field_ident();
 
         let attributes = &self.attributes;
         let supertype_attributes = self.supertype_attributes();
