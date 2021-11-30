@@ -2,6 +2,7 @@
 
 mod algorithm;
 mod entity;
+mod error;
 mod expression;
 mod schema;
 mod types;
