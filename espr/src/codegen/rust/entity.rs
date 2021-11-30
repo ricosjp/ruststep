@@ -82,25 +82,19 @@ impl Entity {
         }
     }
 
-    fn supertype_attributes(&self) -> TokenStream {
-        let mut attr_name = Vec::new();
-        let mut attr_type = Vec::new();
-
-        for ty in &self.supertypes {
-            let (attr, ty) = match ty {
-                TypeRef::Named { name, .. } | TypeRef::Entity { name, .. } => {
-                    (format_ident!("{}", name), ty)
-                }
-                _ => unreachable!(),
-            };
-
-            attr_name.push(attr.clone());
-            attr_type.push(ty.to_token_stream());
-        }
-
-        quote! {
-            #(pub #attr_name : #attr_type),*
-        }
+    fn supertype_attributes(&self) -> Vec<TokenStream> {
+        self.supertypes
+            .iter()
+            .map(|ty| {
+                let (attr, ty) = match ty {
+                    TypeRef::Named { name, .. } | TypeRef::Entity { name, .. } => {
+                        (format_ident!("{}", name), ty)
+                    }
+                    _ => unreachable!(),
+                };
+                quote! { pub #attr: #ty }
+            })
+            .collect()
     }
 }
 
@@ -118,7 +112,7 @@ impl ToTokens for Entity {
             #[holder(field = #field_name)]
             #[holder(generate_deserialize)]
             pub struct #name {
-                #supertype_attributes
+                #(#supertype_attributes),*
                 #(#attributes),*
             }
         });
