@@ -15,6 +15,7 @@ In addition to original Keep-a-Changelog, we use following rules:
 ## Unreleased (will be 0.2.0)
 
 ### Added
+- Refactoring `espr::codegen` https://github.com/ricosjp/ruststep/pull/165
 - ignore pending snapshot https://github.com/ricosjp/ruststep/pull/164
 - Add fields for tuple structs to `Table`. https://github.com/ricosjp/ruststep/pull/151
 - Expose the module `derive_more` in `ruststep`.
