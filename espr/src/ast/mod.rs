@@ -2,18 +2,46 @@
 
 mod algorithm;
 mod entity;
+mod error;
 mod expression;
 mod schema;
 mod types;
 
 pub use algorithm::*;
 pub use entity::*;
+pub use error::*;
 pub use expression::*;
 pub use schema::*;
 pub use types::*;
 
 use crate::parser::{combinator::*, *};
 use nom::Finish;
+
+pub trait Component: Sized {
+    fn parse(input: &str) -> Result<(Self, Vec<Remark>), TokenizeFailed>;
+    fn from_str(input: &str) -> Result<Self, TokenizeFailed> {
+        let (component, _remarks) = Self::parse(input)?;
+        Ok(component)
+    }
+}
+
+#[macro_export(local_inner_macro)]
+macro_rules! derive_ast_component {
+    ($component:ty, $parser:path) => {
+        impl crate::ast::Component for $component {
+            fn parse(
+                input: &str,
+            ) -> Result<(Self, Vec<crate::ast::Remark>), crate::ast::TokenizeFailed> {
+                use nom::Finish;
+                let input = input.trim();
+                let (_input, parsed) = $parser(input)
+                    .finish()
+                    .map_err(|err| crate::ast::TokenizeFailed::new(input, err))?;
+                Ok(parsed)
+            }
+        }
+    };
+}
 
 /// Remarks in EXPRESS input, `(* ... *)` or `-- ...`
 #[derive(Debug, Clone, PartialEq, Eq)]
