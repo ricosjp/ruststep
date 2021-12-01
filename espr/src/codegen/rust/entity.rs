@@ -97,13 +97,21 @@ impl Entity {
         self.supertypes
             .iter()
             .map(|ty| {
+                let use_place_holder = if ty.is_simple() {
+                    quote! {}
+                } else {
+                    quote! { #[holder(use_place_holder)] }
+                };
                 let (attr, ty) = match ty {
                     TypeRef::Named { name, .. } | TypeRef::Entity { name, .. } => {
-                        (format_ident!("{}", name), ty)
+                        (format_ident!("{}", name), ty.to_not_supertype())
                     }
                     _ => unreachable!(),
                 };
-                quote! { pub #attr: #ty }
+                quote! {
+                    #use_place_holder
+                    pub #attr: #ty
+                }
             })
             .collect()
     }
@@ -123,8 +131,8 @@ impl ToTokens for Entity {
             #[holder(field = #field_name)]
             #[holder(generate_deserialize)]
             pub struct #name {
-                #(#supertype_attributes),*
-                #(#attributes),*
+                #(#supertype_attributes,)*
+                #(#attributes,)*
             }
         });
 
