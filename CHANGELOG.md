@@ -32,8 +32,9 @@ In addition to original Keep-a-Changelog, we use following rules:
 - `Tables` from `DataSection` https://github.com/ricosjp/ruststep/pull/139
 - impl `FromStr` for `Record` and `DataSection` https://github.com/ricosjp/ruststep/pull/140
 
-### Changed
-- Translates `TYPE` declarations in EXPRESS to Rust tuple struct https://github.com/ricosjp/ruststep/pull/144
+### Changeuse std::cell::RefCell;d
+- Fixed a bug where the parent class was not registered in the child class field. https://github.com/ricosjp/ruststep/pull/166
+- Translatuse std::rc::Rc;es `TYPE` declarations in EXPRESS to Rust tuple struct https://github.com/ricosjp/ruststep/pull/144
 - Visitor struct and all fields in Holder struct become public https://github.com/ricosjp/ruststep/pull/160
 - Add flag to switch ruststep internal/external codegen in IR::to_token_stream https://github.com/ricosjp/ruststep/pull/158
 - Remove `ruststep_derive::as_holder_visitor!` https://github.com/ricosjp/ruststep/pull/147
