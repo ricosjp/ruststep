@@ -1,10 +1,6 @@
 //! AST for entity declarations
 
-use crate::{
-    ast::{algorithm::*, error::*, expression::*, types::*},
-    parser::*,
-};
-use std::str::FromStr;
+use crate::{ast::*, parser::*};
 
 /// Parsed result of EXPRESS's ENTITY
 #[derive(Debug, Clone, PartialEq)]
@@ -26,15 +22,13 @@ pub struct Entity {
     pub where_clause: Option<WhereClause>,
 }
 
-impl FromStr for Entity {
-    type Err = TokenizeFailed;
-    fn from_str(input: &str) -> Result<Self, Self::Err> {
-        use nom::Finish;
+impl Component for Entity {
+    fn parse(input: &str) -> Result<(Self, Vec<Remark>), TokenizeFailed> {
         let input = input.trim();
-        let (_input, (record, _remarks)) = entity_decl(input)
+        let (_input, parsed) = entity_decl(input)
             .finish()
             .map_err(|err| TokenizeFailed::new(input, err))?;
-        Ok(record)
+        Ok(parsed)
     }
 }
 
