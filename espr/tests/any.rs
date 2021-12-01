@@ -79,14 +79,28 @@ fn any() {
         # [holder (field = sub1)]
         #[holder(generate_deserialize)]
         pub struct Sub1 {
+            #[holder(use_place_holder)]
+            pub base: Base,
             pub y1: f64,
+        }
+        impl Into<BaseAny> for Sub1 {
+            fn into(self) -> BaseAny {
+                BaseAny::Sub1(Box::new(self))
+            }
         }
         #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
         # [holder (table = Tables)]
         # [holder (field = sub2)]
         #[holder(generate_deserialize)]
         pub struct Sub2 {
+            #[holder(use_place_holder)]
+            pub base: Base,
             pub y2: f64,
+        }
+        impl Into<BaseAny> for Sub2 {
+            fn into(self) -> BaseAny {
+                BaseAny::Sub2(Box::new(self))
+            }
         }
     }
     "###);
