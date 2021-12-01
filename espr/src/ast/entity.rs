@@ -22,15 +22,7 @@ pub struct Entity {
     pub where_clause: Option<WhereClause>,
 }
 
-impl Component for Entity {
-    fn parse(input: &str) -> Result<(Self, Vec<Remark>), TokenizeFailed> {
-        let input = input.trim();
-        let (_input, parsed) = entity_decl(input)
-            .finish()
-            .map_err(|err| TokenizeFailed::new(input, err))?;
-        Ok(parsed)
-    }
-}
+crate::derive_ast_component!(Entity, entity_decl);
 
 impl Entity {
     pub fn has_supertype_decl(&self) -> bool {
