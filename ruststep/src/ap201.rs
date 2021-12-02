@@ -2761,6 +2761,9 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub enum AddressAny {
         #[holder(use_place_holder)]
+        # [holder (field = address)]
+        Address(Box<Address>),
+        #[holder(use_place_holder)]
         # [holder (field = organizational_address)]
         OrganizationalAddress(Box<OrganizationalAddress>),
         #[holder(use_place_holder)]
@@ -2792,6 +2795,9 @@ pub mod explicit_draughting {
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum AnnotationCurveOccurrenceAny {
+        #[holder(use_place_holder)]
+        # [holder (field = annotation_curve_occurrence)]
+        AnnotationCurveOccurrence(Box<AnnotationCurveOccurrence>),
         #[holder(use_place_holder)]
         # [holder (field = dimension_curve)]
         DimensionCurve(Box<DimensionCurve>),
@@ -2850,14 +2856,17 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub enum AnnotationOccurrenceAny {
         #[holder(use_place_holder)]
+        # [holder (field = annotation_occurrence)]
+        AnnotationOccurrence(Box<AnnotationOccurrence>),
+        #[holder(use_place_holder)]
         # [holder (field = annotation_curve_occurrence)]
-        AnnotationCurveOccurrenceAny(Box<AnnotationCurveOccurrenceAny>),
+        AnnotationCurveOccurrence(Box<AnnotationCurveOccurrence>),
         #[holder(use_place_holder)]
         # [holder (field = annotation_fill_area_occurrence)]
         AnnotationFillAreaOccurrence(Box<AnnotationFillAreaOccurrence>),
         #[holder(use_place_holder)]
         # [holder (field = annotation_symbol_occurrence)]
-        AnnotationSymbolOccurrenceAny(Box<AnnotationSymbolOccurrenceAny>),
+        AnnotationSymbolOccurrence(Box<AnnotationSymbolOccurrence>),
         #[holder(use_place_holder)]
         # [holder (field = annotation_text_occurrence)]
         AnnotationTextOccurrence(Box<AnnotationTextOccurrence>),
@@ -2909,11 +2918,14 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub enum AnnotationSymbolOccurrenceAny {
         #[holder(use_place_holder)]
+        # [holder (field = annotation_symbol_occurrence)]
+        AnnotationSymbolOccurrence(Box<AnnotationSymbolOccurrence>),
+        #[holder(use_place_holder)]
         # [holder (field = annotation_subfigure_occurrence)]
         AnnotationSubfigureOccurrence(Box<AnnotationSubfigureOccurrence>),
         #[holder(use_place_holder)]
         # [holder (field = terminator_symbol)]
-        TerminatorSymbolAny(Box<TerminatorSymbolAny>),
+        TerminatorSymbol(Box<TerminatorSymbol>),
     }
     impl Into<AnnotationOccurrenceAny> for AnnotationSymbolOccurrenceAny {
         fn into(self) -> AnnotationOccurrenceAny {
@@ -2967,6 +2979,9 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub enum ApplicationContextElementAny {
         #[holder(use_place_holder)]
+        # [holder (field = application_context_element)]
+        ApplicationContextElement(Box<ApplicationContextElement>),
+        #[holder(use_place_holder)]
         # [holder (field = product_context)]
         ProductContext(Box<ProductContext>),
         #[holder(use_place_holder)]
@@ -3005,6 +3020,9 @@ pub mod explicit_draughting {
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum ApprovalAssignmentAny {
+        #[holder(use_place_holder)]
+        # [holder (field = approval_assignment)]
+        ApprovalAssignment(Box<ApprovalAssignment>),
         #[holder(use_place_holder)]
         # [holder (field = draughting_approval_assignment)]
         DraughtingApprovalAssignment(Box<DraughtingApprovalAssignment>),
@@ -3060,6 +3078,9 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub enum AreaInSetAny {
         #[holder(use_place_holder)]
+        # [holder (field = area_in_set)]
+        AreaInSet(Box<AreaInSet>),
+        #[holder(use_place_holder)]
         # [holder (field = drawing_sheet_revision_usage)]
         DrawingSheetRevisionUsage(Box<DrawingSheetRevisionUsage>),
     }
@@ -3096,6 +3117,9 @@ pub mod explicit_draughting {
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum BSplineCurveAny {
+        #[holder(use_place_holder)]
+        # [holder (field = b_spline_curve)]
+        BSplineCurve(Box<BSplineCurve>),
         #[holder(use_place_holder)]
         # [holder (field = b_spline_curve_with_knots)]
         BSplineCurveWithKnots(Box<BSplineCurveWithKnots>),
@@ -3159,8 +3183,11 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub enum BoundedCurveAny {
         #[holder(use_place_holder)]
+        # [holder (field = bounded_curve)]
+        BoundedCurve(Box<BoundedCurve>),
+        #[holder(use_place_holder)]
         # [holder (field = b_spline_curve)]
-        BSplineCurveAny(Box<BSplineCurveAny>),
+        BSplineCurve(Box<BSplineCurve>),
         #[holder(use_place_holder)]
         # [holder (field = composite_curve)]
         CompositeCurve(Box<CompositeCurve>),
@@ -3204,6 +3231,9 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub enum CameraImageAny {
         #[holder(use_place_holder)]
+        # [holder (field = camera_image)]
+        CameraImage(Box<CameraImage>),
+        #[holder(use_place_holder)]
         # [holder (field = camera_image_2d_with_scale)]
         CameraImage2DWithScale(Box<CameraImage2DWithScale>),
     }
@@ -3237,6 +3267,9 @@ pub mod explicit_draughting {
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum CameraModelAny {
+        #[holder(use_place_holder)]
+        # [holder (field = camera_model)]
+        CameraModel(Box<CameraModel>),
         #[holder(use_place_holder)]
         # [holder (field = camera_model_d2)]
         CameraModelD2(Box<CameraModelD2>),
@@ -3313,11 +3346,14 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub enum ColourAny {
         #[holder(use_place_holder)]
+        # [holder (field = colour)]
+        Colour(Box<Colour>),
+        #[holder(use_place_holder)]
         # [holder (field = colour_specification)]
-        ColourSpecificationAny(Box<ColourSpecificationAny>),
+        ColourSpecification(Box<ColourSpecification>),
         #[holder(use_place_holder)]
         # [holder (field = pre_defined_colour)]
-        PreDefinedColourAny(Box<PreDefinedColourAny>),
+        PreDefinedColour(Box<PreDefinedColour>),
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
@@ -3349,6 +3385,9 @@ pub mod explicit_draughting {
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum ColourSpecificationAny {
+        #[holder(use_place_holder)]
+        # [holder (field = colour_specification)]
+        ColourSpecification(Box<ColourSpecification>),
         #[holder(use_place_holder)]
         # [holder (field = colour_rgb)]
         ColourRgb(Box<ColourRgb>),
@@ -3398,6 +3437,9 @@ pub mod explicit_draughting {
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum CompositeTextAny {
+        #[holder(use_place_holder)]
+        # [holder (field = composite_text)]
+        CompositeText(Box<CompositeText>),
         #[holder(use_place_holder)]
         # [holder (field = composite_text_with_associated_curves)]
         CompositeTextWithAssociatedCurves(Box<CompositeTextWithAssociatedCurves>),
@@ -3473,6 +3515,9 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub enum ConicAny {
         #[holder(use_place_holder)]
+        # [holder (field = conic)]
+        Conic(Box<Conic>),
+        #[holder(use_place_holder)]
         # [holder (field = circle)]
         Circle(Box<Circle>),
         #[holder(use_place_holder)]
@@ -3528,6 +3573,9 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub enum ContractAssignmentAny {
         #[holder(use_place_holder)]
+        # [holder (field = contract_assignment)]
+        ContractAssignment(Box<ContractAssignment>),
+        #[holder(use_place_holder)]
         # [holder (field = draughting_contract_assignment)]
         DraughtingContractAssignment(Box<DraughtingContractAssignment>),
     }
@@ -3567,11 +3615,14 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub enum CurveAny {
         #[holder(use_place_holder)]
+        # [holder (field = curve)]
+        Curve(Box<Curve>),
+        #[holder(use_place_holder)]
         # [holder (field = bounded_curve)]
-        BoundedCurveAny(Box<BoundedCurveAny>),
+        BoundedCurve(Box<BoundedCurve>),
         #[holder(use_place_holder)]
         # [holder (field = conic)]
-        ConicAny(Box<ConicAny>),
+        Conic(Box<Conic>),
         #[holder(use_place_holder)]
         # [holder (field = line)]
         Line(Box<Line>),
@@ -3638,6 +3689,9 @@ pub mod explicit_draughting {
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum DateAny {
+        #[holder(use_place_holder)]
+        # [holder (field = date)]
+        Date(Box<Date>),
         #[holder(use_place_holder)]
         # [holder (field = calendar_date)]
         CalendarDate(Box<CalendarDate>),
@@ -3750,6 +3804,9 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub enum DimensionCurveDirectedCalloutAny {
         #[holder(use_place_holder)]
+        # [holder (field = dimension_curve_directed_callout)]
+        DimensionCurveDirectedCallout(Box<DimensionCurveDirectedCallout>),
+        #[holder(use_place_holder)]
         # [holder (field = angular_dimension)]
         AngularDimension(Box<AngularDimension>),
         #[holder(use_place_holder)]
@@ -3849,6 +3906,9 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub enum DocumentReferenceAny {
         #[holder(use_place_holder)]
+        # [holder (field = document_reference)]
+        DocumentReference(Box<DocumentReference>),
+        #[holder(use_place_holder)]
         # [holder (field = draughting_specification_reference)]
         DraughtingSpecificationReference(Box<DraughtingSpecificationReference>),
     }
@@ -3902,6 +3962,9 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub enum DraughtingCalloutAny {
         #[holder(use_place_holder)]
+        # [holder (field = draughting_callout)]
+        DraughtingCallout(Box<DraughtingCallout>),
+        #[holder(use_place_holder)]
         # [holder (field = datum_feature_callout)]
         DatumFeatureCallout(Box<DatumFeatureCallout>),
         #[holder(use_place_holder)]
@@ -3909,7 +3972,7 @@ pub mod explicit_draughting {
         DatumTargetCallout(Box<DatumTargetCallout>),
         #[holder(use_place_holder)]
         # [holder (field = dimension_curve_directed_callout)]
-        DimensionCurveDirectedCalloutAny(Box<DimensionCurveDirectedCalloutAny>),
+        DimensionCurveDirectedCallout(Box<DimensionCurveDirectedCallout>),
         #[holder(use_place_holder)]
         # [holder (field = draughting_elements)]
         DraughtingElements(Box<DraughtingElements>),
@@ -3918,10 +3981,10 @@ pub mod explicit_draughting {
         GeometricalToleranceCallout(Box<GeometricalToleranceCallout>),
         #[holder(use_place_holder)]
         # [holder (field = leader_directed_callout)]
-        LeaderDirectedCalloutAny(Box<LeaderDirectedCalloutAny>),
+        LeaderDirectedCallout(Box<LeaderDirectedCallout>),
         #[holder(use_place_holder)]
         # [holder (field = projection_directed_callout)]
-        ProjectionDirectedCalloutAny(Box<ProjectionDirectedCalloutAny>),
+        ProjectionDirectedCallout(Box<ProjectionDirectedCallout>),
         #[holder(use_place_holder)]
         # [holder (field = structured_dimension_callout)]
         StructuredDimensionCallout(Box<StructuredDimensionCallout>),
@@ -3947,6 +4010,9 @@ pub mod explicit_draughting {
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum DraughtingCalloutRelationshipAny {
+        #[holder(use_place_holder)]
+        # [holder (field = draughting_callout_relationship)]
+        DraughtingCalloutRelationship(Box<DraughtingCalloutRelationship>),
         #[holder(use_place_holder)]
         # [holder (field = dimension_callout_component_relationship)]
         DimensionCalloutComponentRelationship(Box<DimensionCalloutComponentRelationship>),
@@ -4185,6 +4251,9 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub enum DraughtingSymbolRepresentationAny {
         #[holder(use_place_holder)]
+        # [holder (field = draughting_symbol_representation)]
+        DraughtingSymbolRepresentation(Box<DraughtingSymbolRepresentation>),
+        #[holder(use_place_holder)]
         # [holder (field = drawing_sheet_layout)]
         DrawingSheetLayout(Box<DrawingSheetLayout>),
     }
@@ -4240,6 +4309,9 @@ pub mod explicit_draughting {
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum DrawingRevisionAny {
+        #[holder(use_place_holder)]
+        # [holder (field = drawing_revision)]
+        DrawingRevision(Box<DrawingRevision>),
         #[holder(use_place_holder)]
         # [holder (field = draughting_drawing_revision)]
         DraughtingDrawingRevision(Box<DraughtingDrawingRevision>),
@@ -4360,6 +4432,9 @@ pub mod explicit_draughting {
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum ExternallyDefinedItemAny {
+        #[holder(use_place_holder)]
+        # [holder (field = externally_defined_item)]
+        ExternallyDefinedItem(Box<ExternallyDefinedItem>),
         #[holder(use_place_holder)]
         # [holder (field = externally_defined_curve_font)]
         ExternallyDefinedCurveFont(Box<ExternallyDefinedCurveFont>),
@@ -4535,17 +4610,20 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub enum GeometricRepresentationItemAny {
         #[holder(use_place_holder)]
+        # [holder (field = geometric_representation_item)]
+        GeometricRepresentationItem(Box<GeometricRepresentationItem>),
+        #[holder(use_place_holder)]
         # [holder (field = annotation_fill_area)]
         AnnotationFillArea(Box<AnnotationFillArea>),
         #[holder(use_place_holder)]
         # [holder (field = camera_model)]
-        CameraModelAny(Box<CameraModelAny>),
+        CameraModel(Box<CameraModel>),
         #[holder(use_place_holder)]
         # [holder (field = composite_text)]
-        CompositeTextAny(Box<CompositeTextAny>),
+        CompositeText(Box<CompositeText>),
         #[holder(use_place_holder)]
         # [holder (field = curve)]
-        CurveAny(Box<CurveAny>),
+        Curve(Box<Curve>),
         #[holder(use_place_holder)]
         # [holder (field = defined_symbol)]
         DefinedSymbol(Box<DefinedSymbol>),
@@ -4554,7 +4632,7 @@ pub mod explicit_draughting {
         Direction(Box<Direction>),
         #[holder(use_place_holder)]
         # [holder (field = draughting_callout)]
-        DraughtingCalloutAny(Box<DraughtingCalloutAny>),
+        DraughtingCallout(Box<DraughtingCallout>),
         #[holder(use_place_holder)]
         # [holder (field = externally_defined_hatch_style)]
         ExternallyDefinedHatchStyle(Box<ExternallyDefinedHatchStyle>),
@@ -4572,25 +4650,25 @@ pub mod explicit_draughting {
         FillAreaStyleTiles(Box<FillAreaStyleTiles>),
         #[holder(use_place_holder)]
         # [holder (field = geometric_set)]
-        GeometricSetAny(Box<GeometricSetAny>),
+        GeometricSet(Box<GeometricSet>),
         #[holder(use_place_holder)]
         # [holder (field = one_direction_repeat_factor)]
-        OneDirectionRepeatFactorAny(Box<OneDirectionRepeatFactorAny>),
+        OneDirectionRepeatFactor(Box<OneDirectionRepeatFactor>),
         #[holder(use_place_holder)]
         # [holder (field = placement)]
-        PlacementAny(Box<PlacementAny>),
+        Placement(Box<Placement>),
         #[holder(use_place_holder)]
         # [holder (field = planar_extent)]
-        PlanarExtentAny(Box<PlanarExtentAny>),
+        PlanarExtent(Box<PlanarExtent>),
         #[holder(use_place_holder)]
         # [holder (field = point)]
-        PointAny(Box<PointAny>),
+        Point(Box<Point>),
         #[holder(use_place_holder)]
         # [holder (field = symbol_target)]
         SymbolTarget(Box<SymbolTarget>),
         #[holder(use_place_holder)]
         # [holder (field = text_literal)]
-        TextLiteralAny(Box<TextLiteralAny>),
+        TextLiteral(Box<TextLiteral>),
         #[holder(use_place_holder)]
         # [holder (field = vector)]
         Vector(Box<Vector>),
@@ -4614,6 +4692,9 @@ pub mod explicit_draughting {
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum GeometricSetAny {
+        #[holder(use_place_holder)]
+        # [holder (field = geometric_set)]
+        GeometricSet(Box<GeometricSet>),
         #[holder(use_place_holder)]
         # [holder (field = geometric_curve_set)]
         GeometricCurveSet(Box<GeometricCurveSet>),
@@ -4685,6 +4766,9 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub enum GroupAssignmentAny {
         #[holder(use_place_holder)]
+        # [holder (field = group_assignment)]
+        GroupAssignment(Box<GroupAssignment>),
+        #[holder(use_place_holder)]
         # [holder (field = draughting_group_assignment)]
         DraughtingGroupAssignment(Box<DraughtingGroupAssignment>),
     }
@@ -4728,6 +4812,9 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub enum InvisibilityAny {
         #[holder(use_place_holder)]
+        # [holder (field = invisibility)]
+        Invisibility(Box<Invisibility>),
+        #[holder(use_place_holder)]
         # [holder (field = context_dependent_invisibility)]
         ContextDependentInvisibility(Box<ContextDependentInvisibility>),
     }
@@ -4756,6 +4843,9 @@ pub mod explicit_draughting {
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum LeaderDirectedCalloutAny {
+        #[holder(use_place_holder)]
+        # [holder (field = leader_directed_callout)]
+        LeaderDirectedCallout(Box<LeaderDirectedCallout>),
         #[holder(use_place_holder)]
         # [holder (field = leader_directed_dimension)]
         LeaderDirectedDimension(Box<LeaderDirectedDimension>),
@@ -4864,6 +4954,9 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub enum MappedItemAny {
         #[holder(use_place_holder)]
+        # [holder (field = mapped_item)]
+        MappedItem(Box<MappedItem>),
+        #[holder(use_place_holder)]
         # [holder (field = annotation_symbol)]
         AnnotationSymbol(Box<AnnotationSymbol>),
         #[holder(use_place_holder)]
@@ -4871,7 +4964,7 @@ pub mod explicit_draughting {
         AnnotationText(Box<AnnotationText>),
         #[holder(use_place_holder)]
         # [holder (field = camera_image)]
-        CameraImageAny(Box<CameraImageAny>),
+        CameraImage(Box<CameraImage>),
     }
     impl Into<RepresentationItemAny> for MappedItemAny {
         fn into(self) -> RepresentationItemAny {
@@ -4893,6 +4986,9 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub enum MeasureWithUnitAny {
         #[holder(use_place_holder)]
+        # [holder (field = measure_with_unit)]
+        MeasureWithUnit(Box<MeasureWithUnit>),
+        #[holder(use_place_holder)]
         # [holder (field = length_measure_with_unit)]
         LengthMeasureWithUnit(Box<LengthMeasureWithUnit>),
         #[holder(use_place_holder)]
@@ -4911,6 +5007,9 @@ pub mod explicit_draughting {
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum NamedUnitAny {
+        #[holder(use_place_holder)]
+        # [holder (field = named_unit)]
+        NamedUnit(Box<NamedUnit>),
         #[holder(use_place_holder)]
         # [holder (field = conversion_based_unit)]
         ConversionBasedUnit(Box<ConversionBasedUnit>),
@@ -4956,6 +5055,9 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub enum OneDirectionRepeatFactorAny {
         #[holder(use_place_holder)]
+        # [holder (field = one_direction_repeat_factor)]
+        OneDirectionRepeatFactor(Box<OneDirectionRepeatFactor>),
+        #[holder(use_place_holder)]
         # [holder (field = two_direction_repeat_factor)]
         TwoDirectionRepeatFactor(Box<TwoDirectionRepeatFactor>),
     }
@@ -5000,6 +5102,9 @@ pub mod explicit_draughting {
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum OrganizationAssignmentAny {
+        #[holder(use_place_holder)]
+        # [holder (field = organization_assignment)]
+        OrganizationAssignment(Box<OrganizationAssignment>),
         #[holder(use_place_holder)]
         # [holder (field = draughting_organization_assignment)]
         DraughtingOrganizationAssignment(Box<DraughtingOrganizationAssignment>),
@@ -5078,6 +5183,9 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub enum PersonAndOrganizationAssignmentAny {
         #[holder(use_place_holder)]
+        # [holder (field = person_and_organization_assignment)]
+        PersonAndOrganizationAssignment(Box<PersonAndOrganizationAssignment>),
+        #[holder(use_place_holder)]
         # [holder (field = draughting_person_and_organization_assignment)]
         DraughtingPersonAndOrganizationAssignment(Box<DraughtingPersonAndOrganizationAssignment>),
     }
@@ -5102,6 +5210,9 @@ pub mod explicit_draughting {
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum PersonAssignmentAny {
+        #[holder(use_place_holder)]
+        # [holder (field = person_assignment)]
+        PersonAssignment(Box<PersonAssignment>),
         #[holder(use_place_holder)]
         # [holder (field = draughting_person_assignment)]
         DraughtingPersonAssignment(Box<DraughtingPersonAssignment>),
@@ -5144,6 +5255,9 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub enum PlacementAny {
         #[holder(use_place_holder)]
+        # [holder (field = placement)]
+        Placement(Box<Placement>),
+        #[holder(use_place_holder)]
         # [holder (field = axis2_placement_2d)]
         Axis2Placement2D(Box<Axis2Placement2D>),
     }
@@ -5181,6 +5295,9 @@ pub mod explicit_draughting {
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum PlanarExtentAny {
+        #[holder(use_place_holder)]
+        # [holder (field = planar_extent)]
+        PlanarExtent(Box<PlanarExtent>),
         #[holder(use_place_holder)]
         # [holder (field = planar_box)]
         PlanarBox(Box<PlanarBox>),
@@ -5228,6 +5345,9 @@ pub mod explicit_draughting {
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum PointAny {
+        #[holder(use_place_holder)]
+        # [holder (field = point)]
+        Point(Box<Point>),
         #[holder(use_place_holder)]
         # [holder (field = cartesian_point)]
         CartesianPoint(Box<CartesianPoint>),
@@ -5286,6 +5406,9 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub enum PreDefinedColourAny {
         #[holder(use_place_holder)]
+        # [holder (field = pre_defined_colour)]
+        PreDefinedColour(Box<PreDefinedColour>),
+        #[holder(use_place_holder)]
         # [holder (field = draughting_pre_defined_colour)]
         DraughtingPreDefinedColour(Box<DraughtingPreDefinedColour>),
     }
@@ -5311,6 +5434,9 @@ pub mod explicit_draughting {
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum PreDefinedCurveFontAny {
+        #[holder(use_place_holder)]
+        # [holder (field = pre_defined_curve_font)]
+        PreDefinedCurveFont(Box<PreDefinedCurveFont>),
         #[holder(use_place_holder)]
         # [holder (field = draughting_pre_defined_curve_font)]
         DraughtingPreDefinedCurveFont(Box<DraughtingPreDefinedCurveFont>),
@@ -5358,17 +5484,20 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub enum PreDefinedItemAny {
         #[holder(use_place_holder)]
+        # [holder (field = pre_defined_item)]
+        PreDefinedItem(Box<PreDefinedItem>),
+        #[holder(use_place_holder)]
         # [holder (field = pre_defined_colour)]
-        PreDefinedColourAny(Box<PreDefinedColourAny>),
+        PreDefinedColour(Box<PreDefinedColour>),
         #[holder(use_place_holder)]
         # [holder (field = pre_defined_curve_font)]
-        PreDefinedCurveFontAny(Box<PreDefinedCurveFontAny>),
+        PreDefinedCurveFont(Box<PreDefinedCurveFont>),
         #[holder(use_place_holder)]
         # [holder (field = pre_defined_symbol)]
-        PreDefinedSymbolAny(Box<PreDefinedSymbolAny>),
+        PreDefinedSymbol(Box<PreDefinedSymbol>),
         #[holder(use_place_holder)]
         # [holder (field = pre_defined_text_font)]
-        PreDefinedTextFontAny(Box<PreDefinedTextFontAny>),
+        PreDefinedTextFont(Box<PreDefinedTextFont>),
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
@@ -5395,6 +5524,9 @@ pub mod explicit_draughting {
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum PreDefinedSymbolAny {
+        #[holder(use_place_holder)]
+        # [holder (field = pre_defined_symbol)]
+        PreDefinedSymbol(Box<PreDefinedSymbol>),
         #[holder(use_place_holder)]
         # [holder (field = pre_defined_dimension_symbol)]
         PreDefinedDimensionSymbol(Box<PreDefinedDimensionSymbol>),
@@ -5439,6 +5571,9 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub enum PreDefinedTextFontAny {
         #[holder(use_place_holder)]
+        # [holder (field = pre_defined_text_font)]
+        PreDefinedTextFont(Box<PreDefinedTextFont>),
+        #[holder(use_place_holder)]
         # [holder (field = draughting_pre_defined_text_font)]
         DraughtingPreDefinedTextFont(Box<DraughtingPreDefinedTextFont>),
     }
@@ -5459,6 +5594,9 @@ pub mod explicit_draughting {
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum PresentationAreaAny {
+        #[holder(use_place_holder)]
+        # [holder (field = presentation_area)]
+        PresentationArea(Box<PresentationArea>),
         #[holder(use_place_holder)]
         # [holder (field = drawing_sheet_revision)]
         DrawingSheetRevision(Box<DrawingSheetRevision>),
@@ -5501,8 +5639,11 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub enum PresentationRepresentationAny {
         #[holder(use_place_holder)]
+        # [holder (field = presentation_representation)]
+        PresentationRepresentation(Box<PresentationRepresentation>),
+        #[holder(use_place_holder)]
         # [holder (field = presentation_area)]
-        PresentationAreaAny(Box<PresentationAreaAny>),
+        PresentationArea(Box<PresentationArea>),
         #[holder(use_place_holder)]
         # [holder (field = presentation_view)]
         PresentationView(Box<PresentationView>),
@@ -5522,8 +5663,11 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub enum PresentationSetAny {
         #[holder(use_place_holder)]
+        # [holder (field = presentation_set)]
+        PresentationSet(Box<PresentationSet>),
+        #[holder(use_place_holder)]
         # [holder (field = drawing_revision)]
-        DrawingRevisionAny(Box<DrawingRevisionAny>),
+        DrawingRevision(Box<DrawingRevision>),
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
@@ -5547,6 +5691,9 @@ pub mod explicit_draughting {
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum PresentationStyleAssignmentAny {
+        #[holder(use_place_holder)]
+        # [holder (field = presentation_style_assignment)]
+        PresentationStyleAssignment(Box<PresentationStyleAssignment>),
         #[holder(use_place_holder)]
         # [holder (field = presentation_style_by_context)]
         PresentationStyleByContext(Box<PresentationStyleByContext>),
@@ -5588,6 +5735,9 @@ pub mod explicit_draughting {
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum PresentedItemAny {
+        #[holder(use_place_holder)]
+        # [holder (field = presented_item)]
+        PresentedItem(Box<PresentedItem>),
         #[holder(use_place_holder)]
         # [holder (field = draughting_presented_item)]
         DraughtingPresentedItem(Box<DraughtingPresentedItem>),
@@ -5702,6 +5852,9 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub enum ProjectionDirectedCalloutAny {
         #[holder(use_place_holder)]
+        # [holder (field = projection_directed_callout)]
+        ProjectionDirectedCallout(Box<ProjectionDirectedCallout>),
+        #[holder(use_place_holder)]
         # [holder (field = ordinate_dimension)]
         OrdinateDimension(Box<OrdinateDimension>),
     }
@@ -5725,6 +5878,9 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub enum PropertyDefinitionAny {
         #[holder(use_place_holder)]
+        # [holder (field = property_definition)]
+        PropertyDefinition(Box<PropertyDefinition>),
+        #[holder(use_place_holder)]
         # [holder (field = product_definition_shape)]
         ProductDefinitionShape(Box<ProductDefinitionShape>),
     }
@@ -5742,6 +5898,9 @@ pub mod explicit_draughting {
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum PropertyDefinitionRepresentationAny {
+        #[holder(use_place_holder)]
+        # [holder (field = property_definition_representation)]
+        PropertyDefinitionRepresentation(Box<PropertyDefinitionRepresentation>),
         #[holder(use_place_holder)]
         # [holder (field = shape_definition_representation)]
         ShapeDefinitionRepresentation(Box<ShapeDefinitionRepresentation>),
@@ -5802,17 +5961,20 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub enum RepresentationAny {
         #[holder(use_place_holder)]
+        # [holder (field = representation)]
+        Representation(Box<Representation>),
+        #[holder(use_place_holder)]
         # [holder (field = draughting_model)]
         DraughtingModel(Box<DraughtingModel>),
         #[holder(use_place_holder)]
         # [holder (field = presentation_representation)]
-        PresentationRepresentationAny(Box<PresentationRepresentationAny>),
+        PresentationRepresentation(Box<PresentationRepresentation>),
         #[holder(use_place_holder)]
         # [holder (field = shape_representation)]
-        ShapeRepresentationAny(Box<ShapeRepresentationAny>),
+        ShapeRepresentation(Box<ShapeRepresentation>),
         #[holder(use_place_holder)]
         # [holder (field = symbol_representation)]
-        SymbolRepresentationAny(Box<SymbolRepresentationAny>),
+        SymbolRepresentation(Box<SymbolRepresentation>),
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
@@ -5826,6 +5988,9 @@ pub mod explicit_draughting {
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum RepresentationContextAny {
+        #[holder(use_place_holder)]
+        # [holder (field = representation_context)]
+        RepresentationContext(Box<RepresentationContext>),
         #[holder(use_place_holder)]
         # [holder (field = geometric_representation_context)]
         GeometricRepresentationContext(Box<GeometricRepresentationContext>),
@@ -5845,14 +6010,17 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub enum RepresentationItemAny {
         #[holder(use_place_holder)]
+        # [holder (field = representation_item)]
+        RepresentationItem(Box<RepresentationItem>),
+        #[holder(use_place_holder)]
         # [holder (field = geometric_representation_item)]
-        GeometricRepresentationItemAny(Box<GeometricRepresentationItemAny>),
+        GeometricRepresentationItem(Box<GeometricRepresentationItem>),
         #[holder(use_place_holder)]
         # [holder (field = mapped_item)]
-        MappedItemAny(Box<MappedItemAny>),
+        MappedItem(Box<MappedItem>),
         #[holder(use_place_holder)]
         # [holder (field = styled_item)]
-        StyledItemAny(Box<StyledItemAny>),
+        StyledItem(Box<StyledItem>),
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
@@ -5868,6 +6036,9 @@ pub mod explicit_draughting {
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum RepresentationMapAny {
+        #[holder(use_place_holder)]
+        # [holder (field = representation_map)]
+        RepresentationMap(Box<RepresentationMap>),
         #[holder(use_place_holder)]
         # [holder (field = camera_usage)]
         CameraUsage(Box<CameraUsage>),
@@ -5897,6 +6068,9 @@ pub mod explicit_draughting {
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum SecurityClassificationAssignmentAny {
+        #[holder(use_place_holder)]
+        # [holder (field = security_classification_assignment)]
+        SecurityClassificationAssignment(Box<SecurityClassificationAssignment>),
         #[holder(use_place_holder)]
         # [holder (field = draughting_security_classification_assignment)]
         DraughtingSecurityClassificationAssignment(Box<DraughtingSecurityClassificationAssignment>),
@@ -5933,6 +6107,9 @@ pub mod explicit_draughting {
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum ShapeRepresentationAny {
+        #[holder(use_place_holder)]
+        # [holder (field = shape_representation)]
+        ShapeRepresentation(Box<ShapeRepresentation>),
         #[holder(use_place_holder)]
         # [holder (field = geometrically_bounded_2d_wireframe_representation)]
         GeometricallyBounded2DWireframeRepresentation(
@@ -5989,8 +6166,11 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub enum StyledItemAny {
         #[holder(use_place_holder)]
+        # [holder (field = styled_item)]
+        StyledItem(Box<StyledItem>),
+        #[holder(use_place_holder)]
         # [holder (field = annotation_occurrence)]
-        AnnotationOccurrenceAny(Box<AnnotationOccurrenceAny>),
+        AnnotationOccurrence(Box<AnnotationOccurrence>),
     }
     impl Into<RepresentationItemAny> for StyledItemAny {
         fn into(self) -> RepresentationItemAny {
@@ -6018,11 +6198,14 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub enum SymbolRepresentationAny {
         #[holder(use_place_holder)]
+        # [holder (field = symbol_representation)]
+        SymbolRepresentation(Box<SymbolRepresentation>),
+        #[holder(use_place_holder)]
         # [holder (field = draughting_subfigure_representation)]
         DraughtingSubfigureRepresentation(Box<DraughtingSubfigureRepresentation>),
         #[holder(use_place_holder)]
         # [holder (field = draughting_symbol_representation)]
-        DraughtingSymbolRepresentationAny(Box<DraughtingSymbolRepresentationAny>),
+        DraughtingSymbolRepresentation(Box<DraughtingSymbolRepresentation>),
     }
     impl Into<RepresentationAny> for SymbolRepresentationAny {
         fn into(self) -> RepresentationAny {
@@ -6083,6 +6266,9 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub enum TerminatorSymbolAny {
         #[holder(use_place_holder)]
+        # [holder (field = terminator_symbol)]
+        TerminatorSymbol(Box<TerminatorSymbol>),
+        #[holder(use_place_holder)]
         # [holder (field = dimension_curve_terminator)]
         DimensionCurveTerminator(Box<DimensionCurveTerminator>),
         #[holder(use_place_holder)]
@@ -6114,6 +6300,9 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub enum TextLiteralAny {
         #[holder(use_place_holder)]
+        # [holder (field = text_literal)]
+        TextLiteral(Box<TextLiteral>),
+        #[holder(use_place_holder)]
         # [holder (field = text_literal_with_associated_curves)]
         TextLiteralWithAssociatedCurves(Box<TextLiteralWithAssociatedCurves>),
         #[holder(use_place_holder)]
@@ -6121,7 +6310,7 @@ pub mod explicit_draughting {
         TextLiteralWithBlankingBox(Box<TextLiteralWithBlankingBox>),
         #[holder(use_place_holder)]
         # [holder (field = text_literal_with_delineation)]
-        TextLiteralWithDelineationAny(Box<TextLiteralWithDelineationAny>),
+        TextLiteralWithDelineation(Box<TextLiteralWithDelineation>),
         #[holder(use_place_holder)]
         # [holder (field = text_literal_with_extent)]
         TextLiteralWithExtent(Box<TextLiteralWithExtent>),
@@ -6175,6 +6364,9 @@ pub mod explicit_draughting {
     #[holder(generate_deserialize)]
     pub enum TextLiteralWithDelineationAny {
         #[holder(use_place_holder)]
+        # [holder (field = text_literal_with_delineation)]
+        TextLiteralWithDelineation(Box<TextLiteralWithDelineation>),
+        #[holder(use_place_holder)]
         # [holder (field = draughting_text_literal_with_delineation)]
         DraughtingTextLiteralWithDelineation(Box<DraughtingTextLiteralWithDelineation>),
     }
@@ -6211,6 +6403,9 @@ pub mod explicit_draughting {
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum TextStyleAny {
+        #[holder(use_place_holder)]
+        # [holder (field = text_style)]
+        TextStyle(Box<TextStyle>),
         #[holder(use_place_holder)]
         # [holder (field = text_style_with_box_characteristics)]
         TextStyleWithBoxCharacteristics(Box<TextStyleWithBoxCharacteristics>),
