@@ -103,9 +103,10 @@ impl Entity {
                     quote! { #[holder(use_place_holder)] }
                 };
                 let (attr, ty) = match ty {
-                    TypeRef::Named { name, .. } | TypeRef::Entity { name, .. } => {
-                        (format_ident!("{}", name), ty.to_not_supertype())
-                    }
+                    TypeRef::Named { name, .. } | TypeRef::Entity { name, .. } => (
+                        format_ident!("{}", name),
+                        format_ident!("{}", name.to_pascal_case()),
+                    ),
                     _ => unreachable!(),
                 };
                 quote! {
