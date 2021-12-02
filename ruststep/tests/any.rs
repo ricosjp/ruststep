@@ -1,8 +1,7 @@
 use nom::Finish;
 use ruststep::{ast::*, parser::exchange, place_holder::*, tables::*};
-use ruststep_derive::{as_holder, TableInit};
 use serde::Deserialize;
-use std::{collections::HashMap, str::FromStr};
+use std::str::FromStr;
 
 espr_derive::inline_express!(
     r#"
