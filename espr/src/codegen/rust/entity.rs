@@ -42,14 +42,20 @@ impl Entity {
 
     fn generate_any_def(&self, tokens: &mut TokenStream) {
         if !self.subtypes.is_empty() {
-            let subtypes = &self.subtypes;
-            let names: Vec<_> = subtypes
-                .iter()
-                .map(|ty| match &ty {
-                    TypeRef::Entity { name, .. } => format_ident!("{}", name),
+            let mut names = vec![&self.name];
+            for ty in &self.subtypes {
+                match &ty {
+                    TypeRef::Entity { name, .. } => names.push(name),
                     _ => unreachable!(),
-                })
+                }
+            }
+
+            let fields: Vec<_> = names.iter().map(|name| format_ident!("{}", name)).collect();
+            let subtypes: Vec<_> = names
+                .iter()
+                .map(|name| format_ident!("{}", name.to_pascal_case()))
                 .collect();
+
             let any = self.any_ident();
             tokens.append_all(quote! {
                 #[derive(Debug, Clone, PartialEq, Holder)]
@@ -58,7 +64,7 @@ impl Entity {
                 pub enum #any {
                     #(
                     #[holder(use_place_holder)]
-                    #[holder(field = #names)]
+                    #[holder(field = #fields)]
                     #subtypes(Box<#subtypes>)
                     ),*
                 }
