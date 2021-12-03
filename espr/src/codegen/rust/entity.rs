@@ -86,11 +86,12 @@ impl Entity {
                     } else {
                         self.any_ident()
                     };
+                    let variant = self.name_ident();
                     let any_enum = format_ident!("{}Any", supertype_name.to_pascal_case());
                     tokens.append_all(quote! {
                         impl Into<#any_enum> for #name {
                             fn into(self) -> #any_enum {
-                                #any_enum::#name(Box::new(self))
+                                #any_enum::#variant(Box::new(self))
                             }
                         }
                     });

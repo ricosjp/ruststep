@@ -98,7 +98,7 @@ fn subsuper() {
         }
         impl Into<BaseAny> for SubAny {
             fn into(self) -> BaseAny {
-                BaseAny::SubAny(Box::new(self))
+                BaseAny::Sub(Box::new(self))
             }
         }
         #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
