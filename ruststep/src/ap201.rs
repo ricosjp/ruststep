@@ -2810,7 +2810,7 @@ pub mod explicit_draughting {
     }
     impl Into<AnnotationOccurrenceAny> for AnnotationCurveOccurrenceAny {
         fn into(self) -> AnnotationOccurrenceAny {
-            AnnotationOccurrenceAny::AnnotationCurveOccurrenceAny(Box::new(self))
+            AnnotationOccurrenceAny::AnnotationCurveOccurrence(Box::new(self))
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -2860,13 +2860,13 @@ pub mod explicit_draughting {
         AnnotationOccurrence(Box<AnnotationOccurrence>),
         #[holder(use_place_holder)]
         # [holder (field = annotation_curve_occurrence)]
-        AnnotationCurveOccurrence(Box<AnnotationCurveOccurrence>),
+        AnnotationCurveOccurrence(Box<AnnotationCurveOccurrenceAny>),
         #[holder(use_place_holder)]
         # [holder (field = annotation_fill_area_occurrence)]
         AnnotationFillAreaOccurrence(Box<AnnotationFillAreaOccurrence>),
         #[holder(use_place_holder)]
         # [holder (field = annotation_symbol_occurrence)]
-        AnnotationSymbolOccurrence(Box<AnnotationSymbolOccurrence>),
+        AnnotationSymbolOccurrence(Box<AnnotationSymbolOccurrenceAny>),
         #[holder(use_place_holder)]
         # [holder (field = annotation_text_occurrence)]
         AnnotationTextOccurrence(Box<AnnotationTextOccurrence>),
@@ -2876,7 +2876,7 @@ pub mod explicit_draughting {
     }
     impl Into<StyledItemAny> for AnnotationOccurrenceAny {
         fn into(self) -> StyledItemAny {
-            StyledItemAny::AnnotationOccurrenceAny(Box::new(self))
+            StyledItemAny::AnnotationOccurrence(Box::new(self))
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -2925,11 +2925,11 @@ pub mod explicit_draughting {
         AnnotationSubfigureOccurrence(Box<AnnotationSubfigureOccurrence>),
         #[holder(use_place_holder)]
         # [holder (field = terminator_symbol)]
-        TerminatorSymbol(Box<TerminatorSymbol>),
+        TerminatorSymbol(Box<TerminatorSymbolAny>),
     }
     impl Into<AnnotationOccurrenceAny> for AnnotationSymbolOccurrenceAny {
         fn into(self) -> AnnotationOccurrenceAny {
-            AnnotationOccurrenceAny::AnnotationSymbolOccurrenceAny(Box::new(self))
+            AnnotationOccurrenceAny::AnnotationSymbolOccurrence(Box::new(self))
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -3138,7 +3138,7 @@ pub mod explicit_draughting {
     }
     impl Into<BoundedCurveAny> for BSplineCurveAny {
         fn into(self) -> BoundedCurveAny {
-            BoundedCurveAny::BSplineCurveAny(Box::new(self))
+            BoundedCurveAny::BSplineCurve(Box::new(self))
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -3187,7 +3187,7 @@ pub mod explicit_draughting {
         BoundedCurve(Box<BoundedCurve>),
         #[holder(use_place_holder)]
         # [holder (field = b_spline_curve)]
-        BSplineCurve(Box<BSplineCurve>),
+        BSplineCurve(Box<BSplineCurveAny>),
         #[holder(use_place_holder)]
         # [holder (field = composite_curve)]
         CompositeCurve(Box<CompositeCurve>),
@@ -3200,7 +3200,7 @@ pub mod explicit_draughting {
     }
     impl Into<CurveAny> for BoundedCurveAny {
         fn into(self) -> CurveAny {
-            CurveAny::BoundedCurveAny(Box::new(self))
+            CurveAny::BoundedCurve(Box::new(self))
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -3239,7 +3239,7 @@ pub mod explicit_draughting {
     }
     impl Into<MappedItemAny> for CameraImageAny {
         fn into(self) -> MappedItemAny {
-            MappedItemAny::CameraImageAny(Box::new(self))
+            MappedItemAny::CameraImage(Box::new(self))
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -3276,7 +3276,7 @@ pub mod explicit_draughting {
     }
     impl Into<GeometricRepresentationItemAny> for CameraModelAny {
         fn into(self) -> GeometricRepresentationItemAny {
-            GeometricRepresentationItemAny::CameraModelAny(Box::new(self))
+            GeometricRepresentationItemAny::CameraModel(Box::new(self))
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -3350,10 +3350,10 @@ pub mod explicit_draughting {
         Colour(Box<Colour>),
         #[holder(use_place_holder)]
         # [holder (field = colour_specification)]
-        ColourSpecification(Box<ColourSpecification>),
+        ColourSpecification(Box<ColourSpecificationAny>),
         #[holder(use_place_holder)]
         # [holder (field = pre_defined_colour)]
-        PreDefinedColour(Box<PreDefinedColour>),
+        PreDefinedColour(Box<PreDefinedColourAny>),
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
@@ -3394,7 +3394,7 @@ pub mod explicit_draughting {
     }
     impl Into<ColourAny> for ColourSpecificationAny {
         fn into(self) -> ColourAny {
-            ColourAny::ColourSpecificationAny(Box::new(self))
+            ColourAny::ColourSpecification(Box::new(self))
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -3452,7 +3452,7 @@ pub mod explicit_draughting {
     }
     impl Into<GeometricRepresentationItemAny> for CompositeTextAny {
         fn into(self) -> GeometricRepresentationItemAny {
-            GeometricRepresentationItemAny::CompositeTextAny(Box::new(self))
+            GeometricRepresentationItemAny::CompositeText(Box::new(self))
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -3532,7 +3532,7 @@ pub mod explicit_draughting {
     }
     impl Into<CurveAny> for ConicAny {
         fn into(self) -> CurveAny {
-            CurveAny::ConicAny(Box::new(self))
+            CurveAny::Conic(Box::new(self))
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -3619,10 +3619,10 @@ pub mod explicit_draughting {
         Curve(Box<Curve>),
         #[holder(use_place_holder)]
         # [holder (field = bounded_curve)]
-        BoundedCurve(Box<BoundedCurve>),
+        BoundedCurve(Box<BoundedCurveAny>),
         #[holder(use_place_holder)]
         # [holder (field = conic)]
-        Conic(Box<Conic>),
+        Conic(Box<ConicAny>),
         #[holder(use_place_holder)]
         # [holder (field = line)]
         Line(Box<Line>),
@@ -3632,7 +3632,7 @@ pub mod explicit_draughting {
     }
     impl Into<GeometricRepresentationItemAny> for CurveAny {
         fn into(self) -> GeometricRepresentationItemAny {
-            GeometricRepresentationItemAny::CurveAny(Box::new(self))
+            GeometricRepresentationItemAny::Curve(Box::new(self))
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -3824,7 +3824,7 @@ pub mod explicit_draughting {
     }
     impl Into<DraughtingCalloutAny> for DimensionCurveDirectedCalloutAny {
         fn into(self) -> DraughtingCalloutAny {
-            DraughtingCalloutAny::DimensionCurveDirectedCalloutAny(Box::new(self))
+            DraughtingCalloutAny::DimensionCurveDirectedCallout(Box::new(self))
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -3972,7 +3972,7 @@ pub mod explicit_draughting {
         DatumTargetCallout(Box<DatumTargetCallout>),
         #[holder(use_place_holder)]
         # [holder (field = dimension_curve_directed_callout)]
-        DimensionCurveDirectedCallout(Box<DimensionCurveDirectedCallout>),
+        DimensionCurveDirectedCallout(Box<DimensionCurveDirectedCalloutAny>),
         #[holder(use_place_holder)]
         # [holder (field = draughting_elements)]
         DraughtingElements(Box<DraughtingElements>),
@@ -3981,17 +3981,17 @@ pub mod explicit_draughting {
         GeometricalToleranceCallout(Box<GeometricalToleranceCallout>),
         #[holder(use_place_holder)]
         # [holder (field = leader_directed_callout)]
-        LeaderDirectedCallout(Box<LeaderDirectedCallout>),
+        LeaderDirectedCallout(Box<LeaderDirectedCalloutAny>),
         #[holder(use_place_holder)]
         # [holder (field = projection_directed_callout)]
-        ProjectionDirectedCallout(Box<ProjectionDirectedCallout>),
+        ProjectionDirectedCallout(Box<ProjectionDirectedCalloutAny>),
         #[holder(use_place_holder)]
         # [holder (field = structured_dimension_callout)]
         StructuredDimensionCallout(Box<StructuredDimensionCallout>),
     }
     impl Into<GeometricRepresentationItemAny> for DraughtingCalloutAny {
         fn into(self) -> GeometricRepresentationItemAny {
-            GeometricRepresentationItemAny::DraughtingCalloutAny(Box::new(self))
+            GeometricRepresentationItemAny::DraughtingCallout(Box::new(self))
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -4259,7 +4259,7 @@ pub mod explicit_draughting {
     }
     impl Into<SymbolRepresentationAny> for DraughtingSymbolRepresentationAny {
         fn into(self) -> SymbolRepresentationAny {
-            SymbolRepresentationAny::DraughtingSymbolRepresentationAny(Box::new(self))
+            SymbolRepresentationAny::DraughtingSymbolRepresentation(Box::new(self))
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -4318,7 +4318,7 @@ pub mod explicit_draughting {
     }
     impl Into<PresentationSetAny> for DrawingRevisionAny {
         fn into(self) -> PresentationSetAny {
-            PresentationSetAny::DrawingRevisionAny(Box::new(self))
+            PresentationSetAny::DrawingRevision(Box::new(self))
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -4617,13 +4617,13 @@ pub mod explicit_draughting {
         AnnotationFillArea(Box<AnnotationFillArea>),
         #[holder(use_place_holder)]
         # [holder (field = camera_model)]
-        CameraModel(Box<CameraModel>),
+        CameraModel(Box<CameraModelAny>),
         #[holder(use_place_holder)]
         # [holder (field = composite_text)]
-        CompositeText(Box<CompositeText>),
+        CompositeText(Box<CompositeTextAny>),
         #[holder(use_place_holder)]
         # [holder (field = curve)]
-        Curve(Box<Curve>),
+        Curve(Box<CurveAny>),
         #[holder(use_place_holder)]
         # [holder (field = defined_symbol)]
         DefinedSymbol(Box<DefinedSymbol>),
@@ -4632,7 +4632,7 @@ pub mod explicit_draughting {
         Direction(Box<Direction>),
         #[holder(use_place_holder)]
         # [holder (field = draughting_callout)]
-        DraughtingCallout(Box<DraughtingCallout>),
+        DraughtingCallout(Box<DraughtingCalloutAny>),
         #[holder(use_place_holder)]
         # [holder (field = externally_defined_hatch_style)]
         ExternallyDefinedHatchStyle(Box<ExternallyDefinedHatchStyle>),
@@ -4650,32 +4650,32 @@ pub mod explicit_draughting {
         FillAreaStyleTiles(Box<FillAreaStyleTiles>),
         #[holder(use_place_holder)]
         # [holder (field = geometric_set)]
-        GeometricSet(Box<GeometricSet>),
+        GeometricSet(Box<GeometricSetAny>),
         #[holder(use_place_holder)]
         # [holder (field = one_direction_repeat_factor)]
-        OneDirectionRepeatFactor(Box<OneDirectionRepeatFactor>),
+        OneDirectionRepeatFactor(Box<OneDirectionRepeatFactorAny>),
         #[holder(use_place_holder)]
         # [holder (field = placement)]
-        Placement(Box<Placement>),
+        Placement(Box<PlacementAny>),
         #[holder(use_place_holder)]
         # [holder (field = planar_extent)]
-        PlanarExtent(Box<PlanarExtent>),
+        PlanarExtent(Box<PlanarExtentAny>),
         #[holder(use_place_holder)]
         # [holder (field = point)]
-        Point(Box<Point>),
+        Point(Box<PointAny>),
         #[holder(use_place_holder)]
         # [holder (field = symbol_target)]
         SymbolTarget(Box<SymbolTarget>),
         #[holder(use_place_holder)]
         # [holder (field = text_literal)]
-        TextLiteral(Box<TextLiteral>),
+        TextLiteral(Box<TextLiteralAny>),
         #[holder(use_place_holder)]
         # [holder (field = vector)]
         Vector(Box<Vector>),
     }
     impl Into<RepresentationItemAny> for GeometricRepresentationItemAny {
         fn into(self) -> RepresentationItemAny {
-            RepresentationItemAny::GeometricRepresentationItemAny(Box::new(self))
+            RepresentationItemAny::GeometricRepresentationItem(Box::new(self))
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -4701,7 +4701,7 @@ pub mod explicit_draughting {
     }
     impl Into<GeometricRepresentationItemAny> for GeometricSetAny {
         fn into(self) -> GeometricRepresentationItemAny {
-            GeometricRepresentationItemAny::GeometricSetAny(Box::new(self))
+            GeometricRepresentationItemAny::GeometricSet(Box::new(self))
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -4852,7 +4852,7 @@ pub mod explicit_draughting {
     }
     impl Into<DraughtingCalloutAny> for LeaderDirectedCalloutAny {
         fn into(self) -> DraughtingCalloutAny {
-            DraughtingCalloutAny::LeaderDirectedCalloutAny(Box::new(self))
+            DraughtingCalloutAny::LeaderDirectedCallout(Box::new(self))
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -4964,11 +4964,11 @@ pub mod explicit_draughting {
         AnnotationText(Box<AnnotationText>),
         #[holder(use_place_holder)]
         # [holder (field = camera_image)]
-        CameraImage(Box<CameraImage>),
+        CameraImage(Box<CameraImageAny>),
     }
     impl Into<RepresentationItemAny> for MappedItemAny {
         fn into(self) -> RepresentationItemAny {
-            RepresentationItemAny::MappedItemAny(Box::new(self))
+            RepresentationItemAny::MappedItem(Box::new(self))
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -5063,7 +5063,7 @@ pub mod explicit_draughting {
     }
     impl Into<GeometricRepresentationItemAny> for OneDirectionRepeatFactorAny {
         fn into(self) -> GeometricRepresentationItemAny {
-            GeometricRepresentationItemAny::OneDirectionRepeatFactorAny(Box::new(self))
+            GeometricRepresentationItemAny::OneDirectionRepeatFactor(Box::new(self))
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -5263,7 +5263,7 @@ pub mod explicit_draughting {
     }
     impl Into<GeometricRepresentationItemAny> for PlacementAny {
         fn into(self) -> GeometricRepresentationItemAny {
-            GeometricRepresentationItemAny::PlacementAny(Box::new(self))
+            GeometricRepresentationItemAny::Placement(Box::new(self))
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -5304,7 +5304,7 @@ pub mod explicit_draughting {
     }
     impl Into<GeometricRepresentationItemAny> for PlanarExtentAny {
         fn into(self) -> GeometricRepresentationItemAny {
-            GeometricRepresentationItemAny::PlanarExtentAny(Box::new(self))
+            GeometricRepresentationItemAny::PlanarExtent(Box::new(self))
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -5357,7 +5357,7 @@ pub mod explicit_draughting {
     }
     impl Into<GeometricRepresentationItemAny> for PointAny {
         fn into(self) -> GeometricRepresentationItemAny {
-            GeometricRepresentationItemAny::PointAny(Box::new(self))
+            GeometricRepresentationItemAny::Point(Box::new(self))
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -5414,12 +5414,12 @@ pub mod explicit_draughting {
     }
     impl Into<PreDefinedItemAny> for PreDefinedColourAny {
         fn into(self) -> PreDefinedItemAny {
-            PreDefinedItemAny::PreDefinedColourAny(Box::new(self))
+            PreDefinedItemAny::PreDefinedColour(Box::new(self))
         }
     }
     impl Into<ColourAny> for PreDefinedColourAny {
         fn into(self) -> ColourAny {
-            ColourAny::PreDefinedColourAny(Box::new(self))
+            ColourAny::PreDefinedColour(Box::new(self))
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -5443,7 +5443,7 @@ pub mod explicit_draughting {
     }
     impl Into<PreDefinedItemAny> for PreDefinedCurveFontAny {
         fn into(self) -> PreDefinedItemAny {
-            PreDefinedItemAny::PreDefinedCurveFontAny(Box::new(self))
+            PreDefinedItemAny::PreDefinedCurveFont(Box::new(self))
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -5488,16 +5488,16 @@ pub mod explicit_draughting {
         PreDefinedItem(Box<PreDefinedItem>),
         #[holder(use_place_holder)]
         # [holder (field = pre_defined_colour)]
-        PreDefinedColour(Box<PreDefinedColour>),
+        PreDefinedColour(Box<PreDefinedColourAny>),
         #[holder(use_place_holder)]
         # [holder (field = pre_defined_curve_font)]
-        PreDefinedCurveFont(Box<PreDefinedCurveFont>),
+        PreDefinedCurveFont(Box<PreDefinedCurveFontAny>),
         #[holder(use_place_holder)]
         # [holder (field = pre_defined_symbol)]
-        PreDefinedSymbol(Box<PreDefinedSymbol>),
+        PreDefinedSymbol(Box<PreDefinedSymbolAny>),
         #[holder(use_place_holder)]
         # [holder (field = pre_defined_text_font)]
-        PreDefinedTextFont(Box<PreDefinedTextFont>),
+        PreDefinedTextFont(Box<PreDefinedTextFontAny>),
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
@@ -5542,7 +5542,7 @@ pub mod explicit_draughting {
     }
     impl Into<PreDefinedItemAny> for PreDefinedSymbolAny {
         fn into(self) -> PreDefinedItemAny {
-            PreDefinedItemAny::PreDefinedSymbolAny(Box::new(self))
+            PreDefinedItemAny::PreDefinedSymbol(Box::new(self))
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -5579,7 +5579,7 @@ pub mod explicit_draughting {
     }
     impl Into<PreDefinedItemAny> for PreDefinedTextFontAny {
         fn into(self) -> PreDefinedItemAny {
-            PreDefinedItemAny::PreDefinedTextFontAny(Box::new(self))
+            PreDefinedItemAny::PreDefinedTextFont(Box::new(self))
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -5603,7 +5603,7 @@ pub mod explicit_draughting {
     }
     impl Into<PresentationRepresentationAny> for PresentationAreaAny {
         fn into(self) -> PresentationRepresentationAny {
-            PresentationRepresentationAny::PresentationAreaAny(Box::new(self))
+            PresentationRepresentationAny::PresentationArea(Box::new(self))
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -5643,14 +5643,14 @@ pub mod explicit_draughting {
         PresentationRepresentation(Box<PresentationRepresentation>),
         #[holder(use_place_holder)]
         # [holder (field = presentation_area)]
-        PresentationArea(Box<PresentationArea>),
+        PresentationArea(Box<PresentationAreaAny>),
         #[holder(use_place_holder)]
         # [holder (field = presentation_view)]
         PresentationView(Box<PresentationView>),
     }
     impl Into<RepresentationAny> for PresentationRepresentationAny {
         fn into(self) -> RepresentationAny {
-            RepresentationAny::PresentationRepresentationAny(Box::new(self))
+            RepresentationAny::PresentationRepresentation(Box::new(self))
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -5667,7 +5667,7 @@ pub mod explicit_draughting {
         PresentationSet(Box<PresentationSet>),
         #[holder(use_place_holder)]
         # [holder (field = drawing_revision)]
-        DrawingRevision(Box<DrawingRevision>),
+        DrawingRevision(Box<DrawingRevisionAny>),
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
@@ -5860,7 +5860,7 @@ pub mod explicit_draughting {
     }
     impl Into<DraughtingCalloutAny> for ProjectionDirectedCalloutAny {
         fn into(self) -> DraughtingCalloutAny {
-            DraughtingCalloutAny::ProjectionDirectedCalloutAny(Box::new(self))
+            DraughtingCalloutAny::ProjectionDirectedCallout(Box::new(self))
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -5968,13 +5968,13 @@ pub mod explicit_draughting {
         DraughtingModel(Box<DraughtingModel>),
         #[holder(use_place_holder)]
         # [holder (field = presentation_representation)]
-        PresentationRepresentation(Box<PresentationRepresentation>),
+        PresentationRepresentation(Box<PresentationRepresentationAny>),
         #[holder(use_place_holder)]
         # [holder (field = shape_representation)]
-        ShapeRepresentation(Box<ShapeRepresentation>),
+        ShapeRepresentation(Box<ShapeRepresentationAny>),
         #[holder(use_place_holder)]
         # [holder (field = symbol_representation)]
-        SymbolRepresentation(Box<SymbolRepresentation>),
+        SymbolRepresentation(Box<SymbolRepresentationAny>),
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
@@ -6014,13 +6014,13 @@ pub mod explicit_draughting {
         RepresentationItem(Box<RepresentationItem>),
         #[holder(use_place_holder)]
         # [holder (field = geometric_representation_item)]
-        GeometricRepresentationItem(Box<GeometricRepresentationItem>),
+        GeometricRepresentationItem(Box<GeometricRepresentationItemAny>),
         #[holder(use_place_holder)]
         # [holder (field = mapped_item)]
-        MappedItem(Box<MappedItem>),
+        MappedItem(Box<MappedItemAny>),
         #[holder(use_place_holder)]
         # [holder (field = styled_item)]
-        StyledItem(Box<StyledItem>),
+        StyledItem(Box<StyledItemAny>),
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
@@ -6118,7 +6118,7 @@ pub mod explicit_draughting {
     }
     impl Into<RepresentationAny> for ShapeRepresentationAny {
         fn into(self) -> RepresentationAny {
-            RepresentationAny::ShapeRepresentationAny(Box::new(self))
+            RepresentationAny::ShapeRepresentation(Box::new(self))
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -6170,11 +6170,11 @@ pub mod explicit_draughting {
         StyledItem(Box<StyledItem>),
         #[holder(use_place_holder)]
         # [holder (field = annotation_occurrence)]
-        AnnotationOccurrence(Box<AnnotationOccurrence>),
+        AnnotationOccurrence(Box<AnnotationOccurrenceAny>),
     }
     impl Into<RepresentationItemAny> for StyledItemAny {
         fn into(self) -> RepresentationItemAny {
-            RepresentationItemAny::StyledItemAny(Box::new(self))
+            RepresentationItemAny::StyledItem(Box::new(self))
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -6205,11 +6205,11 @@ pub mod explicit_draughting {
         DraughtingSubfigureRepresentation(Box<DraughtingSubfigureRepresentation>),
         #[holder(use_place_holder)]
         # [holder (field = draughting_symbol_representation)]
-        DraughtingSymbolRepresentation(Box<DraughtingSymbolRepresentation>),
+        DraughtingSymbolRepresentation(Box<DraughtingSymbolRepresentationAny>),
     }
     impl Into<RepresentationAny> for SymbolRepresentationAny {
         fn into(self) -> RepresentationAny {
-            RepresentationAny::SymbolRepresentationAny(Box::new(self))
+            RepresentationAny::SymbolRepresentation(Box::new(self))
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -6277,7 +6277,7 @@ pub mod explicit_draughting {
     }
     impl Into<AnnotationSymbolOccurrenceAny> for TerminatorSymbolAny {
         fn into(self) -> AnnotationSymbolOccurrenceAny {
-            AnnotationSymbolOccurrenceAny::TerminatorSymbolAny(Box::new(self))
+            AnnotationSymbolOccurrenceAny::TerminatorSymbol(Box::new(self))
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -6310,14 +6310,14 @@ pub mod explicit_draughting {
         TextLiteralWithBlankingBox(Box<TextLiteralWithBlankingBox>),
         #[holder(use_place_holder)]
         # [holder (field = text_literal_with_delineation)]
-        TextLiteralWithDelineation(Box<TextLiteralWithDelineation>),
+        TextLiteralWithDelineation(Box<TextLiteralWithDelineationAny>),
         #[holder(use_place_holder)]
         # [holder (field = text_literal_with_extent)]
         TextLiteralWithExtent(Box<TextLiteralWithExtent>),
     }
     impl Into<GeometricRepresentationItemAny> for TextLiteralAny {
         fn into(self) -> GeometricRepresentationItemAny {
-            GeometricRepresentationItemAny::TextLiteralAny(Box::new(self))
+            GeometricRepresentationItemAny::TextLiteral(Box::new(self))
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -6372,7 +6372,7 @@ pub mod explicit_draughting {
     }
     impl Into<TextLiteralAny> for TextLiteralWithDelineationAny {
         fn into(self) -> TextLiteralAny {
-            TextLiteralAny::TextLiteralWithDelineationAny(Box::new(self))
+            TextLiteralAny::TextLiteralWithDelineation(Box::new(self))
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
