@@ -74,7 +74,7 @@ fn subsuper() {
             Base(Box<Base>),
             #[holder(use_place_holder)]
             # [holder (field = sub)]
-            Sub(Box<Sub>),
+            Sub(Box<SubAny>),
         }
         #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
         # [holder (table = Tables)]

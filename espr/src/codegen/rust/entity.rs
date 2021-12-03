@@ -42,19 +42,26 @@ impl Entity {
 
     fn generate_any_def(&self, tokens: &mut TokenStream) {
         if !self.subtypes.is_empty() {
-            let mut names = vec![&self.name];
+            let mut fields = vec![format_ident!("{}", self.name)];
+            let mut variants = vec![format_ident!("{}", self.name.to_pascal_case())];
+            let mut subtypes = vec![format_ident!("{}", self.name.to_pascal_case())];
+
             for ty in &self.subtypes {
                 match &ty {
-                    TypeRef::Entity { name, .. } => names.push(name),
+                    TypeRef::Entity {
+                        name, is_supertype, ..
+                    } => {
+                        fields.push(format_ident!("{}", name));
+                        variants.push(format_ident!("{}", name.to_pascal_case()));
+                        if *is_supertype {
+                            subtypes.push(format_ident!("{}Any", name.to_pascal_case()));
+                        } else {
+                            subtypes.push(format_ident!("{}", name.to_pascal_case()));
+                        }
+                    }
                     _ => unreachable!(),
                 }
             }
-
-            let fields: Vec<_> = names.iter().map(|name| format_ident!("{}", name)).collect();
-            let subtypes: Vec<_> = names
-                .iter()
-                .map(|name| format_ident!("{}", name.to_pascal_case()))
-                .collect();
 
             let any = self.any_ident();
             tokens.append_all(quote! {
@@ -65,7 +72,7 @@ impl Entity {
                     #(
                     #[holder(use_place_holder)]
                     #[holder(field = #fields)]
-                    #subtypes(Box<#subtypes>)
+                    #variants(Box<#subtypes>)
                     ),*
                 }
             }); // tokens.append_all
