@@ -43,6 +43,7 @@ In addition to original Keep-a-Changelog, we use following rules:
 - Use Rust 2021 edition https://github.com/ricosjp/ruststep/pull/128
 
 ### Fixed
+- set raw identifier for reserved words. https://github.com/ricosjp/ruststep/pull/172
 - Drop unused derive_more, and dyn-clone crate dependencies https://github.com/ricosjp/ruststep/pull/159
 
 ### Deprecated

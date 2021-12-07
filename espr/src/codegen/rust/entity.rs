@@ -1,5 +1,6 @@
 use crate::ir::*;
 
+use check_keyword::CheckKeyword;
 use inflector::Inflector;
 use proc_macro2::TokenStream;
 use quote::*;
@@ -8,7 +9,7 @@ impl ToTokens for EntityAttribute {
     fn to_tokens(&self, tokens: &mut TokenStream) {
         let EntityAttribute { name, ty, optional } = self;
 
-        let attr_name = format_ident!("{}", name);
+        let attr_name = format_ident!("{}", name.to_safe());
         let attr_type = if *optional {
             quote! { Option<#ty> }
         } else {
@@ -37,7 +38,7 @@ impl Entity {
     }
 
     fn field_ident(&self) -> syn::Ident {
-        format_ident!("{}", self.name)
+        format_ident!("{}", self.name.to_safe())
     }
 
     fn generate_any_def(&self, tokens: &mut TokenStream) {
@@ -46,7 +47,7 @@ impl Entity {
             let names: Vec<_> = subtypes
                 .iter()
                 .map(|ty| match &ty {
-                    TypeRef::Entity { name, .. } => format_ident!("{}", name),
+                    TypeRef::Entity { name, .. } => format_ident!("{}", name.to_safe()),
                     _ => unreachable!(),
                 })
                 .collect();
@@ -99,7 +100,7 @@ impl Entity {
             .map(|ty| {
                 let (attr, ty) = match ty {
                     TypeRef::Named { name, .. } | TypeRef::Entity { name, .. } => {
-                        (format_ident!("{}", name), ty)
+                        (format_ident!("{}", name.to_safe()), ty)
                     }
                     _ => unreachable!(),
                 };
