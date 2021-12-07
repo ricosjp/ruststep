@@ -32,8 +32,8 @@ In addition to original Keep-a-Changelog, we use following rules:
 - `Tables` from `DataSection` https://github.com/ricosjp/ruststep/pull/139
 - impl `FromStr` for `Record` and `DataSection` https://github.com/ricosjp/ruststep/pull/140
 
-### Changeuse std::cell::RefCell;d
-- Fixed a bug where the parent class was not registered in the child class field. https://github.com/ricosjp/ruststep/pull/166
+### Changed
+- Translates `TYPE` declarations in EXPRESS to Rust tuple struct https://github.com/ricosjp/ruststep/pull/144
 - Translatuse std::rc::Rc;es `TYPE` declarations in EXPRESS to Rust tuple struct https://github.com/ricosjp/ruststep/pull/144
 - Visitor struct and all fields in Holder struct become public https://github.com/ricosjp/ruststep/pull/160
 - Add flag to switch ruststep internal/external codegen in IR::to_token_stream https://github.com/ricosjp/ruststep/pull/158
@@ -41,6 +41,7 @@ In addition to original Keep-a-Changelog, we use following rules:
 - Use Rust 2021 edition https://github.com/ricosjp/ruststep/pull/128
 
 ### Fixed
+- supertype field is not included in subtypes type https://github.com/ricosjp/ruststep/pull/166
 - Drop unused derive_more, and dyn-clone crate dependencies https://github.com/ricosjp/ruststep/pull/159
 
 ### Deprecated
