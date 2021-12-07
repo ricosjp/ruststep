@@ -1,5 +1,6 @@
 use crate::ir::*;
 
+use check_keyword::CheckKeyword;
 use inflector::Inflector;
 use proc_macro2::TokenStream;
 use quote::*;
@@ -58,8 +59,12 @@ impl Schema {
             .collect();
         let holder_name: Vec<_> = entities
             .iter()
-            .map(|e| format_ident!("{}", e.name))
-            .chain(type_decls.clone().map(|e| format_ident!("{}", e.id())))
+            .map(|e| format_ident!("{}", e.name.to_safe()))
+            .chain(
+                type_decls
+                    .clone()
+                    .map(|e| format_ident!("{}", e.id().to_safe())),
+            )
             .collect();
         let iter_name: Vec<_> = entities
             .iter()
