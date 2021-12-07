@@ -26,7 +26,7 @@ END_SCHEMA;
 "#;
 
 #[test]
-fn list() {
+fn sub_super_type() {
     let st = SyntaxTree::parse(EXPRESS).unwrap();
     let ir = IR::from_syntax_tree(&st).unwrap();
     let tt = ir.to_token_stream(CratePrefix::External).to_string();
@@ -35,7 +35,7 @@ fn list() {
 
     insta::assert_snapshot!(tt, @r###"
     pub mod test_schema {
-        use crate::{
+        use ruststep::{
             as_holder, derive_more::*, error::Result, primitive::*, tables::*, Holder, TableInit,
         };
         use std::collections::HashMap;
@@ -59,9 +59,7 @@ fn list() {
                     .cloned()
                     .map(move |value| value.into_owned(&self))
             }
-            pub fn rabbit_iter<'table>(
-                &'table self,
-            ) -> impl Iterator<Item = Result<Rabbit>> + 'table {
+            pub fn rabbit_iter<'table>(&'table self) -> impl Iterator<Item = Result<Rabbit>> + 'table {
                 self.rabbit
                     .values()
                     .cloned()

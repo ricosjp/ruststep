@@ -42,14 +42,13 @@ impl Entity {
 
     fn generate_any_def(&self, tokens: &mut TokenStream) {
         if !self.subtypes.is_empty() {
-            let subtypes = &self.subtypes;
-            let names: Vec<_> = subtypes
-                .iter()
-                .map(|ty| match &ty {
-                    TypeRef::Entity { name, .. } => format_ident!("{}", name),
-                    _ => unreachable!(),
-                })
-                .collect();
+            let mut subtypes = vec![self.name_ident().to_token_stream()];
+            subtypes.extend(self.subtypes.iter().map(|a| quote! {#a}));
+            let mut names = vec![format_ident!("{}", self.name)];
+            names.extend(self.subtypes.iter().map(|ty| match &ty {
+                TypeRef::Entity { name, .. } => format_ident!("{}", name),
+                _ => unreachable!(),
+            }));
             let any = self.any_ident();
             tokens.append_all(quote! {
                 #[derive(Debug, Clone, PartialEq, Holder)]
