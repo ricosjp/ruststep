@@ -2178,6 +2178,8 @@ pub mod explicit_draughting {
         AsRef,
         Deref,
         DerefMut,
+        From,
+        Into,
         :: serde :: Serialize,
         :: serde :: Deserialize,
     )]
@@ -2199,6 +2201,8 @@ pub mod explicit_draughting {
         AsRef,
         Deref,
         DerefMut,
+        From,
+        Into,
         :: serde :: Serialize,
         :: serde :: Deserialize,
     )]
@@ -2327,6 +2331,8 @@ pub mod explicit_draughting {
         AsRef,
         Deref,
         DerefMut,
+        From,
+        Into,
         :: serde :: Serialize,
         :: serde :: Deserialize,
     )]
@@ -2369,6 +2375,8 @@ pub mod explicit_draughting {
         AsRef,
         Deref,
         DerefMut,
+        From,
+        Into,
         :: serde :: Serialize,
         :: serde :: Deserialize,
     )]
@@ -2389,6 +2397,8 @@ pub mod explicit_draughting {
         AsRef,
         Deref,
         DerefMut,
+        From,
+        Into,
         :: serde :: Serialize,
         :: serde :: Deserialize,
     )]
@@ -2411,6 +2421,8 @@ pub mod explicit_draughting {
         AsRef,
         Deref,
         DerefMut,
+        From,
+        Into,
         :: serde :: Serialize,
         :: serde :: Deserialize,
     )]
@@ -2426,6 +2438,8 @@ pub mod explicit_draughting {
         AsRef,
         Deref,
         DerefMut,
+        From,
+        Into,
         :: serde :: Serialize,
         :: serde :: Deserialize,
     )]
@@ -2451,6 +2465,8 @@ pub mod explicit_draughting {
         AsRef,
         Deref,
         DerefMut,
+        From,
+        Into,
         :: serde :: Serialize,
         :: serde :: Deserialize,
     )]
@@ -2484,6 +2500,8 @@ pub mod explicit_draughting {
         AsRef,
         Deref,
         DerefMut,
+        From,
+        Into,
         :: serde :: Serialize,
         :: serde :: Deserialize,
     )]
@@ -2533,6 +2551,8 @@ pub mod explicit_draughting {
         AsRef,
         Deref,
         DerefMut,
+        From,
+        Into,
         :: serde :: Serialize,
         :: serde :: Deserialize,
     )]
@@ -2642,6 +2662,8 @@ pub mod explicit_draughting {
         AsRef,
         Deref,
         DerefMut,
+        From,
+        Into,
         :: serde :: Serialize,
         :: serde :: Deserialize,
     )]
@@ -2734,6 +2756,8 @@ pub mod explicit_draughting {
         AsRef,
         Deref,
         DerefMut,
+        From,
+        Into,
         :: serde :: Serialize,
         :: serde :: Deserialize,
     )]
