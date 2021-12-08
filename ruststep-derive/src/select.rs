@@ -394,4 +394,114 @@ mod tests {
         }
         "###);
     }
+
+    #[test]
+    fn base_any() {
+        let input: syn::DeriveInput = syn::parse_str(
+            r#"
+            # [holder (table = Tables)]
+            #[holder(generate_deserialize)]
+            pub enum BaseAny {
+                #[holder(use_place_holder)]
+                # [holder (field = base)]
+                Base(Box<Base>),
+                #[holder(use_place_holder)]
+                # [holder (field = sub)]
+                Sub(Box<SubAny>),
+            }
+            "#,
+        )
+        .unwrap();
+
+        let tt = crate::derive_holder(&input);
+        let out = espr::codegen::rust::rustfmt(tt.to_string());
+
+        insta::assert_snapshot!(out, @r###"
+        #[derive(Clone, Debug, PartialEq)]
+        pub enum BaseAnyHolder {
+            Base(Box<BaseHolder>),
+            Sub(Box<SubAnyHolder>),
+        }
+        impl ::ruststep::tables::Holder for BaseAnyHolder {
+            type Owned = BaseAny;
+            type Table = Tables;
+            fn into_owned(self, table: &Self::Table) -> ::ruststep::error::Result<Self::Owned> {
+                Ok(match self {
+                    BaseAnyHolder::Base(sub) => BaseAny::Base(Box::new(sub.into_owned(table)?)),
+                    BaseAnyHolder::Sub(sub) => BaseAny::Sub(Box::new(sub.into_owned(table)?)),
+                })
+            }
+            fn name() -> &'static str {
+                "BASE_ANY"
+            }
+            fn attr_len() -> usize {
+                0
+            }
+        }
+        impl<'de> ::serde::de::Deserialize<'de> for BaseAnyHolder {
+            fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+            where
+                D: ::serde::de::Deserializer<'de>,
+            {
+                deserializer.deserialize_tuple_struct("BASE_ANY", 0, BaseAnyHolderVisitor {})
+            }
+        }
+        pub struct BaseAnyHolderVisitor;
+        impl<'de> ::serde::de::Visitor<'de> for BaseAnyHolderVisitor {
+            type Value = BaseAnyHolder;
+            fn expecting(&self, formatter: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+                write!(formatter, "BASE_ANY")
+            }
+            fn visit_map<A>(self, mut map: A) -> ::std::result::Result<Self::Value, A::Error>
+            where
+                A: ::serde::de::MapAccess<'de>,
+            {
+                let key: String = map
+                    .next_key()?
+                    .expect("Empty map cannot be accepted as ruststep Holder");
+                match key.as_str() {
+                    "BASE" => {
+                        let owned = map.next_value()?;
+                        return Ok(BaseAnyHolder::Base(Box::new(owned)));
+                    }
+                    "SUB" => {
+                        let owned = map.next_value()?;
+                        return Ok(BaseAnyHolder::Sub(Box::new(owned)));
+                    }
+                    _ => {
+                        use serde::de::{Error, Unexpected};
+                        return Err(A::Error::invalid_value(Unexpected::Other(&key), &self));
+                    }
+                }
+            }
+        }
+        impl ::ruststep::tables::WithVisitor for BaseAnyHolder {
+            type Visitor = BaseAnyHolderVisitor;
+            fn visitor_new() -> Self::Visitor {
+                BaseAnyHolderVisitor {}
+            }
+        }
+        impl ::ruststep::tables::EntityTable<BaseAnyHolder> for Tables {
+            fn get_owned(&self, entity_id: u64) -> ::ruststep::error::Result<BaseAny> {
+                if let Ok(owned) = ::ruststep::tables::get_owned(self, &self.base, entity_id) {
+                    return Ok(BaseAny::Base(Box::new(owned)));
+                }
+                if let Ok(owned) = ::ruststep::tables::get_owned(self, &self.sub, entity_id) {
+                    return Ok(BaseAny::Sub(Box::new(owned)));
+                }
+                Err(::ruststep::error::Error::UnknownEntity(entity_id))
+            }
+            fn owned_iter<'table>(
+                &'table self,
+            ) -> Box<dyn Iterator<Item = ::ruststep::error::Result<BaseAny>> + 'table> {
+                Box::new(::itertools::chain![
+                    ::ruststep::tables::owned_iter(self, &self.base)
+                        .map(|owned| owned.map(|owned| BaseAny::Base(Box::new(owned)))),
+                    ::ruststep::tables::owned_iter(self, &self.sub)
+                        .map(|owned| owned.map(|owned| BaseAny::Sub(Box::new(owned))))
+                ])
+            }
+        }
+        "###);
+    }
 }
