@@ -68,28 +68,25 @@ impl Entity {
     }
 
     fn generate_into_any(&self, tokens: &mut TokenStream) {
+        let name = if self.subtypes.is_empty() {
+            self.name_ident()
+        } else {
+            self.any_ident()
+        };
         for ty in &self.supertypes {
             if let TypeRef::Entity {
                 name: supertype_name,
-                is_supertype,
                 ..
             } = ty
             {
-                if *is_supertype {
-                    let name = if self.subtypes.is_empty() {
-                        self.name_ident()
-                    } else {
-                        self.any_ident()
-                    };
-                    let any_enum = format_ident!("{}Any", supertype_name.to_pascal_case());
-                    tokens.append_all(quote! {
-                        impl Into<#any_enum> for #name {
-                            fn into(self) -> #any_enum {
-                                #any_enum::#name(Box::new(self))
-                            }
+                let any_enum = format_ident!("{}Any", supertype_name.to_pascal_case());
+                tokens.append_all(quote! {
+                    impl Into<#any_enum> for #name {
+                        fn into(self) -> #any_enum {
+                            #any_enum::#name(Box::new(self))
                         }
-                    });
-                }
+                    }
+                });
             }
         }
     }
