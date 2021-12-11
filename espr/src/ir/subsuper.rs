@@ -18,12 +18,11 @@ impl SubSuperGraph {
             let scope = root.pushed(ScopeType::Schema, &schema.name);
             // Check `SUBTYPE OF` specification
             for entity in &schema.entities {
-                let entity_scope = &scope;
                 // Be sure that `ENTITY A SUBTYPE OF (B)` means `B` is *supertype* of `A`
                 if let Some(supertypes) = &entity.subtype_of {
                     for name in &supertypes.entity_references {
-                        let sub = Path::new(&entity_scope, ScopeType::Entity, &entity.name);
-                        let sup = ns.resolve(&entity_scope, name)?;
+                        let sub = Path::new(&scope, ScopeType::Entity, &entity.name);
+                        let sup = ns.resolve(&scope, name)?;
                         let subs: &mut Vec<_> = super_to_sub.entry(sup.clone()).or_default();
                         subs.push(sub.clone());
                         let sups: &mut Vec<_> = sub_to_super.entry(sub).or_default();
