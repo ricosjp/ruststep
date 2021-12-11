@@ -28,68 +28,78 @@ impl ToTokens for EntityAttribute {
     }
 }
 
+// Additional functions to use in codegen/rust for ir::Entity.
 impl Entity {
     fn name_ident(&self) -> syn::Ident {
         format_ident!("{}", self.name.to_pascal_case())
     }
 
     fn any_ident(&self) -> syn::Ident {
+        // `Any` indentifier must be appears if the entity is supertype
+        assert!(!self.subtypes.is_empty());
         format_ident!("{}Any", self.name.to_pascal_case())
     }
 
+    /// Field identifier
     fn field_ident(&self) -> syn::Ident {
         format_ident!("{}", self.name.to_safe())
     }
 
-    fn generate_any_def(&self, tokens: &mut TokenStream) {
-        if !self.subtypes.is_empty() {
-            let subtypes = &self.subtypes;
-            let names: Vec<_> = subtypes
-                .iter()
-                .map(|ty| match &ty {
-                    TypeRef::Entity { name, .. } => format_ident!("{}", name.to_safe()),
-                    _ => unreachable!(),
-                })
-                .collect();
-            let any = self.any_ident();
-            tokens.append_all(quote! {
-                #[derive(Debug, Clone, PartialEq, Holder)]
-                #[holder(table = Tables)]
-                #[holder(generate_deserialize)]
-                pub enum #any {
-                    #(
-                    #[holder(use_place_holder)]
-                    #[holder(field = #names)]
-                    #subtypes(Box<#subtypes>)
-                    ),*
-                }
-            }); // tokens.append_all
-        }
+    /// Generate declaration of `XxxAny` enum
+    fn generate_any_enum(&self, tokens: &mut TokenStream) {
+        let any = self.any_ident();
+        let name = self.name_ident();
+        let field = format_ident!("{}", self.name.to_safe());
+        let subtypes = &self.subtypes;
+        let field_names: Vec<_> = subtypes
+            .iter()
+            .map(|ty| match &ty {
+                TypeRef::Entity { name, .. } => format_ident!("{}", name.to_safe()),
+                _ => unreachable!(),
+            })
+            .collect();
+
+        tokens.append_all(quote! {
+            #[derive(Debug, Clone, PartialEq, Holder)]
+            #[holder(table = Tables)]
+            #[holder(generate_deserialize)]
+            pub enum #any {
+                #[holder(use_place_holder)]
+                #[holder(field = #field)]
+                #name(Box<#name>),
+                #(
+                #[holder(use_place_holder)]
+                #[holder(field = #field_names)]
+                #subtypes(Box<#subtypes>)
+                ),*
+            }
+        }); // tokens.append_all
     }
 
+    /// Generate `impl Into<SelfAny> for SubType` for self and all subtypes
     fn generate_into_any(&self, tokens: &mut TokenStream) {
-        for ty in &self.supertypes {
-            if let TypeRef::Entity {
-                name: supertype_name,
-                is_supertype,
-                ..
-            } = ty
-            {
-                if *is_supertype {
-                    let name = if self.subtypes.is_empty() {
-                        self.name_ident()
-                    } else {
-                        self.any_ident()
-                    };
-                    let any_enum = format_ident!("{}Any", supertype_name.to_pascal_case());
-                    tokens.append_all(quote! {
-                        impl Into<#any_enum> for #name {
-                            fn into(self) -> #any_enum {
-                                #any_enum::#name(Box::new(self))
-                            }
-                        }
-                    });
+        let any = self.any_ident();
+        let name = self.name_ident();
+
+        // `Self` to `SelfAny`
+        tokens.append_all(quote! {
+            impl Into<#any> for #name {
+                fn into(self) -> #any {
+                    #any::#name(Box::new(self))
                 }
+            }
+        });
+
+        for ty in &self.subtypes {
+            if let TypeRef::Entity { name, .. } = ty {
+                let name = format_ident!("{}", name.to_pascal_case());
+                tokens.append_all(quote! {
+                    impl Into<#any> for #name {
+                        fn into(self) -> #any {
+                            #any::#name(Box::new(self))
+                        }
+                    }
+                });
             }
         }
     }
@@ -149,7 +159,11 @@ impl ToTokens for Entity {
             }
         });
 
-        self.generate_any_def(tokens);
-        self.generate_into_any(tokens);
+        // Generate `Any` enum if this entity is a supertype of other entities
+        if !self.subtypes.is_empty() {
+            self.generate_any_enum(tokens);
+            // Generate `impl Into<XxxAny> for Yyy` for self and all subtypes
+            self.generate_into_any(tokens);
+        }
     }
 }
