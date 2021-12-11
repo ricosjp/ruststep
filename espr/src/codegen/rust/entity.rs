@@ -154,8 +154,8 @@ impl ToTokens for Entity {
             #[holder(generate_deserialize)]
             pub struct #name {
                 #attr_macro
-                #(#supertype_attributes),*
-                #(#attributes),*
+                #(#supertype_attributes,)*
+                #(#attributes,)*
             }
         });
 
