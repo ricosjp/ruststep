@@ -15,6 +15,7 @@ In addition to original Keep-a-Changelog, we use following rules:
 ## Unreleased (will be 0.2.0)
 
 ### Added
+- Legalize the type declare of `SET` and `LIST`. https://github.com/ricosjp/ruststep/pull/171
 - Snapshot testing for ruststep-derive https://github.com/ricosjp/ruststep/pull/175
 - `ast::Component` trait for converting from String to AST https://github.com/ricosjp/ruststep/pull/168
 - Refactoring `espr::codegen` https://github.com/ricosjp/ruststep/pull/165
