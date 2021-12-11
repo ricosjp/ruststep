@@ -87,7 +87,7 @@ impl Entity {
 
         for ty in &self.subtypes {
             if let TypeRef::Entity { name, .. } = ty {
-                let name = format_ident!("{}", name.to_safe());
+                let name = format_ident!("{}", name.to_pascal_case());
                 tokens.append_all(quote! {
                     impl Into<#any> for #name {
                         fn into(self) -> #any {
