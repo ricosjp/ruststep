@@ -48,6 +48,8 @@ impl Entity {
     /// Generate declaration of `XxxAny` enum
     fn generate_any_enum(&self, tokens: &mut TokenStream) {
         let any = self.any_ident();
+        let name = self.name_ident();
+        let field = format_ident!("{}", self.name.to_safe());
         let subtypes = &self.subtypes;
         let field_names: Vec<_> = subtypes
             .iter()
@@ -62,6 +64,9 @@ impl Entity {
             #[holder(table = Tables)]
             #[holder(generate_deserialize)]
             pub enum #any {
+                #[holder(use_place_holder)]
+                #[holder(field = #field)]
+                #name(Box<#name>),
                 #(
                 #[holder(use_place_holder)]
                 #[holder(field = #field_names)]
