@@ -47,6 +47,7 @@ In addition to original Keep-a-Changelog, we use following rules:
 
 ### Fixed
 - supertype field is not included in subtypes type https://github.com/ricosjp/ruststep/pull/166
+- Generate `Into<XxxAny>` correctly https://github.com/ricosjp/ruststep/pull/176
 - set raw identifier for reserved words. https://github.com/ricosjp/ruststep/pull/172
 - Drop unused derive_more, and dyn-clone crate dependencies https://github.com/ricosjp/ruststep/pull/159
 
