@@ -47,11 +47,7 @@ impl Entity {
 
     /// Generate declaration of `XxxAny` enum
     fn generate_any_enum(&self, tokens: &mut TokenStream) {
-        assert!(!self.subtypes.is_empty());
-
         let any = self.any_ident();
-        let name = self.name_ident();
-        let field = format_ident!("{}", self.name.to_safe());
 
         let mut fields = vec![format_ident!("{}", self.name.to_safe())];
         let mut variants = vec![format_ident!("{}", self.name.to_pascal_case())];
@@ -79,9 +75,6 @@ impl Entity {
             #[holder(table = Tables)]
             #[holder(generate_deserialize)]
             pub enum #any {
-                #[holder(use_place_holder)]
-                #[holder(field = #field)]
-                #name(Box<#name>),
                 #(
                 #[holder(use_place_holder)]
                 #[holder(field = #fields)]
