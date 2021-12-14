@@ -41,7 +41,7 @@ impl Entity {
         format_ident!("{}", self.name.to_safe())
     }
 
-    fn generate_any_def(&self, tokens: &mut TokenStream) {
+    fn generate_any_enum(&self, tokens: &mut TokenStream) {
         if !self.subtypes.is_empty() {
             let mut fields = vec![format_ident!("{}", self.name.to_safe())];
             let mut variants = vec![format_ident!("{}", self.name.to_pascal_case())];
@@ -170,7 +170,7 @@ impl ToTokens for Entity {
             }
         });
 
-        self.generate_any_def(tokens);
+        self.generate_any_enum(tokens);
         self.generate_into_any(tokens);
     }
 }
