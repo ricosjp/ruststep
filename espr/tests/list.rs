@@ -9,6 +9,12 @@ SCHEMA test_schema;
   ENTITY b;
     a: LIST [0:?] OF a;
   END_ENTITY;
+
+  TYPE c = LIST [0:?] OF REAL;
+  END_TYPE;
+  
+  TYPE d = LIST [0:?] OF a;
+  END_TYPE;
 END_SCHEMA;
 "#;
 
@@ -30,6 +36,8 @@ fn list() {
         pub struct Tables {
             a: HashMap<u64, as_holder!(A)>,
             b: HashMap<u64, as_holder!(B)>,
+            c: HashMap<u64, as_holder!(C)>,
+            d: HashMap<u64, as_holder!(D)>,
         }
         impl Tables {
             pub fn a_iter<'table>(&'table self) -> impl Iterator<Item = Result<A>> + 'table {
@@ -44,7 +52,29 @@ fn list() {
                     .cloned()
                     .map(move |value| value.into_owned(&self))
             }
+            pub fn c_iter<'table>(&'table self) -> impl Iterator<Item = Result<C>> + 'table {
+                self.c
+                    .values()
+                    .cloned()
+                    .map(move |value| value.into_owned(&self))
+            }
+            pub fn d_iter<'table>(&'table self) -> impl Iterator<Item = Result<D>> + 'table {
+                self.d
+                    .values()
+                    .cloned()
+                    .map(move |value| value.into_owned(&self))
+            }
         }
+        #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, :: ruststep_derive :: Holder)]
+        # [holder (table = Tables)]
+        # [holder (field = c)]
+        #[holder(generate_deserialize)]
+        pub struct C(#[holder(use_place_holder)] pub Vec<f64>);
+        #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, :: ruststep_derive :: Holder)]
+        # [holder (table = Tables)]
+        # [holder (field = d)]
+        #[holder(generate_deserialize)]
+        pub struct D(#[holder(use_place_holder)] pub Vec<A>);
         #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
         # [holder (table = Tables)]
         # [holder (field = a)]
