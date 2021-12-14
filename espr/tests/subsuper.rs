@@ -76,11 +76,27 @@ fn subsuper() {
             # [holder (field = sub)]
             Sub(Box<SubAny>),
         }
-        #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+        impl Into<BaseAny> for Base {
+            fn into(self) -> BaseAny {
+                BaseAny::Base(Box::new(self))
+            }
+        }
+        impl Into<BaseAny> for Sub {
+            fn into(self) -> BaseAny {
+                BaseAny::Sub(Box::new(self))
+            }
+        }
+        #[derive(
+            Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        )]
         # [holder (table = Tables)]
         # [holder (field = sub)]
         #[holder(generate_deserialize)]
         pub struct Sub {
+            #[as_ref]
+            #[as_mut]
+            #[deref]
+            #[deref_mut]
             #[holder(use_place_holder)]
             pub base: Base,
             pub y: f64,
@@ -96,24 +112,30 @@ fn subsuper() {
             # [holder (field = subsub)]
             Subsub(Box<Subsub>),
         }
-        impl Into<BaseAny> for SubAny {
-            fn into(self) -> BaseAny {
-                BaseAny::Sub(Box::new(self))
+        impl Into<SubAny> for Sub {
+            fn into(self) -> SubAny {
+                SubAny::Sub(Box::new(self))
             }
-        }
-        #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
-        # [holder (table = Tables)]
-        # [holder (field = subsub)]
-        #[holder(generate_deserialize)]
-        pub struct Subsub {
-            #[holder(use_place_holder)]
-            pub sub: Sub,
-            pub z: f64,
         }
         impl Into<SubAny> for Subsub {
             fn into(self) -> SubAny {
                 SubAny::Subsub(Box::new(self))
             }
+        }
+        #[derive(
+            Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        )]
+        # [holder (table = Tables)]
+        # [holder (field = subsub)]
+        #[holder(generate_deserialize)]
+        pub struct Subsub {
+            #[as_ref]
+            #[as_mut]
+            #[deref]
+            #[deref_mut]
+            #[holder(use_place_holder)]
+            pub sub: Sub,
+            pub z: f64,
         }
     }
     "###);
