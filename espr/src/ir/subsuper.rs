@@ -3,7 +3,7 @@
 use super::*;
 use std::collections::HashMap;
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Eq)]
 pub struct SubSuperGraph {
     pub super_to_sub: HashMap<Path, Vec<Path>>,
     pub sub_to_super: HashMap<Path, Vec<Path>>,
@@ -43,5 +43,65 @@ impl SubSuperGraph {
 
     pub fn get_subtypes(&self, sup: &Path) -> Option<&[Path]> {
         self.super_to_sub.get(sup).map(|ty| ty.as_slice())
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::{ast, ir};
+    use maplit::hashmap;
+
+    #[test]
+    fn subsuper_tree_init() {
+        let st = ast::SyntaxTree::parse(
+            //       ┌──────┐
+            //       │ base │
+            //     ┌─┴──────┴─┐
+            //     │          │
+            // ┌───▼──┐    ┌──▼───┐
+            // │ sub1 │    │ sub2 │
+            // └──────┘    └──────┘
+            r#"
+            SCHEMA test_schema;
+              ENTITY base SUPERTYPE OF (ONEOF (sub1, sub2));
+                x: REAL;
+              END_ENTITY;
+
+              ENTITY sub1 SUBTYPE OF (base);
+                y1: REAL;
+              END_ENTITY;
+
+              ENTITY sub2 SUBTYPE OF (base);
+                y2: REAL;
+              END_ENTITY;
+            END_SCHEMA;
+            "#,
+        )
+        .unwrap();
+        dbg!(&st);
+
+        let ns = ir::Namespace::new(&st);
+        let ss = ir::SubSuperGraph::new(&ns, &st).unwrap();
+        dbg!(&ss);
+
+        let schema_scope = ir::Scope::root().pushed(ir::ScopeType::Schema, "test_schema");
+        let base = ir::Path::new(&schema_scope, ir::ScopeType::Entity, "base");
+        let sub1 = ir::Path::new(&schema_scope, ir::ScopeType::Entity, "sub1");
+        let sub2 = ir::Path::new(&schema_scope, ir::ScopeType::Entity, "sub2");
+
+        assert_eq!(
+            ss,
+            super::SubSuperGraph {
+                sub_to_super: hashmap! {
+                    base.clone() => vec![sub1.clone(), sub2.clone()]
+                },
+                super_to_sub: hashmap! {
+                    sub1.clone() => vec![base.clone()],
+                    sub2.clone() => vec![base.clone()],
+                }
+            }
+        );
+
+        panic!()
     }
 }
