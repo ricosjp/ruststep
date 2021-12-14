@@ -42,51 +42,47 @@ impl Entity {
     }
 
     fn generate_any_enum(&self, tokens: &mut TokenStream) {
-        if !self.subtypes.is_empty() {
-            let mut fields = vec![format_ident!("{}", self.name.to_safe())];
-            let mut variants = vec![format_ident!("{}", self.name.to_pascal_case())];
-            let mut subtypes = vec![format_ident!("{}", self.name.to_pascal_case())];
+        assert!(!self.subtypes.is_empty());
 
-            for ty in &self.subtypes {
-                match &ty {
-                    TypeRef::Entity {
-                        name, is_supertype, ..
-                    } => {
-                        fields.push(format_ident!("{}", name.to_safe()));
-                        variants.push(format_ident!("{}", name.to_pascal_case()));
-                        if *is_supertype {
-                            subtypes.push(format_ident!("{}Any", name.to_pascal_case()));
-                        } else {
-                            subtypes.push(format_ident!("{}", name.to_pascal_case()));
-                        }
+        let mut fields = vec![format_ident!("{}", self.name.to_safe())];
+        let mut variants = vec![format_ident!("{}", self.name.to_pascal_case())];
+        let mut subtypes = vec![format_ident!("{}", self.name.to_pascal_case())];
+
+        for ty in &self.subtypes {
+            match &ty {
+                TypeRef::Entity {
+                    name, is_supertype, ..
+                } => {
+                    fields.push(format_ident!("{}", name.to_safe()));
+                    variants.push(format_ident!("{}", name.to_pascal_case()));
+                    if *is_supertype {
+                        subtypes.push(format_ident!("{}Any", name.to_pascal_case()));
+                    } else {
+                        subtypes.push(format_ident!("{}", name.to_pascal_case()));
                     }
-                    _ => unreachable!(),
                 }
+                _ => unreachable!(),
             }
-
-            let any = self.any_ident();
-            tokens.append_all(quote! {
-                #[derive(Debug, Clone, PartialEq, Holder)]
-                #[holder(table = Tables)]
-                #[holder(generate_deserialize)]
-                pub enum #any {
-                    #(
-                    #[holder(use_place_holder)]
-                    #[holder(field = #fields)]
-                    #variants(Box<#subtypes>)
-                    ),*
-                }
-            }); // tokens.append_all
         }
+
+        let any = self.any_ident();
+        tokens.append_all(quote! {
+            #[derive(Debug, Clone, PartialEq, Holder)]
+            #[holder(table = Tables)]
+            #[holder(generate_deserialize)]
+            pub enum #any {
+                #(
+                #[holder(use_place_holder)]
+                #[holder(field = #fields)]
+                #variants(Box<#subtypes>)
+                ),*
+            }
+        }); // tokens.append_all
     }
 
     // derive self -> SuperTypeAny
     fn generate_into_any(&self, tokens: &mut TokenStream) {
-        let name = if self.subtypes.is_empty() {
-            self.name_ident()
-        } else {
-            self.any_ident()
-        };
+        let name = self.any_ident();
         for ty in &self.supertypes {
             if let TypeRef::Entity {
                 name: supertype_name,
@@ -170,7 +166,9 @@ impl ToTokens for Entity {
             }
         });
 
-        self.generate_any_enum(tokens);
-        self.generate_into_any(tokens);
+        if !self.subtypes.is_empty() {
+            self.generate_any_enum(tokens);
+            self.generate_into_any(tokens);
+        }
     }
 }
