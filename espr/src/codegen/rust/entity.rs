@@ -1,5 +1,6 @@
 use crate::ir::*;
 
+use check_keyword::CheckKeyword;
 use inflector::Inflector;
 use proc_macro2::TokenStream;
 use quote::*;
@@ -8,7 +9,7 @@ impl ToTokens for EntityAttribute {
     fn to_tokens(&self, tokens: &mut TokenStream) {
         let EntityAttribute { name, ty, optional } = self;
 
-        let attr_name = format_ident!("{}", name);
+        let attr_name = format_ident!("{}", name.to_safe());
         let attr_type = if *optional {
             quote! { Option<#ty> }
         } else {
@@ -37,12 +38,12 @@ impl Entity {
     }
 
     fn field_ident(&self) -> syn::Ident {
-        format_ident!("{}", self.name)
+        format_ident!("{}", self.name.to_safe())
     }
 
     fn generate_any_def(&self, tokens: &mut TokenStream) {
         if !self.subtypes.is_empty() {
-            let mut fields = vec![format_ident!("{}", self.name)];
+            let mut fields = vec![format_ident!("{}", self.name.to_safe())];
             let mut variants = vec![format_ident!("{}", self.name.to_pascal_case())];
             let mut subtypes = vec![format_ident!("{}", self.name.to_pascal_case())];
 
@@ -51,7 +52,7 @@ impl Entity {
                     TypeRef::Entity {
                         name, is_supertype, ..
                     } => {
-                        fields.push(format_ident!("{}", name));
+                        fields.push(format_ident!("{}", name.to_safe()));
                         variants.push(format_ident!("{}", name.to_pascal_case()));
                         if *is_supertype {
                             subtypes.push(format_ident!("{}Any", name.to_pascal_case()));
@@ -116,7 +117,7 @@ impl Entity {
                 };
                 let (attr, ty) = match ty {
                     TypeRef::Named { name, .. } | TypeRef::Entity { name, .. } => (
-                        format_ident!("{}", name),
+                        format_ident!("{}", name.to_safe()),
                         format_ident!("{}", name.to_pascal_case()),
                     ),
                     _ => unreachable!(),

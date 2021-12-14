@@ -29,6 +29,7 @@ itertools = "0.10.1"
 maplit = "1.0.2"
 thiserror = "1.0.26"
 structopt = "0.3.22"
+check_keyword = "0.1.1"
 
 [dev-dependencies]
 insta = "1.8.0"
