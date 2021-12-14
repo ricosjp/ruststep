@@ -90,18 +90,18 @@ mod tests {
         let sub2 = ir::Path::new(&schema_scope, ir::ScopeType::Entity, "sub2");
 
         assert_eq!(
-            ss,
-            super::SubSuperGraph {
-                sub_to_super: hashmap! {
-                    base.clone() => vec![sub1.clone(), sub2.clone()]
-                },
-                super_to_sub: hashmap! {
-                    sub1.clone() => vec![base.clone()],
-                    sub2.clone() => vec![base.clone()],
-                }
+            ss.super_to_sub,
+            hashmap! {
+                base.clone() => vec![sub1.clone(), sub2.clone()]
             }
         );
 
-        panic!()
+        assert_eq!(
+            ss.sub_to_super,
+            hashmap! {
+                sub1.clone() => vec![base.clone()],
+                sub2.clone() => vec![base.clone()],
+            }
+        );
     }
 }
