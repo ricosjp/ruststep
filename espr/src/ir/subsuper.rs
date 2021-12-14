@@ -51,16 +51,16 @@ mod tests {
     use crate::{ast, ir};
     use maplit::hashmap;
 
+    //       ┌──────┐
+    //       │ base │
+    //     ┌─┴──────┴─┐
+    //     │          │
+    // ┌───▼──┐    ┌──▼───┐
+    // │ sub1 │    │ sub2 │
+    // └──────┘    └──────┘
     #[test]
     fn subsuper_tree_init() {
         let st = ast::SyntaxTree::parse(
-            //       ┌──────┐
-            //       │ base │
-            //     ┌─┴──────┴─┐
-            //     │          │
-            // ┌───▼──┐    ┌──▼───┐
-            // │ sub1 │    │ sub2 │
-            // └──────┘    └──────┘
             r#"
             SCHEMA test_schema;
               ENTITY base SUPERTYPE OF (ONEOF (sub1, sub2));
@@ -90,18 +90,29 @@ mod tests {
         let sub2 = ir::Path::new(&schema_scope, ir::ScopeType::Entity, "sub2");
 
         assert_eq!(
-            ss.super_to_sub,
-            hashmap! {
+            &ss.super_to_sub,
+            &hashmap! {
                 base.clone() => vec![sub1.clone(), sub2.clone()]
             }
         );
 
         assert_eq!(
-            ss.sub_to_super,
-            hashmap! {
+            &ss.sub_to_super,
+            &hashmap! {
                 sub1.clone() => vec![base.clone()],
                 sub2.clone() => vec![base.clone()],
             }
         );
+
+        assert_eq!(
+            ss.get_subtypes(&base),
+            Some([sub1.clone(), sub2.clone()].as_slice())
+        );
+        assert_eq!(ss.get_subtypes(&sub1), None);
+        assert_eq!(ss.get_subtypes(&sub2), None);
+
+        assert_eq!(ss.get_supertypes(&base), None);
+        assert_eq!(ss.get_supertypes(&sub1), Some([base.clone()].as_slice()));
+        assert_eq!(ss.get_supertypes(&sub2), Some([base.clone()].as_slice()));
     }
 }
