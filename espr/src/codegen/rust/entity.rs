@@ -128,6 +128,24 @@ impl Entity {
             })
             .collect()
     }
+
+    fn generate_derive(&self) -> (TokenStream, TokenStream) {
+        if self.supertypes.len() == 1 {
+            (
+                quote! {
+                    #[derive(Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, ::derive_new::new, Holder)]
+                },
+                quote! { #[as_ref] #[as_mut] #[deref] #[deref_mut] },
+            )
+        } else {
+            (
+                quote! {
+                    #[derive(Debug, Clone, PartialEq, ::derive_new::new, Holder)]
+                },
+                quote! {},
+            )
+        }
+    }
 }
 
 impl ToTokens for Entity {
@@ -137,13 +155,15 @@ impl ToTokens for Entity {
 
         let attributes = &self.attributes;
         let supertype_attributes = self.supertype_attributes();
+        let (derive, attr_macro) = self.generate_derive();
 
         tokens.append_all(quote! {
-            #[derive(Debug, Clone, PartialEq, ::derive_new::new, Holder)]
+            #derive
             #[holder(table = Tables)]
             #[holder(field = #field_name)]
             #[holder(generate_deserialize)]
             pub struct #name {
+                #attr_macro
                 #(#supertype_attributes,)*
                 #(#attributes,)*
             }
