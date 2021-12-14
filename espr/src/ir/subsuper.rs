@@ -106,13 +106,13 @@ mod tests {
 
         assert_eq!(
             ss.get_subtypes(&base),
-            Some([sub1.clone(), sub2.clone()].as_slice())
+            Some([sub1.clone(), sub2.clone()].as_ref())
         );
         assert_eq!(ss.get_subtypes(&sub1), None);
         assert_eq!(ss.get_subtypes(&sub2), None);
 
         assert_eq!(ss.get_supertypes(&base), None);
-        assert_eq!(ss.get_supertypes(&sub1), Some([base.clone()].as_slice()));
-        assert_eq!(ss.get_supertypes(&sub2), Some([base.clone()].as_slice()));
+        assert_eq!(ss.get_supertypes(&sub1), Some([base.clone()].as_ref()));
+        assert_eq!(ss.get_supertypes(&sub2), Some([base.clone()].as_ref()));
     }
 }
