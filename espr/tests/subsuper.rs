@@ -83,7 +83,7 @@ fn subsuper() {
         }
         impl Into<BaseAny> for Sub {
             fn into(self) -> BaseAny {
-                BaseAny::Sub(Box::new(self))
+                BaseAny::Sub(Box::new(self.into()))
             }
         }
         #[derive(
@@ -119,7 +119,7 @@ fn subsuper() {
         }
         impl Into<SubAny> for Subsub {
             fn into(self) -> SubAny {
-                SubAny::Subsub(Box::new(self))
+                SubAny::Subsub(Box::new(self.into()))
             }
         }
         #[derive(

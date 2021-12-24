@@ -104,7 +104,7 @@ impl Entity {
                 tokens.append_all(quote! {
                     impl Into<#any> for #name {
                         fn into(self) -> #any {
-                            #any::#name(Box::new(self))
+                            #any::#name(Box::new(self.into()))
                         }
                     }
                 });

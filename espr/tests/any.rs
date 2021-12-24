@@ -84,12 +84,12 @@ fn any() {
         }
         impl Into<BaseAny> for Sub1 {
             fn into(self) -> BaseAny {
-                BaseAny::Sub1(Box::new(self))
+                BaseAny::Sub1(Box::new(self.into()))
             }
         }
         impl Into<BaseAny> for Sub2 {
             fn into(self) -> BaseAny {
-                BaseAny::Sub2(Box::new(self))
+                BaseAny::Sub2(Box::new(self.into()))
             }
         }
         #[derive(
