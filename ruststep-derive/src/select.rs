@@ -53,7 +53,7 @@ impl Input {
                         // ENTITY case
                         holder_types.push(as_holder_path(&f.ty));
                         holder_exprs.push(quote! { Box::new(sub.into_owned(table)?) });
-                        variant_exprs.push(quote! { Box::new(owned) });
+                        variant_exprs.push(quote! { Box::new(owned.into()) });
                     } else {
                         abort_call_site!("Simple type should not be Boxed")
                     }
@@ -352,11 +352,11 @@ mod tests {
                 match key.as_str() {
                     "A" => {
                         let owned = map.next_value()?;
-                        return Ok(S1Holder::A(Box::new(owned)));
+                        return Ok(S1Holder::A(Box::new(owned.into())));
                     }
                     "B" => {
                         let owned = map.next_value()?;
-                        return Ok(S1Holder::B(Box::new(owned)));
+                        return Ok(S1Holder::B(Box::new(owned.into())));
                     }
                     _ => {
                         use serde::de::{Error, Unexpected};
@@ -374,10 +374,10 @@ mod tests {
         impl ::ruststep::tables::EntityTable<S1Holder> for Table {
             fn get_owned(&self, entity_id: u64) -> ::ruststep::error::Result<S1> {
                 if let Ok(owned) = ::ruststep::tables::get_owned(self, &self.a, entity_id) {
-                    return Ok(S1::A(Box::new(owned)));
+                    return Ok(S1::A(Box::new(owned.into())));
                 }
                 if let Ok(owned) = ::ruststep::tables::get_owned(self, &self.b, entity_id) {
-                    return Ok(S1::B(Box::new(owned)));
+                    return Ok(S1::B(Box::new(owned.into())));
                 }
                 Err(::ruststep::error::Error::UnknownEntity(entity_id))
             }
@@ -386,9 +386,9 @@ mod tests {
             ) -> Box<dyn Iterator<Item = ::ruststep::error::Result<S1>> + 'table> {
                 Box::new(::itertools::chain![
                     ::ruststep::tables::owned_iter(self, &self.a)
-                        .map(|owned| owned.map(|owned| S1::A(Box::new(owned)))),
+                        .map(|owned| owned.map(|owned| S1::A(Box::new(owned.into())))),
                     ::ruststep::tables::owned_iter(self, &self.b)
-                        .map(|owned| owned.map(|owned| S1::B(Box::new(owned))))
+                        .map(|owned| owned.map(|owned| S1::B(Box::new(owned.into()))))
                 ])
             }
         }
@@ -462,11 +462,11 @@ mod tests {
                 match key.as_str() {
                     "BASE" => {
                         let owned = map.next_value()?;
-                        return Ok(BaseAnyHolder::Base(Box::new(owned)));
+                        return Ok(BaseAnyHolder::Base(Box::new(owned.into())));
                     }
                     "SUB" => {
                         let owned = map.next_value()?;
-                        return Ok(BaseAnyHolder::Sub(Box::new(owned)));
+                        return Ok(BaseAnyHolder::Sub(Box::new(owned.into())));
                     }
                     _ => {
                         use serde::de::{Error, Unexpected};
@@ -484,10 +484,10 @@ mod tests {
         impl ::ruststep::tables::EntityTable<BaseAnyHolder> for Tables {
             fn get_owned(&self, entity_id: u64) -> ::ruststep::error::Result<BaseAny> {
                 if let Ok(owned) = ::ruststep::tables::get_owned(self, &self.base, entity_id) {
-                    return Ok(BaseAny::Base(Box::new(owned)));
+                    return Ok(BaseAny::Base(Box::new(owned.into())));
                 }
                 if let Ok(owned) = ::ruststep::tables::get_owned(self, &self.sub, entity_id) {
-                    return Ok(BaseAny::Sub(Box::new(owned)));
+                    return Ok(BaseAny::Sub(Box::new(owned.into())));
                 }
                 Err(::ruststep::error::Error::UnknownEntity(entity_id))
             }
@@ -496,9 +496,9 @@ mod tests {
             ) -> Box<dyn Iterator<Item = ::ruststep::error::Result<BaseAny>> + 'table> {
                 Box::new(::itertools::chain![
                     ::ruststep::tables::owned_iter(self, &self.base)
-                        .map(|owned| owned.map(|owned| BaseAny::Base(Box::new(owned)))),
+                        .map(|owned| owned.map(|owned| BaseAny::Base(Box::new(owned.into())))),
                     ::ruststep::tables::owned_iter(self, &self.sub)
-                        .map(|owned| owned.map(|owned| BaseAny::Sub(Box::new(owned))))
+                        .map(|owned| owned.map(|owned| BaseAny::Sub(Box::new(owned.into()))))
                 ])
             }
         }
