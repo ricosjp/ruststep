@@ -2801,12 +2801,12 @@ pub mod explicit_draughting {
     }
     impl Into<AddressAny> for OrganizationalAddress {
         fn into(self) -> AddressAny {
-            AddressAny::OrganizationalAddress(Box::new(self))
+            AddressAny::OrganizationalAddress(Box::new(self.into()))
         }
     }
     impl Into<AddressAny> for PersonalAddress {
         fn into(self) -> AddressAny {
-            AddressAny::PersonalAddress(Box::new(self))
+            AddressAny::PersonalAddress(Box::new(self.into()))
         }
     }
     #[derive(
@@ -2861,17 +2861,17 @@ pub mod explicit_draughting {
     }
     impl Into<AnnotationCurveOccurrenceAny> for DimensionCurve {
         fn into(self) -> AnnotationCurveOccurrenceAny {
-            AnnotationCurveOccurrenceAny::DimensionCurve(Box::new(self))
+            AnnotationCurveOccurrenceAny::DimensionCurve(Box::new(self.into()))
         }
     }
     impl Into<AnnotationCurveOccurrenceAny> for LeaderCurve {
         fn into(self) -> AnnotationCurveOccurrenceAny {
-            AnnotationCurveOccurrenceAny::LeaderCurve(Box::new(self))
+            AnnotationCurveOccurrenceAny::LeaderCurve(Box::new(self.into()))
         }
     }
     impl Into<AnnotationCurveOccurrenceAny> for ProjectionCurve {
         fn into(self) -> AnnotationCurveOccurrenceAny {
-            AnnotationCurveOccurrenceAny::ProjectionCurve(Box::new(self))
+            AnnotationCurveOccurrenceAny::ProjectionCurve(Box::new(self.into()))
         }
     }
     #[derive(
@@ -2950,27 +2950,27 @@ pub mod explicit_draughting {
     }
     impl Into<AnnotationOccurrenceAny> for AnnotationCurveOccurrence {
         fn into(self) -> AnnotationOccurrenceAny {
-            AnnotationOccurrenceAny::AnnotationCurveOccurrence(Box::new(self))
+            AnnotationOccurrenceAny::AnnotationCurveOccurrence(Box::new(self.into()))
         }
     }
     impl Into<AnnotationOccurrenceAny> for AnnotationFillAreaOccurrence {
         fn into(self) -> AnnotationOccurrenceAny {
-            AnnotationOccurrenceAny::AnnotationFillAreaOccurrence(Box::new(self))
+            AnnotationOccurrenceAny::AnnotationFillAreaOccurrence(Box::new(self.into()))
         }
     }
     impl Into<AnnotationOccurrenceAny> for AnnotationSymbolOccurrence {
         fn into(self) -> AnnotationOccurrenceAny {
-            AnnotationOccurrenceAny::AnnotationSymbolOccurrence(Box::new(self))
+            AnnotationOccurrenceAny::AnnotationSymbolOccurrence(Box::new(self.into()))
         }
     }
     impl Into<AnnotationOccurrenceAny> for AnnotationTextOccurrence {
         fn into(self) -> AnnotationOccurrenceAny {
-            AnnotationOccurrenceAny::AnnotationTextOccurrence(Box::new(self))
+            AnnotationOccurrenceAny::AnnotationTextOccurrence(Box::new(self.into()))
         }
     }
     impl Into<AnnotationOccurrenceAny> for DraughtingAnnotationOccurrence {
         fn into(self) -> AnnotationOccurrenceAny {
-            AnnotationOccurrenceAny::DraughtingAnnotationOccurrence(Box::new(self))
+            AnnotationOccurrenceAny::DraughtingAnnotationOccurrence(Box::new(self.into()))
         }
     }
     #[derive(
@@ -3036,12 +3036,12 @@ pub mod explicit_draughting {
     }
     impl Into<AnnotationSymbolOccurrenceAny> for AnnotationSubfigureOccurrence {
         fn into(self) -> AnnotationSymbolOccurrenceAny {
-            AnnotationSymbolOccurrenceAny::AnnotationSubfigureOccurrence(Box::new(self))
+            AnnotationSymbolOccurrenceAny::AnnotationSubfigureOccurrence(Box::new(self.into()))
         }
     }
     impl Into<AnnotationSymbolOccurrenceAny> for TerminatorSymbol {
         fn into(self) -> AnnotationSymbolOccurrenceAny {
-            AnnotationSymbolOccurrenceAny::TerminatorSymbol(Box::new(self))
+            AnnotationSymbolOccurrenceAny::TerminatorSymbol(Box::new(self.into()))
         }
     }
     #[derive(
@@ -3109,12 +3109,12 @@ pub mod explicit_draughting {
     }
     impl Into<ApplicationContextElementAny> for ProductContext {
         fn into(self) -> ApplicationContextElementAny {
-            ApplicationContextElementAny::ProductContext(Box::new(self))
+            ApplicationContextElementAny::ProductContext(Box::new(self.into()))
         }
     }
     impl Into<ApplicationContextElementAny> for ProductDefinitionContext {
         fn into(self) -> ApplicationContextElementAny {
-            ApplicationContextElementAny::ProductDefinitionContext(Box::new(self))
+            ApplicationContextElementAny::ProductDefinitionContext(Box::new(self.into()))
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -3163,7 +3163,7 @@ pub mod explicit_draughting {
     }
     impl Into<ApprovalAssignmentAny> for DraughtingApprovalAssignment {
         fn into(self) -> ApprovalAssignmentAny {
-            ApprovalAssignmentAny::DraughtingApprovalAssignment(Box::new(self))
+            ApprovalAssignmentAny::DraughtingApprovalAssignment(Box::new(self.into()))
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -3230,7 +3230,7 @@ pub mod explicit_draughting {
     }
     impl Into<AreaInSetAny> for DrawingSheetRevisionUsage {
         fn into(self) -> AreaInSetAny {
-            AreaInSetAny::DrawingSheetRevisionUsage(Box::new(self))
+            AreaInSetAny::DrawingSheetRevisionUsage(Box::new(self.into()))
         }
     }
     #[derive(
@@ -3299,27 +3299,27 @@ pub mod explicit_draughting {
     }
     impl Into<BSplineCurveAny> for BSplineCurveWithKnots {
         fn into(self) -> BSplineCurveAny {
-            BSplineCurveAny::BSplineCurveWithKnots(Box::new(self))
+            BSplineCurveAny::BSplineCurveWithKnots(Box::new(self.into()))
         }
     }
     impl Into<BSplineCurveAny> for BezierCurve {
         fn into(self) -> BSplineCurveAny {
-            BSplineCurveAny::BezierCurve(Box::new(self))
+            BSplineCurveAny::BezierCurve(Box::new(self.into()))
         }
     }
     impl Into<BSplineCurveAny> for QuasiUniformCurve {
         fn into(self) -> BSplineCurveAny {
-            BSplineCurveAny::QuasiUniformCurve(Box::new(self))
+            BSplineCurveAny::QuasiUniformCurve(Box::new(self.into()))
         }
     }
     impl Into<BSplineCurveAny> for RationalBSplineCurve {
         fn into(self) -> BSplineCurveAny {
-            BSplineCurveAny::RationalBSplineCurve(Box::new(self))
+            BSplineCurveAny::RationalBSplineCurve(Box::new(self.into()))
         }
     }
     impl Into<BSplineCurveAny> for UniformCurve {
         fn into(self) -> BSplineCurveAny {
-            BSplineCurveAny::UniformCurve(Box::new(self))
+            BSplineCurveAny::UniformCurve(Box::new(self.into()))
         }
     }
     #[derive(
@@ -3394,22 +3394,22 @@ pub mod explicit_draughting {
     }
     impl Into<BoundedCurveAny> for BSplineCurve {
         fn into(self) -> BoundedCurveAny {
-            BoundedCurveAny::BSplineCurve(Box::new(self))
+            BoundedCurveAny::BSplineCurve(Box::new(self.into()))
         }
     }
     impl Into<BoundedCurveAny> for CompositeCurve {
         fn into(self) -> BoundedCurveAny {
-            BoundedCurveAny::CompositeCurve(Box::new(self))
+            BoundedCurveAny::CompositeCurve(Box::new(self.into()))
         }
     }
     impl Into<BoundedCurveAny> for Polyline {
         fn into(self) -> BoundedCurveAny {
-            BoundedCurveAny::Polyline(Box::new(self))
+            BoundedCurveAny::Polyline(Box::new(self.into()))
         }
     }
     impl Into<BoundedCurveAny> for TrimmedCurve {
         fn into(self) -> BoundedCurveAny {
-            BoundedCurveAny::TrimmedCurve(Box::new(self))
+            BoundedCurveAny::TrimmedCurve(Box::new(self.into()))
         }
     }
     #[derive(
@@ -3460,7 +3460,7 @@ pub mod explicit_draughting {
     }
     impl Into<CameraImageAny> for CameraImage2DWithScale {
         fn into(self) -> CameraImageAny {
-            CameraImageAny::CameraImage2DWithScale(Box::new(self))
+            CameraImageAny::CameraImage2DWithScale(Box::new(self.into()))
         }
     }
     #[derive(
@@ -3509,7 +3509,7 @@ pub mod explicit_draughting {
     }
     impl Into<CameraModelAny> for CameraModelD2 {
         fn into(self) -> CameraModelAny {
-            CameraModelAny::CameraModelD2(Box::new(self))
+            CameraModelAny::CameraModelD2(Box::new(self.into()))
         }
     }
     #[derive(
@@ -3599,12 +3599,12 @@ pub mod explicit_draughting {
     }
     impl Into<ColourAny> for ColourSpecification {
         fn into(self) -> ColourAny {
-            ColourAny::ColourSpecification(Box::new(self))
+            ColourAny::ColourSpecification(Box::new(self.into()))
         }
     }
     impl Into<ColourAny> for PreDefinedColour {
         fn into(self) -> ColourAny {
-            ColourAny::PreDefinedColour(Box::new(self))
+            ColourAny::PreDefinedColour(Box::new(self.into()))
         }
     }
     #[derive(
@@ -3658,7 +3658,7 @@ pub mod explicit_draughting {
     }
     impl Into<ColourSpecificationAny> for ColourRgb {
         fn into(self) -> ColourSpecificationAny {
-            ColourSpecificationAny::ColourRgb(Box::new(self))
+            ColourSpecificationAny::ColourRgb(Box::new(self.into()))
         }
     }
     #[derive(
@@ -3728,17 +3728,17 @@ pub mod explicit_draughting {
     }
     impl Into<CompositeTextAny> for CompositeTextWithAssociatedCurves {
         fn into(self) -> CompositeTextAny {
-            CompositeTextAny::CompositeTextWithAssociatedCurves(Box::new(self))
+            CompositeTextAny::CompositeTextWithAssociatedCurves(Box::new(self.into()))
         }
     }
     impl Into<CompositeTextAny> for CompositeTextWithBlankingBox {
         fn into(self) -> CompositeTextAny {
-            CompositeTextAny::CompositeTextWithBlankingBox(Box::new(self))
+            CompositeTextAny::CompositeTextWithBlankingBox(Box::new(self.into()))
         }
     }
     impl Into<CompositeTextAny> for CompositeTextWithExtent {
         fn into(self) -> CompositeTextAny {
-            CompositeTextAny::CompositeTextWithExtent(Box::new(self))
+            CompositeTextAny::CompositeTextWithExtent(Box::new(self.into()))
         }
     }
     #[derive(
@@ -3832,22 +3832,22 @@ pub mod explicit_draughting {
     }
     impl Into<ConicAny> for Circle {
         fn into(self) -> ConicAny {
-            ConicAny::Circle(Box::new(self))
+            ConicAny::Circle(Box::new(self.into()))
         }
     }
     impl Into<ConicAny> for Ellipse {
         fn into(self) -> ConicAny {
-            ConicAny::Ellipse(Box::new(self))
+            ConicAny::Ellipse(Box::new(self.into()))
         }
     }
     impl Into<ConicAny> for Hyperbola {
         fn into(self) -> ConicAny {
-            ConicAny::Hyperbola(Box::new(self))
+            ConicAny::Hyperbola(Box::new(self.into()))
         }
     }
     impl Into<ConicAny> for Parabola {
         fn into(self) -> ConicAny {
-            ConicAny::Parabola(Box::new(self))
+            ConicAny::Parabola(Box::new(self.into()))
         }
     }
     #[derive(
@@ -3902,7 +3902,7 @@ pub mod explicit_draughting {
     }
     impl Into<ContractAssignmentAny> for DraughtingContractAssignment {
         fn into(self) -> ContractAssignmentAny {
-            ContractAssignmentAny::DraughtingContractAssignment(Box::new(self))
+            ContractAssignmentAny::DraughtingContractAssignment(Box::new(self.into()))
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -3970,22 +3970,22 @@ pub mod explicit_draughting {
     }
     impl Into<CurveAny> for BoundedCurve {
         fn into(self) -> CurveAny {
-            CurveAny::BoundedCurve(Box::new(self))
+            CurveAny::BoundedCurve(Box::new(self.into()))
         }
     }
     impl Into<CurveAny> for Conic {
         fn into(self) -> CurveAny {
-            CurveAny::Conic(Box::new(self))
+            CurveAny::Conic(Box::new(self.into()))
         }
     }
     impl Into<CurveAny> for Line {
         fn into(self) -> CurveAny {
-            CurveAny::Line(Box::new(self))
+            CurveAny::Line(Box::new(self.into()))
         }
     }
     impl Into<CurveAny> for OffsetCurve2D {
         fn into(self) -> CurveAny {
-            CurveAny::OffsetCurve2D(Box::new(self))
+            CurveAny::OffsetCurve2D(Box::new(self.into()))
         }
     }
     #[derive(
@@ -4057,7 +4057,7 @@ pub mod explicit_draughting {
     }
     impl Into<DateAny> for CalendarDate {
         fn into(self) -> DateAny {
-            DateAny::CalendarDate(Box::new(self))
+            DateAny::CalendarDate(Box::new(self.into()))
         }
     }
     #[derive(
@@ -4206,27 +4206,27 @@ pub mod explicit_draughting {
     }
     impl Into<DimensionCurveDirectedCalloutAny> for AngularDimension {
         fn into(self) -> DimensionCurveDirectedCalloutAny {
-            DimensionCurveDirectedCalloutAny::AngularDimension(Box::new(self))
+            DimensionCurveDirectedCalloutAny::AngularDimension(Box::new(self.into()))
         }
     }
     impl Into<DimensionCurveDirectedCalloutAny> for CurveDimension {
         fn into(self) -> DimensionCurveDirectedCalloutAny {
-            DimensionCurveDirectedCalloutAny::CurveDimension(Box::new(self))
+            DimensionCurveDirectedCalloutAny::CurveDimension(Box::new(self.into()))
         }
     }
     impl Into<DimensionCurveDirectedCalloutAny> for DiameterDimension {
         fn into(self) -> DimensionCurveDirectedCalloutAny {
-            DimensionCurveDirectedCalloutAny::DiameterDimension(Box::new(self))
+            DimensionCurveDirectedCalloutAny::DiameterDimension(Box::new(self.into()))
         }
     }
     impl Into<DimensionCurveDirectedCalloutAny> for LinearDimension {
         fn into(self) -> DimensionCurveDirectedCalloutAny {
-            DimensionCurveDirectedCalloutAny::LinearDimension(Box::new(self))
+            DimensionCurveDirectedCalloutAny::LinearDimension(Box::new(self.into()))
         }
     }
     impl Into<DimensionCurveDirectedCalloutAny> for RadiusDimension {
         fn into(self) -> DimensionCurveDirectedCalloutAny {
-            DimensionCurveDirectedCalloutAny::RadiusDimension(Box::new(self))
+            DimensionCurveDirectedCalloutAny::RadiusDimension(Box::new(self.into()))
         }
     }
     #[derive(
@@ -4324,7 +4324,7 @@ pub mod explicit_draughting {
     }
     impl Into<DocumentReferenceAny> for DraughtingSpecificationReference {
         fn into(self) -> DocumentReferenceAny {
-            DocumentReferenceAny::DraughtingSpecificationReference(Box::new(self))
+            DocumentReferenceAny::DraughtingSpecificationReference(Box::new(self.into()))
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -4419,42 +4419,42 @@ pub mod explicit_draughting {
     }
     impl Into<DraughtingCalloutAny> for DatumFeatureCallout {
         fn into(self) -> DraughtingCalloutAny {
-            DraughtingCalloutAny::DatumFeatureCallout(Box::new(self))
+            DraughtingCalloutAny::DatumFeatureCallout(Box::new(self.into()))
         }
     }
     impl Into<DraughtingCalloutAny> for DatumTargetCallout {
         fn into(self) -> DraughtingCalloutAny {
-            DraughtingCalloutAny::DatumTargetCallout(Box::new(self))
+            DraughtingCalloutAny::DatumTargetCallout(Box::new(self.into()))
         }
     }
     impl Into<DraughtingCalloutAny> for DimensionCurveDirectedCallout {
         fn into(self) -> DraughtingCalloutAny {
-            DraughtingCalloutAny::DimensionCurveDirectedCallout(Box::new(self))
+            DraughtingCalloutAny::DimensionCurveDirectedCallout(Box::new(self.into()))
         }
     }
     impl Into<DraughtingCalloutAny> for DraughtingElements {
         fn into(self) -> DraughtingCalloutAny {
-            DraughtingCalloutAny::DraughtingElements(Box::new(self))
+            DraughtingCalloutAny::DraughtingElements(Box::new(self.into()))
         }
     }
     impl Into<DraughtingCalloutAny> for GeometricalToleranceCallout {
         fn into(self) -> DraughtingCalloutAny {
-            DraughtingCalloutAny::GeometricalToleranceCallout(Box::new(self))
+            DraughtingCalloutAny::GeometricalToleranceCallout(Box::new(self.into()))
         }
     }
     impl Into<DraughtingCalloutAny> for LeaderDirectedCallout {
         fn into(self) -> DraughtingCalloutAny {
-            DraughtingCalloutAny::LeaderDirectedCallout(Box::new(self))
+            DraughtingCalloutAny::LeaderDirectedCallout(Box::new(self.into()))
         }
     }
     impl Into<DraughtingCalloutAny> for ProjectionDirectedCallout {
         fn into(self) -> DraughtingCalloutAny {
-            DraughtingCalloutAny::ProjectionDirectedCallout(Box::new(self))
+            DraughtingCalloutAny::ProjectionDirectedCallout(Box::new(self.into()))
         }
     }
     impl Into<DraughtingCalloutAny> for StructuredDimensionCallout {
         fn into(self) -> DraughtingCalloutAny {
-            DraughtingCalloutAny::StructuredDimensionCallout(Box::new(self))
+            DraughtingCalloutAny::StructuredDimensionCallout(Box::new(self.into()))
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -4493,17 +4493,19 @@ pub mod explicit_draughting {
     }
     impl Into<DraughtingCalloutRelationshipAny> for DimensionCalloutComponentRelationship {
         fn into(self) -> DraughtingCalloutRelationshipAny {
-            DraughtingCalloutRelationshipAny::DimensionCalloutComponentRelationship(Box::new(self))
+            DraughtingCalloutRelationshipAny::DimensionCalloutComponentRelationship(Box::new(
+                self.into(),
+            ))
         }
     }
     impl Into<DraughtingCalloutRelationshipAny> for DimensionCalloutRelationship {
         fn into(self) -> DraughtingCalloutRelationshipAny {
-            DraughtingCalloutRelationshipAny::DimensionCalloutRelationship(Box::new(self))
+            DraughtingCalloutRelationshipAny::DimensionCalloutRelationship(Box::new(self.into()))
         }
     }
     impl Into<DraughtingCalloutRelationshipAny> for DimensionPair {
         fn into(self) -> DraughtingCalloutRelationshipAny {
-            DraughtingCalloutRelationshipAny::DimensionPair(Box::new(self))
+            DraughtingCalloutRelationshipAny::DimensionPair(Box::new(self.into()))
         }
     }
     #[derive(
@@ -4764,7 +4766,7 @@ pub mod explicit_draughting {
     }
     impl Into<DraughtingSymbolRepresentationAny> for DrawingSheetLayout {
         fn into(self) -> DraughtingSymbolRepresentationAny {
-            DraughtingSymbolRepresentationAny::DrawingSheetLayout(Box::new(self))
+            DraughtingSymbolRepresentationAny::DrawingSheetLayout(Box::new(self.into()))
         }
     }
     #[derive(
@@ -4835,7 +4837,7 @@ pub mod explicit_draughting {
     }
     impl Into<DrawingRevisionAny> for DraughtingDrawingRevision {
         fn into(self) -> DrawingRevisionAny {
-            DrawingRevisionAny::DraughtingDrawingRevision(Box::new(self))
+            DrawingRevisionAny::DraughtingDrawingRevision(Box::new(self.into()))
         }
     }
     #[derive(
@@ -4970,27 +4972,27 @@ pub mod explicit_draughting {
     }
     impl Into<ExternallyDefinedItemAny> for ExternallyDefinedCurveFont {
         fn into(self) -> ExternallyDefinedItemAny {
-            ExternallyDefinedItemAny::ExternallyDefinedCurveFont(Box::new(self))
+            ExternallyDefinedItemAny::ExternallyDefinedCurveFont(Box::new(self.into()))
         }
     }
     impl Into<ExternallyDefinedItemAny> for ExternallyDefinedHatchStyle {
         fn into(self) -> ExternallyDefinedItemAny {
-            ExternallyDefinedItemAny::ExternallyDefinedHatchStyle(Box::new(self))
+            ExternallyDefinedItemAny::ExternallyDefinedHatchStyle(Box::new(self.into()))
         }
     }
     impl Into<ExternallyDefinedItemAny> for ExternallyDefinedSymbol {
         fn into(self) -> ExternallyDefinedItemAny {
-            ExternallyDefinedItemAny::ExternallyDefinedSymbol(Box::new(self))
+            ExternallyDefinedItemAny::ExternallyDefinedSymbol(Box::new(self.into()))
         }
     }
     impl Into<ExternallyDefinedItemAny> for ExternallyDefinedTextFont {
         fn into(self) -> ExternallyDefinedItemAny {
-            ExternallyDefinedItemAny::ExternallyDefinedTextFont(Box::new(self))
+            ExternallyDefinedItemAny::ExternallyDefinedTextFont(Box::new(self.into()))
         }
     }
     impl Into<ExternallyDefinedItemAny> for ExternallyDefinedTileStyle {
         fn into(self) -> ExternallyDefinedItemAny {
-            ExternallyDefinedItemAny::ExternallyDefinedTileStyle(Box::new(self))
+            ExternallyDefinedItemAny::ExternallyDefinedTileStyle(Box::new(self.into()))
         }
     }
     #[derive(
@@ -5225,102 +5227,102 @@ pub mod explicit_draughting {
     }
     impl Into<GeometricRepresentationItemAny> for AnnotationFillArea {
         fn into(self) -> GeometricRepresentationItemAny {
-            GeometricRepresentationItemAny::AnnotationFillArea(Box::new(self))
+            GeometricRepresentationItemAny::AnnotationFillArea(Box::new(self.into()))
         }
     }
     impl Into<GeometricRepresentationItemAny> for CameraModel {
         fn into(self) -> GeometricRepresentationItemAny {
-            GeometricRepresentationItemAny::CameraModel(Box::new(self))
+            GeometricRepresentationItemAny::CameraModel(Box::new(self.into()))
         }
     }
     impl Into<GeometricRepresentationItemAny> for CompositeText {
         fn into(self) -> GeometricRepresentationItemAny {
-            GeometricRepresentationItemAny::CompositeText(Box::new(self))
+            GeometricRepresentationItemAny::CompositeText(Box::new(self.into()))
         }
     }
     impl Into<GeometricRepresentationItemAny> for Curve {
         fn into(self) -> GeometricRepresentationItemAny {
-            GeometricRepresentationItemAny::Curve(Box::new(self))
+            GeometricRepresentationItemAny::Curve(Box::new(self.into()))
         }
     }
     impl Into<GeometricRepresentationItemAny> for DefinedSymbol {
         fn into(self) -> GeometricRepresentationItemAny {
-            GeometricRepresentationItemAny::DefinedSymbol(Box::new(self))
+            GeometricRepresentationItemAny::DefinedSymbol(Box::new(self.into()))
         }
     }
     impl Into<GeometricRepresentationItemAny> for Direction {
         fn into(self) -> GeometricRepresentationItemAny {
-            GeometricRepresentationItemAny::Direction(Box::new(self))
+            GeometricRepresentationItemAny::Direction(Box::new(self.into()))
         }
     }
     impl Into<GeometricRepresentationItemAny> for DraughtingCallout {
         fn into(self) -> GeometricRepresentationItemAny {
-            GeometricRepresentationItemAny::DraughtingCallout(Box::new(self))
+            GeometricRepresentationItemAny::DraughtingCallout(Box::new(self.into()))
         }
     }
     impl Into<GeometricRepresentationItemAny> for ExternallyDefinedHatchStyle {
         fn into(self) -> GeometricRepresentationItemAny {
-            GeometricRepresentationItemAny::ExternallyDefinedHatchStyle(Box::new(self))
+            GeometricRepresentationItemAny::ExternallyDefinedHatchStyle(Box::new(self.into()))
         }
     }
     impl Into<GeometricRepresentationItemAny> for ExternallyDefinedTileStyle {
         fn into(self) -> GeometricRepresentationItemAny {
-            GeometricRepresentationItemAny::ExternallyDefinedTileStyle(Box::new(self))
+            GeometricRepresentationItemAny::ExternallyDefinedTileStyle(Box::new(self.into()))
         }
     }
     impl Into<GeometricRepresentationItemAny> for FillAreaStyleHatching {
         fn into(self) -> GeometricRepresentationItemAny {
-            GeometricRepresentationItemAny::FillAreaStyleHatching(Box::new(self))
+            GeometricRepresentationItemAny::FillAreaStyleHatching(Box::new(self.into()))
         }
     }
     impl Into<GeometricRepresentationItemAny> for FillAreaStyleTileSymbolWithStyle {
         fn into(self) -> GeometricRepresentationItemAny {
-            GeometricRepresentationItemAny::FillAreaStyleTileSymbolWithStyle(Box::new(self))
+            GeometricRepresentationItemAny::FillAreaStyleTileSymbolWithStyle(Box::new(self.into()))
         }
     }
     impl Into<GeometricRepresentationItemAny> for FillAreaStyleTiles {
         fn into(self) -> GeometricRepresentationItemAny {
-            GeometricRepresentationItemAny::FillAreaStyleTiles(Box::new(self))
+            GeometricRepresentationItemAny::FillAreaStyleTiles(Box::new(self.into()))
         }
     }
     impl Into<GeometricRepresentationItemAny> for GeometricSet {
         fn into(self) -> GeometricRepresentationItemAny {
-            GeometricRepresentationItemAny::GeometricSet(Box::new(self))
+            GeometricRepresentationItemAny::GeometricSet(Box::new(self.into()))
         }
     }
     impl Into<GeometricRepresentationItemAny> for OneDirectionRepeatFactor {
         fn into(self) -> GeometricRepresentationItemAny {
-            GeometricRepresentationItemAny::OneDirectionRepeatFactor(Box::new(self))
+            GeometricRepresentationItemAny::OneDirectionRepeatFactor(Box::new(self.into()))
         }
     }
     impl Into<GeometricRepresentationItemAny> for Placement {
         fn into(self) -> GeometricRepresentationItemAny {
-            GeometricRepresentationItemAny::Placement(Box::new(self))
+            GeometricRepresentationItemAny::Placement(Box::new(self.into()))
         }
     }
     impl Into<GeometricRepresentationItemAny> for PlanarExtent {
         fn into(self) -> GeometricRepresentationItemAny {
-            GeometricRepresentationItemAny::PlanarExtent(Box::new(self))
+            GeometricRepresentationItemAny::PlanarExtent(Box::new(self.into()))
         }
     }
     impl Into<GeometricRepresentationItemAny> for Point {
         fn into(self) -> GeometricRepresentationItemAny {
-            GeometricRepresentationItemAny::Point(Box::new(self))
+            GeometricRepresentationItemAny::Point(Box::new(self.into()))
         }
     }
     impl Into<GeometricRepresentationItemAny> for SymbolTarget {
         fn into(self) -> GeometricRepresentationItemAny {
-            GeometricRepresentationItemAny::SymbolTarget(Box::new(self))
+            GeometricRepresentationItemAny::SymbolTarget(Box::new(self.into()))
         }
     }
     impl Into<GeometricRepresentationItemAny> for TextLiteral {
         fn into(self) -> GeometricRepresentationItemAny {
-            GeometricRepresentationItemAny::TextLiteral(Box::new(self))
+            GeometricRepresentationItemAny::TextLiteral(Box::new(self.into()))
         }
     }
     impl Into<GeometricRepresentationItemAny> for Vector {
         fn into(self) -> GeometricRepresentationItemAny {
-            GeometricRepresentationItemAny::Vector(Box::new(self))
+            GeometricRepresentationItemAny::Vector(Box::new(self.into()))
         }
     }
     #[derive(
@@ -5357,7 +5359,7 @@ pub mod explicit_draughting {
     }
     impl Into<GeometricSetAny> for GeometricCurveSet {
         fn into(self) -> GeometricSetAny {
-            GeometricSetAny::GeometricCurveSet(Box::new(self))
+            GeometricSetAny::GeometricCurveSet(Box::new(self.into()))
         }
     }
     #[derive(
@@ -5438,7 +5440,7 @@ pub mod explicit_draughting {
     }
     impl Into<GroupAssignmentAny> for DraughtingGroupAssignment {
         fn into(self) -> GroupAssignmentAny {
-            GroupAssignmentAny::DraughtingGroupAssignment(Box::new(self))
+            GroupAssignmentAny::DraughtingGroupAssignment(Box::new(self.into()))
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -5495,7 +5497,7 @@ pub mod explicit_draughting {
     }
     impl Into<InvisibilityAny> for ContextDependentInvisibility {
         fn into(self) -> InvisibilityAny {
-            InvisibilityAny::ContextDependentInvisibility(Box::new(self))
+            InvisibilityAny::ContextDependentInvisibility(Box::new(self.into()))
         }
     }
     #[derive(
@@ -5544,7 +5546,7 @@ pub mod explicit_draughting {
     }
     impl Into<LeaderDirectedCalloutAny> for LeaderDirectedDimension {
         fn into(self) -> LeaderDirectedCalloutAny {
-            LeaderDirectedCalloutAny::LeaderDirectedDimension(Box::new(self))
+            LeaderDirectedCalloutAny::LeaderDirectedDimension(Box::new(self.into()))
         }
     }
     #[derive(
@@ -5677,17 +5679,17 @@ pub mod explicit_draughting {
     }
     impl Into<MappedItemAny> for AnnotationSymbol {
         fn into(self) -> MappedItemAny {
-            MappedItemAny::AnnotationSymbol(Box::new(self))
+            MappedItemAny::AnnotationSymbol(Box::new(self.into()))
         }
     }
     impl Into<MappedItemAny> for AnnotationText {
         fn into(self) -> MappedItemAny {
-            MappedItemAny::AnnotationText(Box::new(self))
+            MappedItemAny::AnnotationText(Box::new(self.into()))
         }
     }
     impl Into<MappedItemAny> for CameraImage {
         fn into(self) -> MappedItemAny {
-            MappedItemAny::CameraImage(Box::new(self))
+            MappedItemAny::CameraImage(Box::new(self.into()))
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -5721,12 +5723,12 @@ pub mod explicit_draughting {
     }
     impl Into<MeasureWithUnitAny> for LengthMeasureWithUnit {
         fn into(self) -> MeasureWithUnitAny {
-            MeasureWithUnitAny::LengthMeasureWithUnit(Box::new(self))
+            MeasureWithUnitAny::LengthMeasureWithUnit(Box::new(self.into()))
         }
     }
     impl Into<MeasureWithUnitAny> for PlaneAngleMeasureWithUnit {
         fn into(self) -> MeasureWithUnitAny {
-            MeasureWithUnitAny::PlaneAngleMeasureWithUnit(Box::new(self))
+            MeasureWithUnitAny::PlaneAngleMeasureWithUnit(Box::new(self.into()))
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -5764,22 +5766,22 @@ pub mod explicit_draughting {
     }
     impl Into<NamedUnitAny> for ConversionBasedUnit {
         fn into(self) -> NamedUnitAny {
-            NamedUnitAny::ConversionBasedUnit(Box::new(self))
+            NamedUnitAny::ConversionBasedUnit(Box::new(self.into()))
         }
     }
     impl Into<NamedUnitAny> for LengthUnit {
         fn into(self) -> NamedUnitAny {
-            NamedUnitAny::LengthUnit(Box::new(self))
+            NamedUnitAny::LengthUnit(Box::new(self.into()))
         }
     }
     impl Into<NamedUnitAny> for PlaneAngleUnit {
         fn into(self) -> NamedUnitAny {
-            NamedUnitAny::PlaneAngleUnit(Box::new(self))
+            NamedUnitAny::PlaneAngleUnit(Box::new(self.into()))
         }
     }
     impl Into<NamedUnitAny> for SiUnit {
         fn into(self) -> NamedUnitAny {
-            NamedUnitAny::SiUnit(Box::new(self))
+            NamedUnitAny::SiUnit(Box::new(self.into()))
         }
     }
     #[derive(
@@ -5834,7 +5836,7 @@ pub mod explicit_draughting {
     }
     impl Into<OneDirectionRepeatFactorAny> for TwoDirectionRepeatFactor {
         fn into(self) -> OneDirectionRepeatFactorAny {
-            OneDirectionRepeatFactorAny::TwoDirectionRepeatFactor(Box::new(self))
+            OneDirectionRepeatFactorAny::TwoDirectionRepeatFactor(Box::new(self.into()))
         }
     }
     #[derive(
@@ -5888,7 +5890,7 @@ pub mod explicit_draughting {
     }
     impl Into<OrganizationAssignmentAny> for DraughtingOrganizationAssignment {
         fn into(self) -> OrganizationAssignmentAny {
-            OrganizationAssignmentAny::DraughtingOrganizationAssignment(Box::new(self))
+            OrganizationAssignmentAny::DraughtingOrganizationAssignment(Box::new(self.into()))
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -5981,7 +5983,7 @@ pub mod explicit_draughting {
     impl Into<PersonAndOrganizationAssignmentAny> for DraughtingPersonAndOrganizationAssignment {
         fn into(self) -> PersonAndOrganizationAssignmentAny {
             PersonAndOrganizationAssignmentAny::DraughtingPersonAndOrganizationAssignment(Box::new(
-                self,
+                self.into(),
             ))
         }
     }
@@ -6020,7 +6022,7 @@ pub mod explicit_draughting {
     }
     impl Into<PersonAssignmentAny> for DraughtingPersonAssignment {
         fn into(self) -> PersonAssignmentAny {
-            PersonAssignmentAny::DraughtingPersonAssignment(Box::new(self))
+            PersonAssignmentAny::DraughtingPersonAssignment(Box::new(self.into()))
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -6081,7 +6083,7 @@ pub mod explicit_draughting {
     }
     impl Into<PlacementAny> for Axis2Placement2D {
         fn into(self) -> PlacementAny {
-            PlacementAny::Axis2Placement2D(Box::new(self))
+            PlacementAny::Axis2Placement2D(Box::new(self.into()))
         }
     }
     #[derive(
@@ -6134,7 +6136,7 @@ pub mod explicit_draughting {
     }
     impl Into<PlanarExtentAny> for PlanarBox {
         fn into(self) -> PlanarExtentAny {
-            PlanarExtentAny::PlanarBox(Box::new(self))
+            PlanarExtentAny::PlanarBox(Box::new(self.into()))
         }
     }
     #[derive(
@@ -6200,12 +6202,12 @@ pub mod explicit_draughting {
     }
     impl Into<PointAny> for CartesianPoint {
         fn into(self) -> PointAny {
-            PointAny::CartesianPoint(Box::new(self))
+            PointAny::CartesianPoint(Box::new(self.into()))
         }
     }
     impl Into<PointAny> for PointOnCurve {
         fn into(self) -> PointAny {
-            PointAny::PointOnCurve(Box::new(self))
+            PointAny::PointOnCurve(Box::new(self.into()))
         }
     }
     #[derive(
@@ -6269,7 +6271,7 @@ pub mod explicit_draughting {
     }
     impl Into<PreDefinedColourAny> for DraughtingPreDefinedColour {
         fn into(self) -> PreDefinedColourAny {
-            PreDefinedColourAny::DraughtingPreDefinedColour(Box::new(self))
+            PreDefinedColourAny::DraughtingPreDefinedColour(Box::new(self.into()))
         }
     }
     #[derive(
@@ -6304,7 +6306,7 @@ pub mod explicit_draughting {
     }
     impl Into<PreDefinedCurveFontAny> for DraughtingPreDefinedCurveFont {
         fn into(self) -> PreDefinedCurveFontAny {
-            PreDefinedCurveFontAny::DraughtingPreDefinedCurveFont(Box::new(self))
+            PreDefinedCurveFontAny::DraughtingPreDefinedCurveFont(Box::new(self.into()))
         }
     }
     #[derive(
@@ -6369,22 +6371,22 @@ pub mod explicit_draughting {
     }
     impl Into<PreDefinedItemAny> for PreDefinedColour {
         fn into(self) -> PreDefinedItemAny {
-            PreDefinedItemAny::PreDefinedColour(Box::new(self))
+            PreDefinedItemAny::PreDefinedColour(Box::new(self.into()))
         }
     }
     impl Into<PreDefinedItemAny> for PreDefinedCurveFont {
         fn into(self) -> PreDefinedItemAny {
-            PreDefinedItemAny::PreDefinedCurveFont(Box::new(self))
+            PreDefinedItemAny::PreDefinedCurveFont(Box::new(self.into()))
         }
     }
     impl Into<PreDefinedItemAny> for PreDefinedSymbol {
         fn into(self) -> PreDefinedItemAny {
-            PreDefinedItemAny::PreDefinedSymbol(Box::new(self))
+            PreDefinedItemAny::PreDefinedSymbol(Box::new(self.into()))
         }
     }
     impl Into<PreDefinedItemAny> for PreDefinedTextFont {
         fn into(self) -> PreDefinedItemAny {
-            PreDefinedItemAny::PreDefinedTextFont(Box::new(self))
+            PreDefinedItemAny::PreDefinedTextFont(Box::new(self.into()))
         }
     }
     #[derive(
@@ -6442,22 +6444,22 @@ pub mod explicit_draughting {
     }
     impl Into<PreDefinedSymbolAny> for PreDefinedDimensionSymbol {
         fn into(self) -> PreDefinedSymbolAny {
-            PreDefinedSymbolAny::PreDefinedDimensionSymbol(Box::new(self))
+            PreDefinedSymbolAny::PreDefinedDimensionSymbol(Box::new(self.into()))
         }
     }
     impl Into<PreDefinedSymbolAny> for PreDefinedGeometricalToleranceSymbol {
         fn into(self) -> PreDefinedSymbolAny {
-            PreDefinedSymbolAny::PreDefinedGeometricalToleranceSymbol(Box::new(self))
+            PreDefinedSymbolAny::PreDefinedGeometricalToleranceSymbol(Box::new(self.into()))
         }
     }
     impl Into<PreDefinedSymbolAny> for PreDefinedPointMarkerSymbol {
         fn into(self) -> PreDefinedSymbolAny {
-            PreDefinedSymbolAny::PreDefinedPointMarkerSymbol(Box::new(self))
+            PreDefinedSymbolAny::PreDefinedPointMarkerSymbol(Box::new(self.into()))
         }
     }
     impl Into<PreDefinedSymbolAny> for PreDefinedTerminatorSymbol {
         fn into(self) -> PreDefinedSymbolAny {
-            PreDefinedSymbolAny::PreDefinedTerminatorSymbol(Box::new(self))
+            PreDefinedSymbolAny::PreDefinedTerminatorSymbol(Box::new(self.into()))
         }
     }
     #[derive(
@@ -6506,7 +6508,7 @@ pub mod explicit_draughting {
     }
     impl Into<PreDefinedTextFontAny> for DraughtingPreDefinedTextFont {
         fn into(self) -> PreDefinedTextFontAny {
-            PreDefinedTextFontAny::DraughtingPreDefinedTextFont(Box::new(self))
+            PreDefinedTextFontAny::DraughtingPreDefinedTextFont(Box::new(self.into()))
         }
     }
     #[derive(
@@ -6541,7 +6543,7 @@ pub mod explicit_draughting {
     }
     impl Into<PresentationAreaAny> for DrawingSheetRevision {
         fn into(self) -> PresentationAreaAny {
-            PresentationAreaAny::DrawingSheetRevision(Box::new(self))
+            PresentationAreaAny::DrawingSheetRevision(Box::new(self.into()))
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -6599,12 +6601,12 @@ pub mod explicit_draughting {
     }
     impl Into<PresentationRepresentationAny> for PresentationArea {
         fn into(self) -> PresentationRepresentationAny {
-            PresentationRepresentationAny::PresentationArea(Box::new(self))
+            PresentationRepresentationAny::PresentationArea(Box::new(self.into()))
         }
     }
     impl Into<PresentationRepresentationAny> for PresentationView {
         fn into(self) -> PresentationRepresentationAny {
-            PresentationRepresentationAny::PresentationView(Box::new(self))
+            PresentationRepresentationAny::PresentationView(Box::new(self.into()))
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -6630,7 +6632,7 @@ pub mod explicit_draughting {
     }
     impl Into<PresentationSetAny> for DrawingRevision {
         fn into(self) -> PresentationSetAny {
-            PresentationSetAny::DrawingRevision(Box::new(self))
+            PresentationSetAny::DrawingRevision(Box::new(self.into()))
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -6669,7 +6671,7 @@ pub mod explicit_draughting {
     }
     impl Into<PresentationStyleAssignmentAny> for PresentationStyleByContext {
         fn into(self) -> PresentationStyleAssignmentAny {
-            PresentationStyleAssignmentAny::PresentationStyleByContext(Box::new(self))
+            PresentationStyleAssignmentAny::PresentationStyleByContext(Box::new(self.into()))
         }
     }
     #[derive(
@@ -6725,7 +6727,7 @@ pub mod explicit_draughting {
     }
     impl Into<PresentedItemAny> for DraughtingPresentedItem {
         fn into(self) -> PresentedItemAny {
-            PresentedItemAny::DraughtingPresentedItem(Box::new(self))
+            PresentedItemAny::DraughtingPresentedItem(Box::new(self.into()))
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -6861,7 +6863,7 @@ pub mod explicit_draughting {
     }
     impl Into<ProjectionDirectedCalloutAny> for OrdinateDimension {
         fn into(self) -> ProjectionDirectedCalloutAny {
-            ProjectionDirectedCalloutAny::OrdinateDimension(Box::new(self))
+            ProjectionDirectedCalloutAny::OrdinateDimension(Box::new(self.into()))
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -6892,7 +6894,7 @@ pub mod explicit_draughting {
     }
     impl Into<PropertyDefinitionAny> for ProductDefinitionShape {
         fn into(self) -> PropertyDefinitionAny {
-            PropertyDefinitionAny::ProductDefinitionShape(Box::new(self))
+            PropertyDefinitionAny::ProductDefinitionShape(Box::new(self.into()))
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -6923,7 +6925,9 @@ pub mod explicit_draughting {
     }
     impl Into<PropertyDefinitionRepresentationAny> for ShapeDefinitionRepresentation {
         fn into(self) -> PropertyDefinitionRepresentationAny {
-            PropertyDefinitionRepresentationAny::ShapeDefinitionRepresentation(Box::new(self))
+            PropertyDefinitionRepresentationAny::ShapeDefinitionRepresentation(Box::new(
+                self.into(),
+            ))
         }
     }
     #[derive(
@@ -7007,22 +7011,22 @@ pub mod explicit_draughting {
     }
     impl Into<RepresentationAny> for DraughtingModel {
         fn into(self) -> RepresentationAny {
-            RepresentationAny::DraughtingModel(Box::new(self))
+            RepresentationAny::DraughtingModel(Box::new(self.into()))
         }
     }
     impl Into<RepresentationAny> for PresentationRepresentation {
         fn into(self) -> RepresentationAny {
-            RepresentationAny::PresentationRepresentation(Box::new(self))
+            RepresentationAny::PresentationRepresentation(Box::new(self.into()))
         }
     }
     impl Into<RepresentationAny> for ShapeRepresentation {
         fn into(self) -> RepresentationAny {
-            RepresentationAny::ShapeRepresentation(Box::new(self))
+            RepresentationAny::ShapeRepresentation(Box::new(self.into()))
         }
     }
     impl Into<RepresentationAny> for SymbolRepresentation {
         fn into(self) -> RepresentationAny {
-            RepresentationAny::SymbolRepresentation(Box::new(self))
+            RepresentationAny::SymbolRepresentation(Box::new(self.into()))
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -7054,12 +7058,12 @@ pub mod explicit_draughting {
     }
     impl Into<RepresentationContextAny> for GeometricRepresentationContext {
         fn into(self) -> RepresentationContextAny {
-            RepresentationContextAny::GeometricRepresentationContext(Box::new(self))
+            RepresentationContextAny::GeometricRepresentationContext(Box::new(self.into()))
         }
     }
     impl Into<RepresentationContextAny> for GlobalUnitAssignedContext {
         fn into(self) -> RepresentationContextAny {
-            RepresentationContextAny::GlobalUnitAssignedContext(Box::new(self))
+            RepresentationContextAny::GlobalUnitAssignedContext(Box::new(self.into()))
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -7093,17 +7097,17 @@ pub mod explicit_draughting {
     }
     impl Into<RepresentationItemAny> for GeometricRepresentationItem {
         fn into(self) -> RepresentationItemAny {
-            RepresentationItemAny::GeometricRepresentationItem(Box::new(self))
+            RepresentationItemAny::GeometricRepresentationItem(Box::new(self.into()))
         }
     }
     impl Into<RepresentationItemAny> for MappedItem {
         fn into(self) -> RepresentationItemAny {
-            RepresentationItemAny::MappedItem(Box::new(self))
+            RepresentationItemAny::MappedItem(Box::new(self.into()))
         }
     }
     impl Into<RepresentationItemAny> for StyledItem {
         fn into(self) -> RepresentationItemAny {
-            RepresentationItemAny::StyledItem(Box::new(self))
+            RepresentationItemAny::StyledItem(Box::new(self.into()))
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -7137,12 +7141,12 @@ pub mod explicit_draughting {
     }
     impl Into<RepresentationMapAny> for CameraUsage {
         fn into(self) -> RepresentationMapAny {
-            RepresentationMapAny::CameraUsage(Box::new(self))
+            RepresentationMapAny::CameraUsage(Box::new(self.into()))
         }
     }
     impl Into<RepresentationMapAny> for SymbolRepresentationMap {
         fn into(self) -> RepresentationMapAny {
-            RepresentationMapAny::SymbolRepresentationMap(Box::new(self))
+            RepresentationMapAny::SymbolRepresentationMap(Box::new(self.into()))
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -7182,7 +7186,7 @@ pub mod explicit_draughting {
     impl Into<SecurityClassificationAssignmentAny> for DraughtingSecurityClassificationAssignment {
         fn into(self) -> SecurityClassificationAssignmentAny {
             SecurityClassificationAssignmentAny::DraughtingSecurityClassificationAssignment(
-                Box::new(self),
+                Box::new(self.into()),
             )
         }
     }
@@ -7241,7 +7245,9 @@ pub mod explicit_draughting {
     }
     impl Into<ShapeRepresentationAny> for GeometricallyBounded2DWireframeRepresentation {
         fn into(self) -> ShapeRepresentationAny {
-            ShapeRepresentationAny::GeometricallyBounded2DWireframeRepresentation(Box::new(self))
+            ShapeRepresentationAny::GeometricallyBounded2DWireframeRepresentation(Box::new(
+                self.into(),
+            ))
         }
     }
     #[derive(
@@ -7310,7 +7316,7 @@ pub mod explicit_draughting {
     }
     impl Into<StyledItemAny> for AnnotationOccurrence {
         fn into(self) -> StyledItemAny {
-            StyledItemAny::AnnotationOccurrence(Box::new(self))
+            StyledItemAny::AnnotationOccurrence(Box::new(self.into()))
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -7356,12 +7362,12 @@ pub mod explicit_draughting {
     }
     impl Into<SymbolRepresentationAny> for DraughtingSubfigureRepresentation {
         fn into(self) -> SymbolRepresentationAny {
-            SymbolRepresentationAny::DraughtingSubfigureRepresentation(Box::new(self))
+            SymbolRepresentationAny::DraughtingSubfigureRepresentation(Box::new(self.into()))
         }
     }
     impl Into<SymbolRepresentationAny> for DraughtingSymbolRepresentation {
         fn into(self) -> SymbolRepresentationAny {
-            SymbolRepresentationAny::DraughtingSymbolRepresentation(Box::new(self))
+            SymbolRepresentationAny::DraughtingSymbolRepresentation(Box::new(self.into()))
         }
     }
     #[derive(
@@ -7442,12 +7448,12 @@ pub mod explicit_draughting {
     }
     impl Into<TerminatorSymbolAny> for DimensionCurveTerminator {
         fn into(self) -> TerminatorSymbolAny {
-            TerminatorSymbolAny::DimensionCurveTerminator(Box::new(self))
+            TerminatorSymbolAny::DimensionCurveTerminator(Box::new(self.into()))
         }
     }
     impl Into<TerminatorSymbolAny> for LeaderTerminator {
         fn into(self) -> TerminatorSymbolAny {
-            TerminatorSymbolAny::LeaderTerminator(Box::new(self))
+            TerminatorSymbolAny::LeaderTerminator(Box::new(self.into()))
         }
     }
     #[derive(
@@ -7498,22 +7504,22 @@ pub mod explicit_draughting {
     }
     impl Into<TextLiteralAny> for TextLiteralWithAssociatedCurves {
         fn into(self) -> TextLiteralAny {
-            TextLiteralAny::TextLiteralWithAssociatedCurves(Box::new(self))
+            TextLiteralAny::TextLiteralWithAssociatedCurves(Box::new(self.into()))
         }
     }
     impl Into<TextLiteralAny> for TextLiteralWithBlankingBox {
         fn into(self) -> TextLiteralAny {
-            TextLiteralAny::TextLiteralWithBlankingBox(Box::new(self))
+            TextLiteralAny::TextLiteralWithBlankingBox(Box::new(self.into()))
         }
     }
     impl Into<TextLiteralAny> for TextLiteralWithDelineation {
         fn into(self) -> TextLiteralAny {
-            TextLiteralAny::TextLiteralWithDelineation(Box::new(self))
+            TextLiteralAny::TextLiteralWithDelineation(Box::new(self.into()))
         }
     }
     impl Into<TextLiteralAny> for TextLiteralWithExtent {
         fn into(self) -> TextLiteralAny {
-            TextLiteralAny::TextLiteralWithExtent(Box::new(self))
+            TextLiteralAny::TextLiteralWithExtent(Box::new(self.into()))
         }
     }
     #[derive(
@@ -7581,7 +7587,9 @@ pub mod explicit_draughting {
     }
     impl Into<TextLiteralWithDelineationAny> for DraughtingTextLiteralWithDelineation {
         fn into(self) -> TextLiteralWithDelineationAny {
-            TextLiteralWithDelineationAny::DraughtingTextLiteralWithDelineation(Box::new(self))
+            TextLiteralWithDelineationAny::DraughtingTextLiteralWithDelineation(Box::new(
+                self.into(),
+            ))
         }
     }
     #[derive(
@@ -7630,12 +7638,12 @@ pub mod explicit_draughting {
     }
     impl Into<TextStyleAny> for TextStyleWithBoxCharacteristics {
         fn into(self) -> TextStyleAny {
-            TextStyleAny::TextStyleWithBoxCharacteristics(Box::new(self))
+            TextStyleAny::TextStyleWithBoxCharacteristics(Box::new(self.into()))
         }
     }
     impl Into<TextStyleAny> for TextStyleWithMirror {
         fn into(self) -> TextStyleAny {
-            TextStyleAny::TextStyleWithMirror(Box::new(self))
+            TextStyleAny::TextStyleWithMirror(Box::new(self.into()))
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
