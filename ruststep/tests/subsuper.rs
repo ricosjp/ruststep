@@ -1,8 +1,3 @@
-use nom::Finish;
-use ruststep::{ast::*, parser::exchange, place_holder::*, tables::*};
-use serde::Deserialize;
-use std::str::FromStr;
-
 espr_derive::inline_express!(
     r#"
     SCHEMA test_schema;
@@ -23,9 +18,7 @@ espr_derive::inline_express!(
     "#
 );
 
-use test_schema::*;
-
-const EXAMPLE: &str = r#"
+const _EXAMPLE: &str = r#"
 DATA;
   #1 = BASE(1.0);
   #2 = SUB(BASE((1.0)), 2.0);
