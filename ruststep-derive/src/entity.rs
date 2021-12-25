@@ -171,9 +171,14 @@ pub fn impl_entity_table(ident: &syn::Ident, table: &HolderAttr) -> TokenStream2
 // `name` may be different from `ident`
 // because this will be used for both Entity struct and its `*Holder` struct.
 fn def_visitor(ident: &syn::Ident, name: &str, st: &syn::DataStruct) -> TokenStream2 {
+    let ruststep = ruststep_crate();
     let visitor_ident = as_visitor_ident(ident);
-    let FieldEntries { attributes, .. } = FieldEntries::parse(st);
-    let attr_len = attributes.len();
+    let FieldEntries {
+        attributes,
+        holder_types,
+        ..
+    } = FieldEntries::parse(st);
+
     quote! {
         #[doc(hidden)]
         pub struct #visitor_ident;
@@ -189,13 +194,11 @@ fn def_visitor(ident: &syn::Ident, name: &str, st: &syn::DataStruct) -> TokenStr
             where
                 A: ::serde::de::SeqAccess<'de>,
             {
-                if let Some(size) = seq.size_hint() {
-                    if size != #attr_len {
-                        use ::serde::de::Error;
-                        return Err(A::Error::invalid_length(size, &self));
-                    }
-                }
-                #( let #attributes = seq.next_element()?.unwrap(); )*
+                use #ruststep::tables::WithVisitor;
+                #(
+                let visitor = <#holder_types as WithVisitor>::visitor_new();
+                let #attributes = visitor.visit_seq(&mut seq)?;
+                )*
                 Ok(#ident { #(#attributes),* })
             }
 
