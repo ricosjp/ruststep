@@ -236,11 +236,11 @@ mod snapshot_tests {
                 match key.as_str() {
                     "A" => {
                         let owned = map.next_value()?;
-                        return Ok(S1Holder::A(Box::new(owned.into())));
+                        return Ok(S1Holder::A(Box::new(owned)));
                     }
                     "B" => {
                         let owned = map.next_value()?;
-                        return Ok(S1Holder::B(Box::new(owned.into())));
+                        return Ok(S1Holder::B(Box::new(owned)));
                     }
                     _ => {
                         use serde::de::{Error, Unexpected};
@@ -346,11 +346,11 @@ mod snapshot_tests {
                 match key.as_str() {
                     "BASE" => {
                         let owned = map.next_value()?;
-                        return Ok(BaseAnyHolder::Base(Box::new(owned.into())));
+                        return Ok(BaseAnyHolder::Base(Box::new(owned)));
                     }
                     "SUB" => {
                         let owned = map.next_value()?;
-                        return Ok(BaseAnyHolder::Sub(Box::new(owned.into())));
+                        return Ok(BaseAnyHolder::Sub(Box::new(owned)));
                     }
                     _ => {
                         use serde::de::{Error, Unexpected};

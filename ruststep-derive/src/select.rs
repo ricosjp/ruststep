@@ -13,6 +13,7 @@ struct Input {
     variants: Vec<syn::Ident>,
     variant_names: Vec<String>,
     variant_exprs: Vec<TokenStream2>,
+    variant_into_exprs: Vec<TokenStream2>,
     holder_types: Vec<syn::Type>,
     holder_exprs: Vec<TokenStream2>,
     table_fields: Vec<Option<syn::Ident>>,
@@ -37,6 +38,7 @@ impl Input {
         let mut holder_types = Vec::new();
         let mut table_fields = Vec::new();
         let mut variant_exprs = Vec::new();
+        let mut variant_into_exprs = Vec::new();
         for var in &e.variants {
             let HolderAttr {
                 field,
@@ -53,12 +55,14 @@ impl Input {
                         // ENTITY case
                         holder_types.push(as_holder_path(&f.ty));
                         holder_exprs.push(quote! { Box::new(sub.into_owned(table)?) });
-                        variant_exprs.push(quote! { Box::new(owned.into()) });
+                        variant_exprs.push(quote! { Box::new(owned) });
+                        variant_into_exprs.push(quote! { Box::new(owned.into()) });
                     } else {
                         abort_call_site!("Simple type should not be Boxed")
                     }
                 } else {
                     variant_exprs.push(quote! { owned });
+                    variant_into_exprs.push(quote! { owned.into() });
                     if place_holder {
                         // *Any case
                         holder_types.push(as_holder_path(&f.ty));
@@ -81,6 +85,7 @@ impl Input {
             variants,
             variant_names,
             variant_exprs,
+            variant_into_exprs,
             holder_types,
             holder_exprs,
             table_fields,
@@ -212,7 +217,7 @@ impl Input {
             variants,
             table_fields,
             table,
-            variant_exprs,
+            variant_into_exprs,
             ..
         } = self;
         let ruststep = ruststep_crate();
@@ -222,7 +227,7 @@ impl Input {
         for ((var, field), expr) in variants
             .iter()
             .zip(table_fields.iter())
-            .zip(variant_exprs.iter())
+            .zip(variant_into_exprs.iter())
         {
             if let Some(field) = field {
                 vars.push(var);
