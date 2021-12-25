@@ -2801,24 +2801,42 @@ pub mod explicit_draughting {
     }
     impl Into<AddressAny> for OrganizationalAddress {
         fn into(self) -> AddressAny {
-            AddressAny::OrganizationalAddress(Box::new(self))
+            AddressAny::OrganizationalAddress(Box::new(self.into()))
         }
     }
     impl Into<AddressAny> for PersonalAddress {
         fn into(self) -> AddressAny {
-            AddressAny::PersonalAddress(Box::new(self))
+            AddressAny::PersonalAddress(Box::new(self.into()))
         }
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = angular_dimension)]
     #[holder(generate_deserialize)]
-    pub struct AngularDimension {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    pub struct AngularDimension {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub dimension_curve_directed_callout: DimensionCurveDirectedCallout,
+    }
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = annotation_curve_occurrence)]
     #[holder(generate_deserialize)]
-    pub struct AnnotationCurveOccurrence {}
+    pub struct AnnotationCurveOccurrence {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub annotation_occurrence: AnnotationOccurrence,
+    }
     #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
@@ -2843,40 +2861,65 @@ pub mod explicit_draughting {
     }
     impl Into<AnnotationCurveOccurrenceAny> for DimensionCurve {
         fn into(self) -> AnnotationCurveOccurrenceAny {
-            AnnotationCurveOccurrenceAny::DimensionCurve(Box::new(self))
+            AnnotationCurveOccurrenceAny::DimensionCurve(Box::new(self.into()))
         }
     }
     impl Into<AnnotationCurveOccurrenceAny> for LeaderCurve {
         fn into(self) -> AnnotationCurveOccurrenceAny {
-            AnnotationCurveOccurrenceAny::LeaderCurve(Box::new(self))
+            AnnotationCurveOccurrenceAny::LeaderCurve(Box::new(self.into()))
         }
     }
     impl Into<AnnotationCurveOccurrenceAny> for ProjectionCurve {
         fn into(self) -> AnnotationCurveOccurrenceAny {
-            AnnotationCurveOccurrenceAny::ProjectionCurve(Box::new(self))
+            AnnotationCurveOccurrenceAny::ProjectionCurve(Box::new(self.into()))
         }
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = annotation_fill_area)]
     #[holder(generate_deserialize)]
     pub struct AnnotationFillArea {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub geometric_representation_item: GeometricRepresentationItem,
         #[holder(use_place_holder)]
         pub boundaries: Vec<CurveAny>,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = annotation_fill_area_occurrence)]
     #[holder(generate_deserialize)]
     pub struct AnnotationFillAreaOccurrence {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub annotation_occurrence: AnnotationOccurrence,
         #[holder(use_place_holder)]
         pub fill_style_target: PointAny,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = annotation_occurrence)]
     #[holder(generate_deserialize)]
-    pub struct AnnotationOccurrence {}
+    pub struct AnnotationOccurrence {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub styled_item: StyledItem,
+    }
     #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
@@ -2886,13 +2929,13 @@ pub mod explicit_draughting {
         AnnotationOccurrence(Box<AnnotationOccurrence>),
         #[holder(use_place_holder)]
         # [holder (field = annotation_curve_occurrence)]
-        AnnotationCurveOccurrence(Box<AnnotationCurveOccurrence>),
+        AnnotationCurveOccurrence(Box<AnnotationCurveOccurrenceAny>),
         #[holder(use_place_holder)]
         # [holder (field = annotation_fill_area_occurrence)]
         AnnotationFillAreaOccurrence(Box<AnnotationFillAreaOccurrence>),
         #[holder(use_place_holder)]
         # [holder (field = annotation_symbol_occurrence)]
-        AnnotationSymbolOccurrence(Box<AnnotationSymbolOccurrence>),
+        AnnotationSymbolOccurrence(Box<AnnotationSymbolOccurrenceAny>),
         #[holder(use_place_holder)]
         # [holder (field = annotation_text_occurrence)]
         AnnotationTextOccurrence(Box<AnnotationTextOccurrence>),
@@ -2907,44 +2950,71 @@ pub mod explicit_draughting {
     }
     impl Into<AnnotationOccurrenceAny> for AnnotationCurveOccurrence {
         fn into(self) -> AnnotationOccurrenceAny {
-            AnnotationOccurrenceAny::AnnotationCurveOccurrence(Box::new(self))
+            AnnotationOccurrenceAny::AnnotationCurveOccurrence(Box::new(self.into()))
         }
     }
     impl Into<AnnotationOccurrenceAny> for AnnotationFillAreaOccurrence {
         fn into(self) -> AnnotationOccurrenceAny {
-            AnnotationOccurrenceAny::AnnotationFillAreaOccurrence(Box::new(self))
+            AnnotationOccurrenceAny::AnnotationFillAreaOccurrence(Box::new(self.into()))
         }
     }
     impl Into<AnnotationOccurrenceAny> for AnnotationSymbolOccurrence {
         fn into(self) -> AnnotationOccurrenceAny {
-            AnnotationOccurrenceAny::AnnotationSymbolOccurrence(Box::new(self))
+            AnnotationOccurrenceAny::AnnotationSymbolOccurrence(Box::new(self.into()))
         }
     }
     impl Into<AnnotationOccurrenceAny> for AnnotationTextOccurrence {
         fn into(self) -> AnnotationOccurrenceAny {
-            AnnotationOccurrenceAny::AnnotationTextOccurrence(Box::new(self))
+            AnnotationOccurrenceAny::AnnotationTextOccurrence(Box::new(self.into()))
         }
     }
     impl Into<AnnotationOccurrenceAny> for DraughtingAnnotationOccurrence {
         fn into(self) -> AnnotationOccurrenceAny {
-            AnnotationOccurrenceAny::DraughtingAnnotationOccurrence(Box::new(self))
+            AnnotationOccurrenceAny::DraughtingAnnotationOccurrence(Box::new(self.into()))
         }
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = annotation_subfigure_occurrence)]
     #[holder(generate_deserialize)]
-    pub struct AnnotationSubfigureOccurrence {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    pub struct AnnotationSubfigureOccurrence {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub annotation_symbol_occurrence: AnnotationSymbolOccurrence,
+    }
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = annotation_symbol)]
     #[holder(generate_deserialize)]
-    pub struct AnnotationSymbol {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    pub struct AnnotationSymbol {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub mapped_item: MappedItem,
+    }
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = annotation_symbol_occurrence)]
     #[holder(generate_deserialize)]
-    pub struct AnnotationSymbolOccurrence {}
+    pub struct AnnotationSymbolOccurrence {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub annotation_occurrence: AnnotationOccurrence,
+    }
     #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
@@ -2957,7 +3027,7 @@ pub mod explicit_draughting {
         AnnotationSubfigureOccurrence(Box<AnnotationSubfigureOccurrence>),
         #[holder(use_place_holder)]
         # [holder (field = terminator_symbol)]
-        TerminatorSymbol(Box<TerminatorSymbol>),
+        TerminatorSymbol(Box<TerminatorSymbolAny>),
     }
     impl Into<AnnotationSymbolOccurrenceAny> for AnnotationSymbolOccurrence {
         fn into(self) -> AnnotationSymbolOccurrenceAny {
@@ -2966,24 +3036,42 @@ pub mod explicit_draughting {
     }
     impl Into<AnnotationSymbolOccurrenceAny> for AnnotationSubfigureOccurrence {
         fn into(self) -> AnnotationSymbolOccurrenceAny {
-            AnnotationSymbolOccurrenceAny::AnnotationSubfigureOccurrence(Box::new(self))
+            AnnotationSymbolOccurrenceAny::AnnotationSubfigureOccurrence(Box::new(self.into()))
         }
     }
     impl Into<AnnotationSymbolOccurrenceAny> for TerminatorSymbol {
         fn into(self) -> AnnotationSymbolOccurrenceAny {
-            AnnotationSymbolOccurrenceAny::TerminatorSymbol(Box::new(self))
+            AnnotationSymbolOccurrenceAny::TerminatorSymbol(Box::new(self.into()))
         }
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = annotation_text)]
     #[holder(generate_deserialize)]
-    pub struct AnnotationText {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    pub struct AnnotationText {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub mapped_item: MappedItem,
+    }
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = annotation_text_occurrence)]
     #[holder(generate_deserialize)]
-    pub struct AnnotationTextOccurrence {}
+    pub struct AnnotationTextOccurrence {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub annotation_occurrence: AnnotationOccurrence,
+    }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = application_context)]
@@ -3021,12 +3109,12 @@ pub mod explicit_draughting {
     }
     impl Into<ApplicationContextElementAny> for ProductContext {
         fn into(self) -> ApplicationContextElementAny {
-            ApplicationContextElementAny::ProductContext(Box::new(self))
+            ApplicationContextElementAny::ProductContext(Box::new(self.into()))
         }
     }
     impl Into<ApplicationContextElementAny> for ProductDefinitionContext {
         fn into(self) -> ApplicationContextElementAny {
-            ApplicationContextElementAny::ProductDefinitionContext(Box::new(self))
+            ApplicationContextElementAny::ProductDefinitionContext(Box::new(self.into()))
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -3075,7 +3163,7 @@ pub mod explicit_draughting {
     }
     impl Into<ApprovalAssignmentAny> for DraughtingApprovalAssignment {
         fn into(self) -> ApprovalAssignmentAny {
-            ApprovalAssignmentAny::DraughtingApprovalAssignment(Box::new(self))
+            ApprovalAssignmentAny::DraughtingApprovalAssignment(Box::new(self.into()))
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -3142,22 +3230,38 @@ pub mod explicit_draughting {
     }
     impl Into<AreaInSetAny> for DrawingSheetRevisionUsage {
         fn into(self) -> AreaInSetAny {
-            AreaInSetAny::DrawingSheetRevisionUsage(Box::new(self))
+            AreaInSetAny::DrawingSheetRevisionUsage(Box::new(self.into()))
         }
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = axis2_placement_2d)]
     #[holder(generate_deserialize)]
     pub struct Axis2Placement2D {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub placement: Placement,
         #[holder(use_place_holder)]
         pub ref_direction: Option<Direction>,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = b_spline_curve)]
     #[holder(generate_deserialize)]
     pub struct BSplineCurve {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub bounded_curve: BoundedCurve,
         pub degree: i64,
         #[holder(use_place_holder)]
         pub control_points_list: Vec<CartesianPoint>,
@@ -3195,48 +3299,74 @@ pub mod explicit_draughting {
     }
     impl Into<BSplineCurveAny> for BSplineCurveWithKnots {
         fn into(self) -> BSplineCurveAny {
-            BSplineCurveAny::BSplineCurveWithKnots(Box::new(self))
+            BSplineCurveAny::BSplineCurveWithKnots(Box::new(self.into()))
         }
     }
     impl Into<BSplineCurveAny> for BezierCurve {
         fn into(self) -> BSplineCurveAny {
-            BSplineCurveAny::BezierCurve(Box::new(self))
+            BSplineCurveAny::BezierCurve(Box::new(self.into()))
         }
     }
     impl Into<BSplineCurveAny> for QuasiUniformCurve {
         fn into(self) -> BSplineCurveAny {
-            BSplineCurveAny::QuasiUniformCurve(Box::new(self))
+            BSplineCurveAny::QuasiUniformCurve(Box::new(self.into()))
         }
     }
     impl Into<BSplineCurveAny> for RationalBSplineCurve {
         fn into(self) -> BSplineCurveAny {
-            BSplineCurveAny::RationalBSplineCurve(Box::new(self))
+            BSplineCurveAny::RationalBSplineCurve(Box::new(self.into()))
         }
     }
     impl Into<BSplineCurveAny> for UniformCurve {
         fn into(self) -> BSplineCurveAny {
-            BSplineCurveAny::UniformCurve(Box::new(self))
+            BSplineCurveAny::UniformCurve(Box::new(self.into()))
         }
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = b_spline_curve_with_knots)]
     #[holder(generate_deserialize)]
     pub struct BSplineCurveWithKnots {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub b_spline_curve: BSplineCurve,
         pub knot_multiplicities: Vec<i64>,
         pub knots: Vec<ParameterValue>,
         pub knot_spec: KnotType,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = bezier_curve)]
     #[holder(generate_deserialize)]
-    pub struct BezierCurve {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    pub struct BezierCurve {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub b_spline_curve: BSplineCurve,
+    }
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = bounded_curve)]
     #[holder(generate_deserialize)]
-    pub struct BoundedCurve {}
+    pub struct BoundedCurve {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub curve: Curve,
+    }
     #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
@@ -3246,7 +3376,7 @@ pub mod explicit_draughting {
         BoundedCurve(Box<BoundedCurve>),
         #[holder(use_place_holder)]
         # [holder (field = b_spline_curve)]
-        BSplineCurve(Box<BSplineCurve>),
+        BSplineCurve(Box<BSplineCurveAny>),
         #[holder(use_place_holder)]
         # [holder (field = composite_curve)]
         CompositeCurve(Box<CompositeCurve>),
@@ -3264,37 +3394,54 @@ pub mod explicit_draughting {
     }
     impl Into<BoundedCurveAny> for BSplineCurve {
         fn into(self) -> BoundedCurveAny {
-            BoundedCurveAny::BSplineCurve(Box::new(self))
+            BoundedCurveAny::BSplineCurve(Box::new(self.into()))
         }
     }
     impl Into<BoundedCurveAny> for CompositeCurve {
         fn into(self) -> BoundedCurveAny {
-            BoundedCurveAny::CompositeCurve(Box::new(self))
+            BoundedCurveAny::CompositeCurve(Box::new(self.into()))
         }
     }
     impl Into<BoundedCurveAny> for Polyline {
         fn into(self) -> BoundedCurveAny {
-            BoundedCurveAny::Polyline(Box::new(self))
+            BoundedCurveAny::Polyline(Box::new(self.into()))
         }
     }
     impl Into<BoundedCurveAny> for TrimmedCurve {
         fn into(self) -> BoundedCurveAny {
-            BoundedCurveAny::TrimmedCurve(Box::new(self))
+            BoundedCurveAny::TrimmedCurve(Box::new(self.into()))
         }
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = calendar_date)]
     #[holder(generate_deserialize)]
     pub struct CalendarDate {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub date: Date,
         pub day_component: DayInMonthNumber,
         pub month_component: MonthInYearNumber,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = camera_image)]
     #[holder(generate_deserialize)]
-    pub struct CameraImage {}
+    pub struct CameraImage {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub mapped_item: MappedItem,
+    }
     #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
@@ -3313,19 +3460,37 @@ pub mod explicit_draughting {
     }
     impl Into<CameraImageAny> for CameraImage2DWithScale {
         fn into(self) -> CameraImageAny {
-            CameraImageAny::CameraImage2DWithScale(Box::new(self))
+            CameraImageAny::CameraImage2DWithScale(Box::new(self.into()))
         }
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = camera_image_2d_with_scale)]
     #[holder(generate_deserialize)]
-    pub struct CameraImage2DWithScale {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    pub struct CameraImage2DWithScale {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub camera_image: CameraImage,
+    }
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = camera_model)]
     #[holder(generate_deserialize)]
-    pub struct CameraModel {}
+    pub struct CameraModel {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub geometric_representation_item: GeometricRepresentationItem,
+    }
     #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
@@ -3344,35 +3509,68 @@ pub mod explicit_draughting {
     }
     impl Into<CameraModelAny> for CameraModelD2 {
         fn into(self) -> CameraModelAny {
-            CameraModelAny::CameraModelD2(Box::new(self))
+            CameraModelAny::CameraModelD2(Box::new(self.into()))
         }
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = camera_model_d2)]
     #[holder(generate_deserialize)]
     pub struct CameraModelD2 {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub camera_model: CameraModel,
         #[holder(use_place_holder)]
         pub view_window: PlanarBox,
         pub view_window_clipping: bool,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = camera_usage)]
     #[holder(generate_deserialize)]
-    pub struct CameraUsage {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    pub struct CameraUsage {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub representation_map: RepresentationMap,
+    }
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = cartesian_point)]
     #[holder(generate_deserialize)]
     pub struct CartesianPoint {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub point: Point,
         pub coordinates: Vec<LengthMeasure>,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = circle)]
     #[holder(generate_deserialize)]
     pub struct Circle {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub conic: Conic,
         pub radius: PositiveLengthMeasure,
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -3389,10 +3587,10 @@ pub mod explicit_draughting {
         Colour(Box<Colour>),
         #[holder(use_place_holder)]
         # [holder (field = colour_specification)]
-        ColourSpecification(Box<ColourSpecification>),
+        ColourSpecification(Box<ColourSpecificationAny>),
         #[holder(use_place_holder)]
         # [holder (field = pre_defined_colour)]
-        PreDefinedColour(Box<PreDefinedColour>),
+        PreDefinedColour(Box<PreDefinedColourAny>),
     }
     impl Into<ColourAny> for Colour {
         fn into(self) -> ColourAny {
@@ -3401,28 +3599,44 @@ pub mod explicit_draughting {
     }
     impl Into<ColourAny> for ColourSpecification {
         fn into(self) -> ColourAny {
-            ColourAny::ColourSpecification(Box::new(self))
+            ColourAny::ColourSpecification(Box::new(self.into()))
         }
     }
     impl Into<ColourAny> for PreDefinedColour {
         fn into(self) -> ColourAny {
-            ColourAny::PreDefinedColour(Box::new(self))
+            ColourAny::PreDefinedColour(Box::new(self.into()))
         }
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = colour_rgb)]
     #[holder(generate_deserialize)]
     pub struct ColourRgb {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub colour_specification: ColourSpecification,
         pub red: f64,
         pub green: f64,
         pub blue: f64,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = colour_specification)]
     #[holder(generate_deserialize)]
     pub struct ColourSpecification {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub colour: Colour,
         #[holder(use_place_holder)]
         pub name: ColourAny,
     }
@@ -3444,14 +3658,22 @@ pub mod explicit_draughting {
     }
     impl Into<ColourSpecificationAny> for ColourRgb {
         fn into(self) -> ColourSpecificationAny {
-            ColourSpecificationAny::ColourRgb(Box::new(self))
+            ColourSpecificationAny::ColourRgb(Box::new(self.into()))
         }
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = composite_curve)]
     #[holder(generate_deserialize)]
     pub struct CompositeCurve {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub bounded_curve: BoundedCurve,
         #[holder(use_place_holder)]
         pub segments: Vec<CompositeCurveSegment>,
         pub self_intersect: Logical,
@@ -3466,11 +3688,19 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub parent_curve: CurveAny,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = composite_text)]
     #[holder(generate_deserialize)]
     pub struct CompositeText {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub geometric_representation_item: GeometricRepresentationItem,
         #[holder(use_place_holder)]
         pub collected_text: Vec<TextOrCharacter>,
     }
@@ -3498,48 +3728,80 @@ pub mod explicit_draughting {
     }
     impl Into<CompositeTextAny> for CompositeTextWithAssociatedCurves {
         fn into(self) -> CompositeTextAny {
-            CompositeTextAny::CompositeTextWithAssociatedCurves(Box::new(self))
+            CompositeTextAny::CompositeTextWithAssociatedCurves(Box::new(self.into()))
         }
     }
     impl Into<CompositeTextAny> for CompositeTextWithBlankingBox {
         fn into(self) -> CompositeTextAny {
-            CompositeTextAny::CompositeTextWithBlankingBox(Box::new(self))
+            CompositeTextAny::CompositeTextWithBlankingBox(Box::new(self.into()))
         }
     }
     impl Into<CompositeTextAny> for CompositeTextWithExtent {
         fn into(self) -> CompositeTextAny {
-            CompositeTextAny::CompositeTextWithExtent(Box::new(self))
+            CompositeTextAny::CompositeTextWithExtent(Box::new(self.into()))
         }
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = composite_text_with_associated_curves)]
     #[holder(generate_deserialize)]
     pub struct CompositeTextWithAssociatedCurves {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub composite_text: CompositeText,
         #[holder(use_place_holder)]
         pub associated_curves: Vec<CurveAny>,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = composite_text_with_blanking_box)]
     #[holder(generate_deserialize)]
     pub struct CompositeTextWithBlankingBox {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub composite_text: CompositeText,
         #[holder(use_place_holder)]
         pub blanking: PlanarBox,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = composite_text_with_extent)]
     #[holder(generate_deserialize)]
     pub struct CompositeTextWithExtent {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub composite_text: CompositeText,
         #[holder(use_place_holder)]
         pub extent: PlanarExtentAny,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = conic)]
     #[holder(generate_deserialize)]
     pub struct Conic {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub curve: Curve,
         #[holder(use_place_holder)]
         pub position: Axis2Placement,
     }
@@ -3570,29 +3832,37 @@ pub mod explicit_draughting {
     }
     impl Into<ConicAny> for Circle {
         fn into(self) -> ConicAny {
-            ConicAny::Circle(Box::new(self))
+            ConicAny::Circle(Box::new(self.into()))
         }
     }
     impl Into<ConicAny> for Ellipse {
         fn into(self) -> ConicAny {
-            ConicAny::Ellipse(Box::new(self))
+            ConicAny::Ellipse(Box::new(self.into()))
         }
     }
     impl Into<ConicAny> for Hyperbola {
         fn into(self) -> ConicAny {
-            ConicAny::Hyperbola(Box::new(self))
+            ConicAny::Hyperbola(Box::new(self.into()))
         }
     }
     impl Into<ConicAny> for Parabola {
         fn into(self) -> ConicAny {
-            ConicAny::Parabola(Box::new(self))
+            ConicAny::Parabola(Box::new(self.into()))
         }
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = context_dependent_invisibility)]
     #[holder(generate_deserialize)]
     pub struct ContextDependentInvisibility {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub invisibility: Invisibility,
         #[holder(use_place_holder)]
         pub presentation_context: InvisibilityContext,
     }
@@ -3632,7 +3902,7 @@ pub mod explicit_draughting {
     }
     impl Into<ContractAssignmentAny> for DraughtingContractAssignment {
         fn into(self) -> ContractAssignmentAny {
-            ContractAssignmentAny::DraughtingContractAssignment(Box::new(self))
+            ContractAssignmentAny::DraughtingContractAssignment(Box::new(self.into()))
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -3642,20 +3912,37 @@ pub mod explicit_draughting {
     pub struct ContractType {
         pub description: Label,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = conversion_based_unit)]
     #[holder(generate_deserialize)]
     pub struct ConversionBasedUnit {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub named_unit: NamedUnit,
         pub name: Label,
         #[holder(use_place_holder)]
         pub conversion_factor: MeasureWithUnitAny,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = curve)]
     #[holder(generate_deserialize)]
-    pub struct Curve {}
+    pub struct Curve {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub geometric_representation_item: GeometricRepresentationItem,
+    }
     #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
@@ -3665,10 +3952,10 @@ pub mod explicit_draughting {
         Curve(Box<Curve>),
         #[holder(use_place_holder)]
         # [holder (field = bounded_curve)]
-        BoundedCurve(Box<BoundedCurve>),
+        BoundedCurve(Box<BoundedCurveAny>),
         #[holder(use_place_holder)]
         # [holder (field = conic)]
-        Conic(Box<Conic>),
+        Conic(Box<ConicAny>),
         #[holder(use_place_holder)]
         # [holder (field = line)]
         Line(Box<Line>),
@@ -3683,29 +3970,38 @@ pub mod explicit_draughting {
     }
     impl Into<CurveAny> for BoundedCurve {
         fn into(self) -> CurveAny {
-            CurveAny::BoundedCurve(Box::new(self))
+            CurveAny::BoundedCurve(Box::new(self.into()))
         }
     }
     impl Into<CurveAny> for Conic {
         fn into(self) -> CurveAny {
-            CurveAny::Conic(Box::new(self))
+            CurveAny::Conic(Box::new(self.into()))
         }
     }
     impl Into<CurveAny> for Line {
         fn into(self) -> CurveAny {
-            CurveAny::Line(Box::new(self))
+            CurveAny::Line(Box::new(self.into()))
         }
     }
     impl Into<CurveAny> for OffsetCurve2D {
         fn into(self) -> CurveAny {
-            CurveAny::OffsetCurve2D(Box::new(self))
+            CurveAny::OffsetCurve2D(Box::new(self.into()))
         }
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = curve_dimension)]
     #[holder(generate_deserialize)]
-    pub struct CurveDimension {}
+    pub struct CurveDimension {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub dimension_curve_directed_callout: DimensionCurveDirectedCallout,
+    }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = curve_style)]
@@ -3761,54 +4057,125 @@ pub mod explicit_draughting {
     }
     impl Into<DateAny> for CalendarDate {
         fn into(self) -> DateAny {
-            DateAny::CalendarDate(Box::new(self))
+            DateAny::CalendarDate(Box::new(self.into()))
         }
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = datum_feature_callout)]
     #[holder(generate_deserialize)]
-    pub struct DatumFeatureCallout {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    pub struct DatumFeatureCallout {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub draughting_callout: DraughtingCallout,
+    }
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = datum_target_callout)]
     #[holder(generate_deserialize)]
-    pub struct DatumTargetCallout {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    pub struct DatumTargetCallout {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub draughting_callout: DraughtingCallout,
+    }
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = defined_symbol)]
     #[holder(generate_deserialize)]
     pub struct DefinedSymbol {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub geometric_representation_item: GeometricRepresentationItem,
         #[holder(use_place_holder)]
         pub definition: DefinedSymbolSelect,
         #[holder(use_place_holder)]
         pub target: SymbolTarget,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = diameter_dimension)]
     #[holder(generate_deserialize)]
-    pub struct DiameterDimension {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    pub struct DiameterDimension {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub dimension_curve_directed_callout: DimensionCurveDirectedCallout,
+    }
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = dimension_callout_component_relationship)]
     #[holder(generate_deserialize)]
-    pub struct DimensionCalloutComponentRelationship {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    pub struct DimensionCalloutComponentRelationship {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub draughting_callout_relationship: DraughtingCalloutRelationship,
+    }
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = dimension_callout_relationship)]
     #[holder(generate_deserialize)]
-    pub struct DimensionCalloutRelationship {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    pub struct DimensionCalloutRelationship {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub draughting_callout_relationship: DraughtingCalloutRelationship,
+    }
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = dimension_curve)]
     #[holder(generate_deserialize)]
-    pub struct DimensionCurve {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    pub struct DimensionCurve {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub annotation_curve_occurrence: AnnotationCurveOccurrence,
+    }
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = dimension_curve_directed_callout)]
     #[holder(generate_deserialize)]
-    pub struct DimensionCurveDirectedCallout {}
+    pub struct DimensionCurveDirectedCallout {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub draughting_callout: DraughtingCallout,
+    }
     #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
@@ -3839,41 +4206,58 @@ pub mod explicit_draughting {
     }
     impl Into<DimensionCurveDirectedCalloutAny> for AngularDimension {
         fn into(self) -> DimensionCurveDirectedCalloutAny {
-            DimensionCurveDirectedCalloutAny::AngularDimension(Box::new(self))
+            DimensionCurveDirectedCalloutAny::AngularDimension(Box::new(self.into()))
         }
     }
     impl Into<DimensionCurveDirectedCalloutAny> for CurveDimension {
         fn into(self) -> DimensionCurveDirectedCalloutAny {
-            DimensionCurveDirectedCalloutAny::CurveDimension(Box::new(self))
+            DimensionCurveDirectedCalloutAny::CurveDimension(Box::new(self.into()))
         }
     }
     impl Into<DimensionCurveDirectedCalloutAny> for DiameterDimension {
         fn into(self) -> DimensionCurveDirectedCalloutAny {
-            DimensionCurveDirectedCalloutAny::DiameterDimension(Box::new(self))
+            DimensionCurveDirectedCalloutAny::DiameterDimension(Box::new(self.into()))
         }
     }
     impl Into<DimensionCurveDirectedCalloutAny> for LinearDimension {
         fn into(self) -> DimensionCurveDirectedCalloutAny {
-            DimensionCurveDirectedCalloutAny::LinearDimension(Box::new(self))
+            DimensionCurveDirectedCalloutAny::LinearDimension(Box::new(self.into()))
         }
     }
     impl Into<DimensionCurveDirectedCalloutAny> for RadiusDimension {
         fn into(self) -> DimensionCurveDirectedCalloutAny {
-            DimensionCurveDirectedCalloutAny::RadiusDimension(Box::new(self))
+            DimensionCurveDirectedCalloutAny::RadiusDimension(Box::new(self.into()))
         }
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = dimension_curve_terminator)]
     #[holder(generate_deserialize)]
     pub struct DimensionCurveTerminator {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub terminator_symbol: TerminatorSymbol,
         pub role: DimensionExtentUsage,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = dimension_pair)]
     #[holder(generate_deserialize)]
-    pub struct DimensionPair {}
+    pub struct DimensionPair {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub draughting_callout_relationship: DraughtingCalloutRelationship,
+    }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = dimensional_exponents)]
@@ -3887,11 +4271,19 @@ pub mod explicit_draughting {
         pub amount_of_substance_exponent: f64,
         pub luminous_intensity_exponent: f64,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = direction)]
     #[holder(generate_deserialize)]
     pub struct Direction {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub geometric_representation_item: GeometricRepresentationItem,
         pub direction_ratios: Vec<f64>,
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -3932,7 +4324,7 @@ pub mod explicit_draughting {
     }
     impl Into<DocumentReferenceAny> for DraughtingSpecificationReference {
         fn into(self) -> DocumentReferenceAny {
-            DocumentReferenceAny::DraughtingSpecificationReference(Box::new(self))
+            DocumentReferenceAny::DraughtingSpecificationReference(Box::new(self.into()))
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -3942,24 +4334,49 @@ pub mod explicit_draughting {
     pub struct DocumentType {
         pub product_data_type: Label,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = draughting_annotation_occurrence)]
     #[holder(generate_deserialize)]
-    pub struct DraughtingAnnotationOccurrence {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    pub struct DraughtingAnnotationOccurrence {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub annotation_occurrence: AnnotationOccurrence,
+    }
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = draughting_approval_assignment)]
     #[holder(generate_deserialize)]
     pub struct DraughtingApprovalAssignment {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub approval_assignment: ApprovalAssignment,
         #[holder(use_place_holder)]
         pub approved_items: Vec<ApprovedItem>,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = draughting_callout)]
     #[holder(generate_deserialize)]
     pub struct DraughtingCallout {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub geometric_representation_item: GeometricRepresentationItem,
         #[holder(use_place_holder)]
         pub contents: Vec<DraughtingCalloutElement>,
     }
@@ -3978,7 +4395,7 @@ pub mod explicit_draughting {
         DatumTargetCallout(Box<DatumTargetCallout>),
         #[holder(use_place_holder)]
         # [holder (field = dimension_curve_directed_callout)]
-        DimensionCurveDirectedCallout(Box<DimensionCurveDirectedCallout>),
+        DimensionCurveDirectedCallout(Box<DimensionCurveDirectedCalloutAny>),
         #[holder(use_place_holder)]
         # [holder (field = draughting_elements)]
         DraughtingElements(Box<DraughtingElements>),
@@ -3987,10 +4404,10 @@ pub mod explicit_draughting {
         GeometricalToleranceCallout(Box<GeometricalToleranceCallout>),
         #[holder(use_place_holder)]
         # [holder (field = leader_directed_callout)]
-        LeaderDirectedCallout(Box<LeaderDirectedCallout>),
+        LeaderDirectedCallout(Box<LeaderDirectedCalloutAny>),
         #[holder(use_place_holder)]
         # [holder (field = projection_directed_callout)]
-        ProjectionDirectedCallout(Box<ProjectionDirectedCallout>),
+        ProjectionDirectedCallout(Box<ProjectionDirectedCalloutAny>),
         #[holder(use_place_holder)]
         # [holder (field = structured_dimension_callout)]
         StructuredDimensionCallout(Box<StructuredDimensionCallout>),
@@ -4002,42 +4419,42 @@ pub mod explicit_draughting {
     }
     impl Into<DraughtingCalloutAny> for DatumFeatureCallout {
         fn into(self) -> DraughtingCalloutAny {
-            DraughtingCalloutAny::DatumFeatureCallout(Box::new(self))
+            DraughtingCalloutAny::DatumFeatureCallout(Box::new(self.into()))
         }
     }
     impl Into<DraughtingCalloutAny> for DatumTargetCallout {
         fn into(self) -> DraughtingCalloutAny {
-            DraughtingCalloutAny::DatumTargetCallout(Box::new(self))
+            DraughtingCalloutAny::DatumTargetCallout(Box::new(self.into()))
         }
     }
     impl Into<DraughtingCalloutAny> for DimensionCurveDirectedCallout {
         fn into(self) -> DraughtingCalloutAny {
-            DraughtingCalloutAny::DimensionCurveDirectedCallout(Box::new(self))
+            DraughtingCalloutAny::DimensionCurveDirectedCallout(Box::new(self.into()))
         }
     }
     impl Into<DraughtingCalloutAny> for DraughtingElements {
         fn into(self) -> DraughtingCalloutAny {
-            DraughtingCalloutAny::DraughtingElements(Box::new(self))
+            DraughtingCalloutAny::DraughtingElements(Box::new(self.into()))
         }
     }
     impl Into<DraughtingCalloutAny> for GeometricalToleranceCallout {
         fn into(self) -> DraughtingCalloutAny {
-            DraughtingCalloutAny::GeometricalToleranceCallout(Box::new(self))
+            DraughtingCalloutAny::GeometricalToleranceCallout(Box::new(self.into()))
         }
     }
     impl Into<DraughtingCalloutAny> for LeaderDirectedCallout {
         fn into(self) -> DraughtingCalloutAny {
-            DraughtingCalloutAny::LeaderDirectedCallout(Box::new(self))
+            DraughtingCalloutAny::LeaderDirectedCallout(Box::new(self.into()))
         }
     }
     impl Into<DraughtingCalloutAny> for ProjectionDirectedCallout {
         fn into(self) -> DraughtingCalloutAny {
-            DraughtingCalloutAny::ProjectionDirectedCallout(Box::new(self))
+            DraughtingCalloutAny::ProjectionDirectedCallout(Box::new(self.into()))
         }
     }
     impl Into<DraughtingCalloutAny> for StructuredDimensionCallout {
         fn into(self) -> DraughtingCalloutAny {
-            DraughtingCalloutAny::StructuredDimensionCallout(Box::new(self))
+            DraughtingCalloutAny::StructuredDimensionCallout(Box::new(self.into()))
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -4076,123 +4493,261 @@ pub mod explicit_draughting {
     }
     impl Into<DraughtingCalloutRelationshipAny> for DimensionCalloutComponentRelationship {
         fn into(self) -> DraughtingCalloutRelationshipAny {
-            DraughtingCalloutRelationshipAny::DimensionCalloutComponentRelationship(Box::new(self))
+            DraughtingCalloutRelationshipAny::DimensionCalloutComponentRelationship(Box::new(
+                self.into(),
+            ))
         }
     }
     impl Into<DraughtingCalloutRelationshipAny> for DimensionCalloutRelationship {
         fn into(self) -> DraughtingCalloutRelationshipAny {
-            DraughtingCalloutRelationshipAny::DimensionCalloutRelationship(Box::new(self))
+            DraughtingCalloutRelationshipAny::DimensionCalloutRelationship(Box::new(self.into()))
         }
     }
     impl Into<DraughtingCalloutRelationshipAny> for DimensionPair {
         fn into(self) -> DraughtingCalloutRelationshipAny {
-            DraughtingCalloutRelationshipAny::DimensionPair(Box::new(self))
+            DraughtingCalloutRelationshipAny::DimensionPair(Box::new(self.into()))
         }
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = draughting_contract_assignment)]
     #[holder(generate_deserialize)]
     pub struct DraughtingContractAssignment {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub contract_assignment: ContractAssignment,
         #[holder(use_place_holder)]
         pub items: Vec<ContractedItem>,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = draughting_drawing_revision)]
     #[holder(generate_deserialize)]
-    pub struct DraughtingDrawingRevision {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    pub struct DraughtingDrawingRevision {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub drawing_revision: DrawingRevision,
+    }
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = draughting_elements)]
     #[holder(generate_deserialize)]
-    pub struct DraughtingElements {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    pub struct DraughtingElements {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub draughting_callout: DraughtingCallout,
+    }
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = draughting_group_assignment)]
     #[holder(generate_deserialize)]
     pub struct DraughtingGroupAssignment {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub group_assignment: GroupAssignment,
         #[holder(use_place_holder)]
         pub items: Vec<DraughtingGroupedItem>,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = draughting_model)]
     #[holder(generate_deserialize)]
-    pub struct DraughtingModel {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    pub struct DraughtingModel {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub representation: Representation,
+    }
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = draughting_organization_assignment)]
     #[holder(generate_deserialize)]
     pub struct DraughtingOrganizationAssignment {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub organization_assignment: OrganizationAssignment,
         #[holder(use_place_holder)]
         pub assigned_items: Vec<DraughtingOrganizationItem>,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = draughting_person_and_organization_assignment)]
     #[holder(generate_deserialize)]
     pub struct DraughtingPersonAndOrganizationAssignment {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub person_and_organization_assignment: PersonAndOrganizationAssignment,
         #[holder(use_place_holder)]
         pub assigned_items: Vec<DraughtingOrganizationItem>,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = draughting_person_assignment)]
     #[holder(generate_deserialize)]
     pub struct DraughtingPersonAssignment {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub person_assignment: PersonAssignment,
         #[holder(use_place_holder)]
         pub assigned_items: Vec<DraughtingOrganizationItem>,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = draughting_pre_defined_colour)]
     #[holder(generate_deserialize)]
-    pub struct DraughtingPreDefinedColour {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    pub struct DraughtingPreDefinedColour {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub pre_defined_colour: PreDefinedColour,
+    }
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = draughting_pre_defined_curve_font)]
     #[holder(generate_deserialize)]
-    pub struct DraughtingPreDefinedCurveFont {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    pub struct DraughtingPreDefinedCurveFont {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub pre_defined_curve_font: PreDefinedCurveFont,
+    }
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = draughting_pre_defined_text_font)]
     #[holder(generate_deserialize)]
-    pub struct DraughtingPreDefinedTextFont {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    pub struct DraughtingPreDefinedTextFont {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub pre_defined_text_font: PreDefinedTextFont,
+    }
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = draughting_presented_item)]
     #[holder(generate_deserialize)]
     pub struct DraughtingPresentedItem {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub presented_item: PresentedItem,
         #[holder(use_place_holder)]
         pub items: Vec<DraughtingPresentedItemSelect>,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = draughting_security_classification_assignment)]
     #[holder(generate_deserialize)]
     pub struct DraughtingSecurityClassificationAssignment {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub security_classification_assignment: SecurityClassificationAssignment,
         #[holder(use_place_holder)]
         pub assigned_items: Vec<ClassifiedItem>,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = draughting_specification_reference)]
     #[holder(generate_deserialize)]
     pub struct DraughtingSpecificationReference {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub document_reference: DocumentReference,
         #[holder(use_place_holder)]
         pub specified_items: Vec<SpecifiedItem>,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = draughting_subfigure_representation)]
     #[holder(generate_deserialize)]
-    pub struct DraughtingSubfigureRepresentation {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    pub struct DraughtingSubfigureRepresentation {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub symbol_representation: SymbolRepresentation,
+    }
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = draughting_symbol_representation)]
     #[holder(generate_deserialize)]
-    pub struct DraughtingSymbolRepresentation {}
+    pub struct DraughtingSymbolRepresentation {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub symbol_representation: SymbolRepresentation,
+    }
     #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
@@ -4211,14 +4766,23 @@ pub mod explicit_draughting {
     }
     impl Into<DraughtingSymbolRepresentationAny> for DrawingSheetLayout {
         fn into(self) -> DraughtingSymbolRepresentationAny {
-            DraughtingSymbolRepresentationAny::DrawingSheetLayout(Box::new(self))
+            DraughtingSymbolRepresentationAny::DrawingSheetLayout(Box::new(self.into()))
         }
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = draughting_text_literal_with_delineation)]
     #[holder(generate_deserialize)]
-    pub struct DraughtingTextLiteralWithDelineation {}
+    pub struct DraughtingTextLiteralWithDelineation {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub text_literal_with_delineation: TextLiteralWithDelineation,
+    }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = draughting_title)]
@@ -4237,11 +4801,19 @@ pub mod explicit_draughting {
         pub drawing_number: Identifier,
         pub drawing_type: Option<Label>,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = drawing_revision)]
     #[holder(generate_deserialize)]
     pub struct DrawingRevision {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub presentation_set: PresentationSet,
         pub revision_identifier: Identifier,
         #[holder(use_place_holder)]
         pub drawing_identifier: DrawingDefinition,
@@ -4265,33 +4837,66 @@ pub mod explicit_draughting {
     }
     impl Into<DrawingRevisionAny> for DraughtingDrawingRevision {
         fn into(self) -> DrawingRevisionAny {
-            DrawingRevisionAny::DraughtingDrawingRevision(Box::new(self))
+            DrawingRevisionAny::DraughtingDrawingRevision(Box::new(self.into()))
         }
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = drawing_sheet_layout)]
     #[holder(generate_deserialize)]
-    pub struct DrawingSheetLayout {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    pub struct DrawingSheetLayout {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub draughting_symbol_representation: DraughtingSymbolRepresentation,
+    }
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = drawing_sheet_revision)]
     #[holder(generate_deserialize)]
     pub struct DrawingSheetRevision {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub presentation_area: PresentationArea,
         pub revision_identifier: Identifier,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = drawing_sheet_revision_usage)]
     #[holder(generate_deserialize)]
     pub struct DrawingSheetRevisionUsage {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub area_in_set: AreaInSet,
         pub sheet_number: Identifier,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = ellipse)]
     #[holder(generate_deserialize)]
     pub struct Ellipse {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub conic: Conic,
         pub semi_axis_1: PositiveLengthMeasure,
         pub semi_axis_2: PositiveLengthMeasure,
     }
@@ -4303,16 +4908,30 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub source_id: SourceItem,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = externally_defined_curve_font)]
     #[holder(generate_deserialize)]
-    pub struct ExternallyDefinedCurveFont {}
+    pub struct ExternallyDefinedCurveFont {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub externally_defined_item: ExternallyDefinedItem,
+    }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = externally_defined_hatch_style)]
     #[holder(generate_deserialize)]
-    pub struct ExternallyDefinedHatchStyle {}
+    pub struct ExternallyDefinedHatchStyle {
+        #[holder(use_place_holder)]
+        pub externally_defined_item: ExternallyDefinedItem,
+        #[holder(use_place_holder)]
+        pub geometric_representation_item: GeometricRepresentationItem,
+    }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = externally_defined_item)]
@@ -4353,44 +4972,67 @@ pub mod explicit_draughting {
     }
     impl Into<ExternallyDefinedItemAny> for ExternallyDefinedCurveFont {
         fn into(self) -> ExternallyDefinedItemAny {
-            ExternallyDefinedItemAny::ExternallyDefinedCurveFont(Box::new(self))
+            ExternallyDefinedItemAny::ExternallyDefinedCurveFont(Box::new(self.into()))
         }
     }
     impl Into<ExternallyDefinedItemAny> for ExternallyDefinedHatchStyle {
         fn into(self) -> ExternallyDefinedItemAny {
-            ExternallyDefinedItemAny::ExternallyDefinedHatchStyle(Box::new(self))
+            ExternallyDefinedItemAny::ExternallyDefinedHatchStyle(Box::new(self.into()))
         }
     }
     impl Into<ExternallyDefinedItemAny> for ExternallyDefinedSymbol {
         fn into(self) -> ExternallyDefinedItemAny {
-            ExternallyDefinedItemAny::ExternallyDefinedSymbol(Box::new(self))
+            ExternallyDefinedItemAny::ExternallyDefinedSymbol(Box::new(self.into()))
         }
     }
     impl Into<ExternallyDefinedItemAny> for ExternallyDefinedTextFont {
         fn into(self) -> ExternallyDefinedItemAny {
-            ExternallyDefinedItemAny::ExternallyDefinedTextFont(Box::new(self))
+            ExternallyDefinedItemAny::ExternallyDefinedTextFont(Box::new(self.into()))
         }
     }
     impl Into<ExternallyDefinedItemAny> for ExternallyDefinedTileStyle {
         fn into(self) -> ExternallyDefinedItemAny {
-            ExternallyDefinedItemAny::ExternallyDefinedTileStyle(Box::new(self))
+            ExternallyDefinedItemAny::ExternallyDefinedTileStyle(Box::new(self.into()))
         }
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = externally_defined_symbol)]
     #[holder(generate_deserialize)]
-    pub struct ExternallyDefinedSymbol {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    pub struct ExternallyDefinedSymbol {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub externally_defined_item: ExternallyDefinedItem,
+    }
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = externally_defined_text_font)]
     #[holder(generate_deserialize)]
-    pub struct ExternallyDefinedTextFont {}
+    pub struct ExternallyDefinedTextFont {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub externally_defined_item: ExternallyDefinedItem,
+    }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = externally_defined_tile_style)]
     #[holder(generate_deserialize)]
-    pub struct ExternallyDefinedTileStyle {}
+    pub struct ExternallyDefinedTileStyle {
+        #[holder(use_place_holder)]
+        pub externally_defined_item: ExternallyDefinedItem,
+        #[holder(use_place_holder)]
+        pub geometric_representation_item: GeometricRepresentationItem,
+    }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = fill_area_style)]
@@ -4409,11 +5051,19 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub fill_colour: ColourAny,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = fill_area_style_hatching)]
     #[holder(generate_deserialize)]
     pub struct FillAreaStyleHatching {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub geometric_representation_item: GeometricRepresentationItem,
         #[holder(use_place_holder)]
         pub hatch_line_appearance: CurveStyle,
         #[holder(use_place_holder)]
@@ -4424,42 +5074,84 @@ pub mod explicit_draughting {
         pub pattern_start: CartesianPoint,
         pub hatch_line_angle: PlaneAngleMeasure,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = fill_area_style_tile_symbol_with_style)]
     #[holder(generate_deserialize)]
     pub struct FillAreaStyleTileSymbolWithStyle {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub geometric_representation_item: GeometricRepresentationItem,
         #[holder(use_place_holder)]
         pub symbol: AnnotationSymbolOccurrenceAny,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = fill_area_style_tiles)]
     #[holder(generate_deserialize)]
     pub struct FillAreaStyleTiles {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub geometric_representation_item: GeometricRepresentationItem,
         #[holder(use_place_holder)]
         pub tiling_pattern: TwoDirectionRepeatFactor,
         #[holder(use_place_holder)]
         pub tiles: Vec<FillAreaStyleTileShapeSelect>,
         pub tiling_scale: PositiveRatioMeasure,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = geometric_curve_set)]
     #[holder(generate_deserialize)]
-    pub struct GeometricCurveSet {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    pub struct GeometricCurveSet {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub geometric_set: GeometricSet,
+    }
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = geometric_representation_context)]
     #[holder(generate_deserialize)]
     pub struct GeometricRepresentationContext {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub representation_context: RepresentationContext,
         pub coordinate_space_dimension: DimensionCount,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = geometric_representation_item)]
     #[holder(generate_deserialize)]
-    pub struct GeometricRepresentationItem {}
+    pub struct GeometricRepresentationItem {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub representation_item: RepresentationItem,
+    }
     #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
@@ -4472,13 +5164,13 @@ pub mod explicit_draughting {
         AnnotationFillArea(Box<AnnotationFillArea>),
         #[holder(use_place_holder)]
         # [holder (field = camera_model)]
-        CameraModel(Box<CameraModel>),
+        CameraModel(Box<CameraModelAny>),
         #[holder(use_place_holder)]
         # [holder (field = composite_text)]
-        CompositeText(Box<CompositeText>),
+        CompositeText(Box<CompositeTextAny>),
         #[holder(use_place_holder)]
         # [holder (field = curve)]
-        Curve(Box<Curve>),
+        Curve(Box<CurveAny>),
         #[holder(use_place_holder)]
         # [holder (field = defined_symbol)]
         DefinedSymbol(Box<DefinedSymbol>),
@@ -4487,7 +5179,7 @@ pub mod explicit_draughting {
         Direction(Box<Direction>),
         #[holder(use_place_holder)]
         # [holder (field = draughting_callout)]
-        DraughtingCallout(Box<DraughtingCallout>),
+        DraughtingCallout(Box<DraughtingCalloutAny>),
         #[holder(use_place_holder)]
         # [holder (field = externally_defined_hatch_style)]
         ExternallyDefinedHatchStyle(Box<ExternallyDefinedHatchStyle>),
@@ -4505,25 +5197,25 @@ pub mod explicit_draughting {
         FillAreaStyleTiles(Box<FillAreaStyleTiles>),
         #[holder(use_place_holder)]
         # [holder (field = geometric_set)]
-        GeometricSet(Box<GeometricSet>),
+        GeometricSet(Box<GeometricSetAny>),
         #[holder(use_place_holder)]
         # [holder (field = one_direction_repeat_factor)]
-        OneDirectionRepeatFactor(Box<OneDirectionRepeatFactor>),
+        OneDirectionRepeatFactor(Box<OneDirectionRepeatFactorAny>),
         #[holder(use_place_holder)]
         # [holder (field = placement)]
-        Placement(Box<Placement>),
+        Placement(Box<PlacementAny>),
         #[holder(use_place_holder)]
         # [holder (field = planar_extent)]
-        PlanarExtent(Box<PlanarExtent>),
+        PlanarExtent(Box<PlanarExtentAny>),
         #[holder(use_place_holder)]
         # [holder (field = point)]
-        Point(Box<Point>),
+        Point(Box<PointAny>),
         #[holder(use_place_holder)]
         # [holder (field = symbol_target)]
         SymbolTarget(Box<SymbolTarget>),
         #[holder(use_place_holder)]
         # [holder (field = text_literal)]
-        TextLiteral(Box<TextLiteral>),
+        TextLiteral(Box<TextLiteralAny>),
         #[holder(use_place_holder)]
         # [holder (field = vector)]
         Vector(Box<Vector>),
@@ -4535,109 +5227,117 @@ pub mod explicit_draughting {
     }
     impl Into<GeometricRepresentationItemAny> for AnnotationFillArea {
         fn into(self) -> GeometricRepresentationItemAny {
-            GeometricRepresentationItemAny::AnnotationFillArea(Box::new(self))
+            GeometricRepresentationItemAny::AnnotationFillArea(Box::new(self.into()))
         }
     }
     impl Into<GeometricRepresentationItemAny> for CameraModel {
         fn into(self) -> GeometricRepresentationItemAny {
-            GeometricRepresentationItemAny::CameraModel(Box::new(self))
+            GeometricRepresentationItemAny::CameraModel(Box::new(self.into()))
         }
     }
     impl Into<GeometricRepresentationItemAny> for CompositeText {
         fn into(self) -> GeometricRepresentationItemAny {
-            GeometricRepresentationItemAny::CompositeText(Box::new(self))
+            GeometricRepresentationItemAny::CompositeText(Box::new(self.into()))
         }
     }
     impl Into<GeometricRepresentationItemAny> for Curve {
         fn into(self) -> GeometricRepresentationItemAny {
-            GeometricRepresentationItemAny::Curve(Box::new(self))
+            GeometricRepresentationItemAny::Curve(Box::new(self.into()))
         }
     }
     impl Into<GeometricRepresentationItemAny> for DefinedSymbol {
         fn into(self) -> GeometricRepresentationItemAny {
-            GeometricRepresentationItemAny::DefinedSymbol(Box::new(self))
+            GeometricRepresentationItemAny::DefinedSymbol(Box::new(self.into()))
         }
     }
     impl Into<GeometricRepresentationItemAny> for Direction {
         fn into(self) -> GeometricRepresentationItemAny {
-            GeometricRepresentationItemAny::Direction(Box::new(self))
+            GeometricRepresentationItemAny::Direction(Box::new(self.into()))
         }
     }
     impl Into<GeometricRepresentationItemAny> for DraughtingCallout {
         fn into(self) -> GeometricRepresentationItemAny {
-            GeometricRepresentationItemAny::DraughtingCallout(Box::new(self))
+            GeometricRepresentationItemAny::DraughtingCallout(Box::new(self.into()))
         }
     }
     impl Into<GeometricRepresentationItemAny> for ExternallyDefinedHatchStyle {
         fn into(self) -> GeometricRepresentationItemAny {
-            GeometricRepresentationItemAny::ExternallyDefinedHatchStyle(Box::new(self))
+            GeometricRepresentationItemAny::ExternallyDefinedHatchStyle(Box::new(self.into()))
         }
     }
     impl Into<GeometricRepresentationItemAny> for ExternallyDefinedTileStyle {
         fn into(self) -> GeometricRepresentationItemAny {
-            GeometricRepresentationItemAny::ExternallyDefinedTileStyle(Box::new(self))
+            GeometricRepresentationItemAny::ExternallyDefinedTileStyle(Box::new(self.into()))
         }
     }
     impl Into<GeometricRepresentationItemAny> for FillAreaStyleHatching {
         fn into(self) -> GeometricRepresentationItemAny {
-            GeometricRepresentationItemAny::FillAreaStyleHatching(Box::new(self))
+            GeometricRepresentationItemAny::FillAreaStyleHatching(Box::new(self.into()))
         }
     }
     impl Into<GeometricRepresentationItemAny> for FillAreaStyleTileSymbolWithStyle {
         fn into(self) -> GeometricRepresentationItemAny {
-            GeometricRepresentationItemAny::FillAreaStyleTileSymbolWithStyle(Box::new(self))
+            GeometricRepresentationItemAny::FillAreaStyleTileSymbolWithStyle(Box::new(self.into()))
         }
     }
     impl Into<GeometricRepresentationItemAny> for FillAreaStyleTiles {
         fn into(self) -> GeometricRepresentationItemAny {
-            GeometricRepresentationItemAny::FillAreaStyleTiles(Box::new(self))
+            GeometricRepresentationItemAny::FillAreaStyleTiles(Box::new(self.into()))
         }
     }
     impl Into<GeometricRepresentationItemAny> for GeometricSet {
         fn into(self) -> GeometricRepresentationItemAny {
-            GeometricRepresentationItemAny::GeometricSet(Box::new(self))
+            GeometricRepresentationItemAny::GeometricSet(Box::new(self.into()))
         }
     }
     impl Into<GeometricRepresentationItemAny> for OneDirectionRepeatFactor {
         fn into(self) -> GeometricRepresentationItemAny {
-            GeometricRepresentationItemAny::OneDirectionRepeatFactor(Box::new(self))
+            GeometricRepresentationItemAny::OneDirectionRepeatFactor(Box::new(self.into()))
         }
     }
     impl Into<GeometricRepresentationItemAny> for Placement {
         fn into(self) -> GeometricRepresentationItemAny {
-            GeometricRepresentationItemAny::Placement(Box::new(self))
+            GeometricRepresentationItemAny::Placement(Box::new(self.into()))
         }
     }
     impl Into<GeometricRepresentationItemAny> for PlanarExtent {
         fn into(self) -> GeometricRepresentationItemAny {
-            GeometricRepresentationItemAny::PlanarExtent(Box::new(self))
+            GeometricRepresentationItemAny::PlanarExtent(Box::new(self.into()))
         }
     }
     impl Into<GeometricRepresentationItemAny> for Point {
         fn into(self) -> GeometricRepresentationItemAny {
-            GeometricRepresentationItemAny::Point(Box::new(self))
+            GeometricRepresentationItemAny::Point(Box::new(self.into()))
         }
     }
     impl Into<GeometricRepresentationItemAny> for SymbolTarget {
         fn into(self) -> GeometricRepresentationItemAny {
-            GeometricRepresentationItemAny::SymbolTarget(Box::new(self))
+            GeometricRepresentationItemAny::SymbolTarget(Box::new(self.into()))
         }
     }
     impl Into<GeometricRepresentationItemAny> for TextLiteral {
         fn into(self) -> GeometricRepresentationItemAny {
-            GeometricRepresentationItemAny::TextLiteral(Box::new(self))
+            GeometricRepresentationItemAny::TextLiteral(Box::new(self.into()))
         }
     }
     impl Into<GeometricRepresentationItemAny> for Vector {
         fn into(self) -> GeometricRepresentationItemAny {
-            GeometricRepresentationItemAny::Vector(Box::new(self))
+            GeometricRepresentationItemAny::Vector(Box::new(self.into()))
         }
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = geometric_set)]
     #[holder(generate_deserialize)]
     pub struct GeometricSet {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub geometric_representation_item: GeometricRepresentationItem,
         #[holder(use_place_holder)]
         pub elements: Vec<GeometricSetSelect>,
     }
@@ -4659,24 +5359,50 @@ pub mod explicit_draughting {
     }
     impl Into<GeometricSetAny> for GeometricCurveSet {
         fn into(self) -> GeometricSetAny {
-            GeometricSetAny::GeometricCurveSet(Box::new(self))
+            GeometricSetAny::GeometricCurveSet(Box::new(self.into()))
         }
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = geometrical_tolerance_callout)]
     #[holder(generate_deserialize)]
-    pub struct GeometricalToleranceCallout {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    pub struct GeometricalToleranceCallout {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub draughting_callout: DraughtingCallout,
+    }
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = geometrically_bounded_2d_wireframe_representation)]
     #[holder(generate_deserialize)]
-    pub struct GeometricallyBounded2DWireframeRepresentation {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    pub struct GeometricallyBounded2DWireframeRepresentation {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub shape_representation: ShapeRepresentation,
+    }
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = global_unit_assigned_context)]
     #[holder(generate_deserialize)]
     pub struct GlobalUnitAssignedContext {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub representation_context: RepresentationContext,
         #[holder(use_place_holder)]
         pub units: Vec<Unit>,
     }
@@ -4714,7 +5440,7 @@ pub mod explicit_draughting {
     }
     impl Into<GroupAssignmentAny> for DraughtingGroupAssignment {
         fn into(self) -> GroupAssignmentAny {
-            GroupAssignmentAny::DraughtingGroupAssignment(Box::new(self))
+            GroupAssignmentAny::DraughtingGroupAssignment(Box::new(self.into()))
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -4729,11 +5455,19 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub related_group: Group,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = hyperbola)]
     #[holder(generate_deserialize)]
     pub struct Hyperbola {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub conic: Conic,
         pub semi_axis: PositiveLengthMeasure,
         pub semi_imag_axis: PositiveLengthMeasure,
     }
@@ -4763,19 +5497,37 @@ pub mod explicit_draughting {
     }
     impl Into<InvisibilityAny> for ContextDependentInvisibility {
         fn into(self) -> InvisibilityAny {
-            InvisibilityAny::ContextDependentInvisibility(Box::new(self))
+            InvisibilityAny::ContextDependentInvisibility(Box::new(self.into()))
         }
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = leader_curve)]
     #[holder(generate_deserialize)]
-    pub struct LeaderCurve {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    pub struct LeaderCurve {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub annotation_curve_occurrence: AnnotationCurveOccurrence,
+    }
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = leader_directed_callout)]
     #[holder(generate_deserialize)]
-    pub struct LeaderDirectedCallout {}
+    pub struct LeaderDirectedCallout {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub draughting_callout: DraughtingCallout,
+    }
     #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
@@ -4794,49 +5546,110 @@ pub mod explicit_draughting {
     }
     impl Into<LeaderDirectedCalloutAny> for LeaderDirectedDimension {
         fn into(self) -> LeaderDirectedCalloutAny {
-            LeaderDirectedCalloutAny::LeaderDirectedDimension(Box::new(self))
+            LeaderDirectedCalloutAny::LeaderDirectedDimension(Box::new(self.into()))
         }
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = leader_directed_dimension)]
     #[holder(generate_deserialize)]
-    pub struct LeaderDirectedDimension {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    pub struct LeaderDirectedDimension {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub leader_directed_callout: LeaderDirectedCallout,
+    }
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = leader_terminator)]
     #[holder(generate_deserialize)]
-    pub struct LeaderTerminator {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    pub struct LeaderTerminator {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub terminator_symbol: TerminatorSymbol,
+    }
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = length_measure_with_unit)]
     #[holder(generate_deserialize)]
-    pub struct LengthMeasureWithUnit {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    pub struct LengthMeasureWithUnit {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub measure_with_unit: MeasureWithUnit,
+    }
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = length_unit)]
     #[holder(generate_deserialize)]
-    pub struct LengthUnit {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    pub struct LengthUnit {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub named_unit: NamedUnit,
+    }
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = line)]
     #[holder(generate_deserialize)]
     pub struct Line {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub curve: Curve,
         #[holder(use_place_holder)]
         pub pnt: CartesianPoint,
         #[holder(use_place_holder)]
         pub dir: Vector,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = linear_dimension)]
     #[holder(generate_deserialize)]
-    pub struct LinearDimension {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    pub struct LinearDimension {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub dimension_curve_directed_callout: DimensionCurveDirectedCallout,
+    }
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = mapped_item)]
     #[holder(generate_deserialize)]
     pub struct MappedItem {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub representation_item: RepresentationItem,
         #[holder(use_place_holder)]
         pub mapping_source: RepresentationMapAny,
         #[holder(use_place_holder)]
@@ -4857,7 +5670,7 @@ pub mod explicit_draughting {
         AnnotationText(Box<AnnotationText>),
         #[holder(use_place_holder)]
         # [holder (field = camera_image)]
-        CameraImage(Box<CameraImage>),
+        CameraImage(Box<CameraImageAny>),
     }
     impl Into<MappedItemAny> for MappedItem {
         fn into(self) -> MappedItemAny {
@@ -4866,17 +5679,17 @@ pub mod explicit_draughting {
     }
     impl Into<MappedItemAny> for AnnotationSymbol {
         fn into(self) -> MappedItemAny {
-            MappedItemAny::AnnotationSymbol(Box::new(self))
+            MappedItemAny::AnnotationSymbol(Box::new(self.into()))
         }
     }
     impl Into<MappedItemAny> for AnnotationText {
         fn into(self) -> MappedItemAny {
-            MappedItemAny::AnnotationText(Box::new(self))
+            MappedItemAny::AnnotationText(Box::new(self.into()))
         }
     }
     impl Into<MappedItemAny> for CameraImage {
         fn into(self) -> MappedItemAny {
-            MappedItemAny::CameraImage(Box::new(self))
+            MappedItemAny::CameraImage(Box::new(self.into()))
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -4910,12 +5723,12 @@ pub mod explicit_draughting {
     }
     impl Into<MeasureWithUnitAny> for LengthMeasureWithUnit {
         fn into(self) -> MeasureWithUnitAny {
-            MeasureWithUnitAny::LengthMeasureWithUnit(Box::new(self))
+            MeasureWithUnitAny::LengthMeasureWithUnit(Box::new(self.into()))
         }
     }
     impl Into<MeasureWithUnitAny> for PlaneAngleMeasureWithUnit {
         fn into(self) -> MeasureWithUnitAny {
-            MeasureWithUnitAny::PlaneAngleMeasureWithUnit(Box::new(self))
+            MeasureWithUnitAny::PlaneAngleMeasureWithUnit(Box::new(self.into()))
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -4953,39 +5766,55 @@ pub mod explicit_draughting {
     }
     impl Into<NamedUnitAny> for ConversionBasedUnit {
         fn into(self) -> NamedUnitAny {
-            NamedUnitAny::ConversionBasedUnit(Box::new(self))
+            NamedUnitAny::ConversionBasedUnit(Box::new(self.into()))
         }
     }
     impl Into<NamedUnitAny> for LengthUnit {
         fn into(self) -> NamedUnitAny {
-            NamedUnitAny::LengthUnit(Box::new(self))
+            NamedUnitAny::LengthUnit(Box::new(self.into()))
         }
     }
     impl Into<NamedUnitAny> for PlaneAngleUnit {
         fn into(self) -> NamedUnitAny {
-            NamedUnitAny::PlaneAngleUnit(Box::new(self))
+            NamedUnitAny::PlaneAngleUnit(Box::new(self.into()))
         }
     }
     impl Into<NamedUnitAny> for SiUnit {
         fn into(self) -> NamedUnitAny {
-            NamedUnitAny::SiUnit(Box::new(self))
+            NamedUnitAny::SiUnit(Box::new(self.into()))
         }
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = offset_curve_2d)]
     #[holder(generate_deserialize)]
     pub struct OffsetCurve2D {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub curve: Curve,
         #[holder(use_place_holder)]
         pub basis_curve: CurveAny,
         pub distance: LengthMeasure,
         pub self_intersect: Logical,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = one_direction_repeat_factor)]
     #[holder(generate_deserialize)]
     pub struct OneDirectionRepeatFactor {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub geometric_representation_item: GeometricRepresentationItem,
         #[holder(use_place_holder)]
         pub repeat_factor: Vector,
     }
@@ -5007,14 +5836,23 @@ pub mod explicit_draughting {
     }
     impl Into<OneDirectionRepeatFactorAny> for TwoDirectionRepeatFactor {
         fn into(self) -> OneDirectionRepeatFactorAny {
-            OneDirectionRepeatFactorAny::TwoDirectionRepeatFactor(Box::new(self))
+            OneDirectionRepeatFactorAny::TwoDirectionRepeatFactor(Box::new(self.into()))
         }
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = ordinate_dimension)]
     #[holder(generate_deserialize)]
-    pub struct OrdinateDimension {}
+    pub struct OrdinateDimension {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub projection_directed_callout: ProjectionDirectedCallout,
+    }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = organization)]
@@ -5052,7 +5890,7 @@ pub mod explicit_draughting {
     }
     impl Into<OrganizationAssignmentAny> for DraughtingOrganizationAssignment {
         fn into(self) -> OrganizationAssignmentAny {
-            OrganizationAssignmentAny::DraughtingOrganizationAssignment(Box::new(self))
+            OrganizationAssignmentAny::DraughtingOrganizationAssignment(Box::new(self.into()))
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -5062,20 +5900,36 @@ pub mod explicit_draughting {
     pub struct OrganizationRole {
         pub name: Label,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = organizational_address)]
     #[holder(generate_deserialize)]
     pub struct OrganizationalAddress {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub address: Address,
         #[holder(use_place_holder)]
         pub organizations: Vec<Organization>,
         pub description: Text,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = parabola)]
     #[holder(generate_deserialize)]
     pub struct Parabola {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub conic: Conic,
         pub focal_dist: LengthMeasure,
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -5129,7 +5983,7 @@ pub mod explicit_draughting {
     impl Into<PersonAndOrganizationAssignmentAny> for DraughtingPersonAndOrganizationAssignment {
         fn into(self) -> PersonAndOrganizationAssignmentAny {
             PersonAndOrganizationAssignmentAny::DraughtingPersonAndOrganizationAssignment(Box::new(
-                self,
+                self.into(),
             ))
         }
     }
@@ -5168,7 +6022,7 @@ pub mod explicit_draughting {
     }
     impl Into<PersonAssignmentAny> for DraughtingPersonAssignment {
         fn into(self) -> PersonAssignmentAny {
-            PersonAssignmentAny::DraughtingPersonAssignment(Box::new(self))
+            PersonAssignmentAny::DraughtingPersonAssignment(Box::new(self.into()))
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -5178,20 +6032,36 @@ pub mod explicit_draughting {
     pub struct PersonRole {
         pub name: Label,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = personal_address)]
     #[holder(generate_deserialize)]
     pub struct PersonalAddress {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub address: Address,
         #[holder(use_place_holder)]
         pub people: Vec<Person>,
         pub description: Text,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = placement)]
     #[holder(generate_deserialize)]
     pub struct Placement {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub geometric_representation_item: GeometricRepresentationItem,
         #[holder(use_place_holder)]
         pub location: CartesianPoint,
     }
@@ -5213,22 +6083,38 @@ pub mod explicit_draughting {
     }
     impl Into<PlacementAny> for Axis2Placement2D {
         fn into(self) -> PlacementAny {
-            PlacementAny::Axis2Placement2D(Box::new(self))
+            PlacementAny::Axis2Placement2D(Box::new(self.into()))
         }
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = planar_box)]
     #[holder(generate_deserialize)]
     pub struct PlanarBox {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub planar_extent: PlanarExtent,
         #[holder(use_place_holder)]
         pub placement: Axis2Placement,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = planar_extent)]
     #[holder(generate_deserialize)]
     pub struct PlanarExtent {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub geometric_representation_item: GeometricRepresentationItem,
         pub size_in_x: LengthMeasure,
         pub size_in_y: LengthMeasure,
     }
@@ -5250,24 +6136,51 @@ pub mod explicit_draughting {
     }
     impl Into<PlanarExtentAny> for PlanarBox {
         fn into(self) -> PlanarExtentAny {
-            PlanarExtentAny::PlanarBox(Box::new(self))
+            PlanarExtentAny::PlanarBox(Box::new(self.into()))
         }
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = plane_angle_measure_with_unit)]
     #[holder(generate_deserialize)]
-    pub struct PlaneAngleMeasureWithUnit {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    pub struct PlaneAngleMeasureWithUnit {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub measure_with_unit: MeasureWithUnit,
+    }
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = plane_angle_unit)]
     #[holder(generate_deserialize)]
-    pub struct PlaneAngleUnit {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    pub struct PlaneAngleUnit {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub named_unit: NamedUnit,
+    }
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = point)]
     #[holder(generate_deserialize)]
-    pub struct Point {}
+    pub struct Point {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub geometric_representation_item: GeometricRepresentationItem,
+    }
     #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
@@ -5289,28 +6202,44 @@ pub mod explicit_draughting {
     }
     impl Into<PointAny> for CartesianPoint {
         fn into(self) -> PointAny {
-            PointAny::CartesianPoint(Box::new(self))
+            PointAny::CartesianPoint(Box::new(self.into()))
         }
     }
     impl Into<PointAny> for PointOnCurve {
         fn into(self) -> PointAny {
-            PointAny::PointOnCurve(Box::new(self))
+            PointAny::PointOnCurve(Box::new(self.into()))
         }
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = point_on_curve)]
     #[holder(generate_deserialize)]
     pub struct PointOnCurve {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub point: Point,
         #[holder(use_place_holder)]
         pub basis_curve: CurveAny,
         pub point_parameter: ParameterValue,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = polyline)]
     #[holder(generate_deserialize)]
     pub struct Polyline {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub bounded_curve: BoundedCurve,
         #[holder(use_place_holder)]
         pub points: Vec<CartesianPoint>,
     }
@@ -5318,7 +6247,12 @@ pub mod explicit_draughting {
     # [holder (table = Tables)]
     # [holder (field = pre_defined_colour)]
     #[holder(generate_deserialize)]
-    pub struct PreDefinedColour {}
+    pub struct PreDefinedColour {
+        #[holder(use_place_holder)]
+        pub pre_defined_item: PreDefinedItem,
+        #[holder(use_place_holder)]
+        pub colour: Colour,
+    }
     #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
@@ -5337,14 +6271,23 @@ pub mod explicit_draughting {
     }
     impl Into<PreDefinedColourAny> for DraughtingPreDefinedColour {
         fn into(self) -> PreDefinedColourAny {
-            PreDefinedColourAny::DraughtingPreDefinedColour(Box::new(self))
+            PreDefinedColourAny::DraughtingPreDefinedColour(Box::new(self.into()))
         }
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = pre_defined_curve_font)]
     #[holder(generate_deserialize)]
-    pub struct PreDefinedCurveFont {}
+    pub struct PreDefinedCurveFont {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub pre_defined_item: PreDefinedItem,
+    }
     #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
@@ -5363,19 +6306,37 @@ pub mod explicit_draughting {
     }
     impl Into<PreDefinedCurveFontAny> for DraughtingPreDefinedCurveFont {
         fn into(self) -> PreDefinedCurveFontAny {
-            PreDefinedCurveFontAny::DraughtingPreDefinedCurveFont(Box::new(self))
+            PreDefinedCurveFontAny::DraughtingPreDefinedCurveFont(Box::new(self.into()))
         }
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = pre_defined_dimension_symbol)]
     #[holder(generate_deserialize)]
-    pub struct PreDefinedDimensionSymbol {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    pub struct PreDefinedDimensionSymbol {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub pre_defined_symbol: PreDefinedSymbol,
+    }
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = pre_defined_geometrical_tolerance_symbol)]
     #[holder(generate_deserialize)]
-    pub struct PreDefinedGeometricalToleranceSymbol {}
+    pub struct PreDefinedGeometricalToleranceSymbol {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub pre_defined_symbol: PreDefinedSymbol,
+    }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = pre_defined_item)]
@@ -5392,16 +6353,16 @@ pub mod explicit_draughting {
         PreDefinedItem(Box<PreDefinedItem>),
         #[holder(use_place_holder)]
         # [holder (field = pre_defined_colour)]
-        PreDefinedColour(Box<PreDefinedColour>),
+        PreDefinedColour(Box<PreDefinedColourAny>),
         #[holder(use_place_holder)]
         # [holder (field = pre_defined_curve_font)]
-        PreDefinedCurveFont(Box<PreDefinedCurveFont>),
+        PreDefinedCurveFont(Box<PreDefinedCurveFontAny>),
         #[holder(use_place_holder)]
         # [holder (field = pre_defined_symbol)]
-        PreDefinedSymbol(Box<PreDefinedSymbol>),
+        PreDefinedSymbol(Box<PreDefinedSymbolAny>),
         #[holder(use_place_holder)]
         # [holder (field = pre_defined_text_font)]
-        PreDefinedTextFont(Box<PreDefinedTextFont>),
+        PreDefinedTextFont(Box<PreDefinedTextFontAny>),
     }
     impl Into<PreDefinedItemAny> for PreDefinedItem {
         fn into(self) -> PreDefinedItemAny {
@@ -5410,34 +6371,52 @@ pub mod explicit_draughting {
     }
     impl Into<PreDefinedItemAny> for PreDefinedColour {
         fn into(self) -> PreDefinedItemAny {
-            PreDefinedItemAny::PreDefinedColour(Box::new(self))
+            PreDefinedItemAny::PreDefinedColour(Box::new(self.into()))
         }
     }
     impl Into<PreDefinedItemAny> for PreDefinedCurveFont {
         fn into(self) -> PreDefinedItemAny {
-            PreDefinedItemAny::PreDefinedCurveFont(Box::new(self))
+            PreDefinedItemAny::PreDefinedCurveFont(Box::new(self.into()))
         }
     }
     impl Into<PreDefinedItemAny> for PreDefinedSymbol {
         fn into(self) -> PreDefinedItemAny {
-            PreDefinedItemAny::PreDefinedSymbol(Box::new(self))
+            PreDefinedItemAny::PreDefinedSymbol(Box::new(self.into()))
         }
     }
     impl Into<PreDefinedItemAny> for PreDefinedTextFont {
         fn into(self) -> PreDefinedItemAny {
-            PreDefinedItemAny::PreDefinedTextFont(Box::new(self))
+            PreDefinedItemAny::PreDefinedTextFont(Box::new(self.into()))
         }
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = pre_defined_point_marker_symbol)]
     #[holder(generate_deserialize)]
-    pub struct PreDefinedPointMarkerSymbol {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    pub struct PreDefinedPointMarkerSymbol {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub pre_defined_symbol: PreDefinedSymbol,
+    }
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = pre_defined_symbol)]
     #[holder(generate_deserialize)]
-    pub struct PreDefinedSymbol {}
+    pub struct PreDefinedSymbol {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub pre_defined_item: PreDefinedItem,
+    }
     #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
@@ -5465,34 +6444,52 @@ pub mod explicit_draughting {
     }
     impl Into<PreDefinedSymbolAny> for PreDefinedDimensionSymbol {
         fn into(self) -> PreDefinedSymbolAny {
-            PreDefinedSymbolAny::PreDefinedDimensionSymbol(Box::new(self))
+            PreDefinedSymbolAny::PreDefinedDimensionSymbol(Box::new(self.into()))
         }
     }
     impl Into<PreDefinedSymbolAny> for PreDefinedGeometricalToleranceSymbol {
         fn into(self) -> PreDefinedSymbolAny {
-            PreDefinedSymbolAny::PreDefinedGeometricalToleranceSymbol(Box::new(self))
+            PreDefinedSymbolAny::PreDefinedGeometricalToleranceSymbol(Box::new(self.into()))
         }
     }
     impl Into<PreDefinedSymbolAny> for PreDefinedPointMarkerSymbol {
         fn into(self) -> PreDefinedSymbolAny {
-            PreDefinedSymbolAny::PreDefinedPointMarkerSymbol(Box::new(self))
+            PreDefinedSymbolAny::PreDefinedPointMarkerSymbol(Box::new(self.into()))
         }
     }
     impl Into<PreDefinedSymbolAny> for PreDefinedTerminatorSymbol {
         fn into(self) -> PreDefinedSymbolAny {
-            PreDefinedSymbolAny::PreDefinedTerminatorSymbol(Box::new(self))
+            PreDefinedSymbolAny::PreDefinedTerminatorSymbol(Box::new(self.into()))
         }
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = pre_defined_terminator_symbol)]
     #[holder(generate_deserialize)]
-    pub struct PreDefinedTerminatorSymbol {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    pub struct PreDefinedTerminatorSymbol {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub pre_defined_symbol: PreDefinedSymbol,
+    }
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = pre_defined_text_font)]
     #[holder(generate_deserialize)]
-    pub struct PreDefinedTextFont {}
+    pub struct PreDefinedTextFont {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub pre_defined_item: PreDefinedItem,
+    }
     #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
@@ -5511,14 +6508,23 @@ pub mod explicit_draughting {
     }
     impl Into<PreDefinedTextFontAny> for DraughtingPreDefinedTextFont {
         fn into(self) -> PreDefinedTextFontAny {
-            PreDefinedTextFontAny::DraughtingPreDefinedTextFont(Box::new(self))
+            PreDefinedTextFontAny::DraughtingPreDefinedTextFont(Box::new(self.into()))
         }
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = presentation_area)]
     #[holder(generate_deserialize)]
-    pub struct PresentationArea {}
+    pub struct PresentationArea {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub presentation_representation: PresentationRepresentation,
+    }
     #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
@@ -5537,7 +6543,7 @@ pub mod explicit_draughting {
     }
     impl Into<PresentationAreaAny> for DrawingSheetRevision {
         fn into(self) -> PresentationAreaAny {
-            PresentationAreaAny::DrawingSheetRevision(Box::new(self))
+            PresentationAreaAny::DrawingSheetRevision(Box::new(self.into()))
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -5560,11 +6566,20 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub presentation: PresentationRepresentationAny,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = presentation_representation)]
     #[holder(generate_deserialize)]
-    pub struct PresentationRepresentation {}
+    pub struct PresentationRepresentation {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub representation: Representation,
+    }
     #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
@@ -5574,7 +6589,7 @@ pub mod explicit_draughting {
         PresentationRepresentation(Box<PresentationRepresentation>),
         #[holder(use_place_holder)]
         # [holder (field = presentation_area)]
-        PresentationArea(Box<PresentationArea>),
+        PresentationArea(Box<PresentationAreaAny>),
         #[holder(use_place_holder)]
         # [holder (field = presentation_view)]
         PresentationView(Box<PresentationView>),
@@ -5586,12 +6601,12 @@ pub mod explicit_draughting {
     }
     impl Into<PresentationRepresentationAny> for PresentationArea {
         fn into(self) -> PresentationRepresentationAny {
-            PresentationRepresentationAny::PresentationArea(Box::new(self))
+            PresentationRepresentationAny::PresentationArea(Box::new(self.into()))
         }
     }
     impl Into<PresentationRepresentationAny> for PresentationView {
         fn into(self) -> PresentationRepresentationAny {
-            PresentationRepresentationAny::PresentationView(Box::new(self))
+            PresentationRepresentationAny::PresentationView(Box::new(self.into()))
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -5608,7 +6623,7 @@ pub mod explicit_draughting {
         PresentationSet(Box<PresentationSet>),
         #[holder(use_place_holder)]
         # [holder (field = drawing_revision)]
-        DrawingRevision(Box<DrawingRevision>),
+        DrawingRevision(Box<DrawingRevisionAny>),
     }
     impl Into<PresentationSetAny> for PresentationSet {
         fn into(self) -> PresentationSetAny {
@@ -5617,7 +6632,7 @@ pub mod explicit_draughting {
     }
     impl Into<PresentationSetAny> for DrawingRevision {
         fn into(self) -> PresentationSetAny {
-            PresentationSetAny::DrawingRevision(Box::new(self))
+            PresentationSetAny::DrawingRevision(Box::new(self.into()))
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -5656,22 +6671,39 @@ pub mod explicit_draughting {
     }
     impl Into<PresentationStyleAssignmentAny> for PresentationStyleByContext {
         fn into(self) -> PresentationStyleAssignmentAny {
-            PresentationStyleAssignmentAny::PresentationStyleByContext(Box::new(self))
+            PresentationStyleAssignmentAny::PresentationStyleByContext(Box::new(self.into()))
         }
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = presentation_style_by_context)]
     #[holder(generate_deserialize)]
     pub struct PresentationStyleByContext {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub presentation_style_assignment: PresentationStyleAssignment,
         #[holder(use_place_holder)]
         pub style_context: StyleContextSelect,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = presentation_view)]
     #[holder(generate_deserialize)]
-    pub struct PresentationView {}
+    pub struct PresentationView {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub presentation_representation: PresentationRepresentation,
+    }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = presented_item)]
@@ -5695,7 +6727,7 @@ pub mod explicit_draughting {
     }
     impl Into<PresentedItemAny> for DraughtingPresentedItem {
         fn into(self) -> PresentedItemAny {
-            PresentedItemAny::DraughtingPresentedItem(Box::new(self))
+            PresentedItemAny::DraughtingPresentedItem(Box::new(self.into()))
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -5719,11 +6751,19 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub frame_of_reference: Vec<ProductContext>,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = product_context)]
     #[holder(generate_deserialize)]
     pub struct ProductContext {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub application_context_element: ApplicationContextElement,
         pub discipline_type: Label,
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -5738,11 +6778,19 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub frame_of_reference: ProductDefinitionContext,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = product_definition_context)]
     #[holder(generate_deserialize)]
     pub struct ProductDefinitionContext {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub application_context_element: ApplicationContextElement,
         pub life_cycle_stage: Label,
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -5755,21 +6803,48 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub of_product: Product,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = product_definition_shape)]
     #[holder(generate_deserialize)]
-    pub struct ProductDefinitionShape {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    pub struct ProductDefinitionShape {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub property_definition: PropertyDefinition,
+    }
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = projection_curve)]
     #[holder(generate_deserialize)]
-    pub struct ProjectionCurve {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    pub struct ProjectionCurve {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub annotation_curve_occurrence: AnnotationCurveOccurrence,
+    }
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = projection_directed_callout)]
     #[holder(generate_deserialize)]
-    pub struct ProjectionDirectedCallout {}
+    pub struct ProjectionDirectedCallout {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub draughting_callout: DraughtingCallout,
+    }
     #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
@@ -5788,7 +6863,7 @@ pub mod explicit_draughting {
     }
     impl Into<ProjectionDirectedCalloutAny> for OrdinateDimension {
         fn into(self) -> ProjectionDirectedCalloutAny {
-            ProjectionDirectedCalloutAny::OrdinateDimension(Box::new(self))
+            ProjectionDirectedCalloutAny::OrdinateDimension(Box::new(self.into()))
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -5819,7 +6894,7 @@ pub mod explicit_draughting {
     }
     impl Into<PropertyDefinitionAny> for ProductDefinitionShape {
         fn into(self) -> PropertyDefinitionAny {
-            PropertyDefinitionAny::ProductDefinitionShape(Box::new(self))
+            PropertyDefinitionAny::ProductDefinitionShape(Box::new(self.into()))
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -5850,24 +6925,52 @@ pub mod explicit_draughting {
     }
     impl Into<PropertyDefinitionRepresentationAny> for ShapeDefinitionRepresentation {
         fn into(self) -> PropertyDefinitionRepresentationAny {
-            PropertyDefinitionRepresentationAny::ShapeDefinitionRepresentation(Box::new(self))
+            PropertyDefinitionRepresentationAny::ShapeDefinitionRepresentation(Box::new(
+                self.into(),
+            ))
         }
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = quasi_uniform_curve)]
     #[holder(generate_deserialize)]
-    pub struct QuasiUniformCurve {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    pub struct QuasiUniformCurve {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub b_spline_curve: BSplineCurve,
+    }
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = radius_dimension)]
     #[holder(generate_deserialize)]
-    pub struct RadiusDimension {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    pub struct RadiusDimension {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub dimension_curve_directed_callout: DimensionCurveDirectedCallout,
+    }
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = rational_b_spline_curve)]
     #[holder(generate_deserialize)]
     pub struct RationalBSplineCurve {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub b_spline_curve: BSplineCurve,
         pub weights_data: Vec<f64>,
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -5893,13 +6996,13 @@ pub mod explicit_draughting {
         DraughtingModel(Box<DraughtingModel>),
         #[holder(use_place_holder)]
         # [holder (field = presentation_representation)]
-        PresentationRepresentation(Box<PresentationRepresentation>),
+        PresentationRepresentation(Box<PresentationRepresentationAny>),
         #[holder(use_place_holder)]
         # [holder (field = shape_representation)]
-        ShapeRepresentation(Box<ShapeRepresentation>),
+        ShapeRepresentation(Box<ShapeRepresentationAny>),
         #[holder(use_place_holder)]
         # [holder (field = symbol_representation)]
-        SymbolRepresentation(Box<SymbolRepresentation>),
+        SymbolRepresentation(Box<SymbolRepresentationAny>),
     }
     impl Into<RepresentationAny> for Representation {
         fn into(self) -> RepresentationAny {
@@ -5908,22 +7011,22 @@ pub mod explicit_draughting {
     }
     impl Into<RepresentationAny> for DraughtingModel {
         fn into(self) -> RepresentationAny {
-            RepresentationAny::DraughtingModel(Box::new(self))
+            RepresentationAny::DraughtingModel(Box::new(self.into()))
         }
     }
     impl Into<RepresentationAny> for PresentationRepresentation {
         fn into(self) -> RepresentationAny {
-            RepresentationAny::PresentationRepresentation(Box::new(self))
+            RepresentationAny::PresentationRepresentation(Box::new(self.into()))
         }
     }
     impl Into<RepresentationAny> for ShapeRepresentation {
         fn into(self) -> RepresentationAny {
-            RepresentationAny::ShapeRepresentation(Box::new(self))
+            RepresentationAny::ShapeRepresentation(Box::new(self.into()))
         }
     }
     impl Into<RepresentationAny> for SymbolRepresentation {
         fn into(self) -> RepresentationAny {
-            RepresentationAny::SymbolRepresentation(Box::new(self))
+            RepresentationAny::SymbolRepresentation(Box::new(self.into()))
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -5955,12 +7058,12 @@ pub mod explicit_draughting {
     }
     impl Into<RepresentationContextAny> for GeometricRepresentationContext {
         fn into(self) -> RepresentationContextAny {
-            RepresentationContextAny::GeometricRepresentationContext(Box::new(self))
+            RepresentationContextAny::GeometricRepresentationContext(Box::new(self.into()))
         }
     }
     impl Into<RepresentationContextAny> for GlobalUnitAssignedContext {
         fn into(self) -> RepresentationContextAny {
-            RepresentationContextAny::GlobalUnitAssignedContext(Box::new(self))
+            RepresentationContextAny::GlobalUnitAssignedContext(Box::new(self.into()))
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -5979,13 +7082,13 @@ pub mod explicit_draughting {
         RepresentationItem(Box<RepresentationItem>),
         #[holder(use_place_holder)]
         # [holder (field = geometric_representation_item)]
-        GeometricRepresentationItem(Box<GeometricRepresentationItem>),
+        GeometricRepresentationItem(Box<GeometricRepresentationItemAny>),
         #[holder(use_place_holder)]
         # [holder (field = mapped_item)]
-        MappedItem(Box<MappedItem>),
+        MappedItem(Box<MappedItemAny>),
         #[holder(use_place_holder)]
         # [holder (field = styled_item)]
-        StyledItem(Box<StyledItem>),
+        StyledItem(Box<StyledItemAny>),
     }
     impl Into<RepresentationItemAny> for RepresentationItem {
         fn into(self) -> RepresentationItemAny {
@@ -5994,17 +7097,17 @@ pub mod explicit_draughting {
     }
     impl Into<RepresentationItemAny> for GeometricRepresentationItem {
         fn into(self) -> RepresentationItemAny {
-            RepresentationItemAny::GeometricRepresentationItem(Box::new(self))
+            RepresentationItemAny::GeometricRepresentationItem(Box::new(self.into()))
         }
     }
     impl Into<RepresentationItemAny> for MappedItem {
         fn into(self) -> RepresentationItemAny {
-            RepresentationItemAny::MappedItem(Box::new(self))
+            RepresentationItemAny::MappedItem(Box::new(self.into()))
         }
     }
     impl Into<RepresentationItemAny> for StyledItem {
         fn into(self) -> RepresentationItemAny {
-            RepresentationItemAny::StyledItem(Box::new(self))
+            RepresentationItemAny::StyledItem(Box::new(self.into()))
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -6038,12 +7141,12 @@ pub mod explicit_draughting {
     }
     impl Into<RepresentationMapAny> for CameraUsage {
         fn into(self) -> RepresentationMapAny {
-            RepresentationMapAny::CameraUsage(Box::new(self))
+            RepresentationMapAny::CameraUsage(Box::new(self.into()))
         }
     }
     impl Into<RepresentationMapAny> for SymbolRepresentationMap {
         fn into(self) -> RepresentationMapAny {
-            RepresentationMapAny::SymbolRepresentationMap(Box::new(self))
+            RepresentationMapAny::SymbolRepresentationMap(Box::new(self.into()))
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -6083,7 +7186,7 @@ pub mod explicit_draughting {
     impl Into<SecurityClassificationAssignmentAny> for DraughtingSecurityClassificationAssignment {
         fn into(self) -> SecurityClassificationAssignmentAny {
             SecurityClassificationAssignmentAny::DraughtingSecurityClassificationAssignment(
-                Box::new(self),
+                Box::new(self.into()),
             )
         }
     }
@@ -6094,16 +7197,34 @@ pub mod explicit_draughting {
     pub struct SecurityClassificationLevel {
         pub name: Label,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = shape_definition_representation)]
     #[holder(generate_deserialize)]
-    pub struct ShapeDefinitionRepresentation {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    pub struct ShapeDefinitionRepresentation {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub property_definition_representation: PropertyDefinitionRepresentation,
+    }
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = shape_representation)]
     #[holder(generate_deserialize)]
-    pub struct ShapeRepresentation {}
+    pub struct ShapeRepresentation {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub representation: Representation,
+    }
     #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
@@ -6124,27 +7245,54 @@ pub mod explicit_draughting {
     }
     impl Into<ShapeRepresentationAny> for GeometricallyBounded2DWireframeRepresentation {
         fn into(self) -> ShapeRepresentationAny {
-            ShapeRepresentationAny::GeometricallyBounded2DWireframeRepresentation(Box::new(self))
+            ShapeRepresentationAny::GeometricallyBounded2DWireframeRepresentation(Box::new(
+                self.into(),
+            ))
         }
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = si_unit)]
     #[holder(generate_deserialize)]
     pub struct SiUnit {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub named_unit: NamedUnit,
         pub prefix: Option<SiPrefix>,
         pub name: SiUnitName,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = structured_dimension_callout)]
     #[holder(generate_deserialize)]
-    pub struct StructuredDimensionCallout {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    pub struct StructuredDimensionCallout {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub draughting_callout: DraughtingCallout,
+    }
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = styled_item)]
     #[holder(generate_deserialize)]
     pub struct StyledItem {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub representation_item: RepresentationItem,
         #[holder(use_place_holder)]
         pub styles: Vec<PresentationStyleAssignmentAny>,
         #[holder(use_place_holder)]
@@ -6159,7 +7307,7 @@ pub mod explicit_draughting {
         StyledItem(Box<StyledItem>),
         #[holder(use_place_holder)]
         # [holder (field = annotation_occurrence)]
-        AnnotationOccurrence(Box<AnnotationOccurrence>),
+        AnnotationOccurrence(Box<AnnotationOccurrenceAny>),
     }
     impl Into<StyledItemAny> for StyledItem {
         fn into(self) -> StyledItemAny {
@@ -6168,7 +7316,7 @@ pub mod explicit_draughting {
     }
     impl Into<StyledItemAny> for AnnotationOccurrence {
         fn into(self) -> StyledItemAny {
-            StyledItemAny::AnnotationOccurrence(Box::new(self))
+            StyledItemAny::AnnotationOccurrence(Box::new(self.into()))
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -6179,11 +7327,20 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub colour_of_symbol: ColourAny,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = symbol_representation)]
     #[holder(generate_deserialize)]
-    pub struct SymbolRepresentation {}
+    pub struct SymbolRepresentation {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub representation: Representation,
+    }
     #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
@@ -6196,7 +7353,7 @@ pub mod explicit_draughting {
         DraughtingSubfigureRepresentation(Box<DraughtingSubfigureRepresentation>),
         #[holder(use_place_holder)]
         # [holder (field = draughting_symbol_representation)]
-        DraughtingSymbolRepresentation(Box<DraughtingSymbolRepresentation>),
+        DraughtingSymbolRepresentation(Box<DraughtingSymbolRepresentationAny>),
     }
     impl Into<SymbolRepresentationAny> for SymbolRepresentation {
         fn into(self) -> SymbolRepresentationAny {
@@ -6205,19 +7362,28 @@ pub mod explicit_draughting {
     }
     impl Into<SymbolRepresentationAny> for DraughtingSubfigureRepresentation {
         fn into(self) -> SymbolRepresentationAny {
-            SymbolRepresentationAny::DraughtingSubfigureRepresentation(Box::new(self))
+            SymbolRepresentationAny::DraughtingSubfigureRepresentation(Box::new(self.into()))
         }
     }
     impl Into<SymbolRepresentationAny> for DraughtingSymbolRepresentation {
         fn into(self) -> SymbolRepresentationAny {
-            SymbolRepresentationAny::DraughtingSymbolRepresentation(Box::new(self))
+            SymbolRepresentationAny::DraughtingSymbolRepresentation(Box::new(self.into()))
         }
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = symbol_representation_map)]
     #[holder(generate_deserialize)]
-    pub struct SymbolRepresentationMap {}
+    pub struct SymbolRepresentationMap {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub representation_map: RepresentationMap,
+    }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = symbol_style)]
@@ -6227,21 +7393,37 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub style_of_symbol: SymbolStyleSelect,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = symbol_target)]
     #[holder(generate_deserialize)]
     pub struct SymbolTarget {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub geometric_representation_item: GeometricRepresentationItem,
         #[holder(use_place_holder)]
         pub placement: Axis2Placement,
         pub x_scale: PositiveRatioMeasure,
         pub y_scale: PositiveRatioMeasure,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = terminator_symbol)]
     #[holder(generate_deserialize)]
     pub struct TerminatorSymbol {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub annotation_symbol_occurrence: AnnotationSymbolOccurrence,
         #[holder(use_place_holder)]
         pub annotated_curve: AnnotationCurveOccurrenceAny,
     }
@@ -6266,19 +7448,27 @@ pub mod explicit_draughting {
     }
     impl Into<TerminatorSymbolAny> for DimensionCurveTerminator {
         fn into(self) -> TerminatorSymbolAny {
-            TerminatorSymbolAny::DimensionCurveTerminator(Box::new(self))
+            TerminatorSymbolAny::DimensionCurveTerminator(Box::new(self.into()))
         }
     }
     impl Into<TerminatorSymbolAny> for LeaderTerminator {
         fn into(self) -> TerminatorSymbolAny {
-            TerminatorSymbolAny::LeaderTerminator(Box::new(self))
+            TerminatorSymbolAny::LeaderTerminator(Box::new(self.into()))
         }
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = text_literal)]
     #[holder(generate_deserialize)]
     pub struct TextLiteral {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub geometric_representation_item: GeometricRepresentationItem,
         pub literal: PresentableText,
         #[holder(use_place_holder)]
         pub placement: Axis2Placement,
@@ -6302,7 +7492,7 @@ pub mod explicit_draughting {
         TextLiteralWithBlankingBox(Box<TextLiteralWithBlankingBox>),
         #[holder(use_place_holder)]
         # [holder (field = text_literal_with_delineation)]
-        TextLiteralWithDelineation(Box<TextLiteralWithDelineation>),
+        TextLiteralWithDelineation(Box<TextLiteralWithDelineationAny>),
         #[holder(use_place_holder)]
         # [holder (field = text_literal_with_extent)]
         TextLiteralWithExtent(Box<TextLiteralWithExtent>),
@@ -6314,45 +7504,69 @@ pub mod explicit_draughting {
     }
     impl Into<TextLiteralAny> for TextLiteralWithAssociatedCurves {
         fn into(self) -> TextLiteralAny {
-            TextLiteralAny::TextLiteralWithAssociatedCurves(Box::new(self))
+            TextLiteralAny::TextLiteralWithAssociatedCurves(Box::new(self.into()))
         }
     }
     impl Into<TextLiteralAny> for TextLiteralWithBlankingBox {
         fn into(self) -> TextLiteralAny {
-            TextLiteralAny::TextLiteralWithBlankingBox(Box::new(self))
+            TextLiteralAny::TextLiteralWithBlankingBox(Box::new(self.into()))
         }
     }
     impl Into<TextLiteralAny> for TextLiteralWithDelineation {
         fn into(self) -> TextLiteralAny {
-            TextLiteralAny::TextLiteralWithDelineation(Box::new(self))
+            TextLiteralAny::TextLiteralWithDelineation(Box::new(self.into()))
         }
     }
     impl Into<TextLiteralAny> for TextLiteralWithExtent {
         fn into(self) -> TextLiteralAny {
-            TextLiteralAny::TextLiteralWithExtent(Box::new(self))
+            TextLiteralAny::TextLiteralWithExtent(Box::new(self.into()))
         }
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = text_literal_with_associated_curves)]
     #[holder(generate_deserialize)]
     pub struct TextLiteralWithAssociatedCurves {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub text_literal: TextLiteral,
         #[holder(use_place_holder)]
         pub associated_curves: Vec<CurveAny>,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = text_literal_with_blanking_box)]
     #[holder(generate_deserialize)]
     pub struct TextLiteralWithBlankingBox {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub text_literal: TextLiteral,
         #[holder(use_place_holder)]
         pub blanking: PlanarBox,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = text_literal_with_delineation)]
     #[holder(generate_deserialize)]
     pub struct TextLiteralWithDelineation {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub text_literal: TextLiteral,
         pub delineation: TextDelineation,
     }
     #[derive(Debug, Clone, PartialEq, Holder)]
@@ -6373,14 +7587,24 @@ pub mod explicit_draughting {
     }
     impl Into<TextLiteralWithDelineationAny> for DraughtingTextLiteralWithDelineation {
         fn into(self) -> TextLiteralWithDelineationAny {
-            TextLiteralWithDelineationAny::DraughtingTextLiteralWithDelineation(Box::new(self))
+            TextLiteralWithDelineationAny::DraughtingTextLiteralWithDelineation(Box::new(
+                self.into(),
+            ))
         }
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = text_literal_with_extent)]
     #[holder(generate_deserialize)]
     pub struct TextLiteralWithExtent {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub text_literal: TextLiteral,
         #[holder(use_place_holder)]
         pub extent: PlanarExtentAny,
     }
@@ -6414,12 +7638,12 @@ pub mod explicit_draughting {
     }
     impl Into<TextStyleAny> for TextStyleWithBoxCharacteristics {
         fn into(self) -> TextStyleAny {
-            TextStyleAny::TextStyleWithBoxCharacteristics(Box::new(self))
+            TextStyleAny::TextStyleWithBoxCharacteristics(Box::new(self.into()))
         }
     }
     impl Into<TextStyleAny> for TextStyleWithMirror {
         fn into(self) -> TextStyleAny {
-            TextStyleAny::TextStyleWithMirror(Box::new(self))
+            TextStyleAny::TextStyleWithMirror(Box::new(self.into()))
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -6430,27 +7654,51 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub text_colour: ColourAny,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = text_style_with_box_characteristics)]
     #[holder(generate_deserialize)]
     pub struct TextStyleWithBoxCharacteristics {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub text_style: TextStyle,
         #[holder(use_place_holder)]
         pub characteristics: Vec<BoxCharacteristicSelect>,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = text_style_with_mirror)]
     #[holder(generate_deserialize)]
     pub struct TextStyleWithMirror {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub text_style: TextStyle,
         #[holder(use_place_holder)]
         pub mirror_placement: Axis2Placement,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = trimmed_curve)]
     #[holder(generate_deserialize)]
     pub struct TrimmedCurve {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub bounded_curve: BoundedCurve,
         #[holder(use_place_holder)]
         pub basis_curve: CurveAny,
         #[holder(use_place_holder)]
@@ -6460,24 +7708,49 @@ pub mod explicit_draughting {
         pub sense_agreement: bool,
         pub master_representation: TrimmingPreference,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = two_direction_repeat_factor)]
     #[holder(generate_deserialize)]
     pub struct TwoDirectionRepeatFactor {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub one_direction_repeat_factor: OneDirectionRepeatFactor,
         #[holder(use_place_holder)]
         pub second_repeat_factor: Vector,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = uniform_curve)]
     #[holder(generate_deserialize)]
-    pub struct UniformCurve {}
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    pub struct UniformCurve {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub b_spline_curve: BSplineCurve,
+    }
+    #[derive(
+        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = vector)]
     #[holder(generate_deserialize)]
     pub struct Vector {
+        #[as_ref]
+        #[as_mut]
+        #[deref]
+        #[deref_mut]
+        #[holder(use_place_holder)]
+        pub geometric_representation_item: GeometricRepresentationItem,
         #[holder(use_place_holder)]
         pub orientation: Direction,
         pub magnitude: LengthMeasure,

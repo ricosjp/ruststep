@@ -13,6 +13,7 @@ struct Input {
     variants: Vec<syn::Ident>,
     variant_names: Vec<String>,
     variant_exprs: Vec<TokenStream2>,
+    variant_into_exprs: Vec<TokenStream2>,
     holder_types: Vec<syn::Type>,
     holder_exprs: Vec<TokenStream2>,
     table_fields: Vec<Option<syn::Ident>>,
@@ -37,6 +38,7 @@ impl Input {
         let mut holder_types = Vec::new();
         let mut table_fields = Vec::new();
         let mut variant_exprs = Vec::new();
+        let mut variant_into_exprs = Vec::new();
         for var in &e.variants {
             let HolderAttr {
                 field,
@@ -54,11 +56,13 @@ impl Input {
                         holder_types.push(as_holder_path(&f.ty));
                         holder_exprs.push(quote! { Box::new(sub.into_owned(table)?) });
                         variant_exprs.push(quote! { Box::new(owned) });
+                        variant_into_exprs.push(quote! { Box::new(owned.into()) });
                     } else {
                         abort_call_site!("Simple type should not be Boxed")
                     }
                 } else {
                     variant_exprs.push(quote! { owned });
+                    variant_into_exprs.push(quote! { owned.into() });
                     if place_holder {
                         // *Any case
                         holder_types.push(as_holder_path(&f.ty));
@@ -81,6 +85,7 @@ impl Input {
             variants,
             variant_names,
             variant_exprs,
+            variant_into_exprs,
             holder_types,
             holder_exprs,
             table_fields,
@@ -212,7 +217,7 @@ impl Input {
             variants,
             table_fields,
             table,
-            variant_exprs,
+            variant_into_exprs,
             ..
         } = self;
         let ruststep = ruststep_crate();
@@ -222,7 +227,7 @@ impl Input {
         for ((var, field), expr) in variants
             .iter()
             .zip(table_fields.iter())
-            .zip(variant_exprs.iter())
+            .zip(variant_into_exprs.iter())
         {
             if let Some(field) = field {
                 vars.push(var);
@@ -280,118 +285,4 @@ pub fn derive_holder(ident: &syn::Ident, e: &syn::DataEnum, attr: &HolderAttr) -
 
 pub fn derive_deserialize(_ident: &syn::Ident, _e: &syn::DataEnum) -> TokenStream2 {
     unimplemented!()
-}
-
-#[cfg(test)]
-mod tests {
-
-    #[test]
-    fn simple() {
-        let input: syn::DeriveInput = syn::parse_str(
-            r#"
-            #[holder(table = Table)]
-            #[holder(generate_deserialize)]
-            pub enum S1 {
-                #[holder(field = a)]
-                #[holder(use_place_holder)]
-                A(Box<A>),
-                #[holder(field = b)]
-                #[holder(use_place_holder)]
-                B(Box<B>),
-            }
-            "#,
-        )
-        .unwrap();
-
-        let tt = crate::derive_holder(&input);
-        let out = espr::codegen::rust::rustfmt(tt.to_string());
-
-        insta::assert_snapshot!(out, @r###"
-        #[derive(Clone, Debug, PartialEq)]
-        pub enum S1Holder {
-            A(Box<AHolder>),
-            B(Box<BHolder>),
-        }
-        impl ::ruststep::tables::Holder for S1Holder {
-            type Owned = S1;
-            type Table = Table;
-            fn into_owned(self, table: &Self::Table) -> ::ruststep::error::Result<Self::Owned> {
-                Ok(match self {
-                    S1Holder::A(sub) => S1::A(Box::new(sub.into_owned(table)?)),
-                    S1Holder::B(sub) => S1::B(Box::new(sub.into_owned(table)?)),
-                })
-            }
-            fn name() -> &'static str {
-                "S1"
-            }
-            fn attr_len() -> usize {
-                0
-            }
-        }
-        impl<'de> ::serde::de::Deserialize<'de> for S1Holder {
-            fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
-            where
-                D: ::serde::de::Deserializer<'de>,
-            {
-                deserializer.deserialize_tuple_struct("S1", 0, S1HolderVisitor {})
-            }
-        }
-        pub struct S1HolderVisitor;
-        impl<'de> ::serde::de::Visitor<'de> for S1HolderVisitor {
-            type Value = S1Holder;
-            fn expecting(&self, formatter: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-                write!(formatter, "S1")
-            }
-            fn visit_map<A>(self, mut map: A) -> ::std::result::Result<Self::Value, A::Error>
-            where
-                A: ::serde::de::MapAccess<'de>,
-            {
-                let key: String = map
-                    .next_key()?
-                    .expect("Empty map cannot be accepted as ruststep Holder");
-                match key.as_str() {
-                    "A" => {
-                        let owned = map.next_value()?;
-                        return Ok(S1Holder::A(Box::new(owned)));
-                    }
-                    "B" => {
-                        let owned = map.next_value()?;
-                        return Ok(S1Holder::B(Box::new(owned)));
-                    }
-                    _ => {
-                        use serde::de::{Error, Unexpected};
-                        return Err(A::Error::invalid_value(Unexpected::Other(&key), &self));
-                    }
-                }
-            }
-        }
-        impl ::ruststep::tables::WithVisitor for S1Holder {
-            type Visitor = S1HolderVisitor;
-            fn visitor_new() -> Self::Visitor {
-                S1HolderVisitor {}
-            }
-        }
-        impl ::ruststep::tables::EntityTable<S1Holder> for Table {
-            fn get_owned(&self, entity_id: u64) -> ::ruststep::error::Result<S1> {
-                if let Ok(owned) = ::ruststep::tables::get_owned(self, &self.a, entity_id) {
-                    return Ok(S1::A(Box::new(owned)));
-                }
-                if let Ok(owned) = ::ruststep::tables::get_owned(self, &self.b, entity_id) {
-                    return Ok(S1::B(Box::new(owned)));
-                }
-                Err(::ruststep::error::Error::UnknownEntity(entity_id))
-            }
-            fn owned_iter<'table>(
-                &'table self,
-            ) -> Box<dyn Iterator<Item = ::ruststep::error::Result<S1>> + 'table> {
-                Box::new(::itertools::chain![
-                    ::ruststep::tables::owned_iter(self, &self.a)
-                        .map(|owned| owned.map(|owned| S1::A(Box::new(owned)))),
-                    ::ruststep::tables::owned_iter(self, &self.b)
-                        .map(|owned| owned.map(|owned| S1::B(Box::new(owned))))
-                ])
-            }
-        }
-        "###);
-    }
 }

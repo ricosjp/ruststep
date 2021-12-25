@@ -24,6 +24,15 @@ impl HolderAttr {
         let mut generate_deserialize = false;
 
         for attr in attrs {
+            // Only read `#[holder(...)]`
+            if let Some(ident) = attr.path.get_ident() {
+                if ident != "holder" {
+                    continue;
+                }
+            } else {
+                continue;
+            }
+
             match attr.parse_args().unwrap() {
                 Attr::Table(path) => {
                     table = Some(path);

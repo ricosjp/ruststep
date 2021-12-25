@@ -48,29 +48,37 @@ impl Entity {
     /// Generate declaration of `XxxAny` enum
     fn generate_any_enum(&self, tokens: &mut TokenStream) {
         let any = self.any_ident();
-        let name = self.name_ident();
-        let field = format_ident!("{}", self.name.to_safe());
-        let subtypes = &self.subtypes;
-        let field_names: Vec<_> = subtypes
-            .iter()
-            .map(|ty| match &ty {
-                TypeRef::Entity { name, .. } => format_ident!("{}", name.to_safe()),
+
+        let mut fields = vec![format_ident!("{}", self.name.to_safe())];
+        let mut variants = vec![format_ident!("{}", self.name.to_pascal_case())];
+        let mut subtypes = vec![format_ident!("{}", self.name.to_pascal_case())];
+
+        for ty in &self.subtypes {
+            match &ty {
+                TypeRef::Entity {
+                    name, is_supertype, ..
+                } => {
+                    fields.push(format_ident!("{}", name.to_safe()));
+                    variants.push(format_ident!("{}", name.to_pascal_case()));
+                    if *is_supertype {
+                        subtypes.push(format_ident!("{}Any", name.to_pascal_case()));
+                    } else {
+                        subtypes.push(format_ident!("{}", name.to_pascal_case()));
+                    }
+                }
                 _ => unreachable!(),
-            })
-            .collect();
+            }
+        }
 
         tokens.append_all(quote! {
             #[derive(Debug, Clone, PartialEq, Holder)]
             #[holder(table = Tables)]
             #[holder(generate_deserialize)]
             pub enum #any {
-                #[holder(use_place_holder)]
-                #[holder(field = #field)]
-                #name(Box<#name>),
                 #(
                 #[holder(use_place_holder)]
-                #[holder(field = #field_names)]
-                #subtypes(Box<#subtypes>)
+                #[holder(field = #fields)]
+                #variants(Box<#subtypes>)
                 ),*
             }
         }); // tokens.append_all
@@ -96,7 +104,7 @@ impl Entity {
                 tokens.append_all(quote! {
                     impl Into<#any> for #name {
                         fn into(self) -> #any {
-                            #any::#name(Box::new(self))
+                            #any::#name(Box::new(self.into()))
                         }
                     }
                 });
@@ -108,13 +116,22 @@ impl Entity {
         self.supertypes
             .iter()
             .map(|ty| {
+                let use_place_holder = if ty.is_simple() {
+                    quote! {}
+                } else {
+                    quote! { #[holder(use_place_holder)] }
+                };
                 let (attr, ty) = match ty {
-                    TypeRef::Named { name, .. } | TypeRef::Entity { name, .. } => {
-                        (format_ident!("{}", name.to_safe()), ty)
-                    }
+                    TypeRef::Named { name, .. } | TypeRef::Entity { name, .. } => (
+                        format_ident!("{}", name.to_safe()),
+                        format_ident!("{}", name.to_pascal_case()),
+                    ),
                     _ => unreachable!(),
                 };
-                quote! { pub #attr: #ty }
+                quote! {
+                    #use_place_holder
+                    pub #attr: #ty
+                }
             })
             .collect()
     }
@@ -154,8 +171,8 @@ impl ToTokens for Entity {
             #[holder(generate_deserialize)]
             pub struct #name {
                 #attr_macro
-                #(#supertype_attributes),*
-                #(#attributes),*
+                #(#supertype_attributes,)*
+                #(#attributes,)*
             }
         });
 
