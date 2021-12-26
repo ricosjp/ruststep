@@ -126,7 +126,8 @@ impl Entity {
                 _ => unreachable!(),
             })
             .collect::<Vec<_>>();
-        let subtypes_token = quote! { #(#any::#subtypes (x) => AsRef::<#name>::as_ref(x.as_ref()).as_ref(),)* };
+        let subtypes_token =
+            quote! { #(#any::#subtypes (x) => AsRef::<#name>::as_ref(x.as_ref()).as_ref(),)* };
 
         let supertypes = self
             .supertypes
