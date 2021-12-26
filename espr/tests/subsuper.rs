@@ -86,6 +86,14 @@ fn subsuper() {
                 BaseAny::Sub(Box::new(self.into()))
             }
         }
+        impl AsRef<Base> for BaseAny {
+            fn as_ref(&self) -> &Base {
+                match self {
+                    BaseAny::Base(x) => x.as_ref(),
+                    BaseAny::Sub(x) => (**x).as_ref(),
+                }
+            }
+        }
         #[derive(
             Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
         )]
@@ -120,6 +128,22 @@ fn subsuper() {
         impl Into<SubAny> for Subsub {
             fn into(self) -> SubAny {
                 SubAny::Subsub(Box::new(self.into()))
+            }
+        }
+        impl AsRef<Sub> for SubAny {
+            fn as_ref(&self) -> &Sub {
+                match self {
+                    SubAny::Sub(x) => x.as_ref(),
+                    SubAny::Subsub(x) => (**x).as_ref(),
+                }
+            }
+        }
+        impl AsRef<Base> for SubAny {
+            fn as_ref(&self) -> &Base {
+                match self {
+                    SubAny::Sub(x) => AsRef::<Sub>::as_ref(x).as_ref(),
+                    SubAny::Subsub(x) => AsRef::<Sub>::as_ref(x.as_ref()).as_ref(),
+                }
             }
         }
         #[derive(

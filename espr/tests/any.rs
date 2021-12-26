@@ -92,6 +92,15 @@ fn any() {
                 BaseAny::Sub2(Box::new(self.into()))
             }
         }
+        impl AsRef<Base> for BaseAny {
+            fn as_ref(&self) -> &Base {
+                match self {
+                    BaseAny::Base(x) => x.as_ref(),
+                    BaseAny::Sub1(x) => (**x).as_ref(),
+                    BaseAny::Sub2(x) => (**x).as_ref(),
+                }
+            }
+        }
         #[derive(
             Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
         )]
