@@ -112,6 +112,53 @@ impl Entity {
         }
     }
 
+    fn generate_asref_from_any(&self, tokens: &mut TokenStream) {
+        let any = self.any_ident();
+        let name = self.name_ident();
+
+        let subtypes = self
+            .subtypes
+            .iter()
+            .map(|ty| match &ty {
+                TypeRef::Entity { name, .. } => {
+                    format_ident!("{}", name.to_pascal_case())
+                }
+                _ => unreachable!(),
+            })
+            .collect::<Vec<_>>();
+        let subtypes_token = quote! { #(#any::#subtypes (x) => AsRef::<#name>::as_ref(x.as_ref()).as_ref(),)* };
+
+        let supertypes = self
+            .supertypes
+            .iter()
+            .map(|ty| match &ty {
+                TypeRef::Entity { name, .. } => {
+                    format_ident!("{}", name.to_pascal_case())
+                }
+                _ => unreachable!(),
+            })
+            .collect::<Vec<_>>();
+
+        tokens.append_all(quote! {
+            impl AsRef<#name> for #any {
+                fn as_ref(&self) -> &#name {
+                    match self {
+                        #any::#name (x) => x.as_ref(),
+                        #(#any::#subtypes (x) => (**x).as_ref(),)*
+                    }
+                }
+            }
+            #(impl AsRef<#supertypes> for #any {
+                fn as_ref(&self) -> &#supertypes {
+                    match self {
+                        #any::#name (x) => x.as_ref(),
+                        #subtypes_token
+                    }
+                }
+            })*
+        });
+    }
+
     fn supertype_attributes(&self) -> Vec<TokenStream> {
         self.supertypes
             .iter()
@@ -181,6 +228,7 @@ impl ToTokens for Entity {
             self.generate_any_enum(tokens);
             // Generate `impl Into<XxxAny> for Yyy` for self and all subtypes
             self.generate_into_any(tokens);
+            self.generate_asref_from_any(tokens);
         }
     }
 }
