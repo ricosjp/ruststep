@@ -151,7 +151,7 @@ impl Entity {
             #(impl AsRef<#supertypes> for #any {
                 fn as_ref(&self) -> &#supertypes {
                     match self {
-                        #any::#name (x) => x.as_ref(),
+                        #any::#name (x) => AsRef::<#name>::as_ref(x).as_ref(),
                         #subtypes_token
                     }
                 }
