@@ -160,6 +160,7 @@ impl Entity {
     }
 
     fn supertype_attributes(&self) -> Vec<TokenStream> {
+        let single_supertype = self.supertypes.len() == 1;
         self.supertypes
             .iter()
             .map(|ty| {
@@ -167,6 +168,11 @@ impl Entity {
                     quote! {}
                 } else {
                     quote! { #[holder(use_place_holder)] }
+                };
+                let derive_attr = if single_supertype {
+                    quote! {#[as_ref] #[as_mut] #[deref] #[deref_mut]}
+                } else {
+                    quote! {#[as_ref] #[as_mut]}
                 };
                 let (attr, ty) = match ty {
                     TypeRef::Named { name, .. } | TypeRef::Entity { name, .. } => (
@@ -176,6 +182,7 @@ impl Entity {
                     _ => unreachable!(),
                 };
                 quote! {
+                    #derive_attr
                     #use_place_holder
                     pub #attr: #ty
                 }
@@ -183,21 +190,19 @@ impl Entity {
             .collect()
     }
 
-    fn generate_derive(&self) -> (TokenStream, TokenStream) {
-        if self.supertypes.len() == 1 {
-            (
-                quote! {
-                    #[derive(Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, ::derive_new::new, Holder)]
-                },
-                quote! { #[as_ref] #[as_mut] #[deref] #[deref_mut] },
-            )
-        } else {
-            (
-                quote! {
+    fn generate_derive(&self) -> TokenStream {
+        if self.supertypes.is_empty() {
+            quote! {
                     #[derive(Debug, Clone, PartialEq, ::derive_new::new, Holder)]
-                },
-                quote! {},
-            )
+            }
+        } else if self.supertypes.len() == 1 {
+            quote! {
+                #[derive(Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, ::derive_new::new, Holder)]
+            }
+        } else {
+            quote! {
+                #[derive(Debug, Clone, PartialEq, AsRef, AsMut, ::derive_new::new, Holder)]
+            }
         }
     }
 }
@@ -209,7 +214,7 @@ impl ToTokens for Entity {
 
         let attributes = &self.attributes;
         let supertype_attributes = self.supertype_attributes();
-        let (derive, attr_macro) = self.generate_derive();
+        let derive = self.generate_derive();
 
         tokens.append_all(quote! {
             #derive
@@ -217,7 +222,6 @@ impl ToTokens for Entity {
             #[holder(field = #field_name)]
             #[holder(generate_deserialize)]
             pub struct #name {
-                #attr_macro
                 #(#supertype_attributes,)*
                 #(#attributes,)*
             }
