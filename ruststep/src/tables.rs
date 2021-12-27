@@ -8,6 +8,7 @@ use crate::{
     error::*,
 };
 
+/// Trait for resolving a reference through entity id
 pub trait IntoOwned: Clone + 'static {
     type Owned;
     type Table;
@@ -22,7 +23,7 @@ impl<T: IntoOwned> IntoOwned for Vec<T> {
     }
 }
 
-/// Trait for resolving a reference through entity id
+/// Trait for a field of tables
 pub trait Holder: IntoOwned {
     fn name() -> &'static str;
     fn attr_len() -> usize;
