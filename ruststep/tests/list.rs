@@ -53,7 +53,10 @@ fn deserialize_list_b() {
 
 #[test]
 fn deserialize_list_c() {
-    let (residual, p): (_, Record) = exchange::simple_record("C( ( ( A(((1.0))) ), ( A(((2.0))) ) ) )").finish().unwrap();
+    let (residual, p): (_, Record) =
+        exchange::simple_record("C( ( ( A(((1.0))) ), ( A(((2.0))) ) ) )")
+            .finish()
+            .unwrap();
     dbg!(&p);
     assert_eq!(residual, "");
     let c: CHolder = Deserialize::deserialize(&p).unwrap();
@@ -61,7 +64,10 @@ fn deserialize_list_c() {
     assert_eq!(
         c,
         CHolder {
-            a: vec![vec![PlaceHolder::Owned(AHolder { x: vec![1.0] })],vec![PlaceHolder::Owned(AHolder { x: vec![2.0] })]]
+            a: vec![
+                vec![PlaceHolder::Owned(AHolder { x: vec![1.0] })],
+                vec![PlaceHolder::Owned(AHolder { x: vec![2.0] })]
+            ]
         }
     );
 }
