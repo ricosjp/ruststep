@@ -130,13 +130,16 @@ pub fn impl_holder(ident: &syn::Ident, table: &HolderAttr, st: &syn::DataStruct)
 
     quote! {
         #[automatically_derived]
-        impl #ruststep::tables::Holder for #holder_ident {
+        impl #ruststep::tables::IntoOwned for #holder_ident {
             type Table = #table;
             type Owned = #ident;
             fn into_owned(self, #table_arg: &Self::Table) -> #ruststep::error::Result<Self::Owned> {
                 let #holder_ident { #(#attributes),* } = self;
                 Ok(#ident { #(#attributes: #into_owned),* })
             }
+        }
+        #[automatically_derived]
+        impl #ruststep::tables::Holder for #holder_ident {
             fn name() -> &'static str {
                 #name
             }

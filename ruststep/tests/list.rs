@@ -12,6 +12,14 @@ espr_derive::inline_express!(
       ENTITY b;
         a: LIST [0:?] OF a;
       END_ENTITY;
+
+      ENTITY c;
+        a: LIST [0:?] OF LIST [0:?] OF a;
+      END_ENTITY;
+      
+      ENTITY d;
+        a: LIST [0:?] OF LIST [0:?] OF LIST [0:?] OF a;
+      END_ENTITY;
     END_SCHEMA;
     "#
 );
@@ -39,6 +47,21 @@ fn deserialize_list_b() {
         b,
         BHolder {
             a: vec![PlaceHolder::Owned(AHolder { x: vec![1.0] })]
+        }
+    );
+}
+
+#[test]
+fn deserialize_list_c() {
+    let (residual, p): (_, Record) = exchange::simple_record("C( ( ( A(((1.0))) ), ( A(((2.0))) ) ) )").finish().unwrap();
+    dbg!(&p);
+    assert_eq!(residual, "");
+    let c: CHolder = Deserialize::deserialize(&p).unwrap();
+    dbg!(&c);
+    assert_eq!(
+        c,
+        CHolder {
+            a: vec![vec![PlaceHolder::Owned(AHolder { x: vec![1.0] })],vec![PlaceHolder::Owned(AHolder { x: vec![2.0] })]]
         }
     );
 }

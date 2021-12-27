@@ -8,11 +8,22 @@ use crate::{
     error::*,
 };
 
-/// Trait for resolving a reference through entity id
-pub trait Holder: Clone + 'static {
+pub trait IntoOwned: Clone + 'static {
     type Owned;
     type Table;
     fn into_owned(self, table: &Self::Table) -> Result<Self::Owned>;
+}
+
+impl<T: IntoOwned> IntoOwned for Vec<T> {
+    type Owned = Vec<T::Owned>;
+    type Table = T::Table;
+    fn into_owned(self, table: &Self::Table) -> Result<Self::Owned> {
+        self.into_iter().map(|x| x.into_owned(table)).collect()
+    }
+}
+
+/// Trait for resolving a reference through entity id
+pub trait Holder: IntoOwned {
     fn name() -> &'static str;
     fn attr_len() -> usize;
 }
