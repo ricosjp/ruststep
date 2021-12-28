@@ -87,7 +87,7 @@ fn subsuper() {
             }
         }
         #[derive(
-            Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+            Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
         )]
         # [holder (table = Tables)]
         # [holder (field = sub)]
@@ -123,7 +123,7 @@ fn subsuper() {
             }
         }
         #[derive(
-            Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+            Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
         )]
         # [holder (table = Tables)]
         # [holder (field = subsub)]
