@@ -12,18 +12,19 @@ pub enum PlaceHolder<T> {
     Owned(T),
 }
 
-impl<T: Holder> PlaceHolder<T> {
+impl<T: Holder> IntoOwned for PlaceHolder<T>
+where
+    T::Table: EntityTable<T>,
+{
+    type Owned = T::Owned;
+    type Table = T::Table;
     /// Get owned value, or look up entity table and clone it for a reference.
     ///
     /// Errors
     /// -------
     /// - if table lookup failed, i.e. unknown entity id not registered in the table
     ///
-    pub fn into_owned<Table>(self, table: &Table) -> Result<T::Owned, crate::error::Error>
-    where
-        T: Holder<Table = Table> + Clone,
-        Table: EntityTable<T>,
-    {
+    fn into_owned(self, table: &Self::Table) -> Result<T::Owned, crate::error::Error> {
         match self {
             PlaceHolder::Ref(id) => match id {
                 RValue::Entity(id) => table.get_owned(id),
