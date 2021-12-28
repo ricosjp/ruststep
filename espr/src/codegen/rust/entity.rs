@@ -4,7 +4,6 @@ use check_keyword::CheckKeyword;
 use inflector::Inflector;
 use proc_macro2::TokenStream;
 use quote::*;
-use std::str::FromStr;
 
 impl ToTokens for EntityAttribute {
     fn to_tokens(&self, tokens: &mut TokenStream) {
@@ -144,21 +143,21 @@ impl Entity {
             .collect()
     }
 
-    fn derives(&self) -> Vec<TokenStream> {
+    fn derives(&self) -> Vec<syn::Path> {
         let mut derives = vec![
-            TokenStream::from_str("Debug").unwrap(),
-            TokenStream::from_str("Clone").unwrap(),
-            TokenStream::from_str("PartialEq").unwrap(),
-            TokenStream::from_str("::derive_new::new").unwrap(),
-            TokenStream::from_str("Holder").unwrap(),
+            syn::parse_str("Debug").unwrap(),
+            syn::parse_str("Clone").unwrap(),
+            syn::parse_str("PartialEq").unwrap(),
+            syn::parse_str("::derive_new::new").unwrap(),
+            syn::parse_str("Holder").unwrap(),
         ];
         if !self.supertypes.is_empty() {
-            derives.push(TokenStream::from_str("AsRef").unwrap());
-            derives.push(TokenStream::from_str("AsMut").unwrap());
+            derives.push(syn::parse_str("AsRef").unwrap());
+            derives.push(syn::parse_str("AsMut").unwrap());
         }
         if self.supertypes.len() == 1 {
-            derives.push(TokenStream::from_str("Deref").unwrap());
-            derives.push(TokenStream::from_str("DerefMut").unwrap());
+            derives.push(syn::parse_str("Deref").unwrap());
+            derives.push(syn::parse_str("DerefMut").unwrap());
         }
         derives
     }
