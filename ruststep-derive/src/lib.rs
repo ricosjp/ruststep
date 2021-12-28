@@ -196,7 +196,7 @@ mod snapshot_tests {
             A(Box<AHolder>),
             B(Box<BHolder>),
         }
-        impl ::ruststep::tables::Holder for S1Holder {
+        impl ::ruststep::tables::IntoOwned for S1Holder {
             type Owned = S1;
             type Table = Table;
             fn into_owned(self, table: &Self::Table) -> ::ruststep::error::Result<Self::Owned> {
@@ -205,6 +205,8 @@ mod snapshot_tests {
                     S1Holder::B(sub) => S1::B(Box::new(sub.into_owned(table)?)),
                 })
             }
+        }
+        impl ::ruststep::tables::Holder for S1Holder {
             fn name() -> &'static str {
                 "S1"
             }
@@ -306,7 +308,7 @@ mod snapshot_tests {
             Base(Box<BaseHolder>),
             Sub(Box<SubAnyHolder>),
         }
-        impl ::ruststep::tables::Holder for BaseAnyHolder {
+        impl ::ruststep::tables::IntoOwned for BaseAnyHolder {
             type Owned = BaseAny;
             type Table = Tables;
             fn into_owned(self, table: &Self::Table) -> ::ruststep::error::Result<Self::Owned> {
@@ -315,6 +317,8 @@ mod snapshot_tests {
                     BaseAnyHolder::Sub(sub) => BaseAny::Sub(Box::new(sub.into_owned(table)?)),
                 })
             }
+        }
+        impl ::ruststep::tables::Holder for BaseAnyHolder {
             fn name() -> &'static str {
                 "BASE_ANY"
             }
@@ -423,7 +427,7 @@ mod snapshot_tests {
             pub y1: f64,
         }
         #[automatically_derived]
-        impl ::ruststep::tables::Holder for Sub1Holder {
+        impl ::ruststep::tables::IntoOwned for Sub1Holder {
             type Table = Tables;
             type Owned = Sub1;
             fn into_owned(self, table: &Self::Table) -> ::ruststep::error::Result<Self::Owned> {
@@ -433,6 +437,9 @@ mod snapshot_tests {
                     y1: y1,
                 })
             }
+        }
+        #[automatically_derived]
+        impl ::ruststep::tables::Holder for Sub1Holder {
             fn name() -> &'static str {
                 "SUB_1"
             }
