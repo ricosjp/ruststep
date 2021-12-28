@@ -4,6 +4,7 @@ use check_keyword::CheckKeyword;
 use inflector::Inflector;
 use proc_macro2::TokenStream;
 use quote::*;
+use std::str::FromStr;
 
 impl ToTokens for EntityAttribute {
     fn to_tokens(&self, tokens: &mut TokenStream) {
@@ -143,20 +144,23 @@ impl Entity {
             .collect()
     }
 
-    fn generate_derive(&self) -> TokenStream {
-        if self.supertypes.is_empty() {
-            quote! {
-                    #[derive(Debug, Clone, PartialEq, ::derive_new::new, Holder)]
-            }
-        } else if self.supertypes.len() == 1 {
-            quote! {
-                #[derive(Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, ::derive_new::new, Holder)]
-            }
-        } else {
-            quote! {
-                #[derive(Debug, Clone, PartialEq, AsRef, AsMut, ::derive_new::new, Holder)]
-            }
+    fn derives(&self) -> Vec<TokenStream> {
+        let mut derives = vec![
+            TokenStream::from_str("Debug").unwrap(),
+            TokenStream::from_str("Clone").unwrap(),
+            TokenStream::from_str("PartialEq").unwrap(),
+            TokenStream::from_str("::derive_new::new").unwrap(),
+            TokenStream::from_str("Holder").unwrap(),
+        ];
+        if !self.supertypes.is_empty() {
+            derives.push(TokenStream::from_str("AsRef").unwrap());
+            derives.push(TokenStream::from_str("AsMut").unwrap());
         }
+        if self.supertypes.len() == 1 {
+            derives.push(TokenStream::from_str("Deref").unwrap());
+            derives.push(TokenStream::from_str("DerefMut").unwrap());
+        }
+        derives
     }
 }
 
@@ -167,10 +171,10 @@ impl ToTokens for Entity {
 
         let attributes = &self.attributes;
         let supertype_attributes = self.supertype_attributes();
-        let derive = self.generate_derive();
+        let derive = self.derives();
 
         tokens.append_all(quote! {
-            #derive
+            #( #[derive(#derive)] )*
             #[holder(table = Tables)]
             #[holder(field = #field_name)]
             #[holder(generate_deserialize)]
