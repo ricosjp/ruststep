@@ -4922,13 +4922,17 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub externally_defined_item: ExternallyDefinedItem,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(Debug, Clone, PartialEq, AsRef, AsMut, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = externally_defined_hatch_style)]
     #[holder(generate_deserialize)]
     pub struct ExternallyDefinedHatchStyle {
+        #[as_ref]
+        #[as_mut]
         #[holder(use_place_holder)]
         pub externally_defined_item: ExternallyDefinedItem,
+        #[as_ref]
+        #[as_mut]
         #[holder(use_place_holder)]
         pub geometric_representation_item: GeometricRepresentationItem,
     }
@@ -5023,13 +5027,17 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub externally_defined_item: ExternallyDefinedItem,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(Debug, Clone, PartialEq, AsRef, AsMut, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = externally_defined_tile_style)]
     #[holder(generate_deserialize)]
     pub struct ExternallyDefinedTileStyle {
+        #[as_ref]
+        #[as_mut]
         #[holder(use_place_holder)]
         pub externally_defined_item: ExternallyDefinedItem,
+        #[as_ref]
+        #[as_mut]
         #[holder(use_place_holder)]
         pub geometric_representation_item: GeometricRepresentationItem,
     }
@@ -6243,13 +6251,17 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub points: Vec<CartesianPoint>,
     }
-    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+    #[derive(Debug, Clone, PartialEq, AsRef, AsMut, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = pre_defined_colour)]
     #[holder(generate_deserialize)]
     pub struct PreDefinedColour {
+        #[as_ref]
+        #[as_mut]
         #[holder(use_place_holder)]
         pub pre_defined_item: PreDefinedItem,
+        #[as_ref]
+        #[as_mut]
         #[holder(use_place_holder)]
         pub colour: Colour,
     }
