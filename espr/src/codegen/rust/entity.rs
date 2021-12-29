@@ -150,19 +150,6 @@ impl Entity {
                 _ => unreachable!(),
             })
             .collect::<Vec<_>>();
-        let subtypes_token =
-            quote! { #(#any::#subtypes (x) => AsRef::<#name>::as_ref(x.as_ref()).as_ref(),)* };
-
-        let supertypes = self
-            .supertypes
-            .iter()
-            .map(|ty| match &ty {
-                TypeRef::Entity { name, .. } => {
-                    format_ident!("{}", name.to_pascal_case())
-                }
-                _ => unreachable!(),
-            })
-            .collect::<Vec<_>>();
 
         tokens.append_all(quote! {
             impl AsRef<#name> for #any {
@@ -173,15 +160,27 @@ impl Entity {
                     }
                 }
             }
-            #(impl AsRef<#supertypes> for #any {
-                fn as_ref(&self) -> &#supertypes {
-                    match self {
-                        #any::#name (x) => AsRef::<#name>::as_ref(x).as_ref(),
-                        #subtypes_token
+        });
+
+        for ty in &self.supertypes {
+            let supertype = match ty {
+                TypeRef::Entity { name, .. } => {
+                    format_ident!("{}", name.to_pascal_case())
+                }
+                _ => unreachable!(),
+            };
+
+            tokens.append_all(quote! {
+                impl AsRef<#supertype> for #any {
+                    fn as_ref(&self) -> &#supertype {
+                        match self {
+                            #any::#name (x) => AsRef::<#name>::as_ref(x).as_ref(),
+                            #(#any::#subtypes (x) => AsRef::<#name>::as_ref(x.as_ref()).as_ref(),)*
+                        }
                     }
                 }
-            })*
-        });
+            });
+        }
     }
 
     fn supertype_fields(&self) -> Vec<Field> {
