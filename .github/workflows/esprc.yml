@@ -45,5 +45,5 @@ jobs:
     - name: Generate binding
       run: |
         set -eo pipefail
-        cargo run --bin esprc -- ./schemas/APs/10303-${{ matrix.ap}}-aim-long.exp | rustfmt > ./ruststep/src/ap${{ matrix.ap }}.rs
+        cargo run --bin esprc -- ./schemas/APs/10303-${{ matrix.ap }}-aim-long.exp | rustfmt > ./ruststep/src/ap${{ matrix.ap }}.rs
         git diff --exit-code
