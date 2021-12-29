@@ -136,32 +136,34 @@ impl Entity {
         }
     }
 
-    fn supertype_fields(&self) -> Vec<TokenStream> {
-        let single_supertype = self.supertypes.len() == 1;
+    fn supertype_fields(&self) -> Vec<Field> {
         self.supertypes
             .iter()
             .map(|ty| {
-                let use_place_holder = if ty.is_simple() {
-                    quote! {}
-                } else {
-                    quote! { #[holder(use_place_holder)] }
-                };
-                let derive_attr = if single_supertype {
-                    quote! {#[as_ref] #[as_mut] #[deref] #[deref_mut]}
-                } else {
-                    quote! {#[as_ref] #[as_mut]}
-                };
-                let (attr, ty) = match ty {
-                    TypeRef::Named { name, .. } | TypeRef::Entity { name, .. } => (
-                        format_ident!("{}", name.to_safe()),
-                        format_ident!("{}", name.to_pascal_case()),
-                    ),
+                let mut attributes = Vec::new();
+                attributes.push(parse_quote! { #[as_ref] });
+                attributes.push(parse_quote! { #[as_mut] });
+
+                if self.supertypes.len() == 1 {
+                    attributes.push(parse_quote! { #[deref] });
+                    attributes.push(parse_quote! { #[deref_mut] });
+                }
+                if !ty.is_simple() {
+                    attributes.push(parse_quote! { #[holder(use_place_holder)] });
+                }
+
+                let (name, ty) = match ty {
+                    TypeRef::Named { name, .. } | TypeRef::Entity { name, .. } => {
+                        let ty = format_ident!("{}", name.to_pascal_case());
+                        (format_ident!("{}", name.to_safe()), parse_quote! { #ty })
+                    }
                     _ => unreachable!(),
                 };
-                quote! {
-                    #derive_attr
-                    #use_place_holder
-                    pub #attr: #ty
+
+                Field {
+                    name,
+                    ty,
+                    attributes,
                 }
             })
             .collect()
