@@ -36,6 +36,7 @@ In addition to original Keep-a-Changelog, we use following rules:
 - impl `FromStr` for `Record` and `DataSection` https://github.com/ricosjp/ruststep/pull/140
 
 ### Changed
+- Use `syn::Type` and other explicit types instead of `proc_macro2::TokenStream` in espr/codegen https://github.com/ricosjp/ruststep/pull/184
 - Cut out `IntoOwned` from `Holder` for compile `LIST OF LIST OF XXX`. https://github.com/ricosjp/ruststep/pull/183
 - Implement `AsRef` and `AsMut` in the case of multiple inheritance. https://github.com/ricosjp/ruststep/pull/179
 - Implements `AsRef`, `AsMut`, `Deref`, `DerefMut` for subtypes. https://github.com/ricosjp/ruststep/pull/174
