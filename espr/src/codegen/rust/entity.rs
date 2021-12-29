@@ -10,7 +10,7 @@ use syn::parse_quote;
 struct Field {
     name: syn::Ident,
     ty: syn::Type,
-    attributes: Vec<TokenStream>,
+    attributes: Vec<syn::Attribute>,
 }
 
 impl From<EntityAttribute> for Field {
@@ -18,12 +18,16 @@ impl From<EntityAttribute> for Field {
         let EntityAttribute { name, ty, optional } = attr;
 
         let name = format_ident!("{}", name.to_safe());
+        let attributes = if ty.is_simple() {
+            Vec::new()
+        } else {
+            vec![parse_quote! { #[holder(use_place_holder)] }]
+        };
         let ty = if optional {
             parse_quote! { Option<#ty> }
         } else {
             parse_quote! { #ty }
         };
-        let attributes = Vec::new();
 
         Field {
             name,
@@ -33,25 +37,17 @@ impl From<EntityAttribute> for Field {
     }
 }
 
-impl ToTokens for EntityAttribute {
+impl ToTokens for Field {
     fn to_tokens(&self, tokens: &mut TokenStream) {
-        let EntityAttribute { name, ty, optional } = self;
-
-        let attr_name = format_ident!("{}", name.to_safe());
-        let attr_type = if *optional {
-            quote! { Option<#ty> }
-        } else {
-            quote! { #ty }
-        };
-        let use_place_holder = if ty.is_simple() {
-            quote! {}
-        } else {
-            quote! { #[holder(use_place_holder)] }
-        };
+        let Field {
+            name,
+            ty,
+            attributes,
+        } = self;
 
         tokens.append_all(quote! {
-            #use_place_holder
-            pub #attr_name : #attr_type
+            #( #attributes )*
+            pub #name : #ty
         });
     }
 }
@@ -200,7 +196,11 @@ impl ToTokens for Entity {
         // and "attribute" refers other items
         //
         // https://doc.rust-lang.org/std/keyword.struct.html
-        let fields = &self.attributes;
+        let fields = self
+            .attributes
+            .iter()
+            .map(|attr| Field::from(attr.clone()))
+            .collect::<Vec<Field>>();
         let supertype_fields = self.supertype_fields();
 
         let derive = self.derives();
