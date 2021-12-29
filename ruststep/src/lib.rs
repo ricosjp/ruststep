@@ -25,3 +25,5 @@ pub use ruststep_derive::*;
 // Automatically generated codes
 #[cfg(feature = "ap201")]
 pub mod ap201;
+#[cfg(feature = "ap203")]
+pub mod ap203;
