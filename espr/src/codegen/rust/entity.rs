@@ -112,7 +112,7 @@ impl Entity {
         }
     }
 
-    fn supertype_attributes(&self) -> Vec<TokenStream> {
+    fn supertype_fields(&self) -> Vec<TokenStream> {
         let single_supertype = self.supertypes.len() == 1;
         self.supertypes
             .iter()
@@ -168,8 +168,13 @@ impl ToTokens for Entity {
         let name = self.name_ident();
         let field_name = self.field_ident();
 
-        let attributes = &self.attributes;
-        let supertype_attributes = self.supertype_attributes();
+        // Each component of struct is called "field" in Rust,
+        // and "attribute" refers other items
+        //
+        // https://doc.rust-lang.org/std/keyword.struct.html
+        let fields = &self.attributes;
+        let supertype_fields = self.supertype_fields();
+
         let derive = self.derives();
 
         tokens.append_all(quote! {
@@ -178,8 +183,8 @@ impl ToTokens for Entity {
             #[holder(field = #field_name)]
             #[holder(generate_deserialize)]
             pub struct #name {
-                #(#supertype_attributes,)*
-                #(#attributes,)*
+                #(#supertype_fields,)*
+                #(#fields,)*
             }
         });
 
