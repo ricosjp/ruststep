@@ -4,6 +4,34 @@ use check_keyword::CheckKeyword;
 use inflector::Inflector;
 use proc_macro2::TokenStream;
 use quote::*;
+use syn::parse_quote;
+
+// Each component of Rust struct corresponding to ENTITY in EXPRESS
+struct Field {
+    name: syn::Ident,
+    ty: syn::Type,
+    attributes: Vec<TokenStream>,
+}
+
+impl From<EntityAttribute> for Field {
+    fn from(attr: EntityAttribute) -> Self {
+        let EntityAttribute { name, ty, optional } = attr;
+
+        let name = format_ident!("{}", name.to_safe());
+        let ty = if optional {
+            parse_quote! { Option<#ty> }
+        } else {
+            parse_quote! { #ty }
+        };
+        let attributes = Vec::new();
+
+        Field {
+            name,
+            ty,
+            attributes,
+        }
+    }
+}
 
 impl ToTokens for EntityAttribute {
     fn to_tokens(&self, tokens: &mut TokenStream) {
