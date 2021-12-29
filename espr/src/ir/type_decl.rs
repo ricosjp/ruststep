@@ -41,6 +41,17 @@ pub enum TypeDecl {
     Select(Select),
 }
 
+impl TypeDecl {
+    pub fn id(&self) -> &str {
+        match self {
+            TypeDecl::Simple(e) => &e.id,
+            TypeDecl::Rename(e) => &e.id,
+            TypeDecl::Enumeration(e) => &e.id,
+            TypeDecl::Select(e) => &e.id,
+        }
+    }
+}
+
 impl Legalize for TypeDecl {
     type Input = ast::TypeDecl;
     fn legalize(
@@ -82,6 +93,41 @@ impl Legalize for TypeDecl {
                     })
                     .collect::<Result<Vec<_>, _>>()?;
                 TypeDecl::Select(Select { id, types })
+            }
+            Type::Set { base, bound } => {
+                let base = TypeRef::legalize(ns, ss, scope, base.as_ref())?;
+                let bound = if let Some(bound) = bound {
+                    Some(Legalize::legalize(ns, ss, scope, bound)?)
+                } else {
+                    None
+                };
+                TypeDecl::Rename(Rename {
+                    id,
+                    ty: TypeRef::Set {
+                        base: Box::new(base),
+                        bound,
+                    },
+                })
+            }
+            Type::List {
+                base,
+                bound,
+                unique,
+            } => {
+                let base = TypeRef::legalize(ns, ss, scope, base.as_ref())?;
+                let bound = if let Some(bound) = bound {
+                    Some(Legalize::legalize(ns, ss, scope, bound)?)
+                } else {
+                    None
+                };
+                TypeDecl::Rename(Rename {
+                    id,
+                    ty: TypeRef::List {
+                        base: Box::new(base),
+                        bound,
+                        unique: *unique,
+                    },
+                })
             }
             _ => panic!(),
         })

@@ -1,6 +1,6 @@
 //! AST for function, procedure, and rule declarations
 
-use crate::ast::{entity::*, expression::*, types::*};
+use crate::{ast::*, derive_ast_component, parser::*};
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum Statement {
@@ -77,6 +77,8 @@ pub struct Procedure {
     pub statements: Vec<Statement>,
 }
 
+derive_ast_component!(Procedure, procedure_decl);
+
 #[derive(Debug, Clone, PartialEq)]
 pub struct Function {
     pub name: String,
@@ -87,6 +89,8 @@ pub struct Function {
     pub statements: Vec<Statement>,
     pub return_type: Type,
 }
+
+derive_ast_component!(Function, function_decl);
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub enum ProcedureCallName {

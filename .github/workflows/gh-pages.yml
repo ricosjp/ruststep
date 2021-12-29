@@ -10,6 +10,12 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
     - uses: actions/checkout@v2
+    - uses: actions-rs/toolchain@v1
+      with:
+        toolchain: "1.56.0"
+        profile: minimal
+        default: true
+        override: true
     - uses: actions-rs/cargo@v1
       with:
         command: doc
@@ -19,3 +25,4 @@ jobs:
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./target/doc
+        force_orphan: true

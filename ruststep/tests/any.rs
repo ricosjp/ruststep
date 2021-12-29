@@ -1,85 +1,35 @@
 use nom::Finish;
-use ruststep::{ast::*, parser::exchange, place_holder::*};
-use ruststep_derive::as_holder;
+use ruststep::{ast::*, parser::exchange, place_holder::*, tables::*};
 use serde::Deserialize;
-use std::collections::HashMap;
+use std::str::FromStr;
 
-#[derive(Debug, Clone, PartialEq, Default)]
-pub struct Table {
-    base: HashMap<u64, as_holder!(Base)>,
-    sub1: HashMap<u64, as_holder!(Sub1)>,
-    sub2: HashMap<u64, as_holder!(Sub2)>,
-}
+espr_derive::inline_express!(
+    r#"
+    SCHEMA test_schema;
+      ENTITY base SUPERTYPE OF (ONEOF (sub1, sub2));
+        x: REAL;
+      END_ENTITY;
 
-impl Table {
-    // ```
-    // #1 = BASE(1.0);
-    // #2 = SUB_1(BASE((1.0)), 2.0);
-    // #3 = SUB_2(#1, 4.0);
-    // ```
-    fn example() -> Self {
-        let mut table = Self::default();
-        table.base.insert(1, BaseHolder { x: 1.0 });
-        table.sub1.insert(
-            2,
-            Sub1Holder {
-                base: BaseHolder { x: 1.0 }.into(),
-                y1: 2.0,
-            },
-        );
-        table.sub2.insert(
-            3,
-            Sub2Holder {
-                base: RValue::Entity(1).into(),
-                y2: 4.0,
-            },
-        );
-        table
-    }
-}
+      ENTITY sub1 SUBTYPE OF (base);
+        y1: REAL;
+      END_ENTITY;
 
-#[derive(Clone, Debug, PartialEq, ruststep_derive::Holder)]
-#[holder(table = Table)]
-#[holder(field = base)]
-#[holder(generate_deserialize)]
-pub struct Base {
-    x: f64,
-}
+      ENTITY sub2 SUBTYPE OF (base);
+        y2: REAL;
+      END_ENTITY;
+    END_SCHEMA;
+    "#
+);
 
-#[derive(Clone, Debug, PartialEq, ruststep_derive::Holder)]
-#[holder(table = Table)]
-#[holder(field = sub1)]
-#[holder(generate_deserialize)]
-pub struct Sub1 {
-    #[holder(use_place_holder)]
-    base: Base,
-    y1: f64,
-}
+use test_schema::*;
 
-#[derive(Clone, Debug, PartialEq, ruststep_derive::Holder)]
-#[holder(table = Table)]
-#[holder(field = sub2)]
-#[holder(generate_deserialize)]
-pub struct Sub2 {
-    #[holder(use_place_holder)]
-    base: Base,
-    y2: f64,
-}
-
-#[derive(Clone, Debug, PartialEq, ruststep_derive::Holder)]
-#[holder(table = Table)]
-#[holder(generate_deserialize)]
-enum BaseAny {
-    #[holder(field = base)]
-    #[holder(use_place_holder)]
-    Base(Box<Base>),
-    #[holder(field = sub1)]
-    #[holder(use_place_holder)]
-    Sub1(Box<Sub1>),
-    #[holder(field = sub2)]
-    #[holder(use_place_holder)]
-    Sub2(Box<Sub2>),
-}
+const EXAMPLE: &str = r#"
+DATA;
+  #1 = BASE(1.0);
+  #2 = SUB_1(BASE((1.0)), 2.0);
+  #3 = SUB_2(#1, 4.0);
+ENDSEC;
+"#;
 
 #[test]
 fn deserialize_base() {
@@ -194,7 +144,7 @@ fn into_base_any() {
     );
 
     fn test(input: &str, answer: BaseAny) {
-        let table = Table::example();
+        let table = Tables::from_str(EXAMPLE).unwrap();
 
         let (residual, p): (_, Record) = exchange::simple_record(input).finish().unwrap();
         dbg!(&p);
@@ -231,7 +181,7 @@ fn lookup_base_any() {
     );
 
     fn test(p: Parameter, answer: BaseAny) {
-        let table = Table::example();
+        let table = Tables::from_str(EXAMPLE).unwrap();
 
         let holder = PlaceHolder::<BaseAnyHolder>::deserialize(&p).unwrap();
         dbg!(&holder);
@@ -240,4 +190,74 @@ fn lookup_base_any() {
         dbg!(&owned);
         assert_eq!(owned, answer);
     }
+}
+
+#[test]
+fn get_owned_base() {
+    let table = Tables::from_str(EXAMPLE).unwrap();
+    let base = EntityTable::<BaseHolder>::get_owned(&table, 1).unwrap();
+    assert_eq!(base, Base { x: 1.0 });
+}
+
+#[test]
+fn get_owned_sub1() {
+    let table = Tables::from_str(EXAMPLE).unwrap();
+    let sub1 = EntityTable::<Sub1Holder>::get_owned(&table, 2).unwrap();
+    assert_eq!(
+        sub1,
+        Sub1 {
+            base: Base { x: 1.0 },
+            y1: 2.0
+        }
+    );
+}
+
+#[test]
+fn get_owned_any() {
+    let table = Tables::from_str(EXAMPLE).unwrap();
+
+    // #1 = BASE(1.0);
+    let any1 = EntityTable::<BaseAnyHolder>::get_owned(&table, 1).unwrap();
+    assert_eq!(any1, BaseAny::Base(Box::new(Base { x: 1.0 })));
+
+    // #2 = SUB_1(BASE((1.0)), 2.0);
+    let any2 = EntityTable::<BaseAnyHolder>::get_owned(&table, 2).unwrap();
+    assert_eq!(
+        any2,
+        BaseAny::Sub1(Box::new(Sub1 {
+            base: Base { x: 1.0 },
+            y1: 2.0
+        }))
+    );
+
+    // #3 = SUB_2(#1, 4.0);
+    let any3 = EntityTable::<BaseAnyHolder>::get_owned(&table, 3).unwrap();
+    assert_eq!(
+        any3,
+        BaseAny::Sub2(Box::new(Sub2 {
+            base: Base { x: 1.0 },
+            y2: 4.0
+        }))
+    );
+}
+
+#[test]
+fn as_ref_base_any() {
+    let table = Tables::from_str(EXAMPLE).unwrap();
+
+    // #1 = BASE(1.0);
+    let any1 = EntityTable::<BaseAnyHolder>::get_owned(&table, 1).unwrap();
+    assert_eq!(any1.as_ref(), &Base { x: 1.0 });
+
+    // #2 = SUB_1(BASE((1.0)), 2.0);
+    let any2 = EntityTable::<BaseAnyHolder>::get_owned(&table, 2).unwrap();
+    assert_eq!(any2.as_ref(), &Base { x: 1.0 });
+    let sub2 = EntityTable::<Sub1Holder>::get_owned(&table, 2).unwrap();
+    assert_eq!(sub2.as_ref(), &Base { x: 1.0 });
+
+    // #3 = SUB_2(#1, 4.0);
+    let any3 = EntityTable::<BaseAnyHolder>::get_owned(&table, 3).unwrap();
+    assert_eq!(any3.as_ref(), &Base { x: 1.0 });
+    let sub3 = EntityTable::<Sub2Holder>::get_owned(&table, 3).unwrap();
+    assert_eq!(sub3.as_ref(), &Base { x: 1.0 });
 }

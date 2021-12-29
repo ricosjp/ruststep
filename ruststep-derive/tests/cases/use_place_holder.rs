@@ -9,6 +9,7 @@ pub struct Table {
 #[derive(Debug, Clone, PartialEq, Holder)]
 #[holder(table = Table)]
 #[holder(field = a)]
+#[holder(generate_deserialize)]
 pub struct A {
     pub x: f64,
     pub y: f64,
@@ -17,6 +18,7 @@ pub struct A {
 #[derive(Debug, Clone, PartialEq, Holder)]
 #[holder(table = Table)]
 #[holder(field = b)]
+#[holder(generate_deserialize)]
 pub struct B {
     pub z: f64,
     #[holder(use_place_holder)]

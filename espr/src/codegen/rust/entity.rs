@@ -1,106 +1,277 @@
 use crate::ir::*;
 
+use check_keyword::CheckKeyword;
 use inflector::Inflector;
 use proc_macro2::TokenStream;
 use quote::*;
+use syn::parse_quote;
 
-impl ToTokens for Entity {
+// Each component of Rust struct corresponding to ENTITY in EXPRESS
+struct Field {
+    name: syn::Ident,
+    ty: syn::Type,
+    attributes: Vec<syn::Attribute>,
+}
+
+impl From<EntityAttribute> for Field {
+    fn from(attr: EntityAttribute) -> Self {
+        let EntityAttribute { name, ty, optional } = attr;
+
+        let name = format_ident!("{}", name.to_safe());
+        let attributes = if ty.is_simple() {
+            Vec::new()
+        } else {
+            vec![parse_quote! { #[holder(use_place_holder)] }]
+        };
+        let ty = if optional {
+            parse_quote! { Option<#ty> }
+        } else {
+            parse_quote! { #ty }
+        };
+
+        Field {
+            name,
+            ty,
+            attributes,
+        }
+    }
+}
+
+impl ToTokens for Field {
     fn to_tokens(&self, tokens: &mut TokenStream) {
-        let field_name = format_ident!("{}", self.name);
-        let name = format_ident!("{}", self.name.to_pascal_case());
+        let Field {
+            name,
+            ty,
+            attributes,
+        } = self;
 
-        let mut attr_name = Vec::new();
-        let mut attr_type = Vec::new();
-        let mut use_place_holder = Vec::new();
+        tokens.append_all(quote! {
+            #( #attributes )*
+            pub #name : #ty
+        });
+    }
+}
 
-        for EntityAttribute { name, ty, optional } in &self.attributes {
-            let name = format_ident!("{}", name);
-            attr_name.push(name.clone());
-            if *optional {
-                attr_type.push(quote! { Option<#ty> });
-            } else {
-                attr_type.push(quote! { #ty });
-            }
-            if ty.is_simple() {
-                use_place_holder.push(quote! {});
-            } else {
-                use_place_holder.push(quote! { #[holder(use_place_holder)] });
+// Additional functions to use in codegen/rust for ir::Entity.
+impl Entity {
+    fn name_ident(&self) -> syn::Ident {
+        format_ident!("{}", self.name.to_pascal_case())
+    }
+
+    fn any_ident(&self) -> syn::Ident {
+        // `Any` indentifier must be appears if the entity is supertype
+        assert!(!self.subtypes.is_empty());
+        format_ident!("{}Any", self.name.to_pascal_case())
+    }
+
+    /// Field identifier
+    fn field_ident(&self) -> syn::Ident {
+        format_ident!("{}", self.name.to_safe())
+    }
+
+    /// Generate declaration of `XxxAny` enum
+    fn generate_any_enum(&self, tokens: &mut TokenStream) {
+        let any = self.any_ident();
+
+        let mut fields = vec![format_ident!("{}", self.name.to_safe())];
+        let mut variants = vec![format_ident!("{}", self.name.to_pascal_case())];
+        let mut subtypes = vec![format_ident!("{}", self.name.to_pascal_case())];
+
+        for ty in &self.subtypes {
+            match &ty {
+                TypeRef::Entity {
+                    name, is_supertype, ..
+                } => {
+                    fields.push(format_ident!("{}", name.to_safe()));
+                    variants.push(format_ident!("{}", name.to_pascal_case()));
+                    if *is_supertype {
+                        subtypes.push(format_ident!("{}Any", name.to_pascal_case()));
+                    } else {
+                        subtypes.push(format_ident!("{}", name.to_pascal_case()));
+                    }
+                }
+                _ => unreachable!(),
             }
         }
 
+        tokens.append_all(quote! {
+            #[derive(Debug, Clone, PartialEq, Holder)]
+            #[holder(table = Tables)]
+            #[holder(generate_deserialize)]
+            pub enum #any {
+                #(
+                #[holder(use_place_holder)]
+                #[holder(field = #fields)]
+                #variants(Box<#subtypes>)
+                ),*
+            }
+        }); // tokens.append_all
+    }
+
+    /// Generate `impl Into<SelfAny> for SubType` for self and all subtypes
+    fn generate_into_any(&self, tokens: &mut TokenStream) {
+        let any = self.any_ident();
+        let name = self.name_ident();
+
+        // `Self` to `SelfAny`
+        tokens.append_all(quote! {
+            impl Into<#any> for #name {
+                fn into(self) -> #any {
+                    #any::#name(Box::new(self))
+                }
+            }
+        });
+
+        for ty in &self.subtypes {
+            if let TypeRef::Entity { name, .. } = ty {
+                let name = format_ident!("{}", name.to_pascal_case());
+                tokens.append_all(quote! {
+                    impl Into<#any> for #name {
+                        fn into(self) -> #any {
+                            #any::#name(Box::new(self.into()))
+                        }
+                    }
+                });
+            }
+        }
+    }
+
+    /// Generate `impl AsRef<Self> for SelfAny` and `impl AsRef<Super> for SelfAny`
+    fn generate_asref_from_any(&self, tokens: &mut TokenStream) {
+        let any = self.any_ident();
+        let name = self.name_ident();
+
+        let subtypes = self
+            .subtypes
+            .iter()
+            .map(|ty| match &ty {
+                TypeRef::Entity { name, .. } => {
+                    format_ident!("{}", name.to_pascal_case())
+                }
+                _ => unreachable!(),
+            })
+            .collect::<Vec<_>>();
+
+        tokens.append_all(quote! {
+            impl AsRef<#name> for #any {
+                fn as_ref(&self) -> &#name {
+                    match self {
+                        #any::#name (x) => x.as_ref(),
+                        #(#any::#subtypes (x) => (**x).as_ref(),)*
+                    }
+                }
+            }
+        });
+
         for ty in &self.supertypes {
-            let (attr, ty) = match ty {
-                TypeRef::Named { name, .. } | TypeRef::Entity { name, .. } => {
-                    (format_ident!("{}", name), ty)
+            let supertype = match ty {
+                TypeRef::Entity { name, .. } => {
+                    format_ident!("{}", name.to_pascal_case())
                 }
                 _ => unreachable!(),
             };
 
-            attr_name.push(attr.clone());
-            attr_type.push(ty.to_token_stream());
-
-            if let TypeRef::Entity {
-                name: supertype_name,
-                is_supertype,
-                ..
-            } = ty
-            {
-                if *is_supertype {
-                    let name = if self.subtypes.is_empty() {
-                        format_ident!("{}", self.name.to_pascal_case())
-                    } else {
-                        format_ident!("{}Any", self.name.to_pascal_case())
-                    };
-                    let any_enum = format_ident!("{}Any", supertype_name.to_pascal_case());
-                    tokens.append_all(quote! {
-                        impl Into<#any_enum> for #name {
-                            fn into(self) -> #any_enum {
-                                #any_enum::#name(Box::new(self))
-                            }
+            tokens.append_all(quote! {
+                impl AsRef<#supertype> for #any {
+                    fn as_ref(&self) -> &#supertype {
+                        match self {
+                            #any::#name (x) => AsRef::<#name>::as_ref(x).as_ref(),
+                            #(#any::#subtypes (x) => AsRef::<#name>::as_ref(x.as_ref()).as_ref(),)*
                         }
-                    });
+                    }
                 }
-            }
+            });
         }
+    }
 
-        assert_eq!(attr_name.len(), attr_type.len());
-        assert_eq!(attr_name.len(), use_place_holder.len());
+    fn supertype_fields(&self) -> Vec<Field> {
+        self.supertypes
+            .iter()
+            .map(|ty| {
+                let mut attributes = Vec::new();
+                attributes.push(parse_quote! { #[as_ref] });
+                attributes.push(parse_quote! { #[as_mut] });
+
+                if self.supertypes.len() == 1 {
+                    attributes.push(parse_quote! { #[deref] });
+                    attributes.push(parse_quote! { #[deref_mut] });
+                }
+                if !ty.is_simple() {
+                    attributes.push(parse_quote! { #[holder(use_place_holder)] });
+                }
+
+                let (name, ty) = match ty {
+                    TypeRef::Named { name, .. } | TypeRef::Entity { name, .. } => {
+                        let ty = format_ident!("{}", name.to_pascal_case());
+                        (format_ident!("{}", name.to_safe()), parse_quote! { #ty })
+                    }
+                    _ => unreachable!(),
+                };
+
+                Field {
+                    name,
+                    ty,
+                    attributes,
+                }
+            })
+            .collect()
+    }
+
+    fn derives(&self) -> Vec<syn::Path> {
+        let mut derives = vec![
+            syn::parse_str("Debug").unwrap(),
+            syn::parse_str("Clone").unwrap(),
+            syn::parse_str("PartialEq").unwrap(),
+            syn::parse_str("::derive_new::new").unwrap(),
+            syn::parse_str("Holder").unwrap(),
+        ];
+        if !self.supertypes.is_empty() {
+            derives.push(syn::parse_str("AsRef").unwrap());
+            derives.push(syn::parse_str("AsMut").unwrap());
+        }
+        if self.supertypes.len() == 1 {
+            derives.push(syn::parse_str("Deref").unwrap());
+            derives.push(syn::parse_str("DerefMut").unwrap());
+        }
+        derives
+    }
+}
+
+impl ToTokens for Entity {
+    fn to_tokens(&self, tokens: &mut TokenStream) {
+        let name = self.name_ident();
+        let field_name = self.field_ident();
+
+        // Each component of struct is called "field" in Rust,
+        // and "attribute" refers other items
+        //
+        // https://doc.rust-lang.org/std/keyword.struct.html
+        let fields = self
+            .attributes
+            .iter()
+            .map(|attr| Field::from(attr.clone()))
+            .collect::<Vec<Field>>();
+        let supertype_fields = self.supertype_fields();
+
+        let derive = self.derives();
 
         tokens.append_all(quote! {
-            #[derive(Debug, Clone, PartialEq, ::derive_new::new, ::ruststep_derive::Holder)]
+            #( #[derive(#derive)] )*
             #[holder(table = Tables)]
             #[holder(field = #field_name)]
             #[holder(generate_deserialize)]
             pub struct #name {
-                #(
-                #use_place_holder
-                pub #attr_name : #attr_type,
-                )*
+                #(#supertype_fields,)*
+                #(#fields,)*
             }
         });
 
+        // Generate `Any` enum if this entity is a supertype of other entities
         if !self.subtypes.is_empty() {
-            let subtypes = &self.subtypes;
-            let names: Vec<_> = subtypes
-                .iter()
-                .map(|ty| match &ty {
-                    TypeRef::Entity { name, .. } => format_ident!("{}", name),
-                    _ => unreachable!(),
-                })
-                .collect();
-            let enum_name = format_ident!("{}Any", name);
-            tokens.append_all(quote! {
-                #[derive(Debug, Clone, PartialEq, ::ruststep_derive::Holder)]
-                #[holder(table = Tables)]
-                #[holder(generate_deserialize)]
-                pub enum #enum_name {
-                    #(
-                    #[holder(use_place_holder)]
-                    #[holder(field = #names)]
-                    #subtypes(Box<#subtypes>)
-                    ),*
-                }
-            }); // tokens.append_all
+            self.generate_any_enum(tokens);
+            // Generate `impl Into<XxxAny> for Yyy` for self and all subtypes
+            self.generate_into_any(tokens);
+            self.generate_asref_from_any(tokens);
         }
     }
 }

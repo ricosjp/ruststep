@@ -1,9 +1,6 @@
 //! AST for entity declarations
 
-use crate::ast::{algorithm::*, expression::*, types::*};
-
-#[cfg(doc)]
-use crate::parser::*;
+use crate::{ast::*, parser::*};
 
 /// Parsed result of EXPRESS's ENTITY
 #[derive(Debug, Clone, PartialEq)]
@@ -24,6 +21,8 @@ pub struct Entity {
     pub unique_clause: Option<UniqueClause>,
     pub where_clause: Option<WhereClause>,
 }
+
+crate::derive_ast_component!(Entity, entity_decl);
 
 impl Entity {
     pub fn has_supertype_decl(&self) -> bool {

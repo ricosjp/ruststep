@@ -2,39 +2,32 @@ use ruststep_derive::{as_holder, Holder};
 use std::collections::HashMap;
 
 pub struct Table {
+    e: HashMap<u64, as_holder!(E)>,
     a: HashMap<u64, as_holder!(A)>,
     b: HashMap<u64, as_holder!(B)>,
-    c: HashMap<u64, as_holder!(C)>,
+}
+
+#[derive(Debug, Clone, PartialEq, ::serde::Deserialize)]
+pub struct Simple(pub f64);
+
+#[derive(Debug, Clone, PartialEq, Holder)]
+#[holder(table = Table)]
+#[holder(field = e)]
+#[holder(generate_deserialize)]
+pub struct E {
+    simple: Simple,
 }
 
 #[derive(Debug, Clone, PartialEq, Holder)]
 #[holder(table = Table)]
 #[holder(field = a)]
 #[holder(generate_deserialize)]
-pub struct A {
-    pub x: f64,
-    pub y: Option<f64>,
-}
+pub struct A(#[holder(use_place_holder)] pub E);
 
 #[derive(Debug, Clone, PartialEq, Holder)]
 #[holder(table = Table)]
 #[holder(field = b)]
 #[holder(generate_deserialize)]
-pub struct B {
-    pub z: f64,
-    #[holder(use_place_holder)]
-    pub a: A,
-}
-
-#[derive(Debug, Clone, PartialEq, Holder)]
-#[holder(table = Table)]
-#[holder(field = c)]
-#[holder(generate_deserialize)]
-pub struct C {
-    #[holder(use_place_holder)]
-    pub p: A,
-    #[holder(use_place_holder)]
-    pub q: Option<B>,
-}
+pub struct B(pub f64, #[holder(use_place_holder)] pub A);
 
 fn main() {}

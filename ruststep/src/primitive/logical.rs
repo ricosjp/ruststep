@@ -1,4 +1,4 @@
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use std::ops::*;
 
 /// `LOGICAL` type
@@ -56,7 +56,7 @@ use std::ops::*;
 /// assert_eq!(Logical::Unknown ^ Logical::Unknown, Logical::Unknown);
 /// assert_eq!(Logical::Unknown ^ Logical::False, Logical::Unknown);
 /// ```
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord, Deserialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord, Serialize, Deserialize)]
 pub enum Logical {
     False,
     Unknown,

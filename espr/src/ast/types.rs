@@ -1,9 +1,10 @@
 //! AST for type declaration
 
-use crate::ast::{algorithm::*, expression::*};
-
-#[cfg(doc)]
-use crate::parser::*;
+use crate::{
+    ast::{algorithm::*, expression::*},
+    derive_ast_component,
+    parser::*,
+};
 
 /// Type declaration by [type_decl].
 #[derive(Debug, Clone, PartialEq)]
@@ -76,6 +77,8 @@ pub enum SimpleType {
     /// 8.1.7 Binary data type
     Binary { width_spec: Option<WidthSpec> },
 }
+
+derive_ast_component!(SimpleType, simple_types);
 
 /// Output of [width_spec]
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]

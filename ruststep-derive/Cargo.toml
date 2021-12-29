@@ -1,8 +1,9 @@
 [package]
 name = "ruststep-derive"
 version = "0.1.0"
-edition = "2018"
 authors = ["Toshiki Teramura <toshiki.teramura@gmail.com>"]
+edition = "2021"
+rust-version = "1.56.0"
 
 description   = "proc-macro for ruststep"
 documentation = "https://ricosjp.github.io/ruststep/ruststep_derive/index.html"
@@ -27,9 +28,13 @@ proc-macro-error = "1.0.4"
 serde = "1.0.129"
 trybuild = "1.0.45"
 itertools = "0.10.1"
+insta = "1.8.0"
 
 [dev-dependencies.ruststep]
 path = "../ruststep"
+
+[dev-dependencies.espr]
+path = "../espr"
 
 [package.metadata.release]
 no-dev-version = true

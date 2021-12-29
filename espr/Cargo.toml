@@ -2,7 +2,8 @@
 name = "espr"
 version = "0.1.0"
 authors = ["Yoshinori Tanimura <tanimura@ricos.co.jp>", "Toshiki Teramura <teramura@ricos.co.jp"]
-edition = "2018"
+edition = "2021"
+rust-version = "1.56.0"
 
 description   = "EXPRESS Language compiler"
 documentation = "https://ricosjp.github.io/ruststep/espr/index.html"
@@ -28,6 +29,11 @@ itertools = "0.10.1"
 maplit = "1.0.2"
 thiserror = "1.0.26"
 structopt = "0.3.22"
+check_keyword = "0.1.1"
+
+[dev-dependencies]
+insta = "1.8.0"
+maplit = "1.0.2"
 
 [package.metadata.release]
 no-dev-version = true
