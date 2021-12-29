@@ -136,6 +136,7 @@ impl Entity {
         }
     }
 
+    /// Generate `impl AsRef<Self> for SelfAny` and `impl AsRef<Super> for SelfAny`
     fn generate_asref_from_any(&self, tokens: &mut TokenStream) {
         let any = self.any_ident();
         let name = self.name_ident();
