@@ -4,26 +4,50 @@ use check_keyword::CheckKeyword;
 use inflector::Inflector;
 use proc_macro2::TokenStream;
 use quote::*;
+use syn::parse_quote;
 
-impl ToTokens for EntityAttribute {
+// Each component of Rust struct corresponding to ENTITY in EXPRESS
+struct Field {
+    name: syn::Ident,
+    ty: syn::Type,
+    attributes: Vec<syn::Attribute>,
+}
+
+impl From<EntityAttribute> for Field {
+    fn from(attr: EntityAttribute) -> Self {
+        let EntityAttribute { name, ty, optional } = attr;
+
+        let name = format_ident!("{}", name.to_safe());
+        let attributes = if ty.is_simple() {
+            Vec::new()
+        } else {
+            vec![parse_quote! { #[holder(use_place_holder)] }]
+        };
+        let ty = if optional {
+            parse_quote! { Option<#ty> }
+        } else {
+            parse_quote! { #ty }
+        };
+
+        Field {
+            name,
+            ty,
+            attributes,
+        }
+    }
+}
+
+impl ToTokens for Field {
     fn to_tokens(&self, tokens: &mut TokenStream) {
-        let EntityAttribute { name, ty, optional } = self;
-
-        let attr_name = format_ident!("{}", name.to_safe());
-        let attr_type = if *optional {
-            quote! { Option<#ty> }
-        } else {
-            quote! { #ty }
-        };
-        let use_place_holder = if ty.is_simple() {
-            quote! {}
-        } else {
-            quote! { #[holder(use_place_holder)] }
-        };
+        let Field {
+            name,
+            ty,
+            attributes,
+        } = self;
 
         tokens.append_all(quote! {
-            #use_place_holder
-            pub #attr_name : #attr_type
+            #( #attributes )*
+            pub #name : #ty
         });
     }
 }
@@ -112,51 +136,56 @@ impl Entity {
         }
     }
 
-    fn supertype_attributes(&self) -> Vec<TokenStream> {
-        let single_supertype = self.supertypes.len() == 1;
+    fn supertype_fields(&self) -> Vec<Field> {
         self.supertypes
             .iter()
             .map(|ty| {
-                let use_place_holder = if ty.is_simple() {
-                    quote! {}
-                } else {
-                    quote! { #[holder(use_place_holder)] }
-                };
-                let derive_attr = if single_supertype {
-                    quote! {#[as_ref] #[as_mut] #[deref] #[deref_mut]}
-                } else {
-                    quote! {#[as_ref] #[as_mut]}
-                };
-                let (attr, ty) = match ty {
-                    TypeRef::Named { name, .. } | TypeRef::Entity { name, .. } => (
-                        format_ident!("{}", name.to_safe()),
-                        format_ident!("{}", name.to_pascal_case()),
-                    ),
+                let mut attributes = Vec::new();
+                attributes.push(parse_quote! { #[as_ref] });
+                attributes.push(parse_quote! { #[as_mut] });
+
+                if self.supertypes.len() == 1 {
+                    attributes.push(parse_quote! { #[deref] });
+                    attributes.push(parse_quote! { #[deref_mut] });
+                }
+                if !ty.is_simple() {
+                    attributes.push(parse_quote! { #[holder(use_place_holder)] });
+                }
+
+                let (name, ty) = match ty {
+                    TypeRef::Named { name, .. } | TypeRef::Entity { name, .. } => {
+                        let ty = format_ident!("{}", name.to_pascal_case());
+                        (format_ident!("{}", name.to_safe()), parse_quote! { #ty })
+                    }
                     _ => unreachable!(),
                 };
-                quote! {
-                    #derive_attr
-                    #use_place_holder
-                    pub #attr: #ty
+
+                Field {
+                    name,
+                    ty,
+                    attributes,
                 }
             })
             .collect()
     }
 
-    fn generate_derive(&self) -> TokenStream {
-        if self.supertypes.is_empty() {
-            quote! {
-                    #[derive(Debug, Clone, PartialEq, ::derive_new::new, Holder)]
-            }
-        } else if self.supertypes.len() == 1 {
-            quote! {
-                #[derive(Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, ::derive_new::new, Holder)]
-            }
-        } else {
-            quote! {
-                #[derive(Debug, Clone, PartialEq, AsRef, AsMut, ::derive_new::new, Holder)]
-            }
+    fn derives(&self) -> Vec<syn::Path> {
+        let mut derives = vec![
+            syn::parse_str("Debug").unwrap(),
+            syn::parse_str("Clone").unwrap(),
+            syn::parse_str("PartialEq").unwrap(),
+            syn::parse_str("::derive_new::new").unwrap(),
+            syn::parse_str("Holder").unwrap(),
+        ];
+        if !self.supertypes.is_empty() {
+            derives.push(syn::parse_str("AsRef").unwrap());
+            derives.push(syn::parse_str("AsMut").unwrap());
         }
+        if self.supertypes.len() == 1 {
+            derives.push(syn::parse_str("Deref").unwrap());
+            derives.push(syn::parse_str("DerefMut").unwrap());
+        }
+        derives
     }
 }
 
@@ -165,18 +194,27 @@ impl ToTokens for Entity {
         let name = self.name_ident();
         let field_name = self.field_ident();
 
-        let attributes = &self.attributes;
-        let supertype_attributes = self.supertype_attributes();
-        let derive = self.generate_derive();
+        // Each component of struct is called "field" in Rust,
+        // and "attribute" refers other items
+        //
+        // https://doc.rust-lang.org/std/keyword.struct.html
+        let fields = self
+            .attributes
+            .iter()
+            .map(|attr| Field::from(attr.clone()))
+            .collect::<Vec<Field>>();
+        let supertype_fields = self.supertype_fields();
+
+        let derive = self.derives();
 
         tokens.append_all(quote! {
-            #derive
+            #( #[derive(#derive)] )*
             #[holder(table = Tables)]
             #[holder(field = #field_name)]
             #[holder(generate_deserialize)]
             pub struct #name {
-                #(#supertype_attributes,)*
-                #(#attributes,)*
+                #(#supertype_fields,)*
+                #(#fields,)*
             }
         });
 
