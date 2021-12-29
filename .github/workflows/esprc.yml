@@ -27,29 +27,23 @@ jobs:
         command: run
         args: --bin esprc -- ./schemas/APs/10303-${{ matrix.ap }}-aim-long.exp --check
 
-  generate-ap201:
+  generate:
     runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        ap:
+          - "201"
+          - "203"
     steps:
     - uses: actions/checkout@v1
     - uses: actions-rs/toolchain@v1
       with:
         toolchain: "1.56.0"
         profile: minimal
-        components: rustfmt
         default: true
         override: true
-    - name: Generate AP201 binding
+    - name: Generate binding
       run: |
         set -eo pipefail
-        cargo run --bin esprc -- ./schemas/APs/10303-201-aim-long.exp | rustfmt > ./ruststep/src/ap201.rs
-        git diff --exit-code
-
-  generate-ap203:
-    runs-on: ubuntu-20.04
-    steps:
-    - uses: actions/checkout@v1
-    - name: Generate AP203 binding
-      run: |
-        set -eo pipefail
-        cargo run --bin esprc -- ./schemas/APs/10303-203-aim-long.exp | rustfmt > ./ruststep/src/ap203.rs
+        cargo run --bin esprc -- ./schemas/APs/10303-${{ matrix.ap}}-aim-long.exp | rustfmt > ./ruststep/src/ap${{ matrix.ap }}.rs
         git diff --exit-code
