@@ -2819,7 +2819,7 @@ pub mod explicit_draughting {
         }
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = angular_dimension)]
@@ -2833,7 +2833,7 @@ pub mod explicit_draughting {
         pub dimension_curve_directed_callout: DimensionCurveDirectedCallout,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = annotation_curve_occurrence)]
@@ -2912,7 +2912,7 @@ pub mod explicit_draughting {
         }
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = annotation_fill_area)]
@@ -2928,7 +2928,7 @@ pub mod explicit_draughting {
         pub boundaries: Vec<CurveAny>,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = annotation_fill_area_occurrence)]
@@ -2944,7 +2944,7 @@ pub mod explicit_draughting {
         pub fill_style_target: PointAny,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = annotation_occurrence)]
@@ -3047,7 +3047,7 @@ pub mod explicit_draughting {
         }
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = annotation_subfigure_occurrence)]
@@ -3061,7 +3061,7 @@ pub mod explicit_draughting {
         pub annotation_symbol_occurrence: AnnotationSymbolOccurrence,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = annotation_symbol)]
@@ -3075,7 +3075,7 @@ pub mod explicit_draughting {
         pub mapped_item: MappedItem,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = annotation_symbol_occurrence)]
@@ -3142,7 +3142,7 @@ pub mod explicit_draughting {
         }
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = annotation_text)]
@@ -3156,7 +3156,7 @@ pub mod explicit_draughting {
         pub mapped_item: MappedItem,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = annotation_text_occurrence)]
@@ -3356,7 +3356,7 @@ pub mod explicit_draughting {
         }
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = axis2_placement_2d)]
@@ -3372,7 +3372,7 @@ pub mod explicit_draughting {
         pub ref_direction: Option<Direction>,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = b_spline_curve)]
@@ -3479,7 +3479,7 @@ pub mod explicit_draughting {
         }
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = b_spline_curve_with_knots)]
@@ -3496,7 +3496,7 @@ pub mod explicit_draughting {
         pub knot_spec: KnotType,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = bezier_curve)]
@@ -3510,7 +3510,7 @@ pub mod explicit_draughting {
         pub b_spline_curve: BSplineCurve,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = bounded_curve)]
@@ -3597,7 +3597,7 @@ pub mod explicit_draughting {
         }
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = calendar_date)]
@@ -3613,7 +3613,7 @@ pub mod explicit_draughting {
         pub month_component: MonthInYearNumber,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = camera_image)]
@@ -3666,7 +3666,7 @@ pub mod explicit_draughting {
         }
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = camera_image_2d_with_scale)]
@@ -3680,7 +3680,7 @@ pub mod explicit_draughting {
         pub camera_image: CameraImage,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = camera_model)]
@@ -3733,7 +3733,7 @@ pub mod explicit_draughting {
         }
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = camera_model_d2)]
@@ -3750,7 +3750,7 @@ pub mod explicit_draughting {
         pub view_window_clipping: bool,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = camera_usage)]
@@ -3764,7 +3764,7 @@ pub mod explicit_draughting {
         pub representation_map: RepresentationMap,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = cartesian_point)]
@@ -3779,7 +3779,7 @@ pub mod explicit_draughting {
         pub coordinates: Vec<LengthMeasure>,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = circle)]
@@ -3837,7 +3837,7 @@ pub mod explicit_draughting {
         }
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = colour_rgb)]
@@ -3854,7 +3854,7 @@ pub mod explicit_draughting {
         pub blue: f64,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = colour_specification)]
@@ -3911,7 +3911,7 @@ pub mod explicit_draughting {
         }
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = composite_curve)]
@@ -3938,7 +3938,7 @@ pub mod explicit_draughting {
         pub parent_curve: CurveAny,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = composite_text)]
@@ -4017,7 +4017,7 @@ pub mod explicit_draughting {
         }
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = composite_text_with_associated_curves)]
@@ -4033,7 +4033,7 @@ pub mod explicit_draughting {
         pub associated_curves: Vec<CurveAny>,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = composite_text_with_blanking_box)]
@@ -4049,7 +4049,7 @@ pub mod explicit_draughting {
         pub blanking: PlanarBox,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = composite_text_with_extent)]
@@ -4065,7 +4065,7 @@ pub mod explicit_draughting {
         pub extent: PlanarExtentAny,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = conic)]
@@ -4148,7 +4148,7 @@ pub mod explicit_draughting {
         }
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = context_dependent_invisibility)]
@@ -4218,7 +4218,7 @@ pub mod explicit_draughting {
         pub description: Label,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = conversion_based_unit)]
@@ -4235,7 +4235,7 @@ pub mod explicit_draughting {
         pub conversion_factor: MeasureWithUnitAny,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = curve)]
@@ -4316,7 +4316,7 @@ pub mod explicit_draughting {
         }
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = curve_dimension)]
@@ -4396,7 +4396,7 @@ pub mod explicit_draughting {
         }
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = datum_feature_callout)]
@@ -4410,7 +4410,7 @@ pub mod explicit_draughting {
         pub draughting_callout: DraughtingCallout,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = datum_target_callout)]
@@ -4424,7 +4424,7 @@ pub mod explicit_draughting {
         pub draughting_callout: DraughtingCallout,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = defined_symbol)]
@@ -4442,7 +4442,7 @@ pub mod explicit_draughting {
         pub target: SymbolTarget,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = diameter_dimension)]
@@ -4456,7 +4456,7 @@ pub mod explicit_draughting {
         pub dimension_curve_directed_callout: DimensionCurveDirectedCallout,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = dimension_callout_component_relationship)]
@@ -4470,7 +4470,7 @@ pub mod explicit_draughting {
         pub draughting_callout_relationship: DraughtingCalloutRelationship,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = dimension_callout_relationship)]
@@ -4484,7 +4484,7 @@ pub mod explicit_draughting {
         pub draughting_callout_relationship: DraughtingCalloutRelationship,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = dimension_curve)]
@@ -4498,7 +4498,7 @@ pub mod explicit_draughting {
         pub annotation_curve_occurrence: AnnotationCurveOccurrence,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = dimension_curve_directed_callout)]
@@ -4601,7 +4601,7 @@ pub mod explicit_draughting {
         }
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = dimension_curve_terminator)]
@@ -4616,7 +4616,7 @@ pub mod explicit_draughting {
         pub role: DimensionExtentUsage,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = dimension_pair)]
@@ -4643,7 +4643,7 @@ pub mod explicit_draughting {
         pub luminous_intensity_exponent: f64,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = direction)]
@@ -4714,7 +4714,7 @@ pub mod explicit_draughting {
         pub product_data_type: Label,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = draughting_annotation_occurrence)]
@@ -4728,7 +4728,7 @@ pub mod explicit_draughting {
         pub annotation_occurrence: AnnotationOccurrence,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = draughting_approval_assignment)]
@@ -4744,7 +4744,7 @@ pub mod explicit_draughting {
         pub approved_items: Vec<ApprovedItem>,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = draughting_callout)]
@@ -4948,7 +4948,7 @@ pub mod explicit_draughting {
         }
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = draughting_contract_assignment)]
@@ -4964,7 +4964,7 @@ pub mod explicit_draughting {
         pub items: Vec<ContractedItem>,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = draughting_drawing_revision)]
@@ -4978,7 +4978,7 @@ pub mod explicit_draughting {
         pub drawing_revision: DrawingRevision,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = draughting_elements)]
@@ -4992,7 +4992,7 @@ pub mod explicit_draughting {
         pub draughting_callout: DraughtingCallout,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = draughting_group_assignment)]
@@ -5008,7 +5008,7 @@ pub mod explicit_draughting {
         pub items: Vec<DraughtingGroupedItem>,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = draughting_model)]
@@ -5022,7 +5022,7 @@ pub mod explicit_draughting {
         pub representation: Representation,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = draughting_organization_assignment)]
@@ -5038,7 +5038,7 @@ pub mod explicit_draughting {
         pub assigned_items: Vec<DraughtingOrganizationItem>,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = draughting_person_and_organization_assignment)]
@@ -5054,7 +5054,7 @@ pub mod explicit_draughting {
         pub assigned_items: Vec<DraughtingOrganizationItem>,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = draughting_person_assignment)]
@@ -5070,7 +5070,7 @@ pub mod explicit_draughting {
         pub assigned_items: Vec<DraughtingOrganizationItem>,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = draughting_pre_defined_colour)]
@@ -5084,7 +5084,7 @@ pub mod explicit_draughting {
         pub pre_defined_colour: PreDefinedColour,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = draughting_pre_defined_curve_font)]
@@ -5098,7 +5098,7 @@ pub mod explicit_draughting {
         pub pre_defined_curve_font: PreDefinedCurveFont,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = draughting_pre_defined_text_font)]
@@ -5112,7 +5112,7 @@ pub mod explicit_draughting {
         pub pre_defined_text_font: PreDefinedTextFont,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = draughting_presented_item)]
@@ -5128,7 +5128,7 @@ pub mod explicit_draughting {
         pub items: Vec<DraughtingPresentedItemSelect>,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = draughting_security_classification_assignment)]
@@ -5144,7 +5144,7 @@ pub mod explicit_draughting {
         pub assigned_items: Vec<ClassifiedItem>,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = draughting_specification_reference)]
@@ -5160,7 +5160,7 @@ pub mod explicit_draughting {
         pub specified_items: Vec<SpecifiedItem>,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = draughting_subfigure_representation)]
@@ -5174,7 +5174,7 @@ pub mod explicit_draughting {
         pub symbol_representation: SymbolRepresentation,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = draughting_symbol_representation)]
@@ -5229,7 +5229,7 @@ pub mod explicit_draughting {
         }
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = draughting_text_literal_with_delineation)]
@@ -5261,7 +5261,7 @@ pub mod explicit_draughting {
         pub drawing_type: Option<Label>,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = drawing_revision)]
@@ -5320,7 +5320,7 @@ pub mod explicit_draughting {
         }
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = drawing_sheet_layout)]
@@ -5334,7 +5334,7 @@ pub mod explicit_draughting {
         pub draughting_symbol_representation: DraughtingSymbolRepresentation,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = drawing_sheet_revision)]
@@ -5349,7 +5349,7 @@ pub mod explicit_draughting {
         pub revision_identifier: Identifier,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = drawing_sheet_revision_usage)]
@@ -5364,7 +5364,7 @@ pub mod explicit_draughting {
         pub sheet_number: Identifier,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = ellipse)]
@@ -5388,7 +5388,7 @@ pub mod explicit_draughting {
         pub source_id: SourceItem,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = externally_defined_curve_font)]
@@ -5401,7 +5401,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub externally_defined_item: ExternallyDefinedItem,
     }
-    #[derive(Debug, Clone, PartialEq, AsRef, AsMut, :: derive_new :: new, Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut)]
     # [holder (table = Tables)]
     # [holder (field = externally_defined_hatch_style)]
     #[holder(generate_deserialize)]
@@ -5491,7 +5491,7 @@ pub mod explicit_draughting {
         }
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = externally_defined_symbol)]
@@ -5505,7 +5505,7 @@ pub mod explicit_draughting {
         pub externally_defined_item: ExternallyDefinedItem,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = externally_defined_text_font)]
@@ -5518,7 +5518,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub externally_defined_item: ExternallyDefinedItem,
     }
-    #[derive(Debug, Clone, PartialEq, AsRef, AsMut, :: derive_new :: new, Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut)]
     # [holder (table = Tables)]
     # [holder (field = externally_defined_tile_style)]
     #[holder(generate_deserialize)]
@@ -5551,7 +5551,7 @@ pub mod explicit_draughting {
         pub fill_colour: ColourAny,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = fill_area_style_hatching)]
@@ -5574,7 +5574,7 @@ pub mod explicit_draughting {
         pub hatch_line_angle: PlaneAngleMeasure,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = fill_area_style_tile_symbol_with_style)]
@@ -5590,7 +5590,7 @@ pub mod explicit_draughting {
         pub symbol: AnnotationSymbolOccurrenceAny,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = fill_area_style_tiles)]
@@ -5609,7 +5609,7 @@ pub mod explicit_draughting {
         pub tiling_scale: PositiveRatioMeasure,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = geometric_curve_set)]
@@ -5623,7 +5623,7 @@ pub mod explicit_draughting {
         pub geometric_set: GeometricSet,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = geometric_representation_context)]
@@ -5638,7 +5638,7 @@ pub mod explicit_draughting {
         pub coordinate_space_dimension: DimensionCount,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = geometric_representation_item)]
@@ -5923,7 +5923,7 @@ pub mod explicit_draughting {
         }
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = geometric_set)]
@@ -5978,7 +5978,7 @@ pub mod explicit_draughting {
         }
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = geometrical_tolerance_callout)]
@@ -5992,7 +5992,7 @@ pub mod explicit_draughting {
         pub draughting_callout: DraughtingCallout,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = geometrically_bounded_2d_wireframe_representation)]
@@ -6006,7 +6006,7 @@ pub mod explicit_draughting {
         pub shape_representation: ShapeRepresentation,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = global_unit_assigned_context)]
@@ -6079,7 +6079,7 @@ pub mod explicit_draughting {
         pub related_group: Group,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = hyperbola)]
@@ -6132,7 +6132,7 @@ pub mod explicit_draughting {
         }
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = leader_curve)]
@@ -6146,7 +6146,7 @@ pub mod explicit_draughting {
         pub annotation_curve_occurrence: AnnotationCurveOccurrence,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = leader_directed_callout)]
@@ -6201,7 +6201,7 @@ pub mod explicit_draughting {
         }
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = leader_directed_dimension)]
@@ -6215,7 +6215,7 @@ pub mod explicit_draughting {
         pub leader_directed_callout: LeaderDirectedCallout,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = leader_terminator)]
@@ -6229,7 +6229,7 @@ pub mod explicit_draughting {
         pub terminator_symbol: TerminatorSymbol,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = length_measure_with_unit)]
@@ -6243,7 +6243,7 @@ pub mod explicit_draughting {
         pub measure_with_unit: MeasureWithUnit,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = length_unit)]
@@ -6257,7 +6257,7 @@ pub mod explicit_draughting {
         pub named_unit: NamedUnit,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = line)]
@@ -6275,7 +6275,7 @@ pub mod explicit_draughting {
         pub dir: Vector,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = linear_dimension)]
@@ -6289,7 +6289,7 @@ pub mod explicit_draughting {
         pub dimension_curve_directed_callout: DimensionCurveDirectedCallout,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = mapped_item)]
@@ -6480,7 +6480,7 @@ pub mod explicit_draughting {
         }
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = offset_curve_2d)]
@@ -6498,7 +6498,7 @@ pub mod explicit_draughting {
         pub self_intersect: Logical,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = one_direction_repeat_factor)]
@@ -6555,7 +6555,7 @@ pub mod explicit_draughting {
         }
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = ordinate_dimension)]
@@ -6624,7 +6624,7 @@ pub mod explicit_draughting {
         pub name: Label,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = organizational_address)]
@@ -6641,7 +6641,7 @@ pub mod explicit_draughting {
         pub description: Text,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = parabola)]
@@ -6776,7 +6776,7 @@ pub mod explicit_draughting {
         pub name: Label,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = personal_address)]
@@ -6793,7 +6793,7 @@ pub mod explicit_draughting {
         pub description: Text,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = placement)]
@@ -6848,7 +6848,7 @@ pub mod explicit_draughting {
         }
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = planar_box)]
@@ -6864,7 +6864,7 @@ pub mod explicit_draughting {
         pub placement: Axis2Placement,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = planar_extent)]
@@ -6917,7 +6917,7 @@ pub mod explicit_draughting {
         }
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = plane_angle_measure_with_unit)]
@@ -6931,7 +6931,7 @@ pub mod explicit_draughting {
         pub measure_with_unit: MeasureWithUnit,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = plane_angle_unit)]
@@ -6945,7 +6945,7 @@ pub mod explicit_draughting {
         pub named_unit: NamedUnit,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = point)]
@@ -7006,7 +7006,7 @@ pub mod explicit_draughting {
         }
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = point_on_curve)]
@@ -7023,7 +7023,7 @@ pub mod explicit_draughting {
         pub point_parameter: ParameterValue,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = polyline)]
@@ -7038,7 +7038,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub points: Vec<CartesianPoint>,
     }
-    #[derive(Debug, Clone, PartialEq, AsRef, AsMut, :: derive_new :: new, Holder)]
+    #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut)]
     # [holder (table = Tables)]
     # [holder (field = pre_defined_colour)]
     #[holder(generate_deserialize)]
@@ -7106,7 +7106,7 @@ pub mod explicit_draughting {
         }
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = pre_defined_curve_font)]
@@ -7161,7 +7161,7 @@ pub mod explicit_draughting {
         }
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = pre_defined_dimension_symbol)]
@@ -7175,7 +7175,7 @@ pub mod explicit_draughting {
         pub pre_defined_symbol: PreDefinedSymbol,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = pre_defined_geometrical_tolerance_symbol)]
@@ -7252,7 +7252,7 @@ pub mod explicit_draughting {
         }
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = pre_defined_point_marker_symbol)]
@@ -7266,7 +7266,7 @@ pub mod explicit_draughting {
         pub pre_defined_symbol: PreDefinedSymbol,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = pre_defined_symbol)]
@@ -7357,7 +7357,7 @@ pub mod explicit_draughting {
         }
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = pre_defined_terminator_symbol)]
@@ -7371,7 +7371,7 @@ pub mod explicit_draughting {
         pub pre_defined_symbol: PreDefinedSymbol,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = pre_defined_text_font)]
@@ -7426,7 +7426,7 @@ pub mod explicit_draughting {
         }
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = presentation_area)]
@@ -7501,7 +7501,7 @@ pub mod explicit_draughting {
         pub presentation: PresentationRepresentationAny,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = presentation_representation)]
@@ -7649,7 +7649,7 @@ pub mod explicit_draughting {
         }
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = presentation_style_by_context)]
@@ -7665,7 +7665,7 @@ pub mod explicit_draughting {
         pub style_context: StyleContextSelect,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = presentation_view)]
@@ -7734,7 +7734,7 @@ pub mod explicit_draughting {
         pub frame_of_reference: Vec<ProductContext>,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = product_context)]
@@ -7761,7 +7761,7 @@ pub mod explicit_draughting {
         pub frame_of_reference: ProductDefinitionContext,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = product_definition_context)]
@@ -7786,7 +7786,7 @@ pub mod explicit_draughting {
         pub of_product: Product,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = product_definition_shape)]
@@ -7800,7 +7800,7 @@ pub mod explicit_draughting {
         pub property_definition: PropertyDefinition,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = projection_curve)]
@@ -7814,7 +7814,7 @@ pub mod explicit_draughting {
         pub annotation_curve_occurrence: AnnotationCurveOccurrence,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = projection_directed_callout)]
@@ -7953,7 +7953,7 @@ pub mod explicit_draughting {
         }
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = quasi_uniform_curve)]
@@ -7967,7 +7967,7 @@ pub mod explicit_draughting {
         pub b_spline_curve: BSplineCurve,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = radius_dimension)]
@@ -7981,7 +7981,7 @@ pub mod explicit_draughting {
         pub dimension_curve_directed_callout: DimensionCurveDirectedCallout,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = rational_b_spline_curve)]
@@ -8271,7 +8271,7 @@ pub mod explicit_draughting {
         pub name: Label,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = shape_definition_representation)]
@@ -8285,7 +8285,7 @@ pub mod explicit_draughting {
         pub property_definition_representation: PropertyDefinitionRepresentation,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = shape_representation)]
@@ -8346,7 +8346,7 @@ pub mod explicit_draughting {
         }
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = si_unit)]
@@ -8362,7 +8362,7 @@ pub mod explicit_draughting {
         pub name: SiUnitName,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = structured_dimension_callout)]
@@ -8376,7 +8376,7 @@ pub mod explicit_draughting {
         pub draughting_callout: DraughtingCallout,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = styled_item)]
@@ -8441,7 +8441,7 @@ pub mod explicit_draughting {
         pub colour_of_symbol: ColourAny,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = symbol_representation)]
@@ -8508,7 +8508,7 @@ pub mod explicit_draughting {
         }
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = symbol_representation_map)]
@@ -8531,7 +8531,7 @@ pub mod explicit_draughting {
         pub style_of_symbol: SymbolStyleSelect,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = symbol_target)]
@@ -8549,7 +8549,7 @@ pub mod explicit_draughting {
         pub y_scale: PositiveRatioMeasure,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = terminator_symbol)]
@@ -8618,7 +8618,7 @@ pub mod explicit_draughting {
         }
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = text_literal)]
@@ -8714,7 +8714,7 @@ pub mod explicit_draughting {
         }
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = text_literal_with_associated_curves)]
@@ -8730,7 +8730,7 @@ pub mod explicit_draughting {
         pub associated_curves: Vec<CurveAny>,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = text_literal_with_blanking_box)]
@@ -8746,7 +8746,7 @@ pub mod explicit_draughting {
         pub blanking: PlanarBox,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = text_literal_with_delineation)]
@@ -8806,7 +8806,7 @@ pub mod explicit_draughting {
         }
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = text_literal_with_extent)]
@@ -8877,7 +8877,7 @@ pub mod explicit_draughting {
         pub text_colour: ColourAny,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = text_style_with_box_characteristics)]
@@ -8893,7 +8893,7 @@ pub mod explicit_draughting {
         pub characteristics: Vec<BoxCharacteristicSelect>,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = text_style_with_mirror)]
@@ -8909,7 +8909,7 @@ pub mod explicit_draughting {
         pub mirror_placement: Axis2Placement,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = trimmed_curve)]
@@ -8931,7 +8931,7 @@ pub mod explicit_draughting {
         pub master_representation: TrimmingPreference,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = two_direction_repeat_factor)]
@@ -8947,7 +8947,7 @@ pub mod explicit_draughting {
         pub second_repeat_factor: Vector,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = uniform_curve)]
@@ -8961,7 +8961,7 @@ pub mod explicit_draughting {
         pub b_spline_curve: BSplineCurve,
     }
     #[derive(
-        Debug, Clone, PartialEq, AsRef, AsMut, Deref, DerefMut, :: derive_new :: new, Holder,
+        Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
     # [holder (table = Tables)]
     # [holder (field = vector)]
