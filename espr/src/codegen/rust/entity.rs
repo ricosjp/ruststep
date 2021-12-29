@@ -136,6 +136,54 @@ impl Entity {
         }
     }
 
+    /// Generate `impl AsRef<Self> for SelfAny` and `impl AsRef<Super> for SelfAny`
+    fn generate_asref_from_any(&self, tokens: &mut TokenStream) {
+        let any = self.any_ident();
+        let name = self.name_ident();
+
+        let subtypes = self
+            .subtypes
+            .iter()
+            .map(|ty| match &ty {
+                TypeRef::Entity { name, .. } => {
+                    format_ident!("{}", name.to_pascal_case())
+                }
+                _ => unreachable!(),
+            })
+            .collect::<Vec<_>>();
+
+        tokens.append_all(quote! {
+            impl AsRef<#name> for #any {
+                fn as_ref(&self) -> &#name {
+                    match self {
+                        #any::#name (x) => x.as_ref(),
+                        #(#any::#subtypes (x) => (**x).as_ref(),)*
+                    }
+                }
+            }
+        });
+
+        for ty in &self.supertypes {
+            let supertype = match ty {
+                TypeRef::Entity { name, .. } => {
+                    format_ident!("{}", name.to_pascal_case())
+                }
+                _ => unreachable!(),
+            };
+
+            tokens.append_all(quote! {
+                impl AsRef<#supertype> for #any {
+                    fn as_ref(&self) -> &#supertype {
+                        match self {
+                            #any::#name (x) => AsRef::<#name>::as_ref(x).as_ref(),
+                            #(#any::#subtypes (x) => AsRef::<#name>::as_ref(x.as_ref()).as_ref(),)*
+                        }
+                    }
+                }
+            });
+        }
+    }
+
     fn supertype_fields(&self) -> Vec<Field> {
         self.supertypes
             .iter()
@@ -223,6 +271,7 @@ impl ToTokens for Entity {
             self.generate_any_enum(tokens);
             // Generate `impl Into<XxxAny> for Yyy` for self and all subtypes
             self.generate_into_any(tokens);
+            self.generate_asref_from_any(tokens);
         }
     }
 }

@@ -2809,6 +2809,15 @@ pub mod explicit_draughting {
             AddressAny::PersonalAddress(Box::new(self.into()))
         }
     }
+    impl AsRef<Address> for AddressAny {
+        fn as_ref(&self) -> &Address {
+            match self {
+                AddressAny::Address(x) => x.as_ref(),
+                AddressAny::OrganizationalAddress(x) => (**x).as_ref(),
+                AddressAny::PersonalAddress(x) => (**x).as_ref(),
+            }
+        }
+    }
     #[derive(
         Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
@@ -2872,6 +2881,34 @@ pub mod explicit_draughting {
     impl Into<AnnotationCurveOccurrenceAny> for ProjectionCurve {
         fn into(self) -> AnnotationCurveOccurrenceAny {
             AnnotationCurveOccurrenceAny::ProjectionCurve(Box::new(self.into()))
+        }
+    }
+    impl AsRef<AnnotationCurveOccurrence> for AnnotationCurveOccurrenceAny {
+        fn as_ref(&self) -> &AnnotationCurveOccurrence {
+            match self {
+                AnnotationCurveOccurrenceAny::AnnotationCurveOccurrence(x) => x.as_ref(),
+                AnnotationCurveOccurrenceAny::DimensionCurve(x) => (**x).as_ref(),
+                AnnotationCurveOccurrenceAny::LeaderCurve(x) => (**x).as_ref(),
+                AnnotationCurveOccurrenceAny::ProjectionCurve(x) => (**x).as_ref(),
+            }
+        }
+    }
+    impl AsRef<AnnotationOccurrence> for AnnotationCurveOccurrenceAny {
+        fn as_ref(&self) -> &AnnotationOccurrence {
+            match self {
+                AnnotationCurveOccurrenceAny::AnnotationCurveOccurrence(x) => {
+                    AsRef::<AnnotationCurveOccurrence>::as_ref(x).as_ref()
+                }
+                AnnotationCurveOccurrenceAny::DimensionCurve(x) => {
+                    AsRef::<AnnotationCurveOccurrence>::as_ref(x.as_ref()).as_ref()
+                }
+                AnnotationCurveOccurrenceAny::LeaderCurve(x) => {
+                    AsRef::<AnnotationCurveOccurrence>::as_ref(x.as_ref()).as_ref()
+                }
+                AnnotationCurveOccurrenceAny::ProjectionCurve(x) => {
+                    AsRef::<AnnotationCurveOccurrence>::as_ref(x.as_ref()).as_ref()
+                }
+            }
         }
     }
     #[derive(
@@ -2973,6 +3010,42 @@ pub mod explicit_draughting {
             AnnotationOccurrenceAny::DraughtingAnnotationOccurrence(Box::new(self.into()))
         }
     }
+    impl AsRef<AnnotationOccurrence> for AnnotationOccurrenceAny {
+        fn as_ref(&self) -> &AnnotationOccurrence {
+            match self {
+                AnnotationOccurrenceAny::AnnotationOccurrence(x) => x.as_ref(),
+                AnnotationOccurrenceAny::AnnotationCurveOccurrence(x) => (**x).as_ref(),
+                AnnotationOccurrenceAny::AnnotationFillAreaOccurrence(x) => (**x).as_ref(),
+                AnnotationOccurrenceAny::AnnotationSymbolOccurrence(x) => (**x).as_ref(),
+                AnnotationOccurrenceAny::AnnotationTextOccurrence(x) => (**x).as_ref(),
+                AnnotationOccurrenceAny::DraughtingAnnotationOccurrence(x) => (**x).as_ref(),
+            }
+        }
+    }
+    impl AsRef<StyledItem> for AnnotationOccurrenceAny {
+        fn as_ref(&self) -> &StyledItem {
+            match self {
+                AnnotationOccurrenceAny::AnnotationOccurrence(x) => {
+                    AsRef::<AnnotationOccurrence>::as_ref(x).as_ref()
+                }
+                AnnotationOccurrenceAny::AnnotationCurveOccurrence(x) => {
+                    AsRef::<AnnotationOccurrence>::as_ref(x.as_ref()).as_ref()
+                }
+                AnnotationOccurrenceAny::AnnotationFillAreaOccurrence(x) => {
+                    AsRef::<AnnotationOccurrence>::as_ref(x.as_ref()).as_ref()
+                }
+                AnnotationOccurrenceAny::AnnotationSymbolOccurrence(x) => {
+                    AsRef::<AnnotationOccurrence>::as_ref(x.as_ref()).as_ref()
+                }
+                AnnotationOccurrenceAny::AnnotationTextOccurrence(x) => {
+                    AsRef::<AnnotationOccurrence>::as_ref(x.as_ref()).as_ref()
+                }
+                AnnotationOccurrenceAny::DraughtingAnnotationOccurrence(x) => {
+                    AsRef::<AnnotationOccurrence>::as_ref(x.as_ref()).as_ref()
+                }
+            }
+        }
+    }
     #[derive(
         Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
@@ -3042,6 +3115,30 @@ pub mod explicit_draughting {
     impl Into<AnnotationSymbolOccurrenceAny> for TerminatorSymbol {
         fn into(self) -> AnnotationSymbolOccurrenceAny {
             AnnotationSymbolOccurrenceAny::TerminatorSymbol(Box::new(self.into()))
+        }
+    }
+    impl AsRef<AnnotationSymbolOccurrence> for AnnotationSymbolOccurrenceAny {
+        fn as_ref(&self) -> &AnnotationSymbolOccurrence {
+            match self {
+                AnnotationSymbolOccurrenceAny::AnnotationSymbolOccurrence(x) => x.as_ref(),
+                AnnotationSymbolOccurrenceAny::AnnotationSubfigureOccurrence(x) => (**x).as_ref(),
+                AnnotationSymbolOccurrenceAny::TerminatorSymbol(x) => (**x).as_ref(),
+            }
+        }
+    }
+    impl AsRef<AnnotationOccurrence> for AnnotationSymbolOccurrenceAny {
+        fn as_ref(&self) -> &AnnotationOccurrence {
+            match self {
+                AnnotationSymbolOccurrenceAny::AnnotationSymbolOccurrence(x) => {
+                    AsRef::<AnnotationSymbolOccurrence>::as_ref(x).as_ref()
+                }
+                AnnotationSymbolOccurrenceAny::AnnotationSubfigureOccurrence(x) => {
+                    AsRef::<AnnotationSymbolOccurrence>::as_ref(x.as_ref()).as_ref()
+                }
+                AnnotationSymbolOccurrenceAny::TerminatorSymbol(x) => {
+                    AsRef::<AnnotationSymbolOccurrence>::as_ref(x.as_ref()).as_ref()
+                }
+            }
         }
     }
     #[derive(
@@ -3117,6 +3214,15 @@ pub mod explicit_draughting {
             ApplicationContextElementAny::ProductDefinitionContext(Box::new(self.into()))
         }
     }
+    impl AsRef<ApplicationContextElement> for ApplicationContextElementAny {
+        fn as_ref(&self) -> &ApplicationContextElement {
+            match self {
+                ApplicationContextElementAny::ApplicationContextElement(x) => x.as_ref(),
+                ApplicationContextElementAny::ProductContext(x) => (**x).as_ref(),
+                ApplicationContextElementAny::ProductDefinitionContext(x) => (**x).as_ref(),
+            }
+        }
+    }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = application_protocol_definition)]
@@ -3164,6 +3270,14 @@ pub mod explicit_draughting {
     impl Into<ApprovalAssignmentAny> for DraughtingApprovalAssignment {
         fn into(self) -> ApprovalAssignmentAny {
             ApprovalAssignmentAny::DraughtingApprovalAssignment(Box::new(self.into()))
+        }
+    }
+    impl AsRef<ApprovalAssignment> for ApprovalAssignmentAny {
+        fn as_ref(&self) -> &ApprovalAssignment {
+            match self {
+                ApprovalAssignmentAny::ApprovalAssignment(x) => x.as_ref(),
+                ApprovalAssignmentAny::DraughtingApprovalAssignment(x) => (**x).as_ref(),
+            }
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -3231,6 +3345,14 @@ pub mod explicit_draughting {
     impl Into<AreaInSetAny> for DrawingSheetRevisionUsage {
         fn into(self) -> AreaInSetAny {
             AreaInSetAny::DrawingSheetRevisionUsage(Box::new(self.into()))
+        }
+    }
+    impl AsRef<AreaInSet> for AreaInSetAny {
+        fn as_ref(&self) -> &AreaInSet {
+            match self {
+                AreaInSetAny::AreaInSet(x) => x.as_ref(),
+                AreaInSetAny::DrawingSheetRevisionUsage(x) => (**x).as_ref(),
+            }
         }
     }
     #[derive(
@@ -3320,6 +3442,40 @@ pub mod explicit_draughting {
     impl Into<BSplineCurveAny> for UniformCurve {
         fn into(self) -> BSplineCurveAny {
             BSplineCurveAny::UniformCurve(Box::new(self.into()))
+        }
+    }
+    impl AsRef<BSplineCurve> for BSplineCurveAny {
+        fn as_ref(&self) -> &BSplineCurve {
+            match self {
+                BSplineCurveAny::BSplineCurve(x) => x.as_ref(),
+                BSplineCurveAny::BSplineCurveWithKnots(x) => (**x).as_ref(),
+                BSplineCurveAny::BezierCurve(x) => (**x).as_ref(),
+                BSplineCurveAny::QuasiUniformCurve(x) => (**x).as_ref(),
+                BSplineCurveAny::RationalBSplineCurve(x) => (**x).as_ref(),
+                BSplineCurveAny::UniformCurve(x) => (**x).as_ref(),
+            }
+        }
+    }
+    impl AsRef<BoundedCurve> for BSplineCurveAny {
+        fn as_ref(&self) -> &BoundedCurve {
+            match self {
+                BSplineCurveAny::BSplineCurve(x) => AsRef::<BSplineCurve>::as_ref(x).as_ref(),
+                BSplineCurveAny::BSplineCurveWithKnots(x) => {
+                    AsRef::<BSplineCurve>::as_ref(x.as_ref()).as_ref()
+                }
+                BSplineCurveAny::BezierCurve(x) => {
+                    AsRef::<BSplineCurve>::as_ref(x.as_ref()).as_ref()
+                }
+                BSplineCurveAny::QuasiUniformCurve(x) => {
+                    AsRef::<BSplineCurve>::as_ref(x.as_ref()).as_ref()
+                }
+                BSplineCurveAny::RationalBSplineCurve(x) => {
+                    AsRef::<BSplineCurve>::as_ref(x.as_ref()).as_ref()
+                }
+                BSplineCurveAny::UniformCurve(x) => {
+                    AsRef::<BSplineCurve>::as_ref(x.as_ref()).as_ref()
+                }
+            }
         }
     }
     #[derive(
@@ -3412,6 +3568,34 @@ pub mod explicit_draughting {
             BoundedCurveAny::TrimmedCurve(Box::new(self.into()))
         }
     }
+    impl AsRef<BoundedCurve> for BoundedCurveAny {
+        fn as_ref(&self) -> &BoundedCurve {
+            match self {
+                BoundedCurveAny::BoundedCurve(x) => x.as_ref(),
+                BoundedCurveAny::BSplineCurve(x) => (**x).as_ref(),
+                BoundedCurveAny::CompositeCurve(x) => (**x).as_ref(),
+                BoundedCurveAny::Polyline(x) => (**x).as_ref(),
+                BoundedCurveAny::TrimmedCurve(x) => (**x).as_ref(),
+            }
+        }
+    }
+    impl AsRef<Curve> for BoundedCurveAny {
+        fn as_ref(&self) -> &Curve {
+            match self {
+                BoundedCurveAny::BoundedCurve(x) => AsRef::<BoundedCurve>::as_ref(x).as_ref(),
+                BoundedCurveAny::BSplineCurve(x) => {
+                    AsRef::<BoundedCurve>::as_ref(x.as_ref()).as_ref()
+                }
+                BoundedCurveAny::CompositeCurve(x) => {
+                    AsRef::<BoundedCurve>::as_ref(x.as_ref()).as_ref()
+                }
+                BoundedCurveAny::Polyline(x) => AsRef::<BoundedCurve>::as_ref(x.as_ref()).as_ref(),
+                BoundedCurveAny::TrimmedCurve(x) => {
+                    AsRef::<BoundedCurve>::as_ref(x.as_ref()).as_ref()
+                }
+            }
+        }
+    }
     #[derive(
         Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
@@ -3463,6 +3647,24 @@ pub mod explicit_draughting {
             CameraImageAny::CameraImage2DWithScale(Box::new(self.into()))
         }
     }
+    impl AsRef<CameraImage> for CameraImageAny {
+        fn as_ref(&self) -> &CameraImage {
+            match self {
+                CameraImageAny::CameraImage(x) => x.as_ref(),
+                CameraImageAny::CameraImage2DWithScale(x) => (**x).as_ref(),
+            }
+        }
+    }
+    impl AsRef<MappedItem> for CameraImageAny {
+        fn as_ref(&self) -> &MappedItem {
+            match self {
+                CameraImageAny::CameraImage(x) => AsRef::<CameraImage>::as_ref(x).as_ref(),
+                CameraImageAny::CameraImage2DWithScale(x) => {
+                    AsRef::<CameraImage>::as_ref(x.as_ref()).as_ref()
+                }
+            }
+        }
+    }
     #[derive(
         Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
@@ -3510,6 +3712,24 @@ pub mod explicit_draughting {
     impl Into<CameraModelAny> for CameraModelD2 {
         fn into(self) -> CameraModelAny {
             CameraModelAny::CameraModelD2(Box::new(self.into()))
+        }
+    }
+    impl AsRef<CameraModel> for CameraModelAny {
+        fn as_ref(&self) -> &CameraModel {
+            match self {
+                CameraModelAny::CameraModel(x) => x.as_ref(),
+                CameraModelAny::CameraModelD2(x) => (**x).as_ref(),
+            }
+        }
+    }
+    impl AsRef<GeometricRepresentationItem> for CameraModelAny {
+        fn as_ref(&self) -> &GeometricRepresentationItem {
+            match self {
+                CameraModelAny::CameraModel(x) => AsRef::<CameraModel>::as_ref(x).as_ref(),
+                CameraModelAny::CameraModelD2(x) => {
+                    AsRef::<CameraModel>::as_ref(x.as_ref()).as_ref()
+                }
+            }
         }
     }
     #[derive(
@@ -3607,6 +3827,15 @@ pub mod explicit_draughting {
             ColourAny::PreDefinedColour(Box::new(self.into()))
         }
     }
+    impl AsRef<Colour> for ColourAny {
+        fn as_ref(&self) -> &Colour {
+            match self {
+                ColourAny::Colour(x) => x.as_ref(),
+                ColourAny::ColourSpecification(x) => (**x).as_ref(),
+                ColourAny::PreDefinedColour(x) => (**x).as_ref(),
+            }
+        }
+    }
     #[derive(
         Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
@@ -3659,6 +3888,26 @@ pub mod explicit_draughting {
     impl Into<ColourSpecificationAny> for ColourRgb {
         fn into(self) -> ColourSpecificationAny {
             ColourSpecificationAny::ColourRgb(Box::new(self.into()))
+        }
+    }
+    impl AsRef<ColourSpecification> for ColourSpecificationAny {
+        fn as_ref(&self) -> &ColourSpecification {
+            match self {
+                ColourSpecificationAny::ColourSpecification(x) => x.as_ref(),
+                ColourSpecificationAny::ColourRgb(x) => (**x).as_ref(),
+            }
+        }
+    }
+    impl AsRef<Colour> for ColourSpecificationAny {
+        fn as_ref(&self) -> &Colour {
+            match self {
+                ColourSpecificationAny::ColourSpecification(x) => {
+                    AsRef::<ColourSpecification>::as_ref(x).as_ref()
+                }
+                ColourSpecificationAny::ColourRgb(x) => {
+                    AsRef::<ColourSpecification>::as_ref(x.as_ref()).as_ref()
+                }
+            }
         }
     }
     #[derive(
@@ -3739,6 +3988,32 @@ pub mod explicit_draughting {
     impl Into<CompositeTextAny> for CompositeTextWithExtent {
         fn into(self) -> CompositeTextAny {
             CompositeTextAny::CompositeTextWithExtent(Box::new(self.into()))
+        }
+    }
+    impl AsRef<CompositeText> for CompositeTextAny {
+        fn as_ref(&self) -> &CompositeText {
+            match self {
+                CompositeTextAny::CompositeText(x) => x.as_ref(),
+                CompositeTextAny::CompositeTextWithAssociatedCurves(x) => (**x).as_ref(),
+                CompositeTextAny::CompositeTextWithBlankingBox(x) => (**x).as_ref(),
+                CompositeTextAny::CompositeTextWithExtent(x) => (**x).as_ref(),
+            }
+        }
+    }
+    impl AsRef<GeometricRepresentationItem> for CompositeTextAny {
+        fn as_ref(&self) -> &GeometricRepresentationItem {
+            match self {
+                CompositeTextAny::CompositeText(x) => AsRef::<CompositeText>::as_ref(x).as_ref(),
+                CompositeTextAny::CompositeTextWithAssociatedCurves(x) => {
+                    AsRef::<CompositeText>::as_ref(x.as_ref()).as_ref()
+                }
+                CompositeTextAny::CompositeTextWithBlankingBox(x) => {
+                    AsRef::<CompositeText>::as_ref(x.as_ref()).as_ref()
+                }
+                CompositeTextAny::CompositeTextWithExtent(x) => {
+                    AsRef::<CompositeText>::as_ref(x.as_ref()).as_ref()
+                }
+            }
         }
     }
     #[derive(
@@ -3850,6 +4125,28 @@ pub mod explicit_draughting {
             ConicAny::Parabola(Box::new(self.into()))
         }
     }
+    impl AsRef<Conic> for ConicAny {
+        fn as_ref(&self) -> &Conic {
+            match self {
+                ConicAny::Conic(x) => x.as_ref(),
+                ConicAny::Circle(x) => (**x).as_ref(),
+                ConicAny::Ellipse(x) => (**x).as_ref(),
+                ConicAny::Hyperbola(x) => (**x).as_ref(),
+                ConicAny::Parabola(x) => (**x).as_ref(),
+            }
+        }
+    }
+    impl AsRef<Curve> for ConicAny {
+        fn as_ref(&self) -> &Curve {
+            match self {
+                ConicAny::Conic(x) => AsRef::<Conic>::as_ref(x).as_ref(),
+                ConicAny::Circle(x) => AsRef::<Conic>::as_ref(x.as_ref()).as_ref(),
+                ConicAny::Ellipse(x) => AsRef::<Conic>::as_ref(x.as_ref()).as_ref(),
+                ConicAny::Hyperbola(x) => AsRef::<Conic>::as_ref(x.as_ref()).as_ref(),
+                ConicAny::Parabola(x) => AsRef::<Conic>::as_ref(x.as_ref()).as_ref(),
+            }
+        }
+    }
     #[derive(
         Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
@@ -3903,6 +4200,14 @@ pub mod explicit_draughting {
     impl Into<ContractAssignmentAny> for DraughtingContractAssignment {
         fn into(self) -> ContractAssignmentAny {
             ContractAssignmentAny::DraughtingContractAssignment(Box::new(self.into()))
+        }
+    }
+    impl AsRef<ContractAssignment> for ContractAssignmentAny {
+        fn as_ref(&self) -> &ContractAssignment {
+            match self {
+                ContractAssignmentAny::ContractAssignment(x) => x.as_ref(),
+                ContractAssignmentAny::DraughtingContractAssignment(x) => (**x).as_ref(),
+            }
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -3988,6 +4293,28 @@ pub mod explicit_draughting {
             CurveAny::OffsetCurve2D(Box::new(self.into()))
         }
     }
+    impl AsRef<Curve> for CurveAny {
+        fn as_ref(&self) -> &Curve {
+            match self {
+                CurveAny::Curve(x) => x.as_ref(),
+                CurveAny::BoundedCurve(x) => (**x).as_ref(),
+                CurveAny::Conic(x) => (**x).as_ref(),
+                CurveAny::Line(x) => (**x).as_ref(),
+                CurveAny::OffsetCurve2D(x) => (**x).as_ref(),
+            }
+        }
+    }
+    impl AsRef<GeometricRepresentationItem> for CurveAny {
+        fn as_ref(&self) -> &GeometricRepresentationItem {
+            match self {
+                CurveAny::Curve(x) => AsRef::<Curve>::as_ref(x).as_ref(),
+                CurveAny::BoundedCurve(x) => AsRef::<Curve>::as_ref(x.as_ref()).as_ref(),
+                CurveAny::Conic(x) => AsRef::<Curve>::as_ref(x.as_ref()).as_ref(),
+                CurveAny::Line(x) => AsRef::<Curve>::as_ref(x.as_ref()).as_ref(),
+                CurveAny::OffsetCurve2D(x) => AsRef::<Curve>::as_ref(x.as_ref()).as_ref(),
+            }
+        }
+    }
     #[derive(
         Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
@@ -4058,6 +4385,14 @@ pub mod explicit_draughting {
     impl Into<DateAny> for CalendarDate {
         fn into(self) -> DateAny {
             DateAny::CalendarDate(Box::new(self.into()))
+        }
+    }
+    impl AsRef<Date> for DateAny {
+        fn as_ref(&self) -> &Date {
+            match self {
+                DateAny::Date(x) => x.as_ref(),
+                DateAny::CalendarDate(x) => (**x).as_ref(),
+            }
         }
     }
     #[derive(
@@ -4229,6 +4564,42 @@ pub mod explicit_draughting {
             DimensionCurveDirectedCalloutAny::RadiusDimension(Box::new(self.into()))
         }
     }
+    impl AsRef<DimensionCurveDirectedCallout> for DimensionCurveDirectedCalloutAny {
+        fn as_ref(&self) -> &DimensionCurveDirectedCallout {
+            match self {
+                DimensionCurveDirectedCalloutAny::DimensionCurveDirectedCallout(x) => x.as_ref(),
+                DimensionCurveDirectedCalloutAny::AngularDimension(x) => (**x).as_ref(),
+                DimensionCurveDirectedCalloutAny::CurveDimension(x) => (**x).as_ref(),
+                DimensionCurveDirectedCalloutAny::DiameterDimension(x) => (**x).as_ref(),
+                DimensionCurveDirectedCalloutAny::LinearDimension(x) => (**x).as_ref(),
+                DimensionCurveDirectedCalloutAny::RadiusDimension(x) => (**x).as_ref(),
+            }
+        }
+    }
+    impl AsRef<DraughtingCallout> for DimensionCurveDirectedCalloutAny {
+        fn as_ref(&self) -> &DraughtingCallout {
+            match self {
+                DimensionCurveDirectedCalloutAny::DimensionCurveDirectedCallout(x) => {
+                    AsRef::<DimensionCurveDirectedCallout>::as_ref(x).as_ref()
+                }
+                DimensionCurveDirectedCalloutAny::AngularDimension(x) => {
+                    AsRef::<DimensionCurveDirectedCallout>::as_ref(x.as_ref()).as_ref()
+                }
+                DimensionCurveDirectedCalloutAny::CurveDimension(x) => {
+                    AsRef::<DimensionCurveDirectedCallout>::as_ref(x.as_ref()).as_ref()
+                }
+                DimensionCurveDirectedCalloutAny::DiameterDimension(x) => {
+                    AsRef::<DimensionCurveDirectedCallout>::as_ref(x.as_ref()).as_ref()
+                }
+                DimensionCurveDirectedCalloutAny::LinearDimension(x) => {
+                    AsRef::<DimensionCurveDirectedCallout>::as_ref(x.as_ref()).as_ref()
+                }
+                DimensionCurveDirectedCalloutAny::RadiusDimension(x) => {
+                    AsRef::<DimensionCurveDirectedCallout>::as_ref(x.as_ref()).as_ref()
+                }
+            }
+        }
+    }
     #[derive(
         Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
@@ -4325,6 +4696,14 @@ pub mod explicit_draughting {
     impl Into<DocumentReferenceAny> for DraughtingSpecificationReference {
         fn into(self) -> DocumentReferenceAny {
             DocumentReferenceAny::DraughtingSpecificationReference(Box::new(self.into()))
+        }
+    }
+    impl AsRef<DocumentReference> for DocumentReferenceAny {
+        fn as_ref(&self) -> &DocumentReference {
+            match self {
+                DocumentReferenceAny::DocumentReference(x) => x.as_ref(),
+                DocumentReferenceAny::DraughtingSpecificationReference(x) => (**x).as_ref(),
+            }
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -4457,6 +4836,54 @@ pub mod explicit_draughting {
             DraughtingCalloutAny::StructuredDimensionCallout(Box::new(self.into()))
         }
     }
+    impl AsRef<DraughtingCallout> for DraughtingCalloutAny {
+        fn as_ref(&self) -> &DraughtingCallout {
+            match self {
+                DraughtingCalloutAny::DraughtingCallout(x) => x.as_ref(),
+                DraughtingCalloutAny::DatumFeatureCallout(x) => (**x).as_ref(),
+                DraughtingCalloutAny::DatumTargetCallout(x) => (**x).as_ref(),
+                DraughtingCalloutAny::DimensionCurveDirectedCallout(x) => (**x).as_ref(),
+                DraughtingCalloutAny::DraughtingElements(x) => (**x).as_ref(),
+                DraughtingCalloutAny::GeometricalToleranceCallout(x) => (**x).as_ref(),
+                DraughtingCalloutAny::LeaderDirectedCallout(x) => (**x).as_ref(),
+                DraughtingCalloutAny::ProjectionDirectedCallout(x) => (**x).as_ref(),
+                DraughtingCalloutAny::StructuredDimensionCallout(x) => (**x).as_ref(),
+            }
+        }
+    }
+    impl AsRef<GeometricRepresentationItem> for DraughtingCalloutAny {
+        fn as_ref(&self) -> &GeometricRepresentationItem {
+            match self {
+                DraughtingCalloutAny::DraughtingCallout(x) => {
+                    AsRef::<DraughtingCallout>::as_ref(x).as_ref()
+                }
+                DraughtingCalloutAny::DatumFeatureCallout(x) => {
+                    AsRef::<DraughtingCallout>::as_ref(x.as_ref()).as_ref()
+                }
+                DraughtingCalloutAny::DatumTargetCallout(x) => {
+                    AsRef::<DraughtingCallout>::as_ref(x.as_ref()).as_ref()
+                }
+                DraughtingCalloutAny::DimensionCurveDirectedCallout(x) => {
+                    AsRef::<DraughtingCallout>::as_ref(x.as_ref()).as_ref()
+                }
+                DraughtingCalloutAny::DraughtingElements(x) => {
+                    AsRef::<DraughtingCallout>::as_ref(x.as_ref()).as_ref()
+                }
+                DraughtingCalloutAny::GeometricalToleranceCallout(x) => {
+                    AsRef::<DraughtingCallout>::as_ref(x.as_ref()).as_ref()
+                }
+                DraughtingCalloutAny::LeaderDirectedCallout(x) => {
+                    AsRef::<DraughtingCallout>::as_ref(x.as_ref()).as_ref()
+                }
+                DraughtingCalloutAny::ProjectionDirectedCallout(x) => {
+                    AsRef::<DraughtingCallout>::as_ref(x.as_ref()).as_ref()
+                }
+                DraughtingCalloutAny::StructuredDimensionCallout(x) => {
+                    AsRef::<DraughtingCallout>::as_ref(x.as_ref()).as_ref()
+                }
+            }
+        }
+    }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = draughting_callout_relationship)]
@@ -4506,6 +4933,18 @@ pub mod explicit_draughting {
     impl Into<DraughtingCalloutRelationshipAny> for DimensionPair {
         fn into(self) -> DraughtingCalloutRelationshipAny {
             DraughtingCalloutRelationshipAny::DimensionPair(Box::new(self.into()))
+        }
+    }
+    impl AsRef<DraughtingCalloutRelationship> for DraughtingCalloutRelationshipAny {
+        fn as_ref(&self) -> &DraughtingCalloutRelationship {
+            match self {
+                DraughtingCalloutRelationshipAny::DraughtingCalloutRelationship(x) => x.as_ref(),
+                DraughtingCalloutRelationshipAny::DimensionCalloutComponentRelationship(x) => {
+                    (**x).as_ref()
+                }
+                DraughtingCalloutRelationshipAny::DimensionCalloutRelationship(x) => (**x).as_ref(),
+                DraughtingCalloutRelationshipAny::DimensionPair(x) => (**x).as_ref(),
+            }
         }
     }
     #[derive(
@@ -4769,6 +5208,26 @@ pub mod explicit_draughting {
             DraughtingSymbolRepresentationAny::DrawingSheetLayout(Box::new(self.into()))
         }
     }
+    impl AsRef<DraughtingSymbolRepresentation> for DraughtingSymbolRepresentationAny {
+        fn as_ref(&self) -> &DraughtingSymbolRepresentation {
+            match self {
+                DraughtingSymbolRepresentationAny::DraughtingSymbolRepresentation(x) => x.as_ref(),
+                DraughtingSymbolRepresentationAny::DrawingSheetLayout(x) => (**x).as_ref(),
+            }
+        }
+    }
+    impl AsRef<SymbolRepresentation> for DraughtingSymbolRepresentationAny {
+        fn as_ref(&self) -> &SymbolRepresentation {
+            match self {
+                DraughtingSymbolRepresentationAny::DraughtingSymbolRepresentation(x) => {
+                    AsRef::<DraughtingSymbolRepresentation>::as_ref(x).as_ref()
+                }
+                DraughtingSymbolRepresentationAny::DrawingSheetLayout(x) => {
+                    AsRef::<DraughtingSymbolRepresentation>::as_ref(x.as_ref()).as_ref()
+                }
+            }
+        }
+    }
     #[derive(
         Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
@@ -4838,6 +5297,26 @@ pub mod explicit_draughting {
     impl Into<DrawingRevisionAny> for DraughtingDrawingRevision {
         fn into(self) -> DrawingRevisionAny {
             DrawingRevisionAny::DraughtingDrawingRevision(Box::new(self.into()))
+        }
+    }
+    impl AsRef<DrawingRevision> for DrawingRevisionAny {
+        fn as_ref(&self) -> &DrawingRevision {
+            match self {
+                DrawingRevisionAny::DrawingRevision(x) => x.as_ref(),
+                DrawingRevisionAny::DraughtingDrawingRevision(x) => (**x).as_ref(),
+            }
+        }
+    }
+    impl AsRef<PresentationSet> for DrawingRevisionAny {
+        fn as_ref(&self) -> &PresentationSet {
+            match self {
+                DrawingRevisionAny::DrawingRevision(x) => {
+                    AsRef::<DrawingRevision>::as_ref(x).as_ref()
+                }
+                DrawingRevisionAny::DraughtingDrawingRevision(x) => {
+                    AsRef::<DrawingRevision>::as_ref(x.as_ref()).as_ref()
+                }
+            }
         }
     }
     #[derive(
@@ -4997,6 +5476,18 @@ pub mod explicit_draughting {
     impl Into<ExternallyDefinedItemAny> for ExternallyDefinedTileStyle {
         fn into(self) -> ExternallyDefinedItemAny {
             ExternallyDefinedItemAny::ExternallyDefinedTileStyle(Box::new(self.into()))
+        }
+    }
+    impl AsRef<ExternallyDefinedItem> for ExternallyDefinedItemAny {
+        fn as_ref(&self) -> &ExternallyDefinedItem {
+            match self {
+                ExternallyDefinedItemAny::ExternallyDefinedItem(x) => x.as_ref(),
+                ExternallyDefinedItemAny::ExternallyDefinedCurveFont(x) => (**x).as_ref(),
+                ExternallyDefinedItemAny::ExternallyDefinedHatchStyle(x) => (**x).as_ref(),
+                ExternallyDefinedItemAny::ExternallyDefinedSymbol(x) => (**x).as_ref(),
+                ExternallyDefinedItemAny::ExternallyDefinedTextFont(x) => (**x).as_ref(),
+                ExternallyDefinedItemAny::ExternallyDefinedTileStyle(x) => (**x).as_ref(),
+            }
         }
     }
     #[derive(
@@ -5333,6 +5824,104 @@ pub mod explicit_draughting {
             GeometricRepresentationItemAny::Vector(Box::new(self.into()))
         }
     }
+    impl AsRef<GeometricRepresentationItem> for GeometricRepresentationItemAny {
+        fn as_ref(&self) -> &GeometricRepresentationItem {
+            match self {
+                GeometricRepresentationItemAny::GeometricRepresentationItem(x) => x.as_ref(),
+                GeometricRepresentationItemAny::AnnotationFillArea(x) => (**x).as_ref(),
+                GeometricRepresentationItemAny::CameraModel(x) => (**x).as_ref(),
+                GeometricRepresentationItemAny::CompositeText(x) => (**x).as_ref(),
+                GeometricRepresentationItemAny::Curve(x) => (**x).as_ref(),
+                GeometricRepresentationItemAny::DefinedSymbol(x) => (**x).as_ref(),
+                GeometricRepresentationItemAny::Direction(x) => (**x).as_ref(),
+                GeometricRepresentationItemAny::DraughtingCallout(x) => (**x).as_ref(),
+                GeometricRepresentationItemAny::ExternallyDefinedHatchStyle(x) => (**x).as_ref(),
+                GeometricRepresentationItemAny::ExternallyDefinedTileStyle(x) => (**x).as_ref(),
+                GeometricRepresentationItemAny::FillAreaStyleHatching(x) => (**x).as_ref(),
+                GeometricRepresentationItemAny::FillAreaStyleTileSymbolWithStyle(x) => {
+                    (**x).as_ref()
+                }
+                GeometricRepresentationItemAny::FillAreaStyleTiles(x) => (**x).as_ref(),
+                GeometricRepresentationItemAny::GeometricSet(x) => (**x).as_ref(),
+                GeometricRepresentationItemAny::OneDirectionRepeatFactor(x) => (**x).as_ref(),
+                GeometricRepresentationItemAny::Placement(x) => (**x).as_ref(),
+                GeometricRepresentationItemAny::PlanarExtent(x) => (**x).as_ref(),
+                GeometricRepresentationItemAny::Point(x) => (**x).as_ref(),
+                GeometricRepresentationItemAny::SymbolTarget(x) => (**x).as_ref(),
+                GeometricRepresentationItemAny::TextLiteral(x) => (**x).as_ref(),
+                GeometricRepresentationItemAny::Vector(x) => (**x).as_ref(),
+            }
+        }
+    }
+    impl AsRef<RepresentationItem> for GeometricRepresentationItemAny {
+        fn as_ref(&self) -> &RepresentationItem {
+            match self {
+                GeometricRepresentationItemAny::GeometricRepresentationItem(x) => {
+                    AsRef::<GeometricRepresentationItem>::as_ref(x).as_ref()
+                }
+                GeometricRepresentationItemAny::AnnotationFillArea(x) => {
+                    AsRef::<GeometricRepresentationItem>::as_ref(x.as_ref()).as_ref()
+                }
+                GeometricRepresentationItemAny::CameraModel(x) => {
+                    AsRef::<GeometricRepresentationItem>::as_ref(x.as_ref()).as_ref()
+                }
+                GeometricRepresentationItemAny::CompositeText(x) => {
+                    AsRef::<GeometricRepresentationItem>::as_ref(x.as_ref()).as_ref()
+                }
+                GeometricRepresentationItemAny::Curve(x) => {
+                    AsRef::<GeometricRepresentationItem>::as_ref(x.as_ref()).as_ref()
+                }
+                GeometricRepresentationItemAny::DefinedSymbol(x) => {
+                    AsRef::<GeometricRepresentationItem>::as_ref(x.as_ref()).as_ref()
+                }
+                GeometricRepresentationItemAny::Direction(x) => {
+                    AsRef::<GeometricRepresentationItem>::as_ref(x.as_ref()).as_ref()
+                }
+                GeometricRepresentationItemAny::DraughtingCallout(x) => {
+                    AsRef::<GeometricRepresentationItem>::as_ref(x.as_ref()).as_ref()
+                }
+                GeometricRepresentationItemAny::ExternallyDefinedHatchStyle(x) => {
+                    AsRef::<GeometricRepresentationItem>::as_ref(x.as_ref()).as_ref()
+                }
+                GeometricRepresentationItemAny::ExternallyDefinedTileStyle(x) => {
+                    AsRef::<GeometricRepresentationItem>::as_ref(x.as_ref()).as_ref()
+                }
+                GeometricRepresentationItemAny::FillAreaStyleHatching(x) => {
+                    AsRef::<GeometricRepresentationItem>::as_ref(x.as_ref()).as_ref()
+                }
+                GeometricRepresentationItemAny::FillAreaStyleTileSymbolWithStyle(x) => {
+                    AsRef::<GeometricRepresentationItem>::as_ref(x.as_ref()).as_ref()
+                }
+                GeometricRepresentationItemAny::FillAreaStyleTiles(x) => {
+                    AsRef::<GeometricRepresentationItem>::as_ref(x.as_ref()).as_ref()
+                }
+                GeometricRepresentationItemAny::GeometricSet(x) => {
+                    AsRef::<GeometricRepresentationItem>::as_ref(x.as_ref()).as_ref()
+                }
+                GeometricRepresentationItemAny::OneDirectionRepeatFactor(x) => {
+                    AsRef::<GeometricRepresentationItem>::as_ref(x.as_ref()).as_ref()
+                }
+                GeometricRepresentationItemAny::Placement(x) => {
+                    AsRef::<GeometricRepresentationItem>::as_ref(x.as_ref()).as_ref()
+                }
+                GeometricRepresentationItemAny::PlanarExtent(x) => {
+                    AsRef::<GeometricRepresentationItem>::as_ref(x.as_ref()).as_ref()
+                }
+                GeometricRepresentationItemAny::Point(x) => {
+                    AsRef::<GeometricRepresentationItem>::as_ref(x.as_ref()).as_ref()
+                }
+                GeometricRepresentationItemAny::SymbolTarget(x) => {
+                    AsRef::<GeometricRepresentationItem>::as_ref(x.as_ref()).as_ref()
+                }
+                GeometricRepresentationItemAny::TextLiteral(x) => {
+                    AsRef::<GeometricRepresentationItem>::as_ref(x.as_ref()).as_ref()
+                }
+                GeometricRepresentationItemAny::Vector(x) => {
+                    AsRef::<GeometricRepresentationItem>::as_ref(x.as_ref()).as_ref()
+                }
+            }
+        }
+    }
     #[derive(
         Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
@@ -5368,6 +5957,24 @@ pub mod explicit_draughting {
     impl Into<GeometricSetAny> for GeometricCurveSet {
         fn into(self) -> GeometricSetAny {
             GeometricSetAny::GeometricCurveSet(Box::new(self.into()))
+        }
+    }
+    impl AsRef<GeometricSet> for GeometricSetAny {
+        fn as_ref(&self) -> &GeometricSet {
+            match self {
+                GeometricSetAny::GeometricSet(x) => x.as_ref(),
+                GeometricSetAny::GeometricCurveSet(x) => (**x).as_ref(),
+            }
+        }
+    }
+    impl AsRef<GeometricRepresentationItem> for GeometricSetAny {
+        fn as_ref(&self) -> &GeometricRepresentationItem {
+            match self {
+                GeometricSetAny::GeometricSet(x) => AsRef::<GeometricSet>::as_ref(x).as_ref(),
+                GeometricSetAny::GeometricCurveSet(x) => {
+                    AsRef::<GeometricSet>::as_ref(x.as_ref()).as_ref()
+                }
+            }
         }
     }
     #[derive(
@@ -5451,6 +6058,14 @@ pub mod explicit_draughting {
             GroupAssignmentAny::DraughtingGroupAssignment(Box::new(self.into()))
         }
     }
+    impl AsRef<GroupAssignment> for GroupAssignmentAny {
+        fn as_ref(&self) -> &GroupAssignment {
+            match self {
+                GroupAssignmentAny::GroupAssignment(x) => x.as_ref(),
+                GroupAssignmentAny::DraughtingGroupAssignment(x) => (**x).as_ref(),
+            }
+        }
+    }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = group_relationship)]
@@ -5508,6 +6123,14 @@ pub mod explicit_draughting {
             InvisibilityAny::ContextDependentInvisibility(Box::new(self.into()))
         }
     }
+    impl AsRef<Invisibility> for InvisibilityAny {
+        fn as_ref(&self) -> &Invisibility {
+            match self {
+                InvisibilityAny::Invisibility(x) => x.as_ref(),
+                InvisibilityAny::ContextDependentInvisibility(x) => (**x).as_ref(),
+            }
+        }
+    }
     #[derive(
         Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
@@ -5555,6 +6178,26 @@ pub mod explicit_draughting {
     impl Into<LeaderDirectedCalloutAny> for LeaderDirectedDimension {
         fn into(self) -> LeaderDirectedCalloutAny {
             LeaderDirectedCalloutAny::LeaderDirectedDimension(Box::new(self.into()))
+        }
+    }
+    impl AsRef<LeaderDirectedCallout> for LeaderDirectedCalloutAny {
+        fn as_ref(&self) -> &LeaderDirectedCallout {
+            match self {
+                LeaderDirectedCalloutAny::LeaderDirectedCallout(x) => x.as_ref(),
+                LeaderDirectedCalloutAny::LeaderDirectedDimension(x) => (**x).as_ref(),
+            }
+        }
+    }
+    impl AsRef<DraughtingCallout> for LeaderDirectedCalloutAny {
+        fn as_ref(&self) -> &DraughtingCallout {
+            match self {
+                LeaderDirectedCalloutAny::LeaderDirectedCallout(x) => {
+                    AsRef::<LeaderDirectedCallout>::as_ref(x).as_ref()
+                }
+                LeaderDirectedCalloutAny::LeaderDirectedDimension(x) => {
+                    AsRef::<LeaderDirectedCallout>::as_ref(x.as_ref()).as_ref()
+                }
+            }
         }
     }
     #[derive(
@@ -5700,6 +6343,30 @@ pub mod explicit_draughting {
             MappedItemAny::CameraImage(Box::new(self.into()))
         }
     }
+    impl AsRef<MappedItem> for MappedItemAny {
+        fn as_ref(&self) -> &MappedItem {
+            match self {
+                MappedItemAny::MappedItem(x) => x.as_ref(),
+                MappedItemAny::AnnotationSymbol(x) => (**x).as_ref(),
+                MappedItemAny::AnnotationText(x) => (**x).as_ref(),
+                MappedItemAny::CameraImage(x) => (**x).as_ref(),
+            }
+        }
+    }
+    impl AsRef<RepresentationItem> for MappedItemAny {
+        fn as_ref(&self) -> &RepresentationItem {
+            match self {
+                MappedItemAny::MappedItem(x) => AsRef::<MappedItem>::as_ref(x).as_ref(),
+                MappedItemAny::AnnotationSymbol(x) => {
+                    AsRef::<MappedItem>::as_ref(x.as_ref()).as_ref()
+                }
+                MappedItemAny::AnnotationText(x) => {
+                    AsRef::<MappedItem>::as_ref(x.as_ref()).as_ref()
+                }
+                MappedItemAny::CameraImage(x) => AsRef::<MappedItem>::as_ref(x.as_ref()).as_ref(),
+            }
+        }
+    }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = measure_with_unit)]
@@ -5737,6 +6404,15 @@ pub mod explicit_draughting {
     impl Into<MeasureWithUnitAny> for PlaneAngleMeasureWithUnit {
         fn into(self) -> MeasureWithUnitAny {
             MeasureWithUnitAny::PlaneAngleMeasureWithUnit(Box::new(self.into()))
+        }
+    }
+    impl AsRef<MeasureWithUnit> for MeasureWithUnitAny {
+        fn as_ref(&self) -> &MeasureWithUnit {
+            match self {
+                MeasureWithUnitAny::MeasureWithUnit(x) => x.as_ref(),
+                MeasureWithUnitAny::LengthMeasureWithUnit(x) => (**x).as_ref(),
+                MeasureWithUnitAny::PlaneAngleMeasureWithUnit(x) => (**x).as_ref(),
+            }
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -5790,6 +6466,17 @@ pub mod explicit_draughting {
     impl Into<NamedUnitAny> for SiUnit {
         fn into(self) -> NamedUnitAny {
             NamedUnitAny::SiUnit(Box::new(self.into()))
+        }
+    }
+    impl AsRef<NamedUnit> for NamedUnitAny {
+        fn as_ref(&self) -> &NamedUnit {
+            match self {
+                NamedUnitAny::NamedUnit(x) => x.as_ref(),
+                NamedUnitAny::ConversionBasedUnit(x) => (**x).as_ref(),
+                NamedUnitAny::LengthUnit(x) => (**x).as_ref(),
+                NamedUnitAny::PlaneAngleUnit(x) => (**x).as_ref(),
+                NamedUnitAny::SiUnit(x) => (**x).as_ref(),
+            }
         }
     }
     #[derive(
@@ -5847,6 +6534,26 @@ pub mod explicit_draughting {
             OneDirectionRepeatFactorAny::TwoDirectionRepeatFactor(Box::new(self.into()))
         }
     }
+    impl AsRef<OneDirectionRepeatFactor> for OneDirectionRepeatFactorAny {
+        fn as_ref(&self) -> &OneDirectionRepeatFactor {
+            match self {
+                OneDirectionRepeatFactorAny::OneDirectionRepeatFactor(x) => x.as_ref(),
+                OneDirectionRepeatFactorAny::TwoDirectionRepeatFactor(x) => (**x).as_ref(),
+            }
+        }
+    }
+    impl AsRef<GeometricRepresentationItem> for OneDirectionRepeatFactorAny {
+        fn as_ref(&self) -> &GeometricRepresentationItem {
+            match self {
+                OneDirectionRepeatFactorAny::OneDirectionRepeatFactor(x) => {
+                    AsRef::<OneDirectionRepeatFactor>::as_ref(x).as_ref()
+                }
+                OneDirectionRepeatFactorAny::TwoDirectionRepeatFactor(x) => {
+                    AsRef::<OneDirectionRepeatFactor>::as_ref(x.as_ref()).as_ref()
+                }
+            }
+        }
+    }
     #[derive(
         Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
@@ -5899,6 +6606,14 @@ pub mod explicit_draughting {
     impl Into<OrganizationAssignmentAny> for DraughtingOrganizationAssignment {
         fn into(self) -> OrganizationAssignmentAny {
             OrganizationAssignmentAny::DraughtingOrganizationAssignment(Box::new(self.into()))
+        }
+    }
+    impl AsRef<OrganizationAssignment> for OrganizationAssignmentAny {
+        fn as_ref(&self) -> &OrganizationAssignment {
+            match self {
+                OrganizationAssignmentAny::OrganizationAssignment(x) => x.as_ref(),
+                OrganizationAssignmentAny::DraughtingOrganizationAssignment(x) => (**x).as_ref(),
+            }
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -5995,6 +6710,18 @@ pub mod explicit_draughting {
             ))
         }
     }
+    impl AsRef<PersonAndOrganizationAssignment> for PersonAndOrganizationAssignmentAny {
+        fn as_ref(&self) -> &PersonAndOrganizationAssignment {
+            match self {
+                PersonAndOrganizationAssignmentAny::PersonAndOrganizationAssignment(x) => {
+                    x.as_ref()
+                }
+                PersonAndOrganizationAssignmentAny::DraughtingPersonAndOrganizationAssignment(
+                    x,
+                ) => (**x).as_ref(),
+            }
+        }
+    }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = person_and_organization_role)]
@@ -6031,6 +6758,14 @@ pub mod explicit_draughting {
     impl Into<PersonAssignmentAny> for DraughtingPersonAssignment {
         fn into(self) -> PersonAssignmentAny {
             PersonAssignmentAny::DraughtingPersonAssignment(Box::new(self.into()))
+        }
+    }
+    impl AsRef<PersonAssignment> for PersonAssignmentAny {
+        fn as_ref(&self) -> &PersonAssignment {
+            match self {
+                PersonAssignmentAny::PersonAssignment(x) => x.as_ref(),
+                PersonAssignmentAny::DraughtingPersonAssignment(x) => (**x).as_ref(),
+            }
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -6094,6 +6829,24 @@ pub mod explicit_draughting {
             PlacementAny::Axis2Placement2D(Box::new(self.into()))
         }
     }
+    impl AsRef<Placement> for PlacementAny {
+        fn as_ref(&self) -> &Placement {
+            match self {
+                PlacementAny::Placement(x) => x.as_ref(),
+                PlacementAny::Axis2Placement2D(x) => (**x).as_ref(),
+            }
+        }
+    }
+    impl AsRef<GeometricRepresentationItem> for PlacementAny {
+        fn as_ref(&self) -> &GeometricRepresentationItem {
+            match self {
+                PlacementAny::Placement(x) => AsRef::<Placement>::as_ref(x).as_ref(),
+                PlacementAny::Axis2Placement2D(x) => {
+                    AsRef::<Placement>::as_ref(x.as_ref()).as_ref()
+                }
+            }
+        }
+    }
     #[derive(
         Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
@@ -6145,6 +6898,22 @@ pub mod explicit_draughting {
     impl Into<PlanarExtentAny> for PlanarBox {
         fn into(self) -> PlanarExtentAny {
             PlanarExtentAny::PlanarBox(Box::new(self.into()))
+        }
+    }
+    impl AsRef<PlanarExtent> for PlanarExtentAny {
+        fn as_ref(&self) -> &PlanarExtent {
+            match self {
+                PlanarExtentAny::PlanarExtent(x) => x.as_ref(),
+                PlanarExtentAny::PlanarBox(x) => (**x).as_ref(),
+            }
+        }
+    }
+    impl AsRef<GeometricRepresentationItem> for PlanarExtentAny {
+        fn as_ref(&self) -> &GeometricRepresentationItem {
+            match self {
+                PlanarExtentAny::PlanarExtent(x) => AsRef::<PlanarExtent>::as_ref(x).as_ref(),
+                PlanarExtentAny::PlanarBox(x) => AsRef::<PlanarExtent>::as_ref(x.as_ref()).as_ref(),
+            }
         }
     }
     #[derive(
@@ -6218,6 +6987,24 @@ pub mod explicit_draughting {
             PointAny::PointOnCurve(Box::new(self.into()))
         }
     }
+    impl AsRef<Point> for PointAny {
+        fn as_ref(&self) -> &Point {
+            match self {
+                PointAny::Point(x) => x.as_ref(),
+                PointAny::CartesianPoint(x) => (**x).as_ref(),
+                PointAny::PointOnCurve(x) => (**x).as_ref(),
+            }
+        }
+    }
+    impl AsRef<GeometricRepresentationItem> for PointAny {
+        fn as_ref(&self) -> &GeometricRepresentationItem {
+            match self {
+                PointAny::Point(x) => AsRef::<Point>::as_ref(x).as_ref(),
+                PointAny::CartesianPoint(x) => AsRef::<Point>::as_ref(x.as_ref()).as_ref(),
+                PointAny::PointOnCurve(x) => AsRef::<Point>::as_ref(x.as_ref()).as_ref(),
+            }
+        }
+    }
     #[derive(
         Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
@@ -6286,6 +7073,38 @@ pub mod explicit_draughting {
             PreDefinedColourAny::DraughtingPreDefinedColour(Box::new(self.into()))
         }
     }
+    impl AsRef<PreDefinedColour> for PreDefinedColourAny {
+        fn as_ref(&self) -> &PreDefinedColour {
+            match self {
+                PreDefinedColourAny::PreDefinedColour(x) => x.as_ref(),
+                PreDefinedColourAny::DraughtingPreDefinedColour(x) => (**x).as_ref(),
+            }
+        }
+    }
+    impl AsRef<PreDefinedItem> for PreDefinedColourAny {
+        fn as_ref(&self) -> &PreDefinedItem {
+            match self {
+                PreDefinedColourAny::PreDefinedColour(x) => {
+                    AsRef::<PreDefinedColour>::as_ref(x).as_ref()
+                }
+                PreDefinedColourAny::DraughtingPreDefinedColour(x) => {
+                    AsRef::<PreDefinedColour>::as_ref(x.as_ref()).as_ref()
+                }
+            }
+        }
+    }
+    impl AsRef<Colour> for PreDefinedColourAny {
+        fn as_ref(&self) -> &Colour {
+            match self {
+                PreDefinedColourAny::PreDefinedColour(x) => {
+                    AsRef::<PreDefinedColour>::as_ref(x).as_ref()
+                }
+                PreDefinedColourAny::DraughtingPreDefinedColour(x) => {
+                    AsRef::<PreDefinedColour>::as_ref(x.as_ref()).as_ref()
+                }
+            }
+        }
+    }
     #[derive(
         Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
@@ -6319,6 +7138,26 @@ pub mod explicit_draughting {
     impl Into<PreDefinedCurveFontAny> for DraughtingPreDefinedCurveFont {
         fn into(self) -> PreDefinedCurveFontAny {
             PreDefinedCurveFontAny::DraughtingPreDefinedCurveFont(Box::new(self.into()))
+        }
+    }
+    impl AsRef<PreDefinedCurveFont> for PreDefinedCurveFontAny {
+        fn as_ref(&self) -> &PreDefinedCurveFont {
+            match self {
+                PreDefinedCurveFontAny::PreDefinedCurveFont(x) => x.as_ref(),
+                PreDefinedCurveFontAny::DraughtingPreDefinedCurveFont(x) => (**x).as_ref(),
+            }
+        }
+    }
+    impl AsRef<PreDefinedItem> for PreDefinedCurveFontAny {
+        fn as_ref(&self) -> &PreDefinedItem {
+            match self {
+                PreDefinedCurveFontAny::PreDefinedCurveFont(x) => {
+                    AsRef::<PreDefinedCurveFont>::as_ref(x).as_ref()
+                }
+                PreDefinedCurveFontAny::DraughtingPreDefinedCurveFont(x) => {
+                    AsRef::<PreDefinedCurveFont>::as_ref(x.as_ref()).as_ref()
+                }
+            }
         }
     }
     #[derive(
@@ -6401,6 +7240,17 @@ pub mod explicit_draughting {
             PreDefinedItemAny::PreDefinedTextFont(Box::new(self.into()))
         }
     }
+    impl AsRef<PreDefinedItem> for PreDefinedItemAny {
+        fn as_ref(&self) -> &PreDefinedItem {
+            match self {
+                PreDefinedItemAny::PreDefinedItem(x) => x.as_ref(),
+                PreDefinedItemAny::PreDefinedColour(x) => (**x).as_ref(),
+                PreDefinedItemAny::PreDefinedCurveFont(x) => (**x).as_ref(),
+                PreDefinedItemAny::PreDefinedSymbol(x) => (**x).as_ref(),
+                PreDefinedItemAny::PreDefinedTextFont(x) => (**x).as_ref(),
+            }
+        }
+    }
     #[derive(
         Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
@@ -6474,6 +7324,38 @@ pub mod explicit_draughting {
             PreDefinedSymbolAny::PreDefinedTerminatorSymbol(Box::new(self.into()))
         }
     }
+    impl AsRef<PreDefinedSymbol> for PreDefinedSymbolAny {
+        fn as_ref(&self) -> &PreDefinedSymbol {
+            match self {
+                PreDefinedSymbolAny::PreDefinedSymbol(x) => x.as_ref(),
+                PreDefinedSymbolAny::PreDefinedDimensionSymbol(x) => (**x).as_ref(),
+                PreDefinedSymbolAny::PreDefinedGeometricalToleranceSymbol(x) => (**x).as_ref(),
+                PreDefinedSymbolAny::PreDefinedPointMarkerSymbol(x) => (**x).as_ref(),
+                PreDefinedSymbolAny::PreDefinedTerminatorSymbol(x) => (**x).as_ref(),
+            }
+        }
+    }
+    impl AsRef<PreDefinedItem> for PreDefinedSymbolAny {
+        fn as_ref(&self) -> &PreDefinedItem {
+            match self {
+                PreDefinedSymbolAny::PreDefinedSymbol(x) => {
+                    AsRef::<PreDefinedSymbol>::as_ref(x).as_ref()
+                }
+                PreDefinedSymbolAny::PreDefinedDimensionSymbol(x) => {
+                    AsRef::<PreDefinedSymbol>::as_ref(x.as_ref()).as_ref()
+                }
+                PreDefinedSymbolAny::PreDefinedGeometricalToleranceSymbol(x) => {
+                    AsRef::<PreDefinedSymbol>::as_ref(x.as_ref()).as_ref()
+                }
+                PreDefinedSymbolAny::PreDefinedPointMarkerSymbol(x) => {
+                    AsRef::<PreDefinedSymbol>::as_ref(x.as_ref()).as_ref()
+                }
+                PreDefinedSymbolAny::PreDefinedTerminatorSymbol(x) => {
+                    AsRef::<PreDefinedSymbol>::as_ref(x.as_ref()).as_ref()
+                }
+            }
+        }
+    }
     #[derive(
         Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
@@ -6523,6 +7405,26 @@ pub mod explicit_draughting {
             PreDefinedTextFontAny::DraughtingPreDefinedTextFont(Box::new(self.into()))
         }
     }
+    impl AsRef<PreDefinedTextFont> for PreDefinedTextFontAny {
+        fn as_ref(&self) -> &PreDefinedTextFont {
+            match self {
+                PreDefinedTextFontAny::PreDefinedTextFont(x) => x.as_ref(),
+                PreDefinedTextFontAny::DraughtingPreDefinedTextFont(x) => (**x).as_ref(),
+            }
+        }
+    }
+    impl AsRef<PreDefinedItem> for PreDefinedTextFontAny {
+        fn as_ref(&self) -> &PreDefinedItem {
+            match self {
+                PreDefinedTextFontAny::PreDefinedTextFont(x) => {
+                    AsRef::<PreDefinedTextFont>::as_ref(x).as_ref()
+                }
+                PreDefinedTextFontAny::DraughtingPreDefinedTextFont(x) => {
+                    AsRef::<PreDefinedTextFont>::as_ref(x.as_ref()).as_ref()
+                }
+            }
+        }
+    }
     #[derive(
         Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
@@ -6556,6 +7458,26 @@ pub mod explicit_draughting {
     impl Into<PresentationAreaAny> for DrawingSheetRevision {
         fn into(self) -> PresentationAreaAny {
             PresentationAreaAny::DrawingSheetRevision(Box::new(self.into()))
+        }
+    }
+    impl AsRef<PresentationArea> for PresentationAreaAny {
+        fn as_ref(&self) -> &PresentationArea {
+            match self {
+                PresentationAreaAny::PresentationArea(x) => x.as_ref(),
+                PresentationAreaAny::DrawingSheetRevision(x) => (**x).as_ref(),
+            }
+        }
+    }
+    impl AsRef<PresentationRepresentation> for PresentationAreaAny {
+        fn as_ref(&self) -> &PresentationRepresentation {
+            match self {
+                PresentationAreaAny::PresentationArea(x) => {
+                    AsRef::<PresentationArea>::as_ref(x).as_ref()
+                }
+                PresentationAreaAny::DrawingSheetRevision(x) => {
+                    AsRef::<PresentationArea>::as_ref(x.as_ref()).as_ref()
+                }
+            }
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -6621,6 +7543,30 @@ pub mod explicit_draughting {
             PresentationRepresentationAny::PresentationView(Box::new(self.into()))
         }
     }
+    impl AsRef<PresentationRepresentation> for PresentationRepresentationAny {
+        fn as_ref(&self) -> &PresentationRepresentation {
+            match self {
+                PresentationRepresentationAny::PresentationRepresentation(x) => x.as_ref(),
+                PresentationRepresentationAny::PresentationArea(x) => (**x).as_ref(),
+                PresentationRepresentationAny::PresentationView(x) => (**x).as_ref(),
+            }
+        }
+    }
+    impl AsRef<Representation> for PresentationRepresentationAny {
+        fn as_ref(&self) -> &Representation {
+            match self {
+                PresentationRepresentationAny::PresentationRepresentation(x) => {
+                    AsRef::<PresentationRepresentation>::as_ref(x).as_ref()
+                }
+                PresentationRepresentationAny::PresentationArea(x) => {
+                    AsRef::<PresentationRepresentation>::as_ref(x.as_ref()).as_ref()
+                }
+                PresentationRepresentationAny::PresentationView(x) => {
+                    AsRef::<PresentationRepresentation>::as_ref(x.as_ref()).as_ref()
+                }
+            }
+        }
+    }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = presentation_set)]
@@ -6645,6 +7591,14 @@ pub mod explicit_draughting {
     impl Into<PresentationSetAny> for DrawingRevision {
         fn into(self) -> PresentationSetAny {
             PresentationSetAny::DrawingRevision(Box::new(self.into()))
+        }
+    }
+    impl AsRef<PresentationSet> for PresentationSetAny {
+        fn as_ref(&self) -> &PresentationSet {
+            match self {
+                PresentationSetAny::PresentationSet(x) => x.as_ref(),
+                PresentationSetAny::DrawingRevision(x) => (**x).as_ref(),
+            }
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -6684,6 +7638,14 @@ pub mod explicit_draughting {
     impl Into<PresentationStyleAssignmentAny> for PresentationStyleByContext {
         fn into(self) -> PresentationStyleAssignmentAny {
             PresentationStyleAssignmentAny::PresentationStyleByContext(Box::new(self.into()))
+        }
+    }
+    impl AsRef<PresentationStyleAssignment> for PresentationStyleAssignmentAny {
+        fn as_ref(&self) -> &PresentationStyleAssignment {
+            match self {
+                PresentationStyleAssignmentAny::PresentationStyleAssignment(x) => x.as_ref(),
+                PresentationStyleAssignmentAny::PresentationStyleByContext(x) => (**x).as_ref(),
+            }
         }
     }
     #[derive(
@@ -6740,6 +7702,14 @@ pub mod explicit_draughting {
     impl Into<PresentedItemAny> for DraughtingPresentedItem {
         fn into(self) -> PresentedItemAny {
             PresentedItemAny::DraughtingPresentedItem(Box::new(self.into()))
+        }
+    }
+    impl AsRef<PresentedItem> for PresentedItemAny {
+        fn as_ref(&self) -> &PresentedItem {
+            match self {
+                PresentedItemAny::PresentedItem(x) => x.as_ref(),
+                PresentedItemAny::DraughtingPresentedItem(x) => (**x).as_ref(),
+            }
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -6878,6 +7848,26 @@ pub mod explicit_draughting {
             ProjectionDirectedCalloutAny::OrdinateDimension(Box::new(self.into()))
         }
     }
+    impl AsRef<ProjectionDirectedCallout> for ProjectionDirectedCalloutAny {
+        fn as_ref(&self) -> &ProjectionDirectedCallout {
+            match self {
+                ProjectionDirectedCalloutAny::ProjectionDirectedCallout(x) => x.as_ref(),
+                ProjectionDirectedCalloutAny::OrdinateDimension(x) => (**x).as_ref(),
+            }
+        }
+    }
+    impl AsRef<DraughtingCallout> for ProjectionDirectedCalloutAny {
+        fn as_ref(&self) -> &DraughtingCallout {
+            match self {
+                ProjectionDirectedCalloutAny::ProjectionDirectedCallout(x) => {
+                    AsRef::<ProjectionDirectedCallout>::as_ref(x).as_ref()
+                }
+                ProjectionDirectedCalloutAny::OrdinateDimension(x) => {
+                    AsRef::<ProjectionDirectedCallout>::as_ref(x.as_ref()).as_ref()
+                }
+            }
+        }
+    }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = property_definition)]
@@ -6907,6 +7897,14 @@ pub mod explicit_draughting {
     impl Into<PropertyDefinitionAny> for ProductDefinitionShape {
         fn into(self) -> PropertyDefinitionAny {
             PropertyDefinitionAny::ProductDefinitionShape(Box::new(self.into()))
+        }
+    }
+    impl AsRef<PropertyDefinition> for PropertyDefinitionAny {
+        fn as_ref(&self) -> &PropertyDefinition {
+            match self {
+                PropertyDefinitionAny::PropertyDefinition(x) => x.as_ref(),
+                PropertyDefinitionAny::ProductDefinitionShape(x) => (**x).as_ref(),
+            }
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -6940,6 +7938,18 @@ pub mod explicit_draughting {
             PropertyDefinitionRepresentationAny::ShapeDefinitionRepresentation(Box::new(
                 self.into(),
             ))
+        }
+    }
+    impl AsRef<PropertyDefinitionRepresentation> for PropertyDefinitionRepresentationAny {
+        fn as_ref(&self) -> &PropertyDefinitionRepresentation {
+            match self {
+                PropertyDefinitionRepresentationAny::PropertyDefinitionRepresentation(x) => {
+                    x.as_ref()
+                }
+                PropertyDefinitionRepresentationAny::ShapeDefinitionRepresentation(x) => {
+                    (**x).as_ref()
+                }
+            }
         }
     }
     #[derive(
@@ -7041,6 +8051,17 @@ pub mod explicit_draughting {
             RepresentationAny::SymbolRepresentation(Box::new(self.into()))
         }
     }
+    impl AsRef<Representation> for RepresentationAny {
+        fn as_ref(&self) -> &Representation {
+            match self {
+                RepresentationAny::Representation(x) => x.as_ref(),
+                RepresentationAny::DraughtingModel(x) => (**x).as_ref(),
+                RepresentationAny::PresentationRepresentation(x) => (**x).as_ref(),
+                RepresentationAny::ShapeRepresentation(x) => (**x).as_ref(),
+                RepresentationAny::SymbolRepresentation(x) => (**x).as_ref(),
+            }
+        }
+    }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = representation_context)]
@@ -7076,6 +8097,15 @@ pub mod explicit_draughting {
     impl Into<RepresentationContextAny> for GlobalUnitAssignedContext {
         fn into(self) -> RepresentationContextAny {
             RepresentationContextAny::GlobalUnitAssignedContext(Box::new(self.into()))
+        }
+    }
+    impl AsRef<RepresentationContext> for RepresentationContextAny {
+        fn as_ref(&self) -> &RepresentationContext {
+            match self {
+                RepresentationContextAny::RepresentationContext(x) => x.as_ref(),
+                RepresentationContextAny::GeometricRepresentationContext(x) => (**x).as_ref(),
+                RepresentationContextAny::GlobalUnitAssignedContext(x) => (**x).as_ref(),
+            }
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -7122,6 +8152,16 @@ pub mod explicit_draughting {
             RepresentationItemAny::StyledItem(Box::new(self.into()))
         }
     }
+    impl AsRef<RepresentationItem> for RepresentationItemAny {
+        fn as_ref(&self) -> &RepresentationItem {
+            match self {
+                RepresentationItemAny::RepresentationItem(x) => x.as_ref(),
+                RepresentationItemAny::GeometricRepresentationItem(x) => (**x).as_ref(),
+                RepresentationItemAny::MappedItem(x) => (**x).as_ref(),
+                RepresentationItemAny::StyledItem(x) => (**x).as_ref(),
+            }
+        }
+    }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = representation_map)]
@@ -7159,6 +8199,15 @@ pub mod explicit_draughting {
     impl Into<RepresentationMapAny> for SymbolRepresentationMap {
         fn into(self) -> RepresentationMapAny {
             RepresentationMapAny::SymbolRepresentationMap(Box::new(self.into()))
+        }
+    }
+    impl AsRef<RepresentationMap> for RepresentationMapAny {
+        fn as_ref(&self) -> &RepresentationMap {
+            match self {
+                RepresentationMapAny::RepresentationMap(x) => x.as_ref(),
+                RepresentationMapAny::CameraUsage(x) => (**x).as_ref(),
+                RepresentationMapAny::SymbolRepresentationMap(x) => (**x).as_ref(),
+            }
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -7200,6 +8249,18 @@ pub mod explicit_draughting {
             SecurityClassificationAssignmentAny::DraughtingSecurityClassificationAssignment(
                 Box::new(self.into()),
             )
+        }
+    }
+    impl AsRef<SecurityClassificationAssignment> for SecurityClassificationAssignmentAny {
+        fn as_ref(&self) -> &SecurityClassificationAssignment {
+            match self {
+                SecurityClassificationAssignmentAny::SecurityClassificationAssignment(x) => {
+                    x.as_ref()
+                }
+                SecurityClassificationAssignmentAny::DraughtingSecurityClassificationAssignment(
+                    x,
+                ) => (**x).as_ref(),
+            }
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -7260,6 +8321,28 @@ pub mod explicit_draughting {
             ShapeRepresentationAny::GeometricallyBounded2DWireframeRepresentation(Box::new(
                 self.into(),
             ))
+        }
+    }
+    impl AsRef<ShapeRepresentation> for ShapeRepresentationAny {
+        fn as_ref(&self) -> &ShapeRepresentation {
+            match self {
+                ShapeRepresentationAny::ShapeRepresentation(x) => x.as_ref(),
+                ShapeRepresentationAny::GeometricallyBounded2DWireframeRepresentation(x) => {
+                    (**x).as_ref()
+                }
+            }
+        }
+    }
+    impl AsRef<Representation> for ShapeRepresentationAny {
+        fn as_ref(&self) -> &Representation {
+            match self {
+                ShapeRepresentationAny::ShapeRepresentation(x) => {
+                    AsRef::<ShapeRepresentation>::as_ref(x).as_ref()
+                }
+                ShapeRepresentationAny::GeometricallyBounded2DWireframeRepresentation(x) => {
+                    AsRef::<ShapeRepresentation>::as_ref(x.as_ref()).as_ref()
+                }
+            }
         }
     }
     #[derive(
@@ -7331,6 +8414,24 @@ pub mod explicit_draughting {
             StyledItemAny::AnnotationOccurrence(Box::new(self.into()))
         }
     }
+    impl AsRef<StyledItem> for StyledItemAny {
+        fn as_ref(&self) -> &StyledItem {
+            match self {
+                StyledItemAny::StyledItem(x) => x.as_ref(),
+                StyledItemAny::AnnotationOccurrence(x) => (**x).as_ref(),
+            }
+        }
+    }
+    impl AsRef<RepresentationItem> for StyledItemAny {
+        fn as_ref(&self) -> &RepresentationItem {
+            match self {
+                StyledItemAny::StyledItem(x) => AsRef::<StyledItem>::as_ref(x).as_ref(),
+                StyledItemAny::AnnotationOccurrence(x) => {
+                    AsRef::<StyledItem>::as_ref(x.as_ref()).as_ref()
+                }
+            }
+        }
+    }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = symbol_colour)]
@@ -7380,6 +8481,30 @@ pub mod explicit_draughting {
     impl Into<SymbolRepresentationAny> for DraughtingSymbolRepresentation {
         fn into(self) -> SymbolRepresentationAny {
             SymbolRepresentationAny::DraughtingSymbolRepresentation(Box::new(self.into()))
+        }
+    }
+    impl AsRef<SymbolRepresentation> for SymbolRepresentationAny {
+        fn as_ref(&self) -> &SymbolRepresentation {
+            match self {
+                SymbolRepresentationAny::SymbolRepresentation(x) => x.as_ref(),
+                SymbolRepresentationAny::DraughtingSubfigureRepresentation(x) => (**x).as_ref(),
+                SymbolRepresentationAny::DraughtingSymbolRepresentation(x) => (**x).as_ref(),
+            }
+        }
+    }
+    impl AsRef<Representation> for SymbolRepresentationAny {
+        fn as_ref(&self) -> &Representation {
+            match self {
+                SymbolRepresentationAny::SymbolRepresentation(x) => {
+                    AsRef::<SymbolRepresentation>::as_ref(x).as_ref()
+                }
+                SymbolRepresentationAny::DraughtingSubfigureRepresentation(x) => {
+                    AsRef::<SymbolRepresentation>::as_ref(x.as_ref()).as_ref()
+                }
+                SymbolRepresentationAny::DraughtingSymbolRepresentation(x) => {
+                    AsRef::<SymbolRepresentation>::as_ref(x.as_ref()).as_ref()
+                }
+            }
         }
     }
     #[derive(
@@ -7468,6 +8593,30 @@ pub mod explicit_draughting {
             TerminatorSymbolAny::LeaderTerminator(Box::new(self.into()))
         }
     }
+    impl AsRef<TerminatorSymbol> for TerminatorSymbolAny {
+        fn as_ref(&self) -> &TerminatorSymbol {
+            match self {
+                TerminatorSymbolAny::TerminatorSymbol(x) => x.as_ref(),
+                TerminatorSymbolAny::DimensionCurveTerminator(x) => (**x).as_ref(),
+                TerminatorSymbolAny::LeaderTerminator(x) => (**x).as_ref(),
+            }
+        }
+    }
+    impl AsRef<AnnotationSymbolOccurrence> for TerminatorSymbolAny {
+        fn as_ref(&self) -> &AnnotationSymbolOccurrence {
+            match self {
+                TerminatorSymbolAny::TerminatorSymbol(x) => {
+                    AsRef::<TerminatorSymbol>::as_ref(x).as_ref()
+                }
+                TerminatorSymbolAny::DimensionCurveTerminator(x) => {
+                    AsRef::<TerminatorSymbol>::as_ref(x.as_ref()).as_ref()
+                }
+                TerminatorSymbolAny::LeaderTerminator(x) => {
+                    AsRef::<TerminatorSymbol>::as_ref(x.as_ref()).as_ref()
+                }
+            }
+        }
+    }
     #[derive(
         Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
@@ -7532,6 +8681,36 @@ pub mod explicit_draughting {
     impl Into<TextLiteralAny> for TextLiteralWithExtent {
         fn into(self) -> TextLiteralAny {
             TextLiteralAny::TextLiteralWithExtent(Box::new(self.into()))
+        }
+    }
+    impl AsRef<TextLiteral> for TextLiteralAny {
+        fn as_ref(&self) -> &TextLiteral {
+            match self {
+                TextLiteralAny::TextLiteral(x) => x.as_ref(),
+                TextLiteralAny::TextLiteralWithAssociatedCurves(x) => (**x).as_ref(),
+                TextLiteralAny::TextLiteralWithBlankingBox(x) => (**x).as_ref(),
+                TextLiteralAny::TextLiteralWithDelineation(x) => (**x).as_ref(),
+                TextLiteralAny::TextLiteralWithExtent(x) => (**x).as_ref(),
+            }
+        }
+    }
+    impl AsRef<GeometricRepresentationItem> for TextLiteralAny {
+        fn as_ref(&self) -> &GeometricRepresentationItem {
+            match self {
+                TextLiteralAny::TextLiteral(x) => AsRef::<TextLiteral>::as_ref(x).as_ref(),
+                TextLiteralAny::TextLiteralWithAssociatedCurves(x) => {
+                    AsRef::<TextLiteral>::as_ref(x.as_ref()).as_ref()
+                }
+                TextLiteralAny::TextLiteralWithBlankingBox(x) => {
+                    AsRef::<TextLiteral>::as_ref(x.as_ref()).as_ref()
+                }
+                TextLiteralAny::TextLiteralWithDelineation(x) => {
+                    AsRef::<TextLiteral>::as_ref(x.as_ref()).as_ref()
+                }
+                TextLiteralAny::TextLiteralWithExtent(x) => {
+                    AsRef::<TextLiteral>::as_ref(x.as_ref()).as_ref()
+                }
+            }
         }
     }
     #[derive(
@@ -7604,6 +8783,28 @@ pub mod explicit_draughting {
             ))
         }
     }
+    impl AsRef<TextLiteralWithDelineation> for TextLiteralWithDelineationAny {
+        fn as_ref(&self) -> &TextLiteralWithDelineation {
+            match self {
+                TextLiteralWithDelineationAny::TextLiteralWithDelineation(x) => x.as_ref(),
+                TextLiteralWithDelineationAny::DraughtingTextLiteralWithDelineation(x) => {
+                    (**x).as_ref()
+                }
+            }
+        }
+    }
+    impl AsRef<TextLiteral> for TextLiteralWithDelineationAny {
+        fn as_ref(&self) -> &TextLiteral {
+            match self {
+                TextLiteralWithDelineationAny::TextLiteralWithDelineation(x) => {
+                    AsRef::<TextLiteralWithDelineation>::as_ref(x).as_ref()
+                }
+                TextLiteralWithDelineationAny::DraughtingTextLiteralWithDelineation(x) => {
+                    AsRef::<TextLiteralWithDelineation>::as_ref(x.as_ref()).as_ref()
+                }
+            }
+        }
+    }
     #[derive(
         Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut, Deref, DerefMut,
     )]
@@ -7656,6 +8857,15 @@ pub mod explicit_draughting {
     impl Into<TextStyleAny> for TextStyleWithMirror {
         fn into(self) -> TextStyleAny {
             TextStyleAny::TextStyleWithMirror(Box::new(self.into()))
+        }
+    }
+    impl AsRef<TextStyle> for TextStyleAny {
+        fn as_ref(&self) -> &TextStyle {
+            match self {
+                TextStyleAny::TextStyle(x) => x.as_ref(),
+                TextStyleAny::TextStyleWithBoxCharacteristics(x) => (**x).as_ref(),
+                TextStyleAny::TextStyleWithMirror(x) => (**x).as_ref(),
+            }
         }
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]

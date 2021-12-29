@@ -240,3 +240,24 @@ fn get_owned_any() {
         }))
     );
 }
+
+#[test]
+fn as_ref_base_any() {
+    let table = Tables::from_str(EXAMPLE).unwrap();
+
+    // #1 = BASE(1.0);
+    let any1 = EntityTable::<BaseAnyHolder>::get_owned(&table, 1).unwrap();
+    assert_eq!(any1.as_ref(), &Base { x: 1.0 });
+
+    // #2 = SUB_1(BASE((1.0)), 2.0);
+    let any2 = EntityTable::<BaseAnyHolder>::get_owned(&table, 2).unwrap();
+    assert_eq!(any2.as_ref(), &Base { x: 1.0 });
+    let sub2 = EntityTable::<Sub1Holder>::get_owned(&table, 2).unwrap();
+    assert_eq!(sub2.as_ref(), &Base { x: 1.0 });
+
+    // #3 = SUB_2(#1, 4.0);
+    let any3 = EntityTable::<BaseAnyHolder>::get_owned(&table, 3).unwrap();
+    assert_eq!(any3.as_ref(), &Base { x: 1.0 });
+    let sub3 = EntityTable::<Sub2Holder>::get_owned(&table, 3).unwrap();
+    assert_eq!(sub3.as_ref(), &Base { x: 1.0 });
+}
