@@ -196,10 +196,7 @@ impl FieldEntries {
 
         for (i, field) in st.fields.iter().enumerate() {
             let ft: FieldType = field.ty.clone().try_into().unwrap();
-            let index = syn::Index {
-                index: i as u32,
-                span: Span::call_site(),
-            };
+            let index = syn::Index::from(i);
 
             let HolderAttr { place_holder, .. } = HolderAttr::parse(&field.attrs);
             if place_holder {
@@ -213,7 +210,7 @@ impl FieldEntries {
 						);
                     }
                     FieldType::List(_) => into_owned.push(quote! {
-                        self.#i
+                        self.#index
                             .into_iter()
                             .map(|v| v.into_owned(#table_arg))
                             .collect::<::std::result::Result<Vec<_>, _>>()?
