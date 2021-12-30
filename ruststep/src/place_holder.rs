@@ -60,7 +60,7 @@ impl<'de, T: Holder + WithVisitor + Deserialize<'de>> Deserialize<'de> for Place
     }
 }
 
-struct PlaceHolderVisitor<T> {
+pub struct PlaceHolderVisitor<T> {
     phantom: PhantomData<T>,
 }
 
@@ -72,7 +72,7 @@ impl<T> Default for PlaceHolderVisitor<T> {
     }
 }
 
-impl<'de, T: Deserialize<'de> + Holder + WithVisitor> de::Visitor<'de> for PlaceHolderVisitor<T> {
+impl<'de, T: Deserialize<'de> + WithVisitor> de::Visitor<'de> for PlaceHolderVisitor<T> {
     type Value = PlaceHolder<T>;
 
     fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
@@ -142,5 +142,17 @@ impl<'de, T: Deserialize<'de> + Holder + WithVisitor> de::Visitor<'de> for Place
     {
         let visitor = T::visitor_new();
         Ok(PlaceHolder::Owned(visitor.visit_map(map)?))
+    }
+}
+
+impl<T> WithVisitor for PlaceHolder<T>
+where
+    T: WithVisitor + for<'de> de::Deserialize<'de>,
+{
+    type Visitor = PlaceHolderVisitor<T>;
+    fn visitor_new() -> Self::Visitor {
+        PlaceHolderVisitor {
+            phantom: PhantomData,
+        }
     }
 }
