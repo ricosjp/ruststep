@@ -1,7 +1,7 @@
 //! Traits for espr-generated structures
 
 use serde::de;
-use std::collections::HashMap;
+use std::{collections::HashMap, marker::PhantomData};
 
 use crate::{
     ast::{DataSection, Record},
@@ -32,6 +32,103 @@ pub trait Holder: IntoOwned {
 pub trait WithVisitor {
     type Visitor: for<'de> de::Visitor<'de, Value = Self>;
     fn visitor_new() -> Self::Visitor;
+}
+
+pub struct StringVisitor {}
+
+impl<'de> de::Visitor<'de> for StringVisitor {
+    type Value = String;
+    fn expecting(&self, formatter: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        write!(formatter, "String")
+    }
+
+    fn visit_seq<A>(self, mut seq: A) -> ::std::result::Result<Self::Value, A::Error>
+    where
+        A: de::SeqAccess<'de>,
+    {
+        if let Some(s) = seq.next_element()? {
+            Ok(s)
+        } else {
+            panic!("Empty sequence")
+        }
+    }
+
+    fn visit_str<E>(self, v: &str) -> ::std::result::Result<Self::Value, E>
+    where
+        E: de::Error,
+    {
+        Ok(v.to_string())
+    }
+}
+
+impl WithVisitor for String {
+    type Visitor = StringVisitor;
+    fn visitor_new() -> Self::Visitor {
+        StringVisitor {}
+    }
+}
+
+pub struct FloatVisitor {}
+
+impl<'de> de::Visitor<'de> for FloatVisitor {
+    type Value = f64;
+    fn expecting(&self, formatter: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        write!(formatter, "f64")
+    }
+
+    fn visit_f64<E>(self, v: f64) -> ::std::result::Result<Self::Value, E>
+    where
+        E: de::Error,
+    {
+        Ok(v)
+    }
+
+    fn visit_seq<A>(self, mut seq: A) -> ::std::result::Result<Self::Value, A::Error>
+    where
+        A: ::serde::de::SeqAccess<'de>,
+    {
+        Ok(seq.next_element()?.expect("Empty sequence"))
+    }
+}
+
+impl WithVisitor for f64 {
+    type Visitor = FloatVisitor;
+    fn visitor_new() -> Self::Visitor {
+        FloatVisitor {}
+    }
+}
+
+pub struct ListVisitor<T: WithVisitor> {
+    phantom: PhantomData<T>,
+}
+
+impl<'de, T: WithVisitor> de::Visitor<'de> for ListVisitor<T> {
+    type Value = Vec<T>;
+    fn expecting(&self, formatter: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        write!(formatter, "Vec<{}>", std::any::type_name::<T>())
+    }
+
+    fn visit_seq<A>(self, mut seq: A) -> ::std::result::Result<Self::Value, A::Error>
+    where
+        A: ::serde::de::SeqAccess<'de>,
+    {
+        let n = seq.size_hint().expect("seq must have size hint");
+        let mut out = Vec::new();
+        for _ in 0..n {
+            let visitor = T::visitor_new();
+            out.push(visitor.visit_seq(&mut seq)?);
+        }
+        Ok(out)
+    }
+}
+
+impl<T: WithVisitor> WithVisitor for Vec<T> {
+    type Visitor = ListVisitor<T>;
+    fn visitor_new() -> Self::Visitor {
+        ListVisitor {
+            phantom: PhantomData,
+        }
+    }
 }
 
 /// Trait for tables which pulls an entity (`T`) from an entity id (`u64`)
