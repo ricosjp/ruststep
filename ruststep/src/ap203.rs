@@ -283,8 +283,65 @@ pub mod config_control_design {
         volume_unit: HashMap<u64, as_holder!(VolumeUnit)>,
         week_of_year_and_day_date: HashMap<u64, as_holder!(WeekOfYearAndDayDate)>,
         wire_shell: HashMap<u64, as_holder!(WireShell)>,
+        approved_item: HashMap<u64, as_holder!(ApprovedItem)>,
+        area_measure: HashMap<u64, as_holder!(AreaMeasure)>,
+        axis2_placement: HashMap<u64, as_holder!(Axis2Placement)>,
+        boolean_operand: HashMap<u64, as_holder!(BooleanOperand)>,
+        certified_item: HashMap<u64, as_holder!(CertifiedItem)>,
+        change_request_item: HashMap<u64, as_holder!(ChangeRequestItem)>,
+        characterized_definition: HashMap<u64, as_holder!(CharacterizedDefinition)>,
+        characterized_product_definition: HashMap<u64, as_holder!(CharacterizedProductDefinition)>,
+        classified_item: HashMap<u64, as_holder!(ClassifiedItem)>,
+        context_dependent_measure: HashMap<u64, as_holder!(ContextDependentMeasure)>,
+        contracted_item: HashMap<u64, as_holder!(ContractedItem)>,
+        count_measure: HashMap<u64, as_holder!(CountMeasure)>,
+        curve_on_surface: HashMap<u64, as_holder!(CurveOnSurface)>,
+        date_time_item: HashMap<u64, as_holder!(DateTimeItem)>,
+        date_time_select: HashMap<u64, as_holder!(DateTimeSelect)>,
+        day_in_month_number: HashMap<u64, as_holder!(DayInMonthNumber)>,
+        day_in_week_number: HashMap<u64, as_holder!(DayInWeekNumber)>,
+        day_in_year_number: HashMap<u64, as_holder!(DayInYearNumber)>,
+        descriptive_measure: HashMap<u64, as_holder!(DescriptiveMeasure)>,
+        dimension_count: HashMap<u64, as_holder!(DimensionCount)>,
+        founded_item_select: HashMap<u64, as_holder!(FoundedItemSelect)>,
+        geometric_set_select: HashMap<u64, as_holder!(GeometricSetSelect)>,
+        hour_in_day: HashMap<u64, as_holder!(HourInDay)>,
+        identifier: HashMap<u64, as_holder!(Identifier)>,
+        label: HashMap<u64, as_holder!(Label)>,
+        length_measure: HashMap<u64, as_holder!(LengthMeasure)>,
         list_of_reversible_topology_item: HashMap<u64, as_holder!(ListOfReversibleTopologyItem)>,
+        mass_measure: HashMap<u64, as_holder!(MassMeasure)>,
+        measure_value: HashMap<u64, as_holder!(MeasureValue)>,
+        minute_in_hour: HashMap<u64, as_holder!(MinuteInHour)>,
+        month_in_year_number: HashMap<u64, as_holder!(MonthInYearNumber)>,
+        parameter_value: HashMap<u64, as_holder!(ParameterValue)>,
+        pcurve_or_surface: HashMap<u64, as_holder!(PcurveOrSurface)>,
+        person_organization_item: HashMap<u64, as_holder!(PersonOrganizationItem)>,
+        person_organization_select: HashMap<u64, as_holder!(PersonOrganizationSelect)>,
+        plane_angle_measure: HashMap<u64, as_holder!(PlaneAngleMeasure)>,
+        positive_length_measure: HashMap<u64, as_holder!(PositiveLengthMeasure)>,
+        positive_plane_angle_measure: HashMap<u64, as_holder!(PositivePlaneAngleMeasure)>,
+        reversible_topology: HashMap<u64, as_holder!(ReversibleTopology)>,
+        reversible_topology_item: HashMap<u64, as_holder!(ReversibleTopologyItem)>,
+        second_in_minute: HashMap<u64, as_holder!(SecondInMinute)>,
         set_of_reversible_topology_item: HashMap<u64, as_holder!(SetOfReversibleTopologyItem)>,
+        shape_definition: HashMap<u64, as_holder!(ShapeDefinition)>,
+        shell: HashMap<u64, as_holder!(Shell)>,
+        solid_angle_measure: HashMap<u64, as_holder!(SolidAngleMeasure)>,
+        specified_item: HashMap<u64, as_holder!(SpecifiedItem)>,
+        start_request_item: HashMap<u64, as_holder!(StartRequestItem)>,
+        supported_item: HashMap<u64, as_holder!(SupportedItem)>,
+        surface_model: HashMap<u64, as_holder!(SurfaceModel)>,
+        text: HashMap<u64, as_holder!(Text)>,
+        transformation: HashMap<u64, as_holder!(Transformation)>,
+        trimming_select: HashMap<u64, as_holder!(TrimmingSelect)>,
+        unit: HashMap<u64, as_holder!(Unit)>,
+        vector_or_direction: HashMap<u64, as_holder!(VectorOrDirection)>,
+        volume_measure: HashMap<u64, as_holder!(VolumeMeasure)>,
+        week_in_year_number: HashMap<u64, as_holder!(WeekInYearNumber)>,
+        wireframe_model: HashMap<u64, as_holder!(WireframeModel)>,
+        work_item: HashMap<u64, as_holder!(WorkItem)>,
+        year_number: HashMap<u64, as_holder!(YearNumber)>,
     }
     impl Tables {
         pub fn action_iter<'table>(&'table self) -> impl Iterator<Item = Result<Action>> + 'table {
@@ -2289,6 +2346,212 @@ pub mod config_control_design {
                 .cloned()
                 .map(move |value| value.into_owned(&self))
         }
+        pub fn approved_item_iter<'table>(
+            &'table self,
+        ) -> impl Iterator<Item = Result<ApprovedItem>> + 'table {
+            self.approved_item
+                .values()
+                .cloned()
+                .map(move |value| value.into_owned(&self))
+        }
+        pub fn area_measure_iter<'table>(
+            &'table self,
+        ) -> impl Iterator<Item = Result<AreaMeasure>> + 'table {
+            self.area_measure
+                .values()
+                .cloned()
+                .map(move |value| value.into_owned(&self))
+        }
+        pub fn axis2_placement_iter<'table>(
+            &'table self,
+        ) -> impl Iterator<Item = Result<Axis2Placement>> + 'table {
+            self.axis2_placement
+                .values()
+                .cloned()
+                .map(move |value| value.into_owned(&self))
+        }
+        pub fn boolean_operand_iter<'table>(
+            &'table self,
+        ) -> impl Iterator<Item = Result<BooleanOperand>> + 'table {
+            self.boolean_operand
+                .values()
+                .cloned()
+                .map(move |value| value.into_owned(&self))
+        }
+        pub fn certified_item_iter<'table>(
+            &'table self,
+        ) -> impl Iterator<Item = Result<CertifiedItem>> + 'table {
+            self.certified_item
+                .values()
+                .cloned()
+                .map(move |value| value.into_owned(&self))
+        }
+        pub fn change_request_item_iter<'table>(
+            &'table self,
+        ) -> impl Iterator<Item = Result<ChangeRequestItem>> + 'table {
+            self.change_request_item
+                .values()
+                .cloned()
+                .map(move |value| value.into_owned(&self))
+        }
+        pub fn characterized_definition_iter<'table>(
+            &'table self,
+        ) -> impl Iterator<Item = Result<CharacterizedDefinition>> + 'table {
+            self.characterized_definition
+                .values()
+                .cloned()
+                .map(move |value| value.into_owned(&self))
+        }
+        pub fn characterized_product_definition_iter<'table>(
+            &'table self,
+        ) -> impl Iterator<Item = Result<CharacterizedProductDefinition>> + 'table {
+            self.characterized_product_definition
+                .values()
+                .cloned()
+                .map(move |value| value.into_owned(&self))
+        }
+        pub fn classified_item_iter<'table>(
+            &'table self,
+        ) -> impl Iterator<Item = Result<ClassifiedItem>> + 'table {
+            self.classified_item
+                .values()
+                .cloned()
+                .map(move |value| value.into_owned(&self))
+        }
+        pub fn context_dependent_measure_iter<'table>(
+            &'table self,
+        ) -> impl Iterator<Item = Result<ContextDependentMeasure>> + 'table {
+            self.context_dependent_measure
+                .values()
+                .cloned()
+                .map(move |value| value.into_owned(&self))
+        }
+        pub fn contracted_item_iter<'table>(
+            &'table self,
+        ) -> impl Iterator<Item = Result<ContractedItem>> + 'table {
+            self.contracted_item
+                .values()
+                .cloned()
+                .map(move |value| value.into_owned(&self))
+        }
+        pub fn count_measure_iter<'table>(
+            &'table self,
+        ) -> impl Iterator<Item = Result<CountMeasure>> + 'table {
+            self.count_measure
+                .values()
+                .cloned()
+                .map(move |value| value.into_owned(&self))
+        }
+        pub fn curve_on_surface_iter<'table>(
+            &'table self,
+        ) -> impl Iterator<Item = Result<CurveOnSurface>> + 'table {
+            self.curve_on_surface
+                .values()
+                .cloned()
+                .map(move |value| value.into_owned(&self))
+        }
+        pub fn date_time_item_iter<'table>(
+            &'table self,
+        ) -> impl Iterator<Item = Result<DateTimeItem>> + 'table {
+            self.date_time_item
+                .values()
+                .cloned()
+                .map(move |value| value.into_owned(&self))
+        }
+        pub fn date_time_select_iter<'table>(
+            &'table self,
+        ) -> impl Iterator<Item = Result<DateTimeSelect>> + 'table {
+            self.date_time_select
+                .values()
+                .cloned()
+                .map(move |value| value.into_owned(&self))
+        }
+        pub fn day_in_month_number_iter<'table>(
+            &'table self,
+        ) -> impl Iterator<Item = Result<DayInMonthNumber>> + 'table {
+            self.day_in_month_number
+                .values()
+                .cloned()
+                .map(move |value| value.into_owned(&self))
+        }
+        pub fn day_in_week_number_iter<'table>(
+            &'table self,
+        ) -> impl Iterator<Item = Result<DayInWeekNumber>> + 'table {
+            self.day_in_week_number
+                .values()
+                .cloned()
+                .map(move |value| value.into_owned(&self))
+        }
+        pub fn day_in_year_number_iter<'table>(
+            &'table self,
+        ) -> impl Iterator<Item = Result<DayInYearNumber>> + 'table {
+            self.day_in_year_number
+                .values()
+                .cloned()
+                .map(move |value| value.into_owned(&self))
+        }
+        pub fn descriptive_measure_iter<'table>(
+            &'table self,
+        ) -> impl Iterator<Item = Result<DescriptiveMeasure>> + 'table {
+            self.descriptive_measure
+                .values()
+                .cloned()
+                .map(move |value| value.into_owned(&self))
+        }
+        pub fn dimension_count_iter<'table>(
+            &'table self,
+        ) -> impl Iterator<Item = Result<DimensionCount>> + 'table {
+            self.dimension_count
+                .values()
+                .cloned()
+                .map(move |value| value.into_owned(&self))
+        }
+        pub fn founded_item_select_iter<'table>(
+            &'table self,
+        ) -> impl Iterator<Item = Result<FoundedItemSelect>> + 'table {
+            self.founded_item_select
+                .values()
+                .cloned()
+                .map(move |value| value.into_owned(&self))
+        }
+        pub fn geometric_set_select_iter<'table>(
+            &'table self,
+        ) -> impl Iterator<Item = Result<GeometricSetSelect>> + 'table {
+            self.geometric_set_select
+                .values()
+                .cloned()
+                .map(move |value| value.into_owned(&self))
+        }
+        pub fn hour_in_day_iter<'table>(
+            &'table self,
+        ) -> impl Iterator<Item = Result<HourInDay>> + 'table {
+            self.hour_in_day
+                .values()
+                .cloned()
+                .map(move |value| value.into_owned(&self))
+        }
+        pub fn identifier_iter<'table>(
+            &'table self,
+        ) -> impl Iterator<Item = Result<Identifier>> + 'table {
+            self.identifier
+                .values()
+                .cloned()
+                .map(move |value| value.into_owned(&self))
+        }
+        pub fn label_iter<'table>(&'table self) -> impl Iterator<Item = Result<Label>> + 'table {
+            self.label
+                .values()
+                .cloned()
+                .map(move |value| value.into_owned(&self))
+        }
+        pub fn length_measure_iter<'table>(
+            &'table self,
+        ) -> impl Iterator<Item = Result<LengthMeasure>> + 'table {
+            self.length_measure
+                .values()
+                .cloned()
+                .map(move |value| value.into_owned(&self))
+        }
         pub fn list_of_reversible_topology_item_iter<'table>(
             &'table self,
         ) -> impl Iterator<Item = Result<ListOfReversibleTopologyItem>> + 'table {
@@ -2297,10 +2560,252 @@ pub mod config_control_design {
                 .cloned()
                 .map(move |value| value.into_owned(&self))
         }
+        pub fn mass_measure_iter<'table>(
+            &'table self,
+        ) -> impl Iterator<Item = Result<MassMeasure>> + 'table {
+            self.mass_measure
+                .values()
+                .cloned()
+                .map(move |value| value.into_owned(&self))
+        }
+        pub fn measure_value_iter<'table>(
+            &'table self,
+        ) -> impl Iterator<Item = Result<MeasureValue>> + 'table {
+            self.measure_value
+                .values()
+                .cloned()
+                .map(move |value| value.into_owned(&self))
+        }
+        pub fn minute_in_hour_iter<'table>(
+            &'table self,
+        ) -> impl Iterator<Item = Result<MinuteInHour>> + 'table {
+            self.minute_in_hour
+                .values()
+                .cloned()
+                .map(move |value| value.into_owned(&self))
+        }
+        pub fn month_in_year_number_iter<'table>(
+            &'table self,
+        ) -> impl Iterator<Item = Result<MonthInYearNumber>> + 'table {
+            self.month_in_year_number
+                .values()
+                .cloned()
+                .map(move |value| value.into_owned(&self))
+        }
+        pub fn parameter_value_iter<'table>(
+            &'table self,
+        ) -> impl Iterator<Item = Result<ParameterValue>> + 'table {
+            self.parameter_value
+                .values()
+                .cloned()
+                .map(move |value| value.into_owned(&self))
+        }
+        pub fn pcurve_or_surface_iter<'table>(
+            &'table self,
+        ) -> impl Iterator<Item = Result<PcurveOrSurface>> + 'table {
+            self.pcurve_or_surface
+                .values()
+                .cloned()
+                .map(move |value| value.into_owned(&self))
+        }
+        pub fn person_organization_item_iter<'table>(
+            &'table self,
+        ) -> impl Iterator<Item = Result<PersonOrganizationItem>> + 'table {
+            self.person_organization_item
+                .values()
+                .cloned()
+                .map(move |value| value.into_owned(&self))
+        }
+        pub fn person_organization_select_iter<'table>(
+            &'table self,
+        ) -> impl Iterator<Item = Result<PersonOrganizationSelect>> + 'table {
+            self.person_organization_select
+                .values()
+                .cloned()
+                .map(move |value| value.into_owned(&self))
+        }
+        pub fn plane_angle_measure_iter<'table>(
+            &'table self,
+        ) -> impl Iterator<Item = Result<PlaneAngleMeasure>> + 'table {
+            self.plane_angle_measure
+                .values()
+                .cloned()
+                .map(move |value| value.into_owned(&self))
+        }
+        pub fn positive_length_measure_iter<'table>(
+            &'table self,
+        ) -> impl Iterator<Item = Result<PositiveLengthMeasure>> + 'table {
+            self.positive_length_measure
+                .values()
+                .cloned()
+                .map(move |value| value.into_owned(&self))
+        }
+        pub fn positive_plane_angle_measure_iter<'table>(
+            &'table self,
+        ) -> impl Iterator<Item = Result<PositivePlaneAngleMeasure>> + 'table {
+            self.positive_plane_angle_measure
+                .values()
+                .cloned()
+                .map(move |value| value.into_owned(&self))
+        }
+        pub fn reversible_topology_iter<'table>(
+            &'table self,
+        ) -> impl Iterator<Item = Result<ReversibleTopology>> + 'table {
+            self.reversible_topology
+                .values()
+                .cloned()
+                .map(move |value| value.into_owned(&self))
+        }
+        pub fn reversible_topology_item_iter<'table>(
+            &'table self,
+        ) -> impl Iterator<Item = Result<ReversibleTopologyItem>> + 'table {
+            self.reversible_topology_item
+                .values()
+                .cloned()
+                .map(move |value| value.into_owned(&self))
+        }
+        pub fn second_in_minute_iter<'table>(
+            &'table self,
+        ) -> impl Iterator<Item = Result<SecondInMinute>> + 'table {
+            self.second_in_minute
+                .values()
+                .cloned()
+                .map(move |value| value.into_owned(&self))
+        }
         pub fn set_of_reversible_topology_item_iter<'table>(
             &'table self,
         ) -> impl Iterator<Item = Result<SetOfReversibleTopologyItem>> + 'table {
             self.set_of_reversible_topology_item
+                .values()
+                .cloned()
+                .map(move |value| value.into_owned(&self))
+        }
+        pub fn shape_definition_iter<'table>(
+            &'table self,
+        ) -> impl Iterator<Item = Result<ShapeDefinition>> + 'table {
+            self.shape_definition
+                .values()
+                .cloned()
+                .map(move |value| value.into_owned(&self))
+        }
+        pub fn shell_iter<'table>(&'table self) -> impl Iterator<Item = Result<Shell>> + 'table {
+            self.shell
+                .values()
+                .cloned()
+                .map(move |value| value.into_owned(&self))
+        }
+        pub fn solid_angle_measure_iter<'table>(
+            &'table self,
+        ) -> impl Iterator<Item = Result<SolidAngleMeasure>> + 'table {
+            self.solid_angle_measure
+                .values()
+                .cloned()
+                .map(move |value| value.into_owned(&self))
+        }
+        pub fn specified_item_iter<'table>(
+            &'table self,
+        ) -> impl Iterator<Item = Result<SpecifiedItem>> + 'table {
+            self.specified_item
+                .values()
+                .cloned()
+                .map(move |value| value.into_owned(&self))
+        }
+        pub fn start_request_item_iter<'table>(
+            &'table self,
+        ) -> impl Iterator<Item = Result<StartRequestItem>> + 'table {
+            self.start_request_item
+                .values()
+                .cloned()
+                .map(move |value| value.into_owned(&self))
+        }
+        pub fn supported_item_iter<'table>(
+            &'table self,
+        ) -> impl Iterator<Item = Result<SupportedItem>> + 'table {
+            self.supported_item
+                .values()
+                .cloned()
+                .map(move |value| value.into_owned(&self))
+        }
+        pub fn surface_model_iter<'table>(
+            &'table self,
+        ) -> impl Iterator<Item = Result<SurfaceModel>> + 'table {
+            self.surface_model
+                .values()
+                .cloned()
+                .map(move |value| value.into_owned(&self))
+        }
+        pub fn text_iter<'table>(&'table self) -> impl Iterator<Item = Result<Text>> + 'table {
+            self.text
+                .values()
+                .cloned()
+                .map(move |value| value.into_owned(&self))
+        }
+        pub fn transformation_iter<'table>(
+            &'table self,
+        ) -> impl Iterator<Item = Result<Transformation>> + 'table {
+            self.transformation
+                .values()
+                .cloned()
+                .map(move |value| value.into_owned(&self))
+        }
+        pub fn trimming_select_iter<'table>(
+            &'table self,
+        ) -> impl Iterator<Item = Result<TrimmingSelect>> + 'table {
+            self.trimming_select
+                .values()
+                .cloned()
+                .map(move |value| value.into_owned(&self))
+        }
+        pub fn unit_iter<'table>(&'table self) -> impl Iterator<Item = Result<Unit>> + 'table {
+            self.unit
+                .values()
+                .cloned()
+                .map(move |value| value.into_owned(&self))
+        }
+        pub fn vector_or_direction_iter<'table>(
+            &'table self,
+        ) -> impl Iterator<Item = Result<VectorOrDirection>> + 'table {
+            self.vector_or_direction
+                .values()
+                .cloned()
+                .map(move |value| value.into_owned(&self))
+        }
+        pub fn volume_measure_iter<'table>(
+            &'table self,
+        ) -> impl Iterator<Item = Result<VolumeMeasure>> + 'table {
+            self.volume_measure
+                .values()
+                .cloned()
+                .map(move |value| value.into_owned(&self))
+        }
+        pub fn week_in_year_number_iter<'table>(
+            &'table self,
+        ) -> impl Iterator<Item = Result<WeekInYearNumber>> + 'table {
+            self.week_in_year_number
+                .values()
+                .cloned()
+                .map(move |value| value.into_owned(&self))
+        }
+        pub fn wireframe_model_iter<'table>(
+            &'table self,
+        ) -> impl Iterator<Item = Result<WireframeModel>> + 'table {
+            self.wireframe_model
+                .values()
+                .cloned()
+                .map(move |value| value.into_owned(&self))
+        }
+        pub fn work_item_iter<'table>(
+            &'table self,
+        ) -> impl Iterator<Item = Result<WorkItem>> + 'table {
+            self.work_item
+                .values()
+                .cloned()
+                .map(move |value| value.into_owned(&self))
+        }
+        pub fn year_number_iter<'table>(
+            &'table self,
+        ) -> impl Iterator<Item = Result<YearNumber>> + 'table {
+            self.year_number
                 .values()
                 .cloned()
                 .map(move |value| value.into_owned(&self))
@@ -2347,18 +2852,10 @@ pub mod config_control_design {
         #[holder(use_place_holder)]
         Contract(Box<Contract>),
     }
-    #[derive(
-        Clone,
-        Debug,
-        PartialEq,
-        AsRef,
-        Deref,
-        DerefMut,
-        From,
-        Into,
-        :: serde :: Serialize,
-        :: serde :: Deserialize,
-    )]
+    #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables)]
+    # [holder (field = area_measure)]
+    #[holder(generate_deserialize)]
     pub struct AreaMeasure(pub f64);
     #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
@@ -2443,18 +2940,10 @@ pub mod config_control_design {
         #[holder(use_place_holder)]
         AssemblyComponentUsage(AssemblyComponentUsageAny),
     }
-    #[derive(
-        Clone,
-        Debug,
-        PartialEq,
-        AsRef,
-        Deref,
-        DerefMut,
-        From,
-        Into,
-        :: serde :: Serialize,
-        :: serde :: Deserialize,
-    )]
+    #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables)]
+    # [holder (field = context_dependent_measure)]
+    #[holder(generate_deserialize)]
     pub struct ContextDependentMeasure(pub f64);
     #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
@@ -2463,18 +2952,10 @@ pub mod config_control_design {
         #[holder(use_place_holder)]
         ProductDefinitionFormation(ProductDefinitionFormationAny),
     }
-    #[derive(
-        Clone,
-        Debug,
-        PartialEq,
-        AsRef,
-        Deref,
-        DerefMut,
-        From,
-        Into,
-        :: serde :: Serialize,
-        :: serde :: Deserialize,
-    )]
+    #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables)]
+    # [holder (field = count_measure)]
+    #[holder(generate_deserialize)]
     pub struct CountMeasure(pub f64);
     #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
@@ -2531,70 +3012,30 @@ pub mod config_control_design {
         #[holder(use_place_holder)]
         DateAndTime(Box<DateAndTime>),
     }
-    #[derive(
-        Clone,
-        Debug,
-        PartialEq,
-        AsRef,
-        Deref,
-        DerefMut,
-        From,
-        Into,
-        :: serde :: Serialize,
-        :: serde :: Deserialize,
-    )]
+    #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables)]
+    # [holder (field = day_in_month_number)]
+    #[holder(generate_deserialize)]
     pub struct DayInMonthNumber(pub i64);
-    #[derive(
-        Clone,
-        Debug,
-        PartialEq,
-        AsRef,
-        Deref,
-        DerefMut,
-        From,
-        Into,
-        :: serde :: Serialize,
-        :: serde :: Deserialize,
-    )]
+    #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables)]
+    # [holder (field = day_in_week_number)]
+    #[holder(generate_deserialize)]
     pub struct DayInWeekNumber(pub i64);
-    #[derive(
-        Clone,
-        Debug,
-        PartialEq,
-        AsRef,
-        Deref,
-        DerefMut,
-        From,
-        Into,
-        :: serde :: Serialize,
-        :: serde :: Deserialize,
-    )]
+    #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables)]
+    # [holder (field = day_in_year_number)]
+    #[holder(generate_deserialize)]
     pub struct DayInYearNumber(pub i64);
-    #[derive(
-        Clone,
-        Debug,
-        PartialEq,
-        AsRef,
-        Deref,
-        DerefMut,
-        From,
-        Into,
-        :: serde :: Serialize,
-        :: serde :: Deserialize,
-    )]
+    #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables)]
+    # [holder (field = descriptive_measure)]
+    #[holder(generate_deserialize)]
     pub struct DescriptiveMeasure(pub String);
-    #[derive(
-        Clone,
-        Debug,
-        PartialEq,
-        AsRef,
-        Deref,
-        DerefMut,
-        From,
-        Into,
-        :: serde :: Serialize,
-        :: serde :: Deserialize,
-    )]
+    #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables)]
+    # [holder (field = dimension_count)]
+    #[holder(generate_deserialize)]
     pub struct DimensionCount(pub i64);
     #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
@@ -2616,31 +3057,15 @@ pub mod config_control_design {
         #[holder(use_place_holder)]
         Surface(SurfaceAny),
     }
-    #[derive(
-        Clone,
-        Debug,
-        PartialEq,
-        AsRef,
-        Deref,
-        DerefMut,
-        From,
-        Into,
-        :: serde :: Serialize,
-        :: serde :: Deserialize,
-    )]
+    #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables)]
+    # [holder (field = hour_in_day)]
+    #[holder(generate_deserialize)]
     pub struct HourInDay(pub i64);
-    #[derive(
-        Clone,
-        Debug,
-        PartialEq,
-        AsRef,
-        Deref,
-        DerefMut,
-        From,
-        Into,
-        :: serde :: Serialize,
-        :: serde :: Deserialize,
-    )]
+    #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables)]
+    # [holder (field = identifier)]
+    #[holder(generate_deserialize)]
     pub struct Identifier(pub String);
     #[derive(Debug, Clone, PartialEq, :: serde :: Deserialize)]
     pub enum KnotType {
@@ -2649,31 +3074,15 @@ pub mod config_control_design {
         QuasiUniformKnots,
         PiecewiseBezierKnots,
     }
-    #[derive(
-        Clone,
-        Debug,
-        PartialEq,
-        AsRef,
-        Deref,
-        DerefMut,
-        From,
-        Into,
-        :: serde :: Serialize,
-        :: serde :: Deserialize,
-    )]
+    #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables)]
+    # [holder (field = label)]
+    #[holder(generate_deserialize)]
     pub struct Label(pub String);
-    #[derive(
-        Clone,
-        Debug,
-        PartialEq,
-        AsRef,
-        Deref,
-        DerefMut,
-        From,
-        Into,
-        :: serde :: Serialize,
-        :: serde :: Deserialize,
-    )]
+    #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables)]
+    # [holder (field = length_measure)]
+    #[holder(generate_deserialize)]
     pub struct LengthMeasure(pub f64);
     #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
@@ -2682,74 +3091,54 @@ pub mod config_control_design {
     pub struct ListOfReversibleTopologyItem(
         #[holder(use_place_holder)] pub Vec<ReversibleTopologyItem>,
     );
-    #[derive(
-        Clone,
-        Debug,
-        PartialEq,
-        AsRef,
-        Deref,
-        DerefMut,
-        From,
-        Into,
-        :: serde :: Serialize,
-        :: serde :: Deserialize,
-    )]
+    #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables)]
+    # [holder (field = mass_measure)]
+    #[holder(generate_deserialize)]
     pub struct MassMeasure(pub f64);
     #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum MeasureValue {
-        LengthMeasure(LengthMeasure),
-        MassMeasure(MassMeasure),
-        PlaneAngleMeasure(PlaneAngleMeasure),
-        SolidAngleMeasure(SolidAngleMeasure),
-        AreaMeasure(AreaMeasure),
-        VolumeMeasure(VolumeMeasure),
-        ParameterValue(ParameterValue),
-        ContextDependentMeasure(ContextDependentMeasure),
-        DescriptiveMeasure(DescriptiveMeasure),
-        PositiveLengthMeasure(PositiveLengthMeasure),
-        PositivePlaneAngleMeasure(PositivePlaneAngleMeasure),
-        CountMeasure(CountMeasure),
+        #[holder(use_place_holder)]
+        LengthMeasure(Box<LengthMeasure>),
+        #[holder(use_place_holder)]
+        MassMeasure(Box<MassMeasure>),
+        #[holder(use_place_holder)]
+        PlaneAngleMeasure(Box<PlaneAngleMeasure>),
+        #[holder(use_place_holder)]
+        SolidAngleMeasure(Box<SolidAngleMeasure>),
+        #[holder(use_place_holder)]
+        AreaMeasure(Box<AreaMeasure>),
+        #[holder(use_place_holder)]
+        VolumeMeasure(Box<VolumeMeasure>),
+        #[holder(use_place_holder)]
+        ParameterValue(Box<ParameterValue>),
+        #[holder(use_place_holder)]
+        ContextDependentMeasure(Box<ContextDependentMeasure>),
+        #[holder(use_place_holder)]
+        DescriptiveMeasure(Box<DescriptiveMeasure>),
+        #[holder(use_place_holder)]
+        PositiveLengthMeasure(Box<PositiveLengthMeasure>),
+        #[holder(use_place_holder)]
+        PositivePlaneAngleMeasure(Box<PositivePlaneAngleMeasure>),
+        #[holder(use_place_holder)]
+        CountMeasure(Box<CountMeasure>),
     }
-    #[derive(
-        Clone,
-        Debug,
-        PartialEq,
-        AsRef,
-        Deref,
-        DerefMut,
-        From,
-        Into,
-        :: serde :: Serialize,
-        :: serde :: Deserialize,
-    )]
+    #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables)]
+    # [holder (field = minute_in_hour)]
+    #[holder(generate_deserialize)]
     pub struct MinuteInHour(pub i64);
-    #[derive(
-        Clone,
-        Debug,
-        PartialEq,
-        AsRef,
-        Deref,
-        DerefMut,
-        From,
-        Into,
-        :: serde :: Serialize,
-        :: serde :: Deserialize,
-    )]
+    #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables)]
+    # [holder (field = month_in_year_number)]
+    #[holder(generate_deserialize)]
     pub struct MonthInYearNumber(pub i64);
-    #[derive(
-        Clone,
-        Debug,
-        PartialEq,
-        AsRef,
-        Deref,
-        DerefMut,
-        From,
-        Into,
-        :: serde :: Serialize,
-        :: serde :: Deserialize,
-    )]
+    #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables)]
+    # [holder (field = parameter_value)]
+    #[holder(generate_deserialize)]
     pub struct ParameterValue(pub f64);
     #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
@@ -2807,41 +3196,21 @@ pub mod config_control_design {
         #[holder(use_place_holder)]
         PersonAndOrganization(Box<PersonAndOrganization>),
     }
-    #[derive(
-        Clone,
-        Debug,
-        PartialEq,
-        AsRef,
-        Deref,
-        DerefMut,
-        From,
-        Into,
-        :: serde :: Serialize,
-        :: serde :: Deserialize,
-    )]
+    #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables)]
+    # [holder (field = plane_angle_measure)]
+    #[holder(generate_deserialize)]
     pub struct PlaneAngleMeasure(pub f64);
-    #[derive(
-        Clone,
-        Debug,
-        PartialEq,
-        AsRef,
-        Deref,
-        DerefMut,
-        :: serde :: Serialize,
-        :: serde :: Deserialize,
-    )]
-    pub struct PositiveLengthMeasure(pub LengthMeasure);
-    #[derive(
-        Clone,
-        Debug,
-        PartialEq,
-        AsRef,
-        Deref,
-        DerefMut,
-        :: serde :: Serialize,
-        :: serde :: Deserialize,
-    )]
-    pub struct PositivePlaneAngleMeasure(pub PlaneAngleMeasure);
+    #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables)]
+    # [holder (field = positive_length_measure)]
+    #[holder(generate_deserialize)]
+    pub struct PositiveLengthMeasure(#[holder(use_place_holder)] pub LengthMeasure);
+    #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables)]
+    # [holder (field = positive_plane_angle_measure)]
+    #[holder(generate_deserialize)]
+    pub struct PositivePlaneAngleMeasure(#[holder(use_place_holder)] pub PlaneAngleMeasure);
     #[derive(Debug, Clone, PartialEq, :: serde :: Deserialize)]
     pub enum PreferredSurfaceCurveRepresentation {
         Curve3D,
@@ -2876,18 +3245,10 @@ pub mod config_control_design {
         #[holder(use_place_holder)]
         OpenShell(OpenShellAny),
     }
-    #[derive(
-        Clone,
-        Debug,
-        PartialEq,
-        AsRef,
-        Deref,
-        DerefMut,
-        From,
-        Into,
-        :: serde :: Serialize,
-        :: serde :: Deserialize,
-    )]
+    #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables)]
+    # [holder (field = second_in_minute)]
+    #[holder(generate_deserialize)]
     pub struct SecondInMinute(pub f64);
     #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, :: ruststep_derive :: Holder)]
     # [holder (table = Tables)]
@@ -2975,18 +3336,10 @@ pub mod config_control_design {
         Gray,
         Sievert,
     }
-    #[derive(
-        Clone,
-        Debug,
-        PartialEq,
-        AsRef,
-        Deref,
-        DerefMut,
-        From,
-        Into,
-        :: serde :: Serialize,
-        :: serde :: Deserialize,
-    )]
+    #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables)]
+    # [holder (field = solid_angle_measure)]
+    #[holder(generate_deserialize)]
     pub struct SolidAngleMeasure(pub f64);
     #[derive(Debug, Clone, PartialEq, :: serde :: Deserialize)]
     pub enum Source {
@@ -3032,18 +3385,10 @@ pub mod config_control_design {
         #[holder(use_place_holder)]
         ShellBasedSurfaceModel(Box<ShellBasedSurfaceModel>),
     }
-    #[derive(
-        Clone,
-        Debug,
-        PartialEq,
-        AsRef,
-        Deref,
-        DerefMut,
-        From,
-        Into,
-        :: serde :: Serialize,
-        :: serde :: Deserialize,
-    )]
+    #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables)]
+    # [holder (field = text)]
+    #[holder(generate_deserialize)]
     pub struct Text(pub String);
     #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
@@ -3075,7 +3420,8 @@ pub mod config_control_design {
         # [holder (field = cartesian_point)]
         #[holder(use_place_holder)]
         CartesianPoint(Box<CartesianPoint>),
-        ParameterValue(ParameterValue),
+        #[holder(use_place_holder)]
+        ParameterValue(Box<ParameterValue>),
     }
     #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
@@ -3095,31 +3441,15 @@ pub mod config_control_design {
         #[holder(use_place_holder)]
         Direction(Box<Direction>),
     }
-    #[derive(
-        Clone,
-        Debug,
-        PartialEq,
-        AsRef,
-        Deref,
-        DerefMut,
-        From,
-        Into,
-        :: serde :: Serialize,
-        :: serde :: Deserialize,
-    )]
+    #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables)]
+    # [holder (field = volume_measure)]
+    #[holder(generate_deserialize)]
     pub struct VolumeMeasure(pub f64);
-    #[derive(
-        Clone,
-        Debug,
-        PartialEq,
-        AsRef,
-        Deref,
-        DerefMut,
-        From,
-        Into,
-        :: serde :: Serialize,
-        :: serde :: Deserialize,
-    )]
+    #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables)]
+    # [holder (field = week_in_year_number)]
+    #[holder(generate_deserialize)]
     pub struct WeekInYearNumber(pub i64);
     #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
@@ -3139,25 +3469,19 @@ pub mod config_control_design {
         #[holder(use_place_holder)]
         ProductDefinitionFormation(ProductDefinitionFormationAny),
     }
-    #[derive(
-        Clone,
-        Debug,
-        PartialEq,
-        AsRef,
-        Deref,
-        DerefMut,
-        From,
-        Into,
-        :: serde :: Serialize,
-        :: serde :: Deserialize,
-    )]
+    #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, :: ruststep_derive :: Holder)]
+    # [holder (table = Tables)]
+    # [holder (field = year_number)]
+    #[holder(generate_deserialize)]
     pub struct YearNumber(pub i64);
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = action)]
     #[holder(generate_deserialize)]
     pub struct Action {
+        #[holder(use_place_holder)]
         pub name: Label,
+        #[holder(use_place_holder)]
         pub description: Text,
         #[holder(use_place_holder)]
         pub chosen_method: ActionMethod,
@@ -3242,9 +3566,13 @@ pub mod config_control_design {
     # [holder (field = action_directive)]
     #[holder(generate_deserialize)]
     pub struct ActionDirective {
+        #[holder(use_place_holder)]
         pub name: Label,
+        #[holder(use_place_holder)]
         pub description: Text,
+        #[holder(use_place_holder)]
         pub analysis: Text,
+        #[holder(use_place_holder)]
         pub comment: Text,
         #[holder(use_place_holder)]
         pub requests: Vec<VersionedActionRequest>,
@@ -3254,9 +3582,13 @@ pub mod config_control_design {
     # [holder (field = action_method)]
     #[holder(generate_deserialize)]
     pub struct ActionMethod {
+        #[holder(use_place_holder)]
         pub name: Label,
+        #[holder(use_place_holder)]
         pub description: Text,
+        #[holder(use_place_holder)]
         pub consequence: Text,
+        #[holder(use_place_holder)]
         pub purpose: Text,
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -3320,6 +3652,7 @@ pub mod config_control_design {
     # [holder (field = action_request_status)]
     #[holder(generate_deserialize)]
     pub struct ActionRequestStatus {
+        #[holder(use_place_holder)]
         pub status: Label,
         #[holder(use_place_holder)]
         pub assigned_request: VersionedActionRequest,
@@ -3329,6 +3662,7 @@ pub mod config_control_design {
     # [holder (field = action_status)]
     #[holder(generate_deserialize)]
     pub struct ActionStatus {
+        #[holder(use_place_holder)]
         pub status: Label,
         #[holder(use_place_holder)]
         pub assigned_action: ExecutedActionAny,
@@ -3338,17 +3672,29 @@ pub mod config_control_design {
     # [holder (field = address)]
     #[holder(generate_deserialize)]
     pub struct Address {
+        #[holder(use_place_holder)]
         pub internal_location: Option<Label>,
+        #[holder(use_place_holder)]
         pub street_number: Option<Label>,
+        #[holder(use_place_holder)]
         pub street: Option<Label>,
+        #[holder(use_place_holder)]
         pub postal_box: Option<Label>,
+        #[holder(use_place_holder)]
         pub town: Option<Label>,
+        #[holder(use_place_holder)]
         pub region: Option<Label>,
+        #[holder(use_place_holder)]
         pub postal_code: Option<Label>,
+        #[holder(use_place_holder)]
         pub country: Option<Label>,
+        #[holder(use_place_holder)]
         pub facsimile_number: Option<Label>,
+        #[holder(use_place_holder)]
         pub telephone_number: Option<Label>,
+        #[holder(use_place_holder)]
         pub electronic_mail_address: Option<Label>,
+        #[holder(use_place_holder)]
         pub telex_number: Option<Label>,
     }
     #[derive(Debug, Clone, PartialEq, Holder)]
@@ -3422,12 +3768,15 @@ pub mod config_control_design {
     # [holder (field = alternate_product_relationship)]
     #[holder(generate_deserialize)]
     pub struct AlternateProductRelationship {
+        #[holder(use_place_holder)]
         pub name: Label,
+        #[holder(use_place_holder)]
         pub definition: Text,
         #[holder(use_place_holder)]
         pub alternate: Product,
         #[holder(use_place_holder)]
         pub base: Product,
+        #[holder(use_place_holder)]
         pub basis: Text,
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -3435,6 +3784,7 @@ pub mod config_control_design {
     # [holder (field = application_context)]
     #[holder(generate_deserialize)]
     pub struct ApplicationContext {
+        #[holder(use_place_holder)]
         pub application: Text,
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -3442,6 +3792,7 @@ pub mod config_control_design {
     # [holder (field = application_context_element)]
     #[holder(generate_deserialize)]
     pub struct ApplicationContextElement {
+        #[holder(use_place_holder)]
         pub name: Label,
         #[holder(use_place_holder)]
         pub frame_of_reference: ApplicationContext,
@@ -3498,8 +3849,11 @@ pub mod config_control_design {
     # [holder (field = application_protocol_definition)]
     #[holder(generate_deserialize)]
     pub struct ApplicationProtocolDefinition {
+        #[holder(use_place_holder)]
         pub status: Label,
+        #[holder(use_place_holder)]
         pub application_interpreted_model_schema_name: Label,
+        #[holder(use_place_holder)]
         pub application_protocol_year: YearNumber,
         #[holder(use_place_holder)]
         pub application: ApplicationContext,
@@ -3511,6 +3865,7 @@ pub mod config_control_design {
     pub struct Approval {
         #[holder(use_place_holder)]
         pub status: ApprovalStatus,
+        #[holder(use_place_holder)]
         pub level: Label,
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -3577,7 +3932,9 @@ pub mod config_control_design {
     # [holder (field = approval_relationship)]
     #[holder(generate_deserialize)]
     pub struct ApprovalRelationship {
+        #[holder(use_place_holder)]
         pub name: Label,
+        #[holder(use_place_holder)]
         pub description: Text,
         #[holder(use_place_holder)]
         pub relating_approval: Approval,
@@ -3589,6 +3946,7 @@ pub mod config_control_design {
     # [holder (field = approval_role)]
     #[holder(generate_deserialize)]
     pub struct ApprovalRole {
+        #[holder(use_place_holder)]
         pub role: Label,
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -3596,6 +3954,7 @@ pub mod config_control_design {
     # [holder (field = approval_status)]
     #[holder(generate_deserialize)]
     pub struct ApprovalStatus {
+        #[holder(use_place_holder)]
         pub name: Label,
     }
     #[derive(
@@ -3639,6 +3998,7 @@ pub mod config_control_design {
         #[deref_mut]
         #[holder(use_place_holder)]
         pub product_definition_usage: ProductDefinitionUsage,
+        #[holder(use_place_holder)]
         pub reference_designator: Option<Identifier>,
     }
     #[derive(Debug, Clone, PartialEq, Holder)]
@@ -3723,7 +4083,9 @@ pub mod config_control_design {
     # [holder (field = assembly_component_usage_substitute)]
     #[holder(generate_deserialize)]
     pub struct AssemblyComponentUsageSubstitute {
+        #[holder(use_place_holder)]
         pub name: Label,
+        #[holder(use_place_holder)]
         pub definition: Text,
         #[holder(use_place_holder)]
         pub base: AssemblyComponentUsageAny,
@@ -3901,6 +4263,7 @@ pub mod config_control_design {
         #[holder(use_place_holder)]
         pub b_spline_curve: BSplineCurve,
         pub knot_multiplicities: Vec<i64>,
+        #[holder(use_place_holder)]
         pub knots: Vec<ParameterValue>,
         pub knot_spec: KnotType,
     }
@@ -4028,7 +4391,9 @@ pub mod config_control_design {
         pub b_spline_surface: BSplineSurface,
         pub u_multiplicities: Vec<i64>,
         pub v_multiplicities: Vec<i64>,
+        #[holder(use_place_holder)]
         pub u_knots: Vec<ParameterValue>,
+        #[holder(use_place_holder)]
         pub v_knots: Vec<ParameterValue>,
         pub knot_spec: KnotType,
     }
@@ -4370,7 +4735,9 @@ pub mod config_control_design {
         #[deref_mut]
         #[holder(use_place_holder)]
         pub date: Date,
+        #[holder(use_place_holder)]
         pub day_component: DayInMonthNumber,
+        #[holder(use_place_holder)]
         pub month_component: MonthInYearNumber,
     }
     #[derive(
@@ -4386,6 +4753,7 @@ pub mod config_control_design {
         #[deref_mut]
         #[holder(use_place_holder)]
         pub point: Point,
+        #[holder(use_place_holder)]
         pub coordinates: Vec<LengthMeasure>,
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder, AsRef, AsMut)]
@@ -4601,7 +4969,9 @@ pub mod config_control_design {
     # [holder (field = certification)]
     #[holder(generate_deserialize)]
     pub struct Certification {
+        #[holder(use_place_holder)]
         pub name: Label,
+        #[holder(use_place_holder)]
         pub purpose: Text,
         #[holder(use_place_holder)]
         pub kind: CertificationType,
@@ -4648,6 +5018,7 @@ pub mod config_control_design {
     # [holder (field = certification_type)]
     #[holder(generate_deserialize)]
     pub struct CertificationType {
+        #[holder(use_place_holder)]
         pub description: Label,
     }
     #[derive(
@@ -4695,6 +5066,7 @@ pub mod config_control_design {
         #[deref_mut]
         #[holder(use_place_holder)]
         pub conic: Conic,
+        #[holder(use_place_holder)]
         pub radius: PositiveLengthMeasure,
     }
     #[derive(
@@ -4951,11 +5323,15 @@ pub mod config_control_design {
     # [holder (field = configuration_item)]
     #[holder(generate_deserialize)]
     pub struct ConfigurationItem {
+        #[holder(use_place_holder)]
         pub id: Identifier,
+        #[holder(use_place_holder)]
         pub name: Label,
+        #[holder(use_place_holder)]
         pub description: Option<Text>,
         #[holder(use_place_holder)]
         pub item_concept: ProductConcept,
+        #[holder(use_place_holder)]
         pub purpose: Option<Label>,
     }
     #[derive(
@@ -5054,7 +5430,9 @@ pub mod config_control_design {
         #[deref_mut]
         #[holder(use_place_holder)]
         pub elementary_surface: ElementarySurface,
+        #[holder(use_place_holder)]
         pub radius: LengthMeasure,
+        #[holder(use_place_holder)]
         pub semi_angle: PlaneAngleMeasure,
     }
     #[derive(
@@ -5165,6 +5543,7 @@ pub mod config_control_design {
         #[deref_mut]
         #[holder(use_place_holder)]
         pub named_unit: NamedUnit,
+        #[holder(use_place_holder)]
         pub name: Label,
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -5172,7 +5551,9 @@ pub mod config_control_design {
     # [holder (field = contract)]
     #[holder(generate_deserialize)]
     pub struct Contract {
+        #[holder(use_place_holder)]
         pub name: Label,
+        #[holder(use_place_holder)]
         pub purpose: Text,
         #[holder(use_place_holder)]
         pub kind: ContractType,
@@ -5219,6 +5600,7 @@ pub mod config_control_design {
     # [holder (field = contract_type)]
     #[holder(generate_deserialize)]
     pub struct ContractType {
+        #[holder(use_place_holder)]
         pub description: Label,
     }
     #[derive(
@@ -5234,6 +5616,7 @@ pub mod config_control_design {
         #[deref_mut]
         #[holder(use_place_holder)]
         pub named_unit: NamedUnit,
+        #[holder(use_place_holder)]
         pub name: Label,
         #[holder(use_place_holder)]
         pub conversion_factor: MeasureWithUnitAny,
@@ -5243,7 +5626,9 @@ pub mod config_control_design {
     # [holder (field = coordinated_universal_time_offset)]
     #[holder(generate_deserialize)]
     pub struct CoordinatedUniversalTimeOffset {
+        #[holder(use_place_holder)]
         pub hour_offset: HourInDay,
+        #[holder(use_place_holder)]
         pub minute_offset: Option<MinuteInHour>,
         pub sense: AheadOrBehind,
     }
@@ -5408,6 +5793,7 @@ pub mod config_control_design {
         #[deref_mut]
         #[holder(use_place_holder)]
         pub elementary_surface: ElementarySurface,
+        #[holder(use_place_holder)]
         pub radius: PositiveLengthMeasure,
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -5415,6 +5801,7 @@ pub mod config_control_design {
     # [holder (field = date)]
     #[holder(generate_deserialize)]
     pub struct Date {
+        #[holder(use_place_holder)]
         pub year_component: YearNumber,
     }
     #[derive(Debug, Clone, PartialEq, Holder)]
@@ -5518,6 +5905,7 @@ pub mod config_control_design {
     # [holder (field = date_time_role)]
     #[holder(generate_deserialize)]
     pub struct DateTimeRole {
+        #[holder(use_place_holder)]
         pub name: Label,
     }
     #[derive(
@@ -5703,8 +6091,11 @@ pub mod config_control_design {
     # [holder (field = document)]
     #[holder(generate_deserialize)]
     pub struct Document {
+        #[holder(use_place_holder)]
         pub id: Identifier,
+        #[holder(use_place_holder)]
         pub name: Label,
+        #[holder(use_place_holder)]
         pub description: Text,
         #[holder(use_place_holder)]
         pub kind: DocumentType,
@@ -5745,6 +6136,7 @@ pub mod config_control_design {
     pub struct DocumentReference {
         #[holder(use_place_holder)]
         pub assigned_document: DocumentAny,
+        #[holder(use_place_holder)]
         pub source: Label,
     }
     #[derive(Debug, Clone, PartialEq, Holder)]
@@ -5781,7 +6173,9 @@ pub mod config_control_design {
     # [holder (field = document_relationship)]
     #[holder(generate_deserialize)]
     pub struct DocumentRelationship {
+        #[holder(use_place_holder)]
         pub name: Label,
+        #[holder(use_place_holder)]
         pub description: Text,
         #[holder(use_place_holder)]
         pub relating_document: DocumentAny,
@@ -5793,6 +6187,7 @@ pub mod config_control_design {
     # [holder (field = document_type)]
     #[holder(generate_deserialize)]
     pub struct DocumentType {
+        #[holder(use_place_holder)]
         pub product_data_type: Label,
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -5802,7 +6197,9 @@ pub mod config_control_design {
     pub struct DocumentUsageConstraint {
         #[holder(use_place_holder)]
         pub source: DocumentAny,
+        #[holder(use_place_holder)]
         pub subject_element: Label,
+        #[holder(use_place_holder)]
         pub subject_element_value: Text,
     }
     #[derive(
@@ -5818,6 +6215,7 @@ pub mod config_control_design {
         #[deref_mut]
         #[holder(use_place_holder)]
         pub document: Document,
+        #[holder(use_place_holder)]
         pub class: Identifier,
     }
     #[derive(
@@ -5951,6 +6349,7 @@ pub mod config_control_design {
     # [holder (field = effectivity)]
     #[holder(generate_deserialize)]
     pub struct Effectivity {
+        #[holder(use_place_holder)]
         pub id: Identifier,
     }
     #[derive(Debug, Clone, PartialEq, Holder)]
@@ -6127,7 +6526,9 @@ pub mod config_control_design {
         #[deref_mut]
         #[holder(use_place_holder)]
         pub conic: Conic,
+        #[holder(use_place_holder)]
         pub semi_axis_1: PositiveLengthMeasure,
+        #[holder(use_place_holder)]
         pub semi_axis_2: PositiveLengthMeasure,
     }
     #[derive(
@@ -6472,7 +6873,9 @@ pub mod config_control_design {
     # [holder (field = functionally_defined_transformation)]
     #[holder(generate_deserialize)]
     pub struct FunctionallyDefinedTransformation {
+        #[holder(use_place_holder)]
         pub name: Label,
+        #[holder(use_place_holder)]
         pub description: Text,
     }
     #[derive(Debug, Clone, PartialEq, Holder)]
@@ -6537,6 +6940,7 @@ pub mod config_control_design {
         #[deref_mut]
         #[holder(use_place_holder)]
         pub representation_context: RepresentationContext,
+        #[holder(use_place_holder)]
         pub coordinate_space_dimension: DimensionCount,
     }
     #[derive(
@@ -6904,7 +7308,9 @@ pub mod config_control_design {
         #[deref_mut]
         #[holder(use_place_holder)]
         pub conic: Conic,
+        #[holder(use_place_holder)]
         pub semi_axis: PositiveLengthMeasure,
+        #[holder(use_place_holder)]
         pub semi_imag_axis: PositiveLengthMeasure,
     }
     #[derive(
@@ -6926,7 +7332,9 @@ pub mod config_control_design {
     # [holder (field = item_defined_transformation)]
     #[holder(generate_deserialize)]
     pub struct ItemDefinedTransformation {
+        #[holder(use_place_holder)]
         pub name: Label,
+        #[holder(use_place_holder)]
         pub description: Text,
         #[holder(use_place_holder)]
         pub transform_item_1: RepresentationItemAny,
@@ -6984,8 +7392,11 @@ pub mod config_control_design {
     # [holder (field = local_time)]
     #[holder(generate_deserialize)]
     pub struct LocalTime {
+        #[holder(use_place_holder)]
         pub hour_component: HourInDay,
+        #[holder(use_place_holder)]
         pub minute_component: Option<MinuteInHour>,
+        #[holder(use_place_holder)]
         pub second_component: Option<SecondInMinute>,
         #[holder(use_place_holder)]
         pub zone: CoordinatedUniversalTimeOffset,
@@ -7074,6 +7485,7 @@ pub mod config_control_design {
         #[deref_mut]
         #[holder(use_place_holder)]
         pub effectivity: Effectivity,
+        #[holder(use_place_holder)]
         pub effectivity_lot_id: Identifier,
         #[holder(use_place_holder)]
         pub effectivity_lot_size: MeasureWithUnitAny,
@@ -7452,6 +7864,7 @@ pub mod config_control_design {
         pub curve: Curve,
         #[holder(use_place_holder)]
         pub basis_curve: CurveAny,
+        #[holder(use_place_holder)]
         pub distance: LengthMeasure,
         pub self_intersect: Logical,
         #[holder(use_place_holder)]
@@ -7472,6 +7885,7 @@ pub mod config_control_design {
         pub surface: Surface,
         #[holder(use_place_holder)]
         pub basis_surface: SurfaceAny,
+        #[holder(use_place_holder)]
         pub distance: LengthMeasure,
         pub self_intersect: Logical,
     }
@@ -7541,6 +7955,7 @@ pub mod config_control_design {
         #[deref_mut]
         #[holder(use_place_holder)]
         pub date: Date,
+        #[holder(use_place_holder)]
         pub day_component: DayInYearNumber,
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -7548,8 +7963,11 @@ pub mod config_control_design {
     # [holder (field = organization)]
     #[holder(generate_deserialize)]
     pub struct Organization {
+        #[holder(use_place_holder)]
         pub id: Option<Identifier>,
+        #[holder(use_place_holder)]
         pub name: Label,
+        #[holder(use_place_holder)]
         pub description: Text,
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -7557,7 +7975,9 @@ pub mod config_control_design {
     # [holder (field = organization_relationship)]
     #[holder(generate_deserialize)]
     pub struct OrganizationRelationship {
+        #[holder(use_place_holder)]
         pub name: Label,
+        #[holder(use_place_holder)]
         pub description: Text,
         #[holder(use_place_holder)]
         pub relating_organization: Organization,
@@ -7579,6 +7999,7 @@ pub mod config_control_design {
         pub address: Address,
         #[holder(use_place_holder)]
         pub organizations: Vec<Organization>,
+        #[holder(use_place_holder)]
         pub description: Text,
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -7586,7 +8007,9 @@ pub mod config_control_design {
     # [holder (field = organizational_project)]
     #[holder(generate_deserialize)]
     pub struct OrganizationalProject {
+        #[holder(use_place_holder)]
         pub name: Label,
+        #[holder(use_place_holder)]
         pub description: Text,
         #[holder(use_place_holder)]
         pub responsible_organizations: Vec<Organization>,
@@ -7703,6 +8126,7 @@ pub mod config_control_design {
         #[deref_mut]
         #[holder(use_place_holder)]
         pub conic: Conic,
+        #[holder(use_place_holder)]
         pub focal_dist: LengthMeasure,
     }
     #[derive(
@@ -7842,11 +8266,17 @@ pub mod config_control_design {
     # [holder (field = person)]
     #[holder(generate_deserialize)]
     pub struct Person {
+        #[holder(use_place_holder)]
         pub id: Identifier,
+        #[holder(use_place_holder)]
         pub last_name: Option<Label>,
+        #[holder(use_place_holder)]
         pub first_name: Option<Label>,
+        #[holder(use_place_holder)]
         pub middle_names: Option<Vec<Label>>,
+        #[holder(use_place_holder)]
         pub prefix_titles: Option<Vec<Label>>,
+        #[holder(use_place_holder)]
         pub suffix_titles: Option<Vec<Label>>,
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -7909,6 +8339,7 @@ pub mod config_control_design {
     # [holder (field = person_and_organization_role)]
     #[holder(generate_deserialize)]
     pub struct PersonAndOrganizationRole {
+        #[holder(use_place_holder)]
         pub name: Label,
     }
     #[derive(
@@ -7926,6 +8357,7 @@ pub mod config_control_design {
         pub address: Address,
         #[holder(use_place_holder)]
         pub people: Vec<Person>,
+        #[holder(use_place_holder)]
         pub description: Text,
     }
     #[derive(
@@ -8153,6 +8585,7 @@ pub mod config_control_design {
         pub point: Point,
         #[holder(use_place_holder)]
         pub basis_curve: CurveAny,
+        #[holder(use_place_holder)]
         pub point_parameter: ParameterValue,
     }
     #[derive(
@@ -8170,7 +8603,9 @@ pub mod config_control_design {
         pub point: Point,
         #[holder(use_place_holder)]
         pub basis_surface: SurfaceAny,
+        #[holder(use_place_holder)]
         pub point_parameter_u: ParameterValue,
+        #[holder(use_place_holder)]
         pub point_parameter_v: ParameterValue,
     }
     #[derive(
@@ -8228,8 +8663,11 @@ pub mod config_control_design {
     # [holder (field = product)]
     #[holder(generate_deserialize)]
     pub struct Product {
+        #[holder(use_place_holder)]
         pub id: Identifier,
+        #[holder(use_place_holder)]
         pub name: Label,
+        #[holder(use_place_holder)]
         pub description: Text,
         #[holder(use_place_holder)]
         pub frame_of_reference: Vec<ProductContextAny>,
@@ -8239,7 +8677,9 @@ pub mod config_control_design {
     # [holder (field = product_category)]
     #[holder(generate_deserialize)]
     pub struct ProductCategory {
+        #[holder(use_place_holder)]
         pub name: Label,
+        #[holder(use_place_holder)]
         pub description: Option<Text>,
     }
     #[derive(Debug, Clone, PartialEq, Holder)]
@@ -8276,7 +8716,9 @@ pub mod config_control_design {
     # [holder (field = product_category_relationship)]
     #[holder(generate_deserialize)]
     pub struct ProductCategoryRelationship {
+        #[holder(use_place_holder)]
         pub name: Label,
+        #[holder(use_place_holder)]
         pub description: Text,
         #[holder(use_place_holder)]
         pub category: ProductCategoryAny,
@@ -8288,8 +8730,11 @@ pub mod config_control_design {
     # [holder (field = product_concept)]
     #[holder(generate_deserialize)]
     pub struct ProductConcept {
+        #[holder(use_place_holder)]
         pub id: Identifier,
+        #[holder(use_place_holder)]
         pub name: Label,
+        #[holder(use_place_holder)]
         pub description: Text,
         #[holder(use_place_holder)]
         pub market_context: ProductConceptContext,
@@ -8307,6 +8752,7 @@ pub mod config_control_design {
         #[deref_mut]
         #[holder(use_place_holder)]
         pub application_context_element: ApplicationContextElement,
+        #[holder(use_place_holder)]
         pub market_segment_type: Label,
     }
     #[derive(
@@ -8322,6 +8768,7 @@ pub mod config_control_design {
         #[deref_mut]
         #[holder(use_place_holder)]
         pub application_context_element: ApplicationContextElement,
+        #[holder(use_place_holder)]
         pub discipline_type: Label,
     }
     #[derive(Debug, Clone, PartialEq, Holder)]
@@ -8368,7 +8815,9 @@ pub mod config_control_design {
     # [holder (field = product_definition)]
     #[holder(generate_deserialize)]
     pub struct ProductDefinition {
+        #[holder(use_place_holder)]
         pub id: Identifier,
+        #[holder(use_place_holder)]
         pub description: Text,
         #[holder(use_place_holder)]
         pub formation: ProductDefinitionFormationAny,
@@ -8417,6 +8866,7 @@ pub mod config_control_design {
         #[deref_mut]
         #[holder(use_place_holder)]
         pub application_context_element: ApplicationContextElement,
+        #[holder(use_place_holder)]
         pub life_cycle_stage: Label,
     }
     #[derive(Debug, Clone, PartialEq, Holder)]
@@ -8522,7 +8972,9 @@ pub mod config_control_design {
     # [holder (field = product_definition_formation)]
     #[holder(generate_deserialize)]
     pub struct ProductDefinitionFormation {
+        #[holder(use_place_holder)]
         pub id: Identifier,
+        #[holder(use_place_holder)]
         pub description: Text,
         #[holder(use_place_holder)]
         pub of_product: Product,
@@ -8582,8 +9034,11 @@ pub mod config_control_design {
     # [holder (field = product_definition_relationship)]
     #[holder(generate_deserialize)]
     pub struct ProductDefinitionRelationship {
+        #[holder(use_place_holder)]
         pub id: Identifier,
+        #[holder(use_place_holder)]
         pub name: Label,
+        #[holder(use_place_holder)]
         pub description: Text,
         #[holder(use_place_holder)]
         pub relating_product_definition: ProductDefinitionAny,
@@ -8757,7 +9212,9 @@ pub mod config_control_design {
     # [holder (field = property_definition)]
     #[holder(generate_deserialize)]
     pub struct PropertyDefinition {
+        #[holder(use_place_holder)]
         pub name: Label,
+        #[holder(use_place_holder)]
         pub description: Text,
         #[holder(use_place_holder)]
         pub definition: CharacterizedDefinition,
@@ -8941,9 +9398,13 @@ pub mod config_control_design {
         pub bounded_surface: BoundedSurface,
         #[holder(use_place_holder)]
         pub basis_surface: SurfaceAny,
+        #[holder(use_place_holder)]
         pub u1: ParameterValue,
+        #[holder(use_place_holder)]
         pub u2: ParameterValue,
+        #[holder(use_place_holder)]
         pub v1: ParameterValue,
+        #[holder(use_place_holder)]
         pub v2: ParameterValue,
         pub usense: bool,
         pub vsense: bool,
@@ -8961,6 +9422,7 @@ pub mod config_control_design {
         #[deref_mut]
         #[holder(use_place_holder)]
         pub composite_curve_segment: CompositeCurveSegment,
+        #[holder(use_place_holder)]
         pub param_length: ParameterValue,
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -8968,6 +9430,7 @@ pub mod config_control_design {
     # [holder (field = representation)]
     #[holder(generate_deserialize)]
     pub struct Representation {
+        #[holder(use_place_holder)]
         pub name: Label,
         #[holder(use_place_holder)]
         pub items: Vec<RepresentationItemAny>,
@@ -9017,7 +9480,9 @@ pub mod config_control_design {
     # [holder (field = representation_context)]
     #[holder(generate_deserialize)]
     pub struct RepresentationContext {
+        #[holder(use_place_holder)]
         pub context_identifier: Identifier,
+        #[holder(use_place_holder)]
         pub context_type: Text,
     }
     #[derive(Debug, Clone, PartialEq, Holder)]
@@ -9081,6 +9546,7 @@ pub mod config_control_design {
     # [holder (field = representation_item)]
     #[holder(generate_deserialize)]
     pub struct RepresentationItem {
+        #[holder(use_place_holder)]
         pub name: Label,
     }
     #[derive(Debug, Clone, PartialEq, Holder)]
@@ -9145,7 +9611,9 @@ pub mod config_control_design {
     # [holder (field = representation_relationship)]
     #[holder(generate_deserialize)]
     pub struct RepresentationRelationship {
+        #[holder(use_place_holder)]
         pub name: Label,
+        #[holder(use_place_holder)]
         pub description: Text,
         #[holder(use_place_holder)]
         pub rep_1: RepresentationAny,
@@ -9231,7 +9699,9 @@ pub mod config_control_design {
     # [holder (field = security_classification)]
     #[holder(generate_deserialize)]
     pub struct SecurityClassification {
+        #[holder(use_place_holder)]
         pub name: Label,
+        #[holder(use_place_holder)]
         pub purpose: Text,
         #[holder(use_place_holder)]
         pub security_level: SecurityClassificationLevel,
@@ -9284,6 +9754,7 @@ pub mod config_control_design {
     # [holder (field = security_classification_level)]
     #[holder(generate_deserialize)]
     pub struct SecurityClassificationLevel {
+        #[holder(use_place_holder)]
         pub name: Label,
     }
     #[derive(
@@ -9299,7 +9770,9 @@ pub mod config_control_design {
         #[deref_mut]
         #[holder(use_place_holder)]
         pub effectivity: Effectivity,
+        #[holder(use_place_holder)]
         pub effectivity_start_id: Identifier,
+        #[holder(use_place_holder)]
         pub effectivity_end_id: Option<Identifier>,
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -9307,7 +9780,9 @@ pub mod config_control_design {
     # [holder (field = shape_aspect)]
     #[holder(generate_deserialize)]
     pub struct ShapeAspect {
+        #[holder(use_place_holder)]
         pub name: Label,
+        #[holder(use_place_holder)]
         pub description: Text,
         #[holder(use_place_holder)]
         pub of_shape: ProductDefinitionShape,
@@ -9318,7 +9793,9 @@ pub mod config_control_design {
     # [holder (field = shape_aspect_relationship)]
     #[holder(generate_deserialize)]
     pub struct ShapeAspectRelationship {
+        #[holder(use_place_holder)]
         pub name: Label,
+        #[holder(use_place_holder)]
         pub description: Text,
         #[holder(use_place_holder)]
         pub relating_shape_aspect: ShapeAspect,
@@ -9666,6 +10143,7 @@ pub mod config_control_design {
         #[deref_mut]
         #[holder(use_place_holder)]
         pub elementary_surface: ElementarySurface,
+        #[holder(use_place_holder)]
         pub radius: PositiveLengthMeasure,
     }
     #[derive(
@@ -10198,7 +10676,9 @@ pub mod config_control_design {
         #[deref_mut]
         #[holder(use_place_holder)]
         pub elementary_surface: ElementarySurface,
+        #[holder(use_place_holder)]
         pub major_radius: PositiveLengthMeasure,
+        #[holder(use_place_holder)]
         pub minor_radius: PositiveLengthMeasure,
     }
     #[derive(Debug, Clone, PartialEq, Holder)]
@@ -10277,7 +10757,9 @@ pub mod config_control_design {
         #[deref_mut]
         #[holder(use_place_holder)]
         pub measure_with_unit: MeasureWithUnit,
+        #[holder(use_place_holder)]
         pub name: Label,
+        #[holder(use_place_holder)]
         pub description: Text,
     }
     #[derive(
@@ -10323,6 +10805,7 @@ pub mod config_control_design {
         pub geometric_representation_item: GeometricRepresentationItem,
         #[holder(use_place_holder)]
         pub orientation: Direction,
+        #[holder(use_place_holder)]
         pub magnitude: LengthMeasure,
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -10330,9 +10813,13 @@ pub mod config_control_design {
     # [holder (field = versioned_action_request)]
     #[holder(generate_deserialize)]
     pub struct VersionedActionRequest {
+        #[holder(use_place_holder)]
         pub id: Identifier,
+        #[holder(use_place_holder)]
         pub version: Label,
+        #[holder(use_place_holder)]
         pub purpose: Text,
+        #[holder(use_place_holder)]
         pub description: Text,
     }
     #[derive(
@@ -10475,7 +10962,9 @@ pub mod config_control_design {
         #[deref_mut]
         #[holder(use_place_holder)]
         pub date: Date,
+        #[holder(use_place_holder)]
         pub week_component: WeekInYearNumber,
+        #[holder(use_place_holder)]
         pub day_component: Option<DayInWeekNumber>,
     }
     #[derive(

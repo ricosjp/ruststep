@@ -48,9 +48,11 @@ pub enum TypeRef {
         /// TYPE b = a; ENDTYPE;
         /// ```
         ///
-        /// Then both `a` and `b` are simple.
+        /// Then `a` is simple, but `b` is not simple.
         ///
         is_simple: bool,
+        /// Enumerations do not produce holder, as a simple type like f64 and others.
+        is_enumerate: bool,
     },
 
     /* Declared as `ENTITY` */
@@ -76,7 +78,7 @@ impl TypeRef {
     pub fn is_simple(&self) -> bool {
         match self {
             TypeRef::SimpleType(..) => true,
-            TypeRef::Named { is_simple, .. } => *is_simple,
+            TypeRef::Named { is_enumerate, .. } => *is_enumerate,
             TypeRef::Set { base, .. } | TypeRef::List { base, .. } => base.is_simple(),
             _ => false,
         }
@@ -97,33 +99,28 @@ impl TypeRef {
                 })
             }
             ScopeType::Type => {
-                let mut p = path.clone();
-                let is_simple = loop {
-                    match ns.get(&p)? {
-                        Named::Type(ast::TypeDecl {
-                            underlying_type, ..
-                        }) => match underlying_type {
-                            // Enumeration e.g.
-                            //
-                            // ```
-                            // TYPE null_style = ENUMERATION OF (null); END_TYPE;
-                            // ```
-                            //
-                            // should be simple because it will be expressed as single integer.
-                            ast::Type::Simple(_) | ast::Type::Enumeration { .. } => break true,
-                            ast::Type::Named(name) => {
-                                p = ns.resolve(&p.scope, name)?;
-                                continue;
-                            }
-                            _ => break false,
-                        },
-                        Named::Entity(_) => break false,
-                    }
+                let (is_simple, is_enumerate) = match ns.get(&path)? {
+                    Named::Type(ast::TypeDecl {
+                        underlying_type, ..
+                    }) => match underlying_type {
+                        // Enumeration e.g.
+                        //
+                        // ```
+                        // TYPE null_style = ENUMERATION OF (null); END_TYPE;
+                        // ```
+                        //
+                        // should be simple because it will be expressed as single integer.
+                        ast::Type::Simple(_) => (true, false),
+                        ast::Type::Enumeration { .. } => (true, true),
+                        _ => (false, false),
+                    },
+                    Named::Entity(_) => (false, false),
                 };
                 Ok(TypeRef::Named {
                     scope: path.scope.clone(),
                     name: path.name.clone(),
                     is_simple,
+                    is_enumerate,
                 })
             }
             _ => unimplemented!("Path to TypeRef conversion only supports Entity and Types yet."),

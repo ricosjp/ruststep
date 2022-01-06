@@ -37,6 +37,7 @@ In addition to original Keep-a-Changelog, we use following rules:
 - impl `FromStr` for `Record` and `DataSection` https://github.com/ricosjp/ruststep/pull/140
 
 ### Changed
+- Generate Holder struct for TYPE declaration with simple type. https://github.com/ricosjp/ruststep/pull/186
 - Implement `AsRef` and `AsMut` for `XXAny`. https://github.com/ricosjp/ruststep/pull/180
 - Use `syn::Type` and other explicit types instead of `proc_macro2::TokenStream` in espr/codegen https://github.com/ricosjp/ruststep/pull/184
 - Cut out `IntoOwned` from `Holder` for compile `LIST OF LIST OF XXX`. https://github.com/ricosjp/ruststep/pull/183

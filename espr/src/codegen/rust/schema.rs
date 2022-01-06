@@ -37,16 +37,10 @@ impl Schema {
         let types = &self.types;
         let entities = &self.entities;
         let type_decls = self.types.iter().filter(|e| match e {
-            TypeDecl::Rename(Rename {
-                ty: TypeRef::SimpleType(_),
-                ..
-            }) => false,
-            TypeDecl::Rename(Rename {
-                ty: TypeRef::Named { is_simple, .. },
-                ..
-            }) => !is_simple,
-            TypeDecl::Rename(Rename { .. }) => true,
-            _ => false,
+            // Only Enumeration is treated as a simple type, like f64, etc.
+            // In other words, no holder generation, etc. is done.
+            TypeDecl::Enumeration(_) => false,
+            _ => true,
         });
         let entity_types: Vec<_> = entities
             .iter()
