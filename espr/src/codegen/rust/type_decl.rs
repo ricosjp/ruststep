@@ -56,7 +56,7 @@ impl ToTokens for Rename {
 fn simple_meta(field_name: &syn::Ident) -> (TokenStream, TokenStream) {
     (
         quote! {
-            #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, ::ruststep_derive::Holder)]
+            #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, Into, From, ::ruststep_derive::Holder)]
             #[holder(table = Tables)]
             #[holder(field = #field_name)]
             #[holder(generate_deserialize)]
@@ -68,7 +68,7 @@ fn simple_meta(field_name: &syn::Ident) -> (TokenStream, TokenStream) {
 fn rename_meta(field_name: &syn::Ident) -> (TokenStream, TokenStream) {
     (
         quote! {
-            #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, ::ruststep_derive::Holder)]
+            #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, Into, From, ::ruststep_derive::Holder)]
             #[holder(table = Tables)]
             #[holder(field = #field_name)]
             #[holder(generate_deserialize)]

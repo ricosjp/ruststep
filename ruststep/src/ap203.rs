@@ -2852,7 +2852,9 @@ pub mod config_control_design {
         #[holder(use_place_holder)]
         Contract(Box<Contract>),
     }
-    #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, :: ruststep_derive :: Holder)]
+    #[derive(
+        Clone, Debug, PartialEq, AsRef, Deref, DerefMut, Into, From, :: ruststep_derive :: Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = area_measure)]
     #[holder(generate_deserialize)]
@@ -2940,7 +2942,9 @@ pub mod config_control_design {
         #[holder(use_place_holder)]
         AssemblyComponentUsage(AssemblyComponentUsageAny),
     }
-    #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, :: ruststep_derive :: Holder)]
+    #[derive(
+        Clone, Debug, PartialEq, AsRef, Deref, DerefMut, Into, From, :: ruststep_derive :: Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = context_dependent_measure)]
     #[holder(generate_deserialize)]
@@ -2952,7 +2956,9 @@ pub mod config_control_design {
         #[holder(use_place_holder)]
         ProductDefinitionFormation(ProductDefinitionFormationAny),
     }
-    #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, :: ruststep_derive :: Holder)]
+    #[derive(
+        Clone, Debug, PartialEq, AsRef, Deref, DerefMut, Into, From, :: ruststep_derive :: Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = count_measure)]
     #[holder(generate_deserialize)]
@@ -3012,27 +3018,37 @@ pub mod config_control_design {
         #[holder(use_place_holder)]
         DateAndTime(Box<DateAndTime>),
     }
-    #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, :: ruststep_derive :: Holder)]
+    #[derive(
+        Clone, Debug, PartialEq, AsRef, Deref, DerefMut, Into, From, :: ruststep_derive :: Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = day_in_month_number)]
     #[holder(generate_deserialize)]
     pub struct DayInMonthNumber(pub i64);
-    #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, :: ruststep_derive :: Holder)]
+    #[derive(
+        Clone, Debug, PartialEq, AsRef, Deref, DerefMut, Into, From, :: ruststep_derive :: Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = day_in_week_number)]
     #[holder(generate_deserialize)]
     pub struct DayInWeekNumber(pub i64);
-    #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, :: ruststep_derive :: Holder)]
+    #[derive(
+        Clone, Debug, PartialEq, AsRef, Deref, DerefMut, Into, From, :: ruststep_derive :: Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = day_in_year_number)]
     #[holder(generate_deserialize)]
     pub struct DayInYearNumber(pub i64);
-    #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, :: ruststep_derive :: Holder)]
+    #[derive(
+        Clone, Debug, PartialEq, AsRef, Deref, DerefMut, Into, From, :: ruststep_derive :: Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = descriptive_measure)]
     #[holder(generate_deserialize)]
     pub struct DescriptiveMeasure(pub String);
-    #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, :: ruststep_derive :: Holder)]
+    #[derive(
+        Clone, Debug, PartialEq, AsRef, Deref, DerefMut, Into, From, :: ruststep_derive :: Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = dimension_count)]
     #[holder(generate_deserialize)]
@@ -3057,12 +3073,16 @@ pub mod config_control_design {
         #[holder(use_place_holder)]
         Surface(SurfaceAny),
     }
-    #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, :: ruststep_derive :: Holder)]
+    #[derive(
+        Clone, Debug, PartialEq, AsRef, Deref, DerefMut, Into, From, :: ruststep_derive :: Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = hour_in_day)]
     #[holder(generate_deserialize)]
     pub struct HourInDay(pub i64);
-    #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, :: ruststep_derive :: Holder)]
+    #[derive(
+        Clone, Debug, PartialEq, AsRef, Deref, DerefMut, Into, From, :: ruststep_derive :: Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = identifier)]
     #[holder(generate_deserialize)]
@@ -3074,24 +3094,32 @@ pub mod config_control_design {
         QuasiUniformKnots,
         PiecewiseBezierKnots,
     }
-    #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, :: ruststep_derive :: Holder)]
+    #[derive(
+        Clone, Debug, PartialEq, AsRef, Deref, DerefMut, Into, From, :: ruststep_derive :: Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = label)]
     #[holder(generate_deserialize)]
     pub struct Label(pub String);
-    #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, :: ruststep_derive :: Holder)]
+    #[derive(
+        Clone, Debug, PartialEq, AsRef, Deref, DerefMut, Into, From, :: ruststep_derive :: Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = length_measure)]
     #[holder(generate_deserialize)]
     pub struct LengthMeasure(pub f64);
-    #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, :: ruststep_derive :: Holder)]
+    #[derive(
+        Clone, Debug, PartialEq, AsRef, Deref, DerefMut, Into, From, :: ruststep_derive :: Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = list_of_reversible_topology_item)]
     #[holder(generate_deserialize)]
     pub struct ListOfReversibleTopologyItem(
         #[holder(use_place_holder)] pub Vec<ReversibleTopologyItem>,
     );
-    #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, :: ruststep_derive :: Holder)]
+    #[derive(
+        Clone, Debug, PartialEq, AsRef, Deref, DerefMut, Into, From, :: ruststep_derive :: Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = mass_measure)]
     #[holder(generate_deserialize)]
@@ -3125,17 +3153,23 @@ pub mod config_control_design {
         #[holder(use_place_holder)]
         CountMeasure(Box<CountMeasure>),
     }
-    #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, :: ruststep_derive :: Holder)]
+    #[derive(
+        Clone, Debug, PartialEq, AsRef, Deref, DerefMut, Into, From, :: ruststep_derive :: Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = minute_in_hour)]
     #[holder(generate_deserialize)]
     pub struct MinuteInHour(pub i64);
-    #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, :: ruststep_derive :: Holder)]
+    #[derive(
+        Clone, Debug, PartialEq, AsRef, Deref, DerefMut, Into, From, :: ruststep_derive :: Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = month_in_year_number)]
     #[holder(generate_deserialize)]
     pub struct MonthInYearNumber(pub i64);
-    #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, :: ruststep_derive :: Holder)]
+    #[derive(
+        Clone, Debug, PartialEq, AsRef, Deref, DerefMut, Into, From, :: ruststep_derive :: Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = parameter_value)]
     #[holder(generate_deserialize)]
@@ -3196,17 +3230,23 @@ pub mod config_control_design {
         #[holder(use_place_holder)]
         PersonAndOrganization(Box<PersonAndOrganization>),
     }
-    #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, :: ruststep_derive :: Holder)]
+    #[derive(
+        Clone, Debug, PartialEq, AsRef, Deref, DerefMut, Into, From, :: ruststep_derive :: Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = plane_angle_measure)]
     #[holder(generate_deserialize)]
     pub struct PlaneAngleMeasure(pub f64);
-    #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, :: ruststep_derive :: Holder)]
+    #[derive(
+        Clone, Debug, PartialEq, AsRef, Deref, DerefMut, Into, From, :: ruststep_derive :: Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = positive_length_measure)]
     #[holder(generate_deserialize)]
     pub struct PositiveLengthMeasure(#[holder(use_place_holder)] pub LengthMeasure);
-    #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, :: ruststep_derive :: Holder)]
+    #[derive(
+        Clone, Debug, PartialEq, AsRef, Deref, DerefMut, Into, From, :: ruststep_derive :: Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = positive_plane_angle_measure)]
     #[holder(generate_deserialize)]
@@ -3245,12 +3285,16 @@ pub mod config_control_design {
         #[holder(use_place_holder)]
         OpenShell(OpenShellAny),
     }
-    #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, :: ruststep_derive :: Holder)]
+    #[derive(
+        Clone, Debug, PartialEq, AsRef, Deref, DerefMut, Into, From, :: ruststep_derive :: Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = second_in_minute)]
     #[holder(generate_deserialize)]
     pub struct SecondInMinute(pub f64);
-    #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, :: ruststep_derive :: Holder)]
+    #[derive(
+        Clone, Debug, PartialEq, AsRef, Deref, DerefMut, Into, From, :: ruststep_derive :: Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = set_of_reversible_topology_item)]
     #[holder(generate_deserialize)]
@@ -3336,7 +3380,9 @@ pub mod config_control_design {
         Gray,
         Sievert,
     }
-    #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, :: ruststep_derive :: Holder)]
+    #[derive(
+        Clone, Debug, PartialEq, AsRef, Deref, DerefMut, Into, From, :: ruststep_derive :: Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = solid_angle_measure)]
     #[holder(generate_deserialize)]
@@ -3385,7 +3431,9 @@ pub mod config_control_design {
         #[holder(use_place_holder)]
         ShellBasedSurfaceModel(Box<ShellBasedSurfaceModel>),
     }
-    #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, :: ruststep_derive :: Holder)]
+    #[derive(
+        Clone, Debug, PartialEq, AsRef, Deref, DerefMut, Into, From, :: ruststep_derive :: Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = text)]
     #[holder(generate_deserialize)]
@@ -3441,12 +3489,16 @@ pub mod config_control_design {
         #[holder(use_place_holder)]
         Direction(Box<Direction>),
     }
-    #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, :: ruststep_derive :: Holder)]
+    #[derive(
+        Clone, Debug, PartialEq, AsRef, Deref, DerefMut, Into, From, :: ruststep_derive :: Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = volume_measure)]
     #[holder(generate_deserialize)]
     pub struct VolumeMeasure(pub f64);
-    #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, :: ruststep_derive :: Holder)]
+    #[derive(
+        Clone, Debug, PartialEq, AsRef, Deref, DerefMut, Into, From, :: ruststep_derive :: Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = week_in_year_number)]
     #[holder(generate_deserialize)]
@@ -3469,7 +3521,9 @@ pub mod config_control_design {
         #[holder(use_place_holder)]
         ProductDefinitionFormation(ProductDefinitionFormationAny),
     }
-    #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, :: ruststep_derive :: Holder)]
+    #[derive(
+        Clone, Debug, PartialEq, AsRef, Deref, DerefMut, Into, From, :: ruststep_derive :: Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = year_number)]
     #[holder(generate_deserialize)]

@@ -65,12 +65,16 @@ fn list() {
                     .map(move |value| value.into_owned(&self))
             }
         }
-        #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, :: ruststep_derive :: Holder)]
+        #[derive(
+            Clone, Debug, PartialEq, AsRef, Deref, DerefMut, Into, From, :: ruststep_derive :: Holder,
+        )]
         # [holder (table = Tables)]
         # [holder (field = c)]
         #[holder(generate_deserialize)]
         pub struct C(#[holder(use_place_holder)] pub Vec<f64>);
-        #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, :: ruststep_derive :: Holder)]
+        #[derive(
+            Clone, Debug, PartialEq, AsRef, Deref, DerefMut, Into, From, :: ruststep_derive :: Holder,
+        )]
         # [holder (table = Tables)]
         # [holder (field = d)]
         #[holder(generate_deserialize)]

@@ -64,7 +64,9 @@ fn type_decl() {
                     .map(move |value| value.into_owned(&self))
             }
         }
-        #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, :: ruststep_derive :: Holder)]
+        #[derive(
+            Clone, Debug, PartialEq, AsRef, Deref, DerefMut, Into, From, :: ruststep_derive :: Holder,
+        )]
         # [holder (table = Tables)]
         # [holder (field = a)]
         #[holder(generate_deserialize)]
@@ -75,7 +77,9 @@ fn type_decl() {
             Sore,
             Dore,
         }
-        #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, :: ruststep_derive :: Holder)]
+        #[derive(
+            Clone, Debug, PartialEq, AsRef, Deref, DerefMut, Into, From, :: ruststep_derive :: Holder,
+        )]
         # [holder (table = Tables)]
         # [holder (field = c)]
         #[holder(generate_deserialize)]

@@ -2610,22 +2610,30 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         BoxRotateAngle(Box<BoxRotateAngle>),
     }
-    #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, :: ruststep_derive :: Holder)]
+    #[derive(
+        Clone, Debug, PartialEq, AsRef, Deref, DerefMut, Into, From, :: ruststep_derive :: Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = box_height)]
     #[holder(generate_deserialize)]
     pub struct BoxHeight(#[holder(use_place_holder)] pub PositiveRatioMeasure);
-    #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, :: ruststep_derive :: Holder)]
+    #[derive(
+        Clone, Debug, PartialEq, AsRef, Deref, DerefMut, Into, From, :: ruststep_derive :: Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = box_rotate_angle)]
     #[holder(generate_deserialize)]
     pub struct BoxRotateAngle(#[holder(use_place_holder)] pub PlaneAngleMeasure);
-    #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, :: ruststep_derive :: Holder)]
+    #[derive(
+        Clone, Debug, PartialEq, AsRef, Deref, DerefMut, Into, From, :: ruststep_derive :: Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = box_slant_angle)]
     #[holder(generate_deserialize)]
     pub struct BoxSlantAngle(#[holder(use_place_holder)] pub PlaneAngleMeasure);
-    #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, :: ruststep_derive :: Holder)]
+    #[derive(
+        Clone, Debug, PartialEq, AsRef, Deref, DerefMut, Into, From, :: ruststep_derive :: Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = box_width)]
     #[holder(generate_deserialize)]
@@ -2727,7 +2735,9 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         Date(DateAny),
     }
-    #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, :: ruststep_derive :: Holder)]
+    #[derive(
+        Clone, Debug, PartialEq, AsRef, Deref, DerefMut, Into, From, :: ruststep_derive :: Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = day_in_month_number)]
     #[holder(generate_deserialize)]
@@ -2742,7 +2752,9 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         ExternallyDefinedSymbol(Box<ExternallyDefinedSymbol>),
     }
-    #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, :: ruststep_derive :: Holder)]
+    #[derive(
+        Clone, Debug, PartialEq, AsRef, Deref, DerefMut, Into, From, :: ruststep_derive :: Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = dimension_count)]
     #[holder(generate_deserialize)]
@@ -2864,7 +2876,9 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         AnnotationFillArea(Box<AnnotationFillArea>),
     }
-    #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, :: ruststep_derive :: Holder)]
+    #[derive(
+        Clone, Debug, PartialEq, AsRef, Deref, DerefMut, Into, From, :: ruststep_derive :: Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = identifier)]
     #[holder(generate_deserialize)]
@@ -2900,7 +2914,9 @@ pub mod explicit_draughting {
         PiecewiseBezierKnots,
         Unspecified,
     }
-    #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, :: ruststep_derive :: Holder)]
+    #[derive(
+        Clone, Debug, PartialEq, AsRef, Deref, DerefMut, Into, From, :: ruststep_derive :: Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = label)]
     #[holder(generate_deserialize)]
@@ -2914,7 +2930,9 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         RepresentationItem(RepresentationItemAny),
     }
-    #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, :: ruststep_derive :: Holder)]
+    #[derive(
+        Clone, Debug, PartialEq, AsRef, Deref, DerefMut, Into, From, :: ruststep_derive :: Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = length_measure)]
     #[holder(generate_deserialize)]
@@ -2936,7 +2954,9 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         PositiveRatioMeasure(Box<PositiveRatioMeasure>),
     }
-    #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, :: ruststep_derive :: Holder)]
+    #[derive(
+        Clone, Debug, PartialEq, AsRef, Deref, DerefMut, Into, From, :: ruststep_derive :: Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = month_in_year_number)]
     #[holder(generate_deserialize)]
@@ -2945,7 +2965,9 @@ pub mod explicit_draughting {
     pub enum NullStyle {
         Null,
     }
-    #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, :: ruststep_derive :: Holder)]
+    #[derive(
+        Clone, Debug, PartialEq, AsRef, Deref, DerefMut, Into, From, :: ruststep_derive :: Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = parameter_value)]
     #[holder(generate_deserialize)]
@@ -2964,22 +2986,30 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         PersonAndOrganization(Box<PersonAndOrganization>),
     }
-    #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, :: ruststep_derive :: Holder)]
+    #[derive(
+        Clone, Debug, PartialEq, AsRef, Deref, DerefMut, Into, From, :: ruststep_derive :: Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = plane_angle_measure)]
     #[holder(generate_deserialize)]
     pub struct PlaneAngleMeasure(pub f64);
-    #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, :: ruststep_derive :: Holder)]
+    #[derive(
+        Clone, Debug, PartialEq, AsRef, Deref, DerefMut, Into, From, :: ruststep_derive :: Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = positive_length_measure)]
     #[holder(generate_deserialize)]
     pub struct PositiveLengthMeasure(#[holder(use_place_holder)] pub LengthMeasure);
-    #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, :: ruststep_derive :: Holder)]
+    #[derive(
+        Clone, Debug, PartialEq, AsRef, Deref, DerefMut, Into, From, :: ruststep_derive :: Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = positive_ratio_measure)]
     #[holder(generate_deserialize)]
     pub struct PositiveRatioMeasure(#[holder(use_place_holder)] pub RatioMeasure);
-    #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, :: ruststep_derive :: Holder)]
+    #[derive(
+        Clone, Debug, PartialEq, AsRef, Deref, DerefMut, Into, From, :: ruststep_derive :: Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = presentable_text)]
     #[holder(generate_deserialize)]
@@ -3022,7 +3052,9 @@ pub mod explicit_draughting {
         TextStyle(TextStyleAny),
         NullStyle(NullStyle),
     }
-    #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, :: ruststep_derive :: Holder)]
+    #[derive(
+        Clone, Debug, PartialEq, AsRef, Deref, DerefMut, Into, From, :: ruststep_derive :: Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = ratio_measure)]
     #[holder(generate_deserialize)]
@@ -3127,17 +3159,23 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         SymbolColour(Box<SymbolColour>),
     }
-    #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, :: ruststep_derive :: Holder)]
+    #[derive(
+        Clone, Debug, PartialEq, AsRef, Deref, DerefMut, Into, From, :: ruststep_derive :: Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = text)]
     #[holder(generate_deserialize)]
     pub struct Text(pub String);
-    #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, :: ruststep_derive :: Holder)]
+    #[derive(
+        Clone, Debug, PartialEq, AsRef, Deref, DerefMut, Into, From, :: ruststep_derive :: Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = text_alignment)]
     #[holder(generate_deserialize)]
     pub struct TextAlignment(#[holder(use_place_holder)] pub Label);
-    #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, :: ruststep_derive :: Holder)]
+    #[derive(
+        Clone, Debug, PartialEq, AsRef, Deref, DerefMut, Into, From, :: ruststep_derive :: Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = text_delineation)]
     #[holder(generate_deserialize)]
@@ -3202,7 +3240,9 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         Direction(Box<Direction>),
     }
-    #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, :: ruststep_derive :: Holder)]
+    #[derive(
+        Clone, Debug, PartialEq, AsRef, Deref, DerefMut, Into, From, :: ruststep_derive :: Holder,
+    )]
     # [holder (table = Tables)]
     # [holder (field = year_number)]
     #[holder(generate_deserialize)]
