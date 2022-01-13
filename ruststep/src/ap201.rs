@@ -1,8 +1,6 @@
 #![allow(dead_code)]
 pub mod explicit_draughting {
-    use crate::{
-        as_holder, derive_more::*, error::Result, primitive::*, tables::*, Holder, TableInit,
-    };
+    use crate::{as_holder, derive_more::*, primitive::*, Holder, TableInit};
     use std::collections::HashMap;
     #[derive(Debug, Clone, PartialEq, Default, TableInit)]
     pub struct Tables {
@@ -244,1746 +242,881 @@ pub mod explicit_draughting {
         vector: HashMap<u64, as_holder!(Vector)>,
     }
     impl Tables {
-        pub fn address_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<Address>> + 'table {
-            self.address
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn angular_dimension_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<AngularDimension>> + 'table {
-            self.angular_dimension
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn annotation_curve_occurrence_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<AnnotationCurveOccurrence>> + 'table {
-            self.annotation_curve_occurrence
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn annotation_fill_area_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<AnnotationFillArea>> + 'table {
-            self.annotation_fill_area
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn annotation_fill_area_occurrence_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<AnnotationFillAreaOccurrence>> + 'table {
-            self.annotation_fill_area_occurrence
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn annotation_occurrence_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<AnnotationOccurrence>> + 'table {
-            self.annotation_occurrence
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn annotation_subfigure_occurrence_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<AnnotationSubfigureOccurrence>> + 'table {
-            self.annotation_subfigure_occurrence
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn annotation_symbol_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<AnnotationSymbol>> + 'table {
-            self.annotation_symbol
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn annotation_symbol_occurrence_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<AnnotationSymbolOccurrence>> + 'table {
-            self.annotation_symbol_occurrence
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn annotation_text_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<AnnotationText>> + 'table {
-            self.annotation_text
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn annotation_text_occurrence_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<AnnotationTextOccurrence>> + 'table {
-            self.annotation_text_occurrence
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn application_context_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<ApplicationContext>> + 'table {
-            self.application_context
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn application_context_element_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<ApplicationContextElement>> + 'table {
-            self.application_context_element
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn application_protocol_definition_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<ApplicationProtocolDefinition>> + 'table {
-            self.application_protocol_definition
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn approval_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<Approval>> + 'table {
-            self.approval
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn approval_assignment_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<ApprovalAssignment>> + 'table {
-            self.approval_assignment
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn approval_date_time_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<ApprovalDateTime>> + 'table {
-            self.approval_date_time
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn approval_person_organization_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<ApprovalPersonOrganization>> + 'table {
-            self.approval_person_organization
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn approval_role_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<ApprovalRole>> + 'table {
-            self.approval_role
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn approval_status_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<ApprovalStatus>> + 'table {
-            self.approval_status
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn area_in_set_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<AreaInSet>> + 'table {
-            self.area_in_set
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn axis2_placement_2d_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<Axis2Placement2D>> + 'table {
-            self.axis2_placement_2d
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn b_spline_curve_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<BSplineCurve>> + 'table {
-            self.b_spline_curve
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn b_spline_curve_with_knots_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<BSplineCurveWithKnots>> + 'table {
-            self.b_spline_curve_with_knots
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn bezier_curve_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<BezierCurve>> + 'table {
-            self.bezier_curve
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn bounded_curve_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<BoundedCurve>> + 'table {
-            self.bounded_curve
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn calendar_date_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<CalendarDate>> + 'table {
-            self.calendar_date
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn camera_image_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<CameraImage>> + 'table {
-            self.camera_image
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn camera_image_2d_with_scale_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<CameraImage2DWithScale>> + 'table {
-            self.camera_image_2d_with_scale
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn camera_model_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<CameraModel>> + 'table {
-            self.camera_model
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn camera_model_d2_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<CameraModelD2>> + 'table {
-            self.camera_model_d2
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn camera_usage_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<CameraUsage>> + 'table {
-            self.camera_usage
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn cartesian_point_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<CartesianPoint>> + 'table {
-            self.cartesian_point
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn circle_iter<'table>(&'table self) -> impl Iterator<Item = Result<Circle>> + 'table {
-            self.circle
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn colour_iter<'table>(&'table self) -> impl Iterator<Item = Result<Colour>> + 'table {
-            self.colour
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn colour_rgb_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<ColourRgb>> + 'table {
-            self.colour_rgb
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn colour_specification_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<ColourSpecification>> + 'table {
-            self.colour_specification
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn composite_curve_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<CompositeCurve>> + 'table {
-            self.composite_curve
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn composite_curve_segment_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<CompositeCurveSegment>> + 'table {
-            self.composite_curve_segment
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn composite_text_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<CompositeText>> + 'table {
-            self.composite_text
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn composite_text_with_associated_curves_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<CompositeTextWithAssociatedCurves>> + 'table {
-            self.composite_text_with_associated_curves
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn composite_text_with_blanking_box_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<CompositeTextWithBlankingBox>> + 'table {
-            self.composite_text_with_blanking_box
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn composite_text_with_extent_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<CompositeTextWithExtent>> + 'table {
-            self.composite_text_with_extent
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn conic_iter<'table>(&'table self) -> impl Iterator<Item = Result<Conic>> + 'table {
-            self.conic
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn context_dependent_invisibility_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<ContextDependentInvisibility>> + 'table {
-            self.context_dependent_invisibility
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn contract_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<Contract>> + 'table {
-            self.contract
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn contract_assignment_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<ContractAssignment>> + 'table {
-            self.contract_assignment
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn contract_type_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<ContractType>> + 'table {
-            self.contract_type
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn conversion_based_unit_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<ConversionBasedUnit>> + 'table {
-            self.conversion_based_unit
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn curve_iter<'table>(&'table self) -> impl Iterator<Item = Result<Curve>> + 'table {
-            self.curve
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn curve_dimension_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<CurveDimension>> + 'table {
-            self.curve_dimension
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn curve_style_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<CurveStyle>> + 'table {
-            self.curve_style
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn curve_style_font_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<CurveStyleFont>> + 'table {
-            self.curve_style_font
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn curve_style_font_pattern_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<CurveStyleFontPattern>> + 'table {
-            self.curve_style_font_pattern
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn date_iter<'table>(&'table self) -> impl Iterator<Item = Result<Date>> + 'table {
-            self.date
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn datum_feature_callout_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<DatumFeatureCallout>> + 'table {
-            self.datum_feature_callout
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn datum_target_callout_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<DatumTargetCallout>> + 'table {
-            self.datum_target_callout
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn defined_symbol_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<DefinedSymbol>> + 'table {
-            self.defined_symbol
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn diameter_dimension_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<DiameterDimension>> + 'table {
-            self.diameter_dimension
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn dimension_callout_component_relationship_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<DimensionCalloutComponentRelationship>> + 'table {
-            self.dimension_callout_component_relationship
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn dimension_callout_relationship_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<DimensionCalloutRelationship>> + 'table {
-            self.dimension_callout_relationship
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn dimension_curve_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<DimensionCurve>> + 'table {
-            self.dimension_curve
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn dimension_curve_directed_callout_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<DimensionCurveDirectedCallout>> + 'table {
-            self.dimension_curve_directed_callout
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn dimension_curve_terminator_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<DimensionCurveTerminator>> + 'table {
-            self.dimension_curve_terminator
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn dimension_pair_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<DimensionPair>> + 'table {
-            self.dimension_pair
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn dimensional_exponents_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<DimensionalExponents>> + 'table {
-            self.dimensional_exponents
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn direction_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<Direction>> + 'table {
-            self.direction
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn document_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<Document>> + 'table {
-            self.document
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn document_reference_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<DocumentReference>> + 'table {
-            self.document_reference
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn document_type_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<DocumentType>> + 'table {
-            self.document_type
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn draughting_annotation_occurrence_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<DraughtingAnnotationOccurrence>> + 'table {
-            self.draughting_annotation_occurrence
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn draughting_approval_assignment_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<DraughtingApprovalAssignment>> + 'table {
-            self.draughting_approval_assignment
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn draughting_callout_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<DraughtingCallout>> + 'table {
-            self.draughting_callout
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn draughting_callout_relationship_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<DraughtingCalloutRelationship>> + 'table {
-            self.draughting_callout_relationship
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn draughting_contract_assignment_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<DraughtingContractAssignment>> + 'table {
-            self.draughting_contract_assignment
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn draughting_drawing_revision_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<DraughtingDrawingRevision>> + 'table {
-            self.draughting_drawing_revision
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn draughting_elements_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<DraughtingElements>> + 'table {
-            self.draughting_elements
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn draughting_group_assignment_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<DraughtingGroupAssignment>> + 'table {
-            self.draughting_group_assignment
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn draughting_model_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<DraughtingModel>> + 'table {
-            self.draughting_model
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn draughting_organization_assignment_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<DraughtingOrganizationAssignment>> + 'table {
-            self.draughting_organization_assignment
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn draughting_person_and_organization_assignment_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<DraughtingPersonAndOrganizationAssignment>> + 'table
-        {
-            self.draughting_person_and_organization_assignment
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn draughting_person_assignment_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<DraughtingPersonAssignment>> + 'table {
-            self.draughting_person_assignment
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn draughting_pre_defined_colour_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<DraughtingPreDefinedColour>> + 'table {
-            self.draughting_pre_defined_colour
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn draughting_pre_defined_curve_font_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<DraughtingPreDefinedCurveFont>> + 'table {
-            self.draughting_pre_defined_curve_font
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn draughting_pre_defined_text_font_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<DraughtingPreDefinedTextFont>> + 'table {
-            self.draughting_pre_defined_text_font
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn draughting_presented_item_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<DraughtingPresentedItem>> + 'table {
-            self.draughting_presented_item
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn draughting_security_classification_assignment_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<DraughtingSecurityClassificationAssignment>> + 'table
-        {
-            self.draughting_security_classification_assignment
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn draughting_specification_reference_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<DraughtingSpecificationReference>> + 'table {
-            self.draughting_specification_reference
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn draughting_subfigure_representation_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<DraughtingSubfigureRepresentation>> + 'table {
-            self.draughting_subfigure_representation
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn draughting_symbol_representation_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<DraughtingSymbolRepresentation>> + 'table {
-            self.draughting_symbol_representation
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn draughting_text_literal_with_delineation_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<DraughtingTextLiteralWithDelineation>> + 'table {
-            self.draughting_text_literal_with_delineation
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn draughting_title_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<DraughtingTitle>> + 'table {
-            self.draughting_title
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn drawing_definition_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<DrawingDefinition>> + 'table {
-            self.drawing_definition
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn drawing_revision_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<DrawingRevision>> + 'table {
-            self.drawing_revision
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn drawing_sheet_layout_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<DrawingSheetLayout>> + 'table {
-            self.drawing_sheet_layout
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn drawing_sheet_revision_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<DrawingSheetRevision>> + 'table {
-            self.drawing_sheet_revision
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn drawing_sheet_revision_usage_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<DrawingSheetRevisionUsage>> + 'table {
-            self.drawing_sheet_revision_usage
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn ellipse_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<Ellipse>> + 'table {
-            self.ellipse
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn external_source_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<ExternalSource>> + 'table {
-            self.external_source
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn externally_defined_curve_font_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<ExternallyDefinedCurveFont>> + 'table {
-            self.externally_defined_curve_font
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn externally_defined_hatch_style_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<ExternallyDefinedHatchStyle>> + 'table {
-            self.externally_defined_hatch_style
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn externally_defined_item_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<ExternallyDefinedItem>> + 'table {
-            self.externally_defined_item
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn externally_defined_symbol_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<ExternallyDefinedSymbol>> + 'table {
-            self.externally_defined_symbol
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn externally_defined_text_font_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<ExternallyDefinedTextFont>> + 'table {
-            self.externally_defined_text_font
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn externally_defined_tile_style_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<ExternallyDefinedTileStyle>> + 'table {
-            self.externally_defined_tile_style
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn fill_area_style_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<FillAreaStyle>> + 'table {
-            self.fill_area_style
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn fill_area_style_colour_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<FillAreaStyleColour>> + 'table {
-            self.fill_area_style_colour
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn fill_area_style_hatching_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<FillAreaStyleHatching>> + 'table {
-            self.fill_area_style_hatching
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn fill_area_style_tile_symbol_with_style_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<FillAreaStyleTileSymbolWithStyle>> + 'table {
-            self.fill_area_style_tile_symbol_with_style
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn fill_area_style_tiles_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<FillAreaStyleTiles>> + 'table {
-            self.fill_area_style_tiles
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn geometric_curve_set_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<GeometricCurveSet>> + 'table {
-            self.geometric_curve_set
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn geometric_representation_context_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<GeometricRepresentationContext>> + 'table {
-            self.geometric_representation_context
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn geometric_representation_item_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<GeometricRepresentationItem>> + 'table {
-            self.geometric_representation_item
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn geometric_set_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<GeometricSet>> + 'table {
-            self.geometric_set
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn geometrical_tolerance_callout_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<GeometricalToleranceCallout>> + 'table {
-            self.geometrical_tolerance_callout
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn geometrically_bounded_2d_wireframe_representation_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<GeometricallyBounded2DWireframeRepresentation>> + 'table
-        {
-            self.geometrically_bounded_2d_wireframe_representation
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn global_unit_assigned_context_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<GlobalUnitAssignedContext>> + 'table {
-            self.global_unit_assigned_context
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn group_iter<'table>(&'table self) -> impl Iterator<Item = Result<Group>> + 'table {
-            self.group
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn group_assignment_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<GroupAssignment>> + 'table {
-            self.group_assignment
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn group_relationship_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<GroupRelationship>> + 'table {
-            self.group_relationship
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn hyperbola_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<Hyperbola>> + 'table {
-            self.hyperbola
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn invisibility_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<Invisibility>> + 'table {
-            self.invisibility
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn leader_curve_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<LeaderCurve>> + 'table {
-            self.leader_curve
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn leader_directed_callout_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<LeaderDirectedCallout>> + 'table {
-            self.leader_directed_callout
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn leader_directed_dimension_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<LeaderDirectedDimension>> + 'table {
-            self.leader_directed_dimension
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn leader_terminator_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<LeaderTerminator>> + 'table {
-            self.leader_terminator
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn length_measure_with_unit_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<LengthMeasureWithUnit>> + 'table {
-            self.length_measure_with_unit
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn length_unit_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<LengthUnit>> + 'table {
-            self.length_unit
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn line_iter<'table>(&'table self) -> impl Iterator<Item = Result<Line>> + 'table {
-            self.line
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn linear_dimension_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<LinearDimension>> + 'table {
-            self.linear_dimension
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn mapped_item_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<MappedItem>> + 'table {
-            self.mapped_item
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn measure_with_unit_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<MeasureWithUnit>> + 'table {
-            self.measure_with_unit
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn named_unit_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<NamedUnit>> + 'table {
-            self.named_unit
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn offset_curve_2d_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<OffsetCurve2D>> + 'table {
-            self.offset_curve_2d
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn one_direction_repeat_factor_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<OneDirectionRepeatFactor>> + 'table {
-            self.one_direction_repeat_factor
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn ordinate_dimension_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<OrdinateDimension>> + 'table {
-            self.ordinate_dimension
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn organization_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<Organization>> + 'table {
-            self.organization
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn organization_assignment_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<OrganizationAssignment>> + 'table {
-            self.organization_assignment
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn organization_role_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<OrganizationRole>> + 'table {
-            self.organization_role
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn organizational_address_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<OrganizationalAddress>> + 'table {
-            self.organizational_address
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn parabola_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<Parabola>> + 'table {
-            self.parabola
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn person_iter<'table>(&'table self) -> impl Iterator<Item = Result<Person>> + 'table {
-            self.person
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn person_and_organization_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<PersonAndOrganization>> + 'table {
-            self.person_and_organization
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn person_and_organization_assignment_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<PersonAndOrganizationAssignment>> + 'table {
-            self.person_and_organization_assignment
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn person_and_organization_role_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<PersonAndOrganizationRole>> + 'table {
-            self.person_and_organization_role
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn person_assignment_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<PersonAssignment>> + 'table {
-            self.person_assignment
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn person_role_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<PersonRole>> + 'table {
-            self.person_role
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn personal_address_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<PersonalAddress>> + 'table {
-            self.personal_address
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn placement_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<Placement>> + 'table {
-            self.placement
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn planar_box_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<PlanarBox>> + 'table {
-            self.planar_box
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn planar_extent_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<PlanarExtent>> + 'table {
-            self.planar_extent
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn plane_angle_measure_with_unit_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<PlaneAngleMeasureWithUnit>> + 'table {
-            self.plane_angle_measure_with_unit
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn plane_angle_unit_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<PlaneAngleUnit>> + 'table {
-            self.plane_angle_unit
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn point_iter<'table>(&'table self) -> impl Iterator<Item = Result<Point>> + 'table {
-            self.point
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn point_on_curve_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<PointOnCurve>> + 'table {
-            self.point_on_curve
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn polyline_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<Polyline>> + 'table {
-            self.polyline
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn pre_defined_colour_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<PreDefinedColour>> + 'table {
-            self.pre_defined_colour
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn pre_defined_curve_font_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<PreDefinedCurveFont>> + 'table {
-            self.pre_defined_curve_font
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn pre_defined_dimension_symbol_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<PreDefinedDimensionSymbol>> + 'table {
-            self.pre_defined_dimension_symbol
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn pre_defined_geometrical_tolerance_symbol_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<PreDefinedGeometricalToleranceSymbol>> + 'table {
-            self.pre_defined_geometrical_tolerance_symbol
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn pre_defined_item_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<PreDefinedItem>> + 'table {
-            self.pre_defined_item
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn pre_defined_point_marker_symbol_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<PreDefinedPointMarkerSymbol>> + 'table {
-            self.pre_defined_point_marker_symbol
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn pre_defined_symbol_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<PreDefinedSymbol>> + 'table {
-            self.pre_defined_symbol
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn pre_defined_terminator_symbol_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<PreDefinedTerminatorSymbol>> + 'table {
-            self.pre_defined_terminator_symbol
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn pre_defined_text_font_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<PreDefinedTextFont>> + 'table {
-            self.pre_defined_text_font
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn presentation_area_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<PresentationArea>> + 'table {
-            self.presentation_area
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn presentation_layer_assignment_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<PresentationLayerAssignment>> + 'table {
-            self.presentation_layer_assignment
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn presentation_layer_usage_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<PresentationLayerUsage>> + 'table {
-            self.presentation_layer_usage
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn presentation_representation_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<PresentationRepresentation>> + 'table {
-            self.presentation_representation
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn presentation_set_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<PresentationSet>> + 'table {
-            self.presentation_set
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn presentation_size_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<PresentationSize>> + 'table {
-            self.presentation_size
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn presentation_style_assignment_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<PresentationStyleAssignment>> + 'table {
-            self.presentation_style_assignment
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn presentation_style_by_context_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<PresentationStyleByContext>> + 'table {
-            self.presentation_style_by_context
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn presentation_view_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<PresentationView>> + 'table {
-            self.presentation_view
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn presented_item_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<PresentedItem>> + 'table {
-            self.presented_item
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn presented_item_representation_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<PresentedItemRepresentation>> + 'table {
-            self.presented_item_representation
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn product_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<Product>> + 'table {
-            self.product
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn product_context_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<ProductContext>> + 'table {
-            self.product_context
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn product_definition_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<ProductDefinition>> + 'table {
-            self.product_definition
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn product_definition_context_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<ProductDefinitionContext>> + 'table {
-            self.product_definition_context
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn product_definition_formation_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<ProductDefinitionFormation>> + 'table {
-            self.product_definition_formation
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn product_definition_shape_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<ProductDefinitionShape>> + 'table {
-            self.product_definition_shape
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn projection_curve_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<ProjectionCurve>> + 'table {
-            self.projection_curve
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn projection_directed_callout_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<ProjectionDirectedCallout>> + 'table {
-            self.projection_directed_callout
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn property_definition_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<PropertyDefinition>> + 'table {
-            self.property_definition
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn property_definition_representation_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<PropertyDefinitionRepresentation>> + 'table {
-            self.property_definition_representation
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn quasi_uniform_curve_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<QuasiUniformCurve>> + 'table {
-            self.quasi_uniform_curve
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn radius_dimension_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<RadiusDimension>> + 'table {
-            self.radius_dimension
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn rational_b_spline_curve_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<RationalBSplineCurve>> + 'table {
-            self.rational_b_spline_curve
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn representation_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<Representation>> + 'table {
-            self.representation
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn representation_context_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<RepresentationContext>> + 'table {
-            self.representation_context
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn representation_item_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<RepresentationItem>> + 'table {
-            self.representation_item
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn representation_map_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<RepresentationMap>> + 'table {
-            self.representation_map
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn security_classification_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<SecurityClassification>> + 'table {
-            self.security_classification
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn security_classification_assignment_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<SecurityClassificationAssignment>> + 'table {
-            self.security_classification_assignment
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn security_classification_level_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<SecurityClassificationLevel>> + 'table {
-            self.security_classification_level
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn shape_definition_representation_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<ShapeDefinitionRepresentation>> + 'table {
-            self.shape_definition_representation
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn shape_representation_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<ShapeRepresentation>> + 'table {
-            self.shape_representation
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn si_unit_iter<'table>(&'table self) -> impl Iterator<Item = Result<SiUnit>> + 'table {
-            self.si_unit
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn structured_dimension_callout_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<StructuredDimensionCallout>> + 'table {
-            self.structured_dimension_callout
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn styled_item_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<StyledItem>> + 'table {
-            self.styled_item
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn symbol_colour_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<SymbolColour>> + 'table {
-            self.symbol_colour
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn symbol_representation_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<SymbolRepresentation>> + 'table {
-            self.symbol_representation
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn symbol_representation_map_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<SymbolRepresentationMap>> + 'table {
-            self.symbol_representation_map
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn symbol_style_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<SymbolStyle>> + 'table {
-            self.symbol_style
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn symbol_target_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<SymbolTarget>> + 'table {
-            self.symbol_target
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn terminator_symbol_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<TerminatorSymbol>> + 'table {
-            self.terminator_symbol
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn text_literal_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<TextLiteral>> + 'table {
-            self.text_literal
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn text_literal_with_associated_curves_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<TextLiteralWithAssociatedCurves>> + 'table {
-            self.text_literal_with_associated_curves
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn text_literal_with_blanking_box_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<TextLiteralWithBlankingBox>> + 'table {
-            self.text_literal_with_blanking_box
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn text_literal_with_delineation_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<TextLiteralWithDelineation>> + 'table {
-            self.text_literal_with_delineation
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn text_literal_with_extent_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<TextLiteralWithExtent>> + 'table {
-            self.text_literal_with_extent
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn text_style_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<TextStyle>> + 'table {
-            self.text_style
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn text_style_for_defined_font_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<TextStyleForDefinedFont>> + 'table {
-            self.text_style_for_defined_font
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn text_style_with_box_characteristics_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<TextStyleWithBoxCharacteristics>> + 'table {
-            self.text_style_with_box_characteristics
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn text_style_with_mirror_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<TextStyleWithMirror>> + 'table {
-            self.text_style_with_mirror
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn trimmed_curve_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<TrimmedCurve>> + 'table {
-            self.trimmed_curve
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn two_direction_repeat_factor_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<TwoDirectionRepeatFactor>> + 'table {
-            self.two_direction_repeat_factor
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn uniform_curve_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<UniformCurve>> + 'table {
-            self.uniform_curve
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
-        }
-        pub fn vector_iter<'table>(&'table self) -> impl Iterator<Item = Result<Vector>> + 'table {
-            self.vector
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
+        pub fn address_holders(&self) -> &HashMap<u64, as_holder!(Address)> {
+            &self.address
+        }
+        pub fn angular_dimension_holders(&self) -> &HashMap<u64, as_holder!(AngularDimension)> {
+            &self.angular_dimension
+        }
+        pub fn annotation_curve_occurrence_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(AnnotationCurveOccurrence)> {
+            &self.annotation_curve_occurrence
+        }
+        pub fn annotation_fill_area_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(AnnotationFillArea)> {
+            &self.annotation_fill_area
+        }
+        pub fn annotation_fill_area_occurrence_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(AnnotationFillAreaOccurrence)> {
+            &self.annotation_fill_area_occurrence
+        }
+        pub fn annotation_occurrence_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(AnnotationOccurrence)> {
+            &self.annotation_occurrence
+        }
+        pub fn annotation_subfigure_occurrence_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(AnnotationSubfigureOccurrence)> {
+            &self.annotation_subfigure_occurrence
+        }
+        pub fn annotation_symbol_holders(&self) -> &HashMap<u64, as_holder!(AnnotationSymbol)> {
+            &self.annotation_symbol
+        }
+        pub fn annotation_symbol_occurrence_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(AnnotationSymbolOccurrence)> {
+            &self.annotation_symbol_occurrence
+        }
+        pub fn annotation_text_holders(&self) -> &HashMap<u64, as_holder!(AnnotationText)> {
+            &self.annotation_text
+        }
+        pub fn annotation_text_occurrence_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(AnnotationTextOccurrence)> {
+            &self.annotation_text_occurrence
+        }
+        pub fn application_context_holders(&self) -> &HashMap<u64, as_holder!(ApplicationContext)> {
+            &self.application_context
+        }
+        pub fn application_context_element_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(ApplicationContextElement)> {
+            &self.application_context_element
+        }
+        pub fn application_protocol_definition_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(ApplicationProtocolDefinition)> {
+            &self.application_protocol_definition
+        }
+        pub fn approval_holders(&self) -> &HashMap<u64, as_holder!(Approval)> {
+            &self.approval
+        }
+        pub fn approval_assignment_holders(&self) -> &HashMap<u64, as_holder!(ApprovalAssignment)> {
+            &self.approval_assignment
+        }
+        pub fn approval_date_time_holders(&self) -> &HashMap<u64, as_holder!(ApprovalDateTime)> {
+            &self.approval_date_time
+        }
+        pub fn approval_person_organization_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(ApprovalPersonOrganization)> {
+            &self.approval_person_organization
+        }
+        pub fn approval_role_holders(&self) -> &HashMap<u64, as_holder!(ApprovalRole)> {
+            &self.approval_role
+        }
+        pub fn approval_status_holders(&self) -> &HashMap<u64, as_holder!(ApprovalStatus)> {
+            &self.approval_status
+        }
+        pub fn area_in_set_holders(&self) -> &HashMap<u64, as_holder!(AreaInSet)> {
+            &self.area_in_set
+        }
+        pub fn axis2_placement_2d_holders(&self) -> &HashMap<u64, as_holder!(Axis2Placement2D)> {
+            &self.axis2_placement_2d
+        }
+        pub fn b_spline_curve_holders(&self) -> &HashMap<u64, as_holder!(BSplineCurve)> {
+            &self.b_spline_curve
+        }
+        pub fn b_spline_curve_with_knots_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(BSplineCurveWithKnots)> {
+            &self.b_spline_curve_with_knots
+        }
+        pub fn bezier_curve_holders(&self) -> &HashMap<u64, as_holder!(BezierCurve)> {
+            &self.bezier_curve
+        }
+        pub fn bounded_curve_holders(&self) -> &HashMap<u64, as_holder!(BoundedCurve)> {
+            &self.bounded_curve
+        }
+        pub fn calendar_date_holders(&self) -> &HashMap<u64, as_holder!(CalendarDate)> {
+            &self.calendar_date
+        }
+        pub fn camera_image_holders(&self) -> &HashMap<u64, as_holder!(CameraImage)> {
+            &self.camera_image
+        }
+        pub fn camera_image_2d_with_scale_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(CameraImage2DWithScale)> {
+            &self.camera_image_2d_with_scale
+        }
+        pub fn camera_model_holders(&self) -> &HashMap<u64, as_holder!(CameraModel)> {
+            &self.camera_model
+        }
+        pub fn camera_model_d2_holders(&self) -> &HashMap<u64, as_holder!(CameraModelD2)> {
+            &self.camera_model_d2
+        }
+        pub fn camera_usage_holders(&self) -> &HashMap<u64, as_holder!(CameraUsage)> {
+            &self.camera_usage
+        }
+        pub fn cartesian_point_holders(&self) -> &HashMap<u64, as_holder!(CartesianPoint)> {
+            &self.cartesian_point
+        }
+        pub fn circle_holders(&self) -> &HashMap<u64, as_holder!(Circle)> {
+            &self.circle
+        }
+        pub fn colour_holders(&self) -> &HashMap<u64, as_holder!(Colour)> {
+            &self.colour
+        }
+        pub fn colour_rgb_holders(&self) -> &HashMap<u64, as_holder!(ColourRgb)> {
+            &self.colour_rgb
+        }
+        pub fn colour_specification_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(ColourSpecification)> {
+            &self.colour_specification
+        }
+        pub fn composite_curve_holders(&self) -> &HashMap<u64, as_holder!(CompositeCurve)> {
+            &self.composite_curve
+        }
+        pub fn composite_curve_segment_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(CompositeCurveSegment)> {
+            &self.composite_curve_segment
+        }
+        pub fn composite_text_holders(&self) -> &HashMap<u64, as_holder!(CompositeText)> {
+            &self.composite_text
+        }
+        pub fn composite_text_with_associated_curves_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(CompositeTextWithAssociatedCurves)> {
+            &self.composite_text_with_associated_curves
+        }
+        pub fn composite_text_with_blanking_box_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(CompositeTextWithBlankingBox)> {
+            &self.composite_text_with_blanking_box
+        }
+        pub fn composite_text_with_extent_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(CompositeTextWithExtent)> {
+            &self.composite_text_with_extent
+        }
+        pub fn conic_holders(&self) -> &HashMap<u64, as_holder!(Conic)> {
+            &self.conic
+        }
+        pub fn context_dependent_invisibility_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(ContextDependentInvisibility)> {
+            &self.context_dependent_invisibility
+        }
+        pub fn contract_holders(&self) -> &HashMap<u64, as_holder!(Contract)> {
+            &self.contract
+        }
+        pub fn contract_assignment_holders(&self) -> &HashMap<u64, as_holder!(ContractAssignment)> {
+            &self.contract_assignment
+        }
+        pub fn contract_type_holders(&self) -> &HashMap<u64, as_holder!(ContractType)> {
+            &self.contract_type
+        }
+        pub fn conversion_based_unit_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(ConversionBasedUnit)> {
+            &self.conversion_based_unit
+        }
+        pub fn curve_holders(&self) -> &HashMap<u64, as_holder!(Curve)> {
+            &self.curve
+        }
+        pub fn curve_dimension_holders(&self) -> &HashMap<u64, as_holder!(CurveDimension)> {
+            &self.curve_dimension
+        }
+        pub fn curve_style_holders(&self) -> &HashMap<u64, as_holder!(CurveStyle)> {
+            &self.curve_style
+        }
+        pub fn curve_style_font_holders(&self) -> &HashMap<u64, as_holder!(CurveStyleFont)> {
+            &self.curve_style_font
+        }
+        pub fn curve_style_font_pattern_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(CurveStyleFontPattern)> {
+            &self.curve_style_font_pattern
+        }
+        pub fn date_holders(&self) -> &HashMap<u64, as_holder!(Date)> {
+            &self.date
+        }
+        pub fn datum_feature_callout_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(DatumFeatureCallout)> {
+            &self.datum_feature_callout
+        }
+        pub fn datum_target_callout_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(DatumTargetCallout)> {
+            &self.datum_target_callout
+        }
+        pub fn defined_symbol_holders(&self) -> &HashMap<u64, as_holder!(DefinedSymbol)> {
+            &self.defined_symbol
+        }
+        pub fn diameter_dimension_holders(&self) -> &HashMap<u64, as_holder!(DiameterDimension)> {
+            &self.diameter_dimension
+        }
+        pub fn dimension_callout_component_relationship_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(DimensionCalloutComponentRelationship)> {
+            &self.dimension_callout_component_relationship
+        }
+        pub fn dimension_callout_relationship_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(DimensionCalloutRelationship)> {
+            &self.dimension_callout_relationship
+        }
+        pub fn dimension_curve_holders(&self) -> &HashMap<u64, as_holder!(DimensionCurve)> {
+            &self.dimension_curve
+        }
+        pub fn dimension_curve_directed_callout_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(DimensionCurveDirectedCallout)> {
+            &self.dimension_curve_directed_callout
+        }
+        pub fn dimension_curve_terminator_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(DimensionCurveTerminator)> {
+            &self.dimension_curve_terminator
+        }
+        pub fn dimension_pair_holders(&self) -> &HashMap<u64, as_holder!(DimensionPair)> {
+            &self.dimension_pair
+        }
+        pub fn dimensional_exponents_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(DimensionalExponents)> {
+            &self.dimensional_exponents
+        }
+        pub fn direction_holders(&self) -> &HashMap<u64, as_holder!(Direction)> {
+            &self.direction
+        }
+        pub fn document_holders(&self) -> &HashMap<u64, as_holder!(Document)> {
+            &self.document
+        }
+        pub fn document_reference_holders(&self) -> &HashMap<u64, as_holder!(DocumentReference)> {
+            &self.document_reference
+        }
+        pub fn document_type_holders(&self) -> &HashMap<u64, as_holder!(DocumentType)> {
+            &self.document_type
+        }
+        pub fn draughting_annotation_occurrence_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(DraughtingAnnotationOccurrence)> {
+            &self.draughting_annotation_occurrence
+        }
+        pub fn draughting_approval_assignment_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(DraughtingApprovalAssignment)> {
+            &self.draughting_approval_assignment
+        }
+        pub fn draughting_callout_holders(&self) -> &HashMap<u64, as_holder!(DraughtingCallout)> {
+            &self.draughting_callout
+        }
+        pub fn draughting_callout_relationship_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(DraughtingCalloutRelationship)> {
+            &self.draughting_callout_relationship
+        }
+        pub fn draughting_contract_assignment_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(DraughtingContractAssignment)> {
+            &self.draughting_contract_assignment
+        }
+        pub fn draughting_drawing_revision_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(DraughtingDrawingRevision)> {
+            &self.draughting_drawing_revision
+        }
+        pub fn draughting_elements_holders(&self) -> &HashMap<u64, as_holder!(DraughtingElements)> {
+            &self.draughting_elements
+        }
+        pub fn draughting_group_assignment_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(DraughtingGroupAssignment)> {
+            &self.draughting_group_assignment
+        }
+        pub fn draughting_model_holders(&self) -> &HashMap<u64, as_holder!(DraughtingModel)> {
+            &self.draughting_model
+        }
+        pub fn draughting_organization_assignment_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(DraughtingOrganizationAssignment)> {
+            &self.draughting_organization_assignment
+        }
+        pub fn draughting_person_and_organization_assignment_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(DraughtingPersonAndOrganizationAssignment)> {
+            &self.draughting_person_and_organization_assignment
+        }
+        pub fn draughting_person_assignment_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(DraughtingPersonAssignment)> {
+            &self.draughting_person_assignment
+        }
+        pub fn draughting_pre_defined_colour_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(DraughtingPreDefinedColour)> {
+            &self.draughting_pre_defined_colour
+        }
+        pub fn draughting_pre_defined_curve_font_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(DraughtingPreDefinedCurveFont)> {
+            &self.draughting_pre_defined_curve_font
+        }
+        pub fn draughting_pre_defined_text_font_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(DraughtingPreDefinedTextFont)> {
+            &self.draughting_pre_defined_text_font
+        }
+        pub fn draughting_presented_item_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(DraughtingPresentedItem)> {
+            &self.draughting_presented_item
+        }
+        pub fn draughting_security_classification_assignment_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(DraughtingSecurityClassificationAssignment)> {
+            &self.draughting_security_classification_assignment
+        }
+        pub fn draughting_specification_reference_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(DraughtingSpecificationReference)> {
+            &self.draughting_specification_reference
+        }
+        pub fn draughting_subfigure_representation_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(DraughtingSubfigureRepresentation)> {
+            &self.draughting_subfigure_representation
+        }
+        pub fn draughting_symbol_representation_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(DraughtingSymbolRepresentation)> {
+            &self.draughting_symbol_representation
+        }
+        pub fn draughting_text_literal_with_delineation_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(DraughtingTextLiteralWithDelineation)> {
+            &self.draughting_text_literal_with_delineation
+        }
+        pub fn draughting_title_holders(&self) -> &HashMap<u64, as_holder!(DraughtingTitle)> {
+            &self.draughting_title
+        }
+        pub fn drawing_definition_holders(&self) -> &HashMap<u64, as_holder!(DrawingDefinition)> {
+            &self.drawing_definition
+        }
+        pub fn drawing_revision_holders(&self) -> &HashMap<u64, as_holder!(DrawingRevision)> {
+            &self.drawing_revision
+        }
+        pub fn drawing_sheet_layout_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(DrawingSheetLayout)> {
+            &self.drawing_sheet_layout
+        }
+        pub fn drawing_sheet_revision_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(DrawingSheetRevision)> {
+            &self.drawing_sheet_revision
+        }
+        pub fn drawing_sheet_revision_usage_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(DrawingSheetRevisionUsage)> {
+            &self.drawing_sheet_revision_usage
+        }
+        pub fn ellipse_holders(&self) -> &HashMap<u64, as_holder!(Ellipse)> {
+            &self.ellipse
+        }
+        pub fn external_source_holders(&self) -> &HashMap<u64, as_holder!(ExternalSource)> {
+            &self.external_source
+        }
+        pub fn externally_defined_curve_font_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(ExternallyDefinedCurveFont)> {
+            &self.externally_defined_curve_font
+        }
+        pub fn externally_defined_hatch_style_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(ExternallyDefinedHatchStyle)> {
+            &self.externally_defined_hatch_style
+        }
+        pub fn externally_defined_item_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(ExternallyDefinedItem)> {
+            &self.externally_defined_item
+        }
+        pub fn externally_defined_symbol_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(ExternallyDefinedSymbol)> {
+            &self.externally_defined_symbol
+        }
+        pub fn externally_defined_text_font_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(ExternallyDefinedTextFont)> {
+            &self.externally_defined_text_font
+        }
+        pub fn externally_defined_tile_style_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(ExternallyDefinedTileStyle)> {
+            &self.externally_defined_tile_style
+        }
+        pub fn fill_area_style_holders(&self) -> &HashMap<u64, as_holder!(FillAreaStyle)> {
+            &self.fill_area_style
+        }
+        pub fn fill_area_style_colour_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(FillAreaStyleColour)> {
+            &self.fill_area_style_colour
+        }
+        pub fn fill_area_style_hatching_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(FillAreaStyleHatching)> {
+            &self.fill_area_style_hatching
+        }
+        pub fn fill_area_style_tile_symbol_with_style_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(FillAreaStyleTileSymbolWithStyle)> {
+            &self.fill_area_style_tile_symbol_with_style
+        }
+        pub fn fill_area_style_tiles_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(FillAreaStyleTiles)> {
+            &self.fill_area_style_tiles
+        }
+        pub fn geometric_curve_set_holders(&self) -> &HashMap<u64, as_holder!(GeometricCurveSet)> {
+            &self.geometric_curve_set
+        }
+        pub fn geometric_representation_context_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(GeometricRepresentationContext)> {
+            &self.geometric_representation_context
+        }
+        pub fn geometric_representation_item_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(GeometricRepresentationItem)> {
+            &self.geometric_representation_item
+        }
+        pub fn geometric_set_holders(&self) -> &HashMap<u64, as_holder!(GeometricSet)> {
+            &self.geometric_set
+        }
+        pub fn geometrical_tolerance_callout_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(GeometricalToleranceCallout)> {
+            &self.geometrical_tolerance_callout
+        }
+        pub fn geometrically_bounded_2d_wireframe_representation_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(GeometricallyBounded2DWireframeRepresentation)> {
+            &self.geometrically_bounded_2d_wireframe_representation
+        }
+        pub fn global_unit_assigned_context_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(GlobalUnitAssignedContext)> {
+            &self.global_unit_assigned_context
+        }
+        pub fn group_holders(&self) -> &HashMap<u64, as_holder!(Group)> {
+            &self.group
+        }
+        pub fn group_assignment_holders(&self) -> &HashMap<u64, as_holder!(GroupAssignment)> {
+            &self.group_assignment
+        }
+        pub fn group_relationship_holders(&self) -> &HashMap<u64, as_holder!(GroupRelationship)> {
+            &self.group_relationship
+        }
+        pub fn hyperbola_holders(&self) -> &HashMap<u64, as_holder!(Hyperbola)> {
+            &self.hyperbola
+        }
+        pub fn invisibility_holders(&self) -> &HashMap<u64, as_holder!(Invisibility)> {
+            &self.invisibility
+        }
+        pub fn leader_curve_holders(&self) -> &HashMap<u64, as_holder!(LeaderCurve)> {
+            &self.leader_curve
+        }
+        pub fn leader_directed_callout_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(LeaderDirectedCallout)> {
+            &self.leader_directed_callout
+        }
+        pub fn leader_directed_dimension_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(LeaderDirectedDimension)> {
+            &self.leader_directed_dimension
+        }
+        pub fn leader_terminator_holders(&self) -> &HashMap<u64, as_holder!(LeaderTerminator)> {
+            &self.leader_terminator
+        }
+        pub fn length_measure_with_unit_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(LengthMeasureWithUnit)> {
+            &self.length_measure_with_unit
+        }
+        pub fn length_unit_holders(&self) -> &HashMap<u64, as_holder!(LengthUnit)> {
+            &self.length_unit
+        }
+        pub fn line_holders(&self) -> &HashMap<u64, as_holder!(Line)> {
+            &self.line
+        }
+        pub fn linear_dimension_holders(&self) -> &HashMap<u64, as_holder!(LinearDimension)> {
+            &self.linear_dimension
+        }
+        pub fn mapped_item_holders(&self) -> &HashMap<u64, as_holder!(MappedItem)> {
+            &self.mapped_item
+        }
+        pub fn measure_with_unit_holders(&self) -> &HashMap<u64, as_holder!(MeasureWithUnit)> {
+            &self.measure_with_unit
+        }
+        pub fn named_unit_holders(&self) -> &HashMap<u64, as_holder!(NamedUnit)> {
+            &self.named_unit
+        }
+        pub fn offset_curve_2d_holders(&self) -> &HashMap<u64, as_holder!(OffsetCurve2D)> {
+            &self.offset_curve_2d
+        }
+        pub fn one_direction_repeat_factor_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(OneDirectionRepeatFactor)> {
+            &self.one_direction_repeat_factor
+        }
+        pub fn ordinate_dimension_holders(&self) -> &HashMap<u64, as_holder!(OrdinateDimension)> {
+            &self.ordinate_dimension
+        }
+        pub fn organization_holders(&self) -> &HashMap<u64, as_holder!(Organization)> {
+            &self.organization
+        }
+        pub fn organization_assignment_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(OrganizationAssignment)> {
+            &self.organization_assignment
+        }
+        pub fn organization_role_holders(&self) -> &HashMap<u64, as_holder!(OrganizationRole)> {
+            &self.organization_role
+        }
+        pub fn organizational_address_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(OrganizationalAddress)> {
+            &self.organizational_address
+        }
+        pub fn parabola_holders(&self) -> &HashMap<u64, as_holder!(Parabola)> {
+            &self.parabola
+        }
+        pub fn person_holders(&self) -> &HashMap<u64, as_holder!(Person)> {
+            &self.person
+        }
+        pub fn person_and_organization_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(PersonAndOrganization)> {
+            &self.person_and_organization
+        }
+        pub fn person_and_organization_assignment_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(PersonAndOrganizationAssignment)> {
+            &self.person_and_organization_assignment
+        }
+        pub fn person_and_organization_role_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(PersonAndOrganizationRole)> {
+            &self.person_and_organization_role
+        }
+        pub fn person_assignment_holders(&self) -> &HashMap<u64, as_holder!(PersonAssignment)> {
+            &self.person_assignment
+        }
+        pub fn person_role_holders(&self) -> &HashMap<u64, as_holder!(PersonRole)> {
+            &self.person_role
+        }
+        pub fn personal_address_holders(&self) -> &HashMap<u64, as_holder!(PersonalAddress)> {
+            &self.personal_address
+        }
+        pub fn placement_holders(&self) -> &HashMap<u64, as_holder!(Placement)> {
+            &self.placement
+        }
+        pub fn planar_box_holders(&self) -> &HashMap<u64, as_holder!(PlanarBox)> {
+            &self.planar_box
+        }
+        pub fn planar_extent_holders(&self) -> &HashMap<u64, as_holder!(PlanarExtent)> {
+            &self.planar_extent
+        }
+        pub fn plane_angle_measure_with_unit_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(PlaneAngleMeasureWithUnit)> {
+            &self.plane_angle_measure_with_unit
+        }
+        pub fn plane_angle_unit_holders(&self) -> &HashMap<u64, as_holder!(PlaneAngleUnit)> {
+            &self.plane_angle_unit
+        }
+        pub fn point_holders(&self) -> &HashMap<u64, as_holder!(Point)> {
+            &self.point
+        }
+        pub fn point_on_curve_holders(&self) -> &HashMap<u64, as_holder!(PointOnCurve)> {
+            &self.point_on_curve
+        }
+        pub fn polyline_holders(&self) -> &HashMap<u64, as_holder!(Polyline)> {
+            &self.polyline
+        }
+        pub fn pre_defined_colour_holders(&self) -> &HashMap<u64, as_holder!(PreDefinedColour)> {
+            &self.pre_defined_colour
+        }
+        pub fn pre_defined_curve_font_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(PreDefinedCurveFont)> {
+            &self.pre_defined_curve_font
+        }
+        pub fn pre_defined_dimension_symbol_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(PreDefinedDimensionSymbol)> {
+            &self.pre_defined_dimension_symbol
+        }
+        pub fn pre_defined_geometrical_tolerance_symbol_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(PreDefinedGeometricalToleranceSymbol)> {
+            &self.pre_defined_geometrical_tolerance_symbol
+        }
+        pub fn pre_defined_item_holders(&self) -> &HashMap<u64, as_holder!(PreDefinedItem)> {
+            &self.pre_defined_item
+        }
+        pub fn pre_defined_point_marker_symbol_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(PreDefinedPointMarkerSymbol)> {
+            &self.pre_defined_point_marker_symbol
+        }
+        pub fn pre_defined_symbol_holders(&self) -> &HashMap<u64, as_holder!(PreDefinedSymbol)> {
+            &self.pre_defined_symbol
+        }
+        pub fn pre_defined_terminator_symbol_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(PreDefinedTerminatorSymbol)> {
+            &self.pre_defined_terminator_symbol
+        }
+        pub fn pre_defined_text_font_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(PreDefinedTextFont)> {
+            &self.pre_defined_text_font
+        }
+        pub fn presentation_area_holders(&self) -> &HashMap<u64, as_holder!(PresentationArea)> {
+            &self.presentation_area
+        }
+        pub fn presentation_layer_assignment_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(PresentationLayerAssignment)> {
+            &self.presentation_layer_assignment
+        }
+        pub fn presentation_layer_usage_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(PresentationLayerUsage)> {
+            &self.presentation_layer_usage
+        }
+        pub fn presentation_representation_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(PresentationRepresentation)> {
+            &self.presentation_representation
+        }
+        pub fn presentation_set_holders(&self) -> &HashMap<u64, as_holder!(PresentationSet)> {
+            &self.presentation_set
+        }
+        pub fn presentation_size_holders(&self) -> &HashMap<u64, as_holder!(PresentationSize)> {
+            &self.presentation_size
+        }
+        pub fn presentation_style_assignment_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(PresentationStyleAssignment)> {
+            &self.presentation_style_assignment
+        }
+        pub fn presentation_style_by_context_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(PresentationStyleByContext)> {
+            &self.presentation_style_by_context
+        }
+        pub fn presentation_view_holders(&self) -> &HashMap<u64, as_holder!(PresentationView)> {
+            &self.presentation_view
+        }
+        pub fn presented_item_holders(&self) -> &HashMap<u64, as_holder!(PresentedItem)> {
+            &self.presented_item
+        }
+        pub fn presented_item_representation_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(PresentedItemRepresentation)> {
+            &self.presented_item_representation
+        }
+        pub fn product_holders(&self) -> &HashMap<u64, as_holder!(Product)> {
+            &self.product
+        }
+        pub fn product_context_holders(&self) -> &HashMap<u64, as_holder!(ProductContext)> {
+            &self.product_context
+        }
+        pub fn product_definition_holders(&self) -> &HashMap<u64, as_holder!(ProductDefinition)> {
+            &self.product_definition
+        }
+        pub fn product_definition_context_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(ProductDefinitionContext)> {
+            &self.product_definition_context
+        }
+        pub fn product_definition_formation_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(ProductDefinitionFormation)> {
+            &self.product_definition_formation
+        }
+        pub fn product_definition_shape_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(ProductDefinitionShape)> {
+            &self.product_definition_shape
+        }
+        pub fn projection_curve_holders(&self) -> &HashMap<u64, as_holder!(ProjectionCurve)> {
+            &self.projection_curve
+        }
+        pub fn projection_directed_callout_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(ProjectionDirectedCallout)> {
+            &self.projection_directed_callout
+        }
+        pub fn property_definition_holders(&self) -> &HashMap<u64, as_holder!(PropertyDefinition)> {
+            &self.property_definition
+        }
+        pub fn property_definition_representation_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(PropertyDefinitionRepresentation)> {
+            &self.property_definition_representation
+        }
+        pub fn quasi_uniform_curve_holders(&self) -> &HashMap<u64, as_holder!(QuasiUniformCurve)> {
+            &self.quasi_uniform_curve
+        }
+        pub fn radius_dimension_holders(&self) -> &HashMap<u64, as_holder!(RadiusDimension)> {
+            &self.radius_dimension
+        }
+        pub fn rational_b_spline_curve_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(RationalBSplineCurve)> {
+            &self.rational_b_spline_curve
+        }
+        pub fn representation_holders(&self) -> &HashMap<u64, as_holder!(Representation)> {
+            &self.representation
+        }
+        pub fn representation_context_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(RepresentationContext)> {
+            &self.representation_context
+        }
+        pub fn representation_item_holders(&self) -> &HashMap<u64, as_holder!(RepresentationItem)> {
+            &self.representation_item
+        }
+        pub fn representation_map_holders(&self) -> &HashMap<u64, as_holder!(RepresentationMap)> {
+            &self.representation_map
+        }
+        pub fn security_classification_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(SecurityClassification)> {
+            &self.security_classification
+        }
+        pub fn security_classification_assignment_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(SecurityClassificationAssignment)> {
+            &self.security_classification_assignment
+        }
+        pub fn security_classification_level_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(SecurityClassificationLevel)> {
+            &self.security_classification_level
+        }
+        pub fn shape_definition_representation_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(ShapeDefinitionRepresentation)> {
+            &self.shape_definition_representation
+        }
+        pub fn shape_representation_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(ShapeRepresentation)> {
+            &self.shape_representation
+        }
+        pub fn si_unit_holders(&self) -> &HashMap<u64, as_holder!(SiUnit)> {
+            &self.si_unit
+        }
+        pub fn structured_dimension_callout_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(StructuredDimensionCallout)> {
+            &self.structured_dimension_callout
+        }
+        pub fn styled_item_holders(&self) -> &HashMap<u64, as_holder!(StyledItem)> {
+            &self.styled_item
+        }
+        pub fn symbol_colour_holders(&self) -> &HashMap<u64, as_holder!(SymbolColour)> {
+            &self.symbol_colour
+        }
+        pub fn symbol_representation_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(SymbolRepresentation)> {
+            &self.symbol_representation
+        }
+        pub fn symbol_representation_map_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(SymbolRepresentationMap)> {
+            &self.symbol_representation_map
+        }
+        pub fn symbol_style_holders(&self) -> &HashMap<u64, as_holder!(SymbolStyle)> {
+            &self.symbol_style
+        }
+        pub fn symbol_target_holders(&self) -> &HashMap<u64, as_holder!(SymbolTarget)> {
+            &self.symbol_target
+        }
+        pub fn terminator_symbol_holders(&self) -> &HashMap<u64, as_holder!(TerminatorSymbol)> {
+            &self.terminator_symbol
+        }
+        pub fn text_literal_holders(&self) -> &HashMap<u64, as_holder!(TextLiteral)> {
+            &self.text_literal
+        }
+        pub fn text_literal_with_associated_curves_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(TextLiteralWithAssociatedCurves)> {
+            &self.text_literal_with_associated_curves
+        }
+        pub fn text_literal_with_blanking_box_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(TextLiteralWithBlankingBox)> {
+            &self.text_literal_with_blanking_box
+        }
+        pub fn text_literal_with_delineation_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(TextLiteralWithDelineation)> {
+            &self.text_literal_with_delineation
+        }
+        pub fn text_literal_with_extent_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(TextLiteralWithExtent)> {
+            &self.text_literal_with_extent
+        }
+        pub fn text_style_holders(&self) -> &HashMap<u64, as_holder!(TextStyle)> {
+            &self.text_style
+        }
+        pub fn text_style_for_defined_font_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(TextStyleForDefinedFont)> {
+            &self.text_style_for_defined_font
+        }
+        pub fn text_style_with_box_characteristics_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(TextStyleWithBoxCharacteristics)> {
+            &self.text_style_with_box_characteristics
+        }
+        pub fn text_style_with_mirror_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(TextStyleWithMirror)> {
+            &self.text_style_with_mirror
+        }
+        pub fn trimmed_curve_holders(&self) -> &HashMap<u64, as_holder!(TrimmedCurve)> {
+            &self.trimmed_curve
+        }
+        pub fn two_direction_repeat_factor_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(TwoDirectionRepeatFactor)> {
+            &self.two_direction_repeat_factor
+        }
+        pub fn uniform_curve_holders(&self) -> &HashMap<u64, as_holder!(UniformCurve)> {
+            &self.uniform_curve
+        }
+        pub fn vector_holders(&self) -> &HashMap<u64, as_holder!(Vector)> {
+            &self.vector
         }
     }
     #[derive(Debug, Clone, PartialEq, Holder)]

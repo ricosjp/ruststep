@@ -26,9 +26,7 @@ fn any() {
 
     insta::assert_snapshot!(tt, @r###"
     pub mod test_schema {
-        use ruststep::{
-            as_holder, derive_more::*, error::Result, primitive::*, tables::*, Holder, TableInit,
-        };
+        use ruststep::{as_holder, derive_more::*, primitive::*, Holder, TableInit};
         use std::collections::HashMap;
         #[derive(Debug, Clone, PartialEq, Default, TableInit)]
         pub struct Tables {
@@ -37,23 +35,14 @@ fn any() {
             sub2: HashMap<u64, as_holder!(Sub2)>,
         }
         impl Tables {
-            pub fn base_iter<'table>(&'table self) -> impl Iterator<Item = Result<Base>> + 'table {
-                self.base
-                    .values()
-                    .cloned()
-                    .map(move |value| value.into_owned(&self))
+            pub fn base_holders(&self) -> &HashMap<u64, as_holder!(Base)> {
+                &self.base
             }
-            pub fn sub1_iter<'table>(&'table self) -> impl Iterator<Item = Result<Sub1>> + 'table {
-                self.sub1
-                    .values()
-                    .cloned()
-                    .map(move |value| value.into_owned(&self))
+            pub fn sub1_holders(&self) -> &HashMap<u64, as_holder!(Sub1)> {
+                &self.sub1
             }
-            pub fn sub2_iter<'table>(&'table self) -> impl Iterator<Item = Result<Sub2>> + 'table {
-                self.sub2
-                    .values()
-                    .cloned()
-                    .map(move |value| value.into_owned(&self))
+            pub fn sub2_holders(&self) -> &HashMap<u64, as_holder!(Sub2)> {
+                &self.sub2
             }
         }
         #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
