@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>EXPRESS playground</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head>
+
+  <body>
+    <button name="button">Compile</button>
+
+    <div id="input">
+      <textarea
+        id="input_express"
+        name="input_express"
+        rows="5"
+        cols="33"
+        placeholder="Input EXPRESS Schema here..."
+      ></textarea>
+    </div>
+
+    <div id="ast">
+      <p id="syntax_tree"> AST output </div>
+    </div>
+
+    <script type="module">
+      import init from './pkg/espr_playground.js';
+        async function run() {
+            await init();
+        };
+        run();
+    </script>
+  </body>
+</html>
