@@ -2,6 +2,7 @@
 members = [
   "espr",
   "espr-derive",
+  "espr-playground",
   "ruststep",
   "ruststep-derive",
 ]
