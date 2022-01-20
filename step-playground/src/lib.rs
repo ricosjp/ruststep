@@ -1,5 +1,5 @@
 use wasm_bindgen::{prelude::*, JsCast};
-use web_sys::HtmlElement;
+use web_sys::*;
 
 #[wasm_bindgen(start)]
 pub fn run() {
@@ -7,7 +7,14 @@ pub fn run() {
         let window = web_sys::window().unwrap();
         let document = window.document().unwrap();
         let p = document.get_element_by_id("syntax_tree").unwrap();
-        p.set_inner_html("From closure!!");
+        p.set_inner_html(
+            &document
+                .get_element_by_id("input_express")
+                .unwrap()
+                .dyn_ref::<HtmlTextAreaElement>()
+                .unwrap()
+                .value(),
+        );
     }) as Box<dyn FnMut()>);
 
     let window = web_sys::window().unwrap();

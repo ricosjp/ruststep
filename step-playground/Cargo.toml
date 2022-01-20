@@ -15,6 +15,7 @@ features = [
   "Document",
   "Element",
   "HtmlElement",
+  "HtmlTextAreaElement",
   "Window",
 ]
 
