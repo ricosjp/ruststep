@@ -7,7 +7,7 @@
   </head>
 
   <body>
-    <button name="button">Compile</button>
+    <button id="button">Compile</button>
 
     <div id="input">
       <textarea
@@ -24,10 +24,10 @@
 
     <script type="module">
       import init from './pkg/step_playground.js';
-        async function run() {
-            await init();
-        };
-        run();
+      async function run() {
+          await init();
+      };
+      run();
     </script>
   </body>
 </html>
