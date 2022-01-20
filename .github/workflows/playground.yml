@@ -1,0 +1,21 @@
+name: playground
+
+on:
+  push:
+    branches:
+      - master
+  pull_request: {}
+
+jobs:
+  test:
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v1
+    - uses: jetli/wasm-pack-action@v0.3.0
+      with:
+        version: 'latest'
+    - uses: Swatinem/rust-cache@v1
+    - name: wasm-pack build
+      run: |
+        cd ./step-playground
+        wasm-pack build --target web
