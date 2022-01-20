@@ -1,3 +1,4 @@
+use espr::ast::SyntaxTree;
 use wasm_bindgen::{prelude::*, JsCast};
 use web_sys::*;
 
@@ -7,14 +8,14 @@ pub fn run() {
         let window = web_sys::window().unwrap();
         let document = window.document().unwrap();
         let p = document.get_element_by_id("syntax_tree").unwrap();
-        p.set_inner_html(
-            &document
-                .get_element_by_id("input_express")
-                .unwrap()
-                .dyn_ref::<HtmlTextAreaElement>()
-                .unwrap()
-                .value(),
-        );
+        let input = document
+            .get_element_by_id("input_express")
+            .unwrap()
+            .dyn_ref::<HtmlTextAreaElement>()
+            .unwrap()
+            .value();
+        let st = SyntaxTree::parse(&input);
+        p.set_inner_html(&format!("{:?}", st));
     }) as Box<dyn FnMut()>);
 
     let window = web_sys::window().unwrap();
