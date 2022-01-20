@@ -8,7 +8,7 @@ extern "C" {
 
 #[wasm_bindgen(start)]
 pub fn run() {
-    log("Hello, espr!");
+    log("Hello, STEP!");
 }
 
 #[wasm_bindgen]
