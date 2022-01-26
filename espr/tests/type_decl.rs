@@ -32,9 +32,7 @@ fn type_decl() {
 
     insta::assert_snapshot!(tt, @r###"
     pub mod test_schema {
-        use ruststep::{
-            as_holder, derive_more::*, error::Result, primitive::*, tables::*, Holder, TableInit,
-        };
+        use ruststep::{as_holder, derive_more::*, primitive::*, Holder, TableInit};
         use std::collections::HashMap;
         #[derive(Debug, Clone, PartialEq, Default, TableInit)]
         pub struct Tables {
@@ -43,25 +41,14 @@ fn type_decl() {
             c: HashMap<u64, as_holder!(C)>,
         }
         impl Tables {
-            pub fn c_entity_iter<'table>(
-                &'table self,
-            ) -> impl Iterator<Item = Result<CEntity>> + 'table {
-                self.c_entity
-                    .values()
-                    .cloned()
-                    .map(move |value| value.into_owned(&self))
+            pub fn c_entity_holders(&self) -> &HashMap<u64, as_holder!(CEntity)> {
+                &self.c_entity
             }
-            pub fn a_iter<'table>(&'table self) -> impl Iterator<Item = Result<A>> + 'table {
-                self.a
-                    .values()
-                    .cloned()
-                    .map(move |value| value.into_owned(&self))
+            pub fn a_holders(&self) -> &HashMap<u64, as_holder!(A)> {
+                &self.a
             }
-            pub fn c_iter<'table>(&'table self) -> impl Iterator<Item = Result<C>> + 'table {
-                self.c
-                    .values()
-                    .cloned()
-                    .map(move |value| value.into_owned(&self))
+            pub fn c_holders(&self) -> &HashMap<u64, as_holder!(C)> {
+                &self.c
             }
         }
         #[derive(
