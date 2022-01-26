@@ -99,7 +99,7 @@ impl TypeRef {
                 })
             }
             ScopeType::Type => {
-                let (is_simple, is_enumerate) = match ns.get(&path)? {
+                let (is_simple, is_enumerate) = match ns.get(path)? {
                     Named::Type(ast::TypeDecl {
                         underlying_type, ..
                     }) => match underlying_type {

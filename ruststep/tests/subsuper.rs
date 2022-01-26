@@ -156,7 +156,6 @@ fn get_owned_any() {
                 base: Base { x: 1.0 },
                 y: 2.0
             }
-            .into()
         ))
     );
     let any = EntityTable::<SubAnyHolder>::get_owned(&table, 3).unwrap();
@@ -170,7 +169,6 @@ fn get_owned_any() {
                 },
                 z: 4.0
             }
-            .into()
         ))
     );
 }
