@@ -30,9 +30,7 @@ fn reserved_keyword() {
 
     insta::assert_snapshot!(tt, @r###"
     pub mod test_schema {
-        use ruststep::{
-            as_holder, derive_more::*, error::Result, primitive::*, tables::*, Holder, TableInit,
-        };
+        use ruststep::{as_holder, derive_more::*, primitive::*, Holder, TableInit};
         use std::collections::HashMap;
         #[derive(Debug, Clone, PartialEq, Default, TableInit)]
         pub struct Tables {
@@ -42,29 +40,17 @@ fn reserved_keyword() {
             b: HashMap<u64, as_holder!(B)>,
         }
         impl Tables {
-            pub fn loop_iter<'table>(&'table self) -> impl Iterator<Item = Result<Loop>> + 'table {
-                self.r#loop
-                    .values()
-                    .cloned()
-                    .map(move |value| value.into_owned(&self))
+            pub fn loop_holders(&self) -> &HashMap<u64, as_holder!(Loop)> {
+                &self.r#loop
             }
-            pub fn a_iter<'table>(&'table self) -> impl Iterator<Item = Result<A>> + 'table {
-                self.a
-                    .values()
-                    .cloned()
-                    .map(move |value| value.into_owned(&self))
+            pub fn a_holders(&self) -> &HashMap<u64, as_holder!(A)> {
+                &self.a
             }
-            pub fn c_iter<'table>(&'table self) -> impl Iterator<Item = Result<C>> + 'table {
-                self.c
-                    .values()
-                    .cloned()
-                    .map(move |value| value.into_owned(&self))
+            pub fn c_holders(&self) -> &HashMap<u64, as_holder!(C)> {
+                &self.c
             }
-            pub fn b_iter<'table>(&'table self) -> impl Iterator<Item = Result<B>> + 'table {
-                self.b
-                    .values()
-                    .cloned()
-                    .map(move |value| value.into_owned(&self))
+            pub fn b_holders(&self) -> &HashMap<u64, as_holder!(B)> {
+                &self.b
             }
         }
         #[derive(

@@ -60,17 +60,17 @@ impl Schema {
                     .map(|e| format_ident!("{}", e.id().to_safe())),
             )
             .collect();
-        let iter_name: Vec<_> = entities
+        let holders_name: Vec<_> = entities
             .iter()
-            .map(|e| format_ident!("{}_iter", e.name))
-            .chain(type_decls.map(|e| format_ident!("{}_iter", e.id())))
+            .map(|e| format_ident!("{}_holders", e.name))
+            .chain(type_decls.map(|e| format_ident!("{}_holders", e.id())))
             .collect();
 
         let ruststep_path = prefix.as_path();
 
         quote! {
             pub mod #name {
-                use #ruststep_path::{as_holder, Holder, TableInit, primitive::*, tables::*, error::Result, derive_more::*};
+                use #ruststep_path::{as_holder, Holder, TableInit, primitive::*, derive_more::*};
                 use std::collections::HashMap;
 
                 #[derive(Debug, Clone, PartialEq, Default, TableInit)]
@@ -82,13 +82,8 @@ impl Schema {
 
                 impl Tables {
                     #(
-                    pub fn #iter_name<'table>(&'table self) ->
-                        impl Iterator<Item = Result<#entity_types>> + 'table
-                    {
-                        self.#holder_name
-                            .values()
-                            .cloned()
-                            .map(move |value| value.into_owned(&self))
+                    pub fn #holders_name(&self) -> &HashMap<u64, as_holder!(#entity_types)> {
+                        &self.#holder_name
                     }
                     )*
                 }
