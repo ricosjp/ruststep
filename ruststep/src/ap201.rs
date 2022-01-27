@@ -1186,511 +1186,247 @@ pub mod explicit_draughting {
         pub fn vector_holders(&self) -> &HashMap<u64, as_holder!(Vector)> {
             &self.vector
         }
-        pub fn approved_item_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<ApprovedItem>> + 'table {
-            self.approved_item
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
+        pub fn approved_item_holders(&self) -> &HashMap<u64, as_holder!(ApprovedItem)> {
+            &self.approved_item
         }
-        pub fn area_or_view_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<AreaOrView>> + 'table {
-            self.area_or_view
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
+        pub fn area_or_view_holders(&self) -> &HashMap<u64, as_holder!(AreaOrView)> {
+            &self.area_or_view
         }
-        pub fn axis2_placement_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<Axis2Placement>> + 'table {
-            self.axis2_placement
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
+        pub fn axis2_placement_holders(&self) -> &HashMap<u64, as_holder!(Axis2Placement)> {
+            &self.axis2_placement
         }
-        pub fn box_characteristic_select_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<BoxCharacteristicSelect>> + 'table {
-            self.box_characteristic_select
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
+        pub fn box_characteristic_select_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(BoxCharacteristicSelect)> {
+            &self.box_characteristic_select
         }
-        pub fn box_height_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<BoxHeight>> + 'table {
-            self.box_height
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
+        pub fn box_height_holders(&self) -> &HashMap<u64, as_holder!(BoxHeight)> {
+            &self.box_height
         }
-        pub fn box_rotate_angle_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<BoxRotateAngle>> + 'table {
-            self.box_rotate_angle
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
+        pub fn box_rotate_angle_holders(&self) -> &HashMap<u64, as_holder!(BoxRotateAngle)> {
+            &self.box_rotate_angle
         }
-        pub fn box_slant_angle_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<BoxSlantAngle>> + 'table {
-            self.box_slant_angle
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
+        pub fn box_slant_angle_holders(&self) -> &HashMap<u64, as_holder!(BoxSlantAngle)> {
+            &self.box_slant_angle
         }
-        pub fn box_width_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<BoxWidth>> + 'table {
-            self.box_width
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
+        pub fn box_width_holders(&self) -> &HashMap<u64, as_holder!(BoxWidth)> {
+            &self.box_width
         }
-        pub fn character_spacing_select_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<CharacterSpacingSelect>> + 'table {
-            self.character_spacing_select
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
+        pub fn character_spacing_select_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(CharacterSpacingSelect)> {
+            &self.character_spacing_select
         }
-        pub fn character_style_select_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<CharacterStyleSelect>> + 'table {
-            self.character_style_select
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
+        pub fn character_style_select_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(CharacterStyleSelect)> {
+            &self.character_style_select
         }
-        pub fn characterized_definition_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<CharacterizedDefinition>> + 'table {
-            self.characterized_definition
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
+        pub fn characterized_definition_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(CharacterizedDefinition)> {
+            &self.characterized_definition
         }
-        pub fn characterized_product_definition_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<CharacterizedProductDefinition>> + 'table {
-            self.characterized_product_definition
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
+        pub fn characterized_product_definition_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(CharacterizedProductDefinition)> {
+            &self.characterized_product_definition
         }
-        pub fn classified_item_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<ClassifiedItem>> + 'table {
-            self.classified_item
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
+        pub fn classified_item_holders(&self) -> &HashMap<u64, as_holder!(ClassifiedItem)> {
+            &self.classified_item
         }
-        pub fn contracted_item_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<ContractedItem>> + 'table {
-            self.contracted_item
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
+        pub fn contracted_item_holders(&self) -> &HashMap<u64, as_holder!(ContractedItem)> {
+            &self.contracted_item
         }
-        pub fn curve_font_or_scaled_curve_font_select_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<CurveFontOrScaledCurveFontSelect>> + 'table {
-            self.curve_font_or_scaled_curve_font_select
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
+        pub fn curve_font_or_scaled_curve_font_select_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(CurveFontOrScaledCurveFontSelect)> {
+            &self.curve_font_or_scaled_curve_font_select
         }
-        pub fn curve_or_annotation_curve_occurrence_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<CurveOrAnnotationCurveOccurrence>> + 'table {
-            self.curve_or_annotation_curve_occurrence
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
+        pub fn curve_or_annotation_curve_occurrence_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(CurveOrAnnotationCurveOccurrence)> {
+            &self.curve_or_annotation_curve_occurrence
         }
-        pub fn curve_or_render_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<CurveOrRender>> + 'table {
-            self.curve_or_render
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
+        pub fn curve_or_render_holders(&self) -> &HashMap<u64, as_holder!(CurveOrRender)> {
+            &self.curve_or_render
         }
-        pub fn curve_style_font_select_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<CurveStyleFontSelect>> + 'table {
-            self.curve_style_font_select
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
+        pub fn curve_style_font_select_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(CurveStyleFontSelect)> {
+            &self.curve_style_font_select
         }
-        pub fn date_time_select_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<DateTimeSelect>> + 'table {
-            self.date_time_select
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
+        pub fn date_time_select_holders(&self) -> &HashMap<u64, as_holder!(DateTimeSelect)> {
+            &self.date_time_select
         }
-        pub fn day_in_month_number_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<DayInMonthNumber>> + 'table {
-            self.day_in_month_number
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
+        pub fn day_in_month_number_holders(&self) -> &HashMap<u64, as_holder!(DayInMonthNumber)> {
+            &self.day_in_month_number
         }
-        pub fn defined_symbol_select_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<DefinedSymbolSelect>> + 'table {
-            self.defined_symbol_select
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
+        pub fn defined_symbol_select_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(DefinedSymbolSelect)> {
+            &self.defined_symbol_select
         }
-        pub fn dimension_count_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<DimensionCount>> + 'table {
-            self.dimension_count
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
+        pub fn dimension_count_holders(&self) -> &HashMap<u64, as_holder!(DimensionCount)> {
+            &self.dimension_count
         }
-        pub fn draughting_callout_element_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<DraughtingCalloutElement>> + 'table {
-            self.draughting_callout_element
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
+        pub fn draughting_callout_element_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(DraughtingCalloutElement)> {
+            &self.draughting_callout_element
         }
-        pub fn draughting_grouped_item_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<DraughtingGroupedItem>> + 'table {
-            self.draughting_grouped_item
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
+        pub fn draughting_grouped_item_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(DraughtingGroupedItem)> {
+            &self.draughting_grouped_item
         }
-        pub fn draughting_organization_item_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<DraughtingOrganizationItem>> + 'table {
-            self.draughting_organization_item
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
+        pub fn draughting_organization_item_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(DraughtingOrganizationItem)> {
+            &self.draughting_organization_item
         }
-        pub fn draughting_presented_item_select_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<DraughtingPresentedItemSelect>> + 'table {
-            self.draughting_presented_item_select
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
+        pub fn draughting_presented_item_select_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(DraughtingPresentedItemSelect)> {
+            &self.draughting_presented_item_select
         }
-        pub fn draughting_titled_item_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<DraughtingTitledItem>> + 'table {
-            self.draughting_titled_item
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
+        pub fn draughting_titled_item_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(DraughtingTitledItem)> {
+            &self.draughting_titled_item
         }
-        pub fn fill_area_style_tile_shape_select_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<FillAreaStyleTileShapeSelect>> + 'table {
-            self.fill_area_style_tile_shape_select
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
+        pub fn fill_area_style_tile_shape_select_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(FillAreaStyleTileShapeSelect)> {
+            &self.fill_area_style_tile_shape_select
         }
-        pub fn fill_style_select_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<FillStyleSelect>> + 'table {
-            self.fill_style_select
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
+        pub fn fill_style_select_holders(&self) -> &HashMap<u64, as_holder!(FillStyleSelect)> {
+            &self.fill_style_select
         }
-        pub fn font_select_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<FontSelect>> + 'table {
-            self.font_select
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
+        pub fn font_select_holders(&self) -> &HashMap<u64, as_holder!(FontSelect)> {
+            &self.font_select
         }
-        pub fn geometric_set_select_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<GeometricSetSelect>> + 'table {
-            self.geometric_set_select
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
+        pub fn geometric_set_select_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(GeometricSetSelect)> {
+            &self.geometric_set_select
         }
-        pub fn hiding_or_blanking_select_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<HidingOrBlankingSelect>> + 'table {
-            self.hiding_or_blanking_select
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
+        pub fn hiding_or_blanking_select_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(HidingOrBlankingSelect)> {
+            &self.hiding_or_blanking_select
         }
-        pub fn identifier_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<Identifier>> + 'table {
-            self.identifier
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
+        pub fn identifier_holders(&self) -> &HashMap<u64, as_holder!(Identifier)> {
+            &self.identifier
         }
-        pub fn invisibility_context_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<InvisibilityContext>> + 'table {
-            self.invisibility_context
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
+        pub fn invisibility_context_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(InvisibilityContext)> {
+            &self.invisibility_context
         }
-        pub fn invisible_item_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<InvisibleItem>> + 'table {
-            self.invisible_item
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
+        pub fn invisible_item_holders(&self) -> &HashMap<u64, as_holder!(InvisibleItem)> {
+            &self.invisible_item
         }
-        pub fn label_iter<'table>(&'table self) -> impl Iterator<Item = Result<Label>> + 'table {
-            self.label
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
+        pub fn label_holders(&self) -> &HashMap<u64, as_holder!(Label)> {
+            &self.label
         }
-        pub fn layered_item_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<LayeredItem>> + 'table {
-            self.layered_item
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
+        pub fn layered_item_holders(&self) -> &HashMap<u64, as_holder!(LayeredItem)> {
+            &self.layered_item
         }
-        pub fn length_measure_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<LengthMeasure>> + 'table {
-            self.length_measure
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
+        pub fn length_measure_holders(&self) -> &HashMap<u64, as_holder!(LengthMeasure)> {
+            &self.length_measure
         }
-        pub fn measure_value_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<MeasureValue>> + 'table {
-            self.measure_value
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
+        pub fn measure_value_holders(&self) -> &HashMap<u64, as_holder!(MeasureValue)> {
+            &self.measure_value
         }
-        pub fn month_in_year_number_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<MonthInYearNumber>> + 'table {
-            self.month_in_year_number
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
+        pub fn month_in_year_number_holders(&self) -> &HashMap<u64, as_holder!(MonthInYearNumber)> {
+            &self.month_in_year_number
         }
-        pub fn parameter_value_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<ParameterValue>> + 'table {
-            self.parameter_value
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
+        pub fn parameter_value_holders(&self) -> &HashMap<u64, as_holder!(ParameterValue)> {
+            &self.parameter_value
         }
-        pub fn person_organization_select_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<PersonOrganizationSelect>> + 'table {
-            self.person_organization_select
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
+        pub fn person_organization_select_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(PersonOrganizationSelect)> {
+            &self.person_organization_select
         }
-        pub fn plane_angle_measure_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<PlaneAngleMeasure>> + 'table {
-            self.plane_angle_measure
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
+        pub fn plane_angle_measure_holders(&self) -> &HashMap<u64, as_holder!(PlaneAngleMeasure)> {
+            &self.plane_angle_measure
         }
-        pub fn positive_length_measure_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<PositiveLengthMeasure>> + 'table {
-            self.positive_length_measure
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
+        pub fn positive_length_measure_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(PositiveLengthMeasure)> {
+            &self.positive_length_measure
         }
-        pub fn positive_ratio_measure_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<PositiveRatioMeasure>> + 'table {
-            self.positive_ratio_measure
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
+        pub fn positive_ratio_measure_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(PositiveRatioMeasure)> {
+            &self.positive_ratio_measure
         }
-        pub fn presentable_text_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<PresentableText>> + 'table {
-            self.presentable_text
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
+        pub fn presentable_text_holders(&self) -> &HashMap<u64, as_holder!(PresentableText)> {
+            &self.presentable_text
         }
-        pub fn presentation_representation_select_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<PresentationRepresentationSelect>> + 'table {
-            self.presentation_representation_select
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
+        pub fn presentation_representation_select_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(PresentationRepresentationSelect)> {
+            &self.presentation_representation_select
         }
-        pub fn presentation_size_assignment_select_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<PresentationSizeAssignmentSelect>> + 'table {
-            self.presentation_size_assignment_select
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
+        pub fn presentation_size_assignment_select_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(PresentationSizeAssignmentSelect)> {
+            &self.presentation_size_assignment_select
         }
-        pub fn presentation_style_select_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<PresentationStyleSelect>> + 'table {
-            self.presentation_style_select
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
+        pub fn presentation_style_select_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(PresentationStyleSelect)> {
+            &self.presentation_style_select
         }
-        pub fn ratio_measure_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<RatioMeasure>> + 'table {
-            self.ratio_measure
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
+        pub fn ratio_measure_holders(&self) -> &HashMap<u64, as_holder!(RatioMeasure)> {
+            &self.ratio_measure
         }
-        pub fn shape_definition_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<ShapeDefinition>> + 'table {
-            self.shape_definition
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
+        pub fn shape_definition_holders(&self) -> &HashMap<u64, as_holder!(ShapeDefinition)> {
+            &self.shape_definition
         }
-        pub fn size_select_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<SizeSelect>> + 'table {
-            self.size_select
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
+        pub fn size_select_holders(&self) -> &HashMap<u64, as_holder!(SizeSelect)> {
+            &self.size_select
         }
-        pub fn source_item_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<SourceItem>> + 'table {
-            self.source_item
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
+        pub fn source_item_holders(&self) -> &HashMap<u64, as_holder!(SourceItem)> {
+            &self.source_item
         }
-        pub fn specified_item_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<SpecifiedItem>> + 'table {
-            self.specified_item
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
+        pub fn specified_item_holders(&self) -> &HashMap<u64, as_holder!(SpecifiedItem)> {
+            &self.specified_item
         }
-        pub fn style_context_select_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<StyleContextSelect>> + 'table {
-            self.style_context_select
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
+        pub fn style_context_select_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(StyleContextSelect)> {
+            &self.style_context_select
         }
-        pub fn symbol_style_select_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<SymbolStyleSelect>> + 'table {
-            self.symbol_style_select
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
+        pub fn symbol_style_select_holders(&self) -> &HashMap<u64, as_holder!(SymbolStyleSelect)> {
+            &self.symbol_style_select
         }
-        pub fn text_iter<'table>(&'table self) -> impl Iterator<Item = Result<Text>> + 'table {
-            self.text
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
+        pub fn text_holders(&self) -> &HashMap<u64, as_holder!(Text)> {
+            &self.text
         }
-        pub fn text_alignment_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<TextAlignment>> + 'table {
-            self.text_alignment
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
+        pub fn text_alignment_holders(&self) -> &HashMap<u64, as_holder!(TextAlignment)> {
+            &self.text_alignment
         }
-        pub fn text_delineation_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<TextDelineation>> + 'table {
-            self.text_delineation
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
+        pub fn text_delineation_holders(&self) -> &HashMap<u64, as_holder!(TextDelineation)> {
+            &self.text_delineation
         }
-        pub fn text_or_character_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<TextOrCharacter>> + 'table {
-            self.text_or_character
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
+        pub fn text_or_character_holders(&self) -> &HashMap<u64, as_holder!(TextOrCharacter)> {
+            &self.text_or_character
         }
-        pub fn trimming_select_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<TrimmingSelect>> + 'table {
-            self.trimming_select
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
+        pub fn trimming_select_holders(&self) -> &HashMap<u64, as_holder!(TrimmingSelect)> {
+            &self.trimming_select
         }
-        pub fn unit_iter<'table>(&'table self) -> impl Iterator<Item = Result<Unit>> + 'table {
-            self.unit
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
+        pub fn unit_holders(&self) -> &HashMap<u64, as_holder!(Unit)> {
+            &self.unit
         }
-        pub fn vector_or_direction_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<VectorOrDirection>> + 'table {
-            self.vector_or_direction
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
+        pub fn vector_or_direction_holders(&self) -> &HashMap<u64, as_holder!(VectorOrDirection)> {
+            &self.vector_or_direction
         }
-        pub fn year_number_iter<'table>(
-            &'table self,
-        ) -> impl Iterator<Item = Result<YearNumber>> + 'table {
-            self.year_number
-                .values()
-                .cloned()
-                .map(move |value| value.into_owned(&self))
+        pub fn year_number_holders(&self) -> &HashMap<u64, as_holder!(YearNumber)> {
+            &self.year_number
         }
     }
     #[derive(Debug, Clone, PartialEq, Holder)]
