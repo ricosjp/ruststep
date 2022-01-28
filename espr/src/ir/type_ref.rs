@@ -48,10 +48,29 @@ pub enum TypeRef {
         /// TYPE b = a; ENDTYPE;
         /// ```
         ///
-        /// Then `a` is simple, but `b` is not simple.
+        /// Then both `a` and `b` are simple.
         ///
         is_simple: bool,
-        /// Enumerations do not produce holder, as a simple type like f64 and others.
+        /// An enumeration, its renaming, or a direct renaming of simple type:
+        ///
+        /// ```text
+        /// TYPE a = INTEGER; ENDTYPE;
+        /// TYPE b = a; ENDTYPE;
+        /// ```
+        ///
+        /// Then `a` is direct simple, but `b` is not direct simple.
+        ///
+        /// Enumerations are also treated as a simple type:
+        ///
+        /// ```text
+        /// TYPE a = ENUMERATION OF (..); END_TYPE;
+        /// TYPE b = ENUMERATION Of (..); END_TYPE;
+        /// ```
+        ///
+        /// Then both `a` and `b` are direct simple.
+        ///
+        is_direct_simple: bool,
+        /// Enumeration, declared by `TYPE a = ENUMERATION OF (..); END_TYPE;`.
         is_enumerate: bool,
     },
 
@@ -75,11 +94,32 @@ pub enum TypeRef {
 }
 
 impl TypeRef {
+    /// Returns `true` iff `self` is:
+    /// - a simple type,
+    /// - a named type whose underlying type is simple, or,
+    /// - a set or list of a type `x` such that `x.is_simple() == true`.
     pub fn is_simple(&self) -> bool {
         match self {
             TypeRef::SimpleType(..) => true,
-            TypeRef::Named { is_enumerate, .. } => *is_enumerate,
+            TypeRef::Named { is_simple, .. } => *is_simple,
             TypeRef::Set { base, .. } | TypeRef::List { base, .. } => base.is_simple(),
+            _ => false,
+        }
+    }
+
+    /// Returns `true` iff `self` is:
+    /// - a simple type,
+    /// - an enumeration,
+    /// - a direct renaming of enumeration,
+    /// - a direct renaming of simple type, or,
+    /// - a set or list of a simple type.
+    pub fn is_direct_simple(&self) -> bool {
+        match self {
+            TypeRef::SimpleType(..) => true,
+            TypeRef::Named {
+                is_direct_simple, ..
+            } => *is_direct_simple,
+            TypeRef::Set { base, .. } | TypeRef::List { base, .. } => base.is_direct_simple(),
             _ => false,
         }
     }
@@ -99,7 +139,30 @@ impl TypeRef {
                 })
             }
             ScopeType::Type => {
-                let (is_simple, is_enumerate) = match ns.get(path)? {
+                let mut p = path.clone();
+                let is_simple = loop {
+                    match ns.get(&p)? {
+                        Named::Type(ast::TypeDecl {
+                            underlying_type, ..
+                        }) => match underlying_type {
+                            // Enumeration e.g.
+                            //
+                            // ```
+                            // TYPE null_style = ENUMERATION OF (null); END_TYPE;
+                            // ```
+                            //
+                            // should be simple because it will be expressed as single integer.
+                            ast::Type::Simple(_) | ast::Type::Enumeration { .. } => break true,
+                            ast::Type::Named(name) => {
+                                p = ns.resolve(&p.scope, name)?;
+                                continue;
+                            }
+                            _ => break false,
+                        },
+                        Named::Entity(_) => break false,
+                    }
+                };
+                let (is_direct_simple, is_enumerate) = match ns.get(path)? {
                     Named::Type(ast::TypeDecl {
                         underlying_type, ..
                     }) => match underlying_type {
@@ -120,6 +183,7 @@ impl TypeRef {
                     scope: path.scope.clone(),
                     name: path.name.clone(),
                     is_simple,
+                    is_direct_simple,
                     is_enumerate,
                 })
             }

@@ -13,12 +13,25 @@ struct Field {
     attributes: Vec<syn::Attribute>,
 }
 
+/// A field is NOT used place holder iff its type is:
+/// - a simple type,
+/// - an enumeration, or,
+/// - a set or list which is NOT a used place holder type.
+fn used_place_holder_field(ty: &TypeRef) -> bool {
+    match ty {
+        TypeRef::SimpleType(..) => true,
+        TypeRef::Named { is_enumerate, .. } => *is_enumerate,
+        TypeRef::Set { base, .. } | TypeRef::List { base, .. } => used_place_holder_field(base),
+        _ => false,
+    }
+}
+
 impl From<EntityAttribute> for Field {
     fn from(attr: EntityAttribute) -> Self {
         let EntityAttribute { name, ty, optional } = attr;
 
         let name = format_ident!("{}", name.to_safe());
-        let attributes = if ty.is_simple() {
+        let attributes = if used_place_holder_field(&ty) {
             Vec::new()
         } else {
             vec![parse_quote! { #[holder(use_place_holder)] }]
@@ -196,10 +209,9 @@ impl Entity {
                     attributes.push(parse_quote! { #[deref] });
                     attributes.push(parse_quote! { #[deref_mut] });
                 }
-                if !ty.is_simple() {
+                if !ty.is_direct_simple() {
                     attributes.push(parse_quote! { #[holder(use_place_holder)] });
                 }
-
                 let (name, ty) = match ty {
                     TypeRef::Named { name, .. } | TypeRef::Entity { name, .. } => {
                         let ty = format_ident!("{}", name.to_pascal_case());
