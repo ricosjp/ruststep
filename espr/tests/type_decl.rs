@@ -2,24 +2,33 @@ use espr::{ast::SyntaxTree, codegen::rust::*, ir::IR};
 
 const EXPRESS: &str = r#"
 SCHEMA test_schema;
-  ENTITY a;
-    x: LIST [0:?] OF REAL;
-  END_ENTITY;
-
-  ENTITY b;
-    a: LIST [0:?] OF a;
-  END_ENTITY;
-
-  TYPE c = LIST [0:?] OF REAL;
+  TYPE a = STRING;
   END_TYPE;
-  
-  TYPE d = LIST [0:?] OF a;
+
+  TYPE b = ENUMERATION OF (
+      are,
+      sore,
+      dore
+    );
   END_TYPE;
+
+  TYPE c = a;
+  END_TYPE;
+
+  TYPE d = b;
+  END_TYPE;
+
+  ENTITY e;
+    a: a;
+    b: b;
+    c: c;
+    d: d;
+  END_ENTITY;
 END_SCHEMA;
 "#;
 
 #[test]
-fn list() {
+fn type_decl() {
     let st = SyntaxTree::parse(EXPRESS).unwrap();
     let ir = IR::from_syntax_tree(&st).unwrap();
     let tt = ir.to_token_stream(CratePrefix::External).to_string();
@@ -32,17 +41,17 @@ fn list() {
         use std::collections::HashMap;
         #[derive(Debug, Clone, PartialEq, Default, TableInit)]
         pub struct Tables {
+            e: HashMap<u64, as_holder!(E)>,
             a: HashMap<u64, as_holder!(A)>,
-            b: HashMap<u64, as_holder!(B)>,
             c: HashMap<u64, as_holder!(C)>,
             d: HashMap<u64, as_holder!(D)>,
         }
         impl Tables {
+            pub fn e_holders(&self) -> &HashMap<u64, as_holder!(E)> {
+                &self.e
+            }
             pub fn a_holders(&self) -> &HashMap<u64, as_holder!(A)> {
                 &self.a
-            }
-            pub fn b_holders(&self) -> &HashMap<u64, as_holder!(B)> {
-                &self.b
             }
             pub fn c_holders(&self) -> &HashMap<u64, as_holder!(C)> {
                 &self.c
@@ -55,30 +64,41 @@ fn list() {
             Clone, Debug, PartialEq, AsRef, Deref, DerefMut, Into, From, :: ruststep_derive :: Holder,
         )]
         # [holder (table = Tables)]
+        # [holder (field = a)]
+        #[holder(generate_deserialize)]
+        pub struct A(pub String);
+        #[derive(Debug, Clone, PartialEq, :: serde :: Deserialize)]
+        pub enum B {
+            Are,
+            Sore,
+            Dore,
+        }
+        #[derive(
+            Clone, Debug, PartialEq, AsRef, Deref, DerefMut, Into, From, :: ruststep_derive :: Holder,
+        )]
+        # [holder (table = Tables)]
         # [holder (field = c)]
         #[holder(generate_deserialize)]
-        pub struct C(#[holder(use_place_holder)] pub Vec<f64>);
+        pub struct C(#[holder(use_place_holder)] pub A);
         #[derive(
             Clone, Debug, PartialEq, AsRef, Deref, DerefMut, Into, From, :: ruststep_derive :: Holder,
         )]
         # [holder (table = Tables)]
         # [holder (field = d)]
         #[holder(generate_deserialize)]
-        pub struct D(#[holder(use_place_holder)] pub Vec<A>);
+        pub struct D(pub B);
         #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
         # [holder (table = Tables)]
-        # [holder (field = a)]
+        # [holder (field = e)]
         #[holder(generate_deserialize)]
-        pub struct A {
-            pub x: Vec<f64>,
-        }
-        #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
-        # [holder (table = Tables)]
-        # [holder (field = b)]
-        #[holder(generate_deserialize)]
-        pub struct B {
+        pub struct E {
             #[holder(use_place_holder)]
-            pub a: Vec<A>,
+            pub a: A,
+            pub b: B,
+            #[holder(use_place_holder)]
+            pub c: C,
+            #[holder(use_place_holder)]
+            pub d: D,
         }
     }
     "###);

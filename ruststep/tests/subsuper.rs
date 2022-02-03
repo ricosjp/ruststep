@@ -151,26 +151,20 @@ fn get_owned_any() {
     let any = EntityTable::<SubAnyHolder>::get_owned(&table, 2).unwrap();
     assert_eq!(
         any,
-        SubAny::Sub(Box::new(
-            Sub {
-                base: Base { x: 1.0 },
-                y: 2.0
-            }
-            .into()
-        ))
+        SubAny::Sub(Box::new(Sub {
+            base: Base { x: 1.0 },
+            y: 2.0
+        }))
     );
     let any = EntityTable::<SubAnyHolder>::get_owned(&table, 3).unwrap();
     assert_eq!(
         any,
-        SubAny::Subsub(Box::new(
-            Subsub {
-                sub: Sub {
-                    base: Base { x: 1.0 },
-                    y: 2.0,
-                },
-                z: 4.0
-            }
-            .into()
-        ))
+        SubAny::Subsub(Box::new(Subsub {
+            sub: Sub {
+                base: Base { x: 1.0 },
+                y: 2.0,
+            },
+            z: 4.0
+        }))
     );
 }

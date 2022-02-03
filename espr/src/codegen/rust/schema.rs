@@ -37,16 +37,8 @@ impl Schema {
         let types = &self.types;
         let entities = &self.entities;
         let type_decls = self.types.iter().filter(|e| match e {
-            TypeDecl::Rename(Rename {
-                ty: TypeRef::SimpleType(_),
-                ..
-            }) => false,
-            TypeDecl::Rename(Rename {
-                ty: TypeRef::Named { is_simple, .. },
-                ..
-            }) => !is_simple,
-            TypeDecl::Rename(Rename { .. }) => true,
-            _ => false,
+            TypeDecl::Enumeration(_) => false,
+            _ => true,
         });
         let entity_types: Vec<_> = entities
             .iter()

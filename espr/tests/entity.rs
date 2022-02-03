@@ -15,7 +15,7 @@ END_SCHEMA;
 "#;
 
 #[test]
-fn simple() {
+fn entity() {
     let st = SyntaxTree::parse(EXPRESS).unwrap();
     let ir = IR::from_syntax_tree(&st).unwrap();
     let tt = ir.to_token_stream(CratePrefix::External).to_string();

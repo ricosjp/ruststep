@@ -240,6 +240,74 @@ pub mod explicit_draughting {
         two_direction_repeat_factor: HashMap<u64, as_holder!(TwoDirectionRepeatFactor)>,
         uniform_curve: HashMap<u64, as_holder!(UniformCurve)>,
         vector: HashMap<u64, as_holder!(Vector)>,
+        approved_item: HashMap<u64, as_holder!(ApprovedItem)>,
+        area_or_view: HashMap<u64, as_holder!(AreaOrView)>,
+        axis2_placement: HashMap<u64, as_holder!(Axis2Placement)>,
+        box_characteristic_select: HashMap<u64, as_holder!(BoxCharacteristicSelect)>,
+        box_height: HashMap<u64, as_holder!(BoxHeight)>,
+        box_rotate_angle: HashMap<u64, as_holder!(BoxRotateAngle)>,
+        box_slant_angle: HashMap<u64, as_holder!(BoxSlantAngle)>,
+        box_width: HashMap<u64, as_holder!(BoxWidth)>,
+        character_spacing_select: HashMap<u64, as_holder!(CharacterSpacingSelect)>,
+        character_style_select: HashMap<u64, as_holder!(CharacterStyleSelect)>,
+        characterized_definition: HashMap<u64, as_holder!(CharacterizedDefinition)>,
+        characterized_product_definition: HashMap<u64, as_holder!(CharacterizedProductDefinition)>,
+        classified_item: HashMap<u64, as_holder!(ClassifiedItem)>,
+        contracted_item: HashMap<u64, as_holder!(ContractedItem)>,
+        curve_font_or_scaled_curve_font_select:
+            HashMap<u64, as_holder!(CurveFontOrScaledCurveFontSelect)>,
+        curve_or_annotation_curve_occurrence:
+            HashMap<u64, as_holder!(CurveOrAnnotationCurveOccurrence)>,
+        curve_or_render: HashMap<u64, as_holder!(CurveOrRender)>,
+        curve_style_font_select: HashMap<u64, as_holder!(CurveStyleFontSelect)>,
+        date_time_select: HashMap<u64, as_holder!(DateTimeSelect)>,
+        day_in_month_number: HashMap<u64, as_holder!(DayInMonthNumber)>,
+        defined_symbol_select: HashMap<u64, as_holder!(DefinedSymbolSelect)>,
+        dimension_count: HashMap<u64, as_holder!(DimensionCount)>,
+        draughting_callout_element: HashMap<u64, as_holder!(DraughtingCalloutElement)>,
+        draughting_grouped_item: HashMap<u64, as_holder!(DraughtingGroupedItem)>,
+        draughting_organization_item: HashMap<u64, as_holder!(DraughtingOrganizationItem)>,
+        draughting_presented_item_select: HashMap<u64, as_holder!(DraughtingPresentedItemSelect)>,
+        draughting_titled_item: HashMap<u64, as_holder!(DraughtingTitledItem)>,
+        fill_area_style_tile_shape_select: HashMap<u64, as_holder!(FillAreaStyleTileShapeSelect)>,
+        fill_style_select: HashMap<u64, as_holder!(FillStyleSelect)>,
+        font_select: HashMap<u64, as_holder!(FontSelect)>,
+        geometric_set_select: HashMap<u64, as_holder!(GeometricSetSelect)>,
+        hiding_or_blanking_select: HashMap<u64, as_holder!(HidingOrBlankingSelect)>,
+        identifier: HashMap<u64, as_holder!(Identifier)>,
+        invisibility_context: HashMap<u64, as_holder!(InvisibilityContext)>,
+        invisible_item: HashMap<u64, as_holder!(InvisibleItem)>,
+        label: HashMap<u64, as_holder!(Label)>,
+        layered_item: HashMap<u64, as_holder!(LayeredItem)>,
+        length_measure: HashMap<u64, as_holder!(LengthMeasure)>,
+        measure_value: HashMap<u64, as_holder!(MeasureValue)>,
+        month_in_year_number: HashMap<u64, as_holder!(MonthInYearNumber)>,
+        parameter_value: HashMap<u64, as_holder!(ParameterValue)>,
+        person_organization_select: HashMap<u64, as_holder!(PersonOrganizationSelect)>,
+        plane_angle_measure: HashMap<u64, as_holder!(PlaneAngleMeasure)>,
+        positive_length_measure: HashMap<u64, as_holder!(PositiveLengthMeasure)>,
+        positive_ratio_measure: HashMap<u64, as_holder!(PositiveRatioMeasure)>,
+        presentable_text: HashMap<u64, as_holder!(PresentableText)>,
+        presentation_representation_select:
+            HashMap<u64, as_holder!(PresentationRepresentationSelect)>,
+        presentation_size_assignment_select:
+            HashMap<u64, as_holder!(PresentationSizeAssignmentSelect)>,
+        presentation_style_select: HashMap<u64, as_holder!(PresentationStyleSelect)>,
+        ratio_measure: HashMap<u64, as_holder!(RatioMeasure)>,
+        shape_definition: HashMap<u64, as_holder!(ShapeDefinition)>,
+        size_select: HashMap<u64, as_holder!(SizeSelect)>,
+        source_item: HashMap<u64, as_holder!(SourceItem)>,
+        specified_item: HashMap<u64, as_holder!(SpecifiedItem)>,
+        style_context_select: HashMap<u64, as_holder!(StyleContextSelect)>,
+        symbol_style_select: HashMap<u64, as_holder!(SymbolStyleSelect)>,
+        text: HashMap<u64, as_holder!(Text)>,
+        text_alignment: HashMap<u64, as_holder!(TextAlignment)>,
+        text_delineation: HashMap<u64, as_holder!(TextDelineation)>,
+        text_or_character: HashMap<u64, as_holder!(TextOrCharacter)>,
+        trimming_select: HashMap<u64, as_holder!(TrimmingSelect)>,
+        unit: HashMap<u64, as_holder!(Unit)>,
+        vector_or_direction: HashMap<u64, as_holder!(VectorOrDirection)>,
+        year_number: HashMap<u64, as_holder!(YearNumber)>,
     }
     impl Tables {
         pub fn address_holders(&self) -> &HashMap<u64, as_holder!(Address)> {
@@ -1118,6 +1186,248 @@ pub mod explicit_draughting {
         pub fn vector_holders(&self) -> &HashMap<u64, as_holder!(Vector)> {
             &self.vector
         }
+        pub fn approved_item_holders(&self) -> &HashMap<u64, as_holder!(ApprovedItem)> {
+            &self.approved_item
+        }
+        pub fn area_or_view_holders(&self) -> &HashMap<u64, as_holder!(AreaOrView)> {
+            &self.area_or_view
+        }
+        pub fn axis2_placement_holders(&self) -> &HashMap<u64, as_holder!(Axis2Placement)> {
+            &self.axis2_placement
+        }
+        pub fn box_characteristic_select_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(BoxCharacteristicSelect)> {
+            &self.box_characteristic_select
+        }
+        pub fn box_height_holders(&self) -> &HashMap<u64, as_holder!(BoxHeight)> {
+            &self.box_height
+        }
+        pub fn box_rotate_angle_holders(&self) -> &HashMap<u64, as_holder!(BoxRotateAngle)> {
+            &self.box_rotate_angle
+        }
+        pub fn box_slant_angle_holders(&self) -> &HashMap<u64, as_holder!(BoxSlantAngle)> {
+            &self.box_slant_angle
+        }
+        pub fn box_width_holders(&self) -> &HashMap<u64, as_holder!(BoxWidth)> {
+            &self.box_width
+        }
+        pub fn character_spacing_select_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(CharacterSpacingSelect)> {
+            &self.character_spacing_select
+        }
+        pub fn character_style_select_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(CharacterStyleSelect)> {
+            &self.character_style_select
+        }
+        pub fn characterized_definition_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(CharacterizedDefinition)> {
+            &self.characterized_definition
+        }
+        pub fn characterized_product_definition_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(CharacterizedProductDefinition)> {
+            &self.characterized_product_definition
+        }
+        pub fn classified_item_holders(&self) -> &HashMap<u64, as_holder!(ClassifiedItem)> {
+            &self.classified_item
+        }
+        pub fn contracted_item_holders(&self) -> &HashMap<u64, as_holder!(ContractedItem)> {
+            &self.contracted_item
+        }
+        pub fn curve_font_or_scaled_curve_font_select_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(CurveFontOrScaledCurveFontSelect)> {
+            &self.curve_font_or_scaled_curve_font_select
+        }
+        pub fn curve_or_annotation_curve_occurrence_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(CurveOrAnnotationCurveOccurrence)> {
+            &self.curve_or_annotation_curve_occurrence
+        }
+        pub fn curve_or_render_holders(&self) -> &HashMap<u64, as_holder!(CurveOrRender)> {
+            &self.curve_or_render
+        }
+        pub fn curve_style_font_select_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(CurveStyleFontSelect)> {
+            &self.curve_style_font_select
+        }
+        pub fn date_time_select_holders(&self) -> &HashMap<u64, as_holder!(DateTimeSelect)> {
+            &self.date_time_select
+        }
+        pub fn day_in_month_number_holders(&self) -> &HashMap<u64, as_holder!(DayInMonthNumber)> {
+            &self.day_in_month_number
+        }
+        pub fn defined_symbol_select_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(DefinedSymbolSelect)> {
+            &self.defined_symbol_select
+        }
+        pub fn dimension_count_holders(&self) -> &HashMap<u64, as_holder!(DimensionCount)> {
+            &self.dimension_count
+        }
+        pub fn draughting_callout_element_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(DraughtingCalloutElement)> {
+            &self.draughting_callout_element
+        }
+        pub fn draughting_grouped_item_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(DraughtingGroupedItem)> {
+            &self.draughting_grouped_item
+        }
+        pub fn draughting_organization_item_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(DraughtingOrganizationItem)> {
+            &self.draughting_organization_item
+        }
+        pub fn draughting_presented_item_select_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(DraughtingPresentedItemSelect)> {
+            &self.draughting_presented_item_select
+        }
+        pub fn draughting_titled_item_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(DraughtingTitledItem)> {
+            &self.draughting_titled_item
+        }
+        pub fn fill_area_style_tile_shape_select_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(FillAreaStyleTileShapeSelect)> {
+            &self.fill_area_style_tile_shape_select
+        }
+        pub fn fill_style_select_holders(&self) -> &HashMap<u64, as_holder!(FillStyleSelect)> {
+            &self.fill_style_select
+        }
+        pub fn font_select_holders(&self) -> &HashMap<u64, as_holder!(FontSelect)> {
+            &self.font_select
+        }
+        pub fn geometric_set_select_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(GeometricSetSelect)> {
+            &self.geometric_set_select
+        }
+        pub fn hiding_or_blanking_select_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(HidingOrBlankingSelect)> {
+            &self.hiding_or_blanking_select
+        }
+        pub fn identifier_holders(&self) -> &HashMap<u64, as_holder!(Identifier)> {
+            &self.identifier
+        }
+        pub fn invisibility_context_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(InvisibilityContext)> {
+            &self.invisibility_context
+        }
+        pub fn invisible_item_holders(&self) -> &HashMap<u64, as_holder!(InvisibleItem)> {
+            &self.invisible_item
+        }
+        pub fn label_holders(&self) -> &HashMap<u64, as_holder!(Label)> {
+            &self.label
+        }
+        pub fn layered_item_holders(&self) -> &HashMap<u64, as_holder!(LayeredItem)> {
+            &self.layered_item
+        }
+        pub fn length_measure_holders(&self) -> &HashMap<u64, as_holder!(LengthMeasure)> {
+            &self.length_measure
+        }
+        pub fn measure_value_holders(&self) -> &HashMap<u64, as_holder!(MeasureValue)> {
+            &self.measure_value
+        }
+        pub fn month_in_year_number_holders(&self) -> &HashMap<u64, as_holder!(MonthInYearNumber)> {
+            &self.month_in_year_number
+        }
+        pub fn parameter_value_holders(&self) -> &HashMap<u64, as_holder!(ParameterValue)> {
+            &self.parameter_value
+        }
+        pub fn person_organization_select_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(PersonOrganizationSelect)> {
+            &self.person_organization_select
+        }
+        pub fn plane_angle_measure_holders(&self) -> &HashMap<u64, as_holder!(PlaneAngleMeasure)> {
+            &self.plane_angle_measure
+        }
+        pub fn positive_length_measure_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(PositiveLengthMeasure)> {
+            &self.positive_length_measure
+        }
+        pub fn positive_ratio_measure_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(PositiveRatioMeasure)> {
+            &self.positive_ratio_measure
+        }
+        pub fn presentable_text_holders(&self) -> &HashMap<u64, as_holder!(PresentableText)> {
+            &self.presentable_text
+        }
+        pub fn presentation_representation_select_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(PresentationRepresentationSelect)> {
+            &self.presentation_representation_select
+        }
+        pub fn presentation_size_assignment_select_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(PresentationSizeAssignmentSelect)> {
+            &self.presentation_size_assignment_select
+        }
+        pub fn presentation_style_select_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(PresentationStyleSelect)> {
+            &self.presentation_style_select
+        }
+        pub fn ratio_measure_holders(&self) -> &HashMap<u64, as_holder!(RatioMeasure)> {
+            &self.ratio_measure
+        }
+        pub fn shape_definition_holders(&self) -> &HashMap<u64, as_holder!(ShapeDefinition)> {
+            &self.shape_definition
+        }
+        pub fn size_select_holders(&self) -> &HashMap<u64, as_holder!(SizeSelect)> {
+            &self.size_select
+        }
+        pub fn source_item_holders(&self) -> &HashMap<u64, as_holder!(SourceItem)> {
+            &self.source_item
+        }
+        pub fn specified_item_holders(&self) -> &HashMap<u64, as_holder!(SpecifiedItem)> {
+            &self.specified_item
+        }
+        pub fn style_context_select_holders(
+            &self,
+        ) -> &HashMap<u64, as_holder!(StyleContextSelect)> {
+            &self.style_context_select
+        }
+        pub fn symbol_style_select_holders(&self) -> &HashMap<u64, as_holder!(SymbolStyleSelect)> {
+            &self.symbol_style_select
+        }
+        pub fn text_holders(&self) -> &HashMap<u64, as_holder!(Text)> {
+            &self.text
+        }
+        pub fn text_alignment_holders(&self) -> &HashMap<u64, as_holder!(TextAlignment)> {
+            &self.text_alignment
+        }
+        pub fn text_delineation_holders(&self) -> &HashMap<u64, as_holder!(TextDelineation)> {
+            &self.text_delineation
+        }
+        pub fn text_or_character_holders(&self) -> &HashMap<u64, as_holder!(TextOrCharacter)> {
+            &self.text_or_character
+        }
+        pub fn trimming_select_holders(&self) -> &HashMap<u64, as_holder!(TrimmingSelect)> {
+            &self.trimming_select
+        }
+        pub fn unit_holders(&self) -> &HashMap<u64, as_holder!(Unit)> {
+            &self.unit
+        }
+        pub fn vector_or_direction_holders(&self) -> &HashMap<u64, as_holder!(VectorOrDirection)> {
+            &self.vector_or_direction
+        }
+        pub fn year_number_holders(&self) -> &HashMap<u64, as_holder!(YearNumber)> {
+            &self.year_number
+        }
     }
     #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
@@ -1160,61 +1470,51 @@ pub mod explicit_draughting {
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum BoxCharacteristicSelect {
-        BoxHeight(BoxHeight),
-        BoxWidth(BoxWidth),
-        BoxSlantAngle(BoxSlantAngle),
-        BoxRotateAngle(BoxRotateAngle),
+        #[holder(use_place_holder)]
+        BoxHeight(Box<BoxHeight>),
+        #[holder(use_place_holder)]
+        BoxWidth(Box<BoxWidth>),
+        #[holder(use_place_holder)]
+        BoxSlantAngle(Box<BoxSlantAngle>),
+        #[holder(use_place_holder)]
+        BoxRotateAngle(Box<BoxRotateAngle>),
     }
     #[derive(
-        Clone,
-        Debug,
-        PartialEq,
-        AsRef,
-        Deref,
-        DerefMut,
-        :: serde :: Serialize,
-        :: serde :: Deserialize,
+        Clone, Debug, PartialEq, AsRef, Deref, DerefMut, Into, From, :: ruststep_derive :: Holder,
     )]
-    pub struct BoxHeight(pub PositiveRatioMeasure);
+    # [holder (table = Tables)]
+    # [holder (field = box_height)]
+    #[holder(generate_deserialize)]
+    pub struct BoxHeight(#[holder(use_place_holder)] pub PositiveRatioMeasure);
     #[derive(
-        Clone,
-        Debug,
-        PartialEq,
-        AsRef,
-        Deref,
-        DerefMut,
-        :: serde :: Serialize,
-        :: serde :: Deserialize,
+        Clone, Debug, PartialEq, AsRef, Deref, DerefMut, Into, From, :: ruststep_derive :: Holder,
     )]
-    pub struct BoxRotateAngle(pub PlaneAngleMeasure);
+    # [holder (table = Tables)]
+    # [holder (field = box_rotate_angle)]
+    #[holder(generate_deserialize)]
+    pub struct BoxRotateAngle(#[holder(use_place_holder)] pub PlaneAngleMeasure);
     #[derive(
-        Clone,
-        Debug,
-        PartialEq,
-        AsRef,
-        Deref,
-        DerefMut,
-        :: serde :: Serialize,
-        :: serde :: Deserialize,
+        Clone, Debug, PartialEq, AsRef, Deref, DerefMut, Into, From, :: ruststep_derive :: Holder,
     )]
-    pub struct BoxSlantAngle(pub PlaneAngleMeasure);
+    # [holder (table = Tables)]
+    # [holder (field = box_slant_angle)]
+    #[holder(generate_deserialize)]
+    pub struct BoxSlantAngle(#[holder(use_place_holder)] pub PlaneAngleMeasure);
     #[derive(
-        Clone,
-        Debug,
-        PartialEq,
-        AsRef,
-        Deref,
-        DerefMut,
-        :: serde :: Serialize,
-        :: serde :: Deserialize,
+        Clone, Debug, PartialEq, AsRef, Deref, DerefMut, Into, From, :: ruststep_derive :: Holder,
     )]
-    pub struct BoxWidth(pub PositiveRatioMeasure);
+    # [holder (table = Tables)]
+    # [holder (field = box_width)]
+    #[holder(generate_deserialize)]
+    pub struct BoxWidth(#[holder(use_place_holder)] pub PositiveRatioMeasure);
     #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum CharacterSpacingSelect {
-        LengthMeasure(LengthMeasure),
-        RatioMeasure(RatioMeasure),
+        #[holder(use_place_holder)]
+        LengthMeasure(Box<LengthMeasure>),
+        #[holder(use_place_holder)]
+        RatioMeasure(Box<RatioMeasure>),
         #[holder(use_place_holder)]
         MeasureWithUnit(MeasureWithUnitAny),
     }
@@ -1305,17 +1605,11 @@ pub mod explicit_draughting {
         Date(DateAny),
     }
     #[derive(
-        Clone,
-        Debug,
-        PartialEq,
-        AsRef,
-        Deref,
-        DerefMut,
-        From,
-        Into,
-        :: serde :: Serialize,
-        :: serde :: Deserialize,
+        Clone, Debug, PartialEq, AsRef, Deref, DerefMut, Into, From, :: ruststep_derive :: Holder,
     )]
+    # [holder (table = Tables)]
+    # [holder (field = day_in_month_number)]
+    #[holder(generate_deserialize)]
     pub struct DayInMonthNumber(pub i64);
     #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
@@ -1328,17 +1622,11 @@ pub mod explicit_draughting {
         ExternallyDefinedSymbol(Box<ExternallyDefinedSymbol>),
     }
     #[derive(
-        Clone,
-        Debug,
-        PartialEq,
-        AsRef,
-        Deref,
-        DerefMut,
-        From,
-        Into,
-        :: serde :: Serialize,
-        :: serde :: Deserialize,
+        Clone, Debug, PartialEq, AsRef, Deref, DerefMut, Into, From, :: ruststep_derive :: Holder,
     )]
+    # [holder (table = Tables)]
+    # [holder (field = dimension_count)]
+    #[holder(generate_deserialize)]
     pub struct DimensionCount(pub i64);
     #[derive(Debug, Clone, PartialEq, :: serde :: Deserialize)]
     pub enum DimensionExtentUsage {
@@ -1458,17 +1746,11 @@ pub mod explicit_draughting {
         AnnotationFillArea(Box<AnnotationFillArea>),
     }
     #[derive(
-        Clone,
-        Debug,
-        PartialEq,
-        AsRef,
-        Deref,
-        DerefMut,
-        From,
-        Into,
-        :: serde :: Serialize,
-        :: serde :: Deserialize,
+        Clone, Debug, PartialEq, AsRef, Deref, DerefMut, Into, From, :: ruststep_derive :: Holder,
     )]
+    # [holder (table = Tables)]
+    # [holder (field = identifier)]
+    #[holder(generate_deserialize)]
     pub struct Identifier(pub String);
     #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
@@ -1502,17 +1784,11 @@ pub mod explicit_draughting {
         Unspecified,
     }
     #[derive(
-        Clone,
-        Debug,
-        PartialEq,
-        AsRef,
-        Deref,
-        DerefMut,
-        From,
-        Into,
-        :: serde :: Serialize,
-        :: serde :: Deserialize,
+        Clone, Debug, PartialEq, AsRef, Deref, DerefMut, Into, From, :: ruststep_derive :: Holder,
     )]
+    # [holder (table = Tables)]
+    # [holder (field = label)]
+    #[holder(generate_deserialize)]
     pub struct Label(pub String);
     #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
@@ -1524,58 +1800,46 @@ pub mod explicit_draughting {
         RepresentationItem(RepresentationItemAny),
     }
     #[derive(
-        Clone,
-        Debug,
-        PartialEq,
-        AsRef,
-        Deref,
-        DerefMut,
-        From,
-        Into,
-        :: serde :: Serialize,
-        :: serde :: Deserialize,
+        Clone, Debug, PartialEq, AsRef, Deref, DerefMut, Into, From, :: ruststep_derive :: Holder,
     )]
+    # [holder (table = Tables)]
+    # [holder (field = length_measure)]
+    #[holder(generate_deserialize)]
     pub struct LengthMeasure(pub f64);
     #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum MeasureValue {
-        LengthMeasure(LengthMeasure),
-        PlaneAngleMeasure(PlaneAngleMeasure),
-        RatioMeasure(RatioMeasure),
-        ParameterValue(ParameterValue),
-        PositiveLengthMeasure(PositiveLengthMeasure),
-        PositiveRatioMeasure(PositiveRatioMeasure),
+        #[holder(use_place_holder)]
+        LengthMeasure(Box<LengthMeasure>),
+        #[holder(use_place_holder)]
+        PlaneAngleMeasure(Box<PlaneAngleMeasure>),
+        #[holder(use_place_holder)]
+        RatioMeasure(Box<RatioMeasure>),
+        #[holder(use_place_holder)]
+        ParameterValue(Box<ParameterValue>),
+        #[holder(use_place_holder)]
+        PositiveLengthMeasure(Box<PositiveLengthMeasure>),
+        #[holder(use_place_holder)]
+        PositiveRatioMeasure(Box<PositiveRatioMeasure>),
     }
     #[derive(
-        Clone,
-        Debug,
-        PartialEq,
-        AsRef,
-        Deref,
-        DerefMut,
-        From,
-        Into,
-        :: serde :: Serialize,
-        :: serde :: Deserialize,
+        Clone, Debug, PartialEq, AsRef, Deref, DerefMut, Into, From, :: ruststep_derive :: Holder,
     )]
+    # [holder (table = Tables)]
+    # [holder (field = month_in_year_number)]
+    #[holder(generate_deserialize)]
     pub struct MonthInYearNumber(pub i64);
     #[derive(Debug, Clone, PartialEq, :: serde :: Deserialize)]
     pub enum NullStyle {
         Null,
     }
     #[derive(
-        Clone,
-        Debug,
-        PartialEq,
-        AsRef,
-        Deref,
-        DerefMut,
-        From,
-        Into,
-        :: serde :: Serialize,
-        :: serde :: Deserialize,
+        Clone, Debug, PartialEq, AsRef, Deref, DerefMut, Into, From, :: ruststep_derive :: Holder,
     )]
+    # [holder (table = Tables)]
+    # [holder (field = parameter_value)]
+    #[holder(generate_deserialize)]
     pub struct ParameterValue(pub f64);
     #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
@@ -1592,52 +1856,32 @@ pub mod explicit_draughting {
         PersonAndOrganization(Box<PersonAndOrganization>),
     }
     #[derive(
-        Clone,
-        Debug,
-        PartialEq,
-        AsRef,
-        Deref,
-        DerefMut,
-        From,
-        Into,
-        :: serde :: Serialize,
-        :: serde :: Deserialize,
+        Clone, Debug, PartialEq, AsRef, Deref, DerefMut, Into, From, :: ruststep_derive :: Holder,
     )]
+    # [holder (table = Tables)]
+    # [holder (field = plane_angle_measure)]
+    #[holder(generate_deserialize)]
     pub struct PlaneAngleMeasure(pub f64);
     #[derive(
-        Clone,
-        Debug,
-        PartialEq,
-        AsRef,
-        Deref,
-        DerefMut,
-        :: serde :: Serialize,
-        :: serde :: Deserialize,
+        Clone, Debug, PartialEq, AsRef, Deref, DerefMut, Into, From, :: ruststep_derive :: Holder,
     )]
-    pub struct PositiveLengthMeasure(pub LengthMeasure);
+    # [holder (table = Tables)]
+    # [holder (field = positive_length_measure)]
+    #[holder(generate_deserialize)]
+    pub struct PositiveLengthMeasure(#[holder(use_place_holder)] pub LengthMeasure);
     #[derive(
-        Clone,
-        Debug,
-        PartialEq,
-        AsRef,
-        Deref,
-        DerefMut,
-        :: serde :: Serialize,
-        :: serde :: Deserialize,
+        Clone, Debug, PartialEq, AsRef, Deref, DerefMut, Into, From, :: ruststep_derive :: Holder,
     )]
-    pub struct PositiveRatioMeasure(pub RatioMeasure);
+    # [holder (table = Tables)]
+    # [holder (field = positive_ratio_measure)]
+    #[holder(generate_deserialize)]
+    pub struct PositiveRatioMeasure(#[holder(use_place_holder)] pub RatioMeasure);
     #[derive(
-        Clone,
-        Debug,
-        PartialEq,
-        AsRef,
-        Deref,
-        DerefMut,
-        From,
-        Into,
-        :: serde :: Serialize,
-        :: serde :: Deserialize,
+        Clone, Debug, PartialEq, AsRef, Deref, DerefMut, Into, From, :: ruststep_derive :: Holder,
     )]
+    # [holder (table = Tables)]
+    # [holder (field = presentable_text)]
+    #[holder(generate_deserialize)]
     pub struct PresentableText(pub String);
     #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
@@ -1678,17 +1922,11 @@ pub mod explicit_draughting {
         NullStyle(NullStyle),
     }
     #[derive(
-        Clone,
-        Debug,
-        PartialEq,
-        AsRef,
-        Deref,
-        DerefMut,
-        From,
-        Into,
-        :: serde :: Serialize,
-        :: serde :: Deserialize,
+        Clone, Debug, PartialEq, AsRef, Deref, DerefMut, Into, From, :: ruststep_derive :: Holder,
     )]
+    # [holder (table = Tables)]
+    # [holder (field = ratio_measure)]
+    #[holder(generate_deserialize)]
     pub struct RatioMeasure(pub f64);
     #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
@@ -1752,7 +1990,8 @@ pub mod explicit_draughting {
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum SizeSelect {
-        PositiveLengthMeasure(PositiveLengthMeasure),
+        #[holder(use_place_holder)]
+        PositiveLengthMeasure(Box<PositiveLengthMeasure>),
         #[holder(use_place_holder)]
         MeasureWithUnit(MeasureWithUnitAny),
     }
@@ -1760,7 +1999,8 @@ pub mod explicit_draughting {
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum SourceItem {
-        Identifier(Identifier),
+        #[holder(use_place_holder)]
+        Identifier(Box<Identifier>),
     }
     #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
@@ -1789,40 +2029,26 @@ pub mod explicit_draughting {
         SymbolColour(Box<SymbolColour>),
     }
     #[derive(
-        Clone,
-        Debug,
-        PartialEq,
-        AsRef,
-        Deref,
-        DerefMut,
-        From,
-        Into,
-        :: serde :: Serialize,
-        :: serde :: Deserialize,
+        Clone, Debug, PartialEq, AsRef, Deref, DerefMut, Into, From, :: ruststep_derive :: Holder,
     )]
+    # [holder (table = Tables)]
+    # [holder (field = text)]
+    #[holder(generate_deserialize)]
     pub struct Text(pub String);
     #[derive(
-        Clone,
-        Debug,
-        PartialEq,
-        AsRef,
-        Deref,
-        DerefMut,
-        :: serde :: Serialize,
-        :: serde :: Deserialize,
+        Clone, Debug, PartialEq, AsRef, Deref, DerefMut, Into, From, :: ruststep_derive :: Holder,
     )]
-    pub struct TextAlignment(pub Label);
+    # [holder (table = Tables)]
+    # [holder (field = text_alignment)]
+    #[holder(generate_deserialize)]
+    pub struct TextAlignment(#[holder(use_place_holder)] pub Label);
     #[derive(
-        Clone,
-        Debug,
-        PartialEq,
-        AsRef,
-        Deref,
-        DerefMut,
-        :: serde :: Serialize,
-        :: serde :: Deserialize,
+        Clone, Debug, PartialEq, AsRef, Deref, DerefMut, Into, From, :: ruststep_derive :: Holder,
     )]
-    pub struct TextDelineation(pub Label);
+    # [holder (table = Tables)]
+    # [holder (field = text_delineation)]
+    #[holder(generate_deserialize)]
+    pub struct TextDelineation(#[holder(use_place_holder)] pub Label);
     #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
@@ -1862,7 +2088,8 @@ pub mod explicit_draughting {
         # [holder (field = cartesian_point)]
         #[holder(use_place_holder)]
         CartesianPoint(Box<CartesianPoint>),
-        ParameterValue(ParameterValue),
+        #[holder(use_place_holder)]
+        ParameterValue(Box<ParameterValue>),
     }
     #[derive(Debug, Clone, PartialEq, Holder)]
     # [holder (table = Tables)]
@@ -1883,34 +2110,40 @@ pub mod explicit_draughting {
         Direction(Box<Direction>),
     }
     #[derive(
-        Clone,
-        Debug,
-        PartialEq,
-        AsRef,
-        Deref,
-        DerefMut,
-        From,
-        Into,
-        :: serde :: Serialize,
-        :: serde :: Deserialize,
+        Clone, Debug, PartialEq, AsRef, Deref, DerefMut, Into, From, :: ruststep_derive :: Holder,
     )]
+    # [holder (table = Tables)]
+    # [holder (field = year_number)]
+    #[holder(generate_deserialize)]
     pub struct YearNumber(pub i64);
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
     # [holder (table = Tables)]
     # [holder (field = address)]
     #[holder(generate_deserialize)]
     pub struct Address {
+        #[holder(use_place_holder)]
         pub internal_location: Option<Label>,
+        #[holder(use_place_holder)]
         pub street_number: Option<Label>,
+        #[holder(use_place_holder)]
         pub street: Option<Label>,
+        #[holder(use_place_holder)]
         pub postal_box: Option<Label>,
+        #[holder(use_place_holder)]
         pub town: Option<Label>,
+        #[holder(use_place_holder)]
         pub region: Option<Label>,
+        #[holder(use_place_holder)]
         pub postal_code: Option<Label>,
+        #[holder(use_place_holder)]
         pub country: Option<Label>,
+        #[holder(use_place_holder)]
         pub facsimile_number: Option<Label>,
+        #[holder(use_place_holder)]
         pub telephone_number: Option<Label>,
+        #[holder(use_place_holder)]
         pub electronic_mail_address: Option<Label>,
+        #[holder(use_place_holder)]
         pub telex_number: Option<Label>,
     }
     #[derive(Debug, Clone, PartialEq, Holder)]
@@ -2307,6 +2540,7 @@ pub mod explicit_draughting {
     # [holder (field = application_context)]
     #[holder(generate_deserialize)]
     pub struct ApplicationContext {
+        #[holder(use_place_holder)]
         pub application: Text,
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -2314,6 +2548,7 @@ pub mod explicit_draughting {
     # [holder (field = application_context_element)]
     #[holder(generate_deserialize)]
     pub struct ApplicationContextElement {
+        #[holder(use_place_holder)]
         pub name: Label,
         #[holder(use_place_holder)]
         pub frame_of_reference: ApplicationContext,
@@ -2361,8 +2596,11 @@ pub mod explicit_draughting {
     # [holder (field = application_protocol_definition)]
     #[holder(generate_deserialize)]
     pub struct ApplicationProtocolDefinition {
+        #[holder(use_place_holder)]
         pub status: Label,
+        #[holder(use_place_holder)]
         pub application_interpreted_model_schema_name: Label,
+        #[holder(use_place_holder)]
         pub application_protocol_year: YearNumber,
         #[holder(use_place_holder)]
         pub application: ApplicationContext,
@@ -2374,6 +2612,7 @@ pub mod explicit_draughting {
     pub struct Approval {
         #[holder(use_place_holder)]
         pub status: ApprovalStatus,
+        #[holder(use_place_holder)]
         pub level: Label,
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -2440,6 +2679,7 @@ pub mod explicit_draughting {
     # [holder (field = approval_role)]
     #[holder(generate_deserialize)]
     pub struct ApprovalRole {
+        #[holder(use_place_holder)]
         pub role: Label,
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -2447,6 +2687,7 @@ pub mod explicit_draughting {
     # [holder (field = approval_status)]
     #[holder(generate_deserialize)]
     pub struct ApprovalStatus {
+        #[holder(use_place_holder)]
         pub name: Label,
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -2625,6 +2866,7 @@ pub mod explicit_draughting {
         #[holder(use_place_holder)]
         pub b_spline_curve: BSplineCurve,
         pub knot_multiplicities: Vec<i64>,
+        #[holder(use_place_holder)]
         pub knots: Vec<ParameterValue>,
         pub knot_spec: KnotType,
     }
@@ -2742,7 +2984,9 @@ pub mod explicit_draughting {
         #[deref_mut]
         #[holder(use_place_holder)]
         pub date: Date,
+        #[holder(use_place_holder)]
         pub day_component: DayInMonthNumber,
+        #[holder(use_place_holder)]
         pub month_component: MonthInYearNumber,
     }
     #[derive(
@@ -2909,6 +3153,7 @@ pub mod explicit_draughting {
         #[deref_mut]
         #[holder(use_place_holder)]
         pub point: Point,
+        #[holder(use_place_holder)]
         pub coordinates: Vec<LengthMeasure>,
     }
     #[derive(
@@ -2924,6 +3169,7 @@ pub mod explicit_draughting {
         #[deref_mut]
         #[holder(use_place_holder)]
         pub conic: Conic,
+        #[holder(use_place_holder)]
         pub radius: PositiveLengthMeasure,
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -3301,7 +3547,9 @@ pub mod explicit_draughting {
     # [holder (field = contract)]
     #[holder(generate_deserialize)]
     pub struct Contract {
+        #[holder(use_place_holder)]
         pub name: Label,
+        #[holder(use_place_holder)]
         pub purpose: Text,
         #[holder(use_place_holder)]
         pub kind: ContractType,
@@ -3348,6 +3596,7 @@ pub mod explicit_draughting {
     # [holder (field = contract_type)]
     #[holder(generate_deserialize)]
     pub struct ContractType {
+        #[holder(use_place_holder)]
         pub description: Label,
     }
     #[derive(
@@ -3363,6 +3612,7 @@ pub mod explicit_draughting {
         #[deref_mut]
         #[holder(use_place_holder)]
         pub named_unit: NamedUnit,
+        #[holder(use_place_holder)]
         pub name: Label,
         #[holder(use_place_holder)]
         pub conversion_factor: MeasureWithUnitAny,
@@ -3467,6 +3717,7 @@ pub mod explicit_draughting {
     # [holder (field = curve_style)]
     #[holder(generate_deserialize)]
     pub struct CurveStyle {
+        #[holder(use_place_holder)]
         pub name: Label,
         #[holder(use_place_holder)]
         pub curve_font: CurveFontOrScaledCurveFontSelect,
@@ -3480,6 +3731,7 @@ pub mod explicit_draughting {
     # [holder (field = curve_style_font)]
     #[holder(generate_deserialize)]
     pub struct CurveStyleFont {
+        #[holder(use_place_holder)]
         pub name: Label,
         #[holder(use_place_holder)]
         pub pattern_list: Vec<CurveStyleFontPattern>,
@@ -3489,7 +3741,9 @@ pub mod explicit_draughting {
     # [holder (field = curve_style_font_pattern)]
     #[holder(generate_deserialize)]
     pub struct CurveStyleFontPattern {
+        #[holder(use_place_holder)]
         pub visible_segment_length: PositiveLengthMeasure,
+        #[holder(use_place_holder)]
         pub invisible_segment_length: PositiveLengthMeasure,
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -3497,6 +3751,7 @@ pub mod explicit_draughting {
     # [holder (field = date)]
     #[holder(generate_deserialize)]
     pub struct Date {
+        #[holder(use_place_holder)]
         pub year_component: YearNumber,
     }
     #[derive(Debug, Clone, PartialEq, Holder)]
@@ -3795,8 +4050,11 @@ pub mod explicit_draughting {
     # [holder (field = document)]
     #[holder(generate_deserialize)]
     pub struct Document {
+        #[holder(use_place_holder)]
         pub id: Identifier,
+        #[holder(use_place_holder)]
         pub name: Label,
+        #[holder(use_place_holder)]
         pub description: Text,
         #[holder(use_place_holder)]
         pub kind: DocumentType,
@@ -3808,6 +4066,7 @@ pub mod explicit_draughting {
     pub struct DocumentReference {
         #[holder(use_place_holder)]
         pub assigned_document: Document,
+        #[holder(use_place_holder)]
         pub source: Label,
     }
     #[derive(Debug, Clone, PartialEq, Holder)]
@@ -3844,6 +4103,7 @@ pub mod explicit_draughting {
     # [holder (field = document_type)]
     #[holder(generate_deserialize)]
     pub struct DocumentType {
+        #[holder(use_place_holder)]
         pub product_data_type: Label,
     }
     #[derive(
@@ -4022,7 +4282,9 @@ pub mod explicit_draughting {
     # [holder (field = draughting_callout_relationship)]
     #[holder(generate_deserialize)]
     pub struct DraughtingCalloutRelationship {
+        #[holder(use_place_holder)]
         pub name: Label,
+        #[holder(use_place_holder)]
         pub description: Text,
         #[holder(use_place_holder)]
         pub relating_draughting_callout: DraughtingCalloutAny,
@@ -4382,7 +4644,9 @@ pub mod explicit_draughting {
     pub struct DraughtingTitle {
         #[holder(use_place_holder)]
         pub items: Vec<DraughtingTitledItem>,
+        #[holder(use_place_holder)]
         pub language: Label,
+        #[holder(use_place_holder)]
         pub contents: Text,
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -4390,7 +4654,9 @@ pub mod explicit_draughting {
     # [holder (field = drawing_definition)]
     #[holder(generate_deserialize)]
     pub struct DrawingDefinition {
+        #[holder(use_place_holder)]
         pub drawing_number: Identifier,
+        #[holder(use_place_holder)]
         pub drawing_type: Option<Label>,
     }
     #[derive(
@@ -4406,9 +4672,11 @@ pub mod explicit_draughting {
         #[deref_mut]
         #[holder(use_place_holder)]
         pub presentation_set: PresentationSet,
+        #[holder(use_place_holder)]
         pub revision_identifier: Identifier,
         #[holder(use_place_holder)]
         pub drawing_identifier: DrawingDefinition,
+        #[holder(use_place_holder)]
         pub intended_scale: Option<Text>,
     }
     #[derive(Debug, Clone, PartialEq, Holder)]
@@ -4479,6 +4747,7 @@ pub mod explicit_draughting {
         #[deref_mut]
         #[holder(use_place_holder)]
         pub presentation_area: PresentationArea,
+        #[holder(use_place_holder)]
         pub revision_identifier: Identifier,
     }
     #[derive(
@@ -4494,6 +4763,7 @@ pub mod explicit_draughting {
         #[deref_mut]
         #[holder(use_place_holder)]
         pub area_in_set: AreaInSet,
+        #[holder(use_place_holder)]
         pub sheet_number: Identifier,
     }
     #[derive(
@@ -4509,7 +4779,9 @@ pub mod explicit_draughting {
         #[deref_mut]
         #[holder(use_place_holder)]
         pub conic: Conic,
+        #[holder(use_place_holder)]
         pub semi_axis_1: PositiveLengthMeasure,
+        #[holder(use_place_holder)]
         pub semi_axis_2: PositiveLengthMeasure,
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -4670,6 +4942,7 @@ pub mod explicit_draughting {
     # [holder (field = fill_area_style)]
     #[holder(generate_deserialize)]
     pub struct FillAreaStyle {
+        #[holder(use_place_holder)]
         pub name: Label,
         #[holder(use_place_holder)]
         pub fill_styles: Vec<FillStyleSelect>,
@@ -4679,6 +4952,7 @@ pub mod explicit_draughting {
     # [holder (field = fill_area_style_colour)]
     #[holder(generate_deserialize)]
     pub struct FillAreaStyleColour {
+        #[holder(use_place_holder)]
         pub name: Label,
         #[holder(use_place_holder)]
         pub fill_colour: ColourAny,
@@ -4704,6 +4978,7 @@ pub mod explicit_draughting {
         pub point_of_reference_hatch_line: CartesianPoint,
         #[holder(use_place_holder)]
         pub pattern_start: CartesianPoint,
+        #[holder(use_place_holder)]
         pub hatch_line_angle: PlaneAngleMeasure,
     }
     #[derive(
@@ -4739,6 +5014,7 @@ pub mod explicit_draughting {
         pub tiling_pattern: TwoDirectionRepeatFactor,
         #[holder(use_place_holder)]
         pub tiles: Vec<FillAreaStyleTileShapeSelect>,
+        #[holder(use_place_holder)]
         pub tiling_scale: PositiveRatioMeasure,
     }
     #[derive(
@@ -4768,6 +5044,7 @@ pub mod explicit_draughting {
         #[deref_mut]
         #[holder(use_place_holder)]
         pub representation_context: RepresentationContext,
+        #[holder(use_place_holder)]
         pub coordinate_space_dimension: DimensionCount,
     }
     #[derive(
@@ -5159,7 +5436,9 @@ pub mod explicit_draughting {
     # [holder (field = group)]
     #[holder(generate_deserialize)]
     pub struct Group {
+        #[holder(use_place_holder)]
         pub name: Label,
+        #[holder(use_place_holder)]
         pub description: Text,
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -5204,7 +5483,9 @@ pub mod explicit_draughting {
     # [holder (field = group_relationship)]
     #[holder(generate_deserialize)]
     pub struct GroupRelationship {
+        #[holder(use_place_holder)]
         pub name: Label,
+        #[holder(use_place_holder)]
         pub description: Text,
         #[holder(use_place_holder)]
         pub relating_group: Group,
@@ -5224,7 +5505,9 @@ pub mod explicit_draughting {
         #[deref_mut]
         #[holder(use_place_holder)]
         pub conic: Conic,
+        #[holder(use_place_holder)]
         pub semi_axis: PositiveLengthMeasure,
+        #[holder(use_place_holder)]
         pub semi_imag_axis: PositiveLengthMeasure,
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -5627,6 +5910,7 @@ pub mod explicit_draughting {
         pub curve: Curve,
         #[holder(use_place_holder)]
         pub basis_curve: CurveAny,
+        #[holder(use_place_holder)]
         pub distance: LengthMeasure,
         pub self_intersect: Logical,
     }
@@ -5706,8 +5990,11 @@ pub mod explicit_draughting {
     # [holder (field = organization)]
     #[holder(generate_deserialize)]
     pub struct Organization {
+        #[holder(use_place_holder)]
         pub id: Option<Identifier>,
+        #[holder(use_place_holder)]
         pub name: Label,
+        #[holder(use_place_holder)]
         pub description: Text,
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -5754,6 +6041,7 @@ pub mod explicit_draughting {
     # [holder (field = organization_role)]
     #[holder(generate_deserialize)]
     pub struct OrganizationRole {
+        #[holder(use_place_holder)]
         pub name: Label,
     }
     #[derive(
@@ -5771,6 +6059,7 @@ pub mod explicit_draughting {
         pub address: Address,
         #[holder(use_place_holder)]
         pub organizations: Vec<Organization>,
+        #[holder(use_place_holder)]
         pub description: Text,
     }
     #[derive(
@@ -5786,6 +6075,7 @@ pub mod explicit_draughting {
         #[deref_mut]
         #[holder(use_place_holder)]
         pub conic: Conic,
+        #[holder(use_place_holder)]
         pub focal_dist: LengthMeasure,
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -5793,11 +6083,17 @@ pub mod explicit_draughting {
     # [holder (field = person)]
     #[holder(generate_deserialize)]
     pub struct Person {
+        #[holder(use_place_holder)]
         pub id: Identifier,
+        #[holder(use_place_holder)]
         pub last_name: Option<Label>,
+        #[holder(use_place_holder)]
         pub first_name: Option<Label>,
+        #[holder(use_place_holder)]
         pub middle_names: Option<Vec<Label>>,
+        #[holder(use_place_holder)]
         pub prefix_titles: Option<Vec<Label>>,
+        #[holder(use_place_holder)]
         pub suffix_titles: Option<Vec<Label>>,
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -5860,6 +6156,7 @@ pub mod explicit_draughting {
     # [holder (field = person_and_organization_role)]
     #[holder(generate_deserialize)]
     pub struct PersonAndOrganizationRole {
+        #[holder(use_place_holder)]
         pub name: Label,
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -5906,6 +6203,7 @@ pub mod explicit_draughting {
     # [holder (field = person_role)]
     #[holder(generate_deserialize)]
     pub struct PersonRole {
+        #[holder(use_place_holder)]
         pub name: Label,
     }
     #[derive(
@@ -5923,6 +6221,7 @@ pub mod explicit_draughting {
         pub address: Address,
         #[holder(use_place_holder)]
         pub people: Vec<Person>,
+        #[holder(use_place_holder)]
         pub description: Text,
     }
     #[derive(
@@ -6009,7 +6308,9 @@ pub mod explicit_draughting {
         #[deref_mut]
         #[holder(use_place_holder)]
         pub geometric_representation_item: GeometricRepresentationItem,
+        #[holder(use_place_holder)]
         pub size_in_x: LengthMeasure,
+        #[holder(use_place_holder)]
         pub size_in_y: LengthMeasure,
     }
     #[derive(Debug, Clone, PartialEq, Holder)]
@@ -6153,6 +6454,7 @@ pub mod explicit_draughting {
         pub point: Point,
         #[holder(use_place_holder)]
         pub basis_curve: CurveAny,
+        #[holder(use_place_holder)]
         pub point_parameter: ParameterValue,
     }
     #[derive(
@@ -6326,6 +6628,7 @@ pub mod explicit_draughting {
     # [holder (field = pre_defined_item)]
     #[holder(generate_deserialize)]
     pub struct PreDefinedItem {
+        #[holder(use_place_holder)]
         pub name: Label,
     }
     #[derive(Debug, Clone, PartialEq, Holder)]
@@ -6618,7 +6921,9 @@ pub mod explicit_draughting {
     # [holder (field = presentation_layer_assignment)]
     #[holder(generate_deserialize)]
     pub struct PresentationLayerAssignment {
+        #[holder(use_place_holder)]
         pub name: Label,
+        #[holder(use_place_holder)]
         pub description: Text,
         #[holder(use_place_holder)]
         pub assigned_items: Vec<LayeredItem>,
@@ -6860,8 +7165,11 @@ pub mod explicit_draughting {
     # [holder (field = product)]
     #[holder(generate_deserialize)]
     pub struct Product {
+        #[holder(use_place_holder)]
         pub id: Identifier,
+        #[holder(use_place_holder)]
         pub name: Label,
+        #[holder(use_place_holder)]
         pub description: Text,
         #[holder(use_place_holder)]
         pub frame_of_reference: Vec<ProductContext>,
@@ -6879,6 +7187,7 @@ pub mod explicit_draughting {
         #[deref_mut]
         #[holder(use_place_holder)]
         pub application_context_element: ApplicationContextElement,
+        #[holder(use_place_holder)]
         pub discipline_type: Label,
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -6886,7 +7195,9 @@ pub mod explicit_draughting {
     # [holder (field = product_definition)]
     #[holder(generate_deserialize)]
     pub struct ProductDefinition {
+        #[holder(use_place_holder)]
         pub id: Identifier,
+        #[holder(use_place_holder)]
         pub description: Text,
         #[holder(use_place_holder)]
         pub formation: ProductDefinitionFormation,
@@ -6906,6 +7217,7 @@ pub mod explicit_draughting {
         #[deref_mut]
         #[holder(use_place_holder)]
         pub application_context_element: ApplicationContextElement,
+        #[holder(use_place_holder)]
         pub life_cycle_stage: Label,
     }
     #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
@@ -6913,7 +7225,9 @@ pub mod explicit_draughting {
     # [holder (field = product_definition_formation)]
     #[holder(generate_deserialize)]
     pub struct ProductDefinitionFormation {
+        #[holder(use_place_holder)]
         pub id: Identifier,
+        #[holder(use_place_holder)]
         pub description: Text,
         #[holder(use_place_holder)]
         pub of_product: Product,
@@ -7006,7 +7320,9 @@ pub mod explicit_draughting {
     # [holder (field = property_definition)]
     #[holder(generate_deserialize)]
     pub struct PropertyDefinition {
+        #[holder(use_place_holder)]
         pub name: Label,
+        #[holder(use_place_holder)]
         pub description: Text,
         #[holder(use_place_holder)]
         pub definition: CharacterizedDefinition,
@@ -7133,6 +7449,7 @@ pub mod explicit_draughting {
     # [holder (field = representation)]
     #[holder(generate_deserialize)]
     pub struct Representation {
+        #[holder(use_place_holder)]
         pub name: Label,
         #[holder(use_place_holder)]
         pub items: Vec<RepresentationItemAny>,
@@ -7200,7 +7517,9 @@ pub mod explicit_draughting {
     # [holder (field = representation_context)]
     #[holder(generate_deserialize)]
     pub struct RepresentationContext {
+        #[holder(use_place_holder)]
         pub context_identifier: Identifier,
+        #[holder(use_place_holder)]
         pub context_type: Text,
     }
     #[derive(Debug, Clone, PartialEq, Holder)]
@@ -7246,6 +7565,7 @@ pub mod explicit_draughting {
     # [holder (field = representation_item)]
     #[holder(generate_deserialize)]
     pub struct RepresentationItem {
+        #[holder(use_place_holder)]
         pub name: Label,
     }
     #[derive(Debug, Clone, PartialEq, Holder)]
@@ -7348,7 +7668,9 @@ pub mod explicit_draughting {
     # [holder (field = security_classification)]
     #[holder(generate_deserialize)]
     pub struct SecurityClassification {
+        #[holder(use_place_holder)]
         pub name: Label,
+        #[holder(use_place_holder)]
         pub purpose: Text,
         #[holder(use_place_holder)]
         pub security_level: SecurityClassificationLevel,
@@ -7401,6 +7723,7 @@ pub mod explicit_draughting {
     # [holder (field = security_classification_level)]
     #[holder(generate_deserialize)]
     pub struct SecurityClassificationLevel {
+        #[holder(use_place_holder)]
         pub name: Label,
     }
     #[derive(
@@ -7659,6 +7982,7 @@ pub mod explicit_draughting {
     # [holder (field = symbol_style)]
     #[holder(generate_deserialize)]
     pub struct SymbolStyle {
+        #[holder(use_place_holder)]
         pub name: Label,
         #[holder(use_place_holder)]
         pub style_of_symbol: SymbolStyleSelect,
@@ -7678,7 +8002,9 @@ pub mod explicit_draughting {
         pub geometric_representation_item: GeometricRepresentationItem,
         #[holder(use_place_holder)]
         pub placement: Axis2Placement,
+        #[holder(use_place_holder)]
         pub x_scale: PositiveRatioMeasure,
+        #[holder(use_place_holder)]
         pub y_scale: PositiveRatioMeasure,
     }
     #[derive(
@@ -7763,9 +8089,11 @@ pub mod explicit_draughting {
         #[deref_mut]
         #[holder(use_place_holder)]
         pub geometric_representation_item: GeometricRepresentationItem,
+        #[holder(use_place_holder)]
         pub literal: PresentableText,
         #[holder(use_place_holder)]
         pub placement: Axis2Placement,
+        #[holder(use_place_holder)]
         pub alignment: TextAlignment,
         pub path: TextPath,
         #[holder(use_place_holder)]
@@ -7891,6 +8219,7 @@ pub mod explicit_draughting {
         #[deref_mut]
         #[holder(use_place_holder)]
         pub text_literal: TextLiteral,
+        #[holder(use_place_holder)]
         pub delineation: TextDelineation,
     }
     #[derive(Debug, Clone, PartialEq, Holder)]
@@ -7959,6 +8288,7 @@ pub mod explicit_draughting {
     # [holder (field = text_style)]
     #[holder(generate_deserialize)]
     pub struct TextStyle {
+        #[holder(use_place_holder)]
         pub name: Label,
         #[holder(use_place_holder)]
         pub character_appearance: CharacterStyleSelect,
@@ -8108,6 +8438,7 @@ pub mod explicit_draughting {
         pub geometric_representation_item: GeometricRepresentationItem,
         #[holder(use_place_holder)]
         pub orientation: Direction,
+        #[holder(use_place_holder)]
         pub magnitude: LengthMeasure,
     }
 }

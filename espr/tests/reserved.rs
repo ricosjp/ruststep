@@ -53,7 +53,9 @@ fn reserved_keyword() {
                 &self.b
             }
         }
-        #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, :: ruststep_derive :: Holder)]
+        #[derive(
+            Clone, Debug, PartialEq, AsRef, Deref, DerefMut, Into, From, :: ruststep_derive :: Holder,
+        )]
         # [holder (table = Tables)]
         # [holder (field = b)]
         #[holder(generate_deserialize)]

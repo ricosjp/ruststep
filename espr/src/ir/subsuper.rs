@@ -113,6 +113,6 @@ mod tests {
 
         assert_eq!(ss.get_supertypes(&base), None);
         assert_eq!(ss.get_supertypes(&sub1), Some([base.clone()].as_ref()));
-        assert_eq!(ss.get_supertypes(&sub2), Some([base.clone()].as_ref()));
+        assert_eq!(ss.get_supertypes(&sub2), Some([base].as_ref()));
     }
 }

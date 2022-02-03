@@ -51,6 +51,8 @@ pub enum TypeRef {
         /// Then both `a` and `b` are simple.
         ///
         is_simple: bool,
+        /// Enumeration, declared by `TYPE a = ENUMERATION OF (..); END_TYPE;`.
+        is_enumerate: bool,
     },
 
     /* Declared as `ENTITY` */
@@ -73,6 +75,10 @@ pub enum TypeRef {
 }
 
 impl TypeRef {
+    /// Returns `true` iff `self` is:
+    /// - a simple type,
+    /// - a named type whose underlying type is simple, or,
+    /// - a set or list of a type `x` such that `x.is_simple() == true`.
     pub fn is_simple(&self) -> bool {
         match self {
             TypeRef::SimpleType(..) => true,
@@ -120,10 +126,28 @@ impl TypeRef {
                         Named::Entity(_) => break false,
                     }
                 };
+                let is_enumerate = match ns.get(path)? {
+                    Named::Type(ast::TypeDecl {
+                        underlying_type, ..
+                    }) => match underlying_type {
+                        // Enumeration e.g.
+                        //
+                        // ```
+                        // TYPE null_style = ENUMERATION OF (null); END_TYPE;
+                        // ```
+                        //
+                        // should be simple because it will be expressed as single integer.
+                        ast::Type::Simple(_) => false,
+                        ast::Type::Enumeration { .. } => true,
+                        _ => false,
+                    },
+                    Named::Entity(_) => false,
+                };
                 Ok(TypeRef::Named {
                     scope: path.scope.clone(),
                     name: path.name.clone(),
                     is_simple,
+                    is_enumerate,
                 })
             }
             _ => unimplemented!("Path to TypeRef conversion only supports Entity and Types yet."),

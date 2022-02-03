@@ -17,10 +17,12 @@ impl ToTokens for TypeDecl {
 
 impl ToTokens for Simple {
     fn to_tokens(&self, tokens: &mut TokenStream) {
+        let field_name = format_ident!("{}", &self.id.to_snake_case());
         let id = format_ident!("{}", &self.id.to_pascal_case());
         let ty = &self.ty;
+        let (derive, _) = simple_meta(&field_name);
         tokens.append_all(quote! {
-            #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, From, Into, ::serde::Serialize, ::serde::Deserialize)]
+            #derive
             pub struct #id(pub #ty);
         });
     }
@@ -32,10 +34,11 @@ impl ToTokens for Rename {
         let id = format_ident!("{}", &self.id.to_pascal_case());
         let ty = &self.ty;
         let (derive, use_place_holder) = match ty {
-            TypeRef::SimpleType(_) => simple_meta(),
-            TypeRef::Named { is_simple, .. } => {
-                if *is_simple {
-                    simple_meta()
+            TypeRef::SimpleType(_) => simple_meta(&field_name),
+            TypeRef::Named { is_enumerate, .. } => {
+                // Enumeration does not have Holder.
+                if *is_enumerate {
+                    simple_meta(&field_name)
                 } else {
                     rename_meta(&field_name)
                 }
@@ -50,9 +53,14 @@ impl ToTokens for Rename {
     }
 }
 
-fn simple_meta() -> (TokenStream, TokenStream) {
+fn simple_meta(field_name: &syn::Ident) -> (TokenStream, TokenStream) {
     (
-        quote! {#[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, ::serde::Serialize, ::serde::Deserialize)]},
+        quote! {
+            #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, Into, From, ::ruststep_derive::Holder)]
+            #[holder(table = Tables)]
+            #[holder(field = #field_name)]
+            #[holder(generate_deserialize)]
+        },
         quote! {},
     )
 }
@@ -60,7 +68,7 @@ fn simple_meta() -> (TokenStream, TokenStream) {
 fn rename_meta(field_name: &syn::Ident) -> (TokenStream, TokenStream) {
     (
         quote! {
-            #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, ::ruststep_derive::Holder)]
+            #[derive(Clone, Debug, PartialEq, AsRef, Deref, DerefMut, Into, From, ::ruststep_derive::Holder)]
             #[holder(table = Tables)]
             #[holder(field = #field_name)]
             #[holder(generate_deserialize)]
@@ -110,11 +118,11 @@ impl ToTokens for Select {
                     use_place_holder.push(quote! { #[holder(use_place_holder)] });
                 }
                 TypeRef::Named {
-                    name, is_simple, ..
+                    name, is_enumerate, ..
                 } => {
                     field.push(quote! {});
                     entries.push(format_ident!("{}", name.to_pascal_case()));
-                    if *is_simple {
+                    if *is_enumerate {
                         entry_types.push(quote! { #ty });
                         use_place_holder.push(quote! {});
                     } else {
