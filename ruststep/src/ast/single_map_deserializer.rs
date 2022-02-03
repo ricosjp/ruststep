@@ -39,8 +39,7 @@ impl<'de> de::MapAccess<'de> for SingleMapDeserializer {
         V: de::DeserializeSeed<'de>,
     {
         if let Some(value) = self.value.take() {
-            let value = value.into_deserializer();
-            let value: V::Value = seed.deserialize(value)?;
+            let value: V::Value = seed.deserialize(&value)?;
             Ok(value)
         } else {
             unreachable!("next_value_seed before next_key_seed is incorrect.")
