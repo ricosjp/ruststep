@@ -157,7 +157,7 @@ impl<'de, 'param> de::Deserializer<'de> for &'param Parameter {
     {
         match self {
             Parameter::Typed { name, ty } => {
-                visitor.visit_map(SingleMapDeserializer::new(name, ty.as_ref()))
+                visitor.visit_map(SingleMapDeserializer::new(name, *ty.clone()))
             }
             Parameter::Integer(val) => visitor.visit_i64(*val),
             Parameter::Real(val) => visitor.visit_f64(*val),

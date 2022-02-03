@@ -15,6 +15,7 @@ In addition to original Keep-a-Changelog, we use following rules:
 ## Unreleased (will be 0.2.0)
 
 ### Added
+- Drop type parameter T in SingleMapDeserializer https://github.com/ricosjp/ruststep/pull/191
 - Add the module created from AP203. https://github.com/ricosjp/ruststep/pull/185
 - Legalize the type declare of `SET` and `LIST`. https://github.com/ricosjp/ruststep/pull/171
 - Snapshot testing for ruststep-derive https://github.com/ricosjp/ruststep/pull/175
