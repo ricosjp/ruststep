@@ -12,12 +12,10 @@ SCHEMA test_schema;
     );
   END_TYPE;
 
-  ENTITY c_entity;
-    x: REAL;
+  ENTITY c;
+    a: a;
+    b: b;
   END_ENTITY;
-
-  TYPE c = c_entity;
-  END_TYPE;
 
 END_SCHEMA;
 "#;
@@ -36,19 +34,15 @@ fn type_decl() {
         use std::collections::HashMap;
         #[derive(Debug, Clone, PartialEq, Default, TableInit)]
         pub struct Tables {
-            c_entity: HashMap<u64, as_holder!(CEntity)>,
-            a: HashMap<u64, as_holder!(A)>,
             c: HashMap<u64, as_holder!(C)>,
+            a: HashMap<u64, as_holder!(A)>,
         }
         impl Tables {
-            pub fn c_entity_holders(&self) -> &HashMap<u64, as_holder!(CEntity)> {
-                &self.c_entity
+            pub fn c_holders(&self) -> &HashMap<u64, as_holder!(C)> {
+                &self.c
             }
             pub fn a_holders(&self) -> &HashMap<u64, as_holder!(A)> {
                 &self.a
-            }
-            pub fn c_holders(&self) -> &HashMap<u64, as_holder!(C)> {
-                &self.c
             }
         }
         #[derive(
@@ -64,19 +58,14 @@ fn type_decl() {
             Sore,
             Dore,
         }
-        #[derive(
-            Clone, Debug, PartialEq, AsRef, Deref, DerefMut, Into, From, :: ruststep_derive :: Holder,
-        )]
+        #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
         # [holder (table = Tables)]
         # [holder (field = c)]
         #[holder(generate_deserialize)]
-        pub struct C(#[holder(use_place_holder)] pub CEntity);
-        #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
-        # [holder (table = Tables)]
-        # [holder (field = c_entity)]
-        #[holder(generate_deserialize)]
-        pub struct CEntity {
-            pub x: f64,
+        pub struct C {
+            #[holder(use_place_holder)]
+            pub a: A,
+            pub b: B,
         }
     }
     "###);
