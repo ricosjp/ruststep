@@ -9,7 +9,7 @@ use std::str::FromStr;
 espr_derive::inline_express!(
     r#"
     SCHEMA test_schema;
-	  TYPE a = STRING;
+    TYPE a = STRING;
       END_TYPE;
 
       TYPE a_rename = a;
@@ -25,7 +25,7 @@ espr_derive::inline_express!(
           DORE
         );
       END_TYPE;
-      
+
       TYPE b_rename = b;
       END_TYPE;
 
@@ -43,7 +43,7 @@ espr_derive::inline_express!(
       TYPE c = abs_entity;
       END_TYPE;
 
-	END_SCHEMA;
+    END_SCHEMA;
     "#
 );
 
