@@ -12,11 +12,18 @@ SCHEMA test_schema;
     );
   END_TYPE;
 
-  ENTITY c;
+  TYPE c = a;
+  END_TYPE;
+
+  TYPE d = b;
+  END_TYPE;
+
+  ENTITY e;
     a: a;
     b: b;
+    c: c;
+    d: d;
   END_ENTITY;
-
 END_SCHEMA;
 "#;
 
@@ -34,15 +41,23 @@ fn type_decl() {
         use std::collections::HashMap;
         #[derive(Debug, Clone, PartialEq, Default, TableInit)]
         pub struct Tables {
-            c: HashMap<u64, as_holder!(C)>,
+            e: HashMap<u64, as_holder!(E)>,
             a: HashMap<u64, as_holder!(A)>,
+            c: HashMap<u64, as_holder!(C)>,
+            d: HashMap<u64, as_holder!(D)>,
         }
         impl Tables {
-            pub fn c_holders(&self) -> &HashMap<u64, as_holder!(C)> {
-                &self.c
+            pub fn e_holders(&self) -> &HashMap<u64, as_holder!(E)> {
+                &self.e
             }
             pub fn a_holders(&self) -> &HashMap<u64, as_holder!(A)> {
                 &self.a
+            }
+            pub fn c_holders(&self) -> &HashMap<u64, as_holder!(C)> {
+                &self.c
+            }
+            pub fn d_holders(&self) -> &HashMap<u64, as_holder!(D)> {
+                &self.d
             }
         }
         #[derive(
@@ -58,14 +73,32 @@ fn type_decl() {
             Sore,
             Dore,
         }
-        #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+        #[derive(
+            Clone, Debug, PartialEq, AsRef, Deref, DerefMut, Into, From, :: ruststep_derive :: Holder,
+        )]
         # [holder (table = Tables)]
         # [holder (field = c)]
         #[holder(generate_deserialize)]
-        pub struct C {
+        pub struct C(#[holder(use_place_holder)] pub A);
+        #[derive(
+            Clone, Debug, PartialEq, AsRef, Deref, DerefMut, Into, From, :: ruststep_derive :: Holder,
+        )]
+        # [holder (table = Tables)]
+        # [holder (field = d)]
+        #[holder(generate_deserialize)]
+        pub struct D(pub B);
+        #[derive(Debug, Clone, PartialEq, :: derive_new :: new, Holder)]
+        # [holder (table = Tables)]
+        # [holder (field = e)]
+        #[holder(generate_deserialize)]
+        pub struct E {
             #[holder(use_place_holder)]
             pub a: A,
             pub b: B,
+            #[holder(use_place_holder)]
+            pub c: C,
+            #[holder(use_place_holder)]
+            pub d: D,
         }
     }
     "###);
