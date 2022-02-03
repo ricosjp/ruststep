@@ -32,7 +32,7 @@ impl<'de, 'record> de::Deserializer<'de> for &'record Record {
     {
         visitor.visit_map(SingleMapDeserializer::new(
             &self.name,
-            self.parameters.iter().collect::<Vec<&Parameter>>(),
+            self.parameters.iter().collect::<Parameter>(),
         ))
     }
 
