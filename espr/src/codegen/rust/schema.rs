@@ -37,8 +37,6 @@ impl Schema {
         let types = &self.types;
         let entities = &self.entities;
         let type_decls = self.types.iter().filter(|e| match e {
-            // Only Enumeration is treated as a simple type, like f64, etc.
-            // In other words, no holder generation, etc. is done.
             TypeDecl::Enumeration(_) => false,
             _ => true,
         });
