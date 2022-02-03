@@ -209,9 +209,7 @@ impl Entity {
                     attributes.push(parse_quote! { #[deref] });
                     attributes.push(parse_quote! { #[deref_mut] });
                 }
-                if !ty.is_direct_simple() {
-                    attributes.push(parse_quote! { #[holder(use_place_holder)] });
-                }
+                attributes.push(parse_quote! { #[holder(use_place_holder)] });
                 let (name, ty) = match ty {
                     TypeRef::Named { name, .. } | TypeRef::Entity { name, .. } => {
                         let ty = format_ident!("{}", name.to_pascal_case());
