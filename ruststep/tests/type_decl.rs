@@ -1,9 +1,6 @@
 // Test for deserializing Holder structs
 
-use ruststep::{ast::*, parser::exchange, place_holder::PlaceHolder, tables::*};
-
-use nom::Finish;
-use serde::Deserialize;
+use ruststep::tables::*;
 use std::str::FromStr;
 
 espr_derive::inline_express!(
@@ -40,7 +37,6 @@ use test_schema::*;
 const EXAMPLE: &str = r#"
 DATA;
   #1 = A('KORE');
-  #2 = B(.ARE.);
   #3 = C(#1);
   #4 = D(.DORE.);
   #5 = E(#1, .SORE., #3, #4);
@@ -48,32 +44,25 @@ ENDSEC;
 "#;
 
 #[test]
-fn deserialize_a_holder() {
-    // from Record
-    let (residual, p): (_, Record) = exchange::simple_record("A('KORE')").finish().unwrap();
-    assert_eq!(residual, "");
-    dbg!(&p);
-    let a: AHolder = Deserialize::deserialize(&p).unwrap();
-    assert_eq!(a, AHolder("KORE".to_string()));
-
-    // from Parameter::Typed
-    let (residual, p): (_, Parameter) = exchange::parameter("A(('KORE'))").finish().unwrap();
-    assert_eq!(residual, "");
-    dbg!(&p);
-    let a: AHolder = Deserialize::deserialize(&p).unwrap();
-    assert_eq!(a, AHolder("KORE".to_string()));
-
-    // Test for PlaceHolder<AHolder>
-    let (residual, p): (_, Record) = exchange::simple_record("A('KORE')").finish().unwrap();
-    assert_eq!(residual, "");
-    dbg!(&p);
-    let a: PlaceHolder<AHolder> = Deserialize::deserialize(&p).unwrap();
-    assert_eq!(a, PlaceHolder::Owned(AHolder("KORE".to_string())));
-}
-
-#[test]
-fn get_owned_a() {
+fn get_owned() {
     let table = Tables::from_str(EXAMPLE).unwrap();
     let a = EntityTable::<AHolder>::get_owned(&table, 1).unwrap();
     assert_eq!(a, A("KORE".to_string()));
+
+    let c = EntityTable::<CHolder>::get_owned(&table, 3).unwrap();
+    assert_eq!(c, C(A("KORE".to_string())));
+
+    let d = EntityTable::<DHolder>::get_owned(&table, 4).unwrap();
+    assert_eq!(d, D(B::Dore));
+
+    let e = EntityTable::<EHolder>::get_owned(&table, 5).unwrap();
+    assert_eq!(
+        e,
+        E {
+            a: A("KORE".to_string()),
+            b: B::Sore,
+            c: C(A("KORE".to_string())),
+            d: D(B::Dore),
+        }
+    );
 }
