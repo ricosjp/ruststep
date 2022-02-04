@@ -32,14 +32,14 @@ use serde::{
 /// // inline typed struct
 /// let (residual, p) = exchange::parameter("FILE_NAME('ruststep')").finish().unwrap();
 /// assert_eq!(residual, "");
-/// assert!(matches!(p, Parameter::Typed { .. }));
+/// assert!(matches!(p, Parameter::Typed(_)));
 /// ```
 ///
 /// Inline struct or list can be nested, i.e. `Parameter` can be a tree.
 ///
 /// ```
 /// use nom::Finish;
-/// use ruststep::{parser::exchange, ast::Parameter};
+/// use ruststep::{parser::exchange, ast::{Parameter, Record}};
 ///
 /// let (residual, p) = exchange::parameter("B((1.0, A((2.0, 3.0))))")
 ///     .finish()
@@ -47,16 +47,16 @@ use serde::{
 /// assert_eq!(residual, "");
 ///
 /// // A((2.0, 3.0))
-/// let a = Parameter::Typed {
+/// let a = Parameter::Typed(Record {
 ///     name: "A".to_string(),
-///     ty: Box::new(Parameter::from_iter(&[Parameter::real(2.0), Parameter::real(3.0)])),
-/// };
+///     parameter: Box::new(Parameter::from_iter(&[Parameter::real(2.0), Parameter::real(3.0)])),
+/// });
 ///
 /// // B((1.0, a))
-/// let b = Parameter::Typed {
+/// let b = Parameter::Typed(Record {
 ///     name: "B".to_string(),
-///     ty: Box::new(Parameter::from_iter(&[Parameter::real(1.0), a])),
-/// };
+///     parameter: Box::new(Parameter::from_iter(&[Parameter::real(1.0), a])),
+/// });
 ///
 /// assert_eq!(p, b);
 /// ```
