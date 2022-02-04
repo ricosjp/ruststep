@@ -77,7 +77,7 @@ use serde::{
 #[derive(Debug, Clone, PartialEq)]
 pub enum Parameter {
     /// Inline *Typed* struct
-    Typed { name: String, ty: Box<Parameter> },
+    Typed(Record),
 
     /// Signed integer
     Integer(i64),
@@ -156,9 +156,7 @@ impl<'de, 'param> de::Deserializer<'de> for &'param Parameter {
         V: de::Visitor<'de>,
     {
         match self {
-            Parameter::Typed { name, ty } => {
-                visitor.visit_map(SingleMapDeserializer::new(name, *ty.clone()))
-            }
+            Parameter::Typed(record) => de::Deserializer::deserialize_any(record, visitor),
             Parameter::Integer(val) => visitor.visit_i64(*val),
             Parameter::Real(val) => visitor.visit_f64(*val),
             Parameter::String(val) => visitor.visit_str(val),

@@ -19,9 +19,11 @@ pub fn parameter(input: &str) -> ParseResult<Parameter> {
 /// typed_parameter = [keyword] `(` [parameter] `)` .
 pub fn typed_parameter(input: &str) -> ParseResult<Parameter> {
     tuple_((keyword, char_('('), parameter, char_(')')))
-        .map(|(name, _open, ty, _close)| Parameter::Typed {
-            name,
-            ty: Box::new(ty),
+        .map(|(name, _open, ty, _close)| {
+            Parameter::Typed(Record {
+                name,
+                parameters: vec![ty],
+            })
         })
         .parse(input)
 }
