@@ -1,4 +1,4 @@
-use super::{parameter::Parameter, SingleMapDeserializer};
+use super::{parameter::Parameter, RecordDeserializer};
 use serde::{de, forward_to_deserialize_any, Deserialize};
 
 #[cfg(doc)] // for doc-link
@@ -34,19 +34,19 @@ impl<'de, 'value> de::Deserializer<'de> for &'value RValue {
         V: de::Visitor<'de>,
     {
         match self {
-            RValue::Entity(id) => visitor.visit_enum(SingleMapDeserializer::new(
+            RValue::Entity(id) => visitor.visit_enum(RecordDeserializer::new(
                 "Entity",
                 Parameter::Integer(*id as i64),
             )),
-            RValue::Value(id) => visitor.visit_enum(SingleMapDeserializer::new(
+            RValue::Value(id) => visitor.visit_enum(RecordDeserializer::new(
                 "Value",
                 Parameter::Integer(*id as i64),
             )),
-            RValue::ConstantEntity(name) => visitor.visit_enum(SingleMapDeserializer::new(
+            RValue::ConstantEntity(name) => visitor.visit_enum(RecordDeserializer::new(
                 "ConstantEntity",
                 Parameter::String(name.clone()),
             )),
-            RValue::ConstantValue(name) => visitor.visit_enum(SingleMapDeserializer::new(
+            RValue::ConstantValue(name) => visitor.visit_enum(RecordDeserializer::new(
                 "ConstantValue",
                 Parameter::String(name.clone()),
             )),

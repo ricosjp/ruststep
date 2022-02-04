@@ -3,14 +3,14 @@ use serde::de::{self, IntoDeserializer};
 
 /// Deserializer corresponding to a single-key map like `{ "A": [1.0, 2.0] }`
 #[derive(Debug)]
-pub struct SingleMapDeserializer {
+pub struct RecordDeserializer {
     key: Option<String>,
     value: Option<Parameter>,
 }
 
-impl SingleMapDeserializer {
+impl RecordDeserializer {
     pub fn new(key: &str, value: Parameter) -> Self {
-        SingleMapDeserializer {
+        RecordDeserializer {
             key: Some(key.to_string()),
             value: Some(value),
         }
@@ -18,7 +18,7 @@ impl SingleMapDeserializer {
 }
 
 // Entry point of `visit_map`
-impl<'de> de::MapAccess<'de> for SingleMapDeserializer {
+impl<'de> de::MapAccess<'de> for RecordDeserializer {
     type Error = crate::error::Error;
 
     fn next_key_seed<K>(&mut self, seed: K) -> Result<Option<K::Value>, Self::Error>
@@ -48,7 +48,7 @@ impl<'de> de::MapAccess<'de> for SingleMapDeserializer {
 }
 
 // Entry point of `visit_enum`
-impl<'de> de::EnumAccess<'de> for SingleMapDeserializer {
+impl<'de> de::EnumAccess<'de> for RecordDeserializer {
     type Error = crate::error::Error;
     type Variant = Self; // this requires `VariantAccess` (see below impl)
 
@@ -77,10 +77,10 @@ impl<'de> de::EnumAccess<'de> for SingleMapDeserializer {
 // - "tuple_variant"   e.g. the `E::T` in `enum E { T(u8, u8) }`
 // - "struct_variant"  e.g. the `E::S` in `enum E { S { r: u8, g: u8, b: u8 } }`
 //
-// But, `SingleMapDeserializer` is only used for "newtype_variant" case,
+// But, `RecordDeserializer` is only used for "newtype_variant" case,
 // and returns `Err` in other cases.
 //
-impl<'de> de::VariantAccess<'de> for SingleMapDeserializer {
+impl<'de> de::VariantAccess<'de> for RecordDeserializer {
     type Error = crate::error::Error;
 
     fn unit_variant(self) -> Result<(), Self::Error> {
