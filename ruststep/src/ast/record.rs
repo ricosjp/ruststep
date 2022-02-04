@@ -62,6 +62,33 @@ pub struct RecordDeserializer {
     value: Option<Parameter>,
 }
 
+impl<'de, 'record> de::IntoDeserializer<'de, crate::error::Error> for &'record Record {
+    type Deserializer = RecordDeserializer;
+    fn into_deserializer(self) -> RecordDeserializer {
+        RecordDeserializer {
+            key: Some(self.name.to_string()),
+            value: Some(*self.parameter.clone()),
+        }
+    }
+}
+
+impl<'de> de::Deserializer<'de> for RecordDeserializer {
+    type Error = Error;
+
+    fn deserialize_any<V>(self, visitor: V) -> Result<V::Value>
+    where
+        V: de::Visitor<'de>,
+    {
+        visitor.visit_map(self)
+    }
+
+    forward_to_deserialize_any! {
+        bool i8 i16 i32 i64 i128 u8 u16 u32 u64 u128 f32 f64 char str string
+        bytes byte_buf option unit unit_struct newtype_struct seq tuple
+        struct tuple_struct map enum identifier ignored_any
+    }
+}
+
 impl RecordDeserializer {
     pub fn new(key: &str, value: Parameter) -> Self {
         RecordDeserializer {
