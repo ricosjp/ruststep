@@ -20,7 +20,7 @@ use std::str::FromStr;
 #[derive(Debug, Clone, PartialEq)]
 pub struct Record {
     pub name: String,
-    pub parameters: Vec<Parameter>,
+    pub parameter: Box<Parameter>,
 }
 
 impl<'de, 'record> de::Deserializer<'de> for &'record Record {
@@ -32,7 +32,7 @@ impl<'de, 'record> de::Deserializer<'de> for &'record Record {
     {
         visitor.visit_map(SingleMapDeserializer::new(
             &self.name,
-            self.parameters.iter().collect::<Parameter>(),
+            *self.parameter.clone(),
         ))
     }
 

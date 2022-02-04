@@ -22,7 +22,7 @@ pub fn typed_parameter(input: &str) -> ParseResult<Parameter> {
         .map(|(name, _open, ty, _close)| {
             Parameter::Typed(Record {
                 name,
-                parameters: vec![ty],
+                parameter: Box::new(ty),
             })
         })
         .parse(input)

@@ -9,7 +9,7 @@ pub fn to_record(obj: &impl ser::Serialize) -> Result<Record> {
     assert!(ser.stack.is_empty()); // should panic because this must be bug, not a valid input
     Ok(Record {
         name: ser.name,
-        parameters: ser.parameters,
+        parameter: Box::new(ser.parameters.iter().collect()),
     })
 }
 
@@ -303,7 +303,7 @@ impl<'se> ser::SerializeStruct for &'se mut RecordSerializer {
             let params = std::mem::replace(&mut self.parameters, params);
             self.parameters.push(Parameter::Typed(Record {
                 name,
-                parameters: params,
+                parameter: Box::new(params.into_iter().collect()),
             }));
         }
         Ok(())
