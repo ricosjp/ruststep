@@ -112,10 +112,6 @@ impl Parameter {
     pub fn string(s: &str) -> Self {
         Parameter::String(s.to_string())
     }
-
-    pub fn from_iter<'a>(iter: impl IntoIterator<Item = &'a Parameter>) -> Self {
-        std::iter::FromIterator::from_iter(iter)
-    }
 }
 
 impl From<i64> for Parameter {
