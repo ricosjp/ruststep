@@ -16,7 +16,7 @@ use std::str::FromStr;
 ///     record,
 ///     Record {
 ///         name: "A".to_string(),
-///         parameter: Box::new(Parameter::List(vec![Parameter::Integer(1), Parameter::Integer(2)]))
+///         parameter: Box::new(vec![Parameter::Integer(1), Parameter::Integer(2)].into())
 ///     }
 /// )
 /// ```

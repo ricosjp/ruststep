@@ -27,7 +27,7 @@ use serde::{
 /// // non-uniform list
 /// let (residual, p) = exchange::parameter("('ruststep', 1.0)").finish().unwrap();
 /// assert_eq!(residual, "");
-/// assert_eq!(p, Parameter::from_iter(&[Parameter::string("ruststep"), Parameter::real(1.0)]));
+/// assert_eq!(p, vec![Parameter::string("ruststep"), Parameter::real(1.0)].into());
 ///
 /// // inline typed struct
 /// let (residual, p) = exchange::parameter("FILE_NAME('ruststep')").finish().unwrap();
@@ -49,13 +49,13 @@ use serde::{
 /// // A((2.0, 3.0))
 /// let a = Parameter::Typed(Record {
 ///     name: "A".to_string(),
-///     parameter: Box::new(Parameter::from_iter(&[Parameter::real(2.0), Parameter::real(3.0)])),
+///     parameter: Box::new(vec![Parameter::real(2.0), Parameter::real(3.0)].into()),
 /// });
 ///
 /// // B((1.0, a))
 /// let b = Parameter::Typed(Record {
 ///     name: "B".to_string(),
-///     parameter: Box::new(Parameter::from_iter(&[Parameter::real(1.0), a])),
+///     parameter: Box::new(vec![Parameter::real(1.0), a].into()),
 /// });
 ///
 /// assert_eq!(p, b);
@@ -129,6 +129,12 @@ impl From<f64> for Parameter {
 impl From<String> for Parameter {
     fn from(value: String) -> Self {
         Parameter::String(value)
+    }
+}
+
+impl From<Vec<Parameter>> for Parameter {
+    fn from(source: Vec<Parameter>) -> Self {
+        Parameter::List(source)
     }
 }
 
