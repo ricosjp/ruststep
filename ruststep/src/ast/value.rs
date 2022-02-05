@@ -1,5 +1,8 @@
 use super::{parameter::Parameter, RecordDeserializer};
-use serde::{de, forward_to_deserialize_any, Deserialize};
+use serde::{
+    de::{self, IntoDeserializer},
+    forward_to_deserialize_any, Deserialize,
+};
 
 #[cfg(doc)] // for doc-link
 use super::Record;
@@ -26,6 +29,22 @@ pub enum RValue {
     ConstantValue(String),
 }
 
+impl<'de> de::IntoDeserializer<'de, crate::error::Error> for RValue {
+    type Deserializer = RecordDeserializer;
+    fn into_deserializer(self) -> RecordDeserializer {
+        match self {
+            RValue::Entity(id) => RecordDeserializer::new("Entity", Parameter::Integer(id as i64)),
+            RValue::Value(id) => RecordDeserializer::new("Value", Parameter::Integer(id as i64)),
+            RValue::ConstantEntity(name) => {
+                RecordDeserializer::new("ConstantEntity", Parameter::String(name))
+            }
+            RValue::ConstantValue(name) => {
+                RecordDeserializer::new("ConstantValue", Parameter::String(name))
+            }
+        }
+    }
+}
+
 impl<'de, 'value> de::Deserializer<'de> for &'value RValue {
     type Error = crate::error::Error;
 
@@ -33,24 +52,7 @@ impl<'de, 'value> de::Deserializer<'de> for &'value RValue {
     where
         V: de::Visitor<'de>,
     {
-        match self {
-            RValue::Entity(id) => visitor.visit_enum(RecordDeserializer::new(
-                "Entity",
-                Parameter::Integer(*id as i64),
-            )),
-            RValue::Value(id) => visitor.visit_enum(RecordDeserializer::new(
-                "Value",
-                Parameter::Integer(*id as i64),
-            )),
-            RValue::ConstantEntity(name) => visitor.visit_enum(RecordDeserializer::new(
-                "ConstantEntity",
-                Parameter::String(name.clone()),
-            )),
-            RValue::ConstantValue(name) => visitor.visit_enum(RecordDeserializer::new(
-                "ConstantValue",
-                Parameter::String(name.clone()),
-            )),
-        }
+        visitor.visit_enum(self.clone().into_deserializer())
     }
 
     forward_to_deserialize_any! {
