@@ -27,19 +27,19 @@ use serde::{
 /// // non-uniform list
 /// let (residual, p) = exchange::parameter("('ruststep', 1.0)").finish().unwrap();
 /// assert_eq!(residual, "");
-/// assert_eq!(p, Parameter::from_iter(&[Parameter::string("ruststep"), Parameter::real(1.0)]));
+/// assert_eq!(p, vec![Parameter::string("ruststep"), Parameter::real(1.0)].into());
 ///
 /// // inline typed struct
 /// let (residual, p) = exchange::parameter("FILE_NAME('ruststep')").finish().unwrap();
 /// assert_eq!(residual, "");
-/// assert!(matches!(p, Parameter::Typed { .. }));
+/// assert!(matches!(p, Parameter::Typed(_)));
 /// ```
 ///
 /// Inline struct or list can be nested, i.e. `Parameter` can be a tree.
 ///
 /// ```
 /// use nom::Finish;
-/// use ruststep::{parser::exchange, ast::Parameter};
+/// use ruststep::{parser::exchange, ast::{Parameter, Record}};
 ///
 /// let (residual, p) = exchange::parameter("B((1.0, A((2.0, 3.0))))")
 ///     .finish()
@@ -47,16 +47,16 @@ use serde::{
 /// assert_eq!(residual, "");
 ///
 /// // A((2.0, 3.0))
-/// let a = Parameter::Typed {
+/// let a = Parameter::Typed(Record {
 ///     name: "A".to_string(),
-///     ty: Box::new(Parameter::from_iter(&[Parameter::real(2.0), Parameter::real(3.0)])),
-/// };
+///     parameter: Box::new(vec![Parameter::real(2.0), Parameter::real(3.0)].into()),
+/// });
 ///
 /// // B((1.0, a))
-/// let b = Parameter::Typed {
+/// let b = Parameter::Typed(Record {
 ///     name: "B".to_string(),
-///     ty: Box::new(Parameter::from_iter(&[Parameter::real(1.0), a])),
-/// };
+///     parameter: Box::new(vec![Parameter::real(1.0), a].into()),
+/// });
 ///
 /// assert_eq!(p, b);
 /// ```
@@ -77,7 +77,7 @@ use serde::{
 #[derive(Debug, Clone, PartialEq)]
 pub enum Parameter {
     /// Inline *Typed* struct
-    Typed { name: String, ty: Box<Parameter> },
+    Typed(Record),
 
     /// Signed integer
     Integer(i64),
@@ -112,10 +112,6 @@ impl Parameter {
     pub fn string(s: &str) -> Self {
         Parameter::String(s.to_string())
     }
-
-    pub fn from_iter<'a>(iter: impl IntoIterator<Item = &'a Parameter>) -> Self {
-        std::iter::FromIterator::from_iter(iter)
-    }
 }
 
 impl From<i64> for Parameter {
@@ -133,6 +129,12 @@ impl From<f64> for Parameter {
 impl From<String> for Parameter {
     fn from(value: String) -> Self {
         Parameter::String(value)
+    }
+}
+
+impl From<Vec<Parameter>> for Parameter {
+    fn from(source: Vec<Parameter>) -> Self {
+        Parameter::List(source)
     }
 }
 
@@ -156,9 +158,7 @@ impl<'de, 'param> de::Deserializer<'de> for &'param Parameter {
         V: de::Visitor<'de>,
     {
         match self {
-            Parameter::Typed { name, ty } => {
-                visitor.visit_map(SingleMapDeserializer::new(name, *ty.clone()))
-            }
+            Parameter::Typed(record) => de::Deserializer::deserialize_any(record, visitor),
             Parameter::Integer(val) => visitor.visit_i64(*val),
             Parameter::Real(val) => visitor.visit_f64(*val),
             Parameter::String(val) => visitor.visit_str(val),
