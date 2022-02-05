@@ -33,7 +33,7 @@ impl<'de, 'record> de::Deserializer<'de> for &'record Record {
     where
         V: de::Visitor<'de>,
     {
-        visitor.visit_map(RecordDeserializer::new(&self.name, *self.parameter.clone()))
+        visitor.visit_map(self.into_deserializer())
     }
 
     forward_to_deserialize_any! {
