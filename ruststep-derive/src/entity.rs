@@ -173,7 +173,6 @@ pub fn impl_entity_table(ident: &syn::Ident, table: &HolderAttr) -> TokenStream2
 fn def_visitor(ident: &syn::Ident, name: &str, st: &syn::DataStruct) -> TokenStream2 {
     let visitor_ident = as_visitor_ident(ident);
     let FieldEntries { attributes, .. } = FieldEntries::parse(st);
-    let attr_len = attributes.len();
     quote! {
         #[doc(hidden)]
         pub struct #visitor_ident;
@@ -189,12 +188,6 @@ fn def_visitor(ident: &syn::Ident, name: &str, st: &syn::DataStruct) -> TokenStr
             where
                 A: ::serde::de::SeqAccess<'de>,
             {
-                if let Some(size) = seq.size_hint() {
-                    if size != #attr_len {
-                        use ::serde::de::Error;
-                        return Err(A::Error::invalid_length(size, &self));
-                    }
-                }
                 #( let #attributes = seq.next_element()?.unwrap(); )*
                 Ok(#ident { #(#attributes),* })
             }
