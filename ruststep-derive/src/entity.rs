@@ -195,9 +195,12 @@ fn def_visitor(ident: &syn::Ident, name: &str, st: &syn::DataStruct) -> TokenStr
                 A: ::serde::de::SeqAccess<'de>,
             {
                 use #ruststep::tables::WithVisitor;
+                dbg!(std::any::type_name::<A>());
                 #(
+                dbg!(std::any::type_name::<#holder_types>());
                 let visitor = <#holder_types as WithVisitor>::visitor_new();
                 let #attributes = visitor.visit_seq(&mut seq)?;
+                dbg!(&#attributes);
                 )*
                 Ok(#ident { #(#attributes),* })
             }

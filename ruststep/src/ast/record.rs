@@ -33,6 +33,8 @@ impl<'de, 'record> de::Deserializer<'de> for &'record Record {
     where
         V: de::Visitor<'de>,
     {
+        dbg!(std::any::type_name::<V>());
+        dbg!(self);
         visitor.visit_map(self.into_deserializer())
     }
 
@@ -79,6 +81,8 @@ impl<'de> de::Deserializer<'de> for RecordDeserializer {
     where
         V: de::Visitor<'de>,
     {
+        dbg!(std::any::type_name::<V>());
+        dbg!(&self);
         visitor.visit_map(self)
     }
 

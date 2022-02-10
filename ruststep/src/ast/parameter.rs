@@ -157,8 +157,12 @@ impl<'de, 'param> de::Deserializer<'de> for &'param Parameter {
     where
         V: de::Visitor<'de>,
     {
+        dbg!(std::any::type_name::<V>());
         match self {
-            Parameter::Typed(record) => de::Deserializer::deserialize_any(record, visitor),
+            Parameter::Typed(record) => {
+                dbg!(record);
+                de::Deserializer::deserialize_any(record, visitor)
+            }
             Parameter::Integer(val) => visitor.visit_i64(*val),
             Parameter::Real(val) => visitor.visit_f64(*val),
             Parameter::String(val) => visitor.visit_str(val),
