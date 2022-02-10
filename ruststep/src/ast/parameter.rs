@@ -187,6 +187,28 @@ impl<'de, 'param> de::IntoDeserializer<'de, crate::error::Error> for &'param Par
     }
 }
 
+#[derive(Debug)]
+pub struct SeqDeserializer {
+    parameters: Vec<Parameter>,
+}
+
+impl<'de> de::Deserializer<'de> for SeqDeserializer {
+    type Error = Error;
+
+    fn deserialize_any<V>(self, visitor: V) -> Result<V::Value>
+    where
+        V: de::Visitor<'de>,
+    {
+        todo!()
+    }
+
+    forward_to_deserialize_any! {
+        bool i8 i16 i32 i64 i128 u8 u16 u32 u64 u128 f32 f64 char str string
+        bytes byte_buf option unit unit_struct newtype_struct seq tuple
+        struct tuple_struct map enum identifier ignored_any
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
