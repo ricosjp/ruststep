@@ -1,4 +1,4 @@
-use crate::ast::*;
+use crate::{ast::*, error::*};
 use inflector::Inflector;
 use serde::{
     de::{self, IntoDeserializer},
@@ -153,7 +153,7 @@ impl<'a> std::iter::FromIterator<&'a Parameter> for Parameter {
 impl<'de, 'param> de::Deserializer<'de> for &'param Parameter {
     type Error = crate::error::Error;
 
-    fn deserialize_any<V>(self, visitor: V) -> Result<V::Value, Self::Error>
+    fn deserialize_any<V>(self, visitor: V) -> Result<V::Value>
     where
         V: de::Visitor<'de>,
     {
@@ -205,7 +205,7 @@ mod tests {
         let a: i64 = Deserialize::deserialize(&p).unwrap();
         assert_eq!(a, -2);
         // cannot be deserialized negative integer into unsigned
-        let res: Result<u32, _> = Deserialize::deserialize(&p);
+        let res: Result<u32> = Deserialize::deserialize(&p);
         assert!(res.is_err());
     }
 }
