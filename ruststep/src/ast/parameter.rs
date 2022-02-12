@@ -162,9 +162,7 @@ impl<'de, 'param> de::Deserializer<'de> for &'param Parameter {
             Parameter::Integer(val) => visitor.visit_i64(*val),
             Parameter::Real(val) => visitor.visit_f64(*val),
             Parameter::String(val) => visitor.visit_str(val),
-            Parameter::List(params) => {
-                visitor.visit_seq(de::value::SeqDeserializer::new(params.iter()))
-            }
+            Parameter::List(params) => visitor.visit_seq(SeqDeserializer::new(params)),
             Parameter::RValue(rvalue) => de::Deserializer::deserialize_any(rvalue, visitor),
             Parameter::NotProvided | Parameter::Omitted => visitor.visit_none(),
             Parameter::Enumeration(variant) => {
@@ -192,20 +190,27 @@ pub struct SeqDeserializer {
     parameters: Vec<Parameter>,
 }
 
-impl<'de> de::Deserializer<'de> for SeqDeserializer {
+impl SeqDeserializer {
+    fn new(parameters: &[Parameter]) -> Self {
+        SeqDeserializer {
+            parameters: parameters.iter().rev().cloned().collect(),
+        }
+    }
+}
+
+impl<'de> de::SeqAccess<'de> for SeqDeserializer {
     type Error = Error;
 
-    fn deserialize_any<V>(self, visitor: V) -> Result<V::Value>
+    fn next_element_seed<T>(&mut self, seed: T) -> Result<Option<T::Value>>
     where
-        V: de::Visitor<'de>,
+        T: de::DeserializeSeed<'de>,
     {
-        todo!()
-    }
-
-    forward_to_deserialize_any! {
-        bool i8 i16 i32 i64 i128 u8 u16 u32 u64 u128 f32 f64 char str string
-        bytes byte_buf option unit unit_struct newtype_struct seq tuple
-        struct tuple_struct map enum identifier ignored_any
+        if let Some(last) = self.parameters.pop() {
+            let value = seed.deserialize(&last)?;
+            Ok(Some(value))
+        } else {
+            Ok(None)
+        }
     }
 }
 
