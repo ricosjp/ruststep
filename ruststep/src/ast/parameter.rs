@@ -1,4 +1,4 @@
-use crate::ast::*;
+use crate::{ast::*, error::*};
 use inflector::Inflector;
 use serde::{
     de::{self, IntoDeserializer},
@@ -153,7 +153,7 @@ impl<'a> std::iter::FromIterator<&'a Parameter> for Parameter {
 impl<'de, 'param> de::Deserializer<'de> for &'param Parameter {
     type Error = crate::error::Error;
 
-    fn deserialize_any<V>(self, visitor: V) -> Result<V::Value, Self::Error>
+    fn deserialize_any<V>(self, visitor: V) -> Result<V::Value>
     where
         V: de::Visitor<'de>,
     {
@@ -162,9 +162,7 @@ impl<'de, 'param> de::Deserializer<'de> for &'param Parameter {
             Parameter::Integer(val) => visitor.visit_i64(*val),
             Parameter::Real(val) => visitor.visit_f64(*val),
             Parameter::String(val) => visitor.visit_str(val),
-            Parameter::List(params) => {
-                visitor.visit_seq(de::value::SeqDeserializer::new(params.iter()))
-            }
+            Parameter::List(params) => visitor.visit_seq(SeqDeserializer::new(params)),
             Parameter::RValue(rvalue) => de::Deserializer::deserialize_any(rvalue, visitor),
             Parameter::NotProvided | Parameter::Omitted => visitor.visit_none(),
             Parameter::Enumeration(variant) => {
@@ -187,6 +185,35 @@ impl<'de, 'param> de::IntoDeserializer<'de, crate::error::Error> for &'param Par
     }
 }
 
+#[derive(Debug)]
+pub struct SeqDeserializer {
+    parameters: Vec<Parameter>,
+}
+
+impl SeqDeserializer {
+    fn new(parameters: &[Parameter]) -> Self {
+        SeqDeserializer {
+            parameters: parameters.iter().rev().cloned().collect(),
+        }
+    }
+}
+
+impl<'de> de::SeqAccess<'de> for SeqDeserializer {
+    type Error = Error;
+
+    fn next_element_seed<T>(&mut self, seed: T) -> Result<Option<T::Value>>
+    where
+        T: de::DeserializeSeed<'de>,
+    {
+        if let Some(last) = self.parameters.pop() {
+            let value = seed.deserialize(&last)?;
+            Ok(Some(value))
+        } else {
+            Ok(None)
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -205,7 +232,7 @@ mod tests {
         let a: i64 = Deserialize::deserialize(&p).unwrap();
         assert_eq!(a, -2);
         // cannot be deserialized negative integer into unsigned
-        let res: Result<u32, _> = Deserialize::deserialize(&p);
+        let res: Result<u32> = Deserialize::deserialize(&p);
         assert!(res.is_err());
     }
 }

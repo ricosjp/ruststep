@@ -52,6 +52,7 @@ In addition to original Keep-a-Changelog, we use following rules:
 ### Security
 
 ### Internal
+- Replace `SeqDeserializer` https://github.com/ricosjp/ruststep/pull/194
 - Use `Record` struct in `Parameter::Typed` https://github.com/ricosjp/ruststep/pull/192
 - Drop type parameter `T` in `SingleMapDeserializer` https://github.com/ricosjp/ruststep/pull/191
 - Use `syn::Type` and other explicit types instead of `proc_macro2::TokenStream` in espr/codegen https://github.com/ricosjp/ruststep/pull/184
