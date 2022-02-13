@@ -1,9 +1,11 @@
 use crate::{ast::*, error::*};
+
 use inflector::Inflector;
 use serde::{
     de::{self, IntoDeserializer},
     forward_to_deserialize_any,
 };
+use std::collections::VecDeque;
 
 /// Primitive value type in STEP data
 ///
@@ -187,25 +189,51 @@ impl<'de, 'param> de::IntoDeserializer<'de, crate::error::Error> for &'param Par
 
 #[derive(Debug)]
 pub struct SeqDeserializer {
-    parameters: Vec<Parameter>,
+    parameters: VecDeque<Parameter>,
+}
+
+// FIXME: This must be implemented without heap allocation
+fn as_iter(p: &Parameter) -> Box<dyn Iterator<Item = Parameter>> {
+    match p {
+        Parameter::List(list) => {
+            if list.len() == 0 {
+                return Box::new(std::iter::empty());
+            }
+            let mut i = list.iter();
+            let mut iter = as_iter(i.next().unwrap());
+            for c in i {
+                iter = Box::new(iter.chain(as_iter(c)));
+            }
+            iter
+        }
+        e @ _ => Box::new(std::iter::once(e.clone())),
+    }
 }
 
 impl SeqDeserializer {
-    fn new(parameters: &[Parameter]) -> Self {
-        SeqDeserializer {
-            parameters: parameters.iter().rev().cloned().collect(),
+    fn new(params: &[Parameter]) -> Self {
+        let mut parameters = VecDeque::new();
+        for p in params {
+            for pp in as_iter(p) {
+                parameters.push_back(pp);
+            }
         }
+        SeqDeserializer { parameters }
     }
 }
 
 impl<'de> de::SeqAccess<'de> for SeqDeserializer {
     type Error = Error;
 
+    fn size_hint(&self) -> Option<usize> {
+        Some(self.parameters.len())
+    }
+
     fn next_element_seed<T>(&mut self, seed: T) -> Result<Option<T::Value>>
     where
         T: de::DeserializeSeed<'de>,
     {
-        if let Some(last) = self.parameters.pop() {
+        if let Some(last) = self.parameters.pop_front() {
             let value = seed.deserialize(&last)?;
             Ok(Some(value))
         } else {
