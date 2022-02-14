@@ -201,6 +201,10 @@ impl SeqDeserializer {
 impl<'de> de::SeqAccess<'de> for SeqDeserializer {
     type Error = Error;
 
+    fn size_hint(&self) -> Option<usize> {
+        Some(self.parameters.len())
+    }
+
     fn next_element_seed<T>(&mut self, seed: T) -> Result<Option<T::Value>>
     where
         T: de::DeserializeSeed<'de>,
