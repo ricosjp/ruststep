@@ -52,6 +52,7 @@ In addition to original Keep-a-Changelog, we use following rules:
 ### Security
 
 ### Internal
+- impl `SeqDeserializer::size_hint` https://github.com/ricosjp/ruststep/pull/197
 - Replace `SeqDeserializer` https://github.com/ricosjp/ruststep/pull/194
 - Use `Record` struct in `Parameter::Typed` https://github.com/ricosjp/ruststep/pull/192
 - Drop type parameter `T` in `SingleMapDeserializer` https://github.com/ricosjp/ruststep/pull/191
