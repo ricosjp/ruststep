@@ -42,6 +42,7 @@ In addition to original Keep-a-Changelog, we use following rules:
 - Use Rust 2021 edition https://github.com/ricosjp/ruststep/pull/128
 
 ### Fixed
+- Incorrect `GENERIC` type handling https://github.com/ricosjp/ruststep/pull/198
 - Subtype-Supertype dependency graph generation fixed https://github.com/ricosjp/ruststep/pull/161
 - Supertype field is not included in subtypes type https://github.com/ricosjp/ruststep/pull/166
 - Generate `Into<XxxAny>` correctly https://github.com/ricosjp/ruststep/pull/176
