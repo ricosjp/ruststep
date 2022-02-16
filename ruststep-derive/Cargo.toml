@@ -25,9 +25,7 @@ Inflector = "0.11.4"
 proc-macro-error = "1.0.4"
 
 [dev-dependencies]
-serde = "1.0.129"
 trybuild = "1.0.45"
-itertools = "0.10.1"
 insta = "1.8.0"
 
 [dev-dependencies.ruststep]
