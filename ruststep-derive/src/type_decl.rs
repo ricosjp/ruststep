@@ -205,9 +205,7 @@ impl FieldEntries {
                         into_owned.push(quote! { self.#index.into_owned(#table_arg)? });
                     }
                     FieldType::Optional(_) => {
-                        into_owned.push(
-							quote! { self.#index.map(|holder| holder.into_owned(#table_arg)).transpose()? },
-						);
+                        into_owned.push(quote! { self.#index.map(|holder| holder.into_owned(#table_arg)).transpose()? },);
                     }
                     FieldType::List(_) => into_owned.push(quote! {
                         self.#index
