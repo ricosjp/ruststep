@@ -15,6 +15,7 @@ In addition to original Keep-a-Changelog, we use following rules:
 ## Unreleased (will be 0.2.0)
 
 ### Added
+- Re-expose serde and itertools from ruststep https://github.com/ricosjp/ruststep/pull/199
 - Add the module created from AP203. https://github.com/ricosjp/ruststep/pull/185
 - Implement `AsRef` and `AsMut` for `XXAny`. https://github.com/ricosjp/ruststep/pull/180
 - Implement `AsRef` and `AsMut` in the case of multiple inheritance. https://github.com/ricosjp/ruststep/pull/179
