@@ -26,6 +26,16 @@ pub fn as_visitor_ident(input: &syn::Ident) -> syn::Ident {
     format_ident!("{}Visitor", input)
 }
 
+pub fn serde_crate() -> syn::Path {
+    let ruststep = ruststep_crate();
+    syn::parse_quote!( #ruststep::serde )
+}
+
+pub fn itertools_crate() -> syn::Path {
+    let ruststep = ruststep_crate();
+    syn::parse_quote!( #ruststep::itertools )
+}
+
 /// Returns `crate` or `::ruststep` as in ruststep crate or not
 pub fn ruststep_crate() -> syn::Path {
     let path = crate_name("ruststep").unwrap();
