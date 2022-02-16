@@ -147,11 +147,12 @@ impl Input {
             holder_visitor_ident,
             ..
         } = self;
+        let serde = serde_crate();
         quote! {
-            impl<'de> ::serde::de::Deserialize<'de> for #holder_ident {
+            impl<'de> #serde::de::Deserialize<'de> for #holder_ident {
                 fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
                 where
-                    D: ::serde::de::Deserializer<'de>,
+                    D: #serde::de::Deserializer<'de>,
                 {
                     deserializer.deserialize_tuple_struct(#name, 0, #holder_visitor_ident {})
                 }
@@ -170,11 +171,12 @@ impl Input {
             ..
         } = self;
         let ruststep = ruststep_crate();
+        let serde = serde_crate();
 
         quote! {
             pub struct #holder_visitor_ident;
 
-            impl<'de> ::serde::de::Visitor<'de> for #holder_visitor_ident {
+            impl<'de> #serde::de::Visitor<'de> for #holder_visitor_ident {
                 type Value = #holder_ident;
                 fn expecting(&self, formatter: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
                     write!(formatter, #name)
@@ -183,7 +185,7 @@ impl Input {
                 // Entry point for Record or Parameter::Typed
                 fn visit_map<A>(self, mut map: A) -> ::std::result::Result<Self::Value, A::Error>
                 where
-                    A: ::serde::de::MapAccess<'de>,
+                    A: #serde::de::MapAccess<'de>,
                 {
                     let key: String = map
                         .next_key()?
@@ -196,7 +198,7 @@ impl Input {
                         }
                         )*
                         _ => {
-                            use ::serde::de::{Error, Unexpected};
+                            use #serde::de::{Error, Unexpected};
                             return Err(A::Error::invalid_value(Unexpected::Other(&key), &self));
                         }
                     }
@@ -223,6 +225,7 @@ impl Input {
             ..
         } = self;
         let ruststep = ruststep_crate();
+        let itertools = itertools_crate();
         let mut vars = Vec::new();
         let mut fields = Vec::new();
         let mut exprs = Vec::new();
@@ -249,7 +252,7 @@ impl Input {
                     Err(#ruststep::error::Error::UnknownEntity(entity_id))
                 }
                 fn owned_iter<'table>(&'table self) -> Box<dyn Iterator<Item = #ruststep::error::Result<#ident>> + 'table> {
-                    Box::new(::itertools::chain![
+                    Box::new(#itertools::chain![
                         #(
                         #ruststep::tables::owned_iter(self, &self.#fields)
                             .map(|owned| owned.map(|owned| #ident::#vars(#exprs)))

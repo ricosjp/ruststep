@@ -19,7 +19,11 @@ pub mod place_holder;
 pub mod primitive;
 pub mod tables;
 
+// To work generated code by ruststep-derive only with ruststep
 pub use derive_more;
+pub use itertools;
+pub use serde;
+
 pub use ruststep_derive::*;
 
 // Automatically generated codes

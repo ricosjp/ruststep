@@ -214,23 +214,23 @@ mod snapshot_tests {
                 0
             }
         }
-        impl<'de> ::serde::de::Deserialize<'de> for S1Holder {
+        impl<'de> ::ruststep::serde::de::Deserialize<'de> for S1Holder {
             fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
             where
-                D: ::serde::de::Deserializer<'de>,
+                D: ::ruststep::serde::de::Deserializer<'de>,
             {
                 deserializer.deserialize_tuple_struct("S1", 0, S1HolderVisitor {})
             }
         }
         pub struct S1HolderVisitor;
-        impl<'de> ::serde::de::Visitor<'de> for S1HolderVisitor {
+        impl<'de> ::ruststep::serde::de::Visitor<'de> for S1HolderVisitor {
             type Value = S1Holder;
             fn expecting(&self, formatter: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
                 write!(formatter, "S1")
             }
             fn visit_map<A>(self, mut map: A) -> ::std::result::Result<Self::Value, A::Error>
             where
-                A: ::serde::de::MapAccess<'de>,
+                A: ::ruststep::serde::de::MapAccess<'de>,
             {
                 let key: String = map
                     .next_key()?
@@ -245,7 +245,7 @@ mod snapshot_tests {
                         return Ok(S1Holder::B(Box::new(owned)));
                     }
                     _ => {
-                        use serde::de::{Error, Unexpected};
+                        use ruststep::serde::de::{Error, Unexpected};
                         return Err(A::Error::invalid_value(Unexpected::Other(&key), &self));
                     }
                 }
@@ -270,7 +270,7 @@ mod snapshot_tests {
             fn owned_iter<'table>(
                 &'table self,
             ) -> Box<dyn Iterator<Item = ::ruststep::error::Result<S1>> + 'table> {
-                Box::new(::itertools::chain![
+                Box::new(::ruststep::itertools::chain![
                     ::ruststep::tables::owned_iter(self, &self.a)
                         .map(|owned| owned.map(|owned| S1::A(Box::new(owned.into())))),
                     ::ruststep::tables::owned_iter(self, &self.b)
@@ -326,23 +326,23 @@ mod snapshot_tests {
                 0
             }
         }
-        impl<'de> ::serde::de::Deserialize<'de> for BaseAnyHolder {
+        impl<'de> ::ruststep::serde::de::Deserialize<'de> for BaseAnyHolder {
             fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
             where
-                D: ::serde::de::Deserializer<'de>,
+                D: ::ruststep::serde::de::Deserializer<'de>,
             {
                 deserializer.deserialize_tuple_struct("BASE_ANY", 0, BaseAnyHolderVisitor {})
             }
         }
         pub struct BaseAnyHolderVisitor;
-        impl<'de> ::serde::de::Visitor<'de> for BaseAnyHolderVisitor {
+        impl<'de> ::ruststep::serde::de::Visitor<'de> for BaseAnyHolderVisitor {
             type Value = BaseAnyHolder;
             fn expecting(&self, formatter: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
                 write!(formatter, "BASE_ANY")
             }
             fn visit_map<A>(self, mut map: A) -> ::std::result::Result<Self::Value, A::Error>
             where
-                A: ::serde::de::MapAccess<'de>,
+                A: ::ruststep::serde::de::MapAccess<'de>,
             {
                 let key: String = map
                     .next_key()?
@@ -357,7 +357,7 @@ mod snapshot_tests {
                         return Ok(BaseAnyHolder::Sub(Box::new(owned)));
                     }
                     _ => {
-                        use serde::de::{Error, Unexpected};
+                        use ruststep::serde::de::{Error, Unexpected};
                         return Err(A::Error::invalid_value(Unexpected::Other(&key), &self));
                     }
                 }
@@ -382,7 +382,7 @@ mod snapshot_tests {
             fn owned_iter<'table>(
                 &'table self,
             ) -> Box<dyn Iterator<Item = ::ruststep::error::Result<BaseAny>> + 'table> {
-                Box::new(::itertools::chain![
+                Box::new(::ruststep::itertools::chain![
                     ::ruststep::tables::owned_iter(self, &self.base)
                         .map(|owned| owned.map(|owned| BaseAny::Base(Box::new(owned.into())))),
                     ::ruststep::tables::owned_iter(self, &self.sub)
@@ -461,18 +461,18 @@ mod snapshot_tests {
         #[doc(hidden)]
         pub struct Sub1HolderVisitor;
         #[automatically_derived]
-        impl<'de> ::serde::de::Visitor<'de> for Sub1HolderVisitor {
+        impl<'de> ::ruststep::serde::de::Visitor<'de> for Sub1HolderVisitor {
             type Value = Sub1Holder;
             fn expecting(&self, formatter: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
                 write!(formatter, "SUB_1")
             }
             fn visit_seq<A>(self, mut seq: A) -> ::std::result::Result<Self::Value, A::Error>
             where
-                A: ::serde::de::SeqAccess<'de>,
+                A: ::ruststep::serde::de::SeqAccess<'de>,
             {
                 if let Some(size) = seq.size_hint() {
                     if size != 2usize {
-                        use serde::de::Error;
+                        use ruststep::serde::de::Error;
                         return Err(A::Error::invalid_length(size, &self));
                     }
                 }
@@ -482,13 +482,13 @@ mod snapshot_tests {
             }
             fn visit_map<A>(self, mut map: A) -> ::std::result::Result<Self::Value, A::Error>
             where
-                A: ::serde::de::MapAccess<'de>,
+                A: ::ruststep::serde::de::MapAccess<'de>,
             {
                 let key: String = map
                     .next_key()?
                     .expect("Empty map cannot be accepted as ruststep Holder");
                 if key != "SUB_1" {
-                    use serde::de::{Error, Unexpected};
+                    use ruststep::serde::de::{Error, Unexpected};
                     return Err(A::Error::invalid_value(Unexpected::Other(&key), &self));
                 }
                 let value = map.next_value()?;
@@ -496,10 +496,10 @@ mod snapshot_tests {
             }
         }
         #[automatically_derived]
-        impl<'de> ::serde::de::Deserialize<'de> for Sub1Holder {
+        impl<'de> ::ruststep::serde::de::Deserialize<'de> for Sub1Holder {
             fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
             where
-                D: ::serde::de::Deserializer<'de>,
+                D: ::ruststep::serde::de::Deserializer<'de>,
             {
                 deserializer.deserialize_tuple_struct("SUB_1", 2usize, Sub1HolderVisitor {})
             }

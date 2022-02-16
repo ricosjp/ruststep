@@ -102,12 +102,13 @@ fn def_visitor(ident: &syn::Ident, name: &str, st: &syn::DataStruct) -> TokenStr
     let attributes = (0..attr_len)
         .map(|i| format_ident!("a_{}", i))
         .collect::<Vec<_>>();
+    let serde = serde_crate();
     quote! {
         #[doc(hidden)]
         pub struct #visitor_ident;
 
         #[automatically_derived]
-        impl<'de> ::serde::de::Visitor<'de> for #visitor_ident {
+        impl<'de> #serde::de::Visitor<'de> for #visitor_ident {
             type Value = #ident;
             fn expecting(&self, formatter: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
                 write!(formatter, #name)
@@ -115,11 +116,11 @@ fn def_visitor(ident: &syn::Ident, name: &str, st: &syn::DataStruct) -> TokenStr
 
             fn visit_seq<A>(self, mut seq: A) -> ::std::result::Result<Self::Value, A::Error>
             where
-                A: ::serde::de::SeqAccess<'de>,
+                A: #serde::de::SeqAccess<'de>,
             {
                 if let Some(size) = seq.size_hint() {
                     if size != #attr_len {
-                        use ::serde::de::Error;
+                        use #serde::de::Error;
                         return Err(A::Error::invalid_length(size, &self));
                     }
                 }
@@ -130,13 +131,13 @@ fn def_visitor(ident: &syn::Ident, name: &str, st: &syn::DataStruct) -> TokenStr
             // Entry point for Record or Parameter::Typed
             fn visit_map<A>(self, mut map: A) -> ::std::result::Result<Self::Value, A::Error>
             where
-                A: ::serde::de::MapAccess<'de>,
+                A: #serde::de::MapAccess<'de>,
             {
                 let key: String = map
                     .next_key()?
                     .expect("Empty map cannot be accepted as ruststep Holder"); // this must be a bug, not runtime error
                 if key != #name {
-                    use ::serde::de::{Error, Unexpected};
+                    use #serde::de::{Error, Unexpected};
                     return Err(A::Error::invalid_value(Unexpected::Other(&key), &self));
                 }
                 let value = map.next_value()?; // send to Self::visit_seq
@@ -152,12 +153,13 @@ fn impl_deserialize(ident: &syn::Ident, name: &str, st: &syn::DataStruct) -> Tok
     let visitor_ident = as_visitor_ident(ident);
     let FieldEntries { holder_types, .. } = FieldEntries::parse(st);
     let attr_len = holder_types.len();
+    let serde = serde_crate();
     quote! {
         #[automatically_derived]
-        impl<'de> ::serde::de::Deserialize<'de> for #ident {
+        impl<'de> #serde::de::Deserialize<'de> for #ident {
             fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
             where
-                D: ::serde::de::Deserializer<'de>,
+                D: #serde::de::Deserializer<'de>,
             {
                 deserializer.deserialize_tuple_struct(#name, #attr_len, #visitor_ident {})
             }
@@ -205,9 +207,7 @@ impl FieldEntries {
                         into_owned.push(quote! { self.#index.into_owned(#table_arg)? });
                     }
                     FieldType::Optional(_) => {
-                        into_owned.push(
-							quote! { self.#index.map(|holder| holder.into_owned(#table_arg)).transpose()? },
-						);
+                        into_owned.push(quote! { self.#index.map(|holder| holder.into_owned(#table_arg)).transpose()? },);
                     }
                     FieldType::List(_) => into_owned.push(quote! {
                         self.#index
