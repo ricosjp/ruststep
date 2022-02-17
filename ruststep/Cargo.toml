@@ -1,6 +1,6 @@
 [package]
 name = "ruststep"
-version = "0.1.0"
+version = "0.2.0"
 authors = ["Toshiki Teramura <teramura@ricos.co.jp>", "Yoshinori Tanimura <tanimura@ricos.co.jp>"]
 edition = "2021"
 rust-version = "1.56.0"
