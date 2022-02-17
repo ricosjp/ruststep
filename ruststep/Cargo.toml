@@ -1,6 +1,6 @@
 [package]
 name = "ruststep"
-version = "0.1.0"
+version = "0.2.0"
 authors = ["Toshiki Teramura <teramura@ricos.co.jp>", "Yoshinori Tanimura <tanimura@ricos.co.jp>"]
 edition = "2021"
 rust-version = "1.56.0"
@@ -29,14 +29,11 @@ itertools = "0.10.1"
 
 [dependencies.ruststep-derive]
 path = "../ruststep-derive"
-version = "0.1.0"
+version = "0.2.0"
 
 [dev-dependencies]
 anyhow = "1.0.43"
 
 [dev-dependencies.espr-derive]
 path = "../espr-derive"
-version = "0.1.0"
-
-[package.metadata.release]
-no-dev-version = true
+version = "0.2.0"

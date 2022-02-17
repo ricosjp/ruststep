@@ -12,7 +12,14 @@ In addition to original Keep-a-Changelog, we use following rules:
   - This will be checked by GitHub Actions
 - Each Pull Request MAY correspond to one or more lines in this file
 
-## Unreleased (will be 0.2.0)
+## Unreleased
+
+### Added
+### Changed
+### Fixed
+### Internal
+
+## 0.2.0 - 2022-02-17
 
 ### Added
 - Re-expose serde and itertools from ruststep https://github.com/ricosjp/ruststep/pull/199
@@ -48,10 +55,6 @@ In addition to original Keep-a-Changelog, we use following rules:
 - Supertype field is not included in subtypes type https://github.com/ricosjp/ruststep/pull/166
 - Generate `Into<XxxAny>` correctly https://github.com/ricosjp/ruststep/pull/176
 - Use raw identifier `r#` for reserved words. https://github.com/ricosjp/ruststep/pull/172
-
-### Deprecated
-### Removed
-### Security
 
 ### Internal
 - impl `SeqDeserializer::size_hint` https://github.com/ricosjp/ruststep/pull/197
