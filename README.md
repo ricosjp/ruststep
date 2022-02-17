@@ -9,6 +9,7 @@ aimed at replacing [stepcode](https://github.com/stepcode/stepcode).
 | name | crates.io | docs.rs | master | description |
 |:-----|:----------|:--------|:-------|-------------|
 | espr |[![Crate](https://img.shields.io/crates/v/espr.svg)](https://crates.io/crates/espr) |[![docs.rs](https://docs.rs/espr/badge.svg)](https://docs.rs/espr) |[![cargo-doc](https://img.shields.io/badge/master-espr-blue)][espr-doc] |[EXPRESS Language (ISO 10303-11)][EXPRESS] Compiler|
+| espr-derive |[![Crate](https://img.shields.io/crates/v/espr-derive.svg)](https://crates.io/crates/espr-derive) |[![docs.rs](https://docs.rs/espr-derive/badge.svg)](https://docs.rs/espr-derive) |[![cargo-doc](https://img.shields.io/badge/master-espr-derive-blue)][espr-derive-doc] |proc-macro for running espr compiler|
 | ruststep | [![Crate](https://img.shields.io/crates/v/ruststep.svg)](https://crates.io/crates/ruststep) | [![docs.rs](https://docs.rs/ruststep/badge.svg)](https://docs.rs/ruststep) |[![cargo-doc](https://img.shields.io/badge/master-ruststep-blue)][ruststep-doc]|Serialize/Deserialize STEP files|
 | ruststep-derive | [![Crate](https://img.shields.io/crates/v/ruststep-derive.svg)](https://crates.io/crates/ruststep-derive) | [![docs.rs](https://docs.rs/ruststep-derive/badge.svg)](https://docs.rs/ruststep-derive) |[![cargo-doc](https://img.shields.io/badge/master-ruststep--derive-blue)][ruststep-derive-doc]|proc-macro helper crate|
 
