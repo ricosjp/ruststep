@@ -2,6 +2,15 @@
 name = "espr-derive"
 version = "0.1.0"
 edition = "2021"
+authors = ["Toshiki Teramura <teramura@ricos.co.jp"]
+
+description   = "Procedual macro for running espr compiler"
+documentation = "https://ricosjp.github.io/ruststep/espr_derive/index.html"
+repository    = "https://github.com/ricosjp/ruststep"
+keywords      = ["step", "cad", "compiler", "proc-macro"]
+license       = "Apache-2.0"
+readme        = "../README.md"
+categories    = ["science", "development-tools"]
 
 [lib]
 proc-macro = true
