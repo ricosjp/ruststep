@@ -12,7 +12,7 @@ proc-macro2 = "1.0.28"
 syn = { version = "1.0.75", features = ["full", "extra-traits"] }
 
 [dependencies.espr]
-version = "0.1.0"
+version = "0.2.0"
 path = "../espr"
 
 [dev-dependencies]
