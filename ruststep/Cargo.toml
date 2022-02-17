@@ -36,4 +36,4 @@ anyhow = "1.0.43"
 
 [dev-dependencies.espr-derive]
 path = "../espr-derive"
-version = "0.1.0"
+version = "0.2.0"
