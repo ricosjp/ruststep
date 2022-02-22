@@ -1,17 +1,17 @@
 //! Intermediate Representation ([IR]) legalized (semantically analyzed) from [SyntaxTree]
 
+mod complex_entity;
 mod entity;
 mod namespace;
-mod partial_complex_entity;
 mod schema;
 mod scope;
 mod subsuper;
 mod type_decl;
 mod type_ref;
 
+pub use complex_entity::*;
 pub use entity::*;
 pub use namespace::*;
-pub use partial_complex_entity::*;
 pub use schema::*;
 pub use scope::*;
 pub use subsuper::*;
