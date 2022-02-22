@@ -40,7 +40,7 @@ impl std::ops::BitAnd for PartialComplexEntity {
     type Output = Self;
     fn bitand(mut self, mut rhs: Self) -> Self {
         self.indices.append(&mut rhs.indices);
-        self.indices.sort();
+        self.indices.sort_unstable();
         PartialComplexEntity {
             indices: self.indices.into_iter().dedup().collect(),
         }
