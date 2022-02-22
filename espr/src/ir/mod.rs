@@ -2,6 +2,7 @@
 
 mod entity;
 mod namespace;
+mod partial_complex_entity;
 mod schema;
 mod scope;
 mod subsuper;
@@ -10,6 +11,7 @@ mod type_ref;
 
 pub use entity::*;
 pub use namespace::*;
+pub use partial_complex_entity::*;
 pub use schema::*;
 pub use scope::*;
 pub use subsuper::*;
