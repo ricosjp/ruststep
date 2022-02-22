@@ -1,5 +1,7 @@
 //! Partial complex entities described in ISO-10303-11 Annex B
 
+use itertools::Itertools;
+
 /// Partial complex entity data type, e.g. `A & B & C` in ISO document
 ///
 /// Each component `A` will be represented by an index.
@@ -12,23 +14,25 @@
 /// let c = PartialComplexEntity::new(&[2]);
 /// assert_eq!(a & b & c, PartialComplexEntity::new(&[1, 2, 3]));
 /// ```
-#[derive(Debug, PartialEq, Eq)]
+///
+/// `A & A == A`
+///
+/// ```
+/// # use espr::ir::*;
+/// let a = PartialComplexEntity::new(&[1]);
+/// assert_eq!(a.clone() & a.clone(), a);
+/// ```
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct PartialComplexEntity {
     /// Sorted and non-duplicated indices
     indices: Vec<usize>,
 }
 
-impl Into<PartialComplexEntity> for Vec<usize> {
-    fn into(self) -> PartialComplexEntity {
-        let mut pce = PartialComplexEntity { indices: self };
-        pce.indices.sort();
-        pce
-    }
-}
-
 impl PartialComplexEntity {
     pub fn new(indices: &[usize]) -> Self {
-        indices.to_vec().into()
+        PartialComplexEntity {
+            indices: indices.iter().cloned().dedup().collect(),
+        }
     }
 }
 
@@ -37,7 +41,9 @@ impl std::ops::BitAnd for PartialComplexEntity {
     fn bitand(mut self, mut rhs: Self) -> Self {
         self.indices.append(&mut rhs.indices);
         self.indices.sort();
-        self
+        PartialComplexEntity {
+            indices: self.indices.into_iter().dedup().collect(),
+        }
     }
 }
 
