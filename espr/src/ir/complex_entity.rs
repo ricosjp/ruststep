@@ -7,20 +7,32 @@ use itertools::Itertools;
 /// Each component `A` will be represented by an index.
 /// `&` operation corresponds to `BitAnd`
 ///
-/// ```
-/// # use espr::ir::*;
-/// let a = PartialComplexEntity::new(&[1]);
-/// let b = PartialComplexEntity::new(&[3]);
-/// let c = PartialComplexEntity::new(&[2]);
-/// assert_eq!(a & b & c, PartialComplexEntity::new(&[1, 2, 3]));
-/// ```
-///
 /// `A & A == A`
 ///
 /// ```
 /// # use espr::ir::*;
 /// let a = PartialComplexEntity::new(&[1]);
 /// assert_eq!(a.clone() & a.clone(), a);
+/// ```
+///
+/// `A & B == B & A`
+///
+/// ```
+/// # use espr::ir::*;
+/// let a = PartialComplexEntity::new(&[1]);
+/// let b = PartialComplexEntity::new(&[2]);
+/// assert_eq!(a.clone() & b.clone(), b & a);
+/// ```
+///
+/// `A & (B & C) == (A & B) & C == A & B & C`
+///
+/// ```
+/// # use espr::ir::*;
+/// let a = PartialComplexEntity::new(&[1]);
+/// let b = PartialComplexEntity::new(&[3]);
+/// let c = PartialComplexEntity::new(&[2]);
+/// assert_eq!((a.clone() & b.clone()) & c.clone(), a.clone() & (b.clone() & c.clone()));
+/// assert_eq!(a & b & c, PartialComplexEntity::new(&[1, 2, 3]));
 /// ```
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct PartialComplexEntity {
