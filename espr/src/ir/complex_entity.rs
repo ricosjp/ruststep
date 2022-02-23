@@ -51,6 +51,12 @@ impl PartialComplexEntity {
     }
 }
 
+impl Into<PartialComplexEntity> for &[usize] {
+    fn into(self) -> PartialComplexEntity {
+        PartialComplexEntity::new(self)
+    }
+}
+
 impl std::ops::BitAnd for PartialComplexEntity {
     type Output = Self;
     fn bitand(mut self, mut rhs: Self) -> Self {
@@ -63,19 +69,30 @@ impl std::ops::BitAnd for PartialComplexEntity {
 }
 
 /// Complex entity, a list of [PartialComplexEntity]
+///
+/// ```
+/// # use espr::ir::*;
+/// let ce = ComplexEntity::new(&[PartialComplexEntity::new(&[1]), PartialComplexEntity::new(&[2])]);
+/// ```
 #[derive(Debug, PartialEq, Eq)]
 pub struct ComplexEntity {
     /// Sorted and non-duplicated list of partial complex entities
     parts: Vec<PartialComplexEntity>,
 }
 
-impl FromIterator<PartialComplexEntity> for ComplexEntity {
+impl ComplexEntity {
+    pub fn new(parts: &[PartialComplexEntity]) -> Self {
+        parts.iter().collect()
+    }
+}
+
+impl<'a> FromIterator<&'a PartialComplexEntity> for ComplexEntity {
     fn from_iter<I>(iter: I) -> Self
     where
-        I: IntoIterator<Item = PartialComplexEntity>,
+        I: IntoIterator<Item = &'a PartialComplexEntity>,
     {
         Self {
-            parts: iter.into_iter().sorted().dedup().collect(),
+            parts: iter.into_iter().cloned().sorted().dedup().collect(),
         }
     }
 }
