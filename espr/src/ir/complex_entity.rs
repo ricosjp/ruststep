@@ -107,3 +107,41 @@ impl std::ops::Add<ComplexEntity> for PartialComplexEntity {
         rhs + self
     }
 }
+
+// [A, B] & [C, D] = [A & C, A & D, B & C, B & D]
+impl std::ops::BitAnd for ComplexEntity {
+    type Output = ComplexEntity;
+    fn bitand(self, rhs: ComplexEntity) -> ComplexEntity {
+        let mut parts = Vec::with_capacity(self.parts.len() * rhs.parts.len());
+        for p in &self.parts {
+            for q in &rhs.parts {
+                parts.push(p.clone() & q.clone());
+            }
+        }
+        ComplexEntity { parts }
+    }
+}
+
+// [A, B] & C = [A & C, B & C]
+impl std::ops::BitAnd<PartialComplexEntity> for ComplexEntity {
+    type Output = ComplexEntity;
+    fn bitand(self, q: PartialComplexEntity) -> ComplexEntity {
+        ComplexEntity {
+            parts: self
+                .parts
+                .into_iter()
+                .map(|p| p & q.clone())
+                .sorted()
+                .dedup()
+                .collect(),
+        }
+    }
+}
+
+// A & [B, C] = [A & B, A & C]
+impl std::ops::BitAnd<ComplexEntity> for PartialComplexEntity {
+    type Output = ComplexEntity;
+    fn bitand(self, rhs: ComplexEntity) -> ComplexEntity {
+        rhs & self
+    }
+}
