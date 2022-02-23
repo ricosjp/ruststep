@@ -31,10 +31,13 @@ use itertools::Itertools;
 /// let a = PartialComplexEntity::new(&[1]);
 /// let b = PartialComplexEntity::new(&[3]);
 /// let c = PartialComplexEntity::new(&[2]);
-/// assert_eq!((a.clone() & b.clone()) & c.clone(), a.clone() & (b.clone() & c.clone()));
+/// assert_eq!(
+///     (a.clone() & b.clone()) & c.clone(),
+///      a.clone() & (b.clone() & c.clone())
+/// );
 /// assert_eq!(a & b & c, PartialComplexEntity::new(&[1, 2, 3]));
 /// ```
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct PartialComplexEntity {
     /// Sorted and non-duplicated indices
     indices: Vec<usize>,
@@ -59,8 +62,48 @@ impl std::ops::BitAnd for PartialComplexEntity {
     }
 }
 
-/// Complex entity, a list of partial complex entity.
+/// Complex entity, a list of [PartialComplexEntity]
 #[derive(Debug, PartialEq, Eq)]
 pub struct ComplexEntity {
+    /// Sorted and non-duplicated list of partial complex entities
     parts: Vec<PartialComplexEntity>,
+}
+
+impl FromIterator<PartialComplexEntity> for ComplexEntity {
+    fn from_iter<I>(iter: I) -> Self
+    where
+        I: IntoIterator<Item = PartialComplexEntity>,
+    {
+        Self {
+            parts: iter.into_iter().sorted().dedup().collect(),
+        }
+    }
+}
+
+// [A, B] + [C, D] = [A, B, C, D]
+impl std::ops::Add for ComplexEntity {
+    type Output = Self;
+    fn add(mut self, mut rhs: ComplexEntity) -> Self {
+        self.parts.append(&mut rhs.parts);
+        self.parts.sort_unstable();
+        self
+    }
+}
+
+// [A, B] + C = [A, B, C]
+impl std::ops::Add<PartialComplexEntity> for ComplexEntity {
+    type Output = Self;
+    fn add(mut self, rhs: PartialComplexEntity) -> Self {
+        self.parts.push(rhs);
+        self.parts.sort_unstable();
+        self
+    }
+}
+
+// A + [B, C] = [A, B, C]
+impl std::ops::Add<ComplexEntity> for PartialComplexEntity {
+    type Output = ComplexEntity;
+    fn add(self, rhs: ComplexEntity) -> ComplexEntity {
+        rhs + self
+    }
 }
