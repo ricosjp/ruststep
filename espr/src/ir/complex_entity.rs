@@ -51,9 +51,9 @@ impl PartialComplexEntity {
     }
 }
 
-impl Into<PartialComplexEntity> for &[usize] {
-    fn into(self) -> PartialComplexEntity {
-        PartialComplexEntity::new(self)
+impl From<&[usize]> for PartialComplexEntity {
+    fn from(indices: &[usize]) -> PartialComplexEntity {
+        PartialComplexEntity::new(indices)
     }
 }
 
