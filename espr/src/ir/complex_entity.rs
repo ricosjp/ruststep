@@ -74,6 +74,33 @@ impl std::ops::BitAnd for PartialComplexEntity {
 /// # use espr::ir::*;
 /// let ce = ComplexEntity::new(&[PartialComplexEntity::new(&[1]), PartialComplexEntity::new(&[2])]);
 /// ```
+///
+/// `[A, A & B, A & C, A & B & D, B & C, D] / A = [A, A & B, A & C, A & B & D]`
+///
+/// ```
+/// # use espr::ir::*;
+/// let a = PartialComplexEntity::new(&[1]);
+/// let b = PartialComplexEntity::new(&[2]);
+/// let c = PartialComplexEntity::new(&[3]);
+/// let d = PartialComplexEntity::new(&[4]);
+///
+/// let ce = ComplexEntity::new(&[
+///   a.clone(),
+///   a.clone() & b.clone(),
+///   a.clone() & c.clone(),
+///   a.clone() & b.clone() & d.clone(),
+///   b.clone() & c.clone(),
+///   d.clone()
+/// ]);
+///
+/// assert_eq!(ce / a.clone(), ComplexEntity::new(&[
+///   a.clone(),
+///   a.clone() & b.clone(),
+///   a.clone() & c.clone(),
+///   a.clone() & b.clone() & d.clone(),
+/// ]));
+/// ```
+///
 #[derive(Debug, PartialEq, Eq)]
 pub struct ComplexEntity {
     /// Sorted and non-duplicated list of partial complex entities
@@ -160,5 +187,28 @@ impl std::ops::BitAnd<ComplexEntity> for PartialComplexEntity {
     type Output = ComplexEntity;
     fn bitand(self, rhs: ComplexEntity) -> ComplexEntity {
         rhs & self
+    }
+}
+
+// [A, A & B, A & C, A & B & D, B & C, D] / A = [A, A & B, A & C, A & B & D]
+impl std::ops::Div<PartialComplexEntity> for ComplexEntity {
+    type Output = ComplexEntity;
+    fn div(self, rhs: PartialComplexEntity) -> ComplexEntity {
+        ComplexEntity {
+            parts: self
+                .parts
+                .into_iter()
+                .filter(|part| {
+                    for i in &rhs.indices {
+                        if let Ok(_) = part.indices.binary_search(i) {
+                            continue;
+                        } else {
+                            return false;
+                        }
+                    }
+                    return true;
+                })
+                .collect(),
+        }
     }
 }
