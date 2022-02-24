@@ -101,6 +101,36 @@ impl std::ops::BitAnd for PartialComplexEntity {
 /// ]));
 /// ```
 ///
+/// `[A, A & B, A & C, A & B & D, B & C, D]/[B, D] ≡ [A & B, A & B & D, B & C, D]`
+///
+/// ```
+/// # use espr::ir::*;
+/// let a = PartialComplexEntity::new(&[1]);
+/// let b = PartialComplexEntity::new(&[2]);
+/// let c = PartialComplexEntity::new(&[3]);
+/// let d = PartialComplexEntity::new(&[4]);
+///
+/// let ce1 = ComplexEntity::new(&[
+///   a.clone(),
+///   a.clone() & b.clone(),
+///   a.clone() & c.clone(),
+///   a.clone() & b.clone() & d.clone(),
+///   b.clone() & c.clone(),
+///   d.clone()
+/// ]);
+///
+/// let ce2 = ComplexEntity::new(&[
+///   b.clone(),
+///   d.clone()
+/// ]);
+///
+/// assert_eq!(ce1 / ce2, ComplexEntity::new(&[
+///   a.clone() & b.clone(),
+///   a.clone() & b.clone() & d.clone(),
+///   b.clone() & c.clone(),
+///   d.clone()
+/// ]));
+/// ```
 #[derive(Debug, PartialEq, Eq)]
 pub struct ComplexEntity {
     /// Sorted and non-duplicated list of partial complex entities
@@ -190,6 +220,27 @@ impl std::ops::BitAnd<ComplexEntity> for PartialComplexEntity {
     }
 }
 
+// [A, A & B, A & C, A & B & D, B & C, D]/[B, D] ≡ [A & B, A & B & D, B & C, D]
+impl std::ops::Div for ComplexEntity {
+    type Output = Self;
+    fn div(self, rhs: ComplexEntity) -> Self {
+        ComplexEntity {
+            parts: self
+                .parts
+                .into_iter()
+                .filter(|p| {
+                    for q in &rhs.parts {
+                        if q.indices.iter().all(|j| p.indices.binary_search(j).is_ok()) {
+                            return true;
+                        }
+                    }
+                    return false;
+                })
+                .collect(),
+        }
+    }
+}
+
 // [A, A & B, A & C, A & B & D, B & C, D] / A = [A, A & B, A & C, A & B & D]
 impl std::ops::Div<PartialComplexEntity> for ComplexEntity {
     type Output = ComplexEntity;
@@ -199,14 +250,9 @@ impl std::ops::Div<PartialComplexEntity> for ComplexEntity {
                 .parts
                 .into_iter()
                 .filter(|part| {
-                    for i in &rhs.indices {
-                        if let Ok(_) = part.indices.binary_search(i) {
-                            continue;
-                        } else {
-                            return false;
-                        }
-                    }
-                    return true;
+                    rhs.indices
+                        .iter()
+                        .all(|i| part.indices.binary_search(i).is_ok())
                 })
                 .collect(),
         }
