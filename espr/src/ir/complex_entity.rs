@@ -75,11 +75,80 @@ impl std::ops::BitAnd for PartialComplexEntity {
 ///
 /// This has several operation, $+$, $-$, $\And$, and $/$.
 ///
-/// - Division by PartialComplexEntity
+/// - $A + [B_1, B_2] = [B_1, B_2] + A = [A, B_1, B_2]$
 ///
-/// $$
-/// [A, A \And B, A \And C, A \And B \And D, B \And C, D] / A = [A, A \And B, A \And C, A \And B \And D]
-/// $$
+/// ```
+/// # use espr::ir::*;
+/// let a = PartialComplexEntity::new(&[1]);
+/// let b1 = PartialComplexEntity::new(&[2]);
+/// let b2 = PartialComplexEntity::new(&[3]);
+///
+/// let ce = ComplexEntity::new(&[b1.clone(), b2.clone()]);
+///
+/// assert_eq!(a.clone() + ce, ComplexEntity::new(&[
+///   a.clone(),
+///   b1.clone(),
+///   b2.clone(),
+/// ]));
+/// ```
+///
+/// - $A \And [B_1, B_2] = [B_1, B_2] \And A = [A \And B_1, A \And B_2]$
+///
+/// ```
+/// # use espr::ir::*;
+/// let a = PartialComplexEntity::new(&[1]);
+/// let b1 = PartialComplexEntity::new(&[2]);
+/// let b2 = PartialComplexEntity::new(&[3]);
+///
+/// let ce = ComplexEntity::new(&[b1.clone(), b2.clone()]);
+///
+/// assert_eq!(a.clone() & ce, ComplexEntity::new(&[
+///   a.clone() & b1.clone(),
+///   a.clone() & b2.clone(),
+/// ]));
+/// ```
+///
+/// - $[A_1, A_2] + [B_1, B_2] = [A_1, A_2, B_1, B_2]$
+///
+/// ```
+/// # use espr::ir::*;
+/// let a1 = PartialComplexEntity::new(&[1]);
+/// let a2 = PartialComplexEntity::new(&[1]);
+/// let b1 = PartialComplexEntity::new(&[3]);
+/// let b2 = PartialComplexEntity::new(&[4]);
+///
+/// let ce1 = ComplexEntity::new(&[a1.clone(), a2.clone()]);
+/// let ce2 = ComplexEntity::new(&[b1.clone(), b2.clone()]);
+///
+/// assert_eq!(ce1 + ce2, ComplexEntity::new(&[
+///   a1.clone(),
+///   a2.clone(),
+///   b1.clone(),
+///   b2.clone(),
+/// ]));
+/// ```
+///
+/// - $[A_1, A_2] \And [B_1, B_2] = [A_1 \And B_1, A_1 \And B_2, A_2 \And B_1, A_2 \And B_2]$
+///
+/// ```
+/// # use espr::ir::*;
+/// let a1 = PartialComplexEntity::new(&[1]);
+/// let a2 = PartialComplexEntity::new(&[1]);
+/// let b1 = PartialComplexEntity::new(&[3]);
+/// let b2 = PartialComplexEntity::new(&[4]);
+///
+/// let ce1 = ComplexEntity::new(&[a1.clone(), a2.clone()]);
+/// let ce2 = ComplexEntity::new(&[b1.clone(), b2.clone()]);
+///
+/// assert_eq!(ce1 & ce2, ComplexEntity::new(&[
+///   a1.clone() & b1.clone(),
+///   a1.clone() & b2.clone(),
+///   a2.clone() & b1.clone(),
+///   a2.clone() & b2.clone(),
+/// ]));
+/// ```
+///
+/// - $[A, A \And B, A \And C, A \And B \And D, B \And C, D] / A = [A, A \And B, A \And C, A \And B \And D]$
 ///
 /// ```
 /// # use espr::ir::*;
@@ -105,11 +174,7 @@ impl std::ops::BitAnd for PartialComplexEntity {
 /// ]));
 /// ```
 ///
-/// - Division by ComplexEntity
-///
-/// $$
-/// [A, A \And B, A \And C, A \And B \And D, B \And C, D]/[B, D] = [A \And B, A \And B \And D, B \And C, D]
-/// $$
+/// - $ [A, A \And B, A \And C, A \And B \And D, B \And C, D]/[B, D] = [A \And B, A \And B \And D, B \And C, D] $
 ///
 /// ```
 /// # use espr::ir::*;
