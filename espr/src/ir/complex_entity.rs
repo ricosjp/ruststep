@@ -2,12 +2,14 @@
 
 use itertools::Itertools;
 
-/// Partial complex entity data type, e.g. `A & B & C` in ISO document
+#[cfg_attr(doc, katexit::katexit)]
+/// Partial complex entity data type, e.g. $A \And B \And C$ in ISO document
 ///
-/// Each component `A` will be represented by an index.
-/// `&` operation corresponds to `BitAnd`
+/// Each component, e.g. $A$, will be represented by an index.
+/// $\And$ operation is implemented by [std::ops::BitAnd] trait.
+/// This satisfies following equations:
 ///
-/// `A & A == A`
+/// - $A \And A = A$
 ///
 /// ```
 /// # use espr::ir::*;
@@ -15,7 +17,7 @@ use itertools::Itertools;
 /// assert_eq!(a.clone() & a.clone(), a);
 /// ```
 ///
-/// `A & B == B & A`
+/// - $A \And B = B \And A$
 ///
 /// ```
 /// # use espr::ir::*;
@@ -24,7 +26,7 @@ use itertools::Itertools;
 /// assert_eq!(a.clone() & b.clone(), b & a);
 /// ```
 ///
-/// `A & (B & C) == (A & B) & C == A & B & C`
+/// - $A \And (B \And C) = (A \And B) \And C = A \And B \And C$
 ///
 /// ```
 /// # use espr::ir::*;
@@ -68,14 +70,16 @@ impl std::ops::BitAnd for PartialComplexEntity {
     }
 }
 
-/// Complex entity, a list of [PartialComplexEntity]
+#[cfg_attr(doc, katexit::katexit)]
+/// Complex entity, a list of PartialComplexEntity
 ///
-/// ```
-/// # use espr::ir::*;
-/// let ce = ComplexEntity::new(&[PartialComplexEntity::new(&[1]), PartialComplexEntity::new(&[2])]);
-/// ```
+/// This has several operation, $+$, $-$, $\And$, and $/$.
 ///
-/// `[A, A & B, A & C, A & B & D, B & C, D] / A = [A, A & B, A & C, A & B & D]`
+/// - Division by PartialComplexEntity
+///
+/// $$
+/// [A, A \And B, A \And C, A \And B \And D, B \And C, D] / A = [A, A \And B, A \And C, A \And B \And D]
+/// $$
 ///
 /// ```
 /// # use espr::ir::*;
@@ -101,7 +105,11 @@ impl std::ops::BitAnd for PartialComplexEntity {
 /// ]));
 /// ```
 ///
-/// `[A, A & B, A & C, A & B & D, B & C, D]/[B, D] ≡ [A & B, A & B & D, B & C, D]`
+/// - Division by ComplexEntity
+///
+/// $$
+/// [A, A \And B, A \And C, A \And B \And D, B \And C, D]/[B, D] = [A \And B, A \And B \And D, B \And C, D]
+/// $$
 ///
 /// ```
 /// # use espr::ir::*;
