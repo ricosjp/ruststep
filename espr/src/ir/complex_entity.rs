@@ -73,7 +73,8 @@ impl std::ops::BitAnd for PartialComplexEntity {
 #[cfg_attr(doc, katexit::katexit)]
 /// Complex entity, a list of PartialComplexEntity
 ///
-/// This has several operation, $+$, $-$, $\And$, and $/$.
+/// This has several operation described in ISO-10303-11 annex B,
+/// $+$, $-$, $\And$, and $/$.
 ///
 /// - $A + [B_1, B_2] = [B_1, B_2] + A = [A, B_1, B_2]$
 ///
@@ -204,6 +205,33 @@ impl std::ops::BitAnd for PartialComplexEntity {
 ///   d.clone()
 /// ]));
 /// ```
+///
+/// - $[A_1, A_2, B_1, B_2] − [A_2, B_1] = [A_1, B_2]$
+///
+/// ```
+/// # use espr::ir::*;
+/// let a1 = PartialComplexEntity::new(&[1]);
+/// let a2 = PartialComplexEntity::new(&[2]);
+/// let b1 = PartialComplexEntity::new(&[3]);
+/// let b2 = PartialComplexEntity::new(&[4]);
+///
+/// let ce1 = ComplexEntity::new(&[
+///   a1.clone(),
+///   a2.clone(),
+///   b1.clone(),
+///   b2.clone(),
+/// ]);
+///
+/// let ce2 = ComplexEntity::new(&[
+///   a2.clone(),
+///   b1.clone()
+/// ]);
+///
+/// assert_eq!(ce1 - ce2, ComplexEntity::new(&[
+///   a1.clone(),
+///   b2.clone()
+/// ]));
+/// ```
 #[derive(Debug, PartialEq, Eq)]
 pub struct ComplexEntity {
     /// Sorted and non-duplicated list of partial complex entities
@@ -290,6 +318,28 @@ impl std::ops::BitAnd<ComplexEntity> for PartialComplexEntity {
     type Output = ComplexEntity;
     fn bitand(self, rhs: ComplexEntity) -> ComplexEntity {
         rhs & self
+    }
+}
+
+impl std::ops::Sub for ComplexEntity {
+    type Output = Self;
+    fn sub(self, rhs: ComplexEntity) -> Self {
+        ComplexEntity {
+            parts: self
+                .parts
+                .into_iter()
+                .filter(|p| rhs.parts.iter().all(|q| p != q))
+                .collect(),
+        }
+    }
+}
+
+impl std::ops::Sub<PartialComplexEntity> for ComplexEntity {
+    type Output = Self;
+    fn sub(self, q: PartialComplexEntity) -> Self {
+        ComplexEntity {
+            parts: self.parts.into_iter().filter(|p| p != &q).collect(),
+        }
     }
 }
 
