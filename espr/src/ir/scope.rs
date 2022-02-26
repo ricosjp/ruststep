@@ -88,6 +88,15 @@ impl PartialOrd for Scope {
     }
 }
 
+macro_rules! add_scope {
+    ($f:ident, $ty:ident) => {
+        #[doc = stringify!(Add $ty scope)]
+        pub fn $f(&self, name: &str) -> Self {
+            self.pushed(ScopeType::$ty, name)
+        }
+    };
+}
+
 impl Scope {
     pub fn root() -> Self {
         Self(Vec::new())
@@ -98,6 +107,17 @@ impl Scope {
         new.0.push((ty, name.to_string()));
         new
     }
+
+    add_scope!(entity, Entity);
+    add_scope!(alias, Alias);
+    add_scope!(function, Function);
+    add_scope!(procedure, Procedure);
+    add_scope!(query, Query);
+    add_scope!(repeat, Repeat);
+    add_scope!(rule, Rule);
+    add_scope!(schema, Schema);
+    add_scope!(subtype, SubType);
+    add_scope!(r#type, Type);
 
     /// Pop the last scope
     ///
