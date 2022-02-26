@@ -1,6 +1,7 @@
 use super::{scope::*, SemanticError};
 use crate::ast::{self, SyntaxTree};
-use std::collections::HashMap;
+
+use std::{collections::HashMap, fmt};
 
 /// Named AST portion of corresponding [Path]
 #[derive(Debug, Clone, Copy)] // Copy since this is actually immutable reference
@@ -9,10 +10,24 @@ pub enum Named<'st> {
     Entity(&'st ast::Entity),
 }
 
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct Namespace<'st> {
     pub names: HashMap<Scope, Vec<(ScopeType, String)>>,
     pub ast: HashMap<Path, Named<'st>>,
+}
+
+impl fmt::Debug for Namespace<'_> {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "[Namespace.names]")?;
+        for (k, v) in &self.names {
+            writeln!(f, "{} = {:>2?}", k, v)?;
+        }
+        writeln!(f, "[Namespace.ast]")?;
+        for (k, v) in &self.ast {
+            writeln!(f, "{} = {:>2?}", k, v)?;
+        }
+        Ok(())
+    }
 }
 
 impl<'st> Namespace<'st> {
@@ -117,5 +132,46 @@ mod tests {
                 assert_eq!(names.len(), 1);
             }
         }
+    }
+
+    #[test]
+    fn namespace_debug() {
+        let st = ast::SyntaxTree::parse(
+            r#"
+            SCHEMA test_schema;
+              ENTITY base SUPERTYPE OF (ONEOF (sub1, sub2));
+                x: REAL;
+              END_ENTITY;
+
+              ENTITY sub1 SUBTYPE OF (base);
+                y1: REAL;
+              END_ENTITY;
+
+              ENTITY sub2 SUBTYPE OF (base);
+                y2: REAL;
+              END_ENTITY;
+            END_SCHEMA;
+            "#,
+        )
+        .unwrap();
+        let ns = Namespace::new(&st);
+
+        insta::assert_snapshot!(format!("{:?}", ns), @r###"
+        [Namespace.names]
+        test_schema = [(Entity, "base"), (Entity, "sub1"), (Entity, "sub2")]
+        [Namespace.ast]
+        test_schema.sub1 = Entity(Entity sub1
+          EntityAttribute { name: Reference("y1"), ty: Simple(Real), optional: false }
+          SubTypeDecl { entity_references: ["base"] }
+        )
+        test_schema.sub2 = Entity(Entity sub2
+          EntityAttribute { name: Reference("y2"), ty: Simple(Real), optional: false }
+          SubTypeDecl { entity_references: ["base"] }
+        )
+        test_schema.base = Entity(Entity base
+          EntityAttribute { name: Reference("x"), ty: Simple(Real), optional: false }
+          SuperTypeRule(OneOf { exprs: [Reference("sub1"), Reference("sub2")] })
+        )
+        "###);
     }
 }
