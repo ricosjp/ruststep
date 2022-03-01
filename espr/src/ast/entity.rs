@@ -1,10 +1,9 @@
 //! AST for entity declarations
 
 use crate::{ast::*, parser::*};
-use std::fmt;
 
 /// Parsed result of EXPRESS's ENTITY
-#[derive(Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct Entity {
     /// Name of this entity type
     pub name: String,
@@ -21,34 +20,6 @@ pub struct Entity {
     pub inverse_clause: Option<InverseClause>,
     pub unique_clause: Option<UniqueClause>,
     pub where_clause: Option<WhereClause>,
-}
-
-impl fmt::Debug for Entity {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "Entity {}", self.name)?;
-        for attr in &self.attributes {
-            writeln!(f, "  {:?}", attr)?;
-        }
-        if let Some(constraint) = &self.constraint {
-            writeln!(f, "  {:?}", constraint)?;
-        }
-        if let Some(subtype_of) = &self.subtype_of {
-            writeln!(f, "  {:?}", subtype_of)?;
-        }
-        if let Some(derive_clause) = &self.derive_clause {
-            writeln!(f, "  {:?}", derive_clause)?;
-        }
-        if let Some(inverse_clause) = &self.inverse_clause {
-            writeln!(f, "  {:?}", inverse_clause)?;
-        }
-        if let Some(unique_clause) = &self.unique_clause {
-            writeln!(f, "  {:?}", unique_clause)?;
-        }
-        if let Some(where_clause) = &self.where_clause {
-            writeln!(f, "  {:?}", where_clause)?;
-        }
-        Ok(())
-    }
 }
 
 crate::derive_ast_component!(Entity, entity_decl);
