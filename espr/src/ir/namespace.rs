@@ -25,6 +25,20 @@ pub struct Namespace<'st> {
     pub ast: Vec<(Path, Named<'st>)>,
 }
 
+impl<'st> std::ops::Index<usize> for Namespace<'st> {
+    type Output = (Path, Named<'st>);
+    fn index(&self, id: usize) -> &Self::Output {
+        &self.ast[id]
+    }
+}
+
+impl<'st> std::ops::Index<&Scope> for Namespace<'st> {
+    type Output = [(ScopeType, String)];
+    fn index(&self, id: &Scope) -> &Self::Output {
+        &self.names[id]
+    }
+}
+
 impl fmt::Debug for Namespace<'_> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "[Namespace.names]")?;
@@ -64,6 +78,11 @@ impl<'st> Namespace<'st> {
         }
 
         Namespace { names, ast }
+    }
+
+    /// Size of indexed AST
+    pub fn len(&self) -> usize {
+        self.ast.len()
     }
 
     /// Resolve a `name` referred in a `scope` into the full path.
