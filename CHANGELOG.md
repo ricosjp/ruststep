@@ -18,6 +18,7 @@ In addition to original Keep-a-Changelog, we use following rules:
 ### Changed
 ### Fixed
 ### Internal
+- Index named AST https://github.com/ricosjp/ruststep/pull/201
 
 ## 0.2.0 - 2022-02-17
 

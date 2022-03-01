@@ -1,5 +1,6 @@
 use super::{scope::*, SemanticError};
 use crate::ast::{self, SyntaxTree};
+
 use std::collections::HashMap;
 
 /// Named AST portion of corresponding [Path]
@@ -9,16 +10,39 @@ pub enum Named<'st> {
     Entity(&'st ast::Entity),
 }
 
+/// Namespace of loaded EXPRESS schema
+///
+/// This struct will be constructed at the first time of IR creation,
+/// and is responsible for
+///
+/// - Resolving name in each [Scope] into [Path]
+/// - Get a reference to AST portion corresponding to [Path]
+///
 #[derive(Debug, Clone)]
 pub struct Namespace<'st> {
     pub names: HashMap<Scope, Vec<(ScopeType, String)>>,
-    pub ast: HashMap<Path, Named<'st>>,
+    /// Indexed AST portion
+    pub ast: Vec<(Path, Named<'st>)>,
+}
+
+impl<'st> std::ops::Index<usize> for Namespace<'st> {
+    type Output = (Path, Named<'st>);
+    fn index(&self, id: usize) -> &Self::Output {
+        &self.ast[id]
+    }
+}
+
+impl<'st> std::ops::Index<&Scope> for Namespace<'st> {
+    type Output = [(ScopeType, String)];
+    fn index(&self, id: &Scope) -> &Self::Output {
+        &self.names[id]
+    }
 }
 
 impl<'st> Namespace<'st> {
     pub fn new(st: &'st SyntaxTree) -> Self {
         let mut names = HashMap::new();
-        let mut ast = HashMap::new();
+        let mut ast = Vec::new();
         let root = Scope::root();
 
         for schema in &st.schemas {
@@ -28,18 +52,23 @@ impl<'st> Namespace<'st> {
                 let name = &ty.type_id;
                 current_names.push((ScopeType::Type, name.to_string()));
                 let path = Path::new(&here, ScopeType::Type, name);
-                ast.insert(path, Named::Type(ty));
+                ast.push((path, Named::Type(ty)));
             }
             for entity in &schema.entities {
                 let name = &entity.name;
                 current_names.push((ScopeType::Entity, name.to_string()));
                 let path = Path::new(&here, ScopeType::Entity, name);
-                ast.insert(path, Named::Entity(entity));
+                ast.push((path, Named::Entity(entity)));
             }
             names.insert(here, current_names);
         }
 
         Namespace { names, ast }
+    }
+
+    /// Size of indexed AST
+    pub fn len(&self) -> usize {
+        self.ast.len()
     }
 
     /// Resolve a `name` referred in a `scope` into the full path.
@@ -65,16 +94,19 @@ impl<'st> Namespace<'st> {
         }
     }
 
-    /// Get an AST portion corresponding the path
+    /// Get an AST portion corresponding the [Path]
     ///
     /// Error
     /// ------
     /// - Input path is invalid, i.e. No item is specified by the path.
+    ///
     pub fn get(&self, path: &Path) -> Result<Named, SemanticError> {
-        Ok(*self
-            .ast
-            .get(path)
-            .ok_or_else(|| SemanticError::InvalidPath(path.clone()))?)
+        for (p, ast) in &self.ast {
+            if p == path {
+                return Ok(*ast);
+            }
+        }
+        Err(SemanticError::InvalidPath(path.clone()))
     }
 }
 
@@ -117,5 +149,151 @@ mod tests {
                 assert_eq!(names.len(), 1);
             }
         }
+    }
+
+    #[test]
+    fn namespace_debug() {
+        let st = ast::SyntaxTree::parse(
+            r#"
+            SCHEMA test_schema;
+              ENTITY base SUPERTYPE OF (ONEOF (sub1, sub2));
+                x: REAL;
+              END_ENTITY;
+
+              ENTITY sub1 SUBTYPE OF (base);
+                y1: REAL;
+              END_ENTITY;
+
+              ENTITY sub2 SUBTYPE OF (base);
+                y2: REAL;
+              END_ENTITY;
+            END_SCHEMA;
+            "#,
+        )
+        .unwrap();
+        let ns = Namespace::new(&st);
+
+        insta::assert_snapshot!(format!("{:#?}", ns), @r###"
+        Namespace {
+            names: {
+                Scope(test_schema[Schema]): [
+                    (
+                        Entity,
+                        "base",
+                    ),
+                    (
+                        Entity,
+                        "sub1",
+                    ),
+                    (
+                        Entity,
+                        "sub2",
+                    ),
+                ],
+            },
+            ast: [
+                (
+                    Scope(test_schema[Schema]).base[Entity],
+                    Entity(
+                        Entity {
+                            name: "base",
+                            attributes: [
+                                EntityAttribute {
+                                    name: Reference(
+                                        "x",
+                                    ),
+                                    ty: Simple(
+                                        Real,
+                                    ),
+                                    optional: false,
+                                },
+                            ],
+                            constraint: Some(
+                                SuperTypeRule(
+                                    OneOf {
+                                        exprs: [
+                                            Reference(
+                                                "sub1",
+                                            ),
+                                            Reference(
+                                                "sub2",
+                                            ),
+                                        ],
+                                    },
+                                ),
+                            ),
+                            subtype_of: None,
+                            derive_clause: None,
+                            inverse_clause: None,
+                            unique_clause: None,
+                            where_clause: None,
+                        },
+                    ),
+                ),
+                (
+                    Scope(test_schema[Schema]).sub1[Entity],
+                    Entity(
+                        Entity {
+                            name: "sub1",
+                            attributes: [
+                                EntityAttribute {
+                                    name: Reference(
+                                        "y1",
+                                    ),
+                                    ty: Simple(
+                                        Real,
+                                    ),
+                                    optional: false,
+                                },
+                            ],
+                            constraint: None,
+                            subtype_of: Some(
+                                SubTypeDecl {
+                                    entity_references: [
+                                        "base",
+                                    ],
+                                },
+                            ),
+                            derive_clause: None,
+                            inverse_clause: None,
+                            unique_clause: None,
+                            where_clause: None,
+                        },
+                    ),
+                ),
+                (
+                    Scope(test_schema[Schema]).sub2[Entity],
+                    Entity(
+                        Entity {
+                            name: "sub2",
+                            attributes: [
+                                EntityAttribute {
+                                    name: Reference(
+                                        "y2",
+                                    ),
+                                    ty: Simple(
+                                        Real,
+                                    ),
+                                    optional: false,
+                                },
+                            ],
+                            constraint: None,
+                            subtype_of: Some(
+                                SubTypeDecl {
+                                    entity_references: [
+                                        "base",
+                                    ],
+                                },
+                            ),
+                            derive_clause: None,
+                            inverse_clause: None,
+                            unique_clause: None,
+                            where_clause: None,
+                        },
+                    ),
+                ),
+            ],
+        }
+        "###);
     }
 }
