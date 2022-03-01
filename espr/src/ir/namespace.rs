@@ -10,10 +10,19 @@ pub enum Named<'st> {
     Entity(&'st ast::Entity),
 }
 
+/// Namespace of loaded EXPRESS schema
+///
+/// This struct will be constructed at the first time of IR creation,
+/// and is responsible for
+///
+/// - Resolving name in each [Scope] into [Path]
+/// - Get a reference to AST portion corresponding to [Path]
+///
 #[derive(Clone)]
 pub struct Namespace<'st> {
     pub names: HashMap<Scope, Vec<(ScopeType, String)>>,
-    pub ast: HashMap<Path, Named<'st>>,
+    /// Indexed AST portion
+    pub ast: Vec<(Path, Named<'st>)>,
 }
 
 impl fmt::Debug for Namespace<'_> {
@@ -33,7 +42,7 @@ impl fmt::Debug for Namespace<'_> {
 impl<'st> Namespace<'st> {
     pub fn new(st: &'st SyntaxTree) -> Self {
         let mut names = HashMap::new();
-        let mut ast = HashMap::new();
+        let mut ast = Vec::new();
         let root = Scope::root();
 
         for schema in &st.schemas {
@@ -43,13 +52,13 @@ impl<'st> Namespace<'st> {
                 let name = &ty.type_id;
                 current_names.push((ScopeType::Type, name.to_string()));
                 let path = Path::new(&here, ScopeType::Type, name);
-                ast.insert(path, Named::Type(ty));
+                ast.push((path, Named::Type(ty)));
             }
             for entity in &schema.entities {
                 let name = &entity.name;
                 current_names.push((ScopeType::Entity, name.to_string()));
                 let path = Path::new(&here, ScopeType::Entity, name);
-                ast.insert(path, Named::Entity(entity));
+                ast.push((path, Named::Entity(entity)));
             }
             names.insert(here, current_names);
         }
@@ -80,16 +89,19 @@ impl<'st> Namespace<'st> {
         }
     }
 
-    /// Get an AST portion corresponding the path
+    /// Get an AST portion corresponding the [Path]
     ///
     /// Error
     /// ------
     /// - Input path is invalid, i.e. No item is specified by the path.
+    ///
     pub fn get(&self, path: &Path) -> Result<Named, SemanticError> {
-        Ok(*self
-            .ast
-            .get(path)
-            .ok_or_else(|| SemanticError::InvalidPath(path.clone()))?)
+        for (p, ast) in &self.ast {
+            if p == path {
+                return Ok(*ast);
+            }
+        }
+        Err(SemanticError::InvalidPath(path.clone()))
     }
 }
 
@@ -160,6 +172,10 @@ mod tests {
         [Namespace.names]
         test_schema = [(Entity, "base"), (Entity, "sub1"), (Entity, "sub2")]
         [Namespace.ast]
+        test_schema.base = Entity(Entity base
+          EntityAttribute { name: Reference("x"), ty: Simple(Real), optional: false }
+          SuperTypeRule(OneOf { exprs: [Reference("sub1"), Reference("sub2")] })
+        )
         test_schema.sub1 = Entity(Entity sub1
           EntityAttribute { name: Reference("y1"), ty: Simple(Real), optional: false }
           SubTypeDecl { entity_references: ["base"] }
@@ -167,10 +183,6 @@ mod tests {
         test_schema.sub2 = Entity(Entity sub2
           EntityAttribute { name: Reference("y2"), ty: Simple(Real), optional: false }
           SubTypeDecl { entity_references: ["base"] }
-        )
-        test_schema.base = Entity(Entity base
-          EntityAttribute { name: Reference("x"), ty: Simple(Real), optional: false }
-          SuperTypeRule(OneOf { exprs: [Reference("sub1"), Reference("sub2")] })
         )
         "###);
     }
