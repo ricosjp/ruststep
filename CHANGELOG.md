@@ -15,6 +15,7 @@ In addition to original Keep-a-Changelog, we use following rules:
 ## Unreleased
 
 ### Added
+- Partial complex entities described in ISO-10303-11 Annex B https://github.com/ricosjp/ruststep/pull/200
 ### Changed
 ### Fixed
 ### Internal
