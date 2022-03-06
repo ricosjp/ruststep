@@ -6,7 +6,22 @@ pub struct Entity {
     /// Name of entity in snake_case
     pub name: String,
     pub attributes: Vec<EntityAttribute>,
-    pub subtypes: Vec<TypeRef>,
+
+    /// List of constraints corresponding to `SUBTYPE_CONSTRAINTS`
+    /// and `SUPERTYPE OF` declaration in EXPRESS schema
+    pub constraints: Vec<TypeRef>,
+
+    /// List of types to be inherited by this entity
+    ///
+    /// When this entity is `sub` defined like:
+    ///
+    /// ```text
+    /// ENTITY sub SUBTYPE OF (base);
+    /// END_ENTITY;
+    /// ```
+    ///
+    /// then this `supertypes` is `[base]`.
+    ///
     pub supertypes: Vec<TypeRef>,
 }
 
@@ -62,7 +77,7 @@ impl Legalize for Entity {
             .iter()
             .map(|sup| TypeRef::from_path(ns, ss, sup))
             .collect::<Result<Vec<_>, _>>()?;
-        let subtypes = ss
+        let constraints = ss
             .get_subtypes(&path)
             .unwrap_or_default()
             .iter()
@@ -72,7 +87,7 @@ impl Legalize for Entity {
         Ok(Entity {
             name,
             attributes,
-            subtypes,
+            constraints,
             supertypes,
         })
     }
