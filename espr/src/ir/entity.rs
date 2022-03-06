@@ -61,7 +61,7 @@ impl Legalize for Entity {
         ns: &Namespace,
         ss: &SubSuperGraph,
         scope: &Scope,
-        entity: &Self::Input,
+        entity: &ast::Entity,
     ) -> Result<Self, SemanticError> {
         let name = entity.name.clone();
         let attributes = entity
@@ -70,19 +70,17 @@ impl Legalize for Entity {
             .map(|attr| EntityAttribute::legalize(ns, ss, scope, attr))
             .collect::<Result<Vec<_>, _>>()?;
 
-        let path = Path::new(scope, ScopeType::Entity, &name);
-        let supertypes = ss
-            .get_supertypes(&path)
-            .unwrap_or_default()
-            .iter()
-            .map(|sup| TypeRef::from_path(ns, ss, sup))
-            .collect::<Result<Vec<_>, _>>()?;
-        let constraints = ss
-            .get_subtypes(&path)
-            .unwrap_or_default()
-            .iter()
-            .map(|sub| TypeRef::from_path(ns, ss, sub))
-            .collect::<Result<Vec<_>, _>>()?;
+        let supertypes = if let Some(supertypes) = &entity.subtype_of {
+            supertypes
+                .entity_references
+                .iter()
+                .map(|sup| TypeRef::from_path(ns, ss, &ns.resolve(scope, sup)?))
+                .collect::<Result<Vec<TypeRef>, _>>()?
+        } else {
+            Vec::new()
+        };
+
+        let constraints = Vec::new();
 
         Ok(Entity {
             name,

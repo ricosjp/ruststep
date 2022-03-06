@@ -16,7 +16,7 @@ impl SubSuperGraph {
         let root = Scope::root();
         for schema in &st.schemas {
             let scope = root.pushed(ScopeType::Schema, &schema.name);
-            // Check `SUBTYPE OF` specification
+            // Check `SUBTYPE OF` declaration
             for entity in &schema.entities {
                 // Be sure that `ENTITY A SUBTYPE OF (B)` means `B` is *supertype* of `A`
                 if let Some(supertypes) = &entity.subtype_of {
