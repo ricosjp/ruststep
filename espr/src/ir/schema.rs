@@ -12,7 +12,7 @@ impl Legalize for Schema {
     type Input = ast::Schema;
     fn legalize(
         ns: &Namespace,
-        ss: &SubSuperGraph,
+        ss: &Constraints,
         scope: &Scope,
         schema: &Self::Input,
     ) -> Result<Self, SemanticError> {
@@ -44,7 +44,7 @@ mod tests {
     fn legalize() {
         let example = SyntaxTree::example();
         let ns = Namespace::new(&example);
-        let ss = SubSuperGraph::new(&ns, &example).unwrap();
+        let ss = Constraints::new(&ns, &example).unwrap();
         dbg!(&ns, &ss);
         let schema = &example.schemas[0];
         let scope = Scope::root();

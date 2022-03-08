@@ -1,5 +1,6 @@
 //! Partial complex entities described in ISO-10303-11 Annex B
 
+use super::*;
 use itertools::Itertools;
 
 #[cfg_attr(doc, katexit::katexit)]

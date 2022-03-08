@@ -37,7 +37,7 @@ impl Legalize for EntityAttribute {
 
     fn legalize(
         ns: &Namespace,
-        ss: &SubSuperGraph,
+        ss: &Constraints,
         scope: &Scope,
         attr: &Self::Input,
     ) -> Result<Self, SemanticError> {
@@ -59,7 +59,7 @@ impl Legalize for Entity {
 
     fn legalize(
         ns: &Namespace,
-        ss: &SubSuperGraph,
+        ss: &Constraints,
         scope: &Scope,
         entity: &ast::Entity,
     ) -> Result<Self, SemanticError> {
@@ -74,7 +74,7 @@ impl Legalize for Entity {
             supertypes
                 .entity_references
                 .iter()
-                .map(|sup| TypeRef::from_path(ns, ss, &ns.resolve(scope, sup)?))
+                .map(|sup| TypeRef::from_path(ns, ss, &ns.resolve(scope, sup)?.0))
                 .collect::<Result<Vec<TypeRef>, _>>()?
         } else {
             Vec::new()
@@ -99,7 +99,7 @@ mod tests {
     fn legalize() {
         let example = SyntaxTree::example();
         let ns = Namespace::new(&example);
-        let ss = SubSuperGraph::new(&ns, &example).unwrap();
+        let ss = Constraints::new(&ns, &example).unwrap();
         dbg!(&ns);
         let entity = &example.schemas[0].entities[0];
         let scope = Scope::root().pushed(ScopeType::Schema, &example.schemas[0].name);

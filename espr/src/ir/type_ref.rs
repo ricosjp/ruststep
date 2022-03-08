@@ -8,7 +8,7 @@ impl Legalize for SimpleType {
     type Input = ast::SimpleType;
     fn legalize(
         _ns: &Namespace,
-        _ss: &SubSuperGraph,
+        _ss: &Constraints,
         _scope: &Scope,
         input: &Self::Input,
     ) -> Result<Self, SemanticError> {
@@ -23,7 +23,7 @@ impl Legalize for Bound {
     type Input = ast::Bound;
     fn legalize(
         _ns: &Namespace,
-        _ss: &SubSuperGraph,
+        _ss: &Constraints,
         _scope: &Scope,
         _input: &Self::Input,
     ) -> Result<Self, SemanticError> {
@@ -88,14 +88,10 @@ impl TypeRef {
         }
     }
 
-    pub fn from_path(
-        ns: &Namespace,
-        ss: &SubSuperGraph,
-        path: &Path,
-    ) -> Result<Self, SemanticError> {
+    pub fn from_path(ns: &Namespace, ss: &Constraints, path: &Path) -> Result<Self, SemanticError> {
         match path.ty {
             ScopeType::Entity => {
-                let is_supertype = ss.super_to_sub.get(path).is_some();
+                let is_supertype = ss.is_supertype(path);
                 Ok(TypeRef::Entity {
                     name: path.name.clone(),
                     scope: path.scope.clone(),
@@ -160,7 +156,7 @@ impl Legalize for TypeRef {
 
     fn legalize(
         ns: &Namespace,
-        ss: &SubSuperGraph,
+        ss: &Constraints,
         scope: &Scope,
         ty: &ast::Type,
     ) -> Result<Self, SemanticError> {

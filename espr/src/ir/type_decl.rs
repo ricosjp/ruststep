@@ -56,7 +56,7 @@ impl Legalize for TypeDecl {
     type Input = ast::TypeDecl;
     fn legalize(
         ns: &Namespace,
-        ss: &SubSuperGraph,
+        ss: &Constraints,
         scope: &Scope,
         type_decl: &Self::Input,
     ) -> Result<Self, SemanticError> {
