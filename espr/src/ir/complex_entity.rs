@@ -1,6 +1,7 @@
 //! Partial complex entities described in ISO-10303-11 Annex B
-
 use super::*;
+
+use crate::{ast, ir};
 use itertools::Itertools;
 
 #[cfg_attr(doc, katexit::katexit)]
@@ -43,7 +44,7 @@ use itertools::Itertools;
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct PartialComplexEntity {
     /// Sorted and non-duplicated indices
-    indices: Vec<usize>,
+    pub indices: Vec<usize>,
 }
 
 impl PartialComplexEntity {
@@ -236,12 +237,48 @@ impl std::ops::BitAnd for PartialComplexEntity {
 #[derive(Debug, PartialEq, Eq)]
 pub struct Instantiables {
     /// Sorted and non-duplicated list of partial complex entities
-    parts: Vec<PartialComplexEntity>,
+    pub parts: Vec<PartialComplexEntity>,
 }
 
 impl Instantiables {
     pub fn new(parts: &[PartialComplexEntity]) -> Self {
         parts.iter().collect()
+    }
+
+    pub fn from_expr(
+        ns: &ir::Namespace,
+        scope: &ir::Scope,
+        expr: &ast::SuperTypeExpression,
+    ) -> Result<Self, SemanticError> {
+        match expr {
+            ast::SuperTypeExpression::Reference(name) => {
+                let (_type_ref, index) = ns.resolve(scope, name)?;
+                Ok(Instantiables {
+                    parts: vec![PartialComplexEntity::new(&[index])],
+                })
+            }
+            ast::SuperTypeExpression::OneOf { exprs } => {
+                // ONEOF(A, B, C) → [A, B, C]
+                let mut constrait = Self::new(&[]);
+                for e in exprs {
+                    let c = Self::from_expr(ns, scope, e)?;
+                    constrait = constrait + c;
+                }
+                Ok(constrait)
+            }
+            ast::SuperTypeExpression::And { terms } => {
+                // A AND B AND C → [A & B & C]
+                let mut constrait = Self::new(&[]);
+                for e in terms {
+                    let c = Self::from_expr(ns, scope, e)?;
+                    constrait = constrait & c;
+                }
+                Ok(constrait)
+            }
+            ast::SuperTypeExpression::AndOr { factors: _ } => {
+                todo!()
+            }
+        }
     }
 }
 
