@@ -68,7 +68,7 @@ impl Legalize for TypeDecl {
                 ty: SimpleType(*ty),
             }),
             Type::Named(name) => {
-                let path = ns.resolve(scope, name)?;
+                let (path, _index) = ns.resolve(scope, name)?;
                 TypeDecl::Rename(Rename {
                     id,
                     ty: TypeRef::from_path(ns, ss, &path)?,
@@ -88,7 +88,7 @@ impl Legalize for TypeDecl {
                 let types = types
                     .iter()
                     .map(|ty| {
-                        let path = ns.resolve(scope, ty)?;
+                        let (path, _index) = ns.resolve(scope, ty)?;
                         TypeRef::from_path(ns, ss, &path)
                     })
                     .collect::<Result<Vec<_>, _>>()?;
