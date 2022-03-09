@@ -115,9 +115,7 @@ pub fn procedure_head(input: &str) -> ParseResult<(String, Vec<FormalParameter>)
             tuple((char('('), semicolon_separated(param), char(')'))).map(
                 |(_open, params, _close)| {
                     params
-                        .into_iter()
-                        .map(|ps| ps.into_iter())
-                        .flatten()
+                        .into_iter().flat_map(|ps| ps.into_iter())
                         .collect()
                 },
             ),
@@ -169,9 +167,7 @@ pub fn function_head(input: &str) -> ParseResult<(String, Vec<FormalParameter>, 
             tuple((char('('), semicolon_separated(formal_parameter), char(')'))).map(
                 |(_open, params, _close)| {
                     params
-                        .into_iter()
-                        .map(|ps| ps.into_iter())
-                        .flatten()
+                        .into_iter().flat_map(|ps| ps.into_iter())
                         .collect()
                 },
             ),
@@ -294,9 +290,7 @@ pub fn local_decl(input: &str) -> ParseResult<Vec<LocalVariable>> {
         char(';'),
     ))
     .map(|(_local, vars, _end, _semicolon)| {
-        vars.into_iter()
-            .map(|var| var.into_iter())
-            .flatten()
+        vars.into_iter().flat_map(|var| var.into_iter())
             .collect()
     })
     .parse(input)

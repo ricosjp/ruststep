@@ -41,6 +41,6 @@ fn main() {
     let ir = IR::from_syntax_tree(&st).expect("Failed in semantic analysis phase");
     println!(
         "#![allow(dead_code)]\n{}",
-        ir.to_token_stream(CratePrefix::Internal).to_string()
+        ir.to_token_stream(CratePrefix::Internal)
     );
 }
