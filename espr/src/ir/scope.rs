@@ -148,6 +148,15 @@ impl fmt::Debug for Path {
     }
 }
 
+macro_rules! new_path {
+    ($f:ident, $ty:ident) => {
+        #[doc = stringify!(Add $ty scope)]
+        pub fn $f(scope: &Scope, name: &str) -> Self {
+            Path::new(scope, ScopeType::$ty, name)
+        }
+    };
+}
+
 impl Path {
     pub fn new(scope: &Scope, ty: ScopeType, name: &str) -> Self {
         Path {
@@ -156,6 +165,17 @@ impl Path {
             name: name.to_string(),
         }
     }
+
+    new_path!(entity, Entity);
+    new_path!(alias, Alias);
+    new_path!(function, Function);
+    new_path!(procedure, Procedure);
+    new_path!(query, Query);
+    new_path!(repeat, Repeat);
+    new_path!(rule, Rule);
+    new_path!(schema, Schema);
+    new_path!(subtype, SubType);
+    new_path!(r#type, Type);
 }
 
 #[cfg(test)]
