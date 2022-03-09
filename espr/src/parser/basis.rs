@@ -41,7 +41,7 @@ pub fn encoded_character(input: &str) -> RawParseResult<[u8; 4]> {
 pub fn encoded_string_literal(input: &str) -> RawParseResult<String> {
     tuple((char('"'), many1(encoded_character), char('"')))
         .map(|(_openq, chars, _closeq)| {
-            let raw_chars: Vec<u8> = chars.iter().map(|c| c.iter()).flatten().cloned().collect();
+            let raw_chars: Vec<u8> = chars.iter().flat_map(|c| c.iter()).cloned().collect();
             String::from_utf8(raw_chars).expect("non UTF8 input")
         })
         .parse(input)
