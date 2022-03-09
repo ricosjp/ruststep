@@ -357,7 +357,7 @@ impl std::ops::Div for Constraint {
                             return true;
                         }
                     }
-                    return false;
+                    false
                 })
                 .collect(),
         }
