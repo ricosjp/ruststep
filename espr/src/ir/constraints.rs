@@ -84,9 +84,9 @@ impl std::ops::BitAnd for PartialComplexEntity {
 /// let b1 = PartialComplexEntity::new(&[2]);
 /// let b2 = PartialComplexEntity::new(&[3]);
 ///
-/// let ce = ComplexEntity::new(&[b1.clone(), b2.clone()]);
+/// let ce = Constraint::new(&[b1.clone(), b2.clone()]);
 ///
-/// assert_eq!(a.clone() + ce, ComplexEntity::new(&[
+/// assert_eq!(a.clone() + ce, Constraint::new(&[
 ///   a.clone(),
 ///   b1.clone(),
 ///   b2.clone(),
@@ -101,9 +101,9 @@ impl std::ops::BitAnd for PartialComplexEntity {
 /// let b1 = PartialComplexEntity::new(&[2]);
 /// let b2 = PartialComplexEntity::new(&[3]);
 ///
-/// let ce = ComplexEntity::new(&[b1.clone(), b2.clone()]);
+/// let ce = Constraint::new(&[b1.clone(), b2.clone()]);
 ///
-/// assert_eq!(a.clone() & ce, ComplexEntity::new(&[
+/// assert_eq!(a.clone() & ce, Constraint::new(&[
 ///   a.clone() & b1.clone(),
 ///   a.clone() & b2.clone(),
 /// ]));
@@ -118,10 +118,10 @@ impl std::ops::BitAnd for PartialComplexEntity {
 /// let b1 = PartialComplexEntity::new(&[3]);
 /// let b2 = PartialComplexEntity::new(&[4]);
 ///
-/// let ce1 = ComplexEntity::new(&[a1.clone(), a2.clone()]);
-/// let ce2 = ComplexEntity::new(&[b1.clone(), b2.clone()]);
+/// let ce1 = Constraint::new(&[a1.clone(), a2.clone()]);
+/// let ce2 = Constraint::new(&[b1.clone(), b2.clone()]);
 ///
-/// assert_eq!(ce1 + ce2, ComplexEntity::new(&[
+/// assert_eq!(ce1 + ce2, Constraint::new(&[
 ///   a1.clone(),
 ///   a2.clone(),
 ///   b1.clone(),
@@ -138,10 +138,10 @@ impl std::ops::BitAnd for PartialComplexEntity {
 /// let b1 = PartialComplexEntity::new(&[3]);
 /// let b2 = PartialComplexEntity::new(&[4]);
 ///
-/// let ce1 = ComplexEntity::new(&[a1.clone(), a2.clone()]);
-/// let ce2 = ComplexEntity::new(&[b1.clone(), b2.clone()]);
+/// let ce1 = Constraint::new(&[a1.clone(), a2.clone()]);
+/// let ce2 = Constraint::new(&[b1.clone(), b2.clone()]);
 ///
-/// assert_eq!(ce1 & ce2, ComplexEntity::new(&[
+/// assert_eq!(ce1 & ce2, Constraint::new(&[
 ///   a1.clone() & b1.clone(),
 ///   a1.clone() & b2.clone(),
 ///   a2.clone() & b1.clone(),
@@ -158,7 +158,7 @@ impl std::ops::BitAnd for PartialComplexEntity {
 /// let c = PartialComplexEntity::new(&[3]);
 /// let d = PartialComplexEntity::new(&[4]);
 ///
-/// let ce = ComplexEntity::new(&[
+/// let ce = Constraint::new(&[
 ///   a.clone(),
 ///   a.clone() & b.clone(),
 ///   a.clone() & c.clone(),
@@ -167,7 +167,7 @@ impl std::ops::BitAnd for PartialComplexEntity {
 ///   d.clone()
 /// ]);
 ///
-/// assert_eq!(ce / a.clone(), ComplexEntity::new(&[
+/// assert_eq!(ce / a.clone(), Constraint::new(&[
 ///   a.clone(),
 ///   a.clone() & b.clone(),
 ///   a.clone() & c.clone(),
@@ -184,7 +184,7 @@ impl std::ops::BitAnd for PartialComplexEntity {
 /// let c = PartialComplexEntity::new(&[3]);
 /// let d = PartialComplexEntity::new(&[4]);
 ///
-/// let ce1 = ComplexEntity::new(&[
+/// let ce1 = Constraint::new(&[
 ///   a.clone(),
 ///   a.clone() & b.clone(),
 ///   a.clone() & c.clone(),
@@ -193,12 +193,12 @@ impl std::ops::BitAnd for PartialComplexEntity {
 ///   d.clone()
 /// ]);
 ///
-/// let ce2 = ComplexEntity::new(&[
+/// let ce2 = Constraint::new(&[
 ///   b.clone(),
 ///   d.clone()
 /// ]);
 ///
-/// assert_eq!(ce1 / ce2, ComplexEntity::new(&[
+/// assert_eq!(ce1 / ce2, Constraint::new(&[
 ///   a.clone() & b.clone(),
 ///   a.clone() & b.clone() & d.clone(),
 ///   b.clone() & c.clone(),
@@ -215,36 +215,36 @@ impl std::ops::BitAnd for PartialComplexEntity {
 /// let b1 = PartialComplexEntity::new(&[3]);
 /// let b2 = PartialComplexEntity::new(&[4]);
 ///
-/// let ce1 = ComplexEntity::new(&[
+/// let ce1 = Constraint::new(&[
 ///   a1.clone(),
 ///   a2.clone(),
 ///   b1.clone(),
 ///   b2.clone(),
 /// ]);
 ///
-/// let ce2 = ComplexEntity::new(&[
+/// let ce2 = Constraint::new(&[
 ///   a2.clone(),
 ///   b1.clone()
 /// ]);
 ///
-/// assert_eq!(ce1 - ce2, ComplexEntity::new(&[
+/// assert_eq!(ce1 - ce2, Constraint::new(&[
 ///   a1.clone(),
 ///   b2.clone()
 /// ]));
 /// ```
 #[derive(Debug, PartialEq, Eq)]
-pub struct ComplexEntity {
+pub struct Constraint {
     /// Sorted and non-duplicated list of partial complex entities
     parts: Vec<PartialComplexEntity>,
 }
 
-impl ComplexEntity {
+impl Constraint {
     pub fn new(parts: &[PartialComplexEntity]) -> Self {
         parts.iter().collect()
     }
 }
 
-impl<'a> FromIterator<&'a PartialComplexEntity> for ComplexEntity {
+impl<'a> FromIterator<&'a PartialComplexEntity> for Constraint {
     fn from_iter<I>(iter: I) -> Self
     where
         I: IntoIterator<Item = &'a PartialComplexEntity>,
@@ -256,9 +256,9 @@ impl<'a> FromIterator<&'a PartialComplexEntity> for ComplexEntity {
 }
 
 // [A, B] + [C, D] = [A, B, C, D]
-impl std::ops::Add for ComplexEntity {
+impl std::ops::Add for Constraint {
     type Output = Self;
-    fn add(mut self, mut rhs: ComplexEntity) -> Self {
+    fn add(mut self, mut rhs: Constraint) -> Self {
         self.parts.append(&mut rhs.parts);
         self.parts.sort_unstable();
         self
@@ -266,7 +266,7 @@ impl std::ops::Add for ComplexEntity {
 }
 
 // [A, B] + C = [A, B, C]
-impl std::ops::Add<PartialComplexEntity> for ComplexEntity {
+impl std::ops::Add<PartialComplexEntity> for Constraint {
     type Output = Self;
     fn add(mut self, rhs: PartialComplexEntity) -> Self {
         self.parts.push(rhs);
@@ -276,32 +276,32 @@ impl std::ops::Add<PartialComplexEntity> for ComplexEntity {
 }
 
 // A + [B, C] = [A, B, C]
-impl std::ops::Add<ComplexEntity> for PartialComplexEntity {
-    type Output = ComplexEntity;
-    fn add(self, rhs: ComplexEntity) -> ComplexEntity {
+impl std::ops::Add<Constraint> for PartialComplexEntity {
+    type Output = Constraint;
+    fn add(self, rhs: Constraint) -> Constraint {
         rhs + self
     }
 }
 
 // [A, B] & [C, D] = [A & C, A & D, B & C, B & D]
-impl std::ops::BitAnd for ComplexEntity {
-    type Output = ComplexEntity;
-    fn bitand(self, rhs: ComplexEntity) -> ComplexEntity {
+impl std::ops::BitAnd for Constraint {
+    type Output = Constraint;
+    fn bitand(self, rhs: Constraint) -> Constraint {
         let mut parts = Vec::with_capacity(self.parts.len() * rhs.parts.len());
         for p in &self.parts {
             for q in &rhs.parts {
                 parts.push(p.clone() & q.clone());
             }
         }
-        ComplexEntity { parts }
+        Constraint { parts }
     }
 }
 
 // [A, B] & C = [A & C, B & C]
-impl std::ops::BitAnd<PartialComplexEntity> for ComplexEntity {
-    type Output = ComplexEntity;
-    fn bitand(self, q: PartialComplexEntity) -> ComplexEntity {
-        ComplexEntity {
+impl std::ops::BitAnd<PartialComplexEntity> for Constraint {
+    type Output = Constraint;
+    fn bitand(self, q: PartialComplexEntity) -> Constraint {
+        Constraint {
             parts: self
                 .parts
                 .into_iter()
@@ -314,17 +314,17 @@ impl std::ops::BitAnd<PartialComplexEntity> for ComplexEntity {
 }
 
 // A & [B, C] = [A & B, A & C]
-impl std::ops::BitAnd<ComplexEntity> for PartialComplexEntity {
-    type Output = ComplexEntity;
-    fn bitand(self, rhs: ComplexEntity) -> ComplexEntity {
+impl std::ops::BitAnd<Constraint> for PartialComplexEntity {
+    type Output = Constraint;
+    fn bitand(self, rhs: Constraint) -> Constraint {
         rhs & self
     }
 }
 
-impl std::ops::Sub for ComplexEntity {
+impl std::ops::Sub for Constraint {
     type Output = Self;
-    fn sub(self, rhs: ComplexEntity) -> Self {
-        ComplexEntity {
+    fn sub(self, rhs: Constraint) -> Self {
+        Constraint {
             parts: self
                 .parts
                 .into_iter()
@@ -334,20 +334,20 @@ impl std::ops::Sub for ComplexEntity {
     }
 }
 
-impl std::ops::Sub<PartialComplexEntity> for ComplexEntity {
+impl std::ops::Sub<PartialComplexEntity> for Constraint {
     type Output = Self;
     fn sub(self, q: PartialComplexEntity) -> Self {
-        ComplexEntity {
+        Constraint {
             parts: self.parts.into_iter().filter(|p| p != &q).collect(),
         }
     }
 }
 
 // [A, A & B, A & C, A & B & D, B & C, D]/[B, D] ≡ [A & B, A & B & D, B & C, D]
-impl std::ops::Div for ComplexEntity {
+impl std::ops::Div for Constraint {
     type Output = Self;
-    fn div(self, rhs: ComplexEntity) -> Self {
-        ComplexEntity {
+    fn div(self, rhs: Constraint) -> Self {
+        Constraint {
             parts: self
                 .parts
                 .into_iter()
@@ -365,10 +365,10 @@ impl std::ops::Div for ComplexEntity {
 }
 
 // [A, A & B, A & C, A & B & D, B & C, D] / A = [A, A & B, A & C, A & B & D]
-impl std::ops::Div<PartialComplexEntity> for ComplexEntity {
-    type Output = ComplexEntity;
-    fn div(self, rhs: PartialComplexEntity) -> ComplexEntity {
-        ComplexEntity {
+impl std::ops::Div<PartialComplexEntity> for Constraint {
+    type Output = Constraint;
+    fn div(self, rhs: PartialComplexEntity) -> Constraint {
+        Constraint {
             parts: self
                 .parts
                 .into_iter()
