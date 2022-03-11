@@ -51,15 +51,15 @@ impl<'st> Namespace<'st> {
             for ty in &schema.types {
                 let name = &ty.type_id;
                 let path = Path::new(&here, ScopeType::Type, name);
-                ast.push((path, Named::Type(ty)));
                 let index = ast.len();
+                ast.push((path, Named::Type(ty)));
                 current_names.push((ScopeType::Type, name.to_string(), index));
             }
             for entity in &schema.entities {
                 let name = &entity.name;
                 let path = Path::new(&here, ScopeType::Entity, name);
-                ast.push((path, Named::Entity(entity)));
                 let index = ast.len();
+                ast.push((path, Named::Entity(entity)));
                 current_names.push((ScopeType::Entity, name.to_string(), index));
             }
             names.insert(here, current_names);
@@ -182,14 +182,17 @@ mod tests {
                     (
                         Entity,
                         "base",
+                        0,
                     ),
                     (
                         Entity,
                         "sub1",
+                        1,
                     ),
                     (
                         Entity,
                         "sub2",
+                        2,
                     ),
                 ],
             },
