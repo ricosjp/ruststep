@@ -71,7 +71,7 @@ impl std::ops::BitAnd for PartialComplexEntity {
 }
 
 #[cfg_attr(doc, katexit::katexit)]
-/// Complex entity, a list of PartialComplexEntity
+/// Instantiable subtypes described by a list of partial complex entity, e.g. $[A, B & C]$
 ///
 /// This has several operation described in ISO-10303-11 annex B,
 /// $+$, $-$, $\And$, and $/$.
