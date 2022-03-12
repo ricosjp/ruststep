@@ -79,7 +79,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn constraint_init() {
+    fn constraint_oneof() {
         let st = ast::SyntaxTree::parse(
             r#"
             SCHEMA test_schema;
@@ -110,6 +110,81 @@ mod tests {
                     Path::entity(&scope, "base") => vec![
                         vec![Path::entity(&scope, "sub1")],
                         vec![Path::entity(&scope, "sub2")],
+                    ]
+                }
+            }
+        );
+    }
+
+    #[test]
+    fn constraint_andor() {
+        // Based on `ANDOR` example in ISO-10303-11
+        let st = ast::SyntaxTree::parse(
+            r#"
+            SCHEMA test_schema;
+              ENTITY person SUPERTYPE OF (employee ANDOR student);
+              END_ENTITY;
+              ENTITY employee SUBTYPE OF (person);
+              END_ENTITY;
+              ENTITY student SUBTYPE OF (person);
+              END_ENTITY;
+            END_SCHEMA;
+            "#,
+        )
+        .unwrap();
+
+        let ns = Namespace::new(&st);
+        let c = Constraints::new(&ns, &st).unwrap();
+
+        let scope = Scope::root().schema("test_schema");
+        assert_eq!(
+            c,
+            Constraints {
+                instantiables: maplit::hashmap! {
+                    Path::entity(&scope, "person") => vec![
+                        vec![Path::entity(&scope, "employee")],
+                        vec![Path::entity(&scope, "student")],
+                        vec![Path::entity(&scope, "employee"), Path::entity(&scope, "student")],
+                    ]
+                }
+            }
+        );
+    }
+
+    #[test]
+    fn constraint_and() {
+        // Based on `AND` example in ISO-10303-11
+        let st = ast::SyntaxTree::parse(
+            r#"
+            SCHEMA test_schema;
+              ENTITY person SUPERTYPE OF (ONEOF(male,female) AND ONEOF(citizen,alien));
+              END_ENTITY;
+              ENTITY male SUBTYPE OF (person);
+              END_ENTITY;
+              ENTITY female SUBTYPE OF (person);
+              END_ENTITY;
+              ENTITY citizen SUBTYPE OF (person);
+              END_ENTITY;
+              ENTITY alien SUBTYPE OF (person);
+              END_ENTITY;
+            END_SCHEMA;
+            "#,
+        )
+        .unwrap();
+
+        let ns = Namespace::new(&st);
+        let c = Constraints::new(&ns, &st).unwrap();
+
+        let scope = Scope::root().schema("test_schema");
+        assert_eq!(
+            c,
+            Constraints {
+                instantiables: maplit::hashmap! {
+                    Path::entity(&scope, "person") => vec![
+                        vec![Path::entity(&scope, "male"), Path::entity(&scope, "citizen")],
+                        vec![Path::entity(&scope, "male"), Path::entity(&scope, "alian")],
+                        vec![Path::entity(&scope, "female"), Path::entity(&scope, "citizen")],
+                        vec![Path::entity(&scope, "female"), Path::entity(&scope, "alian")],
                     ]
                 }
             }
