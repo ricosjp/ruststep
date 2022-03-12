@@ -268,12 +268,17 @@ impl Instantiables {
             }
             ast::SuperTypeExpression::And { terms } => {
                 // A AND B AND C → [A & B & C]
-                let mut constrait = Self::new(&[]);
+                assert!(terms.len() > 0);
+                let mut constrait = None;
                 for e in terms {
                     let c = Self::from_expr(ns, scope, e)?;
-                    constrait = constrait & c;
+                    constrait = Some(if let Some(constrait) = constrait {
+                        constrait & c
+                    } else {
+                        c
+                    });
                 }
-                Ok(constrait)
+                Ok(constrait.unwrap())
             }
             ast::SuperTypeExpression::AndOr { factors: _ } => {
                 todo!()
