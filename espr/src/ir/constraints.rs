@@ -73,3 +73,46 @@ impl Constraints {
         self.instantiables.contains_key(path)
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn constraint_init() {
+        let st = ast::SyntaxTree::parse(
+            r#"
+            SCHEMA test_schema;
+              ENTITY base SUPERTYPE OF (ONEOF (sub1, sub2));
+                x: REAL;
+              END_ENTITY;
+
+              ENTITY sub1 SUBTYPE OF (base);
+                y1: REAL;
+              END_ENTITY;
+
+              ENTITY sub2 SUBTYPE OF (base);
+                y2: REAL;
+              END_ENTITY;
+            END_SCHEMA;
+            "#,
+        )
+        .unwrap();
+
+        let ns = Namespace::new(&st);
+        let c = Constraints::new(&ns, &st).unwrap();
+
+        let scope = Scope::root().schema("test_schema");
+        assert_eq!(
+            c,
+            Constraints {
+                instantiables: maplit::hashmap! {
+                    Path::entity(&scope, "base") => vec![
+                        vec![Path::entity(&scope, "sub1")],
+                        vec![Path::entity(&scope, "sub2")],
+                    ]
+                }
+            }
+        );
+    }
+}
