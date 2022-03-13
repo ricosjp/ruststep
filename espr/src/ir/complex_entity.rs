@@ -234,7 +234,7 @@ impl std::ops::BitAnd for PartialComplexEntity {
 ///   b2.clone()
 /// ]));
 /// ```
-#[derive(Debug, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Instantiables {
     /// Sorted and non-duplicated list of partial complex entities
     pub parts: Vec<PartialComplexEntity>,
@@ -268,7 +268,7 @@ impl Instantiables {
             }
             ast::SuperTypeExpression::And { terms } => {
                 // A AND B AND C → [A & B & C]
-                assert!(terms.len() > 0);
+                assert!(terms.len() >= 2);
                 let mut constrait = None;
                 for e in terms {
                     let c = Self::from_expr(ns, scope, e)?;
@@ -280,8 +280,44 @@ impl Instantiables {
                 }
                 Ok(constrait.unwrap())
             }
-            ast::SuperTypeExpression::AndOr { factors: _ } => {
-                todo!()
+            ast::SuperTypeExpression::AndOr { factors } => {
+                assert!(!factors.is_empty());
+
+                let factors = factors
+                    .iter()
+                    .map(|expr| Self::from_expr(ns, scope, expr))
+                    .collect::<Result<Vec<Self>, SemanticError>>()?;
+
+                // A ANDOR B → [A, B, A & B]
+                //
+                // This means `ANDOR` of n-factors will produce $2^n-1$ terms like:
+                //
+                // | A | B | ANDOR |
+                // |---|---|-------|
+                // | + | - | A     |
+                // | - | + | B     |
+                // | + | + | A & B |
+                //
+                let n = factors.len() as u32;
+                let mut constrait = Self::new(&[]);
+                for mut i in 1..(2usize.pow(n)) {
+                    // i=0b01 -> A
+                    // i=0b10 -> B
+                    // i=0b11 -> A & B, and so on.
+                    let mut c: Option<Self> = None;
+                    for factor in &factors {
+                        if i % 2 == 1 {
+                            c = Some(if let Some(pre) = c {
+                                pre & factor.clone()
+                            } else {
+                                factor.clone()
+                            });
+                        }
+                        i >>= 1;
+                    }
+                    constrait = constrait + c.unwrap();
+                }
+                Ok(constrait)
             }
         }
     }

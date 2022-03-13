@@ -143,8 +143,8 @@ mod tests {
                 instantiables: maplit::hashmap! {
                     Path::entity(&scope, "person") => vec![
                         vec![Path::entity(&scope, "employee")],
-                        vec![Path::entity(&scope, "student")],
                         vec![Path::entity(&scope, "employee"), Path::entity(&scope, "student")],
+                        vec![Path::entity(&scope, "student")],
                     ]
                 }
             }
