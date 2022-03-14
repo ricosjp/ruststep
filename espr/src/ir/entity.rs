@@ -80,6 +80,7 @@ impl Legalize for Entity {
             Vec::new()
         };
 
+        // TODO
         let constraints = Vec::new();
 
         Ok(Entity {

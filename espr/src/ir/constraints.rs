@@ -50,20 +50,21 @@ impl Constraints {
         let instantiables = instantiables
             .into_iter()
             .map(|(path, it)| {
-                let it: Vec<Vec<Path>> = it
-                    .parts
-                    .iter()
-                    .map(|pce| {
-                        pce.indices
-                            .iter()
-                            .map(|index| {
-                                let (path, _ast) = &ns[*index];
-                                path.clone()
-                            })
-                            .collect()
-                    })
-                    .collect();
-                (path, it)
+                (
+                    path,
+                    it.parts
+                        .iter()
+                        .map(|pce| {
+                            pce.indices
+                                .iter()
+                                .map(|index| {
+                                    let (path, _ast) = &ns[*index];
+                                    path.clone()
+                                })
+                                .collect()
+                        })
+                        .collect(),
+                )
             })
             .collect();
         Ok(Constraints { instantiables })
