@@ -41,7 +41,13 @@ impl Constraints {
                     _ => continue,
                 }
             }
-            // TODO: SUBTYPE_CONSTRAINTS
+
+            for constraint in &schema.subtype_constraints {
+                if let Some(expr) = &constraint.expr {
+                    let (path, _index) = ns.resolve(&scope, &constraint.entity)?;
+                    instantiables.push((path, Instantiables::from_expr(ns, &scope, expr)?));
+                }
+            }
         }
 
         // TODO Add implicit constraints
@@ -78,6 +84,51 @@ impl Constraints {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn constraint() {
+        let st = ast::SyntaxTree::parse(
+            r#"
+            SCHEMA test_schema;
+              ENTITY pet;
+                name : pet_name;
+              END_ENTITY;
+
+              SUBTYPE_CONSTRAINT separate_species FOR pet;
+                ABSTRACT SUPERTYPE;
+                ONEOF(cat, rabbit, dog);
+              END_SUBTYPE_CONSTRAINT;
+
+              ENTITY cat SUBTYPE OF (pet);
+              END_ENTITY;
+
+              ENTITY rabbit SUBTYPE OF (pet);
+              END_ENTITY;
+
+              ENTITY dog SUBTYPE OF (pet);
+              END_ENTITY;
+            END_SCHEMA;
+            "#,
+        )
+        .unwrap();
+
+        let ns = Namespace::new(&st);
+        let c = Constraints::new(&ns, &st).unwrap();
+
+        let scope = Scope::root().schema("test_schema");
+        assert_eq!(
+            c,
+            Constraints {
+                instantiables: maplit::hashmap! {
+                    Path::entity(&scope, "pet") => vec![
+                        vec![Path::entity(&scope, "cat")],
+                        vec![Path::entity(&scope, "rabbit")],
+                        vec![Path::entity(&scope, "dog")],
+                    ]
+                }
+            }
+        );
+    }
 
     #[test]
     fn constraint_oneof() {
