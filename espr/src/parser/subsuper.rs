@@ -153,7 +153,7 @@ pub fn subtype_constraint_body(
     tuple((
         opt(abstract_supertype).map(|opt| opt.is_some()),
         opt(total_over),
-        opt(supertype_expression),
+        opt(tuple((supertype_expression, char(';'))).map(|(expr, _semicolon)| expr)),
     ))
     .parse(input)
 }
@@ -176,4 +176,25 @@ pub fn abstract_supertype(input: &str) -> ParseResult<()> {
     tuple((tag("ABSTRACT"), tag("SUPERTYPE"), char(';')))
         .map(|(_abstract, _supertype, _semicolon)| ())
         .parse(input)
+}
+
+#[cfg(test)]
+mod tests {
+    use nom::Finish;
+
+    #[test]
+    fn subtype_constraint_oneof() {
+        let exp_str = r#"
+        SUBTYPE_CONSTRAINT separate_species FOR pet;
+          ABSTRACT SUPERTYPE;
+          ONEOF(cat, rabbit, dog);
+        END_SUBTYPE_CONSTRAINT;
+        "#
+        .trim();
+
+        let (residual, (entity, _remark)) =
+            super::subtype_constraint_decl(exp_str).finish().unwrap();
+        dbg!(&entity);
+        assert_eq!(residual, "");
+    }
 }
