@@ -118,7 +118,7 @@ impl TypeRef {
                             // should be simple because it will be expressed as single integer.
                             ast::Type::Simple(_) | ast::Type::Enumeration { .. } => break true,
                             ast::Type::Named(name) => {
-                                p = ns.resolve(&p.scope, name)?;
+                                p = ns.resolve(&p.scope, name)?.0;
                                 continue;
                             }
                             _ => break false,
@@ -168,7 +168,7 @@ impl Legalize for TypeRef {
         Ok(match ty {
             Simple(ty) => Self::SimpleType(SimpleType(*ty)),
             Named(name) => {
-                let path = ns.resolve(scope, name)?;
+                let (path, _index) = ns.resolve(scope, name)?;
                 Self::from_path(ns, ss, &path)?
             }
             Set { base, bound } => {

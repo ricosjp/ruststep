@@ -22,7 +22,7 @@ impl SubSuperGraph {
                 if let Some(supertypes) = &entity.subtype_of {
                     for name in &supertypes.entity_references {
                         let sub = Path::new(&scope, ScopeType::Entity, &entity.name);
-                        let sup = ns.resolve(&scope, name)?;
+                        let (sup, _index) = ns.resolve(&scope, name)?;
                         let subs: &mut Vec<_> = super_to_sub.entry(sup.clone()).or_default();
                         subs.push(sub.clone());
                         let sups: &mut Vec<_> = sub_to_super.entry(sub).or_default();

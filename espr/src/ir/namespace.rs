@@ -20,7 +20,7 @@ pub enum Named<'st> {
 ///
 #[derive(Debug, Clone)]
 pub struct Namespace<'st> {
-    pub names: HashMap<Scope, Vec<(ScopeType, String)>>,
+    pub names: HashMap<Scope, Vec<(ScopeType, String, usize)>>,
     /// Indexed AST portion
     pub ast: Vec<(Path, Named<'st>)>,
 }
@@ -33,7 +33,7 @@ impl<'st> std::ops::Index<usize> for Namespace<'st> {
 }
 
 impl<'st> std::ops::Index<&Scope> for Namespace<'st> {
-    type Output = [(ScopeType, String)];
+    type Output = [(ScopeType, String, usize)];
     fn index(&self, id: &Scope) -> &Self::Output {
         &self.names[id]
     }
@@ -50,15 +50,17 @@ impl<'st> Namespace<'st> {
             let mut current_names = Vec::new();
             for ty in &schema.types {
                 let name = &ty.type_id;
-                current_names.push((ScopeType::Type, name.to_string()));
                 let path = Path::new(&here, ScopeType::Type, name);
+                let index = ast.len();
                 ast.push((path, Named::Type(ty)));
+                current_names.push((ScopeType::Type, name.to_string(), index));
             }
             for entity in &schema.entities {
                 let name = &entity.name;
-                current_names.push((ScopeType::Entity, name.to_string()));
                 let path = Path::new(&here, ScopeType::Entity, name);
+                let index = ast.len();
                 ast.push((path, Named::Entity(entity)));
+                current_names.push((ScopeType::Entity, name.to_string(), index));
             }
             names.insert(here, current_names);
         }
@@ -77,13 +79,13 @@ impl<'st> Namespace<'st> {
     /// ------
     /// - If no corresponding definition found.
     ///
-    pub fn resolve(&self, scope: &Scope, name: &str) -> Result<Path, SemanticError> {
+    pub fn resolve(&self, scope: &Scope, name: &str) -> Result<(Path, usize), SemanticError> {
         let mut scope = scope.clone();
         loop {
             if let Some(names) = self.names.get(&scope) {
-                for (ty, n) in names {
+                for (ty, n, index) in names {
                     if name == n {
-                        return Ok(Path::new(&scope, *ty, n));
+                        return Ok((Path::new(&scope, *ty, n), *index));
                     }
                 }
             }
@@ -180,14 +182,17 @@ mod tests {
                     (
                         Entity,
                         "base",
+                        0,
                     ),
                     (
                         Entity,
                         "sub1",
+                        1,
                     ),
                     (
                         Entity,
                         "sub2",
+                        2,
                     ),
                 ],
             },

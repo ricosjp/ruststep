@@ -19,6 +19,7 @@ In addition to original Keep-a-Changelog, we use following rules:
 ### Changed
 ### Fixed
 ### Internal
+- Return index from ir::Namespace::resolve https://github.com/ricosjp/ruststep/pull/204
 - cargo clippy --fix https://github.com/ricosjp/ruststep/pull/202
 - Index named AST https://github.com/ricosjp/ruststep/pull/201
 
