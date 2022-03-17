@@ -101,7 +101,7 @@ impl TypeRef {
             ScopeType::Type => {
                 let mut p = path.clone();
                 let is_simple = loop {
-                    match ns.get(&p)? {
+                    match ns.get(&p)?.0 {
                         Named::Type(ast::TypeDecl {
                             underlying_type, ..
                         }) => match underlying_type {
@@ -122,7 +122,7 @@ impl TypeRef {
                         Named::Entity(_) => break false,
                     }
                 };
-                let is_enumerate = match ns.get(path)? {
+                let is_enumerate = match ns.get(path)?.0 {
                     Named::Type(ast::TypeDecl {
                         underlying_type, ..
                     }) => match underlying_type {
