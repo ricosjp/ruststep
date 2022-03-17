@@ -2,6 +2,7 @@
 
 use super::*;
 use crate::ast;
+use std::collections::hash_map::Entry;
 use std::collections::HashMap;
 
 /// Global constraints in EXPRESS components
@@ -46,7 +47,6 @@ impl Constraints {
                 if let Some(expr) = &constraint.expr {
                     let (path, _index) = ns.resolve(&scope, &constraint.entity)?;
                     let is = Instantiables::from_expr(ns, &scope, expr)?;
-                    use std::collections::hash_map::Entry;
                     match instantiables.entry(path) {
                         Entry::Occupied(mut e) => {
                             // ISO-10303-11 (2004, en) Annex B.3 "Interpreting the possible complex entity data types"
@@ -63,7 +63,44 @@ impl Constraints {
             }
         }
 
-        // TODO Add implicit constraints
+        // Add default constraints
+        //
+        // ISO-10303-11 (2004, en) 9.2.5.6 Default constraint between subtypes
+        // > If no supertype constraint is mentioned in the declaration of an entity,
+        // > the subtypes (if any) shall be mutually inclusive, that is,
+        // > as if all subtypes were implicitly mentioned in an ANDOR construct.
+        //
+        let mut super_to_sub = HashMap::new();
+        for schema in &st.schemas {
+            let scope = root.schema(&schema.name);
+            for entity in &schema.entities {
+                let sub = Path::entity(&scope, &entity.name);
+                let (_ast, index) = ns.get(&sub)?;
+                if let Some(subtype_decl) = &entity.subtype_of {
+                    for sup_name in &subtype_decl.entity_references {
+                        let (sup, _) = ns.resolve(&scope, sup_name)?;
+                        let indices: &mut Vec<usize> = super_to_sub.entry(sup).or_default();
+                        indices.push(index);
+                    }
+                }
+            }
+        }
+        // Apply ANDOR to gathered indices
+        for (sup, indices) in super_to_sub {
+            let mut is: Vec<_> = indices
+                .into_iter()
+                .map(|index| Instantiables::single(index))
+                .collect();
+            match instantiables.entry(sup) {
+                Entry::Occupied(mut e) => {
+                    is.push(e.get().clone());
+                    e.insert(Instantiables::andor(is));
+                }
+                Entry::Vacant(e) => {
+                    e.insert(Instantiables::andor(is));
+                }
+            }
+        }
 
         // Replace indices to Path using Namespace
         let instantiables = instantiables

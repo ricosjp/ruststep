@@ -357,8 +357,9 @@ impl std::ops::Add for Instantiables {
     type Output = Self;
     fn add(mut self, mut rhs: Instantiables) -> Self {
         self.parts.append(&mut rhs.parts);
-        self.parts.sort_unstable();
-        self
+        Self {
+            parts: self.parts.into_iter().sorted().dedup().collect(),
+        }
     }
 }
 
@@ -367,8 +368,9 @@ impl std::ops::Add<PartialComplexEntity> for Instantiables {
     type Output = Self;
     fn add(mut self, rhs: PartialComplexEntity) -> Self {
         self.parts.push(rhs);
-        self.parts.sort_unstable();
-        self
+        Self {
+            parts: self.parts.into_iter().sorted().dedup().collect(),
+        }
     }
 }
 
@@ -390,7 +392,9 @@ impl std::ops::BitAnd for Instantiables {
                 parts.push(p.clone() & q.clone());
             }
         }
-        Instantiables { parts }
+        Instantiables {
+            parts: parts.into_iter().sorted().dedup().collect(),
+        }
     }
 }
 
