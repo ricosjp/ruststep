@@ -14,7 +14,7 @@ pub struct Constraints {
 
 impl Constraints {
     pub fn new(ns: &Namespace, st: &SyntaxTree) -> Result<Self, SemanticError> {
-        let mut instantiables = Vec::new();
+        let mut instantiables = HashMap::new();
         let root = Scope::root();
         for schema in &st.schemas {
             let scope = root.schema(&schema.name);
@@ -25,7 +25,7 @@ impl Constraints {
             // ISO-10303-11 (2004, en) Page 56, Note 1
             // > In order that existing schemas remain valid,
             // > the declaration of subtype/supertype constraints
-            // > that use the keywords oneof, andor, or and within
+            // > that use the keywords ONEOF, ANDOR, or AND within
             // > the declaration of an entity, as described in this sub-clause,
             // > remains valid under this edition 2 of EXPRESS.
             // > However, its use is deprecated, and its removal is planned
@@ -36,7 +36,7 @@ impl Constraints {
                 match &entity.constraint {
                     Some(ast::Constraint::SuperTypeRule(expr)) => {
                         let path = Path::new(&scope, ScopeType::Entity, &entity.name);
-                        instantiables.push((path, Instantiables::from_expr(ns, &scope, expr)?));
+                        instantiables.insert(path, Instantiables::from_expr(ns, &scope, expr)?);
                     }
                     _ => continue,
                 }
@@ -45,7 +45,20 @@ impl Constraints {
             for constraint in &schema.subtype_constraints {
                 if let Some(expr) = &constraint.expr {
                     let (path, _index) = ns.resolve(&scope, &constraint.entity)?;
-                    instantiables.push((path, Instantiables::from_expr(ns, &scope, expr)?));
+                    let is = Instantiables::from_expr(ns, &scope, expr)?;
+                    use std::collections::hash_map::Entry;
+                    match instantiables.entry(path) {
+                        Entry::Occupied(mut e) => {
+                            // ISO-10303-11 (2004, en) Annex B.3 "Interpreting the possible complex entity data types"
+                            // > Combine the subtype expressions sxi of these constraints
+                            // > into a single subtype constraint sti of the form:
+                            // > (sx1 ANDOR sx2 ANDOR sx3 . . . ANDOR sxk ).
+                            e.insert(Instantiables::andor(vec![e.get().clone(), is]));
+                        }
+                        Entry::Vacant(e) => {
+                            e.insert(is);
+                        }
+                    }
                 }
             }
         }
