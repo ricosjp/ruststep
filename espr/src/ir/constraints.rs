@@ -136,7 +136,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn constraint() {
+    fn constraint_oneof() {
         let st = ast::SyntaxTree::parse(
             r#"
             SCHEMA test_schema;
@@ -181,7 +181,7 @@ mod tests {
     }
 
     #[test]
-    fn constraint_oneof() {
+    fn supertype_of_oneof() {
         let st = ast::SyntaxTree::parse(
             r#"
             SCHEMA test_schema;
@@ -219,7 +219,7 @@ mod tests {
     }
 
     #[test]
-    fn constraint_andor() {
+    fn supertype_of_andor() {
         // Based on `ANDOR` example in ISO-10303-11
         let st = ast::SyntaxTree::parse(
             r#"
@@ -254,7 +254,7 @@ mod tests {
     }
 
     #[test]
-    fn constraint_and() {
+    fn supertype_of_and() {
         // Based on `AND` example in ISO-10303-11
         let st = ast::SyntaxTree::parse(
             r#"
@@ -287,6 +287,40 @@ mod tests {
                         vec![Path::entity(&scope, "male"), Path::entity(&scope, "alien")],
                         vec![Path::entity(&scope, "female"), Path::entity(&scope, "citizen")],
                         vec![Path::entity(&scope, "female"), Path::entity(&scope, "alien")],
+                    ]
+                }
+            }
+        );
+    }
+
+    #[test]
+    fn default_constraint() {
+        let st = ast::SyntaxTree::parse(
+            r#"
+            SCHEMA test_schema;
+              ENTITY person;
+              END_ENTITY;
+              ENTITY employee SUBTYPE OF (person);
+              END_ENTITY;
+              ENTITY student SUBTYPE OF (person);
+              END_ENTITY;
+            END_SCHEMA;
+            "#,
+        )
+        .unwrap();
+
+        let ns = Namespace::new(&st);
+        let c = Constraints::new(&ns, &st).unwrap();
+
+        let scope = Scope::root().schema("test_schema");
+        assert_eq!(
+            c,
+            Constraints {
+                instantiables: maplit::hashmap! {
+                    Path::entity(&scope, "person") => vec![
+                        vec![Path::entity(&scope, "employee")],
+                        vec![Path::entity(&scope, "employee"), Path::entity(&scope, "student")],
+                        vec![Path::entity(&scope, "student")],
                     ]
                 }
             }
