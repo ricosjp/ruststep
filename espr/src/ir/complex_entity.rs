@@ -234,15 +234,76 @@ impl std::ops::BitAnd for PartialComplexEntity {
 ///   b2.clone()
 /// ]));
 /// ```
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Default)]
 pub struct Instantiables {
     /// Sorted and non-duplicated list of partial complex entities
     pub parts: Vec<PartialComplexEntity>,
 }
 
 impl Instantiables {
-    pub fn new(parts: &[PartialComplexEntity]) -> Self {
-        parts.iter().collect()
+    /// Create from single index
+    pub fn single(index: usize) -> Self {
+        Self {
+            parts: vec![PartialComplexEntity::new(&[index])],
+        }
+    }
+
+    /// ONEOF(A, B, C) -> [A, B, C]
+    pub fn oneof(parts: Vec<Self>) -> Self {
+        let mut is = Self::default();
+        for p in parts {
+            is = is + p;
+        }
+        is
+    }
+
+    /// A AND B AND C -> [A & B & C]
+    pub fn and(terms: Vec<Self>) -> Self {
+        assert!(terms.len() >= 2);
+        let mut constrait = None;
+        for c in terms {
+            constrait = Some(if let Some(constrait) = constrait {
+                constrait & c
+            } else {
+                c
+            });
+        }
+        constrait.unwrap()
+    }
+
+    /// A ANDOR B ANDOR C -> [A, B, C, A & B, B & C, A & C, A & B & C]
+    pub fn andor(factors: Vec<Self>) -> Self {
+        assert!(!factors.is_empty());
+        // A ANDOR B → [A, B, A & B]
+        //
+        // This means `ANDOR` of n-factors will produce $2^n-1$ terms like:
+        //
+        // | A | B | ANDOR |
+        // |---|---|-------|
+        // | + | - | A     |
+        // | - | + | B     |
+        // | + | + | A & B |
+        //
+        let n = factors.len() as u32;
+        let mut constrait = Self::default();
+        for mut i in 1..(2usize.pow(n)) {
+            // i=0b01 -> A
+            // i=0b10 -> B
+            // i=0b11 -> A & B, and so on.
+            let mut c: Option<Self> = None;
+            for factor in &factors {
+                if i % 2 == 1 {
+                    c = Some(if let Some(pre) = c {
+                        pre & factor.clone()
+                    } else {
+                        factor.clone()
+                    });
+                }
+                i >>= 1;
+            }
+            constrait = constrait + c.unwrap();
+        }
+        constrait
     }
 
     pub fn from_expr(
@@ -253,71 +314,28 @@ impl Instantiables {
         match expr {
             ast::SuperTypeExpression::Reference(name) => {
                 let (_type_ref, index) = ns.resolve(scope, name)?;
-                Ok(Instantiables {
-                    parts: vec![PartialComplexEntity::new(&[index])],
-                })
+                Ok(Self::single(index))
             }
             ast::SuperTypeExpression::OneOf { exprs } => {
-                // ONEOF(A, B, C) → [A, B, C]
-                let mut constrait = Self::new(&[]);
-                for e in exprs {
-                    let c = Self::from_expr(ns, scope, e)?;
-                    constrait = constrait + c;
-                }
-                Ok(constrait)
+                let exprs = exprs
+                    .iter()
+                    .map(|e| Self::from_expr(ns, scope, e))
+                    .collect::<Result<Vec<Self>, SemanticError>>()?;
+                Ok(Self::oneof(exprs))
             }
             ast::SuperTypeExpression::And { terms } => {
-                // A AND B AND C → [A & B & C]
-                assert!(terms.len() >= 2);
-                let mut constrait = None;
-                for e in terms {
-                    let c = Self::from_expr(ns, scope, e)?;
-                    constrait = Some(if let Some(constrait) = constrait {
-                        constrait & c
-                    } else {
-                        c
-                    });
-                }
-                Ok(constrait.unwrap())
+                let terms = terms
+                    .iter()
+                    .map(|e| Self::from_expr(ns, scope, e))
+                    .collect::<Result<Vec<Self>, SemanticError>>()?;
+                Ok(Self::and(terms))
             }
             ast::SuperTypeExpression::AndOr { factors } => {
-                assert!(!factors.is_empty());
-
                 let factors = factors
                     .iter()
-                    .map(|expr| Self::from_expr(ns, scope, expr))
+                    .map(|e| Self::from_expr(ns, scope, e))
                     .collect::<Result<Vec<Self>, SemanticError>>()?;
-
-                // A ANDOR B → [A, B, A & B]
-                //
-                // This means `ANDOR` of n-factors will produce $2^n-1$ terms like:
-                //
-                // | A | B | ANDOR |
-                // |---|---|-------|
-                // | + | - | A     |
-                // | - | + | B     |
-                // | + | + | A & B |
-                //
-                let n = factors.len() as u32;
-                let mut constrait = Self::new(&[]);
-                for mut i in 1..(2usize.pow(n)) {
-                    // i=0b01 -> A
-                    // i=0b10 -> B
-                    // i=0b11 -> A & B, and so on.
-                    let mut c: Option<Self> = None;
-                    for factor in &factors {
-                        if i % 2 == 1 {
-                            c = Some(if let Some(pre) = c {
-                                pre & factor.clone()
-                            } else {
-                                factor.clone()
-                            });
-                        }
-                        i >>= 1;
-                    }
-                    constrait = constrait + c.unwrap();
-                }
-                Ok(constrait)
+                Ok(Self::andor(factors))
             }
         }
     }
