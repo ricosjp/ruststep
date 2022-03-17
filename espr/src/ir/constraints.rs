@@ -167,7 +167,7 @@ mod tests {
 
         let scope = Scope::root().schema("test_schema");
         assert_eq!(
-            c,
+            dbg!(c),
             Constraints {
                 instantiables: maplit::hashmap! {
                     Path::entity(&scope, "pet") => vec![
@@ -206,7 +206,7 @@ mod tests {
 
         let scope = Scope::root().schema("test_schema");
         assert_eq!(
-            c,
+            dbg!(c),
             Constraints {
                 instantiables: maplit::hashmap! {
                     Path::entity(&scope, "base") => vec![
@@ -240,7 +240,7 @@ mod tests {
 
         let scope = Scope::root().schema("test_schema");
         assert_eq!(
-            c,
+            dbg!(c),
             Constraints {
                 instantiables: maplit::hashmap! {
                     Path::entity(&scope, "person") => vec![
@@ -279,7 +279,7 @@ mod tests {
 
         let scope = Scope::root().schema("test_schema");
         assert_eq!(
-            c,
+            dbg!(c),
             Constraints {
                 instantiables: maplit::hashmap! {
                     Path::entity(&scope, "person") => vec![
@@ -314,7 +314,7 @@ mod tests {
 
         let scope = Scope::root().schema("test_schema");
         assert_eq!(
-            c,
+            dbg!(c),
             Constraints {
                 instantiables: maplit::hashmap! {
                     Path::entity(&scope, "person") => vec![
