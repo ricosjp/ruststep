@@ -15,6 +15,37 @@ pub enum ConstraintExpr {
 }
 
 impl ConstraintExpr {
+    pub fn andor(mut self, rhs: Self) -> Self {
+        self.andor_mut(rhs);
+        self
+    }
+
+    pub fn andor_mut(&mut self, rhs: Self) {
+        use ConstraintExpr::*;
+        match (self, rhs) {
+            (AndOr(ref mut a), AndOr(mut b)) => {
+                a.append(&mut b);
+            }
+            (AndOr(ref mut a), b @ _) => {
+                a.push(b);
+            }
+            (a @ _, b @ AndOr(_)) => {
+                let s = std::mem::replace(a, b);
+                match a {
+                    AndOr(factors) => factors.insert(0, s),
+                    _ => unreachable!(),
+                }
+            }
+            (a @ _, b @ _) => {
+                let s = std::mem::replace(a, AndOr(vec![b]));
+                match a {
+                    AndOr(factors) => factors.insert(0, s),
+                    _ => unreachable!(),
+                }
+            }
+        }
+    }
+
     pub fn from_ast_expr(
         ns: &Namespace,
         scope: &Scope,
@@ -271,6 +302,25 @@ impl Constraints {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn constraint_expr_andor() {
+        let root = Scope::root();
+        // a ANDOR b
+        let a = ConstraintExpr::Reference(Path::entity(&root, "a"));
+        let b = ConstraintExpr::Reference(Path::entity(&root, "b"));
+        assert_eq!(
+            a.clone().andor(b.clone()),
+            ConstraintExpr::AndOr(vec![a, b])
+        );
+
+        // (a ANDOR b) ANDOR c
+        let a = ConstraintExpr::Reference(Path::entity(&root, "a"));
+        let b = ConstraintExpr::Reference(Path::entity(&root, "b"));
+        let c = ConstraintExpr::Reference(Path::entity(&root, "c"));
+        let ab = a.clone().andor(b.clone());
+        assert_eq!(ab.andor(c.clone()), ConstraintExpr::AndOr(vec![a, b, c]))
+    }
 
     #[test]
     fn constraint_oneof() {

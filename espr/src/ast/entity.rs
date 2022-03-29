@@ -170,39 +170,6 @@ pub enum SuperTypeExpression {
     OneOf { exprs: Vec<SuperTypeExpression> },
 }
 
-impl SuperTypeExpression {
-    pub fn andor(mut self, rhs: Self) -> Self {
-        self.andor_mut(rhs);
-        self
-    }
-
-    pub fn andor_mut(&mut self, rhs: Self) {
-        use SuperTypeExpression::*;
-        match (self, rhs) {
-            (AndOr { factors: ref mut a }, AndOr { factors: mut b }) => {
-                a.append(&mut b);
-            }
-            (AndOr { factors: ref mut a }, b @ _) => {
-                a.push(b);
-            }
-            (a @ _, b @ AndOr { .. }) => {
-                let s = std::mem::replace(a, b);
-                match a {
-                    AndOr { factors } => factors.push(s),
-                    _ => unreachable!(),
-                }
-            }
-            (a @ _, b @ _) => {
-                let s = std::mem::replace(a, AndOr { factors: vec![b] });
-                match a {
-                    AndOr { factors } => factors.push(s),
-                    _ => unreachable!(),
-                }
-            }
-        }
-    }
-}
-
 #[derive(Debug, Clone, PartialEq)]
 pub struct SubTypeConstraint {
     pub name: String,
@@ -221,34 +188,4 @@ pub struct UniqueClause {
 pub struct UniqueRule {
     pub name: Option<String>,
     pub attributes: Vec<AttributeDecl>,
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn supertype_expr_andor() {
-        // a ANDOR b
-        let a = SuperTypeExpression::Reference("a".to_string());
-        let b = SuperTypeExpression::Reference("b".to_string());
-        assert_eq!(
-            a.clone().andor(b.clone()),
-            SuperTypeExpression::AndOr {
-                factors: vec![a, b]
-            }
-        );
-
-        // (a ANDOR b) ANDOR c
-        let a = SuperTypeExpression::Reference("a".to_string());
-        let b = SuperTypeExpression::Reference("b".to_string());
-        let c = SuperTypeExpression::Reference("c".to_string());
-        let ab = a.clone().andor(b.clone());
-        assert_eq!(
-            c.clone().andor(ab),
-            SuperTypeExpression::AndOr {
-                factors: vec![a, b, c]
-            }
-        )
-    }
 }
