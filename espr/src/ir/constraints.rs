@@ -13,6 +13,103 @@ pub struct Constraints {
     pub instantiables: HashMap<Path, Vec<Vec<Path>>>,
 }
 
+// Execute b), c), and d) steps of the algorithm described in the section B.3
+//
+// - Step a) has been done while namespace creation.
+//
+fn gather_constraint_expr(
+    ns: &Namespace,
+    st: &SyntaxTree,
+) -> Result<HashMap<Path, ast::SuperTypeExpression>, SemanticError> {
+    let root = Scope::root();
+    let mut exprs: HashMap<Path, ast::SuperTypeExpression> = HashMap::new();
+
+    // b) Convert `SUPERTYPE OF` into `SUBTYPE_CONSTRAINT`
+    //
+    // Be sure that `SUPERTYPE OF` declaration with complex constraint
+    // using `ONEOF`, `AND` and `ANDOR` are deprecated:
+    //
+    // ISO-10303-11 (2004, en) Page 56, Note 1
+    // > In order that existing schemas remain valid,
+    // > the declaration of subtype/supertype constraints
+    // > that use the keywords ONEOF, ANDOR, or AND within
+    // > the declaration of an entity, as described in this sub-clause,
+    // > remains valid under this edition 2 of EXPRESS.
+    // > However, its use is deprecated, and its removal is planned
+    // > in future editions. The use of the subtype constraint (see 9.7)
+    // > is encouraged instead.
+    //
+    for schema in &st.schemas {
+        let scope = root.schema(&schema.name);
+        for entity in &schema.entities {
+            let path = Path::entity(&scope, &entity.name);
+            match &entity.constraint {
+                Some(ast::Constraint::SuperTypeRule(expr)) => {
+                    let result = exprs.insert(path.clone(), expr.clone());
+                    // This insert must be first time unless same ENTITY declaration exists
+                    if result.is_some() {
+                        return Err(SemanticError::DuplicatedDeclaration(path));
+                    }
+                }
+                _ => continue,
+            }
+        }
+    }
+
+    // c) Add default constraint (described in 9.2.5.6),
+    //    i.e. convert `SUBTYPE OF` into `SUBTYPE_CONSTRAINT`
+    //
+    // We'd like to list up subtypes for each supertype,
+    // but `SUBTYPE OF` description exists on subtype's `ENTITY` declaration.
+    //
+    // c-1) Thus, we first read every ENTITY to gather sub to super dependency,
+    let mut super_to_sub: HashMap<Path /* super */, Vec<Path> /* sub */> = HashMap::new();
+    for schema in &st.schemas {
+        let scope = root.schema(&schema.name);
+        for entity in &schema.entities {
+            if let Some(subtype_decl) = &entity.subtype_of {
+                for sup_name in &subtype_decl.entity_references {
+                    let (sup, _) = ns.resolve(&scope, sup_name)?;
+                    let subs = super_to_sub.entry(sup).or_default();
+                    let sub = Path::entity(&scope, &entity.name);
+                    subs.push(sub);
+                }
+            }
+        }
+    }
+    // c-2) and reverse it.
+    for (sup, subs) in super_to_sub {
+        match exprs.entry(sup) {
+            Entry::Occupied(mut e) => {
+                todo!()
+            }
+            Entry::Vacant(e) => {
+                todo!()
+            }
+        }
+    }
+
+    // d) Combine `SUBTYPE_CONSTRAINT` into single expression by `ANDOR`
+    for schema in &st.schemas {
+        let scope = root.schema(&schema.name);
+        for constraint in &schema.subtype_constraints {
+            if let Some(expr) = &constraint.expr {
+                let (path, _index) = ns.resolve(&scope, &constraint.entity)?;
+                match exprs.entry(path) {
+                    Entry::Occupied(mut e) => {
+                        e.get_mut().andor_mut(expr.clone());
+                    }
+                    Entry::Vacant(e) => {
+                        e.insert(expr.clone());
+                    }
+                }
+            }
+        }
+    }
+
+    Ok(exprs)
+}
+
 impl Constraints {
     pub fn new(ns: &Namespace, st: &SyntaxTree) -> Result<Self, SemanticError> {
         let mut instantiables = HashMap::new();
