@@ -15,6 +15,15 @@ pub enum ConstraintExpr {
 }
 
 impl ConstraintExpr {
+    /// Check if `path` occurs in this expression
+    pub fn is_in(&self, path: &Path) -> bool {
+        use ConstraintExpr::*;
+        match self {
+            Reference(p) => p == path,
+            AndOr(exprs) | And(exprs) | OneOf(exprs) => exprs.iter().any(|expr| expr.is_in(path)),
+        }
+    }
+
     pub fn andor(mut self, rhs: Self) -> Self {
         self.andor_mut(rhs);
         self
@@ -91,9 +100,9 @@ pub struct Constraints {
 fn gather_constraint_expr(
     ns: &Namespace,
     st: &SyntaxTree,
-) -> Result<HashMap<Path, ast::SuperTypeExpression>, SemanticError> {
+) -> Result<HashMap<Path, ConstraintExpr>, SemanticError> {
     let root = Scope::root();
-    let mut exprs: HashMap<Path, ast::SuperTypeExpression> = HashMap::new();
+    let mut exprs: HashMap<Path, ConstraintExpr> = HashMap::new();
 
     // b) Convert `SUPERTYPE OF` into `SUBTYPE_CONSTRAINT`
     //
@@ -113,13 +122,18 @@ fn gather_constraint_expr(
     for schema in &st.schemas {
         let scope = root.schema(&schema.name);
         for entity in &schema.entities {
-            let path = Path::entity(&scope, &entity.name);
             match &entity.constraint {
                 Some(ast::Constraint::SuperTypeRule(expr)) => {
-                    let result = exprs.insert(path.clone(), expr.clone());
+                    let result = exprs.insert(
+                        Path::entity(&scope, &entity.name),
+                        ConstraintExpr::from_ast_expr(ns, &scope, expr)?,
+                    );
                     // This insert must be first time unless same ENTITY declaration exists
                     if result.is_some() {
-                        return Err(SemanticError::DuplicatedDeclaration(path));
+                        return Err(SemanticError::DuplicatedDeclaration(Path::entity(
+                            &scope,
+                            &entity.name,
+                        )));
                     }
                 }
                 _ => continue,
@@ -152,10 +166,23 @@ fn gather_constraint_expr(
     for (sup, subs) in super_to_sub {
         match exprs.entry(sup) {
             Entry::Occupied(mut e) => {
-                todo!()
+                // Gather subtype does not occur in other `SUBTYPE_CONSTRAINT`
+                let subs: Vec<ConstraintExpr> = subs
+                    .into_iter()
+                    .filter_map(|sub| {
+                        if e.get().is_in(&sub) {
+                            None
+                        } else {
+                            Some(ConstraintExpr::Reference(sub))
+                        }
+                    })
+                    .collect();
+                e.get_mut().andor_mut(ConstraintExpr::AndOr(subs));
             }
             Entry::Vacant(e) => {
-                todo!()
+                // No `SUBTYPE_CONSTRAINT` for this supertype did not exist
+                let subs = subs.into_iter().map(ConstraintExpr::Reference).collect();
+                e.insert(ConstraintExpr::AndOr(subs));
             }
         }
     }
@@ -166,12 +193,13 @@ fn gather_constraint_expr(
         for constraint in &schema.subtype_constraints {
             if let Some(expr) = &constraint.expr {
                 let (path, _index) = ns.resolve(&scope, &constraint.entity)?;
+                let expr = ConstraintExpr::from_ast_expr(ns, &scope, expr)?;
                 match exprs.entry(path) {
                     Entry::Occupied(mut e) => {
-                        e.get_mut().andor_mut(expr.clone());
+                        e.get_mut().andor_mut(expr);
                     }
                     Entry::Vacant(e) => {
-                        e.insert(expr.clone());
+                        e.insert(expr);
                     }
                 }
             }
@@ -302,6 +330,14 @@ impl Constraints {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn constraint_expr_is_in() {
+        let root = Scope::root();
+        let a = ConstraintExpr::Reference(Path::entity(&root, "a"));
+        assert!(a.is_in(&Path::entity(&root, "a")));
+        assert!(!a.is_in(&Path::entity(&root, "b")));
+    }
 
     #[test]
     fn constraint_expr_andor() {
