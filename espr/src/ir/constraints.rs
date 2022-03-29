@@ -5,6 +5,46 @@ use crate::ast;
 use std::collections::hash_map::Entry;
 use std::collections::HashMap;
 
+/// Expression appears in `SUBTYPE_CONSTRAINT` with resolved [Path]
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum ConstraintExpr {
+    Reference(Path),
+    AndOr(Vec<ConstraintExpr>),
+    And(Vec<ConstraintExpr>),
+    OneOf(Vec<ConstraintExpr>),
+}
+
+impl ConstraintExpr {
+    pub fn from_ast_expr(
+        ns: &Namespace,
+        scope: &Scope,
+        expr: &ast::SuperTypeExpression,
+    ) -> Result<Self, SemanticError> {
+        use ast::SuperTypeExpression::*;
+        Ok(match expr {
+            Reference(name) => Self::Reference(ns.resolve(scope, &name)?.0),
+            AndOr { factors } => Self::AndOr(
+                factors
+                    .iter()
+                    .map(|f| Self::from_ast_expr(ns, scope, f))
+                    .collect::<Result<Vec<Self>, SemanticError>>()?,
+            ),
+            And { terms } => Self::And(
+                terms
+                    .iter()
+                    .map(|f| Self::from_ast_expr(ns, scope, f))
+                    .collect::<Result<Vec<Self>, SemanticError>>()?,
+            ),
+            OneOf { exprs } => Self::OneOf(
+                exprs
+                    .iter()
+                    .map(|f| Self::from_ast_expr(ns, scope, f))
+                    .collect::<Result<Vec<Self>, SemanticError>>()?,
+            ),
+        })
+    }
+}
+
 /// Global constraints in EXPRESS components
 #[derive(Debug, PartialEq, Eq)]
 pub struct Constraints {
