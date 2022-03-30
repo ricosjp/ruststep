@@ -364,33 +364,100 @@ mod tests {
         assert_eq!(ab.andor(c.clone()), ConstraintExpr::AndOr(vec![a, b, c]))
     }
 
+    /// Based on `ONEOF` example in ISO-10303-11
+    const PET: &str = r#"
+    SCHEMA test_schema;
+      ENTITY pet;
+        name : pet_name;
+      END_ENTITY;
+
+      SUBTYPE_CONSTRAINT separate_species FOR pet;
+        ABSTRACT SUPERTYPE;
+        ONEOF(cat, rabbit, dog);
+      END_SUBTYPE_CONSTRAINT;
+
+      ENTITY cat SUBTYPE OF (pet);
+      END_ENTITY;
+
+      ENTITY rabbit SUBTYPE OF (pet);
+      END_ENTITY;
+
+      ENTITY dog SUBTYPE OF (pet);
+      END_ENTITY;
+    END_SCHEMA;
+    "#;
+
+    /// Based on `ANDOR` example in ISO-10303-11
+    const PERSON_ANDOR: &str = r#"
+    SCHEMA test_schema;
+      ENTITY person SUPERTYPE OF (employee ANDOR student);
+      END_ENTITY;
+
+      ENTITY employee SUBTYPE OF (person);
+      END_ENTITY;
+
+      ENTITY student SUBTYPE OF (person);
+      END_ENTITY;
+    END_SCHEMA;
+    "#;
+
+    /// Based on `AND` example in ISO-10303-11
+    const PERSON_AND: &str = r#"
+    SCHEMA test_schema;
+      ENTITY person
+        SUPERTYPE OF (
+          ONEOF(male,female) AND ONEOF(citizen,alien)
+        );
+      END_ENTITY;
+
+      ENTITY male SUBTYPE OF (person);
+      END_ENTITY;
+
+      ENTITY female SUBTYPE OF (person);
+      END_ENTITY;
+
+      ENTITY citizen SUBTYPE OF (person);
+      END_ENTITY;
+
+      ENTITY alien SUBTYPE OF (person);
+      END_ENTITY;
+    END_SCHEMA;
+    "#;
+
+    /// Based on default constraint example in ISO-10303-11
+    const PERSON_DEFAULT: &str = r#"
+    SCHEMA test_schema;
+      ENTITY person;
+      END_ENTITY;
+
+      ENTITY employee SUBTYPE OF (person);
+      END_ENTITY;
+
+      ENTITY student SUBTYPE OF (person);
+      END_ENTITY;
+    END_SCHEMA;
+    "#;
+
+    /// Example for using `SUPERTYPE OF` declaration
+    const SUPERTYPE_OF: &str = r#"
+    SCHEMA test_schema;
+      ENTITY base SUPERTYPE OF (ONEOF (sub1, sub2));
+        x: REAL;
+      END_ENTITY;
+
+      ENTITY sub1 SUBTYPE OF (base);
+        y1: REAL;
+      END_ENTITY;
+
+      ENTITY sub2 SUBTYPE OF (base);
+        y2: REAL;
+      END_ENTITY;
+    END_SCHEMA;
+    "#;
+
     #[test]
     fn gather_constraint_expr_oneof() {
-        let st = ast::SyntaxTree::parse(
-            r#"
-            SCHEMA test_schema;
-              ENTITY pet;
-                name : pet_name;
-              END_ENTITY;
-
-              SUBTYPE_CONSTRAINT separate_species FOR pet;
-                ABSTRACT SUPERTYPE;
-                ONEOF(cat, rabbit, dog);
-              END_SUBTYPE_CONSTRAINT;
-
-              ENTITY cat SUBTYPE OF (pet);
-              END_ENTITY;
-
-              ENTITY rabbit SUBTYPE OF (pet);
-              END_ENTITY;
-
-              ENTITY dog SUBTYPE OF (pet);
-              END_ENTITY;
-            END_SCHEMA;
-            "#,
-        )
-        .unwrap();
-
+        let st = ast::SyntaxTree::parse(PET).unwrap();
         let ns = Namespace::new(&st);
         let exprs = gather_constraint_expr(&ns, &st).unwrap();
 
@@ -413,34 +480,9 @@ mod tests {
 
     #[test]
     fn constraint_oneof() {
-        let st = ast::SyntaxTree::parse(
-            r#"
-            SCHEMA test_schema;
-              ENTITY pet;
-                name : pet_name;
-              END_ENTITY;
-
-              SUBTYPE_CONSTRAINT separate_species FOR pet;
-                ABSTRACT SUPERTYPE;
-                ONEOF(cat, rabbit, dog);
-              END_SUBTYPE_CONSTRAINT;
-
-              ENTITY cat SUBTYPE OF (pet);
-              END_ENTITY;
-
-              ENTITY rabbit SUBTYPE OF (pet);
-              END_ENTITY;
-
-              ENTITY dog SUBTYPE OF (pet);
-              END_ENTITY;
-            END_SCHEMA;
-            "#,
-        )
-        .unwrap();
-
+        let st = ast::SyntaxTree::parse(PET).unwrap();
         let ns = Namespace::new(&st);
         let c = Constraints::new(&ns, &st).unwrap();
-
         let scope = Scope::root().schema("test_schema");
         assert_eq!(
             dbg!(c),
@@ -458,28 +500,9 @@ mod tests {
 
     #[test]
     fn supertype_of_oneof() {
-        let st = ast::SyntaxTree::parse(
-            r#"
-            SCHEMA test_schema;
-              ENTITY base SUPERTYPE OF (ONEOF (sub1, sub2));
-                x: REAL;
-              END_ENTITY;
-
-              ENTITY sub1 SUBTYPE OF (base);
-                y1: REAL;
-              END_ENTITY;
-
-              ENTITY sub2 SUBTYPE OF (base);
-                y2: REAL;
-              END_ENTITY;
-            END_SCHEMA;
-            "#,
-        )
-        .unwrap();
-
+        let st = ast::SyntaxTree::parse(SUPERTYPE_OF).unwrap();
         let ns = Namespace::new(&st);
         let c = Constraints::new(&ns, &st).unwrap();
-
         let scope = Scope::root().schema("test_schema");
         assert_eq!(
             dbg!(c),
@@ -496,24 +519,9 @@ mod tests {
 
     #[test]
     fn supertype_of_andor() {
-        // Based on `ANDOR` example in ISO-10303-11
-        let st = ast::SyntaxTree::parse(
-            r#"
-            SCHEMA test_schema;
-              ENTITY person SUPERTYPE OF (employee ANDOR student);
-              END_ENTITY;
-              ENTITY employee SUBTYPE OF (person);
-              END_ENTITY;
-              ENTITY student SUBTYPE OF (person);
-              END_ENTITY;
-            END_SCHEMA;
-            "#,
-        )
-        .unwrap();
-
+        let st = ast::SyntaxTree::parse(PERSON_ANDOR).unwrap();
         let ns = Namespace::new(&st);
         let c = Constraints::new(&ns, &st).unwrap();
-
         let scope = Scope::root().schema("test_schema");
         assert_eq!(
             dbg!(c),
@@ -531,28 +539,9 @@ mod tests {
 
     #[test]
     fn supertype_of_and() {
-        // Based on `AND` example in ISO-10303-11
-        let st = ast::SyntaxTree::parse(
-            r#"
-            SCHEMA test_schema;
-              ENTITY person SUPERTYPE OF (ONEOF(male,female) AND ONEOF(citizen,alien));
-              END_ENTITY;
-              ENTITY male SUBTYPE OF (person);
-              END_ENTITY;
-              ENTITY female SUBTYPE OF (person);
-              END_ENTITY;
-              ENTITY citizen SUBTYPE OF (person);
-              END_ENTITY;
-              ENTITY alien SUBTYPE OF (person);
-              END_ENTITY;
-            END_SCHEMA;
-            "#,
-        )
-        .unwrap();
-
+        let st = ast::SyntaxTree::parse(PERSON_AND).unwrap();
         let ns = Namespace::new(&st);
         let c = Constraints::new(&ns, &st).unwrap();
-
         let scope = Scope::root().schema("test_schema");
         assert_eq!(
             dbg!(c),
@@ -571,23 +560,9 @@ mod tests {
 
     #[test]
     fn default_constraint() {
-        let st = ast::SyntaxTree::parse(
-            r#"
-            SCHEMA test_schema;
-              ENTITY person;
-              END_ENTITY;
-              ENTITY employee SUBTYPE OF (person);
-              END_ENTITY;
-              ENTITY student SUBTYPE OF (person);
-              END_ENTITY;
-            END_SCHEMA;
-            "#,
-        )
-        .unwrap();
-
+        let st = ast::SyntaxTree::parse(PERSON_DEFAULT).unwrap();
         let ns = Namespace::new(&st);
         let c = Constraints::new(&ns, &st).unwrap();
-
         let scope = Scope::root().schema("test_schema");
         assert_eq!(
             dbg!(c),
