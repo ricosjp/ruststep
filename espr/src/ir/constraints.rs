@@ -97,7 +97,7 @@ pub struct Constraints {
 //
 // - Step a) has been done while namespace creation.
 //
-fn gather_constraint_expr(
+pub fn gather_constraint_expr(
     ns: &Namespace,
     st: &SyntaxTree,
 ) -> Result<HashMap<Path, ConstraintExpr>, SemanticError> {
@@ -141,13 +141,36 @@ fn gather_constraint_expr(
         }
     }
 
+    // d) Combine `SUBTYPE_CONSTRAINT` into single expression by `ANDOR`
+    //
+    // The step d) is done before c) because c) have to look up all `SUBTYPE_CONSTRAINT`.
+    // New `SUBTYPE_CONSTRAINT` introduced in the step c) will be merged while c).
+    //
+    for schema in &st.schemas {
+        let scope = root.schema(&schema.name);
+        for constraint in &schema.subtype_constraints {
+            if let Some(expr) = &constraint.expr {
+                let (path, _index) = ns.resolve(&scope, &constraint.entity)?;
+                let expr = ConstraintExpr::from_ast_expr(ns, &scope, expr)?;
+                match exprs.entry(path) {
+                    Entry::Occupied(mut e) => {
+                        e.get_mut().andor_mut(expr);
+                    }
+                    Entry::Vacant(e) => {
+                        e.insert(expr);
+                    }
+                }
+            }
+        }
+    }
+
     // c) Add default constraint (described in 9.2.5.6),
     //    i.e. convert `SUBTYPE OF` into `SUBTYPE_CONSTRAINT`
     //
     // We'd like to list up subtypes for each supertype,
     // but `SUBTYPE OF` description exists on subtype's `ENTITY` declaration.
     //
-    // c-1) Thus, we first read every ENTITY to gather sub to super dependency,
+    // c-1) Thus, we first read every ENTITY to gather sub- to super-type dependencies,
     let mut super_to_sub: HashMap<Path /* super */, Vec<Path> /* sub */> = HashMap::new();
     for schema in &st.schemas {
         let scope = root.schema(&schema.name);
@@ -177,31 +200,14 @@ fn gather_constraint_expr(
                         }
                     })
                     .collect();
-                e.get_mut().andor_mut(ConstraintExpr::AndOr(subs));
+                if !subs.is_empty() {
+                    e.get_mut().andor_mut(ConstraintExpr::AndOr(subs));
+                }
             }
             Entry::Vacant(e) => {
-                // No `SUBTYPE_CONSTRAINT` for this supertype did not exist
+                // No `SUBTYPE_CONSTRAINT` for this supertype
                 let subs = subs.into_iter().map(ConstraintExpr::Reference).collect();
                 e.insert(ConstraintExpr::AndOr(subs));
-            }
-        }
-    }
-
-    // d) Combine `SUBTYPE_CONSTRAINT` into single expression by `ANDOR`
-    for schema in &st.schemas {
-        let scope = root.schema(&schema.name);
-        for constraint in &schema.subtype_constraints {
-            if let Some(expr) = &constraint.expr {
-                let (path, _index) = ns.resolve(&scope, &constraint.entity)?;
-                let expr = ConstraintExpr::from_ast_expr(ns, &scope, expr)?;
-                match exprs.entry(path) {
-                    Entry::Occupied(mut e) => {
-                        e.get_mut().andor_mut(expr);
-                    }
-                    Entry::Vacant(e) => {
-                        e.insert(expr);
-                    }
-                }
             }
         }
     }
@@ -356,6 +362,53 @@ mod tests {
         let c = ConstraintExpr::Reference(Path::entity(&root, "c"));
         let ab = a.clone().andor(b.clone());
         assert_eq!(ab.andor(c.clone()), ConstraintExpr::AndOr(vec![a, b, c]))
+    }
+
+    #[test]
+    fn gather_constraint_expr_oneof() {
+        let st = ast::SyntaxTree::parse(
+            r#"
+            SCHEMA test_schema;
+              ENTITY pet;
+                name : pet_name;
+              END_ENTITY;
+
+              SUBTYPE_CONSTRAINT separate_species FOR pet;
+                ABSTRACT SUPERTYPE;
+                ONEOF(cat, rabbit, dog);
+              END_SUBTYPE_CONSTRAINT;
+
+              ENTITY cat SUBTYPE OF (pet);
+              END_ENTITY;
+
+              ENTITY rabbit SUBTYPE OF (pet);
+              END_ENTITY;
+
+              ENTITY dog SUBTYPE OF (pet);
+              END_ENTITY;
+            END_SCHEMA;
+            "#,
+        )
+        .unwrap();
+
+        let ns = Namespace::new(&st);
+        let exprs = gather_constraint_expr(&ns, &st).unwrap();
+
+        let scope = Scope::root().schema("test_schema");
+        let pet = Path::entity(&scope, "pet");
+        let cat = Path::entity(&scope, "cat");
+        let rabbit = Path::entity(&scope, "rabbit");
+        let dog = Path::entity(&scope, "dog");
+        assert_eq!(
+            dbg!(exprs),
+            maplit::hashmap! {
+                pet => ConstraintExpr::OneOf(vec![
+                    ConstraintExpr::Reference(cat),
+                    ConstraintExpr::Reference(rabbit),
+                    ConstraintExpr::Reference(dog),
+                ])
+            }
+        );
     }
 
     #[test]
