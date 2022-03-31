@@ -456,23 +456,79 @@ mod tests {
     "#;
 
     #[test]
-    fn gather_constraint_expr_oneof() {
+    fn gather_constraint_expr_pet() {
         let st = ast::SyntaxTree::parse(PET).unwrap();
         let ns = Namespace::new(&st);
         let exprs = gather_constraint_expr(&ns, &st).unwrap();
-
         let scope = Scope::root().schema("test_schema");
         let pet = Path::entity(&scope, "pet");
-        let cat = Path::entity(&scope, "cat");
-        let rabbit = Path::entity(&scope, "rabbit");
-        let dog = Path::entity(&scope, "dog");
         assert_eq!(
             dbg!(exprs),
             maplit::hashmap! {
                 pet => ConstraintExpr::OneOf(vec![
-                    ConstraintExpr::Reference(cat),
-                    ConstraintExpr::Reference(rabbit),
-                    ConstraintExpr::Reference(dog),
+                    ConstraintExpr::Reference(Path::entity(&scope, "cat")),
+                    ConstraintExpr::Reference(Path::entity(&scope, "rabbit")),
+                    ConstraintExpr::Reference(Path::entity(&scope, "dog")),
+                ])
+            }
+        );
+    }
+
+    #[test]
+    fn gather_constraint_expr_person_andor() {
+        let st = ast::SyntaxTree::parse(PERSON_ANDOR).unwrap();
+        let ns = Namespace::new(&st);
+        let exprs = gather_constraint_expr(&ns, &st).unwrap();
+        let scope = Scope::root().schema("test_schema");
+        let person = Path::entity(&scope, "person");
+        assert_eq!(
+            dbg!(exprs),
+            maplit::hashmap! {
+                person => ConstraintExpr::AndOr(vec![
+                    ConstraintExpr::Reference(Path::entity(&scope, "employee")),
+                    ConstraintExpr::Reference(Path::entity(&scope, "student")),
+                ])
+            }
+        );
+    }
+
+    #[test]
+    fn gather_constraint_expr_person_default() {
+        let st = ast::SyntaxTree::parse(PERSON_DEFAULT).unwrap();
+        let ns = Namespace::new(&st);
+        let exprs = gather_constraint_expr(&ns, &st).unwrap();
+        let scope = Scope::root().schema("test_schema");
+        let person = Path::entity(&scope, "person");
+        assert_eq!(
+            dbg!(exprs),
+            maplit::hashmap! {
+                person => ConstraintExpr::AndOr(vec![
+                    ConstraintExpr::Reference(Path::entity(&scope, "employee")),
+                    ConstraintExpr::Reference(Path::entity(&scope, "student")),
+                ])
+            }
+        );
+    }
+
+    #[test]
+    fn gather_constraint_expr_person_and() {
+        let st = ast::SyntaxTree::parse(PERSON_AND).unwrap();
+        let ns = Namespace::new(&st);
+        let exprs = gather_constraint_expr(&ns, &st).unwrap();
+        let scope = Scope::root().schema("test_schema");
+        let person = Path::entity(&scope, "person");
+        assert_eq!(
+            dbg!(exprs),
+            maplit::hashmap! {
+                person => ConstraintExpr::And(vec![
+                    ConstraintExpr::OneOf(vec![
+                        ConstraintExpr::Reference(Path::entity(&scope, "male")),
+                        ConstraintExpr::Reference(Path::entity(&scope, "female")),
+                    ]),
+                    ConstraintExpr::OneOf(vec![
+                        ConstraintExpr::Reference(Path::entity(&scope, "citizen")),
+                        ConstraintExpr::Reference(Path::entity(&scope, "alien")),
+                    ]),
                 ])
             }
         );
