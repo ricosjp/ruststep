@@ -80,7 +80,6 @@ impl Legalize for Entity {
             Vec::new()
         };
 
-        // TODO
         let path = Path::entity(scope, &entity.name);
         let constraints = if let Some(instantiables) = ss.instantiables.get(&path) {
             instantiables
