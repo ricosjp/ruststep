@@ -53,6 +53,17 @@ impl PartialComplexEntity {
             indices: indices.iter().cloned().dedup().collect(),
         }
     }
+
+    /// Restore Path from namespace index
+    pub fn as_path(&self, ns: &Namespace) -> Vec<Path> {
+        self.indices
+            .iter()
+            .map(|index| {
+                let (path, _ast) = &ns[*index];
+                path.clone()
+            })
+            .collect()
+    }
 }
 
 impl From<&[usize]> for PartialComplexEntity {
@@ -372,6 +383,11 @@ impl Instantiables {
                 Ok(Self::andor(exprs))
             }
         }
+    }
+
+    /// Restore Path from namespace index
+    pub fn as_path(&self, ns: &Namespace) -> Vec<Vec<Path>> {
+        self.parts.iter().map(|pce| pce.as_path(ns)).collect()
     }
 }
 
