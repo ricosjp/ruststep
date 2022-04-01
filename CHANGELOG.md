@@ -15,10 +15,14 @@ In addition to original Keep-a-Changelog, we use following rules:
 ## Unreleased
 
 ### Added
+- Integrate instantiable complex entity into rust/codegen https://github.com/ricosjp/ruststep/pull/203
 - Partial complex entities described in ISO-10303-11 Annex B https://github.com/ricosjp/ruststep/pull/200
+
 ### Changed
+
 ### Fixed
 - `SUBTYPE_CONSTRAINT` cannot parse supertype-constraint like `ONEOF` https://github.com/ricosjp/ruststep/pull/205
+
 ### Internal
 - Use Instantiables instead of Constraint https://github.com/ricosjp/ruststep/pull/206
 - Return index from ir::Namespace::resolve https://github.com/ricosjp/ruststep/pull/204
