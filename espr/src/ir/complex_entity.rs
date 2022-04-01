@@ -339,6 +339,40 @@ impl Instantiables {
             }
         }
     }
+
+    pub fn from_constraint_expr(
+        ns: &Namespace,
+        expr: &ConstraintExpr,
+    ) -> Result<Self, SemanticError> {
+        use ConstraintExpr::*;
+        match expr {
+            Reference(path) => {
+                let (_ast, index) = ns.get(path)?;
+                Ok(Self::single(index))
+            }
+            OneOf(exprs) => {
+                let exprs = exprs
+                    .iter()
+                    .map(|e| Self::from_constraint_expr(ns, e))
+                    .collect::<Result<Vec<Self>, SemanticError>>()?;
+                Ok(Self::oneof(exprs))
+            }
+            And(exprs) => {
+                let exprs = exprs
+                    .iter()
+                    .map(|e| Self::from_constraint_expr(ns, e))
+                    .collect::<Result<Vec<Self>, SemanticError>>()?;
+                Ok(Self::and(exprs))
+            }
+            AndOr(exprs) => {
+                let exprs = exprs
+                    .iter()
+                    .map(|e| Self::from_constraint_expr(ns, e))
+                    .collect::<Result<Vec<Self>, SemanticError>>()?;
+                Ok(Self::andor(exprs))
+            }
+        }
+    }
 }
 
 impl<'a> FromIterator<&'a PartialComplexEntity> for Instantiables {
