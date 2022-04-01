@@ -35,17 +35,17 @@ impl ConstraintExpr {
             (AndOr(ref mut a), AndOr(mut b)) => {
                 a.append(&mut b);
             }
-            (AndOr(ref mut a), b @ _) => {
+            (AndOr(ref mut a), b) => {
                 a.push(b);
             }
-            (a @ _, b @ AndOr(_)) => {
+            (a, b @ AndOr(_)) => {
                 let s = std::mem::replace(a, b);
                 match a {
                     AndOr(factors) => factors.insert(0, s),
                     _ => unreachable!(),
                 }
             }
-            (a @ _, b @ _) => {
+            (a, b) => {
                 let s = std::mem::replace(a, AndOr(vec![b]));
                 match a {
                     AndOr(factors) => factors.insert(0, s),
@@ -62,7 +62,7 @@ impl ConstraintExpr {
     ) -> Result<Self, SemanticError> {
         use ast::SuperTypeExpression::*;
         Ok(match expr {
-            Reference(name) => Self::Reference(ns.resolve(scope, &name)?.0),
+            Reference(name) => Self::Reference(ns.resolve(scope, name)?.0),
             AndOr { factors } => Self::AndOr(
                 factors
                     .iter()
