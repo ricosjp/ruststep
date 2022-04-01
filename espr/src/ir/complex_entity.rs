@@ -1,7 +1,6 @@
 //! Partial complex entities described in ISO-10303-11 Annex B
 use super::*;
 
-use crate::{ast, ir};
 use itertools::Itertools;
 
 #[cfg_attr(doc, katexit::katexit)]
@@ -252,6 +251,12 @@ pub struct Instantiables {
 }
 
 impl Instantiables {
+    pub fn new(pces: &[PartialComplexEntity]) -> Self {
+        Self {
+            parts: pces.to_vec(),
+        }
+    }
+
     /// Create from single index
     pub fn single(index: usize) -> Self {
         Self {
@@ -315,40 +320,6 @@ impl Instantiables {
             constrait = constrait + c.unwrap();
         }
         constrait
-    }
-
-    pub fn from_expr(
-        ns: &ir::Namespace,
-        scope: &ir::Scope,
-        expr: &ast::SuperTypeExpression,
-    ) -> Result<Self, SemanticError> {
-        match expr {
-            ast::SuperTypeExpression::Reference(name) => {
-                let (_type_ref, index) = ns.resolve(scope, name)?;
-                Ok(Self::single(index))
-            }
-            ast::SuperTypeExpression::OneOf { exprs } => {
-                let exprs = exprs
-                    .iter()
-                    .map(|e| Self::from_expr(ns, scope, e))
-                    .collect::<Result<Vec<Self>, SemanticError>>()?;
-                Ok(Self::oneof(exprs))
-            }
-            ast::SuperTypeExpression::And { terms } => {
-                let terms = terms
-                    .iter()
-                    .map(|e| Self::from_expr(ns, scope, e))
-                    .collect::<Result<Vec<Self>, SemanticError>>()?;
-                Ok(Self::and(terms))
-            }
-            ast::SuperTypeExpression::AndOr { factors } => {
-                let factors = factors
-                    .iter()
-                    .map(|e| Self::from_expr(ns, scope, e))
-                    .collect::<Result<Vec<Self>, SemanticError>>()?;
-                Ok(Self::andor(factors))
-            }
-        }
     }
 
     pub fn from_constraint_expr(
