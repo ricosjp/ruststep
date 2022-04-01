@@ -126,7 +126,7 @@ impl std::ops::BitAnd for PartialComplexEntity {
 /// ```
 /// # use espr::ir::*;
 /// let a1 = PartialComplexEntity::new(&[1]);
-/// let a2 = PartialComplexEntity::new(&[1]);
+/// let a2 = PartialComplexEntity::new(&[2]);
 /// let b1 = PartialComplexEntity::new(&[3]);
 /// let b2 = PartialComplexEntity::new(&[4]);
 ///
@@ -146,7 +146,7 @@ impl std::ops::BitAnd for PartialComplexEntity {
 /// ```
 /// # use espr::ir::*;
 /// let a1 = PartialComplexEntity::new(&[1]);
-/// let a2 = PartialComplexEntity::new(&[1]);
+/// let a2 = PartialComplexEntity::new(&[2]);
 /// let b1 = PartialComplexEntity::new(&[3]);
 /// let b2 = PartialComplexEntity::new(&[4]);
 ///
