@@ -95,7 +95,7 @@ impl Entity {
         let mut constraints = vec![format_ident!("{}", self.name.to_pascal_case())];
 
         for ty in &self.constraints {
-            match &ty[0] {
+            match ty {
                 TypeRef::Entity {
                     name, is_supertype, ..
                 } => {
@@ -140,7 +140,7 @@ impl Entity {
         });
 
         for ty in &self.constraints {
-            if let TypeRef::Entity { name, .. } = &ty[0] {
+            if let TypeRef::Entity { name, .. } = ty {
                 let name = format_ident!("{}", name.to_pascal_case());
                 tokens.append_all(quote! {
                     impl Into<#any> for #name {
@@ -161,7 +161,7 @@ impl Entity {
         let constraints = self
             .constraints
             .iter()
-            .map(|ty| match &ty[0] {
+            .map(|ty| match ty {
                 TypeRef::Entity { name, .. } => {
                     format_ident!("{}", name.to_pascal_case())
                 }

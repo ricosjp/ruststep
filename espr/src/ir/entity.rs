@@ -9,7 +9,7 @@ pub struct Entity {
 
     /// List of constraints corresponding to `SUBTYPE_CONSTRAINTS`
     /// and `SUPERTYPE OF` declaration in EXPRESS schema
-    pub constraints: Vec<Vec<TypeRef>>,
+    pub constraints: Vec<TypeRef>,
 
     /// List of types to be inherited by this entity
     ///
@@ -84,12 +84,12 @@ impl Legalize for Entity {
         let constraints = if let Some(instantiables) = ss.instantiables.get(&path) {
             instantiables
                 .iter()
-                .map(|pce| {
-                    pce.iter()
-                        .map(|path| TypeRef::from_path(ns, ss, path))
-                        .collect()
+                .filter_map(|pce| match pce.len() {
+                    // FIXME ignore complex entity case
+                    1 => Some(TypeRef::from_path(ns, ss, &pce[0])),
+                    _ => None,
                 })
-                .collect::<Result<Vec<Vec<TypeRef>>, SemanticError>>()?
+                .collect::<Result<Vec<TypeRef>, SemanticError>>()?
         } else {
             Vec::new()
         };
