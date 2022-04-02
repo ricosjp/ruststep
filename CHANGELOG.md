@@ -15,7 +15,7 @@ In addition to original Keep-a-Changelog, we use following rules:
 ## Unreleased
 
 ### Added
-- Integrate instantiable complex entity into rust/codegen https://github.com/ricosjp/ruststep/pull/203
+- Formal approach for instantiable complex entity https://github.com/ricosjp/ruststep/pull/203
 - Partial complex entities described in ISO-10303-11 Annex B https://github.com/ricosjp/ruststep/pull/200
 
 ### Changed
