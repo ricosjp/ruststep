@@ -2,6 +2,7 @@
 use super::*;
 
 use itertools::Itertools;
+use std::cmp::Ordering;
 
 #[cfg_attr(doc, katexit::katexit)]
 /// Partial complex entity data type, e.g. $A \And B \And C$ in ISO document
@@ -40,10 +41,20 @@ use itertools::Itertools;
 /// );
 /// assert_eq!(a & b & c, PartialComplexEntity::new(&[1, 2, 3]));
 /// ```
-#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Debug, Clone, PartialEq, Eq, Ord)]
 pub struct PartialComplexEntity {
     /// Sorted and non-duplicated indices
     pub indices: Vec<usize>,
+}
+
+impl PartialOrd for PartialComplexEntity {
+    fn partial_cmp(&self, rhs: &Self) -> Option<Ordering> {
+        match PartialOrd::partial_cmp(&self.indices.len(), &rhs.indices.len()) {
+            Some(Ordering::Equal) => PartialOrd::partial_cmp(&self.indices, &rhs.indices),
+            a @ Some(Ordering::Less) | a @ Some(Ordering::Greater) => a,
+            None => unreachable!(),
+        }
+    }
 }
 
 impl PartialComplexEntity {
