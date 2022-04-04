@@ -41,7 +41,7 @@ use std::cmp::Ordering;
 /// );
 /// assert_eq!(a & b & c, PartialComplexEntity::new(&[1, 2, 3]));
 /// ```
-#[derive(Debug, Clone, PartialEq, Eq, Ord)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct PartialComplexEntity {
     /// Sorted and non-duplicated indices
     pub indices: Vec<usize>,
@@ -54,6 +54,12 @@ impl PartialOrd for PartialComplexEntity {
             a @ Some(Ordering::Less) | a @ Some(Ordering::Greater) => a,
             None => unreachable!(),
         }
+    }
+}
+
+impl Ord for PartialComplexEntity {
+    fn cmp(&self, rhs: &Self) -> Ordering {
+        self.partial_cmp(rhs).unwrap()
     }
 }
 
