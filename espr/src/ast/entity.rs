@@ -170,30 +170,6 @@ pub enum SuperTypeExpression {
     OneOf { exprs: Vec<SuperTypeExpression> },
 }
 
-impl SuperTypeExpression {
-    /// Get the list of subtype names
-    ///
-    /// - When `ENTITY A SUPERTYPE OF (B)`, it means `A` is supertype of `B`, i.e. `B` is subtype of `A`.
-    ///   Thus, this should be `as_subtype_names` rather than `as_supertype_names`
-    ///   because it returns `["B"]` for this case and they are subtypes of `self`
-    /// - This ignores the differences between `ONE_OF`, `ANDOR`, and `AND`
-    pub fn as_subtype_names(&self) -> Vec<&str> {
-        let mut names: Vec<&str> = Vec::new();
-        match self {
-            SuperTypeExpression::Reference(name) => names.push(name),
-            SuperTypeExpression::OneOf { exprs }
-            | SuperTypeExpression::AndOr { factors: exprs }
-            | SuperTypeExpression::And { terms: exprs } => {
-                for expr in exprs {
-                    let mut sub_names = expr.as_subtype_names();
-                    names.append(&mut sub_names);
-                }
-            }
-        }
-        names
-    }
-}
-
 #[derive(Debug, Clone, PartialEq)]
 pub struct SubTypeConstraint {
     pub name: String,
@@ -212,28 +188,4 @@ pub struct UniqueClause {
 pub struct UniqueRule {
     pub name: Option<String>,
     pub attributes: Vec<AttributeDecl>,
-}
-
-#[cfg(test)]
-mod tests {
-    use crate::parser;
-
-    #[test]
-    fn as_subtype_names() {
-        let (_, (expr, _)) = parser::supertype_expression("employee ANDOR sutudent").unwrap();
-        assert_eq!(expr.as_subtype_names(), &["employee", "sutudent"]);
-
-        let (_, (expr, _)) =
-            parser::supertype_expression("ONEOF(male,female) AND ONEOF(citizen,alien)").unwrap();
-        assert_eq!(
-            expr.as_subtype_names(),
-            &["male", "female", "citizen", "alien"]
-        );
-
-        let (_, (expr, _)) = parser::supertype_expression("a ANDOR b AND c").unwrap();
-        assert_eq!(expr.as_subtype_names(), &["a", "b", "c"]);
-
-        let (_, (expr, _)) = parser::supertype_expression("(a ANDOR b) AND c").unwrap();
-        assert_eq!(expr.as_subtype_names(), &["a", "b", "c"]);
-    }
 }

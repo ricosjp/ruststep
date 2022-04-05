@@ -77,7 +77,7 @@ impl Entity {
 
     fn any_ident(&self) -> syn::Ident {
         // `Any` indentifier must be appears if the entity is supertype
-        assert!(!self.subtypes.is_empty());
+        assert!(!self.constraints.is_empty());
         format_ident!("{}Any", self.name.to_pascal_case())
     }
 
@@ -92,19 +92,19 @@ impl Entity {
 
         let mut fields = vec![format_ident!("{}", self.name.to_safe())];
         let mut variants = vec![format_ident!("{}", self.name.to_pascal_case())];
-        let mut subtypes = vec![format_ident!("{}", self.name.to_pascal_case())];
+        let mut constraints = vec![format_ident!("{}", self.name.to_pascal_case())];
 
-        for ty in &self.subtypes {
-            match &ty {
+        for ty in &self.constraints {
+            match ty {
                 TypeRef::Entity {
                     name, is_supertype, ..
                 } => {
                     fields.push(format_ident!("{}", name.to_safe()));
                     variants.push(format_ident!("{}", name.to_pascal_case()));
                     if *is_supertype {
-                        subtypes.push(format_ident!("{}Any", name.to_pascal_case()));
+                        constraints.push(format_ident!("{}Any", name.to_pascal_case()));
                     } else {
-                        subtypes.push(format_ident!("{}", name.to_pascal_case()));
+                        constraints.push(format_ident!("{}", name.to_pascal_case()));
                     }
                 }
                 _ => unreachable!(),
@@ -119,13 +119,13 @@ impl Entity {
                 #(
                 #[holder(use_place_holder)]
                 #[holder(field = #fields)]
-                #variants(Box<#subtypes>)
+                #variants(Box<#constraints>)
                 ),*
             }
         }); // tokens.append_all
     }
 
-    /// Generate `impl Into<SelfAny> for SubType` for self and all subtypes
+    /// Generate `impl Into<SelfAny> for SubType` for self and all constraints
     fn generate_into_any(&self, tokens: &mut TokenStream) {
         let any = self.any_ident();
         let name = self.name_ident();
@@ -139,7 +139,7 @@ impl Entity {
             }
         });
 
-        for ty in &self.subtypes {
+        for ty in &self.constraints {
             if let TypeRef::Entity { name, .. } = ty {
                 let name = format_ident!("{}", name.to_pascal_case());
                 tokens.append_all(quote! {
@@ -158,10 +158,10 @@ impl Entity {
         let any = self.any_ident();
         let name = self.name_ident();
 
-        let subtypes = self
-            .subtypes
+        let constraints = self
+            .constraints
             .iter()
-            .map(|ty| match &ty {
+            .map(|ty| match ty {
                 TypeRef::Entity { name, .. } => {
                     format_ident!("{}", name.to_pascal_case())
                 }
@@ -174,7 +174,7 @@ impl Entity {
                 fn as_ref(&self) -> &#name {
                     match self {
                         #any::#name (x) => x.as_ref(),
-                        #(#any::#subtypes (x) => (**x).as_ref(),)*
+                        #(#any::#constraints (x) => (**x).as_ref(),)*
                     }
                 }
             }
@@ -193,7 +193,7 @@ impl Entity {
                     fn as_ref(&self) -> &#supertype {
                         match self {
                             #any::#name (x) => AsRef::<#name>::as_ref(x).as_ref(),
-                            #(#any::#subtypes (x) => AsRef::<#name>::as_ref(x.as_ref()).as_ref(),)*
+                            #(#any::#constraints (x) => AsRef::<#name>::as_ref(x.as_ref()).as_ref(),)*
                         }
                     }
                 }
@@ -281,9 +281,9 @@ impl ToTokens for Entity {
         });
 
         // Generate `Any` enum if this entity is a supertype of other entities
-        if !self.subtypes.is_empty() {
+        if !self.constraints.is_empty() {
             self.generate_any_enum(tokens);
-            // Generate `impl Into<XxxAny> for Yyy` for self and all subtypes
+            // Generate `impl Into<XxxAny> for Yyy` for self and all constraints
             self.generate_into_any(tokens);
             self.generate_asref_from_any(tokens);
         }

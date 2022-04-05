@@ -68,6 +68,10 @@ impl<'st> Namespace<'st> {
         Namespace { names, ast }
     }
 
+    pub fn is_empty(&self) -> bool {
+        self.ast.is_empty()
+    }
+
     /// Size of indexed AST
     pub fn len(&self) -> usize {
         self.ast.len()
@@ -96,16 +100,16 @@ impl<'st> Namespace<'st> {
         }
     }
 
-    /// Get an AST portion corresponding the [Path]
+    /// Get an AST portion and its index corresponding the [Path]
     ///
     /// Error
     /// ------
     /// - Input path is invalid, i.e. No item is specified by the path.
     ///
-    pub fn get(&self, path: &Path) -> Result<Named, SemanticError> {
-        for (p, ast) in &self.ast {
+    pub fn get(&self, path: &Path) -> Result<(Named, usize), SemanticError> {
+        for (index, (p, ast)) in self.ast.iter().enumerate() {
             if p == path {
-                return Ok(*ast);
+                return Ok((*ast, index));
             }
         }
         Err(SemanticError::InvalidPath(path.clone()))

@@ -6,7 +6,22 @@ pub struct Entity {
     /// Name of entity in snake_case
     pub name: String,
     pub attributes: Vec<EntityAttribute>,
-    pub subtypes: Vec<TypeRef>,
+
+    /// List of constraints corresponding to `SUBTYPE_CONSTRAINTS`
+    /// and `SUPERTYPE OF` declaration in EXPRESS schema
+    pub constraints: Vec<TypeRef>,
+
+    /// List of types to be inherited by this entity
+    ///
+    /// When this entity is `sub` defined like:
+    ///
+    /// ```text
+    /// ENTITY sub SUBTYPE OF (base);
+    /// END_ENTITY;
+    /// ```
+    ///
+    /// then this `supertypes` is `[base]`.
+    ///
     pub supertypes: Vec<TypeRef>,
 }
 
@@ -22,7 +37,7 @@ impl Legalize for EntityAttribute {
 
     fn legalize(
         ns: &Namespace,
-        ss: &SubSuperGraph,
+        ss: &Constraints,
         scope: &Scope,
         attr: &Self::Input,
     ) -> Result<Self, SemanticError> {
@@ -44,9 +59,9 @@ impl Legalize for Entity {
 
     fn legalize(
         ns: &Namespace,
-        ss: &SubSuperGraph,
+        ss: &Constraints,
         scope: &Scope,
-        entity: &Self::Input,
+        entity: &ast::Entity,
     ) -> Result<Self, SemanticError> {
         let name = entity.name.clone();
         let attributes = entity
@@ -55,24 +70,34 @@ impl Legalize for Entity {
             .map(|attr| EntityAttribute::legalize(ns, ss, scope, attr))
             .collect::<Result<Vec<_>, _>>()?;
 
-        let path = Path::new(scope, ScopeType::Entity, &name);
-        let supertypes = ss
-            .get_supertypes(&path)
-            .unwrap_or_default()
-            .iter()
-            .map(|sup| TypeRef::from_path(ns, ss, sup))
-            .collect::<Result<Vec<_>, _>>()?;
-        let subtypes = ss
-            .get_subtypes(&path)
-            .unwrap_or_default()
-            .iter()
-            .map(|sub| TypeRef::from_path(ns, ss, sub))
-            .collect::<Result<Vec<_>, _>>()?;
+        let supertypes = if let Some(supertypes) = &entity.subtype_of {
+            supertypes
+                .entity_references
+                .iter()
+                .map(|sup| TypeRef::from_path(ns, ss, &ns.resolve(scope, sup)?.0))
+                .collect::<Result<Vec<TypeRef>, _>>()?
+        } else {
+            Vec::new()
+        };
+
+        let path = Path::entity(scope, &entity.name);
+        let constraints = if let Some(instantiables) = ss.instantiables.get(&path) {
+            instantiables
+                .iter()
+                .filter_map(|pce| match pce.len() {
+                    // FIXME ignore complex entity case
+                    1 => Some(TypeRef::from_path(ns, ss, &pce[0])),
+                    _ => None,
+                })
+                .collect::<Result<Vec<TypeRef>, SemanticError>>()?
+        } else {
+            Vec::new()
+        };
 
         Ok(Entity {
             name,
             attributes,
-            subtypes,
+            constraints,
             supertypes,
         })
     }
@@ -86,7 +111,7 @@ mod tests {
     fn legalize() {
         let example = SyntaxTree::example();
         let ns = Namespace::new(&example);
-        let ss = SubSuperGraph::new(&ns, &example).unwrap();
+        let ss = Constraints::new(&ns, &example).unwrap();
         dbg!(&ns);
         let entity = &example.schemas[0].entities[0];
         let scope = Scope::root().pushed(ScopeType::Schema, &example.schemas[0].name);

@@ -1,6 +1,8 @@
 //! Partial complex entities described in ISO-10303-11 Annex B
+use super::*;
 
 use itertools::Itertools;
+use std::cmp::Ordering;
 
 #[cfg_attr(doc, katexit::katexit)]
 /// Partial complex entity data type, e.g. $A \And B \And C$ in ISO document
@@ -39,10 +41,26 @@ use itertools::Itertools;
 /// );
 /// assert_eq!(a & b & c, PartialComplexEntity::new(&[1, 2, 3]));
 /// ```
-#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct PartialComplexEntity {
     /// Sorted and non-duplicated indices
-    indices: Vec<usize>,
+    pub indices: Vec<usize>,
+}
+
+impl PartialOrd for PartialComplexEntity {
+    fn partial_cmp(&self, rhs: &Self) -> Option<Ordering> {
+        match PartialOrd::partial_cmp(&self.indices.len(), &rhs.indices.len()) {
+            Some(Ordering::Equal) => PartialOrd::partial_cmp(&self.indices, &rhs.indices),
+            a @ Some(Ordering::Less) | a @ Some(Ordering::Greater) => a,
+            None => unreachable!(),
+        }
+    }
+}
+
+impl Ord for PartialComplexEntity {
+    fn cmp(&self, rhs: &Self) -> Ordering {
+        self.partial_cmp(rhs).unwrap()
+    }
 }
 
 impl PartialComplexEntity {
@@ -50,6 +68,17 @@ impl PartialComplexEntity {
         PartialComplexEntity {
             indices: indices.iter().cloned().dedup().collect(),
         }
+    }
+
+    /// Restore Path from namespace index
+    pub fn as_path(&self, ns: &Namespace) -> Vec<Path> {
+        self.indices
+            .iter()
+            .map(|index| {
+                let (path, _ast) = &ns[*index];
+                path.clone()
+            })
+            .collect()
     }
 }
 
@@ -114,7 +143,7 @@ impl std::ops::BitAnd for PartialComplexEntity {
 /// ```
 /// # use espr::ir::*;
 /// let a1 = PartialComplexEntity::new(&[1]);
-/// let a2 = PartialComplexEntity::new(&[1]);
+/// let a2 = PartialComplexEntity::new(&[2]);
 /// let b1 = PartialComplexEntity::new(&[3]);
 /// let b2 = PartialComplexEntity::new(&[4]);
 ///
@@ -134,7 +163,7 @@ impl std::ops::BitAnd for PartialComplexEntity {
 /// ```
 /// # use espr::ir::*;
 /// let a1 = PartialComplexEntity::new(&[1]);
-/// let a2 = PartialComplexEntity::new(&[1]);
+/// let a2 = PartialComplexEntity::new(&[2]);
 /// let b1 = PartialComplexEntity::new(&[3]);
 /// let b2 = PartialComplexEntity::new(&[4]);
 ///
@@ -232,15 +261,121 @@ impl std::ops::BitAnd for PartialComplexEntity {
 ///   b2.clone()
 /// ]));
 /// ```
-#[derive(Debug, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Default)]
 pub struct Instantiables {
     /// Sorted and non-duplicated list of partial complex entities
-    parts: Vec<PartialComplexEntity>,
+    pub parts: Vec<PartialComplexEntity>,
 }
 
 impl Instantiables {
-    pub fn new(parts: &[PartialComplexEntity]) -> Self {
-        parts.iter().collect()
+    pub fn new(pces: &[PartialComplexEntity]) -> Self {
+        Self {
+            parts: pces.to_vec(),
+        }
+    }
+
+    /// Create from single index
+    pub fn single(index: usize) -> Self {
+        Self {
+            parts: vec![PartialComplexEntity::new(&[index])],
+        }
+    }
+
+    /// ONEOF(A, B, C) -> [A, B, C]
+    pub fn oneof(parts: Vec<Self>) -> Self {
+        let mut is = Self::default();
+        for p in parts {
+            is = is + p;
+        }
+        is
+    }
+
+    /// A AND B AND C -> [A & B & C]
+    pub fn and(terms: Vec<Self>) -> Self {
+        assert!(terms.len() >= 2);
+        let mut constrait = None;
+        for c in terms {
+            constrait = Some(if let Some(constrait) = constrait {
+                constrait & c
+            } else {
+                c
+            });
+        }
+        constrait.unwrap()
+    }
+
+    /// A ANDOR B ANDOR C -> [A, B, C, A & B, B & C, A & C, A & B & C]
+    pub fn andor(factors: Vec<Self>) -> Self {
+        assert!(!factors.is_empty());
+        // A ANDOR B → [A, B, A & B]
+        //
+        // This means `ANDOR` of n-factors will produce $2^n-1$ terms like:
+        //
+        // | A | B | ANDOR |
+        // |---|---|-------|
+        // | + | - | A     |
+        // | - | + | B     |
+        // | + | + | A & B |
+        //
+        let n = factors.len() as u32;
+        let mut constrait = Self::default();
+        for mut i in 1..(2usize.pow(n)) {
+            // i=0b01 -> A
+            // i=0b10 -> B
+            // i=0b11 -> A & B, and so on.
+            let mut c: Option<Self> = None;
+            for factor in &factors {
+                if i % 2 == 1 {
+                    c = Some(if let Some(pre) = c {
+                        pre & factor.clone()
+                    } else {
+                        factor.clone()
+                    });
+                }
+                i >>= 1;
+            }
+            constrait = constrait + c.unwrap();
+        }
+        constrait
+    }
+
+    pub fn from_constraint_expr(
+        ns: &Namespace,
+        expr: &ConstraintExpr,
+    ) -> Result<Self, SemanticError> {
+        use ConstraintExpr::*;
+        match expr {
+            Reference(path) => {
+                let (_ast, index) = ns.get(path)?;
+                Ok(Self::single(index))
+            }
+            OneOf(exprs) => {
+                let exprs = exprs
+                    .iter()
+                    .map(|e| Self::from_constraint_expr(ns, e))
+                    .collect::<Result<Vec<Self>, SemanticError>>()?;
+                Ok(Self::oneof(exprs))
+            }
+            And(exprs) => {
+                let exprs = exprs
+                    .iter()
+                    .map(|e| Self::from_constraint_expr(ns, e))
+                    .collect::<Result<Vec<Self>, SemanticError>>()?;
+                Ok(Self::and(exprs))
+            }
+            AndOr(exprs) => {
+                let exprs = exprs
+                    .iter()
+                    .map(|e| Self::from_constraint_expr(ns, e))
+                    .collect::<Result<Vec<Self>, SemanticError>>()?;
+                Ok(Self::andor(exprs))
+            }
+        }
+    }
+
+    /// Restore Path from namespace index
+    pub fn as_path(&self, ns: &Namespace) -> Vec<Vec<Path>> {
+        self.parts.iter().map(|pce| pce.as_path(ns)).collect()
     }
 }
 
@@ -260,8 +395,9 @@ impl std::ops::Add for Instantiables {
     type Output = Self;
     fn add(mut self, mut rhs: Instantiables) -> Self {
         self.parts.append(&mut rhs.parts);
-        self.parts.sort_unstable();
-        self
+        Self {
+            parts: self.parts.into_iter().sorted().dedup().collect(),
+        }
     }
 }
 
@@ -270,8 +406,9 @@ impl std::ops::Add<PartialComplexEntity> for Instantiables {
     type Output = Self;
     fn add(mut self, rhs: PartialComplexEntity) -> Self {
         self.parts.push(rhs);
-        self.parts.sort_unstable();
-        self
+        Self {
+            parts: self.parts.into_iter().sorted().dedup().collect(),
+        }
     }
 }
 
@@ -293,7 +430,9 @@ impl std::ops::BitAnd for Instantiables {
                 parts.push(p.clone() & q.clone());
             }
         }
-        Instantiables { parts }
+        Instantiables {
+            parts: parts.into_iter().sorted().dedup().collect(),
+        }
     }
 }
 
