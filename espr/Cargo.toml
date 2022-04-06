@@ -15,23 +15,23 @@ categories    = ["science", "development-tools"]
 
 [dependencies]
 # For parser
-nom = "7.0.0"
+nom = "7.1.1"
 
 # For Rust code generation
-syn = "1.0.75"
-quote = "1.0.9"
-proc-macro2 = "1.0.28"
+syn = "1.0.91"
+quote = "1.0.17"
+proc-macro2 = "1.0.37"
 
 # Utilities
 Inflector = "0.11.4"
-derive_more = "0.99.16"
-itertools = "0.10.1"
+derive_more = "0.99.17"
+itertools = "0.10.3"
 maplit = "1.0.2"
-thiserror = "1.0.26"
-structopt = "0.3.22"
+thiserror = "1.0.30"
+structopt = "0.3.26"
 check_keyword = "0.1.1"
-katexit = "0.1.1"
+katexit = "0.1.2"
 
 [dev-dependencies]
-insta = "1.8.0"
+insta = "1.14.0"
 maplit = "1.0.2"

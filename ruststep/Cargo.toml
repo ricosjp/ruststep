@@ -19,20 +19,20 @@ ap201 = []
 ap203 = []
 
 [dependencies]
-derive_more = "0.99.16"
+derive_more = "0.99.17"
 derive-new = "0.5.9"
-nom = "7.0.0"
-serde = { version = "1.0.129", features = ["derive"] }
-thiserror = "1.0.26"
+nom = "7.1.1"
+serde = { version = "1.0.136", features = ["derive"] }
+thiserror = "1.0.30"
 Inflector = "0.11.4"
-itertools = "0.10.1"
+itertools = "0.10.3"
 
 [dependencies.ruststep-derive]
 path = "../ruststep-derive"
 version = "0.2.0"
 
 [dev-dependencies]
-anyhow = "1.0.43"
+anyhow = "1.0.56"
 
 [dev-dependencies.espr-derive]
 path = "../espr-derive"
