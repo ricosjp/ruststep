@@ -328,6 +328,30 @@ mod tests {
     END_SCHEMA;
     "#;
 
+    /// Based on `AND` example in ISO-10303-11
+    const PERSON_AND_SEPARATE: &str = r#"
+    SCHEMA test_schema;
+      ENTITY person;
+      END_ENTITY;
+
+      ENTITY male SUBTYPE OF (person);
+      END_ENTITY;
+
+      ENTITY female SUBTYPE OF (person);
+      END_ENTITY;
+
+      ENTITY citizen SUBTYPE OF (person);
+      END_ENTITY;
+
+      ENTITY alien SUBTYPE OF (person);
+      END_ENTITY;
+
+      SUBTYPE_CONSTRAINT person_prop FOR person;
+        ONEOF(male, female) AND ONEOF(citizen, alien);
+      END_SUBTYPE_CONSTRAINT;
+    END_SCHEMA;
+    "#;
+
     /// Based on default constraint example in ISO-10303-11
     const PERSON_DEFAULT: &str = r#"
     SCHEMA test_schema;
@@ -339,6 +363,24 @@ mod tests {
 
       ENTITY student SUBTYPE OF (person);
       END_ENTITY;
+    END_SCHEMA;
+    "#;
+
+    /// Based on default constraint example in ISO-10303-11
+    const PERSON_ANDOR_SEPARATE: &str = r#"
+    SCHEMA test_schema;
+      ENTITY person;
+      END_ENTITY;
+
+      ENTITY employee SUBTYPE OF (person);
+      END_ENTITY;
+
+      ENTITY student SUBTYPE OF (person);
+      END_ENTITY;
+
+      SUBTYPE_CONSTRAINT person_prop FOR person;
+        employee ANDOR student;
+      END_SUBTYPE_CONSTRAINT;
     END_SCHEMA;
     "#;
 
@@ -397,6 +439,24 @@ mod tests {
     }
 
     #[test]
+    fn gather_constraint_expr_person_explicit() {
+        let st = ast::SyntaxTree::parse(PERSON_ANDOR_SEPARATE).unwrap();
+        let ns = Namespace::new(&st);
+        let exprs = gather_constraint_expr(&ns, &st).unwrap();
+        let scope = Scope::root().schema("test_schema");
+        let person = Path::entity(&scope, "person");
+        assert_eq!(
+            dbg!(exprs),
+            maplit::hashmap! {
+                person => ConstraintExpr::AndOr(vec![
+                    ConstraintExpr::Reference(Path::entity(&scope, "employee")),
+                    ConstraintExpr::Reference(Path::entity(&scope, "student")),
+                ])
+            }
+        );
+    }
+
+    #[test]
     fn gather_constraint_expr_person_default() {
         let st = ast::SyntaxTree::parse(PERSON_DEFAULT).unwrap();
         let ns = Namespace::new(&st);
@@ -417,6 +477,30 @@ mod tests {
     #[test]
     fn gather_constraint_expr_person_and() {
         let st = ast::SyntaxTree::parse(PERSON_AND).unwrap();
+        let ns = Namespace::new(&st);
+        let exprs = gather_constraint_expr(&ns, &st).unwrap();
+        let scope = Scope::root().schema("test_schema");
+        let person = Path::entity(&scope, "person");
+        assert_eq!(
+            dbg!(exprs),
+            maplit::hashmap! {
+                person => ConstraintExpr::And(vec![
+                    ConstraintExpr::OneOf(vec![
+                        ConstraintExpr::Reference(Path::entity(&scope, "male")),
+                        ConstraintExpr::Reference(Path::entity(&scope, "female")),
+                    ]),
+                    ConstraintExpr::OneOf(vec![
+                        ConstraintExpr::Reference(Path::entity(&scope, "citizen")),
+                        ConstraintExpr::Reference(Path::entity(&scope, "alien")),
+                    ]),
+                ])
+            }
+        );
+    }
+
+    #[test]
+    fn gather_constraint_expr_person_and_separate() {
+        let st = ast::SyntaxTree::parse(PERSON_AND_SEPARATE).unwrap();
         let ns = Namespace::new(&st);
         let exprs = gather_constraint_expr(&ns, &st).unwrap();
         let scope = Scope::root().schema("test_schema");
