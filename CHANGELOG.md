@@ -15,6 +15,7 @@ In addition to original Keep-a-Changelog, we use following rules:
 ## Unreleased
 
 ### Added
+- Introduction to STEP, espr design document https://github.com/ricosjp/ruststep/pull/208
 - Formal approach for instantiable complex entity https://github.com/ricosjp/ruststep/pull/203
 - Partial complex entities described in ISO-10303-11 Annex B https://github.com/ricosjp/ruststep/pull/200
 
