@@ -41,18 +41,18 @@ use serde::{
 /// use nom::Finish;
 /// use ruststep::{parser::exchange, ast::{Parameter, Record}};
 ///
-/// let (residual, p) = exchange::parameter("B((1.0, A((2.0, 3.0))))")
+/// let (residual, p) = exchange::parameter("B(1.0, A(2.0, 3.0))")
 ///     .finish()
 ///     .unwrap();
 /// assert_eq!(residual, "");
 ///
-/// // A((2.0, 3.0))
+/// // A(2.0, 3.0)
 /// let a = Parameter::Typed(Record {
 ///     name: "A".to_string(),
 ///     parameter: Box::new(vec![Parameter::real(2.0), Parameter::real(3.0)].into()),
 /// });
 ///
-/// // B((1.0, a))
+/// // B(1.0, a)
 /// let b = Parameter::Typed(Record {
 ///     name: "B".to_string(),
 ///     parameter: Box::new(vec![Parameter::real(1.0), a].into()),
