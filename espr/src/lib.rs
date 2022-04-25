@@ -106,6 +106,48 @@
 //! e.g. `A(1.0, 2.0, 3.0)` based on the schema specification,
 //! and this crate aims to help creating such programs easily.
 //!
+//! Terms and definitions
+//! -----------------------
+//!
+//! These are excerpts from ISO 10303-11 3.3 "Other terms and definitions"
+//! to help understanding terms appears in this document.
+//!
+//! ### Basic terms
+//!
+//! | Section | Term      | Meaning |
+//! |:--------|:----------|:--------|
+//! | 3.3.22  | value     | a unit of data.|
+//! | 3.3.4   | constant  | a named unit of data from a specified domain. The value cannot be modified.|
+//! | 3.3.10  | instance  | a named value.|
+//! | 3.3.5   | data type | a domain of values.|
+//!
+//! ### Terms about entity
+//!
+//! | Section | Term                              | Meaning |
+//! |:--------|:----------------------------------|:--------|
+//! | 3.3.6   | entity                            | a class of information defined by common properties.|
+//! | 3.3.7   | entity data type                  | a representation of an entity. An entity data type establishes a domain of values defined by common attributes and constraints.|
+//! | 3.3.8   | entity (data type) instance       | a named entity data type value. The name of an entity instance is used for referencing the instance.|
+//! | 3.3.9   | (single) entity (data type) value | a unit of data which represents a unit of information within the class defined by an entity data type. It is a member of the domain established by this entity data type.|
+//! | 3.3.16  | population                        | a collection of entity data type instances.|
+//!
+//! ### Advanced terms about entity
+//!
+//! | Section | Term                               | Meaning |
+//! |:--------|:-----------------------------------|:--------|
+//! | 3.3.1   | complex entity                     | a representation of an entity. A complex entity data type establishes a domain of values defined by the common attributes and constraints of an allowed combination of entity data types within a particular subtype/supertype graph.|
+//! | 3.3.19  | simple entity instance             | a named unit of data which represents a unit of information within the class defined by an entity. It is a member of the domain established by a single entity data type.|
+//! | 3.3.2   | complex entity instance            | a named complex entity data type value. The name of a complex entity instance is used for referencing the instance.|
+//! | 3.3.3   | complex entity value               | a unit of data that represents a unit of information within the class defined by a complex entity data type. It is a member of the domain established by this complex entity data type.|
+//! | 3.3.14  | partial complex entity             | a potential representation of an entity. A partial complex entity data type is a grouping of entity data types within a subtype/supertype graph which may form part or all of a complex entity data type.|
+//! | 3.3.15  | partial complex entity value       | a value of a partial complex entity data type. This has no meaning on its own and must be combined with other partial complex entity values and a name to form a complex entity instance.|
+//! | 3.3.11  | multi-leaf complex entity          | a complex entity data type that consists of more than one entity data types that do not have further subtypes within this complex entity data type.|
+//! | 3.3.12  | multi-leaf complex entity instance | a named multi-leaf complex entity data type value. The name of a multi-leaf complex entity instance is used for referencing the instance.|
+//! | 3.3.13  | multi-leaf complex entity value    | a unit of data that represents a unit of information within the class defined by a multi-leaf complex entity data type. It is a member of the domain established by this multi-leaf complex entity data type.|
+//!
+//! "data type" is ommitted here since "entity" and "entity data type"
+//! indicate same one in most situation.
+//!
 
 #![deny(rustdoc::broken_intra_doc_links)]
 
