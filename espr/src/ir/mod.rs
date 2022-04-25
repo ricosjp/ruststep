@@ -67,7 +67,7 @@
 //! the inherited attributes (`name`) shall appear sequentially
 //! prior to the explicit attributes (`pay`, `school_name`).
 //! Using external mapping, an instance is represented by a list of
-//! "partial entity value" enclosed by `()`.
+//! "partial complex entity value" enclosed by `()`.
 //! The instances `#1` (`#2`) described by internal mapping
 //! and `#3` (`#4`) described by external mapping are same value of `employee` (`student`) entity,
 //! but internal mapping cannot describe `#5` case.
