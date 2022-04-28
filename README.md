@@ -19,9 +19,6 @@ aimed at replacing [stepcode](https://github.com/stepcode/stepcode).
 [ruststep-derive-doc]: https://ricosjp.github.io/ruststep/ruststep_derive/index.html
 [EXPRESS]: https://www.iso.org/standard/38047.html
 
-See [ARCHITECTURE.md](./ARCHITECTURE.md) for detail.
-
-
 What is STEP?
 --------------
 
