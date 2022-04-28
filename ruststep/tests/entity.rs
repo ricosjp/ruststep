@@ -1,6 +1,6 @@
 // Test for deserializing Holder structs
 
-use ruststep::{ast::*, parser::exchange, place_holder::PlaceHolder, tables::*};
+use ruststep::{ast::*, parser::exchange, tables::*};
 
 use nom::Finish;
 use serde::Deserialize;
