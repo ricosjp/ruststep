@@ -15,6 +15,7 @@ In addition to original Keep-a-Changelog, we use following rules:
 ## Unreleased
 
 ### Added
+- Design document of ruststep crate https://github.com/ricosjp/ruststep/pull/214
 - Term and definitions https://github.com/ricosjp/ruststep/pull/210
 - Introduction to STEP, espr design document https://github.com/ricosjp/ruststep/pull/208
 - Formal approach for instantiable complex entity https://github.com/ricosjp/ruststep/pull/203
