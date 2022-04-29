@@ -1,26 +1,92 @@
+//! Header section of exchange structure
+//!
+//! `HEADER` section of exchange structure shall contains
+//! one instance of each of following entities in this order:
+//!
+//! - `file_description`
+//! - `file_name`
+//! - `file_schema`
+//!
+//! and following entities may appear after `file_schema`:
+//!
+//! - `schema_population`
+//! - `file_population`
+//! - `section_language`
+//! - `section_context`
+//!
+//! These entities are defined in [ISO-10303-21 "8.2 Header section declarations"](https://www.iso.org/standard/63141.html)
+//! using EXPRESS schemas.
+//! Although we can generate corresponding Rust struct using espr compiler,
+//! we write these definitions manually to keep development process simple.
+//!
+
 use crate::{ast::*, error::Result};
 use serde::Deserialize;
 
+/// File description
+///
+/// Following EXPRESS schema is an exerpt from
+/// [ISO-10303-21:2016(E) "8.2.2 file_description"](https://www.iso.org/standard/63141.html):
+///
+/// ```text
+/// ENTITY file_description;
+///   description          : LIST [1:?] OF STRING (256) ;
+///   implementation_level : STRING (256) ;
+/// END_ENTITY;
+/// ```
 #[derive(Debug, Clone, PartialEq, ruststep_derive::Deserialize)]
 pub struct FileDescription {
-    description: Vec<String>,
-    implementation_level: String,
+    pub description: Vec<String>,
+    pub implementation_level: String,
 }
 
+/// File name
+///
+/// Following EXPRESS schema is an exerpt from
+/// [ISO-10303-21:2016(E) "8.2.3 file_name"](https://www.iso.org/standard/63141.html):
+///
+/// ```text
+/// ENTITY file_name;
+///   name                 : STRING (256) ;
+///   time_stamp           : time_stamp_text ;
+///   author               : LIST [ 1 : ? ] OF STRING (256) ;
+///   organization         : LIST [ 1 : ? ] OF STRING (256) ;
+///   preprocessor_version : STRING (256) ;
+///   originating_system   : STRING (256) ;
+///   authorization        : STRING (256) ;
+/// END_ENTITY;
+///
+/// TYPE time_stamp_text = STRING(256);
+/// END_TYPE;
+/// ```
 #[derive(Debug, Clone, PartialEq, ruststep_derive::Deserialize)]
 pub struct FileName {
-    name: String,
-    time_stamp: String,
-    author: Vec<String>,
-    organization: Vec<String>,
-    preprocessor_version: String,
-    originating_system: String,
-    authorization: String,
+    pub name: String,
+    /// ISO-8601 formatted date and time specifying when the exchange structure was created.
+    pub time_stamp: String,
+    pub author: Vec<String>,
+    pub organization: Vec<String>,
+    pub preprocessor_version: String,
+    pub originating_system: String,
+    pub authorization: String,
 }
 
+/// File schema
+///
+/// Following EXPRESS schema is an exerpt from
+/// [ISO-10303-21:2016(E) "8.2.4 file_schema"](https://www.iso.org/standard/63141.html):
+///
+/// ```text
+/// ENTITY file_schema;
+///   schema_identifiers : LIST [1:?] OF UNIQUE schema_name;
+/// END_ENTITY;
+///
+/// TYPE schema_name = STRING(1024);
+/// END_TYPE;
+/// ```
 #[derive(Debug, Clone, PartialEq, ruststep_derive::Deserialize)]
 pub struct FileSchema {
-    schema: Vec<String>,
+    pub schema: Vec<String>,
 }
 
 /// STEP-file HEADER section
@@ -30,9 +96,9 @@ pub struct FileSchema {
 ///
 #[derive(Debug, Clone, PartialEq)]
 pub struct Header {
-    file_description: FileDescription,
-    file_name: FileName,
-    file_schema: FileSchema,
+    pub file_description: FileDescription,
+    pub file_name: FileName,
+    pub file_schema: FileSchema,
 }
 
 impl Header {
