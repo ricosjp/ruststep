@@ -5,35 +5,10 @@ use serde::{
     forward_to_deserialize_any,
 };
 
+#[cfg(doc)]
+use crate::parser;
+
 /// Primitive value type in STEP data
-///
-/// Parse
-/// ------
-///
-/// ```
-/// use nom::Finish;
-/// use ruststep::{parser::exchange, ast::Parameter};
-///
-/// // Real number
-/// let (residual, p) = exchange::parameter("1.0").finish().unwrap();
-/// assert_eq!(residual, "");
-/// assert_eq!(p, Parameter::real(1.0));
-///
-/// // String
-/// let (residual, p) = exchange::parameter("'ruststep'").finish().unwrap();
-/// assert_eq!(residual, "");
-/// assert_eq!(p, Parameter::string("ruststep"));
-///
-/// // non-uniform list
-/// let (residual, p) = exchange::parameter("('ruststep', 1.0)").finish().unwrap();
-/// assert_eq!(residual, "");
-/// assert_eq!(p, vec![Parameter::string("ruststep"), Parameter::real(1.0)].into());
-///
-/// // inline typed struct
-/// let (residual, p) = exchange::parameter("FILE_NAME('ruststep')").finish().unwrap();
-/// assert_eq!(residual, "");
-/// assert!(matches!(p, Parameter::Typed(_)));
-/// ```
 ///
 /// Inline struct or list can be nested, i.e. `Parameter` can be a tree.
 ///
@@ -76,18 +51,88 @@ use serde::{
 ///
 #[derive(Debug, Clone, PartialEq)]
 pub enum Parameter {
-    /// Inline *Typed* struct
+    /// Corresponding to `TYPED_PARAMETER` in WSN:
+    ///
+    /// ```text
+    /// TYPED_PARAMETER = KEYWORD "(" PARAMETER ")" .
+    /// ```
+    ///
+    /// and [parser::exchange::typed_parameter].
+    /// It takes only one `PARAMETER` different from [Record],
+    /// which takes many `PARAMETER`s.
+    ///
+    /// ```text
+    /// SIMPLE_RECORD = KEYWORD "(" [ PARAMETER_LIST ] ")" .
+    /// ```
+    ///
+    /// ```
+    /// # use nom::Finish;
+    /// # use ruststep::{parser, ast::Parameter};
+    /// let (residual, p) = parser::exchange::parameter("FILE_NAME('ruststep')").finish().unwrap();
+    /// assert!(matches!(p, Parameter::Typed(_)));
+    /// ```
     Typed(Record),
 
     /// Signed integer
+    ///
+    /// ```
+    /// # use nom::Finish;
+    /// # use ruststep::{parser, ast::Parameter};
+    /// let (residual, p) = parser::exchange::parameter("10").finish().unwrap();
+    /// assert_eq!(p, Parameter::Integer(10));
+    /// # assert_eq!(residual, "");
+    /// let (residual, p) = parser::exchange::parameter("-10").finish().unwrap();
+    /// assert_eq!(p, Parameter::Integer(-10));
+    /// # assert_eq!(residual, "");
+    /// ```
     Integer(i64),
+
     /// Real number
+    ///
+    /// ```
+    /// # use nom::Finish;
+    /// # use ruststep::{parser, ast::Parameter};
+    /// let (residual, p) = parser::exchange::parameter("1.0").finish().unwrap();
+    /// assert_eq!(p, Parameter::Real(1.0));
+    /// # assert_eq!(residual, "");
+    /// ```
     Real(f64),
+
     /// string literal
+    ///
+    /// ```
+    /// # use nom::Finish;
+    /// # use ruststep::{parser, ast::Parameter};
+    /// let (residual, p) = parser::exchange::parameter("'EXAMPLE STRING'").finish().unwrap();
+    /// assert_eq!(p, Parameter::String("EXAMPLE STRING".to_string()));
+    /// # assert_eq!(residual, "");
+    /// ```
     String(String),
+
     /// Enumeration defined in EXPRESS schema, like `.TRUE.`
+    ///
+    /// ```
+    /// # use nom::Finish;
+    /// # use ruststep::{parser, ast::Parameter};
+    /// let (residual, p) = parser::exchange::parameter(".TRUE.").finish().unwrap();
+    /// assert_eq!(p, Parameter::Enumeration("TRUE".to_string()));
+    /// # assert_eq!(residual, "");
+    /// ```
     Enumeration(String),
-    /// List of other parameters
+
+    /// List of parameters. This can be non-uniform.
+    ///
+    /// ```
+    /// # use nom::Finish;
+    /// # use ruststep::{parser, ast::Parameter};
+    /// let (residual, p) = parser::exchange::parameter("(1.0, 2, 'STRING')").finish().unwrap();
+    /// assert_eq!(p, Parameter::List(vec![
+    ///   Parameter::Real(1.0),
+    ///   Parameter::Integer(2),
+    ///   Parameter::String("STRING".to_string()),
+    /// ]));
+    /// # assert_eq!(residual, "");
+    /// ```
     List(Vec<Parameter>),
 
     /// A reference to entity or value
