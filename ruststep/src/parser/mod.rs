@@ -1,9 +1,6 @@
-//! Tokenize ASCII exchange structure (or STEP-file) defined by ISO-10303-21
+//! Tokenize exchange structure string into [ast]
 //!
-//! This submodule responsible only for tokenize into abstract syntax tree (AST),
-//! not for semantic validation.
-//!
-//! STEP-file consists of following sections:
+//! ASCII encoding of exchange structure, a.k.a. STEP file, consists of following sections:
 //!
 //! - HEADER
 //! - ANCHOR (optional)
@@ -38,7 +35,7 @@ pub mod exchange;
 pub mod token;
 
 use crate::{
-    ast::*,
+    ast,
     error::{Result, TokenizeFailed},
 };
 use nom::Finish;
@@ -68,7 +65,7 @@ use nom::Finish;
 /// let (residual, header) = ruststep::parser::parse_header(&step_str).unwrap();
 /// assert_eq!(residual, ""); // consume HEADER section of `step_str`
 /// ```
-pub fn parse_header(input: &str) -> Result<(&str, Vec<Record>)> {
+pub fn parse_header(input: &str) -> Result<(&str, Vec<ast::Record>)> {
     match exchange::header_section(input).finish() {
         Ok((input, records)) => Ok((input, records)),
         Err(e) => Err(TokenizeFailed::new(input, e).into()),
@@ -76,7 +73,7 @@ pub fn parse_header(input: &str) -> Result<(&str, Vec<Record>)> {
 }
 
 /// Parse entire STEP file
-pub fn parse(input: &str) -> Result<Exchange> {
+pub fn parse(input: &str) -> Result<ast::Exchange> {
     match exchange::exchange_file(input).finish() {
         Ok((_residual, ex)) => Ok(ex),
         Err(e) => Err(TokenizeFailed::new(input, e).into()),

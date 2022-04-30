@@ -1,9 +1,10 @@
-//! AST (abstract syntax tree) for [exchange structure (ISO-10303-21)][ISO-10303-21]
+//! Abstract syntax tree for exchange structure
 //!
-//! [ISO-10303-21]: https://www.iso.org/standard/63141.html
+//! This module contains implementation of [serde::Serialize] and [serde::Deserialize]
+//! for AST structs.
 //!
-//! Serde data model
-//! -----------------
+//! Mapping to serde data model
+//! ----------------------------
 //!
 //! [Parameter] and [Record] can be deserialize through serde data model.
 //!
