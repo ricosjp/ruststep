@@ -42,6 +42,8 @@ pub use record::*;
 pub use ser::*;
 pub use value::*;
 
+pub mod de;
+
 use std::str::FromStr;
 
 #[cfg(doc)]
