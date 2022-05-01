@@ -1,4 +1,5 @@
 use crate::{ast::*, error::*};
+use derive_more::From;
 use inflector::Inflector;
 use serde::{
     de::{self, IntoDeserializer},
@@ -49,7 +50,7 @@ use crate::parser;
 /// assert!(matches!(p, Parameter::List(_)));
 /// ```
 ///
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, From)]
 pub enum Parameter {
     /// Corresponding to `TYPED_PARAMETER` in WSN:
     ///
@@ -85,6 +86,7 @@ pub enum Parameter {
     /// assert_eq!(p, Parameter::Integer(-10));
     /// # assert_eq!(residual, "");
     /// ```
+    #[from]
     Integer(i64),
 
     /// Real number
@@ -96,6 +98,7 @@ pub enum Parameter {
     /// assert_eq!(p, Parameter::Real(1.0));
     /// # assert_eq!(residual, "");
     /// ```
+    #[from]
     Real(f64),
 
     /// string literal
@@ -107,6 +110,7 @@ pub enum Parameter {
     /// assert_eq!(p, Parameter::String("EXAMPLE STRING".to_string()));
     /// # assert_eq!(residual, "");
     /// ```
+    #[from]
     String(String),
 
     /// Enumeration defined in EXPRESS schema, like `.TRUE.`
@@ -133,9 +137,11 @@ pub enum Parameter {
     /// ]));
     /// # assert_eq!(residual, "");
     /// ```
+    #[from]
     List(Vec<Parameter>),
 
     /// A reference to entity or value
+    #[from]
     RValue(RValue),
 
     /// The special token dollar sign (`$`) is used to represent
@@ -156,30 +162,6 @@ impl Parameter {
 
     pub fn string(s: &str) -> Self {
         Parameter::String(s.to_string())
-    }
-}
-
-impl From<i64> for Parameter {
-    fn from(value: i64) -> Self {
-        Self::integer(value)
-    }
-}
-
-impl From<f64> for Parameter {
-    fn from(value: f64) -> Self {
-        Self::real(value)
-    }
-}
-
-impl From<String> for Parameter {
-    fn from(value: String) -> Self {
-        Parameter::String(value)
-    }
-}
-
-impl From<Vec<Parameter>> for Parameter {
-    fn from(source: Vec<Parameter>) -> Self {
-        Parameter::List(source)
     }
 }
 
