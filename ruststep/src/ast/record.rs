@@ -55,6 +55,8 @@ impl FromStr for Record {
     }
 }
 
+impl AST for Record {}
+
 /// Deserializer corresponding to a single-key map like `{ "A": [1.0, 2.0] }`
 #[derive(Debug)]
 pub struct RecordDeserializer {

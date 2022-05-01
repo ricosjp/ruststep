@@ -38,3 +38,5 @@ impl FromStr for DataSection {
         Ok(record)
     }
 }
+
+impl AST for DataSection {}

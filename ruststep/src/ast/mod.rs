@@ -42,6 +42,14 @@ pub use record::*;
 pub use ser::*;
 pub use value::*;
 
+use std::str::FromStr;
+
+#[cfg(doc)]
+use crate::parser;
+
+/// AST portion
+pub trait AST: FromStr<Err = crate::error::Error> {}
+
 /// Entire exchange structure
 #[derive(Debug, Clone, PartialEq)]
 pub struct Exchange {
