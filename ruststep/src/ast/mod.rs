@@ -300,6 +300,7 @@ pub struct Exchange {
     /// `SIGNATURE` section
     pub signature: Vec<String>,
 }
+derive_ast_from_str!(Exchange, parser::exchange::exchange_file);
 
 /// Each line of data section
 #[derive(Debug, Clone, PartialEq)]
@@ -307,12 +308,14 @@ pub enum EntityInstance {
     Simple { id: u64, record: Record },
     Complex { id: u64, subsuper: Vec<Record> },
 }
+derive_ast_from_str!(EntityInstance, parser::exchange::entity_instance);
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct ReferenceEntry {
     pub name: LValue,
     pub resource: URI,
 }
+derive_ast_from_str!(ReferenceEntry, parser::exchange::reference);
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct URI(pub String);
@@ -323,6 +326,7 @@ pub struct Anchor {
     pub item: AnchorItem,
     pub tags: Vec<(String, AnchorItem)>,
 }
+derive_ast_from_str!(Anchor, parser::exchange::anchor);
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum AnchorItem {
@@ -337,3 +341,4 @@ pub enum AnchorItem {
     /// List of other parameters
     List(Vec<AnchorItem>),
 }
+derive_ast_from_str!(AnchorItem, parser::exchange::anchor_item);
