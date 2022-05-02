@@ -174,9 +174,9 @@ pub enum Parameter {
     /// ```
     ///
     /// ```
-    /// # use nom::Finish;
-    /// # use ruststep::{parser, ast::Parameter};
-    /// let (residual, p) = parser::exchange::parameter("FILE_NAME('ruststep')").finish().unwrap();
+    /// # use std::str::FromStr;
+    /// # use ruststep::ast::Parameter;
+    /// let p = Parameter::from_str("FILE_NAME('ruststep')").unwrap();
     /// assert!(matches!(p, Parameter::Typed(_)));
     /// ```
     Typed(Record),
@@ -184,14 +184,12 @@ pub enum Parameter {
     /// Signed integer
     ///
     /// ```
-    /// # use nom::Finish;
-    /// # use ruststep::{parser, ast::Parameter};
-    /// let (residual, p) = parser::exchange::parameter("10").finish().unwrap();
+    /// # use std::str::FromStr;
+    /// # use ruststep::ast::Parameter;
+    /// let p = Parameter::from_str("10").unwrap();
     /// assert_eq!(p, Parameter::Integer(10));
-    /// # assert_eq!(residual, "");
-    /// let (residual, p) = parser::exchange::parameter("-10").finish().unwrap();
+    /// let p = Parameter::from_str("-10").unwrap();
     /// assert_eq!(p, Parameter::Integer(-10));
-    /// # assert_eq!(residual, "");
     /// ```
     #[from]
     Integer(i64),
@@ -199,11 +197,10 @@ pub enum Parameter {
     /// Real number
     ///
     /// ```
-    /// # use nom::Finish;
-    /// # use ruststep::{parser, ast::Parameter};
-    /// let (residual, p) = parser::exchange::parameter("1.0").finish().unwrap();
+    /// # use std::str::FromStr;
+    /// # use ruststep::ast::Parameter;
+    /// let p = Parameter::from_str("1.0").unwrap();
     /// assert_eq!(p, Parameter::Real(1.0));
-    /// # assert_eq!(residual, "");
     /// ```
     #[from]
     Real(f64),
@@ -211,11 +208,10 @@ pub enum Parameter {
     /// string literal
     ///
     /// ```
-    /// # use nom::Finish;
-    /// # use ruststep::{parser, ast::Parameter};
-    /// let (residual, p) = parser::exchange::parameter("'EXAMPLE STRING'").finish().unwrap();
+    /// # use std::str::FromStr;
+    /// # use ruststep::ast::Parameter;
+    /// let p = Parameter::from_str("'EXAMPLE STRING'").unwrap();
     /// assert_eq!(p, Parameter::String("EXAMPLE STRING".to_string()));
-    /// # assert_eq!(residual, "");
     /// ```
     #[from]
     String(String),
@@ -223,26 +219,24 @@ pub enum Parameter {
     /// Enumeration defined in EXPRESS schema, like `.TRUE.`
     ///
     /// ```
-    /// # use nom::Finish;
-    /// # use ruststep::{parser, ast::Parameter};
-    /// let (residual, p) = parser::exchange::parameter(".TRUE.").finish().unwrap();
+    /// # use std::str::FromStr;
+    /// # use ruststep::ast::Parameter;
+    /// let p = Parameter::from_str(".TRUE.").unwrap();
     /// assert_eq!(p, Parameter::Enumeration("TRUE".to_string()));
-    /// # assert_eq!(residual, "");
     /// ```
     Enumeration(String),
 
     /// List of parameters. This can be non-uniform.
     ///
     /// ```
-    /// # use nom::Finish;
-    /// # use ruststep::{parser, ast::Parameter};
-    /// let (residual, p) = parser::exchange::parameter("(1.0, 2, 'STRING')").finish().unwrap();
+    /// # use std::str::FromStr;
+    /// # use ruststep::ast::Parameter;
+    /// let p = Parameter::from_str("(1.0, 2, 'STRING')").unwrap();
     /// assert_eq!(p, Parameter::List(vec![
     ///   Parameter::Real(1.0),
     ///   Parameter::Integer(2),
     ///   Parameter::String("STRING".to_string()),
     /// ]));
-    /// # assert_eq!(residual, "");
     /// ```
     #[from]
     List(Vec<Parameter>),
