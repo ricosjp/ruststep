@@ -1,7 +1,5 @@
-use serde::Deserialize;
-
 /// Left hand side value
-#[derive(Debug, Clone, PartialEq, Deserialize)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum LValue {
     /// Like `#11`
     Entity(u64),
