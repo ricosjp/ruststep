@@ -40,7 +40,9 @@ use crate::parser;
 use std::str::FromStr;
 
 /// AST portion
-pub trait AST: FromStr<Err = crate::error::Error> {}
+pub trait AST: FromStr<Err = crate::error::Error> {
+    fn parse(input: &str) -> parser::combinator::ParseResult<Self>;
+}
 
 macro_rules! derive_ast_from_str {
     ($ast:ty, $parse:path) => {
@@ -49,14 +51,21 @@ macro_rules! derive_ast_from_str {
             fn from_str(input: &str) -> $crate::error::Result<Self> {
                 use nom::Finish;
                 let input = input.trim();
-                let (_input, record) = $parse(input)
+                let (residual, record) = AST::parse(input)
                     .finish()
                     .map_err(|err| $crate::error::TokenizeFailed::new(input, err))?;
+                if !residual.is_empty() {
+                    return Err($crate::error::Error::ExtraInputRemaining(input.to_string()));
+                }
                 Ok(record)
             }
         }
 
-        impl AST for $ast {}
+        impl AST for $ast {
+            fn parse(input: &str) -> parser::combinator::ParseResult<Self> {
+                $parse(input)
+            }
+        }
     };
 }
 
