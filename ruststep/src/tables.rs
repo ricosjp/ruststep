@@ -59,7 +59,7 @@
 //! The simple types in EXPRESS are mapped into Rust primitive types.
 //! The ENTITY `a` will be treated as a Rust struct like
 //!
-//! ```rust:ignore
+//! ```
 //! struct A {
 //!   x: i64,
 //!   y: i64,
@@ -67,9 +67,10 @@
 //! ```
 //!
 //! The ENTITY `b` has to support both reference and inline struct like as `#4` and `#6`.
-//! For this purpose, PlaceHolder exists:
+//! For this purpose, [PlaceHolder] exists:
 //!
-//! ```rust:ignore
+//! ```
+//! # use ruststep::ast::RValue;
 //! enum PlaceHolder<T> {
 //!   /// For reference, e.g. `#1`
 //!   Ref(RValue),
@@ -80,7 +81,10 @@
 //!
 //! Then following two Rust structs will be defined:
 //!
-//! ```rust:ignore
+//! ```
+//! # use ruststep::tables::PlaceHolder;
+//! # struct A {}
+//! # struct AHolder {}
 //! struct B {
 //!   z: i64,
 //!   w: A,
@@ -91,18 +95,18 @@
 //! }
 //! ```
 //!
-//! There also a function `into_owned(BHolder) -> B` in [Holder][Holder] trait.
+//! There also a function [IntoOwned::into_owned] to convert a holder struct
+//! `BHolder` into owned struct `B`.
 //! `AHolder` will also be introduced to keep consistency.
-//! These are automated by `#[derive(ruststep_derive::Holder)]` proc-macro.
+//! These are automated by [ruststep_derive::Holder] proc-macro.
 //!
 
-use serde::de;
-use std::collections::HashMap;
-
-use crate::{
-    ast::{DataSection, Record},
-    error::*,
+use crate::{ast::*, error::*};
+use serde::{
+    de::{self, IntoDeserializer, VariantAccess},
+    Deserialize,
 };
+use std::{collections::HashMap, fmt, marker::PhantomData};
 
 /// Trait for resolving a reference through entity id
 pub trait IntoOwned: Clone + 'static {
@@ -194,5 +198,145 @@ pub fn insert_record<'de, T: de::Deserialize<'de>>(
         Err(Error::DuplicatedEntity(id))
     } else {
         Ok(())
+    }
+}
+
+/// Owned value or reference through entity/value id
+#[derive(Debug, Clone, PartialEq)]
+pub enum PlaceHolder<T> {
+    Ref(RValue),
+    Owned(T),
+}
+
+impl<T: Holder> IntoOwned for PlaceHolder<T>
+where
+    T::Table: EntityTable<T>,
+{
+    type Owned = T::Owned;
+    type Table = T::Table;
+    /// Get owned value, or look up entity table and clone it for a reference.
+    ///
+    /// Errors
+    /// -------
+    /// - if table lookup failed, i.e. unknown entity id not registered in the table
+    ///
+    fn into_owned(self, table: &Self::Table) -> Result<T::Owned> {
+        match self {
+            PlaceHolder::Ref(id) => match id {
+                RValue::Entity(id) => table.get_owned(id),
+                _ => unimplemented!("ENTITY is only supported now"),
+            },
+            PlaceHolder::Owned(a) => a.into_owned(table),
+        }
+    }
+}
+
+impl<T: Holder> From<T> for PlaceHolder<T> {
+    fn from(owned: T) -> Self {
+        PlaceHolder::Owned(owned)
+    }
+}
+
+impl<T> From<RValue> for PlaceHolder<T> {
+    fn from(rvalue: RValue) -> Self {
+        PlaceHolder::Ref(rvalue)
+    }
+}
+
+impl<'de, T: Holder + WithVisitor + Deserialize<'de>> Deserialize<'de> for PlaceHolder<T> {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: de::Deserializer<'de>,
+    {
+        deserializer.deserialize_tuple_struct(
+            T::name(),
+            T::attr_len(),
+            PlaceHolderVisitor::<T>::default(),
+        )
+    }
+}
+
+struct PlaceHolderVisitor<T> {
+    phantom: PhantomData<T>,
+}
+
+impl<T> Default for PlaceHolderVisitor<T> {
+    fn default() -> Self {
+        PlaceHolderVisitor {
+            phantom: PhantomData,
+        }
+    }
+}
+
+impl<'de, T: Deserialize<'de> + Holder + WithVisitor> de::Visitor<'de> for PlaceHolderVisitor<T> {
+    type Value = PlaceHolder<T>;
+
+    fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+        write!(formatter, "PlaceHolder<{}>", std::any::type_name::<T>())
+    }
+
+    fn visit_i64<E>(self, v: i64) -> ::std::result::Result<Self::Value, E>
+    where
+        E: de::Error,
+    {
+        Ok(PlaceHolder::Owned(T::deserialize(v.into_deserializer())?))
+    }
+
+    fn visit_f64<E>(self, v: f64) -> ::std::result::Result<Self::Value, E>
+    where
+        E: de::Error,
+    {
+        Ok(PlaceHolder::Owned(T::deserialize(v.into_deserializer())?))
+    }
+
+    fn visit_str<E>(self, v: &str) -> ::std::result::Result<Self::Value, E>
+    where
+        E: de::Error,
+    {
+        Ok(PlaceHolder::Owned(T::deserialize(v.into_deserializer())?))
+    }
+
+    fn visit_seq<A>(self, seq: A) -> ::std::result::Result<Self::Value, A::Error>
+    where
+        A: de::SeqAccess<'de>,
+    {
+        let visitor = T::visitor_new();
+        Ok(PlaceHolder::Owned(visitor.visit_seq(seq)?))
+    }
+
+    // For Ref(RValue)
+    fn visit_enum<A>(self, data: A) -> ::std::result::Result<Self::Value, A::Error>
+    where
+        A: de::EnumAccess<'de>,
+    {
+        let (key, variant): (String, _) = data.variant()?;
+        match key.as_str() {
+            "Entity" => {
+                let value: u64 = variant.newtype_variant()?;
+                Ok(PlaceHolder::Ref(RValue::Entity(value)))
+            }
+            "Value" => {
+                let value: u64 = variant.newtype_variant()?;
+                Ok(PlaceHolder::Ref(RValue::Value(value)))
+            }
+            "ConstantEntity" => {
+                let name: String = variant.newtype_variant()?;
+                Ok(PlaceHolder::Ref(RValue::ConstantEntity(name)))
+            }
+            "ConstantValue" => {
+                let name: String = variant.newtype_variant()?;
+                Ok(PlaceHolder::Ref(RValue::ConstantValue(name)))
+            }
+            _ => unreachable!("Invalid key while deserializing PlaceHolder"),
+        }
+    }
+
+    // Entry point for Record or Parameter::Typed
+    fn visit_map<A>(self, map: A) -> ::std::result::Result<Self::Value, A::Error>
+    where
+        A: de::MapAccess<'de>,
+    {
+        let visitor = T::visitor_new();
+        Ok(PlaceHolder::Owned(visitor.visit_map(map)?))
     }
 }

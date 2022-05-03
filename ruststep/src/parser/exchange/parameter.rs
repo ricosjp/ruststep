@@ -55,7 +55,7 @@ pub fn parameter_list(input: &str) -> ParseResult<Vec<Parameter>> {
 
 #[cfg(test)]
 mod tests {
-    use crate::parser::Parameter;
+    use crate::ast::Parameter;
     use nom::Finish;
 
     #[test]

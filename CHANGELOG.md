@@ -23,6 +23,7 @@ In addition to original Keep-a-Changelog, we use following rules:
 - Partial complex entities described in ISO-10303-11 Annex B https://github.com/ricosjp/ruststep/pull/200
 
 ### Changed
+- `ruststep::place_holder` is integrated into `ruststep::tables` https://github.com/ricosjp/ruststep/pull/216
 
 ### Fixed
 - `SUBTYPE_CONSTRAINT` cannot parse supertype-constraint like `ONEOF` https://github.com/ricosjp/ruststep/pull/205

@@ -8,6 +8,9 @@ pub enum Error {
     #[error(transparent)]
     TokenizeFailed(#[from] TokenizeFailed),
 
+    #[error("Extra input string remains behind: {0}")]
+    ExtraInputRemaining(String),
+
     #[error("Error while deserialize STEP struct: {0}")]
     DeserializeFailed(String),
 

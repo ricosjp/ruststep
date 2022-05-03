@@ -1,5 +1,5 @@
 use nom::Finish;
-use ruststep::{ast::*, parser::exchange, place_holder::*, tables::*};
+use ruststep::{ast::*, parser::exchange, tables::*};
 use serde::Deserialize;
 use std::str::FromStr;
 
