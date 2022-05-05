@@ -33,6 +33,7 @@ version = "0.2.0"
 
 [dev-dependencies]
 anyhow = "1.0.56"
+maplit = "1.0.2"
 
 [dev-dependencies.espr-derive]
 path = "../espr-derive"

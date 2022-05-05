@@ -72,26 +72,3 @@ impl<'de> de::SeqAccess<'de> for SeqDeserializer {
         }
     }
 }
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-    use serde::Deserialize;
-
-    #[test]
-    fn deserialize_int() {
-        let p = Parameter::Integer(2);
-        let a: i64 = Deserialize::deserialize(&p).unwrap();
-        assert_eq!(a, 2);
-        // can be deserialized as unsigned
-        let a: u32 = Deserialize::deserialize(&p).unwrap();
-        assert_eq!(a, 2);
-
-        let p = Parameter::Integer(-2);
-        let a: i64 = Deserialize::deserialize(&p).unwrap();
-        assert_eq!(a, -2);
-        // cannot be deserialized negative integer into unsigned
-        let res: Result<u32> = Deserialize::deserialize(&p);
-        assert!(res.is_err());
-    }
-}
