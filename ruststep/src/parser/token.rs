@@ -155,21 +155,21 @@ pub fn constant_value_name(input: &str) -> ParseResult<String> {
 }
 
 /// lhs_occurrence_name = ( [entity_instance_name] | [value_instance_name] ) .
-pub fn lhs_occurrence_name(input: &str) -> ParseResult<LValue> {
+pub fn lhs_occurrence_name(input: &str) -> ParseResult<Name> {
     alt((
-        entity_instance_name.map(LValue::Entity),
-        value_instance_name.map(LValue::Value),
+        entity_instance_name.map(Name::Entity),
+        value_instance_name.map(Name::Value),
     ))
     .parse(input)
 }
 
 /// rhs_occurrence_name = ( [entity_instance_name] | [value_instance_name] | [constant_entity_name] | [constant_value_name]) .
-pub fn rhs_occurrence_name(input: &str) -> ParseResult<RValue> {
+pub fn rhs_occurrence_name(input: &str) -> ParseResult<Name> {
     alt((
-        entity_instance_name.map(RValue::Entity),
-        value_instance_name.map(RValue::Value),
-        constant_entity_name.map(RValue::ConstantEntity),
-        constant_value_name.map(RValue::ConstantValue),
+        entity_instance_name.map(Name::Entity),
+        value_instance_name.map(Name::Value),
+        constant_entity_name.map(Name::ConstantEntity),
+        constant_value_name.map(Name::ConstantValue),
     ))
     .parse(input)
 }

@@ -47,7 +47,7 @@ fn deserialize_sub() {
     test(
         "SUB(#3, 2.0)",
         SubHolder {
-            base: RValue::Entity(3).into(),
+            base: Name::Entity(3).into(),
             y: 2.0,
         },
     );

@@ -36,7 +36,7 @@ pub fn anchor_item(input: &str) -> ParseResult<AnchorItem> {
         integer.map(AnchorItem::Integer),
         real.map(AnchorItem::Real),
         string.map(AnchorItem::String),
-        rhs_occurrence_name.map(AnchorItem::RValue),
+        rhs_occurrence_name.map(AnchorItem::Name),
         enumeration.map(AnchorItem::Enumeration),
         // FIXME binary
         anchor_item_list,

@@ -4,23 +4,23 @@ use serde::{
     forward_to_deserialize_any,
 };
 
-impl<'de> de::IntoDeserializer<'de, crate::error::Error> for RValue {
+impl<'de> de::IntoDeserializer<'de, crate::error::Error> for Name {
     type Deserializer = RecordDeserializer;
     fn into_deserializer(self) -> RecordDeserializer {
         match self {
-            RValue::Entity(id) => RecordDeserializer::new("Entity", Parameter::Integer(id as i64)),
-            RValue::Value(id) => RecordDeserializer::new("Value", Parameter::Integer(id as i64)),
-            RValue::ConstantEntity(name) => {
+            Name::Entity(id) => RecordDeserializer::new("Entity", Parameter::Integer(id as i64)),
+            Name::Value(id) => RecordDeserializer::new("Value", Parameter::Integer(id as i64)),
+            Name::ConstantEntity(name) => {
                 RecordDeserializer::new("ConstantEntity", Parameter::String(name))
             }
-            RValue::ConstantValue(name) => {
+            Name::ConstantValue(name) => {
                 RecordDeserializer::new("ConstantValue", Parameter::String(name))
             }
         }
     }
 }
 
-impl<'de, 'value> de::Deserializer<'de> for &'value RValue {
+impl<'de, 'value> de::Deserializer<'de> for &'value Name {
     type Error = crate::error::Error;
 
     fn deserialize_any<V>(self, visitor: V) -> Result<V::Value, Self::Error>

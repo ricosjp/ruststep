@@ -23,6 +23,7 @@ In addition to original Keep-a-Changelog, we use following rules:
 - Partial complex entities described in ISO-10303-11 Annex B https://github.com/ricosjp/ruststep/pull/200
 
 ### Changed
+- `ruststep::ast::RValue` is renamed to `Name` https://github.com/ricosjp/ruststep/pull/219
 - `ruststep::place_holder` is integrated into `ruststep::tables` https://github.com/ricosjp/ruststep/pull/216
 
 ### Fixed

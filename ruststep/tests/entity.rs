@@ -85,7 +85,7 @@ fn deserialize_b_holder_record_ref() {
         b,
         BHolder {
             z: 1.0,
-            a: PlaceHolder::Ref(RValue::Entity(2))
+            a: PlaceHolder::Ref(Name::Entity(2))
         }
     );
 }
@@ -119,7 +119,7 @@ fn deserialize_b_holder_parameter_ref() {
         b,
         BHolder {
             z: 1.0,
-            a: PlaceHolder::Ref(RValue::Entity(2))
+            a: PlaceHolder::Ref(Name::Entity(2))
         }
     );
 }
