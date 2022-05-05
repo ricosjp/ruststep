@@ -162,18 +162,18 @@ fn into_base_any() {
 #[test]
 fn lookup_base_any() {
     test(
-        Parameter::Name(Name::Entity(1)),
+        Parameter::Ref(Name::Entity(1)),
         BaseAny::Base(Box::new(Base { x: 1.0 })),
     );
     test(
-        Parameter::Name(Name::Entity(2)),
+        Parameter::Ref(Name::Entity(2)),
         BaseAny::Sub1(Box::new(Sub1 {
             base: Base { x: 1.0 },
             y1: 2.0,
         })),
     );
     test(
-        Parameter::Name(Name::Entity(3)),
+        Parameter::Ref(Name::Entity(3)),
         BaseAny::Sub2(Box::new(Sub2 {
             base: Base { x: 1.0 },
             y2: 4.0,

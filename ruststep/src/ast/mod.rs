@@ -253,7 +253,7 @@ pub enum Parameter {
 
     /// A reference to entity or value
     #[from]
-    Name(Name),
+    Ref(Name),
 
     /// The special token dollar sign (`$`) is used to represent
     /// an object whose value is not provided in the exchange structure.

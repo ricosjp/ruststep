@@ -18,7 +18,7 @@ impl<'de, 'param> de::Deserializer<'de> for &'param Parameter {
             Parameter::Real(val) => visitor.visit_f64(*val),
             Parameter::String(val) => visitor.visit_str(val),
             Parameter::List(params) => visitor.visit_seq(SeqDeserializer::new(params)),
-            Parameter::Name(rvalue) => de::Deserializer::deserialize_any(rvalue, visitor),
+            Parameter::Ref(name) => de::Deserializer::deserialize_any(name, visitor),
             Parameter::NotProvided | Parameter::Omitted => visitor.visit_none(),
             Parameter::Enumeration(variant) => {
                 visitor.visit_enum(variant.to_class_case().into_deserializer())
