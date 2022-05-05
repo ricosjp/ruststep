@@ -24,7 +24,7 @@
 //!
 //! - [Parameter::Typed] e.g. `A((1.0, 2.0))` and [Record] e.g. `A(1.0, 2.0)` are mapped to "map"
 //!   in [the serde data model][serde-data-model]
-//! - [Parameter::Name] is mapped to "enum" in [the serde data model][serde-data-model].
+//! - [Parameter::Ref] is mapped to "enum" in [the serde data model][serde-data-model].
 //! - FIXME Enumeration is not supported yet.
 //!
 //! [serde-data-model]: https://serde.rs/data-model.html
@@ -67,17 +67,20 @@ macro_rules! derive_ast_from_str {
 }
 
 /// Name of an entity instance or a value
+///
+/// Corresponding to [parser::token::rhs_occurrence_name] and [parser::token::lhs_occurrence_name]
 #[derive(Debug, Clone, PartialEq)]
 pub enum Name {
-    /// Like `#11`
+    /// Like `#11`, corresponds to [parser::token::entity_instance_name]
     Entity(u64),
-    /// Like `@11`
+    /// Like `@11`, corresponds to [parser::token::value_instance_name]
     Value(u64),
-    /// Like `#CONST_ENTITY`
+    /// Like `#CONST_ENTITY`, corresponds to [parser::token::constant_entity_name]
     ConstantEntity(String),
-    /// Like `@CONST_VALUE`
+    /// Like `@CONST_VALUE`, corresponds to [parser::token::constant_value_name]
     ConstantValue(String),
 }
+derive_ast_from_str!(Name, parser::token::rhs_occurrence_name);
 
 /// A struct typed in EXPRESS schema, e.g. `A(1.0, 2.0)`
 ///
