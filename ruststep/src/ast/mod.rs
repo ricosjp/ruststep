@@ -18,20 +18,17 @@
 //! | NotProvided   | unit             |
 //! | Omitted       | unit             |
 //! | Typed, Record | map              |
-//! | RValue        | enum             |
+//! | Name        | enum             |
 //!
 //! See [the official document of serde data model](https://serde.rs/data-model.html) for detail.
 //!
 //! - [Parameter::Typed] e.g. `A((1.0, 2.0))` and [Record] e.g. `A(1.0, 2.0)` are mapped to "map"
 //!   in [the serde data model][serde-data-model]
-//! - [Parameter::RValue] is mapped to "enum" in [the serde data model][serde-data-model].
+//! - [Parameter::Name] is mapped to "enum" in [the serde data model][serde-data-model].
 //! - FIXME Enumeration is not supported yet.
 //!
 //! [serde-data-model]: https://serde.rs/data-model.html
 //!
-
-mod value;
-pub use value::*;
 
 pub mod de;
 pub mod ser;
@@ -67,6 +64,19 @@ macro_rules! derive_ast_from_str {
             }
         }
     };
+}
+
+/// Name of an entity instance or a value
+#[derive(Debug, Clone, PartialEq)]
+pub enum Name {
+    /// Like `#11`
+    Entity(u64),
+    /// Like `@11`
+    Value(u64),
+    /// Like `#CONST_ENTITY`
+    ConstantEntity(String),
+    /// Like `@CONST_VALUE`
+    ConstantValue(String),
 }
 
 /// A struct typed in EXPRESS schema, e.g. `A(1.0, 2.0)`
@@ -243,7 +253,7 @@ pub enum Parameter {
 
     /// A reference to entity or value
     #[from]
-    RValue(RValue),
+    Name(Name),
 
     /// The special token dollar sign (`$`) is used to represent
     /// an object whose value is not provided in the exchange structure.
@@ -306,7 +316,7 @@ derive_ast_from_str!(EntityInstance, parser::exchange::entity_instance);
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct ReferenceEntry {
-    pub name: LValue,
+    pub name: Name,
     pub resource: URI,
 }
 derive_ast_from_str!(ReferenceEntry, parser::exchange::reference);
@@ -331,7 +341,7 @@ pub enum AnchorItem {
     /// The special token dollar sign (`$`) is used to represent an object whose value is not provided in the exchange structure.
     NotProvided,
     /// A reference to entity or value
-    RValue(RValue),
+    Name(Name),
     /// List of other parameters
     List(Vec<AnchorItem>),
 }

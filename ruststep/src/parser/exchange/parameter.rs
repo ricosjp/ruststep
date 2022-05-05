@@ -35,7 +35,7 @@ pub fn untyped_parameter(input: &str) -> ParseResult<Parameter> {
         real.map(Parameter::Real),
         integer.map(Parameter::Integer),
         string.map(Parameter::String),
-        rhs_occurrence_name.map(Parameter::RValue),
+        rhs_occurrence_name.map(Parameter::Name),
         enumeration.map(Parameter::Enumeration),
         // FIXME binary
         list,

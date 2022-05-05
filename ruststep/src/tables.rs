@@ -70,10 +70,10 @@
 //! For this purpose, [PlaceHolder] exists:
 //!
 //! ```
-//! # use ruststep::ast::RValue;
+//! # use ruststep::ast::Name;
 //! enum PlaceHolder<T> {
 //!   /// For reference, e.g. `#1`
-//!   Ref(RValue),
+//!   Ref(Name),
 //!   /// For inline typed parameter, e.g. `A((9, 10))`
 //!   Owned(T),
 //! }
@@ -204,7 +204,7 @@ pub fn insert_record<'de, T: de::Deserialize<'de>>(
 /// Owned value or reference through entity/value id
 #[derive(Debug, Clone, PartialEq)]
 pub enum PlaceHolder<T> {
-    Ref(RValue),
+    Ref(Name),
     Owned(T),
 }
 
@@ -223,7 +223,7 @@ where
     fn into_owned(self, table: &Self::Table) -> Result<T::Owned> {
         match self {
             PlaceHolder::Ref(id) => match id {
-                RValue::Entity(id) => table.get_owned(id),
+                Name::Entity(id) => table.get_owned(id),
                 _ => unimplemented!("ENTITY is only supported now"),
             },
             PlaceHolder::Owned(a) => a.into_owned(table),
@@ -237,8 +237,8 @@ impl<T: Holder> From<T> for PlaceHolder<T> {
     }
 }
 
-impl<T> From<RValue> for PlaceHolder<T> {
-    fn from(rvalue: RValue) -> Self {
+impl<T> From<Name> for PlaceHolder<T> {
+    fn from(rvalue: Name) -> Self {
         PlaceHolder::Ref(rvalue)
     }
 }
@@ -304,7 +304,7 @@ impl<'de, T: Deserialize<'de> + Holder + WithVisitor> de::Visitor<'de> for Place
         Ok(PlaceHolder::Owned(visitor.visit_seq(seq)?))
     }
 
-    // For Ref(RValue)
+    // For Ref(Name)
     fn visit_enum<A>(self, data: A) -> ::std::result::Result<Self::Value, A::Error>
     where
         A: de::EnumAccess<'de>,
@@ -313,19 +313,19 @@ impl<'de, T: Deserialize<'de> + Holder + WithVisitor> de::Visitor<'de> for Place
         match key.as_str() {
             "Entity" => {
                 let value: u64 = variant.newtype_variant()?;
-                Ok(PlaceHolder::Ref(RValue::Entity(value)))
+                Ok(PlaceHolder::Ref(Name::Entity(value)))
             }
             "Value" => {
                 let value: u64 = variant.newtype_variant()?;
-                Ok(PlaceHolder::Ref(RValue::Value(value)))
+                Ok(PlaceHolder::Ref(Name::Value(value)))
             }
             "ConstantEntity" => {
                 let name: String = variant.newtype_variant()?;
-                Ok(PlaceHolder::Ref(RValue::ConstantEntity(name)))
+                Ok(PlaceHolder::Ref(Name::ConstantEntity(name)))
             }
             "ConstantValue" => {
                 let name: String = variant.newtype_variant()?;
-                Ok(PlaceHolder::Ref(RValue::ConstantValue(name)))
+                Ok(PlaceHolder::Ref(Name::ConstantValue(name)))
             }
             _ => unreachable!("Invalid key while deserializing PlaceHolder"),
         }
