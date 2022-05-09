@@ -1,7 +1,24 @@
 //! Implementation of [serde::de] traits for AST structs
 //!
-//! Test mapping AST to serde data model,
-//! without deserializing to espr-generated struct
+//! Mapping to serde data model
+//! ----------------------------
+//!
+//! [Parameter] and [Record] can be deserialize through [serde data model](https://serde.rs/data-model.html).
+//!
+//! | Parameter   | serde data model |
+//! |:------------|:-----------------|
+//! | Integer     | i64              |
+//! | Real        | f64              |
+//! | String      | string           |
+//! | List        | seq              |
+//! | NotProvided | unit             |
+//! | Omitted     | unit             |
+//! | Typed       | struct           |
+//! | Enumeration | unit_variant     |
+//! | Name        | newtype_variant  |
+//!
+//! Following tests are for mapping AST to serde data model
+//! without using espr-generated struct.
 //!
 //! ## Parameter::Integer
 //!
@@ -112,3 +129,6 @@ mod value;
 pub use parameter::*;
 pub use record::*;
 pub use value::*;
+
+#[cfg(doc)]
+use crate::ast::*;
