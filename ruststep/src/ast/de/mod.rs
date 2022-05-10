@@ -149,6 +149,42 @@
 //! assert_eq!(Option::<i64>::deserialize(&p).unwrap(), None);
 //! ```
 //!
+//! ## Parameter::Enumeration
+//!
+//! ```
+//! use ruststep::ast::*;
+//! use serde::Deserialize;
+//! use std::str::FromStr;
+//!
+//! let p = Parameter::from_str(".A.").unwrap();
+//!
+//! #[derive(Debug, PartialEq, Deserialize)]
+//! enum E {
+//!   A,
+//!   B
+//! }
+//! assert_eq!(E::deserialize(&p).unwrap(), E::A);
+//! ```
+//!
+//! ## Parameter::Ref
+//!
+//! ```
+//! use ruststep::ast::*;
+//! use serde::Deserialize;
+//! use std::str::FromStr;
+//!
+//! let p = Parameter::from_str("#12").unwrap();
+//!
+//! #[derive(Debug, PartialEq, Deserialize)]
+//! enum Id {
+//!   #[serde(rename = "Entity")] // "Entity" is keyword for entity reference
+//!   E(usize),
+//!   #[serde(rename = "Value")]  // "Value" is keyword for value reference
+//!   V(usize),
+//! }
+//! assert_eq!(Id::deserialize(&p).unwrap(), Id::E(12));
+//! ```
+//!
 
 mod parameter;
 mod record;
