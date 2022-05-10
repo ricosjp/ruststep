@@ -1,4 +1,5 @@
-use crate::{ast::*, error::*};
+use super::*;
+use crate::ast::*;
 use inflector::Inflector;
 use serde::{
     de::{self, IntoDeserializer},
@@ -8,7 +9,7 @@ use serde::{
 impl<'de, 'param> de::Deserializer<'de> for &'param Parameter {
     type Error = crate::error::Error;
 
-    fn deserialize_any<V>(self, visitor: V) -> Result<V::Value>
+    fn deserialize_any<V>(self, visitor: V) -> Result<V::Value, Self::Error>
     where
         V: de::Visitor<'de>,
     {
@@ -40,35 +41,52 @@ impl<'de, 'param> de::IntoDeserializer<'de, crate::error::Error> for &'param Par
     }
 }
 
-#[derive(Debug)]
-pub struct SeqDeserializer {
-    parameters: Vec<Parameter>,
-}
-
-impl SeqDeserializer {
-    fn new(parameters: &[Parameter]) -> Self {
-        SeqDeserializer {
-            parameters: parameters.iter().rev().cloned().collect(),
+impl<'de> de::IntoDeserializer<'de, crate::error::Error> for Name {
+    type Deserializer = RecordDeserializer;
+    fn into_deserializer(self) -> RecordDeserializer {
+        match self {
+            Name::Entity(id) => RecordDeserializer::new("Entity", Parameter::Integer(id as i64)),
+            Name::Value(id) => RecordDeserializer::new("Value", Parameter::Integer(id as i64)),
+            Name::ConstantEntity(name) => {
+                RecordDeserializer::new("ConstantEntity", Parameter::String(name))
+            }
+            Name::ConstantValue(name) => {
+                RecordDeserializer::new("ConstantValue", Parameter::String(name))
+            }
         }
     }
 }
 
-impl<'de> de::SeqAccess<'de> for SeqDeserializer {
-    type Error = Error;
+impl<'de, 'value> de::Deserializer<'de> for &'value Name {
+    type Error = crate::error::Error;
 
-    fn size_hint(&self) -> Option<usize> {
-        Some(self.parameters.len())
-    }
-
-    fn next_element_seed<T>(&mut self, seed: T) -> Result<Option<T::Value>>
+    fn deserialize_any<V>(self, visitor: V) -> Result<V::Value, Self::Error>
     where
-        T: de::DeserializeSeed<'de>,
+        V: de::Visitor<'de>,
     {
-        if let Some(last) = self.parameters.pop() {
-            let value = seed.deserialize(&last)?;
-            Ok(Some(value))
-        } else {
-            Ok(None)
-        }
+        visitor.visit_enum(self.clone().into_deserializer())
+    }
+
+    forward_to_deserialize_any! {
+        bool i8 i16 i32 i64 i128 u8 u16 u32 u64 u128 f32 f64 char str string
+        bytes byte_buf option unit unit_struct newtype_struct seq tuple
+        enum tuple_struct struct map identifier ignored_any
+    }
+}
+
+impl<'de, 'record> de::Deserializer<'de> for &'record Record {
+    type Error = crate::error::Error;
+
+    fn deserialize_any<V>(self, visitor: V) -> Result<V::Value, Self::Error>
+    where
+        V: de::Visitor<'de>,
+    {
+        visitor.visit_map(self.into_deserializer())
+    }
+
+    forward_to_deserialize_any! {
+        bool i8 i16 i32 i64 i128 u8 u16 u32 u64 u128 f32 f64 char str string
+        bytes byte_buf option unit unit_struct newtype_struct seq tuple
+        struct tuple_struct map enum identifier ignored_any
     }
 }

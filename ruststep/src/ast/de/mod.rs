@@ -186,13 +186,11 @@
 //! ```
 //!
 
+mod deserializer;
 mod parameter;
-mod record;
-mod value;
 
+pub use deserializer::*;
 pub use parameter::*;
-pub use record::*;
-pub use value::*;
 
 #[cfg(doc)]
 use crate::ast::*;
