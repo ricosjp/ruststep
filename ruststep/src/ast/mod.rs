@@ -2,32 +2,7 @@
 //!
 //! This module contains implementation of [serde::Serialize] and [serde::Deserialize]
 //! for AST structs.
-//!
-//! Mapping to serde data model
-//! ----------------------------
-//!
-//! [Parameter] and [Record] can be deserialize through serde data model.
-//!
-//! | Parameter     | serde data model |
-//! |:--------------|:-----------------|
-//! | Integer       | i64              |
-//! | Real          | f64              |
-//! | String        | string           |
-//! | Enumeration   | -                |
-//! | List          | seq              |
-//! | NotProvided   | unit             |
-//! | Omitted       | unit             |
-//! | Typed, Record | map              |
-//! | Name        | enum             |
-//!
-//! See [the official document of serde data model](https://serde.rs/data-model.html) for detail.
-//!
-//! - [Parameter::Typed] e.g. `A((1.0, 2.0))` and [Record] e.g. `A(1.0, 2.0)` are mapped to "map"
-//!   in [the serde data model][serde-data-model]
-//! - [Parameter::Ref] is mapped to "enum" in [the serde data model][serde-data-model].
-//! - FIXME Enumeration is not supported yet.
-//!
-//! [serde-data-model]: https://serde.rs/data-model.html
+//! See [de] and [ser] module document.
 //!
 
 pub mod de;
