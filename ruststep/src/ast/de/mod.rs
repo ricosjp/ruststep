@@ -3,7 +3,15 @@
 //! Mapping to serde data model
 //! ----------------------------
 //!
-//! [Parameter] and [Record] can be deserialize through [serde data model](https://serde.rs/data-model.html).
+//! [Implementing a Deserializer](https://serde.rs/impl-deserializer.html) page of [serde manual](https://serde.rs/) says
+//! > The deserializer is responsible for mapping the input data
+//! > into [Serde's data model](https://serde.rs/data-model.html) by invoking exactly one of the methods
+//! > on the Visitor that it receives.
+//!
+//! [serde::de::Deserializer] trait is implemented for [Parameter] and [Record].
+//!
+//! - [Record] is mapped to `map` in serde data model through [RecordDeserializer],
+//! - [Parameter] is mapped as following table:
 //!
 //! | Parameter   | serde data model |
 //! |:------------|:-----------------|
@@ -11,14 +19,34 @@
 //! | Real        | f64              |
 //! | String      | string           |
 //! | List        | seq              |
-//! | NotProvided | unit             |
-//! | Omitted     | unit             |
-//! | Typed       | struct           |
-//! | Enumeration | unit_variant     |
-//! | Name        | newtype_variant  |
+//! | NotProvided | option (always none)|
+//! | Omitted     | option (always none)|
+//! | Enumeration | unit_variant (through [serde::de::value::StringDeserializer])|
+//! | Typed       | map (through [RecordDeserializer])|
+//! | Ref         | newtype_variant (through [RecordDeserializer])|
 //!
-//! Following tests are for mapping AST to serde data model
-//! without using espr-generated struct.
+//! Be sure that this mapping is not only for espr-generated structs.
+//! This can be used with other Rust structs using `serde_derive::Deserialize` custom derive:
+//!
+//! ```text
+//! ┌────────────────────┐
+//! │ Exchange Structure │
+//! └─┬──────────────────┘
+//!   │ Deserialier trait  ◄── Implemented here
+//! ┌─▼────────────────┐
+//! │ serde data model │
+//! └─┬────┬───────────┘
+//!   │    │ ruststep_derive::Deserialize
+//!   │ ┌──▼─────────────────────────┐
+//!   │ │ espr-generated Rust struct │
+//!   │ └────────────────────────────┘
+//!   │ serde_derive::Deserialize
+//! ┌─▼─────────────────┐
+//! │ Other Rust struct │
+//! └───────────────────┘
+//! ```
+//!
+//! Following examples show how it works with `serde_derive::Deserialize`:
 //!
 //! ## Parameter::Integer
 //!
