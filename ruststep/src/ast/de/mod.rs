@@ -23,7 +23,7 @@
 //! | Omitted     | option (always none)|
 //! | Enumeration | unit_variant (through [serde::de::value::StringDeserializer])|
 //! | Typed       | map (through [RecordDeserializer])|
-//! | Ref         | newtype_variant (through [RecordDeserializer])|
+//! | Ref         | newtype_variant  |
 //!
 //! Be sure that this mapping is not only for espr-generated structs.
 //! This can be used with other Rust structs using `serde_derive::Deserialize` custom derive:
