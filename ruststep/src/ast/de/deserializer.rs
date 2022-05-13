@@ -41,7 +41,7 @@ impl<'de> de::SeqAccess<'de> for SeqDeserializer {
 #[derive(Debug)]
 pub struct RecordDeserializer {
     key: Option<String>,
-    value: Option<Parameter>,
+    value: Parameter,
 }
 
 impl<'de, 'record> de::IntoDeserializer<'de, crate::error::Error> for &'record Record {
@@ -49,7 +49,7 @@ impl<'de, 'record> de::IntoDeserializer<'de, crate::error::Error> for &'record R
     fn into_deserializer(self) -> RecordDeserializer {
         RecordDeserializer {
             key: Some(self.name.to_string()),
-            value: Some(*self.parameter.clone()),
+            value: *self.parameter.clone(),
         }
     }
 }
@@ -75,7 +75,7 @@ impl RecordDeserializer {
     pub fn new(key: &str, value: Parameter) -> Self {
         RecordDeserializer {
             key: Some(key.to_string()),
-            value: Some(value),
+            value: value,
         }
     }
 }
@@ -101,12 +101,8 @@ impl<'de> de::MapAccess<'de> for RecordDeserializer {
     where
         V: de::DeserializeSeed<'de>,
     {
-        if let Some(value) = self.value.take() {
-            let value: V::Value = seed.deserialize(&value)?;
-            Ok(value)
-        } else {
-            unreachable!("next_value_seed before next_key_seed is incorrect.")
-        }
+        let value: V::Value = seed.deserialize(&self.value)?;
+        Ok(value)
     }
 }
 
