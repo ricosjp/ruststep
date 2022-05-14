@@ -8,9 +8,9 @@
 //! > into [Serde's data model](https://serde.rs/data-model.html) by invoking exactly one of the methods
 //! > on the Visitor that it receives.
 //!
-//! [serde::de::Deserializer] trait is implemented for [Parameter] and [Record].
+//! [serde::de::Deserializer] trait is implemented for [Parameter] and [SimpleEntityInstance].
 //!
-//! - [Record] is mapped to `map` in serde data model through [RecordDeserializer],
+//! - [SimpleEntityInstance] is mapped to `map` in serde data model through [RecordDeserializer],
 //! - [Parameter] is mapped as following table:
 //!
 //! | Parameter   | serde data model |

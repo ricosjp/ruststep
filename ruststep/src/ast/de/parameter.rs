@@ -6,7 +6,7 @@ use serde::{
     forward_to_deserialize_any,
 };
 
-impl<'de, 'record> de::Deserializer<'de> for &'record Record {
+impl<'de, 'record> de::Deserializer<'de> for &'record SimpleEntityInstance {
     type Error = crate::error::Error;
 
     fn deserialize_any<V>(self, visitor: V) -> Result<V::Value, Self::Error>

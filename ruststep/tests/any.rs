@@ -33,7 +33,7 @@ ENDSEC;
 
 #[test]
 fn deserialize_base() {
-    let (residual, p): (_, Record) = exchange::simple_record("BASE(1.0)").finish().unwrap();
+    let (residual, p): (_, SimpleEntityInstance) = exchange::simple_record("BASE(1.0)").finish().unwrap();
     dbg!(&p);
     assert_eq!(residual, "");
 
@@ -60,7 +60,7 @@ fn deserialize_sub1() {
     );
 
     fn test(input: &str, answer: Sub1Holder) {
-        let (residual, p): (_, Record) = exchange::simple_record(input).finish().unwrap();
+        let (residual, p): (_, SimpleEntityInstance) = exchange::simple_record(input).finish().unwrap();
         dbg!(&p);
         assert_eq!(residual, "");
 
@@ -88,7 +88,7 @@ fn deserialize_base_any() {
     );
 
     fn test(input: &str, answer: BaseAnyHolder) {
-        let (residual, p): (_, Record) = exchange::simple_record(input).finish().unwrap();
+        let (residual, p): (_, SimpleEntityInstance) = exchange::simple_record(input).finish().unwrap();
         dbg!(&p);
         assert_eq!(residual, "");
 
@@ -116,7 +116,7 @@ fn deserialize_base_any_placeholder() {
     );
 
     fn test(input: &str, answer: PlaceHolder<BaseAnyHolder>) {
-        let (residual, p): (_, Record) = exchange::simple_record(input).finish().unwrap();
+        let (residual, p): (_, SimpleEntityInstance) = exchange::simple_record(input).finish().unwrap();
         dbg!(&p);
         assert_eq!(residual, "");
 
@@ -146,7 +146,7 @@ fn into_base_any() {
     fn test(input: &str, answer: BaseAny) {
         let table = Tables::from_str(EXAMPLE).unwrap();
 
-        let (residual, p): (_, Record) = exchange::simple_record(input).finish().unwrap();
+        let (residual, p): (_, SimpleEntityInstance) = exchange::simple_record(input).finish().unwrap();
         dbg!(&p);
         assert_eq!(residual, "");
 

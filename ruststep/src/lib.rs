@@ -86,7 +86,7 @@
 //! - `HEADER` section has three components `FILE_DESCRIPTION`, `FILE_NAME`, and `FILE_SCHEMA`.
 //!   - See [header] module document for detail.
 //! - Each data is in form `TYPE_NAME(parameter1, ...)`.
-//!   - This is called "Record".
+//!   - This is called "SimpleEntityInstance".
 //!   - Each records is bounded by a number.
 //!   - Parameter can be
 //!     - Floating number, e.g. `0.0`

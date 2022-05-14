@@ -27,7 +27,7 @@ use test_schema::*;
 
 #[test]
 fn deserialize_base() {
-    let (residual, p): (_, Record) = exchange::simple_record("BASE(1.0)").finish().unwrap();
+    let (residual, p): (_, SimpleEntityInstance) = exchange::simple_record("BASE(1.0)").finish().unwrap();
     dbg!(&p);
     assert_eq!(residual, "");
     let a: BaseHolder = Deserialize::deserialize(&p).unwrap();
@@ -52,7 +52,7 @@ fn deserialize_sub() {
         },
     );
     fn test(input: &str, answer: SubHolder) {
-        let (residual, p): (_, Record) = exchange::simple_record(input).finish().unwrap();
+        let (residual, p): (_, SimpleEntityInstance) = exchange::simple_record(input).finish().unwrap();
         dbg!(&p);
         assert_eq!(residual, "");
         let a: SubHolder = Deserialize::deserialize(&p).unwrap();
@@ -75,7 +75,7 @@ fn deserialize_subsub() {
         },
     );
     fn test(input: &str, answer: SubsubHolder) {
-        let (residual, p): (_, Record) = exchange::simple_record(input).finish().unwrap();
+        let (residual, p): (_, SimpleEntityInstance) = exchange::simple_record(input).finish().unwrap();
         dbg!(&p);
         assert_eq!(residual, "");
         let a: SubsubHolder = Deserialize::deserialize(&p).unwrap();

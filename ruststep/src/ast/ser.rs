@@ -2,12 +2,12 @@ use crate::{ast::*, error::*};
 use serde::ser;
 use std::convert::TryFrom;
 
-/// Serialize struct into STEP [Record]
-pub fn to_record(obj: &impl ser::Serialize) -> Result<Record> {
+/// Serialize struct into STEP [SimpleEntityInstance]
+pub fn to_record(obj: &impl ser::Serialize) -> Result<SimpleEntityInstance> {
     let mut ser = RecordSerializer::default();
     obj.serialize(&mut ser)?;
     assert!(ser.stack.is_empty()); // should panic because this must be bug, not a valid input
-    Ok(Record {
+    Ok(SimpleEntityInstance {
         name: ser.name,
         parameter: Box::new(ser.parameters.iter().collect()),
     })
@@ -270,18 +270,18 @@ impl<'se> ser::SerializeMap for &'se mut RecordSerializer {
     where
         T: ?Sized + ser::Serialize,
     {
-        unimplemented!("Serialize Map to Record is not supported yet.")
+        unimplemented!("Serialize Map to SimpleEntityInstance is not supported yet.")
     }
 
     fn serialize_value<T>(&mut self, _value: &T) -> Result<()>
     where
         T: ?Sized + ser::Serialize,
     {
-        unimplemented!("Serialize Map to Record is not supported yet.")
+        unimplemented!("Serialize Map to SimpleEntityInstance is not supported yet.")
     }
 
     fn end(self) -> Result<()> {
-        unimplemented!("Serialize Map to Record is not supported yet.")
+        unimplemented!("Serialize Map to SimpleEntityInstance is not supported yet.")
     }
 }
 
@@ -301,7 +301,7 @@ impl<'se> ser::SerializeStruct for &'se mut RecordSerializer {
             // restore stacked state
             let name = std::mem::replace(&mut self.name, name);
             let params = std::mem::replace(&mut self.parameters, params);
-            self.parameters.push(Parameter::Typed(Record {
+            self.parameters.push(Parameter::Typed(SimpleEntityInstance {
                 name,
                 parameter: Box::new(params.into_iter().collect()),
             }));

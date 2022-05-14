@@ -60,24 +60,24 @@ derive_ast_from_str!(Name, parser::token::rhs_occurrence_name);
 /// A struct typed in EXPRESS schema, e.g. `A(1.0, 2.0)`
 ///
 /// ```
-/// use ruststep::ast::{Record, Parameter};
+/// use ruststep::ast::{SimpleEntityInstance, Parameter};
 /// use std::str::FromStr;
 ///
-/// let record = Record::from_str("A(1, 2)").unwrap();
+/// let record = SimpleEntityInstance::from_str("A(1, 2)").unwrap();
 /// assert_eq!(
 ///     record,
-///     Record {
+///     SimpleEntityInstance {
 ///         name: "A".to_string(),
 ///         parameter: Box::new(vec![Parameter::Integer(1), Parameter::Integer(2)].into())
 ///     }
 /// )
 /// ```
 #[derive(Debug, Clone, PartialEq)]
-pub struct Record {
+pub struct SimpleEntityInstance {
     pub name: String,
     pub parameter: Box<Parameter>,
 }
-derive_ast_from_str!(Record, parser::exchange::simple_record);
+derive_ast_from_str!(SimpleEntityInstance, parser::exchange::simple_record);
 
 /// `DATA` section in STEP file
 ///
@@ -110,7 +110,7 @@ derive_ast_from_str!(DataSection, parser::exchange::data_section);
 ///
 /// ```
 /// use nom::Finish;
-/// use ruststep::{parser::exchange, ast::{Parameter, Record}};
+/// use ruststep::{parser::exchange, ast::{Parameter, SimpleEntityInstance}};
 ///
 /// let (residual, p) = exchange::parameter("B((1.0, A((2.0, 3.0))))")
 ///     .finish()
@@ -118,13 +118,13 @@ derive_ast_from_str!(DataSection, parser::exchange::data_section);
 /// assert_eq!(residual, "");
 ///
 /// // A((2.0, 3.0))
-/// let a = Parameter::Typed(Record {
+/// let a = Parameter::Typed(SimpleEntityInstance {
 ///     name: "A".to_string(),
 ///     parameter: Box::new(vec![Parameter::real(2.0), Parameter::real(3.0)].into()),
 /// });
 ///
 /// // B((1.0, a))
-/// let b = Parameter::Typed(Record {
+/// let b = Parameter::Typed(SimpleEntityInstance {
 ///     name: "B".to_string(),
 ///     parameter: Box::new(vec![Parameter::real(1.0), a].into()),
 /// });
@@ -154,7 +154,7 @@ pub enum Parameter {
     /// ```
     ///
     /// and [parser::exchange::typed_parameter].
-    /// It takes only one `PARAMETER` different from [Record],
+    /// It takes only one `PARAMETER` different from [SimpleEntityInstance],
     /// which takes many `PARAMETER`s.
     ///
     /// ```text
@@ -167,7 +167,7 @@ pub enum Parameter {
     /// let p = Parameter::from_str("FILE_NAME('ruststep')").unwrap();
     /// assert!(matches!(p, Parameter::Typed(_)));
     /// ```
-    Typed(Record),
+    Typed(SimpleEntityInstance),
 
     /// Signed integer
     ///
@@ -272,7 +272,7 @@ derive_ast_from_str!(Parameter, parser::exchange::parameter);
 #[derive(Debug, Clone, PartialEq)]
 pub struct Exchange {
     /// `HEADER` section
-    pub header: Vec<Record>,
+    pub header: Vec<SimpleEntityInstance>,
     /// `ANCHOR` section
     pub anchor: Vec<Anchor>,
     /// `REFERENCE` section
@@ -287,8 +287,8 @@ derive_ast_from_str!(Exchange, parser::exchange::exchange_file);
 /// Each line of data section
 #[derive(Debug, Clone, PartialEq)]
 pub enum EntityInstance {
-    Simple { id: u64, record: Record },
-    Complex { id: u64, subsuper: Vec<Record> },
+    Simple { id: u64, record: SimpleEntityInstance },
+    Complex { id: u64, subsuper: Vec<SimpleEntityInstance> },
 }
 derive_ast_from_str!(EntityInstance, parser::exchange::entity_instance);
 

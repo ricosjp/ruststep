@@ -192,7 +192,7 @@ where
 pub fn insert_record<'de, T: de::Deserialize<'de>>(
     table: &mut HashMap<u64, T>,
     id: u64,
-    record: &Record,
+    record: &SimpleEntityInstance,
 ) -> crate::error::Result<()> {
     if let Some(_) = table.insert(id, de::Deserialize::deserialize(record)?) {
         Err(Error::DuplicatedEntity(id))
@@ -331,7 +331,7 @@ impl<'de, T: Deserialize<'de> + Holder + WithVisitor> de::Visitor<'de> for Place
         }
     }
 
-    // Entry point for Record or Parameter::Typed
+    // Entry point for SimpleEntityInstance or Parameter::Typed
     fn visit_map<A>(self, map: A) -> ::std::result::Result<Self::Value, A::Error>
     where
         A: de::MapAccess<'de>,

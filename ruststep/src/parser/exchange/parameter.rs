@@ -20,7 +20,7 @@ pub fn parameter(input: &str) -> ParseResult<Parameter> {
 pub fn typed_parameter(input: &str) -> ParseResult<Parameter> {
     tuple_((keyword, char_('('), parameter, char_(')')))
         .map(|(name, _open, ty, _close)| {
-            Parameter::Typed(Record {
+            Parameter::Typed(SimpleEntityInstance {
                 name,
                 parameter: Box::new(ty),
             })

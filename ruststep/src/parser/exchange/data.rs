@@ -52,9 +52,9 @@ pub fn complex_entity_instance(input: &str) -> ParseResult<EntityInstance> {
 }
 
 /// simple_record = [keyword] `(` \[ [parameter_list] \] `)` .
-pub fn simple_record(input: &str) -> ParseResult<Record> {
+pub fn simple_record(input: &str) -> ParseResult<SimpleEntityInstance> {
     tuple_((keyword, char_('('), opt_(parameter_list), char_(')')))
-        .map(|(name, _open, parameter, _close)| Record {
+        .map(|(name, _open, parameter, _close)| SimpleEntityInstance {
             name,
             parameter: Box::new(parameter.unwrap_or_default().into_iter().collect()),
         })
@@ -62,12 +62,12 @@ pub fn simple_record(input: &str) -> ParseResult<Record> {
 }
 
 /// simple_record_list = [simple_record] { [simple_record] } .
-pub fn simple_record_list(input: &str) -> ParseResult<Vec<Record>> {
+pub fn simple_record_list(input: &str) -> ParseResult<Vec<SimpleEntityInstance>> {
     many0_(simple_record).parse(input)
 }
 
 /// subsuper_record = `(` [simple_record_list] `)` .
-pub fn subsuper_record(input: &str) -> ParseResult<Vec<Record>> {
+pub fn subsuper_record(input: &str) -> ParseResult<Vec<SimpleEntityInstance>> {
     tuple_((char_('('), simple_record_list, char_(')')))
         .map(|(_open, records, _close)| records)
         .parse(input)

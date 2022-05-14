@@ -65,7 +65,7 @@ use nom::Finish;
 /// let (residual, header) = ruststep::parser::parse_header(&step_str).unwrap();
 /// assert_eq!(residual, ""); // consume HEADER section of `step_str`
 /// ```
-pub fn parse_header(input: &str) -> Result<(&str, Vec<ast::Record>)> {
+pub fn parse_header(input: &str) -> Result<(&str, Vec<ast::SimpleEntityInstance>)> {
     match exchange::header_section(input).finish() {
         Ok((input, records)) => Ok((input, records)),
         Err(e) => Err(TokenizeFailed::new(input, e).into()),

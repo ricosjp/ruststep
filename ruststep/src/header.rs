@@ -102,7 +102,7 @@ pub struct Header {
 }
 
 impl Header {
-    pub fn from_records(records: &[Record]) -> Result<Self> {
+    pub fn from_records(records: &[SimpleEntityInstance]) -> Result<Self> {
         assert!(records.len() >= 3);
         let file_description = FileDescription::deserialize(&records[0])?;
         let file_name = FileName::deserialize(&records[1])?;
