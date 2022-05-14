@@ -118,16 +118,16 @@ derive_ast_from_str!(DataSection, parser::exchange::data_section);
 /// assert_eq!(residual, "");
 ///
 /// // A((2.0, 3.0))
-/// let a = Parameter::Typed(SimpleEntityInstance {
-///     name: "A".to_string(),
+/// let a = Parameter::Typed {
+///     keyword: "A".to_string(),
 ///     parameter: Box::new(vec![Parameter::real(2.0), Parameter::real(3.0)].into()),
-/// });
+/// };
 ///
 /// // B((1.0, a))
-/// let b = Parameter::Typed(SimpleEntityInstance {
-///     name: "B".to_string(),
+/// let b = Parameter::Typed {
+///     keyword: "B".to_string(),
 ///     parameter: Box::new(vec![Parameter::real(1.0), a].into()),
-/// });
+/// };
 ///
 /// assert_eq!(p, b);
 /// ```
@@ -165,9 +165,12 @@ pub enum Parameter {
     /// # use std::str::FromStr;
     /// # use ruststep::ast::Parameter;
     /// let p = Parameter::from_str("FILE_NAME('ruststep')").unwrap();
-    /// assert!(matches!(p, Parameter::Typed(_)));
+    /// assert!(matches!(p, Parameter::Typed { .. }));
     /// ```
-    Typed(SimpleEntityInstance),
+    Typed {
+        keyword: String,
+        parameter: Box<Parameter>,
+    },
 
     /// Signed integer
     ///

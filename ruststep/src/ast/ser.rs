@@ -301,10 +301,10 @@ impl<'se> ser::SerializeStruct for &'se mut RecordSerializer {
             // restore stacked state
             let name = std::mem::replace(&mut self.name, name);
             let params = std::mem::replace(&mut self.parameters, params);
-            self.parameters.push(Parameter::Typed(SimpleEntityInstance {
-                name,
+            self.parameters.push(Parameter::Typed {
+                keyword: name,
                 parameter: Box::new(params.into_iter().collect()),
-            }));
+            });
         }
         Ok(())
     }
