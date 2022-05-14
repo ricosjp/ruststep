@@ -9,7 +9,7 @@ pub fn to_record(obj: &impl ser::Serialize) -> Result<SimpleEntityInstance> {
     assert!(ser.stack.is_empty()); // should panic because this must be bug, not a valid input
     Ok(SimpleEntityInstance {
         name: ser.name,
-        parameter: Box::new(ser.parameters.iter().collect()),
+        parameters: ser.parameters,
     })
 }
 

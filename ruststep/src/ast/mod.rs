@@ -68,14 +68,14 @@ derive_ast_from_str!(Name, parser::token::rhs_occurrence_name);
 ///     record,
 ///     SimpleEntityInstance {
 ///         name: "A".to_string(),
-///         parameter: Box::new(vec![Parameter::Integer(1), Parameter::Integer(2)].into())
+///         parameters: vec![Parameter::Integer(1), Parameter::Integer(2)],
 ///     }
 /// )
 /// ```
 #[derive(Debug, Clone, PartialEq)]
 pub struct SimpleEntityInstance {
     pub name: String,
-    pub parameter: Box<Parameter>,
+    pub parameters: Vec<Parameter>,
 }
 derive_ast_from_str!(SimpleEntityInstance, parser::exchange::simple_record);
 

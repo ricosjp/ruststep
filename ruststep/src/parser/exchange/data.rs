@@ -54,9 +54,9 @@ pub fn complex_entity_instance(input: &str) -> ParseResult<EntityInstance> {
 /// simple_record = [keyword] `(` \[ [parameter_list] \] `)` .
 pub fn simple_record(input: &str) -> ParseResult<SimpleEntityInstance> {
     tuple_((keyword, char_('('), opt_(parameter_list), char_(')')))
-        .map(|(name, _open, parameter, _close)| SimpleEntityInstance {
+        .map(|(name, _open, parameters, _close)| SimpleEntityInstance {
             name,
-            parameter: Box::new(parameter.unwrap_or_default().into_iter().collect()),
+            parameters: parameters.unwrap_or_default().into_iter().collect(),
         })
         .parse(input)
 }
