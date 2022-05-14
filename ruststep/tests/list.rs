@@ -28,7 +28,8 @@ use test_schema::*;
 
 #[test]
 fn deserialize_list_a() {
-    let (residual, p): (_, SimpleEntityInstance) = exchange::simple_record("A((1.0, 2.0))").finish().unwrap();
+    let (residual, p): (_, SimpleEntityInstance) =
+        exchange::simple_record("A((1.0, 2.0))").finish().unwrap();
     dbg!(&p);
     assert_eq!(residual, "");
     let a: AHolder = Deserialize::deserialize(&p).unwrap();
@@ -38,7 +39,8 @@ fn deserialize_list_a() {
 
 #[test]
 fn deserialize_list_b() {
-    let (residual, p): (_, SimpleEntityInstance) = exchange::simple_record("B((A(((1.0)))))").finish().unwrap();
+    let (residual, p): (_, SimpleEntityInstance) =
+        exchange::simple_record("B((A(((1.0)))))").finish().unwrap();
     dbg!(&p);
     assert_eq!(residual, "");
     let b: BHolder = Deserialize::deserialize(&p).unwrap();

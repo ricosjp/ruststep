@@ -44,7 +44,9 @@ pub struct RecordDeserializer {
     value: Parameter,
 }
 
-impl<'de, 'record> de::IntoDeserializer<'de, crate::error::Error> for &'record SimpleEntityInstance {
+impl<'de, 'record> de::IntoDeserializer<'de, crate::error::Error>
+    for &'record SimpleEntityInstance
+{
     type Deserializer = RecordDeserializer;
     fn into_deserializer(self) -> RecordDeserializer {
         RecordDeserializer {

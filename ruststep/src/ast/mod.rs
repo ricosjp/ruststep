@@ -287,8 +287,14 @@ derive_ast_from_str!(Exchange, parser::exchange::exchange_file);
 /// Each line of data section
 #[derive(Debug, Clone, PartialEq)]
 pub enum EntityInstance {
-    Simple { id: u64, record: SimpleEntityInstance },
-    Complex { id: u64, subsuper: Vec<SimpleEntityInstance> },
+    Simple {
+        id: u64,
+        record: SimpleEntityInstance,
+    },
+    Complex {
+        id: u64,
+        subsuper: Vec<SimpleEntityInstance>,
+    },
 }
 derive_ast_from_str!(EntityInstance, parser::exchange::entity_instance);
 
