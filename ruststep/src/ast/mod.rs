@@ -79,6 +79,11 @@ pub struct SimpleEntityInstance {
 }
 derive_ast_from_str!(SimpleEntityInstance, parser::exchange::simple_record);
 
+/// Complex Entity instance e.g. `(A(1) B(1.0) C("Data Title"))`
+#[derive(Debug, Clone, PartialEq)]
+pub struct ComplexEntityInstance(pub Vec<SimpleEntityInstance>);
+derive_ast_from_str!(ComplexEntityInstance, parser::exchange::subsuper_record);
+
 /// `DATA` section in STEP file
 ///
 /// ```
@@ -292,11 +297,11 @@ derive_ast_from_str!(Exchange, parser::exchange::exchange_file);
 pub enum EntityInstance {
     Simple {
         id: u64,
-        record: SimpleEntityInstance,
+        instance: SimpleEntityInstance,
     },
     Complex {
         id: u64,
-        subsuper: Vec<SimpleEntityInstance>,
+        instance: ComplexEntityInstance,
     },
 }
 derive_ast_from_str!(EntityInstance, parser::exchange::entity_instance);

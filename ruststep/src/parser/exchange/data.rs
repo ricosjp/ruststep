@@ -29,25 +29,29 @@ pub fn entity_instance_list(input: &str) -> ParseResult<Vec<EntityInstance>> {
 
 /// entity_instance = [simple_entity_instance] | [complex_entity_instance] .
 pub fn entity_instance(input: &str) -> ParseResult<EntityInstance> {
-    alt((simple_entity_instance, complex_entity_instance)).parse(input)
+    alt((
+        simple_entity_instance.map(|(id, instance)| EntityInstance::Simple { id, instance }),
+        complex_entity_instance.map(|(id, instance)| EntityInstance::Complex { id, instance }),
+    ))
+    .parse(input)
 }
 
 /// simple_entity_instance = [entity_instance_name] `=` [simple_record] `;` .
-pub fn simple_entity_instance(input: &str) -> ParseResult<EntityInstance> {
+pub fn simple_entity_instance(input: &str) -> ParseResult<(u64, SimpleEntityInstance)> {
     tuple_((entity_instance_name, char_('='), simple_record, char_(';')))
-        .map(|(id, _eq, record, _semicolon)| EntityInstance::Simple { id, record })
+        .map(|(id, _eq, instance, _semicolon)| (id, instance))
         .parse(input)
 }
 
 /// complex_entity_instance = [entity_instance_name] `=` [subsuper_record] `;` .
-pub fn complex_entity_instance(input: &str) -> ParseResult<EntityInstance> {
+pub fn complex_entity_instance(input: &str) -> ParseResult<(u64, ComplexEntityInstance)> {
     tuple_((
         entity_instance_name,
         char_('='),
         subsuper_record,
         char_(';'),
     ))
-    .map(|(id, _eq, subsuper, _semicolon)| EntityInstance::Complex { id, subsuper })
+    .map(|(id, _eq, instance, _semicolon)| (id, instance))
     .parse(input)
 }
 
@@ -69,9 +73,9 @@ pub fn simple_record_list(input: &str) -> ParseResult<Vec<SimpleEntityInstance>>
 }
 
 /// subsuper_record = `(` [simple_record_list] `)` .
-pub fn subsuper_record(input: &str) -> ParseResult<Vec<SimpleEntityInstance>> {
+pub fn subsuper_record(input: &str) -> ParseResult<ComplexEntityInstance> {
     tuple_((char_('('), simple_record_list, char_(')')))
-        .map(|(_open, records, _close)| records)
+        .map(|(_open, records, _close)| ComplexEntityInstance(records))
         .parse(input)
 }
 

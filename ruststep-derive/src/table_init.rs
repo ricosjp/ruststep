@@ -40,13 +40,13 @@ fn entity_impl_table_init(ident: &syn::Ident, st: &syn::DataStruct) -> TokenStre
                 use #ruststep::{error::Error, tables::insert_record, ast::EntityInstance};
                 for entity in &data_sec.entities {
                     match entity {
-                        EntityInstance::Simple { id, record } => match record.keyword.as_str() {
+                        EntityInstance::Simple { id, instance } => match instance.keyword.as_str() {
                             #(
-                            #entity_names => insert_record(&mut self.#table_names, *id, record)?,
+                            #entity_names => insert_record(&mut self.#table_names, *id, instance)?,
                             )*
                             _ => {
                                 return Err(Error::UnknownEntityName {
-                                    entity_name: record.keyword.clone(),
+                                    entity_name: instance.keyword.clone(),
                                     schema: "".to_string(),
                                 });
                             }
@@ -95,13 +95,13 @@ fn tuple_impl_table_init(ident: &syn::Ident, st: &syn::DataStruct) -> TokenStrea
                 use #ruststep::{error::Error, tables::insert_record, ast::EntityInstance};
                 for entity in &data_sec.entities {
                     match entity {
-                        EntityInstance::Simple { id, record } => match record.name.as_str() {
+                        EntityInstance::Simple { id, instance } => match instance.name.as_str() {
                             #(
-                            #entity_names => insert_record(&mut self.#table_names, *id, record)?,
+                            #entity_names => insert_record(&mut self.#table_names, *id, instance)?,
                             )*
                             _ => {
                                 return Err(Error::UnknownEntityName {
-                                    entity_name: record.name.clone(),
+                                    entity_name: instance.name.clone(),
                                     schema: "".to_string(),
                                 });
                             }
