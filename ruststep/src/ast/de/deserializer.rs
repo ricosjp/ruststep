@@ -50,7 +50,7 @@ impl<'de, 'record> de::IntoDeserializer<'de, crate::error::Error>
     type Deserializer = RecordDeserializer;
     fn into_deserializer(self) -> RecordDeserializer {
         RecordDeserializer {
-            key: Some(self.name.to_string()),
+            key: Some(self.keyword.to_string()),
             value: self.parameters.iter().collect(),
         }
     }

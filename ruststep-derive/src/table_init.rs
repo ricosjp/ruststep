@@ -22,9 +22,9 @@ fn entity_impl_table_init(ident: &syn::Ident, st: &syn::DataStruct) -> TokenStre
     let mut entity_names = Vec::new();
     for field in &st.fields {
         let ident = field.ident.as_ref().expect_or_abort("unreachable!");
-        let name = ident.to_string().to_screaming_snake_case();
+        let keyword = ident.to_string().to_screaming_snake_case();
         table_names.push(ident);
-        entity_names.push(name);
+        entity_names.push(keyword);
     }
     assert_eq!(table_names.len(), entity_names.len());
 
@@ -40,13 +40,13 @@ fn entity_impl_table_init(ident: &syn::Ident, st: &syn::DataStruct) -> TokenStre
                 use #ruststep::{error::Error, tables::insert_record, ast::EntityInstance};
                 for entity in &data_sec.entities {
                     match entity {
-                        EntityInstance::Simple { id, record } => match record.name.as_str() {
+                        EntityInstance::Simple { id, record } => match record.keyword.as_str() {
                             #(
                             #entity_names => insert_record(&mut self.#table_names, *id, record)?,
                             )*
                             _ => {
                                 return Err(Error::UnknownEntityName {
-                                    entity_name: record.name.clone(),
+                                    entity_name: record.keyword.clone(),
                                     schema: "".to_string(),
                                 });
                             }

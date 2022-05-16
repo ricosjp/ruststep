@@ -8,14 +8,14 @@ pub fn to_record(obj: &impl ser::Serialize) -> Result<SimpleEntityInstance> {
     obj.serialize(&mut ser)?;
     assert!(ser.stack.is_empty()); // should panic because this must be bug, not a valid input
     Ok(SimpleEntityInstance {
-        name: ser.name,
+        keyword: ser.keyword,
         parameters: ser.parameters,
     })
 }
 
 #[derive(Default, Debug)]
 struct RecordSerializer {
-    name: String,
+    keyword: String,
     parameters: Vec<Parameter>,
     // For supporting nested record e.g. `B(3.0, A((1.0, 2.0)))`
     stack: Vec<(String, Vec<Parameter>)>,
@@ -168,9 +168,9 @@ impl<'se> ser::Serializer for &'se mut RecordSerializer {
         Ok(self)
     }
 
-    fn serialize_struct(self, name: &'static str, _len: usize) -> Result<Self::SerializeStruct> {
-        if self.name.is_empty() {
-            self.name = name.to_string();
+    fn serialize_struct(self, keyword: &'static str, _len: usize) -> Result<Self::SerializeStruct> {
+        if self.keyword.is_empty() {
+            self.keyword = keyword.to_string();
         } else {
             // Entering sub struct e.g.
             //
@@ -183,7 +183,7 @@ impl<'se> ser::Serializer for &'se mut RecordSerializer {
             // and start serializing `A((1.0, 2.0))`.
             // This stack will be popped in SerializeStruct::end()
             //
-            let current_name = std::mem::replace(&mut self.name, name.to_string());
+            let current_name = std::mem::replace(&mut self.keyword, keyword.to_string());
             let current_params = std::mem::take(&mut self.parameters);
             self.stack.push((current_name, current_params));
         }
@@ -297,12 +297,12 @@ impl<'se> ser::SerializeStruct for &'se mut RecordSerializer {
     }
 
     fn end(self) -> Result<()> {
-        if let Some((name, params)) = self.stack.pop() {
+        if let Some((keyword, params)) = self.stack.pop() {
             // restore stacked state
-            let name = std::mem::replace(&mut self.name, name);
+            let keyword = std::mem::replace(&mut self.keyword, keyword);
             let params = std::mem::replace(&mut self.parameters, params);
             self.parameters.push(Parameter::Typed {
-                keyword: name,
+                keyword,
                 parameter: Box::new(params.into_iter().collect()),
             });
         }
