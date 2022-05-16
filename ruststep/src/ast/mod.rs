@@ -57,7 +57,7 @@ pub enum Name {
 }
 derive_ast_from_str!(Name, parser::token::rhs_occurrence_name);
 
-/// A struct typed in EXPRESS schema, e.g. `A(1.0, 2.0)`
+/// Simple entity instance, e.g. `A(1.0, 2.0)`
 ///
 /// ```
 /// use ruststep::ast::{SimpleEntityInstance, Parameter};
@@ -72,6 +72,11 @@ derive_ast_from_str!(Name, parser::token::rhs_occurrence_name);
 ///     }
 /// )
 /// ```
+///
+/// Internal mapping to EXPRESS data types
+/// ---------------------------------------
+/// TBW
+///
 #[derive(Debug, Clone, PartialEq)]
 pub struct SimpleEntityInstance {
     pub keyword: String,
@@ -80,6 +85,11 @@ pub struct SimpleEntityInstance {
 derive_ast_from_str!(SimpleEntityInstance, parser::exchange::simple_record);
 
 /// Complex Entity instance e.g. `(A(1) B(1.0) C("Data Title"))`
+///
+/// External mapping to EXPRESS data types
+/// ---------------------------------------
+/// TBW
+///
 #[derive(Debug, Clone, PartialEq)]
 pub struct ComplexEntityInstance(pub Vec<SimpleEntityInstance>);
 derive_ast_from_str!(ComplexEntityInstance, parser::exchange::subsuper_record);
