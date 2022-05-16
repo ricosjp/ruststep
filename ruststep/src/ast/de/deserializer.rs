@@ -75,7 +75,7 @@ impl RecordDeserializer {
     pub fn new(key: &str, value: Parameter) -> Self {
         RecordDeserializer {
             key: Some(key.to_string()),
-            value: value,
+            value,
         }
     }
 }
