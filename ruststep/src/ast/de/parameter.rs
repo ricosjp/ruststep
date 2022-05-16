@@ -36,7 +36,7 @@ impl<'de, 'param> de::Deserializer<'de> for &'param Parameter {
             Parameter::Real(val) => visitor.visit_f64(*val),
             Parameter::String(val) => visitor.visit_str(val),
             Parameter::List(params) => visitor.visit_seq(SeqDeserializer::new(params)),
-            Parameter::Ref(name) => visitor.visit_enum(name_to_reserializer(name.clone())),
+            Parameter::Ref(name) => visitor.visit_enum(name),
             Parameter::NotProvided | Parameter::Omitted => visitor.visit_none(),
             Parameter::Enumeration(variant) => {
                 visitor.visit_enum(variant.to_class_case().into_deserializer())
@@ -48,18 +48,5 @@ impl<'de, 'param> de::Deserializer<'de> for &'param Parameter {
         bool i8 i16 i32 i64 i128 u8 u16 u32 u64 u128 f32 f64 char str string
         bytes byte_buf option unit unit_struct newtype_struct seq tuple
         struct tuple_struct map enum identifier ignored_any
-    }
-}
-
-fn name_to_reserializer(name: Name) -> RecordDeserializer {
-    match name {
-        Name::Entity(id) => RecordDeserializer::new("Entity", Parameter::Integer(id as i64)),
-        Name::Value(id) => RecordDeserializer::new("Value", Parameter::Integer(id as i64)),
-        Name::ConstantEntity(name) => {
-            RecordDeserializer::new("ConstantEntity", Parameter::String(name))
-        }
-        Name::ConstantValue(name) => {
-            RecordDeserializer::new("ConstantValue", Parameter::String(name))
-        }
     }
 }
