@@ -67,9 +67,9 @@ pub fn simple_record_list(input: &str) -> ParseResult<Vec<Record>> {
 }
 
 /// subsuper_record = `(` [simple_record_list] `)` .
-pub fn subsuper_record(input: &str) -> ParseResult<Vec<Record>> {
+pub fn subsuper_record(input: &str) -> ParseResult<SubSuperRecord> {
     tuple_((char_('('), simple_record_list, char_(')')))
-        .map(|(_open, records, _close)| records)
+        .map(|(_open, records, _close)| SubSuperRecord(records))
         .parse(input)
 }
 
