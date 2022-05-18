@@ -178,8 +178,8 @@ derive_ast_from_str!(Name, parser::token::rhs_occurrence_name);
 /// Internal mapping to complex entity instance
 /// --------------------------------------------
 ///
-/// Complex entity in EXPRESS language is a set of two or more primitive component
-/// called partial complex entity.
+/// Complex entity in EXPRESS language is
+/// a set of two or more primitive component called partial complex entity.
 ///
 /// ```text
 /// ENTITY person;
@@ -267,8 +267,8 @@ derive_ast_from_str!(Record, parser::exchange::simple_record);
 /// )
 /// ```
 ///
-/// Deserialize
-/// ------------
+/// Deserialize as a map
+/// ---------------------
 ///
 /// Similar to [Record], [SubSuperRecord] can be deserialized as a "map":
 ///
@@ -304,6 +304,52 @@ derive_ast_from_str!(Record, parser::exchange::simple_record);
 ///     }
 /// );
 /// ```
+///
+/// External mapping to complex entity instance
+/// --------------------------------------------
+///
+/// As discussed in [Record] for internal mapping,
+///
+/// ```text
+/// ENTITY person;
+///   name: STRING;
+/// END_ENTITY;
+///
+/// ENTITY employee SUBTYPE OF (person);
+///   pay: INTEGER;
+/// END_ENTITY;
+///
+/// ENTITY student SUBTYPE OF (person);
+///   school_name: STRING;
+/// END_ENTITY;
+/// ```
+///
+/// The instance of `person` may have three partial complex entity.
+/// External mapping has different looks in exchange structure:
+///
+/// ```text
+/// #3 = (PERSON('Hitori Goto') EMPLOYEE(10));
+/// #4 = (PERSON('Ikuno Kita') STUDENT('Shuka));
+/// #5 = (PERSON('Nizika Iziti') EMPLOYEE(15) STUDENT('Simokitazawa'))
+/// ```
+///
+/// Each components enclosed by `()` corresponds to a partial entity instance,
+/// which consists of fields declared in its entity definition.
+///
+/// ```text
+/// #5 = (PERSON('Nizika Iziti') EMPLOYEE(15) STUDENT('Simokitazawa'))
+///              ▲                        ▲           ▲
+///              │                        │           └─ school_name in student
+///              │                        └─ pay in employee
+///              └─ name in person
+/// ```
+///
+/// The detail of external mapping is defined in 12.2.5.3 "External mapping"
+/// of [ISO-10303-21](https://www.iso.org/standard/63141.html).
+///
+/// [SubSuperRecord] is not self-describing because
+/// EXPRESS does not defines memory layout of complex entities.
+///
 #[derive(Debug, Clone, PartialEq)]
 pub struct SubSuperRecord(pub Vec<Record>);
 derive_ast_from_str!(SubSuperRecord, parser::exchange::subsuper_record);
