@@ -31,7 +31,9 @@ impl<'de, 'param> de::Deserializer<'de> for &'param Parameter {
         V: de::Visitor<'de>,
     {
         match self {
-            Parameter::Typed(record) => de::Deserializer::deserialize_any(record, visitor),
+            Parameter::Typed { keyword, parameter } => {
+                visitor.visit_map(RecordDeserializer::new(keyword, *parameter.clone()))
+            }
             Parameter::Integer(val) => visitor.visit_i64(*val),
             Parameter::Real(val) => visitor.visit_f64(*val),
             Parameter::String(val) => visitor.visit_str(val),
