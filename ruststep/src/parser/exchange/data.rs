@@ -56,7 +56,7 @@ pub fn simple_record(input: &str) -> ParseResult<Record> {
     tuple_((keyword, char_('('), opt_(parameter_list), char_(')')))
         .map(|(name, _open, parameter, _close)| Record {
             name,
-            parameter: Box::new(parameter.unwrap_or_default().into_iter().collect()),
+            parameter: parameter.unwrap_or_default().into_iter().collect(),
         })
         .parse(input)
 }

@@ -49,7 +49,7 @@ impl<'de, 'record> de::IntoDeserializer<'de, crate::error::Error> for &'record R
     fn into_deserializer(self) -> RecordDeserializer {
         RecordDeserializer {
             key: Some(self.name.to_string()),
-            value: *self.parameter.clone(),
+            value: self.parameter.clone(),
         }
     }
 }
