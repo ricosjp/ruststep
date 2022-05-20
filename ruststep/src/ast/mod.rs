@@ -85,6 +85,34 @@ derive_ast_from_str!(Record, parser::exchange::simple_record);
 pub struct SubSuperRecord(pub Vec<Record>);
 derive_ast_from_str!(SubSuperRecord, parser::exchange::subsuper_record);
 
+impl IntoIterator for SubSuperRecord {
+    type Item = Record;
+    type IntoIter = std::vec::IntoIter<Self::Item>;
+    fn into_iter(self) -> Self::IntoIter {
+        self.0.into_iter()
+    }
+}
+
+impl<'a> IntoIterator for &'a SubSuperRecord {
+    type Item = &'a Record;
+    type IntoIter = std::slice::Iter<'a, Record>;
+    fn into_iter(self) -> Self::IntoIter {
+        self.0.iter()
+    }
+}
+
+impl FromIterator<Record> for SubSuperRecord {
+    fn from_iter<I: IntoIterator<Item = Record>>(iter: I) -> Self {
+        Self(iter.into_iter().collect())
+    }
+}
+
+impl<'a> FromIterator<&'a Record> for SubSuperRecord {
+    fn from_iter<I: IntoIterator<Item = &'a Record>>(iter: I) -> Self {
+        Self(iter.into_iter().cloned().collect())
+    }
+}
+
 /// `DATA` section in STEP file
 ///
 /// ```
