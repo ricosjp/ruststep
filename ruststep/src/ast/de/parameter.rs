@@ -15,7 +15,7 @@ impl<'de, 'param> de::Deserializer<'de> for &'param Parameter {
     {
         match self {
             Parameter::Typed { keyword, parameter } => {
-                visitor.visit_map(RecordDeserializer::new(keyword, *parameter.clone()))
+                visitor.visit_map(RecordDeserializer::new(keyword, parameter))
             }
             Parameter::Integer(val) => visitor.visit_i64(*val),
             Parameter::Real(val) => visitor.visit_f64(*val),
