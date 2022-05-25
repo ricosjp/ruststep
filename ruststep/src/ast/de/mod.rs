@@ -112,7 +112,6 @@
 //! );
 //!
 //! // Map in serde cannot be deserialize to following struct
-//! // using `serde_derive::Deserialize`.
 //! #[derive(Debug, Clone, PartialEq, Deserialize)]
 //! struct A {
 //!     x: i32,
@@ -187,6 +186,13 @@
 //!
 //! ## Record
 //!
+//! [Record] can be deserialize in two ways
+//!
+//! - It is deserialized as a "struct" only when the hint function
+//!   [serde::Deserializer::deserialize_struct] is called and the struct name matches
+//!   to its keyword
+//! - Otherwise, it is deserialized as a "map"
+//!
 //! ```
 //! use std::{str::FromStr, collections::HashMap};
 //! use ruststep::ast::*;
@@ -202,15 +208,6 @@
 //!     }
 //! );
 //!
-//! // Map in serde cannot be deserialize to following struct
-//! // using `serde_derive::Deserialize`.
-//! #[derive(Debug, Clone, PartialEq, Deserialize)]
-//! struct A {
-//!     x: i32,
-//!     y: i32,
-//! }
-//! assert!(A::deserialize(&p).is_err());
-//!
 //! // Map in serde can be interpreted as Rust field
 //! #[derive(Debug, Clone, PartialEq, Deserialize)]
 //! struct X {
@@ -220,6 +217,18 @@
 //! assert_eq!(
 //!     X::deserialize(&p).unwrap(),
 //!     X { a: vec![1, 2] }
+//! );
+//!
+//! // Record can be deserialized as a struct only when
+//! // the struct name corresponds to its name, "A" in this case.
+//! #[derive(Debug, Clone, PartialEq, Deserialize)]
+//! struct A {
+//!     x: i32,
+//!     y: i32,
+//! }
+//! assert_eq!(
+//!     A::deserialize(&p).unwrap(),
+//!     A { x: 1, y: 2 }
 //! );
 //! ```
 //!
