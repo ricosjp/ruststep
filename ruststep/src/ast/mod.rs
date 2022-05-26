@@ -68,16 +68,50 @@ derive_ast_from_str!(Name, parser::token::rhs_occurrence_name);
 ///     record,
 ///     Record {
 ///         name: "A".to_string(),
-///         parameter: Box::new(vec![Parameter::Integer(1), Parameter::Integer(2)].into())
+///         parameter: vec![Parameter::Integer(1), Parameter::Integer(2)].into(),
 ///     }
 /// )
 /// ```
 #[derive(Debug, Clone, PartialEq)]
 pub struct Record {
     pub name: String,
-    pub parameter: Box<Parameter>,
+    pub parameter: Parameter,
 }
 derive_ast_from_str!(Record, parser::exchange::simple_record);
+
+/// A set of [Record] mapping to complex entity instance,
+/// e.g. `(A(1) B(2.0) C("3"))`
+#[derive(Debug, Clone, PartialEq)]
+pub struct SubSuperRecord(pub Vec<Record>);
+derive_ast_from_str!(SubSuperRecord, parser::exchange::subsuper_record);
+
+impl IntoIterator for SubSuperRecord {
+    type Item = Record;
+    type IntoIter = std::vec::IntoIter<Self::Item>;
+    fn into_iter(self) -> Self::IntoIter {
+        self.0.into_iter()
+    }
+}
+
+impl<'a> IntoIterator for &'a SubSuperRecord {
+    type Item = &'a Record;
+    type IntoIter = std::slice::Iter<'a, Record>;
+    fn into_iter(self) -> Self::IntoIter {
+        self.0.iter()
+    }
+}
+
+impl FromIterator<Record> for SubSuperRecord {
+    fn from_iter<I: IntoIterator<Item = Record>>(iter: I) -> Self {
+        Self(iter.into_iter().collect())
+    }
+}
+
+impl<'a> FromIterator<&'a Record> for SubSuperRecord {
+    fn from_iter<I: IntoIterator<Item = &'a Record>>(iter: I) -> Self {
+        Self(iter.into_iter().cloned().collect())
+    }
+}
 
 /// `DATA` section in STEP file
 ///
@@ -118,16 +152,16 @@ derive_ast_from_str!(DataSection, parser::exchange::data_section);
 /// assert_eq!(residual, "");
 ///
 /// // A((2.0, 3.0))
-/// let a = Parameter::Typed(Record {
-///     name: "A".to_string(),
+/// let a = Parameter::Typed {
+///     keyword: "A".to_string(),
 ///     parameter: Box::new(vec![Parameter::real(2.0), Parameter::real(3.0)].into()),
-/// });
+/// };
 ///
 /// // B((1.0, a))
-/// let b = Parameter::Typed(Record {
-///     name: "B".to_string(),
+/// let b = Parameter::Typed {
+///     keyword: "B".to_string(),
 ///     parameter: Box::new(vec![Parameter::real(1.0), a].into()),
-/// });
+/// };
 ///
 /// assert_eq!(p, b);
 /// ```
@@ -165,9 +199,12 @@ pub enum Parameter {
     /// # use std::str::FromStr;
     /// # use ruststep::ast::Parameter;
     /// let p = Parameter::from_str("FILE_NAME('ruststep')").unwrap();
-    /// assert!(matches!(p, Parameter::Typed(_)));
+    /// assert!(matches!(p, Parameter::Typed { .. }));
     /// ```
-    Typed(Record),
+    Typed {
+        keyword: String,
+        parameter: Box<Parameter>,
+    },
 
     /// Signed integer
     ///
@@ -288,7 +325,7 @@ derive_ast_from_str!(Exchange, parser::exchange::exchange_file);
 #[derive(Debug, Clone, PartialEq)]
 pub enum EntityInstance {
     Simple { id: u64, record: Record },
-    Complex { id: u64, subsuper: Vec<Record> },
+    Complex { id: u64, subsuper: SubSuperRecord },
 }
 derive_ast_from_str!(EntityInstance, parser::exchange::entity_instance);
 
