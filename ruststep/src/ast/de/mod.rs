@@ -184,54 +184,6 @@
 //! assert_eq!(Id::deserialize(&p).unwrap(), Id::E(12));
 //! ```
 //!
-//! ## Record
-//!
-//! [Record] can be deserialize in two ways
-//!
-//! - It is deserialized as a "struct" only when the hint function
-//!   [serde::Deserializer::deserialize_struct] is called and the struct name matches
-//!   to its keyword
-//! - Otherwise, it is deserialized as a "map"
-//!
-//! ```
-//! use std::{str::FromStr, collections::HashMap};
-//! use ruststep::ast::*;
-//! use serde::Deserialize;
-//!
-//! let p = Record::from_str("A(1, 2)").unwrap();
-//!
-//! // Map can be deserialize as a hashmap
-//! assert_eq!(
-//!     HashMap::<String, Vec<i32>>::deserialize(&p).unwrap(),
-//!     maplit::hashmap! {
-//!         "A".to_string() => vec![1, 2]
-//!     }
-//! );
-//!
-//! // Map in serde can be interpreted as Rust field
-//! #[derive(Debug, Clone, PartialEq, Deserialize)]
-//! struct X {
-//!     #[serde(rename = "A")]
-//!     a: Vec<i32>,
-//! }
-//! assert_eq!(
-//!     X::deserialize(&p).unwrap(),
-//!     X { a: vec![1, 2] }
-//! );
-//!
-//! // Record can be deserialized as a struct only when
-//! // the struct name corresponds to its name, "A" in this case.
-//! #[derive(Debug, Clone, PartialEq, Deserialize)]
-//! struct A {
-//!     x: i32,
-//!     y: i32,
-//! }
-//! assert_eq!(
-//!     A::deserialize(&p).unwrap(),
-//!     A { x: 1, y: 2 }
-//! );
-//! ```
-//!
 //! ## SubSuperRecord
 //!
 //! ```

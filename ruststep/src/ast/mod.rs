@@ -59,6 +59,8 @@ derive_ast_from_str!(Name, parser::token::rhs_occurrence_name);
 
 /// A struct typed in EXPRESS schema, e.g. `A(1.0, 2.0)`
 ///
+/// ## FromStr
+///
 /// ```
 /// use ruststep::ast::{Record, Parameter};
 /// use std::str::FromStr;
@@ -72,6 +74,62 @@ derive_ast_from_str!(Name, parser::token::rhs_occurrence_name);
 ///     }
 /// )
 /// ```
+///
+/// ## Deserialize
+///
+/// This can be deserialize in two ways
+///
+/// - It is deserialized as a "struct" only when the hint function
+///   [serde::Deserializer::deserialize_struct] is called and the struct name matches
+///   to its keyword
+///
+/// ```
+/// use std::{str::FromStr, collections::HashMap};
+/// use ruststep::ast::*;
+/// use serde::Deserialize;
+///
+/// let p = Record::from_str("A(1, 2)").unwrap();
+///
+/// #[derive(Debug, Clone, PartialEq, Deserialize)]
+/// struct A {
+///     x: i32,
+///     y: i32,
+/// }
+/// assert_eq!(
+///     A::deserialize(&p).unwrap(),
+///     A { x: 1, y: 2 }
+/// );
+/// ```
+///
+/// - Otherwise, it is deserialized as a "map"
+///
+/// ```
+/// use std::{str::FromStr, collections::HashMap};
+/// use ruststep::ast::*;
+/// use serde::Deserialize;
+///
+/// let p = Record::from_str("A(1, 2)").unwrap();
+///
+/// // Map can be deserialize as a hashmap
+/// assert_eq!(
+///     HashMap::<String, Vec<i32>>::deserialize(&p).unwrap(),
+///     maplit::hashmap! {
+///         "A".to_string() => vec![1, 2]
+///     }
+/// );
+///
+/// // Map in serde can be interpreted as Rust field
+/// #[derive(Debug, Clone, PartialEq, Deserialize)]
+/// struct X {
+///     #[serde(rename = "A")]
+///     a: Vec<i32>,
+/// }
+/// assert_eq!(
+///     X::deserialize(&p).unwrap(),
+///     X { a: vec![1, 2] }
+/// );
+/// ```
+///
 #[derive(Debug, Clone, PartialEq)]
 pub struct Record {
     pub name: String,
