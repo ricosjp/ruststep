@@ -37,19 +37,21 @@ impl<'de, 'param> de::Deserializer<'de> for &'param Parameter {
 }
 
 #[derive(Debug)]
-pub struct SeqDeserializer {
-    parameters: Vec<Parameter>,
+pub struct SeqDeserializer<'p> {
+    cursor: usize,
+    parameters: &'p [Parameter],
 }
 
-impl SeqDeserializer {
-    pub fn new(parameters: &[Parameter]) -> Self {
+impl<'p> SeqDeserializer<'p> {
+    pub fn new(parameters: &'p [Parameter]) -> Self {
         SeqDeserializer {
-            parameters: parameters.iter().rev().cloned().collect(),
+            cursor: 0,
+            parameters,
         }
     }
 }
 
-impl<'de> de::SeqAccess<'de> for SeqDeserializer {
+impl<'de, 'p> de::SeqAccess<'de> for SeqDeserializer<'p> {
     type Error = crate::error::Error;
 
     fn size_hint(&self) -> Option<usize> {
@@ -60,8 +62,9 @@ impl<'de> de::SeqAccess<'de> for SeqDeserializer {
     where
         T: de::DeserializeSeed<'de>,
     {
-        if let Some(last) = self.parameters.pop() {
-            let value = seed.deserialize(&last)?;
+        if self.cursor < self.parameters.len() {
+            let value = seed.deserialize(&self.parameters[self.cursor])?;
+            self.cursor += 1;
             Ok(Some(value))
         } else {
             Ok(None)
