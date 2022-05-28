@@ -111,15 +111,6 @@
 //!     }
 //! );
 //!
-//! // Map in serde cannot be deserialize to following struct
-//! // using `serde_derive::Deserialize`.
-//! #[derive(Debug, Clone, PartialEq, Deserialize)]
-//! struct A {
-//!     x: i32,
-//!     y: i32,
-//! }
-//! assert!(A::deserialize(&p).is_err());
-//!
 //! // Map in serde can be interpreted as Rust field
 //! #[derive(Debug, Clone, PartialEq, Deserialize)]
 //! struct X {
@@ -127,6 +118,22 @@
 //!     a: Vec<i32>,
 //! }
 //! assert_eq!(X::deserialize(&p).unwrap(), X { a: vec![1, 2] });
+//! ```
+//!
+//! Different from [Record], deserializing into a struct is not supported:
+//!
+//! ```
+//! use std::{str::FromStr, collections::HashMap};
+//! use ruststep::ast::*;
+//! use serde::Deserialize;
+//!
+//! let p = Parameter::from_str("A(1)").unwrap();
+//!
+//! #[derive(Debug, Clone, PartialEq, Deserialize)]
+//! struct A {
+//!     x: i32,
+//! }
+//! assert!(A::deserialize(&p).is_err());
 //! ```
 //!
 //! ## Parameter::NotProvided
@@ -183,44 +190,6 @@
 //!   V(usize),
 //! }
 //! assert_eq!(Id::deserialize(&p).unwrap(), Id::E(12));
-//! ```
-//!
-//! ## Record
-//!
-//! ```
-//! use std::{str::FromStr, collections::HashMap};
-//! use ruststep::ast::*;
-//! use serde::Deserialize;
-//!
-//! let p = Record::from_str("A(1, 2)").unwrap();
-//!
-//! // Map can be deserialize as a hashmap
-//! assert_eq!(
-//!     HashMap::<String, Vec<i32>>::deserialize(&p).unwrap(),
-//!     maplit::hashmap! {
-//!         "A".to_string() => vec![1, 2]
-//!     }
-//! );
-//!
-//! // Map in serde cannot be deserialize to following struct
-//! // using `serde_derive::Deserialize`.
-//! #[derive(Debug, Clone, PartialEq, Deserialize)]
-//! struct A {
-//!     x: i32,
-//!     y: i32,
-//! }
-//! assert!(A::deserialize(&p).is_err());
-//!
-//! // Map in serde can be interpreted as Rust field
-//! #[derive(Debug, Clone, PartialEq, Deserialize)]
-//! struct X {
-//!     #[serde(rename = "A")]
-//!     a: Vec<i32>,
-//! }
-//! assert_eq!(
-//!     X::deserialize(&p).unwrap(),
-//!     X { a: vec![1, 2] }
-//! );
 //! ```
 //!
 //! ## SubSuperRecord

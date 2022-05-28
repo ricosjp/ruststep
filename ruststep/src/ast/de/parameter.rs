@@ -37,19 +37,38 @@ impl<'de, 'param> de::Deserializer<'de> for &'param Parameter {
 }
 
 #[derive(Debug)]
-pub struct SeqDeserializer {
-    parameters: Vec<Parameter>,
+pub struct SeqDeserializer<'p> {
+    cursor: usize,
+    parameters: &'p [Parameter],
 }
 
-impl SeqDeserializer {
-    pub fn new(parameters: &[Parameter]) -> Self {
+impl<'p> SeqDeserializer<'p> {
+    pub fn new(parameters: &'p [Parameter]) -> Self {
         SeqDeserializer {
-            parameters: parameters.iter().rev().cloned().collect(),
+            cursor: 0,
+            parameters,
         }
     }
 }
 
-impl<'de> de::SeqAccess<'de> for SeqDeserializer {
+impl<'de, 'p> de::Deserializer<'de> for SeqDeserializer<'p> {
+    type Error = crate::error::Error;
+
+    fn deserialize_any<V>(self, visitor: V) -> Result<V::Value, Self::Error>
+    where
+        V: de::Visitor<'de>,
+    {
+        visitor.visit_seq(self)
+    }
+
+    forward_to_deserialize_any! {
+        bool i8 i16 i32 i64 i128 u8 u16 u32 u64 u128 f32 f64 char str string
+        bytes byte_buf option unit unit_struct newtype_struct seq tuple
+        struct tuple_struct map enum identifier ignored_any
+    }
+}
+
+impl<'de, 'p> de::SeqAccess<'de> for SeqDeserializer<'p> {
     type Error = crate::error::Error;
 
     fn size_hint(&self) -> Option<usize> {
@@ -60,8 +79,9 @@ impl<'de> de::SeqAccess<'de> for SeqDeserializer {
     where
         T: de::DeserializeSeed<'de>,
     {
-        if let Some(last) = self.parameters.pop() {
-            let value = seed.deserialize(&last)?;
+        if self.cursor < self.parameters.len() {
+            let value = seed.deserialize(&self.parameters[self.cursor])?;
+            self.cursor += 1;
             Ok(Some(value))
         } else {
             Ok(None)
