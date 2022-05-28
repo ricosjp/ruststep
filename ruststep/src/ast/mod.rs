@@ -80,17 +80,20 @@ derive_ast_from_str!(Name, parser::token::rhs_occurrence_name);
 /// This can be deserialize in two ways
 ///
 /// - It is deserialized as a "struct" only when the hint function
-///   [serde::Deserializer::deserialize_struct] is called and the struct name matches
-///   to its keyword
+///   [serde::Deserializer::deserialize_struct] is called
+///   and the struct name matches to its keyword appears in the exchange structure.
+///   See [the manual of container attribute in serde](https://serde.rs/container-attrs.html)
+///   for detail.
 ///
 /// ```
 /// use std::{str::FromStr, collections::HashMap};
 /// use ruststep::ast::*;
 /// use serde::Deserialize;
 ///
-/// let p = Record::from_str("A(1, 2)").unwrap();
+/// let p = Record::from_str("DATA_KEYWORD(1, 2)").unwrap();
 ///
 /// #[derive(Debug, Clone, PartialEq, Deserialize)]
+/// #[serde(rename = "DATA_KEYWORD")] // keyword matches
 /// struct A {
 ///     x: i32,
 ///     y: i32,
@@ -99,6 +102,14 @@ derive_ast_from_str!(Name, parser::token::rhs_occurrence_name);
 ///     A::deserialize(&p).unwrap(),
 ///     A { x: 1, y: 2 }
 /// );
+///
+/// #[derive(Debug, Clone, PartialEq, Deserialize)]
+/// #[serde(rename = "ANOTHER_KEYWORD")] // keyword does not match
+/// struct B {
+///     x: i32,
+///     y: i32,
+/// }
+/// assert!(B::deserialize(&p).is_err());
 /// ```
 ///
 /// - Otherwise, it is deserialized as a "map"
@@ -108,20 +119,20 @@ derive_ast_from_str!(Name, parser::token::rhs_occurrence_name);
 /// use ruststep::ast::*;
 /// use serde::Deserialize;
 ///
-/// let p = Record::from_str("A(1, 2)").unwrap();
+/// let p = Record::from_str("DATA_KEYWORD(1, 2)").unwrap();
 ///
 /// // Map can be deserialize as a hashmap
 /// assert_eq!(
 ///     HashMap::<String, Vec<i32>>::deserialize(&p).unwrap(),
 ///     maplit::hashmap! {
-///         "A".to_string() => vec![1, 2]
+///         "DATA_KEYWORD".to_string() => vec![1, 2]
 ///     }
 /// );
 ///
 /// // Map in serde can be interpreted as Rust field
 /// #[derive(Debug, Clone, PartialEq, Deserialize)]
 /// struct X {
-///     #[serde(rename = "A")]
+///     #[serde(rename = "DATA_KEYWORD")]
 ///     a: Vec<i32>,
 /// }
 /// assert_eq!(
