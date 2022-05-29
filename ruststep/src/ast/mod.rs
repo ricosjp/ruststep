@@ -150,6 +150,73 @@ derive_ast_from_str!(Record, parser::exchange::simple_record);
 
 /// A set of [Record] mapping to complex entity instance,
 /// e.g. `(A(1) B(2.0) C("3"))`
+///
+/// FromStr
+/// --------
+///
+/// ```
+/// use ruststep::ast::*;
+/// use std::str::FromStr;
+///
+/// let record = SubSuperRecord::from_str("(A(1, 2) B(3, 4))").unwrap();
+/// assert_eq!(
+///     record,
+///     SubSuperRecord(vec![
+///         Record {
+///             name: "A".to_string(),
+///             parameter: vec![
+///                 Parameter::Integer(1),
+///                 Parameter::Integer(2)
+///             ].into(),
+///         },
+///         Record {
+///             name: "B".to_string(),
+///             parameter: vec![
+///                 Parameter::Integer(3),
+///                 Parameter::Integer(4)
+///             ].into(),
+///         }
+///     ])
+/// )
+/// ```
+///
+/// Deserialize
+/// ------------
+///
+/// Similar to [Record], [SubSuperRecord] can be deserialized as a "map":
+///
+/// ```
+/// use std::{str::FromStr, collections::HashMap};
+/// use ruststep::ast::*;
+/// use serde::Deserialize;
+///
+/// let p = SubSuperRecord::from_str("(A(1, 2) B(3, 4))").unwrap();
+///
+/// // Map can be deserialize as a hashmap
+/// assert_eq!(
+///     HashMap::<String, Vec<i32>>::deserialize(&p).unwrap(),
+///     maplit::hashmap! {
+///         "A".to_string() => vec![1, 2],
+///         "B".to_string() => vec![3, 4],
+///     }
+/// );
+///
+/// // Map in serde can be interpreted as Rust field
+/// #[derive(Debug, Clone, PartialEq, Deserialize)]
+/// struct X {
+///     #[serde(rename = "A")]
+///     a: Vec<i32>,
+///     #[serde(rename = "B")]
+///     b: Vec<i32>,
+/// }
+/// assert_eq!(
+///     X::deserialize(&p).unwrap(),
+///     X {
+///         a: vec![1, 2],
+///         b: vec![3, 4]
+///     }
+/// );
+/// ```
 #[derive(Debug, Clone, PartialEq)]
 pub struct SubSuperRecord(pub Vec<Record>);
 derive_ast_from_str!(SubSuperRecord, parser::exchange::subsuper_record);

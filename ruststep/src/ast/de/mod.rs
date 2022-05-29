@@ -192,40 +192,6 @@
 //! assert_eq!(Id::deserialize(&p).unwrap(), Id::E(12));
 //! ```
 //!
-//! ## SubSuperRecord
-//!
-//! ```
-//! use std::{str::FromStr, collections::HashMap};
-//! use ruststep::ast::*;
-//! use serde::Deserialize;
-//!
-//! let p = SubSuperRecord::from_str("(A(1, 2) B(3, 4))").unwrap();
-//!
-//! // Map can be deserialize as a hashmap
-//! assert_eq!(
-//!     HashMap::<String, Vec<i32>>::deserialize(&p).unwrap(),
-//!     maplit::hashmap! {
-//!         "A".to_string() => vec![1, 2],
-//!         "B".to_string() => vec![3, 4],
-//!     }
-//! );
-//!
-//! // Map in serde can be interpreted as Rust field
-//! #[derive(Debug, Clone, PartialEq, Deserialize)]
-//! struct X {
-//!     #[serde(rename = "A")]
-//!     a: Vec<i32>,
-//!     #[serde(rename = "B")]
-//!     b: Vec<i32>,
-//! }
-//! assert_eq!(
-//!     X::deserialize(&p).unwrap(),
-//!     X {
-//!         a: vec![1, 2],
-//!         b: vec![3, 4]
-//!     }
-//! );
-//! ```
 
 mod name;
 mod parameter;
