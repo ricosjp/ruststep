@@ -33,6 +33,7 @@ In addition to original Keep-a-Changelog, we use following rules:
 - `SUBTYPE_CONSTRAINT` cannot parse supertype-constraint like `ONEOF` https://github.com/ricosjp/ruststep/pull/205
 
 ### Internal
+- Reconstruct documents of ast::de https://github.com/ricosjp/ruststep/pull/229
 - Do not use RecordDeserializer for Name https://github.com/ricosjp/ruststep/pull/224
 - Use Instantiables instead of Constraint https://github.com/ricosjp/ruststep/pull/206
 - Return index from ir::Namespace::resolve https://github.com/ricosjp/ruststep/pull/204
