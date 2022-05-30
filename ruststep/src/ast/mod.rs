@@ -2,8 +2,37 @@
 //!
 //! This module contains implementation of [serde::Serialize] and [serde::Deserialize]
 //! for AST structs.
-//! See [de] and [ser] module document.
 //!
+//! Deserialize
+//! ------------
+//!
+//! [Implementing a Deserializer](https://serde.rs/impl-deserializer.html) page of [serde manual](https://serde.rs/) says
+//! > The deserializer is responsible for mapping the input data
+//! > into [Serde's data model](https://serde.rs/data-model.html) by invoking exactly one of the methods
+//! > on the Visitor that it receives.
+//!
+//! [serde::de::Deserializer] trait is implemented for [Parameter],
+//! [Record], and [SubSuperRecord].
+//! Be sure that this mapping is not only for espr-generated structs.
+//! This can be used with other Rust structs using `serde_derive::Deserialize` custom derive:
+//!
+//! ```text
+//! ┌────────────────────┐
+//! │ Exchange Structure │
+//! └─┬──────────────────┘
+//!   │ Deserialier trait  ◄── Implemented here
+//! ┌─▼────────────────┐
+//! │ serde data model │
+//! └─┬────┬───────────┘
+//!   │    │ ruststep_derive::Deserialize
+//!   │ ┌──▼─────────────────────────┐
+//!   │ │ espr-generated Rust struct │
+//!   │ └────────────────────────────┘
+//!   │ serde_derive::Deserialize
+//! ┌─▼─────────────────┐
+//! │ Other Rust struct │
+//! └───────────────────┘
+//! ```
 
 pub mod de;
 pub mod ser;
@@ -150,6 +179,73 @@ derive_ast_from_str!(Record, parser::exchange::simple_record);
 
 /// A set of [Record] mapping to complex entity instance,
 /// e.g. `(A(1) B(2.0) C("3"))`
+///
+/// FromStr
+/// --------
+///
+/// ```
+/// use ruststep::ast::*;
+/// use std::str::FromStr;
+///
+/// let record = SubSuperRecord::from_str("(A(1, 2) B(3, 4))").unwrap();
+/// assert_eq!(
+///     record,
+///     SubSuperRecord(vec![
+///         Record {
+///             name: "A".to_string(),
+///             parameter: vec![
+///                 Parameter::Integer(1),
+///                 Parameter::Integer(2)
+///             ].into(),
+///         },
+///         Record {
+///             name: "B".to_string(),
+///             parameter: vec![
+///                 Parameter::Integer(3),
+///                 Parameter::Integer(4)
+///             ].into(),
+///         }
+///     ])
+/// )
+/// ```
+///
+/// Deserialize
+/// ------------
+///
+/// Similar to [Record], [SubSuperRecord] can be deserialized as a "map":
+///
+/// ```
+/// use std::{str::FromStr, collections::HashMap};
+/// use ruststep::ast::*;
+/// use serde::Deserialize;
+///
+/// let p = SubSuperRecord::from_str("(A(1, 2) B(3, 4))").unwrap();
+///
+/// // Map can be deserialize as a hashmap
+/// assert_eq!(
+///     HashMap::<String, Vec<i32>>::deserialize(&p).unwrap(),
+///     maplit::hashmap! {
+///         "A".to_string() => vec![1, 2],
+///         "B".to_string() => vec![3, 4],
+///     }
+/// );
+///
+/// // Map in serde can be interpreted as Rust field
+/// #[derive(Debug, Clone, PartialEq, Deserialize)]
+/// struct X {
+///     #[serde(rename = "A")]
+///     a: Vec<i32>,
+///     #[serde(rename = "B")]
+///     b: Vec<i32>,
+/// }
+/// assert_eq!(
+///     X::deserialize(&p).unwrap(),
+///     X {
+///         a: vec![1, 2],
+///         b: vec![3, 4]
+///     }
+/// );
+/// ```
 #[derive(Debug, Clone, PartialEq)]
 pub struct SubSuperRecord(pub Vec<Record>);
 derive_ast_from_str!(SubSuperRecord, parser::exchange::subsuper_record);
@@ -248,6 +344,21 @@ derive_ast_from_str!(DataSection, parser::exchange::data_section);
 /// assert!(matches!(p, Parameter::List(_)));
 /// ```
 ///
+/// Deserialize
+/// ------------
+///
+/// | Parameter   | serde data model |
+/// |:------------|:-----------------|
+/// | Integer     | i64              |
+/// | Real        | f64              |
+/// | String      | string           |
+/// | List        | seq              |
+/// | NotProvided | option (always none)|
+/// | Omitted     | option (always none)|
+/// | Enumeration | unit_variant (through [serde::de::value::StringDeserializer])|
+/// | Typed       | map (through [de::RecordDeserializer])|
+/// | Ref         | newtype_variant  |
+///
 #[derive(Debug, Clone, PartialEq, derive_more::From)]
 pub enum Parameter {
     /// Corresponding to `TYPED_PARAMETER` in WSN:
@@ -264,12 +375,59 @@ pub enum Parameter {
     /// SIMPLE_RECORD = KEYWORD "(" [ PARAMETER_LIST ] ")" .
     /// ```
     ///
+    /// FromStr
+    /// --------
     /// ```
-    /// # use std::str::FromStr;
-    /// # use ruststep::ast::Parameter;
+    /// use std::str::FromStr;
+    /// use ruststep::ast::Parameter;
+    ///
     /// let p = Parameter::from_str("FILE_NAME('ruststep')").unwrap();
     /// assert!(matches!(p, Parameter::Typed { .. }));
     /// ```
+    ///
+    /// Deserialize
+    /// ------------
+    /// ```
+    /// use std::{str::FromStr, collections::HashMap};
+    /// use ruststep::ast::*;
+    /// use serde::Deserialize;
+    ///
+    /// // Regarded as a map `{ "A": [1, 2] }` in serde data model
+    /// let p = Parameter::from_str("A((1, 2))").unwrap();
+    ///
+    /// // Map can be deserialize as a hashmap
+    /// assert_eq!(
+    ///     HashMap::<String, Vec<i32>>::deserialize(&p).unwrap(),
+    ///     maplit::hashmap! {
+    ///         "A".to_string() => vec![1, 2]
+    ///     }
+    /// );
+    ///
+    /// // Map in serde can be interpreted as Rust field
+    /// #[derive(Debug, Clone, PartialEq, Deserialize)]
+    /// struct X {
+    ///     #[serde(rename = "A")]
+    ///     a: Vec<i32>,
+    /// }
+    /// assert_eq!(X::deserialize(&p).unwrap(), X { a: vec![1, 2] });
+    /// ```
+    ///
+    /// Different from [Record], deserializing into a struct is not supported:
+    ///
+    /// ```
+    /// use std::{str::FromStr, collections::HashMap};
+    /// use ruststep::ast::*;
+    /// use serde::Deserialize;
+    ///
+    /// let p = Parameter::from_str("A(1)").unwrap();
+    ///
+    /// #[derive(Debug, Clone, PartialEq, Deserialize)]
+    /// struct A {
+    ///     x: i32,
+    /// }
+    /// assert!(A::deserialize(&p).is_err());
+    /// ```
+    ///
     Typed {
         keyword: String,
         parameter: Box<Parameter>,
@@ -277,22 +435,50 @@ pub enum Parameter {
 
     /// Signed integer
     ///
+    /// FromStr
+    /// --------
     /// ```
-    /// # use std::str::FromStr;
-    /// # use ruststep::ast::Parameter;
+    /// use std::str::FromStr;
+    /// use ruststep::ast::Parameter;
+    ///
     /// let p = Parameter::from_str("10").unwrap();
     /// assert_eq!(p, Parameter::Integer(10));
+    ///
     /// let p = Parameter::from_str("-10").unwrap();
     /// assert_eq!(p, Parameter::Integer(-10));
+    /// ```
+    ///
+    /// Deserialize
+    /// ------------
+    /// ```
+    /// use ruststep::ast::*;
+    /// use serde::Deserialize;
+    ///
+    /// let p = Parameter::Integer(2);
+    /// let a = i64::deserialize(&p).unwrap();
+    /// assert_eq!(a, 2);
+    ///
+    /// // can be deserialized as unsigned
+    /// let a = u64::deserialize(&p).unwrap();
+    /// assert_eq!(a, 2);
+    ///
+    /// // cannot be deserialized negative integer into unsigned
+    /// let p = Parameter::Integer(-2);
+    /// let a = i64::deserialize(&p).unwrap();
+    /// assert_eq!(a, -2);
+    /// assert!(u64::deserialize(&p).is_err());
     /// ```
     #[from]
     Integer(i64),
 
     /// Real number
     ///
+    /// FromStr
+    /// --------
     /// ```
-    /// # use std::str::FromStr;
-    /// # use ruststep::ast::Parameter;
+    /// use std::str::FromStr;
+    /// use ruststep::ast::Parameter;
+    ///
     /// let p = Parameter::from_str("1.0").unwrap();
     /// assert_eq!(p, Parameter::Real(1.0));
     /// ```
@@ -301,9 +487,12 @@ pub enum Parameter {
 
     /// string literal
     ///
+    /// FromStr
+    /// --------
     /// ```
-    /// # use std::str::FromStr;
-    /// # use ruststep::ast::Parameter;
+    /// use std::str::FromStr;
+    /// use ruststep::ast::Parameter;
+    ///
     /// let p = Parameter::from_str("'EXAMPLE STRING'").unwrap();
     /// assert_eq!(p, Parameter::String("EXAMPLE STRING".to_string()));
     /// ```
@@ -312,19 +501,42 @@ pub enum Parameter {
 
     /// Enumeration defined in EXPRESS schema, like `.TRUE.`
     ///
+    /// FromStr
+    /// --------
     /// ```
     /// # use std::str::FromStr;
     /// # use ruststep::ast::Parameter;
     /// let p = Parameter::from_str(".TRUE.").unwrap();
     /// assert_eq!(p, Parameter::Enumeration("TRUE".to_string()));
     /// ```
+    ///
+    /// Deserialize
+    /// ------------
+    /// ```
+    /// use ruststep::ast::*;
+    /// use serde::Deserialize;
+    /// use std::str::FromStr;
+    ///
+    /// let p = Parameter::from_str(".A.").unwrap();
+    ///
+    /// #[derive(Debug, PartialEq, Deserialize)]
+    /// enum E {
+    ///   A,
+    ///   B
+    /// }
+    /// assert_eq!(E::deserialize(&p).unwrap(), E::A);
+    /// ```
+    ///
     Enumeration(String),
 
     /// List of parameters. This can be non-uniform.
     ///
+    /// FromStr
+    /// --------
     /// ```
-    /// # use std::str::FromStr;
-    /// # use ruststep::ast::Parameter;
+    /// use std::str::FromStr;
+    /// use ruststep::ast::Parameter;
+    ///
     /// let p = Parameter::from_str("(1.0, 2, 'STRING')").unwrap();
     /// assert_eq!(p, Parameter::List(vec![
     ///   Parameter::Real(1.0),
@@ -332,17 +544,81 @@ pub enum Parameter {
     ///   Parameter::String("STRING".to_string()),
     /// ]));
     /// ```
+    ///
+    /// Deserialize
+    /// ------------
+    /// ```
+    /// use std::str::FromStr;
+    /// use ruststep::ast::*;
+    /// use serde::Deserialize;
+    ///
+    /// let p = Parameter::from_str("(1, 2, 3)").unwrap();
+    ///
+    /// // As Vec<i32>
+    /// let a = Vec::<i32>::deserialize(&p).unwrap();
+    /// assert_eq!(a, vec![1, 2, 3]);
+    ///
+    /// // As user-defined struct
+    /// #[derive(Debug, Clone, PartialEq, Deserialize)]
+    /// struct A {
+    ///     x: i32,
+    ///     y: i32,
+    ///     z: i32,
+    /// }
+    /// let a = A::deserialize(&p).unwrap();
+    /// assert_eq!(a, A { x: 1, y: 2, z: 3 });
+    /// ```
     #[from]
     List(Vec<Parameter>),
 
     /// A reference to entity or value
+    ///
+    /// Deserialize
+    /// ------------
+    /// ```
+    /// use ruststep::ast::*;
+    /// use serde::Deserialize;
+    /// use std::str::FromStr;
+    ///
+    /// let p = Parameter::from_str("#12").unwrap();
+    ///
+    /// #[derive(Debug, PartialEq, Deserialize)]
+    /// enum Id {
+    ///   #[serde(rename = "Entity")] // "Entity" is keyword for entity reference
+    ///   E(usize),
+    ///   #[serde(rename = "Value")]  // "Value" is keyword for value reference
+    ///   V(usize),
+    /// }
+    /// assert_eq!(Id::deserialize(&p).unwrap(), Id::E(12));
+    /// ```
     #[from]
     Ref(Name),
 
     /// The special token dollar sign (`$`) is used to represent
     /// an object whose value is not provided in the exchange structure.
+    ///
+    /// Deserialize
+    /// -----------
+    /// ```
+    /// use ruststep::ast::*;
+    /// use serde::Deserialize;
+    ///
+    /// let p = Parameter::NotProvided;
+    /// assert_eq!(Option::<i64>::deserialize(&p).unwrap(), None);
+    /// ```
     NotProvided,
+
     /// Omitted parameter denoted by `*`
+    ///
+    /// Deserialize
+    /// ------------
+    /// ```
+    /// use ruststep::ast::*;
+    /// use serde::Deserialize;
+    ///
+    /// let p = Parameter::Omitted;
+    /// assert_eq!(Option::<i64>::deserialize(&p).unwrap(), None);
+    /// ```
     Omitted,
 }
 
