@@ -88,7 +88,8 @@ derive_ast_from_str!(Name, parser::token::rhs_occurrence_name);
 
 /// A struct typed in EXPRESS schema, e.g. `A(1.0, 2.0)`
 ///
-/// ## FromStr
+/// FromStr
+/// --------
 ///
 /// ```
 /// use ruststep::ast::{Record, Parameter};
@@ -104,15 +105,48 @@ derive_ast_from_str!(Name, parser::token::rhs_occurrence_name);
 /// )
 /// ```
 ///
-/// ## Deserialize
+/// Deserialize as a map
+/// ---------------------
 ///
-/// This can be deserialize in two ways
+/// [serde::Deserializer] implementation for [Record] provides
+/// a mapping it into "map" in serde data model.
+/// The keyword is mapped into the key and the parameters are its value:
 ///
-/// - It is deserialized as a "struct" only when the hint function
-///   [serde::Deserializer::deserialize_struct] is called
-///   and the struct name matches to its keyword appears in the exchange structure.
-///   See [the manual of container attribute in serde](https://serde.rs/container-attrs.html)
-///   for detail.
+/// ```
+/// use std::{str::FromStr, collections::HashMap};
+/// use ruststep::ast::*;
+/// use serde::Deserialize;
+///
+/// let p = Record::from_str("DATA_KEYWORD(1, 2)").unwrap();
+///
+/// // Map can be deserialize as a hashmap
+/// assert_eq!(
+///     HashMap::<String, Vec<i32>>::deserialize(&p).unwrap(),
+///     maplit::hashmap! {
+///         "DATA_KEYWORD".to_string() => vec![1, 2]
+///     }
+/// );
+///
+/// // Map in serde can be interpreted as Rust field
+/// #[derive(Debug, Clone, PartialEq, Deserialize)]
+/// struct X {
+///     #[serde(rename = "DATA_KEYWORD")]
+///     a: Vec<i32>,
+/// }
+/// assert_eq!(
+///     X::deserialize(&p).unwrap(),
+///     X { a: vec![1, 2] }
+/// );
+/// ```
+///
+/// Mapping to simple instance
+/// ---------------------------
+///
+/// It is deserialized as a "struct" only when the hint function
+/// [serde::Deserializer::deserialize_struct] is called
+/// and the struct name matches to its keyword appears in the exchange structure.
+/// See [the manual of container attribute in serde](https://serde.rs/container-attrs.html)
+/// for detail.
 ///
 /// ```
 /// use std::{str::FromStr, collections::HashMap};
@@ -141,34 +175,58 @@ derive_ast_from_str!(Name, parser::token::rhs_occurrence_name);
 /// assert!(B::deserialize(&p).is_err());
 /// ```
 ///
-/// - Otherwise, it is deserialized as a "map"
+/// Internal mapping to complex entity instance
+/// --------------------------------------------
 ///
+/// Complex entity in EXPRESS language is a set of two or more primitive component
+/// called partial complex entity.
+///
+/// ```text
+/// ENTITY person;
+///   name: STRING;
+/// END_ENTITY;
+///
+/// ENTITY employee SUBTYPE OF (person);
+///   pay: INTEGER;
+/// END_ENTITY;
+///
+/// ENTITY student SUBTYPE OF (person);
+///   school_name: STRING;
+/// END_ENTITY;
 /// ```
-/// use std::{str::FromStr, collections::HashMap};
-/// use ruststep::ast::*;
-/// use serde::Deserialize;
 ///
-/// let p = Record::from_str("DATA_KEYWORD(1, 2)").unwrap();
+/// In this EXPRESS schema, a complex entity of `person` can have three components
+/// representing `person`, `employee`, and `student`.
+/// There are two way of mapping it from an exchange structure.
+/// The internal mapping looks like usual case:
 ///
-/// // Map can be deserialize as a hashmap
-/// assert_eq!(
-///     HashMap::<String, Vec<i32>>::deserialize(&p).unwrap(),
-///     maplit::hashmap! {
-///         "DATA_KEYWORD".to_string() => vec![1, 2]
-///     }
-/// );
-///
-/// // Map in serde can be interpreted as Rust field
-/// #[derive(Debug, Clone, PartialEq, Deserialize)]
-/// struct X {
-///     #[serde(rename = "DATA_KEYWORD")]
-///     a: Vec<i32>,
-/// }
-/// assert_eq!(
-///     X::deserialize(&p).unwrap(),
-///     X { a: vec![1, 2] }
-/// );
+/// ```text
+/// #1 = EMPLOYEE('Hitori Goto', 10);
+/// #2 = STUDENT('Ikuno Kita', 'Shuka');
 /// ```
+///
+/// `#1` has two parameters while `employee` definition has a field `pay`.
+/// These parameters are consumed by supertype `person` first,
+/// and then subtype `employee` consumes:
+///
+/// ```text
+/// #1 = EMPLOYEE('Hitori Goto', 10);
+///               ▲              ▲
+///               │              └─ map to pay in employee
+///               └─ map to name in person
+/// ```
+///
+/// Internal mapping cannot handle the case where
+/// both `employee` and `student` components co-exist.
+/// This case will be handled by external mapping using [SubSuperRecord].
+///
+/// The detail of internal mapping is defined in 12.2.5.2 "Internal mapping"
+/// of [ISO-10303-21](https://www.iso.org/standard/63141.html).
+///
+/// In terms of serde data model, [Record] is not self-describing
+/// when using internal mapping rule.
+/// Structs using internal mapping should implement [serde::Deserialize]
+/// as described in subtype-supertype constraint in EXPRESS schema.
 ///
 #[derive(Debug, Clone, PartialEq)]
 pub struct Record {
