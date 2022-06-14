@@ -37,4 +37,4 @@ maplit = "1.0.2"
 
 [dev-dependencies.espr-derive]
 path = "../espr-derive"
-version = "0.2.0"
+version = "0.3.0"
