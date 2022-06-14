@@ -29,7 +29,7 @@ itertools = "0.10.3"
 
 [dependencies.ruststep-derive]
 path = "../ruststep-derive"
-version = "0.2.0"
+version = "0.3.0"
 
 [dev-dependencies]
 anyhow = "1.0.56"
