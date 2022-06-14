@@ -15,6 +15,16 @@ In addition to original Keep-a-Changelog, we use following rules:
 ## Unreleased
 
 ### Added
+
+### Changed
+
+### Fixed
+
+### Internal
+
+## 0.3.0 - 2022-06-14
+
+### Added
 - Deserialize Record as a struct https://github.com/ricosjp/ruststep/pull/228
 - Add `ruststep::ast::SubSuperRecord` https://github.com/ricosjp/ruststep/pull/225
 - Document and tests for serde mapping in ruststep::ast::de https://github.com/ricosjp/ruststep/pull/220
