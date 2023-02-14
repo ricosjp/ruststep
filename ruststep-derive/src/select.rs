@@ -218,20 +218,23 @@ impl Input {
         } = self;
         let ruststep = ruststep_crate();
         let itertools = itertools_crate();
-        let holders: Vec<syn::Type> = holder_types
-            .iter()
-            .map(|holder| {
-                let ft: FieldType = holder.clone().try_into().unwrap();
-                ft.as_path().into()
-            })
-            .collect();
+        let mut vars = Vec::new();
+        let mut exprs = Vec::new();
+        let mut holders = Vec::<syn::Type>::new();
+        for ((var, holder), expr) in variants.iter().zip(holder_types).zip(variant_into_exprs) {
+            if let FieldType::Boxed(path) = holder.clone().try_into().unwrap() {
+                vars.push(var);
+                holders.push(path.as_ref().clone().into());
+                exprs.push(expr);
+            }
+        }
 
         quote! {
             impl #ruststep::tables::EntityTable<#holder_ident> for #table {
                 fn get_owned(&self, entity_id: u64) -> #ruststep::error::Result<#ident> {
                     #(
                     if let Ok(owned) = #ruststep::tables::EntityTable::<#holders>::get_owned(self, entity_id) {
-                        return Ok(#ident::#variants(#variant_into_exprs));
+                        return Ok(#ident::#vars(#exprs));
                     }
                     )*
                     Err(#ruststep::error::Error::UnknownEntity(entity_id))
@@ -240,7 +243,7 @@ impl Input {
                     Box::new(#itertools::chain![
                         #(
                         #ruststep::tables::EntityTable::<#holders>::owned_iter(self)
-                            .map(|owned| owned.map(|owned| #ident::#variants(#variant_into_exprs)))
+                            .map(|owned| owned.map(|owned| #ident::#vars(#exprs)))
                         ),*
                     ])
                 }
