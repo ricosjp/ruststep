@@ -72,6 +72,15 @@ impl FieldType {
             }
         }
     }
+
+    pub fn as_path(self) -> Self {
+        match self {
+            FieldType::Path(_) => self,
+            FieldType::Optional(path) => path.as_ref().clone(),
+            FieldType::List(path) => path.as_ref().clone(),
+            FieldType::Boxed(path) => path.as_ref().clone(),
+        }
+    }
 }
 
 #[derive(Debug, Clone)]

@@ -16,7 +16,6 @@ struct Input {
     variant_into_exprs: Vec<TokenStream2>,
     holder_types: Vec<syn::Type>,
     holder_exprs: Vec<TokenStream2>,
-    table_fields: Vec<Option<syn::Ident>>,
 }
 
 impl Input {
@@ -36,16 +35,10 @@ impl Input {
 
         let mut holder_exprs = Vec::new();
         let mut holder_types = Vec::new();
-        let mut table_fields = Vec::new();
         let mut variant_exprs = Vec::new();
         let mut variant_into_exprs = Vec::new();
         for var in &e.variants {
-            let HolderAttr {
-                field,
-                place_holder,
-                ..
-            } = HolderAttr::parse(&var.attrs);
-            table_fields.push(field);
+            let HolderAttr { place_holder, .. } = HolderAttr::parse(&var.attrs);
 
             assert_eq!(var.fields.len(), 1);
             for f in &var.fields {
@@ -88,7 +81,6 @@ impl Input {
             variant_into_exprs,
             holder_types,
             holder_exprs,
-            table_fields,
         }
     }
 
@@ -219,34 +211,27 @@ impl Input {
             ident,
             holder_ident,
             variants,
-            table_fields,
+            holder_types,
             table,
             variant_into_exprs,
             ..
         } = self;
         let ruststep = ruststep_crate();
         let itertools = itertools_crate();
-        let mut vars = Vec::new();
-        let mut fields = Vec::new();
-        let mut exprs = Vec::new();
-        for ((var, field), expr) in variants
+        let holders: Vec<syn::Type> = holder_types
             .iter()
-            .zip(table_fields.iter())
-            .zip(variant_into_exprs.iter())
-        {
-            if let Some(field) = field {
-                vars.push(var);
-                fields.push(field);
-                exprs.push(expr);
-            }
-        }
+            .map(|holder| {
+                let ft: FieldType = holder.clone().try_into().unwrap();
+                ft.as_path().into()
+            })
+            .collect();
 
         quote! {
             impl #ruststep::tables::EntityTable<#holder_ident> for #table {
                 fn get_owned(&self, entity_id: u64) -> #ruststep::error::Result<#ident> {
                     #(
-                    if let Ok(owned) = #ruststep::tables::get_owned(self, &self.#fields, entity_id) {
-                        return Ok(#ident::#vars(#exprs));
+                    if let Ok(owned) = #ruststep::tables::EntityTable::<#holders>::get_owned(self, entity_id) {
+                        return Ok(#ident::#variants(#variant_into_exprs));
                     }
                     )*
                     Err(#ruststep::error::Error::UnknownEntity(entity_id))
@@ -254,8 +239,8 @@ impl Input {
                 fn owned_iter<'table>(&'table self) -> Box<dyn Iterator<Item = #ruststep::error::Result<#ident>> + 'table> {
                     Box::new(#itertools::chain![
                         #(
-                        #ruststep::tables::owned_iter(self, &self.#fields)
-                            .map(|owned| owned.map(|owned| #ident::#vars(#exprs)))
+                        #ruststep::tables::EntityTable::<#holders>::owned_iter(self)
+                            .map(|owned| owned.map(|owned| #ident::#variants(#variant_into_exprs)))
                         ),*
                     ])
                 }
