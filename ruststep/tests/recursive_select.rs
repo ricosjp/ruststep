@@ -7,22 +7,22 @@ espr_derive::inline_express!(
       ENTITY a;
         x: REAL;
       END_ENTITY;
-      
-	  ENTITY b;
+
+      ENTITY b;
         y: INTEGER;
       END_ENTITY;
-	  
-	  ENTITY c;
+
+  	  ENTITY c;
         z: STRING;
       END_ENTITY;
 
-	  TYPE sup = SELECT (a, b);
-	  END_TYPE;
+      TYPE sup = SELECT (a, b);
+      END_TYPE;
 
-	  TYPE sup_sup = SELECT (sup, c);
-	  END_TYPE;
-	END_SCHEMA;
-	"#
+      TYPE sup_sup = SELECT (sup, c);
+      END_TYPE;
+    END_SCHEMA;
+    "#
 );
 
 use test_schema::*;
