@@ -12,7 +12,7 @@ espr_derive::inline_express!(
         y: INTEGER;
       END_ENTITY;
 
-  	  ENTITY c;
+      ENTITY c;
         z: STRING;
       END_ENTITY;
 
