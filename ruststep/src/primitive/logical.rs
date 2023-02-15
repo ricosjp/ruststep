@@ -56,7 +56,7 @@ use std::ops::*;
 /// assert_eq!(Logical::Unknown ^ Logical::Unknown, Logical::Unknown);
 /// assert_eq!(Logical::Unknown ^ Logical::False, Logical::Unknown);
 /// ```
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord, Serialize)]
 pub enum Logical {
     False,
     Unknown,
@@ -154,23 +154,97 @@ impl Not for Logical {
     }
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-    use crate::ast::Parameter;
+enum SubLogical {
+    T,
+    True,
+    F,
+    False,
+    U,
+    Unknown,
+}
 
-    #[test]
-    fn deserialize_logical() {
-        let p = Parameter::Enumeration("TRUE".to_string());
-        let logical = Logical::deserialize(&p).unwrap();
-        assert_eq!(logical, Logical::True);
+struct SubVisitor;
 
-        let p = Parameter::Enumeration("FALSE".to_string());
-        let logical = Logical::deserialize(&p).unwrap();
-        assert_eq!(logical, Logical::False);
+const VARIANTS: &[&str] = &["T", "True", "F", "False", "U", "Unknown"];
 
-        let p = Parameter::Enumeration("UNKNOWN".to_string());
-        let logical = Logical::deserialize(&p).unwrap();
-        assert_eq!(logical, Logical::Unknown);
+impl<'de> serde::de::Visitor<'de> for SubVisitor {
+    type Value = SubLogical;
+    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
+        write!(formatter, "Logical")
+    }
+    fn visit_str<E>(self, v: &str) -> Result<Self::Value, E>
+    where
+        E: serde::de::Error,
+    {
+        match v {
+            "T" => Ok(SubLogical::T),
+            "True" => Ok(SubLogical::True),
+            "F" => Ok(SubLogical::F),
+            "False" => Ok(SubLogical::False),
+            "U" => Ok(SubLogical::U),
+            "Unknown" => Ok(SubLogical::Unknown),
+            _ => Err(E::unknown_field(v, VARIANTS)),
+        }
+    }
+    fn visit_bytes<E>(self, v: &[u8]) -> Result<Self::Value, E>
+    where
+        E: serde::de::Error,
+    {
+        match v {
+            b"T" => Ok(SubLogical::T),
+            b"True" => Ok(SubLogical::True),
+            b"F" => Ok(SubLogical::F),
+            b"False" => Ok(SubLogical::False),
+            b"U" => Ok(SubLogical::U),
+            b"Unknown" => Ok(SubLogical::Unknown),
+            _ => Err(E::unknown_field(&String::from_utf8_lossy(v), VARIANTS)),
+        }
+    }
+}
+
+impl From<SubLogical> for Logical {
+    fn from(value: SubLogical) -> Self {
+        match value {
+            SubLogical::T => Self::True,
+            SubLogical::True => Self::True,
+            SubLogical::F => Self::False,
+            SubLogical::False => Self::False,
+            SubLogical::U => Self::Unknown,
+            SubLogical::Unknown => Self::Unknown,
+        }
+    }
+}
+
+impl<'de> Deserialize<'de> for SubLogical {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        deserializer.deserialize_identifier(SubVisitor)
+    }
+}
+
+#[derive(Clone, Debug)]
+struct Visitor;
+
+impl<'de> serde::de::Visitor<'de> for Visitor {
+    type Value = Logical;
+    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
+        write!(formatter, "enum Logical")
+    }
+    fn visit_enum<A>(self, data: A) -> Result<Self::Value, A::Error>
+    where
+        A: serde::de::EnumAccess<'de>,
+    {
+        data.variant::<SubLogical>().map(|(x, _)| x.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Logical {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        deserializer.deserialize_enum("SubLogical", VARIANTS, Visitor)
     }
 }

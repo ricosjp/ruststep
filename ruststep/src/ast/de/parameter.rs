@@ -29,8 +29,25 @@ impl<'de, 'param> de::Deserializer<'de> for &'param Parameter {
         }
     }
 
+    fn deserialize_bool<V>(self, visitor: V) -> Result<V::Value, Self::Error>
+    where
+        V: de::Visitor<'de>,
+    {
+        if let Parameter::Enumeration(variant) = self {
+            match variant.as_str() {
+                "T" => visitor.visit_bool(true),
+                "TRUE" => visitor.visit_bool(true),
+                "F" => visitor.visit_bool(false),
+                "FALSE" => visitor.visit_bool(false),
+                _ => visitor.visit_enum(variant.to_class_case().into_deserializer()),
+            }
+        } else {
+            self.deserialize_any(visitor)
+        }
+    }
+
     forward_to_deserialize_any! {
-        bool i8 i16 i32 i64 i128 u8 u16 u32 u64 u128 f32 f64 char str string
+        i8 i16 i32 i64 i128 u8 u16 u32 u64 u128 f32 f64 char str string
         bytes byte_buf option unit unit_struct newtype_struct seq tuple
         struct tuple_struct map enum identifier ignored_any
     }

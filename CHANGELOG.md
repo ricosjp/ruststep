@@ -15,6 +15,7 @@ In addition to original Keep-a-Changelog, we use following rules:
 ## Unreleased
 
 ### Added
+- Deserialize `LOGICAL` and `BOOLEAN` by `.T.`, `.F.`, and `.U.` notations.
 
 ### Changed
 
