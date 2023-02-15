@@ -50,7 +50,7 @@ impl<'de, 'param> de::Deserializer<'de> for &'param Parameter {
     where
         V: de::Visitor<'de>,
     {
-        if matches!(self, Parameter::NotProvided) {
+        if matches!(self, Parameter::NotProvided | Parameter::Omitted) {
             visitor.visit_none()
         } else {
             visitor.visit_some(self)
