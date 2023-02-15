@@ -46,9 +46,20 @@ impl<'de, 'param> de::Deserializer<'de> for &'param Parameter {
         }
     }
 
+    fn deserialize_option<V>(self, visitor: V) -> Result<V::Value, Self::Error>
+    where
+        V: de::Visitor<'de>,
+    {
+        if matches!(self, Parameter::NotProvided | Parameter::Omitted) {
+            visitor.visit_none()
+        } else {
+            visitor.visit_some(self)
+        }
+    }
+
     forward_to_deserialize_any! {
         i8 i16 i32 i64 i128 u8 u16 u32 u64 u128 f32 f64 char str string
-        bytes byte_buf option unit unit_struct newtype_struct seq tuple
+        bytes byte_buf unit unit_struct newtype_struct seq tuple
         struct tuple_struct map enum identifier ignored_any
     }
 }
