@@ -19,6 +19,7 @@ In addition to original Keep-a-Changelog, we use following rules:
 ### Changed
 
 ### Fixed
+- Recursive implementation of `ruststep::tables::EntityTable::{get_owned, owned_iter}` for select types.
 
 ### Internal
 
