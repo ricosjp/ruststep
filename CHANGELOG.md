@@ -18,6 +18,7 @@ In addition to original Keep-a-Changelog, we use following rules:
 - Deserialize `LOGICAL` and `BOOLEAN` by `.T.`, `.F.`, and `.U.` notations.
 
 ### Changed
+- Remove `field` attr from enumerations.
 
 ### Fixed
 - Deseialize `Option::Some`.

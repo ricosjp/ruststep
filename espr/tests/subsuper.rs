@@ -59,10 +59,8 @@ fn subsuper() {
         #[holder(generate_deserialize)]
         pub enum BaseAny {
             #[holder(use_place_holder)]
-            # [holder (field = base)]
             Base(Box<Base>),
             #[holder(use_place_holder)]
-            # [holder (field = sub)]
             Sub(Box<SubAny>),
         }
         impl Into<BaseAny> for Base {
@@ -103,10 +101,8 @@ fn subsuper() {
         #[holder(generate_deserialize)]
         pub enum SubAny {
             #[holder(use_place_holder)]
-            # [holder (field = sub)]
             Sub(Box<Sub>),
             #[holder(use_place_holder)]
-            # [holder (field = subsub)]
             Subsub(Box<Subsub>),
         }
         impl Into<SubAny> for Sub {

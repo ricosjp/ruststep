@@ -27,10 +27,8 @@ pub struct B {
 #[holder(table = Table)]
 #[holder(generate_deserialize)]
 pub enum S1 {
-    #[holder(field = a)]
     #[holder(use_place_holder)]
     A(Box<A>),
-    #[holder(field = b)]
     #[holder(use_place_holder)]
     B(Box<B>),
 }
@@ -39,7 +37,6 @@ pub enum S1 {
 #[holder(table = Table)]
 #[holder(generate_deserialize)]
 pub enum S2 {
-    #[holder(field = a)]
     #[holder(use_place_holder)]
     A(Box<A>),
     // mix primitive type

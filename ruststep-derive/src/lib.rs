@@ -113,7 +113,6 @@ fn derive_deserialize(ast: &syn::DeriveInput) -> TokenStream2 {
 /// #[derive(Holder)]
 /// #[holder(table = Table)] // <- container attribute
 /// pub enum S2 {
-///     #[holder(field = a)]        // <- variant attribute
 ///     #[holder(use_place_holder)] // <- this is also a variant attribute
 ///     A(Box<A>),
 ///     P(f64),
@@ -176,10 +175,8 @@ mod snapshot_tests {
             #[holder(table = Table)]
             #[holder(generate_deserialize)]
             pub enum S1 {
-                #[holder(field = a)]
                 #[holder(use_place_holder)]
                 A(Box<A>),
-                #[holder(field = b)]
                 #[holder(use_place_holder)]
                 B(Box<B>),
             }

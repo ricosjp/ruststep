@@ -57,13 +57,10 @@ fn any() {
         #[holder(generate_deserialize)]
         pub enum BaseAny {
             #[holder(use_place_holder)]
-            # [holder (field = base)]
             Base(Box<Base>),
             #[holder(use_place_holder)]
-            # [holder (field = sub1)]
             Sub1(Box<Sub1>),
             #[holder(use_place_holder)]
-            # [holder (field = sub2)]
             Sub2(Box<Sub2>),
         }
         impl Into<BaseAny> for Base {
