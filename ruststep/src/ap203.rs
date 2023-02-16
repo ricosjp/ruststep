@@ -1535,31 +1535,22 @@ pub mod config_control_design {
         ProductDefinitionFormation(ProductDefinitionFormationAny),
         #[holder(use_place_holder)]
         ProductDefinition(ProductDefinitionAny),
-        # [holder (field = configuration_effectivity)]
         #[holder(use_place_holder)]
         ConfigurationEffectivity(Box<ConfigurationEffectivity>),
-        # [holder (field = configuration_item)]
         #[holder(use_place_holder)]
         ConfigurationItem(Box<ConfigurationItem>),
-        # [holder (field = security_classification)]
         #[holder(use_place_holder)]
         SecurityClassification(Box<SecurityClassification>),
-        # [holder (field = change_request)]
         #[holder(use_place_holder)]
         ChangeRequest(Box<ChangeRequest>),
-        # [holder (field = change)]
         #[holder(use_place_holder)]
         Change(Box<Change>),
-        # [holder (field = start_request)]
         #[holder(use_place_holder)]
         StartRequest(Box<StartRequest>),
-        # [holder (field = start_work)]
         #[holder(use_place_holder)]
         StartWork(Box<StartWork>),
-        # [holder (field = certification)]
         #[holder(use_place_holder)]
         Certification(Box<Certification>),
-        # [holder (field = contract)]
         #[holder(use_place_holder)]
         Contract(Box<Contract>),
     }
@@ -1574,10 +1565,8 @@ pub mod config_control_design {
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum Axis2Placement {
-        # [holder (field = axis2_placement_2d)]
         #[holder(use_place_holder)]
         Axis2Placement2D(Box<Axis2Placement2D>),
-        # [holder (field = axis2_placement_3d)]
         #[holder(use_place_holder)]
         Axis2Placement3D(Box<Axis2Placement3D>),
     }
@@ -1615,7 +1604,6 @@ pub mod config_control_design {
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum CertifiedItem {
-        # [holder (field = supplied_part_relationship)]
         #[holder(use_place_holder)]
         SuppliedPartRelationship(Box<SuppliedPartRelationship>),
     }
@@ -1691,28 +1679,20 @@ pub mod config_control_design {
     pub enum DateTimeItem {
         #[holder(use_place_holder)]
         ProductDefinition(ProductDefinitionAny),
-        # [holder (field = change_request)]
         #[holder(use_place_holder)]
         ChangeRequest(Box<ChangeRequest>),
-        # [holder (field = start_request)]
         #[holder(use_place_holder)]
         StartRequest(Box<StartRequest>),
-        # [holder (field = change)]
         #[holder(use_place_holder)]
         Change(Box<Change>),
-        # [holder (field = start_work)]
         #[holder(use_place_holder)]
         StartWork(Box<StartWork>),
-        # [holder (field = approval_person_organization)]
         #[holder(use_place_holder)]
         ApprovalPersonOrganization(Box<ApprovalPersonOrganization>),
-        # [holder (field = contract)]
         #[holder(use_place_holder)]
         Contract(Box<Contract>),
-        # [holder (field = security_classification)]
         #[holder(use_place_holder)]
         SecurityClassification(Box<SecurityClassification>),
-        # [holder (field = certification)]
         #[holder(use_place_holder)]
         Certification(Box<Certification>),
     }
@@ -1722,10 +1702,8 @@ pub mod config_control_design {
     pub enum DateTimeSelect {
         #[holder(use_place_holder)]
         Date(DateAny),
-        # [holder (field = local_time)]
         #[holder(use_place_holder)]
         LocalTime(Box<LocalTime>),
-        # [holder (field = date_and_time)]
         #[holder(use_place_holder)]
         DateAndTime(Box<DateAndTime>),
     }
@@ -1898,32 +1876,24 @@ pub mod config_control_design {
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum PersonOrganizationItem {
-        # [holder (field = change)]
         #[holder(use_place_holder)]
         Change(Box<Change>),
-        # [holder (field = start_work)]
         #[holder(use_place_holder)]
         StartWork(Box<StartWork>),
-        # [holder (field = change_request)]
         #[holder(use_place_holder)]
         ChangeRequest(Box<ChangeRequest>),
-        # [holder (field = start_request)]
         #[holder(use_place_holder)]
         StartRequest(Box<StartRequest>),
-        # [holder (field = configuration_item)]
         #[holder(use_place_holder)]
         ConfigurationItem(Box<ConfigurationItem>),
-        # [holder (field = product)]
         #[holder(use_place_holder)]
         Product(Box<Product>),
         #[holder(use_place_holder)]
         ProductDefinitionFormation(ProductDefinitionFormationAny),
         #[holder(use_place_holder)]
         ProductDefinition(ProductDefinitionAny),
-        # [holder (field = contract)]
         #[holder(use_place_holder)]
         Contract(Box<Contract>),
-        # [holder (field = security_classification)]
         #[holder(use_place_holder)]
         SecurityClassification(Box<SecurityClassification>),
     }
@@ -1931,13 +1901,10 @@ pub mod config_control_design {
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum PersonOrganizationSelect {
-        # [holder (field = person)]
         #[holder(use_place_holder)]
         Person(Box<Person>),
-        # [holder (field = organization)]
         #[holder(use_place_holder)]
         Organization(Box<Organization>),
-        # [holder (field = person_and_organization)]
         #[holder(use_place_holder)]
         PersonAndOrganization(Box<PersonAndOrganization>),
     }
@@ -2016,13 +1983,10 @@ pub mod config_control_design {
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum ShapeDefinition {
-        # [holder (field = product_definition_shape)]
         #[holder(use_place_holder)]
         ProductDefinitionShape(Box<ProductDefinitionShape>),
-        # [holder (field = shape_aspect)]
         #[holder(use_place_holder)]
         ShapeAspect(Box<ShapeAspect>),
-        # [holder (field = shape_aspect_relationship)]
         #[holder(use_place_holder)]
         ShapeAspectRelationship(Box<ShapeAspectRelationship>),
     }
@@ -2030,10 +1994,8 @@ pub mod config_control_design {
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum Shell {
-        # [holder (field = vertex_shell)]
         #[holder(use_place_holder)]
         VertexShell(Box<VertexShell>),
-        # [holder (field = wire_shell)]
         #[holder(use_place_holder)]
         WireShell(Box<WireShell>),
         #[holder(use_place_holder)]
@@ -2110,7 +2072,6 @@ pub mod config_control_design {
     pub enum SpecifiedItem {
         #[holder(use_place_holder)]
         ProductDefinition(ProductDefinitionAny),
-        # [holder (field = shape_aspect)]
         #[holder(use_place_holder)]
         ShapeAspect(Box<ShapeAspect>),
     }
@@ -2125,12 +2086,10 @@ pub mod config_control_design {
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum SupportedItem {
-        # [holder (field = action_directive)]
         #[holder(use_place_holder)]
         ActionDirective(Box<ActionDirective>),
         #[holder(use_place_holder)]
         Action(ActionAny),
-        # [holder (field = action_method)]
         #[holder(use_place_holder)]
         ActionMethod(Box<ActionMethod>),
     }
@@ -2138,7 +2097,6 @@ pub mod config_control_design {
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum SurfaceModel {
-        # [holder (field = shell_based_surface_model)]
         #[holder(use_place_holder)]
         ShellBasedSurfaceModel(Box<ShellBasedSurfaceModel>),
     }
@@ -2153,7 +2111,6 @@ pub mod config_control_design {
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum Transformation {
-        # [holder (field = item_defined_transformation)]
         #[holder(use_place_holder)]
         ItemDefinedTransformation(Box<ItemDefinedTransformation>),
         #[holder(use_place_holder)]
@@ -2176,7 +2133,6 @@ pub mod config_control_design {
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum TrimmingSelect {
-        # [holder (field = cartesian_point)]
         #[holder(use_place_holder)]
         CartesianPoint(Box<CartesianPoint>),
         #[holder(use_place_holder)]
@@ -2193,10 +2149,8 @@ pub mod config_control_design {
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum VectorOrDirection {
-        # [holder (field = vector)]
         #[holder(use_place_holder)]
         Vector(Box<Vector>),
-        # [holder (field = direction)]
         #[holder(use_place_holder)]
         Direction(Box<Direction>),
     }
@@ -2218,10 +2172,8 @@ pub mod config_control_design {
     # [holder (table = Tables)]
     #[holder(generate_deserialize)]
     pub enum WireframeModel {
-        # [holder (field = shell_based_wireframe_model)]
         #[holder(use_place_holder)]
         ShellBasedWireframeModel(Box<ShellBasedWireframeModel>),
-        # [holder (field = edge_based_wireframe_model)]
         #[holder(use_place_holder)]
         EdgeBasedWireframeModel(Box<EdgeBasedWireframeModel>),
     }
@@ -2256,10 +2208,8 @@ pub mod config_control_design {
     #[holder(generate_deserialize)]
     pub enum ActionAny {
         #[holder(use_place_holder)]
-        # [holder (field = action)]
         Action(Box<Action>),
         #[holder(use_place_holder)]
-        # [holder (field = executed_action)]
         ExecutedAction(Box<ExecutedActionAny>),
     }
     impl Into<ActionAny> for Action {
@@ -2293,13 +2243,10 @@ pub mod config_control_design {
     #[holder(generate_deserialize)]
     pub enum ActionAssignmentAny {
         #[holder(use_place_holder)]
-        # [holder (field = action_assignment)]
         ActionAssignment(Box<ActionAssignment>),
         #[holder(use_place_holder)]
-        # [holder (field = change)]
         Change(Box<Change>),
         #[holder(use_place_holder)]
-        # [holder (field = start_work)]
         StartWork(Box<StartWork>),
     }
     impl Into<ActionAssignmentAny> for ActionAssignment {
@@ -2369,13 +2316,10 @@ pub mod config_control_design {
     #[holder(generate_deserialize)]
     pub enum ActionRequestAssignmentAny {
         #[holder(use_place_holder)]
-        # [holder (field = action_request_assignment)]
         ActionRequestAssignment(Box<ActionRequestAssignment>),
         #[holder(use_place_holder)]
-        # [holder (field = change_request)]
         ChangeRequest(Box<ChangeRequest>),
         #[holder(use_place_holder)]
-        # [holder (field = start_request)]
         StartRequest(Box<StartRequest>),
     }
     impl Into<ActionRequestAssignmentAny> for ActionRequestAssignment {
@@ -2467,13 +2411,10 @@ pub mod config_control_design {
     #[holder(generate_deserialize)]
     pub enum AddressAny {
         #[holder(use_place_holder)]
-        # [holder (field = address)]
         Address(Box<Address>),
         #[holder(use_place_holder)]
-        # [holder (field = organizational_address)]
         OrganizationalAddress(Box<OrganizationalAddress>),
         #[holder(use_place_holder)]
-        # [holder (field = personal_address)]
         PersonalAddress(Box<PersonalAddress>),
     }
     impl Into<AddressAny> for Address {
@@ -2567,16 +2508,12 @@ pub mod config_control_design {
     #[holder(generate_deserialize)]
     pub enum ApplicationContextElementAny {
         #[holder(use_place_holder)]
-        # [holder (field = application_context_element)]
         ApplicationContextElement(Box<ApplicationContextElement>),
         #[holder(use_place_holder)]
-        # [holder (field = product_concept_context)]
         ProductConceptContext(Box<ProductConceptContext>),
         #[holder(use_place_holder)]
-        # [holder (field = product_context)]
         ProductContext(Box<ProductContextAny>),
         #[holder(use_place_holder)]
-        # [holder (field = product_definition_context)]
         ProductDefinitionContext(Box<ProductDefinitionContextAny>),
     }
     impl Into<ApplicationContextElementAny> for ApplicationContextElement {
@@ -2646,10 +2583,8 @@ pub mod config_control_design {
     #[holder(generate_deserialize)]
     pub enum ApprovalAssignmentAny {
         #[holder(use_place_holder)]
-        # [holder (field = approval_assignment)]
         ApprovalAssignment(Box<ApprovalAssignment>),
         #[holder(use_place_holder)]
-        # [holder (field = cc_design_approval)]
         CcDesignApproval(Box<CcDesignApproval>),
     }
     impl Into<ApprovalAssignmentAny> for ApprovalAssignment {
@@ -2771,19 +2706,14 @@ pub mod config_control_design {
     #[holder(generate_deserialize)]
     pub enum AssemblyComponentUsageAny {
         #[holder(use_place_holder)]
-        # [holder (field = assembly_component_usage)]
         AssemblyComponentUsage(Box<AssemblyComponentUsage>),
         #[holder(use_place_holder)]
-        # [holder (field = next_assembly_usage_occurrence)]
         NextAssemblyUsageOccurrence(Box<NextAssemblyUsageOccurrence>),
         #[holder(use_place_holder)]
-        # [holder (field = promissory_usage_occurrence)]
         PromissoryUsageOccurrence(Box<PromissoryUsageOccurrence>),
         #[holder(use_place_holder)]
-        # [holder (field = quantified_assembly_component_usage)]
         QuantifiedAssemblyComponentUsage(Box<QuantifiedAssemblyComponentUsage>),
         #[holder(use_place_holder)]
-        # [holder (field = specified_higher_usage_occurrence)]
         SpecifiedHigherUsageOccurrence(Box<SpecifiedHigherUsageOccurrence>),
     }
     impl Into<AssemblyComponentUsageAny> for AssemblyComponentUsage {
@@ -2932,22 +2862,16 @@ pub mod config_control_design {
     #[holder(generate_deserialize)]
     pub enum BSplineCurveAny {
         #[holder(use_place_holder)]
-        # [holder (field = b_spline_curve)]
         BSplineCurve(Box<BSplineCurve>),
         #[holder(use_place_holder)]
-        # [holder (field = b_spline_curve_with_knots)]
         BSplineCurveWithKnots(Box<BSplineCurveWithKnots>),
         #[holder(use_place_holder)]
-        # [holder (field = bezier_curve)]
         BezierCurve(Box<BezierCurve>),
         #[holder(use_place_holder)]
-        # [holder (field = quasi_uniform_curve)]
         QuasiUniformCurve(Box<QuasiUniformCurve>),
         #[holder(use_place_holder)]
-        # [holder (field = rational_b_spline_curve)]
         RationalBSplineCurve(Box<RationalBSplineCurve>),
         #[holder(use_place_holder)]
-        # [holder (field = uniform_curve)]
         UniformCurve(Box<UniformCurve>),
     }
     impl Into<BSplineCurveAny> for BSplineCurve {
@@ -3059,22 +2983,16 @@ pub mod config_control_design {
     #[holder(generate_deserialize)]
     pub enum BSplineSurfaceAny {
         #[holder(use_place_holder)]
-        # [holder (field = b_spline_surface)]
         BSplineSurface(Box<BSplineSurface>),
         #[holder(use_place_holder)]
-        # [holder (field = b_spline_surface_with_knots)]
         BSplineSurfaceWithKnots(Box<BSplineSurfaceWithKnots>),
         #[holder(use_place_holder)]
-        # [holder (field = bezier_surface)]
         BezierSurface(Box<BezierSurface>),
         #[holder(use_place_holder)]
-        # [holder (field = quasi_uniform_surface)]
         QuasiUniformSurface(Box<QuasiUniformSurface>),
         #[holder(use_place_holder)]
-        # [holder (field = rational_b_spline_surface)]
         RationalBSplineSurface(Box<RationalBSplineSurface>),
         #[holder(use_place_holder)]
-        # [holder (field = uniform_surface)]
         UniformSurface(Box<UniformSurface>),
     }
     impl Into<BSplineSurfaceAny> for BSplineSurface {
@@ -3209,10 +3127,8 @@ pub mod config_control_design {
     #[holder(generate_deserialize)]
     pub enum BoundaryCurveAny {
         #[holder(use_place_holder)]
-        # [holder (field = boundary_curve)]
         BoundaryCurve(Box<BoundaryCurve>),
         #[holder(use_place_holder)]
-        # [holder (field = outer_boundary_curve)]
         OuterBoundaryCurve(Box<OuterBoundaryCurve>),
     }
     impl Into<BoundaryCurveAny> for BoundaryCurve {
@@ -3262,25 +3178,18 @@ pub mod config_control_design {
     #[holder(generate_deserialize)]
     pub enum BoundedCurveAny {
         #[holder(use_place_holder)]
-        # [holder (field = bounded_curve)]
         BoundedCurve(Box<BoundedCurve>),
         #[holder(use_place_holder)]
-        # [holder (field = b_spline_curve)]
         BSplineCurve(Box<BSplineCurveAny>),
         #[holder(use_place_holder)]
-        # [holder (field = bounded_pcurve)]
         BoundedPcurve(Box<BoundedPcurve>),
         #[holder(use_place_holder)]
-        # [holder (field = bounded_surface_curve)]
         BoundedSurfaceCurve(Box<BoundedSurfaceCurve>),
         #[holder(use_place_holder)]
-        # [holder (field = composite_curve)]
         CompositeCurve(Box<CompositeCurveAny>),
         #[holder(use_place_holder)]
-        # [holder (field = polyline)]
         Polyline(Box<Polyline>),
         #[holder(use_place_holder)]
-        # [holder (field = trimmed_curve)]
         TrimmedCurve(Box<TrimmedCurve>),
     }
     impl Into<BoundedCurveAny> for BoundedCurve {
@@ -3387,19 +3296,14 @@ pub mod config_control_design {
     #[holder(generate_deserialize)]
     pub enum BoundedSurfaceAny {
         #[holder(use_place_holder)]
-        # [holder (field = bounded_surface)]
         BoundedSurface(Box<BoundedSurface>),
         #[holder(use_place_holder)]
-        # [holder (field = b_spline_surface)]
         BSplineSurface(Box<BSplineSurfaceAny>),
         #[holder(use_place_holder)]
-        # [holder (field = curve_bounded_surface)]
         CurveBoundedSurface(Box<CurveBoundedSurface>),
         #[holder(use_place_holder)]
-        # [holder (field = rectangular_composite_surface)]
         RectangularCompositeSurface(Box<RectangularCompositeSurface>),
         #[holder(use_place_holder)]
-        # [holder (field = rectangular_trimmed_surface)]
         RectangularTrimmedSurface(Box<RectangularTrimmedSurface>),
     }
     impl Into<BoundedSurfaceAny> for BoundedSurface {
@@ -3547,10 +3451,8 @@ pub mod config_control_design {
     #[holder(generate_deserialize)]
     pub enum CartesianTransformationOperatorAny {
         #[holder(use_place_holder)]
-        # [holder (field = cartesian_transformation_operator)]
         CartesianTransformationOperator(Box<CartesianTransformationOperator>),
         #[holder(use_place_holder)]
-        # [holder (field = cartesian_transformation_operator_3d)]
         CartesianTransformationOperator3D(Box<CartesianTransformationOperator3D>),
     }
     impl Into<CartesianTransformationOperatorAny> for CartesianTransformationOperator {
@@ -3754,10 +3656,8 @@ pub mod config_control_design {
     #[holder(generate_deserialize)]
     pub enum CertificationAssignmentAny {
         #[holder(use_place_holder)]
-        # [holder (field = certification_assignment)]
         CertificationAssignment(Box<CertificationAssignment>),
         #[holder(use_place_holder)]
-        # [holder (field = cc_design_certification)]
         CcDesignCertification(Box<CcDesignCertification>),
     }
     impl Into<CertificationAssignmentAny> for CertificationAssignment {
@@ -3853,10 +3753,8 @@ pub mod config_control_design {
     #[holder(generate_deserialize)]
     pub enum ClosedShellAny {
         #[holder(use_place_holder)]
-        # [holder (field = closed_shell)]
         ClosedShell(Box<ClosedShell>),
         #[holder(use_place_holder)]
-        # [holder (field = oriented_closed_shell)]
         OrientedClosedShell(Box<OrientedClosedShell>),
     }
     impl Into<ClosedShellAny> for ClosedShell {
@@ -3909,10 +3807,8 @@ pub mod config_control_design {
     #[holder(generate_deserialize)]
     pub enum CompositeCurveAny {
         #[holder(use_place_holder)]
-        # [holder (field = composite_curve)]
         CompositeCurve(Box<CompositeCurve>),
         #[holder(use_place_holder)]
-        # [holder (field = composite_curve_on_surface)]
         CompositeCurveOnSurface(Box<CompositeCurveOnSurfaceAny>),
     }
     impl Into<CompositeCurveAny> for CompositeCurve {
@@ -3962,10 +3858,8 @@ pub mod config_control_design {
     #[holder(generate_deserialize)]
     pub enum CompositeCurveOnSurfaceAny {
         #[holder(use_place_holder)]
-        # [holder (field = composite_curve_on_surface)]
         CompositeCurveOnSurface(Box<CompositeCurveOnSurface>),
         #[holder(use_place_holder)]
-        # [holder (field = boundary_curve)]
         BoundaryCurve(Box<BoundaryCurveAny>),
     }
     impl Into<CompositeCurveOnSurfaceAny> for CompositeCurveOnSurface {
@@ -4021,10 +3915,8 @@ pub mod config_control_design {
     #[holder(generate_deserialize)]
     pub enum CompositeCurveSegmentAny {
         #[holder(use_place_holder)]
-        # [holder (field = composite_curve_segment)]
         CompositeCurveSegment(Box<CompositeCurveSegment>),
         #[holder(use_place_holder)]
-        # [holder (field = reparametrised_composite_curve_segment)]
         ReparametrisedCompositeCurveSegment(Box<ReparametrisedCompositeCurveSegment>),
     }
     impl Into<CompositeCurveSegmentAny> for CompositeCurveSegment {
@@ -4120,19 +4012,14 @@ pub mod config_control_design {
     #[holder(generate_deserialize)]
     pub enum ConicAny {
         #[holder(use_place_holder)]
-        # [holder (field = conic)]
         Conic(Box<Conic>),
         #[holder(use_place_holder)]
-        # [holder (field = circle)]
         Circle(Box<Circle>),
         #[holder(use_place_holder)]
-        # [holder (field = ellipse)]
         Ellipse(Box<Ellipse>),
         #[holder(use_place_holder)]
-        # [holder (field = hyperbola)]
         Hyperbola(Box<Hyperbola>),
         #[holder(use_place_holder)]
-        # [holder (field = parabola)]
         Parabola(Box<Parabola>),
     }
     impl Into<ConicAny> for Conic {
@@ -4237,13 +4124,10 @@ pub mod config_control_design {
     #[holder(generate_deserialize)]
     pub enum ConnectedFaceSetAny {
         #[holder(use_place_holder)]
-        # [holder (field = connected_face_set)]
         ConnectedFaceSet(Box<ConnectedFaceSet>),
         #[holder(use_place_holder)]
-        # [holder (field = closed_shell)]
         ClosedShell(Box<ClosedShellAny>),
         #[holder(use_place_holder)]
-        # [holder (field = open_shell)]
         OpenShell(Box<OpenShellAny>),
     }
     impl Into<ConnectedFaceSetAny> for ConnectedFaceSet {
@@ -4336,10 +4220,8 @@ pub mod config_control_design {
     #[holder(generate_deserialize)]
     pub enum ContractAssignmentAny {
         #[holder(use_place_holder)]
-        # [holder (field = contract_assignment)]
         ContractAssignment(Box<ContractAssignment>),
         #[holder(use_place_holder)]
-        # [holder (field = cc_design_contract)]
         CcDesignContract(Box<CcDesignContract>),
     }
     impl Into<ContractAssignmentAny> for ContractAssignment {
@@ -4416,28 +4298,20 @@ pub mod config_control_design {
     #[holder(generate_deserialize)]
     pub enum CurveAny {
         #[holder(use_place_holder)]
-        # [holder (field = curve)]
         Curve(Box<Curve>),
         #[holder(use_place_holder)]
-        # [holder (field = bounded_curve)]
         BoundedCurve(Box<BoundedCurveAny>),
         #[holder(use_place_holder)]
-        # [holder (field = conic)]
         Conic(Box<ConicAny>),
         #[holder(use_place_holder)]
-        # [holder (field = curve_replica)]
         CurveReplica(Box<CurveReplica>),
         #[holder(use_place_holder)]
-        # [holder (field = line)]
         Line(Box<Line>),
         #[holder(use_place_holder)]
-        # [holder (field = offset_curve_3d)]
         OffsetCurve3D(Box<OffsetCurve3D>),
         #[holder(use_place_holder)]
-        # [holder (field = pcurve)]
         Pcurve(Box<PcurveAny>),
         #[holder(use_place_holder)]
-        # [holder (field = surface_curve)]
         SurfaceCurve(Box<SurfaceCurveAny>),
     }
     impl Into<CurveAny> for Curve {
@@ -4574,16 +4448,12 @@ pub mod config_control_design {
     #[holder(generate_deserialize)]
     pub enum DateAny {
         #[holder(use_place_holder)]
-        # [holder (field = date)]
         Date(Box<Date>),
         #[holder(use_place_holder)]
-        # [holder (field = calendar_date)]
         CalendarDate(Box<CalendarDate>),
         #[holder(use_place_holder)]
-        # [holder (field = ordinal_date)]
         OrdinalDate(Box<OrdinalDate>),
         #[holder(use_place_holder)]
-        # [holder (field = week_of_year_and_day_date)]
         WeekOfYearAndDayDate(Box<WeekOfYearAndDayDate>),
     }
     impl Into<DateAny> for Date {
@@ -4641,10 +4511,8 @@ pub mod config_control_design {
     #[holder(generate_deserialize)]
     pub enum DateAndTimeAssignmentAny {
         #[holder(use_place_holder)]
-        # [holder (field = date_and_time_assignment)]
         DateAndTimeAssignment(Box<DateAndTimeAssignment>),
         #[holder(use_place_holder)]
-        # [holder (field = cc_design_date_and_time_assignment)]
         CcDesignDateAndTimeAssignment(Box<CcDesignDateAndTimeAssignment>),
     }
     impl Into<DateAndTimeAssignmentAny> for DateAndTimeAssignment {
@@ -4728,10 +4596,8 @@ pub mod config_control_design {
     #[holder(generate_deserialize)]
     pub enum DegeneratePcurveAny {
         #[holder(use_place_holder)]
-        # [holder (field = degenerate_pcurve)]
         DegeneratePcurve(Box<DegeneratePcurve>),
         #[holder(use_place_holder)]
-        # [holder (field = evaluated_degenerate_pcurve)]
         EvaluatedDegeneratePcurve(Box<EvaluatedDegeneratePcurve>),
     }
     impl Into<DegeneratePcurveAny> for DegeneratePcurve {
@@ -4870,10 +4736,8 @@ pub mod config_control_design {
     #[holder(generate_deserialize)]
     pub enum DocumentAny {
         #[holder(use_place_holder)]
-        # [holder (field = document)]
         Document(Box<Document>),
         #[holder(use_place_holder)]
-        # [holder (field = document_with_class)]
         DocumentWithClass(Box<DocumentWithClass>),
     }
     impl Into<DocumentAny> for Document {
@@ -4909,10 +4773,8 @@ pub mod config_control_design {
     #[holder(generate_deserialize)]
     pub enum DocumentReferenceAny {
         #[holder(use_place_holder)]
-        # [holder (field = document_reference)]
         DocumentReference(Box<DocumentReference>),
         #[holder(use_place_holder)]
-        # [holder (field = cc_design_specification_reference)]
         CcDesignSpecificationReference(Box<CcDesignSpecificationReference>),
     }
     impl Into<DocumentReferenceAny> for DocumentReference {
@@ -5006,13 +4868,10 @@ pub mod config_control_design {
     #[holder(generate_deserialize)]
     pub enum EdgeAny {
         #[holder(use_place_holder)]
-        # [holder (field = edge)]
         Edge(Box<Edge>),
         #[holder(use_place_holder)]
-        # [holder (field = edge_curve)]
         EdgeCurve(Box<EdgeCurve>),
         #[holder(use_place_holder)]
-        # [holder (field = oriented_edge)]
         OrientedEdge(Box<OrientedEdge>),
     }
     impl Into<EdgeAny> for Edge {
@@ -5122,19 +4981,14 @@ pub mod config_control_design {
     #[holder(generate_deserialize)]
     pub enum EffectivityAny {
         #[holder(use_place_holder)]
-        # [holder (field = effectivity)]
         Effectivity(Box<Effectivity>),
         #[holder(use_place_holder)]
-        # [holder (field = dated_effectivity)]
         DatedEffectivity(Box<DatedEffectivity>),
         #[holder(use_place_holder)]
-        # [holder (field = lot_effectivity)]
         LotEffectivity(Box<LotEffectivity>),
         #[holder(use_place_holder)]
-        # [holder (field = product_definition_effectivity)]
         ProductDefinitionEffectivity(Box<ProductDefinitionEffectivityAny>),
         #[holder(use_place_holder)]
-        # [holder (field = serial_numbered_effectivity)]
         SerialNumberedEffectivity(Box<SerialNumberedEffectivity>),
     }
     impl Into<EffectivityAny> for Effectivity {
@@ -5194,22 +5048,16 @@ pub mod config_control_design {
     #[holder(generate_deserialize)]
     pub enum ElementarySurfaceAny {
         #[holder(use_place_holder)]
-        # [holder (field = elementary_surface)]
         ElementarySurface(Box<ElementarySurface>),
         #[holder(use_place_holder)]
-        # [holder (field = conical_surface)]
         ConicalSurface(Box<ConicalSurface>),
         #[holder(use_place_holder)]
-        # [holder (field = cylindrical_surface)]
         CylindricalSurface(Box<CylindricalSurface>),
         #[holder(use_place_holder)]
-        # [holder (field = plane)]
         Plane(Box<Plane>),
         #[holder(use_place_holder)]
-        # [holder (field = spherical_surface)]
         SphericalSurface(Box<SphericalSurface>),
         #[holder(use_place_holder)]
-        # [holder (field = toroidal_surface)]
         ToroidalSurface(Box<ToroidalSurfaceAny>),
     }
     impl Into<ElementarySurfaceAny> for ElementarySurface {
@@ -5331,10 +5179,8 @@ pub mod config_control_design {
     #[holder(generate_deserialize)]
     pub enum ExecutedActionAny {
         #[holder(use_place_holder)]
-        # [holder (field = executed_action)]
         ExecutedAction(Box<ExecutedAction>),
         #[holder(use_place_holder)]
-        # [holder (field = directed_action)]
         DirectedAction(Box<DirectedAction>),
     }
     impl Into<ExecutedActionAny> for ExecutedAction {
@@ -5386,13 +5232,10 @@ pub mod config_control_design {
     #[holder(generate_deserialize)]
     pub enum FaceAny {
         #[holder(use_place_holder)]
-        # [holder (field = face)]
         Face(Box<Face>),
         #[holder(use_place_holder)]
-        # [holder (field = face_surface)]
         FaceSurface(Box<FaceSurfaceAny>),
         #[holder(use_place_holder)]
-        # [holder (field = oriented_face)]
         OrientedFace(Box<OrientedFace>),
     }
     impl Into<FaceAny> for Face {
@@ -5450,10 +5293,8 @@ pub mod config_control_design {
     #[holder(generate_deserialize)]
     pub enum FaceBoundAny {
         #[holder(use_place_holder)]
-        # [holder (field = face_bound)]
         FaceBound(Box<FaceBound>),
         #[holder(use_place_holder)]
-        # [holder (field = face_outer_bound)]
         FaceOuterBound(Box<FaceOuterBound>),
     }
     impl Into<FaceBoundAny> for FaceBound {
@@ -5518,10 +5359,8 @@ pub mod config_control_design {
     #[holder(generate_deserialize)]
     pub enum FaceSurfaceAny {
         #[holder(use_place_holder)]
-        # [holder (field = face_surface)]
         FaceSurface(Box<FaceSurface>),
         #[holder(use_place_holder)]
-        # [holder (field = advanced_face)]
         AdvancedFace(Box<AdvancedFace>),
     }
     impl Into<FaceSurfaceAny> for FaceSurface {
@@ -5600,13 +5439,10 @@ pub mod config_control_design {
     #[holder(generate_deserialize)]
     pub enum FoundedItemAny {
         #[holder(use_place_holder)]
-        # [holder (field = founded_item)]
         FoundedItem(Box<FoundedItem>),
         #[holder(use_place_holder)]
-        # [holder (field = composite_curve_segment)]
         CompositeCurveSegment(Box<CompositeCurveSegmentAny>),
         #[holder(use_place_holder)]
-        # [holder (field = surface_patch)]
         SurfacePatch(Box<SurfacePatch>),
     }
     impl Into<FoundedItemAny> for FoundedItem {
@@ -5648,10 +5484,8 @@ pub mod config_control_design {
     #[holder(generate_deserialize)]
     pub enum FunctionallyDefinedTransformationAny {
         #[holder(use_place_holder)]
-        # [holder (field = functionally_defined_transformation)]
         FunctionallyDefinedTransformation(Box<FunctionallyDefinedTransformation>),
         #[holder(use_place_holder)]
-        # [holder (field = cartesian_transformation_operator)]
         CartesianTransformationOperator(Box<CartesianTransformationOperatorAny>),
     }
     impl Into<FunctionallyDefinedTransformationAny> for FunctionallyDefinedTransformation {
@@ -5727,55 +5561,38 @@ pub mod config_control_design {
     #[holder(generate_deserialize)]
     pub enum GeometricRepresentationItemAny {
         #[holder(use_place_holder)]
-        # [holder (field = geometric_representation_item)]
         GeometricRepresentationItem(Box<GeometricRepresentationItem>),
         #[holder(use_place_holder)]
-        # [holder (field = cartesian_transformation_operator)]
         CartesianTransformationOperator(Box<CartesianTransformationOperatorAny>),
         #[holder(use_place_holder)]
-        # [holder (field = curve)]
         Curve(Box<CurveAny>),
         #[holder(use_place_holder)]
-        # [holder (field = direction)]
         Direction(Box<Direction>),
         #[holder(use_place_holder)]
-        # [holder (field = edge_based_wireframe_model)]
         EdgeBasedWireframeModel(Box<EdgeBasedWireframeModel>),
         #[holder(use_place_holder)]
-        # [holder (field = edge_curve)]
         EdgeCurve(Box<EdgeCurve>),
         #[holder(use_place_holder)]
-        # [holder (field = face_surface)]
         FaceSurface(Box<FaceSurfaceAny>),
         #[holder(use_place_holder)]
-        # [holder (field = geometric_set)]
         GeometricSet(Box<GeometricSetAny>),
         #[holder(use_place_holder)]
-        # [holder (field = placement)]
         Placement(Box<PlacementAny>),
         #[holder(use_place_holder)]
-        # [holder (field = point)]
         Point(Box<PointAny>),
         #[holder(use_place_holder)]
-        # [holder (field = poly_loop)]
         PolyLoop(Box<PolyLoop>),
         #[holder(use_place_holder)]
-        # [holder (field = shell_based_surface_model)]
         ShellBasedSurfaceModel(Box<ShellBasedSurfaceModel>),
         #[holder(use_place_holder)]
-        # [holder (field = shell_based_wireframe_model)]
         ShellBasedWireframeModel(Box<ShellBasedWireframeModel>),
         #[holder(use_place_holder)]
-        # [holder (field = solid_model)]
         SolidModel(Box<SolidModelAny>),
         #[holder(use_place_holder)]
-        # [holder (field = surface)]
         Surface(Box<SurfaceAny>),
         #[holder(use_place_holder)]
-        # [holder (field = vector)]
         Vector(Box<Vector>),
         #[holder(use_place_holder)]
-        # [holder (field = vertex_point)]
         VertexPoint(Box<VertexPoint>),
     }
     impl Into<GeometricRepresentationItemAny> for GeometricRepresentationItem {
@@ -5966,10 +5783,8 @@ pub mod config_control_design {
     #[holder(generate_deserialize)]
     pub enum GeometricSetAny {
         #[holder(use_place_holder)]
-        # [holder (field = geometric_set)]
         GeometricSet(Box<GeometricSet>),
         #[holder(use_place_holder)]
-        # [holder (field = geometric_curve_set)]
         GeometricCurveSet(Box<GeometricCurveSet>),
     }
     impl Into<GeometricSetAny> for GeometricSet {
@@ -6185,16 +6000,12 @@ pub mod config_control_design {
     #[holder(generate_deserialize)]
     pub enum LoopAny {
         #[holder(use_place_holder)]
-        # [holder (field = r#loop)]
         Loop(Box<Loop>),
         #[holder(use_place_holder)]
-        # [holder (field = edge_loop)]
         EdgeLoop(Box<EdgeLoop>),
         #[holder(use_place_holder)]
-        # [holder (field = poly_loop)]
         PolyLoop(Box<PolyLoop>),
         #[holder(use_place_holder)]
-        # [holder (field = vertex_loop)]
         VertexLoop(Box<VertexLoop>),
     }
     impl Into<LoopAny> for Loop {
@@ -6276,13 +6087,10 @@ pub mod config_control_design {
     #[holder(generate_deserialize)]
     pub enum ManifoldSolidBrepAny {
         #[holder(use_place_holder)]
-        # [holder (field = manifold_solid_brep)]
         ManifoldSolidBrep(Box<ManifoldSolidBrep>),
         #[holder(use_place_holder)]
-        # [holder (field = brep_with_voids)]
         BrepWithVoids(Box<BrepWithVoids>),
         #[holder(use_place_holder)]
-        # [holder (field = faceted_brep)]
         FacetedBrep(Box<FacetedBrep>),
     }
     impl Into<ManifoldSolidBrepAny> for ManifoldSolidBrep {
@@ -6399,28 +6207,20 @@ pub mod config_control_design {
     #[holder(generate_deserialize)]
     pub enum MeasureWithUnitAny {
         #[holder(use_place_holder)]
-        # [holder (field = measure_with_unit)]
         MeasureWithUnit(Box<MeasureWithUnit>),
         #[holder(use_place_holder)]
-        # [holder (field = area_measure_with_unit)]
         AreaMeasureWithUnit(Box<AreaMeasureWithUnit>),
         #[holder(use_place_holder)]
-        # [holder (field = length_measure_with_unit)]
         LengthMeasureWithUnit(Box<LengthMeasureWithUnit>),
         #[holder(use_place_holder)]
-        # [holder (field = mass_measure_with_unit)]
         MassMeasureWithUnit(Box<MassMeasureWithUnit>),
         #[holder(use_place_holder)]
-        # [holder (field = plane_angle_measure_with_unit)]
         PlaneAngleMeasureWithUnit(Box<PlaneAngleMeasureWithUnit>),
         #[holder(use_place_holder)]
-        # [holder (field = solid_angle_measure_with_unit)]
         SolidAngleMeasureWithUnit(Box<SolidAngleMeasureWithUnit>),
         #[holder(use_place_holder)]
-        # [holder (field = uncertainty_measure_with_unit)]
         UncertaintyMeasureWithUnit(Box<UncertaintyMeasureWithUnit>),
         #[holder(use_place_holder)]
-        # [holder (field = volume_measure_with_unit)]
         VolumeMeasureWithUnit(Box<VolumeMeasureWithUnit>),
     }
     impl Into<MeasureWithUnitAny> for MeasureWithUnit {
@@ -6504,34 +6304,24 @@ pub mod config_control_design {
     #[holder(generate_deserialize)]
     pub enum NamedUnitAny {
         #[holder(use_place_holder)]
-        # [holder (field = named_unit)]
         NamedUnit(Box<NamedUnit>),
         #[holder(use_place_holder)]
-        # [holder (field = area_unit)]
         AreaUnit(Box<AreaUnit>),
         #[holder(use_place_holder)]
-        # [holder (field = context_dependent_unit)]
         ContextDependentUnit(Box<ContextDependentUnit>),
         #[holder(use_place_holder)]
-        # [holder (field = conversion_based_unit)]
         ConversionBasedUnit(Box<ConversionBasedUnit>),
         #[holder(use_place_holder)]
-        # [holder (field = length_unit)]
         LengthUnit(Box<LengthUnit>),
         #[holder(use_place_holder)]
-        # [holder (field = mass_unit)]
         MassUnit(Box<MassUnit>),
         #[holder(use_place_holder)]
-        # [holder (field = plane_angle_unit)]
         PlaneAngleUnit(Box<PlaneAngleUnit>),
         #[holder(use_place_holder)]
-        # [holder (field = si_unit)]
         SiUnit(Box<SiUnit>),
         #[holder(use_place_holder)]
-        # [holder (field = solid_angle_unit)]
         SolidAngleUnit(Box<SolidAngleUnit>),
         #[holder(use_place_holder)]
-        # [holder (field = volume_unit)]
         VolumeUnit(Box<VolumeUnit>),
     }
     impl Into<NamedUnitAny> for NamedUnit {
@@ -6673,10 +6463,8 @@ pub mod config_control_design {
     #[holder(generate_deserialize)]
     pub enum OpenShellAny {
         #[holder(use_place_holder)]
-        # [holder (field = open_shell)]
         OpenShell(Box<OpenShell>),
         #[holder(use_place_holder)]
-        # [holder (field = oriented_open_shell)]
         OrientedOpenShell(Box<OrientedOpenShell>),
     }
     impl Into<OpenShellAny> for OpenShell {
@@ -6929,13 +6717,10 @@ pub mod config_control_design {
     #[holder(generate_deserialize)]
     pub enum PathAny {
         #[holder(use_place_holder)]
-        # [holder (field = path)]
         Path(Box<Path>),
         #[holder(use_place_holder)]
-        # [holder (field = edge_loop)]
         EdgeLoop(Box<EdgeLoop>),
         #[holder(use_place_holder)]
-        # [holder (field = oriented_path)]
         OrientedPath(Box<OrientedPath>),
     }
     impl Into<PathAny> for Path {
@@ -6994,10 +6779,8 @@ pub mod config_control_design {
     #[holder(generate_deserialize)]
     pub enum PcurveAny {
         #[holder(use_place_holder)]
-        # [holder (field = pcurve)]
         Pcurve(Box<Pcurve>),
         #[holder(use_place_holder)]
-        # [holder (field = bounded_pcurve)]
         BoundedPcurve(Box<BoundedPcurve>),
     }
     impl Into<PcurveAny> for Pcurve {
@@ -7069,10 +6852,8 @@ pub mod config_control_design {
     #[holder(generate_deserialize)]
     pub enum PersonAndOrganizationAssignmentAny {
         #[holder(use_place_holder)]
-        # [holder (field = person_and_organization_assignment)]
         PersonAndOrganizationAssignment(Box<PersonAndOrganizationAssignment>),
         #[holder(use_place_holder)]
-        # [holder (field = cc_design_person_and_organization_assignment)]
         CcDesignPersonAndOrganizationAssignment(Box<CcDesignPersonAndOrganizationAssignment>),
     }
     impl Into<PersonAndOrganizationAssignmentAny> for PersonAndOrganizationAssignment {
@@ -7146,16 +6927,12 @@ pub mod config_control_design {
     #[holder(generate_deserialize)]
     pub enum PlacementAny {
         #[holder(use_place_holder)]
-        # [holder (field = placement)]
         Placement(Box<Placement>),
         #[holder(use_place_holder)]
-        # [holder (field = axis1_placement)]
         Axis1Placement(Box<Axis1Placement>),
         #[holder(use_place_holder)]
-        # [holder (field = axis2_placement_2d)]
         Axis2Placement2D(Box<Axis2Placement2D>),
         #[holder(use_place_holder)]
-        # [holder (field = axis2_placement_3d)]
         Axis2Placement3D(Box<Axis2Placement3D>),
     }
     impl Into<PlacementAny> for Placement {
@@ -7263,22 +7040,16 @@ pub mod config_control_design {
     #[holder(generate_deserialize)]
     pub enum PointAny {
         #[holder(use_place_holder)]
-        # [holder (field = point)]
         Point(Box<Point>),
         #[holder(use_place_holder)]
-        # [holder (field = cartesian_point)]
         CartesianPoint(Box<CartesianPoint>),
         #[holder(use_place_holder)]
-        # [holder (field = degenerate_pcurve)]
         DegeneratePcurve(Box<DegeneratePcurveAny>),
         #[holder(use_place_holder)]
-        # [holder (field = point_on_curve)]
         PointOnCurve(Box<PointOnCurve>),
         #[holder(use_place_holder)]
-        # [holder (field = point_on_surface)]
         PointOnSurface(Box<PointOnSurface>),
         #[holder(use_place_holder)]
-        # [holder (field = point_replica)]
         PointReplica(Box<PointReplica>),
     }
     impl Into<PointAny> for Point {
@@ -7452,10 +7223,8 @@ pub mod config_control_design {
     #[holder(generate_deserialize)]
     pub enum ProductCategoryAny {
         #[holder(use_place_holder)]
-        # [holder (field = product_category)]
         ProductCategory(Box<ProductCategory>),
         #[holder(use_place_holder)]
-        # [holder (field = product_related_product_category)]
         ProductRelatedProductCategory(Box<ProductRelatedProductCategory>),
     }
     impl Into<ProductCategoryAny> for ProductCategory {
@@ -7541,10 +7310,8 @@ pub mod config_control_design {
     #[holder(generate_deserialize)]
     pub enum ProductContextAny {
         #[holder(use_place_holder)]
-        # [holder (field = product_context)]
         ProductContext(Box<ProductContext>),
         #[holder(use_place_holder)]
-        # [holder (field = mechanical_context)]
         MechanicalContext(Box<MechanicalContext>),
     }
     impl Into<ProductContextAny> for ProductContext {
@@ -7594,10 +7361,8 @@ pub mod config_control_design {
     #[holder(generate_deserialize)]
     pub enum ProductDefinitionAny {
         #[holder(use_place_holder)]
-        # [holder (field = product_definition)]
         ProductDefinition(Box<ProductDefinition>),
         #[holder(use_place_holder)]
-        # [holder (field = product_definition_with_associated_documents)]
         ProductDefinitionWithAssociatedDocuments(Box<ProductDefinitionWithAssociatedDocuments>),
     }
     impl Into<ProductDefinitionAny> for ProductDefinition {
@@ -7639,10 +7404,8 @@ pub mod config_control_design {
     #[holder(generate_deserialize)]
     pub enum ProductDefinitionContextAny {
         #[holder(use_place_holder)]
-        # [holder (field = product_definition_context)]
         ProductDefinitionContext(Box<ProductDefinitionContext>),
         #[holder(use_place_holder)]
-        # [holder (field = design_context)]
         DesignContext(Box<DesignContext>),
     }
     impl Into<ProductDefinitionContextAny> for ProductDefinitionContext {
@@ -7696,10 +7459,8 @@ pub mod config_control_design {
     #[holder(generate_deserialize)]
     pub enum ProductDefinitionEffectivityAny {
         #[holder(use_place_holder)]
-        # [holder (field = product_definition_effectivity)]
         ProductDefinitionEffectivity(Box<ProductDefinitionEffectivity>),
         #[holder(use_place_holder)]
-        # [holder (field = configuration_effectivity)]
         ConfigurationEffectivity(Box<ConfigurationEffectivity>),
     }
     impl Into<ProductDefinitionEffectivityAny> for ProductDefinitionEffectivity {
@@ -7749,10 +7510,8 @@ pub mod config_control_design {
     #[holder(generate_deserialize)]
     pub enum ProductDefinitionFormationAny {
         #[holder(use_place_holder)]
-        # [holder (field = product_definition_formation)]
         ProductDefinitionFormation(Box<ProductDefinitionFormation>),
         #[holder(use_place_holder)]
-        # [holder (field = product_definition_formation_with_specified_source)]
         ProductDefinitionFormationWithSpecifiedSource(
             Box<ProductDefinitionFormationWithSpecifiedSource>,
         ),
@@ -7815,16 +7574,12 @@ pub mod config_control_design {
     #[holder(generate_deserialize)]
     pub enum ProductDefinitionRelationshipAny {
         #[holder(use_place_holder)]
-        # [holder (field = product_definition_relationship)]
         ProductDefinitionRelationship(Box<ProductDefinitionRelationship>),
         #[holder(use_place_holder)]
-        # [holder (field = design_make_from_relationship)]
         DesignMakeFromRelationship(Box<DesignMakeFromRelationship>),
         #[holder(use_place_holder)]
-        # [holder (field = product_definition_usage)]
         ProductDefinitionUsage(Box<ProductDefinitionUsageAny>),
         #[holder(use_place_holder)]
-        # [holder (field = supplied_part_relationship)]
         SuppliedPartRelationship(Box<SuppliedPartRelationship>),
     }
     impl Into<ProductDefinitionRelationshipAny> for ProductDefinitionRelationship {
@@ -7890,10 +7645,8 @@ pub mod config_control_design {
     #[holder(generate_deserialize)]
     pub enum ProductDefinitionUsageAny {
         #[holder(use_place_holder)]
-        # [holder (field = product_definition_usage)]
         ProductDefinitionUsage(Box<ProductDefinitionUsage>),
         #[holder(use_place_holder)]
-        # [holder (field = assembly_component_usage)]
         AssemblyComponentUsage(Box<AssemblyComponentUsageAny>),
     }
     impl Into<ProductDefinitionUsageAny> for ProductDefinitionUsage {
@@ -7989,10 +7742,8 @@ pub mod config_control_design {
     #[holder(generate_deserialize)]
     pub enum PropertyDefinitionAny {
         #[holder(use_place_holder)]
-        # [holder (field = property_definition)]
         PropertyDefinition(Box<PropertyDefinition>),
         #[holder(use_place_holder)]
-        # [holder (field = product_definition_shape)]
         ProductDefinitionShape(Box<ProductDefinitionShape>),
     }
     impl Into<PropertyDefinitionAny> for PropertyDefinition {
@@ -8028,10 +7779,8 @@ pub mod config_control_design {
     #[holder(generate_deserialize)]
     pub enum PropertyDefinitionRepresentationAny {
         #[holder(use_place_holder)]
-        # [holder (field = property_definition_representation)]
         PropertyDefinitionRepresentation(Box<PropertyDefinitionRepresentation>),
         #[holder(use_place_holder)]
-        # [holder (field = shape_definition_representation)]
         ShapeDefinitionRepresentation(Box<ShapeDefinitionRepresentation>),
     }
     impl Into<PropertyDefinitionRepresentationAny> for PropertyDefinitionRepresentation {
@@ -8207,13 +7956,10 @@ pub mod config_control_design {
     #[holder(generate_deserialize)]
     pub enum RepresentationAny {
         #[holder(use_place_holder)]
-        # [holder (field = representation)]
         Representation(Box<Representation>),
         #[holder(use_place_holder)]
-        # [holder (field = definitional_representation)]
         DefinitionalRepresentation(Box<DefinitionalRepresentation>),
         #[holder(use_place_holder)]
-        # [holder (field = shape_representation)]
         ShapeRepresentation(Box<ShapeRepresentationAny>),
     }
     impl Into<RepresentationAny> for Representation {
@@ -8255,19 +8001,14 @@ pub mod config_control_design {
     #[holder(generate_deserialize)]
     pub enum RepresentationContextAny {
         #[holder(use_place_holder)]
-        # [holder (field = representation_context)]
         RepresentationContext(Box<RepresentationContext>),
         #[holder(use_place_holder)]
-        # [holder (field = geometric_representation_context)]
         GeometricRepresentationContext(Box<GeometricRepresentationContext>),
         #[holder(use_place_holder)]
-        # [holder (field = global_uncertainty_assigned_context)]
         GlobalUncertaintyAssignedContext(Box<GlobalUncertaintyAssignedContext>),
         #[holder(use_place_holder)]
-        # [holder (field = global_unit_assigned_context)]
         GlobalUnitAssignedContext(Box<GlobalUnitAssignedContext>),
         #[holder(use_place_holder)]
-        # [holder (field = parametric_representation_context)]
         ParametricRepresentationContext(Box<ParametricRepresentationContext>),
     }
     impl Into<RepresentationContextAny> for RepresentationContext {
@@ -8319,16 +8060,12 @@ pub mod config_control_design {
     #[holder(generate_deserialize)]
     pub enum RepresentationItemAny {
         #[holder(use_place_holder)]
-        # [holder (field = representation_item)]
         RepresentationItem(Box<RepresentationItem>),
         #[holder(use_place_holder)]
-        # [holder (field = geometric_representation_item)]
         GeometricRepresentationItem(Box<GeometricRepresentationItemAny>),
         #[holder(use_place_holder)]
-        # [holder (field = mapped_item)]
         MappedItem(Box<MappedItem>),
         #[holder(use_place_holder)]
-        # [holder (field = topological_representation_item)]
         TopologicalRepresentationItem(Box<TopologicalRepresentationItemAny>),
     }
     impl Into<RepresentationItemAny> for RepresentationItem {
@@ -8390,15 +8127,12 @@ pub mod config_control_design {
     #[holder(generate_deserialize)]
     pub enum RepresentationRelationshipAny {
         #[holder(use_place_holder)]
-        # [holder (field = representation_relationship)]
         RepresentationRelationship(Box<RepresentationRelationship>),
         #[holder(use_place_holder)]
-        # [holder (field = representation_relationship_with_transformation)]
         RepresentationRelationshipWithTransformation(
             Box<RepresentationRelationshipWithTransformation>,
         ),
         #[holder(use_place_holder)]
-        # [holder (field = shape_representation_relationship)]
         ShapeRepresentationRelationship(Box<ShapeRepresentationRelationship>),
     }
     impl Into<RepresentationRelationshipAny> for RepresentationRelationship {
@@ -8484,10 +8218,8 @@ pub mod config_control_design {
     #[holder(generate_deserialize)]
     pub enum SecurityClassificationAssignmentAny {
         #[holder(use_place_holder)]
-        # [holder (field = security_classification_assignment)]
         SecurityClassificationAssignment(Box<SecurityClassificationAssignment>),
         #[holder(use_place_holder)]
-        # [holder (field = cc_design_security_classification)]
         CcDesignSecurityClassification(Box<CcDesignSecurityClassification>),
     }
     impl Into<SecurityClassificationAssignmentAny> for SecurityClassificationAssignment {
@@ -8600,32 +8332,24 @@ pub mod config_control_design {
     #[holder(generate_deserialize)]
     pub enum ShapeRepresentationAny {
         #[holder(use_place_holder)]
-        # [holder (field = shape_representation)]
         ShapeRepresentation(Box<ShapeRepresentation>),
         #[holder(use_place_holder)]
-        # [holder (field = advanced_brep_shape_representation)]
         AdvancedBrepShapeRepresentation(Box<AdvancedBrepShapeRepresentation>),
         #[holder(use_place_holder)]
-        # [holder (field = edge_based_wireframe_shape_representation)]
         EdgeBasedWireframeShapeRepresentation(Box<EdgeBasedWireframeShapeRepresentation>),
         #[holder(use_place_holder)]
-        # [holder (field = faceted_brep_shape_representation)]
         FacetedBrepShapeRepresentation(Box<FacetedBrepShapeRepresentation>),
         #[holder(use_place_holder)]
-        # [holder (field = geometrically_bounded_surface_shape_representation)]
         GeometricallyBoundedSurfaceShapeRepresentation(
             Box<GeometricallyBoundedSurfaceShapeRepresentation>,
         ),
         #[holder(use_place_holder)]
-        # [holder (field = geometrically_bounded_wireframe_shape_representation)]
         GeometricallyBoundedWireframeShapeRepresentation(
             Box<GeometricallyBoundedWireframeShapeRepresentation>,
         ),
         #[holder(use_place_holder)]
-        # [holder (field = manifold_surface_shape_representation)]
         ManifoldSurfaceShapeRepresentation(Box<ManifoldSurfaceShapeRepresentation>),
         #[holder(use_place_holder)]
-        # [holder (field = shell_based_wireframe_shape_representation)]
         ShellBasedWireframeShapeRepresentation(Box<ShellBasedWireframeShapeRepresentation>),
     }
     impl Into<ShapeRepresentationAny> for ShapeRepresentation {
@@ -8843,10 +8567,8 @@ pub mod config_control_design {
     #[holder(generate_deserialize)]
     pub enum SolidModelAny {
         #[holder(use_place_holder)]
-        # [holder (field = solid_model)]
         SolidModel(Box<SolidModel>),
         #[holder(use_place_holder)]
-        # [holder (field = manifold_solid_brep)]
         ManifoldSolidBrep(Box<ManifoldSolidBrepAny>),
     }
     impl Into<SolidModelAny> for SolidModel {
@@ -8976,22 +8698,16 @@ pub mod config_control_design {
     #[holder(generate_deserialize)]
     pub enum SurfaceAny {
         #[holder(use_place_holder)]
-        # [holder (field = surface)]
         Surface(Box<Surface>),
         #[holder(use_place_holder)]
-        # [holder (field = bounded_surface)]
         BoundedSurface(Box<BoundedSurfaceAny>),
         #[holder(use_place_holder)]
-        # [holder (field = elementary_surface)]
         ElementarySurface(Box<ElementarySurfaceAny>),
         #[holder(use_place_holder)]
-        # [holder (field = offset_surface)]
         OffsetSurface(Box<OffsetSurface>),
         #[holder(use_place_holder)]
-        # [holder (field = surface_replica)]
         SurfaceReplica(Box<SurfaceReplica>),
         #[holder(use_place_holder)]
-        # [holder (field = swept_surface)]
         SweptSurface(Box<SweptSurfaceAny>),
     }
     impl Into<SurfaceAny> for Surface {
@@ -9072,16 +8788,12 @@ pub mod config_control_design {
     #[holder(generate_deserialize)]
     pub enum SurfaceCurveAny {
         #[holder(use_place_holder)]
-        # [holder (field = surface_curve)]
         SurfaceCurve(Box<SurfaceCurve>),
         #[holder(use_place_holder)]
-        # [holder (field = bounded_surface_curve)]
         BoundedSurfaceCurve(Box<BoundedSurfaceCurve>),
         #[holder(use_place_holder)]
-        # [holder (field = intersection_curve)]
         IntersectionCurve(Box<IntersectionCurve>),
         #[holder(use_place_holder)]
-        # [holder (field = seam_curve)]
         SeamCurve(Box<SeamCurve>),
     }
     impl Into<SurfaceCurveAny> for SurfaceCurve {
@@ -9219,13 +8931,10 @@ pub mod config_control_design {
     #[holder(generate_deserialize)]
     pub enum SweptSurfaceAny {
         #[holder(use_place_holder)]
-        # [holder (field = swept_surface)]
         SweptSurface(Box<SweptSurface>),
         #[holder(use_place_holder)]
-        # [holder (field = surface_of_linear_extrusion)]
         SurfaceOfLinearExtrusion(Box<SurfaceOfLinearExtrusion>),
         #[holder(use_place_holder)]
-        # [holder (field = surface_of_revolution)]
         SurfaceOfRevolution(Box<SurfaceOfRevolution>),
     }
     impl Into<SweptSurfaceAny> for SweptSurface {
@@ -9284,37 +8993,26 @@ pub mod config_control_design {
     #[holder(generate_deserialize)]
     pub enum TopologicalRepresentationItemAny {
         #[holder(use_place_holder)]
-        # [holder (field = topological_representation_item)]
         TopologicalRepresentationItem(Box<TopologicalRepresentationItem>),
         #[holder(use_place_holder)]
-        # [holder (field = connected_edge_set)]
         ConnectedEdgeSet(Box<ConnectedEdgeSet>),
         #[holder(use_place_holder)]
-        # [holder (field = connected_face_set)]
         ConnectedFaceSet(Box<ConnectedFaceSetAny>),
         #[holder(use_place_holder)]
-        # [holder (field = edge)]
         Edge(Box<EdgeAny>),
         #[holder(use_place_holder)]
-        # [holder (field = face)]
         Face(Box<FaceAny>),
         #[holder(use_place_holder)]
-        # [holder (field = face_bound)]
         FaceBound(Box<FaceBoundAny>),
         #[holder(use_place_holder)]
-        # [holder (field = r#loop)]
         Loop(Box<LoopAny>),
         #[holder(use_place_holder)]
-        # [holder (field = path)]
         Path(Box<PathAny>),
         #[holder(use_place_holder)]
-        # [holder (field = vertex)]
         Vertex(Box<VertexAny>),
         #[holder(use_place_holder)]
-        # [holder (field = vertex_shell)]
         VertexShell(Box<VertexShell>),
         #[holder(use_place_holder)]
-        # [holder (field = wire_shell)]
         WireShell(Box<WireShell>),
     }
     impl Into<TopologicalRepresentationItemAny> for TopologicalRepresentationItem {
@@ -9451,10 +9149,8 @@ pub mod config_control_design {
     #[holder(generate_deserialize)]
     pub enum ToroidalSurfaceAny {
         #[holder(use_place_holder)]
-        # [holder (field = toroidal_surface)]
         ToroidalSurface(Box<ToroidalSurface>),
         #[holder(use_place_holder)]
-        # [holder (field = degenerate_toroidal_surface)]
         DegenerateToroidalSurface(Box<DegenerateToroidalSurface>),
     }
     impl Into<ToroidalSurfaceAny> for ToroidalSurface {
@@ -9606,10 +9302,8 @@ pub mod config_control_design {
     #[holder(generate_deserialize)]
     pub enum VertexAny {
         #[holder(use_place_holder)]
-        # [holder (field = vertex)]
         Vertex(Box<Vertex>),
         #[holder(use_place_holder)]
-        # [holder (field = vertex_point)]
         VertexPoint(Box<VertexPoint>),
     }
     impl Into<VertexAny> for Vertex {

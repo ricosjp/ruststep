@@ -118,7 +118,6 @@ impl Entity {
             pub enum #any {
                 #(
                 #[holder(use_place_holder)]
-                #[holder(field = #fields)]
                 #variants(Box<#constraints>)
                 ),*
             }

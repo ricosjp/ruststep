@@ -99,7 +99,6 @@ impl ToTokens for Select {
         let id = format_ident!("{}", &self.id.to_pascal_case());
         let mut entries = Vec::new();
         let mut entry_types = Vec::new();
-        let mut field = Vec::new();
         let mut use_place_holder = Vec::new();
         for ty in &self.types {
             match ty {
@@ -109,18 +108,14 @@ impl ToTokens for Select {
                     entries.push(format_ident!("{}", name.to_pascal_case()));
                     if *is_supertype {
                         entry_types.push(quote! { #ty });
-                        field.push(quote! {});
                     } else {
                         entry_types.push(quote! { Box<#ty> });
-                        let field_name = format_ident!("{}", name);
-                        field.push(quote! { #[holder(field = #field_name)] })
                     }
                     use_place_holder.push(quote! { #[holder(use_place_holder)] });
                 }
                 TypeRef::Named {
                     name, is_enumerate, ..
                 } => {
-                    field.push(quote! {});
                     entries.push(format_ident!("{}", name.to_pascal_case()));
                     if *is_enumerate {
                         entry_types.push(quote! { #ty });
@@ -139,7 +134,6 @@ impl ToTokens for Select {
             #[holder(generate_deserialize)]
             pub enum #id {
                 #(
-                #field
                 #use_place_holder
                 #entries(#entry_types)
                 ),*
