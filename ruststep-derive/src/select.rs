@@ -16,6 +16,7 @@ struct Input {
     variant_into_exprs: Vec<TokenStream2>,
     holder_types: Vec<syn::Type>,
     holder_exprs: Vec<TokenStream2>,
+    place_holders: Vec<bool>,
 }
 
 impl Input {
@@ -37,8 +38,10 @@ impl Input {
         let mut holder_types = Vec::new();
         let mut variant_exprs = Vec::new();
         let mut variant_into_exprs = Vec::new();
+        let mut place_holders = Vec::new();
         for var in &e.variants {
             let HolderAttr { place_holder, .. } = HolderAttr::parse(&var.attrs);
+            place_holders.push(place_holder);
 
             assert_eq!(var.fields.len(), 1);
             for f in &var.fields {
@@ -81,6 +84,7 @@ impl Input {
             variant_into_exprs,
             holder_types,
             holder_exprs,
+            place_holders,
         }
     }
 
@@ -214,18 +218,28 @@ impl Input {
             holder_types,
             table,
             variant_into_exprs,
+            place_holders,
             ..
         } = self;
         let ruststep = ruststep_crate();
         let itertools = itertools_crate();
         let mut vars = Vec::new();
-        let mut exprs = Vec::new();
         let mut holders = Vec::<syn::Type>::new();
-        for ((var, holder), expr) in variants.iter().zip(holder_types).zip(variant_into_exprs) {
-            if let FieldType::Boxed(path) = holder.clone().try_into().unwrap() {
+        let mut exprs = Vec::new();
+        for (((var, holder), expr), place_holder) in variants
+            .iter()
+            .zip(holder_types)
+            .zip(variant_into_exprs)
+            .zip(place_holders)
+        {
+            if *place_holder {
                 vars.push(var);
-                holders.push(path.as_ref().clone().into());
                 exprs.push(expr);
+                if let FieldType::Boxed(path) = holder.clone().try_into().unwrap() {
+                    holders.push(path.as_ref().clone().into());
+                } else {
+                    holders.push(holder.clone());
+                }
             }
         }
 

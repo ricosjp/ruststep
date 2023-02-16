@@ -19,6 +19,7 @@ In addition to original Keep-a-Changelog, we use following rules:
 
 ### Changed
 - Remove `field` attr from enumerations.
+- Recursive `get_owned` for select type without boxed variant.
 
 ### Fixed
 - Deseialize `Option::Some`.
