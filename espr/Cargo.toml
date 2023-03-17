@@ -18,7 +18,7 @@ categories    = ["science", "development-tools"]
 nom = "7.1.1"
 
 # For Rust code generation
-syn = "1.0.91"
+syn = "2.0.0"
 quote = "1.0.17"
 proc-macro2 = "1.0.37"
 
