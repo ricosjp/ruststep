@@ -15,17 +15,18 @@ In addition to original Keep-a-Changelog, we use following rules:
 ## Unreleased
 
 ### Added
-- Deserialize `LOGICAL` and `BOOLEAN` by `.T.`, `.F.`, and `.U.` notations.
+- Deserialize `LOGICAL` and `BOOLEAN` by `.T.`, `.F.`, and `.U.` notations. https://github.com/ricosjp/ruststep/pull/231
 
 ### Changed
-- Remove `field` attr from enumerations.
-- Recursive `get_owned` for select type without boxed variant.
+- Remove `field` attr from enumerations. https://github.com/ricosjp/ruststep/pull/233
+- Recursive `get_owned` for select type without boxed variant. https://github.com/ricosjp/ruststep/pull/234
 
 ### Fixed
-- Deseialize `Option::Some`.
-- Recursive implementation of `ruststep::tables::EntityTable::{get_owned, owned_iter}` for select types.
+- Deseialize `Option::Some`. https://github.com/ricosjp/ruststep/pull/232
+- Recursive implementation of `ruststep::tables::EntityTable::{get_owned, owned_iter}` for select types. https://github.com/ricosjp/ruststep/pull/230
 
 ### Internal
+- `cargo upgrade --workspace` https://github.com/ricosjp/ruststep/pull/240
 
 ## 0.3.0 - 2022-06-14
 
