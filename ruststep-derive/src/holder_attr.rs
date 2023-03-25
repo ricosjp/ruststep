@@ -25,7 +25,7 @@ impl HolderAttr {
 
         for attr in attrs {
             // Only read `#[holder(...)]`
-            if let Some(ident) = attr.path.get_ident() {
+            if let Some(ident) = attr.meta.path().get_ident() {
                 if ident != "holder" {
                     continue;
                 }

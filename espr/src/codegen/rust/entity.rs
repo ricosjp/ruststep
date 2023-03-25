@@ -34,7 +34,7 @@ impl From<EntityAttribute> for Field {
     fn from(attr: EntityAttribute) -> Self {
         let EntityAttribute { name, ty, optional } = attr;
 
-        let name = format_ident!("{}", name.to_safe());
+        let name = format_ident!("{}", name.into_safe());
         let attributes = if use_place_holder(&ty) {
             vec![parse_quote! { #[holder(use_place_holder)] }]
         } else {
@@ -83,14 +83,14 @@ impl Entity {
 
     /// Field identifier
     fn field_ident(&self) -> syn::Ident {
-        format_ident!("{}", self.name.to_safe())
+        format_ident!("{}", self.name.as_str().into_safe())
     }
 
     /// Generate declaration of `XxxAny` enum
     fn generate_any_enum(&self, tokens: &mut TokenStream) {
         let any = self.any_ident();
 
-        let mut fields = vec![format_ident!("{}", self.name.to_safe())];
+        let mut fields = vec![format_ident!("{}", self.name.as_str().into_safe())];
         let mut variants = vec![format_ident!("{}", self.name.to_pascal_case())];
         let mut constraints = vec![format_ident!("{}", self.name.to_pascal_case())];
 
@@ -99,7 +99,7 @@ impl Entity {
                 TypeRef::Entity {
                     name, is_supertype, ..
                 } => {
-                    fields.push(format_ident!("{}", name.to_safe()));
+                    fields.push(format_ident!("{}", name.as_str().into_safe()));
                     variants.push(format_ident!("{}", name.to_pascal_case()));
                     if *is_supertype {
                         constraints.push(format_ident!("{}Any", name.to_pascal_case()));
@@ -216,7 +216,10 @@ impl Entity {
                 let (name, ty) = match ty {
                     TypeRef::Named { name, .. } | TypeRef::Entity { name, .. } => {
                         let ty = format_ident!("{}", name.to_pascal_case());
-                        (format_ident!("{}", name.to_safe()), parse_quote! { #ty })
+                        (
+                            format_ident!("{}", name.as_str().into_safe()),
+                            parse_quote! { #ty },
+                        )
                     }
                     _ => unreachable!(),
                 };
