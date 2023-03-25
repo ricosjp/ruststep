@@ -51,11 +51,11 @@ impl Schema {
             .collect();
         let holder_name: Vec<_> = entities
             .iter()
-            .map(|e| format_ident!("{}", e.name.to_safe()))
+            .map(|e| format_ident!("{}", e.name.as_str().into_safe()))
             .chain(
                 type_decls
                     .clone()
-                    .map(|e| format_ident!("{}", e.id().to_safe())),
+                    .map(|e| format_ident!("{}", e.id().into_safe())),
             )
             .collect();
         let holders_name: Vec<_> = entities

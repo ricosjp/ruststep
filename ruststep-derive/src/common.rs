@@ -52,7 +52,7 @@ pub fn ruststep_crate() -> syn::Path {
                     arguments: syn::PathArguments::None,
                 });
                 syn::Path {
-                    leading_colon: Some(syn::token::Colon2::default()),
+                    leading_colon: Some(syn::token::PathSep::default()),
                     segments,
                 }
             }
@@ -75,7 +75,7 @@ pub fn ruststep_crate() -> syn::Path {
                 arguments: syn::PathArguments::None,
             });
             syn::Path {
-                leading_colon: Some(syn::token::Colon2::default()),
+                leading_colon: Some(syn::token::PathSep::default()),
                 segments,
             }
         }
