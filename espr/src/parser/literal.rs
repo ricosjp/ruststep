@@ -17,11 +17,15 @@ pub fn literal(input: &str) -> ParseResult<Literal> {
 
 /// 255 logical_literal = `FALSE` | `TRUE` | `UNKNOWN` .
 pub fn logical_literal(input: &str) -> ParseResult<Logical> {
-    alt((
-        value(Logical::True, tag("TRUE")),
-        value(Logical::False, tag("FALSE")),
-        value(Logical::Unknown, tag("UNKNOWN")),
+    tuple((
+        alt((
+            value(Logical::True, tag("TRUE")),
+            value(Logical::False, tag("FALSE")),
+            value(Logical::Unknown, tag("UNKNOWN")),
+        )),
+        peek(not(remarked(nom::character::complete::alpha1))),
     ))
+    .map(|(logical, _non_alpha)| logical)
     .parse(input)
 }
 
