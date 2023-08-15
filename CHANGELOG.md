@@ -15,22 +15,28 @@ In addition to original Keep-a-Changelog, we use following rules:
 ## Unreleased
 
 ### Added
+
 - Deserialize `LOGICAL` and `BOOLEAN` by `.T.`, `.F.`, and `.U.` notations. https://github.com/ricosjp/ruststep/pull/231
 
 ### Changed
+
 - Remove `field` attr from enumerations. https://github.com/ricosjp/ruststep/pull/233
 - Recursive `get_owned` for select type without boxed variant. https://github.com/ricosjp/ruststep/pull/234
 
 ### Fixed
+
+- Fixed bug in logical_listeral parser #244
 - Deseialize `Option::Some`. https://github.com/ricosjp/ruststep/pull/232
 - Recursive implementation of `ruststep::tables::EntityTable::{get_owned, owned_iter}` for select types. https://github.com/ricosjp/ruststep/pull/230
 
 ### Internal
+
 - `cargo upgrade --workspace` https://github.com/ricosjp/ruststep/pull/240
 
 ## 0.3.0 - 2022-06-14
 
 ### Added
+
 - Deserialize Record as a struct https://github.com/ricosjp/ruststep/pull/228
 - Add `ruststep::ast::SubSuperRecord` https://github.com/ricosjp/ruststep/pull/225
 - Document and tests for serde mapping in ruststep::ast::de https://github.com/ricosjp/ruststep/pull/220
@@ -42,13 +48,16 @@ In addition to original Keep-a-Changelog, we use following rules:
 - Partial complex entities described in ISO-10303-11 Annex B https://github.com/ricosjp/ruststep/pull/200
 
 ### Changed
+
 - `ruststep::ast::RValue` is renamed to `Name` https://github.com/ricosjp/ruststep/pull/219
 - `ruststep::place_holder` is integrated into `ruststep::tables` https://github.com/ricosjp/ruststep/pull/216
 
 ### Fixed
+
 - `SUBTYPE_CONSTRAINT` cannot parse supertype-constraint like `ONEOF` https://github.com/ricosjp/ruststep/pull/205
 
 ### Internal
+
 - Document for internal mapping https://github.com/ricosjp/ruststep/pull/226
 - Reconstruct documents of ast::de https://github.com/ricosjp/ruststep/pull/229
 - Do not use RecordDeserializer for Name https://github.com/ricosjp/ruststep/pull/224
@@ -60,6 +69,7 @@ In addition to original Keep-a-Changelog, we use following rules:
 ## 0.2.0 - 2022-02-17
 
 ### Added
+
 - Re-expose serde and itertools from ruststep https://github.com/ricosjp/ruststep/pull/199
 - Add the module created from AP203. https://github.com/ricosjp/ruststep/pull/185
 - Implement `AsRef` and `AsMut` for `XXAny`. https://github.com/ricosjp/ruststep/pull/180
@@ -78,8 +88,9 @@ In addition to original Keep-a-Changelog, we use following rules:
 - impl `FromStr` for `Record` and `DataSection` https://github.com/ricosjp/ruststep/pull/140
 
 ### Changed
+
 - Generate Holder struct for TYPE declaration with simple type. https://github.com/ricosjp/ruststep/pull/186
-- Replace the methods `xxx_iter` of `Tables` with `xxx_holder`.  https://github.com/ricosjp/ruststep/pull/187
+- Replace the methods `xxx_iter` of `Tables` with `xxx_holder`. https://github.com/ricosjp/ruststep/pull/187
 - Cut out `IntoOwned` trait from `Holder`. https://github.com/ricosjp/ruststep/pull/183
 - Translates `TYPE` declarations in EXPRESS to Rust tuple struct https://github.com/ricosjp/ruststep/pull/144
 - Visitor struct and all fields in Holder struct become public https://github.com/ricosjp/ruststep/pull/160
@@ -88,6 +99,7 @@ In addition to original Keep-a-Changelog, we use following rules:
 - Use Rust 2021 edition https://github.com/ricosjp/ruststep/pull/128
 
 ### Fixed
+
 - Incorrect `GENERIC` type handling https://github.com/ricosjp/ruststep/pull/198
 - Subtype-Supertype dependency graph generation fixed https://github.com/ricosjp/ruststep/pull/161
 - Supertype field is not included in subtypes type https://github.com/ricosjp/ruststep/pull/166
@@ -95,6 +107,7 @@ In addition to original Keep-a-Changelog, we use following rules:
 - Use raw identifier `r#` for reserved words. https://github.com/ricosjp/ruststep/pull/172
 
 ### Internal
+
 - impl `SeqDeserializer::size_hint` https://github.com/ricosjp/ruststep/pull/197
 - Replace `SeqDeserializer` https://github.com/ricosjp/ruststep/pull/194
 - Use `Record` struct in `Parameter::Typed` https://github.com/ricosjp/ruststep/pull/192
