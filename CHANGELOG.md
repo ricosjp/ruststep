@@ -25,7 +25,7 @@ In addition to original Keep-a-Changelog, we use following rules:
 
 ### Fixed
 
-- Fixed bug in logical_listeral parser #244
+- Fixed bug in logical_listeral parser. https://github.com/ricosjp/ruststep/pull/244
 - Deseialize `Option::Some`. https://github.com/ricosjp/ruststep/pull/232
 - Recursive implementation of `ruststep::tables::EntityTable::{get_owned, owned_iter}` for select types. https://github.com/ricosjp/ruststep/pull/230
 
