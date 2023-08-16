@@ -129,6 +129,13 @@ pub fn not<'a>(f: impl EsprParser<'a, &'a str>) -> impl EsprParser<'a, &'a str> 
     }
 }
 
+pub fn peek<'a>(f: impl EsprParser<'a, &'a str>) -> impl EsprParser<'a, &'a str> {
+    move |input: &'a str| {
+        let (input, _) = nom::combinator::peek(f.clone())(input)?;
+        Ok((input, ("", Vec::new())))
+    }
+}
+
 pub fn char<'a>(c: char) -> impl EsprParser<'a, char> {
     move |input| {
         let (input, c) = nom::character::complete::char(c)(input)?;
