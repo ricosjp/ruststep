@@ -1,0 +1,155 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Intermediate Representation ([IR]) legalized (semantically analyzed) from [SyntaxTree]"><meta name="keywords" content="rust, rustlang, rust-lang, ir"><title>espr::ir - Rust</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../../espr/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a><h2 class="location">Module ir</h2><div class="sidebar-elems"><div class="block items"><ul><li><a href="#structs">Structs</a></li><li><a href="#enums">Enums</a></li><li><a href="#traits">Traits</a></li><li><a href="#functions">Functions</a></li></ul></div><div id="sidebar-vars" data-name="ir" data-ty="mod" data-relpath="./"></div><script defer src="./sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../../wheel.svg"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="in-band">Module <a href="../index.html">espr</a>::<wbr><a class="mod" href="#">ir</a><button id="copy-path" onclick="copy_path(this)" title="Copy item path to clipboard"><img src="../../clipboard.svg" width="19" height="18" alt="Copy item path"></button></span><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../../src/espr/ir/mod.rs.html#1-245" title="goto source code">[src]</a></span></h1><details class="rustdoc-toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>Intermediate Representation (<a href="struct.IR.html" title="IR">IR</a>) legalized (semantically analyzed) from <a href="../ast/struct.SyntaxTree.html" title="SyntaxTree">SyntaxTree</a></p>
+<p>Legalize procedure consists of three steps:</p>
+<ul>
+<li>Create <a href="struct.Namespace.html" title="Namespace">Namespace</a></li>
+<li>Resolve SubType/SuperType consists to yield <a href="struct.Constraints.html" title="Constraints">Constraints</a></li>
+<li><a href="trait.Legalize.html" title="Legalize">Legalize</a> each AST portions</li>
+</ul>
+<p>First two step are global analysis, which make the last step local.</p>
+<h2 id="namespace-creation" class="section-header"><a href="#namespace-creation">Namespace creation</a></h2>
+<p>Legalize phase starts with <a href="struct.Namespace.html" title="Namespace">Namespace</a> creation.
+This step also introduces <a href="struct.Scope.html" title="Scope">Scope</a> and <a href="struct.Path.html" title="Path">Path</a> to represent scopes and names in EXPRESS schema.
+Using <a href="struct.Namespace.html" title="Namespace">Namespace</a>, we can look up corresponding <a href="struct.Path.html" title="Path">Path</a> to a local identifier appears in a <a href="struct.Scope.html" title="Scope">Scope</a>.</p>
+<div class="example-wrap"><pre class="language-text"><code>SCHEMA sc1;  -- Scope &quot;sc1[schema]&quot; starts
+  ENTITY a;  -- Path &quot;sc1[schema].a[entity]&quot; is registered
+    x: REAL;
+    y: REAL;
+  END_ENTITY;
+
+  ENTITY b;  -- Path &quot;sc1[schema].b[entity]&quot; is registered
+    z: REAL;
+    a: a;    -- Identifier &quot;a&quot; is resolved as a path &quot;sc1[schema].a[entity]&quot;
+  END_ENTITY;
+END_SCHEMA;  -- Scope &quot;sc1[schema]&quot; ends</code></pre></div><h2 id="subtypesupertype-constraints" class="section-header"><a href="#subtypesupertype-constraints">SubType/SuperType constraints</a></h2>
+<p>ENTITY may have subtype or supertype constraints.</p>
+<div class="example-wrap"><pre class="language-text"><code>ENTITY person;
+  name: STRING;
+END_ENTITY;
+
+ENTITY employee SUBTYPE OF (person);
+  pay: INTEGER;
+END_ENTITY;
+
+ENTITY student SUBTYPE OF (person);
+  school_name: STRING;
+END_ENTITY;</code></pre></div>
+<p>This means <code>employee</code> has a field <code>pay</code> in addition to <code>name</code> inherited from <code>person</code>,
+and an <code>employee</code> can be instantiated as a <code>person</code>.
+Instances which contains two or more entity value are called “complex entity instance”,
+and they are mapped into exchange structures using one of two rules,
+“internal mapping” or “external mapping”:</p>
+<div class="example-wrap"><pre class="language-text"><code>/* internal mapping */
+#1 = EMPLOYEE(&#39;Hitori Goto&#39;, 10);
+#2 = STUDENT(&#39;Ikuno Kita&#39;, &#39;Shuka&#39;);
+
+/* external mapping */
+#3 = (PERSON(&#39;Hitori Goto&#39;) EMPLOYEE(10));
+#4 = (PERSON(&#39;Ikuno Kita&#39;) STUDENT(&#39;Shuka));
+#5 = (PERSON(&#39;Nizika Iziti&#39;) EMPLOYEE(15) STUDENT(&#39;Simokitazawa&#39;))</code></pre></div>
+<p>Using internal mapping,
+the inherited attributes (<code>name</code>) shall appear sequentially
+prior to the explicit attributes (<code>pay</code>, <code>school_name</code>).
+Using external mapping, an instance is represented by a list of
+“partial complex entity value” enclosed by <code>()</code>.
+The instances <code>#1</code> (<code>#2</code>) described by internal mapping
+and <code>#3</code> (<code>#4</code>) described by external mapping are same value of <code>employee</code> (<code>student</code>) entity,
+but internal mapping cannot describe <code>#5</code> case.
+Different from usual Object-Oriented Programming (OOP) languages like C++ or Python,
+<code>person</code> can be both <code>employee</code> and <code>student</code> simultaneously,
+i.e. a <code>person</code> object may have both <code>pay</code> field and <code>school_name</code> field like as <code>#5</code>.</p>
+<p>This type of inheritance is called <code>ANDOR</code> in EXPRESS,
+and it is the default constraint for supertype.
+We can write this constraint explicitly in the entity declaration of <code>person</code>:</p>
+<div class="example-wrap"><pre class="language-text"><code>ENTITY person SUPERTYPE OF (employee ANDOR student);
+  name: STRING;
+END_ENTITY;</code></pre></div>
+<p>or as a separate <code>SUBTYPE_CONSTRAINT</code> declaration:</p>
+<div class="example-wrap"><pre class="language-text"><code>SUBTYPE_CONSTRAINT person_prop FOR person;
+  employee ANDOR student;
+END_SUBTYPE_CONSTRAINT;</code></pre></div>
+<p>We cannot determine the subtypes of an entity from its <code>ENTITY</code> declaration
+due to default constraints.
+<code>SUBTYPE OF</code> relation are gathered into <a href="struct.Constraints.html" title="Constraints">Constraints</a> struct
+to look up subtype paths from supertype path before legalizing AST of entities.</p>
+<p>There is two other types of constraints. First is <code>ONEOF</code> constraint:</p>
+<div class="example-wrap"><pre class="language-text"><code>ENTITY pet;
+  name : pet_name;
+END_ENTITY;
+
+SUBTYPE_CONSTRAINT separate_species FOR pet;
+  ABSTRACT SUPERTYPE;
+  ONEOF(cat, rabbit, dog);
+END_SUBTYPE_CONSTRAINT;
+
+ENTITY cat SUBTYPE OF (pet);
+END_ENTITY;
+
+ENTITY rabbit SUBTYPE OF (pet);
+END_ENTITY;
+
+ENTITY dog SUBTYPE OF (pet);
+END_ENTITY;</code></pre></div>
+<p>You know a pet cannot be both cat and rabbit in real world.
+This is represented by <code>ONEOF</code> constraint in <code>SUBTYPE_CONSTRAINT</code> declaration.
+Second is <code>AND</code> constraint:</p>
+<div class="example-wrap"><pre class="language-text"><code>ENTITY person;
+END_ENTITY;
+
+ENTITY male SUBTYPE OF (person);
+END_ENTITY;
+
+ENTITY female SUBTYPE OF (person);
+END_ENTITY;
+
+ENTITY citizen SUBTYPE OF (person);
+END_ENTITY;
+
+ENTITY alien SUBTYPE OF (person);
+END_ENTITY;
+
+SUBTYPE_CONSTRAINT person_prop FOR person;
+  ONEOF(male, female) AND ONEOF(citizen, alien);
+END_SUBTYPE_CONSTRAINT;</code></pre></div>
+<p><code>AND</code> behaves as that for boolean.</p>
+<h2 id="legalize-trait" class="section-header"><a href="#legalize-trait">Legalize trait</a></h2>
+<p>Most of structs in this sub-module implements <a href="trait.Legalize.html" title="Legalize">Legalize</a> trait
+for creating it from a corresponding AST portion.
+<code>Legalize::legalize</code> is called recursively while traversing AST.
+These structs, called IRs (intermediate representations), are designed with
+following rules:</p>
+<ul>
+<li>Code generation only looks IRs, never looks AST.
+Every information required for code generation must be contained in IR.</li>
+<li>Code generation does not execute global analysis,
+e.g. check if a type reference refers a primitive type or not.</li>
+</ul>
+<p>This crate is motivated for generating Rust code,
+but is designed to use for generating other contents,
+e.g. Python code or HTML reference.</p>
+</div></details><h2 id="structs" class="section-header"><a href="#structs">Structs</a></h2>
+<div class="item-table"><div class="item-left module-item"><a class="struct" href="struct.Bound.html" title="espr::ir::Bound struct">Bound</a></div><div class="item-right docblock-short"></div><div class="item-left module-item"><a class="struct" href="struct.Constraints.html" title="espr::ir::Constraints struct">Constraints</a></div><div class="item-right docblock-short"><p>Global constraints in EXPRESS components</p>
+</div><div class="item-left module-item"><a class="struct" href="struct.Entity.html" title="espr::ir::Entity struct">Entity</a></div><div class="item-right docblock-short"></div><div class="item-left module-item"><a class="struct" href="struct.EntityAttribute.html" title="espr::ir::EntityAttribute struct">EntityAttribute</a></div><div class="item-right docblock-short"></div><div class="item-left module-item"><a class="struct" href="struct.Enumeration.html" title="espr::ir::Enumeration struct">Enumeration</a></div><div class="item-right docblock-short"><p>Enumeration of values,
+e.g. <code>TYPE text_path = ENUMERATION OF (up, right, down, left); END_TYPE;</code></p>
+</div><div class="item-left module-item"><a class="struct" href="struct.IR.html" title="espr::ir::IR struct">IR</a></div><div class="item-right docblock-short"><p>Intermediate Representation</p>
+</div><div class="item-left module-item"><a class="struct" href="struct.Instantiables.html" title="espr::ir::Instantiables struct">Instantiables</a></div><div class="item-right docblock-short"><p>Instantiable subtypes described by a list of partial complex entity, e.g. $[A, B &amp; C]$</p>
+</div><div class="item-left module-item"><a class="struct" href="struct.Namespace.html" title="espr::ir::Namespace struct">Namespace</a></div><div class="item-right docblock-short"><p>Namespace of loaded EXPRESS schema</p>
+</div><div class="item-left module-item"><a class="struct" href="struct.PartialComplexEntity.html" title="espr::ir::PartialComplexEntity struct">PartialComplexEntity</a></div><div class="item-right docblock-short"><p>Partial complex entity data type, e.g. $A \And B \And C$ in ISO document</p>
+</div><div class="item-left module-item"><a class="struct" href="struct.Path.html" title="espr::ir::Path struct">Path</a></div><div class="item-right docblock-short"></div><div class="item-left module-item"><a class="struct" href="struct.Rename.html" title="espr::ir::Rename struct">Rename</a></div><div class="item-right docblock-short"><p>Rename of user defined type,
+e.g. <code>TYPE box_height = positive_ratio_measure; END_TYPE;</code></p>
+</div><div class="item-left module-item"><a class="struct" href="struct.Schema.html" title="espr::ir::Schema struct">Schema</a></div><div class="item-right docblock-short"></div><div class="item-left module-item"><a class="struct" href="struct.Scope.html" title="espr::ir::Scope struct">Scope</a></div><div class="item-right docblock-short"><p>Scope declaration</p>
+</div><div class="item-left module-item"><a class="struct" href="struct.Select.html" title="espr::ir::Select struct">Select</a></div><div class="item-right docblock-short"><p>Select of user defined types,
+e.g. <code>TYPE geometric_set_select = SELECT (point, curve); END_TYPE;</code></p>
+</div><div class="item-left module-item"><a class="struct" href="struct.Simple.html" title="espr::ir::Simple struct">Simple</a></div><div class="item-right docblock-short"><p>Rename of primitive type,
+e.g. <code>TYPE label = STRING; ENDTYPE;</code></p>
+</div><div class="item-left module-item"><a class="struct" href="struct.SimpleType.html" title="espr::ir::SimpleType struct">SimpleType</a></div><div class="item-right docblock-short"></div></div><h2 id="enums" class="section-header"><a href="#enums">Enums</a></h2>
+<div class="item-table"><div class="item-left module-item"><a class="enum" href="enum.ConstraintExpr.html" title="espr::ir::ConstraintExpr enum">ConstraintExpr</a></div><div class="item-right docblock-short"><p>Expression appears in <code>SUBTYPE_CONSTRAINT</code> with resolved <a href="struct.Path.html" title="Path">Path</a></p>
+</div><div class="item-left module-item"><a class="enum" href="enum.Named.html" title="espr::ir::Named enum">Named</a></div><div class="item-right docblock-short"><p>Named AST portion of corresponding <a href="struct.Path.html" title="Path">Path</a></p>
+</div><div class="item-left module-item"><a class="enum" href="enum.ScopeType.html" title="espr::ir::ScopeType enum">ScopeType</a></div><div class="item-right docblock-short"><p>Identifier in EXPRESS language must be one of scopes described in
+“Table 9 – Scope and identifier defining items”</p>
+</div><div class="item-left module-item"><a class="enum" href="enum.SemanticError.html" title="espr::ir::SemanticError enum">SemanticError</a></div><div class="item-right docblock-short"><p>Semantic errors</p>
+</div><div class="item-left module-item"><a class="enum" href="enum.TypeDecl.html" title="espr::ir::TypeDecl enum">TypeDecl</a></div><div class="item-right docblock-short"></div><div class="item-left module-item"><a class="enum" href="enum.TypeRef.html" title="espr::ir::TypeRef enum">TypeRef</a></div><div class="item-right docblock-short"></div></div><h2 id="traits" class="section-header"><a href="#traits">Traits</a></h2>
+<div class="item-table"><div class="item-left module-item"><a class="trait" href="trait.Legalize.html" title="espr::ir::Legalize trait">Legalize</a></div><div class="item-right docblock-short"><p>Legalize partial AST input into corresponding intermediate representation</p>
+</div></div><h2 id="functions" class="section-header"><a href="#functions">Functions</a></h2>
+<div class="item-table"><div class="item-left module-item"><a class="fn" href="fn.gather_constraint_expr.html" title="espr::ir::gather_constraint_expr fn">gather_constraint_expr</a></div><div class="item-right docblock-short"></div></div></section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../" data-current-crate="espr" data-search-index-js="../../search-index.js" data-search-js="../../search.js"></div>
+    <script src="../../main.js"></script>
+</body></html>

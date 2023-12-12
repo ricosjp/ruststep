@@ -1,0 +1,1 @@
+initSidebarItems({"macro":[["derive_ast_component",""]],"mod":[["ast","Abstract Syntax Tree (AST) of EXPRESS Language"],["codegen","Code generation"],["ir","Intermediate Representation ([IR]) legalized (semantically analyzed) from [SyntaxTree]"],["parser","Parser combinator for EXPRESS language"]]});

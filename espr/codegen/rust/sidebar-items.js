@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["CratePrefix",""]],"fn":[["rustfmt","Format generated Rust code using `rustfmt` run as external process."]]});

@@ -1,0 +1,1 @@
+initSidebarItems({"mod":[["rust","Generate Rust code using proc-macro utility crates"]]});

@@ -1,0 +1,132 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="A crate for implementing EXPRESS language compiler and related tools"><meta name="keywords" content="rust, rustlang, rust-lang, espr"><title>espr - Rust</title><link rel="stylesheet" type="text/css" href="../normalize.css"><link rel="stylesheet" type="text/css" href="../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../ayu.css" disabled ><script id="default-settings" ></script><script src="../storage.js"></script><script src="../crates.js"></script><noscript><link rel="stylesheet" href="../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../favicon.svg"><style type="text/css">#crate-search{background-image:url("../down-arrow.svg");}</style></head><body class="rustdoc mod crate"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../espr/index.html'><div class='logo-container rust-logo'><img src='../rust-logo.png' alt='logo'></div></a><h2 class="location">Crate espr</h2><div class="block version"><div class="narrow-helper"></div><p>Version 0.3.0</p></div><div class="sidebar-elems"><a id="all-types" href="all.html"><p>See all espr's items</p></a><div class="block items"><ul><li><a href="#modules">Modules</a></li><li><a href="#macros">Macros</a></li></ul></div><div id="sidebar-vars" data-name="espr" data-ty="mod" data-relpath=""></div><script defer src="sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../brush.svg"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../wheel.svg"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="in-band">Crate <a class="mod" href="#">espr</a><button id="copy-path" onclick="copy_path(this)" title="Copy item path to clipboard"><img src="../clipboard.svg" width="19" height="18" alt="Copy item path"></button></span><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../src/espr/lib.rs.html#1-157" title="goto source code">[src]</a></span></h1><details class="rustdoc-toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>A crate for implementing EXPRESS language compiler and related tools</p>
+<h2 id="overview" class="section-header"><a href="#overview">Overview</a></h2><div class="example-wrap"><pre class="language-text"><code>┌────────────────┐
+│ EXPRESS Schema │
+└──┬─────────────┘
+   │ Tokenize
+┌──▼─────────────────────────┐
+│ Abstract Syntax Tree (AST) │
+└──┬─────────────────────────┘
+   │ Legalize
+┌──▼───────────────────────────────┐
+│ Intermediate Representation (IR) │
+└──┬───────────────────────────────┘ │
+   │ Code Generation                 │ espr&#39;s responsibility
+┌──▼────────────────────────┐        ▼
+│ Rust code with proc-macro │  ─────────────────────────────────
+└──┬────────────────────────┘
+   │ proc-macro
+┌──▼──────────────┐ call ┌──────────┐
+│ Final Rust code ├──────► ruststep │
+└─────────────────┘      └──────────┘</code></pre></div>
+<ul>
+<li>Tokenize
+<ul>
+<li>Read EXPRESS input and parse into abstract syntax tree (AST)</li>
+<li><a href="ast/index.html" title="ast">ast</a> module defines AST structs</li>
+<li><a href="parser/index.html" title="parser">parser</a> module defines parser combinator for parsing EXPRESS language</li>
+</ul>
+</li>
+<li>Legalize
+<ul>
+<li>Convert AST to IR (intermediate representation) to ready the following code generation</li>
+<li><a href="ir/index.html" title="ir">ir</a> module defines IR structs, and they implements <a href="ir/trait.Legalize.html" title="ir::Legalize">ir::Legalize</a> trait for legalizing from AST</li>
+</ul>
+</li>
+<li>Code Generation
+<ul>
+<li><a href="codegen/rust/index.html" title="codegen::rust">codegen::rust</a> module generates Rust code from IR</li>
+</ul>
+</li>
+</ul>
+<h2 id="introduction-to-step" class="section-header"><a href="#introduction-to-step">Introduction to STEP</a></h2>
+<p>As we describe in <a href="https://github.com/ricosjp/ruststep#readme">README</a>,
+STEP consists of three components:</p>
+<ul>
+<li>Schema language called EXPRESS</li>
+<li>Data format called “exchange structure” or “STEP file”</li>
+<li>Schemas, e.g. AP203 for CAD components</li>
+</ul>
+<p>This short section shows basic concept of EXPRESS schemas and exchange structures
+for developers new to STEP ecosystem.</p>
+<p>EXPRESS language, standardized as <a href="https://www.iso.org/standard/38047.html">ISO-10303-11</a>,
+is a schema language as a part of STEP ecosystem.</p>
+<div class="example-wrap"><pre class="language-text"><code>SCHEMA my_first_schema;
+  ENTITY a;
+    x: REAL;
+    y: REAL;
+  END_ENTITY;
+
+  ENTITY b;
+    z: REAL;
+    a: a;
+  END_ENTITY;
+END_SCHEMA;</code></pre></div>
+<p>This example schema written in EXPRESS language defines
+<code>my_first_schema</code> schema and two entities <code>a</code> and <code>b</code>.
+Entity is a collection of primitive types or other entities similar to <code>struct</code> in Rust.</p>
+<p>Actual data will be stored in another data format called “exchange structure” or “STEP file”,
+standardized as <a href="https://www.iso.org/standard/63141.html">ISO-10303-21</a>.
+Exchange structure consists of following sections:</p>
+<ul>
+<li>HEADER</li>
+<li>ANCHOR (optional)</li>
+<li>REFERENCE (optional)</li>
+<li>DATA</li>
+<li>SIGNATURE (optional)</li>
+</ul>
+<p>A data section contains indexed instances:</p>
+<div class="example-wrap"><pre class="language-text"><code>DATA;
+  #1 = A(1.0, 2.0);
+  #2 = B(3.0, A((4.0, 5.0)));
+  #3 = B(6.0, #1);
+ENDSEC;</code></pre></div>
+<p>This describes three instances, <code>#1</code> of type <code>A</code>, and <code>#2</code> and <code>#3</code> of type <code>B</code>.
+Data section itself is independent from any schema.
+The grammar of exchange structure allows any number of fields, e.g. <code>A(1.0, 2.0, 3.0)</code>.
+What data must be contained in the data section is specified in its header section:</p>
+<div class="example-wrap"><pre class="language-text"><code>HEADER;
+  FILE_SCHEMA((&#39;my_first_schema&#39;));
+  /* others */
+ENDSEC;</code></pre></div>
+<p>The type <code>A</code> (<code>B</code>) corresponds to <code>a</code> (<code>b</code>) entity in schema.
+Programs reading this exchange structure should reject invalid data
+e.g. <code>A(1.0, 2.0, 3.0)</code> based on the schema specification,
+and this crate aims to help creating such programs easily.</p>
+<h2 id="terms-and-definitions" class="section-header"><a href="#terms-and-definitions">Terms and definitions</a></h2>
+<p>These are excerpts from ISO 10303-11 3.3 “Other terms and definitions”
+to help understanding terms appears in this document.</p>
+<h3 id="basic-terms" class="section-header"><a href="#basic-terms">Basic terms</a></h3><table><thead><tr><th align="left">Section</th><th align="left">Term</th><th align="left">Meaning</th></tr></thead><tbody>
+<tr><td align="left">3.3.22</td><td align="left">value</td><td align="left">a unit of data.</td></tr>
+<tr><td align="left">3.3.4</td><td align="left">constant</td><td align="left">a named unit of data from a specified domain. The value cannot be modified.</td></tr>
+<tr><td align="left">3.3.10</td><td align="left">instance</td><td align="left">a named value.</td></tr>
+<tr><td align="left">3.3.5</td><td align="left">data type</td><td align="left">a domain of values.</td></tr>
+</tbody></table>
+<h3 id="terms-about-entity" class="section-header"><a href="#terms-about-entity">Terms about entity</a></h3><table><thead><tr><th align="left">Section</th><th align="left">Term</th><th align="left">Meaning</th></tr></thead><tbody>
+<tr><td align="left">3.3.6</td><td align="left">entity</td><td align="left">a class of information defined by common properties.</td></tr>
+<tr><td align="left">3.3.7</td><td align="left">entity data type</td><td align="left">a representation of an entity. An entity data type establishes a domain of values defined by common attributes and constraints.</td></tr>
+<tr><td align="left">3.3.8</td><td align="left">entity (data type) instance</td><td align="left">a named entity data type value. The name of an entity instance is used for referencing the instance.</td></tr>
+<tr><td align="left">3.3.9</td><td align="left">(single) entity (data type) value</td><td align="left">a unit of data which represents a unit of information within the class defined by an entity data type. It is a member of the domain established by this entity data type.</td></tr>
+<tr><td align="left">3.3.16</td><td align="left">population</td><td align="left">a collection of entity data type instances.</td></tr>
+</tbody></table>
+<h3 id="advanced-terms-about-entity" class="section-header"><a href="#advanced-terms-about-entity">Advanced terms about entity</a></h3><table><thead><tr><th align="left">Section</th><th align="left">Term</th><th align="left">Meaning</th></tr></thead><tbody>
+<tr><td align="left">3.3.1</td><td align="left">complex entity</td><td align="left">a representation of an entity. A complex entity data type establishes a domain of values defined by the common attributes and constraints of an allowed combination of entity data types within a particular subtype/supertype graph.</td></tr>
+<tr><td align="left">3.3.19</td><td align="left">simple entity instance</td><td align="left">a named unit of data which represents a unit of information within the class defined by an entity. It is a member of the domain established by a single entity data type.</td></tr>
+<tr><td align="left">3.3.2</td><td align="left">complex entity instance</td><td align="left">a named complex entity data type value. The name of a complex entity instance is used for referencing the instance.</td></tr>
+<tr><td align="left">3.3.3</td><td align="left">complex entity value</td><td align="left">a unit of data that represents a unit of information within the class defined by a complex entity data type. It is a member of the domain established by this complex entity data type.</td></tr>
+<tr><td align="left">3.3.14</td><td align="left">partial complex entity</td><td align="left">a potential representation of an entity. A partial complex entity data type is a grouping of entity data types within a subtype/supertype graph which may form part or all of a complex entity data type.</td></tr>
+<tr><td align="left">3.3.15</td><td align="left">partial complex entity value</td><td align="left">a value of a partial complex entity data type. This has no meaning on its own and must be combined with other partial complex entity values and a name to form a complex entity instance.</td></tr>
+<tr><td align="left">3.3.11</td><td align="left">multi-leaf complex entity</td><td align="left">a complex entity data type that consists of more than one entity data types that do not have further subtypes within this complex entity data type.</td></tr>
+<tr><td align="left">3.3.12</td><td align="left">multi-leaf complex entity instance</td><td align="left">a named multi-leaf complex entity data type value. The name of a multi-leaf complex entity instance is used for referencing the instance.</td></tr>
+<tr><td align="left">3.3.13</td><td align="left">multi-leaf complex entity value</td><td align="left">a unit of data that represents a unit of information within the class defined by a multi-leaf complex entity data type. It is a member of the domain established by this multi-leaf complex entity data type.</td></tr>
+</tbody></table>
+<p>“data type” is ommitted here since “entity” and “entity data type”
+indicate same one in most situation.</p>
+</div></details><h2 id="modules" class="section-header"><a href="#modules">Modules</a></h2>
+<div class="item-table"><div class="item-left module-item"><a class="mod" href="ast/index.html" title="espr::ast mod">ast</a></div><div class="item-right docblock-short"><p>Abstract Syntax Tree (AST) of EXPRESS Language</p>
+</div><div class="item-left module-item"><a class="mod" href="codegen/index.html" title="espr::codegen mod">codegen</a></div><div class="item-right docblock-short"><p>Code generation</p>
+</div><div class="item-left module-item"><a class="mod" href="ir/index.html" title="espr::ir mod">ir</a></div><div class="item-right docblock-short"><p>Intermediate Representation (<a href="ir/struct.IR.html" title="IR">IR</a>) legalized (semantically analyzed) from <a href="ast/struct.SyntaxTree.html" title="SyntaxTree">SyntaxTree</a></p>
+</div><div class="item-left module-item"><a class="mod" href="parser/index.html" title="espr::parser mod">parser</a></div><div class="item-right docblock-short"><p>Parser combinator for EXPRESS language</p>
+</div></div><h2 id="macros" class="section-header"><a href="#macros">Macros</a></h2>
+<div class="item-table"><div class="item-left module-item"><a class="macro" href="macro.derive_ast_component.html" title="espr::derive_ast_component macro">derive_ast_component</a></div><div class="item-right docblock-short"></div></div></section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../" data-current-crate="espr" data-search-index-js="../search-index.js" data-search-js="../search.js"></div>
+    <script src="../main.js"></script>
+</body></html>

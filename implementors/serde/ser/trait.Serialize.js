@@ -1,0 +1,3 @@
+(function() {var implementors = {};
+implementors["ruststep"] = [{"text":"impl <a class=\"trait\" href=\"https://docs.rs/serde/1.0.193/serde/ser/trait.Serialize.html\" title=\"trait serde::ser::Serialize\">Serialize</a> for <a class=\"enum\" href=\"ruststep/primitive/enum.Logical.html\" title=\"enum ruststep::primitive::Logical\">Logical</a>","synthetic":false,"types":["ruststep::primitive::logical::Logical"]}];
+if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

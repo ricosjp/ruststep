@@ -1,0 +1,86 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Handling “exchange structure graph” as tables"><meta name="keywords" content="rust, rustlang, rust-lang, tables"><title>ruststep::tables - Rust</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../../ruststep/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a><h2 class="location">Module tables</h2><div class="sidebar-elems"><div class="block items"><ul><li><a href="#enums">Enums</a></li><li><a href="#traits">Traits</a></li><li><a href="#functions">Functions</a></li></ul></div><div id="sidebar-vars" data-name="tables" data-ty="mod" data-relpath="./"></div><script defer src="./sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../../wheel.svg"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="in-band">Module <a href="../index.html">ruststep</a>::<wbr><a class="mod" href="#">tables</a><button id="copy-path" onclick="copy_path(this)" title="Copy item path to clipboard"><img src="../../clipboard.svg" width="19" height="18" alt="Copy item path"></button></span><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../../src/ruststep/tables.rs.html#1-342" title="goto source code">[src]</a></span></h1><details class="rustdoc-toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>Handling “exchange structure graph” as tables</p>
+<p>Since records in an exchange structure has references to other records,
+then consists a graph.</p>
+<ul>
+<li>An exchange structure corresponds to a graph, we call it “exchange structure graph” here.</li>
+<li>A node of graph corresponds to a record.</li>
+<li>An edge of graph corresponds to a reference in a record.</li>
+</ul>
+<h2 id="creating-table-from-exchange-structure-ast" class="section-header"><a href="#creating-table-from-exchange-structure-ast">Creating table from exchange structure AST</a></h2>
+<p>Let us consider a simple EXPRESS schema:</p>
+<div class="example-wrap"><pre class="language-text"><code>ENTITY a;
+  x: INTEGER;
+  y: INTEGER;
+END_ENTITY;
+
+ENTITY b;
+  z: INTEGER;
+  w: a;
+END_ENTITY;</code></pre></div>
+<p>Corresponding data section in STEP file will be something like following (skip HEADER section):</p>
+<div class="example-wrap"><pre class="language-text"><code>DATA;
+  #1 = A(1, 2);
+  #2 = A(3, 4);
+  #3 = B(5, #1);
+  #4 = B(6, #1);
+  #5 = B(7, #2);
+  #6 = B(8, A((9, 10)));
+ENDSEC;</code></pre></div>
+<p>In this example, <code>#3</code> and <code>#4</code> has reference to <code>#1</code>.
+There will exist non-exclusive reference between entity instances generally,
+and thus the data must be regarded as a graph.</p>
+<p>ruststep will parse this data section into following tables:</p>
+<table><thead><tr><th align="left">Table (a)</th><th align="left">x (i64)</th><th align="left">y (i64)</th></tr></thead><tbody>
+<tr><td align="left"><code>#1</code></td><td align="left">1</td><td align="left">2</td></tr>
+<tr><td align="left"><code>#2</code></td><td align="left">3</td><td align="left">4</td></tr>
+</tbody></table>
+<table><thead><tr><th align="left">Table (b)</th><th align="left">z (i64)</th><th align="left">w (a)</th></tr></thead><tbody>
+<tr><td align="left"><code>#3</code></td><td align="left">5</td><td align="left"><code>#1</code></td></tr>
+<tr><td align="left"><code>#4</code></td><td align="left">6</td><td align="left"><code>#1</code></td></tr>
+<tr><td align="left"><code>#5</code></td><td align="left">7</td><td align="left"><code>#2</code></td></tr>
+<tr><td align="left"><code>#6</code></td><td align="left">8</td><td align="left"><code>A((9, 10))</code></td></tr>
+</tbody></table>
+<p>Each columns are defined by EXPRESS schema.
+<code>x</code>, <code>y</code>, and <code>z</code> are specified as integer in EXPRESS, and will be treated as <code>i64</code> in Rust code.
+The simple types in EXPRESS are mapped into Rust primitive types.
+The ENTITY <code>a</code> will be treated as a Rust struct like</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">struct</span> <span class="ident">A</span> {
+  <span class="ident">x</span>: <span class="ident">i64</span>,
+  <span class="ident">y</span>: <span class="ident">i64</span>,
+}</code></pre></div>
+<p>The ENTITY <code>b</code> has to support both reference and inline struct like as <code>#4</code> and <code>#6</code>.
+For this purpose, <a href="enum.PlaceHolder.html" title="PlaceHolder">PlaceHolder</a> exists:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">enum</span> <span class="ident">PlaceHolder</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
+  <span class="doccomment">/// For reference, e.g. `#1`</span>
+  <span class="ident">Ref</span>(<span class="ident">Name</span>),
+  <span class="doccomment">/// For inline typed parameter, e.g. `A((9, 10))`</span>
+  <span class="ident">Owned</span>(<span class="ident">T</span>),
+}</code></pre></div>
+<p>Then following two Rust structs will be defined:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">struct</span> <span class="ident">B</span> {
+  <span class="ident">z</span>: <span class="ident">i64</span>,
+  <span class="ident">w</span>: <span class="ident">A</span>,
+}
+<span class="kw">struct</span> <span class="ident">BHolder</span> {
+  <span class="ident">z</span>: <span class="ident">i64</span>,
+  <span class="ident">w</span>: <span class="ident">PlaceHolder</span><span class="op">&lt;</span><span class="ident">AHolder</span><span class="op">&gt;</span>,
+}</code></pre></div>
+<p>There also a function <a href="trait.IntoOwned.html#tymethod.into_owned" title="IntoOwned::into_owned">IntoOwned::into_owned</a> to convert a holder struct
+<code>BHolder</code> into owned struct <code>B</code>.
+<code>AHolder</code> will also be introduced to keep consistency.
+These are automated by <a href="../derive.Holder.html" title="ruststep_derive::Holder">ruststep_derive::Holder</a> proc-macro.</p>
+</div></details><h2 id="enums" class="section-header"><a href="#enums">Enums</a></h2>
+<div class="item-table"><div class="item-left module-item"><a class="enum" href="enum.PlaceHolder.html" title="ruststep::tables::PlaceHolder enum">PlaceHolder</a></div><div class="item-right docblock-short"><p>Owned value or reference through entity/value id</p>
+</div></div><h2 id="traits" class="section-header"><a href="#traits">Traits</a></h2>
+<div class="item-table"><div class="item-left module-item"><a class="trait" href="trait.EntityTable.html" title="ruststep::tables::EntityTable trait">EntityTable</a></div><div class="item-right docblock-short"><p>Trait for tables which pulls an entity (<code>T</code>) from an entity id (<code>u64</code>)</p>
+</div><div class="item-left module-item"><a class="trait" href="trait.Holder.html" title="ruststep::tables::Holder trait">Holder</a></div><div class="item-right docblock-short"><p>Trait for a field of tables</p>
+</div><div class="item-left module-item"><a class="trait" href="trait.IntoOwned.html" title="ruststep::tables::IntoOwned trait">IntoOwned</a></div><div class="item-right docblock-short"><p>Trait for resolving a reference through entity id</p>
+</div><div class="item-left module-item"><a class="trait" href="trait.TableInit.html" title="ruststep::tables::TableInit trait">TableInit</a></div><div class="item-right docblock-short"><p>Create Table from <a href="../ast/struct.DataSection.html" title="DataSection">DataSection</a></p>
+</div><div class="item-left module-item"><a class="trait" href="trait.WithVisitor.html" title="ruststep::tables::WithVisitor trait">WithVisitor</a></div><div class="item-right docblock-short"></div></div><h2 id="functions" class="section-header"><a href="#functions">Functions</a></h2>
+<div class="item-table"><div class="item-left module-item"><a class="fn" href="fn.get_owned.html" title="ruststep::tables::get_owned fn">get_owned</a></div><div class="item-right docblock-short"></div><div class="item-left module-item"><a class="fn" href="fn.insert_record.html" title="ruststep::tables::insert_record fn">insert_record</a></div><div class="item-right docblock-short"><p>Helper function to implement TableInit trait</p>
+</div><div class="item-left module-item"><a class="fn" href="fn.owned_iter.html" title="ruststep::tables::owned_iter fn">owned_iter</a></div><div class="item-right docblock-short"></div></div></section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../" data-current-crate="ruststep" data-search-index-js="../../search-index.js" data-search-js="../../search.js"></div>
+    <script src="../../main.js"></script>
+</body></html>

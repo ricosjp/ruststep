@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["parse","Parse entire STEP file"],["parse_header","Parse HEADER section"]],"mod":[["basic","Parser for basic alphabets defined in the table 1 of ISO-10303-21"],["combinator","Parser combinators extended for STEP exchange structure"],["exchange","Parser for exchange structure"],["token","Parser for tokens defined in the table 2 of ISO-10303-21"]]});
