@@ -24,7 +24,7 @@ impl<'de, 'param> de::Deserializer<'de> for &'param Parameter {
             Parameter::Ref(name) => visitor.visit_enum(name),
             Parameter::NotProvided | Parameter::Omitted => visitor.visit_none(),
             Parameter::Enumeration(variant) => {
-                visitor.visit_enum(variant.to_class_case().into_deserializer())
+                visitor.visit_enum(variant.to_pascal_case().into_deserializer())
             }
         }
     }
@@ -39,7 +39,7 @@ impl<'de, 'param> de::Deserializer<'de> for &'param Parameter {
                 "TRUE" => visitor.visit_bool(true),
                 "F" => visitor.visit_bool(false),
                 "FALSE" => visitor.visit_bool(false),
-                _ => visitor.visit_enum(variant.to_class_case().into_deserializer()),
+                _ => visitor.visit_enum(variant.to_pascal_case().into_deserializer()),
             }
         } else {
             self.deserialize_any(visitor)
