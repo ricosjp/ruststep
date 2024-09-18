@@ -8,12 +8,12 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-20.04
+    runs-on: ${{ env.UBUNTU_VERSION }}
     strategy:
       matrix:
         rust:
           - stable
-          - "1.56.0"  # MSRV (for edition 2021)
+          - ${{ env.MSRV }}
     steps:
     - uses: actions/checkout@v1
     - uses: actions-rs/toolchain@v1
@@ -30,12 +30,12 @@ jobs:
         args: --all-features
 
   check-format:
-    runs-on: ubuntu-20.04
+    runs-on: ${{ env.UBUNTU_VERSION }}
     steps:
     - uses: actions/checkout@v1
     - uses: actions-rs/toolchain@v1
       with:
-        toolchain: "1.56.0"
+        toolchain: ${{ env.MSRV }}
         profile: minimal
         components: rustfmt
         default: true
@@ -46,12 +46,12 @@ jobs:
         args: -- --check
 
   doc:
-    runs-on: ubuntu-20.04
+    runs-on: ${{ env.UBUNTU_VERSION }}
     steps:
     - uses: actions/checkout@v1
     - uses: actions-rs/toolchain@v1
       with:
-        toolchain: "1.56.0"
+        toolchain: ${{ env.MSRV }}
         profile: minimal
         default: true
         override: true
@@ -61,12 +61,12 @@ jobs:
         args: --no-deps
 
   clippy:
-    runs-on: ubuntu-20.04
+    runs-on: ${{ env.UBUNTU_VERSION }}
     steps:
     - uses: actions/checkout@v1
     - uses: actions-rs/toolchain@v1
       with:
-        toolchain: "1.56.0"
+        toolchain: ${{ env.MSRV }}
         profile: minimal
         components: clippy
         default: true
