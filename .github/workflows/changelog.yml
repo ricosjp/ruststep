@@ -5,7 +5,7 @@ on:
 
 jobs:
   test:
-    runs-on: ${{ env.UBUNTU_VERSION }}
+    runs-on: ${{ vars.UBUNTU_VERSION }}
     steps:
     - uses: actions/checkout@v1
       with:

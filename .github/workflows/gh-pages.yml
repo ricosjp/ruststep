@@ -7,12 +7,12 @@ on:
 
 jobs:
   pages:
-    runs-on: ${{ env.UBUNTU_VERSION }}
+    runs-on: ${{ vars.UBUNTU_VERSION }}
     steps:
     - uses: actions/checkout@v2
     - uses: actions-rs/toolchain@v1
       with:
-        toolchain: ${{ env.MSRV }}
+        toolchain: ${{ vars.MSRV }}
         profile: minimal
         default: true
         override: true
