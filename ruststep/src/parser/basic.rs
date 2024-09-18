@@ -1,5 +1,7 @@
 //! Parser for basic alphabets defined in the table 1 of ISO-10303-21
 
+#![allow(clippy::manual_is_ascii_check)]
+
 use super::combinator::*;
 use nom::{
     branch::alt,

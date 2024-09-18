@@ -17,14 +17,14 @@ pub enum FieldType {
 }
 
 impl FieldType {
-    pub fn as_holder(self) -> Self {
+    pub fn into_holder(self) -> Self {
         match self {
             FieldType::Path(path) => {
                 let syn::Path {
                     leading_colon,
                     mut segments,
                 } = path;
-                let mut last_seg = segments.last_mut().unwrap();
+                let last_seg = segments.last_mut().unwrap();
                 match &mut last_seg.arguments {
                     syn::PathArguments::None => {
                         last_seg.ident = as_holder_ident(&last_seg.ident);
@@ -37,21 +37,21 @@ impl FieldType {
                 })
             }
             FieldType::Optional(ty) => {
-                let holder = ty.as_holder();
+                let holder = ty.into_holder();
                 FieldType::Optional(Box::new(holder))
             }
             FieldType::List(ty) => {
-                let holder = ty.as_holder();
+                let holder = ty.into_holder();
                 FieldType::List(Box::new(holder))
             }
             FieldType::Boxed(ty) => {
-                let holder = ty.as_holder();
+                let holder = ty.into_holder();
                 FieldType::Boxed(Box::new(holder))
             }
         }
     }
 
-    pub fn as_place_holder(self) -> Self {
+    pub fn into_place_holder(self) -> Self {
         let ruststep = ruststep_crate();
         match self {
             FieldType::Path(path) => {
@@ -59,15 +59,15 @@ impl FieldType {
                 FieldType::Path(path)
             }
             FieldType::Optional(ty) => {
-                let place_holder = ty.as_place_holder();
+                let place_holder = ty.into_place_holder();
                 FieldType::Optional(Box::new(place_holder))
             }
             FieldType::List(ty) => {
-                let place_holder = ty.as_place_holder();
+                let place_holder = ty.into_place_holder();
                 FieldType::List(Box::new(place_holder))
             }
             FieldType::Boxed(ty) => {
-                let place_holder = ty.as_place_holder();
+                let place_holder = ty.into_place_holder();
                 FieldType::Boxed(Box::new(place_holder))
             }
         }
@@ -77,18 +77,18 @@ impl FieldType {
 #[derive(Debug, Clone)]
 pub struct UnsupportedTypeError {}
 
-impl Into<Diagnostic> for UnsupportedTypeError {
-    fn into(self) -> Diagnostic {
-        Diagnostic::new(
+impl From<UnsupportedTypeError> for Diagnostic {
+    fn from(_: UnsupportedTypeError) -> Self {
+        Self::new(
             Level::Error,
             "Unsupported Type for ruststep and espr".to_string(),
         )
     }
 }
 
-impl Into<syn::Type> for FieldType {
-    fn into(self) -> syn::Type {
-        let path = match self {
+impl From<FieldType> for syn::Type {
+    fn from(field_type: FieldType) -> Self {
+        let path = match field_type {
             FieldType::Path(path) => path,
             FieldType::Optional(ty) => {
                 let ty: syn::Type = (*ty).into();
@@ -181,25 +181,25 @@ mod tests {
     fn as_holder() {
         let ty: syn::Type = syn::parse_str("T").unwrap();
         let f: FieldType = ty.try_into().unwrap();
-        let holder = f.as_holder();
+        let holder = f.into_holder();
         let ans: syn::Type = syn::parse_str("THolder").unwrap();
         assert_eq!(<FieldType as Into<syn::Type>>::into(holder), ans);
 
         let ty: syn::Type = syn::parse_str("Option<T>").unwrap();
         let f: FieldType = ty.try_into().unwrap();
-        let holder = f.as_holder();
+        let holder = f.into_holder();
         let ans: syn::Type = syn::parse_str("Option<THolder>").unwrap();
         assert_eq!(<FieldType as Into<syn::Type>>::into(holder), ans);
 
         let ty: syn::Type = syn::parse_str("Vec<T>").unwrap();
         let f: FieldType = ty.try_into().unwrap();
-        let holder = f.as_holder();
+        let holder = f.into_holder();
         let ans: syn::Type = syn::parse_str("Vec<THolder>").unwrap();
         assert_eq!(<FieldType as Into<syn::Type>>::into(holder), ans);
 
         let ty: syn::Type = syn::parse_str("Option<Vec<T>>").unwrap();
         let f: FieldType = ty.try_into().unwrap();
-        let holder = f.as_holder();
+        let holder = f.into_holder();
         let ans: syn::Type = syn::parse_str("Option<Vec<THolder>>").unwrap();
         assert_eq!(<FieldType as Into<syn::Type>>::into(holder), ans);
     }
@@ -208,27 +208,27 @@ mod tests {
     fn as_place_holder() {
         let ty: syn::Type = syn::parse_str("T").unwrap();
         let f: FieldType = ty.try_into().unwrap();
-        let place_holder = f.as_holder().as_place_holder();
+        let place_holder = f.into_holder().into_place_holder();
         let ans: syn::Type = syn::parse_str("::ruststep::tables::PlaceHolder<THolder>").unwrap();
         assert_eq!(<FieldType as Into<syn::Type>>::into(place_holder), ans);
 
         let ty: syn::Type = syn::parse_str("Option<T>").unwrap();
         let f: FieldType = ty.try_into().unwrap();
-        let place_holder = f.as_holder().as_place_holder();
+        let place_holder = f.into_holder().into_place_holder();
         let ans: syn::Type =
             syn::parse_str("Option<::ruststep::tables::PlaceHolder<THolder>>").unwrap();
         assert_eq!(<FieldType as Into<syn::Type>>::into(place_holder), ans);
 
         let ty: syn::Type = syn::parse_str("Vec<T>").unwrap();
         let f: FieldType = ty.try_into().unwrap();
-        let place_holder = f.as_holder().as_place_holder();
+        let place_holder = f.into_holder().into_place_holder();
         let ans: syn::Type =
             syn::parse_str("Vec<::ruststep::tables::PlaceHolder<THolder>>").unwrap();
         assert_eq!(<FieldType as Into<syn::Type>>::into(place_holder), ans);
 
         let ty: syn::Type = syn::parse_str("Option<Vec<T>>").unwrap();
         let f: FieldType = ty.try_into().unwrap();
-        let place_holder = f.as_holder().as_place_holder();
+        let place_holder = f.into_holder().into_place_holder();
         let ans: syn::Type =
             syn::parse_str("Option<Vec<::ruststep::tables::PlaceHolder<THolder>>>").unwrap();
         assert_eq!(<FieldType as Into<syn::Type>>::into(place_holder), ans);

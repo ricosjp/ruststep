@@ -25,7 +25,7 @@ impl<'de, 'record> de::Deserializer<'de> for &'record Record {
     {
         if name == self.name {
             if let Parameter::List(ref parameters) = self.parameter {
-                return visitor.visit_map(RecordStructDeserializer::new(fields, &parameters));
+                return visitor.visit_map(RecordStructDeserializer::new(fields, parameters));
             }
         }
         Self::deserialize_any(self, visitor)

@@ -7,6 +7,5 @@ mod simple_type;
 mod type_decl;
 mod type_ref;
 
-pub use entity::*;
 pub use format::rustfmt;
 pub use schema::*;

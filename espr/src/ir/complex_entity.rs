@@ -49,17 +49,16 @@ pub struct PartialComplexEntity {
 
 impl PartialOrd for PartialComplexEntity {
     fn partial_cmp(&self, rhs: &Self) -> Option<Ordering> {
-        match PartialOrd::partial_cmp(&self.indices.len(), &rhs.indices.len()) {
-            Some(Ordering::Equal) => PartialOrd::partial_cmp(&self.indices, &rhs.indices),
-            a @ Some(Ordering::Less) | a @ Some(Ordering::Greater) => a,
-            None => unreachable!(),
-        }
+        Some(self.cmp(rhs))
     }
 }
 
 impl Ord for PartialComplexEntity {
     fn cmp(&self, rhs: &Self) -> Ordering {
-        self.partial_cmp(rhs).unwrap()
+        match Ord::cmp(&self.indices.len(), &rhs.indices.len()) {
+            Ordering::Equal => Ord::cmp(&self.indices, &rhs.indices),
+            a @ Ordering::Less | a @ Ordering::Greater => a,
+        }
     }
 }
 

@@ -49,7 +49,7 @@ impl<'de, 'record> de::MapAccess<'de> for SubSuperRecordDeserializer<'record> {
             let key: K::Value = seed.deserialize(key)?;
             Ok(Some(key))
         } else {
-            return Ok(None);
+            Ok(None)
         }
     }
 
