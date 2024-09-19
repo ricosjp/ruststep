@@ -29,6 +29,7 @@ In addition to original Keep-a-Changelog, we use following rules:
 
 ### Internal
 - `cargo upgrade --workspace` https://github.com/ricosjp/ruststep/pull/240
+- Upgrading MSRV, updating dependent packages, and supporting the new clippy https://github.com/ricosjp/ruststep/pull/246
 
 ## 0.3.0 - 2022-06-14
 
