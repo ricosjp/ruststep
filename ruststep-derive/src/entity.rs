@@ -85,7 +85,7 @@ impl FieldEntries {
                     }),
                     FieldType::Boxed(_) => abort_call_site!("Unexpected Box<T>"),
                 }
-                holder_types.push(ft.as_holder().as_place_holder().into());
+                holder_types.push(ft.into_holder().into_place_holder().into());
             } else {
                 into_owned.push(quote! { #ident });
                 holder_types.push(ft.into());

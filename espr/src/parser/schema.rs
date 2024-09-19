@@ -103,7 +103,7 @@ pub fn procedure_decl(input: &str) -> ParseResult<Procedure> {
 ///                    `)` \] `;` .
 pub fn procedure_head(input: &str) -> ParseResult<(String, Vec<FormalParameter>)> {
     let param = tuple((opt(tag("VAR")), formal_parameter)).map(|(var, mut params)| {
-        for mut param in &mut params {
+        for param in &mut params {
             param.is_variable = var.is_some();
         }
         params

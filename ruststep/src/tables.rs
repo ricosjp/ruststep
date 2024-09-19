@@ -194,7 +194,10 @@ pub fn insert_record<'de, T: de::Deserialize<'de>>(
     id: u64,
     record: &Record,
 ) -> crate::error::Result<()> {
-    if let Some(_) = table.insert(id, de::Deserialize::deserialize(record)?) {
+    if table
+        .insert(id, de::Deserialize::deserialize(record)?)
+        .is_some()
+    {
         Err(Error::DuplicatedEntity(id))
     } else {
         Ok(())

@@ -78,13 +78,7 @@ impl PartialOrd for Scope {
                 return None;
             }
         }
-        if self.0.len() == other.0.len() {
-            Some(cmp::Ordering::Equal)
-        } else if self.0.len() > other.0.len() {
-            Some(cmp::Ordering::Less)
-        } else {
-            Some(cmp::Ordering::Greater)
-        }
+        Some(other.0.len().cmp(&self.0.len()))
     }
 }
 

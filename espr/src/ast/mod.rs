@@ -25,18 +25,18 @@ pub trait Component: Sized {
     }
 }
 
-#[macro_export(local_inner_macro)]
+#[macro_export(local_inner_macros)]
 macro_rules! derive_ast_component {
     ($component:ty, $parser:path) => {
-        impl crate::ast::Component for $component {
+        impl $crate::ast::Component for $component {
             fn parse(
                 input: &str,
-            ) -> Result<(Self, Vec<crate::ast::Remark>), crate::ast::TokenizeFailed> {
+            ) -> Result<(Self, Vec<$crate::ast::Remark>), $crate::ast::TokenizeFailed> {
                 use nom::Finish;
                 let input = input.trim();
                 let (_input, parsed) = $parser(input)
                     .finish()
-                    .map_err(|err| crate::ast::TokenizeFailed::new(input, err))?;
+                    .map_err(|err| $crate::ast::TokenizeFailed::new(input, err))?;
                 Ok(parsed)
             }
         }

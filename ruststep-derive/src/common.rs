@@ -19,7 +19,7 @@ pub fn as_holder_path(input: &syn::Type) -> syn::Type {
         .clone()
         .try_into()
         .expect_or_abort("as_holder! only accepts espr-generated type");
-    ft.as_holder().into()
+    ft.into_holder().into()
 }
 
 pub fn as_visitor_ident(input: &syn::Ident) -> syn::Ident {

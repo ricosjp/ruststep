@@ -1,3 +1,5 @@
+#![allow(clippy::manual_is_ascii_check)]
+
 use super::{combinator::RawParseResult, reserved::is_reserved};
 use nom::{branch::*, character::complete::*, multi::*, sequence::*, Parser};
 
