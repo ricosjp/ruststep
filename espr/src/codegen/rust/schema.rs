@@ -36,7 +36,10 @@ impl Schema {
         let name = format_ident!("{}", self.name);
         let types = &self.types;
         let entities = &self.entities;
-        let type_decls = self.types.iter().filter(|e| !matches!(e, TypeDecl::Enumeration(_)));
+        let type_decls = self
+            .types
+            .iter()
+            .filter(|e| !matches!(e, TypeDecl::Enumeration(_)));
         let entity_types: Vec<_> = entities
             .iter()
             .map(|e| format_ident!("{}", e.name.to_pascal_case()))
