@@ -21,6 +21,7 @@ In addition to original Keep-a-Changelog, we use following rules:
 - Remove `field` attr from enumerations. https://github.com/ricosjp/ruststep/pull/233
 - Recursive `get_owned` for select type without boxed variant. https://github.com/ricosjp/ruststep/pull/234
 - Hide `XXHolderVisitor` in document https://github.com/ricosjp/ruststep/pull/247
+- Add document to `XXAnyHolder`. https://github.com/ricosjp/ruststep/pull/248
 
 ### Fixed
 - Plural class names are converted as is. https://github.com/ricosjp/ruststep/pull/245
