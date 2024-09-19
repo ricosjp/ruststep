@@ -170,6 +170,7 @@ impl Input {
         let serde = serde_crate();
 
         quote! {
+            #[doc(hidden)]
             pub struct #holder_visitor_ident;
 
             impl<'de> #serde::de::Visitor<'de> for #holder_visitor_ident {
