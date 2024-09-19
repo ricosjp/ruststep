@@ -219,6 +219,7 @@ mod snapshot_tests {
                 deserializer.deserialize_tuple_struct("S1", 0, S1HolderVisitor {})
             }
         }
+        #[doc(hidden)]
         pub struct S1HolderVisitor;
         impl<'de> ::ruststep::serde::de::Visitor<'de> for S1HolderVisitor {
             type Value = S1Holder;
@@ -331,6 +332,7 @@ mod snapshot_tests {
                 deserializer.deserialize_tuple_struct("BASE_ANY", 0, BaseAnyHolderVisitor {})
             }
         }
+        #[doc(hidden)]
         pub struct BaseAnyHolderVisitor;
         impl<'de> ::ruststep::serde::de::Visitor<'de> for BaseAnyHolderVisitor {
             type Value = BaseAnyHolder;
