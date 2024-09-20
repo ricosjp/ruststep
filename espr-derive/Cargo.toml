@@ -1,8 +1,9 @@
 [package]
 name = "espr-derive"
-version = "0.3.0"
+version = "0.4.0"
 edition = "2021"
-authors = ["Toshiki Teramura <teramura@ricos.co.jp"]
+authors = ["Yoshinori Tanimura <tanimura@ricos.co.jp>", "Toshiki Teramura <teramura@ricos.co.jp"]
+rust-version = "1.75.0"
 
 description   = "Procedual macro for running espr compiler"
 documentation = "https://ricosjp.github.io/ruststep/espr_derive/index.html"
