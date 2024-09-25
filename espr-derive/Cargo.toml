@@ -1,8 +1,9 @@
 [package]
 name = "espr-derive"
-version = "0.3.0"
+version = "0.4.0"
 edition = "2021"
-authors = ["Toshiki Teramura <teramura@ricos.co.jp"]
+authors = ["Yoshinori Tanimura <tanimura@ricos.co.jp>", "Toshiki Teramura <teramura@ricos.co.jp"]
+rust-version = "1.75.0"
 
 description   = "Procedual macro for running espr compiler"
 documentation = "https://ricosjp.github.io/ruststep/espr_derive/index.html"
@@ -21,11 +22,11 @@ proc-macro2 = "1.0.86"
 syn = { version = "2.0.77", features = ["full", "extra-traits"] }
 
 [dependencies.espr]
-version = "0.3.0"
+version = "0.4.0"
 path = "../espr"
 
 [dev-dependencies]
-ruststep = { version = "0.3.0", path = "../ruststep" }
-ruststep-derive = { version = "0.3.0", path = "../ruststep-derive" }
+ruststep = { version = "0.4.0", path = "../ruststep" }
+ruststep-derive = { version = "0.4.0", path = "../ruststep-derive" }
 serde = "1.0.210"
 derive-new = "0.5.9"

@@ -12,7 +12,7 @@ In addition to original Keep-a-Changelog, we use following rules:
   - This will be checked by GitHub Actions
 - Each Pull Request MAY correspond to one or more lines in this file
 
-## Unreleased
+## 0.4.0 - 2024-09-20
 
 ### Added
 - Deserialize `LOGICAL` and `BOOLEAN` by `.T.`, `.F.`, and `.U.` notations. https://github.com/ricosjp/ruststep/pull/231

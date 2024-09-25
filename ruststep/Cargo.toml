@@ -1,9 +1,9 @@
 [package]
 name = "ruststep"
-version = "0.3.0"
+version = "0.4.0"
 authors = ["Toshiki Teramura <teramura@ricos.co.jp>", "Yoshinori Tanimura <tanimura@ricos.co.jp>"]
 edition = "2021"
-rust-version = "1.56.0"
+rust-version = "1.75.0"
 
 description   = "A STEP toolkit for Rust"
 documentation = "https://ricosjp.github.io/ruststep/ruststep/index.html"
@@ -29,7 +29,7 @@ itertools = "0.10.5"
 
 [dependencies.ruststep-derive]
 path = "../ruststep-derive"
-version = "0.3.0"
+version = "0.4.0"
 
 [dev-dependencies]
 anyhow = "1.0.89"
@@ -37,4 +37,3 @@ maplit = "1.0.2"
 
 [dev-dependencies.espr-derive]
 path = "../espr-derive"
-version = "0.3.0"
