@@ -10,7 +10,7 @@
 //!
 //! ```toml
 //! [dependencies]
-//! ruststep = { version: "*", features = ["ap201", "ap203"] }
+//! ruststep = { version = "*", features = ["ap201", "ap203"] }
 //! ```
 //!
 //! These features are not default.
